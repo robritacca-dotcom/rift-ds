@@ -9,8 +9,8 @@ export interface TreeViewNode {
   id: string;
   /** Text shown on the row */
   label: string;
-  /** Material Symbol name; defaults to `folder` for branches and `draft` for leaves */
-  icon?: string;
+  /** Icon on the row — Material Symbol name (string) or custom element (ReactNode); defaults to `folder` for branches and `draft` for leaves */
+  icon?: string | React.ReactNode;
   /** Child nodes; a non-empty list makes the node an expandable branch */
   children?: TreeViewNode[];
 }
@@ -288,7 +288,7 @@ export const TreeView = React.forwardRef<HTMLUListElement, TreeViewProps>(
               />
             )}
             <span
-              className={`${baseClass}__icon material-symbols-rounded`}
+              className={`${baseClass}__icon${typeof icon === 'string' ? ' material-symbols-rounded' : ''}`}
               aria-hidden="true"
             >
               {icon}

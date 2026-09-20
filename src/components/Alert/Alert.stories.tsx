@@ -116,6 +116,31 @@ export const CustomIcon: Story = {
   },
 };
 
+/** `icon` also takes a custom element — any icon set works when the SVG draws with `currentColor`. */
+export const CustomIconNode: Story = {
+  args: {
+    variant: 'positive',
+    title: 'Deployed',
+    description: 'Your changes are live.',
+    icon: (
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M22 2 11 13" />
+        <path d="M22 2 15 22l-4-9-9-4 20-7z" />
+      </svg>
+    ),
+  },
+};
+
 // Compact variants
 export const CompactInfo: Story = {
   args: {

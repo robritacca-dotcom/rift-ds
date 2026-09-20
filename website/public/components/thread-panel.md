@@ -27,7 +27,7 @@ Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0.
 | logo | `ReactNode` | no |  | Brand mark slot at the top, e.g. a logo `<img>`. While collapsed it doubles as the expand button, AppSidebar's contract. |
 | logoText | `string` | no |  | Brand name beside the logo. The header row renders only when `logo`, `logoText`, or `onExpandedChange` is given. |
 | newThreadLabel | `string` | no |  | Text for the new-thread row. The row renders when this, `onNewThread`, or `newThreadHref` is given. |
-| newThreadIcon | `string` | no | `edit_square` | Material Symbol for the new-thread row. Defaults to the pen-in-a-box `edit_square`, the same glyph chat headers use for New chat. |
+| newThreadIcon | `ReactNode` | no | `edit_square` | Icon for the new-thread row — Material Symbol name (string) or custom element (ReactNode). Defaults to the pen-in-a-box `edit_square`, the same glyph chat headers use for New chat. |
 | newThreadShortcut | `string[]` | no |  | Keyboard hint rendered as compact Kbds at the row's trailing edge, e.g. `["Ctrl", "N"]`. Decorative — the host owns the actual binding. |
 | onNewThread | `(() => void)` | no |  | Fires when the new-thread row is clicked. |
 | newThreadHref | `string` | no |  | Optional href — the new-thread row renders as an `<a>`. |

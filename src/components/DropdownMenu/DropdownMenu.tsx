@@ -15,8 +15,8 @@ export interface DropdownMenuItem {
   label: string;
   /** Keyboard shortcut hint (e.g. "⇧ ⌘ P") */
   shortcut?: string;
-  /** Material Symbol icon name */
-  icon?: string;
+  /** Item icon — Material Symbol name (string) or custom element (ReactNode) */
+  icon?: string | React.ReactNode;
   /** Disabled state */
   disabled?: boolean;
   /** Destructive / danger styling (red text) for delete, remove, etc. */
@@ -141,11 +141,16 @@ const SubMenuItem = ({ item, baseClass, itemId, focused, size, onActivate }: Sub
       }}
     >
       <span className={`${baseClass}__item-label`}>
-        {item.icon && (
-          <span className={`${baseClass}__item-icon material-symbols-rounded`} aria-hidden="true">
-            {item.icon}
-          </span>
-        )}
+        {item.icon &&
+          (typeof item.icon === 'string' ? (
+            <span className={`${baseClass}__item-icon material-symbols-rounded`} aria-hidden="true">
+              {item.icon}
+            </span>
+          ) : (
+            <span className={`${baseClass}__item-icon`} aria-hidden="true">
+              {item.icon}
+            </span>
+          ))}
         {item.label}
       </span>
       <span className={`${baseClass}__submenu-icon material-symbols-rounded`} aria-hidden="true">
@@ -252,11 +257,16 @@ const MenuPanel = ({
         }}
       >
         <span className={`${baseClass}__item-label`}>
-          {entry.icon && (
-            <span className={`${baseClass}__item-icon material-symbols-rounded`} aria-hidden="true">
-              {entry.icon}
-            </span>
-          )}
+          {entry.icon &&
+            (typeof entry.icon === 'string' ? (
+              <span className={`${baseClass}__item-icon material-symbols-rounded`} aria-hidden="true">
+                {entry.icon}
+              </span>
+            ) : (
+              <span className={`${baseClass}__item-icon`} aria-hidden="true">
+                {entry.icon}
+              </span>
+            ))}
           {entry.label}
         </span>
         {entry.shortcut && (
@@ -463,11 +473,16 @@ export const DropdownMenu = ({
         }}
       >
         <span className={`${baseClass}__item-label`}>
-          {entry.icon && (
-            <span className={`${baseClass}__item-icon material-symbols-rounded`} aria-hidden="true">
-              {entry.icon}
-            </span>
-          )}
+          {entry.icon &&
+            (typeof entry.icon === 'string' ? (
+              <span className={`${baseClass}__item-icon material-symbols-rounded`} aria-hidden="true">
+                {entry.icon}
+              </span>
+            ) : (
+              <span className={`${baseClass}__item-icon`} aria-hidden="true">
+                {entry.icon}
+              </span>
+            ))}
           {entry.label}
         </span>
         {entry.shortcut && (

@@ -18,10 +18,11 @@ export interface DropdownOption {
    */
   font?: string;
   /**
-   * Material Symbol drawn before the label, in the option row and on the
-   * closed trigger while the option is selected.
+   * Icon drawn before the label, in the option row and on the closed
+   * trigger while the option is selected — Material Symbol name (string)
+   * or custom element (ReactNode).
    */
-  icon?: string;
+  icon?: string | React.ReactNode;
   /** Whether this option is disabled */
   disabled?: boolean;
 }
@@ -285,14 +286,19 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
             className={`${baseClass}__value ${!selectedOption ? `${baseClass}__value--placeholder` : ''}`}
             style={fontStyle(selectedOption?.font)}
           >
-            {selectedOption?.icon && (
-              <span
-                className={`${baseClass}__value-icon material-symbols-rounded`}
-                aria-hidden="true"
-              >
-                {selectedOption.icon}
-              </span>
-            )}
+            {selectedOption?.icon &&
+              (typeof selectedOption.icon === 'string' ? (
+                <span
+                  className={`${baseClass}__value-icon material-symbols-rounded`}
+                  aria-hidden="true"
+                >
+                  {selectedOption.icon}
+                </span>
+              ) : (
+                <span className={`${baseClass}__value-icon`} aria-hidden="true">
+                  {selectedOption.icon}
+                </span>
+              ))}
             {selectedOption ? selectedOption.label : placeholder}
           </span>
           <span className={`${baseClass}__chevron material-symbols-rounded`} aria-hidden="true">
@@ -343,14 +349,22 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
                               onClick={() => !option.disabled && handleSelect(option.value)}
                             >
                               <span className={`${baseClass}__option-content`}>
-                                {option.icon && (
-                                  <span
-                                    className={`${baseClass}__option-icon material-symbols-rounded`}
-                                    aria-hidden="true"
-                                  >
-                                    {option.icon}
-                                  </span>
-                                )}
+                                {option.icon &&
+                                  (typeof option.icon === 'string' ? (
+                                    <span
+                                      className={`${baseClass}__option-icon material-symbols-rounded`}
+                                      aria-hidden="true"
+                                    >
+                                      {option.icon}
+                                    </span>
+                                  ) : (
+                                    <span
+                                      className={`${baseClass}__option-icon`}
+                                      aria-hidden="true"
+                                    >
+                                      {option.icon}
+                                    </span>
+                                  ))}
                                 {option.label}
                               </span>
                               {option.value === value && (
@@ -390,14 +404,19 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
                     onClick={() => !option.disabled && handleSelect(option.value)}
                   >
                     <span className={`${baseClass}__option-content`}>
-                      {option.icon && (
-                        <span
-                          className={`${baseClass}__option-icon material-symbols-rounded`}
-                          aria-hidden="true"
-                        >
-                          {option.icon}
-                        </span>
-                      )}
+                      {option.icon &&
+                        (typeof option.icon === 'string' ? (
+                          <span
+                            className={`${baseClass}__option-icon material-symbols-rounded`}
+                            aria-hidden="true"
+                          >
+                            {option.icon}
+                          </span>
+                        ) : (
+                          <span className={`${baseClass}__option-icon`} aria-hidden="true">
+                            {option.icon}
+                          </span>
+                        ))}
                       {option.label}
                     </span>
                     {option.value === value && (

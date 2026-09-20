@@ -21,7 +21,7 @@ Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0.
 | readOnly | `boolean` | no | `false` | Display-only mode — renders the current rating with no interaction |
 | disabled | `boolean` | no | `false` | Whether the control is disabled |
 | allowClear | `boolean` | no | `false` | Selecting the already-selected step clears the rating back to 0 |
-| icon | `string` | no | `star` | Material Symbol drawn for each step |
+| icon | `ReactNode` | no | `star` | Glyph drawn for each step — Material Symbol name (string) or custom element (ReactNode). A string glyph solidifies on filled steps via the font's fill axis; a custom element should draw with `currentColor` so the filled colour still reads. |
 | size | `"default" \| "compact"` | no | `default` | Component size |
 | label | `string` | no | `Rating` | Accessible name for the group, and the base of each step's label |
 | className | `string` | no | `` | Additional CSS classes |

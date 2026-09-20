@@ -9,8 +9,8 @@ export interface TimelineItem {
   meta?: string;
   /** Body content under the title */
   description?: React.ReactNode;
-  /** Material Symbol shown in the marker (overrides dot/number) */
-  icon?: string;
+  /** Icon shown in the marker (overrides dot/number) — Material Symbol name (string) or custom element (ReactNode) */
+  icon?: string | React.ReactNode;
 }
 
 /** A single role/position within a company entry (`company` variant). */
@@ -151,8 +151,15 @@ export const Timeline = (props: TimelineProps) => {
 
   const renderMarker = (item: TimelineItem, index: number) => {
     if (item.icon) {
+      if (typeof item.icon === 'string') {
+        return (
+          <span className={`material-symbols-rounded ${BASE_CLASS}__marker-icon`} aria-hidden="true">
+            {item.icon}
+          </span>
+        );
+      }
       return (
-        <span className={`material-symbols-rounded ${BASE_CLASS}__marker-icon`} aria-hidden="true">
+        <span className={`${BASE_CLASS}__marker-icon`} aria-hidden="true">
           {item.icon}
         </span>
       );

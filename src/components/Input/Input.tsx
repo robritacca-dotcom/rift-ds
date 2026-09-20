@@ -19,10 +19,10 @@ type InputOwnProps = {
   error?: boolean;
   /** Helper or error message displayed below the input */
   helperText?: string;
-  /** Material Symbol icon name on the left */
-  iconLeft?: string;
-  /** Material Symbol icon name on the right */
-  iconRight?: string;
+  /** Leading icon — Material Symbol name (string) or custom element (ReactNode) */
+  iconLeft?: string | React.ReactNode;
+  /** Trailing icon — Material Symbol name (string) or custom element (ReactNode) */
+  iconRight?: string | React.ReactNode;
   /**
    * Convenience callback receiving the value directly.
    * Fires alongside `onChange`, which keeps the standard React event signature
@@ -113,7 +113,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         <div className={`${baseClass}__field-wrapper`}>
           {iconLeft && (
             <span
-              className={`${baseClass}__icon ${baseClass}__icon--left material-symbols-rounded`}
+              className={`${baseClass}__icon ${baseClass}__icon--left${typeof iconLeft === 'string' ? ' material-symbols-rounded' : ''}`}
               aria-hidden="true"
             >
               {iconLeft}
@@ -137,7 +137,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           />
           {iconRight && (
             <span
-              className={`${baseClass}__icon ${baseClass}__icon--right material-symbols-rounded`}
+              className={`${baseClass}__icon ${baseClass}__icon--right${typeof iconRight === 'string' ? ' material-symbols-rounded' : ''}`}
               aria-hidden="true"
             >
               {iconRight}

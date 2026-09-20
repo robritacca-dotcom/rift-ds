@@ -15,7 +15,7 @@ Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0.
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | label | `string` | yes |  | Display label beneath the icon / image |
-| icon | `string` | no |  | Material Symbol icon name rendered via the rounded font (e.g. "home") |
+| icon | `ReactNode` | no |  | Icon — Material Symbol name (string, e.g. "home") rendered via the rounded font, or custom element (ReactNode) |
 | imageSrc | `string` | no |  | Path to an image asset — used instead of icon when provided |
 | imageAlt | `string` | no |  | Alt text for the image |
 | className | `string` | no | `` | Additional CSS classes |

@@ -52,11 +52,11 @@ type ButtonOwnProps = {
    */
   state?: 'default' | 'hover' | 'active' | 'disabled';
   /**
-   * Legacy alias for `iconLeft`.
+   * Legacy alias for `iconLeft` — Material Symbol name (string) or custom element (ReactNode).
    *
    * @deprecated Use `iconLeft` instead.
    */
-  icon?: string;
+  icon?: string | React.ReactNode;
   /**
    * Legacy toggle for showing the text label.
    *

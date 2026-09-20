@@ -17,8 +17,8 @@ export interface CommandPaletteCommand {
   label: string;
   /** Optional secondary line under the label */
   description?: string;
-  /** Material Symbol icon name */
-  icon?: string;
+  /** Optional icon — Material Symbol name (string) or custom element (ReactNode) */
+  icon?: string | React.ReactNode;
   /** Keyboard shortcut shown on the right, e.g. ['⌘', 'P'] */
   shortcut?: string[];
   /** Custom node at the row's right edge, after any `shortcut` — a badge or affordance the keycap slot can't express. It renders inside the option row, so keep it non-interactive: a focusable element here would nest controls. */
@@ -319,7 +319,7 @@ export const CommandPalette = ({
                     >
                       {command.icon && (
                         <span
-                          className={`${baseClass}__command-icon material-symbols-rounded`}
+                          className={`${baseClass}__command-icon${typeof command.icon === 'string' ? ' material-symbols-rounded' : ''}`}
                           aria-hidden="true"
                         >
                           {command.icon}

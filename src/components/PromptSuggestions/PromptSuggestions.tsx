@@ -11,8 +11,8 @@ export interface PromptSuggestion {
   id: string;
   /** The suggestion text shown in the chip. */
   label: string;
-  /** Optional leading Material Symbol name. */
-  icon?: string;
+  /** Optional leading icon — Material Symbol name (string) or custom element (ReactNode). */
+  icon?: string | React.ReactNode;
 }
 
 /** Props owned by PromptSuggestions itself — everything else falls through to the root element. */

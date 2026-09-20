@@ -17,7 +17,7 @@ Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0.
 | label | `string` | yes |  | Primary label — e.g. "Email" |
 | value | `string` | yes |  | Visible value or description — e.g. "hello@example.com" |
 | href | `string` | yes |  | Link destination |
-| icon | `string` | no |  | Material Symbol name used when no logo is set |
+| icon | `ReactNode` | no |  | Icon used when no logo is set — Material Symbol name (string) or custom element (ReactNode) |
 | logo | `string` | no |  | Path to a logo image — preferred over icon when both are provided |
 | external | `boolean` | no | `false` | Opens link in a new tab and shows open_in_new indicator |
 | copyable | `boolean` | no | `false` | Renders a copy-to-clipboard button; fires onCopy(value) when clicked |

@@ -9,8 +9,8 @@ export interface Segment {
   value: string;
   /** Display label */
   label: string;
-  /** Optional Material Symbol icon name */
-  icon?: string;
+  /** Optional icon — Material Symbol name (string) or custom element (ReactNode) */
+  icon?: string | React.ReactNode;
   /** Whether disabled */
   disabled?: boolean;
 }
@@ -232,7 +232,7 @@ export const SegmentedControl = ({
           >
             {segment.icon && (
               <span
-                className={`${baseClass}__icon material-symbols-rounded`}
+                className={`${baseClass}__icon${typeof segment.icon === 'string' ? ' material-symbols-rounded' : ''}`}
                 aria-hidden="true"
               >
                 {segment.icon}

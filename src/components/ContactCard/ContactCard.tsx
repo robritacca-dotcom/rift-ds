@@ -1,5 +1,6 @@
 'use client';
 
+import type React from 'react';
 import './ContactCard.css';
 import '../../fonts/material-symbols.css';
 
@@ -10,8 +11,8 @@ export interface ContactCardProps {
   value: string;
   /** Link destination */
   href: string;
-  /** Material Symbol name used when no logo is set */
-  icon?: string;
+  /** Icon used when no logo is set — Material Symbol name (string) or custom element (ReactNode) */
+  icon?: string | React.ReactNode;
   /** Path to a logo image — preferred over icon when both are provided */
   logo?: string;
   /** Opens link in a new tab and shows open_in_new indicator */
@@ -63,10 +64,12 @@ export const ContactCard = ({
             height={24}
             className="ds-contact-card__logo"
           />
-        ) : (
+        ) : typeof icon === 'string' || icon == null ? (
           <span className="material-symbols-rounded ds-contact-card__icon">
             {icon ?? 'link'}
           </span>
+        ) : (
+          <span className="ds-contact-card__icon">{icon}</span>
         )}
       </span>
 

@@ -83,6 +83,12 @@ const ICON_SNIPPET = `/* The bundled Material Symbols font keeps every Google ax
   --material-symbols-grade: 0;     /* -50-200 contrast tuning */
 }`;
 
+const ICON_NODE_SNIPPET = `// Every icon prop takes a Material name or your own element.
+import { Search } from 'lucide-react';
+
+<Input iconLeft="search" />
+<Input iconLeft={<Search size={20} />} />`;
+
 const PRESET_SNIPPET = `// Every shipped theme, one generated stylesheet each, plus this aggregate.
 import '@robr0/design-system/tokens/presets/presets.css';
 
@@ -377,12 +383,14 @@ export default function GetStartedPage() {
                   every axis Google exposes is a custom property: fill,
                   stroke weight, and grade, settable at any scope from one
                   icon to the whole app. Optical size is automatic. And
-                  nothing couples you to the bundled font: many icon props
-                  (Button, Chip, EmptyState, the chat set) accept your own
-                  elements as well as Material names, so a Lucide or any
-                  other icon set drops straight in.
+                  nothing couples you to the bundled font: every icon prop
+                  in the library accepts your own element as well as a
+                  Material name, so a Lucide or any other icon set drops
+                  straight in. Draw custom SVGs with currentColor and they
+                  inherit text colour the way the bundled glyphs do.
                 </p>
                 <CodeBlock code={ICON_SNIPPET} language="css" showCopy />
+                <CodeBlock code={ICON_NODE_SNIPPET} language="tsx" showCopy />
               </section>
 
               {/* Preset themes */}

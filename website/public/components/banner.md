@@ -17,7 +17,7 @@ Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0.
 | variant | `"error" \| "info" \| "positive" \| "warning" \| "neutral"` | no | `info` | Status variant determines colour and default icon |
 | title | `string` | no |  | Short leading emphasis before the body text. Deliberately shadows the native `title` attribute — a banner never needs a hover tooltip. |
 | children | `ReactNode` | no |  | Banner body content — a single line of text, rendered inside the banner's paragraph |
-| icon | `string` | no |  | Custom icon override — Material Symbol name |
+| icon | `ReactNode` | no |  | Custom icon override — Material Symbol name (string) or custom element (ReactNode) |
 | action | `ReactNode` | no |  | Action slot on the trailing edge, for a compact Button or link |
 | dismissible | `boolean` | no | `false` | Whether the banner shows a dismiss button |
 | onDismiss | `(() => void)` | no |  | Callback when the dismiss button is clicked |

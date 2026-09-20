@@ -10,8 +10,8 @@ type BannerOwnProps = {
   title?: string;
   /** Banner body content — a single line of text, rendered inside the banner's paragraph */
   children?: React.ReactNode;
-  /** Custom icon override — Material Symbol name */
-  icon?: string;
+  /** Custom icon override — Material Symbol name (string) or custom element (ReactNode) */
+  icon?: string | React.ReactNode;
   /** Action slot on the trailing edge, for a compact Button or link */
   action?: React.ReactNode;
   /** Whether the banner shows a dismiss button */
@@ -73,14 +73,20 @@ export const Banner = React.forwardRef<HTMLDivElement, BannerProps>(
       .filter(Boolean)
       .join(' ');
 
-    const iconName = icon || defaultIcons[variant];
+    const iconValue = icon || defaultIcons[variant];
 
     return (
       <div {...rest} ref={ref} className={classes} role="status">
         <div className={`${baseClass}__body`}>
-          <span className={`${baseClass}__icon material-symbols-rounded`} aria-hidden="true">
-            {iconName}
-          </span>
+          {typeof iconValue === 'string' ? (
+            <span className={`${baseClass}__icon material-symbols-rounded`} aria-hidden="true">
+              {iconValue}
+            </span>
+          ) : (
+            <span className={`${baseClass}__icon`} aria-hidden="true">
+              {iconValue}
+            </span>
+          )}
           <p className={`${baseClass}__content`}>
             {title && <strong className={`${baseClass}__title`}>{title}</strong>}
             {title && children ? ' ' : null}

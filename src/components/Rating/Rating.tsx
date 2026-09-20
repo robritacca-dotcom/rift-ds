@@ -23,8 +23,8 @@ type RatingOwnProps = {
   disabled?: boolean;
   /** Selecting the already-selected step clears the rating back to 0 */
   allowClear?: boolean;
-  /** Material Symbol drawn for each step */
-  icon?: string;
+  /** Glyph drawn for each step — Material Symbol name (string) or custom element (ReactNode). A string glyph solidifies on filled steps via the font's fill axis; a custom element should draw with `currentColor` so the filled colour still reads. */
+  icon?: string | React.ReactNode;
   /** Component size */
   size?: 'default' | 'compact';
   /** Accessible name for the group, and the base of each step's label */
@@ -132,7 +132,7 @@ export const Rating = React.forwardRef<HTMLDivElement, RatingProps>(
               className={`${baseClass}__step ${step <= displayValue ? `${baseClass}__step--filled` : ''}`}
               aria-hidden="true"
             >
-              <span className={`${baseClass}__icon material-symbols-rounded`}>{icon}</span>
+              <span className={`${baseClass}__icon${typeof icon === 'string' ? ' material-symbols-rounded' : ''}`}>{icon}</span>
             </span>
           ))}
         </div>
@@ -167,7 +167,7 @@ export const Rating = React.forwardRef<HTMLDivElement, RatingProps>(
               onClick={() => setValue(step)}
               onMouseEnter={() => setHoverValue(step)}
             >
-              <span className={`${baseClass}__icon material-symbols-rounded`} aria-hidden="true">
+              <span className={`${baseClass}__icon${typeof icon === 'string' ? ' material-symbols-rounded' : ''}`} aria-hidden="true">
                 {icon}
               </span>
             </button>

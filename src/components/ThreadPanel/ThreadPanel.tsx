@@ -10,8 +10,8 @@ export interface ThreadPanelThreadAction {
   id: string;
   /** Menu row text. */
   label: string;
-  /** Material Symbol name for the row's leading icon. */
-  icon?: string;
+  /** Leading icon on the menu row — Material Symbol name (string) or custom element (ReactNode). */
+  icon?: string | React.ReactNode;
   /** Destructive styling (the error text colour) for delete-like actions. */
   destructive?: boolean;
 }
@@ -33,8 +33,8 @@ export interface ThreadPanelThread {
   description?: string;
   /** The thread holds unseen activity: a small status dot leads the row. The dot is decorative — put the state in `meta` or `description` when it must be read aloud. */
   unread?: boolean;
-  /** Trailing Material Symbol before the meta, e.g. `cloud` for a session that lives remotely. */
-  icon?: string;
+  /** Trailing icon before the meta — Material Symbol name (string) or custom element (ReactNode), e.g. `cloud` for a session that lives remotely. */
+  icon?: string | React.ReactNode;
   /** Marks the thread pinned with a trailing pin glyph. A marker only: the host groups pinned threads (typically a leading group) and offers pin/unpin through the row menu. */
   pinned?: boolean;
 }
@@ -49,8 +49,8 @@ export interface ThreadPanelGroup {
 export interface ThreadPanelControl {
   /** Stable identifier reported through `onControlSelect`. */
   id: string;
-  /** Material Symbol name for the row's leading icon. */
-  icon: string;
+  /** Leading icon on the row — Material Symbol name (string) or custom element (ReactNode). */
+  icon: string | React.ReactNode;
   /** Row text. */
   label: string;
   /** Optional href — the row renders as an `<a>` instead of a `<button>`. */
@@ -62,8 +62,8 @@ export interface ThreadPanelProject {
   id: string;
   /** The project's name. */
   label: string;
-  /** Material Symbol name for the row's leading icon. Defaults to `folder`. */
-  icon?: string;
+  /** Leading icon on the row — Material Symbol name (string) or custom element (ReactNode). Defaults to `folder`. */
+  icon?: string | React.ReactNode;
   /** Small trailing annotation in the caption face, e.g. how recently the project was touched. */
   meta?: string;
   /** Optional href — the row renders as an `<a>` instead of a `<button>`. */
@@ -107,8 +107,8 @@ type ThreadPanelOwnProps = {
   logoText?: string;
   /** Text for the new-thread row. The row renders when this, `onNewThread`, or `newThreadHref` is given. */
   newThreadLabel?: string;
-  /** Material Symbol for the new-thread row. Defaults to the pen-in-a-box `edit_square`, the same glyph chat headers use for New chat. */
-  newThreadIcon?: string;
+  /** Icon for the new-thread row — Material Symbol name (string) or custom element (ReactNode). Defaults to the pen-in-a-box `edit_square`, the same glyph chat headers use for New chat. */
+  newThreadIcon?: string | React.ReactNode;
   /** Keyboard hint rendered as compact Kbds at the row's trailing edge, e.g. `["Ctrl", "N"]`. Decorative — the host owns the actual binding. */
   newThreadShortcut?: string[];
   /** Fires when the new-thread row is clicked. */
@@ -446,7 +446,7 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
             onClick={onNewThread}
           >
             <span
-              className={`${baseClass}__new-icon ${iconClass}`}
+              className={`${baseClass}__new-icon${typeof newThreadIcon === 'string' ? ` ${iconClass}` : ''}`}
               aria-hidden="true"
             >
               {newThreadIcon}
@@ -480,7 +480,7 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
                 }
               >
                 <span
-                  className={`${baseClass}__control-icon ${iconClass}`}
+                  className={`${baseClass}__control-icon${typeof control.icon === 'string' ? ` ${iconClass}` : ''}`}
                   aria-hidden="true"
                 >
                   {control.icon}
@@ -536,7 +536,7 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
                       title={project.label}
                     >
                       <span
-                        className={`${baseClass}__project-icon ${iconClass}`}
+                        className={`${baseClass}__project-icon${typeof project.icon === 'string' || project.icon == null ? ` ${iconClass}` : ''}`}
                         aria-hidden="true"
                       >
                         {project.icon ?? 'folder'}
@@ -665,7 +665,7 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
                                     <span className={`${baseClass}__trail`}>
                                       {thread.icon && (
                                         <span
-                                          className={`${baseClass}__thread-icon ${iconClass}`}
+                                          className={`${baseClass}__thread-icon${typeof thread.icon === 'string' ? ` ${iconClass}` : ''}`}
                                           aria-hidden="true"
                                         >
                                           {thread.icon}

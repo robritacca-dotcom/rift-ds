@@ -318,7 +318,7 @@ export default function IconsPage() {
               One icon contract; the set is a theme choice
             </p>
             <p className={styles.introBody}>
-              The shipped default is Material Symbols Rounded: one weight across the set, on a four-step size scale, with optical size tracking each step automatically so stroke weight stays even from 20px to 48px. {totalIcons} icons are included, and every Google axis stays live (the Style section below). The contract, not the set, is the rule here: icons sit on the size scale and inherit text colour, and many icon props accept your own elements, so another icon set drops in beside or instead of the bundled one.
+              The shipped default is Material Symbols Rounded: one weight across the set, on a four-step size scale, with optical size tracking each step automatically so stroke weight stays even from 20px to 48px. {totalIcons} icons are included, and every Google axis stays live (the Style section below). The contract, not the set, is the rule here: icons sit on the size scale and inherit text colour, and every icon prop accepts your own element, so another icon set drops in beside or instead of the bundled one.
             </p>
           </div>
 

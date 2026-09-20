@@ -17,8 +17,8 @@ type AnchorNavOwnProps = {
   variant?: 'list' | 'floating';
   /** Header text above the list; pass an empty string to render no header */
   title?: string;
-  /** Material Symbols icon name beside the header; pass an empty string for none */
-  icon?: string;
+  /** Icon beside the header — Material Symbol name (string) or custom element (ReactNode); pass an empty string for none */
+  icon?: string | React.ReactNode;
   /** Controlled active item id — set it to drive the highlight yourself and skip scroll tracking */
   activeId?: string;
   /** Fires when the tracked (or clicked) active item changes */
@@ -143,11 +143,16 @@ export const AnchorNav = React.forwardRef<HTMLElement, AnchorNavProps>(
 
     const header = title ? (
       <p className="ds-anchor-nav__header">
-        {icon && (
-          <span className="material-symbols-rounded ds-anchor-nav__icon" aria-hidden="true">
-            {icon}
-          </span>
-        )}
+        {icon &&
+          (typeof icon === 'string' ? (
+            <span className="material-symbols-rounded ds-anchor-nav__icon" aria-hidden="true">
+              {icon}
+            </span>
+          ) : (
+            <span className="ds-anchor-nav__icon" aria-hidden="true">
+              {icon}
+            </span>
+          ))}
         {title}
       </p>
     ) : null;

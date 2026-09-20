@@ -7,8 +7,8 @@ import '../../fonts/material-symbols.css';
 export interface MessageAction {
   /** Stable identifier passed to `onActionClick`. */
   id: string;
-  /** Material Symbol name for the button glyph. */
-  icon: string;
+  /** Button glyph — Material Symbol name (string) or custom element (ReactNode). */
+  icon: string | React.ReactNode;
   /** Accessible name, also shown as the tooltip. */
   label: string;
   /** Marks the action as selected, e.g. the chosen feedback thumb. */
@@ -65,7 +65,10 @@ export const MessageActions = React.forwardRef<HTMLDivElement, MessageActionsPro
               disabled={item.disabled}
               onClick={() => onActionClick?.(item.id)}
             >
-              <span className="material-symbols-rounded" aria-hidden="true">
+              <span
+                className={typeof item.icon === 'string' ? 'material-symbols-rounded' : undefined}
+                aria-hidden="true"
+              >
                 {item.icon}
               </span>
             </button>

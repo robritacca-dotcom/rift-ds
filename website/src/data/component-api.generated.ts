@@ -359,9 +359,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "icon",
-            "type": "string",
+            "type": "ReactNode",
             "required": false,
-            "description": "Custom icon override — Material Symbol name"
+            "description": "Custom icon override — Material Symbol name (string) or custom element (ReactNode)"
           },
           {
             "name": "onDismiss",
@@ -496,9 +496,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "icon",
-            "type": "string",
+            "type": "ReactNode",
             "required": false,
-            "description": "Material Symbols icon name beside the header; pass an empty string for none",
+            "description": "Icon beside the header — Material Symbol name (string) or custom element (ReactNode); pass an empty string for none",
             "defaultValue": "toc"
           },
           {
@@ -1031,9 +1031,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "icon",
-            "type": "string",
+            "type": "ReactNode",
             "required": false,
-            "description": "Custom icon override — Material Symbol name"
+            "description": "Custom icon override — Material Symbol name (string) or custom element (ReactNode)"
           },
           {
             "name": "action",
@@ -1307,9 +1307,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "icon",
-            "type": "string",
+            "type": "ReactNode",
             "required": false,
-            "description": "Legacy alias for `iconLeft`.",
+            "description": "Legacy alias for `iconLeft` — Material Symbol name (string) or custom element (ReactNode).",
             "deprecated": "Use `iconLeft` instead."
           },
           {
@@ -2098,9 +2098,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
         "props": [
           {
             "name": "icon",
-            "type": "string",
+            "type": "ReactNode",
             "required": true,
-            "description": "Material Symbol icon name"
+            "description": "The icon — Material Symbol name (string) or custom element (ReactNode)"
           },
           {
             "name": "variant",
@@ -2844,9 +2844,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "contextIcon",
-            "type": "string",
+            "type": "ReactNode",
             "required": false,
-            "description": "Material Symbol name rendered at the left of the context chip\n(`visibility`, `article`…). Decorative and hidden from assistive\ntechnology — the chip's text carries the meaning. None by default,\nmatching the ai set's icon-free-unless-asked convention."
+            "description": "Icon at the left of the context chip — Material Symbol name (string,\ne.g. `visibility`, `article`) or custom element (ReactNode). Decorative\nand hidden from assistive technology — the chip's text carries the\nmeaning. None by default, matching the ai set's icon-free-unless-asked\nconvention."
           },
           {
             "name": "attachments",
@@ -2924,9 +2924,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "icon",
-            "type": "string",
+            "type": "ReactNode",
             "required": false,
-            "description": "Material Symbol name used when no logo is set"
+            "description": "Icon used when no logo is set — Material Symbol name (string) or custom element (ReactNode)"
           },
           {
             "name": "logo",
@@ -3905,9 +3905,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "icon",
-            "type": "string",
+            "type": "ReactNode",
             "required": false,
-            "description": "Material Symbol icon name rendered via the rounded font (e.g. \"home\")"
+            "description": "Icon — Material Symbol name (string, e.g. \"home\") rendered via the rounded font, or custom element (ReactNode)"
           },
           {
             "name": "imageSrc",
@@ -4876,15 +4876,15 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "iconLeft",
-            "type": "string",
+            "type": "ReactNode",
             "required": false,
-            "description": "Material Symbol icon name on the left"
+            "description": "Leading icon — Material Symbol name (string) or custom element (ReactNode)"
           },
           {
             "name": "iconRight",
-            "type": "string",
+            "type": "ReactNode",
             "required": false,
-            "description": "Material Symbol icon name on the right"
+            "description": "Trailing icon — Material Symbol name (string) or custom element (ReactNode)"
           },
           {
             "name": "onValueChange",
@@ -6950,9 +6950,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "icon",
-            "type": "string",
+            "type": "ReactNode",
             "required": false,
-            "description": "Material Symbol drawn for each step",
+            "description": "Glyph drawn for each step — Material Symbol name (string) or custom element (ReactNode). A string glyph solidifies on filled steps via the font's fill axis; a custom element should draw with `currentColor` so the filled colour still reads.",
             "defaultValue": "star"
           },
           {
@@ -8758,9 +8758,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "newThreadIcon",
-            "type": "string",
+            "type": "ReactNode",
             "required": false,
-            "description": "Material Symbol for the new-thread row. Defaults to the pen-in-a-box `edit_square`, the same glyph chat headers use for New chat.",
+            "description": "Icon for the new-thread row — Material Symbol name (string) or custom element (ReactNode). Defaults to the pen-in-a-box `edit_square`, the same glyph chat headers use for New chat.",
             "defaultValue": "edit_square"
           },
           {
@@ -9181,9 +9181,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "icon",
-            "type": "string",
+            "type": "ReactNode",
             "required": false,
-            "description": "Custom icon override — Material Symbol name"
+            "description": "Custom icon override — Material Symbol name (string) or custom element (ReactNode)"
           },
           {
             "name": "className",

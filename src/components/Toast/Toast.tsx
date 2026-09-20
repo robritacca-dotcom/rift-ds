@@ -25,8 +25,8 @@ export interface ToastData {
   duration?: number;
   /** Whether the toast can be manually dismissed */
   dismissible?: boolean;
-  /** Custom icon override — Material Symbol name */
-  icon?: string;
+  /** Custom icon override — Material Symbol name (string) or custom element (ReactNode) */
+  icon?: string | React.ReactNode;
 }
 
 export interface ToastProviderProps {
@@ -89,7 +89,7 @@ interface ToastItemProps extends Required<Pick<ToastData, 'variant'>> {
   title?: string;
   description?: string;
   dismissible: boolean;
-  icon?: string;
+  icon?: string | React.ReactNode;
   duration: number;
   onDismiss: (id: string) => void;
 }
@@ -156,7 +156,7 @@ const ToastItem = ({
       onBlur={() => setPauseTimer(false)}
     >
       <span
-        className={`${baseClass}__icon material-symbols-rounded`}
+        className={`${baseClass}__icon${typeof iconName === 'string' ? ' material-symbols-rounded' : ''}`}
         aria-hidden="true"
       >
         {iconName}
@@ -301,8 +301,8 @@ export interface ToastProps {
   variant?: 'info' | 'positive' | 'warning' | 'error' | 'neutral';
   /** Whether the toast can be manually dismissed */
   dismissible?: boolean;
-  /** Custom icon override — Material Symbol name */
-  icon?: string;
+  /** Custom icon override — Material Symbol name (string) or custom element (ReactNode) */
+  icon?: string | React.ReactNode;
   /** Additional CSS classes */
   className?: string;
 }
@@ -329,7 +329,7 @@ export const Toast = ({
   return (
     <div className={classes} role="status">
       <span
-        className={`${baseClass}__icon material-symbols-rounded`}
+        className={`${baseClass}__icon${typeof iconName === 'string' ? ' material-symbols-rounded' : ''}`}
         aria-hidden="true"
       >
         {iconName}

@@ -1,3 +1,4 @@
+import type React from 'react';
 import './LinkList.css';
 import '../../fonts/material-symbols.css';
 
@@ -12,8 +13,8 @@ export interface LinkListItem {
   logo?: string;
   /** Alt text for the logo — defaults to empty string (decorative) */
   logoAlt?: string;
-  /** Material Symbol name used when no logo is provided (e.g. "emoji_events") */
-  icon?: string;
+  /** Icon used when no logo is provided — Material Symbol name (string, e.g. "emoji_events") or custom element (ReactNode) */
+  icon?: string | React.ReactNode;
   /** Open in a new tab. Defaults to true; set false for links inside the same site, which swaps the open_in_new indicator for arrow_forward. */
   newTab?: boolean;
 }
@@ -55,10 +56,12 @@ export const LinkList = ({ items, className = '' }: LinkListProps) => {
                   width={28}
                   height={28}
                 />
-              ) : (
+              ) : typeof item.icon === 'string' || item.icon == null ? (
                 <span className="material-symbols-rounded ds-link-list__symbol">
                   {item.icon ?? 'link'}
                 </span>
+              ) : (
+                <span className="ds-link-list__symbol">{item.icon}</span>
               )}
             </span>
 

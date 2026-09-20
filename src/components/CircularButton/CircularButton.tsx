@@ -10,8 +10,8 @@ import '../../fonts/material-symbols.css';
 
 /** Props owned by CircularButton itself — everything else falls through to the DOM node. */
 type CircularButtonOwnProps = {
-  /** Material Symbol icon name */
-  icon: string;
+  /** The icon — Material Symbol name (string) or custom element (ReactNode) */
+  icon: string | React.ReactNode;
   /** Visual treatment */
   variant?: 'primary' | 'secondary' | 'tertiary' | 'neutral';
   /**
@@ -126,7 +126,7 @@ export const CircularButton = React.forwardRef<
         <Spinner size={size === 'compact' ? 'sm' : 'md'} variant="inherit" />
       </span>
     ) : (
-      <span className={`${baseClass}__icon material-symbols-rounded`} aria-hidden="true">
+      <span className={`${baseClass}__icon${typeof icon === 'string' ? ' material-symbols-rounded' : ''}`} aria-hidden="true">
         {icon}
       </span>
     );

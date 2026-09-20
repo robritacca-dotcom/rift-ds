@@ -53,12 +53,13 @@ type ComposerOwnProps = {
    */
   context?: React.ReactNode;
   /**
-   * Material Symbol name rendered at the left of the context chip
-   * (`visibility`, `article`…). Decorative and hidden from assistive
-   * technology — the chip's text carries the meaning. None by default,
-   * matching the ai set's icon-free-unless-asked convention.
+   * Icon at the left of the context chip — Material Symbol name (string,
+   * e.g. `visibility`, `article`) or custom element (ReactNode). Decorative
+   * and hidden from assistive technology — the chip's text carries the
+   * meaning. None by default, matching the ai set's icon-free-unless-asked
+   * convention.
    */
-  contextIcon?: string;
+  contextIcon?: string | React.ReactNode;
   /**
    * Attachment row rendered above the textarea (DocumentChips). Fully
    * controlled by the caller — Composer never owns the list.
@@ -222,7 +223,11 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
           <div className={`${baseClass}__context`}>
             {contextIcon && (
               <span className={`${baseClass}__context-icon`} aria-hidden="true">
-                <span className="material-symbols-rounded">{contextIcon}</span>
+                {typeof contextIcon === 'string' ? (
+                  <span className="material-symbols-rounded">{contextIcon}</span>
+                ) : (
+                  contextIcon
+                )}
               </span>
             )}
             <span className={`${baseClass}__context-text`}>{context}</span>

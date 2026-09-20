@@ -18,7 +18,7 @@ Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0.
 | description | `string` | no |  | Toast description / body text |
 | variant | `"error" \| "info" \| "positive" \| "warning" \| "neutral"` | no | `info` | Toast variant |
 | dismissible | `boolean` | no | `true` | Whether the toast can be manually dismissed |
-| icon | `string` | no |  | Custom icon override — Material Symbol name |
+| icon | `ReactNode` | no |  | Custom icon override — Material Symbol name (string) or custom element (ReactNode) |
 | className | `string` | no | `` | Additional CSS classes |
 
 ## ToastProvider props

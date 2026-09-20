@@ -9,8 +9,8 @@ export interface Tab {
   value: string;
   /** Display label */
   label: string;
-  /** Optional Material Symbol icon name */
-  icon?: string;
+  /** Optional icon — Material Symbol name (string) or custom element (ReactNode) */
+  icon?: string | React.ReactNode;
   /** Whether this tab is disabled */
   disabled?: boolean;
 }
@@ -108,11 +108,16 @@ export const Tabs = ({
             onClick={() => !tab.disabled && onTabChange?.(tab.value)}
             onKeyDown={(e) => handleKeyDown(e, index)}
           >
-            {tab.icon && (
-              <span className={`${baseClass}__icon material-symbols-rounded`} aria-hidden="true">
-                {tab.icon}
-              </span>
-            )}
+            {tab.icon &&
+              (typeof tab.icon === 'string' ? (
+                <span className={`${baseClass}__icon material-symbols-rounded`} aria-hidden="true">
+                  {tab.icon}
+                </span>
+              ) : (
+                <span className={`${baseClass}__icon`} aria-hidden="true">
+                  {tab.icon}
+                </span>
+              ))}
             <span className={`${baseClass}__label`}>{tab.label}</span>
           </button>
         );

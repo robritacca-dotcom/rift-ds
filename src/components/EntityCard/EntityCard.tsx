@@ -1,10 +1,11 @@
+import type React from 'react';
 import './EntityCard.css';
 
 export interface EntityCardProps {
   /** Display label beneath the icon / image */
   label: string;
-  /** Material Symbol icon name rendered via the rounded font (e.g. "home") */
-  icon?: string;
+  /** Icon — Material Symbol name (string, e.g. "home") rendered via the rounded font, or custom element (ReactNode) */
+  icon?: string | React.ReactNode;
   /** Path to an image asset — used instead of icon when provided */
   imageSrc?: string;
   /** Alt text for the image */
@@ -38,9 +39,15 @@ export const EntityCard = ({
             className={`${baseClass}__image`}
           />
         ) : icon ? (
-          <span className={`${baseClass}__icon material-symbols-rounded`} aria-hidden="true">
-            {icon}
-          </span>
+          typeof icon === 'string' ? (
+            <span className={`${baseClass}__icon material-symbols-rounded`} aria-hidden="true">
+              {icon}
+            </span>
+          ) : (
+            <span className={`${baseClass}__icon`} aria-hidden="true">
+              {icon}
+            </span>
+          )
         ) : null}
       </div>
       <span className={`${baseClass}__label`}>{label}</span>

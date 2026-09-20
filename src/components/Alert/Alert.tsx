@@ -1,3 +1,4 @@
+import type React from 'react';
 import './Alert.css';
 import '../../fonts/material-symbols.css';
 
@@ -12,8 +13,8 @@ export interface AlertProps {
   size?: 'default' | 'compact';
   /** Whether the alert can be dismissed */
   dismissible?: boolean;
-  /** Custom icon override — Material Symbol name */
-  icon?: string;
+  /** Custom icon override — Material Symbol name (string) or custom element (ReactNode) */
+  icon?: string | React.ReactNode;
   /** Callback when dismiss button is clicked */
   onDismiss?: () => void;
   /** Additional CSS classes */
@@ -51,16 +52,22 @@ export const Alert = ({
     .filter(Boolean)
     .join(' ');
 
-  const iconName = icon || defaultIcons[variant];
+  const iconValue = icon || defaultIcons[variant];
 
   return (
     <div className={classes} role="alert">
-      <span
-        className={`${baseClass}__icon material-symbols-rounded`}
-        aria-hidden="true"
-      >
-        {iconName}
-      </span>
+      {typeof iconValue === 'string' ? (
+        <span
+          className={`${baseClass}__icon material-symbols-rounded`}
+          aria-hidden="true"
+        >
+          {iconValue}
+        </span>
+      ) : (
+        <span className={`${baseClass}__icon`} aria-hidden="true">
+          {iconValue}
+        </span>
+      )}
 
       <div className={`${baseClass}__content`}>
         {title && <p className={`${baseClass}__title`}>{title}</p>}

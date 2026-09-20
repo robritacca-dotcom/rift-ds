@@ -14,7 +14,7 @@ Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0.
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| icon | `string` | yes |  | Material Symbol icon name |
+| icon | `ReactNode` | yes |  | The icon — Material Symbol name (string) or custom element (ReactNode) |
 | variant | `"neutral" \| "primary" \| "secondary" \| "tertiary"` | no |  | Visual treatment |
 | priority | `"primary" \| "secondary" \| "tertiary"` | no |  | Legacy alias for `variant`. Deprecated: Use `variant` instead. |
 | disabled | `boolean` | no |  | Whether the button is disabled |

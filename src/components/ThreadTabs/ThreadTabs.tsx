@@ -9,8 +9,8 @@ export interface ThreadTab {
   id: string;
   /** The tab's one-line label. Overflow fades out under a trailing mask rather than clipping; the full text stays readable in the tab's native tooltip. */
   label: string;
-  /** Material Symbol name for the tab's leading icon. */
-  icon?: string;
+  /** The tab's leading icon — Material Symbol name (string) or custom element (ReactNode). */
+  icon?: string | React.ReactNode;
   /** The thread holds unseen activity: a small status dot leads the label. The dot is decorative — keep the state readable elsewhere when it must be announced. */
   unread?: boolean;
 }
@@ -252,14 +252,22 @@ export const ThreadTabs = React.forwardRef<HTMLDivElement, ThreadTabsProps>(
                           aria-hidden="true"
                         />
                       )}
-                      {tab.icon && (
-                        <span
-                          className={`${baseClass}__icon ${iconClass}`}
-                          aria-hidden="true"
-                        >
-                          {tab.icon}
-                        </span>
-                      )}
+                      {tab.icon &&
+                        (typeof tab.icon === 'string' ? (
+                          <span
+                            className={`${baseClass}__icon ${iconClass}`}
+                            aria-hidden="true"
+                          >
+                            {tab.icon}
+                          </span>
+                        ) : (
+                          <span
+                            className={`${baseClass}__icon`}
+                            aria-hidden="true"
+                          >
+                            {tab.icon}
+                          </span>
+                        ))}
                       <span className={`${baseClass}__label`}>{tab.label}</span>
                     </button>
                     {onTabClose && (

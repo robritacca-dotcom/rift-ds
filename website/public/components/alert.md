@@ -19,6 +19,6 @@ Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0.
 | variant | `"error" \| "info" \| "positive" \| "warning" \| "neutral"` | no | `info` | Alert variant determines colour and icon |
 | size | `"default" \| "compact"` | no | `default` | Component size |
 | dismissible | `boolean` | no | `false` | Whether the alert can be dismissed |
-| icon | `string` | no |  | Custom icon override — Material Symbol name |
+| icon | `ReactNode` | no |  | Custom icon override — Material Symbol name (string) or custom element (ReactNode) |
 | onDismiss | `(() => void)` | no |  | Callback when dismiss button is clicked |
 | className | `string` | no | `` | Additional CSS classes |

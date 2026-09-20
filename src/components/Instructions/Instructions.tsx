@@ -1,3 +1,4 @@
+import type React from 'react';
 import './Instructions.css';
 import '../../fonts/material-symbols.css';
 
@@ -6,8 +7,8 @@ export interface InstructionStep {
   label: string;
   /** Optional step description */
   description?: string;
-  /** Optional custom icon — defaults to step number */
-  icon?: string;
+  /** Optional custom icon — Material Symbol name (string) or custom element (ReactNode); defaults to step number */
+  icon?: string | React.ReactNode;
 }
 
 export interface InstructionsProps {
@@ -56,9 +57,13 @@ export const Instructions = ({
             <div className={`${baseClass}__indicator`}>
               <div className={`${baseClass}__badge`}>
                 {step.icon ? (
-                  <span className="material-symbols-rounded" aria-hidden="true">
-                    {step.icon}
-                  </span>
+                  typeof step.icon === 'string' ? (
+                    <span className="material-symbols-rounded" aria-hidden="true">
+                      {step.icon}
+                    </span>
+                  ) : (
+                    <span aria-hidden="true">{step.icon}</span>
+                  )
                 ) : numbered ? (
                   <span className={`${baseClass}__number`}>{idx + 1}</span>
                 ) : (

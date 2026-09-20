@@ -18,8 +18,8 @@ export interface FilterBarFilter {
   id: string;
   /** Chip label, e.g. "Status". */
   label: string;
-  /** Material Symbol icon name shown before the label. */
-  icon?: string;
+  /** Icon shown before the label — Material Symbol name (string) or custom element (ReactNode). */
+  icon?: string | React.ReactNode;
   /** The choices this filter offers. */
   options: FilterBarOption[];
   /** Whether several options can be active at once. Single-select closes on choice. */
@@ -242,14 +242,19 @@ export const FilterBar = React.forwardRef<HTMLDivElement, FilterBarProps>(
                   onClick={() => handleTriggerClick(filter)}
                   onKeyDown={(e) => handleTriggerKeyDown(e, filter)}
                 >
-                  {filter.icon && (
-                    <span
-                      className={`${baseClass}__icon material-symbols-rounded`}
-                      aria-hidden="true"
-                    >
-                      {filter.icon}
-                    </span>
-                  )}
+                  {filter.icon &&
+                    (typeof filter.icon === 'string' ? (
+                      <span
+                        className={`${baseClass}__icon material-symbols-rounded`}
+                        aria-hidden="true"
+                      >
+                        {filter.icon}
+                      </span>
+                    ) : (
+                      <span className={`${baseClass}__icon`} aria-hidden="true">
+                        {filter.icon}
+                      </span>
+                    ))}
                   <span className={`${baseClass}__summary`}>{summarize(filter)}</span>
                   <span
                     className={`${baseClass}__caret material-symbols-rounded`}

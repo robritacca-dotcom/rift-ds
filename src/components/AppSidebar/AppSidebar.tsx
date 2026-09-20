@@ -22,8 +22,8 @@ export interface AppSidebarSubItem {
 export interface AppSidebarItem {
   /** Unique key for this item */
   key: string;
-  /** Material Symbols icon name */
-  icon: string;
+  /** Item icon — Material Symbol name (string) or custom element (ReactNode) */
+  icon: string | React.ReactNode;
   /** Display label (shown when expanded) */
   label: string;
   /** Click handler — also fires on a link item, so a consumer can route client-side */
@@ -234,7 +234,9 @@ export const AppSidebar = ({
               const itemContent = (
                 <>
                   <span className={`${baseClass}__btn-left`}>
-                    <span className={`${baseClass}__btn-icon material-symbols-rounded`}>
+                    <span
+                      className={`${baseClass}__btn-icon${typeof item.icon === 'string' ? ' material-symbols-rounded' : ''}`}
+                    >
                       {item.icon}
                     </span>
                     <span className={`${baseClass}__btn-label`}>{item.label}</span>

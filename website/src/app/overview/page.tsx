@@ -16,6 +16,7 @@ import { RELEASE_COUNT } from "@/data/release-log";
 import { chatExchangeMap, consumerMap, operatorsMap, pipelineMap, runtimeMap, systemOverviewMap } from "./maps";
 import styles from "./page.module.css";
 import { BRAND_NAME, FIGMA_FILE_URL, REPOSITORY_URL, STORYBOOK_URL } from "@/config/brand.generated";
+import { SHOW_FIGMA_LINKS } from "@/config/social";
 
 const TOKEN_CATEGORY_COUNT = Object.keys(TOKEN_COUNTS).length;
 
@@ -258,19 +259,21 @@ export default function AboutDsPage() {
               <div className={`${styles.resumeSection} animate-in animate-delay-3`}>
                 <SectionTitle title="Links" />
 
-                <a
-                  href={`${FIGMA_FILE_URL}?node-id=246-5864`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.toolItem}
-                >
-                  <Image src="/logos/Figma.svg" alt="" width={28} height={28} />
-                  <div className={styles.toolDetails}>
-                    <span className={styles.toolName}>Figma</span>
-                    <span className={styles.toolDesc}>Where the foundation was designed</span>
-                  </div>
-                  <span className={`material-symbols-rounded ${styles.toolLinkIcon}`} aria-hidden="true">open_in_new</span>
-                </a>
+                {SHOW_FIGMA_LINKS && (
+                  <a
+                    href={`${FIGMA_FILE_URL}?node-id=246-5864`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.toolItem}
+                  >
+                    <Image src="/logos/Figma.svg" alt="" width={28} height={28} />
+                    <div className={styles.toolDetails}>
+                      <span className={styles.toolName}>Figma</span>
+                      <span className={styles.toolDesc}>Where the foundation was designed</span>
+                    </div>
+                    <span className={`material-symbols-rounded ${styles.toolLinkIcon}`} aria-hidden="true">open_in_new</span>
+                  </a>
+                )}
 
                 <a
                   href={STORYBOOK_URL}

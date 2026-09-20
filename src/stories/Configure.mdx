@@ -1,20 +1,26 @@
-{/* robr0 Design System overview page */}
+{/* Dragonspine DS overview page. Every countable and URL here is a live
+    import (registry counts, the theme order, the brand module), so this
+    page cannot drift from the system it introduces; only its prose can,
+    and the content-audit skill owns that. */}
 import { Meta } from "@storybook/addon-docs/blocks";
 import { COMPONENT_COUNT } from "../components/registry";
+import { TOKEN_COUNT } from "../tokens/registry";
+import { THEME_SELECTOR_ORDER } from "../../website/src/lib/theme/presets";
+import { SITE_URL } from "../../website/src/config/brand.generated";
 
 <Meta title="Dragonspine DS" />
 
 <div className="ds-intro">
 
-# robr0 Design System
+# Dragonspine DS
 
-An AI-ready design system where every visual decision is a token. Claude Code builds the components from the specs in the repo; colour, spacing, radius, and typography are defined once and referenced everywhere, so a change to a single value propagates through the whole system. Built with Vite and TypeScript, documented in Storybook, published to npm as `@robr0/design-system`, and consumed by a live Next.js reference site.
+An open source, AI-ready React design system where every visual decision is a token: colour, spacing, radius, and typography are defined once and referenced everywhere, so a change to a single value propagates through the whole system, and a few primitive overrides are a complete rebrand. Built with Vite and TypeScript, explored here in Storybook, and documented in full on the <a href={SITE_URL}>docs site</a>.
 
 <div className="ds-stats">
   <div className="ds-stat"><span className="ds-stat-num">{COMPONENT_COUNT}</span><span className="ds-stat-label">Components</span></div>
+  <div className="ds-stat"><span className="ds-stat-num">{TOKEN_COUNT}</span><span className="ds-stat-label">Semantic tokens</span></div>
+  <div className="ds-stat"><span className="ds-stat-num">{THEME_SELECTOR_ORDER.length}</span><span className="ds-stat-label">Themes</span></div>
   <div className="ds-stat"><span className="ds-stat-num">3</span><span className="ds-stat-label">Token tiers</span></div>
-  <div className="ds-stat"><span className="ds-stat-num">2</span><span className="ds-stat-label">Themes</span></div>
-  <div className="ds-stat"><span className="ds-stat-num">1</span><span className="ds-stat-label">Typeface</span></div>
 </div>
 
 </div>
@@ -36,7 +42,7 @@ import { Button, Card, Badge } from '@robr0/design-system';
 
 The stylesheet carries the primitives, the semantic tokens, and both themes: import it once at your app root. Deep imports work too (`@robr0/design-system/components/Button/Button`), and the recharts-backed charts live behind a separate `/charts` entry so the optional `recharts` peer is only needed if you use them (the dependency-free chart pieces export from the main barrel with everything else).
 
-Published with signed provenance via npm Trusted Publishing. Full install and theming guide on the [documentation site](https://dragonspine.vercel.app/docs); package page on [npm](https://www.npmjs.com/package/@robr0/design-system). Coding agents can read the same reference over MCP: point any Model Context Protocol client at `https://dragonspine.vercel.app/api/mcp` for the component list, prop contracts, and tokens.
+The full install and theming guide lives at <a href={`${SITE_URL}/docs/get-started`}>{`${SITE_URL.replace("https://", "")}/docs/get-started`}</a>, with two more ways in beside the package: pull single components as source through the shadcn CLI, or clone the repo outright. Coding agents can read the same reference over MCP: point any Model Context Protocol client at <code>{`${SITE_URL}/api/mcp`}</code> for the component list, prop contracts, and tokens.
 
 </div>
 
@@ -51,7 +57,7 @@ Published with signed provenance via npm Trusted Publishing. Full install and th
   </div>
   <div className="ds-principle">
     <h4>Semantic, not literal</h4>
-    <p>A component knows it renders a primary action or a small gap, not that it's teal or 8px. Swapping the primitives underneath changes themes without touching component code.</p>
+    <p>A component knows it renders a primary action or a small gap, never one specific hue or pixel value. Swapping the primitives underneath re-themes everything without touching component code.</p>
   </div>
   <div className="ds-principle">
     <h4>Composition over configuration</h4>
@@ -89,7 +95,7 @@ The system flows in one direction: raw values become purposeful tokens, tokens d
   <div className="ds-layer-connector" />
   <div className="ds-layer">
     <div className="ds-layer-label">Application</div>
-    <p>A Next.js reference site that imports the tokens once and uses the components directly. Switching themes is a single data attribute on the root element.</p>
+    <p>The documentation site imports the tokens once and uses the components directly. One data attribute on the root element switches light and dark; a second applies a complete shipped theme.</p>
   </div>
 </div>
 
@@ -99,7 +105,7 @@ The system flows in one direction: raw values become purposeful tokens, tokens d
 
 ## Theming
 
-Light and dark are two readings of the same token layer, not separate systems. Components reference semantic tokens and stay agnostic to the active theme; the theme decides what each token resolves to.
+Light and dark are two readings of the same token layer, not separate systems. Components reference semantic tokens and stay agnostic to the active theme; the theme decides what each token resolves to. Beyond the two modes, {THEME_SELECTOR_ORDER.length} complete looks ship in the package as generated stylesheets, each applied by one <code>data-brand</code> attribute. The Theme control in this Storybook's toolbar switches between them, and it opens on Smoke, the served default.
 
 <div className="ds-theme-grid">
   <div className="ds-theme-card ds-theme-light">

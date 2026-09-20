@@ -3,6 +3,7 @@ import { Button } from "@robr0/design-system/components/Button/Button";
 import CopyPageMarkdown from "./CopyPageMarkdown";
 import styles from "./PageLinks.module.css";
 import { STORYBOOK_URL } from "@/config/brand.generated";
+import { SHOW_FIGMA_LINKS } from "@/config/social";
 
 const STORYBOOK_BASE = STORYBOOK_URL;
 
@@ -139,7 +140,7 @@ export default function PageLinks({ figmaUrl, storybookPath, githubUrl, substack
         />
       )}
 
-      {figmaUrl && (
+      {SHOW_FIGMA_LINKS && figmaUrl && (
         <Button
           label="Figma"
           variant="tertiary"

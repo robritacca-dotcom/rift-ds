@@ -17,6 +17,7 @@ import { componentMetadata } from "@robr0/design-system/components/registry";
 import { MCP_CLIENTS } from "@/lib/mcp-clients";
 import { MCP_TOOLS } from "@/lib/mcp-tools";
 import { SITE_URL } from "@/lib/structuredData";
+import { SHOW_FIGMA_LINKS } from "@/config/social";
 import { ASSISTANT_NAME, FIGMA_FILE_URL, NPM_URL, REPOSITORY_URL, SKILL_NAME, STORYBOOK_URL } from "@/config/brand.generated";
 
 const { sidebarLinks } = getSidebarLinks(docsSidebarLinks, "/docs/get-started");
@@ -204,7 +205,9 @@ const STACK_TOOLS: {
     name: "Figma",
     desc: "Where the foundation was designed",
     logo: "/logos/Figma.svg",
-    href: `${FIGMA_FILE_URL}?node-id=246-5864`,
+    // The card stays (it is a fact about the stack); the link out follows
+    // the site-wide Figma switch.
+    ...(SHOW_FIGMA_LINKS ? { href: `${FIGMA_FILE_URL}?node-id=246-5864` } : {}),
   },
 ];
 

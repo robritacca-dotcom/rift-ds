@@ -12,7 +12,8 @@
  *   - .claude/skills/<name>/SKILL.md          (repo skills)
  *   - website/src/data/external-skills/*.md   (published external copies)
  *   - CLAUDE.md, README.md, design.md, content-design.md, SECURITY.md
- *   - evals/chat/README.md, evals/chat/SPEC.md, website/README.md
+ *   - evals/chat/README.md, evals/chat/SPEC.md, website/README.md,
+ *     src/stories/Configure.mdx (the Storybook landing)
  *
  * Deliberately excluded:
  *   - website/src/data/skills-content.generated.ts and the website/public
@@ -49,6 +50,10 @@ const sources = [
     // Non-root instruction docs: CLAUDE.md sends readers to the evals README
     // by name, and they all prescribe commands — so they rot the same way.
     'evals/chat/README.md',
+    // The Storybook landing narrates the system for strangers; its
+    // countables and URLs are live imports, and this keeps its path and
+    // script mentions from rotting like any other doc.
+    'src/stories/Configure.mdx',
     'evals/chat/SPEC.md',
     'website/README.md',
   ].map((f) => [f, join(repoRoot, f)]),

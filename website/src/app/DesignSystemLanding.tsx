@@ -10,6 +10,7 @@ import { FIGMA_FILE_URL, NPM_URL, REPOSITORY_URL, STORYBOOK_URL } from "@/config
 import { THEME_SELECTOR_ORDER, themeSelectorTiles } from "@/lib/theme/presets";
 import { useSiteTheme } from "@/lib/theme/use-theme-overrides";
 import { applyBrand } from "@/lib/theme/brand";
+import { SHOW_FIGMA_LINKS } from "@/config/social";
 import { AgentPlan } from "@robr0/design-system/components/AgentPlan/AgentPlan";
 import { AnimatedNumber } from "@robr0/design-system/components/AnimatedNumber/AnimatedNumber";
 import { AgentStatus } from "@robr0/design-system/components/AgentStatus/AgentStatus";
@@ -1182,15 +1183,19 @@ export default function DesignSystemLanding() {
           <ButtonGroup
             ariaLabel="External resources"
             buttons={[
-              {
-                label: "Figma",
-                variant: "tertiary" as const,
-                iconLeft: <FigmaIcon />,
-                iconRight: "open_in_new",
-                href: FIGMA_FILE_URL,
-                target: "_blank",
-                rel: "noopener noreferrer",
-              },
+              ...(SHOW_FIGMA_LINKS
+                ? [
+                    {
+                      label: "Figma",
+                      variant: "tertiary" as const,
+                      iconLeft: <FigmaIcon />,
+                      iconRight: "open_in_new",
+                      href: FIGMA_FILE_URL,
+                      target: "_blank",
+                      rel: "noopener noreferrer",
+                    },
+                  ]
+                : []),
               {
                 label: "Storybook",
                 variant: "tertiary" as const,

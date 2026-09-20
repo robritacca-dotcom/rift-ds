@@ -1253,6 +1253,6 @@ The thresholds themselves stay raw numbers in the media queries, and that is set
 
 ## Known Gaps
 
-- **Figma parity** — The system originates in Figma ([robr0-ds26](https://www.figma.com/design/8NzqDS8iRsBTFPbNGj3Woj/robr0-ds26)), and foundation/component pages deep-link to specific frames via `figmaUrl`. Keeping the Figma file and the coded tokens in sync is still a manual process — there is no automated export pipeline.
+- **Figma parity** — The system originates in Figma ([robr0-ds26](https://www.figma.com/design/8NzqDS8iRsBTFPbNGj3Woj/robr0-ds26)), and foundation/component pages carry `figmaUrl` deep links to specific frames — currently hidden site-wide behind `SHOW_FIGMA_LINKS` in `website/src/config/social.ts`, because the file lags the coded system. Keeping the Figma file and the coded tokens in sync is still a manual process — there is no automated export pipeline.
 
 Three former entries left this list as decisions rather than work: JS-driven timings now share one home (`src/tokens/motion.ts` — see Motion → Migration status), the raw breakpoint literals are settled as raw (see Responsive Behavior → Breakpoints), and form-level validation is permanently the consumer's form layer, not the system's (see the Input spec).

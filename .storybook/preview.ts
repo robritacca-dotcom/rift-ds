@@ -1,7 +1,30 @@
 import '../src/tokens/tokens.css';
+import '../src/tokens/presets/presets.css';
 import '../src/fonts/material-symbols.css';
-import type { Preview } from '@storybook/react-vite';
+import type { Decorator, Preview } from '@storybook/react-vite';
 import { withThemeByDataAttribute } from '@storybook/addon-themes';
+import {
+  DEFAULT_THEME_LABEL,
+  THEME_PRESETS,
+  THEME_SELECTOR_ORDER,
+} from '../website/src/lib/theme/presets';
+
+/**
+ * The theme-preset toolbar mirrors the site's switcher: the same ids in
+ * the same order, applied the same way (data-brand on <html>, which the
+ * generated preset stylesheets key on). "default" is the base token
+ * files with no attribute — the Tide row. Smoke (mono) is the default
+ * here because it is the served site's default look too.
+ */
+const withBrand: Decorator = (Story, context) => {
+  const brand = context.globals.brand;
+  if (brand && brand !== 'default') {
+    document.documentElement.setAttribute('data-brand', String(brand));
+  } else {
+    document.documentElement.removeAttribute('data-brand');
+  }
+  return Story();
+};
 
 const preview: Preview = {
   parameters: {
@@ -55,6 +78,7 @@ const preview: Preview = {
   },
 
   decorators: [
+    withBrand,
     withThemeByDataAttribute({
       themes: {
         light: 'light',
@@ -64,6 +88,26 @@ const preview: Preview = {
       attributeName: 'data-theme',
     }),
   ],
+
+  globalTypes: {
+    brand: {
+      description: 'Theme preset (the site switcher, in Storybook)',
+      toolbar: {
+        title: 'Theme',
+        icon: 'paintbrush',
+        dynamicTitle: true,
+        items: THEME_SELECTOR_ORDER.filter((id) => id !== 'custom').map((id) => ({
+          value: id,
+          title: id === 'default' ? DEFAULT_THEME_LABEL : (THEME_PRESETS[id]?.label ?? id),
+        })),
+      },
+    },
+  },
+
+  // Smoke is the served site's default look, so it is Storybook's too.
+  initialGlobals: {
+    brand: 'mono',
+  },
 };
 
 export default preview;

@@ -57,6 +57,7 @@ const luminance = ([r, g, b]: [number, number, number]): number =>
  * mix(teal-07, white|black, w) against the actual primitives.
  */
 const BRAND_RAMP_WEIGHTS: ReadonlyArray<[step: string, weight: number]> = [
+  ["00", 0.97],
   ["01", 0.93],
   ["02", 0.82],
   ["03", 0.63],
@@ -67,6 +68,7 @@ const BRAND_RAMP_WEIGHTS: ReadonlyArray<[step: string, weight: number]> = [
   ["08", -0.2],
   ["09", -0.43],
   ["10", -0.66],
+  ["11", -0.76],
 ];
 
 /** The shipped light-theme action fill (teal-08). The dark theme inverts
@@ -117,8 +119,8 @@ export const ACTION_COLOR_PRESETS: ReadonlyArray<{
 /**
  * The ideal ramp around a key colour, as rgb per teal-weight step — the
  * role intents pointer mode matches against real steps. The shipped
- * weights assume a mid-dark key: tint steps (01–06) head toward white —
- * step 02 is the text ON the primary fill — and shade steps (08–10)
+ * weights assume a mid-dark key: tint steps (00–06) head toward white —
+ * step 02 is the text ON the primary fill — and shade steps (08–11)
  * toward black for hover/pressed. For a LIGHT key (a white button), both
  * jobs invert toward black, so white buttons never get white text.
  */
@@ -152,63 +154,63 @@ export const CHROMATIC_RAMPS: ReadonlyArray<{
     name: "red",
     label: "Red",
     steps: [
-      ["01", "#FDEFF3"], ["02", "#FAD3DD"], ["03", "#F8B7C7"], ["04", "#F69BB1"],
-      ["05", "#F37F9B"], ["06", "#F16385"], ["07", "#EF476F"], ["08", "#C93A5C"],
-      ["09", "#8E2641"], ["10", "#571727"],
+      ["00", "#FEF8FA"], ["01", "#FDEFF3"], ["02", "#FAD3DD"], ["03", "#F8B7C7"],
+      ["04", "#F69BB1"], ["05", "#F37F9B"], ["06", "#F16385"], ["07", "#EF476F"],
+      ["08", "#C93A5C"], ["09", "#8E2641"], ["10", "#571727"], ["11", "#45101D"],
     ],
   },
   {
     name: "orange",
     label: "Orange",
     steps: [
-      ["01", "#FFF3EC"], ["02", "#FBD9C5"], ["03", "#F6B794"], ["04", "#F1996E"],
-      ["05", "#E98256"], ["06", "#E07045"], ["07", "#EF8247"], ["08", "#C65E33"],
-      ["09", "#8F4324"], ["10", "#552716"],
+      ["00", "#FFFAF7"], ["01", "#FFF3EC"], ["02", "#FBD9C5"], ["03", "#F6B794"],
+      ["04", "#F1996E"], ["05", "#F09263"], ["06", "#F08A56"], ["07", "#EF8247"],
+      ["08", "#C65E33"], ["09", "#8F4324"], ["10", "#552716"], ["11", "#431D0F"],
     ],
   },
   {
     name: "yellow",
     label: "Yellow",
     steps: [
-      ["01", "#FFF9EA"], ["02", "#FFF0C9"], ["03", "#FFE5A3"], ["04", "#FFD97F"],
-      ["05", "#F2C55E"], ["06", "#E0B654"], ["07", "#FFD166"], ["08", "#C49A3E"],
-      ["09", "#8A6B2A"], ["10", "#544016"],
+      ["00", "#FFFCF6"], ["01", "#FFF9EA"], ["02", "#FFF0C9"], ["03", "#FFE5A3"],
+      ["04", "#FFD97F"], ["05", "#FFD677"], ["06", "#FFD46F"], ["07", "#FFD166"],
+      ["08", "#C49A3E"], ["09", "#8A6B2A"], ["10", "#544016"], ["11", "#42320F"],
     ],
   },
   {
     name: "green",
     label: "Green",
     steps: [
-      ["01", "#ECFCF7"], ["02", "#CEF6E8"], ["03", "#9DEBD4"], ["04", "#6DE0C0"],
-      ["05", "#3ED4AA"], ["06", "#1FCB9A"], ["07", "#06D6A0"], ["08", "#05A67C"],
-      ["09", "#03765A"], ["10", "#024336"],
+      ["00", "#F7FEFB"], ["01", "#ECFCF7"], ["02", "#CEF6E8"], ["03", "#9DEBD4"],
+      ["04", "#6DE0C0"], ["05", "#5ADDB6"], ["06", "#41D9AC"], ["07", "#06D6A0"],
+      ["08", "#05A67C"], ["09", "#03765A"], ["10", "#024336"], ["11", "#01342A"],
     ],
   },
   {
     name: "teal",
     label: "Teal",
     steps: [
-      ["01", "#ECF7FB"], ["02", "#CFEAF3"], ["03", "#9ED4E5"], ["04", "#6DBCD6"],
-      ["05", "#3CA5C6"], ["06", "#2C9AB9"], ["07", "#118AB2"], ["08", "#0E6E8F"],
-      ["09", "#0A4E66"], ["10", "#052F3E"],
+      ["00", "#F7FBFD"], ["01", "#ECF7FB"], ["02", "#CFEAF3"], ["03", "#9ED4E5"],
+      ["04", "#6DBCD6"], ["05", "#3CA5C6"], ["06", "#2C9AB9"], ["07", "#118AB2"],
+      ["08", "#0E6E8F"], ["09", "#0A4E66"], ["10", "#052F3E"], ["11", "#032430"],
     ],
   },
   {
     name: "blue",
     label: "Blue",
     steps: [
-      ["01", "#EEF3FD"], ["02", "#D3DDF8"], ["03", "#AABCEF"], ["04", "#7F99E3"],
-      ["05", "#5475D4"], ["06", "#345AC4"], ["07", "#1E47B0"], ["08", "#163789"],
-      ["09", "#0F265E"], ["10", "#081633"],
+      ["00", "#F8FAFE"], ["01", "#EEF3FD"], ["02", "#D3DDF8"], ["03", "#AABCEF"],
+      ["04", "#7F99E3"], ["05", "#5475D4"], ["06", "#345AC4"], ["07", "#1E47B0"],
+      ["08", "#163789"], ["09", "#0F265E"], ["10", "#081633"], ["11", "#050F27"],
     ],
   },
   {
     name: "purple",
     label: "Purple",
     steps: [
-      ["01", "#F7F0FE"], ["02", "#E6D2FB"], ["03", "#CFABF7"], ["04", "#B785F0"],
-      ["05", "#A86AE8"], ["06", "#9754DC"], ["07", "#9E47EF"], ["08", "#7434B3"],
-      ["09", "#52247D"], ["10", "#31164A"],
+      ["00", "#FBF8FF"], ["01", "#F7F0FE"], ["02", "#E6D2FB"], ["03", "#CFABF7"],
+      ["04", "#B785F0"], ["05", "#A86AE8"], ["06", "#9754DC"], ["07", "#9E47EF"],
+      ["08", "#7434B3"], ["09", "#52247D"], ["10", "#31164A"], ["11", "#260F3A"],
     ],
   },
 ];
@@ -379,27 +381,27 @@ export function advancedColorOverrides(
 interface NeutralDef {
   step: string;
   hex: string;
-  /** rgba() variants that share this base: suffix → alpha */
+  /** rgba() variants that share this base: `-aNN` suffix → alpha (NN = alpha × 100) */
   alphas?: Record<string, number>;
 }
 
 /** The shipped neutral scale, including every rgba() variant's alpha. */
 const NEUTRALS: NeutralDef[] = [
-  { step: "00", hex: "#FFFFFF", alphas: { "-transparent": 0.01, "-semi": 0.6, "-glass": 0.9 } },
-  { step: "01", hex: "#F1F1F1", alphas: { "-transparent": 0.01, "-semi": 0.6, "-glass": 0.82 } },
-  { step: "02", hex: "#D6D6D6", alphas: { "-semi": 0.8 } },
-  { step: "03", hex: "#BCBCBC", alphas: { "-semi": 0.8 } },
+  { step: "00", hex: "#FFFFFF", alphas: { "-a01": 0.01, "-a60": 0.6, "-a90": 0.9 } },
+  { step: "01", hex: "#F1F1F1", alphas: { "-a01": 0.01, "-a60": 0.6, "-a82": 0.82 } },
+  { step: "02", hex: "#D6D6D6", alphas: { "-a80": 0.8 } },
+  { step: "03", hex: "#BCBCBC", alphas: { "-a80": 0.8 } },
   { step: "04", hex: "#A2A2A2" },
   { step: "05", hex: "#888888" },
   { step: "06", hex: "#6D6D6D" },
-  { step: "07", hex: "#303030", alphas: { "-semi": 0.8 } },
-  { step: "08", hex: "#232323", alphas: { "-semi": 0.8 } },
+  { step: "07", hex: "#303030", alphas: { "-a80": 0.8 } },
+  { step: "08", hex: "#232323", alphas: { "-a80": 0.8 } },
   {
     step: "09",
     hex: "#0E0E0E",
-    alphas: { "-transparent": 0.01, "-semi": 0.8, "-semi-transparent": 0.6, "-glass": 0.66 },
+    alphas: { "-a01": 0.01, "-a80": 0.8, "-a60": 0.6, "-a66": 0.66 },
   },
-  { step: "10", hex: "#050505", alphas: { "-semi": 0.6, "-subtle": 0.01 } },
+  { step: "10", hex: "#050505", alphas: { "-a60": 0.6, "-a01": 0.01 } },
   { step: "11", hex: "#000000" },
 ];
 
@@ -449,7 +451,8 @@ const ACTION_SEMANTIC_REFS: ReadonlyArray<{
   /* Label steps are "02" in both themes on purpose: brandRampValues
      inverts the tint pole for a light key, so "02" always means "oppose
      the fill" — near-white on a dark fill, near-black on a light one. For
-     the shipped dark key (teal-05) it lands on teal-10, the shipped label. */
+     the shipped dark key (teal-05) it lands at the ramp's dark end (the
+     shipped teal-10 label; the token files stay authoritative there). */
   { cssVar: "--color-action-primary-text", light: "02", dark: "02" },
   { cssVar: "--color-action-primary-text-active", light: null, dark: "02" },
   { cssVar: "--color-action-primary-text-secondary", light: "10", dark: "10" },

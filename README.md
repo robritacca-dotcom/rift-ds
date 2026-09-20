@@ -103,7 +103,7 @@ import { BarChart, LineChart } from '@robr0/design-system/charts';
     --primitive-radius-pill: 12px; /* pill buttons become rounded rectangles */
   }
   ```
-  A complete rebrand re-keys the whole teal ramp (01-10): the remaining steps carry the primary label, active icons, hover/selected input borders, and the AI gradient, so stopping at the six fills leaves those teal. The easiest way to get all of it right is the [playground](https://dragonspine.vercel.app/playground): restyle the system live and copy out a complete, paste-ready override.
+  A complete rebrand re-keys the whole teal ramp (00-11): the remaining steps carry the primary label, active icons, hover/selected input borders, and the AI gradient, so stopping at the six fills leaves those teal. The easiest way to get all of it right is the [playground](https://dragonspine.vercel.app/playground): restyle the system live and copy out a complete, paste-ready override.
 
 Icons use a bundled Material Symbols Rounded variable font (woff2): components import it themselves, so they need no extra setup. If you render raw `.material-symbols-rounded` spans of your own, import `@robr0/design-system/fonts/material-symbols.css` once. Nunito Sans, the system's default typeface, is intentionally *not* bundled: load it yourself (e.g. Google Fonts or `next/font`) or override `--font-family-primary`.
 

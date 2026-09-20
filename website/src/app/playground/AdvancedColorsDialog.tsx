@@ -110,7 +110,7 @@ export default function AdvancedColorsDialog({
                 <div
                   className={styles.advRamp}
                   role="img"
-                  aria-label={`${ramp.label} ramp, steps 01 to 10`}
+                  aria-label={`${ramp.label} ramp, steps 00 to 11`}
                 >
                   {ramp.steps.map(([step, shipped]) => {
                     const hex = currentHex(ramp.name, step, shipped);

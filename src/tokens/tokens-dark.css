@@ -22,17 +22,17 @@
   --color-bg-page-inverse: var(--primitive-neutral-01);
 
   /* Background - Container */
-  --color-bg-container-primary: var(--primitive-neutral-09-semi);
-  --color-bg-container-primary-transparent: var(--primitive-neutral-09-transparent);
-  --color-bg-container-primary-semi: var(--primitive-neutral-09-semi-transparent);
+  --color-bg-container-primary: var(--primitive-neutral-09-a80);
+  --color-bg-container-primary-transparent: var(--primitive-neutral-09-a01);
+  --color-bg-container-primary-semi: var(--primitive-neutral-09-a60);
   --color-bg-container-secondary: var(--primitive-neutral-07);
   --color-bg-container-tertiary: var(--primitive-neutral-08);
   --color-bg-container-inverse: var(--primitive-neutral-01);
   --color-bg-container-border: var(--primitive-neutral-08);
-  --color-bg-glass: var(--primitive-neutral-09-glass);
+  --color-bg-glass: var(--primitive-neutral-09-a66);
 
   /* Divider */
-  --color-divider: var(--primitive-neutral-08-semi);
+  --color-divider: var(--primitive-neutral-08-a80);
 
   /* Chat bubbles — alias the same roles as light; the underlying container
      and text tokens carry the theme swap. */
@@ -50,8 +50,8 @@
      takes the resting cell tint — a step darker than the hovered cell it sits
      on — and the hover-only border ring is an obvious mid-grey that reads
      against both cell states. */
-  --color-calendar-cell-bg: var(--primitive-neutral-08-semi);
-  --color-calendar-cell-bg-hover: var(--primitive-neutral-07-semi);
+  --color-calendar-cell-bg: var(--primitive-neutral-08-a80);
+  --color-calendar-cell-bg-hover: var(--primitive-neutral-07-a80);
   --color-calendar-event-bg: var(--color-bg-container-primary);
   --color-calendar-event-bg-hover: var(--color-calendar-cell-bg);
   --color-calendar-event-border: var(--primitive-neutral-06);
@@ -86,9 +86,9 @@
 
   /* Action - Passive (Secondary button) */
   --color-action-passive-text: var(--primitive-neutral-01);
-  --color-action-passive-bg: var(--primitive-neutral-09-transparent);
-  --color-action-passive-bg-hover: var(--primitive-neutral-08-semi);
-  --color-action-passive-bg-active: var(--primitive-neutral-07-semi);
+  --color-action-passive-bg: var(--primitive-neutral-09-a01);
+  --color-action-passive-bg-hover: var(--primitive-neutral-08-a80);
+  --color-action-passive-bg-active: var(--primitive-neutral-07-a80);
 
   /* Action - Neutral (grey filled buttons). The fill stays visible at
      rest, one step above the container greys; hover and active brighten

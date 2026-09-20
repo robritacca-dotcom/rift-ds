@@ -237,7 +237,8 @@ export const Primitives: Story = {
       </TokenSection>
 
       <TokenSection title="Red Scale">
-        <ColorToken name="01 (Lightest)" value="--primitive-red-01" />
+        <ColorToken name="00 (Lightest)" value="--primitive-red-00" />
+        <ColorToken name="01" value="--primitive-red-01" />
         <ColorToken name="02" value="--primitive-red-02" />
         <ColorToken name="03" value="--primitive-red-03" />
         <ColorToken name="04" value="--primitive-red-04" />
@@ -246,11 +247,13 @@ export const Primitives: Story = {
         <ColorToken name="07" value="--primitive-red-07" />
         <ColorToken name="08" value="--primitive-red-08" />
         <ColorToken name="09" value="--primitive-red-09" />
-        <ColorToken name="10 (Darkest)" value="--primitive-red-10" />
+        <ColorToken name="10" value="--primitive-red-10" />
+        <ColorToken name="11 (Darkest)" value="--primitive-red-11" />
       </TokenSection>
 
       <TokenSection title="Orange Scale">
-        <ColorToken name="01 (Lightest)" value="--primitive-orange-01" />
+        <ColorToken name="00 (Lightest)" value="--primitive-orange-00" />
+        <ColorToken name="01" value="--primitive-orange-01" />
         <ColorToken name="02" value="--primitive-orange-02" />
         <ColorToken name="03" value="--primitive-orange-03" />
         <ColorToken name="04" value="--primitive-orange-04" />
@@ -259,11 +262,13 @@ export const Primitives: Story = {
         <ColorToken name="07" value="--primitive-orange-07" />
         <ColorToken name="08" value="--primitive-orange-08" />
         <ColorToken name="09" value="--primitive-orange-09" />
-        <ColorToken name="10 (Darkest)" value="--primitive-orange-10" />
+        <ColorToken name="10" value="--primitive-orange-10" />
+        <ColorToken name="11 (Darkest)" value="--primitive-orange-11" />
       </TokenSection>
 
       <TokenSection title="Yellow Scale">
-        <ColorToken name="01 (Lightest)" value="--primitive-yellow-01" />
+        <ColorToken name="00 (Lightest)" value="--primitive-yellow-00" />
+        <ColorToken name="01" value="--primitive-yellow-01" />
         <ColorToken name="02" value="--primitive-yellow-02" />
         <ColorToken name="03" value="--primitive-yellow-03" />
         <ColorToken name="04" value="--primitive-yellow-04" />
@@ -272,11 +277,13 @@ export const Primitives: Story = {
         <ColorToken name="07" value="--primitive-yellow-07" />
         <ColorToken name="08" value="--primitive-yellow-08" />
         <ColorToken name="09" value="--primitive-yellow-09" />
-        <ColorToken name="10 (Darkest)" value="--primitive-yellow-10" />
+        <ColorToken name="10" value="--primitive-yellow-10" />
+        <ColorToken name="11 (Darkest)" value="--primitive-yellow-11" />
       </TokenSection>
 
       <TokenSection title="Green Scale">
-        <ColorToken name="01 (Lightest)" value="--primitive-green-01" />
+        <ColorToken name="00 (Lightest)" value="--primitive-green-00" />
+        <ColorToken name="01" value="--primitive-green-01" />
         <ColorToken name="02" value="--primitive-green-02" />
         <ColorToken name="03" value="--primitive-green-03" />
         <ColorToken name="04" value="--primitive-green-04" />
@@ -285,11 +292,13 @@ export const Primitives: Story = {
         <ColorToken name="07" value="--primitive-green-07" />
         <ColorToken name="08" value="--primitive-green-08" />
         <ColorToken name="09" value="--primitive-green-09" />
-        <ColorToken name="10 (Darkest)" value="--primitive-green-10" />
+        <ColorToken name="10" value="--primitive-green-10" />
+        <ColorToken name="11 (Darkest)" value="--primitive-green-11" />
       </TokenSection>
 
       <TokenSection title="Teal Scale">
-        <ColorToken name="01 (Lightest)" value="--primitive-teal-01" />
+        <ColorToken name="00 (Lightest)" value="--primitive-teal-00" />
+        <ColorToken name="01" value="--primitive-teal-01" />
         <ColorToken name="02" value="--primitive-teal-02" />
         <ColorToken name="03" value="--primitive-teal-03" />
         <ColorToken name="04" value="--primitive-teal-04" />
@@ -298,11 +307,13 @@ export const Primitives: Story = {
         <ColorToken name="07" value="--primitive-teal-07" />
         <ColorToken name="08" value="--primitive-teal-08" />
         <ColorToken name="09" value="--primitive-teal-09" />
-        <ColorToken name="10 (Darkest)" value="--primitive-teal-10" />
+        <ColorToken name="10" value="--primitive-teal-10" />
+        <ColorToken name="11 (Darkest)" value="--primitive-teal-11" />
       </TokenSection>
 
       <TokenSection title="Blue Scale">
-        <ColorToken name="01 (Lightest)" value="--primitive-blue-01" />
+        <ColorToken name="00 (Lightest)" value="--primitive-blue-00" />
+        <ColorToken name="01" value="--primitive-blue-01" />
         <ColorToken name="02" value="--primitive-blue-02" />
         <ColorToken name="03" value="--primitive-blue-03" />
         <ColorToken name="04" value="--primitive-blue-04" />
@@ -311,11 +322,13 @@ export const Primitives: Story = {
         <ColorToken name="07" value="--primitive-blue-07" />
         <ColorToken name="08" value="--primitive-blue-08" />
         <ColorToken name="09" value="--primitive-blue-09" />
-        <ColorToken name="10 (Darkest)" value="--primitive-blue-10" />
+        <ColorToken name="10" value="--primitive-blue-10" />
+        <ColorToken name="11 (Darkest)" value="--primitive-blue-11" />
       </TokenSection>
 
       <TokenSection title="Purple Scale">
-        <ColorToken name="01 (Lightest)" value="--primitive-purple-01" />
+        <ColorToken name="00 (Lightest)" value="--primitive-purple-00" />
+        <ColorToken name="01" value="--primitive-purple-01" />
         <ColorToken name="02" value="--primitive-purple-02" />
         <ColorToken name="03" value="--primitive-purple-03" />
         <ColorToken name="04" value="--primitive-purple-04" />
@@ -324,7 +337,8 @@ export const Primitives: Story = {
         <ColorToken name="07" value="--primitive-purple-07" />
         <ColorToken name="08" value="--primitive-purple-08" />
         <ColorToken name="09" value="--primitive-purple-09" />
-        <ColorToken name="10 (Darkest)" value="--primitive-purple-10" />
+        <ColorToken name="10" value="--primitive-purple-10" />
+        <ColorToken name="11 (Darkest)" value="--primitive-purple-11" />
       </TokenSection>
 
       <TokenSection title="Border Radius">

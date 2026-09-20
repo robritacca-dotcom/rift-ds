@@ -25,7 +25,7 @@ const allRows = [
   ["--primitive-teal-07", "#118AB2", "Primitive"],
   ["--primitive-neutral-02", "#D6D6D6", "Primitive"],
   ["--color-action-primary-bg", "teal-08 light / teal-05 dark", "Semantic"],
-  ["--color-divider", "neutral-02-semi", "Semantic"],
+  ["--color-divider", "neutral-02-a80", "Semantic"],
   ["--color-text-primary", "#050505", "Semantic"],
   ["--color-bg-page-primary", "#FFFFFF", "Semantic"],
   ["--radius-300", "12px", "Semantic"],

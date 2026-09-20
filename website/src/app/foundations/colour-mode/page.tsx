@@ -100,7 +100,7 @@ const pageColours: SwatchData[] = [
 const containerColours: SwatchData[] = [
   {
     label: "Primary", cssVar: "--color-bg-container-primary",
-    dark: { primitive: "--neutral--09-semi--", hex: "rgba(14,14,14,0.8)", rgb: "14 / 14 / 14" },
+    dark: { primitive: "--neutral--09-a80--", hex: "rgba(14,14,14,0.8)", rgb: "14 / 14 / 14" },
     light: { primitive: "--neutral--00--", hex: "#FFFFFF", rgb: "255 / 255 / 255" },
   },
   {
@@ -120,13 +120,13 @@ const containerColours: SwatchData[] = [
   },
   {
     label: "Primary Semi", cssVar: "--color-bg-container-primary-semi",
-    dark: { primitive: "--neutral--09-semi-transparent--", hex: "rgba(14,14,14,0.6)", rgb: "14 / 14 / 14" },
-    light: { primitive: "--neutral--00-glass--", hex: "rgba(255,255,255,0.9)", rgb: "255 / 255 / 255" },
+    dark: { primitive: "--neutral--09-a60--", hex: "rgba(14,14,14,0.6)", rgb: "14 / 14 / 14" },
+    light: { primitive: "--neutral--00-a90--", hex: "rgba(255,255,255,0.9)", rgb: "255 / 255 / 255" },
   },
   {
     label: "Primary Transparent", cssVar: "--color-bg-container-primary-transparent",
-    dark: { primitive: "--neutral--09-transparent--", hex: "rgba(14,14,14,0.01)", rgb: "Transparent" },
-    light: { primitive: "--neutral--00-transparent--", hex: "rgba(255,255,255,0.01)", rgb: "Transparent" },
+    dark: { primitive: "--neutral--09-a01--", hex: "rgba(14,14,14,0.01)", rgb: "Transparent" },
+    light: { primitive: "--neutral--00-a01--", hex: "rgba(255,255,255,0.01)", rgb: "Transparent" },
   },
   {
     label: "Border", cssVar: "--color-bg-container-border",
@@ -135,8 +135,8 @@ const containerColours: SwatchData[] = [
   },
   {
     label: "Glass", cssVar: "--color-bg-glass",
-    dark: { primitive: "--neutral--09-glass--", hex: "rgba(14,14,14,0.66)", rgb: "14 / 14 / 14" },
-    light: { primitive: "--neutral--00-glass--", hex: "rgba(255,255,255,0.9)", rgb: "255 / 255 / 255" },
+    dark: { primitive: "--neutral--09-a66--", hex: "rgba(14,14,14,0.66)", rgb: "14 / 14 / 14" },
+    light: { primitive: "--neutral--00-a90--", hex: "rgba(255,255,255,0.9)", rgb: "255 / 255 / 255" },
   },
 ];
 
@@ -187,22 +187,22 @@ const chatSurfaceColours: SwatchData[] = [
 const calendarSurfaceColours: SwatchData[] = [
   {
     label: "Cell bg", cssVar: "--color-calendar-cell-bg",
-    dark: { primitive: "--neutral--08-semi--", hex: "rgba(35,35,35,0.8)", rgb: "35 / 35 / 35" },
+    dark: { primitive: "--neutral--08-a80--", hex: "rgba(35,35,35,0.8)", rgb: "35 / 35 / 35" },
     light: { primitive: "--neutral--01--", hex: "#F1F1F1", rgb: "241 / 241 / 241" },
   },
   {
     label: "Cell bg hover", cssVar: "--color-calendar-cell-bg-hover",
-    dark: { primitive: "--neutral--07-semi--", hex: "rgba(48,48,48,0.8)", rgb: "48 / 48 / 48" },
-    light: { primitive: "--neutral--02-semi--", hex: "rgba(214,214,214,0.8)", rgb: "214 / 214 / 214" },
+    dark: { primitive: "--neutral--07-a80--", hex: "rgba(48,48,48,0.8)", rgb: "48 / 48 / 48" },
+    light: { primitive: "--neutral--02-a80--", hex: "rgba(214,214,214,0.8)", rgb: "214 / 214 / 214" },
   },
   {
     label: "Event bg", cssVar: "--color-calendar-event-bg",
-    dark: { primitive: "--neutral--09-semi--", hex: "rgba(14,14,14,0.8)", rgb: "14 / 14 / 14" },
+    dark: { primitive: "--neutral--09-a80--", hex: "rgba(14,14,14,0.8)", rgb: "14 / 14 / 14" },
     light: { primitive: "--neutral--00--", hex: "#FFFFFF", rgb: "255 / 255 / 255" },
   },
   {
     label: "Event bg hover", cssVar: "--color-calendar-event-bg-hover",
-    dark: { primitive: "--neutral--08-semi--", hex: "rgba(35,35,35,0.8)", rgb: "35 / 35 / 35" },
+    dark: { primitive: "--neutral--08-a80--", hex: "rgba(35,35,35,0.8)", rgb: "35 / 35 / 35" },
     light: { primitive: "--neutral--01--", hex: "#F1F1F1", rgb: "241 / 241 / 241" },
   },
   {
@@ -269,8 +269,8 @@ const overlayControlColours: SwatchData[] = [
   },
   {
     label: "Divider", cssVar: "--color-divider",
-    dark: { primitive: "--neutral--08-semi--", hex: "rgba(35,35,35,0.8)", rgb: "35 / 35 / 35" },
-    light: { primitive: "--neutral--02-semi--", hex: "rgba(214,214,214,0.8)", rgb: "214 / 214 / 214" },
+    dark: { primitive: "--neutral--08-a80--", hex: "rgba(35,35,35,0.8)", rgb: "35 / 35 / 35" },
+    light: { primitive: "--neutral--02-a80--", hex: "rgba(214,214,214,0.8)", rgb: "214 / 214 / 214" },
   },
 ];
 
@@ -342,18 +342,18 @@ const actionPrimaryColours: SwatchData[] = [
 const actionPassiveColours: SwatchData[] = [
   {
     label: "Background Default", cssVar: "--color-action-passive-bg",
-    dark: { primitive: "--neutral--09-transparent--", hex: "rgba(14,14,14,0.01)", rgb: "Transparent" },
-    light: { primitive: "--neutral--01-transparent--", hex: "rgba(241,241,241,0.01)", rgb: "Transparent" },
+    dark: { primitive: "--neutral--09-a01--", hex: "rgba(14,14,14,0.01)", rgb: "Transparent" },
+    light: { primitive: "--neutral--01-a01--", hex: "rgba(241,241,241,0.01)", rgb: "Transparent" },
   },
   {
     label: "Background Hover", cssVar: "--color-action-passive-bg-hover",
-    dark: { primitive: "--neutral--08-semi--", hex: "rgba(35,35,35,0.8)", rgb: "35 / 35 / 35" },
-    light: { primitive: "--neutral--02-semi--", hex: "rgba(214,214,214,0.8)", rgb: "214 / 214 / 214" },
+    dark: { primitive: "--neutral--08-a80--", hex: "rgba(35,35,35,0.8)", rgb: "35 / 35 / 35" },
+    light: { primitive: "--neutral--02-a80--", hex: "rgba(214,214,214,0.8)", rgb: "214 / 214 / 214" },
   },
   {
     label: "Background Active", cssVar: "--color-action-passive-bg-active",
-    dark: { primitive: "--neutral--07-semi--", hex: "rgba(48,48,48,0.8)", rgb: "48 / 48 / 48" },
-    light: { primitive: "--neutral--03-semi--", hex: "rgba(188,188,188,0.8)", rgb: "188 / 188 / 188" },
+    dark: { primitive: "--neutral--07-a80--", hex: "rgba(48,48,48,0.8)", rgb: "48 / 48 / 48" },
+    light: { primitive: "--neutral--03-a80--", hex: "rgba(188,188,188,0.8)", rgb: "188 / 188 / 188" },
   },
   {
     label: "Text Primary", cssVar: "--color-action-passive-text",

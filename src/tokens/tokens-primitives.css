@@ -9,37 +9,53 @@
      COLOR PRIMITIVES
      ============================================ */
 
-  /* Neutral Scale */
+  /* Neutral Scale
+     Alpha variants follow the -aNN grammar: NN is the alpha × 100, so
+     --primitive-neutral-09-a80 is neutral-09 at 80% opacity. */
   --primitive-neutral-00: #FFFFFF;
-  --primitive-neutral-00-transparent: rgba(255, 255, 255, 0.01);
-  --primitive-neutral-00-semi: rgba(255, 255, 255, 0.6);
-  --primitive-neutral-00-glass: rgba(255, 255, 255, 0.9);
+  --primitive-neutral-00-a01: rgba(255, 255, 255, 0.01);
+  --primitive-neutral-00-a60: rgba(255, 255, 255, 0.6);
+  --primitive-neutral-00-a90: rgba(255, 255, 255, 0.9);
   --primitive-neutral-01: #F1F1F1;
-  --primitive-neutral-01-transparent: rgba(241, 241, 241, 0.01);
-  --primitive-neutral-01-semi: rgba(241, 241, 241, 0.6);
-  --primitive-neutral-01-glass: rgba(241, 241, 241, 0.82);
+  --primitive-neutral-01-a01: rgba(241, 241, 241, 0.01);
+  --primitive-neutral-01-a60: rgba(241, 241, 241, 0.6);
+  --primitive-neutral-01-a82: rgba(241, 241, 241, 0.82);
   --primitive-neutral-02: #D6D6D6;
-  --primitive-neutral-02-semi: rgba(214, 214, 214, 0.8);
+  --primitive-neutral-02-a80: rgba(214, 214, 214, 0.8);
   --primitive-neutral-03: #BCBCBC;
-  --primitive-neutral-03-semi: rgba(188, 188, 188, 0.8);
+  --primitive-neutral-03-a80: rgba(188, 188, 188, 0.8);
   --primitive-neutral-04: #A2A2A2;
   --primitive-neutral-05: #888888;
   --primitive-neutral-06: #6D6D6D;
   --primitive-neutral-07: #303030;
-  --primitive-neutral-07-semi: rgba(48, 48, 48, 0.8);
+  --primitive-neutral-07-a80: rgba(48, 48, 48, 0.8);
   --primitive-neutral-08: #232323;
-  --primitive-neutral-08-semi: rgba(35, 35, 35, 0.8);
+  --primitive-neutral-08-a80: rgba(35, 35, 35, 0.8);
   --primitive-neutral-09: #0E0E0E;
-  --primitive-neutral-09-transparent: rgba(14, 14, 14, 0.01);
-  --primitive-neutral-09-semi: rgba(14, 14, 14, 0.8);
-  --primitive-neutral-09-semi-transparent: rgba(14, 14, 14, 0.6);
-  --primitive-neutral-09-glass: rgba(14, 14, 14, 0.66);
+  --primitive-neutral-09-a01: rgba(14, 14, 14, 0.01);
+  --primitive-neutral-09-a80: rgba(14, 14, 14, 0.8);
+  --primitive-neutral-09-a60: rgba(14, 14, 14, 0.6);
+  --primitive-neutral-09-a66: rgba(14, 14, 14, 0.66);
   --primitive-neutral-10: #050505;
-  --primitive-neutral-10-semi: rgba(5, 5, 5, 0.6);
-  --primitive-neutral-10-subtle: rgba(5, 5, 5, 0.01);
+  --primitive-neutral-10-a60: rgba(5, 5, 5, 0.6);
+  --primitive-neutral-10-a01: rgba(5, 5, 5, 0.01);
   --primitive-neutral-11: #000000;
 
+  /* Chromatic ramps, 00–11. Step 07 is each ramp's key colour; relative
+     luminance decreases strictly from 00 down to 11 (build-enforced by
+     scripts/validate-theme-mirrors.mjs).
+
+     The 00 and 11 end caps are generated, not drawn: blended gamma-aware
+     in sRGB (linearize each channel, lerp linearly, delinearize) —
+       00 = mix(white → step 01) at t = 0.45
+       11 = mix(step 10 → black) at t = 0.38 (≈62% of step 10's luminance)
+     Orange, yellow and green 05/06 are gamma-aware interpolations of
+     04 → 07 at t = 1/3 and 2/3 (the hand-drawn steps sat darker than the
+     07 key, kinking the ramps); every other step is the original drawn
+     value. */
+
   /* Red Scale */
+  --primitive-red-00: #FEF8FA;
   --primitive-red-01: #FDEFF3;
   --primitive-red-02: #FAD3DD;
   --primitive-red-03: #F8B7C7;
@@ -50,44 +66,52 @@
   --primitive-red-08: #C93A5C;
   --primitive-red-09: #8E2641;
   --primitive-red-10: #571727;
+  --primitive-red-11: #45101D;
 
   /* Orange Scale */
+  --primitive-orange-00: #FFFAF7;
   --primitive-orange-01: #FFF3EC;
   --primitive-orange-02: #FBD9C5;
   --primitive-orange-03: #F6B794;
   --primitive-orange-04: #F1996E;
-  --primitive-orange-05: #E98256;
-  --primitive-orange-06: #E07045;
+  --primitive-orange-05: #F09263;
+  --primitive-orange-06: #F08A56;
   --primitive-orange-07: #EF8247;
   --primitive-orange-08: #C65E33;
   --primitive-orange-09: #8F4324;
   --primitive-orange-10: #552716;
+  --primitive-orange-11: #431D0F;
 
   /* Yellow Scale */
+  --primitive-yellow-00: #FFFCF6;
   --primitive-yellow-01: #FFF9EA;
   --primitive-yellow-02: #FFF0C9;
   --primitive-yellow-03: #FFE5A3;
   --primitive-yellow-04: #FFD97F;
-  --primitive-yellow-05: #F2C55E;
-  --primitive-yellow-06: #E0B654;
+  --primitive-yellow-05: #FFD677;
+  --primitive-yellow-06: #FFD46F;
   --primitive-yellow-07: #FFD166;
   --primitive-yellow-08: #C49A3E;
   --primitive-yellow-09: #8A6B2A;
   --primitive-yellow-10: #544016;
+  --primitive-yellow-11: #42320F;
 
   /* Green Scale */
+  --primitive-green-00: #F7FEFB;
   --primitive-green-01: #ECFCF7;
   --primitive-green-02: #CEF6E8;
   --primitive-green-03: #9DEBD4;
   --primitive-green-04: #6DE0C0;
-  --primitive-green-05: #3ED4AA;
-  --primitive-green-06: #1FCB9A;
+  --primitive-green-05: #5ADDB6;
+  --primitive-green-06: #41D9AC;
   --primitive-green-07: #06D6A0;
   --primitive-green-08: #05A67C;
   --primitive-green-09: #03765A;
   --primitive-green-10: #024336;
+  --primitive-green-11: #01342A;
 
   /* Teal Scale */
+  --primitive-teal-00: #F7FBFD;
   --primitive-teal-01: #ECF7FB;
   --primitive-teal-02: #CFEAF3;
   --primitive-teal-03: #9ED4E5;
@@ -98,8 +122,10 @@
   --primitive-teal-08: #0E6E8F;
   --primitive-teal-09: #0A4E66;
   --primitive-teal-10: #052F3E;
+  --primitive-teal-11: #032430;
 
   /* Blue Scale */
+  --primitive-blue-00: #F8FAFE;
   --primitive-blue-01: #EEF3FD;
   --primitive-blue-02: #D3DDF8;
   --primitive-blue-03: #AABCEF;
@@ -110,8 +136,10 @@
   --primitive-blue-08: #163789;
   --primitive-blue-09: #0F265E;
   --primitive-blue-10: #081633;
+  --primitive-blue-11: #050F27;
 
   /* Purple Scale */
+  --primitive-purple-00: #FBF8FF;
   --primitive-purple-01: #F7F0FE;
   --primitive-purple-02: #E6D2FB;
   --primitive-purple-03: #CFABF7;
@@ -122,6 +150,7 @@
   --primitive-purple-08: #7434B3;
   --primitive-purple-09: #52247D;
   --primitive-purple-10: #31164A;
+  --primitive-purple-11: #260F3A;
 
   /* True Black */
   --primitive-true-black: #000000;

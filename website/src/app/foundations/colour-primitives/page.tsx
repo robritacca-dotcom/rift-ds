@@ -45,8 +45,9 @@ const neutralColours: PrimitiveSwatch[] = [
   { label: "Neutral 11", cssVar: "--primitive-neutral-11", hex: "#000000", rgb: "0 / 0 / 0" },
 ];
 
-/* --- Red Scale (01–10) --- */
+/* --- Red Scale (00–11) --- */
 const redColours: PrimitiveSwatch[] = [
+  { label: "Red 00", cssVar: "--primitive-red-00", hex: "#FEF8FA", rgb: "254 / 248 / 250" },
   { label: "Red 01", cssVar: "--primitive-red-01", hex: "#FDEFF3", rgb: "253 / 239 / 243" },
   { label: "Red 02", cssVar: "--primitive-red-02", hex: "#FAD3DD", rgb: "250 / 211 / 221" },
   { label: "Red 03", cssVar: "--primitive-red-03", hex: "#F8B7C7", rgb: "248 / 183 / 199" },
@@ -57,52 +58,60 @@ const redColours: PrimitiveSwatch[] = [
   { label: "Red 08", cssVar: "--primitive-red-08", hex: "#C93A5C", rgb: "201 / 58 / 92" },
   { label: "Red 09", cssVar: "--primitive-red-09", hex: "#8E2641", rgb: "142 / 38 / 65" },
   { label: "Red 10", cssVar: "--primitive-red-10", hex: "#571727", rgb: "87 / 23 / 39" },
+  { label: "Red 11", cssVar: "--primitive-red-11", hex: "#45101D", rgb: "69 / 16 / 29" },
 ];
 
-/* --- Orange Scale (01–10) --- */
+/* --- Orange Scale (00–11) --- */
 const orangeColours: PrimitiveSwatch[] = [
+  { label: "Orange 00", cssVar: "--primitive-orange-00", hex: "#FFFAF7", rgb: "255 / 250 / 247" },
   { label: "Orange 01", cssVar: "--primitive-orange-01", hex: "#FFF3EC", rgb: "255 / 243 / 236" },
   { label: "Orange 02", cssVar: "--primitive-orange-02", hex: "#FBD9C5", rgb: "251 / 217 / 197" },
   { label: "Orange 03", cssVar: "--primitive-orange-03", hex: "#F6B794", rgb: "246 / 183 / 148" },
   { label: "Orange 04", cssVar: "--primitive-orange-04", hex: "#F1996E", rgb: "241 / 153 / 110" },
-  { label: "Orange 05", cssVar: "--primitive-orange-05", hex: "#E98256", rgb: "233 / 130 / 86" },
-  { label: "Orange 06", cssVar: "--primitive-orange-06", hex: "#E07045", rgb: "224 / 112 / 69" },
+  { label: "Orange 05", cssVar: "--primitive-orange-05", hex: "#F09263", rgb: "240 / 146 / 99" },
+  { label: "Orange 06", cssVar: "--primitive-orange-06", hex: "#F08A56", rgb: "240 / 138 / 86" },
   { label: "Orange 07", cssVar: "--primitive-orange-07", hex: "#EF8247", rgb: "239 / 130 / 71" },
   { label: "Orange 08", cssVar: "--primitive-orange-08", hex: "#C65E33", rgb: "198 / 94 / 51" },
   { label: "Orange 09", cssVar: "--primitive-orange-09", hex: "#8F4324", rgb: "143 / 67 / 36" },
   { label: "Orange 10", cssVar: "--primitive-orange-10", hex: "#552716", rgb: "85 / 39 / 22" },
+  { label: "Orange 11", cssVar: "--primitive-orange-11", hex: "#431D0F", rgb: "67 / 29 / 15" },
 ];
 
-/* --- Yellow Scale (01–10) --- */
+/* --- Yellow Scale (00–11) --- */
 const yellowColours: PrimitiveSwatch[] = [
+  { label: "Yellow 00", cssVar: "--primitive-yellow-00", hex: "#FFFCF6", rgb: "255 / 252 / 246" },
   { label: "Yellow 01", cssVar: "--primitive-yellow-01", hex: "#FFF9EA", rgb: "255 / 249 / 234" },
   { label: "Yellow 02", cssVar: "--primitive-yellow-02", hex: "#FFF0C9", rgb: "255 / 240 / 201" },
   { label: "Yellow 03", cssVar: "--primitive-yellow-03", hex: "#FFE5A3", rgb: "255 / 229 / 163" },
   { label: "Yellow 04", cssVar: "--primitive-yellow-04", hex: "#FFD97F", rgb: "255 / 217 / 127" },
-  { label: "Yellow 05", cssVar: "--primitive-yellow-05", hex: "#F2C55E", rgb: "242 / 197 / 94" },
-  { label: "Yellow 06", cssVar: "--primitive-yellow-06", hex: "#E0B654", rgb: "224 / 182 / 84" },
+  { label: "Yellow 05", cssVar: "--primitive-yellow-05", hex: "#FFD677", rgb: "255 / 214 / 119" },
+  { label: "Yellow 06", cssVar: "--primitive-yellow-06", hex: "#FFD46F", rgb: "255 / 212 / 111" },
   { label: "Yellow 07", cssVar: "--primitive-yellow-07", hex: "#FFD166", rgb: "255 / 209 / 102" },
   { label: "Yellow 08", cssVar: "--primitive-yellow-08", hex: "#C49A3E", rgb: "196 / 154 / 62" },
   { label: "Yellow 09", cssVar: "--primitive-yellow-09", hex: "#8A6B2A", rgb: "138 / 107 / 42" },
   { label: "Yellow 10", cssVar: "--primitive-yellow-10", hex: "#544016", rgb: "84 / 64 / 22" },
+  { label: "Yellow 11", cssVar: "--primitive-yellow-11", hex: "#42320F", rgb: "66 / 50 / 15" },
 ];
 
-/* --- Green Scale (01–10) --- */
+/* --- Green Scale (00–11) --- */
 const greenColours: PrimitiveSwatch[] = [
+  { label: "Green 00", cssVar: "--primitive-green-00", hex: "#F7FEFB", rgb: "247 / 254 / 251" },
   { label: "Green 01", cssVar: "--primitive-green-01", hex: "#ECFCF7", rgb: "236 / 252 / 247" },
   { label: "Green 02", cssVar: "--primitive-green-02", hex: "#CEF6E8", rgb: "206 / 246 / 232" },
   { label: "Green 03", cssVar: "--primitive-green-03", hex: "#9DEBD4", rgb: "157 / 235 / 212" },
   { label: "Green 04", cssVar: "--primitive-green-04", hex: "#6DE0C0", rgb: "109 / 224 / 192" },
-  { label: "Green 05", cssVar: "--primitive-green-05", hex: "#3ED4AA", rgb: "62 / 212 / 170" },
-  { label: "Green 06", cssVar: "--primitive-green-06", hex: "#1FCB9A", rgb: "31 / 203 / 154" },
+  { label: "Green 05", cssVar: "--primitive-green-05", hex: "#5ADDB6", rgb: "90 / 221 / 182" },
+  { label: "Green 06", cssVar: "--primitive-green-06", hex: "#41D9AC", rgb: "65 / 217 / 172" },
   { label: "Green 07", cssVar: "--primitive-green-07", hex: "#06D6A0", rgb: "6 / 214 / 160" },
   { label: "Green 08", cssVar: "--primitive-green-08", hex: "#05A67C", rgb: "5 / 166 / 124" },
   { label: "Green 09", cssVar: "--primitive-green-09", hex: "#03765A", rgb: "3 / 118 / 90" },
   { label: "Green 10", cssVar: "--primitive-green-10", hex: "#024336", rgb: "2 / 67 / 54" },
+  { label: "Green 11", cssVar: "--primitive-green-11", hex: "#01342A", rgb: "1 / 52 / 42" },
 ];
 
-/* --- Teal Scale (01–10) --- */
+/* --- Teal Scale (00–11) --- */
 const tealColours: PrimitiveSwatch[] = [
+  { label: "Teal 00", cssVar: "--primitive-teal-00", hex: "#F7FBFD", rgb: "247 / 251 / 253" },
   { label: "Teal 01", cssVar: "--primitive-teal-01", hex: "#ECF7FB", rgb: "236 / 247 / 251" },
   { label: "Teal 02", cssVar: "--primitive-teal-02", hex: "#CFEAF3", rgb: "207 / 234 / 243" },
   { label: "Teal 03", cssVar: "--primitive-teal-03", hex: "#9ED4E5", rgb: "158 / 212 / 229" },
@@ -113,10 +122,12 @@ const tealColours: PrimitiveSwatch[] = [
   { label: "Teal 08", cssVar: "--primitive-teal-08", hex: "#0E6E8F", rgb: "14 / 110 / 143" },
   { label: "Teal 09", cssVar: "--primitive-teal-09", hex: "#0A4E66", rgb: "10 / 78 / 102" },
   { label: "Teal 10", cssVar: "--primitive-teal-10", hex: "#052F3E", rgb: "5 / 47 / 62" },
+  { label: "Teal 11", cssVar: "--primitive-teal-11", hex: "#032430", rgb: "3 / 36 / 48" },
 ];
 
-/* --- Blue Scale (01–10) --- */
+/* --- Blue Scale (00–11) --- */
 const blueColours: PrimitiveSwatch[] = [
+  { label: "Blue 00", cssVar: "--primitive-blue-00", hex: "#F8FAFE", rgb: "248 / 250 / 254" },
   { label: "Blue 01", cssVar: "--primitive-blue-01", hex: "#EEF3FD", rgb: "238 / 243 / 253" },
   { label: "Blue 02", cssVar: "--primitive-blue-02", hex: "#D3DDF8", rgb: "211 / 221 / 248" },
   { label: "Blue 03", cssVar: "--primitive-blue-03", hex: "#AABCEF", rgb: "170 / 188 / 239" },
@@ -127,10 +138,12 @@ const blueColours: PrimitiveSwatch[] = [
   { label: "Blue 08", cssVar: "--primitive-blue-08", hex: "#163789", rgb: "22 / 55 / 137" },
   { label: "Blue 09", cssVar: "--primitive-blue-09", hex: "#0F265E", rgb: "15 / 38 / 94" },
   { label: "Blue 10", cssVar: "--primitive-blue-10", hex: "#081633", rgb: "8 / 22 / 51" },
+  { label: "Blue 11", cssVar: "--primitive-blue-11", hex: "#050F27", rgb: "5 / 15 / 39" },
 ];
 
-/* --- Purple Scale (01–10) --- */
+/* --- Purple Scale (00–11) --- */
 const purpleColours: PrimitiveSwatch[] = [
+  { label: "Purple 00", cssVar: "--primitive-purple-00", hex: "#FBF8FF", rgb: "251 / 248 / 255" },
   { label: "Purple 01", cssVar: "--primitive-purple-01", hex: "#F7F0FE", rgb: "247 / 240 / 254" },
   { label: "Purple 02", cssVar: "--primitive-purple-02", hex: "#E6D2FB", rgb: "230 / 210 / 251" },
   { label: "Purple 03", cssVar: "--primitive-purple-03", hex: "#CFABF7", rgb: "207 / 171 / 247" },
@@ -141,28 +154,30 @@ const purpleColours: PrimitiveSwatch[] = [
   { label: "Purple 08", cssVar: "--primitive-purple-08", hex: "#7434B3", rgb: "116 / 52 / 179" },
   { label: "Purple 09", cssVar: "--primitive-purple-09", hex: "#52247D", rgb: "82 / 36 / 125" },
   { label: "Purple 10", cssVar: "--primitive-purple-10", hex: "#31164A", rgb: "49 / 22 / 74" },
+  { label: "Purple 11", cssVar: "--primitive-purple-11", hex: "#260F3A", rgb: "38 / 15 / 58" },
 ];
 
-/* --- Neutral alpha: the semi-transparent and near-transparent neutrals ---
-   The compact label is the neutral step plus its alpha, since that is the
-   only thing that separates two tokens built on the same step. */
+/* --- Neutral alpha: the translucent neutrals, named on the -aNN grammar
+   (NN = alpha × 100, so -a80 is the step at 80% opacity). The compact
+   label is the neutral step plus its alpha, since that is the only thing
+   that separates two tokens built on the same step. */
 const neutralAlphaColours: PrimitiveSwatch[] = [
-  { label: "Neutral 00 transparent", short: "00 · 1%", cssVar: "--primitive-neutral-00-transparent", hex: "rgba(255,255,255,0.01)", rgb: "255 / 255 / 255" },
-  { label: "Neutral 00 semi", short: "00 · 60%", cssVar: "--primitive-neutral-00-semi", hex: "rgba(255,255,255,0.6)", rgb: "255 / 255 / 255" },
-  { label: "Neutral 00 glass", short: "00 · 90%", cssVar: "--primitive-neutral-00-glass", hex: "rgba(255,255,255,0.9)", rgb: "255 / 255 / 255" },
-  { label: "Neutral 01 transparent", short: "01 · 1%", cssVar: "--primitive-neutral-01-transparent", hex: "rgba(241,241,241,0.01)", rgb: "241 / 241 / 241" },
-  { label: "Neutral 01 semi", short: "01 · 60%", cssVar: "--primitive-neutral-01-semi", hex: "rgba(241,241,241,0.6)", rgb: "241 / 241 / 241" },
-  { label: "Neutral 01 glass", short: "01 · 82%", cssVar: "--primitive-neutral-01-glass", hex: "rgba(241,241,241,0.82)", rgb: "241 / 241 / 241" },
-  { label: "Neutral 09 glass", short: "09 · 66%", cssVar: "--primitive-neutral-09-glass", hex: "rgba(14,14,14,0.66)", rgb: "14 / 14 / 14" },
-  { label: "Neutral 02 semi", short: "02 · 80%", cssVar: "--primitive-neutral-02-semi", hex: "rgba(214,214,214,0.8)", rgb: "214 / 214 / 214" },
-  { label: "Neutral 03 semi", short: "03 · 80%", cssVar: "--primitive-neutral-03-semi", hex: "rgba(188,188,188,0.8)", rgb: "188 / 188 / 188" },
-  { label: "Neutral 07 semi", short: "07 · 80%", cssVar: "--primitive-neutral-07-semi", hex: "rgba(48,48,48,0.8)", rgb: "48 / 48 / 48" },
-  { label: "Neutral 08 semi", short: "08 · 80%", cssVar: "--primitive-neutral-08-semi", hex: "rgba(35,35,35,0.8)", rgb: "35 / 35 / 35" },
-  { label: "Neutral 09 transparent", short: "09 · 1%", cssVar: "--primitive-neutral-09-transparent", hex: "rgba(14,14,14,0.01)", rgb: "14 / 14 / 14" },
-  { label: "Neutral 09 semi", short: "09 · 80%", cssVar: "--primitive-neutral-09-semi", hex: "rgba(14,14,14,0.8)", rgb: "14 / 14 / 14" },
-  { label: "Neutral 09 semi transparent", short: "09 · 60%", cssVar: "--primitive-neutral-09-semi-transparent", hex: "rgba(14,14,14,0.6)", rgb: "14 / 14 / 14" },
-  { label: "Neutral 10 semi", short: "10 · 60%", cssVar: "--primitive-neutral-10-semi", hex: "rgba(5,5,5,0.6)", rgb: "5 / 5 / 5" },
-  { label: "Neutral 10 subtle", short: "10 · 1%", cssVar: "--primitive-neutral-10-subtle", hex: "rgba(5,5,5,0.01)", rgb: "5 / 5 / 5" },
+  { label: "Neutral 00 a01", short: "00 · 1%", cssVar: "--primitive-neutral-00-a01", hex: "rgba(255,255,255,0.01)", rgb: "255 / 255 / 255" },
+  { label: "Neutral 00 a60", short: "00 · 60%", cssVar: "--primitive-neutral-00-a60", hex: "rgba(255,255,255,0.6)", rgb: "255 / 255 / 255" },
+  { label: "Neutral 00 a90", short: "00 · 90%", cssVar: "--primitive-neutral-00-a90", hex: "rgba(255,255,255,0.9)", rgb: "255 / 255 / 255" },
+  { label: "Neutral 01 a01", short: "01 · 1%", cssVar: "--primitive-neutral-01-a01", hex: "rgba(241,241,241,0.01)", rgb: "241 / 241 / 241" },
+  { label: "Neutral 01 a60", short: "01 · 60%", cssVar: "--primitive-neutral-01-a60", hex: "rgba(241,241,241,0.6)", rgb: "241 / 241 / 241" },
+  { label: "Neutral 01 a82", short: "01 · 82%", cssVar: "--primitive-neutral-01-a82", hex: "rgba(241,241,241,0.82)", rgb: "241 / 241 / 241" },
+  { label: "Neutral 09 a66", short: "09 · 66%", cssVar: "--primitive-neutral-09-a66", hex: "rgba(14,14,14,0.66)", rgb: "14 / 14 / 14" },
+  { label: "Neutral 02 a80", short: "02 · 80%", cssVar: "--primitive-neutral-02-a80", hex: "rgba(214,214,214,0.8)", rgb: "214 / 214 / 214" },
+  { label: "Neutral 03 a80", short: "03 · 80%", cssVar: "--primitive-neutral-03-a80", hex: "rgba(188,188,188,0.8)", rgb: "188 / 188 / 188" },
+  { label: "Neutral 07 a80", short: "07 · 80%", cssVar: "--primitive-neutral-07-a80", hex: "rgba(48,48,48,0.8)", rgb: "48 / 48 / 48" },
+  { label: "Neutral 08 a80", short: "08 · 80%", cssVar: "--primitive-neutral-08-a80", hex: "rgba(35,35,35,0.8)", rgb: "35 / 35 / 35" },
+  { label: "Neutral 09 a01", short: "09 · 1%", cssVar: "--primitive-neutral-09-a01", hex: "rgba(14,14,14,0.01)", rgb: "14 / 14 / 14" },
+  { label: "Neutral 09 a80", short: "09 · 80%", cssVar: "--primitive-neutral-09-a80", hex: "rgba(14,14,14,0.8)", rgb: "14 / 14 / 14" },
+  { label: "Neutral 09 a60", short: "09 · 60%", cssVar: "--primitive-neutral-09-a60", hex: "rgba(14,14,14,0.6)", rgb: "14 / 14 / 14" },
+  { label: "Neutral 10 a60", short: "10 · 60%", cssVar: "--primitive-neutral-10-a60", hex: "rgba(5,5,5,0.6)", rgb: "5 / 5 / 5" },
+  { label: "Neutral 10 a01", short: "10 · 1%", cssVar: "--primitive-neutral-10-a01", hex: "rgba(5,5,5,0.01)", rgb: "5 / 5 / 5" },
 ];
 
 const trueBlackColours: PrimitiveSwatch[] = [
@@ -171,9 +186,9 @@ const trueBlackColours: PrimitiveSwatch[] = [
   { label: "True Black Strong", short: "70%", cssVar: "--primitive-true-black-strong", hex: "rgba(0,0,0,0.7)", rgb: "0 / 0 / 0" },
 ];
 
-/* The stepped ramps, in display order. Every one of them is placed on the
-   same 00–11 column grid in the ramp view: neutral runs the full width,
-   the chromatics run 01–10 and sit one column in. */
+/* The stepped ramps, in display order. Every one of them runs the full
+   00–11 column grid in the ramp view — the neutral scale and the seven
+   chromatic ramps share the same twelve steps. */
 const STEP_COLUMNS = ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11"];
 
 const steppedRamps = [
@@ -300,8 +315,9 @@ export default function PrimitiveColoursPage() {
                 </div>
 
                 {steppedRamps.map((ramp) => {
-                  /* Chromatic ramps start at step 01, so an empty leading cell
-                     drops them into the column their step number names. */
+                  /* Every stepped ramp runs the full 00–11 grid; the offset
+                     guard stays so a ramp that starts later still lands in
+                     the column its step number names. */
                   const offset = STEP_COLUMNS.indexOf(stepOf(ramp.swatches[0].cssVar));
                   return (
                     <div className={styles.rampRow} key={ramp.title}>

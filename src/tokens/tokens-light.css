@@ -24,11 +24,11 @@
 
   /* Background - Container */
   --color-bg-container-primary: var(--primitive-neutral-00);
-  --color-bg-container-primary-transparent: var(--primitive-neutral-00-transparent);
+  --color-bg-container-primary-transparent: var(--primitive-neutral-00-a01);
   /* The semi surface rides the glass-strength white, not the 60% one: light
      containers should read bright white, with the ambient background only
      whispering through. */
-  --color-bg-container-primary-semi: var(--primitive-neutral-00-glass);
+  --color-bg-container-primary-semi: var(--primitive-neutral-00-a90);
   --color-bg-container-secondary: var(--primitive-neutral-01);
   --color-bg-container-tertiary: var(--primitive-neutral-02);
   --color-bg-container-inverse: var(--primitive-neutral-09);
@@ -37,10 +37,10 @@
   /* Glass: the translucent floating-surface fill (chat panel, floating
      sidebar). Deliberately translucent in both themes so the page's
      colours reach the surface; pair it with backdrop-filter: blur(24px). */
-  --color-bg-glass: var(--primitive-neutral-00-glass);
+  --color-bg-glass: var(--primitive-neutral-00-a90);
 
   /* Divider */
-  --color-divider: var(--primitive-neutral-02-semi);
+  --color-divider: var(--primitive-neutral-02-a80);
 
   /* Chat bubbles — sent (the person) and received (the agent). Both alias
      the container-secondary / text-primary pair today; they exist as their
@@ -65,7 +65,7 @@
      border ring is an obvious mid-grey, so the pill under the pointer is
      never in doubt while resting pills stay quiet. */
   --color-calendar-cell-bg: var(--primitive-neutral-01);
-  --color-calendar-cell-bg-hover: var(--primitive-neutral-02-semi);
+  --color-calendar-cell-bg-hover: var(--primitive-neutral-02-a80);
   --color-calendar-event-bg: var(--color-bg-container-primary);
   --color-calendar-event-bg-hover: var(--color-calendar-cell-bg);
   --color-calendar-event-border: var(--primitive-neutral-04);
@@ -99,9 +99,9 @@
 
   /* Action - Passive (Secondary button) */
   --color-action-passive-text: var(--primitive-neutral-10);
-  --color-action-passive-bg: var(--primitive-neutral-01-transparent);
-  --color-action-passive-bg-hover: var(--primitive-neutral-02-semi);
-  --color-action-passive-bg-active: var(--primitive-neutral-03-semi);
+  --color-action-passive-bg: var(--primitive-neutral-01-a01);
+  --color-action-passive-bg-hover: var(--primitive-neutral-02-a80);
+  --color-action-passive-bg-active: var(--primitive-neutral-03-a80);
 
   /* Action - Neutral (grey filled buttons). Unlike passive, the fill is a
      solid grey step that stays visible at rest — a filled button without

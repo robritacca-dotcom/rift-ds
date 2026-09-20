@@ -18,7 +18,11 @@
  *    --primitive-<name>-<NN> with name !== neutral; the neutral scale is
  *    excluded here because the NEUTRALS table in
  *    validate-token-references.mjs already owns it, and the true-black
- *    specials carry no NN step so they never match.
+ *    specials carry no NN step so they never match. The same check also
+ *    asserts each CSS ramp's monotonicity: computed relative luminance
+ *    (WCAG, sRGB-linearized) must be strictly decreasing from step 00
+ *    down to 11, so a retuned step can never reintroduce a kink where a
+ *    mid step sits darker than the one below it.
  *
  * 2. ACTION_COLOR_PRESETS (same file) — each preset's label names a
  *    primitive ("Teal 07" → --primitive-teal-07); the hex (and
@@ -36,8 +40,8 @@
  *    whatever teal step the CSS actually resolves --color-action-primary-bg
  *    to per theme, and compares the derived step to the CSS's parsed
  *    var(--primitive-teal-NN) reference (following one --color-* level,
- *    dark falling through to light). Five (cssVar, theme) cells diverge by
- *    design — nearest-step matching is approximate, the mirror's own doc
+ *    dark falling through to light). A handful of (cssVar, theme) cells
+ *    diverge by design — nearest-step matching is approximate, the mirror's own doc
  *    block says the token files are authoritative for the shipped keys,
  *    and at runtime the shipped key short-circuits to a null plan so these
  *    cells never render from the derivation. They are pinned in
@@ -213,7 +217,33 @@ function checkChromaticRamps() {
       }
     }
   }
-  summaries.push(`CHROMATIC_RAMPS matches the ${cssChromatic.size} chromatic primitive ramps (${held} steps, both directions)`);
+
+  /* Monotonicity: relative luminance (WCAG, sRGB-linearized) must strictly
+     decrease down every CSS ramp, so light→dark ordering holds from 00 to
+     11 and a retuned step cannot reintroduce a kink. */
+  const linearize = (c) => {
+    const s = c / 255;
+    return s <= 0.04045 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+  };
+  const relativeLuminance = (hex) => {
+    const [r, g, b] = [1, 3, 5].map((i) => linearize(parseInt(hex.slice(i, i + 2), 16)));
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  };
+  for (const [ramp, cssSteps] of cssChromatic) {
+    const ordered = [...cssSteps.keys()].sort((a, b) => Number(a) - Number(b));
+    for (let i = 1; i < ordered.length; i++) {
+      const [above, below] = [ordered[i - 1], ordered[i]];
+      const [lumAbove, lumBelow] = [cssSteps.get(above), cssSteps.get(below)].map(relativeLuminance);
+      if (!(lumBelow < lumAbove)) {
+        errors.push(
+          `tokens-primitives.css: --primitive-${ramp}-${below} (${cssSteps.get(below)}, L=${lumBelow.toFixed(4)}) is not darker than ` +
+            `--primitive-${ramp}-${above} (${cssSteps.get(above)}, L=${lumAbove.toFixed(4)}) — relative luminance must strictly decrease down every chromatic ramp`
+        );
+      }
+    }
+  }
+
+  summaries.push(`CHROMATIC_RAMPS matches the ${cssChromatic.size} chromatic primitive ramps (${held} steps, both directions, luminance strictly decreasing)`);
 }
 
 /* ------------------------------------------------------------------ */
@@ -259,6 +289,15 @@ const SANCTIONED_DERIVATION_GAPS = new Set([
   '--color-action-primary-border-tertiary|dark|derived:05|css:04',
   '--color-input-border-hover|dark|derived:06|css:07',
   '--color-ai-gradient-end|dark|derived:06|css:07',
+  /* The 00–11 ramp widening put teal-11 in the candidate set, and the
+     deepest-shade intents now sit nearest to it; the shipped CSS keeps
+     the drawn teal-10 (shipped keys never render from the derivation). */
+  '--color-action-primary-text-secondary|light|derived:11|css:10',
+  '--color-action-primary-border|light|derived:11|css:10',
+  '--color-core-ui-secondary|light|derived:11|css:10',
+  '--color-action-primary-text|dark|derived:11|css:10',
+  '--color-action-primary-text-active|dark|derived:11|css:10',
+  '--color-action-icon-active|dark|derived:11|css:10',
 ]);
 
 function checkActionSemanticRefs() {

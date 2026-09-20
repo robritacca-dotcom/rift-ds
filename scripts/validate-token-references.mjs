@@ -198,7 +198,7 @@ if (!neutralsBlock) {
     /step:\s*"(\d\d)"\s*,\s*hex:\s*"([^"]+)"\s*,?\s*(?:alphas:\s*\{([^}]*)\})?/g
   )) {
     const alphas = new Map(
-      [...(m[3] ?? '').matchAll(/"(-[a-z-]+)":\s*([0-9.]+)/g)].map((a) => [a[1], Number(a[2])])
+      [...(m[3] ?? '').matchAll(/"(-a\d\d)":\s*([0-9.]+)/g)].map((a) => [a[1], Number(a[2])])
     );
     mirrored.set(m[1], { hex: m[2], alphas });
   }
@@ -210,7 +210,7 @@ if (!neutralsBlock) {
   const hexToRgb = (hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
 
   for (const [name, value] of primitiveValues) {
-    const stepMatch = name.match(/^--primitive-neutral-(\d\d)(-[a-z-]+)?$/);
+    const stepMatch = name.match(/^--primitive-neutral-(\d\d)(-[a-z0-9-]+)?$/);
     if (!stepMatch) continue;
     const [, step, suffix] = stepMatch;
     const entry = mirrored.get(step);
@@ -223,7 +223,18 @@ if (!neutralsBlock) {
         errors.push(`theme-overrides.ts: NEUTRALS step ${step} is ${entry.hex} but ${name} is ${value}`);
       }
     } else {
+      /* Alpha variants follow the -aNN grammar: NN = alpha × 100, so the
+         name itself states the opacity. Enforce both halves — the suffix
+         shape, and that NN matches the rgba() value's actual alpha. */
       const rgba = parseRgba(value);
+      const grammar = suffix.match(/^-a(\d\d)$/);
+      if (!grammar) {
+        errors.push(`tokens-primitives.css: ${name} does not follow the -aNN alpha-variant grammar (NN = alpha × 100)`);
+        continue;
+      }
+      if (rgba && Number(grammar[1]) !== Math.round(rgba.alpha * 100)) {
+        errors.push(`tokens-primitives.css: ${name} names alpha ${Number(grammar[1]) / 100} in its -aNN suffix but its value is ${value}`);
+      }
       const declared = entry.alphas.get(suffix);
       if (declared === undefined) {
         errors.push(`theme-overrides.ts: NEUTRALS step ${step} does not mirror the ${suffix} variant (${name}) — a tinted playground theme leaves it un-themed`);

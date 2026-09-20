@@ -55,15 +55,18 @@ export default function ThemesPage() {
           {/* Intro */}
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
-              The same system, wearing {tiles.length} complete looks
+              {tiles.length} examples of how far the tokens can move
             </p>
             <p className={styles.introBody}>
-              Every theme here is the whole system under different primitives:
-              both colour modes, a heading and body type pairing with
-              self-hosted fonts, radius, density, motion, elevation, the
-              ambient background, and the chart palette. Apply one and this
-              page rethemes around you, which is the honest preview. The
-              playground builds your own the same way and copies out the CSS.
+              These themes are demonstrations, not a menu: each one is the
+              whole system restyled through its tokens alone, to show the
+              range one set of primitives covers. A look means both colour
+              modes, a heading and body type pairing with self-hosted fonts,
+              radius, density, motion, elevation, the ambient background, and
+              the chart palette. Apply one and this page rethemes around you,
+              which is the honest preview. Your own brand takes the same
+              path: the playground builds it live and copies out paste-ready
+              CSS.
             </p>
           </div>
 
@@ -148,6 +151,35 @@ export default function ThemesPage() {
                 </article>
               );
             })}
+
+            {/* The grid ends where a new theme would begin, like the hero
+                dot row and the switcher menu: a dashed slot for the look
+                that doesn't exist yet. */}
+            <article className={`${styles.card} ${styles.cardCreate}`}>
+              <div className={styles.cardSwatches}>
+                <span className={styles.createSwatch} aria-hidden="true">
+                  <span className="material-symbols-rounded">add</span>
+                </span>
+              </div>
+
+              <h2 className={styles.cardName}>Create your own</h2>
+              <p className={styles.cardPairing}>
+                Any colour, pairing, and shape over the same tokens
+              </p>
+              <p className={styles.cardLevers}>
+                every lever live, copied out as paste-ready CSS
+              </p>
+
+              <div className={styles.cardActions}>
+                <Button
+                  label="Open the playground"
+                  variant="primary"
+                  size="compact"
+                  iconRight="arrow_forward"
+                  href="/playground"
+                />
+              </div>
+            </article>
           </div>
         </main>
       </div>

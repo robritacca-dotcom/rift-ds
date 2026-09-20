@@ -153,3 +153,21 @@
   margin-top: auto;
   padding-top: var(--gap-200);
 }
+
+/* The create-your-own slot: dashed where the themes are solid, the same
+   language as the hero dot row's trailing add dot. */
+.cardCreate {
+  border-style: dashed;
+}
+
+.createSwatch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: var(--border-025) dashed var(--color-text-tertiary);
+  border-radius: var(--radius-pill);
+  color: var(--color-text-secondary);
+  --icon-size: var(--icon-size-500);
+}

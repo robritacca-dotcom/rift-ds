@@ -259,7 +259,7 @@
     },
     "/foundations/themes": {
       "title": "Themes",
-      "text": "Every shipped theme as a card: apply it live, open it in the playground, or copy the one-attribute setup.",
+      "text": "Example themes showing the tokens' range: apply one live, open the playground, or copy the one-attribute setup.",
       "chips": [
         {
           "id": "themes-complete",

@@ -65,3 +65,4 @@ notes/
 # Next 16 auto-scaffolds these agent stubs on every build; ours live at the root
 website/AGENTS.md
 website/CLAUDE.md
+.vercel-storybook

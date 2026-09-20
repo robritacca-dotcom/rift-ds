@@ -1,0 +1,120 @@
+/* ============================================
+   STAT COMPONENT
+   A single headline metric with label and an
+   optional trend delta. Compose in a row for
+   a metrics band.
+   ============================================ */
+
+.ds-stat {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-xxs);
+}
+
+/* ============================================
+   VALUE — display weight (300), per the
+   weight-contrast rule for display numerals
+   ============================================ */
+
+.ds-stat__value {
+  font-family: var(--font-sub-display-family);
+  font-size: var(--font-sub-display-size);
+  font-weight: var(--font-sub-display-weight);
+  line-height: var(--font-sub-display-line-height);
+  letter-spacing: var(--font-sub-display-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.ds-stat--large .ds-stat__value {
+  font-size: var(--font-display-2-size);
+  line-height: var(--font-display-2-line-height);
+  letter-spacing: var(--font-display-2-letter-spacing);
+}
+
+/* ============================================
+   LABEL
+   ============================================ */
+
+.ds-stat__label {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-tertiary);
+}
+
+/* ============================================
+   DELTA — trend-coloured annotation
+   ============================================ */
+
+.ds-stat__delta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-xxs);
+  font-family: var(--font-paragraph-sm-em-family);
+  font-size: var(--font-paragraph-sm-em-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+}
+
+.ds-stat__delta .material-symbols-rounded {
+  --icon-size: var(--icon-size-sm);
+  line-height: 1;
+}
+
+/* The trend tokens are theme-split for contrast: deep status inks on
+   light surfaces, the mint/coral accents on dark ones. */
+.ds-stat__delta--up {
+  color: var(--color-trend-up);
+}
+
+.ds-stat__delta--down {
+  color: var(--color-trend-down);
+}
+
+.ds-stat__delta--neutral {
+  color: var(--color-text-tertiary);
+}
+
+/* ============================================
+   INLINE DELTA — delta to the right of the
+   value, bottom-aligned to its baseline
+   ============================================ */
+
+.ds-stat--delta-inline {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    'value delta'
+    'label label';
+  column-gap: var(--gap-sm);
+  row-gap: var(--gap-xxs);
+}
+
+.ds-stat--delta-inline .ds-stat__value {
+  grid-area: value;
+}
+
+.ds-stat--delta-inline .ds-stat__label {
+  grid-area: label;
+}
+
+.ds-stat--delta-inline .ds-stat__delta {
+  grid-area: delta;
+  align-self: end;
+  justify-self: start;
+  /* Optical baseline: compensates the display value's half-leading. */
+  margin-bottom: var(--gap-xs);
+}
+
+/* Icons take the colour of the text around them. Explicit, not just
+   inherited by default: a consumer stylesheet that sets a colour on
+   .material-symbols-rounded itself (a common global default) would
+   otherwise override inheritance and detach the icon from the state
+   colours this component sets on its parents. */
+.ds-stat .material-symbols-rounded {
+  color: inherit;
+}

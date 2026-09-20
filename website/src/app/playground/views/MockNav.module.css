@@ -1,0 +1,82 @@
+/* The white-label header: the site header's proportions — brand left,
+   links centred, theme toggle right — floating straight on the backdrop
+   the way the real one does, no card around it. */
+.nav {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md);
+  min-height: 64px;
+}
+
+/* The side zones flex equally so the link row sits dead centre. */
+.brand {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}
+
+/* The mock product's logo mark: a token-driven dot, so the action colour
+   lever rebrands it along with everything else. */
+.mark {
+  width: var(--icon-size-sm);
+  height: var(--icon-size-sm);
+  border-radius: var(--radius-full);
+  background: var(--color-action-primary-bg);
+  flex-shrink: 0;
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-lg);
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xxs);
+  padding: var(--padding-xxs) var(--padding-sm);
+  border-radius: var(--radius-full);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}
+
+/* One trigger carries the open-menu pill, the way the real header's
+   active section does. */
+.linkActive {
+  background: var(--color-bg-container-secondary);
+}
+
+.caret {
+  --icon-size: var(--icon-size-sm);
+  line-height: 1;
+}
+
+.actions {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* Narrow column: the centre links give way first, the way the real
+   header's do below its own breakpoint. The stage's Mobile preset can't
+   move the real viewport, so its marker hides them the same way. */
+@media (max-width: 899px) {
+  .links {
+    display: none;
+  }
+}
+
+[data-stage="mobile"] .links {
+  display: none;
+}

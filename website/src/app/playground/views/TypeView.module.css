@@ -1,0 +1,148 @@
+/* The Type view: the ramp as a specimen sheet. Rows are read left to
+   right — the step's name, token stem and live metrics in a narrow rail,
+   the specimen line beside it — with the two family-role cards on top. */
+
+/* ── Family role cards ────────────────────────────────────────── */
+
+.faceCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--gap-md);
+}
+
+.faceCard {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md);
+  padding: var(--padding-md);
+  background: var(--color-bg-container-primary);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-xl);
+}
+
+.faceGlyph {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  font-size: var(--font-heading-1-size);
+  font-weight: var(--font-heading-2-weight);
+  color: var(--color-text-primary);
+  background: var(--color-bg-container-secondary);
+  border-radius: var(--radius-lg);
+}
+
+.faceInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxs);
+  min-width: 0;
+}
+
+.faceRole {
+  font-size: var(--font-overline-size);
+  font-weight: var(--font-overline-weight);
+  line-height: var(--font-overline-line-height);
+  letter-spacing: var(--font-overline-letter-spacing);
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+}
+
+.faceName {
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  color: var(--color-text-primary);
+}
+
+.faceToken {
+  font-family: var(--font-family-code);
+  font-size: var(--font-paragraph-sm-size);
+  color: var(--color-text-tertiary);
+}
+
+/* ── Ramp rows ────────────────────────────────────────────────── */
+
+.ramp {
+  display: flex;
+  flex-direction: column;
+  /* Rows respond to the column, not the viewport: the stage's Mobile
+     preset narrows the workspace while the window stays wide. */
+  container-type: inline-size;
+}
+
+.rampRow {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: var(--gap-lg);
+  align-items: center;
+  padding: var(--padding-md) 0;
+  border-bottom: var(--border-xs) solid var(--color-divider);
+}
+
+.rampRow:last-child {
+  border-bottom: none;
+}
+
+.rampMeta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxs);
+  min-width: 0;
+}
+
+.rampName {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  font-size: var(--font-paragraph-em-size);
+  font-weight: var(--font-paragraph-em-weight);
+  line-height: var(--font-paragraph-em-line-height);
+  color: var(--color-text-primary);
+}
+
+.roleChip {
+  flex: none;
+  padding: 0 var(--padding-xs);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  line-height: var(--font-overline-line-height);
+  color: var(--color-text-secondary);
+  background: var(--color-bg-container-tertiary);
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+
+.rampToken {
+  font-family: var(--font-family-code);
+  font-size: var(--font-paragraph-sm-size);
+  color: var(--color-text-tertiary);
+}
+
+.rampValues {
+  font-family: var(--font-family-code);
+  font-size: var(--font-paragraph-sm-size);
+  color: var(--color-text-secondary);
+}
+
+/* One line per specimen, clipped like a specimen sheet — the mega steps
+   would otherwise wrap into a wall. The step's own tokens set everything
+   else inline. */
+.rampSample {
+  margin: 0;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Stack the rail above the specimen when the column tightens (the mobile
+   stage preset, or a phone). */
+@container (max-width: 719px) {
+  .rampRow {
+    grid-template-columns: 1fr;
+    gap: var(--gap-sm);
+    align-items: start;
+  }
+}

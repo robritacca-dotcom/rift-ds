@@ -1,0 +1,132 @@
+/* ============================================
+   RADIO BUTTON COMPONENT
+   Custom radio with animated dot indicator
+   ============================================ */
+
+.ds-radio {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-sm); /* 8px */
+  cursor: pointer;
+  user-select: none;
+}
+
+/* ============================================
+   CIRCLE (outer ring)
+   ============================================ */
+
+.ds-radio__circle {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  border: var(--border-md) solid var(--color-bg-container-border);
+  border-radius: var(--radius-full); /* 999px — perfect circle */
+  background-color: var(--color-bg-container-primary-transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: border-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+/* ============================================
+   DOT (inner fill)
+   ============================================ */
+
+.ds-radio__dot {
+  width: 12px;
+  height: 12px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-action-primary-bg);
+  transform: scale(0);
+  transition: transform var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+/* ============================================
+   LABEL
+   ============================================ */
+
+.ds-radio__label {
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   CHECKED STATE
+   ============================================ */
+
+.ds-radio--checked .ds-radio__circle {
+  border-color: var(--color-action-primary-bg);
+}
+
+.ds-radio--checked .ds-radio__dot {
+  transform: scale(1);
+}
+
+/* ============================================
+   HOVER STATE
+   ============================================ */
+
+.ds-radio:not(.ds-radio--disabled):hover .ds-radio__circle {
+  border-color: var(--color-action-primary-bg);
+}
+
+.ds-radio--checked:not(.ds-radio--disabled):hover .ds-radio__circle {
+  border-color: var(--color-action-primary-bg-hover);
+}
+
+.ds-radio--checked:not(.ds-radio--disabled):hover .ds-radio__dot {
+  background-color: var(--color-action-primary-bg-hover);
+}
+
+/* ============================================
+   FOCUS STATE
+   ============================================ */
+
+.ds-radio:focus-visible .ds-radio__circle {
+  outline: var(--border-md) solid var(--color-action-primary-border-tertiary);
+  outline-offset: 2px;
+}
+
+/* ============================================
+   DISABLED STATE
+   ============================================ */
+
+.ds-radio--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   RADIO GROUP
+   ============================================ */
+
+.ds-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm); /* 8px */
+}
+
+.ds-radio-group__label {
+  font-family: var(--font-paragraph-em-family);
+  font-size: var(--font-paragraph-em-size);
+  font-weight: var(--font-paragraph-em-weight);
+  line-height: var(--font-paragraph-em-line-height);
+  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.ds-radio-group__options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm); /* 8px */
+}
+
+.ds-radio-group--horizontal .ds-radio-group__options {
+  flex-direction: row;
+  gap: var(--gap-lg); /* 20px */
+}

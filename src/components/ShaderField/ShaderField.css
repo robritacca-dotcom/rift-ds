@@ -1,0 +1,24 @@
+/* ShaderField — the canvas only.
+   Placement, clipping and any fade-to-page mask belong to the positioned
+   ancestor the caller provides: where the field sits is a layout decision,
+   and baking one in would make the component unusable anywhere else. */
+
+.ds-shader-field {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  /* Scenery, never a target — a full-bleed canvas that swallowed clicks would
+     make whatever it covers unreachable. */
+  pointer-events: none;
+  /* Reveals only once a context is live and the first frame is drawn, so a
+     machine that cannot run the shader never shows an empty canvas — it stays
+     on the caller's fallback instead. */
+  opacity: 0;
+  transition: opacity var(--motion-duration-slower) var(--motion-ease-entrance);
+}
+
+.ds-shader-field[data-status='active'] {
+  opacity: 1;
+}

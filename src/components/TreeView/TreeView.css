@@ -1,0 +1,119 @@
+/* ============================================
+   TREEVIEW COMPONENT
+   Collapsible hierarchy for files, folders,
+   and nested structures
+   ============================================ */
+
+/* Base */
+
+.ds-treeview {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* ============================================
+   ITEM — the focusable treeitem (roving tabindex)
+   ============================================ */
+
+.ds-treeview__item {
+  outline: none;
+}
+
+/* The focus ring draws on the item's own row, never on the subtree */
+.ds-treeview__item:focus-visible > .ds-treeview__row {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: -2px;
+}
+
+/* ============================================
+   ROW — one line of the tree
+   Indentation steps per depth via a custom
+   property the component sets inline.
+   ============================================ */
+
+.ds-treeview__row {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  padding: var(--padding-xxs) var(--padding-sm);
+  padding-left: calc(var(--padding-sm) + var(--ds-treeview-depth, 0) * var(--gap-md));
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+/* States */
+
+.ds-treeview__row:hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-treeview__row--selected {
+  background-color: var(--color-action-passive-bg-active);
+}
+
+.ds-treeview__row--selected .ds-treeview__label {
+  font-weight: var(--font-paragraph-sm-em-weight);
+}
+
+/* ============================================
+   CHEVRON — rotates a quarter turn on expand
+   ============================================ */
+
+.ds-treeview__chevron {
+  flex-shrink: 0;
+  --icon-size: var(--icon-size-sm);
+  color: var(--color-icon-primary);
+  transition: transform var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-treeview__item[aria-expanded='true'] > .ds-treeview__row .ds-treeview__chevron {
+  transform: rotate(90deg);
+}
+
+/* Leaves keep the chevron column so labels align across depths */
+.ds-treeview__chevron--spacer {
+  display: inline-block;
+  width: var(--icon-size-sm);
+  height: var(--icon-size-sm);
+}
+
+/* ============================================
+   ICON
+   ============================================ */
+
+.ds-treeview__icon {
+  flex-shrink: 0;
+  --icon-size: var(--icon-size-sm);
+  color: var(--color-icon-primary);
+}
+
+/* ============================================
+   LABEL
+   ============================================ */
+
+.ds-treeview__label {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-primary);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* ============================================
+   GROUP — nested children
+   ============================================ */
+
+.ds-treeview__group {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}

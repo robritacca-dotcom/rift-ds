@@ -1,0 +1,39 @@
+/* ============================================
+   BUTTON GROUP COMPONENT
+   Container for grouped buttons in nav/subnav
+   ============================================ */
+
+.ds-button-group {
+  /* Layout */
+  display: inline-flex; /* Hug content instead of stretch */
+  width: auto; /* Don't stretch to full width */
+  overflow: hidden;
+}
+
+/* ============================================
+   HORIZONTAL ORIENTATION
+   Default for top navigation
+   ============================================ */
+
+.ds-button-group--horizontal {
+  flex-direction: row;
+  gap: var(--gap-lg); /* Figma: --gap/lg (20px) */
+  align-items: flex-start;
+}
+
+/* ============================================
+   VERTICAL ORIENTATION
+   For subnav/mobile navigation
+   ============================================ */
+
+.ds-button-group--vertical {
+  flex-direction: column;
+  gap: var(--gap-xxs); /* 2px */
+  align-items: flex-start; /* Left-aligned, hug content */
+}
+
+/* Vertical buttons hug their content by default */
+.ds-button-group--vertical .ds-button {
+  width: auto; /* Hug content instead of stretch */
+  display: inline-flex; /* Hug content */
+}

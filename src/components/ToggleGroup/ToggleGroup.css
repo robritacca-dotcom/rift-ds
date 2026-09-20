@@ -1,0 +1,110 @@
+/* ============================================
+   TOGGLE GROUP COMPONENT
+   A set of two-state buttons
+   ============================================ */
+
+.ds-toggle-group {
+  display: inline-flex;
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+/* ============================================
+   ITEM
+   ============================================ */
+
+.ds-toggle-group__item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--padding-xs) var(--padding-sm);
+  font-family: var(--font-paragraph-sm-em-family);
+  font-size: var(--font-paragraph-sm-em-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+  color: var(--color-text-secondary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard), color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-toggle-group__item + .ds-toggle-group__item {
+  border-left: var(--border-xs) solid var(--color-bg-container-border);
+}
+
+.ds-toggle-group__item .material-symbols-rounded {
+  --icon-size: var(--icon-size-sm);
+}
+
+/* ============================================
+   ITEM — HOVER
+   ============================================ */
+
+.ds-toggle-group__item:hover {
+  background-color: var(--color-bg-container-secondary);
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   ITEM — ACTIVE
+   ============================================ */
+
+.ds-toggle-group__item--active {
+  background-color: var(--color-action-primary-bg);
+  color: var(--color-action-primary-text);
+}
+
+.ds-toggle-group__item--active:hover {
+  background-color: var(--color-action-primary-bg-hover);
+  color: var(--color-action-primary-text);
+}
+
+/* ============================================
+   NEUTRAL VARIANT
+   Active items fill grey instead of the action
+   teal — for sets where the selection should
+   not carry the action colour's weight.
+   ============================================ */
+
+.ds-toggle-group--neutral .ds-toggle-group__item--active {
+  background-color: var(--color-action-neutral-bg);
+  color: var(--color-action-neutral-text);
+}
+
+.ds-toggle-group--neutral .ds-toggle-group__item--active:hover {
+  background-color: var(--color-action-neutral-bg-hover);
+  color: var(--color-action-neutral-text);
+}
+
+/* ============================================
+   COMPACT
+   ============================================ */
+
+.ds-toggle-group--compact .ds-toggle-group__item {
+  padding: var(--padding-xxs) var(--padding-xs);
+}
+
+.ds-toggle-group--compact .ds-toggle-group__item .material-symbols-rounded {
+  --icon-size: var(--icon-size-sm);
+}
+
+/* ============================================
+   DISABLED
+   ============================================ */
+
+.ds-toggle-group--disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* Icons take the colour of the text around them. Explicit, not just
+   inherited by default: a consumer stylesheet that sets a colour on
+   .material-symbols-rounded itself (a common global default) would
+   otherwise override inheritance and detach the icon from the state
+   colours this component sets on its parents. */
+.ds-toggle-group .material-symbols-rounded {
+  color: inherit;
+}

@@ -1,0 +1,234 @@
+/* ============================================
+   WORLD MAP COMPONENT
+   A flat Mercator map: baked Natural Earth land,
+   a quiet graticule, and HTML markers positioned
+   over the drawing. Every colour is a token; the
+   marker dimensions are drawing geometry, like
+   ToggleSwitch's thumb (see the design.md spec).
+   ============================================ */
+
+/* Base — the root crops the frame, which carries the framed window's exact
+   aspect ratio so marker percentages line up with the drawing. */
+
+.ds-world-map {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.ds-world-map:focus-visible {
+  outline: var(--border-md) solid var(--color-action-primary-bg);
+  outline-offset: var(--padding-xxs);
+}
+
+.ds-world-map__frame {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* Until the first measurement, fill the root; the SVG's own fitting keeps
+     the drawing undistorted for that first frame. */
+  width: 100%;
+  height: 100%;
+}
+
+/* Grabbable whenever there is world beyond the window; the touch lock is
+   separate and applies only while zoomed, so an unzoomed map never
+   swallows the page's touch scroll. */
+.ds-world-map__frame--pannable {
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.ds-world-map__frame--touch-lock {
+  touch-action: none;
+}
+
+.ds-world-map__frame--panning {
+  cursor: grabbing;
+}
+
+.ds-world-map__svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Drawing — hairlines stay hairlines at any zoom via non-scaling strokes. */
+
+.ds-world-map__land {
+  fill: var(--color-bg-container-tertiary);
+  stroke: var(--color-divider);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.ds-world-map__graticule {
+  fill: none;
+  stroke: var(--color-divider);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  opacity: 0.5;
+}
+
+/* Markers — real buttons over the drawing. The 20px hit target wraps a
+   10px glyph; both are geometry, not spacing. */
+
+.ds-world-map__marker {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--ds-world-map-marker-color, var(--color-text-secondary));
+  font: inherit;
+}
+
+/* With a hover card, a slot owns the marker's position (the colour custom
+   property inherits down to the dot), the HoverCard wrapper keeps its own
+   relative layout, and the button sits statically inside it. A hovered or
+   focused slot rises above its neighbours so the card is never under a
+   later marker. */
+
+.ds-world-map__marker-slot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  color: var(--ds-world-map-marker-color, var(--color-text-secondary));
+}
+
+.ds-world-map__marker-slot:hover,
+.ds-world-map__marker-slot:focus-within {
+  z-index: 4;
+}
+
+.ds-world-map__marker-slot .ds-world-map__marker {
+  position: static;
+  transform: none;
+}
+
+button.ds-world-map__marker {
+  cursor: pointer;
+}
+
+.ds-world-map__marker:focus-visible {
+  outline: var(--border-md) solid var(--color-action-primary-bg);
+  outline-offset: var(--padding-xxs);
+  border-radius: var(--radius-full);
+}
+
+.ds-world-map__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-full);
+  background-color: currentColor;
+  /* A contrast ring in the surface colour, so a dot stays legible on land
+     and water alike — a ring, not an elevation shadow. */
+  box-shadow: 0 0 0 2px var(--color-bg-container-primary);
+  transition: transform var(--motion-duration-fast) var(--motion-ease-emphasized);
+}
+
+/* An anchor is something fixed: the square from Globe and MapLegend's
+   glyph vocabulary, outlined rather than filled. */
+.ds-world-map__marker--anchor .ds-world-map__dot {
+  border-radius: var(--radius-xxs);
+  background-color: var(--color-bg-container-primary);
+  box-shadow: inset 0 0 0 2px currentColor;
+}
+
+.ds-world-map__marker--active .ds-world-map__dot,
+button.ds-world-map__marker:hover .ds-world-map__dot {
+  transform: scale(1.3);
+}
+
+.ds-world-map__marker--active {
+  z-index: 1;
+}
+
+.ds-world-map__label {
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  padding-left: var(--padding-xxs);
+  font-family: var(--font-family-code);
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.ds-world-map__marker--active .ds-world-map__label {
+  color: var(--color-text-primary);
+}
+
+/* Zoom controls — the site's diagram pill (the architecture maps and the
+   canvas board): a glass pill floating at the bottom centre, holding zoom
+   out, the percent readout (resets to 100%), and zoom in. It stays put
+   while the map pans under it. */
+
+.ds-world-map__zoom {
+  position: absolute;
+  bottom: var(--padding-md);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  padding: var(--padding-xxs) var(--padding-xs);
+  border-radius: var(--radius-full);
+  background: var(--color-bg-container-primary-semi);
+  backdrop-filter: blur(24px);
+  border: var(--border-xs) solid var(--color-divider);
+  box-shadow: var(--shadow-floating);
+  z-index: 3;
+}
+
+.ds-world-map__zoom-level {
+  min-width: 4em;
+  height: var(--gap-xl);
+  padding: 0 var(--padding-xs);
+  border: 0;
+  border-radius: var(--radius-full);
+  background: none;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  color: var(--color-text-primary);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition: background var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-world-map__zoom-level:hover {
+  background: var(--color-bg-container-secondary);
+}
+
+.ds-world-map__zoom-level:focus-visible {
+  outline: var(--border-md) solid var(--color-action-primary-bg);
+  outline-offset: var(--gap-xxs);
+}
+
+/* Callout overlay — positioned at the marker, opening toward the map's
+   centre, where the room is. */
+
+.ds-world-map__callout {
+  position: absolute;
+  pointer-events: none;
+  padding: 0 var(--padding-md);
+  transform: translate(0, -100%);
+  white-space: nowrap;
+  z-index: 2;
+}
+
+.ds-world-map__callout[data-side='left'] {
+  transform: translate(-100%, -100%);
+}

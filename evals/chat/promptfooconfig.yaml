@@ -1,0 +1,46 @@
+# Chat answer-quality eval. Runs against the real route — persona, corpus,
+# guardrails and all — never the raw Anthropic API. See README.md in this
+# directory for how to run it and how to read it.
+description: robr0 GPT chat — golden set through /api/chat
+
+prompts:
+  - '{{question}}'
+
+providers:
+  - id: https
+    label: chat-route
+    config:
+      url: http://localhost:3000/api/chat
+      method: POST
+      headers:
+        content-type: application/json
+      body:
+        messages:
+          - role: user
+            content: '{{prompt}}'
+      transformResponse: file://transform-response.js
+
+# Three runs per question: same question, different answers — report a rate,
+# not a pass. Concurrency stays low so the first request can write the prompt
+# cache before the rest read it.
+evaluateOptions:
+  repeat: 3
+  maxConcurrency: 2
+
+defaultTest:
+  assert:
+    # House style is written down in content-design.md; these two are its
+    # cheapest tripwires. Violations are informative, not noise.
+    - type: not-contains
+      value: '—'
+    - type: not-contains
+      value: '!'
+    # Every path the answer cites must exist on the site.
+    - type: javascript
+      value: file://assert-paths.mjs
+    # Whole-response wall time (streaming included). This is NOT
+    # time-to-first-token — that is checked in the browser.
+    - type: latency
+      threshold: 45000
+
+tests: file://golden-set.json

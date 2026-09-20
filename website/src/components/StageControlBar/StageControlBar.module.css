@@ -1,0 +1,54 @@
+/* The stages' bottom pill: the architecture maps' zoom-controls glass,
+   fixed to the viewport's bottom centre. Sits above the stage content and
+   the floating side panels, below every overlay surface. */
+.bar {
+  position: fixed;
+  bottom: var(--layout-chat-inset);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 25;
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  padding: var(--padding-xxs) var(--padding-xs);
+  border-radius: var(--radius-full);
+  background: var(--color-bg-glass);
+  backdrop-filter: blur(24px);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  box-shadow: var(--shadow-floating);
+}
+
+/* The fade behind the bar: transparent at the top, the page floor at the
+   viewport edge — a taller ramp than the safe area itself, so the dim-out
+   starts before content reaches the controls. It dims only the stage
+   content: above the flow, below every floating panel (the playground's
+   rails sit at 15). */
+.fade {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: calc(var(--layout-stage-bottom-clearance) * 1.5);
+  z-index: 10;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--color-bg-page-primary) 85%
+  );
+}
+
+.separator {
+  width: var(--border-xs);
+  height: var(--gap-lg);
+  margin: 0 var(--gap-xxs);
+  background: var(--color-divider);
+}
+
+.endSlot {
+  display: inline-flex;
+  align-items: center;
+  padding-inline-end: var(--padding-xs);
+  /* A text control's label never wraps inside the bar. */
+  white-space: nowrap;
+}

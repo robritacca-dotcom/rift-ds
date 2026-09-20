@@ -1,0 +1,74 @@
+/* ============================================
+   RATING COMPONENT
+   Star-scale rating control
+   ============================================ */
+
+.ds-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-xxs);
+}
+
+/* ============================================
+   STEPS
+   ============================================ */
+
+.ds-rating__step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--color-icon-secondary);
+  border-radius: var(--radius-xs);
+  transition: color var(--motion-duration-fast) var(--motion-ease-standard),
+    transform var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-rating__icon {
+  --icon-size: var(--icon-size-md);
+}
+
+.ds-rating--compact .ds-rating__icon {
+  --icon-size: var(--icon-size-sm);
+}
+
+.ds-rating__step--filled {
+  color: var(--color-core-accent-gold);
+}
+
+.ds-rating__step--filled .ds-rating__icon {
+  --material-symbols-fill: 1;
+}
+
+/* ============================================
+   STATES
+   ============================================ */
+
+.ds-rating__step:hover {
+  transform: scale(1.1);
+}
+
+.ds-rating__step:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+.ds-rating--read-only .ds-rating__step {
+  cursor: default;
+}
+
+.ds-rating--read-only .ds-rating__step:hover {
+  transform: none;
+}
+
+.ds-rating--disabled .ds-rating__step {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ds-rating--disabled .ds-rating__step:hover {
+  transform: none;
+}

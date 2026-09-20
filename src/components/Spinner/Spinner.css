@@ -1,0 +1,84 @@
+/* ============================================
+   SPINNER COMPONENT
+   Animated circular loading indicator
+   ============================================ */
+
+.ds-spinner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============================================
+   SIZES
+   ============================================ */
+
+.ds-spinner--sm {
+  width: 16px;
+  height: 16px;
+}
+
+.ds-spinner--md {
+  width: 24px;
+  height: 24px;
+}
+
+.ds-spinner--lg {
+  width: 36px;
+  height: 36px;
+}
+
+/* ============================================
+   SVG
+   ============================================ */
+
+.ds-spinner__circle {
+  width: 100%;
+  height: 100%;
+  animation: ds-spinner-rotate var(--motion-duration-loop-spin) var(--motion-ease-linear) infinite;
+}
+
+.ds-spinner__track {
+  stroke: var(--color-bg-container-tertiary);
+}
+
+.ds-spinner__arc {
+  stroke-dasharray: 44;
+  stroke-dashoffset: 32;
+}
+
+/* ============================================
+   VARIANTS
+   ============================================ */
+
+.ds-spinner--primary .ds-spinner__arc {
+  stroke: var(--color-action-primary-bg);
+}
+
+.ds-spinner--neutral .ds-spinner__arc {
+  stroke: var(--color-text-secondary);
+}
+
+/* Inherit — both circles draw in currentColor so the spinner matches the
+   text/icon colour of whatever control contains it (e.g. a loading Button) */
+.ds-spinner--inherit .ds-spinner__track {
+  stroke: currentColor;
+  opacity: 0.25;
+}
+
+.ds-spinner--inherit .ds-spinner__arc {
+  stroke: currentColor;
+}
+
+/* ============================================
+   ANIMATION
+   ============================================ */
+
+@keyframes ds-spinner-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

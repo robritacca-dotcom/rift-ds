@@ -1,0 +1,243 @@
+/* ============================================
+   LOOPS PAGE LAYOUT
+   ============================================ */
+.dsLayout {
+  display: flex;
+  gap: var(--layout-column-gap);
+  width: 100%;
+  max-width: 1440px;
+  padding-top: var(--primitive-gap-xl);
+}
+
+.dsContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxxl);
+}
+
+/* ============================================
+   PAGE HEADER
+   ============================================ */
+.pageHeader {
+  margin-top: calc(var(--primitive-gap-xl) - var(--gap-xxxl));
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--primitive-gap-lg);
+  width: 100%;
+}
+
+.pageTitle {
+  font-size: var(--font-display-2-size);
+  font-weight: var(--font-display-2-weight);
+  line-height: var(--font-display-2-line-height);
+  letter-spacing: var(--font-display-2-letter-spacing);
+  color: var(--color-text-primary);
+  width: 100%;
+}
+
+/* ============================================
+   INTRO SECTION
+   ============================================ */
+.introSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-lg);
+}
+
+.subDisplay {
+  font-family: var(--font-sub-display-family);
+  font-size: var(--font-sub-display-size);
+  font-weight: var(--font-sub-display-weight);
+  line-height: var(--font-sub-display-line-height);
+  letter-spacing: var(--font-sub-display-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.introBody {
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   LOOPS GRID
+   ============================================ */
+.loopsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-lg);
+}
+
+.loopCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-lg);
+  padding: var(--primitive-gap-xl);
+  border: 1px solid var(--color-bg-container-border);
+  border-radius: var(--primitive-radius-xl);
+  background: var(--color-bg-container-primary);
+}
+
+/* ============================================
+   LOOP CARD HEADER
+   ============================================ */
+.loopCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--primitive-gap-md);
+}
+
+.loopMeta {
+  display: flex;
+  align-items: center;
+  gap: var(--primitive-gap-sm);
+}
+
+.loopBadges {
+  display: flex;
+  align-items: center;
+  gap: var(--primitive-gap-xs);
+}
+
+.loopIcon {
+  --icon-size: var(--icon-size-sm);
+  color: var(--color-icon-primary);
+  flex-shrink: 0;
+}
+
+.loopName {
+  font-family: var(--font-heading-3-family);
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+  letter-spacing: var(--font-heading-3-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   LOOP CARD BODY
+   ============================================ */
+.loopDescription {
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-secondary);
+}
+
+.loopSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-sm);
+}
+
+.loopSectionLabel {
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-tertiary);
+  flex-shrink: 0;
+}
+
+/* The run cycle — numbered stages that wrap (rendered as compact Chips) */
+.loopStages {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--gap-sm);
+}
+
+/* Stage number prefix inside the chip label */
+.loopStageNum {
+  font-weight: var(--font-paragraph-sm-em-weight);
+  color: var(--color-text-tertiary);
+  margin-right: var(--gap-xs);
+}
+
+/* Guardrails list */
+.loopGuardrails {
+  margin: 0;
+  padding-left: var(--primitive-padding-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-xs);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+}
+
+/* Footer — skills used + trigger */
+.loopFooter {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--primitive-gap-sm);
+  border-top: 1px solid var(--color-divider);
+  padding-top: var(--primitive-gap-md);
+}
+
+.loopSkillLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--primitive-gap-xs);
+  font-family: monospace;
+  font-size: var(--font-paragraph-sm-size);
+  padding: var(--primitive-padding-xxxs) var(--primitive-padding-xs);
+  background: var(--color-bg-page);
+  border: 1px solid var(--color-bg-container-border);
+  border-radius: var(--radius-xs);
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: border-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.loopSkillLink:hover {
+  border-color: var(--color-text-tertiary);
+}
+
+.loopSkillLink :global(.material-symbols-rounded) {
+  --icon-size: var(--icon-size-sm);
+  color: var(--color-icon-primary);
+}
+
+.loopTrigger {
+  margin-left: auto;
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-tertiary);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 959px) {
+  .pageHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .dsLayout {
+    padding-left: 0;
+    min-width: 0;
+  }
+
+  .dsContent {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+
+  .loopCardHeader {
+    flex-wrap: wrap;
+  }
+
+  .loopTrigger {
+    margin-left: 0;
+    width: 100%;
+  }
+}

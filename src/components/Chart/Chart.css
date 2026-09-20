@@ -1,0 +1,224 @@
+/* ============================================
+   CHART COMPONENT — shared styles
+   Wrapper, header, tooltip, and summary stats
+   used across all chart types (bar, line, pie…).
+   ============================================ */
+
+/* ============================================
+   WRAPPER
+   ============================================ */
+
+.ds-chart {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-lg); /* 20px */
+  width: 100%;
+  padding: var(--padding-lg); /* 24px */
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-lg); /* 16px */
+  background-color: var(--color-bg-container-primary);
+}
+
+/* ============================================
+   HEADER — title / subtitle + summary stats
+   ============================================ */
+
+.ds-chart__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--gap-lg);
+}
+
+.ds-chart__header-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxs); /* 4px */
+}
+
+.ds-chart__title {
+  font-family: var(--font-heading-3-family);
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+  letter-spacing: var(--font-heading-3-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.ds-chart__subtitle {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-secondary);
+}
+
+/* ============================================
+   SUMMARY STATS — top-right key values
+   ============================================ */
+
+.ds-chart__summary {
+  display: flex;
+  gap: var(--gap-lg);
+  flex-shrink: 0;
+}
+
+.ds-chart__summary-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--gap-xxs);
+  padding: var(--padding-xs) var(--padding-md);
+  border-left: var(--border-xs) solid var(--color-bg-container-border);
+}
+
+.ds-chart__summary-label {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+}
+
+.ds-chart__summary-value {
+  font-family: var(--font-heading-1-family);
+  font-size: var(--font-heading-1-size);
+  font-weight: var(--font-heading-1-weight);
+  line-height: var(--font-heading-1-line-height);
+  letter-spacing: var(--font-heading-1-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   BODY — the chart area
+   ============================================ */
+
+.ds-chart__body {
+  width: 100%;
+  /* Anchors the radial centre label overlay. */
+  position: relative;
+}
+
+/* ============================================
+   BARE MODE — the chart sits inside another
+   panel that supplies the surface, so its own
+   card chrome would double-frame it
+   ============================================ */
+
+.ds-chart--bare {
+  border: none;
+  padding: 0;
+  background-color: transparent;
+}
+
+/* ============================================
+   RADIAL CENTRE LABEL — the gauge's headline
+   in the donut hole
+   ============================================ */
+
+.ds-chart__radial-center {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: var(--gap-xxs);
+  pointer-events: none;
+}
+
+.ds-chart__radial-center-value {
+  font-family: var(--font-sub-display-family);
+  font-size: var(--font-sub-display-size);
+  font-weight: var(--font-sub-display-weight);
+  line-height: var(--font-sub-display-line-height);
+  letter-spacing: var(--font-sub-display-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.ds-chart__radial-center-sub {
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-secondary);
+}
+
+/* ============================================
+   CUSTOM TOOLTIP
+   ============================================ */
+
+.ds-chart__tooltip {
+  padding: var(--padding-sm) var(--padding-md);
+  background-color: var(--color-bg-glass);
+  /* The glass token is deliberately translucent; this blur is what keeps
+     the chart's marks readable through the overlay. */
+  backdrop-filter: blur(24px);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-sm); /* 8px */
+  box-shadow: var(--shadow-floating);
+}
+
+.ds-chart__tooltip-label {
+  font-family: var(--font-paragraph-sm-em-family);
+  font-size: var(--font-paragraph-sm-em-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  color: var(--color-text-primary);
+  margin-bottom: var(--gap-xxs);
+}
+
+.ds-chart__tooltip-row {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+}
+
+.ds-chart__tooltip-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.ds-chart__tooltip-name {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+}
+
+.ds-chart__tooltip-value {
+  font-family: var(--font-paragraph-sm-em-family);
+  font-size: var(--font-paragraph-sm-em-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  color: var(--color-text-primary);
+  margin-left: auto;
+}
+
+/* ============================================
+   RESPONSIVE — stack header on small screens
+   ============================================ */
+
+@media (max-width: 599px) {
+  .ds-chart {
+    padding: var(--padding-md);
+  }
+
+  .ds-chart__header {
+    flex-direction: column;
+  }
+
+  .ds-chart__summary {
+    width: 100%;
+  }
+
+  .ds-chart__summary-item {
+    align-items: flex-start;
+    flex: 1;
+    border-left: none;
+    border-top: var(--border-xs) solid var(--color-bg-container-border);
+    padding: var(--padding-xs) 0;
+  }
+}

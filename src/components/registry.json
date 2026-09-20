@@ -1,0 +1,1145 @@
+{
+  "$comment": "SINGLE SOURCE OF TRUTH for the public component count. Every folder in src/components must appear in exactly one of these lists; scripts/validate-component-registry.mjs enforces this at build time. Import COMPONENT_COUNT from src/components/registry.ts wherever a count is displayed - never hardcode the number.",
+  "categories": [
+    {
+      "id": "actions",
+      "label": "Actions",
+      "description": "Buttons, button groups, and toggles for triggering actions and switching modes."
+    },
+    {
+      "id": "ai",
+      "label": "AI",
+      "description": "Chat, agent, and model surfaces for building AI products, from the composer to the reasoning trace and the diff an agent proposes."
+    },
+    {
+      "id": "charts",
+      "label": "Charts",
+      "description": "Data visualisation components for plotting series and activity over time."
+    },
+    {
+      "id": "data-display",
+      "label": "Data display",
+      "description": "Cards, tables, lists, and badges for presenting structured content."
+    },
+    {
+      "id": "effects",
+      "label": "Effects",
+      "description": "Ambient and decorative surfaces that sit behind or around the interface."
+    },
+    {
+      "id": "feedback",
+      "label": "Feedback",
+      "description": "Alerts, toasts, progress, and empty states that tell people what is happening."
+    },
+    {
+      "id": "forms",
+      "label": "Forms",
+      "description": "Inputs, pickers, and selection controls for collecting and editing values."
+    },
+    {
+      "id": "layout",
+      "label": "Layout",
+      "description": "Page scaffolding: app shells, sidebars, dividers, and section headings."
+    },
+    {
+      "id": "maps",
+      "label": "Maps",
+      "description": "Geographic surfaces for showing where things are and what connects them: a globe, a flat world map, and the callout and key that explain them."
+    },
+    {
+      "id": "navigation",
+      "label": "Navigation",
+      "description": "Top bars, breadcrumbs, tabs, steppers, and pagination for moving through a product."
+    },
+    {
+      "id": "overlays",
+      "label": "Overlays",
+      "description": "Dialogs, drawers, menus, and tooltips that float above the page."
+    }
+  ],
+  "components": [
+    {
+      "name": "Accordion",
+      "label": "Accordion",
+      "slug": "accordion",
+      "description": "Collapsible content sections for organising related information.",
+      "category": "data-display",
+      "client": true
+    },
+    {
+      "name": "AgentPlan",
+      "label": "Agent plan",
+      "slug": "agent-plan",
+      "description": "A collapsible checklist of an agent's task, with live step states and a progress readout.",
+      "category": "ai",
+      "client": true
+    },
+    {
+      "name": "AgentStatus",
+      "label": "Agent status",
+      "slug": "agent-status",
+      "description": "A dot-matrix indicator and status line reporting what an agent is doing right now.",
+      "category": "ai",
+      "client": true
+    },
+    {
+      "name": "AiButton",
+      "label": "AI button",
+      "slug": "ai-button",
+      "description": "The AI entry point: icon and label ringed by a turning gradient and glow, with an optional hover-summoned AI-summary panel and prompt chips.",
+      "category": "ai",
+      "client": true
+    },
+    {
+      "name": "Alert",
+      "label": "Alert",
+      "slug": "alert",
+      "description": "Contextual feedback with status variants, optional dismiss, and compact sizing.",
+      "category": "feedback",
+      "client": false
+    },
+    {
+      "name": "AlertDialog",
+      "label": "Alert dialog",
+      "slug": "alert-dialog",
+      "description": "Modal confirmation overlay with title, description, and confirm / cancel actions.",
+      "category": "overlays",
+      "client": true
+    },
+    {
+      "name": "AnchorNav",
+      "label": "Anchor nav",
+      "slug": "anchor-nav",
+      "description": "An on-page list of anchor links that tracks the reader's position and jumps between sections.",
+      "category": "navigation",
+      "client": true
+    },
+    {
+      "name": "AnimatedNumber",
+      "label": "Animated number",
+      "slug": "animated-number",
+      "description": "A number that counts to its value: count-up on mount, eased tweens on change, tabular digits that never jitter.",
+      "category": "data-display",
+      "client": true
+    },
+    {
+      "name": "AppLayout",
+      "label": "App layout",
+      "slug": "app-layout",
+      "description": "Full-page template pairing the collapsible App sidebar with a centred content area.",
+      "category": "layout",
+      "client": true
+    },
+    {
+      "name": "AppSidebar",
+      "label": "App sidebar",
+      "slug": "app-sidebar",
+      "description": "Collapsible navigation rail with accordion sub-items, category headings, and profile section.",
+      "category": "layout",
+      "client": true
+    },
+    {
+      "name": "AreaChart",
+      "label": "Area chart",
+      "slug": "area-chart",
+      "description": "Filled area chart for showing volume over time, with stacked and single-series variants.",
+      "category": "charts",
+      "client": false,
+      "folder": "Chart",
+      "recharts": true
+    },
+    {
+      "name": "Avatar",
+      "label": "Avatar",
+      "slug": "avatar",
+      "description": "User profile image with initials and icon fallback, status indicator, and multiple sizes.",
+      "category": "data-display",
+      "client": true
+    },
+    {
+      "name": "AvatarGroup",
+      "label": "Avatar group",
+      "slug": "avatar-group",
+      "description": "Overlapping avatar stack with a +N counter for the overflow.",
+      "category": "data-display",
+      "client": false
+    },
+    {
+      "name": "Badge",
+      "label": "Badge",
+      "slug": "badge",
+      "description": "Small inline status labels with info, positive, warning, error, and neutral variants.",
+      "category": "data-display",
+      "client": false
+    },
+    {
+      "name": "Banner",
+      "label": "Banner",
+      "slug": "banner",
+      "description": "Full-width status strip for page-level announcements, with an action slot and optional dismissal.",
+      "category": "feedback",
+      "client": false
+    },
+    {
+      "name": "BarChart",
+      "label": "Bar chart",
+      "slug": "bar-chart",
+      "description": "Vertical bars for comparing values across categories or time, with summary stats and tooltips.",
+      "category": "charts",
+      "client": false,
+      "folder": "Chart",
+      "recharts": true
+    },
+    {
+      "name": "Breadcrumb",
+      "label": "Breadcrumb",
+      "slug": "breadcrumb",
+      "description": "Hierarchical navigation trail showing the user's location within the site.",
+      "category": "navigation",
+      "client": false
+    },
+    {
+      "name": "Button",
+      "label": "Button",
+      "slug": "button",
+      "description": "Primary, secondary, tertiary, neutral and destructive variants in default and compact sizes, with icon support and multiple states.",
+      "category": "actions",
+      "client": true
+    },
+    {
+      "name": "ButtonGroup",
+      "label": "Button group",
+      "slug": "button-group",
+      "description": "Horizontal and vertical button group layouts for related actions and navigation patterns.",
+      "category": "actions",
+      "client": false
+    },
+    {
+      "name": "Card",
+      "label": "Card",
+      "slug": "card",
+      "description": "Card components for previews, navigation, and token documentation, from content cards to colour swatches and typography specimens.",
+      "category": "data-display",
+      "client": true
+    },
+    {
+      "name": "CardStack",
+      "label": "Card stack",
+      "slug": "card-stack",
+      "description": "A deck of cards showing one at a time, flipped through with a lift-and-settle animation.",
+      "category": "data-display",
+      "client": true
+    },
+    {
+      "name": "Carousel",
+      "label": "Carousel",
+      "slug": "carousel",
+      "description": "Sliding content viewer with navigation arrows, dot indicators, auto-play, and keyboard support.",
+      "category": "data-display",
+      "client": true
+    },
+    {
+      "name": "ChatHeader",
+      "label": "Chat header",
+      "slug": "chat-header",
+      "description": "The top row of a chat surface, with the conversation title and its controls.",
+      "category": "ai",
+      "client": false
+    },
+    {
+      "name": "ChatMarker",
+      "label": "Chat marker",
+      "slug": "chat-marker",
+      "description": "An inline conversation separator for date breaks and system notes.",
+      "category": "ai",
+      "client": false
+    },
+    {
+      "name": "ChatMessage",
+      "label": "Chat message",
+      "slug": "chat-message",
+      "description": "A single chat turn with avatar, author, timestamp, and bubble or plain content aligned by role.",
+      "category": "ai",
+      "client": false
+    },
+    {
+      "name": "ChatThread",
+      "label": "Chat thread",
+      "slug": "chat-thread",
+      "description": "A scrollable conversation column with edge fades, send anchoring, and a subtle scrollbar.",
+      "category": "ai",
+      "client": true
+    },
+    {
+      "name": "Checkbox",
+      "label": "Checkbox",
+      "slug": "checkbox",
+      "description": "Custom checkbox with check and indeterminate states, keyboard accessible with animated transitions.",
+      "category": "forms",
+      "client": true
+    },
+    {
+      "name": "Chip",
+      "label": "Chip",
+      "slug": "chip",
+      "description": "Compact pills for attributes, filters, and inline metadata.",
+      "category": "data-display",
+      "client": false
+    },
+    {
+      "name": "CircularButton",
+      "label": "Circular button",
+      "slug": "circular-button",
+      "description": "Round icon button with primary, secondary, tertiary and neutral variants, default and compact sizes.",
+      "category": "actions",
+      "client": false
+    },
+    {
+      "name": "CodeBlock",
+      "label": "Code block",
+      "slug": "code-block",
+      "description": "Monospace code with a header and one-click copy.",
+      "category": "data-display",
+      "client": true
+    },
+    {
+      "name": "CodeDiff",
+      "label": "Code diff",
+      "slug": "code-diff",
+      "description": "Unified diff view for code changes, with added, removed, and context lines.",
+      "category": "ai",
+      "client": false
+    },
+    {
+      "name": "ColorPicker",
+      "label": "Colour picker",
+      "slug": "color-picker",
+      "description": "Swatch trigger opening a saturation area, hue and alpha sliders, and a hex field; controlled or uncontrolled.",
+      "category": "forms",
+      "client": true
+    },
+    {
+      "name": "ComboChart",
+      "label": "Combo chart",
+      "slug": "combo-chart",
+      "description": "Bar and line series in one chart, with an optional second y-axis for pairs in different units, like spend and ROAS.",
+      "category": "charts",
+      "client": false,
+      "folder": "Chart",
+      "recharts": true
+    },
+    {
+      "name": "Combobox",
+      "label": "Combobox",
+      "slug": "combobox",
+      "description": "A filterable select that narrows options as the user types, with multi-select chips, grouping, and async loading.",
+      "category": "forms",
+      "client": true
+    },
+    {
+      "name": "CommandPalette",
+      "label": "Command palette",
+      "slug": "command-palette",
+      "description": "A modal Cmd+K launcher that searches a grouped command list, with keyboard navigation and shortcut hints.",
+      "category": "overlays",
+      "client": true
+    },
+    {
+      "name": "Composer",
+      "label": "Composer",
+      "slug": "composer",
+      "description": "An auto-growing message input with send and stop states, a page-context note, an attachment slot, and Enter-to-send.",
+      "category": "ai",
+      "client": true
+    },
+    {
+      "name": "ContactCard",
+      "label": "Contact card",
+      "slug": "contact-card",
+      "description": "Linked contact method with icon, label, and value.",
+      "category": "data-display",
+      "client": true
+    },
+    {
+      "name": "ContextMenu",
+      "label": "Context menu",
+      "slug": "context-menu",
+      "description": "Right-click menu at the pointer with groups, sub-menus, and shortcut hints.",
+      "category": "overlays",
+      "client": true
+    },
+    {
+      "name": "ContributionGraph",
+      "label": "Contribution graph",
+      "slug": "contribution-graph",
+      "description": "A year of activity, one cell per day.",
+      "category": "charts",
+      "client": false
+    },
+    {
+      "name": "DataTable",
+      "label": "Data table",
+      "slug": "data-table",
+      "description": "The wired table: sorting, search, row selection, and pagination assembled around Table.",
+      "category": "data-display",
+      "client": true
+    },
+    {
+      "name": "DateInput",
+      "label": "Date input",
+      "slug": "date-input",
+      "description": "Date input with native picker, calendar icon, label, and validation states.",
+      "category": "forms",
+      "client": true
+    },
+    {
+      "name": "DatePicker",
+      "label": "Date picker",
+      "slug": "date-picker",
+      "description": "Inline calendar with month navigation, day selection, and today indicator.",
+      "category": "forms",
+      "client": true
+    },
+    {
+      "name": "Dialog",
+      "label": "Dialog",
+      "slug": "dialog",
+      "description": "A general-purpose modal for focused tasks, with sizes, an optional footer, and full focus management.",
+      "category": "overlays",
+      "client": true
+    },
+    {
+      "name": "Divider",
+      "label": "Divider",
+      "slug": "divider",
+      "description": "A thin rule separating stacked content, with optional inline label and vertical orientation.",
+      "category": "layout",
+      "client": false
+    },
+    {
+      "name": "DocumentChip",
+      "label": "Document chip",
+      "slug": "document-chip",
+      "description": "A compact file reference with a type icon, name, metadata, and optional remove.",
+      "category": "ai",
+      "client": false
+    },
+    {
+      "name": "Drawer",
+      "label": "Drawer",
+      "slug": "drawer",
+      "description": "An edge-anchored modal panel that slides in from any side, for filter panels, detail views, and mobile navigation.",
+      "category": "overlays",
+      "client": true
+    },
+    {
+      "name": "Dropdown",
+      "label": "Dropdown",
+      "slug": "dropdown",
+      "description": "Custom select dropdown with keyboard navigation, disabled options, and error states.",
+      "category": "forms",
+      "client": true
+    },
+    {
+      "name": "DropdownMenu",
+      "label": "Dropdown menu",
+      "slug": "dropdown-menu",
+      "description": "Contextual menu with sections, sub-menus, keyboard shortcuts, and inset-gap hover styling.",
+      "category": "overlays",
+      "client": true
+    },
+    {
+      "name": "EmptyState",
+      "label": "Empty state",
+      "slug": "empty-state",
+      "description": "The placeholder for a list, table, or search with nothing to show: icon, headline, guidance, and a next action.",
+      "category": "feedback",
+      "client": false
+    },
+    {
+      "name": "EntityCard",
+      "label": "Entity card",
+      "slug": "entity-card",
+      "description": "Compact display-only card with a centred icon or image and a label, used in the Icons and Logos galleries.",
+      "category": "data-display",
+      "client": false
+    },
+    {
+      "name": "EventCalendar",
+      "label": "Event calendar",
+      "slug": "event-calendar",
+      "description": "A month grid with event pills, overflow counts, and month navigation.",
+      "category": "data-display",
+      "client": true
+    },
+    {
+      "name": "Field",
+      "label": "Field",
+      "slug": "field",
+      "description": "The shared scaffolding for labelled form controls: label, required marker, helper and error text, and the ARIA wiring that ties them together.",
+      "category": "forms",
+      "client": true
+    },
+    {
+      "name": "Figure",
+      "label": "Figure",
+      "slug": "figure",
+      "description": "Images with captions, in the case-study frame.",
+      "category": "data-display",
+      "client": false
+    },
+    {
+      "name": "FileInput",
+      "label": "File input",
+      "slug": "file-input",
+      "description": "A click-or-drop upload zone paired with a controlled file list showing size, progress, and per-file errors.",
+      "category": "forms",
+      "client": true
+    },
+    {
+      "name": "FilterBar",
+      "label": "Filter bar",
+      "slug": "filter-bar",
+      "description": "A row of filter chips for narrowing a collection, each opening a popover of options, with per-filter and clear-all resets.",
+      "category": "forms",
+      "client": true
+    },
+    {
+      "name": "FunnelChart",
+      "label": "Funnel chart",
+      "slug": "funnel-chart",
+      "description": "Ordered funnel stages as centred trapezoid bands, each sized by its share of the first stage.",
+      "category": "charts",
+      "client": false,
+      "recharts": true
+    },
+    {
+      "name": "GanttChart",
+      "label": "Gantt chart",
+      "slug": "gantt-chart",
+      "description": "Phases and tasks as bars on a shared timeline, with milestones, progress, and a today rule.",
+      "category": "charts",
+      "client": false
+    },
+    {
+      "name": "Gauge",
+      "label": "Gauge",
+      "slug": "gauge",
+      "description": "A radial dial for a single bounded reading, recoloured through the status roles as it crosses thresholds.",
+      "category": "charts",
+      "client": false
+    },
+    {
+      "name": "Globe",
+      "label": "Globe",
+      "slug": "globe",
+      "description": "An orthographic globe with markers and great-circle arcs, rotated by drag, keys, or a slow spin.",
+      "category": "maps",
+      "client": true
+    },
+    {
+      "name": "HoverCard",
+      "label": "Hover card",
+      "slug": "hover-card",
+      "description": "Rich preview panel that opens from hover or focus, with interactive content and position options.",
+      "category": "overlays",
+      "client": true
+    },
+    {
+      "name": "ImageCompare",
+      "label": "Image compare",
+      "slug": "image-compare",
+      "description": "Before-and-after image comparison with a draggable divider, keyboard control, and corner labels.",
+      "category": "data-display",
+      "client": true
+    },
+    {
+      "name": "Input",
+      "label": "Input",
+      "slug": "input",
+      "description": "Text input with label, placeholder, left and right icons, helper text, and error states.",
+      "category": "forms",
+      "client": true
+    },
+    {
+      "name": "Instructions",
+      "label": "Instructions",
+      "slug": "instructions",
+      "description": "Step-by-step guidance with numbered badges, connecting lines, and horizontal layout.",
+      "category": "data-display",
+      "client": false
+    },
+    {
+      "name": "InterruptCard",
+      "label": "Interrupt card",
+      "slug": "interrupt-card",
+      "description": "A human-in-the-loop checkpoint with a question from the agent and option buttons to decide.",
+      "category": "ai",
+      "client": false
+    },
+    {
+      "name": "Kbd",
+      "label": "Kbd",
+      "slug": "kbd",
+      "description": "A keyboard key rendered as a keycap, for shortcut hints in menus and prose.",
+      "category": "data-display",
+      "client": false
+    },
+    {
+      "name": "LegendTile",
+      "label": "Legend tile",
+      "slug": "legend-tile",
+      "description": "The labelled value tile under a chart: a series dot, the series name, and its reading, on an inset fill.",
+      "category": "charts",
+      "client": false
+    },
+    {
+      "name": "Lightbox",
+      "label": "Lightbox",
+      "slug": "lightbox",
+      "description": "Fullscreen media viewer on the shared overlay stack: deep scrim, caption chip, gallery stepping, trapped and restored focus.",
+      "category": "overlays",
+      "client": true
+    },
+    {
+      "name": "LineChart",
+      "label": "Line chart",
+      "slug": "line-chart",
+      "description": "Multi-series line chart for trends over time, with per-series colours and a summary row.",
+      "category": "charts",
+      "client": false,
+      "folder": "Chart",
+      "recharts": true
+    },
+    {
+      "name": "LinkList",
+      "label": "Link list",
+      "slug": "link-list",
+      "description": "Linked items with logo, label, and subtitle.",
+      "category": "data-display",
+      "client": false
+    },
+    {
+      "name": "MapCallout",
+      "label": "Map callout",
+      "slug": "map-callout",
+      "description": "The annotation beside a map point: a name in capitals over monospace readout lines.",
+      "category": "maps",
+      "client": false
+    },
+    {
+      "name": "MapLegend",
+      "label": "Map legend",
+      "slug": "map-legend",
+      "description": "The corner block of a map: its name, what it shows, and the key to its markers.",
+      "category": "maps",
+      "client": false
+    },
+    {
+      "name": "MessageActions",
+      "label": "Message actions",
+      "slug": "message-actions",
+      "description": "An icon-button row for message-level actions like copy, retry, and feedback.",
+      "category": "ai",
+      "client": false
+    },
+    {
+      "name": "MessageCard",
+      "label": "Message card",
+      "slug": "message-card",
+      "description": "A structured rich-content card embedded in a chat message, with media, title, body, and actions.",
+      "category": "ai",
+      "client": false
+    },
+    {
+      "name": "Meter",
+      "label": "Meter",
+      "slug": "meter",
+      "description": "Level indicator for a known quantity, with a status-coloured fill and an optional value readout.",
+      "category": "feedback",
+      "client": false
+    },
+    {
+      "name": "ModelPicker",
+      "label": "Model picker",
+      "slug": "model-picker",
+      "description": "A model selector for chat surfaces, with per-model descriptions and an optional effort row.",
+      "category": "ai",
+      "client": true
+    },
+    {
+      "name": "Nav",
+      "label": "Nav",
+      "slug": "nav",
+      "description": "Desktop top navigation bar with a brand slot, horizontal button group, and optional trailing content.",
+      "category": "navigation",
+      "client": false
+    },
+    {
+      "name": "NavList",
+      "label": "Nav list",
+      "slug": "nav-list",
+      "description": "Vertical list of navigation links for drawers and menus, with three indent levels and per-row expand toggles.",
+      "category": "navigation",
+      "client": true
+    },
+    {
+      "name": "NotificationCenter",
+      "label": "Notification centre",
+      "slug": "notification-center",
+      "description": "A persistent notification inbox with unread count, filter tabs, and per-item actions.",
+      "category": "feedback",
+      "client": true
+    },
+    {
+      "name": "NumberInput",
+      "label": "Number input",
+      "slug": "number-input",
+      "description": "Numeric field with increment and decrement steppers and min/max clamping.",
+      "category": "forms",
+      "client": true
+    },
+    {
+      "name": "Pagination",
+      "label": "Pagination",
+      "slug": "pagination",
+      "description": "Numbered page navigation for long datasets, with ellipses, disabled end arrows, and a compact readout mode.",
+      "category": "navigation",
+      "client": true
+    },
+    {
+      "name": "Panel",
+      "label": "Panel",
+      "slug": "panel",
+      "description": "The plain dashboard surface: a rounded container with no border or shadow, just padding and a gap.",
+      "category": "layout",
+      "client": false
+    },
+    {
+      "name": "PieChart",
+      "label": "Pie chart",
+      "slug": "pie-chart",
+      "description": "Proportional share of a whole as a pie or donut, with per-slice colours.",
+      "category": "charts",
+      "client": false,
+      "folder": "Chart",
+      "recharts": true
+    },
+    {
+      "name": "PinInput",
+      "label": "Pin input",
+      "slug": "pin-input",
+      "description": "Segmented one-time-code input with auto-advance, paste support, and completion callback.",
+      "category": "forms",
+      "client": true
+    },
+    {
+      "name": "Popover",
+      "label": "Popover",
+      "slug": "popover",
+      "description": "Contextual overlay panel with click and hover triggers, positioned relative to its anchor.",
+      "category": "overlays",
+      "client": true
+    },
+    {
+      "name": "ProgressBar",
+      "label": "Progress bar",
+      "slug": "progress-bar",
+      "description": "Horizontal bar indicating completion progress, with an optional percentage label.",
+      "category": "feedback",
+      "client": false
+    },
+    {
+      "name": "PromptSuggestions",
+      "label": "Prompt suggestions",
+      "slug": "prompt-suggestions",
+      "description": "A horizontal row of tappable prompt suggestions to start or steer a conversation.",
+      "category": "ai",
+      "client": true
+    },
+    {
+      "name": "Prose",
+      "label": "Prose",
+      "slug": "prose",
+      "description": "Token-styled typography for rendered markdown and rich agent output.",
+      "category": "ai",
+      "client": false
+    },
+    {
+      "name": "Quote",
+      "label": "Quote",
+      "slug": "quote",
+      "description": "Blockquotes and pull-quotes with attribution.",
+      "category": "data-display",
+      "client": false
+    },
+    {
+      "name": "RadarChart",
+      "label": "Radar chart",
+      "slug": "radar-chart",
+      "description": "Multi-axis comparison of series across categories on a radial grid.",
+      "category": "charts",
+      "client": false,
+      "folder": "Chart",
+      "recharts": true
+    },
+    {
+      "name": "RadialChart",
+      "label": "Radial chart",
+      "slug": "radial-chart",
+      "description": "Concentric progress rings for completion and KPI readouts.",
+      "category": "charts",
+      "client": false,
+      "folder": "Chart",
+      "recharts": true
+    },
+    {
+      "name": "RadioButton",
+      "label": "Radio button",
+      "slug": "radio-button",
+      "description": "Radio button and radio group with vertical and horizontal layouts, animated dot indicator.",
+      "category": "forms",
+      "client": true
+    },
+    {
+      "name": "Rating",
+      "label": "Rating",
+      "slug": "rating",
+      "description": "Star-scale rating control with keyboard selection, a read-only mode, and a configurable icon.",
+      "category": "forms",
+      "client": true
+    },
+    {
+      "name": "Reasoning",
+      "label": "Reasoning",
+      "slug": "reasoning",
+      "description": "A model's thinking, disclosed behind a one-line summary and collapsed once it finishes.",
+      "category": "ai",
+      "client": true
+    },
+    {
+      "name": "RichDropdown",
+      "label": "Rich dropdown",
+      "slug": "rich-dropdown",
+      "description": "Dropdown's rich sibling: options preview their own heading face, body face, and key colour.",
+      "category": "forms",
+      "client": true
+    },
+    {
+      "name": "ScatterChart",
+      "label": "Scatter chart",
+      "slug": "scatter-chart",
+      "description": "Plots point clusters across two axes to show correlation and distribution.",
+      "category": "charts",
+      "client": false,
+      "folder": "Chart",
+      "recharts": true
+    },
+    {
+      "name": "SectionTitle",
+      "label": "Section title",
+      "slug": "section-title",
+      "description": "Heading with a divider line and optional trailing content for organising page sections.",
+      "category": "layout",
+      "client": false
+    },
+    {
+      "name": "SegmentedControl",
+      "label": "Segmented control",
+      "slug": "segmented-control",
+      "description": "Pill-style toggle between related views with keyboard navigation and icon support.",
+      "category": "actions",
+      "client": true
+    },
+    {
+      "name": "SelectionCard",
+      "label": "Selection card",
+      "slug": "selection-card",
+      "description": "Large selectable option cards with radio or checkbox indicators for high-visibility choices like settings and onboarding.",
+      "category": "data-display",
+      "client": true
+    },
+    {
+      "name": "ShaderField",
+      "label": "Shader field",
+      "slug": "shader-field",
+      "description": "An ambient WebGL2 field of soft light sources that sample colour tokens, with a reported fallback status.",
+      "category": "effects",
+      "client": true
+    },
+    {
+      "name": "Skeleton",
+      "label": "Skeleton",
+      "slug": "skeleton",
+      "description": "Placeholder loading indicators with text, circular, and rectangular variants.",
+      "category": "feedback",
+      "client": false
+    },
+    {
+      "name": "Slider",
+      "label": "Slider",
+      "slug": "slider",
+      "description": "Range input for selecting a value between a minimum and maximum, in default and compact sizes.",
+      "category": "forms",
+      "client": true
+    },
+    {
+      "name": "SourceChip",
+      "label": "Source chip",
+      "slug": "source-chip",
+      "description": "A numbered citation pill linking a claim to its source.",
+      "category": "ai",
+      "client": false
+    },
+    {
+      "name": "SourceTrail",
+      "label": "Source trail",
+      "slug": "source-trail",
+      "description": "The sources an agent opened while answering, as a collapsible list with per-item status.",
+      "category": "ai",
+      "client": true
+    },
+    {
+      "name": "Sparkline",
+      "label": "Sparkline",
+      "slug": "sparkline",
+      "description": "Inline trend line for stats and table cells, drawn without axes or chrome.",
+      "category": "charts",
+      "client": false
+    },
+    {
+      "name": "Spinner",
+      "label": "Spinner",
+      "slug": "spinner",
+      "description": "Animated circular loading indicator in three sizes and primary, neutral, or inherit variants.",
+      "category": "feedback",
+      "client": false
+    },
+    {
+      "name": "SplitButton",
+      "label": "Split button",
+      "slug": "split-button",
+      "description": "Primary action with an attached menu of alternatives, composing Button and DropdownMenu in one pill.",
+      "category": "actions",
+      "client": false
+    },
+    {
+      "name": "SplitPane",
+      "label": "Split pane",
+      "slug": "split-pane",
+      "description": "Two resizable regions with a draggable, keyboard-operable divider between them.",
+      "category": "layout",
+      "client": true
+    },
+    {
+      "name": "StackedBarChart",
+      "label": "Stacked bar chart",
+      "slug": "stacked-bar-chart",
+      "description": "Bars split into stacked segments to compare totals and their composition.",
+      "category": "charts",
+      "client": false,
+      "folder": "Chart",
+      "recharts": true
+    },
+    {
+      "name": "Stat",
+      "label": "Stat",
+      "slug": "stat",
+      "description": "Headline metrics with labels and trend deltas.",
+      "category": "data-display",
+      "client": false
+    },
+    {
+      "name": "StatusDot",
+      "label": "Status dot",
+      "slug": "status-dot",
+      "description": "The bare status mark: a dot in the five status roles, with an optional label and a live pulse for recording and online-now states.",
+      "category": "feedback",
+      "client": false
+    },
+    {
+      "name": "Stepper",
+      "label": "Stepper",
+      "slug": "stepper",
+      "description": "Step-by-step progress indicator for wizards and multi-stage flows.",
+      "category": "navigation",
+      "client": true
+    },
+    {
+      "name": "StreamingText",
+      "label": "Streaming text",
+      "slug": "streaming-text",
+      "description": "Progressive reveal for text arriving in chunks, with a blinking cursor while more is coming.",
+      "category": "ai",
+      "client": true
+    },
+    {
+      "name": "Swatch",
+      "label": "Swatch",
+      "slug": "swatch",
+      "description": "Clickable colour tile for preset palettes and picker triggers, with a theme-aware selection ring.",
+      "category": "forms",
+      "client": false
+    },
+    {
+      "name": "Table",
+      "label": "Table",
+      "slug": "table",
+      "description": "Data table with flexible cell content, striped rows, compact sizing, and support for icons, inputs, buttons, and interactive controls.",
+      "category": "data-display",
+      "client": false
+    },
+    {
+      "name": "Tabs",
+      "label": "Tabs",
+      "slug": "tabs",
+      "description": "Tab navigation with underline indicator, icon support, compact size, and full-width mode.",
+      "category": "navigation",
+      "client": true
+    },
+    {
+      "name": "TagInput",
+      "label": "Tag input",
+      "slug": "tag-input",
+      "description": "Multi-value text input with entries held as removable tags.",
+      "category": "forms",
+      "client": true
+    },
+    {
+      "name": "Textarea",
+      "label": "Textarea",
+      "slug": "textarea",
+      "description": "Multi-line text input with character counter, resize control, helper text, and error states.",
+      "category": "forms",
+      "client": true
+    },
+    {
+      "name": "ThreadPanel",
+      "label": "Thread panel",
+      "slug": "thread-panel",
+      "description": "The session-history rail for chat products: brand header, new-thread action, standing controls, projects, grouped detail-rich threads, and a profile footer.",
+      "category": "ai",
+      "client": false
+    },
+    {
+      "name": "ThreadTabs",
+      "label": "Thread tabs",
+      "slug": "thread-tabs",
+      "description": "The strip of open chat sessions: pill tabs with unread dots and hover-revealed close buttons, a new-tab action, and animated enter and exit.",
+      "category": "ai",
+      "client": true
+    },
+    {
+      "name": "TimePicker",
+      "label": "Time picker",
+      "slug": "time-picker",
+      "description": "Time-of-day field with a dropdown list of selectable times.",
+      "category": "forms",
+      "client": true
+    },
+    {
+      "name": "Timeline",
+      "label": "Timeline",
+      "slug": "timeline",
+      "description": "Ordered sequences: histories and steppers.",
+      "category": "data-display",
+      "client": false
+    },
+    {
+      "name": "Toast",
+      "label": "Toast",
+      "slug": "toast",
+      "description": "Temporary notification with status variants, auto-dismiss, and stacking via ToastProvider.",
+      "category": "feedback",
+      "client": true
+    },
+    {
+      "name": "ToggleGroup",
+      "label": "Toggle group",
+      "slug": "toggle-group",
+      "description": "A set of two-state buttons that can be toggled on or off, supporting text and icon items.",
+      "category": "actions",
+      "client": true
+    },
+    {
+      "name": "ToggleSwitch",
+      "label": "Toggle switch",
+      "slug": "toggle-switch",
+      "description": "Binary on/off toggle control with sliding thumb and check indicator, used for settings like theme switching.",
+      "category": "forms",
+      "client": true
+    },
+    {
+      "name": "ToolCall",
+      "label": "Tool call",
+      "slug": "tool-call",
+      "description": "The record of one tool invocation, with its arguments and result behind a disclosure.",
+      "category": "ai",
+      "client": true
+    },
+    {
+      "name": "Toolbar",
+      "label": "Toolbar",
+      "slug": "toolbar",
+      "description": "A grouped strip of controls in one pill shell: clusters, separators, arrow-key focus, and a glass floating variant.",
+      "category": "layout",
+      "client": true
+    },
+    {
+      "name": "Tooltip",
+      "label": "Tooltip",
+      "slug": "tooltip",
+      "description": "Contextual text label that appears on hover or focus with position and delay options.",
+      "category": "overlays",
+      "client": true
+    },
+    {
+      "name": "TreeView",
+      "label": "Tree view",
+      "slug": "tree-view",
+      "description": "Collapsible hierarchy for files, folders, and nested structures.",
+      "category": "data-display",
+      "client": true
+    },
+    {
+      "name": "Treemap",
+      "label": "Treemap",
+      "slug": "treemap",
+      "description": "Nested rectangles sized by value for part-to-whole breakdowns.",
+      "category": "charts",
+      "client": false,
+      "folder": "Chart",
+      "recharts": true
+    },
+    {
+      "name": "UsageCard",
+      "label": "Usage card",
+      "slug": "usage-card",
+      "description": "An agent's budgets at a glance: context window and plan limits as meter rows with reset captions.",
+      "category": "ai",
+      "client": false
+    },
+    {
+      "name": "Waveform",
+      "label": "Waveform",
+      "slug": "waveform",
+      "description": "Voice made visible: a row of bars dancing on the shared twelve-slot cycle, or tracking a live analyser level by level.",
+      "category": "ai",
+      "client": false
+    },
+    {
+      "name": "WorldMap",
+      "label": "World map",
+      "slug": "world-map",
+      "description": "A flat world map from Natural Earth land shapes: token-coloured continents, framed bounds, and colour-carrying markers.",
+      "category": "maps",
+      "client": true
+    }
+  ],
+  "docOnlyHelpers": [
+    "ColourSwatch",
+    "MotionSwatch",
+    "SpacingSwatch",
+    "TypographySwatch"
+  ]
+}

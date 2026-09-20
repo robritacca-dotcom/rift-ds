@@ -1,0 +1,80 @@
+/* ============================================
+   FIELD COMPONENT
+   Label, required marker, and helper/error text
+   shared by every labelled form control.
+
+   Layout (flex column, gap) deliberately stays on the
+   consuming component's own root class — Field only
+   owns the label and helper scaffolding, so adopting it
+   changes no spacing.
+   ============================================ */
+
+/* ============================================
+   LABEL
+   ============================================ */
+
+.ds-field__label {
+  font-family: var(--font-paragraph-em-family);
+  font-size: var(--font-paragraph-em-size);
+  font-weight: var(--font-paragraph-em-weight);
+  line-height: var(--font-paragraph-em-line-height);
+  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.ds-field__required {
+  color: var(--color-core-accent-coral);
+}
+
+/* ============================================
+   FOOTER — only rendered when an `aside` is supplied
+   (a character counter, a unit). Without one the helper
+   sits directly in the field column, so adopting Field
+   adds no wrapper to existing markup.
+   ============================================ */
+
+.ds-field__footer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--gap-sm);
+}
+
+/* ============================================
+   HELPER TEXT
+   ============================================ */
+
+.ds-field__helper {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-tertiary);
+  margin: 0;
+}
+
+/* ============================================
+   ERROR STATE
+   ============================================ */
+
+.ds-field--error .ds-field__helper {
+  color: var(--color-status-error-border);
+}
+
+/* ============================================
+   DISABLED STATE
+   ============================================ */
+
+.ds-field--disabled .ds-field__label {
+  color: var(--color-input-text-disabled);
+}
+
+/* ============================================
+   COMPACT SIZE
+   ============================================ */
+
+.ds-field--compact .ds-field__label {
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+}

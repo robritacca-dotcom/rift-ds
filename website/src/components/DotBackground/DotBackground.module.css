@@ -1,0 +1,18 @@
+/* The dotted working-canvas ground, viewport-fixed. Same negative layer as
+   the ambient blur-container, so page content needs no z-index of its own. */
+.ground {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-color: var(--color-bg-page-primary);
+  /* Dot size and pitch are drawing geometry, not spacing roles — the same
+     values as the architecture maps' canvas ground, so every dotted stage
+     shares one texture. */
+  background-image: radial-gradient(
+    circle,
+    var(--color-bg-container-border) 1.25px,
+    transparent 1.25px
+  );
+  background-size: 26px 26px;
+}

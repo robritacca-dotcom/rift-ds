@@ -1,0 +1,121 @@
+/* ============================================
+   CAROUSEL COMPONENT
+   Sliding content viewer with navigation
+   ============================================ */
+
+.ds-carousel {
+  position: relative;
+  width: 100%;
+}
+
+/* ============================================
+   VIEWPORT & TRACK
+   ============================================ */
+
+.ds-carousel__viewport {
+  overflow: hidden;
+  border-radius: var(--radius-sm); /* 8px */
+}
+
+.ds-carousel__track {
+  display: flex;
+  transition: transform var(--motion-duration-deliberate) var(--motion-ease-standard);
+}
+
+.ds-carousel__slide {
+  min-width: 100%;
+  flex-shrink: 0;
+}
+
+/* ============================================
+   ARROWS
+   ============================================ */
+
+.ds-carousel__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-full);
+  background-color: var(--color-bg-page-primary);
+  cursor: pointer;
+  z-index: 2;
+  color: var(--color-icon-primary);
+  padding: 0;
+  transition: background-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-carousel__arrow:hover:not(:disabled) {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-carousel__arrow:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+.ds-carousel__arrow--prev {
+  left: var(--gap-sm); /* 8px */
+}
+
+.ds-carousel__arrow--next {
+  right: var(--gap-sm);
+}
+
+.ds-carousel__arrow:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ds-carousel__arrow .material-symbols-rounded {
+  --icon-size: var(--icon-size-sm);
+}
+
+/* ============================================
+   DOTS
+   ============================================ */
+
+.ds-carousel__dots {
+  display: flex;
+  justify-content: center;
+  gap: var(--gap-sm); /* 8px */
+  padding-top: var(--padding-sm); /* 8px */
+}
+
+.ds-carousel__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  border: none;
+  padding: 0;
+  background-color: var(--color-bg-container-border);
+  cursor: pointer;
+  transition: background-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-carousel__dot:hover {
+  background-color: var(--color-text-tertiary);
+}
+
+.ds-carousel__dot--active {
+  background-color: var(--color-action-primary-bg);
+}
+
+.ds-carousel__dot:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+/* Icons take the colour of the text around them. Explicit, not just
+   inherited by default: a consumer stylesheet that sets a colour on
+   .material-symbols-rounded itself (a common global default) would
+   otherwise override inheritance and detach the icon from the state
+   colours this component sets on its parents. */
+.ds-carousel .material-symbols-rounded {
+  color: inherit;
+}

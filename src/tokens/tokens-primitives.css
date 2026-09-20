@@ -1,0 +1,186 @@
+/* ============================================
+   PRIMITIVE TOKENS
+   Source of truth — raw values only
+   Do not use these directly in components
+   ============================================ */
+
+:root {
+  /* ============================================
+     COLOR PRIMITIVES
+     ============================================ */
+
+  /* Neutral Scale */
+  --primitive-neutral-00: #FFFFFF;
+  --primitive-neutral-00-transparent: rgba(255, 255, 255, 0.01);
+  --primitive-neutral-00-semi: rgba(255, 255, 255, 0.6);
+  --primitive-neutral-00-glass: rgba(255, 255, 255, 0.9);
+  --primitive-neutral-01: #F1F1F1;
+  --primitive-neutral-01-transparent: rgba(241, 241, 241, 0.01);
+  --primitive-neutral-01-semi: rgba(241, 241, 241, 0.6);
+  --primitive-neutral-01-glass: rgba(241, 241, 241, 0.82);
+  --primitive-neutral-02: #D6D6D6;
+  --primitive-neutral-02-semi: rgba(214, 214, 214, 0.8);
+  --primitive-neutral-03: #BCBCBC;
+  --primitive-neutral-03-semi: rgba(188, 188, 188, 0.8);
+  --primitive-neutral-04: #A2A2A2;
+  --primitive-neutral-05: #888888;
+  --primitive-neutral-06: #6D6D6D;
+  --primitive-neutral-07: #303030;
+  --primitive-neutral-07-semi: rgba(48, 48, 48, 0.8);
+  --primitive-neutral-08: #232323;
+  --primitive-neutral-08-semi: rgba(35, 35, 35, 0.8);
+  --primitive-neutral-09: #0E0E0E;
+  --primitive-neutral-09-transparent: rgba(14, 14, 14, 0.01);
+  --primitive-neutral-09-semi: rgba(14, 14, 14, 0.8);
+  --primitive-neutral-09-semi-transparent: rgba(14, 14, 14, 0.6);
+  --primitive-neutral-09-glass: rgba(14, 14, 14, 0.66);
+  --primitive-neutral-10: #050505;
+  --primitive-neutral-10-semi: rgba(5, 5, 5, 0.6);
+  --primitive-neutral-10-subtle: rgba(5, 5, 5, 0.01);
+  --primitive-neutral-11: #000000;
+
+  /* Red Scale */
+  --primitive-red-01: #FDEFF3;
+  --primitive-red-02: #FAD3DD;
+  --primitive-red-03: #F8B7C7;
+  --primitive-red-04: #F69BB1;
+  --primitive-red-05: #F37F9B;
+  --primitive-red-06: #F16385;
+  --primitive-red-07: #EF476F;
+  --primitive-red-08: #C93A5C;
+  --primitive-red-09: #8E2641;
+  --primitive-red-10: #571727;
+
+  /* Orange Scale */
+  --primitive-orange-01: #FFF3EC;
+  --primitive-orange-02: #FBD9C5;
+  --primitive-orange-03: #F6B794;
+  --primitive-orange-04: #F1996E;
+  --primitive-orange-05: #E98256;
+  --primitive-orange-06: #E07045;
+  --primitive-orange-07: #EF8247;
+  --primitive-orange-08: #C65E33;
+  --primitive-orange-09: #8F4324;
+  --primitive-orange-10: #552716;
+
+  /* Yellow Scale */
+  --primitive-yellow-01: #FFF9EA;
+  --primitive-yellow-02: #FFF0C9;
+  --primitive-yellow-03: #FFE5A3;
+  --primitive-yellow-04: #FFD97F;
+  --primitive-yellow-05: #F2C55E;
+  --primitive-yellow-06: #E0B654;
+  --primitive-yellow-07: #FFD166;
+  --primitive-yellow-08: #C49A3E;
+  --primitive-yellow-09: #8A6B2A;
+  --primitive-yellow-10: #544016;
+
+  /* Green Scale */
+  --primitive-green-01: #ECFCF7;
+  --primitive-green-02: #CEF6E8;
+  --primitive-green-03: #9DEBD4;
+  --primitive-green-04: #6DE0C0;
+  --primitive-green-05: #3ED4AA;
+  --primitive-green-06: #1FCB9A;
+  --primitive-green-07: #06D6A0;
+  --primitive-green-08: #05A67C;
+  --primitive-green-09: #03765A;
+  --primitive-green-10: #024336;
+
+  /* Teal Scale */
+  --primitive-teal-01: #ECF7FB;
+  --primitive-teal-02: #CFEAF3;
+  --primitive-teal-03: #9ED4E5;
+  --primitive-teal-04: #6DBCD6;
+  --primitive-teal-05: #3CA5C6;
+  --primitive-teal-06: #2C9AB9;
+  --primitive-teal-07: #118AB2;
+  --primitive-teal-08: #0E6E8F;
+  --primitive-teal-09: #0A4E66;
+  --primitive-teal-10: #052F3E;
+
+  /* Blue Scale */
+  --primitive-blue-01: #EEF3FD;
+  --primitive-blue-02: #D3DDF8;
+  --primitive-blue-03: #AABCEF;
+  --primitive-blue-04: #7F99E3;
+  --primitive-blue-05: #5475D4;
+  --primitive-blue-06: #345AC4;
+  --primitive-blue-07: #1E47B0;
+  --primitive-blue-08: #163789;
+  --primitive-blue-09: #0F265E;
+  --primitive-blue-10: #081633;
+
+  /* Purple Scale */
+  --primitive-purple-01: #F7F0FE;
+  --primitive-purple-02: #E6D2FB;
+  --primitive-purple-03: #CFABF7;
+  --primitive-purple-04: #B785F0;
+  --primitive-purple-05: #A86AE8;
+  --primitive-purple-06: #9754DC;
+  --primitive-purple-07: #9E47EF;
+  --primitive-purple-08: #7434B3;
+  --primitive-purple-09: #52247D;
+  --primitive-purple-10: #31164A;
+
+  /* True Black */
+  --primitive-true-black: #000000;
+  --primitive-true-black-semi: rgba(0, 0, 0, 0.5);
+  --primitive-true-black-strong: rgba(0, 0, 0, 0.7);
+
+  /* ============================================
+     SPACING PRIMITIVES
+     ============================================ */
+
+  /* Spacing / Radius */
+  --primitive-radius-xxs: 2px;
+  --primitive-radius-xs: 4px;
+  --primitive-radius-sm: 8px;
+  --primitive-radius-md: 12px;
+  --primitive-radius-lg: 16px;
+  --primitive-radius-xl: 24px;
+  --primitive-radius-xxl: 48px;
+  --primitive-radius-full: 999px;
+  /* The composer shell's corner: concentric with the 40px send button it
+     wraps (half the button + the padding-sm ring + the border width).
+     Held as a resolved constant so consumers re-theme it like any other
+     radius step. */
+  --primitive-radius-composer: 29px;
+
+  /* Padding */
+  --primitive-padding-xxxs: 2px;
+  --primitive-padding-xxs: 4px;
+  --primitive-padding-xs: 6px;
+  --primitive-padding-sm: 8px;
+  --primitive-padding-sm-md: 12px;
+  --primitive-padding-md: 16px;
+  --primitive-padding-lg: 20px;
+  --primitive-padding-xl: 40px;
+  --primitive-padding-xxl: 60px;
+
+  /* Border width */
+  --primitive-border-xs: 1px;
+  --primitive-border-md: 2px;
+
+  /* Icon size
+     The scale starts at 20px because that is the floor of the Material
+     Symbols variable font's `opsz` (optical size) axis — see the fvar
+     range 20..48. Below 20 the axis clamps and optical sizing silently
+     stops tracking, so smaller icons cannot be drawn correctly. */
+  --primitive-icon-sm: 20px;
+  --primitive-icon-md: 24px;
+  --primitive-icon-lg: 32px;
+  --primitive-icon-xl: 48px;
+
+  /* Gap */
+  --primitive-gap-xxs: 2px;
+  --primitive-gap-xs: 4px;
+  --primitive-gap-sm: 8px;
+  --primitive-gap-sm-md: 12px;
+  --primitive-gap-md: 16px;
+  --primitive-gap-lg: 20px;
+  --primitive-gap-xl: 40px;
+  --primitive-gap-xxl: 60px;
+  --primitive-gap-xxxl: 80px;
+  --primitive-gap-xxxxl: 120px;
+}

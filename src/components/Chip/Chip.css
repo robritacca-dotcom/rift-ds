@@ -1,0 +1,231 @@
+/* ============================================
+   CHIP COMPONENT
+   Compact pill for attributes, filters, and
+   inline metadata. Non-clickable by default;
+   clickable, selectable, and removable variants.
+   ============================================ */
+
+.ds-chip {
+  /* Layout */
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-sm); /* 8px */
+
+  /* Spacing — 32px tall at default size */
+  padding: var(--padding-xs) var(--padding-sm-md); /* 6px 12px */
+
+  /* Shape */
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-full);
+  background-color: var(--color-bg-page-primary);
+
+  /* Typography — same em style as Badge */
+  font-family: var(--font-paragraph-sm-em-family);
+  font-size: var(--font-paragraph-sm-em-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+
+  transition: background-color var(--motion-duration-base) var(--motion-ease-standard), border-color var(--motion-duration-base) var(--motion-ease-standard),
+    color var(--motion-duration-base) var(--motion-ease-standard), opacity var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+/* ============================================
+   SIZE — LARGE (40px tall)
+   The default Button's footprint and the body
+   paragraph scale, so a chip used as a primary
+   tap target reads at the same weight as the
+   text around it.
+   ============================================ */
+
+.ds-chip--large {
+  padding: var(--padding-sm) var(--padding-lg); /* 8px 20px */
+  font-family: var(--font-paragraph-em-family);
+  font-size: var(--font-paragraph-em-size);
+  font-weight: var(--font-paragraph-em-weight);
+  line-height: var(--font-paragraph-em-line-height);
+  letter-spacing: var(--font-paragraph-em-letter-spacing);
+}
+
+.ds-chip--large .ds-chip__icon,
+.ds-chip--large .ds-chip__remove .material-symbols-rounded {
+  --icon-size: var(--icon-size-md);
+}
+
+.ds-chip--large .ds-chip__icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* ============================================
+   SIZE — COMPACT (24px tall)
+   ============================================ */
+
+.ds-chip--compact {
+  gap: var(--gap-xs); /* 4px */
+  padding: var(--padding-xxxs) var(--padding-sm); /* 2px 8px */
+}
+
+/* ============================================
+   ICON (leading)
+   ============================================ */
+
+.ds-chip__icon {
+  flex-shrink: 0;
+  --icon-size: var(--icon-size-sm);
+  line-height: 1;
+  color: var(--color-icon-primary);
+  transition: color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-chip__icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.ds-chip--compact .ds-chip__icon {
+  --icon-size: var(--icon-size-sm);
+}
+
+.ds-chip--compact .ds-chip__icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* ============================================
+   LABEL
+   ============================================ */
+
+.ds-chip__label {
+  flex-shrink: 0;
+}
+
+/* ============================================
+   CLICKABLE (rendered as <button>)
+   ============================================ */
+
+.ds-chip--clickable {
+  cursor: pointer;
+}
+
+.ds-chip--clickable:not(.ds-chip--disabled):not(.ds-chip--selected):hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-chip--clickable:not(.ds-chip--disabled):not(.ds-chip--selected):active {
+  background-color: var(--color-action-passive-bg-active);
+}
+
+/* ============================================
+   SELECTED — teal active fill, matching the
+   SegmentedControl selection convention
+   ============================================ */
+
+.ds-chip--selected {
+  background-color: var(--color-action-primary-bg);
+  border-color: var(--color-action-primary-bg);
+  color: var(--color-action-primary-text);
+}
+
+.ds-chip--selected .ds-chip__icon {
+  color: var(--color-action-primary-text);
+}
+
+.ds-chip--selected.ds-chip--clickable:not(.ds-chip--disabled):hover {
+  background-color: var(--color-action-primary-bg-hover);
+}
+
+.ds-chip--selected.ds-chip--clickable:not(.ds-chip--disabled):active {
+  background-color: var(--color-action-primary-bg-active);
+}
+
+/* ============================================
+   REMOVABLE — <span> container with an inner
+   main region (when clickable) + close button
+   ============================================ */
+
+.ds-chip__main {
+  display: inline-flex;
+  align-items: center;
+  gap: inherit;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.ds-chip__remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  border-radius: var(--radius-full);
+  color: var(--color-icon-primary);
+  cursor: pointer;
+  transition: color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-chip__remove .material-symbols-rounded {
+  --icon-size: var(--icon-size-sm);
+  line-height: 1;
+}
+
+.ds-chip--compact .ds-chip__remove .material-symbols-rounded {
+  --icon-size: var(--icon-size-sm);
+}
+
+.ds-chip__remove:not(:disabled):hover {
+  color: var(--color-text-primary);
+}
+
+.ds-chip--selected .ds-chip__remove {
+  color: var(--color-action-primary-text);
+}
+
+.ds-chip--selected .ds-chip__remove:not(:disabled):hover {
+  color: var(--color-action-primary-text-active);
+}
+
+/* ============================================
+   DISABLED
+   ============================================ */
+
+.ds-chip--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ds-chip--disabled .ds-chip__main,
+.ds-chip--disabled .ds-chip__remove {
+  cursor: not-allowed;
+}
+
+/* ============================================
+   FOCUS
+   ============================================ */
+
+.ds-chip--clickable:focus-visible,
+.ds-chip__main:focus-visible,
+.ds-chip__remove:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+/* Icons take the colour of the text around them. Explicit, not just
+   inherited by default: a consumer stylesheet that sets a colour on
+   .material-symbols-rounded itself (a common global default) would
+   otherwise override inheritance and detach the icon from the state
+   colours this component sets on its parents. */
+.ds-chip .material-symbols-rounded {
+  color: inherit;
+}

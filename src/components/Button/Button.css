@@ -1,0 +1,465 @@
+/* ============================================
+   BUTTON COMPONENT
+   Figma design system button component
+   ============================================ */
+
+.ds-button {
+  /* Layout */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-sm); /* Figma: --radius/sm (8px) */
+
+  /* Spacing */
+  padding: var(--padding-sm) var(--padding-lg); /* Figma: --padding/sm (8px) & --radius/lg (16px) */
+
+  /* Border radius */
+  border-radius: var(--radius-full); /* Figma: --radius/full (999px) */
+
+  /* Typography - Using paragraph em (medium weight) for clickable controls */
+  font-family: var(--font-paragraph-em-family);
+  font-weight: var(--font-paragraph-em-weight);
+  font-size: var(--font-paragraph-em-size);
+  line-height: var(--font-paragraph-em-line-height);
+  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  text-align: center;
+  /* A pill's label never wraps — a squeezed layout shortens around the
+     button, it doesn't fold the silhouette into two lines. */
+  white-space: nowrap;
+
+  /* Transitions */
+  transition: background-color var(--motion-duration-base) var(--motion-ease-standard), border-color var(--motion-duration-base) var(--motion-ease-standard), opacity var(--motion-duration-base) var(--motion-ease-standard);
+
+  /* Reset */
+  cursor: pointer;
+  border: none;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ============================================
+   SIZE — DEFAULT (no overrides needed, base styles apply)
+   ============================================ */
+
+.ds-button--default {
+  /* Base padding & typography inherited from .ds-button */
+}
+
+/* ============================================
+   SIZE — COMPACT
+   ============================================ */
+
+.ds-button--compact {
+  padding: var(--padding-xs) var(--padding-sm-md); /* 6px 12px */
+  font-size: var(--font-paragraph-sm-em-size);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+}
+
+.ds-button--compact .ds-button__icon {
+  --icon-size: var(--icon-size-sm);
+/* Figma: compact icons are 20px (vs 24px default) */
+}
+
+/* Scale any child SVG to fit the compact icon slot */
+.ds-button--compact .ds-button__icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* ============================================
+   PRIMARY BUTTON (SOLID)
+   ============================================ */
+
+.ds-button--primary {
+  background-color: var(--color-action-primary-bg);
+  border: none;
+}
+
+.ds-button--primary .ds-button__text {
+  color: var(--color-action-primary-text);
+}
+
+.ds-button--primary.ds-button--hover {
+  background-color: var(--color-action-primary-bg-hover);
+}
+
+.ds-button--primary.ds-button--hover .ds-button__text {
+  color: var(--color-action-primary-text-active);
+}
+
+.ds-button--primary.ds-button--active {
+  background-color: var(--color-action-primary-bg-active);
+}
+
+.ds-button--primary.ds-button--active .ds-button__text {
+  color: var(--color-action-primary-text-active);
+}
+
+.ds-button--primary.ds-button--disabled {
+  background-color: var(--color-action-primary-bg);
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   SECONDARY BUTTON (OUTLINED)
+   ============================================ */
+
+.ds-button--secondary {
+  /* Figma: --action/primary/border/primary - 1px border */
+  border: var(--border-xs) solid var(--color-action-primary-border);
+  background-color: transparent;
+}
+
+.ds-button--secondary .ds-button__text {
+  /* Figma: --text/primary */
+  color: var(--color-text-primary);
+}
+
+.ds-button--secondary.ds-button--default {
+  border: var(--border-xs) solid var(--color-action-primary-border);
+  background-color: transparent;
+}
+
+.ds-button--secondary.ds-button--hover {
+  /* Figma: hover state - 1px border */
+  border: var(--border-xs) solid var(--color-action-primary-border);
+  background-color: var(--color-action-primary-bg-hover);
+}
+
+.ds-button--secondary.ds-button--hover .ds-button__text {
+  color: var(--color-action-primary-text-active);
+}
+
+.ds-button--secondary.ds-button--active {
+  /* Figma: --action/primary/background/active - 1px border */
+  background-color: var(--color-action-primary-bg-active);
+  border: var(--border-xs) solid var(--color-action-primary-border);
+}
+
+.ds-button--secondary.ds-button--active .ds-button__text {
+  color: var(--color-action-primary-text-active);
+}
+
+.ds-button--secondary.ds-button--disabled {
+  border: var(--border-xs) solid var(--color-action-primary-border);
+  background-color: transparent;
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   TERTIARY BUTTON (PASSIVE / GHOST)
+   ============================================ */
+
+.ds-button--tertiary {
+  /* Figma: --action/passive/background/primary (rgba(241, 241, 241, 0.01)) */
+  background-color: var(--color-action-passive-bg);
+  border: none;
+}
+
+.ds-button--tertiary .ds-button__text {
+  /* Figma: --action/passive/text/primary (#050505) */
+  color: var(--color-action-passive-text);
+}
+
+.ds-button--tertiary.ds-button--default {
+  background-color: var(--color-action-passive-bg);
+}
+
+.ds-button--tertiary.ds-button--hover {
+  /* Figma: hover background (#d6d6d6) */
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-button--tertiary.ds-button--active {
+  /* Figma: --action/passive/background/active (#bcbcbc) */
+  background-color: var(--color-action-passive-bg-active);
+}
+
+.ds-button--tertiary.ds-button--disabled {
+  background-color: var(--color-action-passive-bg);
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   NEUTRAL BUTTON (SOLID GREY)
+   Filled like primary but in the neutral greys —
+   unlike tertiary, the background is always shown.
+   ============================================ */
+
+.ds-button--neutral {
+  background-color: var(--color-action-neutral-bg);
+  border: none;
+}
+
+.ds-button--neutral .ds-button__text {
+  color: var(--color-action-neutral-text);
+}
+
+.ds-button--neutral.ds-button--hover {
+  background-color: var(--color-action-neutral-bg-hover);
+}
+
+.ds-button--neutral.ds-button--active {
+  background-color: var(--color-action-neutral-bg-active);
+}
+
+.ds-button--neutral.ds-button--disabled {
+  background-color: var(--color-action-neutral-bg);
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   DESTRUCTIVE BUTTON
+   For dangerous actions: delete, remove, etc.
+   Uses accent-coral as the border / fill colour.
+   ============================================ */
+
+.ds-button--destructive {
+  border: var(--border-xs) solid var(--color-core-accent-coral);
+  background-color: transparent;
+}
+
+.ds-button--destructive .ds-button__text {
+  color: var(--color-core-accent-coral);
+}
+
+.ds-button--destructive.ds-button--default {
+  border: var(--border-xs) solid var(--color-core-accent-coral);
+  background-color: transparent;
+}
+
+.ds-button--destructive.ds-button--hover {
+  border: var(--border-xs) solid var(--color-core-accent-coral);
+  background-color: var(--color-core-accent-coral);
+}
+
+.ds-button--destructive.ds-button--hover .ds-button__text {
+  color: var(--color-status-error-bg);
+}
+
+.ds-button--destructive.ds-button--active {
+  border: var(--border-xs) solid var(--color-core-accent-coral);
+  background-color: var(--color-core-accent-coral);
+}
+
+.ds-button--destructive.ds-button--active .ds-button__text {
+  color: var(--color-status-error-bg);
+}
+
+.ds-button--destructive.ds-button--disabled {
+  border: var(--border-xs) solid var(--color-core-accent-coral);
+  background-color: transparent;
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   ICON
+   ============================================ */
+
+.ds-button__icon {
+  flex-shrink: 0;
+  --icon-size: var(--icon-size-md);
+/* Figma: default icons are 24px */
+  line-height: 1;
+}
+
+/* Scale any child SVG to fit the icon slot */
+.ds-button__icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* A trailing icon nudges right on hover — a small confirmation that the
+   button leads somewhere. Never on disabled or loading buttons (loading
+   disables the element without the disabled class); the reduced-motion
+   guard collapses the transition with every other duration. */
+.ds-button__icon--right {
+  transition: transform var(--motion-duration-fast) var(--motion-ease-entrance);
+}
+
+.ds-button:not(.ds-button--disabled):not(.ds-button--loading):hover .ds-button__icon--right {
+  transform: translateX(2px);
+}
+
+.ds-button--primary .ds-button__icon {
+  color: var(--color-action-primary-text);
+}
+
+.ds-button--primary.ds-button--active .ds-button__icon,
+.ds-button--primary.ds-button--hover .ds-button__icon {
+  color: var(--color-action-primary-text-active);
+}
+
+.ds-button--secondary .ds-button__icon {
+  color: var(--color-action-icon-default);
+}
+
+.ds-button--secondary.ds-button--active .ds-button__icon,
+.ds-button--secondary.ds-button--hover .ds-button__icon {
+  color: var(--color-action-icon-active);
+}
+
+.ds-button--tertiary .ds-button__icon {
+  color: var(--color-icon-primary);
+}
+
+.ds-button--neutral .ds-button__icon {
+  color: var(--color-action-neutral-text);
+}
+
+.ds-button--destructive .ds-button__icon {
+  color: var(--color-core-accent-coral);
+}
+
+.ds-button--destructive.ds-button--hover .ds-button__icon,
+.ds-button--destructive.ds-button--active .ds-button__icon {
+  color: var(--color-status-error-bg);
+}
+
+/* ============================================
+   TEXT
+   ============================================ */
+
+.ds-button__text {
+  flex-shrink: 0;
+}
+
+/* ============================================
+   HOVER STATES (for interactive use)
+   ============================================ */
+
+.ds-button--primary:not(.ds-button--disabled):hover {
+  background-color: var(--color-action-primary-bg-hover);
+}
+
+.ds-button--primary:not(.ds-button--disabled):hover .ds-button__text {
+  color: var(--color-action-primary-text-active);
+}
+
+.ds-button--primary:not(.ds-button--disabled):hover .ds-button__icon {
+  color: var(--color-action-primary-text-active);
+}
+
+.ds-button--secondary:not(.ds-button--disabled):hover {
+  background-color: var(--color-action-primary-bg-hover);
+}
+
+.ds-button--secondary:not(.ds-button--disabled):hover .ds-button__text {
+  color: var(--color-action-primary-text-active);
+}
+
+.ds-button--secondary:not(.ds-button--disabled):hover .ds-button__icon {
+  color: var(--color-action-icon-active);
+}
+
+.ds-button--tertiary:not(.ds-button--disabled):hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-button--neutral:not(.ds-button--disabled):hover {
+  background-color: var(--color-action-neutral-bg-hover);
+}
+
+.ds-button--destructive:not(.ds-button--disabled):hover {
+  background-color: var(--color-core-accent-coral);
+}
+
+.ds-button--destructive:not(.ds-button--disabled):hover .ds-button__text {
+  color: var(--color-status-error-bg);
+}
+
+.ds-button--destructive:not(.ds-button--disabled):hover .ds-button__icon {
+  color: var(--color-status-error-bg);
+}
+
+/* ============================================
+   ACTIVE STATES (for interactive use)
+   ============================================ */
+
+.ds-button--primary:not(.ds-button--disabled):active {
+  background-color: var(--color-action-primary-bg-active);
+}
+
+.ds-button--primary:not(.ds-button--disabled):active .ds-button__text {
+  color: var(--color-action-primary-text-active);
+}
+
+.ds-button--primary:not(.ds-button--disabled):active .ds-button__icon {
+  color: var(--color-action-primary-text-active);
+}
+
+.ds-button--secondary:not(.ds-button--disabled):active {
+  background-color: var(--color-action-primary-bg-active);
+}
+
+.ds-button--secondary:not(.ds-button--disabled):active .ds-button__text {
+  color: var(--color-action-primary-text-active);
+}
+
+.ds-button--secondary:not(.ds-button--disabled):active .ds-button__icon {
+  color: var(--color-action-icon-active);
+}
+
+.ds-button--tertiary:not(.ds-button--disabled):active {
+  background-color: var(--color-action-passive-bg-active);
+}
+
+.ds-button--neutral:not(.ds-button--disabled):active {
+  background-color: var(--color-action-neutral-bg-active);
+}
+
+.ds-button--destructive:not(.ds-button--disabled):active {
+  background-color: var(--color-core-accent-coral);
+}
+
+.ds-button--destructive:not(.ds-button--disabled):active .ds-button__text {
+  color: var(--color-status-error-bg);
+}
+
+.ds-button--destructive:not(.ds-button--disabled):active .ds-button__icon {
+  color: var(--color-status-error-bg);
+}
+
+/* ============================================
+   LOADING
+   Keeps the variant's full-colour appearance (no disabled dim);
+   the spinner occupies the left icon slot and inherits its colour.
+   ============================================ */
+
+.ds-button--loading {
+  cursor: progress;
+  pointer-events: none;
+}
+
+/* The spinner is a box, not a glyph: left inline in the icon slot, it sits
+   on the text baseline and the strut's descender pushes it above centre.
+   Flex centres it geometrically — the same fix as CircularButton's loading
+   icon. */
+.ds-button--loading .ds-button__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* The generic icon-slot svg sizing must not distort the spinner —
+   it sizes itself from the Spinner size prop */
+.ds-button .ds-button__icon .ds-spinner__circle {
+  width: 100%;
+  height: 100%;
+}
+
+/* ============================================
+   FOCUS
+   ============================================ */
+
+.ds-button:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}

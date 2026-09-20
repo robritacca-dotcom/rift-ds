@@ -1,0 +1,291 @@
+/* ============================================
+   REASONING COMPONENT
+   A model's thinking, disclosed behind a
+   one-line summary. Quiet by construction: the
+   trace is secondary text on a rail, never
+   competing with the answer beside it.
+   ============================================ */
+
+.ds-reasoning {
+  /* Where an AgentStatus summary's label starts: matrix plus its gap.
+     The rail geometry and the handoff slide both derive from it. */
+  --ds-reasoning-align: calc(var(--icon-size-md) + var(--gap-sm-md));
+
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* ============================================
+   TRIGGER
+   ============================================ */
+
+.ds-reasoning__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  align-self: flex-start;
+  padding: var(--padding-xxs) var(--padding-xs);
+  margin-left: calc(var(--padding-xs) * -1);
+  background: none;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-secondary);
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+  cursor: pointer;
+  transition: color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-reasoning__trigger:hover {
+  color: var(--color-text-primary);
+}
+
+/* Summary-only: the same line, minus every affordance that would promise a
+   panel behind it. Not a button, so there is nothing to focus or press. */
+.ds-reasoning__trigger--static {
+  cursor: default;
+}
+
+.ds-reasoning__trigger--static:hover {
+  color: var(--color-text-secondary);
+}
+
+.ds-reasoning__trigger:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: -2px;
+}
+
+/* Closed the chevron points at the collapsed trace; open it points down the
+   way the panel expands. The glyph itself points down, so closed is the
+   rotated state — and the quarter turn to open runs clockwise, following
+   the panel as it opens. */
+.ds-reasoning__chevron {
+  --icon-size: var(--icon-size-sm);
+
+  flex: none;
+  transform: rotate(-90deg);
+  transition: transform var(--motion-duration-slow) var(--motion-ease-standard);
+}
+
+.ds-reasoning--open .ds-reasoning__chevron {
+  transform: rotate(0deg);
+}
+
+/* ============================================
+   SUMMARY
+   While the trace streams, a sweep walks the
+   summary left to right — the same gradient
+   AgentStatus uses (primary base, tertiary
+   band, same stops), so "the model is working"
+   looks the same wherever it appears.
+   ============================================ */
+
+.ds-reasoning__summary {
+  position: relative;
+  white-space: nowrap;
+}
+
+/* The live→done handoff. The departing node summary (an AgentStatus)
+   overlays the incoming text, fading out in place, while the text summary
+   slides left from where its label sat into the flush position. The
+   modifier comes off once the animation ends, so nothing stays composited. */
+.ds-reasoning__summary--entering {
+  animation: ds-reasoning-summary-in var(--motion-duration-slow) var(--motion-ease-entrance) both;
+}
+
+.ds-reasoning__summary-leaving {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  animation: ds-reasoning-summary-out var(--motion-duration-slow) var(--motion-ease-standard) both;
+}
+
+@keyframes ds-reasoning-summary-in {
+  from {
+    opacity: 0;
+    transform: translateX(var(--ds-reasoning-align));
+  }
+}
+
+@keyframes ds-reasoning-summary-out {
+  to {
+    opacity: 0;
+  }
+}
+
+/* A node summary (an AgentStatus) owns its own appearance — the text
+   shimmer below never applies to it. Inline-flex keeps the span exactly
+   the node's height: left inline, the node sits on the text baseline and
+   the leftover descender space pushes it off the chevron's centreline. */
+.ds-reasoning__summary--node {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* The band travels dim → bright → dim, and stays narrow, matching
+   AgentStatus's sweep stop for stop: the two sit in the same conversation,
+   so a shimmer that read differently here would look like a second effect
+   rather than the same one. */
+.ds-reasoning--streaming .ds-reasoning__summary:not(.ds-reasoning__summary--node) {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-text-tertiary) 44%,
+    var(--color-text-primary) 50%,
+    var(--color-text-tertiary) 56%
+  );
+  background-size: 250% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: ds-reasoning-shimmer var(--motion-duration-loop-shimmer)
+    var(--motion-ease-linear) infinite;
+}
+
+@keyframes ds-reasoning-shimmer {
+  from {
+    background-position-x: 100%;
+  }
+
+  to {
+    background-position-x: 0%;
+  }
+}
+
+/* ============================================
+   PANEL
+   ============================================ */
+
+.ds-reasoning__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition:
+    grid-template-rows var(--motion-duration-slow) var(--motion-ease-standard),
+    visibility var(--motion-duration-slow) var(--motion-ease-standard);
+}
+
+.ds-reasoning--open .ds-reasoning__panel {
+  grid-template-rows: 1fr;
+  visibility: visible;
+}
+
+.ds-reasoning__content {
+  overflow: hidden;
+  min-height: 0;
+  transition: padding-block var(--motion-duration-slow) var(--motion-ease-standard);
+  /* The rail and trace align to an AgentStatus summary's geometry: the
+     rail runs down the centre of the matrix (half an icon step, corrected
+     by half the rail's own width) and the trace text starts exactly where
+     the status label's first letter starts (matrix + its gap). A plain
+     text summary shares the same geometry, so swapping a live status for
+     the thought-for line never shifts the trace. */
+  margin-left: calc(var(--icon-size-md) / 2 - var(--border-md) / 2);
+  padding-left: calc(var(--icon-size-md) / 2 + var(--gap-sm-md) - var(--border-md) / 2);
+  /* The rail dissolves at its foot — the Timeline's end-of-line treatment.
+     A border can't carry a gradient, so the border only reserves the
+     geometry (transparent, same width) and the stripe is painted under it:
+     a border-box background sized to the border's own column. */
+  border-left: var(--border-md) solid transparent;
+  background:
+    linear-gradient(
+        to bottom,
+        var(--color-divider) calc(100% - var(--gap-lg) * 2),
+        var(--color-bg-container-primary-transparent)
+      )
+      left top / var(--border-md) 100% no-repeat border-box;
+  color: var(--color-text-secondary);
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+}
+
+/* With the trigger's own bottom padding, the panel opens one --gap-lg
+   below the summary row — the same step a --gap-lg trace list uses
+   between nodes, so the first node isn't tighter than the rest. */
+.ds-reasoning--open .ds-reasoning__content {
+  padding-block: var(--padding-md);
+}
+
+.ds-reasoning__content > :first-child {
+  margin-top: 0;
+}
+
+.ds-reasoning__content > :last-child {
+  margin-bottom: 0;
+}
+
+/* ============================================
+   TRACE NODES
+   Inside Reasoning, a list is the trace's node
+   list: one thinking step per item, no bullets
+   (the rail is the marker), on the same
+   --gap-lg beat the panel opens with. New
+   nodes rise in as the trace builds.
+   ============================================ */
+
+.ds-reasoning__content ul,
+.ds-reasoning__content ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-lg);
+}
+
+.ds-reasoning__content li {
+  animation: ds-reasoning-node-in var(--motion-duration-slow) var(--motion-ease-entrance);
+}
+
+@keyframes ds-reasoning-node-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+/* ============================================
+   SIZES
+   The scale pairs with ChatMessage: default
+   matches default message text, compact
+   matches compact message text.
+   ============================================ */
+
+.ds-reasoning--compact .ds-reasoning__trigger,
+.ds-reasoning--compact .ds-reasoning__content {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+}
+
+/* Compact pairs with a compact AgentStatus: sm matrix, sm gap. */
+.ds-reasoning--compact {
+  --ds-reasoning-align: calc(var(--icon-size-sm) + var(--gap-sm));
+}
+
+.ds-reasoning--compact .ds-reasoning__content {
+  margin-left: calc(var(--icon-size-sm) / 2 - var(--border-md) / 2);
+  padding-left: calc(var(--icon-size-sm) / 2 + var(--gap-sm) - var(--border-md) / 2);
+}
+
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-reasoning--streaming .ds-reasoning__summary:not(.ds-reasoning__summary--node) {
+    background-image: none;
+    color: var(--color-text-tertiary);
+    animation: none;
+  }
+}

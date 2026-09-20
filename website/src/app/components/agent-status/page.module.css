@@ -1,0 +1,177 @@
+/* ============================================
+   AGENT STATUS PAGE LAYOUT
+   ============================================ */
+.dsLayout {
+  display: flex;
+  gap: var(--layout-column-gap);
+  width: 100%;
+  max-width: 1440px;
+  padding-top: var(--primitive-gap-xl);
+}
+
+.dsContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-xxxl);
+  min-width: 0;
+}
+
+/* ============================================
+   PAGE TITLE - Display 2
+   ============================================ */
+.pageHeader {
+  margin-top: calc(var(--primitive-gap-xl) - var(--primitive-gap-xxxl));
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--primitive-gap-lg);
+  width: 100%;
+}
+
+.pageTitle {
+  font-size: var(--font-display-2-size);
+  font-weight: var(--font-display-2-weight);
+  line-height: var(--font-display-2-line-height);
+  letter-spacing: var(--font-display-2-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+/* Sub Display */
+.subDisplay {
+  font-family: var(--font-sub-display-family);
+  font-size: var(--font-sub-display-size);
+  font-weight: var(--font-sub-display-weight);
+  line-height: var(--font-sub-display-line-height);
+  letter-spacing: var(--font-sub-display-letter-spacing);
+  color: var(--color-text-primary);
+  margin-bottom: 0;
+}
+
+/* ============================================
+   INTRO SECTION
+   ============================================ */
+.introSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-lg);
+}
+
+.introBody {
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   SECTIONS
+   ============================================ */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-lg);
+  width: 100%;
+}
+
+/* ============================================
+   DEMO CONTAINERS
+   ============================================ */
+.stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-sm-md);
+}
+
+/* Two columns of patterns, matching the gallery they came from */
+.patternGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--gap-sm-md) var(--gap-xl);
+  padding: var(--padding-lg);
+  background-color: var(--color-bg-container-secondary);
+  border-radius: var(--radius-lg);
+}
+
+.patternPrefix {
+  color: var(--color-text-tertiary);
+}
+
+/* One AgentStatus row per core accent ramp: the component's colour custom
+   properties all resolve from a single local --accent, so each variation is
+   one declaration. The sweep keeps the accent as its base and passes a
+   text-primary band across it, the same shape the waiting state uses.
+   The class is doubled because the production build orders the library
+   stylesheet after page modules: at equal specificity the component's own
+   defaults would win the tie there, while the dev server orders them the
+   other way around. */
+.accent.accent {
+  --ds-agent-color: var(--accent);
+  --ds-agent-label-color: var(--accent);
+  --ds-agent-shimmer-base: var(--accent);
+  --ds-agent-shimmer-sweep: var(--color-text-primary);
+}
+
+.coral {
+  --accent: var(--color-core-accent-coral);
+}
+
+.amber {
+  --accent: var(--color-core-accent-amber);
+}
+
+.gold {
+  --accent: var(--color-core-accent-gold);
+}
+
+.mint {
+  --accent: var(--color-core-accent-mint);
+}
+
+.cobalt {
+  --accent: var(--color-core-accent-cobalt);
+}
+
+.violet {
+  --accent: var(--color-core-accent-violet);
+}
+
+.demoText {
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.code {
+  font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: var(--font-paragraph-sm-size);
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 959px) {
+  .pageHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .dsLayout {
+    padding-left: 0;
+    min-width: 0;
+  }
+
+  .dsContent {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .subDisplay {
+    font-size: 24px;
+    line-height: 36px;
+  }
+}

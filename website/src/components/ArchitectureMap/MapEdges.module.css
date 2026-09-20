@@ -1,0 +1,56 @@
+/* ============================================
+   MAP EDGES — bezier connectors + label chips
+   ============================================ */
+.edges {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: visible;
+}
+
+.edge {
+  fill: none;
+  stroke-width: 1.6;
+}
+
+.edge-flow {
+  stroke: var(--color-text-tertiary);
+}
+
+.edge-external {
+  stroke: var(--color-text-tertiary);
+  stroke-dasharray: 6 5;
+}
+
+.edge-accent {
+  stroke: var(--color-chart-series-1);
+  stroke-width: 2.2;
+}
+
+.marker-flow,
+.marker-external {
+  fill: var(--color-text-tertiary);
+}
+
+.marker-accent {
+  fill: var(--color-chart-series-1);
+}
+
+.edgeLabel {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-paragraph-em-weight);
+  color: var(--color-text-secondary);
+  background-color: var(--color-bg-container-primary);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-full);
+  padding: var(--primitive-padding-xxxs) var(--primitive-padding-sm);
+  pointer-events: none;
+}
+
+.edgeLabelAccent {
+  color: var(--color-chart-series-1);
+  border-color: var(--color-chart-series-1);
+}

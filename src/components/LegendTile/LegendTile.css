@@ -1,0 +1,60 @@
+/* ============================================
+   LEGEND TILE COMPONENT
+   The labelled value tile under a chart: an
+   inset surface one step below its panel, a
+   caption label with an optional series dot,
+   and the value beneath. The dot's colour
+   arrives per instance via the
+   --legend-tile-swatch custom property, set
+   inline by the component, so this file stays
+   token-only.
+   ============================================ */
+
+/* Base */
+
+.ds-legend-tile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxs);
+  min-width: 0;
+  background-color: var(--color-bg-page-primary);
+  border-radius: var(--radius-md);
+  padding: var(--padding-sm) var(--padding-sm-md);
+}
+
+/* Parts */
+
+.ds-legend-tile__label {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  min-width: 0;
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Fixed 8px series dot — same literal as the chart tooltip's dot in
+   Chart.css, which is the reference for this element. */
+.ds-legend-tile__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+  background-color: var(--legend-tile-swatch, var(--color-text-secondary));
+}
+
+.ds-legend-tile__value {
+  font-family: var(--font-paragraph-sm-em-family);
+  font-size: var(--font-paragraph-sm-em-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+  color: var(--color-text-primary);
+}

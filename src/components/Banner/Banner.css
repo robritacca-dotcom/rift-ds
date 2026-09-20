@@ -1,0 +1,110 @@
+/* ============================================
+   BANNER COMPONENT
+   Full-width page-level status strip
+   ============================================ */
+
+.ds-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-lg);
+  width: 100%;
+  padding: var(--padding-sm) var(--padding-lg);
+}
+
+.ds-banner__body {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  min-width: 0;
+}
+
+.ds-banner--center .ds-banner__body {
+  flex: 1;
+  justify-content: center;
+}
+
+.ds-banner__icon {
+  --icon-size: var(--icon-size-sm);
+  flex-shrink: 0;
+}
+
+.ds-banner__content {
+  margin: 0;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+}
+
+.ds-banner__title {
+  font-family: var(--font-paragraph-sm-em-family);
+  font-weight: var(--font-paragraph-sm-em-weight);
+}
+
+.ds-banner__action {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* ============================================
+   DISMISS
+   ============================================ */
+
+.ds-banner__dismiss {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--padding-xxs);
+  border: none;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-banner__dismiss .material-symbols-rounded {
+  --icon-size: var(--icon-size-sm);
+}
+
+.ds-banner__dismiss:hover {
+  opacity: 0.7;
+}
+
+.ds-banner__dismiss:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+/* ============================================
+   VARIANTS
+   ============================================ */
+
+.ds-banner--info {
+  background-color: var(--color-status-info-bg);
+  color: var(--color-status-info-text);
+}
+
+.ds-banner--positive {
+  background-color: var(--color-status-positive-bg);
+  color: var(--color-status-positive-text);
+}
+
+.ds-banner--warning {
+  background-color: var(--color-status-warning-bg);
+  color: var(--color-status-warning-text);
+}
+
+.ds-banner--error {
+  background-color: var(--color-status-error-bg);
+  color: var(--color-status-error-text);
+}
+
+.ds-banner--neutral {
+  background-color: var(--color-status-neutral-bg);
+  color: var(--color-status-neutral-text);
+}

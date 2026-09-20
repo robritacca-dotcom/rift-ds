@@ -1,0 +1,61 @@
+/* ============================================
+   CHAT MARKER COMPONENT
+   Inline conversation separator for dates and system notes
+   ============================================ */
+
+.ds-chat-marker {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm-md);
+  width: 100%;
+}
+
+/* Flanking lines — kept as flex spacers when bare, so the label
+   stays centred either way */
+.ds-chat-marker::before,
+.ds-chat-marker::after {
+  content: '';
+  flex: 1;
+  height: var(--border-xs);
+  background-color: var(--color-divider);
+}
+
+.ds-chat-marker--bare::before,
+.ds-chat-marker--bare::after {
+  background-color: transparent;
+}
+
+/* ============================================
+   LABEL
+   ============================================ */
+
+.ds-chat-marker__label {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-tertiary);
+}
+
+.ds-chat-marker__icon {
+  display: inline-flex;
+  align-items: center;
+}
+
+.ds-chat-marker__icon .material-symbols-rounded {
+  --icon-size: var(--icon-size-sm);
+}
+
+/* Icons take the colour of the text around them. Explicit, not just
+   inherited by default: a consumer stylesheet that sets a colour on
+   .material-symbols-rounded itself (a common global default) would
+   otherwise override inheritance and detach the icon from the state
+   colours this component sets on its parents. */
+.ds-chat-marker .material-symbols-rounded {
+  color: inherit;
+}

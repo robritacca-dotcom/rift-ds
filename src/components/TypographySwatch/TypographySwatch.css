@@ -1,0 +1,81 @@
+/* ============================================
+   TYPOGRAPHY SWATCH COMPONENT
+   Card that displays a type style with a live
+   preview and four value columns.
+   ============================================ */
+
+.ds-typography-swatch {
+  /* Layout */
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xl); /* 40px */
+
+  /* Sizing */
+  width: 100%;
+
+  /* Appearance */
+  background: var(--color-bg-container-primary);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-xl); /* 24px */
+  padding: var(--padding-xl) var(--padding-lg) var(--padding-lg); /* 40px top, 20px sides/bottom */
+  overflow: hidden;
+}
+
+/* ============================================
+   PREVIEW TEXT
+   Rendered at the actual font properties via
+   inline style — inherits colour from tokens.
+   ============================================ */
+
+.ds-typography-swatch__preview {
+  color: var(--color-text-primary);
+  word-break: break-word;
+}
+
+/* ============================================
+   DIVIDER
+   ============================================ */
+
+.ds-typography-swatch__divider {
+  width: 100%;
+  border: none;
+  border-top: 1px solid var(--color-bg-container-border);
+  margin: 0;
+}
+
+/* ============================================
+   VALUES ROW
+   Four equal columns showing the metrics.
+   ============================================ */
+
+.ds-typography-swatch__values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 100%;
+}
+
+.ds-typography-swatch__value-item {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.ds-typography-swatch__value-number {
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  letter-spacing: var(--font-title-body-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.ds-typography-swatch__value-label {
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-secondary);
+}

@@ -1,0 +1,56 @@
+/* ============================================
+   TOOLBAR COMPONENT
+   Grouped strip of controls in one shell
+   ============================================ */
+
+/* Base — a pill shell on the container fill. Padding clears the focus
+   ring's full reach (2px offset + 2px outline), so a focused control's
+   ring seats inside the shell instead of slicing its border. */
+
+.ds-toolbar {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  padding: var(--padding-xs);
+  background-color: var(--color-bg-container-primary);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-full);
+}
+
+/* Orientation */
+
+.ds-toolbar--vertical {
+  flex-direction: column;
+}
+
+/* Variants */
+
+/* Floating: the glass pill for controls hovering over content — frosted
+   fill, floating elevation. The consumer's layout positions it. */
+.ds-toolbar--floating {
+  background-color: var(--color-bg-glass);
+  /* The frost's strength; an effect length with no token family, chosen by
+     eye to match the system's other glass surfaces. */
+  --ds-toolbar-frost: 24px;
+  backdrop-filter: blur(var(--ds-toolbar-frost));
+  box-shadow: var(--shadow-floating);
+}
+
+/* Separator — a hairline between control clusters, inset from the shell's
+   edge by stretching only across the controls' own height. */
+
+.ds-toolbar__separator {
+  flex-shrink: 0;
+  align-self: stretch;
+  width: var(--border-xs);
+  margin-block: var(--gap-xxs);
+  margin-inline: var(--gap-xxs);
+  background-color: var(--color-divider);
+}
+
+.ds-toolbar--vertical .ds-toolbar__separator {
+  width: auto;
+  height: var(--border-xs);
+  margin-block: var(--gap-xxs);
+  margin-inline: var(--gap-xxs);
+}

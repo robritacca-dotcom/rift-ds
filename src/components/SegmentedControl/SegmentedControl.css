@@ -1,0 +1,211 @@
+/* ============================================
+   SEGMENTED CONTROL COMPONENT
+   Pill-style toggle between related views
+   ============================================ */
+
+.ds-segmented-control {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-xxs); /* 2px */
+  padding: var(--padding-xxs); /* 4px */
+  border-radius: var(--radius-full); /* pill shape */
+  background-color: var(--color-bg-container-primary);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+}
+
+/* ============================================
+   SLIDING PILL
+   The active indicator is a single element that
+   slides and resizes between segments. Its box is
+   written inline by the component from the active
+   segment's measurements; until that first
+   measurement lands (SSR, first client frame) it
+   stays hidden and the active segment paints its
+   own background instead.
+   ============================================ */
+
+.ds-segmented-control__pill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-radius: var(--radius-full);
+  background-color: var(--color-action-primary-bg);
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform, width;
+  transition:
+    transform var(--motion-duration-base) var(--motion-ease-entrance),
+    width var(--motion-duration-base) var(--motion-ease-entrance),
+    background-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-segmented-control--pill-ready .ds-segmented-control__pill {
+  opacity: 1;
+}
+
+/* Once the pill owns the selection, the active segment's own fill retires —
+   labels and icons keep their active colours and read above the pill. */
+.ds-segmented-control--pill-ready .ds-segmented-control__segment--active,
+.ds-segmented-control--pill-ready .ds-segmented-control__segment--active:hover,
+.ds-segmented-control--pill-ready.ds-segmented-control--neutral .ds-segmented-control__segment--active,
+.ds-segmented-control--pill-ready.ds-segmented-control--neutral .ds-segmented-control__segment--active:hover {
+  background-color: transparent;
+}
+
+/* Hovering the active segment darkens the pill, mirroring the retired
+   per-segment hover fill. */
+.ds-segmented-control--pill-ready:has(.ds-segmented-control__segment--active:hover) .ds-segmented-control__pill {
+  background-color: var(--color-action-primary-bg-hover);
+}
+
+.ds-segmented-control--neutral .ds-segmented-control__pill {
+  background-color: var(--color-action-neutral-bg);
+}
+
+.ds-segmented-control--pill-ready.ds-segmented-control--neutral:has(.ds-segmented-control__segment--active:hover) .ds-segmented-control__pill {
+  background-color: var(--color-action-neutral-bg-hover);
+}
+
+/* ============================================
+   FULL WIDTH
+   ============================================ */
+
+.ds-segmented-control--full-width {
+  width: 100%;
+}
+
+.ds-segmented-control--full-width .ds-segmented-control__segment {
+  flex: 1;
+}
+
+/* ============================================
+   SEGMENT BUTTON
+   ============================================ */
+
+.ds-segmented-control__segment {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-sm); /* 8px */
+  padding: var(--padding-sm) var(--padding-md); /* 8px 16px */
+  border: none;
+  border-radius: var(--radius-full); /* pill shape */
+  background-color: transparent;
+  cursor: pointer;
+  transition: background-color var(--motion-duration-base) var(--motion-ease-standard), color var(--motion-duration-base) var(--motion-ease-standard);
+  white-space: nowrap;
+  position: relative;
+  z-index: 1; /* labels and icons read above the sliding pill */
+}
+
+/* Typography — paragraph em (medium weight) for clickable controls */
+.ds-segmented-control__label {
+  font-family: var(--font-paragraph-em-family);
+  font-size: var(--font-paragraph-em-size);
+  font-weight: var(--font-paragraph-em-weight);
+  line-height: var(--font-paragraph-em-line-height);
+  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  color: var(--color-text-secondary);
+  transition: color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+/* Icon — same idle tier as the label, so an icon never reads dimmer than
+   the text beside it, and an icon-only segment (the site's theme toggle)
+   holds label-strength contrast in both modes. */
+.ds-segmented-control__icon {
+  flex-shrink: 0;
+  --icon-size: var(--icon-size-md);
+  line-height: 1;
+  color: var(--color-text-secondary);
+  transition: color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+/* ============================================
+   HOVER STATE
+   ============================================ */
+
+.ds-segmented-control__segment:not(.ds-segmented-control__segment--active):not(.ds-segmented-control__segment--disabled):hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+/* ============================================
+   ACTIVE STATE
+   ============================================ */
+
+.ds-segmented-control__segment--active {
+  background-color: var(--color-action-primary-bg);
+}
+
+.ds-segmented-control__segment--active .ds-segmented-control__label {
+  color: var(--color-action-primary-text);
+}
+
+.ds-segmented-control__segment--active .ds-segmented-control__icon {
+  color: var(--color-action-primary-text);
+}
+
+.ds-segmented-control__segment--active:hover {
+  background-color: var(--color-action-primary-bg-hover);
+}
+
+/* ============================================
+   NEUTRAL VARIANT
+   The active pill fills grey instead of the
+   action teal — for sets where the selection
+   should not carry the action colour's weight.
+   ============================================ */
+
+.ds-segmented-control--neutral .ds-segmented-control__segment--active {
+  background-color: var(--color-action-neutral-bg);
+}
+
+.ds-segmented-control--neutral .ds-segmented-control__segment--active .ds-segmented-control__label {
+  color: var(--color-action-neutral-text);
+}
+
+.ds-segmented-control--neutral .ds-segmented-control__segment--active .ds-segmented-control__icon {
+  color: var(--color-action-neutral-text);
+}
+
+.ds-segmented-control--neutral .ds-segmented-control__segment--active:hover {
+  background-color: var(--color-action-neutral-bg-hover);
+}
+
+/* ============================================
+   DISABLED STATE
+   ============================================ */
+
+.ds-segmented-control__segment--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   FOCUS
+   ============================================ */
+
+.ds-segmented-control__segment:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+/* ============================================
+   SIZE — COMPACT
+   ============================================ */
+
+.ds-segmented-control--compact .ds-segmented-control__segment {
+  padding: var(--padding-xs) var(--padding-sm-md); /* 6px 12px */
+}
+
+.ds-segmented-control--compact .ds-segmented-control__label {
+  font-size: var(--font-paragraph-sm-em-size);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+}
+
+.ds-segmented-control--compact .ds-segmented-control__icon {
+  --icon-size: var(--icon-size-sm);
+}

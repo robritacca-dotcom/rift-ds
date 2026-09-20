@@ -1,0 +1,58 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Environment files are never tracked (website/.gitignore repeats this for its
+# own tree; the root rule covers everything else, ga-analysis included)
+.env
+.env.*
+
+# The website's static assets live in website/public. A root public/ tree is
+# always an accident (deleted as orphaned in c755c93, reappeared once since).
+/public
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+*storybook.log
+storybook-static
+.vercel
+# Growth-loop local reports (never committed)
+ga-analysis/loop-reports/
+
+# Claude's internal session notes — local-only, not for the public repo
+.claude/memory/
+# Local Claude settings — machine-specific, never committed
+.claude/settings.local.json
+.claude/*.local.json
+
+# macOS Finder/iCloud duplicate copies ("name 2.ext") — the registry
+# validator also fails the build on these so they get deleted, not shipped
+* [2-9]
+* [2-9].*
+
+# Chat eval transcripts — evidence, not source
+evals/chat/runs/
+# Chat-quality loop local reports (never committed — they quote visitor questions)
+evals/chat/loop-reports/
+
+# Local working notes — not for the public repo
+notes/

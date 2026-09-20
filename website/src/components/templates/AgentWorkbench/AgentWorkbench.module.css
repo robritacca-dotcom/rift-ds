@@ -1,0 +1,413 @@
+/* Templates: the Tandem agent workbench. Every colour, space, radius, and
+   type style is a semantic token; the only raw values are structural layout
+   sizes (pane widths, breakpoints), which pages own everywhere else on the
+   site. Three zones run the full viewport with no top bar, no content
+   max-width, and no floating panels — flush tonal bands, the app-window
+   grammar: the threads panel sits a step darker on the page ground, the
+   conversation a step lighter beside it, and the workspace is the deepest
+   surface, a rounded window slightly inset from its region's edges. */
+
+.shell {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  /* The chrome tone: the conversation band and the halo around the inset
+     workspace window both read it from here. The zone tones are chosen
+     per theme below, because the two neutral ramps step in different
+     directions: the relationship (threads a shade darker than the chat,
+     the window deepest) is the constant, not the token. */
+  background-color: var(--color-bg-container-primary);
+  /* The workbench holds the viewport; narrow layouts below trade this for
+     normal page flow. */
+  height: calc(var(--layout-viewport-height, 100vh));
+  /* Stretch across the body's own padding (the marketing dashboard's
+     pattern), so the shell runs edge to edge; the primitives mirror the
+     body's inset in globals.css. */
+  width: calc(100% + var(--primitive-padding-xl) * 2);
+  margin: calc(-1 * var(--primitive-padding-lg))
+    calc(-1 * var(--primitive-padding-xl));
+}
+
+/* --------------------------------------------------------------- board */
+
+/* The threads panel and the conversation keep reading widths; the
+   workspace takes everything else. Full width and no gaps, deliberately:
+   the zones meet flush, and the tone shift is the seam. */
+/* The first track is auto: ThreadPanel owns and animates its own width
+   (AppSidebar's contract), and the band simply follows it. */
+.board {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: auto minmax(400px, 480px) minmax(0, 1fr);
+}
+
+/* ------------------------------------------------------- threads panel */
+
+/* The flush left band, a shade darker than the chat beside it, with a
+   1px seam between them. The rail itself is the library's ThreadPanel
+   (which owns its rows and interior padding); this class paints only the
+   zone it sits on. */
+.threads {
+  display: flex;
+  min-height: 0;
+  background-color: var(--color-bg-page-primary);
+  border-right: var(--border-xs) solid var(--color-bg-container-border);
+}
+
+
+/* Dark theme's zone tones: the chat chrome lifts to the tertiary surface,
+   the threads band sits one step below it, and the window keeps the page
+   ground — the deepest tone the theme has. */
+:global([data-theme="dark"]) .shell {
+  background-color: var(--color-bg-container-tertiary);
+}
+
+:global([data-theme="dark"]) .threads {
+  background-color: var(--color-bg-container-primary);
+}
+
+/* With the coding panel folded away, the conversation takes the whole
+   stage: the transcript and composer centre themselves on a reading
+   column while the header spans the pane, its code button holding the
+   right edge — the chat-app expansion the reference products use. */
+.boardSolo {
+  grid-template-columns: auto minmax(0, 1fr);
+}
+
+.boardSolo .thread {
+  --ds-chat-thread-padding-inline: max(
+    var(--padding-md),
+    calc((100% - 800px) / 2)
+  );
+}
+
+.boardSolo .composerBox {
+  width: 100%;
+  max-width: calc(800px + var(--padding-md) * 2);
+  margin-inline: auto;
+}
+
+/* -------------------------------------------------------- conversation */
+
+/* The middle band, flush against the threads panel; the shell's chrome
+   tone shows through in light, and dark deepens it a half-step below the
+   chrome by laying the semi surface over it. */
+.conversation {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding-top: var(--padding-xs);
+}
+
+:global([data-theme="dark"]) .conversation {
+  background-color: var(--color-bg-container-primary-semi);
+}
+
+/* No inline padding of its own: ChatHeader carries the same --padding-md
+   gutter the thread and composer sit on, so its trailing button lands
+   flush on the chat's right edge line. */
+.conversationHeader {
+  padding: var(--padding-sm) 0 0;
+}
+
+.sessionTitle {
+  margin: 0;
+  font-family: var(--font-family-primary);
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+  letter-spacing: var(--font-heading-3-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.thread {
+  flex: 1;
+  min-height: 0;
+  /* The thread's own gutters land on the same inline inset the header and
+     composer use, so the column's left and right edges read as one line. */
+  --ds-chat-thread-padding-inline: var(--padding-md);
+}
+
+/* One assistant turn's stack: reasoning, tool calls, plan, and text land
+   as a single column (the playground chat's contentStack convention). */
+.turnStack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  min-width: 0;
+}
+
+.turnText {
+  margin: 0;
+}
+
+.statusRow {
+  padding-top: var(--padding-xs);
+}
+
+.composerBox {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs);
+  padding: 0 var(--padding-md) var(--padding-md);
+}
+
+.disclaimer {
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-tertiary);
+}
+
+/* ----------------------------------------------------------- workspace */
+
+/* The region around the coding window wears the conversation's own tone
+   out to the viewport edge, so the chat colour flows around the inset
+   pane; light mode leaves the chrome alone, matching the chat band. */
+.workspaceRegion {
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+  padding: var(--padding-sm);
+}
+
+:global([data-theme="dark"]) .workspaceRegion {
+  background-color: var(--color-bg-container-primary-semi);
+}
+
+/* Folded away by the chat header's code button. Defined after the region
+   itself, so this display wins the source-order tie. */
+.workspaceRegionClosed {
+  display: none;
+}
+
+/* The coding window: a rounded pane slightly inset from its region's
+   edges (the app-window inset the reference products use), on the same
+   surface the chat's cards sit on, so the two sides read as one depth. */
+.workspace {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  min-height: 0;
+  min-width: 0;
+  padding: var(--padding-lg);
+  background-color: var(--color-bg-container-primary);
+  border: var(--border-md) solid var(--color-bg-container-border);
+  border-radius: var(--radius-xl);
+}
+
+/* The region tone doubles as the dark border colour's neighbour, so the
+   window's outline steps one surface lighter to stay visible. */
+:global([data-theme="dark"]) .workspace {
+  border-color: var(--color-bg-container-secondary);
+}
+
+/* Wrapping lets the pull-request button drop to its own line on narrow
+   screens instead of clipping at the pane's edge. */
+.workspaceHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap-sm);
+}
+
+.workspaceTitle {
+  margin: 0;
+  font-family: var(--font-family-primary);
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+  letter-spacing: var(--font-heading-3-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.workspaceSpacer {
+  flex: 1;
+}
+
+/* The diffs take the whole window by default; opening the details rail
+   adds its column on their right. */
+.workspaceBody {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--gap-lg);
+}
+
+.workspaceBodyWithRail {
+  grid-template-columns: minmax(0, 1fr) 280px;
+}
+
+/* The details rail: the tree, the patch stats, the checks, the duration
+   trend and the budgets stack down the diffs' right, behind the header's
+   toggle and closed by default. */
+.filesRail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.railLabel {
+  font-family: var(--font-overline-family);
+  font-size: var(--font-overline-size);
+  font-weight: var(--font-overline-weight);
+  line-height: var(--font-overline-line-height);
+  letter-spacing: var(--font-overline-letter-spacing);
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+}
+
+/* The patch's totals, side by side; the values derive from the diffs. */
+.patchStats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--gap-sm);
+}
+
+.checkList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+}
+
+.checkRow {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+}
+
+.checkLabel {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-primary);
+}
+
+.checkDuration {
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-tertiary);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.checkCaption {
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-tertiary);
+}
+
+/* The sparkline scales to the rail's width. */
+.sparkline {
+  width: 100%;
+  height: auto;
+}
+
+/* Every file's diff, stacked (the pull-request files view); the pane
+   scrolls inside itself instead of pushing the shell. position: relative
+   makes it the offset parent, so the tree's scroll-to-file arithmetic
+   reads each diff's position straight off the pane. */
+.diffPane {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-lg);
+}
+
+.diffFile {
+  flex: none;
+  min-width: 0;
+}
+
+/* ---------------------------------------------------------- responsive */
+
+/* Below the three-panel width the threads panel bows out first: it is
+   history, and the session on stage matters more than the sessions past. */
+@media (max-width: 1280px) {
+  .board {
+    grid-template-columns: minmax(400px, 480px) minmax(0, 1fr);
+  }
+
+  .boardSolo {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .threads {
+    display: none;
+  }
+}
+
+/* Below the two-pane width the board stacks: the conversation first, since
+   the session is the point of the screen, then the workspace in normal
+   flow. The thread gets a fixed height so it scrolls like a chat instead
+   of running the page long. */
+@media (max-width: 1080px) {
+  .shell {
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .board {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .conversation {
+    height: 640px;
+  }
+
+  .workspaceBody {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .filesRail {
+    overflow-y: visible;
+  }
+
+  .diffPane {
+    overflow: visible;
+    overflow-x: auto;
+  }
+}
+
+/* The shell's negative margins mirror the body's inset in globals.css,
+   which steps down at these same breakpoints — an unmirrored step leaves
+   the shell pulled past the viewport's left edge on phones. */
+@media (max-width: 959px) {
+  .shell {
+    width: calc(100% + var(--primitive-padding-lg) * 2);
+    margin: calc(-1 * var(--primitive-padding-lg));
+  }
+}
+
+@media (max-width: 600px) {
+  .shell {
+    width: calc(100% + var(--primitive-padding-md) * 2);
+    margin: calc(-1 * var(--primitive-padding-lg))
+      calc(-1 * var(--primitive-padding-md));
+  }
+}

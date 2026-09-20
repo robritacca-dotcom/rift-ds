@@ -1,0 +1,175 @@
+/* ============================================
+   CODE DIFF COMPONENT
+   Unified diff view: added, removed, and context
+   lines with old/new line number gutters.
+   Note: the system typeface is Nunito Sans;
+   code is the one sanctioned monospace context.
+   ============================================ */
+
+.ds-codediff {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-bg-container-primary);
+  overflow: hidden;
+}
+
+/* ============================================
+   HEADER — filename + additions/deletions stats
+   ============================================ */
+
+.ds-codediff__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-sm);
+  padding: var(--padding-xs) var(--padding-md);
+  border-bottom: var(--border-xs) solid var(--color-bg-container-border);
+  flex-shrink: 0;
+}
+
+.ds-codediff__filename {
+  font-family: var(--font-family-code);
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ds-codediff__stats {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  flex-shrink: 0;
+  font-family: var(--font-paragraph-sm-em-family);
+  font-size: var(--font-paragraph-sm-em-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  line-height: var(--font-paragraph-sm-em-line-height);
+}
+
+.ds-codediff__stat--add {
+  color: var(--color-status-positive-text);
+}
+
+.ds-codediff__stat--remove {
+  color: var(--color-status-error-text);
+}
+
+/* ============================================
+   SCROLL CONTAINER
+   Long lines scroll horizontally inside the
+   component; the tab stop makes that scroll
+   keyboard-reachable.
+   ============================================ */
+
+.ds-codediff__scroll {
+  overflow-x: auto;
+}
+
+.ds-codediff__scroll:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: -2px;
+}
+
+/* ============================================
+   LINES
+   ============================================ */
+
+/* width: max-content + min-width: 100% so row tints
+   span the full width of the longest line, not just
+   the visible scrollport */
+.ds-codediff__lines {
+  list-style: none;
+  margin: 0;
+  padding: var(--padding-xs) 0;
+  width: max-content;
+  min-width: 100%;
+  font-family: var(--font-family-code);
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-primary);
+}
+
+.ds-codediff__line {
+  display: flex;
+  align-items: baseline;
+  /* keeps blank diff lines from collapsing to zero height */
+  min-height: var(--font-paragraph-sm-line-height);
+}
+
+/* ============================================
+   GUTTERS & MARKER
+   Fixed-width columns in the monospace metric so
+   rows align; excluded from text selection so a
+   copied diff carries only the code.
+   ============================================ */
+
+.ds-codediff__gutter {
+  flex-shrink: 0;
+  min-width: 4ch;
+  padding: 0 var(--padding-xxs);
+  text-align: right;
+  color: var(--color-text-tertiary);
+  user-select: none;
+}
+
+.ds-codediff__marker {
+  flex-shrink: 0;
+  width: 2ch;
+  text-align: center;
+  user-select: none;
+}
+
+.ds-codediff__content {
+  white-space: pre;
+  padding-right: var(--padding-md);
+}
+
+/* ============================================
+   LINE VARIANTS
+   Added rows tint with the positive status
+   background, removed with the error one.
+   ============================================ */
+
+.ds-codediff__line--add {
+  background-color: var(--color-status-positive-bg);
+}
+
+.ds-codediff__line--add .ds-codediff__marker {
+  color: var(--color-status-positive-text);
+}
+
+.ds-codediff__line--remove {
+  background-color: var(--color-status-error-bg);
+}
+
+.ds-codediff__line--remove .ds-codediff__marker {
+  color: var(--color-status-error-text);
+}
+
+.ds-codediff__line--hunk {
+  background-color: var(--color-bg-container-secondary);
+  color: var(--color-text-tertiary);
+}
+
+/* ============================================
+   SCREEN-READER-ONLY TEXT
+   Announces the change type; the marker column
+   itself is decorative (aria-hidden).
+   ============================================ */
+
+.ds-codediff__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

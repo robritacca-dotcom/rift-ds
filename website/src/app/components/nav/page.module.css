@@ -1,0 +1,243 @@
+/* ============================================
+   NAVIGATION PAGE LAYOUT
+   ============================================ */
+.dsLayout {
+  display: flex;
+  gap: var(--layout-column-gap);
+  width: 100%;
+  max-width: 1440px;
+  padding-top: var(--primitive-gap-xl);
+}
+
+.dsContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxxl);
+  min-width: 0;
+}
+
+/* ============================================
+   PAGE TITLE - Display 2
+   ============================================ */
+.pageHeader {
+  margin-top: calc(var(--primitive-gap-xl) - var(--gap-xxxl));
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--primitive-gap-lg);
+  width: 100%;
+}
+
+.pageTitle {
+  font-size: var(--font-display-2-size);
+  font-weight: var(--font-display-2-weight);
+  line-height: var(--font-display-2-line-height);
+  letter-spacing: var(--font-display-2-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+/* Sub Display */
+.subDisplay {
+  font-family: var(--font-sub-display-family);
+  font-size: var(--font-sub-display-size);
+  font-weight: var(--font-sub-display-weight);
+  line-height: var(--font-sub-display-line-height);
+  letter-spacing: var(--font-sub-display-letter-spacing);
+  color: var(--color-text-primary);
+  margin-bottom: 0;
+}
+
+/* ============================================
+   INTRO SECTION
+   ============================================ */
+.introSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-lg);
+}
+
+.introBody {
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   SECTION
+   ============================================ */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-xl);
+  width: 100%;
+}
+
+/* ============================================
+   COMPONENT SHOWCASE — full-width previews
+   ============================================ */
+.showcase {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-xl);
+  width: 100%;
+}
+
+.showcaseLabel {
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-tertiary);
+}
+
+/* ============================================
+   NAV PREVIEW — container for desktop nav
+   ============================================ */
+.navPreview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* ============================================
+   MOBILE NAV PREVIEW — narrow container
+   ============================================ */
+.mobileNavPreview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  overflow: hidden;
+}
+
+.mobileNavInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 78px;
+  padding: 0 var(--primitive-padding-lg);
+}
+
+.mobileNavBrand {
+  display: flex;
+  align-items: center;
+  gap: var(--primitive-gap-lg);
+  text-decoration: none;
+  color: var(--color-text-primary);
+}
+
+.mobileNavBrandText {
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  letter-spacing: var(--font-title-body-letter-spacing);
+}
+
+.mobileNavHamburger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-action-passive-bg);
+  border: none;
+  border-radius: var(--primitive-radius-full);
+  padding: var(--primitive-padding-sm);
+  color: var(--color-text-primary);
+  width: 40px;
+  height: 40px;
+}
+
+/* ============================================
+   HAMBURGER MENU PREVIEW — static showcase
+   ============================================ */
+.hamburgerPreview {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  height: auto;
+  overflow: hidden;
+}
+
+.hamburgerOverlay {
+  display: flex;
+  width: 100%;
+}
+
+.hamburgerMenu {
+  width: 341px;
+  min-height: 660px;
+  flex-shrink: 0;
+  background: var(--color-bg-container-primary);
+  box-shadow: 5px 0px 30px 0px rgba(0, 0, 0, 0.15);
+  padding: var(--primitive-padding-xl);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.hamburgerMenuLinks {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--primitive-gap-lg);
+  width: 100%;
+}
+
+.hamburgerSubnav {
+  padding-left: var(--primitive-padding-md);
+}
+
+.hamburgerThemeToggle {
+  margin-top: auto;
+}
+
+.hamburgerCloseArea {
+  flex: 1;
+  min-width: 60px;
+  background: var(--color-bg-container-primary-transparent);
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 39px 20px 0 0;
+}
+
+.hamburgerCloseBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-action-passive-bg);
+  border: none;
+  border-radius: var(--primitive-radius-full);
+  padding: var(--primitive-padding-sm);
+  color: var(--color-text-primary);
+  width: 40px;
+  height: 40px;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 959px) {
+  .pageHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .dsLayout {
+    padding-left: 0;
+    min-width: 0;
+  }
+
+  .dsContent {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+}

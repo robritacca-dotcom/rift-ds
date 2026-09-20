@@ -1,0 +1,176 @@
+/* ============================================
+   MOTION SWATCH COMPONENT
+   Card that displays a motion token with a live
+   animation preview, token name, and value.
+   Click the preview to replay one-shot demos.
+   ============================================ */
+
+.ds-motion-swatch {
+  /* Layout */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-sm); /* 8px */
+
+  /* Sizing */
+  flex: 1 1 0;
+  min-width: 140px;
+
+  /* Appearance */
+  background: var(--color-bg-container-primary-semi);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-xl); /* 24px */
+  padding: var(--padding-lg); /* 20px */
+}
+
+/* ============================================
+   PREVIEW AREA
+   A button so the demo can be replayed by click
+   or keyboard.
+   ============================================ */
+
+.ds-motion-swatch__preview {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  min-height: 60px;
+  margin-bottom: var(--gap-md); /* 12px */
+
+  /* Reset button chrome */
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+}
+
+.ds-motion-swatch__preview:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+.ds-motion-swatch__replay-icon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  --icon-size: var(--icon-size-sm);
+  color: var(--color-text-tertiary);
+  opacity: 0;
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-motion-swatch__preview:hover .ds-motion-swatch__replay-icon,
+.ds-motion-swatch__preview:focus-visible .ds-motion-swatch__replay-icon {
+  opacity: 1;
+}
+
+/* ============================================
+   SLIDE DEMO
+   Dot travels the track using the token's
+   duration or easing.
+   ============================================ */
+
+.ds-motion-swatch__track {
+  display: block;
+  width: 120px;
+  height: 16px;
+  border-radius: var(--radius-full);
+  background: var(--color-bg-container-secondary);
+}
+
+.ds-motion-swatch__dot {
+  display: block;
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-full);
+  background: var(--color-core-accent-violet);
+  animation-name: ds-motion-swatch-slide;
+  animation-fill-mode: forwards;
+}
+
+@keyframes ds-motion-swatch-slide {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(104px); /* track width minus dot */
+  }
+}
+
+/* ============================================
+   SPIN DEMO
+   Continuous rotation loop (spinner timing).
+   ============================================ */
+
+.ds-motion-swatch__spinner {
+  display: block;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  border: var(--border-md) solid var(--color-bg-container-secondary);
+  border-top-color: var(--color-core-accent-violet);
+  animation-name: ds-motion-swatch-spin;
+  animation-iteration-count: infinite;
+}
+
+@keyframes ds-motion-swatch-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================================
+   SHIMMER DEMO
+   Continuous gradient sweep (skeleton timing).
+   ============================================ */
+
+.ds-motion-swatch__shimmer {
+  display: block;
+  width: 120px;
+  height: 16px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(
+    90deg,
+    var(--color-bg-container-secondary) 25%,
+    var(--color-bg-container-tertiary) 50%,
+    var(--color-bg-container-secondary) 75%
+  );
+  background-size: 200% 100%;
+  animation-name: ds-motion-swatch-shimmer;
+  animation-iteration-count: infinite;
+}
+
+@keyframes ds-motion-swatch-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* ============================================
+   LABEL & VALUE
+   ============================================ */
+
+.ds-motion-swatch__label {
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-primary);
+  text-align: center;
+}
+
+.ds-motion-swatch__value {
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-tertiary);
+  text-align: center;
+  overflow-wrap: anywhere;
+}

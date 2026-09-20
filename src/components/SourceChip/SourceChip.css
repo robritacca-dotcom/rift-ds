@@ -1,0 +1,111 @@
+/* ============================================
+   SOURCE CHIP COMPONENT
+   Numbered citation pill linking a claim to
+   its source. Anchor when href is set, plain
+   span otherwise.
+   ============================================ */
+
+.ds-source-chip {
+  /* Layout */
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-xs); /* 4px */
+
+  /* Spacing */
+  padding: var(--padding-xxxs) var(--padding-sm); /* 2px 8px */
+
+  /* Shape — borderless pill on the secondary container */
+  border-radius: var(--radius-full);
+  background-color: var(--color-bg-container-secondary);
+
+  /* Typography */
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-secondary);
+
+  /* The pill shape is the affordance — never an underline */
+  text-decoration: none;
+  cursor: default;
+
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard),
+    color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+/* ============================================
+   INDEX — citation numeral in its own circle
+   ============================================ */
+
+.ds-source-chip__index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  min-width: var(--icon-size-sm);
+  height: var(--icon-size-sm);
+  border-radius: var(--radius-full);
+  background-color: var(--color-bg-container-tertiary);
+
+  font-family: var(--font-paragraph-sm-em-family);
+  font-size: var(--font-paragraph-sm-em-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-tertiary);
+}
+
+/* ============================================
+   ICON (leading, when no index)
+   ============================================ */
+
+.ds-source-chip__icon {
+  flex-shrink: 0;
+  --icon-size: var(--icon-size-sm);
+  line-height: 1;
+  color: var(--color-icon-primary);
+}
+
+/* ============================================
+   TITLE — truncates with an ellipsis
+   ============================================ */
+
+.ds-source-chip__title {
+  max-width: 24ch;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* ============================================
+   LINK (rendered as <a>)
+   ============================================ */
+
+.ds-source-chip--link {
+  cursor: pointer;
+}
+
+.ds-source-chip--link:hover {
+  background-color: var(--color-bg-container-tertiary);
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   FOCUS
+   ============================================ */
+
+.ds-source-chip--link:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+/* Icons take the colour of the text around them. Explicit, not just
+   inherited by default: a consumer stylesheet that sets a colour on
+   .material-symbols-rounded itself (a common global default) would
+   otherwise override inheritance and detach the icon from the state
+   colours this component sets on its parents. */
+.ds-source-chip .material-symbols-rounded {
+  color: inherit;
+}

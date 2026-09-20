@@ -1,0 +1,88 @@
+/* ============================================
+   MAP LEGEND COMPONENT
+   The corner block of a map: name, one line on
+   what it shows, and the key to its markers.
+   ============================================ */
+
+/* Base */
+
+.ds-map-legend {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--gap-xs);
+  max-width: 32ch;
+  font-family: var(--font-family-code);
+  color: var(--color-text-primary);
+}
+
+/* Parts */
+
+.ds-map-legend__title {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  letter-spacing: var(--font-title-body-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.ds-map-legend__description {
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* Key */
+
+.ds-map-legend__key {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxs);
+  margin: 0;
+  margin-top: var(--gap-xs);
+}
+
+.ds-map-legend__row {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+}
+
+.ds-map-legend__glyph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--color-text-secondary);
+}
+
+.ds-map-legend__glyph svg {
+  display: block;
+  overflow: visible;
+}
+
+.ds-map-legend__glyph path,
+.ds-map-legend__glyph rect {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+
+.ds-map-legend__arc-stop-start {
+  stop-color: var(--color-chart-series-7);
+}
+
+.ds-map-legend__arc-stop-end {
+  stop-color: var(--color-chart-series-5);
+}
+
+.ds-map-legend__label {
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-secondary);
+  margin: 0;
+}

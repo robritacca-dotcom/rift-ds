@@ -1,0 +1,155 @@
+/* ============================================
+   GLOBE COMPONENT
+   An orthographic globe: graticule, markers and
+   great-circle arcs. Every colour is a token; the
+   stroke widths are SVG geometry in viewBox units,
+   like Sparkline's, and scale with the drawing.
+   ============================================ */
+
+/* Base */
+
+.ds-globe {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  color: var(--color-text-primary);
+  border-radius: var(--radius-md);
+  outline: none;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.ds-globe:focus-visible {
+  outline: var(--border-md) solid var(--color-action-primary-bg);
+  outline-offset: var(--padding-xxs);
+}
+
+.ds-globe--interactive {
+  cursor: grab;
+}
+
+.ds-globe--dragging {
+  cursor: grabbing;
+}
+
+.ds-globe__svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Sphere */
+
+.ds-globe__limb {
+  fill: none;
+  stroke: var(--color-text-tertiary);
+  stroke-width: 1;
+  opacity: 0.6;
+}
+
+.ds-globe__graticule {
+  fill: none;
+  stroke: var(--color-divider);
+  stroke-width: 1;
+}
+
+.ds-globe__graticule-back {
+  fill: none;
+  stroke: var(--color-divider);
+  stroke-width: 1;
+  stroke-dasharray: 2 4;
+  opacity: 0.5;
+}
+
+/* Arcs — the default gradient runs along the cobalt-to-violet end of the
+   chart series; a per-arc `color` replaces it with a flat stroke. */
+
+.ds-globe__arc-stop-start {
+  stop-color: var(--color-chart-series-7);
+}
+
+.ds-globe__arc-stop-end {
+  stop-color: var(--color-chart-series-5);
+}
+
+.ds-globe__arc {
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ds-globe__arc-back {
+  fill: none;
+  stroke-width: 1;
+  stroke-linecap: round;
+  opacity: 0.15;
+}
+
+/* Markers */
+
+.ds-globe__point {
+  color: var(--color-text-secondary);
+  transition: color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-globe__point--back {
+  opacity: 0.3;
+}
+
+.ds-globe__point--active,
+.ds-globe__point:hover {
+  color: var(--color-text-primary);
+}
+
+.ds-globe__hit {
+  fill: transparent;
+  stroke: none;
+  pointer-events: all;
+}
+
+.ds-globe--interactive .ds-globe__point {
+  cursor: pointer;
+}
+
+.ds-globe__glyph {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform var(--motion-duration-fast) var(--motion-ease-emphasized);
+}
+
+.ds-globe__point--active .ds-globe__glyph {
+  transform: scale(1.4);
+}
+
+.ds-globe__label {
+  font-family: var(--font-family-code);
+  font-size: var(--font-caption-size);
+  fill: var(--color-text-tertiary);
+  pointer-events: none;
+}
+
+.ds-globe__point--active .ds-globe__label {
+  fill: var(--color-text-primary);
+}
+
+/* Callout overlay — positioned at the marker, opening away from the centre. */
+
+.ds-globe__callout {
+  position: absolute;
+  pointer-events: none;
+  padding: 0 var(--padding-md);
+  transform: translate(0, -100%);
+  white-space: nowrap;
+}
+
+.ds-globe__callout[data-side='left'] {
+  transform: translate(-100%, -100%);
+}

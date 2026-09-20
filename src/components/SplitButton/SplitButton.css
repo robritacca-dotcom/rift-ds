@@ -1,0 +1,93 @@
+/* ============================================
+   SPLIT BUTTON COMPONENT
+   Primary action + attached menu of alternatives
+   ============================================ */
+
+.ds-split-button {
+  display: inline-flex;
+  align-items: stretch;
+  /* On the filled variant the hairline of page showing between the
+     segments is the split: a gap the width of the system hairline,
+     not a drawn border. */
+  gap: var(--border-xs);
+}
+
+/* ============================================
+   SEGMENT GEOMETRY
+   Outer silhouette stays the Button pill; the
+   meeting edges square off. The main segment's
+   inner-edge padding tightens one step - the
+   squared edge has no pill cap to clear, so
+   the resting 16px reads as a hole before the
+   chevron.
+   ============================================ */
+
+.ds-split-button .ds-split-button__main {
+  border-start-end-radius: var(--radius-xxs);
+  border-end-end-radius: var(--radius-xxs);
+  padding-inline-end: var(--padding-sm-md);
+}
+
+.ds-split-button .ds-split-button__main.ds-button--compact {
+  padding-inline-end: var(--padding-sm);
+}
+
+.ds-split-button .ds-split-button__trigger {
+  border-start-start-radius: var(--radius-xxs);
+  border-end-start-radius: var(--radius-xxs);
+  /* Standalone, CircularButton is a fixed circle; inside the split its
+     explicit height would block the wrapper's align-items: stretch, and
+     the main segment's height moves (secondary's border adds to it, a
+     loading spinner grows it) — so the flat edges overhang at the seam.
+     Let the flex stretch size it to the main segment instead. */
+  height: auto;
+  align-self: stretch;
+}
+
+/* Optical centering: the trigger is flat on the left and a full round cap
+   on the right, so its visual mass sits left of the box centre (the
+   centroid of a square-plus-semicircle is ~5% of the width off-centre).
+   A geometrically centred chevron reads as pushed toward the cap; nudge
+   it toward the flat edge to match. */
+.ds-split-button .ds-split-button__trigger .ds-circular-button__icon {
+  transform: translateX(-2px);
+}
+
+.ds-split-button .ds-split-button__trigger.ds-circular-button--compact .ds-circular-button__icon {
+  transform: translateX(-1px);
+}
+
+/* ============================================
+   LOADING
+   The trigger is inert while the main segment
+   runs its async action, but it is busy, not
+   broken: Button and CircularButton both define
+   loading as full-colour appearance with a
+   progress cursor, and the disabled dim on one
+   half would split the pill into two unrelated
+   controls. When the main segment is disabled
+   as well, the whole control dims together and
+   this rule deliberately stands down.
+   ============================================ */
+
+.ds-split-button:has(.ds-button--loading:not(.ds-button--disabled)) .ds-split-button__trigger.ds-circular-button--disabled {
+  opacity: 1;
+  cursor: progress;
+}
+
+/* ============================================
+   SECONDARY
+   Both segments are outlined, so the gap would
+   put two hairlines side by side at the seam.
+   Collapse it: no gap, the trigger drops its
+   leading border, and the main segment's own
+   border is the one divider line.
+   ============================================ */
+
+.ds-split-button--secondary {
+  gap: 0;
+}
+
+.ds-split-button--secondary .ds-split-button__trigger {
+  border-inline-start: none;
+}

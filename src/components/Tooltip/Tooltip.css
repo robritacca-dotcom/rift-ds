@@ -1,0 +1,139 @@
+/* ============================================
+   TOOLTIP COMPONENT
+   Contextual text label on hover / focus
+   ============================================ */
+
+.ds-tooltip {
+  position: relative;
+  display: inline-flex;
+}
+
+/* ============================================
+   PANEL
+   ============================================ */
+
+.ds-tooltip__panel {
+  position: absolute;
+  z-index: 50;
+  padding: var(--padding-xs) var(--padding-sm); /* 6px 8px */
+  border-radius: var(--radius-xs); /* 4px */
+  /* The floating surface, same recipe as Popover: page background (the
+     container fill is semi-transparent), hairline border, floating shadow.
+     Same-polarity in both themes — light bubble on light, dark on dark —
+     softer than the old inverse fill. */
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  background-color: var(--color-bg-page-primary);
+  color: var(--color-text-primary);
+  box-shadow: var(--shadow-floating);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard), transform var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-tooltip__panel--visible {
+  opacity: 1;
+}
+
+/* ============================================
+   POSITIONS
+   ============================================ */
+
+.ds-tooltip__panel--top {
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  margin-bottom: var(--gap-xs); /* 4px */
+}
+
+.ds-tooltip__panel--top.ds-tooltip__panel--visible {
+  transform: translateX(-50%) translateY(0);
+}
+
+.ds-tooltip__panel--bottom {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-4px);
+  margin-top: var(--gap-xs);
+}
+
+.ds-tooltip__panel--bottom.ds-tooltip__panel--visible {
+  transform: translateX(-50%) translateY(0);
+}
+
+.ds-tooltip__panel--left {
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%) translateX(4px);
+  margin-right: var(--gap-xs);
+}
+
+.ds-tooltip__panel--left.ds-tooltip__panel--visible {
+  transform: translateY(-50%) translateX(0);
+}
+
+.ds-tooltip__panel--right {
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%) translateX(-4px);
+  margin-left: var(--gap-xs);
+}
+
+.ds-tooltip__panel--right.ds-tooltip__panel--visible {
+  transform: translateY(-50%) translateX(0);
+}
+
+/* ============================================
+   ARROW
+   ============================================ */
+
+/* The arrow is a rotated square in the panel's fill. It overlaps the panel
+   by a pixel more than before so its opaque fill covers the panel border
+   behind it, and draws the hairline itself on its two outward edges only. */
+.ds-tooltip__arrow {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background-color: var(--color-bg-page-primary);
+  transform: rotate(45deg);
+}
+
+/* Arrow — top position (arrow points down) */
+.ds-tooltip__panel--top .ds-tooltip__arrow {
+  bottom: -5px;
+  left: 50%;
+  margin-left: -4px;
+  border-right: var(--border-xs) solid var(--color-bg-container-border);
+  border-bottom: var(--border-xs) solid var(--color-bg-container-border);
+}
+
+/* Arrow — bottom position (arrow points up) */
+.ds-tooltip__panel--bottom .ds-tooltip__arrow {
+  top: -5px;
+  left: 50%;
+  margin-left: -4px;
+  border-top: var(--border-xs) solid var(--color-bg-container-border);
+  border-left: var(--border-xs) solid var(--color-bg-container-border);
+}
+
+/* Arrow — left position (arrow points right) */
+.ds-tooltip__panel--left .ds-tooltip__arrow {
+  right: -5px;
+  top: 50%;
+  margin-top: -4px;
+  border-top: var(--border-xs) solid var(--color-bg-container-border);
+  border-right: var(--border-xs) solid var(--color-bg-container-border);
+}
+
+/* Arrow — right position (arrow points left) */
+.ds-tooltip__panel--right .ds-tooltip__arrow {
+  left: -5px;
+  top: 50%;
+  margin-top: -4px;
+  border-bottom: var(--border-xs) solid var(--color-bg-container-border);
+  border-left: var(--border-xs) solid var(--color-bg-container-border);
+}

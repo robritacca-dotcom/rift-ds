@@ -1,0 +1,511 @@
+/* ============================================
+   AGENT STATUS COMPONENT
+   A dot-matrix indicator plus a line of status
+   text, reporting what an agent is doing now.
+
+   The matrix is a 4x3 grid of 12 dots, numbered
+   row-major:
+
+       1  2  3  4
+       5  6  7  8
+       9 10 11 12
+
+   Every pattern is choreography over that same
+   grid: each dot is told which of the cycle's
+   twelve slots it lights in (--ds-agent-step),
+   and dots a pattern never lights opt out of the
+   animation entirely. One grid, one cycle length,
+   fifteen patterns — so changing pattern never
+   changes the indicator's footprint or rhythm.
+   ============================================ */
+
+.ds-agent-status {
+  --ds-agent-color: var(--color-text-secondary);
+  --ds-agent-label-color: var(--color-text-secondary);
+  --ds-agent-shimmer-base: var(--color-text-tertiary);
+  --ds-agent-shimmer-sweep: var(--color-text-primary);
+  --ds-agent-dot-dim: 0.2;
+  --ds-agent-dot-rest: 0.82;
+  --ds-agent-cycle: var(--motion-duration-loop-matrix);
+  --ds-agent-slot: calc(var(--ds-agent-cycle) / 12);
+  --ds-agent-matrix-size: var(--icon-size-md);
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-sm-md);
+
+  /* The label is set in the title-body face, not the paragraph one: a status
+     is a heading for the work underneath it, not prose. The two sets share
+     16px/24px metrics, so the row's geometry is identical either way — only
+     the weight and tracking change. */
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  letter-spacing: var(--font-title-body-letter-spacing);
+}
+
+/* ============================================
+   MATRIX
+   ============================================ */
+
+.ds-agent-status__matrix {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--gap-xxs);
+  flex: none;
+  width: var(--ds-agent-matrix-size);
+}
+
+.ds-agent-status__dot {
+  aspect-ratio: 1;
+  border-radius: var(--radius-full);
+  background-color: var(--ds-agent-color);
+  opacity: var(--ds-agent-dot-dim);
+  transform: scale(var(--ds-agent-dot-rest));
+}
+
+/* ============================================
+   LABEL
+   ============================================ */
+
+.ds-agent-status__label {
+  position: relative;
+  color: var(--ds-agent-label-color);
+  min-width: 0;
+}
+
+/* Label crossfade: when the label string changes, the outgoing copy sits
+   absolutely over the incoming one and fades up and out while the new one
+   fades up and in — one continuous upward motion. */
+.ds-agent-status__label-text {
+  display: inline-block;
+}
+
+/* The animations live only on the modifier classes, and the modifiers come
+   off once the swap settles: a filled animation can pin the span to its
+   own compositor layer, which would escape the shimmer's text clip and
+   leave the label invisible for good. */
+.ds-agent-status__label-text--in {
+  animation: ds-agent-label-in var(--motion-duration-slow) var(--motion-ease-entrance) both;
+  animation-delay: calc(var(--motion-duration-slow) / 2);
+}
+
+.ds-agent-status__label-text--out {
+  position: absolute;
+  left: 0;
+  top: 0;
+  white-space: nowrap;
+  animation: ds-agent-label-out var(--motion-duration-slow) var(--motion-ease-standard) both;
+  animation-delay: 0s;
+}
+
+@keyframes ds-agent-label-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@keyframes ds-agent-label-out {
+  to {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+/* A gradient between the shimmer base and sweep colours, moving left to
+   right: with an oversized background image, background-position 100% shows
+   its right edge, 0% its left, so counting down walks the sweep band across
+   the text.
+
+   The base is the dimmer colour and the sweep the brighter one, so what
+   travels is a highlight rather than a shadow — the same "the sweep only
+   brightens it" reading `waiting` has always had. The band is narrow
+   (12% of a 250% image, so under a third of the text at a time): spread
+   wide it washes the whole label at once and stops reading as movement. */
+.ds-agent-status__label--shimmer {
+  background-image: linear-gradient(
+    100deg,
+    var(--ds-agent-shimmer-base) 44%,
+    var(--ds-agent-shimmer-sweep) 50%,
+    var(--ds-agent-shimmer-base) 56%
+  );
+  background-size: 250% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: ds-agent-shimmer var(--motion-duration-loop-shimmer)
+    var(--motion-ease-linear) infinite;
+}
+
+/* While a label crossfade runs, the shimmer's text clip stands down: an
+   animated descendant composites on its own layer, which escapes
+   background-clip: text and renders the text invisible. The swap motion
+   covers the pause; the sweep resumes on the settled text. */
+.ds-agent-status__label--shimmer.ds-agent-status__label--swapping {
+  background-image: none;
+  animation: none;
+  color: var(--ds-agent-label-color);
+}
+
+/* ============================================
+   STATES
+   The three working states are deliberately
+   monochrome. Colour is reserved for the states
+   where it carries meaning: waiting on a person,
+   finished, failed.
+   ============================================ */
+
+.ds-agent-status--idle {
+  --ds-agent-color: var(--color-text-tertiary);
+  --ds-agent-label-color: var(--color-text-tertiary);
+}
+
+.ds-agent-status--waiting {
+  --ds-agent-color: var(--color-status-warning-text);
+  --ds-agent-label-color: var(--color-status-warning-text);
+
+  /* Waiting keeps its warning colour through the shimmer — colour is the
+     signal, so the sweep only brightens it rather than going monochrome. */
+  --ds-agent-shimmer-base: var(--color-status-warning-text);
+  --ds-agent-shimmer-sweep: var(--color-text-primary);
+}
+
+.ds-agent-status--done {
+  --ds-agent-color: var(--color-status-positive-text);
+  --ds-agent-label-color: var(--color-status-positive-text);
+}
+
+.ds-agent-status--error {
+  --ds-agent-color: var(--color-status-error-text);
+  --ds-agent-label-color: var(--color-status-error-text);
+}
+
+/* Terminal states fill the matrix solid — the shape itself reads as finished */
+.ds-agent-status--done .ds-agent-status__dot,
+.ds-agent-status--error .ds-agent-status__dot {
+  opacity: 1;
+  transform: none;
+}
+
+/* ============================================
+   SIZES
+   The scale pairs with ChatMessage: default
+   matches default message text, compact
+   matches compact message text.
+   ============================================ */
+
+.ds-agent-status--compact {
+  --ds-agent-matrix-size: var(--icon-size-sm);
+
+  gap: var(--gap-sm);
+
+  /* The small metrics, carrying the same title weight down a size: the scale
+     has no 14px title face, and dropping to the paragraph weight here would
+     make one size of the component read as a heading and the other as prose. */
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+}
+
+/* ============================================
+   VARIANTS
+   ============================================ */
+
+.ds-agent-status--bar {
+  display: flex;
+  width: 100%;
+  padding: var(--padding-xs) var(--padding-sm-md);
+  background-color: var(--color-bg-container-secondary);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-md);
+}
+
+/* ============================================
+   ANIMATION ENGINE
+   Each dot blinks once per cycle, offset by the
+   slot its pattern assigns it.
+   ============================================ */
+
+.ds-agent-status--animated .ds-agent-status__dot {
+  animation: ds-agent-dot var(--ds-agent-cycle) var(--motion-ease-standard) infinite;
+  animation-delay: calc(var(--ds-agent-step, 0) * var(--ds-agent-slot));
+}
+
+/* A dot ramps up over roughly one slot and falls away over three, so the
+   leading edge arrives as smoothly as the trail leaves. Popping straight to
+   full opacity reads as a strobe at this size. */
+@keyframes ds-agent-dot {
+  0% {
+    opacity: var(--ds-agent-dot-dim);
+    transform: scale(var(--ds-agent-dot-rest));
+  }
+
+  10% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  35%,
+  100% {
+    opacity: var(--ds-agent-dot-dim);
+    transform: scale(var(--ds-agent-dot-rest));
+  }
+}
+
+/* Fill sweep holds each column lit until the band has passed */
+@keyframes ds-agent-dot-fill {
+  0% {
+    opacity: var(--ds-agent-dot-dim);
+    transform: scale(var(--ds-agent-dot-rest));
+  }
+
+  8%,
+  74% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  86%,
+  100% {
+    opacity: var(--ds-agent-dot-dim);
+    transform: scale(var(--ds-agent-dot-rest));
+  }
+}
+
+/* Breathe swells the whole matrix rather than travelling through it */
+@keyframes ds-agent-dot-breathe {
+  0%,
+  100% {
+    opacity: var(--ds-agent-dot-dim);
+    transform: scale(var(--ds-agent-dot-rest));
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes ds-agent-shimmer {
+  from {
+    background-position-x: 100%;
+  }
+
+  to {
+    background-position-x: 0%;
+  }
+}
+
+/* ============================================
+   PATTERNS
+   One block per pattern: the slot each dot
+   lights in, and the dots it leaves dark.
+   ============================================ */
+
+/* Braille — a 2x3 cell rotating, the right half dark */
+.ds-agent-status--braille .ds-agent-status__dot:nth-child(1) { --ds-agent-step: 0; }
+.ds-agent-status--braille .ds-agent-status__dot:nth-child(2) { --ds-agent-step: 2; }
+.ds-agent-status--braille .ds-agent-status__dot:nth-child(6) { --ds-agent-step: 4; }
+.ds-agent-status--braille .ds-agent-status__dot:nth-child(10) { --ds-agent-step: 6; }
+.ds-agent-status--braille .ds-agent-status__dot:nth-child(9) { --ds-agent-step: 8; }
+.ds-agent-status--braille .ds-agent-status__dot:nth-child(5) { --ds-agent-step: 10; }
+
+.ds-agent-status--braille .ds-agent-status__dot:nth-child(3),
+.ds-agent-status--braille .ds-agent-status__dot:nth-child(4),
+.ds-agent-status--braille .ds-agent-status__dot:nth-child(7),
+.ds-agent-status--braille .ds-agent-status__dot:nth-child(8),
+.ds-agent-status--braille .ds-agent-status__dot:nth-child(11),
+.ds-agent-status--braille .ds-agent-status__dot:nth-child(12) {
+  animation: none;
+}
+
+/* Orbit — clockwise around the perimeter, core dark */
+.ds-agent-status--orbit .ds-agent-status__dot:nth-child(1) { --ds-agent-step: 0; }
+.ds-agent-status--orbit .ds-agent-status__dot:nth-child(2) { --ds-agent-step: 1; }
+.ds-agent-status--orbit .ds-agent-status__dot:nth-child(3) { --ds-agent-step: 2; }
+.ds-agent-status--orbit .ds-agent-status__dot:nth-child(4) { --ds-agent-step: 3; }
+.ds-agent-status--orbit .ds-agent-status__dot:nth-child(8) { --ds-agent-step: 4; }
+.ds-agent-status--orbit .ds-agent-status__dot:nth-child(12) { --ds-agent-step: 5; }
+.ds-agent-status--orbit .ds-agent-status__dot:nth-child(11) { --ds-agent-step: 6; }
+.ds-agent-status--orbit .ds-agent-status__dot:nth-child(10) { --ds-agent-step: 7; }
+.ds-agent-status--orbit .ds-agent-status__dot:nth-child(9) { --ds-agent-step: 8; }
+.ds-agent-status--orbit .ds-agent-status__dot:nth-child(5) { --ds-agent-step: 9; }
+
+.ds-agent-status--orbit .ds-agent-status__dot:nth-child(6),
+.ds-agent-status--orbit .ds-agent-status__dot:nth-child(7) {
+  animation: none;
+}
+
+/* Breathe — every dot together, on its own swell */
+.ds-agent-status--animated.ds-agent-status--breathe .ds-agent-status__dot {
+  animation-name: ds-agent-dot-breathe;
+}
+
+/* Snake — boustrophedon, one dot at a time */
+.ds-agent-status--snake .ds-agent-status__dot:nth-child(1) { --ds-agent-step: 0; }
+.ds-agent-status--snake .ds-agent-status__dot:nth-child(2) { --ds-agent-step: 1; }
+.ds-agent-status--snake .ds-agent-status__dot:nth-child(3) { --ds-agent-step: 2; }
+.ds-agent-status--snake .ds-agent-status__dot:nth-child(4) { --ds-agent-step: 3; }
+.ds-agent-status--snake .ds-agent-status__dot:nth-child(8) { --ds-agent-step: 4; }
+.ds-agent-status--snake .ds-agent-status__dot:nth-child(7) { --ds-agent-step: 5; }
+.ds-agent-status--snake .ds-agent-status__dot:nth-child(6) { --ds-agent-step: 6; }
+.ds-agent-status--snake .ds-agent-status__dot:nth-child(5) { --ds-agent-step: 7; }
+.ds-agent-status--snake .ds-agent-status__dot:nth-child(9) { --ds-agent-step: 8; }
+.ds-agent-status--snake .ds-agent-status__dot:nth-child(10) { --ds-agent-step: 9; }
+.ds-agent-status--snake .ds-agent-status__dot:nth-child(11) { --ds-agent-step: 10; }
+.ds-agent-status--snake .ds-agent-status__dot:nth-child(12) { --ds-agent-step: 11; }
+
+/* Fill sweep — columns light and hold, a band wiping left to right */
+.ds-agent-status--animated.ds-agent-status--fill-sweep .ds-agent-status__dot {
+  animation-name: ds-agent-dot-fill;
+}
+
+.ds-agent-status--fill-sweep .ds-agent-status__dot:nth-child(4n + 1) { --ds-agent-step: 0; }
+.ds-agent-status--fill-sweep .ds-agent-status__dot:nth-child(4n + 2) { --ds-agent-step: 3; }
+.ds-agent-status--fill-sweep .ds-agent-status__dot:nth-child(4n + 3) { --ds-agent-step: 6; }
+.ds-agent-status--fill-sweep .ds-agent-status__dot:nth-child(4n) { --ds-agent-step: 9; }
+
+/* Pulse — rings expanding from the core */
+.ds-agent-status--pulse .ds-agent-status__dot:nth-child(6),
+.ds-agent-status--pulse .ds-agent-status__dot:nth-child(7) { --ds-agent-step: 0; }
+
+.ds-agent-status--pulse .ds-agent-status__dot:nth-child(2),
+.ds-agent-status--pulse .ds-agent-status__dot:nth-child(3),
+.ds-agent-status--pulse .ds-agent-status__dot:nth-child(5),
+.ds-agent-status--pulse .ds-agent-status__dot:nth-child(8),
+.ds-agent-status--pulse .ds-agent-status__dot:nth-child(10),
+.ds-agent-status--pulse .ds-agent-status__dot:nth-child(11) { --ds-agent-step: 4; }
+
+.ds-agent-status--pulse .ds-agent-status__dot:nth-child(1),
+.ds-agent-status--pulse .ds-agent-status__dot:nth-child(4),
+.ds-agent-status--pulse .ds-agent-status__dot:nth-child(9),
+.ds-agent-status--pulse .ds-agent-status__dot:nth-child(12) { --ds-agent-step: 8; }
+
+/* Columns — odd columns, then even */
+.ds-agent-status--columns .ds-agent-status__dot:nth-child(odd) { --ds-agent-step: 0; }
+.ds-agent-status--columns .ds-agent-status__dot:nth-child(even) { --ds-agent-step: 6; }
+
+/* Checkerboard — the two parities alternating */
+.ds-agent-status--checkerboard .ds-agent-status__dot:nth-child(1),
+.ds-agent-status--checkerboard .ds-agent-status__dot:nth-child(3),
+.ds-agent-status--checkerboard .ds-agent-status__dot:nth-child(6),
+.ds-agent-status--checkerboard .ds-agent-status__dot:nth-child(8),
+.ds-agent-status--checkerboard .ds-agent-status__dot:nth-child(9),
+.ds-agent-status--checkerboard .ds-agent-status__dot:nth-child(11) { --ds-agent-step: 0; }
+
+.ds-agent-status--checkerboard .ds-agent-status__dot:nth-child(2),
+.ds-agent-status--checkerboard .ds-agent-status__dot:nth-child(4),
+.ds-agent-status--checkerboard .ds-agent-status__dot:nth-child(5),
+.ds-agent-status--checkerboard .ds-agent-status__dot:nth-child(7),
+.ds-agent-status--checkerboard .ds-agent-status__dot:nth-child(10),
+.ds-agent-status--checkerboard .ds-agent-status__dot:nth-child(12) { --ds-agent-step: 6; }
+
+/* Scan — a single column travelling left to right */
+.ds-agent-status--scan .ds-agent-status__dot:nth-child(4n + 1) { --ds-agent-step: 0; }
+.ds-agent-status--scan .ds-agent-status__dot:nth-child(4n + 2) { --ds-agent-step: 3; }
+.ds-agent-status--scan .ds-agent-status__dot:nth-child(4n + 3) { --ds-agent-step: 6; }
+.ds-agent-status--scan .ds-agent-status__dot:nth-child(4n) { --ds-agent-step: 9; }
+
+/* Rain — drops falling down each column, columns out of phase */
+.ds-agent-status--rain .ds-agent-status__dot:nth-child(1) { --ds-agent-step: 0; }
+.ds-agent-status--rain .ds-agent-status__dot:nth-child(5) { --ds-agent-step: 2; }
+.ds-agent-status--rain .ds-agent-status__dot:nth-child(9) { --ds-agent-step: 4; }
+.ds-agent-status--rain .ds-agent-status__dot:nth-child(2) { --ds-agent-step: 4; }
+.ds-agent-status--rain .ds-agent-status__dot:nth-child(6) { --ds-agent-step: 6; }
+.ds-agent-status--rain .ds-agent-status__dot:nth-child(10) { --ds-agent-step: 8; }
+.ds-agent-status--rain .ds-agent-status__dot:nth-child(3) { --ds-agent-step: 2; }
+.ds-agent-status--rain .ds-agent-status__dot:nth-child(7) { --ds-agent-step: 4; }
+.ds-agent-status--rain .ds-agent-status__dot:nth-child(11) { --ds-agent-step: 6; }
+.ds-agent-status--rain .ds-agent-status__dot:nth-child(4) { --ds-agent-step: 6; }
+.ds-agent-status--rain .ds-agent-status__dot:nth-child(8) { --ds-agent-step: 8; }
+.ds-agent-status--rain .ds-agent-status__dot:nth-child(12) { --ds-agent-step: 10; }
+
+/* Cascade — column by column, top to bottom */
+.ds-agent-status--cascade .ds-agent-status__dot:nth-child(1) { --ds-agent-step: 0; }
+.ds-agent-status--cascade .ds-agent-status__dot:nth-child(5) { --ds-agent-step: 1; }
+.ds-agent-status--cascade .ds-agent-status__dot:nth-child(9) { --ds-agent-step: 2; }
+.ds-agent-status--cascade .ds-agent-status__dot:nth-child(2) { --ds-agent-step: 3; }
+.ds-agent-status--cascade .ds-agent-status__dot:nth-child(6) { --ds-agent-step: 4; }
+.ds-agent-status--cascade .ds-agent-status__dot:nth-child(10) { --ds-agent-step: 5; }
+.ds-agent-status--cascade .ds-agent-status__dot:nth-child(3) { --ds-agent-step: 6; }
+.ds-agent-status--cascade .ds-agent-status__dot:nth-child(7) { --ds-agent-step: 7; }
+.ds-agent-status--cascade .ds-agent-status__dot:nth-child(11) { --ds-agent-step: 8; }
+.ds-agent-status--cascade .ds-agent-status__dot:nth-child(4) { --ds-agent-step: 9; }
+.ds-agent-status--cascade .ds-agent-status__dot:nth-child(8) { --ds-agent-step: 10; }
+.ds-agent-status--cascade .ds-agent-status__dot:nth-child(12) { --ds-agent-step: 11; }
+
+/* Sparkle — a fixed scatter, so it reads as random without being random */
+.ds-agent-status--sparkle .ds-agent-status__dot:nth-child(1) { --ds-agent-step: 7; }
+.ds-agent-status--sparkle .ds-agent-status__dot:nth-child(2) { --ds-agent-step: 2; }
+.ds-agent-status--sparkle .ds-agent-status__dot:nth-child(3) { --ds-agent-step: 10; }
+.ds-agent-status--sparkle .ds-agent-status__dot:nth-child(4) { --ds-agent-step: 4; }
+.ds-agent-status--sparkle .ds-agent-status__dot:nth-child(5) { --ds-agent-step: 0; }
+.ds-agent-status--sparkle .ds-agent-status__dot:nth-child(6) { --ds-agent-step: 9; }
+.ds-agent-status--sparkle .ds-agent-status__dot:nth-child(7) { --ds-agent-step: 5; }
+.ds-agent-status--sparkle .ds-agent-status__dot:nth-child(8) { --ds-agent-step: 11; }
+.ds-agent-status--sparkle .ds-agent-status__dot:nth-child(9) { --ds-agent-step: 3; }
+.ds-agent-status--sparkle .ds-agent-status__dot:nth-child(10) { --ds-agent-step: 8; }
+.ds-agent-status--sparkle .ds-agent-status__dot:nth-child(11) { --ds-agent-step: 1; }
+.ds-agent-status--sparkle .ds-agent-status__dot:nth-child(12) { --ds-agent-step: 6; }
+
+/* Wave rows — whole rows breaking top to bottom */
+.ds-agent-status--wave-rows .ds-agent-status__dot:nth-child(-n + 4) { --ds-agent-step: 0; }
+.ds-agent-status--wave-rows .ds-agent-status__dot:nth-child(n + 5):nth-child(-n + 8) { --ds-agent-step: 4; }
+.ds-agent-status--wave-rows .ds-agent-status__dot:nth-child(n + 9) { --ds-agent-step: 8; }
+
+/* Helix — two strands crossing, everything off-strand dark */
+.ds-agent-status--helix .ds-agent-status__dot:nth-child(1),
+.ds-agent-status--helix .ds-agent-status__dot:nth-child(9) { --ds-agent-step: 0; }
+.ds-agent-status--helix .ds-agent-status__dot:nth-child(6) { --ds-agent-step: 3; }
+.ds-agent-status--helix .ds-agent-status__dot:nth-child(3),
+.ds-agent-status--helix .ds-agent-status__dot:nth-child(11) { --ds-agent-step: 6; }
+.ds-agent-status--helix .ds-agent-status__dot:nth-child(8) { --ds-agent-step: 9; }
+
+.ds-agent-status--helix .ds-agent-status__dot:nth-child(2),
+.ds-agent-status--helix .ds-agent-status__dot:nth-child(4),
+.ds-agent-status--helix .ds-agent-status__dot:nth-child(5),
+.ds-agent-status--helix .ds-agent-status__dot:nth-child(7),
+.ds-agent-status--helix .ds-agent-status__dot:nth-child(10),
+.ds-agent-status--helix .ds-agent-status__dot:nth-child(12) {
+  animation: none;
+}
+
+/* Diagonal swipe — anti-diagonals, top-left to bottom-right */
+.ds-agent-status--diagonal-swipe .ds-agent-status__dot:nth-child(1) { --ds-agent-step: 0; }
+.ds-agent-status--diagonal-swipe .ds-agent-status__dot:nth-child(2),
+.ds-agent-status--diagonal-swipe .ds-agent-status__dot:nth-child(5) { --ds-agent-step: 2; }
+.ds-agent-status--diagonal-swipe .ds-agent-status__dot:nth-child(3),
+.ds-agent-status--diagonal-swipe .ds-agent-status__dot:nth-child(6),
+.ds-agent-status--diagonal-swipe .ds-agent-status__dot:nth-child(9) { --ds-agent-step: 4; }
+.ds-agent-status--diagonal-swipe .ds-agent-status__dot:nth-child(4),
+.ds-agent-status--diagonal-swipe .ds-agent-status__dot:nth-child(7),
+.ds-agent-status--diagonal-swipe .ds-agent-status__dot:nth-child(10) { --ds-agent-step: 6; }
+.ds-agent-status--diagonal-swipe .ds-agent-status__dot:nth-child(8),
+.ds-agent-status--diagonal-swipe .ds-agent-status__dot:nth-child(11) { --ds-agent-step: 8; }
+.ds-agent-status--diagonal-swipe .ds-agent-status__dot:nth-child(12) { --ds-agent-step: 10; }
+
+/* ============================================
+   REDUCED MOTION
+   The global guard collapses every animation to
+   its final frame, which for the matrix is dark.
+   Park it at a legible resting state instead and
+   let the label carry the meaning on its own.
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-agent-status--animated .ds-agent-status__dot {
+    animation: none;
+    opacity: 0.55;
+    transform: none;
+  }
+
+  .ds-agent-status__label--shimmer {
+    background-image: none;
+    color: var(--ds-agent-label-color);
+    animation: none;
+  }
+}

@@ -1,0 +1,384 @@
+/* ============================================
+   COMBOBOX COMPONENT
+   Filterable text field + listbox, with optional
+   multi-select chips and async loading state
+   ============================================ */
+
+.ds-combobox {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm); /* 8px */
+  width: 100%;
+  position: relative;
+}
+
+/* ============================================
+   LABEL
+   ============================================ */
+
+/* ============================================
+   CONTROL
+   ============================================ */
+
+.ds-combobox__control {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm); /* 8px */
+  padding: var(--padding-sm) var(--padding-md); /* 8px 16px */
+  border: var(--border-xs) solid var(--color-input-border-primary);
+  border-radius: var(--radius-md); /* 12px */
+  background-color: var(--color-input-bg-primary);
+  cursor: text;
+  transition: border-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-combobox__control:hover {
+  border-color: var(--color-input-border-hover);
+}
+
+.ds-combobox--open .ds-combobox__control,
+.ds-combobox__control:focus-within {
+  border-color: var(--color-input-border-selected);
+}
+
+.ds-combobox__search-icon {
+  --icon-size: var(--icon-size-md);
+  color: var(--color-icon-primary);
+  flex-shrink: 0;
+}
+
+/* ============================================
+   FIELD — chips + text input share one line
+   ============================================ */
+
+.ds-combobox__field {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--gap-xs); /* 4px */
+  flex: 1;
+  min-width: 0;
+}
+
+.ds-combobox__input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  padding: 0;
+  font-family: var(--font-paragraph-em-family);
+  font-size: var(--font-paragraph-em-size);
+  font-weight: var(--font-paragraph-em-weight);
+  line-height: var(--font-paragraph-em-line-height);
+  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  color: var(--color-input-text-primary);
+}
+
+.ds-combobox__input::placeholder {
+  color: var(--color-input-text-placeholder);
+}
+
+/* ============================================
+   CHIPS — multi-select selections
+   ============================================ */
+
+.ds-combobox__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-xxs); /* 2px */
+  padding: var(--padding-xxxs) var(--padding-sm); /* 2px 8px */
+  border-radius: var(--radius-full);
+  background-color: var(--color-bg-container-primary);
+  font-family: var(--font-paragraph-sm-em-family);
+  font-size: var(--font-paragraph-sm-em-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+  color: var(--color-text-primary);
+  max-width: 100%;
+}
+
+.ds-combobox__chip-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-full);
+  background-color: transparent;
+  color: var(--color-icon-primary);
+  cursor: pointer;
+  transition: color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-combobox__chip-remove:hover {
+  color: var(--color-text-primary);
+}
+
+.ds-combobox__chip-remove:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 1px;
+}
+
+.ds-combobox__chip-remove .material-symbols-rounded {
+  --icon-size: var(--icon-size-sm);
+}
+
+/* ============================================
+   CLEAR + CHEVRON
+   ============================================ */
+
+.ds-combobox__clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-full);
+  background-color: transparent;
+  color: var(--color-icon-primary);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-combobox__clear:hover {
+  color: var(--color-text-primary);
+}
+
+.ds-combobox__clear:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+.ds-combobox__clear .material-symbols-rounded {
+  --icon-size: var(--icon-size-sm);
+}
+
+.ds-combobox__chevron {
+  --icon-size: var(--icon-size-md);
+  color: var(--color-icon-primary);
+  transition: transform var(--motion-duration-base) var(--motion-ease-standard);
+  flex-shrink: 0;
+}
+
+.ds-combobox--open .ds-combobox__chevron {
+  transform: rotate(180deg);
+}
+
+/* ============================================
+   MENU
+   Floating surface — the one place a shadow is
+   allowed, via the shared elevation token
+   ============================================ */
+
+.ds-combobox__menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: var(--gap-xxs); /* 2px */
+  padding: var(--padding-xxs);
+  border: var(--border-xs) solid var(--color-input-border-primary);
+  border-radius: var(--radius-md); /* 12px */
+  background-color: var(--color-bg-page-primary);
+  list-style: none;
+  max-height: 280px;
+  overflow-y: auto;
+  z-index: 10;
+  box-shadow: var(--shadow-floating);
+  animation: ds-combobox-appear var(--motion-duration-fast) var(--motion-ease-entrance);
+}
+
+@keyframes ds-combobox-appear {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ============================================
+   OPTION
+   ============================================ */
+
+.ds-combobox__option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-sm);
+  padding: var(--padding-sm) var(--padding-sm-md); /* 8px 12px */
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-combobox__option:hover,
+.ds-combobox__option--focused {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-combobox__option--selected .ds-combobox__option-label {
+  color: var(--color-action-primary-text-tertiary);
+}
+
+.ds-combobox__option--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ds-combobox__option--disabled:hover {
+  background-color: transparent;
+}
+
+.ds-combobox__option-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxs);
+  min-width: 0;
+}
+
+.ds-combobox__option-label {
+  font-family: var(--font-paragraph-em-family);
+  font-size: var(--font-paragraph-em-size);
+  font-weight: var(--font-paragraph-em-weight);
+  line-height: var(--font-paragraph-em-line-height);
+  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.ds-combobox__option-description {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-tertiary);
+}
+
+.ds-combobox__check {
+  --icon-size: var(--icon-size-md);
+  color: var(--color-action-primary-bg);
+  flex-shrink: 0;
+}
+
+/* ============================================
+   GROUPS
+   ============================================ */
+
+.ds-combobox__group {
+  list-style: none;
+}
+
+.ds-combobox__group-label {
+  display: block;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-tertiary);
+  padding: var(--padding-xs) var(--padding-sm-md);
+  user-select: none;
+}
+
+.ds-combobox__group-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* ============================================
+   STATUS ROW — loading / empty
+   ============================================ */
+
+.ds-combobox__status {
+  padding: var(--padding-sm) var(--padding-sm-md);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-tertiary);
+  list-style: none;
+}
+
+/* ============================================
+   HELPER TEXT
+   ============================================ */
+
+/* ============================================
+   ERROR STATE
+   ============================================ */
+
+.ds-combobox--error .ds-combobox__control {
+  border-color: var(--color-status-error-border);
+}
+
+/* ============================================
+   DISABLED STATE
+   ============================================ */
+
+.ds-combobox--disabled .ds-combobox__control {
+  background-color: var(--color-input-bg-disabled);
+  border-color: var(--color-input-border-disabled);
+  cursor: not-allowed;
+}
+
+.ds-combobox--disabled .ds-combobox__input {
+  color: var(--color-input-text-disabled);
+  cursor: not-allowed;
+}
+
+.ds-combobox--disabled .ds-combobox__search-icon,
+.ds-combobox--disabled .ds-combobox__chevron {
+  color: var(--color-input-text-disabled);
+}
+
+/* ============================================
+   SIZE — COMPACT
+   ============================================ */
+
+.ds-combobox--compact .ds-combobox__control {
+  padding: var(--padding-xs) var(--padding-sm-md); /* 6px 12px */
+}
+
+.ds-combobox--compact .ds-combobox__input,
+.ds-combobox--compact .ds-combobox__option-label {
+  font-size: var(--font-paragraph-sm-em-size);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+}
+
+.ds-combobox--compact .ds-combobox__option {
+  padding: var(--padding-xs) var(--padding-sm); /* 6px 8px */
+}
+
+.ds-combobox--compact .ds-combobox__search-icon,
+.ds-combobox--compact .ds-combobox__chevron,
+.ds-combobox--compact .ds-combobox__check {
+  --icon-size: var(--icon-size-sm);
+}
+
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-combobox__menu {
+    animation: none;
+  }
+}
+
+/* Icons take the colour of the text around them. Explicit, not just
+   inherited by default: a consumer stylesheet that sets a colour on
+   .material-symbols-rounded itself (a common global default) would
+   otherwise override inheritance and detach the icon from the state
+   colours this component sets on its parents. */
+.ds-combobox .material-symbols-rounded {
+  color: inherit;
+}

@@ -1,0 +1,507 @@
+/* ============================================
+   GLOBAL STYLES
+   ============================================ */
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* An attribute rather than a class on purpose: React owns <html>'s
+   className, and a hydration fallback re-render rewrites it — a ready class
+   would be wiped and the page would stay hidden. See themeScript in
+   layout.tsx, which sets the mark before first paint. */
+html:not([data-theme-ready]) {
+  visibility: hidden;
+}
+
+html[data-theme-ready] {
+  visibility: visible;
+}
+
+:root {
+  /* Feed the next/font-loaded Nunito Sans into the design system's single
+     font token. The body reads the token (not the font variable directly)
+     so one override — here, or live in /playground — restyles
+     the site and every component together. */
+  --font-family-primary: var(--font-nunito-sans), 'Nunito Sans', sans-serif;
+
+  /* Docs-shell column widths: left nav rail, right details rail, and the
+     gap between columns. Every page module sizes its rails from these so
+     the mid-breakpoint override below reaches all of them at once. */
+  --layout-sidebar-width: 291px;
+  --layout-rail-width: 320px;
+  --layout-column-gap: var(--gap-xxl);
+
+  /* The immersive surfaces' slim toolbar (StageToolbar): one height
+     constant shared by the bar itself and the pages that reserve room
+     beneath it, so the two can never drift apart. The bar floats as a
+     glass pill inset --layout-chat-inset off the top edge, so the room a
+     stage reserves is the clearance below: inset + bar + matching air. */
+  --layout-toolbar-height: 56px;
+  --layout-stage-clearance: calc(
+    var(--layout-toolbar-height) + var(--layout-chat-inset) * 2
+  );
+  /* The matching safe area above the bottom control bar (StageControlBar):
+     its inset, its box (restated here because CSS cannot read a sibling's
+     box — same deal as the toast inset above the chat FAB), and air. */
+  --layout-stage-bottom-clearance: calc(var(--layout-chat-inset) * 2 + 48px);
+
+  /* How far an anchor target rests below the viewport top. The sticky
+     MegaNav bar is 78px (--mn-bar-height), but its frosted backdrop
+     dissolves for another 64px below it (--sticky-backdrop-reach), so a
+     heading parked just under the bar sits inside the blur. 128px lands
+     it where the frost has faded to nothing. Shared by every page with
+     anchor links, so the offset can never differ between them. */
+  --layout-anchor-clearance: 128px;
+
+  /* What "one viewport tall" means to a page. Sections that fill the first
+     screen size themselves from this rather than from svh directly, so a
+     surface that shows a page at a height of its own choosing (the /canvas
+     board, which pins it to a desktop viewport on the frame's <html>) gets
+     a page with a natural height instead of one that grows with its frame. */
+  --layout-viewport-height: 100svh;
+
+  /* The docked site-chat panel: its width, and the gap it floats off the
+     viewport edges (top, right, bottom — and the FAB's corner offset).
+     Only applied above 1440px, where a fourth column fits beside
+     sidebar + content + rail. The width is the resting minimum: the panel's
+     widen grip (SiteChatMount) rewrites it inline on <html>, capped at
+     655px — keep its PANEL_MIN/MAX constants in step with this value. */
+  --layout-chat-width: 420px;
+  --layout-chat-inset: 20px;
+
+  /* The site's fixed layers, lowest to highest: the floating anchor rail
+     (5, under the header so its panel can never sit on the bar), sticky
+     header (10), the ambient tuner (20), the library's floating surfaces (tooltip 50,
+     Dialog/Drawer 100, CommandPalette 110), the mega-nav drawer (1000), the
+     chat FAB (1080), scrim (1090), panel (1100) and its grip (1101). Toasts
+     go last: they are transient feedback and must be seen, so they outrank
+     the chat chrome the same way they outrank a dialog in the library. */
+  --ds-toast-z: 1200;
+
+  /* The chat FAB holds the bottom-right corner on every page, which is
+     also the toast queue's default corner. Bottom-placed toasts start
+     above it: the FAB's inset plus its height (AiButton's padding and line
+     height, restated here because CSS cannot read a sibling's box) plus
+     one gap. The playground has no FAB but keeps the offset: a toast 60px
+     higher is not a bug, a toast under a button is. */
+  --ds-toast-inset-bottom: calc(
+    var(--layout-chat-inset) + var(--padding-sm) * 2 + var(--font-paragraph-em-line-height) +
+      var(--gap-sm)
+  );
+}
+
+/* Mid breakpoint (960–1279px): narrow both rails and tighten the column
+   gap so the center column keeps a readable measure. Right rails stack
+   below the main content at 1151px (per-page), and the left nav hides at
+   959px (Sidebar.module.css). */
+@media (max-width: 1279px) {
+  :root {
+    --layout-sidebar-width: 240px;
+    --layout-rail-width: 280px;
+    --layout-column-gap: var(--primitive-gap-xl);
+  }
+}
+
+/* Every section heading is an anchor target for the floating anchor nav
+   (SiteAnchorRail assigns ids to the ones without), so every one lands
+   clear of the sticky header the same way — pages that anchor a section
+   element instead set the same clearance on it themselves. */
+main h2 {
+  scroll-margin-top: var(--layout-anchor-clearance);
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+html[data-theme="light"] {
+  color-scheme: light;
+}
+
+body {
+  font-family: var(--font-family-primary);
+  color: var(--color-text-primary);
+  background: var(--color-bg-page-primary);
+  min-height: 100vh;
+  padding: var(--primitive-padding-lg) var(--primitive-padding-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxxl);
+  align-items: center;
+  transition: background-color var(--motion-duration-slow) var(--motion-ease-standard), color var(--motion-duration-slow) var(--motion-ease-standard), padding-right var(--motion-duration-base) var(--motion-ease-standard);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* The docked chat panel: SiteChatMount sets data-chat="docked" on <html>
+   while the panel is docked (open, wide viewport, panel view). The body is
+   itself the page container (a centred flex column), so right padding
+   slides every page's content over instead of letting the fixed panel
+   cover it — zero per-page layout changes. The fixed sticky header is not
+   inset by body padding; MegaNav.module.css offsets it under the same
+   attribute. Reduced motion zeroes the glide via the motion tokens. */
+html[data-chat="docked"] body {
+  padding-right: calc(
+    var(--primitive-padding-xl) + var(--layout-chat-width) + var(--layout-chat-inset)
+  );
+}
+
+/* Docked, the panel owns the right column and the FAB is gone. A fixed
+   toast ignores the body padding, so right-placed toasts move left of the
+   panel (they glide with the widen grip, since this reads the same width)
+   and bottom-placed ones drop to the panel's own inset, aligned with its
+   bottom edge. */
+html[data-chat="docked"] {
+  --ds-toast-inset-right: calc(var(--layout-chat-width) + var(--layout-chat-inset));
+  --ds-toast-inset-bottom: var(--layout-chat-inset);
+}
+
+/* The phone takeover: SiteChatMount sets data-chat="takeover" on <html>
+   while the chat is open at phone width. The chat is the document there —
+   the panel sits in normal flow at 100dvh (SiteChat.module.css) and the
+   page around it is hidden, not covered, so Safari handles the soft
+   keyboard as it does for any page with a field at the bottom, by scrolling
+   the document. The ambient background stays: it is what the panel's glass
+   shows. The body drops its page-container layout so the panel is the whole
+   document, and its padding glide, so the hand-off is a cut. */
+html[data-chat="takeover"] body {
+  display: block;
+  min-height: 0;
+  padding: 0;
+  transition: none;
+}
+
+html[data-chat="takeover"] body > :not(#site-chat-panel):not(.blur-container) {
+  display: none;
+}
+
+/* While the panel's widen grip is being dragged (SiteChatMount sets the
+   attribute): the pointer drives --layout-chat-width frame by frame, so the
+   body inset must follow instantly rather than glide after it, and the drag
+   crossing page text must not select it. */
+html[data-chat-resizing] {
+  user-select: none;
+}
+html[data-chat-resizing] body {
+  transition: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ============================================
+   BLUR BACKGROUND EFFECTS
+   ============================================ */
+.blur-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  /* 450px → 675px: the shader band runs half again further down the page,
+     with the fade below keeping the lower stretch legible. */
+  height: 675px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Full-bleed variant. The background is mounted once in the root layout and
+   never re-renders per route, so the variant cannot be a prop any more — the
+   page declares it by rendering FullBleedBackground, and these rules pick the
+   marker up from anywhere in the document. No route list to drift. */
+body:has([data-bg-full-bleed]) .blur-container {
+  height: 100vh;
+}
+
+body:has([data-bg-full-bleed]) .blur-container::after {
+  display: none;
+}
+
+/* Background off — the dotted stages (playground, canvas) stand the ambient
+   layer down for their own ground, read the same marker way. Hiding the
+   layer rather than unmounting it keeps the WebGL context alive, so a
+   navigation back to an ambient page is instant instead of a fresh compile
+   and fade. */
+body:has([data-bg-hidden]) .blur-container {
+  display: none;
+}
+
+.blur-container::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 450px;
+  background: linear-gradient(to bottom,
+    transparent 0%,
+    var(--color-bg-page-primary) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.blur-ellipse {
+  --blob-halo: 0px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(var(--blob-size) + var(--blob-halo) * 2);
+  height: calc(var(--blob-size) + var(--blob-halo) * 2);
+  margin-left: calc(var(--blob-ml) - var(--blob-halo));
+  margin-top: calc(var(--blob-mt) - var(--blob-halo));
+  border-radius: 50%;
+  background: var(--blob-color);
+  filter: blur(80px);
+  opacity: 0.15;
+  /* ds-allow(motion): decorative background-float timing — this and the
+     per-blob duration/delay staggers below are ambient scenery tuned by
+     eye, deliberately off the --motion-* interaction scale. */
+  animation: floatCloud 16s ease-in-out infinite;
+  will-change: transform;
+  transition: opacity var(--motion-duration-slower) var(--motion-ease-standard);
+}
+
+/* "pending": the renderer is still resolving, so paint nothing rather than
+   showing blobs that are about to be replaced — that handoff read as two
+   backgrounds loading in sequence. "on": the field has it. Either way the
+   blobs stay in the DOM, so losing the GL context or flipping "mode" to
+   "css" in shader-background.json brings them straight back with nothing to
+   restore. Everything below (the desktop gradient approximation included) is
+   the fallback path, reached by data-shader="off". */
+.blur-container[data-shader="pending"] .blur-ellipse,
+.blur-container[data-shader="on"] .blur-ellipse {
+  opacity: 0;
+}
+
+/* A framed page. The /canvas board marks the <html> of every page it shows
+   (data-embedded) and rasterizes the page under a scale transform, where
+   each repaint re-rasterizes 1440px-wide tiles. So a framed page stops
+   doing the two things that repaint continuously: motion, cut the same way
+   the library's reduced-motion guard cuts it (tokens-motion.css is the
+   model — every transition and animation collapses to its end state), and
+   the glass behind the header and the chat, which re-composites on every
+   paint beneath it. Nothing here changes a page outside a frame. */
+html[data-embedded] *,
+html[data-embedded] *::before,
+html[data-embedded] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  backdrop-filter: none !important;
+}
+
+/* Only stop the drift once the field has actually taken over; a pending
+   container may still fall back, and should not resume from a frozen pose.
+   An embedded page (a /canvas frame) freezes it too: a still of the band. */
+.blur-container[data-shader="on"] .blur-ellipse,
+.blur-container[data-embedded] .blur-ellipse {
+  animation-play-state: paused;
+}
+
+/* On desktop-sized viewports, swap filter: blur(80px) for a radial gradient
+   whose stops sample the Gaussian CDF at σ = 80px (the exact profile the blur
+   produces on a disc edge). Identical pixels, but the texture rasterizes once
+   instead of the GPU re-running 8 large blur passes every animation frame —
+   which is what starves tile rasterization and causes blank checkerboarding
+   during fast scroll. The box grows by --blob-halo (3σ) per side to hold the
+   halo the filter used to paint outside the element; the margin shift keeps
+   the disc centre unchanged. Not applied below 1280px: the approximation is
+   only pixel-accurate while every disc radius is large relative to σ. */
+@media (min-width: 1280px) {
+  .blur-container .blur-ellipse {
+    --blob-halo: 240px;
+    border-radius: 0;
+    filter: none;
+    background: radial-gradient(circle closest-side,
+      var(--blob-color) 0,
+      var(--blob-color) calc(100% - 480px),
+      color-mix(in srgb, var(--blob-color) 99.38%, transparent) calc(100% - 440px),
+      color-mix(in srgb, var(--blob-color) 97.72%, transparent) calc(100% - 400px),
+      color-mix(in srgb, var(--blob-color) 93.32%, transparent) calc(100% - 360px),
+      color-mix(in srgb, var(--blob-color) 84.13%, transparent) calc(100% - 320px),
+      color-mix(in srgb, var(--blob-color) 69.15%, transparent) calc(100% - 280px),
+      color-mix(in srgb, var(--blob-color) 50%, transparent) calc(100% - 240px),
+      color-mix(in srgb, var(--blob-color) 30.85%, transparent) calc(100% - 200px),
+      color-mix(in srgb, var(--blob-color) 15.87%, transparent) calc(100% - 160px),
+      color-mix(in srgb, var(--blob-color) 6.68%, transparent) calc(100% - 120px),
+      color-mix(in srgb, var(--blob-color) 2.28%, transparent) calc(100% - 80px),
+      color-mix(in srgb, var(--blob-color) 0.62%, transparent) calc(100% - 40px),
+      transparent 100%
+    );
+  }
+}
+
+@keyframes floatCloud {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(150px, -100px) scale(1.1); }
+  50% { transform: translate(-130px, 90px) scale(0.9); }
+  75% { transform: translate(100px, 140px) scale(1.05); }
+}
+
+.blur-yellow {
+  --blob-size: 45vw;
+  --blob-ml: -5%; --blob-mt: -10%;
+  --blob-color: var(--color-core-accent-gold);
+  animation-duration: 18s;
+}
+
+.blur-green {
+  --blob-size: 55vw;
+  --blob-ml: -15%; --blob-mt: -15%;
+  --blob-color: var(--color-core-accent-mint);
+  animation-duration: 16s;
+  animation-delay: 1s;
+}
+
+.blur-purple {
+  --blob-size: 90vw;
+  --blob-ml: -10%; --blob-mt: -20%;
+  --blob-color: var(--color-core-accent-violet);
+  animation-duration: 22s;
+  animation-delay: 0.5s;
+}
+
+.blur-neutral {
+  --blob-size: 55vw;
+  --blob-ml: -25%; --blob-mt: -20%;
+  --blob-color: var(--color-bg-container-secondary);
+  animation-duration: 14s;
+  animation-delay: 1.5s;
+}
+
+.blur-blue {
+  --blob-size: 55vw;
+  --blob-ml: -40%; --blob-mt: 20%;
+  --blob-color: var(--color-core-accent-cobalt);
+  animation-duration: 17s;
+  animation-delay: 0.8s;
+}
+
+.blur-red {
+  --blob-size: 48vw;
+  --blob-ml: 15%; --blob-mt: -50%;
+  --blob-color: var(--color-core-accent-coral);
+  animation-duration: 19s;
+  animation-delay: 0.3s;
+}
+
+.blur-orange {
+  --blob-size: 30vw;
+  --blob-ml: 20%; --blob-mt: 15%;
+  --blob-color: var(--color-core-accent-amber);
+  animation-duration: 15s;
+  animation-delay: 1.2s;
+}
+
+.blur-teal {
+  --blob-size: 75vw;
+  --blob-ml: -50%; --blob-mt: -40%;
+  --blob-color: var(--color-core-ui-secondary);
+  animation-duration: 20s;
+  animation-delay: 0.7s;
+}
+
+/* ============================================
+   ENTRANCE ANIMATIONS
+   ============================================ */
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-in {
+  opacity: 0;
+  transform: translateY(12px);
+  animation: fadeSlideIn var(--motion-duration-slower) var(--motion-ease-entrance) both;
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* ds-allow(motion): entrance stagger steps — cascade offsets between
+   elements, not an interaction duration, so no --motion-* token applies. */
+.animate-delay-1 { animation-delay: 0.1s; }
+.animate-delay-2 { animation-delay: 0.2s; }
+.animate-delay-3 { animation-delay: 0.3s; }
+.animate-delay-4 { animation-delay: 0.4s; }
+.animate-delay-5 { animation-delay: 0.5s; }
+.animate-delay-6 { animation-delay: 0.6s; }
+
+/* Kept alongside the DS-wide reduced-motion guard: that guard collapses
+   durations but not animation-delay, so delayed .animate-in elements would
+   hold at opacity 0 through their stagger before snapping in. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-in {
+    opacity: 1;
+    animation: none;
+    transform: none;
+  }
+}
+
+/* ============================================
+   SKIP LINK
+   ============================================ */
+.skip-link {
+  position: absolute;
+  top: -48px;
+  left: var(--gap-md);
+  z-index: 1000;
+  padding: 10px 20px;
+  background: var(--color-bg-container-primary);
+  color: var(--color-text-primary);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: top var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.skip-link:focus-visible {
+  top: var(--gap-md);
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+/* The footer is components/SiteFooter, mounted once from the root
+   layout; its styles live in its own CSS module. */
+
+/* ============================================
+   MATERIAL SYMBOLS
+   Base styles, the icon-size scale, and the
+   .icon-filled modifier all live in the library:
+   src/fonts/material-symbols.css, imported once
+   in app/layout.tsx. Do not redeclare them here —
+   this block used to be a copy and had drifted.
+
+   The one website-level addition is the default
+   colour, which the library deliberately leaves
+   to the consumer so components can inherit.
+   ============================================ */
+
+.material-symbols-rounded {
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   RESPONSIVE - Mobile (< 960px)
+   ============================================ */
+@media (max-width: 959px) {
+  body {
+    padding: var(--primitive-padding-lg);
+  }
+}
+
+/* Phones: tighten the side gutters so the content column keeps a usable
+   measure at 375–430px viewports. */
+@media (max-width: 600px) {
+  body {
+    padding: var(--primitive-padding-lg) var(--primitive-padding-md);
+  }
+}

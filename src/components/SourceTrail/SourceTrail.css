@@ -1,0 +1,209 @@
+/* ============================================
+   SOURCE TRAIL COMPONENT
+   The research trail under an agent's answer:
+   a count header with a disclosure over the
+   sources it opened, in order.
+
+   Shares the chat furniture's 24px shell with
+   ToolCall — a collapsed trail reads as one
+   more row in the run, not a different species.
+   ============================================ */
+
+.ds-source-trail {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: var(--color-bg-container-primary);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+
+.ds-source-trail__header {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  width: 100%;
+  padding: var(--padding-sm) var(--padding-lg);
+  background: none;
+  border: none;
+  /* Buttons default to the UA's buttontext, not the inherited colour, so
+     anything in the header that inherits would read black in both themes. */
+  color: var(--color-text-primary);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-source-trail__header:hover {
+  background-color: var(--color-bg-container-secondary);
+}
+
+.ds-source-trail__header:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: -2px;
+}
+
+.ds-source-trail__indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  color: var(--color-text-secondary);
+}
+
+.ds-source-trail__indicator .material-symbols-rounded {
+  --icon-size: var(--icon-size-sm);
+}
+
+.ds-source-trail__heading {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-text-primary);
+  font-family: var(--font-paragraph-sm-em-family);
+  font-size: var(--font-paragraph-sm-em-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+}
+
+.ds-source-trail__chevron {
+  --icon-size: var(--icon-size-sm);
+
+  flex: none;
+  color: var(--color-icon-secondary);
+  transition: transform var(--motion-duration-slow) var(--motion-ease-standard);
+}
+
+.ds-source-trail--open .ds-source-trail__chevron {
+  transform: rotate(180deg);
+}
+
+/* ============================================
+   PANEL
+   ============================================ */
+
+.ds-source-trail__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition:
+    grid-template-rows var(--motion-duration-slow) var(--motion-ease-standard),
+    visibility var(--motion-duration-slow) var(--motion-ease-standard);
+}
+
+.ds-source-trail--open .ds-source-trail__panel {
+  grid-template-rows: 1fr;
+  visibility: visible;
+}
+
+.ds-source-trail__list {
+  overflow: hidden;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.ds-source-trail--open .ds-source-trail__list {
+  padding: var(--padding-sm) var(--padding-lg) var(--padding-md);
+  border-top: var(--border-xs) solid var(--color-divider);
+  gap: var(--gap-sm);
+}
+
+/* ============================================
+   ROWS
+   ============================================ */
+
+.ds-source-trail__row {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  min-width: 0;
+}
+
+/* Streaming: an appended row eases in. Pure CSS, so the global
+   reduced-motion guard collapses the duration tokens. */
+.ds-source-trail--streaming .ds-source-trail__row {
+  animation: ds-source-trail-enter var(--motion-duration-slow) var(--motion-ease-standard);
+}
+
+@keyframes ds-source-trail-enter {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+.ds-source-trail__row-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  color: var(--color-text-secondary);
+}
+
+.ds-source-trail__row-indicator .material-symbols-rounded {
+  --icon-size: var(--icon-size-sm);
+}
+
+.ds-source-trail__row--pending .ds-source-trail__row-indicator {
+  color: var(--color-text-tertiary);
+}
+
+.ds-source-trail__row--active .ds-source-trail__row-indicator {
+  color: var(--color-status-info-icon);
+}
+
+.ds-source-trail__row--done .ds-source-trail__row-indicator {
+  color: var(--color-status-positive-icon);
+}
+
+/* A pending source has not been opened yet, so its chip sits quieter */
+.ds-source-trail__row--pending {
+  opacity: 0.6;
+}
+
+.ds-source-trail__detail {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-text-tertiary);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+}
+
+/* Screen-reader-only status text, matching AgentPlan's row announcement */
+.ds-source-trail__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Icons follow the state colour set on their parents, even against a
+   consumer stylesheet that colours .material-symbols-rounded globally.
+   The chevron is excluded — it carries its own colour rule, which this
+   higher-specificity rule would otherwise silently override. */
+.ds-source-trail .material-symbols-rounded:not(.ds-source-trail__chevron) {
+  color: inherit;
+}

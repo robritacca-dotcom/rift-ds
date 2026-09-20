@@ -1,0 +1,52 @@
+/* ============================================
+   APP LAYOUT — full-page template
+   Sidebar rail on the left, centered content area
+   ============================================ */
+
+.ds-app-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--color-bg-page-primary);
+}
+
+/* ============================================
+   MAIN CONTENT AREA
+   ============================================ */
+.ds-app-layout__main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  margin-left: 64px;
+  padding: var(--padding-xl) var(--padding-lg);
+  transition: margin-left var(--motion-duration-slow) var(--motion-ease-emphasized);
+  min-width: 0;
+}
+
+.ds-app-layout--expanded .ds-app-layout__main {
+  margin-left: 280px;
+}
+
+/* ============================================
+   CENTERED CONTENT WRAPPER
+   ============================================ */
+.ds-app-layout__content {
+  width: 100%;
+  max-width: 1120px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xl);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+  .ds-app-layout__main {
+    margin-left: 0;
+    padding: var(--padding-lg) var(--padding-md);
+  }
+
+  .ds-app-layout--expanded .ds-app-layout__main {
+    margin-left: 0;
+  }
+}

@@ -1,0 +1,46 @@
+/* ============================================
+   MAP CALLOUT COMPONENT
+   The annotation beside a marker: a name in
+   capitals over readout lines in the code face.
+   ============================================ */
+
+/* Base */
+
+.ds-map-callout {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--gap-xxs);
+  font-family: var(--font-family-code);
+  color: var(--color-text-primary);
+}
+
+.ds-map-callout--start {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.ds-map-callout--end {
+  align-items: flex-end;
+  text-align: right;
+}
+
+/* Parts */
+
+/* The overline face on the code family: the metrics and tracking are the
+   uppercase-label tokens, the family stays monospace with the readouts. */
+.ds-map-callout__title {
+  font-size: var(--font-overline-size);
+  font-weight: var(--font-overline-weight);
+  line-height: var(--font-overline-line-height);
+  letter-spacing: var(--font-overline-letter-spacing);
+  text-transform: uppercase;
+  color: var(--color-text-primary);
+}
+
+.ds-map-callout__line {
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-tertiary);
+  font-variant-numeric: tabular-nums;
+}

@@ -1,0 +1,178 @@
+/* ============================================
+   DIALOG COMPONENT
+   General-purpose modal with backdrop overlay
+   ============================================ */
+
+.ds-dialog {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden; /* keeps panel controls out of the tab order when closed */
+  pointer-events: none;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard), visibility var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-dialog--open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* ============================================
+   BACKDROP
+   ============================================ */
+
+.ds-dialog__backdrop {
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-scrim);
+}
+
+/* ============================================
+   PANEL
+   ============================================ */
+
+.ds-dialog__panel {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md); /* 16px */
+  width: 100%;
+  max-height: calc(100vh - var(--gap-xl) * 2); /* breathing room top/bottom */
+  padding: var(--padding-lg); /* 20px */
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-md); /* 12px */
+  background-color: var(--color-bg-page-primary);
+  box-shadow: var(--shadow-modal);
+  transform: scale(0.96);
+  transition: transform var(--motion-duration-base) var(--motion-ease-standard);
+  outline: none;
+}
+
+.ds-dialog--open .ds-dialog__panel {
+  transform: scale(1);
+}
+
+/* Sizes */
+.ds-dialog--sm .ds-dialog__panel {
+  max-width: 400px;
+}
+
+.ds-dialog--md .ds-dialog__panel {
+  max-width: 560px;
+}
+
+.ds-dialog--lg .ds-dialog__panel {
+  max-width: 720px;
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+
+.ds-dialog__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--gap-md); /* 16px */
+}
+
+.ds-dialog__heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs); /* 4px */
+  min-width: 0;
+}
+
+.ds-dialog__title {
+  font-family: var(--font-heading-3-family);
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+  letter-spacing: var(--font-heading-3-letter-spacing);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.ds-dialog__description {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-tertiary);
+  margin: 0;
+}
+
+/* Close button — ghost icon button */
+.ds-dialog__close {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-full); /* pill */
+  background-color: transparent;
+  cursor: pointer;
+  transition: background-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-dialog__close:hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-dialog__close:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+.ds-dialog__close-icon {
+  --icon-size: var(--icon-size-sm);
+  line-height: 1;
+  color: var(--color-icon-primary);
+}
+
+/* ============================================
+   BODY
+   Scrolls when content exceeds the panel height
+   ============================================ */
+
+.ds-dialog__body {
+  overflow-y: auto;
+  min-height: 0;
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+  color: var(--color-text-secondary);
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+
+.ds-dialog__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--gap-sm); /* 8px */
+  padding-top: var(--padding-xs); /* 6px */
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 480px) {
+  .ds-dialog__panel {
+    margin: var(--padding-md);
+  }
+}

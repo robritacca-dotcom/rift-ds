@@ -1,0 +1,137 @@
+/* ============================================
+   ANCHOR NAV
+   "On this page" list of anchor links with a
+   position indicator riding the left rail.
+   ============================================ */
+.ds-anchor-nav {
+  font-family: var(--font-family-primary);
+}
+
+.ds-anchor-nav__header {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  margin: 0 0 var(--gap-sm);
+  font-size: var(--font-paragraph-em-size);
+  font-weight: var(--font-paragraph-em-weight);
+  line-height: var(--font-paragraph-em-line-height);
+  color: var(--color-text-primary);
+}
+
+.ds-anchor-nav__icon {
+  --icon-size: var(--icon-size-sm);
+  color: var(--color-icon-primary);
+}
+
+.ds-anchor-nav__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-left: var(--border-xs) solid var(--color-divider);
+}
+
+.ds-anchor-nav__link {
+  display: block;
+  padding: var(--padding-xs) 0 var(--padding-xs) var(--padding-md);
+  /* Sits over the list rail; turns into the indicator when active */
+  margin-left: calc(var(--border-xs) * -1);
+  border-left: var(--border-md) solid transparent;
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-tertiary);
+  text-decoration: none;
+  transition:
+    color var(--motion-duration-fast) var(--motion-ease-standard),
+    border-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-anchor-nav__link:hover {
+  color: var(--color-text-primary);
+}
+
+.ds-anchor-nav__link:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: -2px;
+  border-radius: var(--radius-xxs);
+}
+
+.ds-anchor-nav__link--active {
+  color: var(--color-text-primary);
+  font-weight: var(--font-paragraph-em-weight);
+  border-left-color: var(--color-text-primary);
+}
+
+/* ============================================
+   FLOATING VARIANT
+   Collapsed to a minimap of short lines; the
+   full panel expands over it on hover, focus
+   or tap. The caller positions the nav itself
+   (typically fixed on the right page edge).
+   ============================================ */
+.ds-anchor-nav--floating {
+  position: relative;
+  display: inline-block;
+}
+
+.ds-anchor-nav__lines {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--gap-sm);
+  /* A comfortable hover/tap target around the thin lines */
+  padding: var(--padding-sm);
+  cursor: pointer;
+}
+
+.ds-anchor-nav__line {
+  /* One line per section: bespoke minimap geometry, specced in design.md */
+  width: 16px;
+  height: var(--border-md);
+  border-radius: var(--radius-full);
+  background-color: var(--color-divider);
+  transition:
+    width var(--motion-duration-fast) var(--motion-ease-standard),
+    background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-anchor-nav__line--active {
+  width: 24px;
+  background-color: var(--color-text-primary);
+}
+
+.ds-anchor-nav__panel {
+  position: absolute;
+  z-index: 10;
+  top: 50%;
+  right: 0;
+  min-width: 200px;
+  max-width: 280px;
+  /* A long list scrolls inside the panel rather than past the viewport */
+  max-height: 70vh;
+  overflow-y: auto;
+  padding: var(--padding-md);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-sm);
+  /* Page background, not container: the container fill is semi-transparent
+     in dark mode, and a floating panel must not show text through itself */
+  background-color: var(--color-bg-page-primary);
+  box-shadow: var(--shadow-floating);
+
+  /* Hidden by default — but never visibility: hidden, because the links must
+     stay focusable so tabbing into the nav expands it via :focus-within */
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(var(--gap-xxs), -50%);
+  transition:
+    opacity var(--motion-duration-fast) var(--motion-ease-standard),
+    transform var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-anchor-nav--floating:hover .ds-anchor-nav__panel,
+.ds-anchor-nav--floating:focus-within .ds-anchor-nav__panel,
+.ds-anchor-nav--open .ds-anchor-nav__panel {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(0, -50%);
+}

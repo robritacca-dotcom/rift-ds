@@ -1,0 +1,269 @@
+/* ============================================
+   PROSE COMPONENT
+   Token-styled typography for rendered markdown
+   ============================================ */
+
+.ds-prose {
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+/* Block rhythm — every block owns its bottom margin; the edges are
+   trimmed so Prose slots into bubbles and cards cleanly */
+.ds-prose p,
+.ds-prose ul,
+.ds-prose ol,
+.ds-prose pre,
+.ds-prose blockquote,
+.ds-prose table,
+.ds-prose hr,
+.ds-prose img {
+  margin: 0;
+  margin-block-end: var(--gap-md);
+}
+
+.ds-prose > :first-child {
+  margin-block-start: 0;
+}
+
+.ds-prose > :last-child {
+  margin-block-end: 0;
+}
+
+/* ============================================
+   PARAGRAPHS
+   ============================================ */
+
+.ds-prose p {
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   HEADINGS
+   Hierarchy carried by the token scale; the
+   weight contrast is encoded in the tokens
+   ============================================ */
+
+.ds-prose h1,
+.ds-prose h2,
+.ds-prose h3,
+.ds-prose h4 {
+  margin: 0;
+  margin-block-start: var(--gap-lg);
+  margin-block-end: var(--gap-sm-md);
+  color: var(--color-text-primary);
+}
+
+.ds-prose h1 {
+  font-family: var(--font-heading-1-family);
+  font-size: var(--font-heading-1-size);
+  font-weight: var(--font-heading-1-weight);
+  line-height: var(--font-heading-1-line-height);
+  letter-spacing: var(--font-heading-1-letter-spacing);
+}
+
+.ds-prose h2 {
+  font-family: var(--font-heading-2-family);
+  font-size: var(--font-heading-2-size);
+  font-weight: var(--font-heading-2-weight);
+  line-height: var(--font-heading-2-line-height);
+  letter-spacing: var(--font-heading-2-letter-spacing);
+}
+
+.ds-prose h3 {
+  font-family: var(--font-heading-3-family);
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+  letter-spacing: var(--font-heading-3-letter-spacing);
+}
+
+.ds-prose h4 {
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  letter-spacing: var(--font-title-body-letter-spacing);
+}
+
+/* ============================================
+   LISTS
+   ============================================ */
+
+.ds-prose ul,
+.ds-prose ol {
+  padding-inline-start: var(--padding-md);
+}
+
+.ds-prose li {
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.ds-prose li + li {
+  margin-block-start: var(--gap-xs);
+}
+
+/* Nested lists sit tight under their parent item */
+.ds-prose li > ul,
+.ds-prose li > ol {
+  margin-block-start: var(--gap-xs);
+  margin-block-end: 0;
+}
+
+/* ============================================
+   INLINE ELEMENTS
+   ============================================ */
+
+.ds-prose a {
+  color: var(--color-action-primary-text-tertiary);
+  text-decoration: underline;
+}
+
+.ds-prose strong {
+  font-weight: var(--font-paragraph-em-weight);
+}
+
+.ds-prose em {
+  font-style: italic;
+}
+
+.ds-prose code {
+  font-family: var(--font-family-code);
+  font-size: var(--font-paragraph-sm-size);
+  background-color: var(--color-bg-container-secondary);
+  border-radius: var(--radius-xxs);
+  padding-inline: var(--padding-xxxs);
+}
+
+/* ============================================
+   CODE BLOCKS
+   The plain fallback — CodeBlock is the richer
+   choice for standalone code
+   ============================================ */
+
+.ds-prose pre {
+  font-family: var(--font-family-code);
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  background-color: var(--color-bg-container-primary);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-md);
+  padding: var(--padding-md);
+  overflow-x: auto;
+}
+
+.ds-prose pre code {
+  background-color: transparent;
+  border-radius: 0;
+  padding-inline: 0;
+  font-size: inherit;
+}
+
+/* ============================================
+   BLOCKQUOTES
+   Mirrors Reasoning's trace rail
+   ============================================ */
+
+.ds-prose blockquote {
+  border-inline-start: var(--border-md) solid var(--color-divider);
+  padding-inline-start: var(--padding-md);
+  color: var(--color-text-secondary);
+}
+
+.ds-prose blockquote p {
+  color: var(--color-text-secondary);
+}
+
+/* ============================================
+   TABLES
+   ============================================ */
+
+/* The table is its own scroll container. Prose styles markup it does not
+   render, so it cannot wrap the table in a scrolling div — `display: block`
+   makes the table element itself the scroller. The cost is deliberate: the
+   table sizes to its content instead of filling the container, because the
+   inner anonymous table box a block table generates cannot be stretched.
+   A clipped or shattered table is the worse failure. */
+.ds-prose table {
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+}
+
+.ds-prose th {
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-title-body-letter-spacing);
+  background-color: var(--color-bg-container-secondary);
+  text-align: start;
+}
+
+/* Cells never break words, whatever the surrounding context does. An
+   ancestor that sets `overflow-wrap: anywhere` (ChatMessage does, so a long
+   URL cannot widen a bubble) otherwise inherits in and collapses every
+   column's minimum width to one character, which lets auto table layout
+   squeeze a heading into "Co / m / pa / ny" rather than let the table reach
+   its natural width. Holding the floor is what gives the scroll above
+   something to scroll. */
+.ds-prose th,
+.ds-prose td {
+  padding: var(--padding-xs) var(--padding-sm-md);
+  border-block-end: var(--border-xs) solid var(--color-divider);
+  overflow-wrap: normal;
+}
+
+/* ============================================
+   RULES AND MEDIA
+   ============================================ */
+
+.ds-prose hr {
+  border: none;
+  border-block-start: var(--border-xs) solid var(--color-divider);
+}
+
+.ds-prose img {
+  max-width: 100%;
+  border-radius: var(--radius-md);
+}
+
+/* ============================================
+   SMALL SIZE
+   Dense chat contexts — body scale drops to the
+   small paragraph tokens; headings keep their tiers
+   ============================================ */
+
+.ds-prose--sm,
+.ds-prose--sm p,
+.ds-prose--sm li {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+}
+
+.ds-prose--sm strong {
+  font-weight: var(--font-paragraph-sm-em-weight);
+}
+
+.ds-prose--sm code {
+  font-size: var(--font-paragraph-sm-size);
+}

@@ -1,0 +1,198 @@
+{
+  "asOf": {
+    "commit": "aab19d28f36c044d26ff29b6f63913870e411c4f",
+    "date": "2026-09-12"
+  },
+  "entries": [
+    {
+      "meta": "September 1–12, 2026",
+      "title": "The site chat gets tools, a model choice, and a spending policy",
+      "body": [
+        "The chat's answering machinery grew up over the fortnight. Every page now carries a short pre-written summary behind the chat button, with prompt chips that open the chat mid-answer. The composer's model label became a working picker: visitors choose between two models, and a spending policy steps the default down to the cheaper one as the day's budget runs low. The model also carries two lookup tools for what its reading material deliberately leaves out, the exact prop contract of any component and the token registry, and a written behaviour spec now maps every rule the chat is held to onto the check that enforces it.",
+        "The component library shipped the pieces a chat product needs across four releases, 0.15.0 through 0.18.0: usage and source cards, a session-history rail with pins and projects, a tab strip of open conversations, and suggestion chips that shimmer while their questions generate. Two new template screens, an agent workbench and a team calendar, put the set to work. Component pages also gained a markdown twin for coding agents, and a generated skill file now teaches a consumer's own agent the whole library."
+      ]
+    },
+    {
+      "meta": "September 6–7, 2026",
+      "title": "A blank-site outage leads to round-the-clock checks",
+      "body": [
+        "On September 6 a rendering bug left every page blank while every existing check stayed green: the build passed and the server answered, but a visitor saw nothing. The fix was small. The response was structural: a browser-based smoke test now loads the built site before anything ships and probes the live site every four hours, and the build gained new gates for internal links, an accessibility scan of every page in both themes, and the npm package as a consumer would install it. Three new recurring maintenance loops joined the roster on the loops page: chat quality, link rot, and AI visibility."
+      ]
+    },
+    {
+      "meta": "August 29, 2026",
+      "title": "AI assistants can now query the site directly",
+      "body": [
+        "The site now serves a public MCP endpoint at /api/mcp, and any AI client can connect with nothing but the URL. Five tools sit behind it: the component list, the full prop details for any component, the design tokens, install setup, and search over the site's content. Everything it serves is already public, and new build checks keep the data exact."
+      ]
+    },
+    {
+      "meta": "August 15–29, 2026",
+      "title": "The library grows from 79 to 120 components",
+      "body": [
+        "Five releases over the fortnight added 41 components. Most were found by building real screens with the system and filling what was missing: a dashboard set, the maps set with the globe, composition pieces like the gauge and split pane, and a final six this week. A new design QA pass now reviews every component in both themes before it joins the library."
+      ]
+    },
+    {
+      "meta": "August 10–14, 2026",
+      "title": "A new page background and redrawn cover images",
+      "body": [
+        "The colour blobs behind every page were rebuilt as a WebGL field that reads its colours from the design tokens, with the old CSS version kept as a fallback. The thirteen case-study cover screens were redrawn in code so they can follow light and dark mode, then shipped as pre-rendered images so they hold up on phones. The robr0 DS case study was rewritten around six lessons in the same stretch."
+      ]
+    },
+    {
+      "meta": "August 9–14, 2026",
+      "title": "The playground and the chat come together",
+      "body": [
+        "The chat's test bench merged into the playground, now one tool with two views over the same theming levers: Components and Chat. The chat itself gained smooth resizing between its docked and full-screen shapes, links into the site's own pages, feedback buttons, and three suggested follow-up questions after each answer. The licence split too: the code stays MIT, the writing is now all rights reserved. Releases 0.5.0 and 0.6.0 carried the chat components to npm."
+      ]
+    },
+    {
+      "meta": "August 8–9, 2026",
+      "title": "The site gets an AI chat",
+      "body": [
+        "Built over two days and mounted on every page: a floating chat that answers questions about the site, the design system, and Rob's work. It reads only what the site already publishes, and a set of 78 test questions measures whether the answers are right. Conversations are kept for thirty days, disclosed in the widget itself."
+      ]
+    },
+    {
+      "meta": "July 28–August 1, 2026",
+      "title": "A style guide for the site's writing",
+      "body": [
+        "content-design.md now sets how every shipped sentence reads, and each public page was rewritten against it. The same week, /design-system became a real landing page with a live component collage, the home page settled on three case-study cards, and the playground moved to its own top-level address."
+      ]
+    },
+    {
+      "meta": "July 27–August 1, 2026",
+      "title": "The library is reworked for outside users",
+      "body": [
+        "Eighteen components were rebuilt so the package behaves like one built for strangers: refs, native attributes, and form-library support throughout. Forty-nine accessibility issues were fixed, and accessibility checks now run on every build. Releases 0.2.0 and 0.3.0 went out, with four new components alongside."
+      ]
+    },
+    {
+      "meta": "July 26, 2026",
+      "title": "A live theming playground",
+      "body": [
+        "A new Customization section shows theming rather than describing it: a get-started guide, and a playground where colour, radius, and font levers restyle the whole page live, then hand over the CSS to paste into your own project."
+      ]
+    },
+    {
+      "meta": "July 26, 2026",
+      "title": "The design system publishes to npm",
+      "body": [
+        "The library is now on npm as @robr0/design-system, installable by anyone, with version 0.1.0 out the same day. The site became the package's first consumer, importing it exactly the way a stranger would."
+      ]
+    },
+    {
+      "meta": "July 22–23, 2026",
+      "title": "Better metadata for search engines and AI",
+      "body": [
+        "Every page now declares its canonical address, case studies emit structured data, and the sitemap carries real last-modified dates. The site also serves an index at /llms.txt for AI agents, plus branded preview images for link sharing."
+      ]
+    },
+    {
+      "meta": "July 22–23, 2026",
+      "title": "Motion and icon tokens, and the spec backlog cleared",
+      "body": [
+        "Motion timings became twelve duration and easing tokens with a reduced-motion guard, and icons moved onto a four-step size scale; both got their own foundations pages. Five components joined the library, and the 27 components with no written spec all got one."
+      ]
+    },
+    {
+      "meta": "July 21, 2026",
+      "title": "Automated testing on every change",
+      "body": [
+        "Every push now runs a full pipeline: lint, the builds, and a render test of every Storybook story (434 at the time), so a broken component can no longer land unnoticed. One verify script mirrors the whole pipeline locally."
+      ]
+    },
+    {
+      "meta": "July 21, 2026",
+      "title": "A faster page background",
+      "body": [
+        "The blurred colour blobs behind every page were redrawn as radial gradients that look identical but cost the GPU almost nothing, ending the visible blanking while scrolling on desktop."
+      ]
+    },
+    {
+      "meta": "July 20, 2026",
+      "title": "Divider, Pagination, and Dialog join the library",
+      "body": [
+        "A gap analysis against mature design systems ranked what was missing, and the three highest-impact components shipped together, each with stories, a showcase page, and a spec. The site's About cluster was renamed Docs the same day."
+      ]
+    },
+    {
+      "meta": "July 18–20, 2026",
+      "title": "A security review of the public repo",
+      "body": [
+        "The repo and site were audited end to end: security headers added, feed HTML sanitised, dependency vulnerabilities patched, stray identifiers removed from published content, and a security policy published. The audit closed clean."
+      ]
+    },
+    {
+      "meta": "July 17–18, 2026",
+      "title": "The first automation loop, and counts that update themselves",
+      "body": [
+        "The growth loop shipped: a weekly scheduled task that reads the site's analytics, proposes one copy change on a branch, and reports for approval. Underneath it, every count shown on the site started coming from registry files checked at build time, so no number can quietly go stale. Six content components shipped in support, including Timeline, which this page is built with."
+      ]
+    },
+    {
+      "meta": "July 1–9, 2026",
+      "title": "SEO, repaired analytics, and a Writing section",
+      "body": [
+        "A technical SEO pass hardened how the site presents itself, the analytics setup was repaired and gained an on-demand reporting script, and a new Writing section now syncs articles from Substack. The logo picked up an animated variant."
+      ]
+    },
+    {
+      "meta": "June 1–9, 2026",
+      "title": "Colour names, a flicker fix, and bookings",
+      "body": [
+        "The accent colours took on evocative names, the long-standing theme-toggle flicker was finally fixed, and the contact page gained a Stripe consultation-booking section. The site also moved to the robertritacca.com domain."
+      ]
+    },
+    {
+      "meta": "May 21–30, 2026",
+      "title": "The site becomes a portfolio",
+      "body": [
+        "The project's biggest identity shift: the site stopped being a component showcase with an about page and became Robert Ritacca's portfolio, with the design system as its flagship exhibit. A MegaNav, breadcrumbs, a contact page, and six case studies arrived in one push."
+      ]
+    },
+    {
+      "meta": "Apr 27 – May 6, 2026",
+      "title": "The design spec becomes a public page",
+      "body": [
+        "design.md, the full spec for tokens, colour, typography, and every component rule, was written down and published on the site, with CLAUDE.md joining it under a Blueprints section soon after. The documents that govern the build became content in their own right."
+      ]
+    },
+    {
+      "meta": "April 6–13, 2026",
+      "title": "The first Claude skills",
+      "body": [
+        "Three repeatable QA checks (heuristic analysis, accessibility audit, and API consistency review) were packaged as skills an AI agent can run, published on a new Skills page with copyable source. They grew into the scheduled skills system that runs parts of the site today."
+      ]
+    },
+    {
+      "meta": "February 18–22, 2026",
+      "title": "Charts, dashboards, and app shells",
+      "body": [
+        "Eight chart components, application shell pieces, and two dashboard demo pages that compose them: proof the system could build real product screens. The overlay tier filled out in the same push, with an accessibility sweep across the board."
+      ]
+    },
+    {
+      "meta": "February 16, 2026",
+      "title": "The component sprint",
+      "body": [
+        "A single day took the library from a handful of components to a real system: inputs, tabs, tables, badges, menus, and a dozen more, each with stories and a showcase page. Consistency passes on icons, spacing, and focus states kept the sprint from producing a pile of parts. Google Analytics went in the same day."
+      ]
+    },
+    {
+      "meta": "February 14–15, 2026",
+      "title": "The documentation website goes live",
+      "body": [
+        "A separate Next.js site went up on Vercel to show the system, importing the real components so every example is live. Home, About, Components, and Foundations appeared immediately, with links from each page to its Figma frame and Storybook story."
+      ]
+    },
+    {
+      "meta": "February 13–14, 2026",
+      "title": "Day one: tokens, a Button, and Storybook",
+      "body": [
+        "The project began with its rules, not its components: a three-tier token architecture with light and dark values from the first commit, self-hosted icons, and a Storybook wired to the tokens. Button arrived from Figma as the first component. The constraints set in these 48 hours still govern everything since."
+      ]
+    }
+  ]
+}

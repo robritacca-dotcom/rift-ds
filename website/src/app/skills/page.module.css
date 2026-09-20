@@ -1,0 +1,201 @@
+/* ============================================
+   SKILLS PAGE LAYOUT
+   ============================================ */
+.dsLayout {
+  display: flex;
+  gap: var(--layout-column-gap);
+  width: 100%;
+  max-width: 1440px;
+  padding-top: var(--primitive-gap-xl);
+}
+
+.dsContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxxl);
+}
+
+/* ============================================
+   PAGE HEADER
+   ============================================ */
+.pageHeader {
+  margin-top: calc(var(--primitive-gap-xl) - var(--gap-xxxl));
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--primitive-gap-lg);
+  width: 100%;
+}
+
+.pageTitle {
+  font-size: var(--font-display-2-size);
+  font-weight: var(--font-display-2-weight);
+  line-height: var(--font-display-2-line-height);
+  letter-spacing: var(--font-display-2-letter-spacing);
+  color: var(--color-text-primary);
+  width: 100%;
+}
+
+/* ============================================
+   INTRO SECTION
+   ============================================ */
+.introSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-lg);
+}
+
+.subDisplay {
+  font-family: var(--font-sub-display-family);
+  font-size: var(--font-sub-display-size);
+  font-weight: var(--font-sub-display-weight);
+  line-height: var(--font-sub-display-line-height);
+  letter-spacing: var(--font-sub-display-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.introBody {
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-primary);
+}
+
+.inlineCode {
+  font-family: monospace;
+  font-size: var(--font-paragraph-sm-size);
+  padding: var(--primitive-padding-xxxs) var(--primitive-padding-xs);
+  background: var(--color-bg-container-primary);
+  border: 1px solid var(--color-bg-container-border);
+  border-radius: var(--radius-xs);
+  color: var(--color-text-secondary);
+}
+
+/* ============================================
+   SKILLS GRID
+   The on-this-page nav floats over the right
+   viewport edge (FloatingAnchorNav) instead
+   of costing a column.
+   ============================================ */
+.railLayout {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--layout-column-gap);
+  width: 100%;
+}
+
+.skillsGrid {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-lg);
+}
+
+.skillCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-md);
+  padding: var(--primitive-gap-xl);
+  border: 1px solid var(--color-bg-container-border);
+  border-radius: var(--primitive-radius-xl);
+  background: var(--color-bg-container-primary);
+  /* Anchor targets clear the sticky MegaNav overlay and its frosted
+     backdrop — the shared clearance in globals.css owns the geometry */
+  scroll-margin-top: var(--layout-anchor-clearance);
+}
+
+/* ============================================
+   SKILL CARD HEADER
+   ============================================ */
+.skillCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--primitive-gap-md);
+}
+
+.skillMeta {
+  display: flex;
+  align-items: center;
+  gap: var(--primitive-gap-sm);
+}
+
+.skillIcon {
+  --icon-size: var(--icon-size-sm);
+  color: var(--color-icon-primary);
+  flex-shrink: 0;
+}
+
+.skillName {
+  font-family: var(--font-heading-3-family);
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+  letter-spacing: var(--font-heading-3-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   SKILL CARD BODY
+   ============================================ */
+.skillDescription {
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-secondary);
+}
+
+.skillInvoke {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--primitive-gap-sm);
+}
+
+.skillInvokeLabel {
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-tertiary);
+  flex-shrink: 0;
+}
+
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 959px) {
+  .pageHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .dsLayout {
+    padding-left: 0;
+    min-width: 0;
+  }
+
+  .dsContent {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+
+  .skillCardHeader {
+    flex-wrap: wrap;
+  }
+}
+
+/* Inline link in intro copy */
+.introLink {
+  color: var(--color-text-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.introLink:hover {
+  color: var(--color-text-secondary);
+}

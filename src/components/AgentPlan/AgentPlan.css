@@ -1,0 +1,251 @@
+/* ============================================
+   AGENT PLAN COMPONENT
+   A collapsible checklist of an agent's task:
+   a progress header and one row per step.
+
+   The container stays neutral, like ToolCall —
+   colour lives in each step's indicator, so a
+   long plan reads as a list rather than a wall
+   of tinted rows. A thin connector ties the
+   indicators into one path through the task.
+   ============================================ */
+
+.ds-agent-plan {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: var(--color-bg-container-primary);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  /* The chat furniture's shared 24px shell — see ToolCall. */
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+
+.ds-agent-plan__header {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  width: 100%;
+  /* 20px sides — the card family's shared content inset. */
+  padding: var(--padding-sm) var(--padding-lg);
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-agent-plan__header:hover {
+  background-color: var(--color-bg-container-secondary);
+}
+
+.ds-agent-plan__header:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: -2px;
+}
+
+.ds-agent-plan__title {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-text-primary);
+  font-family: var(--font-paragraph-sm-em-family);
+  font-size: var(--font-paragraph-sm-em-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+}
+
+.ds-agent-plan__count {
+  flex: none;
+  color: var(--color-text-tertiary);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.ds-agent-plan__chevron {
+  --icon-size: var(--icon-size-sm);
+
+  flex: none;
+  color: var(--color-icon-secondary);
+  transition: transform var(--motion-duration-slow) var(--motion-ease-standard);
+}
+
+.ds-agent-plan--open .ds-agent-plan__chevron {
+  transform: rotate(180deg);
+}
+
+/* ============================================
+   PANEL
+   Same grid-rows collapse as ToolCall, so the
+   list opens and closes without measuring.
+   ============================================ */
+
+.ds-agent-plan__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition:
+    grid-template-rows var(--motion-duration-slow) var(--motion-ease-standard),
+    visibility var(--motion-duration-slow) var(--motion-ease-standard);
+}
+
+.ds-agent-plan--open .ds-agent-plan__panel {
+  grid-template-rows: 1fr;
+  visibility: visible;
+}
+
+.ds-agent-plan__content {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.ds-agent-plan--open .ds-agent-plan__content {
+  border-top: var(--border-xs) solid var(--color-divider);
+}
+
+/* ============================================
+   STEPS
+   ============================================ */
+
+.ds-agent-plan__steps {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: var(--padding-sm-md) var(--padding-lg);
+  list-style: none;
+}
+
+.ds-agent-plan__step {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-sm);
+  padding: var(--padding-xxs) 0;
+}
+
+/* Connector — a thin line linking each indicator to the next */
+.ds-agent-plan__step:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  top: calc(var(--padding-xxs) + var(--icon-size-sm));
+  bottom: calc(-1 * var(--padding-xxs));
+  left: calc(var(--icon-size-sm) / 2);
+  width: var(--border-xs);
+  background-color: var(--color-divider);
+}
+
+.ds-agent-plan__indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  /* Fixed box: the active step's spinner (16px) is smaller than the step
+     icons (20px), so without this the column narrows and the spinner drifts
+     off the connector's centre line. */
+  width: var(--icon-size-sm);
+  height: var(--icon-size-sm);
+  color: var(--color-icon-secondary);
+}
+
+.ds-agent-plan__indicator .material-symbols-rounded {
+  --icon-size: var(--icon-size-sm);
+}
+
+.ds-agent-plan__step-body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  /* Align the first text line with the indicator's optical centre */
+  padding-top: calc((var(--icon-size-sm) - var(--font-paragraph-sm-line-height)) / 2);
+}
+
+.ds-agent-plan__label {
+  color: var(--color-text-primary);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+}
+
+.ds-agent-plan__detail {
+  color: var(--color-text-tertiary);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+}
+
+/* ============================================
+   STEP STATES
+   ============================================ */
+
+.ds-agent-plan__step--pending .ds-agent-plan__indicator {
+  color: var(--color-status-neutral-icon);
+}
+
+.ds-agent-plan__step--completed .ds-agent-plan__indicator {
+  color: var(--color-status-positive-icon);
+}
+
+.ds-agent-plan__step--completed .ds-agent-plan__label {
+  color: var(--color-text-tertiary);
+}
+
+.ds-agent-plan__step--active .ds-agent-plan__indicator {
+  color: var(--color-status-info-icon);
+}
+
+.ds-agent-plan__step--active .ds-agent-plan__label {
+  font-family: var(--font-paragraph-sm-em-family);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+}
+
+.ds-agent-plan__step--failed .ds-agent-plan__indicator {
+  color: var(--color-status-error-icon);
+}
+
+.ds-agent-plan__step--failed .ds-agent-plan__label {
+  color: var(--color-status-error-text);
+}
+
+/* ============================================
+   SCREEN READER TEXT
+   Status is colour + glyph for sighted users;
+   this span announces it.
+   ============================================ */
+
+.ds-agent-plan__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Icons take the colour of the text around them. Explicit, not just
+   inherited by default: a consumer stylesheet that sets a colour on
+   .material-symbols-rounded itself (a common global default) would
+   otherwise override inheritance and detach the icon from the state
+   colours this component sets on its parents. */
+.ds-agent-plan .material-symbols-rounded {
+  color: inherit;
+}

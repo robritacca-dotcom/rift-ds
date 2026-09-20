@@ -1,0 +1,278 @@
+/* ============================================
+   COLORPICKER COMPONENT
+   Swatch trigger + saturation/hue/alpha panel
+
+   Colour-mixing constants: the white/black
+   gradient overlays and the hue spectrum are
+   colour-space physics, not theme decisions —
+   they are written as hsl() literals because no
+   semantic token can represent them. Everything
+   themeable uses tokens as usual.
+
+   ds-allow-file(color): colour-space physics —
+   the gradients and spectrum cannot be theme
+   tokens.
+   ============================================ */
+
+/* Base */
+
+.ds-colorpicker {
+  position: relative;
+  /* Field owns no layout — the root class stacks label, trigger and helper */
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-sm);
+}
+
+/* Trigger */
+
+.ds-colorpicker__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  padding: var(--padding-xxs);
+  border: var(--border-xs) solid var(--color-input-border-primary);
+  border-radius: var(--radius-md);
+  background-color: transparent;
+  cursor: pointer;
+  transition: border-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-colorpicker__trigger:hover:not(:disabled) {
+  border-color: var(--color-input-border-hover);
+}
+
+.ds-colorpicker__trigger:focus-visible {
+  outline: none;
+  border-color: var(--color-input-border-selected);
+}
+
+.ds-colorpicker--open .ds-colorpicker__trigger {
+  border-color: var(--color-input-border-selected);
+}
+
+.ds-colorpicker__trigger-swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-sm);
+  /* Checkerboard shows through translucent colours */
+  background-color: var(--color-bg-page-primary);
+  background-image:
+    linear-gradient(var(--ds-cp-color), var(--ds-cp-color)),
+    repeating-conic-gradient(var(--color-bg-container-tertiary) 0% 25%, transparent 0% 50%);
+  background-size: 100% 100%, 8px 8px;
+  box-shadow: inset 0 0 0 var(--border-xs) var(--color-bg-container-border);
+  flex-shrink: 0;
+}
+
+.ds-colorpicker__trigger-text {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-primary);
+  font-variant-numeric: tabular-nums;
+  padding-right: var(--padding-xxs);
+}
+
+/* Sizes */
+
+.ds-colorpicker--compact .ds-colorpicker__trigger-swatch {
+  width: 20px;
+  height: 20px;
+}
+
+/* Panel */
+
+.ds-colorpicker__panel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: var(--gap-xxs);
+  width: 240px;
+  padding: var(--padding-sm-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm-md);
+  background-color: var(--color-bg-page-primary);
+  border: var(--border-xs) solid var(--color-input-border-primary);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-floating);
+  z-index: 10;
+}
+
+/* Saturation / brightness area */
+
+.ds-colorpicker__saturation {
+  position: relative;
+  height: 150px;
+  border-radius: var(--radius-sm);
+  cursor: crosshair;
+  touch-action: none;
+  background:
+    linear-gradient(to top, hsl(0 0% 0%), transparent),
+    linear-gradient(to right, hsl(0 0% 100%), transparent),
+    hsl(var(--ds-cp-hue) 100% 50%);
+}
+
+.ds-colorpicker__saturation:focus-visible {
+  outline: var(--border-md) solid var(--color-input-border-selected);
+  outline-offset: var(--border-md);
+}
+
+.ds-colorpicker__handle {
+  position: absolute;
+  left: var(--ds-cp-x);
+  top: var(--ds-cp-y);
+  transform: translate(-50%, -50%);
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-full);
+  border: var(--border-md) solid hsl(0 0% 100%);
+  box-shadow: var(--shadow-floating);
+  pointer-events: none;
+}
+
+/* Sliders + preview */
+
+.ds-colorpicker__controls {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm-md);
+}
+
+.ds-colorpicker__sliders {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  min-width: 0;
+}
+
+.ds-colorpicker__hue,
+.ds-colorpicker__alpha {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  height: 12px;
+  border-radius: var(--radius-full);
+  outline: none;
+  cursor: pointer;
+}
+
+.ds-colorpicker__hue {
+  background: linear-gradient(
+    to right,
+    hsl(0 100% 50%),
+    hsl(60 100% 50%),
+    hsl(120 100% 50%),
+    hsl(180 100% 50%),
+    hsl(240 100% 50%),
+    hsl(300 100% 50%),
+    hsl(360 100% 50%)
+  );
+}
+
+.ds-colorpicker__alpha {
+  background-color: var(--color-bg-page-primary);
+  background-image:
+    linear-gradient(to right, transparent, var(--ds-cp-solid)),
+    repeating-conic-gradient(var(--color-bg-container-tertiary) 0% 25%, transparent 0% 50%);
+  background-size: 100% 100%, 8px 8px;
+}
+
+.ds-colorpicker__hue::-webkit-slider-thumb,
+.ds-colorpicker__alpha::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-full);
+  background: hsl(0 0% 100%);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  box-shadow: var(--shadow-floating);
+}
+
+.ds-colorpicker__hue::-moz-range-thumb,
+.ds-colorpicker__alpha::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-full);
+  background: hsl(0 0% 100%);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  box-shadow: var(--shadow-floating);
+}
+
+.ds-colorpicker__hue:focus-visible,
+.ds-colorpicker__alpha:focus-visible {
+  outline: var(--border-md) solid var(--color-input-border-selected);
+  outline-offset: var(--border-md);
+}
+
+.ds-colorpicker__preview {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-bg-page-primary);
+  background-image:
+    linear-gradient(var(--ds-cp-color), var(--ds-cp-color)),
+    repeating-conic-gradient(var(--color-bg-container-tertiary) 0% 25%, transparent 0% 50%);
+  background-size: 100% 100%, 8px 8px;
+  box-shadow: inset 0 0 0 var(--border-xs) var(--color-bg-container-border);
+  flex-shrink: 0;
+}
+
+/* Hex + alpha inputs */
+
+.ds-colorpicker__inputs {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  padding: var(--padding-xxs) var(--padding-sm);
+  border: var(--border-xs) solid var(--color-input-border-primary);
+  border-radius: var(--radius-md);
+  transition: border-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-colorpicker__inputs:focus-within {
+  border-color: var(--color-input-border-selected);
+}
+
+.ds-colorpicker__hash {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  color: var(--color-text-tertiary);
+}
+
+.ds-colorpicker__hex-field {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  outline: none;
+  padding: 0;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-primary);
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+.ds-colorpicker__alpha-value {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  color: var(--color-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* States */
+
+.ds-colorpicker--disabled .ds-colorpicker__trigger {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ds-colorpicker--error .ds-colorpicker__trigger {
+  border-color: var(--color-status-error-border);
+}

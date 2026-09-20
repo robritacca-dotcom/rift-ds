@@ -1,0 +1,68 @@
+.tocCard {
+  background: var(--color-bg-container-primary-semi);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--primitive-radius-xl);
+  padding: var(--primitive-padding-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-md);
+  flex: 1 1 0;
+  min-width: 250px;
+  height: 268px;
+  text-decoration: none;
+  color: inherit;
+  overflow: hidden;
+  transition: transform var(--motion-duration-slow) var(--motion-ease-standard), box-shadow var(--motion-duration-slow) var(--motion-ease-standard);
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+}
+
+.tocCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.tocCardPreview {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 184px;
+  min-height: 0;
+}
+
+.tocCardTitle {
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+  letter-spacing: var(--font-heading-3-letter-spacing);
+  color: var(--color-text-primary);
+  width: 100%;
+  text-align: center;
+}
+
+/* Responsive - tablet */
+@media (max-width: 959px) {
+  .tocCard {
+    height: auto;
+    min-height: 240px;
+  }
+
+  .tocCardPreview {
+    height: auto;
+    min-height: 150px;
+  }
+}
+
+/* Responsive - small mobile */
+@media (max-width: 600px) {
+  .tocCard {
+    flex: 1 1 100%;
+    height: auto;
+    min-height: 200px;
+  }
+
+  .tocCardPreview {
+    height: auto;
+    min-height: 120px;
+  }
+}

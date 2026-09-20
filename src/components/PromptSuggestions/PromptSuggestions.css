@@ -1,0 +1,264 @@
+/* ============================================
+   PROMPT SUGGESTIONS COMPONENT
+   Horizontal row of tappable prompt chips.
+   Scrolls with pure-CSS edge fades by default;
+   wraps for empty-state hero placements.
+   ============================================ */
+
+.ds-prompt-suggestions {
+  display: flex;
+  gap: var(--gap-sm);
+  /* Breathing room so chip focus rings aren't clipped by the scroll box */
+  padding-block: var(--padding-xxxs);
+}
+
+/* ============================================
+   SIZE
+   The pill scale itself is Chip's — the row only
+   picks which size to ask for. What belongs here
+   is the gutter between pills, which opens up a
+   step at the larger size.
+   ============================================ */
+
+.ds-prompt-suggestions--default {
+  gap: var(--gap-sm-md);
+}
+
+.ds-prompt-suggestions--compact {
+  /* Base gap applies. */
+}
+
+/* ============================================
+   SCROLL — one line, overflow hinted by fades
+   ============================================ */
+
+/* Edge fades — scroll layout only, which is why the layout is named on the
+   element rather than inferred: content near either edge fades out, hinting
+   there is more to scroll. A CSS mask, not a scroll listener.
+   ds-allow(color): mask alpha keywords (black/transparent), not palette colours */
+.ds-prompt-suggestions--scroll {
+  overflow-x: auto;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black var(--gap-lg),
+    black calc(100% - var(--gap-lg)),
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black var(--gap-lg),
+    black calc(100% - var(--gap-lg)),
+    transparent
+  );
+}
+
+/* ============================================
+   WRAP — multi-line hero variant, no fades
+   ============================================ */
+
+.ds-prompt-suggestions--wrap {
+  flex-wrap: wrap;
+}
+
+/* ============================================
+   STACK — one suggestion per line
+   For narrow columns, where a wrapped row breaks
+   wherever the labels happen to run out of room
+   and the ragged right edge reads as an accident.
+   Pills still hug their labels: stretching them
+   to a shared width would make a set of prompts
+   look like a set of buttons.
+   ============================================ */
+
+.ds-prompt-suggestions--stack {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* ============================================
+   ITEMS
+   ============================================ */
+
+.ds-prompt-suggestions__item {
+  display: flex;
+  flex-shrink: 0;
+  /* Pills pop in one after another — a small rise-and-settle with the
+     spring's overshoot, quiet enough to read as arrival rather than
+     performance. `backwards` keeps a delayed pill invisible until its
+     turn. The pending placeholders and the chips that replace them are
+     both items, so each set lands one-two-three. */
+  animation: ds-prompt-suggestions-pop var(--motion-duration-slow) var(--motion-ease-spring)
+    backwards;
+}
+
+/* A set that has already landed stands still: the host turns the entrance
+   off (`entrance={false}`) when it re-shows suggestions the visitor has
+   already watched arrive, so a reopened panel does not replay them. */
+.ds-prompt-suggestions--still .ds-prompt-suggestions__item {
+  animation: none;
+}
+
+/* The stagger: one instant per pill, capped at the fifth so a long
+   scrolling row does not keep the far end waiting. */
+.ds-prompt-suggestions__item:nth-child(2) {
+  animation-delay: var(--motion-duration-instant);
+}
+
+.ds-prompt-suggestions__item:nth-child(3) {
+  animation-delay: calc(var(--motion-duration-instant) * 2);
+}
+
+.ds-prompt-suggestions__item:nth-child(4) {
+  animation-delay: calc(var(--motion-duration-instant) * 3);
+}
+
+.ds-prompt-suggestions__item:nth-child(n + 5) {
+  animation-delay: calc(var(--motion-duration-instant) * 4);
+}
+
+@keyframes ds-prompt-suggestions-pop {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ============================================
+   CHOSEN — the tap acknowledgment
+   The picked chip presses in and springs back
+   (the spring's overshoot is the tiny bounce)
+   while its siblings dim, so the choice pops
+   for the beat before the host acts on it.
+   ============================================ */
+
+.ds-prompt-suggestions__item {
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-prompt-suggestions--choosing
+  .ds-prompt-suggestions__item:not(.ds-prompt-suggestions__item--chosen) {
+  /* The system's dimmed convention, shared with disabled states. */
+  opacity: 0.4;
+}
+
+.ds-prompt-suggestions__item--chosen .ds-chip {
+  animation: ds-prompt-suggestions-choose var(--motion-duration-slow) var(--motion-ease-spring);
+}
+
+@keyframes ds-prompt-suggestions-choose {
+  0% {
+    transform: scale(1);
+  }
+
+  35% {
+    transform: scale(0.94);
+  }
+
+  /* The spring overshoots past 1 on the way back, then settles. */
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* ============================================
+   PENDING — placeholder pills
+   Each placeholder is the chip's real shell —
+   its surface, border, padding and height for
+   the row's size — holding a text-height shimmer
+   bar where the label is "generating" (Skeleton's
+   sweep on ThreadPanel's 0.75em bar geometry).
+   The shell is what keeps the row's height and
+   rhythm exactly what the loaded chips will be.
+   ============================================ */
+
+.ds-prompt-suggestions__skeleton {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  border-radius: var(--radius-full);
+  /* Chip's own surface, so only the label reads as loading. */
+  background-color: var(--color-bg-page-primary);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+
+  /* Chip's default (32px) geometry — the row's compact size. The height is
+     the chip's line box plus its padding and border, stated rather than
+     grown from text, since the shell holds a bar instead of a label. */
+  padding: var(--padding-xs) var(--padding-sm-md);
+  height: calc(
+    var(--font-paragraph-sm-em-line-height) + 2 * var(--padding-xs) + 2 * var(--border-xs)
+  );
+  font-size: var(--font-paragraph-sm-em-size);
+
+  /* Widths are em-cycled below so the set reads as questions of different
+     lengths rather than three identical pills — a drawing choice scaled by
+     the font, like ThreadPanel's 0.75em shimmer bar, not a spacing token. */
+  width: 13em;
+  max-width: 100%;
+}
+
+/* Chip's large geometry — the row's default size. */
+.ds-prompt-suggestions--default .ds-prompt-suggestions__skeleton {
+  padding: var(--padding-sm) var(--padding-lg);
+  height: calc(
+    var(--font-paragraph-em-line-height) + 2 * var(--padding-sm) + 2 * var(--border-xs)
+  );
+  font-size: var(--font-paragraph-em-size);
+}
+
+.ds-prompt-suggestions__item:nth-child(3n + 2) .ds-prompt-suggestions__skeleton {
+  width: 16em;
+}
+
+.ds-prompt-suggestions__item:nth-child(3n) .ds-prompt-suggestions__skeleton {
+  width: 11em;
+}
+
+/* The generating "label": a text-height bar filling the shell's content
+   box, swept by the shimmer. */
+.ds-prompt-suggestions__skeleton-bar {
+  display: block;
+  width: 100%;
+  height: 0.75em;
+  border-radius: var(--radius-full);
+  background-color: var(--color-bg-container-secondary);
+  position: relative;
+  overflow: hidden;
+  /* The trailing end dissolves, as ThreadPanel's naming bar does under its
+     title mask — a label mid-write, not a finished block.
+     ds-allow(color): mask alpha keywords (black/transparent), not palette colours */
+  -webkit-mask-image: linear-gradient(to right, black calc(100% - var(--gap-xl)), transparent);
+  mask-image: linear-gradient(to right, black calc(100% - var(--gap-xl)), transparent);
+}
+
+.ds-prompt-suggestions__skeleton-bar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--color-bg-container-primary) 50%,
+    transparent 100%
+  );
+  /* ds-allow(motion): Skeleton's shimmer — the sweep needs a symmetric
+     in-out curve no --motion-ease-* token provides; the duration is
+     tokenized. */
+  animation: ds-prompt-suggestions-shimmer var(--motion-duration-loop-shimmer)
+    ease-in-out infinite;
+}
+
+@keyframes ds-prompt-suggestions-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}

@@ -1,0 +1,261 @@
+/* ============================================
+   ALERT COMPONENT
+   Contextual feedback with status variants
+   ============================================ */
+
+.ds-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-sm); /* 8px */
+  padding: var(--padding-md); /* 16px */
+  border: var(--border-xs) solid transparent;
+  border-radius: var(--radius-sm); /* 8px */
+  width: 100%;
+}
+
+/* ============================================
+   SIZE — DEFAULT
+   ============================================ */
+
+.ds-alert--default {
+  padding: var(--padding-md); /* 16px */
+}
+
+/* ============================================
+   SIZE — COMPACT
+   ============================================ */
+
+.ds-alert--compact {
+  padding: var(--padding-xs) var(--padding-sm-md); /* 6px 12px */
+}
+
+.ds-alert--compact .ds-alert__icon {
+  --icon-size: var(--icon-size-sm);
+}
+
+.ds-alert--compact .ds-alert__title {
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+}
+
+.ds-alert--compact .ds-alert__description {
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+}
+
+.ds-alert--compact .ds-alert__dismiss {
+  width: 20px;
+  height: 20px;
+}
+
+.ds-alert--compact .ds-alert__dismiss .material-symbols-rounded {
+  --icon-size: var(--icon-size-sm);
+}
+
+/* ============================================
+   ICON
+   ============================================ */
+
+.ds-alert__icon {
+  flex-shrink: 0;
+  --icon-size: var(--icon-size-md);
+  line-height: 1;
+}
+
+/* ============================================
+   CONTENT
+   ============================================ */
+
+.ds-alert__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxs); /* 2px */
+  min-width: 0;
+}
+
+.ds-alert__title {
+  font-family: var(--font-paragraph-em-family);
+  font-size: var(--font-paragraph-em-size);
+  font-weight: var(--font-paragraph-em-weight);
+  line-height: var(--font-paragraph-em-line-height);
+  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  margin: 0;
+}
+
+.ds-alert__description {
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+  margin: 0;
+}
+
+/* ============================================
+   DISMISS BUTTON
+   ============================================ */
+
+.ds-alert__dismiss {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-radius: var(--radius-sm); /* 8px */
+  transition: background-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-alert__dismiss .material-symbols-rounded {
+  --icon-size: var(--icon-size-md);
+}
+
+.ds-alert__dismiss:hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-alert__dismiss:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+/* ============================================
+   VARIANT — INFO
+   ============================================ */
+
+.ds-alert--info {
+  background-color: var(--color-status-info-bg);
+  border-color: var(--color-status-info-border);
+}
+
+.ds-alert--info .ds-alert__icon {
+  color: var(--color-status-info-border);
+}
+
+.ds-alert--info .ds-alert__title {
+  color: var(--color-status-info-text);
+}
+
+.ds-alert--info .ds-alert__description {
+  color: var(--color-status-info-text);
+}
+
+.ds-alert--info .ds-alert__dismiss {
+  color: var(--color-status-info-text);
+}
+
+/* ============================================
+   VARIANT — POSITIVE
+   ============================================ */
+
+.ds-alert--positive {
+  background-color: var(--color-status-positive-bg);
+  border-color: var(--color-status-positive-border);
+}
+
+.ds-alert--positive .ds-alert__icon {
+  color: var(--color-status-positive-border);
+}
+
+.ds-alert--positive .ds-alert__title {
+  color: var(--color-status-positive-text);
+}
+
+.ds-alert--positive .ds-alert__description {
+  color: var(--color-status-positive-text);
+}
+
+.ds-alert--positive .ds-alert__dismiss {
+  color: var(--color-status-positive-text);
+}
+
+/* ============================================
+   VARIANT — WARNING
+   ============================================ */
+
+.ds-alert--warning {
+  background-color: var(--color-status-warning-bg);
+  border-color: var(--color-status-warning-border);
+}
+
+.ds-alert--warning .ds-alert__icon {
+  color: var(--color-status-warning-border);
+}
+
+.ds-alert--warning .ds-alert__title {
+  color: var(--color-status-warning-text);
+}
+
+.ds-alert--warning .ds-alert__description {
+  color: var(--color-status-warning-text);
+}
+
+.ds-alert--warning .ds-alert__dismiss {
+  color: var(--color-status-warning-text);
+}
+
+/* ============================================
+   VARIANT — ERROR
+   ============================================ */
+
+.ds-alert--error {
+  background-color: var(--color-status-error-bg);
+  border-color: var(--color-status-error-border);
+}
+
+.ds-alert--error .ds-alert__icon {
+  color: var(--color-status-error-border);
+}
+
+.ds-alert--error .ds-alert__title {
+  color: var(--color-status-error-text);
+}
+
+.ds-alert--error .ds-alert__description {
+  color: var(--color-status-error-text);
+}
+
+.ds-alert--error .ds-alert__dismiss {
+  color: var(--color-status-error-text);
+}
+
+/* ============================================
+   VARIANT — NEUTRAL
+   ============================================ */
+
+.ds-alert--neutral {
+  background-color: var(--color-status-neutral-bg);
+  border-color: var(--color-status-neutral-border);
+}
+
+.ds-alert--neutral .ds-alert__icon {
+  color: var(--color-status-neutral-text);
+}
+
+.ds-alert--neutral .ds-alert__title {
+  color: var(--color-status-neutral-text);
+}
+
+.ds-alert--neutral .ds-alert__description {
+  color: var(--color-status-neutral-text);
+}
+
+.ds-alert--neutral .ds-alert__dismiss {
+  color: var(--color-status-neutral-text);
+}
+
+/* Icons take the colour of the text around them. Explicit, not just
+   inherited by default: a consumer stylesheet that sets a colour on
+   .material-symbols-rounded itself (a common global default) would
+   otherwise override inheritance and detach the icon from the state
+   colours this component sets on its parents. */
+.ds-alert .material-symbols-rounded {
+  color: inherit;
+}

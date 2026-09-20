@@ -1,0 +1,155 @@
+/* ============================================
+   NAV LIST COMPONENT
+   Vertical navigation link list for drawers and
+   side menus. Rows are tertiary Buttons — their
+   shape, sizing, and states live in Button.css;
+   this file owns only layout, the chevron
+   toggle, and the expand animation.
+   ============================================ */
+
+.ds-nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxs);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Every row reserves the toggle's 40px height, so leaf rows (compact
+   Buttons, ~32px) and rows carrying a 40px chevron toggle sit on the same
+   vertical rhythm instead of producing uneven gaps down the list. */
+.ds-nav-list__item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 40px;
+}
+
+/* ============================================
+   ROWS
+   Full-width, left-aligned Buttons; long labels
+   truncate with an ellipsis.
+   ============================================ */
+
+.ds-nav-list .ds-button {
+  width: 100%;
+  max-width: 100%;
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.ds-nav-list .ds-button__text {
+  min-width: 0;
+  flex: 0 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* A row with a toggle shares its width with the chevron button. */
+.ds-nav-list__row {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xxs);
+  width: 100%;
+}
+
+.ds-nav-list__row .ds-button {
+  width: auto;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* ============================================
+   TOGGLE
+   Mirrors CircularButton's 40px tertiary recipe.
+   ============================================ */
+
+.ds-nav-list__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-full);
+  background-color: var(--color-action-passive-bg);
+  cursor: pointer;
+  transition: background-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-nav-list__toggle:hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-nav-list__toggle:active {
+  background-color: var(--color-action-passive-bg-active);
+}
+
+.ds-nav-list__toggle:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: -2px;
+}
+
+.ds-nav-list__chevron {
+  --icon-size: var(--icon-size-sm);
+  color: var(--color-icon-primary);
+  line-height: 1;
+  transition: transform var(--motion-duration-slow) var(--motion-ease-standard);
+}
+
+.ds-nav-list__toggle[aria-expanded='true'] .ds-nav-list__chevron {
+  transform: rotate(180deg);
+}
+
+/* ============================================
+   PANEL — collapsible sublist wrapper
+   Grid-rows height animation; reduced motion is
+   handled by the motion-token contract.
+   ============================================ */
+
+.ds-nav-list__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  margin-top: 0;
+  transition:
+    grid-template-rows var(--motion-duration-slow) var(--motion-ease-emphasized),
+    margin-top var(--motion-duration-slow) var(--motion-ease-emphasized);
+}
+
+/* Open panels take the list's item gap above them, so the first child sits
+   the same distance from its parent row as any two siblings do. */
+.ds-nav-list__panel--open {
+  grid-template-rows: 1fr;
+  margin-top: var(--gap-xxs);
+}
+
+/* ============================================
+   SUBLIST — one indent step per nesting level
+   ============================================ */
+
+.ds-nav-list__sublist {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxs);
+  overflow: hidden;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  padding-left: var(--padding-xl);
+  list-style: none;
+}
+
+.ds-nav-list__sublist .ds-nav-list__sublist {
+  padding-left: var(--gap-lg);
+}
+
+/* Permanent (non-collapsible) groups render their sublist directly under the
+   row, with no panel — give it the same item gap the panel carries when open. */
+.ds-nav-list__item > .ds-nav-list__sublist {
+  margin-top: var(--gap-xxs);
+}

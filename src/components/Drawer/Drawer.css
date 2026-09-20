@@ -1,0 +1,262 @@
+/* ============================================
+   DRAWER COMPONENT
+   Edge-anchored modal panel that slides in
+   ============================================ */
+
+.ds-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  visibility: hidden; /* keeps panel controls out of the tab order when closed */
+  pointer-events: none;
+  transition: visibility var(--motion-duration-slow) var(--motion-ease-standard);
+}
+
+.ds-drawer--open {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* Anchor the panel to the requested edge */
+.ds-drawer--left {
+  justify-content: flex-start;
+  align-items: stretch;
+}
+
+.ds-drawer--right {
+  justify-content: flex-end;
+  align-items: stretch;
+}
+
+.ds-drawer--top {
+  align-items: flex-start;
+  justify-content: stretch;
+}
+
+.ds-drawer--bottom {
+  align-items: flex-end;
+  justify-content: stretch;
+}
+
+/* ============================================
+   SCRIM
+   ============================================ */
+
+.ds-drawer__scrim {
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-scrim);
+  opacity: 0;
+  transition: opacity var(--motion-duration-slow) var(--motion-ease-standard);
+}
+
+.ds-drawer--open .ds-drawer__scrim {
+  opacity: 1;
+}
+
+/* ============================================
+   PANEL
+   ============================================ */
+
+.ds-drawer__panel {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md); /* 16px */
+  padding: var(--padding-lg); /* 20px */
+  background-color: var(--color-bg-page-primary);
+  box-shadow: var(--shadow-modal);
+  transition: transform var(--motion-duration-slow) var(--motion-ease-standard);
+  outline: none;
+  overflow: hidden;
+}
+
+/* Edge-specific border + resting (off-screen) transform */
+.ds-drawer--left .ds-drawer__panel {
+  height: 100%;
+  border-right: var(--border-xs) solid var(--color-bg-container-border);
+  transform: translateX(-100%);
+}
+
+.ds-drawer--right .ds-drawer__panel {
+  height: 100%;
+  border-left: var(--border-xs) solid var(--color-bg-container-border);
+  transform: translateX(100%);
+}
+
+.ds-drawer--top .ds-drawer__panel {
+  width: 100%;
+  border-bottom: var(--border-xs) solid var(--color-bg-container-border);
+  transform: translateY(-100%);
+}
+
+.ds-drawer--bottom .ds-drawer__panel {
+  width: 100%;
+  border-top: var(--border-xs) solid var(--color-bg-container-border);
+  transform: translateY(100%);
+}
+
+.ds-drawer--open .ds-drawer__panel {
+  transform: translate(0, 0);
+}
+
+/* ============================================
+   SIZES — measured along the slide axis
+   ============================================ */
+
+.ds-drawer--left.ds-drawer--sm .ds-drawer__panel,
+.ds-drawer--right.ds-drawer--sm .ds-drawer__panel {
+  width: 320px;
+  max-width: 100vw;
+}
+
+.ds-drawer--left.ds-drawer--md .ds-drawer__panel,
+.ds-drawer--right.ds-drawer--md .ds-drawer__panel {
+  width: 420px;
+  max-width: 100vw;
+}
+
+.ds-drawer--left.ds-drawer--lg .ds-drawer__panel,
+.ds-drawer--right.ds-drawer--lg .ds-drawer__panel {
+  width: 560px;
+  max-width: 100vw;
+}
+
+.ds-drawer--top.ds-drawer--sm .ds-drawer__panel,
+.ds-drawer--bottom.ds-drawer--sm .ds-drawer__panel {
+  max-height: 30vh;
+}
+
+.ds-drawer--top.ds-drawer--md .ds-drawer__panel,
+.ds-drawer--bottom.ds-drawer--md .ds-drawer__panel {
+  max-height: 50vh;
+}
+
+.ds-drawer--top.ds-drawer--lg .ds-drawer__panel,
+.ds-drawer--bottom.ds-drawer--lg .ds-drawer__panel {
+  max-height: 75vh;
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+
+.ds-drawer__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--gap-md); /* 16px */
+  flex-shrink: 0;
+}
+
+.ds-drawer__heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs); /* 4px */
+  min-width: 0;
+}
+
+.ds-drawer__title {
+  font-family: var(--font-heading-3-family);
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+  letter-spacing: var(--font-heading-3-letter-spacing);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.ds-drawer__description {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-tertiary);
+  margin: 0;
+}
+
+/* Close button — ghost icon button */
+.ds-drawer__close {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-full); /* pill */
+  background-color: transparent;
+  cursor: pointer;
+  transition: background-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-drawer__close:hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-drawer__close:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+.ds-drawer__close-icon {
+  --icon-size: var(--icon-size-sm);
+  line-height: 1;
+  color: var(--color-icon-primary);
+}
+
+/* ============================================
+   BODY
+   ============================================ */
+
+.ds-drawer__body {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+  color: var(--color-text-secondary);
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+
+.ds-drawer__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--gap-sm); /* 8px */
+  padding-top: var(--padding-xs); /* 6px */
+  flex-shrink: 0;
+}
+
+/* ============================================
+   RESPONSIVE
+   Side drawers go full-width on narrow screens
+   ============================================ */
+
+@media (max-width: 480px) {
+  .ds-drawer--left .ds-drawer__panel,
+  .ds-drawer--right .ds-drawer__panel {
+    width: 100vw;
+  }
+}
+
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-drawer,
+  .ds-drawer__panel,
+  .ds-drawer__scrim {
+    transition: none;
+  }
+}

@@ -1,0 +1,288 @@
+/* ============================================
+   TEMPLATES PAGE LAYOUT
+   No sidebar: the carousel below is the way
+   into each template, so the content column
+   runs the full layout width.
+   ============================================ */
+.dsLayout {
+  display: flex;
+  gap: var(--layout-column-gap);
+  width: 100%;
+  max-width: 1440px;
+  padding-top: var(--primitive-gap-xl);
+}
+
+.dsContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxxl);
+  min-width: 0;
+}
+
+/* ============================================
+   PAGE TITLE - Display 2
+   ============================================ */
+.pageHeader {
+  margin-top: calc(var(--primitive-gap-xl) - var(--gap-xxxl));
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--primitive-gap-lg);
+  width: 100%;
+}
+
+.pageTitle {
+  font-size: var(--font-display-2-size);
+  font-weight: var(--font-display-2-weight);
+  line-height: var(--font-display-2-line-height);
+  letter-spacing: var(--font-display-2-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+/* Sub Display */
+.subDisplay {
+  font-family: var(--font-sub-display-family);
+  font-size: var(--font-sub-display-size);
+  font-weight: var(--font-sub-display-weight);
+  line-height: var(--font-sub-display-line-height);
+  letter-spacing: var(--font-sub-display-letter-spacing);
+  color: var(--color-text-primary);
+  margin-bottom: 0;
+}
+
+/* ============================================
+   INTRO SECTION
+   ============================================ */
+.introSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-lg);
+}
+
+.introBody {
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   SHOWCASE
+   One slide per template: the live preview
+   breaks out of the content column and runs
+   the full viewport width, its caption row
+   re-inset to the column beneath.
+   ============================================ */
+.showcaseSection {
+  width: 100%;
+}
+
+/* Full bleed: the column centres inside the body, so escaping it takes the
+   viewport, not just the body padding. TemplateShowcase measures the real
+   viewport into --bleed-width (100vw counts the scrollbar; the measurement
+   does not), with 100vw as the pre-hydration fallback.
+
+   --showcase-gutter mirrors the body's own side padding in globals.css
+   (per breakpoint below), so --showcase-inset is the distance from the
+   viewport edge to the content column's left edge: the snapped slide lines
+   up with the column, and the rest of the track runs off screen. The slide
+   width is capped so the window stays a contained figure with the next
+   slide peeking in from the right (--showcase-peek is the reserved peek
+   room, a layout coordinate like the design size — narrower on phones,
+   where 120px would take a third of the screen from the preview). */
+.showcaseBleed {
+  --showcase-gutter: var(--primitive-padding-xl);
+  --showcase-peek: 120px;
+  --showcase-inset: max(
+    var(--showcase-gutter),
+    (var(--bleed-width, 100vw) - 1440px) / 2
+  );
+  --slide-width: min(
+    1080px,
+    calc(
+      var(--bleed-width, 100vw) - var(--showcase-inset) - var(--showcase-peek)
+    )
+  );
+  width: var(--bleed-width, 100vw);
+  margin-left: calc(50% - var(--bleed-width, 100vw) / 2);
+}
+
+@media (max-width: 959px) {
+  .showcaseBleed {
+    --showcase-gutter: var(--primitive-padding-lg);
+    --showcase-peek: 72px;
+  }
+}
+
+@media (max-width: 600px) {
+  .showcaseBleed {
+    --showcase-gutter: var(--primitive-padding-md);
+    --showcase-peek: 48px;
+  }
+}
+
+/* The scroller: snap points at each slide, the scrollbar hidden because
+   the dots and arrows below are the stated navigation (drag and trackpad
+   still scroll it), and the snap inset matching the column edge. */
+.track {
+  display: flex;
+  gap: var(--gap-xl);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding-inline: var(--showcase-inset);
+  scroll-padding-inline-start: var(--showcase-inset);
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+
+.track::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    scroll-behavior: auto;
+  }
+}
+
+.slide {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-lg);
+  flex: 0 0 var(--slide-width);
+  width: var(--slide-width);
+  scroll-snap-align: start;
+}
+
+/* The window: a drawn browser bar over the template's viewport, so the
+   preview reads as its own entity rather than a region of this page. */
+.frameShell {
+  position: relative;
+  width: 100%;
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-xl);
+  background: var(--color-bg-container-primary);
+  overflow: hidden;
+}
+
+/* The template's viewport: a 16:10 desktop drawn at the design size and
+   scaled to the shell. 1440x900 lives in TemplateShowcase.tsx, which sets
+   --frame-scale from the shell's measured width. */
+.frameViewport {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1440 / 900;
+  overflow: hidden;
+}
+
+.frame {
+  /* Absolute, so the design-size frame adds no intrinsic width: the
+     carousel slide must size from the column, not from the 1440px page
+     inside it. */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1440px;
+  height: 900px;
+  border: 0;
+  transform: scale(var(--frame-scale, 0.5));
+  transform-origin: top left;
+  /* Inert by design: the overlay link owns the pointer, and the full page
+     is one click away. */
+  pointer-events: none;
+}
+
+.frameLink {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-xl);
+}
+
+.frameLink:focus-visible {
+  outline: var(--border-md) solid var(--color-action-primary-bg);
+  outline-offset: calc(-1 * var(--border-md));
+}
+
+/* Caption row under the preview — slide-width, so it travels with its
+   window and a peeking slide brings its own name along. */
+.slideCaption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-lg);
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+/* ============================================
+   CONTROLS
+   Dots and arrows under the track, inset to
+   the content column like the snapped slide.
+   ============================================ */
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-lg);
+  margin-top: var(--gap-lg);
+  /* Under the snapped slide: left edge on the column, right edge on the
+     slide's (border-box, so the width includes the inset padding). */
+  padding-inline-start: var(--showcase-inset);
+  width: calc(var(--showcase-inset) + var(--slide-width));
+}
+
+.dots {
+  display: flex;
+  gap: var(--gap-sm);
+}
+
+/* Dot diameter is a drawing coordinate; the active dot is the selected
+   item of a mutually exclusive set, which is the action colour's job. */
+.dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--color-bg-container-tertiary);
+  cursor: pointer;
+  transition: background-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.dotActive {
+  background: var(--color-action-primary-bg);
+}
+
+.dot:focus-visible {
+  outline: var(--border-md) solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+.arrows {
+  display: flex;
+  gap: var(--gap-sm);
+}
+
+.slideText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs);
+  min-width: 0;
+}
+
+.slideTitle {
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+  letter-spacing: var(--font-heading-3-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.slideDescription {
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-secondary);
+}

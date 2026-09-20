@@ -1,0 +1,34 @@
+/* The copy button's two glyphs stack in one grid cell and crossfade with a
+   blur-and-scale swap when the copy lands — the check materialises where the
+   copy icon dissolved. The timings ride the motion tokens, so the global
+   reduced-motion guard collapses the swap to an instant change. */
+
+.iconSwap {
+  display: inline-grid;
+}
+
+.iconGlyph {
+  grid-area: 1 / 1;
+  transition:
+    opacity var(--motion-duration-base) var(--motion-ease-entrance),
+    filter var(--motion-duration-base) var(--motion-ease-entrance),
+    transform var(--motion-duration-base) var(--motion-ease-entrance);
+}
+
+.iconCheck {
+  opacity: 0;
+  filter: blur(2px);
+  transform: scale(0.4);
+}
+
+.iconSwap[data-copied] .iconCheck {
+  opacity: 1;
+  filter: blur(0);
+  transform: scale(1);
+}
+
+.iconSwap[data-copied] .iconCopy {
+  opacity: 0;
+  filter: blur(2px);
+  transform: scale(0.4);
+}

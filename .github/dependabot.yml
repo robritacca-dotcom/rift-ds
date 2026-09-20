@@ -1,0 +1,14 @@
+version: 2
+updates:
+  # npm dependencies for the whole workspace (root + website share one lockfile).
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+  # Keep GitHub Actions current, and nudge tag pins toward pinned commits.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5

@@ -1,0 +1,153 @@
+.panel {
+  position: fixed;
+  top: 80px;
+  right: var(--padding-lg);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  width: 280px;
+  padding: var(--padding-lg);
+  background: var(--color-bg-container-primary);
+  border: 1px solid var(--color-bg-container-border);
+  border-radius: var(--radius-md);
+}
+
+.panelCollapsed {
+  gap: 0;
+  padding: var(--padding-sm) var(--padding-md);
+  width: auto;
+}
+
+.panelHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-sm);
+}
+
+.panelTitle {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.iconButton {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: 600;
+  padding: var(--padding-xxs) var(--padding-sm);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-bg-container-border);
+  background: var(--color-bg-container-secondary);
+  color: var(--color-text-primary);
+  cursor: pointer;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxs);
+}
+
+.rowLabel {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-family-primary);
+  font-size: var(--font-paragraph-sm-size);
+  color: var(--color-text-primary);
+}
+
+.rowValue {
+  font-family: var(--font-family-code);
+  color: var(--color-text-secondary);
+}
+
+.slider {
+  width: 100%;
+  accent-color: var(--color-action-primary-bg);
+}
+
+.modeRow {
+  display: flex;
+  gap: var(--gap-xs);
+}
+
+.presetRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-xs);
+}
+
+.presetRow .modeButton {
+  flex: 1 1 40%;
+}
+
+.modeButton {
+  flex: 1;
+  font-family: var(--font-family-primary);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: 600;
+  padding: var(--padding-xs) var(--padding-sm);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-bg-container-border);
+  background: var(--color-bg-container-secondary);
+  color: var(--color-text-primary);
+  cursor: pointer;
+}
+
+.modeButtonActive {
+  background: var(--color-action-primary-bg);
+  border-color: var(--color-action-primary-bg);
+  color: var(--color-action-primary-text);
+}
+
+.stats {
+  font-family: var(--font-family-code);
+  font-size: var(--font-paragraph-sm-size);
+  color: var(--color-text-secondary);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxs);
+}
+
+/* The current settings as props, click-to-select. Settings are deliberately
+   not persisted: hydrating them from storage would diverge from the
+   server-rendered markup, so the snippet is how a look leaves this panel. */
+.snippet {
+  font-family: var(--font-family-code);
+  font-size: var(--font-paragraph-sm-size);
+  color: var(--color-text-secondary);
+  background: var(--color-bg-container-secondary);
+  border-radius: var(--radius-sm);
+  padding: var(--padding-sm);
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  user-select: all;
+}
+
+.fallbackNote {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-paragraph-sm-size);
+  color: var(--color-status-warning-text);
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .panel {
+    top: auto;
+    bottom: var(--padding-lg);
+    left: var(--padding-lg);
+    right: var(--padding-lg);
+    width: auto;
+  }
+}

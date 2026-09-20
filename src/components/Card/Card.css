@@ -1,0 +1,189 @@
+/* ============================================
+   CARD COMPONENT
+   Content card with preview area and title
+   ============================================ */
+
+.ds-card {
+  /* Layout */
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md); /* 12px */
+
+  /* Sizing */
+  flex: 1 1 0;
+  min-width: 250px;
+  height: 268px;
+
+  /* Appearance */
+  background: var(--color-bg-container-primary-semi);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-xl); /* 24px */
+  padding: var(--padding-lg); /* 20px */
+  overflow: hidden;
+  color: inherit;
+  text-decoration: none;
+
+  /* Interaction */
+  transition: transform var(--motion-duration-slow) var(--motion-ease-standard), box-shadow var(--motion-duration-slow) var(--motion-ease-standard);
+  /* ds-allow(color): transparent resting state of the sanctioned Card
+     hover-lift shadow (see design.md — Do's and Don'ts). */
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+}
+
+.ds-card--interactive {
+  cursor: pointer;
+}
+
+.ds-card--interactive:hover {
+  transform: translateY(-4px);
+  /* ds-allow(color): the sanctioned Card hover-lift shadow — deliberately
+     heavier than --shadow-floating (see design.md — Do's and Don'ts). */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================
+   PREVIEW AREA
+   ============================================ */
+
+.ds-card__preview {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 184px;
+  min-height: 0;
+}
+
+/* ============================================
+   TITLE
+   ============================================ */
+
+.ds-card__title {
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+  letter-spacing: var(--font-heading-3-letter-spacing);
+  color: var(--color-text-primary);
+  width: 100%;
+  text-align: center;
+}
+
+/* ============================================
+   CASE-STUDY VARIANT
+   ============================================ */
+
+.ds-card--case-study {
+  height: auto;
+  min-width: 0;
+  /* The cover is inset, not full-bleed: 12px of card around a 12px-radius
+     cover keeps the corners concentric with the card's 24px shell. */
+  padding: var(--padding-sm-md);
+  gap: 0;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.ds-card--case-study:hover {
+  transform: translateY(-4px);
+  /* ds-allow(color): same sanctioned hover-lift shadow as the interactive
+     variant. */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.ds-card--case-study--placeholder {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.ds-card--case-study--placeholder:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.ds-card--case-study__cover-wrap {
+  width: 100%;
+  aspect-ratio: 940 / 480;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background: var(--color-bg-container-secondary);
+}
+
+/* A drawn cover (the `cover` prop) fills the same slot the image would, so a
+   grid of cards keeps one cover shape whichever kind it was given. */
+.ds-card--case-study__cover-slot,
+.ds-card--case-study__cover-slot > * {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.ds-card--case-study__cover-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.ds-card--case-study__cover-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-container-secondary);
+}
+
+.ds-card--case-study__cover-placeholder-logo {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  opacity: 0.6;
+}
+
+.ds-card--case-study__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  /* 8px on top of the card's 12px inset: text lands 20px from the card edge
+     (the old full-bleed body padding) and sits slightly inside the cover. */
+  padding: var(--padding-md) var(--padding-sm) var(--padding-sm-md);
+}
+
+.ds-card--case-study__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xs);
+}
+
+.ds-card--case-study__company-logo {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.ds-card--case-study__company-name {
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+}
+
+.ds-card--case-study__title {
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+  letter-spacing: var(--font-heading-3-letter-spacing);
+  color: var(--color-text-primary);
+  margin: 0;
+  text-align: left;
+}
+
+.ds-card--case-study__dek {
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-secondary);
+  margin: 0;
+}

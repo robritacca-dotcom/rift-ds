@@ -1,0 +1,120 @@
+/* ============================================
+   GAUGE COMPONENT
+   Radial dial for a single bounded reading.
+   Card chrome, header, and padding come from
+   the shared chart styles (Chart.css) — this
+   file owns the dial alone. Colour flows
+   through `color`: the value arc draws with
+   currentColor, so a tone is one custom
+   property swap.
+   ============================================ */
+
+/* Base — the dial centres in the shared chart body */
+
+.ds-gauge__body {
+  display: flex;
+  justify-content: center;
+}
+
+/* Unlike the fluid recharts bodies, the dial has intrinsic size — a bare
+   gauge shrink-wraps it so it sits inline in a Stat row or tile. */
+.ds-gauge.ds-chart--bare {
+  width: auto;
+  display: inline-flex;
+}
+
+.ds-gauge__dial {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ds-gauge__svg {
+  display: block;
+}
+
+/* Parts */
+
+.ds-gauge__track {
+  fill: none;
+  stroke: var(--color-bg-container-tertiary);
+  stroke-linecap: round;
+}
+
+.ds-gauge__arc {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  transition: stroke-dasharray var(--motion-duration-slow) var(--motion-ease-emphasized);
+  /* Sweep in from an empty dial on mount — the single keyframe animates to
+     the element's own dasharray, so one rule serves every reading. The
+     duration tokens collapse under reduced motion, guarding this for free. */
+  animation: ds-gauge-sweep var(--motion-duration-slower) var(--motion-ease-emphasized);
+}
+
+@keyframes ds-gauge-sweep {
+  from {
+    stroke-dasharray: 0 100;
+  }
+}
+
+.ds-gauge__center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-xxs);
+  text-align: center;
+  pointer-events: none;
+}
+
+/* The centre pair mirrors the chart family's radial centre label:
+   a light sub-display numeral over a caption. */
+
+.ds-gauge__value {
+  font-family: var(--font-sub-display-family);
+  font-size: var(--font-sub-display-size);
+  font-weight: var(--font-sub-display-weight);
+  line-height: var(--font-sub-display-line-height);
+  letter-spacing: var(--font-sub-display-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.ds-gauge__label {
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+  color: var(--color-text-secondary);
+}
+
+/* Tones */
+
+.ds-gauge--accent {
+  color: var(--color-chart-series-1);
+}
+
+/* The status hues come from the border tokens, not the text tokens: the
+   border set is stable across themes, while the dark-mode text tints are
+   near-white and would wash three tones into one. */
+
+.ds-gauge--positive {
+  color: var(--color-status-positive-border);
+}
+
+.ds-gauge--warning {
+  color: var(--color-status-warning-border);
+}
+
+.ds-gauge--error {
+  color: var(--color-status-error-border);
+}
+
+.ds-gauge--neutral {
+  color: var(--color-text-secondary);
+}

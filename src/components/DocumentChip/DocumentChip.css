@@ -1,0 +1,190 @@
+/* ============================================
+   DOCUMENT CHIP COMPONENT
+   Compact file reference tile: type icon, name,
+   metadata line, upload progress, optional remove.
+   ============================================ */
+
+.ds-document-chip {
+  /* Accent indirection — the error modifier repoints one variable
+     instead of restyling each part */
+  --ds-document-chip-border: var(--color-bg-container-border);
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-sm);
+
+  padding: var(--padding-xs) var(--padding-sm-md);
+
+  border: var(--border-xs) solid var(--ds-document-chip-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-bg-container-primary);
+
+  transition: border-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+/* ============================================
+   SIZE — COMPACT (single line for composer rows)
+   ============================================ */
+
+.ds-document-chip--compact {
+  gap: var(--gap-xs);
+  padding: var(--padding-xxs) var(--padding-sm);
+}
+
+/* ============================================
+   ERROR — repoint the border accent
+   ============================================ */
+
+.ds-document-chip--error {
+  --ds-document-chip-border: var(--color-status-error-border);
+}
+
+/* ============================================
+   MAIN — body button when the chip is clickable
+   ============================================ */
+
+.ds-document-chip__main {
+  display: inline-flex;
+  align-items: center;
+  gap: inherit;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  border-radius: var(--radius-sm);
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-document-chip__main:hover {
+  background-color: var(--color-bg-container-secondary);
+}
+
+/* ============================================
+   TYPE ICON
+   ============================================ */
+
+.ds-document-chip__icon {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  color: var(--color-icon-primary);
+  transition: color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-document-chip__icon .material-symbols-rounded {
+  --icon-size: var(--icon-size-md);
+}
+
+.ds-document-chip--compact .ds-document-chip__icon .material-symbols-rounded {
+  --icon-size: var(--icon-size-sm);
+}
+
+.ds-document-chip--error .ds-document-chip__icon {
+  color: var(--color-status-error-text);
+}
+
+/* ============================================
+   TEXT BLOCK — name over one detail line
+   ============================================ */
+
+.ds-document-chip__text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-xxs);
+  min-width: 0;
+}
+
+.ds-document-chip__name {
+  /* Consumer-overridable truncation width */
+  max-width: var(--ds-document-chip-max-width, 28ch);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  font-family: var(--font-paragraph-sm-em-family);
+  font-size: var(--font-paragraph-sm-em-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.ds-document-chip__meta,
+.ds-document-chip__error {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  white-space: nowrap;
+}
+
+.ds-document-chip__meta {
+  color: var(--color-text-tertiary);
+}
+
+.ds-document-chip__error {
+  color: var(--color-status-error-text);
+}
+
+/* Composed ProgressBar replacing the metadata line */
+.ds-document-chip__progress {
+  align-self: stretch;
+}
+
+/* ============================================
+   REMOVE BUTTON
+   ============================================ */
+
+.ds-document-chip__remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  border-radius: var(--radius-full);
+  color: var(--color-icon-primary);
+  cursor: pointer;
+  transition: color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-document-chip__remove .material-symbols-rounded {
+  --icon-size: var(--icon-size-sm);
+}
+
+.ds-document-chip__remove:not(:disabled):hover {
+  color: var(--color-text-primary);
+}
+
+.ds-document-chip__remove:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   FOCUS
+   ============================================ */
+
+.ds-document-chip__main:focus-visible,
+.ds-document-chip__remove:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: -2px;
+}
+
+/* Icons take the colour of the text around them. Explicit, not just
+   inherited by default: a consumer stylesheet that sets a colour on
+   .material-symbols-rounded itself (a common global default) would
+   otherwise override inheritance and detach the icon from the state
+   colours this component sets on its parents. */
+.ds-document-chip .material-symbols-rounded {
+  color: inherit;
+}

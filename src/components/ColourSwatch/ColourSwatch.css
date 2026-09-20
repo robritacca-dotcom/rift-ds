@@ -1,0 +1,88 @@
+/* ============================================
+   COLOUR SWATCH COMPONENT
+   Tall card that displays a colour token with
+   Primitive, Hex, and RGB values in a box.
+   ============================================ */
+
+.ds-colour-swatch {
+  /* Layout */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  /* Sizing */
+  flex: 1 1 0;
+  min-width: 250px;
+  height: 360px;
+
+  /* Appearance */
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-xl); /* 24px */
+  padding: var(--padding-lg); /* 20px */
+  overflow: hidden;
+  position: relative;
+}
+
+/* Status variant — 1px full border */
+.ds-colour-swatch--status {
+  border: 1px solid;
+}
+
+/* ============================================
+   TITLE BOX
+   Semi-transparent container at card top,
+   matching the values box treatment for
+   readability on any swatch colour.
+   ============================================ */
+
+.ds-colour-swatch__title-box {
+  background: var(--color-bg-container-primary-semi);
+  border-radius: var(--radius-md); /* 12px */
+  padding: var(--padding-sm) var(--padding-md); /* 8px 16px */
+  align-self: flex-start;
+}
+
+.ds-colour-swatch__title {
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+  letter-spacing: var(--font-heading-3-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   VALUES BOX
+   Semi-transparent container at card bottom
+   ============================================ */
+
+.ds-colour-swatch__values {
+  background: var(--color-bg-container-primary-semi);
+  border-radius: var(--radius-md); /* 12px */
+  padding: var(--padding-sm) var(--padding-md); /* 8px 16px */
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* Row: label + value pair */
+.ds-colour-swatch__row {
+  display: flex;
+  gap: var(--gap-md); /* 16px */
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-primary);
+}
+
+/* Label column (e.g. "Primitive", "Hex", "RGB") */
+.ds-colour-swatch__label {
+  flex-shrink: 0;
+  min-width: 70px;
+  color: var(--color-text-tertiary);
+}
+
+/* Data column */
+.ds-colour-swatch__data {
+  word-break: break-word;
+}

@@ -1,0 +1,308 @@
+/* ============================================
+   PRIMITIVE COLOURS PAGE LAYOUT
+   ============================================ */
+.dsLayout {
+  display: flex;
+  gap: var(--layout-column-gap);
+  width: 100%;
+  max-width: 1440px;
+  padding-top: var(--primitive-gap-xl);
+}
+
+.dsContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxxl);
+}
+
+/* ============================================
+   PAGE TITLE - Display 2
+   ============================================ */
+.pageHeader {
+  margin-top: calc(var(--primitive-gap-xl) - var(--gap-xxxl));
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--primitive-gap-lg);
+  width: 100%;
+}
+
+.pageTitle {
+  font-size: var(--font-display-2-size);
+  font-weight: var(--font-display-2-weight);
+  line-height: var(--font-display-2-line-height);
+  letter-spacing: var(--font-display-2-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+/* Sub Display */
+.subDisplay {
+  font-family: var(--font-sub-display-family);
+  font-size: var(--font-sub-display-size);
+  font-weight: var(--font-sub-display-weight);
+  line-height: var(--font-sub-display-line-height);
+  letter-spacing: var(--font-sub-display-letter-spacing);
+  color: var(--color-text-primary);
+  margin-bottom: 0;
+}
+
+/* ============================================
+   INTRO SECTION
+   ============================================ */
+.introSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-lg);
+}
+
+.introBody {
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   VIEW SWITCH
+   ============================================ */
+.viewSwitch {
+  display: flex;
+  width: 100%;
+}
+
+/* ============================================
+   RAMP VIEW — every ramp at once, full width
+
+   Rows share one column template: a fixed label gutter, then a 12-column
+   grid spanning the rest. Neutral fills all twelve (00–11); the chromatic
+   ramps fill 01–10, so a step lines up with the same step on every other
+   ramp no matter how long the ramp is.
+   ============================================ */
+.rampView {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xl);
+  width: 100%;
+}
+
+.rampTable {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  width: 100%;
+}
+
+.rampRow,
+.rampHeaderRow {
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr);
+  align-items: center;
+  gap: var(--gap-md);
+  width: 100%;
+}
+
+.rampCells {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--gap-xxs);
+  width: 100%;
+}
+
+.rampLabel {
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-em-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-primary);
+}
+
+.rampStep {
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-tertiary);
+  text-align: center;
+}
+
+/* The tooltip wrapper is the grid item, so it has to fill the cell */
+.rampTip {
+  display: flex;
+  min-width: 0;
+}
+
+.rampTip :global(.ds-tooltip__panel) {
+  white-space: pre-line;
+  text-align: center;
+  min-width: max-content;
+}
+
+/* A centred panel runs off the page at either end of a 12-column row, so
+   the outer columns anchor their panel to the cell edge instead */
+.rampTipStart :global(.ds-tooltip__panel--top) {
+  left: 0;
+  transform: translateX(0) translateY(4px);
+}
+
+.rampTipStart :global(.ds-tooltip__panel--top.ds-tooltip__panel--visible) {
+  transform: translateX(0) translateY(0);
+}
+
+.rampTipEnd :global(.ds-tooltip__panel--top) {
+  left: auto;
+  right: 0;
+  transform: translateX(0) translateY(4px);
+}
+
+.rampTipEnd :global(.ds-tooltip__panel--top.ds-tooltip__panel--visible) {
+  transform: translateX(0) translateY(0);
+}
+
+.rampCell {
+  width: 100%;
+  height: 44px;
+  border-radius: var(--radius-xs);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+}
+
+/* Step 07 is the key colour each chromatic ramp is built around */
+.rampCellKey {
+  outline: var(--border-md) solid var(--color-input-border-selected);
+  outline-offset: 1px;
+}
+
+.rampNote {
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+}
+
+/* ============================================
+   ALPHA RAMPS — no step numbering, so each swatch
+   carries its own label and sits over a light/dark
+   split that makes the transparency readable
+   ============================================ */
+.alphaGroup {
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr);
+  gap: var(--gap-md);
+  width: 100%;
+}
+
+/* Half the stepped ramps' column count, so the group still lines up with the
+   grid above but each swatch has room for its own label */
+.alphaCells {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: var(--gap-xxs) var(--gap-sm);
+  width: 100%;
+}
+
+.alphaCell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxs);
+  min-width: 0;
+}
+
+.alphaSwatch {
+  display: block;
+  width: 100%;
+  height: 44px;
+  border-radius: var(--radius-xs);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  overflow: hidden;
+  background-image: linear-gradient(
+    to right,
+    var(--color-bg-page-primary) 50%,
+    var(--color-bg-page-inverse) 50%
+  );
+}
+
+.alphaChip {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.alphaLabel {
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ============================================
+   SWATCH VIEW
+   ============================================ */
+.swatchView {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxxl);
+  width: 100%;
+}
+
+/* ============================================
+   COLOUR GROUP — Section per ramp
+   ============================================ */
+.colourGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-xl);
+  width: 100%;
+}
+
+/* ============================================
+   SWATCH GRID
+   ============================================ */
+.colourSwatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--primitive-gap-lg);
+  width: 100%;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 959px) {
+  .pageHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* The label gutter costs too much width to keep at this size, so the row
+     name moves above its ramp and the cells get the full column */
+  .rampRow,
+  .rampHeaderRow,
+  .alphaGroup {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--gap-xs);
+  }
+
+  .rampHeaderRow .rampLabel {
+    display: none;
+  }
+
+  .rampCell,
+  .alphaSwatch {
+    height: 32px;
+  }
+
+  /* Twelve labelled columns is unreadable at this width */
+  .alphaCells {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--gap-sm);
+  }
+
+  .dsLayout {
+    padding-left: 0;
+    min-width: 0;
+  }
+
+  .dsContent {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+}

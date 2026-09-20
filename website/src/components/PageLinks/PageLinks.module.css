@@ -1,0 +1,14 @@
+/* ============================================
+   PAGE LINKS — Figma + Storybook buttons
+   Sits inline with the page title row.
+   Individual buttons use the DS Button component.
+   ============================================ */
+.pageLinks {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--primitive-gap-lg);
+  flex-shrink: 0;
+  /* Pages can pass several link buttons (About passes four) — wrap rather
+     than force the page wider than a phone viewport. */
+  flex-wrap: wrap;
+}

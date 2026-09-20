@@ -1,0 +1,40 @@
+/* ============================================
+   STREAMING TEXT COMPONENT
+   Progressive reveal for text arriving in
+   chunks, with a blinking cursor. Inherits the
+   surrounding typography — the reveal is not a
+   text style of its own.
+   ============================================ */
+
+/* Base */
+
+.ds-streaming-text {
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
+/* Cursor */
+
+.ds-streaming-text__cursor {
+  display: inline-block;
+  width: 0.55em;
+  height: 1em;
+  margin-left: 0.1em;
+  vertical-align: text-bottom;
+  border-radius: var(--radius-xxs);
+  background-color: currentColor;
+  animation: ds-streaming-text-blink var(--motion-duration-loop-spin) var(--motion-ease-standard)
+    infinite;
+}
+
+@keyframes ds-streaming-text-blink {
+  0%,
+  45% {
+    opacity: 1;
+  }
+
+  55%,
+  100% {
+    opacity: 0.15;
+  }
+}

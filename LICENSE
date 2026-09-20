@@ -1,0 +1,72 @@
+Copyright (c) 2026 Rob Ritacca. All rights reserved, except as granted below.
+
+This repository holds two kinds of material under two different licenses.
+The SOFTWARE is free to use under the MIT License. The CONTENT is not
+licensed for reuse.
+
+If you installed this as an npm package, you received the Software only.
+The MIT License below is the license for everything in that package.
+
+
+================================================================================
+SOFTWARE — MIT License
+================================================================================
+
+Applies to the design system and the code that builds and documents it:
+component source and CSS, the design tokens, Storybook stories, the build,
+generator and validator scripts, configuration, and the website's application
+code (layouts, routing, hooks, and UI components).
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+================================================================================
+CONTENT — All rights reserved
+================================================================================
+
+Applies to the authored material published on robertritacca.com and stored in
+this repository, including:
+
+  - Written prose on any page: body copy, headings, descriptions, and
+    microcopy across the website and the root specification documents.
+  - Case studies and the client work they describe
+    (website/src/app/work/, website/src/data/case-studies.json).
+  - Essays and long-form writing
+    (website/src/app/writing/, website/src/data/essays.json).
+  - The project journal entries (website/src/data/site-updates.json).
+  - Photographs, illustrations, client logos, cover images, and other media.
+  - The name "Rob Ritacca", the RR logo and wordmark, and any likeness,
+    photograph, biography, or professional history of Rob Ritacca.
+
+No license is granted to this material. Without prior written permission you
+may not copy, reproduce, republish, mirror, redistribute, sell, or create
+derivative works from it, and you may not use it to train, fine-tune, or
+otherwise build a machine learning model. You may not present it as your own
+work, and you may not use the name, logo, likeness, or professional history of
+Rob Ritacca to imply authorship, endorsement, or affiliation.
+
+You are welcome to read the site, quote short passages with attribution and a
+link to the source, link to any page, and use automated tools to read and cite
+pages as a human reader would. Nothing here restricts rights you already have
+under applicable copyright law.
+
+Client logos and trademarks shown in case studies belong to their respective
+owners and appear as references to real work, not as a grant of any rights.
+
+Permission requests: rob.ritacca@gmail.com

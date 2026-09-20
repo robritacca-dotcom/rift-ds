@@ -1,0 +1,76 @@
+/* ============================================
+   SPARKLINE COMPONENT
+   Inline trend line for stats and table cells.
+   Colour flows through `color` — the line, fill
+   and dot all draw with currentColor, so a tone
+   is one custom property swap.
+   ============================================ */
+
+/* Base */
+
+.ds-sparkline {
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+  color: var(--color-action-primary-bg);
+}
+
+/* Parts */
+
+/* The line draws itself on mount, the way the recharts lines do: the path is
+   normalised to 100 dash units (pathLength on the SVG side), and the offset
+   retreats from fully hidden to zero. The fill and end dot fade in behind
+   and after it. All durations are tokens, so reduced motion collapses the
+   whole sequence to the finished state for free. */
+
+.ds-sparkline__line {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 100;
+  animation: ds-sparkline-draw var(--motion-duration-slower) var(--motion-ease-emphasized);
+}
+
+.ds-sparkline__fill {
+  fill: currentColor;
+  opacity: 0.15;
+  animation: ds-sparkline-fade var(--motion-duration-slower) var(--motion-ease-standard);
+}
+
+.ds-sparkline__dot {
+  fill: currentColor;
+  /* Waits out the draw, then pops in where the line ends. */
+  animation: ds-sparkline-fade var(--motion-duration-slow) var(--motion-ease-standard)
+    var(--motion-duration-slower) backwards;
+}
+
+@keyframes ds-sparkline-draw {
+  from {
+    stroke-dashoffset: 100;
+  }
+}
+
+@keyframes ds-sparkline-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Tones */
+
+.ds-sparkline--accent {
+  color: var(--color-action-primary-bg);
+}
+
+.ds-sparkline--positive {
+  color: var(--color-trend-up);
+}
+
+.ds-sparkline--negative {
+  color: var(--color-trend-down);
+}
+
+.ds-sparkline--neutral {
+  color: var(--color-text-secondary);
+}

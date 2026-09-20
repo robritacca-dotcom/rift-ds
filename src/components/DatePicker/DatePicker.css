@@ -1,0 +1,198 @@
+/* ============================================
+   DATE PICKER COMPONENT
+   Inline calendar with month navigation
+   ============================================ */
+
+.ds-date-picker {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--gap-sm); /* 8px */
+  padding: var(--padding-md); /* 16px */
+  border: var(--border-xs) solid var(--color-input-border-primary);
+  border-radius: var(--radius-md); /* 12px */
+  background-color: var(--color-input-bg-primary);
+  user-select: none;
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+
+.ds-date-picker__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-sm); /* 8px */
+}
+
+.ds-date-picker__month-year {
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  letter-spacing: var(--font-title-body-letter-spacing);
+  color: var(--color-text-primary);
+  text-align: center;
+  flex: 1;
+}
+
+.ds-date-picker__nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-full);
+  background-color: transparent;
+  color: var(--color-text-secondary);
+  font-size: 24px;
+  cursor: pointer;
+  transition: background-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-date-picker__nav-btn:hover:not(:disabled) {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-date-picker__nav-btn:active:not(:disabled) {
+  background-color: var(--color-action-passive-bg-active);
+}
+
+.ds-date-picker__nav-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ds-date-picker__nav-btn:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+/* ============================================
+   GRID
+   ============================================ */
+
+.ds-date-picker__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--gap-xxs); /* 2px */
+}
+
+/* ============================================
+   DAY HEADERS
+   ============================================ */
+
+.ds-date-picker__day-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-title-body-weight); /* 600 — semibold for headers */
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-tertiary);
+}
+
+/* ============================================
+   CELLS
+   ============================================ */
+
+.ds-date-picker__cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-full);
+  background-color: transparent;
+  cursor: pointer;
+  transition: background-color var(--motion-duration-base) var(--motion-ease-standard), color var(--motion-duration-base) var(--motion-ease-standard);
+
+  /* Typography — paragraph sm em for clickable cells */
+  font-family: var(--font-paragraph-sm-em-family);
+  font-size: var(--font-paragraph-sm-em-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  line-height: 1;
+  color: var(--color-text-primary);
+}
+
+.ds-date-picker__cell:hover:not(:disabled):not(.ds-date-picker__cell--selected) {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-date-picker__cell:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+/* Outside current month */
+.ds-date-picker__cell--outside {
+  color: var(--color-text-tertiary);
+  opacity: 0.5;
+}
+
+/* Today indicator */
+.ds-date-picker__cell--today {
+  border: var(--border-xs) solid var(--color-action-primary-bg);
+}
+
+/* Selected */
+.ds-date-picker__cell--selected {
+  background-color: var(--color-action-primary-bg);
+  color: var(--color-action-primary-text);
+}
+
+.ds-date-picker__cell--selected:hover:not(:disabled) {
+  background-color: var(--color-action-primary-bg-hover);
+}
+
+/* Disabled */
+.ds-date-picker__cell--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   SIZE — COMPACT
+   ============================================ */
+
+.ds-date-picker--compact {
+  padding: var(--padding-sm); /* 8px */
+  gap: var(--gap-xxs); /* 2px */
+}
+
+.ds-date-picker--compact .ds-date-picker__month-year {
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+}
+
+.ds-date-picker--compact .ds-date-picker__nav-btn {
+  width: 28px;
+  height: 28px;
+  font-size: 20px;
+}
+
+.ds-date-picker--compact .ds-date-picker__day-header {
+  height: 28px;
+  font-size: 12px;
+}
+
+.ds-date-picker--compact .ds-date-picker__cell {
+  width: 28px;
+  height: 28px;
+  font-size: 12px;
+}
+
+/* ============================================
+   DISABLED STATE
+   ============================================ */
+
+.ds-date-picker--disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}

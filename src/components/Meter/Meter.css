@@ -1,0 +1,98 @@
+/* ============================================
+   METER COMPONENT
+   Level indicator for a known quantity
+   ============================================ */
+
+.ds-meter {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs);
+  width: 100%;
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+
+.ds-meter__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--gap-md);
+}
+
+.ds-meter__label {
+  font-family: var(--font-paragraph-sm-em-family);
+  font-size: var(--font-paragraph-sm-em-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  color: var(--color-text-primary);
+}
+
+.ds-meter__value {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+  font-variant-numeric: tabular-nums;
+  margin-left: auto;
+}
+
+/* ============================================
+   TRACK + FILL
+   ============================================ */
+
+.ds-meter__track {
+  width: 100%;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-bg-container-tertiary);
+  overflow: hidden;
+}
+
+.ds-meter--compact .ds-meter__track {
+  height: 4px;
+}
+
+.ds-meter__fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  transition: width var(--motion-duration-base) var(--motion-ease-standard);
+  /* Grows to the current level on mount — the single keyframe animates to
+     the inline width, and the duration token collapses under reduced motion. */
+  animation: ds-meter-grow var(--motion-duration-slower) var(--motion-ease-emphasized);
+}
+
+@keyframes ds-meter-grow {
+  from {
+    width: 0;
+  }
+}
+
+/* ============================================
+   STATUS VARIANTS
+   The strong border-weight status colour, not
+   the tinted bg — the fill is a thin ribbon
+   and needs the full-strength hue to read.
+   ============================================ */
+
+.ds-meter--info .ds-meter__fill {
+  background-color: var(--color-status-info-border);
+}
+
+.ds-meter--positive .ds-meter__fill {
+  background-color: var(--color-status-positive-border);
+}
+
+.ds-meter--warning .ds-meter__fill {
+  background-color: var(--color-status-warning-border);
+}
+
+.ds-meter--error .ds-meter__fill {
+  background-color: var(--color-status-error-border);
+}
+
+.ds-meter--neutral .ds-meter__fill {
+  background-color: var(--color-status-neutral-border);
+}

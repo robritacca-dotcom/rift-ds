@@ -1,0 +1,391 @@
+/* ============================================
+   SYSTEM GRAPH — the /graph instrument
+   Column hues take the chart series palette (the sanctioned data-viz use;
+   teal leads), the two trace directions take the status icon colours, and
+   everything else reads straight from the semantic tokens, so the instrument
+   re-themes with the site. Bar and edge geometry (positions, widths, the
+   canvas) is drawing coordinates computed in JS, not styling.
+   ============================================ */
+
+.root {
+  --graph-col-primitives: var(--color-chart-series-1);
+  --graph-col-tokens: var(--color-chart-series-2);
+  --graph-col-library: var(--color-chart-series-3);
+  --graph-col-site: var(--color-chart-series-4);
+  --graph-col-pages: var(--color-chart-series-5);
+  --graph-dep: var(--color-status-warning-icon);
+  --graph-use: var(--color-status-info-icon);
+  --graph-mist: var(--color-text-secondary);
+
+  color: var(--color-text-primary);
+  width: 100%;
+}
+
+/* ---------- top bar ---------- */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--gap-lg);
+  padding-block: var(--padding-md);
+}
+
+.searchWrap {
+  position: relative;
+  flex: 1 1 220px;
+  max-width: 340px;
+  min-width: 0;
+}
+
+/* The library Input owns the field's look; the wrapper only sizes it. */
+.search {
+  width: 100%;
+}
+
+.results {
+  position: absolute;
+  top: calc(100% + var(--gap-xxs));
+  left: 0;
+  right: 0;
+  z-index: 30;
+  background-color: var(--color-bg-container-primary);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-floating);
+  overflow: hidden;
+}
+
+.result {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--gap-sm-md);
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  color: var(--color-text-primary);
+  font-family: var(--font-family-code);
+  font-size: var(--font-caption-size);
+  padding: var(--padding-xs) var(--padding-sm-md);
+}
+
+.result:hover,
+.resultActive {
+  background-color: var(--color-bg-container-secondary);
+}
+
+.resultCol {
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+}
+
+.legend {
+  margin-left: auto;
+  display: flex;
+  gap: var(--gap-lg);
+  align-items: center;
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.legendDep,
+.legendUse {
+  display: inline-block;
+  width: 18px;
+  height: 2px;
+  border-radius: var(--radius-xxs);
+  vertical-align: middle;
+  margin-right: var(--gap-xs);
+}
+
+.legendDep {
+  background-color: var(--graph-dep);
+}
+
+.legendUse {
+  background-color: var(--graph-use);
+}
+
+/* ---------- stage ---------- */
+
+.layout {
+  display: flex;
+  gap: var(--gap-lg);
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.stageScroll {
+  flex: 1 1 560px;
+  min-width: 0;
+  overflow-x: auto;
+}
+
+.stage {
+  position: relative;
+  min-width: 720px;
+}
+
+.canvas {
+  position: absolute;
+  inset: 0;
+}
+
+.colHead {
+  position: absolute;
+  top: 0;
+}
+
+.colHead b {
+  font-family: var(--font-paragraph-em-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-em-weight);
+}
+
+.colHead small {
+  display: block;
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.groupLabel {
+  position: absolute;
+  font-family: var(--font-overline-family);
+  font-size: var(--font-overline-size);
+  font-weight: var(--font-overline-weight);
+  letter-spacing: var(--font-overline-letter-spacing);
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+  opacity: 0.7;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.bar {
+  position: absolute;
+  border: 0;
+  padding: 0;
+  border-radius: var(--radius-xxs);
+  cursor: pointer;
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.bar:focus-visible {
+  outline: var(--border-md) solid var(--color-action-primary-bg);
+  outline-offset: 1px;
+  opacity: 1;
+}
+
+.tracing .bar {
+  opacity: 0.13;
+}
+
+.bar.lit {
+  opacity: 1;
+  box-shadow: 0 0 6px 0 currentColor;
+}
+
+.bar.origin {
+  outline: 1px solid var(--color-text-primary);
+  outline-offset: 1px;
+}
+
+/* Column hues: background for bars and dots, plain colour for text. */
+
+.col_primitives {
+  background-color: var(--graph-col-primitives);
+  color: var(--graph-col-primitives);
+}
+
+.col_tokens {
+  background-color: var(--graph-col-tokens);
+  color: var(--graph-col-tokens);
+}
+
+.col_library {
+  background-color: var(--graph-col-library);
+  color: var(--graph-col-library);
+}
+
+.col_site {
+  background-color: var(--graph-col-site);
+  color: var(--graph-col-site);
+}
+
+.col_pages {
+  background-color: var(--graph-col-pages);
+  color: var(--graph-col-pages);
+}
+
+.text_primitives {
+  color: var(--graph-col-primitives);
+}
+
+.text_tokens {
+  color: var(--graph-col-tokens);
+}
+
+.text_library {
+  color: var(--graph-col-library);
+}
+
+.text_site {
+  color: var(--graph-col-site);
+}
+
+.text_pages {
+  color: var(--graph-col-pages);
+}
+
+/* ---------- detail panel ---------- */
+
+/* The library Panel owns the surface; the slot owns width, stickiness, and
+   scroll, and the body wraps everything in one child so the Panel's own
+   content gap does not interleave with the section margins. */
+.panelSlot {
+  width: 330px;
+  flex: 1 0 280px;
+  max-width: 400px;
+  position: sticky;
+  top: var(--gap-sm-md);
+}
+
+.panelSurface {
+  max-height: calc(100vh - 24px);
+  overflow-y: auto;
+}
+
+.panelHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-sm);
+}
+
+.panelKind {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  color: var(--color-text-secondary);
+}
+
+.panelName {
+  font-family: var(--font-family-code);
+  font-size: var(--font-heading-3-size);
+  line-height: var(--font-heading-3-line-height);
+  margin: var(--gap-sm) 0 0;
+  overflow-wrap: break-word;
+}
+
+.panelDesc {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+  margin: var(--gap-xs) 0 0;
+}
+
+.panelSection {
+  font-family: var(--font-overline-family);
+  font-size: var(--font-overline-size);
+  font-weight: var(--font-overline-weight);
+  letter-spacing: var(--font-overline-letter-spacing);
+  line-height: var(--font-overline-line-height);
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+  margin: var(--gap-lg) 0 var(--gap-xs);
+}
+
+.panelCategory {
+  font-family: var(--font-family-code);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  color: var(--color-text-tertiary);
+  margin: var(--gap-sm) 0 var(--gap-xxs);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-xxs);
+}
+
+/* The library Chip owns the pill; a token name can outgrow the panel, so cap
+   the chip and let its label ellipsise. */
+.nodeChip {
+  max-width: 100%;
+}
+
+.nodeChip :global(.ds-chip__label) {
+  font-family: var(--font-family-code);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chipCount {
+  color: var(--color-text-secondary);
+}
+
+/* The library CodeBlock owns the CLI lines. */
+.cliBlock {
+  margin-top: var(--gap-xxs);
+}
+
+.swatchRow {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  font-family: var(--font-family-code);
+  font-size: var(--font-caption-size);
+  margin-top: var(--gap-xxs);
+}
+
+.swatchRow small {
+  color: var(--color-text-secondary);
+}
+
+.swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-xxs);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  flex: none;
+}
+
+.swatchDot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  display: inline-block;
+  flex: none;
+}
+
+.depWord {
+  color: var(--graph-dep);
+  font-weight: var(--font-paragraph-em-weight);
+}
+
+.useWord {
+  color: var(--graph-use);
+  font-weight: var(--font-paragraph-em-weight);
+}
+
+.meta {
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  color: var(--color-text-tertiary);
+  padding-block: var(--padding-md);
+  margin: 0;
+}

@@ -1,0 +1,163 @@
+/* ============================================
+   NUMBER INPUT COMPONENT
+   Numeric field with stepper buttons and clamping
+   ============================================ */
+
+/* Base */
+
+.ds-numberinput {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm); /* 8px */
+  width: 100%;
+}
+
+/* ============================================
+   SHELL — border, fill and focus ring live here
+   ============================================ */
+
+.ds-numberinput__shell {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  border: var(--border-xs) solid var(--color-input-border-primary);
+  border-radius: var(--radius-md); /* 12px — all inputs */
+  background-color: var(--color-input-bg-primary);
+  overflow: hidden;
+  transition: border-color var(--motion-duration-base) var(--motion-ease-standard), background-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-numberinput__shell:hover:not(:focus-within) {
+  border-color: var(--color-input-border-hover);
+}
+
+.ds-numberinput__shell:focus-within {
+  border-color: var(--color-input-border-selected);
+}
+
+/* ============================================
+   FIELD
+   ============================================ */
+
+.ds-numberinput__input {
+  flex: 1;
+  min-width: 0;
+  padding: var(--padding-sm) var(--padding-xs); /* 8px 6px */
+  border: none;
+  outline: none;
+  background-color: transparent;
+  text-align: center;
+
+  /* Typography */
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+  color: var(--color-input-text-primary);
+}
+
+.ds-numberinput__input::placeholder {
+  color: var(--color-input-text-placeholder);
+}
+
+/* Hide the native spinners — the steppers replace them */
+.ds-numberinput__input {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.ds-numberinput__input::-webkit-outer-spin-button,
+.ds-numberinput__input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* ============================================
+   STEPPERS
+   ============================================ */
+
+.ds-numberinput__stepper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--padding-sm-md); /* 12px */
+  border: none;
+  background-color: transparent;
+  color: var(--color-icon-primary);
+  cursor: pointer;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard), color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-numberinput__stepper .material-symbols-rounded {
+  --icon-size: var(--icon-size-sm);
+}
+
+.ds-numberinput__stepper:hover:not(:disabled) {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-numberinput__stepper:active:not(:disabled) {
+  background-color: var(--color-action-passive-bg-active);
+}
+
+.ds-numberinput__stepper:focus-visible {
+  outline: var(--border-md) solid var(--color-input-border-selected);
+  outline-offset: calc(-2 * var(--border-md));
+}
+
+.ds-numberinput__stepper:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   ERROR STATE
+   ============================================ */
+
+.ds-numberinput--error .ds-numberinput__shell,
+.ds-numberinput--error .ds-numberinput__shell:focus-within {
+  border-color: var(--color-status-error-border);
+}
+
+/* ============================================
+   DISABLED STATE
+   ============================================ */
+
+.ds-numberinput--disabled .ds-numberinput__shell {
+  background-color: var(--color-input-bg-disabled);
+  border-color: var(--color-input-border-disabled);
+}
+
+.ds-numberinput--disabled .ds-numberinput__input {
+  color: var(--color-input-text-disabled);
+  cursor: not-allowed;
+}
+
+.ds-numberinput--disabled .ds-numberinput__input::placeholder {
+  color: var(--color-input-text-disabled);
+}
+
+/* ============================================
+   SIZE — COMPACT
+   ============================================ */
+
+.ds-numberinput--compact .ds-numberinput__input {
+  padding: var(--padding-xs) var(--padding-xs); /* 6px */
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+}
+
+.ds-numberinput--compact .ds-numberinput__stepper {
+  padding: 0 var(--padding-sm); /* 8px */
+}
+
+/* Icons take the colour of the text around them. Explicit, not just
+   inherited by default: a consumer stylesheet that sets a colour on
+   .material-symbols-rounded itself (a common global default) would
+   otherwise override inheritance and detach the icon from the state
+   colours this component sets on its parents. */
+.ds-numberinput .material-symbols-rounded {
+  color: inherit;
+}

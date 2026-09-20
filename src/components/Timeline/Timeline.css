@@ -1,0 +1,366 @@
+/* ============================================
+   TIMELINE COMPONENT
+   Ordered steps/events with connected markers.
+   Vertical timeline or horizontal stepper.
+   ============================================ */
+
+.ds-timeline {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+}
+
+.ds-timeline__item {
+  position: relative;
+  display: flex;
+}
+
+/* ============================================
+   MARKERS
+   Dot by default; badge (circle) when numbered;
+   bare floating icon when carrying an icon.
+   ============================================ */
+
+.ds-timeline__marker {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 12px;
+  height: 12px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-bg-container-tertiary);
+}
+
+.ds-timeline__marker--badge {
+  width: 28px;
+  height: 28px;
+  background-color: var(--color-bg-container-primary);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  font-family: var(--font-paragraph-sm-em-family);
+  font-size: var(--font-paragraph-sm-em-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  color: var(--color-text-secondary);
+}
+
+/* Icon markers float bare — same 28px box as the badge
+   so connector geometry is shared, but no circle */
+.ds-timeline__marker--icon {
+  width: 28px;
+  height: 28px;
+  background-color: transparent;
+}
+
+.ds-timeline__marker-icon {
+  --icon-size: var(--icon-size-md);
+  line-height: 1;
+  color: var(--color-icon-primary);
+}
+
+/* ============================================
+   CONTENT
+   ============================================ */
+
+.ds-timeline__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxs);
+  min-width: 0;
+}
+
+.ds-timeline__meta {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-tertiary);
+}
+
+.ds-timeline__title {
+  font-family: var(--font-heading-3-family);
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+  letter-spacing: var(--font-heading-3-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.ds-timeline__description {
+  margin-top: var(--gap-sm);
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   VERTICAL (default) — markers on the left,
+   connector line running down between them
+   ============================================ */
+
+.ds-timeline--vertical {
+  flex-direction: column;
+  gap: var(--gap-lg);
+}
+
+.ds-timeline--vertical .ds-timeline__item {
+  gap: var(--gap-md);
+  align-items: flex-start;
+}
+
+/* Align dot markers with the title's line box */
+.ds-timeline--vertical .ds-timeline__marker {
+  margin-top: 6px;
+}
+
+.ds-timeline--vertical .ds-timeline__marker--badge,
+.ds-timeline--vertical .ds-timeline__marker--icon {
+  margin-top: 0;
+}
+
+/* Connector line — from this marker down to the next item */
+.ds-timeline--vertical .ds-timeline__item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: calc(-1 * var(--gap-lg));
+  left: 5px; /* centre of the 12px dot */
+  width: var(--border-md);
+  background-color: var(--color-divider);
+}
+
+.ds-timeline--vertical.ds-timeline--numbered .ds-timeline__item::before,
+.ds-timeline--vertical .ds-timeline__item:has(.ds-timeline__marker--badge)::before,
+.ds-timeline--vertical .ds-timeline__item:has(.ds-timeline__marker--icon)::before {
+  left: 13px; /* centre of the 28px badge/icon box */
+}
+
+/* Bare icons have no opaque fill to cover the line —
+   start it just below the icon box instead */
+.ds-timeline--vertical .ds-timeline__item:has(.ds-timeline__marker--icon)::before {
+  top: 32px;
+}
+
+.ds-timeline--vertical .ds-timeline__item:last-child::before {
+  display: none;
+}
+
+/* ============================================
+   HORIZONTAL — stepper: markers on top,
+   connector line running across
+   ============================================ */
+
+.ds-timeline--horizontal {
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.ds-timeline--horizontal .ds-timeline__item {
+  flex: 1;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  min-width: 0;
+  padding-right: var(--padding-md);
+}
+
+/* Connector line — from this marker across to the next */
+.ds-timeline--horizontal .ds-timeline__item::before {
+  content: '';
+  position: absolute;
+  top: 5px; /* centre of the 12px dot */
+  left: 0;
+  right: 0;
+  height: var(--border-md);
+  background-color: var(--color-divider);
+}
+
+.ds-timeline--horizontal.ds-timeline--numbered .ds-timeline__item::before,
+.ds-timeline--horizontal .ds-timeline__item:has(.ds-timeline__marker--badge)::before,
+.ds-timeline--horizontal .ds-timeline__item:has(.ds-timeline__marker--icon)::before {
+  top: 13px; /* centre of the 28px badge/icon box */
+}
+
+/* Bare icons have no opaque fill to cover the line —
+   start it just after the icon box instead */
+.ds-timeline--horizontal .ds-timeline__item:has(.ds-timeline__marker--icon)::before {
+  left: 32px;
+}
+
+.ds-timeline--horizontal .ds-timeline__item:last-child::before {
+  display: none;
+}
+
+/* ============================================
+   COMPANY VARIANT — a logo marker per entry,
+   a company/tool name, and one or more nested
+   roles. A segmented bar runs down each entry
+   (résumé / pipeline histories).
+   ============================================ */
+
+/* 32px logo marker — bare, transparent box; the image keeps its own shape.
+   Reset the base marker's circular clip so logos are never cropped. */
+.ds-timeline__marker--logo {
+  width: 32px;
+  height: 32px;
+  background-color: transparent;
+  border-radius: 0;
+  overflow: visible;
+}
+
+/* Logos display in their natural aspect ratio, capped at the 32px box */
+.ds-timeline__marker--logo :where(img, svg) {
+  max-width: 32px;
+  max-height: 32px;
+  object-fit: contain;
+}
+
+/* Logo sits at the top of the entry, aligned with the company name */
+.ds-timeline--company .ds-timeline__marker--logo {
+  margin-top: 0;
+}
+
+.ds-timeline--company .ds-timeline__content {
+  gap: var(--gap-sm);
+}
+
+.ds-timeline__company-name {
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  color: var(--color-text-primary);
+  /* centre the name against the 32px logo */
+  display: flex;
+  align-items: center;
+  min-height: 32px;
+}
+
+.ds-timeline__roles {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-lg);
+}
+
+.ds-timeline__role {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+}
+
+.ds-timeline__role-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-md);
+}
+
+.ds-timeline__role-title {
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-heading-3-family);
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+  letter-spacing: var(--font-heading-3-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.ds-timeline__role-dates {
+  flex-shrink: 0;
+  white-space: nowrap;
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-tertiary);
+}
+
+.ds-timeline__present {
+  color: var(--color-status-positive-text);
+}
+
+.ds-timeline__role-subtitle {
+  margin: 0;
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+  color: var(--color-text-secondary);
+}
+
+/* The title and its subtitle read as one header block, so whatever follows
+   needs a wider break than the role's own 8px rhythm to separate from it. */
+.ds-timeline__role-subtitle + .ds-timeline__role-description,
+.ds-timeline__role-subtitle + .ds-timeline__role-bullets {
+  margin-top: var(--gap-sm);
+}
+
+.ds-timeline__role-description {
+  margin: 0;
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+  color: var(--color-text-secondary);
+}
+
+.ds-timeline__role-bullets {
+  margin: 0;
+  padding-left: 20px;
+  list-style: disc;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+}
+
+.ds-timeline__role-bullets li {
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-secondary);
+}
+
+.ds-timeline__role-bullets a {
+  color: var(--color-action-primary-bg);
+  font-weight: var(--font-paragraph-em-weight);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  transition: text-decoration-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-timeline__role-bullets a:hover {
+  text-decoration-color: currentColor;
+}
+
+/* Connector — centred under the 32px logo, with an even 8px break above and
+   below every logo: it starts 8px below this logo and runs down to 8px above
+   the next one (extending into the inter-entry gap). */
+.ds-timeline--company .ds-timeline__item::before {
+  left: 16px; /* centre of the 32px logo */
+  top: 40px; /* 32px logo + 8px break */
+  bottom: calc(8px - var(--gap-lg)); /* stop 8px above the next logo */
+}
+
+/* Last entry has no following logo — the bar runs to its own content's end
+   and fades out: the hairline treatment (1px, dissolving to the transparent
+   container colour) that marks the end of the timeline. */
+.ds-timeline--company .ds-timeline__item:last-child::before {
+  display: block;
+  bottom: 0;
+  width: var(--border-xs);
+  background: linear-gradient(
+    to bottom,
+    var(--color-divider),
+    var(--color-bg-container-primary-transparent)
+  );
+}

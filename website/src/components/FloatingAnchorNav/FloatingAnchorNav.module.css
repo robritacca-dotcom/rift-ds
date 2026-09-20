@@ -1,0 +1,38 @@
+/* ============================================
+   FLOATING ANCHOR NAV RAIL
+   Fixed right-edge mount for the AnchorNav
+   floating variant.
+   ============================================ */
+.rail {
+  position: fixed;
+  top: 50%;
+  right: var(--primitive-gap-md);
+  transform: translateY(-50%);
+  /* Above the page content, below the sticky header — see the fixed-layer
+     roster in globals.css */
+  z-index: 5;
+  /* Glides with the docked chat, matching the body's padding slide */
+  transition: right var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+/* Docked, the chat owns the right column: slide off its edge the way the
+   toasts do (globals.css owns the geometry) */
+:global(html[data-chat="docked"]) .rail {
+  right: calc(
+    var(--layout-chat-width) + var(--layout-chat-inset) + var(--primitive-gap-md)
+  );
+}
+
+/* The widen grip rewrites --layout-chat-width frame by frame; gliding
+   would lag the dragged edge */
+:global(html[data-chat-resizing]) .rail {
+  transition: none;
+}
+
+/* Below the desktop layout the panel would cover too much of the
+   content it summarises; the mobile drawer owns navigation there */
+@media (max-width: 959px) {
+  .rail {
+    display: none;
+  }
+}

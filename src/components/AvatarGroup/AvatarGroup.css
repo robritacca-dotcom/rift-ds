@@ -1,0 +1,61 @@
+/* ============================================
+   AVATAR GROUP COMPONENT
+   Overlapping avatar stack with a "+N" counter.
+   The pixel size ladder matches Avatar's sizes
+   so the counter circle sits flush in the row.
+   ============================================ */
+
+/* Base */
+
+.ds-avatar-group {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Items — each avatar (and the counter) sits in a ring-bearing wrapper
+   so the overlaps stay legible on any surface. */
+
+.ds-avatar-group__item {
+  position: relative;
+  display: inline-flex;
+  border-radius: var(--radius-full);
+  box-shadow: 0 0 0 var(--border-md) var(--color-bg-page-primary);
+}
+
+.ds-avatar-group__item + .ds-avatar-group__item {
+  margin-left: calc(var(--gap-sm) * -1);
+}
+
+/* Overflow counter */
+
+.ds-avatar-group__overflow {
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background-color: var(--color-bg-container-secondary);
+  color: var(--color-text-secondary);
+  font-family: var(--font-paragraph-em-family);
+  font-weight: var(--font-paragraph-em-weight);
+  line-height: 1;
+  user-select: none;
+}
+
+/* Sizes — matching Avatar's ladder */
+
+.ds-avatar-group--sm .ds-avatar-group__overflow {
+  width: 32px;
+  height: 32px;
+  font-size: 12px;
+}
+
+.ds-avatar-group--md .ds-avatar-group__overflow {
+  width: 40px;
+  height: 40px;
+  font-size: 14px;
+}
+
+.ds-avatar-group--lg .ds-avatar-group__overflow {
+  width: 56px;
+  height: 56px;
+  font-size: 18px;
+}

@@ -1,0 +1,299 @@
+/* ============================================
+   DOCS PAGE LAYOUT
+   ============================================ */
+.dsLayout {
+  display: flex;
+  gap: var(--layout-column-gap);
+  width: 100%;
+  max-width: 1440px;
+  padding-top: var(--primitive-gap-xl);
+}
+
+.dsContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxxl);
+}
+
+/* ============================================
+   PAGE TITLE - Display 2
+   ============================================ */
+.pageHeader {
+  margin-top: calc(var(--primitive-gap-xl) - var(--gap-xxxl));
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--primitive-gap-lg);
+  width: 100%;
+}
+
+.pageTitle {
+  font-size: var(--font-display-2-size);
+  font-weight: var(--font-display-2-weight);
+  line-height: var(--font-display-2-line-height);
+  letter-spacing: var(--font-display-2-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+/* Sub Display */
+.subDisplay {
+  font-family: var(--font-sub-display-family);
+  font-size: var(--font-sub-display-size);
+  font-weight: var(--font-sub-display-weight);
+  line-height: var(--font-sub-display-line-height);
+  letter-spacing: var(--font-sub-display-letter-spacing);
+  color: var(--color-text-primary);
+  margin-bottom: 0;
+}
+
+/* ============================================
+   INTRO SECTION
+   ============================================ */
+.introSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-lg);
+}
+
+.introBody {
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   TOC GRID - 4 column
+   ============================================ */
+.tocGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--primitive-gap-lg);
+  width: 100%;
+}
+
+/* ============================================
+   CIRCLE PREVIEWS
+   ============================================ */
+/* Feature icons inside the round previews. Sizes live here rather than
+   inline so they read from the icon-size scale. */
+.circlePreview > :global(.material-symbols-rounded) {
+  --icon-size: var(--icon-size-xl);
+}
+
+.skillFile :global(.material-symbols-rounded) {
+  --icon-size: var(--icon-size-lg);
+}
+
+.circlePreview {
+  width: 184px;
+  height: 184px;
+  min-width: 184px;
+  min-height: 184px;
+  aspect-ratio: 1 / 1;
+  flex-shrink: 0;
+  border-radius: 999px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  gap: 10px;
+  padding: 0 24px;
+  box-sizing: border-box;
+}
+
+.circleDashed {
+  border: none;
+}
+
+.circleNeutral {
+  background: var(--color-bg-container-primary);
+}
+
+.circleGreen {
+  background: var(--color-status-positive-bg);
+}
+
+.circleBlue {
+  background: var(--color-status-info-bg);
+}
+
+/* Overview — mini pipeline */
+.pipelinePreview {
+  display: flex;
+  align-items: center;
+  gap: var(--primitive-gap-xxs);
+}
+
+.pipelineDot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--color-text-secondary);
+  flex-shrink: 0;
+}
+
+.pipelineBar {
+  width: 24px;
+  height: 2px;
+  background: var(--color-bg-container-tertiary);
+  flex-shrink: 0;
+}
+
+/* Claude MD / Design MD — mock markdown doc */
+.docPreview {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--primitive-gap-xs);
+}
+
+.docHeading {
+  width: 48px;
+  height: 10px;
+  border-radius: var(--primitive-radius-full);
+  background: var(--color-text-secondary);
+}
+
+.docLine {
+  height: 6px;
+  border-radius: var(--primitive-radius-full);
+  background: var(--color-bg-container-tertiary);
+}
+
+.docSwatches {
+  display: flex;
+  gap: var(--primitive-gap-xxs);
+}
+
+/* Content MD — type specimen (weight contrast is the system's signature) */
+.docType {
+  font-size: 26px;
+  line-height: 1;
+  color: var(--color-text-secondary);
+  font-weight: var(--font-display-1-weight);
+}
+
+.docTypeBold {
+  font-weight: var(--font-heading-1-weight);
+}
+
+.docSwatch {
+  width: 16px;
+  height: 16px;
+  border-radius: var(--primitive-radius-xs);
+}
+
+/* Skills — fanned skill files */
+.skillFiles {
+  position: relative;
+  width: 64px;
+  height: 80px;
+}
+
+.skillFile {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--primitive-radius-md);
+  background: var(--color-bg-container-primary);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.skillFileBack {
+  transform: rotate(8deg) translateX(8px);
+}
+
+/* Project journal — mini contribution grid */
+.journalGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 16px);
+  gap: var(--primitive-gap-xxs);
+}
+
+.journalCell {
+  width: 16px;
+  height: 16px;
+  border-radius: var(--primitive-radius-xs);
+}
+
+.journalCellL0 {
+  background: var(--color-chart-contribution-0);
+}
+
+.journalCellL1 {
+  background: var(--color-chart-contribution-1);
+}
+
+.journalCellL2 {
+  background: var(--color-chart-contribution-2);
+}
+
+.journalCellL3 {
+  background: var(--color-chart-contribution-3);
+}
+
+.journalCellL4 {
+  background: var(--color-chart-contribution-4);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 959px) {
+  .pageHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .dsLayout {
+    padding-left: 0;
+    min-width: 0;
+  }
+
+  .dsContent {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+
+  .circlePreview {
+    width: 150px;
+    height: 150px;
+    min-width: 150px;
+    min-height: 150px;
+  }
+}
+
+@media (max-width: 600px) {
+  .circlePreview {
+    width: 120px;
+    height: 120px;
+    min-width: 120px;
+    min-height: 120px;
+  }
+}
+
+/* ============================================
+   GET STARTED CARD PREVIEW
+   ============================================ */
+.installPreview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--primitive-gap-xs);
+}
+
+.installPreview > :global(.material-symbols-rounded) {
+  --icon-size: var(--icon-size-lg);
+  color: var(--color-text-secondary);
+}
+
+.previewInstall {
+  font-size: var(--font-paragraph-sm-size);
+  color: var(--color-text-secondary);
+}

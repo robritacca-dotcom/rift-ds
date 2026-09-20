@@ -1,0 +1,28 @@
+/* ============================================
+   KBD COMPONENT
+   A single keyboard key rendered as a keycap
+   ============================================ */
+
+/* Base */
+.ds-kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  padding: var(--padding-xxxs) var(--padding-xs);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-xs);
+  background-color: var(--color-bg-container-primary);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+}
+
+/* Sizes */
+.ds-kbd--compact {
+  min-width: 20px;
+  padding: var(--padding-xxxs) var(--padding-xxs);
+}

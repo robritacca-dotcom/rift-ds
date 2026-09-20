@@ -1,0 +1,163 @@
+/* ============================================
+   MESSAGE CARD COMPONENT
+   Structured rich content inside a chat turn:
+   media on top, a title/meta/description body,
+   and an actions footer.
+
+   Not the navigation Card — this is content
+   furniture inside a conversation, sized by the
+   bubble or turn that holds it. It shares Card's
+   cover geometry and the chat bubbles' 24px
+   shell, so cards read the same across surfaces.
+   ============================================ */
+
+.ds-message-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: var(--ds-message-card-max-width, 100%);
+  background-color: var(--color-bg-container-primary);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+}
+
+/* ============================================
+   MEDIA
+   Inset, not full bleed: 12px of card around a
+   12px-radius slot keeps the corners concentric
+   with the card's 24px shell — the exact
+   geometry of Card's case-study cover, and the
+   same rule the Composer follows.
+   ============================================ */
+
+.ds-message-card__media {
+  display: block;
+  margin: var(--padding-sm-md) var(--padding-sm-md) 0;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  /* The slot carries its own surface, so drawn media — a chart, an SVG —
+     reads as the same image-shaped panel a photo would. The page tone, not
+     the container ramp: lightest in light mode, darkest in dark, so the
+     slot recedes behind the drawing instead of tinting it. */
+  background-color: var(--color-bg-page-primary);
+}
+
+.ds-message-card__media img {
+  display: block;
+  width: 100%;
+}
+
+/* A Chart in the slot sheds its own panel chrome — the card is already the
+   panel, and the slot's page tone is the brightest surface in light mode and
+   the darkest in dark, so the drawing keeps maximum contrast against its
+   ground instead of sitting on a second container tone. */
+.ds-message-card__media .ds-chart {
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+  padding: var(--padding-sm) var(--padding-sm) 0 0;
+}
+
+/* ============================================
+   BODY
+   The vertical rhythm is deliberately even: the
+   media-to-body distance (--padding-md) equals
+   the body-to-actions distance (--padding-sm on
+   each side of the seam), so the copy sits
+   centred between the image and the CTA row.
+   ============================================ */
+
+.ds-message-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  padding: var(--padding-md) var(--padding-lg) var(--padding-sm);
+}
+
+/* Without an actions footer the body closes the card, so it takes the full
+   bottom padding back. */
+.ds-message-card__body:last-child {
+  padding-bottom: var(--padding-md);
+}
+
+/* Title and meta form one unit, tucked closer together than the body's
+   stack gap so the meta reads as the title's subline. */
+.ds-message-card__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs);
+  min-width: 0;
+}
+
+.ds-message-card__title-row {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  min-width: 0;
+}
+
+.ds-message-card__icon {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  color: var(--color-icon-primary);
+}
+
+.ds-message-card__icon .material-symbols-rounded {
+  --icon-size: var(--icon-size-sm);
+}
+
+.ds-message-card__title {
+  min-width: 0;
+  font-family: var(--font-heading-3-family);
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+  letter-spacing: var(--font-heading-3-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.ds-message-card__meta {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-tertiary);
+}
+
+.ds-message-card__description {
+  margin: 0;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-secondary);
+}
+
+/* ============================================
+   ACTIONS
+   Mirrors ToolCall's actions footer exactly, so
+   approvals on a tool call and link actions on
+   a card read as the same row. Whitespace alone
+   separates it from the body — no rule.
+   ============================================ */
+
+.ds-message-card__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--gap-sm);
+  padding: var(--padding-sm) var(--padding-lg) var(--padding-md);
+}
+
+/* Icons take the colour of the text around them. Explicit, not just
+   inherited by default: a consumer stylesheet that sets a colour on
+   .material-symbols-rounded itself (a common global default) would
+   otherwise override inheritance and detach the icon from the state
+   colours this component sets on its parents. */
+.ds-message-card .material-symbols-rounded {
+  color: inherit;
+}

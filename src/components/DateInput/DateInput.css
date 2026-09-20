@@ -1,0 +1,127 @@
+/* ============================================
+   DATE INPUT COMPONENT
+   Date input with calendar icon and label
+   ============================================ */
+
+.ds-date-input {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm); /* 8px */
+  width: 100%;
+}
+
+/* ============================================
+   LABEL
+   ============================================ */
+
+/* ============================================
+   FIELD WRAPPER
+   ============================================ */
+
+.ds-date-input__field-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* ============================================
+   ICON
+   ============================================ */
+
+.ds-date-input__icon {
+  position: absolute;
+  left: var(--padding-md); /* 16px */
+  top: 50%;
+  transform: translateY(-50%);
+  --icon-size: var(--icon-size-md);
+  color: var(--color-icon-primary);
+  pointer-events: none;
+}
+
+/* ============================================
+   FIELD
+   ============================================ */
+
+.ds-date-input__field {
+  width: 100%;
+  padding: var(--padding-sm) var(--padding-md); /* 8px 16px */
+  padding-left: calc(var(--padding-md) + 24px + var(--gap-sm)); /* 16px + 24px icon + 8px gap */
+  border: var(--border-xs) solid var(--color-input-border-primary);
+  border-radius: var(--radius-md); /* 12px */
+  background-color: var(--color-input-bg-primary);
+
+  /* Typography */
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+  color: var(--color-input-text-primary);
+
+  /* Transitions */
+  transition: border-color var(--motion-duration-base) var(--motion-ease-standard), background-color var(--motion-duration-base) var(--motion-ease-standard);
+  outline: none;
+}
+
+/* Hide the default calendar icon in WebKit browsers */
+.ds-date-input__field::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  cursor: pointer;
+}
+
+.ds-date-input__field:hover:not(:focus):not(:disabled) {
+  border-color: var(--color-input-border-hover);
+}
+
+.ds-date-input__field:focus {
+  border-color: var(--color-input-border-selected);
+  background-color: var(--color-input-bg-primary);
+}
+
+/* ============================================
+   SIZE — COMPACT
+   ============================================ */
+
+.ds-date-input--compact .ds-date-input__field {
+  padding: var(--padding-xs) var(--padding-sm-md); /* 6px 12px */
+  padding-left: calc(var(--padding-sm-md) + 20px + var(--gap-sm)); /* 12px + 20px icon + 8px gap */
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+}
+
+.ds-date-input--compact .ds-date-input__icon {
+  left: var(--padding-sm-md); /* 12px */
+  --icon-size: var(--icon-size-sm);
+}
+
+/* ============================================
+   HELPER TEXT
+   ============================================ */
+
+/* ============================================
+   ERROR STATE
+   ============================================ */
+
+.ds-date-input--error .ds-date-input__field {
+  border-color: var(--color-status-error-border);
+}
+
+.ds-date-input--error .ds-date-input__field:focus {
+  border-color: var(--color-status-error-border);
+}
+
+/* ============================================
+   DISABLED STATE
+   ============================================ */
+
+.ds-date-input--disabled .ds-date-input__field {
+  background-color: var(--color-input-bg-disabled);
+  border-color: var(--color-input-border-disabled);
+  color: var(--color-input-text-disabled);
+  cursor: not-allowed;
+}
+
+.ds-date-input--disabled .ds-date-input__icon {
+  color: var(--color-input-text-disabled);
+}

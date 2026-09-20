@@ -1,0 +1,129 @@
+/* ============================================
+   EMPTY STATE COMPONENT
+   Placeholder for lists, tables, and searches
+   that have nothing to show
+   ============================================ */
+
+.ds-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: var(--gap-md); /* 16px */
+  padding: var(--padding-xl); /* 32px */
+  width: 100%;
+  /* width: 100% plus own padding — border-box locally (as ContactCard,
+     Checkbox, Composer, SelectionCard and Textarea do), so a consumer
+     without a global reset doesn't get a horizontal scrollbar wherever
+     this is embedded. */
+  box-sizing: border-box;
+}
+
+/* ============================================
+   ICON
+   ============================================ */
+
+.ds-empty-state__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-bg-container-primary);
+  color: var(--color-icon-primary);
+  flex-shrink: 0;
+}
+
+.ds-empty-state__icon .material-symbols-rounded {
+  --icon-size: var(--icon-size-md);
+}
+
+/* ============================================
+   CONTENT
+   ============================================ */
+
+.ds-empty-state__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs); /* 4px */
+  max-width: 420px;
+}
+
+.ds-empty-state__title {
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  letter-spacing: var(--font-title-body-letter-spacing);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.ds-empty-state__description {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-tertiary);
+  margin: 0;
+}
+
+/* ============================================
+   ACTION
+   ============================================ */
+
+.ds-empty-state__action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--gap-sm); /* 8px */
+}
+
+/* ============================================
+   VARIANT — BORDERED
+   Dashed container for use inside cards/tables
+   ============================================ */
+
+.ds-empty-state--bordered {
+  border: var(--border-xs) dashed var(--color-bg-container-border);
+  border-radius: var(--radius-md); /* 12px */
+}
+
+/* ============================================
+   SIZE — COMPACT
+   ============================================ */
+
+.ds-empty-state--compact {
+  gap: var(--gap-sm); /* 8px */
+  padding: var(--padding-lg); /* 20px */
+}
+
+.ds-empty-state--compact .ds-empty-state__icon {
+  width: 36px;
+  height: 36px;
+}
+
+.ds-empty-state--compact .ds-empty-state__icon .material-symbols-rounded {
+  --icon-size: var(--icon-size-sm);
+}
+
+.ds-empty-state--compact .ds-empty-state__title {
+  font-family: var(--font-paragraph-em-family);
+  font-size: var(--font-paragraph-em-size);
+  font-weight: var(--font-paragraph-em-weight);
+  line-height: var(--font-paragraph-em-line-height);
+  letter-spacing: var(--font-paragraph-em-letter-spacing);
+}
+
+/* Icons take the colour of the text around them. Explicit, not just
+   inherited by default: a consumer stylesheet that sets a colour on
+   .material-symbols-rounded itself (a common global default) would
+   otherwise override inheritance and detach the icon from the state
+   colours this component sets on its parents. */
+.ds-empty-state .material-symbols-rounded {
+  color: inherit;
+}

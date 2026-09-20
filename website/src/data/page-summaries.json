@@ -1,0 +1,262 @@
+{
+  "routes": {
+    "/": {
+      "title": "Dragonspine DS",
+      "text": "The design system behind this site: tokens, components, and docs, published to npm and enforced by the build.",
+      "chips": [
+        {
+          "id": "start",
+          "label": "How do I install it?",
+          "prompt": "How do I install and set up the @robr0/design-system package?"
+        },
+        {
+          "id": "count",
+          "label": "What's in the library?",
+          "prompt": "What components does the design system include?"
+        }
+      ]
+    },
+    "/overview": {
+      "title": "How this site is built",
+      "text": "The whole pipeline: a component library on npm, a Next.js site consuming it, and validators holding every fact in place.",
+      "chips": [
+        {
+          "id": "pipeline",
+          "label": "Explain the pipeline",
+          "prompt": "Explain how this site is built and deployed."
+        },
+        {
+          "id": "validators",
+          "label": "What do the validators do?",
+          "prompt": "What do the build validators on this project check?"
+        }
+      ]
+    },
+    "/docs": {
+      "title": "Docs",
+      "text": "The hub for using the system: getting started, the skills, and the build journal.",
+      "chips": [
+        {
+          "id": "start",
+          "label": "Get me started",
+          "prompt": "How do I get started with the design system?"
+        }
+      ]
+    },
+    "/docs/get-started": {
+      "title": "Get started",
+      "text": "Install the package, import the tokens, and theme by overriding primitives: the whole setup in a few steps.",
+      "chips": [
+        {
+          "id": "theme",
+          "label": "How does theming work?",
+          "prompt": "How do I re-theme the design system for my own brand?"
+        }
+      ]
+    },
+    "/skills": {
+      "title": "Agent skills",
+      "text": "The repeatable jobs Rob's coding agent runs on this repo: audits, shipping flows, and content loops.",
+      "chips": [
+        {
+          "id": "skills",
+          "label": "How do the skills work?",
+          "prompt": "How do the agent skills on this project work?"
+        }
+      ]
+    },
+    "/project-journal": {
+      "title": "Project journal",
+      "text": "The build's timeline: what shipped and when, from the first tokens to the latest release.",
+      "chips": [
+        {
+          "id": "recent",
+          "label": "What shipped recently?",
+          "prompt": "What has shipped on this project recently?"
+        }
+      ]
+    },
+    "/loops": {
+      "title": "Agent loops",
+      "text": "The recurring automations on this project: copy experiments, journal updates, chat quality, link checks, and visibility tracking.",
+      "chips": [
+        {
+          "id": "loops",
+          "label": "What runs on a loop?",
+          "prompt": "What recurring agent loops run on this project?"
+        }
+      ]
+    },
+    "/templates": {
+      "title": "Templates",
+      "text": "Complete screens built from the system alone, proving the parts compose into real products.",
+      "chips": [
+        {
+          "id": "templates",
+          "label": "What do they prove?",
+          "prompt": "What do the template screens demonstrate about the design system?"
+        }
+      ]
+    },
+    "/components": {
+      "title": "Components",
+      "text": "The full library, organized by category, every entry with live examples and a documented prop contract.",
+      "chips": [
+        {
+          "id": "pick",
+          "label": "Help me pick a component",
+          "prompt": "Help me find the right component for a dashboard I'm building."
+        },
+        {
+          "id": "api",
+          "label": "How are the APIs shaped?",
+          "prompt": "How are the component APIs in this design system shaped?"
+        }
+      ]
+    },
+    "/privacy": {
+      "title": "Privacy",
+      "text": "What the site collects and why: analytics, chat logs, and the choices behind both.",
+      "chips": [
+        {
+          "id": "data",
+          "label": "What data is collected?",
+          "prompt": "What data does this site collect about visitors?"
+        }
+      ]
+    },
+    "/foundations": {
+      "title": "Foundations",
+      "text": "The design language's ground floor: colour, type, spacing, elevation, motion, and icons, each documented with live tokens.",
+      "chips": [
+        {
+          "id": "tokens",
+          "label": "How do tokens work?",
+          "prompt": "How does the token architecture in this design system work?"
+        }
+      ]
+    },
+    "/foundations/colour-mode": {
+      "title": "Colour and mode",
+      "text": "Every semantic colour token with its light and dark values, and how the theme swap works.",
+      "chips": [
+        {
+          "id": "dark",
+          "label": "How does dark mode work?",
+          "prompt": "How does dark mode work in the design system?"
+        }
+      ]
+    },
+    "/foundations/colour-primitives": {
+      "title": "Colour primitives",
+      "text": "The raw colour ramps everything derives from: 10-stop scales the semantic tokens reference.",
+      "chips": [
+        {
+          "id": "primitives",
+          "label": "What are primitives?",
+          "prompt": "What are primitive tokens in the design system, and how do they differ from semantic tokens?"
+        }
+      ]
+    },
+    "/foundations/elevation": {
+      "title": "Elevation",
+      "text": "The depth system: the container ramp and the only shadows components are allowed to cast.",
+      "chips": [
+        {
+          "id": "depth",
+          "label": "How does elevation work?",
+          "prompt": "How does elevation work in the design system?"
+        }
+      ]
+    },
+    "/foundations/icons": {
+      "title": "Icons",
+      "text": "Material Symbols on a fixed size scale, self-hosted and themed by token.",
+      "chips": [
+        {
+          "id": "icons",
+          "label": "How do I use icons?",
+          "prompt": "How do I use icons from the design system?"
+        }
+      ]
+    },
+    "/foundations/logos": {
+      "title": "Logos",
+      "text": "The personal mark and its rules: variants, clear space, and usage.",
+      "chips": [
+        {
+          "id": "logo",
+          "label": "Tell me about the logo",
+          "prompt": "Tell me about the logo system on this site."
+        }
+      ]
+    },
+    "/foundations/motion": {
+      "title": "Motion",
+      "text": "The motion scale: durations, easings, and the reduced-motion contract every animation obeys.",
+      "chips": [
+        {
+          "id": "motion",
+          "label": "How is motion tokenized?",
+          "prompt": "How is motion tokenized in the design system?"
+        }
+      ]
+    },
+    "/foundations/spatial": {
+      "title": "Spatial system",
+      "text": "Spacing, radius, and border scales: the geometry every layout composes from.",
+      "chips": [
+        {
+          "id": "spacing",
+          "label": "How does spacing work?",
+          "prompt": "How does the spacing system work in the design system?"
+        }
+      ]
+    },
+    "/foundations/typography": {
+      "title": "Typography",
+      "text": "One typeface, hierarchy carried by weight: the full type scale and its tokens.",
+      "chips": [
+        {
+          "id": "type",
+          "label": "Why one typeface?",
+          "prompt": "Why does the design system use a single typeface?"
+        }
+      ]
+    },
+    "/blueprints/claude": {
+      "title": "CLAUDE.md",
+      "text": "The agent operating manual this repo runs on, published as a readable page.",
+      "chips": [
+        {
+          "id": "claude",
+          "label": "What's in CLAUDE.md?",
+          "prompt": "What does this project's CLAUDE.md cover?"
+        }
+      ]
+    },
+    "/blueprints/design": {
+      "title": "design.md",
+      "text": "The full design spec behind the system, published as a readable page.",
+      "chips": [
+        {
+          "id": "design",
+          "label": "What's in design.md?",
+          "prompt": "What does this project's design.md cover?"
+        }
+      ]
+    },
+    "/blueprints/content-design": {
+      "title": "content-design.md",
+      "text": "The voice and prose rules every shipped word on this site follows.",
+      "chips": [
+        {
+          "id": "content",
+          "label": "What are the writing rules?",
+          "prompt": "What are the content design rules for this site?"
+        }
+      ]
+    }
+  },
+  "essays": {}
+}

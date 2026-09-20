@@ -1,0 +1,210 @@
+/* ============================================
+   LIGHTBOX COMPONENT
+   Fullscreen media viewer over a frosted scrim
+   ============================================ */
+
+.ds-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  opacity: 0;
+  visibility: hidden; /* keeps panel controls out of the tab order when closed */
+  pointer-events: none;
+  transition:
+    opacity var(--motion-duration-base) var(--motion-ease-standard),
+    visibility var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-lightbox--open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* ============================================
+   BACKDROP
+   The scrim, frosted: blurring the page behind
+   separates the media without a deeper token
+   ============================================ */
+
+.ds-lightbox__backdrop {
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-scrim);
+  /* The frost's strength; an effect length with no token family, chosen by
+     eye — enough to dissolve page detail behind a full-viewport image. */
+  --ds-lightbox-frost: 12px;
+  backdrop-filter: blur(var(--ds-lightbox-frost));
+}
+
+/* A media viewer wants a deeper floor than the dialogs' scrim: the same
+   token laid twice compounds it (≈0.75 light / ≈0.91 dark) while staying
+   theme-driven — no literal colour, no second scrim role. */
+.ds-lightbox__backdrop::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-scrim);
+}
+
+/* ============================================
+   PANEL
+   A full-viewport stage: transparent to clicks
+   so the backdrop hears them, while the media
+   and controls stay interactive
+   ============================================ */
+
+.ds-lightbox__panel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--padding-xl);
+  pointer-events: none;
+  outline: none;
+}
+
+.ds-lightbox__panel > * {
+  pointer-events: auto;
+}
+
+/* ============================================
+   MEDIA
+   ============================================ */
+
+.ds-lightbox__figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-md);
+  margin: 0;
+  max-width: 100%;
+  max-height: 100%;
+  transform: scale(0.96);
+  transition: transform var(--motion-duration-base) var(--motion-ease-entrance);
+}
+
+.ds-lightbox--open .ds-lightbox__figure {
+  transform: scale(1);
+}
+
+.ds-lightbox__img {
+  display: block;
+  max-width: calc(100vw - var(--gap-xl) * 4);
+  max-height: calc(100vh - var(--gap-xl) * 4);
+  width: auto;
+  height: auto;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-modal);
+}
+
+/* Custom media (children) takes the same viewport bounds. */
+.ds-lightbox__figure > :not(figcaption) {
+  max-width: calc(100vw - var(--gap-xl) * 4);
+  max-height: calc(100vh - var(--gap-xl) * 4);
+}
+
+/* ============================================
+   CAPTION
+   A glass chip under the media — legible over
+   the scrim in both themes
+   ============================================ */
+
+.ds-lightbox__caption {
+  padding: var(--padding-xxs) var(--padding-md);
+  border-radius: var(--radius-full);
+  /* ds-allow(color): on-scrim furniture — the scrim floor is dark in both
+     themes, so the caption chip lives in scrim-world, not page-world; a
+     theme token would dissolve it into the dark-mode scrim. */
+  background-color: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(var(--ds-lightbox-frost, 12px));
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  /* ds-allow(color): white text on the always-dark scrim wash, both themes */
+  color: #ffffff;
+  text-align: center;
+  max-width: calc(100vw - var(--gap-xl) * 4);
+}
+
+/* ============================================
+   CONTROLS
+   Glass icon buttons: close pinned to the
+   viewer's corner, chevrons at its edges
+   ============================================ */
+
+.ds-lightbox__control {
+  position: absolute;
+  z-index: 1; /* above the media — DOM order alone would sink the prev chevron under a full-width image */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--icon-size-xl); /* 48px — a viewer-scale target */
+  height: var(--icon-size-xl);
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-full);
+  /* ds-allow(color): on-scrim furniture — the scrim floor is dark in both
+     themes, so the control wash lives in scrim-world, not page-world; a
+     theme token would dissolve the controls into the dark-mode scrim. */
+  background-color: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(var(--ds-lightbox-frost, 12px));
+  cursor: pointer;
+  transition: background-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-lightbox__control:hover {
+  /* ds-allow(color): the same on-scrim wash, one step brighter on hover */
+  background-color: rgba(255, 255, 255, 0.24);
+}
+
+.ds-lightbox__control:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+.ds-lightbox__control-icon {
+  --icon-size: var(--icon-size-md);
+  line-height: 1;
+  /* ds-allow(color): white glyph on the always-dark scrim wash, both themes */
+  color: #ffffff;
+}
+
+.ds-lightbox__close {
+  top: var(--gap-lg);
+  right: var(--gap-lg);
+}
+
+.ds-lightbox__nav {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.ds-lightbox__nav--prev {
+  left: var(--gap-lg);
+}
+
+.ds-lightbox__nav--next {
+  right: var(--gap-lg);
+}
+
+/* ============================================
+   RESPONSIVE
+   Tighter margins on small screens — the
+   chevrons overlay the media's edges
+   ============================================ */
+
+@media (max-width: 480px) {
+  .ds-lightbox__panel {
+    padding: var(--padding-md);
+  }
+
+  .ds-lightbox__img,
+  .ds-lightbox__figure > :not(figcaption),
+  .ds-lightbox__caption {
+    max-width: calc(100vw - var(--gap-md) * 2);
+  }
+}

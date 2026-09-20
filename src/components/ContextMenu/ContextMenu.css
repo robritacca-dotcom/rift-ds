@@ -1,0 +1,258 @@
+/* ============================================
+   CONTEXT MENU COMPONENT
+   Right-click menu anchored at the pointer.
+   Panel and item styling mirror DropdownMenu.
+   ============================================ */
+
+/* Base — a plain block wrapper around the right-clickable area
+   (a real box, so the keyboard-invocation fallback can measure it) */
+.ds-context-menu {
+  display: block;
+}
+
+/* ============================================
+   PANEL
+   Fixed-positioned at the pointer; left/top are
+   set inline from the contextmenu event coords.
+   ============================================ */
+
+.ds-context-menu__panel {
+  position: fixed;
+  z-index: 50;
+  min-width: 200px;
+
+  /* Appearance — same recipe as DropdownMenu */
+  background: var(--color-bg-page-primary);
+  border: var(--border-xs) solid var(--color-input-border-primary);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-floating);
+
+  /* Inset gap */
+  padding: var(--padding-xxs);
+
+  /* Reset list */
+  list-style: none;
+  margin: 0;
+
+  outline: none;
+
+  /* Animation */
+  animation: ds-context-menu-appear var(--motion-duration-fast) var(--motion-ease-entrance);
+}
+
+/* Compact items: paragraph-sm-em, tighter padding, radius-sm */
+.ds-context-menu__panel--compact .ds-context-menu__item {
+  padding: var(--padding-xs) var(--padding-sm-md);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-paragraph-sm-em-family);
+  font-size: var(--font-paragraph-sm-em-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+}
+
+.ds-context-menu__panel--compact .ds-context-menu__item-icon {
+  --icon-size: var(--icon-size-sm);
+}
+
+.ds-context-menu__panel--compact .ds-context-menu__submenu-icon {
+  --icon-size: var(--icon-size-sm);
+}
+
+.ds-context-menu__panel--compact .ds-context-menu__group-label {
+  min-height: auto;
+  padding: var(--padding-xs) var(--padding-sm-md);
+  font-size: var(--font-paragraph-sm-em-size);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+}
+
+.ds-context-menu__panel--compact .ds-context-menu__separator {
+  margin: var(--padding-xxs) var(--padding-sm-md);
+}
+
+/* ============================================
+   SUB-MENU PANEL
+   Positioned relative to its parent item.
+   ============================================ */
+
+.ds-context-menu__submenu {
+  position: absolute;
+  left: 100%;
+  top: 0;
+  margin-left: var(--gap-xxs);
+}
+
+/* ============================================
+   MENU ITEM
+   ============================================ */
+
+.ds-context-menu__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-md);
+  padding: var(--padding-sm) var(--padding-md);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  position: relative;
+  white-space: nowrap;
+  list-style: none;
+
+  font-family: var(--font-paragraph-em-family);
+  font-size: var(--font-paragraph-em-size);
+  font-weight: var(--font-paragraph-em-weight);
+  line-height: var(--font-paragraph-em-line-height);
+  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  color: var(--color-action-passive-text);
+
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard), color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-context-menu__item:hover,
+.ds-context-menu__item--focused {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+/* States — disabled */
+.ds-context-menu__item--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ds-context-menu__item--disabled:hover,
+.ds-context-menu__item--disabled.ds-context-menu__item--focused {
+  background-color: transparent;
+}
+
+/* ============================================
+   ITEM LABEL (text + optional icon)
+   ============================================ */
+
+.ds-context-menu__item-label {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  line-height: 1;
+}
+
+.ds-context-menu__item-icon {
+  --icon-size: var(--icon-size-md);
+  color: var(--color-icon-secondary);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+/* ============================================
+   KEYBOARD SHORTCUT
+   ============================================ */
+
+.ds-context-menu__shortcut {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-tertiary);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* ============================================
+   SUB-MENU INDICATOR
+   ============================================ */
+
+.ds-context-menu__submenu-icon {
+  --icon-size: var(--icon-size-md);
+  color: var(--color-text-tertiary);
+  margin-left: auto;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.ds-context-menu__item--has-submenu {
+  padding-right: var(--padding-sm-md);
+}
+
+/* ============================================
+   SEPARATOR
+   ============================================ */
+
+.ds-context-menu__separator {
+  height: 1px;
+  background: var(--color-input-border-primary);
+  margin: var(--padding-xxs) var(--padding-md);
+  list-style: none;
+}
+
+/* ============================================
+   GROUP
+   ============================================ */
+
+.ds-context-menu__group {
+  list-style: none;
+}
+
+.ds-context-menu__group-label {
+  display: flex;
+  align-items: center;
+  min-height: 40px;
+  font-family: var(--font-paragraph-em-family);
+  font-size: var(--font-paragraph-em-size);
+  font-weight: var(--font-paragraph-em-weight);
+  line-height: var(--font-paragraph-em-line-height);
+  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  color: var(--color-text-tertiary);
+  padding-left: var(--padding-md);
+  padding-right: var(--padding-md);
+  user-select: none;
+}
+
+.ds-context-menu__group-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* ============================================
+   DESTRUCTIVE ITEM
+   ============================================ */
+
+.ds-context-menu__item--destructive {
+  color: var(--color-core-accent-coral);
+}
+
+.ds-context-menu__item--destructive .ds-context-menu__item-icon {
+  color: var(--color-core-accent-coral);
+}
+
+.ds-context-menu__item--destructive .ds-context-menu__shortcut {
+  color: var(--color-core-accent-coral);
+  opacity: 0.7;
+}
+
+.ds-context-menu__item--destructive:hover,
+.ds-context-menu__item--destructive.ds-context-menu__item--focused {
+  background-color: var(--color-status-error-bg);
+}
+
+/* ============================================
+   APPEAR ANIMATION
+   ============================================ */
+
+@keyframes ds-context-menu-appear {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

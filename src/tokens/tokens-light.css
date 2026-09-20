@@ -1,0 +1,273 @@
+/* ============================================
+   SEMANTIC TOKENS — LIGHT THEME
+   These are what components use
+   Always reference these, never primitives
+   Every value chains to tokens-primitives.css
+   (validated by scripts/validate-token-references.mjs)
+   ============================================ */
+
+[data-theme="light"], :root {
+  /* Text */
+  --color-text-primary: var(--primitive-neutral-10);
+  --color-text-secondary: var(--primitive-neutral-07);
+  --color-text-tertiary: var(--primitive-neutral-06);
+  --color-text-inverse: var(--primitive-neutral-04);
+  --color-text-on-inverse: var(--primitive-neutral-01);
+
+  /* Icon */
+  --color-icon-primary: var(--primitive-neutral-06);
+  --color-icon-secondary: var(--primitive-neutral-04);
+
+  /* Background - Page */
+  --color-bg-page-primary: var(--primitive-neutral-01);
+  --color-bg-page-inverse: var(--primitive-neutral-10);
+
+  /* Background - Container */
+  --color-bg-container-primary: var(--primitive-neutral-00);
+  --color-bg-container-primary-transparent: var(--primitive-neutral-00-transparent);
+  /* The semi surface rides the glass-strength white, not the 60% one: light
+     containers should read bright white, with the ambient background only
+     whispering through. */
+  --color-bg-container-primary-semi: var(--primitive-neutral-00-glass);
+  --color-bg-container-secondary: var(--primitive-neutral-01);
+  --color-bg-container-tertiary: var(--primitive-neutral-02);
+  --color-bg-container-inverse: var(--primitive-neutral-09);
+  --color-bg-container-border: var(--primitive-neutral-02);
+
+  /* Glass: the translucent floating-surface fill (chat panel, floating
+     sidebar). Deliberately translucent in both themes so the page's
+     colours reach the surface; pair it with backdrop-filter: blur(24px). */
+  --color-bg-glass: var(--primitive-neutral-00-glass);
+
+  /* Divider */
+  --color-divider: var(--primitive-neutral-02-semi);
+
+  /* Chat bubbles — sent (the person) and received (the agent). Both alias
+     the container-secondary / text-primary pair today; they exist as their
+     own roles so chat surfaces can be re-themed later without touching the
+     container ramp. */
+  --color-chat-bubble-sent-bg: var(--color-bg-container-secondary);
+  --color-chat-bubble-sent-text: var(--color-text-primary);
+  --color-chat-bubble-received-bg: var(--color-bg-container-secondary);
+  --color-chat-bubble-received-text: var(--color-text-primary);
+  /* The composer's context note — the quietest tint per theme, the nearest
+     neutral to each shell that still separates from it. Its own role, not a
+     container alias, because it deliberately sits off the container ramp. */
+  --color-chat-context-bg: var(--primitive-neutral-01);
+
+  /* Calendar surfaces — EventCalendar's day cells and event pills. Their own
+     roles (the chat-surfaces pattern) because the container ramp's dark steps
+     are too far apart for calendar density: cells rest one quiet step off the
+     calendar container and step one gentle notch away from the pill fill on
+     hover (lighter in dark, darker in light). A hovered cell keeps its hover
+     while the pointer is on a pill, so the pill hover aliases the resting
+     cell tint — always one step off the hovered cell — and the hover-only
+     border ring is an obvious mid-grey, so the pill under the pointer is
+     never in doubt while resting pills stay quiet. */
+  --color-calendar-cell-bg: var(--primitive-neutral-01);
+  --color-calendar-cell-bg-hover: var(--primitive-neutral-02-semi);
+  --color-calendar-event-bg: var(--color-bg-container-primary);
+  --color-calendar-event-bg-hover: var(--color-calendar-cell-bg);
+  --color-calendar-event-border: var(--primitive-neutral-04);
+
+  /* Overlay & controls */
+  --color-scrim: var(--primitive-true-black-semi);
+  --color-control-thumb: var(--primitive-neutral-00);
+
+  /* Elevation — the only shadows in the system (floating surfaces + modals) */
+  --shadow-floating: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --shadow-modal: 0 8px 32px rgba(0, 0, 0, 0.2);
+
+  /* Action - Primary. The action colour is theme-dependent: one teal step
+     cannot clear 3:1 against both a white page and a near-black one while
+     also carrying a 4.5:1 label, so light takes a deep fill under a light
+     label and the dark theme inverts it (see tokens-dark.css). */
+  --color-action-primary-bg: var(--primitive-teal-08);
+  --color-action-primary-bg-hover: var(--primitive-teal-09);
+  --color-action-primary-bg-active: var(--primitive-teal-10);
+  --color-action-primary-text: var(--primitive-teal-02);
+  --color-action-primary-text-active: var(--primitive-neutral-01);
+  --color-action-primary-text-secondary: var(--primitive-teal-10);
+  --color-action-primary-text-tertiary: var(--primitive-teal-09);
+  --color-action-primary-border: var(--primitive-teal-10);
+  --color-action-primary-border-secondary: var(--primitive-teal-08);
+  --color-action-primary-border-tertiary: var(--primitive-teal-08);
+
+  /* Action - Icon */
+  --color-action-icon-default: var(--primitive-neutral-10);
+  --color-action-icon-active: var(--primitive-teal-02);
+
+  /* Action - Passive (Secondary button) */
+  --color-action-passive-text: var(--primitive-neutral-10);
+  --color-action-passive-bg: var(--primitive-neutral-01-transparent);
+  --color-action-passive-bg-hover: var(--primitive-neutral-02-semi);
+  --color-action-passive-bg-active: var(--primitive-neutral-03-semi);
+
+  /* Action - Neutral (grey filled buttons). Unlike passive, the fill is a
+     solid grey step that stays visible at rest — a filled button without
+     the action teal's "click here" weight. Hover and active deepen in
+     light mode and brighten in dark, like the primary family. */
+  --color-action-neutral-bg: var(--primitive-neutral-02);
+  --color-action-neutral-bg-hover: var(--primitive-neutral-03);
+  --color-action-neutral-bg-active: var(--primitive-neutral-04);
+  --color-action-neutral-text: var(--primitive-neutral-10);
+
+  /* Core colours */
+  --color-core-ui-primary: var(--primitive-teal-08);
+  --color-core-ui-secondary: var(--primitive-teal-10);
+  --color-core-accent-coral: var(--primitive-red-07);
+  --color-core-accent-violet: var(--primitive-purple-07);
+  --color-core-accent-cobalt: var(--primitive-blue-07);
+  --color-core-accent-amber: var(--primitive-orange-07);
+  --color-core-accent-gold: var(--primitive-yellow-07);
+  --color-core-accent-mint: var(--primitive-green-07);
+
+  /* Trend: the "number went up / went down" role (Stat deltas, table
+     movers). Theme-split for contrast: deep status inks on light
+     surfaces, the mint/coral accents on dark ones. */
+  --color-trend-up: var(--primitive-green-10);
+  --color-trend-down: var(--primitive-red-10);
+
+  /* Status - Positive */
+  --color-status-positive-bg: var(--primitive-green-01);
+  --color-status-positive-border: var(--primitive-green-07);
+  --color-status-positive-text: var(--primitive-green-10);
+  --color-status-positive-icon: var(--primitive-green-08);
+
+  /* Status - Warning */
+  --color-status-warning-bg: var(--primitive-orange-01);
+  --color-status-warning-border: var(--primitive-orange-07);
+  --color-status-warning-text: var(--primitive-orange-10);
+  --color-status-warning-icon: var(--primitive-orange-08);
+
+  /* Status - Error */
+  --color-status-error-bg: var(--primitive-red-01);
+  --color-status-error-border: var(--primitive-red-07);
+  --color-status-error-text: var(--primitive-red-10);
+  --color-status-error-icon: var(--primitive-red-08);
+
+  /* Status - Info */
+  --color-status-info-bg: var(--primitive-blue-01);
+  --color-status-info-border: var(--primitive-blue-07);
+  --color-status-info-text: var(--primitive-blue-10);
+  --color-status-info-icon: var(--primitive-blue-06);
+
+  /* Status - Neutral */
+  --color-status-neutral-bg: var(--primitive-neutral-02);
+  --color-status-neutral-border: var(--primitive-neutral-07);
+  --color-status-neutral-text: var(--primitive-neutral-08);
+  --color-status-neutral-icon: var(--primitive-neutral-06);
+
+  /* The -icon step is the status glyph colour for plain surfaces (a step
+     indicator, a tool-call state) — -text is tuned for the tinted status
+     bg and washes out on a bare container, especially in dark mode. */
+
+  /* AI - The gradient accent reserved for AI entry points and surfaces.
+     Red → blue → teal, so the AI affordance is its own signature and the
+     flat action teal keeps meaning "click here". Used as gradient stops
+     (AiButton's ring and glow), never as fills for ordinary chrome.
+     One luminous set, shared with dark: the deeper inks read as a heavy
+     dark border on white surfaces. */
+  --color-ai-gradient-start: var(--primitive-red-05);
+  --color-ai-gradient-mid: var(--primitive-blue-05);
+  --color-ai-gradient-end: var(--primitive-teal-07);
+  /* The AI button's solid field: pushed past the page floor in the theme's
+     own direction — bright white here, true black in dark — so the entry
+     point punches out of any surface instead of frosting into it. */
+  --color-ai-button-bg: var(--primitive-neutral-00);
+
+  /* Chart - Contribution heatmap ramp (level 0 = none → level 4 = most) */
+  --color-chart-contribution-0: var(--color-bg-container-primary);
+  --color-chart-contribution-1: var(--primitive-green-02);
+  --color-chart-contribution-2: var(--primitive-green-04);
+  --color-chart-contribution-3: var(--primitive-green-07);
+  --color-chart-contribution-4: var(--primitive-green-09);
+
+  /* Chart - Ordered series ramp for multi-series charts. Series 1 follows
+     the action teal (theme-split with it); 2-7 alias the core accents, so
+     re-theming an accent re-themes every chart that uses its slot. */
+  --color-chart-series-1: var(--color-action-primary-bg);
+  --color-chart-series-2: var(--color-core-accent-mint);
+  --color-chart-series-3: var(--color-core-accent-gold);
+  --color-chart-series-4: var(--color-core-accent-coral);
+  --color-chart-series-5: var(--color-core-accent-violet);
+  --color-chart-series-6: var(--color-core-accent-amber);
+  --color-chart-series-7: var(--color-core-accent-cobalt);
+
+  /* Input */
+  --color-input-text-primary: var(--primitive-neutral-10);
+  --color-input-text-placeholder: var(--primitive-neutral-06);
+  --color-input-text-disabled: var(--primitive-neutral-04);
+  --color-input-text-inverse: var(--primitive-neutral-04);
+  --color-input-border-primary: var(--primitive-neutral-02);
+  --color-input-border-hover: var(--primitive-teal-06);
+  --color-input-border-selected: var(--primitive-teal-08);
+  --color-input-border-disabled: var(--primitive-neutral-03);
+  --color-input-bg-primary: var(--primitive-neutral-00);
+  --color-input-bg-disabled: var(--primitive-neutral-02);
+
+  /* Spacing (from primitives) */
+  --radius-xxs: var(--primitive-radius-xxs);
+  --radius-xs: var(--primitive-radius-xs);
+  --radius-sm: var(--primitive-radius-sm);
+  --radius-md: var(--primitive-radius-md);
+  --radius-lg: var(--primitive-radius-lg);
+  --radius-xl: var(--primitive-radius-xl);
+  --radius-xxl: var(--primitive-radius-xxl);
+  --radius-full: var(--primitive-radius-full);
+  --radius-composer: var(--primitive-radius-composer);
+
+  --padding-xxxs: var(--primitive-padding-xxxs);
+  --padding-xxs: var(--primitive-padding-xxs);
+  --padding-xs: var(--primitive-padding-xs);
+  --padding-sm: var(--primitive-padding-sm);
+  --padding-sm-md: var(--primitive-padding-sm-md);
+  --padding-md: var(--primitive-padding-md);
+  --padding-lg: var(--primitive-padding-lg);
+  --padding-xl: var(--primitive-padding-xl);
+
+  --border-xs: var(--primitive-border-xs);
+  --border-md: var(--primitive-border-md);
+
+  /* Icon size — theme-independent, so defined here only (like radius and
+     padding) rather than duplicated into tokens-dark.css. Components set
+     `--icon-size` to one of these; .material-symbols-rounded reads it for
+     font-size, box size, and optical size together. */
+  --icon-size-sm: var(--primitive-icon-sm);   /* 20px — compact controls */
+  --icon-size-md: var(--primitive-icon-md);   /* 24px — default */
+  --icon-size-lg: var(--primitive-icon-lg);   /* 32px — feature */
+  --icon-size-xl: var(--primitive-icon-xl);   /* 48px — marketing */
+
+  --gap-xxs: var(--primitive-gap-xxs);
+  --gap-xs: var(--primitive-gap-xs);
+  --gap-sm: var(--primitive-gap-sm);
+  --gap-sm-md: var(--primitive-gap-sm-md);
+  --gap-md: var(--primitive-gap-md);
+  --gap-lg: var(--primitive-gap-lg);
+  --gap-xl: var(--primitive-gap-xl);
+
+  /* Section rhythm — page-level spacing between major blocks. These are
+     the only spacing tokens with a responsive step (see the collapse
+     block at the bottom of this file). */
+  --gap-xxl: var(--primitive-gap-xxl);       /* 60px */
+  --gap-xxxl: var(--primitive-gap-xxxl);     /* 80px */
+  --gap-xxxxl: var(--primitive-gap-xxxxl);   /* 120px */
+  --padding-xxl: var(--primitive-padding-xxl); /* 60px */
+}
+
+/* ============================================
+   RESPONSIVE COLLAPSE
+   Section-rhythm spacing steps one notch down the primitive scale at
+   768px — the token layer's only breakpoint (typography collapses at the
+   same threshold in tokens-typography.css). Component-level spacing
+   (gap/padding xl and below) never steps.
+   ============================================ */
+
+@media (max-width: 768px) {
+  [data-theme="light"], :root {
+    --gap-xxl: var(--primitive-gap-xl);        /* 60 → 40 */
+    --gap-xxxl: var(--primitive-gap-xxl);      /* 80 → 60 */
+    --gap-xxxxl: var(--primitive-gap-xxxl);    /* 120 → 80 */
+    --padding-xxl: var(--primitive-padding-xl); /* 60 → 40 */
+  }
+}

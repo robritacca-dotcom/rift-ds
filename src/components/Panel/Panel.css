@@ -1,0 +1,26 @@
+/* ============================================
+   PANEL COMPONENT
+   The plain dashboard surface
+   ============================================ */
+
+.ds-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  min-width: 0;
+  background-color: var(--color-bg-container-primary);
+  border-radius: var(--radius-xl);
+  padding: var(--padding-lg);
+}
+
+/* ============================================
+   PADDING VARIANTS
+   ============================================ */
+
+.ds-panel--compact {
+  padding: var(--padding-md);
+}
+
+.ds-panel--flush {
+  padding: 0;
+}

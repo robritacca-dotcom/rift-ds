@@ -1,0 +1,51 @@
+/* ============================================
+   NAV COMPONENT
+   Top navigation bar using ButtonGroup
+   ============================================ */
+
+.ds-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1440px;
+  height: 78px;
+}
+
+/* ============================================
+   BRAND / LOGO
+   ============================================ */
+
+.ds-nav__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-lg); /* 20px */
+  flex-shrink: 0;
+  text-decoration: none;
+  color: var(--color-text-primary);
+}
+
+.ds-nav__brand-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.ds-nav__brand-text {
+  font-family: var(--font-paragraph-em-family);
+  font-size: var(--font-paragraph-em-size);
+  font-weight: var(--font-paragraph-em-weight);
+  line-height: var(--font-paragraph-em-line-height);
+}
+
+/* ============================================
+   RIGHT SECTION
+   ============================================ */
+
+.ds-nav__right {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xl); /* 24px */
+  flex-shrink: 0;
+  flex-wrap: nowrap;
+}

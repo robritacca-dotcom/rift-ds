@@ -1,0 +1,252 @@
+/* ============================================
+   THREAD TABS COMPONENT
+   The strip of open chat sessions across a conversation's top edge: pill
+   tabs with a leading glyph, an unread dot, a hover-revealed close button,
+   and a trailing new-tab action. Deliberately surface-less — the host
+   paints the band it sits on.
+
+   Enter/exit is the grid-track idiom (Accordion's height trick turned
+   sideways): each item is a one-column grid whose track animates between
+   0fr and 1fr, so a new tab glides open in place and a closed one folds
+   away while its neighbours slide over — no measurement, no FLIP. The
+   entrance rides the entrance ease at the slow beat; the exit is quicker
+   (the base beat), since a dismissal should feel lighter than an arrival.
+   ============================================ */
+
+.ds-thread-tabs {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  min-width: 0;
+}
+
+/* ============================================
+   LIST — the scrolling run of tabs
+   ============================================ */
+
+.ds-thread-tabs__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  /* A crowded strip scrolls sideways; the strip is its own scroll
+     affordance, so no bar. */
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+/* ============================================
+   ITEMS — the animated columns
+   The inter-tab gap lives on the items (not the list) so an entering or
+   leaving tab can fold its own gap in and out with its column.
+   ============================================ */
+
+.ds-thread-tabs__item {
+  display: grid;
+  grid-template-columns: 1fr;
+  flex: none;
+  min-width: 0;
+}
+
+.ds-thread-tabs__item + .ds-thread-tabs__item {
+  margin-inline-start: var(--gap-xs);
+}
+
+.ds-thread-tabs__item--entering {
+  animation: ds-thread-tabs-in var(--motion-duration-slow)
+    var(--motion-ease-entrance);
+}
+
+.ds-thread-tabs__item--leaving {
+  pointer-events: none;
+  animation: ds-thread-tabs-out var(--motion-duration-base)
+    var(--motion-ease-emphasized) forwards;
+}
+
+@keyframes ds-thread-tabs-in {
+  from {
+    grid-template-columns: 0fr;
+    margin-inline-start: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes ds-thread-tabs-out {
+  to {
+    grid-template-columns: 0fr;
+    margin-inline-start: 0;
+    opacity: 0;
+  }
+}
+
+/* The track's window: the pill inside keeps its natural width and is
+   revealed or wiped by the collapsing column. */
+.ds-thread-tabs__cell {
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* ============================================
+   TAB — the pill
+   32px pills on the buttons' radius; the active tab wears ThreadPanel's
+   active-row fill, so the strip and the rail mark "on stage" the same way.
+   ============================================ */
+
+.ds-thread-tabs__tab {
+  display: flex;
+  align-items: center;
+  height: 32px;
+  min-width: 0;
+  /* Keep a long session title from eating the strip; the label masks out
+     and stays readable in the tab's tooltip (ThreadPanel's manner). */
+  max-width: 220px;
+  border-radius: var(--radius-full);
+  transition: background-color var(--motion-duration-fast)
+    var(--motion-ease-standard);
+}
+
+.ds-thread-tabs__tab:hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-thread-tabs__tab--active {
+  background-color: var(--color-bg-container-tertiary);
+}
+
+.ds-thread-tabs__trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  min-width: 0;
+  height: 100%;
+  padding: 0 var(--padding-sm-md);
+  border: none;
+  border-radius: var(--radius-full);
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  color: var(--color-text-secondary);
+  transition: color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+/* With a close button beside it, the trigger cedes its trailing inset to
+   the button's own margin so the pill's right edge stays balanced. */
+.ds-thread-tabs__tab--closable .ds-thread-tabs__trigger {
+  padding-inline-end: var(--padding-xxs);
+}
+
+.ds-thread-tabs__tab--active .ds-thread-tabs__trigger {
+  color: var(--color-text-primary);
+}
+
+.ds-thread-tabs__trigger:focus-visible,
+.ds-thread-tabs__close:focus-visible,
+.ds-thread-tabs__add:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: -2px;
+}
+
+/* The unread dot: a small status disc leading the label. Sized on the gap
+   scale — there is no icon token this small (ThreadPanel's dot restated). */
+.ds-thread-tabs__unread {
+  flex: none;
+  width: var(--gap-sm);
+  height: var(--gap-sm);
+  border-radius: var(--radius-full);
+  background-color: var(--color-status-info-icon);
+}
+
+.ds-thread-tabs__icon {
+  --icon-size: var(--icon-size-sm);
+  flex: none;
+  color: var(--color-icon-secondary);
+}
+
+.ds-thread-tabs__label {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  /* A long label dissolves at the trailing edge instead of clipping to an
+     ellipsis; the full text stays in the tab's tooltip.
+     ds-allow(color): mask alpha keywords (black/transparent), not palette colours */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    black calc(100% - var(--gap-md)),
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    black calc(100% - var(--gap-md)),
+    transparent
+  );
+}
+
+/* ============================================
+   CLOSE — hover-revealed, geometry-stable
+   The button always holds its seat (states never move the label); it fades
+   in on hover or keyboard focus, and stands revealed on the active tab.
+   ============================================ */
+
+.ds-thread-tabs__close {
+  --icon-size: var(--icon-size-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex: none;
+  margin-inline-end: var(--padding-xxs);
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--color-icon-primary);
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard),
+    background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-thread-tabs__tab:hover .ds-thread-tabs__close,
+.ds-thread-tabs__tab:focus-within .ds-thread-tabs__close,
+.ds-thread-tabs__tab--active .ds-thread-tabs__close {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.ds-thread-tabs__close:hover {
+  background-color: var(--color-bg-container-secondary);
+}
+
+/* ============================================
+   ADD — the trailing new-tab action
+   ============================================ */
+
+.ds-thread-tabs__add {
+  --icon-size: var(--icon-size-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex: none;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--color-icon-primary);
+  cursor: pointer;
+  transition: background-color var(--motion-duration-fast)
+    var(--motion-ease-standard);
+}
+
+.ds-thread-tabs__add:hover {
+  background-color: var(--color-action-passive-bg-hover);
+}

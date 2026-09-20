@@ -1,0 +1,244 @@
+/* ============================================
+   DOCS — GET STARTED PAGE LAYOUT
+   ============================================ */
+.dsLayout {
+  display: flex;
+  gap: var(--layout-column-gap);
+  width: 100%;
+  max-width: 1440px;
+  padding-top: var(--primitive-gap-xl);
+}
+
+.dsContent {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxxl);
+}
+
+/* ============================================
+   PAGE TITLE - Display 2
+   ============================================ */
+.pageHeader {
+  margin-top: calc(var(--primitive-gap-xl) - var(--gap-xxxl));
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--primitive-gap-lg);
+  width: 100%;
+}
+
+.pageTitle {
+  font-size: var(--font-display-2-size);
+  font-weight: var(--font-display-2-weight);
+  line-height: var(--font-display-2-line-height);
+  letter-spacing: var(--font-display-2-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+/* Sub Display */
+.subDisplay {
+  font-family: var(--font-sub-display-family);
+  font-size: var(--font-sub-display-size);
+  font-weight: var(--font-sub-display-weight);
+  line-height: var(--font-sub-display-line-height);
+  letter-spacing: var(--font-sub-display-letter-spacing);
+  color: var(--color-text-primary);
+  margin-bottom: 0;
+}
+
+/* ============================================
+   INTRO SECTION
+   ============================================ */
+.introSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-lg);
+}
+
+.introBody {
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-secondary);
+}
+
+.introBody code {
+  color: var(--color-text-primary);
+}
+
+.inlineLink {
+  color: var(--color-action-primary-text-tertiary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* .inlineLink's visuals on a button element (the open-chat launcher). */
+.inlineLinkButton {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  color: var(--color-action-primary-text-tertiary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ============================================
+   CONTENT
+   The on-this-page nav floats over the right
+   viewport edge (FloatingAnchorNav) instead
+   of costing a column.
+   ============================================ */
+.railLayout {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--layout-column-gap);
+  width: 100%;
+}
+
+.railMain {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxxl);
+}
+
+
+/* ============================================
+   BUILT WITH
+   ============================================ */
+.toolList {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--primitive-gap-lg) var(--layout-column-gap);
+}
+
+.toolItem {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--primitive-gap-md);
+  text-decoration: none;
+  color: inherit;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+a.toolItem:hover {
+  opacity: 0.8;
+}
+
+.toolGlyph {
+  /* 24px glyph padded to match the 28px logo images beside it */
+  --icon-size: var(--icon-size-md);
+  padding: 2px;
+  color: var(--color-text-secondary);
+  flex-shrink: 0;
+}
+
+.toolLinkIcon {
+  /* Off-scale below the 20px opsz floor on purpose: a quiet trailing
+     affordance sized to read as metadata, not an action. */
+  --icon-size: 16px;
+  color: var(--color-text-tertiary);
+  margin-left: auto;
+  flex-shrink: 0;
+  padding-top: 4px;
+}
+
+.toolDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.toolName {
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  letter-spacing: -0.16px;
+  color: var(--color-text-primary);
+}
+
+.toolDesc {
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-tertiary);
+}
+
+/* ============================================
+   SECTIONS
+   ============================================ */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-lg);
+  /* Anchor targets clear the sticky MegaNav overlay and its frosted
+     backdrop — the shared clearance in globals.css owns the geometry */
+  scroll-margin-top: var(--layout-anchor-clearance);
+}
+
+/* The divider titles follow the case-study header rhythm — heading,
+   rule, then --gap-xl of clearance before the content. The section's
+   internal gap is tighter, so the title carries the difference. */
+.section > :global(.ds-section-title:not(.ds-section-title--no-divider)) {
+  margin-bottom: calc(var(--gap-xl) - var(--primitive-gap-lg));
+}
+
+.sectionNote {
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-secondary);
+}
+
+.sectionNote code {
+  color: var(--color-text-primary);
+}
+
+.ctaLink {
+  align-self: flex-start;
+  text-decoration: none;
+}
+
+.promptList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.promptItem {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--gap-md);
+  padding: var(--padding-sm) 0;
+  border-bottom: var(--border-xs) solid var(--color-bg-container-border);
+  font-size: var(--font-paragraph-size);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-primary);
+}
+
+.promptItem:last-child {
+  border-bottom: none;
+}
+
+.promptTool {
+  flex: none;
+  font-size: var(--font-caption-size);
+  color: var(--color-text-secondary);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 767px) {
+  .toolList {
+    grid-template-columns: 1fr;
+  }
+}

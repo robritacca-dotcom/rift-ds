@@ -1,0 +1,363 @@
+/* ============================================
+   TOAST CONTAINER
+   Fixed position stack for notifications
+
+   Consumer hooks (custom properties with fallbacks, so the defaults hold
+   until a consumer sets them): a page that keeps its own fixed chrome in a
+   corner (a chat launcher, a cookie bar, a docked panel) sets the matching
+   inset so toasts stack clear of it rather than on top of it, and raises
+   --ds-toast-z above its own overlay layers. Toasts are transient feedback
+   and must be seen; a launcher can be covered for five seconds.
+     --ds-toast-z             stacking order (default 200, the library's top)
+     --ds-toast-inset-top     gap from the top edge for top-* placements
+     --ds-toast-inset-bottom  gap from the bottom edge for bottom-* placements
+     --ds-toast-inset-left    gap from the left edge for *-left placements
+     --ds-toast-inset-right   gap from the right edge for *-right placements
+   ============================================ */
+
+.ds-toast-container {
+  position: fixed;
+  z-index: var(--ds-toast-z, 200);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm); /* 8px */
+  pointer-events: none;
+  padding: var(--padding-md); /* 16px */
+}
+
+.ds-toast-container--top-right {
+  top: var(--ds-toast-inset-top, 0);
+  right: var(--ds-toast-inset-right, 0);
+  align-items: flex-end;
+}
+
+.ds-toast-container--top-left {
+  top: var(--ds-toast-inset-top, 0);
+  left: var(--ds-toast-inset-left, 0);
+  align-items: flex-start;
+}
+
+.ds-toast-container--bottom-right {
+  bottom: var(--ds-toast-inset-bottom, 0);
+  right: var(--ds-toast-inset-right, 0);
+  align-items: flex-end;
+}
+
+.ds-toast-container--bottom-left {
+  bottom: var(--ds-toast-inset-bottom, 0);
+  left: var(--ds-toast-inset-left, 0);
+  align-items: flex-start;
+}
+
+.ds-toast-container--top-center {
+  top: var(--ds-toast-inset-top, 0);
+  left: 50%;
+  transform: translateX(-50%);
+  align-items: center;
+}
+
+.ds-toast-container--bottom-center {
+  bottom: var(--ds-toast-inset-bottom, 0);
+  left: 50%;
+  transform: translateX(-50%);
+  align-items: center;
+}
+
+/* ============================================
+   INDIVIDUAL TOAST
+   ============================================ */
+
+.ds-toast {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-sm); /* 8px */
+  padding: var(--padding-md); /* 16px */
+  border: var(--border-xs) solid transparent;
+  border-radius: var(--radius-sm); /* 8px */
+  min-width: 300px;
+  max-width: 420px;
+  box-shadow: var(--shadow-floating);
+  pointer-events: auto;
+  position: relative;
+  overflow: hidden;
+  animation: ds-toast-enter var(--motion-duration-slow) var(--motion-ease-standard) forwards;
+}
+
+.ds-toast--exiting {
+  animation: ds-toast-exit var(--motion-duration-base) var(--motion-ease-standard) forwards;
+}
+
+/* ============================================
+   ICON
+   ============================================ */
+
+.ds-toast__icon {
+  flex-shrink: 0;
+  --icon-size: var(--icon-size-md);
+  line-height: 1;
+}
+
+/* ============================================
+   CONTENT
+   ============================================ */
+
+.ds-toast__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxs); /* 2px */
+  min-width: 0;
+}
+
+.ds-toast__title {
+  font-family: var(--font-paragraph-em-family);
+  font-size: var(--font-paragraph-em-size);
+  font-weight: var(--font-paragraph-em-weight);
+  line-height: var(--font-paragraph-em-line-height);
+  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  margin: 0;
+}
+
+.ds-toast__description {
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+  margin: 0;
+}
+
+/* ============================================
+   DISMISS BUTTON
+   ============================================ */
+
+.ds-toast__dismiss {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-radius: var(--radius-sm); /* 8px */
+  transition: background-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-toast__dismiss .material-symbols-rounded {
+  --icon-size: var(--icon-size-md);
+}
+
+.ds-toast__dismiss:hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-toast__dismiss:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+/* ============================================
+   PROGRESS BAR
+   ============================================ */
+
+.ds-toast__progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  transform-origin: left;
+  animation: ds-toast-progress linear forwards;
+}
+
+/* ============================================
+   VARIANT — INFO
+   ============================================ */
+
+.ds-toast--info {
+  background-color: var(--color-status-info-bg);
+  border-color: var(--color-status-info-border);
+}
+
+.ds-toast--info .ds-toast__icon {
+  color: var(--color-status-info-border);
+}
+
+.ds-toast--info .ds-toast__title {
+  color: var(--color-status-info-text);
+}
+
+.ds-toast--info .ds-toast__description {
+  color: var(--color-status-info-text);
+}
+
+.ds-toast--info .ds-toast__dismiss {
+  color: var(--color-status-info-text);
+}
+
+.ds-toast--info .ds-toast__progress {
+  background-color: var(--color-status-info-border);
+}
+
+/* ============================================
+   VARIANT — POSITIVE
+   ============================================ */
+
+.ds-toast--positive {
+  background-color: var(--color-status-positive-bg);
+  border-color: var(--color-status-positive-border);
+}
+
+.ds-toast--positive .ds-toast__icon {
+  color: var(--color-status-positive-border);
+}
+
+.ds-toast--positive .ds-toast__title {
+  color: var(--color-status-positive-text);
+}
+
+.ds-toast--positive .ds-toast__description {
+  color: var(--color-status-positive-text);
+}
+
+.ds-toast--positive .ds-toast__dismiss {
+  color: var(--color-status-positive-text);
+}
+
+.ds-toast--positive .ds-toast__progress {
+  background-color: var(--color-status-positive-border);
+}
+
+/* ============================================
+   VARIANT — WARNING
+   ============================================ */
+
+.ds-toast--warning {
+  background-color: var(--color-status-warning-bg);
+  border-color: var(--color-status-warning-border);
+}
+
+.ds-toast--warning .ds-toast__icon {
+  color: var(--color-status-warning-border);
+}
+
+.ds-toast--warning .ds-toast__title {
+  color: var(--color-status-warning-text);
+}
+
+.ds-toast--warning .ds-toast__description {
+  color: var(--color-status-warning-text);
+}
+
+.ds-toast--warning .ds-toast__dismiss {
+  color: var(--color-status-warning-text);
+}
+
+.ds-toast--warning .ds-toast__progress {
+  background-color: var(--color-status-warning-border);
+}
+
+/* ============================================
+   VARIANT — ERROR
+   ============================================ */
+
+.ds-toast--error {
+  background-color: var(--color-status-error-bg);
+  border-color: var(--color-status-error-border);
+}
+
+.ds-toast--error .ds-toast__icon {
+  color: var(--color-status-error-border);
+}
+
+.ds-toast--error .ds-toast__title {
+  color: var(--color-status-error-text);
+}
+
+.ds-toast--error .ds-toast__description {
+  color: var(--color-status-error-text);
+}
+
+.ds-toast--error .ds-toast__dismiss {
+  color: var(--color-status-error-text);
+}
+
+.ds-toast--error .ds-toast__progress {
+  background-color: var(--color-status-error-border);
+}
+
+/* ============================================
+   VARIANT — NEUTRAL
+   ============================================ */
+
+.ds-toast--neutral {
+  background-color: var(--color-status-neutral-bg);
+  border-color: var(--color-status-neutral-border);
+}
+
+.ds-toast--neutral .ds-toast__icon {
+  color: var(--color-status-neutral-border);
+}
+
+.ds-toast--neutral .ds-toast__title {
+  color: var(--color-status-neutral-text);
+}
+
+.ds-toast--neutral .ds-toast__description {
+  color: var(--color-status-neutral-text);
+}
+
+.ds-toast--neutral .ds-toast__dismiss {
+  color: var(--color-status-neutral-text);
+}
+
+.ds-toast--neutral .ds-toast__progress {
+  background-color: var(--color-status-neutral-border);
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+@keyframes ds-toast-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ds-toast-exit {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@keyframes ds-toast-progress {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+
+/* Icons take the colour of the text around them. Explicit, not just
+   inherited by default: a consumer stylesheet that sets a colour on
+   .material-symbols-rounded itself (a common global default) would
+   otherwise override inheritance and detach the icon from the state
+   colours this component sets on its parents. */
+.ds-toast .material-symbols-rounded {
+  color: inherit;
+}

@@ -1,0 +1,119 @@
+/* ============================================
+   ACCORDION COMPONENT
+   Collapsible content sections
+   ============================================ */
+
+.ds-accordion {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+/* ============================================
+   ITEM
+   ============================================ */
+
+.ds-accordion__item {
+  border-bottom: var(--border-xs) solid var(--color-bg-container-border);
+}
+
+.ds-accordion__item:last-child {
+  border-bottom: none;
+}
+
+/* ============================================
+   TRIGGER
+   ============================================ */
+
+.ds-accordion__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: var(--gap-sm);
+  padding: var(--padding-md) var(--padding-lg);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-accordion__trigger:hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-accordion__trigger:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: -2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ============================================
+   TITLE
+   ============================================ */
+
+.ds-accordion__title {
+  font-family: var(--font-paragraph-em-family);
+  font-size: var(--font-paragraph-em-size);
+  font-weight: var(--font-paragraph-em-weight);
+  line-height: var(--font-paragraph-em-line-height);
+  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   ICON
+   ============================================ */
+
+.ds-accordion__icon {
+  flex-shrink: 0;
+  --icon-size: var(--icon-size-sm);
+  color: var(--color-icon-primary);
+  transition: transform var(--motion-duration-slow) var(--motion-ease-standard);
+}
+
+.ds-accordion__item--open .ds-accordion__icon {
+  transform: rotate(180deg);
+}
+
+/* ============================================
+   PANEL
+   ============================================ */
+
+.ds-accordion__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--motion-duration-slow) var(--motion-ease-standard);
+}
+
+.ds-accordion__item--open .ds-accordion__panel {
+  grid-template-rows: 1fr;
+}
+
+/* ============================================
+   CONTENT
+   ============================================ */
+
+.ds-accordion__content {
+  overflow: hidden;
+  padding: 0 var(--padding-lg);
+  transition: padding var(--motion-duration-slow) var(--motion-ease-standard);
+}
+
+.ds-accordion__item--open .ds-accordion__content {
+  padding: 0 var(--padding-lg) var(--padding-md);
+}
+
+.ds-accordion__content p {
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+  color: var(--color-text-secondary);
+  margin: 0;
+}

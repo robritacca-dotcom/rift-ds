@@ -1,0 +1,249 @@
+/* SiteFooter — sitemap footer: a hairline, a brand block beside four
+   columns of links, then a quiet copyright row. Matches the MegaNav
+   1440px shell width; body owns the outer gutters and the docked-chat
+   inset, so the footer never goes full-bleed. Identical on every page —
+   nothing here reacts to which shell a page uses. */
+
+.footer {
+  width: 100%;
+  max-width: 1440px;
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxl);
+}
+
+/* ---- Brand block + links ---- */
+
+.body {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--layout-column-gap);
+}
+
+/* The reason the whole thing lines up. The brand block is exactly the
+   docs shell's nav rail width, and the flex gap is the shell's column
+   gap, so the link grid begins on the same vertical line the page's
+   content does — without the footer knowing anything about the page. On
+   pages with no rail the brand block simply reads as a brand block, the
+   way Figma's or Stripe's does, and the columns still start where the
+   page's own content grid would put its second column.
+
+   Five equal columns stretched across the whole shell was the version
+   that never sat right: the pages divide that same width differently
+   (three-up on the home page, four-up on the docs pages), so the footer's
+   column edges landed a few pixels off theirs — 2px off the last card,
+   30–50px off the middle ones. Near-misses read as mistakes. Anchoring
+   the grid to the content line instead means it either matches exactly or
+   is offset by a whole rail. */
+.brand {
+  flex: 0 0 var(--layout-sidebar-width);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-lg);
+}
+
+/* The same mark and wordmark the header wears, at the same size — though
+   the header's runs a step heavier (700; design.md's footer pattern owns
+   the split). The footer is the quiet end of the page, so it is the
+   opacity that sets it back rather than a smaller or greyer variant of
+   the brand. Full strength on hover, since it is still the link home. */
+.brandMark {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  color: var(--color-text-primary);
+  text-decoration: none;
+  opacity: 0.5;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.brandMark:hover,
+.brandMark:focus-visible {
+  opacity: 1;
+}
+
+.brandMark:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 4px;
+  border-radius: var(--radius-sm);
+}
+
+.brandName {
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  letter-spacing: var(--font-title-body-letter-spacing);
+}
+
+/* ---- Link columns ---- */
+
+.columns {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: var(--gap-lg);
+  row-gap: var(--gap-xxl);
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-lg);
+}
+
+/* Two groups sharing one column (Site over Design system), so five groups
+   fit four columns. The gap is the row gap between groups, wider than the
+   gap between a group's own links. */
+.columnStack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxl);
+}
+
+.columnTitle {
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-primary);
+}
+
+.columnList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-xxs);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-tertiary);
+  text-decoration: none;
+  transition: color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.link:hover {
+  color: var(--color-text-primary);
+}
+
+.link:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+.externalIcon {
+  --icon-size: var(--icon-size-sm);
+  color: inherit;
+}
+
+/* ---- Bottom row ---- */
+
+/* Just the copyright now — the social icons moved up into the brand
+   block. Still left-clustered, so the fixed chat button never covers it. */
+.bottomBar {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-lg);
+  flex-wrap: wrap;
+  padding-bottom: var(--gap-md);
+}
+
+.socialRow {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.socialLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-tertiary);
+  transition: color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.socialLink:hover {
+  color: var(--color-text-primary);
+}
+
+.socialLink:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+.socialLink svg {
+  width: var(--icon-size-sm);
+  height: var(--icon-size-sm);
+}
+
+.bottomText {
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-tertiary);
+}
+
+/* ---- Responsive ---- */
+
+/* The nav rail hides at 959px (Sidebar.module.css) and the content column
+   takes the whole shell, so there is no content line left to hold: the
+   brand block stops reserving a rail's width and sits above the links. */
+@media (max-width: 959px) {
+  .body {
+    flex-direction: column;
+    gap: var(--gap-xxl);
+  }
+
+  .brand {
+    flex: 0 0 auto;
+  }
+
+  .columns {
+    width: 100%;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  /* Unstack the pair: with the brand block out of the row there is no
+     four-column grid to fit five groups into, so all five become grid
+     items of their own and land 3 + 2 rather than stranding "Elsewhere"
+     under a double-height first column. */
+  .columnStack {
+    display: contents;
+  }
+}
+
+@media (max-width: 600px) {
+  .columns {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .bottomBar {
+    /* Clear the fixed chat button, which spans the bottom edge on
+       small screens. */
+    padding-bottom: var(--gap-xxxl);
+  }
+}
+
+/* Links to desktop-only pages (the canvas board) leave the mobile IA.
+   Breakpoint matches the nav's drawer switch in MegaNav.module.css. */
+@media (max-width: 959px) {
+  .columnList > li.desktopOnly {
+    display: none;
+  }
+}

@@ -1,0 +1,112 @@
+/* ============================================
+   IMAGE COMPARE COMPONENT
+   Before-and-after images behind one divider
+   ============================================ */
+
+.ds-image-compare {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  background-color: var(--color-bg-container-secondary);
+  /* pan-y keeps the page scrollable over the frame on touch; horizontal
+     drags stay with the slider. */
+  touch-action: pan-y;
+  user-select: none;
+  cursor: col-resize;
+}
+
+/* ============================================
+   IMAGES
+   ============================================ */
+
+.ds-image-compare__after,
+.ds-image-compare__before {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* The before layer sits on top at full frame size and is clipped to the
+   left of the divider. clip-path leaves the image's own geometry alone,
+   so the two layers stay pixel-aligned as the split moves. */
+.ds-image-compare__before-clip {
+  position: absolute;
+  inset: 0;
+  clip-path: inset(0 calc(100% - var(--ds-image-compare-position, 50%)) 0 0);
+}
+
+/* ============================================
+   LABELS
+   ============================================ */
+
+.ds-image-compare__label {
+  position: absolute;
+  top: var(--gap-md);
+  z-index: 2;
+  padding: var(--padding-xxxs) var(--padding-sm);
+  border-radius: var(--radius-full);
+  background-color: var(--color-bg-container-inverse);
+  color: var(--color-text-on-inverse);
+  font-family: var(--font-paragraph-sm-em-family);
+  font-size: var(--font-paragraph-sm-em-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  pointer-events: none;
+}
+
+.ds-image-compare__label--before {
+  left: var(--gap-md);
+}
+
+.ds-image-compare__label--after {
+  right: var(--gap-md);
+}
+
+/* ============================================
+   DIVIDER + HANDLE
+   ============================================ */
+
+.ds-image-compare__divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--ds-image-compare-position);
+  width: var(--border-md);
+  transform: translateX(-50%);
+  background-color: var(--color-bg-page-primary);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.ds-image-compare__handle {
+  position: absolute;
+  top: 50%;
+  left: var(--ds-image-compare-position);
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-bg-page-primary);
+  color: var(--color-icon-primary);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  box-shadow: var(--shadow-floating);
+  cursor: col-resize;
+}
+
+.ds-image-compare__handle .material-symbols-rounded {
+  --icon-size: var(--icon-size-sm);
+}
+
+.ds-image-compare__handle:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}

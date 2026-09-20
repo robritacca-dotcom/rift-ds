@@ -1,0 +1,281 @@
+/* ============================================
+   FILE INPUT COMPONENT
+   Click-or-drop zone plus a controlled file list
+   ============================================ */
+
+.ds-file-input {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm); /* 8px */
+  width: 100%;
+}
+
+/* ============================================
+   LABEL
+   ============================================ */
+
+/* ============================================
+   DROPZONE
+   ============================================ */
+
+.ds-file-input__dropzone {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: var(--gap-xs); /* 4px */
+  padding: var(--padding-xl); /* 32px */
+  border: var(--border-xs) dashed var(--color-input-border-primary);
+  border-radius: var(--radius-md); /* 12px */
+  background-color: var(--color-input-bg-primary);
+  cursor: pointer;
+  transition: border-color var(--motion-duration-base) var(--motion-ease-standard), background-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-file-input__dropzone:hover {
+  border-color: var(--color-input-border-hover);
+}
+
+.ds-file-input__dropzone:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+.ds-file-input--dragging .ds-file-input__dropzone {
+  border-color: var(--color-input-border-selected);
+  background-color: var(--color-bg-container-primary);
+}
+
+.ds-file-input__dropzone-icon {
+  --icon-size: var(--icon-size-md);
+  color: var(--color-icon-primary);
+}
+
+.ds-file-input__dropzone-text {
+  font-family: var(--font-paragraph-em-family);
+  font-size: var(--font-paragraph-em-size);
+  font-weight: var(--font-paragraph-em-weight);
+  line-height: var(--font-paragraph-em-line-height);
+  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.ds-file-input__dropzone-hint {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-tertiary);
+}
+
+/* The real input stays in the DOM for form semantics but is never shown */
+.ds-file-input__native {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ============================================
+   FILE LIST
+   ============================================ */
+
+.ds-file-input__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs); /* 4px */
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ds-file-input__file {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm-md);
+  padding: var(--padding-sm) var(--padding-sm-md); /* 8px 12px */
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-md); /* 12px */
+  background-color: var(--color-bg-page-primary);
+}
+
+.ds-file-input__file--error {
+  border-color: var(--color-status-error-border);
+  background-color: var(--color-status-error-bg);
+}
+
+.ds-file-input__file-icon {
+  --icon-size: var(--icon-size-sm);
+  color: var(--color-icon-primary);
+  flex-shrink: 0;
+}
+
+.ds-file-input__file--error .ds-file-input__file-icon {
+  color: var(--color-status-error-border);
+}
+
+.ds-file-input__file-details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxs);
+  flex: 1;
+  min-width: 0;
+}
+
+.ds-file-input__file-name {
+  font-family: var(--font-paragraph-em-family);
+  font-size: var(--font-paragraph-em-size);
+  font-weight: var(--font-paragraph-em-weight);
+  line-height: var(--font-paragraph-em-line-height);
+  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  color: var(--color-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ds-file-input__file-size {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-tertiary);
+}
+
+.ds-file-input__file-error {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-status-error-text);
+}
+
+/* ============================================
+   PER-FILE PROGRESS
+   ============================================ */
+
+.ds-file-input__progress {
+  display: block;
+  width: 100%;
+  height: 4px;
+  margin-top: var(--gap-xxs);
+  border-radius: var(--radius-full);
+  background-color: var(--color-bg-container-primary);
+  overflow: hidden;
+}
+
+.ds-file-input__progress-fill {
+  display: block;
+  height: 100%;
+  border-radius: var(--radius-full);
+  background-color: var(--color-action-primary-bg);
+  transition: width var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+/* ============================================
+   REMOVE BUTTON
+   ============================================ */
+
+.ds-file-input__file-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-full);
+  background-color: transparent;
+  color: var(--color-icon-primary);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-file-input__file-remove:hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-file-input__file-remove:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+.ds-file-input__file-remove:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ds-file-input__file-remove .material-symbols-rounded {
+  --icon-size: var(--icon-size-sm);
+}
+
+/* ============================================
+   HELPER TEXT
+   ============================================ */
+
+/* ============================================
+   ERROR STATE
+   ============================================ */
+
+.ds-file-input--error .ds-file-input__dropzone {
+  border-color: var(--color-status-error-border);
+}
+
+/* ============================================
+   DISABLED STATE
+   ============================================ */
+
+.ds-file-input--disabled .ds-file-input__dropzone {
+  background-color: var(--color-input-bg-disabled);
+  border-color: var(--color-input-border-disabled);
+  cursor: not-allowed;
+}
+
+.ds-file-input--disabled .ds-file-input__dropzone-text,
+.ds-file-input--disabled .ds-file-input__dropzone-hint,
+.ds-file-input--disabled .ds-file-input__dropzone-icon {
+  color: var(--color-input-text-disabled);
+}
+
+/* ============================================
+   SIZE — COMPACT
+   ============================================ */
+
+.ds-file-input--compact .ds-file-input__dropzone {
+  padding: var(--padding-lg); /* 20px */
+}
+
+.ds-file-input--compact .ds-file-input__dropzone-icon {
+  --icon-size: var(--icon-size-sm);
+}
+
+.ds-file-input--compact .ds-file-input__dropzone-text,
+.ds-file-input--compact .ds-file-input__file-name {
+  font-size: var(--font-paragraph-sm-em-size);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+}
+
+.ds-file-input--compact .ds-file-input__file {
+  padding: var(--padding-xs) var(--padding-sm); /* 6px 8px */
+}
+
+/* Icons take the colour of the text around them. Explicit, not just
+   inherited by default: a consumer stylesheet that sets a colour on
+   .material-symbols-rounded itself (a common global default) would
+   otherwise override inheritance and detach the icon from the state
+   colours this component sets on its parents. */
+.ds-file-input .material-symbols-rounded {
+  color: inherit;
+}

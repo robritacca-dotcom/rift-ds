@@ -1,0 +1,234 @@
+/* ============================================
+   TOOL CALL COMPONENT
+   One tool invocation: a skimmable header row
+   and, behind a disclosure, the arguments and
+   the result.
+
+   The container stays neutral — colour lives in
+   the indicator and the status word, so a long
+   run of calls reads as a list rather than a
+   wall of tinted cards. The border is the
+   standard container hairline in every status;
+   the status word and icon carry the state.
+   ============================================ */
+
+.ds-tool-call {
+  /* Two colour channels per status: -text for the status word (tuned for
+     text contrast) and -icon for the indicator glyph, which needs a hue
+     that survives a plain surface — see the status token comment. */
+  --ds-tool-call-color: var(--color-text-secondary);
+  --ds-tool-call-icon-color: var(--color-icon-secondary);
+
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: var(--color-bg-container-primary);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  /* The chat furniture shares one 24px shell with MessageCard and the
+     bubbles; a closed row rounds to a capsule the way a one-line bubble
+     does, echoing the system's pill buttons. */
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+
+.ds-tool-call__header {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  width: 100%;
+  /* 20px sides — the card family's shared content inset. */
+  padding: var(--padding-sm) var(--padding-lg);
+  background: none;
+  border: none;
+  /* Buttons default to the UA's buttontext, not the inherited colour, so
+     anything in the header that inherits would read black in both themes. */
+  color: var(--color-text-primary);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-tool-call__header:hover {
+  background-color: var(--color-bg-container-secondary);
+}
+
+.ds-tool-call__header:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: -2px;
+}
+
+/* No panel to open — the row is a plain div and must not look pressable */
+.ds-tool-call__header--static {
+  cursor: default;
+}
+
+.ds-tool-call__header--static:hover {
+  background-color: transparent;
+}
+
+.ds-tool-call__indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  color: var(--ds-tool-call-icon-color);
+}
+
+.ds-tool-call__indicator .material-symbols-rounded {
+  --icon-size: var(--icon-size-sm);
+}
+
+/* The tool name is an identifier, so it takes the code stack —
+   the one place the system leaves Nunito Sans */
+.ds-tool-call__name {
+  flex: none;
+  font-family: var(--font-family-code);
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-primary);
+}
+
+.ds-tool-call__summary {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-text-tertiary);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+}
+
+.ds-tool-call__status {
+  flex: none;
+  margin-left: auto;
+  color: var(--ds-tool-call-color);
+  font-family: var(--font-paragraph-sm-em-family);
+  font-size: var(--font-paragraph-sm-em-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+  white-space: nowrap;
+}
+
+/* A summary already claims the free space; without one the status still
+   needs pushing to the right, which the auto margin above handles */
+.ds-tool-call__summary ~ .ds-tool-call__status {
+  margin-left: 0;
+}
+
+.ds-tool-call__duration {
+  flex: none;
+  color: var(--color-text-tertiary);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.ds-tool-call__chevron {
+  --icon-size: var(--icon-size-sm);
+
+  flex: none;
+  color: var(--color-icon-secondary);
+  transition: transform var(--motion-duration-slow) var(--motion-ease-standard);
+}
+
+.ds-tool-call--open .ds-tool-call__chevron {
+  transform: rotate(180deg);
+}
+
+/* ============================================
+   STATUSES
+   ============================================ */
+
+.ds-tool-call--pending {
+  --ds-tool-call-color: var(--color-status-warning-text);
+  --ds-tool-call-icon-color: var(--color-status-warning-icon);
+}
+
+.ds-tool-call--running {
+  --ds-tool-call-color: var(--color-status-info-text);
+  --ds-tool-call-icon-color: var(--color-status-info-icon);
+}
+
+.ds-tool-call--success {
+  --ds-tool-call-color: var(--color-status-positive-text);
+  --ds-tool-call-icon-color: var(--color-status-positive-icon);
+}
+
+.ds-tool-call--error {
+  --ds-tool-call-color: var(--color-status-error-text);
+  --ds-tool-call-icon-color: var(--color-status-error-icon);
+}
+
+/* ============================================
+   PANEL
+   ============================================ */
+
+.ds-tool-call__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition:
+    grid-template-rows var(--motion-duration-slow) var(--motion-ease-standard),
+    visibility var(--motion-duration-slow) var(--motion-ease-standard);
+}
+
+.ds-tool-call--open .ds-tool-call__panel {
+  grid-template-rows: 1fr;
+  visibility: visible;
+}
+
+.ds-tool-call__content {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.ds-tool-call--open .ds-tool-call__content {
+  padding: var(--padding-md) var(--padding-lg);
+  border-top: var(--border-xs) solid var(--color-divider);
+}
+
+.ds-tool-call__content > :first-child {
+  margin-top: 0;
+}
+
+.ds-tool-call__content > :last-child {
+  margin-bottom: 0;
+}
+
+/* ============================================
+   ACTIONS
+   Outside the panel, so a call awaiting approval
+   can be answered without expanding it first.
+   ============================================ */
+
+.ds-tool-call__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--gap-sm);
+  padding: var(--padding-sm) var(--padding-lg) var(--padding-md);
+}
+
+/* Icons take the colour of the text around them. Explicit, not just
+   inherited by default: a consumer stylesheet that sets a colour on
+   .material-symbols-rounded itself (a common global default) would
+   otherwise override inheritance and detach the icon from the state
+   colours this component sets on its parents. The chevron is excluded —
+   it is the one icon that carries its own colour rule, which this
+   higher-specificity rule would otherwise silently override. */
+.ds-tool-call .material-symbols-rounded:not(.ds-tool-call__chevron) {
+  color: inherit;
+}

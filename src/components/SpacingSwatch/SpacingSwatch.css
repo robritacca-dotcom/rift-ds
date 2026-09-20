@@ -1,0 +1,108 @@
+/* ============================================
+   SPACING SWATCH COMPONENT
+   Card that displays a spatial token with a
+   visual preview, size label, and pixel value.
+   ============================================ */
+
+.ds-spacing-swatch {
+  /* Layout */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-lg); /* 20px */
+
+  /* Sizing */
+  flex: 1 1 0;
+  min-width: 140px;
+
+  /* Appearance */
+  background: var(--color-bg-container-primary-semi);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-xl); /* 24px */
+  padding: var(--padding-lg); /* 20px */
+}
+
+/* ============================================
+   PREVIEW AREA
+   Centred container for the visual element
+   ============================================ */
+
+.ds-spacing-swatch__preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60px;
+}
+
+/* ============================================
+   BORDER VARIANT
+   Vertical coloured bar showing border width
+   ============================================ */
+
+.ds-spacing-swatch__border-bar {
+  height: 50px;
+  background: var(--color-core-accent-violet);
+}
+
+/* ============================================
+   RADIUS VARIANT
+   Square with visible border-radius
+   ============================================ */
+
+.ds-spacing-swatch__radius-box {
+  width: 50px;
+  height: 50px;
+  background: transparent;
+  border: 1px solid var(--color-status-positive-border);
+}
+
+/* ============================================
+   GAP VARIANT
+   Two vertical lines separated by the gap width
+   ============================================ */
+
+.ds-spacing-swatch__gap-bar {
+  height: 50px;
+  border-left: 1px solid var(--color-core-accent-coral);
+  border-right: 1px solid var(--color-core-accent-coral);
+}
+
+/* ============================================
+   PADDING VARIANT
+   Outer box with inner box showing the padding
+   ============================================ */
+
+.ds-spacing-swatch__padding-outer {
+  border: 1px solid var(--color-core-ui-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ds-spacing-swatch__padding-inner {
+  width: 10px;
+  height: 10px;
+  border: 1px solid var(--color-status-neutral-border);
+  border-radius: 1px;
+}
+
+/* ============================================
+   LABEL & VALUE
+   ============================================ */
+
+.ds-spacing-swatch__label {
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-primary);
+  text-align: center;
+}
+
+.ds-spacing-swatch__value {
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-tertiary);
+}

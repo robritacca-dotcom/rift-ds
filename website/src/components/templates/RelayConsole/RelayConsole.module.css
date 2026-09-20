@@ -1,0 +1,429 @@
+/* Templates: the Meridian relay console. Every colour, space, radius, and
+   type style is a semantic token; the only raw values are structural layout
+   sizes (rail widths, breakpoints), which pages own everywhere else on the
+   site. The shell is the marketing dashboard's; the page is one instrument,
+   so the stage holds the viewport and the metadata rides its corners. */
+
+.shell {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  /* An instrument holds the viewport; narrow layouts below trade this for
+     normal page flow. */
+  height: calc(var(--layout-viewport-height, 100vh));
+  /* Stretch across the body's own padding (the marketing dashboard's
+     pattern), so the shell runs edge to edge; the primitives mirror the
+     body's inset in globals.css. */
+  width: calc(100% + var(--primitive-padding-xl) * 2);
+  margin: calc(-1 * var(--primitive-padding-lg))
+    calc(-1 * var(--primitive-padding-xl));
+}
+
+/* One inset source for the whole shell: the floating sidebar reads the
+   same value the chat panel uses. */
+.sidebar {
+  --ds-sidebar-float-inset: var(--layout-chat-inset);
+}
+
+/* AppSidebar positions itself fixed; the main column reserves its width the
+   same way AppLayout does (64px rail, 280px expanded — the component's own
+   constants). */
+.main {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  justify-content: center;
+  padding-left: calc(64px + var(--layout-chat-inset) * 2);
+  transition: padding var(--motion-duration-slow) var(--motion-ease-emphasized);
+}
+
+.mainExpanded {
+  padding-left: calc(280px + var(--layout-chat-inset) * 2);
+}
+
+/* The docked chat pushes the page over instead of covering it — the site's
+   body-inset pattern, applied to the main column since this shell owns its
+   own layout. Below the stacking breakpoint the page has no width to give,
+   so the panel covers it instead (it is fixed and on top already). */
+@media (min-width: 1081px) {
+  .mainChatOpen {
+    padding-right: calc(var(--layout-chat-width) + var(--layout-chat-inset) * 2);
+  }
+}
+
+/* The family's content column, minus its 1680px max-width — the map view
+   earns the full viewport width, and the globe holds the wider stage just
+   as well (the structural pick from the retired portfolio-map screen). */
+.content {
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  padding: var(--padding-lg) var(--padding-xl);
+}
+
+/* ------------------------------------------------------------- top bar */
+
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-sm);
+}
+
+.search {
+  position: relative;
+  width: 320px;
+  max-width: 100%;
+}
+
+/* The shortcut hint rides inside the field, over its right padding; it is
+   decorative furniture, so it never intercepts the pointer. */
+.searchKbd {
+  position: absolute;
+  top: 50%;
+  right: var(--padding-sm);
+  transform: translateY(-50%);
+  display: inline-flex;
+  gap: var(--gap-xxs);
+  pointer-events: none;
+}
+
+.topBarActions {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+}
+
+/* --------------------------------------------------------------- stage */
+
+/* The stage is one rounded panel holding the sphere; the metadata sits on
+   the corners the circle leaves empty, in a non-interactive layer so a drag
+   that starts near the edge still lands on the globe. */
+.stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background-color: var(--color-bg-container-primary);
+  border-radius: var(--radius-xl);
+  padding: var(--padding-lg);
+}
+
+.globeBox {
+  width: min(100%, calc(var(--layout-viewport-height, 100vh) - 240px), 860px);
+}
+
+.globe {
+  width: 100%;
+}
+
+/* The flat projection fills the stage; WorldMap letterboxes the world
+   inside it and brings its own zoom pill. */
+.mapBox {
+  position: absolute;
+  inset: 0;
+}
+
+/* The stage's own toolbar, floating along its top edge: the projection
+   flip ranged left, the filter selects ranged right. The bar itself lets
+   the pointer through, so the gap between clusters still grabs the map. */
+.stageBar {
+  position: absolute;
+  top: var(--padding-lg);
+  left: var(--padding-lg);
+  right: var(--padding-lg);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--gap-sm);
+  flex-wrap: wrap;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.viewToggle,
+.filters {
+  pointer-events: auto;
+}
+
+/* Three matching selects at the default size, with icons on the choices —
+   the stage bar reads at arm's length where a data view's compact row
+   would not. */
+.filters {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.filterSelect {
+  width: 232px;
+  flex-shrink: 0;
+}
+
+/* ---------------------------------------------------- corner metadata */
+
+.metaLeft,
+.metaRight {
+  position: absolute;
+  bottom: 0;
+  padding: var(--padding-lg);
+  pointer-events: none;
+}
+
+.metaLeft {
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  max-width: 320px;
+}
+
+.metaRight {
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--gap-md);
+  text-align: right;
+}
+
+/* The screen's name and key wear the readout voice (MapCallout's code
+   face), so the stage furniture reads as instrument, not page prose. */
+.metaTitle {
+  margin: 0;
+  font-family: var(--font-family-code);
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+  letter-spacing: var(--font-heading-3-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.metaTagline {
+  margin: 0;
+  font-family: var(--font-family-code);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-tertiary);
+}
+
+.legend {
+  margin-top: var(--gap-xs);
+}
+
+/* Legend swatches for the flat view — the map's own 10px marker geometry
+   in miniature, coloured through currentColor so one inline `color` tints
+   a square's ring or a dot's fill. */
+.legendDot {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-full);
+  background-color: currentColor;
+  color: var(--color-text-secondary);
+}
+
+.legendAnchor {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-xxs);
+  background-color: var(--color-bg-container-primary);
+  box-shadow: inset 0 0 0 2px currentColor;
+  color: var(--color-text-secondary);
+}
+
+/* ------------------------------------------------------ marker cards */
+
+/* The flat view's hover-card content — spans only, because HoverCard's
+   panel is a <span> (its own contract); display comes from CSS. */
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxs);
+}
+
+.cardName {
+  font-weight: var(--font-paragraph-sm-em-weight);
+  color: var(--color-text-primary);
+}
+
+.cardCity {
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-tertiary);
+}
+
+.cardMeta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  color: var(--color-text-secondary);
+}
+
+.cardBook {
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The headline numbers as a quiet strip: live dot, then value-over-label
+   pairs in tabular figures. */
+.metricsRow {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: var(--gap-sm) var(--gap-lg);
+}
+
+.liveDot {
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+  border-radius: var(--radius-full);
+  background-color: var(--color-status-positive-border);
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  white-space: nowrap;
+}
+
+.metricValue {
+  font-family: var(--font-paragraph-sm-em-family);
+  font-size: var(--font-paragraph-sm-em-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-primary);
+}
+
+.metricLabel {
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-tertiary);
+}
+
+.kbdHint {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-tertiary);
+}
+
+.kbdRow {
+  display: inline-flex;
+  gap: var(--gap-xxs);
+}
+
+/* ---------------------------------------------------------- responsive */
+
+/* Below the wide-instrument width the metadata leaves the corners: the
+   stage gives up the fixed viewport and the blocks stack under the globe in
+   normal flow. */
+@media (max-width: 1080px) {
+  .shell {
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .content {
+    padding: var(--padding-md);
+  }
+
+  .stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--gap-lg);
+  }
+
+  /* The stage's toolbar leaves the floating layer and stacks first in
+     normal flow, so it never overlaps the drawing below it. */
+  .stageBar {
+    position: static;
+  }
+
+  .globeBox {
+    width: min(100%, 480px);
+  }
+
+  /* The flat view keeps the viewport's height in normal flow. */
+  .mapBox {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: max(420px, calc(var(--layout-viewport-height, 100vh) - 320px));
+  }
+
+  .metaLeft,
+  .metaRight {
+    position: static;
+    padding: 0;
+    pointer-events: auto;
+    max-width: none;
+  }
+
+  .metaRight {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .metric {
+    align-items: flex-start;
+  }
+
+  .metricsRow {
+    justify-content: flex-start;
+    gap: var(--gap-md) var(--gap-lg);
+  }
+}
+
+/* The shell's negative margins mirror the body's inset in globals.css,
+   which steps down at these same breakpoints — an unmirrored step leaves
+   the shell pulled past the viewport's left edge on phones. */
+@media (max-width: 959px) {
+  .shell {
+    width: calc(100% + var(--primitive-padding-lg) * 2);
+    margin: calc(-1 * var(--primitive-padding-lg));
+  }
+}
+
+@media (max-width: 760px) {
+  .sidebar {
+    display: none;
+  }
+
+  .main,
+  .mainExpanded {
+    padding-left: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .shell {
+    width: calc(100% + var(--primitive-padding-md) * 2);
+    margin: calc(-1 * var(--primitive-padding-lg))
+      calc(-1 * var(--primitive-padding-md));
+  }
+}

@@ -1,0 +1,105 @@
+/* ============================================
+   DATA TABLE COMPONENT
+   The wired table block: toolbar with search
+   and filter slot, sortable headers, selection,
+   pagination footer. Row and cell styling all
+   comes from the underlying Table — this file
+   only styles the chrome around it.
+   ============================================ */
+
+.ds-data-table {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  width: 100%;
+}
+
+/* ============================================
+   TOOLBAR
+   ============================================ */
+
+.ds-data-table__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-sm);
+  flex-wrap: wrap;
+}
+
+.ds-data-table__filters {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  flex-wrap: wrap;
+}
+
+/* The search field sits at the end of the toolbar even with no filters */
+.ds-data-table__search {
+  margin-left: auto;
+  max-width: 240px;
+}
+
+/* ============================================
+   SORTABLE HEADERS
+   The button fills the header cell so the whole
+   label is the click target.
+   ============================================ */
+
+.ds-data-table__sort {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-xxs);
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+}
+
+.ds-data-table__sort:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+  border-radius: var(--radius-xxs);
+}
+
+.ds-data-table__sort-icon {
+  --icon-size: var(--icon-size-sm);
+
+  color: var(--color-icon-secondary);
+  opacity: 0;
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-data-table__sort:hover .ds-data-table__sort-icon,
+.ds-data-table__sort:focus-visible .ds-data-table__sort-icon,
+.ds-data-table__sort-icon--active {
+  opacity: 1;
+}
+
+.ds-data-table__sort-icon--active {
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+
+.ds-data-table__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-sm);
+  flex-wrap: wrap;
+}
+
+.ds-data-table__count {
+  color: var(--color-text-tertiary);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  font-variant-numeric: tabular-nums;
+}

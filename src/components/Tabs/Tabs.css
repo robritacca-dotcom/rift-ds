@@ -1,0 +1,140 @@
+/* ============================================
+   TABS COMPONENT
+   Horizontal tab navigation with underline
+   ============================================ */
+
+.ds-tabs {
+  display: inline-flex;
+  align-items: stretch;
+  gap: 0;
+  border-bottom: var(--border-xs) solid var(--color-bg-container-border);
+}
+
+/* ============================================
+   FULL WIDTH
+   ============================================ */
+
+.ds-tabs--full-width {
+  display: flex;
+  width: 100%;
+}
+
+.ds-tabs--full-width .ds-tabs__tab {
+  flex: 1;
+}
+
+/* ============================================
+   TAB BUTTON
+   ============================================ */
+
+.ds-tabs__tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-sm); /* 8px */
+  padding: var(--padding-sm) var(--padding-md); /* 8px 16px */
+  border: none;
+  border-bottom: var(--border-md) solid transparent;
+  margin-bottom: calc(var(--border-xs) * -1); /* Overlap the container border */
+  background: none;
+  cursor: pointer;
+  position: relative;
+
+  /* Typography — paragraph em (medium weight) for clickable controls */
+  font-family: var(--font-paragraph-em-family);
+  font-size: var(--font-paragraph-em-size);
+  font-weight: var(--font-paragraph-em-weight);
+  line-height: var(--font-paragraph-em-line-height);
+  letter-spacing: var(--font-paragraph-em-letter-spacing);
+
+  transition: color var(--motion-duration-base) var(--motion-ease-standard), border-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+/* ============================================
+   SIZE — COMPACT
+   ============================================ */
+
+.ds-tabs--compact .ds-tabs__tab {
+  padding: var(--padding-xs) var(--padding-sm-md); /* 6px 12px */
+  font-size: var(--font-paragraph-sm-em-size);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+}
+
+.ds-tabs--compact .ds-tabs__icon {
+  --icon-size: var(--icon-size-sm);
+}
+
+/* ============================================
+   LABEL
+   ============================================ */
+
+.ds-tabs__label {
+  color: var(--color-text-tertiary);
+  transition: color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+/* ============================================
+   ICON
+   ============================================ */
+
+.ds-tabs__icon {
+  --icon-size: var(--icon-size-md);
+  color: var(--color-icon-secondary);
+  transition: color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+/* ============================================
+   DEFAULT (inactive) TAB
+   ============================================ */
+
+.ds-tabs__tab:not(.ds-tabs__tab--disabled):hover .ds-tabs__label {
+  color: var(--color-text-primary);
+}
+
+.ds-tabs__tab:not(.ds-tabs__tab--disabled):hover .ds-tabs__icon {
+  color: var(--color-icon-primary);
+}
+
+.ds-tabs__tab:not(.ds-tabs__tab--disabled):hover {
+  border-bottom-color: var(--color-bg-container-secondary);
+}
+
+/* ============================================
+   ACTIVE TAB
+   ============================================ */
+
+.ds-tabs__tab--active {
+  border-bottom-color: var(--color-action-primary-bg);
+}
+
+.ds-tabs__tab--active .ds-tabs__label {
+  color: var(--color-text-primary);
+}
+
+.ds-tabs__tab--active .ds-tabs__icon {
+  color: var(--color-action-primary-bg);
+}
+
+.ds-tabs__tab--active:not(.ds-tabs__tab--disabled):hover {
+  border-bottom-color: var(--color-action-primary-bg);
+}
+
+/* ============================================
+   FOCUS STATE
+   ============================================ */
+
+.ds-tabs__tab:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: -2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ============================================
+   DISABLED STATE
+   ============================================ */
+
+.ds-tabs__tab--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

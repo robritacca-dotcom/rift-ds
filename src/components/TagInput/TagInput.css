@@ -1,0 +1,169 @@
+/* ============================================
+   TAG INPUT COMPONENT
+   Multi-value text input; committed entries
+   held as removable tags inside the field
+   ============================================ */
+
+.ds-taginput {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm); /* 8px */
+  width: 100%;
+}
+
+/* ============================================
+   SHELL — the focus-within box matching
+   Input's field border and radius
+   ============================================ */
+
+.ds-taginput__shell {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap-xs); /* 4px */
+  padding: var(--padding-xs) var(--padding-md); /* 6px 16px */
+  border: var(--border-xs) solid var(--color-input-border-primary);
+  border-radius: var(--radius-md); /* 12px */
+  background-color: var(--color-input-bg-primary);
+  cursor: text;
+  transition: border-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-taginput__shell:hover:not(:focus-within) {
+  border-color: var(--color-input-border-hover);
+}
+
+.ds-taginput__shell:focus-within {
+  border-color: var(--color-input-border-selected);
+}
+
+/* ============================================
+   TAG — pill holding one committed entry
+   ============================================ */
+
+.ds-taginput__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-xxs); /* 2px */
+  padding: var(--padding-xxxs) var(--padding-sm); /* 2px 8px */
+  border-radius: var(--radius-full);
+  background-color: var(--color-bg-container-secondary);
+  font-family: var(--font-paragraph-sm-em-family);
+  font-size: var(--font-paragraph-sm-em-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+  color: var(--color-text-primary);
+  max-width: 100%;
+}
+
+.ds-taginput__tag-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ============================================
+   REMOVE — trailing close button on each tag
+   ============================================ */
+
+.ds-taginput__remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-full);
+  background-color: transparent;
+  color: var(--color-icon-primary);
+  cursor: pointer;
+  transition: color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-taginput__remove:not(:disabled):hover {
+  color: var(--color-text-primary);
+}
+
+.ds-taginput__remove:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 1px;
+}
+
+.ds-taginput__remove .material-symbols-rounded {
+  --icon-size: var(--icon-size-sm);
+  line-height: 1;
+}
+
+/* ============================================
+   INPUT — borderless draft field sharing the
+   shell's line with the tags
+   ============================================ */
+
+.ds-taginput__input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  padding: 0;
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+  color: var(--color-input-text-primary);
+}
+
+.ds-taginput__input::placeholder {
+  color: var(--color-input-text-placeholder);
+}
+
+/* ============================================
+   ERROR STATE
+   ============================================ */
+
+.ds-taginput--error .ds-taginput__shell,
+.ds-taginput--error .ds-taginput__shell:hover:not(:focus-within),
+.ds-taginput--error .ds-taginput__shell:focus-within {
+  border-color: var(--color-status-error-border);
+}
+
+/* ============================================
+   DISABLED STATE
+   ============================================ */
+
+.ds-taginput--disabled .ds-taginput__shell {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ds-taginput--disabled .ds-taginput__input,
+.ds-taginput--disabled .ds-taginput__remove {
+  cursor: not-allowed;
+}
+
+/* ============================================
+   SIZE — COMPACT
+   ============================================ */
+
+.ds-taginput--compact .ds-taginput__shell {
+  gap: var(--gap-xxs); /* 2px */
+  padding: var(--padding-xxs) var(--padding-sm-md); /* 4px 12px */
+}
+
+.ds-taginput--compact .ds-taginput__input {
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+}
+
+/* Icons take the colour of the text around them. Explicit, not just
+   inherited by default: a consumer stylesheet that sets a colour on
+   .material-symbols-rounded itself (a common global default) would
+   otherwise override inheritance and detach the icon from the state
+   colours this component sets on its parents. */
+.ds-taginput .material-symbols-rounded {
+  color: inherit;
+}

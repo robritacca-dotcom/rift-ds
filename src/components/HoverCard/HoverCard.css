@@ -1,0 +1,97 @@
+/* ============================================
+   HOVER CARD COMPONENT
+   Rich preview panel on hover / focus
+   ============================================ */
+
+.ds-hover-card {
+  position: relative;
+  display: inline-flex;
+}
+
+/* ============================================
+   PANEL
+   Dresses like the other floating panels:
+   page-primary fill, hairline, radius-sm,
+   floating shadow (see Popover).
+   ============================================ */
+
+.ds-hover-card__panel {
+  /* Rendered as a <span> so the card survives inside a <p>; absolute
+     positioning already computes display to block, stated here anyway. */
+  display: block;
+  position: absolute;
+  z-index: 50;
+  min-width: 240px;
+  max-width: 320px;
+  padding: var(--padding-md);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-bg-page-primary);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  box-shadow: var(--shadow-floating);
+  color: var(--color-text-primary);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  /* visibility keeps the hidden panel out of the accessibility tree and
+     tab order; opacity + transform carry the entrance. */
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    opacity var(--motion-duration-fast) var(--motion-ease-standard),
+    transform var(--motion-duration-fast) var(--motion-ease-standard),
+    visibility var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-hover-card__panel--visible {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* ============================================
+   POSITIONS
+   ============================================ */
+
+.ds-hover-card__panel--top {
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  margin-bottom: var(--gap-xs);
+}
+
+.ds-hover-card__panel--top.ds-hover-card__panel--visible {
+  transform: translateX(-50%) translateY(0);
+}
+
+.ds-hover-card__panel--bottom {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-4px);
+  margin-top: var(--gap-xs);
+}
+
+.ds-hover-card__panel--bottom.ds-hover-card__panel--visible {
+  transform: translateX(-50%) translateY(0);
+}
+
+.ds-hover-card__panel--left {
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%) translateX(4px);
+  margin-right: var(--gap-xs);
+}
+
+.ds-hover-card__panel--left.ds-hover-card__panel--visible {
+  transform: translateY(-50%) translateX(0);
+}
+
+.ds-hover-card__panel--right {
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%) translateX(-4px);
+  margin-left: var(--gap-xs);
+}
+
+.ds-hover-card__panel--right.ds-hover-card__panel--visible {
+  transform: translateY(-50%) translateX(0);
+}

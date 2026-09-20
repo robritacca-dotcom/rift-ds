@@ -1,0 +1,106 @@
+/* ============================================
+   CARD STACK COMPONENT
+   A deck showing one card, the rest peeking out
+   beneath. Forward flips lift the top card away;
+   backward flips drop it in from above. Depth
+   offsets are percentages of the card itself, so
+   the choreography scales with whatever card the
+   deck holds.
+   ============================================ */
+
+/* Base */
+
+.ds-card-stack {
+  /* How far each buried card peeks out below the one above it. */
+  --ds-card-stack-peek: var(--gap-md);
+
+  position: relative;
+  display: grid;
+  border-radius: var(--radius-xl);
+  padding-bottom: calc(var(--ds-card-stack-peek) * var(--ds-card-stack-depth, 0));
+  outline: none;
+}
+
+.ds-card-stack:focus-visible {
+  outline: var(--border-md) solid var(--color-action-primary-bg);
+  outline-offset: var(--padding-xxs);
+}
+
+/* Items — every card occupies the same cell; position is one transform. */
+
+.ds-card-stack__item {
+  grid-area: 1 / 1;
+  /* An opaque page-colour backing behind each card: the system's cards sit on
+     translucent surfaces, and without this the buried cards read through the
+     top one. Rounded to Card's radius; a deck of differently shaped cards
+     repoints --ds-card-stack-card-radius. */
+  background: var(--color-bg-page-primary);
+  border-radius: var(--ds-card-stack-card-radius, var(--radius-xl));
+  transform-origin: 50% 100%;
+  transform: translateY(calc(var(--ds-card-stack-peek) * var(--ds-card-stack-pos, 0)))
+    scale(calc(1 - 0.04 * var(--ds-card-stack-pos, 0)));
+  transition:
+    transform var(--motion-duration-deliberate) var(--motion-ease-emphasized),
+    opacity var(--motion-duration-deliberate) var(--motion-ease-emphasized);
+}
+
+/* Deeper than the visible peek: parked at the last slot, faded out. */
+.ds-card-stack__item--buried {
+  opacity: 0;
+  transform: translateY(calc(var(--ds-card-stack-peek) * var(--ds-card-stack-depth, 0)))
+    scale(calc(1 - 0.04 * var(--ds-card-stack-depth, 0)));
+}
+
+/* Flipped away with loop off: lifted out of view, above the deck. */
+.ds-card-stack__item--gone {
+  opacity: 0;
+  transform: translateY(-12%) scale(0.98);
+}
+
+/* Flip choreography — the lift is a fraction of the card's own height. */
+
+.ds-card-stack__item--leaving {
+  animation: ds-card-stack-leave var(--motion-duration-deliberate) var(--motion-ease-emphasized)
+    both;
+}
+
+.ds-card-stack__item--entering {
+  animation: ds-card-stack-enter var(--motion-duration-deliberate) var(--motion-ease-entrance)
+    both;
+}
+
+@keyframes ds-card-stack-leave {
+  from {
+    transform: translateY(0) rotate(0deg) scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-18%) rotate(-3deg) scale(0.98);
+    opacity: 0;
+  }
+}
+
+@keyframes ds-card-stack-enter {
+  from {
+    transform: translateY(-18%) rotate(-3deg) scale(0.98);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) rotate(0deg) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Screen-reader announcement of the deck position. */
+
+.ds-card-stack__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

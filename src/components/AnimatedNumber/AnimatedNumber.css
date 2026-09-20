@@ -1,0 +1,31 @@
+/* ============================================
+   ANIMATED NUMBER COMPONENT
+   A number that counts to its value
+   ============================================ */
+
+/* Base — inherits the surrounding type entirely: the component is a number
+   inside someone else's composition (a Stat, a table cell, a sentence), so
+   it owns no face, size, or colour of its own. */
+
+.ds-animated-number {
+  display: inline-flex;
+}
+
+/* Tabular figures: every digit the same width, so the layout holds still
+   while the digits roll. */
+.ds-animated-number__value {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Visually hidden settled value — what a screen reader gets instead of the
+   rolling digits. */
+.ds-animated-number__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

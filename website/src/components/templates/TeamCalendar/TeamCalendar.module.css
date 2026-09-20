@@ -1,0 +1,385 @@
+/* Templates: the Cadence team calendar. Every colour, space, radius, and
+   type style is a semantic token; the only raw values are structural layout
+   sizes (rail widths, breakpoints), which pages own everywhere else on the
+   site. The shell is the marketing dashboard's; the page is a two-pane
+   spread, the to-do rail beside the month grid. */
+
+.shell {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  /* The planner holds the viewport; narrow layouts below trade this for
+     normal page flow. */
+  height: calc(var(--layout-viewport-height, 100vh));
+  /* Stretch across the body's own padding (the marketing dashboard's
+     pattern), so the shell runs edge to edge; the primitives mirror the
+     body's inset in globals.css. */
+  width: calc(100% + var(--primitive-padding-xl) * 2);
+  margin: calc(-1 * var(--primitive-padding-lg))
+    calc(-1 * var(--primitive-padding-xl));
+}
+
+/* One inset source for the whole shell: the floating sidebar reads the
+   same value the chat panel uses. */
+.sidebar {
+  --ds-sidebar-float-inset: var(--layout-chat-inset);
+}
+
+/* AppSidebar positions itself fixed; the main column reserves its width the
+   same way AppLayout does (64px rail, 280px expanded — the component's own
+   constants). */
+.main {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  justify-content: center;
+  padding-left: calc(64px + var(--layout-chat-inset) * 2);
+  transition: padding var(--motion-duration-slow) var(--motion-ease-emphasized);
+}
+
+.mainExpanded {
+  padding-left: calc(280px + var(--layout-chat-inset) * 2);
+}
+
+/* The docked chat pushes the page over instead of covering it — the site's
+   body-inset pattern, applied to the main column since this shell owns its
+   own layout. Below the stacking breakpoint the page has no width to give,
+   so the panel covers it instead (it is fixed and on top already). */
+@media (min-width: 1081px) {
+  .mainChatOpen {
+    padding-right: calc(var(--layout-chat-width) + var(--layout-chat-inset) * 2);
+  }
+}
+
+.content {
+  width: 100%;
+  max-width: 1680px;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  padding: var(--padding-lg) var(--padding-xl);
+}
+
+/* ------------------------------------------------------------- top bar */
+
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-sm);
+}
+
+.search {
+  position: relative;
+  width: 320px;
+  max-width: 100%;
+}
+
+/* The shortcut hint rides inside the field, over its right padding; it is
+   decorative furniture, so it never intercepts the pointer. */
+.searchKbd {
+  position: absolute;
+  top: 50%;
+  right: var(--padding-sm);
+  transform: translateY(-50%);
+  display: inline-flex;
+  gap: var(--gap-xxs);
+  pointer-events: none;
+}
+
+.topBarActions {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+}
+
+/* --------------------------------------------------------------- board */
+
+/* The rail keeps a fixed reading width; the calendar takes the rest. Both
+   panes stretch to the shell's full height, so the screen reads as one
+   instrument rather than furniture floating at the top. */
+.board {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  gap: var(--gap-md);
+}
+
+/* ---------------------------------------------------------------- rail */
+
+.rail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-lg);
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.railHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--gap-sm);
+}
+
+.railTitle {
+  margin: 0;
+  font-family: var(--font-family-primary);
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+  letter-spacing: var(--font-heading-3-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+/* The done count derives from the checkboxes' live state, so it moves as
+   items are ticked. */
+.railCount {
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-tertiary);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+}
+
+.groupLabel {
+  font-family: var(--font-overline-family);
+  font-size: var(--font-overline-size);
+  font-weight: var(--font-overline-weight);
+  line-height: var(--font-overline-line-height);
+  letter-spacing: var(--font-overline-letter-spacing);
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+}
+
+.todoList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+}
+
+/* ------------------------------------------------------------ day view */
+
+/* The selected date leads its section the way a stat leads a tile: the big
+   day number, with the weekday and month stacked beside it. */
+.dayHeading {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+}
+
+.dayNumber {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-heading-1-size);
+  font-weight: var(--font-heading-1-weight);
+  line-height: var(--font-heading-1-line-height);
+  letter-spacing: var(--font-heading-1-letter-spacing);
+  color: var(--color-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.dayMeta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.dayWeekday {
+  font-family: var(--font-paragraph-sm-em-family);
+  font-size: var(--font-paragraph-sm-em-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  color: var(--color-text-primary);
+}
+
+.dayMonth {
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-tertiary);
+}
+
+.schedule {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+}
+
+.scheduleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+}
+
+/* The dots reuse the calendar pills' accent roles, so the rail and the grid
+   tell the same colour story. */
+.scheduleDot {
+  flex: none;
+  width: var(--gap-xs);
+  height: var(--gap-xs);
+  border-radius: var(--radius-full);
+}
+
+.dotNeutral {
+  background-color: var(--color-text-tertiary);
+}
+
+.dotCoral {
+  background-color: var(--color-core-accent-coral);
+}
+
+.dotViolet {
+  background-color: var(--color-core-accent-violet);
+}
+
+.dotCobalt {
+  background-color: var(--color-core-accent-cobalt);
+}
+
+.dotAmber {
+  background-color: var(--color-core-accent-amber);
+}
+
+.dotGold {
+  background-color: var(--color-core-accent-gold);
+}
+
+.dotMint {
+  background-color: var(--color-core-accent-mint);
+}
+
+.scheduleTitle {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-primary);
+}
+
+.scheduleTime {
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-tertiary);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.scheduleEmpty {
+  margin: 0;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-tertiary);
+}
+
+/* ------------------------------------------------------------ calendar */
+
+/* EventCalendar draws its own panel (container surface, border, radius), so
+   the section adds nothing but the grid slot. The calendar fills the pane's
+   height, its week rows sharing the room evenly; a viewport too short for
+   the month scrolls inside the pane instead of pushing the shell. */
+.calendar {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  overflow-y: auto;
+}
+
+/* The calendar's own chrome is the widget default (radius-md, hairline
+   border, padding-md); beside the rail's Panel that reads as two different
+   surfaces. Restyled here to the template family's panel: radius-xl,
+   borderless, padding-lg — the relay console's stage and the marketing
+   dashboard's panels set the convention. */
+.calendar :global(.ds-event-calendar) {
+  min-height: 100%;
+  border: none;
+  border-radius: var(--radius-xl);
+  padding: var(--padding-lg);
+}
+
+.calendar :global(.ds-event-calendar__grid) {
+  flex: 1;
+  min-height: 0;
+}
+
+/* ---------------------------------------------------------- responsive */
+
+/* Below the two-pane width the board stacks: the calendar first, since it
+   is the point of the screen, then the rail in normal flow. */
+@media (max-width: 1080px) {
+  .shell {
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .rail,
+  .calendar {
+    overflow-y: visible;
+  }
+
+  .content {
+    padding: var(--padding-md);
+  }
+
+  .board {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .calendar {
+    order: -1;
+  }
+}
+
+/* The shell's negative margins mirror the body's inset in globals.css,
+   which steps down at these same breakpoints — an unmirrored step leaves
+   the shell pulled past the viewport's left edge on phones. */
+@media (max-width: 959px) {
+  .shell {
+    width: calc(100% + var(--primitive-padding-lg) * 2);
+    margin: calc(-1 * var(--primitive-padding-lg));
+  }
+}
+
+@media (max-width: 760px) {
+  .sidebar {
+    display: none;
+  }
+
+  .main,
+  .mainExpanded {
+    padding-left: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .shell {
+    width: calc(100% + var(--primitive-padding-md) * 2);
+    margin: calc(-1 * var(--primitive-padding-lg))
+      calc(-1 * var(--primitive-padding-md));
+  }
+}

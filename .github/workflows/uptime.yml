@@ -1,0 +1,34 @@
+# Scheduled synthetic monitoring: the live hydration smoke, every four
+# hours. Every other check runs at ship time, but the site can change
+# without a deploy — ISR regenerates pages at runtime, which is exactly how
+# the 2026-09-06 blank-site outage appeared on a deployment that had shipped
+# green. A failed run emails the workflow's last committer (GitHub's default
+# for scheduled failures); the fix path is the same as ship's step 8 — treat
+# it as an active outage.
+#
+# GitHub pauses cron workflows after 60 days without repo activity; a push
+# revives them. The schedule offsets the hour mark because GitHub delays
+# top-of-hour crons under load.
+name: Uptime
+
+on:
+  schedule:
+    - cron: "17 */4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    name: Live hydration smoke
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: node scripts/smoke-hydration.mjs https://robertritacca.com

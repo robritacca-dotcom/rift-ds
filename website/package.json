@@ -1,0 +1,38 @@
+{
+  "name": "website",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "predev": "node ../scripts/generate-skills-content.mjs && node ../scripts/generate-token-registry.mjs && node ../scripts/sync-blueprints.mjs && node ../scripts/generate-site-corpus.mjs && node ../scripts/generate-component-api.mjs && node ../scripts/generate-component-md.mjs && node ../scripts/generate-agent-skill.mjs && node ../scripts/generate-dependency-graph.mjs",
+    "dev": "next dev",
+    "dev:eval": "KV_REST_API_URL= KV_REST_API_TOKEN= next dev",
+    "prebuild": "node ../scripts/generate-skills-content.mjs && node ../scripts/generate-readme-content.mjs && node ../scripts/generate-token-registry.mjs && node ../scripts/sync-blueprints.mjs && node ../scripts/generate-site-corpus.mjs && node ../scripts/generate-component-api.mjs && node ../scripts/generate-component-md.mjs && node ../scripts/generate-agent-skill.mjs && node ../scripts/generate-dependency-graph.mjs && node ../scripts/validate-component-registry.mjs && node ../scripts/validate-website-surfaces.mjs && node ../scripts/validate-skills-registry.mjs && node ../scripts/validate-doc-refs.mjs && node ../scripts/validate-site-updates.mjs && node ../scripts/validate-loops.mjs && node ../scripts/validate-token-registry.mjs && node ../scripts/validate-shader-background.mjs && node ../scripts/validate-single-background-mount.mjs && node ../scripts/validate-page-titles.mjs && node ../scripts/validate-site-corpus.mjs && node ../scripts/validate-prop-docs.mjs && node ../scripts/validate-component-api.mjs && node ../scripts/validate-component-md.mjs && node ../scripts/validate-agent-skill.mjs && node ../scripts/validate-dependency-graph.mjs && node ../scripts/validate-mcp-tools.mjs && node ../scripts/validate-chat-coverage.mjs && node ../scripts/validate-chat-starters.mjs && node ../scripts/validate-page-summaries.mjs && node ../scripts/validate-shipped-prose.mjs",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.116.0",
+    "@robr0/design-system": "file:..",
+    "@upstash/ratelimit": "^2.0.8",
+    "@upstash/redis": "^1.38.2",
+    "mcp-handler": "^2.1.1",
+    "next": "^16.3.4",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-markdown": "^10.1.0",
+    "recharts": "^3.7.0",
+    "remark-gfm": "^4.0.1",
+    "sanitize-html": "^2.17.6",
+    "zod": "^4.5.4"
+  },
+  "devDependencies": {
+    "@types/node": "^24",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/sanitize-html": "^2.16.1",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.11",
+    "typescript": "^5"
+  }
+}

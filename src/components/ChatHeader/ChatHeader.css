@@ -1,0 +1,35 @@
+/* ============================================
+   CHAT HEADER COMPONENT
+   Top row of a chat surface: title on the
+   left, controls on the right. No divider —
+   it floats free of the transcript.
+   ============================================ */
+
+/* Base */
+.ds-chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-md);
+  padding: var(--padding-xs) var(--padding-md);
+}
+
+/* Title */
+.ds-chat-header__title {
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  color: var(--color-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Actions */
+.ds-chat-header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  flex-shrink: 0;
+}

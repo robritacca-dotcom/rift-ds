@@ -1,0 +1,36 @@
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap" rel="stylesheet" />
+
+<style>
+  /* Apply Nunito Sans across all Storybook preview areas */
+  body {
+    font-family: 'Nunito Sans', sans-serif;
+  }
+
+  /* Apply design system background to all Storybook preview areas */
+  body,
+  #storybook-root,
+  .sb-show-main,
+  #storybook-docs,
+  .docs-story {
+    background-color: var(--color-bg-page-primary) !important;
+  }
+
+  /* Ensure the background changes with theme */
+  [data-theme="light"] body,
+  [data-theme="light"] #storybook-root,
+  [data-theme="light"] .sb-show-main,
+  [data-theme="light"] #storybook-docs,
+  [data-theme="light"] .docs-story {
+    background-color: #FEFEFE !important;
+  }
+
+  [data-theme="dark"] body,
+  [data-theme="dark"] #storybook-root,
+  [data-theme="dark"] .sb-show-main,
+  [data-theme="dark"] #storybook-docs,
+  [data-theme="dark"] .docs-story {
+    background-color: #050505 !important;
+  }
+</style>

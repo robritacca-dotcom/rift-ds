@@ -1,0 +1,251 @@
+/* ============================================
+   COMPONENT CARD PREVIEWS
+
+   ds-allow-file(mockup): these previews are
+   static artwork — miniature drawings of
+   components, not real UI — so their raw
+   px/shadow/font values are drawing
+   coordinates, not token candidates.
+   ============================================ */
+.previewRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.previewColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Real components rendered at true size read huge beside the
+   miniature mocks — scale them down to the same visual register.
+   The wrapper keeps its layout width; only the paint shrinks. */
+.scaledComponentPreview {
+  flex-shrink: 0;
+  transform: scale(0.72);
+}
+
+/* ============================================
+   CARD PREVIEW (mini card inside circle)
+   ============================================ */
+.cardPreview {
+  width: 90px;
+  height: 90px;
+  background: var(--color-bg-container-primary);
+  border: 1px solid var(--color-bg-container-border);
+  border-radius: var(--primitive-radius-xl);
+  box-shadow: 0px 0px 20.9px 0px rgba(0, 0, 0, 0.25);
+}
+
+/* ============================================
+   DROPDOWN PREVIEW (mini dropdown inside circle)
+   ============================================ */
+.dropdownPreview {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 120px;
+  padding: 6px 10px;
+  border: 1px solid var(--color-bg-container-border);
+  border-radius: var(--primitive-radius-sm);
+  background: var(--color-bg-container-primary-transparent);
+}
+
+.dropdownPreviewText {
+  font-size: 14px;
+  color: var(--color-text-tertiary);
+}
+
+/* ============================================
+   INPUT PREVIEW (mini input inside circle)
+   ============================================ */
+.inputPreview {
+  width: 120px;
+  padding: 6px 10px;
+  border: 1px solid var(--color-bg-container-border);
+  border-radius: var(--primitive-radius-sm);
+  background: var(--color-bg-container-primary-transparent);
+}
+
+/* ============================================
+   TEXTAREA PREVIEW (mini textarea inside circle)
+   ============================================ */
+.textareaPreview {
+  width: 120px;
+  height: 60px;
+  padding: 6px 10px;
+  border: 1px solid var(--color-bg-container-border);
+  border-radius: var(--primitive-radius-sm);
+  background: var(--color-bg-container-primary-transparent);
+}
+
+/* ============================================
+   TOGGLE PREVIEW (mini toggle inside circle)
+   ============================================ */
+.togglePreview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toggleSocket {
+  width: 42px;
+  height: 24px;
+  border-radius: 42px;
+  background: var(--color-action-primary-bg);
+  position: relative;
+}
+
+.toggleThumb {
+  position: absolute;
+  top: 4.17%;
+  bottom: 4.17%;
+  right: 2.38%;
+  width: 52.38%;
+  border-radius: 50%;
+  background: var(--color-action-primary-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* ============================================
+   INSTRUCTION PREVIEW (mini steps inside circle)
+   ============================================ */
+.instructionStep {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.instructionBadge {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1.5px solid var(--color-bg-container-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  flex-shrink: 0;
+}
+
+.instructionLabel {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+/* ============================================
+   POPOVER PREVIEW (mini popover inside circle)
+   ============================================ */
+.popoverPreview {
+  position: relative;
+  padding: 8px 14px;
+  background: var(--color-bg-container-primary);
+  border: 1px solid var(--color-bg-container-border);
+  border-radius: var(--primitive-radius-sm);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.popoverArrow {
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 10px;
+  height: 10px;
+  background: var(--color-bg-container-primary);
+  border-right: 1px solid var(--color-divider);
+  border-bottom: 1px solid var(--color-divider);
+}
+
+/* ============================================
+   TABLE PREVIEW (mini table inside circle)
+   ============================================ */
+.tablePreview {
+  display: flex;
+  flex-direction: column;
+  width: 100px;
+  gap: 0;
+}
+
+.tablePreviewRow {
+  height: 12px;
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.tablePreviewRowHeader {
+  border-bottom-width: 2px;
+}
+
+/* ============================================
+   ACCORDION PREVIEW
+   ============================================ */
+.accordionPreviewRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 4px 8px;
+  border: 1px solid var(--color-bg-container-border);
+  border-radius: var(--primitive-radius-xs);
+  background: var(--color-bg-container-primary-transparent);
+}
+
+/* ============================================
+   SECTION TITLE PREVIEW
+   ============================================ */
+.sectionTitlePreview {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100px;
+}
+
+.sectionTitlePreviewText {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.sectionTitlePreviewDivider {
+  height: 1px;
+  width: 100%;
+  background: var(--color-divider);
+}
+
+/* ============================================
+   DROPDOWN MENU PREVIEW
+   ============================================ */
+.dropdownMenuPreview {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 110px;
+  padding: 3px;
+  border: 1px solid var(--color-bg-container-border);
+  border-radius: var(--primitive-radius-sm);
+  background: var(--color-bg-page-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dropdownMenuPreviewItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 6px;
+  border-radius: 4px;
+}
+
+.dropdownMenuPreviewSep {
+  height: 1px;
+  background: var(--color-bg-container-border);
+  margin: 1px 4px;
+}

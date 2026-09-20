@@ -1,0 +1,169 @@
+/* ============================================
+   CONTRIBUTION GRAPH COMPONENT
+   GitHub-style activity heatmap — one cell per
+   day, coloured by the contribution colour ramp
+   ============================================ */
+
+/* Card chrome, header, and padding come from the shared chart styles
+   (Chart.css); this file owns the grid, legend, and cell ramp. */
+
+.ds-contribution-graph {
+  --ds-contribution-cell: 12px;
+  --ds-contribution-gap: 3px;
+
+  min-width: 0;
+}
+
+.ds-contribution-graph__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  min-width: 0;
+}
+
+/* Grid + month labels scroll together on narrow screens */
+.ds-contribution-graph__scroll {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxs);
+  overflow-x: auto;
+  padding-bottom: var(--padding-xxxs);
+}
+
+/* ============================================
+   MONTH LABELS
+   ============================================ */
+
+.ds-contribution-graph__months {
+  display: grid;
+  column-gap: var(--ds-contribution-gap);
+  width: 100%;
+}
+
+.ds-contribution-graph__month-label {
+  grid-row: 1;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+}
+
+/* ============================================
+   GRID
+   ============================================ */
+
+.ds-contribution-graph__grid {
+  display: grid;
+  gap: var(--ds-contribution-gap);
+  width: 100%;
+}
+
+.ds-contribution-graph__week {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-contribution-gap);
+}
+
+.ds-contribution-graph__cell {
+  width: var(--ds-contribution-cell);
+  height: var(--ds-contribution-cell);
+  border-radius: var(--radius-xxs);
+  flex-shrink: 0;
+}
+
+/* Cells inside the grid stretch with their column; the fixed size above
+   only applies to the legend swatches */
+.ds-contribution-graph__week .ds-contribution-graph__cell {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  /* The year sweeps in left to right on mount: each column's delay steps by
+     a fraction of the entrance duration (--ds-contribution-week, set inline
+     per column). Token-composed, so reduced motion collapses the sweep. */
+  animation: ds-contribution-fade var(--motion-duration-slow) var(--motion-ease-standard)
+    backwards;
+  animation-delay: calc(
+    var(--ds-contribution-week, 0) * var(--motion-duration-slower) / 40
+  );
+}
+
+@keyframes ds-contribution-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Hover lifts the day under the pointer, so the title tooltip has a visible
+   anchor. */
+.ds-contribution-graph__week .ds-contribution-graph__cell:not(.ds-contribution-graph__cell--empty):hover {
+  outline: var(--border-xs) solid var(--color-text-tertiary);
+  outline-offset: calc(-1 * var(--border-xs));
+}
+
+.ds-contribution-graph__cell--empty {
+  background-color: transparent;
+}
+
+.ds-contribution-graph__cell--level-0 {
+  background-color: var(--color-chart-contribution-0);
+}
+
+.ds-contribution-graph__cell--level-1 {
+  background-color: var(--color-chart-contribution-1);
+}
+
+.ds-contribution-graph__cell--level-2 {
+  background-color: var(--color-chart-contribution-2);
+}
+
+.ds-contribution-graph__cell--level-3 {
+  background-color: var(--color-chart-contribution-3);
+}
+
+.ds-contribution-graph__cell--level-4 {
+  background-color: var(--color-chart-contribution-4);
+}
+
+/* ============================================
+   FOOTER — caption + legend
+   ============================================ */
+
+.ds-contribution-graph__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-md);
+  flex-wrap: wrap;
+}
+
+.ds-contribution-graph__caption {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+}
+
+.ds-contribution-graph__legend {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-contribution-gap);
+}
+
+.ds-contribution-graph__legend-label {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-tertiary);
+}
+
+.ds-contribution-graph__legend-label:first-child {
+  margin-right: var(--gap-xxs);
+}
+
+.ds-contribution-graph__legend-label:last-child {
+  margin-left: var(--gap-xxs);
+}

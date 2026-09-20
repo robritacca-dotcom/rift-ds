@@ -1,0 +1,171 @@
+/* ============================================
+   CHAT THREAD COMPONENT
+   Scrollable conversation column: edge fades,
+   send-to-top anchoring, subtle scrollbar.
+   ============================================ */
+
+/* Base — the root is the scroll container. Inline gutters live on
+   __content, so the scrollbar rides the component's far edge. */
+.ds-chat-thread {
+  position: relative;
+  overflow-y: auto;
+  min-height: 0;
+  /* The component owns anchoring; the browser's native scroll anchoring
+     otherwise latches onto the trailing spacer and drags the viewport
+     down while a response streams in. */
+  overflow-anchor: none;
+  /* Anchoring scrolls glide; the reduced-motion guard in tokens-motion.css
+     forces scroll-behavior back to auto. */
+  scroll-behavior: smooth;
+
+  /* Subtle scrollbar — invisible until the thread is actually scrolling.
+     The gutter is reserved permanently: on classic-scrollbar platforms a
+     scrollbar popping in (the first overflowing turn, or a rounding
+     flicker mid-animation) would otherwise reflow the content sideways. */
+  scrollbar-width: thin;
+  scrollbar-gutter: stable;
+  scrollbar-color: transparent transparent;
+  transition: scrollbar-color var(--motion-duration-base) var(--motion-ease-standard);
+
+  /* Edge fades — a CSS mask, not a scroll listener: content scrolling out
+     at either end passes through the fade.
+     ds-allow(color): mask alpha keywords (black/transparent), not palette colours */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black var(--gap-lg),
+    black calc(100% - var(--gap-lg)),
+    transparent
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black var(--gap-lg),
+    black calc(100% - var(--gap-lg)),
+    transparent
+  );
+}
+
+/* States */
+.ds-chat-thread--scrolling {
+  scrollbar-color: var(--color-divider) transparent;
+}
+
+.ds-chat-thread:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: -2px;
+}
+
+/* Content — the turns. Consumers override the inline gutters (mobile
+   densities) through --ds-chat-thread-padding-inline, and can cap the
+   conversation column through --ds-chat-thread-content-max-width: the
+   column centres itself while the scroll container, its fades, and the
+   scrollbar keep spanning the full component width. */
+.ds-chat-thread__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xl);
+  max-width: var(--ds-chat-thread-content-max-width, none);
+  margin-inline: auto;
+  /* Roomy bottom padding: the end of a long response rests 40px clear of
+     the composer, so the last lines stay readable. The right padding
+     subtracts the measured scrollbar gutter (--ds-chat-thread-gutter, set
+     by the component) so the column stays symmetric and aligned with its
+     surroundings on classic-scrollbar platforms. */
+  padding: var(--padding-lg)
+    max(0px, calc(var(--ds-chat-thread-padding-inline, var(--padding-lg)) - var(--ds-chat-thread-gutter, 0px)))
+    var(--padding-xl) var(--ds-chat-thread-padding-inline, var(--padding-lg));
+  /* The first send into an empty thread floats up from composer level —
+     a transform glide, since no scroll distance exists yet. Later sends
+     glide via scroll instead; this transition only ever sees the
+     component-driven translateY. */
+  transition: transform var(--motion-duration-slower) var(--motion-ease-entrance);
+}
+
+/* The list scrolls; entries never shrink. Without this, children that clip
+   their own overflow collapse when the column overflows. */
+.ds-chat-thread__content > * {
+  flex-shrink: 0;
+}
+
+/* Trailing spacer — sized by the component so the newest turn can always
+   reach the top of the viewport, and holds no more room than that: it
+   shrinks away as a response grows into the space it was reserving. */
+.ds-chat-thread__spacer {
+  height: 0;
+}
+
+/* Scroll-to-bottom — a sticky, zero-height slot pinned just above the
+   bottom fade, so the control floats centred over the transcript right
+   on top of the composer. */
+.ds-chat-thread__jump-slot {
+  position: sticky;
+  bottom: var(--gap-lg);
+  height: 0;
+  display: flex;
+  justify-content: center;
+  /* Bottom-align against the zero-height line — the default stretch
+     would squash the circle flat. */
+  align-items: flex-end;
+  /* The slot spans the content box, which excludes the gutter; this
+     re-centres the control on the full component width. */
+  padding-left: var(--ds-chat-thread-gutter, 0px);
+  z-index: 1;
+}
+
+/* The passive ramp is a ghost family meant to paint over a surface, so
+   the floating pill supplies its own: container surface + border below,
+   the passive layer above stepping through rest, hover, and active. */
+.ds-chat-thread__jump {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* The send button's exact footprint — CircularButton's default size,
+     a raw value there too (icon-button sizes are not on a token scale). */
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-full);
+  background-color: var(--color-bg-container-primary);
+  background-image: linear-gradient(
+    var(--color-action-passive-bg),
+    var(--color-action-passive-bg)
+  );
+  color: var(--color-action-passive-text);
+  box-shadow: var(--shadow-floating);
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-chat-thread__jump--visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.ds-chat-thread__jump:hover {
+  background-image: linear-gradient(
+    var(--color-action-passive-bg-hover),
+    var(--color-action-passive-bg-hover)
+  );
+}
+
+.ds-chat-thread__jump:active {
+  background-image: linear-gradient(
+    var(--color-action-passive-bg-active),
+    var(--color-action-passive-bg-active)
+  );
+}
+
+.ds-chat-thread__jump:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+/* The glyph matches the send button's: --icon-size-md in a 40px circle
+   (icon plus the padding ring), pointing the other way. */
+.ds-chat-thread__jump-icon {
+  --icon-size: var(--icon-size-md);
+}

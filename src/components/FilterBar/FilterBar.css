@@ -1,0 +1,202 @@
+/* ============================================
+   FILTER BAR COMPONENT
+   A row of filter chips, each opening a
+   popover listbox. The chips share Chip's pill
+   language; active state uses the teal fill
+   convention from Chip's selected state.
+   ============================================ */
+
+/* Base */
+
+.ds-filter-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--gap-sm);
+}
+
+.ds-filter-bar__filter {
+  position: relative;
+  display: inline-flex;
+}
+
+/* Chip shell — the pill holding the trigger and the clear button */
+
+.ds-filter-bar__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  padding: var(--padding-xs) var(--padding-sm-md);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-full);
+  background-color: var(--color-bg-page-primary);
+  font-family: var(--font-paragraph-sm-em-family);
+  font-size: var(--font-paragraph-sm-em-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  transition:
+    background-color var(--motion-duration-base) var(--motion-ease-standard),
+    border-color var(--motion-duration-base) var(--motion-ease-standard),
+    color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-filter-bar--compact .ds-filter-bar__chip {
+  gap: var(--gap-xs);
+  padding: var(--padding-xxxs) var(--padding-sm);
+}
+
+.ds-filter-bar__chip:hover:not(.ds-filter-bar__chip--active) {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-filter-bar__chip--open:not(.ds-filter-bar__chip--active) {
+  background-color: var(--color-action-passive-bg-active);
+}
+
+/* Active — teal fill, matching Chip's selected convention */
+
+.ds-filter-bar__chip--active {
+  background-color: var(--color-action-primary-bg);
+  border-color: var(--color-action-primary-bg);
+  color: var(--color-action-primary-text);
+}
+
+.ds-filter-bar__chip--active:hover {
+  background-color: var(--color-action-primary-bg-hover);
+}
+
+/* Trigger + clear share the shell's typography and colour */
+
+.ds-filter-bar__trigger,
+.ds-filter-bar__chip-clear {
+  display: inline-flex;
+  align-items: center;
+  gap: inherit;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.ds-filter-bar__trigger:focus-visible,
+.ds-filter-bar__chip-clear:focus-visible,
+.ds-filter-bar__clear-all:focus-visible {
+  outline: var(--border-md) solid var(--color-action-primary-bg);
+  outline-offset: var(--gap-xxs);
+  border-radius: var(--radius-full);
+}
+
+.ds-filter-bar__icon {
+  flex-shrink: 0;
+  --icon-size: var(--icon-size-sm);
+  line-height: 1;
+}
+
+.ds-filter-bar__caret {
+  flex-shrink: 0;
+  --icon-size: var(--icon-size-sm);
+  line-height: 1;
+  transition: transform var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-filter-bar__chip--open .ds-filter-bar__caret {
+  transform: rotate(180deg);
+}
+
+.ds-filter-bar__chip-clear {
+  flex-shrink: 0;
+  border-radius: var(--radius-full);
+}
+
+.ds-filter-bar__chip-clear .material-symbols-rounded {
+  --icon-size: var(--icon-size-sm);
+  line-height: 1;
+}
+
+/* Popover listbox */
+
+.ds-filter-bar__panel {
+  position: absolute;
+  top: calc(100% + var(--gap-xxs));
+  left: 0;
+  z-index: 10;
+  min-width: 100%;
+  max-height: 280px;
+  overflow-y: auto;
+  margin: 0;
+  padding: var(--padding-xxs);
+  list-style: none;
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-bg-container-primary);
+  box-shadow: var(--shadow-floating);
+}
+
+.ds-filter-bar__option {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  padding: var(--padding-xs) var(--padding-sm);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-filter-bar__option:hover,
+.ds-filter-bar__option--focused {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-filter-bar__option--selected {
+  color: var(--color-text-primary);
+}
+
+.ds-filter-bar__option-check {
+  flex-shrink: 0;
+  width: var(--icon-size-sm);
+  --icon-size: var(--icon-size-sm);
+  line-height: 1;
+  color: var(--color-action-primary-bg);
+}
+
+/* Clear all */
+
+.ds-filter-bar__clear-all {
+  margin: 0;
+  padding: var(--padding-xs) var(--padding-sm);
+  border: none;
+  background: none;
+  border-radius: var(--radius-full);
+  font-family: var(--font-paragraph-sm-em-family);
+  font-size: var(--font-paragraph-sm-em-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-filter-bar__clear-all:hover {
+  color: var(--color-text-primary);
+}
+
+/* Icons take the colour of the text around them (see Chip.css for why
+   this is explicit rather than inherited). */
+.ds-filter-bar .material-symbols-rounded {
+  color: inherit;
+}

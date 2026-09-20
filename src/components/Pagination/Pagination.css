@@ -1,0 +1,126 @@
+/* ============================================
+   PAGINATION COMPONENT
+   Page navigation for long datasets
+   ============================================ */
+
+.ds-pagination {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-xs); /* 4px */
+}
+
+.ds-pagination__list {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-xs); /* 4px */
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* ============================================
+   PAGE BUTTONS
+   Pill-shaped, matching CircularButton sizing
+   ============================================ */
+
+.ds-pagination__page,
+.ds-pagination__arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-full); /* pill */
+  background-color: transparent;
+  cursor: pointer;
+  transition: background-color var(--motion-duration-base) var(--motion-ease-standard), color var(--motion-duration-base) var(--motion-ease-standard);
+  font-family: var(--font-paragraph-em-family);
+  font-size: var(--font-paragraph-em-size);
+  font-weight: var(--font-paragraph-em-weight);
+  line-height: var(--font-paragraph-em-line-height);
+  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  color: var(--color-text-secondary);
+}
+
+.ds-pagination__page:hover:not(:disabled):not(.ds-pagination__page--current),
+.ds-pagination__arrow:hover:not(:disabled) {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-pagination__page:focus-visible,
+.ds-pagination__arrow:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+/* ============================================
+   CURRENT PAGE
+   Same active treatment as SegmentedControl
+   ============================================ */
+
+.ds-pagination__page--current {
+  background-color: var(--color-action-primary-bg);
+  color: var(--color-action-primary-text);
+}
+
+.ds-pagination__page--current:hover {
+  background-color: var(--color-action-primary-bg-hover);
+}
+
+/* ============================================
+   ARROWS
+   ============================================ */
+
+.ds-pagination__icon {
+  --icon-size: var(--icon-size-md);
+  line-height: 1;
+  color: var(--color-icon-primary);
+}
+
+.ds-pagination__arrow:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   ELLIPSIS
+   ============================================ */
+
+.ds-pagination__ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  color: var(--color-text-tertiary);
+  user-select: none;
+}
+
+/* ============================================
+   COMPACT
+   Prev/next arrows with a page readout
+   ============================================ */
+
+.ds-pagination--compact .ds-pagination__arrow {
+  width: 32px;
+  height: 32px;
+}
+
+.ds-pagination--compact .ds-pagination__icon {
+  --icon-size: var(--icon-size-sm);
+}
+
+.ds-pagination__readout {
+  padding: 0 var(--padding-sm); /* 8px */
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}

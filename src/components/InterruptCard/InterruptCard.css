@@ -1,0 +1,164 @@
+/* ============================================
+   INTERRUPT CARD COMPONENT
+   A human-in-the-loop checkpoint: a question
+   from the agent, a detail slot, and option
+   buttons in a footer.
+
+   The card is deliberately quiet — one tone,
+   the standard container border, no status
+   colour. The question and its buttons are
+   the signal; the visually hidden status
+   announcement carries the waiting state.
+   ============================================ */
+
+.ds-interrupt-card {
+  --ds-interrupt-card-color: var(--color-icon-secondary);
+
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: var(--color-bg-container-primary);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  /* The chat furniture's shared 24px shell — see ToolCall. */
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+
+.ds-interrupt-card__header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-sm);
+  padding: var(--padding-md) var(--padding-lg);
+}
+
+.ds-interrupt-card__icon {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  /* Centre the icon on the title's first line. */
+  margin-top: calc((var(--font-heading-3-line-height) - var(--icon-size-sm)) / 2);
+  color: var(--ds-interrupt-card-color);
+}
+
+.ds-interrupt-card__icon .material-symbols-rounded {
+  --icon-size: var(--icon-size-sm);
+}
+
+.ds-interrupt-card__heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs);
+  min-width: 0;
+}
+
+/* The question is the card's one heading, so it takes the same heading
+   tier as MessageCard's title — the chat cards share one title scale. */
+.ds-interrupt-card__title {
+  font-family: var(--font-heading-3-family);
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+  letter-spacing: var(--font-heading-3-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.ds-interrupt-card__description {
+  margin: 0;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-secondary);
+}
+
+/* ============================================
+   DETAIL SLOT
+   Typically a pending ToolCall showing what
+   wants to run.
+   ============================================ */
+
+.ds-interrupt-card__detail {
+  padding: 0 var(--padding-lg) var(--padding-md);
+}
+
+.ds-interrupt-card__detail > :first-child {
+  margin-top: 0;
+}
+
+.ds-interrupt-card__detail > :last-child {
+  margin-bottom: 0;
+}
+
+/* ============================================
+   OPTIONS
+   Mirrors ToolCall's actions footer exactly, so
+   a decision on a card and an approval on a
+   call read as the same row.
+   ============================================ */
+
+.ds-interrupt-card__options {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--gap-sm);
+  padding: var(--padding-sm) var(--padding-lg) var(--padding-md);
+}
+
+/* ============================================
+   ANSWERED ECHO
+   Same footer geometry, quiet text where the
+   buttons were.
+   ============================================ */
+
+.ds-interrupt-card__answer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--gap-xs);
+  padding: var(--padding-sm) var(--padding-lg) var(--padding-md);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-secondary);
+}
+
+.ds-interrupt-card__answer-icon {
+  --icon-size: var(--icon-size-sm);
+
+  flex: none;
+  color: var(--ds-interrupt-card-color);
+}
+
+/* ============================================
+   VISUALLY HIDDEN
+   The waiting announcement is for screen
+   readers only.
+   ============================================ */
+
+.ds-interrupt-card__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Icons take the colour of the text around them. Explicit, not just
+   inherited by default: a consumer stylesheet that sets a colour on
+   .material-symbols-rounded itself (a common global default) would
+   otherwise override inheritance and detach the icon from the state
+   colours this component sets on its parents. */
+.ds-interrupt-card .material-symbols-rounded {
+  color: inherit;
+}

@@ -1,0 +1,133 @@
+/* ============================================
+   AVATAR COMPONENT
+   User profile image with initials fallback
+   ============================================ */
+
+.ds-avatar {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full); /* 999px */
+  background-color: var(--color-bg-container-secondary);
+  flex-shrink: 0;
+}
+
+/* ============================================
+   SIZES
+   ============================================ */
+
+.ds-avatar--sm {
+  width: 32px;
+  height: 32px;
+}
+
+.ds-avatar--md {
+  width: 40px;
+  height: 40px;
+}
+
+.ds-avatar--lg {
+  width: 56px;
+  height: 56px;
+}
+
+/* ============================================
+   IMAGE
+   ============================================ */
+
+.ds-avatar__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: var(--radius-full);
+}
+
+/* ============================================
+   INITIALS FALLBACK
+   ============================================ */
+
+.ds-avatar__initials {
+  font-family: var(--font-paragraph-em-family);
+  font-weight: var(--font-paragraph-em-weight);
+  color: var(--color-text-primary);
+  line-height: 1;
+  user-select: none;
+}
+
+.ds-avatar--sm .ds-avatar__initials {
+  font-size: 12px;
+}
+
+.ds-avatar--md .ds-avatar__initials {
+  font-size: 14px;
+}
+
+.ds-avatar--lg .ds-avatar__initials {
+  font-size: 18px;
+}
+
+/* ============================================
+   ICON FALLBACK
+   ============================================ */
+
+.ds-avatar__icon {
+  color: var(--color-icon-secondary);
+  line-height: 1;
+}
+
+.ds-avatar--sm .ds-avatar__icon {
+  --icon-size: var(--icon-size-sm);
+}
+
+.ds-avatar--md .ds-avatar__icon {
+  --icon-size: var(--icon-size-md);
+}
+
+.ds-avatar--lg .ds-avatar__icon {
+  --icon-size: var(--icon-size-lg);
+}
+
+/* ============================================
+   STATUS INDICATOR
+   ============================================ */
+
+.ds-avatar__status {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  border-radius: var(--radius-full);
+  border: 2px solid var(--color-bg-page-primary);
+}
+
+.ds-avatar--sm .ds-avatar__status {
+  width: 10px;
+  height: 10px;
+}
+
+.ds-avatar--md .ds-avatar__status {
+  width: 12px;
+  height: 12px;
+}
+
+.ds-avatar--lg .ds-avatar__status {
+  width: 14px;
+  height: 14px;
+}
+
+.ds-avatar__status--online {
+  background-color: var(--color-status-positive-border);
+}
+
+.ds-avatar__status--away {
+  background-color: var(--color-status-warning-border);
+}
+
+.ds-avatar__status--offline {
+  background-color: var(--color-bg-container-border);
+}
+
+.ds-avatar__status--busy {
+  background-color: var(--color-status-error-border);
+}

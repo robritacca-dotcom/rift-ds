@@ -1,0 +1,94 @@
+/* ============================================
+   MATERIAL SYMBOLS — Rounded only
+   Variable font with FILL, GRAD, opsz, wght axes
+   ============================================ */
+
+@font-face {
+  font-family: 'Material Symbols Rounded';
+  font-style: normal;
+  font-weight: 100 700;
+  src: url('./MaterialSymbolsRounded-VariableFont_FILL,GRAD,opsz,wght.woff2') format('woff2');
+  font-display: block;
+}
+
+/* ============================================
+   ICON BASE STYLES
+   ============================================ */
+
+/*
+   Sizing is driven by a single custom property, `--icon-size`, which sets
+   the glyph size and the layout box together so they can never desync.
+
+   This is deliberately a *consumed* variable with a fallback, never a
+   declared one: because this class only reads `--icon-size` and never sets
+   it, a component that sets `--icon-size` has nothing to compete with.
+   Declaring `font-size` here directly (as this file used to) tied on
+   specificity with every single-class component rule and — being imported
+   later — won, rendering 24px glyphs inside 20px boxes.
+
+   Use one of the semantic steps: --icon-size-sm | -md | -lg | -xl.
+*/
+.material-symbols-rounded {
+  font-family: 'Material Symbols Rounded';
+  font-weight: normal;
+  font-style: normal;
+  font-size: var(--icon-size, var(--icon-size-md));
+  width: var(--icon-size, var(--icon-size-md));
+  height: var(--icon-size, var(--icon-size-md));
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'liga';
+}
+
+/* ============================================
+   VARIABLE FONT SETTINGS
+   ============================================ */
+
+/*
+   `opsz` is intentionally ABSENT from font-variation-settings. An explicit
+   axis value always overrides `font-optical-sizing: auto`, so listing it
+   here would silently pin every icon to one optical size regardless of how
+   large it is drawn — which is exactly what this file used to do, via a
+   `--material-symbols-size` hook that nothing ever set.
+
+   With the axis omitted, the browser feeds the used font-size into `opsz`
+   automatically, so stroke weight adapts to the rendered size. The font's
+   axis range is 20..48; the icon-size scale starts at 20 to stay inside it.
+*/
+.material-symbols-rounded {
+  font-optical-sizing: auto;
+  font-variation-settings:
+    'FILL' var(--material-symbols-fill, 0),
+    'wght' var(--material-symbols-weight, 200),
+    'GRAD' var(--material-symbols-grade, 0);
+}
+
+/* ============================================
+   DARK THEME — optical grade correction
+   Light-on-dark glyphs bloom and read heavier
+   than the same strokes on a light background.
+   A negative GRAD thins them back without
+   changing glyph width or spacing (which is
+   what `wght` would do). Material's own
+   guidance for inverted surfaces.
+   ============================================ */
+
+[data-theme="dark"] {
+  --material-symbols-grade: -25;
+}
+
+/* ============================================
+   MODIFIER — filled variant
+   ============================================ */
+
+.icon-filled {
+  --material-symbols-fill: 1;
+}

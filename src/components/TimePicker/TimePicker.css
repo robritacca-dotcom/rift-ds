@@ -1,0 +1,230 @@
+/* ============================================
+   TIMEPICKER COMPONENT
+   Time-of-day field with a dropdown listbox of
+   generated times. Mirrors Dropdown's anatomy;
+   the trigger is a real <button> styled as an
+   input.
+   ============================================ */
+
+/* ============================================
+   BASE
+   ============================================ */
+
+.ds-timepicker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm); /* 8px */
+  width: 100%;
+  position: relative;
+}
+
+/* ============================================
+   TRIGGER
+   ============================================ */
+
+.ds-timepicker__trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm); /* 8px */
+  width: 100%;
+  padding: var(--padding-sm) var(--padding-md); /* 8px 16px */
+  border: var(--border-xs) solid var(--color-input-border-primary);
+  border-radius: var(--radius-md); /* 12px — input shape, not the button pill */
+  background-color: var(--color-input-bg-primary);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color var(--motion-duration-base) var(--motion-ease-standard);
+  outline: none;
+}
+
+.ds-timepicker__trigger:hover:not(:focus-visible):not(:disabled) {
+  border-color: var(--color-input-border-hover);
+}
+
+.ds-timepicker__trigger:focus-visible {
+  border-color: var(--color-input-border-selected);
+}
+
+.ds-timepicker--open .ds-timepicker__trigger {
+  border-color: var(--color-input-border-selected);
+}
+
+/* ============================================
+   CLOCK ICON
+   ============================================ */
+
+.ds-timepicker__icon {
+  --icon-size: var(--icon-size-sm);
+  color: var(--color-icon-primary);
+  flex-shrink: 0;
+}
+
+/* ============================================
+   VALUE / PLACEHOLDER
+   ============================================ */
+
+.ds-timepicker__value {
+  font-family: var(--font-paragraph-em-family);
+  font-size: var(--font-paragraph-em-size);
+  font-weight: var(--font-paragraph-em-weight);
+  line-height: var(--font-paragraph-em-line-height);
+  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  color: var(--color-input-text-primary);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ds-timepicker__value--placeholder {
+  color: var(--color-input-text-placeholder);
+}
+
+/* ============================================
+   CHEVRON
+   ============================================ */
+
+.ds-timepicker__chevron {
+  --icon-size: var(--icon-size-md);
+  color: var(--color-icon-primary);
+  transition: transform var(--motion-duration-base) var(--motion-ease-standard);
+  flex-shrink: 0;
+}
+
+.ds-timepicker--open .ds-timepicker__chevron {
+  transform: rotate(180deg);
+}
+
+/* ============================================
+   MENU
+   ============================================ */
+
+.ds-timepicker__menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: var(--gap-xxs); /* 2px */
+  padding: var(--padding-xxs); /* inset gap on all sides */
+  border: var(--border-xs) solid var(--color-input-border-primary);
+  border-radius: var(--radius-md); /* 12px */
+  background-color: var(--color-bg-page-primary);
+  list-style: none;
+  max-height: 240px;
+  overflow-y: auto;
+  z-index: 10;
+  box-shadow: var(--shadow-floating);
+
+  /* Animation */
+  animation: ds-timepicker-appear var(--motion-duration-fast) var(--motion-ease-entrance);
+}
+
+@keyframes ds-timepicker-appear {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ============================================
+   OPTION
+   ============================================ */
+
+.ds-timepicker__option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--padding-sm) var(--padding-sm-md); /* 8px 12px */
+  border-radius: var(--radius-sm);
+  font-family: var(--font-paragraph-em-family);
+  font-size: var(--font-paragraph-em-size);
+  font-weight: var(--font-paragraph-em-weight);
+  line-height: var(--font-paragraph-em-line-height);
+  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-timepicker__option:hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-timepicker__option--focused {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-timepicker__option--selected {
+  color: var(--color-action-primary-text-tertiary);
+}
+
+/* ============================================
+   CHECK ICON
+   ============================================ */
+
+.ds-timepicker__check {
+  --icon-size: var(--icon-size-md);
+  color: var(--color-action-primary-bg);
+}
+
+/* ============================================
+   ERROR STATE
+   ============================================ */
+
+.ds-timepicker--error .ds-timepicker__trigger {
+  border-color: var(--color-status-error-border);
+}
+
+/* ============================================
+   DISABLED STATE
+   ============================================ */
+
+.ds-timepicker--disabled .ds-timepicker__trigger {
+  background-color: var(--color-input-bg-disabled);
+  border-color: var(--color-input-border-disabled);
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ds-timepicker--disabled .ds-timepicker__value {
+  color: var(--color-input-text-disabled);
+}
+
+.ds-timepicker--disabled .ds-timepicker__icon,
+.ds-timepicker--disabled .ds-timepicker__chevron {
+  color: var(--color-input-text-disabled);
+}
+
+/* ============================================
+   SIZE — COMPACT
+   ============================================ */
+
+.ds-timepicker--compact .ds-timepicker__trigger {
+  padding: var(--padding-xs) var(--padding-sm-md); /* 6px 12px */
+}
+
+.ds-timepicker--compact .ds-timepicker__value {
+  font-size: var(--font-paragraph-sm-em-size);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+}
+
+.ds-timepicker--compact .ds-timepicker__chevron {
+  --icon-size: var(--icon-size-sm);
+}
+
+.ds-timepicker--compact .ds-timepicker__option {
+  padding: var(--padding-xs) var(--padding-sm); /* 6px 8px */
+  font-size: var(--font-paragraph-sm-em-size);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+}
+
+.ds-timepicker--compact .ds-timepicker__check {
+  --icon-size: var(--icon-size-sm);
+}

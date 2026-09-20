@@ -1,0 +1,884 @@
+/* ============================================
+   MEGA NAV
+   Top nav for the website. Flat top-level links
+   (About · Work · Contact) plus a "Design system"
+   trigger that opens a floating mega menu.
+   ============================================ */
+
+.header {
+  position: relative;
+  background: transparent;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  /* The header bar's height and the logo mark's size. Everything that has
+     to line up with either reads these: the sticky overlay, the drawer's
+     close button, and the drawer's logo row and list indent. Inherited, so
+     descendants see them too. */
+  --mn-bar-height: 78px;
+  --mn-logo-mark: 24px;
+}
+
+.headerInner {
+  /* The containing block for the mega panel, in both headers. The panel must
+     centre on the content box, not the header: the sticky bar is full
+     viewport width and carries its gutters — and the docked chat's inset —
+     as padding, which absolute positioning ignores (offsets resolve against
+     the padding box). Anchoring to the inner box inherits all of it. */
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1440px;
+  height: var(--mn-bar-height);
+  /* No horizontal padding: the in-flow header sits inside the body, whose
+     side gutters already align it with the page content. The sticky
+     overlay is viewport-fixed, so it re-adds matching gutters below. */
+}
+
+.stickyHeader {
+  /* Mirrors the body gutters in globals.css (40px → 20px @959 → 16px @600)
+     as padding on the fixed bar itself, so headerInner centres inside a
+     content box identical to the body's and every item lands exactly where
+     the in-flow header put it. Padding (not inner padding) because the
+     inner's 1440px max-width is border-box — gutters inside it would shrink
+     and re-centre the content against the full viewport instead. The
+     gradient is unaffected: backgrounds paint across the padding box. */
+  padding: 0 var(--primitive-padding-xl);
+}
+
+.logoSlot {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.navCenter {
+  display: flex;
+  align-items: center;
+  /* Left-aligned beside the logo rather than centred on the page — the
+     margin plus the first pill's own 16px padding sets the visual gap.
+     With nothing centred, the outer slots need no balancing widths. */
+  justify-content: flex-start;
+  margin-left: var(--primitive-gap-xl);
+  flex: 1;
+}
+
+.rightSlot {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-shrink: 0;
+  gap: var(--primitive-gap-md);
+}
+
+/* ============================================
+   LOGO
+   ============================================ */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: var(--primitive-gap-sm);
+  text-decoration: none;
+  color: var(--color-text-primary);
+}
+
+.logoMark {
+  width: var(--mn-logo-mark);
+  height: var(--mn-logo-mark);
+  flex-shrink: 0;
+}
+
+.logoText {
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  /* ds-allow(typography): the system's one weight-700 setting — the wordmark
+     reads a notch heavier than the nav pills beside it, one step above
+     title-body's 600; no token resolves to 700 (design.md's Site header
+     pattern records the exception), and the face is in the loaded set. */
+  font-weight: 700;
+  line-height: var(--font-title-body-line-height);
+  letter-spacing: var(--font-title-body-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   NAV LINKS
+   ============================================ */
+.nav {
+  display: flex;
+  align-items: center;
+  gap: var(--primitive-gap-xs);
+}
+
+.navLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  /* Fixed height, not vertical padding: the caret's Material Symbols box
+     (--icon-size floor is 20px) is taller than the 14px text line, so a
+     padding-driven pill grows on icon-bearing items. Every pill must
+     measure 30px regardless of content, in both headers. */
+  height: 30px;
+  padding: 0 16px;
+  border: none;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--color-text-primary);
+  font-family: var(--font-title-body-family);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background var(--motion-duration-fast) var(--motion-ease-standard), color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.navLink:hover {
+  background: var(--color-bg-container-secondary);
+}
+
+.navLink:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+/* An open mega menu holds the hover pill, nothing more: teal is the
+   current-section marker, and opening a menu is not a selection. Declared
+   before .navLinkActive so the teal still wins when the open trigger is
+   also the current section. */
+.navLinkOpen {
+  background: var(--color-bg-container-secondary);
+}
+
+/* The current section's pill is the action-primary pair — the same
+   selected-segment treatment as SegmentedControl (the theme toggle), so
+   "you are here" survives the glassy header backdrop in both themes. The
+   hover rule below out-specifies .navLink:hover, which would otherwise
+   swap the teal back to the neutral hover fill. Desktop pills only: the
+   mobile drawer is NavList's own styling. */
+.navLinkActive {
+  background: var(--color-action-primary-bg);
+  color: var(--color-action-primary-text);
+}
+
+.navLinkActive:hover {
+  background: var(--color-action-primary-bg-hover);
+}
+
+.navLinkActive .caret {
+  color: inherit;
+}
+
+/* ============================================
+   DS TRIGGER (button with caret)
+   ============================================ */
+.dsWrap {
+  position: relative;
+}
+
+.dsTrigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+/* Material Symbol expand_more — the same glyph NavList and Accordion use,
+   at the scale floor (the opsz axis bottoms out at 20). */
+.caret {
+  flex-shrink: 0;
+  margin-left: 2px;
+  --icon-size: var(--icon-size-sm);
+  line-height: 1;
+  color: var(--color-text-secondary);
+  transition: transform var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.caretOpen {
+  transform: rotate(180deg);
+}
+
+/* ============================================
+   THEME TOGGLE (desktop)
+   ============================================ */
+.desktopThemeToggle {
+  /* visible by default, hidden on mobile via media query */
+}
+
+/* ============================================
+   MOBILE MENU BUTTON (hidden on desktop)
+   ============================================ */
+.mobileMenuBtn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-action-passive-bg);
+  border: none;
+  border-radius: var(--radius-full);
+  padding: var(--primitive-padding-sm);
+  cursor: pointer;
+  color: var(--color-text-primary);
+  width: 40px;
+  height: 40px;
+}
+
+.mobileMenuBtn:hover {
+  background: var(--color-action-passive-bg-hover);
+}
+
+/* While the drawer is open the header's own button sits under the overlay
+   scrim (the header stacking context caps at z-index 10, the overlay is
+   1000), so it hides and the overlay renders its own close button on the
+   top layer instead. */
+.mobileMenuBtnHidden {
+  visibility: hidden;
+}
+
+/* ============================================
+   SEARCH FIELD (all widths)
+   Opens the global command palette. Dressed as an
+   input — icon, placeholder, ⌘K keycaps — but it is
+   a button: typing happens in the palette itself.
+   Below 1280px it collapses back to the icon circle
+   (same footprint as the mobile menu button), and is
+   never hidden.
+   ============================================ */
+.searchBtn {
+  display: flex;
+  align-items: center;
+  gap: var(--primitive-gap-sm);
+  /* Same track recipe as the theme toggle beside it (SegmentedControl's
+     container-primary fill and border), so the two pills read as one
+     family — the passive fill is near-invisible on the dark header. */
+  background: var(--color-bg-container-primary);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-full);
+  padding: 0 var(--primitive-padding-sm-md);
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  /* Wide enough for the full "Search or ask anything" placeholder plus the
+     icon and the ⌘K keycaps, with the keys' auto margin absorbing the rest. */
+  width: 264px;
+  height: 40px;
+  --icon-size: var(--icon-size-sm);
+  /* Input's own hover transition, so the border responds at the same pace. */
+  transition:
+    background var(--motion-duration-base) var(--motion-ease-standard),
+    border-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+/* Hovers like a real Input: the border darkens, the fill stays put. */
+.searchBtn:hover {
+  border-color: var(--color-input-border-hover);
+}
+
+/* The site's global symbol default is --color-text-primary; this icon is an
+   input adornment and must match the placeholder label beside it (and the
+   theme toggle's idle glyphs) at the button's --color-text-secondary. */
+.searchBtn :global(.material-symbols-rounded) {
+  color: inherit;
+}
+
+.searchLabel {
+  font-family: var(--font-title-body-family);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.searchKeys {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--primitive-gap-xxs);
+  margin-left: auto;
+}
+
+/* ============================================
+   MEGA MENU PANEL
+   Floating panel with rounded corners, spanning the header's content box.
+   ============================================ */
+.mega {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 1440px;
+  margin-top: 8px;
+  z-index: 9;
+
+  /* The chat panel's glass, the same recipe the mobile drawer takes
+     (SiteChat's .panel owns the original): translucent in both themes —
+     light's container token is opaque — so the page's colours and the
+     ambient field reach through. Denser and blurred harder than those two,
+     because this panel is a shallow strip that lands on whatever the page
+     opens with — display type, most of it — and at the panel's 82%/24px a
+     heading that size still reads straight through the tile labels. */
+  background: color-mix(in srgb, var(--color-bg-container-primary) 88%, transparent);
+  backdrop-filter: blur(32px);
+  border: 1px solid var(--color-bg-container-border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+
+  /* Hidden state */
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard), visibility 0.22s;
+}
+
+.megaOpen {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.megaInner {
+  padding: var(--primitive-padding-xl);
+}
+
+/* Three columns: the two link groups share the left two thirds, the
+   showcase card takes the right third. The divider between the halves is
+   the showcase's own left border. */
+.megaLayout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--primitive-gap-xl);
+}
+
+/* A panel with no showcase card spans the full width with its link grid. */
+.megaLayoutFull {
+  grid-template-columns: 1fr;
+}
+
+/* The link grid: capped at four rows, wrapping into further columns — a
+   section's panel grows sideways, never into a scroll. */
+.megaGroups {
+  display: grid;
+  grid-template-rows: repeat(4, auto);
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: var(--primitive-gap-sm) var(--primitive-gap-xl);
+  align-content: start;
+}
+
+.megaGroupLabel {
+  font-family: var(--font-overline-family);
+  font-size: var(--font-overline-size);
+  font-weight: var(--font-overline-weight);
+  line-height: var(--font-overline-line-height);
+  letter-spacing: var(--font-overline-letter-spacing);
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+  /* Aligns the header with the item labels, past the rows' hover padding. */
+  padding-inline: var(--primitive-padding-md);
+}
+
+/* ============================================
+   MEGA MENU ITEM
+   One row per index page: icon tile, then label over description.
+   ============================================ */
+.megaItem {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--primitive-gap-sm-md);
+  padding: var(--primitive-padding-sm-md) var(--primitive-padding-md);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  color: inherit;
+  transition: background var(--motion-duration-fast) var(--motion-ease-standard);
+  min-width: 0;
+}
+
+.megaItem:hover {
+  background: var(--color-bg-container-secondary);
+}
+
+.megaItem:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+.megaItemActive {
+  background: var(--color-bg-container-secondary);
+}
+
+.megaIcon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  background: var(--color-bg-container-secondary);
+  color: var(--color-text-primary);
+  transition: background var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+/* The tile keeps a step of contrast when the row behind it fills in. */
+.megaItem:hover .megaIcon,
+.megaItemActive .megaIcon {
+  background: var(--color-bg-container-tertiary);
+}
+
+.megaIcon :global(.material-symbols-rounded),
+.megaIcon span {
+  --icon-size: var(--icon-size-md);
+  line-height: 1;
+}
+
+.megaLogo {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  display: block;
+}
+
+.megaItemText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.megaLabel {
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  letter-spacing: var(--font-title-body-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.megaDescription {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-tertiary);
+  /* Panel rows stay even: a description is at most two lines, ellipsised.
+     The full sentence still lives on the page the row links to. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ============================================
+   MEGA MENU SHOWCASE
+   The featured-page card in the right column — one link that IS the card.
+   The pipeline vector fills the frame and absorbs whatever height the
+   link grid runs to, so the columns always bottom-align no matter how
+   many rows the groups hold; the copy sits inside over a gradient rising
+   from the bottom edge. The divider between the halves lives on the
+   column wrapper, not the link.
+   ============================================ */
+.megaShowcaseColumn {
+  display: flex;
+  padding-left: var(--primitive-padding-xl);
+  border-left: 1px solid var(--color-bg-container-border);
+  /* Sizes the card's height floor below in cqw, i.e. as a share of this
+     column's width. */
+  container-type: inline-size;
+}
+
+.megaShowcase {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-width: 0;
+  /* The floor for a short link grid: holds the card at 4:3 or taller so
+     the drawing keeps room above the copy. Growth is unbounded — a taller
+     grid just gives the vector more ground. */
+  min-height: 75cqw;
+  text-decoration: none;
+  color: inherit;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-bg-container-border);
+  overflow: hidden;
+  transition: border-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.megaShowcase:hover {
+  border-color: var(--color-bg-container-tertiary);
+}
+
+.megaShowcase:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 4px;
+}
+
+/* The vector fills the whole card behind the copy; the gentle zoom on
+   hover is the card acknowledging the pointer, clipped by the frame. */
+.megaShowcaseCover {
+  position: absolute;
+  inset: 0;
+  transition: scale var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.megaShowcase:hover .megaShowcaseCover {
+  scale: 1.02;
+}
+
+/* The copy block, kept legible on the drawing's ground by a gradient up
+   from the card's bottom edge. The tall top padding is the fade zone —
+   the gradient owns it, the text never reaches it. */
+.megaShowcaseText {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-xs);
+  padding: var(--primitive-padding-lg);
+  padding-top: var(--primitive-padding-xxl);
+  background: linear-gradient(
+    to top,
+    var(--color-bg-page-primary) 55%,
+    transparent
+  );
+}
+
+.megaShowcase .megaGroupLabel {
+  /* The overline aligns with the copy block here, not with hover-padded
+     rows. */
+  padding-inline: 0;
+}
+
+.megaShowcaseTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xs);
+}
+
+.megaShowcaseTitleIcon {
+  --icon-size: var(--icon-size-sm);
+  line-height: 1;
+  color: var(--color-action-passive-text);
+  transition: translate var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.megaShowcase:hover .megaShowcaseTitleIcon {
+  translate: 2px 0;
+}
+
+/* ============================================
+   STICKY OVERLAY HEADER
+   Slides in from the top when the in-flow header
+   has scrolled out of view. Matches the original
+   Header behavior — no layout shift, just appears.
+   ============================================ */
+.stickyHeader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(-100%);
+  transition: opacity var(--motion-duration-slow) var(--motion-ease-standard), visibility var(--motion-duration-slow) var(--motion-ease-standard), transform var(--motion-duration-slow) var(--motion-ease-standard), padding-right var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.stickyHeaderVisible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+/* The bar's tint and blur live on a stack of layers behind the nav, not on
+   the bar itself: a backdrop-filter on the bar would make it a backdrop
+   root, and the mega panel inside it (its own backdrop-filter glass) would
+   then sample only the bar's subtree instead of the page — the panel's blur
+   silently dies. The stack sits inside the bar's own stacking context
+   (fixed + z-index) at z-index: -1, behind the nav items but above the page.
+
+   Why a stack, and why masks: a single backdrop-filter is uniform across its
+   whole box, so a tint that fades to transparent still ends in a hard line
+   where the blur stops. A mask-image multiplies both the tint *and* the
+   filtered backdrop by its alpha, so the blur itself dissolves. Four layers
+   with rising blur radius and a shrinking mask band give a progressive
+   blur: sharp and clear well below the bar, frosted at the top. The stack
+   reaches --sticky-backdrop-reach below the bar so the dissolve has room.
+   The tint is the page surface in both themes (dark's resolves to the
+   near-black floor), so the bar reads as one with the viewport edge. */
+.stickyBackdrop {
+  --sticky-backdrop-tint: var(--color-bg-page-primary);
+  --sticky-backdrop-reach: 64px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: calc(100% + var(--sticky-backdrop-reach));
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* No hand-written -webkit- twins for backdrop-filter here or on the drawer:
+   the build's CSS pipeline adds the prefix from browserslist, and a manual
+   one next to it made it drop the property entirely — the bar rendered
+   with no blur at all until this was removed. */
+.stickyBackdrop > span {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+/* ds-allow(color): mask alpha keywords (black/transparent), not palette colours */
+
+.stickyBackdrop > span:nth-child(1) {
+  background: linear-gradient(
+    to bottom,
+    var(--sticky-backdrop-tint) 0%,
+    color-mix(in srgb, var(--sticky-backdrop-tint) 90%, transparent) 30%,
+    color-mix(in srgb, var(--sticky-backdrop-tint) 40%, transparent) 65%,
+    transparent 100%
+  );
+  backdrop-filter: blur(2px);
+  mask-image: linear-gradient(to bottom, black 0%, black 55%, transparent 100%);
+}
+
+.stickyBackdrop > span:nth-child(2) {
+  backdrop-filter: blur(6px);
+  mask-image: linear-gradient(to bottom, black 0%, black 40%, transparent 80%);
+}
+
+.stickyBackdrop > span:nth-child(3) {
+  backdrop-filter: blur(12px);
+  mask-image: linear-gradient(to bottom, black 0%, black 25%, transparent 60%);
+}
+
+.stickyBackdrop > span:nth-child(4) {
+  backdrop-filter: blur(24px);
+  mask-image: linear-gradient(to bottom, black 0%, black 10%, transparent 40%);
+}
+
+/* ============================================
+   MOBILE MENU OVERLAY (hidden on desktop)
+   ============================================ */
+.mobileMenuOverlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--motion-duration-slow) var(--motion-ease-standard), visibility var(--motion-duration-slow) var(--motion-ease-standard);
+}
+
+.mobileMenuOverlayOpen {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Close control on the scrim itself — the one place that can sit above the
+   drawer panel. Always light: the scrim stays dark in both themes. It sits
+   exactly where the menu button was when it was tapped: MegaNav measures
+   that button at open and pins it here as --mn-close-top, frozen for the
+   whole time the drawer is open. A pair of static positions couldn't do
+   this — between a page at rest and a fully stuck header the hamburger sits
+   anywhere, and a live isStuck binding jolted the X when iOS fired scroll
+   events mid-open (the body lock clamping scrollY, the URL bar resizing).
+   The max() floor is the stuck-bar position, so a button tapped while half
+   scrolled off-screen can't drag the X off with it; the fallback is the
+   at-rest header, for an open with no measurement. */
+.mobileMenuClose {
+  position: absolute;
+  top: max(
+    calc((var(--mn-bar-height) - 40px) / 2),
+    var(--mn-close-top, calc(var(--primitive-padding-lg) + (var(--mn-bar-height) - 40px) / 2))
+  );
+  right: var(--primitive-padding-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: none;
+  border: none;
+  border-radius: var(--radius-full);
+  color: var(--primitive-neutral-01);
+  cursor: pointer;
+}
+
+.mobileMenuClose:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.mobileMenu {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 320px;
+  max-width: 80vw;
+  height: 100%;
+  /* The chat panel's glass, and deliberately the same recipe (SiteChat's
+     .panel owns the original): translucent in both themes — light's
+     container token is opaque — so the page's colours and the ambient field
+     reach through, with the blur keeping the rows legible over them. */
+  background: color-mix(in srgb, var(--color-bg-container-primary) 82%, transparent);
+  backdrop-filter: blur(24px);
+  box-shadow: 5px 0px 30px 0px rgba(0, 0, 0, 0.15);
+  /* Top and side padding mirror the body gutters (globals.css) so the
+     drawer's logo row lands on the page's own logo; the bottom keeps the
+     wider inset for the theme toggle. */
+  padding: var(--primitive-padding-lg) var(--primitive-padding-lg) var(--primitive-padding-xl);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--primitive-gap-lg);
+  /* The section accordions (Components alone is ~60 links) can exceed the
+     viewport, so the drawer scrolls its own content. */
+  overflow-y: auto;
+  transform: translateX(-100%);
+  transition: transform var(--motion-duration-slow) var(--motion-ease-standard);
+}
+
+.mobileMenuOverlayOpen .mobileMenu {
+  transform: translateX(0);
+}
+
+/* The drawer opens on the logo it replaced: same gutter, same header band,
+   so it doesn't move as the panel slides over the page. */
+.mobileMenuLogo {
+  height: var(--mn-bar-height);
+  flex-shrink: 0;
+}
+
+/* Opened from the sticky header, the bar it replaced is at the viewport top
+   rather than below the body's inset — so the drawer drops its top padding
+   and the logo tracks it. Applied from state captured at open, like the
+   close button's anchor, so a scroll event mid-open can't reflow it. */
+.mobileMenuStuck {
+  padding-top: 0;
+}
+
+/* Rows already carry the Button's own text inset, so the list steps right
+   by whatever is left of the logo's lead-in — the mark plus its gap — and
+   every label starts on the wordmark's first letter. The same step on the
+   right keeps the rows centred in the panel rather than pushed against its
+   far edge. */
+.mobileMenuNav {
+  width: 100%;
+  padding-inline: calc(var(--mn-logo-mark) + var(--primitive-gap-sm) - var(--padding-lg));
+}
+
+/* The drawer's rows are a NavList (@robr0/design-system) — no row styling
+   lives here, only a roomier rhythm than the library default: on a phone
+   the list is the whole screen, so the rows get space the sidebar's
+   denser default doesn't need. Both places NavList separates siblings —
+   the list itself and any open sub-list — take the same step. */
+.mobileMenu :global(.ds-nav-list),
+.mobileMenu :global(.ds-nav-list__sublist) {
+  gap: var(--primitive-gap-md);
+}
+
+.mobileMenu :global(.ds-nav-list__panel--open),
+.mobileMenu :global(.ds-nav-list__item) > :global(.ds-nav-list__sublist) {
+  margin-top: var(--primitive-gap-md);
+}
+
+.mobileThemeToggle {
+  margin-top: auto;
+  width: 100%;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 1279px) {
+  /* Not enough room for the input dressing beside five nav pills — the
+     field folds back to the icon circle. */
+  .searchBtn {
+    justify-content: center;
+    width: 40px;
+    padding: var(--primitive-padding-sm);
+    /* Back to the plain circle — the toggle-track costume belongs to the
+       input form. Same passive fill as the mobile menu button beside it. */
+    border: none;
+    background: var(--color-action-passive-bg);
+  }
+
+  .searchBtn:hover {
+    background: var(--color-action-passive-bg-hover);
+  }
+
+  .searchLabel,
+  .searchKeys {
+    display: none;
+  }
+}
+
+@media (max-width: 959px) {
+  /* body carries the page's 20px inset on mobile, so the in-flow
+     header must not add its own — only the fixed sticky header,
+     which escapes body padding, keeps the inner padding. */
+  .header > .headerInner {
+    padding: 0;
+  }
+
+  .navCenter,
+  .desktopThemeToggle {
+    display: none !important;
+  }
+
+  .mobileMenuBtn {
+    display: flex;
+  }
+
+  .mobileMenuOverlay {
+    display: block;
+  }
+
+  .stickyHeader {
+    padding: 0 var(--primitive-padding-lg);
+  }
+}
+
+@media (max-width: 600px) {
+  .stickyHeader {
+    padding: 0 var(--primitive-padding-md);
+  }
+
+  .mobileMenuClose {
+    right: var(--primitive-padding-md);
+  }
+
+  /* Phone gutters, so the drawer's logo keeps sitting on the page's. */
+  .mobileMenu {
+    padding-left: var(--primitive-padding-md);
+    padding-right: var(--primitive-padding-md);
+  }
+}
+
+/* The docked chat panel insets the page via body padding, but this header
+   is position: fixed and escapes it. The bar itself stays full-width so its
+   gradient runs continuously behind the floating panel (the panel sits
+   above it at z-index 1100) — only the bar's padding grows, by exactly the
+   body's docked padding-right, so the content box (and therefore every nav
+   item) matches the shifted page below. The transition mirrors the body's
+   padding-right glide, and drag-resizing snaps it instant the same way
+   globals.css does for the body. */
+:global(html[data-chat="docked"]) .stickyHeader {
+  padding-right: calc(
+    var(--primitive-padding-xl) + var(--layout-chat-width) + var(--layout-chat-inset)
+  );
+}
+
+:global(html[data-chat-resizing]) .stickyHeader {
+  transition: none;
+}
+

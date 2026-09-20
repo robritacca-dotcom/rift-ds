@@ -1,0 +1,86 @@
+/* ============================================
+   SLIDER COMPONENT
+   Range input for selecting values
+   ============================================ */
+
+.ds-slider {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+/* ============================================
+   INPUT — RESET & BASE
+   ============================================ */
+
+.ds-slider__input {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: var(--radius-full);
+  outline: none;
+  cursor: pointer;
+  background: var(--color-bg-container-tertiary);
+}
+
+.ds-slider--compact .ds-slider__input {
+  height: 4px;
+}
+
+/* ============================================
+   THUMB — WEBKIT
+   ============================================ */
+
+.ds-slider__input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  background: var(--color-action-primary-bg);
+  border: 2px solid var(--color-action-primary-bg);
+  cursor: pointer;
+  transition: box-shadow var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-slider--compact .ds-slider__input::-webkit-slider-thumb {
+  width: 16px;
+  height: 16px;
+}
+
+.ds-slider__input::-webkit-slider-thumb:hover {
+  box-shadow: 0 0 0 4px var(--color-action-primary-bg-hover);
+}
+
+/* ============================================
+   THUMB — MOZ
+   ============================================ */
+
+.ds-slider__input::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  background: var(--color-action-primary-bg);
+  border: 2px solid var(--color-action-primary-bg);
+  cursor: pointer;
+  transition: box-shadow var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-slider--compact .ds-slider__input::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+}
+
+.ds-slider__input::-moz-range-thumb:hover {
+  box-shadow: 0 0 0 4px var(--color-action-primary-bg-hover);
+}
+
+/* ============================================
+   DISABLED
+   ============================================ */
+
+.ds-slider--disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}

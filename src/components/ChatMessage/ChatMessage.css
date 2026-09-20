@@ -1,0 +1,326 @@
+/* ============================================
+   CHAT MESSAGE COMPONENT
+   A single chat turn: avatar, author, timestamp,
+   and bubble or plain content aligned by role.
+
+   Bubble surfaces come only from the four
+   --color-chat-bubble-* tokens — never the
+   container ramp directly — so re-theming a chat
+   means repointing those four and nothing else.
+   ============================================ */
+
+.ds-chat-message {
+  /* Gutter width matches the Avatar sm footprint, so a run of turns keeps
+     its left edge whether or not each row shows its avatar. Consumers can
+     repoint it for a larger avatar. */
+  --ds-chat-message-gutter: var(--icon-size-lg);
+
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-sm-md);
+  width: 100%;
+}
+
+.ds-chat-message--user {
+  flex-direction: row-reverse;
+}
+
+/* ============================================
+   GUTTER
+   ============================================ */
+
+.ds-chat-message__gutter {
+  flex: none;
+  display: flex;
+  justify-content: center;
+  width: var(--ds-chat-message-gutter);
+}
+
+/* Hidden, not removed — the reserved width is what keeps a run aligned */
+.ds-chat-message__gutter--hidden {
+  visibility: hidden;
+}
+
+/* ============================================
+   BODY
+   ============================================ */
+
+.ds-chat-message__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-xs);
+}
+
+.ds-chat-message--user .ds-chat-message__body {
+  align-items: flex-end;
+}
+
+/* ============================================
+   META ROW
+   ============================================ */
+
+.ds-chat-message__meta {
+  display: flex;
+  align-items: baseline;
+  gap: var(--gap-sm);
+}
+
+.ds-chat-message__author {
+  font-family: var(--font-paragraph-sm-em-family);
+  font-size: var(--font-paragraph-sm-em-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+  color: var(--color-text-secondary);
+}
+
+.ds-chat-message__timestamp {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-tertiary);
+}
+
+/* ============================================
+   CONTENT
+   ============================================ */
+
+.ds-chat-message__content {
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+  /* Content never pushes the turn wider than its container — an unbroken
+     run (a URL, a token) wraps inside the bubble or column instead. */
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+/* Plain — the assistant default: no surface, full width, primary text */
+.ds-chat-message--plain .ds-chat-message__content {
+  width: 100%;
+  color: var(--color-text-primary);
+}
+
+/* Card furniture inside a turn steps clear of the content around it — at
+   the body's default rhythm an adjacent text line sits close enough to read
+   as a caption rather than a neighbouring block. Margins, not gap, so a
+   card standing alone adds nothing. */
+.ds-chat-message__content > .ds-message-card:not(:first-child),
+.ds-chat-message__content > .ds-interrupt-card:not(:first-child),
+.ds-chat-message__content > .ds-tool-call:not(:first-child) {
+  margin-top: var(--gap-sm-md);
+}
+
+.ds-chat-message__content > .ds-message-card:not(:last-child),
+.ds-chat-message__content > .ds-interrupt-card:not(:last-child),
+.ds-chat-message__content > .ds-tool-call:not(:last-child) {
+  margin-bottom: var(--gap-sm-md);
+}
+
+/* Bubble — capped width so a short line never drags a surface across the
+   whole row; the fallback is the sanctioned consumer-override hook */
+.ds-chat-message--bubble .ds-chat-message__content {
+  max-width: var(--ds-chat-message-max-width, 75%);
+  padding: var(--padding-sm-md) var(--padding-lg);
+  border-radius: var(--radius-xl);
+}
+
+/* Sent — the user's own turns */
+.ds-chat-message--bubble.ds-chat-message--user .ds-chat-message__content {
+  background-color: var(--color-chat-bubble-sent-bg);
+  color: var(--color-chat-bubble-sent-text);
+}
+
+/* Received — an assistant turn opted into a bubble */
+.ds-chat-message--bubble.ds-chat-message--assistant .ds-chat-message__content {
+  background-color: var(--color-chat-bubble-received-bg);
+  color: var(--color-chat-bubble-received-text);
+}
+
+/* Tail — the speaker-side bottom corner squares off to point at them */
+.ds-chat-message--tail.ds-chat-message--bubble.ds-chat-message--user
+  .ds-chat-message__content {
+  border-bottom-right-radius: var(--radius-xs);
+}
+
+.ds-chat-message--tail.ds-chat-message--bubble.ds-chat-message--assistant
+  .ds-chat-message__content {
+  border-bottom-left-radius: var(--radius-xs);
+}
+
+/* ============================================
+   GROUPED
+   A follow-on row in the same speaker's run:
+   no meta, avatar hidden but gutter kept, and
+   the row pulls up towards the one above so the
+   run reads as one utterance. The negative
+   margin offsets part of the container's gap.
+   ============================================ */
+
+.ds-chat-message--grouped {
+  margin-top: calc(-1 * var(--gap-sm));
+}
+
+/* ============================================
+   COMPACT
+   ============================================ */
+
+.ds-chat-message--compact .ds-chat-message__content {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+}
+
+.ds-chat-message--compact.ds-chat-message--bubble .ds-chat-message__content {
+  padding: var(--padding-xs) var(--padding-sm-md);
+}
+
+/* ============================================
+   PENDING
+   Three dots pulsing in sequence while the
+   first content is still on its way.
+   ============================================ */
+
+.ds-chat-message__pending {
+  --ds-chat-message-pending-cycle: var(--motion-duration-loop-matrix);
+
+  display: inline-flex;
+  align-items: center;
+}
+
+.ds-chat-message__dots {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-xs);
+}
+
+.ds-chat-message__dot {
+  width: var(--gap-sm);
+  height: var(--gap-sm);
+  border-radius: var(--radius-full);
+  background-color: var(--color-text-tertiary);
+  opacity: 0.25;
+  animation: ds-chat-message-dot var(--ds-chat-message-pending-cycle)
+    var(--motion-ease-linear) infinite;
+}
+
+.ds-chat-message__dot:nth-child(2) {
+  animation-delay: calc(var(--ds-chat-message-pending-cycle) / 6);
+}
+
+.ds-chat-message__dot:nth-child(3) {
+  animation-delay: calc(var(--ds-chat-message-pending-cycle) / 3);
+}
+
+/* Each dot brightens and falls back within the first half of the cycle, so
+   the stagger reads as a wave rather than three independent blinkers */
+@keyframes ds-chat-message-dot {
+  0%,
+  60%,
+  100% {
+    opacity: 0.25;
+  }
+
+  30% {
+    opacity: 1;
+  }
+}
+
+/* ============================================
+   ACTIONS
+   Hidden until the row is hovered or holds
+   keyboard focus; touch has no hover, so there
+   they stay visible.
+
+   Opacity only, never visibility: hidden would
+   drop the buttons from the tab order, so a
+   message with no other focusable child could
+   never match :focus-within and keyboard users
+   could never reach the actions. Invisible-but-
+   tabbable is the point — the first Tab into a
+   button reveals the row.
+   ============================================ */
+
+.ds-chat-message__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  /* The row hides with opacity, not display, so this offset is always
+     reserved — the body's own gap plus this margin sets the row a full
+     --gap-md off the content without loosening the meta stack above. */
+  margin-top: var(--gap-sm-md);
+  opacity: 0;
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-chat-message:hover .ds-chat-message__actions,
+.ds-chat-message:focus-within .ds-chat-message__actions {
+  opacity: 1;
+}
+
+/* showActions pins the row on: the actions are part of the response, not a
+   secondary affordance to discover. */
+.ds-chat-message--show-actions .ds-chat-message__actions {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .ds-chat-message__actions {
+    opacity: 1;
+  }
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+
+.ds-chat-message__footer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--gap-xs);
+}
+
+/* ============================================
+   VISUALLY HIDDEN
+   The pending label is for screen readers only.
+   ============================================ */
+
+.ds-chat-message__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ============================================
+   REDUCED MOTION
+   The global guard collapses the loop to its
+   final frame, which is the dim phase — three
+   near-invisible dots. Park them at a legible
+   static opacity instead; the visually hidden
+   label still says what is happening.
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-chat-message__dot {
+    animation: none;
+    opacity: 0.55;
+  }
+}

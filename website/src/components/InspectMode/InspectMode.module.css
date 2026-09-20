@@ -1,0 +1,211 @@
+/* Inspect mode: turns the live page into its own spec, on the surfaces
+   that host its switch in a StageToolbar. Everything here is chrome for
+   the inspector, drawn with the system's own tokens; the layers stack
+   below the site chat (1080+) so the panel stays reachable while
+   inspecting. */
+
+/* ── Section redlines ─────────────────────────────────────────── */
+
+.sectionBox {
+  position: fixed;
+  z-index: 1040;
+  pointer-events: none;
+  border: var(--border-xs) dashed var(--color-core-accent-coral);
+}
+
+.sectionLabel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateY(-100%);
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--gap-xs);
+  max-width: 100%;
+  padding: 0 var(--padding-xxs);
+  font-family: var(--font-family-code);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  color: var(--color-text-on-inverse);
+  background: var(--color-core-accent-coral);
+  border-radius: var(--radius-xxs) var(--radius-xxs) 0 0;
+  white-space: nowrap;
+}
+
+.sectionDims {
+  font-weight: var(--font-paragraph-sm-weight);
+  opacity: 0.8;
+}
+
+/* A section whose top edge sits above the viewport keeps its label readable
+   by flipping it inside the box. */
+.sectionLabelInside {
+  transform: none;
+  border-radius: 0 0 var(--radius-xxs) 0;
+}
+
+/* ── Hover target ─────────────────────────────────────────────── */
+
+.hoverBox {
+  position: fixed;
+  z-index: 1050;
+  pointer-events: none;
+  border: var(--border-xs) solid var(--color-action-primary-bg);
+  background: color-mix(in srgb, var(--color-action-primary-bg) 8%, transparent);
+}
+
+.hoverDims {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  transform: translateY(100%);
+  padding: 0 var(--padding-xxs);
+  font-family: var(--font-family-code);
+  font-size: var(--font-paragraph-sm-size);
+  color: var(--color-action-primary-text);
+  background: var(--color-action-primary-bg);
+  border-radius: 0 0 var(--radius-xxs) var(--radius-xxs);
+  white-space: nowrap;
+}
+
+/* ── Popover ──────────────────────────────────────────────────── */
+
+.popover {
+  position: fixed;
+  z-index: 1060;
+  width: 320px;
+  max-width: calc(100vw - var(--padding-lg) * 2);
+  max-height: 70vh;
+  overflow-y: auto;
+  pointer-events: none;
+  padding: var(--padding-sm) var(--padding-md);
+  background: color-mix(in srgb, var(--color-bg-container-primary) 88%, transparent);
+  backdrop-filter: blur(24px);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-floating);
+}
+
+.popoverPinned {
+  pointer-events: auto;
+  user-select: text;
+}
+
+.popoverHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--gap-xs);
+  padding-bottom: var(--padding-xxs);
+  border-bottom: var(--border-xs) solid var(--color-divider);
+  margin-bottom: var(--padding-xxs);
+}
+
+.popoverName {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-overline-weight);
+  color: var(--color-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.popoverKind {
+  flex: none;
+  font-family: var(--font-family-primary);
+  font-size: var(--font-paragraph-sm-size);
+  color: var(--color-text-tertiary);
+}
+
+.popoverKindComponent {
+  color: var(--color-action-primary-text-tertiary);
+}
+
+.popoverTag {
+  font-family: var(--font-family-code);
+  font-size: var(--font-paragraph-sm-size);
+  color: var(--color-text-tertiary);
+  margin: 0 0 var(--padding-xxs);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rowList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxs);
+  margin: 0;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 88px 1fr;
+  gap: var(--gap-xs);
+  align-items: start;
+}
+
+.rowProp {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-xxs);
+  font-family: var(--font-family-primary);
+  font-size: var(--font-paragraph-sm-size);
+  color: var(--color-text-secondary);
+}
+
+/* The colour circle beside a colour row — round on purpose, so it reads
+   as a paint chip rather than a checkbox. */
+.swatch {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-full);
+  border: var(--border-xs) solid var(--color-divider);
+}
+
+.rowTokens {
+  font-family: var(--font-family-code);
+  font-size: var(--font-paragraph-sm-size);
+  color: var(--color-text-primary);
+  word-break: break-all;
+}
+
+/* The lead token's chain into the primitive layer — the tier the semantic
+   name resolves from, so a hover reads value → token → primitive. */
+.rowPrimitive {
+  display: block;
+  color: var(--color-action-primary-text-tertiary);
+}
+
+.rowValue {
+  display: block;
+  color: var(--color-text-tertiary);
+}
+
+.rowOffToken {
+  color: var(--color-status-warning-text);
+}
+
+.popoverHint {
+  margin: var(--padding-xxs) 0 0;
+  font-family: var(--font-family-primary);
+  font-size: var(--font-paragraph-sm-size);
+  color: var(--color-text-tertiary);
+}
+
+/* Hosting inside a toolbar's actions slot: just an inline shell for the
+   system's ToggleSwitch — the toolbar owns position and spacing. */
+.switchHost {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Matches the playground's compact breakpoint, below which the toolbar
+   has no room for the switch — and inspection is a hover interaction. */
+@media (max-width: 1099px) {
+  .desktopOnly {
+    display: none;
+  }
+}

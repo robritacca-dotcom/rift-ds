@@ -1,0 +1,72 @@
+/* ============================================
+   MOTION TOKENS
+   Durations and easing curves for transitions
+   and animations. Theme-agnostic (no light/dark
+   split) — defined once in :root, like typography.
+   ============================================ */
+
+:root {
+  /* ============================================
+     DURATIONS — CORE
+     The day-to-day scale. Most transitions use
+     base; fast is for hover feedback, slow for
+     structural changes, slower for page reveals.
+     ============================================ */
+
+  --motion-duration-fast: 150ms;     /* Quick feedback: hovers, icons, tooltips */
+  --motion-duration-base: 200ms;     /* Default for color/opacity/border transitions */
+  --motion-duration-slow: 300ms;     /* Structural: accordion, sidebar, toast enter */
+  --motion-duration-slower: 600ms;   /* Deliberate page-entrance reveals */
+
+  /* ============================================
+     DURATIONS — EXTENDED
+     Special-purpose timings; not part of the
+     day-to-day scale.
+     ============================================ */
+
+  --motion-duration-instant: 75ms;        /* Sub-threshold: takes the edge off a size change without reading as motion (Composer grow/shrink) */
+  --motion-duration-deliberate: 400ms;    /* Carousel slide */
+  --motion-duration-loop-spin: 1000ms;    /* Spinner rotation */
+  --motion-duration-loop-shimmer: 1800ms; /* Skeleton shimmer, agent label sweep */
+  --motion-duration-loop-matrix: 1400ms;  /* Agent dot-matrix cycle (twelve slots) */
+
+  /* ============================================
+     EASINGS
+     ============================================ */
+
+  --motion-ease-standard: ease;                                /* General default */
+  --motion-ease-emphasized: cubic-bezier(0.4, 0, 0.2, 1);      /* Size/layout changes */
+  --motion-ease-entrance: cubic-bezier(0.16, 1, 0.3, 1);       /* Decelerate for enter animations */
+  --motion-ease-linear: linear;                                /* Continuous loops: spinner, progress */
+  --motion-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);     /* Playful overshoot: toggle thumb */
+}
+
+/* ============================================
+   REDUCED MOTION
+   Token collapse covers token-consuming CSS;
+   the universal guard covers components still
+   on hardcoded timings.
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-duration-fast: 0.01ms;
+    --motion-duration-base: 0.01ms;
+    --motion-duration-slow: 0.01ms;
+    --motion-duration-slower: 0.01ms;
+    --motion-duration-instant: 0.01ms;
+    --motion-duration-deliberate: 0.01ms;
+    --motion-duration-loop-spin: 0.01ms;
+    --motion-duration-loop-shimmer: 0.01ms;
+    --motion-duration-loop-matrix: 0.01ms;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

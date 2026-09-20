@@ -1,0 +1,417 @@
+/* ============================================
+   COMPOSER COMPONENT
+   The chat input shell: attachments, auto-growing textarea, send/stop
+   ============================================ */
+
+/* The focus treatment animates a registered custom property, exactly as
+   AiButton does: a conic gradient's angle cannot tween otherwise. Browsers
+   without @property render the ring at its initial angle, static — a
+   correct, quieter fallback. Registered under its own name so Composer
+   never depends on AiButton's stylesheet being loaded. */
+@property --ds-composer-glow-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.ds-composer {
+  /* Anchors the focus ring and glow pseudo-elements */
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  /* The send button's diameter — CircularButton's default size, which is
+     a raw value in CircularButton.css too (icon-button sizes are not on
+     a token scale). Everything concentric derives from it. */
+  --ds-composer-send-size: 40px;
+  background-color: var(--color-input-bg-primary);
+  border: var(--border-xs) solid var(--color-input-border-primary);
+  /* The token's default is concentric with the send button: half the
+     button, plus the action bar's padding-sm ring, plus the border width
+     (border-radius applies to the border's outer edge). A token rather
+     than the calc so radius re-theming reaches this corner too. */
+  border-radius: var(--radius-composer);
+  box-shadow: var(--shadow-floating);
+  transition: border-color var(--motion-duration-fast) var(--motion-ease-standard);
+  /* The whole shell is the input affordance — clicking anywhere that is
+     not a control focuses the textarea, and the cursor says so. The
+     action bar below opts back out. */
+  cursor: text;
+}
+
+/* The shell carries the input focus/hover treatment — the textarea inside
+   is borderless, so the whole surface reads as one control */
+.ds-composer:hover:not(:focus-within) {
+  border-color: var(--color-input-border-hover);
+}
+
+.ds-composer:focus-within {
+  border-color: var(--color-input-border-selected);
+}
+
+/* ============================================
+   AI GLOW — opt-in via the `aiGlow` prop
+   While focused, the plain selected border stands down and the AI gradient
+   ring takes its place — the same "a model answers here" signal AiButton
+   carries, for composers whose messages are answered by a model.
+   ============================================ */
+
+.ds-composer--ai-glow:focus-within {
+  border-color: transparent;
+}
+
+/* The gradient ring: AiButton's treatment on the composer shell — a conic
+   gradient painted across the whole box, masked to the border band (two
+   fills, exclude-composited, inset by the border width). The gradient
+   repeats back to its start colour so the seam at 360° is invisible while
+   it turns. Negative inset lays the pseudo over the shell's own border
+   box, so the ring replaces the border exactly. */
+.ds-composer--ai-glow::before {
+  content: '';
+  position: absolute;
+  inset: calc(-1 * var(--border-xs));
+  border-radius: inherit;
+  /* One step up from the shell's --border-xs border: the outer edge stays on
+     the border box and the extra pixel grows inward, so the thicker band
+     reads clearly on low-density screens without changing the geometry. */
+  padding: var(--border-md);
+  background: conic-gradient(
+    from var(--ds-composer-glow-angle),
+    var(--color-ai-gradient-start),
+    var(--color-ai-gradient-mid),
+    var(--color-ai-gradient-end),
+    var(--color-ai-gradient-mid),
+    var(--color-ai-gradient-start)
+  );
+  /* Standard properties only — the build pipeline prefixes per its browser
+     targets, and hand-written -webkit- duplicates confuse its merging. */
+  /* ds-allow(color): mask luminance keying — the #fff paints alpha coverage
+     for mask-composite, not a theme colour */
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+  /* ds-allow(motion): ambient signature rotation, matched to AiButton's —
+     deliberately far slower than the interaction-scale motion tokens; the
+     21s loop is AiButton's three-uneven-turns cadence */
+  animation: ds-composer-glow-turn 21s var(--motion-ease-emphasized) infinite paused;
+}
+
+/* The glow: the same gradient, blurred behind the opaque shell at low
+   opacity, so it reads as a halo around the border. A colour effect, not
+   an elevation shadow — depth stays token-owned. */
+.ds-composer--ai-glow::after {
+  content: '';
+  position: absolute;
+  inset: calc(-1 * var(--border-xs));
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--ds-composer-glow-angle),
+    var(--color-ai-gradient-start),
+    var(--color-ai-gradient-mid),
+    var(--color-ai-gradient-end),
+    var(--color-ai-gradient-mid),
+    var(--color-ai-gradient-start)
+  );
+  /* The glow's spread; a length with no token family, matched to AiButton. */
+  --ds-composer-glow: 14px;
+  filter: blur(var(--ds-composer-glow));
+  opacity: 0;
+  /* Resting, the glow waits collapsed at the send-button corner (fractions
+     chosen by eye, matching AiButton's entry) — waking is a bloom out of
+     that corner, not a flat fade. This rest-state transition is the way
+     back: losing focus collapses the halo quickly on the base pace. */
+  transform-origin: 95% 85%;
+  transform: scale(0.35);
+  z-index: -1;
+  pointer-events: none;
+  transition:
+    opacity var(--motion-duration-base) var(--motion-ease-standard),
+    transform var(--motion-duration-base) var(--motion-ease-standard);
+  /* ds-allow(motion): same ambient rotation as the ring, kept in phase */
+  animation: ds-composer-glow-turn 21s var(--motion-ease-emphasized) infinite paused;
+}
+
+/* Waking: the entry. The glow blooms out of the send-button corner over
+   the entrance pace and the ring fades up a --motion-duration-fast beat
+   behind it — the transition here (the destination state's) governs the
+   way in; the resting rules above govern the quick way back. */
+.ds-composer--ai-glow:focus-within::before {
+  opacity: 1;
+  transition: opacity var(--motion-duration-slower) var(--motion-ease-entrance) var(--motion-duration-fast);
+  animation-play-state: running;
+}
+
+.ds-composer--ai-glow:focus-within::after {
+  opacity: 0.3;
+  transform: none;
+  transition:
+    opacity var(--motion-duration-slower) var(--motion-ease-entrance),
+    transform var(--motion-duration-slower) var(--motion-ease-entrance);
+  animation-play-state: running;
+}
+
+/* AiButton's cadence, restated on the Composer-scoped angle: three uneven
+   turns eased per segment, ending on a whole turn so the wrap is seamless
+   and the average pace stays one turn per 7s. */
+@keyframes ds-composer-glow-turn {
+  0% {
+    --ds-composer-glow-angle: 0deg;
+  }
+  14% {
+    --ds-composer-glow-angle: 168deg;
+  }
+  31% {
+    --ds-composer-glow-angle: 306deg;
+  }
+  46% {
+    --ds-composer-glow-angle: 570deg;
+  }
+  62% {
+    --ds-composer-glow-angle: 690deg;
+  }
+  79% {
+    --ds-composer-glow-angle: 936deg;
+  }
+  100% {
+    --ds-composer-glow-angle: 1080deg;
+  }
+}
+
+/* Working: while a response streams, the ring stays lit and keeps turning
+   whether or not the field holds focus — the visible half of the `streaming`
+   contract for glowing composers. The pairing is defined in design.md's
+   Composer section; streaming without aiGlow changes nothing. */
+.ds-composer--ai-glow.ds-composer--streaming {
+  border-color: transparent;
+}
+
+.ds-composer--ai-glow.ds-composer--streaming::before {
+  opacity: 1;
+  transition: opacity var(--motion-duration-slower) var(--motion-ease-entrance) var(--motion-duration-fast);
+  animation-play-state: running;
+}
+
+.ds-composer--ai-glow.ds-composer--streaming::after {
+  opacity: 0.3;
+  transform: none;
+  transition:
+    opacity var(--motion-duration-slower) var(--motion-ease-entrance),
+    transform var(--motion-duration-slower) var(--motion-ease-entrance);
+  animation-play-state: running;
+}
+
+/* Reduced motion: the ring and glow stay, the turning stops. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-composer--ai-glow::before,
+  .ds-composer--ai-glow::after {
+    animation: none;
+  }
+}
+
+/* ============================================
+   CONTEXT CHIP
+   A full-width, non-interactive note at the very top of the shell — what
+   the model is currently looking at. Composer owns the chrome; the caller
+   passes the text.
+   ============================================ */
+
+.ds-composer__context {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  /* The action bar's tight --padding-sm ring, open toward the text below */
+  margin: var(--padding-sm) var(--padding-sm) 0;
+  /* ModelPicker's trigger geometry — the send button's height with the same
+     0/padding-md inset — so the chip and the bar's pills read as one family */
+  height: var(--ds-composer-send-size);
+  padding: 0 var(--padding-md);
+  background-color: var(--color-chat-context-bg);
+  /* A full pill, matching the suggestion chips around the composer */
+  border-radius: var(--radius-full);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  /* Tertiary, like DocumentChip's metadata line — the note is ambient
+     context, quieter than anything a person typed. The icon inherits it:
+     one tone for the whole note. */
+  color: var(--color-text-tertiary);
+  /* Not editable, not a control — but a click still falls through the shell
+     handler and focuses the textarea */
+  cursor: default;
+}
+
+.ds-composer__context-icon {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.ds-composer__context-icon .material-symbols-rounded {
+  --icon-size: var(--icon-size-sm);
+}
+
+/* The text owns the truncation: one line, ellipsized only when the note
+   actually outgrows the shell — an ellipsis is a truncation mark, not
+   punctuation. The icon beside it never shrinks. */
+.ds-composer__context-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ============================================
+   ATTACHMENTS ROW
+   ============================================ */
+
+.ds-composer__attachments {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--gap-xs);
+  /* Top ring only — the text zone below keeps its own full padding-md,
+     so chips sit a clear padding-md above the first text line */
+  padding: var(--padding-md) var(--padding-lg) 0;
+}
+
+/* ============================================
+   CONTENT ZONE
+   The text zone breathes more than the action bar: generous top and
+   inline padding, tighter toward the bar below it.
+   ============================================ */
+
+.ds-composer__content {
+  display: flex;
+  /* The textarea keeps its own natural height rather than stretching to the
+     zone's — the measurement below reads it, so a stretched textarea would
+     feed its own height back in and the zone could never shrink. */
+  align-items: flex-start;
+  box-sizing: border-box;
+  width: 100%;
+  padding: var(--padding-md) var(--padding-lg) var(--padding-sm);
+  /* Growing and shrinking is animated, which needs two pixel heights to run
+     between — `auto` has nothing to interpolate. So the zone states its own
+     height: the measured textarea (published as --ds-composer-text-height on
+     every resize) plus the block padding it owns. The fallback is a single
+     row, which is what the shell renders before the first measurement. */
+  height: calc(
+    var(--ds-composer-text-height, var(--font-paragraph-line-height)) + var(--padding-md) +
+      var(--padding-sm)
+  );
+  /* Mid-transition the textarea is already at its new height, so the extra
+     line is clipped on the way in and released on the way out. */
+  overflow: hidden;
+  transition: height var(--motion-duration-instant) var(--motion-ease-emphasized);
+}
+
+.ds-composer__textarea {
+  width: 100%;
+  padding: 0;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  resize: none;
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+  color: var(--color-input-text-primary);
+  /* Growth cap: the shell owns the block padding, so the cap is rows × line-height.
+     --ds-composer-max-rows is set inline from the maxRows prop. */
+  max-height: calc(var(--ds-composer-max-rows, 8) * var(--font-paragraph-line-height));
+  overflow-y: auto;
+}
+
+.ds-composer__textarea::placeholder {
+  color: var(--color-input-text-placeholder);
+}
+
+/* Overflow scrollbar — thin, trackless, and quiet instead of the bulky
+   platform default. scrollbar-* covers Firefox and modern Chromium;
+   the -webkit rules cover Safari. */
+.ds-composer__textarea {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-bg-container-secondary) transparent;
+}
+
+.ds-composer__textarea::-webkit-scrollbar {
+  width: 6px;
+}
+
+.ds-composer__textarea::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.ds-composer__textarea::-webkit-scrollbar-thumb {
+  background-color: var(--color-bg-container-secondary);
+  border-radius: var(--radius-full);
+}
+
+/* Native auto-grow where supported; the JS measurement path stands down
+   (it checks the same capability) */
+@supports (field-sizing: content) {
+  .ds-composer__textarea {
+    field-sizing: content;
+  }
+}
+
+/* ============================================
+   FOOTER ROW
+   ============================================ */
+
+.ds-composer__footer {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  /* The tight uniform ring the concentric corner is computed from */
+  padding: var(--padding-sm);
+  /* Empty bar space still focuses the textarea on click, but the bar is
+     control territory, so it keeps the default cursor. */
+  cursor: default;
+}
+
+.ds-composer__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xs);
+}
+
+.ds-composer__trailing {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  margin-left: auto;
+}
+
+/* ============================================
+   DISABLED
+   ============================================ */
+
+.ds-composer--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background-color: var(--color-input-bg-disabled);
+}
+
+.ds-composer--disabled:hover:not(:focus-within),
+.ds-composer--disabled:focus-within {
+  border-color: var(--color-input-border-disabled);
+}
+
+.ds-composer--disabled:focus-within::before,
+.ds-composer--disabled:focus-within::after {
+  opacity: 0;
+  animation-play-state: paused;
+}
+
+.ds-composer--disabled .ds-composer__textarea {
+  cursor: not-allowed;
+  color: var(--color-input-text-disabled);
+}

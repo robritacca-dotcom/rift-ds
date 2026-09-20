@@ -1,0 +1,10 @@
+/* Full-bleed working canvas, like the other immersive stage surfaces: the
+   instrument takes the whole viewport width, with only the minimum gutter. */
+.page {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  padding-inline: var(--padding-lg);
+  /* Room for the floating stage toolbar, like the other immersive surfaces. */
+  padding-top: var(--layout-stage-clearance);
+}

@@ -1,0 +1,17 @@
+/* ============================================
+   FUNNEL CHART COMPONENT
+   Centred trapezoid funnel built on Recharts'
+   native Funnel. Card chrome, header, padding
+   and the tooltip surface all come from the
+   shared chart styles (Chart.css); colour
+   arrives per stage as a chart-series token
+   resolved live in SVG paint. This file owns
+   only what the shared styles cannot reach.
+   ============================================ */
+
+/* The stage-name labels draw as SVG text, which inherits no typography from
+   the shared chart classes — pin them to the family's primary face. */
+
+.ds-funnel-chart .recharts-label-list text {
+  font-family: var(--font-family-primary);
+}

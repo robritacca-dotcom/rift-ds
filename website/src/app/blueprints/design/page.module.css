@@ -1,0 +1,332 @@
+/* ============================================
+   DESIGN MD PAGE LAYOUT
+   ============================================ */
+.dsLayout {
+  display: flex;
+  gap: var(--layout-column-gap);
+  width: 100%;
+  max-width: 1440px;
+  padding-top: var(--primitive-gap-xl);
+}
+
+.dsContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxxl);
+  min-width: 0;
+}
+
+/* ============================================
+   INTRO SECTION
+   ============================================ */
+.introSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-lg);
+}
+
+.subDisplay {
+  font-family: var(--font-sub-display-family);
+  font-size: var(--font-sub-display-size);
+  font-weight: var(--font-sub-display-weight);
+  line-height: var(--font-sub-display-line-height);
+  letter-spacing: var(--font-sub-display-letter-spacing);
+  color: var(--color-text-primary);
+  margin-bottom: 0;
+}
+
+.introBody {
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   PAGE HEADER
+   ============================================ */
+.pageHeader {
+  margin-top: calc(var(--primitive-gap-xl) - var(--gap-xxxl));
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--primitive-gap-lg);
+  width: 100%;
+}
+
+.pageTitle {
+  font-size: var(--font-display-2-size);
+  font-weight: var(--font-display-2-weight);
+  line-height: var(--font-display-2-line-height);
+  letter-spacing: var(--font-display-2-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   MARKDOWN BODY
+   Reset all default margins, then set
+   per-element vertical rhythm explicitly.
+   ============================================ */
+/* The doc takes the full row; the on-this-page nav floats over the right
+   viewport edge (FloatingAnchorNav) instead of costing a column */
+.docLayout {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--layout-column-gap);
+  width: 100%;
+}
+
+.markdownBody {
+  flex: 1;
+  min-width: 0;
+}
+
+.markdownBody > *,
+.markdownBody :global(*) {
+  margin: 0;
+}
+
+/* H2 — top-level sections (Colors, Typography, Components, etc.)
+   Uses sub-display (30px / weight 300) for a light, airy major-section header.
+   The light weight contrasts hard with the bold h3 below it, making hierarchy unmistakable. */
+.markdownBody :global(h2) {
+  font-family: var(--font-sub-display-family);
+  font-size: var(--font-sub-display-size);
+  font-weight: var(--font-sub-display-weight);
+  line-height: var(--font-sub-display-line-height);
+  letter-spacing: var(--font-sub-display-letter-spacing);
+  color: var(--color-text-primary);
+  padding-bottom: var(--primitive-padding-sm);
+  border-bottom: 1px solid var(--color-divider);
+  margin-top: var(--gap-xxl);
+  margin-bottom: var(--primitive-gap-md);
+}
+
+.markdownBody :global(h2:first-child) {
+  margin-top: 0;
+}
+
+/* H3 — sub-sections (Token Tiers, Action / Brand, Surfaces, etc.)
+   heading-3 (22px / weight 600) — clearly smaller and bolder than h2. */
+.markdownBody :global(h3) {
+  font-family: var(--font-heading-3-family);
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+  letter-spacing: var(--font-heading-3-letter-spacing);
+  color: var(--color-text-primary);
+  margin-top: var(--primitive-gap-xl);
+  margin-bottom: var(--primitive-gap-sm);
+}
+
+/* H4 — minor headings
+   title-body (16px / weight 600) — paragraph-sized, bold. Inline with body copy hierarchy. */
+.markdownBody :global(h4) {
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  letter-spacing: var(--font-title-body-letter-spacing);
+  color: var(--color-text-primary);
+  margin-top: var(--primitive-gap-md);
+  margin-bottom: var(--primitive-gap-xs);
+}
+
+/* Bold-only paragraphs act as inline headings (e.g. "Key Characteristics:") */
+.markdownBody :global(p:has(> strong:only-child)) {
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  letter-spacing: var(--font-title-body-letter-spacing);
+  color: var(--color-text-primary);
+  margin-top: var(--primitive-gap-md);
+  margin-bottom: var(--primitive-gap-xs);
+}
+
+/* Paragraphs */
+.markdownBody :global(p) {
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--primitive-gap-md);
+}
+
+.markdownBody :global(p:last-child) {
+  margin-bottom: 0;
+}
+
+/* Strong / bold */
+.markdownBody :global(strong) {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+/* Inline code */
+.markdownBody :global(code) {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 13px;
+  padding: 1px 6px;
+  border-radius: var(--primitive-radius-xs);
+  background: var(--color-bg-container-secondary);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}
+
+/* Code blocks (pre > code) */
+.markdownBody :global(pre) {
+  background: var(--color-bg-container-primary);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--primitive-radius-md);
+  padding: var(--primitive-padding-md);
+  margin-bottom: var(--primitive-gap-md);
+  overflow-x: auto;
+}
+
+.markdownBody :global(pre code) {
+  background: none;
+  padding: 0;
+  border-radius: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre;
+}
+
+/* Lists */
+.markdownBody :global(ul),
+.markdownBody :global(ol) {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-xs);
+  padding-left: var(--primitive-padding-md);
+  margin-bottom: var(--primitive-gap-md);
+}
+
+.markdownBody :global(li) {
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-secondary);
+  list-style-type: disc;
+  padding-left: var(--primitive-padding-xxs);
+}
+
+.markdownBody :global(ol li) {
+  list-style-type: decimal;
+}
+
+.markdownBody :global(li > p) {
+  margin-bottom: 0;
+}
+
+.markdownBody :global(li > ul),
+.markdownBody :global(li > ol) {
+  margin-top: var(--primitive-gap-xs);
+  margin-bottom: 0;
+}
+
+/* Hide horizontal rules — h2 borders provide section separation */
+.markdownBody :global(hr) {
+  display: none;
+}
+
+/* ============================================
+   TABLES
+   Wrapped in .tableWrapper for horizontal scroll
+   ============================================ */
+.tableWrapper {
+  overflow-x: auto;
+  border: 1px solid var(--color-divider);
+  border-radius: var(--primitive-radius-md);
+  margin-bottom: var(--primitive-gap-md);
+  background: var(--color-bg-page-primary);
+}
+
+.tableWrapper :global(table) {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  table-layout: auto;
+}
+
+.tableWrapper :global(thead) {
+  background: var(--color-bg-container-primary);
+}
+
+.tableWrapper :global(th) {
+  text-align: left;
+  font-weight: 600;
+  font-size: var(--font-paragraph-sm-em-size);
+  color: var(--color-text-primary);
+  padding: var(--primitive-padding-sm-md) var(--primitive-padding-md);
+  border-bottom: 1px solid var(--color-divider);
+  white-space: nowrap;
+}
+
+.tableWrapper :global(td) {
+  padding: var(--primitive-padding-sm-md) var(--primitive-padding-md);
+  color: var(--color-text-secondary);
+  border-bottom: 1px solid var(--color-divider);
+  vertical-align: top;
+  line-height: 1.5;
+}
+
+.tableWrapper :global(td code),
+.tableWrapper :global(th code) {
+  white-space: nowrap;
+}
+
+.tableWrapper :global(tbody tr:last-child td) {
+  border-bottom: none;
+}
+
+.tableWrapper :global(tbody tr) {
+  transition: background-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.tableWrapper :global(tbody tr:hover) {
+  background: var(--color-bg-container-primary);
+}
+
+/* ============================================
+   ANCHOR RAIL (on-this-page column)
+   ============================================ */
+/* Anchor targets clear the sticky MegaNav overlay and its frosted
+   backdrop — the shared clearance in globals.css owns the geometry */
+.markdownBody :global(h2) {
+  scroll-margin-top: var(--layout-anchor-clearance);
+}
+
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 959px) {
+  .pageHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--primitive-gap-md);
+  }
+
+  .dsLayout {
+    padding-left: 0;
+    min-width: 0;
+  }
+
+
+  .markdownBody {
+    max-width: 100%;
+  }
+
+  .markdownBody :global(h2) {
+    font-size: 26px;
+    line-height: 32px;
+  }
+
+  .markdownBody :global(h3) {
+    font-size: 18px;
+    line-height: 24px;
+  }
+}

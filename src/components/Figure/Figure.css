@@ -1,0 +1,71 @@
+/* ============================================
+   FIGURE COMPONENT
+   Image + caption in a rounded container.
+   Pass onClick for a zoomable (lightbox) figure.
+   ============================================ */
+
+.ds-figure {
+  margin: 0;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background-color: var(--color-bg-container-secondary);
+}
+
+/* ============================================
+   MEDIA — child img/picture fills the width
+   ============================================ */
+
+.ds-figure__media {
+  display: block;
+  line-height: 0;
+}
+
+.ds-figure__media img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+/* ============================================
+   CAPTION
+   ============================================ */
+
+.ds-figure__caption {
+  display: block;
+  padding: var(--padding-md) var(--padding-lg);
+  border-top: var(--border-xs) solid var(--color-bg-container-border);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-tertiary);
+}
+
+/* ============================================
+   ZOOMABLE (has onClick)
+   ============================================ */
+
+/* The zoom control is a real <button> wrapping the media (ARIA forbids
+   role="button" on <figure>), stripped back to a bare block. */
+.ds-figure__zoom {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  cursor: zoom-in;
+}
+
+.ds-figure__zoom:hover .ds-figure__media img {
+  opacity: 0.88;
+}
+
+/* Inset ring: the button sits inside the figure's overflow clip, so an
+   outset outline would be cropped away. */
+.ds-figure__zoom:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: -2px;
+}

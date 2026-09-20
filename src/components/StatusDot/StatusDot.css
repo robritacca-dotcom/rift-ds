@@ -1,0 +1,104 @@
+/* ============================================
+   STATUS DOT COMPONENT
+   Bare presence/status indicator with optional
+   label and live pulse
+   ============================================ */
+
+/* Base */
+
+.ds-status-dot {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-xs);
+}
+
+.ds-status-dot__indicator {
+  position: relative;
+  flex-shrink: 0;
+  border-radius: var(--radius-full);
+}
+
+.ds-status-dot__label {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+/* Sizes — the dot rides the icon scale at half-diameter, so it can never
+   drift from the glyphs it sits beside. */
+
+.ds-status-dot--sm .ds-status-dot__indicator {
+  width: calc(var(--icon-size-sm) / 2); /* 10px */
+  height: calc(var(--icon-size-sm) / 2);
+}
+
+.ds-status-dot--md .ds-status-dot__indicator {
+  width: calc(var(--icon-size-md) / 2); /* 12px */
+  height: calc(var(--icon-size-md) / 2);
+}
+
+.ds-status-dot--lg .ds-status-dot__indicator {
+  width: calc(var(--icon-size-lg) / 2); /* 16px */
+  height: calc(var(--icon-size-lg) / 2);
+}
+
+/* Variants — the plain-surface icon steps, tuned to hold on bare
+   containers where the status text tints wash out. */
+
+.ds-status-dot--info .ds-status-dot__indicator {
+  background-color: var(--color-status-info-icon);
+}
+
+.ds-status-dot--positive .ds-status-dot__indicator {
+  background-color: var(--color-status-positive-icon);
+}
+
+.ds-status-dot--warning .ds-status-dot__indicator {
+  background-color: var(--color-status-warning-icon);
+}
+
+.ds-status-dot--error .ds-status-dot__indicator {
+  background-color: var(--color-status-error-icon);
+}
+
+.ds-status-dot--neutral .ds-status-dot__indicator {
+  background-color: var(--color-status-neutral-icon);
+}
+
+/* Pulse — a ring of the dot's own colour swelling out and fading, on the
+   shimmer loop so every live indicator in the system breathes at one rate. */
+
+.ds-status-dot--pulse .ds-status-dot__indicator::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-full);
+  background-color: inherit;
+  animation: ds-status-dot-pulse var(--motion-duration-loop-shimmer) var(--motion-ease-standard)
+    infinite;
+}
+
+@keyframes ds-status-dot-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  70%,
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+/* The looping ring parks rather than strobing through the collapsed
+   duration — same treatment as the other looping indicators. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-status-dot--pulse .ds-status-dot__indicator::after {
+    animation: none;
+    opacity: 0;
+  }
+}

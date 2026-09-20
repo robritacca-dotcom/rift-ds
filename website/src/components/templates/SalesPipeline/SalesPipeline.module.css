@@ -1,0 +1,284 @@
+/* Templates: the Meridian sales pipeline. Every colour, space, radius, and
+   type style is a semantic token; the only raw values are structural layout
+   sizes (column widths, breakpoints), which pages own everywhere else on
+   the site. The shell is the template family's; the page follows the
+   marketing dashboard's composition — page head, KPI band, then the table
+   section — on the dashboard rung set: gap-lg between regions and between
+   Panels, gap-md inside a region, gap-sm inside a cluster. */
+
+.shell {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  /* The pipeline holds the viewport; narrow layouts below trade this for
+     normal page flow. */
+  min-height: calc(var(--layout-viewport-height, 100vh));
+  /* Stretch across the body's own padding (the template family's pattern),
+     so the shell runs edge to edge; the primitives mirror the body's inset
+     in globals.css. */
+  width: calc(100% + var(--primitive-padding-xl) * 2);
+  margin: calc(-1 * var(--primitive-padding-lg))
+    calc(-1 * var(--primitive-padding-xl));
+}
+
+/* One inset source for the whole shell: the floating sidebar reads the
+   same value the chat panel uses. */
+.sidebar {
+  --ds-sidebar-float-inset: var(--layout-chat-inset);
+}
+
+/* AppSidebar positions itself fixed; the main column reserves its width the
+   same way AppLayout does (64px rail, 280px expanded — the component's own
+   constants). */
+.main {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  justify-content: center;
+  padding-left: calc(64px + var(--layout-chat-inset) * 2);
+  transition: padding var(--motion-duration-slow) var(--motion-ease-emphasized);
+}
+
+.mainExpanded {
+  padding-left: calc(280px + var(--layout-chat-inset) * 2);
+}
+
+/* The docked chat pushes the page over instead of covering it — the site's
+   body-inset pattern, applied to the main column since this shell owns its
+   own layout. Below the stacking breakpoint the page has no width to give,
+   so the panel covers it instead (it is fixed and on top already). */
+@media (min-width: 1081px) {
+  .mainChatOpen {
+    padding-right: calc(var(--layout-chat-width) + var(--layout-chat-inset) * 2);
+  }
+}
+
+.content {
+  width: 100%;
+  max-width: 1680px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-lg);
+  padding: var(--padding-lg) var(--padding-xl) var(--padding-xxl);
+}
+
+/* ------------------------------------------------------------- top bar */
+
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-sm);
+}
+
+.search {
+  position: relative;
+  width: 320px;
+  max-width: 100%;
+}
+
+/* The shortcut hint rides inside the field, over its right padding; it is
+   decorative furniture, so it never intercepts the pointer. */
+.searchKbd {
+  position: absolute;
+  top: 50%;
+  right: var(--padding-sm);
+  transform: translateY(-50%);
+  display: inline-flex;
+  gap: var(--gap-xxs);
+  pointer-events: none;
+}
+
+.topBarActions {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+}
+
+/* ------------------------------------------------------------ page head */
+
+.pageHead {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--gap-sm);
+  flex-wrap: wrap;
+}
+
+.title {
+  margin: var(--gap-xs) 0 0;
+  font-family: var(--font-heading-1-family);
+  font-size: var(--font-heading-1-size);
+  font-weight: var(--font-heading-1-weight);
+  line-height: var(--font-heading-1-line-height);
+  letter-spacing: var(--font-heading-1-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.headActions {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  flex-wrap: wrap;
+}
+
+/* -------------------------------------------------------- table section */
+
+/* The table sits directly on the page — the DataTable brings its own
+   bordered chrome, so a panel around it would double-box it. SectionTitle
+   binds to it at the region gap. */
+.tableSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  min-width: 0;
+}
+
+/* The toolbar's controls cluster: three matching compact selects in the
+   DataTable's own filter slot, the marketing dashboard's convention. */
+.tableFilters {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  flex-wrap: wrap;
+}
+
+.filterSelect {
+  width: 160px;
+  flex-shrink: 0;
+}
+
+/* ---------------------------------------------------------------- cells */
+
+.companyCell {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.companyName {
+  font-weight: var(--font-paragraph-sm-em-weight);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}
+
+.companySegment {
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+}
+
+.ownerCell {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  white-space: nowrap;
+}
+
+.ownerName {
+  color: var(--color-text-primary);
+}
+
+.pipelineCell {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  min-width: 0;
+}
+
+.pipelineValue {
+  font-weight: var(--font-paragraph-sm-em-weight);
+  color: var(--color-text-primary);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.pipelineDeals {
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+}
+
+.winCell {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  min-width: 120px;
+}
+
+.winMeter {
+  flex: 1;
+  min-width: 0;
+}
+
+.winValue {
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-secondary);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.touchCell {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.touchDate {
+  color: var(--color-text-primary);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.touchType {
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------- responsive */
+
+@media (max-width: 1080px) {
+  .content {
+    padding: var(--padding-md) var(--padding-md) var(--padding-xl);
+  }
+}
+
+/* The shell's negative margins mirror the body's inset in globals.css,
+   which steps down at these same breakpoints — an unmirrored step leaves
+   the shell pulled past the viewport's left edge on phones. */
+@media (max-width: 959px) {
+  .shell {
+    width: calc(100% + var(--primitive-padding-lg) * 2);
+    margin: calc(-1 * var(--primitive-padding-lg));
+  }
+}
+
+@media (max-width: 760px) {
+  .sidebar {
+    display: none;
+  }
+
+  .main,
+  .mainExpanded {
+    padding-left: 0;
+  }
+
+  .topBar {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 600px) {
+  .shell {
+    width: calc(100% + var(--primitive-padding-md) * 2);
+    margin: calc(-1 * var(--primitive-padding-lg))
+      calc(-1 * var(--primitive-padding-md));
+  }
+}

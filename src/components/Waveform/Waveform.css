@@ -1,0 +1,97 @@
+/* ============================================
+   WAVEFORM COMPONENT
+   Voice indicator — a row of bars dancing on
+   the shared twelve-slot cycle
+   ============================================ */
+
+/* Base — height rides the icon scale, bar width derives from it, and the
+   colour routes through one custom property so a consumer can tint the wave. */
+
+.ds-waveform {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-xxs);
+  height: var(--icon-size-md);
+  --ds-waveform-color: var(--color-text-secondary);
+}
+
+.ds-waveform--compact {
+  height: var(--icon-size-sm);
+}
+
+.ds-waveform__bar {
+  width: calc(var(--icon-size-sm) / 5); /* 4px, derived from the scale */
+  height: 100%;
+  flex-shrink: 0;
+  border-radius: var(--radius-full);
+  background-color: var(--ds-waveform-color);
+  transform: scaleY(0.25);
+  transform-origin: center;
+}
+
+/* States */
+
+/* Idle: parked low in the tertiary tier — present, not performing. */
+.ds-waveform--idle {
+  --ds-waveform-color: var(--color-text-tertiary);
+}
+
+/* Listening runs the same wave at roughly half height; speaking at full.
+   One keyframe set, scaled per state through --ds-waveform-peak. */
+.ds-waveform--listening {
+  --ds-waveform-peak: 0.55;
+}
+
+.ds-waveform--speaking {
+  --ds-waveform-peak: 1;
+}
+
+.ds-waveform--listening .ds-waveform__bar,
+.ds-waveform--speaking .ds-waveform__bar {
+  animation: ds-waveform-wave var(--motion-duration-loop-matrix) var(--motion-ease-standard)
+    infinite;
+  /* Negative delay by cycle slot: every bar is already mid-wave on mount,
+     and the peak travels down the row. */
+  animation-delay: calc(var(--ds-waveform-step, 0) * (var(--motion-duration-loop-matrix) / -12));
+}
+
+@keyframes ds-waveform-wave {
+  0%,
+  100% {
+    transform: scaleY(0.25);
+  }
+  50% {
+    transform: scaleY(calc(var(--ds-waveform-amp, 1) * var(--ds-waveform-peak, 1)));
+  }
+}
+
+/* Controlled mode — a real analyser drives the bars; each one eases to its
+   level instead of animating. */
+.ds-waveform--levels .ds-waveform__bar {
+  animation: none;
+  transform: scaleY(var(--ds-waveform-level, 0.25));
+  transition: transform var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+/* Visually hidden state text — what a screen reader gets instead of bars. */
+.ds-waveform__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* The looping wave parks on its resting contour rather than strobing
+   through the collapsed duration — same treatment as the other looping
+   indicators. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-waveform--listening .ds-waveform__bar,
+  .ds-waveform--speaking .ds-waveform__bar {
+    animation: none;
+    transform: scaleY(calc(var(--ds-waveform-amp, 1) * 0.6));
+  }
+}

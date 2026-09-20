@@ -1,0 +1,363 @@
+/* ============================================
+   EVENT CALENDAR COMPONENT
+   Month-at-a-glance grid with event pills.
+   Rows share the height of the fullest day in
+   their week (grid-auto-rows), so the calendar
+   grows with its content instead of fixing a
+   cell height.
+
+   Event accents use the core accent roles —
+   never the action teal, which stays reserved
+   for actions.
+   ============================================ */
+
+.ds-event-calendar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  width: 100%;
+  background-color: var(--color-bg-container-primary);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-md);
+  padding: var(--padding-md);
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+
+.ds-event-calendar__header {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+}
+
+.ds-event-calendar__month {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--color-text-primary);
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  letter-spacing: var(--font-title-body-letter-spacing);
+}
+
+.ds-event-calendar__nav {
+  display: flex;
+  gap: var(--gap-xxs);
+}
+
+.ds-event-calendar__nav-btn {
+  --icon-size: var(--icon-size-sm);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--padding-xxs);
+  background-color: var(--color-action-passive-bg);
+  border: none;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  color: var(--color-icon-primary);
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-event-calendar__nav-btn:hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-event-calendar__nav-btn:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+.ds-event-calendar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+}
+
+/* ============================================
+   WEEKDAY ROW
+   ============================================ */
+
+.ds-event-calendar__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--gap-xxs);
+}
+
+.ds-event-calendar__weekday {
+  padding: var(--padding-xxs) var(--padding-xs);
+  color: var(--color-text-tertiary);
+  font-family: var(--font-paragraph-sm-em-family);
+  font-size: var(--font-paragraph-sm-em-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+}
+
+/* ============================================
+   GRID
+   ============================================ */
+
+.ds-event-calendar__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-auto-rows: 1fr;
+  gap: var(--gap-xxs);
+}
+
+.ds-event-calendar__cell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxs);
+  min-width: 0;
+  padding: var(--padding-xxs);
+  background-color: var(--color-calendar-cell-bg);
+  border-radius: var(--radius-sm);
+}
+
+.ds-event-calendar__cell--outside {
+  background-color: var(--color-bg-container-primary-transparent);
+}
+
+.ds-event-calendar__cell--outside .ds-event-calendar__day {
+  color: var(--color-text-tertiary);
+}
+
+/* With onDateClick the whole cell is a pointer target (the day-number
+   button stays the accessible control) — cursor and colour together say
+   the day will take the click. The cell keeps its hover while the pointer
+   is on an event pill inside it: the pill separates through its hover
+   ring and a fill one step off the hovered cell — darker than that cell
+   in dark, lighter in light. */
+.ds-event-calendar__cell--clickable {
+  cursor: pointer;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-event-calendar__cell--clickable:hover {
+  background-color: var(--color-calendar-cell-bg-hover);
+}
+
+/* ============================================
+   DAY NUMBER
+   ============================================ */
+
+.ds-event-calendar__day {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;
+  min-width: var(--icon-size-md);
+  height: var(--icon-size-md);
+  padding: 0 var(--padding-xxs);
+  background: none;
+  border: none;
+  border-radius: var(--radius-full);
+  color: var(--color-text-secondary);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  font-variant-numeric: tabular-nums;
+}
+
+button.ds-event-calendar__day {
+  cursor: pointer;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+button.ds-event-calendar__day:hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+button.ds-event-calendar__day:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+/* Today — inverse chip on the day number, like DatePicker's today ring
+   but filled so it reads at calendar density */
+.ds-event-calendar__cell--today .ds-event-calendar__day {
+  background-color: var(--color-bg-page-inverse);
+  color: var(--color-text-on-inverse);
+  font-family: var(--font-paragraph-sm-em-family);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+}
+
+/* Selected — the teal selection chip (the selected item of a mutually
+   exclusive set, DatePicker's convention). Declared after the today block
+   so a selected today reads as selected. */
+.ds-event-calendar__cell--selected .ds-event-calendar__day {
+  background-color: var(--color-action-primary-bg);
+  color: var(--color-action-primary-text);
+  font-family: var(--font-paragraph-sm-em-family);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+}
+
+.ds-event-calendar__cell--selected button.ds-event-calendar__day:hover {
+  background-color: var(--color-action-primary-bg-hover);
+}
+
+/* ============================================
+   EVENT PILLS
+   ============================================ */
+
+.ds-event-calendar__events {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxs);
+  min-width: 0;
+}
+
+.ds-event-calendar__event {
+  --ds-event-accent: var(--color-status-neutral-border);
+
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xxs);
+  min-width: 0;
+  padding: var(--padding-xxxs) var(--padding-xs);
+  background-color: var(--color-calendar-event-bg);
+  /* Transparent at rest so the hover ring appears without a layout shift —
+     resting pills stay quiet, only the pill under the pointer gets ringed. */
+  border: var(--border-xs) solid transparent;
+  border-radius: var(--radius-xs);
+  text-align: left;
+}
+
+button.ds-event-calendar__event {
+  cursor: pointer;
+  transition:
+    background-color var(--motion-duration-fast) var(--motion-ease-standard),
+    border-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+button.ds-event-calendar__event:hover {
+  background-color: var(--color-calendar-event-bg-hover);
+  border-color: var(--color-calendar-event-border);
+}
+
+button.ds-event-calendar__event:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: -2px;
+}
+
+.ds-event-calendar__event-dot {
+  flex: none;
+  width: var(--gap-xs);
+  height: var(--gap-xs);
+  border-radius: var(--radius-full);
+  background-color: var(--ds-event-accent);
+}
+
+.ds-event-calendar__event-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-text-primary);
+  font-family: var(--font-paragraph-sm-em-family);
+  font-size: var(--font-paragraph-sm-em-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+}
+
+.ds-event-calendar__event-time {
+  flex: none;
+  color: var(--color-text-tertiary);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ============================================
+   EVENT ACCENTS — core accent roles only
+   ============================================ */
+
+.ds-event-calendar__event--coral {
+  --ds-event-accent: var(--color-core-accent-coral);
+}
+
+.ds-event-calendar__event--violet {
+  --ds-event-accent: var(--color-core-accent-violet);
+}
+
+.ds-event-calendar__event--cobalt {
+  --ds-event-accent: var(--color-core-accent-cobalt);
+}
+
+.ds-event-calendar__event--amber {
+  --ds-event-accent: var(--color-core-accent-amber);
+}
+
+.ds-event-calendar__event--gold {
+  --ds-event-accent: var(--color-core-accent-gold);
+}
+
+.ds-event-calendar__event--mint {
+  --ds-event-accent: var(--color-core-accent-mint);
+}
+
+/* ============================================
+   OVERFLOW
+   ============================================ */
+
+.ds-event-calendar__more {
+  align-self: flex-start;
+  padding: var(--padding-xxxs) var(--padding-xs);
+  background: none;
+  border: none;
+  color: var(--color-text-tertiary);
+  font-family: var(--font-paragraph-sm-em-family);
+  font-size: var(--font-paragraph-sm-em-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+}
+
+button.ds-event-calendar__more {
+  cursor: pointer;
+  border-radius: var(--radius-xs);
+  transition:
+    background-color var(--motion-duration-fast) var(--motion-ease-standard),
+    color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+button.ds-event-calendar__more:hover {
+  background-color: var(--color-calendar-event-bg-hover);
+  color: var(--color-text-secondary);
+}
+
+button.ds-event-calendar__more:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: -2px;
+}
+
+/* ============================================
+   RESPONSIVE
+   At phone widths the pills drop their time so
+   titles keep at least a few characters.
+   ============================================ */
+
+@media (max-width: 768px) {
+  .ds-event-calendar__event-time {
+    display: none;
+  }
+
+  .ds-event-calendar__weekday {
+    padding: var(--padding-xxs) 0;
+    text-align: center;
+  }
+}

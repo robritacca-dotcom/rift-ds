@@ -1,0 +1,326 @@
+/* ============================================
+   GANTT CHART COMPONENT
+   Phases and tasks as bars on a shared
+   timeline, with milestones and a today rule
+   ============================================ */
+
+/* Card chrome, header, and padding come from the shared chart styles
+   (Chart.css); this file owns the axis, rows, bars, and markers. */
+
+.ds-gantt {
+  /* Structural sizes, component-scoped: the sticky label rail, the smallest
+     timeline worth drawing before the scroll takes over, and the row rhythm. */
+  --ds-gantt-label-width: 172px;
+  --ds-gantt-track-min: 480px;
+  --ds-gantt-row-height: 36px;
+  --ds-gantt-bar-height: 20px;
+
+  min-width: 0;
+}
+
+.ds-gantt__body {
+  min-width: 0;
+}
+
+/* The whole drawing scrolls sideways in its own container on narrow
+   screens; the label column stays pinned inside it. */
+.ds-gantt__scroll {
+  overflow-x: auto;
+  padding-bottom: var(--padding-xxxs);
+}
+
+.ds-gantt__canvas {
+  min-width: calc(var(--ds-gantt-label-width) + var(--ds-gantt-track-min));
+}
+
+/* ============================================
+   AXIS — month labels
+   ============================================ */
+
+.ds-gantt__axis {
+  display: flex;
+  align-items: flex-end;
+  height: var(--ds-gantt-row-height);
+}
+
+.ds-gantt__corner {
+  flex: 0 0 var(--ds-gantt-label-width);
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  height: 100%;
+  background-color: var(--color-bg-container-primary);
+}
+
+.ds-gantt__months {
+  flex: 1 0 var(--ds-gantt-track-min);
+  position: relative;
+  min-width: 0;
+  height: 100%;
+}
+
+.ds-gantt__month-label {
+  position: absolute;
+  bottom: var(--padding-xxs);
+  padding-left: var(--padding-xxs);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+}
+
+/* ============================================
+   ROWS
+   ============================================ */
+
+.ds-gantt__rows {
+  position: relative;
+}
+
+.ds-gantt__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ds-gantt__row,
+.ds-gantt__group-row {
+  display: flex;
+  align-items: center;
+  height: var(--ds-gantt-row-height);
+  border-top: var(--border-xs) solid var(--color-divider);
+}
+
+.ds-gantt__label,
+.ds-gantt__group-label {
+  flex: 0 0 var(--ds-gantt-label-width);
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  padding-right: var(--padding-sm);
+  background-color: var(--color-bg-container-primary);
+  border-right: var(--border-xs) solid var(--color-divider);
+  min-width: 0;
+}
+
+.ds-gantt__label {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+  align-content: center;
+}
+
+.ds-gantt__group-label {
+  font-family: var(--font-overline-family);
+  font-size: var(--font-overline-size);
+  font-weight: var(--font-overline-weight);
+  line-height: var(--font-overline-line-height);
+  letter-spacing: var(--font-overline-letter-spacing);
+  text-transform: uppercase;
+  color: var(--color-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+  align-content: center;
+}
+
+.ds-gantt__track {
+  flex: 1 0 var(--ds-gantt-track-min);
+  position: relative;
+  min-width: 0;
+  height: 100%;
+}
+
+/* ============================================
+   OVERLAY — gridlines + today rule
+   Drawn once behind every row, offset past the
+   label rail so its percentages match the bars
+   ============================================ */
+
+.ds-gantt__overlay {
+  position: absolute;
+  inset: 0 0 0 var(--ds-gantt-label-width);
+  pointer-events: none;
+}
+
+.ds-gantt__gridline {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: var(--border-xs);
+  background-color: var(--color-divider);
+}
+
+/* Today is current, not selected: the inverse role, like EventCalendar's
+   today chip. Teal stays reserved for the selected bar. */
+.ds-gantt__today {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: var(--color-bg-page-inverse);
+  z-index: 1;
+}
+
+/* The rule's flag: an inverse chip, like EventCalendar's today chip. It
+   sits in the axis row and covers whatever month label falls behind it. */
+.ds-gantt__today-label {
+  position: absolute;
+  bottom: calc(100% + var(--padding-xxxs));
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0 var(--padding-xs);
+  border-radius: var(--radius-full);
+  background-color: var(--color-bg-page-inverse);
+  font-family: var(--font-paragraph-sm-em-family);
+  font-size: var(--font-paragraph-sm-em-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  color: var(--color-text-on-inverse);
+  white-space: nowrap;
+}
+
+/* ============================================
+   BARS
+   ============================================ */
+
+.ds-gantt__bar {
+  --ds-gantt-accent: var(--color-status-neutral-border);
+
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  height: var(--ds-gantt-bar-height);
+  border: none;
+  border-radius: var(--radius-full);
+  background-color: var(--ds-gantt-accent);
+  padding: 0;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* With a progress reading, the bar becomes a quiet track and the accent
+   fills the completed share — the ProgressBar recipe on a timeline. */
+.ds-gantt__bar--tracked {
+  background-color: var(--color-bg-container-tertiary);
+}
+
+.ds-gantt__bar-fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: var(--radius-full);
+  background-color: var(--ds-gantt-accent);
+  transition: width var(--motion-duration-slow) var(--motion-ease-emphasized);
+}
+
+/* Projected work is a target, not a commitment: outline only. */
+.ds-gantt__bar--projected {
+  background-color: transparent;
+  border: var(--border-xs) dashed var(--ds-gantt-accent);
+}
+
+button.ds-gantt__bar {
+  cursor: pointer;
+}
+
+button.ds-gantt__bar:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+.ds-gantt__bar--selected {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+/* ============================================
+   ACCENTS
+   ============================================ */
+
+.ds-gantt__bar--coral,
+.ds-gantt__milestone--coral {
+  --ds-gantt-accent: var(--color-core-accent-coral);
+}
+
+.ds-gantt__bar--violet,
+.ds-gantt__milestone--violet {
+  --ds-gantt-accent: var(--color-core-accent-violet);
+}
+
+.ds-gantt__bar--cobalt,
+.ds-gantt__milestone--cobalt {
+  --ds-gantt-accent: var(--color-core-accent-cobalt);
+}
+
+.ds-gantt__bar--amber,
+.ds-gantt__milestone--amber {
+  --ds-gantt-accent: var(--color-core-accent-amber);
+}
+
+.ds-gantt__bar--gold,
+.ds-gantt__milestone--gold {
+  --ds-gantt-accent: var(--color-core-accent-gold);
+}
+
+.ds-gantt__bar--mint,
+.ds-gantt__milestone--mint {
+  --ds-gantt-accent: var(--color-core-accent-mint);
+}
+
+/* ============================================
+   MILESTONES
+   ============================================ */
+
+/* The accent modifiers above set --ds-gantt-accent; the fallback keeps an
+   unaccented diamond on the neutral role without out-ranking them. */
+.ds-gantt__milestone {
+  position: absolute;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  transform: translate(-50%, -50%) rotate(45deg);
+  border-radius: var(--radius-xxs);
+  background-color: var(--ds-gantt-accent, var(--color-status-neutral-border));
+  z-index: 1;
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+
+/* Visually hidden text carrying each row's full reading for screen readers. */
+.ds-gantt__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+  .ds-gantt {
+    --ds-gantt-label-width: 120px;
+  }
+}

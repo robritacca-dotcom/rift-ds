@@ -1,0 +1,52 @@
+.themeToggle {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* Icon-only experiment: the three segments read fine as glyphs alone, and the
+   labels made the control wide once System joined. The label isn't removed —
+   it becomes the segment's tooltip, so each button keeps its accessible name
+   and hover or keyboard focus still says which option is which. Styled to
+   match ds-tooltip's panel (same tokens), revealed below the segment. */
+.themeToggle :global(.ds-segmented-control__label) {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  z-index: 50;
+  margin-top: var(--gap-xs);
+  padding: var(--padding-xs) var(--padding-sm);
+  border-radius: var(--radius-xs);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  background-color: var(--color-bg-page-primary);
+  color: var(--color-text-primary);
+  box-shadow: var(--shadow-floating);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(-50%) translateY(calc(-1 * var(--gap-xs)));
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard),
+    transform var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+/* --motion-duration-slow (300ms) matches MOTION_HOVER_SHOW_DELAY_MS, the same
+   hover-intent delay Tooltip uses in JS, so the label doesn't flash while the
+   pointer passes through. Hiding takes no delay, like a tooltip's mouseleave. */
+.themeToggle :global(.ds-segmented-control__segment:hover .ds-segmented-control__label),
+.themeToggle :global(.ds-segmented-control__segment:focus-visible .ds-segmented-control__label) {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  transition-delay: var(--motion-duration-slow);
+}
+
+/* Without an inline label the compact segment's asymmetric padding reads
+   lopsided — square it up so each segment is a small even pill around its
+   glyph. */
+.themeToggle :global(.ds-segmented-control__segment) {
+  padding: var(--padding-xs) var(--padding-sm);
+}

@@ -1,0 +1,216 @@
+/* ============================================
+   INSTRUCTIONS COMPONENT
+   Step-by-step guidance with numbered steps
+   ============================================ */
+
+.ds-instructions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md); /* 16px */
+  width: 100%;
+}
+
+/* ============================================
+   TITLE
+   ============================================ */
+
+.ds-instructions__title {
+  font-family: var(--font-heading-3-family);
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+  letter-spacing: var(--font-heading-3-letter-spacing);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+/* ============================================
+   LIST
+   ============================================ */
+
+.ds-instructions__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* ============================================
+   STEP
+   ============================================ */
+
+.ds-instructions__step {
+  display: flex;
+  gap: var(--gap-sm); /* 8px */
+}
+
+/* ============================================
+   INDICATOR (badge + connector)
+   ============================================ */
+
+.ds-instructions__indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.ds-instructions__badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  border: var(--border-xs) solid var(--color-action-primary-border);
+  background-color: transparent;
+  flex-shrink: 0;
+}
+
+.ds-instructions__badge .material-symbols-rounded {
+  --icon-size: var(--icon-size-md);
+  color: var(--color-action-primary-bg);
+}
+
+.ds-instructions__number {
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: 1;
+  color: var(--color-action-primary-bg);
+}
+
+.ds-instructions__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-action-primary-bg);
+}
+
+.ds-instructions__connector {
+  width: var(--border-xs); /* 1px */
+  flex: 1;
+  min-height: var(--padding-md); /* 16px */
+  background-color: var(--color-bg-container-border);
+}
+
+/* ============================================
+   CONTENT
+   ============================================ */
+
+.ds-instructions__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxs); /* 2px */
+  padding-top: var(--padding-xxs); /* 4px — align text with badge center */
+  padding-bottom: var(--padding-md); /* 16px — space before next step */
+  min-width: 0;
+}
+
+.ds-instructions__step:last-child .ds-instructions__content {
+  padding-bottom: 0;
+}
+
+.ds-instructions__label {
+  font-family: var(--font-paragraph-em-family);
+  font-size: var(--font-paragraph-em-size);
+  font-weight: var(--font-paragraph-em-weight);
+  line-height: var(--font-paragraph-em-line-height);
+  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.ds-instructions__description {
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* ============================================
+   HORIZONTAL LAYOUT
+   ============================================ */
+
+.ds-instructions--horizontal .ds-instructions__list {
+  flex-direction: row;
+}
+
+.ds-instructions--horizontal .ds-instructions__step {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex: 1;
+}
+
+.ds-instructions--horizontal .ds-instructions__indicator {
+  flex-direction: row;
+  width: 100%;
+}
+
+.ds-instructions--horizontal .ds-instructions__connector {
+  width: auto;
+  height: var(--border-xs); /* 1px */
+  min-height: 0;
+  min-width: 0;
+  flex: 1;
+  align-self: center;
+}
+
+.ds-instructions--horizontal .ds-instructions__content {
+  padding-top: var(--padding-sm); /* 8px */
+  padding-bottom: 0;
+}
+
+/* ============================================
+   SIZE — COMPACT
+   ============================================ */
+
+.ds-instructions--compact .ds-instructions__title {
+  font-size: var(--font-title-body-size);
+  line-height: var(--font-title-body-line-height);
+}
+
+.ds-instructions--compact .ds-instructions__badge {
+  width: 24px;
+  height: 24px;
+}
+
+.ds-instructions--compact .ds-instructions__badge .material-symbols-rounded {
+  --icon-size: var(--icon-size-sm);
+}
+
+.ds-instructions--compact .ds-instructions__number {
+  font-size: 12px;
+}
+
+.ds-instructions--compact .ds-instructions__dot {
+  width: 6px;
+  height: 6px;
+}
+
+.ds-instructions--compact .ds-instructions__label {
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+}
+
+.ds-instructions--compact .ds-instructions__description {
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+}
+
+.ds-instructions--compact .ds-instructions__content {
+  padding-top: var(--padding-xxxs); /* 2px */
+  padding-bottom: var(--padding-sm); /* 8px */
+}
+
+.ds-instructions--compact .ds-instructions__step:last-child .ds-instructions__content {
+  padding-bottom: 0;
+}

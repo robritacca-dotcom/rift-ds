@@ -1,0 +1,133 @@
+/* ============================================
+   ALERT DIALOG COMPONENT
+   Modal confirmation with backdrop overlay
+   ============================================ */
+
+.ds-alert-dialog {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden; /* keeps panel controls out of the tab order when closed */
+  pointer-events: none;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard), visibility var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-alert-dialog--open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* ============================================
+   BACKDROP
+   ============================================ */
+
+.ds-alert-dialog__backdrop {
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-scrim);
+}
+
+/* ============================================
+   PANEL
+   ============================================ */
+
+.ds-alert-dialog__panel {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md); /* 16px */
+  min-width: 320px;
+  max-width: 480px;
+  padding: var(--padding-lg); /* 20px */
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-md); /* 12px */
+  background-color: var(--color-bg-page-primary);
+  box-shadow: var(--shadow-modal);
+  transform: scale(0.96);
+  transition: transform var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-alert-dialog--open .ds-alert-dialog__panel {
+  transform: scale(1);
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+
+.ds-alert-dialog__header {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm); /* 8px */
+}
+
+.ds-alert-dialog__icon {
+  flex-shrink: 0;
+  --icon-size: var(--icon-size-md);
+  line-height: 1;
+  color: var(--color-icon-primary);
+}
+
+.ds-alert-dialog--destructive .ds-alert-dialog__icon {
+  color: var(--color-status-error-border);
+}
+
+/* ============================================
+   TITLE
+   ============================================ */
+
+.ds-alert-dialog__title {
+  font-family: var(--font-heading-3-family);
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+  letter-spacing: var(--font-heading-3-letter-spacing);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.ds-alert-dialog--destructive .ds-alert-dialog__title {
+  color: var(--color-status-error-border);
+}
+
+/* ============================================
+   DESCRIPTION
+   ============================================ */
+
+.ds-alert-dialog__description {
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* ============================================
+   ACTIONS
+   ============================================ */
+
+.ds-alert-dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--gap-sm); /* 8px */
+  padding-top: var(--padding-xs); /* 6px */
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 480px) {
+  .ds-alert-dialog__panel {
+    min-width: auto;
+    margin: var(--padding-md);
+  }
+}

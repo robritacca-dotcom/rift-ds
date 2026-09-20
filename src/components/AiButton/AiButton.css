@@ -1,0 +1,559 @@
+/* ============================================
+   AI BUTTON
+   The AI entry point: a solid field pushed past
+   the page floor (bright white in light, true
+   black in dark), slowly rotating gradient ring,
+   soft glow of the same gradient haloing the
+   edge. The ring is the system's "a model
+   answers here" signal — ordinary actions keep
+   the flat action teal.
+   ============================================ */
+
+/* The rotation animates a registered custom property: a conic gradient's
+   angle cannot tween otherwise. Browsers without @property render the ring
+   at its initial angle, static — a correct, quieter fallback. */
+@property --ds-ai-button-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+/* Base */
+.ds-ai-button {
+  /* Layout */
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-sm);
+
+  /* Spacing — matches Button so the two sit on one control scale */
+  padding: var(--padding-sm) var(--padding-lg);
+
+  /* Buttons are always pill-shaped (design.md invariant) */
+  border-radius: var(--radius-full);
+
+  /* Typography — the clickable-control face, same as Button */
+  font-family: var(--font-paragraph-em-family);
+  font-weight: var(--font-paragraph-em-weight);
+  font-size: var(--font-paragraph-em-size);
+  line-height: var(--font-paragraph-em-line-height);
+  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  text-align: center;
+  /* A pill's label never wraps — a squeezed layout shortens around the
+     button, it doesn't fold the silhouette into two lines. */
+  white-space: nowrap;
+
+  /* The field is the theme's extreme surface — brighter than the light page,
+     deeper than the dark one — so the pill stands off whatever it floats
+     over. The opaque fill also keeps the glow at the edges: the ::after
+     escapes behind the button (negative z-index, no stacking context here),
+     so it reads as a halo, not a tint. */
+  background: var(--color-ai-button-bg);
+  color: var(--color-text-primary);
+
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+
+  /* Reset */
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+}
+
+/* The gradient ring: a conic gradient painted across the whole button, then
+   masked to the border band (two fills, exclude-composited, inset by the
+   border width). The gradient repeats back to its start colour so the seam
+   at 360° is invisible while it turns. */
+.ds-ai-button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: var(--border-md);
+  background: conic-gradient(
+    from var(--ds-ai-button-angle),
+    var(--color-ai-gradient-start),
+    var(--color-ai-gradient-mid),
+    var(--color-ai-gradient-end),
+    var(--color-ai-gradient-mid),
+    var(--color-ai-gradient-start)
+  );
+  /* Standard properties only — the build pipeline prefixes per its browser
+     targets, and hand-written -webkit- duplicates confuse its merging. */
+  /* ds-allow(color): mask luminance keying — the #fff paints alpha coverage
+     for mask-composite, not a theme colour */
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  /* The entry shares the glow's corner origin (a fraction chosen by eye)
+     and lands a --motion-duration-fast beat after the bloom starts. */
+  transform-origin: 90% 90%;
+  /* ds-allow(motion): ambient signature rotation, tuned by eye — deliberately
+     far slower than the interaction-scale motion tokens. The 21s loop is
+     three uneven turns (the keyframes own the cadence), so the pace swells
+     and settles instead of ticking round like a clock. The second animation
+     is the one-shot entry — opacity/transform only, so the two compose. */
+  animation:
+    ds-ai-button-turn 21s var(--motion-ease-emphasized) infinite,
+    ds-ai-button-enter-ring var(--motion-duration-slower) var(--motion-ease-entrance) var(--motion-duration-fast) backwards;
+}
+
+/* The glow: the same gradient, blurred behind the button at low opacity.
+   A colour effect, not an elevation shadow — depth stays token-owned. */
+.ds-ai-button::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--ds-ai-button-angle),
+    var(--color-ai-gradient-start),
+    var(--color-ai-gradient-mid),
+    var(--color-ai-gradient-end),
+    var(--color-ai-gradient-mid),
+    var(--color-ai-gradient-start)
+  );
+  /* The glow's spread; a length with no token family, chosen by eye. */
+  --ds-ai-button-glow: 14px;
+  filter: blur(var(--ds-ai-button-glow));
+  opacity: 0.3;
+  z-index: -1;
+  pointer-events: none;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+  /* The bloom grows out of the bottom-right corner — a fraction chosen by
+     eye, matching the ring's origin. */
+  transform-origin: 90% 90%;
+  /* ds-allow(motion): same ambient rotation as the ring, kept in phase;
+     the second animation is the one-shot entry bloom */
+  animation:
+    ds-ai-button-turn 21s var(--motion-ease-emphasized) infinite,
+    ds-ai-button-enter-glow var(--motion-duration-slower) var(--motion-ease-entrance) backwards;
+}
+
+/* Three full turns with unevenly spaced stops, eased per segment: the ring
+   drifts, surges, and settles rather than rotating at one mechanical rate.
+   The angles are turn fractions tuned by eye; the loop ends on a whole
+   turn (1080deg), so the repeating gradient makes the wrap seamless and
+   the average pace stays one turn per 7s. */
+@keyframes ds-ai-button-turn {
+  0% {
+    --ds-ai-button-angle: 0deg;
+  }
+  14% {
+    --ds-ai-button-angle: 168deg;
+  }
+  31% {
+    --ds-ai-button-angle: 306deg;
+  }
+  46% {
+    --ds-ai-button-angle: 570deg;
+  }
+  62% {
+    --ds-ai-button-angle: 690deg;
+  }
+  79% {
+    --ds-ai-button-angle: 936deg;
+  }
+  100% {
+    --ds-ai-button-angle: 1080deg;
+  }
+}
+
+/* The entry: on mount the glow blooms out of the bottom-right corner while
+   the ring fades up into place a beat behind it — the button lights rather
+   than arriving at full strength. From-only keyframes: each settles onto
+   the element's base styles, so hover and the ambient turn take over with
+   nothing filled forward. */
+@keyframes ds-ai-button-enter-ring {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+}
+
+@keyframes ds-ai-button-enter-glow {
+  from {
+    opacity: 0;
+    transform: scale(0.35);
+  }
+}
+
+/* Icon rides the icon-size scale */
+.ds-ai-button__icon {
+  --icon-size: var(--icon-size-md);
+  line-height: 1;
+}
+
+/* States */
+.ds-ai-button:hover::after {
+  opacity: 0.55;
+}
+
+.ds-ai-button:focus-visible {
+  outline: var(--border-md) solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+.ds-ai-button--disabled,
+.ds-ai-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ds-ai-button--disabled::before,
+.ds-ai-button--disabled::after,
+.ds-ai-button:disabled::before,
+.ds-ai-button:disabled::after {
+  /* The turn (first in the list) pauses; the one-shot entry still runs to
+     completion, or a button disabled from birth would freeze mid-entrance
+     with an invisible ring. */
+  animation-play-state: paused, running;
+}
+
+/* Sizes */
+.ds-ai-button--compact {
+  padding: var(--padding-xs) var(--padding-sm-md);
+  font-size: var(--font-paragraph-sm-em-size);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+}
+
+.ds-ai-button--compact .ds-ai-button__icon {
+  --icon-size: var(--icon-size-sm);
+}
+
+/* Reduced motion: the ring and glow stay, the turning stops. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-ai-button::before,
+  .ds-ai-button::after {
+    animation: none;
+  }
+}
+
+/* ============================================
+   THE SUMMARY PANEL
+   AiButton's TLDR surface: a frosted glass card
+   summoned above (or below) the button. The
+   button and panel share one hover zone — the
+   host — and the AI gradient sweeps once around
+   the panel's border as it opens, then fades to
+   the ordinary container border.
+   ============================================ */
+
+.ds-ai-button-host {
+  position: relative;
+  display: inline-flex;
+}
+
+/* The button acknowledges the panel's arrival with one gentle pulse. */
+.ds-ai-button-host--open .ds-ai-button {
+  animation: ds-ai-button-acknowledge var(--motion-duration-deliberate) var(--motion-ease-spring) both;
+}
+
+@keyframes ds-ai-button-acknowledge {
+  from {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.ds-ai-button__summary {
+  position: absolute;
+  right: 0;
+  z-index: 1;
+  /* Component-local lengths, chosen by eye like the button's glow: a
+     readable measure, capped so a phone viewport keeps its margins. */
+  --ds-ai-summary-width: 340px;
+  --ds-ai-summary-viewport-margin: 40px;
+  width: min(var(--ds-ai-summary-width), calc(100vw - var(--ds-ai-summary-viewport-margin)));
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+
+  padding: var(--padding-lg);
+  border-radius: var(--radius-xl);
+  /* ds-allow(color): the light glass token reads solid on a floating card;
+     thinned so the page shows through the frost */
+  background: color-mix(in srgb, var(--color-bg-glass) 62%, transparent);
+  /* The frost: heavier than the 24px glass pairing so the blur reads
+     unmistakably over imagery — a component-local effect length, chosen by
+     eye. Standard property only: the build pipeline prefixes it, and a
+     hand-written -webkit- duplicate makes its merging drop the declaration. */
+  --ds-ai-summary-frost: 36px;
+  backdrop-filter: blur(var(--ds-ai-summary-frost)) saturate(1.5);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  box-shadow: var(--shadow-floating);
+
+  /* Mounted but resting: the closed state mirrors the pop's `from`, so
+     leaving transitions back down the same path the entrance sprang up.
+     visibility keeps the hidden panel out of the accessibility tree and
+     the tab order, the way HoverCard hides. */
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(10px) scale(0.9);
+  transition:
+    opacity var(--motion-duration-fast) var(--motion-ease-standard),
+    transform var(--motion-duration-fast) var(--motion-ease-standard),
+    visibility var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-ai-button-host--open .ds-ai-button__summary {
+  visibility: visible;
+  opacity: 1;
+  transform: none;
+  animation: ds-ai-summary-pop var(--motion-duration-deliberate) var(--motion-ease-entrance) both;
+}
+
+/* Dark glass is already translucent; thinning it further puts body text
+   straight onto whatever bright imagery sits beneath. */
+[data-theme='dark'] .ds-ai-button__summary {
+  background: var(--color-bg-glass);
+}
+
+/* Placement: the panel grows out of the button, so its transform origin
+   points back at the button's side of the gap. */
+.ds-ai-button-host--top .ds-ai-button__summary {
+  bottom: calc(100% + var(--gap-sm));
+  transform-origin: calc(100% - 60px) calc(100% + 40px);
+}
+
+.ds-ai-button-host--bottom .ds-ai-button__summary {
+  top: calc(100% + var(--gap-sm));
+  transform-origin: calc(100% - 60px) -40px;
+  transform: translateY(-10px) scale(0.9);
+}
+
+.ds-ai-button-host--bottom.ds-ai-button-host--open .ds-ai-button__summary {
+  transform: none;
+}
+
+@keyframes ds-ai-summary-pop {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.ds-ai-button-host--bottom.ds-ai-button-host--open .ds-ai-button__summary {
+  animation-name: ds-ai-summary-pop-down;
+}
+
+@keyframes ds-ai-summary-pop-down {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* The opening signature: the AI gradient sweeps once around the whole
+   border — the button's masked conic ring, run as a single swoosh — then
+   fades away, leaving the regular border. The rotation animates a
+   registered custom property; without @property support the ring still
+   fades in and out, just without turning. */
+@property --ds-ai-summary-ring-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.ds-ai-button__summary::before {
+  content: '';
+  position: absolute;
+  inset: calc(-1 * var(--border-xs));
+  border-radius: var(--radius-xl);
+  padding: var(--border-md);
+  background: conic-gradient(
+    from var(--ds-ai-summary-ring-angle),
+    var(--color-ai-gradient-start),
+    var(--color-ai-gradient-mid),
+    var(--color-ai-gradient-end),
+    var(--color-ai-gradient-mid),
+    var(--color-ai-gradient-start)
+  );
+  /* ds-allow(color): mask luminance keying — the #fff paints alpha coverage
+     for mask-composite, not a theme colour */
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.ds-ai-button-host--open .ds-ai-button__summary::before {
+  /* ds-allow(motion): one-shot signature sweep timed to the panel's
+     entrance, tuned by eye — it runs once, then the border is ordinary */
+  animation: ds-ai-summary-ring 1500ms var(--motion-ease-standard) both;
+  animation-delay: 100ms;
+}
+
+@keyframes ds-ai-summary-ring {
+  from {
+    --ds-ai-summary-ring-angle: 0deg;
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  65% {
+    opacity: 1;
+  }
+  to {
+    --ds-ai-summary-ring-angle: 360deg;
+    opacity: 0;
+  }
+}
+
+/* The content settles a beat behind the surface — each row fades up in
+   sequence, so the panel and its contents arrive as one gesture. */
+.ds-ai-button-host--open .ds-ai-button__summary-meta,
+.ds-ai-button-host--open .ds-ai-button__summary-title,
+.ds-ai-button-host--open .ds-ai-button__summary-text,
+.ds-ai-button-host--open .ds-ai-button__summary-actions {
+  animation: ds-ai-summary-rise var(--motion-duration-slow) var(--motion-ease-entrance) both;
+}
+
+/* ds-allow(motion): stagger offsets between rows, tuned by eye — the paced
+   durations themselves are the motion tokens above */
+.ds-ai-button-host--open .ds-ai-button__summary-meta { animation-delay: 80ms; }
+.ds-ai-button-host--open .ds-ai-button__summary-title { animation-delay: 130ms; }
+.ds-ai-button-host--open .ds-ai-button__summary-text { animation-delay: 180ms; }
+.ds-ai-button-host--open .ds-ai-button__summary-actions { animation-delay: 230ms; }
+
+@keyframes ds-ai-summary-rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ds-ai-button__summary-dismiss {
+  position: absolute;
+  top: var(--gap-sm);
+  right: var(--gap-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* Icon-button hit target — a component-local size, chosen by eye. */
+  --ds-ai-summary-dismiss-size: 28px;
+  width: var(--ds-ai-summary-dismiss-size);
+  height: var(--ds-ai-summary-dismiss-size);
+  border: none;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+
+.ds-ai-button__summary-dismiss:hover {
+  background: var(--color-bg-container-secondary);
+  color: var(--color-text-primary);
+}
+
+.ds-ai-button__summary-dismiss .material-symbols-rounded {
+  font-size: var(--icon-size-sm);
+}
+
+.ds-ai-button__summary-meta {
+  display: flex;
+  align-items: baseline;
+  gap: var(--gap-sm);
+  /* Keeps the row clear of the dismiss button in the corner. */
+  padding-right: var(--gap-xl);
+}
+
+.ds-ai-button__summary-overline {
+  font-family: var(--font-overline-family);
+  font-size: var(--font-overline-size);
+  font-weight: var(--font-overline-weight);
+  line-height: var(--font-overline-line-height);
+  letter-spacing: var(--font-overline-letter-spacing);
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+
+.ds-ai-button__summary-caption {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-tertiary);
+}
+
+.ds-ai-button__summary-title {
+  /* Long titles wrap short of the dismiss corner. */
+  padding-right: var(--gap-lg);
+  font-family: var(--font-family-primary);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  color: var(--color-text-primary);
+}
+
+.ds-ai-button__summary-text {
+  display: block;
+  font-family: var(--font-family-primary);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-secondary);
+  /* Seats the ghost/reveal stack below. */
+  position: relative;
+}
+
+/* During the type-out, an invisible ghost of the finished text sizes the
+   container and the stream paints over it — the panel takes its final
+   height the moment "generation" completes, and a short summary reserves
+   nothing it won't use. */
+.ds-ai-button__summary-text-ghost {
+  visibility: hidden;
+}
+
+.ds-ai-button__summary-text-reveal {
+  position: absolute;
+  inset: 0;
+}
+
+.ds-ai-button__summary-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-sm);
+  margin-top: var(--gap-xs);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-ai-button-host--open .ds-ai-button,
+  .ds-ai-button-host--open .ds-ai-button__summary,
+  .ds-ai-button-host--open .ds-ai-button__summary::before,
+  .ds-ai-button-host--open .ds-ai-button__summary-meta,
+  .ds-ai-button-host--open .ds-ai-button__summary-title,
+  .ds-ai-button-host--open .ds-ai-button__summary-text,
+  .ds-ai-button-host--open .ds-ai-button__summary-actions {
+    animation: none;
+  }
+
+  .ds-ai-button__summary {
+    transition: none;
+  }
+}

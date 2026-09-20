@@ -1,0 +1,169 @@
+/* The component's own layer sits at z-index 110 (above Dialog and Drawer,
+   which is all a normal host needs), but this instance is site chrome: it
+   must also clear the sticky header and the mobile drawer overlay, both at
+   1000. Lifted here rather than in the library because the stacking order
+   of the site's chrome is the site's business. */
+.palette {
+  z-index: 1200;
+}
+
+/* The ask-chat row's trailing chip: AiButton's gradient ring (the system's
+   "a model answers here" signal — see design.md's AiButton spec) worn as a
+   passive badge, sized to AiButton's compact scale and turning at its
+   ambient pace. Not the component itself: a real button inside the
+   role="option" row would nest interactive controls, so this is a
+   decorative span. */
+
+/* The rotation animates a registered custom property, exactly as AiButton
+   does — a conic gradient's angle cannot tween otherwise. Browsers without
+   @property render the ring static: a correct, quieter fallback. */
+@property --site-ask-chip-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+.askChip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  padding: var(--padding-xs) var(--padding-sm-md);
+  border-radius: var(--radius-full);
+  /* AiButton's solid field, worn with the ring: opaque, so the row's hover
+     highlight never shows through the pill, and the glow stays an edge halo
+     (the ::after escapes behind — negative z-index, no stacking context). */
+  background: var(--color-ai-button-bg);
+  font-family: var(--font-paragraph-sm-em-family);
+  font-size: var(--font-paragraph-sm-em-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}
+
+/* The glow: AiButton's blurred-gradient halo, waking when the row is the
+   active one — the row is the control, so its hover and keyboard highlight
+   both light the chip, exactly when Enter would fire it. Resting it at
+   zero keeps the list quiet; AiButton's own resting glow marks the one
+   true entry point. */
+.askChip::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--site-ask-chip-angle),
+    var(--color-ai-gradient-start),
+    var(--color-ai-gradient-mid),
+    var(--color-ai-gradient-end),
+    var(--color-ai-gradient-mid),
+    var(--color-ai-gradient-start)
+  );
+  /* The glow's spread — AiButton's own component-local length, chosen by eye. */
+  --site-ask-chip-glow: 14px;
+  filter: blur(var(--site-ask-chip-glow));
+  opacity: 0;
+  z-index: -1;
+  pointer-events: none;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+  /* ds-allow(motion): AiButton's ambient signature rotation, kept at its
+     pace — deliberately far slower than the interaction-scale motion
+     tokens; the 21s loop is AiButton's three-uneven-turns cadence */
+  animation: askChipTurn 21s var(--motion-ease-emphasized) infinite;
+}
+
+.askChip {
+  transition: transform var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+:global(.ds-command-palette__command--active) .askChip::after {
+  opacity: 0.55;
+}
+
+:global(.ds-command-palette__command--active) .askChip {
+  transform: scale(1.03);
+}
+
+/* Reduced motion mirrors AiButton: the ring and glow stay, the turning
+   stops — and the active scale sits still. */
+@media (prefers-reduced-motion: reduce) {
+  .askChip {
+    transition: none;
+    transform: none;
+  }
+
+  .askChip::before,
+  .askChip::after {
+    animation: none;
+  }
+}
+
+/* The ring: AiButton's masked-conic recipe, minus the rotation. */
+.askChip::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: var(--border-md);
+  background: conic-gradient(
+    from var(--site-ask-chip-angle),
+    var(--color-ai-gradient-start),
+    var(--color-ai-gradient-mid),
+    var(--color-ai-gradient-end),
+    var(--color-ai-gradient-mid),
+    var(--color-ai-gradient-start)
+  );
+  /* ds-allow(color): mask luminance keying — the #fff paints alpha coverage
+     for mask-composite, not a theme colour */
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  /* ds-allow(motion): same ambient rotation as the glow, kept in phase */
+  animation: askChipTurn 21s var(--motion-ease-emphasized) infinite;
+}
+
+/* AiButton's cadence, restated on the chip-scoped angle: three uneven
+   turns eased per segment, ending on a whole turn so the wrap is seamless
+   and the average pace stays one turn per 7s. */
+@keyframes askChipTurn {
+  0% {
+    --site-ask-chip-angle: 0deg;
+  }
+  14% {
+    --site-ask-chip-angle: 168deg;
+  }
+  31% {
+    --site-ask-chip-angle: 306deg;
+  }
+  46% {
+    --site-ask-chip-angle: 570deg;
+  }
+  62% {
+    --site-ask-chip-angle: 690deg;
+  }
+  79% {
+    --site-ask-chip-angle: 936deg;
+  }
+  100% {
+    --site-ask-chip-angle: 1080deg;
+  }
+}
+
+.askChipIcon {
+  --icon-size: var(--icon-size-sm);
+  line-height: 1;
+}
+
+/* Under the chip + label + description squeeze on a narrow phone, the chip
+   keeps its icon and drops its words — half a pill still signals AI, and
+   the row's own label is the query the visitor just typed. */
+@media (max-width: 480px) {
+  .askChip {
+    font-size: 0;
+    gap: 0;
+    padding: var(--padding-xs);
+  }
+}

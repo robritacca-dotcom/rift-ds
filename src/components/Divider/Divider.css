@@ -1,0 +1,100 @@
+/* ============================================
+   DIVIDER COMPONENT
+   Thin rule separating stacked content
+   ============================================ */
+
+/* Base — plain horizontal <hr> */
+.ds-divider {
+  border: none;
+  margin: 0;
+  border-top: var(--border-xs) solid var(--color-divider);
+  width: 100%;
+}
+
+/* ============================================
+   SPACING
+   Block margin for horizontal, inline for vertical
+   ============================================ */
+
+.ds-divider--spacing-none {
+  margin-block: 0;
+}
+
+.ds-divider--spacing-sm {
+  margin-block: var(--gap-sm); /* 8px */
+}
+
+.ds-divider--spacing-md {
+  margin-block: var(--gap-md); /* 16px */
+}
+
+.ds-divider--spacing-lg {
+  margin-block: var(--gap-lg); /* 20px */
+}
+
+/* ============================================
+   LABELED
+   Text label inline with the rule
+   ============================================ */
+
+.ds-divider--labeled {
+  border-top: none;
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm-md); /* 12px */
+}
+
+.ds-divider--labeled::before,
+.ds-divider--labeled::after {
+  content: '';
+  flex: 1;
+  height: var(--border-xs);
+  background-color: var(--color-divider);
+}
+
+/* Label at the start — no leading segment */
+.ds-divider--label-start::before {
+  display: none;
+}
+
+.ds-divider__label {
+  flex-shrink: 0;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-secondary);
+}
+
+/* ============================================
+   VERTICAL
+   Stretches to container height inside flex rows
+   ============================================ */
+
+.ds-divider--vertical {
+  border-top: none;
+  width: var(--border-xs);
+  align-self: stretch;
+  background-color: var(--color-divider);
+}
+
+.ds-divider--vertical.ds-divider--spacing-none {
+  margin-block: 0;
+  margin-inline: 0;
+}
+
+.ds-divider--vertical.ds-divider--spacing-sm {
+  margin-block: 0;
+  margin-inline: var(--gap-sm); /* 8px */
+}
+
+.ds-divider--vertical.ds-divider--spacing-md {
+  margin-block: 0;
+  margin-inline: var(--gap-md); /* 16px */
+}
+
+.ds-divider--vertical.ds-divider--spacing-lg {
+  margin-block: 0;
+  margin-inline: var(--gap-lg); /* 20px */
+}

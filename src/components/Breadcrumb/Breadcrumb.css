@@ -1,0 +1,100 @@
+/* ============================================
+   BREADCRUMB COMPONENT
+   Hierarchical navigation trail
+   ============================================ */
+
+.ds-breadcrumb {
+  width: 100%;
+}
+
+/* ============================================
+   LIST
+   ============================================ */
+
+.ds-breadcrumb__list {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--gap-xxs);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* ============================================
+   ITEM
+   ============================================ */
+
+.ds-breadcrumb__item {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xxs);
+}
+
+/* ============================================
+   LINK
+   ============================================ */
+
+.ds-breadcrumb__link {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-breadcrumb__link:hover {
+  color: var(--color-text-primary);
+  text-decoration: underline;
+}
+
+.ds-breadcrumb__link:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ============================================
+   CURRENT (last item)
+   ============================================ */
+
+.ds-breadcrumb__current {
+  font-family: var(--font-paragraph-sm-em-family);
+  font-size: var(--font-paragraph-sm-em-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   SEPARATOR
+   ============================================ */
+
+/*
+   Size via --icon-size, never font-size: .material-symbols-rounded derives
+   the glyph size AND the layout box from that one variable. Setting
+   font-size alone shrank the glyph but left a 24px box around it, so the
+   chevron floated above the text baseline. --icon-size-sm (20px) also
+   matches the 20px line-height of the paragraph-sm labels either side.
+*/
+.ds-breadcrumb__separator {
+  --icon-size: var(--icon-size-sm);
+  flex: none;
+  color: var(--color-text-tertiary);
+  user-select: none;
+}
+
+/* ============================================
+   ELLIPSIS
+   ============================================ */
+
+.ds-breadcrumb__ellipsis {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  color: var(--color-text-tertiary);
+  user-select: none;
+}

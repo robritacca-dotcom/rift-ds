@@ -1,0 +1,205 @@
+/* ============================================
+   TABLE COMPONENT
+   Data table with flexible cell content
+   ============================================ */
+
+.ds-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: var(--radius-sm); /* 8px */
+  overflow: hidden;
+
+  /* Typography */
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   CAPTION
+   ============================================ */
+
+.ds-table__caption {
+  font-family: var(--font-paragraph-em-family);
+  font-size: var(--font-paragraph-em-size);
+  font-weight: var(--font-paragraph-em-weight);
+  line-height: var(--font-paragraph-em-line-height);
+  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  color: var(--color-text-secondary);
+  text-align: left;
+  caption-side: top;
+  padding-bottom: var(--padding-sm); /* 8px */
+}
+
+.ds-table__caption--hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ============================================
+   ROW
+   ============================================ */
+
+.ds-table__row {
+  border-bottom: var(--border-xs) solid var(--color-bg-container-border);
+  transition: background-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+/* ============================================
+   HEADER CELL
+   ============================================ */
+
+.ds-table__header-cell {
+  padding: var(--padding-sm) var(--padding-md); /* 8px 16px */
+  vertical-align: middle;
+
+  /* paragraph-em (500 weight / label style) */
+  font-family: var(--font-paragraph-em-family);
+  font-size: var(--font-paragraph-em-size);
+  font-weight: var(--font-paragraph-em-weight);
+  line-height: var(--font-paragraph-em-line-height);
+  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  color: var(--color-text-secondary);
+  text-align: left;
+}
+
+/* ============================================
+   DATA CELL
+   ============================================ */
+
+.ds-table__cell {
+  padding: var(--padding-sm) var(--padding-md); /* 8px 16px */
+  vertical-align: middle;
+  color: var(--color-text-primary);
+}
+
+/* Inner wrapper ensures all cell content is perfectly vertically centred */
+.ds-table__cell-content {
+  display: flex;
+  align-items: center;
+  min-height: 0;
+}
+
+/* ============================================
+   ROW HOVER (body rows only)
+   ============================================ */
+
+.ds-table__body .ds-table__row:hover {
+  background-color: var(--color-bg-container-primary-semi);
+}
+
+/* ============================================
+   STRIPED ROWS
+   ============================================ */
+
+.ds-table--striped .ds-table__body .ds-table__row:nth-child(even) {
+  background-color: var(--color-bg-container-primary-semi);
+}
+
+.ds-table--striped .ds-table__body .ds-table__row:nth-child(even):hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+/* ============================================
+   SIZE — DEFAULT (base styles apply)
+   ============================================ */
+
+.ds-table--default {
+  /* Base padding & typography inherited from .ds-table */
+}
+
+/* ============================================
+   BORDERED VARIANT
+   Outer border box + tinted thead + divider row lines.
+   Matches the table style used on markdown content pages.
+   ============================================ */
+
+.ds-table__wrapper {
+  overflow-x: auto;
+  border: var(--border-xs) solid var(--color-divider);
+  border-radius: var(--radius-md); /* 12px */
+  background: var(--color-bg-page-primary);
+}
+
+/* When bordered, the table fills the wrapper — no radius needed on the table itself */
+.ds-table--bordered {
+  border-radius: 0;
+}
+
+/* Thead gets a tinted background to distinguish it from body rows */
+.ds-table--bordered .ds-table__head {
+  background: var(--color-bg-container-primary);
+}
+
+/* Remove row-level border — border-collapse: separate ignores it */
+.ds-table--bordered .ds-table__row {
+  border-bottom: none;
+}
+
+/* Header cells: bottom divider */
+.ds-table--bordered .ds-table__header-cell {
+  border-bottom: var(--border-xs) solid var(--color-divider);
+}
+
+/* Body cells: bottom divider */
+.ds-table--bordered .ds-table__cell {
+  border-bottom: var(--border-xs) solid var(--color-divider);
+}
+
+/* Last body row: no bottom border (the wrapper border handles it) */
+.ds-table--bordered .ds-table__body .ds-table__row:last-child .ds-table__cell {
+  border-bottom: none;
+}
+
+/* Row hover on bordered variant */
+.ds-table--bordered .ds-table__body .ds-table__row:hover {
+  background-color: var(--color-bg-container-primary);
+}
+
+/* ============================================
+   SIZE — COMPACT
+   ============================================ */
+
+.ds-table--compact .ds-table__header-cell {
+  padding: var(--padding-xs) var(--padding-sm-md); /* 6px 12px */
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+}
+
+.ds-table--compact .ds-table__cell {
+  padding: var(--padding-xs) var(--padding-sm-md); /* 6px 12px */
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+}
+
+/* ============================================
+   SCREEN-READER-ONLY
+   Fallback text for header cells with no visible
+   label (checkbox / actions columns) — an empty
+   <th> is unannounced.
+   ============================================ */
+
+.ds-table__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

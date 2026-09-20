@@ -1,0 +1,186 @@
+/* ============================================
+   SEMANTIC TOKENS — DARK THEME
+   Applied when data-theme="dark" is set
+   Every value chains to tokens-primitives.css
+   (validated by scripts/validate-token-references.mjs)
+   ============================================ */
+
+[data-theme="dark"] {
+  /* Text */
+  --color-text-primary: var(--primitive-neutral-01);
+  --color-text-secondary: var(--primitive-neutral-03);
+  --color-text-tertiary: var(--primitive-neutral-04);
+  --color-text-inverse: var(--primitive-neutral-07);
+  --color-text-on-inverse: var(--primitive-neutral-09);
+
+  /* Icon */
+  --color-icon-primary: var(--primitive-neutral-02);
+  --color-icon-secondary: var(--primitive-neutral-04);
+
+  /* Background - Page */
+  --color-bg-page-primary: var(--primitive-neutral-10);
+  --color-bg-page-inverse: var(--primitive-neutral-01);
+
+  /* Background - Container */
+  --color-bg-container-primary: var(--primitive-neutral-09-semi);
+  --color-bg-container-primary-transparent: var(--primitive-neutral-09-transparent);
+  --color-bg-container-primary-semi: var(--primitive-neutral-09-semi-transparent);
+  --color-bg-container-secondary: var(--primitive-neutral-07);
+  --color-bg-container-tertiary: var(--primitive-neutral-08);
+  --color-bg-container-inverse: var(--primitive-neutral-01);
+  --color-bg-container-border: var(--primitive-neutral-08);
+  --color-bg-glass: var(--primitive-neutral-09-glass);
+
+  /* Divider */
+  --color-divider: var(--primitive-neutral-08-semi);
+
+  /* Chat bubbles — alias the same roles as light; the underlying container
+     and text tokens carry the theme swap. */
+  --color-chat-bubble-sent-bg: var(--color-bg-container-secondary);
+  --color-chat-bubble-sent-text: var(--color-text-primary);
+  --color-chat-bubble-received-bg: var(--color-bg-container-secondary);
+  --color-chat-bubble-received-text: var(--color-text-primary);
+  /* The composer's context note — one step off the #050505 shell */
+  --color-chat-context-bg: var(--primitive-neutral-09);
+
+  /* Calendar surfaces — the dark values are the reason this family exists:
+     the container ramp's second step (#303030) glares at calendar density, so
+     cells rest on the semi neutral-08 (≈#1E over the calendar container) and
+     hover one gentle step up to the semi neutral-07 (≈#2C). The pill hover
+     takes the resting cell tint — a step darker than the hovered cell it sits
+     on — and the hover-only border ring is an obvious mid-grey that reads
+     against both cell states. */
+  --color-calendar-cell-bg: var(--primitive-neutral-08-semi);
+  --color-calendar-cell-bg-hover: var(--primitive-neutral-07-semi);
+  --color-calendar-event-bg: var(--color-bg-container-primary);
+  --color-calendar-event-bg-hover: var(--color-calendar-cell-bg);
+  --color-calendar-event-border: var(--primitive-neutral-06);
+
+  /* Overlay & controls */
+  --color-scrim: var(--primitive-true-black-strong);
+  --color-control-thumb: var(--primitive-neutral-01);
+
+  /* Elevation — stronger opacity so shadows read against the #050505 floor */
+  --shadow-floating: 0 4px 16px rgba(0, 0, 0, 0.55);
+  --shadow-modal: 0 8px 32px rgba(0, 0, 0, 0.6);
+
+  /* Action - Primary. Inverted from light: the fill is the light half of
+     the teal ramp under a dark label, because a dark fill cannot clear 3:1
+     against the near-black page. Hover and active brighten rather than
+     deepen, so the fill walks toward the page's opposite, not into it. */
+  --color-action-primary-bg: var(--primitive-teal-05);
+  --color-action-primary-bg-hover: var(--primitive-teal-04);
+  --color-action-primary-bg-active: var(--primitive-teal-03);
+  --color-action-primary-text: var(--primitive-teal-10);
+  --color-action-primary-text-active: var(--primitive-teal-10);
+  --color-action-primary-text-secondary: var(--primitive-teal-10);
+  --color-action-primary-text-tertiary: var(--primitive-teal-04);
+  --color-action-primary-border: var(--primitive-teal-05);
+  --color-action-primary-border-secondary: var(--primitive-teal-06);
+  --color-action-primary-border-tertiary: var(--primitive-teal-04);
+
+  /* Action - Icon. The active icon sits on the hover/active fills, which
+     are the light half of the ramp here — so it inverts with the label. */
+  --color-action-icon-default: var(--primitive-neutral-01);
+  --color-action-icon-active: var(--primitive-teal-10);
+
+  /* Action - Passive (Secondary button) */
+  --color-action-passive-text: var(--primitive-neutral-01);
+  --color-action-passive-bg: var(--primitive-neutral-09-transparent);
+  --color-action-passive-bg-hover: var(--primitive-neutral-08-semi);
+  --color-action-passive-bg-active: var(--primitive-neutral-07-semi);
+
+  /* Action - Neutral (grey filled buttons). The fill stays visible at
+     rest, one step above the container greys; hover and active brighten
+     toward the page's opposite, like the primary family. */
+  --color-action-neutral-bg: var(--primitive-neutral-08);
+  --color-action-neutral-bg-hover: var(--primitive-neutral-07);
+  --color-action-neutral-bg-active: var(--primitive-neutral-06);
+  --color-action-neutral-text: var(--primitive-neutral-01);
+
+  /* Status - Positive */
+  --color-status-positive-bg: var(--primitive-green-10);
+  --color-status-positive-border: var(--primitive-green-07);
+  --color-status-positive-text: var(--primitive-green-01);
+  --color-status-positive-icon: var(--primitive-green-07);
+
+  /* Status - Warning */
+  --color-status-warning-bg: var(--primitive-orange-10);
+  --color-status-warning-border: var(--primitive-orange-07);
+  --color-status-warning-text: var(--primitive-orange-01);
+  --color-status-warning-icon: var(--primitive-orange-07);
+
+  /* Status - Error */
+  --color-status-error-bg: var(--primitive-red-10);
+  --color-status-error-border: var(--primitive-red-07);
+  --color-status-error-text: var(--primitive-red-01);
+  --color-status-error-icon: var(--primitive-red-06);
+
+  /* Status - Info */
+  --color-status-info-bg: var(--primitive-blue-10);
+  --color-status-info-border: var(--primitive-blue-07);
+  --color-status-info-text: var(--primitive-blue-01);
+  --color-status-info-icon: var(--primitive-blue-05);
+
+  /* Status - Neutral */
+  --color-status-neutral-bg: var(--primitive-neutral-08);
+  --color-status-neutral-border: var(--primitive-neutral-06);
+  --color-status-neutral-text: var(--primitive-neutral-01);
+  --color-status-neutral-icon: var(--primitive-neutral-04);
+
+  /* The -icon step (status glyphs on plain surfaces) runs brighter here
+     than the light-theme inks: mid-ramp hues that hold ≥3:1 on the dark
+     container floor, where the near-white -text tints all read as grey. */
+
+  /* AI - The gradient accent: the same luminous stops as light. One set
+     works on both floors, so the AI signature never shifts hue with the
+     theme. */
+  --color-ai-gradient-start: var(--primitive-red-05);
+  --color-ai-gradient-mid: var(--primitive-blue-05);
+  --color-ai-gradient-end: var(--primitive-teal-07);
+  /* The AI button's solid field: deeper than the neutral-10 page floor, so
+     the pill reads as a cut-out of true darkness under the luminous ring. */
+  --color-ai-button-bg: var(--primitive-true-black);
+
+  /* Chart - Contribution heatmap ramp (level 0 = none → level 4 = most) */
+  --color-chart-contribution-0: var(--primitive-neutral-08);
+  --color-chart-contribution-1: var(--primitive-green-10);
+  --color-chart-contribution-2: var(--primitive-green-09);
+  --color-chart-contribution-3: var(--primitive-green-08);
+  --color-chart-contribution-4: var(--primitive-green-07);
+
+  /* Chart - Ordered series ramp for multi-series charts. Series 1 follows
+     the action teal (theme-split with it); 2-7 alias the core accents, so
+     re-theming an accent re-themes every chart that uses its slot. */
+  --color-chart-series-1: var(--color-action-primary-bg);
+  --color-chart-series-2: var(--color-core-accent-mint);
+  --color-chart-series-3: var(--color-core-accent-gold);
+  --color-chart-series-4: var(--color-core-accent-coral);
+  --color-chart-series-5: var(--color-core-accent-violet);
+  --color-chart-series-6: var(--color-core-accent-amber);
+  --color-chart-series-7: var(--color-core-accent-cobalt);
+
+  /* Input */
+  --color-input-text-primary: var(--primitive-neutral-01);
+  --color-input-text-placeholder: var(--primitive-neutral-04);
+  --color-input-text-disabled: var(--primitive-neutral-07);
+  --color-input-text-inverse: var(--primitive-neutral-07);
+  --color-input-border-primary: var(--primitive-neutral-08);
+  --color-input-border-hover: var(--primitive-teal-07);
+  --color-input-border-selected: var(--primitive-teal-06);
+  --color-input-border-disabled: var(--primitive-neutral-08);
+  --color-input-bg-primary: var(--primitive-neutral-10);
+  --color-input-bg-disabled: var(--primitive-neutral-09);
+
+  /* Core colours */
+  --color-core-ui-primary: var(--primitive-teal-05);
+  --color-core-ui-secondary: var(--primitive-teal-09);
+  --color-core-accent-coral: var(--primitive-red-07);
+  --color-core-accent-violet: var(--primitive-purple-07);
+  --color-core-accent-cobalt: var(--primitive-blue-07);
+  --color-core-accent-amber: var(--primitive-orange-07);
+  --color-core-accent-gold: var(--primitive-yellow-07);
+  --color-core-accent-mint: var(--primitive-green-07);
+  --color-trend-up: var(--primitive-green-07);
+  --color-trend-down: var(--primitive-red-07);
+}

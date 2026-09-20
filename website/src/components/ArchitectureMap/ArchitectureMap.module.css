@@ -1,0 +1,155 @@
+/* ============================================
+   ARCHITECTURE MAP — figure, canvas surface,
+   controls, and the expanded overlay. Node and
+   edge styles live in MapNode.module.css and
+   MapEdges.module.css beside their components.
+   ============================================ */
+
+.figure {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-sm);
+}
+
+.caption {
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-secondary);
+}
+
+/* --------------------------------------------
+   Canvas surface
+   -------------------------------------------- */
+.surface {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--color-bg-page-primary);
+  /* The dotted working-canvas ground. Dot size and pitch are drawing
+     geometry, not spacing roles, like the cover mocks' coordinates. */
+  background-image: radial-gradient(
+    circle,
+    var(--color-bg-container-border) 1.25px,
+    transparent 1.25px
+  );
+  background-size: 26px 26px;
+  cursor: grab;
+}
+
+.surfaceEmbed {
+  border: var(--border-xs) solid var(--color-divider);
+  border-radius: var(--radius-xl);
+  height: 460px;
+  touch-action: pan-y;
+}
+
+/* Phones: the fit is width-constrained, so a tall panel just frames empty
+   canvas around a small drawing. Shorter keeps the preview honest — the
+   expanded view is the real reading surface there. */
+@media (max-width: 699px) {
+  .surfaceEmbed {
+    height: 300px;
+  }
+}
+
+.surfaceFull {
+  flex: 1;
+  min-height: 0;
+  touch-action: none;
+}
+
+.surfaceDragging {
+  cursor: grabbing;
+}
+
+.world {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+}
+
+/* --------------------------------------------
+   Controls — the /canvas board's floating pill
+   -------------------------------------------- */
+.controls {
+  position: absolute;
+  bottom: var(--padding-md);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  padding: var(--padding-xxs) var(--padding-xs);
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--color-bg-container-primary) 85%, transparent);
+  backdrop-filter: blur(16px);
+  border: var(--border-xs) solid var(--color-divider);
+  box-shadow: var(--shadow-floating);
+}
+
+.separator {
+  width: var(--border-xs);
+  height: var(--gap-lg);
+  margin: 0 var(--gap-xxs);
+  background: var(--color-divider);
+}
+
+.zoomLevel {
+  min-width: 4em;
+  height: var(--gap-xl);
+  padding: 0 var(--padding-xs);
+  border: 0;
+  border-radius: var(--radius-full);
+  background: none;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  color: var(--color-text-primary);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition: background var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.zoomLevel:hover {
+  background: var(--color-bg-container-secondary);
+}
+
+.zoomLevel:focus-visible {
+  outline: var(--border-md) solid var(--color-action-primary-bg);
+  outline-offset: var(--gap-xxs);
+}
+
+.hint {
+  position: fixed;
+  left: var(--padding-lg);
+  bottom: var(--padding-lg);
+  margin: 0;
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-tertiary);
+  pointer-events: none;
+}
+
+/* Phones: the hint would collide with the controls. */
+@media (max-width: 699px) {
+  .hint {
+    display: none;
+  }
+}
+
+/* --------------------------------------------
+   Expanded overlay
+   -------------------------------------------- */
+.overlay {
+  position: fixed;
+  inset: 0;
+  /* Above the chat layers (SiteChat tops out at 1101): an expanded map is a
+     modal takeover, and the floating chat button must not ride on top of it. */
+  z-index: 1200;
+  display: flex;
+  flex-direction: column;
+  /* The StageToolbar inside is a floating pill, like the canvas and
+     playground stages; the pannable surface runs underneath it. */
+  background-color: var(--color-bg-page-primary);
+}

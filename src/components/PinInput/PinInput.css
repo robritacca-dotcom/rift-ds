@@ -1,0 +1,92 @@
+/* ============================================
+   PIN INPUT COMPONENT
+   Segmented one-time-code input
+   ============================================ */
+
+/* Base — the Field wrapper carries the root class */
+.ds-pininput {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm); /* 8px */
+}
+
+/* ============================================
+   CELLS ROW
+   ============================================ */
+
+.ds-pininput__cells {
+  display: flex;
+  gap: var(--gap-sm); /* 8px */
+}
+
+/* ============================================
+   CELL
+   ============================================ */
+
+.ds-pininput__cell {
+  /* Fixed control geometry, like the ToggleSwitch track */
+  width: 44px;
+  height: 52px;
+  padding: 0;
+  text-align: center;
+
+  border: var(--border-xs) solid var(--color-input-border-primary);
+  border-radius: var(--radius-md); /* 12px */
+  background-color: var(--color-input-bg-primary);
+
+  /* Typography */
+  font-family: var(--font-paragraph-em-family);
+  font-size: var(--font-paragraph-em-size);
+  font-weight: var(--font-paragraph-em-weight);
+  line-height: var(--font-paragraph-em-line-height);
+  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  color: var(--color-input-text-primary);
+
+  /* Transitions */
+  transition: border-color var(--motion-duration-base) var(--motion-ease-standard), background-color var(--motion-duration-base) var(--motion-ease-standard);
+  outline: none;
+}
+
+/* ============================================
+   STATES
+   ============================================ */
+
+.ds-pininput__cell:hover:not(:focus):not(:disabled) {
+  border-color: var(--color-input-border-hover);
+}
+
+.ds-pininput__cell:focus {
+  border-color: var(--color-input-border-selected);
+}
+
+.ds-pininput__cell:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+/* ============================================
+   ERROR STATE
+   ============================================ */
+
+.ds-pininput--error .ds-pininput__cell {
+  border-color: var(--color-status-error-border);
+}
+
+.ds-pininput--error .ds-pininput__cell:focus {
+  border-color: var(--color-status-error-border);
+}
+
+/* ============================================
+   DISABLED STATE
+   ============================================ */
+
+.ds-pininput--disabled .ds-pininput__cells {
+  opacity: 0.4;
+}
+
+.ds-pininput--disabled .ds-pininput__cell {
+  background-color: var(--color-input-bg-disabled);
+  border-color: var(--color-input-border-disabled);
+  color: var(--color-input-text-disabled);
+  cursor: not-allowed;
+}

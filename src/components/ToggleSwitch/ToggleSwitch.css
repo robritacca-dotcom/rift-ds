@@ -1,0 +1,146 @@
+/* ============================================
+   TOGGLE SWITCH COMPONENT
+   Dark/Light mode toggle with check icon
+   ============================================ */
+
+.ds-toggle-switch {
+  /* Layout */
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-sm); /* 8px */
+
+  /* Reset */
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: var(--color-text-primary);
+  font-family: var(--font-paragraph-family);
+}
+
+/* ============================================
+   TRACK
+   ============================================ */
+
+.ds-toggle-switch__track {
+  position: relative;
+  width: 42px;
+  height: 24px;
+  border-radius: var(--radius-full);
+  background: var(--color-action-primary-bg);
+  transition: background-color var(--motion-duration-slow) var(--motion-ease-standard);
+  flex-shrink: 0;
+}
+
+/* ============================================
+   THUMB
+   ============================================ */
+
+.ds-toggle-switch__thumb {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 20px;
+  height: 20px;
+  background: var(--color-control-thumb);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: transform var(--motion-duration-slow) var(--motion-ease-spring);
+}
+
+.ds-toggle-switch__thumb-icon {
+  /* Intentionally off the --icon-size-* scale. This check sits inside the
+     20x20 thumb; the smallest scale step is also 20px, which would fill the
+     thumb edge to edge. Control-internal glyph, not a UI icon.
+
+     Set via --icon-size (not font-size): .material-symbols-rounded derives
+     font-size, width, and height from it together. Overriding font-size
+     alone leaves the box at the 24px default, so the glyph hangs off-centre
+     inside the thumb.
+
+     ds-allow(icon-size): 14px glyph inside the 20px thumb — the smallest
+     scale step would fill it edge to edge. */
+  --icon-size: 14px;
+  color: var(--color-action-primary-bg);
+}
+
+/* ============================================
+   LABEL
+   ============================================ */
+
+.ds-toggle-switch__label {
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  /* The root is a <button>, whose UA style centres text — without this,
+     a label short enough to undershoot any width the layout gives it
+     floats away from the track instead of hugging the gap. */
+  text-align: left;
+}
+
+/* ============================================
+   STATES
+   ============================================ */
+
+/* Off / Unchecked state — thumb moves to the left */
+.ds-toggle-switch--off .ds-toggle-switch__track {
+  background: var(--color-text-secondary);
+}
+
+.ds-toggle-switch--off .ds-toggle-switch__thumb {
+  transform: translateX(-18px);
+}
+
+/* ============================================
+   FOCUS
+   ============================================ */
+
+.ds-toggle-switch:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+/* ============================================
+   DISABLED STATE
+   ============================================ */
+
+.ds-toggle-switch--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   SIZE — COMPACT
+   ============================================ */
+
+.ds-toggle-switch--compact .ds-toggle-switch__track {
+  width: 34px;
+  height: 20px;
+}
+
+.ds-toggle-switch--compact .ds-toggle-switch__thumb {
+  width: 16px;
+  height: 16px;
+}
+
+.ds-toggle-switch--compact .ds-toggle-switch__thumb-icon {
+  /* Off-scale for the same reason as the default size — the compact thumb
+     is only 16x16.
+
+     ds-allow(icon-size): 12px glyph inside the 16px compact thumb. */
+  --icon-size: 12px;
+}
+
+.ds-toggle-switch--compact .ds-toggle-switch__label {
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+}
+
+.ds-toggle-switch--compact.ds-toggle-switch--off .ds-toggle-switch__thumb {
+  transform: translateX(-14px);
+}

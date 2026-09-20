@@ -1,0 +1,67 @@
+/* ============================================
+   BADGE COMPONENT
+   Small inline status labels
+   ============================================ */
+
+.ds-badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-paragraph-sm-em-family);
+  font-size: var(--font-paragraph-sm-em-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+  padding: var(--padding-xxxs) var(--padding-sm); /* Figma: 2px 8px */
+  /* Badges are borderless by decision (2026-08-26): the tinted fill
+     carries the status on its own, and the old per-variant borders sat
+     below 3:1 against their fills. The transparent border keeps the
+     geometry so the box does not shift against bordered neighbours. */
+  border: var(--border-xs) solid transparent;
+  border-radius: var(--radius-xs); /* Figma: 4px */
+  white-space: nowrap;
+}
+
+/* ============================================
+   VARIANT — INFO
+   ============================================ */
+
+.ds-badge--info {
+  background-color: var(--color-status-info-bg);
+  color: var(--color-status-info-text);
+}
+
+/* ============================================
+   VARIANT — POSITIVE
+   ============================================ */
+
+.ds-badge--positive {
+  background-color: var(--color-status-positive-bg);
+  color: var(--color-status-positive-text);
+}
+
+/* ============================================
+   VARIANT — WARNING
+   ============================================ */
+
+.ds-badge--warning {
+  background-color: var(--color-status-warning-bg);
+  color: var(--color-status-warning-text);
+}
+
+/* ============================================
+   VARIANT — ERROR
+   ============================================ */
+
+.ds-badge--error {
+  background-color: var(--color-status-error-bg);
+  color: var(--color-status-error-text);
+}
+
+/* ============================================
+   VARIANT — NEUTRAL
+   ============================================ */
+
+.ds-badge--neutral {
+  background-color: var(--color-status-neutral-bg);
+  color: var(--color-status-neutral-text);
+}

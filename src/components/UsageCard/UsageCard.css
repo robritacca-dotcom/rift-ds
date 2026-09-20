@@ -1,0 +1,30 @@
+/* ============================================
+   USAGE CARD COMPONENT
+   An agent's budgets at a glance — meter rows
+   with reset captions, in the chart card chrome
+   ============================================ */
+
+/* Base — the card chrome itself comes from ds-chart */
+
+.ds-usage-card__items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-lg);
+}
+
+.ds-usage-card__item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxs);
+}
+
+/* Reset caption — sits under the bar's trailing edge */
+
+.ds-usage-card__reset {
+  align-self: flex-end;
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-secondary);
+}

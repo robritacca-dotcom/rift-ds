@@ -1,0 +1,288 @@
+/* ============================================
+   DROPDOWN COMPONENT
+   Custom select with menu, keyboard navigation
+   ============================================ */
+
+.ds-dropdown {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm); /* 8px */
+  width: 100%;
+  position: relative;
+}
+
+/* ============================================
+   LABEL
+   ============================================ */
+
+/* ============================================
+   TRIGGER
+   ============================================ */
+
+.ds-dropdown__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-sm); /* 8px */
+  padding: var(--padding-sm) var(--padding-md); /* 8px 16px */
+  border: var(--border-xs) solid var(--color-input-border-primary);
+  border-radius: var(--radius-md); /* 12px */
+  background-color: var(--color-input-bg-primary);
+  cursor: pointer;
+  transition: border-color var(--motion-duration-base) var(--motion-ease-standard);
+  outline: none;
+}
+
+.ds-dropdown__trigger:hover:not(:focus-visible) {
+  border-color: var(--color-input-border-hover);
+}
+
+.ds-dropdown__trigger:focus-visible {
+  border-color: var(--color-input-border-selected);
+}
+
+.ds-dropdown--open .ds-dropdown__trigger {
+  border-color: var(--color-input-border-selected);
+}
+
+/* ============================================
+   VALUE / PLACEHOLDER
+   ============================================ */
+
+/* The selected option's preview face (--ds-dropdown-font, set per option
+   from the `font` option field) wins over the theme face when present. */
+.ds-dropdown__value {
+  font-family: var(--ds-dropdown-font, var(--font-paragraph-em-family));
+  font-size: var(--font-paragraph-em-size);
+  font-weight: var(--font-paragraph-em-weight);
+  line-height: var(--font-paragraph-em-line-height);
+  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  color: var(--color-input-text-primary);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ds-dropdown__value--placeholder {
+  color: var(--color-input-text-placeholder);
+}
+
+/* An option's icon, on the closed trigger — inline with the text so the
+   value keeps its single-line ellipsis. */
+.ds-dropdown__value-icon {
+  --icon-size: var(--icon-size-sm);
+  color: var(--color-icon-primary);
+  vertical-align: text-bottom;
+  margin-right: var(--gap-xs);
+}
+
+/* ============================================
+   CHEVRON
+   ============================================ */
+
+.ds-dropdown__chevron {
+  --icon-size: var(--icon-size-md);
+  color: var(--color-icon-primary);
+  transition: transform var(--motion-duration-base) var(--motion-ease-standard);
+  flex-shrink: 0;
+}
+
+.ds-dropdown--open .ds-dropdown__chevron {
+  transform: rotate(180deg);
+}
+
+/* ============================================
+   MENU
+   ============================================ */
+
+.ds-dropdown__menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: var(--gap-xxs); /* 2px */
+  padding: var(--padding-xxs); /* inset gap on all sides */
+  border: var(--border-xs) solid var(--color-input-border-primary);
+  border-radius: var(--radius-md); /* 12px */
+  background-color: var(--color-bg-page-primary);
+  list-style: none;
+  max-height: 240px;
+  overflow-y: auto;
+  z-index: 10;
+  box-shadow: var(--shadow-floating);
+
+  /* Animation */
+  animation: ds-dropdown-appear var(--motion-duration-fast) var(--motion-ease-entrance);
+}
+
+@keyframes ds-dropdown-appear {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ============================================
+   OPTION (with inset-gap hover)
+   ============================================ */
+
+.ds-dropdown__option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--padding-sm) var(--padding-sm-md); /* 8px 12px */
+  border-radius: var(--radius-sm);
+  font-family: var(--ds-dropdown-font, var(--font-paragraph-em-family));
+  font-size: var(--font-paragraph-em-size);
+  font-weight: var(--font-paragraph-em-weight);
+  line-height: var(--font-paragraph-em-line-height);
+  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-dropdown__option:hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-dropdown__option--focused {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-dropdown__option--selected {
+  color: var(--color-action-primary-text-tertiary);
+}
+
+.ds-dropdown__option--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ds-dropdown__option--disabled:hover {
+  background-color: transparent;
+}
+
+/* ============================================
+   GROUPED MODE
+   ============================================ */
+
+.ds-dropdown__group {
+  list-style: none;
+}
+
+.ds-dropdown__group-label {
+  display: block;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-tertiary);
+  padding: var(--padding-xs) var(--padding-sm-md);
+  user-select: none;
+}
+
+.ds-dropdown__group-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ds-dropdown__separator {
+  height: 1px;
+  background: var(--color-bg-container-border);
+  margin: var(--padding-xxs) var(--padding-sm);
+  list-style: none;
+}
+
+/* ============================================
+   CHECK ICON
+   ============================================ */
+
+.ds-dropdown__check {
+  --icon-size: var(--icon-size-md);
+  color: var(--color-action-primary-bg);
+}
+
+/* The option row's icon-and-label cluster, so the selected check keeps its
+   own end of the space-between row. */
+.ds-dropdown__option-content {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  min-width: 0;
+}
+
+.ds-dropdown__option-icon {
+  --icon-size: var(--icon-size-sm);
+  color: var(--color-icon-primary);
+  flex-shrink: 0;
+}
+
+/* ============================================
+   HELPER TEXT
+   ============================================ */
+
+/* ============================================
+   ERROR STATE
+   ============================================ */
+
+.ds-dropdown--error .ds-dropdown__trigger {
+  border-color: var(--color-status-error-border);
+}
+
+/* ============================================
+   DISABLED STATE
+   ============================================ */
+
+.ds-dropdown--disabled .ds-dropdown__trigger {
+  background-color: var(--color-input-bg-disabled);
+  border-color: var(--color-input-border-disabled);
+  cursor: not-allowed;
+}
+
+.ds-dropdown--disabled .ds-dropdown__value {
+  color: var(--color-input-text-disabled);
+}
+
+.ds-dropdown--disabled .ds-dropdown__chevron {
+  color: var(--color-input-text-disabled);
+}
+
+/* ============================================
+   SIZE — COMPACT
+   ============================================ */
+
+.ds-dropdown--compact .ds-dropdown__trigger {
+  padding: var(--padding-xs) var(--padding-sm-md); /* 6px 12px */
+}
+
+.ds-dropdown--compact .ds-dropdown__value {
+  font-size: var(--font-paragraph-sm-em-size);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+}
+
+.ds-dropdown--compact .ds-dropdown__chevron {
+  --icon-size: var(--icon-size-sm);
+}
+
+.ds-dropdown--compact .ds-dropdown__option {
+  padding: var(--padding-xs) var(--padding-sm); /* 6px 8px */
+  font-size: var(--font-paragraph-sm-em-size);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+}
+
+/* Compact group labels keep the base --font-paragraph-sm-* type — the
+   scale has no smaller step. */
+
+.ds-dropdown--compact .ds-dropdown__check {
+  --icon-size: var(--icon-size-sm);
+}

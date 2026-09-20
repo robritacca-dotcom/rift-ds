@@ -1,0 +1,189 @@
+/* ============================================
+   CODE BLOCK COMPONENT
+   Monospace code with an optional header row
+   (filename, language) and a copy button.
+   Note: the system typeface is Nunito Sans;
+   code is the one sanctioned monospace context.
+   ============================================ */
+
+.ds-code-block {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-bg-container-primary);
+  overflow: hidden;
+  max-height: var(--ds-code-block-max-height, none);
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+
+.ds-code-block__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-sm);
+  padding: var(--padding-xs) var(--padding-sm) var(--padding-xs) var(--padding-md);
+  border-bottom: var(--border-xs) solid var(--color-bg-container-border);
+  flex-shrink: 0;
+  transition: border-bottom-color var(--motion-duration-slow) var(--motion-ease-standard);
+}
+
+/* Collapsed: keep the header's height but hide its divider so it
+   doesn't double up with the root border */
+.ds-code-block--collapsed .ds-code-block__header {
+  border-bottom-color: transparent;
+}
+
+.ds-code-block__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  min-width: 0;
+}
+
+.ds-code-block__toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: var(--padding-xxxs);
+  border: none;
+  border-radius: var(--radius-full);
+  background: none;
+  color: var(--color-icon-primary);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-code-block__toggle .material-symbols-rounded {
+  --icon-size: var(--icon-size-sm);
+  line-height: 1;
+  transition: transform var(--motion-duration-slow) var(--motion-ease-standard);
+}
+
+.ds-code-block--collapsed .ds-code-block__toggle .material-symbols-rounded {
+  transform: rotate(-90deg);
+}
+
+.ds-code-block__toggle:hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-code-block__toggle:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+.ds-code-block__filename {
+  font-family: var(--font-family-code);
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ds-code-block__language {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  text-transform: uppercase;
+  letter-spacing: var(--font-overline-letter-spacing);
+  color: var(--color-text-tertiary);
+  flex-shrink: 0;
+}
+
+/* ============================================
+   COPY BUTTON
+   ============================================ */
+
+.ds-code-block__copy {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  margin: 0;
+  padding: var(--padding-xxxs) var(--padding-sm);
+  border: none;
+  border-radius: var(--radius-full);
+  background: none;
+  font-family: var(--font-paragraph-sm-em-family);
+  font-size: var(--font-paragraph-sm-em-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color var(--motion-duration-base) var(--motion-ease-standard), color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-code-block__copy .material-symbols-rounded {
+  --icon-size: var(--icon-size-sm);
+  line-height: 1;
+}
+
+.ds-code-block__copy:hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-code-block__copy:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+/* ============================================
+   CODE AREA
+   ============================================ */
+
+/* Same collapse technique as Accordion: animate the grid track
+   between 0fr and 1fr so height animates without measuring */
+.ds-code-block__panel {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows var(--motion-duration-slow) var(--motion-ease-standard);
+  min-height: 0;
+}
+
+.ds-code-block--collapsed .ds-code-block__panel {
+  grid-template-rows: 0fr;
+}
+
+.ds-code-block__panel-inner {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.ds-code-block__pre {
+  margin: 0;
+  padding: var(--padding-md);
+  overflow: auto;
+  /* Allow the pre to shrink below its content height so a
+     max-height on the root scrolls here, not past the header */
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.ds-code-block__code {
+  font-family: var(--font-family-code);
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-primary);
+  white-space: pre;
+}
+
+/* Icons take the colour of the text around them. Explicit, not just
+   inherited by default: a consumer stylesheet that sets a colour on
+   .material-symbols-rounded itself (a common global default) would
+   otherwise override inheritance and detach the icon from the state
+   colours this component sets on its parents. */
+.ds-code-block .material-symbols-rounded {
+  color: inherit;
+}

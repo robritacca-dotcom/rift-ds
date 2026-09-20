@@ -1,0 +1,517 @@
+/* ============================================
+   APP SIDEBAR — collapsible navigation
+   Collapsed: 64px icon-only rail
+   Expanded: 280px with labels, accordion, profile
+   ============================================ */
+
+/* ============================================
+   WRAPPER
+   ============================================ */
+.ds-app-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+  width: 64px;
+  padding: var(--padding-lg) 0;
+  background-color: var(--color-bg-page-primary);
+  overflow: hidden;
+  transition: width var(--motion-duration-slow) var(--motion-ease-emphasized);
+}
+
+.ds-app-sidebar--expanded {
+  width: 280px;
+}
+
+/* ============================================
+   FLOATING VARIANT — the rail as a glass card
+   inset from the viewport edges (the same
+   recipe as the site chat panel)
+   ============================================ */
+.ds-app-sidebar--floating {
+  top: var(--ds-sidebar-float-inset, 20px);
+  left: var(--ds-sidebar-float-inset, 20px);
+  height: calc(100dvh - var(--ds-sidebar-float-inset, 20px) * 2);
+  background-color: var(--color-bg-glass);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-floating);
+  /* The glass token is deliberately translucent; this blur is what keeps
+     content behind the rail readable through it. */
+  backdrop-filter: blur(24px);
+}
+
+/* ============================================
+   TOP SECTION — logo + nav
+   ============================================ */
+.ds-app-sidebar__top {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xl);
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex: 1;
+  min-height: 0;
+}
+
+/* ============================================
+   LOGO ROW
+   ============================================ */
+.ds-app-sidebar__logo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 24px;
+  padding: 0 var(--padding-lg);
+  flex-shrink: 0;
+}
+
+/* Expand/collapse choreography, here and on every row below: the rail's
+   clipping width and the text's opacity fade carry the whole transition.
+   Inner layout stays constant - text keeps its natural width with
+   min-width: 0 so it truncates under the sweeping rail instead of holding
+   rows at full width (width: 0 to auto cannot interpolate, and a gap that
+   snaps mid-glide reads as a bounce). */
+.ds-app-sidebar__logo-inner {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-lg);
+  min-width: 0;
+}
+
+.ds-app-sidebar__logo-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.ds-app-sidebar__logo-text {
+  font-family: var(--font-paragraph-em-family);
+  font-size: var(--font-paragraph-em-size);
+  font-weight: var(--font-paragraph-em-weight);
+  line-height: var(--font-paragraph-em-line-height);
+  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  min-width: 0;
+  flex-shrink: 1;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-app-sidebar--expanded .ds-app-sidebar__logo-text {
+  opacity: 1;
+}
+
+.ds-app-sidebar__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 0;
+  height: 24px;
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  color: var(--color-icon-primary);
+  cursor: pointer;
+  padding: 0;
+  overflow: hidden;
+  opacity: 0;
+  /* Both widths are explicit (0 and 24px), so the width glides too. */
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard), width var(--motion-duration-slow) var(--motion-ease-emphasized);
+}
+
+.ds-app-sidebar--expanded .ds-app-sidebar__toggle {
+  width: 24px;
+  opacity: 1;
+}
+
+.ds-app-sidebar__toggle .material-symbols-rounded {
+  --icon-size: var(--icon-size-md);
+  transition: transform var(--motion-duration-slow) var(--motion-ease-standard);
+}
+
+/* ============================================
+   NAV GROUP
+   ============================================ */
+.ds-app-sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs);
+  flex-shrink: 0;
+  /* Stretch in both states: rows fill the rail and the collapsed icon is
+     centred by the row's own padding, so alignment never snaps. */
+  align-items: stretch;
+}
+
+/* Category label — only visible when expanded */
+.ds-app-sidebar__category {
+  padding: 0 var(--padding-lg);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard), height var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-app-sidebar--expanded .ds-app-sidebar__category {
+  opacity: 1;
+  height: 20px;
+}
+
+/* ============================================
+   NAV BUTTON
+   ============================================ */
+.ds-app-sidebar__btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 40px;
+  min-width: 0;
+  /* The same inset in both states: in the collapsed 64px rail the 12px
+     margins leave a 40px row, so the hover pill is a perfect circle clear
+     of the rail edges, with the icon centred (12 + 8 + 24 + 8 + 12 = 64);
+     expanded, these are the pill's edge inset. Nothing to transition. */
+  margin: 0 var(--padding-sm-md);
+  padding: var(--padding-sm);
+  border-radius: var(--radius-full);
+  background: transparent;
+  border: none;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  overflow: hidden;
+  text-align: left;
+  /* The row renders as an <a> when the item carries an href. */
+  text-decoration: none;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard), padding var(--motion-duration-slow) var(--motion-ease-emphasized), margin var(--motion-duration-slow) var(--motion-ease-emphasized);
+}
+
+/* Inset via margin + reduced padding (12 + 8 = the 20px the label sat at
+   before), so the pill floats off the rail edges while the icon and label
+   keep their exact x-positions against the category labels above. */
+
+.ds-app-sidebar__btn:hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-app-sidebar__btn--active {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-app-sidebar__btn-left {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  min-width: 0;
+}
+
+.ds-app-sidebar__btn-icon {
+  --icon-size: var(--icon-size-md);
+  color: var(--color-icon-primary);
+  flex-shrink: 0;
+}
+
+.ds-app-sidebar__btn-label {
+  font-family: var(--font-paragraph-em-family);
+  font-size: var(--font-paragraph-em-size);
+  font-weight: var(--font-paragraph-em-weight);
+  line-height: var(--font-paragraph-em-line-height);
+  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  min-width: 0;
+  flex-shrink: 1;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-app-sidebar--expanded .ds-app-sidebar__btn-label {
+  opacity: 1;
+}
+
+.ds-app-sidebar__btn-badge {
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-secondary);
+  background-color: var(--color-bg-container-tertiary);
+  border-radius: var(--radius-full);
+  padding: var(--padding-xxxs) var(--padding-sm);
+  min-width: 0;
+  flex-shrink: 1;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-app-sidebar--expanded .ds-app-sidebar__btn-badge {
+  opacity: 1;
+}
+
+.ds-app-sidebar__btn-chevron {
+  font-size: 24px;
+  color: var(--color-icon-secondary);
+  min-width: 0;
+  flex-shrink: 1;
+  overflow: hidden;
+  transition: transform var(--motion-duration-slow) var(--motion-ease-standard), opacity var(--motion-duration-base) var(--motion-ease-standard);
+  opacity: 0;
+}
+
+.ds-app-sidebar--expanded .ds-app-sidebar__btn-chevron {
+  opacity: 1;
+}
+
+.ds-app-sidebar__btn-chevron--open {
+  transform: rotate(90deg);
+}
+
+/* ============================================
+   SUB-ITEMS (accordion children)
+   ============================================ */
+.ds-app-sidebar__sub-items {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height var(--motion-duration-slow) var(--motion-ease-emphasized);
+}
+
+.ds-app-sidebar__sub-items--open {
+  max-height: 500px;
+}
+
+.ds-app-sidebar__sub-item {
+  display: flex;
+  align-items: flex-start;
+  height: 40px;
+}
+
+.ds-app-sidebar__sub-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 100%;
+  flex-shrink: 0;
+  padding-left: 16px;
+}
+
+.ds-app-sidebar__sub-line::after {
+  content: '';
+  display: block;
+  width: 1px;
+  height: 100%;
+  background-color: var(--color-bg-container-border);
+}
+
+.ds-app-sidebar__sub-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  /* The same edge inset the parent pills get; sub-items only render while
+     the rail is expanded, so this needs no state selector. */
+  margin-right: var(--padding-sm-md);
+  padding: var(--padding-sm);
+  border-radius: var(--radius-full);
+  background: transparent;
+  border: none;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  flex: 1;
+  text-align: left;
+  overflow: hidden;
+  white-space: nowrap;
+  /* The row renders as an <a> when the sub-item carries an href. */
+  text-decoration: none;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-app-sidebar__sub-btn:hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-app-sidebar__sub-btn--active {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-app-sidebar__sub-label {
+  font-family: var(--font-paragraph-em-family);
+  font-size: var(--font-paragraph-em-size);
+  font-weight: var(--font-paragraph-em-weight);
+  line-height: var(--font-paragraph-em-line-height);
+  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}
+
+/* ============================================
+   CONSUMER SLOTS + BOTTOM WRAPPER
+   Slots keep their height in both states so the
+   rail's layout never snaps; collapsed they fade
+   out and stop taking clicks.
+   ============================================ */
+.ds-app-sidebar__bottom {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  min-width: 0;
+  flex-shrink: 0;
+}
+
+.ds-app-sidebar__top-slot,
+.ds-app-sidebar__footer-slot {
+  padding: 0 var(--padding-md);
+  min-width: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-app-sidebar--expanded .ds-app-sidebar__top-slot,
+.ds-app-sidebar--expanded .ds-app-sidebar__footer-slot {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ============================================
+   PROFILE
+   ============================================ */
+.ds-app-sidebar__profile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 0;
+  /* Centres the 40px avatar in the collapsed 64px rail; glides to the
+     expanded inset below. */
+  padding: 0 var(--padding-sm-md);
+  flex-shrink: 0;
+  transition: padding var(--motion-duration-slow) var(--motion-ease-emphasized);
+}
+
+.ds-app-sidebar--expanded .ds-app-sidebar__profile {
+  padding: 0 var(--padding-lg);
+}
+
+.ds-app-sidebar__profile-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.ds-app-sidebar__avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-bg-container-secondary);
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.ds-app-sidebar__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ds-app-sidebar__profile-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex-shrink: 1;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-app-sidebar--expanded .ds-app-sidebar__profile-info {
+  opacity: 1;
+}
+
+.ds-app-sidebar__profile-name {
+  font-family: var(--font-paragraph-em-family);
+  font-size: var(--font-paragraph-em-size);
+  font-weight: var(--font-paragraph-em-weight);
+  line-height: var(--font-paragraph-em-line-height);
+  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ds-app-sidebar__profile-email {
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ds-app-sidebar__profile-more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--color-icon-primary);
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  width: 0;
+  overflow: hidden;
+  opacity: 0;
+  /* Both widths are explicit (0 and 24px), so the width glides too. */
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard), width var(--motion-duration-slow) var(--motion-ease-emphasized);
+}
+
+.ds-app-sidebar--expanded .ds-app-sidebar__profile-more {
+  width: 24px;
+  opacity: 1;
+}
+
+.ds-app-sidebar__profile-more .material-symbols-rounded {
+  --icon-size: var(--icon-size-md);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+  .ds-app-sidebar {
+    width: 0;
+    padding: 0;
+  }
+
+  .ds-app-sidebar--expanded {
+    width: 280px;
+    padding: var(--padding-lg) 0;
+  }
+}
+
+/* Icons take the colour of the text around them. Explicit, not just
+   inherited by default: a consumer stylesheet that sets a colour on
+   .material-symbols-rounded itself (a common global default) would
+   otherwise override inheritance and detach the icon from the state
+   colours this component sets on its parents. */
+.ds-app-sidebar .material-symbols-rounded {
+  color: inherit;
+}

@@ -1,0 +1,381 @@
+/* ============================================
+   OVERVIEW PAGE LAYOUT
+   ============================================ */
+.dsLayout {
+  display: flex;
+  gap: var(--layout-column-gap);
+  width: 100%;
+  max-width: 1440px;
+  padding-top: var(--primitive-gap-xl);
+}
+
+.dsContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxxl);
+  min-width: 0;
+}
+
+/* ============================================
+   PAGE HEADER
+   ============================================ */
+.pageHeader {
+  margin-top: calc(var(--primitive-gap-xl) - var(--gap-xxxl));
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--primitive-gap-lg);
+  width: 100%;
+}
+
+/* ============================================
+   PAGE TITLE - Display 2
+   ============================================ */
+.pageTitle {
+  font-size: var(--font-display-2-size);
+  font-weight: var(--font-display-2-weight);
+  line-height: var(--font-display-2-line-height);
+  letter-spacing: var(--font-display-2-letter-spacing);
+  color: var(--color-text-primary);
+  width: 100%;
+}
+
+/* Sub Display */
+.subDisplay {
+  font-family: var(--font-sub-display-family);
+  font-size: var(--font-sub-display-size);
+  font-weight: var(--font-sub-display-weight);
+  line-height: var(--font-sub-display-line-height);
+  letter-spacing: var(--font-sub-display-letter-spacing);
+  color: var(--color-text-primary);
+  margin-bottom: 0;
+}
+
+/* ============================================
+   INTRO SECTION
+   ============================================ */
+.introSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-lg);
+}
+
+.introBody {
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   TOOLS LIST (right rail)
+   ============================================ */
+.toolItem {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--primitive-gap-md);
+  text-decoration: none;
+  color: inherit;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+a.toolItem:hover {
+  opacity: 0.8;
+}
+
+.toolLinkIcon {
+  /* Off-scale below the 20px opsz floor on purpose: a quiet trailing
+     affordance sized to read as metadata, not an action. */
+  --icon-size: 16px;
+  color: var(--color-text-tertiary);
+  margin-left: auto;
+  flex-shrink: 0;
+  padding-top: 4px;
+}
+
+.toolDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.toolName {
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  letter-spacing: -0.16px;
+  color: var(--color-text-primary);
+}
+
+.toolDesc {
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-tertiary);
+}
+
+/* ============================================
+   RESUME TWO-COLUMN LAYOUT
+   ============================================ */
+.resumeLayout {
+  display: flex;
+  gap: var(--layout-column-gap);
+  width: 100%;
+}
+
+.resumeMain {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.resumeSidebar {
+  width: var(--layout-rail-width);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxxl);
+}
+
+/* ============================================
+   RESUME SECTION
+   ============================================ */
+/* Match the map sections' heading-to-content gap so the left column and
+   the rail line up: both use the library SectionTitle, so the same gap
+   here starts the stat list at the same point the map prose starts. */
+.resumeSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-md);
+}
+
+/* Company / pipeline histories now render via the design-system
+   Timeline `company` variant (see src/components/Timeline). */
+
+/* ============================================
+   SKILLS
+   ============================================ */
+.skillsGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-sm);
+}
+
+.skillsCategory {
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  color: var(--color-text-primary);
+}
+
+.skillsList {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.skillsList li {
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-tertiary);
+}
+
+
+/* ============================================
+   INLINE LINKS — design.md / CLAUDE.md mentions
+   ============================================ */
+.inlineLink {
+  color: var(--color-action-primary-bg);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  font-weight: var(--font-paragraph-em-weight);
+  transition: text-decoration-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.inlineLink:hover {
+  text-decoration-color: currentColor;
+}
+
+/* ============================================
+   KEY STATS (right rail) — registry-driven counts
+   ============================================ */
+.statList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-lg);
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-decoration: none;
+  color: inherit;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+a.statItem:hover {
+  opacity: 0.8;
+}
+
+.statItem:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
+}
+
+.statValue {
+  font-size: var(--font-heading-2-size);
+  font-weight: var(--font-heading-2-weight);
+  line-height: var(--font-heading-2-line-height);
+  letter-spacing: var(--font-heading-2-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.statTitle {
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  color: var(--color-text-primary);
+}
+
+.statLabel {
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-secondary);
+}
+
+/* ============================================
+   PROFILE COLUMN (about/me — left slot matching sidebar width)
+   ============================================ */
+.profileCol {
+  width: var(--layout-sidebar-width);
+  flex-shrink: 0;
+  position: sticky;
+  top: calc(78px + var(--primitive-padding-lg) * 2 + var(--primitive-gap-xl));
+  height: fit-content;
+}
+
+.profileImage {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  display: block;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 959px) {
+  .profileCol {
+    display: none;
+  }
+}
+
+@media (max-width: 1151px) {
+  .resumeLayout {
+    flex-direction: column;
+  }
+
+  .resumeSidebar {
+    width: 100%;
+  }
+}
+
+@media (max-width: 959px) {
+  .pageHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .dsLayout {
+    padding-left: 0;
+    min-width: 0;
+  }
+
+  .dsContent {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+}
+
+/* ============================================
+   MAP SECTIONS (stage-grouped overview)
+   ============================================ */
+.mapSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-md);
+  margin-bottom: var(--gap-xxxl);
+}
+
+/* The divider-bearing titles follow the case-study header rhythm —
+   heading, rule, then --gap-xl of clearance before the content. These
+   sections run a tighter internal gap, so the title carries the
+   difference; the divider-less titles keep the plain section gap. */
+.mapSection > :global(.ds-section-title:not(.ds-section-title--no-divider)),
+.resumeSection > :global(.ds-section-title:not(.ds-section-title--no-divider)) {
+  margin-bottom: calc(var(--gap-xl) - var(--primitive-gap-md));
+}
+
+.sectionBody {
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-primary);
+}
+
+.sectionBullets {
+  margin: 0;
+  padding-left: var(--primitive-padding-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-xs);
+  font-size: var(--font-paragraph-size);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-primary);
+}
+
+/* The one-breath section's tool roster, for readers who never expand a map */
+.logoStrip {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--primitive-gap-sm);
+}
+
+.logoChip {
+  display: flex;
+  align-items: center;
+  gap: var(--primitive-gap-sm);
+  padding: var(--primitive-padding-xs) var(--primitive-padding-sm-md);
+  border: var(--border-xs) solid var(--color-divider);
+  border-radius: var(--radius-full);
+  background-color: var(--color-bg-container-primary);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  color: var(--color-text-primary);
+}
+
+/* Theme-paired marks (Next.js, Vercel ship as light/dark files) */
+.logoDark {
+  display: none;
+}
+
+[data-theme="dark"] .logoLight {
+  display: none;
+}
+
+[data-theme="dark"] .logoDark {
+  display: block;
+}

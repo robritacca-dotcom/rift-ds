@@ -1,0 +1,79 @@
+/* ============================================
+   QUOTE COMPONENT
+   Inline blockquote or large pull-quote with
+   optional attribution.
+   ============================================ */
+
+.ds-quote {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+}
+
+.ds-quote__text {
+  margin: 0;
+}
+
+/* ============================================
+   VARIANT — DEFAULT (inline blockquote)
+   ============================================ */
+
+.ds-quote--default .ds-quote__text {
+  padding-left: var(--padding-lg);
+  border-left: var(--border-md) solid var(--color-bg-container-tertiary);
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+  color: var(--color-text-secondary);
+}
+
+.ds-quote--default .ds-quote__caption {
+  padding-left: var(--padding-lg);
+}
+
+/* ============================================
+   VARIANT — PULL (large display quote)
+   Weight 300 display type per the
+   weight-contrast rule — no border, the scale
+   is the emphasis.
+   ============================================ */
+
+.ds-quote--pull .ds-quote__text {
+  font-family: var(--font-sub-display-family);
+  font-size: var(--font-sub-display-size);
+  font-weight: var(--font-sub-display-weight);
+  line-height: var(--font-sub-display-line-height);
+  letter-spacing: var(--font-sub-display-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   ATTRIBUTION
+   ============================================ */
+
+.ds-quote__caption {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxs);
+}
+
+.ds-quote__attribution {
+  font-family: var(--font-paragraph-sm-em-family);
+  font-size: var(--font-paragraph-sm-em-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.ds-quote__detail {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-tertiary);
+}

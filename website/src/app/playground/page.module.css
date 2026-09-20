@@ -1,0 +1,443 @@
+/* ============================================
+   PLAYGROUND PAGE LAYOUT
+   An immersive tool, not the standard page shell:
+   floating glass panels over a dotted ground —
+   the control panel on the left, the workspace
+   centred in the space between the panel's edge
+   and the viewport's right edge.
+   ============================================ */
+.dsLayout {
+  /* The floating panel's width — the workspace centres in what remains. */
+  --rail-width: 300px;
+  /* How far the panels float off the viewport edges — the same inset the
+     toolbar pill and the docked site chat keep. */
+  --rail-inset: var(--layout-chat-inset);
+  /* Where the floating panels stand in from each side — the stage
+     widget's hard width wall. Read by ChatView.module.css. */
+  --stage-walls: calc((var(--rail-width) + var(--rail-inset)) * 2);
+  display: flex;
+  justify-content: center;
+  /* Stretch across the body's own side padding so the centring zone is
+     exactly [panel edge → viewport edge] — the workspace's left and right
+     margins come out identical, not skewed by the body inset. */
+  width: calc(100% + var(--primitive-padding-xl) * 2);
+  margin-inline: calc(-1 * var(--primitive-padding-xl));
+  /* Panel, then the same safe ring the chat stage keeps — the column can
+     narrow to the panel's edge on tight viewports, and flush against the
+     glass is a collision, not a fit. */
+  padding-left: calc(var(--rail-width) + var(--rail-inset) * 2);
+  /* The workspace keeps the float inset off the right edge too, so the
+     content column never touches the viewport where no panel floats. */
+  padding-right: var(--rail-inset);
+  /* Clear the floating toolbar pill, then the immersive page still starts
+     lower than a doc page would — the title gets air, not a viewport edge. */
+  padding-top: calc(var(--layout-stage-clearance) + var(--primitive-gap-xl));
+  /* And the safe area above the bottom control bar, so the end of the
+     scroll is never parked behind it. */
+  padding-bottom: var(--layout-stage-bottom-clearance);
+}
+
+/* The Chat view runs a second floating panel on the right (the chat
+   director), so the workspace centres between the two. Applied by the page
+   only when that panel is actually rendered. */
+.dsLayoutChat {
+  /* The chat stage owns its safe ring (ChatView's --stage-safe-pad), so
+     the layout hands it the zone panel-to-panel on both sides. */
+  padding-left: calc(var(--rail-width) + var(--rail-inset));
+  padding-right: calc(var(--rail-width) + var(--rail-inset));
+  /* The chat stage carries no page heading, so the components view's
+     extra title air goes — the widget's top gap matches its bottom one. */
+  padding-top: var(--layout-stage-clearance);
+}
+
+/* The chat stage's safe area is the browser's, not a document's: the
+   review-width cap belongs to the components showcase, so the chat view
+   lets its column run panel to panel at any viewport. */
+.dsLayoutChat .dsContent {
+  max-width: none;
+}
+
+.dsContent {
+  flex: 1;
+  min-width: 0;
+  /* A review-width column, centred in the space right of the rail — the
+     showcase reads as a stage, not a stretched doc page. */
+  max-width: 960px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxxl);
+}
+
+/* The bar's Mobile stage: the components workspace narrows to a
+   phone-width column. The width is a review target, like the Chat view's
+   stage presets — set dressing, not a layout token. */
+.dsContentMobile {
+  max-width: 420px;
+}
+
+.inlineLink {
+  color: var(--color-action-primary-text-tertiary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ============================================
+   CONTROL PANEL — a floating glass card: inset
+   off the left edge, from the toolbar pill's
+   clearance to the bottom inset, everything
+   scrolling inside (the shell clips, the
+   scroller carries the padding and the thin
+   scrollbar). Same glass as the toolbar pill.
+   ============================================ */
+.controlRail {
+  position: fixed;
+  top: var(--layout-stage-clearance);
+  bottom: var(--rail-inset);
+  left: var(--rail-inset);
+  width: var(--rail-width);
+  /* Above the showcase sections' animate-in stacking contexts, so the
+     rail's open Dropdown menu can never be painted over. */
+  z-index: 15;
+  display: flex;
+  overflow: hidden;
+  background: var(--color-bg-glass);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-floating);
+  backdrop-filter: blur(24px);
+}
+
+/* The chat director's panel: the control panel mirrored to the right edge.
+   Same card, same float, same glass. */
+.eventRail {
+  position: fixed;
+  top: var(--layout-stage-clearance);
+  bottom: var(--rail-inset);
+  right: var(--rail-inset);
+  width: var(--rail-width);
+  z-index: 15;
+  display: flex;
+  overflow: hidden;
+  background: var(--color-bg-glass);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-floating);
+  backdrop-filter: blur(24px);
+}
+
+.railScroll {
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  overflow-y: auto;
+  /* The chat thread's scrollbar treatment: thin, gutter reserved, the
+     divider grey for a thumb — not the browser's chrome. */
+  scrollbar-width: thin;
+  scrollbar-gutter: stable;
+  scrollbar-color: var(--color-divider) transparent;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  padding: var(--padding-md);
+}
+
+.controlGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  padding-bottom: var(--gap-md);
+  border-bottom: var(--border-xs) solid var(--color-divider);
+}
+
+/* Standalone group headings match the Field label the DS inputs render,
+   so hand-built controls (swatches, sliders) read as the same form */
+.controlHeading {
+  font-size: var(--font-paragraph-em-size);
+  font-weight: var(--font-paragraph-em-weight);
+  line-height: var(--font-paragraph-em-line-height);
+  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.controlNote {
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-tertiary);
+}
+
+/* The tint toggle doubles as its group's title — match the label weight
+   the other group headings use */
+.tintTitleToggle :global(.ds-toggle-switch__label) {
+  font-weight: var(--font-paragraph-em-weight);
+  letter-spacing: var(--font-paragraph-em-letter-spacing);
+}
+
+/* Preset action-colour swatches — one column per hue, one row per ramp step */
+.swatchGrid {
+  display: grid;
+  grid-template-columns: repeat(8, max-content);
+  gap: var(--gap-sm);
+  padding: var(--primitive-padding-xxxs) 0;
+}
+
+/* The custom ColorPicker stays lit while the current colour is not one of
+   the preset swatches */
+.customPickerActive :global(.ds-colorpicker__trigger) {
+  border-color: var(--color-input-border-selected);
+}
+
+.sliderRow {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm-md);
+}
+
+.sliderRow > :first-child {
+  flex: 1;
+}
+
+.sliderValue {
+  min-width: 44px;
+  text-align: right;
+  font-size: var(--font-paragraph-sm-size);
+  color: var(--color-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The Typeface dropdown sits at the bottom of the rail, which is an
+   overflow-y scroll container — a downward menu gets clipped at the rail's
+   edge. Opening it upward keeps the menu inside the scrollable content,
+   where the controls above give it plenty of room. */
+.dropUp :global(.ds-dropdown__menu),
+.dropUp :global(.ds-rich-dropdown__menu) {
+  top: auto;
+  bottom: 100%;
+  margin-top: 0;
+  margin-bottom: var(--gap-xxs);
+}
+
+/* Copy CSS + View CSS + Reset, pinned at the end of the rail */
+.railFooter {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm-md);
+}
+
+/* The generated-CSS dialog's body: the install note over the code. */
+.cssDialogBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  min-width: 0;
+}
+
+/* The ambient shader, staged as a banner now that the stage ground is the
+   dot pattern: ShaderField fills this positioned, clipped frame, and the
+   levers re-theme it live like everything else on the stage. */
+.shaderBanner {
+  position: relative;
+  overflow: hidden;
+  height: 220px;
+  border-radius: var(--radius-xl);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  background: var(--color-bg-page-primary);
+}
+
+/* ============================================
+   DEMO SECTIONS — full content-column width,
+   divided by SectionTitle headers
+   ============================================ */
+.demoSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-lg);
+}
+
+.sectionNote {
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-secondary);
+}
+
+.sectionNote code {
+  color: var(--color-text-primary);
+}
+
+.demoRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap-sm-md);
+}
+
+/* Two-up grid for form fields — collapses to one column when narrow */
+.demoColumns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--primitive-gap-lg);
+  align-items: start;
+}
+
+@media (max-width: 1151px) {
+  .demoColumns {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* The Mobile stage is a phone-width column on a desktop viewport, so
+   the collapse above can't fire — the stage marker forces it. */
+[data-stage="mobile"] .demoColumns {
+  grid-template-columns: 1fr;
+}
+
+/* The globe takes the wider column; the legend rides beside it, centred
+   on the sphere. Collapses with the rest of the two-up grids. */
+.mapsColumns {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: var(--primitive-gap-lg);
+  align-items: center;
+}
+
+@media (max-width: 1151px) {
+  .mapsColumns {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+}
+
+[data-stage="mobile"] .mapsColumns {
+  grid-template-columns: 1fr;
+  justify-items: center;
+}
+
+/* ============================================
+   ADVANCED COLOURS DIALOG — mini primitive ramps
+   ============================================ */
+.advBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+}
+
+.advGlobal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  padding-bottom: var(--gap-md);
+  border-bottom: var(--border-xs) solid var(--color-divider);
+}
+
+.advSliderLabel {
+  min-width: 72px;
+  font-size: var(--font-paragraph-sm-size);
+  color: var(--color-text-secondary);
+}
+
+/* The label column must not absorb the sliderRow's flex:1 first-child rule */
+.advGlobal .sliderRow > :first-child {
+  flex: 0 0 auto;
+}
+
+.advGlobal .sliderRow > :nth-child(2) {
+  flex: 1;
+}
+
+.advRamps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+}
+
+.advRampRow {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm-md);
+}
+
+.advRampLabel {
+  min-width: 72px;
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-em-weight);
+  color: var(--color-text-primary);
+}
+
+.advRamp {
+  display: flex;
+  flex: 1;
+  gap: var(--gap-xxs);
+}
+
+.advCell {
+  flex: 1;
+  height: 24px;
+  border-radius: var(--radius-xxs);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+}
+
+/* Step 07 is the ramp's key colour — the one the row's picker sets */
+.advCellKey {
+  outline: var(--border-md) solid var(--color-input-border-selected);
+  outline-offset: 1px;
+}
+
+/* The row's picker sits at the dialog's right edge — its panel must open
+   leftward or it clips against the panel/scroll container */
+.advRampPicker :global(.ds-colorpicker__panel) {
+  left: auto;
+  right: 0;
+}
+
+.advRampReset {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-full);
+  background: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  --icon-size: var(--icon-size-sm);
+  transition: background-color var(--motion-duration-base) var(--motion-ease-standard), color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.advRampReset:hover:not(:disabled) {
+  background-color: var(--color-bg-container-secondary);
+  color: var(--color-text-primary);
+}
+
+.advRampReset:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* The same control groups, hosted by the Drawer: a plain column — the
+   Drawer brings the shell, the scroll, and the title. */
+.drawerControls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+}
+
+/* ============================================
+   RESPONSIVE — below the tool's breakpoint the
+   floating panel is not rendered at all: the
+   controls live in the Drawer, and the
+   workspace owns the whole screen.
+   ============================================ */
+@media (max-width: 1099px) {
+  .dsLayout {
+    padding-left: 0;
+    padding-right: 0;
+    /* No panel means no centring zone to correct. */
+    width: 100%;
+    margin-inline: 0;
+    /* The bottom control bar still floats here — keep its safe area. */
+    padding-bottom: var(--layout-stage-bottom-clearance);
+  }
+}

@@ -1,0 +1,352 @@
+{/* robr0 Design System overview page */}
+import { Meta } from "@storybook/addon-docs/blocks";
+import { COMPONENT_COUNT } from "../components/registry";
+
+<Meta title="robr0 DS" />
+
+<div className="ds-intro">
+
+# robr0 Design System
+
+An AI-ready design system where every visual decision is a token. Claude Code builds the components from the specs in the repo; colour, spacing, radius, and typography are defined once and referenced everywhere, so a change to a single value propagates through the whole system. Built with Vite and TypeScript, documented in Storybook, published to npm as `@robr0/design-system`, and consumed by a live Next.js reference site.
+
+<div className="ds-stats">
+  <div className="ds-stat"><span className="ds-stat-num">{COMPONENT_COUNT}</span><span className="ds-stat-label">Components</span></div>
+  <div className="ds-stat"><span className="ds-stat-num">3</span><span className="ds-stat-label">Token tiers</span></div>
+  <div className="ds-stat"><span className="ds-stat-num">2</span><span className="ds-stat-label">Themes</span></div>
+  <div className="ds-stat"><span className="ds-stat-num">1</span><span className="ds-stat-label">Typeface</span></div>
+</div>
+
+</div>
+
+<div className="ds-section">
+
+## Install
+
+Everything on this page ships as a package. Install it, import the token stylesheet once, and use the components:
+
+```bash
+npm install @robr0/design-system
+```
+
+```tsx
+import '@robr0/design-system/tokens/tokens.css';
+import { Button, Card, Badge } from '@robr0/design-system';
+```
+
+The stylesheet carries the primitives, the semantic tokens, and both themes: import it once at your app root. Deep imports work too (`@robr0/design-system/components/Button/Button`), and the recharts-backed charts live behind a separate `/charts` entry so the optional `recharts` peer is only needed if you use them (the dependency-free chart pieces export from the main barrel with everything else).
+
+Published with signed provenance via npm Trusted Publishing. Full install and theming guide on the [documentation site](https://www.robertritacca.com/docs); package page on [npm](https://www.npmjs.com/package/@robr0/design-system). Coding agents can read the same reference over MCP: point any Model Context Protocol client at `https://robertritacca.com/api/mcp` for the component list, prop contracts, and tokens.
+
+</div>
+
+<div className="ds-section">
+
+## Principles
+
+<div className="ds-principles">
+  <div className="ds-principle">
+    <h4>Tokens, not hardcoded values</h4>
+    <p>Components reference named tokens rather than raw hex or pixel values. Every visual property traces back to a token with a clear, documented purpose.</p>
+  </div>
+  <div className="ds-principle">
+    <h4>Semantic, not literal</h4>
+    <p>A component knows it renders a primary action or a small gap, not that it's teal or 8px. Swapping the primitives underneath changes themes without touching component code.</p>
+  </div>
+  <div className="ds-principle">
+    <h4>Composition over configuration</h4>
+    <p>Small, focused components that combine freely. A table cell accepts any React node (text, icons, buttons, inputs) rather than a fixed set of props.</p>
+  </div>
+  <div className="ds-principle">
+    <h4>Two sizes, deliberately</h4>
+    <p>Every component ships a default and a compact variant. Keeping the size scale small keeps the system consistent and predictable to work with.</p>
+  </div>
+</div>
+
+</div>
+
+<div className="ds-section">
+
+## Architecture
+
+The system flows in one direction: raw values become purposeful tokens, tokens drive components, and components build pages.
+
+<div className="ds-layers">
+  <div className="ds-layer">
+    <div className="ds-layer-label">Primitives</div>
+    <p>The raw scale (colours, spacing, border widths, radii) as fixed hex and pixel values. The source of truth, never referenced directly by components.</p>
+  </div>
+  <div className="ds-layer-connector" />
+  <div className="ds-layer">
+    <div className="ds-layer-label">Semantic tokens</div>
+    <p>Purpose-driven mappings over the primitives. A primitive becomes "action primary background" or "text secondary". Light and dark are two mappings over the same underlying scale.</p>
+  </div>
+  <div className="ds-layer-connector" />
+  <div className="ds-layer">
+    <div className="ds-layer-label">Components</div>
+    <p>React components that consume semantic tokens through CSS custom properties. Theme-aware by default: token references rather than conditional logic.</p>
+  </div>
+  <div className="ds-layer-connector" />
+  <div className="ds-layer">
+    <div className="ds-layer-label">Application</div>
+    <p>A Next.js reference site that imports the tokens once and uses the components directly. Switching themes is a single data attribute on the root element.</p>
+  </div>
+</div>
+
+</div>
+
+<div className="ds-section">
+
+## Theming
+
+Light and dark are two readings of the same token layer, not separate systems. Components reference semantic tokens and stay agnostic to the active theme; the theme decides what each token resolves to.
+
+<div className="ds-theme-grid">
+  <div className="ds-theme-card ds-theme-light">
+    <h4>Light</h4>
+    <p>Neutral backgrounds, near-black text, teal accents. Semi-transparent layers carry depth.</p>
+  </div>
+  <div className="ds-theme-card ds-theme-dark">
+    <h4>Dark</h4>
+    <p>Same token names, different primitives. Surfaces darken, text lightens, and the action accent inverts: the deep teal fill under a light label becomes a light fill under a dark one.</p>
+  </div>
+</div>
+
+The passive (ghost) action tokens use semi-transparent values, so tertiary controls layer naturally over any surface; primary action fills are opaque by design.
+
+</div>
+
+<div className="ds-section">
+
+## Conventions
+
+<div className="ds-conventions">
+  <div className="ds-convention">
+    <strong>BEM naming</strong>
+    <span>{"Block__element--modifier with a ds- prefix. .ds-button, .ds-button__icon, .ds-button--compact."}</span>
+  </div>
+  <div className="ds-convention">
+    <strong>Size variants</strong>
+    <span>Default and compact. Default uses paragraph tokens (16px), compact uses paragraph-sm (14px) with tighter padding.</span>
+  </div>
+  <div className="ds-convention">
+    <strong>Icons</strong>
+    <span>Material Symbols Rounded at 24px default, 20px compact. Custom SVGs where font metrics cause alignment issues.</span>
+  </div>
+  <div className="ds-convention">
+    <strong>Typography scale</strong>
+    <span>Mega and display for marketing, heading 1–3 and sub-display for structure, title-body and paragraph tiers for content. Each step is a full token set: family, size, weight, line-height, and letter-spacing.</span>
+  </div>
+  <div className="ds-convention">
+    <strong>Fonts</strong>
+    <span>Nunito Sans for all text, Material Symbols Rounded for all icons: one type family and one icon font, no third face.</span>
+  </div>
+</div>
+
+</div>
+
+<style>
+  {`
+  .ds-intro {
+    max-width: 720px;
+    margin-bottom: 40px;
+  }
+
+  .ds-intro p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #6D6D6D;
+  }
+
+  /* Stats */
+  .ds-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(128, 128, 128, 0.2);
+  }
+
+  .ds-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .ds-stat-num {
+    font-size: 32px;
+    font-weight: 300;
+    line-height: 1;
+    color: #118AB2;
+  }
+
+  .ds-stat-label {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #6D6D6D;
+  }
+
+  .ds-section {
+    margin-bottom: 48px;
+    max-width: 900px;
+  }
+
+  .ds-section h2 {
+    margin-bottom: 16px;
+  }
+
+  .ds-section > p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #6D6D6D;
+    margin-bottom: 16px;
+  }
+
+  /* Principles */
+  .ds-principles {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  .ds-principle {
+    border: 1px solid rgba(128, 128, 128, 0.2);
+    border-radius: 12px;
+    padding: 20px;
+  }
+
+  .ds-principle h4 {
+    margin: 0 0 8px 0;
+    padding: 0;
+  }
+
+  .ds-principle p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #6D6D6D;
+  }
+
+  /* Architecture layers */
+  .ds-layers {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 16px 0;
+  }
+
+  .ds-layer {
+    border: 1px solid rgba(128, 128, 128, 0.2);
+    border-radius: 12px;
+    padding: 20px;
+  }
+
+  .ds-layer-label {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #118AB2;
+    margin-bottom: 8px;
+  }
+
+  .ds-layer p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #6D6D6D;
+  }
+
+  .ds-layer-connector {
+    width: 2px;
+    height: 16px;
+    background: rgba(128, 128, 128, 0.2);
+    margin-left: 32px;
+  }
+
+  /* Theme cards */
+  .ds-theme-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+
+  .ds-theme-card {
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .ds-theme-card h4 {
+    margin: 0;
+    padding: 0;
+  }
+
+  .ds-theme-card p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    opacity: 0.7;
+  }
+
+  .ds-theme-light {
+    background: #F1F1F1;
+    color: #050505;
+  }
+
+  .ds-theme-dark {
+    background: #232323;
+    color: #F1F1F1;
+  }
+
+  .ds-theme-dark h4 {
+    color: #F1F1F1;
+  }
+
+  .ds-theme-dark p {
+    color: #F1F1F1;
+  }
+
+  /* Conventions */
+  .ds-conventions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  .ds-convention {
+    border-left: 3px solid #118AB2;
+    padding: 12px 16px;
+    font-size: 14px;
+    line-height: 1.5;
+    background: rgba(128, 128, 128, 0.05);
+    border-radius: 0 8px 8px 0;
+  }
+
+  .ds-convention strong {
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .ds-convention span {
+    color: #6D6D6D;
+  }
+
+  @media screen and (max-width: 600px) {
+    .ds-principles {
+      grid-template-columns: 1fr;
+    }
+
+    .ds-theme-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  `}
+</style>

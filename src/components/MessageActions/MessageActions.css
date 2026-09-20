@@ -1,0 +1,85 @@
+/* ============================================
+   MESSAGE ACTIONS COMPONENT
+   The icon-button row under a chat message:
+   copy, retry, feedback. Ghost buttons — no
+   border, no resting background — so the row
+   stays quiet until pointed at.
+
+   Stateless beyond hover: copy feedback is the
+   consumer swapping an item's icon, never a
+   timer inside the row.
+   ============================================ */
+
+.ds-message-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xxs);
+}
+
+/* ============================================
+   BUTTON
+   Ghost: transparent at rest, the passive
+   action ramp on hover and for the active item.
+   ============================================ */
+
+.ds-message-actions__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--padding-xxs);
+  border: none;
+  border-radius: var(--radius-sm);
+  background-color: transparent;
+  color: var(--color-icon-primary);
+  cursor: pointer;
+  transition:
+    background-color var(--motion-duration-fast) var(--motion-ease-standard),
+    color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-message-actions__button .material-symbols-rounded {
+  --icon-size: var(--icon-size-sm);
+}
+
+.ds-message-actions__button:hover:not(:disabled) {
+  background-color: var(--color-action-passive-bg-hover);
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   ACTIVE
+   The selected item, e.g. the chosen feedback
+   thumb — held on the pressed step of the ramp.
+   ============================================ */
+
+.ds-message-actions__button--active {
+  background-color: var(--color-action-passive-bg-active);
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   FOCUS
+   ============================================ */
+
+.ds-message-actions__button:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: -2px;
+}
+
+/* ============================================
+   DISABLED
+   ============================================ */
+
+.ds-message-actions__button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Icons take the colour of the text around them. Explicit, not just
+   inherited by default: a consumer stylesheet that sets a colour on
+   .material-symbols-rounded itself (a common global default) would
+   otherwise override inheritance and detach the icon from the state
+   colours this component sets on its parents. */
+.ds-message-actions .material-symbols-rounded {
+  color: inherit;
+}

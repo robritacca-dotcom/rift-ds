@@ -1,0 +1,255 @@
+/* ============================================
+   SELECTION CARD COMPONENT
+   Large selectable option cards with radio or
+   checkbox indicators. Used for high-visibility
+   choice interfaces like settings and onboarding.
+   ============================================ */
+
+/* ============================================
+   GROUP — vertical stack of cards
+   ============================================ */
+
+.ds-selection-card-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm); /* 8px */
+}
+
+/* ============================================
+   CARD — single option
+   ============================================ */
+
+.ds-selection-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-lg); /* 20px */
+  padding: var(--padding-md); /* 16px */
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-md); /* 12px */
+  background-color: transparent;
+  cursor: pointer;
+  user-select: none;
+  transition: border-color var(--motion-duration-base) var(--motion-ease-standard), background-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+/* ============================================
+   HOVER STATE
+   ============================================ */
+
+.ds-selection-card:not(.ds-selection-card--disabled):hover {
+  border-color: var(--color-action-primary-border);
+}
+
+/* ============================================
+   SELECTED STATE
+   ============================================ */
+
+.ds-selection-card--selected {
+  border-color: var(--color-action-primary-border);
+  background-color: var(--color-bg-container-primary-semi);
+}
+
+/* ============================================
+   DISABLED STATE
+   ============================================ */
+
+.ds-selection-card--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   FOCUS STATE
+   ============================================ */
+
+.ds-selection-card:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+/* ============================================
+   CONTENT — label + description
+   ============================================ */
+
+.ds-selection-card__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxs); /* 4px */
+  min-width: 0;
+}
+
+.ds-selection-card__label {
+  font-family: var(--font-paragraph-em-family);
+  font-size: var(--font-paragraph-em-size);
+  font-weight: var(--font-paragraph-em-weight);
+  line-height: var(--font-paragraph-em-line-height);
+  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.ds-selection-card__description {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-secondary);
+}
+
+/* ============================================
+   INDICATOR — radio, checkbox, or toggle
+   ============================================ */
+
+.ds-selection-card__indicator {
+  flex-shrink: 0;
+}
+
+/* ============================================
+   RADIO INDICATOR
+   ============================================ */
+
+.ds-selection-card__radio {
+  width: 24px;
+  height: 24px;
+  border: var(--border-md) solid var(--color-bg-container-border);
+  border-radius: var(--radius-full);
+  background-color: var(--color-bg-container-primary-transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-selection-card__radio-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-action-primary-bg);
+  transform: scale(0);
+  transition: transform var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+/* Selected radio */
+.ds-selection-card--selected .ds-selection-card__radio {
+  border-color: var(--color-action-primary-bg);
+}
+
+.ds-selection-card--selected .ds-selection-card__radio-dot {
+  transform: scale(1);
+}
+
+/* Hover radio (unselected) */
+.ds-selection-card:not(.ds-selection-card--disabled):not(.ds-selection-card--selected):hover .ds-selection-card__radio {
+  border-color: var(--color-action-primary-bg);
+}
+
+/* Hover radio (selected) */
+.ds-selection-card--selected:not(.ds-selection-card--disabled):hover .ds-selection-card__radio {
+  border-color: var(--color-action-primary-bg-hover);
+}
+
+.ds-selection-card--selected:not(.ds-selection-card--disabled):hover .ds-selection-card__radio-dot {
+  background-color: var(--color-action-primary-bg-hover);
+}
+
+/* ============================================
+   CHECKBOX INDICATOR
+   ============================================ */
+
+.ds-selection-card__checkbox {
+  width: 24px;
+  height: 24px;
+  box-sizing: border-box;
+  border: var(--border-md) solid var(--color-bg-container-border);
+  border-radius: var(--radius-sm); /* 8px */
+  background-color: var(--color-bg-container-primary-transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--motion-duration-base) var(--motion-ease-standard), border-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-selection-card__check-icon {
+  width: 14px;
+  height: 14px;
+  color: var(--color-action-primary-text-active);
+  opacity: 0;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+/* Selected checkbox */
+.ds-selection-card--selected .ds-selection-card__checkbox {
+  background-color: var(--color-action-primary-bg);
+  border-color: var(--color-action-primary-bg);
+}
+
+.ds-selection-card--selected .ds-selection-card__check-icon {
+  opacity: 1;
+}
+
+/* Hover checkbox (unselected) */
+.ds-selection-card:not(.ds-selection-card--disabled):not(.ds-selection-card--selected):hover .ds-selection-card__checkbox {
+  border-color: var(--color-action-primary-bg);
+}
+
+/* Hover checkbox (selected) */
+.ds-selection-card--selected:not(.ds-selection-card--disabled):hover .ds-selection-card__checkbox {
+  background-color: var(--color-action-primary-bg-hover);
+  border-color: var(--color-action-primary-bg-hover);
+}
+
+/* ============================================
+   TOGGLE INDICATOR
+   Matches ToggleSwitch component styling
+   ============================================ */
+
+.ds-selection-card__toggle {
+  position: relative;
+  width: 42px;
+  height: 24px;
+  border-radius: var(--radius-full);
+  background: var(--color-action-primary-bg);
+  transition: background-color var(--motion-duration-base) var(--motion-ease-standard);
+  flex-shrink: 0;
+}
+
+.ds-selection-card__toggle-thumb {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 20px;
+  height: 20px;
+  background: var(--color-control-thumb);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: transform var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-selection-card__toggle-icon {
+  /* Intentionally off the --icon-size-* scale — same reason as ToggleSwitch:
+     this glyph lives inside the 20x20 toggle thumb, and the smallest scale
+     step (20px) would fill it completely. Sized via --icon-size, not
+     font-size, so the icon's box shrinks with the glyph (see ToggleSwitch).
+
+     ds-allow(icon-size): 14px glyph inside the 20px thumb — the smallest
+     scale step would fill it edge to edge. */
+  --icon-size: 14px;
+  color: var(--color-action-primary-bg);
+}
+
+/* Off state — thumb moves left, track goes grey */
+.ds-selection-card__toggle--off {
+  background: var(--color-text-secondary);
+}
+
+.ds-selection-card__toggle--off .ds-selection-card__toggle-thumb {
+  transform: translateX(-18px);
+}
+
+.ds-selection-card__toggle--off .ds-selection-card__toggle-icon {
+  color: var(--color-text-secondary);
+}

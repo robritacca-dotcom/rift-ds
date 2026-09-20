@@ -1,0 +1,759 @@
+/* ============================================
+   THE WIDGET INTERNALS — header / thread / composer.
+   Hosted by the bench's resizable stage widget or the site's docked panel;
+   fills whichever container it is given. Compact hosts (phone-width panels)
+   set data-compact for the narrower insets.
+   ============================================ */
+
+.chat {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  /* A small breath above the header on every host, web and phone alike —
+     it seats the title row on the same line as the threads rail's own
+     header, whose panel carries this inset built in. */
+  padding-top: var(--padding-sm);
+  /* The one side inset every row shares — header controls, greeting,
+     thread bubbles, composer edge, starter pills, disclaimer — so they sit
+     on a single rail. A step tighter on compact hosts. */
+  --sitechat-inset: var(--padding-lg);
+  /* A size container, so the welcome dressing below can step aside when the
+     host — docked panel, takeover, or bench stage — is too short for it. */
+  container-type: size;
+  container-name: sitechat;
+}
+
+.chat[data-compact] {
+  --sitechat-inset: var(--padding-md);
+}
+
+/* The header rides the same rail as everything under it; the component's
+   own default is a step tighter than the widget wants. */
+.chat :global(.ds-chat-header) {
+  padding-inline: var(--sitechat-inset);
+}
+
+/* The close button hugs the panel's clipped right edge, so its centred
+   bottom tooltip would lose its right cap to overflow: hidden. End-align
+   the last header tooltip to the button and walk the arrow back to the
+   button's centre (20px in, minus half the 8px arrow). */
+.chat :global(.ds-chat-header__actions .ds-tooltip:last-child .ds-tooltip__panel--bottom) {
+  left: auto;
+  right: 0;
+  transform: translateY(-4px);
+}
+
+.chat :global(.ds-chat-header__actions .ds-tooltip:last-child .ds-tooltip__panel--bottom.ds-tooltip__panel--visible) {
+  transform: translateY(0);
+}
+
+.chat :global(.ds-chat-header__actions .ds-tooltip:last-child .ds-tooltip__panel--bottom .ds-tooltip__arrow) {
+  left: auto;
+  right: 16px;
+  margin-left: 0;
+}
+
+/* The open-sessions tab strip (playground furniture, like the threads
+   rail): its own row under the header, on the shared side inset. */
+.tabsRow {
+  min-width: 0;
+  padding: var(--padding-xs) var(--sitechat-inset) 0;
+}
+
+/* The header brand: the RR mark beside the chat name. A node title renders
+   as-is, so the name restates the header's title treatment. */
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  min-width: 0;
+}
+
+.brand img {
+  flex-shrink: 0;
+}
+
+.brandName {
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  color: var(--color-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The top region: header + thread. Zero basis so welcome mode splits the
+   height exactly with the bottom region, centring the composer. */
+.topRegion {
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* The body hosts the thread, with the welcome greeting overlaid while the
+   conversation is empty. */
+.body {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* The thread owns scrolling, gutters, fades, and send anchoring. However
+   wide the container gets, the conversation column caps at 768px and
+   centres; the header above is the one row that spans the full width. */
+.thread {
+  flex: 1;
+  --ds-chat-thread-content-max-width: 768px;
+  /* Match the composer and header inset, so bubbles, composer edge, and
+     the header controls all share one right rail. */
+  --ds-chat-thread-padding-inline: var(--sitechat-inset);
+}
+
+/* ============================================
+   WELCOME — the new-chat empty state
+   ============================================ */
+
+.welcomeTop {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 100%;
+  max-width: 768px;
+  margin-inline: auto;
+  /* The block-end padding is the gap between the greeting and the composer;
+     block-start is inert, since the overlay bottom-aligns its content. */
+  padding: var(--padding-lg) var(--sitechat-inset) var(--gap-xl);
+  pointer-events: none;
+}
+
+.welcomeGreeting {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+}
+
+/* Small and semibold over the ask line's large light face — the pair
+   separates by weight contrast, per the hierarchy rule. Tertiary text,
+   a step quieter than the ask line, so the time-of-day pleasantry
+   supports the invitation rather than competing with it. */
+.welcomeHello {
+  margin: 0;
+  /* The greeting is read from the visitor's clock after mount, so this line
+     is empty for the first paint. An empty block has no line box at all —
+     reserve the height, or the ask line below jumps up a row and back. */
+  min-height: var(--font-heading-3-line-height);
+  font-family: var(--font-heading-3-family);
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+  letter-spacing: var(--font-heading-3-letter-spacing);
+  color: var(--color-text-tertiary);
+}
+
+.welcomeAsk {
+  margin: 0;
+  font-family: var(--font-sub-display-family);
+  font-size: var(--font-sub-display-size);
+  font-weight: var(--font-sub-display-weight);
+  line-height: var(--font-sub-display-line-height);
+  letter-spacing: var(--font-sub-display-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+/* The panel is a viewport of its own. tokens-typography.css collapses
+   sub-display to 24px/36px under a 768px *viewport*, but the docked panel
+   is phone-width on a desktop window, where that media query still serves
+   the 30px desktop size into a 420px card. So the ask line takes the same
+   step on the *container's* width, at the same 768px line: narrower than
+   that, the panel wears the phone scale, and only the takeover on a wide
+   window keeps the full size. The values restate the token layer's own
+   phone step rather than referencing it, because a value inside an
+   unmatched media query is unreachable — tokens-typography.css owns the
+   pair, and the two must move together (design.md, Responsive Collapse). */
+/* ds-allow(typography): the token layer's 768px sub-display step, restated for the panel's container width — tokens-typography.css owns the values */
+@container sitechat (max-width: 768px) {
+  .welcomeAsk {
+    --font-sub-display-size: 24px;
+    --font-sub-display-line-height: 36px;
+  }
+}
+
+/* The bottom region: starters at its top, disclaimer pinned to its
+   bottom. Grown while the chat is empty (centring the composer against
+   the zero-basis top region), collapsing to the disclaimer's height on
+   the first utterance. Basis stays 0 in both states so only flex-grow
+   ever animates — the flow-down is one continuous glide with no layout
+   mode changing underneath it. Reduced motion zeroes it via the token. */
+.bottomRegion {
+  display: flex;
+  flex-direction: column;
+  flex: 0 1 0;
+  transition: flex-grow var(--motion-duration-slower) var(--motion-ease-entrance);
+}
+
+.bottomRegionWelcome {
+  flex-grow: 1;
+}
+
+.startersColumn {
+  width: 100%;
+  max-width: 768px;
+  margin-inline: auto;
+  padding: var(--gap-xl) var(--sitechat-inset) 0;
+}
+
+/* The welcome dressing needs roughly 580px of widget for the greeting and
+   460px for the starters (header + composer + disclaimer plus their own
+   heights). Shorter than that, each is decoration the layout cannot afford —
+   the greeting would paint over the header — so it steps aside and the
+   empty state falls back to header, centred composer, disclaimer. These sit
+   after the base rules above: same specificity, so source order decides. */
+@container sitechat (max-height: 579px) {
+  .welcomeTop {
+    display: none;
+  }
+}
+
+@container sitechat (max-height: 459px) {
+  .startersColumn {
+    display: none;
+  }
+}
+
+/* ============================================
+   WELCOME ON A PHONE — data-phone
+   The soft keyboard claims the lower half of a phone screen the moment the
+   composer is focused, and on the centred layout that leaves the starters
+   squeezed between the input and the keys. So a phone never centres: the
+   top region takes all the slack, which pins the composer to the bottom
+   from the first paint, the greeting floats in the middle of the empty
+   thread, and the starters render directly above the composer (SiteChat.tsx places
+   them before it in the DOM there). Nothing glides on the first utterance
+   because nothing moves — the composer is already where it ends up.
+   ============================================ */
+
+.chat[data-phone] .welcomeTop {
+  /* Restated, not inherited: the desktop height guard above hides the
+     overlay under 580px, which is most phones once the keyboard is up.
+     This outranks it on specificity, and the phone guard below takes over
+     at the same specificity, later in source. */
+  display: flex;
+  /* Centred in whatever the empty thread has left, so the greeting reads
+     as the screen's focal point rather than a header subtitle; with the
+     keyboard up it drifts toward the chips, which is where the eye goes. */
+  justify-content: center;
+  /* Symmetric, since neither edge is the live one now. */
+  padding-block: var(--padding-md);
+}
+
+.chat[data-phone] .bottomRegionWelcome {
+  flex-grow: 0;
+}
+
+.chat[data-phone] .bottomRegion {
+  transition: none;
+}
+
+/* Above the composer: its gap is the block-end padding now, and the start
+   side is open to the thread. */
+.chat[data-phone] .startersColumn {
+  display: block;
+  padding-block: 0 var(--gap-md);
+}
+
+/* The phone stack needs less height than the centred layout — roughly
+   500px with the greeting, 380px without (header, three starters, composer
+   and disclaimer, measured at the site's type scale) — and it is the
+   keyboard, not a short window, that usually takes it away. The greeting
+   steps aside first (it is the one part the visitor has already read), the
+   starters only when even they would crowd the composer. Same pattern as
+   the desktop guards above, one specificity step up so the phone
+   thresholds replace the desktop ones rather than stacking on them. */
+@container sitechat (max-height: 499px) {
+  .chat[data-phone] .welcomeTop {
+    display: none;
+  }
+}
+
+@container sitechat (max-height: 379px) {
+  .chat[data-phone] .startersColumn {
+    display: none;
+  }
+}
+
+/* Locked to the bottom of the widget, in every state. */
+.disclaimerRow {
+  margin-top: auto;
+  padding: var(--gap-xs) var(--sitechat-inset) var(--padding-sm);
+}
+
+.responseStack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-lg);
+}
+
+/* A visitor turn with an injected attachment: the file tile stacks above
+   the bubble, sharing its right edge. The stack is one thread child, so
+   the thread's own turn spacing treats the pair as a single turn. */
+.userTurnStack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs);
+}
+
+.userTurnAttachment {
+  align-self: flex-end;
+}
+
+/* No divider — the composer floats free of the transcript, like the
+   reference. The thread's bottom padding provides the separation above;
+   the disclaimer row provides it below. */
+.footer {
+  display: flex;
+  flex-direction: column;
+  /* The composer never gives up height in a squeeze — the regions around
+     it absorb the shortfall instead. */
+  flex-shrink: 0;
+  padding: 0 var(--sitechat-inset);
+}
+
+/* The composer shares the conversation column's cap and centre. */
+.composerColumn {
+  width: 100%;
+  max-width: 768px;
+  margin-inline: auto;
+}
+
+/* One quiet line, centred with the composer column, at the floor of the
+   type scale: a visitor can find it, and never has to read it to chat. */
+.disclaimer {
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+  color: var(--color-text-tertiary);
+}
+
+.disclaimerLink {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ============================================
+   MESSAGE ACTIONS — the copy and thumbs row a
+   committed assistant turn passes into
+   ChatMessage's actions slot, pinned permanently
+   visible via showActions; these style only the
+   buttons themselves.
+   ============================================ */
+
+.actionButton {
+  display: grid;
+  place-items: center;
+  padding: var(--padding-xxs);
+  border: none;
+  border-radius: var(--radius-full);
+  background: transparent;
+  cursor: pointer;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.actionButton:hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.actionButton:active {
+  background-color: var(--color-action-passive-bg-active);
+}
+
+.actionIcon {
+  /* Both of the copy button's icons share this single grid cell, so the
+     swap happens in place rather than reflowing the row. */
+  grid-area: 1 / 1;
+  --icon-size: var(--icon-size-sm);
+  color: var(--color-icon-secondary);
+  transition:
+    opacity var(--motion-duration-fast) var(--motion-ease-standard),
+    transform var(--motion-duration-fast) var(--motion-ease-standard),
+    color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.actionButton:hover .actionIcon {
+  color: var(--color-icon-primary);
+}
+
+/* The hidden half of the copy swap: faded and slightly shrunk, so the
+   arriving icon reads as popping in rather than teleporting. */
+.actionIconHidden {
+  opacity: 0;
+  transform: scale(0.6);
+}
+
+/* The tick wears the positive status role while it shows — the border-level
+   value, which is what Alert uses for a status icon on a plain surface. */
+.actionIconTick,
+.actionButton:hover .actionIconTick {
+  color: var(--color-status-positive-border);
+}
+
+/* A chosen thumb: filled glyph, full-strength colour, no hover needed. */
+.actionButton[aria-pressed="true"] .actionIcon {
+  --material-symbols-fill: 1;
+  color: var(--color-icon-primary);
+}
+
+/* ============================================
+   FOLLOW-UP SUGGESTIONS — the chips a committed
+   assistant turn passes into ChatMessage's footer
+   slot. The same PromptSuggestions row the welcome
+   screen uses, so these only place it: full width
+   of the footer, set off from the actions above.
+   ============================================ */
+
+.followups {
+  width: 100%;
+  margin-top: var(--gap-sm);
+  /* They land a beat after the answer commits, so they arrive rather than
+     appear. Reduced motion zeroes the duration through the token, which
+     leaves the chips in their final state on the first frame. */
+  animation: followupsIn var(--motion-duration-slow) var(--motion-ease-entrance) both;
+}
+
+@keyframes followupsIn {
+  from {
+    opacity: 0;
+    transform: translateY(var(--gap-xs));
+  }
+}
+
+/* Sidebar.module.css's srOnly, repeated here because CSS modules scope
+   class names per file. Visually hidden, still announced. */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ============================================
+   THE SITE PANEL — SiteChatMount's chrome.
+   A floating card inset from the viewport edges, docked above the threshold
+   (content slides over via the body inset that html[data-chat="docked"]
+   applies in globals.css); an overlay with a scrim below it; a blurred full
+   takeover in fullscreen view. On phones it fills the viewport.
+   ============================================ */
+
+.panel {
+  position: fixed;
+  top: var(--layout-chat-inset);
+  right: var(--layout-chat-inset);
+  height: calc(100dvh - var(--layout-chat-inset) * 2);
+  width: var(--layout-chat-width);
+  max-width: calc(100vw - var(--layout-chat-inset) * 2);
+  display: flex;
+  flex-direction: column;
+  /* The glass token: deliberately translucent in both themes, so the
+     page's colours reach the surface; the blur is what keeps the
+     transcript readable over them. */
+  background: var(--color-bg-glass);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-floating);
+  overflow: hidden;
+  backdrop-filter: blur(24px);
+  z-index: 1100;
+  /* The panel-to-takeover glide: the same card grows to fill the viewport,
+     so every property that differs between the two views animates together.
+     Structural size change, so the emphasized pair. Reduced motion zeroes
+     it via the tokens. */
+  transition:
+    top var(--motion-duration-slow) var(--motion-ease-emphasized),
+    right var(--motion-duration-slow) var(--motion-ease-emphasized),
+    width var(--motion-duration-slow) var(--motion-ease-emphasized),
+    height var(--motion-duration-slow) var(--motion-ease-emphasized),
+    max-width var(--motion-duration-slow) var(--motion-ease-emphasized),
+    border-radius var(--motion-duration-slow) var(--motion-ease-emphasized),
+    border-color var(--motion-duration-slow) var(--motion-ease-emphasized),
+    backdrop-filter var(--motion-duration-slow) var(--motion-ease-emphasized);
+}
+
+/* The widen grip drives --layout-chat-width frame by frame; the width glide
+   above would ease each frame's value and drag rubber-band behind the
+   pointer, so resizing suspends it (the body inset does the same). */
+:global(html[data-chat-resizing]) .panel {
+  transition: none;
+}
+
+/* Open: the card fades in with a small rise from its resting spot — quick
+   and quiet, the FAB's corner is where it comes from. Plays on mount, so
+   the view toggle (panel to takeover), which keeps the node, never replays
+   it. */
+.panel {
+  animation: panel-in var(--motion-duration-slow) var(--motion-ease-entrance);
+}
+
+/* Close: the mirror image. The provider keeps the panel mounted for
+   MOTION_EXIT_SYNC_MS (which mirrors --motion-duration-base) while this
+   plays, and pointer-events off so a dying panel swallows no clicks. */
+.panelClosing {
+  animation: panel-out var(--motion-duration-base) var(--motion-ease-standard) forwards;
+  pointer-events: none;
+}
+
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes panel-out {
+  to {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+/* Fullscreen view: a true viewport takeover. The stronger blur is what
+   keeps the transcript readable while the page's colours still shine
+   through the translucent surface. The border fades rather than vanishing —
+   border: none would change border-width and snap the geometry mid-glide. */
+.panelFull {
+  top: 0;
+  right: 0;
+  height: 100dvh;
+  width: 100vw;
+  max-width: 100vw;
+  border-color: transparent;
+  border-radius: 0;
+  backdrop-filter: blur(40px);
+}
+
+/* Below the dock threshold the panel overlays the page behind a scrim.
+   It mounts and unmounts with the view, so entrance is an animation, not a
+   transition — without it, leaving fullscreen pops the scrim in while the
+   panel above it is still gliding back to its card shape. */
+.scrim {
+  position: fixed;
+  inset: 0;
+  background: var(--color-scrim);
+  z-index: 1090;
+  animation: scrimIn var(--motion-duration-slow) var(--motion-ease-standard);
+}
+
+@keyframes scrimIn {
+  from {
+    opacity: 0;
+  }
+}
+
+/* The widen grip — the playground Chat view's left resize handle
+   (views/ChatView.module.css), transplanted to the docked panel: same 20px
+   grab zone straddling the edge, same hover-revealed 4×48px pill. A fixed
+   sibling of the panel, positioned from the same variables, so it tracks
+   the edge as the drag rewrites --layout-chat-width. */
+.dockHandle {
+  position: fixed;
+  top: var(--layout-chat-inset);
+  height: calc(100dvh - var(--layout-chat-inset) * 2);
+  right: calc(var(--layout-chat-inset) + var(--layout-chat-width) - 10px);
+  width: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: ew-resize;
+  touch-action: none;
+  z-index: 1101;
+}
+
+.dockHandle::after {
+  content: "";
+  width: 4px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  background: transparent;
+  transition: background var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.dockHandle:hover::after,
+.dockHandleResizing::after {
+  background: var(--color-text-tertiary);
+}
+
+.dockHandle:active::after {
+  background: var(--color-text-secondary);
+}
+
+/* On short viewports the vertical insets are height the widget needs more
+   than the chrome does — the panel docks to the top and bottom edges and
+   keeps its side inset. The grip tracks the same edges. */
+@media (max-height: 619px) {
+  .panel {
+    top: 0;
+    height: 100dvh;
+  }
+
+  .dockHandle {
+    top: 0;
+    height: 100dvh;
+  }
+}
+
+/* Phone widths: the chat is the document, not an overlay. The panel leaves
+   the fixed layer for normal flow at 100dvh, and html[data-chat="takeover"]
+   (globals.css) hides the page around it, so the soft keyboard is handled
+   the way Safari handles any page with a field at the bottom — it scrolls
+   the document to show the field — with no viewport arithmetic here. A
+   viewport-sized fixed container is exactly what iOS 26.0 Safari renders
+   short under the keyboard, leaving a hole between composer and keys.
+   SiteChatMount reads the same threshold as TAKEOVER_QUERY and opens the
+   chat in full view there — this rule is what covers the first render,
+   before a media query has been read, so the two must stay in step. No
+   transition: there is no card form to glide from. */
+@media (max-width: 719px) {
+  .panel {
+    position: relative;
+    top: auto;
+    right: auto;
+    height: 100dvh;
+    width: 100%;
+    max-width: none;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    transition: none;
+  }
+}
+
+/* ============================================
+   THE FAB — the chat's persistent entry point,
+   bottom right on every page. Hidden while the
+   panel is open; the panel's close returns here.
+   ============================================ */
+
+.fab {
+  position: fixed;
+  right: var(--layout-chat-inset);
+  bottom: var(--layout-chat-inset);
+  z-index: 1080;
+}
+
+/* The button's own solid field (--color-ai-button-bg) keeps it legible over
+   whatever content scrolls beneath it; the FAB only adds the floating
+   elevation. No backdrop-filter here — the fill is opaque, and an ancestor
+   backdrop root would blind the summary panel's frost. */
+.fab :global(.ds-ai-button) {
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-floating);
+}
+
+/* MegaNav's mobile drawer is open (it sets the attribute on <html>). The FAB
+   sits above the drawer's scrim, where it reads as a stray button laid over
+   the menu, so it stands down until the menu closes. */
+:global(html[data-nav-drawer="open"]) .fab {
+  display: none;
+}
+
+/* ============================================
+   THREADS RAIL - the optional session-history panel (a ThreadPanel the
+   host passes through the `threads` render prop). Wide widgets seat it as
+   an inline left rail; narrow ones summon it from the header hamburger as
+   a slide-over sheet behind a scrim. The mode follows the widget's own
+   measured width, so every host gets the right one for free.
+   ============================================ */
+
+.threadsHost {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.chatWithThreads {
+  flex: 1;
+  min-width: 0;
+}
+
+.threadsRail {
+  flex: none;
+  display: flex;
+  min-height: 0;
+  border-right: var(--border-xs) solid var(--color-bg-container-border);
+}
+
+/* The sheet layer: hidden entirely (visibility) while closed, so nothing
+   in it can take focus or reach assistive technology. */
+.threadsOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  visibility: hidden;
+  transition: visibility 0s var(--motion-duration-slow);
+}
+
+.threadsOverlayOpen {
+  visibility: visible;
+  transition: visibility 0s;
+}
+
+.threadsScrim {
+  position: absolute;
+  inset: 0;
+  border: none;
+  padding: 0;
+  background-color: var(--color-scrim);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--motion-duration-slow) var(--motion-ease-standard);
+}
+
+.threadsOverlayOpen .threadsScrim {
+  opacity: 1;
+}
+
+/* The glass recipe the floating AppSidebar and the mobile menu wear: the
+   translucent fill over a backdrop blur, so the dimmed chat shows through
+   the sheet the way it does behind the site's own drawers. */
+.threadsSheet {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  background-color: var(--color-bg-glass);
+  backdrop-filter: blur(24px);
+  border-right: var(--border-xs) solid var(--color-bg-container-border);
+  box-shadow: var(--shadow-floating);
+  transform: translateX(-100%);
+  transition: transform var(--motion-duration-slow) var(--motion-ease-emphasized);
+}
+
+.threadsOverlayOpen .threadsSheet {
+  transform: translateX(0);
+}

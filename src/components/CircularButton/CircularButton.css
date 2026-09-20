@@ -1,0 +1,263 @@
+/* ============================================
+   CIRCULAR BUTTON (ICON BUTTON)
+   Round button with a single icon
+   ============================================ */
+
+.ds-circular-button {
+  /* Layout */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Size — default */
+  width: 40px;
+  height: 40px;
+
+  /* Shape */
+  border-radius: var(--radius-full); /* 999px — perfect circle */
+
+  /* Transitions */
+  transition: background-color var(--motion-duration-base) var(--motion-ease-standard), border-color var(--motion-duration-base) var(--motion-ease-standard), opacity var(--motion-duration-base) var(--motion-ease-standard);
+
+  /* Reset */
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ============================================
+   SIZE — DEFAULT
+   ============================================ */
+
+.ds-circular-button--default {
+  width: 40px;
+  height: 40px;
+}
+
+/* ============================================
+   SIZE — COMPACT
+   ============================================ */
+
+.ds-circular-button--compact {
+  width: 32px;
+  height: 32px;
+}
+
+.ds-circular-button--compact .ds-circular-button__icon {
+  --icon-size: var(--icon-size-sm);
+}
+
+/* ============================================
+   ICON
+   ============================================ */
+
+.ds-circular-button__icon {
+  flex-shrink: 0;
+  --icon-size: var(--icon-size-md);
+  line-height: 1;
+}
+
+/* ============================================
+   PRIMARY VARIANT (SOLID)
+   ============================================ */
+
+.ds-circular-button--primary {
+  background-color: var(--color-action-primary-bg);
+  border: none;
+}
+
+.ds-circular-button--primary .ds-circular-button__icon {
+  color: var(--color-action-primary-text);
+}
+
+.ds-circular-button--primary.ds-circular-button--hover {
+  background-color: var(--color-action-primary-bg-hover);
+}
+
+.ds-circular-button--primary.ds-circular-button--hover .ds-circular-button__icon {
+  color: var(--color-action-primary-text-active);
+}
+
+.ds-circular-button--primary.ds-circular-button--active {
+  background-color: var(--color-action-primary-bg-active);
+}
+
+.ds-circular-button--primary.ds-circular-button--active .ds-circular-button__icon {
+  color: var(--color-action-primary-text-active);
+}
+
+.ds-circular-button--primary.ds-circular-button--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Interactive hover/active */
+.ds-circular-button--primary:not(.ds-circular-button--disabled):hover {
+  background-color: var(--color-action-primary-bg-hover);
+}
+
+.ds-circular-button--primary:not(.ds-circular-button--disabled):hover .ds-circular-button__icon {
+  color: var(--color-action-primary-text-active);
+}
+
+.ds-circular-button--primary:not(.ds-circular-button--disabled):active {
+  background-color: var(--color-action-primary-bg-active);
+}
+
+.ds-circular-button--primary:not(.ds-circular-button--disabled):active .ds-circular-button__icon {
+  color: var(--color-action-primary-text-active);
+}
+
+/* ============================================
+   SECONDARY VARIANT (OUTLINED)
+   ============================================ */
+
+.ds-circular-button--secondary {
+  border: var(--border-xs) solid var(--color-action-primary-border);
+  background-color: transparent;
+}
+
+.ds-circular-button--secondary .ds-circular-button__icon {
+  color: var(--color-action-icon-default);
+}
+
+.ds-circular-button--secondary.ds-circular-button--hover {
+  background-color: var(--color-action-primary-bg-hover);
+}
+
+.ds-circular-button--secondary.ds-circular-button--hover .ds-circular-button__icon {
+  color: var(--color-action-icon-active);
+}
+
+.ds-circular-button--secondary.ds-circular-button--active {
+  background-color: var(--color-action-primary-bg-active);
+}
+
+.ds-circular-button--secondary.ds-circular-button--active .ds-circular-button__icon {
+  color: var(--color-action-icon-active);
+}
+
+.ds-circular-button--secondary.ds-circular-button--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Interactive hover/active */
+.ds-circular-button--secondary:not(.ds-circular-button--disabled):hover {
+  background-color: var(--color-action-primary-bg-hover);
+}
+
+.ds-circular-button--secondary:not(.ds-circular-button--disabled):hover .ds-circular-button__icon {
+  color: var(--color-action-icon-active);
+}
+
+.ds-circular-button--secondary:not(.ds-circular-button--disabled):active {
+  background-color: var(--color-action-primary-bg-active);
+}
+
+.ds-circular-button--secondary:not(.ds-circular-button--disabled):active .ds-circular-button__icon {
+  color: var(--color-action-icon-active);
+}
+
+/* ============================================
+   TERTIARY VARIANT (PASSIVE / GHOST)
+   ============================================ */
+
+.ds-circular-button--tertiary {
+  background-color: var(--color-action-passive-bg);
+  border: none;
+}
+
+.ds-circular-button--tertiary .ds-circular-button__icon {
+  color: var(--color-icon-primary);
+}
+
+.ds-circular-button--tertiary.ds-circular-button--hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-circular-button--tertiary.ds-circular-button--active {
+  background-color: var(--color-action-passive-bg-active);
+}
+
+.ds-circular-button--tertiary.ds-circular-button--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Interactive hover/active */
+.ds-circular-button--tertiary:not(.ds-circular-button--disabled):hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-circular-button--tertiary:not(.ds-circular-button--disabled):active {
+  background-color: var(--color-action-passive-bg-active);
+}
+
+/* ============================================
+   NEUTRAL VARIANT (SOLID GREY)
+   Filled like primary but in the neutral greys —
+   unlike tertiary, the background is always shown.
+   ============================================ */
+
+.ds-circular-button--neutral {
+  background-color: var(--color-action-neutral-bg);
+  border: none;
+}
+
+.ds-circular-button--neutral .ds-circular-button__icon {
+  color: var(--color-action-neutral-text);
+}
+
+.ds-circular-button--neutral.ds-circular-button--hover {
+  background-color: var(--color-action-neutral-bg-hover);
+}
+
+.ds-circular-button--neutral.ds-circular-button--active {
+  background-color: var(--color-action-neutral-bg-active);
+}
+
+.ds-circular-button--neutral.ds-circular-button--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Interactive hover/active */
+.ds-circular-button--neutral:not(.ds-circular-button--disabled):hover {
+  background-color: var(--color-action-neutral-bg-hover);
+}
+
+.ds-circular-button--neutral:not(.ds-circular-button--disabled):active {
+  background-color: var(--color-action-neutral-bg-active);
+}
+
+/* ============================================
+   LOADING
+   Keeps the variant's full-colour appearance (no disabled dim);
+   the spinner replaces the icon and inherits its colour.
+   ============================================ */
+
+.ds-circular-button--loading {
+  cursor: progress;
+  pointer-events: none;
+}
+
+/* The spinner is a box, not a glyph: left inline, it sits on the text
+   baseline and the strut's descender pushes it ~1px above the button's
+   centre. Flex centres it geometrically. */
+.ds-circular-button--loading .ds-circular-button__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============================================
+   FOCUS
+   ============================================ */
+
+.ds-circular-button:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}

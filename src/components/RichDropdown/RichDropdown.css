@@ -1,0 +1,239 @@
+/* ============================================
+   RICH DROPDOWN COMPONENT
+   Select whose options preview their own look
+   ============================================ */
+
+/* Base */
+
+.ds-rich-dropdown {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm); /* 8px */
+  width: 100%;
+  position: relative;
+}
+
+/* ============================================
+   TRIGGER
+   ============================================ */
+
+.ds-rich-dropdown__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-sm); /* 8px */
+  padding: var(--padding-sm) var(--padding-md); /* 8px 16px */
+  border: var(--border-xs) solid var(--color-input-border-primary);
+  border-radius: var(--radius-md); /* 12px */
+  background-color: var(--color-input-bg-primary);
+  cursor: pointer;
+  transition: border-color var(--motion-duration-base) var(--motion-ease-standard);
+  outline: none;
+}
+
+.ds-rich-dropdown__trigger:hover:not(:focus-visible) {
+  border-color: var(--color-input-border-hover);
+}
+
+.ds-rich-dropdown__trigger:focus-visible {
+  border-color: var(--color-input-border-selected);
+}
+
+.ds-rich-dropdown--open .ds-rich-dropdown__trigger {
+  border-color: var(--color-input-border-selected);
+}
+
+.ds-rich-dropdown__placeholder {
+  font-family: var(--font-paragraph-em-family);
+  font-size: var(--font-paragraph-em-size);
+  font-weight: var(--font-paragraph-em-weight);
+  line-height: var(--font-paragraph-em-line-height);
+  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  color: var(--color-input-text-placeholder);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ============================================
+   CELL (shared by trigger and options)
+   ============================================ */
+
+.ds-rich-dropdown__cell {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm-md); /* 12px */
+  flex: 1;
+  min-width: 0;
+}
+
+/* Same geometry as Swatch's default tile: a fixed dot with a hairline
+   inset so very light colours stay visible on the input floor. The radius
+   is per-option runtime data — an option with sharp corners squares its
+   own swatch — with the full circle as the default. */
+.ds-rich-dropdown__swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--ds-rich-dropdown-swatch-radius, var(--radius-full));
+  background-color: var(--ds-rich-dropdown-color);
+  box-shadow: inset 0 0 0 var(--border-xs) var(--color-bg-container-border);
+  flex-shrink: 0;
+}
+
+.ds-rich-dropdown__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxs); /* 2px */
+  min-width: 0;
+}
+
+/* The name wears the option's own heading face; the theme's heading role
+   is the fallback so an option with no fonts still reads as a title. */
+.ds-rich-dropdown__name {
+  font-family: var(--ds-rich-dropdown-heading-font, var(--font-family-heading));
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  letter-spacing: var(--font-title-body-letter-spacing);
+  color: var(--color-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The detail line wears the option's body face. */
+.ds-rich-dropdown__detail {
+  font-family: var(--ds-rich-dropdown-body-font, var(--font-family-body));
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-tertiary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ============================================
+   CHEVRON
+   ============================================ */
+
+.ds-rich-dropdown__chevron {
+  --icon-size: var(--icon-size-md);
+  color: var(--color-icon-primary);
+  transition: transform var(--motion-duration-base) var(--motion-ease-standard);
+  flex-shrink: 0;
+}
+
+.ds-rich-dropdown--open .ds-rich-dropdown__chevron {
+  transform: rotate(180deg);
+}
+
+/* ============================================
+   MENU
+   ============================================ */
+
+.ds-rich-dropdown__menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: var(--gap-xxs); /* 2px */
+  padding: var(--padding-xxs); /* inset gap on all sides */
+  border: var(--border-xs) solid var(--color-input-border-primary);
+  border-radius: var(--radius-md); /* 12px */
+  background-color: var(--color-bg-page-primary);
+  list-style: none;
+  max-height: 320px; /* taller cells than Dropdown's plain rows */
+  overflow-y: auto;
+  z-index: 10;
+  box-shadow: var(--shadow-floating);
+
+  /* Animation */
+  animation: ds-rich-dropdown-appear var(--motion-duration-fast) var(--motion-ease-entrance);
+}
+
+@keyframes ds-rich-dropdown-appear {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ============================================
+   OPTION (with inset-gap hover)
+   ============================================ */
+
+.ds-rich-dropdown__option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-sm); /* 8px */
+  padding: var(--padding-sm) var(--padding-sm-md); /* 8px 12px */
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-rich-dropdown__option:hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-rich-dropdown__option--focused {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-rich-dropdown__option--selected .ds-rich-dropdown__name {
+  color: var(--color-action-primary-text-tertiary);
+}
+
+.ds-rich-dropdown__option--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ds-rich-dropdown__option--disabled:hover {
+  background-color: transparent;
+}
+
+/* ============================================
+   CHECK ICON
+   ============================================ */
+
+.ds-rich-dropdown__check {
+  --icon-size: var(--icon-size-md);
+  color: var(--color-action-primary-bg);
+}
+
+/* ============================================
+   ERROR STATE
+   ============================================ */
+
+.ds-rich-dropdown--error .ds-rich-dropdown__trigger {
+  border-color: var(--color-status-error-border);
+}
+
+/* ============================================
+   DISABLED STATE
+   ============================================ */
+
+.ds-rich-dropdown--disabled .ds-rich-dropdown__trigger {
+  background-color: var(--color-input-bg-disabled);
+  border-color: var(--color-input-border-disabled);
+  cursor: not-allowed;
+}
+
+.ds-rich-dropdown--disabled .ds-rich-dropdown__name,
+.ds-rich-dropdown--disabled .ds-rich-dropdown__detail,
+.ds-rich-dropdown--disabled .ds-rich-dropdown__placeholder {
+  color: var(--color-input-text-disabled);
+}
+
+.ds-rich-dropdown--disabled .ds-rich-dropdown__chevron {
+  color: var(--color-input-text-disabled);
+}

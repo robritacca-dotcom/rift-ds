@@ -1,0 +1,132 @@
+/* ============================================
+   CONTACT CARD
+   ============================================ */
+.ds-contact-card {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-lg);
+  padding: var(--padding-lg);
+  border: 1px solid var(--color-bg-container-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-container-primary-semi);
+  text-decoration: none;
+  color: inherit;
+  transition: background var(--motion-duration-fast) var(--motion-ease-standard), border-color var(--motion-duration-fast) var(--motion-ease-standard);
+  /* Resets so the card renders identically whether it's an <a> or a <button>
+     (copy-only cards use a button). */
+  width: 100%;
+  box-sizing: border-box;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ds-contact-card:hover {
+  background: var(--color-bg-container-secondary);
+  border-color: var(--color-bg-container-border);
+}
+
+.ds-contact-card:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+/* Icon / logo slot */
+.ds-contact-card__icon-wrap {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ds-contact-card__icon {
+  --icon-size: var(--icon-size-md);
+  color: var(--color-text-secondary);
+}
+
+.ds-contact-card__logo {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+/* Text */
+.ds-contact-card__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.ds-contact-card__label {
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  color: var(--color-text-primary);
+}
+
+.ds-contact-card__value {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Actions */
+.ds-contact-card__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  flex-shrink: 0;
+}
+
+.ds-contact-card__copy-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+  transition: background var(--motion-duration-fast) var(--motion-ease-standard), color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-contact-card__copy-btn:hover {
+  background: var(--color-bg-container-tertiary);
+  color: var(--color-text-primary);
+}
+
+.ds-contact-card__copy-btn:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+.ds-contact-card__copy-btn .material-symbols-rounded {
+  --icon-size: var(--icon-size-sm);
+}
+
+.ds-contact-card__chevron {
+  --icon-size: var(--icon-size-sm);
+  color: var(--color-text-tertiary);
+  flex-shrink: 0;
+}
+
+/* Icons take the colour of the text around them. Explicit, not just
+   inherited by default: a consumer stylesheet that sets a colour on
+   .material-symbols-rounded itself (a common global default) would
+   otherwise override inheritance and detach the icon from the state
+   colours this component sets on its parents. */
+.ds-contact-card .material-symbols-rounded {
+  color: inherit;
+}

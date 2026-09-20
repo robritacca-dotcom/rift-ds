@@ -1,0 +1,78 @@
+/* ============================================
+   SCROLL CUE — pinned to the bottom of the fold
+   by the parent (position: relative), out of the
+   centring math, smooth-scrolls to its anchor.
+   Fades out once the reader scrolls past the
+   threshold (ScrollCue.tsx) and back in when
+   they return above it.
+   ============================================ */
+/* Centres with a full-width flex row instead of a transform — the
+   entrance animation (.animate-in) owns this element's transform, so a
+   translateX(-50%) here would be overridden by its fill. */
+.scrollCueSlot {
+  position: absolute;
+  bottom: var(--padding-lg);
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.scrollCue {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--padding-xs);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-bg-container-border);
+  background: var(--color-bg-container-primary-semi);
+  color: var(--color-icon-primary);
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard),
+    color var(--motion-duration-fast) var(--motion-ease-standard),
+    opacity var(--motion-duration-slow) var(--motion-ease-standard),
+    visibility 0s linear 0s;
+}
+
+/* visibility flips only after the fade-out completes (the delayed
+   transition below), so the cue fades rather than blinking away —
+   and flips back instantly on reappear so the fade-in is visible. */
+.scrollCueHidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard),
+    color var(--motion-duration-fast) var(--motion-ease-standard),
+    opacity var(--motion-duration-slow) var(--motion-ease-standard),
+    visibility 0s linear var(--motion-duration-slow);
+}
+
+.scrollCue:hover {
+  background: var(--color-bg-container-secondary);
+  color: var(--color-text-primary);
+}
+
+.scrollCue :global(.material-symbols-rounded) {
+  --icon-size: var(--icon-size-md);
+  /* ds-allow(motion): ambient nudge inviting the scroll — far slower
+     than any UI motion token, same decorative-timing precedent as the
+     home page's DS-board bar breathing. */
+  animation: scroll-cue-nudge 2.4s var(--motion-ease-standard) infinite;
+}
+
+@keyframes scroll-cue-nudge {
+  0%,
+  100% {
+    transform: translateY(-2px);
+  }
+  50% {
+    transform: translateY(2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scrollCue :global(.material-symbols-rounded) {
+    animation: none;
+  }
+}

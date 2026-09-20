@@ -1,0 +1,86 @@
+/* A full-screen view's toolbar: one slim glass pill floating across the
+   top of an immersive surface — an instrument panel over the stage, not a
+   wall at its edge. Height comes from --layout-toolbar-height (globals.css);
+   pages reserve --layout-stage-clearance beneath it, which accounts for the
+   float inset too. */
+.toolbar {
+  position: fixed;
+  top: var(--layout-chat-inset);
+  left: var(--layout-chat-inset);
+  right: var(--layout-chat-inset);
+  height: var(--layout-toolbar-height);
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md);
+  padding: 0 var(--padding-lg);
+  z-index: 30;
+  background: var(--color-bg-glass);
+  backdrop-filter: blur(24px);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-floating);
+}
+
+/* The fade behind the pill: the page floor at the viewport's top edge,
+   transparent below — the same treatment the bottom control bar keeps
+   (StageControlBar's fade), so content passing under either floating bar
+   dims out the same way. Above the flow, below the floating panels. */
+.fade {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: calc(var(--layout-stage-clearance) * 1.25);
+  z-index: 10;
+  pointer-events: none;
+  background: linear-gradient(
+    to top,
+    transparent,
+    var(--color-bg-page-primary) 85%
+  );
+}
+
+/* The side zones flex equally so the surface switch sits dead centre. */
+.trail {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md);
+  min-width: 0;
+}
+
+.actions {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--gap-md);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.title {
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}
+
+.crumb {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+/* Phones: the bar keeps logo, switch, and X on one line — the breadcrumb
+   trail gives way (the logo is the way up, and the switch names the page). */
+@media (max-width: 699px) {
+  .crumb {
+    display: none;
+  }
+}

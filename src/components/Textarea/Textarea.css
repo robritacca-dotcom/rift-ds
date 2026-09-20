@@ -1,0 +1,109 @@
+/* ============================================
+   TEXTAREA COMPONENT
+   Multi-line text input with label and counter
+   ============================================ */
+
+.ds-textarea {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm); /* 8px */
+  width: 100%;
+}
+
+/* ============================================
+   LABEL
+   ============================================ */
+
+/* ============================================
+   FIELD
+   ============================================ */
+
+.ds-textarea__field {
+  width: 100%;
+  padding: var(--padding-sm) var(--padding-md); /* 8px 16px */
+  border: var(--border-xs) solid var(--color-input-border-primary);
+  border-radius: var(--radius-md); /* 12px */
+  background-color: var(--color-input-bg-primary);
+
+  /* Typography */
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+  color: var(--color-input-text-primary);
+
+  /* Transitions */
+  transition: border-color var(--motion-duration-base) var(--motion-ease-standard), background-color var(--motion-duration-base) var(--motion-ease-standard);
+  outline: none;
+  box-sizing: border-box;
+}
+
+.ds-textarea__field::placeholder {
+  color: var(--color-input-text-placeholder);
+}
+
+.ds-textarea__field:hover:not(:focus):not(:disabled) {
+  border-color: var(--color-input-border-hover);
+}
+
+.ds-textarea__field:focus {
+  border-color: var(--color-input-border-selected);
+  background-color: var(--color-input-bg-primary);
+}
+
+/* ============================================
+   FOOTER (helper + counter)
+   ============================================ */
+
+.ds-textarea__counter {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-tertiary);
+  flex-shrink: 0;
+}
+
+/* ============================================
+   ERROR STATE
+   ============================================ */
+
+.ds-textarea--error .ds-textarea__field {
+  border-color: var(--color-status-error-border);
+}
+
+.ds-textarea--error .ds-textarea__field:focus {
+  border-color: var(--color-status-error-border);
+}
+
+.ds-textarea--error .ds-textarea__counter {
+  color: var(--color-status-error-border);
+}
+
+/* ============================================
+   DISABLED STATE
+   ============================================ */
+
+.ds-textarea--disabled .ds-textarea__field {
+  background-color: var(--color-input-bg-disabled);
+  border-color: var(--color-input-border-disabled);
+  color: var(--color-input-text-disabled);
+  cursor: not-allowed;
+}
+
+.ds-textarea--disabled .ds-textarea__field::placeholder {
+  color: var(--color-input-text-disabled);
+}
+
+/* ============================================
+   SIZE — COMPACT
+   ============================================ */
+
+.ds-textarea--compact .ds-textarea__field {
+  padding: var(--padding-xs) var(--padding-sm-md); /* 6px 12px */
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+}
+

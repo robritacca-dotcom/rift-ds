@@ -1,0 +1,764 @@
+/* ============================================
+   DESIGN SYSTEM LANDING — centred title + live collage
+   Demo cards and navigation cards share one masonry grid.
+   ============================================ */
+
+.page {
+  position: relative;
+  z-index: 1;
+  max-width: 1280px;
+  min-width: 0; /* a flex-item main must not grow to the chart's intrinsic width */
+  margin: 0 auto;
+  /* Same token every other page puts above its title, so the h1 sits at
+     the same height site-wide */
+  padding: var(--primitive-gap-xl) 32px 96px;
+}
+
+/* ---------- page header (site-standard treatment) ---------- */
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--gap-md);
+  max-width: 1080px;
+  /* Section-rhythm token rather than a fixed margin: it steps down at
+     768px on its own, so the mobile override below isn't needed. */
+  margin: 0 auto var(--gap-xxl);
+}
+
+.pageTitle {
+  /* The mega face — the landing title carries the brand the way the old
+     homepage name did, one tier above the display scale. */
+  font-family: var(--font-mega-1-family);
+  font-size: var(--font-mega-1-size);
+  font-weight: var(--font-mega-1-weight);
+  line-height: var(--font-mega-1-line-height);
+  letter-spacing: var(--font-mega-1-letter-spacing);
+  color: var(--color-text-primary);
+  margin: 0;
+  text-align: center;
+}
+
+.subDisplay {
+  font-family: var(--font-sub-display-family);
+  font-size: var(--font-sub-display-size);
+  font-weight: var(--font-sub-display-weight);
+  line-height: var(--font-sub-display-line-height);
+  letter-spacing: var(--font-sub-display-letter-spacing);
+  color: var(--color-text-primary);
+  /* Together with the hero gap, the spacing above matches the
+     title-to-subtitle gap every other page gets from its section rhythm
+     (--primitive-gap-xxxl). */
+  margin: calc(var(--primitive-gap-xxxl) - var(--gap-md)) 0 0;
+}
+
+/* ============================================
+   STAT STRIP — the metrics band under the
+   tagline: the library's own Stat, centred,
+   one figure per registry count export
+   ============================================ */
+
+.statStrip {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--gap-md) var(--gap-xxl);
+  margin-top: var(--gap-sm);
+}
+
+/* Stat left-aligns for dashboard rows; a centred hero band centres each
+   value over its label. */
+.statStrip :global(.ds-stat) {
+  align-items: center;
+}
+
+/* ============================================
+   ACCENT SWITCHER — the hero's live re-theming
+   strip; picks apply through the shared theme
+   levers and reset on navigation away
+   ============================================ */
+
+.accentStrip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-md);
+  margin-top: var(--gap-sm);
+}
+
+.accentRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: var(--gap-sm);
+}
+
+.accentSwatch {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: transform var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.accentSwatch:hover {
+  transform: scale(1.15);
+}
+
+.accentSwatch:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+/* The teal selection convention: the chosen swatch of the mutually
+   exclusive set carries the action-colour ring — which follows the pick
+   itself, since the pick re-points the action tokens. */
+.accentSwatchActive {
+  box-shadow:
+    0 0 0 2px var(--color-bg-page-primary),
+    0 0 0 4px var(--color-action-primary-bg);
+}
+
+/* The hero's section-link row wraps and stays centred on narrow screens.
+   The symmetric margin keeps the divider sandwich even: the same air
+   above and below the buttons. */
+.hero :global(.ds-button-group) {
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: var(--gap-sm) 0;
+}
+
+/* ============================================
+   RESOURCES STRIP — below the collage: the
+   external homes of the system, then the stack
+   it is built on
+   ============================================ */
+
+.resourcesStrip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-md);
+  margin-top: var(--gap-xl);
+}
+
+.resourcesStrip :global(.ds-button-group) {
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.techRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--gap-xs) var(--gap-sm);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-tertiary);
+}
+
+.techItem {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-sm);
+}
+
+.techItem:not(:first-child)::before {
+  content: "·";
+}
+
+/* ---------- collage ---------- */
+
+/* Three curated stacks rather than auto-flow columns, so specific cards can
+   hold specific positions (spending donut top-left, install top-middle).
+
+   The collage is a fixed-height window onto three escalator columns: each
+   column's cards render twice into a track that translates continuously by
+   one copy's height, so the loop never shows a seam. The outer columns run
+   down, the middle runs up, all slower than a reading pace — ambient motion,
+   not a carousel. The mask fades the cards out at the window's edges. */
+.collage {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--gap-md);
+  align-items: stretch;
+  height: clamp(640px, 130vh, 1400px);
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 9%, black 91%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, black 9%, black 91%, transparent);
+}
+
+.col {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.escalatorTrack {
+  display: flex;
+  flex-direction: column;
+  /* Durations are minutes long by design — the day-to-day motion scale tops
+     out at page reveals, so these stay per-column values, set inline */
+  animation: escalate var(--escalator-duration, 240s) var(--motion-ease-linear) infinite;
+  will-change: transform;
+}
+
+.colDown .escalatorTrack {
+  animation-direction: reverse;
+}
+
+/* A moving target is unusable: freeze the column while the pointer is over
+   it, and for keyboard users whenever focus is inside it */
+.col:hover .escalatorTrack,
+.col:focus-within .escalatorTrack {
+  animation-play-state: paused;
+}
+
+.escalatorStack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  padding-bottom: var(--gap-md); /* the seam between the two copies = the card gap */
+}
+
+/* The chat demo thread needs a bounded height to be a scroll container at
+   all; without one it grows to its content and the thread's own edge fades
+   and jump control never engage */
+.chatDemoThread {
+  height: 320px;
+}
+
+/* Translating by half the track's own height is exactly one copy (cards +
+   seam padding), which is what makes the loop seamless at any content size */
+@keyframes escalate {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(-50%);
+  }
+}
+
+/* Reduced motion: back to the plain static collage — full height, no mask,
+   one copy per column. The global animation guard would stop the track
+   anyway; this also removes the window so nothing is clipped. */
+@media (prefers-reduced-motion: reduce) {
+  .collage {
+    height: auto;
+    overflow: visible;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .escalatorTrack {
+    animation: none;
+  }
+
+  .escalatorStack {
+    padding-bottom: 0;
+  }
+
+  .escalatorDupe {
+    display: none;
+  }
+}
+
+.card > footer {
+  margin-top: auto;
+}
+
+.card {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  padding: var(--padding-lg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-bg-container-border);
+  background: var(--color-bg-container-primary);
+}
+
+.cardHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxs);
+}
+
+.cardTitle {
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  letter-spacing: var(--font-title-body-letter-spacing);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.cardSub {
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-tertiary);
+  margin: 0;
+}
+
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm-md);
+}
+
+.cardLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-xs);
+  padding-top: var(--padding-xs);
+  border-top: 1px solid var(--color-bg-container-border);
+}
+
+.cardLink {
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-tertiary);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  padding: 2px var(--padding-xxs);
+  border-radius: var(--radius-sm);
+  transition: color var(--motion-duration-base) var(--motion-ease-standard), background-color var(--motion-duration-base) var(--motion-ease-standard), text-decoration-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+/* Keep the first footer tag's text flush with the card's left edge */
+.cardLink:first-child {
+  margin-left: calc(-1 * var(--padding-xxs));
+}
+
+.cardLink:hover {
+  color: var(--color-text-primary);
+  background: var(--color-bg-container-secondary);
+  text-decoration-color: currentColor;
+}
+
+.cardHint {
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-tertiary);
+  margin: 0;
+}
+
+/* Wide fixed-size content (the contribution graph's day cells) scrolls
+   inside its card instead of widening the page. */
+.scrollX {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+/* ---------- card internals ---------- */
+
+.statGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gap-md) var(--gap-sm);
+}
+
+.settingRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-md);
+}
+
+.settingText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.settingLabel {
+  font-size: var(--font-paragraph-sm-em-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  color: var(--color-text-primary);
+}
+
+.settingHint {
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-tertiary);
+}
+
+.chartToolbar {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* The chart component ships as its own bordered panel; inside a collage
+   card that chrome doubles up, so flatten it to bare axes and bars. */
+.chartFlush :global(.ds-chart) {
+  padding: 0;
+  border: none;
+  background: transparent;
+  border-radius: 0;
+}
+
+.formStack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm-md);
+}
+
+.formStack > :last-child {
+  align-self: flex-start;
+  margin-top: var(--gap-xxs);
+}
+
+.controlColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-sm-md);
+}
+
+.buttonRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-xs);
+}
+
+.thresholdReadout {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--gap-sm);
+}
+
+.thresholdLabel {
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+}
+
+.thresholdValue {
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+  color: var(--color-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Shared row-list scaffolding (invoices, activity, statements) */
+
+.rowList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.rowList > li {
+  padding: var(--padding-xs) 0;
+}
+
+.rowList > li:first-child {
+  padding-top: 0;
+}
+
+.rowList > li:last-child {
+  padding-bottom: 0;
+}
+
+.rowList > li + li {
+  border-top: 1px solid var(--color-bg-container-border);
+}
+
+.rowTitle {
+  font-size: var(--font-paragraph-sm-em-size);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  line-height: var(--font-paragraph-sm-em-line-height);
+  color: var(--color-text-primary);
+}
+
+.rowHint {
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-tertiary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Card stack demo — the virtual-card face inside each deck card */
+.teamCardBody {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-md);
+}
+
+.teamCardNumber {
+  font-family: var(--font-family-code);
+  font-size: var(--font-paragraph-size);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-secondary);
+}
+
+.invoiceRow {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+}
+
+.invoiceText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.invoiceAmount {
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+.activityRow {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+}
+
+.activityText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.activityWhen {
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-tertiary);
+  flex-shrink: 0;
+  align-self: flex-start;
+}
+
+.statementRow {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+}
+
+.statementIcon {
+  --icon-size: var(--icon-size-sm);
+  color: var(--color-icon-secondary);
+  flex-shrink: 0;
+}
+
+.statementText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.statementDownload {
+  --icon-size: var(--icon-size-sm);
+  color: var(--color-icon-secondary);
+  flex-shrink: 0;
+}
+
+.goal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs);
+}
+
+.goalHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--gap-sm);
+}
+
+.searchTrigger {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  padding: var(--padding-xs) var(--padding-sm);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-bg-container-border);
+  background: var(--color-bg-page-primary);
+}
+
+.searchIcon {
+  --icon-size: var(--icon-size-sm);
+  color: var(--color-icon-secondary);
+  flex-shrink: 0;
+}
+
+.searchPlaceholder {
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-tertiary);
+  flex: 1;
+}
+
+.kbdKeys {
+  display: flex;
+  gap: var(--gap-xxs);
+}
+
+.loadingRow {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+}
+
+.recentRow {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xs);
+}
+
+.quickActions {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--gap-sm);
+}
+
+.quickAction {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-xs);
+}
+
+.quickActionLabel {
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+}
+
+.calendarWrap {
+  display: flex;
+  justify-content: center;
+}
+
+/* Payment-success pattern: centred check, amount, and stacked actions */
+
+.successPanel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--gap-xs);
+  padding: var(--padding-sm) 0;
+}
+
+.successBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--icon-size-xl);
+  height: var(--icon-size-xl);
+  border-radius: var(--radius-full);
+  background: var(--color-status-positive-bg);
+  border: 1px solid var(--color-status-positive-border);
+  margin-bottom: var(--gap-xxs);
+}
+
+.successBadge > span {
+  --icon-size: var(--icon-size-md);
+  color: var(--color-status-positive-text);
+}
+
+.successAmount {
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+  color: var(--color-text-primary);
+}
+
+.successHint {
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-tertiary);
+}
+
+.successActions {
+  display: flex;
+  gap: var(--gap-xs);
+  margin-top: var(--gap-sm);
+}
+
+/* ---------- responsive ---------- */
+
+/* Content-driven threshold: the three-column collage needs ~1024px to
+   breathe, so it collapses here rather than at a canonical layout tier.
+   One stacked column also ends the escalator — three looping columns on
+   top of each other would be a wall of motion, so the collage reverts to
+   the plain static layout. */
+@media (max-width: 1023px) {
+  .collage {
+    grid-template-columns: minmax(0, 1fr);
+    height: auto;
+    overflow: visible;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .escalatorTrack {
+    animation: none;
+  }
+
+  .escalatorStack {
+    padding-bottom: 0;
+  }
+
+  .escalatorDupe {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding: var(--primitive-gap-xl) 20px 64px;
+  }
+}
+
+/* The hero title deliberately overrides the token collapse: mega-1 needs a
+   two-stage ramp (132 → 64 @959 → 40 @600) that the single 768px token
+   step can't provide at this size. Same ramp the old homepage name used. */
+@media (max-width: 959px) {
+  .pageTitle {
+    font-size: 64px;
+    line-height: 1;
+  }
+}
+
+@media (max-width: 600px) {
+  .pageTitle {
+    font-size: 40px;
+    line-height: 1;
+  }
+}
+
+/* Hero buttons for desktop-only pages (the canvas board) leave the mobile
+   IA. Breakpoint matches the nav's drawer switch in MegaNav.module.css. */
+@media (max-width: 959px) {
+  .desktopOnly {
+    display: none;
+  }
+}

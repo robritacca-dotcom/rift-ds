@@ -1,0 +1,177 @@
+/* ============================================
+   TYPOGRAPHY TOKENS
+   Font families, sizes, weights, line heights
+   All typography styles from Figma design system
+   ============================================ */
+
+:root {
+  /* ============================================
+     FONT FAMILIES
+     ============================================ */
+
+  --font-family-primary: 'Nunito Sans', sans-serif;
+
+  /* Family roles. Every type-scale step chains to one of these two
+     aliases: the display and heading tiers read the heading role, the
+     body tiers (Title Body through Caption) read the body role. Both
+     default to the primary family, so this system stays one typeface and
+     overriding --font-family-primary still re-fonts everything at once —
+     a consumer who wants a display face over a text face overrides the
+     roles separately instead. */
+  --font-family-heading: var(--font-family-primary);
+  --font-family-body: var(--font-family-primary);
+
+  /* The one sanctioned monospace stack — CodeBlock, ToolCall names, and
+     Prose inline code. Anything monospace references this token. */
+  --font-family-code: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas,
+    monospace;
+
+  /* ============================================
+     DISPLAY STYLES (Large headlines)
+
+     Leading is unitless across this tier and loosens as the size drops:
+     0.92 on Mega, 1.05 on Display 1, 1.1 on Display 2. A display line
+     set solid reads as a poster on one line and as a stack on two, and
+     these headlines wrap — a page title is a sentence, not a word. The
+     ratios are the smallest step that opens a wrapped title without
+     costing the tier its density.
+     ============================================ */
+
+  /* Mega 1 - Largest display text */
+  --font-mega-1-family: var(--font-family-heading);
+  --font-mega-1-size: 132px;
+  --font-mega-1-weight: 300;
+  --font-mega-1-line-height: 0.92;
+  --font-mega-1-letter-spacing: 0.02em; /* 2% */
+
+  /* Mega 2 */
+  --font-mega-2-family: var(--font-family-heading);
+  --font-mega-2-size: 116px;
+  --font-mega-2-weight: 300;
+  --font-mega-2-line-height: 0.92;
+  --font-mega-2-letter-spacing: 0.02em; /* 2% */
+
+  /* Display 1 */
+  --font-display-1-family: var(--font-family-heading);
+  --font-display-1-size: 96px;
+  --font-display-1-weight: 300;
+  --font-display-1-line-height: 1.05;
+  --font-display-1-letter-spacing: 0.02em; /* 2% */
+
+  /* Display 2 */
+  --font-display-2-family: var(--font-family-heading);
+  --font-display-2-size: 64px;
+  --font-display-2-weight: 300;
+  --font-display-2-line-height: 1.1;
+  --font-display-2-letter-spacing: 0.015em; /* 1.5% */
+
+  /* Sub Display */
+  --font-sub-display-family: var(--font-family-heading);
+  --font-sub-display-size: 30px;
+  --font-sub-display-weight: 300;
+  --font-sub-display-line-height: 44px;
+  --font-sub-display-letter-spacing: 0.015em; /* 1.5% */
+
+  /* ============================================
+     HEADING STYLES
+     ============================================ */
+
+  /* Heading 1 */
+  --font-heading-1-family: var(--font-family-heading);
+  --font-heading-1-size: 30px;
+  --font-heading-1-weight: 600;
+  --font-heading-1-line-height: 44px;
+  --font-heading-1-letter-spacing: 0.015em; /* 1.5% */
+
+  /* Heading 2 */
+  --font-heading-2-family: var(--font-family-heading);
+  --font-heading-2-size: 26px;
+  --font-heading-2-weight: 600;
+  --font-heading-2-line-height: 32px;
+  --font-heading-2-letter-spacing: 0.015em; /* 1.5% */
+
+  /* Heading 3 */
+  --font-heading-3-family: var(--font-family-heading);
+  --font-heading-3-size: 22px;
+  --font-heading-3-weight: 600;
+  --font-heading-3-line-height: 28px;
+  --font-heading-3-letter-spacing: 0.015em; /* 1.5% */
+
+  /* ============================================
+     BODY TEXT STYLES
+     ============================================ */
+
+  /* Title Body */
+  --font-title-body-family: var(--font-family-body);
+  --font-title-body-size: 16px;
+  --font-title-body-weight: 600;
+  --font-title-body-line-height: 24px;
+  --font-title-body-letter-spacing: -0.01em; /* -1% */
+
+  /* Paragraph Em (emphasis — medium weight, between paragraph and title body) */
+  --font-paragraph-em-family: var(--font-family-body);
+  --font-paragraph-em-size: 16px;
+  --font-paragraph-em-weight: 500;
+  --font-paragraph-em-line-height: 24px;
+  --font-paragraph-em-letter-spacing: -0.01em; /* -1% */
+
+  /* Paragraph */
+  --font-paragraph-family: var(--font-family-body);
+  --font-paragraph-size: 16px;
+  --font-paragraph-weight: 400;
+  --font-paragraph-line-height: 24px;
+  --font-paragraph-letter-spacing: 0;
+
+  /* Paragraph SM */
+  --font-paragraph-sm-family: var(--font-family-body);
+  --font-paragraph-sm-size: 14px;
+  --font-paragraph-sm-weight: 400;
+  --font-paragraph-sm-line-height: 20px;
+  --font-paragraph-sm-letter-spacing: 0;
+
+  /* Paragraph SM Em (emphasis — medium weight small paragraph) */
+  --font-paragraph-sm-em-family: var(--font-family-body);
+  --font-paragraph-sm-em-size: 14px;
+  --font-paragraph-sm-em-weight: 500;
+  --font-paragraph-sm-em-line-height: 20px;
+  --font-paragraph-sm-em-letter-spacing: 0;
+
+  /* Overline — the uppercase label face: an eyebrow over a title, a map
+     callout's place name, a code block's language chip. Small and bold with
+     open tracking, because capitals at this size need air to stay legible.
+     Pair with text-transform: uppercase at the use site — the tokens set the
+     metrics, never the casing. */
+  --font-overline-family: var(--font-family-body);
+  --font-overline-size: 14px;
+  --font-overline-weight: 600;
+  --font-overline-line-height: 20px;
+  --font-overline-letter-spacing: 0.08em; /* +8% */
+
+  /* Caption — the floor of the scale. Footnotes and disclaimers: a line the
+     reader should be able to find but never has to read to use the screen.
+     Never on a control, never for running text. */
+  --font-caption-family: var(--font-family-body);
+  --font-caption-size: 12px;
+  --font-caption-weight: 400;
+  --font-caption-line-height: 16px;
+  --font-caption-letter-spacing: 0;
+}
+
+/* ============================================
+   RESPONSIVE COLLAPSE
+   The display tier steps down once, at 768px — the token layer's only
+   breakpoint. Headings and body never step; weights and letter-spacing
+   never change at any breakpoint (weight contrast is the hierarchy rule).
+   ============================================ */
+
+@media (max-width: 768px) {
+  :root {
+    --font-mega-1-size: 64px;
+    --font-mega-2-size: 56px;
+    --font-display-1-size: 48px;
+    --font-display-2-size: 40px;
+    --font-display-2-line-height: 1.15;
+    --font-sub-display-size: 24px;
+    --font-sub-display-line-height: 36px;
+  }
+}

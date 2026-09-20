@@ -1,0 +1,370 @@
+/* Labs: marketing dashboard rebuild. Every colour, space, radius, and type
+   style is a semantic token; the only raw values are structural layout sizes
+   (grid tracks, breakpoints), which pages own everywhere else on the site. */
+
+.shell {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  /* From the pinned viewport variable, never bare 100vh — the templates
+     carousel and the canvas board size viewport-tall shells through it. */
+  min-height: calc(var(--layout-viewport-height, 100vh));
+  /* Stretch across the body's own padding (the playground's pattern), so
+     the app shell runs edge to edge instead of sitting in the doc-page
+     column; the primitives here mirror the body's inset in globals.css. */
+  width: calc(100% + var(--primitive-padding-xl) * 2);
+  margin: calc(-1 * var(--primitive-padding-lg))
+    calc(-1 * var(--primitive-padding-xl));
+  /* Deliberately no opaque background: the body's page colour carries the
+     shell, and the site's ambient background reaches the top of the page
+     the way it does everywhere else, so the glass sidebar below has real
+     colour to blur. */
+}
+
+/* One inset source for the whole shell: the floating sidebar reads the
+   same value the chat panel uses. */
+.sidebar {
+  --ds-sidebar-float-inset: var(--layout-chat-inset);
+}
+
+/* AppSidebar positions itself fixed; the main column reserves its width the
+   same way AppLayout does (64px rail, 280px expanded — the component's own
+   constants). */
+.main {
+  flex: 1;
+  min-width: 0;
+  padding-left: calc(64px + var(--layout-chat-inset) * 2);
+  transition: padding var(--motion-duration-slow) var(--motion-ease-emphasized);
+  display: flex;
+  justify-content: center;
+}
+
+.mainExpanded {
+  padding-left: calc(280px + var(--layout-chat-inset) * 2);
+}
+
+/* The docked chat pushes the page over instead of covering it — the site's
+   body-inset pattern, applied to the main column since this shell owns its
+   own layout. */
+.mainChatOpen {
+  padding-right: calc(var(--layout-chat-width) + var(--layout-chat-inset) * 2);
+}
+
+/* The content column centres in the space between the rail and the right
+   viewport edge (the playground's centring pattern), with equal side
+   padding, so the page never lists to one side. */
+.content {
+  width: 100%;
+  max-width: 1440px;
+  min-width: 0;
+  padding: var(--padding-lg) var(--padding-xl) var(--padding-xxl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-lg);
+}
+
+/* ------------------------------------------------------------- header */
+
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-sm);
+}
+
+.search {
+  position: relative;
+  width: 320px;
+  max-width: 100%;
+}
+
+/* The shortcut hint rides inside the field, over its right padding; it is
+   decorative furniture, so it never intercepts the pointer. */
+.searchKbd {
+  position: absolute;
+  top: 50%;
+  right: var(--padding-sm);
+  transform: translateY(-50%);
+  display: inline-flex;
+  gap: var(--gap-xxs);
+  pointer-events: none;
+}
+
+.topBarActions {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+}
+
+.pageHead {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--gap-sm);
+  flex-wrap: wrap;
+}
+
+/* The mock assistant panel lives in the shared TemplateAssistant module. */
+
+.title {
+  margin: var(--gap-xs) 0 0;
+  font-family: var(--font-heading-1-family);
+  font-size: var(--font-heading-1-size);
+  font-weight: var(--font-heading-1-weight);
+  line-height: var(--font-heading-1-line-height);
+  letter-spacing: var(--font-heading-1-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.headActions {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  flex-wrap: wrap;
+}
+
+/* -------------------------------------------------------------- panels */
+
+.panel {
+  background-color: var(--color-bg-container-primary);
+  border-radius: var(--radius-xl);
+  padding: var(--padding-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  min-width: 0;
+}
+
+/* The campaigns table sits directly on the page - the DataTable brings its
+   own bordered chrome, so a panel around it double-boxed it. */
+.tableSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  min-width: 0;
+}
+
+.panelHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--gap-sm);
+}
+
+/* Dropdown fills its container by design; the selects on this page are
+   fixed-width furniture, not form fields. */
+.rangeSelect {
+  width: 160px;
+  flex-shrink: 0;
+}
+
+/* ---------------------------------------------------------------- KPIs */
+
+.kpiGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--gap-lg);
+}
+
+.kpi {
+  composes: panel;
+  align-items: flex-start;
+  gap: var(--gap-sm-md);
+}
+
+.kpiIcon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: var(--radius-full);
+  background-color: var(--color-bg-container-tertiary);
+  color: var(--color-text-primary);
+  --icon-size: var(--icon-size-sm);
+}
+
+/* ------------------------------------------------------------ mid row */
+
+.midGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--gap-lg);
+}
+
+.chartsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gap-lg);
+}
+
+.radial {
+  align-self: center;
+}
+
+/* ------------------------------------------------------------- legends */
+
+.legendRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: var(--gap-sm);
+  margin-top: auto;
+}
+
+/* ------------------------------------------------------- channel panel */
+
+.channelList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm-md);
+  padding-top: var(--padding-xxs);
+}
+
+.channelRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs);
+}
+
+.channelMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-xs);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+}
+
+.channelName {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-xxs);
+  color: var(--color-text-primary);
+  font-weight: var(--font-paragraph-sm-em-weight);
+  min-width: 0;
+}
+
+.channelPct {
+  color: var(--color-text-secondary);
+}
+
+.channelGlyph {
+  color: var(--color-text-secondary);
+  --icon-size: var(--icon-size-sm);
+}
+
+/* --------------------------------------------------------------- table */
+
+.tableFilters {
+  display: flex;
+  gap: var(--gap-sm);
+  flex-wrap: wrap;
+}
+
+
+.campaignCell {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-sm-md);
+}
+
+/* The channel glyph rides in a filled chip (the KPI tiles' treatment at
+   table scale), so it reads as an icon slot rather than a stray glyph. */
+.glyphChip {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: var(--radius-full);
+  background-color: var(--color-bg-container-tertiary);
+  color: var(--color-text-primary);
+  --icon-size: var(--icon-size-sm);
+}
+
+.campaignText {
+  display: flex;
+  flex-direction: column;
+}
+
+.campaignName {
+  color: var(--color-text-primary);
+  font-weight: var(--font-paragraph-sm-em-weight);
+}
+
+.campaignMarket {
+  color: var(--color-text-tertiary);
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+}
+
+.deliverySelect {
+  min-width: 140px;
+}
+
+.dateCell {
+  white-space: nowrap;
+}
+
+.rowActions {
+  display: inline-flex;
+  justify-content: flex-end;
+  gap: var(--gap-xs);
+}
+
+/* ---------------------------------------------------------- responsive */
+
+/* The shell's negative margins mirror the body's inset in globals.css,
+   which steps down at these same breakpoints — an unmirrored step leaves
+   the shell pulled past the viewport's left edge on phones. */
+@media (max-width: 959px) {
+  .shell {
+    width: calc(100% + var(--primitive-padding-lg) * 2);
+    margin: calc(-1 * var(--primitive-padding-lg));
+  }
+}
+
+@media (max-width: 600px) {
+  .shell {
+    width: calc(100% + var(--primitive-padding-md) * 2);
+    margin: calc(-1 * var(--primitive-padding-lg))
+      calc(-1 * var(--primitive-padding-md));
+  }
+}
+
+@media (max-width: 1360px) {
+  .midGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .kpiGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1080px) {
+  .midGrid,
+  .chartsGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .content {
+    padding: var(--padding-md);
+  }
+}
+
+@media (max-width: 760px) {
+  .sidebar {
+    display: none;
+  }
+
+  .main,
+  .mainExpanded {
+    padding-left: 0;
+  }
+
+  .kpiGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -1,0 +1,45 @@
+/* ============================================
+   SECTION TITLE COMPONENT
+   Heading with divider line, optional trailing content
+   ============================================ */
+
+.ds-section-title {
+  display: flex;
+  align-items: baseline;
+  gap: var(--gap-md);
+  border-bottom: var(--border-xs) solid var(--color-divider);
+  padding-bottom: var(--padding-lg);
+}
+
+/* Divider-less variant: for headings above content that draws its own
+   lines, where a second rule would double up. The generous clearance
+   the divider needed drops to a small breathing gap. */
+.ds-section-title--no-divider {
+  border-bottom: none;
+  padding-bottom: var(--padding-md);
+}
+
+/* ============================================
+   HEADING
+   ============================================ */
+
+.ds-section-title__heading {
+  font-family: var(--font-heading-2-family);
+  font-size: var(--font-heading-2-size);
+  font-weight: var(--font-heading-2-weight);
+  line-height: var(--font-heading-2-line-height);
+  letter-spacing: var(--font-heading-2-letter-spacing);
+  color: var(--color-text-secondary);
+}
+
+/* ============================================
+   TRAILING CONTENT (count, badge, metadata)
+   ============================================ */
+
+.ds-section-title__trailing {
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-tertiary);
+}

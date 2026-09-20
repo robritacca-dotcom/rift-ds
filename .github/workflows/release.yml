@@ -1,0 +1,142 @@
+name: Release
+
+# Publishes @robr0/design-system to npm — manually triggered, dry-run by
+# default. The publish happens FROM dist/ (its generated package.json is
+# the one that ships; the root manifest stays private and never publishes).
+#
+# AUTH: Trusted Publishing (OIDC). There is no npm token. GitHub mints a
+# short-lived OIDC token for this workflow, and npm accepts it because this
+# repo + workflow filename are registered as a trusted publisher on the
+# package's npmjs.com settings page. Consequences worth knowing:
+#   - `permissions: id-token: write` below is load-bearing — without it the
+#     publish fails to authenticate, not just to attach provenance.
+#   - The trusted-publisher registration is keyed to THIS FILENAME
+#     (release.yml). Renaming or moving this file breaks publishing until
+#     the registration is updated on npmjs.com.
+#   - Provenance is signed automatically under OIDC; --provenance is kept
+#     explicit below so the intent is visible in the log.
+#   - A dry run never authenticates, so it cannot prove OIDC works. The only
+#     proof is a real publish.
+#
+# To cut a release, follow the `release` skill (.claude/skills/release):
+# bump PACKAGE_VERSION in scripts/package-manifest.mjs, dry-run, run for
+# real, then tag the published commit.
+#
+# 0.1.0 shipped 2026-07-26 using a granular NPM_TOKEN; that token is retired.
+# 0.2.0 shipped 2026-07-27 — the first release authenticated by OIDC.
+# 0.3.0 shipped 2026-07-28.
+# 0.4.0 shipped 2026-08-01 — the ai component category.
+# 0.5.0 shipped 2026-08-09 — the chat component set behind the site chat.
+# 0.6.0 shipped 2026-08-11 — the composer radius token, ChatMessage's
+#   showActions, and the README's chat-boundary correction.
+# 0.7.0 shipped 2026-08-15 — ShaderField, the WebGL2 ambient background, plus
+#   Card's cover slot and the --motion-duration-instant token.
+# 0.8.0 shipped 2026-08-16 — AgentPlan, ModelPicker, NotificationCenter,
+#   DataTable and EventCalendar, the five from the dashboard gap analysis.
+# 0.9.0 shipped 2026-08-17 — past 100 components: AnchorNav, Stepper, TagInput,
+#   NumberInput, TreeView, PinInput, CodeDiff, Sparkline and TimePicker, plus
+#   restored "use client" directives in the published dist.
+# 0.10.0 shipped 2026-08-20 — the accessible teal split: the action colour is
+#   theme-dependent (light teal-08 fill, dark inverts to teal-05), all AA;
+#   SectionTitle's optional divider and AppSidebar link rows.
+# 0.11.0 shipped 2026-08-23 — the maps category (Globe, MapCallout, MapLegend),
+#   CardStack, and the overline typography face.
+# 0.12.0 shipped 2026-08-26 — the dashboard set from the labs rebuild: Panel,
+#   LegendTile, FunnelChart, ComboChart; live var() chart colours with bare
+#   mode; Stat's trend tokens and inline delta; borderless badges; the
+#   AppSidebar floating/badges/slots set and its rebuilt transition.
+# 0.13.0 shipped 2026-08-29 — five composition gap-fillers: Gauge, FilterBar,
+#   SplitPane, StreamingText, AvatarGroup, with the stream reveal's motion
+#   constant and the amended JS motion contract.
+# 0.14.0 shipped 2026-08-29 — six components to 120: Banner, HoverCard,
+#   ImageCompare, Meter, Rating, SplitButton, plus LinkList's newTab opt-out.
+# 0.15.0 shipped 2026-09-04 — UsageCard and SourceTrail join the ai category,
+#   Composer's working glow (aiGlow + streaming), and the agent-docs surfaces
+#   around the package: per-component markdown contracts, the consumer agent
+#   skill, and the MCP roster with example prompts.
+# 0.16.0 shipped 2026-09-06 — the shared overlay behavior layer under the
+#   modal components (with useScrollLock published for host chrome),
+#   AiButton's summary panel and Composer's context note, the status icon
+#   step tokens, and overlay listener/timer fixes.
+# 0.17.0 shipped 2026-09-09 — ThreadPanel, the session-history rail for chat
+#   products (AppSidebar's collapse choreography, server-renderable), plus
+#   EventCalendar's selectedDate and whole-cell interactivity on its own
+#   calendar colour family, and the toast exit timer on the motion constant.
+# 0.18.0 shipped 2026-09-11 — ThreadTabs, the animated strip of open chat
+#   sessions, with ThreadPanel's detail rows, pin marks and projects
+#   section; PromptSuggestions' pending shimmer and entrance stagger; and
+#   CommandPalette's trailing slot for a non-interactive row badge.
+# 0.18.1 shipped 2026-09-12 — the section-divider rhythm fix: SectionTitle's
+#   rule clearance drops to --padding-lg (heading, 20px, rule, 40px, content
+#   everywhere), and the rule width and Table's hairlines move onto the
+#   border tokens.
+# 0.19.0 shipped 2026-09-16 — GanttChart and RichDropdown, the heading and
+#   body font family roles for split-face theming, AiButton's signature
+#   refresh, Dropdown's typeface preview, the micro-animation pass
+#   (SegmentedControl's sliding pill, Button's trailing-icon nudge), and
+#   ToggleSwitch labels hugging the track.
+# 0.20.0 shipped 2026-09-18 — six components to 132: WorldMap, the flat
+#   companion to Globe, plus Toolbar, Lightbox, Waveform, AnimatedNumber
+#   and StatusDot; Lightbox is the first overlay born on the shared
+#   behavior layer, and the count-up budget joins the motion constants.
+# 0.21.0 shipped 2026-09-19 — the package's first bin: npx
+#   @robr0/design-system init fetches the consumer agent skill from the
+#   live site into .claude/skills/ and prints the MCP connect line.
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run — build and smoke-test, skip the actual npm publish"
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+  id-token: write # Required for Trusted Publishing (OIDC) AND provenance
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      # NOTE: deliberately NO `registry-url:` here. Setting it makes setup-node
+      # write an .npmrc containing `_authToken=${NODE_AUTH_TOKEN}` AND export a
+      # placeholder NODE_AUTH_TOKEN ("XXXXX-XXXXX-..."). npm then believes it is
+      # already authenticated, never attempts the OIDC exchange, and the
+      # registry rejects the placeholder with a misleading `E404` on PUT.
+      # Without it npm finds no credentials and falls through to Trusted
+      # Publishing. npm defaults to registry.npmjs.org anyway, and the package
+      # sets no publishConfig, so nothing is lost. (Cost us run 30284784878.)
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      # Trusted Publishing needs npm >= 11.5.1. Node 24 does not ship a new
+      # enough npm on every patch release, and an older CLI fails to exchange
+      # the OIDC token rather than falling back gracefully — so pin it forward
+      # explicitly instead of trusting whatever the runner happens to bundle.
+      - name: Ensure npm supports Trusted Publishing
+        run: |
+          npm install -g npm@latest
+          npm --version
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run build
+      - run: npm run build:lib
+      # Pack the tarball, scaffold a real Vite consumer, install, tsc, build —
+      # fails the release before anything reaches the registry.
+      - name: Consumer smoke test
+        run: node scripts/smoke-consumer.mjs
+      # --loglevel verbose is deliberate: it prints the OIDC token exchange
+      # (`POST .../oidc/token/exchange/package/...`), which is the only visible
+      # evidence that Trusted Publishing actually authenticated. Without it an
+      # auth failure surfaces only as a misleading E404 or ENEEDAUTH.
+      - name: Publish to npm
+        if: ${{ !inputs.dry_run }}
+        working-directory: dist
+        run: npm publish --access public --provenance --loglevel verbose
+      - name: Dry-run publish preview
+        if: ${{ inputs.dry_run }}
+        working-directory: dist
+        run: npm publish --access public --dry-run

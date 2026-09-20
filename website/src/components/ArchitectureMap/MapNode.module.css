@@ -1,0 +1,132 @@
+/* ============================================
+   MAP NODE — one cell of an architecture map
+   ============================================ */
+.node {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: var(--primitive-gap-sm);
+  padding: var(--primitive-padding-sm) var(--primitive-padding-md);
+  background-color: var(--color-bg-container-primary);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-floating);
+}
+
+.node-external {
+  border-style: dashed;
+  background-color: var(--color-bg-container-secondary);
+  box-shadow: none;
+}
+
+.node-state {
+  background-color: var(--color-bg-container-tertiary);
+  box-shadow: none;
+}
+
+.nodeText {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+}
+
+.nodeTitle {
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: 1.3;
+  color: var(--color-text-primary);
+}
+
+.nodeSub {
+  font-size: var(--font-caption-size);
+  line-height: 1.4;
+  color: var(--color-text-secondary);
+}
+
+/* Icon / logo chip */
+.chip {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--icon-size-lg);
+  height: var(--icon-size-lg);
+  border-radius: var(--radius-md);
+}
+
+.chipIcon {
+  font-size: var(--icon-size-sm);
+}
+
+.chipLogo {
+  background-color: var(--color-bg-container-secondary);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+}
+
+.chip-neutral {
+  background-color: var(--color-status-neutral-bg);
+  color: var(--color-status-neutral-text);
+}
+
+.chip-info {
+  background-color: var(--color-status-info-bg);
+  color: var(--color-status-info-text);
+}
+
+.chip-positive {
+  background-color: var(--color-status-positive-bg);
+  color: var(--color-status-positive-text);
+}
+
+.chip-warning {
+  background-color: var(--color-status-warning-bg);
+  color: var(--color-status-warning-text);
+}
+
+.chip-action {
+  /* The teal chip marks the argument's own nodes, the same sanctioned
+     data-viz teal the chart series leads with. */
+  background-color: var(--color-chart-series-1);
+  color: var(--color-text-on-inverse);
+}
+
+/* Theme-paired logo marks (Vercel, Next.js ship as light/dark files) */
+.logoDark {
+  display: none;
+}
+
+:global([data-theme="dark"]) .logoLight {
+  display: none;
+}
+
+:global([data-theme="dark"]) .logoDark {
+  display: block;
+}
+
+/* ============================================
+   ZONE — a translucent grouping container
+   ============================================ */
+.zone {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: var(--primitive-padding-md);
+  background-color: var(--color-bg-glass);
+  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-xl);
+}
+
+.zoneTitle {
+  font-size: var(--font-overline-size);
+  font-weight: var(--font-overline-weight);
+  letter-spacing: var(--font-overline-letter-spacing);
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+
+.zoneSub {
+  font-size: var(--font-caption-size);
+  color: var(--color-text-tertiary);
+}

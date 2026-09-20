@@ -9,6 +9,14 @@
 
 An open source React design system built for AI products and coding agents: components on a three-tier token architecture, complete theme presets that restyle everything with one attribute, and machine surfaces (an MCP endpoint, per-component contracts, an installable agent skill) so your coding agent knows the library as well as you do.
 
+## Why Dragonspine DS
+
+- **Whole themes, not a colour swap.** Every shipped theme is a complete look: both colour modes, a heading and body type pairing with self-hosted fonts, radius, density, motion, elevation, the ambient background, and the chart palette. One `data-brand` attribute applies it with zero runtime JavaScript, and every theme holds WCAG AA contrast in both modes, enforced by the build.
+- **Nothing to adopt but a package.** No Tailwind, no CLI pipeline, no configuration API, no providers. One install, one stylesheet import, and theming is plain CSS custom properties any bundler already handles.
+- **The AI product set is free.** Composer, streaming chat thread, tool calls, reasoning, thread panel and tabs: the components an assistant UI actually needs, running a real production chat today, all MIT with no pro tier.
+- **Your agent already knows it.** One command installs the agent skill and prints the MCP connect line, and the MCP tools are generated from the same JSDoc that builds the shipped `.d.ts`: an agent reads the exact contract npm ships, no key, no account.
+- **Docs that cannot lie.** Every count, list, and prop table is generated from source registries and build-validated; CI fails on drift, and every component story ships through an accessibility audit. What the docs say is what ships.
+
 ## Documentation
 
 Everything deep lives on the docs site: **[dragonspine.vercel.app](https://dragonspine.vercel.app/)**, with live examples, foundations, templates, the playground, and the **[get-started guide](https://dragonspine.vercel.app/docs/get-started)**. **[Storybook](https://dragonspine-storybook.vercel.app/?path=/docs/dragonspine-ds--docs)** is the interactive component explorer.
@@ -81,7 +89,7 @@ Accordion · Agent plan · Agent status · AI button · Alert · Alert dialog ·
 - **Vitest + Playwright + axe**: every Storybook story runs as a render test in headless Chromium, with an accessibility audit on each
 - **CSS custom properties**: all theming via semantic tokens, no CSS-in-JS
 
-Docs that cannot lie: every count, list, and contract here and on the site is generated from registries and build-validated, and CI fails on drift. The [overview](https://dragonspine.vercel.app/overview) shows the pipeline.
+The [overview](https://dragonspine.vercel.app/overview) shows the generate-and-validate pipeline behind the docs.
 
 ## Running locally
 

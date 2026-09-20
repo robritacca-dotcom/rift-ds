@@ -274,6 +274,21 @@ export default function PlaygroundPage() {
     HEADING_FONT_OPTIONS.find((f) => f.label === headingFontLabel) ??
     HEADING_FONT_OPTIONS[0];
 
+  /* The playground edits the RAW token layer: its levers write inline
+     overrides against the shipped defaults. A site-wide data-brand theme
+     (the landing's dot row) would sit underneath and bleed through every
+     property a lever hasn't touched, so the attribute is suspended while
+     the playground is mounted and restored on the way out — the visitor's
+     stored pick is untouched. */
+  useEffect(() => {
+    const root = document.documentElement;
+    const suspended = root.dataset.brand;
+    if (suspended !== undefined) delete root.dataset.brand;
+    return () => {
+      if (suspended !== undefined) root.dataset.brand = suspended;
+    };
+  }, []);
+
   const theme = useSiteTheme();
 
   /* A preset can carry a theme-dependent action colour (black & white:

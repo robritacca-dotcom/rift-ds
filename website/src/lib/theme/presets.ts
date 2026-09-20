@@ -240,6 +240,35 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
       purple: "#A6527F",
     }),
   },
+  gold: {
+    label: "Crisp gold",
+    // The yellow key is a light colour, so the action lever derives dark
+    // labels over gold fills on its own — no brandDark needed.
+    brand: "#FFD166",
+    tintOn: true,
+    tintSeed: "#FFD166",
+    tintStrength: 4,
+    // Crisp: corners cut hard toward square, and no pill anywhere.
+    radiusScale: 30,
+    pill: false,
+    density: 100,
+    typeScale: 100,
+    // Modern and quick on its feet: a notch under the shipped tempo.
+    motionScale: 90,
+    elevation: "default",
+    // One bold geometric face carries the whole look.
+    fontLabel: "Space Grotesk",
+    // Bold neighbours: every hue keyed hot around the gold. Yellow is
+    // the action family, left alone.
+    advanced: bases({
+      red: "#F04E5E",
+      orange: "#FF9A3D",
+      green: "#2FBF8F",
+      teal: "#1A9BB8",
+      blue: "#3355D8",
+      purple: "#8A4DE8",
+    }),
+  },
   terminal: {
     label: "Terminal green",
     brand: "#06D6A0",
@@ -265,7 +294,54 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
       purple: "#7E5BC8",
     }),
   },
+  violet: {
+    label: "Soft violet",
+    brand: "#7434B3",
+    tintOn: true,
+    tintSeed: "#9E47EF",
+    tintStrength: 5,
+    // Rounder than the shipped scale, pills kept — the generous corner
+    // is the theme's signature.
+    radiusScale: 140,
+    pill: true,
+    density: 100,
+    typeScale: 100,
+    motionScale: 100,
+    // The gentler float suits the rounded geometry.
+    elevation: "soft",
+    // The serif-over-sans split: Lora display over Work Sans text.
+    fontLabel: "Work Sans",
+    headingFontLabel: "Lora (serif)",
+    // Violet-leaning neighbours, slightly calmed. Purple is the action
+    // family, left alone.
+    advanced: bases({
+      red: "#E0568F",
+      orange: "#D97B62",
+      yellow: "#E8C77B",
+      green: "#3FAF95",
+      teal: "#4B8FB8",
+      blue: "#5C63D8",
+    }),
+  },
 };
+
+
+/**
+ * The selector order every theme surface renders — the landing's dot
+ * row and the playground's preset picker walk this list. "default" is
+ * the shipped Dragonspine look (no data-brand attribute); "classic"
+ * stays out on purpose (a revert handle, not a destination).
+ */
+export const THEME_SELECTOR_ORDER: ReadonlyArray<string> = [
+  "coral",
+  "warm",
+  "gold",
+  "terminal",
+  "default",
+  "contrast",
+  "violet",
+  "mono",
+];
 
 /* ---------- rich picker cells ----------
    The preset selector renders each option as a self-portrait (RichDropdown):
@@ -342,10 +418,13 @@ export function presetPickerOptions(args: {
       bodyFont: bodyStack(args.custom.fontLabel),
       description: pairingLine(args.custom.fontLabel, args.custom.headingFontLabel),
     },
-    /* classic stays defined above as the revert handle for the accessible
-       teal split, but is deliberately not offered in the menu. */
-    ...Object.entries(THEME_PRESETS)
-      .filter(([value]) => value !== "classic")
+    /* Preset rows walk THEME_SELECTOR_ORDER (minus "default", which is
+       the first row above), so this menu and the landing's dot row can
+       never disagree on order. classic stays defined as the revert
+       handle for the accessible teal split, deliberately not offered. */
+    ...THEME_SELECTOR_ORDER
+      .filter((value) => value !== "default")
+      .map((value) => [value, THEME_PRESETS[value]] as const)
       .map(([value, p]) => ({
         label: p.label,
         value,

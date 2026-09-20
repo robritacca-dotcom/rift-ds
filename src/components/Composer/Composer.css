@@ -24,12 +24,20 @@
      a raw value in CircularButton.css too (icon-button sizes are not on
      a token scale). Everything concentric derives from it. */
   --ds-composer-send-size: 40px;
-  /* The shell's concentric corner: half the send button, plus the action
+  /* The shell's concentric corner, derived rather than frozen: the send
+     button's EFFECTIVE radius (its --radius-pill capped at half its own
+     size — 999px never renders rounder than a circle), plus the action
      bar's padding-200 ring, plus the border width (border-radius applies
-     to the border's outer edge). Component-local by design — one
-     component's geometry, not a step on the global radius scale
-     (design.md's Composer section owns the contract). */
-  --ds-composer-radius: 29px;
+     to the border's outer edge). Shipped theme: min(999, 20) + 8 + 1 =
+     the historical 29px. A theme that squares the pill (radiusOverrides'
+     pill branch, the crisp presets) flows straight through, so the shell
+     always sits concentric with whatever button it wraps. Component-local
+     by design — one component's geometry, not a step on the global radius
+     scale (design.md's Composer section owns the contract). */
+  --ds-composer-radius: calc(
+    min(var(--radius-pill), var(--ds-composer-send-size) / 2) +
+      var(--padding-200) + var(--border-025)
+  );
   background-color: var(--color-input-bg-primary);
   border: var(--border-025) solid var(--color-input-border-primary);
   border-radius: var(--ds-composer-radius);

@@ -6,13 +6,9 @@ import MegaNav from "../components/MegaNav/MegaNav";
 import FadeDivider from "../components/FadeDivider/FadeDivider";
 import styles from "./page.module.css";
 import { NPM_URL, REPOSITORY_URL, STORYBOOK_URL } from "@/config/brand.generated";
-import {
-  ACTION_COLOR_PRESETS,
-  DEFAULT_BRAND,
-  DEFAULT_BRAND_DARK,
-  actionColorPlan,
-} from "@/lib/theme/theme-overrides";
-import { useAppliedOverrides, useSiteTheme } from "@/lib/theme/use-theme-overrides";
+import { DEFAULT_BRAND, DEFAULT_BRAND_DARK } from "@/lib/theme/theme-overrides";
+import { THEME_PRESETS, THEME_SELECTOR_ORDER } from "@/lib/theme/presets";
+import { useSiteTheme } from "@/lib/theme/use-theme-overrides";
 import { AgentPlan } from "@robr0/design-system/components/AgentPlan/AgentPlan";
 import { AgentStatus } from "@robr0/design-system/components/AgentStatus/AgentStatus";
 import { AiButton } from "@robr0/design-system/components/AiButton/AiButton";
@@ -381,54 +377,79 @@ function EscalatorColumn({
    default. Selecting one re-points the action tokens for the whole page —
    the same actionColorPlan the playground applies, on the same :root
    mechanism, so every live demo below re-tints without re-rendering. */
-const ACCENT_CHOICES = ACTION_COLOR_PRESETS.filter((preset) =>
-  preset.label.endsWith(" 07")
-);
+/* ---------- the theme selector ----------
+   The hero's dot row is the primary way a visitor picks a theme: one dot
+   per shipped preset, in THEME_SELECTOR_ORDER, applied by swapping the
+   data-brand attribute on <html> — the same one-attribute contract the
+   package documents, exercised by the site itself. "default" is the
+   Dragonspine-original look (attribute removed, the raw token files);
+   the server ships data-brand="mono", so black & white is what a
+   visitor lands on and the mono dot wakes up ringed. */
 
-function AccentSwitcher() {
+const THEME_DOTS = THEME_SELECTOR_ORDER.map((id) => {
+  if (id === "default") {
+    return {
+      id,
+      label: "Dragonspine original",
+      hex: DEFAULT_BRAND,
+      hexDark: DEFAULT_BRAND_DARK,
+    };
+  }
+  const preset = THEME_PRESETS[id];
+  return {
+    id,
+    label: preset.label,
+    hex: preset.brand,
+    hexDark: preset.brandDark,
+  };
+});
+
+const SSR_BRAND = "mono";
+
+function ThemeSwitcher() {
   const theme = useSiteTheme();
-  const [accent, setAccent] = useState<(typeof ACCENT_CHOICES)[number] | null>(null);
+  const [active, setActive] = useState(SSR_BRAND);
 
-  const effectiveHex = accent
-    ? theme === "dark" && accent.hexDark
-      ? accent.hexDark
-      : accent.hex
-    : DEFAULT_BRAND;
+  /* The attribute is the truth (it survives navigation, and anything may
+     have set it before this mount) — read it once the client is up. */
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setActive(document.documentElement.dataset.brand ?? "default");
+  }, []);
 
-  const overrides = useMemo(() => {
-    const plan = actionColorPlan(effectiveHex, theme === "dark" ? "dark" : "light");
-    return plan ? { ...plan.primitives, ...plan.semantics } : {};
-  }, [effectiveHex, theme]);
-  useAppliedOverrides(overrides);
+  const pick = (id: string) => {
+    if (id === "default") {
+      delete document.documentElement.dataset.brand;
+    } else {
+      document.documentElement.dataset.brand = id;
+    }
+    /* Same persistence contract as the light/dark toggle: the pick holds
+       across every page until the visitor changes it or clears storage
+       (the layout's pre-paint script reads it back). */
+    try {
+      localStorage.setItem("brand", id);
+    } catch {
+      /* private mode: the pick still applies for this page's lifetime */
+    }
+    setActive(id);
+  };
 
   return (
     <div className={styles.accentStrip}>
-      <div className={styles.accentRow} role="group" aria-label="Accent colour">
-        <button
-          type="button"
-          className={`${styles.accentSwatch} ${accent === null ? styles.accentSwatchActive : ""}`}
-          style={{ backgroundColor: theme === "dark" ? DEFAULT_BRAND_DARK : DEFAULT_BRAND }}
-          aria-pressed={accent === null}
-          aria-label="Shipped teal (default)"
-          title="Shipped teal"
-          onClick={() => setAccent(null)}
-        />
-        {ACCENT_CHOICES.map((choice) => {
-          const active = accent?.label === choice.label;
+      <div className={styles.accentRow} role="group" aria-label="Theme">
+        {THEME_DOTS.map((dot) => {
           const swatchHex =
-            theme === "dark" && choice.hexDark ? choice.hexDark : choice.hex;
-          const name =
-            theme === "dark" && choice.labelDark ? choice.labelDark : choice.label;
+            theme === "dark" && dot.hexDark ? dot.hexDark : dot.hex;
           return (
             <button
-              key={choice.label}
+              key={dot.id}
               type="button"
-              className={`${styles.accentSwatch} ${active ? styles.accentSwatchActive : ""}`}
+              className={`${styles.accentSwatch} ${active === dot.id ? styles.accentSwatchActive : ""}`}
               style={{ backgroundColor: swatchHex }}
-              aria-pressed={active}
-              aria-label={name}
-              title={name}
-              onClick={() => setAccent(choice)}
+              aria-pressed={active === dot.id}
+              aria-label={dot.label}
+              title={dot.label}
+              onClick={() => pick(dot.id)}
             />
           );
         })}
@@ -481,7 +502,7 @@ export default function DesignSystemLanding() {
           </div>
           {/* No section-link row: the top nav owns the sections now. */}
           <FadeDivider />
-          <AccentSwitcher />
+          <ThemeSwitcher />
         </section>
 
         {/* ---------- collage: three curated columns of live demos + nav ---------- */}

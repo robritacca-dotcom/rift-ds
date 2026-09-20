@@ -546,6 +546,10 @@ export default function PlaygroundPage() {
               tintStrength={tintStrength}
               radiusScale={radiusScale}
               pill={pill}
+              density={density}
+              typeScale={typeScale}
+              motionScale={motionScale}
+              elevation={elevation}
               fontLabel={fontLabel}
               headingFontLabel={headingFontLabel}
               productName={productName}
@@ -558,6 +562,10 @@ export default function PlaygroundPage() {
               onTintStrength={asCustom(setTintStrength)}
               onRadiusScale={asCustom(setRadiusScale)}
               onPill={asCustom(setPill)}
+              onDensity={asCustom(setDensity)}
+              onTypeScale={asCustom(setTypeScale)}
+              onMotionScale={asCustom(setMotionScale)}
+              onElevation={asCustom(setElevation)}
               onFontLabel={asCustom(setFontLabel)}
               onHeadingFontLabel={asCustom(setHeadingFontLabel)}
               onProductName={setProductName}

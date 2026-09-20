@@ -6,9 +6,10 @@ import { Button } from "@robr0/design-system/components/Button/Button";
 import { ColorPicker } from "@robr0/design-system/components/ColorPicker/ColorPicker";
 import { Swatch } from "@robr0/design-system/components/Swatch/Swatch";
 import { Input } from "@robr0/design-system/components/Input/Input";
+import { SegmentedControl } from "@robr0/design-system/components/SegmentedControl/SegmentedControl";
 import { Slider } from "@robr0/design-system/components/Slider/Slider";
 import { ToggleSwitch } from "@robr0/design-system/components/ToggleSwitch/ToggleSwitch";
-import { ACTION_COLOR_PRESETS } from "@/lib/theme/theme-overrides";
+import { ACTION_COLOR_PRESETS, type ElevationVariant } from "@/lib/theme/theme-overrides";
 import { Dropdown } from "@robr0/design-system/components/Dropdown/Dropdown";
 import { RichDropdown } from "@robr0/design-system/components/RichDropdown/RichDropdown";
 import { fontPickerOptions, presetPickerOptions } from "@/lib/theme/presets";
@@ -25,6 +26,13 @@ export interface PlaygroundControlsProps {
   tintStrength: number;
   radiusScale: number;
   pill: boolean;
+  /** Spacing-ladder scale in percent; 100 is the shipped grid. */
+  density: number;
+  /** Type-ladder scale in percent; 100 is the shipped scale. */
+  typeScale: number;
+  /** Schedule-duration scale in percent; under 100 is snappier. */
+  motionScale: number;
+  elevation: ElevationVariant;
   fontLabel: string;
   headingFontLabel: string;
   productName: string;
@@ -48,6 +56,10 @@ export interface PlaygroundControlsProps {
   onTintStrength: (value: number) => void;
   onRadiusScale: (value: number) => void;
   onPill: (value: boolean) => void;
+  onDensity: (value: number) => void;
+  onTypeScale: (value: number) => void;
+  onMotionScale: (value: number) => void;
+  onElevation: (value: ElevationVariant) => void;
   onFontLabel: (value: string) => void;
   onHeadingFontLabel: (value: string) => void;
   onProductName: (value: string) => void;
@@ -68,6 +80,10 @@ export default function PlaygroundControls({
   tintStrength,
   radiusScale,
   pill,
+  density,
+  typeScale,
+  motionScale,
+  elevation,
   fontLabel,
   headingFontLabel,
   productName,
@@ -82,6 +98,10 @@ export default function PlaygroundControls({
   onTintStrength,
   onRadiusScale,
   onPill,
+  onDensity,
+  onTypeScale,
+  onMotionScale,
+  onElevation,
   onFontLabel,
   onHeadingFontLabel,
   onProductName,
@@ -230,6 +250,69 @@ export default function PlaygroundControls({
             <span className={styles.sliderValue}>{radiusScale}%</span>
           </div>
           <ToggleSwitch label="Pill buttons" checked={pill} onChange={onPill} />
+        </div>
+
+        {/* The remaining preset levers, in the composer's own order:
+            spacing, type, motion, then the elevation variant. Sliders in
+            percent of the shipped ladders, like the radius above. */}
+        <div className={styles.controlGroup}>
+          <h4 className={styles.controlHeading}>Density</h4>
+          <div className={styles.sliderRow}>
+            <Slider
+              value={density}
+              min={70}
+              max={130}
+              step={5}
+              onValueChange={onDensity}
+              ariaLabel="Density scale"
+            />
+            <span className={styles.sliderValue}>{density}%</span>
+          </div>
+        </div>
+
+        <div className={styles.controlGroup}>
+          <h4 className={styles.controlHeading}>Type scale</h4>
+          <div className={styles.sliderRow}>
+            <Slider
+              value={typeScale}
+              min={80}
+              max={120}
+              step={5}
+              onValueChange={onTypeScale}
+              ariaLabel="Type scale"
+            />
+            <span className={styles.sliderValue}>{typeScale}%</span>
+          </div>
+        </div>
+
+        <div className={styles.controlGroup}>
+          <h4 className={styles.controlHeading}>Motion</h4>
+          <div className={styles.sliderRow}>
+            <Slider
+              value={motionScale}
+              min={50}
+              max={150}
+              step={10}
+              onValueChange={onMotionScale}
+              ariaLabel="Motion duration scale"
+            />
+            <span className={styles.sliderValue}>{motionScale}%</span>
+          </div>
+        </div>
+
+        <div className={styles.controlGroup}>
+          <h4 className={styles.controlHeading}>Elevation</h4>
+          <SegmentedControl
+            segments={[
+              { value: "default", label: "Default" },
+              { value: "flat", label: "Flat" },
+              { value: "soft", label: "Soft" },
+            ]}
+            activeSegment={elevation}
+            onSegmentChange={(value) => onElevation(value as ElevationVariant)}
+            size="compact"
+            ariaLabel="Elevation"
+          />
         </div>
 
         <div className={`${styles.controlGroup} ${styles.dropUp}`}>

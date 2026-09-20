@@ -11,10 +11,10 @@ An open source React design system built for AI products and coding agents: comp
 
 ## Why Dragonspine DS
 
-- **Whole themes, not a colour swap.** Every shipped theme is a complete look: both colour modes, a heading and body type pairing with self-hosted fonts, radius, density, motion, elevation, the ambient background, and the chart palette. One `data-brand` attribute applies it with zero runtime JavaScript, and every theme holds WCAG AA contrast in both modes, enforced by the build.
-- **Nothing to adopt but a package.** No Tailwind, no CLI pipeline, no configuration API, no providers. One install, one stylesheet import, and theming is plain CSS custom properties any bundler already handles.
-- **The AI product set is free.** Composer, streaming chat thread, tool calls, reasoning, thread panel and tabs: the components an assistant UI actually needs, running a real production chat today, all MIT with no pro tier.
-- **Your agent already knows it.** One command installs the agent skill and prints the MCP connect line, and the MCP tools are generated from the same JSDoc that builds the shipped `.d.ts`: an agent reads the exact contract npm ships, no key, no account.
+- **One package, zero dependencies.** React is the only required peer dependency; recharts is optional and only for the charts entry. No configuration API, no providers, no build-tool integration: theming is plain CSS custom properties, so it works in any bundler, in any stack, beside anything you already use.
+- **Whole themes behind one attribute.** A shipped theme is a complete look: both colour modes, a heading and body type pairing with self-hosted fonts, radius, density, motion, elevation, the ambient background, and the chart palette. Setting `data-brand` on the root element applies all of it with zero runtime JavaScript, and the build holds every theme's action colours to WCAG AA in both modes.
+- **The AI product set, free.** Composer, streaming chat thread, tool calls, reasoning, thread panel and tabs: the components an assistant UI needs, the same set this repo's own site chat is built from, all MIT with no pro tier.
+- **Legible to coding agents.** One command installs the agent skill and prints the MCP connect line, and the MCP tools and per-component markdown are generated from the same JSDoc that builds the shipped `.d.ts`: an agent reads the exact contract npm ships, no key, no account.
 - **Docs that cannot lie.** Every count, list, and prop table is generated from source registries and build-validated; CI fails on drift, and every component story ships through an accessibility audit. What the docs say is what ships.
 
 ## Documentation

@@ -25,8 +25,10 @@ const registryPath = join(tokensDir, 'registry.json');
 /** The files that define the semantic layer (primitives are excluded). */
 const SEMANTIC_FILES = ['tokens-light.css', 'tokens-typography.css', 'tokens-motion.css'];
 
-/** Prefix → category mapping. Order is the display order on the site. */
-const CATEGORY_PREFIXES = [
+/** Prefix → category mapping. Order is the display order on the site.
+    Exported so validate-theme-mirrors.mjs can hold hardcoded prefix
+    strings elsewhere to this list instead of restating it. */
+export const CATEGORY_PREFIXES = [
   ['colour', ['--color-']],
   ['typography', ['--font-']],
   ['spacing', ['--gap-', '--padding-']],

@@ -887,7 +887,7 @@ The Recharts wrapper set, sharing one implementation folder (`Chart/`), one CSS 
 - `--color-chart-contribution-0` — no activity (`--color-bg-container-primary` light / #232323 dark)
 - `--color-chart-contribution-1` → `-4` — increasing activity, green primitives (light: green-02 → 04 → 07 → 09; dark: green-10 → 09 → 08 → 07, so the brightest cell is mint #06D6A0)
 
-Month labels, caption, and Less→More legend use `--font-paragraph-sm-*` in `--color-text-tertiary`/`--color-text-secondary`. The grid scrolls horizontally inside its own container on narrow screens. The year sweeps in left to right on mount — each column's cells fade in at `--motion-duration-slow`, delayed by a per-column fraction of `--motion-duration-slower` (token-composed, so reduced motion collapses the sweep) — and the day under the pointer takes a `--color-text-tertiary` inset outline so the native tooltip has a visible anchor. This ramp is for activity intensity only — ordered multi-series colours come from the `--color-chart-series` ramp (see the chart set spec above).
+Month labels, caption, and Less→More legend use `--font-paragraph-sm-*` in `--color-text-tertiary`/`--color-text-secondary`. The grid scrolls horizontally inside its own container on narrow screens. The year sweeps in left to right on mount — each column's cells fade in at `--motion-duration-slow`, delayed by a per-column fraction of `--motion-duration-slower` (token-composed, so reduced motion collapses the sweep) — and the day under the pointer takes a `--color-text-tertiary` inset outline so the native tooltip has a visible anchor. This ramp is for activity intensity only — ordered multi-series colours come from the `--color-chart-series-*` ramp (see the chart set spec above).
 
 ### Sparkline
 

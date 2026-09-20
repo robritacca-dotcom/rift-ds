@@ -1,8 +1,10 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import MegaNav from "../../components/MegaNav/MegaNav";
+import MegaNav from "../../../components/MegaNav/MegaNav";
+import Sidebar from "../../../components/Sidebar/Sidebar";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
+import { getSidebarLinks, foundationsSidebarLinks } from "@/config/navigation";
 import { Button } from "@robr0/design-system/components/Button/Button";
 import { CodeBlock } from "@robr0/design-system/components/CodeBlock/CodeBlock";
 import {
@@ -16,6 +18,8 @@ import styles from "./page.module.css";
 
 /* Matches the SSR value of data-brand on <html> in the root layout. */
 const getServerSnapshot = () => "mono";
+
+const { sidebarLinks } = getSidebarLinks(foundationsSidebarLinks, "/foundations/themes");
 
 const SETUP_SNIPPET = `// Every shipped theme, one generated stylesheet each, plus this aggregate.
 import '@robr0/design-system/tokens/presets/presets.css';
@@ -39,6 +43,8 @@ export default function ThemesPage() {
       <MegaNav />
 
       <div className={styles.dsLayout}>
+        <Sidebar links={sidebarLinks} />
+
         <main className={styles.dsContent} id="main-content">
           <PageBreadcrumb />
           {/* Page Header */}

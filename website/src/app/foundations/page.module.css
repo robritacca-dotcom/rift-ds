@@ -354,3 +354,17 @@
     transform: scale(0.62);
   }
 }
+
+/* Themes card: four ambient-accent dots, reading the live tokens so the
+   preview itself rethemes with an Apply. */
+.themesDots {
+  display: flex;
+  gap: var(--gap-200);
+}
+
+.themesDot {
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-pill);
+  border: var(--border-025) solid var(--color-bg-container-border);
+}

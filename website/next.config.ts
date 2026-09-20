@@ -53,6 +53,9 @@ const nextConfig: NextConfig = {
       // The journal became the release log when entries moved to 1:1 with
       // npm releases; the old URL keeps resolving.
       { source: "/project-journal", destination: "/releases", permanent: true },
+      // The theme gallery shipped top-level for a day before settling under
+      // Foundations; the deployed URL keeps resolving.
+      { source: "/themes", destination: "/foundations/themes", permanent: true },
       { source: "/design-md", destination: "/blueprints/design", permanent: true },
       { source: "/blueprints", destination: "/docs", permanent: true },
       // The porting guide was unpublished from /blueprints in August 2026 and

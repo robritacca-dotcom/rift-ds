@@ -158,7 +158,7 @@ The old `merge-and-push` skill is retired because its name didn't say which of t
     ├── public/                # Includes GENERATED copies of the root markdown specs (see /blueprints)
     ├── src/app/
     │   ├── components/        # One folder per component (page.tsx + page.module.css); the index renders registry-derived category sections over the shared ComponentPreviews map
-    │   ├── foundations/       # Design tokens & layout doc pages
+    │   ├── foundations/       # Design tokens & layout doc pages, incl. foundations/themes — the theme gallery (every shipped look as a card: apply it live, open the playground, or copy the data-brand setup; cards drawn from the same themeSelectorTiles builder as the switchers)
     │   ├── templates/         # Template screens — complete pages built from the system alone; the index lists them (templatesSidebarLinks in website/src/config/navigation.ts is the authoritative list — the showcase carousel, sidebar, sitemap and llms.txt all derive from it), each renders full-viewport and chromeless; implementations live in website/src/components/templates/, sharing the TemplateAssistant mock panel where the screen isn't itself a chat surface (the agent workbench's conversation pane is its own inline mock), and the marketing dashboard shares its shell with its labs origin at /labs/marketing; **design.md's Template screens section owns the family's composition conventions** — read it before building or reworking one
     │   ├── docs/              # Docs hub: links out to overview/skills/journal; owns get-started (install + theming)
     │   ├── overview/          # How-it's-built pipeline page
@@ -166,7 +166,6 @@ The old `merge-and-push` skill is retired because its name didn't say which of t
     │   ├── releases/          # Release log, one entry per npm version (release-log registry)
     │   ├── loops/             # The recurring agent loops page (maps over the loops registry — see the Registries table)
     │   ├── privacy/           # Privacy policy page (standalone; analytics + chat-log disclosure)
-    │   ├── themes/            # The theme gallery: every shipped look as a card — apply it live (the page rethemes as the preview), open the playground, or copy the data-brand setup; top-level nav section, cards drawn from the same themeSelectorTiles builder as the switchers
     │   ├── playground/        # The immersive re-theming tool: Components + Type + Chat views over one set of levers (chromeless; absorbed the old /robr0-gpt chat bench, which now redirects here)
     │   ├── graph/             # The dependency-graph instrument (chromeless, linked from /overview): the system as five traceable columns — primitives, tokens, library, site UI, pages — over the generated graph data (see the Dependency graph registry row)
     │   ├── blueprints/        # Renders the public root-spec copies (CLAUDE.md, design.md, content-design.md)

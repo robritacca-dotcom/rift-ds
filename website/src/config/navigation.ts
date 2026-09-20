@@ -135,6 +135,7 @@ const FOUNDATION_ICONS: Record<string, string> = {
   "/foundations/colour-primitives": "palette",
   "/foundations/colour-mode": "invert_colors",
   "/foundations/spatial": "straighten",
+  "/foundations/themes": "palette",
   "/foundations/typography": "text_fields",
 };
 
@@ -213,16 +214,6 @@ function buildNavSections(): NavSection[] {
         },
       },
       isActive: (path) => path.startsWith("/foundations"),
-    },
-    {
-      id: "themes",
-      label: "Themes",
-      href: "/themes",
-      icon: "palette",
-      description:
-        "Every shipped look, applied live with one attribute or copied into your app",
-      // Deliberately no mega: the gallery page is the menu.
-      isActive: (path) => path.startsWith("/themes"),
     },
     {
       id: "templates",
@@ -381,6 +372,7 @@ export const foundationsSidebarLinks: NavLink[] = [
   { href: "/foundations/colour-primitives", label: "Primitive colours", description: "The raw values behind the colour tokens" },
   { href: "/foundations/colour-mode", label: "Semantic colours", description: "Every colour token in both themes" },
   { href: "/foundations/spatial", label: "Semantic spacing", description: "The spacing, radius, and border tokens" },
+  { href: "/foundations/themes", label: "Themes", description: "Every shipped look, applied live or copied into your app" },
   { href: "/foundations/typography", label: "Typography", description: "The type scale, weights, and faces" },
 ];
 

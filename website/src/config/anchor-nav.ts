@@ -18,8 +18,8 @@
  * lets an index be excluded while its children keep the rail.
  */
 export const ANCHOR_NAV_EXCLUDED_ROUTES = new Set([
-  // /themes is a gallery — one grid, no h2 sections to navigate.
-  "/themes",
+  // The themes gallery is one grid, no h2 sections to navigate.
+  "/foundations/themes",
   "/",
   "/docs",
   "/foundations",

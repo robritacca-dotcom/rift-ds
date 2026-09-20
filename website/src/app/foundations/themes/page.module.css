@@ -63,14 +63,13 @@
   line-height: var(--font-paragraph-line-height);
   letter-spacing: var(--font-paragraph-letter-spacing);
   color: var(--color-text-secondary);
-  max-width: 880px;
 }
 
 /* ============================================
    CONSUMER SETUP
    ============================================ */
 .setupBlock {
-  max-width: 720px;
+  width: 100%;
 }
 
 /* ============================================

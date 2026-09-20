@@ -105,6 +105,18 @@ export default function FoundationsPage() {
               </div>
             </TocCard>
 
+            {/* Themes */}
+            <TocCard href="/foundations/themes" title="Themes">
+              <div className={`${styles.circlePreview} ${styles.circleNeutral}`}>
+                <div className={styles.themesDots}>
+                  <span className={styles.themesDot} style={{ background: "var(--color-core-accent-coral)" }} />
+                  <span className={styles.themesDot} style={{ background: "var(--color-core-accent-gold)" }} />
+                  <span className={styles.themesDot} style={{ background: "var(--color-core-accent-mint)" }} />
+                  <span className={styles.themesDot} style={{ background: "var(--color-core-accent-cobalt)" }} />
+                </div>
+              </div>
+            </TocCard>
+
             {/* Typography */}
             <TocCard href="/foundations/typography" title="Typography">
               <div className={`${styles.circlePreview} ${styles.circleBlue}`}>

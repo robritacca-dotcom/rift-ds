@@ -58,7 +58,7 @@
 
   /* Overlay & controls */
   --color-scrim: var(--primitive-true-black-strong);
-  --color-control-thumb: var(--primitive-neutral-01);
+  --color-control-thumb: var(--color-action-primary-text);
 
   /* Elevation — stronger opacity so shadows read against the #050505 floor */
   --shadow-floating: 0 4px 16px rgba(0, 0, 0, 0.55);

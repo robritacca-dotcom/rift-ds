@@ -93,7 +93,7 @@ EventCalendar's day cells and event pills get their own colour roles, for the sa
 
 ### Overlay & Controls
 - **Scrim** (`--color-scrim` — rgba(0,0,0,0.5) light / rgba(0,0,0,0.7) dark): Modal backdrop behind Dialog, AlertDialog, Drawer and CommandPalette. Darker in dark mode so the modal still separates from the near-black floor.
-- **Control thumb** (`--color-control-thumb` — #FFFFFF light / #F1F1F1 dark): The circular thumb inside toggle switches (ToggleSwitch, SelectionCard's toggle indicator).
+- **Control thumb** (`--color-control-thumb` — chains to `--color-action-primary-text` in both themes): The circular thumb inside toggle switches (ToggleSwitch, SelectionCard's toggle indicator). Riding the on-action ink means every theme's AA-held action pairing keeps the thumb legible on its track — a light action fill (Smoke, Volt) gets a dark thumb automatically, where a fixed near-white value vanished into it.
 
 ### Text
 - **Primary** (`--color-text-primary` — #050505 light / #F1F1F1 dark): Headlines and primary content.
@@ -1169,7 +1169,7 @@ The theme is activated by `data-theme="dark"` on the HTML root element. The `tok
 - `--color-input-bg-primary`, `--color-input-border-primary`, `--color-input-text-primary`
 - `--color-action-passive-*` (near-transparent fills swap to dark semi-transparent)
 - `--color-bg-container-inverse` / `--color-text-on-inverse` (the tooltip surface flips from near-black to near-white)
-- `--color-scrim` (0.5 → 0.7 black), `--color-control-thumb` (#FFFFFF → #F1F1F1)
+- `--color-scrim` (0.5 → 0.7 black); `--color-control-thumb` chains to the on-action ink in both themes, so its per-theme value follows the action plan
 - `--shadow-floating`, `--shadow-modal` (shadow opacity increases in dark mode)
 
 - `--color-action-primary-*` — the action family inverts by design: the light theme's deep fill (#0E6E8F) under a light label becomes a light fill (#3CA5C6) under a deep label, because one teal step cannot clear contrast against both page floors (see Action / Brand)

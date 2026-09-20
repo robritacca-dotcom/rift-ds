@@ -72,7 +72,11 @@
 
   /* Overlay & controls */
   --color-scrim: var(--primitive-true-black-semi);
-  --color-control-thumb: var(--primitive-neutral-00);
+  /* The knob on an action-coloured track (ToggleSwitch, SelectionCard's
+     toggle). Chained to the on-action ink rather than a fixed neutral, so
+     every theme's AA-held action pairing keeps the thumb legible — a
+     light action fill (Smoke, Volt) gets a dark thumb automatically. */
+  --color-control-thumb: var(--color-action-primary-text);
 
   /* Elevation — the only shadows in the system (floating surfaces + modals) */
   --shadow-floating: 0 4px 16px rgba(0, 0, 0, 0.12);

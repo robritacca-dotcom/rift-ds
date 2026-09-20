@@ -58,7 +58,7 @@ Then:
 npm run validate-registry
 ```
 
-This re-runs the three-way version parity check and regenerates the derived surfaces — and two generated trees stamp `PACKAGE_VERSION` into their output, so the bump rewrites every per-component markdown page under `website/public/components/` and the consumer agent skill under `website/public/skill/robr0-design-system/`. The diff is large by design. Commit all of it together as the bump commit (`chore(release): <version>`) and push — a bump pushed without the restamped files fails CI's drift guard (that exact split produced the 0.15.0 cleanup commit), and the commit you push here is the commit that will be published and tagged.
+This re-runs the three-way version parity check and regenerates the derived surfaces — and two generated trees stamp `PACKAGE_VERSION` into their output, so the bump rewrites every per-component markdown page under `website/public/components/` and the consumer agent skill under `website/public/skill/dragonspine-design-system/`. The diff is large by design. Commit all of it together as the bump commit (`chore(release): <version>`) and push — a bump pushed without the restamped files fails CI's drift guard (that exact split produced the 0.15.0 cleanup commit), and the commit you push here is the commit that will be published and tagged.
 
 ### 4. Dry run — never skip this
 
@@ -74,7 +74,7 @@ gh run list --workflow=release.yml --limit 3 --json databaseId,createdAt,display
 gh run watch <the-new-databaseId> --exit-status
 ```
 
-The dry run does everything except upload: builds `dist/`, packs the tarball, installs it into a scratch Vite + React app and **builds that app without recharts installed** (the optional-peer path — the regression this catches), then prints the publish preview. It needs no npm token, so it is free to run as often as you like. Read the preview's file count and package size and sanity-check them against the previous release; a sudden jump means something got swept into the tarball. Expect `LICENSE`, `README.md` and `bin/robr0-design-system.mjs` (the init bin, origin-stamped and executable) alongside the build output; anything else new is not deliberate.
+The dry run does everything except upload: builds `dist/`, packs the tarball, installs it into a scratch Vite + React app and **builds that app without recharts installed** (the optional-peer path — the regression this catches), then prints the publish preview. It needs no npm token, so it is free to run as often as you like. Read the preview's file count and package size and sanity-check them against the previous release; a sudden jump means something got swept into the tarball. Expect `LICENSE`, `README.md` and `bin/dragonspine-design-system.mjs` (the init bin, origin-stamped and executable) alongside the build output; anything else new is not deliberate.
 
 ### 5. Publish
 

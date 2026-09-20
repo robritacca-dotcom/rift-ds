@@ -2,8 +2,8 @@
 /**
  * validate-agent-skill.mjs
  *
- * Holds the consumer agent skill (website/public/skill/robr0-design-system/)
- * to its source. Three checks:
+ * Holds the consumer agent skill (website/public/skill/<SKILL_NAME>/, the
+ * folder name owned by scripts/brand.mjs) to its source. Three checks:
  *
  *   1. Byte-compare: both files match what generate-agent-skill.mjs
  *      produces now, so a registry or JSDoc change cannot ship with a stale
@@ -18,6 +18,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { assembleAgentSkill, skillDir } from './generate-agent-skill.mjs';
+import { SKILL_NAME } from './brand.mjs';
 import { repoRoot } from './component-docgen.mjs';
 
 const errors = [];
@@ -57,14 +58,17 @@ for (const file of files) {
 // 3. Advertised and reachable. The two surfaces that tell people the skill
 // exists must name its path; if the skill is ever unpublished, they fail
 // here instead of advertising a 404.
-const SKILL_PATH = '/skill/robr0-design-system/SKILL.md';
+const SKILL_PATH = `/skill/${SKILL_NAME}/SKILL.md`;
+// The advertisers build the URL from the brand constant, so their source
+// carries the template form rather than the resolved literal.
+const SKILL_PATH_TEMPLATE = '/skill/${SKILL_NAME}/SKILL.md';
 const advertisers = [
   'website/src/app/llms.txt/route.ts',
   'website/src/app/docs/get-started/page.tsx',
 ];
 for (const file of advertisers) {
   const content = readFileSync(join(repoRoot, file), 'utf8');
-  if (!content.includes(SKILL_PATH)) {
+  if (!content.includes(SKILL_PATH) && !content.includes(SKILL_PATH_TEMPLATE)) {
     errors.push(
       `${file} no longer mentions ${SKILL_PATH} — the skill must stay advertised ` +
         `where agents and readers look, or be removed deliberately (update this script too).`

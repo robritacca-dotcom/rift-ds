@@ -438,7 +438,7 @@ export default function AgentWorkbench() {
         {/* -------------------------------------------- session history */}
         <aside className={styles.threads} aria-label="Sessions">
           <ThreadPanel
-            logo={<Image src="/logos/rr.svg" alt="" width={24} height={24} />}
+            logo={<Image src="/logos/mark.svg" alt="" width={24} height={24} />}
             logoText="Tandem"
             newThreadLabel="New session"
             newThreadShortcut={["Ctrl", "N"]}

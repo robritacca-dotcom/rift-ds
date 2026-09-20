@@ -5,7 +5,7 @@ import { pageOpenGraph } from "@/config/navigation";
 // sidebar array, so its metadata is a literal rather than pageMetadata().
 const title = "Privacy";
 const description =
-  "What robertritacca.com collects: analytics and site-chat logs, why, and how long they are kept.";
+  "What this site collects: analytics and site-chat logs, why, and how long they are kept.";
 
 export const metadata: Metadata = {
   title,

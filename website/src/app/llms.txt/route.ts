@@ -6,6 +6,7 @@ import {
   type NavLink,
 } from "@/config/navigation";
 import { SITE_URL } from "@/lib/structuredData";
+import { NPM_URL, REPOSITORY_URL, SKILL_NAME, STORYBOOK_URL } from "@/config/brand.generated";
 
 /**
  * /llms.txt — a markdown index of the site for AI agents, per llmstxt.org.
@@ -71,11 +72,11 @@ export function GET() {
     "Raw markdown sources and machine-readable indexes.",
     "",
     `- [MCP server](${SITE_URL}/api/mcp): a Model Context Protocol endpoint (Streamable HTTP, no auth). Tools cover the component list, per-component prop APIs, the design token registry, install setup, and full-text site search. Point any MCP client at this URL`,
-    `- [Agent skill](${SITE_URL}/skill/robr0-design-system/SKILL.md): a SKILL.md for consumers of the package, generated from the registries. Save it (with its references/components.md catalogue) into a project's .claude/skills/robr0-design-system/ and a coding agent loads the library's install, theming and catalogue rules every session. \`npx @robr0/design-system init\` fetches the pair and prints the MCP connect line`,
-    `- [Storybook](https://design-system-iota-one.vercel.app): the rendered API reference. Every component has a props table with types, defaults, and deprecations`,
-    `- [npm package](https://www.npmjs.com/package/@robr0/design-system): \`npm install @robr0/design-system\` ships complete .d.ts type declarations for every component`,
+    `- [Agent skill](${SITE_URL}/skill/${SKILL_NAME}/SKILL.md): a SKILL.md for consumers of the package, generated from the registries. Save it (with its references/components.md catalogue) into a project's .claude/skills/${SKILL_NAME}/ and a coding agent loads the library's install, theming and catalogue rules every session. \`npx @robr0/design-system init\` fetches the pair and prints the MCP connect line`,
+    `- [Storybook](${STORYBOOK_URL}): the rendered API reference. Every component has a props table with types, defaults, and deprecations`,
+    `- [npm package](${NPM_URL}): \`npm install @robr0/design-system\` ships complete .d.ts type declarations for every component`,
     `- [CLAUDE.md](${SITE_URL}/CLAUDE.md): how this repository is *maintained* (architecture, registries, workflows). Written for contributors to the system itself, not for people using the package: for that, read design.md below and the README`,
-    `- [GitHub source](https://github.com/robritacca-dotcom/design-system): the full source, if you want to read the implementation`,
+    `- [GitHub source](${REPOSITORY_URL}): the full source, if you want to read the implementation`,
     `- [design.md](${SITE_URL}/design.md): the full design specification (tokens, colours, typography, component rules)`,
     `- [content-design.md](${SITE_URL}/content-design.md): the writing rules (voice, register by surface, words and patterns the project never ships)`,
     `- [Sitemap](${SITE_URL}/sitemap.xml)`,

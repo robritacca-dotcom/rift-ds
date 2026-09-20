@@ -8,7 +8,8 @@ import "@robr0/design-system/tokens/tokens.css";
 import "@robr0/design-system/fonts/material-symbols.css";
 import { Nunito_Sans } from "next/font/google";
 import "./globals.css";
-import { buildPersonJsonLd, buildWebsiteJsonLd, SITE_URL } from "@/lib/structuredData";
+import { buildDesignSystemJsonLd, buildWebsiteJsonLd, SITE_URL } from "@/lib/structuredData";
+import { BRAND_NAME, GA_ID, TITLE_SUFFIX } from "@/config/brand.generated";
 import { SiteChatProvider } from "@/components/SiteChat/ChatContext";
 import { SiteChatMount } from "@/components/SiteChat/SiteChatMount";
 import { SitePaletteMount } from "@/components/SitePalette/SitePaletteMount";
@@ -18,8 +19,6 @@ import SiteAnchorRail from "@/components/FloatingAnchorNav/SiteAnchorRail";
 import { ClientNav } from "@/components/ClientNav/ClientNav";
 import BlurBackground from "@/components/BlurBackground/BlurBackground";
 
-const GA_ID = "G-RCSFYMD51K";
-
 const nunitoSans = Nunito_Sans({
   subsets: ["latin"],
   weight: ["300", "400", "600", "700"],
@@ -27,13 +26,14 @@ const nunitoSans = Nunito_Sans({
 });
 
 // Kept under 160 characters so search results render it whole.
-const SITE_DESCRIPTION =
-  "Dragonspine DS: an AI-ready React design system. Tokens, components, templates, and the docs site they build, published to npm and enforced by the build.";
+const SITE_DESCRIPTION = `${BRAND_NAME}: an AI-ready React design system. Tokens, components, templates, and the docs site they build, published to npm and enforced by the build.`;
+
+const SITE_TITLE = `${BRAND_NAME} · An AI-ready React design system`;
 
 export const metadata: Metadata = {
   title: {
-    default: "Dragonspine DS · An AI-ready React design system",
-    template: "%s · Dragonspine DS",
+    default: SITE_TITLE,
+    template: `%s · ${TITLE_SUFFIX}`,
   },
   description: SITE_DESCRIPTION,
   metadataBase: new URL(SITE_URL),
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
   // canonical (via pageMetadata/sectionMetadata or an explicit alternates
   // block); pages that set none self-canonicalise to their own URL.
   keywords: [
-    "Dragonspine DS",
+    BRAND_NAME,
     "design system",
     "design tokens",
     "React components",
@@ -53,10 +53,10 @@ export const metadata: Metadata = {
   authors: [{ name: "Robert Ritacca" }],
   creator: "Robert Ritacca",
   openGraph: {
-    title: "Dragonspine DS · An AI-ready React design system",
+    title: SITE_TITLE,
     description: SITE_DESCRIPTION,
     url: SITE_URL,
-    siteName: "Dragonspine DS",
+    siteName: BRAND_NAME,
     locale: "en_US",
     type: "website",
     // og:image (and the Twitter image) come from the file-convention
@@ -153,24 +153,30 @@ export default async function RootLayout({
             time, so no preconnect to fonts.googleapis.com is needed either. */}
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(buildPersonJsonLd()) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(buildDesignSystemJsonLd()) }}
         />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(buildWebsiteJsonLd()) }}
         />
-        <Script
-          src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '${GA_ID}');
-          `}
-        </Script>
+        {/* Analytics is off until GA_ID has a value (the brand module ships
+            it empty until the product's own GA4 property exists). */}
+        {GA_ID && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${GA_ID}');
+              `}
+            </Script>
+          </>
+        )}
       </head>
       <body>
         {/* Must run before first paint (html stays visibility:hidden until

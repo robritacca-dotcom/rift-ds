@@ -1,4 +1,5 @@
 import { SITE_URL } from "@/lib/structuredData";
+import { MCP_SERVER_NAME } from "@/config/brand.generated";
 
 /**
  * The connect snippets for the /api/mcp endpoint, one per MCP client. The
@@ -23,7 +24,7 @@ export const MCP_CLIENTS: McpClient[] = [
     id: "claude-code",
     label: "Claude Code",
     language: "bash",
-    snippet: `claude mcp add --transport http robr0-ds ${MCP_ENDPOINT}`,
+    snippet: `claude mcp add --transport http ${MCP_SERVER_NAME} ${MCP_ENDPOINT}`,
   },
   {
     id: "cursor",
@@ -32,7 +33,7 @@ export const MCP_CLIENTS: McpClient[] = [
     filename: ".cursor/mcp.json",
     snippet: `{
   "mcpServers": {
-    "robr0-ds": { "url": "${MCP_ENDPOINT}" }
+    "${MCP_SERVER_NAME}": { "url": "${MCP_ENDPOINT}" }
   }
 }`,
   },
@@ -43,7 +44,7 @@ export const MCP_CLIENTS: McpClient[] = [
     filename: ".vscode/mcp.json",
     snippet: `{
   "servers": {
-    "robr0-ds": { "type": "http", "url": "${MCP_ENDPOINT}" }
+    "${MCP_SERVER_NAME}": { "type": "http", "url": "${MCP_ENDPOINT}" }
   }
 }`,
   },

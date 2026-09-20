@@ -86,7 +86,7 @@ export default function StageToolbar({
       <header className={styles.toolbar}>
       <div className={styles.trail}>
         <Link href="/" className={styles.logo} aria-label="Home">
-          <Image src="/rr.svg" alt="" width={24} height={24} />
+          <Image src="/logos/mark.svg" alt="" width={24} height={24} />
         </Link>
         {title && <span className={styles.title}>{title}</span>}
         {badge && <Badge label={badge} variant="info" />}

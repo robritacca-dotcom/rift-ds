@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { pageOpenGraph } from "@/config/navigation";
+import { BRAND_NAME } from "@/config/brand.generated";
 
 const title = "Skills";
 const description =
-  "Reusable Claude Code skill files I wrote to extend robr0 DS, each one a markdown file you can read and copy.";
+  `Reusable Claude Code skill files I wrote to extend ${BRAND_NAME}, each one a markdown file you can read and copy.`;
 
 export const metadata: Metadata = {
   alternates: { canonical: "/skills" },

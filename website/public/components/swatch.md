@@ -2,13 +2,13 @@
 
 Clickable colour tile for preset palettes and picker triggers, with a theme-aware selection ring.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://robertritacca.com/api/mcp.
+Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine.vercel.app/api/mcp.
 
 - Category: forms
 - Import: `import { Swatch } from '@robr0/design-system';`
 - Deep import: `import { Swatch } from '@robr0/design-system/components/Swatch/Swatch';`
 - Rendering: server-renderable (no 'use client')
-- Live docs: https://robertritacca.com/components/swatch
+- Live docs: https://dragonspine.vercel.app/components/swatch
 
 ## Swatch props
 

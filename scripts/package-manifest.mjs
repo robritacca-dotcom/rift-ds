@@ -19,11 +19,15 @@
  * so SUBPATHS is the one to edit and the other two are checked copies.
  */
 
-export const PACKAGE_NAME = '@robr0/design-system';
+// Identity lives in scripts/brand.mjs — the one home for brand facts —
+// re-exported here so the manifest stays the package's single import for
+// the scripts that predate the brand module.
+import { BIN_NAME, PACKAGE_NAME, REPOSITORY_URL, SITE_URL } from './brand.mjs';
+
+export { PACKAGE_NAME, REPOSITORY_URL };
 export const PACKAGE_VERSION = '0.21.0';
 export const PACKAGE_DESCRIPTION =
   'An AI-ready React design system: accessible components on composable tokens, light/dark theming, and CSS-variable overrides.';
-export const REPOSITORY_URL = 'https://github.com/robritacca-dotcom/design-system';
 
 /**
  * Public subpaths. `srcJs` entries get types+import conditions in the
@@ -89,7 +93,7 @@ export function distManifest(rootPkg) {
     description: PACKAGE_DESCRIPTION,
     license: rootPkg.license,
     repository: { type: 'git', url: `git+${REPOSITORY_URL}.git` },
-    homepage: 'https://robertritacca.com',
+    homepage: SITE_URL,
     keywords: [
       'react',
       'design-system',
@@ -105,10 +109,11 @@ export function distManifest(rootPkg) {
     ],
     type: 'module',
     sideEffects: ['**/*.css'],
-    // The one command: `npx @robr0/design-system init` (a single bin, so
-    // bare npx resolves it). Source lives at src/cli/init.mjs;
-    // build-package.mjs stamps the site origin and sets the executable bit.
-    bin: { 'robr0-design-system': './bin/robr0-design-system.mjs' },
+    // The one command: `npx <package> init` (a single bin, so bare npx
+    // resolves it). Source lives at src/cli/init.mjs; build-package.mjs
+    // stamps the brand facts in and sets the executable bit. The bin's
+    // name and filename both come from BIN_NAME in scripts/brand.mjs.
+    bin: { [BIN_NAME]: `./bin/${BIN_NAME}.mjs` },
     exports: distExports(),
     peerDependencies: rootPkg.peerDependencies,
     peerDependenciesMeta: rootPkg.peerDependenciesMeta,

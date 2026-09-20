@@ -4,7 +4,7 @@ import registry from "./page-summaries.json";
 /**
  * Accessors for the page-summaries registry — the per-page content for the
  * chat FAB's TLDR panel (AiButton's `summary` prop): a super-concise
- * pre-written summary plus one or two prompt chips that launch robr0 GPT
+ * pre-written summary plus one or two prompt chips that launch the site chat
  * mid-answer.
  *
  * `page-summaries.json` holds the hand-written entries (the static

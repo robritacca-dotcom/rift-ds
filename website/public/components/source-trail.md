@@ -2,13 +2,13 @@
 
 The sources an agent opened while answering, as a collapsible list with per-item status.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://robertritacca.com/api/mcp.
+Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine.vercel.app/api/mcp.
 
 - Category: ai
 - Import: `import { SourceTrail } from '@robr0/design-system';`
 - Deep import: `import { SourceTrail } from '@robr0/design-system/components/SourceTrail/SourceTrail';`
 - Rendering: client component (declares 'use client')
-- Live docs: https://robertritacca.com/components/source-trail
+- Live docs: https://dragonspine.vercel.app/components/source-trail
 
 ## SourceTrail props
 

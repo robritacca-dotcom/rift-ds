@@ -1,9 +1,10 @@
 import { buildOgImage, ogImageSize, ogImageContentType } from "@/lib/ogImage";
+import { BRAND_NAME } from "@/config/brand.generated";
 
 export const size = ogImageSize;
 export const contentType = ogImageContentType;
-export const alt = "Robert Ritacca · Principal Product Designer";
+export const alt = `${BRAND_NAME} · An AI-ready React design system`;
 
 export default function Image() {
-  return buildOgImage("Robert Ritacca", "Principal Product Designer");
+  return buildOgImage(BRAND_NAME, "An AI-ready React design system");
 }

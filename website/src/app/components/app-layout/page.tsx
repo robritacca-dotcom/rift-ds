@@ -39,8 +39,8 @@ const demoSections = [
 ];
 
 const demoProfile = {
-  name: "robr0",
-  email: "robr0@example.com",
+  name: "Avery",
+  email: "avery@example.com",
 };
 
 function DemoContent({ heading, body }: { heading: string; body: string }) {
@@ -90,7 +90,7 @@ export default function AppLayoutPage() {
                 sections={demoSections}
                 profile={demoProfile}
                 activeKey="dashboard"
-                logoText="robr0"
+                logoText="Northlight"
                 defaultExpanded={true}
               >
                 <DemoContent
@@ -109,7 +109,7 @@ export default function AppLayoutPage() {
                 sections={demoSections}
                 profile={demoProfile}
                 activeKey="analytics"
-                logoText="robr0"
+                logoText="Northlight"
                 defaultExpanded={false}
               >
                 <DemoContent

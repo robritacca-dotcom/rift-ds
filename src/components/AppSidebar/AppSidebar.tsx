@@ -101,79 +101,11 @@ function DefaultLogo() {
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
     >
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M18.0309 14.98C18.6612 14.8653 19.2184 14.6623 19.7208 14.3712C20.214 14.08 20.6343 13.7358 20.9814 13.3211C21.3285 12.9063 21.5934 12.4387 21.776 11.9269C21.9587 11.4062 22.05 10.8592 22.05 10.2856C22.05 9.22672 21.8034 8.35314 21.3011 7.67368C20.8078 6.99423 20.1775 6.45596 19.4103 6.05889C18.6429 5.6618 17.7935 5.37943 16.8618 5.22942C15.9301 5.07059 15.0258 5 14.158 5L0 5C0 5 1.7355 8.8561 6.49444 8.8561C11.2534 8.8561 14.5417 8.8561 14.5417 8.8561C15.3638 8.8561 16.0123 8.99729 16.4691 9.28849C16.9257 9.57968 17.1541 10.0121 17.1541 10.5856C17.1541 11.1062 16.8983 11.5122 16.3959 11.8033C15.8936 12.1033 15.2725 12.2445 14.5417 12.2445C14.5417 12.2445 7.84631 12.2445 4.28395 12.2445C0.876885 12.2445 1.18745 15.5535 1.18745 15.5535L1.18745 19.8244C1.18745 19.8244 5.93725 19.8068 5.93725 15.9065H13.2263C16.9714 21.2627 23 19.8244 23 19.8244L18.0309 14.98Z"
-        fill="url(#sidebar_paint0)"
-      />
-      <path
-        opacity="0.4"
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M8 8.69492C12.0901 8.69492 14.6165 8.70339 14.6165 8.70339C16.5233 8.76271 16.9046 9.10173 17 9.5C17 6.11865 13.0434 5 11.0795 5C9.11546 5 8 5 8 5V8.69492Z"
-        fill="url(#sidebar_paint1)"
-      />
-      <path
-        opacity="0.5"
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M14.2646 5.38135C14.2646 5.38135 13.2763 5 12.3696 5C10.5018 5 9.44108 5 9.44108 5L1 5C1 5 2.72267 6.89831 7.44641 6.89831L13.4213 6.90678C17.3472 6.90678 17.9094 9.61018 18 10C18 7.5678 16.0507 6.04237 14.2646 5.38135Z"
-        fill="url(#sidebar_paint2)"
-      />
-      <path
-        opacity="0.4"
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M13 12.5C11.9827 12.5 10.372 12.5 9 12.5C6.30269 12.5 6 15.5 6 15.5H13V12.5Z"
-        fill="url(#sidebar_paint3)"
-      />
-      <path
-        opacity="0.5"
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M6 13C4.69445 13 5.42838 13 4.39805 13C1.76576 13 2.0057 15.6193 2.0057 15.6193L2.0057 19C2.0057 19 3.57237 17.7218 3.57237 16.206C3.57237 14.6904 3.95346 13 6 13Z"
-        fill="url(#sidebar_paint4)"
-      />
-      <path
-        opacity="0.5"
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M17.947 15C17.947 15 17.4185 15.1645 16 15C18.392 20.0731 23 19.9999 23 19.9999L17.947 15Z"
-        fill="url(#sidebar_paint5)"
-      />
-      <defs>
-        <linearGradient id="sidebar_paint0" x1="3.83825" y1="15.8618" x2="13.4908" y2="5.78849" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#2980B9" />
-          <stop offset="0.5484" stopColor="#2980B9" />
-          <stop offset="1" stopColor="#34495E" />
-        </linearGradient>
-        <linearGradient id="sidebar_paint1" x1="9.8045" y1="7.5" x2="16.6666" y2="7.5" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#2980B9" />
-          <stop offset="0.5484" stopColor="#2980B9" />
-          <stop offset="1" stopColor="#34495E" />
-        </linearGradient>
-        <linearGradient id="sidebar_paint2" x1="0.874018" y1="7.27631" x2="9.44862" y2="8.80891" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#2980B9" />
-          <stop offset="0.5484" stopColor="#2980B9" />
-          <stop offset="1" stopColor="#34495E" />
-        </linearGradient>
-        <linearGradient id="sidebar_paint3" x1="14.3715" y1="14" x2="7.79961" y2="14" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#2980B9" />
-          <stop offset="0.5484" stopColor="#2980B9" />
-          <stop offset="1" stopColor="#34495E" />
-        </linearGradient>
-        <linearGradient id="sidebar_paint4" x1="4" y1="18.7627" x2="4" y2="15.6662" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#2980B9" />
-          <stop offset="0.5484" stopColor="#2980B9" />
-          <stop offset="1" stopColor="#34495E" />
-        </linearGradient>
-        <linearGradient id="sidebar_paint5" x1="21.5356" y1="19.143" x2="19.9551" y2="16.6911" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#2980B9" />
-          <stop offset="0.5484" stopColor="#2980B9" />
-          <stop offset="1" stopColor="#34495E" />
-        </linearGradient>
-      </defs>
+      {/* The brand's chevron spine, in currentColor so it follows the
+          sidebar's own text colour through both themes. */}
+      <path d="M5 5.5 L12 9 L19 5.5" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M5 11 L12 14.5 L19 11" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M5 16.5 L12 20 L19 16.5" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -203,7 +135,7 @@ export const AppSidebar = ({
   footerSlot,
   className = '',
   logo,
-  logoText = 'robr0',
+  logoText = 'Dragonspine',
 }: AppSidebarProps) => {
   const baseClass = 'ds-app-sidebar';
 

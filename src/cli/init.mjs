@@ -10,16 +10,17 @@
  * command overwrites the pair; that is the refresh story.
  *
  * Zero dependencies by design: global fetch plus node:fs, so npx never
- * installs anything beyond the package itself. SITE_ORIGIN is stamped by
- * build-package.mjs from the website's own SITE_URL constant (one
- * authoritative home for the origin); running this file straight from
- * source fails fast rather than guessing a domain.
+ * installs anything beyond the package itself. SITE_ORIGIN, SKILL_NAME
+ * and MCP_SERVER_NAME are stamped by build-package.mjs from
+ * scripts/brand.mjs (the one home for brand facts); running this file
+ * straight from source fails fast rather than guessing a domain.
  */
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 
 const SITE_ORIGIN = '__SITE_URL__';
-const SKILL_NAME = 'robr0-design-system';
+const SKILL_NAME = '__SKILL_NAME__';
+const MCP_SERVER_NAME = '__MCP_SERVER_NAME__';
 const SKILL_FILES = ['SKILL.md', 'references/components.md'];
 const DEFAULT_OUT = join('.claude', 'skills', SKILL_NAME);
 
@@ -61,7 +62,7 @@ async function init(outDir) {
   }
   console.log(`✓ Agent skill installed. Skill-capable agents load it automatically.`);
   console.log(`\nFor on-demand lookups too, connect the MCP endpoint:`);
-  console.log(`  claude mcp add --transport http robr0-ds ${SITE_ORIGIN}/api/mcp`);
+  console.log(`  claude mcp add --transport http ${MCP_SERVER_NAME} ${SITE_ORIGIN}/api/mcp`);
 }
 
 const args = process.argv.slice(2);

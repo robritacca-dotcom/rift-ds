@@ -2,13 +2,13 @@
 
 Temporary notification with status variants, auto-dismiss, and stacking via ToastProvider.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://robertritacca.com/api/mcp.
+Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine.vercel.app/api/mcp.
 
 - Category: feedback
 - Import: `import { Toast } from '@robr0/design-system';`
 - Deep import: `import { Toast } from '@robr0/design-system/components/Toast/Toast';`
 - Rendering: client component (declares 'use client')
-- Live docs: https://robertritacca.com/components/toast
+- Live docs: https://dragonspine.vercel.app/components/toast
 
 ## Toast props
 

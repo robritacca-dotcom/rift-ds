@@ -67,7 +67,7 @@ export default function ButtonGroupPage() {
           <div className={`${styles.pageHeader} animate-in`}>
             <h1 className={styles.pageTitle}>Button group</h1>
             <PageLinks
-              figmaUrl="https://www.figma.com/design/8NzqDS8iRsBTFPbNGj3Woj/robr0-ds26?node-id=256-12612"
+              figmaUrl="https://www.figma.com/design/8NzqDS8iRsBTFPbNGj3Woj/Dragonspine?node-id=256-12612"
               storybookPath="/?path=/docs/components-buttongroup--docs"
             />
           </div>

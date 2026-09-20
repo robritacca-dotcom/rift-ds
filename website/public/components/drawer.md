@@ -2,13 +2,13 @@
 
 An edge-anchored modal panel that slides in from any side, for filter panels, detail views, and mobile navigation.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://robertritacca.com/api/mcp.
+Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine.vercel.app/api/mcp.
 
 - Category: overlays
 - Import: `import { Drawer } from '@robr0/design-system';`
 - Deep import: `import { Drawer } from '@robr0/design-system/components/Drawer/Drawer';`
 - Rendering: client component (declares 'use client')
-- Live docs: https://robertritacca.com/components/drawer
+- Live docs: https://dragonspine.vercel.app/components/drawer
 
 ## Drawer props
 

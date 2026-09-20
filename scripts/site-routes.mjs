@@ -1,7 +1,7 @@
 /**
  * site-routes.mjs
  *
- * The authoritative list of page routes on robertritacca.com, derived from the
+ * The authoritative list of the site's page routes, derived from the
  * filesystem: every `page.tsx` under website/src/app is a route. This is the
  * strongest possible source — a page that exists on disk is reachable whether
  * or not anyone remembered to add it to navigation — and it is what lets the

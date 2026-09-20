@@ -53,7 +53,7 @@ const bases = (b: Record<string, string>): AdvancedColorState => ({
 
 export const THEME_PRESETS: Record<string, ThemePreset> = {
   classic: {
-    label: "robr0 DS Classic",
+    label: "Classic (pre-split teal)",
     // The pre-promotion shipped theme, kept as a revert handle: teal-07 as
     // one action colour across both themes, before "Accessible teal" (the
     // per-theme split now shipped in the token files) became the default.
@@ -276,7 +276,7 @@ export function presetPickerOptions(args: {
   const dark = args.theme === "dark";
   return [
     {
-      label: "robr0 DS default",
+      label: "System default",
       value: "default",
       color: dark ? DEFAULT_BRAND_DARK : DEFAULT_BRAND,
       swatchRadius: swatchRadius(100, true),

@@ -5,7 +5,8 @@
  * Builds the consumer agent skill — a SKILL.md plus a reference catalog that
  * a consumer of @robr0/design-system can drop into their own .claude/skills/
  * so their coding agent knows the library every session. Served from
- * website/public/skill/robr0-design-system/ (the blueprints precedent:
+ * website/public/skill/<SKILL_NAME>/ (the folder name lives in
+ * scripts/brand.mjs; the blueprints precedent:
  * generated, tracked, drift-guarded), advertised in llms.txt and on the
  * get-started page.
  *
@@ -29,8 +30,9 @@ import { registry, repoRoot } from './component-docgen.mjs';
 import { assembleComponentApi } from './generate-component-api.mjs';
 import { siteUrl } from './generate-component-md.mjs';
 import { PACKAGE_NAME, PACKAGE_VERSION } from './package-manifest.mjs';
+import { SKILL_NAME } from './brand.mjs';
 
-export const skillDir = join(repoRoot, 'website', 'public', 'skill', 'robr0-design-system');
+export const skillDir = join(repoRoot, 'website', 'public', 'skill', SKILL_NAME);
 
 const tokenRegistry = JSON.parse(
   readFileSync(join(repoRoot, 'src', 'tokens', 'registry.json'), 'utf8')
@@ -53,7 +55,7 @@ export function assembleAgentSkill() {
   );
 
   const skillMd = `---
-name: robr0-design-system
+name: ${SKILL_NAME}
 description: Build React UI with ${PACKAGE_NAME}. Use when installing the package, composing its components, theming with its design tokens, or reading a component's exact prop contract.
 ---
 
@@ -163,7 +165,7 @@ if (isMain) {
   }
   console.log(
     written > 0
-      ? `✓ Agent skill regenerated — ${written} file(s) written to website/public/skill/robr0-design-system.`
-      : '✓ Agent skill up to date — website/public/skill/robr0-design-system matches the registries.'
+      ? `✓ Agent skill regenerated — ${written} file(s) written to website/public/skill/${SKILL_NAME}.`
+      : `✓ Agent skill up to date — website/public/skill/${SKILL_NAME} matches the registries.`
   );
 }

@@ -28,6 +28,7 @@
  * are added, never the [slug] pattern, so /writing/<unknown> still fails.
  */
 import { readdirSync, readFileSync, existsSync } from 'node:fs';
+import { SITE_URL } from './brand.mjs';
 import { dirname, join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -106,7 +107,10 @@ for (const m of configSource.matchAll(/source:\s*["'`]([^"'`]+)["'`]/g)) {
 
 /* ---- The links the pages actually render ---- */
 
-const SELF_ORIGINS = /^https?:\/\/(www\.)?robertritacca\.com/;
+// Absolute links to the site's own origin (brand.mjs owns the host) are
+// internal links spelled long-hand, so they normalize to paths below.
+const SELF_HOST = new URL(SITE_URL).host.replace(/^www\./, '').replace(/\./g, '\\.');
+const SELF_ORIGINS = new RegExp(`^https?://(www\\.)?${SELF_HOST}`);
 
 function normalize(href) {
   let path = href.replace(SELF_ORIGINS, '');

@@ -23,7 +23,7 @@ export default function ComponentsPage() {
           {/* Page Title */}
           <div className={`${styles.pageHeader} animate-in`}>
             <h1 className={styles.pageTitle}>Components</h1>
-            <PageLinks figmaUrl="https://www.figma.com/design/8NzqDS8iRsBTFPbNGj3Woj/robr0-ds26?node-id=113-6513" storybookPath="/?path=/docs/components-button--docs" />
+            <PageLinks figmaUrl="https://www.figma.com/design/8NzqDS8iRsBTFPbNGj3Woj/Dragonspine?node-id=113-6513" storybookPath="/?path=/docs/components-button--docs" />
           </div>
 
           {/* Intro */}

@@ -32,7 +32,7 @@ const logoCategories: LogoCategory[] = [
   {
     title: "Brand",
     logos: [
-      { label: "mark", file: "rr.svg" },
+      { label: "mark", file: "mark.svg" },
     ],
   },
   {
@@ -83,7 +83,7 @@ export default function LogosPage() {
           <div className={`${styles.pageHeader} animate-in`}>
             <h1 className={styles.pageTitle}>Logos</h1>
             <PageLinks
-              figmaUrl="https://www.figma.com/design/8NzqDS8iRsBTFPbNGj3Woj/robr0-ds26?node-id=253-13813"
+              figmaUrl="https://www.figma.com/design/8NzqDS8iRsBTFPbNGj3Woj/Dragonspine?node-id=253-13813"
               storybookPath="/?path=/docs/foundations-logos--docs"
             />
           </div>

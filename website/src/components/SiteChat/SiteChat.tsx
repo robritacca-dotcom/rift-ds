@@ -26,6 +26,7 @@ import { useSiteChat } from "./ChatContext";
 import { readGreeting, serverGreeting, subscribeClock } from "./greeting";
 import { startersForPath, type Starter } from "./starters";
 import styles from "./SiteChat.module.css";
+import { ASSISTANT_NAME } from "@/config/brand.generated";
 
 /** The one line a locked model shows in place of its description. */
 const LOCKED_MODEL_DESCRIPTION = "Paused for today to stay in budget.";
@@ -40,10 +41,10 @@ export function SiteChat({
   fullscreenEnabled = true,
   compact = false,
   phone = false,
-  title = "robr0 GPT",
+  title = ASSISTANT_NAME,
   placeholder = "Ask anything",
   showStarters = true,
-  logo = "/rr.svg",
+  logo = "/logos/mark.svg",
   tagline,
   starters: startersOverride,
   composerActions,
@@ -74,7 +75,7 @@ export function SiteChat({
       it to preview a consumer's own copy; the site default stays. */
   tagline?: string;
   /** Replaces the route-aware conversation starters wholesale — again the
-      playground's lever, so its preview isn't robr0-specific. */
+      playground's lever, so its preview isn't tied to this site's brand. */
   starters?: Starter[];
   /** Replaces the composer's leading actions (the live model picker) —
       the playground slots its own mock picker and attach button here. */

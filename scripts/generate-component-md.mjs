@@ -23,28 +23,19 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { assembleComponentApi } from './generate-component-api.mjs';
 import { PACKAGE_NAME, PACKAGE_VERSION } from './package-manifest.mjs';
+import { SITE_URL } from './brand.mjs';
 import { repoRoot } from './component-docgen.mjs';
 
 export const outputDir = join(repoRoot, 'website', 'public', 'components');
 
 /**
- * The canonical site origin, read from the website's own constant rather
- * than restated — a renamed domain fails here instead of shipping stale
- * links in every generated file.
+ * The canonical site origin — scripts/brand.mjs is the one home for it,
+ * and the website reads the same value through its generated mirror, so
+ * every generated file and the site agree by construction. Kept as a
+ * function because every generator calls it that way.
  */
 export function siteUrl() {
-  const source = readFileSync(
-    join(repoRoot, 'website', 'src', 'lib', 'structuredData.ts'),
-    'utf8'
-  ).replace(/\r\n/g, '\n');
-  const match = source.match(/export const SITE_URL = ["']([^"']+)["']/);
-  if (!match) {
-    throw new Error(
-      'SITE_URL not found in website/src/lib/structuredData.ts — ' +
-        'if the constant moved, update scripts/generate-component-md.mjs.'
-    );
-  }
-  return match[1];
+  return SITE_URL;
 }
 
 /** One markdown table cell: pipes escaped, newlines flattened. */

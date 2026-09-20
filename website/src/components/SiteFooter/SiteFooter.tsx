@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import BrandMark from "@/components/BrandMark/BrandMark";
 import { getSectionItems, docsSidebarLinks, foundationsSidebarLinks } from "@/config/navigation";
 import { SOCIAL_PROFILES, PROJECT_LINKS } from "@/config/social";
 import { InstagramIcon, LinkedInIcon, XIcon } from "../BrandIcons/BrandIcons";
@@ -86,7 +86,7 @@ export default function SiteFooter() {
       <div className={styles.body}>
         <div className={styles.brand}>
           <Link href="/" className={styles.brandMark} aria-label="Dragonspine DS, home">
-            <Image src="/rr.svg" alt="" width={24} height={24} />
+            <BrandMark />
             <span className={styles.brandName}>Dragonspine DS</span>
           </Link>
           <ul className={styles.socialRow}>

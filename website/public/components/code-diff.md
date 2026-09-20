@@ -2,13 +2,13 @@
 
 Unified diff view for code changes, with added, removed, and context lines.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://robertritacca.com/api/mcp.
+Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine.vercel.app/api/mcp.
 
 - Category: ai
 - Import: `import { CodeDiff } from '@robr0/design-system';`
 - Deep import: `import { CodeDiff } from '@robr0/design-system/components/CodeDiff/CodeDiff';`
 - Rendering: server-renderable (no 'use client')
-- Live docs: https://robertritacca.com/components/code-diff
+- Live docs: https://dragonspine.vercel.app/components/code-diff
 
 ## CodeDiff props
 

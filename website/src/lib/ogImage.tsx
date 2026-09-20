@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { BRAND_NAME } from "@/config/brand.generated";
 import shaderBackground from "@/data/shader-background.json";
 
 export const ogImageSize = { width: 1200, height: 630 };
@@ -61,7 +62,7 @@ const THEME = {
 /**
  * Renders a 1200x630 OG image: the ambient blob field (one static frame of
  * the site's shader background), the logo mark, a title, and a byline of
- * "Robert Ritacca — <kicker>". Used for every dynamic social card on the site.
+ * "<brand> — <kicker>". Used for every dynamic social card on the site.
  *
  * The light theme is the default the routes ship: unfurlers fetch one static
  * image per page (Open Graph has no notion of the viewer's colour scheme), and
@@ -116,7 +117,7 @@ export function buildOgImage(
         </div>
 
         <div style={{ display: "flex", fontSize: 38, fontWeight: 600, color: colors.byline }}>
-          Robert Ritacca · {kicker}
+          {BRAND_NAME} · {kicker}
         </div>
       </div>
     ),
@@ -124,7 +125,7 @@ export function buildOgImage(
   );
 }
 
-/** Case-study OG image — the byline reads "Robert Ritacca — Case Study". */
+/** Case-study OG image — the byline reads "<brand> — Case Study". */
 export function buildCaseStudyOgImage(title: string) {
   return buildOgImage(title, "Case Study");
 }

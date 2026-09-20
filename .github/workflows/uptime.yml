@@ -34,4 +34,6 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps chromium
-      - run: node scripts/smoke-hydration.mjs https://robertritacca.com
+      # The origin restates SITE_URL from scripts/brand.mjs (workflows cannot
+      # import it); it goes live at the first deploy — keep the two in sync.
+      - run: node scripts/smoke-hydration.mjs https://dragonspine.vercel.app

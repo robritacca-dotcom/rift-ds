@@ -14,6 +14,7 @@ import { CHROMELESS_ROUTES } from "@/config/chromeless";
 import { useSiteChat } from "@/components/SiteChat/ChatContext";
 import { SITE_PALETTE_OPEN_EVENT } from "./palette-bus";
 import styles from "./SitePalette.module.css";
+import { ASSISTANT_NAME } from "@/config/brand.generated";
 
 /* Mirrors the nav's 959px breakpoint: desktopOnly pages (the canvas) stay
    out of the mobile IA, so the palette hides their rows below it too. */
@@ -184,7 +185,7 @@ export function SitePaletteMount() {
     // the concrete matches, and when nothing else matches it is the whole
     // result set: the dead-end empty state becomes an answer path.
     const askChat: CommandPaletteGroup = {
-      label: "Ask robr0 GPT",
+      label: `Ask ${ASSISTANT_NAME}`,
       commands: [
         {
           id: "ask-chat-query",
@@ -192,7 +193,7 @@ export function SitePaletteMount() {
           description: "Get an answer from the site chat",
           // The AI-ring chip — the system's "a model answers here" signal,
           // worn as a passive badge, wearing the FAB's own face (forum +
-          // "Ask robr0 GPT") so the row points at the surface it opens;
+          // the "Ask" label) so the row points at the surface it opens;
           // the chip replaces the row's leading icon rather than repeating
           // it. aria-hidden because the group heading already says it, and
           // decorative rather than the AiButton component because a real
@@ -204,7 +205,7 @@ export function SitePaletteMount() {
               >
                 forum
               </span>
-              Ask robr0 GPT
+              Ask {ASSISTANT_NAME}
             </span>
           ),
           onSelect: () => {

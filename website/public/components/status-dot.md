@@ -2,13 +2,13 @@
 
 The bare status mark: a dot in the five status roles, with an optional label and a live pulse for recording and online-now states.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://robertritacca.com/api/mcp.
+Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine.vercel.app/api/mcp.
 
 - Category: feedback
 - Import: `import { StatusDot } from '@robr0/design-system';`
 - Deep import: `import { StatusDot } from '@robr0/design-system/components/StatusDot/StatusDot';`
 - Rendering: server-renderable (no 'use client')
-- Live docs: https://robertritacca.com/components/status-dot
+- Live docs: https://dragonspine.vercel.app/components/status-dot
 
 ## StatusDot props
 

@@ -9,6 +9,7 @@ import { getPageSummary } from "@/data/page-summaries";
 import { DOCK_QUERY, TAKEOVER_QUERY, useSiteChat } from "./ChatContext";
 import { SiteChat } from "./SiteChat";
 import styles from "./SiteChat.module.css";
+import { ASSISTANT_NAME } from "@/config/brand.generated";
 
 /* The docked panel's drag-to-widen range. The minimum mirrors the
    --layout-chat-width default in globals.css (the resting width); the
@@ -188,7 +189,7 @@ export function SiteChatMount() {
     return (
       <div className={styles.fab}>
         <AiButton
-          label="Ask robr0 GPT"
+          label={`Ask ${ASSISTANT_NAME}`}
           icon="forum"
           aria-expanded={false}
           aria-controls="site-chat-panel"

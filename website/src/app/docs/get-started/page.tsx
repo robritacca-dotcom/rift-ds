@@ -16,6 +16,7 @@ import { componentMetadata } from "@robr0/design-system/components/registry";
 import { MCP_CLIENTS } from "@/lib/mcp-clients";
 import { MCP_TOOLS } from "@/lib/mcp-tools";
 import { SITE_URL } from "@/lib/structuredData";
+import { ASSISTANT_NAME, NPM_URL, REPOSITORY_URL, SKILL_NAME, STORYBOOK_URL } from "@/config/brand.generated";
 
 const { sidebarLinks } = getSidebarLinks(docsSidebarLinks, "/docs/get-started");
 
@@ -66,8 +67,8 @@ const DARK_MODE_SNIPPET = `<!-- Light is the default; flip the whole system with
 
 const INIT_SNIPPET = `npx @robr0/design-system init`;
 
-const SKILL_SNIPPET = `curl --create-dirs -o .claude/skills/robr0-design-system/SKILL.md ${SITE_URL}/skill/robr0-design-system/SKILL.md
-curl --create-dirs -o .claude/skills/robr0-design-system/references/components.md ${SITE_URL}/skill/robr0-design-system/references/components.md`;
+const SKILL_SNIPPET = `curl --create-dirs -o .claude/skills/${SKILL_NAME}/SKILL.md ${SITE_URL}/skill/${SKILL_NAME}/SKILL.md
+curl --create-dirs -o .claude/skills/${SKILL_NAME}/references/components.md ${SITE_URL}/skill/${SKILL_NAME}/references/components.md`;
 
 /* Three questions a model answers wrong without the docs above — each one
    is a fact the agent skill and one MCP tool both hold, and each has a
@@ -153,25 +154,25 @@ const STACK_TOOLS: {
     name: "Storybook",
     desc: "Every component, every variant",
     logo: "/logos/storybook.svg",
-    href: "https://design-system-iota-one.vercel.app/?path=/docs/robr0-ds--docs",
+    href: STORYBOOK_URL,
   },
   {
     name: "npm",
     desc: "Published with provenance on every release",
     icon: "deployed_code",
-    href: "https://www.npmjs.com/package/@robr0/design-system",
+    href: NPM_URL,
   },
   {
     name: "GitHub",
     desc: "Source, CI, and releases",
     logo: "/logos/Git.svg",
-    href: "https://github.com/robritacca-dotcom/design-system",
+    href: REPOSITORY_URL,
   },
   {
     name: "Figma",
     desc: "Where the foundation was designed",
     logo: "/logos/Figma.svg",
-    href: "https://www.figma.com/design/8NzqDS8iRsBTFPbNGj3Woj/robr0-ds26?node-id=246-5864",
+    href: "https://www.figma.com/design/8NzqDS8iRsBTFPbNGj3Woj/Dragonspine?node-id=246-5864",
   },
 ];
 
@@ -332,7 +333,7 @@ export default function GetStartedPage() {
                   package or your client code ever holds one. This site&apos;s chat
                   is the reference implementation:{" "}
                   <OpenChatLink className={styles.inlineLinkButton}>
-                    open robr0 GPT
+                    open {ASSISTANT_NAME}
                   </OpenChatLink>{" "}
                   and you are looking at those components at work.
                 </p>

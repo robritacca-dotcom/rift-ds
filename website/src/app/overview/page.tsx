@@ -15,6 +15,7 @@ import { SKILL_COUNT } from "@/data/skills-registry";
 import { SITE_UPDATE_COUNT } from "@/data/site-updates";
 import { chatExchangeMap, operatorsMap, pipelineMap, runtimeMap, systemOverviewMap } from "./maps";
 import styles from "./page.module.css";
+import { BRAND_NAME, REPOSITORY_URL, STORYBOOK_URL } from "@/config/brand.generated";
 
 const TOKEN_CATEGORY_COUNT = Object.keys(TOKEN_COUNTS).length;
 
@@ -33,7 +34,7 @@ export default function AboutDsPage() {
           <PageBreadcrumb />
           {/* Page Title */}
           <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Overview of robr0 DS</h1>
+            <h1 className={styles.pageTitle}>Overview of {BRAND_NAME}</h1>
           </div>
 
           {/* Intro */}
@@ -42,9 +43,9 @@ export default function AboutDsPage() {
               An AI-ready design system, built to make this site
             </p>
             <p className={styles.introBody}>
-              robr0 DS is the design system behind every page on this site: a solo build, run as a working experiment in how far a written spec and an AI pair can carry a production system. The foundation was designed in{" "}
-              <a href="https://www.figma.com/design/8NzqDS8iRsBTFPbNGj3Woj/robr0-ds26?node-id=246-5864" target="_blank" rel="noopener noreferrer" className={styles.inlineLink}>Figma</a>; the system lives in{" "}
-              <a href="https://github.com/robritacca-dotcom/design-system" target="_blank" rel="noopener noreferrer" className={styles.inlineLink}>the repo</a> as a{" "}
+              {BRAND_NAME} is the design system behind every page on this site: a solo build, run as a working experiment in how far a written spec and an AI pair can carry a production system. The foundation was designed in{" "}
+              <a href="https://www.figma.com/design/8NzqDS8iRsBTFPbNGj3Woj/Dragonspine?node-id=246-5864" target="_blank" rel="noopener noreferrer" className={styles.inlineLink}>Figma</a>; the system lives in{" "}
+              <a href={REPOSITORY_URL} target="_blank" rel="noopener noreferrer" className={styles.inlineLink}>the repo</a> as a{" "}
               <Link href="/blueprints/design" className={styles.inlineLink}>written spec</Link>, layered CSS tokens, and React components, and Claude Code builds from the spec, so a design change reaches production in under a minute. It ships as the npm package <code>@robr0/design-system</code>, and this site installs that package like any other consumer would. You can{" "}
               <Link href="/docs/get-started" className={styles.inlineLink}>install it yourself</Link> and{" "}
               <Link href="/playground" className={styles.inlineLink}>re-theme it live</Link>.
@@ -267,7 +268,7 @@ export default function AboutDsPage() {
                 <SectionTitle title="Links" />
 
                 <a
-                  href="https://www.figma.com/design/8NzqDS8iRsBTFPbNGj3Woj/robr0-ds26?node-id=246-5864"
+                  href="https://www.figma.com/design/8NzqDS8iRsBTFPbNGj3Woj/Dragonspine?node-id=246-5864"
                   target="_blank"
                   rel="noopener noreferrer"
                   className={styles.toolItem}
@@ -281,7 +282,7 @@ export default function AboutDsPage() {
                 </a>
 
                 <a
-                  href="https://design-system-iota-one.vercel.app/?path=/docs/robr0-ds--docs"
+                  href={STORYBOOK_URL}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={styles.toolItem}
@@ -295,7 +296,7 @@ export default function AboutDsPage() {
                 </a>
 
                 <a
-                  href="https://github.com/robritacca-dotcom/design-system"
+                  href={REPOSITORY_URL}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={styles.toolItem}

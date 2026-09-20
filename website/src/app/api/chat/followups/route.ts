@@ -30,8 +30,12 @@
  */
 import Anthropic from "@anthropic-ai/sdk";
 
+import { BRAND_SHORT, SITE_URL } from "@/config/brand.generated";
 import { FOLLOWUP_MODEL } from "@/lib/chat-model";
 import { SUGGESTION_MAX_CHARS, fitsChip } from "@/lib/chat-suggestions";
+
+/** The bare host, the way the prompt names the site in prose. */
+const SITE_HOST = new URL(SITE_URL).host;
 
 import { checkFollowupLimit, recordSpend } from "../guardrails";
 
@@ -74,7 +78,7 @@ const MAX_TOKENS = 200;
  */
 const UPSTREAM_TIMEOUT_MS = 8_000;
 
-const SYSTEM = `You write the follow-up questions offered under an answer from the chat assistant on robertritacca.com, the portfolio and design system site of Rob Ritacca, a principal product designer.
+const SYSTEM = `You write the follow-up questions offered under an answer from the chat assistant on ${SITE_HOST}, the portfolio and design system site of the site's maintainer, a principal product designer.
 
 You are given the visitor's last question and the answer they just read. Write the ${CANDIDATES} questions that visitor is most likely to want to ask next, best first.
 
@@ -88,7 +92,7 @@ Which case study should I read first?
 Why is teal reserved for actions?
 
 The rest of the rules:
-- Each question must be answerable by this site: Rob's career and case studies, his writing, the robr0 design system and how this site is built, or established design craft.
+- Each question must be answerable by this site: Rob's career and case studies, his writing, the ${BRAND_SHORT} design system and how this site is built, or established design craft.
 - Move the conversation forward. Never re-ask the question just asked, and never ask something the answer already covered.
 - The visitor is speaking to the assistant about Rob in the third person: "What did Rob change first?", never "What did you change first?".
 - Plain words, British spelling, sentence case. No em dashes, no emoji, no quotation marks, no numbering, no markdown.

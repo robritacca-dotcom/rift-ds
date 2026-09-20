@@ -72,6 +72,7 @@ import { MessageActions } from "@robr0/design-system/components/MessageActions/M
 import { MessageCard } from "@robr0/design-system/components/MessageCard/MessageCard";
 import type { ReactNode } from "react";
 import styles from "./ComponentPreviews.module.css";
+import { BRAND_SHORT } from "@/config/brand.generated";
 
 // Small fixed dataset for the contribution graph preview card
 // 10 weeks: the grid columns are minmax(12px, 1fr), so ten of them plus
@@ -1068,9 +1069,9 @@ const previews: Record<string, () => ReactNode> = {
   "nav": () => (
     <>
       <div className={styles.previewRow} style={{ gap: "20px" }}>
-        <Image src="/rr.svg" alt="robr0" width={24} height={24} />
+        <Image src="/logos/mark.svg" alt="Dragonspine" width={24} height={24} />
         <span style={{ fontSize: "16px", fontWeight: 600, color: "var(--color-text-primary)", letterSpacing: "-0.16px" }}>
-          robr0
+          {BRAND_SHORT}
         </span>
       </div>
     </>

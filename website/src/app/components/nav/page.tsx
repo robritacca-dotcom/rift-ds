@@ -12,6 +12,7 @@ import type { ButtonProps } from "@robr0/design-system/components/Button/Button"
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import { BRAND_NAME, BRAND_SHORT } from "@/config/brand.generated";
 /* ============================================
    DEMO NAV BUTTON DATA
    ============================================ */
@@ -27,7 +28,7 @@ const demoMobileMenuTopLinks: ButtonProps[] = [
   { label: "Home", variant: "tertiary", state: "default" },
   { label: "About", variant: "tertiary", state: "disabled" },
   { label: "Work", variant: "tertiary", state: "disabled" },
-  { label: "robr0 DS", variant: "tertiary", state: "active" },
+  { label: BRAND_NAME, variant: "tertiary", state: "active" },
 ];
 
 const demoMobileSubnavLinks: ButtonProps[] = [
@@ -61,7 +62,7 @@ export default function NavigationPage() {
           <div className={`${styles.pageHeader} animate-in`}>
             <h1 className={styles.pageTitle}>Nav</h1>
             <PageLinks
-              figmaUrl="https://www.figma.com/design/8NzqDS8iRsBTFPbNGj3Woj/robr0-ds26?node-id=155-7279"
+              figmaUrl="https://www.figma.com/design/8NzqDS8iRsBTFPbNGj3Woj/Dragonspine?node-id=155-7279"
               storybookPath="/?path=/docs/components-nav--docs"
             />
           </div>
@@ -85,9 +86,9 @@ export default function NavigationPage() {
               </span>
               <div className={styles.navPreview}>
                 <Nav
-                  brandText="robr0"
+                  brandText={BRAND_SHORT}
                   brandIcon={
-                    <Image src="/rr.svg" alt="robr0" width={24} height={24} />
+                    <Image src="/logos/mark.svg" alt="Dragonspine" width={24} height={24} />
                   }
                   buttons={demoNavButtons}
                   trailing={
@@ -112,8 +113,8 @@ export default function NavigationPage() {
               <div className={styles.mobileNavPreview}>
                 <div className={styles.mobileNavInner}>
                   <div className={styles.mobileNavBrand}>
-                    <Image src="/rr.svg" alt="robr0" width={24} height={24} />
-                    <span className={styles.mobileNavBrandText}>robr0</span>
+                    <Image src="/logos/mark.svg" alt="Dragonspine" width={24} height={24} />
+                    <span className={styles.mobileNavBrandText}>{BRAND_SHORT}</span>
                   </div>
                   <div className={styles.mobileNavHamburger}>
                     <span className="material-symbols-rounded" aria-hidden="true">

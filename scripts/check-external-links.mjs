@@ -27,6 +27,7 @@
 import { readdirSync, readFileSync, existsSync } from 'node:fs';
 import { dirname, join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { SITE_URL } from './brand.mjs';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const appHtmlDir = join(repoRoot, 'website', '.next', 'server', 'app');
@@ -56,11 +57,12 @@ const KNOWN_BLOCKERS = new Map([
  */
 const DEMO_DOMAINS = /(^|\.)example\.(com|org|net)$/;
 
-const SELF_ORIGINS = /^https?:\/\/(www\.)?robertritacca\.com/;
+const SELF_HOST = new URL(SITE_URL).host.replace(/^www\./, '').replace(/\./g, '\\.');
+const SELF_ORIGINS = new RegExp(`^https?://(www\\.)?${SELF_HOST}`);
 const TIMEOUT_MS = 10_000;
 const CONCURRENCY = 8;
 const USER_AGENT =
-  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36 (robertritacca.com link check)';
+  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36 (' + new URL(SITE_URL).host + ' link check)';
 
 const walk = (dir, filter) => {
   const out = [];

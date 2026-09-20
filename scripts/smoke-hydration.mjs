@@ -16,7 +16,7 @@
  *     website job, after the build — it catches the reproducible class of
  *     mismatch (time-, random-, and environment-dependent renders).
  *
- *   node scripts/smoke-hydration.mjs https://robertritacca.com
+ *   node scripts/smoke-hydration.mjs <production origin — SITE_URL in scripts/brand.mjs>
  *     Checks a live origin. The `ship` skill runs this against production
  *     after every deploy, because the outage's trigger (Vercel's internal
  *     pathname during the root route's ISR regeneration) exists only there —

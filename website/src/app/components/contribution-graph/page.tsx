@@ -12,6 +12,7 @@ import { SectionTitle } from "@robr0/design-system/components/SectionTitle/Secti
 import GitHubContributions from "../../../components/GitHubContributions/GitHubContributions";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import { BRAND_NAME } from "@/config/brand.generated";
 
 /** Deterministic pseudo-random generator so the demo renders consistently */
 const seededRandom = (seed: number) => () => {
@@ -75,7 +76,7 @@ export default function ContributionGraphPage() {
           <section className={styles.section}>
             <SectionTitle title="Live GitHub data" />
             <p className={styles.introBody}>
-              This instance pulls real contribution data for the account that builds robr0 DS, cached server-side and refreshed every six hours.
+              This instance pulls real contribution data for the account that builds {BRAND_NAME}, cached server-side and refreshed every six hours.
             </p>
             <GitHubContributions />
           </section>

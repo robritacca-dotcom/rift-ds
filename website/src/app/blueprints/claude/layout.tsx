@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { pageOpenGraph } from "@/config/navigation";
+import { BRAND_NAME } from "@/config/brand.generated";
 
 const title = "Claude MD";
 const description =
-  "The codebase context file Claude Code reads on every session. Project structure, token architecture, and the conventions a builder needs to extend robr0 DS without exploring.";
+  `The codebase context file Claude Code reads on every session. Project structure, token architecture, and the conventions a builder needs to extend ${BRAND_NAME} without exploring.`;
 
 export const metadata: Metadata = {
   alternates: { canonical: "/blueprints/claude" },

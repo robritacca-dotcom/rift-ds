@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { pageOpenGraph, TITLE_TEMPLATE } from "@/config/navigation";
+import { BRAND_NAME } from "@/config/brand.generated";
 
 const description =
-  "Documentation for robr0 DS: the system overview, the spec files that drive the build, reusable skills, autonomous loops, and the project journal.";
+  `Documentation for ${BRAND_NAME}: the system overview, the spec files that drive the build, reusable skills, autonomous loops, and the project journal.`;
 
 // `title.template` (not a bare string) matters here: /docs now has a real
 // sub-page (/docs/get-started), and a plain-string title would null the

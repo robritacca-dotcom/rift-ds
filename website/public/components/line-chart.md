@@ -2,13 +2,13 @@
 
 Multi-series line chart for trends over time, with per-series colours and a summary row.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://robertritacca.com/api/mcp.
+Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine.vercel.app/api/mcp.
 
 - Category: charts
 - Import: `import { LineChart } from '@robr0/design-system/charts'; // needs the optional recharts peer`
 - Deep import: `import { LineChart } from '@robr0/design-system/components/Chart/LineChart';`
 - Rendering: server-renderable (no 'use client')
-- Live docs: https://robertritacca.com/components/line-chart
+- Live docs: https://dragonspine.vercel.app/components/line-chart
 
 ## LineChart props
 

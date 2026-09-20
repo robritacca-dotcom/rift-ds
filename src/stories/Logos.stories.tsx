@@ -23,7 +23,7 @@ const logos = [
   'nextjs white.svg',
   'npm.svg',
   'React.svg',
-  'rr.svg',
+  'mark.svg',
   'storybook.svg',
   'stripe-new.png',
   'vercel black.svg',

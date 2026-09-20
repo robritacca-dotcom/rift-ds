@@ -2,13 +2,13 @@
 
 Linked contact method with icon, label, and value.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://robertritacca.com/api/mcp.
+Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine.vercel.app/api/mcp.
 
 - Category: data-display
 - Import: `import { ContactCard } from '@robr0/design-system';`
 - Deep import: `import { ContactCard } from '@robr0/design-system/components/ContactCard/ContactCard';`
 - Rendering: client component (declares 'use client')
-- Live docs: https://robertritacca.com/components/contact-card
+- Live docs: https://dragonspine.vercel.app/components/contact-card
 
 ## ContactCard props
 

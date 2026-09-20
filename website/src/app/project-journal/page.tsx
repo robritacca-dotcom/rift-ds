@@ -8,6 +8,7 @@ import { Timeline } from "@robr0/design-system/components/Timeline/Timeline";
 import { getSidebarLinks, docsSidebarLinks } from "@/config/navigation";
 import { siteUpdates, siteUpdatesAsOf, SITE_UPDATE_COUNT } from "@/data/site-updates";
 import styles from "./page.module.css";
+import { BRAND_NAME, REPOSITORY_URL, STORYBOOK_URL } from "@/config/brand.generated";
 
 const { sidebarLinks } = getSidebarLinks(docsSidebarLinks, "/project-journal");
 
@@ -50,7 +51,7 @@ export default function SiteUpdatesPage() {
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>The progression of the build</p>
             <p className={styles.introBody}>
-              An evergreen record of the largest updates to robr0 DS and this
+              An evergreen record of the largest updates to {BRAND_NAME} and this
               site. Each entry consolidates the commits behind one theme into a
               short record of what was built and when. Curated from the full
               history and extended on a biweekly loop.
@@ -63,7 +64,7 @@ export default function SiteUpdatesPage() {
               <h2 className={styles.contributionsTitle}>Contributions</h2>
             </div>
             <p className={styles.contributionsIntro}>
-              The system is built in public: every commit lands on GitHub. This is the real activity, pulled live from the account that builds robr0 DS.
+              The system is built in public: every commit lands on GitHub. This is the real activity, pulled live from the account that builds {BRAND_NAME}.
             </p>
             <GitHubContributions />
           </div>
@@ -107,7 +108,7 @@ export default function SiteUpdatesPage() {
                 </div>
                 <div className={styles.linkList}>
                   <a
-                    href="https://github.com/robritacca-dotcom/design-system/commits/main"
+                    href={`${REPOSITORY_URL}/commits/main`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className={styles.linkItem}
@@ -123,7 +124,7 @@ export default function SiteUpdatesPage() {
                   </a>
 
                   <a
-                    href="https://github.com/robritacca-dotcom/design-system"
+                    href={REPOSITORY_URL}
                     target="_blank"
                     rel="noopener noreferrer"
                     className={styles.linkItem}
@@ -139,7 +140,7 @@ export default function SiteUpdatesPage() {
                   </a>
 
                   <a
-                    href="https://design-system-iota-one.vercel.app"
+                    href={STORYBOOK_URL}
                     target="_blank"
                     rel="noopener noreferrer"
                     className={styles.linkItem}
@@ -155,7 +156,7 @@ export default function SiteUpdatesPage() {
                   </a>
 
                   <Link href="/loops" className={styles.linkItem}>
-                    <Image src="/logos/rr.svg" alt="" width={28} height={28} className={styles.linkLogo} />
+                    <Image src="/logos/mark.svg" alt="" width={28} height={28} className={styles.linkLogo} />
                     <div className={styles.linkContent}>
                       <div className={styles.linkTitle}>
                         <span>Loops</span>
@@ -166,7 +167,7 @@ export default function SiteUpdatesPage() {
                   </Link>
 
                   <Link href="/overview" className={styles.linkItem}>
-                    <Image src="/logos/rr.svg" alt="" width={28} height={28} className={styles.linkLogo} />
+                    <Image src="/logos/mark.svg" alt="" width={28} height={28} className={styles.linkLogo} />
                     <div className={styles.linkContent}>
                       <div className={styles.linkTitle}>
                         <span>System overview</span>

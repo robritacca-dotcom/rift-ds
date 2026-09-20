@@ -28,7 +28,7 @@ export default function ToggleSwitchPage() {
           <div className={`${styles.pageHeader} animate-in`}>
             <h1 className={styles.pageTitle}>Toggle switch</h1>
             <PageLinks
-              figmaUrl="https://www.figma.com/design/8NzqDS8iRsBTFPbNGj3Woj/robr0-ds26?node-id=253-10071"
+              figmaUrl="https://www.figma.com/design/8NzqDS8iRsBTFPbNGj3Woj/Dragonspine?node-id=253-10071"
               storybookPath="/?path=/docs/components-toggleswitch--docs"
             />
           </div>

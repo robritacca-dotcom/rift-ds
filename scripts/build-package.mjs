@@ -6,9 +6,10 @@
  *   2. copies the runtime assets the emitted JS references verbatim:
  *      every non-story .css under src/, the icon font, and the
  *      registry JSON files
- *   3. writes dist/bin/robr0-design-system.mjs — the init bin, with the
- *      site origin stamped in from the website's SITE_URL constant and
- *      the executable bit set (publint checks both)
+ *   3. writes dist/bin/<BIN_NAME>.mjs — the init bin, with the site
+ *      origin, skill folder and MCP server name stamped in from
+ *      scripts/brand.mjs and the executable bit set (publint checks the
+ *      shebang and the bit)
  *   4. writes dist/package.json — the manifest that actually ships to
  *      npm (dist-form exports, no `private`, no scripts) — plus
  *      LICENSE and README.md
@@ -26,7 +27,7 @@ import {
 } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { siteUrl } from './generate-component-md.mjs';
+import { BIN_NAME, MCP_SERVER_NAME, SITE_URL, SKILL_NAME } from './brand.mjs';
 import { distManifest } from './package-manifest.mjs';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -87,16 +88,23 @@ if (unmarked.length > 0) {
 }
 console.log(`▸ Restored "use client" on ${clientDistFiles.length} dist modules.`);
 
-// The init bin. The site origin is stamped in from the website's own
-// SITE_URL constant — the same helper every generator uses — so the CLI
-// can never fetch from a domain the site no longer lives at. Executable
-// bit and shebang are what publint checks a bin for.
+// The init bin. The site origin, skill folder and MCP server name are
+// stamped in from scripts/brand.mjs — the one home for brand facts — so
+// the CLI can never fetch from a domain the site no longer lives at, or
+// install a skill folder the site no longer publishes. Executable bit
+// and shebang are what publint checks a bin for.
 const binSource = readFileSync(join(srcDir, 'cli', 'init.mjs'), 'utf8');
-const binTarget = join(distDir, 'bin', 'robr0-design-system.mjs');
+const binTarget = join(distDir, 'bin', `${BIN_NAME}.mjs`);
 mkdirSync(dirname(binTarget), { recursive: true });
-writeFileSync(binTarget, binSource.replaceAll('__SITE_URL__', siteUrl()));
+writeFileSync(
+  binTarget,
+  binSource
+    .replaceAll('__SITE_URL__', SITE_URL)
+    .replaceAll('__SKILL_NAME__', SKILL_NAME)
+    .replaceAll('__MCP_SERVER_NAME__', MCP_SERVER_NAME)
+);
 chmodSync(binTarget, 0o755);
-console.log('▸ Wrote bin/robr0-design-system.mjs (site origin stamped).');
+console.log(`▸ Wrote bin/${BIN_NAME}.mjs (brand facts stamped).`);
 
 const rootPkg = JSON.parse(readFileSync(join(repoRoot, 'package.json'), 'utf8'));
 writeFileSync(join(distDir, 'package.json'), JSON.stringify(distManifest(rootPkg), null, 2) + '\n');

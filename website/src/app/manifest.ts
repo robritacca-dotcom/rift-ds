@@ -1,11 +1,12 @@
 import type { MetadataRoute } from "next";
+import { BRAND_NAME, BRAND_SHORT } from "@/config/brand.generated";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Robert Ritacca · Principal Product Designer",
-    short_name: "Robert Ritacca",
+    name: `${BRAND_NAME} · An AI-ready React design system`,
+    short_name: BRAND_SHORT,
     description:
-      "Principal Product Designer in Toronto, crafting AI-native products and agentic experiences.",
+      "An AI-ready React design system: tokens, components, templates, and the docs site they build.",
     start_url: "/",
     display: "standalone",
     background_color: "#050505",

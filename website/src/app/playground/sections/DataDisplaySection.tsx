@@ -85,7 +85,7 @@ export default function DataDisplaySection() {
           selected={selectedChip === "components"}
           onClick={() => setSelectedChip("components")}
         />
-        <Avatar name="Robert Ritacca" status="online" />
+        <Avatar name="Avery Chen" status="online" />
         <Avatar name="Design System" size="sm" />
       </div>
 

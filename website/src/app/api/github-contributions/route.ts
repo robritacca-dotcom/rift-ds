@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 
-const GITHUB_USERNAME = "robritacca-dotcom";
+import { REPOSITORY_URL } from "@/config/brand.generated";
+
+// The GitHub account, derived from the repository URL's owner segment so a
+// moved repo cannot leave the graph counting someone else's contributions.
+const GITHUB_USERNAME = new URL(REPOSITORY_URL).pathname.split("/")[1];
 const CONTRIBUTIONS_API = `https://github-contributions-api.jogruber.de/v4/${GITHUB_USERNAME}?y=last`;
 
 interface ContributionsResponse {

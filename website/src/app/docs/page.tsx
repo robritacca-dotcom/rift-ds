@@ -6,6 +6,7 @@ import Sidebar from "../../components/Sidebar/Sidebar";
 import TocCard from "../../components/TocCard/TocCard";
 import { getSidebarLinks, docsSidebarLinks } from "@/config/navigation";
 import styles from "./page.module.css";
+import { BRAND_NAME } from "@/config/brand.generated";
 
 const { sidebarLinks } = getSidebarLinks(docsSidebarLinks, "/docs");
 
@@ -40,7 +41,7 @@ export default function DocsPage() {
               The system, explained and ready to reuse
             </p>
             <p className={styles.introBody}>
-              Everything that makes robr0 DS run, documented in one place. Start with the overview for the pipeline behind the system, get started with installing and theming the package, read the spec files Claude Code builds from, or take the skills and loops that automate the work. The project journal keeps a running record of how it all came together.
+              Everything that makes {BRAND_NAME} run, documented in one place. Start with the overview for the pipeline behind the system, get started with installing and theming the package, read the spec files Claude Code builds from, or take the skills and loops that automate the work. The project journal keeps a running record of how it all came together.
             </p>
           </div>
 

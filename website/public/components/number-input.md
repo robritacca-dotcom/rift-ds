@@ -2,13 +2,13 @@
 
 Numeric field with increment and decrement steppers and min/max clamping.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://robertritacca.com/api/mcp.
+Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine.vercel.app/api/mcp.
 
 - Category: forms
 - Import: `import { NumberInput } from '@robr0/design-system';`
 - Deep import: `import { NumberInput } from '@robr0/design-system/components/NumberInput/NumberInput';`
 - Rendering: client component (declares 'use client')
-- Live docs: https://robertritacca.com/components/number-input
+- Live docs: https://dragonspine.vercel.app/components/number-input
 
 ## NumberInput props
 

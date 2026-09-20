@@ -33,6 +33,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
 import { siteRoutes, isDynamicSegment } from './site-routes.mjs';
+import { NPM_URL, PACKAGE_NAME, REPOSITORY_URL, STORYBOOK_URL } from './brand.mjs';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const websiteApp = join(repoRoot, 'website', 'src', 'app');
@@ -656,9 +657,9 @@ ${componentDocLines()}
 
 ### Elsewhere
 
-- Storybook: https://design-system-iota-one.vercel.app (rendered API reference with props tables)
-- npm: https://www.npmjs.com/package/@robr0/design-system (\`npm install @robr0/design-system\`)
-- GitHub: https://github.com/robritacca-dotcom/design-system (full source)`;
+- Storybook: ${STORYBOOK_URL} (rendered API reference with props tables)
+- npm: ${NPM_URL} (\`npm install ${PACKAGE_NAME}\`)
+- GitHub: ${REPOSITORY_URL} (full source)`;
 }
 
 /* ============================================================
@@ -836,7 +837,7 @@ function sectionComponents() {
 
 ${pageProse('components')}
 
-${registry.components.length} components published as @robr0/design-system, grouped by category. Each has documentation at the path shown.
+${registry.components.length} components published as ${PACKAGE_NAME}, grouped by category. Each has documentation at the path shown.
 
 ${groups}`;
 }

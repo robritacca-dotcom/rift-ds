@@ -50,8 +50,8 @@ export default function QuotePage() {
           <section className={styles.section}>
             <SectionTitle title="With attribution" />
             <Quote
-              attribution="Rob Ritacca"
-              detail="Career Profile case study"
+              attribution="Avery Chen"
+              detail="Design platform case study"
             >
               The challenge is not creating beautiful screens. The challenge is creating
               frameworks that allow hundreds of people and teams to build coherently over
@@ -70,7 +70,7 @@ export default function QuotePage() {
           {/* Pull with attribution */}
           <section className={styles.section}>
             <SectionTitle title="Pull-quote with attribution" />
-            <Quote variant="pull" attribution="Rob Ritacca" detail="Writing, 2026">
+            <Quote variant="pull" attribution="Avery Chen" detail="Writing, 2026">
               Design still derisks development.
             </Quote>
           </section>

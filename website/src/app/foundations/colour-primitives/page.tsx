@@ -256,7 +256,7 @@ export default function PrimitiveColoursPage() {
           <div className={`${styles.pageHeader} animate-in`}>
             <h1 className={styles.pageTitle}>Primitive colours</h1>
             <PageLinks
-              figmaUrl="https://www.figma.com/design/8NzqDS8iRsBTFPbNGj3Woj/robr0-ds26?node-id=155-6434"
+              figmaUrl="https://www.figma.com/design/8NzqDS8iRsBTFPbNGj3Woj/Dragonspine?node-id=155-6434"
               storybookPath="/?path=/docs/foundations-tokens--docs"
             />
           </div>

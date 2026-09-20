@@ -2,8 +2,9 @@ import React from "react";
 import { Button } from "@robr0/design-system/components/Button/Button";
 import CopyPageMarkdown from "./CopyPageMarkdown";
 import styles from "./PageLinks.module.css";
+import { STORYBOOK_URL } from "@/config/brand.generated";
 
-const STORYBOOK_BASE = "https://design-system-iota-one.vercel.app";
+const STORYBOOK_BASE = STORYBOOK_URL;
 
 interface PageLinksProps {
   /** Figma file URL — omit to hide the Figma button */

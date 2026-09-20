@@ -3,9 +3,9 @@
  * Validates that component pages have real, centralized browser-tab titles:
  *
  *   1. website/src/app/components/<slug>/layout.tsx exists — without it the
- *      page falls back to the site-wide default title ("Robert Ritacca —
- *      Principal Product Designer"), which is what happened to 9 component
- *      pages before this guard existed.
+ *      page falls back to the site-wide default title (built around
+ *      TITLE_SUFFIX in scripts/brand.mjs), which is what happened to 9
+ *      component pages before this guard existed.
  *   2. That layout resolves its metadata through componentPageMetadata("<slug>"),
  *      so the title and description come from src/components/registry.json
  *      rather than a second copy living in the layout

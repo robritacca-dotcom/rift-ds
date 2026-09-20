@@ -5,6 +5,7 @@ import Link from "next/link";
 import MegaNav from "../components/MegaNav/MegaNav";
 import FadeDivider from "../components/FadeDivider/FadeDivider";
 import styles from "./page.module.css";
+import { NPM_URL, REPOSITORY_URL, STORYBOOK_URL } from "@/config/brand.generated";
 import {
   ACTION_COLOR_PRESETS,
   DEFAULT_BRAND,
@@ -698,7 +699,7 @@ export default function DesignSystemLanding() {
                   variant="tertiary"
                   size="compact"
                   iconRight="open_in_new"
-                  href="https://github.com/robritacca-dotcom/design-system"
+                  href={REPOSITORY_URL}
                   target="_blank"
                   rel="noopener noreferrer"
                 />
@@ -1144,7 +1145,7 @@ export default function DesignSystemLanding() {
                 variant: "tertiary" as const,
                 iconLeft: <FigmaIcon />,
                 iconRight: "open_in_new",
-                href: "https://www.figma.com/design/8NzqDS8iRsBTFPbNGj3Woj/robr0-ds26",
+                href: "https://www.figma.com/design/8NzqDS8iRsBTFPbNGj3Woj/Dragonspine",
                 target: "_blank",
                 rel: "noopener noreferrer",
               },
@@ -1153,7 +1154,7 @@ export default function DesignSystemLanding() {
                 variant: "tertiary" as const,
                 iconLeft: <StorybookIcon />,
                 iconRight: "open_in_new",
-                href: "https://design-system-iota-one.vercel.app",
+                href: STORYBOOK_URL,
                 target: "_blank",
                 rel: "noopener noreferrer",
               },
@@ -1162,7 +1163,7 @@ export default function DesignSystemLanding() {
                 variant: "tertiary" as const,
                 iconLeft: <GitHubIcon />,
                 iconRight: "open_in_new",
-                href: "https://github.com/robritacca-dotcom/design-system",
+                href: REPOSITORY_URL,
                 target: "_blank",
                 rel: "noopener noreferrer",
               },
@@ -1171,7 +1172,7 @@ export default function DesignSystemLanding() {
                 variant: "tertiary" as const,
                 iconLeft: <NpmIcon />,
                 iconRight: "open_in_new",
-                href: "https://www.npmjs.com/package/@robr0/design-system",
+                href: NPM_URL,
                 target: "_blank",
                 rel: "noopener noreferrer",
               },

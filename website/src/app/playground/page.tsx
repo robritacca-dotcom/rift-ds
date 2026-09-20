@@ -210,9 +210,19 @@ export default function PlaygroundPage() {
     Pick<ThemePreset, "brandDark" | "extraOverrides" | "extraOverridesDark">
   >({});
 
-  /** Touching any individual lever means the state is no longer the preset. */
+  const syncPresetParam = (value: string) => {
+    const url = new URL(window.location.href);
+    if (value === "custom") url.searchParams.delete("preset");
+    else url.searchParams.set("preset", value);
+    window.history.replaceState(null, "", url);
+  };
+
+  /** Touching any individual lever means the state is no longer the
+      preset — and the share URL stops naming one, since a custom mix is
+      not addressable by id. */
   const asCustom = <T,>(setter: (value: T) => void) => (value: T) => {
     setPreset("custom");
+    syncPresetParam("custom");
     setter(value);
   };
 
@@ -251,6 +261,7 @@ export default function PlaygroundPage() {
   };
 
   const applyPreset = (value: string) => {
+    syncPresetParam(value);
     if (value === "default") {
       reset(); // the shipped look — put every lever back
       return;
@@ -420,13 +431,25 @@ export default function PlaygroundPage() {
     setHeadingFontLabel(HEADING_FONT_OPTIONS[0].label);
   };
 
-  /* Launch from the applied theme: the pick the suspend effect recorded
-     seeds the levers once, so the playground opens already showing the
-     look the visitor arrived in rather than the shipped default. Sits
-     after applyPreset/reset so the definitions exist when it runs. */
+  /* Launch from the linked or applied theme: a ?preset= param (the
+     share URL — the themes gallery's Open-in-playground links carry it)
+     wins; otherwise the pick the suspend effect recorded seeds the
+     levers once, so the playground opens already showing the look the
+     visitor arrived in rather than the shipped default. Read once on
+     mount like ?view above. Sits after applyPreset/reset so the
+     definitions exist when it runs. */
   useEffect(() => {
+    const linked = new URLSearchParams(window.location.search).get("preset");
+    if (linked && (linked === "default" || THEME_PRESETS[linked])) {
+      // A once-on-mount sync from the URL, which the prerender can't
+      // see — the same sanctioned pattern as the ?view read above.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      applyPreset(linked);
+      return;
+    }
     const suspended = suspendedBrandRef.current;
     if (suspended && THEME_PRESETS[suspended]) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       applyPreset(suspended);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

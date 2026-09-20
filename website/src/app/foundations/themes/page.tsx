@@ -145,7 +145,7 @@ export default function ThemesPage() {
                       variant="tertiary"
                       size="compact"
                       iconRight="arrow_forward"
-                      href="/playground"
+                      href={`/playground?preset=${tile.value}`}
                     />
                   </div>
                 </article>

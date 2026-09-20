@@ -1,0 +1,25 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "nav",
+  "type": "registry:ui",
+  "title": "Nav",
+  "description": "Desktop top navigation bar with a brand slot, horizontal button group, and optional trailing content.",
+  "registryDependencies": [
+    "https://dragonspine.vercel.app/r/base.json",
+    "https://dragonspine.vercel.app/r/button-group.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/Nav/Nav.css",
+      "type": "registry:file",
+      "target": "dragonspine/components/Nav/Nav.css",
+      "content": "/* ============================================\n   NAV COMPONENT\n   Top navigation bar using ButtonGroup\n   ============================================ */\n\n.ds-nav {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  width: 100%;\n  max-width: 1440px;\n  height: 78px;\n}\n\n/* ============================================\n   BRAND / LOGO\n   ============================================ */\n\n.ds-nav__brand {\n  display: flex;\n  align-items: center;\n  gap: var(--gap-500); /* 20px */\n  flex-shrink: 0;\n  text-decoration: none;\n  color: var(--color-text-primary);\n}\n\n.ds-nav__brand-icon {\n  width: 24px;\n  height: 24px;\n  flex-shrink: 0;\n}\n\n.ds-nav__brand-text {\n  font-family: var(--font-paragraph-emphasis-family);\n  font-size: var(--font-paragraph-emphasis-size);\n  font-weight: var(--font-paragraph-emphasis-weight);\n  line-height: var(--font-paragraph-emphasis-line-height);\n}\n\n/* ============================================\n   RIGHT SECTION\n   ============================================ */\n\n.ds-nav__right {\n  display: flex;\n  align-items: center;\n  gap: var(--gap-1000); /* 24px */\n  flex-shrink: 0;\n  flex-wrap: nowrap;\n}\n"
+    },
+    {
+      "path": "src/components/Nav/Nav.tsx",
+      "type": "registry:file",
+      "target": "dragonspine/components/Nav/Nav.tsx",
+      "content": "import React from 'react';\nimport { ButtonGroup, type ButtonGroupProps } from '../ButtonGroup/ButtonGroup';\nimport './Nav.css';\n\nexport interface NavProps {\n  /** Brand/logo text */\n  brandText?: string;\n  /** Brand icon element (img, svg, etc.) */\n  brandIcon?: React.ReactNode;\n  /** Navigation buttons config — passed directly to ButtonGroup */\n  buttons: ButtonGroupProps['buttons'];\n  /** Additional elements rendered after the button group (e.g. ToggleSwitch) */\n  trailing?: React.ReactNode;\n  /** Additional CSS classes */\n  className?: string;\n}\n\n/**\n * Nav component from Figma design system\n * Renders a horizontal navigation bar using ButtonGroup\n */\nexport const Nav = ({\n  brandText,\n  brandIcon,\n  buttons,\n  trailing,\n  className = '',\n}: NavProps) => {\n  const baseClass = 'ds-nav';\n\n  return (\n    <nav className={`${baseClass} ${className}`}>\n      {(brandText || brandIcon) && (\n        <div className={`${baseClass}__brand`}>\n          {brandIcon && (\n            <span className={`${baseClass}__brand-icon`}>{brandIcon}</span>\n          )}\n          {brandText && (\n            <span className={`${baseClass}__brand-text`}>{brandText}</span>\n          )}\n        </div>\n      )}\n      <div className={`${baseClass}__right`}>\n        <ButtonGroup orientation=\"horizontal\" buttons={buttons} />\n        {trailing}\n      </div>\n    </nav>\n  );\n};\n"
+    }
+  ]
+}

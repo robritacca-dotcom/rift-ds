@@ -1,0 +1,24 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "quote",
+  "type": "registry:ui",
+  "title": "Quote",
+  "description": "Blockquotes and pull-quotes with attribution.",
+  "registryDependencies": [
+    "https://dragonspine.vercel.app/r/base.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/Quote/Quote.css",
+      "type": "registry:file",
+      "target": "dragonspine/components/Quote/Quote.css",
+      "content": "/* ============================================\n   QUOTE COMPONENT\n   Inline blockquote or large pull-quote with\n   optional attribution.\n   ============================================ */\n\n.ds-quote {\n  margin: 0;\n  display: flex;\n  flex-direction: column;\n  gap: var(--gap-200);\n}\n\n.ds-quote__text {\n  margin: 0;\n}\n\n/* ============================================\n   VARIANT — DEFAULT (inline blockquote)\n   ============================================ */\n\n.ds-quote--default .ds-quote__text {\n  padding-left: var(--padding-500);\n  border-left: var(--border-050) solid var(--color-bg-container-tertiary);\n  font-family: var(--font-paragraph-family);\n  font-size: var(--font-paragraph-size);\n  font-weight: var(--font-paragraph-weight);\n  line-height: var(--font-paragraph-line-height);\n  letter-spacing: var(--font-paragraph-letter-spacing);\n  color: var(--color-text-secondary);\n}\n\n.ds-quote--default .ds-quote__caption {\n  padding-left: var(--padding-500);\n}\n\n/* ============================================\n   VARIANT — PULL (large display quote)\n   Weight 300 display type per the\n   weight-contrast rule — no border, the scale\n   is the emphasis.\n   ============================================ */\n\n.ds-quote--pull .ds-quote__text {\n  font-family: var(--font-sub-display-family);\n  font-size: var(--font-sub-display-size);\n  font-weight: var(--font-sub-display-weight);\n  line-height: var(--font-sub-display-line-height);\n  letter-spacing: var(--font-sub-display-letter-spacing);\n  color: var(--color-text-primary);\n}\n\n/* ============================================\n   ATTRIBUTION\n   ============================================ */\n\n.ds-quote__caption {\n  display: flex;\n  flex-direction: column;\n  gap: var(--gap-050);\n}\n\n.ds-quote__attribution {\n  font-family: var(--font-paragraph-sm-emphasis-family);\n  font-size: var(--font-paragraph-sm-emphasis-size);\n  font-weight: var(--font-paragraph-sm-emphasis-weight);\n  line-height: var(--font-paragraph-sm-emphasis-line-height);\n  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);\n  color: var(--color-text-primary);\n}\n\n.ds-quote__detail {\n  font-family: var(--font-paragraph-sm-family);\n  font-size: var(--font-paragraph-sm-size);\n  font-weight: var(--font-paragraph-sm-weight);\n  line-height: var(--font-paragraph-sm-line-height);\n  letter-spacing: var(--font-paragraph-sm-letter-spacing);\n  color: var(--color-text-tertiary);\n}\n"
+    },
+    {
+      "path": "src/components/Quote/Quote.tsx",
+      "type": "registry:file",
+      "target": "dragonspine/components/Quote/Quote.tsx",
+      "content": "import React from 'react';\nimport './Quote.css';\n\nexport interface QuoteProps {\n  /** The quote text */\n  children: React.ReactNode;\n  /** Who said it, e.g. \"Jordan Reyes\" */\n  attribution?: string;\n  /** Context under the attribution, e.g. \"Design Lead, Northlight\" */\n  detail?: string;\n  /** `default` is an inline blockquote; `pull` is a large display pull-quote */\n  variant?: 'default' | 'pull';\n  /** Additional CSS classes */\n  className?: string;\n}\n\n/**\n * Quote component — an inline blockquote or a large pull-quote,\n * with optional attribution.\n */\nexport const Quote = ({\n  children,\n  attribution,\n  detail,\n  variant = 'default',\n  className = '',\n}: QuoteProps) => {\n  const baseClass = 'ds-quote';\n\n  const classes = [baseClass, `${baseClass}--${variant}`, className]\n    .filter(Boolean)\n    .join(' ');\n\n  return (\n    <figure className={classes}>\n      <blockquote className={`${baseClass}__text`}>{children}</blockquote>\n      {(attribution || detail) && (\n        <figcaption className={`${baseClass}__caption`}>\n          {attribution && (\n            <span className={`${baseClass}__attribution`}>&mdash; {attribution}</span>\n          )}\n          {detail && <span className={`${baseClass}__detail`}>{detail}</span>}\n        </figcaption>\n      )}\n    </figure>\n  );\n};\n"
+    }
+  ]
+}

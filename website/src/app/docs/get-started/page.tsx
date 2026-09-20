@@ -25,6 +25,7 @@ const { sidebarLinks } = getSidebarLinks(docsSidebarLinks, "/docs/get-started");
 const PAGE_SECTIONS = [
   { id: "agent-quickstart", label: "Quick start with an agent" },
   { id: "install", label: "Install" },
+  { id: "shadcn-registry", label: "Or pull single components" },
   { id: "clone", label: "Or clone the repo" },
   { id: "dark-mode", label: "Dark mode" },
   { id: "fonts", label: "Bring your own font" },
@@ -69,6 +70,8 @@ import { BarChart, LineChart } from '@robr0/design-system/charts';`;
 
 const DARK_MODE_SNIPPET = `<!-- Light is the default; flip the whole system with one attribute -->
 <html data-theme="dark">`;
+
+const SHADCN_SNIPPET = `npx shadcn@latest add ${SITE_URL}/r/button.json`;
 
 const CLONE_SNIPPET = `git clone ${REPOSITORY_URL}.git
 cd ${REPOSITORY_URL.split("/").pop()}
@@ -313,6 +316,22 @@ export default function GetStartedPage() {
                 <CodeBlock code={INSTALL_SNIPPET} language="bash" showCopy />
                 <CodeBlock code={USAGE_SNIPPET} language="tsx" filename="app.tsx" showCopy />
                 <CodeBlock code={CHARTS_SNIPPET} language="tsx" showCopy />
+              </section>
+
+              {/* shadcn registry */}
+              <section id="shadcn-registry" className={`${styles.section} animate-in animate-delay-3`}>
+                <SectionTitle title="Or pull single components" />
+                <p className={styles.sectionNote}>
+                  The site serves a shadcn-compatible registry, so the shadcn
+                  CLI can install any component as source you own instead of a
+                  package you depend on. One add brings the component, the
+                  components it builds on, and the shared base (tokens, theme
+                  presets, icon font, behavior hooks) into a dragonspine
+                  folder in your project, imports intact. The index at{" "}
+                  <a href="/r/registry.json">/r/registry.json</a> lists every
+                  component.
+                </p>
+                <CodeBlock code={SHADCN_SNIPPET} language="bash" showCopy />
               </section>
 
               {/* Clone */}

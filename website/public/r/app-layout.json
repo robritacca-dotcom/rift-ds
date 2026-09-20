@@ -1,0 +1,25 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "app-layout",
+  "type": "registry:ui",
+  "title": "App layout",
+  "description": "Full-page template pairing the collapsible App sidebar with a centred content area.",
+  "registryDependencies": [
+    "https://dragonspine.vercel.app/r/base.json",
+    "https://dragonspine.vercel.app/r/app-sidebar.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/AppLayout/AppLayout.css",
+      "type": "registry:file",
+      "target": "dragonspine/components/AppLayout/AppLayout.css",
+      "content": "/* ============================================\n   APP LAYOUT — full-page template\n   Sidebar rail on the left, centered content area\n   ============================================ */\n\n.ds-app-layout {\n  display: flex;\n  min-height: 100vh;\n  background-color: var(--color-bg-page-primary);\n}\n\n/* ============================================\n   MAIN CONTENT AREA\n   ============================================ */\n.ds-app-layout__main {\n  flex: 1;\n  display: flex;\n  justify-content: center;\n  margin-left: 64px;\n  padding: var(--padding-1000) var(--padding-500);\n  transition: margin-left var(--motion-duration-slow) var(--motion-ease-emphasized);\n  min-width: 0;\n}\n\n.ds-app-layout--expanded .ds-app-layout__main {\n  margin-left: 280px;\n}\n\n/* ============================================\n   CENTERED CONTENT WRAPPER\n   ============================================ */\n.ds-app-layout__content {\n  width: 100%;\n  max-width: 1120px;\n  display: flex;\n  flex-direction: column;\n  gap: var(--gap-1000);\n}\n\n/* ============================================\n   RESPONSIVE\n   ============================================ */\n@media (max-width: 768px) {\n  .ds-app-layout__main {\n    margin-left: 0;\n    padding: var(--padding-500) var(--padding-400);\n  }\n\n  .ds-app-layout--expanded .ds-app-layout__main {\n    margin-left: 0;\n  }\n}\n"
+    },
+    {
+      "path": "src/components/AppLayout/AppLayout.tsx",
+      "type": "registry:file",
+      "target": "dragonspine/components/AppLayout/AppLayout.tsx",
+      "content": "'use client';\n\nimport React, { useState, useCallback } from 'react';\nimport { AppSidebar } from '../AppSidebar/AppSidebar';\nimport type { AppSidebarSection, AppSidebarProfile } from '../AppSidebar/AppSidebar';\nimport './AppLayout.css';\n\nexport interface AppLayoutProps {\n  /** Sidebar navigation sections */\n  sections: AppSidebarSection[];\n  /** Sidebar profile */\n  profile?: AppSidebarProfile;\n  /** Active nav item key */\n  activeKey?: string;\n  /** Active sub-item key */\n  activeSubKey?: string;\n  /** Whether sidebar starts expanded */\n  defaultExpanded?: boolean;\n  /** Logo text next to icon */\n  logoText?: string;\n  /** Custom logo element */\n  logo?: React.ReactNode;\n  /** Page content — centred in the main area */\n  children: React.ReactNode;\n  /**\n   * Colour scheme: 'dark' pins the layout to the dark theme (the historical\n   * behaviour and the default); 'inherit' drops the pin so the layout\n   * follows the surrounding data-theme like any other component.\n   */\n  theme?: 'dark' | 'inherit';\n  /** Additional CSS classes on outer wrapper */\n  className?: string;\n}\n\n/**\n * AppLayout — full-page template with a collapsible sidebar\n * and a centred content area.\n */\nexport const AppLayout = ({\n  sections,\n  profile,\n  activeKey,\n  activeSubKey,\n  defaultExpanded = true,\n  logoText,\n  logo,\n  children,\n  theme = 'dark',\n  className = '',\n}: AppLayoutProps) => {\n  const baseClass = 'ds-app-layout';\n  const [expanded, setExpanded] = useState(defaultExpanded);\n\n  const handleExpandedChange = useCallback((next: boolean) => {\n    setExpanded(next);\n  }, []);\n\n  const classes = [\n    baseClass,\n    expanded ? `${baseClass}--expanded` : '',\n    className,\n  ]\n    .filter(Boolean)\n    .join(' ');\n\n  return (\n    <div className={classes} data-theme={theme === 'dark' ? 'dark' : undefined}>\n      <AppSidebar\n        sections={sections}\n        profile={profile}\n        activeKey={activeKey}\n        activeSubKey={activeSubKey}\n        expanded={expanded}\n        onExpandedChange={handleExpandedChange}\n        logoText={logoText}\n        logo={logo}\n      />\n      <main className={`${baseClass}__main`}>\n        <div className={`${baseClass}__content`}>\n          {children}\n        </div>\n      </main>\n    </div>\n  );\n};\n"
+    }
+  ]
+}

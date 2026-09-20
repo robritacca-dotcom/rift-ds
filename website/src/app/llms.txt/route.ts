@@ -76,6 +76,7 @@ export function GET() {
     `- [Agent skill](${SITE_URL}/skill/${SKILL_NAME}/SKILL.md): a SKILL.md for consumers of the package, generated from the registries. Save it (with its references/components.md catalogue) into a project's .claude/skills/${SKILL_NAME}/ and a coding agent loads the library's install, theming and catalogue rules every session. \`npx @robr0/design-system init\` fetches the pair and prints the MCP connect line`,
     `- [Storybook](${STORYBOOK_URL}): the rendered API reference. Every component has a props table with types, defaults, and deprecations`,
     `- [npm package](${NPM_URL}): \`npm install @robr0/design-system\` ships complete .d.ts type declarations for every component`,
+    `- [shadcn registry](${SITE_URL}/r/registry.json): a shadcn-compatible registry serving every component as installable source. \`npx shadcn@latest add ${SITE_URL}/r/<slug>.json\` copies the component, its dependencies, and the shared base (tokens, presets, icon font, behaviors) into your project`,
     `- [CLAUDE.md](${SITE_URL}/CLAUDE.md): how this repository is *maintained* (architecture, registries, workflows). Written for contributors to the system itself, not for people using the package: for that, read design.md below and the README`,
     `- [GitHub source](${REPOSITORY_URL}): the full source, if you want to read the implementation`,
     `- [design.md](${SITE_URL}/design.md): the full design specification (tokens, colours, typography, component rules)`,

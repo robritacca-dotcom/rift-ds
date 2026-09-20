@@ -1,0 +1,24 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "section-title",
+  "type": "registry:ui",
+  "title": "Section title",
+  "description": "Heading with a divider line and optional trailing content for organising page sections.",
+  "registryDependencies": [
+    "https://dragonspine.vercel.app/r/base.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/SectionTitle/SectionTitle.css",
+      "type": "registry:file",
+      "target": "dragonspine/components/SectionTitle/SectionTitle.css",
+      "content": "/* ============================================\n   SECTION TITLE COMPONENT\n   Heading with divider line, optional trailing content\n   ============================================ */\n\n.ds-section-title {\n  display: flex;\n  align-items: baseline;\n  gap: var(--gap-400);\n  border-bottom: var(--border-025) solid var(--color-divider);\n  padding-bottom: var(--padding-500);\n}\n\n/* Divider-less variant: for headings above content that draws its own\n   lines, where a second rule would double up. The generous clearance\n   the divider needed drops to a small breathing gap. */\n.ds-section-title--no-divider {\n  border-bottom: none;\n  padding-bottom: var(--padding-400);\n}\n\n/* ============================================\n   HEADING\n   ============================================ */\n\n.ds-section-title__heading {\n  font-family: var(--font-heading-2-family);\n  font-size: var(--font-heading-2-size);\n  font-weight: var(--font-heading-2-weight);\n  line-height: var(--font-heading-2-line-height);\n  letter-spacing: var(--font-heading-2-letter-spacing);\n  color: var(--color-text-secondary);\n}\n\n/* ============================================\n   TRAILING CONTENT (count, badge, metadata)\n   ============================================ */\n\n.ds-section-title__trailing {\n  font-family: var(--font-paragraph-family);\n  font-size: var(--font-paragraph-size);\n  font-weight: var(--font-paragraph-weight);\n  line-height: var(--font-paragraph-line-height);\n  color: var(--color-text-tertiary);\n}\n"
+    },
+    {
+      "path": "src/components/SectionTitle/SectionTitle.tsx",
+      "type": "registry:file",
+      "target": "dragonspine/components/SectionTitle/SectionTitle.tsx",
+      "content": "import React from \"react\";\nimport \"./SectionTitle.css\";\n\nexport interface SectionTitleProps {\n  /** Section heading text */\n  title: string;\n  /** Optional trailing content (count, badge, metadata) */\n  trailing?: React.ReactNode;\n  /** Whether to draw the bottom divider line. Set false above content that draws its own lines (bordered tables, calendars), so the section separates by whitespace alone. */\n  divider?: boolean;\n  /** Additional CSS classes */\n  className?: string;\n}\n\nexport function SectionTitle({\n  title,\n  trailing,\n  divider = true,\n  className,\n}: SectionTitleProps) {\n  const classes = [\n    \"ds-section-title\",\n    !divider && \"ds-section-title--no-divider\",\n    className,\n  ]\n    .filter(Boolean)\n    .join(\" \");\n\n  return (\n    <div className={classes}>\n      <h2 className=\"ds-section-title__heading\">{title}</h2>\n      {trailing !== undefined && trailing !== null && (\n        <span className=\"ds-section-title__trailing\">{trailing}</span>\n      )}\n    </div>\n  );\n}\n"
+    }
+  ]
+}

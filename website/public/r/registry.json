@@ -1,0 +1,805 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "dragonspine",
+  "homepage": "https://dragonspine.vercel.app",
+  "items": [
+    {
+      "name": "base",
+      "type": "registry:lib",
+      "title": "Dragonspine base",
+      "description": "The shared layer every component builds on: the token stylesheets, the generated theme presets, the icon font, the motion constants, and the overlay behavior hooks."
+    },
+    {
+      "name": "accordion",
+      "type": "registry:ui",
+      "title": "Accordion",
+      "description": "Collapsible content sections for organising related information."
+    },
+    {
+      "name": "agent-plan",
+      "type": "registry:ui",
+      "title": "Agent plan",
+      "description": "A collapsible checklist of an agent's task, with live step states and a progress readout."
+    },
+    {
+      "name": "agent-status",
+      "type": "registry:ui",
+      "title": "Agent status",
+      "description": "A dot-matrix indicator and status line reporting what an agent is doing right now."
+    },
+    {
+      "name": "ai-button",
+      "type": "registry:ui",
+      "title": "AI button",
+      "description": "The AI entry point: icon and label ringed by a turning gradient and glow, with an optional hover-summoned AI-summary panel and prompt chips."
+    },
+    {
+      "name": "alert",
+      "type": "registry:ui",
+      "title": "Alert",
+      "description": "Contextual feedback with status variants, optional dismiss, and compact sizing."
+    },
+    {
+      "name": "alert-dialog",
+      "type": "registry:ui",
+      "title": "Alert dialog",
+      "description": "Modal confirmation overlay with title, description, and confirm / cancel actions."
+    },
+    {
+      "name": "anchor-nav",
+      "type": "registry:ui",
+      "title": "Anchor nav",
+      "description": "An on-page list of anchor links that tracks the reader's position and jumps between sections."
+    },
+    {
+      "name": "animated-number",
+      "type": "registry:ui",
+      "title": "Animated number",
+      "description": "A number that counts to its value: count-up on mount, eased tweens on change, tabular digits that never jitter."
+    },
+    {
+      "name": "app-layout",
+      "type": "registry:ui",
+      "title": "App layout",
+      "description": "Full-page template pairing the collapsible App sidebar with a centred content area."
+    },
+    {
+      "name": "app-sidebar",
+      "type": "registry:ui",
+      "title": "App sidebar",
+      "description": "Collapsible navigation rail with accordion sub-items, category headings, and profile section."
+    },
+    {
+      "name": "area-chart",
+      "type": "registry:ui",
+      "title": "Area chart",
+      "description": "Filled area chart for showing volume over time, with stacked and single-series variants."
+    },
+    {
+      "name": "avatar",
+      "type": "registry:ui",
+      "title": "Avatar",
+      "description": "User profile image with initials and icon fallback, status indicator, and multiple sizes."
+    },
+    {
+      "name": "avatar-group",
+      "type": "registry:ui",
+      "title": "Avatar group",
+      "description": "Overlapping avatar stack with a +N counter for the overflow."
+    },
+    {
+      "name": "badge",
+      "type": "registry:ui",
+      "title": "Badge",
+      "description": "Small inline status labels with info, positive, warning, error, and neutral variants."
+    },
+    {
+      "name": "banner",
+      "type": "registry:ui",
+      "title": "Banner",
+      "description": "Full-width status strip for page-level announcements, with an action slot and optional dismissal."
+    },
+    {
+      "name": "bar-chart",
+      "type": "registry:ui",
+      "title": "Bar chart",
+      "description": "Vertical bars for comparing values across categories or time, with summary stats and tooltips."
+    },
+    {
+      "name": "breadcrumb",
+      "type": "registry:ui",
+      "title": "Breadcrumb",
+      "description": "Hierarchical navigation trail showing the user's location within the site."
+    },
+    {
+      "name": "button",
+      "type": "registry:ui",
+      "title": "Button",
+      "description": "Primary, secondary, tertiary, neutral and destructive variants in default and compact sizes, with icon support and multiple states."
+    },
+    {
+      "name": "button-group",
+      "type": "registry:ui",
+      "title": "Button group",
+      "description": "Horizontal and vertical button group layouts for related actions and navigation patterns."
+    },
+    {
+      "name": "card",
+      "type": "registry:ui",
+      "title": "Card",
+      "description": "Card components for previews, navigation, and token documentation, from content cards to colour swatches and typography specimens."
+    },
+    {
+      "name": "card-stack",
+      "type": "registry:ui",
+      "title": "Card stack",
+      "description": "A deck of cards showing one at a time, flipped through with a lift-and-settle animation."
+    },
+    {
+      "name": "carousel",
+      "type": "registry:ui",
+      "title": "Carousel",
+      "description": "Sliding content viewer with navigation arrows, dot indicators, auto-play, and keyboard support."
+    },
+    {
+      "name": "chat-header",
+      "type": "registry:ui",
+      "title": "Chat header",
+      "description": "The top row of a chat surface, with the conversation title and its controls."
+    },
+    {
+      "name": "chat-marker",
+      "type": "registry:ui",
+      "title": "Chat marker",
+      "description": "An inline conversation separator for date breaks and system notes."
+    },
+    {
+      "name": "chat-message",
+      "type": "registry:ui",
+      "title": "Chat message",
+      "description": "A single chat turn with avatar, author, timestamp, and bubble or plain content aligned by role."
+    },
+    {
+      "name": "chat-thread",
+      "type": "registry:ui",
+      "title": "Chat thread",
+      "description": "A scrollable conversation column with edge fades, send anchoring, and a subtle scrollbar."
+    },
+    {
+      "name": "checkbox",
+      "type": "registry:ui",
+      "title": "Checkbox",
+      "description": "Custom checkbox with check and indeterminate states, keyboard accessible with animated transitions."
+    },
+    {
+      "name": "chip",
+      "type": "registry:ui",
+      "title": "Chip",
+      "description": "Compact pills for attributes, filters, and inline metadata."
+    },
+    {
+      "name": "circular-button",
+      "type": "registry:ui",
+      "title": "Circular button",
+      "description": "Round icon button with primary, secondary, tertiary and neutral variants, default and compact sizes."
+    },
+    {
+      "name": "code-block",
+      "type": "registry:ui",
+      "title": "Code block",
+      "description": "Monospace code with a header and one-click copy."
+    },
+    {
+      "name": "code-diff",
+      "type": "registry:ui",
+      "title": "Code diff",
+      "description": "Unified diff view for code changes, with added, removed, and context lines."
+    },
+    {
+      "name": "color-picker",
+      "type": "registry:ui",
+      "title": "Colour picker",
+      "description": "Swatch trigger opening a saturation area, hue and alpha sliders, and a hex field; controlled or uncontrolled."
+    },
+    {
+      "name": "combo-chart",
+      "type": "registry:ui",
+      "title": "Combo chart",
+      "description": "Bar and line series in one chart, with an optional second y-axis for pairs in different units, like spend and ROAS."
+    },
+    {
+      "name": "combobox",
+      "type": "registry:ui",
+      "title": "Combobox",
+      "description": "A filterable select that narrows options as the user types, with multi-select chips, grouping, and async loading."
+    },
+    {
+      "name": "command-palette",
+      "type": "registry:ui",
+      "title": "Command palette",
+      "description": "A modal Cmd+K launcher that searches a grouped command list, with keyboard navigation and shortcut hints."
+    },
+    {
+      "name": "composer",
+      "type": "registry:ui",
+      "title": "Composer",
+      "description": "An auto-growing message input with send and stop states, a page-context note, an attachment slot, and Enter-to-send."
+    },
+    {
+      "name": "contact-card",
+      "type": "registry:ui",
+      "title": "Contact card",
+      "description": "Linked contact method with icon, label, and value."
+    },
+    {
+      "name": "context-menu",
+      "type": "registry:ui",
+      "title": "Context menu",
+      "description": "Right-click menu at the pointer with groups, sub-menus, and shortcut hints."
+    },
+    {
+      "name": "contribution-graph",
+      "type": "registry:ui",
+      "title": "Contribution graph",
+      "description": "A year of activity, one cell per day."
+    },
+    {
+      "name": "data-table",
+      "type": "registry:ui",
+      "title": "Data table",
+      "description": "The wired table: sorting, search, row selection, and pagination assembled around Table."
+    },
+    {
+      "name": "date-input",
+      "type": "registry:ui",
+      "title": "Date input",
+      "description": "Date input with native picker, calendar icon, label, and validation states."
+    },
+    {
+      "name": "date-picker",
+      "type": "registry:ui",
+      "title": "Date picker",
+      "description": "Inline calendar with month navigation, day selection, and today indicator."
+    },
+    {
+      "name": "dialog",
+      "type": "registry:ui",
+      "title": "Dialog",
+      "description": "A general-purpose modal for focused tasks, with sizes, an optional footer, and full focus management."
+    },
+    {
+      "name": "divider",
+      "type": "registry:ui",
+      "title": "Divider",
+      "description": "A thin rule separating stacked content, with optional inline label and vertical orientation."
+    },
+    {
+      "name": "document-chip",
+      "type": "registry:ui",
+      "title": "Document chip",
+      "description": "A compact file reference with a type icon, name, metadata, and optional remove."
+    },
+    {
+      "name": "drawer",
+      "type": "registry:ui",
+      "title": "Drawer",
+      "description": "An edge-anchored modal panel that slides in from any side, for filter panels, detail views, and mobile navigation."
+    },
+    {
+      "name": "dropdown",
+      "type": "registry:ui",
+      "title": "Dropdown",
+      "description": "Custom select dropdown with keyboard navigation, disabled options, and error states."
+    },
+    {
+      "name": "dropdown-menu",
+      "type": "registry:ui",
+      "title": "Dropdown menu",
+      "description": "Contextual menu with sections, sub-menus, keyboard shortcuts, and inset-gap hover styling."
+    },
+    {
+      "name": "empty-state",
+      "type": "registry:ui",
+      "title": "Empty state",
+      "description": "The placeholder for a list, table, or search with nothing to show: icon, headline, guidance, and a next action."
+    },
+    {
+      "name": "entity-card",
+      "type": "registry:ui",
+      "title": "Entity card",
+      "description": "Compact display-only card with a centred icon or image and a label, used in the Icons and Logos galleries."
+    },
+    {
+      "name": "event-calendar",
+      "type": "registry:ui",
+      "title": "Event calendar",
+      "description": "A month grid with event pills, overflow counts, and month navigation."
+    },
+    {
+      "name": "field",
+      "type": "registry:ui",
+      "title": "Field",
+      "description": "The shared scaffolding for labelled form controls: label, required marker, helper and error text, and the ARIA wiring that ties them together."
+    },
+    {
+      "name": "figure",
+      "type": "registry:ui",
+      "title": "Figure",
+      "description": "Images with captions, in the case-study frame."
+    },
+    {
+      "name": "file-input",
+      "type": "registry:ui",
+      "title": "File input",
+      "description": "A click-or-drop upload zone paired with a controlled file list showing size, progress, and per-file errors."
+    },
+    {
+      "name": "filter-bar",
+      "type": "registry:ui",
+      "title": "Filter bar",
+      "description": "A row of filter chips for narrowing a collection, each opening a popover of options, with per-filter and clear-all resets."
+    },
+    {
+      "name": "funnel-chart",
+      "type": "registry:ui",
+      "title": "Funnel chart",
+      "description": "Ordered funnel stages as centred trapezoid bands, each sized by its share of the first stage."
+    },
+    {
+      "name": "gantt-chart",
+      "type": "registry:ui",
+      "title": "Gantt chart",
+      "description": "Phases and tasks as bars on a shared timeline, with milestones, progress, and a today rule."
+    },
+    {
+      "name": "gauge",
+      "type": "registry:ui",
+      "title": "Gauge",
+      "description": "A radial dial for a single bounded reading, recoloured through the status roles as it crosses thresholds."
+    },
+    {
+      "name": "globe",
+      "type": "registry:ui",
+      "title": "Globe",
+      "description": "An orthographic globe with markers and great-circle arcs, rotated by drag, keys, or a slow spin."
+    },
+    {
+      "name": "hover-card",
+      "type": "registry:ui",
+      "title": "Hover card",
+      "description": "Rich preview panel that opens from hover or focus, with interactive content and position options."
+    },
+    {
+      "name": "image-compare",
+      "type": "registry:ui",
+      "title": "Image compare",
+      "description": "Before-and-after image comparison with a draggable divider, keyboard control, and corner labels."
+    },
+    {
+      "name": "input",
+      "type": "registry:ui",
+      "title": "Input",
+      "description": "Text input with label, placeholder, left and right icons, helper text, and error states."
+    },
+    {
+      "name": "instructions",
+      "type": "registry:ui",
+      "title": "Instructions",
+      "description": "Step-by-step guidance with numbered badges, connecting lines, and horizontal layout."
+    },
+    {
+      "name": "interrupt-card",
+      "type": "registry:ui",
+      "title": "Interrupt card",
+      "description": "A human-in-the-loop checkpoint with a question from the agent and option buttons to decide."
+    },
+    {
+      "name": "kbd",
+      "type": "registry:ui",
+      "title": "Kbd",
+      "description": "A keyboard key rendered as a keycap, for shortcut hints in menus and prose."
+    },
+    {
+      "name": "legend-tile",
+      "type": "registry:ui",
+      "title": "Legend tile",
+      "description": "The labelled value tile under a chart: a series dot, the series name, and its reading, on an inset fill."
+    },
+    {
+      "name": "lightbox",
+      "type": "registry:ui",
+      "title": "Lightbox",
+      "description": "Fullscreen media viewer on the shared overlay stack: deep scrim, caption chip, gallery stepping, trapped and restored focus."
+    },
+    {
+      "name": "line-chart",
+      "type": "registry:ui",
+      "title": "Line chart",
+      "description": "Multi-series line chart for trends over time, with per-series colours and a summary row."
+    },
+    {
+      "name": "link-list",
+      "type": "registry:ui",
+      "title": "Link list",
+      "description": "Linked items with logo, label, and subtitle."
+    },
+    {
+      "name": "map-callout",
+      "type": "registry:ui",
+      "title": "Map callout",
+      "description": "The annotation beside a map point: a name in capitals over monospace readout lines."
+    },
+    {
+      "name": "map-legend",
+      "type": "registry:ui",
+      "title": "Map legend",
+      "description": "The corner block of a map: its name, what it shows, and the key to its markers."
+    },
+    {
+      "name": "message-actions",
+      "type": "registry:ui",
+      "title": "Message actions",
+      "description": "An icon-button row for message-level actions like copy, retry, and feedback."
+    },
+    {
+      "name": "message-card",
+      "type": "registry:ui",
+      "title": "Message card",
+      "description": "A structured rich-content card embedded in a chat message, with media, title, body, and actions."
+    },
+    {
+      "name": "meter",
+      "type": "registry:ui",
+      "title": "Meter",
+      "description": "Level indicator for a known quantity, with a status-coloured fill and an optional value readout."
+    },
+    {
+      "name": "model-picker",
+      "type": "registry:ui",
+      "title": "Model picker",
+      "description": "A model selector for chat surfaces, with per-model descriptions and an optional effort row."
+    },
+    {
+      "name": "nav",
+      "type": "registry:ui",
+      "title": "Nav",
+      "description": "Desktop top navigation bar with a brand slot, horizontal button group, and optional trailing content."
+    },
+    {
+      "name": "nav-list",
+      "type": "registry:ui",
+      "title": "Nav list",
+      "description": "Vertical list of navigation links for drawers and menus, with three indent levels and per-row expand toggles."
+    },
+    {
+      "name": "notification-center",
+      "type": "registry:ui",
+      "title": "Notification centre",
+      "description": "A persistent notification inbox with unread count, filter tabs, and per-item actions."
+    },
+    {
+      "name": "number-input",
+      "type": "registry:ui",
+      "title": "Number input",
+      "description": "Numeric field with increment and decrement steppers and min/max clamping."
+    },
+    {
+      "name": "pagination",
+      "type": "registry:ui",
+      "title": "Pagination",
+      "description": "Numbered page navigation for long datasets, with ellipses, disabled end arrows, and a compact readout mode."
+    },
+    {
+      "name": "panel",
+      "type": "registry:ui",
+      "title": "Panel",
+      "description": "The plain dashboard surface: a rounded container with no border or shadow, just padding and a gap."
+    },
+    {
+      "name": "pie-chart",
+      "type": "registry:ui",
+      "title": "Pie chart",
+      "description": "Proportional share of a whole as a pie or donut, with per-slice colours."
+    },
+    {
+      "name": "pin-input",
+      "type": "registry:ui",
+      "title": "Pin input",
+      "description": "Segmented one-time-code input with auto-advance, paste support, and completion callback."
+    },
+    {
+      "name": "popover",
+      "type": "registry:ui",
+      "title": "Popover",
+      "description": "Contextual overlay panel with click and hover triggers, positioned relative to its anchor."
+    },
+    {
+      "name": "progress-bar",
+      "type": "registry:ui",
+      "title": "Progress bar",
+      "description": "Horizontal bar indicating completion progress, with an optional percentage label."
+    },
+    {
+      "name": "prompt-suggestions",
+      "type": "registry:ui",
+      "title": "Prompt suggestions",
+      "description": "A horizontal row of tappable prompt suggestions to start or steer a conversation."
+    },
+    {
+      "name": "prose",
+      "type": "registry:ui",
+      "title": "Prose",
+      "description": "Token-styled typography for rendered markdown and rich agent output."
+    },
+    {
+      "name": "quote",
+      "type": "registry:ui",
+      "title": "Quote",
+      "description": "Blockquotes and pull-quotes with attribution."
+    },
+    {
+      "name": "radar-chart",
+      "type": "registry:ui",
+      "title": "Radar chart",
+      "description": "Multi-axis comparison of series across categories on a radial grid."
+    },
+    {
+      "name": "radial-chart",
+      "type": "registry:ui",
+      "title": "Radial chart",
+      "description": "Concentric progress rings for completion and KPI readouts."
+    },
+    {
+      "name": "radio-button",
+      "type": "registry:ui",
+      "title": "Radio button",
+      "description": "Radio button and radio group with vertical and horizontal layouts, animated dot indicator."
+    },
+    {
+      "name": "rating",
+      "type": "registry:ui",
+      "title": "Rating",
+      "description": "Star-scale rating control with keyboard selection, a read-only mode, and a configurable icon."
+    },
+    {
+      "name": "reasoning",
+      "type": "registry:ui",
+      "title": "Reasoning",
+      "description": "A model's thinking, disclosed behind a one-line summary and collapsed once it finishes."
+    },
+    {
+      "name": "rich-dropdown",
+      "type": "registry:ui",
+      "title": "Rich dropdown",
+      "description": "Dropdown's rich sibling: options preview their own heading face, body face, and key colour."
+    },
+    {
+      "name": "scatter-chart",
+      "type": "registry:ui",
+      "title": "Scatter chart",
+      "description": "Plots point clusters across two axes to show correlation and distribution."
+    },
+    {
+      "name": "section-title",
+      "type": "registry:ui",
+      "title": "Section title",
+      "description": "Heading with a divider line and optional trailing content for organising page sections."
+    },
+    {
+      "name": "segmented-control",
+      "type": "registry:ui",
+      "title": "Segmented control",
+      "description": "Pill-style toggle between related views with keyboard navigation and icon support."
+    },
+    {
+      "name": "selection-card",
+      "type": "registry:ui",
+      "title": "Selection card",
+      "description": "Large selectable option cards with radio or checkbox indicators for high-visibility choices like settings and onboarding."
+    },
+    {
+      "name": "shader-field",
+      "type": "registry:ui",
+      "title": "Shader field",
+      "description": "An ambient WebGL2 field of soft light sources that sample colour tokens, with a reported fallback status."
+    },
+    {
+      "name": "skeleton",
+      "type": "registry:ui",
+      "title": "Skeleton",
+      "description": "Placeholder loading indicators with text, circular, and rectangular variants."
+    },
+    {
+      "name": "slider",
+      "type": "registry:ui",
+      "title": "Slider",
+      "description": "Range input for selecting a value between a minimum and maximum, in default and compact sizes."
+    },
+    {
+      "name": "source-chip",
+      "type": "registry:ui",
+      "title": "Source chip",
+      "description": "A numbered citation pill linking a claim to its source."
+    },
+    {
+      "name": "source-trail",
+      "type": "registry:ui",
+      "title": "Source trail",
+      "description": "The sources an agent opened while answering, as a collapsible list with per-item status."
+    },
+    {
+      "name": "sparkline",
+      "type": "registry:ui",
+      "title": "Sparkline",
+      "description": "Inline trend line for stats and table cells, drawn without axes or chrome."
+    },
+    {
+      "name": "spinner",
+      "type": "registry:ui",
+      "title": "Spinner",
+      "description": "Animated circular loading indicator in three sizes and primary, neutral, or inherit variants."
+    },
+    {
+      "name": "split-button",
+      "type": "registry:ui",
+      "title": "Split button",
+      "description": "Primary action with an attached menu of alternatives, composing Button and DropdownMenu in one pill."
+    },
+    {
+      "name": "split-pane",
+      "type": "registry:ui",
+      "title": "Split pane",
+      "description": "Two resizable regions with a draggable, keyboard-operable divider between them."
+    },
+    {
+      "name": "stacked-bar-chart",
+      "type": "registry:ui",
+      "title": "Stacked bar chart",
+      "description": "Bars split into stacked segments to compare totals and their composition."
+    },
+    {
+      "name": "stat",
+      "type": "registry:ui",
+      "title": "Stat",
+      "description": "Headline metrics with labels and trend deltas."
+    },
+    {
+      "name": "status-dot",
+      "type": "registry:ui",
+      "title": "Status dot",
+      "description": "The bare status mark: a dot in the five status roles, with an optional label and a live pulse for recording and online-now states."
+    },
+    {
+      "name": "stepper",
+      "type": "registry:ui",
+      "title": "Stepper",
+      "description": "Step-by-step progress indicator for wizards and multi-stage flows."
+    },
+    {
+      "name": "streaming-text",
+      "type": "registry:ui",
+      "title": "Streaming text",
+      "description": "Progressive reveal for text arriving in chunks, with a blinking cursor while more is coming."
+    },
+    {
+      "name": "swatch",
+      "type": "registry:ui",
+      "title": "Swatch",
+      "description": "Clickable colour tile for preset palettes and picker triggers, with a theme-aware selection ring."
+    },
+    {
+      "name": "table",
+      "type": "registry:ui",
+      "title": "Table",
+      "description": "Data table with flexible cell content, striped rows, compact sizing, and support for icons, inputs, buttons, and interactive controls."
+    },
+    {
+      "name": "tabs",
+      "type": "registry:ui",
+      "title": "Tabs",
+      "description": "Tab navigation with underline indicator, icon support, compact size, and full-width mode."
+    },
+    {
+      "name": "tag-input",
+      "type": "registry:ui",
+      "title": "Tag input",
+      "description": "Multi-value text input with entries held as removable tags."
+    },
+    {
+      "name": "textarea",
+      "type": "registry:ui",
+      "title": "Textarea",
+      "description": "Multi-line text input with character counter, resize control, helper text, and error states."
+    },
+    {
+      "name": "thread-panel",
+      "type": "registry:ui",
+      "title": "Thread panel",
+      "description": "The session-history rail for chat products: brand header, new-thread action, standing controls, projects, grouped detail-rich threads, and a profile footer."
+    },
+    {
+      "name": "thread-tabs",
+      "type": "registry:ui",
+      "title": "Thread tabs",
+      "description": "The strip of open chat sessions: pill tabs with unread dots and hover-revealed close buttons, a new-tab action, and animated enter and exit."
+    },
+    {
+      "name": "time-picker",
+      "type": "registry:ui",
+      "title": "Time picker",
+      "description": "Time-of-day field with a dropdown list of selectable times."
+    },
+    {
+      "name": "timeline",
+      "type": "registry:ui",
+      "title": "Timeline",
+      "description": "Ordered sequences: histories and steppers."
+    },
+    {
+      "name": "toast",
+      "type": "registry:ui",
+      "title": "Toast",
+      "description": "Temporary notification with status variants, auto-dismiss, and stacking via ToastProvider."
+    },
+    {
+      "name": "toggle-group",
+      "type": "registry:ui",
+      "title": "Toggle group",
+      "description": "A set of two-state buttons that can be toggled on or off, supporting text and icon items."
+    },
+    {
+      "name": "toggle-switch",
+      "type": "registry:ui",
+      "title": "Toggle switch",
+      "description": "Binary on/off toggle control with sliding thumb and check indicator, used for settings like theme switching."
+    },
+    {
+      "name": "tool-call",
+      "type": "registry:ui",
+      "title": "Tool call",
+      "description": "The record of one tool invocation, with its arguments and result behind a disclosure."
+    },
+    {
+      "name": "toolbar",
+      "type": "registry:ui",
+      "title": "Toolbar",
+      "description": "A grouped strip of controls in one pill shell: clusters, separators, arrow-key focus, and a glass floating variant."
+    },
+    {
+      "name": "tooltip",
+      "type": "registry:ui",
+      "title": "Tooltip",
+      "description": "Contextual text label that appears on hover or focus with position and delay options."
+    },
+    {
+      "name": "tree-view",
+      "type": "registry:ui",
+      "title": "Tree view",
+      "description": "Collapsible hierarchy for files, folders, and nested structures."
+    },
+    {
+      "name": "treemap",
+      "type": "registry:ui",
+      "title": "Treemap",
+      "description": "Nested rectangles sized by value for part-to-whole breakdowns."
+    },
+    {
+      "name": "usage-card",
+      "type": "registry:ui",
+      "title": "Usage card",
+      "description": "An agent's budgets at a glance: context window and plan limits as meter rows with reset captions."
+    },
+    {
+      "name": "waveform",
+      "type": "registry:ui",
+      "title": "Waveform",
+      "description": "Voice made visible: a row of bars dancing on the shared twelve-slot cycle, or tracking a live analyser level by level."
+    },
+    {
+      "name": "world-map",
+      "type": "registry:ui",
+      "title": "World map",
+      "description": "A flat world map from Natural Earth land shapes: token-coloured continents, framed bounds, and colour-carrying markers."
+    }
+  ]
+}

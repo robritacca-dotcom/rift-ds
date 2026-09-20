@@ -12,7 +12,7 @@ An open source React design system built for AI products and coding agents: comp
 ## Why Dragonspine DS
 
 - **One package, zero dependencies.** React is the only required peer dependency; recharts is optional and only for the charts entry. No configuration API, no providers, no build-tool integration: theming is plain CSS custom properties, so it works in any bundler, in any stack, beside anything you already use.
-- **Free, open source, consumed your way.** MIT end to end, no pro tier, no paywalled components. Install the npm package, or clone the repo and own every line; both are first-class paths.
+- **Free, open source, consumed your way.** MIT end to end, no pro tier, no paywalled components. Install the npm package, pull single components as source through the shadcn CLI, or clone the repo and own every line; all three are first-class paths.
 - **A few primitives re-theme everything.** Every semantic token chains to a primitive, so a handful of overrides cascade through every component, the charts, and the ambient background, in both colour modes. Your brand is a short CSS block, not a fork.
 - **The shipped themes prove it.** Each one is the same system under different primitives, saved as a complete look: colour modes, a type pairing with self-hosted fonts, radius, density, motion, elevation, the chart palette. Setting `data-brand` on the root element applies all of it with zero runtime JavaScript, the build holds every theme's action colours to WCAG AA in both modes, and the playground builds yours the same way.
 - **The AI product set is in the box.** Composer, streaming chat thread, tool calls, reasoning, thread panel and tabs: the components an assistant UI needs, the same set this repo's own site chat is built from.
@@ -36,7 +36,7 @@ import '@robr0/design-system/tokens/tokens.css';
 import { Button, Card, Badge } from '@robr0/design-system';
 ```
 
-React 19+ is a peer dependency. The package is ESM-only and resolved via `exports` subpaths: use a bundler that handles CSS and font imports from `node_modules` (Vite, Next.js, webpack) and set TypeScript's `moduleResolution` to `"bundler"` or `"nodenext"`. The Recharts-backed charts live behind `@robr0/design-system/charts`, so the optional `recharts` peer dependency is only needed if you use them. Prefer owning the source? Clone this repo and build on it directly; all of it is MIT.
+React 19+ is a peer dependency. The package is ESM-only and resolved via `exports` subpaths: use a bundler that handles CSS and font imports from `node_modules` (Vite, Next.js, webpack) and set TypeScript's `moduleResolution` to `"bundler"` or `"nodenext"`. The Recharts-backed charts live behind `@robr0/design-system/charts`, so the optional `recharts` peer dependency is only needed if you use them. Prefer owning the source? Pull single components through the shadcn CLI (`npx shadcn@latest add https://dragonspine.vercel.app/r/button.json`, with details in the [get-started guide](https://dragonspine.vercel.app/docs/get-started)), or clone this repo and build on it directly; all of it is MIT.
 
 ## Set up your agent
 

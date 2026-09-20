@@ -5,7 +5,6 @@
  * Regenerate: node scripts/generate-preset-stylesheets.mjs
  * Import after tokens.css, then set data-brand="<id>" on <html>.
  */
-@import url("./classic.css");
 @import url("./contrast.css");
 @import url("./coral.css");
 @import url("./gold.css");

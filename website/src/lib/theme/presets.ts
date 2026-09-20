@@ -80,60 +80,6 @@ const bases = (b: Record<string, string>): AdvancedColorState => ({
 });
 
 export const THEME_PRESETS: Record<string, ThemePreset> = {
-  classic: {
-    label: "Classic (pre-split teal)",
-    // The pre-promotion shipped theme, kept as a revert handle: teal-07 as
-    // one action colour across both themes, before "Accessible teal" (the
-    // per-theme split now shipped in the token files) became the default.
-    // The lever derives an inverted dark plan from teal-07, so every role
-    // is pinned to the exact steps the old tokens-light/dark.css used.
-    brand: "#118AB2",
-    tintOn: false,
-    tintSeed: DEFAULT_NEUTRAL_SEED,
-    tintStrength: 6,
-    radiusScale: 100,
-    pill: true,
-    density: 100,
-    typeScale: 100,
-    motionScale: 100,
-    elevation: "default",
-    fontLabel: "Nunito Sans (default)",
-    // The shipped keys — this preset reverts the action split, not the
-    // ambient palette.
-    accents: {
-      coral: "#EF476F",
-      violet: "#9E47EF",
-      cobalt: "#1E47B0",
-      amber: "#EF8247",
-      gold: "#FFD166",
-      mint: "#06D6A0",
-    },
-    extraOverrides: {
-      "--color-action-primary-bg": "var(--primitive-teal-07)",
-      "--color-action-primary-bg-hover": "var(--primitive-teal-08)",
-      "--color-action-primary-bg-active": "var(--primitive-teal-09)",
-      "--color-action-primary-text": "var(--primitive-teal-02)",
-      "--color-action-primary-text-tertiary": "var(--primitive-teal-07)",
-      "--color-action-primary-border": "var(--primitive-teal-09)",
-      "--color-action-primary-border-secondary": "var(--primitive-teal-06)",
-      "--color-action-primary-border-tertiary": "var(--primitive-teal-04)",
-      "--color-action-icon-active": "var(--primitive-teal-02)",
-      "--color-core-ui-primary": "var(--primitive-teal-07)",
-      "--color-core-ui-secondary": "var(--primitive-teal-10)",
-      "--color-input-border-hover": "var(--primitive-teal-04)",
-      "--color-input-border-selected": "var(--primitive-teal-06)",
-      "--color-ai-gradient-end": "var(--primitive-teal-06)",
-    },
-    // The classic theme pointed both themes at the same fills; only these
-    // five roles differed in its dark file.
-    extraOverridesDark: {
-      "--color-action-primary-text-active": "var(--primitive-neutral-01)",
-      "--color-action-icon-active": "var(--primitive-neutral-01)",
-      "--color-core-ui-secondary": "var(--primitive-teal-09)",
-      "--color-input-border-hover": "var(--primitive-teal-09)",
-      "--color-ai-gradient-end": "var(--primitive-teal-05)",
-    },
-  },
   warm: {
     label: "Warm serif",
     brand: "#D97757",
@@ -249,7 +195,9 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     // Hospitality-brand look in the Airbnb direction: the coral key lands
     // in the red family, so the lever rebases red and every other hue is
     // re-keyed toward the travel palette (a beach teal, a sunset orange).
-    brand: "#FF385C",
+    // The key sits deeper than the reference coral so the button label can
+    // clear WCAG AA; the bright coral lives on in the accent sextet.
+    brand: "#D9234E",
     tintOn: false,
     tintSeed: DEFAULT_NEUTRAL_SEED,
     tintStrength: 6,
@@ -282,6 +230,12 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
       blue: "#4A7BD0",
       purple: "#A6527F",
     }),
+    // The derived label (a 02-step pink) tops out below AA on any fill
+    // that still reads coral — lift it to plain white, the reference
+    // brand's own label colour.
+    extraOverrides: {
+      "--color-action-primary-text": "var(--primitive-neutral-00)",
+    },
   },
   gold: {
     label: "Crisp gold",
@@ -400,10 +354,12 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
 /**
  * The selector order every theme surface renders — the landing's dot
  * row and the playground's preset picker walk this list. "default" is
- * the shipped Dragonspine look (no data-brand attribute); "classic"
- * stays out on purpose (a revert handle, not a destination).
+ * the shipped Dragonspine look (no data-brand attribute).
  */
 export const THEME_SELECTOR_ORDER: ReadonlyArray<string> = [
+  // Black & white leads: it is the default the server ships, so the row
+  // opens on the look the visitor is already seeing.
+  "mono",
   "coral",
   "warm",
   "gold",
@@ -411,8 +367,13 @@ export const THEME_SELECTOR_ORDER: ReadonlyArray<string> = [
   "default",
   "contrast",
   "violet",
-  "mono",
 ];
+
+/** The shipped look's display name (the "default" selector entry — no
+    data-brand attribute, the raw token files). Named here, beside the
+    presets' own `label` fields, so every selector surface reads the same
+    registry rather than hardcoding a string. */
+export const DEFAULT_THEME_LABEL = "Rounded teal";
 
 /* ---------- rich picker cells ----------
    The preset selector renders each option as a self-portrait (RichDropdown):
@@ -454,10 +415,44 @@ const pairingLine = (bodyLabel: string, headingLabel?: string) => {
 };
 
 /**
- * The preset selector's options, one rich cell per look. `theme` resolves the
- * theme-dependent key colours (black & white flips its dot with the mode);
- * `custom` is the live levers, so the Custom row is always a portrait of the
- * current state rather than a bare word.
+ * One rich cell per shipped look, in THEME_SELECTOR_ORDER with "default"
+ * in place mid-list — the landing's theme tiles render this directly, and
+ * the playground's preset picker composes from it, so the two surfaces can
+ * never disagree on order, portraits, or labels. `theme` resolves the
+ * theme-dependent key colours (black & white flips its dot with the mode).
+ */
+export function themeSelectorTiles(theme: "light" | "dark"): RichDropdownOption[] {
+  const dark = theme === "dark";
+  return THEME_SELECTOR_ORDER.map((value) => {
+    if (value === "default") {
+      return {
+        label: DEFAULT_THEME_LABEL,
+        value,
+        color: dark ? DEFAULT_BRAND_DARK : DEFAULT_BRAND,
+        swatchRadius: swatchRadius(100, true),
+        headingFont: SHIPPED_FONT_STACK,
+        bodyFont: SHIPPED_FONT_STACK,
+        description: pairingLine(FONT_OPTIONS[0].label),
+      };
+    }
+    const p = THEME_PRESETS[value];
+    return {
+      label: p.label,
+      value,
+      color: dark && p.brandDark ? p.brandDark : p.brand,
+      swatchRadius: swatchRadius(p.radiusScale, p.pill),
+      headingFont: headingStack(p.headingFontLabel, p.fontLabel),
+      bodyFont: bodyStack(p.fontLabel),
+      description: pairingLine(p.fontLabel, p.headingFontLabel),
+    };
+  });
+}
+
+/**
+ * The preset selector's options: the same tiles re-ordered for a menu
+ * (the shipped look first), plus the Custom row — `custom` is the live
+ * levers, so that row is always a portrait of the current state rather
+ * than a bare word.
  */
 export function presetPickerOptions(args: {
   theme: "light" | "dark";
@@ -469,17 +464,9 @@ export function presetPickerOptions(args: {
     pill: boolean;
   };
 }): RichDropdownOption[] {
-  const dark = args.theme === "dark";
+  const tiles = themeSelectorTiles(args.theme);
   return [
-    {
-      label: "System default",
-      value: "default",
-      color: dark ? DEFAULT_BRAND_DARK : DEFAULT_BRAND,
-      swatchRadius: swatchRadius(100, true),
-      headingFont: SHIPPED_FONT_STACK,
-      bodyFont: SHIPPED_FONT_STACK,
-      description: pairingLine(FONT_OPTIONS[0].label),
-    },
+    tiles.find((t) => t.value === "default")!,
     {
       label: "Custom",
       value: "custom",
@@ -489,22 +476,7 @@ export function presetPickerOptions(args: {
       bodyFont: bodyStack(args.custom.fontLabel),
       description: pairingLine(args.custom.fontLabel, args.custom.headingFontLabel),
     },
-    /* Preset rows walk THEME_SELECTOR_ORDER (minus "default", which is
-       the first row above), so this menu and the landing's dot row can
-       never disagree on order. classic stays defined as the revert
-       handle for the accessible teal split, deliberately not offered. */
-    ...THEME_SELECTOR_ORDER
-      .filter((value) => value !== "default")
-      .map((value) => [value, THEME_PRESETS[value]] as const)
-      .map(([value, p]) => ({
-        label: p.label,
-        value,
-        color: dark && p.brandDark ? p.brandDark : p.brand,
-        swatchRadius: swatchRadius(p.radiusScale, p.pill),
-        headingFont: headingStack(p.headingFontLabel, p.fontLabel),
-        bodyFont: bodyStack(p.fontLabel),
-        description: pairingLine(p.fontLabel, p.headingFontLabel),
-      })),
+    ...tiles.filter((t) => t.value !== "default"),
   ];
 }
 

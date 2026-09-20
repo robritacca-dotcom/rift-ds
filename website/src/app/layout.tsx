@@ -30,9 +30,9 @@ const nunitoSans = Nunito_Sans({
 });
 
 // Kept under 160 characters so search results render it whole.
-const SITE_DESCRIPTION = `${BRAND_NAME}: an AI-ready React design system. Tokens, components, templates, and the docs site they build, published to npm and enforced by the build.`;
+const SITE_DESCRIPTION = `${BRAND_NAME}: a free, open source React design system for AI products. Tokens, components, themes and templates, published to npm and enforced by the build.`;
 
-const SITE_TITLE = `${BRAND_NAME} · An AI-ready React design system`;
+const SITE_TITLE = `${BRAND_NAME} · An open source, AI-ready React design system`;
 
 export const metadata: Metadata = {
   title: {
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     "design tokens",
     "React components",
     "component library",
-    "AI-ready design system",
+    "open source design system",
     "MCP",
   ],
   authors: [{ name: "Robert Ritacca" }],

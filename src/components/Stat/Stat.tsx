@@ -1,9 +1,10 @@
+import type React from 'react';
 import './Stat.css';
 import '../../fonts/material-symbols.css';
 
 export interface StatProps {
-  /** The headline number, e.g. "~900%" or "3.8M" */
-  value: string;
+  /** The headline number, e.g. "~900%" or "3.8M" — or a node, such as an AnimatedNumber, for figures that move */
+  value: React.ReactNode;
   /** What the number measures */
   label: string;
   /** Optional change annotation, e.g. "+42% vs last quarter" */

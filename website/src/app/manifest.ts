@@ -3,10 +3,10 @@ import { BRAND_NAME, BRAND_SHORT } from "@/config/brand.generated";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: `${BRAND_NAME} · An AI-ready React design system`,
+    name: `${BRAND_NAME} · An open source, AI-ready React design system`,
     short_name: BRAND_SHORT,
     description:
-      "An AI-ready React design system: tokens, components, templates, and the docs site they build.",
+      "A free, open source React design system for AI products: tokens, components, themes and templates.",
     start_url: "/",
     display: "standalone",
     background_color: "#050505",

@@ -6,9 +6,10 @@
 .page {
   position: relative;
   z-index: 1;
-  /* Matches the header's headerInner max-width, so the collage's outer
-     card edges land exactly under the logo and the theme toggle. */
-  max-width: 1440px;
+  /* No page-level cap: the hero spans the banner's full width. The collage
+     below re-caps itself at 1440px so its outer card edges still land
+     under the logo and the theme toggle. */
+  width: 100%;
   min-width: 0; /* a flex-item main must not grow to the chart's intrinsic width */
   margin: 0 auto;
   /* Same token every other page puts above its title, so the h1 sits at
@@ -33,17 +34,54 @@
   margin: 0 auto var(--gap-1500);
 }
 
+/* The animated inner wrapper mirrors the hero's own column layout; the
+   section stays untransformed so the theme tooltips' backdrop blur can
+   reach the page behind them. */
+.heroInner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-400);
+  width: 100%;
+}
+
+/* The theme row enters by opacity alone: a finished opacity animation
+   releases the backdrop root, where .animate-in's will-change transform
+   would hold it forever. Delay comes from the shared stagger class. */
+.heroThemes {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  opacity: 0;
+  animation: heroThemesIn var(--motion-duration-slower) var(--motion-ease-entrance) both;
+}
+
+@keyframes heroThemesIn {
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heroThemes {
+    opacity: 1;
+    animation: none;
+  }
+}
+
 .pageTitle {
-  /* The mega face — the landing title carries the brand the way the old
-     homepage name did, one tier above the display scale. */
-  font-family: var(--font-mega-1-family);
-  font-size: var(--font-mega-1-size);
-  font-weight: var(--font-mega-1-weight);
-  line-height: var(--font-mega-1-line-height);
-  letter-spacing: var(--font-mega-1-letter-spacing);
+  /* The display face: the h1 is the tagline now (the nav wordmark carries
+     the name), and a sentence needs room to wrap where the old two-word
+     mega title needed one line. Balance keeps the two lines even. */
+  font-family: var(--font-display-2-family);
+  font-size: var(--font-display-2-size);
+  font-weight: var(--font-display-2-weight);
+  line-height: var(--font-display-2-line-height);
+  letter-spacing: var(--font-display-2-letter-spacing);
   color: var(--color-text-primary);
   margin: 0;
   text-align: center;
+  text-wrap: balance;
 }
 
 .subDisplay {
@@ -53,10 +91,8 @@
   line-height: var(--font-sub-display-line-height);
   letter-spacing: var(--font-sub-display-letter-spacing);
   color: var(--color-text-primary);
-  /* Together with the hero gap, the spacing above matches the
-     title-to-subtitle gap every other page gets from its section rhythm
-     (--primitive-gap-2000). */
-  margin: calc(var(--primitive-gap-2000) - var(--gap-400)) 0 0;
+  /* Tight to the tagline: the hero's own gap is the whole space. */
+  margin: 0;
 }
 
 /* ============================================
@@ -65,12 +101,18 @@
    one figure per registry count export
    ============================================ */
 
+/* The dividers breathe: air below the subtitle, and between the second
+   rule and the stats, on top of the hero's own gap. */
+.heroDivider {
+  margin-top: var(--gap-400);
+}
+
 .statStrip {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: var(--gap-400) var(--gap-1500);
-  margin-top: var(--gap-200);
+  margin-top: var(--gap-400);
 }
 
 /* Stat left-aligns for dashboard rows; a centred hero band centres each
@@ -80,18 +122,10 @@
 }
 
 /* ============================================
-   ACCENT SWITCHER — the hero's live re-theming
-   strip; picks apply through the shared theme
-   levers and reset on navigation away
+   THEME SWITCHER — the hero's live re-theming
+   row: one dot per shipped look, with a card
+   tooltip naming the theme in its own faces
    ============================================ */
-
-.accentStrip {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--gap-400);
-  margin-top: var(--gap-200);
-}
 
 .accentRow {
   display: flex;
@@ -99,6 +133,12 @@
   justify-content: center;
   align-items: center;
   gap: var(--gap-200);
+  margin-top: var(--gap-200);
+}
+
+.swatchWrap {
+  position: relative;
+  display: inline-flex;
 }
 
 .accentSwatch {
@@ -128,6 +168,65 @@
     0 0 0 2px var(--color-bg-page-primary),
     0 0 0 4px var(--color-action-primary-bg);
 }
+
+/* The tooltip card: floats above the dot, names the theme in its own
+   heading face with the font pairing underneath, and previews the
+   theme's corner language on its swatch. Fades up after a beat, so
+   sweeping the row doesn't strobe cards. */
+.swatchTip {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-050);
+  padding: var(--padding-400) var(--padding-500);
+  white-space: nowrap;
+  /* Glass: a mostly-transparent container over a hard blur, so whatever
+     sits behind the card — stats, ambient field — smears through it.
+     Thinner than the mega panel's 88% because this card is small and the
+     blur IS the effect. */
+  background: color-mix(in srgb, var(--color-bg-container-primary) 62%, transparent);
+  -webkit-backdrop-filter: blur(32px);
+  backdrop-filter: blur(32px);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-400);
+  box-shadow: var(--shadow-floating);
+  opacity: 0;
+  transform: translate(-50%, -6px);
+  pointer-events: none;
+  z-index: 5;
+  /* No exit transition: the moment the pointer moves to a neighbour the
+     old card vanishes, so two can never overlap mid-fade. The fade and
+     slide live on the hover state below, entering only. */
+}
+
+/* Hover only — plus keyboard focus via :focus-visible, so a click's
+   lingering focus never pins a card open after the pointer leaves. */
+.swatchWrap:hover .swatchTip,
+.swatchWrap:has(.accentSwatch:focus-visible) .swatchTip {
+  opacity: 1;
+  transform: translate(-50%, 0);
+  transition:
+    opacity var(--motion-duration-base) var(--motion-ease-standard) 80ms,
+    transform var(--motion-duration-base) var(--motion-ease-standard) 80ms;
+}
+
+.swatchTipName {
+  font-size: var(--font-paragraph-emphasis-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-emphasis-line-height);
+  color: var(--color-text-primary);
+}
+
+.swatchTipFont {
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-tertiary);
+}
+
 
 /* The hero's section-link row wraps and stays centred on narrow screens.
    The symmetric margin keeps the divider sandwich even: the same air
@@ -195,6 +294,10 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--gap-400);
+  /* The page container no longer caps itself (the hero runs full width),
+     so the collage holds the 1440px line on its own. */
+  max-width: 1376px; /* 1440 minus the old container's 32px side padding */
+  margin-inline: auto;
   align-items: stretch;
   height: clamp(640px, 130vh, 1400px);
   overflow: hidden;
@@ -743,22 +846,8 @@
   }
 }
 
-/* The hero title deliberately overrides the token collapse: mega-1 needs a
-   two-stage ramp (132 → 64 @959 → 40 @600) that the single 768px token
-   step can't provide at this size. Same ramp the old homepage name used. */
-@media (max-width: 959px) {
-  .pageTitle {
-    font-size: 64px;
-    line-height: 1;
-  }
-}
-
-@media (max-width: 600px) {
-  .pageTitle {
-    font-size: 40px;
-    line-height: 1;
-  }
-}
+/* No hand ramp for the tagline: display-2's own 768px token collapse
+   (64px to 40px) is enough at this size. */
 
 /* Hero buttons for desktop-only pages (the canvas board) leave the mobile
    IA. Breakpoint matches the nav's drawer switch in MegaNav.module.css. */

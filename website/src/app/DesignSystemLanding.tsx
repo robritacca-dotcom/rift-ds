@@ -7,10 +7,14 @@ import { ExtendedBackground } from "../components/BlurBackground/BlurBackground"
 import FadeDivider from "../components/FadeDivider/FadeDivider";
 import styles from "./page.module.css";
 import { NPM_URL, REPOSITORY_URL, STORYBOOK_URL } from "@/config/brand.generated";
-import { DEFAULT_BRAND, DEFAULT_BRAND_DARK } from "@/lib/theme/theme-overrides";
-import { THEME_PRESETS, THEME_SELECTOR_ORDER } from "@/lib/theme/presets";
+import {
+  PICKER_FONT_PARAMS,
+  THEME_SELECTOR_ORDER,
+  themeSelectorTiles,
+} from "@/lib/theme/presets";
 import { useSiteTheme } from "@/lib/theme/use-theme-overrides";
 import { AgentPlan } from "@robr0/design-system/components/AgentPlan/AgentPlan";
+import { AnimatedNumber } from "@robr0/design-system/components/AnimatedNumber/AnimatedNumber";
 import { AgentStatus } from "@robr0/design-system/components/AgentStatus/AgentStatus";
 import { AiButton } from "@robr0/design-system/components/AiButton/AiButton";
 import { Avatar } from "@robr0/design-system/components/Avatar/Avatar";
@@ -75,7 +79,6 @@ import { Timeline } from "@robr0/design-system/components/Timeline/Timeline";
 import { ToggleSwitch } from "@robr0/design-system/components/ToggleSwitch/ToggleSwitch";
 import { COMPONENT_COUNT } from "@robr0/design-system/components/registry";
 import { TOKEN_COUNT } from "@robr0/design-system/tokens/registry";
-import { SKILL_COUNT } from "@/data/skills-registry";
 import { MCP_TOOLS } from "@/lib/mcp-tools";
 import { BarChart, LineChart, PieChart } from "@robr0/design-system/charts";
 
@@ -379,43 +382,49 @@ function EscalatorColumn({
    the same actionColorPlan the playground applies, on the same :root
    mechanism, so every live demo below re-tints without re-rendering. */
 /* ---------- the theme selector ----------
-   The hero's dot row is the primary way a visitor picks a theme: one dot
-   per shipped preset, in THEME_SELECTOR_ORDER, applied by swapping the
-   data-brand attribute on <html> — the same one-attribute contract the
-   package documents, exercised by the site itself. "default" is the
-   Dragonspine-original look (attribute removed, the raw token files);
-   the server ships data-brand="mono", so black & white is what a
-   visitor lands on and the mono dot wakes up ringed. */
-
-const THEME_DOTS = THEME_SELECTOR_ORDER.map((id) => {
-  if (id === "default") {
-    return {
-      id,
-      label: "Dragonspine original",
-      hex: DEFAULT_BRAND,
-      hexDark: DEFAULT_BRAND_DARK,
-    };
-  }
-  const preset = THEME_PRESETS[id];
-  return {
-    id,
-    label: preset.label,
-    hex: preset.brand,
-    hexDark: preset.brandDark,
-  };
-});
+   The hero's tile row is the primary way a visitor picks a theme: one
+   tile per shipped look, in THEME_SELECTOR_ORDER, applied by swapping
+   the data-brand attribute on <html> — the same one-attribute contract
+   the package documents, exercised by the site itself. Each tile is a
+   portrait — swatch, name in the theme's own heading face, and the font
+   pairing — so the scale of what a pick changes is visible before the
+   click. "default" is the Dragonspine-original look (attribute removed,
+   the raw token files); the server ships data-brand="mono", so black &
+   white is what a visitor lands on and the mono tile wakes up ringed. */
 
 const SSR_BRAND = "mono";
 
 function ThemeSwitcher() {
   const theme = useSiteTheme();
   const [active, setActive] = useState(SSR_BRAND);
+  const tiles = themeSelectorTiles(theme === "dark" ? "dark" : "light");
 
   /* The attribute is the truth (it survives navigation, and anything may
      have set it before this mount) — read it once the client is up. */
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setActive(document.documentElement.dataset.brand ?? "default");
+  }, []);
+
+  /* The tile names render in their themes' own faces — load the picker
+     preview fonts the way the playground does (CSS is tiny; each woff2
+     downloads only because the face really renders). Removed on unmount. */
+  useEffect(() => {
+    const ids: string[] = [];
+    for (const param of PICKER_FONT_PARAMS) {
+      const id = `landing-font-${param}`;
+      if (!document.getElementById(id)) {
+        const link = document.createElement("link");
+        link.id = id;
+        link.rel = "stylesheet";
+        link.href = `https://fonts.googleapis.com/css2?family=${param}&display=swap`;
+        document.head.appendChild(link);
+        ids.push(id);
+      }
+    }
+    return () => {
+      for (const id of ids) document.getElementById(id)?.remove();
+    };
   }, []);
 
   const pick = (id: string) => {
@@ -438,25 +447,30 @@ function ThemeSwitcher() {
   };
 
   return (
-    <div className={styles.accentStrip}>
-      <div className={styles.accentRow} role="group" aria-label="Theme">
-        {THEME_DOTS.map((dot) => {
-          const swatchHex =
-            theme === "dark" && dot.hexDark ? dot.hexDark : dot.hex;
-          return (
-            <button
-              key={dot.id}
-              type="button"
-              className={`${styles.accentSwatch} ${active === dot.id ? styles.accentSwatchActive : ""}`}
-              style={{ backgroundColor: swatchHex }}
-              aria-pressed={active === dot.id}
-              aria-label={dot.label}
-              title={dot.label}
-              onClick={() => pick(dot.id)}
-            />
-          );
-        })}
-      </div>
+    <div className={styles.accentRow} role="group" aria-label="Theme">
+      {tiles.map((tile) => (
+        <span key={tile.value} className={styles.swatchWrap}>
+          <button
+            type="button"
+            className={`${styles.accentSwatch} ${active === tile.value ? styles.accentSwatchActive : ""}`}
+            style={{ backgroundColor: tile.color }}
+            aria-pressed={active === tile.value}
+            aria-label={`${tile.label} (${tile.description})`}
+            onClick={() => pick(tile.value)}
+          />
+          {/* The card names the look before the click: theme name in its
+              own heading face, the pairing underneath in its body face.
+              Hidden from the tree — the button's label carries both. */}
+          <span className={styles.swatchTip} aria-hidden="true">
+            <span className={styles.swatchTipName} style={{ fontFamily: tile.headingFont }}>
+              {tile.label}
+            </span>
+            <span className={styles.swatchTipFont} style={{ fontFamily: tile.bodyFont }}>
+              {tile.description}
+            </span>
+          </span>
+        </span>
+      ))}
     </div>
   );
 }
@@ -491,22 +505,44 @@ export default function DesignSystemLanding() {
              swatches — nothing else. Figma, Storybook, GitHub and npm live in
              the resources strip below the collage, plus the footer and the
              Install card.) ---------- */}
-        <section className={`${styles.hero} animate-in`} aria-label="About the design system">
-          <h1 className={styles.pageTitle}>Dragonspine DS</h1>
+        <section className={styles.hero} aria-label="About the design system">
+          {/* The entrance animation lives on this wrapper, NOT the section:
+              .animate-in's will-change makes an ancestor a backdrop root,
+              which would stop the theme tooltips blurring the page behind
+              them. The theme row enters by opacity alone, outside it. */}
+          <div className={`${styles.heroInner} animate-in`}>
+          {/* The tagline is the h1: the nav wordmark owns the name. */}
+          <h1 className={styles.pageTitle}>The AI-ready React design system</h1>
           <p className={styles.subDisplay}>
-            An AI-ready React design system
+            Open source and fully themeable, built for AI products and coding
+            agents.
           </p>
-          {/* Every figure imports from the registry export that owns it,
-              so the band can never overstate. */}
+          <ButtonGroup
+            ariaLabel="Get started"
+            buttons={[
+              { label: "Get started", variant: "primary" as const, href: "/docs/get-started" },
+              { label: "Browse components", variant: "secondary" as const, href: "/components" },
+            ]}
+          />
+          {/* The counts sit between the two rules; the theme dots close
+              the hero. Every figure imports from the registry export that
+              owns it, so the band can never overstate. */}
+          <FadeDivider className={styles.heroDivider} />
           <div className={styles.statStrip} role="group" aria-label="What the system counts today">
-            <Stat value={String(COMPONENT_COUNT)} label="Components" />
-            <Stat value={String(TOKEN_COUNT)} label="Semantic tokens" />
-            <Stat value={String(SKILL_COUNT)} label="Claude Code skills" />
-            <Stat value={String(MCP_TOOLS.length)} label="MCP tools" />
+            <Stat value={<AnimatedNumber value={COMPONENT_COUNT} />} label="Components" />
+            <Stat value={<AnimatedNumber value={TOKEN_COUNT} />} label="Semantic tokens" />
+            <Stat value={<AnimatedNumber value={THEME_SELECTOR_ORDER.length} />} label="Themes" />
+            <Stat value={<AnimatedNumber value={MCP_TOOLS.length} />} label="MCP tools" />
+            <Stat
+              value={<AnimatedNumber value={0} format={(v) => `$${v.toFixed(2)}`} />}
+              label="Cost"
+            />
           </div>
-          {/* No section-link row: the top nav owns the sections now. */}
-          <FadeDivider />
-          <ThemeSwitcher />
+          <FadeDivider className={styles.heroDivider} />
+          </div>
+          <div className={`${styles.heroThemes} animate-delay-1`}>
+            <ThemeSwitcher />
+          </div>
         </section>
 
         {/* ---------- collage: three curated columns of live demos + nav ---------- */}
@@ -1156,8 +1192,7 @@ export default function DesignSystemLanding() {
           </>)} />
         </section>
 
-        {/* ---------- below the collage: where the system lives, and what
-             it is built on ---------- */}
+        {/* ---------- where the system lives, and what it is built on ---------- */}
         <section
           className={`${styles.resourcesStrip} animate-in animate-delay-1`}
           aria-label="Resources and stack"

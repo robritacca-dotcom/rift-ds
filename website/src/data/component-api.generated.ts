@@ -8059,9 +8059,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
         "props": [
           {
             "name": "value",
-            "type": "string",
+            "type": "ReactNode",
             "required": true,
-            "description": "The headline number, e.g. \"~900%\" or \"3.8M\""
+            "description": "The headline number, e.g. \"~900%\" or \"3.8M\" — or a node, such as an AnimatedNumber, for figures that move"
           },
           {
             "name": "label",

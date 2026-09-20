@@ -201,8 +201,8 @@ export default function PlaygroundPage() {
      Seeded by a preset, hand-picked in the Advanced colours dialog. */
   const [accents, setAccents] = useState<AccentSextet>(SHIPPED_ACCENTS);
 
-  /** The last-chosen preset's non-lever state (classic's pinned teal
-      extras, mono's theme-dependent action colour). Kept separate from
+  /** The last-chosen preset's non-lever state (coral's white label,
+      mono's theme-dependent action colour). Kept separate from
       `preset` so Custom inherits it — touching one lever must only change
       that lever, never snap the rest of the look back to the shipped
       defaults. */

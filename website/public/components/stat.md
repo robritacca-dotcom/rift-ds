@@ -14,7 +14,7 @@ Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0.
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| value | `string` | yes |  | The headline number, e.g. "~900%" or "3.8M" |
+| value | `ReactNode` | yes |  | The headline number, e.g. "~900%" or "3.8M" — or a node, such as an AnimatedNumber, for figures that move |
 | label | `string` | yes |  | What the number measures |
 | delta | `string` | no |  | Optional change annotation, e.g. "+42% vs last quarter" |
 | trend | `"neutral" \| "up" \| "down"` | no | `neutral` | Direction of the delta — colours it and adds an arrow |

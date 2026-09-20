@@ -78,21 +78,8 @@ const registryNames = new Set(
     ratio so a change in either direction (a fix, or a further regression)
     fails until the pin moves. Each pin's reason is its authoritative
     record — pinning is deliberate acceptance, never a silent weakening
-    of the gate. Pinned 2026-09-19:
-      - classic: the pre-split revert handle. It exists to reproduce the
-        shipped theme as it was BEFORE the accessible-teal split, whose
-        entire point was that no single teal step can carry an AA label
-        in both themes — failing AA is this preset's documented identity.
-      - coral: reproduces the hospitality brand's own coral fill under a
-        near-white label; the reference product ships the same sub-AA
-        pairing. Kept faithful to the look it demonstrates.
-   */
-const SANCTIONED_AA_GAPS = new Map([
-  ['classic|light', '3.15'],
-  ['classic|dark', '3.15'],
-  ['coral|light', '3.08'],
-  ['coral|dark', '3.08'],
-]);
+    of the gate. Currently empty: every shipped preset holds AA. */
+const SANCTIONED_AA_GAPS = new Map([]);
 
 const REQUIRED_ACTION_ROLES = [
   '--color-action-primary-bg',

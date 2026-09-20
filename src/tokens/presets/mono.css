@@ -1,6 +1,6 @@
 /*
  * AUTO-GENERATED. Do not edit.
- * Theme preset "mono" (Black & white).
+ * Theme preset "mono" (Smoke).
  * Source of truth: website/src/lib/theme/presets.ts (THEME_PRESETS + presetOverrides).
  * Regenerate: node scripts/generate-preset-stylesheets.mjs
  * Import after tokens.css, then set data-brand="mono" on <html>.
@@ -27,6 +27,7 @@ html[data-brand="mono"] {
   --color-core-ui-secondary: var(--primitive-neutral-09);
   --color-input-border-hover: var(--primitive-neutral-06);
   --color-input-border-selected: var(--primitive-neutral-08);
+  --font-family-heading: 'Montserrat', sans-serif;
   --font-family-primary: 'Inter', sans-serif;
   --primitive-blue-00: #FBFBFC;
   --primitive-blue-01: #F5F6F8;
@@ -147,6 +148,7 @@ html[data-brand="mono"][data-theme="dark"] {
   --color-core-ui-secondary: var(--primitive-neutral-05);
   --color-input-border-hover: var(--primitive-neutral-03);
   --color-input-border-selected: var(--primitive-neutral-03);
+  --font-family-heading: 'Montserrat', sans-serif;
   --font-family-primary: 'Inter', sans-serif;
   --primitive-blue-00: #FBFBFC;
   --primitive-blue-01: #F5F6F8;

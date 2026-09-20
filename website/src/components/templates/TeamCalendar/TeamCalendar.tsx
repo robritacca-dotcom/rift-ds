@@ -36,7 +36,7 @@ import {
 import { Input } from "@robr0/design-system/components/Input/Input";
 import { Kbd } from "@robr0/design-system/components/Kbd/Kbd";
 import { Panel } from "@robr0/design-system/components/Panel/Panel";
-import ThemeToggle from "../../ThemeToggle/ThemeToggle";
+import SidebarSwitchers from "../SidebarSwitchers/SidebarSwitchers";
 import TemplateAssistant from "../TemplateAssistant/TemplateAssistant";
 import styles from "./TeamCalendar.module.css";
 
@@ -217,7 +217,7 @@ export default function TeamCalendar() {
           onExpandedChange={setSidebarExpanded}
           logoText="Cadence"
           floating
-          footerSlot={<ThemeToggle />}
+          footerSlot={<SidebarSwitchers />}
         />
       </div>
 

@@ -61,7 +61,7 @@ import {
   type TreeViewNode,
 } from "@robr0/design-system/components/TreeView/TreeView";
 import { UsageCard } from "@robr0/design-system/components/UsageCard/UsageCard";
-import ThemeToggle from "../../ThemeToggle/ThemeToggle";
+import SidebarSwitchers from "../SidebarSwitchers/SidebarSwitchers";
 import styles from "./AgentWorkbench.module.css";
 
 /* ---------------------------------------------------------------- data */
@@ -450,7 +450,7 @@ export default function AgentWorkbench() {
             moreLabel="Show 20 more"
             historyLabel="Session history"
             profile={{ name: "Ada Okafor", meta: "Team" }}
-            footerSlot={<ThemeToggle />}
+            footerSlot={<SidebarSwitchers />}
           />
         </aside>
 

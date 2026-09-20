@@ -38,10 +38,20 @@ export default function DocsPage() {
           {/* Intro */}
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
-              The system, explained and ready to reuse
+              What it is, how to use it, and why to trust it
             </p>
             <p className={styles.introBody}>
-              Everything that makes {BRAND_NAME} run, documented in one place. Start with the overview for the pipeline behind the system, get started with installing and theming the package, read the spec files Claude Code builds from, or take the skills and loops that automate the work. The project journal keeps a running record of how it all came together.
+              {BRAND_NAME} is an open source React design system built for AI
+              products and the coding agents that build them. Three ideas run
+              through everything here. Every look is one attribute: complete
+              themes ship in the package as generated stylesheets. Every fact
+              on this site derives from a registry the build enforces, so the
+              docs cannot quietly drift from the code. And every contract is
+              published for agents as well as people, from the MCP endpoint to
+              the per-component markdown. Start with Get started to install
+              and theme the package, read Overview for how the system is built
+              and verified, or take the spec files it is built from. The
+              release log records what each published version shipped.
             </p>
           </div>
 

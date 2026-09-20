@@ -13,7 +13,7 @@ import { COMPONENT_COUNT } from "@robr0/design-system/components/registry";
 import { TOKEN_COUNT, TOKEN_COUNTS } from "@robr0/design-system/tokens/registry";
 import { SKILL_COUNT } from "@/data/skills-registry";
 import { RELEASE_COUNT } from "@/data/release-log";
-import { chatExchangeMap, operatorsMap, pipelineMap, runtimeMap, systemOverviewMap } from "./maps";
+import { chatExchangeMap, consumerMap, operatorsMap, pipelineMap, runtimeMap, systemOverviewMap } from "./maps";
 import styles from "./page.module.css";
 import { BRAND_NAME, FIGMA_FILE_URL, REPOSITORY_URL, STORYBOOK_URL } from "@/config/brand.generated";
 
@@ -40,23 +40,21 @@ export default function AboutDsPage() {
           {/* Intro */}
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
-              An AI-ready design system, built to make this site
+              How the system is built, and why its docs stay true
             </p>
             <p className={styles.introBody}>
-              {BRAND_NAME} is the design system behind every page on this site: a solo build, run as a working experiment in how far a written spec and an AI pair can carry a production system. The foundation was designed in{" "}
-              <a href={`${FIGMA_FILE_URL}?node-id=246-5864`} target="_blank" rel="noopener noreferrer" className={styles.inlineLink}>Figma</a>; the system lives in{" "}
-              <a href={REPOSITORY_URL} target="_blank" rel="noopener noreferrer" className={styles.inlineLink}>the repo</a> as a{" "}
-              <Link href="/blueprints/design" className={styles.inlineLink}>written spec</Link>, layered CSS tokens, and React components, and Claude Code builds from the spec, so a design change is a short commit away from a deploy. It ships as the npm package <code>@robr0/design-system</code>, and this site installs that package like any other consumer would. You can{" "}
+              {BRAND_NAME} ships as the npm package <code>@robr0/design-system</code>: layered CSS tokens, React components, and complete themes, each a generated stylesheet applied by one data-brand attribute. This site installs that package like any other consumer would, and everything documented here is held to the code by the build: generators write the docs from the code&apos;s own registries in{" "}
+              <a href={REPOSITORY_URL} target="_blank" rel="noopener noreferrer" className={styles.inlineLink}>the repo</a>, and validators fail the build when the two disagree. What these pages say is what the package does. You can{" "}
               <Link href="/docs/get-started" className={styles.inlineLink}>install it yourself</Link> and{" "}
               <Link href="/playground" className={styles.inlineLink}>re-theme it live</Link>.
             </p>
             <p className={styles.introBody}>
-              Everything is on display because the system is the work: the maps and the graph below show how the pieces fit, and all of it is open to lift.{" "}
+              All of it is open to lift: the specs ({" "}
               <Link href="/blueprints/claude" className={styles.inlineLink}>CLAUDE.md</Link>,{" "}
               <Link href="/blueprints/design" className={styles.inlineLink}>design.md</Link>,{" "}
-              <Link href="/blueprints/content-design" className={styles.inlineLink}>content-design.md</Link>, the{" "}
+              <Link href="/blueprints/content-design" className={styles.inlineLink}>content-design.md</Link>), the{" "}
               <Link href="/skills" className={styles.inlineLink}>skills</Link>, and the{" "}
-              <Link href="/loops" className={styles.inlineLink}>loops</Link> drop into your own codebase or AI tooling. Agents get the same access: the site serves a Model Context Protocol endpoint at <code>/api/mcp</code>, so a coding agent connects with one URL and reads the component list, exact prop contracts, and the token registry while it builds with the package, instead of guessing at props.
+              <Link href="/loops" className={styles.inlineLink}>loops</Link> drop into your own codebase or AI tooling. Agents connect to the same docs through the MCP endpoint at <code>/api/mcp</code>: one URL for the component list, exact prop contracts, and the token registry.
             </p>
           </div>
 
@@ -66,18 +64,32 @@ export default function AboutDsPage() {
             <div className={styles.resumeMain}>
 
               <section className={`${styles.mapSection} animate-in animate-delay-2`}>
+                <SectionTitle title="Using it in your product" />
+                <p className={styles.sectionBody}>
+                  The consumer&apos;s view first. Install the package, import
+                  one stylesheet, and compose the components; a{" "}
+                  <code>data-brand</code> attribute on your root element
+                  applies a complete theme, light and dark included. Your
+                  coding agent joins through this site: one command installs
+                  the generated agent skill, and the MCP endpoint serves the
+                  exact prop and token contracts while it builds.
+                </p>
+                <ArchitectureMap
+                  map={consumerMap}
+                  caption="Your product on the right, the package on the left, and this site serving your agent between them."
+                />
+              </section>
+
+              <section className={`${styles.mapSection} animate-in animate-delay-2`}>
                 <SectionTitle title="The system in one breath" />
                 <p className={styles.sectionBody}>
                   One repo becomes one website, one Storybook, and one npm
-                  package. Between the repo and its two destinations sits a
-                  single gate: generators derive every surface from one
-                  source of truth, validators fail the build when anything
-                  drifts, and CI runs the whole chain on every push. The
-                  rest of this page magnifies that picture one lane at a
-                  time: what the repo holds, how a change moves through it,
-                  what drives the moves, and what runs once the site is
-                  live. Each map pans, zooms, and expands to fill the
-                  screen.
+                  package, through a single gate: generators derive every
+                  surface from one source of truth, validators fail the
+                  build when anything drifts, and CI runs the whole chain
+                  on every push. The maps below magnify that picture one
+                  lane at a time; each pans, zooms, and expands to fill
+                  the screen.
                 </p>
                 <ul className={styles.logoStrip} aria-label="The tools involved">
                   {[
@@ -135,19 +147,14 @@ export default function AboutDsPage() {
                 <p className={styles.sectionBody}>
                   A change to any of those layers becomes live the same way,
                   in five stages: author, generate and validate, build,
-                  gate, ship. Figma feeds the
-                  authoring stage from outside, Google is touched exactly once
-                  at build time (the typeface is fetched, then self-hosted),
-                  and a push to main is built to deploy straight to
-                  Vercel once the project is attached. The package takes its
-                  own lane: a manual release publishes to npm with
-                  provenance, no stored token. The map carries the
-                  detail: the drift guard, the hydration smoke, the axe audit
-                  on every story.
+                  gate, ship. A push to main deploys the site; the package
+                  takes its own lane, published to npm with provenance and
+                  no stored token. The map carries the detail: the drift
+                  guard, the hydration smoke, the axe audit on every story.
                 </p>
                 <ArchitectureMap
                   map={pipelineMap}
-                  caption="Five stages, then the flow snakes down through the gate. The teal edge is the one Google touch before runtime."
+                  caption="Five stages, then the flow snakes down through the gate."
                 />
               </section>
 
@@ -173,24 +180,17 @@ export default function AboutDsPage() {
                 <SectionTitle title="The architecture at runtime" divider={false} />
                 <p className={styles.sectionBody}>
                   Once the site is live, only the edges matter. Pages come
-                  from Vercel with the fonts and the chat corpus already baked
-                  in, analytics stays off until a measurement ID is set, and a
-                  scheduled smoke stands ready to re-prove production on a
-                  cron once there is a production to prove.
+                  from Vercel with the fonts and the chat corpus already
+                  baked in, and a scheduled smoke re-proves production on a
+                  cron.
                 </p>
                 <ul className={styles.sectionBullets}>
                   <li>
-                    The chat answers from the published site through Claude,
-                    reaching for the same generated prop and token contracts
-                    the MCP tools serve when a question needs them, held by
-                    per-visitor rate limits and a daily budget once its
-                    backing store is wired; conversations are kept for 30
-                    days, tied to no name, then deleted. The
-                    same widget runs in{" "}
-                    <Link href="/playground?view=chat" className={styles.inlineLink}>
-                      the playground&apos;s Chat view
-                    </Link>
-                    .
+                    The chat answers through Claude from the published
+                    site&apos;s corpus, reaching for the generated prop and
+                    token contracts when a question needs them; rate limits
+                    and a daily budget hold it, and conversations are kept
+                    30 days, tied to no name.
                   </li>
                   <li>
                     <code>/api/mcp</code> serves agents five tools with no
@@ -198,36 +198,25 @@ export default function AboutDsPage() {
                     list, per-component prop APIs, the token registry, install
                     setup, and site search.
                   </li>
-                  <li>
-                    The pipeline&apos;s single Google touch has two runtime
-                    exceptions, both fonts: the playground&apos;s typeface
-                    picker and the MCP endpoint&apos;s landing page fetch
-                    type from Google when opened.
-                  </li>
                 </ul>
                 <ArchitectureMap
                   map={runtimeMap}
-                  caption="A space diagram, no time in it. The teal edge is the one the vendor-grouped version filed wrong."
+                  caption="A space diagram, no time in it: who talks to whom once the site is live."
                 />
               </section>
 
               <section className={`${styles.mapSection} animate-in animate-delay-3`}>
                 <SectionTitle title="How the chat answers" divider={false} />
                 <p className={styles.sectionBody}>
-                  One of those edges gets its own map. The chat&apos;s
-                  context is a two-part answer to one question: what should
-                  the model know? The site corpus
-                  carries everything published as prose, baked in at build
-                  time and cached for an hour, so most questions are answered
-                  from context alone. What it deliberately leaves out is the
-                  generated contracts: the component prop API and the token
-                  registry, thousands of facts most questions never touch.
-                  For those, the model carries two lookup tools. When a
-                  question needs a prop&apos;s type or default, a
-                  deprecation, or a token count, it reads the answer from the
-                  same in-memory data <code>/api/mcp</code> serves to agents,
-                  and the lookup surfaces in the widget as a trace point. The
-                  corpus makes the chat fluent; the tools keep it exact.
+                  The chat&apos;s context is deliberate. The site corpus
+                  carries everything published as prose, cached for an hour,
+                  so most questions are answered from context alone. The
+                  generated contracts stay out of it: for a prop&apos;s type
+                  or default, or a token count, the model calls two lookup
+                  tools that read the same in-memory data{" "}
+                  <code>/api/mcp</code> serves to agents, and the lookup
+                  surfaces in the widget as a trace point. The corpus makes
+                  the chat fluent; the tools keep it exact.
                 </p>
                 <ArchitectureMap
                   map={chatExchangeMap}

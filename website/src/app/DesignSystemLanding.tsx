@@ -13,6 +13,7 @@ import {
   themeSelectorTiles,
 } from "@/lib/theme/presets";
 import { useSiteTheme } from "@/lib/theme/use-theme-overrides";
+import { applyBrand } from "@/lib/theme/brand";
 import { AgentPlan } from "@robr0/design-system/components/AgentPlan/AgentPlan";
 import { AnimatedNumber } from "@robr0/design-system/components/AnimatedNumber/AnimatedNumber";
 import { AgentStatus } from "@robr0/design-system/components/AgentStatus/AgentStatus";
@@ -428,21 +429,7 @@ function ThemeSwitcher() {
   }, []);
 
   const pick = (id: string) => {
-    /* setAttribute/removeAttribute rather than the dataset proxy: the
-       hooks lint reads a dataset assignment as mutating shared state. */
-    if (id === "default") {
-      document.documentElement.removeAttribute("data-brand");
-    } else {
-      document.documentElement.setAttribute("data-brand", id);
-    }
-    /* Same persistence contract as the light/dark toggle: the pick holds
-       across every page until the visitor changes it or clears storage
-       (the layout's pre-paint script reads it back). */
-    try {
-      localStorage.setItem("brand", id);
-    } catch {
-      /* private mode: the pick still applies for this page's lifetime */
-    }
+    applyBrand(id); // the shared helper owns the attribute + persistence
     setActive(id);
   };
 

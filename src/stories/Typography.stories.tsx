@@ -220,7 +220,7 @@ export const DisplayStyles: Story = {
         }}
       >
         Large display text for hero sections, marketing pages, and major
-        headlines. All styles use Nunito Sans Light (300 weight). The display
+        headlines. All styles sit at weight 300 in the primary family. The display
         tier steps down automatically below 768px — the sizes shown resolve at
         the current viewport.
       </p>
@@ -276,8 +276,8 @@ export const HeadingStyles: Story = {
           lineHeight: '1.5',
         }}
       >
-        Heading styles for section titles and content hierarchy. All styles use
-        Nunito Sans SemiBold (600 weight).
+        Heading styles for section titles and content hierarchy. All styles sit
+        at weight 600 in the primary family.
       </p>
 
       <TypographyStyle
@@ -372,8 +372,8 @@ export const CodeStyle: Story = {
         }}
       >
         The system mono stack, codified as <code>--font-family-code</code>.
-        Used by CodeBlock, ToolCall names, and Prose inline code — Nunito Sans
-        everywhere else. Sizing rides the Paragraph SM scale; only the family
+        Used by CodeBlock, ToolCall names, and Prose inline code — the primary
+        family everywhere else. Sizing rides the Paragraph SM scale; only the family
         changes.
       </p>
 
@@ -417,7 +417,8 @@ export const AllStyles: Story = {
           lineHeight: '1.5',
         }}
       >
-        All typography styles from the Figma design system. Font: Nunito Sans.
+        All typography styles from the Figma design system, set here in the
+        shipped default family, Nunito Sans — the faces are yours to swap.
         Every style chains its family through one of two role tokens — the
         display and heading tiers read <code>--font-family-heading</code>, the
         body tiers read <code>--font-family-body</code> — and both resolve to{' '}

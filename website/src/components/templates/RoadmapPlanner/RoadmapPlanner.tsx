@@ -46,7 +46,7 @@ import { Input } from "@robr0/design-system/components/Input/Input";
 import { Kbd } from "@robr0/design-system/components/Kbd/Kbd";
 import { Panel } from "@robr0/design-system/components/Panel/Panel";
 import { ProgressBar } from "@robr0/design-system/components/ProgressBar/ProgressBar";
-import ThemeToggle from "../../ThemeToggle/ThemeToggle";
+import SidebarSwitchers from "../SidebarSwitchers/SidebarSwitchers";
 import TemplateAssistant from "../TemplateAssistant/TemplateAssistant";
 import styles from "./RoadmapPlanner.module.css";
 
@@ -416,7 +416,7 @@ export default function RoadmapPlanner() {
           onExpandedChange={setSidebarExpanded}
           logoText="Waypoint"
           floating
-          footerSlot={<ThemeToggle />}
+          footerSlot={<SidebarSwitchers />}
         />
       </div>
 

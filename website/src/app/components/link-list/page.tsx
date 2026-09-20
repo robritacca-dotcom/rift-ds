@@ -32,7 +32,7 @@ export default function LinkListPage() {
               Linked items with logo, label, and subtitle
             </p>
             <p className={styles.introBody}>
-              LinkList renders a vertical stack of external links. Each item has a logo or icon on the left, a title with an open-in-new indicator, and optional subtitle lines. Used in case study sidebars and profile pages to surface related resources.
+              LinkList renders a vertical stack of external links. Each item has a logo or icon on the left, a title with an open-in-new indicator, and optional subtitle lines. Used in sidebars and detail pages to surface related resources.
             </p>
           </div>
 

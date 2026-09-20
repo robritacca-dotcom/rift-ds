@@ -349,7 +349,7 @@ export default function TypographyPage() {
           {/* Intro */}
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
-              Everything is set in{" "}
+              One scale, and the faces are yours: the default theme sets it in{" "}
               <a
                 href="https://fonts.google.com/specimen/Nunito+Sans"
                 target="_blank"
@@ -360,7 +360,7 @@ export default function TypographyPage() {
               </a>
             </p>
             <p className={styles.introBody}>
-              Mega and Display styles are for hero moments and landing pages. Headings structure sections. Title is for bold labels. Paragraph Em is the default for buttons and interactive controls. Paragraph is body copy. The SM variants scale each of those down for compact components and secondary text. Overline is the uppercase label face, always paired with an uppercase transform at the use site. Caption is the floor, for footnotes and disclaimers only.
+              Mega and Display styles are for hero moments and landing pages. Headings structure sections. Title is for bold labels. Paragraph Em is the default for buttons and interactive controls. Paragraph is body copy. The SM variants scale each of those down for compact components and secondary text. Overline is the uppercase label face, always paired with an uppercase transform at the use site. Caption is the floor, for footnotes and disclaimers only. The faces are theme decisions: the scale chains through heading and body family roles, and the shipped themes mix serif, sans, grotesk and mono pairings over this same scale.
             </p>
             <p className={styles.introBody}>
               Every style chains its family through one of two role tokens: the

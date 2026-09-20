@@ -46,7 +46,7 @@ import { SectionTitle } from "@robr0/design-system/components/SectionTitle/Secti
 import { Stat } from "@robr0/design-system/components/Stat/Stat";
 import { Tabs } from "@robr0/design-system/components/Tabs/Tabs";
 import { AreaChart, ComboChart, RadialChart } from "@robr0/design-system/charts";
-import ThemeToggle from "../../ThemeToggle/ThemeToggle";
+import SidebarSwitchers from "../SidebarSwitchers/SidebarSwitchers";
 import TemplateAssistant from "../TemplateAssistant/TemplateAssistant";
 import styles from "./MarketingDashboard.module.css";
 
@@ -497,7 +497,7 @@ export default function MarketingDashboard() {
           onExpandedChange={setSidebarExpanded}
           logoText="Boardline"
           floating
-          footerSlot={<ThemeToggle />}
+          footerSlot={<SidebarSwitchers />}
         />
       </div>
 

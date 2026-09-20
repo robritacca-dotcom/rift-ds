@@ -208,6 +208,11 @@
   /* visible by default, hidden on mobile via media query */
 }
 
+/* The theme (preset) switcher sits beside the mode toggle, same rules. */
+.desktopBrandSwitcher {
+  /* visible by default, hidden on mobile via media query */
+}
+
 /* ============================================
    MOBILE MENU BUTTON (hidden on desktop)
    ============================================ */
@@ -833,7 +838,8 @@
   }
 
   .navCenter,
-  .desktopThemeToggle {
+  .desktopThemeToggle,
+  .desktopBrandSwitcher {
     display: none !important;
   }
 

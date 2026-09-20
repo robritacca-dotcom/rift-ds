@@ -33,6 +33,7 @@
    PAGE TITLE - Display 2
    ============================================ */
 .pageTitle {
+  font-family: var(--font-display-2-family);
   font-size: var(--font-display-2-size);
   font-weight: var(--font-display-2-weight);
   line-height: var(--font-display-2-line-height);
@@ -189,15 +190,16 @@ a.toolItem:hover {
    INLINE LINKS — design.md / CLAUDE.md mentions
    ============================================ */
 .inlineLink {
-  color: var(--color-action-primary-bg);
+  /* The underline is always on: colour alone cannot mark a link in the
+     monochrome themes, where the action colour sits beside body text. */
+  color: var(--color-action-primary-text-tertiary);
   text-decoration: underline;
-  text-decoration-color: transparent;
+  text-underline-offset: 3px;
   font-weight: var(--font-paragraph-emphasis-weight);
-  transition: text-decoration-color var(--motion-duration-base) var(--motion-ease-standard);
 }
 
 .inlineLink:hover {
-  text-decoration-color: currentColor;
+  color: var(--color-action-primary-text);
 }
 
 /* ============================================
@@ -229,6 +231,7 @@ a.statItem:hover {
 }
 
 .statValue {
+  font-family: var(--font-heading-2-family);
   font-size: var(--font-heading-2-size);
   font-weight: var(--font-heading-2-weight);
   line-height: var(--font-heading-2-line-height);

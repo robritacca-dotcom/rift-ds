@@ -53,7 +53,12 @@
 /* The chat stage's safe area is the browser's, not a document's: the
    review-width cap belongs to the components showcase, so the chat view
    lets its column run panel to panel at any viewport. */
-.dsLayoutChat .dsContent {
+.dsLayoutChat /* The content column shares the rails' entrance. */
+.dsContentEnter {
+  animation: playgroundEnter var(--motion-duration-slower) var(--motion-ease-entrance) both;
+}
+
+.dsContent {
   max-width: none;
 }
 
@@ -89,7 +94,12 @@
    scroller carries the padding and the thin
    scrollbar). Same glass as the toolbar pill.
    ============================================ */
+/* The workspace arrives rather than cutting in: the rails and the content
+   column each carry the entrance themselves, because the rails are fixed
+   and an animated transform on their ancestor would re-anchor them
+   mid-flight. Reduced motion zeroes it via the media block below. */
 .controlRail {
+  animation: playgroundEnter var(--motion-duration-slower) var(--motion-ease-entrance) both;
   position: fixed;
   top: var(--layout-stage-clearance);
   bottom: var(--rail-inset);
@@ -110,6 +120,7 @@
 /* The chat director's panel: the control panel mirrored to the right edge.
    Same card, same float, same glass. */
 .eventRail {
+  animation: playgroundEnter var(--motion-duration-slower) var(--motion-ease-entrance) both;
   position: fixed;
   top: var(--layout-stage-clearance);
   bottom: var(--rail-inset);
@@ -449,5 +460,24 @@
     margin-inline: 0;
     /* The bottom control bar still floats here — keep its safe area. */
     padding-bottom: var(--layout-stage-bottom-clearance);
+  }
+}
+
+@keyframes playgroundEnter {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.992);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .controlRail,
+  .eventRail,
+  .dsContentEnter {
+    animation: none;
   }
 }

@@ -1,0 +1,119 @@
+.root {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* The trigger wears the same track recipe as the search pill and the
+   mode toggle beside it (container-primary fill, hairline border), so
+   the three controls read as one family; the active theme's swatch
+   sits inside it. Height matches the toggle's compact track. */
+.trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  background: var(--color-bg-container-primary);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.trigger:hover {
+  background: var(--color-bg-container-secondary);
+}
+
+.trigger:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+.triggerSwatch {
+  width: 18px;
+  height: 18px;
+  border: var(--border-025) solid var(--color-bg-container-border);
+}
+
+/* The menu: the mega panel's glass recipe. Positioned by the component
+   (fixed, measured from the trigger) because it portals to <body>. */
+.menu {
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-050);
+  min-width: 240px;
+  padding: var(--padding-200);
+  background: color-mix(in srgb, var(--color-bg-container-primary) 88%, transparent);
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-400);
+  box-shadow: var(--shadow-floating);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-300);
+  width: 100%;
+  padding: var(--padding-200) var(--padding-300);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-200);
+  cursor: pointer;
+  text-align: left;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.row:hover {
+  background: var(--color-bg-container-secondary);
+}
+
+.row:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: -2px;
+}
+
+.rowActive {
+  background: var(--color-bg-container-secondary);
+}
+
+.rowSwatch {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  border: var(--border-025) solid var(--color-bg-container-border);
+}
+
+.rowText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.rowName {
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}
+
+.rowFont {
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+}
+
+.rowCheck {
+  --icon-size: var(--icon-size-500);
+  color: var(--color-action-primary-text-tertiary);
+  flex-shrink: 0;
+}

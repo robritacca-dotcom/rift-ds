@@ -33,7 +33,7 @@ export default function ComponentsPage() {
               Every building block in one place
             </p>
             <p className={styles.introBody}>
-              Each component is built on the colour, spacing, and typography tokens from the foundations pages. They all share the same padding rules, focus styles, and sizing conventions so they feel consistent when combined. Click into any component to see its variants, states, and sizing options.
+              Each component is built on the colour, spacing, and typography tokens from the foundations pages. They all share the same padding rules, focus styles, and sizing conventions so they feel consistent when combined, and because every colour and shape is a token, each one renders correctly in all of the shipped themes, light and dark included. Click into any component to see its variants, states, and sizing options.
             </p>
           </div>
 

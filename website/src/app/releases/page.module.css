@@ -30,6 +30,7 @@
 }
 
 .pageTitle {
+  font-family: var(--font-display-2-family);
   font-size: var(--font-display-2-size);
   font-weight: var(--font-display-2-weight);
   line-height: var(--font-display-2-line-height);
@@ -78,6 +79,7 @@
 }
 
 .contributionsTitle {
+  font-family: var(--font-heading-2-family);
   font-size: var(--font-heading-2-size);
   font-weight: var(--font-heading-2-weight);
   line-height: var(--font-heading-2-line-height);
@@ -116,6 +118,7 @@
 }
 
 .timelineSectionTitle {
+  font-family: var(--font-heading-2-family);
   font-size: var(--font-heading-2-size);
   font-weight: var(--font-heading-2-weight);
   line-height: var(--font-heading-2-line-height);
@@ -155,6 +158,7 @@
 }
 
 .railSectionTitle {
+  font-family: var(--font-heading-2-family);
   font-size: var(--font-heading-2-size);
   font-weight: var(--font-heading-2-weight);
   line-height: var(--font-heading-2-line-height);

@@ -46,6 +46,12 @@ function LiveFrame({ href, title }: { href: string; title: string }) {
     if (!doc) return;
     const theme = document.documentElement.getAttribute("data-theme") ?? "dark";
     doc.documentElement.setAttribute("data-theme", theme);
+    /* The theme preset rides along the same way: mirror data-brand into the
+       frame (and its absence — "default" is the attribute removed), so a
+       pick from the header or the hero re-themes every live preview too. */
+    const brand = document.documentElement.getAttribute("data-brand");
+    if (brand) doc.documentElement.setAttribute("data-brand", brand);
+    else doc.documentElement.removeAttribute("data-brand");
     doc.documentElement.style.setProperty(
       "--layout-viewport-height",
       `${DESIGN_HEIGHT}px`
@@ -57,7 +63,7 @@ function LiveFrame({ href, title }: { href: string; title: string }) {
     const observer = new MutationObserver(sync);
     observer.observe(document.documentElement, {
       attributes: true,
-      attributeFilter: ["data-theme"],
+      attributeFilter: ["data-theme", "data-brand"],
     });
     return () => observer.disconnect();
   }, [sync]);
@@ -90,8 +96,10 @@ function LiveFrame({ href, title }: { href: string; title: string }) {
       </div>
       <Link
         href={href}
+        target="_blank"
+        rel="noopener noreferrer"
         className={styles.frameLink}
-        aria-label={`Open the ${title.toLowerCase()} template full screen`}
+        aria-label={`Open the ${title.toLowerCase()} template in a new tab`}
       />
     </div>
   );
@@ -160,9 +168,11 @@ export default function TemplateShowcase() {
               </div>
               <Button
                 href={template.href}
+                target="_blank"
+                rel="noopener noreferrer"
                 variant="secondary"
                 label="Open template"
-                iconRight="arrow_forward"
+                iconRight="open_in_new"
               />
             </div>
           </div>

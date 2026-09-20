@@ -56,7 +56,7 @@ import {
   type WorldMapBounds,
   type WorldMapPoint,
 } from "@robr0/design-system/components/WorldMap/WorldMap";
-import ThemeToggle from "../../ThemeToggle/ThemeToggle";
+import SidebarSwitchers from "../SidebarSwitchers/SidebarSwitchers";
 import TemplateAssistant from "../TemplateAssistant/TemplateAssistant";
 import styles from "./RelayConsole.module.css";
 
@@ -441,7 +441,7 @@ export default function RelayConsole() {
           onExpandedChange={setSidebarExpanded}
           logoText="Meridian"
           floating
-          footerSlot={<ThemeToggle />}
+          footerSlot={<SidebarSwitchers />}
         />
       </div>
 

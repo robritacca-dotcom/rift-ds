@@ -17,6 +17,36 @@ import { LOOP_COUNT } from "@/data/loops";
 const VERCEL_LOGO = { logo: "/logos/vercel black.svg", logoDark: "/logos/vercel white.svg" };
 const NEXTJS_LOGO = { logo: "/logos/nextjs black.svg", logoDark: "/logos/nextjs white.svg" };
 
+/** The consumer's view: what a product takes from the package, and what its agent takes from this site. */
+export const consumerMap: ArchMap = {
+  id: "consumer",
+  title: "Using it in your product",
+  label:
+    "A product installs the package and imports one stylesheet; components compose from there, a data-brand attribute applies a complete theme, and the product's coding agent reads exact contracts from this site over MCP.",
+  width: 1560,
+  height: 760,
+  nodes: [
+    { id: "z-pkg", x: 60, y: 80, w: 460, h: 560, kind: "zone", title: "The package", sub: "@robr0/design-system · ESM · React 19 peer", },
+    { id: "pkg-components", x: 100, y: 170, w: 380, h: 76, title: "Components", sub: "one barrel + deep subpaths", icon: "widgets", chip: "info" },
+    { id: "pkg-tokens", x: 100, y: 310, w: 380, h: 76, title: "Tokens", sub: "tokens.css · primitives → semantic → components", icon: "palette", chip: "info" },
+    { id: "pkg-presets", x: 100, y: 450, w: 380, h: 90, title: "Theme presets", sub: "presets.css · one generated stylesheet per look", icon: "style", chip: "info" },
+
+    { id: "z-you", x: 1040, y: 80, w: 460, h: 560, kind: "zone", title: "Your product", sub: "any React 19 stack with a bundler" },
+    { id: "you-app", x: 1080, y: 170, w: 380, h: 76, title: "Your app", sub: "import, compose, override tokens", icon: "deployed_code", chip: "positive" },
+    { id: "you-root", x: 1080, y: 310, w: 380, h: 76, title: "Root element", sub: 'data-theme="dark" · data-brand="<look>"', icon: "toggle_on", chip: "positive" },
+    { id: "you-agent", x: 1080, y: 450, w: 380, h: 90, title: "Your coding agent", sub: "builds with exact prop and token contracts", icon: "smart_toy", chip: "positive" },
+
+    { id: "docs-site", x: 560, y: 620, w: 400, h: 90, title: "This site", sub: "/api/mcp · the agent skill · component .md pages", kind: "external", icon: "hub" },
+  ],
+  edges: [
+    { id: "components-app", from: "pkg-components", to: "you-app", label: "npm install, then import" },
+    { id: "tokens-app", from: "pkg-tokens", to: "you-app", label: "one stylesheet import", bend: -40 },
+    { id: "presets-root", from: "pkg-presets", to: "you-root", label: "one attribute applies a complete look", kind: "accent" },
+    { id: "site-agent", from: "docs-site", to: "you-agent", label: "npx init installs the agent skill" },
+    { id: "agent-site", from: "you-agent", to: "docs-site", label: "reads contracts over MCP", bend: 60 },
+  ],
+};
+
 /** One repo, one gate, two destinations. */
 export const systemOverviewMap: ArchMap = {
   id: "system-overview",
@@ -42,7 +72,7 @@ export const systemOverviewMap: ArchMap = {
   ],
 };
 
-/** Five stages, three artifacts, and the only two external touches before runtime. */
+/** Five stages, three artifacts, one external touch before runtime. */
 export const pipelineMap: ArchMap = {
   id: "pipeline",
   title: "The pipeline",
@@ -51,14 +81,11 @@ export const pipelineMap: ArchMap = {
   width: 2080,
   height: 1220,
   nodes: [
-    /* External inputs */
-    { id: "figma", x: 40, y: 250, w: 220, h: 64, title: "Figma", sub: "design foundation", kind: "external", logo: "/logos/Figma.svg" },
-
     /* Stage 1 */
     { id: "z-author", x: 330, y: 140, w: 430, h: 460, kind: "zone", title: "1 · Author", sub: "everything hand-written" },
     { id: "author-src", x: 370, y: 220, w: 350, h: 76, title: "Component source", sub: "code · prop JSDoc · token CSS", icon: "code", chip: "info" },
     { id: "author-specs", x: 370, y: 330, w: 350, h: 76, title: "Root specs", sub: "design.md · content-design.md · CLAUDE.md", icon: "description", chip: "info" },
-    { id: "author-data", x: 370, y: 440, w: 350, h: 76, title: "Data registries", sub: "components · tokens · journal", icon: "storage", chip: "info" },
+    { id: "author-data", x: 370, y: 440, w: 350, h: 76, title: "Data registries", sub: "components · tokens · releases", icon: "storage", chip: "info" },
 
     /* Stage 2 */
     { id: "z-chain", x: 880, y: 240, w: 430, h: 340, kind: "zone", title: "2 · Generate + validate", sub: "no build starts before this passes" },
@@ -81,10 +108,8 @@ export const pipelineMap: ArchMap = {
     { id: "release", x: 370, y: 930, w: 320, h: 76, title: "Release workflow", sub: "manual · OIDC trusted publishing · consumer smoke", icon: "rocket_launch", chip: "positive" },
     { id: "npm-registry", x: 370, y: 1050, w: 320, h: 64, title: "npm registry", sub: "@robr0/design-system", kind: "external", logo: "/logos/npm.svg" },
     { id: "vercel", x: 770, y: 930, w: 350, h: 76, title: "Vercel", sub: "deploys every push to main · two projects", ...VERCEL_LOGO },
-    { id: "godaddy", x: 770, y: 1050, w: 350, h: 64, title: "Domain", sub: "DNS pointed at Vercel", kind: "external", icon: "language" },
   ],
   edges: [
-    { id: "figma-src", from: "figma", to: "author-src", label: "the foundation's origin" },
     { id: "src-gen", from: "author-src", to: "generators" },
     { id: "specs-gen", from: "author-specs", to: "generators", label: "before every build" },
     { id: "data-gen", from: "author-data", to: "validators" },
@@ -99,7 +124,6 @@ export const pipelineMap: ArchMap = {
     { id: "ci-vercel", from: "ci", to: "vercel", label: "push to main deploys" },
     { id: "ci-release", from: "ci", to: "release", label: "dispatched by hand", bend: 170 },
     { id: "release-npm", from: "release", to: "npm-registry", label: "publish from dist/ · provenance" },
-    { id: "godaddy-vercel", from: "godaddy", to: "vercel", label: "DNS", kind: "external" },
   ],
 };
 
@@ -175,10 +199,9 @@ export const runtimeMap: ArchMap = {
   width: 1700,
   height: 900,
   nodes: [
-    { id: "godaddy", x: 140, y: 70, w: 320, h: 64, title: "Domain", sub: "DNS: www → Vercel", kind: "external", icon: "language" },
     { id: "browser", x: 140, y: 200, w: 320, h: 90, title: "Visitor's browser", sub: "gtag + the WebGL background run here", icon: "public", chip: "positive" },
-    { id: "ga4", x: 140, y: 376, w: 320, h: 64, title: "Google Analytics 4", sub: "Vercel never sees an event", kind: "external", icon: "monitoring" },
-    { id: "runtime-fonts", x: 140, y: 490, w: 320, h: 64, title: "Google Fonts", sub: "two pages fetch type at runtime", kind: "external", icon: "font_download" },
+    { id: "ga4", x: 140, y: 376, w: 320, h: 64, title: "Google Analytics 4", sub: "off until a measurement ID is set", kind: "external", icon: "monitoring" },
+    { id: "runtime-fonts", x: 140, y: 490, w: 320, h: 64, title: "Google Fonts", sub: "theme faces, fetched on use", kind: "external", icon: "font_download" },
     { id: "agents", x: 140, y: 580, w: 320, h: 76, title: "Agents + MCP clients", sub: "connect with one URL, no key", icon: "smart_toy", chip: "positive" },
     { id: "cron", x: 140, y: 720, w: 320, h: 76, title: "GitHub Actions cron", sub: "the uptime workflow", kind: "external", logo: "/logos/Git.svg" },
 
@@ -194,13 +217,12 @@ export const runtimeMap: ArchMap = {
     { id: "github-api", x: 1320, y: 590, w: 320, h: 64, title: "GitHub API", sub: "public commit data", kind: "external", logo: "/logos/Git.svg" },
   ],
   edges: [
-    { id: "godaddy-pages", from: "godaddy", to: "pages", label: "DNS", kind: "external" },
     { id: "browser-pages", from: "browser", to: "pages", label: "HTML + assets" },
     { id: "browser-chat", from: "browser", to: "api-chat", label: "chat", bend: 40 },
     { id: "browser-ga4", from: "browser", to: "ga4", label: "events go straight to Google", kind: "accent" },
-    { id: "browser-fonts", from: "browser", to: "runtime-fonts", fromSide: "left", toSide: "left", label: "playground + MCP landing", kind: "external" },
+    { id: "browser-fonts", from: "browser", to: "runtime-fonts", fromSide: "left", toSide: "left", label: "a face downloads when a theme uses it", kind: "external" },
     { id: "agents-mcp", from: "agents", to: "api-mcp", label: "MCP tools" },
-    { id: "cron-isr", from: "cron", to: "isr", label: "smoke every 4h", kind: "external" },
+    { id: "cron-isr", from: "cron", to: "isr", label: "smokes production on a cron", kind: "external" },
     { id: "chat-anthropic", from: "api-chat", to: "anthropic", label: "model calls" },
     { id: "chat-redis", from: "api-chat", to: "redis", label: "log + budget + rate", bend: 30 },
     { id: "github-github", from: "api-github", to: "github-api", label: "polls" },

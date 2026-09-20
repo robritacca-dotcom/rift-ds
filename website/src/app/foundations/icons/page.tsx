@@ -6,6 +6,7 @@ import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import { EntityCard } from "@robr0/design-system/components/EntityCard/EntityCard";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
+import { CodeBlock } from "@robr0/design-system/components/CodeBlock/CodeBlock";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import { getSidebarLinks, foundationsSidebarLinks } from "@/config/navigation";
 import styles from "./page.module.css";
@@ -314,10 +315,10 @@ export default function IconsPage() {
           {/* Intro */}
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
-              Material Symbols 3, rounded variant only
+              One icon contract; the set is a theme choice
             </p>
             <p className={styles.introBody}>
-              One weight across the entire set, on a four-step size scale, so icons stay visually consistent next to text and inside components. Optical size tracks each step automatically, keeping stroke weight even from 20px to 48px. {totalIcons} icons are included.
+              The shipped default is Material Symbols Rounded: one weight across the set, on a four-step size scale, with optical size tracking each step automatically so stroke weight stays even from 20px to 48px. {totalIcons} icons are included, and every Google axis stays live (the Style section below). The contract, not the set, is the rule here: icons sit on the size scale and inherit text colour, and many icon props accept your own elements, so another icon set drops in beside or instead of the bundled one.
             </p>
           </div>
 
@@ -352,6 +353,58 @@ export default function IconsPage() {
                 </div>
               ))}
             </div>
+          </section>
+
+          {/* Style hooks */}
+          <section className={`${styles.iconSection} animate-in animate-delay-2`}>
+            <SectionTitle title="Style" />
+
+            <p className={styles.sizeNote}>
+              The bundled font is the full Material Symbols variable font, and
+              every axis Google exposes is a custom property you can set at
+              any scope: <code>--material-symbols-fill</code> (0 line, 1
+              filled), <code>--material-symbols-weight</code> (100–700 stroke
+              thickness), and <code>--material-symbols-grade</code> (-50–200
+              contrast tuning). Optical size is deliberately automatic: the
+              browser feeds the rendered size into the axis, so strokes stay
+              even across the size scale. Dark mode already applies a -25
+              grade so light-on-dark glyphs do not bloom, and the{" "}
+              <code>icon-filled</code> class is shorthand for the fill axis
+              on one icon.
+            </p>
+
+            <div className={styles.sizeRow}>
+              {([
+                { label: "Line", vars: {} },
+                { label: "Filled", vars: { "--material-symbols-fill": "1" } },
+                { label: "Thin", vars: { "--material-symbols-weight": "100" } },
+                { label: "Bold", vars: { "--material-symbols-weight": "600" } },
+              ] as { label: string; vars: Record<string, string> }[]).map((v) => (
+                <div key={v.label} className={styles.sizeCard}>
+                  <div className={styles.sizePreview}>
+                    <span
+                      className="material-symbols-rounded"
+                      style={{ ["--icon-size" as string]: "var(--icon-size-800)", ...v.vars }}
+                      aria-hidden="true"
+                    >
+                      favorite
+                    </span>
+                  </div>
+                  <span className={styles.sizeLabel}>{v.label}</span>
+                </div>
+              ))}
+            </div>
+
+            <CodeBlock
+              code={`/* Every Google axis is a token-style hook; set them at any scope. */
+:root {
+  --material-symbols-fill: 1;      /* 0 line · 1 filled */
+  --material-symbols-weight: 300;  /* 100-700 stroke thickness */
+  --material-symbols-grade: 0;     /* -50-200 contrast tuning */
+}`}
+              language="css"
+              showCopy
+            />
           </section>
 
           {/* Icon Categories */}

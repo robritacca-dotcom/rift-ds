@@ -47,7 +47,7 @@ import { Input } from "@robr0/design-system/components/Input/Input";
 import { Kbd } from "@robr0/design-system/components/Kbd/Kbd";
 import { Meter } from "@robr0/design-system/components/Meter/Meter";
 import { Sparkline } from "@robr0/design-system/components/Sparkline/Sparkline";
-import ThemeToggle from "../../ThemeToggle/ThemeToggle";
+import SidebarSwitchers from "../SidebarSwitchers/SidebarSwitchers";
 import TemplateAssistant from "../TemplateAssistant/TemplateAssistant";
 import styles from "./SalesPipeline.module.css";
 
@@ -689,7 +689,7 @@ export default function SalesPipeline() {
           onExpandedChange={setSidebarExpanded}
           logoText="Meridian"
           floating
-          footerSlot={<ThemeToggle />}
+          footerSlot={<SidebarSwitchers />}
         />
       </div>
 

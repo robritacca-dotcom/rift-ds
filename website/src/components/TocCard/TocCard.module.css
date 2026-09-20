@@ -31,6 +31,7 @@
 }
 
 .tocCardTitle {
+  font-family: var(--font-heading-3-family);
   font-size: var(--font-heading-3-size);
   font-weight: var(--font-heading-3-weight);
   line-height: var(--font-heading-3-line-height);

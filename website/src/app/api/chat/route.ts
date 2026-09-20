@@ -40,7 +40,6 @@ import {
 } from "@/lib/chat-model";
 import { lookupComponent, lookupTokens } from "@/lib/site-tools";
 
-import { EASTER_EGGS } from "./easter-eggs";
 import {
   checkGuardrails,
   recordExchange,
@@ -473,9 +472,8 @@ export async function POST(request: Request): Promise<Response> {
 
         const system: Anthropic.Messages.TextBlockParam[] = [
           { type: "text", text: PERSONA },
-          { type: "text", text: EASTER_EGGS },
-          // The cache breakpoint sits on this block, so the persona and
-          // easter eggs cache together with the corpus. Nothing volatile
+          // The cache breakpoint sits on this block, so the persona
+          // caches together with the corpus. Nothing volatile
           // may precede it (the tools array serialises ahead of the system
           // blocks, which is fine — it is as stable as the persona). The
           // 1-hour TTL matches how visitors actually arrive: most gaps

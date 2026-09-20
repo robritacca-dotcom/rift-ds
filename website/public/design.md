@@ -16,11 +16,11 @@ The system is **light/dark-first**: every semantic color token has a light-theme
 **Key Characteristics:**
 - Soft gray page floor (`--color-bg-page-primary` — #F1F1F1) with near-black primary text (`--color-text-primary` — #050505 light / #F1F1F1 dark), and crisp white containers lifting off it.
 - Teal primary action (`--color-action-primary-bg` — #0E6E8F light / #3CA5C6 dark). Used exclusively on primary CTA buttons, focus rings, and the selected item of a mutually exclusive set (the teal selection convention: SegmentedControl's active segment, Pagination's current page, Stepper's active step, the site header's current-section pill), with one sanctioned data-viz exception: teal leads the default chart series palette. Never decorative elsewhere.
-- Nunito Sans single-family system. Weight 300 for Mega/Display (marketing), 600 for headings, 500/400 for body and UI labels; 700 appears once, on the site header's wordmark.
+- Single-family system (Nunito Sans in the shipped theme). Weight 300 for Mega/Display (marketing), 600 for headings, 500/400 for body and UI labels; 700 appears once, on the site header's wordmark.
 - Container hierarchy as depth signal — standard containers carry no drop shadows. Depth is conveyed by stepping through `--color-bg-container-primary` → `secondary` → `tertiary`; the only shadows are the `--shadow-floating`/`--shadow-modal` tokens on floating surfaces and the interactive-card hover lift.
 - Five semantic status variants running through every feedback component: `info` (blue), `positive` (green), `warning` (orange), `error` (red), `neutral` (gray).
 - Border radius is hierarchical: `--radius-100` (4px) for badges, `--radius-300` (12px) for inputs and standard containers, `--radius-600` (24px) for the sanctioned soft-container set the Border Radius Scale table below enumerates (navigation tiles, chat surfaces, Panel, the floating sidebar), `--radius-pill` (999px) for buttons.
-- Material Symbols Rounded for all iconography, on a four-step size scale — `--icon-size-500` (20px) / `md` (24px, default) / `lg` (32px) / `xl` (48px). Optical size tracks the step automatically.
+- Material Symbols Rounded as the shipped icon set (a theme choice, not a structural limit — see the icon style hooks and the node-accepting icon props), on a four-step size scale — `--icon-size-500` (20px) / `md` (24px, default) / `lg` (32px) / `xl` (48px). Optical size tracks the step automatically.
 - One GPU-rendered surface: **ShaderField**, an ambient field of soft light sources that sample the colour tokens at runtime, so it re-themes with everything else. It is scenery rather than interface, it reports how it resolved so a caller can keep a fallback painted, and its `prefers-reduced-motion` check lives in JavaScript, where the CSS guard cannot reach (Carousel's autoplay gate makes the same move).
 - Accessibility-first: ARIA roles, semantic HTML, and keyboard navigation in every interactive component.
 
@@ -150,7 +150,7 @@ The family carries one solid fill alongside the stops: `--color-ai-button-bg` (`
 ## Typography
 
 ### Font Family
-The system uses **Nunito Sans** exclusively. No serif face, and no bundled monospace face — code contexts (CodeBlock, ToolCall names, Prose inline code) use the system mono stack codified as `--font-family-code`. The main font stack is `'Nunito Sans', sans-serif` via `--font-family-primary`.
+The shipped theme resolves every role to **Nunito Sans**. No serif face, and no bundled monospace face — code contexts (CodeBlock, ToolCall names, Prose inline code) use the system mono stack codified as `--font-family-code`. The main font stack is `'Nunito Sans', sans-serif` via `--font-family-primary`.
 
 Nunito Sans is a rounded humanist sans-serif. The rounded terminals give UI elements a friendly, approachable quality without sacrificing technical clarity. Inter is an acceptable substitute for prototyping; avoid Helvetica or Arial, which strip the rounded character.
 
@@ -397,6 +397,8 @@ Components set **`--icon-size`**, never `font-size`:
 ```css
 .ds-thing__icon { --icon-size: var(--icon-size-500); }
 ```
+
+**Icon style hooks** — the bundled woff2 is the full Material Symbols variable font, and `src/fonts/material-symbols.css` exposes every Google axis as a consumed custom property, settable at any scope: `--material-symbols-fill` (0 line / 1 filled), `--material-symbols-weight` (100–700 stroke), `--material-symbols-grade` (−50–200 contrast). `opsz` is deliberately absent from `font-variation-settings` so `font-optical-sizing: auto` feeds the rendered size into the axis (an explicit value would pin it). Two shipped applications of the hooks: `[data-theme="dark"]` sets grade −25 so light-on-dark glyphs do not bloom, and `.icon-filled` is the one-icon shorthand for the fill axis. These are consumer-override hooks with fallbacks, not registry tokens — the fallback values in that file are their defaults.
 
 `.material-symbols-rounded` reads that one property for `font-size`, `width`, and `height` together, so the glyph and its layout box can never disagree. It *consumes* the variable and never declares it — which is what keeps a component rule from colliding with the icon font's own styles. Setting `font-size` directly on an icon is a bug: it changes the glyph without changing the box.
 
@@ -827,7 +829,7 @@ Row status is shown as a Badge, with editing behind the row's actions — the bl
 
 ### Stat
 
-**`ds-stat`** — A single headline metric: display-weight numeral over a quiet label, with an optional trend delta. Value uses `--font-sub-display-*` (30px/300) by default, `--font-display-2-*` (64px/300) at `large` — the weight-contrast rule applied to numerals. Label: `--font-paragraph-sm-*` in `--color-text-tertiary`. Delta: `--font-paragraph-sm-emphasis-*` with an `--icon-size-500` (20px) Material arrow; colours by trend through the theme-split trend tokens — `up` → `--color-trend-up`, `down` → `--color-trend-down`, `neutral` → `--color-text-tertiary` (the earlier always-accent colouring was unreadable on light surfaces; see the Trend token section). `deltaPlacement="inline"` (`ds-stat--delta-inline`) moves the delta to the right of the value, bottom-aligned to its baseline via a grid re-template, for dashboard KPI tiles; the default stacks it below the label. Compose several in a flex row for a case-study metrics band.
+**`ds-stat`** — A single headline metric: display-weight numeral over a quiet label, with an optional trend delta. Value uses `--font-sub-display-*` (30px/300) by default, `--font-display-2-*` (64px/300) at `large` — the weight-contrast rule applied to numerals. Label: `--font-paragraph-sm-*` in `--color-text-tertiary`. Delta: `--font-paragraph-sm-emphasis-*` with an `--icon-size-500` (20px) Material arrow; colours by trend through the theme-split trend tokens — `up` → `--color-trend-up`, `down` → `--color-trend-down`, `neutral` → `--color-text-tertiary` (the earlier always-accent colouring was unreadable on light surfaces; see the Trend token section). `deltaPlacement="inline"` (`ds-stat--delta-inline`) moves the delta to the right of the value, bottom-aligned to its baseline via a grid re-template, for dashboard KPI tiles; the default stacks it below the label. Compose several in a flex row for a metrics band.
 
 ### AnimatedNumber
 

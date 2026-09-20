@@ -114,7 +114,7 @@ export default function SemanticSpacingPage() {
           {/* Intro */}
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
-              Border, radius, gap, and padding tokens from Figma variables
+              Border, radius, gap, and padding: the spatial contract
             </p>
             <p className={styles.introBody}>
               Border controls stroke thickness. Radius sets corner rounding, from subtle (2px) to full pill shapes. Gap is the space between sibling elements like buttons in a group or items in a list. Padding is the breathing room inside a container, like the space between a card edge and its content.

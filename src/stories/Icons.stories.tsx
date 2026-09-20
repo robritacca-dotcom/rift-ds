@@ -276,7 +276,7 @@ const meta = {
     docs: {
       description: {
         component: `
-Material Symbols 3 icon gallery: **Rounded** only.
+The shipped icon set: Material Symbols **Rounded**. A theme choice, not a structural limit — the size scale and colour inheritance are the contract, and components' icon props accept your own elements too.
 
 ## Usage
 \`\`\`tsx

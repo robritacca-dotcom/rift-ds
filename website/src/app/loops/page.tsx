@@ -37,11 +37,12 @@ export default function LoopsPage() {
               Agents on a schedule, with a human approval gate
             </p>
             <p className={styles.introBody}>
-              Skills are capabilities: instructions Claude Code follows when I invoke
-              them. Loops are what happens when a skill runs on a schedule. An agent
-              does real work against real data and brings me a proposal. Nothing merges
-              or deploys itself; every loop ends in the same place, me reviewing a
-              branch. This page documents the loops currently running on this site.
+              Skills are capabilities: instructions a coding agent follows when
+              invoked. Loops are what happens when a skill runs on a schedule. An
+              agent does real work against real data and brings the maintainer a
+              proposal. Nothing merges or deploys itself; every loop ends in the
+              same place, a human reviewing a branch. This page documents the
+              loops this repo defines.
             </p>
           </div>
 

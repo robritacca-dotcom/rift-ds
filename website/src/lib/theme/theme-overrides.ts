@@ -888,6 +888,9 @@ export const HEADING_FONT_OPTIONS: FontOption[] = [
   { label: HEADING_MATCH_LABEL, family: "", googleParam: null },
   { label: "Nunito Sans", family: "'Nunito Sans', sans-serif", googleParam: "Nunito+Sans:opsz,wght@6..12,300..700" },
   ...FONT_OPTIONS.slice(1),
+  /* Heading-only face: a display serif too characterful for body copy,
+     there so a second serif theme does not have to share Lora. */
+  { label: "Fraunces (serif)", family: "'Fraunces', serif", googleParam: "Fraunces:opsz,wght@9..144,300..700" },
 ];
 
 export function googleFontHref(googleParam: string): string {

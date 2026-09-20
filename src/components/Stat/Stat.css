@@ -27,6 +27,7 @@
 }
 
 .ds-stat--large .ds-stat__value {
+  font-family: var(--font-display-2-family);
   font-size: var(--font-display-2-size);
   line-height: var(--font-display-2-line-height);
   letter-spacing: var(--font-display-2-letter-spacing);

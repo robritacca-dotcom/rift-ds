@@ -105,7 +105,7 @@ import { BarChart, LineChart } from '@robr0/design-system/charts';
   ```
   A complete rebrand re-keys the whole teal ramp (00-11): the remaining steps carry the primary label, active icons, hover/selected input borders, and the AI gradient, so stopping at the six fills leaves those teal. The easiest way to get all of it right is the [playground](https://dragonspine.vercel.app/playground): restyle the system live and copy out a complete, paste-ready override.
 
-Icons use a bundled Material Symbols Rounded variable font (woff2): components import it themselves, so they need no extra setup. If you render raw `.material-symbols-rounded` spans of your own, import `@robr0/design-system/fonts/material-symbols.css` once. Nunito Sans, the system's default typeface, is intentionally *not* bundled: load it yourself (e.g. Google Fonts or `next/font`) or override `--font-family-primary`.
+Icons use a bundled Material Symbols Rounded variable font (woff2): components import it themselves, so they need no extra setup. If you render raw `.material-symbols-rounded` spans of your own, import `@robr0/design-system/fonts/material-symbols.css` once. No text face is bundled: the whole scale chains to family tokens, the shipped themes mix serif, sans and mono pairings over the same components, and the default resolves to Nunito Sans: load any font and point `--font-family-primary` (or the heading/body roles) at it.
 
 ### Token architecture
 

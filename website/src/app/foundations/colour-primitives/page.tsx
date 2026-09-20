@@ -280,10 +280,10 @@ export default function PrimitiveColoursPage() {
           {/* Intro */}
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
-              Colour ramps built from a single palette in Figma
+              Colour ramps: the raw layer every theme re-points
             </p>
             <p className={styles.introBody}>
-              These raw values never get used directly in components. Instead, they feed into the semantic layer where each value gets assigned a role like &quot;page background&quot; or &quot;primary text&quot;. Keeping them separate means the palette can evolve without touching any component styles.
+              These raw values never get used directly in components. Instead, they feed into the semantic layer where each value gets assigned a role like &quot;page background&quot; or &quot;primary text&quot;. Keeping them separate means the palette can evolve without touching any component styles, and it is what makes re-theming cheap: the shipped theme presets rebase these ramps, and overriding a primitive cascades through everything built on it.
             </p>
           </div>
 

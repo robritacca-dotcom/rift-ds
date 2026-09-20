@@ -3,6 +3,7 @@
 import Link from "next/link";
 import type { MouseEvent as ReactMouseEvent } from "react";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
+import BrandSwitcher from "../BrandSwitcher/BrandSwitcher";
 import { openSitePalette } from "../SitePalette/palette-bus";
 import { Kbd } from "@robr0/design-system/components/Kbd/Kbd";
 import { getNavSections } from "@/config/navigation";
@@ -147,6 +148,7 @@ export default function HeaderBar({
 
       <div className={styles.rightSlot}>
         <SearchButton tabIndex={linkTab} />
+        <BrandSwitcher className={styles.desktopBrandSwitcher} />
         <ThemeToggle className={styles.desktopThemeToggle} />
         <button
           type="button"

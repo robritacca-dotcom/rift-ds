@@ -1,6 +1,6 @@
 /*
  * AUTO-GENERATED. Do not edit.
- * Theme preset "violet" (Soft violet).
+ * Theme preset "violet" (Velvet).
  * Source of truth: website/src/lib/theme/presets.ts (THEME_PRESETS + presetOverrides).
  * Regenerate: node scripts/generate-preset-stylesheets.mjs
  * Import after tokens.css, then set data-brand="violet" on <html>.
@@ -27,7 +27,7 @@ html[data-brand="violet"] {
   --color-core-ui-secondary: var(--primitive-purple-11);
   --color-input-border-hover: var(--primitive-purple-06);
   --color-input-border-selected: var(--primitive-purple-08);
-  --font-family-heading: 'Lora', serif;
+  --font-family-heading: 'Fraunces', serif;
   --font-family-primary: 'Work Sans', sans-serif;
   --primitive-blue-00: #FBFBFE;
   --primitive-blue-01: #F6F6FD;
@@ -163,7 +163,7 @@ html[data-brand="violet"][data-theme="dark"] {
   --color-core-ui-secondary: var(--primitive-purple-09);
   --color-input-border-hover: var(--primitive-purple-09);
   --color-input-border-selected: var(--primitive-purple-09);
-  --font-family-heading: 'Lora', serif;
+  --font-family-heading: 'Fraunces', serif;
   --font-family-primary: 'Work Sans', sans-serif;
   --primitive-blue-00: #FBFBFE;
   --primitive-blue-01: #F6F6FD;

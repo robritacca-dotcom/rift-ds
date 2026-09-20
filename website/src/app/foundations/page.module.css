@@ -29,6 +29,7 @@
 }
 
 .pageTitle {
+  font-family: var(--font-display-2-family);
   font-size: var(--font-display-2-size);
   font-weight: var(--font-display-2-weight);
   line-height: var(--font-display-2-line-height);
@@ -280,6 +281,7 @@
 
 /* Typography preview */
 .typographyLightA {
+  font-family: var(--font-display-2-family);
   font-size: var(--font-display-2-size);
   font-weight: var(--font-display-2-weight);
   color: var(--color-text-primary);
@@ -287,6 +289,7 @@
 }
 
 .typographyBoldA {
+  font-family: var(--font-display-1-family);
   font-size: var(--font-display-1-size);
   font-weight: 600;
   color: var(--color-text-primary);

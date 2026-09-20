@@ -87,14 +87,13 @@ try {
   // Generation already failed above; no need to report it twice.
 }
 
-// 2b. The other system blocks. persona.ts and easter-eggs.ts are sent to the
-// model alongside the corpus, so the same secret-leak rules apply to them. The
-// email screen is corpus-only (it depends on corpus-facts() sanctioning); these
-// files carry no such mechanism, so they are held to the non-sanctionable
-// patterns — a local path, GA id, or API key must never appear in a prompt file.
+// 2b. The other system block. persona.ts is sent to the model alongside the
+// corpus, so the same secret-leak rules apply to it. The email screen is
+// corpus-only (it depends on corpus-facts() sanctioning); this file carries no
+// such mechanism, so it is held to the non-sanctionable patterns — a local
+// path, GA id, or API key must never appear in a prompt file.
 const promptFiles = [
   'website/src/app/api/chat/persona.ts',
-  'website/src/app/api/chat/easter-eggs.ts',
 ];
 for (const rel of promptFiles) {
   const abs = join(repoRoot, rel);

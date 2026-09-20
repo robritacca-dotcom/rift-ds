@@ -7,7 +7,7 @@
  * agreeing with a hostile premise to be agreeable, volunteering opinions about
  * named people or companies. Those are the rules below.
  *
- * Sent as the first system block, ahead of the easter eggs and the site
+ * Sent as the first system block, ahead of the site
  * corpus. The cache breakpoint sits on the corpus, so all three blocks cache
  * together and editing this file invalidates the cache on the next request.
  * That is fine: persona edits are rare, and the first request after one pays

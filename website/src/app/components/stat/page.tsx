@@ -34,7 +34,7 @@ export default function StatPage() {
             <p className={styles.introBody}>
               A Stat gives one number room to speak: display-weight numeral, quiet label,
               and an optional trend annotation. Compose several in a row for the metrics
-              band that opens a case study.
+              band that opens a dashboard or a report.
             </p>
           </div>
 
@@ -75,8 +75,8 @@ export default function StatPage() {
           <section className={styles.section}>
             <SectionTitle title="Metrics band" />
             <p className={styles.introBody}>
-              The intended composition: a row of stats leading a case study, replacing
-              numbers buried in body copy. These are real outcomes from the Augmenta study.
+              The intended composition: a row of stats leading a report, replacing
+              numbers buried in body copy. The figures here are demo data.
             </p>
             <div className={styles.variantRow}>
               <Stat value="~900%" label="Successful generations" trend="up" delta="clash visualisation" />

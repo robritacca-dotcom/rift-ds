@@ -23,9 +23,12 @@ const { sidebarLinks } = getSidebarLinks(docsSidebarLinks, "/docs/get-started");
 
 /** On-this-page rail entries — ids match the section elements below, in document order. */
 const PAGE_SECTIONS = [
+  { id: "agent-quickstart", label: "Quick start with an agent" },
   { id: "install", label: "Install" },
+  { id: "clone", label: "Or clone the repo" },
   { id: "dark-mode", label: "Dark mode" },
   { id: "fonts", label: "Bring your own font" },
+  { id: "icons", label: "Tune the icons" },
   { id: "re-theme", label: "Re-theme with primitives" },
   { id: "preset-themes", label: "Ship a theme" },
   { id: "chat-agent-ui", label: "Chat and agent UI" },
@@ -66,6 +69,19 @@ import { BarChart, LineChart } from '@robr0/design-system/charts';`;
 
 const DARK_MODE_SNIPPET = `<!-- Light is the default; flip the whole system with one attribute -->
 <html data-theme="dark">`;
+
+const CLONE_SNIPPET = `git clone ${REPOSITORY_URL}.git
+cd ${REPOSITORY_URL.split("/").pop()}
+npm install          # one install; the website is an npm workspace
+npm run storybook    # the component sandbox, or:
+npm run dev -w website   # this whole docs site, locally`;
+
+const ICON_SNIPPET = `/* The bundled Material Symbols font keeps every Google axis live. */
+:root {
+  --material-symbols-fill: 1;      /* 0 line · 1 filled */
+  --material-symbols-weight: 300;  /* 100-700 stroke thickness */
+  --material-symbols-grade: 0;     /* -50-200 contrast tuning */
+}`;
 
 const PRESET_SNIPPET = `// Every shipped theme, one generated stylesheet each, plus this aggregate.
 import '@robr0/design-system/tokens/presets/presets.css';
@@ -258,6 +274,24 @@ export default function GetStartedPage() {
           {/* Content + Built-with rail */}
           <div className={styles.railLayout}>
             <div className={styles.railMain}>
+              {/* Agent quick start — before the human steps, because for many
+                  readers the agent IS the installer */}
+              <section id="agent-quickstart" className={`${styles.section} animate-in animate-delay-2`}>
+                <SectionTitle title="Quick start with an agent" />
+                <p className={styles.sectionNote}>
+                  Building with a coding agent? One command teaches it the
+                  system before you write anything: it installs the generated
+                  agent skill into your project and prints the MCP connect
+                  line, so the agent knows the components, the tokens, and the
+                  theming contract from its first session. The{" "}
+                  <a href="#agent-docs" className={styles.inlineLink}>
+                    docs for your agent
+                  </a>{" "}
+                  section below has everything it sets up.
+                </p>
+                <CodeBlock code={INIT_SNIPPET} language="bash" showCopy />
+              </section>
+
               {/* Install */}
               <section id="install" className={`${styles.section} animate-in animate-delay-2`}>
                 <SectionTitle title="Install" />
@@ -273,6 +307,21 @@ export default function GetStartedPage() {
                 <CodeBlock code={INSTALL_SNIPPET} language="bash" showCopy />
                 <CodeBlock code={USAGE_SNIPPET} language="tsx" filename="app.tsx" showCopy />
                 <CodeBlock code={CHARTS_SNIPPET} language="tsx" showCopy />
+              </section>
+
+              {/* Clone */}
+              <section id="clone" className={`${styles.section} animate-in animate-delay-3`}>
+                <SectionTitle title="Or clone the repo" />
+                <p className={styles.sectionNote}>
+                  The package is one way in; the source is another. The whole
+                  system is MIT licensed, this site included, so you can clone
+                  the repo, run it, and keep whatever parts serve you: the
+                  components and tokens, the generators and validators that
+                  hold the docs to the code, or the specs the system is built
+                  from. One install brings up both the Storybook sandbox and
+                  this documentation site.
+                </p>
+                <CodeBlock code={CLONE_SNIPPET} language="bash" showCopy />
               </section>
 
               {/* Dark mode */}
@@ -291,13 +340,14 @@ export default function GetStartedPage() {
               <section id="fonts" className={`${styles.section} animate-in animate-delay-4`}>
                 <SectionTitle title="Bring your own font" />
                 <p className={styles.sectionNote}>
-                  The system is designed for Nunito Sans but deliberately does not bundle
-                  it. Load it (or any font) however your stack prefers and point one token
-                  at it. This site loads Nunito Sans with <code>next/font</code> and does
-                  exactly this override in its global CSS. Want headings in one face and
-                  body copy in another? The scale chains through two family roles, both
-                  defaulting to the primary token, so you can split them instead. Try
-                  pairings live in the playground.
+                  No text face is bundled, on purpose: the type is yours to choose.
+                  The whole scale chains to one family token, so you load any font
+                  however your stack prefers and point the token at it. Want headings
+                  in one face and body copy in another? The scale chains through two
+                  family roles, both defaulting to the primary token, so you split
+                  them instead. The shipped themes prove the range: eight looks
+                  mixing serif, sans, grotesk and mono pairings over the same
+                  components. Try pairings live in the playground.
                 </p>
                 <CodeBlock code={FONT_SNIPPET} language="css" showCopy />
               </section>
@@ -317,6 +367,22 @@ export default function GetStartedPage() {
                   without touching the ramp it comes from:
                 </p>
                 <CodeBlock code={SEMANTIC_SNIPPET} language="css" showCopy />
+              </section>
+
+              {/* Icons */}
+              <section id="icons" className={`${styles.section} animate-in animate-delay-5`}>
+                <SectionTitle title="Tune the icons" />
+                <p className={styles.sectionNote}>
+                  Icons ship as the full Material Symbols variable font, so
+                  every axis Google exposes is a custom property: fill,
+                  stroke weight, and grade, settable at any scope from one
+                  icon to the whole app. Optical size is automatic. And
+                  nothing couples you to the bundled font: many icon props
+                  (Button, Chip, EmptyState, the chat set) accept your own
+                  elements as well as Material names, so a Lucide or any
+                  other icon set drops straight in.
+                </p>
+                <CodeBlock code={ICON_SNIPPET} language="css" showCopy />
               </section>
 
               {/* Preset themes */}

@@ -81,7 +81,7 @@ const bases = (b: Record<string, string>): AdvancedColorState => ({
 
 export const THEME_PRESETS: Record<string, ThemePreset> = {
   warm: {
-    label: "Warm serif",
+    label: "Ember",
     brand: "#D97757",
     tintOn: true,
     tintSeed: "#C08B5C",
@@ -118,7 +118,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     }),
   },
   mono: {
-    label: "Black & white",
+    label: "Smoke",
     // Real neutral primitives (08 / 01), so the action colour applies as
     // semantic re-pointing at the neutral ramp instead of a rewritten teal.
     brand: "#232323",
@@ -134,6 +134,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     motionScale: 100,
     elevation: "flat",
     fontLabel: "Inter",
+    headingFontLabel: "Montserrat",
     // Ink-wash chromatics: hue and value hold, saturation drops hard, so
     // any colour that does appear reads as a tinted grey.
     advanced: bases({
@@ -158,7 +159,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     },
   },
   contrast: {
-    label: "Modern blue tint",
+    label: "Blueprint",
     brand: "#1E40AF",
     tintOn: true,
     tintSeed: "#1E40AF",
@@ -191,7 +192,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     }),
   },
   coral: {
-    label: "Coral getaway",
+    label: "Getaway",
     // Hospitality-brand look in the Airbnb direction: the coral key lands
     // in the red family, so the lever rebases red and every other hue is
     // re-keyed toward the travel palette (a beach teal, a sunset orange).
@@ -238,7 +239,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     },
   },
   gold: {
-    label: "Crisp gold",
+    label: "Volt",
     // The yellow key is a light colour, so the action lever derives dark
     // labels over gold fills on its own — no brandDark needed.
     brand: "#FFD166",
@@ -276,7 +277,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     }),
   },
   terminal: {
-    label: "Terminal green",
+    label: "Terminal",
     brand: "#06D6A0",
     tintOn: true,
     tintSeed: "#06D6A0",
@@ -311,7 +312,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     }),
   },
   violet: {
-    label: "Soft violet",
+    label: "Velvet",
     brand: "#7434B3",
     tintOn: true,
     tintSeed: "#9E47EF",
@@ -327,7 +328,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     elevation: "soft",
     // The serif-over-sans split: Lora display over Work Sans text.
     fontLabel: "Work Sans",
-    headingFontLabel: "Lora (serif)",
+    headingFontLabel: "Fraunces (serif)",
     // Violet-leaning sextet: the ambient palette calmed around the key.
     accents: {
       coral: "#D96BA8",
@@ -357,7 +358,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
  * the shipped Dragonspine look (no data-brand attribute).
  */
 export const THEME_SELECTOR_ORDER: ReadonlyArray<string> = [
-  // Black & white leads: it is the default the server ships, so the row
+  // Smoke leads: it is the default the server ships, so the row
   // opens on the look the visitor is already seeing.
   "mono",
   "coral",
@@ -373,7 +374,7 @@ export const THEME_SELECTOR_ORDER: ReadonlyArray<string> = [
     data-brand attribute, the raw token files). Named here, beside the
     presets' own `label` fields, so every selector surface reads the same
     registry rather than hardcoding a string. */
-export const DEFAULT_THEME_LABEL = "Rounded teal";
+export const DEFAULT_THEME_LABEL = "Tide";
 
 /* ---------- rich picker cells ----------
    The preset selector renders each option as a self-portrait (RichDropdown):

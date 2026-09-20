@@ -290,9 +290,11 @@ export default function PlaygroundPage() {
      property a lever hasn't touched, so the attribute is suspended while
      the playground is mounted and restored on the way out — the visitor's
      stored pick is untouched. */
+  const suspendedBrandRef = useRef<string | undefined>(undefined);
   useEffect(() => {
     const root = document.documentElement;
     const suspended = root.dataset.brand;
+    suspendedBrandRef.current = suspended;
     if (suspended !== undefined) delete root.dataset.brand;
     return () => {
       if (suspended !== undefined) root.dataset.brand = suspended;
@@ -417,6 +419,18 @@ export default function PlaygroundPage() {
     setFontLabel(FONT_OPTIONS[0].label);
     setHeadingFontLabel(HEADING_FONT_OPTIONS[0].label);
   };
+
+  /* Launch from the applied theme: the pick the suspend effect recorded
+     seeds the levers once, so the playground opens already showing the
+     look the visitor arrived in rather than the shipped default. Sits
+     after applyPreset/reset so the definitions exist when it runs. */
+  useEffect(() => {
+    const suspended = suspendedBrandRef.current;
+    if (suspended && THEME_PRESETS[suspended]) {
+      applyPreset(suspended);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   /* The copied CSS always puts the light-mode values in :root, whatever
      theme is being previewed. Any non-default action colour ships a
@@ -547,7 +561,9 @@ export default function PlaygroundPage() {
               onFontLabel={asCustom(setFontLabel)}
               onHeadingFontLabel={asCustom(setHeadingFontLabel)}
               onProductName={setProductName}
-              onReset={reset}
+              /* Reset lands on Smoke, the served default — the raw token
+                 files stay reachable as the Tide row in the picker. */
+              onReset={() => applyPreset("mono")}
               onOpenAdvanced={() => setAdvOpen(true)}
               onViewCss={() => setCssOpen(true)}
               contextual={
@@ -708,6 +724,7 @@ export default function PlaygroundPage() {
         <main
           className={[
             styles.dsContent,
+            styles.dsContentEnter,
             /* The stage switch narrows the components and type workspaces
                to a phone-width column — the same lever the Chat view reads
                as its widget preset, so the views agree on what the bar's

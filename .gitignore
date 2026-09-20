@@ -56,3 +56,9 @@ evals/chat/loop-reports/
 
 # Local working notes — not for the public repo
 notes/
+
+# Session-local agent state — never tracked (the skills and launch.json ARE tracked)
+.claude/worktrees/
+.claude/memory/
+.claude/settings.local.json
+.claude/scheduled_tasks.lock

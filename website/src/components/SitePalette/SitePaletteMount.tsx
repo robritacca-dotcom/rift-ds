@@ -53,7 +53,7 @@ const DOC_ICONS: Record<string, string> = {
   "/blueprints/content-design": "description",
   "/skills": "construction",
   "/loops": "all_inclusive",
-  "/project-journal": "timeline",
+  "/releases": "new_releases",
 };
 
 /**

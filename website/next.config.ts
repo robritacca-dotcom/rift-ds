@@ -50,6 +50,9 @@ const nextConfig: NextConfig = {
       // The DS landing was promoted to the home page when the site became
       // the design system's own; the old URL keeps resolving.
       { source: "/design-system", destination: "/", permanent: true },
+      // The journal became the release log when entries moved to 1:1 with
+      // npm releases; the old URL keeps resolving.
+      { source: "/project-journal", destination: "/releases", permanent: true },
       { source: "/design-md", destination: "/blueprints/design", permanent: true },
       { source: "/blueprints", destination: "/docs", permanent: true },
       // The porting guide was unpublished from /blueprints in August 2026 and

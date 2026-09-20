@@ -18,7 +18,7 @@ Use this skill when asked to audit copy, check prose quality, find AI-writing te
 
 1. **Determine scope.** Accept one of:
    - A specific file path (a page, a data file, a markdown doc)
-   - `site-updates` → `website/src/data/site-updates.json` (titles + story bodies)
+   - `release-log` → `website/src/data/release-log.json` (titles + story bodies)
    - `registry` → the `description` fields in `src/components/registry.json`
    - `package-meta` → the npm package description: `PACKAGE_DESCRIPTION` in `scripts/package-manifest.mjs`, mirrored into the root `package.json` (renders on the npmjs.com package page — its register row calls it production copy at the README's bar; no validator judges its prose, and the `readme` scope never reaches it)
    - `corpus-prose` → the hand-written connective paragraphs inside `scripts/generate-site-corpus.mjs` (the chat model can repeat any of them verbatim to a visitor — its register row holds them to the page-prose bar; the corpus validators screen for leaks, never for voice, so the judgement rules stay this scope's. Fix the generator's strings, never the generated file)

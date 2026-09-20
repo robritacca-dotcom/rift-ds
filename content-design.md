@@ -50,7 +50,7 @@ Each surface has its own shape. The full standard for a surface lives in one pla
 
 | Surface | Person | Shape | The rule that matters | Full standard |
 |---|---|---|---|---|
-| Journal entries (`website/src/data/site-updates.json`) | None | One short paragraph per theme: what shipped, and when | Concise and neutral, never commit digests; what and when over why; a plain descriptive title a non-technical reader can follow | This file |
+| Release log entries (`website/src/data/release-log.json`) | None | Short paragraphs per release: what shipped, and what it means for a consumer | Concise and neutral, never commit digests; written for a consumer, not a maintainer; a plain descriptive title a non-technical reader can follow | This file |
 | Website page copy + metadata | None | Short paragraphs under sentence-case headings | The system is the subject; specifics over adjectives | This file |
 | Case studies and about pages | "I" / "we" | Narrative prose with real numbers | A person tells their own story; claims carry evidence | This file |
 | Component descriptions (`src/components/registry.json`) | None | One verbless fragment, ≤160 chars, ends in a full stop | One authoritative home: sidebar, metadata, and README all derive from it | This file + registry validator |

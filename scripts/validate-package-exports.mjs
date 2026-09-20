@@ -9,8 +9,7 @@
  *   3. package-lock.json's root version matches too. npm records the
  *      version there on install, and a release bump that skips the
  *      lockfile (0.3.0 shipped that way) leaves every later plain
- *      `npm install` dirtying the tree — which breaks the worktree
- *      recipes in the site-updates and growth-loop skills. Fix with
+ *      `npm install` dirtying the tree. Fix with
  *      `npm install --package-lock-only` and commit the lockfile.
  *   4. Every `.ts` module under src/components is reachable by a
  *      consumer. See REACHABILITY below.

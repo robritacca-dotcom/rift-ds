@@ -135,7 +135,7 @@ export default function DocsPage() {
             </TocCard>
 
             {/* Project journal */}
-            <TocCard href="/project-journal" title="Project journal">
+            <TocCard href="/releases" title="Release log">
               <div className={styles.journalGrid}>
                 {journalCells.map((level, i) => (
                   <span key={i} className={`${styles.journalCell} ${styles[`journalCellL${level}`]}`} />

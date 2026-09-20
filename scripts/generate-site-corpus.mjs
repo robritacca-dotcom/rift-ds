@@ -894,17 +894,17 @@ ${pageProse('loops')}
 ${entries}`;
 }
 
-function sectionJournal() {
-  const data = JSON.parse(read(join(repoRoot, 'website', 'src', 'data', 'site-updates.json')));
-  const entries = data.entries
-    .map((e) => `### ${e.title} (${e.meta})\n\n${e.body.join('\n\n')}`)
+function sectionReleases() {
+  const data = JSON.parse(read(join(repoRoot, 'website', 'src', 'data', 'release-log.json')));
+  const entries = data.releases
+    .map((e) => `### ${e.version} — ${e.title} (${e.date})\n\n${e.body.join('\n\n')}`)
     .join('\n\n');
 
-  return `## Project journal
+  return `## Release log
 
-How this site and design system got built, newest first. Published at /project-journal.
+One entry per published npm version, newest first. Published at /releases.
 
-${entries}`;
+${entries || 'No releases have been published from this repository yet; the first entry lands with the first npm publish.'}`;
 }
 
 /* ============================================================
@@ -918,7 +918,7 @@ const SECTIONS = [
   ['Components', sectionComponents],
   ['Skills', sectionSkills],
   ['Loops', sectionLoops],
-  ['Journal', sectionJournal],
+  ['Releases', sectionReleases],
 ];
 
 const PREAMBLE = `# Full site content

@@ -52,7 +52,7 @@ function fileForRoute(route: string): string {
 
 function changeFrequency(route: string): ChangeFrequency {
   if (route === "") return "monthly";
-  if (route === "/project-journal" || route === "/loops") return "weekly";
+  if (route === "/releases" || route === "/loops") return "weekly";
   return "monthly";
 }
 

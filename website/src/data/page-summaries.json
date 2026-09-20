@@ -65,17 +65,6 @@
         }
       ]
     },
-    "/project-journal": {
-      "title": "Project journal",
-      "text": "The build's timeline: what shipped and when, from the first tokens to the latest release.",
-      "chips": [
-        {
-          "id": "recent",
-          "label": "What shipped recently?",
-          "prompt": "What has shipped on this project recently?"
-        }
-      ]
-    },
     "/loops": {
       "title": "Agent loops",
       "text": "The recurring automations on this project: copy experiments, journal updates, chat quality, link checks, and visibility tracking.",
@@ -254,6 +243,17 @@
           "id": "content",
           "label": "What are the writing rules?",
           "prompt": "What are the content design rules for this site?"
+        }
+      ]
+    },
+    "/releases": {
+      "title": "Release log",
+      "text": "One entry per npm release: what each published version shipped, newest first.",
+      "chips": [
+        {
+          "id": "latest",
+          "label": "What shipped in the latest release?",
+          "prompt": "What shipped in the latest release of the design system?"
         }
       ]
     }

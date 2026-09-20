@@ -195,10 +195,10 @@ for (const c of registry.components) {
   scan(`src/components/registry.json (${c.name})`, c.description);
 }
 
-const updates = json('website/src/data/site-updates.json');
+const releaseLog = json('website/src/data/release-log.json');
 surfacesChecked += 1;
-for (const e of updates.entries ?? []) {
-  scan(`website/src/data/site-updates.json (${e.title ?? '?'})`, `${e.title ?? ''}\n${e.body ?? e.story ?? ''}`);
+for (const e of releaseLog.releases ?? []) {
+  scan(`website/src/data/release-log.json (${e.version ?? '?'})`, `${e.title ?? ''}\n${(e.body ?? []).join('\n')}`);
 }
 
 const loopsRegistry = json('website/src/data/loops.json');

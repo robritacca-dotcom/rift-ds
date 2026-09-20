@@ -12,7 +12,7 @@ import { getSidebarLinks, docsSidebarLinks } from "@/config/navigation";
 import { COMPONENT_COUNT } from "@robr0/design-system/components/registry";
 import { TOKEN_COUNT, TOKEN_COUNTS } from "@robr0/design-system/tokens/registry";
 import { SKILL_COUNT } from "@/data/skills-registry";
-import { SITE_UPDATE_COUNT } from "@/data/site-updates";
+import { RELEASE_COUNT } from "@/data/release-log";
 import { chatExchangeMap, operatorsMap, pipelineMap, runtimeMap, systemOverviewMap } from "./maps";
 import styles from "./page.module.css";
 import { BRAND_NAME, FIGMA_FILE_URL, REPOSITORY_URL, STORYBOOK_URL } from "@/config/brand.generated";
@@ -256,8 +256,8 @@ export default function AboutDsPage() {
                     <span className={styles.statTitle}>Claude Code skills</span>
                     <span className={styles.statLabel}>Building and auditing the system</span>
                   </Link>
-                  <Link href="/project-journal" className={styles.statItem}>
-                    <span className={styles.statValue}>{SITE_UPDATE_COUNT}</span>
+                  <Link href="/releases" className={styles.statItem}>
+                    <span className={styles.statValue}>{RELEASE_COUNT}</span>
                     <span className={styles.statTitle}>Journal entries</span>
                     <span className={styles.statLabel}>The build, tracked in public</span>
                   </Link>

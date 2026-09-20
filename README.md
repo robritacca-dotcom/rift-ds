@@ -199,6 +199,4 @@ npm run dev --workspace website   # http://localhost:3000
 
 ## License
 
-Two licenses, one repository. The **software** (components, tokens, scripts, and the website's application code) is MIT, so use it in anything. The **content** (page prose, case studies, essays, images, and the name and likeness of Rob Ritacca) is all rights reserved and not licensed for reuse. See [`LICENSE`](LICENSE) for the full terms.
-
-The npm package contains the software only.
+MIT, the whole repository: components, tokens, scripts, the website, and the docs. Use it in anything. See [`LICENSE`](LICENSE) for the full terms.

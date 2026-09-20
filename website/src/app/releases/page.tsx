@@ -1,16 +1,16 @@
-import Link from "next/link";
 import Image from "next/image";
 import MegaNav from "../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import GitHubContributions from "../../components/GitHubContributions/GitHubContributions";
 import { Timeline } from "@robr0/design-system/components/Timeline/Timeline";
+import { EmptyState } from "@robr0/design-system/components/EmptyState/EmptyState";
 import { getSidebarLinks, docsSidebarLinks } from "@/config/navigation";
-import { siteUpdates, siteUpdatesAsOf, SITE_UPDATE_COUNT } from "@/data/site-updates";
+import { releases, latestRelease, RELEASE_COUNT } from "@/data/release-log";
 import styles from "./page.module.css";
-import { BRAND_NAME, REPOSITORY_URL, STORYBOOK_URL } from "@/config/brand.generated";
+import { BRAND_NAME, NPM_URL, REPOSITORY_URL, STORYBOOK_URL } from "@/config/brand.generated";
 
-const { sidebarLinks } = getSidebarLinks(docsSidebarLinks, "/project-journal");
+const { sidebarLinks } = getSidebarLinks(docsSidebarLinks, "/releases");
 
 function formatDate(iso: string): string {
   return new Date(`${iso}T00:00:00`).toLocaleDateString("en-US", {
@@ -20,10 +20,10 @@ function formatDate(iso: string): string {
   });
 }
 
-export default function SiteUpdatesPage() {
-  const items = siteUpdates.map((entry) => ({
-    meta: entry.meta,
-    title: entry.title,
+export default function ReleasesPage() {
+  const items = releases.map((entry) => ({
+    meta: formatDate(entry.date),
+    title: `${entry.version} — ${entry.title}`,
     description: (
       <>
         {entry.body.map((paragraph, i) => (
@@ -45,16 +45,16 @@ export default function SiteUpdatesPage() {
         <main className={styles.dsContent} id="main-content">
           <PageBreadcrumb />
           <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Project journal</h1>
+            <h1 className={styles.pageTitle}>Release log</h1>
           </div>
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>The progression of the build</p>
+            <p className={styles.subDisplay}>One entry per npm release</p>
             <p className={styles.introBody}>
-              An evergreen record of the largest updates to {BRAND_NAME} and this
-              site. Each entry consolidates the commits behind one theme into a
-              short record of what was built and when. Curated from the full
-              history and extended on a biweekly loop.
+              What each published version of {BRAND_NAME} shipped, newest
+              first. The log is one to one with npm: an entry is written when
+              a version is published, and never otherwise, so this page and
+              the registry always tell the same story.
             </p>
           </div>
 
@@ -72,32 +72,39 @@ export default function SiteUpdatesPage() {
           <div className={`${styles.updatesLayout} animate-in animate-delay-3`}>
             <div className={styles.timelineSection}>
               <div className={styles.timelineSectionHeader}>
-                <h2 className={styles.timelineSectionTitle}>Timeline</h2>
+                <h2 className={styles.timelineSectionTitle}>Releases</h2>
               </div>
-              <Timeline items={items} orientation="vertical" />
+              {RELEASE_COUNT === 0 ? (
+                <EmptyState
+                  icon="new_releases"
+                  title="No releases yet"
+                  description="The first entry lands with the first npm publish."
+                  variant="bordered"
+                />
+              ) : (
+                <Timeline items={items} orientation="vertical" />
+              )}
             </div>
 
-            <aside className={styles.updatesRail} aria-label="Project journal details">
+            <aside className={styles.updatesRail} aria-label="Release log details">
               <div className={styles.railSection}>
                 <div className={styles.railSectionHeader}>
                   <h2 className={styles.railSectionTitle}>Details</h2>
                 </div>
                 <div className={styles.detailList}>
                   <div className={styles.detailItem}>
-                    <span className={styles.detailLabel}>Entries</span>
-                    <span className={styles.detailValue}>{SITE_UPDATE_COUNT}</span>
+                    <span className={styles.detailLabel}>Releases</span>
+                    <span className={styles.detailValue}>{RELEASE_COUNT}</span>
                   </div>
                   <div className={styles.detailItem}>
-                    <span className={styles.detailLabel}>History since</span>
-                    <span className={styles.detailValue}>February 13, 2026</span>
-                  </div>
-                  <div className={styles.detailItem}>
-                    <span className={styles.detailLabel}>Last curated</span>
-                    <span className={styles.detailValue}>{formatDate(siteUpdatesAsOf.date)}</span>
+                    <span className={styles.detailLabel}>Latest</span>
+                    <span className={styles.detailValue}>
+                      {latestRelease ? latestRelease.version : "—"}
+                    </span>
                   </div>
                   <div className={styles.detailItem}>
                     <span className={styles.detailLabel}>Cadence</span>
-                    <span className={styles.detailValue}>Biweekly, 1st &amp; 15th</span>
+                    <span className={styles.detailValue}>With every publish</span>
                   </div>
                 </div>
               </div>
@@ -107,6 +114,22 @@ export default function SiteUpdatesPage() {
                   <h2 className={styles.railSectionTitle}>Links</h2>
                 </div>
                 <div className={styles.linkList}>
+                  <a
+                    href={NPM_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.linkItem}
+                  >
+                    <Image src="/logos/npm.svg" alt="" width={28} height={28} className={styles.linkLogo} />
+                    <div className={styles.linkContent}>
+                      <div className={styles.linkTitle}>
+                        <span>npm package</span>
+                        <span className="material-symbols-rounded" aria-hidden="true">open_in_new</span>
+                      </div>
+                      <span className={styles.linkSub}>Every version this log records</span>
+                    </div>
+                  </a>
+
                   <a
                     href={`${REPOSITORY_URL}/commits/main`}
                     target="_blank"
@@ -119,7 +142,7 @@ export default function SiteUpdatesPage() {
                         <span>Commit history</span>
                         <span className="material-symbols-rounded" aria-hidden="true">open_in_new</span>
                       </div>
-                      <span className={styles.linkSub}>Every commit behind these stories</span>
+                      <span className={styles.linkSub}>Every commit behind these releases</span>
                     </div>
                   </a>
 
@@ -154,35 +177,12 @@ export default function SiteUpdatesPage() {
                       <span className={styles.linkSub}>Every component, every variant</span>
                     </div>
                   </a>
-
-                  <Link href="/loops" className={styles.linkItem}>
-                    <Image src="/logos/mark.svg" alt="" width={28} height={28} className={styles.linkLogo} />
-                    <div className={styles.linkContent}>
-                      <div className={styles.linkTitle}>
-                        <span>Loops</span>
-                        <span className="material-symbols-rounded" aria-hidden="true">arrow_forward</span>
-                      </div>
-                      <span className={styles.linkSub}>The loop that keeps this page current</span>
-                    </div>
-                  </Link>
-
-                  <Link href="/overview" className={styles.linkItem}>
-                    <Image src="/logos/mark.svg" alt="" width={28} height={28} className={styles.linkLogo} />
-                    <div className={styles.linkContent}>
-                      <div className={styles.linkTitle}>
-                        <span>System overview</span>
-                        <span className="material-symbols-rounded" aria-hidden="true">arrow_forward</span>
-                      </div>
-                      <span className={styles.linkSub}>How the system is built and shipped</span>
-                    </div>
-                  </Link>
                 </div>
               </div>
             </aside>
           </div>
         </main>
       </div>
-
     </>
   );
 }

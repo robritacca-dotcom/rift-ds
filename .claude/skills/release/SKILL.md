@@ -108,7 +108,11 @@ gh release create v<version> --verify-tag --title "v<version> — <short title>"
 
 Write the notes for a consumer, not a maintainer: what's new, anything breaking with the migration step spelled out, and the install snippet. The previous release is the format reference; the prose follows `content-design.md`.
 
-### 8. Report
+### 8. Append the release-log entry
+
+The `/releases` page is 1:1 with npm by rule: every publish gets exactly one entry in `website/src/data/release-log.json`, written now, as part of this ritual — never later, never speculatively. Add the new entry at the TOP of `releases` (newest first) with the published `version`, the publish `date`, a plain descriptive `title`, and `body` paragraphs written for a consumer (the same story as the GitHub release notes, condensed — `content-design.md`'s release-log register row owns the voice). `scripts/validate-release-log.mjs` holds the structure; commit it with the version-bump follow-ups so the site and the registry never tell different stories.
+
+### 9. Report
 
 Version published, the npm URL, the tagged commit, the release URL, and anything a consumer must do to upgrade.
 

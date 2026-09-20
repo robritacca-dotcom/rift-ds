@@ -146,7 +146,7 @@ const DOC_ITEM_ICONS: Record<string, string> = {
   "/blueprints/content-design": "description",
   "/skills": "construction",
   "/loops": "all_inclusive",
-  "/project-journal": "timeline",
+  "/releases": "new_releases",
 };
 
 const linksToMegaItems = (
@@ -264,7 +264,7 @@ function buildNavSections(): NavSection[] {
             label: "The system at work",
             items: linksToMegaItems(
               docsSidebarLinks.filter((l) =>
-                ["/skills", "/loops", "/project-journal"].includes(l.href)
+                ["/skills", "/loops", "/releases"].includes(l.href)
               ),
               DOC_ITEM_ICONS
             ),
@@ -285,7 +285,7 @@ function buildNavSections(): NavSection[] {
         path.startsWith("/blueprints") ||
         path.startsWith("/skills") ||
         path.startsWith("/loops") ||
-        path.startsWith("/project-journal"),
+        path.startsWith("/releases"),
     },
   ];
 }
@@ -388,7 +388,7 @@ export const docsSidebarLinks: NavLink[] = [
   { href: "/blueprints/content-design", label: "Content MD", description: "The style guide behind the words" },
   { href: "/skills", label: "Skills", description: "The agent skills that maintain the site" },
   { href: "/loops", label: "Loops", description: "The recurring loops that keep it current" },
-  { href: "/project-journal", label: "Project journal", description: "What shipped and when, curated" },
+  { href: "/releases", label: "Release log", description: "One entry per npm release" },
 ];
 
 /**

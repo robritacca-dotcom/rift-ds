@@ -157,14 +157,12 @@ const STARTERS_BY_PREFIX: Array<[string, Starter[]]> = [
     { id: "chat-quality", label: "What does the chat quality loop do?" },
     { id: "deploy", label: "Do loops deploy on their own?" },
   ]],
-  ["/project-journal", [
-    { id: "latest", label: "What changed recently?" },
-    { id: "story", label: "How did this system get built?" },
-    { id: "loops", label: "What runs on a schedule?" },
-    { id: "milestone", label: "What was the biggest milestone?" },
-    { id: "author", label: "Who writes these entries?" },
-    { id: "span", label: "How far back does the journal go?" },
-    { id: "release", label: "What shipped in the latest release?" },
+  ["/releases", [
+    { id: "latest", label: "What shipped in the latest release?" },
+    { id: "install", label: "How do I install the latest version?" },
+    { id: "cadence", label: "How often do releases happen?" },
+    { id: "contents", label: "What's in the npm package?" },
+    { id: "log", label: "How is this log kept accurate?" },
   ]],
   ["/playground", [
     { id: "retheme", label: "How does re-theming work?" },

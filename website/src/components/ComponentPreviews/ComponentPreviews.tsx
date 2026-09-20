@@ -1069,7 +1069,7 @@ const previews: Record<string, () => ReactNode> = {
   "nav": () => (
     <>
       <div className={styles.previewRow} style={{ gap: "20px" }}>
-        <Image src="/logos/mark.svg" alt="Dragonspine" width={24} height={24} />
+        <Image src="/logos/mark.svg" alt={BRAND_SHORT} width={24} height={24} />
         <span style={{ fontSize: "16px", fontWeight: 600, color: "var(--color-text-primary)", letterSpacing: "-0.16px" }}>
           {BRAND_SHORT}
         </span>

@@ -6,7 +6,7 @@ import MegaNav from "../components/MegaNav/MegaNav";
 import { ExtendedBackground } from "../components/BlurBackground/BlurBackground";
 import FadeDivider from "../components/FadeDivider/FadeDivider";
 import styles from "./page.module.css";
-import { NPM_URL, REPOSITORY_URL, STORYBOOK_URL } from "@/config/brand.generated";
+import { FIGMA_FILE_URL, NPM_URL, REPOSITORY_URL, STORYBOOK_URL } from "@/config/brand.generated";
 import {
   PICKER_FONT_PARAMS,
   THEME_SELECTOR_ORDER,
@@ -1205,7 +1205,7 @@ export default function DesignSystemLanding() {
                 variant: "tertiary" as const,
                 iconLeft: <FigmaIcon />,
                 iconRight: "open_in_new",
-                href: "https://www.figma.com/design/8NzqDS8iRsBTFPbNGj3Woj/Dragonspine",
+                href: FIGMA_FILE_URL,
                 target: "_blank",
                 rel: "noopener noreferrer",
               },

@@ -9,6 +9,7 @@ import {
   componentCategoryMetadata,
 } from "@robr0/design-system/components/registry";
 import styles from "./page.module.css";
+import { FIGMA_FILE_URL } from "@/config/brand.generated";
 
 export default function ComponentsPage() {
   return (
@@ -23,7 +24,7 @@ export default function ComponentsPage() {
           {/* Page Title */}
           <div className={`${styles.pageHeader} animate-in`}>
             <h1 className={styles.pageTitle}>Components</h1>
-            <PageLinks figmaUrl="https://www.figma.com/design/8NzqDS8iRsBTFPbNGj3Woj/Dragonspine?node-id=113-6513" storybookPath="/?path=/docs/components-button--docs" />
+            <PageLinks figmaUrl={`${FIGMA_FILE_URL}?node-id=113-6513`} storybookPath="/?path=/docs/components-button--docs" />
           </div>
 
           {/* Intro */}

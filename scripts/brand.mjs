@@ -27,11 +27,23 @@ export const ASSISTANT_NAME = 'Dragonspine GPT';
 
 /**
  * The published npm package. Also the specifier every import in this
- * repo uses (the workspace consumes the real package name), so changing
- * it means the repo-wide import sweep plus a lockfile refresh — see the
- * rename-day notes in the plan.
+ * repo uses (the workspace consumes the real package name). Renaming it
+ * is mechanised: edit this constant, move the old name into
+ * RETIRED_PACKAGE_NAMES below, run `node scripts/rename-package.mjs`
+ * (rewrites every import and manifest key from the old name to this
+ * one), then `npm install` to re-link the workspace and refresh the
+ * lockfile. validate-package-exports fails the build between the edit
+ * and the sweep, so the two can never ship apart.
  */
 export const PACKAGE_NAME = '@robr0/design-system';
+
+/**
+ * Names this package used to have. A build fails while any of them
+ * survives anywhere in source (validate-package-exports scans for
+ * them), so a rename can leave no straggler imports or stale install
+ * snippets. Append, never remove.
+ */
+export const RETIRED_PACKAGE_NAMES = [];
 
 /**
  * The deployed site's origin. Baked into the sitemap, canonicals, OG
@@ -54,6 +66,14 @@ export const NPM_URL = `https://www.npmjs.com/package/${PACKAGE_NAME}`;
  * from, so it survives the codename: it is provenance, not branding.
  */
 export const FIGMA_URL = 'https://www.figma.com/@robr0';
+
+/**
+ * The design file every figmaUrl deep link appends its node-id to. The
+ * file KEY is the stable part (Figma redirects on the name slug, so the
+ * links keep working whatever the file is called); keeping the base
+ * here means a renamed file is still a one-line change.
+ */
+export const FIGMA_FILE_URL = 'https://www.figma.com/design/8NzqDS8iRsBTFPbNGj3Woj/Dragonspine';
 
 /** Browser-tab title suffix and og:site_name. */
 export const TITLE_SUFFIX = BRAND_NAME;

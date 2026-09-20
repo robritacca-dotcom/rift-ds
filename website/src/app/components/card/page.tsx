@@ -14,6 +14,7 @@ import { ToggleSwitch } from "@robr0/design-system/components/ToggleSwitch/Toggl
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import { FIGMA_FILE_URL } from "@/config/brand.generated";
 /* ============================================
    PAGE
    ============================================ */
@@ -34,7 +35,7 @@ export default function CardPage() {
           <div className={`${styles.pageHeader} animate-in`}>
             <h1 className={styles.pageTitle}>Card</h1>
             <PageLinks
-              figmaUrl="https://www.figma.com/design/8NzqDS8iRsBTFPbNGj3Woj/Dragonspine?node-id=253-12702"
+              figmaUrl={`${FIGMA_FILE_URL}?node-id=253-12702`}
               storybookPath="/?path=/docs/components-card--docs"
             />
           </div>

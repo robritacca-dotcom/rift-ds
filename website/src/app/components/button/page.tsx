@@ -8,6 +8,7 @@ import { Button } from "@robr0/design-system/components/Button/Button";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import { FIGMA_FILE_URL } from "@/config/brand.generated";
 /* ============================================
    BUTTON STATES & VARIANTS
    ============================================ */
@@ -113,7 +114,7 @@ export default function ButtonPage() {
           <div className={`${styles.pageHeader} animate-in`}>
             <h1 className={styles.pageTitle}>Button</h1>
             <PageLinks
-              figmaUrl="https://www.figma.com/design/8NzqDS8iRsBTFPbNGj3Woj/Dragonspine?node-id=113-5392"
+              figmaUrl={`${FIGMA_FILE_URL}?node-id=113-5392`}
               storybookPath="/?path=/docs/components-button--docs"
             />
           </div>

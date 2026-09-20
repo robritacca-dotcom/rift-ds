@@ -11,6 +11,7 @@ import styles from "./page.module.css";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import { Tabs } from "@robr0/design-system/components/Tabs/Tabs";
 import { Tooltip } from "@robr0/design-system/components/Tooltip/Tooltip";
+import { FIGMA_FILE_URL } from "@/config/brand.generated";
 
 const { sidebarLinks } = getSidebarLinks(foundationsSidebarLinks, "/foundations/colour-primitives");
 
@@ -271,7 +272,7 @@ export default function PrimitiveColoursPage() {
           <div className={`${styles.pageHeader} animate-in`}>
             <h1 className={styles.pageTitle}>Primitive colours</h1>
             <PageLinks
-              figmaUrl="https://www.figma.com/design/8NzqDS8iRsBTFPbNGj3Woj/Dragonspine?node-id=155-6434"
+              figmaUrl={`${FIGMA_FILE_URL}?node-id=155-6434`}
               storybookPath="/?path=/docs/foundations-tokens--docs"
             />
           </div>

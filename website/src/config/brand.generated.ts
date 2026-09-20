@@ -6,6 +6,7 @@ export const ASSISTANT_NAME: string = "Dragonspine GPT";
 export const BIN_NAME: string = "dragonspine-design-system";
 export const BRAND_NAME: string = "Dragonspine DS";
 export const BRAND_SHORT: string = "Dragonspine";
+export const FIGMA_FILE_URL: string = "https://www.figma.com/design/8NzqDS8iRsBTFPbNGj3Woj/Dragonspine";
 export const FIGMA_URL: string = "https://www.figma.com/@robr0";
 export const GA_ID: string = "";
 export const MCP_SERVER_NAME: string = "dragonspine-ds";

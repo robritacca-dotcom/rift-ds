@@ -8,6 +8,7 @@ import TocCard from "../../components/TocCard/TocCard";
 import PageLinks from "../../components/PageLinks/PageLinks";
 import { getSidebarLinks, foundationsSidebarLinks } from "@/config/navigation";
 import styles from "./page.module.css";
+import { BRAND_SHORT, FIGMA_FILE_URL } from "@/config/brand.generated";
 
 const { sidebarLinks } = getSidebarLinks(foundationsSidebarLinks, "/foundations");
 
@@ -25,7 +26,7 @@ export default function FoundationsPage() {
           {/* Page Title */}
           <div className={`${styles.pageHeader} animate-in`}>
             <h1 className={styles.pageTitle}>Foundations</h1>
-            <PageLinks figmaUrl="https://www.figma.com/design/8NzqDS8iRsBTFPbNGj3Woj/Dragonspine?node-id=244-3125" storybookPath="/?path=/docs/foundations-tokens--docs" />
+            <PageLinks figmaUrl={`${FIGMA_FILE_URL}?node-id=244-3125`} storybookPath="/?path=/docs/foundations-tokens--docs" />
           </div>
 
           {/* Intro */}
@@ -71,8 +72,8 @@ export default function FoundationsPage() {
             {/* Logos */}
             <TocCard href="/foundations/logos" title="Logos">
               <div className={`${styles.circlePreview} ${styles.circleDashed}`} style={{ gap: "10px" }}>
-                <Image src="/logos/mark.svg" alt="Dragonspine mark" width={48} height={48} />
-                <Image src="/logos/mark.svg" alt="Dragonspine mark" width={72} height={72} />
+                <Image src="/logos/mark.svg" alt={`${BRAND_SHORT} mark`} width={48} height={48} />
+                <Image src="/logos/mark.svg" alt={`${BRAND_SHORT} mark`} width={72} height={72} />
               </div>
             </TocCard>
 

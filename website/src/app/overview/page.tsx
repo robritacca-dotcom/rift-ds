@@ -15,7 +15,7 @@ import { SKILL_COUNT } from "@/data/skills-registry";
 import { SITE_UPDATE_COUNT } from "@/data/site-updates";
 import { chatExchangeMap, operatorsMap, pipelineMap, runtimeMap, systemOverviewMap } from "./maps";
 import styles from "./page.module.css";
-import { BRAND_NAME, REPOSITORY_URL, STORYBOOK_URL } from "@/config/brand.generated";
+import { BRAND_NAME, FIGMA_FILE_URL, REPOSITORY_URL, STORYBOOK_URL } from "@/config/brand.generated";
 
 const TOKEN_CATEGORY_COUNT = Object.keys(TOKEN_COUNTS).length;
 
@@ -44,7 +44,7 @@ export default function AboutDsPage() {
             </p>
             <p className={styles.introBody}>
               {BRAND_NAME} is the design system behind every page on this site: a solo build, run as a working experiment in how far a written spec and an AI pair can carry a production system. The foundation was designed in{" "}
-              <a href="https://www.figma.com/design/8NzqDS8iRsBTFPbNGj3Woj/Dragonspine?node-id=246-5864" target="_blank" rel="noopener noreferrer" className={styles.inlineLink}>Figma</a>; the system lives in{" "}
+              <a href={`${FIGMA_FILE_URL}?node-id=246-5864`} target="_blank" rel="noopener noreferrer" className={styles.inlineLink}>Figma</a>; the system lives in{" "}
               <a href={REPOSITORY_URL} target="_blank" rel="noopener noreferrer" className={styles.inlineLink}>the repo</a> as a{" "}
               <Link href="/blueprints/design" className={styles.inlineLink}>written spec</Link>, layered CSS tokens, and React components, and Claude Code builds from the spec, so a design change reaches production in under a minute. It ships as the npm package <code>@robr0/design-system</code>, and this site installs that package like any other consumer would. You can{" "}
               <Link href="/docs/get-started" className={styles.inlineLink}>install it yourself</Link> and{" "}
@@ -268,7 +268,7 @@ export default function AboutDsPage() {
                 <SectionTitle title="Links" />
 
                 <a
-                  href="https://www.figma.com/design/8NzqDS8iRsBTFPbNGj3Woj/Dragonspine?node-id=246-5864"
+                  href={`${FIGMA_FILE_URL}?node-id=246-5864`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={styles.toolItem}

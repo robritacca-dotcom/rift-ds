@@ -12,7 +12,7 @@ import type { ButtonProps } from "@robr0/design-system/components/Button/Button"
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
-import { BRAND_NAME, BRAND_SHORT } from "@/config/brand.generated";
+import { BRAND_NAME, BRAND_SHORT, FIGMA_FILE_URL } from "@/config/brand.generated";
 /* ============================================
    DEMO NAV BUTTON DATA
    ============================================ */
@@ -62,7 +62,7 @@ export default function NavigationPage() {
           <div className={`${styles.pageHeader} animate-in`}>
             <h1 className={styles.pageTitle}>Nav</h1>
             <PageLinks
-              figmaUrl="https://www.figma.com/design/8NzqDS8iRsBTFPbNGj3Woj/Dragonspine?node-id=155-7279"
+              figmaUrl={`${FIGMA_FILE_URL}?node-id=155-7279`}
               storybookPath="/?path=/docs/components-nav--docs"
             />
           </div>
@@ -88,7 +88,7 @@ export default function NavigationPage() {
                 <Nav
                   brandText={BRAND_SHORT}
                   brandIcon={
-                    <Image src="/logos/mark.svg" alt="Dragonspine" width={24} height={24} />
+                    <Image src="/logos/mark.svg" alt={BRAND_SHORT} width={24} height={24} />
                   }
                   buttons={demoNavButtons}
                   trailing={
@@ -113,7 +113,7 @@ export default function NavigationPage() {
               <div className={styles.mobileNavPreview}>
                 <div className={styles.mobileNavInner}>
                   <div className={styles.mobileNavBrand}>
-                    <Image src="/logos/mark.svg" alt="Dragonspine" width={24} height={24} />
+                    <Image src="/logos/mark.svg" alt={BRAND_SHORT} width={24} height={24} />
                     <span className={styles.mobileNavBrandText}>{BRAND_SHORT}</span>
                   </div>
                   <div className={styles.mobileNavHamburger}>

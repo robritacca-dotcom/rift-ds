@@ -10,6 +10,7 @@ import { Tabs } from "@robr0/design-system/components/Tabs/Tabs";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import { getSidebarLinks, foundationsSidebarLinks } from "@/config/navigation";
 import styles from "./page.module.css";
+import { FIGMA_FILE_URL } from "@/config/brand.generated";
 
 const { sidebarLinks } = getSidebarLinks(foundationsSidebarLinks, "/foundations/typography");
 
@@ -340,7 +341,7 @@ export default function TypographyPage() {
           <div className={`${styles.pageHeader} animate-in`}>
             <h1 className={styles.pageTitle}>Typography</h1>
             <PageLinks
-              figmaUrl="https://www.figma.com/design/8NzqDS8iRsBTFPbNGj3Woj/Dragonspine?node-id=191-1656"
+              figmaUrl={`${FIGMA_FILE_URL}?node-id=191-1656`}
               storybookPath="/?path=/docs/foundations-typography--docs"
             />
           </div>

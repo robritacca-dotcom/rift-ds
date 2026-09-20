@@ -10,6 +10,7 @@ import { getSidebarLinks, foundationsSidebarLinks } from "@/config/navigation";
 import styles from "./page.module.css";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import { TOKEN_COUNTS } from "@robr0/design-system/tokens/registry";
+import { FIGMA_FILE_URL } from "@/config/brand.generated";
 
 const { sidebarLinks } = getSidebarLinks(foundationsSidebarLinks, "/foundations/colour-mode");
 
@@ -658,7 +659,7 @@ export default function SemanticColoursPage() {
           <div className={`${styles.pageHeader} animate-in`}>
             <h1 className={styles.pageTitle}>Semantic colours</h1>
             <PageLinks
-              figmaUrl="https://www.figma.com/design/8NzqDS8iRsBTFPbNGj3Woj/Dragonspine?node-id=113-4831"
+              figmaUrl={`${FIGMA_FILE_URL}?node-id=113-4831`}
               storybookPath="/?path=/docs/foundations-tokens--docs"
             />
           </div>

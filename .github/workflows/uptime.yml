@@ -12,8 +12,11 @@
 name: Uptime
 
 on:
-  schedule:
-    - cron: "17 */4 * * *"
+  # The cron is parked until the site has a deployment of its own: this
+  # repo predates its Vercel project, and the schedule would smoke a URL
+  # that isn't ours yet. Restore the schedule trigger at first deploy:
+  #   schedule:
+  #     - cron: "17 */4 * * *"
   workflow_dispatch:
 
 permissions:

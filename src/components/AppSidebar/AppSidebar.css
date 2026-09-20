@@ -513,6 +513,11 @@
     width: 0;
     padding: 0;
     overflow: hidden;
+    /* Zero width still paints borders and the floating variant's glass
+       edge — a hairline sliver standing where the rail was. Visibility
+       hides every painted box in one property, whatever the variant;
+       the open drawer below restores it. */
+    visibility: hidden;
   }
 
   .ds-app-sidebar__mobile-trigger {
@@ -546,6 +551,7 @@
      in from the left on the motion tokens (the reduced-motion guard
      zeroes the duration system-wide). */
   .ds-app-sidebar--mobile-open {
+    visibility: visible;
     position: fixed;
     top: 0;
     left: 0;

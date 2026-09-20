@@ -5,8 +5,8 @@
   "title": "Date input",
   "description": "Date input with native picker, calendar icon, label, and validation states.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json",
-    "https://dragonspine.vercel.app/r/field.json"
+    "https://dragonspine-delta.vercel.app/r/base.json",
+    "https://dragonspine-delta.vercel.app/r/field.json"
   ],
   "files": [
     {

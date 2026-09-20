@@ -5,7 +5,7 @@
   "title": "Card stack",
   "description": "A deck of cards showing one at a time, flipped through with a lift-and-settle animation.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json"
+    "https://dragonspine-delta.vercel.app/r/base.json"
   ],
   "files": [
     {

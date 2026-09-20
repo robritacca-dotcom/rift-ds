@@ -5,7 +5,7 @@
   "title": "Radio button",
   "description": "Radio button and radio group with vertical and horizontal layouts, animated dot indicator.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json"
+    "https://dragonspine-delta.vercel.app/r/base.json"
   ],
   "files": [
     {

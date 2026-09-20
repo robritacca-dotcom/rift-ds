@@ -2,13 +2,13 @@
 
 A set of two-state buttons that can be toggled on or off, supporting text and icon items.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine.vercel.app/api/mcp.
+Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine-delta.vercel.app/api/mcp.
 
 - Category: actions
 - Import: `import { ToggleGroup } from '@robr0/design-system';`
 - Deep import: `import { ToggleGroup } from '@robr0/design-system/components/ToggleGroup/ToggleGroup';`
 - Rendering: client component (declares 'use client')
-- Live docs: https://dragonspine.vercel.app/components/toggle-group
+- Live docs: https://dragonspine-delta.vercel.app/components/toggle-group
 
 ## ToggleGroup props
 

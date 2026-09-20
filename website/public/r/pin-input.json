@@ -5,8 +5,8 @@
   "title": "Pin input",
   "description": "Segmented one-time-code input with auto-advance, paste support, and completion callback.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json",
-    "https://dragonspine.vercel.app/r/field.json"
+    "https://dragonspine-delta.vercel.app/r/base.json",
+    "https://dragonspine-delta.vercel.app/r/field.json"
   ],
   "files": [
     {

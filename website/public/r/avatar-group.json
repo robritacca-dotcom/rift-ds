@@ -5,7 +5,7 @@
   "title": "Avatar group",
   "description": "Overlapping avatar stack with a +N counter for the overflow.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json"
+    "https://dragonspine-delta.vercel.app/r/base.json"
   ],
   "files": [
     {

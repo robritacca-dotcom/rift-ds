@@ -2,13 +2,13 @@
 
 Large selectable option cards with radio or checkbox indicators for high-visibility choices like settings and onboarding.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine.vercel.app/api/mcp.
+Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine-delta.vercel.app/api/mcp.
 
 - Category: data-display
 - Import: `import { SelectionCard } from '@robr0/design-system';`
 - Deep import: `import { SelectionCard } from '@robr0/design-system/components/SelectionCard/SelectionCard';`
 - Rendering: client component (declares 'use client')
-- Live docs: https://dragonspine.vercel.app/components/selection-card
+- Live docs: https://dragonspine-delta.vercel.app/components/selection-card
 
 ## SelectionCard props
 

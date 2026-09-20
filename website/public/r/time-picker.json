@@ -5,8 +5,8 @@
   "title": "Time picker",
   "description": "Time-of-day field with a dropdown list of selectable times.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json",
-    "https://dragonspine.vercel.app/r/field.json"
+    "https://dragonspine-delta.vercel.app/r/base.json",
+    "https://dragonspine-delta.vercel.app/r/field.json"
   ],
   "files": [
     {

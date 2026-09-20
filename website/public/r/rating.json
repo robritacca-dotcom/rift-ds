@@ -5,7 +5,7 @@
   "title": "Rating",
   "description": "Star-scale rating control with keyboard selection, a read-only mode, and a configurable icon.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json"
+    "https://dragonspine-delta.vercel.app/r/base.json"
   ],
   "files": [
     {

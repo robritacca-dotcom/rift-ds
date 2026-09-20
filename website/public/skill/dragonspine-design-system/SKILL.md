@@ -5,7 +5,7 @@ description: Build React UI with @robr0/design-system. Use when installing the p
 
 # Using @robr0/design-system
 
-Generated from the library's registries at version 0.21.0, alongside every deploy of https://dragonspine.vercel.app. The library is 132 React components across 11 categories, themed by 255 semantic design tokens, published to npm.
+Generated from the library's registries at version 0.21.0, alongside every deploy of https://dragonspine-delta.vercel.app. The library is 132 React components across 11 categories, themed by 255 semantic design tokens, published to npm.
 
 ## Install
 
@@ -29,7 +29,7 @@ Set `data-theme="dark"` on the root element. Every semantic colour token has a l
 
 ## Theming
 
-Components read semantic tokens (`--color-*`, `--radius-*`, `--font-*`, `--motion-*`, ...), and every semantic colour token references a `--primitive-*` value. Re-theme by overriding primitives: one override cascades through both themes at once. Never hardcode a colour beside the components; override the token it should come from. The full token reference lives at https://dragonspine.vercel.app/foundations, and the MCP endpoint's `list_tokens` tool serves the registry.
+Components read semantic tokens (`--color-*`, `--radius-*`, `--font-*`, `--motion-*`, ...), and every semantic colour token references a `--primitive-*` value. Re-theme by overriding primitives: one override cascades through both themes at once. Never hardcode a colour beside the components; override the token it should come from. The full token reference lives at https://dragonspine-delta.vercel.app/foundations, and the MCP endpoint's `list_tokens` tool serves the registry.
 
 ## Charts
 
@@ -64,5 +64,5 @@ references/components.md lists every component with its import line and descript
 Do not guess props. Three equivalent sources, all generated from the same JSDoc that ships in the package:
 
 - The `.d.ts` files in `node_modules/@robr0/design-system` once installed.
-- `https://dragonspine.vercel.app/components/<slug>.md` — one markdown contract per component, next to its live docs page.
-- The MCP endpoint at `https://dragonspine.vercel.app/api/mcp` — the `get_component` tool returns the full contract for one component.
+- `https://dragonspine-delta.vercel.app/components/<slug>.md` — one markdown contract per component, next to its live docs page.
+- The MCP endpoint at `https://dragonspine-delta.vercel.app/api/mcp` — the `get_component` tool returns the full contract for one component.

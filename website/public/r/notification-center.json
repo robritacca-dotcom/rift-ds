@@ -5,8 +5,8 @@
   "title": "Notification centre",
   "description": "A persistent notification inbox with unread count, filter tabs, and per-item actions.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json",
-    "https://dragonspine.vercel.app/r/empty-state.json"
+    "https://dragonspine-delta.vercel.app/r/base.json",
+    "https://dragonspine-delta.vercel.app/r/empty-state.json"
   ],
   "files": [
     {

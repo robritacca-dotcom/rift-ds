@@ -5,8 +5,8 @@
   "title": "Rich dropdown",
   "description": "Dropdown's rich sibling: options preview their own heading face, body face, and key colour.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json",
-    "https://dragonspine.vercel.app/r/field.json"
+    "https://dragonspine-delta.vercel.app/r/base.json",
+    "https://dragonspine-delta.vercel.app/r/field.json"
   ],
   "files": [
     {

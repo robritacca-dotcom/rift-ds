@@ -1,4 +1,4 @@
-<a href="https://dragonspine.vercel.app"><img src=".github/readme-banner.jpg" alt="Dragonspine DS, the AI-ready React design system" width="100%"></a>
+<a href="https://dragonspine-delta.vercel.app"><img src=".github/readme-banner.jpg" alt="Dragonspine DS, the AI-ready React design system" width="100%"></a>
 
 # Dragonspine DS
 
@@ -21,7 +21,7 @@ An open source React design system built for AI products and coding agents: comp
 
 ## Documentation
 
-Everything deep lives on the docs site: **[dragonspine.vercel.app](https://dragonspine.vercel.app/)**, with live examples, foundations, templates, the playground, and the **[get-started guide](https://dragonspine.vercel.app/docs/get-started)**. **[Storybook](https://dragonspine-storybook.vercel.app/?path=/docs/dragonspine-ds--docs)** is the interactive component explorer.
+Everything deep lives on the docs site: **[dragonspine-delta.vercel.app](https://dragonspine-delta.vercel.app/)**, with live examples, foundations, templates, the playground, and the **[get-started guide](https://dragonspine-delta.vercel.app/docs/get-started)**. **[Storybook](https://dragonspine-storybook.vercel.app/?path=/docs/dragonspine-ds--docs)** is the interactive component explorer.
 
 ## Install
 
@@ -36,7 +36,7 @@ import '@robr0/design-system/tokens/tokens.css';
 import { Button, Card, Badge } from '@robr0/design-system';
 ```
 
-React 19+ is a peer dependency. The package is ESM-only and resolved via `exports` subpaths: use a bundler that handles CSS and font imports from `node_modules` (Vite, Next.js, webpack) and set TypeScript's `moduleResolution` to `"bundler"` or `"nodenext"`. The Recharts-backed charts live behind `@robr0/design-system/charts`, so the optional `recharts` peer dependency is only needed if you use them. Prefer owning the source? Pull single components through the shadcn CLI (`npx shadcn@latest add https://dragonspine.vercel.app/r/button.json`, with details in the [get-started guide](https://dragonspine.vercel.app/docs/get-started)), or clone this repo and build on it directly; all of it is MIT.
+React 19+ is a peer dependency. The package is ESM-only and resolved via `exports` subpaths: use a bundler that handles CSS and font imports from `node_modules` (Vite, Next.js, webpack) and set TypeScript's `moduleResolution` to `"bundler"` or `"nodenext"`. The Recharts-backed charts live behind `@robr0/design-system/charts`, so the optional `recharts` peer dependency is only needed if you use them. Prefer owning the source? Pull single components through the shadcn CLI (`npx shadcn@latest add https://dragonspine-delta.vercel.app/r/button.json`, with details in the [get-started guide](https://dragonspine-delta.vercel.app/docs/get-started)), or clone this repo and build on it directly; all of it is MIT.
 
 ## Set up your agent
 
@@ -49,10 +49,10 @@ npx @robr0/design-system init
 The MCP endpoint serves the component catalogue, per-component prop APIs, the token registry, install setup, and docs search to any client. No key, no account, no model calls: every tool reads only published, generated data, built from the same JSDoc that produces the shipped `.d.ts`, so an agent reads the exact contract npm ships.
 
 ```bash
-claude mcp add --transport http dragonspine-ds https://dragonspine.vercel.app/api/mcp
+claude mcp add --transport http dragonspine-ds https://dragonspine-delta.vercel.app/api/mcp
 ```
 
-Every component's prop contract is also plain markdown (append `.md` to its docs URL), and [llms.txt](https://dragonspine.vercel.app/llms.txt) indexes every machine surface. Then just ask: "Build a settings page with Dragonspine components."
+Every component's prop contract is also plain markdown (append `.md` to its docs URL), and [llms.txt](https://dragonspine-delta.vercel.app/llms.txt) indexes every machine surface. Then just ask: "Build a settings page with Dragonspine components."
 
 ## Theming
 
@@ -65,13 +65,13 @@ import '@robr0/design-system/tokens/presets/presets.css';
 ```
 
 - **Dark mode**: `data-theme="dark"` on the root element; light is the default.
-- **Your own brand**: every semantic token chains to a primitive, so overriding one primitive re-themes everything built on it. The [playground](https://dragonspine.vercel.app/playground) restyles the system live and copies out a complete, paste-ready override.
+- **Your own brand**: every semantic token chains to a primitive, so overriding one primitive re-themes everything built on it. The [playground](https://dragonspine-delta.vercel.app/playground) restyles the system live and copies out a complete, paste-ready override.
 - **Fonts**: no text face is bundled and the whole scale chains to `--font-family-primary` (split heading and body faces via `--font-family-heading` and `--font-family-body`); point them at any font you load.
 - **Icons**: a Material Symbols Rounded variable font is bundled and components import it themselves, with every Google axis exposed as a custom property. Every icon prop also takes your own element, so any icon set drops in.
 
 ## Components
 
-<!-- component-count -->132<!-- /component-count --> components, including a chat set for AI products (Chat thread, Composer, Tool call, Reasoning, Thread panel) and Shader field, a WebGL2 ambient background whose light sources read your colour tokens at runtime, so it re-themes with everything else. Details and live examples are on the [docs site](https://dragonspine.vercel.app/components).
+<!-- component-count -->132<!-- /component-count --> components, including a chat set for AI products (Chat thread, Composer, Tool call, Reasoning, Thread panel) and Shader field, a WebGL2 ambient background whose light sources read your colour tokens at runtime, so it re-themes with everything else. Details and live examples are on the [docs site](https://dragonspine-delta.vercel.app/components).
 
 <details>
 <summary>The full list</summary>
@@ -91,7 +91,7 @@ Accordion · Agent plan · Agent status · AI button · Alert · Alert dialog ·
 - **Vitest + Playwright + axe**: every Storybook story runs as a render test in headless Chromium, with an accessibility audit on each
 - **CSS custom properties**: all theming via semantic tokens, no CSS-in-JS
 
-The [overview](https://dragonspine.vercel.app/overview) shows the generate-and-validate pipeline behind the docs.
+The [overview](https://dragonspine-delta.vercel.app/overview) shows the generate-and-validate pipeline behind the docs.
 
 ## Running locally
 

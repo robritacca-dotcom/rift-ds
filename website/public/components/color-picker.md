@@ -2,13 +2,13 @@
 
 Swatch trigger opening a saturation area, hue and alpha sliders, and a hex field; controlled or uncontrolled.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine.vercel.app/api/mcp.
+Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine-delta.vercel.app/api/mcp.
 
 - Category: forms
 - Import: `import { ColorPicker } from '@robr0/design-system';`
 - Deep import: `import { ColorPicker } from '@robr0/design-system/components/ColorPicker/ColorPicker';`
 - Rendering: client component (declares 'use client')
-- Live docs: https://dragonspine.vercel.app/components/color-picker
+- Live docs: https://dragonspine-delta.vercel.app/components/color-picker
 
 ## ColorPicker props
 

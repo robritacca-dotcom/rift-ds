@@ -2,13 +2,13 @@
 
 Plots point clusters across two axes to show correlation and distribution.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine.vercel.app/api/mcp.
+Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine-delta.vercel.app/api/mcp.
 
 - Category: charts
 - Import: `import { ScatterChart } from '@robr0/design-system/charts'; // needs the optional recharts peer`
 - Deep import: `import { ScatterChart } from '@robr0/design-system/components/Chart/ScatterChart';`
 - Rendering: server-renderable (no 'use client')
-- Live docs: https://dragonspine.vercel.app/components/scatter-chart
+- Live docs: https://dragonspine-delta.vercel.app/components/scatter-chart
 
 ## ScatterChart props
 

@@ -5,7 +5,7 @@
   "title": "Link list",
   "description": "Linked items with logo, label, and subtitle.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json"
+    "https://dragonspine-delta.vercel.app/r/base.json"
   ],
   "files": [
     {

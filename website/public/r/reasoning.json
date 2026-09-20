@@ -5,7 +5,7 @@
   "title": "Reasoning",
   "description": "A model's thinking, disclosed behind a one-line summary and collapsed once it finishes.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json"
+    "https://dragonspine-delta.vercel.app/r/base.json"
   ],
   "files": [
     {

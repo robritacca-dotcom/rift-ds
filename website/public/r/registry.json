@@ -1,7 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
   "name": "dragonspine",
-  "homepage": "https://dragonspine.vercel.app",
+  "homepage": "https://dragonspine-delta.vercel.app",
   "items": [
     {
       "name": "base",

@@ -5,9 +5,9 @@
   "title": "World map",
   "description": "A flat world map from Natural Earth land shapes: token-coloured continents, framed bounds, and colour-carrying markers.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json",
-    "https://dragonspine.vercel.app/r/circular-button.json",
-    "https://dragonspine.vercel.app/r/hover-card.json"
+    "https://dragonspine-delta.vercel.app/r/base.json",
+    "https://dragonspine-delta.vercel.app/r/circular-button.json",
+    "https://dragonspine-delta.vercel.app/r/hover-card.json"
   ],
   "files": [
     {

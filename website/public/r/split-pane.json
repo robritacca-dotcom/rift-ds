@@ -5,7 +5,7 @@
   "title": "Split pane",
   "description": "Two resizable regions with a draggable, keyboard-operable divider between them.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json"
+    "https://dragonspine-delta.vercel.app/r/base.json"
   ],
   "files": [
     {

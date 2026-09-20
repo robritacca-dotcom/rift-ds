@@ -5,8 +5,8 @@
   "title": "Composer",
   "description": "An auto-growing message input with send and stop states, a page-context note, an attachment slot, and Enter-to-send.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json",
-    "https://dragonspine.vercel.app/r/circular-button.json"
+    "https://dragonspine-delta.vercel.app/r/base.json",
+    "https://dragonspine-delta.vercel.app/r/circular-button.json"
   ],
   "files": [
     {

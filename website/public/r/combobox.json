@@ -5,8 +5,8 @@
   "title": "Combobox",
   "description": "A filterable select that narrows options as the user types, with multi-select chips, grouping, and async loading.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json",
-    "https://dragonspine.vercel.app/r/field.json"
+    "https://dragonspine-delta.vercel.app/r/base.json",
+    "https://dragonspine-delta.vercel.app/r/field.json"
   ],
   "files": [
     {

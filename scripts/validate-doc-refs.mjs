@@ -76,9 +76,30 @@ let pathCount = 0;
 // slash-less probe dodges a git quirk (observed on Windows) where ANY
 // nonexistent trailing-slash path reports ignored, matching an empty
 // pattern, which silently excused refs here that CI then caught.
+// Vercel's build container checks the tree out without a usable .git, so
+// `git check-ignore` cannot answer there (status null/128, not 0/1). Fall
+// back to the .gitignore files themselves for the simple pattern shapes
+// this repo uses — the git answer stays authoritative wherever git works.
+const gitignorePatterns = ['/.gitignore', '/website/.gitignore']
+  .flatMap((rel) => {
+    const path = join(repoRoot, ...rel.split('/').filter(Boolean));
+    if (!existsSync(path)) return [];
+    return readFileSync(path, 'utf8')
+      .split('\n')
+      .map((l) => l.trim())
+      .filter((l) => l && !l.startsWith('#'));
+  })
+  .map((raw) => {
+    const pattern = raw.replace(/\/$/, '').replace(/^\//, '');
+    return new RegExp(
+      `(^|/)${pattern.replace(/[.+^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '[^/]*')}(/|$)`
+    );
+  });
 const isGitignored = (span) => {
   const probe = span.endsWith('/') ? `${span}__doc_refs_probe__` : span;
-  return spawnSync('git', ['check-ignore', '-q', probe], { cwd: repoRoot }).status === 0;
+  const status = spawnSync('git', ['check-ignore', '-q', probe], { cwd: repoRoot }).status;
+  if (status === 0 || status === 1) return status === 0;
+  return gitignorePatterns.some((pattern) => pattern.test(span.replace(/\/$/, '')));
 };
 
 // Check B — every `npm run X` mention resolves to a real script in the root

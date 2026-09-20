@@ -5,8 +5,8 @@
   "title": "Gauge",
   "description": "A radial dial for a single bounded reading, recoloured through the status roles as it crosses thresholds.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json",
-    "https://dragonspine.vercel.app/r/treemap.json"
+    "https://dragonspine-delta.vercel.app/r/base.json",
+    "https://dragonspine-delta.vercel.app/r/treemap.json"
   ],
   "files": [
     {

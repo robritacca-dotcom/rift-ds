@@ -5,8 +5,8 @@
   "title": "Context menu",
   "description": "Right-click menu at the pointer with groups, sub-menus, and shortcut hints.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json",
-    "https://dragonspine.vercel.app/r/dropdown-menu.json"
+    "https://dragonspine-delta.vercel.app/r/base.json",
+    "https://dragonspine-delta.vercel.app/r/dropdown-menu.json"
   ],
   "files": [
     {

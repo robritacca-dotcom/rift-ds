@@ -2,13 +2,13 @@
 
 Fullscreen media viewer on the shared overlay stack: deep scrim, caption chip, gallery stepping, trapped and restored focus.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine.vercel.app/api/mcp.
+Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine-delta.vercel.app/api/mcp.
 
 - Category: overlays
 - Import: `import { Lightbox } from '@robr0/design-system';`
 - Deep import: `import { Lightbox } from '@robr0/design-system/components/Lightbox/Lightbox';`
 - Rendering: client component (declares 'use client')
-- Live docs: https://dragonspine.vercel.app/components/lightbox
+- Live docs: https://dragonspine-delta.vercel.app/components/lightbox
 
 ## Lightbox props
 

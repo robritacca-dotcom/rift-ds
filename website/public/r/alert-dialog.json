@@ -5,8 +5,8 @@
   "title": "Alert dialog",
   "description": "Modal confirmation overlay with title, description, and confirm / cancel actions.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json",
-    "https://dragonspine.vercel.app/r/button.json"
+    "https://dragonspine-delta.vercel.app/r/base.json",
+    "https://dragonspine-delta.vercel.app/r/button.json"
   ],
   "files": [
     {

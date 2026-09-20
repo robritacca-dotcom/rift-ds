@@ -5,7 +5,7 @@
   "title": "Slider",
   "description": "Range input for selecting a value between a minimum and maximum, in default and compact sizes.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json"
+    "https://dragonspine-delta.vercel.app/r/base.json"
   ],
   "files": [
     {

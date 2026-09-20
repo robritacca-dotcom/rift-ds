@@ -5,7 +5,7 @@
   "title": "Card",
   "description": "Card components for previews, navigation, and token documentation, from content cards to colour swatches and typography specimens.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json"
+    "https://dragonspine-delta.vercel.app/r/base.json"
   ],
   "files": [
     {

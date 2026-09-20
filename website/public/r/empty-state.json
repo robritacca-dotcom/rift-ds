@@ -5,7 +5,7 @@
   "title": "Empty state",
   "description": "The placeholder for a list, table, or search with nothing to show: icon, headline, guidance, and a next action.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json"
+    "https://dragonspine-delta.vercel.app/r/base.json"
   ],
   "files": [
     {

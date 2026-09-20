@@ -5,7 +5,7 @@
   "title": "Entity card",
   "description": "Compact display-only card with a centred icon or image and a label, used in the Icons and Logos galleries.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json"
+    "https://dragonspine-delta.vercel.app/r/base.json"
   ],
   "files": [
     {

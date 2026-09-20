@@ -5,8 +5,8 @@
   "title": "App layout",
   "description": "Full-page template pairing the collapsible App sidebar with a centred content area.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json",
-    "https://dragonspine.vercel.app/r/app-sidebar.json"
+    "https://dragonspine-delta.vercel.app/r/base.json",
+    "https://dragonspine-delta.vercel.app/r/app-sidebar.json"
   ],
   "files": [
     {

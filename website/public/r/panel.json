@@ -5,7 +5,7 @@
   "title": "Panel",
   "description": "The plain dashboard surface: a rounded container with no border or shadow, just padding and a gap.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json"
+    "https://dragonspine-delta.vercel.app/r/base.json"
   ],
   "files": [
     {

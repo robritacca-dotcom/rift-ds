@@ -5,8 +5,8 @@
   "title": "Agent plan",
   "description": "A collapsible checklist of an agent's task, with live step states and a progress readout.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json",
-    "https://dragonspine.vercel.app/r/spinner.json"
+    "https://dragonspine-delta.vercel.app/r/base.json",
+    "https://dragonspine-delta.vercel.app/r/spinner.json"
   ],
   "files": [
     {

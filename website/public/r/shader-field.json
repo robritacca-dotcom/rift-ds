@@ -5,7 +5,7 @@
   "title": "Shader field",
   "description": "An ambient WebGL2 field of soft light sources that sample colour tokens, with a reported fallback status.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json"
+    "https://dragonspine-delta.vercel.app/r/base.json"
   ],
   "files": [
     {

@@ -12,11 +12,8 @@
 name: Uptime
 
 on:
-  # The cron is parked until the site has a deployment of its own: this
-  # repo predates its Vercel project, and the schedule would smoke a URL
-  # that isn't ours yet. Restore the schedule trigger at first deploy:
-  #   schedule:
-  #     - cron: "17 */4 * * *"
+  schedule:
+    - cron: "17 */4 * * *"
   workflow_dispatch:
 
 permissions:
@@ -36,4 +33,4 @@ jobs:
       - run: npx playwright install --with-deps chromium
       # The origin restates SITE_URL from scripts/brand.mjs (workflows cannot
       # import it); it goes live at the first deploy — keep the two in sync.
-      - run: node scripts/smoke-hydration.mjs https://dragonspine.vercel.app
+      - run: node scripts/smoke-hydration.mjs https://dragonspine-delta.vercel.app

@@ -5,7 +5,7 @@
   "title": "Meter",
   "description": "Level indicator for a known quantity, with a status-coloured fill and an optional value readout.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json"
+    "https://dragonspine-delta.vercel.app/r/base.json"
   ],
   "files": [
     {

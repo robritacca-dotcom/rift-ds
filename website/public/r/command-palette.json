@@ -5,8 +5,8 @@
   "title": "Command palette",
   "description": "A modal Cmd+K launcher that searches a grouped command list, with keyboard navigation and shortcut hints.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json",
-    "https://dragonspine.vercel.app/r/kbd.json"
+    "https://dragonspine-delta.vercel.app/r/base.json",
+    "https://dragonspine-delta.vercel.app/r/kbd.json"
   ],
   "files": [
     {

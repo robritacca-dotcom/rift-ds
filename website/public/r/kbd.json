@@ -5,7 +5,7 @@
   "title": "Kbd",
   "description": "A keyboard key rendered as a keycap, for shortcut hints in menus and prose.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json"
+    "https://dragonspine-delta.vercel.app/r/base.json"
   ],
   "files": [
     {

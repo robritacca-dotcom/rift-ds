@@ -5,7 +5,7 @@
   "title": "Agent status",
   "description": "A dot-matrix indicator and status line reporting what an agent is doing right now.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json"
+    "https://dragonspine-delta.vercel.app/r/base.json"
   ],
   "files": [
     {

@@ -12,7 +12,7 @@ Primary, secondary, tertiary, neutral and destructive variants in default and co
 
 - Import: `import { Button } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/button.md
+- Contract: https://dragonspine-delta.vercel.app/components/button.md
 
 ### Button group
 
@@ -20,7 +20,7 @@ Horizontal and vertical button group layouts for related actions and navigation 
 
 - Import: `import { ButtonGroup } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/button-group.md
+- Contract: https://dragonspine-delta.vercel.app/components/button-group.md
 
 ### Circular button
 
@@ -28,7 +28,7 @@ Round icon button with primary, secondary, tertiary and neutral variants, defaul
 
 - Import: `import { CircularButton } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/circular-button.md
+- Contract: https://dragonspine-delta.vercel.app/components/circular-button.md
 
 ### Segmented control
 
@@ -36,7 +36,7 @@ Pill-style toggle between related views with keyboard navigation and icon suppor
 
 - Import: `import { SegmentedControl } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/segmented-control.md
+- Contract: https://dragonspine-delta.vercel.app/components/segmented-control.md
 
 ### Split button
 
@@ -44,7 +44,7 @@ Primary action with an attached menu of alternatives, composing Button and Dropd
 
 - Import: `import { SplitButton } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/split-button.md
+- Contract: https://dragonspine-delta.vercel.app/components/split-button.md
 
 ### Toggle group
 
@@ -52,7 +52,7 @@ A set of two-state buttons that can be toggled on or off, supporting text and ic
 
 - Import: `import { ToggleGroup } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/toggle-group.md
+- Contract: https://dragonspine-delta.vercel.app/components/toggle-group.md
 
 ## AI (25)
 
@@ -64,7 +64,7 @@ A collapsible checklist of an agent's task, with live step states and a progress
 
 - Import: `import { AgentPlan } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/agent-plan.md
+- Contract: https://dragonspine-delta.vercel.app/components/agent-plan.md
 
 ### Agent status
 
@@ -72,7 +72,7 @@ A dot-matrix indicator and status line reporting what an agent is doing right no
 
 - Import: `import { AgentStatus } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/agent-status.md
+- Contract: https://dragonspine-delta.vercel.app/components/agent-status.md
 
 ### AI button
 
@@ -80,7 +80,7 @@ The AI entry point: icon and label ringed by a turning gradient and glow, with a
 
 - Import: `import { AiButton } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/ai-button.md
+- Contract: https://dragonspine-delta.vercel.app/components/ai-button.md
 
 ### Chat header
 
@@ -88,7 +88,7 @@ The top row of a chat surface, with the conversation title and its controls.
 
 - Import: `import { ChatHeader } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/chat-header.md
+- Contract: https://dragonspine-delta.vercel.app/components/chat-header.md
 
 ### Chat marker
 
@@ -96,7 +96,7 @@ An inline conversation separator for date breaks and system notes.
 
 - Import: `import { ChatMarker } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/chat-marker.md
+- Contract: https://dragonspine-delta.vercel.app/components/chat-marker.md
 
 ### Chat message
 
@@ -104,7 +104,7 @@ A single chat turn with avatar, author, timestamp, and bubble or plain content a
 
 - Import: `import { ChatMessage } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/chat-message.md
+- Contract: https://dragonspine-delta.vercel.app/components/chat-message.md
 
 ### Chat thread
 
@@ -112,7 +112,7 @@ A scrollable conversation column with edge fades, send anchoring, and a subtle s
 
 - Import: `import { ChatThread } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/chat-thread.md
+- Contract: https://dragonspine-delta.vercel.app/components/chat-thread.md
 
 ### Code diff
 
@@ -120,7 +120,7 @@ Unified diff view for code changes, with added, removed, and context lines.
 
 - Import: `import { CodeDiff } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/code-diff.md
+- Contract: https://dragonspine-delta.vercel.app/components/code-diff.md
 
 ### Composer
 
@@ -128,7 +128,7 @@ An auto-growing message input with send and stop states, a page-context note, an
 
 - Import: `import { Composer } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/composer.md
+- Contract: https://dragonspine-delta.vercel.app/components/composer.md
 
 ### Document chip
 
@@ -136,7 +136,7 @@ A compact file reference with a type icon, name, metadata, and optional remove.
 
 - Import: `import { DocumentChip } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/document-chip.md
+- Contract: https://dragonspine-delta.vercel.app/components/document-chip.md
 
 ### Interrupt card
 
@@ -144,7 +144,7 @@ A human-in-the-loop checkpoint with a question from the agent and option buttons
 
 - Import: `import { InterruptCard } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/interrupt-card.md
+- Contract: https://dragonspine-delta.vercel.app/components/interrupt-card.md
 
 ### Message actions
 
@@ -152,7 +152,7 @@ An icon-button row for message-level actions like copy, retry, and feedback.
 
 - Import: `import { MessageActions } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/message-actions.md
+- Contract: https://dragonspine-delta.vercel.app/components/message-actions.md
 
 ### Message card
 
@@ -160,7 +160,7 @@ A structured rich-content card embedded in a chat message, with media, title, bo
 
 - Import: `import { MessageCard } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/message-card.md
+- Contract: https://dragonspine-delta.vercel.app/components/message-card.md
 
 ### Model picker
 
@@ -168,7 +168,7 @@ A model selector for chat surfaces, with per-model descriptions and an optional 
 
 - Import: `import { ModelPicker } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/model-picker.md
+- Contract: https://dragonspine-delta.vercel.app/components/model-picker.md
 
 ### Prompt suggestions
 
@@ -176,7 +176,7 @@ A horizontal row of tappable prompt suggestions to start or steer a conversation
 
 - Import: `import { PromptSuggestions } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/prompt-suggestions.md
+- Contract: https://dragonspine-delta.vercel.app/components/prompt-suggestions.md
 
 ### Prose
 
@@ -184,7 +184,7 @@ Token-styled typography for rendered markdown and rich agent output.
 
 - Import: `import { Prose } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/prose.md
+- Contract: https://dragonspine-delta.vercel.app/components/prose.md
 
 ### Reasoning
 
@@ -192,7 +192,7 @@ A model's thinking, disclosed behind a one-line summary and collapsed once it fi
 
 - Import: `import { Reasoning } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/reasoning.md
+- Contract: https://dragonspine-delta.vercel.app/components/reasoning.md
 
 ### Source chip
 
@@ -200,7 +200,7 @@ A numbered citation pill linking a claim to its source.
 
 - Import: `import { SourceChip } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/source-chip.md
+- Contract: https://dragonspine-delta.vercel.app/components/source-chip.md
 
 ### Source trail
 
@@ -208,7 +208,7 @@ The sources an agent opened while answering, as a collapsible list with per-item
 
 - Import: `import { SourceTrail } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/source-trail.md
+- Contract: https://dragonspine-delta.vercel.app/components/source-trail.md
 
 ### Streaming text
 
@@ -216,7 +216,7 @@ Progressive reveal for text arriving in chunks, with a blinking cursor while mor
 
 - Import: `import { StreamingText } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/streaming-text.md
+- Contract: https://dragonspine-delta.vercel.app/components/streaming-text.md
 
 ### Thread panel
 
@@ -224,7 +224,7 @@ The session-history rail for chat products: brand header, new-thread action, sta
 
 - Import: `import { ThreadPanel } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/thread-panel.md
+- Contract: https://dragonspine-delta.vercel.app/components/thread-panel.md
 
 ### Thread tabs
 
@@ -232,7 +232,7 @@ The strip of open chat sessions: pill tabs with unread dots and hover-revealed c
 
 - Import: `import { ThreadTabs } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/thread-tabs.md
+- Contract: https://dragonspine-delta.vercel.app/components/thread-tabs.md
 
 ### Tool call
 
@@ -240,7 +240,7 @@ The record of one tool invocation, with its arguments and result behind a disclo
 
 - Import: `import { ToolCall } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/tool-call.md
+- Contract: https://dragonspine-delta.vercel.app/components/tool-call.md
 
 ### Usage card
 
@@ -248,7 +248,7 @@ An agent's budgets at a glance: context window and plan limits as meter rows wit
 
 - Import: `import { UsageCard } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/usage-card.md
+- Contract: https://dragonspine-delta.vercel.app/components/usage-card.md
 
 ### Waveform
 
@@ -256,7 +256,7 @@ Voice made visible: a row of bars dancing on the shared twelve-slot cycle, or tr
 
 - Import: `import { Waveform } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/waveform.md
+- Contract: https://dragonspine-delta.vercel.app/components/waveform.md
 
 ## Charts (16)
 
@@ -268,7 +268,7 @@ Filled area chart for showing volume over time, with stacked and single-series v
 
 - Import: `import { AreaChart } from '@robr0/design-system/charts';` (needs the optional recharts peer)
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/area-chart.md
+- Contract: https://dragonspine-delta.vercel.app/components/area-chart.md
 
 ### Bar chart
 
@@ -276,7 +276,7 @@ Vertical bars for comparing values across categories or time, with summary stats
 
 - Import: `import { BarChart } from '@robr0/design-system/charts';` (needs the optional recharts peer)
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/bar-chart.md
+- Contract: https://dragonspine-delta.vercel.app/components/bar-chart.md
 
 ### Combo chart
 
@@ -284,7 +284,7 @@ Bar and line series in one chart, with an optional second y-axis for pairs in di
 
 - Import: `import { ComboChart } from '@robr0/design-system/charts';` (needs the optional recharts peer)
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/combo-chart.md
+- Contract: https://dragonspine-delta.vercel.app/components/combo-chart.md
 
 ### Contribution graph
 
@@ -292,7 +292,7 @@ A year of activity, one cell per day.
 
 - Import: `import { ContributionGraph } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/contribution-graph.md
+- Contract: https://dragonspine-delta.vercel.app/components/contribution-graph.md
 
 ### Funnel chart
 
@@ -300,7 +300,7 @@ Ordered funnel stages as centred trapezoid bands, each sized by its share of the
 
 - Import: `import { FunnelChart } from '@robr0/design-system/charts';` (needs the optional recharts peer)
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/funnel-chart.md
+- Contract: https://dragonspine-delta.vercel.app/components/funnel-chart.md
 
 ### Gantt chart
 
@@ -308,7 +308,7 @@ Phases and tasks as bars on a shared timeline, with milestones, progress, and a 
 
 - Import: `import { GanttChart } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/gantt-chart.md
+- Contract: https://dragonspine-delta.vercel.app/components/gantt-chart.md
 
 ### Gauge
 
@@ -316,7 +316,7 @@ A radial dial for a single bounded reading, recoloured through the status roles 
 
 - Import: `import { Gauge } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/gauge.md
+- Contract: https://dragonspine-delta.vercel.app/components/gauge.md
 
 ### Legend tile
 
@@ -324,7 +324,7 @@ The labelled value tile under a chart: a series dot, the series name, and its re
 
 - Import: `import { LegendTile } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/legend-tile.md
+- Contract: https://dragonspine-delta.vercel.app/components/legend-tile.md
 
 ### Line chart
 
@@ -332,7 +332,7 @@ Multi-series line chart for trends over time, with per-series colours and a summ
 
 - Import: `import { LineChart } from '@robr0/design-system/charts';` (needs the optional recharts peer)
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/line-chart.md
+- Contract: https://dragonspine-delta.vercel.app/components/line-chart.md
 
 ### Pie chart
 
@@ -340,7 +340,7 @@ Proportional share of a whole as a pie or donut, with per-slice colours.
 
 - Import: `import { PieChart } from '@robr0/design-system/charts';` (needs the optional recharts peer)
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/pie-chart.md
+- Contract: https://dragonspine-delta.vercel.app/components/pie-chart.md
 
 ### Radar chart
 
@@ -348,7 +348,7 @@ Multi-axis comparison of series across categories on a radial grid.
 
 - Import: `import { RadarChart } from '@robr0/design-system/charts';` (needs the optional recharts peer)
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/radar-chart.md
+- Contract: https://dragonspine-delta.vercel.app/components/radar-chart.md
 
 ### Radial chart
 
@@ -356,7 +356,7 @@ Concentric progress rings for completion and KPI readouts.
 
 - Import: `import { RadialChart } from '@robr0/design-system/charts';` (needs the optional recharts peer)
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/radial-chart.md
+- Contract: https://dragonspine-delta.vercel.app/components/radial-chart.md
 
 ### Scatter chart
 
@@ -364,7 +364,7 @@ Plots point clusters across two axes to show correlation and distribution.
 
 - Import: `import { ScatterChart } from '@robr0/design-system/charts';` (needs the optional recharts peer)
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/scatter-chart.md
+- Contract: https://dragonspine-delta.vercel.app/components/scatter-chart.md
 
 ### Sparkline
 
@@ -372,7 +372,7 @@ Inline trend line for stats and table cells, drawn without axes or chrome.
 
 - Import: `import { Sparkline } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/sparkline.md
+- Contract: https://dragonspine-delta.vercel.app/components/sparkline.md
 
 ### Stacked bar chart
 
@@ -380,7 +380,7 @@ Bars split into stacked segments to compare totals and their composition.
 
 - Import: `import { StackedBarChart } from '@robr0/design-system/charts';` (needs the optional recharts peer)
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/stacked-bar-chart.md
+- Contract: https://dragonspine-delta.vercel.app/components/stacked-bar-chart.md
 
 ### Treemap
 
@@ -388,7 +388,7 @@ Nested rectangles sized by value for part-to-whole breakdowns.
 
 - Import: `import { Treemap } from '@robr0/design-system/charts';` (needs the optional recharts peer)
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/treemap.md
+- Contract: https://dragonspine-delta.vercel.app/components/treemap.md
 
 ## Data display (25)
 
@@ -400,7 +400,7 @@ Collapsible content sections for organising related information.
 
 - Import: `import { Accordion } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/accordion.md
+- Contract: https://dragonspine-delta.vercel.app/components/accordion.md
 
 ### Animated number
 
@@ -408,7 +408,7 @@ A number that counts to its value: count-up on mount, eased tweens on change, ta
 
 - Import: `import { AnimatedNumber } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/animated-number.md
+- Contract: https://dragonspine-delta.vercel.app/components/animated-number.md
 
 ### Avatar
 
@@ -416,7 +416,7 @@ User profile image with initials and icon fallback, status indicator, and multip
 
 - Import: `import { Avatar } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/avatar.md
+- Contract: https://dragonspine-delta.vercel.app/components/avatar.md
 
 ### Avatar group
 
@@ -424,7 +424,7 @@ Overlapping avatar stack with a +N counter for the overflow.
 
 - Import: `import { AvatarGroup } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/avatar-group.md
+- Contract: https://dragonspine-delta.vercel.app/components/avatar-group.md
 
 ### Badge
 
@@ -432,7 +432,7 @@ Small inline status labels with info, positive, warning, error, and neutral vari
 
 - Import: `import { Badge } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/badge.md
+- Contract: https://dragonspine-delta.vercel.app/components/badge.md
 
 ### Card
 
@@ -440,7 +440,7 @@ Card components for previews, navigation, and token documentation, from content 
 
 - Import: `import { Card } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/card.md
+- Contract: https://dragonspine-delta.vercel.app/components/card.md
 
 ### Card stack
 
@@ -448,7 +448,7 @@ A deck of cards showing one at a time, flipped through with a lift-and-settle an
 
 - Import: `import { CardStack } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/card-stack.md
+- Contract: https://dragonspine-delta.vercel.app/components/card-stack.md
 
 ### Carousel
 
@@ -456,7 +456,7 @@ Sliding content viewer with navigation arrows, dot indicators, auto-play, and ke
 
 - Import: `import { Carousel } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/carousel.md
+- Contract: https://dragonspine-delta.vercel.app/components/carousel.md
 
 ### Chip
 
@@ -464,7 +464,7 @@ Compact pills for attributes, filters, and inline metadata.
 
 - Import: `import { Chip } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/chip.md
+- Contract: https://dragonspine-delta.vercel.app/components/chip.md
 
 ### Code block
 
@@ -472,7 +472,7 @@ Monospace code with a header and one-click copy.
 
 - Import: `import { CodeBlock } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/code-block.md
+- Contract: https://dragonspine-delta.vercel.app/components/code-block.md
 
 ### Contact card
 
@@ -480,7 +480,7 @@ Linked contact method with icon, label, and value.
 
 - Import: `import { ContactCard } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/contact-card.md
+- Contract: https://dragonspine-delta.vercel.app/components/contact-card.md
 
 ### Data table
 
@@ -488,7 +488,7 @@ The wired table: sorting, search, row selection, and pagination assembled around
 
 - Import: `import { DataTable } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/data-table.md
+- Contract: https://dragonspine-delta.vercel.app/components/data-table.md
 
 ### Entity card
 
@@ -496,7 +496,7 @@ Compact display-only card with a centred icon or image and a label, used in the 
 
 - Import: `import { EntityCard } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/entity-card.md
+- Contract: https://dragonspine-delta.vercel.app/components/entity-card.md
 
 ### Event calendar
 
@@ -504,7 +504,7 @@ A month grid with event pills, overflow counts, and month navigation.
 
 - Import: `import { EventCalendar } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/event-calendar.md
+- Contract: https://dragonspine-delta.vercel.app/components/event-calendar.md
 
 ### Figure
 
@@ -512,7 +512,7 @@ Images with captions, in the case-study frame.
 
 - Import: `import { Figure } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/figure.md
+- Contract: https://dragonspine-delta.vercel.app/components/figure.md
 
 ### Image compare
 
@@ -520,7 +520,7 @@ Before-and-after image comparison with a draggable divider, keyboard control, an
 
 - Import: `import { ImageCompare } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/image-compare.md
+- Contract: https://dragonspine-delta.vercel.app/components/image-compare.md
 
 ### Instructions
 
@@ -528,7 +528,7 @@ Step-by-step guidance with numbered badges, connecting lines, and horizontal lay
 
 - Import: `import { Instructions } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/instructions.md
+- Contract: https://dragonspine-delta.vercel.app/components/instructions.md
 
 ### Kbd
 
@@ -536,7 +536,7 @@ A keyboard key rendered as a keycap, for shortcut hints in menus and prose.
 
 - Import: `import { Kbd } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/kbd.md
+- Contract: https://dragonspine-delta.vercel.app/components/kbd.md
 
 ### Link list
 
@@ -544,7 +544,7 @@ Linked items with logo, label, and subtitle.
 
 - Import: `import { LinkList } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/link-list.md
+- Contract: https://dragonspine-delta.vercel.app/components/link-list.md
 
 ### Quote
 
@@ -552,7 +552,7 @@ Blockquotes and pull-quotes with attribution.
 
 - Import: `import { Quote } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/quote.md
+- Contract: https://dragonspine-delta.vercel.app/components/quote.md
 
 ### Selection card
 
@@ -560,7 +560,7 @@ Large selectable option cards with radio or checkbox indicators for high-visibil
 
 - Import: `import { SelectionCard } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/selection-card.md
+- Contract: https://dragonspine-delta.vercel.app/components/selection-card.md
 
 ### Stat
 
@@ -568,7 +568,7 @@ Headline metrics with labels and trend deltas.
 
 - Import: `import { Stat } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/stat.md
+- Contract: https://dragonspine-delta.vercel.app/components/stat.md
 
 ### Table
 
@@ -576,7 +576,7 @@ Data table with flexible cell content, striped rows, compact sizing, and support
 
 - Import: `import { Table } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/table.md
+- Contract: https://dragonspine-delta.vercel.app/components/table.md
 
 ### Timeline
 
@@ -584,7 +584,7 @@ Ordered sequences: histories and steppers.
 
 - Import: `import { Timeline } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/timeline.md
+- Contract: https://dragonspine-delta.vercel.app/components/timeline.md
 
 ### Tree view
 
@@ -592,7 +592,7 @@ Collapsible hierarchy for files, folders, and nested structures.
 
 - Import: `import { TreeView } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/tree-view.md
+- Contract: https://dragonspine-delta.vercel.app/components/tree-view.md
 
 ## Effects (1)
 
@@ -604,7 +604,7 @@ An ambient WebGL2 field of soft light sources that sample colour tokens, with a 
 
 - Import: `import { ShaderField } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/shader-field.md
+- Contract: https://dragonspine-delta.vercel.app/components/shader-field.md
 
 ## Feedback (10)
 
@@ -616,7 +616,7 @@ Contextual feedback with status variants, optional dismiss, and compact sizing.
 
 - Import: `import { Alert } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/alert.md
+- Contract: https://dragonspine-delta.vercel.app/components/alert.md
 
 ### Banner
 
@@ -624,7 +624,7 @@ Full-width status strip for page-level announcements, with an action slot and op
 
 - Import: `import { Banner } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/banner.md
+- Contract: https://dragonspine-delta.vercel.app/components/banner.md
 
 ### Empty state
 
@@ -632,7 +632,7 @@ The placeholder for a list, table, or search with nothing to show: icon, headlin
 
 - Import: `import { EmptyState } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/empty-state.md
+- Contract: https://dragonspine-delta.vercel.app/components/empty-state.md
 
 ### Meter
 
@@ -640,7 +640,7 @@ Level indicator for a known quantity, with a status-coloured fill and an optiona
 
 - Import: `import { Meter } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/meter.md
+- Contract: https://dragonspine-delta.vercel.app/components/meter.md
 
 ### Notification centre
 
@@ -648,7 +648,7 @@ A persistent notification inbox with unread count, filter tabs, and per-item act
 
 - Import: `import { NotificationCenter } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/notification-center.md
+- Contract: https://dragonspine-delta.vercel.app/components/notification-center.md
 
 ### Progress bar
 
@@ -656,7 +656,7 @@ Horizontal bar indicating completion progress, with an optional percentage label
 
 - Import: `import { ProgressBar } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/progress-bar.md
+- Contract: https://dragonspine-delta.vercel.app/components/progress-bar.md
 
 ### Skeleton
 
@@ -664,7 +664,7 @@ Placeholder loading indicators with text, circular, and rectangular variants.
 
 - Import: `import { Skeleton } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/skeleton.md
+- Contract: https://dragonspine-delta.vercel.app/components/skeleton.md
 
 ### Spinner
 
@@ -672,7 +672,7 @@ Animated circular loading indicator in three sizes and primary, neutral, or inhe
 
 - Import: `import { Spinner } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/spinner.md
+- Contract: https://dragonspine-delta.vercel.app/components/spinner.md
 
 ### Status dot
 
@@ -680,7 +680,7 @@ The bare status mark: a dot in the five status roles, with an optional label and
 
 - Import: `import { StatusDot } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/status-dot.md
+- Contract: https://dragonspine-delta.vercel.app/components/status-dot.md
 
 ### Toast
 
@@ -688,7 +688,7 @@ Temporary notification with status variants, auto-dismiss, and stacking via Toas
 
 - Import: `import { Toast } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/toast.md
+- Contract: https://dragonspine-delta.vercel.app/components/toast.md
 
 ## Forms (21)
 
@@ -700,7 +700,7 @@ Custom checkbox with check and indeterminate states, keyboard accessible with an
 
 - Import: `import { Checkbox } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/checkbox.md
+- Contract: https://dragonspine-delta.vercel.app/components/checkbox.md
 
 ### Colour picker
 
@@ -708,7 +708,7 @@ Swatch trigger opening a saturation area, hue and alpha sliders, and a hex field
 
 - Import: `import { ColorPicker } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/color-picker.md
+- Contract: https://dragonspine-delta.vercel.app/components/color-picker.md
 
 ### Combobox
 
@@ -716,7 +716,7 @@ A filterable select that narrows options as the user types, with multi-select ch
 
 - Import: `import { Combobox } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/combobox.md
+- Contract: https://dragonspine-delta.vercel.app/components/combobox.md
 
 ### Date input
 
@@ -724,7 +724,7 @@ Date input with native picker, calendar icon, label, and validation states.
 
 - Import: `import { DateInput } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/date-input.md
+- Contract: https://dragonspine-delta.vercel.app/components/date-input.md
 
 ### Date picker
 
@@ -732,7 +732,7 @@ Inline calendar with month navigation, day selection, and today indicator.
 
 - Import: `import { DatePicker } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/date-picker.md
+- Contract: https://dragonspine-delta.vercel.app/components/date-picker.md
 
 ### Dropdown
 
@@ -740,7 +740,7 @@ Custom select dropdown with keyboard navigation, disabled options, and error sta
 
 - Import: `import { Dropdown } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/dropdown.md
+- Contract: https://dragonspine-delta.vercel.app/components/dropdown.md
 
 ### Field
 
@@ -748,7 +748,7 @@ The shared scaffolding for labelled form controls: label, required marker, helpe
 
 - Import: `import { Field } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/field.md
+- Contract: https://dragonspine-delta.vercel.app/components/field.md
 
 ### File input
 
@@ -756,7 +756,7 @@ A click-or-drop upload zone paired with a controlled file list showing size, pro
 
 - Import: `import { FileInput } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/file-input.md
+- Contract: https://dragonspine-delta.vercel.app/components/file-input.md
 
 ### Filter bar
 
@@ -764,7 +764,7 @@ A row of filter chips for narrowing a collection, each opening a popover of opti
 
 - Import: `import { FilterBar } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/filter-bar.md
+- Contract: https://dragonspine-delta.vercel.app/components/filter-bar.md
 
 ### Input
 
@@ -772,7 +772,7 @@ Text input with label, placeholder, left and right icons, helper text, and error
 
 - Import: `import { Input } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/input.md
+- Contract: https://dragonspine-delta.vercel.app/components/input.md
 
 ### Number input
 
@@ -780,7 +780,7 @@ Numeric field with increment and decrement steppers and min/max clamping.
 
 - Import: `import { NumberInput } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/number-input.md
+- Contract: https://dragonspine-delta.vercel.app/components/number-input.md
 
 ### Pin input
 
@@ -788,7 +788,7 @@ Segmented one-time-code input with auto-advance, paste support, and completion c
 
 - Import: `import { PinInput } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/pin-input.md
+- Contract: https://dragonspine-delta.vercel.app/components/pin-input.md
 
 ### Radio button
 
@@ -796,7 +796,7 @@ Radio button and radio group with vertical and horizontal layouts, animated dot 
 
 - Import: `import { RadioButton } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/radio-button.md
+- Contract: https://dragonspine-delta.vercel.app/components/radio-button.md
 
 ### Rating
 
@@ -804,7 +804,7 @@ Star-scale rating control with keyboard selection, a read-only mode, and a confi
 
 - Import: `import { Rating } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/rating.md
+- Contract: https://dragonspine-delta.vercel.app/components/rating.md
 
 ### Rich dropdown
 
@@ -812,7 +812,7 @@ Dropdown's rich sibling: options preview their own heading face, body face, and 
 
 - Import: `import { RichDropdown } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/rich-dropdown.md
+- Contract: https://dragonspine-delta.vercel.app/components/rich-dropdown.md
 
 ### Slider
 
@@ -820,7 +820,7 @@ Range input for selecting a value between a minimum and maximum, in default and 
 
 - Import: `import { Slider } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/slider.md
+- Contract: https://dragonspine-delta.vercel.app/components/slider.md
 
 ### Swatch
 
@@ -828,7 +828,7 @@ Clickable colour tile for preset palettes and picker triggers, with a theme-awar
 
 - Import: `import { Swatch } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/swatch.md
+- Contract: https://dragonspine-delta.vercel.app/components/swatch.md
 
 ### Tag input
 
@@ -836,7 +836,7 @@ Multi-value text input with entries held as removable tags.
 
 - Import: `import { TagInput } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/tag-input.md
+- Contract: https://dragonspine-delta.vercel.app/components/tag-input.md
 
 ### Textarea
 
@@ -844,7 +844,7 @@ Multi-line text input with character counter, resize control, helper text, and e
 
 - Import: `import { Textarea } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/textarea.md
+- Contract: https://dragonspine-delta.vercel.app/components/textarea.md
 
 ### Time picker
 
@@ -852,7 +852,7 @@ Time-of-day field with a dropdown list of selectable times.
 
 - Import: `import { TimePicker } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/time-picker.md
+- Contract: https://dragonspine-delta.vercel.app/components/time-picker.md
 
 ### Toggle switch
 
@@ -860,7 +860,7 @@ Binary on/off toggle control with sliding thumb and check indicator, used for se
 
 - Import: `import { ToggleSwitch } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/toggle-switch.md
+- Contract: https://dragonspine-delta.vercel.app/components/toggle-switch.md
 
 ## Layout (7)
 
@@ -872,7 +872,7 @@ Full-page template pairing the collapsible App sidebar with a centred content ar
 
 - Import: `import { AppLayout } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/app-layout.md
+- Contract: https://dragonspine-delta.vercel.app/components/app-layout.md
 
 ### App sidebar
 
@@ -880,7 +880,7 @@ Collapsible navigation rail with accordion sub-items, category headings, and pro
 
 - Import: `import { AppSidebar } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/app-sidebar.md
+- Contract: https://dragonspine-delta.vercel.app/components/app-sidebar.md
 
 ### Divider
 
@@ -888,7 +888,7 @@ A thin rule separating stacked content, with optional inline label and vertical 
 
 - Import: `import { Divider } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/divider.md
+- Contract: https://dragonspine-delta.vercel.app/components/divider.md
 
 ### Panel
 
@@ -896,7 +896,7 @@ The plain dashboard surface: a rounded container with no border or shadow, just 
 
 - Import: `import { Panel } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/panel.md
+- Contract: https://dragonspine-delta.vercel.app/components/panel.md
 
 ### Section title
 
@@ -904,7 +904,7 @@ Heading with a divider line and optional trailing content for organising page se
 
 - Import: `import { SectionTitle } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/section-title.md
+- Contract: https://dragonspine-delta.vercel.app/components/section-title.md
 
 ### Split pane
 
@@ -912,7 +912,7 @@ Two resizable regions with a draggable, keyboard-operable divider between them.
 
 - Import: `import { SplitPane } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/split-pane.md
+- Contract: https://dragonspine-delta.vercel.app/components/split-pane.md
 
 ### Toolbar
 
@@ -920,7 +920,7 @@ A grouped strip of controls in one pill shell: clusters, separators, arrow-key f
 
 - Import: `import { Toolbar } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/toolbar.md
+- Contract: https://dragonspine-delta.vercel.app/components/toolbar.md
 
 ## Maps (4)
 
@@ -932,7 +932,7 @@ An orthographic globe with markers and great-circle arcs, rotated by drag, keys,
 
 - Import: `import { Globe } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/globe.md
+- Contract: https://dragonspine-delta.vercel.app/components/globe.md
 
 ### Map callout
 
@@ -940,7 +940,7 @@ The annotation beside a map point: a name in capitals over monospace readout lin
 
 - Import: `import { MapCallout } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/map-callout.md
+- Contract: https://dragonspine-delta.vercel.app/components/map-callout.md
 
 ### Map legend
 
@@ -948,7 +948,7 @@ The corner block of a map: its name, what it shows, and the key to its markers.
 
 - Import: `import { MapLegend } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/map-legend.md
+- Contract: https://dragonspine-delta.vercel.app/components/map-legend.md
 
 ### World map
 
@@ -956,7 +956,7 @@ A flat world map from Natural Earth land shapes: token-coloured continents, fram
 
 - Import: `import { WorldMap } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/world-map.md
+- Contract: https://dragonspine-delta.vercel.app/components/world-map.md
 
 ## Navigation (7)
 
@@ -968,7 +968,7 @@ An on-page list of anchor links that tracks the reader's position and jumps betw
 
 - Import: `import { AnchorNav } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/anchor-nav.md
+- Contract: https://dragonspine-delta.vercel.app/components/anchor-nav.md
 
 ### Breadcrumb
 
@@ -976,7 +976,7 @@ Hierarchical navigation trail showing the user's location within the site.
 
 - Import: `import { Breadcrumb } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/breadcrumb.md
+- Contract: https://dragonspine-delta.vercel.app/components/breadcrumb.md
 
 ### Nav
 
@@ -984,7 +984,7 @@ Desktop top navigation bar with a brand slot, horizontal button group, and optio
 
 - Import: `import { Nav } from '@robr0/design-system';`
 - Rendering: server-renderable (no 'use client')
-- Contract: https://dragonspine.vercel.app/components/nav.md
+- Contract: https://dragonspine-delta.vercel.app/components/nav.md
 
 ### Nav list
 
@@ -992,7 +992,7 @@ Vertical list of navigation links for drawers and menus, with three indent level
 
 - Import: `import { NavList } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/nav-list.md
+- Contract: https://dragonspine-delta.vercel.app/components/nav-list.md
 
 ### Pagination
 
@@ -1000,7 +1000,7 @@ Numbered page navigation for long datasets, with ellipses, disabled end arrows, 
 
 - Import: `import { Pagination } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/pagination.md
+- Contract: https://dragonspine-delta.vercel.app/components/pagination.md
 
 ### Stepper
 
@@ -1008,7 +1008,7 @@ Step-by-step progress indicator for wizards and multi-stage flows.
 
 - Import: `import { Stepper } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/stepper.md
+- Contract: https://dragonspine-delta.vercel.app/components/stepper.md
 
 ### Tabs
 
@@ -1016,7 +1016,7 @@ Tab navigation with underline indicator, icon support, compact size, and full-wi
 
 - Import: `import { Tabs } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/tabs.md
+- Contract: https://dragonspine-delta.vercel.app/components/tabs.md
 
 ## Overlays (10)
 
@@ -1028,7 +1028,7 @@ Modal confirmation overlay with title, description, and confirm / cancel actions
 
 - Import: `import { AlertDialog } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/alert-dialog.md
+- Contract: https://dragonspine-delta.vercel.app/components/alert-dialog.md
 
 ### Command palette
 
@@ -1036,7 +1036,7 @@ A modal Cmd+K launcher that searches a grouped command list, with keyboard navig
 
 - Import: `import { CommandPalette } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/command-palette.md
+- Contract: https://dragonspine-delta.vercel.app/components/command-palette.md
 
 ### Context menu
 
@@ -1044,7 +1044,7 @@ Right-click menu at the pointer with groups, sub-menus, and shortcut hints.
 
 - Import: `import { ContextMenu } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/context-menu.md
+- Contract: https://dragonspine-delta.vercel.app/components/context-menu.md
 
 ### Dialog
 
@@ -1052,7 +1052,7 @@ A general-purpose modal for focused tasks, with sizes, an optional footer, and f
 
 - Import: `import { Dialog } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/dialog.md
+- Contract: https://dragonspine-delta.vercel.app/components/dialog.md
 
 ### Drawer
 
@@ -1060,7 +1060,7 @@ An edge-anchored modal panel that slides in from any side, for filter panels, de
 
 - Import: `import { Drawer } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/drawer.md
+- Contract: https://dragonspine-delta.vercel.app/components/drawer.md
 
 ### Dropdown menu
 
@@ -1068,7 +1068,7 @@ Contextual menu with sections, sub-menus, keyboard shortcuts, and inset-gap hove
 
 - Import: `import { DropdownMenu } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/dropdown-menu.md
+- Contract: https://dragonspine-delta.vercel.app/components/dropdown-menu.md
 
 ### Hover card
 
@@ -1076,7 +1076,7 @@ Rich preview panel that opens from hover or focus, with interactive content and 
 
 - Import: `import { HoverCard } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/hover-card.md
+- Contract: https://dragonspine-delta.vercel.app/components/hover-card.md
 
 ### Lightbox
 
@@ -1084,7 +1084,7 @@ Fullscreen media viewer on the shared overlay stack: deep scrim, caption chip, g
 
 - Import: `import { Lightbox } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/lightbox.md
+- Contract: https://dragonspine-delta.vercel.app/components/lightbox.md
 
 ### Popover
 
@@ -1092,7 +1092,7 @@ Contextual overlay panel with click and hover triggers, positioned relative to i
 
 - Import: `import { Popover } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/popover.md
+- Contract: https://dragonspine-delta.vercel.app/components/popover.md
 
 ### Tooltip
 
@@ -1100,4 +1100,4 @@ Contextual text label that appears on hover or focus with position and delay opt
 
 - Import: `import { Tooltip } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
-- Contract: https://dragonspine.vercel.app/components/tooltip.md
+- Contract: https://dragonspine-delta.vercel.app/components/tooltip.md

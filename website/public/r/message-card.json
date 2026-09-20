@@ -5,7 +5,7 @@
   "title": "Message card",
   "description": "A structured rich-content card embedded in a chat message, with media, title, body, and actions.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json"
+    "https://dragonspine-delta.vercel.app/r/base.json"
   ],
   "files": [
     {

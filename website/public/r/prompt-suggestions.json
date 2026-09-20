@@ -5,8 +5,8 @@
   "title": "Prompt suggestions",
   "description": "A horizontal row of tappable prompt suggestions to start or steer a conversation.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json",
-    "https://dragonspine.vercel.app/r/chip.json"
+    "https://dragonspine-delta.vercel.app/r/base.json",
+    "https://dragonspine-delta.vercel.app/r/chip.json"
   ],
   "files": [
     {

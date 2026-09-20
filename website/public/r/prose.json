@@ -5,7 +5,7 @@
   "title": "Prose",
   "description": "Token-styled typography for rendered markdown and rich agent output.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json"
+    "https://dragonspine-delta.vercel.app/r/base.json"
   ],
   "files": [
     {

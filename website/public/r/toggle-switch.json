@@ -5,7 +5,7 @@
   "title": "Toggle switch",
   "description": "Binary on/off toggle control with sliding thumb and check indicator, used for settings like theme switching.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json"
+    "https://dragonspine-delta.vercel.app/r/base.json"
   ],
   "files": [
     {

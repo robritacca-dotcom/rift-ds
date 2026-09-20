@@ -2,13 +2,13 @@
 
 A keyboard key rendered as a keycap, for shortcut hints in menus and prose.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine.vercel.app/api/mcp.
+Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine-delta.vercel.app/api/mcp.
 
 - Category: data-display
 - Import: `import { Kbd } from '@robr0/design-system';`
 - Deep import: `import { Kbd } from '@robr0/design-system/components/Kbd/Kbd';`
 - Rendering: server-renderable (no 'use client')
-- Live docs: https://dragonspine.vercel.app/components/kbd
+- Live docs: https://dragonspine-delta.vercel.app/components/kbd
 
 ## Kbd props
 

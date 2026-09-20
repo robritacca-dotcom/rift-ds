@@ -2,13 +2,13 @@
 
 Full-width status strip for page-level announcements, with an action slot and optional dismissal.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine.vercel.app/api/mcp.
+Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine-delta.vercel.app/api/mcp.
 
 - Category: feedback
 - Import: `import { Banner } from '@robr0/design-system';`
 - Deep import: `import { Banner } from '@robr0/design-system/components/Banner/Banner';`
 - Rendering: server-renderable (no 'use client')
-- Live docs: https://dragonspine.vercel.app/components/banner
+- Live docs: https://dragonspine-delta.vercel.app/components/banner
 
 ## Banner props
 

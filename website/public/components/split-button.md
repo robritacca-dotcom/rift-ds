@@ -2,13 +2,13 @@
 
 Primary action with an attached menu of alternatives, composing Button and DropdownMenu in one pill.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine.vercel.app/api/mcp.
+Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine-delta.vercel.app/api/mcp.
 
 - Category: actions
 - Import: `import { SplitButton } from '@robr0/design-system';`
 - Deep import: `import { SplitButton } from '@robr0/design-system/components/SplitButton/SplitButton';`
 - Rendering: server-renderable (no 'use client')
-- Live docs: https://dragonspine.vercel.app/components/split-button
+- Live docs: https://dragonspine-delta.vercel.app/components/split-button
 
 ## SplitButton props
 

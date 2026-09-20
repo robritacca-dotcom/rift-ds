@@ -50,7 +50,7 @@ export const RETIRED_PACKAGE_NAMES = [];
  * urls, llms.txt, the corpus, and the init bin at build time — point it
  * at the real deployment before any `build:lib`.
  */
-export const SITE_URL = 'https://dragonspine.vercel.app';
+export const SITE_URL = 'https://dragonspine-delta.vercel.app';
 
 /** The source repository. */
 export const REPOSITORY_URL = 'https://github.com/robritacca-dotcom/dragonspine';

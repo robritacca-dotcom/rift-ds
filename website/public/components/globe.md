@@ -2,13 +2,13 @@
 
 An orthographic globe with markers and great-circle arcs, rotated by drag, keys, or a slow spin.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine.vercel.app/api/mcp.
+Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine-delta.vercel.app/api/mcp.
 
 - Category: maps
 - Import: `import { Globe } from '@robr0/design-system';`
 - Deep import: `import { Globe } from '@robr0/design-system/components/Globe/Globe';`
 - Rendering: client component (declares 'use client')
-- Live docs: https://dragonspine.vercel.app/components/globe
+- Live docs: https://dragonspine-delta.vercel.app/components/globe
 
 ## Globe props
 

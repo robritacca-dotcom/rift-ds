@@ -2,13 +2,13 @@
 
 Bar and line series in one chart, with an optional second y-axis for pairs in different units, like spend and ROAS.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine.vercel.app/api/mcp.
+Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine-delta.vercel.app/api/mcp.
 
 - Category: charts
 - Import: `import { ComboChart } from '@robr0/design-system/charts'; // needs the optional recharts peer`
 - Deep import: `import { ComboChart } from '@robr0/design-system/components/Chart/ComboChart';`
 - Rendering: server-renderable (no 'use client')
-- Live docs: https://dragonspine.vercel.app/components/combo-chart
+- Live docs: https://dragonspine-delta.vercel.app/components/combo-chart
 
 ## ComboChart props
 

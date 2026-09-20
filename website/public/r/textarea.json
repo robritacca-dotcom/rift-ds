@@ -5,8 +5,8 @@
   "title": "Textarea",
   "description": "Multi-line text input with character counter, resize control, helper text, and error states.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json",
-    "https://dragonspine.vercel.app/r/field.json"
+    "https://dragonspine-delta.vercel.app/r/base.json",
+    "https://dragonspine-delta.vercel.app/r/field.json"
   ],
   "files": [
     {

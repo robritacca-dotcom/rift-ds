@@ -5,8 +5,8 @@
   "title": "Nav",
   "description": "Desktop top navigation bar with a brand slot, horizontal button group, and optional trailing content.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json",
-    "https://dragonspine.vercel.app/r/button-group.json"
+    "https://dragonspine-delta.vercel.app/r/base.json",
+    "https://dragonspine-delta.vercel.app/r/button-group.json"
   ],
   "files": [
     {

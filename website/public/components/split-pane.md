@@ -2,13 +2,13 @@
 
 Two resizable regions with a draggable, keyboard-operable divider between them.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine.vercel.app/api/mcp.
+Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine-delta.vercel.app/api/mcp.
 
 - Category: layout
 - Import: `import { SplitPane } from '@robr0/design-system';`
 - Deep import: `import { SplitPane } from '@robr0/design-system/components/SplitPane/SplitPane';`
 - Rendering: client component (declares 'use client')
-- Live docs: https://dragonspine.vercel.app/components/split-pane
+- Live docs: https://dragonspine-delta.vercel.app/components/split-pane
 
 ## SplitPane props
 

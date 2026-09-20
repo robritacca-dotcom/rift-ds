@@ -5,7 +5,7 @@
   "title": "Selection card",
   "description": "Large selectable option cards with radio or checkbox indicators for high-visibility choices like settings and onboarding.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json"
+    "https://dragonspine-delta.vercel.app/r/base.json"
   ],
   "files": [
     {

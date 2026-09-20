@@ -5,8 +5,8 @@
   "title": "Tool call",
   "description": "The record of one tool invocation, with its arguments and result behind a disclosure.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json",
-    "https://dragonspine.vercel.app/r/spinner.json"
+    "https://dragonspine-delta.vercel.app/r/base.json",
+    "https://dragonspine-delta.vercel.app/r/spinner.json"
   ],
   "files": [
     {

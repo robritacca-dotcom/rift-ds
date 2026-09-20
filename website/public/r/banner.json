@@ -5,7 +5,7 @@
   "title": "Banner",
   "description": "Full-width status strip for page-level announcements, with an action slot and optional dismissal.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json"
+    "https://dragonspine-delta.vercel.app/r/base.json"
   ],
   "files": [
     {

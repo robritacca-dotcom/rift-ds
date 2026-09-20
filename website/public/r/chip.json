@@ -5,7 +5,7 @@
   "title": "Chip",
   "description": "Compact pills for attributes, filters, and inline metadata.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json"
+    "https://dragonspine-delta.vercel.app/r/base.json"
   ],
   "files": [
     {

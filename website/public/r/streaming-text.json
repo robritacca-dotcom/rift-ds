@@ -5,7 +5,7 @@
   "title": "Streaming text",
   "description": "Progressive reveal for text arriving in chunks, with a blinking cursor while more is coming.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json"
+    "https://dragonspine-delta.vercel.app/r/base.json"
   ],
   "files": [
     {

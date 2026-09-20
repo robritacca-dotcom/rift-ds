@@ -5,9 +5,9 @@
   "title": "Circular button",
   "description": "Round icon button with primary, secondary, tertiary and neutral variants, default and compact sizes.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json",
-    "https://dragonspine.vercel.app/r/spinner.json",
-    "https://dragonspine.vercel.app/r/tooltip.json"
+    "https://dragonspine-delta.vercel.app/r/base.json",
+    "https://dragonspine-delta.vercel.app/r/spinner.json",
+    "https://dragonspine-delta.vercel.app/r/tooltip.json"
   ],
   "files": [
     {

@@ -5,7 +5,7 @@
   "title": "Source chip",
   "description": "A numbered citation pill linking a claim to its source.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json"
+    "https://dragonspine-delta.vercel.app/r/base.json"
   ],
   "files": [
     {

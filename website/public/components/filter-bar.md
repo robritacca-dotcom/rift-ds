@@ -2,13 +2,13 @@
 
 A row of filter chips for narrowing a collection, each opening a popover of options, with per-filter and clear-all resets.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine.vercel.app/api/mcp.
+Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine-delta.vercel.app/api/mcp.
 
 - Category: forms
 - Import: `import { FilterBar } from '@robr0/design-system';`
 - Deep import: `import { FilterBar } from '@robr0/design-system/components/FilterBar/FilterBar';`
 - Rendering: client component (declares 'use client')
-- Live docs: https://dragonspine.vercel.app/components/filter-bar
+- Live docs: https://dragonspine-delta.vercel.app/components/filter-bar
 
 ## FilterBar props
 

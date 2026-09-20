@@ -5,9 +5,9 @@
   "title": "Source trail",
   "description": "The sources an agent opened while answering, as a collapsible list with per-item status.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json",
-    "https://dragonspine.vercel.app/r/source-chip.json",
-    "https://dragonspine.vercel.app/r/spinner.json"
+    "https://dragonspine-delta.vercel.app/r/base.json",
+    "https://dragonspine-delta.vercel.app/r/source-chip.json",
+    "https://dragonspine-delta.vercel.app/r/spinner.json"
   ],
   "files": [
     {

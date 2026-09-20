@@ -5,7 +5,7 @@
   "title": "Stepper",
   "description": "Step-by-step progress indicator for wizards and multi-stage flows.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json"
+    "https://dragonspine-delta.vercel.app/r/base.json"
   ],
   "files": [
     {

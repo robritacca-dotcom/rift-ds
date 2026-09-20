@@ -5,7 +5,7 @@
   "title": "Chat marker",
   "description": "An inline conversation separator for date breaks and system notes.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json"
+    "https://dragonspine-delta.vercel.app/r/base.json"
   ],
   "files": [
     {

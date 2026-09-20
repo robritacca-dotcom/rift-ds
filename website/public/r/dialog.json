@@ -5,7 +5,7 @@
   "title": "Dialog",
   "description": "A general-purpose modal for focused tasks, with sizes, an optional footer, and full focus management.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json"
+    "https://dragonspine-delta.vercel.app/r/base.json"
   ],
   "files": [
     {

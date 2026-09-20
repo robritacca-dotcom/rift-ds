@@ -5,7 +5,7 @@
   "title": "Figure",
   "description": "Images with captions, in the case-study frame.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json"
+    "https://dragonspine-delta.vercel.app/r/base.json"
   ],
   "files": [
     {

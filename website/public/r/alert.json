@@ -5,7 +5,7 @@
   "title": "Alert",
   "description": "Contextual feedback with status variants, optional dismiss, and compact sizing.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json"
+    "https://dragonspine-delta.vercel.app/r/base.json"
   ],
   "files": [
     {

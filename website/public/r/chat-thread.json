@@ -5,7 +5,7 @@
   "title": "Chat thread",
   "description": "A scrollable conversation column with edge fades, send anchoring, and a subtle scrollbar.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json"
+    "https://dragonspine-delta.vercel.app/r/base.json"
   ],
   "files": [
     {

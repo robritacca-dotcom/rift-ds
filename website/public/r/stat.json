@@ -5,7 +5,7 @@
   "title": "Stat",
   "description": "Headline metrics with labels and trend deltas.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json"
+    "https://dragonspine-delta.vercel.app/r/base.json"
   ],
   "files": [
     {

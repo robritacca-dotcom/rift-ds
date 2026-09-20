@@ -5,7 +5,7 @@
   "title": "Spinner",
   "description": "Animated circular loading indicator in three sizes and primary, neutral, or inherit variants.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json"
+    "https://dragonspine-delta.vercel.app/r/base.json"
   ],
   "files": [
     {

@@ -2,13 +2,13 @@
 
 A compact file reference with a type icon, name, metadata, and optional remove.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine.vercel.app/api/mcp.
+Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine-delta.vercel.app/api/mcp.
 
 - Category: ai
 - Import: `import { DocumentChip } from '@robr0/design-system';`
 - Deep import: `import { DocumentChip } from '@robr0/design-system/components/DocumentChip/DocumentChip';`
 - Rendering: server-renderable (no 'use client')
-- Live docs: https://dragonspine.vercel.app/components/document-chip
+- Live docs: https://dragonspine-delta.vercel.app/components/document-chip
 
 ## DocumentChip props
 

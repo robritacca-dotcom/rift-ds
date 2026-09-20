@@ -1,6 +1,6 @@
 ---
 name: pre-deploy
-description: Run the full local verify (lint, library and package builds with the publish lint, story tests, Storybook build, website lint + build, the built-HTML validators, and the served-site checks) and confirm the site is safe to push to Vercel (no Vercel project exists for this repo yet; every check runs locally regardless). Use when asked whether changes are ready to push, deploy, or ship, or for a pre-deploy check.
+description: Run the full local verify (lint, library and package builds with the publish lint, story tests, Storybook build, website lint + build, the built-HTML validators, and the served-site checks) and confirm the site is safe to push to Vercel (a push to main deploys the live site). Use when asked whether changes are ready to push, deploy, or ship, or for a pre-deploy check.
 icon: rocket_launch
 displayDescription: "Runs the same checks as CI before a push to Vercel: lint, the library type-check, the publishable npm package build, every Storybook story as a render, interaction, *and* accessibility test (Vitest + headless Chromium + axe, with story play functions asserting behavior), the Storybook build, the website lint + build (Next.js), the validators that read the built HTML, and the served-site checks: a hydration smoke in a real browser and a page-level axe pass in both themes. Knows the npm-workspace layout and watches for SSR-unsafe code, portal regressions, and static generation failures."
 invoke: ["is this ready to push?","run the build","pre-deploy check","check before I push"]

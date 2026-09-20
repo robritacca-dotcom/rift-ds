@@ -5,8 +5,8 @@
   "title": "Button group",
   "description": "Horizontal and vertical button group layouts for related actions and navigation patterns.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json",
-    "https://dragonspine.vercel.app/r/button.json"
+    "https://dragonspine-delta.vercel.app/r/base.json",
+    "https://dragonspine-delta.vercel.app/r/button.json"
   ],
   "files": [
     {

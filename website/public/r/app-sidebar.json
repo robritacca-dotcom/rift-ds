@@ -5,7 +5,7 @@
   "title": "App sidebar",
   "description": "Collapsible navigation rail with accordion sub-items, category headings, and profile section.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json"
+    "https://dragonspine-delta.vercel.app/r/base.json"
   ],
   "files": [
     {

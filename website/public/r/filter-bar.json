@@ -5,7 +5,7 @@
   "title": "Filter bar",
   "description": "A row of filter chips for narrowing a collection, each opening a popover of options, with per-filter and clear-all resets.",
   "registryDependencies": [
-    "https://dragonspine.vercel.app/r/base.json"
+    "https://dragonspine-delta.vercel.app/r/base.json"
   ],
   "files": [
     {

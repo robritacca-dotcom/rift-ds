@@ -493,17 +493,81 @@
 }
 
 /* ============================================
-   RESPONSIVE
+   RESPONSIVE — the mobile drawer
+   Below the mobile breakpoint (768px — design.md's Breakpoints section
+   is the authoritative home) the rail leaves the layout entirely and
+   the fixed hamburger trigger opens it as a modal overlay drawer. The
+   trigger and scrim exist only inside this media query, so the overlay
+   behaviors can never activate on wider viewports.
    ============================================ */
+.ds-app-sidebar__mobile-trigger {
+  display: none;
+}
+
+.ds-app-sidebar__scrim {
+  display: none;
+}
+
 @media (max-width: 768px) {
   .ds-app-sidebar {
     width: 0;
     padding: 0;
+    overflow: hidden;
   }
 
-  .ds-app-sidebar--expanded {
+  .ds-app-sidebar__mobile-trigger {
+    position: fixed;
+    top: var(--padding-500);
+    left: var(--padding-500);
+    z-index: 80;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    background: var(--color-bg-container-primary);
+    border: var(--border-025) solid var(--color-bg-container-border);
+    border-radius: var(--radius-pill);
+    color: var(--color-text-primary);
+    cursor: pointer;
+    box-shadow: var(--shadow-floating);
+  }
+
+  .ds-app-sidebar__scrim {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    background: var(--color-scrim);
+  }
+
+  /* The drawer: the full expanded rail, fixed over the scrim, sliding
+     in from the left on the motion tokens (the reduced-motion guard
+     zeroes the duration system-wide). */
+  .ds-app-sidebar--mobile-open {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 100;
     width: 280px;
+    height: 100dvh;
     padding: var(--padding-500) 0;
+    overflow-y: auto;
+    background: var(--color-bg-page-primary);
+    border-right: var(--border-025) solid var(--color-bg-container-border);
+    box-shadow: var(--shadow-modal);
+    animation: ds-app-sidebar-slide-in var(--motion-duration-base) var(--motion-ease-standard);
+  }
+}
+
+@keyframes ds-app-sidebar-slide-in {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
   }
 }
 

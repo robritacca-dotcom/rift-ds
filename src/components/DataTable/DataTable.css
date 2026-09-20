@@ -33,10 +33,14 @@
   flex-wrap: wrap;
 }
 
-/* The search field sits at the end of the toolbar even with no filters */
+/* The search field sits at the end of the toolbar even with no filters.
+   It flexes from a fixed-feeling width instead of pinning one: on a roomy
+   row it reads as the familiar 240px field, and when the toolbar wraps it
+   grows across its own line rather than orphaning right over dead space. */
 .ds-data-table__search {
   margin-left: auto;
-  max-width: 240px;
+  flex: 1 1 200px;
+  max-width: 320px;
 }
 
 /* ============================================

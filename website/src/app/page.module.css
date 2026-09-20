@@ -25,10 +25,11 @@
   align-items: center;
   text-align: center;
   gap: var(--gap-400);
-  /* Full container width: the mega title must fit one line in every
-     theme's face, and the monospace themes run wide (terminal was
-     wrapping "Dragonspine DS" inside the old 1080px cap). */
-  max-width: 100%;
+  /* The content container's own cap, not the raw viewport: the fade
+     rules and stat band read as part of the page column, not banner
+     furniture. 1440px clears the mega title in every theme's face,
+     including the wide monospace ones that broke the old 1080px cap. */
+  max-width: 1440px;
   /* Section-rhythm token rather than a fixed margin: it steps down at
      768px on its own, so the mobile override below isn't needed. */
   margin: 0 auto var(--gap-1500);

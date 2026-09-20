@@ -1,6 +1,9 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect, useId, useRef } from 'react';
+import { useLayer } from '../../behaviors/useLayer';
+import { useFocusScope } from '../../behaviors/useFocusScope';
+import { useScrollLock } from '../../behaviors/useScrollLock';
 import './AppSidebar.css';
 import '../../fonts/material-symbols.css';
 
@@ -86,6 +89,12 @@ export interface AppSidebarProps {
   logo?: React.ReactNode;
   /** Text shown next to logo when expanded */
   logoText?: string;
+  /**
+   * Below the mobile breakpoint the rail hides and this fixed hamburger
+   * button opens it as an overlay drawer instead. Set false when the
+   * host renders its own trigger in the page chrome.
+   */
+  showMobileTrigger?: boolean;
 }
 
 /* ============================================
@@ -136,6 +145,7 @@ export const AppSidebar = ({
   className = '',
   logo,
   logoText = 'Dragonspine',
+  showMobileTrigger = true,
 }: AppSidebarProps) => {
   const baseClass = 'ds-app-sidebar';
 
@@ -148,6 +158,30 @@ export const AppSidebar = ({
     setInternalExpanded(next);
     onExpandedChange?.(next);
   }, [isExpanded, onExpandedChange]);
+
+  /* Mobile drawer: below the breakpoint the rail is hidden and the
+     trigger opens it as a modal overlay, on the shared behavior layer
+     like every other overlay (dismissal stack, focus trap, scroll
+     lock). The trigger is CSS-gated to the mobile media query, so the
+     overlay can only ever activate there; crossing back up while open
+     closes it, or the scroll lock would outlive the drawer. */
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const drawerRef = useRef<HTMLElement>(null);
+  const drawerId = useId();
+  const closeMobile = useCallback(() => setMobileOpen(false), []);
+  useLayer({ open: mobileOpen, onDismiss: closeMobile });
+  useFocusScope(drawerRef, { active: mobileOpen });
+  useScrollLock(mobileOpen);
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const query = window.matchMedia('(min-width: 769px)');
+    const onChange = () => {
+      if (query.matches) setMobileOpen(false);
+    };
+    onChange();
+    query.addEventListener('change', onChange);
+    return () => query.removeEventListener('change', onChange);
+  }, [mobileOpen]);
 
   /* Accordion open keys */
   const [openKeys, setOpenKeys] = useState<Set<string>>(new Set());
@@ -166,15 +200,36 @@ export const AppSidebar = ({
 
   const classes = [
     baseClass,
-    isExpanded ? `${baseClass}--expanded` : '',
+    // The drawer always shows the expanded layout: an icon rail inside
+    // a modal overlay would be all cost and no labels.
+    isExpanded || mobileOpen ? `${baseClass}--expanded` : '',
     floating ? `${baseClass}--floating` : '',
+    mobileOpen ? `${baseClass}--mobile-open` : '',
     className,
   ]
     .filter(Boolean)
     .join(' ');
 
   return (
-    <nav className={classes} aria-label="App navigation">
+    <>
+      {showMobileTrigger && (
+        <button
+          type="button"
+          className={`${baseClass}__mobile-trigger`}
+          aria-label="Open navigation"
+          aria-expanded={mobileOpen}
+          aria-controls={drawerId}
+          onClick={() => setMobileOpen(true)}
+        >
+          <span className="material-symbols-rounded" aria-hidden="true">
+            menu
+          </span>
+        </button>
+      )}
+      {mobileOpen && (
+        <div className={`${baseClass}__scrim`} onClick={closeMobile} aria-hidden="true" />
+      )}
+    <nav ref={drawerRef} id={drawerId} className={classes} aria-label="App navigation">
       {/* ---- TOP ---- */}
       <div className={`${baseClass}__top`}>
         {/* Logo */}
@@ -373,5 +428,6 @@ export const AppSidebar = ({
         )}
       </div>
     </nav>
+    </>
   );
 };

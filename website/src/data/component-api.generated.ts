@@ -761,6 +761,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Text shown next to logo when expanded",
             "defaultValue": "Dragonspine"
+          },
+          {
+            "name": "showMobileTrigger",
+            "type": "boolean",
+            "required": false,
+            "description": "Below the mobile breakpoint the rail hides and this fixed hamburger\nbutton opens it as an overlay drawer instead. Set false when the\nhost renders its own trigger in the page chrome.",
+            "defaultValue": "true"
           }
         ]
       }

@@ -356,7 +356,10 @@
 
 @media (max-width: 760px) {
   .sidebar {
-    display: none;
+    /* The wrapper stays in the tree: AppSidebar owns mobile itself now —
+       the rail collapses to zero width and its fixed hamburger opens the
+       drawer. display: none here would take the trigger down with it. */
+    width: auto;
   }
 
   .main,

@@ -41,7 +41,7 @@
   transform: translate(-50%, -50%);
   white-space: nowrap;
   font-size: var(--font-caption-size);
-  font-weight: var(--font-paragraph-em-weight);
+  font-weight: var(--font-paragraph-emphasis-weight);
   color: var(--color-text-secondary);
   background-color: var(--color-bg-container-primary);
   border: var(--border-025) solid var(--color-bg-container-border);

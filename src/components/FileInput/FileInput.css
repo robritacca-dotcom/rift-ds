@@ -54,11 +54,11 @@
 }
 
 .ds-file-input__dropzone-text {
-  font-family: var(--font-paragraph-em-family);
-  font-size: var(--font-paragraph-em-size);
-  font-weight: var(--font-paragraph-em-weight);
-  line-height: var(--font-paragraph-em-line-height);
-  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  font-family: var(--font-paragraph-emphasis-family);
+  font-size: var(--font-paragraph-emphasis-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-emphasis-letter-spacing);
   color: var(--color-text-primary);
 }
 
@@ -131,11 +131,11 @@
 }
 
 .ds-file-input__file-name {
-  font-family: var(--font-paragraph-em-family);
-  font-size: var(--font-paragraph-em-size);
-  font-weight: var(--font-paragraph-em-weight);
-  line-height: var(--font-paragraph-em-line-height);
-  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  font-family: var(--font-paragraph-emphasis-family);
+  font-size: var(--font-paragraph-emphasis-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-emphasis-letter-spacing);
   color: var(--color-text-primary);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -262,9 +262,9 @@
 
 .ds-file-input--compact .ds-file-input__dropzone-text,
 .ds-file-input--compact .ds-file-input__file-name {
-  font-size: var(--font-paragraph-sm-em-size);
-  line-height: var(--font-paragraph-sm-em-line-height);
-  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
 }
 
 .ds-file-input--compact .ds-file-input__file {

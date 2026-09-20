@@ -134,7 +134,7 @@
 }
 
 .ds-prose strong {
-  font-weight: var(--font-paragraph-em-weight);
+  font-weight: var(--font-paragraph-emphasis-weight);
 }
 
 .ds-prose em {
@@ -261,7 +261,7 @@
 }
 
 .ds-prose--sm strong {
-  font-weight: var(--font-paragraph-sm-em-weight);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
 }
 
 .ds-prose--sm code {

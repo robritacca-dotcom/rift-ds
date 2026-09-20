@@ -25,7 +25,7 @@
   padding: 0 var(--padding-100);
   font-family: var(--font-family-code);
   font-size: var(--font-paragraph-sm-size);
-  font-weight: var(--font-paragraph-sm-em-weight);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
   color: var(--color-text-on-inverse);
   background: var(--color-core-accent-coral);
   border-radius: var(--radius-050) var(--radius-050) 0 0;

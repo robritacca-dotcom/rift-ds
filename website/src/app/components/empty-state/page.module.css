@@ -100,7 +100,7 @@
   border-bottom: var(--border-025) solid var(--color-bg-container-border);
   font-family: var(--font-paragraph-sm-family);
   font-size: var(--font-paragraph-sm-size);
-  font-weight: var(--font-paragraph-sm-em-weight);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
   color: var(--color-text-tertiary);
 }
 

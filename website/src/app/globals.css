@@ -91,7 +91,7 @@ html[data-theme-ready] {
      one gap. The playground has no FAB but keeps the offset: a toast 60px
      higher is not a bug, a toast under a button is. */
   --ds-toast-inset-bottom: calc(
-    var(--layout-chat-inset) + var(--padding-200) * 2 + var(--font-paragraph-em-line-height) +
+    var(--layout-chat-inset) + var(--padding-200) * 2 + var(--font-paragraph-emphasis-line-height) +
       var(--gap-200)
   );
 }

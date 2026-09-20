@@ -192,9 +192,9 @@
      grown from text, since the shell holds a bar instead of a label. */
   padding: var(--padding-150) var(--padding-300);
   height: calc(
-    var(--font-paragraph-sm-em-line-height) + 2 * var(--padding-150) + 2 * var(--border-025)
+    var(--font-paragraph-sm-emphasis-line-height) + 2 * var(--padding-150) + 2 * var(--border-025)
   );
-  font-size: var(--font-paragraph-sm-em-size);
+  font-size: var(--font-paragraph-sm-emphasis-size);
 
   /* Widths are em-cycled below so the set reads as questions of different
      lengths rather than three identical pills — a drawing choice scaled by
@@ -207,9 +207,9 @@
 .ds-prompt-suggestions--default .ds-prompt-suggestions__skeleton {
   padding: var(--padding-200) var(--padding-500);
   height: calc(
-    var(--font-paragraph-em-line-height) + 2 * var(--padding-200) + 2 * var(--border-025)
+    var(--font-paragraph-emphasis-line-height) + 2 * var(--padding-200) + 2 * var(--border-025)
   );
-  font-size: var(--font-paragraph-em-size);
+  font-size: var(--font-paragraph-emphasis-size);
 }
 
 .ds-prompt-suggestions__item:nth-child(3n + 2) .ds-prompt-suggestions__skeleton {

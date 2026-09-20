@@ -159,7 +159,7 @@
 }
 
 .companyName {
-  font-weight: var(--font-paragraph-sm-em-weight);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
   color: var(--color-text-primary);
   white-space: nowrap;
 }
@@ -190,7 +190,7 @@
 }
 
 .pipelineValue {
-  font-weight: var(--font-paragraph-sm-em-weight);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
   color: var(--color-text-primary);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;

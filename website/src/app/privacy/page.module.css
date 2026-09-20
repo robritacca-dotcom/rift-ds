@@ -76,7 +76,7 @@
 
 .body a {
   color: var(--color-action-primary-bg);
-  font-weight: var(--font-paragraph-em-weight);
+  font-weight: var(--font-paragraph-emphasis-weight);
   text-decoration: underline;
   text-decoration-color: transparent;
   transition: text-decoration-color var(--motion-duration-base) var(--motion-ease-standard);

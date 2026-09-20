@@ -41,11 +41,11 @@
   position: relative;
 
   /* Typography — paragraph em (medium weight) for clickable controls */
-  font-family: var(--font-paragraph-em-family);
-  font-size: var(--font-paragraph-em-size);
-  font-weight: var(--font-paragraph-em-weight);
-  line-height: var(--font-paragraph-em-line-height);
-  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  font-family: var(--font-paragraph-emphasis-family);
+  font-size: var(--font-paragraph-emphasis-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-emphasis-letter-spacing);
 
   transition: color var(--motion-duration-base) var(--motion-ease-standard), border-color var(--motion-duration-base) var(--motion-ease-standard);
 }
@@ -56,9 +56,9 @@
 
 .ds-tabs--compact .ds-tabs__tab {
   padding: var(--padding-150) var(--padding-300); /* 6px 12px */
-  font-size: var(--font-paragraph-sm-em-size);
-  line-height: var(--font-paragraph-sm-em-line-height);
-  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
 }
 
 .ds-tabs--compact .ds-tabs__icon {

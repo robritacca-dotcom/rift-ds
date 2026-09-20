@@ -159,10 +159,10 @@
 }
 
 .ds-chart__tooltip-label {
-  font-family: var(--font-paragraph-sm-em-family);
-  font-size: var(--font-paragraph-sm-em-size);
-  font-weight: var(--font-paragraph-sm-em-weight);
-  line-height: var(--font-paragraph-sm-em-line-height);
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
   color: var(--color-text-primary);
   margin-bottom: var(--gap-050);
 }
@@ -189,10 +189,10 @@
 }
 
 .ds-chart__tooltip-value {
-  font-family: var(--font-paragraph-sm-em-family);
-  font-size: var(--font-paragraph-sm-em-size);
-  font-weight: var(--font-paragraph-sm-em-weight);
-  line-height: var(--font-paragraph-sm-em-line-height);
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
   color: var(--color-text-primary);
   margin-left: auto;
 }

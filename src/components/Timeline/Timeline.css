@@ -40,9 +40,9 @@
   height: 28px;
   background-color: var(--color-bg-container-primary);
   border: var(--border-025) solid var(--color-bg-container-border);
-  font-family: var(--font-paragraph-sm-em-family);
-  font-size: var(--font-paragraph-sm-em-size);
-  font-weight: var(--font-paragraph-sm-em-weight);
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
   color: var(--color-text-secondary);
 }
 
@@ -332,7 +332,7 @@
 
 .ds-timeline__role-bullets a {
   color: var(--color-action-primary-bg);
-  font-weight: var(--font-paragraph-em-weight);
+  font-weight: var(--font-paragraph-emphasis-weight);
   text-decoration: underline;
   text-decoration-color: transparent;
   transition: text-decoration-color var(--motion-duration-base) var(--motion-ease-standard);

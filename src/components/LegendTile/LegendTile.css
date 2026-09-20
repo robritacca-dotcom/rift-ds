@@ -51,10 +51,10 @@
 }
 
 .ds-legend-tile__value {
-  font-family: var(--font-paragraph-sm-em-family);
-  font-size: var(--font-paragraph-sm-em-size);
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
   font-weight: var(--font-title-body-weight);
-  line-height: var(--font-paragraph-sm-em-line-height);
-  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
   color: var(--color-text-primary);
 }

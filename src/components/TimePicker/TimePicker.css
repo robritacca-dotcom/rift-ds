@@ -64,11 +64,11 @@
    ============================================ */
 
 .ds-timepicker__value {
-  font-family: var(--font-paragraph-em-family);
-  font-size: var(--font-paragraph-em-size);
-  font-weight: var(--font-paragraph-em-weight);
-  line-height: var(--font-paragraph-em-line-height);
-  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  font-family: var(--font-paragraph-emphasis-family);
+  font-size: var(--font-paragraph-emphasis-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-emphasis-letter-spacing);
   color: var(--color-input-text-primary);
   flex: 1;
   overflow: hidden;
@@ -140,11 +140,11 @@
   justify-content: space-between;
   padding: var(--padding-200) var(--padding-300); /* 8px 12px */
   border-radius: var(--radius-200);
-  font-family: var(--font-paragraph-em-family);
-  font-size: var(--font-paragraph-em-size);
-  font-weight: var(--font-paragraph-em-weight);
-  line-height: var(--font-paragraph-em-line-height);
-  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  font-family: var(--font-paragraph-emphasis-family);
+  font-size: var(--font-paragraph-emphasis-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-emphasis-letter-spacing);
   font-variant-numeric: tabular-nums;
   color: var(--color-text-primary);
   cursor: pointer;
@@ -209,9 +209,9 @@
 }
 
 .ds-timepicker--compact .ds-timepicker__value {
-  font-size: var(--font-paragraph-sm-em-size);
-  line-height: var(--font-paragraph-sm-em-line-height);
-  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
 }
 
 .ds-timepicker--compact .ds-timepicker__chevron {
@@ -220,9 +220,9 @@
 
 .ds-timepicker--compact .ds-timepicker__option {
   padding: var(--padding-150) var(--padding-200); /* 6px 8px */
-  font-size: var(--font-paragraph-sm-em-size);
-  line-height: var(--font-paragraph-sm-em-line-height);
-  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
 }
 
 .ds-timepicker--compact .ds-timepicker__check {

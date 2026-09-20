@@ -12,9 +12,9 @@
   align-items: center;
   gap: var(--gap-100);
   margin: 0 0 var(--gap-200);
-  font-size: var(--font-paragraph-em-size);
-  font-weight: var(--font-paragraph-em-weight);
-  line-height: var(--font-paragraph-em-line-height);
+  font-size: var(--font-paragraph-emphasis-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-emphasis-line-height);
   color: var(--color-text-primary);
 }
 
@@ -58,7 +58,7 @@
 
 .ds-anchor-nav__link--active {
   color: var(--color-text-primary);
-  font-weight: var(--font-paragraph-em-weight);
+  font-weight: var(--font-paragraph-emphasis-weight);
   border-left-color: var(--color-text-primary);
 }
 

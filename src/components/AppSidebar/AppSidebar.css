@@ -90,11 +90,11 @@
 }
 
 .ds-app-sidebar__logo-text {
-  font-family: var(--font-paragraph-em-family);
-  font-size: var(--font-paragraph-em-size);
-  font-weight: var(--font-paragraph-em-weight);
-  line-height: var(--font-paragraph-em-line-height);
-  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  font-family: var(--font-paragraph-emphasis-family);
+  font-size: var(--font-paragraph-emphasis-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-emphasis-letter-spacing);
   color: var(--color-text-primary);
   white-space: nowrap;
   min-width: 0;
@@ -222,11 +222,11 @@
 }
 
 .ds-app-sidebar__btn-label {
-  font-family: var(--font-paragraph-em-family);
-  font-size: var(--font-paragraph-em-size);
-  font-weight: var(--font-paragraph-em-weight);
-  line-height: var(--font-paragraph-em-line-height);
-  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  font-family: var(--font-paragraph-emphasis-family);
+  font-size: var(--font-paragraph-emphasis-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-emphasis-letter-spacing);
   color: var(--color-text-primary);
   white-space: nowrap;
   min-width: 0;
@@ -243,7 +243,7 @@
 .ds-app-sidebar__btn-badge {
   font-family: var(--font-caption-family);
   font-size: var(--font-caption-size);
-  font-weight: var(--font-paragraph-sm-em-weight);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
   line-height: var(--font-caption-line-height);
   color: var(--color-text-secondary);
   background-color: var(--color-bg-container-tertiary);
@@ -349,11 +349,11 @@
 }
 
 .ds-app-sidebar__sub-label {
-  font-family: var(--font-paragraph-em-family);
-  font-size: var(--font-paragraph-em-size);
-  font-weight: var(--font-paragraph-em-weight);
-  line-height: var(--font-paragraph-em-line-height);
-  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  font-family: var(--font-paragraph-emphasis-family);
+  font-size: var(--font-paragraph-emphasis-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-emphasis-letter-spacing);
   color: var(--color-text-primary);
   white-space: nowrap;
 }
@@ -444,11 +444,11 @@
 }
 
 .ds-app-sidebar__profile-name {
-  font-family: var(--font-paragraph-em-family);
-  font-size: var(--font-paragraph-em-size);
-  font-weight: var(--font-paragraph-em-weight);
-  line-height: var(--font-paragraph-em-line-height);
-  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  font-family: var(--font-paragraph-emphasis-family);
+  font-size: var(--font-paragraph-emphasis-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-emphasis-letter-spacing);
   color: var(--color-text-primary);
   white-space: nowrap;
   overflow: hidden;

@@ -31,11 +31,11 @@
   border-radius: var(--radius-pill);
   cursor: pointer;
   color: var(--color-text-secondary);
-  font-family: var(--font-paragraph-sm-em-family);
-  font-size: var(--font-paragraph-sm-em-size);
-  font-weight: var(--font-paragraph-sm-em-weight);
-  line-height: var(--font-paragraph-sm-em-line-height);
-  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
   transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
@@ -145,11 +145,11 @@
   align-items: center;
   gap: var(--gap-100);
   color: var(--color-text-primary);
-  font-family: var(--font-paragraph-sm-em-family);
-  font-size: var(--font-paragraph-sm-em-size);
-  font-weight: var(--font-paragraph-sm-em-weight);
-  line-height: var(--font-paragraph-sm-em-line-height);
-  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
 }
 
 .ds-model-picker__option-badge {
@@ -157,11 +157,11 @@
   background-color: var(--color-status-info-bg);
   border-radius: var(--radius-pill);
   color: var(--color-status-info-text);
-  font-family: var(--font-paragraph-sm-em-family);
-  font-size: var(--font-paragraph-sm-em-size);
-  font-weight: var(--font-paragraph-sm-em-weight);
-  line-height: var(--font-paragraph-sm-em-line-height);
-  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
 }
 
 .ds-model-picker__option-description {
@@ -195,11 +195,11 @@
 .ds-model-picker__effort-label {
   flex: 1 1 auto;
   color: var(--color-text-secondary);
-  font-family: var(--font-paragraph-sm-em-family);
-  font-size: var(--font-paragraph-sm-em-size);
-  font-weight: var(--font-paragraph-sm-em-weight);
-  line-height: var(--font-paragraph-sm-em-line-height);
-  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
 }
 
 .ds-model-picker__effort-options {
@@ -217,11 +217,11 @@
   border-radius: var(--radius-pill);
   cursor: pointer;
   color: var(--color-text-secondary);
-  font-family: var(--font-paragraph-sm-em-family);
-  font-size: var(--font-paragraph-sm-em-size);
-  font-weight: var(--font-paragraph-sm-em-weight);
-  line-height: var(--font-paragraph-sm-em-line-height);
-  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
   transition:
     background-color var(--motion-duration-fast) var(--motion-ease-standard),
     color var(--motion-duration-fast) var(--motion-ease-standard);

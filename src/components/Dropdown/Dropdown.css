@@ -52,11 +52,11 @@
 /* The selected option's preview face (--ds-dropdown-font, set per option
    from the `font` option field) wins over the theme face when present. */
 .ds-dropdown__value {
-  font-family: var(--ds-dropdown-font, var(--font-paragraph-em-family));
-  font-size: var(--font-paragraph-em-size);
-  font-weight: var(--font-paragraph-em-weight);
-  line-height: var(--font-paragraph-em-line-height);
-  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  font-family: var(--ds-dropdown-font, var(--font-paragraph-emphasis-family));
+  font-size: var(--font-paragraph-emphasis-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-emphasis-letter-spacing);
   color: var(--color-input-text-primary);
   flex: 1;
   overflow: hidden;
@@ -137,11 +137,11 @@
   justify-content: space-between;
   padding: var(--padding-200) var(--padding-300); /* 8px 12px */
   border-radius: var(--radius-200);
-  font-family: var(--ds-dropdown-font, var(--font-paragraph-em-family));
-  font-size: var(--font-paragraph-em-size);
-  font-weight: var(--font-paragraph-em-weight);
-  line-height: var(--font-paragraph-em-line-height);
-  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  font-family: var(--ds-dropdown-font, var(--font-paragraph-emphasis-family));
+  font-size: var(--font-paragraph-emphasis-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-emphasis-letter-spacing);
   color: var(--color-text-primary);
   cursor: pointer;
   transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
@@ -180,7 +180,7 @@
   display: block;
   font-family: var(--font-paragraph-sm-family);
   font-size: var(--font-paragraph-sm-size);
-  font-weight: var(--font-paragraph-sm-em-weight);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
   line-height: var(--font-paragraph-sm-line-height);
   letter-spacing: var(--font-paragraph-sm-letter-spacing);
   color: var(--color-text-tertiary);
@@ -264,9 +264,9 @@
 }
 
 .ds-dropdown--compact .ds-dropdown__value {
-  font-size: var(--font-paragraph-sm-em-size);
-  line-height: var(--font-paragraph-sm-em-line-height);
-  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
 }
 
 .ds-dropdown--compact .ds-dropdown__chevron {
@@ -275,9 +275,9 @@
 
 .ds-dropdown--compact .ds-dropdown__option {
   padding: var(--padding-150) var(--padding-200); /* 6px 8px */
-  font-size: var(--font-paragraph-sm-em-size);
-  line-height: var(--font-paragraph-sm-em-line-height);
-  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
 }
 
 /* Compact group labels keep the base --font-paragraph-sm-* type — the

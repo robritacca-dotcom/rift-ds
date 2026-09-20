@@ -39,8 +39,8 @@
 }
 
 .ds-banner__title {
-  font-family: var(--font-paragraph-sm-em-family);
-  font-weight: var(--font-paragraph-sm-em-weight);
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
 }
 
 .ds-banner__action {

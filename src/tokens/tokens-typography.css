@@ -27,6 +27,39 @@
     monospace;
 
   /* ============================================
+     TYPE SCALE LADDERS
+     The sizes and pixel line-heights every style bundle below
+     resolves through — rank = px / 4 x 100, the same rule as the
+     spacing scale. Override a ladder step and every tier that
+     reads it rescales together; the display tiers' unitless
+     leadings (0.92-1.15) are ratios, not lengths, and stay in
+     their bundles.
+     ============================================ */
+
+  --font-size-300: 12px;
+  --font-size-350: 14px;
+  --font-size-400: 16px;
+  --font-size-550: 22px;
+  --font-size-600: 24px;
+  --font-size-650: 26px;
+  --font-size-750: 30px;
+  --font-size-1000: 40px;
+  --font-size-1200: 48px;
+  --font-size-1400: 56px;
+  --font-size-1600: 64px;
+  --font-size-2400: 96px;
+  --font-size-2900: 116px;
+  --font-size-3300: 132px;
+
+  --font-line-height-400: 16px;
+  --font-line-height-500: 20px;
+  --font-line-height-600: 24px;
+  --font-line-height-700: 28px;
+  --font-line-height-800: 32px;
+  --font-line-height-900: 36px;
+  --font-line-height-1100: 44px;
+
+  /* ============================================
      DISPLAY STYLES (Large headlines)
 
      Leading is unitless across this tier and loosens as the size drops:
@@ -39,37 +72,37 @@
 
   /* Mega 1 - Largest display text */
   --font-mega-1-family: var(--font-family-heading);
-  --font-mega-1-size: 132px;
+  --font-mega-1-size: var(--font-size-3300);
   --font-mega-1-weight: 300;
   --font-mega-1-line-height: 0.92;
   --font-mega-1-letter-spacing: 0.02em; /* 2% */
 
   /* Mega 2 */
   --font-mega-2-family: var(--font-family-heading);
-  --font-mega-2-size: 116px;
+  --font-mega-2-size: var(--font-size-2900);
   --font-mega-2-weight: 300;
   --font-mega-2-line-height: 0.92;
   --font-mega-2-letter-spacing: 0.02em; /* 2% */
 
   /* Display 1 */
   --font-display-1-family: var(--font-family-heading);
-  --font-display-1-size: 96px;
+  --font-display-1-size: var(--font-size-2400);
   --font-display-1-weight: 300;
   --font-display-1-line-height: 1.05;
   --font-display-1-letter-spacing: 0.02em; /* 2% */
 
   /* Display 2 */
   --font-display-2-family: var(--font-family-heading);
-  --font-display-2-size: 64px;
+  --font-display-2-size: var(--font-size-1600);
   --font-display-2-weight: 300;
   --font-display-2-line-height: 1.1;
   --font-display-2-letter-spacing: 0.015em; /* 1.5% */
 
   /* Sub Display */
   --font-sub-display-family: var(--font-family-heading);
-  --font-sub-display-size: 30px;
+  --font-sub-display-size: var(--font-size-750);
   --font-sub-display-weight: 300;
-  --font-sub-display-line-height: 44px;
+  --font-sub-display-line-height: var(--font-line-height-1100);
   --font-sub-display-letter-spacing: 0.015em; /* 1.5% */
 
   /* ============================================
@@ -78,23 +111,23 @@
 
   /* Heading 1 */
   --font-heading-1-family: var(--font-family-heading);
-  --font-heading-1-size: 30px;
+  --font-heading-1-size: var(--font-size-750);
   --font-heading-1-weight: 600;
-  --font-heading-1-line-height: 44px;
+  --font-heading-1-line-height: var(--font-line-height-1100);
   --font-heading-1-letter-spacing: 0.015em; /* 1.5% */
 
   /* Heading 2 */
   --font-heading-2-family: var(--font-family-heading);
-  --font-heading-2-size: 26px;
+  --font-heading-2-size: var(--font-size-650);
   --font-heading-2-weight: 600;
-  --font-heading-2-line-height: 32px;
+  --font-heading-2-line-height: var(--font-line-height-800);
   --font-heading-2-letter-spacing: 0.015em; /* 1.5% */
 
   /* Heading 3 */
   --font-heading-3-family: var(--font-family-heading);
-  --font-heading-3-size: 22px;
+  --font-heading-3-size: var(--font-size-550);
   --font-heading-3-weight: 600;
-  --font-heading-3-line-height: 28px;
+  --font-heading-3-line-height: var(--font-line-height-700);
   --font-heading-3-letter-spacing: 0.015em; /* 1.5% */
 
   /* ============================================
@@ -103,38 +136,38 @@
 
   /* Title Body */
   --font-title-body-family: var(--font-family-body);
-  --font-title-body-size: 16px;
+  --font-title-body-size: var(--font-size-400);
   --font-title-body-weight: 600;
-  --font-title-body-line-height: 24px;
+  --font-title-body-line-height: var(--font-line-height-600);
   --font-title-body-letter-spacing: -0.01em; /* -1% */
 
   /* Paragraph Em (emphasis — medium weight, between paragraph and title body) */
-  --font-paragraph-em-family: var(--font-family-body);
-  --font-paragraph-em-size: 16px;
-  --font-paragraph-em-weight: 500;
-  --font-paragraph-em-line-height: 24px;
-  --font-paragraph-em-letter-spacing: -0.01em; /* -1% */
+  --font-paragraph-emphasis-family: var(--font-family-body);
+  --font-paragraph-emphasis-size: var(--font-size-400);
+  --font-paragraph-emphasis-weight: 500;
+  --font-paragraph-emphasis-line-height: var(--font-line-height-600);
+  --font-paragraph-emphasis-letter-spacing: -0.01em; /* -1% */
 
   /* Paragraph */
   --font-paragraph-family: var(--font-family-body);
-  --font-paragraph-size: 16px;
+  --font-paragraph-size: var(--font-size-400);
   --font-paragraph-weight: 400;
-  --font-paragraph-line-height: 24px;
+  --font-paragraph-line-height: var(--font-line-height-600);
   --font-paragraph-letter-spacing: 0;
 
   /* Paragraph SM */
   --font-paragraph-sm-family: var(--font-family-body);
-  --font-paragraph-sm-size: 14px;
+  --font-paragraph-sm-size: var(--font-size-350);
   --font-paragraph-sm-weight: 400;
-  --font-paragraph-sm-line-height: 20px;
+  --font-paragraph-sm-line-height: var(--font-line-height-500);
   --font-paragraph-sm-letter-spacing: 0;
 
   /* Paragraph SM Em (emphasis — medium weight small paragraph) */
-  --font-paragraph-sm-em-family: var(--font-family-body);
-  --font-paragraph-sm-em-size: 14px;
-  --font-paragraph-sm-em-weight: 500;
-  --font-paragraph-sm-em-line-height: 20px;
-  --font-paragraph-sm-em-letter-spacing: 0;
+  --font-paragraph-sm-emphasis-family: var(--font-family-body);
+  --font-paragraph-sm-emphasis-size: var(--font-size-350);
+  --font-paragraph-sm-emphasis-weight: 500;
+  --font-paragraph-sm-emphasis-line-height: var(--font-line-height-500);
+  --font-paragraph-sm-emphasis-letter-spacing: 0;
 
   /* Overline — the uppercase label face: an eyebrow over a title, a map
      callout's place name, a code block's language chip. Small and bold with
@@ -142,18 +175,18 @@
      Pair with text-transform: uppercase at the use site — the tokens set the
      metrics, never the casing. */
   --font-overline-family: var(--font-family-body);
-  --font-overline-size: 14px;
+  --font-overline-size: var(--font-size-350);
   --font-overline-weight: 600;
-  --font-overline-line-height: 20px;
+  --font-overline-line-height: var(--font-line-height-500);
   --font-overline-letter-spacing: 0.08em; /* +8% */
 
   /* Caption — the floor of the scale. Footnotes and disclaimers: a line the
      reader should be able to find but never has to read to use the screen.
      Never on a control, never for running text. */
   --font-caption-family: var(--font-family-body);
-  --font-caption-size: 12px;
+  --font-caption-size: var(--font-size-300);
   --font-caption-weight: 400;
-  --font-caption-line-height: 16px;
+  --font-caption-line-height: var(--font-line-height-400);
   --font-caption-letter-spacing: 0;
 }
 
@@ -166,12 +199,12 @@
 
 @media (max-width: 768px) {
   :root {
-    --font-mega-1-size: 64px;
-    --font-mega-2-size: 56px;
-    --font-display-1-size: 48px;
-    --font-display-2-size: 40px;
+    --font-mega-1-size: var(--font-size-1600);
+    --font-mega-2-size: var(--font-size-1400);
+    --font-display-1-size: var(--font-size-1200);
+    --font-display-2-size: var(--font-size-1000);
     --font-display-2-line-height: 1.15;
-    --font-sub-display-size: 24px;
-    --font-sub-display-line-height: 36px;
+    --font-sub-display-size: var(--font-size-600);
+    --font-sub-display-line-height: var(--font-line-height-900);
   }
 }

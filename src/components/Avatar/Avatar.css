@@ -49,8 +49,8 @@
    ============================================ */
 
 .ds-avatar__initials {
-  font-family: var(--font-paragraph-em-family);
-  font-weight: var(--font-paragraph-em-weight);
+  font-family: var(--font-paragraph-emphasis-family);
+  font-weight: var(--font-paragraph-emphasis-weight);
   color: var(--color-text-primary);
   line-height: 1;
   user-select: none;

@@ -34,11 +34,11 @@
   border-radius: var(--radius-pill);
 
   /* Typography — the clickable-control face, same as Button */
-  font-family: var(--font-paragraph-em-family);
-  font-weight: var(--font-paragraph-em-weight);
-  font-size: var(--font-paragraph-em-size);
-  line-height: var(--font-paragraph-em-line-height);
-  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  font-family: var(--font-paragraph-emphasis-family);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  font-size: var(--font-paragraph-emphasis-size);
+  line-height: var(--font-paragraph-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-emphasis-letter-spacing);
   text-align: center;
   /* A pill's label never wraps — a squeezed layout shortens around the
      button, it doesn't fold the silhouette into two lines. */
@@ -215,9 +215,9 @@
 /* Sizes */
 .ds-ai-button--compact {
   padding: var(--padding-150) var(--padding-300);
-  font-size: var(--font-paragraph-sm-em-size);
-  line-height: var(--font-paragraph-sm-em-line-height);
-  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
 }
 
 .ds-ai-button--compact .ds-ai-button__icon {

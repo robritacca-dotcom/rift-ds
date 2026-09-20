@@ -152,10 +152,10 @@
 /* Standalone group headings match the Field label the DS inputs render,
    so hand-built controls (swatches, sliders) read as the same form */
 .controlHeading {
-  font-size: var(--font-paragraph-em-size);
-  font-weight: var(--font-paragraph-em-weight);
-  line-height: var(--font-paragraph-em-line-height);
-  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  font-size: var(--font-paragraph-emphasis-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-emphasis-letter-spacing);
   color: var(--color-text-primary);
 }
 
@@ -169,8 +169,8 @@
 /* The tint toggle doubles as its group's title — match the label weight
    the other group headings use */
 .tintTitleToggle :global(.ds-toggle-switch__label) {
-  font-weight: var(--font-paragraph-em-weight);
-  letter-spacing: var(--font-paragraph-em-letter-spacing);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  letter-spacing: var(--font-paragraph-emphasis-letter-spacing);
 }
 
 /* Preset action-colour swatches — one column per hue, one row per ramp step */
@@ -360,7 +360,7 @@
 .advRampLabel {
   min-width: 72px;
   font-size: var(--font-paragraph-sm-size);
-  font-weight: var(--font-paragraph-em-weight);
+  font-weight: var(--font-paragraph-emphasis-weight);
   color: var(--color-text-primary);
 }
 

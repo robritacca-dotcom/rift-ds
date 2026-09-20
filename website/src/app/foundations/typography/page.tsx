@@ -206,11 +206,11 @@ const bodyStyles: TypeStyleData[] = [
     lineHeight: "24px",
     letterSpacing: "-1%",
     previewStyle: {
-      fontFamily: "var(--font-paragraph-em-family)",
-      fontSize: "var(--font-paragraph-em-size)",
-      fontWeight: "var(--font-paragraph-em-weight)" as unknown as number,
-      lineHeight: "var(--font-paragraph-em-line-height)",
-      letterSpacing: "var(--font-paragraph-em-letter-spacing)",
+      fontFamily: "var(--font-paragraph-emphasis-family)",
+      fontSize: "var(--font-paragraph-emphasis-size)",
+      fontWeight: "var(--font-paragraph-emphasis-weight)" as unknown as number,
+      lineHeight: "var(--font-paragraph-emphasis-line-height)",
+      letterSpacing: "var(--font-paragraph-emphasis-letter-spacing)",
     },
   },
   {
@@ -234,11 +234,11 @@ const bodyStyles: TypeStyleData[] = [
     lineHeight: "20px",
     letterSpacing: "0",
     previewStyle: {
-      fontFamily: "var(--font-paragraph-sm-em-family)",
-      fontSize: "var(--font-paragraph-sm-em-size)",
-      fontWeight: "var(--font-paragraph-sm-em-weight)" as unknown as number,
-      lineHeight: "var(--font-paragraph-sm-em-line-height)",
-      letterSpacing: "var(--font-paragraph-sm-em-letter-spacing)",
+      fontFamily: "var(--font-paragraph-sm-emphasis-family)",
+      fontSize: "var(--font-paragraph-sm-emphasis-size)",
+      fontWeight: "var(--font-paragraph-sm-emphasis-weight)" as unknown as number,
+      lineHeight: "var(--font-paragraph-sm-emphasis-line-height)",
+      letterSpacing: "var(--font-paragraph-sm-emphasis-letter-spacing)",
     },
   },
   {

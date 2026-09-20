@@ -192,7 +192,7 @@ a.toolItem:hover {
   color: var(--color-action-primary-bg);
   text-decoration: underline;
   text-decoration-color: transparent;
-  font-weight: var(--font-paragraph-em-weight);
+  font-weight: var(--font-paragraph-emphasis-weight);
   transition: text-decoration-color var(--motion-duration-base) var(--motion-ease-standard);
 }
 
@@ -363,7 +363,7 @@ a.statItem:hover {
   border-radius: var(--radius-pill);
   background-color: var(--color-bg-container-primary);
   font-size: var(--font-paragraph-sm-size);
-  font-weight: var(--font-paragraph-sm-em-weight);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
   color: var(--color-text-primary);
 }
 

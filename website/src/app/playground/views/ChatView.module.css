@@ -196,7 +196,7 @@
 .statusTime {
   font-family: var(--font-paragraph-sm-family);
   font-size: var(--font-paragraph-sm-size);
-  font-weight: var(--font-paragraph-em-weight);
+  font-weight: var(--font-paragraph-emphasis-weight);
   line-height: var(--font-paragraph-sm-line-height);
   font-variant-numeric: tabular-nums;
 }

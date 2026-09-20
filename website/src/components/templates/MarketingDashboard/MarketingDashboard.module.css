@@ -241,7 +241,7 @@
   align-items: center;
   gap: var(--gap-050);
   color: var(--color-text-primary);
-  font-weight: var(--font-paragraph-sm-em-weight);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
   min-width: 0;
 }
 
@@ -290,7 +290,7 @@
 
 .campaignName {
   color: var(--color-text-primary);
-  font-weight: var(--font-paragraph-sm-em-weight);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
 }
 
 .campaignMarket {

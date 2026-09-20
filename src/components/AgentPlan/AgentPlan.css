@@ -55,11 +55,11 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   color: var(--color-text-primary);
-  font-family: var(--font-paragraph-sm-em-family);
-  font-size: var(--font-paragraph-sm-em-size);
-  font-weight: var(--font-paragraph-sm-em-weight);
-  line-height: var(--font-paragraph-sm-em-line-height);
-  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
 }
 
 .ds-agent-plan__count {
@@ -210,9 +210,9 @@
 }
 
 .ds-agent-plan__step--active .ds-agent-plan__label {
-  font-family: var(--font-paragraph-sm-em-family);
-  font-weight: var(--font-paragraph-sm-em-weight);
-  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
 }
 
 .ds-agent-plan__step--failed .ds-agent-plan__indicator {

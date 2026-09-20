@@ -96,9 +96,9 @@
   display: inline-flex;
   align-items: center;
   gap: var(--gap-100);
-  font-size: var(--font-paragraph-em-size);
-  font-weight: var(--font-paragraph-em-weight);
-  line-height: var(--font-paragraph-em-line-height);
+  font-size: var(--font-paragraph-emphasis-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-emphasis-line-height);
   color: var(--color-text-primary);
 }
 
@@ -106,7 +106,7 @@
   flex: none;
   padding: 0 var(--padding-150);
   font-size: var(--font-caption-size);
-  font-weight: var(--font-paragraph-sm-em-weight);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
   line-height: var(--font-overline-line-height);
   color: var(--color-text-secondary);
   background: var(--color-bg-container-tertiary);

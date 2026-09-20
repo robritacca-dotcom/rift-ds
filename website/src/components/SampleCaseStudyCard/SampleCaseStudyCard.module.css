@@ -69,9 +69,9 @@
   color: var(--color-action-primary-text, #fff);
   border-radius: var(--primitive-radius-pill);
   text-decoration: none;
-  font-family: var(--font-paragraph-em-family);
+  font-family: var(--font-paragraph-emphasis-family);
   font-size: var(--font-paragraph-size);
-  font-weight: var(--font-paragraph-em-weight);
+  font-weight: var(--font-paragraph-emphasis-weight);
   line-height: 1;
   transition: background var(--motion-duration-base) var(--motion-ease-standard), transform var(--motion-duration-base) var(--motion-ease-standard);
   white-space: nowrap;

@@ -152,7 +152,7 @@
 
 /* Stage number prefix inside the chip label */
 .loopStageNum {
-  font-weight: var(--font-paragraph-sm-em-weight);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
   color: var(--color-text-tertiary);
   margin-right: var(--gap-100);
 }

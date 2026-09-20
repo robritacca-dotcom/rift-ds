@@ -111,7 +111,7 @@
 
 .rampLabel {
   font-size: var(--font-paragraph-sm-size);
-  font-weight: var(--font-paragraph-em-weight);
+  font-weight: var(--font-paragraph-emphasis-weight);
   line-height: var(--font-paragraph-sm-line-height);
   color: var(--color-text-primary);
 }

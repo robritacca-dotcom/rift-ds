@@ -165,7 +165,7 @@
 
 .ds-card--case-study__company-name {
   font-size: var(--font-paragraph-sm-size);
-  font-weight: var(--font-paragraph-sm-em-weight);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
   line-height: var(--font-paragraph-sm-line-height);
   color: var(--color-text-secondary);
 }

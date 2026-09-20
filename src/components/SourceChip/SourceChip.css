@@ -48,10 +48,10 @@
   border-radius: var(--radius-pill);
   background-color: var(--color-bg-container-tertiary);
 
-  font-family: var(--font-paragraph-sm-em-family);
-  font-size: var(--font-paragraph-sm-em-size);
-  font-weight: var(--font-paragraph-sm-em-weight);
-  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
   line-height: 1;
   font-variant-numeric: tabular-nums;
   color: var(--color-text-tertiary);

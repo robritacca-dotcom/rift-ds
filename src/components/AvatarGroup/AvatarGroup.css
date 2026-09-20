@@ -34,8 +34,8 @@
   flex-shrink: 0;
   background-color: var(--color-bg-container-secondary);
   color: var(--color-text-secondary);
-  font-family: var(--font-paragraph-em-family);
-  font-weight: var(--font-paragraph-em-weight);
+  font-family: var(--font-paragraph-emphasis-family);
+  font-weight: var(--font-paragraph-emphasis-weight);
   line-height: 1;
   user-select: none;
 }

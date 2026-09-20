@@ -142,9 +142,9 @@
 }
 
 .colHead b {
-  font-family: var(--font-paragraph-em-family);
+  font-family: var(--font-paragraph-emphasis-family);
   font-size: var(--font-paragraph-sm-size);
-  font-weight: var(--font-paragraph-em-weight);
+  font-weight: var(--font-paragraph-emphasis-weight);
 }
 
 .colHead small {
@@ -374,12 +374,12 @@
 
 .depWord {
   color: var(--graph-dep);
-  font-weight: var(--font-paragraph-em-weight);
+  font-weight: var(--font-paragraph-emphasis-weight);
 }
 
 .useWord {
   color: var(--graph-use);
-  font-weight: var(--font-paragraph-em-weight);
+  font-weight: var(--font-paragraph-emphasis-weight);
 }
 
 .meta {

@@ -57,7 +57,7 @@
 }
 
 .ds-treeview__row--selected .ds-treeview__label {
-  font-weight: var(--font-paragraph-sm-em-weight);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
 }
 
 /* ============================================

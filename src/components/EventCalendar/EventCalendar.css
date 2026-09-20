@@ -91,11 +91,11 @@
 .ds-event-calendar__weekday {
   padding: var(--padding-100) var(--padding-150);
   color: var(--color-text-tertiary);
-  font-family: var(--font-paragraph-sm-em-family);
-  font-size: var(--font-paragraph-sm-em-size);
-  font-weight: var(--font-paragraph-sm-em-weight);
-  line-height: var(--font-paragraph-sm-em-line-height);
-  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
 }
 
 /* ============================================
@@ -185,9 +185,9 @@ button.ds-event-calendar__day:focus-visible {
 .ds-event-calendar__cell--today .ds-event-calendar__day {
   background-color: var(--color-bg-page-inverse);
   color: var(--color-text-on-inverse);
-  font-family: var(--font-paragraph-sm-em-family);
-  font-weight: var(--font-paragraph-sm-em-weight);
-  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
 }
 
 /* Selected — the teal selection chip (the selected item of a mutually
@@ -196,9 +196,9 @@ button.ds-event-calendar__day:focus-visible {
 .ds-event-calendar__cell--selected .ds-event-calendar__day {
   background-color: var(--color-action-primary-bg);
   color: var(--color-action-primary-text);
-  font-family: var(--font-paragraph-sm-em-family);
-  font-weight: var(--font-paragraph-sm-em-weight);
-  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
 }
 
 .ds-event-calendar__cell--selected button.ds-event-calendar__day:hover {
@@ -264,11 +264,11 @@ button.ds-event-calendar__event:focus-visible {
   text-overflow: ellipsis;
   white-space: nowrap;
   color: var(--color-text-primary);
-  font-family: var(--font-paragraph-sm-em-family);
-  font-size: var(--font-paragraph-sm-em-size);
-  font-weight: var(--font-paragraph-sm-em-weight);
-  line-height: var(--font-paragraph-sm-em-line-height);
-  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
 }
 
 .ds-event-calendar__event-time {
@@ -320,11 +320,11 @@ button.ds-event-calendar__event:focus-visible {
   background: none;
   border: none;
   color: var(--color-text-tertiary);
-  font-family: var(--font-paragraph-sm-em-family);
-  font-size: var(--font-paragraph-sm-em-size);
-  font-weight: var(--font-paragraph-sm-em-weight);
-  line-height: var(--font-paragraph-sm-em-line-height);
-  letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
 }
 
 button.ds-event-calendar__more {

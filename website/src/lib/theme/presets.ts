@@ -157,6 +157,16 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
       gold: "#C9C9C9",
       mint: "#ADADAD",
     },
+    // Hairlines carry Smoke's depth, so its section dividers step two
+    // ramp notches stronger than the base theme's (which they inherit as
+    // near-invisible on this look's flat grounds): 02 to 04 in light, 08
+    // to 06 in dark, alpha dropped.
+    extraOverrides: {
+      "--color-divider": "var(--primitive-neutral-04)",
+    },
+    extraOverridesDark: {
+      "--color-divider": "var(--primitive-neutral-06)",
+    },
   },
   contrast: {
     label: "Blueprint",

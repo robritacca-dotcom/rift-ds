@@ -499,6 +499,17 @@ html[data-embedded] *::after {
   color: var(--color-text-primary);
 }
 
+/* Every doc page's title block carries a pull-up margin sized to tuck the
+   heading under its breadcrumb row. Section indexes render no breadcrumb
+   (PageBreadcrumb returns null for top-level routes), which makes the
+   title block main's first child — the one case where that pull-up
+   overshoots, hoisting the h1 above the sidebar's first row. Cancel it
+   structurally, so the heading starts where the breadcrumbs would have,
+   level with the sidebar, on all ~149 page modules at once. */
+main > div:first-child:has(> h1) {
+  margin-top: 0;
+}
+
 /* ============================================
    RESPONSIVE - Mobile (< 960px)
    ============================================ */

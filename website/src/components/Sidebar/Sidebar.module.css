@@ -25,6 +25,11 @@
    still truncate at the rail's right edge, not 20px early. */
 .sidebar :global(.ds-button-group) {
   margin-left: calc(-1 * var(--padding-500));
+  /* Same optical rule vertically: pull the list up by the button's own
+     vertical padding, so the first row's TEXT tops out level with the
+     content column's breadcrumb text instead of a pill-padding lower.
+     The active pill hangs into the gap intact, like the left gutter. */
+  margin-top: calc(-1 * var(--padding-200));
   max-width: calc(100% + var(--padding-500));
 }
 

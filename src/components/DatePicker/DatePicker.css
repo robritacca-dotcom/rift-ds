@@ -6,8 +6,8 @@
 .ds-date-picker {
   display: inline-flex;
   flex-direction: column;
-  gap: var(--gap-sm); /* 8px */
-  padding: var(--padding-md); /* 16px */
+  gap: var(--gap-200); /* 8px */
+  padding: var(--padding-400); /* 16px */
   border: var(--border-xs) solid var(--color-input-border-primary);
   border-radius: var(--radius-md); /* 12px */
   background-color: var(--color-input-bg-primary);
@@ -22,7 +22,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--gap-sm); /* 8px */
+  gap: var(--gap-200); /* 8px */
 }
 
 .ds-date-picker__month-year {
@@ -77,7 +77,7 @@
 .ds-date-picker__grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: var(--gap-xxs); /* 2px */
+  gap: var(--gap-050); /* 2px */
 }
 
 /* ============================================
@@ -162,8 +162,8 @@
    ============================================ */
 
 .ds-date-picker--compact {
-  padding: var(--padding-sm); /* 8px */
-  gap: var(--gap-xxs); /* 2px */
+  padding: var(--padding-200); /* 8px */
+  gap: var(--gap-050); /* 2px */
 }
 
 .ds-date-picker--compact .ds-date-picker__month-year {

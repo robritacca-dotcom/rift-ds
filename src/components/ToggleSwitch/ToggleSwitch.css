@@ -7,7 +7,7 @@
   /* Layout */
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-sm); /* 8px */
+  gap: var(--gap-200); /* 8px */
 
   /* Reset */
   background: none;

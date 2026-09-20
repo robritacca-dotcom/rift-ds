@@ -6,7 +6,7 @@
 .rail {
   position: fixed;
   top: 50%;
-  right: var(--primitive-gap-md);
+  right: var(--primitive-gap-400);
   transform: translateY(-50%);
   /* Above the page content, below the sticky header — see the fixed-layer
      roster in globals.css */
@@ -19,7 +19,7 @@
    toasts do (globals.css owns the geometry) */
 :global(html[data-chat="docked"]) .rail {
   right: calc(
-    var(--layout-chat-width) + var(--layout-chat-inset) + var(--primitive-gap-md)
+    var(--layout-chat-width) + var(--layout-chat-inset) + var(--primitive-gap-400)
   );
 }
 

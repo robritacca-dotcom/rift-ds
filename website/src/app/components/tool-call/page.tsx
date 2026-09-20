@@ -62,7 +62,7 @@ function LiveRunDemo() {
   }, []);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "var(--gap-sm)", alignItems: "flex-start", width: "100%" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "var(--gap-200)", alignItems: "flex-start", width: "100%" }}>
       <Button variant="secondary" size="compact" label={revealed === 0 ? "Play the run" : "Replay"} onClick={play} />
       {script.slice(0, revealed).map((call, index) => (
         <ToolCall

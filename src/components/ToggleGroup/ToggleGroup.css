@@ -18,7 +18,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: var(--padding-xs) var(--padding-sm);
+  padding: var(--padding-150) var(--padding-200);
   font-family: var(--font-paragraph-sm-em-family);
   font-size: var(--font-paragraph-sm-em-size);
   font-weight: var(--font-paragraph-sm-em-weight);
@@ -84,7 +84,7 @@
    ============================================ */
 
 .ds-toggle-group--compact .ds-toggle-group__item {
-  padding: var(--padding-xxs) var(--padding-xs);
+  padding: var(--padding-100) var(--padding-150);
 }
 
 .ds-toggle-group--compact .ds-toggle-group__item .material-symbols-rounded {

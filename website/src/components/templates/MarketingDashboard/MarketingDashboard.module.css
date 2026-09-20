@@ -12,9 +12,9 @@
   /* Stretch across the body's own padding (the playground's pattern), so
      the app shell runs edge to edge instead of sitting in the doc-page
      column; the primitives here mirror the body's inset in globals.css. */
-  width: calc(100% + var(--primitive-padding-xl) * 2);
-  margin: calc(-1 * var(--primitive-padding-lg))
-    calc(-1 * var(--primitive-padding-xl));
+  width: calc(100% + var(--primitive-padding-1000) * 2);
+  margin: calc(-1 * var(--primitive-padding-500))
+    calc(-1 * var(--primitive-padding-1000));
   /* Deliberately no opaque background: the body's page colour carries the
      shell, and the site's ambient background reaches the top of the page
      the way it does everywhere else, so the glass sidebar below has real
@@ -57,10 +57,10 @@
   width: 100%;
   max-width: 1440px;
   min-width: 0;
-  padding: var(--padding-lg) var(--padding-xl) var(--padding-xxl);
+  padding: var(--padding-500) var(--padding-1000) var(--padding-1500);
   display: flex;
   flex-direction: column;
-  gap: var(--gap-lg);
+  gap: var(--gap-500);
 }
 
 /* ------------------------------------------------------------- header */
@@ -69,7 +69,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 }
 
 .search {
@@ -83,31 +83,31 @@
 .searchKbd {
   position: absolute;
   top: 50%;
-  right: var(--padding-sm);
+  right: var(--padding-200);
   transform: translateY(-50%);
   display: inline-flex;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
   pointer-events: none;
 }
 
 .topBarActions {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 }
 
 .pageHead {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
   flex-wrap: wrap;
 }
 
 /* The mock assistant panel lives in the shared TemplateAssistant module. */
 
 .title {
-  margin: var(--gap-xs) 0 0;
+  margin: var(--gap-100) 0 0;
   font-family: var(--font-heading-1-family);
   font-size: var(--font-heading-1-size);
   font-weight: var(--font-heading-1-weight);
@@ -119,7 +119,7 @@
 .headActions {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
   flex-wrap: wrap;
 }
 
@@ -128,10 +128,10 @@
 .panel {
   background-color: var(--color-bg-container-primary);
   border-radius: var(--radius-xl);
-  padding: var(--padding-lg);
+  padding: var(--padding-500);
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
+  gap: var(--gap-400);
   min-width: 0;
 }
 
@@ -140,7 +140,7 @@
 .tableSection {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
+  gap: var(--gap-400);
   min-width: 0;
 }
 
@@ -148,7 +148,7 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 }
 
 /* Dropdown fills its container by design; the selects on this page are
@@ -163,13 +163,13 @@
 .kpiGrid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: var(--gap-lg);
+  gap: var(--gap-500);
 }
 
 .kpi {
   composes: panel;
   align-items: flex-start;
-  gap: var(--gap-sm-md);
+  gap: var(--gap-300);
 }
 
 .kpiIcon {
@@ -189,13 +189,13 @@
 .midGrid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--gap-lg);
+  gap: var(--gap-500);
 }
 
 .chartsGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--gap-lg);
+  gap: var(--gap-500);
 }
 
 .radial {
@@ -207,7 +207,7 @@
 .legendRow {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
   margin-top: auto;
 }
 
@@ -216,21 +216,21 @@
 .channelList {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm-md);
-  padding-top: var(--padding-xxs);
+  gap: var(--gap-300);
+  padding-top: var(--padding-100);
 }
 
 .channelRow {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
 }
 
 .channelMeta {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
   font-family: var(--font-paragraph-sm-family);
   font-size: var(--font-paragraph-sm-size);
   line-height: var(--font-paragraph-sm-line-height);
@@ -239,7 +239,7 @@
 .channelName {
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
   color: var(--color-text-primary);
   font-weight: var(--font-paragraph-sm-em-weight);
   min-width: 0;
@@ -258,7 +258,7 @@
 
 .tableFilters {
   display: flex;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
   flex-wrap: wrap;
 }
 
@@ -266,7 +266,7 @@
 .campaignCell {
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-sm-md);
+  gap: var(--gap-300);
 }
 
 /* The channel glyph rides in a filled chip (the KPI tiles' treatment at
@@ -310,7 +310,7 @@
 .rowActions {
   display: inline-flex;
   justify-content: flex-end;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
 }
 
 /* ---------------------------------------------------------- responsive */
@@ -320,16 +320,16 @@
    the shell pulled past the viewport's left edge on phones. */
 @media (max-width: 959px) {
   .shell {
-    width: calc(100% + var(--primitive-padding-lg) * 2);
-    margin: calc(-1 * var(--primitive-padding-lg));
+    width: calc(100% + var(--primitive-padding-500) * 2);
+    margin: calc(-1 * var(--primitive-padding-500));
   }
 }
 
 @media (max-width: 600px) {
   .shell {
-    width: calc(100% + var(--primitive-padding-md) * 2);
-    margin: calc(-1 * var(--primitive-padding-lg))
-      calc(-1 * var(--primitive-padding-md));
+    width: calc(100% + var(--primitive-padding-400) * 2);
+    margin: calc(-1 * var(--primitive-padding-500))
+      calc(-1 * var(--primitive-padding-400));
   }
 }
 
@@ -350,7 +350,7 @@
   }
 
   .content {
-    padding: var(--padding-md);
+    padding: var(--padding-400);
   }
 }
 

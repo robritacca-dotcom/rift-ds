@@ -6,7 +6,7 @@
 .ds-rating {
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
 }
 
 /* ============================================

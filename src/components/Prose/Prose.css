@@ -23,7 +23,7 @@
 .ds-prose hr,
 .ds-prose img {
   margin: 0;
-  margin-block-end: var(--gap-md);
+  margin-block-end: var(--gap-400);
 }
 
 .ds-prose > :first-child {
@@ -58,8 +58,8 @@
 .ds-prose h3,
 .ds-prose h4 {
   margin: 0;
-  margin-block-start: var(--gap-lg);
-  margin-block-end: var(--gap-sm-md);
+  margin-block-start: var(--gap-500);
+  margin-block-end: var(--gap-300);
   color: var(--color-text-primary);
 }
 
@@ -101,7 +101,7 @@
 
 .ds-prose ul,
 .ds-prose ol {
-  padding-inline-start: var(--padding-md);
+  padding-inline-start: var(--padding-400);
 }
 
 .ds-prose li {
@@ -114,13 +114,13 @@
 }
 
 .ds-prose li + li {
-  margin-block-start: var(--gap-xs);
+  margin-block-start: var(--gap-100);
 }
 
 /* Nested lists sit tight under their parent item */
 .ds-prose li > ul,
 .ds-prose li > ol {
-  margin-block-start: var(--gap-xs);
+  margin-block-start: var(--gap-100);
   margin-block-end: 0;
 }
 
@@ -146,7 +146,7 @@
   font-size: var(--font-paragraph-sm-size);
   background-color: var(--color-bg-container-secondary);
   border-radius: var(--radius-xxs);
-  padding-inline: var(--padding-xxxs);
+  padding-inline: var(--padding-050);
 }
 
 /* ============================================
@@ -162,7 +162,7 @@
   background-color: var(--color-bg-container-primary);
   border: var(--border-xs) solid var(--color-bg-container-border);
   border-radius: var(--radius-md);
-  padding: var(--padding-md);
+  padding: var(--padding-400);
   overflow-x: auto;
 }
 
@@ -180,7 +180,7 @@
 
 .ds-prose blockquote {
   border-inline-start: var(--border-md) solid var(--color-divider);
-  padding-inline-start: var(--padding-md);
+  padding-inline-start: var(--padding-400);
   color: var(--color-text-secondary);
 }
 
@@ -225,7 +225,7 @@
    something to scroll. */
 .ds-prose th,
 .ds-prose td {
-  padding: var(--padding-xs) var(--padding-sm-md);
+  padding: var(--padding-150) var(--padding-300);
   border-block-end: var(--border-xs) solid var(--color-divider);
   overflow-wrap: normal;
 }

@@ -501,7 +501,7 @@ const previews: Record<string, () => ReactNode> = {
   "chat-thread": () => (
     <>
       <div style={{ width: "100%", height: "150px", display: "flex", flexDirection: "column", border: "1px solid var(--color-bg-container-border)", borderRadius: "16px", overflow: "hidden" }}>
-        <ChatThread anchor={false} style={{ flex: 1, "--ds-chat-thread-padding-inline": "var(--padding-sm-md)" } as React.CSSProperties}>
+        <ChatThread anchor={false} style={{ flex: 1, "--ds-chat-thread-padding-inline": "var(--padding-300)" } as React.CSSProperties}>
           <ChatMessage role="user" size="compact">
             Where do the fades come from?
           </ChatMessage>
@@ -736,7 +736,7 @@ const previews: Record<string, () => ReactNode> = {
   ),
   "document-chip": () => (
     <>
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "var(--gap-xs)" }}>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "var(--gap-100)" }}>
         <DocumentChip name="brief.pdf" fileType="pdf" meta="1.2 MB" />
         <DocumentChip name="budget.xlsx" fileType="sheet" size="compact" />
       </div>
@@ -1078,7 +1078,7 @@ const previews: Record<string, () => ReactNode> = {
   ),
   "nav-list": () => (
     <>
-      <div aria-hidden="true" style={{ width: "180px", display: "flex", flexDirection: "column", gap: "var(--gap-xxs)" }}>
+      <div aria-hidden="true" style={{ width: "180px", display: "flex", flexDirection: "column", gap: "var(--gap-050)" }}>
         <Button
           variant="tertiary"
           label="Overview"
@@ -1086,7 +1086,7 @@ const previews: Record<string, () => ReactNode> = {
           tabIndex={-1}
           style={{ width: "100%", justifyContent: "flex-start" }}
         />
-        <div style={{ display: "flex", alignItems: "center", gap: "var(--gap-xxs)" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "var(--gap-050)" }}>
           <Button
             variant="tertiary"
             label="Guides"

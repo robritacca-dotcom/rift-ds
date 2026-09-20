@@ -32,7 +32,7 @@
   color: var(--color-text-secondary);
   text-align: left;
   caption-side: top;
-  padding-bottom: var(--padding-sm); /* 8px */
+  padding-bottom: var(--padding-200); /* 8px */
 }
 
 .ds-table__caption--hidden {
@@ -61,7 +61,7 @@
    ============================================ */
 
 .ds-table__header-cell {
-  padding: var(--padding-sm) var(--padding-md); /* 8px 16px */
+  padding: var(--padding-200) var(--padding-400); /* 8px 16px */
   vertical-align: middle;
 
   /* paragraph-em (500 weight / label style) */
@@ -79,7 +79,7 @@
    ============================================ */
 
 .ds-table__cell {
-  padding: var(--padding-sm) var(--padding-md); /* 8px 16px */
+  padding: var(--padding-200) var(--padding-400); /* 8px 16px */
   vertical-align: middle;
   color: var(--color-text-primary);
 }
@@ -172,14 +172,14 @@
    ============================================ */
 
 .ds-table--compact .ds-table__header-cell {
-  padding: var(--padding-xs) var(--padding-sm-md); /* 6px 12px */
+  padding: var(--padding-150) var(--padding-300); /* 6px 12px */
   font-size: var(--font-paragraph-sm-size);
   line-height: var(--font-paragraph-sm-line-height);
   letter-spacing: var(--font-paragraph-sm-letter-spacing);
 }
 
 .ds-table--compact .ds-table__cell {
-  padding: var(--padding-xs) var(--padding-sm-md); /* 6px 12px */
+  padding: var(--padding-150) var(--padding-300); /* 6px 12px */
   font-size: var(--font-paragraph-sm-size);
   line-height: var(--font-paragraph-sm-line-height);
   letter-spacing: var(--font-paragraph-sm-letter-spacing);

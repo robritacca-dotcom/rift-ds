@@ -11,7 +11,7 @@
   font-weight: var(--font-paragraph-sm-em-weight);
   line-height: var(--font-paragraph-sm-em-line-height);
   letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
-  padding: var(--padding-xxxs) var(--padding-sm); /* Figma: 2px 8px */
+  padding: var(--padding-050) var(--padding-200); /* Figma: 2px 8px */
   /* Badges are borderless by decision (2026-08-26): the tinted fill
      carries the status on its own, and the old per-variant borders sat
      below 3:1 against their fills. The transparent border keeps the

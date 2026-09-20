@@ -6,25 +6,25 @@
   gap: var(--layout-column-gap);
   width: 100%;
   max-width: 1440px;
-  padding-top: var(--primitive-gap-xl);
+  padding-top: var(--primitive-gap-1000);
 }
 
 .dsContent {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xxxl);
+  gap: var(--gap-2000);
 }
 
 /* ============================================
    PAGE HEADER
    ============================================ */
 .pageHeader {
-  margin-top: calc(var(--primitive-gap-xl) - var(--gap-xxxl));
+  margin-top: calc(var(--primitive-gap-1000) - var(--gap-2000));
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--primitive-gap-lg);
+  gap: var(--primitive-gap-500);
   width: 100%;
 }
 
@@ -43,7 +43,7 @@
 .introSection {
   display: flex;
   flex-direction: column;
-  gap: var(--primitive-gap-lg);
+  gap: var(--primitive-gap-500);
 }
 
 .subDisplay {
@@ -68,14 +68,14 @@
 .loopsGrid {
   display: flex;
   flex-direction: column;
-  gap: var(--primitive-gap-lg);
+  gap: var(--primitive-gap-500);
 }
 
 .loopCard {
   display: flex;
   flex-direction: column;
-  gap: var(--primitive-gap-lg);
-  padding: var(--primitive-gap-xl);
+  gap: var(--primitive-gap-500);
+  padding: var(--primitive-gap-1000);
   border: 1px solid var(--color-bg-container-border);
   border-radius: var(--primitive-radius-xl);
   background: var(--color-bg-container-primary);
@@ -88,19 +88,19 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--primitive-gap-md);
+  gap: var(--primitive-gap-400);
 }
 
 .loopMeta {
   display: flex;
   align-items: center;
-  gap: var(--primitive-gap-sm);
+  gap: var(--primitive-gap-200);
 }
 
 .loopBadges {
   display: flex;
   align-items: center;
-  gap: var(--primitive-gap-xs);
+  gap: var(--primitive-gap-100);
 }
 
 .loopIcon {
@@ -131,7 +131,7 @@
 .loopSection {
   display: flex;
   flex-direction: column;
-  gap: var(--primitive-gap-sm);
+  gap: var(--primitive-gap-200);
 }
 
 .loopSectionLabel {
@@ -147,23 +147,23 @@
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 }
 
 /* Stage number prefix inside the chip label */
 .loopStageNum {
   font-weight: var(--font-paragraph-sm-em-weight);
   color: var(--color-text-tertiary);
-  margin-right: var(--gap-xs);
+  margin-right: var(--gap-100);
 }
 
 /* Guardrails list */
 .loopGuardrails {
   margin: 0;
-  padding-left: var(--primitive-padding-lg);
+  padding-left: var(--primitive-padding-500);
   display: flex;
   flex-direction: column;
-  gap: var(--primitive-gap-xs);
+  gap: var(--primitive-gap-100);
   font-size: var(--font-paragraph-sm-size);
   font-weight: var(--font-paragraph-sm-weight);
   line-height: var(--font-paragraph-sm-line-height);
@@ -175,18 +175,18 @@
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: var(--primitive-gap-sm);
+  gap: var(--primitive-gap-200);
   border-top: 1px solid var(--color-divider);
-  padding-top: var(--primitive-gap-md);
+  padding-top: var(--primitive-gap-400);
 }
 
 .loopSkillLink {
   display: inline-flex;
   align-items: center;
-  gap: var(--primitive-gap-xs);
+  gap: var(--primitive-gap-100);
   font-family: monospace;
   font-size: var(--font-paragraph-sm-size);
-  padding: var(--primitive-padding-xxxs) var(--primitive-padding-xs);
+  padding: var(--primitive-padding-050) var(--primitive-padding-150);
   background: var(--color-bg-page);
   border: 1px solid var(--color-bg-container-border);
   border-radius: var(--radius-xs);

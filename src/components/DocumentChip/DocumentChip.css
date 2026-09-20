@@ -11,9 +11,9 @@
 
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 
-  padding: var(--padding-xs) var(--padding-sm-md);
+  padding: var(--padding-150) var(--padding-300);
 
   border: var(--border-xs) solid var(--ds-document-chip-border);
   border-radius: var(--radius-md);
@@ -27,8 +27,8 @@
    ============================================ */
 
 .ds-document-chip--compact {
-  gap: var(--gap-xs);
-  padding: var(--padding-xxs) var(--padding-sm);
+  gap: var(--gap-100);
+  padding: var(--padding-100) var(--padding-200);
 }
 
 /* ============================================
@@ -96,7 +96,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
   min-width: 0;
 }
 

@@ -6,25 +6,25 @@
   gap: var(--layout-column-gap);
   width: 100%;
   max-width: 1440px;
-  padding-top: var(--primitive-gap-xl);
+  padding-top: var(--primitive-gap-1000);
 }
 
 .dsContent {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xxxl);
+  gap: var(--gap-2000);
 }
 
 /* ============================================
    PAGE TITLE - Display 2
    ============================================ */
 .pageHeader {
-  margin-top: calc(var(--primitive-gap-xl) - var(--gap-xxxl));
+  margin-top: calc(var(--primitive-gap-1000) - var(--gap-2000));
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--primitive-gap-lg);
+  gap: var(--primitive-gap-500);
   width: 100%;
 }
 
@@ -53,7 +53,7 @@
 .introSection {
   display: flex;
   flex-direction: column;
-  gap: var(--primitive-gap-lg);
+  gap: var(--primitive-gap-500);
 }
 
 .introBody {
@@ -82,14 +82,14 @@
 .rampView {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xl);
+  gap: var(--gap-1000);
   width: 100%;
 }
 
 .rampTable {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
   width: 100%;
 }
 
@@ -98,14 +98,14 @@
   display: grid;
   grid-template-columns: 88px minmax(0, 1fr);
   align-items: center;
-  gap: var(--gap-md);
+  gap: var(--gap-400);
   width: 100%;
 }
 
 .rampCells {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
   width: 100%;
 }
 
@@ -183,7 +183,7 @@
 .alphaGroup {
   display: grid;
   grid-template-columns: 88px minmax(0, 1fr);
-  gap: var(--gap-md);
+  gap: var(--gap-400);
   width: 100%;
 }
 
@@ -192,14 +192,14 @@
 .alphaCells {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: var(--gap-xxs) var(--gap-sm);
+  gap: var(--gap-050) var(--gap-200);
   width: 100%;
 }
 
 .alphaCell {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
   min-width: 0;
 }
 
@@ -238,7 +238,7 @@
 .swatchView {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xxxl);
+  gap: var(--gap-2000);
   width: 100%;
 }
 
@@ -248,7 +248,7 @@
 .colourGroup {
   display: flex;
   flex-direction: column;
-  gap: var(--primitive-gap-xl);
+  gap: var(--primitive-gap-1000);
   width: 100%;
 }
 
@@ -258,7 +258,7 @@
 .colourSwatches {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--primitive-gap-lg);
+  gap: var(--primitive-gap-500);
   width: 100%;
 }
 
@@ -277,7 +277,7 @@
   .rampHeaderRow,
   .alphaGroup {
     grid-template-columns: minmax(0, 1fr);
-    gap: var(--gap-xs);
+    gap: var(--gap-100);
   }
 
   .rampHeaderRow .rampLabel {
@@ -292,7 +292,7 @@
   /* Twelve labelled columns is unreadable at this width */
   .alphaCells {
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: var(--gap-sm);
+    gap: var(--gap-200);
   }
 
   .dsLayout {

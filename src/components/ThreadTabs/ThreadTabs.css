@@ -16,7 +16,7 @@
 .ds-thread-tabs {
   display: flex;
   align-items: center;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
   min-width: 0;
 }
 
@@ -51,7 +51,7 @@
 }
 
 .ds-thread-tabs__item + .ds-thread-tabs__item {
-  margin-inline-start: var(--gap-xs);
+  margin-inline-start: var(--gap-100);
 }
 
 .ds-thread-tabs__item--entering {
@@ -118,10 +118,10 @@
 .ds-thread-tabs__trigger {
   display: flex;
   align-items: center;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
   min-width: 0;
   height: 100%;
-  padding: 0 var(--padding-sm-md);
+  padding: 0 var(--padding-300);
   border: none;
   border-radius: var(--radius-full);
   background: transparent;
@@ -134,7 +134,7 @@
 /* With a close button beside it, the trigger cedes its trailing inset to
    the button's own margin so the pill's right edge stays balanced. */
 .ds-thread-tabs__tab--closable .ds-thread-tabs__trigger {
-  padding-inline-end: var(--padding-xxs);
+  padding-inline-end: var(--padding-100);
 }
 
 .ds-thread-tabs__tab--active .ds-thread-tabs__trigger {
@@ -152,8 +152,8 @@
    scale — there is no icon token this small (ThreadPanel's dot restated). */
 .ds-thread-tabs__unread {
   flex: none;
-  width: var(--gap-sm);
-  height: var(--gap-sm);
+  width: var(--gap-200);
+  height: var(--gap-200);
   border-radius: var(--radius-full);
   background-color: var(--color-status-info-icon);
 }
@@ -177,12 +177,12 @@
      ds-allow(color): mask alpha keywords (black/transparent), not palette colours */
   -webkit-mask-image: linear-gradient(
     to right,
-    black calc(100% - var(--gap-md)),
+    black calc(100% - var(--gap-400)),
     transparent
   );
   mask-image: linear-gradient(
     to right,
-    black calc(100% - var(--gap-md)),
+    black calc(100% - var(--gap-400)),
     transparent
   );
 }
@@ -201,7 +201,7 @@
   width: 24px;
   height: 24px;
   flex: none;
-  margin-inline-end: var(--padding-xxs);
+  margin-inline-end: var(--padding-100);
   padding: 0;
   border: none;
   border-radius: var(--radius-full);

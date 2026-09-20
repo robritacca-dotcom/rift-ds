@@ -9,7 +9,7 @@
   display: inline-flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
 }
 
 /* ============================================
@@ -52,7 +52,7 @@
 .ds-stat__delta {
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
   font-family: var(--font-paragraph-sm-em-family);
   font-size: var(--font-paragraph-sm-em-size);
   font-weight: var(--font-paragraph-sm-em-weight);
@@ -90,8 +90,8 @@
   grid-template-areas:
     'value delta'
     'label label';
-  column-gap: var(--gap-sm);
-  row-gap: var(--gap-xxs);
+  column-gap: var(--gap-200);
+  row-gap: var(--gap-050);
 }
 
 .ds-stat--delta-inline .ds-stat__value {
@@ -107,7 +107,7 @@
   align-self: end;
   justify-self: start;
   /* Optical baseline: compensates the display value's half-leading. */
-  margin-bottom: var(--gap-xs);
+  margin-bottom: var(--gap-100);
 }
 
 /* Icons take the colour of the text around them. Explicit, not just

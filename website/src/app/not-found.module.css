@@ -16,7 +16,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--primitive-gap-xl);
+  gap: var(--primitive-gap-1000);
   text-align: center;
 }
 
@@ -44,7 +44,7 @@
   line-height: var(--font-sub-display-line-height);
   letter-spacing: var(--font-sub-display-letter-spacing);
   color: var(--color-text-secondary);
-  margin-bottom: var(--primitive-gap-md);
+  margin-bottom: var(--primitive-gap-400);
 }
 
 /* ============================================

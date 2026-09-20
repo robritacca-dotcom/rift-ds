@@ -20,8 +20,8 @@
   /* Stretch across the body's own side padding so the centring zone is
      exactly [panel edge → viewport edge] — the workspace's left and right
      margins come out identical, not skewed by the body inset. */
-  width: calc(100% + var(--primitive-padding-xl) * 2);
-  margin-inline: calc(-1 * var(--primitive-padding-xl));
+  width: calc(100% + var(--primitive-padding-1000) * 2);
+  margin-inline: calc(-1 * var(--primitive-padding-1000));
   /* Panel, then the same safe ring the chat stage keeps — the column can
      narrow to the panel's edge on tight viewports, and flush against the
      glass is a collision, not a fit. */
@@ -31,7 +31,7 @@
   padding-right: var(--rail-inset);
   /* Clear the floating toolbar pill, then the immersive page still starts
      lower than a doc page would — the title gets air, not a viewport edge. */
-  padding-top: calc(var(--layout-stage-clearance) + var(--primitive-gap-xl));
+  padding-top: calc(var(--layout-stage-clearance) + var(--primitive-gap-1000));
   /* And the safe area above the bottom control bar, so the end of the
      scroll is never parked behind it. */
   padding-bottom: var(--layout-stage-bottom-clearance);
@@ -65,7 +65,7 @@
   max-width: 960px;
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xxxl);
+  gap: var(--gap-2000);
 }
 
 /* The bar's Mobile stage: the components workspace narrows to a
@@ -137,15 +137,15 @@
   scrollbar-color: var(--color-divider) transparent;
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
-  padding: var(--padding-md);
+  gap: var(--gap-400);
+  padding: var(--padding-400);
 }
 
 .controlGroup {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm);
-  padding-bottom: var(--gap-md);
+  gap: var(--gap-200);
+  padding-bottom: var(--gap-400);
   border-bottom: var(--border-xs) solid var(--color-divider);
 }
 
@@ -177,8 +177,8 @@
 .swatchGrid {
   display: grid;
   grid-template-columns: repeat(8, max-content);
-  gap: var(--gap-sm);
-  padding: var(--primitive-padding-xxxs) 0;
+  gap: var(--gap-200);
+  padding: var(--primitive-padding-050) 0;
 }
 
 /* The custom ColorPicker stays lit while the current colour is not one of
@@ -190,7 +190,7 @@
 .sliderRow {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm-md);
+  gap: var(--gap-300);
 }
 
 .sliderRow > :first-child {
@@ -214,21 +214,21 @@
   top: auto;
   bottom: 100%;
   margin-top: 0;
-  margin-bottom: var(--gap-xxs);
+  margin-bottom: var(--gap-050);
 }
 
 /* Copy CSS + View CSS + Reset, pinned at the end of the rail */
 .railFooter {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm-md);
+  gap: var(--gap-300);
 }
 
 /* The generated-CSS dialog's body: the install note over the code. */
 .cssDialogBody {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
+  gap: var(--gap-400);
   min-width: 0;
 }
 
@@ -251,7 +251,7 @@
 .demoSection {
   display: flex;
   flex-direction: column;
-  gap: var(--primitive-gap-lg);
+  gap: var(--primitive-gap-500);
 }
 
 .sectionNote {
@@ -269,14 +269,14 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--gap-sm-md);
+  gap: var(--gap-300);
 }
 
 /* Two-up grid for form fields — collapses to one column when narrow */
 .demoColumns {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--primitive-gap-lg);
+  gap: var(--primitive-gap-500);
   align-items: start;
 }
 
@@ -297,7 +297,7 @@
 .mapsColumns {
   display: grid;
   grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
-  gap: var(--primitive-gap-lg);
+  gap: var(--primitive-gap-500);
   align-items: center;
 }
 
@@ -319,14 +319,14 @@
 .advBody {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
+  gap: var(--gap-400);
 }
 
 .advGlobal {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm);
-  padding-bottom: var(--gap-md);
+  gap: var(--gap-200);
+  padding-bottom: var(--gap-400);
   border-bottom: var(--border-xs) solid var(--color-divider);
 }
 
@@ -348,13 +348,13 @@
 .advRamps {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 }
 
 .advRampRow {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm-md);
+  gap: var(--gap-300);
 }
 
 .advRampLabel {
@@ -367,7 +367,7 @@
 .advRamp {
   display: flex;
   flex: 1;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
 }
 
 .advCell {
@@ -421,7 +421,7 @@
 .drawerControls {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
+  gap: var(--gap-400);
 }
 
 /* ============================================

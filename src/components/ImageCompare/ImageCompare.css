@@ -46,9 +46,9 @@
 
 .ds-image-compare__label {
   position: absolute;
-  top: var(--gap-md);
+  top: var(--gap-400);
   z-index: 2;
-  padding: var(--padding-xxxs) var(--padding-sm);
+  padding: var(--padding-050) var(--padding-200);
   border-radius: var(--radius-full);
   background-color: var(--color-bg-container-inverse);
   color: var(--color-text-on-inverse);
@@ -60,11 +60,11 @@
 }
 
 .ds-image-compare__label--before {
-  left: var(--gap-md);
+  left: var(--gap-400);
 }
 
 .ds-image-compare__label--after {
-  right: var(--gap-md);
+  right: var(--gap-400);
 }
 
 /* ============================================

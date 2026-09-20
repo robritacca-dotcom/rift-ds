@@ -7,7 +7,7 @@
 .ds-taginput {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm); /* 8px */
+  gap: var(--gap-200); /* 8px */
   width: 100%;
 }
 
@@ -20,8 +20,8 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--gap-xs); /* 4px */
-  padding: var(--padding-xs) var(--padding-md); /* 6px 16px */
+  gap: var(--gap-100); /* 4px */
+  padding: var(--padding-150) var(--padding-400); /* 6px 16px */
   border: var(--border-xs) solid var(--color-input-border-primary);
   border-radius: var(--radius-md); /* 12px */
   background-color: var(--color-input-bg-primary);
@@ -44,8 +44,8 @@
 .ds-taginput__tag {
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-xxs); /* 2px */
-  padding: var(--padding-xxxs) var(--padding-sm); /* 2px 8px */
+  gap: var(--gap-050); /* 2px */
+  padding: var(--padding-050) var(--padding-200); /* 2px 8px */
   border-radius: var(--radius-full);
   background-color: var(--color-bg-container-secondary);
   font-family: var(--font-paragraph-sm-em-family);
@@ -149,8 +149,8 @@
    ============================================ */
 
 .ds-taginput--compact .ds-taginput__shell {
-  gap: var(--gap-xxs); /* 2px */
-  padding: var(--padding-xxs) var(--padding-sm-md); /* 4px 12px */
+  gap: var(--gap-050); /* 2px */
+  padding: var(--padding-100) var(--padding-300); /* 4px 12px */
 }
 
 .ds-taginput--compact .ds-taginput__input {

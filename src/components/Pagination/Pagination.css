@@ -6,13 +6,13 @@
 .ds-pagination {
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-xs); /* 4px */
+  gap: var(--gap-100); /* 4px */
 }
 
 .ds-pagination__list {
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-xs); /* 4px */
+  gap: var(--gap-100); /* 4px */
   list-style: none;
   margin: 0;
   padding: 0;
@@ -115,7 +115,7 @@
 }
 
 .ds-pagination__readout {
-  padding: 0 var(--padding-sm); /* 8px */
+  padding: 0 var(--padding-200); /* 8px */
   font-family: var(--font-paragraph-sm-family);
   font-size: var(--font-paragraph-sm-size);
   font-weight: var(--font-paragraph-sm-weight);

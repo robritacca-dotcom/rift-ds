@@ -5,8 +5,8 @@
   position: absolute;
   display: flex;
   align-items: center;
-  gap: var(--primitive-gap-sm);
-  padding: var(--primitive-padding-sm) var(--primitive-padding-md);
+  gap: var(--primitive-gap-200);
+  padding: var(--primitive-padding-200) var(--primitive-padding-400);
   background-color: var(--color-bg-container-primary);
   border: var(--border-xs) solid var(--color-bg-container-border);
   border-radius: var(--radius-lg);
@@ -112,7 +112,7 @@
   display: flex;
   flex-direction: column;
   gap: 0;
-  padding: var(--primitive-padding-md);
+  padding: var(--primitive-padding-400);
   background-color: var(--color-bg-glass);
   border: var(--border-xs) solid var(--color-bg-container-border);
   border-radius: var(--radius-xl);

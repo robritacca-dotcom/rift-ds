@@ -24,8 +24,8 @@ function PrimitiveRampField({ className }: { className?: string }) {
       style={{
         display: "grid",
         gridTemplateRows: `repeat(${SHOWCASE_RAMPS.length}, 1fr)`,
-        gap: "var(--primitive-gap-xs)",
-        padding: "var(--primitive-padding-md)",
+        gap: "var(--primitive-gap-100)",
+        padding: "var(--primitive-padding-400)",
       }}
     >
       {SHOWCASE_RAMPS.map((ramp) => (
@@ -34,7 +34,7 @@ function PrimitiveRampField({ className }: { className?: string }) {
           style={{
             display: "grid",
             gridTemplateColumns: `repeat(${SHOWCASE_STEPS.length}, 1fr)`,
-            gap: "var(--primitive-gap-xs)",
+            gap: "var(--primitive-gap-100)",
           }}
         >
           {SHOWCASE_STEPS.map((step) => (

@@ -10,8 +10,8 @@
 .ds-toolbar {
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-xs);
-  padding: var(--padding-xs);
+  gap: var(--gap-100);
+  padding: var(--padding-150);
   background-color: var(--color-bg-container-primary);
   border: var(--border-xs) solid var(--color-bg-container-border);
   border-radius: var(--radius-full);
@@ -43,14 +43,14 @@
   flex-shrink: 0;
   align-self: stretch;
   width: var(--border-xs);
-  margin-block: var(--gap-xxs);
-  margin-inline: var(--gap-xxs);
+  margin-block: var(--gap-050);
+  margin-inline: var(--gap-050);
   background-color: var(--color-divider);
 }
 
 .ds-toolbar--vertical .ds-toolbar__separator {
   width: auto;
   height: var(--border-xs);
-  margin-block: var(--gap-xxs);
-  margin-inline: var(--gap-xxs);
+  margin-block: var(--gap-050);
+  margin-inline: var(--gap-050);
 }

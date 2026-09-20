@@ -37,7 +37,7 @@
   left: 0;
   z-index: 50;
   min-width: 200px;
-  margin-top: var(--gap-xxs); /* 2px offset from trigger */
+  margin-top: var(--gap-050); /* 2px offset from trigger */
 
   /* Appearance — Figma: page/primary bg, input/border/primary, radius/md */
   background: var(--color-bg-page-primary);
@@ -46,7 +46,7 @@
   box-shadow: var(--shadow-floating);
 
   /* Inset gap — Figma: padding/xxs (4px) all sides */
-  padding: var(--padding-xxs);
+  padding: var(--padding-100);
 
   /* Reset list */
   list-style: none;
@@ -63,7 +63,7 @@
 
 /* Compact items: paragraph-sm-em (14/20), padding xs sm-md (6px 12px), radius-sm (8px) */
 .ds-dropdown-menu__panel--compact .ds-dropdown-menu__item {
-  padding: var(--padding-xs) var(--padding-sm-md); /* 6px 12px */
+  padding: var(--padding-150) var(--padding-300); /* 6px 12px */
   border-radius: var(--radius-sm); /* 8px */
   font-family: var(--font-paragraph-sm-em-family);
   font-size: var(--font-paragraph-sm-em-size);
@@ -85,7 +85,7 @@
 /* Compact group label: same padding as compact items so heights match */
 .ds-dropdown-menu__panel--compact .ds-dropdown-menu__group-label {
   min-height: auto;
-  padding: var(--padding-xs) var(--padding-sm-md); /* matches compact item padding */
+  padding: var(--padding-150) var(--padding-300); /* matches compact item padding */
   font-size: var(--font-paragraph-sm-em-size);
   line-height: var(--font-paragraph-sm-em-line-height);
   letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
@@ -93,7 +93,7 @@
 
 /* Compact separator margin matches compact item padding */
 .ds-dropdown-menu__panel--compact .ds-dropdown-menu__separator {
-  margin: var(--padding-xxs) var(--padding-sm-md);
+  margin: var(--padding-100) var(--padding-300);
 }
 
 /* Compact shortcuts keep the base --font-paragraph-sm-* size — the scale
@@ -107,7 +107,7 @@
   position: absolute;
   left: 100%;
   top: 0;
-  margin-left: var(--gap-xxs); /* 4px offset from parent */
+  margin-left: var(--gap-050); /* 4px offset from parent */
 }
 
 /* ============================================
@@ -121,8 +121,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--gap-md); /* 16px between label and shortcut */
-  padding: var(--padding-sm) var(--padding-md); /* Figma: 8px 16px */
+  gap: var(--gap-400); /* 16px between label and shortcut */
+  padding: var(--padding-200) var(--padding-400); /* Figma: 8px 16px */
   border-radius: var(--radius-md); /* Figma: 12px */
   cursor: pointer;
   position: relative;
@@ -166,7 +166,7 @@
 .ds-dropdown-menu__item-label {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm); /* Figma: 8px between icon and text */
+  gap: var(--gap-200); /* Figma: 8px between icon and text */
   line-height: 1;
 }
 
@@ -219,7 +219,7 @@
 .ds-dropdown-menu__separator {
   height: 1px;
   background: var(--color-input-border-primary);
-  margin: var(--padding-xxs) var(--padding-md);
+  margin: var(--padding-100) var(--padding-400);
   list-style: none;
 }
 
@@ -243,8 +243,8 @@
   line-height: var(--font-paragraph-em-line-height);
   letter-spacing: var(--font-paragraph-em-letter-spacing);
   color: var(--color-text-tertiary);
-  padding-left: var(--padding-md);
-  padding-right: var(--padding-md);
+  padding-left: var(--padding-400);
+  padding-right: var(--padding-400);
   user-select: none;
 }
 
@@ -259,7 +259,7 @@
    ============================================ */
 
 .ds-dropdown-menu__item--has-submenu {
-  padding-right: var(--padding-sm-md); /* Slightly less right padding for chevron */
+  padding-right: var(--padding-300); /* Slightly less right padding for chevron */
 }
 
 /* ============================================

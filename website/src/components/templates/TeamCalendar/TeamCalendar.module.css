@@ -14,9 +14,9 @@
   /* Stretch across the body's own padding (the marketing dashboard's
      pattern), so the shell runs edge to edge; the primitives mirror the
      body's inset in globals.css. */
-  width: calc(100% + var(--primitive-padding-xl) * 2);
-  margin: calc(-1 * var(--primitive-padding-lg))
-    calc(-1 * var(--primitive-padding-xl));
+  width: calc(100% + var(--primitive-padding-1000) * 2);
+  margin: calc(-1 * var(--primitive-padding-500))
+    calc(-1 * var(--primitive-padding-1000));
 }
 
 /* One inset source for the whole shell: the floating sidebar reads the
@@ -59,8 +59,8 @@
   min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
-  padding: var(--padding-lg) var(--padding-xl);
+  gap: var(--gap-400);
+  padding: var(--padding-500) var(--padding-1000);
 }
 
 /* ------------------------------------------------------------- top bar */
@@ -69,7 +69,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 }
 
 .search {
@@ -83,17 +83,17 @@
 .searchKbd {
   position: absolute;
   top: 50%;
-  right: var(--padding-sm);
+  right: var(--padding-200);
   transform: translateY(-50%);
   display: inline-flex;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
   pointer-events: none;
 }
 
 .topBarActions {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 }
 
 /* --------------------------------------------------------------- board */
@@ -106,7 +106,7 @@
   min-height: 0;
   display: grid;
   grid-template-columns: 300px minmax(0, 1fr);
-  gap: var(--gap-md);
+  gap: var(--gap-400);
 }
 
 /* ---------------------------------------------------------------- rail */
@@ -114,7 +114,7 @@
 .rail {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-lg);
+  gap: var(--gap-500);
   min-height: 0;
   overflow-y: auto;
 }
@@ -123,7 +123,7 @@
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 }
 
 .railTitle {
@@ -151,7 +151,7 @@
 .group {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 }
 
 .groupLabel {
@@ -167,7 +167,7 @@
 .todoList {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 }
 
 /* ------------------------------------------------------------ day view */
@@ -178,7 +178,7 @@
   margin: 0;
   display: flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 }
 
 .dayNumber {
@@ -219,21 +219,21 @@
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 }
 
 .scheduleRow {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 }
 
 /* The dots reuse the calendar pills' accent roles, so the rail and the grid
    tell the same colour story. */
 .scheduleDot {
   flex: none;
-  width: var(--gap-xs);
-  height: var(--gap-xs);
+  width: var(--gap-100);
+  height: var(--gap-100);
   border-radius: var(--radius-full);
 }
 
@@ -319,7 +319,7 @@
   min-height: 100%;
   border: none;
   border-radius: var(--radius-xl);
-  padding: var(--padding-lg);
+  padding: var(--padding-500);
 }
 
 .calendar :global(.ds-event-calendar__grid) {
@@ -343,7 +343,7 @@
   }
 
   .content {
-    padding: var(--padding-md);
+    padding: var(--padding-400);
   }
 
   .board {
@@ -360,8 +360,8 @@
    the shell pulled past the viewport's left edge on phones. */
 @media (max-width: 959px) {
   .shell {
-    width: calc(100% + var(--primitive-padding-lg) * 2);
-    margin: calc(-1 * var(--primitive-padding-lg));
+    width: calc(100% + var(--primitive-padding-500) * 2);
+    margin: calc(-1 * var(--primitive-padding-500));
   }
 }
 
@@ -378,8 +378,8 @@
 
 @media (max-width: 600px) {
   .shell {
-    width: calc(100% + var(--primitive-padding-md) * 2);
-    margin: calc(-1 * var(--primitive-padding-lg))
-      calc(-1 * var(--primitive-padding-md));
+    width: calc(100% + var(--primitive-padding-400) * 2);
+    margin: calc(-1 * var(--primitive-padding-500))
+      calc(-1 * var(--primitive-padding-400));
   }
 }

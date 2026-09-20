@@ -12,7 +12,7 @@
 
 .ds-card-stack {
   /* How far each buried card peeks out below the one above it. */
-  --ds-card-stack-peek: var(--gap-md);
+  --ds-card-stack-peek: var(--gap-400);
 
   position: relative;
   display: grid;
@@ -23,7 +23,7 @@
 
 .ds-card-stack:focus-visible {
   outline: var(--border-md) solid var(--color-action-primary-bg);
-  outline-offset: var(--padding-xxs);
+  outline-offset: var(--padding-100);
 }
 
 /* Items — every card occupies the same cell; position is one transform. */

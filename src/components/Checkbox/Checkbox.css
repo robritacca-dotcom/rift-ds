@@ -6,7 +6,7 @@
 .ds-checkbox {
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-sm); /* 8px */
+  gap: var(--gap-200); /* 8px */
   cursor: pointer;
   user-select: none;
 }
@@ -140,7 +140,7 @@
 .ds-checkbox-group {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm); /* 8px */
+  gap: var(--gap-200); /* 8px */
 }
 
 .ds-checkbox-group__label {
@@ -155,10 +155,10 @@
 .ds-checkbox-group__items {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm); /* 8px */
+  gap: var(--gap-200); /* 8px */
 }
 
 .ds-checkbox-group--horizontal .ds-checkbox-group__items {
   flex-direction: row;
-  gap: var(--gap-lg); /* 20px */
+  gap: var(--gap-500); /* 20px */
 }

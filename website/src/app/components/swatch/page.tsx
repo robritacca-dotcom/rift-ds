@@ -53,7 +53,7 @@ export default function SwatchPage() {
           {/* Interactive palette */}
           <section className={styles.section}>
             <SectionTitle title="Palette" />
-            <div style={{ display: "flex", gap: "var(--gap-sm)" }}>
+            <div style={{ display: "flex", gap: "var(--gap-200)" }}>
               {PALETTE.map(([value, label]) => (
                 <Swatch
                   key={value}
@@ -69,7 +69,7 @@ export default function SwatchPage() {
           {/* Shapes */}
           <section className={styles.section}>
             <SectionTitle title="Shapes" />
-            <div style={{ display: "flex", gap: "var(--gap-sm)", alignItems: "center" }}>
+            <div style={{ display: "flex", gap: "var(--gap-200)", alignItems: "center" }}>
               <Swatch value="#118AB2" label="Circle" />
               <Swatch value="#118AB2" label="Square" shape="square" />
             </div>
@@ -78,7 +78,7 @@ export default function SwatchPage() {
           {/* Sizes */}
           <section className={styles.section}>
             <SectionTitle title="Sizes" />
-            <div style={{ display: "flex", gap: "var(--gap-sm)", alignItems: "center" }}>
+            <div style={{ display: "flex", gap: "var(--gap-200)", alignItems: "center" }}>
               <Swatch value="#9E47EF" label="Default" />
               <Swatch value="#9E47EF" label="Compact" size="compact" />
             </div>
@@ -87,7 +87,7 @@ export default function SwatchPage() {
           {/* States */}
           <section className={styles.section}>
             <SectionTitle title="States" />
-            <div style={{ display: "flex", gap: "var(--gap-sm)", alignItems: "center" }}>
+            <div style={{ display: "flex", gap: "var(--gap-200)", alignItems: "center" }}>
               <Swatch value="#06D6A0" label="Default state" />
               <Swatch value="#06D6A0" label="Selected state" selected />
               <Swatch value="#06D6A0" label="Disabled state" disabled />

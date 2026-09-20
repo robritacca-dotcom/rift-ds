@@ -33,15 +33,15 @@
   -webkit-mask-image: linear-gradient(
     to bottom,
     transparent,
-    black var(--gap-lg),
-    black calc(100% - var(--gap-lg)),
+    black var(--gap-500),
+    black calc(100% - var(--gap-500)),
     transparent
   );
   mask-image: linear-gradient(
     to bottom,
     transparent,
-    black var(--gap-lg),
-    black calc(100% - var(--gap-lg)),
+    black var(--gap-500),
+    black calc(100% - var(--gap-500)),
     transparent
   );
 }
@@ -64,7 +64,7 @@
 .ds-chat-thread__content {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xl);
+  gap: var(--gap-1000);
   max-width: var(--ds-chat-thread-content-max-width, none);
   margin-inline: auto;
   /* Roomy bottom padding: the end of a long response rests 40px clear of
@@ -72,9 +72,9 @@
      subtracts the measured scrollbar gutter (--ds-chat-thread-gutter, set
      by the component) so the column stays symmetric and aligned with its
      surroundings on classic-scrollbar platforms. */
-  padding: var(--padding-lg)
-    max(0px, calc(var(--ds-chat-thread-padding-inline, var(--padding-lg)) - var(--ds-chat-thread-gutter, 0px)))
-    var(--padding-xl) var(--ds-chat-thread-padding-inline, var(--padding-lg));
+  padding: var(--padding-500)
+    max(0px, calc(var(--ds-chat-thread-padding-inline, var(--padding-500)) - var(--ds-chat-thread-gutter, 0px)))
+    var(--padding-1000) var(--ds-chat-thread-padding-inline, var(--padding-500));
   /* The first send into an empty thread floats up from composer level —
      a transform glide, since no scroll distance exists yet. Later sends
      glide via scroll instead; this transition only ever sees the
@@ -100,7 +100,7 @@
    on top of the composer. */
 .ds-chat-thread__jump-slot {
   position: sticky;
-  bottom: var(--gap-lg);
+  bottom: var(--gap-500);
   height: 0;
   display: flex;
   justify-content: center;

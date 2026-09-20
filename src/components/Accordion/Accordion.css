@@ -33,8 +33,8 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  gap: var(--gap-sm);
-  padding: var(--padding-md) var(--padding-lg);
+  gap: var(--gap-200);
+  padding: var(--padding-400) var(--padding-500);
   background: none;
   border: none;
   cursor: pointer;
@@ -100,12 +100,12 @@
 
 .ds-accordion__content {
   overflow: hidden;
-  padding: 0 var(--padding-lg);
+  padding: 0 var(--padding-500);
   transition: padding var(--motion-duration-slow) var(--motion-ease-standard);
 }
 
 .ds-accordion__item--open .ds-accordion__content {
-  padding: 0 var(--padding-lg) var(--padding-md);
+  padding: 0 var(--padding-500) var(--padding-400);
 }
 
 .ds-accordion__content p {

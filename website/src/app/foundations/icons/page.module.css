@@ -6,25 +6,25 @@
   gap: var(--layout-column-gap);
   width: 100%;
   max-width: 1440px;
-  padding-top: var(--primitive-gap-xl);
+  padding-top: var(--primitive-gap-1000);
 }
 
 .dsContent {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xxxl);
+  gap: var(--gap-2000);
 }
 
 /* ============================================
    PAGE TITLE - Display 2
    ============================================ */
 .pageHeader {
-  margin-top: calc(var(--primitive-gap-xl) - var(--gap-xxxl));
+  margin-top: calc(var(--primitive-gap-1000) - var(--gap-2000));
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--primitive-gap-lg);
+  gap: var(--primitive-gap-500);
   width: 100%;
 }
 
@@ -53,7 +53,7 @@
 .introSection {
   display: flex;
   flex-direction: column;
-  gap: var(--primitive-gap-lg);
+  gap: var(--primitive-gap-500);
 }
 
 .introBody {
@@ -69,7 +69,7 @@
 .iconSection {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xxl);
+  gap: var(--gap-1500);
   width: 100%;
 }
 
@@ -85,7 +85,7 @@
   line-height: var(--font-paragraph-sm-line-height);
   letter-spacing: var(--font-paragraph-sm-letter-spacing);
   color: var(--color-text-tertiary);
-  margin: calc(var(--gap-xxl) * -1 + var(--primitive-gap-lg)) 0 0;
+  margin: calc(var(--gap-1500) * -1 + var(--primitive-gap-500)) 0 0;
 }
 
 .sizeNote code {
@@ -96,7 +96,7 @@
 .sizeRow {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: var(--primitive-gap-md);
+  gap: var(--primitive-gap-400);
   width: 100%;
 }
 
@@ -104,8 +104,8 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--gap-xs);
-  padding: var(--padding-md);
+  gap: var(--gap-100);
+  padding: var(--padding-400);
   border: var(--border-xs) solid var(--color-bg-container-border);
   border-radius: var(--radius-md);
   background-color: var(--color-bg-page-primary);
@@ -119,7 +119,7 @@
   justify-content: center;
   width: 100%;
   height: 56px;
-  margin-bottom: var(--gap-sm);
+  margin-bottom: var(--gap-200);
   color: var(--color-icon-primary);
 }
 
@@ -160,7 +160,7 @@
 .iconGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: var(--primitive-gap-lg);
+  gap: var(--primitive-gap-500);
   width: 100%;
 }
 

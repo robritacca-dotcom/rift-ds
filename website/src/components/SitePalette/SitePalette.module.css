@@ -26,8 +26,8 @@
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-xs);
-  padding: var(--padding-xs) var(--padding-sm-md);
+  gap: var(--gap-100);
+  padding: var(--padding-150) var(--padding-300);
   border-radius: var(--radius-full);
   /* AiButton's solid field, worn with the ring: opaque, so the row's hover
      highlight never shows through the pill, and the glow stays an edge halo
@@ -164,6 +164,6 @@
   .askChip {
     font-size: 0;
     gap: 0;
-    padding: var(--padding-xs);
+    padding: var(--padding-150);
   }
 }

@@ -20,9 +20,9 @@
   transform: translateY(-100%);
   display: inline-flex;
   align-items: baseline;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
   max-width: 100%;
-  padding: 0 var(--padding-xxs);
+  padding: 0 var(--padding-100);
   font-family: var(--font-family-code);
   font-size: var(--font-paragraph-sm-size);
   font-weight: var(--font-paragraph-sm-em-weight);
@@ -59,7 +59,7 @@
   bottom: 0;
   right: 0;
   transform: translateY(100%);
-  padding: 0 var(--padding-xxs);
+  padding: 0 var(--padding-100);
   font-family: var(--font-family-code);
   font-size: var(--font-paragraph-sm-size);
   color: var(--color-action-primary-text);
@@ -74,11 +74,11 @@
   position: fixed;
   z-index: 1060;
   width: 320px;
-  max-width: calc(100vw - var(--padding-lg) * 2);
+  max-width: calc(100vw - var(--padding-500) * 2);
   max-height: 70vh;
   overflow-y: auto;
   pointer-events: none;
-  padding: var(--padding-sm) var(--padding-md);
+  padding: var(--padding-200) var(--padding-400);
   background: color-mix(in srgb, var(--color-bg-container-primary) 88%, transparent);
   backdrop-filter: blur(24px);
   border: var(--border-xs) solid var(--color-bg-container-border);
@@ -95,10 +95,10 @@
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--gap-xs);
-  padding-bottom: var(--padding-xxs);
+  gap: var(--gap-100);
+  padding-bottom: var(--padding-100);
   border-bottom: var(--border-xs) solid var(--color-divider);
-  margin-bottom: var(--padding-xxs);
+  margin-bottom: var(--padding-100);
 }
 
 .popoverName {
@@ -126,7 +126,7 @@
   font-family: var(--font-family-code);
   font-size: var(--font-paragraph-sm-size);
   color: var(--color-text-tertiary);
-  margin: 0 0 var(--padding-xxs);
+  margin: 0 0 var(--padding-100);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -135,21 +135,21 @@
 .rowList {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
   margin: 0;
 }
 
 .row {
   display: grid;
   grid-template-columns: 88px 1fr;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
   align-items: start;
 }
 
 .rowProp {
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
   font-family: var(--font-family-primary);
   font-size: var(--font-paragraph-sm-size);
   color: var(--color-text-secondary);
@@ -189,7 +189,7 @@
 }
 
 .popoverHint {
-  margin: var(--padding-xxs) 0 0;
+  margin: var(--padding-100) 0 0;
   font-family: var(--font-family-primary);
   font-size: var(--font-paragraph-sm-size);
   color: var(--color-text-tertiary);

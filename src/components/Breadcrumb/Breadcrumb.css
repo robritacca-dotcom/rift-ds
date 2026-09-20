@@ -15,7 +15,7 @@
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
   list-style: none;
   margin: 0;
   padding: 0;
@@ -28,7 +28,7 @@
 .ds-breadcrumb__item {
   display: flex;
   align-items: center;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
 }
 
 /* ============================================

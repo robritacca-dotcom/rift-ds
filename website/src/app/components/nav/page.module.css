@@ -6,14 +6,14 @@
   gap: var(--layout-column-gap);
   width: 100%;
   max-width: 1440px;
-  padding-top: var(--primitive-gap-xl);
+  padding-top: var(--primitive-gap-1000);
 }
 
 .dsContent {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xxxl);
+  gap: var(--gap-2000);
   min-width: 0;
 }
 
@@ -21,11 +21,11 @@
    PAGE TITLE - Display 2
    ============================================ */
 .pageHeader {
-  margin-top: calc(var(--primitive-gap-xl) - var(--gap-xxxl));
+  margin-top: calc(var(--primitive-gap-1000) - var(--gap-2000));
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--primitive-gap-lg);
+  gap: var(--primitive-gap-500);
   width: 100%;
 }
 
@@ -54,7 +54,7 @@
 .introSection {
   display: flex;
   flex-direction: column;
-  gap: var(--primitive-gap-lg);
+  gap: var(--primitive-gap-500);
 }
 
 .introBody {
@@ -70,7 +70,7 @@
 .section {
   display: flex;
   flex-direction: column;
-  gap: var(--primitive-gap-xl);
+  gap: var(--primitive-gap-1000);
   width: 100%;
 }
 
@@ -80,7 +80,7 @@
 .showcase {
   display: flex;
   flex-direction: column;
-  gap: var(--primitive-gap-xl);
+  gap: var(--primitive-gap-1000);
   width: 100%;
 }
 
@@ -122,13 +122,13 @@
   justify-content: space-between;
   width: 100%;
   height: 78px;
-  padding: 0 var(--primitive-padding-lg);
+  padding: 0 var(--primitive-padding-500);
 }
 
 .mobileNavBrand {
   display: flex;
   align-items: center;
-  gap: var(--primitive-gap-lg);
+  gap: var(--primitive-gap-500);
   text-decoration: none;
   color: var(--color-text-primary);
 }
@@ -147,7 +147,7 @@
   background: var(--color-action-passive-bg);
   border: none;
   border-radius: var(--primitive-radius-full);
-  padding: var(--primitive-padding-sm);
+  padding: var(--primitive-padding-200);
   color: var(--color-text-primary);
   width: 40px;
   height: 40px;
@@ -175,7 +175,7 @@
   flex-shrink: 0;
   background: var(--color-bg-container-primary);
   box-shadow: 5px 0px 30px 0px rgba(0, 0, 0, 0.15);
-  padding: var(--primitive-padding-xl);
+  padding: var(--primitive-padding-1000);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -186,12 +186,12 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--primitive-gap-lg);
+  gap: var(--primitive-gap-500);
   width: 100%;
 }
 
 .hamburgerSubnav {
-  padding-left: var(--primitive-padding-md);
+  padding-left: var(--primitive-padding-400);
 }
 
 .hamburgerThemeToggle {
@@ -215,7 +215,7 @@
   background: var(--color-action-passive-bg);
   border: none;
   border-radius: var(--primitive-radius-full);
-  padding: var(--primitive-padding-sm);
+  padding: var(--primitive-padding-200);
   color: var(--color-text-primary);
   width: 40px;
   height: 40px;

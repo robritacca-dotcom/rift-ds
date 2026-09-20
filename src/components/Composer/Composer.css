@@ -223,13 +223,13 @@
   box-sizing: border-box;
   display: flex;
   align-items: center;
-  gap: var(--gap-xs);
-  /* The action bar's tight --padding-sm ring, open toward the text below */
-  margin: var(--padding-sm) var(--padding-sm) 0;
+  gap: var(--gap-100);
+  /* The action bar's tight --padding-200 ring, open toward the text below */
+  margin: var(--padding-200) var(--padding-200) 0;
   /* ModelPicker's trigger geometry — the send button's height with the same
      0/padding-md inset — so the chip and the bar's pills read as one family */
   height: var(--ds-composer-send-size);
-  padding: 0 var(--padding-md);
+  padding: 0 var(--padding-400);
   background-color: var(--color-chat-context-bg);
   /* A full pill, matching the suggestion chips around the composer */
   border-radius: var(--radius-full);
@@ -274,10 +274,10 @@
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
   /* Top ring only — the text zone below keeps its own full padding-md,
      so chips sit a clear padding-md above the first text line */
-  padding: var(--padding-md) var(--padding-lg) 0;
+  padding: var(--padding-400) var(--padding-500) 0;
 }
 
 /* ============================================
@@ -294,15 +294,15 @@
   align-items: flex-start;
   box-sizing: border-box;
   width: 100%;
-  padding: var(--padding-md) var(--padding-lg) var(--padding-sm);
+  padding: var(--padding-400) var(--padding-500) var(--padding-200);
   /* Growing and shrinking is animated, which needs two pixel heights to run
      between — `auto` has nothing to interpolate. So the zone states its own
      height: the measured textarea (published as --ds-composer-text-height on
      every resize) plus the block padding it owns. The fallback is a single
      row, which is what the shell renders before the first measurement. */
   height: calc(
-    var(--ds-composer-text-height, var(--font-paragraph-line-height)) + var(--padding-md) +
-      var(--padding-sm)
+    var(--ds-composer-text-height, var(--font-paragraph-line-height)) + var(--padding-400) +
+      var(--padding-200)
   );
   /* Mid-transition the textarea is already at its new height, so the extra
      line is clipped on the way in and released on the way out. */
@@ -369,9 +369,9 @@
 .ds-composer__footer {
   display: flex;
   align-items: center;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
   /* The tight uniform ring the concentric corner is computed from */
-  padding: var(--padding-sm);
+  padding: var(--padding-200);
   /* Empty bar space still focuses the textarea on click, but the bar is
      control territory, so it keeps the default cursor. */
   cursor: default;
@@ -380,13 +380,13 @@
 .ds-composer__actions {
   display: flex;
   align-items: center;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
 }
 
 .ds-composer__trailing {
   display: flex;
   align-items: center;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
   margin-left: auto;
 }
 

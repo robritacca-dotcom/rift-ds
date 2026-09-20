@@ -17,7 +17,7 @@
   display: flex;
   justify-content: center;
   margin-left: 64px;
-  padding: var(--padding-xl) var(--padding-lg);
+  padding: var(--padding-1000) var(--padding-500);
   transition: margin-left var(--motion-duration-slow) var(--motion-ease-emphasized);
   min-width: 0;
 }
@@ -34,7 +34,7 @@
   max-width: 1120px;
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xl);
+  gap: var(--gap-1000);
 }
 
 /* ============================================
@@ -43,7 +43,7 @@
 @media (max-width: 768px) {
   .ds-app-layout__main {
     margin-left: 0;
-    padding: var(--padding-lg) var(--padding-md);
+    padding: var(--padding-500) var(--padding-400);
   }
 
   .ds-app-layout--expanded .ds-app-layout__main {

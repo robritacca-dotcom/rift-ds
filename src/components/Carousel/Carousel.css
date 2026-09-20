@@ -60,11 +60,11 @@
 }
 
 .ds-carousel__arrow--prev {
-  left: var(--gap-sm); /* 8px */
+  left: var(--gap-200); /* 8px */
 }
 
 .ds-carousel__arrow--next {
-  right: var(--gap-sm);
+  right: var(--gap-200);
 }
 
 .ds-carousel__arrow:disabled {
@@ -83,8 +83,8 @@
 .ds-carousel__dots {
   display: flex;
   justify-content: center;
-  gap: var(--gap-sm); /* 8px */
-  padding-top: var(--padding-sm); /* 8px */
+  gap: var(--gap-200); /* 8px */
+  padding-top: var(--padding-200); /* 8px */
 }
 
 .ds-carousel__dot {

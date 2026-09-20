@@ -148,15 +148,15 @@
   --primitive-radius-composer: 29px;
 
   /* Padding */
-  --primitive-padding-xxxs: 2px;
-  --primitive-padding-xxs: 4px;
-  --primitive-padding-xs: 6px;
-  --primitive-padding-sm: 8px;
-  --primitive-padding-sm-md: 12px;
-  --primitive-padding-md: 16px;
-  --primitive-padding-lg: 20px;
-  --primitive-padding-xl: 40px;
-  --primitive-padding-xxl: 60px;
+  --primitive-padding-050: 2px;
+  --primitive-padding-100: 4px;
+  --primitive-padding-150: 6px;
+  --primitive-padding-200: 8px;
+  --primitive-padding-300: 12px;
+  --primitive-padding-400: 16px;
+  --primitive-padding-500: 20px;
+  --primitive-padding-1000: 40px;
+  --primitive-padding-1500: 60px;
 
   /* Border width */
   --primitive-border-xs: 1px;
@@ -173,14 +173,14 @@
   --primitive-icon-xl: 48px;
 
   /* Gap */
-  --primitive-gap-xxs: 2px;
-  --primitive-gap-xs: 4px;
-  --primitive-gap-sm: 8px;
-  --primitive-gap-sm-md: 12px;
-  --primitive-gap-md: 16px;
-  --primitive-gap-lg: 20px;
-  --primitive-gap-xl: 40px;
-  --primitive-gap-xxl: 60px;
-  --primitive-gap-xxxl: 80px;
-  --primitive-gap-xxxxl: 120px;
+  --primitive-gap-050: 2px;
+  --primitive-gap-100: 4px;
+  --primitive-gap-200: 8px;
+  --primitive-gap-300: 12px;
+  --primitive-gap-400: 16px;
+  --primitive-gap-500: 20px;
+  --primitive-gap-1000: 40px;
+  --primitive-gap-1500: 60px;
+  --primitive-gap-2000: 80px;
+  --primitive-gap-3000: 120px;
 }

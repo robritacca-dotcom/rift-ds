@@ -64,7 +64,7 @@
 .ds-skeleton__group {
   display: flex;
   flex-direction: column;
-  gap: var(--padding-xs);
+  gap: var(--padding-150);
 }
 
 /* ============================================

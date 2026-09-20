@@ -2,7 +2,7 @@
   width: var(--layout-sidebar-width);
   flex-shrink: 0;
   position: sticky;
-  top: calc(78px + var(--primitive-padding-lg) * 2 + var(--primitive-gap-xl));
+  top: calc(78px + var(--primitive-padding-500) * 2 + var(--primitive-gap-1000));
   height: fit-content;
 }
 
@@ -24,8 +24,8 @@
    gutter intact. The max-width grows by the same amount so long labels
    still truncate at the rail's right edge, not 20px early. */
 .sidebar :global(.ds-button-group) {
-  margin-left: calc(-1 * var(--padding-lg));
-  max-width: calc(100% + var(--padding-lg));
+  margin-left: calc(-1 * var(--padding-500));
+  max-width: calc(100% + var(--padding-500));
 }
 
 .sidebar :global(.ds-button) {
@@ -40,7 +40,7 @@
 /* The pinned link sits outside any ButtonGroup, so it carries the optical
    shift itself (see the .ds-button-group comment above). */
 .pinnedHome :global(.ds-button) {
-  margin-left: calc(-1 * var(--padding-lg));
+  margin-left: calc(-1 * var(--padding-500));
 }
 
 .sidebar :global(.ds-button__text) {
@@ -54,12 +54,12 @@
 /* Pinned section-landing link ("Components overview") above the
    grouped list */
 .pinnedHome {
-  margin-bottom: var(--primitive-gap-lg);
+  margin-bottom: var(--primitive-gap-500);
 }
 
 /* Storybook-style section subheader above the link list */
 .listHeader {
-  margin: 0 0 var(--primitive-gap-xs);
+  margin: 0 0 var(--primitive-gap-100);
   /* No left padding: header text sits on the rail's edge, matching the
      optically aligned link rows (see the .ds-button margin above). */
   font-family: var(--font-paragraph-sm-family);
@@ -75,7 +75,7 @@
 .groups {
   display: flex;
   flex-direction: column;
-  gap: var(--primitive-gap-sm);
+  gap: var(--primitive-gap-200);
 }
 
 .group {
@@ -91,9 +91,9 @@
   justify-content: space-between;
   width: 100%;
   margin: 0;
-  padding-top: var(--primitive-padding-xs);
-  padding-bottom: var(--primitive-padding-xs);
-  padding-right: var(--primitive-padding-sm);
+  padding-top: var(--primitive-padding-150);
+  padding-bottom: var(--primitive-padding-150);
+  padding-right: var(--primitive-padding-200);
   background: none;
   border: none;
   cursor: pointer;
@@ -123,8 +123,8 @@
 
 /* Indent the group's links so the hierarchy reads at a glance */
 .groupList {
-  padding-left: var(--primitive-gap-sm);
-  padding-bottom: var(--primitive-gap-xs);
+  padding-left: var(--primitive-gap-200);
+  padding-bottom: var(--primitive-gap-100);
 }
 
 /* Hidden on mobile */

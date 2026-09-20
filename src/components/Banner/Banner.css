@@ -7,15 +7,15 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--gap-lg);
+  gap: var(--gap-500);
   width: 100%;
-  padding: var(--padding-sm) var(--padding-lg);
+  padding: var(--padding-200) var(--padding-500);
 }
 
 .ds-banner__body {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
   min-width: 0;
 }
 
@@ -57,7 +57,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: var(--padding-xxs);
+  padding: var(--padding-100);
   border: none;
   background: none;
   color: inherit;

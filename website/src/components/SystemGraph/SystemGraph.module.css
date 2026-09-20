@@ -27,8 +27,8 @@
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: var(--gap-lg);
-  padding-block: var(--padding-md);
+  gap: var(--gap-500);
+  padding-block: var(--padding-400);
 }
 
 .searchWrap {
@@ -45,7 +45,7 @@
 
 .results {
   position: absolute;
-  top: calc(100% + var(--gap-xxs));
+  top: calc(100% + var(--gap-050));
   left: 0;
   right: 0;
   z-index: 30;
@@ -60,7 +60,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: var(--gap-sm-md);
+  gap: var(--gap-300);
   width: 100%;
   text-align: left;
   background: none;
@@ -69,7 +69,7 @@
   color: var(--color-text-primary);
   font-family: var(--font-family-code);
   font-size: var(--font-caption-size);
-  padding: var(--padding-xs) var(--padding-sm-md);
+  padding: var(--padding-150) var(--padding-300);
 }
 
 .result:hover,
@@ -85,7 +85,7 @@
 .legend {
   margin-left: auto;
   display: flex;
-  gap: var(--gap-lg);
+  gap: var(--gap-500);
   align-items: center;
   font-family: var(--font-caption-family);
   font-size: var(--font-caption-size);
@@ -100,7 +100,7 @@
   height: 2px;
   border-radius: var(--radius-xxs);
   vertical-align: middle;
-  margin-right: var(--gap-xs);
+  margin-right: var(--gap-100);
 }
 
 .legendDep {
@@ -115,7 +115,7 @@
 
 .layout {
   display: flex;
-  gap: var(--gap-lg);
+  gap: var(--gap-500);
   align-items: flex-start;
   flex-wrap: wrap;
 }
@@ -256,7 +256,7 @@
   flex: 1 0 280px;
   max-width: 400px;
   position: sticky;
-  top: var(--gap-sm-md);
+  top: var(--gap-300);
 }
 
 .panelSurface {
@@ -268,13 +268,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 }
 
 .panelKind {
   display: flex;
   align-items: center;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
   font-family: var(--font-caption-family);
   font-size: var(--font-caption-size);
   color: var(--color-text-secondary);
@@ -284,7 +284,7 @@
   font-family: var(--font-family-code);
   font-size: var(--font-heading-3-size);
   line-height: var(--font-heading-3-line-height);
-  margin: var(--gap-sm) 0 0;
+  margin: var(--gap-200) 0 0;
   overflow-wrap: break-word;
 }
 
@@ -293,7 +293,7 @@
   font-size: var(--font-paragraph-sm-size);
   line-height: var(--font-paragraph-sm-line-height);
   color: var(--color-text-secondary);
-  margin: var(--gap-xs) 0 0;
+  margin: var(--gap-100) 0 0;
 }
 
 .panelSection {
@@ -304,7 +304,7 @@
   line-height: var(--font-overline-line-height);
   text-transform: uppercase;
   color: var(--color-text-tertiary);
-  margin: var(--gap-lg) 0 var(--gap-xs);
+  margin: var(--gap-500) 0 var(--gap-100);
 }
 
 .panelCategory {
@@ -312,13 +312,13 @@
   font-size: var(--font-caption-size);
   font-weight: var(--font-caption-weight);
   color: var(--color-text-tertiary);
-  margin: var(--gap-sm) 0 var(--gap-xxs);
+  margin: var(--gap-200) 0 var(--gap-050);
 }
 
 .chips {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
 }
 
 /* The library Chip owns the pill; a token name can outgrow the panel, so cap
@@ -340,16 +340,16 @@
 
 /* The library CodeBlock owns the CLI lines. */
 .cliBlock {
-  margin-top: var(--gap-xxs);
+  margin-top: var(--gap-050);
 }
 
 .swatchRow {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
   font-family: var(--font-family-code);
   font-size: var(--font-caption-size);
-  margin-top: var(--gap-xxs);
+  margin-top: var(--gap-050);
 }
 
 .swatchRow small {
@@ -386,6 +386,6 @@
   font-family: var(--font-caption-family);
   font-size: var(--font-caption-size);
   color: var(--color-text-tertiary);
-  padding-block: var(--padding-md);
+  padding-block: var(--padding-400);
   margin: 0;
 }

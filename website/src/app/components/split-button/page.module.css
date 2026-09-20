@@ -6,23 +6,23 @@
   gap: var(--layout-column-gap);
   width: 100%;
   max-width: 1440px;
-  padding-top: var(--primitive-gap-xl);
+  padding-top: var(--primitive-gap-1000);
 }
 
 .dsContent {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xxxl);
+  gap: var(--gap-2000);
   min-width: 0;
 }
 
 .pageHeader {
-  margin-top: calc(var(--primitive-gap-xl) - var(--gap-xxxl));
+  margin-top: calc(var(--primitive-gap-1000) - var(--gap-2000));
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--primitive-gap-lg);
+  gap: var(--primitive-gap-500);
   width: 100%;
 }
 
@@ -50,7 +50,7 @@
 .introSection {
   display: flex;
   flex-direction: column;
-  gap: var(--primitive-gap-lg);
+  gap: var(--primitive-gap-500);
 }
 
 .introBody {
@@ -67,7 +67,7 @@
 .variantBlock {
   display: flex;
   flex-direction: column;
-  gap: var(--primitive-gap-xl);
+  gap: var(--primitive-gap-1000);
 }
 
 /* ============================================
@@ -78,7 +78,7 @@
 .buttonGrid {
   display: grid;
   grid-template-columns: auto repeat(2, 1fr);
-  gap: var(--primitive-gap-md) var(--primitive-gap-md);
+  gap: var(--primitive-gap-400) var(--primitive-gap-400);
   align-items: center;
   width: 100%;
 }
@@ -106,7 +106,7 @@
   letter-spacing: var(--font-paragraph-sm-letter-spacing);
   color: var(--color-text-tertiary);
   text-align: right;
-  padding-right: var(--primitive-padding-sm);
+  padding-right: var(--primitive-padding-200);
   white-space: nowrap;
 }
 

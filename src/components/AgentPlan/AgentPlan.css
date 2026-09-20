@@ -28,10 +28,10 @@
 .ds-agent-plan__header {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
   width: 100%;
   /* 20px sides — the card family's shared content inset. */
-  padding: var(--padding-sm) var(--padding-lg);
+  padding: var(--padding-200) var(--padding-500);
   background: none;
   border: none;
   text-align: left;
@@ -123,7 +123,7 @@
   display: flex;
   flex-direction: column;
   margin: 0;
-  padding: var(--padding-sm-md) var(--padding-lg);
+  padding: var(--padding-300) var(--padding-500);
   list-style: none;
 }
 
@@ -131,16 +131,16 @@
   position: relative;
   display: flex;
   align-items: flex-start;
-  gap: var(--gap-sm);
-  padding: var(--padding-xxs) 0;
+  gap: var(--gap-200);
+  padding: var(--padding-100) 0;
 }
 
 /* Connector — a thin line linking each indicator to the next */
 .ds-agent-plan__step:not(:last-child)::before {
   content: '';
   position: absolute;
-  top: calc(var(--padding-xxs) + var(--icon-size-sm));
-  bottom: calc(-1 * var(--padding-xxs));
+  top: calc(var(--padding-100) + var(--icon-size-sm));
+  bottom: calc(-1 * var(--padding-100));
   left: calc(var(--icon-size-sm) / 2);
   width: var(--border-xs);
   background-color: var(--color-divider);

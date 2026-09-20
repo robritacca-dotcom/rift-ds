@@ -26,9 +26,9 @@
 .ds-source-trail__header {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
   width: 100%;
-  padding: var(--padding-sm) var(--padding-lg);
+  padding: var(--padding-200) var(--padding-500);
   background: none;
   border: none;
   /* Buttons default to the UA's buttontext, not the inherited colour, so
@@ -115,9 +115,9 @@
 }
 
 .ds-source-trail--open .ds-source-trail__list {
-  padding: var(--padding-sm) var(--padding-lg) var(--padding-md);
+  padding: var(--padding-200) var(--padding-500) var(--padding-400);
   border-top: var(--border-xs) solid var(--color-divider);
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 }
 
 /* ============================================
@@ -127,7 +127,7 @@
 .ds-source-trail__row {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
   min-width: 0;
 }
 

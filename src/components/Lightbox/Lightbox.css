@@ -60,7 +60,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--padding-xl);
+  padding: var(--padding-1000);
   pointer-events: none;
   outline: none;
 }
@@ -77,7 +77,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--gap-md);
+  gap: var(--gap-400);
   margin: 0;
   max-width: 100%;
   max-height: 100%;
@@ -91,8 +91,8 @@
 
 .ds-lightbox__img {
   display: block;
-  max-width: calc(100vw - var(--gap-xl) * 4);
-  max-height: calc(100vh - var(--gap-xl) * 4);
+  max-width: calc(100vw - var(--gap-1000) * 4);
+  max-height: calc(100vh - var(--gap-1000) * 4);
   width: auto;
   height: auto;
   border-radius: var(--radius-md);
@@ -101,8 +101,8 @@
 
 /* Custom media (children) takes the same viewport bounds. */
 .ds-lightbox__figure > :not(figcaption) {
-  max-width: calc(100vw - var(--gap-xl) * 4);
-  max-height: calc(100vh - var(--gap-xl) * 4);
+  max-width: calc(100vw - var(--gap-1000) * 4);
+  max-height: calc(100vh - var(--gap-1000) * 4);
 }
 
 /* ============================================
@@ -112,7 +112,7 @@
    ============================================ */
 
 .ds-lightbox__caption {
-  padding: var(--padding-xxs) var(--padding-md);
+  padding: var(--padding-100) var(--padding-400);
   border-radius: var(--radius-full);
   /* ds-allow(color): on-scrim furniture — the scrim floor is dark in both
      themes, so the caption chip lives in scrim-world, not page-world; a
@@ -127,7 +127,7 @@
   /* ds-allow(color): white text on the always-dark scrim wash, both themes */
   color: #ffffff;
   text-align: center;
-  max-width: calc(100vw - var(--gap-xl) * 4);
+  max-width: calc(100vw - var(--gap-1000) * 4);
 }
 
 /* ============================================
@@ -174,8 +174,8 @@
 }
 
 .ds-lightbox__close {
-  top: var(--gap-lg);
-  right: var(--gap-lg);
+  top: var(--gap-500);
+  right: var(--gap-500);
 }
 
 .ds-lightbox__nav {
@@ -184,11 +184,11 @@
 }
 
 .ds-lightbox__nav--prev {
-  left: var(--gap-lg);
+  left: var(--gap-500);
 }
 
 .ds-lightbox__nav--next {
-  right: var(--gap-lg);
+  right: var(--gap-500);
 }
 
 /* ============================================
@@ -199,12 +199,12 @@
 
 @media (max-width: 480px) {
   .ds-lightbox__panel {
-    padding: var(--padding-md);
+    padding: var(--padding-400);
   }
 
   .ds-lightbox__img,
   .ds-lightbox__figure > :not(figcaption),
   .ds-lightbox__caption {
-    max-width: calc(100vw - var(--gap-md) * 2);
+    max-width: calc(100vw - var(--gap-400) * 2);
   }
 }

@@ -7,7 +7,7 @@
 .ds-combobox {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm); /* 8px */
+  gap: var(--gap-200); /* 8px */
   width: 100%;
   position: relative;
 }
@@ -23,8 +23,8 @@
 .ds-combobox__control {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm); /* 8px */
-  padding: var(--padding-sm) var(--padding-md); /* 8px 16px */
+  gap: var(--gap-200); /* 8px */
+  padding: var(--padding-200) var(--padding-400); /* 8px 16px */
   border: var(--border-xs) solid var(--color-input-border-primary);
   border-radius: var(--radius-md); /* 12px */
   background-color: var(--color-input-bg-primary);
@@ -55,7 +55,7 @@
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: var(--gap-xs); /* 4px */
+  gap: var(--gap-100); /* 4px */
   flex: 1;
   min-width: 0;
 }
@@ -86,8 +86,8 @@
 .ds-combobox__chip {
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-xxs); /* 2px */
-  padding: var(--padding-xxxs) var(--padding-sm); /* 2px 8px */
+  gap: var(--gap-050); /* 2px */
+  padding: var(--padding-050) var(--padding-200); /* 2px 8px */
   border-radius: var(--radius-full);
   background-color: var(--color-bg-container-primary);
   font-family: var(--font-paragraph-sm-em-family);
@@ -178,8 +178,8 @@
   top: 100%;
   left: 0;
   right: 0;
-  margin-top: var(--gap-xxs); /* 2px */
-  padding: var(--padding-xxs);
+  margin-top: var(--gap-050); /* 2px */
+  padding: var(--padding-100);
   border: var(--border-xs) solid var(--color-input-border-primary);
   border-radius: var(--radius-md); /* 12px */
   background-color: var(--color-bg-page-primary);
@@ -210,8 +210,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--gap-sm);
-  padding: var(--padding-sm) var(--padding-sm-md); /* 8px 12px */
+  gap: var(--gap-200);
+  padding: var(--padding-200) var(--padding-300); /* 8px 12px */
   border-radius: var(--radius-sm);
   cursor: pointer;
   transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
@@ -238,7 +238,7 @@
 .ds-combobox__option-text {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
   min-width: 0;
 }
 
@@ -282,7 +282,7 @@
   line-height: var(--font-paragraph-sm-line-height);
   letter-spacing: var(--font-paragraph-sm-letter-spacing);
   color: var(--color-text-tertiary);
-  padding: var(--padding-xs) var(--padding-sm-md);
+  padding: var(--padding-150) var(--padding-300);
   user-select: none;
 }
 
@@ -297,7 +297,7 @@
    ============================================ */
 
 .ds-combobox__status {
-  padding: var(--padding-sm) var(--padding-sm-md);
+  padding: var(--padding-200) var(--padding-300);
   font-family: var(--font-paragraph-sm-family);
   font-size: var(--font-paragraph-sm-size);
   font-weight: var(--font-paragraph-sm-weight);
@@ -344,7 +344,7 @@
    ============================================ */
 
 .ds-combobox--compact .ds-combobox__control {
-  padding: var(--padding-xs) var(--padding-sm-md); /* 6px 12px */
+  padding: var(--padding-150) var(--padding-300); /* 6px 12px */
 }
 
 .ds-combobox--compact .ds-combobox__input,
@@ -355,7 +355,7 @@
 }
 
 .ds-combobox--compact .ds-combobox__option {
-  padding: var(--padding-xs) var(--padding-sm); /* 6px 8px */
+  padding: var(--padding-150) var(--padding-200); /* 6px 8px */
 }
 
 .ds-combobox--compact .ds-combobox__search-icon,

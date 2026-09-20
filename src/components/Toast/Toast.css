@@ -20,9 +20,9 @@
   z-index: var(--ds-toast-z, 200);
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm); /* 8px */
+  gap: var(--gap-200); /* 8px */
   pointer-events: none;
-  padding: var(--padding-md); /* 16px */
+  padding: var(--padding-400); /* 16px */
 }
 
 .ds-toast-container--top-right {
@@ -70,8 +70,8 @@
 .ds-toast {
   display: flex;
   align-items: flex-start;
-  gap: var(--gap-sm); /* 8px */
-  padding: var(--padding-md); /* 16px */
+  gap: var(--gap-200); /* 8px */
+  padding: var(--padding-400); /* 16px */
   border: var(--border-xs) solid transparent;
   border-radius: var(--radius-sm); /* 8px */
   min-width: 300px;
@@ -105,7 +105,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xxs); /* 2px */
+  gap: var(--gap-050); /* 2px */
   min-width: 0;
 }
 

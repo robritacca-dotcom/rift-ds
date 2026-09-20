@@ -6,14 +6,14 @@
   gap: var(--layout-column-gap);
   width: 100%;
   max-width: 1440px;
-  padding-top: var(--primitive-gap-xl);
+  padding-top: var(--primitive-gap-1000);
 }
 
 .dsContent {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xxxl);
+  gap: var(--gap-2000);
   min-width: 0;
 }
 
@@ -23,7 +23,7 @@
 .introSection {
   display: flex;
   flex-direction: column;
-  gap: var(--primitive-gap-lg);
+  gap: var(--primitive-gap-500);
 }
 
 .subDisplay {
@@ -47,11 +47,11 @@
    PAGE HEADER
    ============================================ */
 .pageHeader {
-  margin-top: calc(var(--primitive-gap-xl) - var(--gap-xxxl));
+  margin-top: calc(var(--primitive-gap-1000) - var(--gap-2000));
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--primitive-gap-lg);
+  gap: var(--primitive-gap-500);
   width: 100%;
 }
 
@@ -92,10 +92,10 @@
   line-height: var(--font-sub-display-line-height);
   letter-spacing: var(--font-sub-display-letter-spacing);
   color: var(--color-text-primary);
-  padding-bottom: var(--primitive-padding-sm);
+  padding-bottom: var(--primitive-padding-200);
   border-bottom: 1px solid var(--color-divider);
-  margin-top: var(--gap-xxl);
-  margin-bottom: var(--primitive-gap-md);
+  margin-top: var(--gap-1500);
+  margin-bottom: var(--primitive-gap-400);
 }
 
 .markdownBody :global(h2:first-child) {
@@ -109,8 +109,8 @@
   line-height: var(--font-heading-3-line-height);
   letter-spacing: var(--font-heading-3-letter-spacing);
   color: var(--color-text-primary);
-  margin-top: var(--primitive-gap-xl);
-  margin-bottom: var(--primitive-gap-sm);
+  margin-top: var(--primitive-gap-1000);
+  margin-bottom: var(--primitive-gap-200);
 }
 
 .markdownBody :global(h4) {
@@ -120,8 +120,8 @@
   line-height: var(--font-title-body-line-height);
   letter-spacing: var(--font-title-body-letter-spacing);
   color: var(--color-text-primary);
-  margin-top: var(--primitive-gap-md);
-  margin-bottom: var(--primitive-gap-xs);
+  margin-top: var(--primitive-gap-400);
+  margin-bottom: var(--primitive-gap-100);
 }
 
 /* Bold-only paragraphs act as inline headings */
@@ -131,8 +131,8 @@
   line-height: var(--font-title-body-line-height);
   letter-spacing: var(--font-title-body-letter-spacing);
   color: var(--color-text-primary);
-  margin-top: var(--primitive-gap-md);
-  margin-bottom: var(--primitive-gap-xs);
+  margin-top: var(--primitive-gap-400);
+  margin-bottom: var(--primitive-gap-100);
 }
 
 .markdownBody :global(p) {
@@ -140,7 +140,7 @@
   font-weight: var(--font-paragraph-weight);
   line-height: var(--font-paragraph-line-height);
   color: var(--color-text-secondary);
-  margin-bottom: var(--primitive-gap-md);
+  margin-bottom: var(--primitive-gap-400);
 }
 
 .markdownBody :global(p:last-child) {
@@ -167,8 +167,8 @@
   background: var(--color-bg-container-primary);
   border: 1px solid var(--color-divider);
   border-radius: var(--primitive-radius-md);
-  padding: var(--primitive-padding-md);
-  margin-bottom: var(--primitive-gap-md);
+  padding: var(--primitive-padding-400);
+  margin-bottom: var(--primitive-gap-400);
   overflow-x: auto;
 }
 
@@ -185,9 +185,9 @@
 .markdownBody :global(ol) {
   display: flex;
   flex-direction: column;
-  gap: var(--primitive-gap-xs);
-  padding-left: var(--primitive-padding-md);
-  margin-bottom: var(--primitive-gap-md);
+  gap: var(--primitive-gap-100);
+  padding-left: var(--primitive-padding-400);
+  margin-bottom: var(--primitive-gap-400);
 }
 
 .markdownBody :global(li) {
@@ -196,7 +196,7 @@
   line-height: var(--font-paragraph-line-height);
   color: var(--color-text-secondary);
   list-style-type: disc;
-  padding-left: var(--primitive-padding-xxs);
+  padding-left: var(--primitive-padding-100);
 }
 
 .markdownBody :global(ol li) {
@@ -209,13 +209,13 @@
 
 .markdownBody :global(li > ul),
 .markdownBody :global(li > ol) {
-  margin-top: var(--primitive-gap-xs);
+  margin-top: var(--primitive-gap-100);
   margin-bottom: 0;
 }
 
 /* Checkboxes in task lists */
 .markdownBody :global(li input[type="checkbox"]) {
-  margin-right: var(--primitive-gap-sm);
+  margin-right: var(--primitive-gap-200);
 }
 
 .markdownBody :global(hr) {
@@ -229,7 +229,7 @@
   overflow-x: auto;
   border: 1px solid var(--color-divider);
   border-radius: var(--primitive-radius-md);
-  margin-bottom: var(--primitive-gap-md);
+  margin-bottom: var(--primitive-gap-400);
   background: var(--color-bg-page-primary);
 }
 
@@ -250,13 +250,13 @@
   font-weight: 600;
   font-size: var(--font-paragraph-sm-em-size);
   color: var(--color-text-primary);
-  padding: var(--primitive-padding-sm-md) var(--primitive-padding-md);
+  padding: var(--primitive-padding-300) var(--primitive-padding-400);
   border-bottom: 1px solid var(--color-divider);
   white-space: nowrap;
 }
 
 .tableWrapper :global(td) {
-  padding: var(--primitive-padding-sm-md) var(--primitive-padding-md);
+  padding: var(--primitive-padding-300) var(--primitive-padding-400);
   color: var(--color-text-secondary);
   border-bottom: 1px solid var(--color-divider);
   vertical-align: top;
@@ -297,7 +297,7 @@
   .pageHeader {
     flex-direction: column;
     align-items: flex-start;
-    gap: var(--primitive-gap-md);
+    gap: var(--primitive-gap-400);
   }
 
   .dsLayout {

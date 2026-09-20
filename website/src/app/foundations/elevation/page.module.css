@@ -6,25 +6,25 @@
   gap: var(--layout-column-gap);
   width: 100%;
   max-width: 1440px;
-  padding-top: var(--primitive-gap-xl);
+  padding-top: var(--primitive-gap-1000);
 }
 
 .dsContent {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xxxl);
+  gap: var(--gap-2000);
 }
 
 /* ============================================
    PAGE TITLE - Display 2
    ============================================ */
 .pageHeader {
-  margin-top: calc(var(--primitive-gap-xl) - var(--gap-xxxl));
+  margin-top: calc(var(--primitive-gap-1000) - var(--gap-2000));
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--primitive-gap-lg);
+  gap: var(--primitive-gap-500);
   width: 100%;
 }
 
@@ -53,7 +53,7 @@
 .introSection {
   display: flex;
   flex-direction: column;
-  gap: var(--primitive-gap-lg);
+  gap: var(--primitive-gap-500);
 }
 
 .introBody {
@@ -69,7 +69,7 @@
 .section {
   display: flex;
   flex-direction: column;
-  gap: var(--primitive-gap-xl);
+  gap: var(--primitive-gap-1000);
   width: 100%;
 }
 
@@ -86,14 +86,14 @@
 .elevationGrid {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--gap-xxxl);
+  gap: var(--gap-2000);
   width: 100%;
 }
 
 .elevationItem {
   display: flex;
   flex-direction: column;
-  gap: var(--primitive-gap-lg);
+  gap: var(--primitive-gap-500);
   width: 320px;
   max-width: 100%;
 }
@@ -103,7 +103,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
   width: 100%;
   height: 160px;
   border: var(--border-xs) solid var(--color-bg-container-border);
@@ -134,12 +134,12 @@
 .elevationMeta {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 }
 
 .metaRow {
   display: flex;
-  gap: var(--gap-md);
+  gap: var(--gap-400);
   align-items: baseline;
 }
 
@@ -163,14 +163,14 @@
 .depthList {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
+  gap: var(--gap-400);
   width: 100%;
 }
 
 .depthRow {
   display: flex;
   align-items: center;
-  gap: var(--primitive-gap-lg);
+  gap: var(--primitive-gap-500);
   width: 100%;
 }
 
@@ -201,7 +201,7 @@
 .depthText {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
   flex: 0 0 240px;
 }
 
@@ -245,12 +245,12 @@
 
 
   .elevationGrid {
-    gap: var(--primitive-gap-xl);
+    gap: var(--primitive-gap-1000);
   }
 
   .depthRow {
     flex-wrap: wrap;
-    gap: var(--gap-md);
+    gap: var(--gap-400);
   }
 
   .depthText {

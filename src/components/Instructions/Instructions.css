@@ -6,7 +6,7 @@
 .ds-instructions {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md); /* 16px */
+  gap: var(--gap-400); /* 16px */
   width: 100%;
 }
 
@@ -43,7 +43,7 @@
 
 .ds-instructions__step {
   display: flex;
-  gap: var(--gap-sm); /* 8px */
+  gap: var(--gap-200); /* 8px */
 }
 
 /* ============================================
@@ -92,7 +92,7 @@
 .ds-instructions__connector {
   width: var(--border-xs); /* 1px */
   flex: 1;
-  min-height: var(--padding-md); /* 16px */
+  min-height: var(--padding-400); /* 16px */
   background-color: var(--color-bg-container-border);
 }
 
@@ -103,9 +103,9 @@
 .ds-instructions__content {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xxs); /* 2px */
-  padding-top: var(--padding-xxs); /* 4px — align text with badge center */
-  padding-bottom: var(--padding-md); /* 16px — space before next step */
+  gap: var(--gap-050); /* 2px */
+  padding-top: var(--padding-100); /* 4px — align text with badge center */
+  padding-bottom: var(--padding-400); /* 16px — space before next step */
   min-width: 0;
 }
 
@@ -163,7 +163,7 @@
 }
 
 .ds-instructions--horizontal .ds-instructions__content {
-  padding-top: var(--padding-sm); /* 8px */
+  padding-top: var(--padding-200); /* 8px */
   padding-bottom: 0;
 }
 
@@ -207,8 +207,8 @@
 }
 
 .ds-instructions--compact .ds-instructions__content {
-  padding-top: var(--padding-xxxs); /* 2px */
-  padding-bottom: var(--padding-sm); /* 8px */
+  padding-top: var(--padding-050); /* 2px */
+  padding-bottom: var(--padding-200); /* 8px */
 }
 
 .ds-instructions--compact .ds-instructions__step:last-child .ds-instructions__content {

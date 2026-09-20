@@ -6,7 +6,7 @@
 .ds-meter {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
   width: 100%;
 }
 
@@ -18,7 +18,7 @@
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--gap-md);
+  gap: var(--gap-400);
 }
 
 .ds-meter__label {

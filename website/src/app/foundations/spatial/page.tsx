@@ -48,28 +48,28 @@ const radiusTokens: SpacingToken[] = [
 ];
 
 const gapTokens: SpacingToken[] = [
-  { label: "XXS", value: "2px", px: 2, variant: "gap" },
-  { label: "XS", value: "4px", px: 4, variant: "gap" },
-  { label: "SM", value: "8px", px: 8, variant: "gap" },
-  { label: "SM-MD", value: "12px", px: 12, variant: "gap" },
-  { label: "MD", value: "16px", px: 16, variant: "gap" },
-  { label: "LG", value: "20px", px: 20, variant: "gap" },
-  { label: "XL", value: "40px", px: 40, variant: "gap" },
-  { label: "XXL", value: "60px", px: 60, variant: "gap", mobileValue: "40px", mobilePx: 40 },
-  { label: "XXXL", value: "80px", px: 80, variant: "gap", mobileValue: "60px", mobilePx: 60 },
-  { label: "XXXXL", value: "120px", px: 120, variant: "gap", mobileValue: "80px", mobilePx: 80 },
+  { label: "050", value: "2px", px: 2, variant: "gap" },
+  { label: "100", value: "4px", px: 4, variant: "gap" },
+  { label: "200", value: "8px", px: 8, variant: "gap" },
+  { label: "300", value: "12px", px: 12, variant: "gap" },
+  { label: "400", value: "16px", px: 16, variant: "gap" },
+  { label: "500", value: "20px", px: 20, variant: "gap" },
+  { label: "1000", value: "40px", px: 40, variant: "gap" },
+  { label: "1500", value: "60px", px: 60, variant: "gap", mobileValue: "40px", mobilePx: 40 },
+  { label: "2000", value: "80px", px: 80, variant: "gap", mobileValue: "60px", mobilePx: 60 },
+  { label: "3000", value: "120px", px: 120, variant: "gap", mobileValue: "80px", mobilePx: 80 },
 ];
 
 const paddingTokens: SpacingToken[] = [
-  { label: "XXXS", value: "2px", px: 2, variant: "padding" },
-  { label: "XXS", value: "4px", px: 4, variant: "padding" },
-  { label: "XS", value: "6px", px: 6, variant: "padding" },
-  { label: "SM", value: "8px", px: 8, variant: "padding" },
-  { label: "SM-MD", value: "12px", px: 12, variant: "padding" },
-  { label: "MD", value: "16px", px: 16, variant: "padding" },
-  { label: "LG", value: "20px", px: 20, variant: "padding" },
-  { label: "XL", value: "40px", px: 40, variant: "padding" },
-  { label: "XXL", value: "60px", px: 60, variant: "padding", mobileValue: "40px", mobilePx: 40 },
+  { label: "050", value: "2px", px: 2, variant: "padding" },
+  { label: "100", value: "4px", px: 4, variant: "padding" },
+  { label: "150", value: "6px", px: 6, variant: "padding" },
+  { label: "200", value: "8px", px: 8, variant: "padding" },
+  { label: "300", value: "12px", px: 12, variant: "padding" },
+  { label: "400", value: "16px", px: 16, variant: "padding" },
+  { label: "500", value: "20px", px: 20, variant: "padding" },
+  { label: "1000", value: "40px", px: 40, variant: "padding" },
+  { label: "1500", value: "60px", px: 60, variant: "padding", mobileValue: "40px", mobilePx: 40 },
 ];
 
 const spacingSections = [

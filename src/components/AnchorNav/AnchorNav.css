@@ -10,8 +10,8 @@
 .ds-anchor-nav__header {
   display: flex;
   align-items: center;
-  gap: var(--gap-xs);
-  margin: 0 0 var(--gap-sm);
+  gap: var(--gap-100);
+  margin: 0 0 var(--gap-200);
   font-size: var(--font-paragraph-em-size);
   font-weight: var(--font-paragraph-em-weight);
   line-height: var(--font-paragraph-em-line-height);
@@ -32,7 +32,7 @@
 
 .ds-anchor-nav__link {
   display: block;
-  padding: var(--padding-xs) 0 var(--padding-xs) var(--padding-md);
+  padding: var(--padding-150) 0 var(--padding-150) var(--padding-400);
   /* Sits over the list rail; turns into the indicator when active */
   margin-left: calc(var(--border-xs) * -1);
   border-left: var(--border-md) solid transparent;
@@ -78,9 +78,9 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
   /* A comfortable hover/tap target around the thin lines */
-  padding: var(--padding-sm);
+  padding: var(--padding-200);
   cursor: pointer;
 }
 
@@ -110,7 +110,7 @@
   /* A long list scrolls inside the panel rather than past the viewport */
   max-height: 70vh;
   overflow-y: auto;
-  padding: var(--padding-md);
+  padding: var(--padding-400);
   border: var(--border-xs) solid var(--color-bg-container-border);
   border-radius: var(--radius-sm);
   /* Page background, not container: the container fill is semi-transparent
@@ -122,7 +122,7 @@
      stay focusable so tabbing into the nav expands it via :focus-within */
   opacity: 0;
   pointer-events: none;
-  transform: translate(var(--gap-xxs), -50%);
+  transform: translate(var(--gap-050), -50%);
   transition:
     opacity var(--motion-duration-fast) var(--motion-ease-standard),
     transform var(--motion-duration-fast) var(--motion-ease-standard);

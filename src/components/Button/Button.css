@@ -8,10 +8,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--gap-sm); /* Figma: --radius/sm (8px) */
+  gap: var(--gap-200); /* Figma: --radius/sm (8px) */
 
   /* Spacing */
-  padding: var(--padding-sm) var(--padding-lg); /* Figma: --padding/sm (8px) & --radius/lg (16px) */
+  padding: var(--padding-200) var(--padding-500); /* Figma: --padding/sm (8px) & --radius/lg (16px) */
 
   /* Border radius */
   border-radius: var(--radius-full); /* Figma: --radius/full (999px) */
@@ -51,7 +51,7 @@
    ============================================ */
 
 .ds-button--compact {
-  padding: var(--padding-xs) var(--padding-sm-md); /* 6px 12px */
+  padding: var(--padding-150) var(--padding-300); /* 6px 12px */
   font-size: var(--font-paragraph-sm-em-size);
   line-height: var(--font-paragraph-sm-em-line-height);
   letter-spacing: var(--font-paragraph-sm-em-letter-spacing);

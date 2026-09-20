@@ -15,7 +15,7 @@
 .ds-tooltip__panel {
   position: absolute;
   z-index: 50;
-  padding: var(--padding-xs) var(--padding-sm); /* 6px 8px */
+  padding: var(--padding-150) var(--padding-200); /* 6px 8px */
   border-radius: var(--radius-xs); /* 4px */
   /* The floating surface, same recipe as Popover: page background (the
      container fill is semi-transparent), hairline border, floating shadow.
@@ -47,7 +47,7 @@
   bottom: 100%;
   left: 50%;
   transform: translateX(-50%) translateY(4px);
-  margin-bottom: var(--gap-xs); /* 4px */
+  margin-bottom: var(--gap-100); /* 4px */
 }
 
 .ds-tooltip__panel--top.ds-tooltip__panel--visible {
@@ -58,7 +58,7 @@
   top: 100%;
   left: 50%;
   transform: translateX(-50%) translateY(-4px);
-  margin-top: var(--gap-xs);
+  margin-top: var(--gap-100);
 }
 
 .ds-tooltip__panel--bottom.ds-tooltip__panel--visible {
@@ -69,7 +69,7 @@
   right: 100%;
   top: 50%;
   transform: translateY(-50%) translateX(4px);
-  margin-right: var(--gap-xs);
+  margin-right: var(--gap-100);
 }
 
 .ds-tooltip__panel--left.ds-tooltip__panel--visible {
@@ -80,7 +80,7 @@
   left: 100%;
   top: 50%;
   transform: translateY(-50%) translateX(-4px);
-  margin-left: var(--gap-xs);
+  margin-left: var(--gap-100);
 }
 
 .ds-tooltip__panel--right.ds-tooltip__panel--visible {

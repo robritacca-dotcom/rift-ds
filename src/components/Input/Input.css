@@ -6,7 +6,7 @@
 .ds-input {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm); /* 8px */
+  gap: var(--gap-200); /* 8px */
   width: 100%;
 }
 
@@ -26,7 +26,7 @@
 
 .ds-input__field {
   width: 100%;
-  padding: var(--padding-sm) var(--padding-md); /* 8px 16px */
+  padding: var(--padding-200) var(--padding-400); /* 8px 16px */
   border: var(--border-xs) solid var(--color-input-border-primary);
   border-radius: var(--radius-md); /* 12px */
   background-color: var(--color-input-bg-primary);
@@ -71,19 +71,19 @@
 }
 
 .ds-input__icon--left {
-  left: var(--padding-md); /* 16px */
+  left: var(--padding-400); /* 16px */
 }
 
 .ds-input__icon--right {
-  right: var(--padding-md); /* 16px */
+  right: var(--padding-400); /* 16px */
 }
 
 .ds-input--has-icon-left .ds-input__field {
-  padding-left: calc(var(--padding-md) + 24px + var(--gap-sm)); /* 16px + 24px icon + 8px gap */
+  padding-left: calc(var(--padding-400) + 24px + var(--gap-200)); /* 16px + 24px icon + 8px gap */
 }
 
 .ds-input--has-icon-right .ds-input__field {
-  padding-right: calc(var(--padding-md) + 24px + var(--gap-sm)); /* 16px + 24px icon + 8px gap */
+  padding-right: calc(var(--padding-400) + 24px + var(--gap-200)); /* 16px + 24px icon + 8px gap */
 }
 
 /* ============================================
@@ -122,7 +122,7 @@
    ============================================ */
 
 .ds-input--compact .ds-input__field {
-  padding: var(--padding-xs) var(--padding-sm-md); /* 6px 12px */
+  padding: var(--padding-150) var(--padding-300); /* 6px 12px */
   font-size: var(--font-paragraph-sm-size);
   line-height: var(--font-paragraph-sm-line-height);
   letter-spacing: var(--font-paragraph-sm-letter-spacing);
@@ -133,18 +133,18 @@
 }
 
 .ds-input--compact .ds-input__icon--left {
-  left: var(--padding-sm-md); /* 12px */
+  left: var(--padding-300); /* 12px */
 }
 
 .ds-input--compact .ds-input__icon--right {
-  right: var(--padding-sm-md); /* 12px */
+  right: var(--padding-300); /* 12px */
 }
 
 .ds-input--compact.ds-input--has-icon-left .ds-input__field {
-  padding-left: calc(var(--padding-sm-md) + 20px + var(--gap-sm)); /* 12px + 20px icon + 8px gap */
+  padding-left: calc(var(--padding-300) + 20px + var(--gap-200)); /* 12px + 20px icon + 8px gap */
 }
 
 .ds-input--compact.ds-input--has-icon-right .ds-input__field {
-  padding-right: calc(var(--padding-sm-md) + 20px + var(--gap-sm)); /* 12px + 20px icon + 8px gap */
+  padding-right: calc(var(--padding-300) + 20px + var(--gap-200)); /* 12px + 20px icon + 8px gap */
 }
 

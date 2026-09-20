@@ -6,7 +6,7 @@
 .ds-chat-marker {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm-md);
+  gap: var(--gap-300);
   width: 100%;
 }
 
@@ -33,7 +33,7 @@
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
   font-family: var(--font-paragraph-sm-family);
   font-size: var(--font-paragraph-sm-size);
   font-weight: var(--font-paragraph-sm-weight);

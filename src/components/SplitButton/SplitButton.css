@@ -25,11 +25,11 @@
 .ds-split-button .ds-split-button__main {
   border-start-end-radius: var(--radius-xxs);
   border-end-end-radius: var(--radius-xxs);
-  padding-inline-end: var(--padding-sm-md);
+  padding-inline-end: var(--padding-300);
 }
 
 .ds-split-button .ds-split-button__main.ds-button--compact {
-  padding-inline-end: var(--padding-sm);
+  padding-inline-end: var(--padding-200);
 }
 
 .ds-split-button .ds-split-button__trigger {

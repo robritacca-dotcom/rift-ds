@@ -21,15 +21,15 @@
 }
 
 .ds-divider--spacing-sm {
-  margin-block: var(--gap-sm); /* 8px */
+  margin-block: var(--gap-200); /* 8px */
 }
 
 .ds-divider--spacing-md {
-  margin-block: var(--gap-md); /* 16px */
+  margin-block: var(--gap-400); /* 16px */
 }
 
 .ds-divider--spacing-lg {
-  margin-block: var(--gap-lg); /* 20px */
+  margin-block: var(--gap-500); /* 20px */
 }
 
 /* ============================================
@@ -41,7 +41,7 @@
   border-top: none;
   display: flex;
   align-items: center;
-  gap: var(--gap-sm-md); /* 12px */
+  gap: var(--gap-300); /* 12px */
 }
 
 .ds-divider--labeled::before,
@@ -86,15 +86,15 @@
 
 .ds-divider--vertical.ds-divider--spacing-sm {
   margin-block: 0;
-  margin-inline: var(--gap-sm); /* 8px */
+  margin-inline: var(--gap-200); /* 8px */
 }
 
 .ds-divider--vertical.ds-divider--spacing-md {
   margin-block: 0;
-  margin-inline: var(--gap-md); /* 16px */
+  margin-inline: var(--gap-400); /* 16px */
 }
 
 .ds-divider--vertical.ds-divider--spacing-lg {
   margin-block: 0;
-  margin-inline: var(--gap-lg); /* 20px */
+  margin-inline: var(--gap-500); /* 20px */
 }

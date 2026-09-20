@@ -50,7 +50,7 @@ export const FileTypes: Story = {
       style={{
         display: 'flex',
         flexWrap: 'wrap',
-        gap: 'var(--gap-sm)',
+        gap: 'var(--gap-200)',
         maxWidth: '640px',
       }}
     >

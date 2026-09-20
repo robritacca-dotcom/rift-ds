@@ -9,7 +9,7 @@
 .ds-reasoning {
   /* Where an AgentStatus summary's label starts: matrix plus its gap.
      The rail geometry and the handoff slide both derive from it. */
-  --ds-reasoning-align: calc(var(--icon-size-md) + var(--gap-sm-md));
+  --ds-reasoning-align: calc(var(--icon-size-md) + var(--gap-300));
 
   display: flex;
   flex-direction: column;
@@ -23,10 +23,10 @@
 .ds-reasoning__trigger {
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
   align-self: flex-start;
-  padding: var(--padding-xxs) var(--padding-xs);
-  margin-left: calc(var(--padding-xs) * -1);
+  padding: var(--padding-100) var(--padding-150);
+  margin-left: calc(var(--padding-150) * -1);
   background: none;
   border: none;
   border-radius: var(--radius-sm);
@@ -186,7 +186,7 @@
      text summary shares the same geometry, so swapping a live status for
      the thought-for line never shifts the trace. */
   margin-left: calc(var(--icon-size-md) / 2 - var(--border-md) / 2);
-  padding-left: calc(var(--icon-size-md) / 2 + var(--gap-sm-md) - var(--border-md) / 2);
+  padding-left: calc(var(--icon-size-md) / 2 + var(--gap-300) - var(--border-md) / 2);
   /* The rail dissolves at its foot — the Timeline's end-of-line treatment.
      A border can't carry a gradient, so the border only reserves the
      geometry (transparent, same width) and the stripe is painted under it:
@@ -195,7 +195,7 @@
   background:
     linear-gradient(
         to bottom,
-        var(--color-divider) calc(100% - var(--gap-lg) * 2),
+        var(--color-divider) calc(100% - var(--gap-500) * 2),
         var(--color-bg-container-primary-transparent)
       )
       left top / var(--border-md) 100% no-repeat border-box;
@@ -207,11 +207,11 @@
   letter-spacing: var(--font-paragraph-letter-spacing);
 }
 
-/* With the trigger's own bottom padding, the panel opens one --gap-lg
-   below the summary row — the same step a --gap-lg trace list uses
+/* With the trigger's own bottom padding, the panel opens one --gap-500
+   below the summary row — the same step a --gap-500 trace list uses
    between nodes, so the first node isn't tighter than the rest. */
 .ds-reasoning--open .ds-reasoning__content {
-  padding-block: var(--padding-md);
+  padding-block: var(--padding-400);
 }
 
 .ds-reasoning__content > :first-child {
@@ -227,7 +227,7 @@
    Inside Reasoning, a list is the trace's node
    list: one thinking step per item, no bullets
    (the rail is the marker), on the same
-   --gap-lg beat the panel opens with. New
+   --gap-500 beat the panel opens with. New
    nodes rise in as the trace builds.
    ============================================ */
 
@@ -238,7 +238,7 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--gap-lg);
+  gap: var(--gap-500);
 }
 
 .ds-reasoning__content li {
@@ -270,12 +270,12 @@
 
 /* Compact pairs with a compact AgentStatus: sm matrix, sm gap. */
 .ds-reasoning--compact {
-  --ds-reasoning-align: calc(var(--icon-size-sm) + var(--gap-sm));
+  --ds-reasoning-align: calc(var(--icon-size-sm) + var(--gap-200));
 }
 
 .ds-reasoning--compact .ds-reasoning__content {
   margin-left: calc(var(--icon-size-sm) / 2 - var(--border-md) / 2);
-  padding-left: calc(var(--icon-size-sm) / 2 + var(--gap-sm) - var(--border-md) / 2);
+  padding-left: calc(var(--icon-size-sm) / 2 + var(--gap-200) - var(--border-md) / 2);
 }
 
 /* ============================================

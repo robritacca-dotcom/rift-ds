@@ -6,7 +6,7 @@ import './Panel.css';
 
 /** Props owned by Panel itself; everything else falls through to the <div>. */
 type PanelOwnProps = {
-  /** Interior padding: 'default' uses --padding-lg, 'compact' uses --padding-md, 'none' removes it */
+  /** Interior padding: 'default' uses --padding-500, 'compact' uses --padding-400, 'none' removes it */
   padding?: 'default' | 'compact' | 'none';
   /** Additional CSS classes */
   className?: string;

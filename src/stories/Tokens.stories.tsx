@@ -340,15 +340,15 @@ export const Primitives: Story = {
       </TokenSection>
 
       <TokenSection title="Padding">
-        <SpacingToken name="XXXS" value="--primitive-padding-xxxs" />
-        <SpacingToken name="XXS" value="--primitive-padding-xxs" />
-        <SpacingToken name="XS" value="--primitive-padding-xs" />
-        <SpacingToken name="SM" value="--primitive-padding-sm" />
-        <SpacingToken name="SM-MD" value="--primitive-padding-sm-md" />
-        <SpacingToken name="MD" value="--primitive-padding-md" />
-        <SpacingToken name="LG" value="--primitive-padding-lg" />
-        <SpacingToken name="XL" value="--primitive-padding-xl" />
-        <SpacingToken name="XXL" value="--primitive-padding-xxl" />
+        <SpacingToken name="XXXS" value="--primitive-padding-050" />
+        <SpacingToken name="XXS" value="--primitive-padding-100" />
+        <SpacingToken name="XS" value="--primitive-padding-150" />
+        <SpacingToken name="SM" value="--primitive-padding-200" />
+        <SpacingToken name="SM-MD" value="--primitive-padding-300" />
+        <SpacingToken name="MD" value="--primitive-padding-400" />
+        <SpacingToken name="LG" value="--primitive-padding-500" />
+        <SpacingToken name="XL" value="--primitive-padding-1000" />
+        <SpacingToken name="XXL" value="--primitive-padding-1500" />
       </TokenSection>
 
       <TokenSection title="Border Width">
@@ -357,16 +357,16 @@ export const Primitives: Story = {
       </TokenSection>
 
       <TokenSection title="Gap">
-        <SpacingToken name="XXS" value="--primitive-gap-xxs" />
-        <SpacingToken name="XS" value="--primitive-gap-xs" />
-        <SpacingToken name="SM" value="--primitive-gap-sm" />
-        <SpacingToken name="SM-MD" value="--primitive-gap-sm-md" />
-        <SpacingToken name="MD" value="--primitive-gap-md" />
-        <SpacingToken name="LG" value="--primitive-gap-lg" />
-        <SpacingToken name="XL" value="--primitive-gap-xl" />
-        <SpacingToken name="XXL" value="--primitive-gap-xxl" />
-        <SpacingToken name="XXXL" value="--primitive-gap-xxxl" />
-        <SpacingToken name="XXXXL" value="--primitive-gap-xxxxl" />
+        <SpacingToken name="XXS" value="--primitive-gap-050" />
+        <SpacingToken name="XS" value="--primitive-gap-100" />
+        <SpacingToken name="SM" value="--primitive-gap-200" />
+        <SpacingToken name="SM-MD" value="--primitive-gap-300" />
+        <SpacingToken name="MD" value="--primitive-gap-400" />
+        <SpacingToken name="LG" value="--primitive-gap-500" />
+        <SpacingToken name="XL" value="--primitive-gap-1000" />
+        <SpacingToken name="XXL" value="--primitive-gap-1500" />
+        <SpacingToken name="XXXL" value="--primitive-gap-2000" />
+        <SpacingToken name="XXXXL" value="--primitive-gap-3000" />
       </TokenSection>
     </div>
   ),
@@ -814,15 +814,15 @@ export const SemanticSpacing: Story = {
       </TokenSection>
 
       <TokenSection title="Padding">
-        <SpacingToken name="XXXS" value="--padding-xxxs" />
-        <SpacingToken name="XXS" value="--padding-xxs" />
-        <SpacingToken name="XS" value="--padding-xs" />
-        <SpacingToken name="SM" value="--padding-sm" />
-        <SpacingToken name="SM-MD" value="--padding-sm-md" />
-        <SpacingToken name="MD" value="--padding-md" />
-        <SpacingToken name="LG" value="--padding-lg" />
-        <SpacingToken name="XL" value="--padding-xl" />
-        <SpacingToken name="XXL" value="--padding-xxl" />
+        <SpacingToken name="XXXS" value="--padding-050" />
+        <SpacingToken name="XXS" value="--padding-100" />
+        <SpacingToken name="XS" value="--padding-150" />
+        <SpacingToken name="SM" value="--padding-200" />
+        <SpacingToken name="SM-MD" value="--padding-300" />
+        <SpacingToken name="MD" value="--padding-400" />
+        <SpacingToken name="LG" value="--padding-500" />
+        <SpacingToken name="XL" value="--padding-1000" />
+        <SpacingToken name="XXL" value="--padding-1500" />
       </TokenSection>
 
       <TokenSection title="Border Width">
@@ -831,16 +831,16 @@ export const SemanticSpacing: Story = {
       </TokenSection>
 
       <TokenSection title="Gap">
-        <SpacingToken name="XXS" value="--gap-xxs" />
-        <SpacingToken name="XS" value="--gap-xs" />
-        <SpacingToken name="SM" value="--gap-sm" />
-        <SpacingToken name="SM-MD" value="--gap-sm-md" />
-        <SpacingToken name="MD" value="--gap-md" />
-        <SpacingToken name="LG" value="--gap-lg" />
-        <SpacingToken name="XL" value="--gap-xl" />
-        <SpacingToken name="XXL" value="--gap-xxl" />
-        <SpacingToken name="XXXL" value="--gap-xxxl" />
-        <SpacingToken name="XXXXL" value="--gap-xxxxl" />
+        <SpacingToken name="XXS" value="--gap-050" />
+        <SpacingToken name="XS" value="--gap-100" />
+        <SpacingToken name="SM" value="--gap-200" />
+        <SpacingToken name="SM-MD" value="--gap-300" />
+        <SpacingToken name="MD" value="--gap-400" />
+        <SpacingToken name="LG" value="--gap-500" />
+        <SpacingToken name="XL" value="--gap-1000" />
+        <SpacingToken name="XXL" value="--gap-1500" />
+        <SpacingToken name="XXXL" value="--gap-2000" />
+        <SpacingToken name="XXXXL" value="--gap-3000" />
       </TokenSection>
     </div>
   ),

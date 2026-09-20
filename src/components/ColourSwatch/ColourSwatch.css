@@ -18,7 +18,7 @@
   /* Appearance */
   border: var(--border-xs) solid var(--color-bg-container-border);
   border-radius: var(--radius-xl); /* 24px */
-  padding: var(--padding-lg); /* 20px */
+  padding: var(--padding-500); /* 20px */
   overflow: hidden;
   position: relative;
 }
@@ -38,7 +38,7 @@
 .ds-colour-swatch__title-box {
   background: var(--color-bg-container-primary-semi);
   border-radius: var(--radius-md); /* 12px */
-  padding: var(--padding-sm) var(--padding-md); /* 8px 16px */
+  padding: var(--padding-200) var(--padding-400); /* 8px 16px */
   align-self: flex-start;
 }
 
@@ -59,7 +59,7 @@
 .ds-colour-swatch__values {
   background: var(--color-bg-container-primary-semi);
   border-radius: var(--radius-md); /* 12px */
-  padding: var(--padding-sm) var(--padding-md); /* 8px 16px */
+  padding: var(--padding-200) var(--padding-400); /* 8px 16px */
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -68,7 +68,7 @@
 /* Row: label + value pair */
 .ds-colour-swatch__row {
   display: flex;
-  gap: var(--gap-md); /* 16px */
+  gap: var(--gap-400); /* 16px */
   font-size: var(--font-paragraph-size);
   font-weight: var(--font-paragraph-weight);
   line-height: var(--font-paragraph-line-height);

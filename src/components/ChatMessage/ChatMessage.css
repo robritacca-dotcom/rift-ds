@@ -17,7 +17,7 @@
 
   display: flex;
   align-items: flex-start;
-  gap: var(--gap-sm-md);
+  gap: var(--gap-300);
   width: 100%;
 }
 
@@ -51,7 +51,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
 }
 
 .ds-chat-message--user .ds-chat-message__body {
@@ -65,7 +65,7 @@
 .ds-chat-message__meta {
   display: flex;
   align-items: baseline;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 }
 
 .ds-chat-message__author {
@@ -117,20 +117,20 @@
 .ds-chat-message__content > .ds-message-card:not(:first-child),
 .ds-chat-message__content > .ds-interrupt-card:not(:first-child),
 .ds-chat-message__content > .ds-tool-call:not(:first-child) {
-  margin-top: var(--gap-sm-md);
+  margin-top: var(--gap-300);
 }
 
 .ds-chat-message__content > .ds-message-card:not(:last-child),
 .ds-chat-message__content > .ds-interrupt-card:not(:last-child),
 .ds-chat-message__content > .ds-tool-call:not(:last-child) {
-  margin-bottom: var(--gap-sm-md);
+  margin-bottom: var(--gap-300);
 }
 
 /* Bubble — capped width so a short line never drags a surface across the
    whole row; the fallback is the sanctioned consumer-override hook */
 .ds-chat-message--bubble .ds-chat-message__content {
   max-width: var(--ds-chat-message-max-width, 75%);
-  padding: var(--padding-sm-md) var(--padding-lg);
+  padding: var(--padding-300) var(--padding-500);
   border-radius: var(--radius-xl);
 }
 
@@ -167,7 +167,7 @@
    ============================================ */
 
 .ds-chat-message--grouped {
-  margin-top: calc(-1 * var(--gap-sm));
+  margin-top: calc(-1 * var(--gap-200));
 }
 
 /* ============================================
@@ -183,7 +183,7 @@
 }
 
 .ds-chat-message--compact.ds-chat-message--bubble .ds-chat-message__content {
-  padding: var(--padding-xs) var(--padding-sm-md);
+  padding: var(--padding-150) var(--padding-300);
 }
 
 /* ============================================
@@ -202,12 +202,12 @@
 .ds-chat-message__dots {
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
 }
 
 .ds-chat-message__dot {
-  width: var(--gap-sm);
-  height: var(--gap-sm);
+  width: var(--gap-200);
+  height: var(--gap-200);
   border-radius: var(--radius-full);
   background-color: var(--color-text-tertiary);
   opacity: 0.25;
@@ -255,11 +255,11 @@
 .ds-chat-message__actions {
   display: flex;
   align-items: center;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
   /* The row hides with opacity, not display, so this offset is always
      reserved — the body's own gap plus this margin sets the row a full
-     --gap-md off the content without loosening the meta stack above. */
-  margin-top: var(--gap-sm-md);
+     --gap-400 off the content without loosening the meta stack above. */
+  margin-top: var(--gap-300);
   opacity: 0;
   transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
 }
@@ -289,7 +289,7 @@
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
 }
 
 /* ============================================

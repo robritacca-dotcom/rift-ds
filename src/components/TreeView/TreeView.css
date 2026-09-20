@@ -38,9 +38,9 @@
 .ds-treeview__row {
   display: flex;
   align-items: center;
-  gap: var(--gap-xs);
-  padding: var(--padding-xxs) var(--padding-sm);
-  padding-left: calc(var(--padding-sm) + var(--ds-treeview-depth, 0) * var(--gap-md));
+  gap: var(--gap-100);
+  padding: var(--padding-100) var(--padding-200);
+  padding-left: calc(var(--padding-200) + var(--ds-treeview-depth, 0) * var(--gap-400));
   border-radius: var(--radius-sm);
   cursor: pointer;
   transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);

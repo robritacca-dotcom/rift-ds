@@ -6,19 +6,19 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--gap-xxxl);
+  gap: var(--gap-2000);
   width: 100%;
   max-width: 720px;
   /* Top offset matches the 40px every other page puts above its title,
      so the h1 sits at the same height site-wide */
-  padding: var(--primitive-gap-xl) var(--primitive-padding-xl)
-    var(--gap-xxxl);
+  padding: var(--primitive-gap-1000) var(--primitive-padding-1000)
+    var(--gap-2000);
 }
 
 .heading {
   display: flex;
   flex-direction: column;
-  gap: var(--primitive-gap-xxxl);
+  gap: var(--primitive-gap-2000);
   align-items: center;
   text-align: center;
 }
@@ -50,7 +50,7 @@
 .section {
   display: flex;
   flex-direction: column;
-  gap: var(--primitive-gap-md);
+  gap: var(--primitive-gap-400);
   width: 100%;
 }
 

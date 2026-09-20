@@ -25,8 +25,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--gap-sm);
-  padding: var(--padding-xs) var(--padding-sm) var(--padding-xs) var(--padding-md);
+  gap: var(--gap-200);
+  padding: var(--padding-150) var(--padding-200) var(--padding-150) var(--padding-400);
   border-bottom: var(--border-xs) solid var(--color-bg-container-border);
   flex-shrink: 0;
   transition: border-bottom-color var(--motion-duration-slow) var(--motion-ease-standard);
@@ -41,7 +41,7 @@
 .ds-code-block__meta {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
   min-width: 0;
 }
 
@@ -50,7 +50,7 @@
   align-items: center;
   justify-content: center;
   margin: 0;
-  padding: var(--padding-xxxs);
+  padding: var(--padding-050);
   border: none;
   border-radius: var(--radius-full);
   background: none;
@@ -107,9 +107,9 @@
 .ds-code-block__copy {
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
   margin: 0;
-  padding: var(--padding-xxxs) var(--padding-sm);
+  padding: var(--padding-050) var(--padding-200);
   border: none;
   border-radius: var(--radius-full);
   background: none;
@@ -163,7 +163,7 @@
 
 .ds-code-block__pre {
   margin: 0;
-  padding: var(--padding-md);
+  padding: var(--padding-400);
   overflow: auto;
   /* Allow the pre to shrink below its content height so a
      max-height on the root scrolls here, not past the header */

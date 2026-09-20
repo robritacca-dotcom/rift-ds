@@ -37,7 +37,7 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 }
 
 /* ============================================

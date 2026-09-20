@@ -49,7 +49,7 @@ export const InConversation: Story = {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        gap: 'var(--gap-md)',
+        gap: 'var(--gap-400)',
         maxWidth: '480px',
       }}
     >

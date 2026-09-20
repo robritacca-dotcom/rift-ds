@@ -19,7 +19,7 @@
 .ds-nav__brand {
   display: flex;
   align-items: center;
-  gap: var(--gap-lg); /* 20px */
+  gap: var(--gap-500); /* 20px */
   flex-shrink: 0;
   text-decoration: none;
   color: var(--color-text-primary);
@@ -45,7 +45,7 @@
 .ds-nav__right {
   display: flex;
   align-items: center;
-  gap: var(--gap-xl); /* 24px */
+  gap: var(--gap-1000); /* 24px */
   flex-shrink: 0;
   flex-wrap: nowrap;
 }

@@ -26,7 +26,7 @@
    screens; the label column stays pinned inside it. */
 .ds-gantt__scroll {
   overflow-x: auto;
-  padding-bottom: var(--padding-xxxs);
+  padding-bottom: var(--padding-050);
 }
 
 .ds-gantt__canvas {
@@ -61,8 +61,8 @@
 
 .ds-gantt__month-label {
   position: absolute;
-  bottom: var(--padding-xxs);
-  padding-left: var(--padding-xxs);
+  bottom: var(--padding-100);
+  padding-left: var(--padding-100);
   font-family: var(--font-paragraph-sm-family);
   font-size: var(--font-paragraph-sm-size);
   font-weight: var(--font-paragraph-sm-weight);
@@ -102,7 +102,7 @@
   align-self: stretch;
   display: flex;
   align-items: center;
-  padding-right: var(--padding-sm);
+  padding-right: var(--padding-200);
   background-color: var(--color-bg-container-primary);
   border-right: var(--border-xs) solid var(--color-divider);
   min-width: 0;
@@ -178,10 +178,10 @@
    sits in the axis row and covers whatever month label falls behind it. */
 .ds-gantt__today-label {
   position: absolute;
-  bottom: calc(100% + var(--padding-xxxs));
+  bottom: calc(100% + var(--padding-050));
   left: 50%;
   transform: translateX(-50%);
-  padding: 0 var(--padding-xs);
+  padding: 0 var(--padding-150);
   border-radius: var(--radius-full);
   background-color: var(--color-bg-page-inverse);
   font-family: var(--font-paragraph-sm-em-family);

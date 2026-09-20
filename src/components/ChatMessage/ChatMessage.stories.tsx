@@ -58,7 +58,7 @@ export const Conversation: Story = {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        gap: 'var(--gap-lg)',
+        gap: 'var(--gap-500)',
         maxWidth: '560px',
       }}
     >
@@ -109,7 +109,7 @@ export const Grouped: Story = {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        gap: 'var(--gap-lg)',
+        gap: 'var(--gap-500)',
         maxWidth: '560px',
       }}
     >
@@ -205,7 +205,7 @@ export const BubbleOverride: Story = {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        gap: 'var(--gap-lg)',
+        gap: 'var(--gap-500)',
         maxWidth: '560px',
       }}
     >

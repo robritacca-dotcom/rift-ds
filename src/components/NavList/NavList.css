@@ -10,7 +10,7 @@
 .ds-nav-list {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
   width: 100%;
   margin: 0;
   padding: 0;
@@ -52,7 +52,7 @@
 .ds-nav-list__row {
   display: flex;
   align-items: center;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
   width: 100%;
 }
 
@@ -125,7 +125,7 @@
    the same distance from its parent row as any two siblings do. */
 .ds-nav-list__panel--open {
   grid-template-rows: 1fr;
-  margin-top: var(--gap-xxs);
+  margin-top: var(--gap-050);
 }
 
 /* ============================================
@@ -135,21 +135,21 @@
 .ds-nav-list__sublist {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
   overflow: hidden;
   min-height: 0;
   margin: 0;
   padding: 0;
-  padding-left: var(--padding-xl);
+  padding-left: var(--padding-1000);
   list-style: none;
 }
 
 .ds-nav-list__sublist .ds-nav-list__sublist {
-  padding-left: var(--gap-lg);
+  padding-left: var(--gap-500);
 }
 
 /* Permanent (non-collapsible) groups render their sublist directly under the
    row, with no panel — give it the same item gap the panel carries when open. */
 .ds-nav-list__item > .ds-nav-list__sublist {
-  margin-top: var(--gap-xxs);
+  margin-top: var(--gap-050);
 }

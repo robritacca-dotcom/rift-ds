@@ -6,11 +6,11 @@
 .ds-panel {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
+  gap: var(--gap-400);
   min-width: 0;
   background-color: var(--color-bg-container-primary);
   border-radius: var(--radius-xl);
-  padding: var(--padding-lg);
+  padding: var(--padding-500);
 }
 
 /* ============================================
@@ -18,7 +18,7 @@
    ============================================ */
 
 .ds-panel--compact {
-  padding: var(--padding-md);
+  padding: var(--padding-400);
 }
 
 .ds-panel--flush {

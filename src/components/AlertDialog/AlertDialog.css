@@ -41,10 +41,10 @@
   z-index: 1;
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md); /* 16px */
+  gap: var(--gap-400); /* 16px */
   min-width: 320px;
   max-width: 480px;
-  padding: var(--padding-lg); /* 20px */
+  padding: var(--padding-500); /* 20px */
   border: var(--border-xs) solid var(--color-bg-container-border);
   border-radius: var(--radius-md); /* 12px */
   background-color: var(--color-bg-page-primary);
@@ -64,7 +64,7 @@
 .ds-alert-dialog__header {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm); /* 8px */
+  gap: var(--gap-200); /* 8px */
 }
 
 .ds-alert-dialog__icon {
@@ -117,8 +117,8 @@
 .ds-alert-dialog__actions {
   display: flex;
   justify-content: flex-end;
-  gap: var(--gap-sm); /* 8px */
-  padding-top: var(--padding-xs); /* 6px */
+  gap: var(--gap-200); /* 8px */
+  padding-top: var(--padding-150); /* 6px */
 }
 
 /* ============================================
@@ -128,6 +128,6 @@
 @media (max-width: 480px) {
   .ds-alert-dialog__panel {
     min-width: auto;
-    margin: var(--padding-md);
+    margin: var(--padding-400);
   }
 }

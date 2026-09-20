@@ -9,7 +9,7 @@
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--primitive-gap-sm);
+  gap: var(--primitive-gap-200);
 }
 
 .caption {
@@ -74,13 +74,13 @@
    -------------------------------------------- */
 .controls {
   position: absolute;
-  bottom: var(--padding-md);
+  bottom: var(--padding-400);
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   align-items: center;
-  gap: var(--gap-xs);
-  padding: var(--padding-xxs) var(--padding-xs);
+  gap: var(--gap-100);
+  padding: var(--padding-100) var(--padding-150);
   border-radius: var(--radius-full);
   background: color-mix(in srgb, var(--color-bg-container-primary) 85%, transparent);
   backdrop-filter: blur(16px);
@@ -90,15 +90,15 @@
 
 .separator {
   width: var(--border-xs);
-  height: var(--gap-lg);
-  margin: 0 var(--gap-xxs);
+  height: var(--gap-500);
+  margin: 0 var(--gap-050);
   background: var(--color-divider);
 }
 
 .zoomLevel {
   min-width: 4em;
-  height: var(--gap-xl);
-  padding: 0 var(--padding-xs);
+  height: var(--gap-1000);
+  padding: 0 var(--padding-150);
   border: 0;
   border-radius: var(--radius-full);
   background: none;
@@ -117,13 +117,13 @@
 
 .zoomLevel:focus-visible {
   outline: var(--border-md) solid var(--color-action-primary-bg);
-  outline-offset: var(--gap-xxs);
+  outline-offset: var(--gap-050);
 }
 
 .hint {
   position: fixed;
-  left: var(--padding-lg);
-  bottom: var(--padding-lg);
+  left: var(--padding-500);
+  bottom: var(--padding-500);
   margin: 0;
   font-size: var(--font-caption-size);
   line-height: var(--font-caption-line-height);

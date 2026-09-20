@@ -13,7 +13,7 @@
 .ds-message-actions {
   display: flex;
   align-items: center;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
 }
 
 /* ============================================
@@ -26,7 +26,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: var(--padding-xxs);
+  padding: var(--padding-100);
   border: none;
   border-radius: var(--radius-sm);
   background-color: transparent;

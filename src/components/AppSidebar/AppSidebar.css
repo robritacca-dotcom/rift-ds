@@ -17,7 +17,7 @@
   justify-content: space-between;
   height: 100vh;
   width: 64px;
-  padding: var(--padding-lg) 0;
+  padding: var(--padding-500) 0;
   background-color: var(--color-bg-page-primary);
   overflow: hidden;
   transition: width var(--motion-duration-slow) var(--motion-ease-emphasized);
@@ -51,7 +51,7 @@
 .ds-app-sidebar__top {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xl);
+  gap: var(--gap-1000);
   overflow-y: auto;
   overflow-x: hidden;
   flex: 1;
@@ -66,7 +66,7 @@
   align-items: center;
   justify-content: space-between;
   height: 24px;
-  padding: 0 var(--padding-lg);
+  padding: 0 var(--padding-500);
   flex-shrink: 0;
 }
 
@@ -79,7 +79,7 @@
 .ds-app-sidebar__logo-inner {
   display: flex;
   align-items: center;
-  gap: var(--gap-lg);
+  gap: var(--gap-500);
   min-width: 0;
 }
 
@@ -142,7 +142,7 @@
 .ds-app-sidebar__nav {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
   flex-shrink: 0;
   /* Stretch in both states: rows fill the rail and the collapsed icon is
      centred by the row's own padding, so alignment never snaps. */
@@ -151,7 +151,7 @@
 
 /* Category label — only visible when expanded */
 .ds-app-sidebar__category {
-  padding: 0 var(--padding-lg);
+  padding: 0 var(--padding-500);
   font-family: var(--font-paragraph-sm-family);
   font-size: var(--font-paragraph-sm-size);
   font-weight: var(--font-paragraph-sm-weight);
@@ -182,8 +182,8 @@
      margins leave a 40px row, so the hover pill is a perfect circle clear
      of the rail edges, with the icon centred (12 + 8 + 24 + 8 + 12 = 64);
      expanded, these are the pill's edge inset. Nothing to transition. */
-  margin: 0 var(--padding-sm-md);
-  padding: var(--padding-sm);
+  margin: 0 var(--padding-300);
+  padding: var(--padding-200);
   border-radius: var(--radius-full);
   background: transparent;
   border: none;
@@ -211,7 +211,7 @@
 .ds-app-sidebar__btn-left {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
   min-width: 0;
 }
 
@@ -248,7 +248,7 @@
   color: var(--color-text-secondary);
   background-color: var(--color-bg-container-tertiary);
   border-radius: var(--radius-full);
-  padding: var(--padding-xxxs) var(--padding-sm);
+  padding: var(--padding-050) var(--padding-200);
   min-width: 0;
   flex-shrink: 1;
   overflow: hidden;
@@ -324,8 +324,8 @@
   height: 40px;
   /* The same edge inset the parent pills get; sub-items only render while
      the rail is expanded, so this needs no state selector. */
-  margin-right: var(--padding-sm-md);
-  padding: var(--padding-sm);
+  margin-right: var(--padding-300);
+  padding: var(--padding-200);
   border-radius: var(--radius-full);
   background: transparent;
   border: none;
@@ -367,14 +367,14 @@
 .ds-app-sidebar__bottom {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
+  gap: var(--gap-400);
   min-width: 0;
   flex-shrink: 0;
 }
 
 .ds-app-sidebar__top-slot,
 .ds-app-sidebar__footer-slot {
-  padding: 0 var(--padding-md);
+  padding: 0 var(--padding-400);
   min-width: 0;
   overflow: hidden;
   opacity: 0;
@@ -398,13 +398,13 @@
   min-width: 0;
   /* Centres the 40px avatar in the collapsed 64px rail; glides to the
      expanded inset below. */
-  padding: 0 var(--padding-sm-md);
+  padding: 0 var(--padding-300);
   flex-shrink: 0;
   transition: padding var(--motion-duration-slow) var(--motion-ease-emphasized);
 }
 
 .ds-app-sidebar--expanded .ds-app-sidebar__profile {
-  padding: 0 var(--padding-lg);
+  padding: 0 var(--padding-500);
 }
 
 .ds-app-sidebar__profile-left {
@@ -503,7 +503,7 @@
 
   .ds-app-sidebar--expanded {
     width: 280px;
-    padding: var(--padding-lg) 0;
+    padding: var(--padding-500) 0;
   }
 }
 

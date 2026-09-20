@@ -46,7 +46,7 @@ export const SourcesRow: Story = {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        gap: 'var(--gap-md)',
+        gap: 'var(--gap-400)',
         maxWidth: '480px',
       }}
     >
@@ -55,7 +55,7 @@ export const SourcesRow: Story = {
         primitive and have the change cascade through every component that
         references it.
       </p>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--gap-xs)' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--gap-100)' }}>
         <SourceChip index={1} title="Design tokens quarterly" href="https://example.com/tokens" />
         <SourceChip index={2} title="Theming layered systems" href="https://example.com/theming" />
         <SourceChip index={3} title="The primitives handbook" href="https://example.com/primitives" />

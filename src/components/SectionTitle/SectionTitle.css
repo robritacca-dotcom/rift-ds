@@ -6,9 +6,9 @@
 .ds-section-title {
   display: flex;
   align-items: baseline;
-  gap: var(--gap-md);
+  gap: var(--gap-400);
   border-bottom: var(--border-xs) solid var(--color-divider);
-  padding-bottom: var(--padding-lg);
+  padding-bottom: var(--padding-500);
 }
 
 /* Divider-less variant: for headings above content that draws its own
@@ -16,7 +16,7 @@
    the divider needed drops to a small breathing gap. */
 .ds-section-title--no-divider {
   border-bottom: none;
-  padding-bottom: var(--padding-md);
+  padding-bottom: var(--padding-400);
 }
 
 /* ============================================

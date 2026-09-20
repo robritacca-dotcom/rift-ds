@@ -10,7 +10,7 @@
 .ds-waveform {
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
   height: var(--icon-size-md);
   --ds-waveform-color: var(--color-text-secondary);
 }

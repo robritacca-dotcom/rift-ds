@@ -23,7 +23,7 @@
 
 .ds-globe:focus-visible {
   outline: var(--border-md) solid var(--color-action-primary-bg);
-  outline-offset: var(--padding-xxs);
+  outline-offset: var(--padding-100);
 }
 
 .ds-globe--interactive {
@@ -145,7 +145,7 @@
 .ds-globe__callout {
   position: absolute;
   pointer-events: none;
-  padding: 0 var(--padding-md);
+  padding: 0 var(--padding-400);
   transform: translate(0, -100%);
   white-space: nowrap;
 }

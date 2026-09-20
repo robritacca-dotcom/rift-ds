@@ -20,7 +20,7 @@
 
 .ds-world-map:focus-visible {
   outline: var(--border-md) solid var(--color-action-primary-bg);
-  outline-offset: var(--padding-xxs);
+  outline-offset: var(--padding-100);
 }
 
 .ds-world-map__frame {
@@ -120,7 +120,7 @@ button.ds-world-map__marker {
 
 .ds-world-map__marker:focus-visible {
   outline: var(--border-md) solid var(--color-action-primary-bg);
-  outline-offset: var(--padding-xxs);
+  outline-offset: var(--padding-100);
   border-radius: var(--radius-full);
 }
 
@@ -157,7 +157,7 @@ button.ds-world-map__marker:hover .ds-world-map__dot {
   left: 100%;
   top: 50%;
   transform: translateY(-50%);
-  padding-left: var(--padding-xxs);
+  padding-left: var(--padding-100);
   font-family: var(--font-family-code);
   font-size: var(--font-caption-size);
   line-height: var(--font-caption-line-height);
@@ -177,13 +177,13 @@ button.ds-world-map__marker:hover .ds-world-map__dot {
 
 .ds-world-map__zoom {
   position: absolute;
-  bottom: var(--padding-md);
+  bottom: var(--padding-400);
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   align-items: center;
-  gap: var(--gap-xs);
-  padding: var(--padding-xxs) var(--padding-xs);
+  gap: var(--gap-100);
+  padding: var(--padding-100) var(--padding-150);
   border-radius: var(--radius-full);
   background: var(--color-bg-container-primary-semi);
   backdrop-filter: blur(24px);
@@ -194,8 +194,8 @@ button.ds-world-map__marker:hover .ds-world-map__dot {
 
 .ds-world-map__zoom-level {
   min-width: 4em;
-  height: var(--gap-xl);
-  padding: 0 var(--padding-xs);
+  height: var(--gap-1000);
+  padding: 0 var(--padding-150);
   border: 0;
   border-radius: var(--radius-full);
   background: none;
@@ -214,7 +214,7 @@ button.ds-world-map__marker:hover .ds-world-map__dot {
 
 .ds-world-map__zoom-level:focus-visible {
   outline: var(--border-md) solid var(--color-action-primary-bg);
-  outline-offset: var(--gap-xxs);
+  outline-offset: var(--gap-050);
 }
 
 /* Callout overlay — positioned at the marker, opening toward the map's
@@ -223,7 +223,7 @@ button.ds-world-map__marker:hover .ds-world-map__dot {
 .ds-world-map__callout {
   position: absolute;
   pointer-events: none;
-  padding: 0 var(--padding-md);
+  padding: 0 var(--padding-400);
   transform: translate(0, -100%);
   white-space: nowrap;
   z-index: 2;

@@ -33,7 +33,7 @@
 
 .ds-message-card__media {
   display: block;
-  margin: var(--padding-sm-md) var(--padding-sm-md) 0;
+  margin: var(--padding-300) var(--padding-300) 0;
   border-radius: var(--radius-md);
   overflow: hidden;
   /* The slot carries its own surface, so drawn media — a chart, an SVG —
@@ -56,14 +56,14 @@
   background-color: transparent;
   border: none;
   border-radius: 0;
-  padding: var(--padding-sm) var(--padding-sm) 0 0;
+  padding: var(--padding-200) var(--padding-200) 0 0;
 }
 
 /* ============================================
    BODY
    The vertical rhythm is deliberately even: the
-   media-to-body distance (--padding-md) equals
-   the body-to-actions distance (--padding-sm on
+   media-to-body distance (--padding-400) equals
+   the body-to-actions distance (--padding-200 on
    each side of the seam), so the copy sits
    centred between the image and the CTA row.
    ============================================ */
@@ -71,14 +71,14 @@
 .ds-message-card__body {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm);
-  padding: var(--padding-md) var(--padding-lg) var(--padding-sm);
+  gap: var(--gap-200);
+  padding: var(--padding-400) var(--padding-500) var(--padding-200);
 }
 
 /* Without an actions footer the body closes the card, so it takes the full
    bottom padding back. */
 .ds-message-card__body:last-child {
-  padding-bottom: var(--padding-md);
+  padding-bottom: var(--padding-400);
 }
 
 /* Title and meta form one unit, tucked closer together than the body's
@@ -86,14 +86,14 @@
 .ds-message-card__header {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
   min-width: 0;
 }
 
 .ds-message-card__title-row {
   display: flex;
   align-items: center;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
   min-width: 0;
 }
 
@@ -149,8 +149,8 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: var(--gap-sm);
-  padding: var(--padding-sm) var(--padding-lg) var(--padding-md);
+  gap: var(--gap-200);
+  padding: var(--padding-200) var(--padding-500) var(--padding-400);
 }
 
 /* Icons take the colour of the text around them. Explicit, not just

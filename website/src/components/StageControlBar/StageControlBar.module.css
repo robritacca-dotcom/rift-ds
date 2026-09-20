@@ -9,8 +9,8 @@
   z-index: 25;
   display: flex;
   align-items: center;
-  gap: var(--gap-sm);
-  padding: var(--padding-xxs) var(--padding-xs);
+  gap: var(--gap-200);
+  padding: var(--padding-100) var(--padding-150);
   border-radius: var(--radius-full);
   background: var(--color-bg-glass);
   backdrop-filter: blur(24px);
@@ -40,15 +40,15 @@
 
 .separator {
   width: var(--border-xs);
-  height: var(--gap-lg);
-  margin: 0 var(--gap-xxs);
+  height: var(--gap-500);
+  margin: 0 var(--gap-050);
   background: var(--color-divider);
 }
 
 .endSlot {
   display: inline-flex;
   align-items: center;
-  padding-inline-end: var(--padding-xs);
+  padding-inline-end: var(--padding-150);
   /* A text control's label never wraps inside the bar. */
   white-space: nowrap;
 }

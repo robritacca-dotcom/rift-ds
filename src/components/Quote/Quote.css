@@ -8,7 +8,7 @@
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 }
 
 .ds-quote__text {
@@ -20,7 +20,7 @@
    ============================================ */
 
 .ds-quote--default .ds-quote__text {
-  padding-left: var(--padding-lg);
+  padding-left: var(--padding-500);
   border-left: var(--border-md) solid var(--color-bg-container-tertiary);
   font-family: var(--font-paragraph-family);
   font-size: var(--font-paragraph-size);
@@ -31,7 +31,7 @@
 }
 
 .ds-quote--default .ds-quote__caption {
-  padding-left: var(--padding-lg);
+  padding-left: var(--padding-500);
 }
 
 /* ============================================
@@ -57,7 +57,7 @@
 .ds-quote__caption {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
 }
 
 .ds-quote__attribution {

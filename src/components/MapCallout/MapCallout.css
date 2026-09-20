@@ -9,7 +9,7 @@
 .ds-map-callout {
   display: inline-flex;
   flex-direction: column;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
   font-family: var(--font-family-code);
   color: var(--color-text-primary);
 }

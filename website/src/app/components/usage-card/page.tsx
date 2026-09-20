@@ -103,7 +103,7 @@ export default function UsageCardPage() {
               supplies the surface, here beside a gauge.
             </p>
             <div className={styles.variantRow}>
-              <Panel className={styles.variantItem} style={{ width: "440px", display: "flex", flexDirection: "column", gap: "var(--gap-lg)" }}>
+              <Panel className={styles.variantItem} style={{ width: "440px", display: "flex", flexDirection: "column", gap: "var(--gap-500)" }}>
                 <UsageCard
                   title="Usage"
                   bare

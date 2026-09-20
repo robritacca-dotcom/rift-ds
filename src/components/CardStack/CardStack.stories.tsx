@@ -17,7 +17,7 @@ const cards = roles.map((role) => (
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        gap: 'var(--gap-md)',
+        gap: 'var(--gap-400)',
       }}
     >
       <Badge variant="neutral" label={role.rate} />

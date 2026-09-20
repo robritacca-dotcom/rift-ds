@@ -14,6 +14,6 @@ Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0.
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| padding | `"none" \| "default" \| "compact"` | no | `default` | Interior padding: 'default' uses --padding-lg, 'compact' uses --padding-md, 'none' removes it |
+| padding | `"none" \| "default" \| "compact"` | no | `default` | Interior padding: 'default' uses --padding-500, 'compact' uses --padding-400, 'none' removes it |
 | className | `string` | no | `` | Additional CSS classes |
 | children | `ReactNode` | no |  | Panel content |

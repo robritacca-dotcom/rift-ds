@@ -23,9 +23,9 @@
   /* Stretch across the body's own padding (the marketing dashboard's
      pattern), so the shell runs edge to edge; the primitives mirror the
      body's inset in globals.css. */
-  width: calc(100% + var(--primitive-padding-xl) * 2);
-  margin: calc(-1 * var(--primitive-padding-lg))
-    calc(-1 * var(--primitive-padding-xl));
+  width: calc(100% + var(--primitive-padding-1000) * 2);
+  margin: calc(-1 * var(--primitive-padding-500))
+    calc(-1 * var(--primitive-padding-1000));
 }
 
 /* --------------------------------------------------------------- board */
@@ -78,14 +78,14 @@
 
 .boardSolo .thread {
   --ds-chat-thread-padding-inline: max(
-    var(--padding-md),
+    var(--padding-400),
     calc((100% - 800px) / 2)
   );
 }
 
 .boardSolo .composerBox {
   width: 100%;
-  max-width: calc(800px + var(--padding-md) * 2);
+  max-width: calc(800px + var(--padding-400) * 2);
   margin-inline: auto;
 }
 
@@ -98,18 +98,18 @@
   display: flex;
   flex-direction: column;
   min-height: 0;
-  padding-top: var(--padding-xs);
+  padding-top: var(--padding-150);
 }
 
 :global([data-theme="dark"]) .conversation {
   background-color: var(--color-bg-container-primary-semi);
 }
 
-/* No inline padding of its own: ChatHeader carries the same --padding-md
+/* No inline padding of its own: ChatHeader carries the same --padding-400
    gutter the thread and composer sit on, so its trailing button lands
    flush on the chat's right edge line. */
 .conversationHeader {
-  padding: var(--padding-sm) 0 0;
+  padding: var(--padding-200) 0 0;
 }
 
 .sessionTitle {
@@ -127,7 +127,7 @@
   min-height: 0;
   /* The thread's own gutters land on the same inline inset the header and
      composer use, so the column's left and right edges read as one line. */
-  --ds-chat-thread-padding-inline: var(--padding-md);
+  --ds-chat-thread-padding-inline: var(--padding-400);
 }
 
 /* One assistant turn's stack: reasoning, tool calls, plan, and text land
@@ -135,7 +135,7 @@
 .turnStack {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
   min-width: 0;
 }
 
@@ -144,14 +144,14 @@
 }
 
 .statusRow {
-  padding-top: var(--padding-xs);
+  padding-top: var(--padding-150);
 }
 
 .composerBox {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xs);
-  padding: 0 var(--padding-md) var(--padding-md);
+  gap: var(--gap-100);
+  padding: 0 var(--padding-400) var(--padding-400);
 }
 
 .disclaimer {
@@ -173,7 +173,7 @@
   display: flex;
   min-width: 0;
   min-height: 0;
-  padding: var(--padding-sm);
+  padding: var(--padding-200);
 }
 
 :global([data-theme="dark"]) .workspaceRegion {
@@ -193,10 +193,10 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
+  gap: var(--gap-400);
   min-height: 0;
   min-width: 0;
-  padding: var(--padding-lg);
+  padding: var(--padding-500);
   background-color: var(--color-bg-container-primary);
   border: var(--border-md) solid var(--color-bg-container-border);
   border-radius: var(--radius-xl);
@@ -214,7 +214,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 }
 
 .workspaceTitle {
@@ -238,7 +238,7 @@
   min-height: 0;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--gap-lg);
+  gap: var(--gap-500);
 }
 
 .workspaceBodyWithRail {
@@ -251,7 +251,7 @@
 .filesRail {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
   min-height: 0;
   overflow-y: auto;
 }
@@ -270,7 +270,7 @@
 .patchStats {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 }
 
 .checkList {
@@ -279,13 +279,13 @@
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 }
 
 .checkRow {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 }
 
 .checkLabel {
@@ -336,7 +336,7 @@
   overflow: auto;
   display: flex;
   flex-direction: column;
-  gap: var(--gap-lg);
+  gap: var(--gap-500);
 }
 
 .diffFile {
@@ -399,15 +399,15 @@
    the shell pulled past the viewport's left edge on phones. */
 @media (max-width: 959px) {
   .shell {
-    width: calc(100% + var(--primitive-padding-lg) * 2);
-    margin: calc(-1 * var(--primitive-padding-lg));
+    width: calc(100% + var(--primitive-padding-500) * 2);
+    margin: calc(-1 * var(--primitive-padding-500));
   }
 }
 
 @media (max-width: 600px) {
   .shell {
-    width: calc(100% + var(--primitive-padding-md) * 2);
-    margin: calc(-1 * var(--primitive-padding-lg))
-      calc(-1 * var(--primitive-padding-md));
+    width: calc(100% + var(--primitive-padding-400) * 2);
+    margin: calc(-1 * var(--primitive-padding-500))
+      calc(-1 * var(--primitive-padding-400));
   }
 }

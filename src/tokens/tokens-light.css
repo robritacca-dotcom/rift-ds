@@ -217,14 +217,14 @@
   --radius-full: var(--primitive-radius-full);
   --radius-composer: var(--primitive-radius-composer);
 
-  --padding-xxxs: var(--primitive-padding-xxxs);
-  --padding-xxs: var(--primitive-padding-xxs);
-  --padding-xs: var(--primitive-padding-xs);
-  --padding-sm: var(--primitive-padding-sm);
-  --padding-sm-md: var(--primitive-padding-sm-md);
-  --padding-md: var(--primitive-padding-md);
-  --padding-lg: var(--primitive-padding-lg);
-  --padding-xl: var(--primitive-padding-xl);
+  --padding-050: var(--primitive-padding-050);
+  --padding-100: var(--primitive-padding-100);
+  --padding-150: var(--primitive-padding-150);
+  --padding-200: var(--primitive-padding-200);
+  --padding-300: var(--primitive-padding-300);
+  --padding-400: var(--primitive-padding-400);
+  --padding-500: var(--primitive-padding-500);
+  --padding-1000: var(--primitive-padding-1000);
 
   --border-xs: var(--primitive-border-xs);
   --border-md: var(--primitive-border-md);
@@ -238,21 +238,21 @@
   --icon-size-lg: var(--primitive-icon-lg);   /* 32px — feature */
   --icon-size-xl: var(--primitive-icon-xl);   /* 48px — marketing */
 
-  --gap-xxs: var(--primitive-gap-xxs);
-  --gap-xs: var(--primitive-gap-xs);
-  --gap-sm: var(--primitive-gap-sm);
-  --gap-sm-md: var(--primitive-gap-sm-md);
-  --gap-md: var(--primitive-gap-md);
-  --gap-lg: var(--primitive-gap-lg);
-  --gap-xl: var(--primitive-gap-xl);
+  --gap-050: var(--primitive-gap-050);
+  --gap-100: var(--primitive-gap-100);
+  --gap-200: var(--primitive-gap-200);
+  --gap-300: var(--primitive-gap-300);
+  --gap-400: var(--primitive-gap-400);
+  --gap-500: var(--primitive-gap-500);
+  --gap-1000: var(--primitive-gap-1000);
 
   /* Section rhythm — page-level spacing between major blocks. These are
      the only spacing tokens with a responsive step (see the collapse
      block at the bottom of this file). */
-  --gap-xxl: var(--primitive-gap-xxl);       /* 60px */
-  --gap-xxxl: var(--primitive-gap-xxxl);     /* 80px */
-  --gap-xxxxl: var(--primitive-gap-xxxxl);   /* 120px */
-  --padding-xxl: var(--primitive-padding-xxl); /* 60px */
+  --gap-1500: var(--primitive-gap-1500);       /* 60px */
+  --gap-2000: var(--primitive-gap-2000);     /* 80px */
+  --gap-3000: var(--primitive-gap-3000);   /* 120px */
+  --padding-1500: var(--primitive-padding-1500); /* 60px */
 }
 
 /* ============================================
@@ -265,9 +265,9 @@
 
 @media (max-width: 768px) {
   [data-theme="light"], :root {
-    --gap-xxl: var(--primitive-gap-xl);        /* 60 → 40 */
-    --gap-xxxl: var(--primitive-gap-xxl);      /* 80 → 60 */
-    --gap-xxxxl: var(--primitive-gap-xxxl);    /* 120 → 80 */
-    --padding-xxl: var(--primitive-padding-xl); /* 60 → 40 */
+    --gap-1500: var(--primitive-gap-1000);        /* 60 → 40 */
+    --gap-2000: var(--primitive-gap-1500);      /* 80 → 60 */
+    --gap-3000: var(--primitive-gap-2000);    /* 120 → 80 */
+    --padding-1500: var(--primitive-padding-1000); /* 60 → 40 */
   }
 }

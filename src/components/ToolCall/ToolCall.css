@@ -38,10 +38,10 @@
 .ds-tool-call__header {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
   width: 100%;
   /* 20px sides — the card family's shared content inset. */
-  padding: var(--padding-sm) var(--padding-lg);
+  padding: var(--padding-200) var(--padding-500);
   background: none;
   border: none;
   /* Buttons default to the UA's buttontext, not the inherited colour, so
@@ -196,7 +196,7 @@
 }
 
 .ds-tool-call--open .ds-tool-call__content {
-  padding: var(--padding-md) var(--padding-lg);
+  padding: var(--padding-400) var(--padding-500);
   border-top: var(--border-xs) solid var(--color-divider);
 }
 
@@ -218,8 +218,8 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: var(--gap-sm);
-  padding: var(--padding-sm) var(--padding-lg) var(--padding-md);
+  gap: var(--gap-200);
+  padding: var(--padding-200) var(--padding-500) var(--padding-400);
 }
 
 /* Icons take the colour of the text around them. Explicit, not just

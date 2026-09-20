@@ -14,8 +14,8 @@
   top: 100%;
   left: 50%;
   z-index: 50;
-  margin-top: var(--gap-xs);
-  padding: var(--padding-xs) var(--padding-sm);
+  margin-top: var(--gap-100);
+  padding: var(--padding-150) var(--padding-200);
   border-radius: var(--radius-xs);
   border: var(--border-xs) solid var(--color-bg-container-border);
   background-color: var(--color-bg-page-primary);
@@ -29,7 +29,7 @@
   white-space: nowrap;
   pointer-events: none;
   opacity: 0;
-  transform: translateX(-50%) translateY(calc(-1 * var(--gap-xs)));
+  transform: translateX(-50%) translateY(calc(-1 * var(--gap-100)));
   transition: opacity var(--motion-duration-fast) var(--motion-ease-standard),
     transform var(--motion-duration-fast) var(--motion-ease-standard);
 }
@@ -48,5 +48,5 @@
    lopsided — square it up so each segment is a small even pill around its
    glyph. */
 .themeToggle :global(.ds-segmented-control__segment) {
-  padding: var(--padding-xs) var(--padding-sm);
+  padding: var(--padding-150) var(--padding-200);
 }

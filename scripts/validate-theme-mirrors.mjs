@@ -543,7 +543,7 @@ function checkSpatialPage() {
       continue;
     }
     const entries = [...block[1].matchAll(
-      /\{\s*label:\s*"([A-Za-z-]+)",\s*value:\s*"(\d+)px",\s*px:\s*(\d+),\s*variant:\s*"[a-z]+"(?:,\s*mobileValue:\s*"(\d+)px",\s*mobilePx:\s*(\d+))?\s*\}/g
+      /\{\s*label:\s*"([A-Za-z0-9-]+)",\s*value:\s*"(\d+)px",\s*px:\s*(\d+),\s*variant:\s*"[a-z]+"(?:,\s*mobileValue:\s*"(\d+)px",\s*mobilePx:\s*(\d+))?\s*\}/g
     )].map((m) => ({
       label: m[1],
       px: Number(m[3]),

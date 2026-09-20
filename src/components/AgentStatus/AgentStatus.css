@@ -32,7 +32,7 @@
 
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-sm-md);
+  gap: var(--gap-300);
 
   /* The label is set in the title-body face, not the paragraph one: a status
      is a heading for the work underneath it, not prose. The two sets share
@@ -52,7 +52,7 @@
 .ds-agent-status__matrix {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
   flex: none;
   width: var(--ds-agent-matrix-size);
 }
@@ -199,7 +199,7 @@
 .ds-agent-status--compact {
   --ds-agent-matrix-size: var(--icon-size-sm);
 
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 
   /* The small metrics, carrying the same title weight down a size: the scale
      has no 14px title face, and dropping to the paragraph weight here would
@@ -218,7 +218,7 @@
 .ds-agent-status--bar {
   display: flex;
   width: 100%;
-  padding: var(--padding-xs) var(--padding-sm-md);
+  padding: var(--padding-150) var(--padding-300);
   background-color: var(--color-bg-container-secondary);
   border: var(--border-xs) solid var(--color-bg-container-border);
   border-radius: var(--radius-md);

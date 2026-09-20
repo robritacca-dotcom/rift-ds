@@ -146,7 +146,7 @@ export const Wrapped: Story = {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          gap: 'var(--gap-lg)',
+          gap: 'var(--gap-500)',
           maxWidth: '480px',
           margin: '0 auto',
           textAlign: 'center',
@@ -168,7 +168,7 @@ export const AboveAComposer: Story = {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        gap: 'var(--gap-sm)',
+        gap: 'var(--gap-200)',
         maxWidth: '520px',
       }}
     >

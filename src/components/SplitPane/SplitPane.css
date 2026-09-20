@@ -61,12 +61,12 @@
 }
 
 .ds-split-pane--horizontal .ds-split-pane__separator {
-  width: var(--gap-sm);
+  width: var(--gap-200);
   cursor: col-resize;
 }
 
 .ds-split-pane--vertical .ds-split-pane__separator {
-  height: var(--gap-sm);
+  height: var(--gap-200);
   cursor: row-resize;
 }
 
@@ -91,13 +91,13 @@
 }
 
 .ds-split-pane--horizontal .ds-split-pane__grip {
-  width: var(--gap-xxs);
-  height: var(--gap-xl);
+  width: var(--gap-050);
+  height: var(--gap-1000);
 }
 
 .ds-split-pane--vertical .ds-split-pane__grip {
-  width: var(--gap-xl);
-  height: var(--gap-xxs);
+  width: var(--gap-1000);
+  height: var(--gap-050);
 }
 
 .ds-split-pane__separator:hover .ds-split-pane__grip,

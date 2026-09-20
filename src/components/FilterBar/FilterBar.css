@@ -12,7 +12,7 @@
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 }
 
 .ds-filter-bar__filter {
@@ -25,8 +25,8 @@
 .ds-filter-bar__chip {
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-sm);
-  padding: var(--padding-xs) var(--padding-sm-md);
+  gap: var(--gap-200);
+  padding: var(--padding-150) var(--padding-300);
   border: var(--border-xs) solid var(--color-bg-container-border);
   border-radius: var(--radius-full);
   background-color: var(--color-bg-page-primary);
@@ -44,8 +44,8 @@
 }
 
 .ds-filter-bar--compact .ds-filter-bar__chip {
-  gap: var(--gap-xs);
-  padding: var(--padding-xxxs) var(--padding-sm);
+  gap: var(--gap-100);
+  padding: var(--padding-050) var(--padding-200);
 }
 
 .ds-filter-bar__chip:hover:not(.ds-filter-bar__chip--active) {
@@ -89,7 +89,7 @@
 .ds-filter-bar__chip-clear:focus-visible,
 .ds-filter-bar__clear-all:focus-visible {
   outline: var(--border-md) solid var(--color-action-primary-bg);
-  outline-offset: var(--gap-xxs);
+  outline-offset: var(--gap-050);
   border-radius: var(--radius-full);
 }
 
@@ -124,14 +124,14 @@
 
 .ds-filter-bar__panel {
   position: absolute;
-  top: calc(100% + var(--gap-xxs));
+  top: calc(100% + var(--gap-050));
   left: 0;
   z-index: 10;
   min-width: 100%;
   max-height: 280px;
   overflow-y: auto;
   margin: 0;
-  padding: var(--padding-xxs);
+  padding: var(--padding-100);
   list-style: none;
   border: var(--border-xs) solid var(--color-bg-container-border);
   border-radius: var(--radius-md);
@@ -142,8 +142,8 @@
 .ds-filter-bar__option {
   display: flex;
   align-items: center;
-  gap: var(--gap-xs);
-  padding: var(--padding-xs) var(--padding-sm);
+  gap: var(--gap-100);
+  padding: var(--padding-150) var(--padding-200);
   border-radius: var(--radius-sm);
   font-family: var(--font-paragraph-sm-family);
   font-size: var(--font-paragraph-sm-size);
@@ -177,7 +177,7 @@
 
 .ds-filter-bar__clear-all {
   margin: 0;
-  padding: var(--padding-xs) var(--padding-sm);
+  padding: var(--padding-150) var(--padding-200);
   border: none;
   background: none;
   border-radius: var(--radius-full);

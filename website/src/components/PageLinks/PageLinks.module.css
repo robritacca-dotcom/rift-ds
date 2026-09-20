@@ -6,7 +6,7 @@
 .pageLinks {
   display: inline-flex;
   align-items: center;
-  gap: var(--primitive-gap-lg);
+  gap: var(--primitive-gap-500);
   flex-shrink: 0;
   /* Pages can pass several link buttons (About passes four) — wrap rather
      than force the page wider than a phone viewport. */

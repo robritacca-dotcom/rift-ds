@@ -9,7 +9,7 @@
 .ds-status-dot {
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
 }
 
 .ds-status-dot__indicator {

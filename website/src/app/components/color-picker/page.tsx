@@ -85,7 +85,7 @@ export default function ColorPickerPage() {
           {/* Controlled */}
           <section className={styles.section}>
             <SectionTitle title="Controlled" />
-            <div style={{ display: "flex", alignItems: "center", gap: "var(--gap-sm-md)" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "var(--gap-300)" }}>
               <ColorPicker
                 value={controlled}
                 onValueChange={setControlled}

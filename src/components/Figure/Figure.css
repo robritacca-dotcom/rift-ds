@@ -33,7 +33,7 @@
 
 .ds-figure__caption {
   display: block;
-  padding: var(--padding-md) var(--padding-lg);
+  padding: var(--padding-400) var(--padding-500);
   border-top: var(--border-xs) solid var(--color-bg-container-border);
   font-family: var(--font-paragraph-sm-family);
   font-size: var(--font-paragraph-sm-size);

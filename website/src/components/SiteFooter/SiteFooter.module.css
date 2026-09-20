@@ -10,7 +10,7 @@
   margin-top: auto;
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xxl);
+  gap: var(--gap-1500);
 }
 
 /* ---- Brand block + links ---- */
@@ -40,7 +40,7 @@
   flex: 0 0 var(--layout-sidebar-width);
   display: flex;
   flex-direction: column;
-  gap: var(--gap-lg);
+  gap: var(--gap-500);
 }
 
 /* The same mark and wordmark the header wears, at the same size — though
@@ -51,7 +51,7 @@
 .brandMark {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
   color: var(--color-text-primary);
   text-decoration: none;
   opacity: 0.5;
@@ -83,14 +83,14 @@
   flex: 1;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  column-gap: var(--gap-lg);
-  row-gap: var(--gap-xxl);
+  column-gap: var(--gap-500);
+  row-gap: var(--gap-1500);
 }
 
 .column {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-lg);
+  gap: var(--gap-500);
 }
 
 /* Two groups sharing one column (Site over Design system), so five groups
@@ -99,7 +99,7 @@
 .columnStack {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xxl);
+  gap: var(--gap-1500);
 }
 
 .columnTitle {
@@ -113,7 +113,7 @@
 .columnList {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
+  gap: var(--gap-400);
   list-style: none;
   margin: 0;
   padding: 0;
@@ -122,7 +122,7 @@
 .link {
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
   font-size: var(--font-paragraph-sm-size);
   font-weight: var(--font-paragraph-sm-weight);
   line-height: var(--font-paragraph-sm-line-height);
@@ -153,15 +153,15 @@
 .bottomBar {
   display: flex;
   align-items: center;
-  gap: var(--gap-lg);
+  gap: var(--gap-500);
   flex-wrap: wrap;
-  padding-bottom: var(--gap-md);
+  padding-bottom: var(--gap-400);
 }
 
 .socialRow {
   display: flex;
   align-items: center;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
   list-style: none;
   margin: 0;
   padding: 0;
@@ -207,7 +207,7 @@
 @media (max-width: 959px) {
   .body {
     flex-direction: column;
-    gap: var(--gap-xxl);
+    gap: var(--gap-1500);
   }
 
   .brand {
@@ -236,7 +236,7 @@
   .bottomBar {
     /* Clear the fixed chat button, which spans the bottom edge on
        small screens. */
-    padding-bottom: var(--gap-xxxl);
+    padding-bottom: var(--gap-2000);
   }
 }
 

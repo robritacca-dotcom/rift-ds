@@ -7,7 +7,7 @@
 .ds-pininput {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm); /* 8px */
+  gap: var(--gap-200); /* 8px */
 }
 
 /* ============================================
@@ -16,7 +16,7 @@
 
 .ds-pininput__cells {
   display: flex;
-  gap: var(--gap-sm); /* 8px */
+  gap: var(--gap-200); /* 8px */
 }
 
 /* ============================================

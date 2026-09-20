@@ -14,7 +14,7 @@
      title air, see .dsLayoutChat). */
   --chat-clearance: calc(
     var(--layout-stage-clearance) + var(--layout-stage-bottom-clearance) +
-      var(--padding-lg) * 2
+      var(--padding-500) * 2
   );
   display: flex;
   align-items: center;
@@ -188,7 +188,7 @@
   align-items: center;
   justify-content: space-between;
   min-height: 54px;
-  padding: var(--padding-xs) var(--padding-md) 0;
+  padding: var(--padding-150) var(--padding-400) 0;
   flex-shrink: 0;
   color: var(--color-text-primary);
 }
@@ -217,7 +217,7 @@
 .statusIcons {
   display: flex;
   align-items: center;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
   --icon-size: var(--icon-size-sm);
 }
 
@@ -227,7 +227,7 @@
   align-items: center;
   justify-content: center;
   min-height: 24px;
-  padding-bottom: var(--padding-xs);
+  padding-bottom: var(--padding-150);
   flex-shrink: 0;
 }
 

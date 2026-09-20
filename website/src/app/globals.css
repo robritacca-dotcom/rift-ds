@@ -35,7 +35,7 @@ html[data-theme-ready] {
      the mid-breakpoint override below reaches all of them at once. */
   --layout-sidebar-width: 291px;
   --layout-rail-width: 320px;
-  --layout-column-gap: var(--gap-xxl);
+  --layout-column-gap: var(--gap-1500);
 
   /* The immersive surfaces' slim toolbar (StageToolbar): one height
      constant shared by the bar itself and the pages that reserve room
@@ -91,8 +91,8 @@ html[data-theme-ready] {
      one gap. The playground has no FAB but keeps the offset: a toast 60px
      higher is not a bug, a toast under a button is. */
   --ds-toast-inset-bottom: calc(
-    var(--layout-chat-inset) + var(--padding-sm) * 2 + var(--font-paragraph-em-line-height) +
-      var(--gap-sm)
+    var(--layout-chat-inset) + var(--padding-200) * 2 + var(--font-paragraph-em-line-height) +
+      var(--gap-200)
   );
 }
 
@@ -104,7 +104,7 @@ html[data-theme-ready] {
   :root {
     --layout-sidebar-width: 240px;
     --layout-rail-width: 280px;
-    --layout-column-gap: var(--primitive-gap-xl);
+    --layout-column-gap: var(--primitive-gap-1000);
   }
 }
 
@@ -129,10 +129,10 @@ body {
   color: var(--color-text-primary);
   background: var(--color-bg-page-primary);
   min-height: 100vh;
-  padding: var(--primitive-padding-lg) var(--primitive-padding-xl);
+  padding: var(--primitive-padding-500) var(--primitive-padding-1000);
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xxxl);
+  gap: var(--gap-2000);
   align-items: center;
   transition: background-color var(--motion-duration-slow) var(--motion-ease-standard), color var(--motion-duration-slow) var(--motion-ease-standard), padding-right var(--motion-duration-base) var(--motion-ease-standard);
   -webkit-font-smoothing: antialiased;
@@ -148,7 +148,7 @@ body {
    attribute. Reduced motion zeroes the glide via the motion tokens. */
 html[data-chat="docked"] body {
   padding-right: calc(
-    var(--primitive-padding-xl) + var(--layout-chat-width) + var(--layout-chat-inset)
+    var(--primitive-padding-1000) + var(--layout-chat-width) + var(--layout-chat-inset)
   );
 }
 
@@ -453,7 +453,7 @@ html[data-embedded] *::after {
 .skip-link {
   position: absolute;
   top: -48px;
-  left: var(--gap-md);
+  left: var(--gap-400);
   z-index: 1000;
   padding: 10px 20px;
   background: var(--color-bg-container-primary);
@@ -464,7 +464,7 @@ html[data-embedded] *::after {
 }
 
 .skip-link:focus-visible {
-  top: var(--gap-md);
+  top: var(--gap-400);
   outline: 2px solid var(--color-action-primary-bg);
   outline-offset: 2px;
 }
@@ -494,7 +494,7 @@ html[data-embedded] *::after {
    ============================================ */
 @media (max-width: 959px) {
   body {
-    padding: var(--primitive-padding-lg);
+    padding: var(--primitive-padding-500);
   }
 }
 
@@ -502,6 +502,6 @@ html[data-embedded] *::after {
    measure at 375–430px viewports. */
 @media (max-width: 600px) {
   body {
-    padding: var(--primitive-padding-lg) var(--primitive-padding-md);
+    padding: var(--primitive-padding-500) var(--primitive-padding-400);
   }
 }

@@ -4,7 +4,7 @@
   position: relative;
   min-height: 100vh;
   width: 100%;
-  padding-inline: var(--padding-lg);
+  padding-inline: var(--padding-500);
   /* Room for the floating stage toolbar, like the other immersive surfaces. */
   padding-top: var(--layout-stage-clearance);
 }

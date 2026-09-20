@@ -8,7 +8,7 @@ const SAMPLE_TSX = `import { Chip } from '@robr0/design-system/components/Chip/C
 const SAMPLE_CSS = `.ds-button {
   background-color: var(--color-action-primary-bg);
   border-radius: var(--radius-full);
-  padding: var(--padding-sm) var(--padding-lg);
+  padding: var(--padding-200) var(--padding-500);
 }`;
 
 const meta = {

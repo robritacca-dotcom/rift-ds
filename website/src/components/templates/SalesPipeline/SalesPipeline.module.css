@@ -16,9 +16,9 @@
   /* Stretch across the body's own padding (the template family's pattern),
      so the shell runs edge to edge; the primitives mirror the body's inset
      in globals.css. */
-  width: calc(100% + var(--primitive-padding-xl) * 2);
-  margin: calc(-1 * var(--primitive-padding-lg))
-    calc(-1 * var(--primitive-padding-xl));
+  width: calc(100% + var(--primitive-padding-1000) * 2);
+  margin: calc(-1 * var(--primitive-padding-500))
+    calc(-1 * var(--primitive-padding-1000));
 }
 
 /* One inset source for the whole shell: the floating sidebar reads the
@@ -60,8 +60,8 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--gap-lg);
-  padding: var(--padding-lg) var(--padding-xl) var(--padding-xxl);
+  gap: var(--gap-500);
+  padding: var(--padding-500) var(--padding-1000) var(--padding-1500);
 }
 
 /* ------------------------------------------------------------- top bar */
@@ -70,7 +70,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 }
 
 .search {
@@ -84,17 +84,17 @@
 .searchKbd {
   position: absolute;
   top: 50%;
-  right: var(--padding-sm);
+  right: var(--padding-200);
   transform: translateY(-50%);
   display: inline-flex;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
   pointer-events: none;
 }
 
 .topBarActions {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 }
 
 /* ------------------------------------------------------------ page head */
@@ -103,12 +103,12 @@
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
   flex-wrap: wrap;
 }
 
 .title {
-  margin: var(--gap-xs) 0 0;
+  margin: var(--gap-100) 0 0;
   font-family: var(--font-heading-1-family);
   font-size: var(--font-heading-1-size);
   font-weight: var(--font-heading-1-weight);
@@ -120,7 +120,7 @@
 .headActions {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
   flex-wrap: wrap;
 }
 
@@ -132,7 +132,7 @@
 .tableSection {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
+  gap: var(--gap-400);
   min-width: 0;
 }
 
@@ -141,7 +141,7 @@
 .tableFilters {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
   flex-wrap: wrap;
 }
 
@@ -174,7 +174,7 @@
 .ownerCell {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
   white-space: nowrap;
 }
 
@@ -206,7 +206,7 @@
 .winCell {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
   min-width: 120px;
 }
 
@@ -246,7 +246,7 @@
 
 @media (max-width: 1080px) {
   .content {
-    padding: var(--padding-md) var(--padding-md) var(--padding-xl);
+    padding: var(--padding-400) var(--padding-400) var(--padding-1000);
   }
 }
 
@@ -255,8 +255,8 @@
    the shell pulled past the viewport's left edge on phones. */
 @media (max-width: 959px) {
   .shell {
-    width: calc(100% + var(--primitive-padding-lg) * 2);
-    margin: calc(-1 * var(--primitive-padding-lg));
+    width: calc(100% + var(--primitive-padding-500) * 2);
+    margin: calc(-1 * var(--primitive-padding-500));
   }
 }
 
@@ -277,8 +277,8 @@
 
 @media (max-width: 600px) {
   .shell {
-    width: calc(100% + var(--primitive-padding-md) * 2);
-    margin: calc(-1 * var(--primitive-padding-lg))
-      calc(-1 * var(--primitive-padding-md));
+    width: calc(100% + var(--primitive-padding-400) * 2);
+    margin: calc(-1 * var(--primitive-padding-500))
+      calc(-1 * var(--primitive-padding-400));
   }
 }

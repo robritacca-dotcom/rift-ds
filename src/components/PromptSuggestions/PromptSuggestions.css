@@ -7,9 +7,9 @@
 
 .ds-prompt-suggestions {
   display: flex;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
   /* Breathing room so chip focus rings aren't clipped by the scroll box */
-  padding-block: var(--padding-xxxs);
+  padding-block: var(--padding-050);
 }
 
 /* ============================================
@@ -21,7 +21,7 @@
    ============================================ */
 
 .ds-prompt-suggestions--default {
-  gap: var(--gap-sm-md);
+  gap: var(--gap-300);
 }
 
 .ds-prompt-suggestions--compact {
@@ -41,15 +41,15 @@
   -webkit-mask-image: linear-gradient(
     to right,
     transparent,
-    black var(--gap-lg),
-    black calc(100% - var(--gap-lg)),
+    black var(--gap-500),
+    black calc(100% - var(--gap-500)),
     transparent
   );
   mask-image: linear-gradient(
     to right,
     transparent,
-    black var(--gap-lg),
-    black calc(100% - var(--gap-lg)),
+    black var(--gap-500),
+    black calc(100% - var(--gap-500)),
     transparent
   );
 }
@@ -190,9 +190,9 @@
   /* Chip's default (32px) geometry — the row's compact size. The height is
      the chip's line box plus its padding and border, stated rather than
      grown from text, since the shell holds a bar instead of a label. */
-  padding: var(--padding-xs) var(--padding-sm-md);
+  padding: var(--padding-150) var(--padding-300);
   height: calc(
-    var(--font-paragraph-sm-em-line-height) + 2 * var(--padding-xs) + 2 * var(--border-xs)
+    var(--font-paragraph-sm-em-line-height) + 2 * var(--padding-150) + 2 * var(--border-xs)
   );
   font-size: var(--font-paragraph-sm-em-size);
 
@@ -205,9 +205,9 @@
 
 /* Chip's large geometry — the row's default size. */
 .ds-prompt-suggestions--default .ds-prompt-suggestions__skeleton {
-  padding: var(--padding-sm) var(--padding-lg);
+  padding: var(--padding-200) var(--padding-500);
   height: calc(
-    var(--font-paragraph-em-line-height) + 2 * var(--padding-sm) + 2 * var(--border-xs)
+    var(--font-paragraph-em-line-height) + 2 * var(--padding-200) + 2 * var(--border-xs)
   );
   font-size: var(--font-paragraph-em-size);
 }
@@ -233,8 +233,8 @@
   /* The trailing end dissolves, as ThreadPanel's naming bar does under its
      title mask — a label mid-write, not a finished block.
      ds-allow(color): mask alpha keywords (black/transparent), not palette colours */
-  -webkit-mask-image: linear-gradient(to right, black calc(100% - var(--gap-xl)), transparent);
-  mask-image: linear-gradient(to right, black calc(100% - var(--gap-xl)), transparent);
+  -webkit-mask-image: linear-gradient(to right, black calc(100% - var(--gap-1000)), transparent);
+  mask-image: linear-gradient(to right, black calc(100% - var(--gap-1000)), transparent);
 }
 
 .ds-prompt-suggestions__skeleton-bar::after {

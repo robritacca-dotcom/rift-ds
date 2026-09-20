@@ -10,8 +10,8 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  gap: var(--gap-md); /* 16px */
-  padding: var(--padding-xl); /* 32px */
+  gap: var(--gap-400); /* 16px */
+  padding: var(--padding-1000); /* 32px */
   width: 100%;
   /* width: 100% plus own padding — border-box locally (as ContactCard,
      Checkbox, Composer, SelectionCard and Textarea do), so a consumer
@@ -47,7 +47,7 @@
 .ds-empty-state__content {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xs); /* 4px */
+  gap: var(--gap-100); /* 4px */
   max-width: 420px;
 }
 
@@ -80,7 +80,7 @@
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  gap: var(--gap-sm); /* 8px */
+  gap: var(--gap-200); /* 8px */
 }
 
 /* ============================================
@@ -98,8 +98,8 @@
    ============================================ */
 
 .ds-empty-state--compact {
-  gap: var(--gap-sm); /* 8px */
-  padding: var(--padding-lg); /* 20px */
+  gap: var(--gap-200); /* 8px */
+  padding: var(--padding-500); /* 20px */
 }
 
 .ds-empty-state--compact .ds-empty-state__icon {

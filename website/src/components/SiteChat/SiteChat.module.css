@@ -14,11 +14,11 @@
   /* A small breath above the header on every host, web and phone alike —
      it seats the title row on the same line as the threads rail's own
      header, whose panel carries this inset built in. */
-  padding-top: var(--padding-sm);
+  padding-top: var(--padding-200);
   /* The one side inset every row shares — header controls, greeting,
      thread bubbles, composer edge, starter pills, disclaimer — so they sit
      on a single rail. A step tighter on compact hosts. */
-  --sitechat-inset: var(--padding-lg);
+  --sitechat-inset: var(--padding-500);
   /* A size container, so the welcome dressing below can step aside when the
      host — docked panel, takeover, or bench stage — is too short for it. */
   container-type: size;
@@ -26,7 +26,7 @@
 }
 
 .chat[data-compact] {
-  --sitechat-inset: var(--padding-md);
+  --sitechat-inset: var(--padding-400);
 }
 
 /* The header rides the same rail as everything under it; the component's
@@ -59,7 +59,7 @@
    rail): its own row under the header, on the shared side inset. */
 .tabsRow {
   min-width: 0;
-  padding: var(--padding-xs) var(--sitechat-inset) 0;
+  padding: var(--padding-150) var(--sitechat-inset) 0;
 }
 
 /* The header brand: the RR mark beside the chat name. A node title renders
@@ -67,7 +67,7 @@
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
   min-width: 0;
 }
 
@@ -131,14 +131,14 @@
   margin-inline: auto;
   /* The block-end padding is the gap between the greeting and the composer;
      block-start is inert, since the overlay bottom-aligns its content. */
-  padding: var(--padding-lg) var(--sitechat-inset) var(--gap-xl);
+  padding: var(--padding-500) var(--sitechat-inset) var(--gap-1000);
   pointer-events: none;
 }
 
 .welcomeGreeting {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 }
 
 /* Small and semibold over the ask line's large light face — the pair
@@ -208,7 +208,7 @@
   width: 100%;
   max-width: 768px;
   margin-inline: auto;
-  padding: var(--gap-xl) var(--sitechat-inset) 0;
+  padding: var(--gap-1000) var(--sitechat-inset) 0;
 }
 
 /* The welcome dressing needs roughly 580px of widget for the greeting and
@@ -252,7 +252,7 @@
      keyboard up it drifts toward the chips, which is where the eye goes. */
   justify-content: center;
   /* Symmetric, since neither edge is the live one now. */
-  padding-block: var(--padding-md);
+  padding-block: var(--padding-400);
 }
 
 .chat[data-phone] .bottomRegionWelcome {
@@ -267,7 +267,7 @@
    side is open to the thread. */
 .chat[data-phone] .startersColumn {
   display: block;
-  padding-block: 0 var(--gap-md);
+  padding-block: 0 var(--gap-400);
 }
 
 /* The phone stack needs less height than the centred layout — roughly
@@ -293,13 +293,13 @@
 /* Locked to the bottom of the widget, in every state. */
 .disclaimerRow {
   margin-top: auto;
-  padding: var(--gap-xs) var(--sitechat-inset) var(--padding-sm);
+  padding: var(--gap-100) var(--sitechat-inset) var(--padding-200);
 }
 
 .responseStack {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-lg);
+  gap: var(--gap-500);
 }
 
 /* A visitor turn with an injected attachment: the file tile stacks above
@@ -308,7 +308,7 @@
 .userTurnStack {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
 }
 
 .userTurnAttachment {
@@ -364,7 +364,7 @@
 .actionButton {
   display: grid;
   place-items: center;
-  padding: var(--padding-xxs);
+  padding: var(--padding-100);
   border: none;
   border-radius: var(--radius-full);
   background: transparent;
@@ -426,7 +426,7 @@
 
 .followups {
   width: 100%;
-  margin-top: var(--gap-sm);
+  margin-top: var(--gap-200);
   /* They land a beat after the answer commits, so they arrive rather than
      appear. Reduced motion zeroes the duration through the token, which
      leaves the chips in their final state on the first frame. */
@@ -436,7 +436,7 @@
 @keyframes followupsIn {
   from {
     opacity: 0;
-    transform: translateY(var(--gap-xs));
+    transform: translateY(var(--gap-100));
   }
 }
 

@@ -11,7 +11,7 @@
    translateX(-50%) here would be overridden by its fill. */
 .scrollCueSlot {
   position: absolute;
-  bottom: var(--padding-lg);
+  bottom: var(--padding-500);
   left: 0;
   right: 0;
   display: flex;
@@ -24,7 +24,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: var(--padding-xs);
+  padding: var(--padding-150);
   border-radius: var(--radius-full);
   border: 1px solid var(--color-bg-container-border);
   background: var(--color-bg-container-primary-semi);

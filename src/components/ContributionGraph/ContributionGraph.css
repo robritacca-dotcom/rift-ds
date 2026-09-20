@@ -17,7 +17,7 @@
 .ds-contribution-graph__content {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
   min-width: 0;
 }
 
@@ -25,9 +25,9 @@
 .ds-contribution-graph__scroll {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
   overflow-x: auto;
-  padding-bottom: var(--padding-xxxs);
+  padding-bottom: var(--padding-050);
 }
 
 /* ============================================
@@ -134,7 +134,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--gap-md);
+  gap: var(--gap-400);
   flex-wrap: wrap;
 }
 
@@ -161,9 +161,9 @@
 }
 
 .ds-contribution-graph__legend-label:first-child {
-  margin-right: var(--gap-xxs);
+  margin-right: var(--gap-050);
 }
 
 .ds-contribution-graph__legend-label:last-child {
-  margin-left: var(--gap-xxs);
+  margin-left: var(--gap-050);
 }

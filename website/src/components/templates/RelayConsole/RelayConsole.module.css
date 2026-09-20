@@ -14,9 +14,9 @@
   /* Stretch across the body's own padding (the marketing dashboard's
      pattern), so the shell runs edge to edge; the primitives mirror the
      body's inset in globals.css. */
-  width: calc(100% + var(--primitive-padding-xl) * 2);
-  margin: calc(-1 * var(--primitive-padding-lg))
-    calc(-1 * var(--primitive-padding-xl));
+  width: calc(100% + var(--primitive-padding-1000) * 2);
+  margin: calc(-1 * var(--primitive-padding-500))
+    calc(-1 * var(--primitive-padding-1000));
 }
 
 /* One inset source for the whole shell: the floating sidebar reads the
@@ -61,8 +61,8 @@
   min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
-  padding: var(--padding-lg) var(--padding-xl);
+  gap: var(--gap-400);
+  padding: var(--padding-500) var(--padding-1000);
 }
 
 /* ------------------------------------------------------------- top bar */
@@ -71,7 +71,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 }
 
 .search {
@@ -85,17 +85,17 @@
 .searchKbd {
   position: absolute;
   top: 50%;
-  right: var(--padding-sm);
+  right: var(--padding-200);
   transform: translateY(-50%);
   display: inline-flex;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
   pointer-events: none;
 }
 
 .topBarActions {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 }
 
 /* --------------------------------------------------------------- stage */
@@ -112,7 +112,7 @@
   overflow: hidden;
   background-color: var(--color-bg-container-primary);
   border-radius: var(--radius-xl);
-  padding: var(--padding-lg);
+  padding: var(--padding-500);
 }
 
 .globeBox {
@@ -135,13 +135,13 @@
    the pointer through, so the gap between clusters still grabs the map. */
 .stageBar {
   position: absolute;
-  top: var(--padding-lg);
-  left: var(--padding-lg);
-  right: var(--padding-lg);
+  top: var(--padding-500);
+  left: var(--padding-500);
+  right: var(--padding-500);
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
   flex-wrap: wrap;
   z-index: 4;
   pointer-events: none;
@@ -158,7 +158,7 @@
 .filters {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
   flex-wrap: wrap;
   justify-content: flex-end;
 }
@@ -174,7 +174,7 @@
 .metaRight {
   position: absolute;
   bottom: 0;
-  padding: var(--padding-lg);
+  padding: var(--padding-500);
   pointer-events: none;
 }
 
@@ -182,7 +182,7 @@
   left: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
   max-width: 320px;
 }
 
@@ -191,7 +191,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: var(--gap-md);
+  gap: var(--gap-400);
   text-align: right;
 }
 
@@ -217,7 +217,7 @@
 }
 
 .legend {
-  margin-top: var(--gap-xs);
+  margin-top: var(--gap-100);
 }
 
 /* Legend swatches for the flat view — the map's own 10px marker geometry
@@ -249,7 +249,7 @@
 .card {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
 }
 
 .cardName {
@@ -266,7 +266,7 @@
 .cardMeta {
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
   color: var(--color-text-secondary);
 }
 
@@ -284,7 +284,7 @@
   align-items: center;
   justify-content: flex-end;
   flex-wrap: wrap;
-  gap: var(--gap-sm) var(--gap-lg);
+  gap: var(--gap-200) var(--gap-500);
 }
 
 .liveDot {
@@ -323,7 +323,7 @@
   margin: 0;
   display: flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
   font-family: var(--font-caption-family);
   font-size: var(--font-caption-size);
   font-weight: var(--font-caption-weight);
@@ -333,7 +333,7 @@
 
 .kbdRow {
   display: inline-flex;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
 }
 
 /* ---------------------------------------------------------- responsive */
@@ -348,14 +348,14 @@
   }
 
   .content {
-    padding: var(--padding-md);
+    padding: var(--padding-400);
   }
 
   .stage {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--gap-lg);
+    gap: var(--gap-500);
   }
 
   /* The stage's toolbar leaves the floating layer and stacks first in
@@ -395,7 +395,7 @@
 
   .metricsRow {
     justify-content: flex-start;
-    gap: var(--gap-md) var(--gap-lg);
+    gap: var(--gap-400) var(--gap-500);
   }
 }
 
@@ -404,8 +404,8 @@
    the shell pulled past the viewport's left edge on phones. */
 @media (max-width: 959px) {
   .shell {
-    width: calc(100% + var(--primitive-padding-lg) * 2);
-    margin: calc(-1 * var(--primitive-padding-lg));
+    width: calc(100% + var(--primitive-padding-500) * 2);
+    margin: calc(-1 * var(--primitive-padding-500));
   }
 }
 
@@ -422,8 +422,8 @@
 
 @media (max-width: 600px) {
   .shell {
-    width: calc(100% + var(--primitive-padding-md) * 2);
-    margin: calc(-1 * var(--primitive-padding-lg))
-      calc(-1 * var(--primitive-padding-md));
+    width: calc(100% + var(--primitive-padding-400) * 2);
+    margin: calc(-1 * var(--primitive-padding-500))
+      calc(-1 * var(--primitive-padding-400));
   }
 }

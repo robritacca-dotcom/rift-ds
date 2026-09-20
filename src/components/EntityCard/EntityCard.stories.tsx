@@ -50,7 +50,7 @@ export const IconGrid: Story = {
     <div style={{
       display: 'grid',
       gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))',
-      gap: 'var(--gap-lg, 20px)',
+      gap: 'var(--gap-500, 20px)',
       maxWidth: 800,
     }}>
       {['home', 'search', 'settings', 'person', 'favorite', 'star'].map((name) => (
@@ -66,7 +66,7 @@ export const LogoGrid: Story = {
     <div style={{
       display: 'grid',
       gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))',
-      gap: 'var(--gap-lg, 20px)',
+      gap: 'var(--gap-500, 20px)',
       maxWidth: 800,
     }}>
       {[

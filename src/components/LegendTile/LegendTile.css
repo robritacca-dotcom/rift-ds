@@ -15,11 +15,11 @@
 .ds-legend-tile {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
   min-width: 0;
   background-color: var(--color-bg-page-primary);
   border-radius: var(--radius-md);
-  padding: var(--padding-sm) var(--padding-sm-md);
+  padding: var(--padding-200) var(--padding-300);
 }
 
 /* Parts */
@@ -27,7 +27,7 @@
 .ds-legend-tile__label {
   display: flex;
   align-items: center;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
   min-width: 0;
   font-family: var(--font-caption-family);
   font-size: var(--font-caption-size);

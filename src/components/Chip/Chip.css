@@ -9,10 +9,10 @@
   /* Layout */
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-sm); /* 8px */
+  gap: var(--gap-200); /* 8px */
 
   /* Spacing — 32px tall at default size */
-  padding: var(--padding-xs) var(--padding-sm-md); /* 6px 12px */
+  padding: var(--padding-150) var(--padding-300); /* 6px 12px */
 
   /* Shape */
   border: var(--border-xs) solid var(--color-bg-container-border);
@@ -41,7 +41,7 @@
    ============================================ */
 
 .ds-chip--large {
-  padding: var(--padding-sm) var(--padding-lg); /* 8px 20px */
+  padding: var(--padding-200) var(--padding-500); /* 8px 20px */
   font-family: var(--font-paragraph-em-family);
   font-size: var(--font-paragraph-em-size);
   font-weight: var(--font-paragraph-em-weight);
@@ -64,8 +64,8 @@
    ============================================ */
 
 .ds-chip--compact {
-  gap: var(--gap-xs); /* 4px */
-  padding: var(--padding-xxxs) var(--padding-sm); /* 2px 8px */
+  gap: var(--gap-100); /* 4px */
+  padding: var(--padding-050) var(--padding-200); /* 2px 8px */
 }
 
 /* ============================================

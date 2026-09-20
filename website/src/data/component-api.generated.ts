@@ -6081,7 +6081,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "padding",
             "type": "\"none\" | \"default\" | \"compact\"",
             "required": false,
-            "description": "Interior padding: 'default' uses --padding-lg, 'compact' uses --padding-md, 'none' removes it",
+            "description": "Interior padding: 'default' uses --padding-500, 'compact' uses --padding-400, 'none' removes it",
             "defaultValue": "default"
           },
           {

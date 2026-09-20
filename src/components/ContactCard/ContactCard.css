@@ -4,8 +4,8 @@
 .ds-contact-card {
   display: flex;
   align-items: center;
-  gap: var(--gap-lg);
-  padding: var(--padding-lg);
+  gap: var(--gap-500);
+  padding: var(--padding-500);
   border: 1px solid var(--color-bg-container-border);
   border-radius: var(--radius-md);
   background: var(--color-bg-container-primary-semi);
@@ -84,7 +84,7 @@
 .ds-contact-card__actions {
   display: flex;
   align-items: center;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
   flex-shrink: 0;
 }
 

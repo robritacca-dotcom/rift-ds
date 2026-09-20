@@ -47,7 +47,7 @@
      inner's 1440px max-width is border-box — gutters inside it would shrink
      and re-centre the content against the full viewport instead. The
      gradient is unaffected: backgrounds paint across the padding box. */
-  padding: 0 var(--primitive-padding-xl);
+  padding: 0 var(--primitive-padding-1000);
 }
 
 .logoSlot {
@@ -63,7 +63,7 @@
      margin plus the first pill's own 16px padding sets the visual gap.
      With nothing centred, the outer slots need no balancing widths. */
   justify-content: flex-start;
-  margin-left: var(--primitive-gap-xl);
+  margin-left: var(--primitive-gap-1000);
   flex: 1;
 }
 
@@ -72,7 +72,7 @@
   align-items: center;
   justify-content: flex-end;
   flex-shrink: 0;
-  gap: var(--primitive-gap-md);
+  gap: var(--primitive-gap-400);
 }
 
 /* ============================================
@@ -81,7 +81,7 @@
 .logo {
   display: flex;
   align-items: center;
-  gap: var(--primitive-gap-sm);
+  gap: var(--primitive-gap-200);
   text-decoration: none;
   color: var(--color-text-primary);
 }
@@ -111,7 +111,7 @@
 .nav {
   display: flex;
   align-items: center;
-  gap: var(--primitive-gap-xs);
+  gap: var(--primitive-gap-100);
 }
 
 .navLink {
@@ -218,7 +218,7 @@
   background: var(--color-action-passive-bg);
   border: none;
   border-radius: var(--radius-full);
-  padding: var(--primitive-padding-sm);
+  padding: var(--primitive-padding-200);
   cursor: pointer;
   color: var(--color-text-primary);
   width: 40px;
@@ -249,14 +249,14 @@
 .searchBtn {
   display: flex;
   align-items: center;
-  gap: var(--primitive-gap-sm);
+  gap: var(--primitive-gap-200);
   /* Same track recipe as the theme toggle beside it (SegmentedControl's
      container-primary fill and border), so the two pills read as one
      family — the passive fill is near-invisible on the dark header. */
   background: var(--color-bg-container-primary);
   border: var(--border-xs) solid var(--color-bg-container-border);
   border-radius: var(--radius-full);
-  padding: 0 var(--primitive-padding-sm-md);
+  padding: 0 var(--primitive-padding-300);
   cursor: pointer;
   color: var(--color-text-secondary);
   /* Wide enough for the full "Search or ask anything" placeholder plus the
@@ -292,7 +292,7 @@
 .searchKeys {
   display: inline-flex;
   align-items: center;
-  gap: var(--primitive-gap-xxs);
+  gap: var(--primitive-gap-050);
   margin-left: auto;
 }
 
@@ -337,7 +337,7 @@
 }
 
 .megaInner {
-  padding: var(--primitive-padding-xl);
+  padding: var(--primitive-padding-1000);
 }
 
 /* Three columns: the two link groups share the left two thirds, the
@@ -346,7 +346,7 @@
 .megaLayout {
   display: grid;
   grid-template-columns: 2fr 1fr;
-  gap: var(--primitive-gap-xl);
+  gap: var(--primitive-gap-1000);
 }
 
 /* A panel with no showcase card spans the full width with its link grid. */
@@ -361,7 +361,7 @@
   grid-template-rows: repeat(4, auto);
   grid-auto-flow: column;
   grid-auto-columns: minmax(0, 1fr);
-  gap: var(--primitive-gap-sm) var(--primitive-gap-xl);
+  gap: var(--primitive-gap-200) var(--primitive-gap-1000);
   align-content: start;
 }
 
@@ -374,7 +374,7 @@
   text-transform: uppercase;
   color: var(--color-text-tertiary);
   /* Aligns the header with the item labels, past the rows' hover padding. */
-  padding-inline: var(--primitive-padding-md);
+  padding-inline: var(--primitive-padding-400);
 }
 
 /* ============================================
@@ -384,8 +384,8 @@
 .megaItem {
   display: flex;
   align-items: flex-start;
-  gap: var(--primitive-gap-sm-md);
-  padding: var(--primitive-padding-sm-md) var(--primitive-padding-md);
+  gap: var(--primitive-gap-300);
+  padding: var(--primitive-padding-300) var(--primitive-padding-400);
   border-radius: var(--radius-md);
   text-decoration: none;
   color: inherit;
@@ -478,7 +478,7 @@
    ============================================ */
 .megaShowcaseColumn {
   display: flex;
-  padding-left: var(--primitive-padding-xl);
+  padding-left: var(--primitive-padding-1000);
   border-left: 1px solid var(--color-bg-container-border);
   /* Sizes the card's height floor below in cqw, i.e. as a share of this
      column's width. */
@@ -532,9 +532,9 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: var(--primitive-gap-xs);
-  padding: var(--primitive-padding-lg);
-  padding-top: var(--primitive-padding-xxl);
+  gap: var(--primitive-gap-100);
+  padding: var(--primitive-padding-500);
+  padding-top: var(--primitive-padding-1500);
   background: linear-gradient(
     to top,
     var(--color-bg-page-primary) 55%,
@@ -551,7 +551,7 @@
 .megaShowcaseTitle {
   display: flex;
   align-items: center;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
 }
 
 .megaShowcaseTitleIcon {
@@ -699,9 +699,9 @@
   position: absolute;
   top: max(
     calc((var(--mn-bar-height) - 40px) / 2),
-    var(--mn-close-top, calc(var(--primitive-padding-lg) + (var(--mn-bar-height) - 40px) / 2))
+    var(--mn-close-top, calc(var(--primitive-padding-500) + (var(--mn-bar-height) - 40px) / 2))
   );
-  right: var(--primitive-padding-lg);
+  right: var(--primitive-padding-500);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -735,11 +735,11 @@
   /* Top and side padding mirror the body gutters (globals.css) so the
      drawer's logo row lands on the page's own logo; the bottom keeps the
      wider inset for the theme toggle. */
-  padding: var(--primitive-padding-lg) var(--primitive-padding-lg) var(--primitive-padding-xl);
+  padding: var(--primitive-padding-500) var(--primitive-padding-500) var(--primitive-padding-1000);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--primitive-gap-lg);
+  gap: var(--primitive-gap-500);
   /* The section accordions (Components alone is ~60 links) can exceed the
      viewport, so the drawer scrolls its own content. */
   overflow-y: auto;
@@ -773,7 +773,7 @@
    far edge. */
 .mobileMenuNav {
   width: 100%;
-  padding-inline: calc(var(--mn-logo-mark) + var(--primitive-gap-sm) - var(--padding-lg));
+  padding-inline: calc(var(--mn-logo-mark) + var(--primitive-gap-200) - var(--padding-500));
 }
 
 /* The drawer's rows are a NavList (@robr0/design-system) — no row styling
@@ -783,12 +783,12 @@
    the list itself and any open sub-list — take the same step. */
 .mobileMenu :global(.ds-nav-list),
 .mobileMenu :global(.ds-nav-list__sublist) {
-  gap: var(--primitive-gap-md);
+  gap: var(--primitive-gap-400);
 }
 
 .mobileMenu :global(.ds-nav-list__panel--open),
 .mobileMenu :global(.ds-nav-list__item) > :global(.ds-nav-list__sublist) {
-  margin-top: var(--primitive-gap-md);
+  margin-top: var(--primitive-gap-400);
 }
 
 .mobileThemeToggle {
@@ -805,7 +805,7 @@
   .searchBtn {
     justify-content: center;
     width: 40px;
-    padding: var(--primitive-padding-sm);
+    padding: var(--primitive-padding-200);
     /* Back to the plain circle — the toggle-track costume belongs to the
        input form. Same passive fill as the mobile menu button beside it. */
     border: none;
@@ -844,23 +844,23 @@
   }
 
   .stickyHeader {
-    padding: 0 var(--primitive-padding-lg);
+    padding: 0 var(--primitive-padding-500);
   }
 }
 
 @media (max-width: 600px) {
   .stickyHeader {
-    padding: 0 var(--primitive-padding-md);
+    padding: 0 var(--primitive-padding-400);
   }
 
   .mobileMenuClose {
-    right: var(--primitive-padding-md);
+    right: var(--primitive-padding-400);
   }
 
   /* Phone gutters, so the drawer's logo keeps sitting on the page's. */
   .mobileMenu {
-    padding-left: var(--primitive-padding-md);
-    padding-right: var(--primitive-padding-md);
+    padding-left: var(--primitive-padding-400);
+    padding-right: var(--primitive-padding-400);
   }
 }
 
@@ -874,7 +874,7 @@
    globals.css does for the body. */
 :global(html[data-chat="docked"]) .stickyHeader {
   padding-right: calc(
-    var(--primitive-padding-xl) + var(--layout-chat-width) + var(--layout-chat-inset)
+    var(--primitive-padding-1000) + var(--layout-chat-width) + var(--layout-chat-inset)
   );
 }
 

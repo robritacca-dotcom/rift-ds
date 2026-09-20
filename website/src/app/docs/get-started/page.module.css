@@ -6,7 +6,7 @@
   gap: var(--layout-column-gap);
   width: 100%;
   max-width: 1440px;
-  padding-top: var(--primitive-gap-xl);
+  padding-top: var(--primitive-gap-1000);
 }
 
 .dsContent {
@@ -14,18 +14,18 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xxxl);
+  gap: var(--gap-2000);
 }
 
 /* ============================================
    PAGE TITLE - Display 2
    ============================================ */
 .pageHeader {
-  margin-top: calc(var(--primitive-gap-xl) - var(--gap-xxxl));
+  margin-top: calc(var(--primitive-gap-1000) - var(--gap-2000));
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--primitive-gap-lg);
+  gap: var(--primitive-gap-500);
   width: 100%;
 }
 
@@ -54,7 +54,7 @@
 .introSection {
   display: flex;
   flex-direction: column;
-  gap: var(--primitive-gap-lg);
+  gap: var(--primitive-gap-500);
 }
 
 .introBody {
@@ -104,7 +104,7 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xxxl);
+  gap: var(--gap-2000);
 }
 
 
@@ -114,13 +114,13 @@
 .toolList {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: var(--primitive-gap-lg) var(--layout-column-gap);
+  gap: var(--primitive-gap-500) var(--layout-column-gap);
 }
 
 .toolItem {
   display: flex;
   align-items: flex-start;
-  gap: var(--primitive-gap-md);
+  gap: var(--primitive-gap-400);
   text-decoration: none;
   color: inherit;
   transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
@@ -175,17 +175,17 @@ a.toolItem:hover {
 .section {
   display: flex;
   flex-direction: column;
-  gap: var(--primitive-gap-lg);
+  gap: var(--primitive-gap-500);
   /* Anchor targets clear the sticky MegaNav overlay and its frosted
      backdrop — the shared clearance in globals.css owns the geometry */
   scroll-margin-top: var(--layout-anchor-clearance);
 }
 
 /* The divider titles follow the case-study header rhythm — heading,
-   rule, then --gap-xl of clearance before the content. The section's
+   rule, then --gap-1000 of clearance before the content. The section's
    internal gap is tighter, so the title carries the difference. */
 .section > :global(.ds-section-title:not(.ds-section-title--no-divider)) {
-  margin-bottom: calc(var(--gap-xl) - var(--primitive-gap-lg));
+  margin-bottom: calc(var(--gap-1000) - var(--primitive-gap-500));
 }
 
 .sectionNote {
@@ -216,8 +216,8 @@ a.toolItem:hover {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--gap-md);
-  padding: var(--padding-sm) 0;
+  gap: var(--gap-400);
+  padding: var(--padding-200) 0;
   border-bottom: var(--border-xs) solid var(--color-bg-container-border);
   font-size: var(--font-paragraph-size);
   line-height: var(--font-paragraph-line-height);

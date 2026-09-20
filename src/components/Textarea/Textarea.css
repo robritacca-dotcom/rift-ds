@@ -6,7 +6,7 @@
 .ds-textarea {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm); /* 8px */
+  gap: var(--gap-200); /* 8px */
   width: 100%;
 }
 
@@ -20,7 +20,7 @@
 
 .ds-textarea__field {
   width: 100%;
-  padding: var(--padding-sm) var(--padding-md); /* 8px 16px */
+  padding: var(--padding-200) var(--padding-400); /* 8px 16px */
   border: var(--border-xs) solid var(--color-input-border-primary);
   border-radius: var(--radius-md); /* 12px */
   background-color: var(--color-input-bg-primary);
@@ -101,7 +101,7 @@
    ============================================ */
 
 .ds-textarea--compact .ds-textarea__field {
-  padding: var(--padding-xs) var(--padding-sm-md); /* 6px 12px */
+  padding: var(--padding-150) var(--padding-300); /* 6px 12px */
   font-size: var(--font-paragraph-sm-size);
   line-height: var(--font-paragraph-sm-line-height);
   letter-spacing: var(--font-paragraph-sm-letter-spacing);

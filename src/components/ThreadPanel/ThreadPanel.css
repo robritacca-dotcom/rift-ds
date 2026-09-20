@@ -23,7 +23,7 @@
   /* AppSidebar's row rhythm: one gap-xs beat between every action row,
      the new-thread row included; the larger section breaks come from the
      history's and footer's own top padding. */
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
   width: 64px;
   height: 100%;
   min-height: 0;
@@ -32,7 +32,7 @@
      the padded column, so the fills all stop at the same 12px breathing
      room in both states — and the collapsed circle math is unchanged
      (12 + 8 + 24 + 8 + 12 = the 64px rail). */
-  padding: var(--padding-md) var(--padding-sm-md);
+  padding: var(--padding-400) var(--padding-300);
   transition: width var(--motion-duration-slow) var(--motion-ease-emphasized);
 }
 
@@ -51,7 +51,7 @@
    HEADER — brand row and the collapse toggle
    ============================================ */
 
-/* Collapsed, --padding-sm centres the 24px mark on the rail's axis
+/* Collapsed, --padding-200 centres the 24px mark on the rail's axis
    (12 + 8 = the rows' icon seat); expanded it deepens to the 28px optical
    seat with everything else, the padding gliding with the sweep. The
    margin sits the brand row evenly between the panel's top edge and the
@@ -62,13 +62,13 @@
   align-items: center;
   flex: none;
   min-width: 0;
-  padding: var(--padding-xs) var(--padding-sm);
-  margin-bottom: var(--gap-sm-md);
+  padding: var(--padding-150) var(--padding-200);
+  margin-bottom: var(--gap-300);
   transition: padding var(--motion-duration-slow) var(--motion-ease-emphasized);
 }
 
 .ds-thread-panel--expanded .ds-thread-panel__header {
-  padding: var(--padding-xs) var(--padding-md);
+  padding: var(--padding-150) var(--padding-400);
 }
 
 /* A logo-less header collapsed to the rail: the empty brand slot would
@@ -91,7 +91,7 @@
   display: flex;
   flex: 1;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
   min-width: 0;
 }
 
@@ -186,11 +186,11 @@
   box-sizing: border-box;
   display: flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
   width: 100%;
   height: 40px;
   min-width: 0;
-  padding: var(--padding-sm);
+  padding: var(--padding-200);
   border: none;
   border-radius: var(--radius-full);
   background: transparent;
@@ -203,15 +203,15 @@
     padding var(--motion-duration-slow) var(--motion-ease-emphasized);
 }
 
-/* Expanded, the rows breathe: --padding-md inline sets the 28px optical
+/* Expanded, the rows breathe: --padding-400 inline sets the 28px optical
    seat (12 + 16) that everything in the panel aligns to — the pen icon's
-   box is the guide. Collapsed returns to --padding-sm, which is what the
+   box is the guide. Collapsed returns to --padding-200, which is what the
    40px circle's math needs; the padding glides with the rail's sweep. */
 .ds-thread-panel--expanded .ds-thread-panel__new,
 .ds-thread-panel--expanded .ds-thread-panel__control,
 .ds-thread-panel--expanded .ds-thread-panel__project,
 .ds-thread-panel--expanded .ds-thread-panel__thread {
-  padding: var(--padding-sm) var(--padding-md);
+  padding: var(--padding-200) var(--padding-400);
 }
 
 .ds-thread-panel__new:hover,
@@ -268,7 +268,7 @@
 .ds-thread-panel__new-kbd {
   display: inline-flex;
   flex: none;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
   opacity: 0;
   transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
 }
@@ -285,7 +285,7 @@
   display: flex;
   flex-direction: column;
   flex: none;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
 }
 
 .ds-thread-panel__control-icon {
@@ -324,7 +324,7 @@
   display: flex;
   flex-direction: column;
   flex: none;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
 }
 
 /* The group-label's seat and rhythm, with the add button balanced on the
@@ -333,10 +333,10 @@
 .ds-thread-panel__projects-header {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
   min-width: 0;
-  padding: var(--padding-xs) var(--padding-sm) var(--padding-xs)
-    var(--padding-md);
+  padding: var(--padding-150) var(--padding-200) var(--padding-150)
+    var(--padding-400);
   opacity: 0;
   visibility: hidden;
   transition: opacity var(--motion-duration-base) var(--motion-ease-standard),
@@ -438,8 +438,8 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
-  padding-top: var(--padding-xs);
+  gap: var(--gap-400);
+  padding-top: var(--padding-150);
   /* Tucked-away scrollbar (ChatThread's manner, without its JS): thin, no
      track fill, and invisible until the pointer is over the history. No
      reserved gutter — it would hold the history's rows 10px narrower than
@@ -468,7 +468,7 @@
 .ds-thread-panel__group {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
 }
 
 /* Aligned with the expanded rows' 28px optical seat. The vertical padding
@@ -476,7 +476,7 @@
    so the overline keeps the pills' rhythm instead of hugging the
    new-thread row above and the first thread below. */
 .ds-thread-panel__group-label {
-  padding: var(--padding-sm) var(--padding-md);
+  padding: var(--padding-200) var(--padding-400);
   overflow: hidden;
   white-space: nowrap;
   font-family: var(--font-overline-family);
@@ -521,7 +521,7 @@
   height: auto;
   min-height: 40px;
   flex-wrap: wrap;
-  column-gap: var(--gap-sm);
+  column-gap: var(--gap-200);
   row-gap: 0;
 }
 
@@ -530,8 +530,8 @@
    cap height. */
 .ds-thread-panel__unread {
   flex: none;
-  width: var(--gap-sm);
-  height: var(--gap-sm);
+  width: var(--gap-200);
+  height: var(--gap-200);
   border-radius: var(--radius-full);
   background-color: var(--color-status-info-icon);
 }
@@ -553,12 +553,12 @@
      ds-allow(color): mask alpha keywords (black/transparent), not palette colours */
   -webkit-mask-image: linear-gradient(
     to right,
-    black calc(100% - var(--gap-xl)),
+    black calc(100% - var(--gap-1000)),
     transparent
   );
   mask-image: linear-gradient(
     to right,
-    black calc(100% - var(--gap-xl)),
+    black calc(100% - var(--gap-1000)),
     transparent
   );
 }
@@ -625,19 +625,19 @@
   color: var(--color-text-tertiary);
   -webkit-mask-image: linear-gradient(
     to right,
-    black calc(100% - var(--gap-xl)),
+    black calc(100% - var(--gap-1000)),
     transparent
   );
   mask-image: linear-gradient(
     to right,
-    black calc(100% - var(--gap-xl)),
+    black calc(100% - var(--gap-1000)),
     transparent
   );
 }
 
 .ds-thread-panel__thread--unread .ds-thread-panel__description {
   /* The dot's width plus the row's column gap. */
-  margin-left: calc(var(--gap-sm) + var(--gap-sm));
+  margin-left: calc(var(--gap-200) + var(--gap-200));
 }
 
 /* The trailing cluster: session glyph, pin marker, and the meta caption,
@@ -646,7 +646,7 @@
   display: inline-flex;
   flex: none;
   align-items: center;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
   transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
@@ -680,8 +680,8 @@
 
 .ds-thread-panel__row .ds-thread-panel__menu {
   position: absolute;
-  top: var(--padding-xs);
-  right: var(--padding-xs);
+  top: var(--padding-150);
+  right: var(--padding-150);
   opacity: 0;
   pointer-events: none;
   transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
@@ -745,7 +745,7 @@
   width: 100%;
   height: 40px;
   min-width: 0;
-  padding: 0 var(--padding-md);
+  padding: 0 var(--padding-400);
   border: var(--border-xs) solid var(--color-action-primary-bg);
   border-radius: var(--radius-full);
   background-color: var(--color-bg-container-primary);
@@ -763,7 +763,7 @@
 
 .ds-thread-panel__more {
   align-self: flex-start;
-  padding: var(--padding-xs) var(--padding-md);
+  padding: var(--padding-150) var(--padding-400);
   border: none;
   border-radius: var(--radius-full);
   background: transparent;
@@ -791,11 +791,11 @@
   display: flex;
   flex-direction: column;
   flex: none;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
   min-width: 0;
   /* Enough air that an overflowing history's last row never crowds the
      profile — the footer is a different region, and the space says so. */
-  padding-top: var(--padding-sm);
+  padding-top: var(--padding-200);
 }
 
 .ds-thread-panel__footer-slot {
@@ -811,19 +811,19 @@
   pointer-events: auto;
 }
 
-/* Same per-state seat as the header: collapsed, --padding-xxs centres the
+/* Same per-state seat as the header: collapsed, --padding-100 centres the
    32px avatar on the rail's axis (12 + 4); expanded joins the 28px seat. */
 .ds-thread-panel__profile {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
   min-width: 0;
-  padding: var(--padding-xxs);
+  padding: var(--padding-100);
   transition: padding var(--motion-duration-slow) var(--motion-ease-emphasized);
 }
 
 .ds-thread-panel--expanded .ds-thread-panel__profile {
-  padding: var(--padding-xxs) var(--padding-md);
+  padding: var(--padding-100) var(--padding-400);
 }
 
 .ds-thread-panel__profile-name {

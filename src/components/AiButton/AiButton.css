@@ -25,10 +25,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 
   /* Spacing — matches Button so the two sit on one control scale */
-  padding: var(--padding-sm) var(--padding-lg);
+  padding: var(--padding-200) var(--padding-500);
 
   /* Buttons are always pill-shaped (design.md invariant) */
   border-radius: var(--radius-full);
@@ -214,7 +214,7 @@
 
 /* Sizes */
 .ds-ai-button--compact {
-  padding: var(--padding-xs) var(--padding-sm-md);
+  padding: var(--padding-150) var(--padding-300);
   font-size: var(--font-paragraph-sm-em-size);
   line-height: var(--font-paragraph-sm-em-line-height);
   letter-spacing: var(--font-paragraph-sm-em-letter-spacing);
@@ -276,9 +276,9 @@
 
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 
-  padding: var(--padding-lg);
+  padding: var(--padding-500);
   border-radius: var(--radius-xl);
   /* ds-allow(color): the light glass token reads solid on a floating card;
      thinned so the page shows through the frost */
@@ -321,12 +321,12 @@
 /* Placement: the panel grows out of the button, so its transform origin
    points back at the button's side of the gap. */
 .ds-ai-button-host--top .ds-ai-button__summary {
-  bottom: calc(100% + var(--gap-sm));
+  bottom: calc(100% + var(--gap-200));
   transform-origin: calc(100% - 60px) calc(100% + 40px);
 }
 
 .ds-ai-button-host--bottom .ds-ai-button__summary {
-  top: calc(100% + var(--gap-sm));
+  top: calc(100% + var(--gap-200));
   transform-origin: calc(100% - 60px) -40px;
   transform: translateY(-10px) scale(0.9);
 }
@@ -449,8 +449,8 @@
 
 .ds-ai-button__summary-dismiss {
   position: absolute;
-  top: var(--gap-sm);
-  right: var(--gap-sm);
+  top: var(--gap-200);
+  right: var(--gap-200);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -477,9 +477,9 @@
 .ds-ai-button__summary-meta {
   display: flex;
   align-items: baseline;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
   /* Keeps the row clear of the dismiss button in the corner. */
-  padding-right: var(--gap-xl);
+  padding-right: var(--gap-1000);
 }
 
 .ds-ai-button__summary-overline {
@@ -502,7 +502,7 @@
 
 .ds-ai-button__summary-title {
   /* Long titles wrap short of the dismiss corner. */
-  padding-right: var(--gap-lg);
+  padding-right: var(--gap-500);
   font-family: var(--font-family-primary);
   font-size: var(--font-title-body-size);
   font-weight: var(--font-title-body-weight);
@@ -538,8 +538,8 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--gap-sm);
-  margin-top: var(--gap-xs);
+  gap: var(--gap-200);
+  margin-top: var(--gap-100);
 }
 
 @media (prefers-reduced-motion: reduce) {

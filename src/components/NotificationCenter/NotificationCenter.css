@@ -27,14 +27,14 @@
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--gap-sm);
-  padding: var(--padding-sm-md) var(--padding-sm-md) var(--padding-xs);
+  gap: var(--gap-200);
+  padding: var(--padding-300) var(--padding-300) var(--padding-150);
 }
 
 .ds-notification-center__heading {
   display: flex;
   align-items: baseline;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
   min-width: 0;
 }
 
@@ -89,16 +89,16 @@
 
 .ds-notification-center__tabs {
   display: flex;
-  gap: var(--gap-xxs);
-  padding: 0 var(--padding-sm-md) var(--padding-xs);
+  gap: var(--gap-050);
+  padding: 0 var(--padding-300) var(--padding-150);
   border-bottom: var(--border-xs) solid var(--color-divider);
 }
 
 .ds-notification-center__tab {
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-xxs);
-  padding: var(--padding-xxs) var(--padding-sm);
+  gap: var(--gap-050);
+  padding: var(--padding-100) var(--padding-200);
   background: none;
   border: none;
   border-radius: var(--radius-full);
@@ -142,7 +142,7 @@
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  padding: var(--padding-xxs) 0;
+  padding: var(--padding-100) 0;
 }
 
 .ds-notification-center__list > .ds-notification-item:not(:last-child) {
@@ -151,7 +151,7 @@
 
 /* Give the built-in empty state breathing room */
 .ds-notification-center__list > .ds-empty-state {
-  padding: var(--padding-lg) var(--padding-sm-md);
+  padding: var(--padding-500) var(--padding-300);
 }
 
 /* ============================================
@@ -161,8 +161,8 @@
 .ds-notification-item {
   display: flex;
   align-items: flex-start;
-  gap: var(--gap-sm);
-  padding: var(--padding-sm) var(--padding-sm-md);
+  gap: var(--gap-200);
+  padding: var(--padding-200) var(--padding-300);
 }
 
 /* The slot is a fixed column as wide as its largest medium — an sm Avatar
@@ -185,7 +185,7 @@
 .ds-notification-item__body {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
   min-width: 0;
   flex: 1 1 auto;
 }
@@ -193,7 +193,7 @@
 .ds-notification-item__top {
   display: flex;
   align-items: center;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
 }
 
 .ds-notification-item__title {
@@ -231,8 +231,8 @@
    one unmistakable unread signal, so it has to register at a glance. */
 .ds-notification-item__dot {
   flex: none;
-  width: var(--gap-sm);
-  height: var(--gap-sm);
+  width: var(--gap-200);
+  height: var(--gap-200);
   border-radius: var(--radius-full);
   background-color: var(--color-status-info-border);
 }
@@ -249,8 +249,8 @@
 .ds-notification-item__actions {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm);
-  padding-top: var(--padding-xxxs);
+  gap: var(--gap-200);
+  padding-top: var(--padding-050);
 }
 
 /* ============================================

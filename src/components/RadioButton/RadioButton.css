@@ -6,7 +6,7 @@
 .ds-radio {
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-sm); /* 8px */
+  gap: var(--gap-200); /* 8px */
   cursor: pointer;
   user-select: none;
 }
@@ -108,7 +108,7 @@
 .ds-radio-group {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm); /* 8px */
+  gap: var(--gap-200); /* 8px */
 }
 
 .ds-radio-group__label {
@@ -123,10 +123,10 @@
 .ds-radio-group__options {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm); /* 8px */
+  gap: var(--gap-200); /* 8px */
 }
 
 .ds-radio-group--horizontal .ds-radio-group__options {
   flex-direction: row;
-  gap: var(--gap-lg); /* 20px */
+  gap: var(--gap-500); /* 20px */
 }

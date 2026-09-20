@@ -10,8 +10,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--gap-md);
-  padding: var(--padding-xs) var(--padding-md);
+  gap: var(--gap-400);
+  padding: var(--padding-150) var(--padding-400);
 }
 
 /* Title */
@@ -30,6 +30,6 @@
 .ds-chat-header__actions {
   display: flex;
   align-items: center;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
   flex-shrink: 0;
 }

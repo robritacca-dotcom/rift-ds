@@ -8,7 +8,7 @@
 .ds-rich-dropdown {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm); /* 8px */
+  gap: var(--gap-200); /* 8px */
   width: 100%;
   position: relative;
 }
@@ -21,8 +21,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--gap-sm); /* 8px */
-  padding: var(--padding-sm) var(--padding-md); /* 8px 16px */
+  gap: var(--gap-200); /* 8px */
+  padding: var(--padding-200) var(--padding-400); /* 8px 16px */
   border: var(--border-xs) solid var(--color-input-border-primary);
   border-radius: var(--radius-md); /* 12px */
   background-color: var(--color-input-bg-primary);
@@ -63,7 +63,7 @@
 .ds-rich-dropdown__cell {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm-md); /* 12px */
+  gap: var(--gap-300); /* 12px */
   flex: 1;
   min-width: 0;
 }
@@ -84,7 +84,7 @@
 .ds-rich-dropdown__text {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xxs); /* 2px */
+  gap: var(--gap-050); /* 2px */
   min-width: 0;
 }
 
@@ -139,8 +139,8 @@
   top: 100%;
   left: 0;
   right: 0;
-  margin-top: var(--gap-xxs); /* 2px */
-  padding: var(--padding-xxs); /* inset gap on all sides */
+  margin-top: var(--gap-050); /* 2px */
+  padding: var(--padding-100); /* inset gap on all sides */
   border: var(--border-xs) solid var(--color-input-border-primary);
   border-radius: var(--radius-md); /* 12px */
   background-color: var(--color-bg-page-primary);
@@ -173,8 +173,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--gap-sm); /* 8px */
-  padding: var(--padding-sm) var(--padding-sm-md); /* 8px 12px */
+  gap: var(--gap-200); /* 8px */
+  padding: var(--padding-200) var(--padding-300); /* 8px 12px */
   border-radius: var(--radius-sm);
   cursor: pointer;
   transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);

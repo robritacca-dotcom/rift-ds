@@ -11,7 +11,7 @@
   margin: 0 auto;
   /* Same token every other page puts above its title, so the h1 sits at
      the same height site-wide */
-  padding: var(--primitive-gap-xl) 32px 96px;
+  padding: var(--primitive-gap-1000) 32px 96px;
 }
 
 /* ---------- page header (site-standard treatment) ---------- */
@@ -21,11 +21,11 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: var(--gap-md);
+  gap: var(--gap-400);
   max-width: 1080px;
   /* Section-rhythm token rather than a fixed margin: it steps down at
      768px on its own, so the mobile override below isn't needed. */
-  margin: 0 auto var(--gap-xxl);
+  margin: 0 auto var(--gap-1500);
 }
 
 .pageTitle {
@@ -50,8 +50,8 @@
   color: var(--color-text-primary);
   /* Together with the hero gap, the spacing above matches the
      title-to-subtitle gap every other page gets from its section rhythm
-     (--primitive-gap-xxxl). */
-  margin: calc(var(--primitive-gap-xxxl) - var(--gap-md)) 0 0;
+     (--primitive-gap-2000). */
+  margin: calc(var(--primitive-gap-2000) - var(--gap-400)) 0 0;
 }
 
 /* ============================================
@@ -64,8 +64,8 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: var(--gap-md) var(--gap-xxl);
-  margin-top: var(--gap-sm);
+  gap: var(--gap-400) var(--gap-1500);
+  margin-top: var(--gap-200);
 }
 
 /* Stat left-aligns for dashboard rows; a centred hero band centres each
@@ -84,8 +84,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--gap-md);
-  margin-top: var(--gap-sm);
+  gap: var(--gap-400);
+  margin-top: var(--gap-200);
 }
 
 .accentRow {
@@ -93,7 +93,7 @@
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 }
 
 .accentSwatch {
@@ -130,7 +130,7 @@
 .hero :global(.ds-button-group) {
   flex-wrap: wrap;
   justify-content: center;
-  margin: var(--gap-sm) 0;
+  margin: var(--gap-200) 0;
 }
 
 /* ============================================
@@ -143,8 +143,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--gap-md);
-  margin-top: var(--gap-xl);
+  gap: var(--gap-400);
+  margin-top: var(--gap-1000);
 }
 
 .resourcesStrip :global(.ds-button-group) {
@@ -156,7 +156,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: var(--gap-xs) var(--gap-sm);
+  gap: var(--gap-100) var(--gap-200);
   list-style: none;
   margin: 0;
   padding: 0;
@@ -169,7 +169,7 @@
 .techItem {
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 }
 
 .techItem:not(:first-child)::before {
@@ -189,7 +189,7 @@
 .collage {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--gap-md);
+  gap: var(--gap-400);
   align-items: stretch;
   height: clamp(640px, 130vh, 1400px);
   overflow: hidden;
@@ -225,8 +225,8 @@
 .escalatorStack {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
-  padding-bottom: var(--gap-md); /* the seam between the two copies = the card gap */
+  gap: var(--gap-400);
+  padding-bottom: var(--gap-400); /* the seam between the two copies = the card gap */
 }
 
 /* The chat demo thread needs a bounded height to be a scroll container at
@@ -280,8 +280,8 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
-  padding: var(--padding-lg);
+  gap: var(--gap-400);
+  padding: var(--padding-500);
   border-radius: var(--radius-xl);
   border: 1px solid var(--color-bg-container-border);
   background: var(--color-bg-container-primary);
@@ -290,7 +290,7 @@
 .cardHeader {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
 }
 
 .cardTitle {
@@ -312,14 +312,14 @@
 .cardBody {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm-md);
+  gap: var(--gap-300);
 }
 
 .cardLinks {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--gap-xs);
-  padding-top: var(--padding-xs);
+  gap: var(--gap-100);
+  padding-top: var(--padding-150);
   border-top: 1px solid var(--color-bg-container-border);
 }
 
@@ -329,14 +329,14 @@
   color: var(--color-text-tertiary);
   text-decoration: underline;
   text-decoration-color: transparent;
-  padding: 2px var(--padding-xxs);
+  padding: 2px var(--padding-100);
   border-radius: var(--radius-sm);
   transition: color var(--motion-duration-base) var(--motion-ease-standard), background-color var(--motion-duration-base) var(--motion-ease-standard), text-decoration-color var(--motion-duration-base) var(--motion-ease-standard);
 }
 
 /* Keep the first footer tag's text flush with the card's left edge */
 .cardLink:first-child {
-  margin-left: calc(-1 * var(--padding-xxs));
+  margin-left: calc(-1 * var(--padding-100));
 }
 
 .cardLink:hover {
@@ -364,14 +364,14 @@
 .statGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--gap-md) var(--gap-sm);
+  gap: var(--gap-400) var(--gap-200);
 }
 
 .settingRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--gap-md);
+  gap: var(--gap-400);
 }
 
 .settingText {
@@ -410,32 +410,32 @@
 .formStack {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm-md);
+  gap: var(--gap-300);
 }
 
 .formStack > :last-child {
   align-self: flex-start;
-  margin-top: var(--gap-xxs);
+  margin-top: var(--gap-050);
 }
 
 .controlColumn {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--gap-sm-md);
+  gap: var(--gap-300);
 }
 
 .buttonRow {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
 }
 
 .thresholdReadout {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 }
 
 .thresholdLabel {
@@ -463,7 +463,7 @@
 }
 
 .rowList > li {
-  padding: var(--padding-xs) 0;
+  padding: var(--padding-150) 0;
 }
 
 .rowList > li:first-child {
@@ -499,7 +499,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--gap-md);
+  gap: var(--gap-400);
 }
 
 .teamCardNumber {
@@ -512,7 +512,7 @@
 .invoiceRow {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 }
 
 .invoiceText {
@@ -534,7 +534,7 @@
 .activityRow {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 }
 
 .activityText {
@@ -556,7 +556,7 @@
 .statementRow {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 }
 
 .statementIcon {
@@ -582,21 +582,21 @@
 .goal {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
 }
 
 .goalHead {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 }
 
 .searchTrigger {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm);
-  padding: var(--padding-xs) var(--padding-sm);
+  gap: var(--gap-200);
+  padding: var(--padding-150) var(--padding-200);
   border-radius: var(--radius-md);
   border: 1px solid var(--color-bg-container-border);
   background: var(--color-bg-page-primary);
@@ -617,32 +617,32 @@
 
 .kbdKeys {
   display: flex;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
 }
 
 .loadingRow {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 }
 
 .recentRow {
   display: flex;
   align-items: center;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
 }
 
 .quickActions {
   display: flex;
   justify-content: space-between;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 }
 
 .quickAction {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
 }
 
 .quickActionLabel {
@@ -663,8 +663,8 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: var(--gap-xs);
-  padding: var(--padding-sm) 0;
+  gap: var(--gap-100);
+  padding: var(--padding-200) 0;
 }
 
 .successBadge {
@@ -676,7 +676,7 @@
   border-radius: var(--radius-full);
   background: var(--color-status-positive-bg);
   border: 1px solid var(--color-status-positive-border);
-  margin-bottom: var(--gap-xxs);
+  margin-bottom: var(--gap-050);
 }
 
 .successBadge > span {
@@ -699,8 +699,8 @@
 
 .successActions {
   display: flex;
-  gap: var(--gap-xs);
-  margin-top: var(--gap-sm);
+  gap: var(--gap-100);
+  margin-top: var(--gap-200);
 }
 
 /* ---------- responsive ---------- */
@@ -734,7 +734,7 @@
 
 @media (max-width: 768px) {
   .page {
-    padding: var(--primitive-gap-xl) 20px 64px;
+    padding: var(--primitive-gap-1000) 20px 64px;
   }
 }
 

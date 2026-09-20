@@ -10,7 +10,7 @@
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding: var(--padding-xl) var(--padding-md);
+  padding: var(--padding-1000) var(--padding-400);
   opacity: 0;
   visibility: hidden; /* also removes the input from the tab order */
   pointer-events: none;
@@ -76,8 +76,8 @@
 .ds-command-palette__search {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm); /* 8px */
-  padding: var(--padding-md) var(--padding-lg); /* 16px 20px */
+  gap: var(--gap-200); /* 8px */
+  padding: var(--padding-400) var(--padding-500); /* 16px 20px */
   border-bottom: var(--border-xs) solid var(--color-divider);
   flex-shrink: 0;
   transition: border-color var(--motion-duration-fast) var(--motion-ease-standard);
@@ -151,7 +151,7 @@
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  padding: var(--padding-sm);
+  padding: var(--padding-200);
   /* Quiet scrollbar, ChatThread's recipe: thin and token-coloured instead
      of the 15px native chrome rail a classic-scrollbar platform would draw
      inside the panel. The stable gutter matters here because filtering
@@ -166,7 +166,7 @@
 }
 
 .ds-command-palette__status {
-  padding: var(--padding-lg);
+  padding: var(--padding-500);
   text-align: center;
   font-family: var(--font-paragraph-sm-family);
   font-size: var(--font-paragraph-sm-size);
@@ -182,7 +182,7 @@
    ============================================ */
 
 .ds-command-palette__group + .ds-command-palette__group {
-  margin-top: var(--gap-xs); /* 4px */
+  margin-top: var(--gap-100); /* 4px */
 }
 
 .ds-command-palette__group-label {
@@ -192,7 +192,7 @@
   line-height: var(--font-paragraph-sm-line-height);
   letter-spacing: var(--font-paragraph-sm-letter-spacing);
   color: var(--color-text-tertiary);
-  padding: var(--padding-xs) var(--padding-sm-md);
+  padding: var(--padding-150) var(--padding-300);
   margin: 0;
   user-select: none;
 }
@@ -204,8 +204,8 @@
 .ds-command-palette__command {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm-md);
-  padding: var(--padding-sm-md); /* 12px — 8px list inset keeps the text edge on the search row's 20px */
+  gap: var(--gap-300);
+  padding: var(--padding-300); /* 12px — 8px list inset keeps the text edge on the search row's 20px */
   border-radius: var(--radius-sm);
   cursor: pointer;
   transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
@@ -229,7 +229,7 @@
 .ds-command-palette__command-text {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
   flex: 1;
   min-width: 0;
 }
@@ -265,7 +265,7 @@
 .ds-command-palette__shortcut {
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
   flex-shrink: 0;
 }
 
@@ -287,8 +287,8 @@
 .ds-command-palette__footer {
   display: flex;
   align-items: center;
-  gap: var(--gap-md);
-  padding: var(--padding-sm-md) var(--padding-lg);
+  gap: var(--gap-400);
+  padding: var(--padding-300) var(--padding-500);
   border-top: var(--border-xs) solid var(--color-divider);
   flex-shrink: 0;
   flex-wrap: wrap;
@@ -297,7 +297,7 @@
 .ds-command-palette__hint {
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
   font-family: var(--font-paragraph-sm-family);
   font-size: var(--font-paragraph-sm-size);
   font-weight: var(--font-paragraph-sm-weight);
@@ -312,7 +312,7 @@
 
 @media (max-width: 480px) {
   .ds-command-palette__panel {
-    margin-top: var(--gap-md);
+    margin-top: var(--gap-400);
     max-height: 75vh;
   }
 

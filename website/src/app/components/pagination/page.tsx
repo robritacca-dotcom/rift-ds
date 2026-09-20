@@ -30,8 +30,8 @@ const allRows = [
   ["--color-bg-page-primary", "#FFFFFF", "Semantic"],
   ["--radius-md", "12px", "Semantic"],
   ["--radius-full", "999px", "Semantic"],
-  ["--gap-md", "16px", "Semantic"],
-  ["--padding-lg", "20px", "Semantic"],
+  ["--gap-400", "16px", "Semantic"],
+  ["--padding-500", "20px", "Semantic"],
   ["--border-xs", "1px", "Semantic"],
   ["--font-paragraph-size", "16px", "Typography"],
 ].map(([name, value, tier], i) => ({

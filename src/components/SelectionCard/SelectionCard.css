@@ -12,7 +12,7 @@
 .ds-selection-card-group {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm); /* 8px */
+  gap: var(--gap-200); /* 8px */
 }
 
 /* ============================================
@@ -23,8 +23,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--gap-lg); /* 20px */
-  padding: var(--padding-md); /* 16px */
+  gap: var(--gap-500); /* 20px */
+  padding: var(--padding-400); /* 16px */
   border: var(--border-xs) solid var(--color-bg-container-border);
   border-radius: var(--radius-md); /* 12px */
   background-color: transparent;
@@ -75,7 +75,7 @@
 .ds-selection-card__content {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xxs); /* 4px */
+  gap: var(--gap-050); /* 4px */
   min-width: 0;
 }
 

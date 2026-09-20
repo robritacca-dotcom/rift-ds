@@ -9,10 +9,10 @@
   /* Layout */
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-xs); /* 4px */
+  gap: var(--gap-100); /* 4px */
 
   /* Spacing */
-  padding: var(--padding-xxxs) var(--padding-sm); /* 2px 8px */
+  padding: var(--padding-050) var(--padding-200); /* 2px 8px */
 
   /* Shape — borderless pill on the secondary container */
   border-radius: var(--radius-full);

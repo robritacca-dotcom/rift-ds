@@ -17,7 +17,7 @@
 
 .ds-button-group--horizontal {
   flex-direction: row;
-  gap: var(--gap-lg); /* Figma: --gap/lg (20px) */
+  gap: var(--gap-500); /* Figma: --gap/lg (20px) */
   align-items: flex-start;
 }
 
@@ -28,7 +28,7 @@
 
 .ds-button-group--vertical {
   flex-direction: column;
-  gap: var(--gap-xxs); /* 2px */
+  gap: var(--gap-050); /* 2px */
   align-items: flex-start; /* Left-aligned, hug content */
 }
 

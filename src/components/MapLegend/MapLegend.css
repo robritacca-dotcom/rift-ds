@@ -9,7 +9,7 @@
 .ds-map-legend {
   display: inline-flex;
   flex-direction: column;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
   max-width: 32ch;
   font-family: var(--font-family-code);
   color: var(--color-text-primary);
@@ -39,15 +39,15 @@
 .ds-map-legend__key {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
   margin: 0;
-  margin-top: var(--gap-xs);
+  margin-top: var(--gap-100);
 }
 
 .ds-map-legend__row {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--gap-200);
 }
 
 .ds-map-legend__glyph {

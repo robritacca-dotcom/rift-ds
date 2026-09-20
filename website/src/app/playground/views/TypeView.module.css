@@ -7,14 +7,14 @@
 .faceCards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: var(--gap-md);
+  gap: var(--gap-400);
 }
 
 .faceCard {
   display: flex;
   align-items: center;
-  gap: var(--gap-md);
-  padding: var(--padding-md);
+  gap: var(--gap-400);
+  padding: var(--padding-400);
   background: var(--color-bg-container-primary);
   border: var(--border-xs) solid var(--color-bg-container-border);
   border-radius: var(--radius-xl);
@@ -36,7 +36,7 @@
 .faceInfo {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
   min-width: 0;
 }
 
@@ -75,9 +75,9 @@
 .rampRow {
   display: grid;
   grid-template-columns: 220px minmax(0, 1fr);
-  gap: var(--gap-lg);
+  gap: var(--gap-500);
   align-items: center;
-  padding: var(--padding-md) 0;
+  padding: var(--padding-400) 0;
   border-bottom: var(--border-xs) solid var(--color-divider);
 }
 
@@ -88,14 +88,14 @@
 .rampMeta {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xxs);
+  gap: var(--gap-050);
   min-width: 0;
 }
 
 .rampName {
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
   font-size: var(--font-paragraph-em-size);
   font-weight: var(--font-paragraph-em-weight);
   line-height: var(--font-paragraph-em-line-height);
@@ -104,7 +104,7 @@
 
 .roleChip {
   flex: none;
-  padding: 0 var(--padding-xs);
+  padding: 0 var(--padding-150);
   font-size: var(--font-caption-size);
   font-weight: var(--font-paragraph-sm-em-weight);
   line-height: var(--font-overline-line-height);
@@ -142,7 +142,7 @@
 @container (max-width: 719px) {
   .rampRow {
     grid-template-columns: 1fr;
-    gap: var(--gap-sm);
+    gap: var(--gap-200);
     align-items: start;
   }
 }

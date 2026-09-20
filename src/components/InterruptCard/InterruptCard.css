@@ -31,8 +31,8 @@
 .ds-interrupt-card__header {
   display: flex;
   align-items: flex-start;
-  gap: var(--gap-sm);
-  padding: var(--padding-md) var(--padding-lg);
+  gap: var(--gap-200);
+  padding: var(--padding-400) var(--padding-500);
 }
 
 .ds-interrupt-card__icon {
@@ -51,7 +51,7 @@
 .ds-interrupt-card__heading {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xs);
+  gap: var(--gap-100);
   min-width: 0;
 }
 
@@ -83,7 +83,7 @@
    ============================================ */
 
 .ds-interrupt-card__detail {
-  padding: 0 var(--padding-lg) var(--padding-md);
+  padding: 0 var(--padding-500) var(--padding-400);
 }
 
 .ds-interrupt-card__detail > :first-child {
@@ -105,8 +105,8 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: var(--gap-sm);
-  padding: var(--padding-sm) var(--padding-lg) var(--padding-md);
+  gap: var(--gap-200);
+  padding: var(--padding-200) var(--padding-500) var(--padding-400);
 }
 
 /* ============================================
@@ -119,8 +119,8 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: var(--gap-xs);
-  padding: var(--padding-sm) var(--padding-lg) var(--padding-md);
+  gap: var(--gap-100);
+  padding: var(--padding-200) var(--padding-500) var(--padding-400);
   font-family: var(--font-paragraph-sm-family);
   font-size: var(--font-paragraph-sm-size);
   font-weight: var(--font-paragraph-sm-weight);

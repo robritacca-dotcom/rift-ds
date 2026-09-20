@@ -13,7 +13,7 @@
 .ds-timepicker {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm); /* 8px */
+  gap: var(--gap-200); /* 8px */
   width: 100%;
   position: relative;
 }
@@ -25,9 +25,9 @@
 .ds-timepicker__trigger {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm); /* 8px */
+  gap: var(--gap-200); /* 8px */
   width: 100%;
-  padding: var(--padding-sm) var(--padding-md); /* 8px 16px */
+  padding: var(--padding-200) var(--padding-400); /* 8px 16px */
   border: var(--border-xs) solid var(--color-input-border-primary);
   border-radius: var(--radius-md); /* 12px — input shape, not the button pill */
   background-color: var(--color-input-bg-primary);
@@ -104,8 +104,8 @@
   top: 100%;
   left: 0;
   right: 0;
-  margin-top: var(--gap-xxs); /* 2px */
-  padding: var(--padding-xxs); /* inset gap on all sides */
+  margin-top: var(--gap-050); /* 2px */
+  padding: var(--padding-100); /* inset gap on all sides */
   border: var(--border-xs) solid var(--color-input-border-primary);
   border-radius: var(--radius-md); /* 12px */
   background-color: var(--color-bg-page-primary);
@@ -138,7 +138,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--padding-sm) var(--padding-sm-md); /* 8px 12px */
+  padding: var(--padding-200) var(--padding-300); /* 8px 12px */
   border-radius: var(--radius-sm);
   font-family: var(--font-paragraph-em-family);
   font-size: var(--font-paragraph-em-size);
@@ -205,7 +205,7 @@
    ============================================ */
 
 .ds-timepicker--compact .ds-timepicker__trigger {
-  padding: var(--padding-xs) var(--padding-sm-md); /* 6px 12px */
+  padding: var(--padding-150) var(--padding-300); /* 6px 12px */
 }
 
 .ds-timepicker--compact .ds-timepicker__value {
@@ -219,7 +219,7 @@
 }
 
 .ds-timepicker--compact .ds-timepicker__option {
-  padding: var(--padding-xs) var(--padding-sm); /* 6px 8px */
+  padding: var(--padding-150) var(--padding-200); /* 6px 8px */
   font-size: var(--font-paragraph-sm-em-size);
   line-height: var(--font-paragraph-sm-em-line-height);
   letter-spacing: var(--font-paragraph-sm-em-letter-spacing);

@@ -9,7 +9,7 @@
   align-items: center;
   justify-content: center;
   min-width: 24px;
-  padding: var(--padding-xxxs) var(--padding-xs);
+  padding: var(--padding-050) var(--padding-150);
   border: var(--border-xs) solid var(--color-bg-container-border);
   border-radius: var(--radius-xs);
   background-color: var(--color-bg-container-primary);
@@ -24,5 +24,5 @@
 /* Sizes */
 .ds-kbd--compact {
   min-width: 20px;
-  padding: var(--padding-xxxs) var(--padding-xxs);
+  padding: var(--padding-050) var(--padding-100);
 }

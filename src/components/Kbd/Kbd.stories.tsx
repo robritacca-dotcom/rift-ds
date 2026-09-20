@@ -43,7 +43,7 @@ export const Compact: Story = {
 /** Compose several Kbds for a chord. */
 export const Chord: Story = {
   render: () => (
-    <span style={{ display: 'inline-flex', gap: 'var(--gap-xxs)' }}>
+    <span style={{ display: 'inline-flex', gap: 'var(--gap-050)' }}>
       <Kbd>⌘</Kbd>
       <Kbd>⇧</Kbd>
       <Kbd>P</Kbd>

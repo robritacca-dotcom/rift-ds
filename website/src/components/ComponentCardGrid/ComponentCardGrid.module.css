@@ -1,6 +1,6 @@
 .tocGrid {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--primitive-gap-lg);
+  gap: var(--primitive-gap-500);
   width: 100%;
 }

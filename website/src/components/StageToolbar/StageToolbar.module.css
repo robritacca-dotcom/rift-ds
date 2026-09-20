@@ -11,8 +11,8 @@
   height: var(--layout-toolbar-height);
   display: flex;
   align-items: center;
-  gap: var(--gap-md);
-  padding: 0 var(--padding-lg);
+  gap: var(--gap-400);
+  padding: 0 var(--padding-500);
   z-index: 30;
   background: var(--color-bg-glass);
   backdrop-filter: blur(24px);
@@ -45,7 +45,7 @@
   flex: 1;
   display: flex;
   align-items: center;
-  gap: var(--gap-md);
+  gap: var(--gap-400);
   min-width: 0;
 }
 
@@ -54,7 +54,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: var(--gap-md);
+  gap: var(--gap-400);
 }
 
 .logo {

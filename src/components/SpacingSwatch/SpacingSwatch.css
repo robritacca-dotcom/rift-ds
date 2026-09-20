@@ -9,7 +9,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--gap-lg); /* 20px */
+  gap: var(--gap-500); /* 20px */
 
   /* Sizing */
   flex: 1 1 0;
@@ -19,7 +19,7 @@
   background: var(--color-bg-container-primary-semi);
   border: var(--border-xs) solid var(--color-bg-container-border);
   border-radius: var(--radius-xl); /* 24px */
-  padding: var(--padding-lg); /* 20px */
+  padding: var(--padding-500); /* 20px */
 }
 
 /* ============================================

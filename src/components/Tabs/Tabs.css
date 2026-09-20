@@ -31,8 +31,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--gap-sm); /* 8px */
-  padding: var(--padding-sm) var(--padding-md); /* 8px 16px */
+  gap: var(--gap-200); /* 8px */
+  padding: var(--padding-200) var(--padding-400); /* 8px 16px */
   border: none;
   border-bottom: var(--border-md) solid transparent;
   margin-bottom: calc(var(--border-xs) * -1); /* Overlap the container border */
@@ -55,7 +55,7 @@
    ============================================ */
 
 .ds-tabs--compact .ds-tabs__tab {
-  padding: var(--padding-xs) var(--padding-sm-md); /* 6px 12px */
+  padding: var(--padding-150) var(--padding-300); /* 6px 12px */
   font-size: var(--font-paragraph-sm-em-size);
   line-height: var(--font-paragraph-sm-em-line-height);
   letter-spacing: var(--font-paragraph-sm-em-letter-spacing);

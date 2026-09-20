@@ -20,7 +20,7 @@ Use this skill when asked to save unfinished work — phrases like "checkpoint",
 
 1. **Check the branch**: `git branch --show-current`.
    - **On a work branch**: commit and push there (steps 2–5).
-   - **On `main`**: move the work to a branch first — there is no "push to main but don't deploy", because a push to `main` publishes robertritacca.com. Create a branch named for the work, not the date: `git checkout -b wip/<short-topic>` (e.g. `wip/nav-search`, `wip/chart-tokens`). Uncommitted changes ride along automatically. Never commit directly to `main` from this skill.
+   - **On `main`**: move the work to a branch first — there is no "push to main but don't deploy", because a push to `main` deploys the live site (`SITE_URL` in `scripts/brand.mjs` is the authority). Create a branch named for the work, not the date: `git checkout -b wip/<short-topic>` (e.g. `wip/nav-search`, `wip/chart-tokens`). Uncommitted changes ride along automatically. Never commit directly to `main` from this skill.
 
 2. **Survey the tree**: run `git status --short` and classify every entry as in scope (this session's work) or out of scope (predates the session or wasn't part of the requested work). **Never run `git add -A`, `git add .`, or `git add` on a directory** — always add explicit file paths. Out-of-scope files stay out and are named in the report.
 

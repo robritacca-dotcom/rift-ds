@@ -46,7 +46,7 @@ export default function AboutDsPage() {
               {BRAND_NAME} is the design system behind every page on this site: a solo build, run as a working experiment in how far a written spec and an AI pair can carry a production system. The foundation was designed in{" "}
               <a href={`${FIGMA_FILE_URL}?node-id=246-5864`} target="_blank" rel="noopener noreferrer" className={styles.inlineLink}>Figma</a>; the system lives in{" "}
               <a href={REPOSITORY_URL} target="_blank" rel="noopener noreferrer" className={styles.inlineLink}>the repo</a> as a{" "}
-              <Link href="/blueprints/design" className={styles.inlineLink}>written spec</Link>, layered CSS tokens, and React components, and Claude Code builds from the spec, so a design change reaches production in under a minute. It ships as the npm package <code>@robr0/design-system</code>, and this site installs that package like any other consumer would. You can{" "}
+              <Link href="/blueprints/design" className={styles.inlineLink}>written spec</Link>, layered CSS tokens, and React components, and Claude Code builds from the spec, so a design change is a short commit away from a deploy. It ships as the npm package <code>@robr0/design-system</code>, and this site installs that package like any other consumer would. You can{" "}
               <Link href="/docs/get-started" className={styles.inlineLink}>install it yourself</Link> and{" "}
               <Link href="/playground" className={styles.inlineLink}>re-theme it live</Link>.
             </p>
@@ -138,9 +138,10 @@ export default function AboutDsPage() {
                   gate, ship. Figma feeds the
                   authoring stage from outside, Google is touched exactly once
                   at build time (the typeface is fetched, then self-hosted),
-                  and a push to main deploys straight to Vercel.
-                  The package takes its own lane: a manual release publishes
-                  to npm with provenance, no stored token. The map carries the
+                  and a push to main is built to deploy straight to
+                  Vercel once the project is attached. The package takes its
+                  own lane: a manual release publishes to npm with
+                  provenance, no stored token. The map carries the
                   detail: the drift guard, the hydration smoke, the axe audit
                   on every story.
                 </p>
@@ -173,17 +174,18 @@ export default function AboutDsPage() {
                 <p className={styles.sectionBody}>
                   Once the site is live, only the edges matter. Pages come
                   from Vercel with the fonts and the chat corpus already baked
-                  in, analytics events go from the browser straight to Google
-                  and never touch Vercel, and a scheduled smoke re-proves
-                  production every four hours.
+                  in, analytics stays off until a measurement ID is set, and a
+                  scheduled smoke stands ready to re-prove production on a
+                  cron once there is a production to prove.
                 </p>
                 <ul className={styles.sectionBullets}>
                   <li>
                     The chat answers from the published site through Claude,
                     reaching for the same generated prop and token contracts
                     the MCP tools serve when a question needs them, held by
-                    per-visitor rate limits and a daily budget; conversations
-                    are kept for 30 days, tied to no name, then deleted. The
+                    per-visitor rate limits and a daily budget once its
+                    backing store is wired; conversations are kept for 30
+                    days, tied to no name, then deleted. The
                     same widget runs in{" "}
                     <Link href="/playground?view=chat" className={styles.inlineLink}>
                       the playground&apos;s Chat view

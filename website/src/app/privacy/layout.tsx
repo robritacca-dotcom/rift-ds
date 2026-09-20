@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { pageOpenGraph } from "@/config/navigation";
 
-// /privacy is a standalone top-level page (like /contact) — it lives in no
+// /privacy is a standalone top-level page (like /playground) — it lives in no
 // sidebar array, so its metadata is a literal rather than pageMetadata().
 const title = "Privacy";
 const description =

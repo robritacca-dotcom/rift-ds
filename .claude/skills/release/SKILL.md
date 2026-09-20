@@ -32,12 +32,15 @@ Check what shipped since the last tag to justify the choice, and confirm it with
 git log $(git describe --tags --abbrev=0)..HEAD --oneline
 ```
 
+**First release from this repo**: the history is fresh and carries no tags yet, so `git describe --tags` fails — compare against the full history instead (`git log --oneline`) and treat everything in it as what ships.
+
 Be deliberate about breaking changes: components are exported both from the barrel and from `./components/*` deep paths, so a renamed component folder breaks consumers even if the barrel still exports the old name.
 
 ### 2. Pre-flight
 
 - **Working tree must be clean and pushed.** The workflow builds from the repo, not your disk — anything uncommitted will not be in the release. `git status --short` and `git log origin/main..HEAD` should both be empty.
 - **CI on `main` must be green.** A release from a red main ships known-broken code.
+- **Confirm the Trusted Publishing registration on npmjs.com covers THIS repo** before a real publish. The registration is keyed to repo + workflow filename, and it currently names a different repository — a publish from here fails auth until it is updated. Rob owns anything that changes on npmjs.com.
 - Run `npm run verify` if anything at all is uncommitted or you haven't verified since the last change.
 
 ### 3. Bump and commit
@@ -58,7 +61,7 @@ Then:
 npm run validate-registry
 ```
 
-This re-runs the three-way version parity check and regenerates the derived surfaces — and two generated trees stamp `PACKAGE_VERSION` into their output, so the bump rewrites every per-component markdown page under `website/public/components/` and the consumer agent skill under `website/public/skill/dragonspine-design-system/`. The diff is large by design. Commit all of it together as the bump commit (`chore(release): <version>`) and push — a bump pushed without the restamped files fails CI's drift guard (that exact split produced the 0.15.0 cleanup commit), and the commit you push here is the commit that will be published and tagged.
+This re-runs the three-way version parity check and regenerates the derived surfaces — and two generated trees stamp `PACKAGE_VERSION` into their output, so the bump rewrites every per-component markdown page under `website/public/components/` and the consumer agent skill's brand-named folder under `website/public/skill/` (`BIN_NAME` in `scripts/brand.mjs` owns the name). The diff is large by design. Commit all of it together as the bump commit (`chore(release): <version>`) and push — a bump pushed without the restamped files fails CI's drift guard (that exact split produced the 0.15.0 cleanup commit), and the commit you push here is the commit that will be published and tagged.
 
 ### 4. Dry run — never skip this
 
@@ -74,7 +77,7 @@ gh run list --workflow=release.yml --limit 3 --json databaseId,createdAt,display
 gh run watch <the-new-databaseId> --exit-status
 ```
 
-The dry run does everything except upload: builds `dist/`, packs the tarball, installs it into a scratch Vite + React app and **builds that app without recharts installed** (the optional-peer path — the regression this catches), then prints the publish preview. It needs no npm token, so it is free to run as often as you like. Read the preview's file count and package size and sanity-check them against the previous release; a sudden jump means something got swept into the tarball. Expect `LICENSE`, `README.md` and `bin/dragonspine-design-system.mjs` (the init bin, origin-stamped and executable) alongside the build output; anything else new is not deliberate.
+The dry run does everything except upload: builds `dist/`, packs the tarball, installs it into a scratch Vite + React app and **builds that app without recharts installed** (the optional-peer path — the regression this catches), then prints the publish preview. It needs no npm token, so it is free to run as often as you like. Read the preview's file count and package size and sanity-check them against the previous release; a sudden jump means something got swept into the tarball. Expect `LICENSE`, `README.md` and the init bin under `bin/` (named by `BIN_NAME` in `scripts/brand.mjs`, origin-stamped and executable) alongside the build output; anything else new is not deliberate.
 
 ### 5. Publish
 
@@ -122,7 +125,7 @@ Version published, the npm URL, the tagged commit, the release URL, and anything
 - **Never** re-run the publish workflow after a successful publish, even if the registry 404s
 - The version's three homes must agree — step 3 above is the procedure and `CLAUDE.md`'s Release section owns the fact. Never bump `package.json` alone — the manifest is what ships
 - Never publish from a dirty tree, an unpushed commit, or a red CI
-- **Auth is Trusted Publishing (OIDC) — there is no npm token to expire or rotate.** If the publish step fails to authenticate, the cause is one of: `actions/setup-node` was given a **`registry-url:`** (see below); the `id-token: write` permission was dropped from `release.yml`; the workflow file was **renamed or moved** (the trusted-publisher registration on npmjs.com is keyed to the filename `release.yml`); the npm CLI on the runner is older than 11.5.1; or the registration itself was removed. Rob owns anything that has to change on npmjs.com.
+- **Auth is Trusted Publishing (OIDC) — there is no npm token to expire or rotate.** If the publish step fails to authenticate, the cause is one of: `actions/setup-node` was given a **`registry-url:`** (see below); the `id-token: write` permission was dropped from `release.yml`; the workflow file was **renamed or moved** (the trusted-publisher registration on npmjs.com is keyed to the filename `release.yml`); the registration on npmjs.com names a different repository — it is keyed to repo + workflow filename, and this repo is not yet registered (see the pre-flight check); the npm CLI on the runner is older than 11.5.1; or the registration itself was removed. Rob owns anything that has to change on npmjs.com.
 - **A `404` on `PUT` during publish is an AUTH failure, not a missing package.** npm returns 404 instead of 403 so it doesn't leak whether a package exists — the message even says "or you do not have permission to access it". Do not go hunting for a missing package; check the auth path.
 - **Never add `registry-url:` to `actions/setup-node` in this workflow.** It writes an `.npmrc` with `_authToken=${NODE_AUTH_TOKEN}` *and* exports a placeholder `NODE_AUTH_TOKEN`, so npm thinks it is already authenticated, skips the OIDC exchange entirely, and gets rejected. The tell in the log: no mention of `oidc`/`trusted` anywhere, and `NODE_AUTH_TOKEN: XXXXX-XXXXX-XXXXX-XXXXX` in a step's env block. Provenance signing still succeeds in this state — that is GitHub→Sigstore and proves nothing about npm accepting the token.
 - **A dry run never authenticates**, so it cannot prove OIDC is working — it exercises the build and the tarball, nothing else. After any change to `release.yml`'s auth, permissions, or filename, the only real proof is a genuine publish. Treat that as a reason to make the *next* release a small patch, not a reason to skip the dry run.

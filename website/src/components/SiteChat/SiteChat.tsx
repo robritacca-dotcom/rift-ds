@@ -132,7 +132,7 @@ export function SiteChat({
 
   const greeting = useSyncExternalStore(subscribeClock, readGreeting, serverGreeting);
 
-  /* Starters follow the page: a new chat opened on /about proposes career
+  /* Starters follow the page: a new chat opened on /components proposes component
      questions, one on a case-study or component page names the item (the
      nav registry already knows its label, client-side). usePathname is
      reactive, so navigating with the welcome screen showing swaps the

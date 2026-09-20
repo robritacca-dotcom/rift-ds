@@ -6,9 +6,9 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/robritacca-dotcom/design-system.git"
+    "url": "git+https://github.com/robritacca-dotcom/dragonspine.git"
   },
-  "homepage": "https://robertritacca.com",
+  "homepage": "https://dragonspine.vercel.app",
   "type": "module",
   "engines": {
     "node": ">=24",
@@ -23,7 +23,7 @@
   "workspaces": [
     "website"
   ],
-  "$comment-overrides": "Pins that outrank the ranges next declares for two of its transitive deps: postcss (next pins an exact 8.5.x â€” 8.5.23 as of next 16.3.4 â€” and the override takes the patched newer 8.5 line) and sharp (also a direct root devDependency for scripts/generate-cover-rasters.mjs, so this is as much a dedupe pin as a security one). Both now sit outside next's own ranges, so `npm ls` reports them invalid and exits non-zero by design; `npm audit` is the real test, and the pins can retire when next's declared ranges catch up. npm ONLY honours overrides in the workspace ROOT â€” the copies that used to live in website/package.json were silently ignored after the workspaces conversion, which un-pinned both. Keep them here.",
+  "$comment-overrides": "Pins that outrank the ranges next declares for two of its transitive deps: postcss (next pins an exact 8.5.x \u00e2\u20ac\u201d 8.5.23 as of next 16.3.4 \u00e2\u20ac\u201d and the override takes the patched newer 8.5 line) and sharp (also a direct root devDependency for scripts/generate-cover-rasters.mjs, so this is as much a dedupe pin as a security one). Both now sit outside next's own ranges, so `npm ls` reports them invalid and exits non-zero by design; `npm audit` is the real test, and the pins can retire when next's declared ranges catch up. npm ONLY honours overrides in the workspace ROOT \u00e2\u20ac\u201d the copies that used to live in website/package.json were silently ignored after the workspaces conversion, which un-pinned both. Keep them here.",
   "overrides": {
     "postcss": "^8.5.18",
     "sharp": "^0.35.3"

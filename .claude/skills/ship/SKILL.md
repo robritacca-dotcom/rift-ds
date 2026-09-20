@@ -1,14 +1,14 @@
 ---
 name: ship
-description: Make finished work live on robertritacca.com. Commit, run the full verify, merge branch work into main when needed, push, watch CI go green, then prove the deployed site actually renders with the live hydration smoke. Use when asked to ship it, make it live, push to main, or deploy this. If asked to "merge and push" (a retired skill name), confirm the intended end state — ship, checkpoint, or land — before acting.
+description: Make finished work live on the deployed site (SITE_URL in scripts/brand.mjs is the authority). Commit, run the full verify, merge branch work into main when needed, push, watch CI go green, then prove the deployed site actually renders with the live hydration smoke. Use when asked to ship it, make it live, push to main, or deploy this. If asked to "merge and push" (a retired skill name), confirm the intended end state — ship, checkpoint, or land — before acting.
 icon: publish
-displayDescription: "Makes finished work live on robertritacca.com. Surveys the tree so unrelated files never get swept into a commit, runs the full local verify (the single script mirroring CI) before anything is committed, merges branch work into main when needed, pushes, confirms the CI run goes green, then loads the deployed site in a real browser to prove it renders (a deploy is not done at HTTP 200), and reports exactly what deployed."
+displayDescription: "Makes finished work live on the deployed site. Surveys the tree so unrelated files never get swept into a commit, runs the full local verify (the single script mirroring CI) before anything is committed, merges branch work into main when needed, pushes, confirms the CI run goes green, then loads the deployed site in a real browser to prove it renders (a deploy is not done at HTTP 200), and reports exactly what deployed."
 invoke: ["ship it","make it live","push to main","deploy this"]
 ---
 
 # ship
 
-Make finished work live on robertritacca.com — builds green first, no unrelated files swept in, a clear report after. The end state is always the same: the work is on `main`, pushed, and deployed.
+Make finished work live on the live site (`SITE_URL` in `scripts/brand.mjs` is the authority for where that is) — builds green first, no unrelated files swept in, a clear report after. The end state is always the same: the work is on `main`, pushed, and deployed.
 
 ## When invoked
 
@@ -19,7 +19,7 @@ Use this skill when asked to make completed work live — phrases like "ship it"
 ## Instructions
 
 0. **Check the branch**: `git branch --show-current`.
-   - **On `main`**: follow steps 1–9 directly. **A push to main deploys robertritacca.com.**
+   - **On `main`**: follow steps 1–9 directly. **A push to main deploys the live site** (`SITE_URL` in `scripts/brand.mjs` is the authority).
    - **On any other branch**: the work rides the branch into `main`. Follow steps 1–4 on the branch (commit there), then merge in step 5. Never cherry-pick or copy files across branches to avoid a merge.
 
 1. **Survey the tree before touching anything**: run `git status --short` and classify every entry:
@@ -50,9 +50,9 @@ Use this skill when asked to make completed work live — phrases like "ship it"
    ```
    A fast-forward or a merge commit are both fine. **If the merge conflicts, stop and report** — never resolve conflicts silently as part of a ship. Never force-push to make a merge "work".
 
-6. **Push**: `git push` on `main`. Remember: **a push to main deploys robertritacca.com via Vercel** — pushing is publishing.
+6. **Push**: `git push` on `main`. Remember: **a push to main deploys the live site via Vercel** (`SITE_URL` in `scripts/brand.mjs` is the authority) — pushing is publishing.
 
-   If the pushed work changed component CSS, anything under `src/tokens/`, or `.storybook/`, offer to dispatch Chromatic (`gh workflow run chromatic.yml`) — `verify` proves nothing about pixels, and this is the decision point pre-deploy's Chromatic rule exists for. It bills cloud snapshots, so it's an offer, not an automatic step.
+   If the pushed work changed component CSS, anything under `src/tokens/`, or `.storybook/`, offer to dispatch Chromatic (`gh workflow run chromatic.yml`) — once a Chromatic project is provisioned for this repo (none exists yet) — `verify` proves nothing about pixels, and this is the decision point pre-deploy's Chromatic rule exists for. It bills cloud snapshots, so it's an offer, not an automatic step.
 
    Chromatic only snapshots Storybook, so it says nothing about the website. If the pushed work touched a site-wide background surface — the config (`website/src/data/shader-background.json`), the site's composition of it (`website/src/components/BlurBackground/`), the renderer itself (`src/components/ShaderField/`), or the immersive stages' ground (`website/src/components/DotBackground/`) — offer a `visual-review` pass instead: the first three change the background on all of the site's pages at once, the fourth is the whole ground under the stage pages, and no automated gate covers any of them. `verify` proves the config validated and the shader compiled, not that the result looks right. The renderer is the easiest to miss, because it lives in the library rather than the website and Chromatic's Storybook snapshots do not cover a full-viewport site background.
 
@@ -62,17 +62,18 @@ Use this skill when asked to make completed work live — phrases like "ship it"
    ```bash
    gh run watch $(gh run list --workflow=ci.yml --branch main --limit 1 --json databaseId --jq '.[0].databaseId') --exit-status
    ```
-   The `--workflow=ci.yml` filter is load-bearing: a push to main also triggers CodeQL within the same second, and an unfiltered `--limit 1` can hand you that run instead. `--exit-status` makes a red run exit non-zero rather than reporting and returning 0. CI runs in parallel with the Vercel deploy — it gates nothing, but a red run on main means something the local verify missed (or an environment difference) and must be investigated, not left as a red X.
+   The `--workflow=ci.yml` filter is load-bearing: a push to main can trigger other workflows within the same second (CodeQL, if it is enabled for this repo — check rather than assume), and an unfiltered `--limit 1` can hand you one of those runs instead. `--exit-status` makes a red run exit non-zero rather than reporting and returning 0. CI runs in parallel with the Vercel deploy — it gates nothing, but a red run on main means something the local verify missed (or an environment difference) and must be investigated, not left as a red X.
 
    **Branch case, after CI is green**: delete the merged branch — `git branch -d <branch>`, and `git push origin --delete <branch>` if it was pushed. Its commits are on `main`; the repo stays main-only by default. Name the deletion in the report.
 
-8. **Prove the deployed site renders** — the step the 2026-09-06 outage was missing. A green verify, a green CI run, and an HTTP 200 all held that morning while every JS browser showed a blank page: the failure lived in Vercel's runtime rendering (the root route's ISR regeneration sees an internal pathname no local run can reproduce), so only the live site can prove itself. First confirm the new deployment is what's serving — the `data-dpl-id` in the homepage HTML changes with every deploy:
+8. **Prove the deployed site renders** — the step the 2026-09-06 outage was missing. A green verify, a green CI run, and an HTTP 200 all held that morning while every JS browser showed a blank page: the failure lived in Vercel's runtime rendering (the root route's ISR regeneration sees an internal pathname no local run can reproduce), so only the live site can prove itself. **Until the first Vercel deployment exists, this whole step is inoperable** — `SITE_URL` in `scripts/brand.mjs` is a placeholder with nothing serving it yet; say so in the report instead of treating the miss as an outage. Read the URL from `scripts/brand.mjs` (the authority), never from memory. First confirm the new deployment is what's serving — the `data-dpl-id` in the homepage HTML changes with every deploy:
    ```bash
-   curl -s https://robertritacca.com/ | grep -o 'data-dpl-id="[^"]*"'
+   SITE_URL="$(node -e "import('./scripts/brand.mjs').then(b=>console.log(b.SITE_URL))")"
+   curl -s "$SITE_URL/" | grep -o 'data-dpl-id="[^"]*"'
    ```
    If it hasn't changed from before the push, wait a moment and re-check — Vercel usually finishes before CI does. Then run the live hydration smoke:
    ```bash
-   node scripts/smoke-hydration.mjs https://robertritacca.com
+   node scripts/smoke-hydration.mjs "$(node -e "import('./scripts/brand.mjs').then(b=>console.log(b.SITE_URL))")"
    ```
    The script's doc block owns what it asserts (hydration succeeded, the theme guard's ready mark landed, the page is visible with content, at desktop and phone viewports). **A red result means the deploy may have taken the site down — treat it as an active outage, not a report line**: diagnose immediately, and if the cause isn't quickly fixable, revert the deploy (`git revert` the pushed commits and push again) rather than leaving the site dark while investigating. Never skip this step because verify and CI were green — they were green during the outage too.
 

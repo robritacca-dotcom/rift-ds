@@ -6,6 +6,7 @@ import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import { getSidebarLinks, docsSidebarLinks } from "@/config/navigation";
+import { THEME_PRESETS, THEME_SELECTOR_ORDER } from "@/lib/theme/presets";
 import styles from "./page.module.css";
 import FloatingAnchorNav from "@/components/FloatingAnchorNav/FloatingAnchorNav";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
@@ -26,6 +27,7 @@ const PAGE_SECTIONS = [
   { id: "dark-mode", label: "Dark mode" },
   { id: "fonts", label: "Bring your own font" },
   { id: "re-theme", label: "Re-theme with primitives" },
+  { id: "preset-themes", label: "Ship a theme" },
   { id: "chat-agent-ui", label: "Chat and agent UI" },
   { id: "agent-docs", label: "Docs for your agent" },
   { id: "ambient-background", label: "Ambient background" },
@@ -64,6 +66,11 @@ import { BarChart, LineChart } from '@robr0/design-system/charts';`;
 
 const DARK_MODE_SNIPPET = `<!-- Light is the default; flip the whole system with one attribute -->
 <html data-theme="dark">`;
+
+const PRESET_SNIPPET = `// Every shipped theme, one generated stylesheet each, plus this aggregate.
+import '@robr0/design-system/tokens/presets/presets.css';
+
+<html data-brand="terminal">`;
 
 const INIT_SNIPPET = `npx @robr0/design-system init`;
 
@@ -310,6 +317,29 @@ export default function GetStartedPage() {
                   without touching the ramp it comes from:
                 </p>
                 <CodeBlock code={SEMANTIC_SNIPPET} language="css" showCopy />
+              </section>
+
+              {/* Preset themes */}
+              <section id="preset-themes" className={`${styles.section} animate-in animate-delay-5`}>
+                <SectionTitle title="Ship a theme" />
+                <p className={styles.sectionNote}>
+                  Complete looks ship in the package as generated stylesheets.
+                  Import the aggregate once, set one attribute on the root
+                  element, and the whole product follows: light and dark, the
+                  action family, the ambience, and the chart colours together.
+                  Remove the attribute to return to the shipped look.
+                </p>
+                <CodeBlock code={PRESET_SNIPPET} language="tsx" showCopy />
+                <p className={styles.sectionNote}>
+                  The shipped themes:{" "}
+                  {THEME_SELECTOR_ORDER.filter((id) => id !== "default")
+                    .map((id) => THEME_PRESETS[id].label)
+                    .join(", ")}
+                  . Each also loads alone from{" "}
+                  <code>tokens/presets/&lt;id&gt;.css</code>, and the theme dots
+                  on the home page swap the same attribute, so every look here
+                  is the one a consumer gets.
+                </p>
               </section>
 
               {/* Chat and agent UI */}

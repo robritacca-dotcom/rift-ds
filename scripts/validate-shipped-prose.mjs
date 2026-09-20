@@ -24,16 +24,11 @@
  * whose own validator (validate-page-summaries.mjs) runs the em-dash check
  * alongside its structural rules.
  *
- * Four modules are in scope by name, because their visitor-visible prose
- * rides in string literals the page scan's prose extraction cannot see:
- * `website/src/lib/chat-sim.ts` (the scripted story and scenario responses
- * and their chips), `website/src/app/playground/ChatDirector.tsx` (the
- * event-rail copy), and `website/src/app/playground/views/ChatView.tsx`
- * (the staged history's thread titles, detail lines and project rows), and
- * `website/src/data/case-study-tldrs.ts` (the TLDR points at the top of the
- * /work case studies, kept outside the route folders so the corpus does not
- * carry the articles' facts twice). Their string literals and JSX text are
- * scanned through the AST, so comments — where an em dash is a structural
+ * A handful of modules are in scope by name, because their visitor-visible
+ * prose rides in string literals the page scan's prose extraction cannot
+ * see — the scripted chat stories, the playground's staged copy, the graph
+ * instrument's panel text. Their string literals and JSX text are scanned
+ * through the AST, so comments — where an em dash is a structural
  * separator, not voice — are never seen. `STORY_MODULES` below is the list.
  *
  * WHAT IS DELIBERATELY OUT, AND WHY
@@ -43,17 +38,11 @@
  *     exempts them: em dashes are structural separators there, not voice.
  *     Skill `displayDescription` frontmatter is NOT exempt, because it
  *     renders on /skills.
- *   - Essays (`website/src/data/essays.json`) — Rob's Substack pieces, synced
- *     rather than authored here. Restyling already-published writing is not
- *     this rule's job.
  *   - noindex pages — derived from the page's own `robots: { index: false }`,
  *     so a page joining or leaving the set moves itself in and out of scope
- *     with no list to maintain here. Today that is `/covers`, `/covers/render`
- *     and `/rr-animated` (internal surfaces a visitor never reaches) plus
- *     `/canvas`, which IS nav-linked but stays noindex while it is alpha —
- *     its board hint and control labels ride outside this gate until the
- *     page graduates to indexed, at which point the derivation pulls it in
- *     by itself.
+ *     with no list to maintain here. Today that is the `/labs` rebuilds
+ *     (internal surfaces a visitor never reaches); when a noindex page
+ *     graduates to indexed, the derivation pulls it in by itself.
  *   - Non-page `.ts` modules other than `STORY_MODULES` — their string
  *     literals are server logs and internal messages, not copy. The chat's
  *     persona and greeting strings are genuinely shipped prose but live among

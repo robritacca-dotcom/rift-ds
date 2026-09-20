@@ -132,7 +132,7 @@ export default function SemanticSpacingPage() {
             />
             <p className={styles.viewportNote}>
               {isMobileView
-                ? "Below 768px the section-rhythm steps (gap XXL–XXXXL, padding XXL) compress one notch. Everything else holds."
+                ? "Below 768px the section-rhythm steps (gap 1500–3000, padding 1500) compress one notch. Everything else holds."
                 : "Above 768px every step renders at its full size."}
             </p>
           </div>

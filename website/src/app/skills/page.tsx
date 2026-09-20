@@ -47,9 +47,8 @@ export default function SkillsPage() {
             </p>
             <p className={styles.introBody}>
               These {SKILL_COUNT} skill files live in{" "}
-              <code className={styles.inlineCode}>.claude/skills/</code> (most in this
-              repo; only <code className={styles.inlineCode}>ga-report</code> lives in my
-              personal skills folder) and encode this project’s conventions:
+              <code className={styles.inlineCode}>.claude/skills/</code> in this
+              repo and encode this project’s conventions:
               component patterns, token rules, navigation wiring, and more. Invoke any
               skill by name in Claude Code and it follows the exact steps without
               re-explanation each session. Expand any skill to read the full file, and

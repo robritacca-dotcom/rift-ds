@@ -2,7 +2,7 @@
 name: link-rot
 description: "Monthly loop that checks every external link the built site renders still resolves. Build the site, probe the external hrefs with scripts/check-external-links.mjs, verify every failure by hand, and fix genuinely dead links on a local branch for approval. Use when asked to run the link rot loop or check the external links. Never pushes, merges, or deploys."
 icon: link_off
-displayDescription: "Collects every external link the built site renders, from case-study references to footer profiles, and checks each one still resolves. The build already proves internal links can never break; the outside world offers no such guarantee. Failures are verified by hand before anything is called dead, because bot-blockers fake them, and real rot is fixed on a branch for approval. One of the loops described on the Loops page."
+displayDescription: "Collects every external link the built site renders, from docs references to footer profiles, and checks each one still resolves. The build already proves internal links can never break; the outside world offers no such guarantee. Failures are verified by hand before anything is called dead, because bot-blockers fake them, and real rot is fixed on a branch for approval. One of the loops described on the Loops page."
 invoke: ["run the link rot loop","/link-rot","check the external links"]
 ---
 

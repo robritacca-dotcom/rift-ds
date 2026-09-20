@@ -100,7 +100,7 @@ export default function FoundationsPage() {
             <TocCard href="/foundations/spatial" title="Semantic spacing">
               <div className={`${styles.circlePreview} ${styles.circleGreen}`}>
                 <div className={styles.spatialBox} />
-                <span className={styles.spatialLabel}>XXL</span>
+                <span className={styles.spatialLabel}>1500</span>
                 <span className={styles.spatialValue}>60px</span>
               </div>
             </TocCard>

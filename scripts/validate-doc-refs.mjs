@@ -12,7 +12,7 @@
  *   - .claude/skills/<name>/SKILL.md          (repo skills)
  *   - website/src/data/external-skills/*.md   (published external copies)
  *   - CLAUDE.md, README.md, design.md, content-design.md, SECURITY.md
- *   - evals/chat/README.md, website/README.md, ga-analysis/README.md
+ *   - evals/chat/README.md, evals/chat/SPEC.md, website/README.md
  *
  * Deliberately excluded:
  *   - website/src/data/skills-content.generated.ts and the website/public
@@ -62,7 +62,7 @@ const sources = [
 // here is fixed by extending the placeholder pattern, not by deleting the
 // reference.
 const pathPrefix =
-  /^(src|website|scripts|evals|ga-analysis|\.claude|\.storybook|\.github|design\.md|content-design\.md|CLAUDE\.md|README\.md|SECURITY\.md)(\/|$)/;
+  /^(src|website|scripts|evals|\.claude|\.storybook|\.github|design\.md|content-design\.md|CLAUDE\.md|README\.md|SECURITY\.md)(\/|$)/;
 const placeholder = /[<>*{}[\] $~]|ComponentName|MyComponent|my-component|component-slug|YYYY/;
 const deadPaths = [];
 let pathCount = 0;

@@ -188,7 +188,7 @@ export async function checkGuardrails(request: Request): Promise<GuardrailVerdic
       return {
         allowed: false,
         notice:
-          "That is a lot of questions at once. Give it a minute and ask again, or use the contact page at /contact if it is urgent.",
+          "That is a lot of questions at once. Give it a minute and ask again; the docs at /docs cover most of it in the meantime.",
       };
     }
 
@@ -196,7 +196,7 @@ export async function checkGuardrails(request: Request): Promise<GuardrailVerdic
       return {
         allowed: false,
         notice:
-          "You have reached the daily limit for this chat. It resets tomorrow. The contact page at /contact is the fastest way to reach Rob directly.",
+          "You have reached the daily limit for this chat. It resets tomorrow. The docs answer most questions without it: start at /docs/get-started.",
       };
     }
 
@@ -212,9 +212,9 @@ export async function checkGuardrails(request: Request): Promise<GuardrailVerdic
         allowed: false,
         notice:
           "This chat has hit its budget for today and is paused until midnight UTC. " +
-          "The site itself answers most of what people ask: the case studies are at /work, " +
-          "Rob's background and career history are at /about, and his email and profiles " +
-          "are at /contact.",
+          "The site itself answers most of what people ask: the components live at " +
+          "/components, install and theming at /docs/get-started, and how the system " +
+          "is built at /overview.",
       };
     }
 

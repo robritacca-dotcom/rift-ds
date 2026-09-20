@@ -1,6 +1,6 @@
 ---
 name: pre-deploy
-description: Run the full local verify (lint, library and package builds with the publish lint, story tests, Storybook build, website lint + build, the built-HTML validators, and the served-site checks) and confirm the site is safe to push to Vercel. Use when asked whether changes are ready to push, deploy, or ship, or for a pre-deploy check.
+description: Run the full local verify (lint, library and package builds with the publish lint, story tests, Storybook build, website lint + build, the built-HTML validators, and the served-site checks) and confirm the site is safe to push to Vercel (no Vercel project exists for this repo yet; every check runs locally regardless). Use when asked whether changes are ready to push, deploy, or ship, or for a pre-deploy check.
 icon: rocket_launch
 displayDescription: "Runs the same checks as CI before a push to Vercel: lint, the library type-check, the publishable npm package build, every Storybook story as a render, interaction, *and* accessibility test (Vitest + headless Chromium + axe, with story play functions asserting behavior), the Storybook build, the website lint + build (Next.js), the validators that read the built HTML, and the served-site checks: a hydration smoke in a real browser and a page-level axe pass in both themes. Knows the npm-workspace layout and watches for SSR-unsafe code, portal regressions, and static generation failures."
 invoke: ["is this ready to push?","run the build","pre-deploy check","check before I push"]
@@ -8,7 +8,7 @@ invoke: ["is this ready to push?","run the build","pre-deploy check","check befo
 
 # pre-deploy
 
-Run the full local verify and confirm the site is safe to push to Vercel.
+Run the full local verify and confirm the site is safe to push to Vercel. No Vercel project exists for this repo yet — every check below runs locally and stands on its own until one does; "safe to push" then means safe to deploy the day a project exists.
 
 ## When invoked
 
@@ -48,7 +48,7 @@ Use this skill when asked to check if changes are ready to push, deploy, or ship
    If everything passes:
    > Verify passed (lint + story tests + library, package, Storybook, and website builds, plus the publish lint, the built-HTML validators, and the served-site checks). Safe to push.
 
-   **If the change touched component CSS, `src/tokens/`, or `.storybook/`, also dispatch the Chromatic workflow** (`gh workflow run chromatic.yml`) and check the diff before or right after pushing — visual regressions are the one thing `verify` cannot see, and Chromatic is deliberately not part of it because every run bills cloud snapshots against a monthly budget. Text-only, script-only, or website-prose changes don't need a run.
+   **If the change touched component CSS, `src/tokens/`, or `.storybook/`, also dispatch the Chromatic workflow** (`gh workflow run chromatic.yml`) — once a Chromatic project is provisioned for this repo (none exists yet) — and check the diff before or right after pushing — visual regressions are the one thing `verify` cannot see, and Chromatic is deliberately not part of it because every run bills cloud snapshots against a monthly budget. Text-only, script-only, or website-prose changes don't need a run.
 
    If any step fails, show:
    - Which step failed (lint, component library, story tests, Storybook, website lint, website build, or one of the checks that run after it — the built-HTML validators or the served-site checks; the tail of the `verify` entry in the root `package.json` is the authoritative list)

@@ -28,21 +28,21 @@ deliberately not built.
 
 ## Grounding
 
-Authority: the "Answering about Rob and this site" section of `persona.ts`,
+Authority: the "Answering about this system and site" section of `persona.ts`,
 and the corpus boundary in CLAUDE.md.
 
 | Id | Rule | Enforced by |
 |---|---|---|
-| G1 | Facts about Rob, his work, and the system come only from the site corpus. A fact not in it is unknown: say so and point at /contact, never guess. | L1 per-case `contains` asserts on the fact questions in `golden-set.json`; L3 for the tone of "I don't know" |
+| G1 | Facts about the system and the site come only from the site corpus. A fact not in it is unknown: say so plainly, never guess. | L1 per-case `contains` asserts on the fact questions in `golden-set.json`; L3 for the tone of "I don't know" |
 | G2 | Every site path the answer cites must exist. | L1 `evals/chat/assert-paths.mjs`, on every case via `defaultTest` |
 | G3 | A stated component count must match the registry; a qualified approximation may run a little under, never over. | L1 `evals/chat/assert-component-count.mjs`. Wired only on the count case today; attach it to any new case likely to elicit a count |
 | G4 | Every fact the golden set requires must actually be in the generated corpus. | L0 `scripts/validate-chat-coverage.mjs`, in CI |
-| G5 | Contact channels and the paid consultation's published scope and booking flow are facts, given directly. Availability, rates, hiring, and bespoke engagement terms are Rob's to answer: deflect to /contact. | L1 the availability case asserts `contains: /contact` |
+| G5 | The site publishes no direct contact channels. Availability, rates, hiring, and engagement terms are the maintainer's to answer: say so and point at the GitHub repository the footer links. | L1 the availability case asserts the answer names GitHub |
 | G6 | Links are inline markdown, on-site only, never invented and never off-site (published profile URLs like LinkedIn are facts to state, not the off-site links this bans). | L1 `assert-paths.mjs` catches invented paths; off-site linking is unenforced, L3 |
 
 ## Tools
 
-Authority: the tools paragraph in the "Answering about Rob and this site"
+Authority: the tools paragraph in the "Answering about this system and site"
 section of `persona.ts`, and the tool definitions in
 `website/src/app/api/chat/route.ts` (`CHAT_TOOLS`), whose implementations are
 shared with `/api/mcp` through `website/src/lib/site-tools.ts`.

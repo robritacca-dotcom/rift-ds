@@ -17,7 +17,7 @@ Run when asked to "run the security audit" (`/security-audit`), or to check how 
 
 - **Report only, by default.** This skill audits and reports; it does not change code. Applying fixes is a separate, explicit request. Say what is wrong and how to fix it, not "I fixed it."
 - **Read-only and non-destructive.** Scans, reads, and a small, bounded set of live requests. No state-changing calls to any service.
-- **Live probing is light and bounded.** A handful of requests to the production chat endpoint (injection, rate-limit, oversized-body, malformed-body). Stop the moment rate limiting kicks in — being throttled is the positive result, not a reason to push harder. Each request bills real API tokens, so keep the count low.
+- **Live probing is light and bounded.** A handful of requests to the production chat endpoint (injection, rate-limit, oversized-body, malformed-body). It needs a deployment to probe — until one exists, skip the live probes and note the gap in the report. Stop the moment rate limiting kicks in — being throttled is the positive result, not a reason to push harder. Each request bills real API tokens, so keep the count low.
 - **A clean pass is a valid outcome.** If a category has nothing worth flagging, say so and credit what is already strong. Never invent a finding to have something to report.
 - **Evidence or it doesn't ship.** Every finding needs a `file:line`, a command result, or a captured live response. Kill false positives in a verification pass before writing anything up.
 
@@ -29,7 +29,7 @@ Work the surfaces below. The list says where to look, not what is there — read
 
 - `npm audit --json` at the repo root (the single lockfile covers the `website` workspace too; run it in `website/` as well to be sure). Capture vuln counts and whether fixes exist.
 - Secret scan of the working tree — `secretlint` with the recommended preset (write its config to a scratch dir, not the repo), or an equivalent scanner if one is installed.
-- Secret sweep of the **full git history** (`git log -p --all`) for key patterns (`sk-ant-`, `ghp_`, `github_pat_`, `AIza…`, PEM headers, AWS keys) — the repo is public, so history matters as much as the tree. Confirm no `.env` file was ever committed (`git log --all --diff-filter=A --name-only`).
+- Secret sweep of the **full git history** (`git log -p --all`) for key patterns (`sk-ant-`, `ghp_`, `github_pat_`, `AIza…`, PEM headers, AWS keys) — check the repo's visibility first (`gh repo view --json visibility`; it may still be private), and if it is public, history matters as much as the tree; it is worth sweeping either way. Confirm no `.env` file was ever committed (`git log --all --diff-filter=A --name-only`).
 - Probe for the scanner binaries (gitleaks, trufflehog, osv-scanner, semgrep, trivy) and Docker before planning the sweep rather than assuming either way — on the Windows checkout they are generally absent (see the memory on Windows checkout quirks). Where they are missing, lean on `npm audit`, `npx secretlint`, and `git` history greps, which need no install, and offer to download a standalone scanner only with permission.
 
 ### 2. API routes & the AI chat (OWASP LLM Top 10)
@@ -48,7 +48,7 @@ Read `website/next.config.ts` for the CSP and headers, then **confirm against wh
 
 ### 4. CI, release & supply chain
 
-Read everything under `.github/` — the workflows *and* `dependabot.yml`, which lives beside the workflows directory, not in it. Check each workflow for a least-privilege `permissions:` block (its absence hands builds the repo-default token scope) and whether actions are pinned to SHAs vs movable tags. For dependency-scanning automation, know that a scanner can exist with no file at all: CodeQL runs via GitHub's default setup here, so confirm with `gh run list --branch main --json workflowName` before concluding anything is absent — a files-only sweep reports a false gap. Credit the release workflow's posture (OIDC Trusted Publishing, provenance, pre-publish consumer smoke test) where it holds.
+Read everything under `.github/` — the workflows *and* `dependabot.yml`, which lives beside the workflows directory, not in it. Check each workflow for a least-privilege `permissions:` block (its absence hands builds the repo-default token scope) and whether actions are pinned to SHAs vs movable tags. For dependency-scanning automation, know that a scanner can exist with no file at all: check whether CodeQL is enabled for this repo (`gh api` the code-scanning default-setup endpoint, the Security tab, or `gh run list --branch main --json workflowName`) — do not assume it either way; a files-only sweep reports a false gap when default setup is on, and a remembered "it runs here" reports a false pass when it is off. Credit the release workflow's posture (OIDC Trusted Publishing, provenance, pre-publish consumer smoke test) where it holds.
 
 ### 5. Analytics & privacy
 

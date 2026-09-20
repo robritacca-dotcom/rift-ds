@@ -9,7 +9,7 @@
  * - Expanded: any pointer pans, wheel zooms freely.
  * - The drawing refits itself on resize until the visitor takes over.
  *
- * Controls are the /canvas board's floating pill: zoom out, the percent
+ * Controls are the floating glass pill: zoom out, the percent
  * readout (resets to 100%), zoom in, fit, and — embedded only — expand.
  */
 

@@ -16,7 +16,7 @@
  *
  * The route also travels to the model as page context (see the sanitised
  * `path` in /api/chat), which is what lets a starter say "this page" or
- * "this case study" and resolve.
+ * "this component" and resolve.
  *
  * Every label here has to fit on one chip: the budget is SUGGESTION_MAX_CHARS
  * and `scripts/validate-chat-starters.mjs` holds the written ones to it. The
@@ -91,7 +91,7 @@ const DEFAULT_STARTERS: Starter[] = [
   { id: "agents", label: "Can my coding agent use this?" },
 ];
 
-/** Longest-prefix wins, so /work/meta-offers beats /work. */
+/** Longest-prefix wins, so /components/button beats /components. */
 const STARTERS_BY_PREFIX: Array<[string, Starter[]]> = [
   ["/components", [
     { id: "organised", label: "How are components organised?" },
@@ -187,36 +187,10 @@ const STARTERS_BY_PREFIX: Array<[string, Starter[]]> = [
 
 /**
  * Item pages get item-aware starter pools. The route already travels to the
- * model as page context, so "this essay" resolves; when the nav registry
- * knows the item's label (case studies, components — essays' titles are
- * runtime feed data and too long for a pill anyway), one starter names it.
+ * model as page context, so "this component" resolves; when the nav
+ * registry knows the item's label, one starter names it.
  */
 function itemStarterPool(pathname: string, itemLabel?: string | null): Starter[] | null {
-  if (/^\/writing\/[^/]+$/.test(pathname)) {
-    return [
-      { id: "argument", label: "What's the core argument?" },
-      { id: "summary", label: "Summarise this essay" },
-      { id: "connect", label: "How does this connect to Rob's work?" },
-      { id: "prompted", label: "What prompted this essay?" },
-      { id: "claim", label: "What's the strongest claim?" },
-      { id: "next", label: "What should I read next?" },
-    ];
-  }
-  if (/^\/work\/[^/]+$/.test(pathname)) {
-    return [
-      {
-        id: "walkthrough",
-        label: itemLabel
-          ? named(`Walk me through ${itemLabel}`, "Walk me through this case study")
-          : "Walk me through this case study",
-      },
-      { id: "role", label: "What was Rob's role?" },
-      { id: "results", label: "What results did it ship?" },
-      { id: "hardest", label: "What was the hardest problem?" },
-      { id: "start", label: "How did the project start?" },
-      { id: "ai", label: "How does AI feature here?" },
-    ];
-  }
   if (/^\/components\/[^/]+$/.test(pathname)) {
     return [
       {

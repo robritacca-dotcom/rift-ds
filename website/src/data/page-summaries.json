@@ -56,7 +56,7 @@
     },
     "/skills": {
       "title": "Agent skills",
-      "text": "The repeatable jobs Rob's coding agent runs on this repo: audits, shipping flows, and content loops.",
+      "text": "The repeatable jobs the coding agent runs on this repo: audits, shipping flows, and content loops.",
       "chips": [
         {
           "id": "skills",
@@ -105,7 +105,7 @@
     },
     "/privacy": {
       "title": "Privacy",
-      "text": "What the site collects and why: analytics, chat logs, and the choices behind both.",
+      "text": "What the site collects and what it does not: analytics off today, and the chat's retention rules for when it is live.",
       "chips": [
         {
           "id": "data",
@@ -171,7 +171,7 @@
     },
     "/foundations/logos": {
       "title": "Logos",
-      "text": "The personal mark and its rules: variants, clear space, and usage.",
+      "text": "The brand mark and wordmark, their construction, and the rules for using them.",
       "chips": [
         {
           "id": "logo",

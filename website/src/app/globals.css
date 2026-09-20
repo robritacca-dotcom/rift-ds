@@ -61,7 +61,7 @@ html[data-theme-ready] {
 
   /* What "one viewport tall" means to a page. Sections that fill the first
      screen size themselves from this rather than from svh directly, so a
-     surface that shows a page at a height of its own choosing (the /canvas
+     surface that shows a page at a height of its own choosing (an embedding
      board, which pins it to a desktop viewport on the frame's <html>) gets
      a page with a natural height instead of one that grows with its frame. */
   --layout-viewport-height: 100svh;
@@ -235,7 +235,7 @@ body:has([data-bg-full-bleed]) .blur-container::after {
   display: none;
 }
 
-/* Background off — the dotted stages (playground, canvas) stand the ambient
+/* Background off — the dotted stages (the playground) stand the ambient
    layer down for their own ground, read the same marker way. Hiding the
    layer rather than unmounting it keeps the WebGL context alive, so a
    navigation back to an ambient page is instant instead of a fresh compile
@@ -292,7 +292,7 @@ body:has([data-bg-hidden]) .blur-container {
   opacity: 0;
 }
 
-/* A framed page. The /canvas board marks the <html> of every page it shows
+/* A framed page. An embedding board marks the <html> of every page it shows
    (data-embedded) and rasterizes the page under a scale transform, where
    each repaint re-rasterizes 1440px-wide tiles. So a framed page stops
    doing the two things that repaint continuously: motion, cut the same way
@@ -311,7 +311,7 @@ html[data-embedded] *::after {
 
 /* Only stop the drift once the field has actually taken over; a pending
    container may still fall back, and should not resume from a frozen pose.
-   An embedded page (a /canvas frame) freezes it too: a still of the band. */
+   An embedded page (an iframe) freezes it too: a still of the band. */
 .blur-container[data-shader="on"] .blur-ellipse,
 .blur-container[data-embedded] .blur-ellipse {
   animation-play-state: paused;

@@ -7,7 +7,7 @@
 
 An AI-ready React design system, the docs site built on it, and the AI layer that lets the site answer questions about itself. Claude Code builds all of it from the written specs in this repo (`CLAUDE.md` for the rules, `design.md` for the design language, `content-design.md` for how every word reads), and generated registries keep this README and the docs site from drifting.
 
-**[→ Live site](https://dragonspine.vercel.app/)** · **[→ Storybook](https://dragonspine-storybook.vercel.app/?path=/docs/robr0-ds--docs)**
+**[→ Live site](https://dragonspine.vercel.app/)** · **[→ Storybook](https://dragonspine-storybook.vercel.app/?path=/docs/dragonspine-ds--docs)**
 
 The **live site** is the documentation site built on the design system. **Storybook** is the interactive component explorer for the design system itself. They deploy separately: two Vercel projects from one repo.
 
@@ -18,7 +18,7 @@ The **live site** is the documentation site built on the design system. **Storyb
 | Part | Description |
 |---|---|
 | **Documentation website** (`/website`) | Next.js app documenting every component with live examples, foundations, templates, and the playground, all built exclusively with the design system components below. **[Live site →](https://dragonspine.vercel.app/)** |
-| **Design system** (`/src`) | <!-- component-count -->132<!-- /component-count --> React components, a three-tier token architecture, dark mode, a WebGL2 ambient background that themes itself from your tokens, and a full documentation site. Built to production standards. **[Storybook →](https://dragonspine-storybook.vercel.app/?path=/docs/robr0-ds--docs)** |
+| **Design system** (`/src`) | <!-- component-count -->132<!-- /component-count --> React components, a three-tier token architecture, dark mode, a WebGL2 ambient background that themes itself from your tokens, and a full documentation site. Built to production standards. **[Storybook →](https://dragonspine-storybook.vercel.app/?path=/docs/dragonspine-ds--docs)** |
 | **AI layer** (`ai` components in `/src`, chat in `/website`, `/evals`) | A site-wide chat that answers questions about the work: built from the library's own `ai` components, grounded in a corpus generated from the site's published content plus lookup tools over the generated prop and token contracts, and scored by a golden-set eval. An MCP endpoint serves the same public data to any agent. |
 
 ---

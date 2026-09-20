@@ -27,6 +27,8 @@ git log --oneline $(git describe --tags --abbrev=0 <previous-tag>^)..v<version>
 git show v<version> --no-patch --format='%s%n%b'
 ```
 
+**First release from this repo**: the history is fresh and carries no earlier tags, so there is no `<previous-tag>` to anchor the range — take it from the full history instead (`git log --oneline v<version>`).
+
 The tag message names the headline features; the commit list fills in the rest. The release-history sentence in `CLAUDE.md` (CI & Local Verify section) is the one-line summary of record — the card and copy must agree with it. Pick the strongest feature as the hero and a handful of others as supporting tiles; a release with more features than tiles drops features rather than shrinking them.
 
 ### 2. Lift the real design values
@@ -34,18 +36,20 @@ The tag message names the headline features; the commit list fills in the rest. 
 Read the token files before drawing — never write a colour or type value from memory:
 
 - `src/tokens/tokens-primitives.css` — the hex values behind the semantic roles
-- `src/tokens/tokens-dark.css` — which primitive each dark-theme role resolves to (the card is dark-theme; it reads best in a feed and matches the earlier cards)
+- `src/tokens/tokens-dark.css` — which primitive each dark-theme role resolves to (the card is dark-theme; it reads best in a feed)
 - `src/tokens/tokens-typography.css` — the display sizes, weights and letter-spacing
 
-The values to resolve: the page and container greys, the container border, the text ramp, the dark-theme action teal and its on-teal ink, and — if a tile shows status colours — the dark-theme status *icon* hues. Radii follow the system's rules: pill for buttons and chips, the card radius for tiles, the composer radius if a tile draws the composer. `design.md` owns those; check it when unsure rather than guessing.
+**This repo has no earlier cards to match, and the site's shipped default theme is the mono preset** (`data-brand="mono"` is served). Resolve every role through that preset — its generated stylesheet in `src/tokens/presets/` overrides the base tokens (composed by `presetOverrides` in `website/src/lib/theme/presets.ts`) — rather than assuming the base dark-teal look.
+
+The values to resolve: the page and container greys, the container border, the text ramp, the dark-theme action colour and its ink as the shipped preset resolves them, and — if a tile shows status colours — the dark-theme status *icon* hues. Radii follow the system's rules: pill for buttons and chips, the card radius for tiles, the composer radius if a tile draws the composer. `design.md` owns those; check it when unsure rather than guessing.
 
 ### 3. Draw the card
 
-Author a plain HTML file in the scratchpad (never in the repo tree) at **1200×675** — X's landscape card ratio. The established layout, matching the earlier release cards:
+Author a plain HTML file in the scratchpad (never in the repo tree) at **1200×675** — X's landscape card ratio. The established layout (this repo has no earlier cards of its own to match; the layout below is the record):
 
-- **Header row**: the package name as an uppercase overline in the action teal; the version large in the light display weight with its tracking; the release date beside it; an `npm i` pill and the site domain on the right.
+- **Header row**: the package name as an uppercase overline in the action teal; the version large in the light display weight with its tracking; the release date beside it; an `npm i` pill and the site's host (from `SITE_URL` in `scripts/brand.mjs`) on the right.
 - **Bento grid** below: four columns by two rows. The hero feature takes a 2×2 tile with a title, one sentence, a few pill chips, and a small abstract drawing of the feature (panels, glyphs, a miniature control — drawn with divs and inline stroke SVG, never emoji or screenshots). Each remaining feature gets a 1×1 tile: bold title, a tiny visual or code chip, one caption sentence.
-- A faint teal radial glow or two behind everything — the site's ambient background in still form. Subtle; the ground stays near-black.
+- A faint accent-coloured radial glow or two behind everything (the accent as the shipped preset resolves it) — the site's ambient background in still form. Subtle; the ground stays near-black.
 
 Nunito Sans loads from Google Fonts via a `<link>` in the head. All copy on the card follows `content-design.md`: sentence case, neutral, no emoji, no em dashes, one idea per line. Tile captions are one short sentence each.
 

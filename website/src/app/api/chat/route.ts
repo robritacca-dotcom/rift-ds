@@ -357,7 +357,7 @@ export async function POST(request: Request): Promise<Response> {
     return ndjson(
       {
         type: "notice",
-        text: "This chat is switched off at the moment. The case studies cover most of what people ask, and /contact reaches Rob directly.",
+        text: "This chat is switched off at the moment. The docs cover most of what people ask: components at /components, install and theming at /docs/get-started.",
       },
       { type: "done" }
     );
@@ -650,7 +650,7 @@ function friendlyError(error: unknown): string {
     return "The model is busy right now. Give it a moment and ask again.";
   }
   if (status === 401 || status === 403) {
-    return "This chat is not configured correctly at the moment. The contact page at /contact still works.";
+    return "This chat is not configured correctly at the moment. The docs at /docs still cover most of it.";
   }
-  return "Something went wrong reaching the model. Try that again, or use /contact if it keeps happening.";
+  return "Something went wrong reaching the model. Try that again in a moment.";
 }

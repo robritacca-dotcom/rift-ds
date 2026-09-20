@@ -4,7 +4,7 @@
     {
       "slug": "chat-quality",
       "icon": "reviews",
-      "description": "Twice a month an agent reads the site chat's own report card: every thumbs verdict a visitor left on an answer, joined back to the logged exchange it rates. Each disliked answer becomes a regression case in the chat eval's golden set, the eval runs against the updated set, and the fixes land on a branch: a new case, a corpus correction, a persona tweak. I read the report and approve or reject. Visitors' questions are paraphrased before anything is committed.",
+      "description": "Twice a month an agent will read the site chat's own report card once the chat is live: every thumbs verdict a visitor left on an answer, joined back to the logged exchange it rates. Each disliked answer becomes a regression case in the chat eval's golden set, the eval runs against the updated set, and the fixes land on a branch: a new case, a corpus correction, a persona tweak. I read the report and approve or reject. Visitors' questions are paraphrased before anything is committed.",
       "cadence": "Biweekly, 8th & 22nd",
       "trigger": "Runs on demand for now",
       "stages": [
@@ -27,12 +27,12 @@
       "skills": [
         "chat-quality"
       ],
-      "status": "active"
+      "status": "paused"
     },
     {
       "slug": "link-rot",
       "icon": "link_off",
-      "description": "Once a month an agent collects every external link the built site renders, from case-study references to footer profiles, and checks each one still resolves. The build already proves internal links can never break; the outside world offers no such guarantee. Every failure is verified by hand before anything is called dead, because bot-blockers fake failures, and real rot is fixed on a branch with a report I approve or reject.",
+      "description": "Once a month an agent collects every external link the built site renders, from docs references to footer links, and checks each one still resolves. The build already proves internal links can never break; the outside world offers no such guarantee. Every failure is verified by hand before anything is called dead, because bot-blockers fake failures, and real rot is fixed on a branch with a report I approve or reject.",
       "cadence": "Monthly, 1st",
       "trigger": "Runs on demand for now",
       "stages": [

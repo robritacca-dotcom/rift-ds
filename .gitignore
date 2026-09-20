@@ -13,7 +13,7 @@ dist-ssr
 *.local
 
 # Environment files are never tracked (website/.gitignore repeats this for its
-# own tree; the root rule covers everything else, ga-analysis included)
+# own tree; the root rule covers everything else)
 .env
 .env.*
 
@@ -36,7 +36,6 @@ dist-ssr
 storybook-static
 .vercel
 # Growth-loop local reports (never committed)
-ga-analysis/loop-reports/
 
 # Claude's internal session notes — local-only, not for the public repo
 .claude/memory/

@@ -1,13 +1,13 @@
 [
   {
-    "description": "recruiter: availability (correct answer is a /contact deflection)",
+    "description": "recruiter: availability (his to answer; the chat points at the GitHub repository)",
     "vars": {
       "question": "Is Rob open to new roles right now?"
     },
     "assert": [
       {
         "type": "contains",
-        "value": "/contact"
+        "value": "github"
       }
     ],
     "metadata": {
@@ -16,14 +16,14 @@
     }
   },
   {
-    "description": "recruiter: consultation price (not published on the site, deflects to /contact)",
+    "description": "recruiter: rates (not published on the site; his to answer, pointed at the GitHub repository)",
     "vars": {
       "question": "How much does a consultation with Rob cost?"
     },
     "assert": [
       {
         "type": "contains",
-        "value": "/contact"
+        "value": "github"
       }
     ],
     "metadata": {
@@ -338,7 +338,7 @@
     }
   },
   {
-    "description": "designer: what the chat is for (log 2026-08-21, asked from /contact)",
+    "description": "designer: what the chat is for (log 2026-08-21, asked from /docs)",
     "vars": {
       "question": "What is this chat actually useful for?"
     },

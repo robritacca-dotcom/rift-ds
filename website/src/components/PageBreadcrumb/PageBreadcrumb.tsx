@@ -18,7 +18,7 @@ interface PageBreadcrumbProps {
 /**
  * Renders the current page's breadcrumb trail based on the URL.
  * Returns nothing for top-level pages where no trail is needed
- * (home, /contact, /about, /work).
+ * (home, /privacy).
  */
 export default function PageBreadcrumb({ currentLabel }: PageBreadcrumbProps) {
   const pathname = usePathname() ?? "/";

@@ -47,7 +47,7 @@ export function ExtendedBackground() {
 
 /**
  * Marker a page renders to hide the background entirely, leaving the flat page
- * colour — the dotted stages (the playground and the canvas board) render it
+ * colour — the dotted stages (the playground) render it
  * beside their DotBackground ground, and the marketing-dashboard template sets
  * the attribute itself.
  *
@@ -89,7 +89,7 @@ export default function BlurBackground() {
   const [mode, setMode] = useState<BackgroundMode>(shaderBackground.mode);
   const [tuning, setTuning] = useState(false);
   const [status, setStatus] = useState<ShaderFieldStatus>("pending");
-  /* Embedded in a frame (the /canvas board shows every page live inside an
+  /* Embedded in a frame (an embedding board can show a page live inside an
      iframe), the page holds no GL context — a board of N pages would
      otherwise open N contexts, and browsers start evicting them well before
      that — and shows the CSS band instead, frozen: a still of the ambient

@@ -15,18 +15,20 @@ export default function PrivacyPage() {
         <div className={`${styles.section} animate-in animate-delay-1`}>
           <h2 className={styles.sectionTitle}>Analytics</h2>
           <p className={styles.body}>
-            This site uses Google Analytics to count visits and see which pages
-            get read. It sets a cookie and records pages viewed and a rough
-            location under a random identifier, not your name. To opt out, block
-            cookies in your browser or install Google&apos;s opt-out add-on.
+            Analytics is off right now: no measurement runs and no analytics
+            cookie is set. If Google Analytics is enabled later, it will count
+            visits and pages read under a random identifier, not your name,
+            and this page will say so. To opt out then, block cookies in your
+            browser or install Google&apos;s opt-out add-on.
           </p>
         </div>
 
         <div className={`${styles.section} animate-in animate-delay-2`}>
           <h2 className={styles.sectionTitle}>The site chat</h2>
           <p className={styles.body}>
-            The chat answers questions about my work and this design system.
-            Messages go to Anthropic, whose model writes the replies. For each
+            The chat answers questions about this design system and its site.
+            When it is live, messages go to Anthropic, whose model writes the
+            replies. For each
             exchange I keep the question, the answer, the page it was asked
             from, which model answered, timing and token counts, and a thumbs
             verdict if you leave one. Each entry carries a scrambled, one-way stand-in for your

@@ -7,20 +7,20 @@
  */
 html[data-brand="terminal"] {
   --color-action-icon-active: var(--primitive-green-11);
-  --color-action-primary-bg: var(--primitive-green-08);
-  --color-action-primary-bg-active: var(--primitive-green-10);
-  --color-action-primary-bg-hover: var(--primitive-green-09);
-  --color-action-primary-border: var(--primitive-green-11);
-  --color-action-primary-border-secondary: var(--primitive-green-08);
-  --color-action-primary-border-tertiary: var(--primitive-green-08);
+  --color-action-primary-bg: var(--primitive-green-07);
+  --color-action-primary-bg-active: var(--primitive-green-09);
+  --color-action-primary-bg-hover: var(--primitive-green-08);
+  --color-action-primary-border: var(--primitive-green-10);
+  --color-action-primary-border-secondary: var(--primitive-green-07);
+  --color-action-primary-border-tertiary: var(--primitive-green-07);
   --color-action-primary-text: var(--primitive-green-11);
-  --color-action-primary-text-secondary: var(--primitive-green-11);
-  --color-action-primary-text-tertiary: var(--primitive-green-09);
-  --color-ai-gradient-end: var(--primitive-green-08);
-  --color-core-ui-primary: var(--primitive-green-08);
-  --color-core-ui-secondary: var(--primitive-green-11);
-  --color-input-border-hover: var(--primitive-green-09);
-  --color-input-border-selected: var(--primitive-green-08);
+  --color-action-primary-text-secondary: var(--primitive-green-10);
+  --color-action-primary-text-tertiary: var(--primitive-green-08);
+  --color-ai-gradient-end: var(--primitive-green-07);
+  --color-core-ui-primary: var(--primitive-green-07);
+  --color-core-ui-secondary: var(--primitive-green-10);
+  --color-input-border-hover: var(--primitive-green-08);
+  --color-input-border-selected: var(--primitive-green-07);
   --font-family-primary: 'IBM Plex Mono', monospace;
   --motion-duration-base: 160ms;
   --motion-duration-deliberate: 320ms;
@@ -141,21 +141,21 @@ html[data-brand="terminal"] {
 
 html[data-brand="terminal"][data-theme="dark"] {
   --color-action-icon-active: var(--primitive-green-11);
-  --color-action-primary-bg: var(--primitive-green-08);
-  --color-action-primary-bg-active: var(--primitive-green-06);
-  --color-action-primary-bg-hover: var(--primitive-green-07);
-  --color-action-primary-border: var(--primitive-green-08);
-  --color-action-primary-border-secondary: var(--primitive-green-09);
-  --color-action-primary-border-tertiary: var(--primitive-green-08);
+  --color-action-primary-bg: var(--primitive-green-07);
+  --color-action-primary-bg-active: var(--primitive-green-05);
+  --color-action-primary-bg-hover: var(--primitive-green-06);
+  --color-action-primary-border: var(--primitive-green-07);
+  --color-action-primary-border-secondary: var(--primitive-green-08);
+  --color-action-primary-border-tertiary: var(--primitive-green-07);
   --color-action-primary-text: var(--primitive-green-11);
   --color-action-primary-text-active: var(--primitive-green-11);
-  --color-action-primary-text-secondary: var(--primitive-green-11);
-  --color-action-primary-text-tertiary: var(--primitive-green-08);
-  --color-ai-gradient-end: var(--primitive-green-09);
-  --color-core-ui-primary: var(--primitive-green-08);
+  --color-action-primary-text-secondary: var(--primitive-green-10);
+  --color-action-primary-text-tertiary: var(--primitive-green-07);
+  --color-ai-gradient-end: var(--primitive-green-08);
+  --color-core-ui-primary: var(--primitive-green-07);
   --color-core-ui-secondary: var(--primitive-green-09);
-  --color-input-border-hover: var(--primitive-green-09);
-  --color-input-border-selected: var(--primitive-green-09);
+  --color-input-border-hover: var(--primitive-green-08);
+  --color-input-border-selected: var(--primitive-green-08);
   --font-family-primary: 'IBM Plex Mono', monospace;
   --motion-duration-base: 160ms;
   --motion-duration-deliberate: 320ms;

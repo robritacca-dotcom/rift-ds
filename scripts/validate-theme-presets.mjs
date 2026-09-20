@@ -81,16 +81,12 @@ const registryNames = new Set(
       - coral: reproduces the hospitality brand's own coral fill under a
         near-white label; the reference product ships the same sub-AA
         pairing. Kept faithful to the look it demonstrates.
-      - terminal: the green-08 key's darkest ramp label lands just under
-        the line. Accepted for the phosphor look; the nearest AA-clearing
-        alternative changes the key colour itself. */
+   */
 const SANCTIONED_AA_GAPS = new Map([
   ['classic|light', '3.15'],
   ['classic|dark', '3.15'],
   ['coral|light', '3.08'],
   ['coral|dark', '3.08'],
-  ['terminal|light', '4.42'],
-  ['terminal|dark', '4.42'],
 ]);
 
 const REQUIRED_ACTION_ROLES = [

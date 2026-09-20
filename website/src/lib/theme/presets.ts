@@ -242,7 +242,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
   },
   terminal: {
     label: "Terminal green",
-    brand: "#05A67C",
+    brand: "#06D6A0",
     tintOn: true,
     tintSeed: "#06D6A0",
     tintStrength: 4,

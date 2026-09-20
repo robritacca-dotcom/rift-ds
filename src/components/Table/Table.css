@@ -132,6 +132,16 @@
   background: var(--color-bg-page-primary);
 }
 
+/* Columns never reflow on a phone: the wrapper scrolls instead
+   (design.md's responsive contract). Natural column widths below the
+   mobile breakpoint force the overflow the wrapper exists to catch —
+   without this the table crushes to the viewport and cells clip. */
+@media (max-width: 768px) {
+  .ds-table__wrapper .ds-table {
+    min-width: max-content;
+  }
+}
+
 /* When bordered, the table fills the wrapper — no radius needed on the table itself */
 .ds-table--bordered {
   border-radius: 0;

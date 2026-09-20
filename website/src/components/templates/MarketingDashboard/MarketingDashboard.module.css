@@ -371,3 +371,13 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* Mobile: AppSidebar's fixed hamburger (40px at a 20px viewport inset)
+   overlays this row's left end — clear its footprint so the search
+   field docks beside it instead of running underneath. Content-driven
+   literal: the offset is the trigger's geometry, not a layout token. */
+@media (max-width: 768px) {
+  .topBar {
+    padding-left: 56px;
+  }
+}

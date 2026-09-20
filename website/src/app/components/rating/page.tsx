@@ -8,6 +8,7 @@ import { Rating } from "@robr0/design-system/components/Rating/Rating";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 export default function RatingPage() {
   return (
@@ -25,6 +26,7 @@ export default function RatingPage() {
               storybookPath="/?path=/docs/components-rating--docs"
             />
           </div>
+          <ComponentInstallStrip slug="rating" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

@@ -9,6 +9,7 @@ import { Figure } from "@robr0/design-system/components/Figure/Figure";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 export default function FigurePage() {
   return (
@@ -26,6 +27,7 @@ export default function FigurePage() {
               storybookPath="/?path=/docs/components-figure--docs"
             />
           </div>
+          <ComponentInstallStrip slug="figure" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

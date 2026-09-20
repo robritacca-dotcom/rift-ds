@@ -8,6 +8,7 @@ import { Input } from "@robr0/design-system/components/Input/Input";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 export default function InputPage() {
   return (
@@ -25,6 +26,7 @@ export default function InputPage() {
               storybookPath="/?path=/docs/components-input--docs"
             />
           </div>
+          <ComponentInstallStrip slug="input" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

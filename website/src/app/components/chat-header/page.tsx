@@ -9,6 +9,7 @@ import { CircularButton } from "@robr0/design-system/components/CircularButton/C
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 
 function ViewSwitchDemo() {
@@ -57,6 +58,7 @@ export default function ChatHeaderPage() {
             <h1 className={styles.pageTitle}>Chat header</h1>
             <PageLinks storybookPath="/?path=/docs/components-chatheader--docs" />
           </div>
+          <ComponentInstallStrip slug="chat-header" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

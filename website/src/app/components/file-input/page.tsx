@@ -9,6 +9,7 @@ import type { FileInputFile } from "@robr0/design-system/components/FileInput/Fi
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 
 export default function FileInputPage() {
@@ -27,6 +28,7 @@ export default function FileInputPage() {
             <h1 className={styles.pageTitle}>File input</h1>
             <PageLinks storybookPath="/?path=/docs/components-fileinput--docs" />
           </div>
+          <ComponentInstallStrip slug="file-input" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>Drop a file, or browse for one</p>

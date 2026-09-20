@@ -8,6 +8,7 @@ import { MapCallout } from "@robr0/design-system/components/MapCallout/MapCallou
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 export default function MapCalloutPage() {
   return (
@@ -23,6 +24,7 @@ export default function MapCalloutPage() {
             <h1 className={styles.pageTitle}>Map callout</h1>
             <PageLinks storybookPath="/?path=/docs/components-mapcallout--docs" />
           </div>
+          <ComponentInstallStrip slug="map-callout" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

@@ -13,6 +13,7 @@ import GitHubContributions from "../../../components/GitHubContributions/GitHubC
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
 import { BRAND_NAME } from "@/config/brand.generated";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 /** Deterministic pseudo-random generator so the demo renders consistently */
 const seededRandom = (seed: number) => () => {
@@ -62,6 +63,7 @@ export default function ContributionGraphPage() {
               storybookPath="/?path=/docs/components-contributiongraph--docs"
             />
           </div>
+          <ComponentInstallStrip slug="contribution-graph" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

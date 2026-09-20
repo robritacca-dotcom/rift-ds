@@ -11,6 +11,7 @@ import {
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 /* Demo data: Skylark is a fictional product, atlas-* fictional repos. */
 
@@ -134,6 +135,7 @@ export default function ThreadTabsPage() {
             <h1 className={styles.pageTitle}>Thread tabs</h1>
             <PageLinks storybookPath="/?path=/docs/components-threadtabs--docs" />
           </div>
+          <ComponentInstallStrip slug="thread-tabs" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>The open sessions, one strip</p>

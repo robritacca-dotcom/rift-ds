@@ -8,6 +8,7 @@ import { TimePicker } from "@robr0/design-system/components/TimePicker/TimePicke
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 export default function TimePickerPage() {
   return (
@@ -25,6 +26,7 @@ export default function TimePickerPage() {
               storybookPath="/?path=/docs/components-timepicker--docs"
             />
           </div>
+          <ComponentInstallStrip slug="time-picker" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

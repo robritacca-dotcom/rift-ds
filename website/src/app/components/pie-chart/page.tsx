@@ -8,6 +8,7 @@ import { PieChart } from "@robr0/design-system/components/Chart/PieChart";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 const browserData = [
   { name: "Chrome", value: 275 },
@@ -37,6 +38,7 @@ export default function PieChartPage() {
             <h1 className={styles.pageTitle}>Pie chart</h1>
             <PageLinks storybookPath="/?path=/docs/components-piechart--docs" />
           </div>
+          <ComponentInstallStrip slug="pie-chart" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

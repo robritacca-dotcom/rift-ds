@@ -9,6 +9,7 @@ import { Composer } from "@robr0/design-system/components/Composer/Composer";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 
 const models = [
@@ -52,6 +53,7 @@ export default function ModelPickerPage() {
             <h1 className={styles.pageTitle}>Model picker</h1>
             <PageLinks storybookPath="/?path=/docs/components-modelpicker--docs" />
           </div>
+          <ComponentInstallStrip slug="model-picker" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

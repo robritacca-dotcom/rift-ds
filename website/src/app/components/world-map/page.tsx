@@ -13,6 +13,7 @@ import { MapLegend } from "@robr0/design-system/components/MapLegend/MapLegend";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 const SERIES = [
   "var(--color-chart-series-1)",
@@ -55,6 +56,7 @@ export default function WorldMapPage() {
             <h1 className={styles.pageTitle}>World map</h1>
             <PageLinks storybookPath="/?path=/docs/components-worldmap--docs" />
           </div>
+          <ComponentInstallStrip slug="world-map" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

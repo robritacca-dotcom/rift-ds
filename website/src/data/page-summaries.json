@@ -256,6 +256,17 @@
           "prompt": "What shipped in the latest release of the design system?"
         }
       ]
+    },
+    "/themes": {
+      "title": "Themes",
+      "text": "Every shipped theme as a card: apply it live, open it in the playground, or copy the one-attribute setup.",
+      "chips": [
+        {
+          "id": "themes-complete",
+          "label": "What makes a theme complete?",
+          "prompt": "What does a complete Dragonspine theme include, and how do I apply one in my own app?"
+        }
+      ]
     }
   },
   "essays": {}

@@ -8,6 +8,7 @@ import { Textarea } from "@robr0/design-system/components/Textarea/Textarea";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 export default function TextareaPage() {
   return (
@@ -25,6 +26,7 @@ export default function TextareaPage() {
               storybookPath="/?path=/docs/components-textarea--docs"
             />
           </div>
+          <ComponentInstallStrip slug="textarea" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

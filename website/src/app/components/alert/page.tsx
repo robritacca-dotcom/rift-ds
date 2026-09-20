@@ -8,6 +8,7 @@ import { Alert } from "@robr0/design-system/components/Alert/Alert";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 export default function AlertPage() {
   return (
@@ -25,6 +26,7 @@ export default function AlertPage() {
               storybookPath="/?path=/docs/components-alert--docs"
             />
           </div>
+          <ComponentInstallStrip slug="alert" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

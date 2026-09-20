@@ -215,6 +215,16 @@ function buildNavSections(): NavSection[] {
       isActive: (path) => path.startsWith("/foundations"),
     },
     {
+      id: "themes",
+      label: "Themes",
+      href: "/themes",
+      icon: "palette",
+      description:
+        "Every shipped look, applied live with one attribute or copied into your app",
+      // Deliberately no mega: the gallery page is the menu.
+      isActive: (path) => path.startsWith("/themes"),
+    },
+    {
       id: "templates",
       label: "Templates",
       href: "/templates",

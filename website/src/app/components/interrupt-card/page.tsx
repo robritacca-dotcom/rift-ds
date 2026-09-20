@@ -11,6 +11,7 @@ import { CodeBlock } from "@robr0/design-system/components/CodeBlock/CodeBlock";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 
 const APPROVAL_OPTIONS = [
@@ -63,6 +64,7 @@ export default function InterruptCardPage() {
             <h1 className={styles.pageTitle}>Interrupt card</h1>
             <PageLinks storybookPath="/?path=/docs/components-interruptcard--docs" />
           </div>
+          <ComponentInstallStrip slug="interrupt-card" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

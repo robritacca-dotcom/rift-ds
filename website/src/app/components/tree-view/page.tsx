@@ -9,6 +9,7 @@ import { SectionTitle } from "@robr0/design-system/components/SectionTitle/Secti
 import { Kbd } from "@robr0/design-system/components/Kbd/Kbd";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 /* ============================================
    DEMO DATA
@@ -122,6 +123,7 @@ export default function TreeViewPage() {
             <h1 className={styles.pageTitle}>Tree view</h1>
             <PageLinks storybookPath="/?path=/docs/components-treeview--docs" />
           </div>
+          <ComponentInstallStrip slug="tree-view" />
 
           {/* Intro */}
           <div className={`${styles.introSection} animate-in animate-delay-1`}>

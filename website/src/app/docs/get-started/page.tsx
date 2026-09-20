@@ -332,7 +332,9 @@ export default function GetStartedPage() {
                   presets, icon font, behavior hooks) into a dragonspine
                   folder in your project, imports intact. The index at{" "}
                   <a href="/r/registry.json">/r/registry.json</a> lists every
-                  component.
+                  component. The CLI expects a <code>components.json</code>{" "}
+                  and a <code>tsconfig.json</code> in your project; if you
+                  have neither, <code>npx shadcn init</code> creates them.
                 </p>
                 <CodeBlock code={SHADCN_SNIPPET} language="bash" showCopy />
               </section>

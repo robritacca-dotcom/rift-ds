@@ -166,6 +166,7 @@ The old `merge-and-push` skill is retired because its name didn't say which of t
     │   ├── releases/          # Release log, one entry per npm version (release-log registry)
     │   ├── loops/             # The recurring agent loops page (maps over the loops registry — see the Registries table)
     │   ├── privacy/           # Privacy policy page (standalone; analytics + chat-log disclosure)
+    │   ├── themes/            # The theme gallery: every shipped look as a card — apply it live (the page rethemes as the preview), open the playground, or copy the data-brand setup; top-level nav section, cards drawn from the same themeSelectorTiles builder as the switchers
     │   ├── playground/        # The immersive re-theming tool: Components + Type + Chat views over one set of levers (chromeless; absorbed the old /robr0-gpt chat bench, which now redirects here)
     │   ├── graph/             # The dependency-graph instrument (chromeless, linked from /overview): the system as five traceable columns — primitives, tokens, library, site UI, pages — over the generated graph data (see the Dependency graph registry row)
     │   ├── blueprints/        # Renders the public root-spec copies (CLAUDE.md, design.md, content-design.md)

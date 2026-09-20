@@ -8,6 +8,7 @@ import { ProgressBar } from "@robr0/design-system/components/ProgressBar/Progres
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 export default function ProgressBarPage() {
   return (
@@ -25,6 +26,7 @@ export default function ProgressBarPage() {
               storybookPath="/?path=/docs/components-progressbar--docs"
             />
           </div>
+          <ComponentInstallStrip slug="progress-bar" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

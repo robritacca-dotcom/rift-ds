@@ -8,6 +8,7 @@ import { AppSidebar } from "@robr0/design-system/components/AppSidebar/AppSideba
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 const demoSections = [
   {
@@ -75,6 +76,7 @@ export default function AppSidebarPage() {
               storybookPath="/?path=/docs/components-appsidebar--docs"
             />
           </div>
+          <ComponentInstallStrip slug="app-sidebar" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

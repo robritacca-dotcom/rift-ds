@@ -10,6 +10,7 @@ import { Avatar } from "@robr0/design-system/components/Avatar/Avatar";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 
 const defaultItems = [
@@ -55,6 +56,7 @@ export default function MessageActionsPage() {
             <h1 className={styles.pageTitle}>Message actions</h1>
             <PageLinks storybookPath="/?path=/docs/components-messageactions--docs" />
           </div>
+          <ComponentInstallStrip slug="message-actions" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

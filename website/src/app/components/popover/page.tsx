@@ -9,6 +9,7 @@ import { Popover } from "@robr0/design-system/components/Popover/Popover";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 export default function PopoverPage() {
   return (
@@ -26,6 +27,7 @@ export default function PopoverPage() {
               storybookPath="/?path=/docs/components-popover--docs"
             />
           </div>
+          <ComponentInstallStrip slug="popover" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

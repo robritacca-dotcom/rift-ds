@@ -14,6 +14,7 @@ import {
   type ShaderFieldStatus,
 } from "@robr0/design-system/components/ShaderField/ShaderField";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 
 function Stage({
@@ -65,6 +66,7 @@ export default function ShaderFieldPage() {
             <h1 className={styles.pageTitle}>Shader field</h1>
             <PageLinks storybookPath="/?path=/docs/components-shaderfield--docs" />
           </div>
+          <ComponentInstallStrip slug="shader-field" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>Ambient light on the GPU</p>

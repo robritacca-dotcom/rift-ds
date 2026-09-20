@@ -8,6 +8,7 @@ import { Lightbox } from "@robr0/design-system/components/Lightbox/Lightbox";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 /** Offline demo image: a labelled gradient drawn as SVG, no asset to fetch. */
 const demoImage = (label: string, from: string, to: string) =>
@@ -58,6 +59,7 @@ export default function LightboxPage() {
             <h1 className={styles.pageTitle}>Lightbox</h1>
             <PageLinks storybookPath="/?path=/docs/components-lightbox--docs" />
           </div>
+          <ComponentInstallStrip slug="lightbox" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

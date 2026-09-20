@@ -8,6 +8,7 @@ import { AnchorNav } from "@robr0/design-system/components/AnchorNav/AnchorNav";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 const demoItems = [
   { id: "preview", label: "Preview" },
@@ -39,6 +40,7 @@ export default function AnchorNavPage() {
             <h1 className={styles.pageTitle}>Anchor nav</h1>
             <PageLinks storybookPath="/?path=/docs/components-anchornav--docs" />
           </div>
+          <ComponentInstallStrip slug="anchor-nav" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

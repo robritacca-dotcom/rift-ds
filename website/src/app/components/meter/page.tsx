@@ -8,6 +8,7 @@ import { Meter } from "@robr0/design-system/components/Meter/Meter";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 export default function MeterPage() {
   return (
@@ -25,6 +26,7 @@ export default function MeterPage() {
               storybookPath="/?path=/docs/components-meter--docs"
             />
           </div>
+          <ComponentInstallStrip slug="meter" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

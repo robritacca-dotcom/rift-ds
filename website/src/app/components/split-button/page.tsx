@@ -8,6 +8,7 @@ import { SplitButton } from "@robr0/design-system/components/SplitButton/SplitBu
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 /* ============================================
    SPLIT BUTTON STATES & VARIANTS
@@ -120,6 +121,7 @@ export default function SplitButtonPage() {
               storybookPath="/?path=/docs/components-splitbutton--docs"
             />
           </div>
+          <ComponentInstallStrip slug="split-button" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

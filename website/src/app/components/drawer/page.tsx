@@ -11,6 +11,7 @@ import { Checkbox } from "@robr0/design-system/components/Checkbox/Checkbox";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 
 type OpenKey =
@@ -43,6 +44,7 @@ export default function DrawerPage() {
             <h1 className={styles.pageTitle}>Drawer</h1>
             <PageLinks storybookPath="/?path=/docs/components-drawer--docs" />
           </div>
+          <ComponentInstallStrip slug="drawer" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>A panel anchored to an edge</p>

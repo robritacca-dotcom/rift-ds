@@ -8,6 +8,7 @@ import { ComboChart } from "@robr0/design-system/components/Chart/ComboChart";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 const spendRoasData = [
   { label: "Jan", spend: 42, roas: 2.8 },
@@ -38,6 +39,7 @@ export default function ComboChartPage() {
             <h1 className={styles.pageTitle}>Combo chart</h1>
             <PageLinks storybookPath="/?path=/docs/components-combochart--docs" />
           </div>
+          <ComponentInstallStrip slug="combo-chart" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

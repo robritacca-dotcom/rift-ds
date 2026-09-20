@@ -8,6 +8,7 @@ import { StackedBarChart } from "@robr0/design-system/components/Chart/StackedBa
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 const trafficData = [
   { label: "Jan", desktop: 186, mobile: 80, tablet: 24 },
@@ -38,6 +39,7 @@ export default function StackedBarChartPage() {
             <h1 className={styles.pageTitle}>Stacked bar chart</h1>
             <PageLinks storybookPath="/?path=/docs/components-stackedbarchart--docs" />
           </div>
+          <ComponentInstallStrip slug="stacked-bar-chart" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

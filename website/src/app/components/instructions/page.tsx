@@ -8,6 +8,7 @@ import { Instructions } from "@robr0/design-system/components/Instructions/Instr
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 export default function InstructionsPage() {
   return (
@@ -25,6 +26,7 @@ export default function InstructionsPage() {
               storybookPath="/?path=/docs/components-instructions--docs"
             />
           </div>
+          <ComponentInstallStrip slug="instructions" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

@@ -9,6 +9,7 @@ import { DropdownMenuEntry } from "@robr0/design-system/components/DropdownMenu/
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 
 /* ============================================
@@ -63,6 +64,7 @@ export default function ContextMenuPage() {
               storybookPath="/?path=/docs/components-contextmenu--docs"
             />
           </div>
+          <ComponentInstallStrip slug="context-menu" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

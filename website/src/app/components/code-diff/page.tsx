@@ -8,6 +8,7 @@ import { CodeDiff } from "@robr0/design-system/components/CodeDiff/CodeDiff";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 const TS_DIFF = `@@ -12,7 +12,8 @@ export function normalizeLabel(input: string) {
  export function normalizeLabel(input: string) {
@@ -47,6 +48,7 @@ export default function CodeDiffPage() {
               storybookPath="/?path=/docs/components-codediff--docs"
             />
           </div>
+          <ComponentInstallStrip slug="code-diff" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

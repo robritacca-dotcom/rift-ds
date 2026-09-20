@@ -13,6 +13,7 @@ import { Button } from "@robr0/design-system/components/Button/Button";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 
 type Demo = {
@@ -139,6 +140,7 @@ export default function NotificationCenterPage() {
             <h1 className={styles.pageTitle}>Notification centre</h1>
             <PageLinks storybookPath="/?path=/docs/components-notificationcenter--docs" />
           </div>
+          <ComponentInstallStrip slug="notification-center" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

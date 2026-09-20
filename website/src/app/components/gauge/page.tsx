@@ -8,6 +8,7 @@ import { Gauge } from "@robr0/design-system/components/Gauge/Gauge";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 const capacityThresholds = [
   { value: 70, tone: "warning" },
@@ -28,6 +29,7 @@ export default function GaugePage() {
             <h1 className={styles.pageTitle}>Gauge</h1>
             <PageLinks storybookPath="/?path=/docs/components-gauge--docs" />
           </div>
+          <ComponentInstallStrip slug="gauge" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

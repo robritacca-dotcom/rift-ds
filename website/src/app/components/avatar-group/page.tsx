@@ -9,6 +9,7 @@ import { Avatar } from "@robr0/design-system/components/Avatar/Avatar";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 const team = [
   "Jane Doe",
@@ -34,6 +35,7 @@ export default function AvatarGroupPage() {
             <h1 className={styles.pageTitle}>Avatar group</h1>
             <PageLinks storybookPath="/?path=/docs/components-avatargroup--docs" />
           </div>
+          <ComponentInstallStrip slug="avatar-group" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

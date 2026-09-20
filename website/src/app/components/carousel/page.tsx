@@ -8,6 +8,7 @@ import { Carousel } from "@robr0/design-system/components/Carousel/Carousel";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 const slides = [
   { bg: "var(--color-status-info-bg)", label: "Slide 1" },
@@ -32,6 +33,7 @@ export default function CarouselPage() {
               storybookPath="/?path=/docs/components-carousel--docs"
             />
           </div>
+          <ComponentInstallStrip slug="carousel" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

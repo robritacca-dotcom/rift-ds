@@ -8,6 +8,7 @@ import { TagInput } from "@robr0/design-system/components/TagInput/TagInput";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 export default function TagInputPage() {
   return (
@@ -25,6 +26,7 @@ export default function TagInputPage() {
               storybookPath="/?path=/docs/components-taginput--docs"
             />
           </div>
+          <ComponentInstallStrip slug="tag-input" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

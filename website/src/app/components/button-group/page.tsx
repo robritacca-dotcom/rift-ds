@@ -10,6 +10,7 @@ import { SectionTitle } from "@robr0/design-system/components/SectionTitle/Secti
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
 import { FIGMA_FILE_URL } from "@/config/brand.generated";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 /* ============================================
    DEMO DATA
    ============================================ */
@@ -72,6 +73,7 @@ export default function ButtonGroupPage() {
               storybookPath="/?path=/docs/components-buttongroup--docs"
             />
           </div>
+          <ComponentInstallStrip slug="button-group" />
 
           {/* Intro */}
           <div className={`${styles.introSection} animate-in animate-delay-1`}>

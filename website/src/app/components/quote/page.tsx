@@ -8,6 +8,7 @@ import { Quote } from "@robr0/design-system/components/Quote/Quote";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 export default function QuotePage() {
   return (
@@ -25,6 +26,7 @@ export default function QuotePage() {
               storybookPath="/?path=/docs/components-quote--docs"
             />
           </div>
+          <ComponentInstallStrip slug="quote" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

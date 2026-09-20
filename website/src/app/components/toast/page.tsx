@@ -9,6 +9,7 @@ import { Button } from "@robr0/design-system/components/Button/Button";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 function ToastTriggers() {
   const { toast } = useToast();
@@ -90,6 +91,7 @@ export default function ToastPage() {
               storybookPath="/?path=/docs/components-toast--docs"
             />
           </div>
+          <ComponentInstallStrip slug="toast" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

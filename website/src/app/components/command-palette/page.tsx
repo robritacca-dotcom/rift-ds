@@ -11,6 +11,7 @@ import { Button } from "@robr0/design-system/components/Button/Button";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 
 const groups: CommandPaletteGroup[] = [
@@ -83,6 +84,7 @@ export default function CommandPalettePage() {
             <h1 className={styles.pageTitle}>Command palette</h1>
             <PageLinks storybookPath="/?path=/docs/components-commandpalette--docs" />
           </div>
+          <ComponentInstallStrip slug="command-palette" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>Search and run commands from the keyboard</p>

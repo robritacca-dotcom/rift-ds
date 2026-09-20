@@ -8,6 +8,7 @@ import { RadioButton, RadioGroup } from "@robr0/design-system/components/RadioBu
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 export default function RadioButtonPage() {
   return (
@@ -25,6 +26,7 @@ export default function RadioButtonPage() {
               storybookPath="/?path=/docs/components-radiobutton--docs"
             />
           </div>
+          <ComponentInstallStrip slug="radio-button" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

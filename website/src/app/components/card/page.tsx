@@ -15,6 +15,7 @@ import { SectionTitle } from "@robr0/design-system/components/SectionTitle/Secti
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
 import { FIGMA_FILE_URL } from "@/config/brand.generated";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 /* ============================================
    PAGE
    ============================================ */
@@ -39,6 +40,7 @@ export default function CardPage() {
               storybookPath="/?path=/docs/components-card--docs"
             />
           </div>
+          <ComponentInstallStrip slug="card" />
 
           {/* Intro */}
           <div className={`${styles.introSection} animate-in animate-delay-1`}>

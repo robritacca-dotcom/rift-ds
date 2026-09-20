@@ -7,6 +7,7 @@ import { AppLayout } from "@robr0/design-system/components/AppLayout/AppLayout";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 
 const demoSections = [
@@ -68,6 +69,7 @@ export default function AppLayoutPage() {
               storybookPath="/?path=/docs/components-applayout--docs"
             />
           </div>
+          <ComponentInstallStrip slug="app-layout" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

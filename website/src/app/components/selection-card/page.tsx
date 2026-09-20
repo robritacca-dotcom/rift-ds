@@ -8,6 +8,7 @@ import { SelectionCard } from "@robr0/design-system/components/SelectionCard/Sel
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 
 export default function SelectionCardPage() {
@@ -26,6 +27,7 @@ export default function SelectionCardPage() {
               storybookPath="/?path=/docs/components-selectioncard--docs"
             />
           </div>
+          <ComponentInstallStrip slug="selection-card" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

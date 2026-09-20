@@ -9,6 +9,7 @@ import { demoAvatar1, demoAvatar2 } from "@robr0/design-system/components/Avatar
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 export default function AvatarPage() {
   return (
@@ -26,6 +27,7 @@ export default function AvatarPage() {
               storybookPath="/?path=/docs/components-avatar--docs"
             />
           </div>
+          <ComponentInstallStrip slug="avatar" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

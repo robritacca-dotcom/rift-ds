@@ -7,6 +7,7 @@ import { EntityCard } from "@robr0/design-system/components/EntityCard/EntityCar
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 
 const demoIcons = ["home", "search", "settings", "person", "favorite", "star"];
@@ -34,6 +35,7 @@ export default function EntityCardPage() {
               storybookPath="/?path=/docs/components-entitycard--docs"
             />
           </div>
+          <ComponentInstallStrip slug="entity-card" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

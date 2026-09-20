@@ -8,6 +8,7 @@ import { ScatterChart } from "@robr0/design-system/components/Chart/ScatterChart
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 function generateScatterCluster(cx: number, cy: number, count: number, spread: number) {
   return Array.from({ length: count }, () => ({
@@ -35,6 +36,7 @@ export default function ScatterChartPage() {
             <h1 className={styles.pageTitle}>Scatter chart</h1>
             <PageLinks storybookPath="/?path=/docs/components-scatterchart--docs" />
           </div>
+          <ComponentInstallStrip slug="scatter-chart" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

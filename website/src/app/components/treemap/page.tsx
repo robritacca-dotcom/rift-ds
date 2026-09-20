@@ -8,6 +8,7 @@ import { Treemap } from "@robr0/design-system/components/Chart/Treemap";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 const treemapData = [
   { name: "Documents", size: 4200 },
@@ -34,6 +35,7 @@ export default function TreemapPage() {
             <h1 className={styles.pageTitle}>Treemap</h1>
             <PageLinks storybookPath="/?path=/docs/components-treemap--docs" />
           </div>
+          <ComponentInstallStrip slug="treemap" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

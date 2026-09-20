@@ -69,17 +69,24 @@ const specHeadings = new Set(
 const missingPage = [];
 const missingPreview = [];
 const missingSpec = [];
+const missingInstallStrip = [];
 
 // slug and label are stored in the registry, so a name-to-slug exception is
 // data, not a special case each validator has to remember.
 for (const { name, slug } of registry.components) {
 
-  if (
-    !existsSync(
-      join(repoRoot, 'website', 'src', 'app', 'components', slug, 'page.tsx')
-    )
-  ) {
+  const pagePath = join(repoRoot, 'website', 'src', 'app', 'components', slug, 'page.tsx');
+  if (!existsSync(pagePath)) {
     missingPage.push(`${name} → website/src/app/components/${slug}/page.tsx`);
+  } else if (
+    // Every component page renders its install strip with its own slug —
+    // the per-page npm import and shadcn add commands (the strip derives
+    // both from the registry, so only the mount can go missing).
+    !readFileSync(pagePath, 'utf8').includes(`<ComponentInstallStrip slug="${slug}"`)
+  ) {
+    missingInstallStrip.push(
+      `${name} → <ComponentInstallStrip slug="${slug}" /> in website/src/app/components/${slug}/page.tsx`
+    );
   }
   if (!previewKeys.has(slug)) {
     missingPreview.push(
@@ -213,6 +220,7 @@ const orphanPreviews = [...previewKeys]
 for (const [what, list] of [
   ['Registry components with no website showcase page', missingPage],
   ['Registry components missing a ComponentPreviews entry', missingPreview],
+  ['Component pages not rendering their ComponentInstallStrip', missingInstallStrip],
   ['Preview entries with no registry component', orphanPreviews],
   ['Registry components with no design.md spec section', missingSpec],
   ['Folders under website/src/app/components with no registry entry', orphanFolders],

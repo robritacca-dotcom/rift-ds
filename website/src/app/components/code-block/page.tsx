@@ -8,6 +8,7 @@ import { CodeBlock } from "@robr0/design-system/components/CodeBlock/CodeBlock";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 const USAGE_SNIPPET = `import { Chip } from '@robr0/design-system/components/Chip/Chip';
 
@@ -54,6 +55,7 @@ export default function CodeBlockPage() {
               storybookPath="/?path=/docs/components-codeblock--docs"
             />
           </div>
+          <ComponentInstallStrip slug="code-block" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

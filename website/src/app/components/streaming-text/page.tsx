@@ -9,6 +9,7 @@ import { SectionTitle } from "@robr0/design-system/components/SectionTitle/Secti
 import { Button } from "@robr0/design-system/components/Button/Button";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 const RESPONSE =
   "The component owns the reveal, not the transport. Feed it the accumulated " +
@@ -63,6 +64,7 @@ export default function StreamingTextPage() {
             <h1 className={styles.pageTitle}>Streaming text</h1>
             <PageLinks storybookPath="/?path=/docs/components-streamingtext--docs" />
           </div>
+          <ComponentInstallStrip slug="streaming-text" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

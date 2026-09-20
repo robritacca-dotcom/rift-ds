@@ -9,6 +9,7 @@ import { Button } from "@robr0/design-system/components/Button/Button";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 export default function AlertDialogPage() {
   const [defaultOpen, setDefaultOpen] = useState(false);
@@ -30,6 +31,7 @@ export default function AlertDialogPage() {
               storybookPath="/?path=/docs/components-alertdialog--docs"
             />
           </div>
+          <ComponentInstallStrip slug="alert-dialog" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

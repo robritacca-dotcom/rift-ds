@@ -10,6 +10,7 @@ import { SectionTitle } from "@robr0/design-system/components/SectionTitle/Secti
 import { CodeBlock } from "@robr0/design-system/components/CodeBlock/CodeBlock";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 
 export default function FieldPage() {
@@ -26,6 +27,7 @@ export default function FieldPage() {
             <h1 className={styles.pageTitle}>Field</h1>
             <PageLinks storybookPath="/?path=/docs/components-field--docs" />
           </div>
+          <ComponentInstallStrip slug="field" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

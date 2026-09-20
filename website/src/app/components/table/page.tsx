@@ -12,6 +12,7 @@ import { Checkbox } from "@robr0/design-system/components/Checkbox/Checkbox";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 /* ============================================
    SHARED TABLE DATA
@@ -46,6 +47,7 @@ export default function TablePage() {
               storybookPath="/?path=/docs/components-table--docs"
             />
           </div>
+          <ComponentInstallStrip slug="table" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

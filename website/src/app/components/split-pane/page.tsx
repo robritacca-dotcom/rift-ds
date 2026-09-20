@@ -9,6 +9,7 @@ import { SectionTitle } from "@robr0/design-system/components/SectionTitle/Secti
 import { Kbd } from "@robr0/design-system/components/Kbd/Kbd";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 export default function SplitPanePage() {
   return (
@@ -24,6 +25,7 @@ export default function SplitPanePage() {
             <h1 className={styles.pageTitle}>Split pane</h1>
             <PageLinks storybookPath="/?path=/docs/components-splitpane--docs" />
           </div>
+          <ComponentInstallStrip slug="split-pane" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

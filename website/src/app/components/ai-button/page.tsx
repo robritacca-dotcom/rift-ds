@@ -8,6 +8,7 @@ import { AiButton } from "@robr0/design-system/components/AiButton/AiButton";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 
 export default function AiButtonPage() {
@@ -24,6 +25,7 @@ export default function AiButtonPage() {
             <h1 className={styles.pageTitle}>AI button</h1>
             <PageLinks storybookPath="/?path=/docs/components-aibutton--docs" />
           </div>
+          <ComponentInstallStrip slug="ai-button" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

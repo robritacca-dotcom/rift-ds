@@ -8,6 +8,7 @@ import { SourceChip } from "@robr0/design-system/components/SourceChip/SourceChi
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 
 export default function SourceChipPage() {
@@ -24,6 +25,7 @@ export default function SourceChipPage() {
             <h1 className={styles.pageTitle}>Source chip</h1>
             <PageLinks storybookPath="/?path=/docs/components-sourcechip--docs" />
           </div>
+          <ComponentInstallStrip slug="source-chip" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

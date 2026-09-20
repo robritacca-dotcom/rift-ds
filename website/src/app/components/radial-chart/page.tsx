@@ -8,6 +8,7 @@ import { RadialChart } from "@robr0/design-system/components/Chart/RadialChart";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 const sprintData = [
   { name: "Design", value: 86 },
@@ -29,6 +30,7 @@ export default function RadialChartPage() {
             <h1 className={styles.pageTitle}>Radial chart</h1>
             <PageLinks storybookPath="/?path=/docs/components-radialchart--docs" />
           </div>
+          <ComponentInstallStrip slug="radial-chart" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

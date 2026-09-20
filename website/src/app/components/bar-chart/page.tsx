@@ -8,6 +8,7 @@ import { BarChart } from "@robr0/design-system/components/Chart/BarChart";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 function generatePageViews() {
   const data: { label: string; value: number }[] = [];
@@ -38,6 +39,7 @@ export default function BarChartPage() {
             <h1 className={styles.pageTitle}>Bar chart</h1>
             <PageLinks storybookPath="/?path=/docs/components-barchart--docs" />
           </div>
+          <ComponentInstallStrip slug="bar-chart" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

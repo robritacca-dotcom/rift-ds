@@ -8,6 +8,7 @@ import { DateInput } from "@robr0/design-system/components/DateInput/DateInput";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 export default function DateInputPage() {
   return (
@@ -25,6 +26,7 @@ export default function DateInputPage() {
               storybookPath="/?path=/docs/components-dateinput--docs"
             />
           </div>
+          <ComponentInstallStrip slug="date-input" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

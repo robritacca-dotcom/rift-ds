@@ -9,6 +9,7 @@ import { Avatar } from "@robr0/design-system/components/Avatar/Avatar";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 export default function StatusDotPage() {
   return (
@@ -24,6 +25,7 @@ export default function StatusDotPage() {
             <h1 className={styles.pageTitle}>Status dot</h1>
             <PageLinks storybookPath="/?path=/docs/components-statusdot--docs" />
           </div>
+          <ComponentInstallStrip slug="status-dot" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

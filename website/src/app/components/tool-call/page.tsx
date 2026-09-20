@@ -11,6 +11,7 @@ import { SectionTitle } from "@robr0/design-system/components/SectionTitle/Secti
 import { MOTION_AUTOPLAY_INTERVAL_MS } from "@robr0/design-system/tokens/motion";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 
 const GREP_ARGS = `{
@@ -133,6 +134,7 @@ export default function ToolCallPage() {
             <h1 className={styles.pageTitle}>Tool call</h1>
             <PageLinks storybookPath="/?path=/docs/components-toolcall--docs" />
           </div>
+          <ComponentInstallStrip slug="tool-call" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>What ran, how it went, what it returned</p>

@@ -10,6 +10,7 @@ import { Timeline } from "@robr0/design-system/components/Timeline/Timeline";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 const CAREER = [
   {
@@ -107,6 +108,7 @@ export default function TimelinePage() {
               storybookPath="/?path=/docs/components-timeline--docs"
             />
           </div>
+          <ComponentInstallStrip slug="timeline" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

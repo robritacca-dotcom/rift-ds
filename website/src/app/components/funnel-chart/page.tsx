@@ -8,6 +8,7 @@ import { FunnelChart } from "@robr0/design-system/components/FunnelChart/FunnelC
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 const conversionFunnel = [
   { label: "Visits", value: 96400, displayValue: "96.4K" },
@@ -43,6 +44,7 @@ export default function FunnelChartPage() {
             <h1 className={styles.pageTitle}>Funnel chart</h1>
             <PageLinks storybookPath="/?path=/docs/components-funnelchart--docs" />
           </div>
+          <ComponentInstallStrip slug="funnel-chart" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

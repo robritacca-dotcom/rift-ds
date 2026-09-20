@@ -8,6 +8,7 @@ import { ChatMarker } from "@robr0/design-system/components/ChatMarker/ChatMarke
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 
 export default function ChatMarkerPage() {
@@ -24,6 +25,7 @@ export default function ChatMarkerPage() {
             <h1 className={styles.pageTitle}>Chat marker</h1>
             <PageLinks storybookPath="/?path=/docs/components-chatmarker--docs" />
           </div>
+          <ComponentInstallStrip slug="chat-marker" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

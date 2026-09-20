@@ -12,6 +12,7 @@ import { Avatar } from "@robr0/design-system/components/Avatar/Avatar";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 
 export default function ChatMessagePage() {
@@ -28,6 +29,7 @@ export default function ChatMessagePage() {
             <h1 className={styles.pageTitle}>Chat message</h1>
             <PageLinks storybookPath="/?path=/docs/components-chatmessage--docs" />
           </div>
+          <ComponentInstallStrip slug="chat-message" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

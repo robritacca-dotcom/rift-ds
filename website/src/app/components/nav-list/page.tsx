@@ -8,6 +8,7 @@ import { NavList } from "@robr0/design-system/components/NavList/NavList";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 const basicItems = [
   { label: "Overview", href: "#overview" },
@@ -79,6 +80,7 @@ export default function NavListPage() {
               storybookPath="/?path=/docs/components-navlist--docs"
             />
           </div>
+          <ComponentInstallStrip slug="nav-list" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

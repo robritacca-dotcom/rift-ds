@@ -69,6 +69,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "",
     "/privacy",
     "/playground",
+    "/themes",
     "/graph",
     ...docsSidebarLinks.map((l) => l.href),
     ...foundationsSidebarLinks.map((l) => l.href),

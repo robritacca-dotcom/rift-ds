@@ -9,6 +9,7 @@ import { SectionTitle } from "@robr0/design-system/components/SectionTitle/Secti
 import { Button } from "@robr0/design-system/components/Button/Button";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 
 /* ============================================
@@ -103,6 +104,7 @@ export default function DropdownMenuPage() {
               storybookPath="/?path=/docs/components-dropdownmenu--docs"
             />
           </div>
+          <ComponentInstallStrip slug="dropdown-menu" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

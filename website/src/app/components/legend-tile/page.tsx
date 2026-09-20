@@ -8,6 +8,7 @@ import { LegendTile } from "@robr0/design-system/components/LegendTile/LegendTil
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 const channels = [
   { label: "Direct", value: "1,204", swatch: "var(--color-chart-series-1)" },
@@ -34,6 +35,7 @@ export default function LegendTilePage() {
             <h1 className={styles.pageTitle}>Legend tile</h1>
             <PageLinks storybookPath="/?path=/docs/components-legendtile--docs" />
           </div>
+          <ComponentInstallStrip slug="legend-tile" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

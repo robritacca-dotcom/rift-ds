@@ -10,6 +10,7 @@ import { Button } from "@robr0/design-system/components/Button/Button";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 const profileContent = (
   <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
@@ -51,6 +52,7 @@ export default function HoverCardPage() {
               storybookPath="/?path=/docs/components-hovercard--docs"
             />
           </div>
+          <ComponentInstallStrip slug="hover-card" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

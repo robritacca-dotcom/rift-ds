@@ -8,6 +8,7 @@ import { RichDropdown } from "@robr0/design-system/components/RichDropdown/RichD
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 /* System-available faces, so the cells preview real typographic contrast
    without loading webfonts for a demo. */
@@ -62,6 +63,7 @@ export default function RichDropdownPage() {
               storybookPath="/?path=/docs/components-richdropdown--docs"
             />
           </div>
+          <ComponentInstallStrip slug="rich-dropdown" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

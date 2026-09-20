@@ -11,6 +11,7 @@ import { PromptSuggestions } from "@robr0/design-system/components/PromptSuggest
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 
 /** Send flips into a short fake stream, with stop cutting it off early. */
@@ -155,6 +156,7 @@ export default function ComposerPage() {
             <h1 className={styles.pageTitle}>Composer</h1>
             <PageLinks storybookPath="/?path=/docs/components-composer--docs" />
           </div>
+          <ComponentInstallStrip slug="composer" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

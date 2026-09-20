@@ -8,6 +8,7 @@ import { Slider } from "@robr0/design-system/components/Slider/Slider";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 export default function SliderPage() {
   const [value1, setValue1] = useState(60);
@@ -28,6 +29,7 @@ export default function SliderPage() {
               storybookPath="/?path=/docs/components-slider--docs"
             />
           </div>
+          <ComponentInstallStrip slug="slider" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

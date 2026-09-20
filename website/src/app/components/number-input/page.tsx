@@ -8,6 +8,7 @@ import { NumberInput } from "@robr0/design-system/components/NumberInput/NumberI
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 export default function NumberInputPage() {
   return (
@@ -25,6 +26,7 @@ export default function NumberInputPage() {
               storybookPath="/?path=/docs/components-numberinput--docs"
             />
           </div>
+          <ComponentInstallStrip slug="number-input" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

@@ -9,6 +9,7 @@ import type { GanttChartItem } from "@robr0/design-system/components/GanttChart/
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 const deliveryPlan: GanttChartItem[] = [
   { id: "charter", label: "Project charter", start: "2026-02-02", end: "2026-02-13", color: "cobalt" },
@@ -93,6 +94,7 @@ export default function GanttChartPage() {
             <h1 className={styles.pageTitle}>Gantt chart</h1>
             <PageLinks storybookPath="/?path=/docs/components-ganttchart--docs" />
           </div>
+          <ComponentInstallStrip slug="gantt-chart" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

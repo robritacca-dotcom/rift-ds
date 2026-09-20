@@ -8,6 +8,7 @@ import { ColorPicker } from "@robr0/design-system/components/ColorPicker/ColorPi
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 export default function ColorPickerPage() {
   const [controlled, setControlled] = useState("#EF476F");
@@ -27,6 +28,7 @@ export default function ColorPickerPage() {
               storybookPath="/?path=/docs/components-colorpicker--docs"
             />
           </div>
+          <ComponentInstallStrip slug="color-picker" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

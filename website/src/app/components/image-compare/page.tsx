@@ -8,6 +8,7 @@ import { ImageCompare } from "@robr0/design-system/components/ImageCompare/Image
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 // A demo cover drawn twice, once for each theme. A light/dark pair of the
 // same composition is exactly what a compare slider is for.
@@ -30,6 +31,7 @@ export default function ImageComparePage() {
               storybookPath="/?path=/docs/components-imagecompare--docs"
             />
           </div>
+          <ComponentInstallStrip slug="image-compare" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

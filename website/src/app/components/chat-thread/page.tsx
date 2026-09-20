@@ -10,6 +10,7 @@ import { Button } from "@robr0/design-system/components/Button/Button";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 
 const EXCHANGES = [
@@ -85,6 +86,7 @@ export default function ChatThreadPage() {
             <h1 className={styles.pageTitle}>Chat thread</h1>
             <PageLinks storybookPath="/?path=/docs/components-chatthread--docs" />
           </div>
+          <ComponentInstallStrip slug="chat-thread" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

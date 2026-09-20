@@ -9,6 +9,7 @@ import { Button } from "@robr0/design-system/components/Button/Button";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 const FILTER_OPTIONS = ["All", "Components", "Foundations", "Patterns"];
 const DEFAULT_TAGS = ["react", "typescript", "storybook", "figma"];
@@ -32,6 +33,7 @@ export default function ChipPage() {
               storybookPath="/?path=/docs/components-chip--docs"
             />
           </div>
+          <ComponentInstallStrip slug="chip" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

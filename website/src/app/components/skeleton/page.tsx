@@ -8,6 +8,7 @@ import { Skeleton } from "@robr0/design-system/components/Skeleton/Skeleton";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 export default function SkeletonPage() {
   return (
@@ -25,6 +26,7 @@ export default function SkeletonPage() {
               storybookPath="/?path=/docs/components-skeleton--docs"
             />
           </div>
+          <ComponentInstallStrip slug="skeleton" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

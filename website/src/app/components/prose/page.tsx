@@ -8,6 +8,7 @@ import { Prose } from "@robr0/design-system/components/Prose/Prose";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 
 export default function ProsePage() {
@@ -24,6 +25,7 @@ export default function ProsePage() {
             <h1 className={styles.pageTitle}>Prose</h1>
             <PageLinks storybookPath="/?path=/docs/components-prose--docs" />
           </div>
+          <ComponentInstallStrip slug="prose" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

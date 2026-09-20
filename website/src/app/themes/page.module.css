@@ -1,0 +1,156 @@
+/* ============================================
+   THEMES PAGE LAYOUT
+   ============================================ */
+.dsLayout {
+  display: flex;
+  gap: var(--layout-column-gap);
+  width: 100%;
+  max-width: 1440px;
+  padding-top: var(--primitive-gap-1000);
+}
+
+.dsContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-2000);
+}
+
+/* ============================================
+   PAGE HEADER
+   ============================================ */
+.pageHeader {
+  margin-top: calc(var(--primitive-gap-1000) - var(--gap-2000));
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--primitive-gap-500);
+  width: 100%;
+}
+
+.pageTitle {
+  font-family: var(--font-display-2-family);
+  font-size: var(--font-display-2-size);
+  font-weight: var(--font-display-2-weight);
+  line-height: var(--font-display-2-line-height);
+  letter-spacing: var(--font-display-2-letter-spacing);
+  color: var(--color-text-primary);
+  width: 100%;
+}
+
+/* ============================================
+   INTRO SECTION
+   ============================================ */
+.introSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-500);
+}
+
+.subDisplay {
+  font-family: var(--font-sub-display-family);
+  font-size: var(--font-sub-display-size);
+  font-weight: var(--font-sub-display-weight);
+  line-height: var(--font-sub-display-line-height);
+  letter-spacing: var(--font-sub-display-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.introBody {
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+  color: var(--color-text-secondary);
+  max-width: 880px;
+}
+
+/* ============================================
+   CONSUMER SETUP
+   ============================================ */
+.setupBlock {
+  max-width: 720px;
+}
+
+/* ============================================
+   GALLERY
+   ============================================ */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--gap-500);
+}
+
+/* The card: a navigation-tile surface wearing the active theme's own
+   corner language through the radius tokens, so the gallery restyles
+   with every Apply. */
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+  padding: var(--padding-500);
+  background: var(--color-bg-container-primary);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
+}
+
+.cardActive {
+  border-color: var(--color-action-primary-bg);
+}
+
+.cardSwatches {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-300);
+}
+
+.brandSwatch {
+  width: 28px;
+  height: 28px;
+  border: var(--border-025) solid var(--color-bg-container-border);
+}
+
+.accentRow {
+  display: flex;
+  gap: var(--gap-100);
+}
+
+.accentDot {
+  width: 12px;
+  height: 12px;
+  border-radius: var(--radius-pill);
+  border: var(--border-025) solid var(--color-bg-container-border);
+}
+
+.cardName {
+  font-size: var(--font-heading-2-size);
+  font-weight: var(--font-heading-2-weight);
+  line-height: var(--font-heading-2-line-height);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.cardPairing {
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.cardLevers {
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-tertiary);
+  margin: 0;
+}
+
+.cardActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-200);
+  margin-top: auto;
+  padding-top: var(--gap-200);
+}

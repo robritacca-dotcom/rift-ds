@@ -9,6 +9,7 @@ import { agentStatusPatterns } from "@robr0/design-system/components/AgentStatus
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 
 /** "fill-sweep" → "Fill sweep" */
@@ -39,6 +40,7 @@ export default function AgentStatusPage() {
             <h1 className={styles.pageTitle}>Agent status</h1>
             <PageLinks storybookPath="/?path=/docs/components-agentstatus--docs" />
           </div>
+          <ComponentInstallStrip slug="agent-status" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>What the agent is doing, right now</p>

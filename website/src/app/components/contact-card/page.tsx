@@ -8,6 +8,7 @@ import { ContactCard } from "@robr0/design-system/components/ContactCard/Contact
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 
 export default function ContactCardPage() {
@@ -27,6 +28,7 @@ export default function ContactCardPage() {
               storybookPath="/?path=/docs/components-contactcard--docs"
             />
           </div>
+          <ComponentInstallStrip slug="contact-card" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

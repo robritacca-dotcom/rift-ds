@@ -8,6 +8,7 @@ import { Swatch } from "@robr0/design-system/components/Swatch/Swatch";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 const PALETTE: Array<[string, string]> = [
   ["#EF476F", "Red 07"],
@@ -37,6 +38,7 @@ export default function SwatchPage() {
               storybookPath="/?path=/docs/components-swatch--docs"
             />
           </div>
+          <ComponentInstallStrip slug="swatch" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

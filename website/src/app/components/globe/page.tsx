@@ -15,6 +15,7 @@ import { Kbd } from "@robr0/design-system/components/Kbd/Kbd";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 const points: GlobePoint[] = [
   { id: "santiago", lat: -33.45, lng: -70.66, label: "SCL", kind: "point" },
@@ -50,6 +51,7 @@ export default function GlobePage() {
             <h1 className={styles.pageTitle}>Globe</h1>
             <PageLinks storybookPath="/?path=/docs/components-globe--docs" />
           </div>
+          <ComponentInstallStrip slug="globe" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

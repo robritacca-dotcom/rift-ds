@@ -9,6 +9,7 @@ import { Button } from "@robr0/design-system/components/Button/Button";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 export default function AnimatedNumberPage() {
   // Remount key replays the count-up; the revenue value feeds the tween demo.
@@ -28,6 +29,7 @@ export default function AnimatedNumberPage() {
             <h1 className={styles.pageTitle}>Animated number</h1>
             <PageLinks storybookPath="/?path=/docs/components-animatednumber--docs" />
           </div>
+          <ComponentInstallStrip slug="animated-number" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

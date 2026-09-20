@@ -9,6 +9,7 @@ import { COMPONENT_COUNT } from "@robr0/design-system/components/registry";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 export default function StatPage() {
   return (
@@ -26,6 +27,7 @@ export default function StatPage() {
               storybookPath="/?path=/docs/components-stat--docs"
             />
           </div>
+          <ComponentInstallStrip slug="stat" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

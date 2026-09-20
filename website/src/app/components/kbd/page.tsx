@@ -8,6 +8,7 @@ import { Kbd } from "@robr0/design-system/components/Kbd/Kbd";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 
 export default function KbdPage() {
@@ -26,6 +27,7 @@ export default function KbdPage() {
               storybookPath="/?path=/docs/components-kbd--docs"
             />
           </div>
+          <ComponentInstallStrip slug="kbd" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

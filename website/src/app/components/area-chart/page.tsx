@@ -8,6 +8,7 @@ import { AreaChart } from "@robr0/design-system/components/Chart/AreaChart";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 const areaData = [
   { month: "Jan", organic: 140, paid: 60 },
@@ -32,6 +33,7 @@ export default function AreaChartPage() {
             <h1 className={styles.pageTitle}>Area chart</h1>
             <PageLinks storybookPath="/?path=/docs/components-areachart--docs" />
           </div>
+          <ComponentInstallStrip slug="area-chart" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

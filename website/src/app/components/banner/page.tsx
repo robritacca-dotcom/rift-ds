@@ -9,6 +9,7 @@ import { Button } from "@robr0/design-system/components/Button/Button";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 export default function BannerPage() {
   return (
@@ -26,6 +27,7 @@ export default function BannerPage() {
               storybookPath="/?path=/docs/components-banner--docs"
             />
           </div>
+          <ComponentInstallStrip slug="banner" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

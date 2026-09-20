@@ -8,6 +8,7 @@ import { LinkList } from "@robr0/design-system/components/LinkList/LinkList";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 
 export default function LinkListPage() {
@@ -26,6 +27,7 @@ export default function LinkListPage() {
               storybookPath="/?path=/docs/components-linklist--docs"
             />
           </div>
+          <ComponentInstallStrip slug="link-list" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

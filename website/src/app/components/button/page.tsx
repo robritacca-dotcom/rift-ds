@@ -7,6 +7,7 @@ import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { Button } from "@robr0/design-system/components/Button/Button";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 import styles from "./page.module.css";
 import { FIGMA_FILE_URL } from "@/config/brand.generated";
 /* ============================================
@@ -118,6 +119,7 @@ export default function ButtonPage() {
               storybookPath="/?path=/docs/components-button--docs"
             />
           </div>
+          <ComponentInstallStrip slug="button" />
 
           {/* Intro */}
           <div className={`${styles.introSection} animate-in animate-delay-1`}>

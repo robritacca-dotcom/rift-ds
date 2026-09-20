@@ -9,6 +9,7 @@ import { Stat } from "@robr0/design-system/components/Stat/Stat";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 const trendUp = [4, 6, 5, 8, 7, 10, 9, 12, 14, 13, 16];
 const trendDown = [16, 14, 15, 12, 13, 10, 11, 8, 7, 8, 5];
@@ -36,6 +37,7 @@ export default function SparklinePage() {
             <h1 className={styles.pageTitle}>Sparkline</h1>
             <PageLinks storybookPath="/?path=/docs/components-sparkline--docs" />
           </div>
+          <ComponentInstallStrip slug="sparkline" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

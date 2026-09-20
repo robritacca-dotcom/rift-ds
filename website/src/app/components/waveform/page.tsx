@@ -8,6 +8,7 @@ import { Waveform } from "@robr0/design-system/components/Waveform/Waveform";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 export default function WaveformPage() {
   return (
@@ -23,6 +24,7 @@ export default function WaveformPage() {
             <h1 className={styles.pageTitle}>Waveform</h1>
             <PageLinks storybookPath="/?path=/docs/components-waveform--docs" />
           </div>
+          <ComponentInstallStrip slug="waveform" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

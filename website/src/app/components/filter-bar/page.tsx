@@ -8,6 +8,7 @@ import { FilterBar } from "@robr0/design-system/components/FilterBar/FilterBar";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 const issueFilters = [
   {
@@ -82,6 +83,7 @@ export default function FilterBarPage() {
             <h1 className={styles.pageTitle}>Filter bar</h1>
             <PageLinks storybookPath="/?path=/docs/components-filterbar--docs" />
           </div>
+          <ComponentInstallStrip slug="filter-bar" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

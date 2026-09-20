@@ -12,6 +12,7 @@ import { Button } from "@robr0/design-system/components/Button/Button";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 
 const signupData = [
@@ -38,6 +39,7 @@ export default function MessageCardPage() {
             <h1 className={styles.pageTitle}>Message card</h1>
             <PageLinks storybookPath="/?path=/docs/components-messagecard--docs" />
           </div>
+          <ComponentInstallStrip slug="message-card" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

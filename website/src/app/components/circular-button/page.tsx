@@ -8,6 +8,7 @@ import { CircularButton } from "@robr0/design-system/components/CircularButton/C
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
+import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 const states = [
   { label: "Default", value: "default" },
@@ -34,6 +35,7 @@ export default function CircularButtonPage() {
               storybookPath="/?path=/docs/components-circularbutton--docs"
             />
           </div>
+          <ComponentInstallStrip slug="circular-button" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>

@@ -1,0 +1,4 @@
+.strip {
+  margin-top: var(--gap-500);
+  max-width: 720px;
+}

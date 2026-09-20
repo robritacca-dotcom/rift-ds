@@ -157,15 +157,17 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
       gold: "#C9C9C9",
       mint: "#ADADAD",
     },
-    // Hairlines carry Smoke's depth, so its section dividers step two
-    // ramp notches stronger than the base theme's (which they inherit as
-    // near-invisible on this look's flat grounds): 02 to 04 in light, 08
-    // to 06 in dark, alpha dropped.
+    // Hairlines carry Smoke's depth, so its dividers step ONE ramp
+    // notch stronger than the base theme's (which they inherit as
+    // near-invisible on this look's flat grounds): 02 to 03 in light,
+    // 08 to 07 in dark, alpha dropped. One notch is the middle ground:
+    // two lit the section rules but made every table hairline shout,
+    // since 39 components ride this token.
     extraOverrides: {
-      "--color-divider": "var(--primitive-neutral-04)",
+      "--color-divider": "var(--primitive-neutral-03)",
     },
     extraOverridesDark: {
-      "--color-divider": "var(--primitive-neutral-06)",
+      "--color-divider": "var(--primitive-neutral-07)",
     },
   },
   contrast: {

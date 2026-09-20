@@ -76,6 +76,17 @@ function LiveFrame({
       `${designH}px`
     );
     doc.documentElement.style.overflow = "hidden";
+    /* The preview is a picture, not a scroll surface: inner scroll
+       areas (a DataTable's wrapper, the Gantt's track) keep working in
+       the real page but their bars are noise at postage-stamp scale —
+       hide every scrollbar inside the frame. */
+    if (!doc.getElementById("preview-scrollbars")) {
+      const style = doc.createElement("style");
+      style.id = "preview-scrollbars";
+      style.textContent =
+        "*{scrollbar-width:none}*::-webkit-scrollbar{display:none}";
+      doc.head.appendChild(style);
+    }
   }, [designH]);
 
   useEffect(() => {
@@ -94,14 +105,17 @@ function LiveFrame({
     const shell = shellRef.current;
     if (!shell) return;
     const observer = new ResizeObserver(() => {
+      /* Device modes float on the dotted stage with safe padding all
+         round; desktop fills the shell edge to edge as before. */
+      const pad = device === "desktop" ? 0 : 24;
       shell.style.setProperty(
         "--frame-scale",
-        `${shell.clientHeight / designH}`
+        `${(shell.clientHeight - pad * 2) / designH}`
       );
     });
     observer.observe(shell);
     return () => observer.disconnect();
-  }, [designH]);
+  }, [designH, device]);
 
   return (
     <div

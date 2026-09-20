@@ -522,8 +522,11 @@
 
   .ds-app-sidebar__mobile-trigger {
     position: fixed;
-    top: var(--padding-500);
-    left: var(--padding-500);
+    /* One padding step in from the corner, so hosts whose mobile
+       content gutter is 16px get a trigger whose centre lines up with
+       a 40px header row's. */
+    top: var(--padding-400);
+    left: var(--padding-400);
     z-index: 80;
     display: flex;
     align-items: center;

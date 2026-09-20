@@ -62,7 +62,7 @@ html[data-brand="mono"] {
   --color-core-accent-violet: #8F8F8F;
   --color-core-ui-primary: var(--primitive-neutral-08);
   --color-core-ui-secondary: var(--primitive-neutral-09);
-  --color-divider: var(--primitive-neutral-04);
+  --color-divider: var(--primitive-neutral-03);
   --color-input-border-hover: var(--primitive-neutral-06);
   --color-input-border-selected: var(--primitive-neutral-08);
   --font-family-heading: 'Montserrat', sans-serif;
@@ -184,7 +184,7 @@ html[data-brand="mono"][data-theme="dark"] {
   --color-core-accent-violet: #8F8F8F;
   --color-core-ui-primary: var(--primitive-neutral-01);
   --color-core-ui-secondary: var(--primitive-neutral-05);
-  --color-divider: var(--primitive-neutral-06);
+  --color-divider: var(--primitive-neutral-07);
   --color-input-border-hover: var(--primitive-neutral-03);
   --color-input-border-selected: var(--primitive-neutral-03);
   --font-family-heading: 'Montserrat', sans-serif;

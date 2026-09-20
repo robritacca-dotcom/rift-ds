@@ -439,6 +439,15 @@ export default function RoadmapPlanner() {
               </span>
             </div>
             <div className={styles.topBarActions}>
+              {/* Mobile: the full search field folds to this icon, riding
+                  with the other actions on the right. */}
+              <CircularButton
+                icon="search"
+                variant="secondary"
+                size="compact"
+                ariaLabel="Search initiatives"
+                className={styles.searchIconMobile}
+              />
               <AiButton
                 label="Ask AI"
                 size="compact"

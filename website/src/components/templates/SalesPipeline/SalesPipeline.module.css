@@ -295,3 +295,28 @@
     padding-left: 56px;
   }
 }
+
+/* Mobile top bar: the hamburger docks left (padding above), the full
+   search field folds to its icon, and the actions keep the right end —
+   one 40px row instead of a wrapping stack. */
+.searchIconMobile {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .search {
+    display: none;
+  }
+
+  .searchIconMobile {
+    display: inline-flex;
+  }
+
+  /* One 40px row: actions right, centres level with the fixed
+     hamburger (40px at the 16px inset). */
+  .topBar {
+    justify-content: flex-end;
+    min-height: 40px;
+    align-items: center;
+  }
+}

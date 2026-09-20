@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
+import Link from "next/link";
 import { themeSelectorTiles } from "@/lib/theme/presets";
 import { useSiteTheme } from "@/lib/theme/use-theme-overrides";
 import { applyBrand, readBrand, subscribeBrand } from "@/lib/theme/brand";
@@ -144,6 +145,23 @@ export default function BrandSwitcher({
               )}
             </button>
           ))}
+          <span className={styles.menuDivider} aria-hidden="true" />
+          {/* The list ends where a new theme would begin: the dashed slot
+              opens the playground, where a visitor builds their own. */}
+          <Link
+            href="/playground"
+            role="menuitem"
+            className={styles.row}
+            onClick={() => setOpen(false)}
+          >
+            <span className={styles.rowSwatchAdd} aria-hidden="true">
+              <span className="material-symbols-rounded">add</span>
+            </span>
+            <span className={styles.rowText}>
+              <span className={styles.rowName}>Make your own</span>
+              <span className={styles.rowFont}>Opens the playground</span>
+            </span>
+          </Link>
         </div>,
         document.body
       )}

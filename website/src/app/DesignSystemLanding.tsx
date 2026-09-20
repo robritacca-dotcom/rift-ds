@@ -458,6 +458,23 @@ function ThemeSwitcher() {
           </span>
         </span>
       ))}
+      {/* The row ends where a new theme would begin: the dashed dot opens
+          the playground, where a visitor builds their own. */}
+      <span className={styles.swatchWrap}>
+        <Link
+          href="/playground"
+          className={styles.accentSwatchAdd}
+          aria-label="Make your own theme in the playground"
+        >
+          <span className="material-symbols-rounded" aria-hidden="true">
+            add
+          </span>
+        </Link>
+        <span className={styles.swatchTip} aria-hidden="true">
+          <span className={styles.swatchTipName}>Make your own</span>
+          <span className={styles.swatchTipFont}>Opens the playground</span>
+        </span>
+      </span>
     </div>
   );
 }

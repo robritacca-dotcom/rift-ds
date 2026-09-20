@@ -202,10 +202,42 @@
      slide live on the hover state below, entering only. */
 }
 
+/* The trailing add dot: dashed where the shipped dots are solid, since it
+   stands for the theme that doesn't exist yet. Links to the playground. */
+.accentSwatchAdd {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  background: transparent;
+  border: var(--border-025) dashed var(--color-text-tertiary);
+  border-radius: var(--radius-pill);
+  color: var(--color-text-secondary);
+  --icon-size: var(--icon-size-500);
+  transition:
+    transform var(--motion-duration-fast) var(--motion-ease-standard),
+    border-color var(--motion-duration-fast) var(--motion-ease-standard),
+    color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.accentSwatchAdd:hover {
+  transform: scale(1.15);
+  border-color: var(--color-text-primary);
+  color: var(--color-text-primary);
+}
+
+.accentSwatchAdd:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
 /* Hover only — plus keyboard focus via :focus-visible, so a click's
    lingering focus never pins a card open after the pointer leaves. */
 .swatchWrap:hover .swatchTip,
-.swatchWrap:has(.accentSwatch:focus-visible) .swatchTip {
+.swatchWrap:has(.accentSwatch:focus-visible) .swatchTip,
+.swatchWrap:has(.accentSwatchAdd:focus-visible) .swatchTip {
   opacity: 1;
   transform: translate(-50%, 0);
   transition:

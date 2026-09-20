@@ -66,6 +66,9 @@
   border-radius: var(--radius-200);
   cursor: pointer;
   text-align: left;
+  /* The add row renders as a link; the global underline convention is
+     for prose links, not menu rows. */
+  text-decoration: none;
   transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
@@ -116,4 +119,32 @@
   --icon-size: var(--icon-size-500);
   color: var(--color-action-primary-text-tertiary);
   flex-shrink: 0;
+}
+
+.menuDivider {
+  height: var(--border-025);
+  margin: var(--gap-050) var(--padding-300);
+  background: var(--color-bg-container-border);
+}
+
+/* The add row's slot: dashed where the theme swatches are solid, since
+   it stands for the theme that doesn't exist yet. */
+.rowSwatchAdd {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  border: var(--border-025) dashed var(--color-text-tertiary);
+  border-radius: var(--radius-pill);
+  color: var(--color-text-secondary);
+  /* The glyph's em box is one icon step up from the circle; the plus
+     ink itself sits central, so the overflow is invisible. */
+  --icon-size: var(--icon-size-500);
+}
+
+.row:hover .rowSwatchAdd {
+  border-color: var(--color-text-primary);
+  color: var(--color-text-primary);
 }

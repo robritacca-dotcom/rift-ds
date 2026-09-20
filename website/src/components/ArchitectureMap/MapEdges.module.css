@@ -44,8 +44,8 @@
   font-weight: var(--font-paragraph-em-weight);
   color: var(--color-text-secondary);
   background-color: var(--color-bg-container-primary);
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-full);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-pill);
   padding: var(--primitive-padding-050) var(--primitive-padding-200);
   pointer-events: none;
 }

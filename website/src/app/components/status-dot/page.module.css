@@ -96,8 +96,8 @@
   align-items: center;
   gap: var(--gap-200);
   padding: var(--padding-200) var(--padding-400);
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-md);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-300);
   background: var(--color-bg-container-primary);
 }
 

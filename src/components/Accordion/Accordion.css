@@ -7,8 +7,8 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-sm);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-200);
   overflow: hidden;
 }
 
@@ -17,7 +17,7 @@
    ============================================ */
 
 .ds-accordion__item {
-  border-bottom: var(--border-xs) solid var(--color-bg-container-border);
+  border-bottom: var(--border-025) solid var(--color-bg-container-border);
 }
 
 .ds-accordion__item:last-child {
@@ -49,7 +49,7 @@
 .ds-accordion__trigger:focus-visible {
   outline: 2px solid var(--color-action-primary-bg);
   outline-offset: -2px;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-200);
 }
 
 /* ============================================
@@ -71,7 +71,7 @@
 
 .ds-accordion__icon {
   flex-shrink: 0;
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
   color: var(--color-icon-primary);
   transition: transform var(--motion-duration-slow) var(--motion-ease-standard);
 }

@@ -23,11 +23,11 @@
   flex-direction: column;
   width: 100%;
   background-color: var(--color-bg-container-primary);
-  border: var(--border-xs) solid var(--color-bg-container-border);
+  border: var(--border-025) solid var(--color-bg-container-border);
   /* The chat furniture shares one 24px shell with MessageCard and the
      bubbles; a closed row rounds to a capsule the way a one-line bubble
      does, echoing the system's pill buttons. */
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-600);
   overflow: hidden;
 }
 
@@ -79,7 +79,7 @@
 }
 
 .ds-tool-call__indicator .material-symbols-rounded {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 }
 
 /* The tool name is an identifier, so it takes the code stack —
@@ -137,7 +137,7 @@
 }
 
 .ds-tool-call__chevron {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 
   flex: none;
   color: var(--color-icon-secondary);
@@ -197,7 +197,7 @@
 
 .ds-tool-call--open .ds-tool-call__content {
   padding: var(--padding-400) var(--padding-500);
-  border-top: var(--border-xs) solid var(--color-divider);
+  border-top: var(--border-025) solid var(--color-divider);
 }
 
 .ds-tool-call__content > :first-child {

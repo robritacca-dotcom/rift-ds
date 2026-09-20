@@ -28,7 +28,7 @@
   --ds-agent-dot-rest: 0.82;
   --ds-agent-cycle: var(--motion-duration-loop-matrix);
   --ds-agent-slot: calc(var(--ds-agent-cycle) / 12);
-  --ds-agent-matrix-size: var(--icon-size-md);
+  --ds-agent-matrix-size: var(--icon-size-600);
 
   display: inline-flex;
   align-items: center;
@@ -59,7 +59,7 @@
 
 .ds-agent-status__dot {
   aspect-ratio: 1;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background-color: var(--ds-agent-color);
   opacity: var(--ds-agent-dot-dim);
   transform: scale(var(--ds-agent-dot-rest));
@@ -197,7 +197,7 @@
    ============================================ */
 
 .ds-agent-status--compact {
-  --ds-agent-matrix-size: var(--icon-size-sm);
+  --ds-agent-matrix-size: var(--icon-size-500);
 
   gap: var(--gap-200);
 
@@ -220,8 +220,8 @@
   width: 100%;
   padding: var(--padding-150) var(--padding-300);
   background-color: var(--color-bg-container-secondary);
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-md);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-300);
 }
 
 /* ============================================

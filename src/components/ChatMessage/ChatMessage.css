@@ -13,7 +13,7 @@
   /* Gutter width matches the Avatar sm footprint, so a run of turns keeps
      its left edge whether or not each row shows its avatar. Consumers can
      repoint it for a larger avatar. */
-  --ds-chat-message-gutter: var(--icon-size-lg);
+  --ds-chat-message-gutter: var(--icon-size-800);
 
   display: flex;
   align-items: flex-start;
@@ -131,7 +131,7 @@
 .ds-chat-message--bubble .ds-chat-message__content {
   max-width: var(--ds-chat-message-max-width, 75%);
   padding: var(--padding-300) var(--padding-500);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-600);
 }
 
 /* Sent — the user's own turns */
@@ -149,12 +149,12 @@
 /* Tail — the speaker-side bottom corner squares off to point at them */
 .ds-chat-message--tail.ds-chat-message--bubble.ds-chat-message--user
   .ds-chat-message__content {
-  border-bottom-right-radius: var(--radius-xs);
+  border-bottom-right-radius: var(--radius-100);
 }
 
 .ds-chat-message--tail.ds-chat-message--bubble.ds-chat-message--assistant
   .ds-chat-message__content {
-  border-bottom-left-radius: var(--radius-xs);
+  border-bottom-left-radius: var(--radius-100);
 }
 
 /* ============================================
@@ -208,7 +208,7 @@
 .ds-chat-message__dot {
   width: var(--gap-200);
   height: var(--gap-200);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background-color: var(--color-text-tertiary);
   opacity: 0.25;
   animation: ds-chat-message-dot var(--ds-chat-message-pending-cycle)

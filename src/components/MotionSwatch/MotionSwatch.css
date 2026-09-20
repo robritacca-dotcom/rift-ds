@@ -18,8 +18,8 @@
 
   /* Appearance */
   background: var(--color-bg-container-primary-semi);
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-xl); /* 24px */
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600); /* 24px */
   padding: var(--padding-500); /* 20px */
 }
 
@@ -49,14 +49,14 @@
 .ds-motion-swatch__preview:focus-visible {
   outline: 2px solid var(--color-action-primary-bg);
   outline-offset: 2px;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-200);
 }
 
 .ds-motion-swatch__replay-icon {
   position: absolute;
   top: 0;
   right: 0;
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
   color: var(--color-text-tertiary);
   opacity: 0;
   transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
@@ -77,7 +77,7 @@
   display: block;
   width: 120px;
   height: 16px;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background: var(--color-bg-container-secondary);
 }
 
@@ -85,7 +85,7 @@
   display: block;
   width: 16px;
   height: 16px;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background: var(--color-core-accent-violet);
   animation-name: ds-motion-swatch-slide;
   animation-fill-mode: forwards;
@@ -109,8 +109,8 @@
   display: block;
   width: 32px;
   height: 32px;
-  border-radius: var(--radius-full);
-  border: var(--border-md) solid var(--color-bg-container-secondary);
+  border-radius: var(--radius-pill);
+  border: var(--border-050) solid var(--color-bg-container-secondary);
   border-top-color: var(--color-core-accent-violet);
   animation-name: ds-motion-swatch-spin;
   animation-iteration-count: infinite;
@@ -131,7 +131,7 @@
   display: block;
   width: 120px;
   height: 16px;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background: linear-gradient(
     90deg,
     var(--color-bg-container-secondary) 25%,

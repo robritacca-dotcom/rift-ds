@@ -20,8 +20,8 @@
   width: 24px;
   height: 24px;
   box-sizing: border-box;
-  border: var(--border-md) solid var(--color-bg-container-border);
-  border-radius: var(--radius-sm); /* 8px */
+  border: var(--border-050) solid var(--color-bg-container-border);
+  border-radius: var(--radius-200); /* 8px */
   background-color: var(--color-bg-container-primary-transparent);
   display: flex;
   align-items: center;

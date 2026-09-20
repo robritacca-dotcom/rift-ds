@@ -25,8 +25,8 @@
   justify-content: space-between;
   gap: var(--gap-500); /* 20px */
   padding: var(--padding-400); /* 16px */
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-md); /* 12px */
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-300); /* 12px */
   background-color: transparent;
   cursor: pointer;
   user-select: none;
@@ -112,8 +112,8 @@
 .ds-selection-card__radio {
   width: 24px;
   height: 24px;
-  border: var(--border-md) solid var(--color-bg-container-border);
-  border-radius: var(--radius-full);
+  border: var(--border-050) solid var(--color-bg-container-border);
+  border-radius: var(--radius-pill);
   background-color: var(--color-bg-container-primary-transparent);
   display: flex;
   align-items: center;
@@ -124,7 +124,7 @@
 .ds-selection-card__radio-dot {
   width: 12px;
   height: 12px;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background-color: var(--color-action-primary-bg);
   transform: scale(0);
   transition: transform var(--motion-duration-base) var(--motion-ease-standard);
@@ -161,8 +161,8 @@
   width: 24px;
   height: 24px;
   box-sizing: border-box;
-  border: var(--border-md) solid var(--color-bg-container-border);
-  border-radius: var(--radius-sm); /* 8px */
+  border: var(--border-050) solid var(--color-bg-container-border);
+  border-radius: var(--radius-200); /* 8px */
   background-color: var(--color-bg-container-primary-transparent);
   display: flex;
   align-items: center;
@@ -208,7 +208,7 @@
   position: relative;
   width: 42px;
   height: 24px;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background: var(--color-action-primary-bg);
   transition: background-color var(--motion-duration-base) var(--motion-ease-standard);
   flex-shrink: 0;

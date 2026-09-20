@@ -14,7 +14,7 @@
 
 .ds-carousel__viewport {
   overflow: hidden;
-  border-radius: var(--radius-sm); /* 8px */
+  border-radius: var(--radius-200); /* 8px */
 }
 
 .ds-carousel__track {
@@ -40,8 +40,8 @@
   justify-content: center;
   width: 36px;
   height: 36px;
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-full);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-pill);
   background-color: var(--color-bg-page-primary);
   cursor: pointer;
   z-index: 2;
@@ -73,7 +73,7 @@
 }
 
 .ds-carousel__arrow .material-symbols-rounded {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 }
 
 /* ============================================
@@ -90,7 +90,7 @@
 .ds-carousel__dot {
   width: 8px;
   height: 8px;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   border: none;
   padding: 0;
   background-color: var(--color-bg-container-border);

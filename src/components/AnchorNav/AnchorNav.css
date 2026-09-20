@@ -19,7 +19,7 @@
 }
 
 .ds-anchor-nav__icon {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
   color: var(--color-icon-primary);
 }
 
@@ -27,15 +27,15 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  border-left: var(--border-xs) solid var(--color-divider);
+  border-left: var(--border-025) solid var(--color-divider);
 }
 
 .ds-anchor-nav__link {
   display: block;
   padding: var(--padding-150) 0 var(--padding-150) var(--padding-400);
   /* Sits over the list rail; turns into the indicator when active */
-  margin-left: calc(var(--border-xs) * -1);
-  border-left: var(--border-md) solid transparent;
+  margin-left: calc(var(--border-025) * -1);
+  border-left: var(--border-050) solid transparent;
   font-size: var(--font-paragraph-size);
   font-weight: var(--font-paragraph-weight);
   line-height: var(--font-paragraph-line-height);
@@ -53,7 +53,7 @@
 .ds-anchor-nav__link:focus-visible {
   outline: 2px solid var(--color-action-primary-bg);
   outline-offset: -2px;
-  border-radius: var(--radius-xxs);
+  border-radius: var(--radius-050);
 }
 
 .ds-anchor-nav__link--active {
@@ -87,8 +87,8 @@
 .ds-anchor-nav__line {
   /* One line per section: bespoke minimap geometry, specced in design.md */
   width: 16px;
-  height: var(--border-md);
-  border-radius: var(--radius-full);
+  height: var(--border-050);
+  border-radius: var(--radius-pill);
   background-color: var(--color-divider);
   transition:
     width var(--motion-duration-fast) var(--motion-ease-standard),
@@ -111,8 +111,8 @@
   max-height: 70vh;
   overflow-y: auto;
   padding: var(--padding-400);
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-sm);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-200);
   /* Page background, not container: the container fill is semi-transparent
      in dark mode, and a floating panel must not show text through itself */
   background-color: var(--color-bg-page-primary);

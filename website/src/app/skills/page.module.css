@@ -68,7 +68,7 @@
   padding: var(--primitive-padding-050) var(--primitive-padding-150);
   background: var(--color-bg-container-primary);
   border: 1px solid var(--color-bg-container-border);
-  border-radius: var(--radius-xs);
+  border-radius: var(--radius-100);
   color: var(--color-text-secondary);
 }
 
@@ -99,7 +99,7 @@
   gap: var(--primitive-gap-400);
   padding: var(--primitive-gap-1000);
   border: 1px solid var(--color-bg-container-border);
-  border-radius: var(--primitive-radius-xl);
+  border-radius: var(--primitive-radius-600);
   background: var(--color-bg-container-primary);
   /* Anchor targets clear the sticky MegaNav overlay and its frosted
      backdrop — the shared clearance in globals.css owns the geometry */
@@ -123,7 +123,7 @@
 }
 
 .skillIcon {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
   color: var(--color-icon-primary);
   flex-shrink: 0;
 }

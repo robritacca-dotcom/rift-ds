@@ -33,7 +33,7 @@
   left: var(--padding-400); /* 16px */
   top: 50%;
   transform: translateY(-50%);
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
   color: var(--color-icon-primary);
   pointer-events: none;
 }
@@ -46,8 +46,8 @@
   width: 100%;
   padding: var(--padding-200) var(--padding-400); /* 8px 16px */
   padding-left: calc(var(--padding-400) + 24px + var(--gap-200)); /* 16px + 24px icon + 8px gap */
-  border: var(--border-xs) solid var(--color-input-border-primary);
-  border-radius: var(--radius-md); /* 12px */
+  border: var(--border-025) solid var(--color-input-border-primary);
+  border-radius: var(--radius-300); /* 12px */
   background-color: var(--color-input-bg-primary);
 
   /* Typography */
@@ -92,7 +92,7 @@
 
 .ds-date-input--compact .ds-date-input__icon {
   left: var(--padding-300); /* 12px */
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 }
 
 /* ============================================

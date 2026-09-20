@@ -74,7 +74,7 @@
 /* A page-background stage so the panel's container surface reads against it. */
 .demoSurface {
   background-color: var(--color-bg-page-primary);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-600);
   padding: var(--padding-500);
 }
 
@@ -107,7 +107,7 @@
 .flushHeader {
   background-color: var(--color-bg-container-secondary);
   padding: var(--padding-400) var(--padding-500);
-  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  border-radius: var(--radius-600) var(--radius-600) 0 0;
 }
 
 .flushBody {

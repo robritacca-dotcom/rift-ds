@@ -144,8 +144,8 @@
 
 .alignmentMarker {
   position: relative;
-  width: var(--icon-size-sm);
-  height: var(--icon-size-sm);
+  width: var(--icon-size-500);
+  height: var(--icon-size-500);
   flex-shrink: 0;
 }
 
@@ -160,12 +160,12 @@
   left: 0;
   right: 0;
   top: 50%;
-  height: var(--border-xs);
+  height: var(--border-025);
 }
 
 .alignmentMarker::after {
   top: 0;
   bottom: 0;
   left: 50%;
-  width: var(--border-xs);
+  width: var(--border-025);
 }

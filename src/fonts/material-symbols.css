@@ -26,15 +26,15 @@
    specificity with every single-class component rule and — being imported
    later — won, rendering 24px glyphs inside 20px boxes.
 
-   Use one of the semantic steps: --icon-size-sm | -md | -lg | -xl.
+   Use one of the semantic steps: --icon-size-500 | -md | -lg | -xl.
 */
 .material-symbols-rounded {
   font-family: 'Material Symbols Rounded';
   font-weight: normal;
   font-style: normal;
-  font-size: var(--icon-size, var(--icon-size-md));
-  width: var(--icon-size, var(--icon-size-md));
-  height: var(--icon-size, var(--icon-size-md));
+  font-size: var(--icon-size, var(--icon-size-600));
+  width: var(--icon-size, var(--icon-size-600));
+  height: var(--icon-size, var(--icon-size-600));
   line-height: 1;
   letter-spacing: normal;
   text-transform: none;

@@ -240,7 +240,7 @@
 }
 
 .linkTitle :global(.material-symbols-rounded) {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
   color: var(--color-text-tertiary);
 }
 

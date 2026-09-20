@@ -79,11 +79,11 @@
 /* Feature icons inside the round previews. Sizes live here rather than
    inline so they read from the icon-size scale. */
 .circlePreview > :global(.material-symbols-rounded) {
-  --icon-size: var(--icon-size-xl);
+  --icon-size: var(--icon-size-1200);
 }
 
 .skillFile :global(.material-symbols-rounded) {
-  --icon-size: var(--icon-size-lg);
+  --icon-size: var(--icon-size-800);
 }
 
 .circlePreview {
@@ -153,13 +153,13 @@
 .docHeading {
   width: 48px;
   height: 10px;
-  border-radius: var(--primitive-radius-full);
+  border-radius: var(--primitive-radius-pill);
   background: var(--color-text-secondary);
 }
 
 .docLine {
   height: 6px;
-  border-radius: var(--primitive-radius-full);
+  border-radius: var(--primitive-radius-pill);
   background: var(--color-bg-container-tertiary);
 }
 
@@ -183,7 +183,7 @@
 .docSwatch {
   width: 16px;
   height: 16px;
-  border-radius: var(--primitive-radius-xs);
+  border-radius: var(--primitive-radius-100);
 }
 
 /* Skills — fanned skill files */
@@ -196,9 +196,9 @@
 .skillFile {
   position: absolute;
   inset: 0;
-  border-radius: var(--primitive-radius-md);
+  border-radius: var(--primitive-radius-300);
   background: var(--color-bg-container-primary);
-  border: var(--border-xs) solid var(--color-bg-container-border);
+  border: var(--border-025) solid var(--color-bg-container-border);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -218,7 +218,7 @@
 .journalCell {
   width: 16px;
   height: 16px;
-  border-radius: var(--primitive-radius-xs);
+  border-radius: var(--primitive-radius-100);
 }
 
 .journalCellL0 {
@@ -289,7 +289,7 @@
 }
 
 .installPreview > :global(.material-symbols-rounded) {
-  --icon-size: var(--icon-size-lg);
+  --icon-size: var(--icon-size-800);
   color: var(--color-text-secondary);
 }
 

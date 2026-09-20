@@ -1,7 +1,7 @@
 .tocCard {
   background: var(--color-bg-container-primary-semi);
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--primitive-radius-xl);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--primitive-radius-600);
   padding: var(--primitive-padding-500);
   display: flex;
   flex-direction: column;

@@ -94,8 +94,8 @@
   justify-content: center;
   min-height: 260px;
   padding: var(--padding-1000);
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-lg);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-400);
   background:
     radial-gradient(circle at 25% 30%, var(--color-status-error-bg), transparent 55%),
     radial-gradient(circle at 75% 40%, var(--color-status-info-bg), transparent 55%),

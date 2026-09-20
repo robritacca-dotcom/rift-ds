@@ -27,7 +27,7 @@ const stage: React.CSSProperties = {
   width: 'min(560px, 90vw)',
   height: '420px',
   border: '1px solid var(--color-bg-container-border)',
-  borderRadius: 'var(--radius-xl)',
+  borderRadius: 'var(--radius-600)',
   background: 'var(--color-bg-container-primary)',
   overflow: 'hidden',
 };

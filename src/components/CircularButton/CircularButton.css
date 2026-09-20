@@ -14,7 +14,7 @@
   height: 40px;
 
   /* Shape */
-  border-radius: var(--radius-full); /* 999px — perfect circle */
+  border-radius: var(--radius-pill); /* 999px — perfect circle */
 
   /* Transitions */
   transition: background-color var(--motion-duration-base) var(--motion-ease-standard), border-color var(--motion-duration-base) var(--motion-ease-standard), opacity var(--motion-duration-base) var(--motion-ease-standard);
@@ -46,7 +46,7 @@
 }
 
 .ds-circular-button--compact .ds-circular-button__icon {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 }
 
 /* ============================================
@@ -55,7 +55,7 @@
 
 .ds-circular-button__icon {
   flex-shrink: 0;
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
   line-height: 1;
 }
 
@@ -115,7 +115,7 @@
    ============================================ */
 
 .ds-circular-button--secondary {
-  border: var(--border-xs) solid var(--color-action-primary-border);
+  border: var(--border-025) solid var(--color-action-primary-border);
   background-color: transparent;
 }
 

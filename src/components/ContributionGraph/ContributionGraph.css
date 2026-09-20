@@ -69,7 +69,7 @@
 .ds-contribution-graph__cell {
   width: var(--ds-contribution-cell);
   height: var(--ds-contribution-cell);
-  border-radius: var(--radius-xxs);
+  border-radius: var(--radius-050);
   flex-shrink: 0;
 }
 
@@ -98,8 +98,8 @@
 /* Hover lifts the day under the pointer, so the title tooltip has a visible
    anchor. */
 .ds-contribution-graph__week .ds-contribution-graph__cell:not(.ds-contribution-graph__cell--empty):hover {
-  outline: var(--border-xs) solid var(--color-text-tertiary);
-  outline-offset: calc(-1 * var(--border-xs));
+  outline: var(--border-025) solid var(--color-text-tertiary);
+  outline-offset: calc(-1 * var(--border-025));
 }
 
 .ds-contribution-graph__cell--empty {

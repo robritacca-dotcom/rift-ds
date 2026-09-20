@@ -288,15 +288,15 @@ Set \`--icon-size\` to a scale step, never \`font-size\`, which changes the
 glyph without changing its layout box.
 
 \`\`\`css
-.ds-thing__icon { --icon-size: var(--icon-size-sm); }
+.ds-thing__icon { --icon-size: var(--icon-size-500); }
 \`\`\`
 
 | Token | Value | Use |
 |---|---|---|
-| \`--icon-size-sm\` | 20px | Compact controls, inline affordances |
-| \`--icon-size-md\` | 24px | Default |
-| \`--icon-size-lg\` | 32px | Feature icons |
-| \`--icon-size-xl\` | 48px | Marketing, empty states |
+| \`--icon-size-500\` | 20px | Compact controls, inline affordances |
+| \`--icon-size-600\` | 24px | Default |
+| \`--icon-size-800\` | 32px | Feature icons |
+| \`--icon-size-1200\` | 48px | Marketing, empty states |
 
 The scale floors at 20px because that is the bottom of the font's \`opsz\`
 (optical size) axis, which runs 20–48. \`font-optical-sizing: auto\` lets
@@ -410,10 +410,10 @@ export const AllIcons: Story = {
    ============================================ */
 
 const ICON_SIZES = [
-  { label: 'SM', px: '20px', token: '--icon-size-sm', use: 'Compact controls, inline affordances' },
-  { label: 'MD', px: '24px', token: '--icon-size-md', use: 'Default: most UI icons' },
-  { label: 'LG', px: '32px', token: '--icon-size-lg', use: 'Feature icons, section headers' },
-  { label: 'XL', px: '48px', token: '--icon-size-xl', use: 'Marketing and empty states' },
+  { label: 'SM', px: '20px', token: '--icon-size-500', use: 'Compact controls, inline affordances' },
+  { label: 'MD', px: '24px', token: '--icon-size-600', use: 'Default: most UI icons' },
+  { label: 'LG', px: '32px', token: '--icon-size-800', use: 'Feature icons, section headers' },
+  { label: 'XL', px: '48px', token: '--icon-size-1200', use: 'Marketing and empty states' },
 ] as const;
 
 export const Sizes: Story = {
@@ -436,7 +436,7 @@ export const Sizes: Story = {
               padding: 16,
               minWidth: 170,
               border: '1px solid var(--color-bg-container-border)',
-              borderRadius: 'var(--radius-md)',
+              borderRadius: 'var(--radius-300)',
             }}
           >
             {/* Fixed stage so all four align on one baseline */}

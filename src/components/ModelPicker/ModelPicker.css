@@ -28,7 +28,7 @@
   padding: 0 var(--padding-400);
   background-color: var(--color-action-passive-bg);
   border: none;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   cursor: pointer;
   color: var(--color-text-secondary);
   font-family: var(--font-paragraph-sm-em-family);
@@ -58,7 +58,7 @@
 }
 
 .ds-model-picker__chevron {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 
   color: var(--color-icon-secondary);
   transition: transform var(--motion-duration-slow) var(--motion-ease-standard);
@@ -82,8 +82,8 @@
   /* Page background, not container: the container fill is semi-transparent
      in dark mode, and a floating panel must not show text through itself */
   background-color: var(--color-bg-page-primary);
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-md);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-300);
   box-shadow: var(--shadow-floating);
   overflow: hidden;
 }
@@ -114,7 +114,7 @@
   align-items: center;
   gap: var(--gap-200);
   padding: var(--padding-100) var(--padding-200);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-200);
   cursor: pointer;
   transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
 }
@@ -155,7 +155,7 @@
 .ds-model-picker__option-badge {
   padding: 0 var(--padding-150);
   background-color: var(--color-status-info-bg);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   color: var(--color-status-info-text);
   font-family: var(--font-paragraph-sm-em-family);
   font-size: var(--font-paragraph-sm-em-size);
@@ -174,7 +174,7 @@
 }
 
 .ds-model-picker__check {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 
   flex: none;
   color: var(--color-action-primary-text-tertiary);
@@ -189,7 +189,7 @@
   align-items: center;
   gap: var(--gap-200);
   padding: var(--padding-150) var(--padding-200);
-  border-top: var(--border-xs) solid var(--color-divider);
+  border-top: var(--border-025) solid var(--color-divider);
 }
 
 .ds-model-picker__effort-label {
@@ -207,14 +207,14 @@
   gap: var(--gap-050);
   padding: var(--padding-050);
   background-color: var(--color-bg-container-secondary);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
 }
 
 .ds-model-picker__effort-option {
   padding: var(--padding-050) var(--padding-200);
   background: none;
   border: none;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   cursor: pointer;
   color: var(--color-text-secondary);
   font-family: var(--font-paragraph-sm-em-family);

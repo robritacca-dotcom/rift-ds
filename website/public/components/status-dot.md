@@ -15,7 +15,7 @@ Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0.
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | variant | `"error" \| "info" \| "positive" \| "warning" \| "neutral"` | no | `neutral` | Status role the dot carries — coloured through the plain-surface `--color-status-*-icon` steps. |
-| size | `"sm" \| "md" \| "lg"` | no | `md` | Dot diameter, derived from the icon scale (half of `--icon-size-sm/md/lg`). |
+| size | `"sm" \| "md" \| "lg"` | no | `md` | Dot diameter, derived from the icon scale (half of `--icon-size-500/md/lg`). |
 | pulse | `boolean` | no | `false` | Radiates a repeating ring from the dot for a live state — recording, online now, deploy in flight. The ring stills under reduced motion. |
 | label | `string` | no |  | Visible text beside the dot. Omit it for a bare dot only when the meaning has another home — a row label, or an `aria-label` passed through — since a colour alone announces nothing. |
 | className | `string` | no | `` | Additional CSS classes |

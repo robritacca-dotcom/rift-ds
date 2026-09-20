@@ -31,20 +31,19 @@ interface SpacingToken {
 }
 
 const borderTokens: SpacingToken[] = [
-  { label: "XS", value: "1px", px: 1, variant: "border" },
-  { label: "MD", value: "2px", px: 2, variant: "border" },
+  { label: "025", value: "1px", px: 1, variant: "border" },
+  { label: "050", value: "2px", px: 2, variant: "border" },
 ];
 
 const radiusTokens: SpacingToken[] = [
-  { label: "XXS", value: "2px", px: 2, variant: "radius" },
-  { label: "XS", value: "4px", px: 4, variant: "radius" },
-  { label: "SM", value: "8px", px: 8, variant: "radius" },
-  { label: "MD", value: "12px", px: 12, variant: "radius" },
-  { label: "LG", value: "16px", px: 16, variant: "radius" },
-  { label: "XL", value: "24px", px: 24, variant: "radius" },
-  { label: "Composer", value: "29px", px: 29, variant: "radius" },
-  { label: "XXL", value: "48px", px: 48, variant: "radius" },
-  { label: "Full", value: "999px", px: 999, variant: "radius" },
+  { label: "050", value: "2px", px: 2, variant: "radius" },
+  { label: "100", value: "4px", px: 4, variant: "radius" },
+  { label: "200", value: "8px", px: 8, variant: "radius" },
+  { label: "300", value: "12px", px: 12, variant: "radius" },
+  { label: "400", value: "16px", px: 16, variant: "radius" },
+  { label: "600", value: "24px", px: 24, variant: "radius" },
+  { label: "1200", value: "48px", px: 48, variant: "radius" },
+  { label: "Pill", value: "999px", px: 999, variant: "radius" },
 ];
 
 const gapTokens: SpacingToken[] = [

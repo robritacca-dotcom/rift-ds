@@ -37,8 +37,8 @@
   left: var(--ds-sidebar-float-inset, 20px);
   height: calc(100dvh - var(--ds-sidebar-float-inset, 20px) * 2);
   background-color: var(--color-bg-glass);
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-xl);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
   box-shadow: var(--shadow-floating);
   /* The glass token is deliberately translucent; this blur is what keeps
      content behind the rail readable through it. */
@@ -132,7 +132,7 @@
 }
 
 .ds-app-sidebar__toggle .material-symbols-rounded {
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
   transition: transform var(--motion-duration-slow) var(--motion-ease-standard);
 }
 
@@ -184,7 +184,7 @@
      expanded, these are the pill's edge inset. Nothing to transition. */
   margin: 0 var(--padding-300);
   padding: var(--padding-200);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background: transparent;
   border: none;
   color: var(--color-text-primary);
@@ -216,7 +216,7 @@
 }
 
 .ds-app-sidebar__btn-icon {
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
   color: var(--color-icon-primary);
   flex-shrink: 0;
 }
@@ -247,7 +247,7 @@
   line-height: var(--font-caption-line-height);
   color: var(--color-text-secondary);
   background-color: var(--color-bg-container-tertiary);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   padding: var(--padding-050) var(--padding-200);
   min-width: 0;
   flex-shrink: 1;
@@ -326,7 +326,7 @@
      the rail is expanded, so this needs no state selector. */
   margin-right: var(--padding-300);
   padding: var(--padding-200);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background: transparent;
   border: none;
   color: var(--color-text-primary);
@@ -417,7 +417,7 @@
 .ds-app-sidebar__avatar {
   width: 40px;
   height: 40px;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background-color: var(--color-bg-container-secondary);
   flex-shrink: 0;
   overflow: hidden;
@@ -489,7 +489,7 @@
 }
 
 .ds-app-sidebar__profile-more .material-symbols-rounded {
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
 }
 
 /* ============================================

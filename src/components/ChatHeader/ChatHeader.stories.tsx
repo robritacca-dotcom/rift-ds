@@ -24,7 +24,7 @@ type Story = StoryObj<typeof meta>;
 const stage: React.CSSProperties = {
   width: 'min(560px, 90vw)',
   border: '1px solid var(--color-bg-container-border)',
-  borderRadius: 'var(--radius-xl)',
+  borderRadius: 'var(--radius-600)',
   background: 'var(--color-bg-container-primary)',
 };
 

@@ -8,8 +8,8 @@
   gap: var(--primitive-gap-200);
   padding: var(--primitive-padding-200) var(--primitive-padding-400);
   background-color: var(--color-bg-container-primary);
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-lg);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-400);
   box-shadow: var(--shadow-floating);
 }
 
@@ -50,18 +50,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: var(--icon-size-lg);
-  height: var(--icon-size-lg);
-  border-radius: var(--radius-md);
+  width: var(--icon-size-800);
+  height: var(--icon-size-800);
+  border-radius: var(--radius-300);
 }
 
 .chipIcon {
-  font-size: var(--icon-size-sm);
+  font-size: var(--icon-size-500);
 }
 
 .chipLogo {
   background-color: var(--color-bg-container-secondary);
-  border: var(--border-xs) solid var(--color-bg-container-border);
+  border: var(--border-025) solid var(--color-bg-container-border);
 }
 
 .chip-neutral {
@@ -114,8 +114,8 @@
   gap: 0;
   padding: var(--primitive-padding-400);
   background-color: var(--color-bg-glass);
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-xl);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
 }
 
 .zoneTitle {

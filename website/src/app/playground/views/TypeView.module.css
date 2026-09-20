@@ -16,8 +16,8 @@
   gap: var(--gap-400);
   padding: var(--padding-400);
   background: var(--color-bg-container-primary);
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-xl);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
 }
 
 .faceGlyph {
@@ -30,7 +30,7 @@
   font-weight: var(--font-heading-2-weight);
   color: var(--color-text-primary);
   background: var(--color-bg-container-secondary);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-400);
 }
 
 .faceInfo {
@@ -78,7 +78,7 @@
   gap: var(--gap-500);
   align-items: center;
   padding: var(--padding-400) 0;
-  border-bottom: var(--border-xs) solid var(--color-divider);
+  border-bottom: var(--border-025) solid var(--color-divider);
 }
 
 .rampRow:last-child {
@@ -110,7 +110,7 @@
   line-height: var(--font-overline-line-height);
   color: var(--color-text-secondary);
   background: var(--color-bg-container-tertiary);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   white-space: nowrap;
 }
 

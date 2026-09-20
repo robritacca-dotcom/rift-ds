@@ -61,7 +61,7 @@
 }
 
 .ds-stat__delta .material-symbols-rounded {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
   line-height: 1;
 }
 

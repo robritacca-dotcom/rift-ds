@@ -55,10 +55,10 @@
  *
  * 4. RADIUS_STEPS (same file) — each step's px held to
  *    --primitive-radius-<step> in tokens-primitives.css, both directions.
- *    One sanctioned absence: "full" is handled by radiusOverrides' pill
+ *    One sanctioned absence: "pill" is handled by radiusOverrides' pill
  *    branch rather than the table, so it is exempt from the reverse
  *    direction — and the exemption is itself checked: the file must still
- *    reference --primitive-radius-full literally, or the exemption fails.
+ *    reference --primitive-radius-pill literally, or the exemption fails.
  *
  * 5. website/src/lib/theme/presets.ts — every literal custom-property
  *    name in the file, whether a var(--…) reference or a quoted "--…"
@@ -428,7 +428,7 @@ function checkRadiusSteps() {
   const block = parseTsBlock(overridesSource, 'RADIUS_STEPS', overridesRel);
   if (block === null) return;
   const mirrored = new Map(
-    [...block.matchAll(/\["([a-z-]+)",\s*(\d+)\]/g)].map((m) => [m[1], Number(m[2])])
+    [...block.matchAll(/\["([a-z0-9-]+)",\s*(\d+)\]/g)].map((m) => [m[1], Number(m[2])])
   );
   if (mirrored.size === 0) {
     errors.push(`${overridesRel}: parsed no entries out of RADIUS_STEPS — the mirror guard needs them`);
@@ -436,7 +436,7 @@ function checkRadiusSteps() {
   }
   const cssRadius = new Map();
   for (const [name, value] of primitives) {
-    const m = name.match(/^--primitive-radius-([a-z-]+)$/);
+    const m = name.match(/^--primitive-radius-([a-z0-9-]+)$/);
     if (m) cssRadius.set(m[1], value);
   }
   for (const [step, px] of mirrored) {
@@ -448,15 +448,15 @@ function checkRadiusSteps() {
     }
   }
   for (const step of cssRadius.keys()) {
-    if (step === 'full') continue; // radiusOverrides' pill branch owns it — verified below
+    if (step === 'pill') continue; // radiusOverrides' pill branch owns it — verified below
     if (!mirrored.has(step)) {
       errors.push(`${overridesRel}: RADIUS_STEPS is missing "${step}" (--primitive-radius-${step}) — the radius lever cannot scale it`);
     }
   }
-  if (!overridesSource.includes('--primitive-radius-full')) {
-    errors.push(`${overridesRel}: RADIUS_STEPS exempts "full" because the pill branch handles --primitive-radius-full, but the file no longer references it`);
+  if (!overridesSource.includes('--primitive-radius-pill')) {
+    errors.push(`${overridesRel}: RADIUS_STEPS exempts "pill" because the pill branch handles --primitive-radius-pill, but the file no longer references it`);
   }
-  summaries.push(`RADIUS_STEPS matches the ${cssRadius.size} radius primitives (${mirrored.size} scaled steps + the pill-branch "full", both directions)`);
+  summaries.push(`RADIUS_STEPS matches the ${cssRadius.size} radius primitives (${mirrored.size} scaled steps + the pill-branch "pill", both directions)`);
 }
 
 /* ------------------------------------------------------------------ */

@@ -9,7 +9,7 @@
   gap: var(--gap-400);
   min-width: 0;
   background-color: var(--color-bg-container-primary);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-600);
   padding: var(--padding-500);
 }
 

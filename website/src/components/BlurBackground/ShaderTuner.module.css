@@ -10,7 +10,7 @@
   padding: var(--padding-500);
   background: var(--color-bg-container-primary);
   border: 1px solid var(--color-bg-container-border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-300);
 }
 
 .panelCollapsed {
@@ -39,7 +39,7 @@
   font-size: var(--font-paragraph-sm-size);
   font-weight: 600;
   padding: var(--padding-100) var(--padding-200);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   border: 1px solid var(--color-bg-container-border);
   background: var(--color-bg-container-secondary);
   color: var(--color-text-primary);
@@ -97,7 +97,7 @@
   font-size: var(--font-paragraph-sm-size);
   font-weight: 600;
   padding: var(--padding-150) var(--padding-200);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   border: 1px solid var(--color-bg-container-border);
   background: var(--color-bg-container-secondary);
   color: var(--color-text-primary);
@@ -127,7 +127,7 @@
   font-size: var(--font-paragraph-sm-size);
   color: var(--color-text-secondary);
   background: var(--color-bg-container-secondary);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-200);
   padding: var(--padding-200);
   margin: 0;
   white-space: pre-wrap;

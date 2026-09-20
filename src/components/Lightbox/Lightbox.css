@@ -95,7 +95,7 @@
   max-height: calc(100vh - var(--gap-1000) * 4);
   width: auto;
   height: auto;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-300);
   box-shadow: var(--shadow-modal);
 }
 
@@ -113,7 +113,7 @@
 
 .ds-lightbox__caption {
   padding: var(--padding-100) var(--padding-400);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   /* ds-allow(color): on-scrim furniture — the scrim floor is dark in both
      themes, so the caption chip lives in scrim-world, not page-world; a
      theme token would dissolve it into the dark-mode scrim. */
@@ -142,11 +142,11 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--icon-size-xl); /* 48px — a viewer-scale target */
-  height: var(--icon-size-xl);
+  width: var(--icon-size-1200); /* 48px — a viewer-scale target */
+  height: var(--icon-size-1200);
   padding: 0;
   border: none;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   /* ds-allow(color): on-scrim furniture — the scrim floor is dark in both
      themes, so the control wash lives in scrim-world, not page-world; a
      theme token would dissolve the controls into the dark-mode scrim. */
@@ -167,7 +167,7 @@
 }
 
 .ds-lightbox__control-icon {
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
   line-height: 1;
   /* ds-allow(color): white glyph on the always-dark scrim wash, both themes */
   color: #ffffff;

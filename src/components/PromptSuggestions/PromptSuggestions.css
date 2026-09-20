@@ -182,17 +182,17 @@
   display: flex;
   align-items: center;
   box-sizing: border-box;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   /* Chip's own surface, so only the label reads as loading. */
   background-color: var(--color-bg-page-primary);
-  border: var(--border-xs) solid var(--color-bg-container-border);
+  border: var(--border-025) solid var(--color-bg-container-border);
 
   /* Chip's default (32px) geometry — the row's compact size. The height is
      the chip's line box plus its padding and border, stated rather than
      grown from text, since the shell holds a bar instead of a label. */
   padding: var(--padding-150) var(--padding-300);
   height: calc(
-    var(--font-paragraph-sm-em-line-height) + 2 * var(--padding-150) + 2 * var(--border-xs)
+    var(--font-paragraph-sm-em-line-height) + 2 * var(--padding-150) + 2 * var(--border-025)
   );
   font-size: var(--font-paragraph-sm-em-size);
 
@@ -207,7 +207,7 @@
 .ds-prompt-suggestions--default .ds-prompt-suggestions__skeleton {
   padding: var(--padding-200) var(--padding-500);
   height: calc(
-    var(--font-paragraph-em-line-height) + 2 * var(--padding-200) + 2 * var(--border-xs)
+    var(--font-paragraph-em-line-height) + 2 * var(--padding-200) + 2 * var(--border-025)
   );
   font-size: var(--font-paragraph-em-size);
 }
@@ -226,7 +226,7 @@
   display: block;
   width: 100%;
   height: 0.75em;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background-color: var(--color-bg-container-secondary);
   position: relative;
   overflow: hidden;

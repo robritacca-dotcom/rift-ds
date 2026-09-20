@@ -14,8 +14,8 @@
   gap: var(--gap-500); /* 20px */
   width: 100%;
   padding: var(--padding-500); /* 24px */
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-lg); /* 16px */
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-400); /* 16px */
   background-color: var(--color-bg-container-primary);
 }
 
@@ -70,7 +70,7 @@
   align-items: flex-end;
   gap: var(--gap-050);
   padding: var(--padding-150) var(--padding-400);
-  border-left: var(--border-xs) solid var(--color-bg-container-border);
+  border-left: var(--border-025) solid var(--color-bg-container-border);
 }
 
 .ds-chart__summary-label {
@@ -153,8 +153,8 @@
   /* The glass token is deliberately translucent; this blur is what keeps
      the chart's marks readable through the overlay. */
   backdrop-filter: blur(24px);
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-sm); /* 8px */
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-200); /* 8px */
   box-shadow: var(--shadow-floating);
 }
 
@@ -176,7 +176,7 @@
 .ds-chart__tooltip-dot {
   width: 8px;
   height: 8px;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   flex-shrink: 0;
 }
 
@@ -218,7 +218,7 @@
     align-items: flex-start;
     flex: 1;
     border-left: none;
-    border-top: var(--border-xs) solid var(--color-bg-container-border);
+    border-top: var(--border-025) solid var(--color-bg-container-border);
     padding: var(--padding-150) 0;
   }
 }

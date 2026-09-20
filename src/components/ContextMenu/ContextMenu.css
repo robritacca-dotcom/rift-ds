@@ -23,8 +23,8 @@
 
   /* Appearance — same recipe as DropdownMenu */
   background: var(--color-bg-page-primary);
-  border: var(--border-xs) solid var(--color-input-border-primary);
-  border-radius: var(--radius-md);
+  border: var(--border-025) solid var(--color-input-border-primary);
+  border-radius: var(--radius-300);
   box-shadow: var(--shadow-floating);
 
   /* Inset gap */
@@ -43,7 +43,7 @@
 /* Compact items: paragraph-sm-em, tighter padding, radius-sm */
 .ds-context-menu__panel--compact .ds-context-menu__item {
   padding: var(--padding-150) var(--padding-300);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-200);
   font-family: var(--font-paragraph-sm-em-family);
   font-size: var(--font-paragraph-sm-em-size);
   font-weight: var(--font-paragraph-sm-em-weight);
@@ -52,11 +52,11 @@
 }
 
 .ds-context-menu__panel--compact .ds-context-menu__item-icon {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 }
 
 .ds-context-menu__panel--compact .ds-context-menu__submenu-icon {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 }
 
 .ds-context-menu__panel--compact .ds-context-menu__group-label {
@@ -93,7 +93,7 @@
   justify-content: space-between;
   gap: var(--gap-400);
   padding: var(--padding-200) var(--padding-400);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-300);
   cursor: pointer;
   position: relative;
   white-space: nowrap;
@@ -137,7 +137,7 @@
 }
 
 .ds-context-menu__item-icon {
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
   color: var(--color-icon-secondary);
   flex-shrink: 0;
   display: flex;
@@ -166,7 +166,7 @@
    ============================================ */
 
 .ds-context-menu__submenu-icon {
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
   color: var(--color-text-tertiary);
   margin-left: auto;
   flex-shrink: 0;

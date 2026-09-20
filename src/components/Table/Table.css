@@ -7,7 +7,7 @@
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
-  border-radius: var(--radius-sm); /* 8px */
+  border-radius: var(--radius-200); /* 8px */
   overflow: hidden;
 
   /* Typography */
@@ -52,7 +52,7 @@
    ============================================ */
 
 .ds-table__row {
-  border-bottom: var(--border-xs) solid var(--color-bg-container-border);
+  border-bottom: var(--border-025) solid var(--color-bg-container-border);
   transition: background-color var(--motion-duration-base) var(--motion-ease-standard);
 }
 
@@ -127,8 +127,8 @@
 
 .ds-table__wrapper {
   overflow-x: auto;
-  border: var(--border-xs) solid var(--color-divider);
-  border-radius: var(--radius-md); /* 12px */
+  border: var(--border-025) solid var(--color-divider);
+  border-radius: var(--radius-300); /* 12px */
   background: var(--color-bg-page-primary);
 }
 
@@ -149,12 +149,12 @@
 
 /* Header cells: bottom divider */
 .ds-table--bordered .ds-table__header-cell {
-  border-bottom: var(--border-xs) solid var(--color-divider);
+  border-bottom: var(--border-025) solid var(--color-divider);
 }
 
 /* Body cells: bottom divider */
 .ds-table--bordered .ds-table__cell {
-  border-bottom: var(--border-xs) solid var(--color-divider);
+  border-bottom: var(--border-025) solid var(--color-divider);
 }
 
 /* Last body row: no bottom border (the wrapper border handles it) */

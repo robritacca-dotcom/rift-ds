@@ -42,7 +42,7 @@ const targetStyle: React.CSSProperties = {
   width: 320,
   height: 160,
   border: '1px dashed var(--color-bg-container-border)',
-  borderRadius: 'var(--radius-md)',
+  borderRadius: 'var(--radius-300)',
   color: 'var(--color-text-tertiary)',
   userSelect: 'none',
 };

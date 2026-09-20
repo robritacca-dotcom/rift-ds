@@ -30,8 +30,8 @@
   padding: 0;
   text-align: center;
 
-  border: var(--border-xs) solid var(--color-input-border-primary);
-  border-radius: var(--radius-md); /* 12px */
+  border: var(--border-025) solid var(--color-input-border-primary);
+  border-radius: var(--radius-300); /* 12px */
   background-color: var(--color-input-bg-primary);
 
   /* Typography */

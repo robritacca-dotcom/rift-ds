@@ -22,17 +22,17 @@
   background: none;
   cursor: pointer;
   color: var(--color-icon-secondary);
-  border-radius: var(--radius-xs);
+  border-radius: var(--radius-100);
   transition: color var(--motion-duration-fast) var(--motion-ease-standard),
     transform var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
 .ds-rating__icon {
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
 }
 
 .ds-rating--compact .ds-rating__icon {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 }
 
 .ds-rating__step--filled {

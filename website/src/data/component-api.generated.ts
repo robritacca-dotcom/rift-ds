@@ -8131,7 +8131,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "size",
             "type": "\"sm\" | \"md\" | \"lg\"",
             "required": false,
-            "description": "Dot diameter, derived from the icon scale (half of `--icon-size-sm/md/lg`).",
+            "description": "Dot diameter, derived from the icon scale (half of `--icon-size-500/md/lg`).",
             "defaultValue": "md"
           },
           {

@@ -110,8 +110,8 @@
   max-width: 560px;
   padding: var(--padding-400);
   background-color: var(--color-bg-container-primary);
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-md);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-300);
 }
 
 .composerChips {

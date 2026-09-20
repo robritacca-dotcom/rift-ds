@@ -76,7 +76,7 @@
   height: 40px;
   padding: 0;
   border: none;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background-color: var(--color-action-passive-bg);
   cursor: pointer;
   transition: background-color var(--motion-duration-base) var(--motion-ease-standard);
@@ -96,7 +96,7 @@
 }
 
 .ds-nav-list__chevron {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
   color: var(--color-icon-primary);
   line-height: 1;
   transition: transform var(--motion-duration-slow) var(--motion-ease-standard);

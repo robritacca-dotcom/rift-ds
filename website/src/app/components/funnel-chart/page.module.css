@@ -106,7 +106,7 @@
 .legendDot {
   width: var(--primitive-gap-200);
   height: var(--primitive-gap-200);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   flex-shrink: 0;
 }
 

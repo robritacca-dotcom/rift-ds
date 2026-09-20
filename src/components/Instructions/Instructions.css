@@ -63,14 +63,14 @@
   justify-content: center;
   width: 32px;
   height: 32px;
-  border-radius: var(--radius-full);
-  border: var(--border-xs) solid var(--color-action-primary-border);
+  border-radius: var(--radius-pill);
+  border: var(--border-025) solid var(--color-action-primary-border);
   background-color: transparent;
   flex-shrink: 0;
 }
 
 .ds-instructions__badge .material-symbols-rounded {
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
   color: var(--color-action-primary-bg);
 }
 
@@ -85,12 +85,12 @@
 .ds-instructions__dot {
   width: 8px;
   height: 8px;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background-color: var(--color-action-primary-bg);
 }
 
 .ds-instructions__connector {
-  width: var(--border-xs); /* 1px */
+  width: var(--border-025); /* 1px */
   flex: 1;
   min-height: var(--padding-400); /* 16px */
   background-color: var(--color-bg-container-border);
@@ -155,7 +155,7 @@
 
 .ds-instructions--horizontal .ds-instructions__connector {
   width: auto;
-  height: var(--border-xs); /* 1px */
+  height: var(--border-025); /* 1px */
   min-height: 0;
   min-width: 0;
   flex: 1;
@@ -182,7 +182,7 @@
 }
 
 .ds-instructions--compact .ds-instructions__badge .material-symbols-rounded {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 }
 
 .ds-instructions--compact .ds-instructions__number {

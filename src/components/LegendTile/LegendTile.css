@@ -18,7 +18,7 @@
   gap: var(--gap-050);
   min-width: 0;
   background-color: var(--color-bg-page-primary);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-300);
   padding: var(--padding-200) var(--padding-300);
 }
 
@@ -45,7 +45,7 @@
 .ds-legend-tile__dot {
   width: 8px;
   height: 8px;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   flex-shrink: 0;
   background-color: var(--legend-tile-swatch, var(--color-text-secondary));
 }

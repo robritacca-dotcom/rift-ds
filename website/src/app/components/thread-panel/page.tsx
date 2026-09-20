@@ -67,7 +67,7 @@ function CollapseDemo() {
         logo={
           <span
             className="material-symbols-rounded"
-            style={{ "--icon-size": "var(--icon-size-md)" } as React.CSSProperties}
+            style={{ "--icon-size": "var(--icon-size-600)" } as React.CSSProperties}
           >
             flare
           </span>

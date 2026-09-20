@@ -9,9 +9,9 @@
   align-items: center;
   gap: var(--gap-050); /* 2px */
   padding: var(--padding-100); /* 4px */
-  border-radius: var(--radius-full); /* pill shape */
+  border-radius: var(--radius-pill); /* pill shape */
   background-color: var(--color-bg-container-primary);
-  border: var(--border-xs) solid var(--color-bg-container-border);
+  border: var(--border-025) solid var(--color-bg-container-border);
 }
 
 /* ============================================
@@ -31,7 +31,7 @@
   left: 0;
   width: 0;
   height: 0;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background-color: var(--color-action-primary-bg);
   opacity: 0;
   pointer-events: none;
@@ -92,7 +92,7 @@
   gap: var(--gap-200); /* 8px */
   padding: var(--padding-200) var(--padding-400); /* 8px 16px */
   border: none;
-  border-radius: var(--radius-full); /* pill shape */
+  border-radius: var(--radius-pill); /* pill shape */
   background-color: transparent;
   cursor: pointer;
   transition: background-color var(--motion-duration-base) var(--motion-ease-standard), color var(--motion-duration-base) var(--motion-ease-standard);
@@ -117,7 +117,7 @@
    holds label-strength contrast in both modes. */
 .ds-segmented-control__icon {
   flex-shrink: 0;
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
   line-height: 1;
   color: var(--color-text-secondary);
   transition: color var(--motion-duration-base) var(--motion-ease-standard);
@@ -207,5 +207,5 @@
 }
 
 .ds-segmented-control--compact .ds-segmented-control__icon {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 }

@@ -122,8 +122,8 @@
    ============================================ */
 .demoBox {
   height: 280px;
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-md);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-300);
   overflow: hidden;
 }
 

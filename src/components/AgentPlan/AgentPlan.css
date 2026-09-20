@@ -15,9 +15,9 @@
   flex-direction: column;
   width: 100%;
   background-color: var(--color-bg-container-primary);
-  border: var(--border-xs) solid var(--color-bg-container-border);
+  border: var(--border-025) solid var(--color-bg-container-border);
   /* The chat furniture's shared 24px shell — see ToolCall. */
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-600);
   overflow: hidden;
 }
 
@@ -75,7 +75,7 @@
 }
 
 .ds-agent-plan__chevron {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 
   flex: none;
   color: var(--color-icon-secondary);
@@ -112,7 +112,7 @@
 }
 
 .ds-agent-plan--open .ds-agent-plan__content {
-  border-top: var(--border-xs) solid var(--color-divider);
+  border-top: var(--border-025) solid var(--color-divider);
 }
 
 /* ============================================
@@ -139,10 +139,10 @@
 .ds-agent-plan__step:not(:last-child)::before {
   content: '';
   position: absolute;
-  top: calc(var(--padding-100) + var(--icon-size-sm));
+  top: calc(var(--padding-100) + var(--icon-size-500));
   bottom: calc(-1 * var(--padding-100));
-  left: calc(var(--icon-size-sm) / 2);
-  width: var(--border-xs);
+  left: calc(var(--icon-size-500) / 2);
+  width: var(--border-025);
   background-color: var(--color-divider);
 }
 
@@ -154,13 +154,13 @@
   /* Fixed box: the active step's spinner (16px) is smaller than the step
      icons (20px), so without this the column narrows and the spinner drifts
      off the connector's centre line. */
-  width: var(--icon-size-sm);
-  height: var(--icon-size-sm);
+  width: var(--icon-size-500);
+  height: var(--icon-size-500);
   color: var(--color-icon-secondary);
 }
 
 .ds-agent-plan__indicator .material-symbols-rounded {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 }
 
 .ds-agent-plan__step-body {
@@ -168,7 +168,7 @@
   flex-direction: column;
   min-width: 0;
   /* Align the first text line with the indicator's optical centre */
-  padding-top: calc((var(--icon-size-sm) - var(--font-paragraph-sm-line-height)) / 2);
+  padding-top: calc((var(--icon-size-500) - var(--font-paragraph-sm-line-height)) / 2);
 }
 
 .ds-agent-plan__label {

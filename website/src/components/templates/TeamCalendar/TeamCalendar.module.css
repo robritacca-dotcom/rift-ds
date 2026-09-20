@@ -234,7 +234,7 @@
   flex: none;
   width: var(--gap-100);
   height: var(--gap-100);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
 }
 
 .dotNeutral {
@@ -318,7 +318,7 @@
 .calendar :global(.ds-event-calendar) {
   min-height: 100%;
   border: none;
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-600);
   padding: var(--padding-500);
 }
 

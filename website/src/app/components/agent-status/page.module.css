@@ -91,7 +91,7 @@
   gap: var(--gap-300) var(--gap-1000);
   padding: var(--padding-500);
   background-color: var(--color-bg-container-secondary);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-400);
 }
 
 .patternPrefix {

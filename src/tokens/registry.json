@@ -212,29 +212,28 @@
       "--padding-500"
     ],
     "radius": [
-      "--radius-composer",
-      "--radius-full",
-      "--radius-lg",
-      "--radius-md",
-      "--radius-sm",
-      "--radius-xl",
-      "--radius-xs",
-      "--radius-xxl",
-      "--radius-xxs"
+      "--radius-050",
+      "--radius-100",
+      "--radius-1200",
+      "--radius-200",
+      "--radius-300",
+      "--radius-400",
+      "--radius-600",
+      "--radius-pill"
     ],
     "border": [
-      "--border-md",
-      "--border-xs"
+      "--border-025",
+      "--border-050"
     ],
     "shadow": [
       "--shadow-floating",
       "--shadow-modal"
     ],
     "icons": [
-      "--icon-size-lg",
-      "--icon-size-md",
-      "--icon-size-sm",
-      "--icon-size-xl"
+      "--icon-size-1200",
+      "--icon-size-500",
+      "--icon-size-600",
+      "--icon-size-800"
     ],
     "motion": [
       "--motion-duration-base",

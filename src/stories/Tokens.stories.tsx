@@ -328,15 +328,14 @@ export const Primitives: Story = {
       </TokenSection>
 
       <TokenSection title="Border Radius">
-        <RadiusToken name="XXS" value="--primitive-radius-xxs" />
-        <RadiusToken name="XS" value="--primitive-radius-xs" />
-        <RadiusToken name="SM" value="--primitive-radius-sm" />
-        <RadiusToken name="MD" value="--primitive-radius-md" />
-        <RadiusToken name="LG" value="--primitive-radius-lg" />
-        <RadiusToken name="XL" value="--primitive-radius-xl" />
-        <RadiusToken name="Composer" value="--primitive-radius-composer" />
-        <RadiusToken name="XXL" value="--primitive-radius-xxl" />
-        <RadiusToken name="Full" value="--primitive-radius-full" />
+        <RadiusToken name="XXS" value="--primitive-radius-050" />
+        <RadiusToken name="XS" value="--primitive-radius-100" />
+        <RadiusToken name="SM" value="--primitive-radius-200" />
+        <RadiusToken name="MD" value="--primitive-radius-300" />
+        <RadiusToken name="LG" value="--primitive-radius-400" />
+        <RadiusToken name="XL" value="--primitive-radius-600" />
+        <RadiusToken name="XXL" value="--primitive-radius-1200" />
+        <RadiusToken name="Full" value="--primitive-radius-pill" />
       </TokenSection>
 
       <TokenSection title="Padding">
@@ -352,8 +351,8 @@ export const Primitives: Story = {
       </TokenSection>
 
       <TokenSection title="Border Width">
-        <SpacingToken name="XS" value="--primitive-border-xs" />
-        <SpacingToken name="MD" value="--primitive-border-md" />
+        <SpacingToken name="XS" value="--primitive-border-025" />
+        <SpacingToken name="MD" value="--primitive-border-050" />
       </TokenSection>
 
       <TokenSection title="Gap">
@@ -802,15 +801,14 @@ export const SemanticSpacing: Story = {
       </p>
 
       <TokenSection title="Border Radius">
-        <RadiusToken name="XXS" value="--radius-xxs" />
-        <RadiusToken name="XS" value="--radius-xs" />
-        <RadiusToken name="SM" value="--radius-sm" />
-        <RadiusToken name="MD" value="--radius-md" />
-        <RadiusToken name="LG" value="--radius-lg" />
-        <RadiusToken name="XL" value="--radius-xl" />
-        <RadiusToken name="Composer" value="--radius-composer" />
-        <RadiusToken name="XXL" value="--radius-xxl" />
-        <RadiusToken name="Full" value="--radius-full" />
+        <RadiusToken name="XXS" value="--radius-050" />
+        <RadiusToken name="XS" value="--radius-100" />
+        <RadiusToken name="SM" value="--radius-200" />
+        <RadiusToken name="MD" value="--radius-300" />
+        <RadiusToken name="LG" value="--radius-400" />
+        <RadiusToken name="XL" value="--radius-600" />
+        <RadiusToken name="XXL" value="--radius-1200" />
+        <RadiusToken name="Full" value="--radius-pill" />
       </TokenSection>
 
       <TokenSection title="Padding">
@@ -826,8 +824,8 @@ export const SemanticSpacing: Story = {
       </TokenSection>
 
       <TokenSection title="Border Width">
-        <SpacingToken name="XS" value="--border-xs" />
-        <SpacingToken name="MD" value="--border-md" />
+        <SpacingToken name="XS" value="--border-025" />
+        <SpacingToken name="MD" value="--border-050" />
       </TokenSection>
 
       <TokenSection title="Gap">

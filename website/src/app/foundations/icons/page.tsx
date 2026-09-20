@@ -25,10 +25,10 @@ interface IconCategory {
 
 /** The four steps of the icon-size scale, mirroring tokens-light.css. */
 const ICON_SIZES = [
-  { label: "SM", px: "20px", token: "--icon-size-sm", use: "Compact controls, inline affordances" },
-  { label: "MD", px: "24px", token: "--icon-size-md", use: "Default: most UI icons" },
-  { label: "LG", px: "32px", token: "--icon-size-lg", use: "Feature icons, section headers" },
-  { label: "XL", px: "48px", token: "--icon-size-xl", use: "Marketing and empty states" },
+  { label: "SM", px: "20px", token: "--icon-size-500", use: "Compact controls, inline affordances" },
+  { label: "MD", px: "24px", token: "--icon-size-600", use: "Default: most UI icons" },
+  { label: "LG", px: "32px", token: "--icon-size-800", use: "Feature icons, section headers" },
+  { label: "XL", px: "48px", token: "--icon-size-1200", use: "Marketing and empty states" },
 ] as const;
 
 const iconCategories: IconCategory[] = [

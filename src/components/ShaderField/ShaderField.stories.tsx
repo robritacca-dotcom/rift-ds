@@ -14,8 +14,8 @@ const Stage = ({ children }: { children: React.ReactNode }) => (
       width: 640,
       height: 320,
       overflow: 'hidden',
-      borderRadius: 'var(--radius-md)',
-      border: 'var(--border-xs) solid var(--color-bg-container-border)',
+      borderRadius: 'var(--radius-300)',
+      border: 'var(--border-025) solid var(--color-bg-container-border)',
       background: 'var(--color-bg-page-primary)',
     }}
   >

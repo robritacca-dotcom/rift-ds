@@ -20,8 +20,8 @@
   display: flex;
   align-items: stretch;
   width: 100%;
-  border: var(--border-xs) solid var(--color-input-border-primary);
-  border-radius: var(--radius-md); /* 12px — all inputs */
+  border: var(--border-025) solid var(--color-input-border-primary);
+  border-radius: var(--radius-300); /* 12px — all inputs */
   background-color: var(--color-input-bg-primary);
   overflow: hidden;
   transition: border-color var(--motion-duration-base) var(--motion-ease-standard), background-color var(--motion-duration-base) var(--motion-ease-standard);
@@ -90,7 +90,7 @@
 }
 
 .ds-numberinput__stepper .material-symbols-rounded {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 }
 
 .ds-numberinput__stepper:hover:not(:disabled) {
@@ -102,8 +102,8 @@
 }
 
 .ds-numberinput__stepper:focus-visible {
-  outline: var(--border-md) solid var(--color-input-border-selected);
-  outline-offset: calc(-2 * var(--border-md));
+  outline: var(--border-050) solid var(--color-input-border-selected);
+  outline-offset: calc(-2 * var(--border-050));
 }
 
 .ds-numberinput__stepper:disabled {

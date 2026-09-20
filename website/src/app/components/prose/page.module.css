@@ -90,8 +90,8 @@
   max-width: 640px;
   padding: var(--padding-500);
   background-color: var(--color-bg-container-primary);
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-md);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-300);
 }
 
 /* The demo copy's in-page link lands here. Anchor targets clear the
@@ -108,7 +108,7 @@
   min-width: 0;
   padding: var(--padding-400);
   background-color: var(--color-bg-container-secondary);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-300);
   overflow-wrap: anywhere;
 }
 
@@ -117,7 +117,7 @@
   max-width: 480px;
   padding: var(--padding-400);
   background-color: var(--color-bg-container-secondary);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-300);
 }
 
 /* ============================================

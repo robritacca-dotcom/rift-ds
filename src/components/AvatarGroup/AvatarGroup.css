@@ -18,8 +18,8 @@
 .ds-avatar-group__item {
   position: relative;
   display: inline-flex;
-  border-radius: var(--radius-full);
-  box-shadow: 0 0 0 var(--border-md) var(--color-bg-page-primary);
+  border-radius: var(--radius-pill);
+  box-shadow: 0 0 0 var(--border-050) var(--color-bg-page-primary);
 }
 
 .ds-avatar-group__item + .ds-avatar-group__item {

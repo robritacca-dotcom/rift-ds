@@ -11,19 +11,19 @@
   display: inline-flex;
   align-items: center;
   gap: var(--gap-050);
-  height: var(--icon-size-md);
+  height: var(--icon-size-600);
   --ds-waveform-color: var(--color-text-secondary);
 }
 
 .ds-waveform--compact {
-  height: var(--icon-size-sm);
+  height: var(--icon-size-500);
 }
 
 .ds-waveform__bar {
-  width: calc(var(--icon-size-sm) / 5); /* 4px, derived from the scale */
+  width: calc(var(--icon-size-500) / 5); /* 4px, derived from the scale */
   height: 100%;
   flex-shrink: 0;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background-color: var(--ds-waveform-color);
   transform: scaleY(0.25);
   transform-origin: center;

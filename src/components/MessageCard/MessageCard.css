@@ -17,8 +17,8 @@
   width: 100%;
   max-width: var(--ds-message-card-max-width, 100%);
   background-color: var(--color-bg-container-primary);
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-xl);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
   overflow: hidden;
 }
 
@@ -34,7 +34,7 @@
 .ds-message-card__media {
   display: block;
   margin: var(--padding-300) var(--padding-300) 0;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-300);
   overflow: hidden;
   /* The slot carries its own surface, so drawn media — a chart, an SVG —
      reads as the same image-shaped panel a photo would. The page tone, not
@@ -105,7 +105,7 @@
 }
 
 .ds-message-card__icon .material-symbols-rounded {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 }
 
 .ds-message-card__title {

@@ -133,7 +133,7 @@
   justify-content: space-between;
   gap: var(--gap-400);
   padding: var(--padding-200) var(--padding-400);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-300);
   background: var(--color-bg-container-primary);
   font-size: var(--font-paragraph-sm-size);
   line-height: var(--font-paragraph-sm-line-height);

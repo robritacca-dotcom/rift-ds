@@ -123,7 +123,7 @@
 .demoCard {
   max-width: 560px;
   padding: var(--padding-500);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-600);
   background: var(--color-bg-container-primary);
   color: var(--color-text-primary);
   font-size: var(--font-paragraph-size);

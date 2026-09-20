@@ -50,8 +50,8 @@
   right: 0;
   z-index: 30;
   background-color: var(--color-bg-container-primary);
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-md);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-300);
   box-shadow: var(--shadow-floating);
   overflow: hidden;
 }
@@ -98,7 +98,7 @@
   display: inline-block;
   width: 18px;
   height: 2px;
-  border-radius: var(--radius-xxs);
+  border-radius: var(--radius-050);
   vertical-align: middle;
   margin-right: var(--gap-100);
 }
@@ -174,13 +174,13 @@
   position: absolute;
   border: 0;
   padding: 0;
-  border-radius: var(--radius-xxs);
+  border-radius: var(--radius-050);
   cursor: pointer;
   transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
 .bar:focus-visible {
-  outline: var(--border-md) solid var(--color-action-primary-bg);
+  outline: var(--border-050) solid var(--color-action-primary-bg);
   outline-offset: 1px;
   opacity: 1;
 }
@@ -359,15 +359,15 @@
 .swatch {
   width: 14px;
   height: 14px;
-  border-radius: var(--radius-xxs);
-  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-050);
+  border: var(--border-025) solid var(--color-bg-container-border);
   flex: none;
 }
 
 .swatchDot {
   width: 8px;
   height: 8px;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   display: inline-block;
   flex: none;
 }

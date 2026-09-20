@@ -23,7 +23,7 @@
 .ds-dropdown-menu__trigger:focus-visible {
   outline: 2px solid var(--color-action-primary-bg);
   outline-offset: 2px;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-200);
 }
 
 /* ============================================
@@ -41,8 +41,8 @@
 
   /* Appearance — Figma: page/primary bg, input/border/primary, radius/md */
   background: var(--color-bg-page-primary);
-  border: var(--border-xs) solid var(--color-input-border-primary);
-  border-radius: var(--radius-md); /* 12px */
+  border: var(--border-025) solid var(--color-input-border-primary);
+  border-radius: var(--radius-300); /* 12px */
   box-shadow: var(--shadow-floating);
 
   /* Inset gap — Figma: padding/xxs (4px) all sides */
@@ -64,7 +64,7 @@
 /* Compact items: paragraph-sm-em (14/20), padding xs sm-md (6px 12px), radius-sm (8px) */
 .ds-dropdown-menu__panel--compact .ds-dropdown-menu__item {
   padding: var(--padding-150) var(--padding-300); /* 6px 12px */
-  border-radius: var(--radius-sm); /* 8px */
+  border-radius: var(--radius-200); /* 8px */
   font-family: var(--font-paragraph-sm-em-family);
   font-size: var(--font-paragraph-sm-em-size);
   font-weight: var(--font-paragraph-sm-em-weight);
@@ -74,12 +74,12 @@
 
 /* Compact icons: 20px (vs 24px default) */
 .ds-dropdown-menu__panel--compact .ds-dropdown-menu__item-icon {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 }
 
 /* Compact submenu chevron: 20px */
 .ds-dropdown-menu__panel--compact .ds-dropdown-menu__submenu-icon {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 }
 
 /* Compact group label: same padding as compact items so heights match */
@@ -123,7 +123,7 @@
   justify-content: space-between;
   gap: var(--gap-400); /* 16px between label and shortcut */
   padding: var(--padding-200) var(--padding-400); /* Figma: 8px 16px */
-  border-radius: var(--radius-md); /* Figma: 12px */
+  border-radius: var(--radius-300); /* Figma: 12px */
   cursor: pointer;
   position: relative;
   white-space: nowrap;
@@ -172,7 +172,7 @@
 
 /* Figma: icons are 24px within menu items */
 .ds-dropdown-menu__item-icon {
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
   color: var(--color-icon-secondary);
   flex-shrink: 0;
   display: flex;
@@ -202,7 +202,7 @@
    ============================================ */
 
 .ds-dropdown-menu__submenu-icon {
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
   color: var(--color-text-tertiary);
   margin-left: auto;
   flex-shrink: 0;

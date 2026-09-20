@@ -28,8 +28,8 @@
   gap: var(--gap-200); /* 8px */
   width: 100%;
   padding: var(--padding-200) var(--padding-400); /* 8px 16px */
-  border: var(--border-xs) solid var(--color-input-border-primary);
-  border-radius: var(--radius-md); /* 12px — input shape, not the button pill */
+  border: var(--border-025) solid var(--color-input-border-primary);
+  border-radius: var(--radius-300); /* 12px — input shape, not the button pill */
   background-color: var(--color-input-bg-primary);
   text-align: left;
   cursor: pointer;
@@ -54,7 +54,7 @@
    ============================================ */
 
 .ds-timepicker__icon {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
   color: var(--color-icon-primary);
   flex-shrink: 0;
 }
@@ -85,7 +85,7 @@
    ============================================ */
 
 .ds-timepicker__chevron {
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
   color: var(--color-icon-primary);
   transition: transform var(--motion-duration-base) var(--motion-ease-standard);
   flex-shrink: 0;
@@ -106,8 +106,8 @@
   right: 0;
   margin-top: var(--gap-050); /* 2px */
   padding: var(--padding-100); /* inset gap on all sides */
-  border: var(--border-xs) solid var(--color-input-border-primary);
-  border-radius: var(--radius-md); /* 12px */
+  border: var(--border-025) solid var(--color-input-border-primary);
+  border-radius: var(--radius-300); /* 12px */
   background-color: var(--color-bg-page-primary);
   list-style: none;
   max-height: 240px;
@@ -139,7 +139,7 @@
   align-items: center;
   justify-content: space-between;
   padding: var(--padding-200) var(--padding-300); /* 8px 12px */
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-200);
   font-family: var(--font-paragraph-em-family);
   font-size: var(--font-paragraph-em-size);
   font-weight: var(--font-paragraph-em-weight);
@@ -168,7 +168,7 @@
    ============================================ */
 
 .ds-timepicker__check {
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
   color: var(--color-action-primary-bg);
 }
 
@@ -215,7 +215,7 @@
 }
 
 .ds-timepicker--compact .ds-timepicker__chevron {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 }
 
 .ds-timepicker--compact .ds-timepicker__option {
@@ -226,5 +226,5 @@
 }
 
 .ds-timepicker--compact .ds-timepicker__check {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 }

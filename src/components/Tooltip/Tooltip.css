@@ -16,12 +16,12 @@
   position: absolute;
   z-index: 50;
   padding: var(--padding-150) var(--padding-200); /* 6px 8px */
-  border-radius: var(--radius-xs); /* 4px */
+  border-radius: var(--radius-100); /* 4px */
   /* The floating surface, same recipe as Popover: page background (the
      container fill is semi-transparent), hairline border, floating shadow.
      Same-polarity in both themes — light bubble on light, dark on dark —
      softer than the old inverse fill. */
-  border: var(--border-xs) solid var(--color-bg-container-border);
+  border: var(--border-025) solid var(--color-bg-container-border);
   background-color: var(--color-bg-page-primary);
   color: var(--color-text-primary);
   box-shadow: var(--shadow-floating);
@@ -107,8 +107,8 @@
   bottom: -5px;
   left: 50%;
   margin-left: -4px;
-  border-right: var(--border-xs) solid var(--color-bg-container-border);
-  border-bottom: var(--border-xs) solid var(--color-bg-container-border);
+  border-right: var(--border-025) solid var(--color-bg-container-border);
+  border-bottom: var(--border-025) solid var(--color-bg-container-border);
 }
 
 /* Arrow — bottom position (arrow points up) */
@@ -116,8 +116,8 @@
   top: -5px;
   left: 50%;
   margin-left: -4px;
-  border-top: var(--border-xs) solid var(--color-bg-container-border);
-  border-left: var(--border-xs) solid var(--color-bg-container-border);
+  border-top: var(--border-025) solid var(--color-bg-container-border);
+  border-left: var(--border-025) solid var(--color-bg-container-border);
 }
 
 /* Arrow — left position (arrow points right) */
@@ -125,8 +125,8 @@
   right: -5px;
   top: 50%;
   margin-top: -4px;
-  border-top: var(--border-xs) solid var(--color-bg-container-border);
-  border-right: var(--border-xs) solid var(--color-bg-container-border);
+  border-top: var(--border-025) solid var(--color-bg-container-border);
+  border-right: var(--border-025) solid var(--color-bg-container-border);
 }
 
 /* Arrow — right position (arrow points left) */
@@ -134,6 +134,6 @@
   left: -5px;
   top: 50%;
   margin-top: -4px;
-  border-bottom: var(--border-xs) solid var(--color-bg-container-border);
-  border-left: var(--border-xs) solid var(--color-bg-container-border);
+  border-bottom: var(--border-025) solid var(--color-bg-container-border);
+  border-left: var(--border-025) solid var(--color-bg-container-border);
 }

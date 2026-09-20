@@ -159,13 +159,13 @@
 .rampCell {
   width: 100%;
   height: 44px;
-  border-radius: var(--radius-xs);
-  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-100);
+  border: var(--border-025) solid var(--color-bg-container-border);
 }
 
 /* Step 07 is the key colour each chromatic ramp is built around */
 .rampCellKey {
-  outline: var(--border-md) solid var(--color-input-border-selected);
+  outline: var(--border-050) solid var(--color-input-border-selected);
   outline-offset: 1px;
 }
 
@@ -207,8 +207,8 @@
   display: block;
   width: 100%;
   height: 44px;
-  border-radius: var(--radius-xs);
-  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-100);
+  border: var(--border-025) solid var(--color-bg-container-border);
   overflow: hidden;
   background-image: linear-gradient(
     to right,

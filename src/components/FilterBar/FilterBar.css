@@ -27,8 +27,8 @@
   align-items: center;
   gap: var(--gap-200);
   padding: var(--padding-150) var(--padding-300);
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-full);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-pill);
   background-color: var(--color-bg-page-primary);
   font-family: var(--font-paragraph-sm-em-family);
   font-size: var(--font-paragraph-sm-em-size);
@@ -88,20 +88,20 @@
 .ds-filter-bar__trigger:focus-visible,
 .ds-filter-bar__chip-clear:focus-visible,
 .ds-filter-bar__clear-all:focus-visible {
-  outline: var(--border-md) solid var(--color-action-primary-bg);
+  outline: var(--border-050) solid var(--color-action-primary-bg);
   outline-offset: var(--gap-050);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
 }
 
 .ds-filter-bar__icon {
   flex-shrink: 0;
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
   line-height: 1;
 }
 
 .ds-filter-bar__caret {
   flex-shrink: 0;
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
   line-height: 1;
   transition: transform var(--motion-duration-base) var(--motion-ease-standard);
 }
@@ -112,11 +112,11 @@
 
 .ds-filter-bar__chip-clear {
   flex-shrink: 0;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
 }
 
 .ds-filter-bar__chip-clear .material-symbols-rounded {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
   line-height: 1;
 }
 
@@ -133,8 +133,8 @@
   margin: 0;
   padding: var(--padding-100);
   list-style: none;
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-md);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-300);
   background-color: var(--color-bg-container-primary);
   box-shadow: var(--shadow-floating);
 }
@@ -144,7 +144,7 @@
   align-items: center;
   gap: var(--gap-100);
   padding: var(--padding-150) var(--padding-200);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-200);
   font-family: var(--font-paragraph-sm-family);
   font-size: var(--font-paragraph-sm-size);
   font-weight: var(--font-paragraph-sm-weight);
@@ -167,8 +167,8 @@
 
 .ds-filter-bar__option-check {
   flex-shrink: 0;
-  width: var(--icon-size-sm);
-  --icon-size: var(--icon-size-sm);
+  width: var(--icon-size-500);
+  --icon-size: var(--icon-size-500);
   line-height: 1;
   color: var(--color-action-primary-bg);
 }
@@ -180,7 +180,7 @@
   padding: var(--padding-150) var(--padding-200);
   border: none;
   background: none;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   font-family: var(--font-paragraph-sm-em-family);
   font-size: var(--font-paragraph-sm-em-size);
   font-weight: var(--font-paragraph-sm-em-weight);

@@ -18,7 +18,7 @@
   flex: 1;
   height: 8px;
   background-color: var(--color-bg-container-tertiary);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   overflow: hidden;
 }
 
@@ -32,7 +32,7 @@
 
 .ds-progress-bar__fill {
   height: 100%;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   transition: width var(--motion-duration-slow) var(--motion-ease-standard);
 }
 

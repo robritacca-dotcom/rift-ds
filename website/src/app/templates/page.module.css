@@ -161,8 +161,8 @@
 .frameShell {
   position: relative;
   width: 100%;
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-xl);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
   background: var(--color-bg-container-primary);
   overflow: hidden;
 }
@@ -197,12 +197,12 @@
 .frameLink {
   position: absolute;
   inset: 0;
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-600);
 }
 
 .frameLink:focus-visible {
-  outline: var(--border-md) solid var(--color-action-primary-bg);
-  outline-offset: calc(-1 * var(--border-md));
+  outline: var(--border-050) solid var(--color-action-primary-bg);
+  outline-offset: calc(-1 * var(--border-050));
 }
 
 /* Caption row under the preview — slide-width, so it travels with its
@@ -245,7 +245,7 @@
   height: 8px;
   padding: 0;
   border: 0;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background: var(--color-bg-container-tertiary);
   cursor: pointer;
   transition: background-color var(--motion-duration-base) var(--motion-ease-standard);
@@ -256,7 +256,7 @@
 }
 
 .dot:focus-visible {
-  outline: var(--border-md) solid var(--color-action-primary-bg);
+  outline: var(--border-050) solid var(--color-action-primary-bg);
   outline-offset: 2px;
 }
 

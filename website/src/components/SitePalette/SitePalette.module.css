@@ -28,7 +28,7 @@
   align-items: center;
   gap: var(--gap-100);
   padding: var(--padding-150) var(--padding-300);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   /* AiButton's solid field, worn with the ring: opaque, so the row's hover
      highlight never shows through the pill, and the glow stays an edge halo
      (the ::after escapes behind — negative z-index, no stacking context). */
@@ -105,7 +105,7 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  padding: var(--border-md);
+  padding: var(--border-050);
   background: conic-gradient(
     from var(--site-ask-chip-angle),
     var(--color-ai-gradient-start),
@@ -153,7 +153,7 @@
 }
 
 .askChipIcon {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
   line-height: 1;
 }
 

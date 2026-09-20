@@ -9,7 +9,7 @@
    its width (64px rail, 280px expanded — the same constants), the sweeping
    clip and the labels' opacity fades carry the whole transition, and inner
    layout stays constant so nothing snaps mid-glide. Rows keep AppSidebar's
-   geometry: 40px --radius-full pills inset by 12px margins, so a collapsed
+   geometry: 40px --radius-pill pills inset by 12px margins, so a collapsed
    row is a perfect circle around its icon (12 + 8 + 24 + 8 + 12 = 64).
    ============================================ */
 
@@ -102,7 +102,7 @@
 .ds-thread-panel__header-inner[role='button']:focus-visible {
   outline: 2px solid var(--color-action-primary-bg);
   outline-offset: 2px;
-  border-radius: var(--radius-xs);
+  border-radius: var(--radius-100);
 }
 
 .ds-thread-panel__logo {
@@ -136,7 +136,7 @@
    expand gesture — and glides back in with the width (AppSidebar's
    mechanics: both widths explicit, so the width interpolates). */
 .ds-thread-panel__toggle {
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -169,12 +169,12 @@
 .ds-thread-panel__toggle:focus-visible {
   outline: 2px solid var(--color-action-primary-bg);
   outline-offset: 2px;
-  border-radius: var(--radius-xs);
+  border-radius: var(--radius-100);
 }
 
 /* ============================================
    ROWS — AppSidebar's shared pill shape
-   40px --radius-full rows inset by 12px margins with 8px padding: the
+   40px --radius-pill rows inset by 12px margins with 8px padding: the
    icon keeps its x-position in both states, and the collapsed hover pill
    is a circle clear of the rail edges.
    ============================================ */
@@ -192,7 +192,7 @@
   min-width: 0;
   padding: var(--padding-200);
   border: none;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background: transparent;
   cursor: pointer;
   overflow: hidden;
@@ -242,7 +242,7 @@
 }
 
 .ds-thread-panel__new-icon {
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
   color: var(--color-icon-primary);
   flex-shrink: 0;
 }
@@ -289,7 +289,7 @@
 }
 
 .ds-thread-panel__control-icon {
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
   color: var(--color-icon-primary);
   flex-shrink: 0;
 }
@@ -365,7 +365,7 @@
 }
 
 .ds-thread-panel__projects-add {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -374,7 +374,7 @@
   flex: none;
   padding: 0;
   border: none;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background: transparent;
   color: var(--color-icon-primary);
   cursor: pointer;
@@ -391,7 +391,7 @@
 }
 
 .ds-thread-panel__project-icon {
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
   color: var(--color-icon-primary);
   flex-shrink: 0;
 }
@@ -532,7 +532,7 @@
   flex: none;
   width: var(--gap-200);
   height: var(--gap-200);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background-color: var(--color-status-info-icon);
 }
 
@@ -577,7 +577,7 @@
      only inset; the title mask softens its trailing end. */
   width: 100%;
   height: 0.75em;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background-color: var(--color-bg-container-secondary);
   position: relative;
   overflow: hidden;
@@ -652,7 +652,7 @@
 
 .ds-thread-panel__thread-icon,
 .ds-thread-panel__pin {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
   flex: none;
   color: var(--color-icon-secondary);
 }
@@ -709,7 +709,7 @@
 }
 
 .ds-thread-panel__menu-trigger {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -717,7 +717,7 @@
   height: 28px;
   padding: 0;
   border: none;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background: transparent;
   color: var(--color-icon-primary);
   cursor: pointer;
@@ -746,8 +746,8 @@
   height: 40px;
   min-width: 0;
   padding: 0 var(--padding-400);
-  border: var(--border-xs) solid var(--color-action-primary-bg);
-  border-radius: var(--radius-full);
+  border: var(--border-025) solid var(--color-action-primary-bg);
+  border-radius: var(--radius-pill);
   background-color: var(--color-bg-container-primary);
   font-family: var(--font-paragraph-sm-family);
   font-size: var(--font-paragraph-sm-size);
@@ -765,7 +765,7 @@
   align-self: flex-start;
   padding: var(--padding-150) var(--padding-400);
   border: none;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background: transparent;
   cursor: pointer;
   white-space: nowrap;

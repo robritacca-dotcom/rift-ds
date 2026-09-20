@@ -14,7 +14,7 @@
   padding: var(--padding-200) var(--padding-500); /* Figma: --padding/sm (8px) & --radius/lg (16px) */
 
   /* Border radius */
-  border-radius: var(--radius-full); /* Figma: --radius/full (999px) */
+  border-radius: var(--radius-pill); /* Figma: --radius/full (999px) */
 
   /* Typography - Using paragraph em (medium weight) for clickable controls */
   font-family: var(--font-paragraph-em-family);
@@ -58,7 +58,7 @@
 }
 
 .ds-button--compact .ds-button__icon {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 /* Figma: compact icons are 20px (vs 24px default) */
 }
 
@@ -109,7 +109,7 @@
 
 .ds-button--secondary {
   /* Figma: --action/primary/border/primary - 1px border */
-  border: var(--border-xs) solid var(--color-action-primary-border);
+  border: var(--border-025) solid var(--color-action-primary-border);
   background-color: transparent;
 }
 
@@ -119,13 +119,13 @@
 }
 
 .ds-button--secondary.ds-button--default {
-  border: var(--border-xs) solid var(--color-action-primary-border);
+  border: var(--border-025) solid var(--color-action-primary-border);
   background-color: transparent;
 }
 
 .ds-button--secondary.ds-button--hover {
   /* Figma: hover state - 1px border */
-  border: var(--border-xs) solid var(--color-action-primary-border);
+  border: var(--border-025) solid var(--color-action-primary-border);
   background-color: var(--color-action-primary-bg-hover);
 }
 
@@ -136,7 +136,7 @@
 .ds-button--secondary.ds-button--active {
   /* Figma: --action/primary/background/active - 1px border */
   background-color: var(--color-action-primary-bg-active);
-  border: var(--border-xs) solid var(--color-action-primary-border);
+  border: var(--border-025) solid var(--color-action-primary-border);
 }
 
 .ds-button--secondary.ds-button--active .ds-button__text {
@@ -144,7 +144,7 @@
 }
 
 .ds-button--secondary.ds-button--disabled {
-  border: var(--border-xs) solid var(--color-action-primary-border);
+  border: var(--border-025) solid var(--color-action-primary-border);
   background-color: transparent;
   opacity: 0.4;
   cursor: not-allowed;
@@ -221,7 +221,7 @@
    ============================================ */
 
 .ds-button--destructive {
-  border: var(--border-xs) solid var(--color-core-accent-coral);
+  border: var(--border-025) solid var(--color-core-accent-coral);
   background-color: transparent;
 }
 
@@ -230,12 +230,12 @@
 }
 
 .ds-button--destructive.ds-button--default {
-  border: var(--border-xs) solid var(--color-core-accent-coral);
+  border: var(--border-025) solid var(--color-core-accent-coral);
   background-color: transparent;
 }
 
 .ds-button--destructive.ds-button--hover {
-  border: var(--border-xs) solid var(--color-core-accent-coral);
+  border: var(--border-025) solid var(--color-core-accent-coral);
   background-color: var(--color-core-accent-coral);
 }
 
@@ -244,7 +244,7 @@
 }
 
 .ds-button--destructive.ds-button--active {
-  border: var(--border-xs) solid var(--color-core-accent-coral);
+  border: var(--border-025) solid var(--color-core-accent-coral);
   background-color: var(--color-core-accent-coral);
 }
 
@@ -253,7 +253,7 @@
 }
 
 .ds-button--destructive.ds-button--disabled {
-  border: var(--border-xs) solid var(--color-core-accent-coral);
+  border: var(--border-025) solid var(--color-core-accent-coral);
   background-color: transparent;
   opacity: 0.4;
   cursor: not-allowed;
@@ -265,7 +265,7 @@
 
 .ds-button__icon {
   flex-shrink: 0;
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
 /* Figma: default icons are 24px */
   line-height: 1;
 }

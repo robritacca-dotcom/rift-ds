@@ -132,7 +132,7 @@ a.toolItem:hover {
 
 .toolGlyph {
   /* 24px glyph padded to match the 28px logo images beside it */
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
   padding: 2px;
   color: var(--color-text-secondary);
   flex-shrink: 0;
@@ -218,7 +218,7 @@ a.toolItem:hover {
   justify-content: space-between;
   gap: var(--gap-400);
   padding: var(--padding-200) 0;
-  border-bottom: var(--border-xs) solid var(--color-bg-container-border);
+  border-bottom: var(--border-025) solid var(--color-bg-container-border);
   font-size: var(--font-paragraph-size);
   line-height: var(--font-paragraph-line-height);
   color: var(--color-text-primary);

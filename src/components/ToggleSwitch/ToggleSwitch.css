@@ -26,7 +26,7 @@
   position: relative;
   width: 42px;
   height: 24px;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background: var(--color-action-primary-bg);
   transition: background-color var(--motion-duration-slow) var(--motion-ease-standard);
   flex-shrink: 0;

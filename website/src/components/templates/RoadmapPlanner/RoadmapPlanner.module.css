@@ -144,7 +144,7 @@
    relay console's stage and the team calendar's grid set the convention. */
 .stage :global(.ds-chart) {
   border: none;
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-600);
 }
 
 /* ----------------------------------------------------------------- rail */
@@ -296,7 +296,7 @@
   gap: var(--gap-200);
   padding: var(--padding-150) var(--padding-200);
   border: none;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-200);
   background-color: var(--color-bg-page-primary);
   cursor: pointer;
   text-align: left;
@@ -347,7 +347,7 @@
   flex: none;
   width: var(--gap-100);
   height: var(--gap-100);
-  border-radius: var(--radius-xxs);
+  border-radius: var(--radius-050);
   transform: rotate(45deg);
   background-color: var(--color-text-tertiary);
 }

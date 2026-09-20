@@ -17,8 +17,8 @@
   gap: var(--gap-200);
   width: 100%;
   background-color: var(--color-bg-container-primary);
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-md);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-300);
   padding: var(--padding-400);
 }
 
@@ -49,7 +49,7 @@
 }
 
 .ds-event-calendar__nav-btn {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 
   display: inline-flex;
   align-items: center;
@@ -57,7 +57,7 @@
   padding: var(--padding-100);
   background-color: var(--color-action-passive-bg);
   border: none;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   cursor: pointer;
   color: var(--color-icon-primary);
   transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
@@ -116,7 +116,7 @@
   min-width: 0;
   padding: var(--padding-100);
   background-color: var(--color-calendar-cell-bg);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-200);
 }
 
 .ds-event-calendar__cell--outside {
@@ -151,12 +151,12 @@
   align-items: center;
   justify-content: center;
   align-self: flex-start;
-  min-width: var(--icon-size-md);
-  height: var(--icon-size-md);
+  min-width: var(--icon-size-600);
+  height: var(--icon-size-600);
   padding: 0 var(--padding-100);
   background: none;
   border: none;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   color: var(--color-text-secondary);
   font-family: var(--font-paragraph-sm-family);
   font-size: var(--font-paragraph-sm-size);
@@ -227,8 +227,8 @@ button.ds-event-calendar__day:focus-visible {
   background-color: var(--color-calendar-event-bg);
   /* Transparent at rest so the hover ring appears without a layout shift —
      resting pills stay quiet, only the pill under the pointer gets ringed. */
-  border: var(--border-xs) solid transparent;
-  border-radius: var(--radius-xs);
+  border: var(--border-025) solid transparent;
+  border-radius: var(--radius-100);
   text-align: left;
 }
 
@@ -253,7 +253,7 @@ button.ds-event-calendar__event:focus-visible {
   flex: none;
   width: var(--gap-100);
   height: var(--gap-100);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background-color: var(--ds-event-accent);
 }
 
@@ -329,7 +329,7 @@ button.ds-event-calendar__event:focus-visible {
 
 button.ds-event-calendar__more {
   cursor: pointer;
-  border-radius: var(--radius-xs);
+  border-radius: var(--radius-100);
   transition:
     background-color var(--motion-duration-fast) var(--motion-ease-standard),
     color var(--motion-duration-fast) var(--motion-ease-standard);

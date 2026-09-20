@@ -45,7 +45,7 @@ import { ButtonGroup } from './components/ButtonGroup/ButtonGroup';
 ## Design Tokens
 
 - **Horizontal gap**: \`--gap-500\` (20px)
-- **Vertical gap**: \`--radius-xxs\` (2px)
+- **Vertical gap**: \`--radius-050\` (2px)
         `,
       },
     },

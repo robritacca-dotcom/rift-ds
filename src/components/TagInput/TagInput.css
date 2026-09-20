@@ -22,8 +22,8 @@
   align-items: center;
   gap: var(--gap-100); /* 4px */
   padding: var(--padding-150) var(--padding-400); /* 6px 16px */
-  border: var(--border-xs) solid var(--color-input-border-primary);
-  border-radius: var(--radius-md); /* 12px */
+  border: var(--border-025) solid var(--color-input-border-primary);
+  border-radius: var(--radius-300); /* 12px */
   background-color: var(--color-input-bg-primary);
   cursor: text;
   transition: border-color var(--motion-duration-base) var(--motion-ease-standard);
@@ -46,7 +46,7 @@
   align-items: center;
   gap: var(--gap-050); /* 2px */
   padding: var(--padding-050) var(--padding-200); /* 2px 8px */
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background-color: var(--color-bg-container-secondary);
   font-family: var(--font-paragraph-sm-em-family);
   font-size: var(--font-paragraph-sm-em-size);
@@ -75,7 +75,7 @@
   margin: 0;
   padding: 0;
   border: none;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background-color: transparent;
   color: var(--color-icon-primary);
   cursor: pointer;
@@ -92,7 +92,7 @@
 }
 
 .ds-taginput__remove .material-symbols-rounded {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
   line-height: 1;
 }
 

@@ -15,7 +15,7 @@
 .ds-status-dot__indicator {
   position: relative;
   flex-shrink: 0;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
 }
 
 .ds-status-dot__label {
@@ -32,18 +32,18 @@
    drift from the glyphs it sits beside. */
 
 .ds-status-dot--sm .ds-status-dot__indicator {
-  width: calc(var(--icon-size-sm) / 2); /* 10px */
-  height: calc(var(--icon-size-sm) / 2);
+  width: calc(var(--icon-size-500) / 2); /* 10px */
+  height: calc(var(--icon-size-500) / 2);
 }
 
 .ds-status-dot--md .ds-status-dot__indicator {
-  width: calc(var(--icon-size-md) / 2); /* 12px */
-  height: calc(var(--icon-size-md) / 2);
+  width: calc(var(--icon-size-600) / 2); /* 12px */
+  height: calc(var(--icon-size-600) / 2);
 }
 
 .ds-status-dot--lg .ds-status-dot__indicator {
-  width: calc(var(--icon-size-lg) / 2); /* 16px */
-  height: calc(var(--icon-size-lg) / 2);
+  width: calc(var(--icon-size-800) / 2); /* 16px */
+  height: calc(var(--icon-size-800) / 2);
 }
 
 /* Variants — the plain-surface icon steps, tuned to hold on bare
@@ -76,7 +76,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background-color: inherit;
   animation: ds-status-dot-pulse var(--motion-duration-loop-shimmer) var(--motion-ease-standard)
     infinite;

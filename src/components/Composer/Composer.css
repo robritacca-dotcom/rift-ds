@@ -24,13 +24,15 @@
      a raw value in CircularButton.css too (icon-button sizes are not on
      a token scale). Everything concentric derives from it. */
   --ds-composer-send-size: 40px;
+  /* The shell's concentric corner: half the send button, plus the action
+     bar's padding-200 ring, plus the border width (border-radius applies
+     to the border's outer edge). Component-local by design — one
+     component's geometry, not a step on the global radius scale
+     (design.md's Composer section owns the contract). */
+  --ds-composer-radius: 29px;
   background-color: var(--color-input-bg-primary);
-  border: var(--border-xs) solid var(--color-input-border-primary);
-  /* The token's default is concentric with the send button: half the
-     button, plus the action bar's padding-sm ring, plus the border width
-     (border-radius applies to the border's outer edge). A token rather
-     than the calc so radius re-theming reaches this corner too. */
-  border-radius: var(--radius-composer);
+  border: var(--border-025) solid var(--color-input-border-primary);
+  border-radius: var(--ds-composer-radius);
   box-shadow: var(--shadow-floating);
   transition: border-color var(--motion-duration-fast) var(--motion-ease-standard);
   /* The whole shell is the input affordance — clicking anywhere that is
@@ -69,12 +71,12 @@
 .ds-composer--ai-glow::before {
   content: '';
   position: absolute;
-  inset: calc(-1 * var(--border-xs));
+  inset: calc(-1 * var(--border-025));
   border-radius: inherit;
-  /* One step up from the shell's --border-xs border: the outer edge stays on
+  /* One step up from the shell's --border-025 border: the outer edge stays on
      the border box and the extra pixel grows inward, so the thicker band
      reads clearly on low-density screens without changing the geometry. */
-  padding: var(--border-md);
+  padding: var(--border-050);
   background: conic-gradient(
     from var(--ds-composer-glow-angle),
     var(--color-ai-gradient-start),
@@ -106,7 +108,7 @@
 .ds-composer--ai-glow::after {
   content: '';
   position: absolute;
-  inset: calc(-1 * var(--border-xs));
+  inset: calc(-1 * var(--border-025));
   border-radius: inherit;
   background: conic-gradient(
     from var(--ds-composer-glow-angle),
@@ -232,7 +234,7 @@
   padding: 0 var(--padding-400);
   background-color: var(--color-chat-context-bg);
   /* A full pill, matching the suggestion chips around the composer */
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   font-family: var(--font-paragraph-sm-family);
   font-size: var(--font-paragraph-sm-size);
   font-weight: var(--font-paragraph-sm-weight);
@@ -254,7 +256,7 @@
 }
 
 .ds-composer__context-icon .material-symbols-rounded {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 }
 
 /* The text owns the truncation: one line, ellipsized only when the note
@@ -351,7 +353,7 @@
 
 .ds-composer__textarea::-webkit-scrollbar-thumb {
   background-color: var(--color-bg-container-secondary);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
 }
 
 /* Native auto-grow where supported; the JS measurement path stands down

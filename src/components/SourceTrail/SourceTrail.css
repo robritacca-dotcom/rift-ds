@@ -14,8 +14,8 @@
   flex-direction: column;
   width: 100%;
   background-color: var(--color-bg-container-primary);
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-xl);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
   overflow: hidden;
 }
 
@@ -57,7 +57,7 @@
 }
 
 .ds-source-trail__indicator .material-symbols-rounded {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 }
 
 .ds-source-trail__heading {
@@ -75,7 +75,7 @@
 }
 
 .ds-source-trail__chevron {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 
   flex: none;
   color: var(--color-icon-secondary);
@@ -116,7 +116,7 @@
 
 .ds-source-trail--open .ds-source-trail__list {
   padding: var(--padding-200) var(--padding-500) var(--padding-400);
-  border-top: var(--border-xs) solid var(--color-divider);
+  border-top: var(--border-025) solid var(--color-divider);
   gap: var(--gap-200);
 }
 
@@ -153,7 +153,7 @@
 }
 
 .ds-source-trail__row-indicator .material-symbols-rounded {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 }
 
 .ds-source-trail__row--pending .ds-source-trail__row-indicator {

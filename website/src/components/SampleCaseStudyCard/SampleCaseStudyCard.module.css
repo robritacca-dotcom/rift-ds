@@ -11,7 +11,7 @@
   padding: var(--primitive-padding-1000);
   background: var(--color-bg-container-primary-semi);
   border: 1px solid var(--color-bg-container-border);
-  border-radius: var(--primitive-radius-xl);
+  border-radius: var(--primitive-radius-600);
   width: 100%;
 }
 
@@ -22,14 +22,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--primitive-radius-full);
+  border-radius: var(--primitive-radius-pill);
   background: var(--color-action-primary-bg);
   color: var(--color-action-primary-text, #fff);
 }
 
 .iconWrap :global(.material-symbols-rounded),
 .iconWrap :global(.material-symbols-rounded) {
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
 }
 
 .text {
@@ -67,7 +67,7 @@
   padding: var(--primitive-padding-200) var(--primitive-padding-500);
   background: var(--color-action-primary-bg);
   color: var(--color-action-primary-text, #fff);
-  border-radius: var(--primitive-radius-full);
+  border-radius: var(--primitive-radius-pill);
   text-decoration: none;
   font-family: var(--font-paragraph-em-family);
   font-size: var(--font-paragraph-size);
@@ -83,7 +83,7 @@
 }
 
 .cta :global(.material-symbols-rounded) {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 }
 
 /* Stack on narrow viewports */

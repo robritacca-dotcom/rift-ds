@@ -540,7 +540,7 @@ const previews: Record<string, () => ReactNode> = {
   "code-block": () => (
     <>
       <div className={styles.scaledComponentPreview} style={{ width: "224px" }}>
-        <CodeBlock code={`--radius-full: 999px;`} filename="tokens.css" showCopy={false} />
+        <CodeBlock code={`--radius-pill: 999px;`} filename="tokens.css" showCopy={false} />
       </div>
     </>
   ),

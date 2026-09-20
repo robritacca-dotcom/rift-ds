@@ -11,10 +11,10 @@
   align-items: center;
   gap: var(--gap-200);
   padding: var(--padding-100) var(--padding-150);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background: var(--color-bg-glass);
   backdrop-filter: blur(24px);
-  border: var(--border-xs) solid var(--color-bg-container-border);
+  border: var(--border-025) solid var(--color-bg-container-border);
   box-shadow: var(--shadow-floating);
 }
 
@@ -39,7 +39,7 @@
 }
 
 .separator {
-  width: var(--border-xs);
+  width: var(--border-025);
   height: var(--gap-500);
   margin: 0 var(--gap-050);
   background: var(--color-divider);

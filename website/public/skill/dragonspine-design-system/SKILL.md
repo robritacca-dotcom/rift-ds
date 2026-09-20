@@ -5,7 +5,7 @@ description: Build React UI with @robr0/design-system. Use when installing the p
 
 # Using @robr0/design-system
 
-Generated from the library's registries at version 0.21.0, alongside every deploy of https://dragonspine.vercel.app. The library is 132 React components across 11 categories, themed by 235 semantic design tokens, published to npm.
+Generated from the library's registries at version 0.21.0, alongside every deploy of https://dragonspine.vercel.app. The library is 132 React components across 11 categories, themed by 234 semantic design tokens, published to npm.
 
 ## Install
 

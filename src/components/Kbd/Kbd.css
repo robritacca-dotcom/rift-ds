@@ -10,8 +10,8 @@
   justify-content: center;
   min-width: 24px;
   padding: var(--padding-050) var(--padding-150);
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-xs);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-100);
   background-color: var(--color-bg-container-primary);
   font-family: var(--font-paragraph-sm-family);
   font-size: var(--font-paragraph-sm-size);

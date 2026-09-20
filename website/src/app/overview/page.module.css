@@ -225,7 +225,7 @@ a.statItem:hover {
 .statItem:focus-visible {
   outline: 2px solid var(--color-action-primary-bg);
   outline-offset: 2px;
-  border-radius: var(--radius-xs);
+  border-radius: var(--radius-100);
 }
 
 .statValue {
@@ -359,8 +359,8 @@ a.statItem:hover {
   align-items: center;
   gap: var(--primitive-gap-200);
   padding: var(--primitive-padding-150) var(--primitive-padding-300);
-  border: var(--border-xs) solid var(--color-divider);
-  border-radius: var(--radius-full);
+  border: var(--border-025) solid var(--color-divider);
+  border-radius: var(--radius-pill);
   background-color: var(--color-bg-container-primary);
   font-size: var(--font-paragraph-sm-size);
   font-weight: var(--font-paragraph-sm-em-weight);

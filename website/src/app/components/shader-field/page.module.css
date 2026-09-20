@@ -95,8 +95,8 @@
   aspect-ratio: 2 / 1;
   max-height: 320px;
   overflow: hidden;
-  border-radius: var(--radius-md);
-  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-300);
+  border: var(--border-025) solid var(--color-bg-container-border);
   background-color: var(--color-bg-page-primary);
 }
 

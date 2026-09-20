@@ -15,8 +15,8 @@
 
   padding: var(--padding-150) var(--padding-300);
 
-  border: var(--border-xs) solid var(--ds-document-chip-border);
-  border-radius: var(--radius-md);
+  border: var(--border-025) solid var(--ds-document-chip-border);
+  border-radius: var(--radius-300);
   background-color: var(--color-bg-container-primary);
 
   transition: border-color var(--motion-duration-base) var(--motion-ease-standard);
@@ -51,7 +51,7 @@
   padding: 0;
   border: none;
   background: none;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-200);
   font: inherit;
   letter-spacing: inherit;
   color: inherit;
@@ -77,11 +77,11 @@
 }
 
 .ds-document-chip__icon .material-symbols-rounded {
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
 }
 
 .ds-document-chip--compact .ds-document-chip__icon .material-symbols-rounded {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 }
 
 .ds-document-chip--error .ds-document-chip__icon {
@@ -151,14 +151,14 @@
   padding: 0;
   border: none;
   background: none;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   color: var(--color-icon-primary);
   cursor: pointer;
   transition: color var(--motion-duration-base) var(--motion-ease-standard);
 }
 
 .ds-document-chip__remove .material-symbols-rounded {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 }
 
 .ds-document-chip__remove:not(:disabled):hover {

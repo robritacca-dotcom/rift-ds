@@ -95,8 +95,8 @@
   display: block;
   width: 220px;
   padding: 0;
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-md);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-300);
   overflow: hidden;
   cursor: zoom-in;
   background: var(--color-bg-container-primary);

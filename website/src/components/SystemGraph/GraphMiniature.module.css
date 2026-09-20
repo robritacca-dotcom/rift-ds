@@ -34,8 +34,8 @@
     transparent 1.25px
   );
   background-size: 26px 26px;
-  border: var(--border-xs) solid var(--color-divider);
-  border-radius: var(--radius-xl);
+  border: var(--border-025) solid var(--color-divider);
+  border-radius: var(--radius-600);
   padding: var(--padding-400);
   transition: border-color var(--motion-duration-base) var(--motion-ease-standard);
 }

@@ -16,7 +16,7 @@
 .ds-chat-marker::after {
   content: '';
   flex: 1;
-  height: var(--border-xs);
+  height: var(--border-025);
   background-color: var(--color-divider);
 }
 
@@ -48,7 +48,7 @@
 }
 
 .ds-chat-marker__icon .material-symbols-rounded {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 }
 
 /* Icons take the colour of the text around them. Explicit, not just

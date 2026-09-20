@@ -41,7 +41,7 @@ function PrimitiveRampField({ className }: { className?: string }) {
             <span
               key={step}
               style={{
-                borderRadius: "var(--radius-xs)",
+                borderRadius: "var(--radius-100)",
                 background: `var(--primitive-${ramp}-${step})`,
               }}
             />

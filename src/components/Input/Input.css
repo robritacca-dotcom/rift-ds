@@ -27,8 +27,8 @@
 .ds-input__field {
   width: 100%;
   padding: var(--padding-200) var(--padding-400); /* 8px 16px */
-  border: var(--border-xs) solid var(--color-input-border-primary);
-  border-radius: var(--radius-md); /* 12px */
+  border: var(--border-025) solid var(--color-input-border-primary);
+  border-radius: var(--radius-300); /* 12px */
   background-color: var(--color-input-bg-primary);
 
   /* Typography */
@@ -65,7 +65,7 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
   color: var(--color-icon-primary);
   pointer-events: none;
 }
@@ -129,7 +129,7 @@
 }
 
 .ds-input--compact .ds-input__icon {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 }
 
 .ds-input--compact .ds-input__icon--left {

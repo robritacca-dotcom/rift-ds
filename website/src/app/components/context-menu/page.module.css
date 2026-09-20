@@ -86,8 +86,8 @@
   width: 320px;
   max-width: 100%;
   height: 160px;
-  border: var(--border-xs) dashed var(--color-bg-container-border);
-  border-radius: var(--radius-md);
+  border: var(--border-025) dashed var(--color-bg-container-border);
+  border-radius: var(--radius-300);
   color: var(--color-text-tertiary);
   font-size: var(--font-paragraph-sm-size);
   line-height: var(--font-paragraph-sm-line-height);

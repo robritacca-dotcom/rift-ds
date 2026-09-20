@@ -54,7 +54,7 @@
 .ds-breadcrumb__link:focus-visible {
   outline: 2px solid var(--color-action-primary-bg);
   outline-offset: 2px;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-200);
 }
 
 /* ============================================
@@ -78,11 +78,11 @@
    Size via --icon-size, never font-size: .material-symbols-rounded derives
    the glyph size AND the layout box from that one variable. Setting
    font-size alone shrank the glyph but left a 24px box around it, so the
-   chevron floated above the text baseline. --icon-size-sm (20px) also
+   chevron floated above the text baseline. --icon-size-500 (20px) also
    matches the 20px line-height of the paragraph-sm labels either side.
 */
 .ds-breadcrumb__separator {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
   flex: none;
   color: var(--color-text-tertiary);
   user-select: none;

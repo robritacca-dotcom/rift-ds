@@ -58,7 +58,7 @@
 }
 
 .ds-link-list__open-icon {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
   color: var(--color-text-tertiary);
 }
 

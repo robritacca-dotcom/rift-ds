@@ -120,7 +120,7 @@ const PRIMITIVE_SNIPPET = `/* Every semantic token references a primitive, so ov
   --primitive-teal-03: #DDD6FE;  /* dark active */
 
   /* Pill buttons become rounded rectangles */
-  --primitive-radius-full: 12px;
+  --primitive-radius-pill: 12px;
 }`;
 
 const SEMANTIC_SNIPPET = `/* Prefer surgical changes? Override a semantic token directly —

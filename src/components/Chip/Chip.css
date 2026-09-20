@@ -15,8 +15,8 @@
   padding: var(--padding-150) var(--padding-300); /* 6px 12px */
 
   /* Shape */
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-full);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-pill);
   background-color: var(--color-bg-page-primary);
 
   /* Typography — same em style as Badge */
@@ -51,7 +51,7 @@
 
 .ds-chip--large .ds-chip__icon,
 .ds-chip--large .ds-chip__remove .material-symbols-rounded {
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
 }
 
 .ds-chip--large .ds-chip__icon svg {
@@ -74,7 +74,7 @@
 
 .ds-chip__icon {
   flex-shrink: 0;
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
   line-height: 1;
   color: var(--color-icon-primary);
   transition: color var(--motion-duration-base) var(--motion-ease-standard);
@@ -86,7 +86,7 @@
 }
 
 .ds-chip--compact .ds-chip__icon {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 }
 
 .ds-chip--compact .ds-chip__icon svg {
@@ -169,19 +169,19 @@
   padding: 0;
   border: none;
   background: none;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   color: var(--color-icon-primary);
   cursor: pointer;
   transition: color var(--motion-duration-base) var(--motion-ease-standard);
 }
 
 .ds-chip__remove .material-symbols-rounded {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
   line-height: 1;
 }
 
 .ds-chip--compact .ds-chip__remove .material-symbols-rounded {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 }
 
 .ds-chip__remove:not(:disabled):hover {

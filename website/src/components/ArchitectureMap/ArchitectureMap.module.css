@@ -37,8 +37,8 @@
 }
 
 .surfaceEmbed {
-  border: var(--border-xs) solid var(--color-divider);
-  border-radius: var(--radius-xl);
+  border: var(--border-025) solid var(--color-divider);
+  border-radius: var(--radius-600);
   height: 460px;
   touch-action: pan-y;
 }
@@ -81,15 +81,15 @@
   align-items: center;
   gap: var(--gap-100);
   padding: var(--padding-100) var(--padding-150);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background: color-mix(in srgb, var(--color-bg-container-primary) 85%, transparent);
   backdrop-filter: blur(16px);
-  border: var(--border-xs) solid var(--color-divider);
+  border: var(--border-025) solid var(--color-divider);
   box-shadow: var(--shadow-floating);
 }
 
 .separator {
-  width: var(--border-xs);
+  width: var(--border-025);
   height: var(--gap-500);
   margin: 0 var(--gap-050);
   background: var(--color-divider);
@@ -100,7 +100,7 @@
   height: var(--gap-1000);
   padding: 0 var(--padding-150);
   border: 0;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background: none;
   font-family: var(--font-paragraph-sm-family);
   font-size: var(--font-paragraph-sm-size);
@@ -116,7 +116,7 @@
 }
 
 .zoomLevel:focus-visible {
-  outline: var(--border-md) solid var(--color-action-primary-bg);
+  outline: var(--border-050) solid var(--color-action-primary-bg);
   outline-offset: var(--gap-050);
 }
 

@@ -26,8 +26,8 @@
   z-index: 10;
   min-width: 200px;
   padding: var(--padding-400); /* 16px */
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-sm); /* 8px */
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-200); /* 8px */
   /* Page background, not container: the container fill is semi-transparent
      in dark mode, and a floating panel must not show text through itself */
   background-color: var(--color-bg-page-primary);

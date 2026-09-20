@@ -31,7 +31,7 @@
   padding: var(--padding-200) var(--padding-500);
 
   /* Buttons are always pill-shaped (design.md invariant) */
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
 
   /* Typography — the clickable-control face, same as Button */
   font-family: var(--font-paragraph-em-family);
@@ -69,7 +69,7 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  padding: var(--border-md);
+  padding: var(--border-050);
   background: conic-gradient(
     from var(--ds-ai-button-angle),
     var(--color-ai-gradient-start),
@@ -182,7 +182,7 @@
 
 /* Icon rides the icon-size scale */
 .ds-ai-button__icon {
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
   line-height: 1;
 }
 
@@ -192,7 +192,7 @@
 }
 
 .ds-ai-button:focus-visible {
-  outline: var(--border-md) solid var(--color-action-primary-bg);
+  outline: var(--border-050) solid var(--color-action-primary-bg);
   outline-offset: 2px;
 }
 
@@ -221,7 +221,7 @@
 }
 
 .ds-ai-button--compact .ds-ai-button__icon {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 }
 
 /* Reduced motion: the ring and glow stay, the turning stops. */
@@ -279,7 +279,7 @@
   gap: var(--gap-200);
 
   padding: var(--padding-500);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-600);
   /* ds-allow(color): the light glass token reads solid on a floating card;
      thinned so the page shows through the frost */
   background: color-mix(in srgb, var(--color-bg-glass) 62%, transparent);
@@ -289,7 +289,7 @@
      hand-written -webkit- duplicate makes its merging drop the declaration. */
   --ds-ai-summary-frost: 36px;
   backdrop-filter: blur(var(--ds-ai-summary-frost)) saturate(1.5);
-  border: var(--border-xs) solid var(--color-bg-container-border);
+  border: var(--border-025) solid var(--color-bg-container-border);
   box-shadow: var(--shadow-floating);
 
   /* Mounted but resting: the closed state mirrors the pop's `from`, so
@@ -375,9 +375,9 @@
 .ds-ai-button__summary::before {
   content: '';
   position: absolute;
-  inset: calc(-1 * var(--border-xs));
-  border-radius: var(--radius-xl);
-  padding: var(--border-md);
+  inset: calc(-1 * var(--border-025));
+  border-radius: var(--radius-600);
+  padding: var(--border-050);
   background: conic-gradient(
     from var(--ds-ai-summary-ring-angle),
     var(--color-ai-gradient-start),
@@ -459,7 +459,7 @@
   width: var(--ds-ai-summary-dismiss-size);
   height: var(--ds-ai-summary-dismiss-size);
   border: none;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background: transparent;
   color: var(--color-text-secondary);
   cursor: pointer;
@@ -471,7 +471,7 @@
 }
 
 .ds-ai-button__summary-dismiss .material-symbols-rounded {
-  font-size: var(--icon-size-sm);
+  font-size: var(--icon-size-500);
 }
 
 .ds-ai-button__summary-meta {

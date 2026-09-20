@@ -24,9 +24,9 @@
 /* The mock product's logo mark: a token-driven dot, so the action colour
    lever rebrands it along with everything else. */
 .mark {
-  width: var(--icon-size-sm);
-  height: var(--icon-size-sm);
-  border-radius: var(--radius-full);
+  width: var(--icon-size-500);
+  height: var(--icon-size-500);
+  border-radius: var(--radius-pill);
   background: var(--color-action-primary-bg);
   flex-shrink: 0;
 }
@@ -42,7 +42,7 @@
   align-items: center;
   gap: var(--gap-050);
   padding: var(--padding-100) var(--padding-200);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   font-size: var(--font-paragraph-size);
   font-weight: var(--font-paragraph-weight);
   line-height: var(--font-paragraph-line-height);
@@ -57,7 +57,7 @@
 }
 
 .caret {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
   line-height: 1;
 }
 

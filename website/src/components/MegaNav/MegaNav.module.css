@@ -125,7 +125,7 @@
   height: 30px;
   padding: 0 16px;
   border: none;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background: transparent;
   color: var(--color-text-primary);
   font-family: var(--font-title-body-family);
@@ -191,7 +191,7 @@
 .caret {
   flex-shrink: 0;
   margin-left: 2px;
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
   line-height: 1;
   color: var(--color-text-secondary);
   transition: transform var(--motion-duration-base) var(--motion-ease-standard);
@@ -217,7 +217,7 @@
   justify-content: center;
   background: var(--color-action-passive-bg);
   border: none;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   padding: var(--primitive-padding-200);
   cursor: pointer;
   color: var(--color-text-primary);
@@ -254,8 +254,8 @@
      container-primary fill and border), so the two pills read as one
      family — the passive fill is near-invisible on the dark header. */
   background: var(--color-bg-container-primary);
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-full);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-pill);
   padding: 0 var(--primitive-padding-300);
   cursor: pointer;
   color: var(--color-text-secondary);
@@ -263,7 +263,7 @@
      icon and the ⌘K keycaps, with the keys' auto margin absorbing the rest. */
   width: 264px;
   height: 40px;
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
   /* Input's own hover transition, so the border responds at the same pace. */
   transition:
     background var(--motion-duration-base) var(--motion-ease-standard),
@@ -320,7 +320,7 @@
   background: color-mix(in srgb, var(--color-bg-container-primary) 88%, transparent);
   backdrop-filter: blur(32px);
   border: 1px solid var(--color-bg-container-border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-400);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
 
   /* Hidden state */
@@ -386,7 +386,7 @@
   align-items: flex-start;
   gap: var(--primitive-gap-300);
   padding: var(--primitive-padding-300) var(--primitive-padding-400);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-300);
   text-decoration: none;
   color: inherit;
   transition: background var(--motion-duration-fast) var(--motion-ease-standard);
@@ -413,7 +413,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-300);
   background: var(--color-bg-container-secondary);
   color: var(--color-text-primary);
   transition: background var(--motion-duration-fast) var(--motion-ease-standard);
@@ -427,7 +427,7 @@
 
 .megaIcon :global(.material-symbols-rounded),
 .megaIcon span {
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
   line-height: 1;
 }
 
@@ -498,7 +498,7 @@
   min-height: 75cqw;
   text-decoration: none;
   color: inherit;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-300);
   border: 1px solid var(--color-bg-container-border);
   overflow: hidden;
   transition: border-color var(--motion-duration-fast) var(--motion-ease-standard);
@@ -555,7 +555,7 @@
 }
 
 .megaShowcaseTitleIcon {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
   line-height: 1;
   color: var(--color-action-passive-text);
   transition: translate var(--motion-duration-fast) var(--motion-ease-standard);
@@ -709,7 +709,7 @@
   height: 40px;
   background: none;
   border: none;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   color: var(--primitive-neutral-01);
   cursor: pointer;
 }

@@ -23,8 +23,8 @@
   justify-content: space-between;
   gap: var(--gap-200); /* 8px */
   padding: var(--padding-200) var(--padding-400); /* 8px 16px */
-  border: var(--border-xs) solid var(--color-input-border-primary);
-  border-radius: var(--radius-md); /* 12px */
+  border: var(--border-025) solid var(--color-input-border-primary);
+  border-radius: var(--radius-300); /* 12px */
   background-color: var(--color-input-bg-primary);
   cursor: pointer;
   transition: border-color var(--motion-duration-base) var(--motion-ease-standard);
@@ -75,9 +75,9 @@
 .ds-rich-dropdown__swatch {
   width: 24px;
   height: 24px;
-  border-radius: var(--ds-rich-dropdown-swatch-radius, var(--radius-full));
+  border-radius: var(--ds-rich-dropdown-swatch-radius, var(--radius-pill));
   background-color: var(--ds-rich-dropdown-color);
-  box-shadow: inset 0 0 0 var(--border-xs) var(--color-bg-container-border);
+  box-shadow: inset 0 0 0 var(--border-025) var(--color-bg-container-border);
   flex-shrink: 0;
 }
 
@@ -120,7 +120,7 @@
    ============================================ */
 
 .ds-rich-dropdown__chevron {
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
   color: var(--color-icon-primary);
   transition: transform var(--motion-duration-base) var(--motion-ease-standard);
   flex-shrink: 0;
@@ -141,8 +141,8 @@
   right: 0;
   margin-top: var(--gap-050); /* 2px */
   padding: var(--padding-100); /* inset gap on all sides */
-  border: var(--border-xs) solid var(--color-input-border-primary);
-  border-radius: var(--radius-md); /* 12px */
+  border: var(--border-025) solid var(--color-input-border-primary);
+  border-radius: var(--radius-300); /* 12px */
   background-color: var(--color-bg-page-primary);
   list-style: none;
   max-height: 320px; /* taller cells than Dropdown's plain rows */
@@ -175,7 +175,7 @@
   justify-content: space-between;
   gap: var(--gap-200); /* 8px */
   padding: var(--padding-200) var(--padding-300); /* 8px 12px */
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-200);
   cursor: pointer;
   transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
 }
@@ -206,7 +206,7 @@
    ============================================ */
 
 .ds-rich-dropdown__check {
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
   color: var(--color-action-primary-bg);
 }
 

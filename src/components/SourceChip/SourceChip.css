@@ -15,7 +15,7 @@
   padding: var(--padding-050) var(--padding-200); /* 2px 8px */
 
   /* Shape — borderless pill on the secondary container */
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background-color: var(--color-bg-container-secondary);
 
   /* Typography */
@@ -43,9 +43,9 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  min-width: var(--icon-size-sm);
-  height: var(--icon-size-sm);
-  border-radius: var(--radius-full);
+  min-width: var(--icon-size-500);
+  height: var(--icon-size-500);
+  border-radius: var(--radius-pill);
   background-color: var(--color-bg-container-tertiary);
 
   font-family: var(--font-paragraph-sm-em-family);
@@ -63,7 +63,7 @@
 
 .ds-source-chip__icon {
   flex-shrink: 0;
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
   line-height: 1;
   color: var(--color-icon-primary);
 }

@@ -32,7 +32,7 @@
   height: 40px;
   padding: 0;
   border: none;
-  border-radius: var(--radius-full); /* pill */
+  border-radius: var(--radius-pill); /* pill */
   background-color: transparent;
   cursor: pointer;
   transition: background-color var(--motion-duration-base) var(--motion-ease-standard), color var(--motion-duration-base) var(--motion-ease-standard);
@@ -74,7 +74,7 @@
    ============================================ */
 
 .ds-pagination__icon {
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
   line-height: 1;
   color: var(--color-icon-primary);
 }
@@ -111,7 +111,7 @@
 }
 
 .ds-pagination--compact .ds-pagination__icon {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 }
 
 .ds-pagination__readout {

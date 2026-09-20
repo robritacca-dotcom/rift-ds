@@ -16,7 +16,7 @@ const USAGE_SNIPPET = `import { Chip } from '@robr0/design-system/components/Chi
 const TOKEN_SNIPPET = `/* Semantic tokens reference primitives — never skip a tier */
 --color-action-primary-bg: var(--primitive-teal-08);   /* #0E6E8F */
 --color-text-primary: var(--primitive-neutral-09);     /* #050505 */
---radius-full: var(--primitive-radius-full);           /* 999px */`;
+--radius-pill: var(--primitive-radius-pill);           /* 999px */`;
 
 const SCROLL_SNIPPET = `:root {
   --color-action-primary-bg: var(--primitive-teal-08);

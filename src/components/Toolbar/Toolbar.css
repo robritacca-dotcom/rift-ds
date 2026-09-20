@@ -13,8 +13,8 @@
   gap: var(--gap-100);
   padding: var(--padding-150);
   background-color: var(--color-bg-container-primary);
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-full);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-pill);
 }
 
 /* Orientation */
@@ -42,7 +42,7 @@
 .ds-toolbar__separator {
   flex-shrink: 0;
   align-self: stretch;
-  width: var(--border-xs);
+  width: var(--border-025);
   margin-block: var(--gap-050);
   margin-inline: var(--gap-050);
   background-color: var(--color-divider);
@@ -50,7 +50,7 @@
 
 .ds-toolbar--vertical .ds-toolbar__separator {
   width: auto;
-  height: var(--border-xs);
+  height: var(--border-025);
   margin-block: var(--gap-050);
   margin-inline: var(--gap-050);
 }

@@ -145,7 +145,7 @@
   font-family: var(--font-family-code);
   font-size: var(--font-paragraph-sm-size);
   background-color: var(--color-bg-container-secondary);
-  border-radius: var(--radius-xxs);
+  border-radius: var(--radius-050);
   padding-inline: var(--padding-050);
 }
 
@@ -160,8 +160,8 @@
   font-size: var(--font-paragraph-sm-size);
   line-height: var(--font-paragraph-sm-line-height);
   background-color: var(--color-bg-container-primary);
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-md);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-300);
   padding: var(--padding-400);
   overflow-x: auto;
 }
@@ -179,7 +179,7 @@
    ============================================ */
 
 .ds-prose blockquote {
-  border-inline-start: var(--border-md) solid var(--color-divider);
+  border-inline-start: var(--border-050) solid var(--color-divider);
   padding-inline-start: var(--padding-400);
   color: var(--color-text-secondary);
 }
@@ -226,7 +226,7 @@
 .ds-prose th,
 .ds-prose td {
   padding: var(--padding-150) var(--padding-300);
-  border-block-end: var(--border-xs) solid var(--color-divider);
+  border-block-end: var(--border-025) solid var(--color-divider);
   overflow-wrap: normal;
 }
 
@@ -236,12 +236,12 @@
 
 .ds-prose hr {
   border: none;
-  border-block-start: var(--border-xs) solid var(--color-divider);
+  border-block-start: var(--border-025) solid var(--color-divider);
 }
 
 .ds-prose img {
   max-width: 100%;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-300);
 }
 
 /* ============================================

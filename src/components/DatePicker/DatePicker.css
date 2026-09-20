@@ -8,8 +8,8 @@
   flex-direction: column;
   gap: var(--gap-200); /* 8px */
   padding: var(--padding-400); /* 16px */
-  border: var(--border-xs) solid var(--color-input-border-primary);
-  border-radius: var(--radius-md); /* 12px */
+  border: var(--border-025) solid var(--color-input-border-primary);
+  border-radius: var(--radius-300); /* 12px */
   background-color: var(--color-input-bg-primary);
   user-select: none;
 }
@@ -44,7 +44,7 @@
   height: 32px;
   padding: 0;
   border: none;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background-color: transparent;
   color: var(--color-text-secondary);
   font-size: 24px;
@@ -108,7 +108,7 @@
   height: 36px;
   padding: 0;
   border: none;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background-color: transparent;
   cursor: pointer;
   transition: background-color var(--motion-duration-base) var(--motion-ease-standard), color var(--motion-duration-base) var(--motion-ease-standard);
@@ -138,7 +138,7 @@
 
 /* Today indicator */
 .ds-date-picker__cell--today {
-  border: var(--border-xs) solid var(--color-action-primary-bg);
+  border: var(--border-025) solid var(--color-action-primary-bg);
 }
 
 /* Selected */

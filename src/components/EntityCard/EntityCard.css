@@ -17,8 +17,8 @@
 
   /* Appearance */
   background: var(--color-bg-container-primary);
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-xl);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
   padding: var(--padding-500);
 }
 
@@ -39,7 +39,7 @@
    ============================================ */
 
 .ds-entity-card__icon {
-  --icon-size: var(--icon-size-lg);
+  --icon-size: var(--icon-size-800);
   color: var(--color-text-primary);
 }
 

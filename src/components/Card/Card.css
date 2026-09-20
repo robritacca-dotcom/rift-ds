@@ -16,8 +16,8 @@
 
   /* Appearance */
   background: var(--color-bg-container-primary-semi);
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-xl); /* 24px */
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600); /* 24px */
   padding: var(--padding-500); /* 20px */
   overflow: hidden;
   color: inherit;
@@ -105,7 +105,7 @@
   width: 100%;
   aspect-ratio: 940 / 480;
   overflow: hidden;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-300);
   background: var(--color-bg-container-secondary);
 }
 

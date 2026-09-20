@@ -125,8 +125,8 @@
   width: 40px;
   height: 40px;
   padding: 0;
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-full);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-pill);
   background-color: var(--color-bg-container-primary);
   background-image: linear-gradient(
     var(--color-action-passive-bg),
@@ -164,8 +164,8 @@
   outline-offset: 2px;
 }
 
-/* The glyph matches the send button's: --icon-size-md in a 40px circle
+/* The glyph matches the send button's: --icon-size-600 in a 40px circle
    (icon plus the padding ring), pointing the other way. */
 .ds-chat-thread__jump-icon {
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
 }

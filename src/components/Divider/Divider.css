@@ -7,7 +7,7 @@
 .ds-divider {
   border: none;
   margin: 0;
-  border-top: var(--border-xs) solid var(--color-divider);
+  border-top: var(--border-025) solid var(--color-divider);
   width: 100%;
 }
 
@@ -48,7 +48,7 @@
 .ds-divider--labeled::after {
   content: '';
   flex: 1;
-  height: var(--border-xs);
+  height: var(--border-025);
   background-color: var(--color-divider);
 }
 
@@ -74,7 +74,7 @@
 
 .ds-divider--vertical {
   border-top: none;
-  width: var(--border-xs);
+  width: var(--border-025);
   align-self: stretch;
   background-color: var(--color-divider);
 }

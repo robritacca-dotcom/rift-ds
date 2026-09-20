@@ -9,7 +9,7 @@
 .ds-reasoning {
   /* Where an AgentStatus summary's label starts: matrix plus its gap.
      The rail geometry and the handoff slide both derive from it. */
-  --ds-reasoning-align: calc(var(--icon-size-md) + var(--gap-300));
+  --ds-reasoning-align: calc(var(--icon-size-600) + var(--gap-300));
 
   display: flex;
   flex-direction: column;
@@ -29,7 +29,7 @@
   margin-left: calc(var(--padding-150) * -1);
   background: none;
   border: none;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-200);
   color: var(--color-text-secondary);
   font-family: var(--font-paragraph-family);
   font-size: var(--font-paragraph-size);
@@ -64,7 +64,7 @@
    rotated state — and the quarter turn to open runs clockwise, following
    the panel as it opens. */
 .ds-reasoning__chevron {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 
   flex: none;
   transform: rotate(-90deg);
@@ -185,20 +185,20 @@
      the status label's first letter starts (matrix + its gap). A plain
      text summary shares the same geometry, so swapping a live status for
      the thought-for line never shifts the trace. */
-  margin-left: calc(var(--icon-size-md) / 2 - var(--border-md) / 2);
-  padding-left: calc(var(--icon-size-md) / 2 + var(--gap-300) - var(--border-md) / 2);
+  margin-left: calc(var(--icon-size-600) / 2 - var(--border-050) / 2);
+  padding-left: calc(var(--icon-size-600) / 2 + var(--gap-300) - var(--border-050) / 2);
   /* The rail dissolves at its foot — the Timeline's end-of-line treatment.
      A border can't carry a gradient, so the border only reserves the
      geometry (transparent, same width) and the stripe is painted under it:
      a border-box background sized to the border's own column. */
-  border-left: var(--border-md) solid transparent;
+  border-left: var(--border-050) solid transparent;
   background:
     linear-gradient(
         to bottom,
         var(--color-divider) calc(100% - var(--gap-500) * 2),
         var(--color-bg-container-primary-transparent)
       )
-      left top / var(--border-md) 100% no-repeat border-box;
+      left top / var(--border-050) 100% no-repeat border-box;
   color: var(--color-text-secondary);
   font-family: var(--font-paragraph-family);
   font-size: var(--font-paragraph-size);
@@ -270,12 +270,12 @@
 
 /* Compact pairs with a compact AgentStatus: sm matrix, sm gap. */
 .ds-reasoning--compact {
-  --ds-reasoning-align: calc(var(--icon-size-sm) + var(--gap-200));
+  --ds-reasoning-align: calc(var(--icon-size-500) + var(--gap-200));
 }
 
 .ds-reasoning--compact .ds-reasoning__content {
-  margin-left: calc(var(--icon-size-sm) / 2 - var(--border-md) / 2);
-  padding-left: calc(var(--icon-size-sm) / 2 + var(--gap-200) - var(--border-md) / 2);
+  margin-left: calc(var(--icon-size-500) / 2 - var(--border-050) / 2);
+  padding-left: calc(var(--icon-size-500) / 2 + var(--gap-200) - var(--border-050) / 2);
 }
 
 /* ============================================

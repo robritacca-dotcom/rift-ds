@@ -53,7 +53,7 @@
   display: flex;
   min-height: 0;
   background-color: var(--color-bg-page-primary);
-  border-right: var(--border-xs) solid var(--color-bg-container-border);
+  border-right: var(--border-025) solid var(--color-bg-container-border);
 }
 
 
@@ -198,8 +198,8 @@
   min-width: 0;
   padding: var(--padding-500);
   background-color: var(--color-bg-container-primary);
-  border: var(--border-md) solid var(--color-bg-container-border);
-  border-radius: var(--radius-xl);
+  border: var(--border-050) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
 }
 
 /* The region tone doubles as the dark border colour's neighbour, so the

@@ -146,7 +146,7 @@
   justify-content: center;
   background: var(--color-action-passive-bg);
   border: none;
-  border-radius: var(--primitive-radius-full);
+  border-radius: var(--primitive-radius-pill);
   padding: var(--primitive-padding-200);
   color: var(--color-text-primary);
   width: 40px;
@@ -214,7 +214,7 @@
   justify-content: center;
   background: var(--color-action-passive-bg);
   border: none;
-  border-radius: var(--primitive-radius-full);
+  border-radius: var(--primitive-radius-pill);
   padding: var(--primitive-padding-200);
   color: var(--color-text-primary);
   width: 40px;

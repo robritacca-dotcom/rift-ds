@@ -101,8 +101,8 @@
   display: flex;
   overflow: hidden;
   background: var(--color-bg-glass);
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-xl);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
   box-shadow: var(--shadow-floating);
   backdrop-filter: blur(24px);
 }
@@ -119,8 +119,8 @@
   display: flex;
   overflow: hidden;
   background: var(--color-bg-glass);
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-xl);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
   box-shadow: var(--shadow-floating);
   backdrop-filter: blur(24px);
 }
@@ -146,7 +146,7 @@
   flex-direction: column;
   gap: var(--gap-200);
   padding-bottom: var(--gap-400);
-  border-bottom: var(--border-xs) solid var(--color-divider);
+  border-bottom: var(--border-025) solid var(--color-divider);
 }
 
 /* Standalone group headings match the Field label the DS inputs render,
@@ -239,8 +239,8 @@
   position: relative;
   overflow: hidden;
   height: 220px;
-  border-radius: var(--radius-xl);
-  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
+  border: var(--border-025) solid var(--color-bg-container-border);
   background: var(--color-bg-page-primary);
 }
 
@@ -327,7 +327,7 @@
   flex-direction: column;
   gap: var(--gap-200);
   padding-bottom: var(--gap-400);
-  border-bottom: var(--border-xs) solid var(--color-divider);
+  border-bottom: var(--border-025) solid var(--color-divider);
 }
 
 .advSliderLabel {
@@ -373,13 +373,13 @@
 .advCell {
   flex: 1;
   height: 24px;
-  border-radius: var(--radius-xxs);
-  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-050);
+  border: var(--border-025) solid var(--color-bg-container-border);
 }
 
 /* Step 07 is the ramp's key colour — the one the row's picker sets */
 .advCellKey {
-  outline: var(--border-md) solid var(--color-input-border-selected);
+  outline: var(--border-050) solid var(--color-input-border-selected);
   outline-offset: 1px;
 }
 
@@ -398,11 +398,11 @@
   height: 28px;
   padding: 0;
   border: none;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background: none;
   color: var(--color-text-secondary);
   cursor: pointer;
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
   transition: background-color var(--motion-duration-base) var(--motion-ease-standard), color var(--motion-duration-base) var(--motion-ease-standard);
 }
 

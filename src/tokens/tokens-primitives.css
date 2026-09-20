@@ -133,19 +133,17 @@
      ============================================ */
 
   /* Spacing / Radius */
-  --primitive-radius-xxs: 2px;
-  --primitive-radius-xs: 4px;
-  --primitive-radius-sm: 8px;
-  --primitive-radius-md: 12px;
-  --primitive-radius-lg: 16px;
-  --primitive-radius-xl: 24px;
-  --primitive-radius-xxl: 48px;
-  --primitive-radius-full: 999px;
+  --primitive-radius-050: 2px;
+  --primitive-radius-100: 4px;
+  --primitive-radius-200: 8px;
+  --primitive-radius-300: 12px;
+  --primitive-radius-400: 16px;
+  --primitive-radius-600: 24px;
+  --primitive-radius-1200: 48px;
+  --primitive-radius-pill: 999px;
   /* The composer shell's corner: concentric with the 40px send button it
      wraps (half the button + the padding-sm ring + the border width).
      Held as a resolved constant so consumers re-theme it like any other
-     radius step. */
-  --primitive-radius-composer: 29px;
 
   /* Padding */
   --primitive-padding-050: 2px;
@@ -159,18 +157,18 @@
   --primitive-padding-1500: 60px;
 
   /* Border width */
-  --primitive-border-xs: 1px;
-  --primitive-border-md: 2px;
+  --primitive-border-025: 1px;
+  --primitive-border-050: 2px;
 
   /* Icon size
      The scale starts at 20px because that is the floor of the Material
      Symbols variable font's `opsz` (optical size) axis — see the fvar
      range 20..48. Below 20 the axis clamps and optical sizing silently
      stops tracking, so smaller icons cannot be drawn correctly. */
-  --primitive-icon-sm: 20px;
-  --primitive-icon-md: 24px;
-  --primitive-icon-lg: 32px;
-  --primitive-icon-xl: 48px;
+  --primitive-icon-500: 20px;
+  --primitive-icon-600: 24px;
+  --primitive-icon-800: 32px;
+  --primitive-icon-1200: 48px;
 
   /* Gap */
   --primitive-gap-050: 2px;

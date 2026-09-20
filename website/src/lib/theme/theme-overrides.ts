@@ -631,19 +631,17 @@ export function actionColorPlan(
 /* ---------- radius ---------- */
 
 const RADIUS_STEPS: ReadonlyArray<[step: string, px: number]> = [
-  ["xxs", 2],
-  ["xs", 4],
-  ["sm", 8],
-  ["md", 12],
-  ["lg", 16],
-  ["xl", 24],
-  ["xxl", 48],
-  // The composer shell's concentric corner (see tokens-primitives.css).
-  ["composer", 29],
+  ["050", 2],
+  ["100", 4],
+  ["200", 8],
+  ["300", 12],
+  ["400", 16],
+  ["600", 24],
+  ["1200", 48],
 ];
 
 /**
- * Scales the radius scale (0..2). `pill` keeps `--radius-full` at its
+ * Scales the radius scale (0..2). `pill` keeps `--radius-pill` at its
  * shipped 999px; turning it off squares the pills to the scaled lg step.
  */
 export function radiusOverrides(scale: number, pill: boolean): Overrides {
@@ -652,7 +650,7 @@ export function radiusOverrides(scale: number, pill: boolean): Overrides {
     overrides[`--primitive-radius-${step}`] = `${Math.round(px * scale)}px`;
   }
   if (!pill) {
-    overrides["--primitive-radius-full"] = `${Math.max(2, Math.round(16 * scale))}px`;
+    overrides["--primitive-radius-pill"] = `${Math.max(2, Math.round(16 * scale))}px`;
   }
   return overrides;
 }

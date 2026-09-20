@@ -31,7 +31,7 @@
   justify-content: center;
   width: 12px;
   height: 12px;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background-color: var(--color-bg-container-tertiary);
 }
 
@@ -39,7 +39,7 @@
   width: 28px;
   height: 28px;
   background-color: var(--color-bg-container-primary);
-  border: var(--border-xs) solid var(--color-bg-container-border);
+  border: var(--border-025) solid var(--color-bg-container-border);
   font-family: var(--font-paragraph-sm-em-family);
   font-size: var(--font-paragraph-sm-em-size);
   font-weight: var(--font-paragraph-sm-em-weight);
@@ -55,7 +55,7 @@
 }
 
 .ds-timeline__marker-icon {
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
   line-height: 1;
   color: var(--color-icon-primary);
 }
@@ -131,7 +131,7 @@
   top: 0;
   bottom: calc(-1 * var(--gap-500));
   left: 5px; /* centre of the 12px dot */
-  width: var(--border-md);
+  width: var(--border-050);
   background-color: var(--color-divider);
 }
 
@@ -176,7 +176,7 @@
   top: 5px; /* centre of the 12px dot */
   left: 0;
   right: 0;
-  height: var(--border-md);
+  height: var(--border-050);
   background-color: var(--color-divider);
 }
 
@@ -357,7 +357,7 @@
 .ds-timeline--company .ds-timeline__item:last-child::before {
   display: block;
   bottom: 0;
-  width: var(--border-xs);
+  width: var(--border-025);
   background: linear-gradient(
     to bottom,
     var(--color-divider),

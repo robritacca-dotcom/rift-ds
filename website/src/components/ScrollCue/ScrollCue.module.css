@@ -25,7 +25,7 @@
   align-items: center;
   justify-content: center;
   padding: var(--padding-150);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   border: 1px solid var(--color-bg-container-border);
   background: var(--color-bg-container-primary-semi);
   color: var(--color-icon-primary);
@@ -54,7 +54,7 @@
 }
 
 .scrollCue :global(.material-symbols-rounded) {
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
   /* ds-allow(motion): ambient nudge inviting the scroll — far slower
      than any UI motion token, same decorative-timing precedent as the
      home page's DS-board bar breathing. */

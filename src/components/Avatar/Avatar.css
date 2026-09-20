@@ -8,7 +8,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--radius-full); /* 999px */
+  border-radius: var(--radius-pill); /* 999px */
   background-color: var(--color-bg-container-secondary);
   flex-shrink: 0;
 }
@@ -41,7 +41,7 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
 }
 
 /* ============================================
@@ -78,15 +78,15 @@
 }
 
 .ds-avatar--sm .ds-avatar__icon {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 }
 
 .ds-avatar--md .ds-avatar__icon {
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
 }
 
 .ds-avatar--lg .ds-avatar__icon {
-  --icon-size: var(--icon-size-lg);
+  --icon-size: var(--icon-size-800);
 }
 
 /* ============================================
@@ -97,7 +97,7 @@
   position: absolute;
   bottom: 0;
   right: 0;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   border: 2px solid var(--color-bg-page-primary);
 }
 

@@ -27,8 +27,8 @@
   text-align: center;
   gap: var(--gap-100); /* 4px */
   padding: var(--padding-1000); /* 32px */
-  border: var(--border-xs) dashed var(--color-input-border-primary);
-  border-radius: var(--radius-md); /* 12px */
+  border: var(--border-025) dashed var(--color-input-border-primary);
+  border-radius: var(--radius-300); /* 12px */
   background-color: var(--color-input-bg-primary);
   cursor: pointer;
   transition: border-color var(--motion-duration-base) var(--motion-ease-standard), background-color var(--motion-duration-base) var(--motion-ease-standard);
@@ -49,7 +49,7 @@
 }
 
 .ds-file-input__dropzone-icon {
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
   color: var(--color-icon-primary);
 }
 
@@ -102,8 +102,8 @@
   align-items: center;
   gap: var(--gap-300);
   padding: var(--padding-200) var(--padding-300); /* 8px 12px */
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-md); /* 12px */
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-300); /* 12px */
   background-color: var(--color-bg-page-primary);
 }
 
@@ -113,7 +113,7 @@
 }
 
 .ds-file-input__file-icon {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
   color: var(--color-icon-primary);
   flex-shrink: 0;
 }
@@ -169,7 +169,7 @@
   width: 100%;
   height: 4px;
   margin-top: var(--gap-050);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background-color: var(--color-bg-container-primary);
   overflow: hidden;
 }
@@ -177,7 +177,7 @@
 .ds-file-input__progress-fill {
   display: block;
   height: 100%;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background-color: var(--color-action-primary-bg);
   transition: width var(--motion-duration-base) var(--motion-ease-standard);
 }
@@ -194,7 +194,7 @@
   height: 32px;
   padding: 0;
   border: none;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background-color: transparent;
   color: var(--color-icon-primary);
   cursor: pointer;
@@ -217,7 +217,7 @@
 }
 
 .ds-file-input__file-remove .material-symbols-rounded {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 }
 
 /* ============================================
@@ -257,7 +257,7 @@
 }
 
 .ds-file-input--compact .ds-file-input__dropzone-icon {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 }
 
 .ds-file-input--compact .ds-file-input__dropzone-text,

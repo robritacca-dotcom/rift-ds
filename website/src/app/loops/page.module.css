@@ -77,7 +77,7 @@
   gap: var(--primitive-gap-500);
   padding: var(--primitive-gap-1000);
   border: 1px solid var(--color-bg-container-border);
-  border-radius: var(--primitive-radius-xl);
+  border-radius: var(--primitive-radius-600);
   background: var(--color-bg-container-primary);
 }
 
@@ -104,7 +104,7 @@
 }
 
 .loopIcon {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
   color: var(--color-icon-primary);
   flex-shrink: 0;
 }
@@ -189,7 +189,7 @@
   padding: var(--primitive-padding-050) var(--primitive-padding-150);
   background: var(--color-bg-page);
   border: 1px solid var(--color-bg-container-border);
-  border-radius: var(--radius-xs);
+  border-radius: var(--radius-100);
   color: var(--color-text-secondary);
   text-decoration: none;
   transition: border-color var(--motion-duration-base) var(--motion-ease-standard);
@@ -200,7 +200,7 @@
 }
 
 .loopSkillLink :global(.material-symbols-rounded) {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
   color: var(--color-icon-primary);
 }
 

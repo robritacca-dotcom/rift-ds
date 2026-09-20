@@ -92,8 +92,8 @@
   max-width: 560px;
   height: 420px;
   background-color: var(--color-bg-container-primary);
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-xl);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
   overflow: hidden;
 }
 

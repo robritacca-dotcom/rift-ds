@@ -16,8 +16,8 @@
   z-index: 50;
   margin-top: var(--gap-100);
   padding: var(--padding-150) var(--padding-200);
-  border-radius: var(--radius-xs);
-  border: var(--border-xs) solid var(--color-bg-container-border);
+  border-radius: var(--radius-100);
+  border: var(--border-025) solid var(--color-bg-container-border);
   background-color: var(--color-bg-page-primary);
   color: var(--color-text-primary);
   box-shadow: var(--shadow-floating);

@@ -5,8 +5,8 @@
 
 .ds-toggle-group {
   display: inline-flex;
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-sm);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-200);
   overflow: hidden;
 }
 
@@ -32,11 +32,11 @@
 }
 
 .ds-toggle-group__item + .ds-toggle-group__item {
-  border-left: var(--border-xs) solid var(--color-bg-container-border);
+  border-left: var(--border-025) solid var(--color-bg-container-border);
 }
 
 .ds-toggle-group__item .material-symbols-rounded {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 }
 
 /* ============================================
@@ -88,7 +88,7 @@
 }
 
 .ds-toggle-group--compact .ds-toggle-group__item .material-symbols-rounded {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 }
 
 /* ============================================

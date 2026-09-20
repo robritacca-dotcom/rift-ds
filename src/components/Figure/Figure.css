@@ -6,7 +6,7 @@
 
 .ds-figure {
   margin: 0;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-300);
   overflow: hidden;
   background-color: var(--color-bg-container-secondary);
 }
@@ -34,7 +34,7 @@
 .ds-figure__caption {
   display: block;
   padding: var(--padding-400) var(--padding-500);
-  border-top: var(--border-xs) solid var(--color-bg-container-border);
+  border-top: var(--border-025) solid var(--color-bg-container-border);
   font-family: var(--font-paragraph-sm-family);
   font-size: var(--font-paragraph-sm-size);
   font-weight: var(--font-paragraph-sm-weight);

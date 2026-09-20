@@ -100,7 +100,7 @@ import { BarChart, LineChart } from '@robr0/design-system/charts';
     --primitive-teal-05: #A78BFA;  /* dark fill */
     --primitive-teal-04: #C4B5FD;  /* dark hover */
     --primitive-teal-03: #DDD6FE;  /* dark active */
-    --primitive-radius-full: 12px; /* pill buttons become rounded rectangles */
+    --primitive-radius-pill: 12px; /* pill buttons become rounded rectangles */
   }
   ```
   A complete rebrand re-keys the whole teal ramp (01-10): the remaining steps carry the primary label, active icons, hover/selected input borders, and the AI gradient, so stopping at the six fills leaves those teal. The easiest way to get all of it right is the [playground](https://dragonspine.vercel.app/playground): restyle the system live and copy out a complete, paste-ready override.

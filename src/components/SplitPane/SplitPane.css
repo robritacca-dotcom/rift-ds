@@ -76,16 +76,16 @@
 }
 
 .ds-split-pane__separator:focus-visible {
-  outline: var(--border-md) solid var(--color-action-primary-bg);
-  outline-offset: calc(var(--border-md) * -1);
-  border-radius: var(--radius-xxs);
+  outline: var(--border-050) solid var(--color-action-primary-bg);
+  outline-offset: calc(var(--border-050) * -1);
+  border-radius: var(--radius-050);
 }
 
 /* Grip */
 
 .ds-split-pane__grip {
   display: block;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background-color: var(--color-bg-container-border);
   transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
 }

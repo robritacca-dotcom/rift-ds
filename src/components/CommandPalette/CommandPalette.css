@@ -53,8 +53,8 @@
   max-width: 560px;
   max-height: 60vh;
   margin-top: 10vh;
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-xl); /* 24px — the floating-surface shell */
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600); /* 24px — the floating-surface shell */
   background-color: var(--color-bg-glass);
   box-shadow: var(--shadow-floating);
   /* The glass token is deliberately translucent; this blur is what keeps
@@ -78,7 +78,7 @@
   align-items: center;
   gap: var(--gap-200); /* 8px */
   padding: var(--padding-400) var(--padding-500); /* 16px 20px */
-  border-bottom: var(--border-xs) solid var(--color-divider);
+  border-bottom: var(--border-025) solid var(--color-divider);
   flex-shrink: 0;
   transition: border-color var(--motion-duration-fast) var(--motion-ease-standard);
 }
@@ -90,7 +90,7 @@
 }
 
 .ds-command-palette__search-icon {
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
   color: var(--color-icon-primary);
   flex-shrink: 0;
 }
@@ -122,7 +122,7 @@
   height: 32px;
   padding: 0;
   border: none;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background-color: transparent;
   color: var(--color-icon-primary);
   cursor: pointer;
@@ -140,7 +140,7 @@
 }
 
 .ds-command-palette__close .material-symbols-rounded {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 }
 
 /* ============================================
@@ -206,7 +206,7 @@
   align-items: center;
   gap: var(--gap-300);
   padding: var(--padding-300); /* 12px — 8px list inset keeps the text edge on the search row's 20px */
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-200);
   cursor: pointer;
   transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
 }
@@ -221,7 +221,7 @@
 }
 
 .ds-command-palette__command-icon {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
   color: var(--color-icon-primary);
   flex-shrink: 0;
 }
@@ -289,7 +289,7 @@
   align-items: center;
   gap: var(--gap-400);
   padding: var(--padding-300) var(--padding-500);
-  border-top: var(--border-xs) solid var(--color-divider);
+  border-top: var(--border-025) solid var(--color-divider);
   flex-shrink: 0;
   flex-wrap: wrap;
 }

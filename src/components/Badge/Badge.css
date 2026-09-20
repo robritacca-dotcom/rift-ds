@@ -16,8 +16,8 @@
      carries the status on its own, and the old per-variant borders sat
      below 3:1 against their fills. The transparent border keeps the
      geometry so the box does not shift against bordered neighbours. */
-  border: var(--border-xs) solid transparent;
-  border-radius: var(--radius-xs); /* Figma: 4px */
+  border: var(--border-025) solid transparent;
+  border-radius: var(--radius-100); /* Figma: 4px */
   white-space: nowrap;
 }
 

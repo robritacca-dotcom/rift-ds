@@ -7,7 +7,7 @@
   display: inline-flex;
   align-items: stretch;
   gap: 0;
-  border-bottom: var(--border-xs) solid var(--color-bg-container-border);
+  border-bottom: var(--border-025) solid var(--color-bg-container-border);
 }
 
 /* ============================================
@@ -34,8 +34,8 @@
   gap: var(--gap-200); /* 8px */
   padding: var(--padding-200) var(--padding-400); /* 8px 16px */
   border: none;
-  border-bottom: var(--border-md) solid transparent;
-  margin-bottom: calc(var(--border-xs) * -1); /* Overlap the container border */
+  border-bottom: var(--border-050) solid transparent;
+  margin-bottom: calc(var(--border-025) * -1); /* Overlap the container border */
   background: none;
   cursor: pointer;
   position: relative;
@@ -62,7 +62,7 @@
 }
 
 .ds-tabs--compact .ds-tabs__icon {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 }
 
 /* ============================================
@@ -79,7 +79,7 @@
    ============================================ */
 
 .ds-tabs__icon {
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
   color: var(--color-icon-secondary);
   transition: color var(--motion-duration-base) var(--motion-ease-standard);
 }
@@ -127,7 +127,7 @@
 .ds-tabs__tab:focus-visible {
   outline: 2px solid var(--color-action-primary-bg);
   outline-offset: -2px;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-200);
 }
 
 /* ============================================

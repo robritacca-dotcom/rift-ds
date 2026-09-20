@@ -89,8 +89,8 @@
   gap: var(--gap-400);
   min-width: 160px;
   padding: var(--padding-1000) var(--padding-500);
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-md);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-300);
   background: var(--color-bg-container-primary);
 }
 

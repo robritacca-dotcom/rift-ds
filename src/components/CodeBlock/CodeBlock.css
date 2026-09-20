@@ -10,8 +10,8 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-md);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-300);
   background-color: var(--color-bg-container-primary);
   overflow: hidden;
   max-height: var(--ds-code-block-max-height, none);
@@ -27,7 +27,7 @@
   justify-content: space-between;
   gap: var(--gap-200);
   padding: var(--padding-150) var(--padding-200) var(--padding-150) var(--padding-400);
-  border-bottom: var(--border-xs) solid var(--color-bg-container-border);
+  border-bottom: var(--border-025) solid var(--color-bg-container-border);
   flex-shrink: 0;
   transition: border-bottom-color var(--motion-duration-slow) var(--motion-ease-standard);
 }
@@ -52,7 +52,7 @@
   margin: 0;
   padding: var(--padding-050);
   border: none;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background: none;
   color: var(--color-icon-primary);
   cursor: pointer;
@@ -61,7 +61,7 @@
 }
 
 .ds-code-block__toggle .material-symbols-rounded {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
   line-height: 1;
   transition: transform var(--motion-duration-slow) var(--motion-ease-standard);
 }
@@ -111,7 +111,7 @@
   margin: 0;
   padding: var(--padding-050) var(--padding-200);
   border: none;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background: none;
   font-family: var(--font-paragraph-sm-em-family);
   font-size: var(--font-paragraph-sm-em-size);
@@ -124,7 +124,7 @@
 }
 
 .ds-code-block__copy .material-symbols-rounded {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
   line-height: 1;
 }
 

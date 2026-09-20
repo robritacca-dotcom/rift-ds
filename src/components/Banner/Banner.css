@@ -25,7 +25,7 @@
 }
 
 .ds-banner__icon {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
   flex-shrink: 0;
 }
 
@@ -62,13 +62,13 @@
   background: none;
   color: inherit;
   cursor: pointer;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   flex-shrink: 0;
   transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
 .ds-banner__dismiss .material-symbols-rounded {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 }
 
 .ds-banner__dismiss:hover {

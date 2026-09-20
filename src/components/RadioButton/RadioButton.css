@@ -19,8 +19,8 @@
   position: relative;
   width: 24px;
   height: 24px;
-  border: var(--border-md) solid var(--color-bg-container-border);
-  border-radius: var(--radius-full); /* 999px — perfect circle */
+  border: var(--border-050) solid var(--color-bg-container-border);
+  border-radius: var(--radius-pill); /* 999px — perfect circle */
   background-color: var(--color-bg-container-primary-transparent);
   display: flex;
   align-items: center;
@@ -36,7 +36,7 @@
 .ds-radio__dot {
   width: 12px;
   height: 12px;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background-color: var(--color-action-primary-bg);
   transform: scale(0);
   transition: transform var(--motion-duration-base) var(--motion-ease-standard);
@@ -88,7 +88,7 @@
    ============================================ */
 
 .ds-radio:focus-visible .ds-radio__circle {
-  outline: var(--border-md) solid var(--color-action-primary-border-tertiary);
+  outline: var(--border-050) solid var(--color-action-primary-border-tertiary);
   outline-offset: 2px;
 }
 

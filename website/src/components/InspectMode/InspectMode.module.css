@@ -10,7 +10,7 @@
   position: fixed;
   z-index: 1040;
   pointer-events: none;
-  border: var(--border-xs) dashed var(--color-core-accent-coral);
+  border: var(--border-025) dashed var(--color-core-accent-coral);
 }
 
 .sectionLabel {
@@ -28,7 +28,7 @@
   font-weight: var(--font-paragraph-sm-em-weight);
   color: var(--color-text-on-inverse);
   background: var(--color-core-accent-coral);
-  border-radius: var(--radius-xxs) var(--radius-xxs) 0 0;
+  border-radius: var(--radius-050) var(--radius-050) 0 0;
   white-space: nowrap;
 }
 
@@ -41,7 +41,7 @@
    by flipping it inside the box. */
 .sectionLabelInside {
   transform: none;
-  border-radius: 0 0 var(--radius-xxs) 0;
+  border-radius: 0 0 var(--radius-050) 0;
 }
 
 /* ── Hover target ─────────────────────────────────────────────── */
@@ -50,7 +50,7 @@
   position: fixed;
   z-index: 1050;
   pointer-events: none;
-  border: var(--border-xs) solid var(--color-action-primary-bg);
+  border: var(--border-025) solid var(--color-action-primary-bg);
   background: color-mix(in srgb, var(--color-action-primary-bg) 8%, transparent);
 }
 
@@ -64,7 +64,7 @@
   font-size: var(--font-paragraph-sm-size);
   color: var(--color-action-primary-text);
   background: var(--color-action-primary-bg);
-  border-radius: 0 0 var(--radius-xxs) var(--radius-xxs);
+  border-radius: 0 0 var(--radius-050) var(--radius-050);
   white-space: nowrap;
 }
 
@@ -81,8 +81,8 @@
   padding: var(--padding-200) var(--padding-400);
   background: color-mix(in srgb, var(--color-bg-container-primary) 88%, transparent);
   backdrop-filter: blur(24px);
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-md);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-300);
   box-shadow: var(--shadow-floating);
 }
 
@@ -97,7 +97,7 @@
   justify-content: space-between;
   gap: var(--gap-100);
   padding-bottom: var(--padding-100);
-  border-bottom: var(--border-xs) solid var(--color-divider);
+  border-bottom: var(--border-025) solid var(--color-divider);
   margin-bottom: var(--padding-100);
 }
 
@@ -161,8 +161,8 @@
   flex: none;
   width: 14px;
   height: 14px;
-  border-radius: var(--radius-full);
-  border: var(--border-xs) solid var(--color-divider);
+  border-radius: var(--radius-pill);
+  border: var(--border-025) solid var(--color-divider);
 }
 
 .rowTokens {

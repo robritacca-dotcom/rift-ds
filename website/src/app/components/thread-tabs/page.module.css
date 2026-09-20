@@ -90,8 +90,8 @@
   min-width: 0;
   padding: var(--padding-200) var(--padding-400);
   background-color: var(--color-bg-page-primary);
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-xl);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
   overflow: hidden;
 }
 

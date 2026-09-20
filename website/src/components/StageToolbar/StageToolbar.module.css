@@ -16,8 +16,8 @@
   z-index: 30;
   background: var(--color-bg-glass);
   backdrop-filter: blur(24px);
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-full);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-pill);
   box-shadow: var(--shadow-floating);
 }
 

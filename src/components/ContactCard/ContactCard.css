@@ -7,7 +7,7 @@
   gap: var(--gap-500);
   padding: var(--padding-500);
   border: 1px solid var(--color-bg-container-border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-300);
   background: var(--color-bg-container-primary-semi);
   text-decoration: none;
   color: inherit;
@@ -42,7 +42,7 @@
 }
 
 .ds-contact-card__icon {
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
   color: var(--color-text-secondary);
 }
 
@@ -95,7 +95,7 @@
   width: 32px;
   height: 32px;
   border: none;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background: transparent;
   color: var(--color-text-tertiary);
   cursor: pointer;
@@ -113,11 +113,11 @@
 }
 
 .ds-contact-card__copy-btn .material-symbols-rounded {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 }
 
 .ds-contact-card__chevron {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
   color: var(--color-text-tertiary);
   flex-shrink: 0;
 }

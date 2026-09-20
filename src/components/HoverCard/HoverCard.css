@@ -24,9 +24,9 @@
   min-width: 240px;
   max-width: 320px;
   padding: var(--padding-400);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-200);
   background-color: var(--color-bg-page-primary);
-  border: var(--border-xs) solid var(--color-bg-container-border);
+  border: var(--border-025) solid var(--color-bg-container-border);
   box-shadow: var(--shadow-floating);
   color: var(--color-text-primary);
   font-family: var(--font-paragraph-sm-family);

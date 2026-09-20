@@ -7,7 +7,7 @@
   display: flex;
   align-items: baseline;
   gap: var(--gap-400);
-  border-bottom: var(--border-xs) solid var(--color-divider);
+  border-bottom: var(--border-025) solid var(--color-divider);
   padding-bottom: var(--padding-500);
 }
 

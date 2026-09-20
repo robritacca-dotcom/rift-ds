@@ -46,7 +46,7 @@ button.ds-stepper__content {
 button.ds-stepper__content:focus-visible {
   outline: 2px solid var(--color-action-primary-bg);
   outline-offset: 2px;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-200);
 }
 
 /* ============================================
@@ -56,15 +56,15 @@ button.ds-stepper__content:focus-visible {
    ============================================ */
 
 .ds-stepper__indicator {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 32px;
   height: 32px;
   flex-shrink: 0;
-  border: var(--border-xs) solid transparent;
-  border-radius: var(--radius-full);
+  border: var(--border-025) solid transparent;
+  border-radius: var(--radius-pill);
   font-family: var(--font-paragraph-sm-em-family);
   font-size: var(--font-paragraph-sm-em-size);
   font-weight: var(--font-paragraph-sm-em-weight);
@@ -155,7 +155,7 @@ button.ds-stepper__content:hover .ds-stepper__label {
   top: 16px; /* vertical centre of the 32px indicator */
   left: calc(50% + 24px);
   right: calc(-50% + 24px);
-  height: var(--border-md);
+  height: var(--border-050);
   transform: translateY(-50%);
   background-color: var(--color-divider);
   transition: background-color var(--motion-duration-base) var(--motion-ease-standard);
@@ -201,7 +201,7 @@ button.ds-stepper__content:hover .ds-stepper__label {
   bottom: var(--gap-100);
   left: 16px; /* horizontal centre of the 32px indicator */
   right: auto;
-  width: var(--border-md);
+  width: var(--border-050);
   height: auto;
   transform: translateX(-50%);
 }

@@ -9,7 +9,7 @@
   /* On the filled variant the hairline of page showing between the
      segments is the split: a gap the width of the system hairline,
      not a drawn border. */
-  gap: var(--border-xs);
+  gap: var(--border-025);
 }
 
 /* ============================================
@@ -23,8 +23,8 @@
    ============================================ */
 
 .ds-split-button .ds-split-button__main {
-  border-start-end-radius: var(--radius-xxs);
-  border-end-end-radius: var(--radius-xxs);
+  border-start-end-radius: var(--radius-050);
+  border-end-end-radius: var(--radius-050);
   padding-inline-end: var(--padding-300);
 }
 
@@ -33,8 +33,8 @@
 }
 
 .ds-split-button .ds-split-button__trigger {
-  border-start-start-radius: var(--radius-xxs);
-  border-end-start-radius: var(--radius-xxs);
+  border-start-start-radius: var(--radius-050);
+  border-end-start-radius: var(--radius-050);
   /* Standalone, CircularButton is a fixed circle; inside the split its
      explicit height would block the wrapper's align-items: stretch, and
      the main segment's height moves (secondary's border adds to it, a

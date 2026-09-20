@@ -61,11 +61,11 @@
 .ds-data-table__sort:focus-visible {
   outline: 2px solid var(--color-action-primary-bg);
   outline-offset: 2px;
-  border-radius: var(--radius-xxs);
+  border-radius: var(--radius-050);
 }
 
 .ds-data-table__sort-icon {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 
   color: var(--color-icon-secondary);
   opacity: 0;

@@ -14,8 +14,8 @@
   flex-direction: column;
   width: 100%;
   background-color: var(--color-bg-container-primary);
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-md);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-300);
   overflow: hidden;
 }
 
@@ -80,7 +80,7 @@
 .ds-notification-center__mark-all:focus-visible {
   outline: 2px solid var(--color-action-primary-bg);
   outline-offset: 2px;
-  border-radius: var(--radius-xxs);
+  border-radius: var(--radius-050);
 }
 
 /* ============================================
@@ -91,7 +91,7 @@
   display: flex;
   gap: var(--gap-050);
   padding: 0 var(--padding-300) var(--padding-150);
-  border-bottom: var(--border-xs) solid var(--color-divider);
+  border-bottom: var(--border-025) solid var(--color-divider);
 }
 
 .ds-notification-center__tab {
@@ -101,7 +101,7 @@
   padding: var(--padding-100) var(--padding-200);
   background: none;
   border: none;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   cursor: pointer;
   color: var(--color-text-secondary);
   font-family: var(--font-paragraph-sm-em-family);
@@ -146,7 +146,7 @@
 }
 
 .ds-notification-center__list > .ds-notification-item:not(:last-child) {
-  border-bottom: var(--border-xs) solid var(--color-divider);
+  border-bottom: var(--border-025) solid var(--color-divider);
 }
 
 /* Give the built-in empty state breathing room */
@@ -166,7 +166,7 @@
 }
 
 /* The slot is a fixed column as wide as its largest medium — an sm Avatar
-   (32px, the --icon-size-lg rung) — with smaller media centred in it, so
+   (32px, the --icon-size-800 rung) — with smaller media centred in it, so
    every row's text starts on the same edge whether its medium is an avatar
    or a bare icon. */
 .ds-notification-item__media {
@@ -174,12 +174,12 @@
   align-items: center;
   justify-content: center;
   flex: none;
-  width: var(--icon-size-lg);
+  width: var(--icon-size-800);
   color: var(--color-icon-primary);
 }
 
 .ds-notification-item__media .material-symbols-rounded {
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
 }
 
 .ds-notification-item__body {
@@ -233,7 +233,7 @@
   flex: none;
   width: var(--gap-200);
   height: var(--gap-200);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background-color: var(--color-status-info-border);
 }
 

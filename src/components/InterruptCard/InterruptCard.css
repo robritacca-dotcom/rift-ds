@@ -18,9 +18,9 @@
   flex-direction: column;
   width: 100%;
   background-color: var(--color-bg-container-primary);
-  border: var(--border-xs) solid var(--color-bg-container-border);
+  border: var(--border-025) solid var(--color-bg-container-border);
   /* The chat furniture's shared 24px shell — see ToolCall. */
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-600);
   overflow: hidden;
 }
 
@@ -40,12 +40,12 @@
   align-items: center;
   flex: none;
   /* Centre the icon on the title's first line. */
-  margin-top: calc((var(--font-heading-3-line-height) - var(--icon-size-sm)) / 2);
+  margin-top: calc((var(--font-heading-3-line-height) - var(--icon-size-500)) / 2);
   color: var(--ds-interrupt-card-color);
 }
 
 .ds-interrupt-card__icon .material-symbols-rounded {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 }
 
 .ds-interrupt-card__heading {
@@ -130,7 +130,7 @@
 }
 
 .ds-interrupt-card__answer-icon {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
 
   flex: none;
   color: var(--ds-interrupt-card-color);

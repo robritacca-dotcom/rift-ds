@@ -243,7 +243,7 @@ const headingStack = (label: string | undefined, bodyLabel: string) => {
 /** The swatch carries the preset's corner language: pill looks keep the
     full circle, sharp looks square off. Hard values by design — this is
     drawing geometry scaled to the 24px dot, not theme; even the circle is
-    pinned, because the live levers override --radius-full itself and a
+    pinned, because the live levers override --radius-pill itself and a
     preset's portrait must not bend to whatever theme is applied. */
 const swatchRadius = (radiusScale: number, pill: boolean) =>
   pill ? "999px" : `${Math.round(radiusScale * 0.08)}px`;

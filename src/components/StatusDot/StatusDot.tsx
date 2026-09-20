@@ -5,7 +5,7 @@ import './StatusDot.css';
 type StatusDotOwnProps = {
   /** Status role the dot carries — coloured through the plain-surface `--color-status-*-icon` steps. */
   variant?: 'info' | 'positive' | 'warning' | 'error' | 'neutral';
-  /** Dot diameter, derived from the icon scale (half of `--icon-size-sm/md/lg`). */
+  /** Dot diameter, derived from the icon scale (half of `--icon-size-500/md/lg`). */
   size?: 'sm' | 'md' | 'lg';
   /**
    * Radiates a repeating ring from the dot for a live state — recording,

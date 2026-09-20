@@ -72,8 +72,8 @@
   align-items: flex-start;
   gap: var(--gap-200); /* 8px */
   padding: var(--padding-400); /* 16px */
-  border: var(--border-xs) solid transparent;
-  border-radius: var(--radius-sm); /* 8px */
+  border: var(--border-025) solid transparent;
+  border-radius: var(--radius-200); /* 8px */
   min-width: 300px;
   max-width: 420px;
   box-shadow: var(--shadow-floating);
@@ -93,7 +93,7 @@
 
 .ds-toast__icon {
   flex-shrink: 0;
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
   line-height: 1;
 }
 
@@ -142,12 +142,12 @@
   border: none;
   background: none;
   cursor: pointer;
-  border-radius: var(--radius-sm); /* 8px */
+  border-radius: var(--radius-200); /* 8px */
   transition: background-color var(--motion-duration-base) var(--motion-ease-standard);
 }
 
 .ds-toast__dismiss .material-symbols-rounded {
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
 }
 
 .ds-toast__dismiss:hover {

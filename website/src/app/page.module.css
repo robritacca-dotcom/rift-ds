@@ -100,8 +100,8 @@
   width: 24px;
   height: 24px;
   padding: 0;
-  border: var(--border-xs) solid var(--color-bg-container-border);
-  border-radius: var(--radius-full);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-pill);
   cursor: pointer;
   transition: transform var(--motion-duration-fast) var(--motion-ease-standard);
 }
@@ -282,7 +282,7 @@
   flex-direction: column;
   gap: var(--gap-400);
   padding: var(--padding-500);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-600);
   border: 1px solid var(--color-bg-container-border);
   background: var(--color-bg-container-primary);
 }
@@ -330,7 +330,7 @@
   text-decoration: underline;
   text-decoration-color: transparent;
   padding: 2px var(--padding-100);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-200);
   transition: color var(--motion-duration-base) var(--motion-ease-standard), background-color var(--motion-duration-base) var(--motion-ease-standard), text-decoration-color var(--motion-duration-base) var(--motion-ease-standard);
 }
 
@@ -560,7 +560,7 @@
 }
 
 .statementIcon {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
   color: var(--color-icon-secondary);
   flex-shrink: 0;
 }
@@ -574,7 +574,7 @@
 }
 
 .statementDownload {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
   color: var(--color-icon-secondary);
   flex-shrink: 0;
 }
@@ -597,13 +597,13 @@
   align-items: center;
   gap: var(--gap-200);
   padding: var(--padding-150) var(--padding-200);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-300);
   border: 1px solid var(--color-bg-container-border);
   background: var(--color-bg-page-primary);
 }
 
 .searchIcon {
-  --icon-size: var(--icon-size-sm);
+  --icon-size: var(--icon-size-500);
   color: var(--color-icon-secondary);
   flex-shrink: 0;
 }
@@ -671,16 +671,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: var(--icon-size-xl);
-  height: var(--icon-size-xl);
-  border-radius: var(--radius-full);
+  width: var(--icon-size-1200);
+  height: var(--icon-size-1200);
+  border-radius: var(--radius-pill);
   background: var(--color-status-positive-bg);
   border: 1px solid var(--color-status-positive-border);
   margin-bottom: var(--gap-050);
 }
 
 .successBadge > span {
-  --icon-size: var(--icon-size-md);
+  --icon-size: var(--icon-size-600);
   color: var(--color-status-positive-text);
 }
 

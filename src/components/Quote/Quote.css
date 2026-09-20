@@ -21,7 +21,7 @@
 
 .ds-quote--default .ds-quote__text {
   padding-left: var(--padding-500);
-  border-left: var(--border-md) solid var(--color-bg-container-tertiary);
+  border-left: var(--border-050) solid var(--color-bg-container-tertiary);
   font-family: var(--font-paragraph-family);
   font-size: var(--font-paragraph-size);
   font-weight: var(--font-paragraph-weight);

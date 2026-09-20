@@ -62,3 +62,7 @@ notes/
 .claude/memory/
 .claude/settings.local.json
 .claude/scheduled_tasks.lock
+
+# Next 16 auto-scaffolds these agent stubs on every build; ours live at the root
+website/AGENTS.md
+website/CLAUDE.md

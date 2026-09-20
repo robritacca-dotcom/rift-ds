@@ -61,6 +61,12 @@ const SUBPATHS = [
   { key: './tokens/motion', srcJs: './src/tokens/motion.ts', dist: './tokens/motion' },
   { key: './components/*', srcJs: './src/components/*.tsx', dist: './components/*' },
   { key: './tokens/*.css', asset: './src/tokens/*.css', dist: './tokens/*.css' },
+  // The generated data-brand preset stylesheets (see
+  // scripts/generate-preset-stylesheets.mjs). Already reachable through
+  // the ./tokens/*.css pattern above (Node wildcards span slashes), but
+  // declared explicitly so the surface is visible in the exports map and
+  // validate-package-exports holds the folder's existence on its own.
+  { key: './tokens/presets/*.css', asset: './src/tokens/presets/*.css', dist: './tokens/presets/*.css' },
   { key: './fonts/*', asset: './src/fonts/*', dist: './fonts/*' },
   { key: './package.json', asset: './package.json', dist: './package.json' },
 ];

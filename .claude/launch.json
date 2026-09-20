@@ -4,34 +4,58 @@
     {
       "name": "website",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["--prefix", "website", "run", "dev"],
+      "runtimeArgs": [
+        "--prefix",
+        "website",
+        "run",
+        "dev"
+      ],
       "port": 3000,
       "autoPort": true
     },
     {
       "name": "website-eval",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["--prefix", "website", "run", "dev:eval"],
+      "runtimeArgs": [
+        "--prefix",
+        "website",
+        "run",
+        "dev:eval"
+      ],
       "port": 3000,
       "autoPort": true
     },
     {
       "name": "website-prod",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["--prefix", "website", "run", "start"],
+      "runtimeArgs": [
+        "--prefix",
+        "website",
+        "run",
+        "start"
+      ],
       "port": 4310,
       "autoPort": true
     },
     {
       "name": "storybook",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "storybook"],
+      "runtimeArgs": [
+        "run",
+        "storybook"
+      ],
       "port": 6006
     },
     {
       "name": "storybook-raw",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["storybook", "dev", "-p", "6016", "--ci"],
+      "runtimeArgs": [
+        "storybook",
+        "dev",
+        "-p",
+        "6016",
+        "--ci"
+      ],
       "port": 6016
     }
   ]

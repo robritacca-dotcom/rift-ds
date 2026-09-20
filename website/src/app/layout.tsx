@@ -1,6 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import "@robr0/design-system/tokens/tokens.css";
+// Every generated data-brand preset theme (src/tokens/presets/): with the
+// bundle loaded site-wide, setting data-brand="<id>" on <html> rethemes
+// every page immediately, light and dark, with zero runtime JS.
+import "@robr0/design-system/tokens/presets/presets.css";
 // Single source of the Material Symbols base styles and icon-size scale.
 // Imported explicitly rather than relying on it arriving incidentally through
 // a component import, so pages that use raw .material-symbols-rounded spans

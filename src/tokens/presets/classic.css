@@ -1,0 +1,43 @@
+/*
+ * AUTO-GENERATED. Do not edit.
+ * Theme preset "classic" (Classic (pre-split teal)).
+ * Source of truth: website/src/lib/theme/presets.ts (THEME_PRESETS + presetOverrides).
+ * Regenerate: node scripts/generate-preset-stylesheets.mjs
+ * Import after tokens.css, then set data-brand="classic" on <html>.
+ */
+html[data-brand="classic"] {
+  --color-action-icon-active: var(--primitive-teal-02);
+  --color-action-primary-bg: var(--primitive-teal-07);
+  --color-action-primary-bg-active: var(--primitive-teal-09);
+  --color-action-primary-bg-hover: var(--primitive-teal-08);
+  --color-action-primary-border: var(--primitive-teal-09);
+  --color-action-primary-border-secondary: var(--primitive-teal-06);
+  --color-action-primary-border-tertiary: var(--primitive-teal-04);
+  --color-action-primary-text: var(--primitive-teal-02);
+  --color-action-primary-text-secondary: var(--primitive-teal-10);
+  --color-action-primary-text-tertiary: var(--primitive-teal-07);
+  --color-ai-gradient-end: var(--primitive-teal-06);
+  --color-core-ui-primary: var(--primitive-teal-07);
+  --color-core-ui-secondary: var(--primitive-teal-10);
+  --color-input-border-hover: var(--primitive-teal-04);
+  --color-input-border-selected: var(--primitive-teal-06);
+}
+
+html[data-brand="classic"][data-theme="dark"] {
+  --color-action-icon-active: var(--primitive-neutral-01);
+  --color-action-primary-bg: var(--primitive-teal-07);
+  --color-action-primary-bg-active: var(--primitive-teal-09);
+  --color-action-primary-bg-hover: var(--primitive-teal-08);
+  --color-action-primary-border: var(--primitive-teal-09);
+  --color-action-primary-border-secondary: var(--primitive-teal-06);
+  --color-action-primary-border-tertiary: var(--primitive-teal-04);
+  --color-action-primary-text: var(--primitive-teal-02);
+  --color-action-primary-text-active: var(--primitive-neutral-01);
+  --color-action-primary-text-secondary: var(--primitive-teal-10);
+  --color-action-primary-text-tertiary: var(--primitive-teal-07);
+  --color-ai-gradient-end: var(--primitive-teal-05);
+  --color-core-ui-primary: var(--primitive-teal-07);
+  --color-core-ui-secondary: var(--primitive-teal-09);
+  --color-input-border-hover: var(--primitive-teal-09);
+  --color-input-border-selected: var(--primitive-teal-06);
+}

@@ -6,8 +6,12 @@ import { ColorPicker } from "@robr0/design-system/components/ColorPicker/ColorPi
 import { Dialog } from "@robr0/design-system/components/Dialog/Dialog";
 import { Slider } from "@robr0/design-system/components/Slider/Slider";
 import {
+  ACCENT_NAMES,
   CHROMATIC_RAMPS,
+  SHIPPED_ACCENTS,
+  isAccentsPristine,
   isAdvancedPristine,
+  type AccentSextet,
   type AdvancedColorState,
   type Overrides,
 } from "@/lib/theme/theme-overrides";
@@ -17,9 +21,12 @@ export interface AdvancedColorsDialogProps {
   onOpenChange: (open: boolean) => void;
   /** The advanced-mode levers (hue/saturation + per-ramp bases). */
   state: AdvancedColorState;
+  /** The ambient accent sextet (--color-core-accent-*). */
+  accents: AccentSextet;
   /** Every override currently applied — paints the mini ramps live. */
   overrides: Overrides;
   onChange: (next: AdvancedColorState) => void;
+  onAccentsChange: (next: AccentSextet) => void;
   onResetColors: () => void;
 }
 
@@ -27,14 +34,19 @@ export interface AdvancedColorsDialogProps {
  * Advanced mode: every chromatic primitive ramp up front, small. Two
  * all-ramps levers on top; each row's picker rebases that ramp from a new
  * 07. The mini swatches read from the applied overrides, so they show the
- * same values the page behind the dialog is rendering.
+ * same values the page behind the dialog is rendering. Below the ramps,
+ * the ambient accent sextet — the six --color-core-accent-* roles that
+ * colour the background blobs and chart series 2–7 — gets a swatch row
+ * per role on the same row grammar.
  */
 export default function AdvancedColorsDialog({
   open,
   onOpenChange,
   state,
+  accents,
   overrides,
   onChange,
+  onAccentsChange,
   onResetColors,
 }: AdvancedColorsDialogProps) {
   const currentHex = (ramp: string, step: string, shipped: string) =>
@@ -62,7 +74,7 @@ export default function AdvancedColorsDialog({
             label="Reset colours"
             variant="secondary"
             iconLeft="restart_alt"
-            disabled={isAdvancedPristine(state)}
+            disabled={isAdvancedPristine(state) && isAccentsPristine(accents)}
             onClick={onResetColors}
           />
           <Button label="Done" variant="primary" onClick={() => onOpenChange(false)} />
@@ -157,6 +169,58 @@ export default function AdvancedColorsDialog({
           Teal is the action ramp: rebasing it moves every primary button and focus
           ring, same as the action colour picker.
         </p>
+
+        <div className={styles.advAccents}>
+          <h4 className={styles.controlHeading}>Ambient accents</h4>
+          {ACCENT_NAMES.map((name) => {
+            const label = name.charAt(0).toUpperCase() + name.slice(1);
+            const hex = accents[name].toUpperCase();
+            const moved = hex !== SHIPPED_ACCENTS[name].toUpperCase();
+            return (
+              <div className={styles.advRampRow} key={name}>
+                <span className={styles.advRampLabel}>{label}</span>
+                <div
+                  className={styles.advRamp}
+                  role="img"
+                  aria-label={`${label} ambient accent, ${hex}`}
+                >
+                  <span
+                    className={styles.advCell}
+                    style={{ background: hex }}
+                    title={`${label} accent · ${hex}`}
+                  />
+                </div>
+                <ColorPicker
+                  size="compact"
+                  value={accents[name]}
+                  onValueChange={(v) => onAccentsChange({ ...accents, [name]: v })}
+                  aria-label={`${label} ambient accent colour`}
+                  className={`${styles.advRampPicker} ${
+                    moved ? styles.customPickerActive : ""
+                  }`}
+                />
+                <button
+                  type="button"
+                  className={styles.advRampReset}
+                  onClick={() =>
+                    onAccentsChange({ ...accents, [name]: SHIPPED_ACCENTS[name] })
+                  }
+                  disabled={!moved}
+                  aria-label={`Reset ${label} accent`}
+                  title={`Reset ${label} accent`}
+                >
+                  <span className="material-symbols-rounded" aria-hidden="true">
+                    restart_alt
+                  </span>
+                </button>
+              </div>
+            );
+          })}
+          <p className={styles.controlNote}>
+            The accents colour the ambient background blobs and chart series 2–7
+            together, never semantic status.
+          </p>
+        </div>
       </div>
     </Dialog>
   );

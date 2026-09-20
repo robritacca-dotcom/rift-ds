@@ -6,8 +6,8 @@
  * means overriding primitives re-themes both light and dark modes at
  * once. Two deliberate exceptions ride the same pipeline: the typeface
  * levers set `--font-family-primary` (body) and `--font-family-heading`
- * (the heading role, when split from the body face), and the mono
- * preset's extraOverrides set semantic `--color-core-accent-*` values.
+ * (the heading role, when split from the body face), and the ambient
+ * accent lever sets the semantic `--color-core-accent-*` sextet.
  */
 
 export interface Overrides {
@@ -422,6 +422,56 @@ export function neutralOverrides(seedHex: string, strength: number): Overrides {
       const [r, g, b] = tinted.map((c) => Math.round(c));
       overrides[`--primitive-neutral-${step}${suffix}`] = `rgba(${r}, ${g}, ${b}, ${alpha})`;
     }
+  }
+  return overrides;
+}
+
+/* ---------- ambient accents ---------- */
+
+/** The six ambient accent roles, in display order. They colour the WebGL
+    background blobs (website/src/data/shader-background.json points every
+    blob at one) and feed chart series 2–7, so a sextet retunes the
+    ambient field and the categorical chart palette together. */
+export const ACCENT_NAMES = [
+  "coral",
+  "violet",
+  "cobalt",
+  "amber",
+  "gold",
+  "mint",
+] as const;
+
+export type AccentName = (typeof ACCENT_NAMES)[number];
+
+/** A complete ambient accent declaration — one hex per role. */
+export type AccentSextet = Record<AccentName, string>;
+
+/** The shipped accent values: the chromatic 07 keys the
+    `--color-core-accent-*` tokens resolve to in tokens-light.css. A
+    constant for the same reason as CHROMATIC_RAMPS (once overridden, the
+    DOM forgets the originals); held to the token CSS in both directions
+    by scripts/validate-theme-mirrors.mjs. */
+export const SHIPPED_ACCENTS: AccentSextet = {
+  coral: "#EF476F",
+  violet: "#9E47EF",
+  cobalt: "#1E47B0",
+  amber: "#EF8247",
+  gold: "#FFD166",
+  mint: "#06D6A0",
+};
+
+export const isAccentsPristine = (a: AccentSextet): boolean =>
+  ACCENT_NAMES.every(
+    (name) => a[name].toUpperCase() === SHIPPED_ACCENTS[name].toUpperCase()
+  );
+
+/** The sextet as its six semantic overrides. Always emits all six — a
+    theme declares the whole set; callers that want the shipped keys to
+    mean "no override" guard with isAccentsPristine first. */
+export function accentOverrides(accents: AccentSextet): Overrides {
+  const overrides: Overrides = {};
+  for (const name of ACCENT_NAMES) {
+    overrides[`--color-core-accent-${name}`] = accents[name];
   }
   return overrides;
 }

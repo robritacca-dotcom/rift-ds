@@ -1,6 +1,7 @@
 import type { DropdownOption } from "@robr0/design-system/components/Dropdown/Dropdown";
 import type { RichDropdownOption } from "@robr0/design-system/components/RichDropdown/RichDropdown";
 import {
+  ACCENT_NAMES,
   DEFAULT_BRAND,
   DEFAULT_BRAND_DARK,
   DEFAULT_NEUTRAL_SEED,
@@ -15,6 +16,7 @@ import {
   neutralOverrides,
   radiusOverrides,
   typeScaleOverrides,
+  type AccentSextet,
   type AdvancedColorState,
   type ElevationVariant,
   type Overrides,
@@ -50,6 +52,10 @@ export interface ThemePreset {
   /** Heading face when split from the body face; absent means the heading
       role follows the body typeface (the shipped single-face system). */
   headingFontLabel?: string;
+  /** The ambient accent sextet — the six `--color-core-accent-*` roles as
+      hexes. They colour the WebGL background blobs and feed chart series
+      2–7, so every theme must say what its ambient colours are. */
+  accents: AccentSextet;
   /** Hand-tuned adjacent ramp keys: every chromatic ramp re-keyed to sit
       in the theme (the action colour's own family is left to the action
       lever). Loads into the Advanced colours state. */
@@ -92,6 +98,16 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     motionScale: 100,
     elevation: "default",
     fontLabel: "Nunito Sans (default)",
+    // The shipped keys — this preset reverts the action split, not the
+    // ambient palette.
+    accents: {
+      coral: "#EF476F",
+      violet: "#9E47EF",
+      cobalt: "#1E47B0",
+      amber: "#EF8247",
+      gold: "#FFD166",
+      mint: "#06D6A0",
+    },
     extraOverrides: {
       "--color-action-primary-bg": "var(--primitive-teal-07)",
       "--color-action-primary-bg-hover": "var(--primitive-teal-08)",
@@ -135,6 +151,15 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     // humanist sans.
     fontLabel: "Source Sans 3",
     headingFontLabel: "Lora (serif)",
+    // Earth sextet: every ambient colour muted toward the terracotta key.
+    accents: {
+      coral: "#D4695F",
+      violet: "#A5789F",
+      cobalt: "#5E6FA8",
+      amber: "#E0955C",
+      gold: "#E7C175",
+      mint: "#7FAE8F",
+    },
     // Earthy neighbours: every hue muted and pulled a few degrees toward
     // the terracotta key. Orange is the action family, left alone.
     advanced: bases({
@@ -174,16 +199,16 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
       blue: "#4B5B83",
       purple: "#9C7BBB",
     }),
-    // Grey out the decorative accents (they colour the background glow
-    // blobs, among other things). Status colours are a separate token set
-    // and deliberately keep their meaning.
-    extraOverrides: {
-      "--color-core-accent-coral": "#A3A3A3",
-      "--color-core-accent-violet": "#8F8F8F",
-      "--color-core-accent-cobalt": "#5C5C5C",
-      "--color-core-accent-amber": "#B8B8B8",
-      "--color-core-accent-gold": "#C9C9C9",
-      "--color-core-accent-mint": "#ADADAD",
+    // Greyed accents: the background glow blobs and chart series go
+    // monochrome with the rest of the look. Status colours are a separate
+    // token set and deliberately keep their meaning.
+    accents: {
+      coral: "#A3A3A3",
+      violet: "#8F8F8F",
+      cobalt: "#5C5C5C",
+      amber: "#B8B8B8",
+      gold: "#C9C9C9",
+      mint: "#ADADAD",
     },
   },
   contrast: {
@@ -199,6 +224,15 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     motionScale: 100,
     elevation: "default",
     fontLabel: "IBM Plex Sans",
+    // Cool-leaning sextet: the ambient palette eased toward the cobalt key.
+    accents: {
+      coral: "#E86A9C",
+      violet: "#7D6BE8",
+      cobalt: "#2F5AE0",
+      amber: "#E89A5E",
+      gold: "#E8C56A",
+      mint: "#3FBFA8",
+    },
     // Cool neighbours: every hue eased toward the cobalt key and slightly
     // calmed. Blue is the action family, left alone.
     advanced: bases({
@@ -230,6 +264,15 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     elevation: "soft",
     fontLabel: "DM Sans",
     headingFontLabel: "Poppins",
+    // Sunset sextet: the ambient palette leans warm around the coral key.
+    accents: {
+      coral: "#FF5A5F",
+      violet: "#C86B98",
+      cobalt: "#5E7BD0",
+      amber: "#FF8E3C",
+      gold: "#FFC24B",
+      mint: "#2EBFA5",
+    },
     // Red is the action family, left alone.
     advanced: bases({
       orange: "#FC642D",
@@ -258,6 +301,15 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     elevation: "default",
     // One bold geometric face carries the whole look.
     fontLabel: "Space Grotesk",
+    // Warm bold sextet: the ambient palette keyed hot around the gold.
+    accents: {
+      coral: "#F58B5B",
+      violet: "#B78AD9",
+      cobalt: "#6E7FD9",
+      amber: "#FFAE4F",
+      gold: "#FFD166",
+      mint: "#7FC9A0",
+    },
     // Bold neighbours: every hue keyed hot around the gold. Yellow is
     // the action family, left alone.
     advanced: bases({
@@ -283,6 +335,16 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     motionScale: 80,
     elevation: "flat",
     fontLabel: "IBM Plex Mono",
+    // Phosphor band: the whole ambient sextet stays in the emerald band,
+    // like a single-phosphor display.
+    accents: {
+      coral: "#35D6A0",
+      violet: "#3DBFA8",
+      cobalt: "#2FA98F",
+      amber: "#57E0B0",
+      gold: "#7CE8C2",
+      mint: "#06D6A0",
+    },
     // Phosphor neighbours: hues lean toward the emerald key, slightly
     // softened. Green is the action family, left alone.
     advanced: bases({
@@ -312,6 +374,15 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     // The serif-over-sans split: Lora display over Work Sans text.
     fontLabel: "Work Sans",
     headingFontLabel: "Lora (serif)",
+    // Violet-leaning sextet: the ambient palette calmed around the key.
+    accents: {
+      coral: "#D96BA8",
+      violet: "#9E47EF",
+      cobalt: "#6A5BE0",
+      amber: "#D9915E",
+      gold: "#D9BE7A",
+      mint: "#6BAE9E",
+    },
     // Violet-leaning neighbours, slightly calmed. Purple is the action
     // family, left alone.
     advanced: bases({
@@ -512,6 +583,13 @@ export function presetOverrides(
     ? HEADING_FONT_OPTIONS.find((f) => f.label === preset.headingFontLabel)
     : undefined;
   if (headingFont?.family) merged["--font-family-heading"] = headingFont.family;
+
+  /* The ambient accent sextet, always all six — a declared lever, so a
+     stylesheet states its ambient colours even at the shipped keys. Just
+     before the extras, so a preset's extras could still specialise one. */
+  for (const name of ACCENT_NAMES) {
+    merged[`--color-core-accent-${name}`] = preset.accents[name];
+  }
 
   if (preset.extraOverrides) Object.assign(merged, preset.extraOverrides);
   if (theme === "dark" && preset.extraOverridesDark) {

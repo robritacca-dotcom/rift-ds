@@ -16,6 +16,12 @@ export const BRAND_MARK_PATHS = [
 
 export const BRAND_MARK_STROKE_WIDTH = 2.4;
 
-/** Gradient stops, top to bottom — the action teals. */
+/**
+ * Gradient stops for the FAVICON ROUTES ONLY (ImageResponse renders
+ * server-side and cannot resolve CSS variables) — the shipped action
+ * teals, frozen. The in-page BrandMark component reads the live action
+ * tokens instead, so the mark re-themes with every data-brand swap;
+ * browser-chrome icons stay the brand's home colours by nature.
+ */
 export const BRAND_MARK_COLOR_TOP = "#3CA5C6";
 export const BRAND_MARK_COLOR_BOTTOM = "#0E6E8F";

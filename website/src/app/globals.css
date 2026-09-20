@@ -205,12 +205,22 @@ a {
   top: 0;
   left: 0;
   right: 0;
-  /* 450px → 675px: the shader band runs half again further down the page,
-     with the fade below keeping the lower stretch legible. */
-  height: 675px;
+  /* The standard band, trimmed 20% from its 675px pass: the 450px fade
+     now starts 90px in, so sub-pages show a brief glow that masks out
+     quickly. The home page overrides this with its own extended band
+     (the data-bg-extended rule below). */
+  height: 540px;
   overflow: hidden;
   pointer-events: none;
   z-index: -1;
+}
+
+/* Extended band — the home page only: the mask sits one step lower than
+   the standard band, so the hero breathes but the page still scrolls
+   clear of the gradient. Declared by the ExtendedBackground marker,
+   exactly like the full-bleed variant below. */
+body:has([data-bg-extended]) .blur-container {
+  height: 900px;
 }
 
 /* Full-bleed variant. The background is mounted once in the root layout and

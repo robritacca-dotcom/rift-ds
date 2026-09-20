@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import MegaNav from "../components/MegaNav/MegaNav";
+import { ExtendedBackground } from "../components/BlurBackground/BlurBackground";
 import FadeDivider from "../components/FadeDivider/FadeDivider";
 import styles from "./page.module.css";
 import { NPM_URL, REPOSITORY_URL, STORYBOOK_URL } from "@/config/brand.generated";
@@ -418,10 +419,12 @@ function ThemeSwitcher() {
   }, []);
 
   const pick = (id: string) => {
+    /* setAttribute/removeAttribute rather than the dataset proxy: the
+       hooks lint reads a dataset assignment as mutating shared state. */
     if (id === "default") {
-      delete document.documentElement.dataset.brand;
+      document.documentElement.removeAttribute("data-brand");
     } else {
-      document.documentElement.dataset.brand = id;
+      document.documentElement.setAttribute("data-brand", id);
     }
     /* Same persistence contract as the light/dark toggle: the pick holds
        across every page until the visitor changes it or clears storage
@@ -478,6 +481,7 @@ export default function DesignSystemLanding() {
 
   return (
     <>
+      <ExtendedBackground />
       <MegaNav />
 
       <main className={styles.page} id="main-content">

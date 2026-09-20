@@ -610,6 +610,65 @@ function checkLeverTables() {
 }
 
 /* ------------------------------------------------------------------ */
+/* 4c. SHIPPED_ACCENTS ↔ the --color-core-accent-* tokens              */
+/*     The accents lever's shipped seed (theme-overrides.ts) is held    */
+/*     to tokens-light.css in BOTH directions: every entry's hex must   */
+/*     equal what its --color-core-accent-<name> token resolves to      */
+/*     (following var() through the primitives), and every accent       */
+/*     token in the CSS must have an entry — a renamed or retuned       */
+/*     accent cannot leave the playground seeding a stale key.          */
+/* ------------------------------------------------------------------ */
+function checkShippedAccents() {
+  const block = overridesSource.match(/const SHIPPED_ACCENTS[^=]*=\s*\{([\s\S]*?)\n\};/);
+  if (!block) {
+    errors.push(`${overridesRel}: could not parse SHIPPED_ACCENTS — the accent mirror guard needs it`);
+    return;
+  }
+  const mirrored = new Map(
+    [...block[1].matchAll(/([a-z]+):\s*"(#[0-9A-Fa-f]{6})"/g)].map((m) => [m[1], m[2]])
+  );
+  if (mirrored.size === 0) {
+    errors.push(`${overridesRel}: parsed no entries out of SHIPPED_ACCENTS — the accent mirror guard needs them`);
+    return;
+  }
+
+  const resolveHex = (name) => {
+    let current = lightDecls.get(name) ?? primitives.get(name);
+    for (let depth = 0; current !== undefined && depth < 8; depth++) {
+      const m = current.match(/^var\((--[a-z0-9-]+)\)$/);
+      if (!m) return current;
+      current = lightDecls.get(m[1]) ?? primitives.get(m[1]);
+    }
+    return current;
+  };
+
+  for (const [name, hex] of mirrored) {
+    const token = `--color-core-accent-${name}`;
+    if (!lightDecls.has(token)) {
+      errors.push(`${overridesRel}: SHIPPED_ACCENTS lists "${name}", but ${token} does not exist in tokens-light.css`);
+      continue;
+    }
+    const resolved = resolveHex(token);
+    if (typeof resolved !== 'string' || resolved.toLowerCase() !== hex.toLowerCase()) {
+      errors.push(
+        `${overridesRel}: SHIPPED_ACCENTS.${name} is ${hex} but ${token} resolves to ${resolved ?? 'nothing'} in tokens-light.css`
+      );
+    }
+  }
+  for (const [name] of lightDecls) {
+    const m = name.match(/^--color-core-accent-([a-z]+)$/);
+    if (m && !mirrored.has(m[1])) {
+      errors.push(
+        `${overridesRel}: tokens-light.css defines ${name}, but SHIPPED_ACCENTS has no "${m[1]}" entry — the accents lever cannot seed it`
+      );
+    }
+  }
+  summaries.push(
+    `SHIPPED_ACCENTS matches the ${mirrored.size} --color-core-accent-* tokens' resolved keys (both directions)`
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* 5. presets.ts custom-property names all exist                       */
 /* ------------------------------------------------------------------ */
 function checkPresetTokenNames() {
@@ -786,6 +845,7 @@ checkActionColorPresets();
 checkActionSemanticRefs();
 checkRadiusSteps();
 checkLeverTables();
+checkShippedAccents();
 checkPresetTokenNames();
 checkInspectModePrefixes();
 checkSpatialPage();

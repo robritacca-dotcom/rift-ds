@@ -23,6 +23,11 @@
  *      short-circuits that hex to a null plan by design and the shipped
  *      token files carry the family. Anything else must say what the
  *      action colour is, or the preset silently inherits the teal.
+ *      The ambient accent sextet (--color-core-accent-*) is required too,
+ *      with NO intended-default exemption: the accents are a declared
+ *      lever (they drive the background blobs and chart series 2-7), so
+ *      every preset must emit all six in both themes — the shipped keys
+ *      are still a declaration.
  *   c. WCAG AA — the resolved action-primary bg and text must contrast
  *      at 4.5:1 or better in both themes. Resolution follows var()
  *      chains through the preset's own override map first, then the
@@ -94,6 +99,18 @@ const REQUIRED_ACTION_ROLES = [
   '--color-action-primary-bg-hover',
   '--color-action-primary-bg-active',
   '--color-action-primary-text',
+];
+
+/* The ambient accent sextet is a declared lever on every preset — unlike
+   the action family there is no intended-default exemption (see doc
+   block, check b). */
+const REQUIRED_ACCENT_ROLES = [
+  '--color-core-accent-coral',
+  '--color-core-accent-violet',
+  '--color-core-accent-cobalt',
+  '--color-core-accent-amber',
+  '--color-core-accent-gold',
+  '--color-core-accent-mint',
 ];
 
 const errors = [];
@@ -188,6 +205,17 @@ for (const [id, preset] of Object.entries(THEME_PRESETS)) {
       }
     }
 
+    // b (continued). Ambient accent coverage — all six, no exemption.
+    for (const role of REQUIRED_ACCENT_ROLES) {
+      const value = overrides[role];
+      if (typeof value !== 'string' || value.trim().length === 0) {
+        errors.push(
+          `preset "${id}" (${theme}): ${role} is ${value === undefined ? 'not declared' : 'empty'} — ` +
+            `the ambient accent sextet is a required lever (it drives the background blobs and chart series 2-7)`
+        );
+      }
+    }
+
     // c. WCAG AA between the resolved action bg and text.
     const resolveRgb = (name, fallbackBg) => {
       const value = resolveValue(name, theme, overrides);
@@ -234,6 +262,6 @@ if (errors.length > 0) {
 
 console.log(
   `✓ Theme presets complete — ${Object.keys(THEME_PRESETS).length} presets × 2 themes: every override names a real token, ` +
-    `the action family is covered, and action bg/text holds AA across ${cells} cells ` +
+    `the action family and all ${REQUIRED_ACCENT_ROLES.length} ambient accents are covered, and action bg/text holds AA across ${cells} cells ` +
     `(${SANCTIONED_AA_GAPS.size} pinned sub-AA cells, worst ratio ${minRatio.toFixed(2)}:1).`
 );

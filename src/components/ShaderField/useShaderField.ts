@@ -547,7 +547,9 @@ export function useShaderField(
     };
     document.addEventListener("visibilitychange", onVisibility);
 
-    // data-theme drives the palette; the style filter catches a consumer
+    // data-theme and data-brand both drive the palette (a data-brand theme
+    // swap re-points the same custom properties from a stylesheet, which no
+    // style mutation ever announces); the style filter catches a consumer
     // writing custom-property overrides live. Coalesced to a flag: one drag
     // emits dozens of records, and colours are re-read at most once per frame.
     const themeObserver = new MutationObserver(() => {
@@ -561,7 +563,7 @@ export function useShaderField(
     });
     themeObserver.observe(document.documentElement, {
       attributes: true,
-      attributeFilter: ["data-theme", "style"],
+      attributeFilter: ["data-theme", "data-brand", "style"],
     });
 
     const resizeObserver = new ResizeObserver(() => {

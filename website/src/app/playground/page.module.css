@@ -416,6 +416,16 @@
   cursor: not-allowed;
 }
 
+/* The ambient accent sextet — the same row grammar as the ramps, one
+   full-width swatch per accent role, fenced off like the global levers. */
+.advAccents {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+  padding-top: var(--gap-400);
+  border-top: var(--border-025) solid var(--color-divider);
+}
+
 /* The same control groups, hosted by the Drawer: a plain column — the
    Drawer brings the shell, the scroll, and the title. */
 .drawerControls {

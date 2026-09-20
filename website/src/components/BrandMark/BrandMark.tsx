@@ -1,15 +1,14 @@
 import { useId } from "react";
-import {
-  BRAND_MARK_PATHS,
-  BRAND_MARK_STROKE_WIDTH,
-  BRAND_MARK_COLOR_TOP,
-  BRAND_MARK_COLOR_BOTTOM,
-} from "@/config/brand-mark";
+import { BRAND_MARK_PATHS, BRAND_MARK_STROKE_WIDTH } from "@/config/brand-mark";
 
 /**
  * The brand mark, inline — the one component every chrome surface renders
  * (header wordmark, footer, drawer). The favicon routes draw the same
- * paths from @/config/brand-mark, so the mark cannot fork.
+ * paths from @/config/brand-mark, so the mark cannot fork. The gradient
+ * reads the live action tokens, so the mark wears whichever theme is on:
+ * gold under Crisp gold, ink under Black & white, teal in the shipped
+ * look. The favicons keep the frozen teals (browser chrome cannot read
+ * CSS variables).
  */
 export default function BrandMark({
   size = 24,
@@ -50,8 +49,8 @@ export default function BrandMark({
           y2="20"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stopColor={BRAND_MARK_COLOR_TOP} />
-          <stop offset="1" stopColor={BRAND_MARK_COLOR_BOTTOM} />
+          <stop style={{ stopColor: "var(--color-action-primary-bg)" }} />
+          <stop offset="1" style={{ stopColor: "var(--color-action-primary-bg-active)" }} />
         </linearGradient>
       </defs>
     </svg>

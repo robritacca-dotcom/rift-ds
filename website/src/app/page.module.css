@@ -6,7 +6,9 @@
 .page {
   position: relative;
   z-index: 1;
-  max-width: 1280px;
+  /* Matches the header's headerInner max-width, so the collage's outer
+     card edges land exactly under the logo and the theme toggle. */
+  max-width: 1440px;
   min-width: 0; /* a flex-item main must not grow to the chart's intrinsic width */
   margin: 0 auto;
   /* Same token every other page puts above its title, so the h1 sits at
@@ -22,7 +24,10 @@
   align-items: center;
   text-align: center;
   gap: var(--gap-400);
-  max-width: 1080px;
+  /* Full container width: the mega title must fit one line in every
+     theme's face, and the monospace themes run wide (terminal was
+     wrapping "Dragonspine DS" inside the old 1080px cap). */
+  max-width: 100%;
   /* Section-rhythm token rather than a fixed margin: it steps down at
      768px on its own, so the mobile override below isn't needed. */
   margin: 0 auto var(--gap-1500);

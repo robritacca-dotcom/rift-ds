@@ -21,11 +21,15 @@ import {
   DEFAULT_NEUTRAL_SEED,
   FONT_OPTIONS,
   HEADING_FONT_OPTIONS,
+  SHIPPED_ACCENTS,
+  type AccentSextet,
   type AdvancedColorState,
   type Overrides,
+  accentOverrides,
   actionColorPlan,
   advancedColorOverrides,
   buildCssSnippet,
+  isAccentsPristine,
   googleFontHref,
   isAdvancedPristine,
   neutralOverrides,
@@ -192,11 +196,16 @@ export default function PlaygroundPage() {
   const [advOpen, setAdvOpen] = useState(false);
   const [cssOpen, setCssOpen] = useState(false);
   const [advColors, setAdvColors] = useState<AdvancedColorState>(DEFAULT_ADVANCED);
+  /* The ambient accent sextet — the six --color-core-accent-* roles,
+     which colour the background blobs and chart series 2–7 together.
+     Seeded by a preset, hand-picked in the Advanced colours dialog. */
+  const [accents, setAccents] = useState<AccentSextet>(SHIPPED_ACCENTS);
 
-  /** The last-chosen preset's non-lever state (mono's greyed accents, its
-      theme-dependent action colour). Kept separate from `preset` so Custom
-      inherits it — touching one lever must only change that lever, never
-      snap the rest of the look back to the shipped defaults. */
+  /** The last-chosen preset's non-lever state (classic's pinned teal
+      extras, mono's theme-dependent action colour). Kept separate from
+      `preset` so Custom inherits it — touching one lever must only change
+      that lever, never snap the rest of the look back to the shipped
+      defaults. */
   const [presetExtras, setPresetExtras] = useState<
     Pick<ThemePreset, "brandDark" | "extraOverrides" | "extraOverridesDark">
   >({});
@@ -250,6 +259,7 @@ export default function PlaygroundPage() {
     const p = THEME_PRESETS[value];
     if (!p) return; // "custom" — keep the current levers
     setAdvColors(p.advanced ?? DEFAULT_ADVANCED); // harmonized ramp keys
+    setAccents({ ...p.accents }); // the theme's ambient sextet
     setPresetExtras({
       brandDark: p.brandDark,
       extraOverrides: p.extraOverrides,
@@ -328,6 +338,11 @@ export default function PlaygroundPage() {
       Object.assign(merged, motionScaleOverrides(motionScale / 100));
     }
     Object.assign(merged, elevationOverrides(elevation, theme === "dark" ? "dark" : "light"));
+    /* The ambient accents apply whenever any differs from the shipped
+       keys — mirroring presetOverrides' placement just before the extras. */
+    if (!isAccentsPristine(accents)) {
+      Object.assign(merged, accentOverrides(accents));
+    }
     if (presetExtras.extraOverrides) {
       Object.assign(merged, presetExtras.extraOverrides);
     }
@@ -338,7 +353,7 @@ export default function PlaygroundPage() {
       Object.assign(merged, advancedColorOverrides(advColors, merged));
     }
     return merged;
-  }, [actionPlan, theme, tintOn, tintSeed, tintStrength, radiusScale, pill, density, typeScale, motionScale, elevation, presetExtras, advColors]);
+  }, [actionPlan, theme, tintOn, tintSeed, tintStrength, radiusScale, pill, density, typeScale, motionScale, elevation, accents, presetExtras, advColors]);
 
   /* ---------- apply to the whole page ----------
      The shared hook writes to :root (where the semantic layer is declared,
@@ -388,6 +403,7 @@ export default function PlaygroundPage() {
     setPreset("default");
     setPresetExtras({});
     setAdvColors(DEFAULT_ADVANCED);
+    setAccents(SHIPPED_ACCENTS);
     setBrand(DEFAULT_BRAND);
     setTintOn(false);
     setTintSeed(DEFAULT_NEUTRAL_SEED);
@@ -652,9 +668,14 @@ export default function PlaygroundPage() {
           open={advOpen}
           onOpenChange={setAdvOpen}
           state={advColors}
+          accents={accents}
           overrides={overrides}
           onChange={changeAdvColors}
-          onResetColors={() => setAdvColors(DEFAULT_ADVANCED)}
+          onAccentsChange={asCustom(setAccents)}
+          onResetColors={() => {
+            setAdvColors(DEFAULT_ADVANCED);
+            setAccents(SHIPPED_ACCENTS);
+          }}
         />
 
         {/* The generated CSS, inspectable from any view — the rail's Copy

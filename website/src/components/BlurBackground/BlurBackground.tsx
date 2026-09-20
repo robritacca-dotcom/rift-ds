@@ -36,6 +36,16 @@ export function FullBleedBackground() {
 }
 
 /**
+ * Marker for the extended band: the home page's hero-and-collage opening
+ * wants the ambient field running well past the first card row before the
+ * fade, where every other page keeps the standard band. Same marker
+ * mechanism as FullBleedBackground; globals.css owns the height.
+ */
+export function ExtendedBackground() {
+  return <div data-bg-extended hidden />;
+}
+
+/**
  * Marker a page renders to hide the background entirely, leaving the flat page
  * colour — the dotted stages (the playground and the canvas board) render it
  * beside their DotBackground ground, and the marketing-dashboard template sets

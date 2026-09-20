@@ -260,10 +260,12 @@
   cursor: pointer;
   color: var(--color-text-secondary);
   /* Wide enough for the full "Search or ask anything" placeholder plus the
-     icon and the ⌘K keycaps, with the keys' auto margin absorbing the rest. */
-  width: 264px;
+     icon and the ⌘K keycaps in EVERY theme's face — the monospace themes
+     run widest, and the label must never wrap to two lines. */
+  width: 320px;
   height: 40px;
   --icon-size: var(--icon-size-500);
+  white-space: nowrap;
   /* Input's own hover transition, so the border responds at the same pace. */
   transition:
     background var(--motion-duration-base) var(--motion-ease-standard),

@@ -75,7 +75,11 @@ if (!toolsArray) {
 }
 
 /** Files whose prose states the tool count. Add a file here when a new surface does. */
-const COUNTED_SURFACES = ['README.md', 'website/src/app/overview/page.tsx'];
+/* The README stopped counting the tools in the 2026-09-20 adoption
+   rewrite (it names what they serve instead — genre convention keeps
+   counts off the README); /overview still states the number, so the
+   count stays validator-held where it appears. */
+const COUNTED_SURFACES = ['website/src/app/overview/page.tsx'];
 
 const NUMBER_WORDS = {
   one: 1, two: 2, three: 3, four: 4, five: 5, six: 6,

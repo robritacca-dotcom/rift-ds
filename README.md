@@ -1,201 +1,96 @@
-# Dragonspine DS: an AI-ready design system
+<a href="https://dragonspine.vercel.app"><img src=".github/readme-banner.jpg" alt="Dragonspine DS, the AI-ready React design system" width="100%"></a>
 
-[![CI](https://github.com/robritacca-dotcom/dragonspine/actions/workflows/ci.yml/badge.svg)](https://github.com/robritacca-dotcom/dragonspine/actions/workflows/ci.yml)
+# Dragonspine DS
+
 <!-- npm-badge:start -->
 [![npm](https://img.shields.io/npm/v/@robr0%2Fdesign-system?logo=npm&color=CB3837)](https://www.npmjs.com/package/@robr0/design-system)
 <!-- npm-badge:end -->
+[![license: MIT](https://img.shields.io/badge/license-MIT-4c1)](LICENSE)
 
-An AI-ready React design system, the docs site built on it, and the AI layer that lets the site answer questions about itself. Claude Code builds all of it from the written specs in this repo (`CLAUDE.md` for the rules, `design.md` for the design language, `content-design.md` for how every word reads), and generated registries keep this README and the docs site from drifting.
+An open source React design system built for AI products and coding agents: components on a three-tier token architecture, complete theme presets that restyle everything with one attribute, and machine surfaces (an MCP endpoint, per-component contracts, an installable agent skill) so your coding agent knows the library as well as you do.
 
-**[→ Live site](https://dragonspine.vercel.app/)** · **[→ Storybook](https://dragonspine-storybook.vercel.app/?path=/docs/dragonspine-ds--docs)**
+## Documentation
 
-The **live site** is the documentation site built on the design system. **Storybook** is the interactive component explorer for the design system itself. They deploy separately: two Vercel projects from one repo.
+Everything deep lives on the docs site: **[dragonspine.vercel.app](https://dragonspine.vercel.app/)**, with live examples, foundations, templates, the playground, and the **[get-started guide](https://dragonspine.vercel.app/docs/get-started)**. **[Storybook](https://dragonspine-storybook.vercel.app/?path=/docs/dragonspine-ds--docs)** is the interactive component explorer.
 
----
-
-## Three parts, one repo
-
-| Part | Description |
-|---|---|
-| **Documentation website** (`/website`) | Next.js app documenting every component with live examples, foundations, templates, and the playground, all built exclusively with the design system components below. **[Live site →](https://dragonspine.vercel.app/)** |
-| **Design system** (`/src`) | <!-- component-count -->132<!-- /component-count --> React components, a three-tier token architecture, dark mode, a WebGL2 ambient background that themes itself from your tokens, and a full documentation site. Built to production standards. **[Storybook →](https://dragonspine-storybook.vercel.app/?path=/docs/dragonspine-ds--docs)** |
-| **AI layer** (`ai` components in `/src`, chat in `/website`, `/evals`) | A site-wide chat that answers questions about the work: built from the library's own `ai` components, grounded in a corpus generated from the site's published content plus lookup tools over the generated prop and token contracts, and scored by a golden-set eval. An MCP endpoint serves the same public data to any agent. |
-
----
-
-## Design system
-
-### Components
-
-<!-- component-list:start -->
-Accordion · Agent plan · Agent status · AI button · Alert · Alert dialog · Anchor nav · Animated number · App layout · App sidebar · Area chart · Avatar · Avatar group · Badge · Banner · Bar chart · Breadcrumb · Button · Button group · Card · Card stack · Carousel · Chat header · Chat marker · Chat message · Chat thread · Checkbox · Chip · Circular button · Code block · Code diff · Colour picker · Combo chart · Combobox · Command palette · Composer · Contact card · Context menu · Contribution graph · Data table · Date input · Date picker · Dialog · Divider · Document chip · Drawer · Dropdown · Dropdown menu · Empty state · Entity card · Event calendar · Field · Figure · File input · Filter bar · Funnel chart · Gantt chart · Gauge · Globe · Hover card · Image compare · Input · Instructions · Interrupt card · Kbd · Legend tile · Lightbox · Line chart · Link list · Map callout · Map legend · Message actions · Message card · Meter · Model picker · Nav · Nav list · Notification centre · Number input · Pagination · Panel · Pie chart · Pin input · Popover · Progress bar · Prompt suggestions · Prose · Quote · Radar chart · Radial chart · Radio button · Rating · Reasoning · Rich dropdown · Scatter chart · Section title · Segmented control · Selection card · Shader field · Skeleton · Slider · Source chip · Source trail · Sparkline · Spinner · Split button · Split pane · Stacked bar chart · Stat · Status dot · Stepper · Streaming text · Swatch · Table · Tabs · Tag input · Textarea · Thread panel · Thread tabs · Time picker · Timeline · Toast · Toggle group · Toggle switch · Tool call · Toolbar · Tooltip · Tree view · Treemap · Usage card · Waveform · World map
-<!-- component-list:end -->
-
-### Ambient background
-
-The package ships more than components. **Shader field** is a WebGL2 canvas that sums soft Gaussian light sources into an ambient field of colour, and every source reads a semantic colour token at runtime. Override a primitive and the background re-themes with the rest of the system, in both themes, with nothing wired up:
-
-```tsx
-import { ShaderField, type ShaderFieldStatus } from '@robr0/design-system';
-
-const [status, setStatus] = useState<ShaderFieldStatus>('pending');
-
-<div style={{ position: 'fixed', inset: 0, zIndex: -1 }}>
-  {status === 'unavailable' && <YourCssFallback />}
-  <ShaderField params={{ streak: 0.4 }} onStatusChange={setStatus} />
-</div>
-```
-
-Eight parameters describe the look, and a composition is a table of token names with positions and drift periods, so a negative weight cuts a shadow through the field instead of adding light to it.
-
-It asks two things of you, both deliberate. It fills a positioned ancestor you provide, because where a background sits is a layout decision rather than a rendering one. And it never decides what to paint instead of itself: it reports `pending`, `active` or `unavailable`, and one fallback covers every way it can fail (no WebGL2, a blocked or lost GPU context, a renderer that stalls before its first frame, or `enabled={false}` as a kill switch). `pending` is the state worth handling. Paint neither layer while the context comes up, or the swap a frame later reads as two backgrounds loading in sequence.
-
-It checks `prefers-reduced-motion` in JavaScript rather than through the motion tokens, because the CSS guard cannot see a JS-driven loop. Set the preference and it draws a single static frame.
-
-The background behind this site is that component, with eight blurred CSS discs kept painted underneath as its fallback. The **[component page](https://dragonspine.vercel.app/components/shader-field)** is a live demo, and the **[setup guide](https://dragonspine.vercel.app/docs/get-started)** has the wiring.
-
-### Using the package
-
-The design system is published as [`@robr0/design-system`](https://www.npmjs.com/package/@robr0/design-system) (React 19+ is a peer dependency). The **[full setup guide](https://dragonspine.vercel.app/docs/get-started)** expands on everything in this section:
+## Install
 
 ```bash
 npm install @robr0/design-system
 ```
 
-The package is ESM-only and resolved via `exports` subpaths: use a bundler that handles CSS and font imports from `node_modules` (Vite, Next.js, webpack), and set TypeScript's `moduleResolution` to `"bundler"` (or `"nodenext"`).
-
-Import the token stylesheet once (it carries the primitives, semantic tokens, and both themes), then use components:
+Import the token stylesheet once, then use components:
 
 ```tsx
 import '@robr0/design-system/tokens/tokens.css';
 import { Button, Card, Badge } from '@robr0/design-system';
 ```
 
-Deep imports work too (`@robr0/design-system/components/Button/Button`). The Recharts-backed charts live behind a separate entry so the optional `recharts` peer dependency is only needed if you use them; the dependency-free charts export from the main barrel with everything else:
+React 19+ is a peer dependency. The package is ESM-only and resolved via `exports` subpaths: use a bundler that handles CSS and font imports from `node_modules` (Vite, Next.js, webpack) and set TypeScript's `moduleResolution` to `"bundler"` or `"nodenext"`. The Recharts-backed charts live behind `@robr0/design-system/charts`, so the optional `recharts` peer dependency is only needed if you use them. Prefer owning the source? Clone this repo and build on it directly; all of it is MIT.
 
-```tsx
-import { BarChart, LineChart } from '@robr0/design-system/charts';
-```
+## Set up your agent
 
-**Theming and customisation** happen through CSS variables; there is no configuration API. Components are provider-free, with one exception: wrap your tree in `ToastProvider` if (and only if) you use the toast queue via `useToast`.
-
-- **Dark mode**: set `data-theme="dark"` on the root element (light is the default).
-- **Font**: the whole type scale chains to one token. Load any font you like and override it:
-  ```css
-  :root { --font-family-primary: 'Inter', sans-serif; }
-  ```
-  To pair a heading face with a body face, override the two family roles instead: display and heading styles read one, body styles the other, and both default to the primary token.
-  ```css
-  :root {
-    --font-family-heading: 'Fraunces', serif;
-    --font-family-body: 'Inter', sans-serif;
-  }
-  ```
-- **Colours, radius, spacing**: every semantic token chains to a primitive, so overriding a primitive re-themes everything built on it. The action colour is theme-split by design (light fills run teal-08/09/10, dark inverts to teal-05/04/03), and the six fill steps below are the core of a rebrand:
-  ```css
-  :root {
-    --primitive-teal-08: #6D31D3;  /* light fill */
-    --primitive-teal-09: #4C2293;  /* light hover */
-    --primitive-teal-10: #2E1560;  /* light active, dark label */
-    --primitive-teal-05: #A78BFA;  /* dark fill */
-    --primitive-teal-04: #C4B5FD;  /* dark hover */
-    --primitive-teal-03: #DDD6FE;  /* dark active */
-    --primitive-radius-pill: 12px; /* pill buttons become rounded rectangles */
-  }
-  ```
-  A complete rebrand re-keys the whole teal ramp (00-11): the remaining steps carry the primary label, active icons, hover/selected input borders, and the AI gradient, so stopping at the six fills leaves those teal. The easiest way to get all of it right is the [playground](https://dragonspine.vercel.app/playground): restyle the system live and copy out a complete, paste-ready override.
-
-Icons use a bundled Material Symbols Rounded variable font (woff2): components import it themselves, so they need no extra setup. If you render raw `.material-symbols-rounded` spans of your own, import `@robr0/design-system/fonts/material-symbols.css` once. No text face is bundled: the whole scale chains to family tokens, the shipped themes mix serif, sans and mono pairings over the same components, and the default resolves to Nunito Sans: load any font and point `--font-family-primary` (or the heading/body roles) at it.
-
-### Token architecture
-
-Tokens flow in one direction, and primitives are never referenced directly in components:
-
-```
-tokens-primitives.css      --primitive-teal-08: #0E6E8F
-        ↓
-tokens-light/dark.css      --color-action-primary-bg: var(--primitive-teal-08)
-        ↓
-Component CSS              background-color: var(--color-action-primary-bg)
-```
-
-Dark mode is driven by `data-theme="dark"` on the root element, with no `prefers-color-scheme` queries in components.
-
-### Design principles
-
-Stated as token roles on purpose. What each role resolves to is the theme, and yours to override:
-
-- **Style with semantic tokens, never raw values**: that is what makes one primitive override cascade through everything
-- **One typeface**, hierarchy carried by weight contrast
-- **The primary-action token means "click here"**: CTAs and focus only, never decoration
-- **Shape is a per-element-type token**, not a per-instance choice
-- **Five status roles** (info, positive, warning, error, neutral) shared by every status-bearing component
-- **Depth is token-owned**: the container ramp plus the system's elevation tokens, and components don't bring their own shadows
-
-The defaults behind each role, and every component spec, live in [`design.md`](design.md).
-
----
-
-## AI layer
-
-The library's `ai` category is the interface half: chat primitives (Chat thread, Chat message, Composer), agent-state components (Tool call, Reasoning, Agent status), and the session surfaces around a conversation (Thread panel, Thread tabs, Usage card). Those components ship in the npm package; the rest of the chat does not. The conversation state hook, the streaming transport, the backend route, the corpus, and the shared lookup-tool module are this site's own code under `website/`, and a consumer builds their own equivalents, with their LLM API key held server-side, never in the client. The site's own chat, Dragonspine GPT, is built from the shipped primitives, so it doubles as a live demo of the components it is made of.
-
-The answering half is a Claude-backed route (`website/src/app/api/chat/route.ts`) with a persona and guardrails. `scripts/generate-site-corpus.mjs` compiles the prose in every published page's route folder, the data registries, and the root specs into one corpus at build time, and the model reads it whole. For what the corpus deliberately omits, the component prop API and the token registry, the model carries two deterministic lookup tools, implemented once in `website/src/lib/site-tools.ts` and shared with the MCP endpoint below. The corpus is public-only, the tools read only generated, already-published data, and a validator enforces the boundary. Nothing reaches the model that is not already on the site, so a prompt injection has nothing private to leak. The route also deploys ahead of its keys, so an unconfigured deploy answers with a polite notice rather than throwing.
-
-Answers are measured, not assumed. `evals/chat` holds a golden set that runs through the real route (persona, corpus, guardrails, all of it) with `npm run eval:chat`; it costs real API calls, so it runs on demand and never in CI. A second validator fails the build when a golden-set fact is missing from the corpus, which keeps the eval and the site describing the same system.
-
-The AI layer also serves machines directly. The live site exposes a Model Context Protocol endpoint at `https://dragonspine.vercel.app/api/mcp`: a stateless Streamable HTTP server with five tools covering the component list, per-component prop APIs, the design tokens, install setup, and full-text search over the same corpus the chat reads. No key, no account; every tool reads only published, generated data. The prop API is built from the same JSDoc that produces the published `.d.ts`, so an agent consuming the package reads the exact contract npm ships:
-
-```bash
-claude mcp add --transport http dragonspine-ds https://dragonspine.vercel.app/api/mcp
-```
-
-The same generated data is served as files too: every component's prop contract lives at `https://dragonspine.vercel.app/components/<slug>.md` beside its docs page, and a generated agent skill (a `SKILL.md` plus its `references/components.md` catalogue, under `https://dragonspine.vercel.app/skill/dragonspine-design-system/`) can be saved as a pair into a project's own skills folder so a coding agent carries the library's install, theming and catalogue rules into every session. One command does it, fetching the current pair from the live site and printing the MCP connect line:
+One command teaches a coding agent the system: it installs the generated agent skill into your project and prints the MCP connect line.
 
 ```bash
 npx @robr0/design-system init
 ```
 
-The [setup guide](https://dragonspine.vercel.app/docs/get-started) has the details and a curl fallback.
+The MCP endpoint serves the component catalogue, per-component prop APIs, the token registry, install setup, and docs search to any client. No key, no account, no model calls: every tool reads only published, generated data, built from the same JSDoc that produces the shipped `.d.ts`, so an agent reads the exact contract npm ships.
 
----
+```bash
+claude mcp add --transport http dragonspine-ds https://dragonspine.vercel.app/api/mcp
+```
+
+Every component's prop contract is also plain markdown (append `.md` to its docs URL), and [llms.txt](https://dragonspine.vercel.app/llms.txt) indexes every machine surface. Then just ask: "Build a settings page with Dragonspine components."
+
+## Theming
+
+Theming is CSS custom properties; there is no configuration API and no provider (one exception: wrap your tree in `ToastProvider` if, and only if, you use the toast queue via `useToast`). Complete looks ship as generated stylesheets: import the aggregate once and one attribute rethemes everything, light and dark, typefaces included (each preset self-hosts its faces).
+
+```tsx
+import '@robr0/design-system/tokens/presets/presets.css';
+
+<html data-brand="terminal">
+```
+
+- **Dark mode**: `data-theme="dark"` on the root element; light is the default.
+- **Your own brand**: every semantic token chains to a primitive, so overriding one primitive re-themes everything built on it. The [playground](https://dragonspine.vercel.app/playground) restyles the system live and copies out a complete, paste-ready override.
+- **Fonts**: no text face is bundled and the whole scale chains to `--font-family-primary` (split heading and body faces via `--font-family-heading` and `--font-family-body`); point them at any font you load.
+- **Icons**: a Material Symbols Rounded variable font is bundled and components import it themselves, with every Google axis exposed as a custom property. Every icon prop also takes your own element, so any icon set drops in.
+
+## Components
+
+<!-- component-count -->132<!-- /component-count --> components, including a chat set for AI products (Chat thread, Composer, Tool call, Reasoning, Thread panel) and Shader field, a WebGL2 ambient background whose light sources read your colour tokens at runtime, so it re-themes with everything else. Details and live examples are on the [docs site](https://dragonspine.vercel.app/components).
+
+<details>
+<summary>The full list</summary>
+
+<!-- component-list:start -->
+Accordion · Agent plan · Agent status · AI button · Alert · Alert dialog · Anchor nav · Animated number · App layout · App sidebar · Area chart · Avatar · Avatar group · Badge · Banner · Bar chart · Breadcrumb · Button · Button group · Card · Card stack · Carousel · Chat header · Chat marker · Chat message · Chat thread · Checkbox · Chip · Circular button · Code block · Code diff · Colour picker · Combo chart · Combobox · Command palette · Composer · Contact card · Context menu · Contribution graph · Data table · Date input · Date picker · Dialog · Divider · Document chip · Drawer · Dropdown · Dropdown menu · Empty state · Entity card · Event calendar · Field · Figure · File input · Filter bar · Funnel chart · Gantt chart · Gauge · Globe · Hover card · Image compare · Input · Instructions · Interrupt card · Kbd · Legend tile · Lightbox · Line chart · Link list · Map callout · Map legend · Message actions · Message card · Meter · Model picker · Nav · Nav list · Notification centre · Number input · Pagination · Panel · Pie chart · Pin input · Popover · Progress bar · Prompt suggestions · Prose · Quote · Radar chart · Radial chart · Radio button · Rating · Reasoning · Rich dropdown · Scatter chart · Section title · Segmented control · Selection card · Shader field · Skeleton · Slider · Source chip · Source trail · Sparkline · Spinner · Split button · Split pane · Stacked bar chart · Stat · Status dot · Stepper · Streaming text · Swatch · Table · Tabs · Tag input · Textarea · Thread panel · Thread tabs · Time picker · Timeline · Toast · Toggle group · Toggle switch · Tool call · Toolbar · Tooltip · Tree view · Treemap · Usage card · Waveform · World map
+<!-- component-list:end -->
+
+</details>
 
 ## Tech
 
 - **React 19 + TypeScript**: component library
 - **Vite 7**: dev server and library build
-- **Next.js 16**: the design system documentation site
+- **Next.js 16**: the documentation site
 - **Storybook 10**: component explorer
-- **Vitest + Playwright + axe**: every Storybook story runs as a render test in headless Chromium, with an accessibility audit on each and interaction assertions where a story carries a play function
+- **Vitest + Playwright + axe**: every Storybook story runs as a render test in headless Chromium, with an accessibility audit on each
 - **CSS custom properties**: all theming via semantic tokens, no CSS-in-JS
 
----
-
-## Quality & CI
-
-Every push and pull request runs a GitHub Actions pipeline ([`ci.yml`](.github/workflows/ci.yml)) with four jobs: lint + library build + the package-publish lint, story tests, Storybook build, and website lint + build followed by the built-HTML checks (rendered spacing, chat-corpus coverage, internal links) and the served-site checks: a hydration smoke that loads the built site in a real browser, and a page-level axe pass over the served pages in both themes. The story tests render every Storybook story in headless Chromium via Vitest and run an axe accessibility audit on each, so a violation fails the build exactly like a render error; the overlay stories also assert their keyboard and focus behaviour with play functions, enforced the same way. A scheduled workflow ([`uptime.yml`](.github/workflows/uptime.yml)) re-runs the hydration smoke against production every four hours, because incremental regeneration means the served site can change with no deploy. The same checklist runs locally with one command:
-
-```bash
-npm run verify   # lint + library type-check + package build + publish lint + story tests + Storybook build + website lint + build + the built-HTML and served-site checks
-```
-
-CI also guards against documentation drift: every generated surface (the `validate-registry` entry in the root `package.json` is the authoritative list, from this README's component count to the per-component markdown and the consumer agent skill) is rebuilt from its source registries on every build, and CI fails if the committed copies are stale. The numbers on the site are never hand-written.
-
----
+Docs that cannot lie: every count, list, and contract here and on the site is generated from registries and build-validated, and CI fails on drift. The [overview](https://dragonspine.vercel.app/overview) shows the pipeline.
 
 ## Running locally
 
 ```bash
-npm install              # once, at the root: the website is an npm workspace, so this installs both
-
-# Storybook (the library's dev sandbox)
-npm run storybook        # http://localhost:6006
-
-# Portfolio + documentation website
-npm run dev --workspace website   # http://localhost:3000
+npm install                         # once, at the root (the website is an npm workspace)
+npm run storybook                   # component explorer at http://localhost:6006
+npm run dev --workspace website     # docs site at http://localhost:3000
+npm run verify                      # the full local quality gate, mirroring CI
 ```
-
----
 
 ## License
 

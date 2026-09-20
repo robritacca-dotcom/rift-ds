@@ -46,7 +46,8 @@ Restore the cron trigger in `.github/workflows/uptime.yml` (parked since genesis
 - **Chat**: an Upstash/Redis store and the env vars the route reads; until then the widget stays in its switched-off state by design.
 - **Analytics**: a GA4 property; setting `GA_ID` in brand.mjs turns the snippet on, and the privacy page's analytics section must be updated in the same change — it currently states analytics is off.
 - **Chromatic**: a project and its token secret; until then the dispatch-only workflow stays unused.
-- **Repo visibility**: flip public when Rob says so — SECURITY.md's advisory link and the README's CI badge assume it eventually is.
+- **Repo visibility**: flip public when Rob says so — SECURITY.md's advisory link assumes it eventually is.
+- **README banner URL**: before the first npm publish, switch the README's banner `src` from the relative `.github/readme-banner.jpg` to the absolute raw.githubusercontent.com URL (built from the repo URL in brand.mjs) — the README ships inside the npm tarball, and npmjs.com cannot resolve a relative image path. Relative is deliberate until then: it renders on the private repo, where an absolute raw URL would not.
 
 ### 5. Close the loop
 

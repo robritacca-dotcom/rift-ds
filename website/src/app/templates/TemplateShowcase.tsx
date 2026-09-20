@@ -18,22 +18,41 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
+import type React from "react";
 import { Button } from "@robr0/design-system/components/Button/Button";
 import { CircularButton } from "@robr0/design-system/components/CircularButton/CircularButton";
+import { SegmentedControl } from "@robr0/design-system/components/SegmentedControl/SegmentedControl";
 import { templatesSidebarLinks } from "@/config/navigation";
 import styles from "./page.module.css";
 
-/* The design viewport a template is drawn at before scaling to its slide:
-   a 16:10 desktop, matching the cover renders' frame. */
-const DESIGN_WIDTH = 1440;
-const DESIGN_HEIGHT = 900;
+/* The design viewports a template can be drawn at before scaling into
+   its slide. Desktop is the 16:10 frame the covers use; tablet and
+   mobile are common portrait devices, so the previews exercise the
+   same breakpoints a real device would (the sidebar drawer included).
+   The slide keeps the desktop frame's height at every size — narrower
+   devices centre inside it like hardware on a stage. */
+const DEVICES = {
+  desktop: { label: "Desktop", icon: "desktop_windows", w: 1440, h: 900 },
+  tablet: { label: "Tablet", icon: "tablet_mac", w: 834, h: 1112 },
+  mobile: { label: "Mobile", icon: "smartphone", w: 390, h: 844 },
+} as const;
+type DeviceKey = keyof typeof DEVICES;
 
 /** The templates themselves — every sidebar entry after "Contents". */
 const TEMPLATES = templatesSidebarLinks.slice(1);
 
 const SLIDE_COUNT = TEMPLATES.length;
 
-function LiveFrame({ href, title }: { href: string; title: string }) {
+function LiveFrame({
+  href,
+  title,
+  device,
+}: {
+  href: string;
+  title: string;
+  device: DeviceKey;
+}) {
+  const { w: designW, h: designH } = DEVICES[device];
   const shellRef = useRef<HTMLDivElement>(null);
   const frameRef = useRef<HTMLIFrameElement>(null);
 
@@ -54,10 +73,10 @@ function LiveFrame({ href, title }: { href: string; title: string }) {
     else doc.documentElement.removeAttribute("data-brand");
     doc.documentElement.style.setProperty(
       "--layout-viewport-height",
-      `${DESIGN_HEIGHT}px`
+      `${designH}px`
     );
     doc.documentElement.style.overflow = "hidden";
-  }, []);
+  }, [designH]);
 
   useEffect(() => {
     const observer = new MutationObserver(sync);
@@ -68,22 +87,28 @@ function LiveFrame({ href, title }: { href: string; title: string }) {
     return () => observer.disconnect();
   }, [sync]);
 
-  /* The frame is drawn at the design size and scaled to the shell's width. */
+  /* The frame is drawn at the device size and scaled to fit the shell's
+     height (the shell holds the desktop frame's aspect at every device,
+     so the carousel's geometry never jumps). */
   useEffect(() => {
     const shell = shellRef.current;
     if (!shell) return;
     const observer = new ResizeObserver(() => {
       shell.style.setProperty(
         "--frame-scale",
-        `${shell.clientWidth / DESIGN_WIDTH}`
+        `${shell.clientHeight / designH}`
       );
     });
     observer.observe(shell);
     return () => observer.disconnect();
-  }, []);
+  }, [designH]);
 
   return (
-    <div ref={shellRef} className={styles.frameShell}>
+    <div
+      ref={shellRef}
+      className={`${styles.frameShell} ${device !== "desktop" ? styles.frameShellDevice : ""}`}
+      style={{ "--design-w": `${designW}px`, "--design-h": `${designH}px` } as React.CSSProperties}
+    >
       <div className={styles.frameViewport}>
         <iframe
           ref={frameRef}
@@ -109,6 +134,7 @@ export default function TemplateShowcase() {
   const bleedRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
+  const [device, setDevice] = useState<DeviceKey>("desktop");
 
   /* Full bleed, measured: 100vw includes the scrollbar on platforms with a
      classic one, which puts a few pixels of horizontal scroll on the page.
@@ -153,10 +179,25 @@ export default function TemplateShowcase() {
 
   return (
     <div ref={bleedRef} className={styles.showcaseBleed}>
+      {/* One toggle re-frames every preview: the same live template,
+          rendered at a device's own viewport, breakpoints and all. */}
+      <div className={styles.deviceToggle}>
+        <SegmentedControl
+          segments={Object.entries(DEVICES).map(([value, d]) => ({
+            value,
+            label: d.label,
+            icon: d.icon,
+          }))}
+          activeSegment={device}
+          onSegmentChange={(value) => setDevice(value as DeviceKey)}
+          size="compact"
+          ariaLabel="Preview device size"
+        />
+      </div>
       <div ref={trackRef} className={styles.track} onScroll={onScroll}>
         {TEMPLATES.map((template) => (
           <div key={template.href} className={styles.slide}>
-            <LiveFrame href={template.href} title={template.label} />
+            <LiveFrame href={template.href} title={template.label} device={device} />
             <div className={styles.slideCaption}>
               <div className={styles.slideText}>
                 <h2 className={styles.slideTitle}>{template.label}</h2>

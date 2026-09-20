@@ -162,6 +162,13 @@
 .frameShell {
   position: relative;
   width: 100%;
+  /* The shell holds the desktop frame's aspect at every device size, so
+     the carousel's geometry never jumps when the toggle switches — a
+     narrower device centres inside it like hardware on a stage. */
+  aspect-ratio: 1440 / 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: var(--border-025) solid var(--color-bg-container-border);
   border-radius: var(--radius-600);
   background: var(--color-bg-container-primary);
@@ -173,20 +180,26 @@
    --frame-scale from the shell's measured width. */
 .frameViewport {
   position: relative;
-  width: 100%;
-  aspect-ratio: 1440 / 900;
+  width: calc(var(--design-w, 1440px) * var(--frame-scale, 0));
+  height: calc(var(--design-h, 900px) * var(--frame-scale, 0));
   overflow: hidden;
+}
+
+/* A non-desktop device frame reads as its own screen on the stage. */
+.frameShellDevice .frameViewport {
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-300);
 }
 
 .frame {
   /* Absolute, so the design-size frame adds no intrinsic width: the
-     carousel slide must size from the column, not from the 1440px page
-     inside it. */
+     carousel slide must size from the column, not from the device-size
+     page inside it. */
   position: absolute;
   top: 0;
   left: 0;
-  width: 1440px;
-  height: 900px;
+  width: var(--design-w, 1440px);
+  height: var(--design-h, 900px);
   border: 0;
   transform: scale(var(--frame-scale, 0.5));
   transform-origin: top left;
@@ -287,4 +300,11 @@
   font-weight: var(--font-paragraph-weight);
   line-height: var(--font-paragraph-line-height);
   color: var(--color-text-secondary);
+}
+
+/* The device toggle above the carousel, centred like the stage below. */
+.deviceToggle {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--gap-500);
 }

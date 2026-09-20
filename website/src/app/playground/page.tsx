@@ -30,6 +30,11 @@ import {
   isAdvancedPristine,
   neutralOverrides,
   radiusOverrides,
+  densityOverrides,
+  typeScaleOverrides,
+  motionScaleOverrides,
+  elevationOverrides,
+  type ElevationVariant,
 } from "@/lib/theme/theme-overrides";
 import { PICKER_FONT_PARAMS, THEME_PRESETS, type ThemePreset } from "@/lib/theme/presets";
 import { useAppliedOverrides, useSiteTheme } from "@/lib/theme/use-theme-overrides";
@@ -160,6 +165,10 @@ export default function PlaygroundPage() {
   const [tintStrength, setTintStrength] = useState(6); // percent
   const [radiusScale, setRadiusScale] = useState(100); // percent
   const [pill, setPill] = useState(true);
+  const [density, setDensity] = useState(100); // percent
+  const [typeScale, setTypeScale] = useState(100); // percent
+  const [motionScale, setMotionScale] = useState(100); // percent
+  const [elevation, setElevation] = useState<ElevationVariant>("default");
   const [fontLabel, setFontLabel] = useState(FONT_OPTIONS[0].label);
   const [headingFontLabel, setHeadingFontLabel] = useState(
     HEADING_FONT_OPTIONS[0].label
@@ -252,6 +261,10 @@ export default function PlaygroundPage() {
     setTintStrength(p.tintStrength);
     setRadiusScale(p.radiusScale);
     setPill(p.pill);
+    setDensity(p.density);
+    setTypeScale(p.typeScale);
+    setMotionScale(p.motionScale);
+    setElevation(p.elevation);
     setFontLabel(p.fontLabel);
     setHeadingFontLabel(p.headingFontLabel ?? HEADING_FONT_OPTIONS[0].label);
   };
@@ -290,6 +303,16 @@ export default function PlaygroundPage() {
     if (radiusScale !== 100 || !pill) {
       Object.assign(merged, radiusOverrides(radiusScale / 100, pill));
     }
+    if (density !== 100) {
+      Object.assign(merged, densityOverrides(density / 100));
+    }
+    if (typeScale !== 100) {
+      Object.assign(merged, typeScaleOverrides(typeScale / 100));
+    }
+    if (motionScale !== 100) {
+      Object.assign(merged, motionScaleOverrides(motionScale / 100));
+    }
+    Object.assign(merged, elevationOverrides(elevation, theme === "dark" ? "dark" : "light"));
     if (presetExtras.extraOverrides) {
       Object.assign(merged, presetExtras.extraOverrides);
     }
@@ -300,7 +323,7 @@ export default function PlaygroundPage() {
       Object.assign(merged, advancedColorOverrides(advColors, merged));
     }
     return merged;
-  }, [actionPlan, theme, tintOn, tintSeed, tintStrength, radiusScale, pill, presetExtras, advColors]);
+  }, [actionPlan, theme, tintOn, tintSeed, tintStrength, radiusScale, pill, density, typeScale, motionScale, elevation, presetExtras, advColors]);
 
   /* ---------- apply to the whole page ----------
      The shared hook writes to :root (where the semantic layer is declared,
@@ -356,6 +379,10 @@ export default function PlaygroundPage() {
     setTintStrength(6);
     setRadiusScale(100);
     setPill(true);
+    setDensity(100);
+    setTypeScale(100);
+    setMotionScale(100);
+    setElevation("default");
     setFontLabel(FONT_OPTIONS[0].label);
     setHeadingFontLabel(HEADING_FONT_OPTIONS[0].label);
   };

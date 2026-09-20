@@ -499,6 +499,117 @@ function checkRadiusSteps() {
 }
 
 /* ------------------------------------------------------------------ */
+/* 4b. The lever tables (density, type scale, motion, elevation)       */
+/*     GAP_STEPS / PADDING_STEPS / FONT_SIZE_STEPS /                   */
+/*     FONT_LINE_HEIGHT_STEPS mirror their token ladders both          */
+/*     directions; MOTION_DURATION_STEPS mirrors the schedule          */
+/*     durations in tokens-motion.css (loop-* and instant are          */
+/*     deliberately outside the lever — instant exists to sit under    */
+/*     the perception threshold, loop periods are an animation's       */
+/*     identity); ELEVATION_VARIANTS.default must equal the shipped    */
+/*     shadow tokens per theme, so the lever's no-op cannot drift.     */
+/* ------------------------------------------------------------------ */
+function checkLeverTables() {
+  const parseTable = (constName) => {
+    const block = parseTsBlock(overridesSource, constName, overridesRel);
+    if (block === null) return null;
+    const map = new Map(
+      [...block.matchAll(/\["([a-z0-9-]+)",\s*(\d+)\]/g)].map((m) => [m[1], Number(m[2])])
+    );
+    if (map.size === 0) {
+      errors.push(`${overridesRel}: parsed no entries out of ${constName} — the mirror guard needs them`);
+      return null;
+    }
+    return map;
+  };
+  const holdBoth = (constName, table, cssMap, nameFor, unit) => {
+    if (table === null) return 0;
+    for (const [step, value] of table) {
+      const cssValue = cssMap.get(nameFor(step));
+      if (cssValue === undefined) {
+        errors.push(`${overridesRel}: ${constName} lists "${step}", but ${nameFor(step)} does not exist`);
+      } else if (cssValue !== `${value}${unit}`) {
+        errors.push(`${overridesRel}: ${constName} "${step}" is ${value}${unit} but ${nameFor(step)} is ${cssValue}`);
+      }
+    }
+    for (const name of cssMap.keys()) {
+      const step = name.slice(name.lastIndexOf('-') + 1);
+      if (!table.has(step)) {
+        errors.push(`${overridesRel}: ${constName} has no entry for ${name} — the lever would skip it`);
+      }
+    }
+    return table.size;
+  };
+  const subset = (prefix, source_) => {
+    const out = new Map();
+    for (const [name, value] of parseDeclarations(source_)) {
+      if (name.startsWith(prefix) && /^[0-9]+$/.test(name.slice(prefix.length))) out.set(name, value);
+    }
+    return out;
+  };
+
+  const primitivesSource = read(join(tokensDir, 'tokens-primitives.css'));
+  const typographySource = read(join(tokensDir, 'tokens-typography.css'));
+  const motionSource = read(join(tokensDir, 'tokens-motion.css'));
+
+  const gapCount = holdBoth('GAP_STEPS', parseTable('GAP_STEPS'),
+    subset('--primitive-gap-', primitivesSource), (s2) => `--primitive-gap-${s2}`, 'px');
+  const padCount = holdBoth('PADDING_STEPS', parseTable('PADDING_STEPS'),
+    subset('--primitive-padding-', primitivesSource), (s2) => `--primitive-padding-${s2}`, 'px');
+  const sizeCount = holdBoth('FONT_SIZE_STEPS', parseTable('FONT_SIZE_STEPS'),
+    subset('--font-size-', typographySource), (s2) => `--font-size-${s2}`, 'px');
+  const lhCount = holdBoth('FONT_LINE_HEIGHT_STEPS', parseTable('FONT_LINE_HEIGHT_STEPS'),
+    subset('--font-line-height-', typographySource), (s2) => `--font-line-height-${s2}`, 'px');
+
+  // Schedule durations: every --motion-duration-<name> that is neither
+  // loop-* nor instant must be in the table with its ms value, and vice
+  // versa. The reduced-motion 0.01ms re-declarations are skipped because
+  // parseDeclarations keeps the first (the :root) declaration of a name.
+  const motionTable = parseTable('MOTION_DURATION_STEPS');
+  if (motionTable !== null) {
+    const durations = new Map();
+    for (const [name, value] of parseDeclarations(motionSource)) {
+      const m = name.match(/^--motion-duration-([a-z-]+)$/);
+      if (m && m[1] !== 'instant' && !m[1].startsWith('loop-')) durations.set(m[1], value);
+    }
+    for (const [name, ms] of motionTable) {
+      const cssValue = durations.get(name);
+      if (cssValue === undefined) {
+        errors.push(`${overridesRel}: MOTION_DURATION_STEPS lists "${name}", but --motion-duration-${name} does not exist (or is instant/loop-*, which the lever must not pace)`);
+      } else if (cssValue !== `${ms}ms`) {
+        errors.push(`${overridesRel}: MOTION_DURATION_STEPS "${name}" is ${ms}ms but --motion-duration-${name} is ${cssValue}`);
+      }
+    }
+    for (const name of durations.keys()) {
+      if (!motionTable.has(name)) {
+        errors.push(`${overridesRel}: MOTION_DURATION_STEPS has no entry for --motion-duration-${name} — the motion lever would skip it`);
+      }
+    }
+  }
+
+  // ELEVATION_VARIANTS.default ↔ the shipped shadow tokens, per theme.
+  const defaultBlock = overridesSource.match(/default:\s*\{\s*light:\s*\{\s*floating:\s*"([^"]+)",\s*modal:\s*"([^"]+)"\s*\},\s*dark:\s*\{\s*floating:\s*"([^"]+)",\s*modal:\s*"([^"]+)"\s*\}/);
+  if (!defaultBlock) {
+    errors.push(`${overridesRel}: could not parse ELEVATION_VARIANTS.default — the elevation guard needs it`);
+  } else {
+    const darkDecls = parseDeclarations(read(join(tokensDir, 'tokens-dark.css')));
+    const expected = [
+      ['light', '--shadow-floating', lightDecls.get('--shadow-floating'), defaultBlock[1]],
+      ['light', '--shadow-modal', lightDecls.get('--shadow-modal'), defaultBlock[2]],
+      ['dark', '--shadow-floating', darkDecls.get('--shadow-floating'), defaultBlock[3]],
+      ['dark', '--shadow-modal', darkDecls.get('--shadow-modal'), defaultBlock[4]],
+    ];
+    for (const [themeName, token, css, mirrored2] of expected) {
+      if (css !== mirrored2) {
+        errors.push(`${overridesRel}: ELEVATION_VARIANTS.default ${themeName} ${token} is "${mirrored2}" but the token file ships "${css}" — the lever's no-op has drifted`);
+      }
+    }
+  }
+
+  summaries.push(`Lever tables match their ladders — gap ${gapCount}, padding ${padCount}, font-size ${sizeCount}, line-height ${lhCount}, motion ${motionTable ? motionTable.size : 0} durations, elevation default pinned to the shipped shadows`);
+}
+
+/* ------------------------------------------------------------------ */
 /* 5. presets.ts custom-property names all exist                       */
 /* ------------------------------------------------------------------ */
 function checkPresetTokenNames() {
@@ -674,6 +785,7 @@ checkChromaticRamps();
 checkActionColorPresets();
 checkActionSemanticRefs();
 checkRadiusSteps();
+checkLeverTables();
 checkPresetTokenNames();
 checkInspectModePrefixes();
 checkSpatialPage();

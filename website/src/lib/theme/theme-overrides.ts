@@ -643,6 +643,147 @@ const RADIUS_STEPS: ReadonlyArray<[step: string, px: number]> = [
   ["1200", 48],
 ];
 
+/* ---------- density, type scale, motion, elevation ----------
+   The remaining preset levers, each a scale (100 = shipped) over one
+   token ladder. Like RADIUS_STEPS, every table here mirrors the token
+   CSS by hand and is held to it in both directions by
+   scripts/validate-theme-mirrors.mjs — a retuned or renamed step fails
+   the build until the mirror moves with it. */
+
+const GAP_STEPS: ReadonlyArray<[step: string, px: number]> = [
+  ["050", 2],
+  ["100", 4],
+  ["200", 8],
+  ["300", 12],
+  ["400", 16],
+  ["500", 20],
+  ["1000", 40],
+  ["1500", 60],
+  ["2000", 80],
+  ["3000", 120],
+];
+
+const PADDING_STEPS: ReadonlyArray<[step: string, px: number]> = [
+  ["050", 2],
+  ["100", 4],
+  ["150", 6],
+  ["200", 8],
+  ["300", 12],
+  ["400", 16],
+  ["500", 20],
+  ["1000", 40],
+  ["1500", 60],
+];
+
+const FONT_SIZE_STEPS: ReadonlyArray<[step: string, px: number]> = [
+  ["300", 12],
+  ["350", 14],
+  ["400", 16],
+  ["550", 22],
+  ["600", 24],
+  ["650", 26],
+  ["750", 30],
+  ["1000", 40],
+  ["1200", 48],
+  ["1400", 56],
+  ["1600", 64],
+  ["2400", 96],
+  ["2900", 116],
+  ["3300", 132],
+];
+
+const FONT_LINE_HEIGHT_STEPS: ReadonlyArray<[step: string, px: number]> = [
+  ["400", 16],
+  ["500", 20],
+  ["600", 24],
+  ["700", 28],
+  ["800", 32],
+  ["900", 36],
+  ["1100", 44],
+];
+
+/* The schedule durations a preset may pace. The loop-* namespace is
+   deliberately absent: spinner and shimmer periods are an animation's
+   identity, not a tempo, and --motion-duration-instant stays fixed
+   because it exists to sit under the perception threshold. */
+const MOTION_DURATION_STEPS: ReadonlyArray<[name: string, ms: number]> = [
+  ["fast", 150],
+  ["base", 200],
+  ["slow", 300],
+  ["deliberate", 400],
+  ["slower", 600],
+];
+
+export type ElevationVariant = "default" | "flat" | "soft";
+
+/* Explicit per-theme shadow values. "default" mirrors the shipped
+   tokens (held to them by the mirror guard, so the no-op cannot drift);
+   "flat" removes depth for print-like looks; "soft" widens and lowers
+   the same geometry for a gentler float. */
+const ELEVATION_VARIANTS: Record<
+  ElevationVariant,
+  Record<"light" | "dark", { floating: string; modal: string }>
+> = {
+  default: {
+    light: { floating: "0 4px 16px rgba(0, 0, 0, 0.12)", modal: "0 8px 32px rgba(0, 0, 0, 0.2)" },
+    dark: { floating: "0 4px 16px rgba(0, 0, 0, 0.55)", modal: "0 8px 32px rgba(0, 0, 0, 0.6)" },
+  },
+  flat: {
+    light: { floating: "none", modal: "none" },
+    dark: { floating: "none", modal: "none" },
+  },
+  soft: {
+    light: { floating: "0 6px 24px rgba(0, 0, 0, 0.08)", modal: "0 12px 48px rgba(0, 0, 0, 0.14)" },
+    dark: { floating: "0 6px 24px rgba(0, 0, 0, 0.45)", modal: "0 12px 48px rgba(0, 0, 0, 0.5)" },
+  },
+};
+
+/** Scales the spacing ladders (gap + padding primitives). 1 = shipped. */
+export function densityOverrides(scale: number): Overrides {
+  const overrides: Overrides = {};
+  for (const [step, px] of GAP_STEPS) {
+    overrides[`--primitive-gap-${step}`] = `${Math.max(1, Math.round(px * scale))}px`;
+  }
+  for (const [step, px] of PADDING_STEPS) {
+    overrides[`--primitive-padding-${step}`] = `${Math.max(1, Math.round(px * scale))}px`;
+  }
+  return overrides;
+}
+
+/** Scales the type ladders (sizes + pixel line-heights together). 1 = shipped. */
+export function typeScaleOverrides(scale: number): Overrides {
+  const overrides: Overrides = {};
+  for (const [step, px] of FONT_SIZE_STEPS) {
+    overrides[`--font-size-${step}`] = `${Math.max(8, Math.round(px * scale))}px`;
+  }
+  for (const [step, px] of FONT_LINE_HEIGHT_STEPS) {
+    overrides[`--font-line-height-${step}`] = `${Math.max(10, Math.round(px * scale))}px`;
+  }
+  return overrides;
+}
+
+/** Scales the schedule durations (never the loop-* periods). 1 = shipped. */
+export function motionScaleOverrides(scale: number): Overrides {
+  const overrides: Overrides = {};
+  for (const [name, ms] of MOTION_DURATION_STEPS) {
+    overrides[`--motion-duration-${name}`] = `${Math.round(ms * scale)}ms`;
+  }
+  return overrides;
+}
+
+/** The elevation variant's shadow pair for one theme. "default" is a no-op. */
+export function elevationOverrides(
+  variant: ElevationVariant,
+  theme: "light" | "dark"
+): Overrides {
+  if (variant === "default") return {};
+  const pair = ELEVATION_VARIANTS[variant][theme];
+  return {
+    "--shadow-floating": pair.floating,
+    "--shadow-modal": pair.modal,
+  };
+}
+
 /**
  * Scales the radius scale (0..2). `pill` keeps `--radius-pill` at its
  * shipped 999px; turning it off squares the pills to the scaled lg step.

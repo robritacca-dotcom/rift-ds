@@ -6,13 +6,27 @@ import {
   DEFAULT_NEUTRAL_SEED,
   FONT_OPTIONS,
   HEADING_FONT_OPTIONS,
+  actionColorPlan,
+  advancedColorOverrides,
+  densityOverrides,
+  elevationOverrides,
+  isAdvancedPristine,
+  motionScaleOverrides,
+  neutralOverrides,
+  radiusOverrides,
+  typeScaleOverrides,
   type AdvancedColorState,
+  type ElevationVariant,
   type Overrides,
 } from "./theme-overrides";
 
-/** A preset is just a saved position for every lever. `fontLabel` must
-    match a FONT_OPTIONS entry, `headingFontLabel` a HEADING_FONT_OPTIONS
-    entry. */
+/** A preset is a saved position for EVERY lever — a complete theme, not a
+    partial one. `fontLabel` must match a FONT_OPTIONS entry,
+    `headingFontLabel` a HEADING_FONT_OPTIONS entry. Every lever is
+    required (100 / "default" is the shipped position) so a preset can
+    ship as a whole-site stylesheet: one `data-brand` attribute swaps the
+    entire look, and a lever a preset forgot would silently inherit
+    whatever came before it. */
 export interface ThemePreset {
   label: string;
   brand: string;
@@ -24,6 +38,14 @@ export interface ThemePreset {
   tintStrength: number;
   radiusScale: number;
   pill: boolean;
+  /** Spacing density, percent of the shipped ladders (100 = shipped). */
+  density: number;
+  /** Type scale, percent of the shipped size + line-height ladders. */
+  typeScale: number;
+  /** Schedule-motion tempo, percent of the shipped durations (never loop-*). */
+  motionScale: number;
+  /** Shadow treatment: the shipped pair, none, or the softer float. */
+  elevation: ElevationVariant;
   fontLabel: string;
   /** Heading face when split from the body face; absent means the heading
       role follows the body typeface (the shipped single-face system). */
@@ -65,6 +87,10 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     tintStrength: 6,
     radiusScale: 100,
     pill: true,
+    density: 100,
+    typeScale: 100,
+    motionScale: 100,
+    elevation: "default",
     fontLabel: "Nunito Sans (default)",
     extraOverrides: {
       "--color-action-primary-bg": "var(--primitive-teal-07)",
@@ -100,6 +126,10 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     tintStrength: 8,
     radiusScale: 100,
     pill: true,
+    density: 100,
+    typeScale: 100,
+    motionScale: 100,
+    elevation: "default",
     // The editorial pairing, and the split-face demonstration: Lora
     // carries the display personality while running text stays in a
     // humanist sans.
@@ -127,6 +157,11 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     tintStrength: 6,
     radiusScale: 40,
     pill: false,
+    // Print-like: hairlines carry the depth, shadows go entirely.
+    density: 100,
+    typeScale: 100,
+    motionScale: 100,
+    elevation: "flat",
     fontLabel: "Inter",
     // Ink-wash chromatics: hue and value hold, saturation drops hard, so
     // any colour that does appear reads as a tinted grey.
@@ -159,6 +194,10 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     tintStrength: 4,
     radiusScale: 100,
     pill: true,
+    density: 100,
+    typeScale: 100,
+    motionScale: 100,
+    elevation: "default",
     fontLabel: "IBM Plex Sans",
     // Cool neighbours: every hue eased toward the cobalt key and slightly
     // calmed. Blue is the action family, left alone.
@@ -184,6 +223,11 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     // card's reserve button rather than a chip.
     radiusScale: 100,
     pill: false,
+    // Hospitality float: the softer, lower shadow pair.
+    density: 100,
+    typeScale: 100,
+    motionScale: 100,
+    elevation: "soft",
     fontLabel: "DM Sans",
     headingFontLabel: "Poppins",
     // Red is the action family, left alone.
@@ -204,6 +248,11 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     tintStrength: 4,
     radiusScale: 0,
     pill: false,
+    // A terminal answers fast and casts no shadows.
+    density: 100,
+    typeScale: 100,
+    motionScale: 80,
+    elevation: "flat",
     fontLabel: "IBM Plex Mono",
     // Phosphor neighbours: hues lean toward the emerald key, slightly
     // softened. Green is the action family, left alone.
@@ -340,3 +389,57 @@ export const PICKER_FONT_PARAMS = Array.from(
       .filter((param): param is string => Boolean(param)),
   ),
 );
+
+/* ---------- the composer ----------
+   One pure function turns a preset into the exact override map the
+   playground's live preview applies — and the exact declarations the
+   generated [data-brand] stylesheets ship. Both consumers call THIS, so
+   the preview and the shipped theme cannot disagree; the merge order
+   mirrors the playground page's own memo (action plan, tint, radius,
+   density, type, motion, elevation, fonts, extras, advanced last so
+   harmonized ramps see the merged state). */
+export function presetOverrides(
+  preset: ThemePreset,
+  theme: "light" | "dark"
+): Overrides {
+  const merged: Overrides = {};
+
+  const brand =
+    preset.brandDark && theme === "dark" ? preset.brandDark : preset.brand;
+  const plan = actionColorPlan(brand, theme);
+  if (plan) {
+    Object.assign(merged, plan.primitives, plan.semantics);
+  }
+  if (preset.tintOn && preset.tintStrength > 0) {
+    Object.assign(merged, neutralOverrides(preset.tintSeed, preset.tintStrength / 100));
+  }
+  if (preset.radiusScale !== 100 || !preset.pill) {
+    Object.assign(merged, radiusOverrides(preset.radiusScale / 100, preset.pill));
+  }
+  if (preset.density !== 100) {
+    Object.assign(merged, densityOverrides(preset.density / 100));
+  }
+  if (preset.typeScale !== 100) {
+    Object.assign(merged, typeScaleOverrides(preset.typeScale / 100));
+  }
+  if (preset.motionScale !== 100) {
+    Object.assign(merged, motionScaleOverrides(preset.motionScale / 100));
+  }
+  Object.assign(merged, elevationOverrides(preset.elevation, theme));
+
+  const font = FONT_OPTIONS.find((f) => f.label === preset.fontLabel);
+  if (font?.family) merged["--font-family-primary"] = font.family;
+  const headingFont = preset.headingFontLabel
+    ? HEADING_FONT_OPTIONS.find((f) => f.label === preset.headingFontLabel)
+    : undefined;
+  if (headingFont?.family) merged["--font-family-heading"] = headingFont.family;
+
+  if (preset.extraOverrides) Object.assign(merged, preset.extraOverrides);
+  if (theme === "dark" && preset.extraOverridesDark) {
+    Object.assign(merged, preset.extraOverridesDark);
+  }
+  if (preset.advanced && !isAdvancedPristine(preset.advanced)) {
+    Object.assign(merged, advancedColorOverrides(preset.advanced, merged));
+  }
+  return merged;
+}

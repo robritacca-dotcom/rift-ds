@@ -140,3 +140,4 @@ jobs:
         if: ${{ inputs.dry_run }}
         working-directory: dist
         run: npm publish --access public --dry-run
+

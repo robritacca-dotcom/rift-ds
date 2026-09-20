@@ -11,7 +11,6 @@ import "@robr0/design-system/tokens/presets/presets.css";
 // (e.g. /foundations/icons) are styled deterministically.
 import "@robr0/design-system/fonts/material-symbols.css";
 import { Nunito_Sans } from "next/font/google";
-import { PICKER_FONT_PARAMS } from "@/lib/theme/presets";
 import "./globals.css";
 import { buildDesignSystemJsonLd, buildWebsiteJsonLd, SITE_URL } from "@/lib/structuredData";
 import { BRAND_NAME, GA_ID, TITLE_SUFFIX } from "@/config/brand.generated";
@@ -158,22 +157,14 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        {/* The theme presets' faces. Every look's heading and body family
-            loads here (one stylesheet per face, derived from the same
-            roster the pickers read), so a data-brand swap renders in its
-            real type for every visitor — the browser only downloads a
-            face when a theme actually uses it. Interim: the queued
-            package-fonts chunk moves these into the preset stylesheets
-            as self-hosted @font-face, and this block goes with it. */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        {PICKER_FONT_PARAMS.map((param) => (
-          <link
-            key={param}
-            rel="stylesheet"
-            href={`https://fonts.googleapis.com/css2?family=${param}&display=swap`}
-          />
-        ))}
+        {/* The theme presets' faces load through the preset stylesheets
+            themselves: each generated sheet carries self-hosted @font-face
+            blocks for exactly the families its preset declares
+            (src/fonts/presets/, shipped in the package), and the browser
+            downloads a face only when a theme actually renders it. No
+            Google Fonts request at runtime — the playground's typeface
+            picker is the one surface that still loads its wider roster
+            from Google, on mount, for faces the presets do not ship. */}
         {/* Material Symbols is served from the design system's own bundled
             @font-face (src/fonts/material-symbols.css, imported above) — the
             woff2 is emitted into the build, so the font was being shipped twice.

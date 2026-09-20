@@ -7,11 +7,7 @@ import { ExtendedBackground } from "../components/BlurBackground/BlurBackground"
 import FadeDivider from "../components/FadeDivider/FadeDivider";
 import styles from "./page.module.css";
 import { FIGMA_FILE_URL, NPM_URL, REPOSITORY_URL, STORYBOOK_URL } from "@/config/brand.generated";
-import {
-  PICKER_FONT_PARAMS,
-  THEME_SELECTOR_ORDER,
-  themeSelectorTiles,
-} from "@/lib/theme/presets";
+import { THEME_SELECTOR_ORDER, themeSelectorTiles } from "@/lib/theme/presets";
 import { useSiteTheme } from "@/lib/theme/use-theme-overrides";
 import { applyBrand } from "@/lib/theme/brand";
 import { AgentPlan } from "@robr0/design-system/components/AgentPlan/AgentPlan";
@@ -407,27 +403,9 @@ function ThemeSwitcher() {
     setActive(document.documentElement.dataset.brand ?? "default");
   }, []);
 
-  /* The tile names render in their themes' own faces — load the picker
-     preview fonts the way the playground does (CSS is tiny; each woff2
-     downloads only because the face really renders). Removed on unmount. */
-  useEffect(() => {
-    const ids: string[] = [];
-    for (const param of PICKER_FONT_PARAMS) {
-      const id = `landing-font-${param}`;
-      if (!document.getElementById(id)) {
-        const link = document.createElement("link");
-        link.id = id;
-        link.rel = "stylesheet";
-        link.href = `https://fonts.googleapis.com/css2?family=${param}&display=swap`;
-        document.head.appendChild(link);
-        ids.push(id);
-      }
-    }
-    return () => {
-      for (const id of ids) document.getElementById(id)?.remove();
-    };
-  }, []);
-
+  /* The tile names render in their themes' own faces, which need no
+     loading here: every shipped face has self-hosted @font-face blocks
+     in its preset's generated stylesheet, imported site-wide. */
   const pick = (id: string) => {
     applyBrand(id); // the shared helper owns the attribute + persistence
     setActive(id);

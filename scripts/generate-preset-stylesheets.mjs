@@ -95,8 +95,65 @@ const REGENERATE = 'node scripts/generate-preset-stylesheets.mjs';
 const header = (lines) =>
   ['/*', ' * AUTO-GENERATED. Do not edit.', ...lines.map((l) => ` * ${l}`), ' */', ''].join('\n');
 
+/**
+ * The self-hosted faces the presets can declare — downloaded by
+ * scripts/sync-preset-fonts.mjs (a deliberate by-hand network fetch),
+ * shipped in the package beside the icon font. A preset face missing
+ * from the manifest fails generation until that script is rerun, so a
+ * stylesheet can never name a family nothing loads.
+ */
+const fontManifest = JSON.parse(
+  readFileSync(join(repoRoot, 'src', 'fonts', 'presets', 'manifest.json'), 'utf8')
+).faces;
+
+/** The css family name an option stack leads with: `'Inter', sans-serif` -> Inter. */
+const stackFamily = (stack) => stack.match(/^'([^']+)'/)?.[1] ?? null;
+
+/**
+ * The @font-face blocks for one preset's declared faces, from the
+ * manifest — url()s relative to this stylesheet's place in the package
+ * (src/tokens/presets/ -> src/fonts/presets/), a layout build-package
+ * copies to dist verbatim. Faces are unique per preset today, but a
+ * shared face would only duplicate a block browsers dedupe by rule.
+ */
+function fontFaceBlocks(preset, source) {
+  const families = [];
+  const body = source.FONT_OPTIONS.find((f) => f.label === preset.fontLabel);
+  const heading = preset.headingFontLabel
+    ? source.HEADING_FONT_OPTIONS.find((f) => f.label === preset.headingFontLabel)
+    : null;
+  for (const option of [body, heading]) {
+    const family = option?.family ? stackFamily(option.family) : null;
+    if (family && !families.includes(family)) families.push(family);
+  }
+  const blocks = [];
+  for (const family of families) {
+    const faces = fontManifest.filter((f) => f.family === family);
+    if (faces.length === 0) {
+      throw new Error(
+        `Preset "${preset.label}" declares ${family}, which src/fonts/presets/manifest.json lacks — run node scripts/sync-preset-fonts.mjs`
+      );
+    }
+    for (const face of faces) {
+      blocks.push(
+        [
+          '@font-face {',
+          `  font-family: '${face.family}';`,
+          `  font-style: ${face.style};`,
+          `  font-weight: ${face.weight};`,
+          '  font-display: swap;',
+          `  src: url('../../fonts/presets/${face.file}') format('woff2');`,
+          `  unicode-range: ${face.unicodeRange};`,
+          '}',
+        ].join('\n')
+      );
+    }
+  }
+  return blocks;
+}
+
 /** One preset's stylesheet: light block, then the always-emitted dark block. */
-export function buildPresetCss(id, preset, presetOverrides) {
+export function buildPresetCss(id, preset, presetOverrides, source) {
   const block = (theme) => {
     const overrides = presetOverrides(preset, theme);
     const selector =
@@ -108,24 +165,28 @@ export function buildPresetCss(id, preset, presetOverrides) {
       .map((name) => `  ${name}: ${overrides[name]};`);
     return `${selector} {\n${declarations.join('\n')}\n}`;
   };
+  const fonts = fontFaceBlocks(preset, source);
   return (
     header([
       `Theme preset "${id}" (${preset.label}).`,
       'Source of truth: website/src/lib/theme/presets.ts (THEME_PRESETS + presetOverrides).',
+      'Fonts: self-hosted from src/fonts/presets/ (scripts/sync-preset-fonts.mjs; OFL-1.1).',
       `Regenerate: ${REGENERATE}`,
       'Import after tokens.css, then set data-brand="' + id + '" on <html>.',
     ]) +
+    (fonts.length > 0 ? `${fonts.join('\n\n')}\n\n` : '') +
     `${block('light')}\n\n${block('dark')}\n`
   );
 }
 
 /** Every file of the surface, as name -> content (LF line endings). */
 export async function assemblePresetStylesheets() {
-  const { THEME_PRESETS, presetOverrides } = await loadThemeSource();
+  const source = await loadThemeSource();
+  const { THEME_PRESETS, presetOverrides } = source;
   const ids = Object.keys(THEME_PRESETS).sort();
   const files = new Map();
   for (const id of ids) {
-    files.set(`${id}.css`, buildPresetCss(id, THEME_PRESETS[id], presetOverrides));
+    files.set(`${id}.css`, buildPresetCss(id, THEME_PRESETS[id], presetOverrides, source));
   }
   files.set(
     'presets.css',

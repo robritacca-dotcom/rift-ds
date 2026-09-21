@@ -162,7 +162,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     // near-invisible on this look's flat grounds): 02 to 03 in light,
     // 08 to 07 in dark, alpha dropped. One notch is the middle ground:
     // two lit the section rules but made every table hairline shout,
-    // since 39 components ride this token.
+    // since dozens of components ride this token.
     extraOverrides: {
       "--color-divider": "var(--primitive-neutral-03)",
     },
@@ -346,6 +346,55 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
       purple: "#7E5BC8",
     }),
   },
+  pink: {
+    label: "Bubblegum",
+    // Hot pink, landing in the red family — deep enough that the lifted
+    // label clears AA over it (the tinted neutrals pull neutral-00 a
+    // shade off white, so the key sits a touch under the classic
+    // #DA1884); the brighter candy pinks live on in the accent sextet.
+    brand: "#D0117E",
+    tintOn: true,
+    tintSeed: "#D0117E",
+    tintStrength: 6,
+    // Bubble-round: a notch past the shipped scale, pills everywhere.
+    radiusScale: 120,
+    pill: true,
+    density: 100,
+    typeScale: 100,
+    // Quick on its feet — playful looks answer fast.
+    motionScale: 90,
+    elevation: "soft",
+    // The candy-shop split: Fraunces' soft wonk over Inter's plain text.
+    fontLabel: "Inter",
+    headingFontLabel: "Fraunces (serif)",
+    // Candy-shop sextet: every ambient colour bright and sugared around
+    // the hot-pink key.
+    accents: {
+      coral: "#FF5A8A",
+      violet: "#C45CFF",
+      cobalt: "#5C7CFF",
+      amber: "#FF9A4D",
+      gold: "#FFD34D",
+      mint: "#3DDCB8",
+    },
+    // Candy neighbours: every hue keyed sweet and bright beside the pink.
+    // Red is the action family, left alone.
+    advanced: bases({
+      orange: "#FF7A3D",
+      yellow: "#FFC93D",
+      green: "#2ED98A",
+      teal: "#22C4D6",
+      blue: "#4D6BFF",
+      purple: "#B44DF0",
+    }),
+    // The derived label (a 02-step pink) tops out below AA on any fill
+    // that still reads hot pink — lift it to neutral-00 (the tinted
+    // near-white, same story as Getaway).
+    extraOverrides: {
+      "--color-action-primary-text": "var(--primitive-neutral-00)",
+      "--color-action-primary-text-active": "var(--primitive-neutral-00)",
+    },
+  },
   violet: {
     label: "Velvet",
     brand: "#7434B3",
@@ -402,6 +451,7 @@ export const THEME_SELECTOR_ORDER: ReadonlyArray<string> = [
   "terminal",
   "default",
   "contrast",
+  "pink",
   "violet",
 ];
 

@@ -55,6 +55,15 @@ import { DatePicker } from "@robr0/design-system/components/DatePicker/DatePicke
 import { Dropdown } from "@robr0/design-system/components/Dropdown/Dropdown";
 import { EmptyState } from "@robr0/design-system/components/EmptyState/EmptyState";
 import {
+  EventCalendar,
+  type EventCalendarEvent,
+} from "@robr0/design-system/components/EventCalendar/EventCalendar";
+import {
+  GanttChart,
+  type GanttChartItem,
+  type GanttChartMilestone,
+} from "@robr0/design-system/components/GanttChart/GanttChart";
+import {
   Globe,
   type GlobeArc,
   type GlobePoint,
@@ -75,6 +84,10 @@ import { Table } from "@robr0/design-system/components/Table/Table";
 import { Tabs } from "@robr0/design-system/components/Tabs/Tabs";
 import { Timeline } from "@robr0/design-system/components/Timeline/Timeline";
 import { ToggleSwitch } from "@robr0/design-system/components/ToggleSwitch/ToggleSwitch";
+import {
+  WorldMap,
+  type WorldMapPoint,
+} from "@robr0/design-system/components/WorldMap/WorldMap";
 import { COMPONENT_COUNT } from "@robr0/design-system/components/registry";
 import { TOKEN_COUNT } from "@robr0/design-system/tokens/registry";
 import { MCP_TOOLS } from "@/lib/mcp-tools";
@@ -218,6 +231,67 @@ const GLOBE_ARCS: GlobeArc[] = PAYMENT_ROUTES.map((r, i) => ({
   to: "toronto",
   altitude: i % 2 ? 0.3 : undefined,
 }));
+
+/* July on the money calendar — payroll runs, invoice due dates, and the
+   filings. The month is pinned so the grid never depends on the clock. */
+const CALENDAR_MONTH = "2026-07";
+
+/* The card renders these as dot-only pills (see calendarFit), so the titles
+   serve as the pills' accessible names rather than visible text. */
+const CALENDAR_EVENTS: EventCalendarEvent[] = [
+  { id: "inv-3461-paid", date: "2026-07-02", title: "Invoice #3461 paid", color: "mint" },
+  { id: "payroll-1", date: "2026-07-03", title: "Payroll run", color: "cobalt" },
+  { id: "gst", date: "2026-07-08", title: "GST filing", color: "coral" },
+  { id: "inv-3462-due", date: "2026-07-14", title: "Invoice #3462 due", color: "amber" },
+  { id: "board-review", date: "2026-07-16", title: "Board review", color: "violet" },
+  { id: "payroll-2", date: "2026-07-17", title: "Payroll run", color: "cobalt" },
+  { id: "inv-3458-due", date: "2026-07-21", title: "Invoice #3458 due", color: "amber" },
+  { id: "payout", date: "2026-07-24", title: "Payout to the bank", color: "mint" },
+  { id: "payroll-3", date: "2026-07-31", title: "Payroll run", color: "cobalt" },
+];
+
+/* The quarter close as a schedule — books to filing, with the today rule
+   pinned mid-audit so server and client always draw it in the same place. */
+const CLOSE_TODAY = "2026-07-18";
+
+const CLOSE_ITEMS: GanttChartItem[] = [
+  { id: "books", label: "Close the books", start: "2026-07-01", end: "2026-07-10", color: "cobalt", progress: 100 },
+  { id: "reconcile", label: "Reconciliation", start: "2026-07-06", end: "2026-07-17", color: "mint", progress: 80 },
+  { id: "audit", label: "External audit", start: "2026-07-15", end: "2026-08-07", color: "violet", progress: 30 },
+  { id: "board", label: "Board sign-off", start: "2026-08-10", end: "2026-08-14", color: "amber", projected: true },
+];
+
+const CLOSE_MILESTONES: GanttChartMilestone[] = [
+  { id: "filing", label: "Filing deadline", date: "2026-08-31", color: "coral" },
+];
+
+/* Payout coverage for the flat map — where the platform can send money,
+   colour-coded by how fast a payout settles there. */
+const COVERAGE_CITIES = [
+  { id: "new-york", lat: 40.71, lng: -74.0, label: "New York", currency: "USD", settles: "Same day", tier: 1 },
+  { id: "mexico-city", lat: 19.43, lng: -99.13, label: "Mexico City", currency: "MXN", settles: "1–2 days", tier: 2 },
+  { id: "sao-paulo", lat: -23.55, lng: -46.63, label: "São Paulo", currency: "BRL", settles: "1–2 days", tier: 2 },
+  { id: "london", lat: 51.5, lng: -0.12, label: "London", currency: "GBP", settles: "Same day", tier: 1 },
+  { id: "berlin", lat: 52.52, lng: 13.4, label: "Berlin", currency: "EUR", settles: "Same day", tier: 1 },
+  { id: "lagos", lat: 6.52, lng: 3.38, label: "Lagos", currency: "NGN", settles: "3–5 days", tier: 3 },
+  { id: "mumbai", lat: 19.08, lng: 72.88, label: "Mumbai", currency: "INR", settles: "1–2 days", tier: 2 },
+  { id: "singapore", lat: 1.35, lng: 103.82, label: "Singapore", currency: "SGD", settles: "Same day", tier: 1 },
+  { id: "tokyo", lat: 35.68, lng: 139.69, label: "Tokyo", currency: "JPY", settles: "1–2 days", tier: 2 },
+  { id: "sydney", lat: -33.86, lng: 151.2, label: "Sydney", currency: "AUD", settles: "1–2 days", tier: 2 },
+];
+
+const COVERAGE_POINTS: WorldMapPoint[] = [
+  { id: "toronto", lat: 43.65, lng: -79.38, label: "Toronto", kind: "anchor" },
+  ...COVERAGE_CITIES.map(
+    (c): WorldMapPoint => ({
+      id: c.id,
+      lat: c.lat,
+      lng: c.lng,
+      label: c.label,
+      color: `var(--color-chart-series-${c.tier})`,
+    })
+  ),
+];
 
 /* Virtual cards for the deck — same team as the activity card. */
 const TEAM_CARDS = [
@@ -473,6 +547,8 @@ export default function DesignSystemLanding() {
   const [draft, setDraft] = useState("");
   const [model, setModel] = useState("fable-5");
   const [transferChoice, setTransferChoice] = useState<string | undefined>(undefined);
+  const [calendarDay, setCalendarDay] = useState("2026-07-16");
+  const [closeTask, setCloseTask] = useState<string | undefined>(undefined);
 
   const chartData = range === "6m" ? REVENUE_DATA.slice(1) : REVENUE_DATA;
 
@@ -547,6 +623,26 @@ export default function DesignSystemLanding() {
                   outerRadius={80}
                   height={230}
                   showLegend
+                />
+              </div>
+            </DemoCard>
+
+            <DemoCard
+              heading="The money month"
+              sub="Payroll runs, due dates, and filings in one view."
+              links={[{ label: "Event calendar", href: "/components/event-calendar" }]}
+            >
+              {/* calendarFit reduces pills to their dots — a day cell in a
+                  one-third column has no room for words. The events stay
+                  buttons so their titles survive as accessible names. */}
+              <div className={styles.calendarFit}>
+                <EventCalendar
+                  defaultMonth={CALENDAR_MONTH}
+                  events={CALENDAR_EVENTS}
+                  maxEventsPerDay={2}
+                  selectedDate={calendarDay}
+                  onDateClick={setCalendarDay}
+                  onEventClick={(event) => setCalendarDay(event.date)}
                 />
               </div>
             </DemoCard>
@@ -749,6 +845,28 @@ export default function DesignSystemLanding() {
                 />
               </div>
             </NavCard>
+
+            <DemoCard
+              heading="Quarter close"
+              sub="Six weeks from closing the books to the filing."
+              links={[{ label: "Gantt chart", href: "/components/gantt-chart" }]}
+            >
+              <div className={styles.ganttFit}>
+                <GanttChart
+                  bare
+                  items={CLOSE_ITEMS}
+                  milestones={CLOSE_MILESTONES}
+                  range={{ start: "2026-07-01", end: "2026-09-12" }}
+                  showToday
+                  today={CLOSE_TODAY}
+                  showGrid
+                  selectedId={closeTask}
+                  onItemClick={(item) =>
+                    setCloseTask((current) => (current === item.id ? undefined : item.id))
+                  }
+                />
+              </div>
+            </DemoCard>
 
             <DemoCard
               heading="Trading activity"
@@ -981,6 +1099,32 @@ export default function DesignSystemLanding() {
                     { dataKey: "benchmark", label: "Benchmark", strokeDasharray: "5 4" },
                   ]}
                   height={180}
+                />
+              </div>
+            </DemoCard>
+
+            <DemoCard
+              heading="Payout coverage"
+              sub="Hover a city for the currency and how fast it settles."
+              links={[{ label: "World map", href: "/components/world-map" }]}
+            >
+              {/* The map fills its container — the wrapper owns the height. */}
+              <div className={styles.mapFrame}>
+                <WorldMap
+                  points={COVERAGE_POINTS}
+                  bounds={[-125, -42, 160, 62]}
+                  fit="cover"
+                  showZoomControls
+                  label="Cities the platform can send money to"
+                  renderCallout={(point) => {
+                    const city = COVERAGE_CITIES.find((c) => c.id === point.id);
+                    return (
+                      <MapCallout
+                        title={point.label ?? point.id}
+                        lines={city ? [city.currency, city.settles] : ["Head office"]}
+                      />
+                    );
+                  }}
                 />
               </div>
             </DemoCard>

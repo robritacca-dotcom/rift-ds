@@ -370,6 +370,20 @@
   padding-bottom: var(--gap-400); /* the seam between the two copies = the card gap */
 }
 
+/* Scrollable demos inside the columns (the gantt's timeline, the chat
+   thread, the contribution graph) keep their scroll but lose the bar:
+   a scrollbar on a drifting card reads as broken chrome, and some themes'
+   larger type overflows containers the shipped theme fits. */
+.col * {
+  scrollbar-width: none;
+}
+
+.col *::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
 /* The chat demo thread needs a bounded height to be a scroll container at
    all; without one it grows to its content and the thread's own edge fades
    and jump control never engage */
@@ -796,6 +810,28 @@
 .calendarWrap {
   display: flex;
   justify-content: center;
+}
+
+/* The world map fills its box, so the wrapper owns the height — the same
+   contract the showcase page's frames follow */
+.mapFrame {
+  width: 100%;
+  height: 260px;
+}
+
+/* The gantt's structural sizes are component-scoped custom properties, so
+   the card narrows the label rail and the smallest track to fit a one-third
+   column without the sideways scroll the defaults would force */
+.ganttFit :global(.ds-gantt) {
+  --ds-gantt-label-width: 116px;
+  --ds-gantt-track-min: 240px;
+}
+
+/* At a seventh of a one-third column a day cell is too narrow for words, so
+   the pills reduce to their colour dots — the calendar's own mini-preview
+   look. The full titles stay in each pill's accessible name. */
+.calendarFit :global(.ds-event-calendar__event-title) {
+  display: none;
 }
 
 /* Payment-success pattern: centred check, amount, and stacked actions */

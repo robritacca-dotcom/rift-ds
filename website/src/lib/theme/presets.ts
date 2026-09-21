@@ -172,35 +172,37 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
   },
   contrast: {
     label: "Blueprint",
-    brand: "#1E40AF",
+    brand: "#003DFF",
     tintOn: true,
-    tintSeed: "#1E40AF",
+    tintSeed: "#003DFF",
     tintStrength: 4,
-    radiusScale: 100,
-    pill: true,
+    // Drafting-table corners: squarer than Getaway, rounder than Smoke,
+    // and no pill anywhere.
+    radiusScale: 70,
+    pill: false,
     density: 100,
     typeScale: 100,
     motionScale: 100,
     elevation: "default",
     fontLabel: "IBM Plex Sans",
-    // Cool-leaning sextet: the ambient palette eased toward the cobalt key.
+    // Electric sextet: the ambient palette run hot around the pure-blue key.
     accents: {
-      coral: "#E86A9C",
-      violet: "#7D6BE8",
-      cobalt: "#2F5AE0",
-      amber: "#E89A5E",
-      gold: "#E8C56A",
-      mint: "#3FBFA8",
+      coral: "#FF3D7A",
+      violet: "#7A3DFF",
+      cobalt: "#2E5BFF",
+      amber: "#FF8A3D",
+      gold: "#FFC53D",
+      mint: "#00E0B8",
     },
-    // Cool neighbours: every hue eased toward the cobalt key and slightly
-    // calmed. Blue is the action family, left alone.
+    // Electric neighbours: every hue saturated up to sit beside the
+    // pure-blue key. Blue is the action family, left alone.
     advanced: bases({
-      red: "#E25489",
-      orange: "#E27354",
-      yellow: "#F4BB71",
-      green: "#16C6AB",
-      teal: "#1D7DA6",
-      purple: "#9354E2",
+      red: "#FF2E63",
+      orange: "#FF6B2E",
+      yellow: "#FFC72E",
+      green: "#00D68F",
+      teal: "#00A8E8",
+      purple: "#8A2EFF",
     }),
   },
   coral: {

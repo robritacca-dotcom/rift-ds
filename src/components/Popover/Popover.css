@@ -33,19 +33,37 @@
   background-color: var(--color-bg-page-primary);
   box-shadow: var(--shadow-floating);
 
-  /* Hidden by default */
+  /* Hidden by default. display:none keeps the closed panel out of the tab
+     order and accessibility tree AND out of the page's scrollable overflow —
+     a min-width 200px panel on an edge-adjacent trigger would otherwise add
+     horizontal scroll while invisible (see Tooltip, where the leak was
+     found). allow-discrete holds the panel through the exit fade,
+     @starting-style below supplies the entry frame; browsers without those
+     skip the fades but open and close correctly. */
+  display: none;
   opacity: 0;
-  visibility: hidden; /* keeps panel content out of the tab order when closed */
   pointer-events: none;
   transform: scale(0.96);
-  transition: opacity var(--motion-duration-base) var(--motion-ease-standard), transform var(--motion-duration-base) var(--motion-ease-standard), visibility var(--motion-duration-base) var(--motion-ease-standard);
+  transition-property: opacity, transform, display;
+  transition-duration: var(--motion-duration-base);
+  transition-timing-function: var(--motion-ease-standard);
+  transition-behavior: allow-discrete;
 }
 
 .ds-popover__panel--open {
+  display: block;
   opacity: 1;
-  visibility: visible;
   pointer-events: auto;
   transform: scale(1);
+}
+
+/* Entry state for the display flip: a panel arriving from display:none has
+   no prior computed style, so this supplies the fade's starting frame. */
+@starting-style {
+  .ds-popover__panel--open {
+    opacity: 0;
+    transform: scale(0.96);
+  }
 }
 
 /* ============================================

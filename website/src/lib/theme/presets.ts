@@ -287,6 +287,24 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
       blue: "#3355D8",
       purple: "#8A4DE8",
     }),
+    // Light mode inverts the button: ink fill (mono's exact trio, so the
+    // hover/active steps have proven headroom) under the gold label —
+    // yellow-07 is the rebased key, #FFD166. Dark mode keeps the derived
+    // gold fill, restored below because extras apply to both themes.
+    extraOverrides: {
+      "--color-action-primary-bg": "var(--primitive-neutral-08)",
+      "--color-action-primary-bg-hover": "var(--primitive-neutral-09)",
+      "--color-action-primary-bg-active": "var(--primitive-neutral-10)",
+      "--color-action-primary-text": "var(--primitive-yellow-07)",
+      "--color-action-primary-text-active": "var(--primitive-yellow-07)",
+    },
+    extraOverridesDark: {
+      "--color-action-primary-bg": "var(--primitive-yellow-07)",
+      "--color-action-primary-bg-hover": "var(--primitive-yellow-08)",
+      "--color-action-primary-bg-active": "var(--primitive-yellow-09)",
+      "--color-action-primary-text": "var(--primitive-yellow-11)",
+      "--color-action-primary-text-active": "var(--primitive-yellow-11)",
+    },
   },
   terminal: {
     label: "Terminal",

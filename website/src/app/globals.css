@@ -201,7 +201,10 @@ a {
    BLUR BACKGROUND EFFECTS
    ============================================ */
 .blur-container {
-  position: fixed;
+  /* Anchored to the top of the DOCUMENT, not the viewport: the ambient
+     field is the page's opening, and scrolling moves past it onto the
+     plain page surface — it does not follow the scroll. */
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;

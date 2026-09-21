@@ -75,8 +75,10 @@ export function HiddenBackground() {
  * flashes, nothing is missing, and the server-rendered markup is identical
  * either way, so there is no hydration mismatch.
  *
- * This component owns only the site's half of that arrangement — the fixed
- * layer, the fallback blobs, the config and the dev tuner. The renderer, its
+ * This component owns only the site's half of that arrangement — the
+ * document-top layer (absolute, so the field scrolls away with the page
+ * opening instead of following the viewport), the fallback blobs, the
+ * config and the dev tuner. The renderer, its
  * reduced-motion handling, context-loss recovery and the watchdog that bounds
  * "pending" all live in ShaderField, which reports which of the three states
  * it has reached.

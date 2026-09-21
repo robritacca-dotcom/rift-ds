@@ -16,9 +16,7 @@
    ============================================ */
 
 .ds-hover-card__panel {
-  /* Rendered as a <span> so the card survives inside a <p>; absolute
-     positioning already computes display to block, stated here anyway. */
-  display: block;
+  /* Rendered as a <span> so the card survives inside a <p>. */
   position: absolute;
   z-index: 50;
   min-width: 240px;
@@ -33,18 +31,23 @@
   font-size: var(--font-paragraph-sm-size);
   font-weight: var(--font-paragraph-sm-weight);
   line-height: var(--font-paragraph-sm-line-height);
-  /* visibility keeps the hidden panel out of the accessibility tree and
-     tab order; opacity + transform carry the entrance. */
-  visibility: hidden;
+  /* display:none keeps the hidden panel out of the accessibility tree and
+     tab order AND out of the page's scrollable overflow — an edge-adjacent
+     trigger's 240px+ panel would otherwise add horizontal scroll while
+     invisible (see Tooltip, where the leak was found). The display flip
+     transitions discretely: allow-discrete holds the panel through the exit
+     fade, @starting-style below supplies the entry frame; browsers without
+     those skip the fades but open and close correctly. */
+  display: none;
   opacity: 0;
-  transition:
-    opacity var(--motion-duration-fast) var(--motion-ease-standard),
-    transform var(--motion-duration-fast) var(--motion-ease-standard),
-    visibility var(--motion-duration-fast) var(--motion-ease-standard);
+  transition-property: opacity, transform, display;
+  transition-duration: var(--motion-duration-fast);
+  transition-timing-function: var(--motion-ease-standard);
+  transition-behavior: allow-discrete;
 }
 
 .ds-hover-card__panel--visible {
-  visibility: visible;
+  display: block;
   opacity: 1;
 }
 
@@ -94,4 +97,29 @@
 
 .ds-hover-card__panel--right.ds-hover-card__panel--visible {
   transform: translateY(-50%) translateX(0);
+}
+
+/* Entry states for the display flip: a panel arriving from display:none has
+   no prior computed style, so these supply the fade's starting frame. Each
+   mirrors its position's hidden transform above. */
+@starting-style {
+  .ds-hover-card__panel--top.ds-hover-card__panel--visible {
+    opacity: 0;
+    transform: translateX(-50%) translateY(4px);
+  }
+
+  .ds-hover-card__panel--bottom.ds-hover-card__panel--visible {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-4px);
+  }
+
+  .ds-hover-card__panel--left.ds-hover-card__panel--visible {
+    opacity: 0;
+    transform: translateY(-50%) translateX(4px);
+  }
+
+  .ds-hover-card__panel--right.ds-hover-card__panel--visible {
+    opacity: 0;
+    transform: translateY(-50%) translateX(-4px);
+  }
 }

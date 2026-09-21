@@ -112,7 +112,10 @@ export const Tooltip = ({
       {/*
         No aria-hidden toggle: the trigger's aria-describedby points here, and
         show is delayed, so the description must be computable the moment
-        focus lands. The panel is hidden visually by CSS until visible.
+        focus lands. The panel hides with display:none (accessible-name
+        computation includes hidden nodes referenced by IDREF, so the
+        description survives), which keeps an edge-adjacent panel out of the
+        page's scrollable overflow while hidden.
       */}
       <span className={panelClasses} role="tooltip" id={tooltipId}>
         {content}

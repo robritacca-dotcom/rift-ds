@@ -26,7 +26,6 @@ export default function RatingPage() {
               storybookPath="/?path=/docs/components-rating--docs"
             />
           </div>
-          <ComponentInstallStrip slug="rating" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -81,6 +80,8 @@ export default function RatingPage() {
               <Rating value={2} disabled label="Disabled rating" />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="rating" />
         </main>
       </div>
 

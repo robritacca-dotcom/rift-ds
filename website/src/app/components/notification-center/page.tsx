@@ -140,7 +140,6 @@ export default function NotificationCenterPage() {
             <h1 className={styles.pageTitle}>Notification centre</h1>
             <PageLinks storybookPath="/?path=/docs/components-notificationcenter--docs" />
           </div>
-          <ComponentInstallStrip slug="notification-center" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -210,6 +209,8 @@ export default function NotificationCenterPage() {
               <NotificationCenter />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="notification-center" />
         </main>
       </div>
     </>

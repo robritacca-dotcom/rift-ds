@@ -99,7 +99,6 @@ export default function PaginationPage() {
               storybookPath="/?path=/docs/components-pagination--docs"
             />
           </div>
-          <ComponentInstallStrip slug="pagination" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -144,6 +143,8 @@ export default function PaginationPage() {
             <SectionTitle title="With a table" />
             <PaginatedTable />
           </section>
+
+          <ComponentInstallStrip slug="pagination" />
         </main>
       </div>
 

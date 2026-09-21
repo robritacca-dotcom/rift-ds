@@ -26,7 +26,6 @@ export default function DateInputPage() {
               storybookPath="/?path=/docs/components-dateinput--docs"
             />
           </div>
-          <ComponentInstallStrip slug="date-input" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -84,6 +83,8 @@ export default function DateInputPage() {
               </div>
             </div>
           </section>
+
+          <ComponentInstallStrip slug="date-input" />
         </main>
       </div>
 

@@ -99,7 +99,6 @@ export default function DataTablePage() {
             <h1 className={styles.pageTitle}>Data table</h1>
             <PageLinks storybookPath="/?path=/docs/components-datatable--docs" />
           </div>
-          <ComponentInstallStrip slug="data-table" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -172,6 +171,8 @@ export default function DataTablePage() {
               pageSize={5}
             />
           </section>
+
+          <ComponentInstallStrip slug="data-table" />
         </main>
       </div>
     </>

@@ -39,7 +39,6 @@ export default function StackedBarChartPage() {
             <h1 className={styles.pageTitle}>Stacked bar chart</h1>
             <PageLinks storybookPath="/?path=/docs/components-stackedbarchart--docs" />
           </div>
-          <ComponentInstallStrip slug="stacked-bar-chart" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -61,6 +60,8 @@ export default function StackedBarChartPage() {
               height={350}
             />
           </section>
+
+          <ComponentInstallStrip slug="stacked-bar-chart" />
         </main>
       </div>
 

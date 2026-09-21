@@ -25,7 +25,6 @@ export default function SectionTitlePage() {
               storybookPath="/?path=/docs/components-sectiontitle--docs"
             />
           </div>
-          <ComponentInstallStrip slug="section-title" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -67,6 +66,8 @@ export default function SectionTitlePage() {
               <SectionTitle title="Team members" trailing="12" divider={false} />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="section-title" />
         </main>
       </div>
 

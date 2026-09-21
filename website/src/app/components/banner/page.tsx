@@ -27,7 +27,6 @@ export default function BannerPage() {
               storybookPath="/?path=/docs/components-banner--docs"
             />
           </div>
-          <ComponentInstallStrip slug="banner" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -81,6 +80,8 @@ export default function BannerPage() {
               <Banner variant="neutral" align="center">Read-only preview. Sign in to make changes.</Banner>
             </div>
           </section>
+
+          <ComponentInstallStrip slug="banner" />
         </main>
       </div>
 

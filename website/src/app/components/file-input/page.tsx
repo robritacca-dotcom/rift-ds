@@ -28,7 +28,6 @@ export default function FileInputPage() {
             <h1 className={styles.pageTitle}>File input</h1>
             <PageLinks storybookPath="/?path=/docs/components-fileinput--docs" />
           </div>
-          <ComponentInstallStrip slug="file-input" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>Drop a file, or browse for one</p>
@@ -194,6 +193,8 @@ export default function FileInputPage() {
               />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="file-input" />
         </main>
       </div>
 

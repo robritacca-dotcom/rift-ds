@@ -26,7 +26,6 @@ export default function BreadcrumbPage() {
               storybookPath="/?path=/docs/components-breadcrumb--docs"
             />
           </div>
-          <ComponentInstallStrip slug="breadcrumb" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -80,6 +79,8 @@ export default function BreadcrumbPage() {
               maxItems={3}
             />
           </section>
+
+          <ComponentInstallStrip slug="breadcrumb" />
         </main>
       </div>
 

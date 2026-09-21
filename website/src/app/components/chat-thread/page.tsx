@@ -86,7 +86,6 @@ export default function ChatThreadPage() {
             <h1 className={styles.pageTitle}>Chat thread</h1>
             <PageLinks storybookPath="/?path=/docs/components-chatthread--docs" />
           </div>
-          <ComponentInstallStrip slug="chat-thread" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -147,6 +146,8 @@ export default function ChatThreadPage() {
               thread is actually scrolling, then fades back out.
             </p>
           </section>
+
+          <ComponentInstallStrip slug="chat-thread" />
         </main>
       </div>
 

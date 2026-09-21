@@ -83,7 +83,6 @@ export default function FilterBarPage() {
             <h1 className={styles.pageTitle}>Filter bar</h1>
             <PageLinks storybookPath="/?path=/docs/components-filterbar--docs" />
           </div>
-          <ComponentInstallStrip slug="filter-bar" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -160,6 +159,8 @@ export default function FilterBarPage() {
               choice lands.
             </p>
           </section>
+
+          <ComponentInstallStrip slug="filter-bar" />
         </main>
       </div>
     </>

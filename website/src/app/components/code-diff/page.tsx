@@ -48,7 +48,6 @@ export default function CodeDiffPage() {
               storybookPath="/?path=/docs/components-codediff--docs"
             />
           </div>
-          <ComponentInstallStrip slug="code-diff" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -108,6 +107,8 @@ export default function CodeDiffPage() {
             </p>
             <CodeDiff diff={ADDITIONS_DIFF} filename="src/components/shippedBadge.tsx" />
           </section>
+
+          <ComponentInstallStrip slug="code-diff" />
         </main>
       </div>
     </>

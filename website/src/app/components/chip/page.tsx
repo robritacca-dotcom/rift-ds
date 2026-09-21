@@ -33,7 +33,6 @@ export default function ChipPage() {
               storybookPath="/?path=/docs/components-chip--docs"
             />
           </div>
-          <ComponentInstallStrip slug="chip" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -137,6 +136,8 @@ export default function ChipPage() {
               <Chip label="Disabled selected" selected disabled onClick={() => {}} />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="chip" />
         </main>
       </div>
 

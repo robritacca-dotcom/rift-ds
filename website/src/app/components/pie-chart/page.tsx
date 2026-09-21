@@ -38,7 +38,6 @@ export default function PieChartPage() {
             <h1 className={styles.pageTitle}>Pie chart</h1>
             <PageLinks storybookPath="/?path=/docs/components-piechart--docs" />
           </div>
-          <ComponentInstallStrip slug="pie-chart" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -67,6 +66,8 @@ export default function PieChartPage() {
               />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="pie-chart" />
         </main>
       </div>
 

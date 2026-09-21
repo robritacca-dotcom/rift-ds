@@ -1,4 +1,6 @@
 .strip {
+  /* Bottom of the page, full content-column width: the closer, not an
+     interruption under the title. */
   margin-top: var(--gap-500);
-  max-width: 720px;
+  width: 100%;
 }

@@ -26,7 +26,6 @@ export default function QuotePage() {
               storybookPath="/?path=/docs/components-quote--docs"
             />
           </div>
-          <ComponentInstallStrip slug="quote" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -76,6 +75,8 @@ export default function QuotePage() {
               Design still derisks development.
             </Quote>
           </section>
+
+          <ComponentInstallStrip slug="quote" />
         </main>
       </div>
 

@@ -29,7 +29,6 @@ export default function ChatMessagePage() {
             <h1 className={styles.pageTitle}>Chat message</h1>
             <PageLinks storybookPath="/?path=/docs/components-chatmessage--docs" />
           </div>
-          <ComponentInstallStrip slug="chat-message" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -248,6 +247,8 @@ export default function ChatMessagePage() {
               </ChatMessage>
             </div>
           </section>
+
+          <ComponentInstallStrip slug="chat-message" />
         </main>
       </div>
 

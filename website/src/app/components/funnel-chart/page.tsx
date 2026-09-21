@@ -44,7 +44,6 @@ export default function FunnelChartPage() {
             <h1 className={styles.pageTitle}>Funnel chart</h1>
             <PageLinks storybookPath="/?path=/docs/components-funnelchart--docs" />
           </div>
-          <ComponentInstallStrip slug="funnel-chart" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -115,6 +114,8 @@ export default function FunnelChartPage() {
             </p>
             <FunnelChart data={adsFunnel} />
           </section>
+
+          <ComponentInstallStrip slug="funnel-chart" />
         </main>
       </div>
     </>

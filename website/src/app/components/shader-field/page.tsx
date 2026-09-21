@@ -66,7 +66,6 @@ export default function ShaderFieldPage() {
             <h1 className={styles.pageTitle}>Shader field</h1>
             <PageLinks storybookPath="/?path=/docs/components-shaderfield--docs" />
           </div>
-          <ComponentInstallStrip slug="shader-field" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>Ambient light on the GPU</p>
@@ -211,6 +210,8 @@ export default function ShaderFieldPage() {
               sits outside that contract by construction.
             </p>
           </section>
+
+          <ComponentInstallStrip slug="shader-field" />
         </main>
       </div>
     </>

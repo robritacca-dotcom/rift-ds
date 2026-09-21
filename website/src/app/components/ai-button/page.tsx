@@ -25,7 +25,6 @@ export default function AiButtonPage() {
             <h1 className={styles.pageTitle}>AI button</h1>
             <PageLinks storybookPath="/?path=/docs/components-aibutton--docs" />
           </div>
-          <ComponentInstallStrip slug="ai-button" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -140,6 +139,8 @@ export default function AiButtonPage() {
               />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="ai-button" />
         </main>
       </div>
 

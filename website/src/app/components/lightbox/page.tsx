@@ -59,7 +59,6 @@ export default function LightboxPage() {
             <h1 className={styles.pageTitle}>Lightbox</h1>
             <PageLinks storybookPath="/?path=/docs/components-lightbox--docs" />
           </div>
-          <ComponentInstallStrip slug="lightbox" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -103,6 +102,8 @@ export default function LightboxPage() {
             onPrev={() => setIndex((i) => (i - 1 + count) % count)}
             onNext={() => setIndex((i) => (i + 1) % count)}
           />
+
+          <ComponentInstallStrip slug="lightbox" />
         </main>
       </div>
     </>

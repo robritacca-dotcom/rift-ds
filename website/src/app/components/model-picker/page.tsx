@@ -53,7 +53,6 @@ export default function ModelPickerPage() {
             <h1 className={styles.pageTitle}>Model picker</h1>
             <PageLinks storybookPath="/?path=/docs/components-modelpicker--docs" />
           </div>
-          <ComponentInstallStrip slug="model-picker" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -150,6 +149,8 @@ export default function ModelPickerPage() {
               <ModelPicker models={models} defaultValue="sonnet-5" disabled />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="model-picker" />
         </main>
       </div>
     </>

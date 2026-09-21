@@ -26,7 +26,6 @@ export default function InputPage() {
               storybookPath="/?path=/docs/components-input--docs"
             />
           </div>
-          <ComponentInstallStrip slug="input" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -96,6 +95,8 @@ export default function InputPage() {
               </div>
             </div>
           </section>
+
+          <ComponentInstallStrip slug="input" />
         </main>
       </div>
 

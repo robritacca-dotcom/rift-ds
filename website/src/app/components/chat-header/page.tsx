@@ -58,7 +58,6 @@ export default function ChatHeaderPage() {
             <h1 className={styles.pageTitle}>Chat header</h1>
             <PageLinks storybookPath="/?path=/docs/components-chatheader--docs" />
           </div>
-          <ComponentInstallStrip slug="chat-header" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -124,6 +123,8 @@ export default function ChatHeaderPage() {
               />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="chat-header" />
         </main>
       </div>
 

@@ -39,7 +39,6 @@ export default function BarChartPage() {
             <h1 className={styles.pageTitle}>Bar chart</h1>
             <PageLinks storybookPath="/?path=/docs/components-barchart--docs" />
           </div>
-          <ComponentInstallStrip slug="bar-chart" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -63,6 +62,8 @@ export default function BarChartPage() {
               ]}
             />
           </section>
+
+          <ComponentInstallStrip slug="bar-chart" />
         </main>
       </div>
 

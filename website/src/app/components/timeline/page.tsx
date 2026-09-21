@@ -108,7 +108,6 @@ export default function TimelinePage() {
               storybookPath="/?path=/docs/components-timeline--docs"
             />
           </div>
-          <ComponentInstallStrip slug="timeline" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -159,6 +158,8 @@ export default function TimelinePage() {
             <SectionTitle title="Company: grouped roles" />
             <Timeline variant="company" items={EXPERIENCE} />
           </section>
+
+          <ComponentInstallStrip slug="timeline" />
         </main>
       </div>
 

@@ -26,7 +26,6 @@ export default function ProgressBarPage() {
               storybookPath="/?path=/docs/components-progressbar--docs"
             />
           </div>
-          <ComponentInstallStrip slug="progress-bar" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -55,6 +54,8 @@ export default function ProgressBarPage() {
               <ProgressBar value={30} size="compact" />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="progress-bar" />
         </main>
       </div>
 

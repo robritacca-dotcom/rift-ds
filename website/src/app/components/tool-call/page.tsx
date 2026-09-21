@@ -134,7 +134,6 @@ export default function ToolCallPage() {
             <h1 className={styles.pageTitle}>Tool call</h1>
             <PageLinks storybookPath="/?path=/docs/components-toolcall--docs" />
           </div>
-          <ComponentInstallStrip slug="tool-call" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>What ran, how it went, what it returned</p>
@@ -215,6 +214,8 @@ export default function ToolCallPage() {
             </p>
             <LiveRunDemo />
           </section>
+
+          <ComponentInstallStrip slug="tool-call" />
         </main>
       </div>
 

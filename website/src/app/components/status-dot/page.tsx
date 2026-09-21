@@ -25,7 +25,6 @@ export default function StatusDotPage() {
             <h1 className={styles.pageTitle}>Status dot</h1>
             <PageLinks storybookPath="/?path=/docs/components-statusdot--docs" />
           </div>
-          <ComponentInstallStrip slug="status-dot" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -93,6 +92,8 @@ export default function StatusDotPage() {
               ))}
             </div>
           </section>
+
+          <ComponentInstallStrip slug="status-dot" />
         </main>
       </div>
     </>

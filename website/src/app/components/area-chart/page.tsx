@@ -33,7 +33,6 @@ export default function AreaChartPage() {
             <h1 className={styles.pageTitle}>Area chart</h1>
             <PageLinks storybookPath="/?path=/docs/components-areachart--docs" />
           </div>
-          <ComponentInstallStrip slug="area-chart" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -72,6 +71,8 @@ export default function AreaChartPage() {
               subtitle="January to June 2024"
             />
           </section>
+
+          <ComponentInstallStrip slug="area-chart" />
         </main>
       </div>
 

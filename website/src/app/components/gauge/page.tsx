@@ -29,7 +29,6 @@ export default function GaugePage() {
             <h1 className={styles.pageTitle}>Gauge</h1>
             <PageLinks storybookPath="/?path=/docs/components-gauge--docs" />
           </div>
-          <ComponentInstallStrip slug="gauge" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -182,6 +181,8 @@ export default function GaugePage() {
               </div>
             </div>
           </section>
+
+          <ComponentInstallStrip slug="gauge" />
         </main>
       </div>
     </>

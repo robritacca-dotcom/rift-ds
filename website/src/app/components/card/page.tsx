@@ -40,7 +40,6 @@ export default function CardPage() {
               storybookPath="/?path=/docs/components-card--docs"
             />
           </div>
-          <ComponentInstallStrip slug="card" />
 
           {/* Intro */}
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
@@ -217,6 +216,8 @@ export default function CardPage() {
               <SpacingSwatch label="XS" value="1px" px={1} variant="border" />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="card" />
         </main>
       </div>
 

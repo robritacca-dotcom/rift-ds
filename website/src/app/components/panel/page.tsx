@@ -26,7 +26,6 @@ export default function PanelPage() {
               storybookPath="/?path=/docs/components-panel--docs"
             />
           </div>
-          <ComponentInstallStrip slug="panel" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -85,6 +84,8 @@ export default function PanelPage() {
               </Panel>
             </div>
           </section>
+
+          <ComponentInstallStrip slug="panel" />
         </main>
       </div>
 

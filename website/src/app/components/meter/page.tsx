@@ -26,7 +26,6 @@ export default function MeterPage() {
               storybookPath="/?path=/docs/components-meter--docs"
             />
           </div>
-          <ComponentInstallStrip slug="meter" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -74,6 +73,8 @@ export default function MeterPage() {
               <Meter label="Compact" value={45} size="compact" showValue />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="meter" />
         </main>
       </div>
 

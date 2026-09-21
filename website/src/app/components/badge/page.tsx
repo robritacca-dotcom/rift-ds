@@ -26,7 +26,6 @@ export default function BadgePage() {
               storybookPath="/?path=/docs/components-badge--docs"
             />
           </div>
-          <ComponentInstallStrip slug="badge" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -60,6 +59,8 @@ export default function BadgePage() {
               <Badge variant="info" label="New" />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="badge" />
         </main>
       </div>
 

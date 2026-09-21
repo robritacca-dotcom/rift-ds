@@ -52,7 +52,6 @@ export default function HoverCardPage() {
               storybookPath="/?path=/docs/components-hovercard--docs"
             />
           </div>
-          <ComponentInstallStrip slug="hover-card" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -112,6 +111,8 @@ export default function HoverCardPage() {
               </HoverCard>
             </div>
           </section>
+
+          <ComponentInstallStrip slug="hover-card" />
         </main>
       </div>
 

@@ -26,7 +26,6 @@ export default function TimePickerPage() {
               storybookPath="/?path=/docs/components-timepicker--docs"
             />
           </div>
-          <ComponentInstallStrip slug="time-picker" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -113,6 +112,8 @@ export default function TimePickerPage() {
               </div>
             </div>
           </section>
+
+          <ComponentInstallStrip slug="time-picker" />
         </main>
       </div>
 

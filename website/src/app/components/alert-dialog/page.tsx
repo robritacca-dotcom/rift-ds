@@ -31,7 +31,6 @@ export default function AlertDialogPage() {
               storybookPath="/?path=/docs/components-alertdialog--docs"
             />
           </div>
-          <ComponentInstallStrip slug="alert-dialog" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -90,6 +89,8 @@ export default function AlertDialogPage() {
               />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="alert-dialog" />
         </main>
       </div>
 

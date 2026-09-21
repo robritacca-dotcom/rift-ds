@@ -33,7 +33,6 @@ export default function CarouselPage() {
               storybookPath="/?path=/docs/components-carousel--docs"
             />
           </div>
-          <ComponentInstallStrip slug="carousel" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -99,6 +98,8 @@ export default function CarouselPage() {
               </Carousel>
             </div>
           </section>
+
+          <ComponentInstallStrip slug="carousel" />
         </main>
       </div>
 

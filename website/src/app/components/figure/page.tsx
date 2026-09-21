@@ -27,7 +27,6 @@ export default function FigurePage() {
               storybookPath="/?path=/docs/components-figure--docs"
             />
           </div>
-          <ComponentInstallStrip slug="figure" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -73,6 +72,8 @@ export default function FigurePage() {
               />
             </Figure>
           </section>
+
+          <ComponentInstallStrip slug="figure" />
         </main>
       </div>
 

@@ -39,7 +39,6 @@ export default function MessageCardPage() {
             <h1 className={styles.pageTitle}>Message card</h1>
             <PageLinks storybookPath="/?path=/docs/components-messagecard--docs" />
           </div>
-          <ComponentInstallStrip slug="message-card" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -162,6 +161,8 @@ export default function MessageCardPage() {
               </ChatMessage>
             </div>
           </section>
+
+          <ComponentInstallStrip slug="message-card" />
         </main>
       </div>
 

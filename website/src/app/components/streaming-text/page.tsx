@@ -64,7 +64,6 @@ export default function StreamingTextPage() {
             <h1 className={styles.pageTitle}>Streaming text</h1>
             <PageLinks storybookPath="/?path=/docs/components-streamingtext--docs" />
           </div>
-          <ComponentInstallStrip slug="streaming-text" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -135,6 +134,8 @@ export default function StreamingTextPage() {
               <StreamingText text="A finished message renders whole, with no cursor and no timers running." />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="streaming-text" />
         </main>
       </div>
     </>

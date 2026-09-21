@@ -35,7 +35,6 @@ export default function AvatarGroupPage() {
             <h1 className={styles.pageTitle}>Avatar group</h1>
             <PageLinks storybookPath="/?path=/docs/components-avatargroup--docs" />
           </div>
-          <ComponentInstallStrip slug="avatar-group" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -129,6 +128,8 @@ export default function AvatarGroupPage() {
               </div>
             </div>
           </section>
+
+          <ComponentInstallStrip slug="avatar-group" />
         </main>
       </div>
     </>

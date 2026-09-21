@@ -27,7 +27,6 @@ export default function DividerPage() {
               storybookPath="/?path=/docs/components-divider--docs"
             />
           </div>
-          <ComponentInstallStrip slug="divider" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -106,6 +105,8 @@ export default function DividerPage() {
               <p className={styles.demoText}>End of scale.</p>
             </div>
           </section>
+
+          <ComponentInstallStrip slug="divider" />
         </main>
       </div>
 

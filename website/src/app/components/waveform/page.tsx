@@ -24,7 +24,6 @@ export default function WaveformPage() {
             <h1 className={styles.pageTitle}>Waveform</h1>
             <PageLinks storybookPath="/?path=/docs/components-waveform--docs" />
           </div>
-          <ComponentInstallStrip slug="waveform" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -123,6 +122,8 @@ export default function WaveformPage() {
               </div>
             </div>
           </section>
+
+          <ComponentInstallStrip slug="waveform" />
         </main>
       </div>
     </>

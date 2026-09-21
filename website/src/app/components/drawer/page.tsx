@@ -44,7 +44,6 @@ export default function DrawerPage() {
             <h1 className={styles.pageTitle}>Drawer</h1>
             <PageLinks storybookPath="/?path=/docs/components-drawer--docs" />
           </div>
-          <ComponentInstallStrip slug="drawer" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>A panel anchored to an edge</p>
@@ -228,6 +227,8 @@ export default function DrawerPage() {
               </p>
             </Drawer>
           </section>
+
+          <ComponentInstallStrip slug="drawer" />
         </main>
       </div>
 

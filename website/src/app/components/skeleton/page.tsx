@@ -26,7 +26,6 @@ export default function SkeletonPage() {
               storybookPath="/?path=/docs/components-skeleton--docs"
             />
           </div>
-          <ComponentInstallStrip slug="skeleton" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -72,6 +71,8 @@ export default function SkeletonPage() {
               </div>
             </div>
           </section>
+
+          <ComponentInstallStrip slug="skeleton" />
         </main>
       </div>
 

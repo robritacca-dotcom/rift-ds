@@ -123,7 +123,6 @@ export default function TreeViewPage() {
             <h1 className={styles.pageTitle}>Tree view</h1>
             <PageLinks storybookPath="/?path=/docs/components-treeview--docs" />
           </div>
-          <ComponentInstallStrip slug="tree-view" />
 
           {/* Intro */}
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
@@ -239,6 +238,8 @@ export default function TreeViewPage() {
               ))}
             </div>
           </section>
+
+          <ComponentInstallStrip slug="tree-view" />
         </main>
       </div>
     </>

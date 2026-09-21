@@ -27,7 +27,6 @@ export default function FieldPage() {
             <h1 className={styles.pageTitle}>Field</h1>
             <PageLinks storybookPath="/?path=/docs/components-field--docs" />
           </div>
-          <ComponentInstallStrip slug="field" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -167,6 +166,8 @@ export default function FieldPage() {
             />
           </section>
 
+
+          <ComponentInstallStrip slug="field" />
         </main>
       </div>
     </>

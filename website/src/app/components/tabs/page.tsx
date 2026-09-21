@@ -26,7 +26,6 @@ export default function TabsPage() {
               storybookPath="/?path=/docs/components-tabs--docs"
             />
           </div>
-          <ComponentInstallStrip slug="tabs" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -118,6 +117,8 @@ export default function TabsPage() {
               />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="tabs" />
         </main>
       </div>
 

@@ -76,7 +76,6 @@ export default function AppSidebarPage() {
               storybookPath="/?path=/docs/components-appsidebar--docs"
             />
           </div>
-          <ComponentInstallStrip slug="app-sidebar" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -112,6 +111,8 @@ export default function AppSidebarPage() {
               />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="app-sidebar" />
         </main>
       </div>
 

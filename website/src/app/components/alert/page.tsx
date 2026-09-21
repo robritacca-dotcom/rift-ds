@@ -26,7 +26,6 @@ export default function AlertPage() {
               storybookPath="/?path=/docs/components-alert--docs"
             />
           </div>
-          <ComponentInstallStrip slug="alert" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -71,6 +70,8 @@ export default function AlertPage() {
               <Alert variant="error" title="Dismissible compact" description="Something went wrong." size="compact" dismissible onDismiss={() => {}} />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="alert" />
         </main>
       </div>
 

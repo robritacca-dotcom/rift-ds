@@ -34,7 +34,6 @@ export default function DropdownPage() {
               storybookPath="/?path=/docs/components-dropdown--docs"
             />
           </div>
-          <ComponentInstallStrip slug="dropdown" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -163,6 +162,8 @@ export default function DropdownPage() {
               </div>
             </div>
           </section>
+
+          <ComponentInstallStrip slug="dropdown" />
         </main>
       </div>
 

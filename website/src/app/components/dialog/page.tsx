@@ -36,7 +36,6 @@ export default function DialogPage() {
               storybookPath="/?path=/docs/components-dialog--docs"
             />
           </div>
-          <ComponentInstallStrip slug="dialog" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -201,6 +200,8 @@ export default function DialogPage() {
               ))}
             </Dialog>
           </section>
+
+          <ComponentInstallStrip slug="dialog" />
         </main>
       </div>
 

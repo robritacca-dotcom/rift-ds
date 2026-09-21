@@ -35,7 +35,6 @@ export default function EntityCardPage() {
               storybookPath="/?path=/docs/components-entitycard--docs"
             />
           </div>
-          <ComponentInstallStrip slug="entity-card" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -72,6 +71,8 @@ export default function EntityCardPage() {
               ))}
             </div>
           </section>
+
+          <ComponentInstallStrip slug="entity-card" />
         </main>
       </div>
 

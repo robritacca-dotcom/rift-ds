@@ -37,7 +37,6 @@ export default function SparklinePage() {
             <h1 className={styles.pageTitle}>Sparkline</h1>
             <PageLinks storybookPath="/?path=/docs/components-sparkline--docs" />
           </div>
-          <ComponentInstallStrip slug="sparkline" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -144,6 +143,8 @@ export default function SparklinePage() {
               </div>
             </div>
           </section>
+
+          <ComponentInstallStrip slug="sparkline" />
         </main>
       </div>
     </>

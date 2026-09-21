@@ -119,7 +119,6 @@ export default function ButtonPage() {
               storybookPath="/?path=/docs/components-button--docs"
             />
           </div>
-          <ComponentInstallStrip slug="button" />
 
           {/* Intro */}
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
@@ -171,6 +170,8 @@ export default function ButtonPage() {
               ))}
             </div>
           </section>
+
+          <ComponentInstallStrip slug="button" />
         </main>
       </div>
 

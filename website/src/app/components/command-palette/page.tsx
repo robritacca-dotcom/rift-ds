@@ -84,7 +84,6 @@ export default function CommandPalettePage() {
             <h1 className={styles.pageTitle}>Command palette</h1>
             <PageLinks storybookPath="/?path=/docs/components-commandpalette--docs" />
           </div>
-          <ComponentInstallStrip slug="command-palette" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>Search and run commands from the keyboard</p>
@@ -210,6 +209,8 @@ export default function CommandPalettePage() {
               in the palette footer, which hides on narrow screens.
             </p>
           </section>
+
+          <ComponentInstallStrip slug="command-palette" />
         </main>
       </div>
 

@@ -79,7 +79,6 @@ export default function StepperPage() {
               storybookPath="/?path=/docs/components-stepper--docs"
             />
           </div>
-          <ComponentInstallStrip slug="stepper" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -147,6 +146,8 @@ export default function StepperPage() {
             <SectionTitle title="In a wizard" />
             <WizardDemo />
           </section>
+
+          <ComponentInstallStrip slug="stepper" />
         </main>
       </div>
 

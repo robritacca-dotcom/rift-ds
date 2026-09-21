@@ -26,7 +26,6 @@ export default function EmptyStatePage() {
             <h1 className={styles.pageTitle}>Empty state</h1>
             <PageLinks storybookPath="/?path=/docs/components-emptystate--docs" />
           </div>
-          <ComponentInstallStrip slug="empty-state" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>Blank space that still says something</p>
@@ -164,6 +163,8 @@ export default function EmptyStatePage() {
               />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="empty-state" />
         </main>
       </div>
 

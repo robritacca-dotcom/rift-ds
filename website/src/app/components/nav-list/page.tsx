@@ -80,7 +80,6 @@ export default function NavListPage() {
               storybookPath="/?path=/docs/components-navlist--docs"
             />
           </div>
-          <ComponentInstallStrip slug="nav-list" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -138,6 +137,8 @@ export default function NavListPage() {
               <NavList items={staticGroupItems} aria-label="Static group example" />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="nav-list" />
         </main>
       </div>
 

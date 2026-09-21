@@ -28,7 +28,6 @@ export default function ColorPickerPage() {
               storybookPath="/?path=/docs/components-colorpicker--docs"
             />
           </div>
-          <ComponentInstallStrip slug="color-picker" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -130,6 +129,8 @@ export default function ColorPickerPage() {
               />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="color-picker" />
         </main>
       </div>
 

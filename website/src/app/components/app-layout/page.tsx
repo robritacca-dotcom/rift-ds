@@ -69,7 +69,6 @@ export default function AppLayoutPage() {
               storybookPath="/?path=/docs/components-applayout--docs"
             />
           </div>
-          <ComponentInstallStrip slug="app-layout" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -121,6 +120,8 @@ export default function AppLayoutPage() {
               </AppLayout>
             </div>
           </section>
+
+          <ComponentInstallStrip slug="app-layout" />
         </main>
       </div>
 

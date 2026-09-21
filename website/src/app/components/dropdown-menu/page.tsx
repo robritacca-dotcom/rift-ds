@@ -104,7 +104,6 @@ export default function DropdownMenuPage() {
               storybookPath="/?path=/docs/components-dropdownmenu--docs"
             />
           </div>
-          <ComponentInstallStrip slug="dropdown-menu" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -180,6 +179,8 @@ export default function DropdownMenuPage() {
               </div>
             </div>
           </section>
+
+          <ComponentInstallStrip slug="dropdown-menu" />
         </main>
       </div>
 

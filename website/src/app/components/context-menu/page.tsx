@@ -64,7 +64,6 @@ export default function ContextMenuPage() {
               storybookPath="/?path=/docs/components-contextmenu--docs"
             />
           </div>
-          <ComponentInstallStrip slug="context-menu" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -116,6 +115,8 @@ export default function ContextMenuPage() {
               </div>
             </div>
           </section>
+
+          <ComponentInstallStrip slug="context-menu" />
         </main>
       </div>
 

@@ -56,7 +56,6 @@ export default function AccordionPage() {
               storybookPath="/?path=/docs/components-accordion--docs"
             />
           </div>
-          <ComponentInstallStrip slug="accordion" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -82,6 +81,8 @@ export default function AccordionPage() {
               <Accordion items={faqItems} multiple defaultExpanded={["1", "3"]} />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="accordion" />
         </main>
       </div>
 

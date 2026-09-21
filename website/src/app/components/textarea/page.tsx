@@ -26,7 +26,6 @@ export default function TextareaPage() {
               storybookPath="/?path=/docs/components-textarea--docs"
             />
           </div>
-          <ComponentInstallStrip slug="textarea" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -90,6 +89,8 @@ export default function TextareaPage() {
               </div>
             </div>
           </section>
+
+          <ComponentInstallStrip slug="textarea" />
         </main>
       </div>
 

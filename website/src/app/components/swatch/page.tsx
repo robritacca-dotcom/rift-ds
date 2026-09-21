@@ -38,7 +38,6 @@ export default function SwatchPage() {
               storybookPath="/?path=/docs/components-swatch--docs"
             />
           </div>
-          <ComponentInstallStrip slug="swatch" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -95,6 +94,8 @@ export default function SwatchPage() {
               <Swatch value="#06D6A0" label="Disabled state" disabled />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="swatch" />
         </main>
       </div>
 

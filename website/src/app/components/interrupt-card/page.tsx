@@ -64,7 +64,6 @@ export default function InterruptCardPage() {
             <h1 className={styles.pageTitle}>Interrupt card</h1>
             <PageLinks storybookPath="/?path=/docs/components-interruptcard--docs" />
           </div>
-          <ComponentInstallStrip slug="interrupt-card" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -152,6 +151,8 @@ export default function InterruptCardPage() {
               />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="interrupt-card" />
         </main>
       </div>
 

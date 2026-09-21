@@ -24,7 +24,6 @@ export default function MapCalloutPage() {
             <h1 className={styles.pageTitle}>Map callout</h1>
             <PageLinks storybookPath="/?path=/docs/components-mapcallout--docs" />
           </div>
-          <ComponentInstallStrip slug="map-callout" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -74,6 +73,8 @@ export default function MapCalloutPage() {
               <MapCallout title="Sydney, AU" lines={["-33.86 / 151.20"]} />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="map-callout" />
         </main>
       </div>
     </>

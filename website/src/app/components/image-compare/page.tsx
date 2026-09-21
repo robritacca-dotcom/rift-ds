@@ -31,7 +31,6 @@ export default function ImageComparePage() {
               storybookPath="/?path=/docs/components-imagecompare--docs"
             />
           </div>
-          <ComponentInstallStrip slug="image-compare" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -87,6 +86,8 @@ export default function ImageComparePage() {
               />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="image-compare" />
         </main>
       </div>
 

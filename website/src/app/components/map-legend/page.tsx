@@ -24,7 +24,6 @@ export default function MapLegendPage() {
             <h1 className={styles.pageTitle}>Map legend</h1>
             <PageLinks storybookPath="/?path=/docs/components-maplegend--docs" />
           </div>
-          <ComponentInstallStrip slug="map-legend" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -103,6 +102,8 @@ export default function MapLegendPage() {
               />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="map-legend" />
         </main>
       </div>
     </>

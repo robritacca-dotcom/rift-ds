@@ -35,7 +35,6 @@ export default function CircularButtonPage() {
               storybookPath="/?path=/docs/components-circularbutton--docs"
             />
           </div>
-          <ComponentInstallStrip slug="circular-button" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -188,6 +187,8 @@ export default function CircularButtonPage() {
               <CircularButton icon="sort" variant="neutral" size="compact" ariaLabel="Sort" />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="circular-button" />
         </main>
       </div>
 

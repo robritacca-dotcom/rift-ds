@@ -73,7 +73,6 @@ export default function ButtonGroupPage() {
               storybookPath="/?path=/docs/components-buttongroup--docs"
             />
           </div>
-          <ComponentInstallStrip slug="button-group" />
 
           {/* Intro */}
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
@@ -121,6 +120,8 @@ export default function ButtonGroupPage() {
               </div>
             </div>
           </section>
+
+          <ComponentInstallStrip slug="button-group" />
         </main>
       </div>
 

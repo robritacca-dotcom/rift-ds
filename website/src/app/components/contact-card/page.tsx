@@ -28,7 +28,6 @@ export default function ContactCardPage() {
               storybookPath="/?path=/docs/components-contactcard--docs"
             />
           </div>
-          <ComponentInstallStrip slug="contact-card" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -109,6 +108,8 @@ export default function ContactCardPage() {
               />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="contact-card" />
         </main>
       </div>
 

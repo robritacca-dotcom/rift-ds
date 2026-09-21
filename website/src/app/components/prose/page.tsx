@@ -25,7 +25,6 @@ export default function ProsePage() {
             <h1 className={styles.pageTitle}>Prose</h1>
             <PageLinks storybookPath="/?path=/docs/components-prose--docs" />
           </div>
-          <ComponentInstallStrip slug="prose" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -263,6 +262,8 @@ export function Dashboard() {
               </Prose>
             </div>
           </section>
+
+          <ComponentInstallStrip slug="prose" />
         </main>
       </div>
 

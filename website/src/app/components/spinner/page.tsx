@@ -26,7 +26,6 @@ export default function SpinnerPage() {
               storybookPath="/?path=/docs/components-spinner--docs"
             />
           </div>
-          <ComponentInstallStrip slug="spinner" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -55,6 +54,8 @@ export default function SpinnerPage() {
               <Spinner variant="neutral" size="lg" />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="spinner" />
         </main>
       </div>
 

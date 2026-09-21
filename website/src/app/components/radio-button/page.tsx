@@ -26,7 +26,6 @@ export default function RadioButtonPage() {
               storybookPath="/?path=/docs/components-radiobutton--docs"
             />
           </div>
-          <ComponentInstallStrip slug="radio-button" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -124,6 +123,8 @@ export default function RadioButtonPage() {
               </div>
             </div>
           </section>
+
+          <ComponentInstallStrip slug="radio-button" />
         </main>
       </div>
 

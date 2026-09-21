@@ -28,7 +28,6 @@ export default function PinInputPage() {
               storybookPath="/?path=/docs/components-pininput--docs"
             />
           </div>
-          <ComponentInstallStrip slug="pin-input" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -115,6 +114,8 @@ export default function PinInputPage() {
               </div>
             </div>
           </section>
+
+          <ComponentInstallStrip slug="pin-input" />
         </main>
       </div>
     </>

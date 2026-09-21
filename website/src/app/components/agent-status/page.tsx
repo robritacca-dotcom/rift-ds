@@ -40,7 +40,6 @@ export default function AgentStatusPage() {
             <h1 className={styles.pageTitle}>Agent status</h1>
             <PageLinks storybookPath="/?path=/docs/components-agentstatus--docs" />
           </div>
-          <ComponentInstallStrip slug="agent-status" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>What the agent is doing, right now</p>
@@ -166,6 +165,8 @@ export default function AgentStatusPage() {
               switched off, because for some readers it always is.
             </p>
           </section>
+
+          <ComponentInstallStrip slug="agent-status" />
         </main>
       </div>
 

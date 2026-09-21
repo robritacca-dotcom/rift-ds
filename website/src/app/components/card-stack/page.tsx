@@ -47,7 +47,6 @@ export default function CardStackPage() {
             <h1 className={styles.pageTitle}>Card stack</h1>
             <PageLinks storybookPath="/?path=/docs/components-cardstack--docs" />
           </div>
-          <ComponentInstallStrip slug="card-stack" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -135,6 +134,8 @@ export default function CardStackPage() {
               </div>
             </div>
           </section>
+
+          <ComponentInstallStrip slug="card-stack" />
         </main>
       </div>
     </>

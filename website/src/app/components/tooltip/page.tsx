@@ -28,7 +28,6 @@ export default function TooltipPage() {
               storybookPath="/?path=/docs/components-tooltip--docs"
             />
           </div>
-          <ComponentInstallStrip slug="tooltip" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -92,6 +91,8 @@ export default function TooltipPage() {
               </Tooltip>
             </div>
           </section>
+
+          <ComponentInstallStrip slug="tooltip" />
         </main>
       </div>
 

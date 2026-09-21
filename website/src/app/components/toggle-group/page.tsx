@@ -31,7 +31,6 @@ export default function ToggleGroupPage() {
               storybookPath="/?path=/docs/components-togglegroup--docs"
             />
           </div>
-          <ComponentInstallStrip slug="toggle-group" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -127,6 +126,8 @@ export default function ToggleGroupPage() {
               />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="toggle-group" />
         </main>
       </div>
 

@@ -135,7 +135,6 @@ export default function ThreadTabsPage() {
             <h1 className={styles.pageTitle}>Thread tabs</h1>
             <PageLinks storybookPath="/?path=/docs/components-threadtabs--docs" />
           </div>
-          <ComponentInstallStrip slug="thread-tabs" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>The open sessions, one strip</p>
@@ -194,6 +193,8 @@ export default function ThreadTabsPage() {
             </p>
             <LongLabelsDemo />
           </section>
+
+          <ComponentInstallStrip slug="thread-tabs" />
         </main>
       </div>
     </>

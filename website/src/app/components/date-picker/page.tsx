@@ -26,7 +26,6 @@ export default function DatePickerPage() {
               storybookPath="/?path=/docs/components-datepicker--docs"
             />
           </div>
-          <ComponentInstallStrip slug="date-picker" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -69,6 +68,8 @@ export default function DatePickerPage() {
               <DatePicker size="compact" value="2026-02-16" onDateSelect={() => {}} />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="date-picker" />
         </main>
       </div>
 

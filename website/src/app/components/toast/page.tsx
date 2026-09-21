@@ -91,7 +91,6 @@ export default function ToastPage() {
               storybookPath="/?path=/docs/components-toast--docs"
             />
           </div>
-          <ComponentInstallStrip slug="toast" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -145,6 +144,8 @@ export default function ToastPage() {
             <SectionTitle title="Interactive" />
             <ToastTriggers />
           </section>
+
+          <ComponentInstallStrip slug="toast" />
         </main>
       </div>
 

@@ -27,7 +27,6 @@ export default function LinkListPage() {
               storybookPath="/?path=/docs/components-linklist--docs"
             />
           </div>
-          <ComponentInstallStrip slug="link-list" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -115,6 +114,8 @@ export default function LinkListPage() {
               />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="link-list" />
         </main>
       </div>
 

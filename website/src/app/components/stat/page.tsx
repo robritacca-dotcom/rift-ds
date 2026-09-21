@@ -27,7 +27,6 @@ export default function StatPage() {
               storybookPath="/?path=/docs/components-stat--docs"
             />
           </div>
-          <ComponentInstallStrip slug="stat" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -87,6 +86,8 @@ export default function StatPage() {
               <Stat value="2×" label="First-generation usability" />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="stat" />
         </main>
       </div>
 

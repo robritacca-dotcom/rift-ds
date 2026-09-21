@@ -27,7 +27,6 @@ export default function SelectionCardPage() {
               storybookPath="/?path=/docs/components-selectioncard--docs"
             />
           </div>
-          <ComponentInstallStrip slug="selection-card" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -161,6 +160,8 @@ export default function SelectionCardPage() {
               />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="selection-card" />
         </main>
       </div>
 

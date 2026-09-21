@@ -25,7 +25,6 @@ export default function SplitPanePage() {
             <h1 className={styles.pageTitle}>Split pane</h1>
             <PageLinks storybookPath="/?path=/docs/components-splitpane--docs" />
           </div>
-          <ComponentInstallStrip slug="split-pane" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -114,6 +113,8 @@ export default function SplitPanePage() {
               </SplitPane>
             </div>
           </section>
+
+          <ComponentInstallStrip slug="split-pane" />
         </main>
       </div>
     </>

@@ -87,7 +87,6 @@ export default function ComboboxPage() {
             <h1 className={styles.pageTitle}>Combobox</h1>
             <PageLinks storybookPath="/?path=/docs/components-combobox--docs" />
           </div>
-          <ComponentInstallStrip slug="combobox" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>A select you can type into</p>
@@ -233,6 +232,8 @@ export default function ComboboxPage() {
               />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="combobox" />
         </main>
       </div>
 

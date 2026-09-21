@@ -28,7 +28,6 @@ export default function UsageCardPage() {
               storybookPath="/?path=/docs/components-usagecard--docs"
             />
           </div>
-          <ComponentInstallStrip slug="usage-card" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -118,6 +117,8 @@ export default function UsageCardPage() {
               </Panel>
             </div>
           </section>
+
+          <ComponentInstallStrip slug="usage-card" />
         </main>
       </div>
     </>

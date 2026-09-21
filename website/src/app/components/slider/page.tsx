@@ -29,7 +29,6 @@ export default function SliderPage() {
               storybookPath="/?path=/docs/components-slider--docs"
             />
           </div>
-          <ComponentInstallStrip slug="slider" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -63,6 +62,8 @@ export default function SliderPage() {
               <Slider value={50} disabled />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="slider" />
         </main>
       </div>
 

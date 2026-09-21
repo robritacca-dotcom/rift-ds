@@ -34,7 +34,6 @@ export default function ToggleSwitchPage() {
               storybookPath="/?path=/docs/components-toggleswitch--docs"
             />
           </div>
-          <ComponentInstallStrip slug="toggle-switch" />
 
           {/* Intro */}
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
@@ -90,6 +89,8 @@ export default function ToggleSwitchPage() {
               </div>
             </div>
           </section>
+
+          <ComponentInstallStrip slug="toggle-switch" />
         </main>
       </div>
 

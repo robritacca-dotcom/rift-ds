@@ -56,7 +56,6 @@ export default function WorldMapPage() {
             <h1 className={styles.pageTitle}>World map</h1>
             <PageLinks storybookPath="/?path=/docs/components-worldmap--docs" />
           </div>
-          <ComponentInstallStrip slug="world-map" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -169,6 +168,8 @@ export default function WorldMapPage() {
               </div>
             </div>
           </section>
+
+          <ComponentInstallStrip slug="world-map" />
         </main>
       </div>
     </>

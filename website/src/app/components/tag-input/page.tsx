@@ -26,7 +26,6 @@ export default function TagInputPage() {
               storybookPath="/?path=/docs/components-taginput--docs"
             />
           </div>
-          <ComponentInstallStrip slug="tag-input" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -84,6 +83,8 @@ export default function TagInputPage() {
               </div>
             </div>
           </section>
+
+          <ComponentInstallStrip slug="tag-input" />
         </main>
       </div>
 

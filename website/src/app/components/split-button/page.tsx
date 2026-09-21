@@ -121,7 +121,6 @@ export default function SplitButtonPage() {
               storybookPath="/?path=/docs/components-splitbutton--docs"
             />
           </div>
-          <ComponentInstallStrip slug="split-button" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -143,6 +142,8 @@ export default function SplitButtonPage() {
               />
             ))
           )}
+
+          <ComponentInstallStrip slug="split-button" />
         </main>
       </div>
 

@@ -75,7 +75,6 @@ export default function DocumentChipPage() {
             <h1 className={styles.pageTitle}>Document chip</h1>
             <PageLinks storybookPath="/?path=/docs/components-documentchip--docs" />
           </div>
-          <ComponentInstallStrip slug="document-chip" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -164,6 +163,8 @@ export default function DocumentChipPage() {
               </div>
             </div>
           </section>
+
+          <ComponentInstallStrip slug="document-chip" />
         </main>
       </div>
 

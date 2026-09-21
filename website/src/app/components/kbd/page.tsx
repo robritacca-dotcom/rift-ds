@@ -27,7 +27,6 @@ export default function KbdPage() {
               storybookPath="/?path=/docs/components-kbd--docs"
             />
           </div>
-          <ComponentInstallStrip slug="kbd" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -110,6 +109,8 @@ export default function KbdPage() {
               <Kbd size="compact">Enter</Kbd> to run one.
             </p>
           </section>
+
+          <ComponentInstallStrip slug="kbd" />
         </main>
       </div>
 

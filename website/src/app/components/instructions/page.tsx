@@ -26,7 +26,6 @@ export default function InstructionsPage() {
               storybookPath="/?path=/docs/components-instructions--docs"
             />
           </div>
-          <ComponentInstallStrip slug="instructions" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -99,6 +98,8 @@ export default function InstructionsPage() {
               />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="instructions" />
         </main>
       </div>
 

@@ -27,7 +27,6 @@ export default function SourceTrailPage() {
               storybookPath="/?path=/docs/components-sourcetrail--docs"
             />
           </div>
-          <ComponentInstallStrip slug="source-trail" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -119,6 +118,8 @@ export default function SourceTrailPage() {
               />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="source-trail" />
         </main>
       </div>
     </>

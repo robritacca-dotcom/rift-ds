@@ -29,7 +29,6 @@ export default function AnimatedNumberPage() {
             <h1 className={styles.pageTitle}>Animated number</h1>
             <PageLinks storybookPath="/?path=/docs/components-animatednumber--docs" />
           </div>
-          <ComponentInstallStrip slug="animated-number" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -112,6 +111,8 @@ export default function AnimatedNumberPage() {
               </div>
             </div>
           </section>
+
+          <ComponentInstallStrip slug="animated-number" />
         </main>
       </div>
     </>

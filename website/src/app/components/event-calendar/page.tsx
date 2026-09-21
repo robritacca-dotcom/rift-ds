@@ -79,7 +79,6 @@ export default function EventCalendarPage() {
             <h1 className={styles.pageTitle}>Event calendar</h1>
             <PageLinks storybookPath="/?path=/docs/components-eventcalendar--docs" />
           </div>
-          <ComponentInstallStrip slug="event-calendar" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -129,6 +128,8 @@ export default function EventCalendarPage() {
             </p>
             <EventCalendar events={events.slice(0, 8)} defaultMonth="2026-08" />
           </section>
+
+          <ComponentInstallStrip slug="event-calendar" />
         </main>
       </div>
     </>

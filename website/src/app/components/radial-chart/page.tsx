@@ -30,7 +30,6 @@ export default function RadialChartPage() {
             <h1 className={styles.pageTitle}>Radial chart</h1>
             <PageLinks storybookPath="/?path=/docs/components-radialchart--docs" />
           </div>
-          <ComponentInstallStrip slug="radial-chart" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -62,6 +61,8 @@ export default function RadialChartPage() {
               />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="radial-chart" />
         </main>
       </div>
 

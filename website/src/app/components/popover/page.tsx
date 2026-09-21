@@ -27,7 +27,6 @@ export default function PopoverPage() {
               storybookPath="/?path=/docs/components-popover--docs"
             />
           </div>
-          <ComponentInstallStrip slug="popover" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -101,6 +100,8 @@ export default function PopoverPage() {
               </Popover>
             </div>
           </section>
+
+          <ComponentInstallStrip slug="popover" />
         </main>
       </div>
 

@@ -63,7 +63,6 @@ export default function RichDropdownPage() {
               storybookPath="/?path=/docs/components-richdropdown--docs"
             />
           </div>
-          <ComponentInstallStrip slug="rich-dropdown" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -176,6 +175,8 @@ export default function RichDropdownPage() {
               </div>
             </div>
           </section>
+
+          <ComponentInstallStrip slug="rich-dropdown" />
         </main>
       </div>
 

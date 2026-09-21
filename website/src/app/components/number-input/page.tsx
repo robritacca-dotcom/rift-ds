@@ -26,7 +26,6 @@ export default function NumberInputPage() {
               storybookPath="/?path=/docs/components-numberinput--docs"
             />
           </div>
-          <ComponentInstallStrip slug="number-input" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -97,6 +96,8 @@ export default function NumberInputPage() {
               </div>
             </div>
           </section>
+
+          <ComponentInstallStrip slug="number-input" />
         </main>
       </div>
 

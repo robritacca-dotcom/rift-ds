@@ -35,7 +35,6 @@ export default function LegendTilePage() {
             <h1 className={styles.pageTitle}>Legend tile</h1>
             <PageLinks storybookPath="/?path=/docs/components-legendtile--docs" />
           </div>
-          <ComponentInstallStrip slug="legend-tile" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -104,6 +103,8 @@ export default function LegendTilePage() {
               />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="legend-tile" />
         </main>
       </div>
     </>

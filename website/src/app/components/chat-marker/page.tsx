@@ -25,7 +25,6 @@ export default function ChatMarkerPage() {
             <h1 className={styles.pageTitle}>Chat marker</h1>
             <PageLinks storybookPath="/?path=/docs/components-chatmarker--docs" />
           </div>
-          <ComponentInstallStrip slug="chat-marker" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -105,6 +104,8 @@ export default function ChatMarkerPage() {
               </p>
             </div>
           </section>
+
+          <ComponentInstallStrip slug="chat-marker" />
         </main>
       </div>
 

@@ -55,7 +55,6 @@ export default function CodeBlockPage() {
               storybookPath="/?path=/docs/components-codeblock--docs"
             />
           </div>
-          <ComponentInstallStrip slug="code-block" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -128,6 +127,8 @@ export default function CodeBlockPage() {
             <SectionTitle title="Bare (no header)" />
             <CodeBlock code="npm run storybook" showCopy={false} />
           </section>
+
+          <ComponentInstallStrip slug="code-block" />
         </main>
       </div>
 

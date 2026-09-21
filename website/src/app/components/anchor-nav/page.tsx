@@ -40,7 +40,6 @@ export default function AnchorNavPage() {
             <h1 className={styles.pageTitle}>Anchor nav</h1>
             <PageLinks storybookPath="/?path=/docs/components-anchornav--docs" />
           </div>
-          <ComponentInstallStrip slug="anchor-nav" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -96,6 +95,8 @@ export default function AnchorNavPage() {
               <AnchorNav items={pageItems} title="Contents" />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="anchor-nav" />
         </main>
       </div>
 

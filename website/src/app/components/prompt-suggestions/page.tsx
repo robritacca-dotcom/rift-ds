@@ -26,7 +26,6 @@ export default function PromptSuggestionsPage() {
             <h1 className={styles.pageTitle}>Prompt suggestions</h1>
             <PageLinks storybookPath="/?path=/docs/components-promptsuggestions--docs" />
           </div>
-          <ComponentInstallStrip slug="prompt-suggestions" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -213,6 +212,8 @@ export default function PromptSuggestionsPage() {
               />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="prompt-suggestions" />
         </main>
       </div>
 

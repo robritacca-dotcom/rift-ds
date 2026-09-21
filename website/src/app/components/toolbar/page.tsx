@@ -30,7 +30,6 @@ export default function ToolbarPage() {
             <h1 className={styles.pageTitle}>Toolbar</h1>
             <PageLinks storybookPath="/?path=/docs/components-toolbar--docs" />
           </div>
-          <ComponentInstallStrip slug="toolbar" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -125,6 +124,8 @@ export default function ToolbarPage() {
               </Toolbar>
             </div>
           </section>
+
+          <ComponentInstallStrip slug="toolbar" />
         </main>
       </div>
     </>

@@ -67,7 +67,6 @@ export default function NavigationPage() {
               storybookPath="/?path=/docs/components-nav--docs"
             />
           </div>
-          <ComponentInstallStrip slug="nav" />
 
           {/* Intro */}
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
@@ -168,6 +167,8 @@ export default function NavigationPage() {
               </div>
             </div>
           </section>
+
+          <ComponentInstallStrip slug="nav" />
         </main>
       </div>
 

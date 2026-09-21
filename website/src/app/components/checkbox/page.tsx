@@ -26,7 +26,6 @@ export default function CheckboxPage() {
               storybookPath="/?path=/docs/components-checkbox--docs"
             />
           </div>
-          <ComponentInstallStrip slug="checkbox" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -150,6 +149,8 @@ export default function CheckboxPage() {
               </div>
             </div>
           </section>
+
+          <ComponentInstallStrip slug="checkbox" />
         </main>
       </div>
 

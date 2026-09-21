@@ -47,7 +47,6 @@ export default function TablePage() {
               storybookPath="/?path=/docs/components-table--docs"
             />
           </div>
-          <ComponentInstallStrip slug="table" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -252,6 +251,8 @@ export default function TablePage() {
               />
             </div>
           </section>
+
+          <ComponentInstallStrip slug="table" />
         </main>
       </div>
 

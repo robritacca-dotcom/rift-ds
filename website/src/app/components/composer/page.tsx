@@ -156,7 +156,6 @@ export default function ComposerPage() {
             <h1 className={styles.pageTitle}>Composer</h1>
             <PageLinks storybookPath="/?path=/docs/components-composer--docs" />
           </div>
-          <ComponentInstallStrip slug="composer" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -289,6 +288,8 @@ export default function ComposerPage() {
             </p>
             <FullFooterDemo />
           </section>
+
+          <ComponentInstallStrip slug="composer" />
         </main>
       </div>
 

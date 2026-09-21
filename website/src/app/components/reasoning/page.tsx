@@ -67,7 +67,6 @@ export default function ReasoningPage() {
             <h1 className={styles.pageTitle}>Reasoning</h1>
             <PageLinks storybookPath="/?path=/docs/components-reasoning--docs" />
           </div>
-          <ComponentInstallStrip slug="reasoning" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>Thinking, without it taking over</p>
@@ -177,6 +176,8 @@ export default function ReasoningPage() {
               boundaries instead: thinking, then thought for so long.
             </p>
           </section>
+
+          <ComponentInstallStrip slug="reasoning" />
         </main>
       </div>
 

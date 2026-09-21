@@ -63,7 +63,6 @@ export default function ContributionGraphPage() {
               storybookPath="/?path=/docs/components-contributiongraph--docs"
             />
           </div>
-          <ComponentInstallStrip slug="contribution-graph" />
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
@@ -110,6 +109,8 @@ export default function ContributionGraphPage() {
               showLegend={false}
             />
           </section>
+
+          <ComponentInstallStrip slug="contribution-graph" />
         </main>
       </div>
 

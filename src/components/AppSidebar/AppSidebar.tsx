@@ -152,12 +152,33 @@ export const AppSidebar = ({
   /* Expand / collapse */
   const [internalExpanded, setInternalExpanded] = useState(defaultExpanded);
   const isExpanded = controlledExpanded ?? internalExpanded;
+  const onExpandedChangeRef = useRef(onExpandedChange);
+  useEffect(() => {
+    onExpandedChangeRef.current = onExpandedChange;
+  }, [onExpandedChange]);
 
   const toggleExpanded = useCallback(() => {
     const next = !isExpanded;
     setInternalExpanded(next);
     onExpandedChange?.(next);
   }, [isExpanded, onExpandedChange]);
+
+  /* Tablet band (769-959px): the expanded rail is a third of the
+     viewport, so entering the band folds it to the icon rail once —
+     through the same path a click takes, so controlled hosts hear it.
+     Deliberately entry-only: the visitor can re-expand by hand. */
+  useEffect(() => {
+    const band = window.matchMedia('(min-width: 769px) and (max-width: 959px)');
+    const onChange = () => {
+      if (band.matches) {
+        setInternalExpanded(false);
+        onExpandedChangeRef.current?.(false);
+      }
+    };
+    onChange();
+    band.addEventListener('change', onChange);
+    return () => band.removeEventListener('change', onChange);
+  }, []);
 
   /* Mobile drawer: below the breakpoint the rail is hidden and the
      trigger opens it as a modal overlay, on the shared behavior layer

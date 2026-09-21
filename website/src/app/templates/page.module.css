@@ -326,3 +326,90 @@
   padding-inline: var(--showcase-inset);
   margin-bottom: var(--gap-500);
 }
+
+/* ============================================
+   PHONE MOCKUP — the mobile preview wears the playground chat stage's
+   device chrome (ChatView.module.css owns the strip geometry): status
+   bar above, home bar below, the whole device scaled as one block so
+   the OS strips shrink with the screen.
+   ============================================ */
+.phoneMock {
+  position: relative;
+  width: calc(var(--design-w, 390px) * var(--frame-scale, 0));
+  height: calc((var(--design-h, 844px) + 78px) * var(--frame-scale, 0));
+}
+
+.phoneMockInner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  width: var(--design-w, 390px);
+  height: calc(var(--design-h, 844px) + 78px);
+  transform: scale(var(--frame-scale, 0));
+  transform-origin: top left;
+  /* ds-allow(mockup): 32px hardware-bezel radius, matching the
+     playground device's set dressing rather than the UI radius scale */
+  border-radius: 32px;
+  overflow: hidden;
+  border: var(--border-025) solid var(--color-bg-container-border);
+  background: var(--color-bg-page-primary);
+  box-shadow: var(--shadow-floating);
+}
+
+.mockStatusBar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 54px;
+  padding: var(--padding-150) var(--padding-400) 0;
+  flex-shrink: 0;
+  color: var(--color-text-primary);
+}
+
+.mockStatusTime {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  font-variant-numeric: tabular-nums;
+}
+
+.mockStatusIcons {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-050);
+  --icon-size: var(--icon-size-500);
+}
+
+.mockScreen {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Inside the mockup the WHOLE device is already scaled as one block, so
+   the frame's own scale must not apply again — double-scaling shrank
+   the app to a strip inside the phone. */
+.mockScreen .frame {
+  transform: none;
+}
+
+.mockHomeBar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 24px;
+  padding-bottom: var(--padding-150);
+  flex-shrink: 0;
+}
+
+.mockHomeIndicator {
+  width: 134px;
+  height: 5px;
+  border-radius: var(--radius-pill);
+  background: var(--color-text-primary);
+}

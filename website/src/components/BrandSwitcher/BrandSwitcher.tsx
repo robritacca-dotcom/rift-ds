@@ -91,6 +91,11 @@ export default function BrandSwitcher({
       <button
         type="button"
         className={styles.trigger}
+        /* Concentric with the swatch inside (the Composer's rule): the
+           trigger's curve is the swatch's radius plus the 11px inset
+           around it, so a squared theme squares the pill in parallel.
+           The 999px circle saturates to the same circle as before. */
+        style={{ borderRadius: `calc(${activeTile.swatchRadius} + 11px)` }}
         aria-label={`Theme: ${activeTile.label}`}
         title={`Theme: ${activeTile.label}`}
         aria-haspopup="menu"

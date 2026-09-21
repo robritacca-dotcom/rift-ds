@@ -53,6 +53,11 @@ function LiveFrame({
   device: DeviceKey;
 }) {
   const { w: designW, h: designH } = DEVICES[device];
+  /* The phone mockup's OS strips (54px status bar + 24px home bar),
+     rendered inside the scaled device so the chrome shrinks with the
+     screen. Geometry mirrors the playground chat stage's set dressing
+     (ChatView.module.css owns the strip recipe). */
+  const chromeH = device === "mobile" ? 78 : 0;
   const shellRef = useRef<HTMLDivElement>(null);
   const frameRef = useRef<HTMLIFrameElement>(null);
 
@@ -110,12 +115,12 @@ function LiveFrame({
       const pad = device === "desktop" ? 0 : 24;
       shell.style.setProperty(
         "--frame-scale",
-        `${(shell.clientHeight - pad * 2) / designH}`
+        `${(shell.clientHeight - pad * 2) / (designH + chromeH)}`
       );
     });
     observer.observe(shell);
     return () => observer.disconnect();
-  }, [designH, device]);
+  }, [designH, chromeH, device]);
 
   return (
     <div
@@ -123,16 +128,46 @@ function LiveFrame({
       className={`${styles.frameShell} ${device !== "desktop" ? styles.frameShellDevice : ""}`}
       style={{ "--design-w": `${designW}px`, "--design-h": `${designH}px` } as React.CSSProperties}
     >
-      <div className={styles.frameViewport}>
-        <iframe
-          ref={frameRef}
-          src={href}
-          title={title}
-          className={styles.frame}
-          tabIndex={-1}
-          onLoad={sync}
-        />
-      </div>
+      {device === "mobile" ? (
+        /* The phone mockup: OS chrome above and below the app, the whole
+           device scaled as one so the strips shrink with the screen. */
+        <div className={styles.phoneMock}>
+          <div className={styles.phoneMockInner}>
+            <div className={styles.mockStatusBar} aria-hidden="true">
+              <span className={styles.mockStatusTime}>9:41</span>
+              <span className={styles.mockStatusIcons}>
+                <span className="material-symbols-rounded">signal_cellular_alt</span>
+                <span className="material-symbols-rounded">wifi</span>
+                <span className="material-symbols-rounded">battery_full</span>
+              </span>
+            </div>
+            <div className={styles.mockScreen}>
+              <iframe
+                ref={frameRef}
+                src={href}
+                title={title}
+                className={styles.frame}
+                tabIndex={-1}
+                onLoad={sync}
+              />
+            </div>
+            <div className={styles.mockHomeBar} aria-hidden="true">
+              <span className={styles.mockHomeIndicator} />
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className={styles.frameViewport}>
+          <iframe
+            ref={frameRef}
+            src={href}
+            title={title}
+            className={styles.frame}
+            tabIndex={-1}
+            onLoad={sync}
+          />
+        </div>
+      )}
       <Link
         href={href}
         target="_blank"

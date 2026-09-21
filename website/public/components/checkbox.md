@@ -15,6 +15,8 @@ Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0.
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | label | `string` | no |  | Label text |
+| helperText | `string` | no |  | Helper or error message rendered under the label text |
+| error | `boolean` | no | `false` | Error state — recolours the helper text and marks the checkbox invalid |
 | checked | `boolean` | no | `false` | Whether the checkbox is checked |
 | indeterminate | `boolean` | no | `false` | Whether the checkbox is in an indeterminate state |
 | disabled | `boolean` | no | `false` | Whether the checkbox is disabled |
@@ -30,6 +32,9 @@ Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0.
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | label | `string` | no |  | Group label |
+| helperText | `string` | no |  | Helper or error message rendered below the group |
+| error | `boolean` | no | `false` | Error state — recolours the helper text and marks the group invalid |
+| required | `boolean` | no | `false` | Marks the group required and renders the required marker on its label |
 | items | `{ label: string; value: string; disabled?: boolean \| undefined; }[]` | yes |  | Checkbox options |
 | values | `string[]` | no | `[]` | Currently selected values |
 | direction | `"horizontal" \| "vertical"` | no | `vertical` | Layout direction |

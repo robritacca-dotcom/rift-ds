@@ -101,6 +101,31 @@
   cursor: not-allowed;
 }
 
+/* Helper line: label and helper stack in a text column beside the circle;
+   the circle aligns to the first text line rather than the column's centre. */
+.ds-radio--has-helper {
+  align-items: flex-start;
+}
+
+.ds-radio__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-050); /* 2px */
+}
+
+.ds-radio__helper {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-tertiary);
+}
+
+.ds-radio--error .ds-radio__helper {
+  color: var(--color-status-error-border);
+}
+
 /* ============================================
    RADIO GROUP
    ============================================ */
@@ -111,14 +136,8 @@
   gap: var(--gap-200); /* 8px */
 }
 
-.ds-radio-group__label {
-  font-family: var(--font-paragraph-emphasis-family);
-  font-size: var(--font-paragraph-emphasis-size);
-  font-weight: var(--font-paragraph-emphasis-weight);
-  line-height: var(--font-paragraph-emphasis-line-height);
-  letter-spacing: var(--font-paragraph-emphasis-letter-spacing);
-  color: var(--color-text-primary);
-}
+/* The group label is Field's (ds-field__label) — the group composes
+   <Field group>, so the scaffolding classes come from Field.css. */
 
 .ds-radio-group__options {
   display: flex;

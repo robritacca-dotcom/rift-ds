@@ -9,6 +9,24 @@
   width: 100%;
 }
 
+/* With Field scaffolding present (label, helper, or value readout) the row
+   becomes a column so the pieces stack; a bare slider keeps the row. */
+.ds-slider--fielded {
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--gap-200); /* 8px */
+}
+
+/* The live value in Field's aside slot, opposite the helper. */
+.ds-slider__value {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
 /* ============================================
    INPUT — RESET & BASE
    ============================================ */

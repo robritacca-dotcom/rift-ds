@@ -132,3 +132,53 @@ export const GroupCompact: GroupStory = {
     direction: 'horizontal',
   },
 };
+
+export const WithHelperText: Story = {
+  args: {
+    label: 'Email me product updates',
+    helperText: 'At most one message a month.',
+    checked: true,
+  },
+};
+
+export const ErrorState: Story = {
+  args: {
+    label: 'Accept the terms',
+    helperText: 'You must accept the terms to continue.',
+    error: true,
+    checked: false,
+  },
+};
+
+export const GroupWithHelper: GroupStory = {
+  render: (args) => <CheckboxGroup {...args} />,
+  args: {
+    label: 'Notification channels',
+    helperText: 'Pick at least one channel.',
+    required: true,
+    items: [
+      { label: 'Email', value: 'email' },
+      { label: 'SMS', value: 'sms' },
+      { label: 'Push', value: 'push' },
+    ],
+    values: ['email'],
+    direction: 'vertical',
+  },
+};
+
+export const GroupError: GroupStory = {
+  render: (args) => <CheckboxGroup {...args} />,
+  args: {
+    label: 'Notification channels',
+    helperText: 'Pick at least one channel.',
+    required: true,
+    error: true,
+    items: [
+      { label: 'Email', value: 'email' },
+      { label: 'SMS', value: 'sms' },
+      { label: 'Push', value: 'push' },
+    ],
+    values: [],
+    direction: 'vertical',
+  },
+};

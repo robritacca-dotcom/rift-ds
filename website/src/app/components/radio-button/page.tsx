@@ -86,7 +86,6 @@ export default function RadioButtonPage() {
               <div className={styles.variantItem}>
                 <RadioGroup
                   label="Vertical"
-                  name="demo-vertical"
                   value="medium"
                   options={[
                     { label: "Small", value: "small" },
@@ -100,7 +99,6 @@ export default function RadioButtonPage() {
               <div className={styles.variantItem}>
                 <RadioGroup
                   label="Horizontal"
-                  name="demo-horizontal"
                   value="teal"
                   options={[
                     { label: "Red", value: "red" },
@@ -114,7 +112,6 @@ export default function RadioButtonPage() {
               <div className={styles.variantItem}>
                 <RadioGroup
                   label="With disabled option"
-                  name="demo-disabled"
                   value="pro"
                   options={[
                     { label: "Free", value: "free" },

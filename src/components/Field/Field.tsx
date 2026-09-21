@@ -27,6 +27,13 @@ type FieldOwnProps = {
   /** Component size */
   size?: 'default' | 'compact';
   /**
+   * Group mode: renders the label as a `<span id>` instead of a
+   * `<label htmlFor>`, for scaffolding a set of controls (a checkbox or
+   * radio group) where no single labelable element exists — the group node
+   * points `aria-labelledby` at the span via `labelId`.
+   */
+  group?: boolean;
+  /**
    * id for the control. Generated when omitted, so the label/control/helper
    * association works with no configuration.
    */
@@ -65,6 +72,7 @@ export const Field = React.forwardRef<HTMLDivElement, FieldProps>(
       required = false,
       disabled = false,
       size = 'default',
+      group = false,
       id,
       className = '',
       ...rest
@@ -99,17 +107,30 @@ export const Field = React.forwardRef<HTMLDivElement, FieldProps>(
     return (
       <FieldContext.Provider value={context}>
         <div {...rest} ref={ref} className={classes}>
-          {label && (
-            <label className={`${baseClass}__label`} id={labelId} htmlFor={controlId}>
-              {label}
-              {required && (
-                <span className={`${baseClass}__required`} aria-hidden="true">
-                  {' '}
-                  *
-                </span>
-              )}
-            </label>
-          )}
+          {label &&
+            (group ? (
+              /* No labelable element to point htmlFor at — the group node
+                 names itself with aria-labelledby={labelId} instead. */
+              <span className={`${baseClass}__label`} id={labelId}>
+                {label}
+                {required && (
+                  <span className={`${baseClass}__required`} aria-hidden="true">
+                    {' '}
+                    *
+                  </span>
+                )}
+              </span>
+            ) : (
+              <label className={`${baseClass}__label`} id={labelId} htmlFor={controlId}>
+                {label}
+                {required && (
+                  <span className={`${baseClass}__required`} aria-hidden="true">
+                    {' '}
+                    *
+                  </span>
+                )}
+              </label>
+            ))}
 
           {children}
 

@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useId } from 'react';
 import './ToggleSwitch.css';
 import '../../fonts/material-symbols.css';
 
@@ -12,6 +12,10 @@ type ToggleSwitchOwnProps = {
   label?: string;
   /** Whether to show the label */
   showLabel?: boolean;
+  /** Helper or error message rendered under the label text */
+  helperText?: string;
+  /** Error state — recolours the helper text and marks the switch invalid */
+  error?: boolean;
   /** Component size */
   size?: 'default' | 'compact';
   /** Called with the next checked state when toggled */
@@ -49,6 +53,8 @@ export const ToggleSwitch = React.forwardRef<HTMLButtonElement, ToggleSwitchProp
       checked = true,
       label = 'Toggle',
       showLabel = true,
+      helperText,
+      error = false,
       disabled = false,
       size = 'default',
       onCheckedChange,
@@ -61,11 +67,16 @@ export const ToggleSwitch = React.forwardRef<HTMLButtonElement, ToggleSwitchProp
     ref,
   ) => {
     const baseClass = 'ds-toggle-switch';
+    const generatedId = useId();
+    const helperId = helperText ? `${generatedId}-helper` : undefined;
+    const describedBy = helperId ?? rest['aria-describedby'];
     const classes = [
       baseClass,
       size === 'compact' ? `${baseClass}--compact` : '',
       checked ? '' : `${baseClass}--off`,
       disabled ? `${baseClass}--disabled` : '',
+      helperText ? `${baseClass}--has-helper` : '',
+      error ? `${baseClass}--error` : '',
       className,
     ]
       .filter(Boolean)
@@ -88,7 +99,9 @@ export const ToggleSwitch = React.forwardRef<HTMLButtonElement, ToggleSwitchProp
         disabled={disabled}
         role="switch"
         aria-checked={checked}
-        aria-label={ariaLabel || rest['aria-label'] || label}
+        aria-label={rest['aria-label'] || ariaLabel || label}
+        aria-describedby={describedBy}
+        aria-invalid={error || undefined}
       >
         <div className={`${baseClass}__track`}>
           <div className={`${baseClass}__thumb`}>
@@ -100,7 +113,19 @@ export const ToggleSwitch = React.forwardRef<HTMLButtonElement, ToggleSwitchProp
             </span>
           </div>
         </div>
-        {showLabel && <span className={`${baseClass}__label`}>{label}</span>}
+        {/* Without a helper the label stays a bare span, so existing markup
+            (and layout) is untouched; with one, label and helper stack in a
+            text column beside the track. */}
+        {helperText ? (
+          <span className={`${baseClass}__text`}>
+            {showLabel && <span className={`${baseClass}__label`}>{label}</span>}
+            <span className={`${baseClass}__helper`} id={helperId}>
+              {helperText}
+            </span>
+          </span>
+        ) : (
+          showLabel && <span className={`${baseClass}__label`}>{label}</span>
+        )}
       </button>
     );
   },

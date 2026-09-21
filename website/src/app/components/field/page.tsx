@@ -40,8 +40,14 @@ export default function FieldPage() {
               <code>aria-describedby</code> and <code>aria-invalid</code>{" "}
               wiring. Controls compose inside it and read that wiring through{" "}
               <code>useField()</code>, so accessibility is correct systemically
-              rather than one component at a time. Input, Textarea, DateInput,
-              Dropdown, Combobox and FileInput all build on it.
+              rather than one component at a time. Every labelled text and
+              picker control builds on it, Slider included, and a{" "}
+              <code>group</code> mode scaffolds CheckboxGroup and RadioGroup:
+              the label renders as a span the group points{" "}
+              <code>aria-labelledby</code> at, since a set of controls has no
+              single labelable element. An <code>aside</code> slot carries
+              content opposite the helper text, like a character counter or
+              Slider&apos;s live value.
             </p>
           </div>
 

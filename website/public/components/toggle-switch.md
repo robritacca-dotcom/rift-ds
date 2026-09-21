@@ -17,6 +17,8 @@ Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0.
 | checked | `boolean` | no | `true` | Whether the toggle is on (checked) |
 | label | `string` | no | `Toggle` | Label text displayed next to the toggle |
 | showLabel | `boolean` | no | `true` | Whether to show the label |
+| helperText | `string` | no |  | Helper or error message rendered under the label text |
+| error | `boolean` | no | `false` | Error state — recolours the helper text and marks the switch invalid |
 | size | `"default" \| "compact"` | no | `default` | Component size |
 | onCheckedChange | `((checked: boolean) => void)` | no |  | Called with the next checked state when toggled |
 | className | `string` | no | `` | Additional CSS classes |

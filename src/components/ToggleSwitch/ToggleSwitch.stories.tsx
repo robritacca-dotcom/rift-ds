@@ -68,3 +68,11 @@ export const DisabledOff: Story = {
     disabled: true,
   },
 };
+
+export const WithHelperText: Story = {
+  args: {
+    checked: true,
+    label: 'Usage analytics',
+    helperText: 'Anonymous counts only, never content.',
+  },
+};

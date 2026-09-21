@@ -1,12 +1,17 @@
 'use client';
 
-import React from 'react';
+import React, { useId } from 'react';
+import { Field } from '../Field/Field';
 import './Checkbox.css';
 
 /** Props owned by Checkbox itself — everything else falls through to the wrapper. */
 type CheckboxOwnProps = {
   /** Label text */
   label?: string;
+  /** Helper or error message rendered under the label text */
+  helperText?: string;
+  /** Error state — recolours the helper text and marks the checkbox invalid */
+  error?: boolean;
   /** Whether the checkbox is checked */
   checked?: boolean;
   /** Whether the checkbox is in an indeterminate state */
@@ -83,6 +88,8 @@ export const Checkbox = React.forwardRef<HTMLDivElement, CheckboxProps>(
   (
     {
       label,
+      helperText,
+      error = false,
       checked = false,
       indeterminate = false,
       disabled = false,
@@ -99,6 +106,9 @@ export const Checkbox = React.forwardRef<HTMLDivElement, CheckboxProps>(
     ref,
   ) => {
     const baseClass = 'ds-checkbox';
+    const generatedId = useId();
+    const helperId = helperText ? `${generatedId}-helper` : undefined;
+    const describedBy = helperId ?? rest['aria-describedby'];
 
     const classes = [
       baseClass,
@@ -106,6 +116,8 @@ export const Checkbox = React.forwardRef<HTMLDivElement, CheckboxProps>(
       checked ? `${baseClass}--checked` : '',
       indeterminate && !checked ? `${baseClass}--indeterminate` : '',
       disabled ? `${baseClass}--disabled` : '',
+      helperText ? `${baseClass}--has-helper` : '',
+      error ? `${baseClass}--error` : '',
       className,
     ]
       .filter(Boolean)
@@ -140,13 +152,27 @@ export const Checkbox = React.forwardRef<HTMLDivElement, CheckboxProps>(
         role="checkbox"
         aria-checked={indeterminate && !checked ? 'mixed' : checked}
         aria-disabled={disabled}
-        aria-label={ariaLabel || rest['aria-label'] || label}
+        aria-label={rest['aria-label'] || ariaLabel || label}
+        aria-describedby={describedBy}
+        aria-invalid={error || undefined}
         tabIndex={disabled ? -1 : 0}
       >
         <div className={`${baseClass}__box`}>
           {indeterminate && !checked ? <MinusIcon /> : <CheckIcon />}
         </div>
-        {label && <span className={`${baseClass}__label`}>{label}</span>}
+        {/* Without a helper the label stays a bare span, so existing markup
+            (and layout) is untouched; with one, label and helper stack in a
+            text column beside the box. */}
+        {helperText ? (
+          <span className={`${baseClass}__text`}>
+            {label && <span className={`${baseClass}__label`}>{label}</span>}
+            <span className={`${baseClass}__helper`} id={helperId}>
+              {helperText}
+            </span>
+          </span>
+        ) : (
+          label && <span className={`${baseClass}__label`}>{label}</span>
+        )}
       </div>
     );
   },
@@ -161,6 +187,12 @@ Checkbox.displayName = 'Checkbox';
 type CheckboxGroupOwnProps = {
   /** Group label */
   label?: string;
+  /** Helper or error message rendered below the group */
+  helperText?: string;
+  /** Error state — recolours the helper text and marks the group invalid */
+  error?: boolean;
+  /** Marks the group required and renders the required marker on its label */
+  required?: boolean;
   /** Checkbox options */
   items: { label: string; value: string; disabled?: boolean }[];
   /** Currently selected values */
@@ -189,6 +221,9 @@ export const CheckboxGroup = React.forwardRef<HTMLDivElement, CheckboxGroupProps
   (
     {
       label,
+      helperText,
+      error = false,
+      required = false,
       items,
       values = [],
       direction = 'vertical',
@@ -196,6 +231,7 @@ export const CheckboxGroup = React.forwardRef<HTMLDivElement, CheckboxGroupProps
       onValuesChange,
       onChange,
       className = '',
+      id,
       ...rest
     },
     ref,
@@ -204,6 +240,14 @@ export const CheckboxGroup = React.forwardRef<HTMLDivElement, CheckboxGroupProps
     const classes = [baseClass, `${baseClass}--${direction}`, className]
       .filter(Boolean)
       .join(' ');
+
+    /* Same derivation Field applies internally to the same id, so the
+       aria-labelledby / aria-describedby pointers below land on the label
+       and helper Field renders. */
+    const generatedId = useId();
+    const groupId = id || generatedId;
+    const labelId = label ? `${groupId}-label` : undefined;
+    const describedBy = helperText ? `${groupId}-helper` : rest['aria-describedby'];
 
     const handleToggle = (itemValue: string) => {
       const next = values.includes(itemValue)
@@ -214,8 +258,24 @@ export const CheckboxGroup = React.forwardRef<HTMLDivElement, CheckboxGroupProps
     };
 
     return (
-      <div {...rest} ref={ref} className={classes} role="group" aria-label={label}>
-        {label && <span className={`${baseClass}__label`}>{label}</span>}
+      <Field
+        {...rest}
+        ref={ref}
+        className={classes}
+        group
+        label={label}
+        helperText={helperText}
+        error={error}
+        required={required}
+        /* size deliberately not forwarded: Field's compact modifier would
+           shrink the group label, which the old group markup never did —
+           compact here sizes the child checkboxes only, as before. */
+        id={groupId}
+        role="group"
+        aria-labelledby={labelId}
+        aria-describedby={describedBy}
+        aria-invalid={error || undefined}
+      >
         <div className={`${baseClass}__items`}>
           {items.map((item) => (
             <Checkbox
@@ -228,7 +288,7 @@ export const CheckboxGroup = React.forwardRef<HTMLDivElement, CheckboxGroupProps
             />
           ))}
         </div>
-      </div>
+      </Field>
     );
   },
 );

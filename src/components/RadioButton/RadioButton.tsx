@@ -1,12 +1,21 @@
 'use client';
 
-import React from 'react';
+import React, { useId } from 'react';
+import { Field } from '../Field/Field';
 import './RadioButton.css';
 
 /** Props owned by RadioButton itself — everything else falls through to the wrapper. */
 type RadioButtonOwnProps = {
   /** Label text */
   label?: string;
+  /** Helper or error message rendered under the label text */
+  helperText?: string;
+  /**
+   * Error state — recolours the helper text. Deliberately no `aria-invalid`:
+   * ARIA does not allow it on `role="radio"`; group-level errors carry it on
+   * the radiogroup via RadioGroup's `error`.
+   */
+  error?: boolean;
   /** Whether this radio is selected */
   checked?: boolean;
   /** Whether the radio is disabled */
@@ -48,6 +57,8 @@ export const RadioButton = React.forwardRef<HTMLDivElement, RadioButtonProps>(
   (
     {
       label,
+      helperText,
+      error = false,
       checked = false,
       disabled = false,
       value = '',
@@ -63,11 +74,16 @@ export const RadioButton = React.forwardRef<HTMLDivElement, RadioButtonProps>(
     ref,
   ) => {
     const baseClass = 'ds-radio';
+    const generatedId = useId();
+    const helperId = helperText ? `${generatedId}-helper` : undefined;
+    const describedBy = helperId ?? rest['aria-describedby'];
 
     const classes = [
       baseClass,
       checked ? `${baseClass}--checked` : '',
       disabled ? `${baseClass}--disabled` : '',
+      helperText ? `${baseClass}--has-helper` : '',
+      error ? `${baseClass}--error` : '',
       className,
     ]
       .filter(Boolean)
@@ -102,13 +118,26 @@ export const RadioButton = React.forwardRef<HTMLDivElement, RadioButtonProps>(
         role="radio"
         aria-checked={checked}
         aria-disabled={disabled}
-        aria-label={ariaLabel || rest['aria-label'] || label}
+        aria-label={rest['aria-label'] || ariaLabel || label}
+        aria-describedby={describedBy}
         tabIndex={disabled ? -1 : 0}
       >
         <div className={`${baseClass}__circle`}>
           <div className={`${baseClass}__dot`} />
         </div>
-        {label && <span className={`${baseClass}__label`}>{label}</span>}
+        {/* Without a helper the label stays a bare span, so existing markup
+            (and layout) is untouched; with one, label and helper stack in a
+            text column beside the circle. */}
+        {helperText ? (
+          <span className={`${baseClass}__text`}>
+            {label && <span className={`${baseClass}__label`}>{label}</span>}
+            <span className={`${baseClass}__helper`} id={helperId}>
+              {helperText}
+            </span>
+          </span>
+        ) : (
+          label && <span className={`${baseClass}__label`}>{label}</span>
+        )}
       </div>
     );
   },
@@ -123,10 +152,22 @@ RadioButton.displayName = 'RadioButton';
 type RadioGroupOwnProps = {
   /** Group label */
   label?: string;
+  /** Helper or error message rendered below the group */
+  helperText?: string;
+  /** Error state — recolours the helper text and marks the group invalid */
+  error?: boolean;
+  /** Marks the group required and renders the required marker on its label */
+  required?: boolean;
   /** Currently selected value */
   value?: string;
-  /** Radio group name */
-  name: string;
+  /**
+   * Legacy grouping name, never used.
+   *
+   * @deprecated No-op. Grouping is React state (`value`/`onValueChange`), not
+   * native `name` semantics — the group renders `role="radiogroup"` over
+   * `<div role="radio">`s, so there is nothing for a name to group.
+   */
+  name?: string;
   /** Radio options */
   options: { label: string; value: string; disabled?: boolean }[];
   /** Layout direction */
@@ -151,6 +192,9 @@ export const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
   (
     {
       label,
+      helperText,
+      error = false,
+      required = false,
       value,
       name: _name,
       options,
@@ -158,6 +202,7 @@ export const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
       onValueChange,
       onChange,
       className = '',
+      id,
       ...rest
     },
     ref,
@@ -167,14 +212,35 @@ export const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
       .filter(Boolean)
       .join(' ');
 
+    /* Same derivation Field applies internally to the same id, so the
+       aria-labelledby / aria-describedby pointers below land on the label
+       and helper Field renders. */
+    const generatedId = useId();
+    const groupId = id || generatedId;
+    const labelId = label ? `${groupId}-label` : undefined;
+    const describedBy = helperText ? `${groupId}-helper` : rest['aria-describedby'];
+
     const handleSelect = (next: string) => {
       onValueChange?.(next);
       onChange?.(next);
     };
 
     return (
-      <div {...rest} ref={ref} className={classes} role="radiogroup" aria-label={label}>
-        {label && <span className={`${baseClass}__label`}>{label}</span>}
+      <Field
+        {...rest}
+        ref={ref}
+        className={classes}
+        group
+        label={label}
+        helperText={helperText}
+        error={error}
+        required={required}
+        id={groupId}
+        role="radiogroup"
+        aria-labelledby={labelId}
+        aria-describedby={describedBy}
+        aria-invalid={error || undefined}
+      >
         <div className={`${baseClass}__options`}>
           {options.map((option) => (
             <RadioButton
@@ -187,7 +253,7 @@ export const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
             />
           ))}
         </div>
-      </div>
+      </Field>
     );
   },
 );

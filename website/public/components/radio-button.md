@@ -15,6 +15,8 @@ Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0.
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | label | `string` | no |  | Label text |
+| helperText | `string` | no |  | Helper or error message rendered under the label text |
+| error | `boolean` | no | `false` | Error state — recolours the helper text. Deliberately no `aria-invalid`: ARIA does not allow it on `role="radio"`; group-level errors carry it on the radiogroup via RadioGroup's `error`. |
 | checked | `boolean` | no | `false` | Whether this radio is selected |
 | disabled | `boolean` | no | `false` | Whether the radio is disabled |
 | value | `string` | no | `` | Value for this radio option |
@@ -29,8 +31,11 @@ Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0.
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | label | `string` | no |  | Group label |
+| helperText | `string` | no |  | Helper or error message rendered below the group |
+| error | `boolean` | no | `false` | Error state — recolours the helper text and marks the group invalid |
+| required | `boolean` | no | `false` | Marks the group required and renders the required marker on its label |
 | value | `string` | no | `` | Currently selected value |
-| name | `string` | yes |  | Radio group name |
+| name | `string` | no |  | Legacy grouping name, never used. Deprecated: No-op. Grouping is React state (`value`/`onValueChange`), not native `name` semantics — the group renders `role="radiogroup"` over `<div role="radio">`s, so there is nothing for a name to group. |
 | options | `{ label: string; value: string; disabled?: boolean \| undefined; }[]` | yes |  | Radio options |
 | direction | `"horizontal" \| "vertical"` | no | `vertical` | Layout direction |
 | onValueChange | `((value: string) => void)` | no |  | Called with the newly selected value |

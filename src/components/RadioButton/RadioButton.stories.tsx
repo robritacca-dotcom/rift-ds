@@ -112,3 +112,35 @@ export const GroupWithDisabled: StoryObj<typeof RadioGroup> = {
     onChange: fn(),
   },
 };
+
+export const GroupWithHelper: StoryObj<typeof RadioGroup> = {
+  render: (args) => <RadioGroup {...args} />,
+  args: {
+    label: 'Billing cycle',
+    helperText: 'Switch any time; the change applies next cycle.',
+    required: true,
+    value: 'monthly',
+    options: [
+      { label: 'Monthly', value: 'monthly' },
+      { label: 'Yearly', value: 'yearly' },
+    ],
+    direction: 'vertical',
+    onChange: fn(),
+  },
+};
+
+export const GroupError: StoryObj<typeof RadioGroup> = {
+  render: (args) => <RadioGroup {...args} />,
+  args: {
+    label: 'Billing cycle',
+    helperText: 'Choose a billing cycle to continue.',
+    required: true,
+    error: true,
+    options: [
+      { label: 'Monthly', value: 'monthly' },
+      { label: 'Yearly', value: 'yearly' },
+    ],
+    direction: 'vertical',
+    onChange: fn(),
+  },
+};

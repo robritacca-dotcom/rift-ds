@@ -50,3 +50,43 @@ export const AllStates: Story = {
     </div>
   ),
 };
+
+export const Labelled: Story = {
+  render: (args) => (
+    <div style={{ width: '300px' }}>
+      <Slider {...args} />
+    </div>
+  ),
+  args: {
+    label: 'Volume',
+    helperText: 'Applies to alerts and previews.',
+    value: 65,
+  },
+};
+
+export const WithValue: Story = {
+  render: (args) => (
+    <div style={{ width: '300px' }}>
+      <Slider {...args} />
+    </div>
+  ),
+  args: {
+    label: 'Opacity',
+    showValue: true,
+    value: 80,
+  },
+};
+
+export const ErrorState: Story = {
+  render: (args) => (
+    <div style={{ width: '300px' }}>
+      <Slider {...args} />
+    </div>
+  ),
+  args: {
+    label: 'Budget cap',
+    helperText: 'The cap must be above the committed spend.',
+    error: true,
+    value: 10,
+  },
+};

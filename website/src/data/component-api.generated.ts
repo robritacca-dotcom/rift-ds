@@ -1892,6 +1892,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Label text"
           },
           {
+            "name": "helperText",
+            "type": "string",
+            "required": false,
+            "description": "Helper or error message rendered under the label text"
+          },
+          {
+            "name": "error",
+            "type": "boolean",
+            "required": false,
+            "description": "Error state — recolours the helper text and marks the checkbox invalid",
+            "defaultValue": "false"
+          },
+          {
             "name": "checked",
             "type": "boolean",
             "required": false,
@@ -1963,6 +1976,26 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Group label"
+          },
+          {
+            "name": "helperText",
+            "type": "string",
+            "required": false,
+            "description": "Helper or error message rendered below the group"
+          },
+          {
+            "name": "error",
+            "type": "boolean",
+            "required": false,
+            "description": "Error state — recolours the helper text and marks the group invalid",
+            "defaultValue": "false"
+          },
+          {
+            "name": "required",
+            "type": "boolean",
+            "required": false,
+            "description": "Marks the group required and renders the required marker on its label",
+            "defaultValue": "false"
           },
           {
             "name": "items",
@@ -4083,6 +4116,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Component size",
             "defaultValue": "default"
+          },
+          {
+            "name": "group",
+            "type": "boolean",
+            "required": false,
+            "description": "Group mode: renders the label as a `<span id>` instead of a\n`<label htmlFor>`, for scaffolding a set of controls (a checkbox or\nradio group) where no single labelable element exists — the group node\npoints `aria-labelledby` at the span via `labelId`.",
+            "defaultValue": "false"
           },
           {
             "name": "id",
@@ -6780,6 +6820,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Label text"
           },
           {
+            "name": "helperText",
+            "type": "string",
+            "required": false,
+            "description": "Helper or error message rendered under the label text"
+          },
+          {
+            "name": "error",
+            "type": "boolean",
+            "required": false,
+            "description": "Error state — recolours the helper text. Deliberately no `aria-invalid`:\nARIA does not allow it on `role=\"radio\"`; group-level errors carry it on\nthe radiogroup via RadioGroup's `error`.",
+            "defaultValue": "false"
+          },
+          {
             "name": "checked",
             "type": "boolean",
             "required": false,
@@ -6846,6 +6899,26 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Group label"
           },
           {
+            "name": "helperText",
+            "type": "string",
+            "required": false,
+            "description": "Helper or error message rendered below the group"
+          },
+          {
+            "name": "error",
+            "type": "boolean",
+            "required": false,
+            "description": "Error state — recolours the helper text and marks the group invalid",
+            "defaultValue": "false"
+          },
+          {
+            "name": "required",
+            "type": "boolean",
+            "required": false,
+            "description": "Marks the group required and renders the required marker on its label",
+            "defaultValue": "false"
+          },
+          {
             "name": "value",
             "type": "string",
             "required": false,
@@ -6855,8 +6928,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
           {
             "name": "name",
             "type": "string",
-            "required": true,
-            "description": "Radio group name"
+            "required": false,
+            "description": "Legacy grouping name, never used.",
+            "deprecated": "No-op. Grouping is React state (`value`/`onValueChange`), not\nnative `name` semantics — the group renders `role=\"radiogroup\"` over\n`<div role=\"radio\">`s, so there is nothing for a name to group."
           },
           {
             "name": "options",
@@ -7511,6 +7585,39 @@ export const componentApi: readonly ComponentApiEntry[] = [
         "component": "Slider",
         "props": [
           {
+            "name": "label",
+            "type": "string",
+            "required": false,
+            "description": "Label text rendered above the slider"
+          },
+          {
+            "name": "helperText",
+            "type": "string",
+            "required": false,
+            "description": "Helper or error message rendered below the slider"
+          },
+          {
+            "name": "error",
+            "type": "boolean",
+            "required": false,
+            "description": "Error state — recolours the helper text and marks the slider invalid",
+            "defaultValue": "false"
+          },
+          {
+            "name": "required",
+            "type": "boolean",
+            "required": false,
+            "description": "Marks the slider required and renders the required marker on its label",
+            "defaultValue": "false"
+          },
+          {
+            "name": "showValue",
+            "type": "boolean",
+            "required": false,
+            "description": "Shows the current value opposite the helper line",
+            "defaultValue": "false"
+          },
+          {
             "name": "value",
             "type": "number",
             "required": false,
@@ -7563,7 +7670,6 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Legacy accessible-name prop.",
-            "defaultValue": "Slider",
             "deprecated": "Pass the native `aria-label` attribute instead."
           }
         ]
@@ -9350,6 +9456,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Whether to show the label",
             "defaultValue": "true"
+          },
+          {
+            "name": "helperText",
+            "type": "string",
+            "required": false,
+            "description": "Helper or error message rendered under the label text"
+          },
+          {
+            "name": "error",
+            "type": "boolean",
+            "required": false,
+            "description": "Error state — recolours the helper text and marks the switch invalid",
+            "defaultValue": "false"
           },
           {
             "name": "size",

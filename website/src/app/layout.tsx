@@ -54,8 +54,8 @@ export const metadata: Metadata = {
     "open source design system",
     "MCP",
   ],
-  authors: [{ name: "Robert Ritacca" }],
-  creator: "Robert Ritacca",
+  authors: [{ name: BRAND_NAME }],
+  creator: BRAND_NAME,
   openGraph: {
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,

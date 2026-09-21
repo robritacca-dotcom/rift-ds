@@ -247,7 +247,7 @@
    Opens the global command palette. Dressed as an
    input — icon, placeholder, ⌘K keycaps — but it is
    a button: typing happens in the palette itself.
-   Below 1280px it collapses back to the icon circle
+   Below 1536px it collapses back to the icon circle
    (same footprint as the mobile menu button), and is
    never hidden.
    ============================================ */
@@ -801,14 +801,20 @@
 .mobileThemeToggle {
   margin-top: auto;
   width: 100%;
+  /* One row on the drawer floor: the look switcher beside the mode
+     toggle, matching the header's right cluster. */
+  display: flex;
+  align-items: center;
+  gap: var(--primitive-gap-300);
 }
 
 /* ============================================
    RESPONSIVE
    ============================================ */
-@media (max-width: 1279px) {
-  /* Not enough room for the input dressing beside five nav pills — the
-     field folds back to the icon circle. */
+@media (max-width: 1535px) {
+  /* Not enough room for the input dressing beside five nav pills (the
+     full pill needs ~1510px of viewport, measured) — the field folds
+     back to the icon circle. */
   .searchBtn {
     justify-content: center;
     width: 40px;
@@ -829,14 +835,10 @@
   }
 }
 
-@media (max-width: 959px) {
-  /* body carries the page's 20px inset on mobile, so the in-flow
-     header must not add its own — only the fixed sticky header,
-     which escapes body padding, keeps the inner padding. */
-  .header > .headerInner {
-    padding: 0;
-  }
-
+@media (max-width: 1279px) {
+  /* Even icon-search, the full pill row needs ~1230px of viewport
+     (measured) — below that the nav hands over to the hamburger
+     drawer rather than clipping its right controls. */
   .navCenter,
   .desktopThemeToggle,
   .desktopBrandSwitcher {
@@ -849,6 +851,15 @@
 
   .mobileMenuOverlay {
     display: block;
+  }
+}
+
+@media (max-width: 959px) {
+  /* body carries the page's 20px inset on mobile, so the in-flow
+     header must not add its own — only the fixed sticky header,
+     which escapes body padding, keeps the inner padding. */
+  .header > .headerInner {
+    padding: 0;
   }
 
   .stickyHeader {

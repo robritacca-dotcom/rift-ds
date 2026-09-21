@@ -85,7 +85,7 @@ export interface AppSidebarProps {
   footerSlot?: React.ReactNode;
   /** Additional CSS classes */
   className?: string;
-  /** Logo element — defaults to built-in robr0 logo */
+  /** Logo element — defaults to the built-in brand mark */
   logo?: React.ReactNode;
   /** Text shown next to logo when expanded */
   logoText?: string;

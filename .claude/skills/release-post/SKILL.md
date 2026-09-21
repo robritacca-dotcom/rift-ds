@@ -74,7 +74,7 @@ The copy and the card must tell the same story: the hero feature on the card is 
 
 ### 6. Deliver
 
-Send the PNG with SendUserFile so it lands as a file Rob can copy straight into the post, and put the copy in the reply as a quoted block. If he wants to hand-tweak the card, the `design` canvas flow (publish the card as an editable artifact) is the follow-up to offer — not the default, since the ask is a paste-ready image.
+Send the PNG with SendUserFile so it lands as a file the owner can copy straight into the post, and put the copy in the reply as a quoted block. If he wants to hand-tweak the card, the `design` canvas flow (publish the card as an editable artifact) is the follow-up to offer — not the default, since the ask is a paste-ready image.
 
 ## Guardrails
 
@@ -82,4 +82,4 @@ Send the PNG with SendUserFile so it lands as a file Rob can copy straight into 
 - Never write a hex value or font size the token CSS didn't supply this session; the card is a picture of the system, so a drifted colour is a wrong picture
 - Working files live in the scratchpad, never the repo tree; nothing this skill produces is committed
 - The card carries no screenshots and no third-party marks — abstract drawings only
-- Posting is Rob's move: this skill ends at a PNG and copy, never at anything published
+- Posting is the owner's move: this skill ends at a PNG and copy, never at anything published

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import BrandMark from "@/components/BrandMark/BrandMark";
+import { BRAND_NAME } from "@/config/brand.generated";
 import { getSectionItems, docsSidebarLinks, foundationsSidebarLinks } from "@/config/navigation";
 import { SOCIAL_PROFILES, PROJECT_LINKS } from "@/config/social";
 import { InstagramIcon, LinkedInIcon, XIcon } from "../BrandIcons/BrandIcons";
@@ -144,7 +145,7 @@ export default function SiteFooter() {
 
       <div className={styles.bottomBar}>
         <p className={styles.bottomText}>
-          &copy; {new Date().getFullYear()} Robert Ritacca
+          &copy; {new Date().getFullYear()} {BRAND_NAME} · MIT licensed
         </p>
       </div>
     </footer>

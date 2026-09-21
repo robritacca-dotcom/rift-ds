@@ -88,4 +88,4 @@ Use this skill when asked to make completed work live — phrases like "ship it"
 - Never force-push, never rewrite pushed history
 - Never commit `.env*` or anything credential-shaped — even if explicitly staged by mistake
 - If there is nothing in scope to commit and nothing unmerged on the branch, say so and stop — don't invent a commit
-- Shipping is Rob's call: only invoke this flow when asked to ship, and never chain into it automatically from other work
+- Shipping is the owner's call: only invoke this flow when asked to ship, and never chain into it automatically from other work

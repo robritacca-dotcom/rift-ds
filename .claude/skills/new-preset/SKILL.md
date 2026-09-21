@@ -46,7 +46,7 @@ node scripts/validate-preset-stylesheets.mjs
 node scripts/validate-theme-presets.mjs
 ```
 
-The generator writes the preset's `html[data-brand]` stylesheet and refreshes the `presets.css` aggregate — commit both; they ship in the npm package. The completeness gate then holds every override to a real token, requires the action family and all six accents, and checks the resolved action bg/text pairing at **WCAG AA 4.5:1 in both themes**. A failing pairing means the key needs to move (deepen or lighten it, or lift the label through `extraOverrides`) — pinning a gap in `SANCTIONED_AA_GAPS` is deliberate acceptance with a written reason, never a shortcut, and needs Rob's sign-off.
+The generator writes the preset's `html[data-brand]` stylesheet and refreshes the `presets.css` aggregate — commit both; they ship in the npm package. The completeness gate then holds every override to a real token, requires the action family and all six accents, and checks the resolved action bg/text pairing at **WCAG AA 4.5:1 in both themes**. A failing pairing means the key needs to move (deepen or lighten it, or lift the label through `extraOverrides`) — pinning a gap in `SANCTIONED_AA_GAPS` is deliberate acceptance with a written reason, never a shortcut, and needs the owner's sign-off.
 
 Then `npm run verify` — the mirror guards and the site build exercise everything the three scripts do not.
 
@@ -57,5 +57,5 @@ Pick the new theme from the home page's selector and walk a component page, a ch
 ## Guardrails
 
 - Never hand-edit `src/tokens/presets/*.css` — they are generated; the byte-compare validator rejects a hand edit anyway
-- Never pin `SANCTIONED_AA_GAPS` to pass the gate without Rob's explicit decision
+- Never pin `SANCTIONED_AA_GAPS` to pass the gate without the owner's explicit decision
 - A preset's portrait (swatch shape, faces) derives from its declaration — never restyle a picker row by hand

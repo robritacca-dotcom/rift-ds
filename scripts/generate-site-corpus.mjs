@@ -887,7 +887,7 @@ function sectionLoops() {
 
   return `## Loops
 
-Recurring agent loops: skills that run on a schedule against real data and end in a branch for Rob to review. Documented at /loops.
+Recurring agent loops: skills that run on a schedule against real data and end in a branch for the owner to review. Documented at /loops.
 
 ${pageProse('loops')}
 

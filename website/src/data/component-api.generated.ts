@@ -753,7 +753,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "logo",
             "type": "ReactNode",
             "required": false,
-            "description": "Logo element — defaults to built-in robr0 logo"
+            "description": "Logo element — defaults to the built-in brand mark"
           },
           {
             "name": "logoText",

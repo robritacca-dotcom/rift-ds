@@ -26,6 +26,6 @@ Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0.
 | topSlot | `ReactNode` | no |  | Rendered under the logo row, above the nav; fades out while collapsed |
 | footerSlot | `ReactNode` | no |  | Rendered above the profile block; fades out while collapsed |
 | className | `string` | no | `` | Additional CSS classes |
-| logo | `ReactNode` | no |  | Logo element — defaults to built-in robr0 logo |
+| logo | `ReactNode` | no |  | Logo element — defaults to the built-in brand mark |
 | logoText | `string` | no | `Dragonspine` | Text shown next to logo when expanded |
 | showMobileTrigger | `boolean` | no | `true` | Below the mobile breakpoint the rail hides and this fixed hamburger button opens it as an overlay drawer instead. Set false when the host renders its own trigger in the page chrome. |

@@ -2,6 +2,7 @@
 
 import type { CSSProperties } from "react";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
+import BrandSwitcher from "../BrandSwitcher/BrandSwitcher";
 import { NavList, type NavListItem } from "@robr0/design-system/components/NavList/NavList";
 import SiteLogo from "./SiteLogo";
 import styles from "./MegaNav.module.css";
@@ -68,6 +69,10 @@ export default function MobileDrawer({
           />
         </nav>
         <div className={styles.mobileThemeToggle}>
+          {/* The drawer serves every width the header's pills leave, so it
+              carries both selectors: look, then light and dark. The menu
+              opens upward — the row sits on the drawer floor. */}
+          <BrandSwitcher placement="up" align="left" />
           <ThemeToggle />
         </div>
       </div>

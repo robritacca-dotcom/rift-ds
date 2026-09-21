@@ -57,4 +57,4 @@ Use this skill when asked to check if changes are ready to push, deploy, or ship
    - File path and line number if available
    - A brief diagnosis of likely cause
 
-4. **Do not push** — this skill only checks and reports. Pushing is Rob's decision.
+4. **Do not push** — this skill only checks and reports. Pushing is the owner's decision.

@@ -16,7 +16,7 @@ Use this skill when asked to "super ship", "audit and ship", or ship "bulletproo
 
 **Not for small changes.** A colour tweak, a copy fix, a single-component change: that's plain `ship`. The audit sweeps every skill and doc, and running it for a one-line change is ceremony, not safety. If invoked on something clearly small, say so and offer plain `ship` instead.
 
-**Invoking this skill is the ask to ship.** `ship`'s guardrail says never to chain into it automatically from other work, and `drift-audit`'s says the report is the deliverable and fixes wait for approval. This skill is the sanctioned exception to both: by invoking it, Rob has pre-approved fixing the drift the audit finds *and* deploying the result. The carve-outs below say where that pre-approval stops.
+**Invoking this skill is the ask to ship.** `ship`'s guardrail says never to chain into it automatically from other work, and `drift-audit`'s says the report is the deliverable and fixes wait for approval. This skill is the sanctioned exception to both: by invoking it, the owner has pre-approved fixing the drift the audit finds *and* deploying the result. The carve-outs below say where that pre-approval stops.
 
 ## Instructions
 

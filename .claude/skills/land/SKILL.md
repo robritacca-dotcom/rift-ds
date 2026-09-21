@@ -8,7 +8,7 @@ invoke: ["land the work","combine my branches","clean up the branches","what's w
 
 # land
 
-Resolve **all** the pending work in the repo in one pass. Some of it is finished and should ship, some is half-built and should wait, some is stale and should go. `land` finds every piece, forms a view on each, gets one decision from Rob, and leaves the repo in the state that decision implies.
+Resolve **all** the pending work in the repo in one pass. Some of it is finished and should ship, some is half-built and should wait, some is stale and should go. `land` finds every piece, forms a view on each, gets one decision from the owner, and leaves the repo in the state that decision implies.
 
 The end state: a local, unpushed `main` carrying the work that was worth keeping and passing `npm run verify`, with everything discarded archived to a recoverable tag and every branch and worktree that no longer earns its place gone.
 
@@ -115,7 +115,7 @@ Dispositions are exactly three:
 
 Follow the table with a short plain-English reading of anything non-obvious, especially every **Delete** proposal. A delete needs a stated reason, not just an age.
 
-**Confirming at scale.** The candidate count is unbounded, and `AskUserQuestion` caps at four options, so never ask per candidate. Ask **one** question about the triage as a whole, with options along the lines of: accept as proposed; accept the landings but keep everything marked delete; land nothing and only dispose; stop and change nothing. Rob names exceptions in free text ("delete these 4", "keep cosmic-wind"). Apply any exceptions, re-present the amended table in two or three lines, and proceed without asking a second full question.
+**Confirming at scale.** The candidate count is unbounded, and `AskUserQuestion` caps at four options, so never ask per candidate. Ask **one** question about the triage as a whole, with options along the lines of: accept as proposed; accept the landings but keep everything marked delete; land nothing and only dispose; stop and change nothing. The owner names exceptions in free text ("delete these 4", "keep cosmic-wind"). Apply any exceptions, re-present the amended table in two or three lines, and proceed without asking a second full question.
 
 The default is that **nothing lands and nothing is deleted until it is named**. Silence is not approval.
 
@@ -192,7 +192,7 @@ git push origin --delete <branch>
 git worktree prune
 ```
 
-- `git worktree remove` **never** takes `--force`. If it refuses, the worktree is dirty: return to step 3's rule and ask. Note that the permission classifier may block a force-removal anyway, so a dirty worktree that must go is finished by Rob in his own terminal, not retried here.
+- `git worktree remove` **never** takes `--force`. If it refuses, the worktree is dirty: return to step 3's rule and ask. Note that the permission classifier may block a force-removal anyway, so a dirty worktree that must go is finished by the owner in his own terminal, not retried here.
 - `git branch -D` is sanctioned **only** for a candidate that was archived in this step and explicitly approved for deletion. Everywhere else, `-d`, and its refusal is the safety net.
 - Deleting a remote branch is the one outward-facing action in this skill. It removes work from GitHub, so it runs only against an approved, archived candidate, and every deletion is named in the report.
 

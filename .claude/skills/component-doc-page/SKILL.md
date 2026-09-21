@@ -20,7 +20,7 @@ This is a more thorough, component-specific version of `new-page`. The Button pa
 
 1. **Gather requirements** if not already provided:
    - Component name (PascalCase)
-   - Figma node URL (optional — ask Rob, or omit if unknown)
+   - Figma node URL (optional — ask the owner, or omit if unknown)
    - Storybook path (optional — format: `/?path=/docs/components-<slug>--docs`)
 
 2. **Read the source component** `src/components/ComponentName/ComponentName.tsx`:

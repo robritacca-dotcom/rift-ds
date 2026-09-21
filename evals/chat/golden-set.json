@@ -305,8 +305,8 @@
     },
     "assert": [
       {
-        "type": "contains",
-        "value": "Rob"
+        "type": "icontains",
+        "value": "maintainer"
       },
       {
         "type": "icontains",

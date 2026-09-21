@@ -96,6 +96,6 @@ Use this skill when asked to review component APIs, check prop naming consistenc
    ```
 
 6. **Prioritise fixes** by impact:
-   - **High:** Renames that would require consuming code changes — flag these clearly so Rob can decide whether to batch into a breaking release
+   - **High:** Renames that would require consuming code changes — flag these clearly so the owner can decide whether to batch into a breaking release
    - **Medium:** Missing props that are commonly needed by consumers
    - **Low:** Style preferences with no breaking impact

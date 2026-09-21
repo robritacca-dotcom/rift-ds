@@ -125,7 +125,3 @@ export function buildOgImage(
   );
 }
 
-/** Case-study OG image — the byline reads "<brand> — Case Study". */
-export function buildCaseStudyOgImage(title: string) {
-  return buildOgImage(title, "Case Study");
-}

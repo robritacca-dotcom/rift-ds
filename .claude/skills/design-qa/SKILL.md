@@ -146,7 +146,7 @@ Reference the exact element and file, e.g. "the divider in Gadget's split varian
 
 ## Guardrails
 
-- **Contrast findings:** the `color-contrast` axe rule is deliberately switched off — rule-wide, every pair — by a settled decision, and the comment beside the override in `.storybook/preview.ts` is its authoritative record (the shipped action pairings it discusses clear AA). Read it before raising any contrast finding, and never re-raise the decision itself as a finding without asking Rob first.
+- **Contrast findings:** the `color-contrast` axe rule is deliberately switched off — rule-wide, every pair — by a settled decision, and the comment beside the override in `.storybook/preview.ts` is its authoritative record (the shipped action pairings it discusses clear AA). Read it before raising any contrast finding, and never re-raise the decision itself as a finding without asking the owner first.
 - **Page reviews** inherit the false-finding caveats in the `visual-review` skill's Key context — the ambient background's two renderers, the layout-mounted chrome, `desktopOnly` nav — read that section before judging a page screenshot.
 - **A clean pass is a valid outcome.** Don't invent findings to justify the run; state what was covered and stop.
 

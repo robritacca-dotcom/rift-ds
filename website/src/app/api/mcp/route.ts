@@ -148,8 +148,8 @@ const handler = createMcpHandler(
         title: "Search the site",
         description:
           `Full-text search over everything published on ${SITE_HOST}: the ` +
-          "design system docs and specs, case studies, essays, skills and the " +
-          "project journal. Returns the most relevant sections as markdown.",
+          "design system docs and specs, the foundations, the skills and the " +
+          "release log. Returns the most relevant sections as markdown.",
         inputSchema: z.object({
           query: z.string().min(2).max(200).describe("Words to look for"),
         }),
@@ -159,7 +159,7 @@ const handler = createMcpHandler(
         if (results.length === 0) {
           return text(
             `Nothing matched ${JSON.stringify(query)}. The corpus covers the design ` +
-              `system, the site's case studies and essays, and the site itself; ` +
+              `system, its docs and specs, and the site itself; ` +
               `try different words, or browse ${SITE_URL}/llms.txt for the index.`
           );
         }

@@ -44,7 +44,8 @@ const SOCIAL_ICONS: Record<string, ReactNode> = {
 };
 
 /* The icon row skips GitHub (the Elsewhere column already links it) and
-   Email (the Site column's Contact link covers reaching out). */
+   Email (the site publishes no direct contact channel; the repository is
+   the way to reach the project). */
 const socialIconProfiles = SOCIAL_PROFILES.filter(
   (profile) => profile.label in SOCIAL_ICONS
 );

@@ -74,7 +74,7 @@ The copy and the card must tell the same story: the hero feature on the card is 
 
 ### 6. Deliver
 
-Send the PNG with SendUserFile so it lands as a file the owner can copy straight into the post, and put the copy in the reply as a quoted block. If he wants to hand-tweak the card, the `design` canvas flow (publish the card as an editable artifact) is the follow-up to offer — not the default, since the ask is a paste-ready image.
+Send the PNG with SendUserFile so it lands as a file the owner can copy straight into the post, and put the copy in the reply as a quoted block. If the owner wants to hand-tweak the card, the `design` canvas flow (publish the card as an editable artifact) is the follow-up to offer — not the default, since the ask is a paste-ready image.
 
 ## Guardrails
 

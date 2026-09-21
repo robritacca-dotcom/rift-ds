@@ -16,7 +16,7 @@ Use this skill when asked to go live, do the first deploy, or start the public p
 
 ## The governing idea
 
-Order is the whole content of this checklist: the init bin stamps `SITE_URL` at package build time, the install surfaces are validator-held to the real package, and the smoke tests need a production to smoke — so each step below unlocks the ones after it, and doing one early ships a pointer at nothing. **Steps marked (owner) happen in dashboards only he can reach**; stop and hand over rather than working around them.
+Order is the whole content of this checklist: the init bin stamps `SITE_URL` at package build time, the install surfaces are validator-held to the real package, and the smoke tests need a production to smoke — so each step below unlocks the ones after it, and doing one early ships a pointer at nothing. **Steps marked (owner) happen in dashboards only the owner can reach**; stop and hand over rather than working around them.
 
 ## Instructions
 
@@ -24,16 +24,13 @@ Order is the whole content of this checklist: the init bin stamps `SITE_URL` at 
 
 The package rename is the gate: publishing under a name that is about to change burns version numbers on a placeholder. Confirm with the owner whether the real name has landed. If it has, run rename day first — the `PACKAGE_NAME` doc block in `scripts/brand.mjs` owns that recipe. If the codename is shipping deliberately, record that decision and continue.
 
-### 1. The site exists
+### 1. The site exists — DONE
 
-- **(owner)** Create the Vercel project by importing the GitHub repo; the website workspace is the build target.
-- Set `SITE_URL` in `scripts/brand.mjs` to the real deployment origin, regenerate (`npm run validate-registry`), and commit — sitemap, canonicals, OG URLs, llms.txt, the corpus, and the MCP connect snippets all read it.
-- Push, let it deploy, then prove it renders: `node scripts/smoke-hydration.mjs <SITE_URL>` — the class of outage this exists for only reproduces on Vercel.
-- **(owner)** A second Vercel project for Storybook; then `STORYBOOK_URL` in brand.mjs follows the same update-regenerate-commit path.
+The Vercel project serves `SITE_URL`, Storybook serves `STORYBOOK_URL` (both in `scripts/brand.mjs`), and the hydration smoke proved the first deploy.
 
-### 2. Monitoring wakes up
+### 2. Monitoring wakes up — DONE
 
-Restore the cron trigger in `.github/workflows/uptime.yml` (parked since genesis; the workflow's comment says why) and update every "inoperable until first deploy" note the drift audit planted — `ship`'s post-deploy proof and `pre-deploy`'s framing become live instructions the moment production exists.
+The cron in `.github/workflows/uptime.yml` runs on schedule against production, and the "inoperable until first deploy" notes in `ship` and `pre-deploy` are retired.
 
 ### 3. The package exists
 

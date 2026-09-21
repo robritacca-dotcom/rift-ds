@@ -31,12 +31,12 @@ const MAX_SUGGESTIONS = 3;
  * `scripts/validate-chat-starters.mjs` holds every label to the budget.
  */
 const FALLBACK_FOLLOWUPS = [
-  "What has Rob shipped recently?",
-  "Which case study should I read first?",
   "How does this design system work?",
-  "What has Rob built with AI?",
-  "Describe Rob's design philosophy",
-  "How do I get in touch with Rob?",
+  "How do I install the package?",
+  "How do the theme presets work?",
+  "What can the MCP endpoint do?",
+  "Why is teal reserved for actions?",
+  "How is the site kept accurate?",
 ];
 
 /**

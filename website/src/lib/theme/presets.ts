@@ -253,7 +253,10 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
   gold: {
     label: "Volt",
     // The yellow key is a light colour, so the action lever derives dark
-    // labels over gold fills on its own — no brandDark needed.
+    // labels over gold fills on its own — no brandDark needed. Dark mode
+    // keeps that derivation (restored in extraOverridesDark); light mode
+    // deliberately inverts to an ink fill under a gold label via the
+    // extras below.
     brand: "#FFD166",
     tintOn: true,
     tintSeed: "#FFD166",

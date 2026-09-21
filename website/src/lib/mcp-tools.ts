@@ -40,7 +40,7 @@ export const MCP_TOOLS: McpTool[] = [
   {
     name: "search_site",
     blurb: "full-text search over everything published on this site",
-    prompt: "What has Rob written about design tokens?",
+    prompt: "What does this site say about design tokens?",
   },
   {
     name: "get_setup",

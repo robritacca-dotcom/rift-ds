@@ -80,7 +80,7 @@ export default function InputPage() {
             <SectionTitle title="States" />
             <div className={styles.variantRow}>
               <div className={styles.variantItem}>
-                <Input label="With value" value="rob@example.com" onChange={() => {}} />
+                <Input label="With value" value="hello@example.com" onChange={() => {}} />
               </div>
               <div className={styles.variantItem}>
                 <Input label="Required" placeholder="Enter name" required onChange={() => {}} />

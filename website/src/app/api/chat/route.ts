@@ -585,7 +585,7 @@ export async function POST(request: Request): Promise<Response> {
 
         if (final.stop_reason === "refusal" && !streamedText) {
           noticeText =
-            "That one is outside what this chat covers. Ask about Rob's work, the case studies, or the design system and it can help.";
+            "That one is outside what this chat covers. Ask about the design system, its foundations, or how the site is built and it can help.";
           send({ type: "notice", text: noticeText });
         } else if (final.stop_reason === "max_tokens") {
           send({ type: "delta", text: "\n\n(Cut off at the length limit.)" });

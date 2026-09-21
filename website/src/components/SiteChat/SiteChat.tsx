@@ -399,7 +399,7 @@ export function SiteChat({
                 <p className={styles.welcomeAsk}>
                   {/* The last pair is tied: "AI" alone on a line is a widow
                       at the docked panel's width. */}
-                  {tagline ?? "Ask about the case studies, the system, design, or\u00a0AI"}
+                  {tagline ?? "Ask about the system, the tokens, design, or\u00a0AI"}
                 </p>
                 {/* The placeholder below stays a plain action ("Ask anything")
                     so this line and the composer don't say the same sentence

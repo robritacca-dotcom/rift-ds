@@ -192,7 +192,7 @@ git push origin --delete <branch>
 git worktree prune
 ```
 
-- `git worktree remove` **never** takes `--force`. If it refuses, the worktree is dirty: return to step 3's rule and ask. Note that the permission classifier may block a force-removal anyway, so a dirty worktree that must go is finished by the owner in his own terminal, not retried here.
+- `git worktree remove` **never** takes `--force`. If it refuses, the worktree is dirty: return to step 3's rule and ask. Note that the permission classifier may block a force-removal anyway, so a dirty worktree that must go is finished by the owner in their own terminal, not retried here.
 - `git branch -D` is sanctioned **only** for a candidate that was archived in this step and explicitly approved for deletion. Everywhere else, `-d`, and its refusal is the safety net.
 - Deleting a remote branch is the one outward-facing action in this skill. It removes work from GitHub, so it runs only against an approved, archived candidate, and every deletion is named in the report.
 

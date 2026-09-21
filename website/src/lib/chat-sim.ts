@@ -64,7 +64,7 @@ const SCENARIOS: SimScenario[] = [
       { status: "Structuring the answer", point: "Three sections: tokens, colour, motion." },
     ],
     response:
-      "Rob's philosophy comes down to a few firm rules, applied everywhere.\n\n" +
+      "The system's philosophy comes down to a few firm rules, applied everywhere.\n\n" +
       "### Tokens before components\n\n" +
       "Every visual decision starts as a token. Primitives hold the raw values, " +
       "semantic tokens give them roles, and components only ever reference the " +

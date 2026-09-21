@@ -30,7 +30,7 @@ the aggregate score is noise by construction; one flipped answer moves it a
 few points. Read the answers seat by seat — `metadata.seat` is `recruiter`,
 `designer`, `developer`, or `conduct` — and judge whether that visitor got
 something they could act on, not just whether nothing was wrong. The
-assertions are a regression tripwire (did the email vanish, did it invent a
+assertions are a regression tripwire (did it name GitHub for an availability question, did it invent a
 path, did an em dash sneak in), not a measurement instrument.
 
 Each question runs 3 times. Same question, different answers is normal; a

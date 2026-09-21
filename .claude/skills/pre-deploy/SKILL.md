@@ -8,7 +8,7 @@ invoke: ["is this ready to push?","run the build","pre-deploy check","check befo
 
 # pre-deploy
 
-Run the full local verify and confirm the site is safe to push to Vercel. No Vercel project exists for this repo yet — every check below runs locally and stands on its own until one does; "safe to push" then means safe to deploy the day a project exists.
+Run the full local verify and confirm the site is safe to push to Vercel. A push to `main` deploys the live site (`SITE_URL` in `scripts/brand.mjs` is the authority), so "safe to push" means safe to deploy — a green verify is the gate before that push.
 
 ## When invoked
 

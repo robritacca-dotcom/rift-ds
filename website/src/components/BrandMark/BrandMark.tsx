@@ -6,8 +6,8 @@ import { BRAND_MARK_PATHS, BRAND_MARK_STROKE_WIDTH } from "@/config/brand-mark";
  * (header wordmark, footer, drawer). The favicon routes draw the same
  * paths from @/config/brand-mark, so the mark cannot fork. The gradient
  * reads the live action tokens, so the mark wears whichever theme is on:
- * gold under Volt, ink under Smoke, teal in the shipped
- * look. The favicons keep the frozen teals (browser chrome cannot read
+ * gold under Volt in dark (ink in light, where Volt inverts the action
+ * fill), ink under Smoke, teal in the shipped look. The favicons keep the frozen teals (browser chrome cannot read
  * CSS variables).
  */
 export default function BrandMark({

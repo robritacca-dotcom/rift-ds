@@ -16,7 +16,7 @@ import { SITE_PALETTE_OPEN_EVENT } from "./palette-bus";
 import styles from "./SitePalette.module.css";
 import { ASSISTANT_NAME } from "@/config/brand.generated";
 
-/* Mirrors the nav's 959px breakpoint: desktopOnly pages (the canvas) stay
+/* Mirrors the page rail's 959px breakpoint: desktopOnly pages (the canvas) stay
    out of the mobile IA, so the palette hides their rows below it too. */
 const DESKTOP_QUERY = "(min-width: 960px)";
 
@@ -166,7 +166,7 @@ export function SitePaletteMount() {
         {
           id: "open-chat",
           label: "Ask the site chat",
-          description: "Answers questions about Rob and the system",
+          description: "Answers questions about the system",
           icon: "forum",
           keywords: ["ai", "help", "assistant"],
           onSelect: () => setChatOpen(true),

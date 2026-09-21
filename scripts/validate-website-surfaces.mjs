@@ -1,15 +1,16 @@
 #!/usr/bin/env node
 /**
  * Validates that every public component in src/components/registry.json
- * is fully represented on the website and in design.md:
- *
- *   1. website/src/app/components/<slug>/page.tsx exists (showcase page)
- *   2. ComponentPreviews.tsx has a preview entry for the slug (both
- *      directions — every key in the map must be a registered slug too).
- *      The index grid and category pages map over the registry, so card
- *      presence there is structurally guaranteed; the preview map is the
- *      one hand-maintained surface left.
- *   3. design.md has a `### Heading` spec section for the component
+ * is fully represented on the website and in design.md — the checks
+ * live in the report loop at the bottom of this file, which is the
+ * authoritative list (a doc-block enumeration here went stale once).
+ * The component-scoped ones: the showcase page exists, it renders its
+ * ComponentInstallStrip, the ComponentPreviews entry exists (both
+ * directions — every key in the map must be a registered slug too, and
+ * every page folder a registered slug), and design.md has a `###`
+ * spec section. The site-scoped ones hold the blueprint pages, the
+ * llms.txt spec downloads, SECTION_OG_IMAGE_SEGMENTS, and the colour
+ * token swatch page to their sources, each in both directions.
  *
  * The sidebar nav entry and its alphabetical order used to be checked here.
  * componentsSidebarLinks is now DERIVED from the registry, so both are

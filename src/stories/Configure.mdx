@@ -105,7 +105,7 @@ The system flows in one direction: raw values become purposeful tokens, tokens d
 
 ## Theming
 
-Light and dark are two readings of the same token layer, not separate systems. Components reference semantic tokens and stay agnostic to the active theme; the theme decides what each token resolves to. Beyond the two modes, {THEME_SELECTOR_ORDER.length} complete looks ship in the package as generated stylesheets, each applied by one <code>data-brand</code> attribute. The Theme control in this Storybook's toolbar switches between them, and it opens on Smoke, the served default.
+Light and dark are two readings of the same token layer, not separate systems. Components reference semantic tokens and stay agnostic to the active theme; the theme decides what each token resolves to. Beyond the two modes, {THEME_SELECTOR_ORDER.filter((id) => id !== "default").length} complete looks ship in the package as generated stylesheets, each applied by one <code>data-brand</code> attribute. The Theme control in this Storybook's toolbar switches between them, and it opens on Smoke, the served default.
 
 <div className="ds-theme-grid">
   <div className="ds-theme-card ds-theme-light">

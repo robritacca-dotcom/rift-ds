@@ -12,7 +12,7 @@ The one-time sequence from a repo that builds green to a site, package, and moni
 
 ## When invoked
 
-Use this skill when asked to go live, do the first deploy, or start the public phase. Several other skills note themselves "inoperable until first deploy"; this is the skill that ends that state.
+Use this skill when asked to go live, do the first deploy, or start the public phase — the site is already live on Vercel, so what remains here is the rest of the public phase (npm, GA, chat wiring, repo visibility).
 
 ## The governing idea
 

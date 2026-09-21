@@ -65,7 +65,7 @@ Use this skill when asked to review component APIs, check prop naming consistenc
    **Family consistency:**
    - Components in the same family (e.g. Button / CircularButton / ButtonGroup) should share `size` enum values
    - If one component accepts `iconLeft`/`iconRight`, siblings in the same family should follow the same pattern
-   - Default values: if `size` defaults to `"default"` on Button, it should not default to `"medium"` on a related component
+   - Default values: if `size` defaults to `"default"` on a Gadget, it should not default to `"medium"` on a related Sprocket
 
 5. **Output a grouped findings report.** The component names in this example are **fictional by design** — findings about real components go stale the moment someone fixes them, so this block only demonstrates the format:
 

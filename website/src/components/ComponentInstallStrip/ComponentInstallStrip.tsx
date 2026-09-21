@@ -4,7 +4,8 @@ import { SITE_URL } from "@/config/brand.generated";
 import styles from "./ComponentInstallStrip.module.css";
 
 /**
- * The per-component install strip, under every component page's header:
+ * The per-component install strip, closing every component page at the
+ * content column's full width:
  * the import line for the npm package and the component's personal
  * shadcn CLI command, both copyable. Everything derives from the
  * registry and the brand module — pages pass only their slug, and

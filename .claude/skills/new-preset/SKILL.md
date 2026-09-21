@@ -36,7 +36,7 @@ Existing entries in the file are the reference implementations; read two before 
 
 ### 2. Decide where it appears
 
-Add the id to `THEME_SELECTOR_ORDER` (same file) in its curated position. The home page's dot row and the playground's preset picker both walk this list, so one edit places it everywhere — there is nothing to wire.
+Add the id to `THEME_SELECTOR_ORDER` (same file) in its curated position. Every theme-picking surface walks this list — the home page's dot row, the playground's preset picker, the theme gallery, get-started's preset list, Storybook's Theme toolbar — so one edit places it everywhere; there is nothing to wire.
 
 ### 3. Generate, gate, verify
 
@@ -46,7 +46,7 @@ node scripts/validate-preset-stylesheets.mjs
 node scripts/validate-theme-presets.mjs
 ```
 
-The generator writes the preset's `html[data-brand]` stylesheet and refreshes the `presets.css` aggregate — commit both; they ship in the npm package. The completeness gate then holds every override to a real token, requires the action family and all six accents, and checks the resolved action bg/text pairing at **WCAG AA 4.5:1 in both themes**. A failing pairing means the key needs to move (deepen or lighten it, or lift the label through `extraOverrides`) — pinning a gap in `SANCTIONED_AA_GAPS` is deliberate acceptance with a written reason, never a shortcut, and needs the owner's sign-off.
+The generator writes the preset's `html[data-brand]` stylesheet and refreshes the `presets.css` aggregate; they ship in the npm package. Downstream generators re-embed the preset CSS too (the shadcn registry's base item among them — the `validate-registry` entry in the root `package.json` is the authoritative list), so commit every file the chain regenerates, not just the two named here. The completeness gate then holds every override to a real token, requires the action family and all six accents, and checks the resolved action bg/text pairing at **WCAG AA 4.5:1 in both themes**. A failing pairing means the key needs to move (deepen or lighten it, or lift the label through `extraOverrides`) — pinning a gap in `SANCTIONED_AA_GAPS` is deliberate acceptance with a written reason, never a shortcut, and needs the owner's sign-off.
 
 Then `npm run verify` — the mirror guards and the site build exercise everything the three scripts do not.
 

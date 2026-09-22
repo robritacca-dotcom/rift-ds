@@ -466,7 +466,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     elevation: "soft",
     // The serif-over-sans split: Lora display over Work Sans text.
     fontLabel: "Work Sans",
-    headingFontLabel: "Fraunces (serif)",
+    headingFontLabel: "Lora (serif)",
     // Violet-leaning sextet: the ambient palette calmed around the key.
     accents: {
       coral: "#D96BA8",

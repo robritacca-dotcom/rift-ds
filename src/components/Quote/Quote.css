@@ -36,9 +36,8 @@
 
 /* ============================================
    VARIANT — PULL (large display quote)
-   Weight 300 display type per the
-   weight-contrast rule — no border, the scale
-   is the emphasis.
+   Display type per the weight-contrast rule —
+   no border, the scale is the emphasis.
    ============================================ */
 
 .ds-quote--pull .ds-quote__text {

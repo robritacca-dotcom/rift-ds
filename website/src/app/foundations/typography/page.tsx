@@ -369,7 +369,9 @@ export default function TypographyPage() {
               resolve to <code>--font-family-primary</code>. This site keeps the
               roles on one face by design. Consumers of the package can point
               them at different faces to pair a heading font with a body font,
-              and preview pairings in the playground.
+              and preview pairings in the playground. The printed specs are the
+              shipped theme&apos;s values: a preset can re-key the weight tokens
+              too, and Forest sets its display tiers bold.
             </p>
           </div>
 

@@ -28,9 +28,9 @@ Add an entry to `THEME_PRESETS` in `website/src/lib/theme/presets.ts`. The `Them
 - **Neutral tint** (`tintOn`/`tintSeed`/`tintStrength`): whether the greys lean toward the brand.
 - **Shape** (`radiusScale`, `pill`): the corner language.
 - **The four feel levers** (`density`, `typeScale`, `motionScale`, `elevation`): 100/100/100/default is a legitimate position, but state it deliberately.
-- **Faces** (`fontLabel`, optionally `headingFontLabel`): the type pairing; the picker previews these, so labels must match `FONT_OPTIONS`/`HEADING_FONT_OPTIONS` entries in the same file.
+- **Faces** (`fontLabel`, optionally `headingFontLabel`): the type pairing; the picker previews these, so labels must match `FONT_OPTIONS`/`HEADING_FONT_OPTIONS` entries in `website/src/lib/theme/theme-overrides.ts` byte-exactly (the serif labels carry their parenthetical).
 - **`accents`**: the ambient sextet. These drive the background blobs and chart series 2–7 together, so curate them as one palette around the key. `SHIPPED_ACCENTS` in `website/src/lib/theme/theme-overrides.ts` shows the default set's shape.
-- **`advanced`** ramp rebases and `extraOverrides` where the derived look needs correcting — the existing presets are the worked examples of when each is warranted (a lifted label for contrast, a re-keyed ramp for harmony).
+- **`advanced`** ramp rebases and `extraOverrides` where the derived look needs correcting — the existing presets are the worked examples of when each is warranted (a lifted label for contrast, a re-keyed ramp for harmony, re-pitched display weights for a heavier face) — plus `extraOverridesDark` for the roles that cannot hold one value across both themes (the usual repair when the dark cell fails the AA gate in step 3).
 
 Existing entries in the file are the reference implementations; read two before writing one.
 
@@ -47,6 +47,8 @@ node scripts/validate-theme-presets.mjs
 ```
 
 The generator writes the preset's `html[data-brand]` stylesheet and refreshes the `presets.css` aggregate; they ship in the npm package. Downstream generators re-embed the preset CSS too (the shadcn registry's base item among them — the `validate-registry` entry in the root `package.json` is the authoritative list), so commit every file the chain regenerates, not just the two named here. The completeness gate then holds every override to a real token, requires the action family and all six accents, and checks the resolved action bg/text pairing at **WCAG AA 4.5:1 in both themes**. A failing pairing means the key needs to move (deepen or lighten it, or lift the label through `extraOverrides`) — pinning a gap in `SANCTIONED_AA_GAPS` is deliberate acceptance with a written reason, never a shortcut, and needs the owner's sign-off.
+
+A face the presets have never shipped needs `node scripts/sync-preset-fonts.mjs` first — a deliberate by-hand fetch, never part of the build; its `FAMILIES` table is the download spec, and CLAUDE.md's Fonts entry owns the contract. The stylesheet generator fails naming the script otherwise, and the downloaded woff2s commit with the preset.
 
 Then `npm run verify` — the mirror guards and the site build exercise everything the three scripts do not.
 

@@ -33,8 +33,8 @@ export default function QuotePage() {
             </p>
             <p className={styles.introBody}>
               Two registers: the default inline blockquote sits inside body copy with a
-              quiet left rule; the pull variant borrows display type (weight 300 at
-              sub-display scale) so the sentence itself is the emphasis.
+              quiet left rule; the pull variant borrows display type at sub-display
+              scale so the sentence itself is the emphasis.
             </p>
           </div>
 

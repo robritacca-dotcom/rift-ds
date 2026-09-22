@@ -204,12 +204,12 @@
     },
     "/foundations/typography": {
       "title": "Typography",
-      "text": "One typeface, hierarchy carried by weight: the full type scale and its tokens.",
+      "text": "One scale, faces set by the theme: the full type scale and its tokens.",
       "chips": [
         {
           "id": "type",
-          "label": "Why one typeface?",
-          "prompt": "Why does the design system use a single typeface?"
+          "label": "Can I use two typefaces?",
+          "prompt": "How do I pair a heading font with a body font?"
         }
       ]
     },

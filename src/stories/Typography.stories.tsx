@@ -220,9 +220,11 @@ export const DisplayStyles: Story = {
         }}
       >
         Large display text for hero sections, marketing pages, and major
-        headlines. All styles sit at weight 300 in the primary family. The display
-        tier steps down automatically below 768px — the sizes shown resolve at
-        the current viewport.
+        headlines. The display tier sits at weight 300 in the shipped theme and
+        chains its family through the heading role — a theme can re-key both,
+        and Forest sets the display weights bold. The display tier steps down
+        automatically below 768px — the sizes shown resolve at the current
+        viewport.
       </p>
 
       <TypographyStyle

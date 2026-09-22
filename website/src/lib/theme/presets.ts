@@ -311,6 +311,60 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
       "--color-action-primary-text-active": "var(--primitive-yellow-11)",
     },
   },
+  forest: {
+    label: "Forest",
+    // Deep-woods green, landing in the green family — dark enough that
+    // the derived near-white label clears AA over it in both themes, so
+    // one key serves light and dark. The brighter leaf greens live on in
+    // the accent sextet.
+    brand: "#23573F",
+    tintOn: true,
+    tintSeed: "#23573F",
+    tintStrength: 6,
+    // Organic softness: the shipped corner scale, pills kept.
+    radiusScale: 100,
+    pill: true,
+    density: 100,
+    typeScale: 100,
+    // Unhurried — the woodland look moves at the shipped tempo under the
+    // gentler float.
+    motionScale: 100,
+    elevation: "soft",
+    // The trail-brand pairing: Montserrat's bold geometric caps-energy
+    // headings over DM Sans text.
+    fontLabel: "DM Sans",
+    headingFontLabel: "Montserrat",
+    // Deep-woods sextet: lit bark, dusk heather, shaded lake, the amber
+    // light shaft, leaf-litter ochre and fern around the pine key.
+    accents: {
+      coral: "#B45E4A",
+      violet: "#7E6899",
+      cobalt: "#446E93",
+      amber: "#C97F3F",
+      gold: "#C2A147",
+      mint: "#4E9A6C",
+    },
+    // Trail-sign bold: the display tiers ship at a light 300, which reads
+    // wispy in Montserrat — Forest sets them semibold instead, with the
+    // sub-display a step lighter so the hero pair keeps its hierarchy.
+    extraOverrides: {
+      "--font-mega-1-weight": "600",
+      "--font-mega-2-weight": "600",
+      "--font-display-1-weight": "600",
+      "--font-display-2-weight": "600",
+      "--font-sub-display-weight": "500",
+    },
+    // Woodland neighbours: every hue muted toward the understory. Green
+    // is the action family, left alone.
+    advanced: bases({
+      red: "#C9524B",
+      orange: "#C06B32",
+      yellow: "#D0A339",
+      teal: "#2E8B83",
+      blue: "#3A6B9C",
+      purple: "#7D5BA6",
+    }),
+  },
   terminal: {
     label: "Terminal",
     brand: "#06D6A0",
@@ -447,6 +501,7 @@ export const THEME_SELECTOR_ORDER: ReadonlyArray<string> = [
   "mono",
   "coral",
   "warm",
+  "forest",
   "gold",
   "terminal",
   "default",

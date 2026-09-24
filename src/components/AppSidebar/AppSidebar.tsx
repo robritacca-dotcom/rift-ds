@@ -110,11 +110,13 @@ function DefaultLogo() {
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
     >
-      {/* The brand's chevron spine, in currentColor so it follows the
-          sidebar's own text colour through both themes. */}
-      <path d="M5 5.5 L12 9 L19 5.5" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M5 11 L12 14.5 L19 11" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M5 16.5 L12 20 L19 16.5" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+      {/* The brand mark — a column with two outer spikes — in currentColor
+          so it follows the sidebar's own text colour through both themes.
+          Hand-mirrored from website/src/config/brand-mark.ts; the library
+          cannot import from the website, so a change there moves here. */}
+      <path d="M12 1.5 V22.5" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M6.5 7 V12 L2 16.5" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M17.5 7 V12 L22 16.5" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }

@@ -11,13 +11,13 @@
     {
       "path": "src/components/Panel/Panel.css",
       "type": "registry:file",
-      "target": "dragonspine/components/Panel/Panel.css",
+      "target": "rift/components/Panel/Panel.css",
       "content": "/* ============================================\n   PANEL COMPONENT\n   The plain dashboard surface\n   ============================================ */\n\n.ds-panel {\n  display: flex;\n  flex-direction: column;\n  gap: var(--gap-400);\n  min-width: 0;\n  background-color: var(--color-bg-container-primary);\n  border-radius: var(--radius-600);\n  padding: var(--padding-500);\n}\n\n/* ============================================\n   PADDING VARIANTS\n   ============================================ */\n\n.ds-panel--compact {\n  padding: var(--padding-400);\n}\n\n.ds-panel--flush {\n  padding: 0;\n}\n"
     },
     {
       "path": "src/components/Panel/Panel.tsx",
       "type": "registry:file",
-      "target": "dragonspine/components/Panel/Panel.tsx",
+      "target": "rift/components/Panel/Panel.tsx",
       "content": "// No 'use client' directive: Panel is purely presentational (no hooks, no event\n// handlers), so it stays renderable from a React Server Component.\n\nimport React from 'react';\nimport './Panel.css';\n\n/** Props owned by Panel itself; everything else falls through to the <div>. */\ntype PanelOwnProps = {\n  /** Interior padding: 'default' uses --padding-500, 'compact' uses --padding-400, 'none' removes it */\n  padding?: 'default' | 'compact' | 'none';\n  /** Additional CSS classes */\n  className?: string;\n  /** Panel content */\n  children?: React.ReactNode;\n};\n\nexport interface PanelProps\n  extends PanelOwnProps,\n    Omit<React.ComponentPropsWithoutRef<'div'>, keyof PanelOwnProps> {}\n\n/**\n * Panel component: the plain dashboard surface.\n * A rounded container on the primary container background with no border and\n * no shadow: just the surface, ready for whatever a dashboard region holds.\n * Content stacks vertically with a medium gap.\n *\n * Forwards a ref to the `<div>` element and spreads unrecognised props onto it.\n */\nexport const Panel = React.forwardRef<HTMLDivElement, PanelProps>(\n  ({ padding = 'default', className = '', children, ...rest }, ref) => {\n    const baseClass = 'ds-panel';\n\n    const classes = [\n      baseClass,\n      padding === 'compact' ? `${baseClass}--compact` : '',\n      padding === 'none' ? `${baseClass}--flush` : '',\n      className,\n    ]\n      .filter(Boolean)\n      .join(' ');\n\n    return (\n      <div {...rest} ref={ref} className={classes}>\n        {children}\n      </div>\n    );\n  },\n);\n\nPanel.displayName = 'Panel';\n"
     }
   ]

@@ -1,5 +1,5 @@
 ---
-name: dragonspine-design-system
+name: rift-design-system
 description: Build React UI with @robr0/design-system. Use when installing the package, composing its components, theming with its design tokens, or reading a component's exact prop contract.
 ---
 

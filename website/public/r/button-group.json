@@ -12,13 +12,13 @@
     {
       "path": "src/components/ButtonGroup/ButtonGroup.css",
       "type": "registry:file",
-      "target": "dragonspine/components/ButtonGroup/ButtonGroup.css",
+      "target": "rift/components/ButtonGroup/ButtonGroup.css",
       "content": "/* ============================================\n   BUTTON GROUP COMPONENT\n   Container for grouped buttons in nav/subnav\n   ============================================ */\n\n.ds-button-group {\n  /* Layout */\n  display: inline-flex; /* Hug content instead of stretch */\n  width: auto; /* Don't stretch to full width */\n  overflow: hidden;\n}\n\n/* ============================================\n   HORIZONTAL ORIENTATION\n   Default for top navigation\n   ============================================ */\n\n.ds-button-group--horizontal {\n  flex-direction: row;\n  gap: var(--gap-500); /* Figma: --gap/lg (20px) */\n  align-items: flex-start;\n}\n\n/* ============================================\n   VERTICAL ORIENTATION\n   For subnav/mobile navigation\n   ============================================ */\n\n.ds-button-group--vertical {\n  flex-direction: column;\n  gap: var(--gap-050); /* 2px */\n  align-items: flex-start; /* Left-aligned, hug content */\n}\n\n/* Vertical buttons hug their content by default */\n.ds-button-group--vertical .ds-button {\n  width: auto; /* Hug content instead of stretch */\n  display: inline-flex; /* Hug content */\n}\n"
     },
     {
       "path": "src/components/ButtonGroup/ButtonGroup.tsx",
       "type": "registry:file",
-      "target": "dragonspine/components/ButtonGroup/ButtonGroup.tsx",
+      "target": "rift/components/ButtonGroup/ButtonGroup.tsx",
       "content": "import React from 'react';\nimport { Button, type ButtonProps } from '../Button/Button';\nimport './ButtonGroup.css';\n\nexport interface ButtonGroupProps {\n  /** Orientation of the button group */\n  orientation?: 'horizontal' | 'vertical';\n  /** Array of button configurations */\n  buttons: Array<ButtonProps>;\n  /** Accessible label for the group */\n  ariaLabel?: string;\n  /** Additional CSS class */\n  className?: string;\n}\n\nexport const ButtonGroup: React.FC<ButtonGroupProps> = ({\n  orientation = 'horizontal',\n  buttons,\n  ariaLabel,\n  className = '',\n}) => {\n  return (\n    <div\n      className={`ds-button-group ds-button-group--${orientation} ${className}`}\n      role=\"group\"\n      aria-label={ariaLabel}\n    >\n      {/* Spread the whole config so every ButtonProps field (target, rel,\n          disabled, …) reaches the Button — enumerating silently dropped them.\n          Entries default to tertiary; the deprecated priority spelling still\n          counts as an explicit choice. */}\n      {buttons.map((button, index) => (\n        <Button\n          key={index}\n          {...button}\n          variant={button.variant ?? button.priority ?? 'tertiary'}\n        />\n      ))}\n    </div>\n  );\n};\n"
     }
   ]

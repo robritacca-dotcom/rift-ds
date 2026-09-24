@@ -760,7 +760,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Text shown next to logo when expanded",
-            "defaultValue": "Dragonspine"
+            "defaultValue": "Rift"
           },
           {
             "name": "showMobileTrigger",

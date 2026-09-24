@@ -56,7 +56,7 @@ export const SITE_URL = 'https://dragonspine-delta.vercel.app';
 /** The source repository. */
 export const REPOSITORY_URL = 'https://github.com/robritacca-dotcom/dragonspine';
 
-/** The deployed Storybook. A placeholder until its Vercel project exists. */
+/** The deployed Storybook (its own Vercel project, built from main). */
 export const STORYBOOK_URL = 'https://dragonspine-storybook.vercel.app';
 
 /** The npm package page, derived — never restated. */

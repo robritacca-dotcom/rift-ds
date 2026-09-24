@@ -61,7 +61,7 @@ Then:
 npm run validate-registry
 ```
 
-This re-runs the three-way version parity check and regenerates the derived surfaces — and two generated trees stamp `PACKAGE_VERSION` into their output, so the bump rewrites every per-component markdown page under `website/public/components/` and the consumer agent skill's brand-named folder under `website/public/skill/` (`BIN_NAME` in `scripts/brand.mjs` owns the name). The diff is large by design. Commit all of it together as the bump commit (`chore(release): <version>`) and push — a bump pushed without the restamped files fails CI's drift guard (that exact split produced the 0.15.0 cleanup commit), and the commit you push here is the commit that will be published and tagged.
+This re-runs the three-way version parity check and regenerates the derived surfaces — and two generated trees stamp `PACKAGE_VERSION` into their output, so the bump rewrites every per-component markdown page under `website/public/components/` and the consumer agent skill's brand-named folder under `website/public/skill/` (`SKILL_NAME` in `scripts/brand.mjs` owns the name). The diff is large by design. Commit all of it together as the bump commit (`chore(release): <version>`) and push — a bump pushed without the restamped files fails CI's drift guard (that exact split produced the 0.15.0 cleanup commit), and the commit you push here is the commit that will be published and tagged.
 
 ### 4. Dry run — never skip this
 

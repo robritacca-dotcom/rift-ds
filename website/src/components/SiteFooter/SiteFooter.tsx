@@ -87,9 +87,9 @@ export default function SiteFooter() {
           a rail, and identically on the pages that don't. */}
       <div className={styles.body}>
         <div className={styles.brand}>
-          <Link href="/" className={styles.brandMark} aria-label="Dragonspine DS, home">
+          <Link href="/" className={styles.brandMark} aria-label={`${BRAND_NAME}, home`}>
             <BrandMark />
-            <span className={styles.brandName}>Dragonspine DS</span>
+            <span className={styles.brandName}>{BRAND_NAME}</span>
           </Link>
           <ul className={styles.socialRow}>
             {socialIconProfiles.map((profile) => (

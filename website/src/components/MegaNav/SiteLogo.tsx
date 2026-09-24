@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import BrandMark from "@/components/BrandMark/BrandMark";
+import { BRAND_NAME } from "@/config/brand.generated";
 import styles from "./MegaNav.module.css";
 
 /**
@@ -27,7 +28,7 @@ export default function SiteLogo({
       onClick={onClick}
     >
       <BrandMark className={styles.logoMark} />
-      <span className={styles.logoText}>Dragonspine DS</span>
+      <span className={styles.logoText}>{BRAND_NAME}</span>
     </Link>
   );
 }

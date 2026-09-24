@@ -493,7 +493,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
 /**
  * The selector order every theme surface renders — the landing's dot
  * row and the playground's preset picker walk this list. "default" is
- * the shipped Dragonspine look (no data-brand attribute).
+ * the shipped Rift look (no data-brand attribute).
  */
 export const THEME_SELECTOR_ORDER: ReadonlyArray<string> = [
   // Smoke leads: it is the default the server ships, so the row

@@ -460,7 +460,7 @@ function EscalatorColumn({
    the package documents, exercised by the site itself. Each tile is a
    portrait — swatch, name in the theme's own heading face, and the font
    pairing — so the scale of what a pick changes is visible before the
-   click. "default" is the Dragonspine-original look (attribute removed,
+   click. "default" is the Rift-original look (attribute removed,
    the raw token files); the server ships data-brand="mono", so black &
    white is what a visitor lands on and the mono tile wakes up ringed. */
 

@@ -2,28 +2,29 @@
 /**
  * BRAND — the single source of truth for every brand fact.
  *
- * The whole point of this module is rename day: when the real name lands,
+ * The whole point of this module is rename day: when a name changes,
  * this file (plus the mark component) is the edit, and everything else —
  * the package manifest, the generated TS module the website reads, the
  * README regions, the agent skill, the MCP server name, the init bin —
- * follows through generators and validators.
+ * follows through generators and validators. The move off the
+ * "Dragonspine" codename to Rift DS was one commit here, which is the
+ * proof the arrangement works.
  *
- * "Dragonspine" is the working codename, chosen to be replaced. Nothing
- * outside this file may restate a value that lives here: scripts import
- * it directly; website code reads the generated mirror
+ * Nothing outside this file may restate a value that lives here: scripts
+ * import it directly; website code reads the generated mirror
  * (website/src/config/brand.generated.ts, written by
  * scripts/generate-brand-module.mjs and byte-held by
  * scripts/validate-brand-module.mjs).
  */
 
 /** The product name, as prose and titles print it. */
-export const BRAND_NAME = 'Dragonspine DS';
+export const BRAND_NAME = 'Rift DS';
 
 /** The short form: wordmarks, the library's own logo defaults. */
-export const BRAND_SHORT = 'Dragonspine';
+export const BRAND_SHORT = 'Rift';
 
 /** The site chat's public name — the FAB, the palette's ask row. */
-export const ASSISTANT_NAME = 'Dragonspine GPT';
+export const ASSISTANT_NAME = 'Rift GPT';
 
 /**
  * The published npm package. Also the specifier every import in this
@@ -73,7 +74,7 @@ export const FIGMA_URL = 'https://www.figma.com/@robr0';
  * links keep working whatever the file is called); keeping the base
  * here means a renamed file is still a one-line change.
  */
-export const FIGMA_FILE_URL = 'https://www.figma.com/design/8NzqDS8iRsBTFPbNGj3Woj/Dragonspine';
+export const FIGMA_FILE_URL = 'https://www.figma.com/design/8NzqDS8iRsBTFPbNGj3Woj/Rift';
 
 /** Browser-tab title suffix and og:site_name. */
 export const TITLE_SUFFIX = BRAND_NAME;
@@ -86,14 +87,14 @@ export const TITLE_SUFFIX = BRAND_NAME;
 export const GA_ID = '';
 
 /** The MCP server's advertised name (client configs, serverInfo). */
-export const MCP_SERVER_NAME = 'dragonspine-ds';
+export const MCP_SERVER_NAME = 'rift-ds';
 
 /**
  * The consumer agent skill's folder name: what `npx <pkg> init` installs
  * under .claude/skills/ and where the site publishes the pair under
  * /skill/<name>/.
  */
-export const SKILL_NAME = 'dragonspine-design-system';
+export const SKILL_NAME = 'rift-design-system';
 
 /** The package's bin name (the `npx` entry). */
-export const BIN_NAME = 'dragonspine-design-system';
+export const BIN_NAME = 'rift-design-system';

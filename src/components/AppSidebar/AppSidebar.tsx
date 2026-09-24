@@ -144,7 +144,7 @@ export const AppSidebar = ({
   footerSlot,
   className = '',
   logo,
-  logoText = 'Dragonspine',
+  logoText = 'Rift',
   showMobileTrigger = true,
 }: AppSidebarProps) => {
   const baseClass = 'ds-app-sidebar';

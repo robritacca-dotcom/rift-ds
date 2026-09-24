@@ -1,7 +1,7 @@
 {
   "routes": {
     "/": {
-      "title": "Dragonspine DS",
+      "title": "Rift DS",
       "text": "The design system behind this site: tokens, components, and docs, published to npm and enforced by the build.",
       "chips": [
         {
@@ -264,7 +264,7 @@
         {
           "id": "themes-complete",
           "label": "What makes a theme complete?",
-          "prompt": "What does a complete Dragonspine theme include, and how do I apply one in my own app?"
+          "prompt": "What does a complete Rift theme include, and how do I apply one in my own app?"
         }
       ]
     }

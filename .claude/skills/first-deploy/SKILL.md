@@ -22,7 +22,7 @@ Order is the whole content of this checklist: the init bin stamps `SITE_URL` at 
 
 ### 0. Decide the identity first
 
-The package rename is the gate: publishing under a name that is about to change burns version numbers on a placeholder. Confirm with the owner whether the real name has landed. If it has, run rename day first — the `PACKAGE_NAME` doc block in `scripts/brand.mjs` owns that recipe. If the codename is shipping deliberately, record that decision and continue.
+The package rename is the gate: publishing under a name that is about to change burns version numbers on a placeholder. The brand name landed as Rift DS, but `PACKAGE_NAME` deliberately stayed `@robr0/design-system`. Re-confirm that decision with the owner before the first publish, since it is far cheaper to change now than after a version exists. If they want it renamed, run rename day first — the `PACKAGE_NAME` doc block in `scripts/brand.mjs` owns that recipe.
 
 ### 1. The site exists — DONE
 

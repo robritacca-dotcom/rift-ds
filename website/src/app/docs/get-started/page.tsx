@@ -329,7 +329,7 @@ export default function GetStartedPage() {
                   CLI can install any component as source you own instead of a
                   package you depend on. One add brings the component, the
                   components it builds on, and the shared base (tokens, theme
-                  presets, icon font, behavior hooks) into a dragonspine
+                  presets, icon font, behavior hooks) into a rift
                   folder in your project, imports intact. The index at{" "}
                   <a href="/r/registry.json">/r/registry.json</a> lists every
                   component. The CLI expects a <code>components.json</code>{" "}

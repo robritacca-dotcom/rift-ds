@@ -24,9 +24,9 @@
  *
  * Two load-bearing decisions:
  *   1. NO import rewriting. Every file's target preserves its src/
- *      layout under a `dragonspine/` folder in the consumer's project
+ *      layout under a brand-named folder in the consumer's project
  *      (src/components/Button/Button.tsx ->
- *      dragonspine/components/Button/Button.tsx), so the library's own
+ *      rift/components/Button/Button.tsx), so the library's own
  *      relative imports resolve verbatim after install. Cross-component
  *      imports become registryDependencies instead, as absolute URLs so
  *      they resolve without namespace configuration.
@@ -51,7 +51,7 @@ import {
 } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { SITE_URL } from './brand.mjs';
+import { BRAND_SHORT, SITE_URL } from './brand.mjs';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const srcDir = join(repoRoot, 'src');
@@ -62,7 +62,8 @@ const registry = JSON.parse(
 );
 
 const ITEM_SCHEMA = 'https://ui.shadcn.com/schema/registry-item.json';
-const TARGET_ROOT = 'dragonspine';
+/** Consumer-side folder name, derived so it can never drift from the brand. */
+const TARGET_ROOT = BRAND_SHORT.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
 /** repo path under src/ -> the consumer-side target path. */
 const targetFor = (absPath) => `${TARGET_ROOT}/${relative(srcDir, absPath).replace(/\\/g, '/')}`;
@@ -220,7 +221,7 @@ export function assembleShadcnRegistry() {
     $schema: ITEM_SCHEMA,
     name: 'base',
     type: 'registry:lib',
-    title: 'Dragonspine base',
+    title: `${BRAND_SHORT} base`,
     description:
       'The shared layer every component builds on: the token stylesheets, the generated theme presets, the icon font, the motion constants, and the overlay behavior hooks.',
     files: [...base.files.keys()]
@@ -233,7 +234,7 @@ export function assembleShadcnRegistry() {
     'registry.json',
     stringify({
       $schema: 'https://ui.shadcn.com/schema/registry.json',
-      name: 'dragonspine',
+      name: TARGET_ROOT,
       homepage: SITE_URL,
       items: [
         { name: baseItem.name, type: baseItem.type, title: baseItem.title, description: baseItem.description },

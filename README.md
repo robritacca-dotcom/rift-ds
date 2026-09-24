@@ -1,6 +1,6 @@
-<a href="https://dragonspine-delta.vercel.app"><img src=".github/readme-banner.jpg" alt="Dragonspine DS, the AI-ready React design system" width="100%"></a>
+<a href="https://dragonspine-delta.vercel.app"><img src=".github/readme-banner.jpg" alt="Rift DS, the AI-ready React design system" width="100%"></a>
 
-# Dragonspine DS
+# Rift DS
 
 <!-- npm-badge:start -->
 [![npm](https://img.shields.io/npm/v/@robr0%2Fdesign-system?logo=npm&color=CB3837)](https://www.npmjs.com/package/@robr0/design-system)
@@ -9,7 +9,7 @@
 
 An open source React design system built for AI products and coding agents: components on a three-tier token architecture, complete theme presets that restyle everything with one attribute, and machine surfaces (an MCP endpoint, per-component contracts, an installable agent skill) so your coding agent knows the library as well as you do.
 
-## Why Dragonspine DS
+## Why Rift DS
 
 - **One package, zero dependencies.** React is the only required peer dependency; recharts is optional and only for the charts entry. No configuration API, no providers, no build-tool integration: theming is plain CSS custom properties, so it works in any bundler, in any stack, beside anything you already use.
 - **Free, open source, consumed your way.** MIT end to end, no pro tier, no paywalled components. Install the npm package, pull single components as source through the shadcn CLI, or clone the repo and own every line; all three are first-class paths.
@@ -21,7 +21,7 @@ An open source React design system built for AI products and coding agents: comp
 
 ## Documentation
 
-Everything deep lives on the docs site: **[dragonspine-delta.vercel.app](https://dragonspine-delta.vercel.app/)**, with live examples, foundations, templates, the playground, and the **[get-started guide](https://dragonspine-delta.vercel.app/docs/get-started)**. **[Storybook](https://dragonspine-storybook.vercel.app/?path=/docs/dragonspine-ds--docs)** is the interactive component explorer.
+Everything deep lives on the docs site: **[dragonspine-delta.vercel.app](https://dragonspine-delta.vercel.app/)**, with live examples, foundations, templates, the playground, and the **[get-started guide](https://dragonspine-delta.vercel.app/docs/get-started)**. **[Storybook](https://dragonspine-storybook.vercel.app/?path=/docs/rift-ds--docs)** is the interactive component explorer.
 
 ## Install
 
@@ -49,10 +49,10 @@ npx @robr0/design-system init
 The MCP endpoint serves the component catalogue, per-component prop APIs, the token registry, install setup, and docs search to any client. No key, no account, no model calls: every tool reads only published, generated data, built from the same JSDoc that produces the shipped `.d.ts`, so an agent reads the exact contract npm ships.
 
 ```bash
-claude mcp add --transport http dragonspine-ds https://dragonspine-delta.vercel.app/api/mcp
+claude mcp add --transport http rift-ds https://dragonspine-delta.vercel.app/api/mcp
 ```
 
-Every component's prop contract is also plain markdown (append `.md` to its docs URL), and [llms.txt](https://dragonspine-delta.vercel.app/llms.txt) indexes every machine surface. Then just ask: "Build a settings page with Dragonspine components."
+Every component's prop contract is also plain markdown (append `.md` to its docs URL), and [llms.txt](https://dragonspine-delta.vercel.app/llms.txt) indexes every machine surface. Then just ask: "Build a settings page with Rift components."
 
 ## Theming
 

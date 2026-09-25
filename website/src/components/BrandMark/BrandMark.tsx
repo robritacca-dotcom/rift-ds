@@ -3,7 +3,8 @@ import { BRAND_MARK_PATHS, BRAND_MARK_STROKE_WIDTH } from "@/config/brand-mark";
 
 /**
  * The brand mark, inline — the one component every chrome surface renders
- * (header wordmark, footer, drawer). The favicon routes draw the same
+ * (header wordmark, footer, drawer, and the immersive stages' toolbar pill,
+ * which took it off the static file so a re-themed stage re-themes the mark). The favicon routes draw the same
  * paths from @/config/brand-mark, so the mark cannot fork. The gradient
  * reads the live action tokens, so the mark wears whichever theme is on:
  * gold under Volt in dark (ink in light, where Volt inverts the action

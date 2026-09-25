@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { Breadcrumb } from "@robr0/design-system/components/Breadcrumb/Breadcrumb";
 import { Button } from "@robr0/design-system/components/Button/Button";
@@ -10,6 +9,7 @@ import { Tabs, type Tab } from "@robr0/design-system/components/Tabs/Tabs";
 import { Badge } from "@robr0/design-system/components/Badge/Badge";
 import { getBreadcrumbs } from "@/config/navigation";
 import { buildBreadcrumbJsonLd } from "@/lib/structuredData";
+import BrandMark from "@/components/BrandMark/BrandMark";
 import styles from "./StageToolbar.module.css";
 
 export interface StageToolbarProps {
@@ -86,7 +86,10 @@ export default function StageToolbar({
       <header className={styles.toolbar}>
       <div className={styles.trail}>
         <Link href="/" className={styles.logo} aria-label="Home">
-          <Image src="/logos/mark.svg" alt="" width={24} height={24} />
+          {/* The inline mark, not the static file: its gradient reads the
+              live action tokens, so an immersive stage that re-themes the
+              page (the playground) re-themes the mark with it. */}
+          <BrandMark size={24} />
         </Link>
         {title && <span className={styles.title}>{title}</span>}
         {badge && <Badge label={badge} variant="info" />}

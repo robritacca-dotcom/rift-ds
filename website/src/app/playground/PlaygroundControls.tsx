@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import styles from "./page.module.css";
 import { Button } from "@robr0/design-system/components/Button/Button";
+import { CircularButton } from "@robr0/design-system/components/CircularButton/CircularButton";
 import { ColorPicker } from "@robr0/design-system/components/ColorPicker/ColorPicker";
 import { Swatch } from "@robr0/design-system/components/Swatch/Swatch";
 import { Input } from "@robr0/design-system/components/Input/Input";
@@ -63,6 +64,16 @@ export interface PlaygroundControlsProps {
   onFontLabel: (value: string) => void;
   onHeadingFontLabel: (value: string) => void;
   onProductName: (value: string) => void;
+  /** File name of the image the theme was read from, when there is one. */
+  imageName?: string;
+  /** True while a dropped or chosen image is being decoded and sampled. */
+  imageBusy?: boolean;
+  /** Why the last image could not be used, if it could not. */
+  imageError?: string;
+  /** Opens the file picker for the theme source image. */
+  onPickImage: () => void;
+  /** Drops the source image. The levers it moved stay where they are. */
+  onClearImage: () => void;
   onReset: () => void;
   /** Opens the advanced-mode dialog (every primitive ramp). */
   onOpenAdvanced: () => void;
@@ -105,6 +116,11 @@ export default function PlaygroundControls({
   onFontLabel,
   onHeadingFontLabel,
   onProductName,
+  imageName,
+  imageBusy = false,
+  imageError,
+  onPickImage,
+  onClearImage,
   onReset,
   onOpenAdvanced,
   onViewCss,
@@ -195,6 +211,39 @@ export default function PlaygroundControls({
             iconLeft="palette"
             onClick={onOpenAdvanced}
           />
+        </div>
+
+        {/* Theming from a picture: the same colour levers, moved all at
+            once. The drop target is the whole tool, so this button is the
+            keyboard and touch route to the same thing. */}
+        <div className={styles.controlGroup}>
+          <h4 className={styles.controlHeading}>From an image</h4>
+          <Button
+            label={imageBusy ? "Reading the image" : "Upload an image"}
+            variant="neutral"
+            iconLeft={imageBusy ? "progress_activity" : "add_photo_alternate"}
+            state={imageBusy ? "disabled" : "default"}
+            onClick={onPickImage}
+          />
+          {imageName ? (
+            <div className={styles.imageSourceRow}>
+              <span className={styles.imageSourceName} title={imageName}>
+                {imageName}
+              </span>
+              <CircularButton
+                icon="close"
+                variant="neutral"
+                size="compact"
+                ariaLabel="Remove the theme source image"
+                onClick={onClearImage}
+              />
+            </div>
+          ) : (
+            /* No standing instruction under the button: the whole page is
+               the drop target, and a note explaining that earns less than
+               the space it takes. Only a failure has something to say. */
+            imageError && <p className={styles.controlNote}>{imageError}</p>
+          )}
         </div>
 
         <div className={styles.controlGroup}>

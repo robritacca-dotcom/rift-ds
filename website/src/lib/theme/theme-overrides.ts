@@ -16,7 +16,9 @@ export interface Overrides {
 
 /* ---------- colour helpers ---------- */
 
-const hexToRgb = (hex: string): [number, number, number] => {
+/** A `#RRGGBB` string as an rgb triple. Exported so the image-palette
+    extractor reads colour through this module rather than its own copy. */
+export const hexToRgb = (hex: string): [number, number, number] => {
   const h = hex.replace("#", "");
   return [
     parseInt(h.slice(0, 2), 16),
@@ -25,7 +27,8 @@ const hexToRgb = (hex: string): [number, number, number] => {
   ];
 };
 
-const rgbToHex = (rgb: [number, number, number]): string =>
+/** An rgb triple as an uppercase `#RRGGBB` string, channels clamped. */
+export const rgbToHex = (rgb: [number, number, number]): string =>
   "#" +
   rgb
     .map((c) => Math.round(Math.min(255, Math.max(0, c))).toString(16).padStart(2, "0"))
@@ -217,7 +220,8 @@ export const CHROMATIC_RAMPS: ReadonlyArray<{
 
 /* HSL round-trip for the all-ramps levers. h in degrees, s/l in 0..1. */
 
-const rgbToHsl = ([r, g, b]: [number, number, number]): [number, number, number] => {
+/** rgb (0..255) to hsl, hue in degrees and s/l in 0..1. */
+export const rgbToHsl = ([r, g, b]: [number, number, number]): [number, number, number] => {
   const rn = r / 255, gn = g / 255, bn = b / 255;
   const max = Math.max(rn, gn, bn), min = Math.min(rn, gn, bn);
   const l = (max + min) / 2;
@@ -231,7 +235,8 @@ const rgbToHsl = ([r, g, b]: [number, number, number]): [number, number, number]
   return [h, s, l];
 };
 
-const hslToRgb = ([h, s, l]: [number, number, number]): [number, number, number] => {
+/** hsl (degrees, 0..1, 0..1) back to rgb (0..255). Hue wraps. */
+export const hslToRgb = ([h, s, l]: [number, number, number]): [number, number, number] => {
   const c = (1 - Math.abs(2 * l - 1)) * s;
   const hp = ((h % 360) + 360) % 360 / 60;
   const x = c * (1 - Math.abs((hp % 2) - 1));

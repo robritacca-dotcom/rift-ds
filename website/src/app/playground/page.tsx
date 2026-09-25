@@ -43,6 +43,8 @@ import {
 import { PICKER_FONT_PARAMS, THEME_PRESETS, type ThemePreset } from "@/lib/theme/presets";
 import { useAppliedOverrides, useSiteTheme } from "@/lib/theme/use-theme-overrides";
 import PlaygroundControls from "./PlaygroundControls";
+import { ImageThemeCard, ImageThemeDropZone } from "./ImageThemeDrop";
+import { themeFromFile, type ImageThemeSource } from "@/lib/theme/image-palette";
 import AdvancedColorsDialog from "./AdvancedColorsDialog";
 import ChatDirector, { STORY_CONTENT } from "./ChatDirector";
 import InspectMode from "@/components/InspectMode/InspectMode";
@@ -110,6 +112,20 @@ function ResetOnTransportChange({ mode }: { mode: TransportMode }) {
   }, [mode, reset]);
   return null;
 }
+
+/**
+ * A preset's extras with anything that would repaint the action colour taken
+ * out. An image supplies that colour, so an inherited pointer at a preset's
+ * own fill has to go; the display-type weight and letter-spacing that ride in
+ * the same object have nothing to do with colour and stay.
+ */
+const withoutActionColours = (extras?: Overrides): Overrides | undefined => {
+  if (!extras) return extras;
+  const kept = Object.fromEntries(
+    Object.entries(extras).filter(([name]) => !name.startsWith("--color-action-"))
+  );
+  return Object.keys(kept).length > 0 ? kept : undefined;
+};
 
 export default function PlaygroundPage() {
   /* ---------- the active view ----------
@@ -201,6 +217,32 @@ export default function PlaygroundPage() {
      Seeded by a preset, hand-picked in the Advanced colours dialog. */
   const [accents, setAccents] = useState<AccentSextet>(SHIPPED_ACCENTS);
 
+  /* ---------- theming from an image ----------
+     The dropped picture, its object URL and the swatches it was read from.
+     Everything here lives in this tab: the file is decoded to an object URL
+     and sampled on a canvas, never uploaded and never stored, and the URL is
+     revoked the moment the card stops rendering it. */
+  const [imageSource, setImageSource] = useState<ImageThemeSource | null>(null);
+  const [imageError, setImageError] = useState("");
+  const [imageBusy, setImageBusy] = useState(false);
+  const imageInputRef = useRef<HTMLInputElement>(null);
+  /* The live URL, so the revoke on unmount does not need imageSource in a
+     dependency array that would re-run the cleanup on every swap. */
+  const imageUrlRef = useRef<string | null>(null);
+
+  const clearImage = () => {
+    if (imageUrlRef.current) URL.revokeObjectURL(imageUrlRef.current);
+    imageUrlRef.current = null;
+    setImageSource(null);
+    setImageError("");
+  };
+
+  useEffect(() => {
+    return () => {
+      if (imageUrlRef.current) URL.revokeObjectURL(imageUrlRef.current);
+    };
+  }, []);
+
   /** The last-chosen preset's non-lever state (coral's white label,
       mono's theme-dependent action colour). Kept separate from
       `preset` so Custom inherits it — touching one lever must only change
@@ -233,6 +275,51 @@ export default function PlaygroundPage() {
     setPreset("custom");
     setPresetExtras((e) => ({ ...e, brandDark: darkValue }));
     setBrand(value);
+  };
+
+  /** Reads a local image and moves the colour levers to match it: the action
+      colour, the neutral tint, and the six ambient accents. It is the same
+      Custom state any hand-moved lever produces, so every other lever keeps
+      its position and the copied CSS reproduces the result like any other
+      theme. */
+  const applyImageTheme = async (file: File) => {
+    setImageBusy(true);
+    setImageError("");
+    const source = await themeFromFile(file);
+    setImageBusy(false);
+    if (!source) {
+      setImageError("That file could not be read. Try a PNG, JPEG or WebP.");
+      return;
+    }
+
+    if (imageUrlRef.current) URL.revokeObjectURL(imageUrlRef.current);
+    imageUrlRef.current = source.url;
+    setImageSource(source);
+
+    setPreset("custom");
+    syncPresetParam("custom");
+    /* Everything that would repaint over the sample has to stand down first.
+       A theme-dependent brand would override the action colour in dark mode;
+       a preset's per-ramp rebases and its hue and saturation levers are
+       applied last of all, so they would beat the sampled colour outright;
+       and its action-colour extras layer over the derived pointers. The
+       levers the image has no opinion about, from radius to typeface, keep
+       their positions. */
+    setPresetExtras((e) => ({
+      brandDark: undefined,
+      extraOverrides: withoutActionColours(e.extraOverrides),
+      extraOverridesDark: withoutActionColours(e.extraOverridesDark),
+    }));
+    setAdvColors(DEFAULT_ADVANCED);
+    setBrand(source.theme.brand);
+    setTintOn(source.theme.tintOn);
+    setTintSeed(source.theme.tintSeed);
+    setTintStrength(source.theme.tintStrength);
+    setAccents(source.theme.accents);
+
+    /* The banner heads the components stage, so a drop from the Type or Chat
+       view lands somewhere it can be seen. */
+    pickView("components");
   };
 
   /* A deep link can seed the action-colour lever with ?brand=<hex> (no
@@ -269,6 +356,9 @@ export default function PlaygroundPage() {
     setPreset(value);
     const p = THEME_PRESETS[value];
     if (!p) return; // "custom" — keep the current levers
+    // A named preset replaces every colour the image supplied, so the card
+    // would be claiming credit for a look it no longer owns.
+    clearImage();
     setAdvColors(p.advanced ?? DEFAULT_ADVANCED); // harmonized ramp keys
     setAccents({ ...p.accents }); // the theme's ambient sextet
     setPresetExtras({
@@ -413,6 +503,7 @@ export default function PlaygroundPage() {
     Object.keys(overrides).length === 0 && !font.family && !headingFont.family;
 
   const reset = () => {
+    clearImage();
     setPreset("default");
     setPresetExtras({});
     setAdvColors(DEFAULT_ADVANCED);
@@ -592,6 +683,11 @@ export default function PlaygroundPage() {
               onFontLabel={asCustom(setFontLabel)}
               onHeadingFontLabel={asCustom(setHeadingFontLabel)}
               onProductName={setProductName}
+              imageName={imageSource?.name}
+              imageBusy={imageBusy}
+              imageError={imageError}
+              onPickImage={() => imageInputRef.current?.click()}
+              onClearImage={clearImage}
               /* Reset lands on Smoke, the served default — the raw token
                  files stay reachable as the Tide row in the picker. */
               onReset={() => applyPreset("mono")}
@@ -618,6 +714,24 @@ export default function PlaygroundPage() {
           the components view instead). */}
       <HiddenBackground />
       <DotBackground />
+
+      {/* Drag a picture onto any part of the tool and the colour levers move
+          to match it. The file is read in this tab and nowhere else. */}
+      <ImageThemeDropZone onFile={applyImageTheme} rejected={imageError} />
+      <input
+        ref={imageInputRef}
+        type="file"
+        accept="image/*"
+        className={styles.visuallyHidden}
+        tabIndex={-1}
+        aria-hidden="true"
+        onChange={(event) => {
+          const file = event.target.files?.[0];
+          // Cleared so choosing the same file twice still fires a change.
+          event.target.value = "";
+          if (file) applyImageTheme(file);
+        }}
+      />
 
       {/* Not the site's full navigation — a full-screen view's floating
           toolbar pill: brand mark, breadcrumb trail, the view tabs, and
@@ -778,7 +892,18 @@ export default function PlaygroundPage() {
                   stacking context per section, which would let later
                   sections paint over an open Dropdown/Popover in an
                   earlier one. */}
-              <MockNav brandName={productName.trim() || "Acme Corp"} />
+              <div className={styles.navStage}>
+                {/* The theme's source picture heads the stage, pushing the
+                    nav and everything under it down, all of it re-themed. */}
+                {imageSource && (
+                  <ImageThemeCard
+                    source={imageSource}
+                    onReplace={() => imageInputRef.current?.click()}
+                    onClear={clearImage}
+                  />
+                )}
+                <MockNav brandName={productName.trim() || "Acme Corp"} />
+              </div>
               {/* The ambient shader, demoted from stage backdrop to staged
                   component: a banner running the site's own field config,
                   re-theming live with the levers like everything else. */}

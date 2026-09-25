@@ -46,7 +46,9 @@ export default function PrivacyPage() {
             marketing. The only data collected is the analytics and chat logs
             above, and both are used only to run and improve the site. The
             machine-readable endpoint at /api/mcp stores nothing: it reads
-            published data and answers.
+            published data and answers. An image you drop on the playground
+            never leaves your browser: it is read there to sample its
+            colours, and nothing about it is uploaded or kept.
           </p>
         </div>
 

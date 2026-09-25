@@ -481,3 +481,43 @@
     animation: none;
   }
 }
+
+/* The image picker's file input: the Theme-from-image button is the real
+   control, so the input is hidden from both the layout and the reader
+   rather than display:none, which some browsers refuse to click(). */
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* The named source image in the control panel, with its dismiss beside it. */
+.imageSourceRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-200);
+  min-width: 0;
+}
+
+.imageSourceName {
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The head of the components stage: the image theming card, when there is
+   one, then the mock nav it pushes down. Their own gap, not the showcase's
+   section rhythm, because they read as one block. */
+.navStage {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-1000);
+}

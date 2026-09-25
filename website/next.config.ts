@@ -16,7 +16,11 @@ const contentSecurityPolicy = [
   `script-src 'self' 'unsafe-inline'${scriptEval} https://www.googletagmanager.com`,
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "font-src 'self' https://fonts.gstatic.com",
-  "img-src 'self' data: https://www.googletagmanager.com https://*.google-analytics.com",
+  // blob: is for the playground's image theming: a dropped picture is read
+  // through an object URL, which is a handle to bytes this page itself
+  // created and holds. It reaches no network and no other origin, and it is
+  // a narrower source than the data: already allowed beside it.
+  "img-src 'self' data: blob: https://www.googletagmanager.com https://*.google-analytics.com",
   "connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com",
   "frame-src 'self'",
   // Same-origin only: the site may frame its own pages (the canvas board

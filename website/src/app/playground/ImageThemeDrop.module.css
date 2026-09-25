@@ -1,0 +1,176 @@
+/* ============================================
+   IMAGE THEMING — the full-screen drop
+   invitation, and the banner that heads the
+   stage once an image has been read.
+   ============================================ */
+
+/* The invitation covers the whole viewport while a file is over the window,
+   above every floating panel and the toolbar pill, so wherever the pointer
+   lands the drop is the same gesture. Pointer events stay off: the window
+   listeners own the drop, and an overlay that captured them would swallow
+   the dragleave the counter depends on. */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--padding-500);
+  pointer-events: none;
+  background: var(--color-scrim);
+  backdrop-filter: blur(4px);
+  animation: imageDropFade var(--motion-duration-fast) var(--motion-ease-entrance) both;
+}
+
+.overlayCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-200);
+  max-width: 420px;
+  padding: var(--padding-500);
+  text-align: center;
+  background: var(--color-bg-glass);
+  border: var(--border-050) dashed var(--color-action-primary-bg);
+  border-radius: var(--radius-600);
+  box-shadow: var(--shadow-floating);
+  backdrop-filter: blur(24px);
+}
+
+.overlayIcon {
+  font-size: var(--icon-size-800);
+  color: var(--color-action-primary-bg);
+}
+
+.overlayTitle {
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  color: var(--color-text-primary);
+}
+
+.overlayNote {
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-secondary);
+}
+
+@keyframes imageDropFade {
+  from {
+    opacity: 0;
+  }
+}
+
+/* ---------- the source card ----------
+   The picture the theme came from, as a banner at the head of the stage:
+   the full column width in a 16:9 frame, the image covering it whatever its
+   own aspect ratio is. In the flow rather than floating, so it pushes the
+   mock nav and the showcase down and hides nothing it themed. */
+.card {
+  position: relative;
+  width: 100%;
+  /* 16:9 rather than a fixed height, so the frame shows as much of a
+     landscape photograph as it can and scales with the column. */
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: var(--radius-600);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  /* Behind the picture while it decodes, and behind any transparency in it. */
+  background: var(--color-bg-container-secondary);
+  animation: imageCardEnter var(--motion-duration-slow) var(--motion-ease-entrance) both;
+}
+
+@keyframes imageCardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(calc(-1 * var(--primitive-gap-300))) scale(0.98);
+  }
+}
+
+/* Fills the frame whatever shape the image is: a panorama and a portrait
+   both cover it, cropped rather than letterboxed. */
+.image {
+  object-fit: cover;
+}
+
+/* The readout, on a fade that runs from the card's own surface at the foot
+   up into the picture. Theme-coloured rather than a fixed dark scrim, so the
+   swatches and the buttons sit on the surface they are designed for and the
+   file name keeps the ordinary text token. */
+.bar {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--gap-400);
+  /* The top padding is the fade's runway, not spacing. */
+  padding: var(--padding-1000) var(--padding-400) var(--padding-400);
+  /* The far stop is the surface's own zero-alpha pair, never `transparent`:
+     `transparent` is rgba(0, 0, 0, 0), so the interpolation would run the
+     fade through grey and leave a smudge across the picture. */
+  background: linear-gradient(
+    to top,
+    var(--color-bg-container-primary) 0%,
+    var(--color-bg-container-primary) 38%,
+    var(--color-bg-container-primary-transparent) 100%
+  );
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+  min-width: 0;
+}
+
+.fileName {
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.swatches {
+  display: flex;
+  gap: var(--gap-100);
+}
+
+/* A sampled colour, not a design decision: the background comes from the
+   image data as an inline style. */
+.chip {
+  width: var(--icon-size-600);
+  height: var(--icon-size-600);
+  border-radius: var(--radius-pill);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  flex-shrink: 0;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-100);
+  flex-shrink: 0;
+}
+
+/* Real phone widths. The readout stays one row rather than stacking, which
+   cost the picture most of the card; it wraps if it has to, and the file name
+   stands down, because the control panel names the image as well. */
+@media (max-width: 599px) {
+  .bar {
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--gap-200);
+    padding-inline: var(--padding-300);
+  }
+
+  .fileName {
+    display: none;
+  }
+}

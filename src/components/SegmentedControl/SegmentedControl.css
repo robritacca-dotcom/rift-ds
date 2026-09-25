@@ -117,6 +117,21 @@
   transition: color var(--motion-duration-base) var(--motion-ease-standard);
 }
 
+/* Collapsed to icons: the word leaves the screen but stays the segment's
+   accessible name, so a narrow strip loses its labels and nothing else. The
+   clip recipe rather than display:none, which would take the name with it. */
+.ds-segmented-control__label--hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* Icon — same idle tier as the label, so an icon never reads dimmer than
    the text beside it, and an icon-only segment (the site's theme toggle)
    holds label-strength contrast in both modes. */

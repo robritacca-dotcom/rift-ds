@@ -28,6 +28,15 @@ export interface SegmentedControlProps {
   variant?: 'primary' | 'neutral';
   /** Full width — segments fill container */
   fullWidth?: boolean;
+  /**
+   * Shed parts rather than overflow when the container is too narrow for the
+   * strip. The control measures its own natural widths and drops to labels
+   * alone, then to icons alone, in that order — the label carries the
+   * meaning, so the icon goes first. It only falls to icons when every
+   * segment has one, and hidden labels stay in the accessibility tree, so
+   * nothing loses its name. Off by default; the control overflows as before.
+   */
+  collapse?: boolean;
   /** Accessible label for the tablist */
   ariaLabel?: string;
   /** Additional CSS classes */
@@ -46,6 +55,7 @@ export const SegmentedControl = ({
   size = 'default',
   variant = 'primary',
   fullWidth = false,
+  collapse = false,
   ariaLabel,
   className = '',
 }: SegmentedControlProps) => {
@@ -62,6 +72,43 @@ export const SegmentedControl = ({
   const hasPositionedRef = useRef(false);
   // Pending double-rAF that arms animated moves — see positionPill.
   const armFrameRef = useRef(0);
+
+  // ---- responsive collapse (opt-in via `collapse`) ----
+  // The three widths the strip can take, measured once from the full render
+  // and then only re-derived when the segments themselves change. Measuring
+  // once is what keeps the ladder from oscillating: the natural widths are a
+  // property of the labels and the type, not of the container, so a container
+  // that grows back re-reads the same numbers rather than re-deriving them
+  // from an already-collapsed strip.
+  type CollapseMode = 'full' | 'labels' | 'icons';
+  // The cache carries the signature it was taken from, so a stale set is
+  // recognised inside the effect rather than cleared during render.
+  const metricsRef = useRef<{
+    key: string;
+    full: number;
+    labels: number;
+    icons: number;
+  } | null>(null);
+  // Icons can only carry the strip alone when every segment has one.
+  const everySegmentHasIcon = segments.every((segment) => Boolean(segment.icon));
+  // Re-measure when the strip's content or metrics change, never on resize.
+  const collapseKey = [
+    size,
+    fullWidth,
+    ...segments.map((segment) => `${segment.value}:${segment.label}`),
+  ].join('|');
+  const [collapseState, setCollapseState] = useState<{ key: string; mode: CollapseMode }>({
+    key: collapseKey,
+    mode: 'full',
+  });
+  if (collapseState.key !== collapseKey) {
+    // Adjusted during render rather than in an effect: the ladder describes
+    // the strip we are about to draw, so a stale rung must not survive even
+    // one frame of it.
+    setCollapseState({ key: collapseKey, mode: 'full' });
+  }
+  const collapseMode: CollapseMode =
+    collapseState.key === collapseKey ? collapseState.mode : 'full';
 
   const classes = [
     baseClass,
@@ -135,7 +182,76 @@ export const SegmentedControl = ({
 
   useLayoutEffect(() => {
     positionPill(hasPositionedRef.current);
-  }, [positionPill, segments, size, fullWidth]);
+  }, [positionPill, segments, size, fullWidth, collapseMode]);
+
+  /* The collapse measurement. It runs from the full render (the only state
+     that can be measured for all three widths at once) and then just picks
+     against the container on every later resize, which is why the effect
+     can be cheap enough to sit on a ResizeObserver. */
+  useLayoutEffect(() => {
+    if (!collapse) return;
+    const container = containerRef.current;
+    const host = container?.parentElement;
+    if (!container || !host || typeof ResizeObserver === 'undefined') return;
+
+    const measure = () => {
+      if (metricsRef.current?.key !== collapseKey) {
+        // Only the full render carries every part, so the numbers are taken
+        // there; a collapsed strip has nothing to measure the missing parts from.
+        if (collapseMode !== 'full') return;
+        const segEls = Array.from(
+          container.querySelectorAll<HTMLElement>('[data-segment-value]')
+        );
+        if (segEls.length === 0 || segEls[0].offsetWidth === 0) return;
+        const trackStyle = getComputedStyle(container);
+        const chrome =
+          parseFloat(trackStyle.paddingLeft) +
+          parseFloat(trackStyle.paddingRight) +
+          parseFloat(trackStyle.borderLeftWidth) +
+          parseFloat(trackStyle.borderRightWidth) +
+          (parseFloat(trackStyle.columnGap) || 0) * (segEls.length - 1);
+        let full = chrome;
+        let iconCost = 0;
+        let labelCost = 0;
+        for (const seg of segEls) {
+          full += seg.getBoundingClientRect().width;
+          const segGap = parseFloat(getComputedStyle(seg).columnGap) || 0;
+          const icon = seg.querySelector<HTMLElement>(`.${baseClass}__icon`);
+          const label = seg.querySelector<HTMLElement>(`.${baseClass}__label`);
+          if (icon) iconCost += icon.getBoundingClientRect().width + (label ? segGap : 0);
+          if (label) labelCost += label.getBoundingClientRect().width + (icon ? segGap : 0);
+        }
+        metricsRef.current = {
+          key: collapseKey,
+          full: Math.ceil(full),
+          labels: Math.ceil(full - iconCost),
+          icons: Math.ceil(full - labelCost),
+        };
+      }
+      const metrics = metricsRef.current;
+      if (!metrics) return;
+      const available = host.clientWidth;
+      // Zero means the host is not laid out yet; keep what we have rather
+      // than collapsing to icons on a measurement that means nothing.
+      if (available === 0) return;
+      const next: CollapseMode =
+        available >= metrics.full
+          ? 'full'
+          : available >= metrics.labels || !everySegmentHasIcon
+            ? 'labels'
+            : 'icons';
+      setCollapseState((current) =>
+        current.key === collapseKey && current.mode === next
+          ? current
+          : { key: collapseKey, mode: next }
+      );
+    };
+
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(host);
+    return () => observer.disconnect();
+  }, [collapse, collapseMode, everySegmentHasIcon, collapseKey]);
 
   useLayoutEffect(() => {
     const container = containerRef.current;
@@ -230,7 +346,7 @@ export const SegmentedControl = ({
             }}
             onKeyDown={(e) => handleKeyDown(e, idx)}
           >
-            {segment.icon && (
+            {segment.icon && collapseMode !== 'labels' && (
               <span
                 className={`${baseClass}__icon${typeof segment.icon === 'string' ? ' material-symbols-rounded' : ''}`}
                 aria-hidden="true"
@@ -238,7 +354,15 @@ export const SegmentedControl = ({
                 {segment.icon}
               </span>
             )}
-            <span className={`${baseClass}__label`}>{segment.label}</span>
+            {/* A hidden label is still the segment's name: the strip loses
+                the word on screen, never in the accessibility tree. */}
+            <span
+              className={`${baseClass}__label${
+                collapseMode === 'icons' && segment.icon ? ` ${baseClass}__label--hidden` : ''
+              }`}
+            >
+              {segment.label}
+            </span>
           </button>
         );
       })}

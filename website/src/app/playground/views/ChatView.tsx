@@ -15,6 +15,7 @@ import {
   type ThreadPanelThread,
 } from "@robr0/design-system/components/ThreadPanel/ThreadPanel";
 import { ThreadTabs } from "@robr0/design-system/components/ThreadTabs/ThreadTabs";
+import AgentPanel from "./AgentPanel";
 import { useSiteChat, useTakeoverViewport } from "@/components/SiteChat/ChatContext";
 import { SiteChat } from "@/components/SiteChat/SiteChat";
 import styles from "./ChatView.module.css";
@@ -178,6 +179,11 @@ export interface ChatViewProps {
   railDetails: boolean;
   /** Stage the open-sessions tab strip across the conversation's top. */
   railTabs: boolean;
+  /** Stage the agent rail on the conversation's trailing edge: the agent's
+      portrait over its activity, approvals, automations and personalization.
+      Wide cards seat it inline, narrow ones raise it as a bottom sheet from
+      the header's agent button. */
+  agentRail: boolean;
 }
 
 /**
@@ -202,6 +208,7 @@ export default function ChatView({
   railPins,
   railDetails,
   railTabs,
+  agentRail,
 }: ChatViewProps) {
   const {
     open,
@@ -223,13 +230,19 @@ export default function ChatView({
   const [threadGroups, setThreadGroups] = useState(INITIAL_THREAD_GROUPS);
   const [activeThread, setActiveThread] = useState("");
   const [renamingThread, setRenamingThread] = useState<string | null>(null);
-  const [railExpanded, setRailExpanded] = useState(true);
+  /* The history opens collapsed: the stage is here to show the chat, and
+     AppSidebar's icon rail is the resting state a real product ships. */
+  const [railExpanded, setRailExpanded] = useState(false);
 
   /* The staged projects and the strip of open sessions. Tabs hold thread
      ids: selecting a thread opens (or revisits) its tab, a fresh thread
      arrives with one, and closing the last tab returns to the greeting.
      Purely visual staging — switching tabs moves the selection, never the
      transcript, the same contract as selecting a thread in the rail. */
+  /* The agent rail's tab, owned here so the inline rail and the bottom
+     sheet agree on which pane is on stage across a resize. */
+  const [agentTab, setAgentTab] = useState("activity");
+
   const [projects, setProjects] = useState(INITIAL_PROJECTS);
   const [activeProject, setActiveProject] = useState(INITIAL_PROJECTS[0].id);
   const projectSeq = useRef(0);
@@ -759,6 +772,24 @@ export default function ChatView({
             }
           />
         ) : undefined}
+        aside={
+          /* The agent rail, staged like the threads rail and gated the same
+             way: simulated transport only, since it stands for a consumer's
+             own agent rather than this site's chat. SiteChat decides the
+             mode by its measured width, so the render prop only shapes the
+             panel for the sheet. */
+          simControls && agentRail
+            ? ({ overlay, close }) => (
+                <AgentPanel
+                  name={title}
+                  activeTab={agentTab}
+                  onTabChange={setAgentTab}
+                  overlay={overlay}
+                  onCollapse={close}
+                />
+              )
+            : undefined
+        }
         tabs={
           /* The strip of open sessions, staged like the rail: desktop card
              only (the bezel and a real phone keep the plain header), and

@@ -1,0 +1,55 @@
+/* The staged agent rail's pane furniture. The rail owns the shell; a date
+   heading over a run of notification rows is host content, so it lives
+   here rather than in the component. */
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-100);
+}
+
+.group + .group,
+.card + .group {
+  margin-top: var(--gap-400);
+}
+
+.heading {
+  font-family: var(--font-overline-family);
+  font-size: var(--font-overline-size);
+  font-weight: var(--font-overline-weight);
+  line-height: var(--font-overline-line-height);
+  letter-spacing: var(--font-overline-letter-spacing);
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+  padding: var(--padding-100) var(--padding-200);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+  padding: var(--padding-300);
+  background-color: var(--color-bg-container-secondary);
+  border-radius: var(--radius-400);
+}
+
+.cardRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-300);
+}
+
+.cardLabel {
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  color: var(--color-text-primary);
+}
+
+/* In the bottom sheet the rail fills the width rather than holding its own
+   column, and the sheet's own rounded top edge is the surface. */
+.railInSheet {
+  width: 100%;
+}

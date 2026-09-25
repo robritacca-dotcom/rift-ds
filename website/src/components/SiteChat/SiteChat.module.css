@@ -757,3 +757,113 @@
 .threadsOverlayOpen .threadsSheet {
   transform: translateX(0);
 }
+
+/* ---------- the agent rail (the trailing edge's mirror of the threads
+   rail) ---------- */
+
+.asideRail {
+  flex: none;
+  display: flex;
+  min-height: 0;
+  border-left: var(--border-025) solid var(--color-bg-container-border);
+  /* Seat the rail's collapse chevron on the same line as the card's own
+     controls opposite it: the chat column's top padding plus the header
+     row's block padding, which is where those buttons start. */
+  --ds-agent-rail-collapse-top: calc(var(--padding-200) + var(--padding-150));
+}
+
+/* The widget's controls, lifted out of the chat header to the card's own
+   right edge while the rail is seated inline. The offsets restate the
+   header's seat rather than sharing it, because the cluster has left the
+   header's box: the chat column's top padding plus the header row's own
+   block padding, and the rail's inline inset on the right. */
+.railActions {
+  position: absolute;
+  top: calc(var(--padding-200) + var(--padding-150));
+  right: var(--padding-300);
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  gap: var(--gap-100);
+}
+
+/* The last button hugs the card's clipped right edge, so its centred
+   bottom tooltip would lose its right cap — the same end-alignment the
+   chat header's own last control gets. */
+.railActions :global(.ds-tooltip:last-child .ds-tooltip__panel--bottom) {
+  left: auto;
+  right: 0;
+  transform: translateY(-4px);
+}
+
+.railActions :global(.ds-tooltip:last-child .ds-tooltip__panel--bottom.ds-tooltip__panel--visible) {
+  transform: translateY(0);
+}
+
+.railActions :global(.ds-tooltip:last-child .ds-tooltip__panel--bottom .ds-tooltip__arrow) {
+  left: auto;
+  right: 16px;
+  margin-left: 0;
+}
+
+/* Narrow hosts raise the rail from the bottom instead of the side: a
+   phone's secondary surface comes up from the edge the thumb is nearest,
+   and the rail's content is a column, so a full-width sheet fits it
+   better than a slide-over ever did. Same layer handling as the threads
+   sheet — hidden by visibility while closed, so nothing in it can take
+   focus or reach assistive technology. */
+.asideOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  visibility: hidden;
+  transition: visibility 0s var(--motion-duration-slow);
+}
+
+.asideOverlayOpen {
+  visibility: visible;
+  transition: visibility 0s;
+}
+
+.asideOverlayOpen .threadsScrim {
+  opacity: 1;
+}
+
+.asideSheet {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  /* Deliberately short of the full height: the sheet is a companion to the
+     conversation, and leaving the last turns visible above it is what says
+     so. */
+  max-height: 82%;
+  background-color: var(--color-bg-glass);
+  backdrop-filter: blur(24px);
+  border-top: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600) var(--radius-600) 0 0;
+  box-shadow: var(--shadow-floating);
+  transform: translateY(100%);
+  transition: transform var(--motion-duration-slow) var(--motion-ease-emphasized);
+}
+
+.asideOverlayOpen .asideSheet {
+  transform: translateY(0);
+}
+
+.asideGrabber {
+  flex: none;
+  width: 36px;
+  height: 4px;
+  margin: var(--gap-200) auto 0;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-divider);
+}
+
+.asideSheetBody {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}

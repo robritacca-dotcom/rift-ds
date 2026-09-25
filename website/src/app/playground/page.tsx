@@ -170,12 +170,17 @@ export default function PlaygroundPage() {
   const [chatManual, setChatManual] = useState<{ w?: number; h?: number }>({});
   const [chatPlaceholder, setChatPlaceholder] = useState("");
   const [showStarters, setShowStarters] = useState(true);
-  /* The staged thread furniture, feature by feature — all off is the simple
-     rail the live site ships. Simulated transport only, like the rail. */
-  const [railProjects, setRailProjects] = useState(true);
-  const [railPins, setRailPins] = useState(true);
-  const [railDetails, setRailDetails] = useState(true);
-  const [railTabs, setRailTabs] = useState(true);
+  /* The staged thread furniture, feature by feature. All off is the simple
+     rail the live site ships, which is where the stage starts: the extras
+     are things to add and look at, not the resting state. Simulated
+     transport only, like the rail itself. */
+  const [railProjects, setRailProjects] = useState(false);
+  const [railPins, setRailPins] = useState(false);
+  const [railDetails, setRailDetails] = useState(false);
+  const [railTabs, setRailTabs] = useState(false);
+  /* The agent rail, on by default because it is the trailing edge's whole
+     content — off, that side of the card is simply not there to look at. */
+  const [agentRail, setAgentRail] = useState(true);
 
   /* ---------- levers ---------- */
   const [preset, setPreset] = useState("default");
@@ -644,6 +649,17 @@ export default function PlaygroundPage() {
           />
         </div>
       )}
+
+      {transportMode === "sim" && (
+        <div className={styles.controlGroup}>
+          <h4 className={styles.controlHeading}>Agent</h4>
+          <ToggleSwitch
+            label="Agent rail"
+            checked={agentRail}
+            onChange={setAgentRail}
+          />
+        </div>
+      )}
     </>
   );
 
@@ -949,6 +965,7 @@ export default function PlaygroundPage() {
               railPins={railPins}
               railDetails={railDetails}
               railTabs={railTabs}
+              agentRail={agentRail}
             />
           )}
         </main>

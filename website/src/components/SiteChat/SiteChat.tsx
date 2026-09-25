@@ -2,6 +2,7 @@
 
 import {
   useEffect,
+  useId,
   useRef,
   useState,
   useSyncExternalStore,
@@ -50,6 +51,7 @@ export function SiteChat({
   composerActions,
   threads,
   tabs,
+  aside,
 }: {
   /** Show the expand toggle. The bench's mobile stage is always a takeover, so it hides there. */
   fullscreenEnabled?: boolean;
@@ -93,6 +95,15 @@ export function SiteChat({
       furniture like the threads rail — the site's own chat passes nothing
       here. */
   tabs?: ReactNode;
+  /** A companion rail (an AgentRail) on the widget's trailing edge, the
+      mirror of `threads`: who the agent is and what it has been doing.
+      Rendered responsively by the same measured width — wide hosts seat it
+      as an inline right rail, narrow ones summon it from a header button as
+      a bottom sheet behind a scrim, which is where a phone expects a
+      secondary surface to come from. The render prop hears which mode it is
+      in and how to close the sheet. Playground furniture like the threads
+      rail — the site's own chat passes nothing here. */
+  aside?: (ctx: { overlay: boolean; close: () => void }) => ReactNode;
 }) {
   const {
     turns,
@@ -204,30 +215,61 @@ export function SiteChat({
     return () => window.clearTimeout(timer);
   }, [open, isEmpty, starterRevealKey, setStarterRevealKey, starterKey]);
 
-  /* ---------- the threads rail (only when the host passes one) ----------
-     The widget measures its own width, so the mode follows the actual
+  /* ---------- the side rails (only when the host passes one) ----------
+     The widget measures its own width, so each mode follows the actual
      container — the docked panel and a thin playground card get the
-     hamburger and sheet, the takeover and wide cards the inline rail. */
+     header button and a sheet, the takeover and wide cards the inline
+     rail. The two rails have their own thresholds because they cost
+     different amounts of room: the history is a narrow list, the agent
+     rail is a 360px column that would leave nothing for the conversation
+     until the card is genuinely wide. */
+  const hasRails = Boolean(threads || aside);
   const [threadsOpen, setThreadsOpen] = useState(false);
+  /* The agent panel keeps one intent per mode, because the two mean
+     different things: the inline rail is furniture that rests open and is
+     dismissed, the sheet is an overlay that rests closed and is raised.
+     One flag would either auto-open a sheet over the conversation or
+     leave a wide card with an empty trailing edge. */
+  const [asideRailOpen, setAsideRailOpen] = useState(true);
+  const [asideSheetOpen, setAsideSheetOpen] = useState(false);
   const threadsHostRef = useRef<HTMLDivElement | null>(null);
   const [threadsWide, setThreadsWide] = useState(false);
+  const [asideWide, setAsideWide] = useState(false);
   useEffect(() => {
-    if (!threads) return;
+    if (!hasRails) return;
     const host = threadsHostRef.current;
     if (!host) return;
     const measure = () => {
-      const wide = host.clientWidth >= 720;
+      const width = host.clientWidth;
+      const wide = width >= 720;
+      const asideRoom = width >= 860;
       setThreadsWide(wide);
+      setAsideWide(asideRoom);
       /* Growing into rail territory retires the sheet, so it cannot pop
          back open on a later trip below the breakpoint. */
       if (wide) setThreadsOpen(false);
+      if (asideRoom) setAsideSheetOpen(false);
     };
     measure();
     const observer = new ResizeObserver(measure);
     observer.observe(host);
     return () => observer.disconnect();
-  }, [threads]);
+  }, [hasRails]);
   const closeThreads = () => setThreadsOpen(false);
+
+  /* One panel, two seats. `asideShown` is what the visitor can actually see,
+     so it drives the brand toggle, the header button and the Escape order
+     alike. */
+  const asideId = useId();
+  const asideShown = Boolean(aside) && (asideWide ? asideRailOpen : asideSheetOpen);
+  const openAside = () => {
+    if (asideWide) setAsideRailOpen(true);
+    else setAsideSheetOpen(true);
+  };
+  const closeAside = () => {
+    if (asideWide) setAsideRailOpen(false);
+    else setAsideSheetOpen(false);
+  };
 
   /* The starters sit in one of two places: under the centred composer on
      the desktop welcome, directly above the bottom-pinned one on a phone.
@@ -249,6 +291,63 @@ export function SiteChat({
     </div>
   );
 
+  /* The widget's own controls. They live in the chat header normally, and
+     move to the card's right edge while the agent rail is seated inline
+     (the rail floats them over its top inset): every one of them acts on
+     the whole widget, so a cluster stranded mid-card above the conversation
+     column reads as the column's chrome instead. The buttons self-label
+     with tooltips, opening downward because the header hugs the panel's
+     clipped top edge. */
+  const headerActions = (
+    <>
+      {/* With the inline threads rail showing, its own new-thread
+          row is the one New chat — a second pen in the header
+          would be the same action twice. */}
+      {!(threads && threadsWide) && (
+        <CircularButton
+          icon="edit_square"
+          variant="tertiary"
+          ariaLabel="New chat"
+          tooltipPosition="bottom"
+          onClick={() => {
+            reset();
+            setDraft("");
+            focusComposer();
+          }}
+        />
+      )}
+      {/* The way in, and only that: once the panel is up it carries its
+          own chevron out, and a second control that also closed it would
+          be the same action twice in the same row. */}
+      {aside && !asideShown && (
+        <CircularButton
+          icon="smart_toy"
+          variant="tertiary"
+          ariaLabel="Show the agent panel"
+          tooltipPosition="bottom"
+          aria-expanded={false}
+          onClick={openAside}
+        />
+      )}
+      {fullscreenEnabled && (
+        <CircularButton
+          icon={isFull ? "close_fullscreen" : "open_in_full"}
+          variant="tertiary"
+          ariaLabel={isFull ? "Exit full screen" : "Enter full screen"}
+          tooltipPosition="bottom"
+          onClick={() => setView(isFull ? "panel" : "full")}
+        />
+      )}
+      <CircularButton
+        icon="close"
+        variant="tertiary"
+        ariaLabel="Close chat"
+        tooltipPosition="bottom"
+        onClick={() => setOpen(false)}
+      />
+    </>
+  );
+
   const chatColumn = (
     <div
       className={`${styles.chat} ${threads ? styles.chatWithThreads : ""}`}
@@ -257,11 +356,13 @@ export function SiteChat({
       /* Escape steps out of the takeover first; the host's own Escape
          handling (closing the panel) takes over once back in panel view. */
       onKeyDown={(e) => {
-        /* The threads sheet is the topmost layer, so Escape settles it
-           before the takeover or the host panel hear anything. */
-        if (e.key === "Escape" && threadsOpen) {
+        /* A rail sheet is the topmost layer, so Escape settles it before
+           the takeover or the host panel hear anything — one layer per
+           press, whichever of the two is standing. */
+        if (e.key === "Escape" && (threadsOpen || asideSheetOpen)) {
           e.stopPropagation();
-          closeThreads();
+          if (threadsOpen) closeThreads();
+          else closeAside();
           return;
         }
         if (e.key === "Escape" && isFull) {
@@ -308,42 +409,10 @@ export function SiteChat({
             </span>
           }
           actions={
-            /* The buttons self-label with tooltips; they open downward because
-               the header hugs the panel's clipped top edge. */
-            <>
-              {/* With the inline threads rail showing, its own new-thread
-                  row is the one New chat — a second pen in the header
-                  would be the same action twice. */}
-              {!(threads && threadsWide) && (
-                <CircularButton
-                  icon="edit_square"
-                  variant="tertiary"
-                  ariaLabel="New chat"
-                  tooltipPosition="bottom"
-                  onClick={() => {
-                    reset();
-                    setDraft("");
-                    focusComposer();
-                  }}
-                />
-              )}
-              {fullscreenEnabled && (
-                <CircularButton
-                  icon={isFull ? "close_fullscreen" : "open_in_full"}
-                  variant="tertiary"
-                  ariaLabel={isFull ? "Exit full screen" : "Enter full screen"}
-                  tooltipPosition="bottom"
-                  onClick={() => setView(isFull ? "panel" : "full")}
-                />
-              )}
-              <CircularButton
-                icon="close"
-                variant="tertiary"
-                ariaLabel="Close chat"
-                tooltipPosition="bottom"
-                onClick={() => setOpen(false)}
-              />
-            </>
+            /* With the agent rail seated inline the cluster moves to the
+               widget's own right edge (see headerActions below) — these
+               controls act on the whole card, not the conversation column. */
+            asideShown && asideWide ? undefined : headerActions
           }
         />
 
@@ -471,19 +540,34 @@ export function SiteChat({
     </div>
   );
 
-  if (!threads) return chatColumn;
+  if (!hasRails) return chatColumn;
 
-  /* With a threads rail, the widget becomes a row: the rail (or, narrow,
-     the hamburger-summoned sheet and its scrim) beside the chat column. */
+  /* With a rail on either edge, the widget becomes a row: the history (or,
+     narrow, the hamburger-summoned sheet) leading, the agent rail (or, narrow,
+     the bottom sheet the header button raises) trailing, the conversation
+     between them. */
   return (
     <div ref={threadsHostRef} className={styles.threadsHost}>
-      {threadsWide && (
+      {threads && threadsWide && (
         <div className={styles.threadsRail}>
           {threads({ overlay: false, close: closeThreads })}
         </div>
       )}
       {chatColumn}
-      {!threadsWide && (
+      {/* The widget's controls at the widget's edge, floating over the
+          rail's top inset, which is empty by construction — the rail's
+          header is a centred identity block starting below it. Ahead of the
+          rail in the DOM as well as above it on screen, so the keyboard
+          reaches the card's own controls before the panel's contents. */}
+      {asideShown && asideWide && (
+        <div className={styles.railActions}>{headerActions}</div>
+      )}
+      {aside && asideWide && asideRailOpen && (
+        <div className={styles.asideRail} id={asideId}>
+          {aside({ overlay: false, close: closeAside })}
+        </div>
+      )}
+      {threads && !threadsWide && (
         <div
           className={`${styles.threadsOverlay} ${
             threadsOpen ? styles.threadsOverlayOpen : ""
@@ -498,6 +582,29 @@ export function SiteChat({
           />
           <div className={styles.threadsSheet}>
             {threads({ overlay: true, close: closeThreads })}
+          </div>
+        </div>
+      )}
+      {aside && !asideWide && (
+        <div
+          className={`${styles.asideOverlay} ${
+            asideSheetOpen ? styles.asideOverlayOpen : ""
+          }`}
+        >
+          <button
+            type="button"
+            className={styles.threadsScrim}
+            aria-label="Close the agent panel"
+            tabIndex={asideSheetOpen ? 0 : -1}
+            onClick={closeAside}
+          />
+          <div className={styles.asideSheet} id={asideId}>
+            {/* The grabber is the mark that says "sheet", not a handle:
+                dragging is the scrim's and the Escape key's job here. */}
+            <span className={styles.asideGrabber} aria-hidden="true" />
+            <div className={styles.asideSheetBody}>
+              {aside({ overlay: true, close: closeAside })}
+            </div>
           </div>
         </div>
       )}

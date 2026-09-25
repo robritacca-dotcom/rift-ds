@@ -131,6 +131,32 @@ const previews: Record<string, () => ReactNode> = {
       </div>
     </>
   ),
+  "agent-rail": () => (
+    <>
+      <div aria-hidden="true" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "6px", width: "150px" }}>
+        <div style={{ width: "28px", height: "28px", borderRadius: "999px", background: "var(--color-bg-container-tertiary)" }} />
+        <span style={{ fontSize: "11px", fontWeight: 600, color: "var(--color-text-primary)" }}>Skylark</span>
+        <div style={{ display: "flex", gap: "2px", padding: "2px", borderRadius: "999px", background: "var(--color-bg-container-secondary)" }}>
+          {["Activity", "Asks", "Runs", "You"].map((label, i) => (
+            <span
+              key={label}
+              style={{ fontSize: "8px", padding: "2px 5px", borderRadius: "999px", color: i === 0 ? "var(--color-text-primary)" : "var(--color-text-tertiary)", background: i === 0 ? "var(--color-bg-container-tertiary)" : "transparent" }}
+            >
+              {label}
+            </span>
+          ))}
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: "4px", width: "100%" }}>
+          {["Watch the Q3 invoices", "Draft the renewal note"].map((row) => (
+            <div key={row} style={{ display: "flex", alignItems: "center", gap: "6px", padding: "0 4px" }}>
+              <span style={{ width: "5px", height: "5px", borderRadius: "999px", background: "var(--color-status-positive-icon)", flex: "none" }} />
+              <span style={{ fontSize: "10px", color: "var(--color-text-secondary)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{row}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
+  ),
   "agent-status": () => (
     <>
       <AgentStatus state="working" label="Working" pattern="orbit" size="compact" />

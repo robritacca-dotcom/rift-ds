@@ -75,6 +75,14 @@
       "client": true
     },
     {
+      "name": "AgentRail",
+      "label": "Agent rail",
+      "slug": "agent-rail",
+      "description": "The companion rail of an agent product: the agent's portrait over tabbed panes for activity, approvals, automations, and personalization.",
+      "category": "ai",
+      "client": false
+    },
+    {
       "name": "AgentStatus",
       "label": "Agent status",
       "slug": "agent-status",

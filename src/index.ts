@@ -5,6 +5,7 @@
  */
 export * from './components/Accordion/Accordion';
 export * from './components/AgentPlan/AgentPlan';
+export * from './components/AgentRail/AgentRail';
 export * from './components/AgentStatus/AgentStatus';
 export * from './components/AgentStatus/AgentStatusPatterns';
 export * from './components/AiButton/AiButton';

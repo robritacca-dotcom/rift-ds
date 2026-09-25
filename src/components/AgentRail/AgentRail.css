@@ -1,0 +1,260 @@
+/* ============================================
+   AGENT RAIL COMPONENT
+   The companion rail of an agent product: the agent's portrait at the
+   top, and the record of what it has been doing below, split across
+   tabs. Deliberately surface-less — the host paints the band it sits
+   on, the way ThreadPanel's spec describes for the opposite edge.
+
+   One scroll region only: the active pane. The header and the tab strip
+   stay put, so switching tabs never moves the agent's face.
+   ============================================ */
+
+.ds-agent-rail {
+  /* Width and padding combine on the root, so the component declares its
+     own sizing model rather than leaning on a host reset — ThreadPanel's
+     reasoning, and the same failure without it. */
+  box-sizing: border-box;
+  /* The positioning frame for the close affordance, which floats over the
+     header rather than sitting in it: the header is a centred identity
+     block, and a control in that column would push the portrait off axis. */
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+  /* Set by the widest thing in it, which is the tab strip, not the rows:
+     four labelled tabs measure a little over 310px, and a rail that clips
+     its own navigation is not a rail. The sibling history needs 280
+     because a thread row is one line; here a row carries a title, a second
+     line and a time as well. A host that wants another width overrides it. */
+  width: 360px;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  padding: var(--padding-400) var(--padding-300);
+}
+
+/* ============================================
+   COLLAPSE — the way out, pinned to the LEADING corner. The trailing one
+   belongs to the host: a rail seated at a card's edge puts the card's own
+   controls above it, and the collapse would sit under them. A chevron,
+   never a cross, for the same reason: two crosses a few pixels apart read
+   as two ways to dismiss the same thing.
+   ============================================ */
+
+.ds-agent-rail__collapse {
+  position: absolute;
+  /* CircularButton's default footprint and glyph, so the control sits in
+     the same row of controls the host puts along the card's top edge —
+     `--ds-agent-rail-collapse-top` is the seat, which a host overrides to
+     line the chevron up with its own header row. */
+  top: var(--ds-agent-rail-collapse-top, var(--padding-300));
+  left: var(--padding-300);
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-pill);
+  background-color: transparent;
+  color: var(--color-icon-secondary);
+  cursor: pointer;
+  transition:
+    background-color var(--motion-duration-fast) var(--motion-ease-standard),
+    color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-agent-rail__collapse .material-symbols-rounded {
+  --icon-size: var(--icon-size-600);
+}
+
+.ds-agent-rail__collapse:hover {
+  background-color: var(--color-action-passive-bg-hover);
+  color: var(--color-icon-primary);
+}
+
+.ds-agent-rail__collapse:focus-visible {
+  outline: var(--border-050) solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+/* ============================================
+   HEADER — the agent's portrait, name, and state
+   ============================================ */
+
+.ds-agent-rail__header {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-100);
+  padding: var(--padding-300) var(--padding-200) var(--padding-100);
+  text-align: center;
+}
+
+.ds-agent-rail__portrait {
+  position: relative;
+  display: inline-flex;
+}
+
+/* The stand-in portrait, on Avatar's own `lg` footprint and fill so a rail
+   with a picture and one without sit at exactly the same size. */
+.ds-agent-rail__mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-bg-container-secondary);
+  color: var(--color-icon-secondary);
+}
+
+.ds-agent-rail__mark .material-symbols-rounded {
+  --icon-size: var(--icon-size-800);
+}
+
+/* The edit affordance overlaps the portrait's lower-right corner, which
+   is where an avatar's own status dot would sit — the two are alternates,
+   never a stack, so the pencil takes the seat outright. It carries the
+   container fill rather than the rail's (which is the host's, and may be
+   anything) so the circle reads as lifted off the face beneath it. */
+.ds-agent-rail__edit {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-bg-container-primary);
+  color: var(--color-icon-primary);
+  cursor: pointer;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-agent-rail__edit .material-symbols-rounded {
+  --icon-size: var(--icon-size-500);
+}
+
+.ds-agent-rail__edit:hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-agent-rail__edit:focus-visible {
+  outline: var(--border-050) solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+.ds-agent-rail__name {
+  margin: 0;
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  letter-spacing: var(--font-title-body-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.ds-agent-rail__status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-100);
+  margin: 0;
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+  color: var(--color-text-secondary);
+}
+
+/* ThreadPanel's unread dot, restated at the same size: the gap scale,
+   because no icon token is that small. */
+.ds-agent-rail__status-dot {
+  width: var(--gap-200);
+  height: var(--gap-200);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-status-positive-icon);
+}
+
+.ds-agent-rail__status[data-tone='info'] .ds-agent-rail__status-dot {
+  background-color: var(--color-status-info-icon);
+}
+
+.ds-agent-rail__status[data-tone='warning'] .ds-agent-rail__status-dot {
+  background-color: var(--color-status-warning-icon);
+}
+
+.ds-agent-rail__status[data-tone='error'] .ds-agent-rail__status-dot {
+  background-color: var(--color-status-error-icon);
+}
+
+.ds-agent-rail__status[data-tone='neutral'] .ds-agent-rail__status-dot {
+  background-color: var(--color-status-neutral-icon);
+}
+
+/* ============================================
+   TABS — the strip that switches panes
+   ============================================ */
+
+.ds-agent-rail__tabs {
+  display: flex;
+  flex: none;
+  justify-content: center;
+  min-width: 0;
+  /* The strip is content-sized and centred, so it reads as one control
+     rather than a stretched band. A host whose labels outrun the rail
+     gets a silent sideways scroll instead of a clipped last tab — every
+     tab stays reachable, which a cut-off one is not. */
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.ds-agent-rail__tabs::-webkit-scrollbar {
+  display: none;
+}
+
+/* ============================================
+   PANE — the one scrolling region
+   ============================================ */
+
+.ds-agent-rail__pane {
+  flex: 1;
+  min-height: 0;
+  /* The pane is the rail's only scroller and may hold nothing focusable,
+     so it takes a tabindex — which means it also takes a focus ring. */
+  overflow-y: auto;
+  /* ThreadPanel's tucked-away thin scrollbar: no track fill, the thumb
+     only showing under the pointer, so a resting rail reads as one
+     surface rather than a framed box. */
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  transition: scrollbar-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-agent-rail__pane:hover {
+  scrollbar-color: var(--color-divider) transparent;
+}
+
+.ds-agent-rail__pane:focus-visible {
+  outline: var(--border-050) solid var(--color-action-primary-bg);
+  outline-offset: calc(-1 * var(--border-050));
+  border-radius: var(--radius-300);
+}
+
+/* ============================================
+   FOOTER — host furniture below the scroll
+   ============================================ */
+
+.ds-agent-rail__footer {
+  flex: none;
+  padding-top: var(--padding-200);
+  border-top: var(--border-025) solid var(--color-divider);
+}

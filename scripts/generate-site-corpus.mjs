@@ -695,6 +695,8 @@ const EXCLUDED_ROUTES = new Map([
     'the dependency-graph instrument — its prose is the instrument\'s own controls and panel labels; the graph\'s data is the registries the corpus already carries, and the /overview section that links to it is covered'],
   ['/labs/marketing',
     'a noindex test page rebuilding a reference marketing dashboard entirely from the system\'s tokens and components, to probe how far they stretch — its prose is fictional demo data, not information'],
+  ['/labs/payroll',
+    'a noindex test page imagining the chat as a docked side rail beside a payroll product, to exercise the agent panel at product scale — its prose is fictional demo data, not information'],
   ['/templates/marketing-dashboard',
     'the marketing dashboard template rendered full viewport (the same app shell as /labs/marketing, its origin) — its prose is fictional demo data; the template\'s facts live on the /templates index, which is covered'],
   ['/templates/relay-console',

@@ -1,0 +1,276 @@
+/* Labs: the payroll console. The shell is the template family's (floating
+   sidebar, centred content column, viewport-tall), with one addition that is
+   the page's whole subject: a docked chat rail on the trailing edge that
+   widens when the agent panel opens inside it. Every colour, space, radius
+   and type style is a semantic token; the only raw values are structural
+   layout sizes, which pages own everywhere else on the site. */
+
+.shell {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  /* From the pinned viewport variable, never bare 100vh. */
+  min-height: calc(var(--layout-viewport-height, 100vh));
+  /* Stretch across the body's own padding, so the app shell runs edge to
+     edge instead of sitting in the doc-page column. */
+  width: calc(100% + var(--primitive-padding-1000) * 2);
+  margin: calc(-1 * var(--primitive-padding-500))
+    calc(-1 * var(--primitive-padding-1000));
+
+  /* One width, the site panel's own. The agent panel opens inside it as a
+     sheet rather than pushing it wider: a companion that shoves the product
+     aside to make room for itself is a worse trade than a sheet. */
+  --payroll-chat-width: var(--layout-chat-width);
+}
+
+/* One inset source for the whole shell: the floating sidebar reads the same
+   value the chat rail uses. */
+.sidebar {
+  --ds-sidebar-float-inset: var(--layout-chat-inset);
+}
+
+/* AppSidebar positions itself fixed; the main column reserves its width the
+   same way AppLayout does (64px rail, 280px expanded — the component's own
+   constants). */
+.main {
+  flex: 1;
+  min-width: 0;
+  padding-left: calc(64px + var(--layout-chat-inset) * 2);
+  transition: padding var(--motion-duration-slow) var(--motion-ease-emphasized);
+  display: flex;
+  justify-content: center;
+}
+
+.mainExpanded {
+  padding-left: calc(280px + var(--layout-chat-inset) * 2);
+}
+
+/* The docked chat pushes the page over instead of covering it — the site's
+   body-inset pattern. Both widths ride the same declaration, so opening the
+   agent panel slides the page rather than jumping it. */
+.shellChatOpen .main {
+  padding-right: calc(var(--payroll-chat-width) + var(--layout-chat-inset) * 2);
+}
+
+.content {
+  width: 100%;
+  max-width: 1440px;
+  min-width: 0;
+  padding: var(--padding-500) var(--padding-1000) var(--padding-1500);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-500);
+}
+
+/* ------------------------------------------------------------- header */
+
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-200);
+}
+
+.search {
+  position: relative;
+  width: 320px;
+  max-width: 100%;
+}
+
+/* The shortcut hint rides inside the field, over its right padding; it is
+   decorative furniture, so it never intercepts the pointer. */
+.searchKbd {
+  position: absolute;
+  top: 50%;
+  right: var(--padding-200);
+  transform: translateY(-50%);
+  display: inline-flex;
+  gap: var(--gap-050);
+  pointer-events: none;
+}
+
+.topBarActions {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-200);
+}
+
+.pageHead {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--gap-200);
+  flex-wrap: wrap;
+}
+
+.title {
+  margin: var(--gap-100) 0 0;
+  font-family: var(--font-heading-1-family);
+  font-size: var(--font-heading-1-size);
+  font-weight: var(--font-heading-1-weight);
+  line-height: var(--font-heading-1-line-height);
+  letter-spacing: var(--font-heading-1-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.subtitle {
+  margin: var(--gap-100) 0 0;
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-secondary);
+}
+
+.headActions {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-200);
+  flex-wrap: wrap;
+}
+
+/* ------------------------------------------------------------ content */
+
+/* The run's four totals, on the dashboard rung set's tile rhythm: they wrap
+   to two rows before they shrink below readable, since a pay figure that has
+   to be squinted at is worse than a second row. */
+.totals {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--gap-400);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-400);
+  min-width: 0;
+}
+
+/* ---------------------------------------------------------- the chat */
+
+/* Docked, not floating over: the page reserves the width above, so the rail
+   never covers the table it is being asked about. The card recipe is the
+   site panel's own. */
+.chatRail {
+  position: fixed;
+  top: var(--layout-chat-inset);
+  right: var(--layout-chat-inset);
+  bottom: var(--layout-chat-inset);
+  z-index: 20;
+  display: flex;
+  width: var(--payroll-chat-width);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
+  background-color: var(--color-bg-container-primary-semi);
+  backdrop-filter: blur(24px);
+  box-shadow: var(--shadow-floating);
+  overflow: hidden;
+  /* The two geometries glide into each other rather than swapping, the site
+     panel's own contract: only animatable properties change between them. */
+  transition:
+    inset var(--motion-duration-slow) var(--motion-ease-emphasized),
+    width var(--motion-duration-slow) var(--motion-ease-emphasized),
+    border-color var(--motion-duration-slow) var(--motion-ease-emphasized),
+    border-radius var(--motion-duration-slow) var(--motion-ease-emphasized);
+}
+
+/* Expanded: the widget takes the viewport, which is what gives the agent
+   panel room to sit inline instead of coming up as a sheet. It rises over
+   the app sidebar too — AppSidebar is fixed at z-index 100, and a takeover
+   with the nav still standing beside it is not a takeover. The border fades
+   to transparent rather than dropping, so its width never snaps mid-glide. */
+.chatRailFull {
+  inset: 0;
+  z-index: 110;
+  width: auto;
+  border-color: transparent;
+  border-radius: 0;
+}
+
+/* Closed, the chat collapses to the corner launcher the site uses. */
+.launcher {
+  position: fixed;
+  right: var(--layout-chat-inset);
+  bottom: var(--layout-chat-inset);
+  z-index: 20;
+}
+
+/* The staged product's brand mark in the history rail: a neutral disc, since
+   a lab page has no logo of its own to seat there. */
+.threadsLogoDot {
+  display: inline-block;
+  width: var(--icon-size-600);
+  height: var(--icon-size-600);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-bg-container-secondary);
+}
+
+/* In the bottom sheet the rail fills the width rather than holding its own
+   column. */
+.railInSheet {
+  width: 100%;
+}
+
+/* ------------------------------------------------- the agent's panes */
+
+.paneGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-100);
+}
+
+.paneGroup + .paneGroup,
+.paneCard + .paneGroup {
+  margin-top: var(--gap-400);
+}
+
+.paneHeading {
+  font-family: var(--font-overline-family);
+  font-size: var(--font-overline-size);
+  font-weight: var(--font-overline-weight);
+  line-height: var(--font-overline-line-height);
+  letter-spacing: var(--font-overline-letter-spacing);
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+  padding: var(--padding-100) var(--padding-200);
+}
+
+.paneCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+  padding: var(--padding-300);
+  background-color: var(--color-bg-container-secondary);
+  border-radius: var(--radius-400);
+}
+
+.paneCardRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-300);
+}
+
+.paneCardLabel {
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  color: var(--color-text-primary);
+}
+
+/* ---------------------------------------------------------- responsive */
+
+/* Below the point where a docked rail and a product can share the screen,
+   the chat stops reserving width and floats over the page instead — the
+   site panel's own behaviour under its dock threshold. */
+@media (max-width: 1279px) {
+  .shellChatOpen .main {
+    padding-right: 0;
+  }
+
+  .chatRail {
+    width: min(420px, calc(100vw - var(--layout-chat-inset) * 2));
+  }
+}

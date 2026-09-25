@@ -129,7 +129,16 @@
 /* Indent the group's links so the hierarchy reads at a glance */
 .groupList {
   padding-left: var(--primitive-gap-200);
+  padding-top: var(--primitive-gap-100);
   padding-bottom: var(--primitive-gap-100);
+}
+
+/* The flat list's upward pull (see the .ds-button-group rule above) aligns
+   its first row with the breadcrumb; under a group header it would drag the
+   first row's pill into the header's padding, so the pull is cancelled here
+   and the header's own padding plus the list's top padding keep them apart. */
+.groupList :global(.ds-button-group) {
+  margin-top: 0;
 }
 
 /* Hidden on mobile */

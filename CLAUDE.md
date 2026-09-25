@@ -307,6 +307,7 @@ These are stated at the level of **token roles**, deliberately: which colour, ra
 - **Five status roles** (`info`, `positive`, `warning`, `error`, `neutral`), shared by every status-bearing component through the same `--color-status-*` set.
 - **Depth is token-owned**: surfaces step through the container ramp, and the only shadows are the elevation tokens the system defines. Components never add their own.
 - **Icons sit on the `--icon-size-*` scale** — set the scale variable, never `font-size` on an icon.
+- **Tables on doc pages are one style**: the library `Table` with `bordered`, which is the look the /blueprints pages give a markdown table (design.md's Table spec owns what the variant does). Reach for the component and the variant before writing table CSS — a page that styles its own table is a second table style, and the reader has no way to know the two mean the same thing.
 
 ---
 

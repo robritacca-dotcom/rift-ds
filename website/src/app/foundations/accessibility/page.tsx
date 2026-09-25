@@ -205,7 +205,7 @@ export default function AccessibilityPage() {
 
           {/* Gates */}
           <section className={styles.section}>
-            <SectionTitle title="What the build enforces" divider />
+            <SectionTitle title="What the build enforces" />
             <p className={styles.sectionNote}>
               Four gates, all in the same run as everything else. None of them is a
               separate ritual somebody has to remember.
@@ -215,6 +215,7 @@ export default function AccessibilityPage() {
               rows={gateRows}
               caption="The four accessibility gates and when each one runs"
               captionHidden
+              bordered
             />
           </section>
 
@@ -232,7 +233,7 @@ export default function AccessibilityPage() {
 
           {/* Inherited behaviour */}
           <section className={styles.section}>
-            <SectionTitle title="What every component inherits" divider />
+            <SectionTitle title="What every component inherits" />
             <p className={styles.sectionNote}>
               The interactive components are built on this repo&apos;s own behaviour layer
               rather than a third-party primitives library, so the keyboard and focus
@@ -244,12 +245,13 @@ export default function AccessibilityPage() {
               rows={inheritedRows}
               caption="The shared behaviour layer and what it guarantees"
               captionHidden
+              bordered
             />
           </section>
 
           {/* Keyboard contract + live demo */}
           <section className={styles.section}>
-            <SectionTitle title="The overlay keyboard contract" divider />
+            <SectionTitle title="The overlay keyboard contract" />
             <p className={styles.sectionNote}>
               {overlayComponents.slice(0, -1).join(", ")} and{" "}
               {overlayComponents.at(-1)} share one contract. Story assertions hold them to
@@ -260,6 +262,7 @@ export default function AccessibilityPage() {
               rows={keyboardRows}
               caption="Keyboard and focus behaviour shared by the modal overlays"
               captionHidden
+              bordered
             />
 
             <div className={styles.demo}>

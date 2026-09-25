@@ -22,6 +22,12 @@
       "description": "A collapsible checklist of an agent's task, with live step states and a progress readout."
     },
     {
+      "name": "agent-rail",
+      "type": "registry:ui",
+      "title": "Agent rail",
+      "description": "The companion rail of an agent product: the agent's portrait over tabbed panes for activity, approvals, automations, and personalization."
+    },
+    {
       "name": "agent-status",
       "type": "registry:ui",
       "title": "Agent status",

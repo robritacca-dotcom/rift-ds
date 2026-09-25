@@ -20,5 +20,6 @@ Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0.
 | size | `"default" \| "compact"` | no | `default` | Component size |
 | variant | `"neutral" \| "primary"` | no | `primary` | Visual treatment of the active segment — teal by default, `neutral` fills it grey |
 | fullWidth | `boolean` | no | `false` | Full width — segments fill container |
+| collapse | `boolean` | no | `false` | Shed parts rather than overflow when the container is too narrow for the strip. The control measures its own natural widths and drops to labels alone, then to icons alone, in that order — the label carries the meaning, so the icon goes first. It only falls to icons when every segment has one, and hidden labels stay in the accessibility tree, so nothing loses its name. Off by default; the control overflows as before. |
 | ariaLabel | `string` | no |  | Accessible label for the tablist |
 | className | `string` | no | `` | Additional CSS classes |

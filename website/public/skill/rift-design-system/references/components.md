@@ -54,7 +54,7 @@ A set of two-state buttons that can be toggled on or off, supporting text and ic
 - Rendering: client component (declares 'use client')
 - Contract: https://dragonspine-delta.vercel.app/components/toggle-group.md
 
-## AI (25)
+## AI (26)
 
 Chat, agent, and model surfaces for building AI products, from the composer to the reasoning trace and the diff an agent proposes.
 
@@ -65,6 +65,14 @@ A collapsible checklist of an agent's task, with live step states and a progress
 - Import: `import { AgentPlan } from '@robr0/design-system';`
 - Rendering: client component (declares 'use client')
 - Contract: https://dragonspine-delta.vercel.app/components/agent-plan.md
+
+### Agent rail
+
+The companion rail of an agent product: the agent's portrait over tabbed panes for activity, approvals, automations, and personalization.
+
+- Import: `import { AgentRail } from '@robr0/design-system';`
+- Rendering: server-renderable (no 'use client')
+- Contract: https://dragonspine-delta.vercel.app/components/agent-rail.md
 
 ### Agent status
 

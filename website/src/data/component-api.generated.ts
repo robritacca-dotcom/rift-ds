@@ -141,6 +141,86 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "name": "AgentRail",
+    "label": "Agent rail",
+    "slug": "agent-rail",
+    "category": "ai",
+    "description": "The companion rail of an agent product: the agent's portrait over tabbed panes for activity, approvals, automations, and personalization.",
+    "client": false,
+    "importPath": "@robr0/design-system/components/AgentRail/AgentRail",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "AgentRail",
+        "props": [
+          {
+            "name": "profile",
+            "type": "AgentRailProfile",
+            "required": false,
+            "description": "The agent this rail belongs to, rendered as the header's portrait block."
+          },
+          {
+            "name": "tabs",
+            "type": "AgentRailTab[]",
+            "required": true,
+            "description": "The rail's tabs, in display order. Each carries its own pane."
+          },
+          {
+            "name": "activeTab",
+            "type": "string",
+            "required": true,
+            "description": "Id of the tab on stage. The rail is controlled, so the host owns the state."
+          },
+          {
+            "name": "onTabChange",
+            "type": "((id: string) => void)",
+            "required": false,
+            "description": "Fires with the chosen tab's id."
+          },
+          {
+            "name": "tabsLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name for the tab strip.",
+            "defaultValue": "Agent views"
+          },
+          {
+            "name": "ariaLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name for the rail itself."
+          },
+          {
+            "name": "onCollapse",
+            "type": "(() => void)",
+            "required": false,
+            "description": "Fires when the rail's collapse affordance is pressed. The button renders\nonly when this is given, pinned to the rail's top trailing corner. It is\na chevron rather than a cross on purpose: the host's own close control\nis usually a cross a few pixels away, and two of them side by side read\nas two ways to dismiss the same thing."
+          },
+          {
+            "name": "collapseLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name for the collapse affordance.",
+            "defaultValue": "Collapse the agent panel"
+          },
+          {
+            "name": "footer",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Rendered under the pane, outside its scroll — a sign-out row, a quiet hint."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
     "name": "AgentStatus",
     "label": "Agent status",
     "slug": "agent-status",
@@ -7424,6 +7504,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "boolean",
             "required": false,
             "description": "Full width — segments fill container",
+            "defaultValue": "false"
+          },
+          {
+            "name": "collapse",
+            "type": "boolean",
+            "required": false,
+            "description": "Shed parts rather than overflow when the container is too narrow for the\nstrip. The control measures its own natural widths and drops to labels\nalone, then to icons alone, in that order — the label carries the\nmeaning, so the icon goes first. It only falls to icons when every\nsegment has one, and hidden labels stay in the accessibility tree, so\nnothing loses its name. Off by default; the control overflows as before.",
             "defaultValue": "false"
           },
           {

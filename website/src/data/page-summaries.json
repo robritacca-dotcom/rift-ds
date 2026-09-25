@@ -125,6 +125,17 @@
         }
       ]
     },
+    "/foundations/accessibility": {
+      "title": "Accessibility",
+      "text": "What the build enforces: every story audited against WCAG 2.1 AA, and the focus contract every overlay inherits.",
+      "chips": [
+        {
+          "id": "a11y-enforced",
+          "label": "What a11y does the build check?",
+          "prompt": "What accessibility checks does the build enforce on every change?"
+        }
+      ]
+    },
     "/foundations/colour-mode": {
       "title": "Colour and mode",
       "text": "Every semantic colour token with its light and dark values, and how the theme swap works.",

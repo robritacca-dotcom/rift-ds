@@ -365,6 +365,7 @@ export const componentsSidebarGroups: SidebarGroup[] = componentCategoryMetadata
 
 export const foundationsSidebarLinks: NavLink[] = [
   { href: "/foundations", label: "Contents" },
+  { href: "/foundations/accessibility", label: "Accessibility", description: "What the build enforces, and what it does not" },
   { href: "/foundations/elevation", label: "Elevation", description: "The shadow and depth tokens" },
   { href: "/foundations/icons", label: "Icons", description: "The icon font and its size scale" },
   { href: "/foundations/logos", label: "Logos", description: "The brand marks and how they are used" },

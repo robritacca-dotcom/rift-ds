@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import MegaNav from "../components/MegaNav/MegaNav";
 import { ExtendedBackground } from "../components/BlurBackground/BlurBackground";
@@ -91,7 +91,7 @@ import {
 import { COMPONENT_COUNT } from "@robr0/design-system/components/registry";
 import { TOKEN_COUNT } from "@robr0/design-system/tokens/registry";
 import { MCP_TOOLS } from "@/lib/mcp-tools";
-import { BarChart, LineChart, PieChart } from "@robr0/design-system/charts";
+import { AreaChart, BarChart, PieChart } from "@robr0/design-system/charts";
 
 /* ---------- fixed demo data (all mock — a small finance product) ---------- */
 
@@ -447,6 +447,28 @@ function EscalatorColumn({
   );
 }
 
+/* Below the collage breakpoint the three escalators fold into one. The
+   window is CSS (page.module.css owns the 1023px rule and the shorter
+   window), but which columns exist is a render decision, so the same
+   breakpoint is read here. The server snapshot is the three-column
+   layout: the markup hydrates identically everywhere and a narrow
+   viewport switches on the client's first paint. */
+const NARROW_COLLAGE_QUERY = "(max-width: 1023px)";
+
+function subscribeNarrowCollage(onChange: () => void) {
+  const mq = window.matchMedia(NARROW_COLLAGE_QUERY);
+  mq.addEventListener("change", onChange);
+  return () => mq.removeEventListener("change", onChange);
+}
+
+function useNarrowCollage() {
+  return useSyncExternalStore(
+    subscribeNarrowCollage,
+    () => window.matchMedia(NARROW_COLLAGE_QUERY).matches,
+    () => false,
+  );
+}
+
 /* ---------- page ---------- */
 
 /* The step-07 swatches from the shared theme levers, plus the shipped
@@ -551,6 +573,718 @@ export default function DesignSystemLanding() {
   const [closeTask, setCloseTask] = useState<string | undefined>(undefined);
 
   const chartData = range === "6m" ? REVENUE_DATA.slice(1) : REVENUE_DATA;
+  const narrow = useNarrowCollage();
+
+  /* The three collage columns, as render functions so the layout can deal
+     them out as three escalators or one (see the collage section). */
+  const renderLeft = () => (<>
+    <DemoCard
+      heading="Spending by category"
+      sub="Where this month's money went."
+      links={[{ label: "Pie chart", href: "/components/pie-chart" }]}
+    >
+      <div className={styles.chartFlush}>
+        <PieChart
+          data={SPENDING_DATA}
+          innerRadius={52}
+          outerRadius={80}
+          height={230}
+          showLegend
+        />
+      </div>
+    </DemoCard>
+
+    <DemoCard
+      heading="The money month"
+      sub="Payroll runs, due dates, and filings in one view."
+      links={[{ label: "Event calendar", href: "/components/event-calendar" }]}
+    >
+      {/* calendarFit reduces pills to their dots — a day cell in a
+          one-third column has no room for words. The events stay
+          buttons so their titles survive as accessible names. */}
+      <div className={styles.calendarFit}>
+        <EventCalendar
+          defaultMonth={CALENDAR_MONTH}
+          events={CALENDAR_EVENTS}
+          maxEventsPerDay={2}
+          selectedDate={calendarDay}
+          onDateClick={setCalendarDay}
+          onEventClick={(event) => setCalendarDay(event.date)}
+        />
+      </div>
+    </DemoCard>
+
+    <DemoCard
+      heading="Financial performance"
+      sub="Compared to the month before."
+      links={[{ label: "Stat", href: "/components/stat" }]}
+    >
+      <div className={styles.statGrid}>
+        <Stat value="$350K" label="MRR" delta="+3.2%" trend="up" />
+        <Stat value="$211K" label="OpEx" delta="+12.8%" trend="down" />
+        <Stat value="44.6%" label="GPM" delta="-1.2%" trend="down" />
+        <Stat value="$443K" label="EBITDA" delta="+4.1%" trend="up" />
+      </div>
+    </DemoCard>
+
+    <DemoCard
+      heading="New invoice"
+      sub="Bill a client in their own currency."
+      links={[
+        { label: "Input", href: "/components/input" },
+        { label: "Dropdown", href: "/components/dropdown" },
+        { label: "Date input", href: "/components/date-input" },
+      ]}
+    >
+      <div className={styles.formStack}>
+        <Input label="Client" placeholder="Acme Ltd" />
+        <Dropdown
+          label="Currency"
+          value={currency}
+          options={CURRENCY_OPTIONS}
+          onValueChange={setCurrency}
+        />
+        <DateInput label="Due date" value={dueDate} onValueChange={setDueDate} />
+        <Button label="Create invoice" variant="primary" iconLeft="receipt_long" />
+      </div>
+    </DemoCard>
+
+    <DemoCard
+      heading="Recent activity"
+      sub="What happened over the past day."
+      links={[{ label: "Avatar", href: "/components/avatar" }]}
+    >
+      <ul className={styles.rowList}>
+        {ACTIVITY.map((a) => (
+          <li key={a.name} className={styles.activityRow}>
+            <Avatar name={a.name} size="sm" />
+            <span className={styles.activityText}>
+              <span className={styles.rowTitle}>{a.name}</span>
+              <span className={styles.rowHint}>{a.action}</span>
+            </span>
+            <span className={styles.activityWhen}>{a.when}</span>
+          </li>
+        ))}
+      </ul>
+    </DemoCard>
+
+    <DemoCard
+      heading="Ask about your money"
+      sub="Answers grounded in your own transactions."
+      links={[
+        { label: "Chat thread", href: "/components/chat-thread" },
+        { label: "Chat message", href: "/components/chat-message" },
+        { label: "Reasoning", href: "/components/reasoning" },
+        { label: "Tool call", href: "/components/tool-call" },
+        { label: "Source chip", href: "/components/source-chip" },
+      ]}
+    >
+      <ChatHeader
+        title="Money copilot"
+        actions={
+          <CircularButton icon="edit_square" variant="tertiary" ariaLabel="New chat" />
+        }
+      />
+      <ChatThread ariaLabel="Example conversation" className={styles.chatDemoThread}>
+        <ChatMarker>Today</ChatMarker>
+        <ChatMessage role="user">
+          How much did I spend on dining in July?
+        </ChatMessage>
+        <Reasoning size="compact" duration={2}>
+          July has five weekends, so compare against a weekly average
+          rather than the June total.
+        </Reasoning>
+        <ToolCall
+          name="query_transactions"
+          status="success"
+          summary="86 transactions scanned"
+        />
+        <ChatMessage
+          role="assistant"
+          actions={<MessageActions items={ANSWER_ACTIONS} showTooltips={false} />}
+          showActions
+        >
+          <Prose size="sm">
+            <p>
+              <strong>$280</strong> across nine visits, 12% less than
+              June. Your cheapest week was the one you meal-prepped.
+            </p>
+          </Prose>
+          <SourceChip index={1} title="July statement" />
+        </ChatMessage>
+      </ChatThread>
+    </DemoCard>
+
+    <DemoCard
+      heading="Overdue invoices"
+      links={[{ label: "Empty state", href: "/components/empty-state" }]}
+    >
+      <EmptyState
+        icon="task_alt"
+        title="Nothing overdue"
+        description="Every invoice is paid or inside its terms."
+        variant="bordered"
+      />
+    </DemoCard>
+
+    <DemoCard
+      heading="Documents"
+      sub="Statements are generated on the 1st of each month."
+      links={[
+        { label: "Tabs", href: "/components/tabs" },
+        { label: "Pagination", href: "/components/pagination" },
+      ]}
+    >
+      <Tabs
+        tabs={STATEMENT_TABS}
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        ariaLabel="Document types"
+      />
+      <ul className={styles.rowList}>
+        {STATEMENTS.map((s) => (
+          <li key={s.month} className={styles.statementRow}>
+            <span className={`material-symbols-rounded ${styles.statementIcon}`} aria-hidden="true">
+              description
+            </span>
+            <span className={styles.statementText}>
+              <span className={styles.rowTitle}>{s.month}</span>
+              <span className={styles.rowHint}>{s.meta}</span>
+            </span>
+            <span className={`material-symbols-rounded ${styles.statementDownload}`} aria-hidden="true">
+              download
+            </span>
+          </li>
+        ))}
+      </ul>
+      <Pagination
+        page={page}
+        pageCount={8}
+        onPageChange={setPage}
+        size="compact"
+        ariaLabel="Statement pages"
+      />
+    </DemoCard>
+
+    <DemoCard
+      heading="Search"
+      sub="Find any transaction, client, or invoice."
+      links={[
+        { label: "Kbd", href: "/components/kbd" },
+        { label: "Chip", href: "/components/chip" },
+      ]}
+    >
+      <div className={styles.searchTrigger}>
+        <span className={`material-symbols-rounded ${styles.searchIcon}`} aria-hidden="true">
+          search
+        </span>
+        <span className={styles.searchPlaceholder}>Search transactions…</span>
+        <span className={styles.kbdKeys}>
+          <Kbd>⌘</Kbd>
+          <Kbd>K</Kbd>
+        </span>
+      </div>
+      <div className={styles.recentRow}>
+        <span className={styles.cardHint}>Recent</span>
+        <Chip label="Acme Ltd" />
+        <Chip label="#3461" />
+      </div>
+    </DemoCard>
+  </>);
+
+  const renderMiddle = (copy: "a" | "b") => (<>
+    <NavCard
+      heading="Install"
+      sub={`${COMPONENT_COUNT} components on ${TOKEN_COUNT} semantic tokens, one package.`}
+    >
+      <CodeBlock code="npm install @robr0/design-system" language="bash" />
+      <div className={styles.buttonRow}>
+        <Button label="Get started" variant="primary" size="compact" href="/docs/get-started" />
+        <Button
+          label="GitHub"
+          variant="tertiary"
+          size="compact"
+          iconRight="open_in_new"
+          href={REPOSITORY_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+        />
+      </div>
+    </NavCard>
+
+    <DemoCard
+      heading="Quarter close"
+      sub="Six weeks from closing the books to the filing."
+      links={[{ label: "Gantt chart", href: "/components/gantt-chart" }]}
+    >
+      <div className={styles.ganttFit}>
+        <GanttChart
+          bare
+          items={CLOSE_ITEMS}
+          milestones={CLOSE_MILESTONES}
+          range={{ start: "2026-07-01", end: "2026-09-12" }}
+          showToday
+          today={CLOSE_TODAY}
+          showGrid
+          selectedId={closeTask}
+          onItemClick={(item) =>
+            setCloseTask((current) => (current === item.id ? undefined : item.id))
+          }
+        />
+      </div>
+    </DemoCard>
+
+    <DemoCard
+      heading="Trading activity"
+      sub="One cell per trading day; darker means more trades."
+      links={[{ label: "Contribution graph", href: "/components/contribution-graph" }]}
+    >
+      <div className={styles.scrollX}>
+        <ContributionGraph bare days={tradingDays} showLegend />
+      </div>
+    </DemoCard>
+
+    <DemoCard
+      heading="Reconciling accounts"
+      sub="A background agent matching invoices to deposits."
+      links={[
+        { label: "Agent status", href: "/components/agent-status" },
+        { label: "Agent plan", href: "/components/agent-plan" },
+      ]}
+    >
+      <AgentStatus state="working" label="Matching deposits" pattern="orbit" shimmer />
+      <AgentPlan title="Reconciliation plan" steps={RECONCILE_STEPS} defaultOpen />
+    </DemoCard>
+
+    <DemoCard
+      heading="Revenue"
+      sub="Monthly, in thousands."
+      links={[
+        { label: "Bar chart", href: "/components/bar-chart" },
+        { label: "Segmented control", href: "/components/segmented-control" },
+      ]}
+    >
+      <div className={styles.chartToolbar}>
+        <SegmentedControl
+          segments={RANGE_SEGMENTS}
+          activeSegment={range}
+          onSegmentChange={setRange}
+        />
+      </div>
+      <div className={styles.chartFlush}>
+        <BarChart data={chartData} dataLabel="Revenue" height={210} />
+      </div>
+    </DemoCard>
+
+    <DemoCard
+      heading="Quick actions"
+      links={[{ label: "Circular button", href: "/components/circular-button" }]}
+    >
+      <div className={styles.quickActions}>
+        <div className={styles.quickAction}>
+          <CircularButton icon="arrow_upward" variant="primary" ariaLabel="Send money" />
+          <span className={styles.quickActionLabel}>Send</span>
+        </div>
+        <div className={styles.quickAction}>
+          <CircularButton icon="arrow_downward" variant="secondary" ariaLabel="Request money" />
+          <span className={styles.quickActionLabel}>Request</span>
+        </div>
+        <div className={styles.quickAction}>
+          <CircularButton icon="add" variant="secondary" ariaLabel="Top up balance" />
+          <span className={styles.quickActionLabel}>Top up</span>
+        </div>
+        <div className={styles.quickAction}>
+          <CircularButton icon="more_horiz" variant="tertiary" ariaLabel="More actions" />
+          <span className={styles.quickActionLabel}>More</span>
+        </div>
+      </div>
+    </DemoCard>
+
+    <DemoCard
+      heading="Start a conversation"
+      sub="Ask in plain language; pick the model behind it."
+      links={[
+        { label: "Composer", href: "/components/composer" },
+        { label: "Prompt suggestions", href: "/components/prompt-suggestions" },
+        { label: "Model picker", href: "/components/model-picker" },
+        { label: "AI button", href: "/components/ai-button" },
+      ]}
+    >
+      <PromptSuggestions
+        suggestions={PROMPT_IDEAS}
+        layout="wrap"
+        size="compact"
+        ariaLabel="Suggested questions"
+        onValueChange={(id) =>
+          setDraft(PROMPT_IDEAS.find((p) => p.id === id)?.label ?? "")
+        }
+      />
+      <Composer
+        value={draft}
+        onValueChange={setDraft}
+        onSubmit={() => setDraft("")}
+        placeholder="Message the agent"
+        actions={
+          <ModelPicker
+            models={AGENT_MODELS}
+            value={model}
+            onValueChange={setModel}
+            placement="top"
+          />
+        }
+      />
+      <div className={styles.buttonRow}>
+        <AiButton label="Summarise July" size="compact" />
+      </div>
+    </DemoCard>
+
+    <DemoCard
+      heading="Invoice paid"
+      links={[{ label: "Button", href: "/components/button" }]}
+    >
+      <div className={styles.successPanel}>
+        <span className={styles.successBadge}>
+          <span className="material-symbols-rounded" aria-hidden="true">
+            check
+          </span>
+        </span>
+        <span className={styles.successAmount}>You received $17,975.30</span>
+        <span className={styles.successHint}>
+          Invoice #3463 settled. A receipt went to accounting@example.com.
+        </span>
+        <div className={styles.successActions}>
+          <Button label="Next invoice" variant="primary" size="compact" />
+          <Button label="Done" variant="secondary" size="compact" />
+        </div>
+      </div>
+    </DemoCard>
+
+    <DemoCard
+      heading="Savings targets"
+      sub="Active goals across your accounts."
+      links={[{ label: "Progress bar", href: "/components/progress-bar" }]}
+    >
+      {SAVINGS_GOALS.map((goal) => (
+        <div key={goal.label} className={styles.goal}>
+          <div className={styles.goalHead}>
+            <span className={styles.rowTitle}>{goal.label}</span>
+            <span className={styles.rowHint}>{goal.target}</span>
+          </div>
+          <ProgressBar value={goal.value} showLabel ariaLabel={`${goal.label} progress`} />
+        </div>
+      ))}
+    </DemoCard>
+
+    <DemoCard
+      heading="Payout schedule"
+      sub="When your cleared balance is sent to the bank."
+      links={[
+        { label: "Selection card", href: "/components/selection-card" },
+        { label: "Checkbox", href: "/components/checkbox" },
+      ]}
+    >
+      <SelectionCard
+        mode="radio"
+        name={`ds-landing-schedule-${copy}`}
+        options={SCHEDULE_OPTIONS}
+        value={schedule}
+        onChange={(v) => setSchedule(v as string)}
+      />
+      <Checkbox
+        label="Email a receipt for each payout"
+        checked={receipt}
+        onChange={setReceipt}
+      />
+    </DemoCard>
+
+    <DemoCard
+      heading="Open positions"
+      links={[
+        { label: "Skeleton", href: "/components/skeleton" },
+        { label: "Spinner", href: "/components/spinner" },
+      ]}
+    >
+      <div className={styles.loadingRow}>
+        <Spinner size="sm" label="Loading positions" />
+        <span className={styles.cardHint}>Fetching the latest prices</span>
+      </div>
+      <Skeleton variant="text" lines={6} />
+    </DemoCard>
+  </>);
+
+  const renderRight = () => (<>
+    <DemoCard
+      heading="Where payments come from"
+      sub="Hover a city for the client and the invoice it settled."
+      links={[
+        { label: "Globe", href: "/components/globe" },
+        { label: "Map callout", href: "/components/map-callout" },
+        { label: "Map legend", href: "/components/map-legend" },
+      ]}
+    >
+      <Globe
+        points={GLOBE_POINTS}
+        arcs={GLOBE_ARCS}
+        defaultRotation={[-45, -25]}
+        label="Client cities and the payment routes home"
+        renderCallout={(point) => {
+          const route = PAYMENT_ROUTES.find((r) => r.id === point.id);
+          return (
+            <MapCallout
+              title={point.label ?? point.id}
+              lines={
+                route
+                  ? [route.client, route.amount]
+                  : ["Head office", `${PAYMENT_ROUTES.length} clients`]
+              }
+            />
+          );
+        }}
+      />
+      <MapLegend
+        items={[
+          { glyph: "anchor", label: "Head office" },
+          { glyph: "point", label: "Client" },
+          { glyph: "arc", label: "Payment route" },
+        ]}
+      />
+    </DemoCard>
+
+    <DemoCard
+      heading="Portfolio value"
+      sub="Against the index, in thousands."
+      links={[{ label: "Area chart", href: "/components/area-chart" }]}
+    >
+      <div className={styles.chartFlush}>
+        <AreaChart
+          data={PORTFOLIO_DATA}
+          xKey="month"
+          series={[
+            { dataKey: "value", label: "Portfolio" },
+            { dataKey: "benchmark", label: "Benchmark", fillOpacity: 0.35 },
+          ]}
+          height={180}
+          showLegend={false}
+        />
+      </div>
+    </DemoCard>
+
+    <DemoCard
+      heading="Payout coverage"
+      sub="Hover a city for the currency and how fast it settles."
+      links={[{ label: "World map", href: "/components/world-map" }]}
+    >
+      {/* The map fills its container — the wrapper owns the height. */}
+      <div className={styles.mapFrame}>
+        <WorldMap
+          points={COVERAGE_POINTS}
+          bounds={[-125, -42, 160, 62]}
+          fit="cover"
+          showZoomControls
+          label="Cities the platform can send money to"
+          renderCallout={(point) => {
+            const city = COVERAGE_CITIES.find((c) => c.id === point.id);
+            return (
+              <MapCallout
+                title={point.label ?? point.id}
+                lines={city ? [city.currency, city.settles] : ["Head office"]}
+              />
+            );
+          }}
+        />
+      </div>
+    </DemoCard>
+
+    <DemoCard
+      heading="Top holdings"
+      sub="By market value."
+      links={[
+        { label: "Table", href: "/components/table" },
+        { label: "Chip", href: "/components/chip" },
+      ]}
+    >
+      <div className={styles.badgeRow}>
+        <Chip
+          label="All"
+          selected={holdingsFilter === "all"}
+          onClick={() => setHoldingsFilter("all")}
+        />
+        <Chip
+          label="Equity"
+          selected={holdingsFilter === "equity"}
+          onClick={() => setHoldingsFilter("equity")}
+        />
+        <Chip
+          label="Bonds"
+          selected={holdingsFilter === "bonds"}
+          onClick={() => setHoldingsFilter("bonds")}
+        />
+      </div>
+      <Table
+        columns={HOLDINGS_COLUMNS}
+        rows={HOLDINGS_ROWS}
+        bordered
+        caption="Top holdings by market value"
+        captionHidden
+      />
+    </DemoCard>
+
+    <DemoCard
+      heading="Team cards"
+      sub="Click the deck to flip through the virtual cards you've issued."
+      links={[
+        { label: "Card stack", href: "/components/card-stack" },
+        { label: "Card", href: "/components/card" },
+      ]}
+    >
+      <CardStack label="Virtual team cards">
+        {TEAM_CARDS.map((c) => (
+          <Card key={c.name} title={c.name}>
+            <div className={styles.teamCardBody}>
+              <span className={styles.teamCardNumber}>{c.number}</span>
+              <Badge variant="neutral" label={c.limit} />
+            </div>
+          </Card>
+        ))}
+      </CardStack>
+    </DemoCard>
+
+    <DemoCard
+      heading="Schedule a transfer"
+      sub="Pick the day the money should move."
+      links={[{ label: "Date picker", href: "/components/date-picker" }]}
+    >
+      <div className={styles.calendarWrap}>
+        <DatePicker size="compact" value={transferDate} onDateSelect={setTransferDate} />
+      </div>
+    </DemoCard>
+
+    <DemoCard
+      heading="Notifications"
+      sub="Choose which alerts reach you."
+      links={[{ label: "Toggle switch", href: "/components/toggle-switch" }]}
+    >
+      <div className={styles.settingRow}>
+        <span className={styles.settingText}>
+          <span className={styles.settingLabel}>Transaction alerts</span>
+          <span className={styles.settingHint}>Deposits, withdrawals, and transfers</span>
+        </span>
+        <ToggleSwitch
+          label="Transaction alerts"
+          showLabel={false}
+          checked={alerts.transactions}
+          onChange={(v) => setAlerts((a) => ({ ...a, transactions: v }))}
+        />
+      </div>
+      <div className={styles.settingRow}>
+        <span className={styles.settingText}>
+          <span className={styles.settingLabel}>Security alerts</span>
+          <span className={styles.settingHint}>Login attempts and account changes</span>
+        </span>
+        <ToggleSwitch
+          label="Security alerts"
+          showLabel={false}
+          checked={alerts.security}
+          onChange={(v) => setAlerts((a) => ({ ...a, security: v }))}
+        />
+      </div>
+      <div className={styles.settingRow}>
+        <span className={styles.settingText}>
+          <span className={styles.settingLabel}>Market updates</span>
+          <span className={styles.settingHint}>Daily price summary</span>
+        </span>
+        <ToggleSwitch
+          label="Market updates"
+          showLabel={false}
+          checked={alerts.market}
+          onChange={(v) => setAlerts((a) => ({ ...a, market: v }))}
+        />
+      </div>
+    </DemoCard>
+
+    <DemoCard
+      heading="Agent hand-offs"
+      sub="The agent pauses before anything irreversible."
+      links={[
+        { label: "Interrupt card", href: "/components/interrupt-card" },
+        { label: "Message card", href: "/components/message-card" },
+        { label: "Document chip", href: "/components/document-chip" },
+      ]}
+    >
+      <InterruptCard
+        title="Send $2,500 to savings?"
+        description="This transfer is larger than your usual amount."
+        options={[
+          { value: "allow", label: "Allow", variant: "primary" },
+          { value: "deny", label: "Not now" },
+        ]}
+        value={transferChoice}
+        onValueChange={setTransferChoice}
+      />
+      <MessageCard
+        title="July statement is ready"
+        description="Nine categories over 86 transactions."
+        meta="Generated 1 Aug"
+      />
+      <DocumentChip name="statement-july.pdf" fileType="pdf" meta="84 KB" size="compact" />
+    </DemoCard>
+
+    <DemoCard
+      heading="Invoices"
+      sub="This month, most recent first."
+      links={[{ label: "Badge", href: "/components/badge" }]}
+    >
+      <ul className={styles.rowList}>
+        {INVOICES.map((inv) => (
+          <li key={inv.id} className={styles.invoiceRow}>
+            <span className={styles.invoiceText}>
+              <span className={styles.rowTitle}>{inv.id}</span>
+              <span className={styles.rowHint}>{inv.client}</span>
+            </span>
+            <span className={styles.invoiceAmount}>{inv.amount}</span>
+            <Badge label={inv.status} variant={inv.variant} />
+          </li>
+        ))}
+      </ul>
+    </DemoCard>
+
+    <DemoCard
+      heading="Payout threshold"
+      sub="The minimum balance before a payout is triggered."
+      links={[{ label: "Slider", href: "/components/slider" }]}
+    >
+      <div className={styles.thresholdStack}>
+        <div className={styles.thresholdReadout}>
+          <span className={styles.thresholdLabel}>Minimum payout</span>
+          <span className={styles.thresholdValue}>
+            ${(threshold * 50).toLocaleString()}
+          </span>
+        </div>
+        <Slider
+          value={threshold}
+          min={10}
+          max={200}
+          onValueChange={setThreshold}
+          ariaLabel="Minimum payout amount"
+        />
+        <Button label="Save threshold" variant="secondary" size="compact" />
+      </div>
+    </DemoCard>
+
+    <DemoCard
+      heading="Invoice #3459"
+      sub="From issue to payment in eleven days."
+      links={[{ label: "Timeline", href: "/components/timeline" }]}
+    >
+      <Timeline
+        items={[
+          { meta: "21 Jun", title: "Issued", description: "Sent to Acme Ltd." },
+          { meta: "24 Jun", title: "Approved", description: "Signed off by their finance team." },
+          { meta: "2 Jul", title: "Paid", description: "$12,400.00 received." },
+        ]}
+      />
+    </DemoCard>
+  </>);
 
   return (
     <>
@@ -604,719 +1338,27 @@ export default function DesignSystemLanding() {
           </div>
         </section>
 
-        {/* ---------- collage: three curated columns of live demos + nav ---------- */}
+        {/* ---------- collage: three curated columns of live demos + nav; one
+             column below the breakpoint, so phones get the same drift ---------- */}
         <section
           className={`${styles.collage} animate-in animate-delay-1`}
           aria-label="Live component examples"
         >
-          {/* -------- left column -------- */}
-          <EscalatorColumn direction="down" duration="320s" render={() => (<>
-            <DemoCard
-              heading="Spending by category"
-              sub="Where this month's money went."
-              links={[{ label: "Pie chart", href: "/components/pie-chart" }]}
-            >
-              <div className={styles.chartFlush}>
-                <PieChart
-                  data={SPENDING_DATA}
-                  innerRadius={52}
-                  outerRadius={80}
-                  height={230}
-                  showLegend
-                />
-              </div>
-            </DemoCard>
-
-            <DemoCard
-              heading="The money month"
-              sub="Payroll runs, due dates, and filings in one view."
-              links={[{ label: "Event calendar", href: "/components/event-calendar" }]}
-            >
-              {/* calendarFit reduces pills to their dots — a day cell in a
-                  one-third column has no room for words. The events stay
-                  buttons so their titles survive as accessible names. */}
-              <div className={styles.calendarFit}>
-                <EventCalendar
-                  defaultMonth={CALENDAR_MONTH}
-                  events={CALENDAR_EVENTS}
-                  maxEventsPerDay={2}
-                  selectedDate={calendarDay}
-                  onDateClick={setCalendarDay}
-                  onEventClick={(event) => setCalendarDay(event.date)}
-                />
-              </div>
-            </DemoCard>
-
-            <DemoCard
-              heading="Financial performance"
-              sub="Compared to the month before."
-              links={[{ label: "Stat", href: "/components/stat" }]}
-            >
-              <div className={styles.statGrid}>
-                <Stat value="$350K" label="MRR" delta="+3.2%" trend="up" />
-                <Stat value="$211K" label="OpEx" delta="+12.8%" trend="down" />
-                <Stat value="44.6%" label="GPM" delta="-1.2%" trend="down" />
-                <Stat value="$443K" label="EBITDA" delta="+4.1%" trend="up" />
-              </div>
-            </DemoCard>
-
-            <DemoCard
-              heading="New invoice"
-              sub="Bill a client in their own currency."
-              links={[
-                { label: "Input", href: "/components/input" },
-                { label: "Dropdown", href: "/components/dropdown" },
-                { label: "Date input", href: "/components/date-input" },
-              ]}
-            >
-              <div className={styles.formStack}>
-                <Input label="Client" placeholder="Acme Ltd" />
-                <Dropdown
-                  label="Currency"
-                  value={currency}
-                  options={CURRENCY_OPTIONS}
-                  onValueChange={setCurrency}
-                />
-                <DateInput label="Due date" value={dueDate} onValueChange={setDueDate} />
-                <Button label="Create invoice" variant="primary" iconLeft="receipt_long" />
-              </div>
-            </DemoCard>
-
-            <DemoCard
-              heading="Recent activity"
-              sub="What happened over the past day."
-              links={[{ label: "Avatar", href: "/components/avatar" }]}
-            >
-              <ul className={styles.rowList}>
-                {ACTIVITY.map((a) => (
-                  <li key={a.name} className={styles.activityRow}>
-                    <Avatar name={a.name} size="sm" />
-                    <span className={styles.activityText}>
-                      <span className={styles.rowTitle}>{a.name}</span>
-                      <span className={styles.rowHint}>{a.action}</span>
-                    </span>
-                    <span className={styles.activityWhen}>{a.when}</span>
-                  </li>
-                ))}
-              </ul>
-            </DemoCard>
-
-            <DemoCard
-              heading="Ask about your money"
-              sub="Answers grounded in your own transactions."
-              links={[
-                { label: "Chat thread", href: "/components/chat-thread" },
-                { label: "Chat message", href: "/components/chat-message" },
-                { label: "Reasoning", href: "/components/reasoning" },
-                { label: "Tool call", href: "/components/tool-call" },
-                { label: "Source chip", href: "/components/source-chip" },
-              ]}
-            >
-              <ChatHeader
-                title="Money copilot"
-                actions={
-                  <CircularButton icon="edit_square" variant="tertiary" ariaLabel="New chat" />
-                }
-              />
-              <ChatThread ariaLabel="Example conversation" className={styles.chatDemoThread}>
-                <ChatMarker>Today</ChatMarker>
-                <ChatMessage role="user">
-                  How much did I spend on dining in July?
-                </ChatMessage>
-                <Reasoning size="compact" duration={2}>
-                  July has five weekends, so compare against a weekly average
-                  rather than the June total.
-                </Reasoning>
-                <ToolCall
-                  name="query_transactions"
-                  status="success"
-                  summary="86 transactions scanned"
-                />
-                <ChatMessage
-                  role="assistant"
-                  actions={<MessageActions items={ANSWER_ACTIONS} showTooltips={false} />}
-                  showActions
-                >
-                  <Prose size="sm">
-                    <p>
-                      <strong>$280</strong> across nine visits, 12% less than
-                      June. Your cheapest week was the one you meal-prepped.
-                    </p>
-                  </Prose>
-                  <SourceChip index={1} title="July statement" />
-                </ChatMessage>
-              </ChatThread>
-            </DemoCard>
-
-            <DemoCard
-              heading="Overdue invoices"
-              links={[{ label: "Empty state", href: "/components/empty-state" }]}
-            >
-              <EmptyState
-                icon="task_alt"
-                title="Nothing overdue"
-                description="Every invoice is paid or inside its terms."
-                variant="bordered"
-              />
-            </DemoCard>
-
-            <DemoCard
-              heading="Documents"
-              sub="Statements are generated on the 1st of each month."
-              links={[
-                { label: "Tabs", href: "/components/tabs" },
-                { label: "Pagination", href: "/components/pagination" },
-              ]}
-            >
-              <Tabs
-                tabs={STATEMENT_TABS}
-                activeTab={activeTab}
-                onTabChange={setActiveTab}
-                ariaLabel="Document types"
-              />
-              <ul className={styles.rowList}>
-                {STATEMENTS.map((s) => (
-                  <li key={s.month} className={styles.statementRow}>
-                    <span className={`material-symbols-rounded ${styles.statementIcon}`} aria-hidden="true">
-                      description
-                    </span>
-                    <span className={styles.statementText}>
-                      <span className={styles.rowTitle}>{s.month}</span>
-                      <span className={styles.rowHint}>{s.meta}</span>
-                    </span>
-                    <span className={`material-symbols-rounded ${styles.statementDownload}`} aria-hidden="true">
-                      download
-                    </span>
-                  </li>
-                ))}
-              </ul>
-              <Pagination
-                page={page}
-                pageCount={8}
-                onPageChange={setPage}
-                size="compact"
-                ariaLabel="Statement pages"
-              />
-            </DemoCard>
-
-            <DemoCard
-              heading="Search"
-              sub="Find any transaction, client, or invoice."
-              links={[
-                { label: "Kbd", href: "/components/kbd" },
-                { label: "Chip", href: "/components/chip" },
-              ]}
-            >
-              <div className={styles.searchTrigger}>
-                <span className={`material-symbols-rounded ${styles.searchIcon}`} aria-hidden="true">
-                  search
-                </span>
-                <span className={styles.searchPlaceholder}>Search transactions…</span>
-                <span className={styles.kbdKeys}>
-                  <Kbd>⌘</Kbd>
-                  <Kbd>K</Kbd>
-                </span>
-              </div>
-              <div className={styles.recentRow}>
-                <span className={styles.cardHint}>Recent</span>
-                <Chip label="Acme Ltd" />
-                <Chip label="#3461" />
-              </div>
-            </DemoCard>
-          </>)} />
-
-          {/* -------- middle column -------- */}
-          <EscalatorColumn direction="up" duration="360s" render={(copy) => (<>
-            <NavCard
-              heading="Install"
-              sub={`${COMPONENT_COUNT} components on ${TOKEN_COUNT} semantic tokens, one package.`}
-            >
-              <CodeBlock code="npm install @robr0/design-system" language="bash" />
-              <div className={styles.buttonRow}>
-                <Button label="Get started" variant="primary" size="compact" href="/docs/get-started" />
-                <Button
-                  label="GitHub"
-                  variant="tertiary"
-                  size="compact"
-                  iconRight="open_in_new"
-                  href={REPOSITORY_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                />
-              </div>
-            </NavCard>
-
-            <DemoCard
-              heading="Quarter close"
-              sub="Six weeks from closing the books to the filing."
-              links={[{ label: "Gantt chart", href: "/components/gantt-chart" }]}
-            >
-              <div className={styles.ganttFit}>
-                <GanttChart
-                  bare
-                  items={CLOSE_ITEMS}
-                  milestones={CLOSE_MILESTONES}
-                  range={{ start: "2026-07-01", end: "2026-09-12" }}
-                  showToday
-                  today={CLOSE_TODAY}
-                  showGrid
-                  selectedId={closeTask}
-                  onItemClick={(item) =>
-                    setCloseTask((current) => (current === item.id ? undefined : item.id))
-                  }
-                />
-              </div>
-            </DemoCard>
-
-            <DemoCard
-              heading="Trading activity"
-              sub="One cell per trading day; darker means more trades."
-              links={[{ label: "Contribution graph", href: "/components/contribution-graph" }]}
-            >
-              <div className={styles.scrollX}>
-                <ContributionGraph bare days={tradingDays} showLegend />
-              </div>
-            </DemoCard>
-
-            <DemoCard
-              heading="Reconciling accounts"
-              sub="A background agent matching invoices to deposits."
-              links={[
-                { label: "Agent status", href: "/components/agent-status" },
-                { label: "Agent plan", href: "/components/agent-plan" },
-              ]}
-            >
-              <AgentStatus state="working" label="Matching deposits" pattern="orbit" shimmer />
-              <AgentPlan title="Reconciliation plan" steps={RECONCILE_STEPS} defaultOpen />
-            </DemoCard>
-
-            <DemoCard
-              heading="Revenue"
-              sub="Monthly, in thousands."
-              links={[
-                { label: "Bar chart", href: "/components/bar-chart" },
-                { label: "Segmented control", href: "/components/segmented-control" },
-              ]}
-            >
-              <div className={styles.chartToolbar}>
-                <SegmentedControl
-                  segments={RANGE_SEGMENTS}
-                  activeSegment={range}
-                  onSegmentChange={setRange}
-                />
-              </div>
-              <div className={styles.chartFlush}>
-                <BarChart data={chartData} dataLabel="Revenue" height={210} />
-              </div>
-            </DemoCard>
-
-            <DemoCard
-              heading="Quick actions"
-              links={[{ label: "Circular button", href: "/components/circular-button" }]}
-            >
-              <div className={styles.quickActions}>
-                <div className={styles.quickAction}>
-                  <CircularButton icon="arrow_upward" variant="primary" ariaLabel="Send money" />
-                  <span className={styles.quickActionLabel}>Send</span>
-                </div>
-                <div className={styles.quickAction}>
-                  <CircularButton icon="arrow_downward" variant="secondary" ariaLabel="Request money" />
-                  <span className={styles.quickActionLabel}>Request</span>
-                </div>
-                <div className={styles.quickAction}>
-                  <CircularButton icon="add" variant="secondary" ariaLabel="Top up balance" />
-                  <span className={styles.quickActionLabel}>Top up</span>
-                </div>
-                <div className={styles.quickAction}>
-                  <CircularButton icon="more_horiz" variant="tertiary" ariaLabel="More actions" />
-                  <span className={styles.quickActionLabel}>More</span>
-                </div>
-              </div>
-            </DemoCard>
-
-            <DemoCard
-              heading="Start a conversation"
-              sub="Ask in plain language; pick the model behind it."
-              links={[
-                { label: "Composer", href: "/components/composer" },
-                { label: "Prompt suggestions", href: "/components/prompt-suggestions" },
-                { label: "Model picker", href: "/components/model-picker" },
-                { label: "AI button", href: "/components/ai-button" },
-              ]}
-            >
-              <PromptSuggestions
-                suggestions={PROMPT_IDEAS}
-                layout="wrap"
-                size="compact"
-                ariaLabel="Suggested questions"
-                onValueChange={(id) =>
-                  setDraft(PROMPT_IDEAS.find((p) => p.id === id)?.label ?? "")
-                }
-              />
-              <Composer
-                value={draft}
-                onValueChange={setDraft}
-                onSubmit={() => setDraft("")}
-                placeholder="Message the agent"
-                actions={
-                  <ModelPicker
-                    models={AGENT_MODELS}
-                    value={model}
-                    onValueChange={setModel}
-                    placement="top"
-                  />
-                }
-              />
-              <div className={styles.buttonRow}>
-                <AiButton label="Summarise July" size="compact" />
-              </div>
-            </DemoCard>
-
-            <DemoCard
-              heading="Invoice paid"
-              links={[{ label: "Button", href: "/components/button" }]}
-            >
-              <div className={styles.successPanel}>
-                <span className={styles.successBadge}>
-                  <span className="material-symbols-rounded" aria-hidden="true">
-                    check
-                  </span>
-                </span>
-                <span className={styles.successAmount}>You received $17,975.30</span>
-                <span className={styles.successHint}>
-                  Invoice #3463 settled. A receipt went to accounting@example.com.
-                </span>
-                <div className={styles.successActions}>
-                  <Button label="Next invoice" variant="primary" size="compact" />
-                  <Button label="Done" variant="secondary" size="compact" />
-                </div>
-              </div>
-            </DemoCard>
-
-            <DemoCard
-              heading="Savings targets"
-              sub="Active goals across your accounts."
-              links={[{ label: "Progress bar", href: "/components/progress-bar" }]}
-            >
-              {SAVINGS_GOALS.map((goal) => (
-                <div key={goal.label} className={styles.goal}>
-                  <div className={styles.goalHead}>
-                    <span className={styles.rowTitle}>{goal.label}</span>
-                    <span className={styles.rowHint}>{goal.target}</span>
-                  </div>
-                  <ProgressBar value={goal.value} showLabel ariaLabel={`${goal.label} progress`} />
-                </div>
-              ))}
-            </DemoCard>
-
-            <DemoCard
-              heading="Payout schedule"
-              sub="When your cleared balance is sent to the bank."
-              links={[
-                { label: "Selection card", href: "/components/selection-card" },
-                { label: "Checkbox", href: "/components/checkbox" },
-              ]}
-            >
-              <SelectionCard
-                mode="radio"
-                name={`ds-landing-schedule-${copy}`}
-                options={SCHEDULE_OPTIONS}
-                value={schedule}
-                onChange={(v) => setSchedule(v as string)}
-              />
-              <Checkbox
-                label="Email a receipt for each payout"
-                checked={receipt}
-                onChange={setReceipt}
-              />
-            </DemoCard>
-
-            <DemoCard
-              heading="Open positions"
-              links={[
-                { label: "Skeleton", href: "/components/skeleton" },
-                { label: "Spinner", href: "/components/spinner" },
-              ]}
-            >
-              <div className={styles.loadingRow}>
-                <Spinner size="sm" label="Loading positions" />
-                <span className={styles.cardHint}>Fetching the latest prices</span>
-              </div>
-              <Skeleton variant="text" lines={6} />
-            </DemoCard>
-          </>)} />
-
-          {/* -------- right column -------- */}
-          <EscalatorColumn direction="down" duration="340s" render={() => (<>
-            <DemoCard
-              heading="Where payments come from"
-              sub="Hover a city for the client and the invoice it settled."
-              links={[
-                { label: "Globe", href: "/components/globe" },
-                { label: "Map callout", href: "/components/map-callout" },
-                { label: "Map legend", href: "/components/map-legend" },
-              ]}
-            >
-              <Globe
-                points={GLOBE_POINTS}
-                arcs={GLOBE_ARCS}
-                defaultRotation={[-45, -25]}
-                label="Client cities and the payment routes home"
-                renderCallout={(point) => {
-                  const route = PAYMENT_ROUTES.find((r) => r.id === point.id);
-                  return (
-                    <MapCallout
-                      title={point.label ?? point.id}
-                      lines={
-                        route
-                          ? [route.client, route.amount]
-                          : ["Head office", `${PAYMENT_ROUTES.length} clients`]
-                      }
-                    />
-                  );
-                }}
-              />
-              <MapLegend
-                items={[
-                  { glyph: "anchor", label: "Head office" },
-                  { glyph: "point", label: "Client" },
-                  { glyph: "arc", label: "Payment route" },
-                ]}
-              />
-            </DemoCard>
-
-            <DemoCard
-              heading="Portfolio value"
-              sub="Against the index, in thousands."
-              links={[{ label: "Line chart", href: "/components/line-chart" }]}
-            >
-              <div className={styles.chartFlush}>
-                <LineChart
-                  data={PORTFOLIO_DATA}
-                  xKey="month"
-                  series={[
-                    { dataKey: "value", label: "Portfolio" },
-                    { dataKey: "benchmark", label: "Benchmark", strokeDasharray: "5 4" },
-                  ]}
-                  height={180}
-                />
-              </div>
-            </DemoCard>
-
-            <DemoCard
-              heading="Payout coverage"
-              sub="Hover a city for the currency and how fast it settles."
-              links={[{ label: "World map", href: "/components/world-map" }]}
-            >
-              {/* The map fills its container — the wrapper owns the height. */}
-              <div className={styles.mapFrame}>
-                <WorldMap
-                  points={COVERAGE_POINTS}
-                  bounds={[-125, -42, 160, 62]}
-                  fit="cover"
-                  showZoomControls
-                  label="Cities the platform can send money to"
-                  renderCallout={(point) => {
-                    const city = COVERAGE_CITIES.find((c) => c.id === point.id);
-                    return (
-                      <MapCallout
-                        title={point.label ?? point.id}
-                        lines={city ? [city.currency, city.settles] : ["Head office"]}
-                      />
-                    );
-                  }}
-                />
-              </div>
-            </DemoCard>
-
-            <DemoCard
-              heading="Top holdings"
-              sub="By market value."
-              links={[
-                { label: "Table", href: "/components/table" },
-                { label: "Chip", href: "/components/chip" },
-              ]}
-            >
-              <div className={styles.badgeRow}>
-                <Chip
-                  label="All"
-                  selected={holdingsFilter === "all"}
-                  onClick={() => setHoldingsFilter("all")}
-                />
-                <Chip
-                  label="Equity"
-                  selected={holdingsFilter === "equity"}
-                  onClick={() => setHoldingsFilter("equity")}
-                />
-                <Chip
-                  label="Bonds"
-                  selected={holdingsFilter === "bonds"}
-                  onClick={() => setHoldingsFilter("bonds")}
-                />
-              </div>
-              <Table
-                columns={HOLDINGS_COLUMNS}
-                rows={HOLDINGS_ROWS}
-                bordered
-                caption="Top holdings by market value"
-                captionHidden
-              />
-            </DemoCard>
-
-            <DemoCard
-              heading="Team cards"
-              sub="Click the deck to flip through the virtual cards you've issued."
-              links={[
-                { label: "Card stack", href: "/components/card-stack" },
-                { label: "Card", href: "/components/card" },
-              ]}
-            >
-              <CardStack label="Virtual team cards">
-                {TEAM_CARDS.map((c) => (
-                  <Card key={c.name} title={c.name}>
-                    <div className={styles.teamCardBody}>
-                      <span className={styles.teamCardNumber}>{c.number}</span>
-                      <Badge variant="neutral" label={c.limit} />
-                    </div>
-                  </Card>
-                ))}
-              </CardStack>
-            </DemoCard>
-
-            <DemoCard
-              heading="Schedule a transfer"
-              sub="Pick the day the money should move."
-              links={[{ label: "Date picker", href: "/components/date-picker" }]}
-            >
-              <div className={styles.calendarWrap}>
-                <DatePicker size="compact" value={transferDate} onDateSelect={setTransferDate} />
-              </div>
-            </DemoCard>
-
-            <DemoCard
-              heading="Notifications"
-              sub="Choose which alerts reach you."
-              links={[{ label: "Toggle switch", href: "/components/toggle-switch" }]}
-            >
-              <div className={styles.settingRow}>
-                <span className={styles.settingText}>
-                  <span className={styles.settingLabel}>Transaction alerts</span>
-                  <span className={styles.settingHint}>Deposits, withdrawals, and transfers</span>
-                </span>
-                <ToggleSwitch
-                  label="Transaction alerts"
-                  showLabel={false}
-                  checked={alerts.transactions}
-                  onChange={(v) => setAlerts((a) => ({ ...a, transactions: v }))}
-                />
-              </div>
-              <div className={styles.settingRow}>
-                <span className={styles.settingText}>
-                  <span className={styles.settingLabel}>Security alerts</span>
-                  <span className={styles.settingHint}>Login attempts and account changes</span>
-                </span>
-                <ToggleSwitch
-                  label="Security alerts"
-                  showLabel={false}
-                  checked={alerts.security}
-                  onChange={(v) => setAlerts((a) => ({ ...a, security: v }))}
-                />
-              </div>
-              <div className={styles.settingRow}>
-                <span className={styles.settingText}>
-                  <span className={styles.settingLabel}>Market updates</span>
-                  <span className={styles.settingHint}>Daily price summary</span>
-                </span>
-                <ToggleSwitch
-                  label="Market updates"
-                  showLabel={false}
-                  checked={alerts.market}
-                  onChange={(v) => setAlerts((a) => ({ ...a, market: v }))}
-                />
-              </div>
-            </DemoCard>
-
-            <DemoCard
-              heading="Agent hand-offs"
-              sub="The agent pauses before anything irreversible."
-              links={[
-                { label: "Interrupt card", href: "/components/interrupt-card" },
-                { label: "Message card", href: "/components/message-card" },
-                { label: "Document chip", href: "/components/document-chip" },
-              ]}
-            >
-              <InterruptCard
-                title="Send $2,500 to savings?"
-                description="This transfer is larger than your usual amount."
-                options={[
-                  { value: "allow", label: "Allow", variant: "primary" },
-                  { value: "deny", label: "Not now" },
-                ]}
-                value={transferChoice}
-                onValueChange={setTransferChoice}
-              />
-              <MessageCard
-                title="July statement is ready"
-                description="Nine categories over 86 transactions."
-                meta="Generated 1 Aug"
-              />
-              <DocumentChip name="statement-july.pdf" fileType="pdf" meta="84 KB" size="compact" />
-            </DemoCard>
-
-            <DemoCard
-              heading="Invoices"
-              sub="This month, most recent first."
-              links={[{ label: "Badge", href: "/components/badge" }]}
-            >
-              <ul className={styles.rowList}>
-                {INVOICES.map((inv) => (
-                  <li key={inv.id} className={styles.invoiceRow}>
-                    <span className={styles.invoiceText}>
-                      <span className={styles.rowTitle}>{inv.id}</span>
-                      <span className={styles.rowHint}>{inv.client}</span>
-                    </span>
-                    <span className={styles.invoiceAmount}>{inv.amount}</span>
-                    <Badge label={inv.status} variant={inv.variant} />
-                  </li>
-                ))}
-              </ul>
-            </DemoCard>
-
-            <DemoCard
-              heading="Payout threshold"
-              sub="The minimum balance before a payout is triggered."
-              links={[{ label: "Slider", href: "/components/slider" }]}
-            >
-              <div className={styles.thresholdReadout}>
-                <span className={styles.thresholdLabel}>Minimum payout</span>
-                <span className={styles.thresholdValue}>
-                  ${(threshold * 50).toLocaleString()}
-                </span>
-              </div>
-              <Slider
-                value={threshold}
-                min={10}
-                max={200}
-                onValueChange={setThreshold}
-                ariaLabel="Minimum payout amount"
-              />
-              <Button label="Save threshold" variant="secondary" size="compact" />
-            </DemoCard>
-
-            <DemoCard
-              heading="Invoice #3459"
-              sub="From issue to payment in eleven days."
-              links={[{ label: "Timeline", href: "/components/timeline" }]}
-            >
-              <Timeline
-                items={[
-                  { meta: "21 Jun", title: "Issued", description: "Sent to Acme Ltd." },
-                  { meta: "24 Jun", title: "Approved", description: "Signed off by their finance team." },
-                  { meta: "2 Jul", title: "Paid", description: "$12,400.00 received." },
-                ]}
-              />
-            </DemoCard>
-          </>)} />
+          {narrow ? (
+            /* One column carries every card; the duration is the three
+               columns' summed so the drift keeps the desktop pace. */
+            <EscalatorColumn direction="down" duration="1020s" render={(copy) => (<>
+              {renderLeft()}
+              {renderMiddle(copy)}
+              {renderRight()}
+            </>)} />
+          ) : (
+            <>
+              <EscalatorColumn direction="down" duration="320s" render={() => renderLeft()} />
+              <EscalatorColumn direction="up" duration="360s" render={(copy) => renderMiddle(copy)} />
+              <EscalatorColumn direction="down" duration="340s" render={() => renderRight()} />
+            </>
+          )}
         </section>
 
         {/* ---------- where the system lives, and what it is built on ---------- */}

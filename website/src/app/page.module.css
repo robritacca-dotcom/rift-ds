@@ -586,6 +586,15 @@
   gap: var(--gap-100);
 }
 
+/* The slider's track is thin, so the readout, the control and the button
+   breathe more than the card's default rhythm gives them. */
+.thresholdStack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-500);
+  padding-block: var(--gap-200);
+}
+
 .thresholdReadout {
   display: flex;
   align-items: baseline;
@@ -886,28 +895,14 @@
 
 /* Content-driven threshold: the three-column collage needs ~1024px to
    breathe, so it collapses here rather than at a canonical layout tier.
-   One stacked column also ends the escalator — three looping columns on
-   top of each other would be a wall of motion, so the collage reverts to
-   the plain static layout. */
+   Below it the page renders one escalator carrying every card (the
+   landing component reads the same 1023px query), and the window shrinks
+   to a short band: a phone-height wall of drifting cards would swallow
+   the page, so the travel is a glimpse rather than a screenful. */
 @media (max-width: 1023px) {
   .collage {
     grid-template-columns: minmax(0, 1fr);
-    height: auto;
-    overflow: visible;
-    -webkit-mask-image: none;
-    mask-image: none;
-  }
-
-  .escalatorTrack {
-    animation: none;
-  }
-
-  .escalatorStack {
-    padding-bottom: 0;
-  }
-
-  .escalatorDupe {
-    display: none;
+    height: clamp(420px, 70vh, 640px);
   }
 }
 

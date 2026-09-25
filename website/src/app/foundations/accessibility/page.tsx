@@ -4,7 +4,6 @@ import { useState } from "react";
 import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import Sidebar from "../../../components/Sidebar/Sidebar";
-import PageLinks from "../../../components/PageLinks/PageLinks";
 import { getSidebarLinks, foundationsSidebarLinks } from "@/config/navigation";
 import styles from "./page.module.css";
 import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
@@ -164,9 +163,11 @@ export default function AccessibilityPage() {
         <main className={styles.dsContent} id="main-content">
           <PageBreadcrumb />
 
+          {/* No PageLinks: the other foundations pages link Storybook's token
+              docs because they document tokens, and there is no accessibility
+              story to point at. /foundations/themes omits it the same way. */}
           <div className={`${styles.pageHeader} animate-in`}>
             <h1 className={styles.pageTitle}>Accessibility</h1>
-            <PageLinks storybookPath="/?path=/docs/foundations-tokens--docs" />
           </div>
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>

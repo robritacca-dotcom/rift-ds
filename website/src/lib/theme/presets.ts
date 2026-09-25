@@ -311,6 +311,80 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
       "--color-action-primary-text-active": "var(--primitive-yellow-11)",
     },
   },
+  zest: {
+    label: "Zest",
+    // Fintech-brand look in the Wise direction: a bright lime fill under
+    // a deep forest label, heavy tight display type, and near-flat white
+    // surfaces on a faintly green-grey page. The key sits a few degrees
+    // greener than the reference lime (#9FE870, hue 96) so it lands in the
+    // GREEN family rather than yellow — the nearest-ramp split falls at
+    // hue 103, and a lime keyed into yellow would turn the warning status
+    // colour lime with it. Positive status going lime is the point.
+    brand: "#8AE86E",
+    // The forest seed at a whisper: white steps to the grey-green section
+    // ground, and the near-blacks pick up the warm green cast of the
+    // reference's ink.
+    tintOn: true,
+    tintSeed: "#163300",
+    tintStrength: 4,
+    // Generous corners, pills kept: pill buttons and chips, cards and
+    // calculator panels rounded well past the shipped scale.
+    radiusScale: 140,
+    pill: true,
+    density: 100,
+    typeScale: 100,
+    motionScale: 100,
+    // Tonal depth (white on grey-green) rather than cast shadows — the
+    // softer float where a surface must lift at all.
+    elevation: "soft",
+    // The reference pairing, near enough: Inter Tight's heavy weights
+    // stand in for the brand's own display grotesque over Inter text.
+    fontLabel: "Inter",
+    headingFontLabel: "Inter Tight",
+    // Bright sextet: the reference's candy-bright secondaries brought up
+    // to chart strength around the lime, which doubles as mint.
+    accents: {
+      coral: "#FF7A66",
+      violet: "#B18CFF",
+      cobalt: "#5AA9E6",
+      amber: "#FFA94D",
+      gold: "#FFE14D",
+      mint: "#8AE86E",
+    },
+    // Poster-heavy display: the display tiers ship light with open
+    // tracking; Zest sets them extra-bold and pulls the tracking negative,
+    // the sub-display a step lighter so the hero pair keeps its hierarchy.
+    // Headings 1–3 stay at the shipped 600 — the reference's section
+    // titles are semibold, only its hero type shouts.
+    //
+    // The light theme keeps its shipped hover/active label (a near-white
+    // neutral) under a custom key, which lands near 2:1 on the darkened
+    // lime hover fill — pin it to the same forest step the resting label
+    // derives (Volt and Bubblegum make the same repair).
+    extraOverrides: {
+      "--color-action-primary-text-active": "var(--primitive-green-11)",
+      "--font-mega-1-weight": "800",
+      "--font-mega-2-weight": "800",
+      "--font-display-1-weight": "800",
+      "--font-display-2-weight": "800",
+      "--font-sub-display-weight": "700",
+      "--font-mega-1-letter-spacing": "-0.03em",
+      "--font-mega-2-letter-spacing": "-0.03em",
+      "--font-display-1-letter-spacing": "-0.025em",
+      "--font-display-2-letter-spacing": "-0.02em",
+      "--font-sub-display-letter-spacing": "-0.015em",
+    },
+    // Fresh neighbours: every hue bright and clean beside the lime. Green
+    // is the action family, left alone.
+    advanced: bases({
+      red: "#F0435C",
+      orange: "#FF8C42",
+      yellow: "#FFE14D",
+      teal: "#1FB5C9",
+      blue: "#3D6BE8",
+      purple: "#9C5CF5",
+    }),
+  },
   forest: {
     label: "Forest",
     // Deep-woods green, landing in the green family — dark enough that
@@ -497,17 +571,20 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
  */
 export const THEME_SELECTOR_ORDER: ReadonlyArray<string> = [
   // Smoke leads: it is the default the server ships, so the row
-  // opens on the look the visitor is already seeing.
+  // opens on the look the visitor is already seeing. The rest walk the
+  // colour wheel by brand hue — red, orange, yellow, the greens, teal,
+  // blue, violet, magenta — so the swatch row reads as a spectrum.
   "mono",
   "coral",
   "warm",
-  "forest",
   "gold",
+  "zest",
+  "forest",
   "terminal",
   "default",
   "contrast",
-  "pink",
   "violet",
+  "pink",
 ];
 
 /** The shipped look's display name (the "default" selector entry — no

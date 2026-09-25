@@ -891,6 +891,10 @@ export const HEADING_FONT_OPTIONS: FontOption[] = [
   /* Heading-only face: a display serif too characterful for body copy,
      there so a second serif theme does not have to share Lora. */
   { label: "Fraunces (serif)", family: "'Fraunces', serif", googleParam: "Fraunces:opsz,wght@9..144,300..700" },
+  /* Heading-only face: Inter's tight-tracked sibling, requested up to
+     900 because its job is heavy fintech display type — a weight the
+     body faces never load. */
+  { label: "Inter Tight", family: "'Inter Tight', sans-serif", googleParam: "Inter+Tight:wght@300..900" },
 ];
 
 export function googleFontHref(googleParam: string): string {

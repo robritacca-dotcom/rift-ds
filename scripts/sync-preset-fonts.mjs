@@ -44,6 +44,7 @@ const FAMILIES = {
   'IBM Plex Mono': 'IBM+Plex+Mono:wght@300;400;500;600;700',
   'IBM Plex Sans': 'IBM+Plex+Sans:wght@300..700',
   Inter: 'Inter:wght@300..700',
+  'Inter Tight': 'Inter+Tight:wght@300..900',
   Lora: 'Lora:wght@400..700',
   Montserrat: 'Montserrat:wght@300..700',
   Poppins: 'Poppins:wght@300;400;500;600;700',

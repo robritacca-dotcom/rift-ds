@@ -4,6 +4,7 @@ import React, { useState, useCallback, useEffect, useId, useRef } from 'react';
 import { useLayer } from '../../behaviors/useLayer';
 import { useFocusScope } from '../../behaviors/useFocusScope';
 import { useScrollLock } from '../../behaviors/useScrollLock';
+import { Avatar } from '../Avatar/Avatar';
 import './AppSidebar.css';
 import '../../fonts/material-symbols.css';
 
@@ -430,11 +431,16 @@ export const AppSidebar = ({
         {profile && (
         <div className={`${baseClass}__profile`}>
           <div className={`${baseClass}__profile-left`}>
-            <div className={`${baseClass}__avatar`}>
-              {profile.avatarUrl && (
-                <img src={profile.avatarUrl} alt={profile.name} />
-              )}
-            </div>
+            {/* Avatar owns the fallback ladder: the picture when there is
+                one, the person's initials when there is not, and the generic
+                glyph when there is neither. The hand-rolled box this replaced
+                drew an empty disc for every profile with no avatarUrl. */}
+            <Avatar
+              className={`${baseClass}__avatar`}
+              size="md"
+              name={profile.name}
+              src={profile.avatarUrl}
+            />
             <div className={`${baseClass}__profile-info`}>
               <span className={`${baseClass}__profile-name`}>{profile.name}</span>
               <span className={`${baseClass}__profile-email`}>{profile.email}</span>

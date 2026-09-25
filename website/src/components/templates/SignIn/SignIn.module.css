@@ -1,0 +1,272 @@
+/* Templates: the Tessera sign-in screen. Every colour, space, radius, and
+   type style is a semantic token; the only raw values are structural layout
+   sizes (the form's measure, the pane split, breakpoints), which pages own
+   everywhere else on the site. The shell is not the marketing dashboard's —
+   this screen has no app shell at all — but it stretches across the body's
+   inset the same way every template does, so it runs edge to edge. */
+
+.shell {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  height: calc(var(--layout-viewport-height, 100vh));
+  /* Stretch across the body's own padding (the family's pattern); the
+     primitives mirror the body's inset in globals.css. */
+  width: calc(100% + var(--primitive-padding-1000) * 2);
+  margin: calc(-1 * var(--primitive-padding-500))
+    calc(-1 * var(--primitive-padding-1000));
+  background-color: var(--color-bg-page-primary);
+  overflow: hidden;
+}
+
+/* ── The form pane ─────────────────────────────────────────────── */
+
+.formPane {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-500);
+  padding: var(--padding-500) var(--padding-500) var(--padding-400);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-200);
+}
+
+.wordmark {
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  letter-spacing: var(--font-title-body-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+/* The form is centred in the pane's remaining height, not the viewport's, so
+   the brand row and the footer keep their corners. */
+.formWell {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+}
+
+.panel,
+.confirmation {
+  width: 100%;
+  /* The form's measure — wide enough for a full-width provider button to read
+     as one line, narrow enough that the labels stay above their fields. */
+  max-width: 400px;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-400);
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-heading-1-family);
+  font-size: var(--font-heading-1-size);
+  font-weight: var(--font-heading-1-weight);
+  line-height: var(--font-heading-1-line-height);
+  letter-spacing: var(--font-heading-1-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.subhead {
+  margin: 0;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+}
+
+/* ── Providers ─────────────────────────────────────────────────── */
+
+.providers {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+}
+
+/* One species, one size, full width — so the three doors read as three
+   equal doors rather than a ranked list. The row is left-aligned rather than
+   centred, and that is the whole reason this rule exists: the three labels
+   are different lengths, so centring each button's icon-and-label group
+   leaves the three marks at three different x positions, and a stacked set
+   of one species should line its marks up in a column. */
+.providerButton {
+  width: 100%;
+  justify-content: flex-start;
+  padding-left: var(--padding-400);
+}
+
+/* Custom marks are not Material Symbols, so they size themselves off the
+   same scale token the glyphs consume rather than inheriting it. */
+.providerMark {
+  width: var(--icon-size-500);
+  height: var(--icon-size-500);
+  flex-shrink: 0;
+}
+
+/* ── The email path ────────────────────────────────────────────── */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+}
+
+.formRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-200);
+}
+
+.signup {
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+}
+
+.signup a {
+  color: var(--color-text-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.signup a:hover {
+  color: var(--color-action-primary-bg);
+}
+
+/* ── The post-sign-in state ────────────────────────────────────── */
+
+.confirmation {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-200);
+}
+
+.confirmationIcon {
+  --icon-size: var(--icon-size-800);
+  color: var(--color-action-primary-bg);
+}
+
+.confirmationTitle {
+  margin: 0;
+  font-family: var(--font-heading-2-family);
+  font-size: var(--font-heading-2-size);
+  font-weight: var(--font-heading-2-weight);
+  line-height: var(--font-heading-2-line-height);
+  letter-spacing: var(--font-heading-2-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.confirmation .subhead {
+  margin-bottom: var(--gap-100);
+}
+
+/* The tertiary Button keeps the same horizontal padding as every other
+   variant, so left-aligning it against a heading indents its label by that
+   padding. Pulling it back by the same amount puts the label in the text
+   column where the eye expects it — the standard tertiary-in-a-stack
+   correction, not a bespoke offset. */
+.backButton {
+  margin-left: calc(-1 * var(--padding-400));
+}
+
+/* ── The pane's floor ──────────────────────────────────────────── */
+
+.paneFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-300);
+}
+
+.legal {
+  margin: 0;
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-tertiary);
+}
+
+/* ── The ambient pane ──────────────────────────────────────────── */
+
+.artPane {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  margin: var(--padding-300) var(--padding-300) var(--padding-300) 0;
+  border-radius: var(--radius-600);
+  overflow: hidden;
+  background-color: var(--color-bg-container-primary);
+}
+
+.field {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ── Narrow layouts ────────────────────────────────────────────── */
+
+/* Below the split's own breakpoint the ambient pane drops out and the form
+   takes the screen — which is what a phone should get regardless. */
+@media (max-width: 900px) {
+  .artPane {
+    display: none;
+  }
+
+  .formPane {
+    padding: var(--padding-400) var(--padding-300) var(--padding-300);
+  }
+}
+
+/* The body's own inset shrinks twice on the way down (globals.css), and the
+   shell's negative margin has to shrink with it or it pulls the screen wider
+   than the viewport. Same two steps every template in the family takes. */
+@media (max-width: 959px) {
+  .shell {
+    width: calc(100% + var(--primitive-padding-500) * 2);
+    margin: calc(-1 * var(--primitive-padding-500));
+  }
+}
+
+@media (max-width: 600px) {
+  .shell {
+    width: calc(100% + var(--primitive-padding-400) * 2);
+    margin: calc(-1 * var(--primitive-padding-500))
+      calc(-1 * var(--primitive-padding-400));
+  }
+
+  .paneFooter {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    gap: var(--gap-200);
+  }
+}

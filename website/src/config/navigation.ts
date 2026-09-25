@@ -430,6 +430,11 @@ export const templatesSidebarLinks: NavLink[] = [
     label: "Sales pipeline",
     description: "A CRM companies view built around the wired data table",
   },
+  {
+    href: "/templates/sign-in",
+    label: "Sign in",
+    description: "A product front door: the providers beside an ambient panel",
+  },
 ];
 
 /* ============================================

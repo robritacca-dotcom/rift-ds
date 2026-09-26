@@ -901,3 +901,11 @@
   transition: none;
 }
 
+
+.logoWordmark {
+  /* Fills with currentColor, so it takes .logo's --color-text-primary and
+     re-themes with everything else. Its own box is sized by the component
+     from the cap height, which is why there is no height here. */
+  display: block;
+  flex-shrink: 0;
+}

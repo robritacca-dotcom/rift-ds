@@ -1,7 +1,7 @@
 {
   "name": "rift-ds",
   "private": true,
-  "version": "0.21.0",
+  "version": "1.0.0",
   "description": "An AI-ready React design system: accessible components on composable tokens, light/dark theming, and CSS-variable overrides.",
   "license": "MIT",
   "repository": {

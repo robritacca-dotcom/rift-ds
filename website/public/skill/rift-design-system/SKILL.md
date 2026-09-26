@@ -5,7 +5,7 @@ description: Build React UI with rift-ds. Use when installing the package, compo
 
 # Using rift-ds
 
-Generated from the library's registries at version 0.21.0, alongside every deploy of https://rift-ds.com. The library is 133 React components across 11 categories, themed by 255 semantic design tokens, published to npm.
+Generated from the library's registries at version 1.0.0, alongside every deploy of https://rift-ds.com. The library is 133 React components across 11 categories, themed by 255 semantic design tokens, published to npm.
 
 ## Install
 

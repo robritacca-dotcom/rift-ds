@@ -2,7 +2,7 @@
 
 Temporary notification with status variants, auto-dismiss, and stacking via ToastProvider.
 
-Generated from the rift-ds registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.0.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: feedback
 - Import: `import { Toast } from 'rift-ds';`

@@ -61,20 +61,23 @@ const SOURCES = [
     scope: /followups:\s*\[([\s\S]*?)\]/g,
     pattern: BARE,
   },
-  /* The template screens' mock assistants (TemplateAssistant) render their
-     CHAT_SUGGESTIONS through the same non-wrapping chip row, with no runtime
-     filter in front of them — written copy, held here like the playground's.
-     The list derives from the templates directory so a new screen is covered
-     the day it lands; the scope keeps the check off the screens' other
-     label: strings (nav items, buttons), which are not chips, and is
-     optional because a template without a mock assistant has no chips. */
+  /* The template screens' chips, through the same non-wrapping chip row with
+     no runtime filter in front of them — written copy, held here like the
+     playground's. Two names, because a screen reaches that row two ways: a
+     mock TemplateAssistant takes CHAT_SUGGESTIONS, and a screen that hosts
+     the real widget hands it CHAT_STARTERS (the payroll console). Scoping to
+     one of them left the other silently unchecked. The list derives from the
+     templates directory so a new screen is covered the day it lands; the
+     scope keeps the check off the screens' other label: strings (nav items,
+     buttons), which are not chips, and is optional because a template with
+     no assistant at all has no chips. */
   ...readdirSync(join(dirname(fileURLToPath(import.meta.url)), '..', 'website', 'src', 'components', 'templates'), {
     withFileTypes: true,
   })
     .filter((entry) => entry.isDirectory() && entry.name !== 'TemplateAssistant')
     .map((entry) => ({
       path: join('website', 'src', 'components', 'templates', entry.name, `${entry.name}.tsx`),
-      scope: /const CHAT_SUGGESTIONS = \[([\s\S]*?)\];/g,
+      scope: /const CHAT_(?:SUGGESTIONS|STARTERS) = \[([\s\S]*?)\];/g,
       optional: true,
     })),
 ];

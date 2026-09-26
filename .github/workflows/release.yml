@@ -18,6 +18,15 @@ name: Release
 #   - A dry run never authenticates, so it cannot prove OIDC works. The only
 #     proof is a real publish.
 #
+# BOOTSTRAP EXCEPTION: a trusted publisher can only be attached to a package
+# that already EXISTS. npm's own error is explicit — the OIDC exchange returns
+# `404 ... OIDC token exchange error - package not found` — so a package's
+# first-ever publish cannot use OIDC, whatever the registration says. That is
+# what the `bootstrap_token` input below is for: it exists solely to create a
+# name, once, and is off by default. Everything after the first publish uses
+# OIDC and needs no secret. (Hit on 2026-09-26 renaming to rift-ds, whose
+# first publish had no package page to register against.)
+#
 # To cut a release, follow the `release` skill (.claude/skills/release):
 # bump PACKAGE_VERSION in scripts/package-manifest.mjs, dry-run, run for
 # real, then tag the published commit.
@@ -90,6 +99,10 @@ on:
         description: "Dry run — build and smoke-test, skip the actual npm publish"
         type: boolean
         default: true
+      bootstrap_token:
+        description: "FIRST PUBLISH ONLY — authenticate with NPM_TOKEN because the package does not exist yet and so cannot have a trusted publisher"
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -132,6 +145,22 @@ jobs:
       # (`POST .../oidc/token/exchange/package/...`), which is the only visible
       # evidence that Trusted Publishing actually authenticated. Without it an
       # auth failure surfaces only as a misleading E404 or ENEEDAUTH.
+      # The token is written to $HOME/.npmrc, never to dist/ — npm excludes
+      # .npmrc from tarballs, but a credential inside the directory being
+      # packed is not a thing to rely on exclusion for. Note this deliberately
+      # does NOT use setup-node's registry-url, for the reason above: that
+      # path would break OIDC for every later release.
+      - name: Authenticate with a token (first publish only)
+        if: ${{ !inputs.dry_run && inputs.bootstrap_token }}
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          if [ -z "$NPM_TOKEN" ]; then
+            echo "bootstrap_token was set but the NPM_TOKEN secret is empty." >&2
+            exit 1
+          fi
+          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > "$HOME/.npmrc"
+          echo "Wrote token auth to ~/.npmrc — OIDC will be skipped for this run."
       - name: Publish to npm
         if: ${{ !inputs.dry_run }}
         working-directory: dist

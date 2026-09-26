@@ -52,6 +52,7 @@ export function SiteChat({
   threads,
   tabs,
   aside,
+  contextLabel,
 }: {
   /** Show the expand toggle. The bench's mobile stage is always a takeover, so it hides there. */
   fullscreenEnabled?: boolean;
@@ -104,6 +105,11 @@ export function SiteChat({
       in and how to close the sheet. Playground furniture like the threads
       rail — the site's own chat passes nothing here. */
   aside?: (ctx: { overlay: boolean; close: () => void }) => ReactNode;
+  /** Overrides the composer's context note, which normally names the site
+      page the visitor is reading. `null` removes it: a staged product's chat
+      is not looking at one of this site's pages, and saying so breaks the
+      fiction. A string names something else. */
+  contextLabel?: string | null;
 }) {
   const {
     turns,
@@ -166,9 +172,12 @@ export function SiteChat({
      page-summaries data first (it covers essays, case studies and
      components) with the nav label as the fallback. A route neither knows
      (the playground, labs) simply shows no chip. Non-interactive v1. */
-  const pageName = pathname
+  const routeName = pathname
     ? getPageSummary(pathname)?.title ?? getNavLabel(pathname)
     : undefined;
+  /* A caller's override wins outright, `null` included — a staged product's
+     chat must be able to say nothing rather than name this site's page. */
+  const pageName = contextLabel !== undefined ? contextLabel : routeName;
 
   /* The text field is ready to type into whenever a conversation can start:
      on open, on new chat, and again after every send. The host restores
@@ -225,16 +234,16 @@ export function SiteChat({
      until the card is genuinely wide. */
   const hasRails = Boolean(threads || aside);
   const [threadsOpen, setThreadsOpen] = useState(false);
-  /* The agent panel keeps one intent per mode, because the two mean
-     different things: the inline rail is furniture that rests open and is
-     dismissed, the sheet is an overlay that rests closed and is raised.
-     One flag would either auto-open a sheet over the conversation or
-     leave a wide card with an empty trailing edge. */
-  const [asideRailOpen, setAsideRailOpen] = useState(true);
-  const [asideSheetOpen, setAsideSheetOpen] = useState(false);
+  /* One piece of state for the agent panel, resting closed: it is the same
+     panel in either seat, and it only ever opens because someone asked. The
+     seat decides how it is drawn — an inline rail on a wide widget, a sheet
+     on a narrow one — never whether it is up. */
+  const [asideOpen, setAsideOpen] = useState(false);
   const threadsHostRef = useRef<HTMLDivElement | null>(null);
   const [threadsWide, setThreadsWide] = useState(false);
   const [asideWide, setAsideWide] = useState(false);
+  /* Only the crossing matters, not every measurement. */
+  const wasAsideWideRef = useRef(false);
   useEffect(() => {
     if (!hasRails) return;
     const host = threadsHostRef.current;
@@ -248,7 +257,13 @@ export function SiteChat({
       /* Growing into rail territory retires the sheet, so it cannot pop
          back open on a later trip below the breakpoint. */
       if (wide) setThreadsOpen(false);
-      if (asideRoom) setAsideSheetOpen(false);
+      /* Leaving rail territory closes the agent panel rather than handing
+         it to the other seat: shrinking out of a takeover would otherwise
+         turn an inline rail into a sheet over the conversation, which is
+         not what the visitor asked for when they opened it. Growing back in
+         does not reopen it — the panel opens on a click and nothing else. */
+      if (wasAsideWideRef.current && !asideRoom) setAsideOpen(false);
+      wasAsideWideRef.current = asideRoom;
     };
     measure();
     const observer = new ResizeObserver(measure);
@@ -261,15 +276,9 @@ export function SiteChat({
      so it drives the brand toggle, the header button and the Escape order
      alike. */
   const asideId = useId();
-  const asideShown = Boolean(aside) && (asideWide ? asideRailOpen : asideSheetOpen);
-  const openAside = () => {
-    if (asideWide) setAsideRailOpen(true);
-    else setAsideSheetOpen(true);
-  };
-  const closeAside = () => {
-    if (asideWide) setAsideRailOpen(false);
-    else setAsideSheetOpen(false);
-  };
+  const asideShown = Boolean(aside) && asideOpen;
+  const closeAside = () => setAsideOpen(false);
+  const toggleAside = () => setAsideOpen((open) => !open);
 
   /* The starters sit in one of two places: under the centred composer on
      the desktop welcome, directly above the bottom-pinned one on a phone.
@@ -316,17 +325,20 @@ export function SiteChat({
           }}
         />
       )}
-      {/* The way in, and only that: once the panel is up it carries its
-          own chevron out, and a second control that also closed it would
-          be the same action twice in the same row. */}
-      {aside && !asideShown && (
+      {/* The agent toggle holds its seat whether the panel is up or not, and
+          says which: open, it fills with the system's neutral selected mark
+          rather than leaving the row. A control that vanishes when it is on
+          is a control nobody learns, and the state is the point here. */}
+      {aside && (
         <CircularButton
           icon="smart_toy"
           variant="tertiary"
-          ariaLabel="Show the agent panel"
+          className={asideShown ? styles.agentToggleOn : undefined}
+          ariaLabel={asideShown ? "Hide the agent panel" : "Show the agent panel"}
           tooltipPosition="bottom"
-          aria-expanded={false}
-          onClick={openAside}
+          aria-expanded={asideShown}
+          aria-controls={asideShown ? asideId : undefined}
+          onClick={toggleAside}
         />
       )}
       {fullscreenEnabled && (
@@ -353,13 +365,16 @@ export function SiteChat({
       className={`${styles.chat} ${threads ? styles.chatWithThreads : ""}`}
       data-compact={compact || undefined}
       data-phone={phone || undefined}
+      /* The header's controls have moved out to the card's edge, so the row
+         has to be told to keep the height they were giving it. */
+      data-lifted-actions={(asideShown && asideWide) || undefined}
       /* Escape steps out of the takeover first; the host's own Escape
          handling (closing the panel) takes over once back in panel view. */
       onKeyDown={(e) => {
         /* A rail sheet is the topmost layer, so Escape settles it before
            the takeover or the host panel hear anything — one layer per
            press, whichever of the two is standing. */
-        if (e.key === "Escape" && (threadsOpen || asideSheetOpen)) {
+        if (e.key === "Escape" && (threadsOpen || (asideShown && !asideWide))) {
           e.stopPropagation();
           if (threadsOpen) closeThreads();
           else closeAside();
@@ -562,7 +577,7 @@ export function SiteChat({
       {asideShown && asideWide && (
         <div className={styles.railActions}>{headerActions}</div>
       )}
-      {aside && asideWide && asideRailOpen && (
+      {aside && asideWide && asideOpen && (
         <div className={styles.asideRail} id={asideId}>
           {aside({ overlay: false, close: closeAside })}
         </div>
@@ -588,14 +603,14 @@ export function SiteChat({
       {aside && !asideWide && (
         <div
           className={`${styles.asideOverlay} ${
-            asideSheetOpen ? styles.asideOverlayOpen : ""
+            asideOpen ? styles.asideOverlayOpen : ""
           }`}
         >
           <button
             type="button"
             className={styles.threadsScrim}
             aria-label="Close the agent panel"
-            tabIndex={asideSheetOpen ? 0 : -1}
+            tabIndex={asideOpen ? 0 : -1}
             onClick={closeAside}
           />
           <div className={styles.asideSheet} id={asideId}>

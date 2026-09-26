@@ -35,6 +35,15 @@
   padding-inline: var(--sitechat-inset);
 }
 
+/* With the controls lifted to the card's edge, the header row has nothing
+   40px tall left in it and would collapse to the title's own line, jerking
+   the brand upward the moment the agent panel opens. The row holds the
+   height its buttons were giving it: the control plus the header's own
+   block padding either side. */
+.chat[data-lifted-actions] :global(.ds-chat-header) {
+  min-height: calc(40px + var(--padding-150) * 2);
+}
+
 /* The close button hugs the panel's clipped right edge, so its centred
    bottom tooltip would lose its right cap to overflow: hidden. End-align
    the last header tooltip to the button and walk the arrow back to the
@@ -761,15 +770,26 @@
 /* ---------- the agent rail (the trailing edge's mirror of the threads
    rail) ---------- */
 
+/* The agent rail floats rather than butting against the widget's edges: its
+   own rounded card, inset on three sides, one step up the container ramp
+   from the surface behind it. That inset is what puts the card's controls in
+   the clear above the panel instead of on its shoulder — the top margin is
+   the header row's exact height (the chat column's top padding, plus the
+   header's own block padding either side of a 40px control), so the panel
+   begins where that row ends. */
 .asideRail {
   flex: none;
   display: flex;
   min-height: 0;
-  border-left: var(--border-025) solid var(--color-bg-container-border);
-  /* Seat the rail's collapse chevron on the same line as the card's own
-     controls opposite it: the chat column's top padding plus the header
-     row's block padding, which is where those buttons start. */
-  --ds-agent-rail-collapse-top: calc(var(--padding-200) + var(--padding-150));
+  margin: calc(var(--padding-200) + var(--padding-150) * 2 + 40px)
+    var(--padding-500) var(--padding-500) 0;
+  /* No fill of its own: the panel sits on the widget's surface like the
+     conversation beside it, and the hairline and radius are what make it a
+     bounded region. A step up the container ramp read as a second, lighter
+     card floating on the first. */
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
+  overflow: hidden;
 }
 
 /* The widget's controls, lifted out of the chat header to the card's own
@@ -780,7 +800,9 @@
 .railActions {
   position: absolute;
   top: calc(var(--padding-200) + var(--padding-150));
-  right: var(--padding-300);
+  /* The floating rail's own right inset, so the cluster sits over the card
+     rather than beside it. */
+  right: var(--padding-500);
   z-index: 6;
   display: flex;
   align-items: center;
@@ -866,4 +888,14 @@
   display: flex;
   flex: 1;
   min-height: 0;
+}
+
+/* The agent toggle's on-state. The panel it opens carries no fill of its
+   own, so the pressed button cannot borrow one: it takes the passive wash
+   instead — the same step the tertiary variant reaches on hover, held down
+   while the panel is up. Paired with the library class so it beats the
+   variant's resting background whatever order the stylesheets load in. */
+:global(.ds-circular-button).agentToggleOn,
+:global(.ds-circular-button).agentToggleOn:hover {
+  background-color: var(--color-action-passive-bg-hover);
 }

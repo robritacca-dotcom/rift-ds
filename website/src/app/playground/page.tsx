@@ -178,9 +178,10 @@ export default function PlaygroundPage() {
   const [railPins, setRailPins] = useState(false);
   const [railDetails, setRailDetails] = useState(false);
   const [railTabs, setRailTabs] = useState(false);
-  /* The agent rail, on by default because it is the trailing edge's whole
-     content — off, that side of the card is simply not there to look at. */
-  const [agentRail, setAgentRail] = useState(true);
+  /* The agent rail, off with the rest of the staged furniture: the stage
+     opens on the plain chat and every extra is something to switch on and
+     look at. */
+  const [agentRail, setAgentRail] = useState(false);
 
   /* ---------- levers ---------- */
   const [preset, setPreset] = useState("default");

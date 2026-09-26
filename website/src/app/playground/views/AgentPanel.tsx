@@ -127,9 +127,6 @@ export interface AgentPanelProps {
   /** The rail is in the bottom sheet, where it fills the width instead of
       holding its own column. */
   overlay: boolean;
-  /** Collapses the panel: the inline rail leaves, the sheet drops. The
-      header's agent button is what brings it back. */
-  onCollapse: () => void;
 }
 
 /** The playground's staged agent rail: the library component filled with
@@ -139,13 +136,10 @@ export default function AgentPanel({
   activeTab,
   onTabChange,
   overlay,
-  onCollapse,
 }: AgentPanelProps) {
   return (
     <AgentRail
       className={overlay ? styles.railInSheet : undefined}
-      onCollapse={onCollapse}
-      collapseLabel={`Collapse the ${name} panel`}
       profile={{
         name,
         status: "Connected",

@@ -779,13 +779,12 @@ export default function ChatView({
              mode by its measured width, so the render prop only shapes the
              panel for the sheet. */
           simControls && agentRail
-            ? ({ overlay, close }) => (
+            ? ({ overlay }) => (
                 <AgentPanel
                   name={title}
                   activeTab={agentTab}
                   onTabChange={setAgentTab}
                   overlay={overlay}
-                  onCollapse={close}
                 />
               )
             : undefined

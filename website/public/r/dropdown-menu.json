@@ -5,7 +5,7 @@
   "title": "Dropdown menu",
   "description": "Contextual menu with sections, sub-menus, keyboard shortcuts, and inset-gap hover styling.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json"
+    "https://rift-ds.com/r/base.json"
   ],
   "files": [
     {

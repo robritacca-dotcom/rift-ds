@@ -2,13 +2,13 @@
 
 Text input with label, placeholder, left and right icons, helper text, and error states.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine-delta.vercel.app/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: forms
-- Import: `import { Input } from '@robr0/design-system';`
-- Deep import: `import { Input } from '@robr0/design-system/components/Input/Input';`
+- Import: `import { Input } from 'rift-ds';`
+- Deep import: `import { Input } from 'rift-ds/components/Input/Input';`
 - Rendering: client component (declares 'use client')
-- Live docs: https://dragonspine-delta.vercel.app/components/input
+- Live docs: https://rift-ds.com/components/input
 
 ## Input props
 

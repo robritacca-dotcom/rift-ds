@@ -6,13 +6,13 @@ import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import { getSidebarLinks, foundationsSidebarLinks } from "@/config/navigation";
 import styles from "./page.module.css";
-import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
-import { Stat } from "@robr0/design-system/components/Stat/Stat";
-import { Table } from "@robr0/design-system/components/Table/Table";
-import { Button } from "@robr0/design-system/components/Button/Button";
-import { Dialog } from "@robr0/design-system/components/Dialog/Dialog";
-import { Input } from "@robr0/design-system/components/Input/Input";
-import { COMPONENT_COUNT } from "@robr0/design-system/components/registry";
+import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
+import { Stat } from "rift-ds/components/Stat/Stat";
+import { Table } from "rift-ds/components/Table/Table";
+import { Button } from "rift-ds/components/Button/Button";
+import { Dialog } from "rift-ds/components/Dialog/Dialog";
+import { Input } from "rift-ds/components/Input/Input";
+import { COMPONENT_COUNT } from "rift-ds/components/registry";
 import {
   ACCESSIBLE_NAME_COUNT,
   ARIA_COMPONENT_COUNT,

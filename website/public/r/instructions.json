@@ -5,7 +5,7 @@
   "title": "Instructions",
   "description": "Step-by-step guidance with numbered badges, connecting lines, and horizontal layout.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json"
+    "https://rift-ds.com/r/base.json"
   ],
   "files": [
     {

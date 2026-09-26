@@ -19,9 +19,9 @@
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type React from "react";
-import { Button } from "@robr0/design-system/components/Button/Button";
-import { CircularButton } from "@robr0/design-system/components/CircularButton/CircularButton";
-import { SegmentedControl } from "@robr0/design-system/components/SegmentedControl/SegmentedControl";
+import { Button } from "rift-ds/components/Button/Button";
+import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
 import { templatesSidebarLinks } from "@/config/navigation";
 import styles from "./page.module.css";
 

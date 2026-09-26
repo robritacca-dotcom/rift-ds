@@ -23,7 +23,7 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { PACKAGE_NAME, PACKAGE_VERSION, sourceExports } from './package-manifest.mjs';
-import { RETIRED_PACKAGE_NAMES } from './brand.mjs';
+import { RETIRED_HOSTS, RETIRED_PACKAGE_NAMES } from './brand.mjs';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const pkg = JSON.parse(readFileSync(join(repoRoot, 'package.json'), 'utf8'));
@@ -50,11 +50,16 @@ if (!websitePkg.dependencies?.[PACKAGE_NAME]) {
   );
 }
 
-/* No retired package name may survive anywhere in source. Empty list =
-   no scan; on rename day the old name goes into RETIRED_PACKAGE_NAMES
-   (brand.mjs) and this check turns every straggler into a build error
-   naming the file. brand.mjs itself is exempt — it holds the list. */
-if (RETIRED_PACKAGE_NAMES.length > 0) {
+/* No retired identity may survive anywhere in source: neither an old
+   package name nor an old host. Empty lists = no scan; on rename day the
+   old values go into RETIRED_PACKAGE_NAMES / RETIRED_HOSTS (brand.mjs)
+   and this check turns every straggler into a build error naming the
+   file. brand.mjs itself is exempt — it holds the lists. */
+const RETIRED = [
+  ...RETIRED_PACKAGE_NAMES.map((name) => ({ kind: 'package name', text: name })),
+  ...RETIRED_HOSTS.map((host) => ({ kind: 'host', text: host })),
+];
+if (RETIRED.length > 0) {
   const SKIP_DIRS = new Set([
     'node_modules',
     '.git',
@@ -62,6 +67,10 @@ if (RETIRED_PACKAGE_NAMES.length > 0) {
     'dist',
     'storybook-static',
     'coverage',
+    // A sibling checkout under .claude/worktrees is on its own branch;
+    // its stragglers are not this branch's to report (and the sweep
+    // deliberately does not enter it either).
+    'worktrees',
   ]);
   const SKIP_FILES = new Set(['package-lock.json', 'brand.mjs']);
   const TEXT_EXT = /\.(ts|tsx|mjs|js|jsx|json|md|mdx|css|ya?ml|txt)$/;
@@ -74,11 +83,13 @@ if (RETIRED_PACKAGE_NAMES.length > 0) {
       }
       if (SKIP_FILES.has(entry) || !TEXT_EXT.test(entry)) continue;
       const text = readFileSync(path, 'utf8');
-      for (const retired of RETIRED_PACKAGE_NAMES) {
+      for (const { kind, text: retired } of RETIRED) {
         if (text.includes(retired)) {
           errors.push(
-            `${relative(repoRoot, path)} still mentions retired package name "${retired}" — ` +
-              `run \`node scripts/rename-package.mjs\`, then regenerate (npm run validate-registry)`
+            `${relative(repoRoot, path)} still mentions retired ${kind} "${retired}" — ` +
+              (kind === 'host'
+                ? `replace it with the current value from scripts/brand.mjs, then regenerate (npm run validate-registry)`
+                : `run \`node scripts/rename-package.mjs\`, then regenerate (npm run validate-registry)`)
           );
         }
       }

@@ -1,4 +1,4 @@
-import { Button } from "@robr0/design-system/components/Button/Button";
+import { Button } from "rift-ds/components/Button/Button";
 import SidebarLinks from "./SidebarLinks";
 import SidebarGroups from "./SidebarGroups";
 import styles from "./Sidebar.module.css";

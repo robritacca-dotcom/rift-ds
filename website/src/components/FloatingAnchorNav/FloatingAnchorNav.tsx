@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AnchorNav } from "@robr0/design-system/components/AnchorNav/AnchorNav";
-import type { AnchorNavItem } from "@robr0/design-system/components/AnchorNav/AnchorNav";
+import { AnchorNav } from "rift-ds/components/AnchorNav/AnchorNav";
+import type { AnchorNavItem } from "rift-ds/components/AnchorNav/AnchorNav";
 import styles from "./FloatingAnchorNav.module.css";
 
 /* The site's mount for AnchorNav's floating variant: fixed to the right

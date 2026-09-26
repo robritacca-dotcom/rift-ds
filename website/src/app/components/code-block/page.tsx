@@ -4,13 +4,13 @@ import React from "react";
 import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
-import { CodeBlock } from "@robr0/design-system/components/CodeBlock/CodeBlock";
-import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
+import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
+import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
-const USAGE_SNIPPET = `import { Chip } from '@robr0/design-system/components/Chip/Chip';
+const USAGE_SNIPPET = `import { Chip } from 'rift-ds/components/Chip/Chip';
 
 <Chip label="Filter" icon="check" selected onClick={toggle} />`;
 

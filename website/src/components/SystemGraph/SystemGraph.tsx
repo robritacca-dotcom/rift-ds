@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Button } from "@robr0/design-system/components/Button/Button";
-import { Chip } from "@robr0/design-system/components/Chip/Chip";
-import { CodeBlock } from "@robr0/design-system/components/CodeBlock/CodeBlock";
-import { Input } from "@robr0/design-system/components/Input/Input";
-import { Panel } from "@robr0/design-system/components/Panel/Panel";
+import { Button } from "rift-ds/components/Button/Button";
+import { Chip } from "rift-ds/components/Chip/Chip";
+import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
+import { Input } from "rift-ds/components/Input/Input";
+import { Panel } from "rift-ds/components/Panel/Panel";
 import {
   GRAPH_EDGE_COUNT,
   GRAPH_NODE_COUNT,

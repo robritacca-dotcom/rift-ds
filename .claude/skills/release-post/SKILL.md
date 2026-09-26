@@ -1,6 +1,6 @@
 ---
 name: release-post
-description: Produce the X announcement for an npm release of @robr0/design-system — a bento release card rendered to a paste-ready PNG, plus post copy in the project's voice. Use when asked for a release post, a release image, or announcement copy for a version.
+description: Produce the X announcement for an npm release of rift-ds — a bento release card rendered to a paste-ready PNG, plus post copy in the project's voice. Use when asked for a release post, a release image, or announcement copy for a version.
 icon: campaign
 displayDescription: "Turns a shipped release into its X announcement: a bento-grid release card drawn in the system's own dark theme, every colour and type value lifted from the live token CSS rather than remembered, rendered headlessly to a paste-ready PNG at twice the post size. The copy comes from the tag and the commits, not from memory, and holds to the content guide: sentence case, no emoji, neutral, and inside the character limit."
 invoke: ["make the release post","release image for [version]","announcement copy for the release"]

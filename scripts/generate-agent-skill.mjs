@@ -3,7 +3,7 @@
  * generate-agent-skill.mjs
  *
  * Builds the consumer agent skill — a SKILL.md plus a reference catalog that
- * a consumer of @robr0/design-system can drop into their own .claude/skills/
+ * a consumer of rift-ds can drop into their own .claude/skills/
  * so their coding agent knows the library every session. Served from
  * website/public/skill/<SKILL_NAME>/ (the folder name lives in
  * scripts/brand.mjs; the blueprints precedent:

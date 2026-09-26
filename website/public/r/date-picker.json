@@ -5,7 +5,7 @@
   "title": "Date picker",
   "description": "Inline calendar with month navigation, day selection, and today indicator.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json"
+    "https://rift-ds.com/r/base.json"
   ],
   "files": [
     {

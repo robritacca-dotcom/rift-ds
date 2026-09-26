@@ -1,15 +1,15 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
-import "@robr0/design-system/tokens/tokens.css";
+import "rift-ds/tokens/tokens.css";
 // Every generated data-brand preset theme (src/tokens/presets/): with the
 // bundle loaded site-wide, setting data-brand="<id>" on <html> rethemes
 // every page immediately, light and dark, with zero runtime JS.
-import "@robr0/design-system/tokens/presets/presets.css";
+import "rift-ds/tokens/presets/presets.css";
 // Single source of the Material Symbols base styles and icon-size scale.
 // Imported explicitly rather than relying on it arriving incidentally through
 // a component import, so pages that use raw .material-symbols-rounded spans
 // (e.g. /foundations/icons) are styled deterministically.
-import "@robr0/design-system/fonts/material-symbols.css";
+import "rift-ds/fonts/material-symbols.css";
 import { Nunito_Sans } from "next/font/google";
 import "./globals.css";
 import { buildDesignSystemJsonLd, buildWebsiteJsonLd, SITE_URL } from "@/lib/structuredData";

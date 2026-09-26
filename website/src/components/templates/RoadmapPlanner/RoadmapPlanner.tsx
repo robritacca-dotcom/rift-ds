@@ -22,30 +22,30 @@
  */
 
 import React from "react";
-import { AiButton } from "@robr0/design-system/components/AiButton/AiButton";
+import { AiButton } from "rift-ds/components/AiButton/AiButton";
 import {
   AppSidebar,
   type AppSidebarSection,
-} from "@robr0/design-system/components/AppSidebar/AppSidebar";
-import { Avatar } from "@robr0/design-system/components/Avatar/Avatar";
-import { Badge } from "@robr0/design-system/components/Badge/Badge";
-import { Button } from "@robr0/design-system/components/Button/Button";
-import { CircularButton } from "@robr0/design-system/components/CircularButton/CircularButton";
-import { Divider } from "@robr0/design-system/components/Divider/Divider";
+} from "rift-ds/components/AppSidebar/AppSidebar";
+import { Avatar } from "rift-ds/components/Avatar/Avatar";
+import { Badge } from "rift-ds/components/Badge/Badge";
+import { Button } from "rift-ds/components/Button/Button";
+import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { Divider } from "rift-ds/components/Divider/Divider";
 import {
   Dropdown,
   type DropdownOption,
-} from "@robr0/design-system/components/Dropdown/Dropdown";
+} from "rift-ds/components/Dropdown/Dropdown";
 import {
   GanttChart,
   type GanttChartColor,
   type GanttChartItem,
   type GanttChartMilestone,
-} from "@robr0/design-system/components/GanttChart/GanttChart";
-import { Input } from "@robr0/design-system/components/Input/Input";
-import { Kbd } from "@robr0/design-system/components/Kbd/Kbd";
-import { Panel } from "@robr0/design-system/components/Panel/Panel";
-import { ProgressBar } from "@robr0/design-system/components/ProgressBar/ProgressBar";
+} from "rift-ds/components/GanttChart/GanttChart";
+import { Input } from "rift-ds/components/Input/Input";
+import { Kbd } from "rift-ds/components/Kbd/Kbd";
+import { Panel } from "rift-ds/components/Panel/Panel";
+import { ProgressBar } from "rift-ds/components/ProgressBar/ProgressBar";
 import SidebarSwitchers from "../SidebarSwitchers/SidebarSwitchers";
 import TemplateAssistant from "../TemplateAssistant/TemplateAssistant";
 import styles from "./RoadmapPlanner.module.css";

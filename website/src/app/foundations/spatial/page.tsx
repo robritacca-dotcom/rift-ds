@@ -4,13 +4,13 @@ import { useState } from "react";
 import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import Sidebar from "../../../components/Sidebar/Sidebar";
-import { SpacingSwatch } from "@robr0/design-system/components/SpacingSwatch/SpacingSwatch";
-import type { SpacingSwatchVariant } from "@robr0/design-system/components/SpacingSwatch/SpacingSwatch";
+import { SpacingSwatch } from "rift-ds/components/SpacingSwatch/SpacingSwatch";
+import type { SpacingSwatchVariant } from "rift-ds/components/SpacingSwatch/SpacingSwatch";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import { getSidebarLinks, foundationsSidebarLinks } from "@/config/navigation";
 import styles from "./page.module.css";
-import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
-import { Tabs } from "@robr0/design-system/components/Tabs/Tabs";
+import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
+import { Tabs } from "rift-ds/components/Tabs/Tabs";
 import { FIGMA_FILE_URL } from "@/config/brand.generated";
 
 const { sidebarLinks } = getSidebarLinks(foundationsSidebarLinks, "/foundations/spatial");

@@ -5,7 +5,7 @@
   "title": "Contact card",
   "description": "Linked contact method with icon, label, and value.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json"
+    "https://rift-ds.com/r/base.json"
   ],
   "files": [
     {

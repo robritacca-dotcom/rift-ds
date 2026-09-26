@@ -5,7 +5,7 @@
   "title": "Animated number",
   "description": "A number that counts to its value: count-up on mount, eased tweens on change, tabular digits that never jitter.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json"
+    "https://rift-ds.com/r/base.json"
   ],
   "files": [
     {

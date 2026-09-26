@@ -2,13 +2,13 @@
 
 Phases and tasks as bars on a shared timeline, with milestones, progress, and a today rule.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine-delta.vercel.app/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: charts
-- Import: `import { GanttChart } from '@robr0/design-system';`
-- Deep import: `import { GanttChart } from '@robr0/design-system/components/GanttChart/GanttChart';`
+- Import: `import { GanttChart } from 'rift-ds';`
+- Deep import: `import { GanttChart } from 'rift-ds/components/GanttChart/GanttChart';`
 - Rendering: server-renderable (no 'use client')
-- Live docs: https://dragonspine-delta.vercel.app/components/gantt-chart
+- Live docs: https://rift-ds.com/components/gantt-chart
 
 ## GanttChart props
 

@@ -25,15 +25,15 @@
 import { createMcpHandler } from "mcp-handler";
 import { z } from "zod";
 
-import pkg from "@robr0/design-system/package.json";
+import pkg from "rift-ds/package.json";
 import {
   COMPONENT_COUNT,
   componentCategoryMetadata,
-} from "@robr0/design-system/components/registry";
+} from "rift-ds/components/registry";
 import {
   TOKEN_COUNT,
   TOKEN_COUNTS,
-} from "@robr0/design-system/tokens/registry";
+} from "rift-ds/tokens/registry";
 
 import {
   BRAND_NAME,
@@ -73,7 +73,7 @@ const handler = createMcpHandler(
       {
         title: "List components",
         description:
-          `List the ${COMPONENT_COUNT} public components in @robr0/design-system, ` +
+          `List the ${COMPONENT_COUNT} public components in rift-ds, ` +
           `with category, description and docs URL. Filter with the optional ` +
           `category argument. Use get_component for a component's full prop API.`,
         inputSchema: z.object({
@@ -172,7 +172,7 @@ const handler = createMcpHandler(
       {
         title: "Get install and theming setup",
         description:
-          "How to install @robr0/design-system and wire up tokens, themes and " +
+          "How to install rift-ds and wire up tokens, themes and " +
           "fonts in a consumer app.",
         inputSchema: z.object({}),
       },

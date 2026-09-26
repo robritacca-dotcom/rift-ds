@@ -2,13 +2,13 @@
 
 import { useState } from "react";
 import styles from "../page.module.css";
-import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
-import { Button } from "@robr0/design-system/components/Button/Button";
-import { CircularButton } from "@robr0/design-system/components/CircularButton/CircularButton";
-import { Dialog } from "@robr0/design-system/components/Dialog/Dialog";
-import { DropdownMenu } from "@robr0/design-system/components/DropdownMenu/DropdownMenu";
-import { Popover } from "@robr0/design-system/components/Popover/Popover";
-import { Tooltip } from "@robr0/design-system/components/Tooltip/Tooltip";
+import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
+import { Button } from "rift-ds/components/Button/Button";
+import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { Dialog } from "rift-ds/components/Dialog/Dialog";
+import { DropdownMenu } from "rift-ds/components/DropdownMenu/DropdownMenu";
+import { Popover } from "rift-ds/components/Popover/Popover";
+import { Tooltip } from "rift-ds/components/Tooltip/Tooltip";
 
 const MENU_ITEMS = [
   { label: "Edit", icon: "edit" },

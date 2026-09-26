@@ -9,11 +9,11 @@ import { getSidebarLinks, docsSidebarLinks } from "@/config/navigation";
 import { THEME_PRESETS, THEME_SELECTOR_ORDER } from "@/lib/theme/presets";
 import styles from "./page.module.css";
 import FloatingAnchorNav from "@/components/FloatingAnchorNav/FloatingAnchorNav";
-import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
-import { CodeBlock } from "@robr0/design-system/components/CodeBlock/CodeBlock";
-import { Button } from "@robr0/design-system/components/Button/Button";
+import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
+import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
+import { Button } from "rift-ds/components/Button/Button";
 import { OpenChatLink } from "./OpenChatLink";
-import { componentMetadata } from "@robr0/design-system/components/registry";
+import { componentMetadata } from "rift-ds/components/registry";
 import { MCP_CLIENTS } from "@/lib/mcp-clients";
 import { MCP_TOOLS } from "@/lib/mcp-tools";
 import { SITE_URL } from "@/lib/structuredData";
@@ -40,20 +40,20 @@ const PAGE_SECTIONS = [
   { id: "built-with", label: "Built with" },
 ];
 
-const INSTALL_SNIPPET = `npm install @robr0/design-system`;
+const INSTALL_SNIPPET = `npm install rift-ds`;
 
 const USAGE_SNIPPET = `// Load the tokens once — primitives, semantic tokens, and both themes.
-import '@robr0/design-system/tokens/tokens.css';
+import 'rift-ds/tokens/tokens.css';
 
 // Then import components — from the barrel…
-import { Button, Card, Badge } from '@robr0/design-system';
+import { Button, Card, Badge } from 'rift-ds';
 
 // …or by deep path (what this site does):
-import { Button } from '@robr0/design-system/components/Button/Button';
+import { Button } from 'rift-ds/components/Button/Button';
 
 // Optional: only if you render raw .material-symbols-rounded spans —
 // any component import already loads the icon font for you.
-import '@robr0/design-system/fonts/material-symbols.css';`;
+import 'rift-ds/fonts/material-symbols.css';`;
 
 /* The dependency-free chart pieces are a registry fact — charts-category
    components without the `recharts` flag, which the barrel generator holds
@@ -67,7 +67,7 @@ const BARREL_CHARTS = componentMetadata
 const CHARTS_SNIPPET = `// The recharts-backed charts live behind their own entry so that peer
 // dependency stays optional — the dependency-free chart pieces
 // (${BARREL_CHARTS}) come from the main barrel.
-import { BarChart, LineChart } from '@robr0/design-system/charts';`;
+import { BarChart, LineChart } from 'rift-ds/charts';`;
 
 const DARK_MODE_SNIPPET = `<!-- Light is the default; flip the whole system with one attribute -->
 <html data-theme="dark">`;
@@ -94,11 +94,11 @@ import { Search } from 'lucide-react';
 <Input iconLeft={<Search size={20} />} />`;
 
 const PRESET_SNIPPET = `// Every shipped theme, one generated stylesheet each, plus this aggregate.
-import '@robr0/design-system/tokens/presets/presets.css';
+import 'rift-ds/tokens/presets/presets.css';
 
 <html data-brand="terminal">`;
 
-const INIT_SNIPPET = `npx @robr0/design-system init`;
+const INIT_SNIPPET = `npx rift-ds init`;
 
 const SKILL_SNIPPET = `curl --create-dirs -o .claude/skills/${SKILL_NAME}/SKILL.md ${SITE_URL}/skill/${SKILL_NAME}/SKILL.md
 curl --create-dirs -o .claude/skills/${SKILL_NAME}/references/components.md ${SITE_URL}/skill/${SKILL_NAME}/references/components.md`;
@@ -106,16 +106,16 @@ curl --create-dirs -o .claude/skills/${SKILL_NAME}/references/components.md ${SI
 /* Three questions a model answers wrong without the docs above — each one
    is a fact the agent skill and one MCP tool both hold, and each has a
    generic-React guess that misses. */
-const SELF_CHECK_SNIPPET = `Before writing any @robr0/design-system code, answer these:
+const SELF_CHECK_SNIPPET = `Before writing any rift-ds code, answer these:
 
 1. Which import path serves the recharts-backed charts?
 2. Which attribute switches the system to dark mode?
 3. Which provider, if any, does the library need, and for what?
 
-If any answer is a guess, run \`npx @robr0/design-system init\` to install
+If any answer is a guess, run \`npx rift-ds init\` to install
 the agent docs, or connect the MCP endpoint, then check again.`;
 
-const SHADER_SNIPPET = `import { ShaderField, type ShaderFieldStatus } from '@robr0/design-system';
+const SHADER_SNIPPET = `import { ShaderField, type ShaderFieldStatus } from 'rift-ds';
 
 const [status, setStatus] = useState<ShaderFieldStatus>('pending');
 
@@ -270,7 +270,7 @@ export default function GetStartedPage() {
               One package, one stylesheet, and every token is yours to override
             </p>
             <p className={styles.introBody}>
-              The design system ships as <code>@robr0/design-system</code>, the same
+              The design system ships as <code>rift-ds</code>, the same
               package this site is built with. There is no configuration API or theme
               provider: theming is plain CSS custom properties. Import the token
               stylesheet, use the components, and re-theme by redefining tokens. (The

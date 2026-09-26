@@ -59,7 +59,7 @@ export const TextTrigger: Story = {
       The component library ships to npm as{' '}
       <HoverCard {...args}>
         <a href="#package" style={{ color: 'var(--color-action-primary-text-tertiary)' }}>
-          @robr0/design-system
+          rift-ds
         </a>
       </HoverCard>{' '}
       and the website consumes it like any other package.
@@ -70,7 +70,7 @@ export const TextTrigger: Story = {
     // block element would end the paragraph mid-parse.
     content: (
       <span style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-        <span style={{ fontWeight: 600 }}>@robr0/design-system</span>
+        <span style={{ fontWeight: 600 }}>rift-ds</span>
         <span>
           React component library with semantic tokens, light and dark themes, and a chat set.
         </span>

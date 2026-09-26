@@ -783,7 +783,7 @@
   padding-inline: calc(var(--mn-logo-mark) + var(--primitive-gap-200) - var(--padding-500));
 }
 
-/* The drawer's rows are a NavList (@robr0/design-system) — no row styling
+/* The drawer's rows are a NavList (rift-ds) — no row styling
    lives here, only a roomier rhythm than the library default: on a phone
    the list is the whole screen, so the rows get space the sidebar's
    denser default doesn't need. Both places NavList separates siblings —

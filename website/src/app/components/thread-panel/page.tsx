@@ -7,8 +7,8 @@ import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import {
   ThreadPanel,
   type ThreadPanelThread,
-} from "@robr0/design-system/components/ThreadPanel/ThreadPanel";
-import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
+} from "rift-ds/components/ThreadPanel/ThreadPanel";
+import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";

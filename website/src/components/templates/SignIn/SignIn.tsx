@@ -48,15 +48,15 @@
 
 import React from "react";
 import Image from "next/image";
-import { Button } from "@robr0/design-system/components/Button/Button";
-import { Checkbox } from "@robr0/design-system/components/Checkbox/Checkbox";
-import { Divider } from "@robr0/design-system/components/Divider/Divider";
-import { Input } from "@robr0/design-system/components/Input/Input";
+import { Button } from "rift-ds/components/Button/Button";
+import { Checkbox } from "rift-ds/components/Checkbox/Checkbox";
+import { Divider } from "rift-ds/components/Divider/Divider";
+import { Input } from "rift-ds/components/Input/Input";
 import {
   ShaderField,
   type ShaderBlob,
   type ShaderParams,
-} from "@robr0/design-system/components/ShaderField/ShaderField";
+} from "rift-ds/components/ShaderField/ShaderField";
 import SidebarSwitchers from "../SidebarSwitchers/SidebarSwitchers";
 import { AppleMark, FacebookMark, GoogleMark } from "./BrandMarks";
 import styles from "./SignIn.module.css";

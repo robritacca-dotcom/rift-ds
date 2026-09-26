@@ -17,35 +17,35 @@
  */
 
 import React from "react";
-import { AiButton } from "@robr0/design-system/components/AiButton/AiButton";
+import { AiButton } from "rift-ds/components/AiButton/AiButton";
 import {
   AppSidebar,
   type AppSidebarSection,
-} from "@robr0/design-system/components/AppSidebar/AppSidebar";
-import { Badge } from "@robr0/design-system/components/Badge/Badge";
-import { Breadcrumb } from "@robr0/design-system/components/Breadcrumb/Breadcrumb";
-import { Button } from "@robr0/design-system/components/Button/Button";
-import { CircularButton } from "@robr0/design-system/components/CircularButton/CircularButton";
+} from "rift-ds/components/AppSidebar/AppSidebar";
+import { Badge } from "rift-ds/components/Badge/Badge";
+import { Breadcrumb } from "rift-ds/components/Breadcrumb/Breadcrumb";
+import { Button } from "rift-ds/components/Button/Button";
+import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
 import {
   DataTable,
   type DataTableColumn,
   type DataTableRow,
-} from "@robr0/design-system/components/DataTable/DataTable";
+} from "rift-ds/components/DataTable/DataTable";
 import {
   Dropdown,
   type DropdownOption,
-} from "@robr0/design-system/components/Dropdown/Dropdown";
-import { Divider } from "@robr0/design-system/components/Divider/Divider";
-import { EmptyState } from "@robr0/design-system/components/EmptyState/EmptyState";
-import { FunnelChart } from "@robr0/design-system/components/FunnelChart/FunnelChart";
-import { Input } from "@robr0/design-system/components/Input/Input";
-import { Kbd } from "@robr0/design-system/components/Kbd/Kbd";
-import { LegendTile } from "@robr0/design-system/components/LegendTile/LegendTile";
-import { ProgressBar } from "@robr0/design-system/components/ProgressBar/ProgressBar";
-import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
-import { Stat } from "@robr0/design-system/components/Stat/Stat";
-import { Tabs } from "@robr0/design-system/components/Tabs/Tabs";
-import { AreaChart, ComboChart, RadialChart } from "@robr0/design-system/charts";
+} from "rift-ds/components/Dropdown/Dropdown";
+import { Divider } from "rift-ds/components/Divider/Divider";
+import { EmptyState } from "rift-ds/components/EmptyState/EmptyState";
+import { FunnelChart } from "rift-ds/components/FunnelChart/FunnelChart";
+import { Input } from "rift-ds/components/Input/Input";
+import { Kbd } from "rift-ds/components/Kbd/Kbd";
+import { LegendTile } from "rift-ds/components/LegendTile/LegendTile";
+import { ProgressBar } from "rift-ds/components/ProgressBar/ProgressBar";
+import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
+import { Stat } from "rift-ds/components/Stat/Stat";
+import { Tabs } from "rift-ds/components/Tabs/Tabs";
+import { AreaChart, ComboChart, RadialChart } from "rift-ds/charts";
 import SidebarSwitchers from "../SidebarSwitchers/SidebarSwitchers";
 import TemplateAssistant from "../TemplateAssistant/TemplateAssistant";
 import styles from "./MarketingDashboard.module.css";

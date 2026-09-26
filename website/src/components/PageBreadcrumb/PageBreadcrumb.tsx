@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { Breadcrumb } from "@robr0/design-system/components/Breadcrumb/Breadcrumb";
+import { Breadcrumb } from "rift-ds/components/Breadcrumb/Breadcrumb";
 import { getBreadcrumbs } from "@/config/navigation";
 import { buildBreadcrumbJsonLd } from "@/lib/structuredData";
 import styles from "./PageBreadcrumb.module.css";

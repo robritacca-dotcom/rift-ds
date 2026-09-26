@@ -5,7 +5,7 @@
   "title": "Field",
   "description": "The shared scaffolding for labelled form controls: label, required marker, helper and error text, and the ARIA wiring that ties them together.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json"
+    "https://rift-ds.com/r/base.json"
   ],
   "files": [
     {

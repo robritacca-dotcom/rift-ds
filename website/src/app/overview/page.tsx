@@ -2,15 +2,15 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
+import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import MegaNav from "../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import { ArchitectureMap } from "@/components/ArchitectureMap/ArchitectureMap";
 import GraphMiniature from "@/components/SystemGraph/GraphMiniature";
 import { getSidebarLinks, docsSidebarLinks } from "@/config/navigation";
-import { COMPONENT_COUNT } from "@robr0/design-system/components/registry";
-import { TOKEN_COUNT, TOKEN_COUNTS } from "@robr0/design-system/tokens/registry";
+import { COMPONENT_COUNT } from "rift-ds/components/registry";
+import { TOKEN_COUNT, TOKEN_COUNTS } from "rift-ds/tokens/registry";
 import { SKILL_COUNT } from "@/data/skills-registry";
 import { RELEASE_COUNT } from "@/data/release-log";
 import { chatExchangeMap, consumerMap, operatorsMap, pipelineMap, runtimeMap, systemOverviewMap } from "./maps";
@@ -44,7 +44,7 @@ export default function AboutDsPage() {
               How the system is built, and why its docs stay true
             </p>
             <p className={styles.introBody}>
-              {BRAND_NAME} ships as the npm package <code>@robr0/design-system</code>: layered CSS tokens, React components, and complete themes, each a generated stylesheet applied by one data-brand attribute. This site installs that package like any other consumer would, and everything documented here is held to the code by the build: generators write the docs from the code&apos;s own registries in{" "}
+              {BRAND_NAME} ships as the npm package <code>rift-ds</code>: layered CSS tokens, React components, and complete themes, each a generated stylesheet applied by one data-brand attribute. This site installs that package like any other consumer would, and everything documented here is held to the code by the build: generators write the docs from the code&apos;s own registries in{" "}
               <a href={REPOSITORY_URL} target="_blank" rel="noopener noreferrer" className={styles.inlineLink}>the repo</a>, and validators fail the build when the two disagree. What these pages say is what the package does. You can{" "}
               <Link href="/docs/get-started" className={styles.inlineLink}>install it yourself</Link> and{" "}
               <Link href="/playground" className={styles.inlineLink}>re-theme it live</Link>.

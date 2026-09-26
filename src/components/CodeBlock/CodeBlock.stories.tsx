@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CodeBlock } from './CodeBlock';
 
-const SAMPLE_TSX = `import { Chip } from '@robr0/design-system/components/Chip/Chip';
+const SAMPLE_TSX = `import { Chip } from 'rift-ds/components/Chip/Chip';
 
 <Chip label="Filter" icon="check" selected onClick={toggle} />`;
 

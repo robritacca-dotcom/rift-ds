@@ -2,13 +2,13 @@
 
 A model's thinking, disclosed behind a one-line summary and collapsed once it finishes.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine-delta.vercel.app/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: ai
-- Import: `import { Reasoning } from '@robr0/design-system';`
-- Deep import: `import { Reasoning } from '@robr0/design-system/components/Reasoning/Reasoning';`
+- Import: `import { Reasoning } from 'rift-ds';`
+- Deep import: `import { Reasoning } from 'rift-ds/components/Reasoning/Reasoning';`
 - Rendering: client component (declares 'use client')
-- Live docs: https://dragonspine-delta.vercel.app/components/reasoning
+- Live docs: https://rift-ds.com/components/reasoning
 
 ## Reasoning props
 

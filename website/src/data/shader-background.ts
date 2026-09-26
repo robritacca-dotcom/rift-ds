@@ -42,7 +42,7 @@
 import type {
   ShaderBlob,
   ShaderParams,
-} from "@robr0/design-system/components/ShaderField/ShaderField";
+} from "rift-ds/components/ShaderField/ShaderField";
 import data from "./shader-background.json";
 
 export type { ShaderBlob, ShaderParams };

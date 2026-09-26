@@ -5,8 +5,8 @@
   "title": "Checkbox",
   "description": "Custom checkbox with check and indeterminate states, keyboard accessible with animated transitions.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json",
-    "https://dragonspine-delta.vercel.app/r/field.json"
+    "https://rift-ds.com/r/base.json",
+    "https://rift-ds.com/r/field.json"
   ],
   "files": [
     {

@@ -5,7 +5,7 @@
   "title": "Waveform",
   "description": "Voice made visible: a row of bars dancing on the shared twelve-slot cycle, or tracking a live analyser level by level.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json"
+    "https://rift-ds.com/r/base.json"
   ],
   "files": [
     {

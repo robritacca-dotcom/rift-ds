@@ -1,6 +1,6 @@
 "use client";
 
-import { PromptSuggestions } from "@robr0/design-system/components/PromptSuggestions/PromptSuggestions";
+import { PromptSuggestions } from "rift-ds/components/PromptSuggestions/PromptSuggestions";
 import { useSiteChat } from "./ChatContext";
 import styles from "./SiteChat.module.css";
 

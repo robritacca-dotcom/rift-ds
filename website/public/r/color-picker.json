@@ -5,8 +5,8 @@
   "title": "Colour picker",
   "description": "Swatch trigger opening a saturation area, hue and alpha sliders, and a hex field; controlled or uncontrolled.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json",
-    "https://dragonspine-delta.vercel.app/r/field.json"
+    "https://rift-ds.com/r/base.json",
+    "https://rift-ds.com/r/field.json"
   ],
   "files": [
     {

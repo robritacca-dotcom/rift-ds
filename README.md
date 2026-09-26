@@ -1,9 +1,9 @@
-<a href="https://dragonspine-delta.vercel.app"><img src=".github/readme-banner.jpg" alt="Rift DS, the AI-ready React design system" width="100%"></a>
+<a href="https://rift-ds.com"><img src=".github/readme-banner.jpg" alt="Rift DS, the AI-ready React design system" width="100%"></a>
 
 # Rift DS
 
 <!-- npm-badge:start -->
-[![npm](https://img.shields.io/npm/v/@robr0%2Fdesign-system?logo=npm&color=CB3837)](https://www.npmjs.com/package/@robr0/design-system)
+[![npm](https://img.shields.io/npm/v/rift-ds?logo=npm&color=CB3837)](https://www.npmjs.com/package/rift-ds)
 <!-- npm-badge:end -->
 [![license: MIT](https://img.shields.io/badge/license-MIT-4c1)](LICENSE)
 
@@ -21,57 +21,57 @@ An open source React design system built for AI products and coding agents: comp
 
 ## Documentation
 
-Everything deep lives on the docs site: **[dragonspine-delta.vercel.app](https://dragonspine-delta.vercel.app/)**, with live examples, foundations, templates, the playground, and the **[get-started guide](https://dragonspine-delta.vercel.app/docs/get-started)**. **[Storybook](https://dragonspine-storybook.vercel.app/?path=/docs/rift-ds--docs)** is the interactive component explorer.
+Everything deep lives on the docs site: **[rift-ds.com](https://rift-ds.com/)**, with live examples, foundations, templates, the playground, and the **[get-started guide](https://rift-ds.com/docs/get-started)**. **[Storybook](https://storybook.rift-ds.com/?path=/docs/rift-ds--docs)** is the interactive component explorer.
 
 ## Install
 
 ```bash
-npm install @robr0/design-system
+npm install rift-ds
 ```
 
 Import the token stylesheet once, then use components:
 
 ```tsx
-import '@robr0/design-system/tokens/tokens.css';
-import { Button, Card, Badge } from '@robr0/design-system';
+import 'rift-ds/tokens/tokens.css';
+import { Button, Card, Badge } from 'rift-ds';
 ```
 
-React 19+ is a peer dependency. The package is ESM-only and resolved via `exports` subpaths: use a bundler that handles CSS and font imports from `node_modules` (Vite, Next.js, webpack) and set TypeScript's `moduleResolution` to `"bundler"` or `"nodenext"`. The Recharts-backed charts live behind `@robr0/design-system/charts`, so the optional `recharts` peer dependency is only needed if you use them. Prefer owning the source? Pull single components through the shadcn CLI (`npx shadcn@latest add https://dragonspine-delta.vercel.app/r/button.json`, with details in the [get-started guide](https://dragonspine-delta.vercel.app/docs/get-started)), or clone this repo and build on it directly; all of it is MIT.
+React 19+ is a peer dependency. The package is ESM-only and resolved via `exports` subpaths: use a bundler that handles CSS and font imports from `node_modules` (Vite, Next.js, webpack) and set TypeScript's `moduleResolution` to `"bundler"` or `"nodenext"`. The Recharts-backed charts live behind `rift-ds/charts`, so the optional `recharts` peer dependency is only needed if you use them. Prefer owning the source? Pull single components through the shadcn CLI (`npx shadcn@latest add https://rift-ds.com/r/button.json`, with details in the [get-started guide](https://rift-ds.com/docs/get-started)), or clone this repo and build on it directly; all of it is MIT.
 
 ## Set up your agent
 
 One command teaches a coding agent the system: it installs the generated agent skill into your project and prints the MCP connect line.
 
 ```bash
-npx @robr0/design-system init
+npx rift-ds init
 ```
 
 The MCP endpoint serves the component catalogue, per-component prop APIs, the token registry, install setup, and docs search to any client. No key, no account, no model calls: every tool reads only published, generated data, built from the same JSDoc that produces the shipped `.d.ts`, so an agent reads the exact contract npm ships.
 
 ```bash
-claude mcp add --transport http rift-ds https://dragonspine-delta.vercel.app/api/mcp
+claude mcp add --transport http rift-ds https://rift-ds.com/api/mcp
 ```
 
-Every component's prop contract is also plain markdown (append `.md` to its docs URL), and [llms.txt](https://dragonspine-delta.vercel.app/llms.txt) indexes every machine surface. Then just ask: "Build a settings page with Rift components."
+Every component's prop contract is also plain markdown (append `.md` to its docs URL), and [llms.txt](https://rift-ds.com/llms.txt) indexes every machine surface. Then just ask: "Build a settings page with Rift components."
 
 ## Theming
 
 Theming is CSS custom properties; there is no configuration API and no provider (one exception: wrap your tree in `ToastProvider` if, and only if, you use the toast queue via `useToast`). Complete looks ship as generated stylesheets: import the aggregate once and one attribute rethemes everything, light and dark, typefaces included (each preset self-hosts its faces).
 
 ```tsx
-import '@robr0/design-system/tokens/presets/presets.css';
+import 'rift-ds/tokens/presets/presets.css';
 
 <html data-brand="terminal">
 ```
 
 - **Dark mode**: `data-theme="dark"` on the root element; light is the default.
-- **Your own brand**: every semantic token chains to a primitive, so overriding one primitive re-themes everything built on it. The [playground](https://dragonspine-delta.vercel.app/playground) restyles the system live and copies out a complete, paste-ready override.
+- **Your own brand**: every semantic token chains to a primitive, so overriding one primitive re-themes everything built on it. The [playground](https://rift-ds.com/playground) restyles the system live and copies out a complete, paste-ready override.
 - **Fonts**: the base theme bundles no text face, and the whole scale chains to `--font-family-primary` (split heading and body faces via `--font-family-heading` and `--font-family-body`); point them at any font you load. Only the preset stylesheets carry faces, each self-hosting its own, and only the presets you import pull them in.
 - **Icons**: a Material Symbols Rounded variable font is bundled and components import it themselves, with every Google axis exposed as a custom property. Every icon prop also takes your own element, so any icon set drops in.
 
 ## Components
 
-<!-- component-count -->133<!-- /component-count --> components, including a chat set for AI products (Chat thread, Composer, Tool call, Reasoning, Thread panel) and Shader field, a WebGL2 ambient background whose light sources read your colour tokens at runtime, so it re-themes with everything else. Details and live examples are on the [docs site](https://dragonspine-delta.vercel.app/components).
+<!-- component-count -->133<!-- /component-count --> components, including a chat set for AI products (Chat thread, Composer, Tool call, Reasoning, Thread panel) and Shader field, a WebGL2 ambient background whose light sources read your colour tokens at runtime, so it re-themes with everything else. Details and live examples are on the [docs site](https://rift-ds.com/components).
 
 <details>
 <summary>The full list</summary>
@@ -91,7 +91,7 @@ Accordion · Agent plan · Agent rail · Agent status · AI button · Alert · A
 - **Vitest + Playwright + axe**: every Storybook story runs as a render test in headless Chromium, with an accessibility audit on each
 - **CSS custom properties**: all theming via semantic tokens, no CSS-in-JS
 
-The [overview](https://dragonspine-delta.vercel.app/overview) shows the generate-and-validate pipeline behind the docs.
+The [overview](https://rift-ds.com/overview) shows the generate-and-validate pipeline behind the docs.
 
 ## Running locally
 

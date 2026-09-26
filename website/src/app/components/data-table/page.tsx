@@ -8,10 +8,10 @@ import {
   DataTable,
   type DataTableColumn,
   type DataTableRow,
-} from "@robr0/design-system/components/DataTable/DataTable";
-import { Badge } from "@robr0/design-system/components/Badge/Badge";
-import { Dropdown } from "@robr0/design-system/components/Dropdown/Dropdown";
-import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
+} from "rift-ds/components/DataTable/DataTable";
+import { Badge } from "rift-ds/components/Badge/Badge";
+import { Dropdown } from "rift-ds/components/Dropdown/Dropdown";
+import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";

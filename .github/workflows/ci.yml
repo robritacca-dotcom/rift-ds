@@ -69,7 +69,7 @@ jobs:
           node-version: 24
           cache: npm
       # npm workspaces: the root install covers the website (and links
-      # @robr0/design-system into its node_modules).
+      # rift-ds into its node_modules).
       - run: npm ci
       - run: npm run lint
         working-directory: website

@@ -5,7 +5,7 @@
   "title": "Divider",
   "description": "A thin rule separating stacked content, with optional inline label and vertical orientation.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json"
+    "https://rift-ds.com/r/base.json"
   ],
   "files": [
     {

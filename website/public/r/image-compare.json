@@ -5,7 +5,7 @@
   "title": "Image compare",
   "description": "Before-and-after image comparison with a draggable divider, keyboard control, and corner labels.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json"
+    "https://rift-ds.com/r/base.json"
   ],
   "files": [
     {

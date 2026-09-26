@@ -12,7 +12,7 @@
  * validate-prop-docs.mjs), so this file cannot say anything the published
  * package does not. That is what makes it safe to serve verbatim: the
  * website's /api/mcp route hands it to any MCP client that asks, so an
- * agent building with @robr0/design-system reads the exact prop contract
+ * agent building with rift-ds reads the exact prop contract
  * instead of guessing.
  *
  * Two properties this file must keep, or the build breaks:
@@ -114,7 +114,7 @@ export function assembleComponentApi() {
       category: component.category,
       description: component.description,
       client: component.client,
-      importPath: `@robr0/design-system/components/${folder}/${component.name}`,
+      importPath: `rift-ds/components/${folder}/${component.name}`,
       barrel: chartsBarrel.includes(`./components/${folder}/${component.name}'`)
         ? 'charts'
         : 'main',

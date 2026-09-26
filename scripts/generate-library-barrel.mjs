@@ -10,7 +10,7 @@
  *   - src/charts.ts — the recharts-backed modules (detected by reading
  *     each module's imports, so a new chart lands here automatically).
  *     Consumers who install recharts import from
- *     '@robr0/design-system/charts'.
+ *     'rift-ds/charts'.
  *
  * Each public component folder contributes every non-story .tsx module
  * it contains (usually just <Name>/<Name>.tsx; Chart/ contributes each

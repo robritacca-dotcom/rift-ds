@@ -5,7 +5,7 @@
   "title": "Swatch",
   "description": "Clickable colour tile for preset palettes and picker triggers, with a theme-aware selection ring.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json"
+    "https://rift-ds.com/r/base.json"
   ],
   "files": [
     {

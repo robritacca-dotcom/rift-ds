@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import {
   ContributionGraph,
   type ContributionDay,
-} from "@robr0/design-system/components/ContributionGraph/ContributionGraph";
-import { Skeleton } from "@robr0/design-system/components/Skeleton/Skeleton";
+} from "rift-ds/components/ContributionGraph/ContributionGraph";
+import { Skeleton } from "rift-ds/components/Skeleton/Skeleton";
 
 interface ContributionsData {
   total: number;

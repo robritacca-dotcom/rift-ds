@@ -2,13 +2,13 @@
 
 The corner block of a map: its name, what it shows, and the key to its markers.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine-delta.vercel.app/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: maps
-- Import: `import { MapLegend } from '@robr0/design-system';`
-- Deep import: `import { MapLegend } from '@robr0/design-system/components/MapLegend/MapLegend';`
+- Import: `import { MapLegend } from 'rift-ds';`
+- Deep import: `import { MapLegend } from 'rift-ds/components/MapLegend/MapLegend';`
 - Rendering: server-renderable (no 'use client')
-- Live docs: https://dragonspine-delta.vercel.app/components/map-legend
+- Live docs: https://rift-ds.com/components/map-legend
 
 ## MapLegend props
 

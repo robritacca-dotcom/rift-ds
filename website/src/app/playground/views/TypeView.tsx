@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
-import { tokenRegistry } from "@robr0/design-system/tokens/registry";
+import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
+import { tokenRegistry } from "rift-ds/tokens/registry";
 import { collectDeclaredTokens, varChain } from "@/lib/token-source";
 import pageStyles from "../page.module.css";
 import styles from "./TypeView.module.css";

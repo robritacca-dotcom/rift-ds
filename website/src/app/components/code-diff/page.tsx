@@ -4,8 +4,8 @@ import React from "react";
 import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
-import { CodeDiff } from "@robr0/design-system/components/CodeDiff/CodeDiff";
-import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
+import { CodeDiff } from "rift-ds/components/CodeDiff/CodeDiff";
+import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
@@ -26,7 +26,7 @@ const FILE_DIFF = `--- a/src/lib/normalize.ts
 +++ b/src/lib/normalize.ts
 ${TS_DIFF}`;
 
-const ADDITIONS_DIFF = `+import { Badge } from '@robr0/design-system';
+const ADDITIONS_DIFF = `+import { Badge } from 'rift-ds';
 +
 +export const shippedBadge = (
 +  <Badge label="Shipped" status="positive" />

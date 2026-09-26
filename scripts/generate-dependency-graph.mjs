@@ -9,7 +9,7 @@
  * already trusts (the component and token registries, the filesystem route
  * walk), and the edges come from parsing the source itself: var() references
  * in CSS (plus getCSSVar literals), cross-component imports, and the
- * `@robr0/design-system` deep and barrel imports in site code.
+ * `rift-ds` deep and barrel imports in site code.
  *
  * Output: website/src/data/dependency-graph.generated.ts (committed;
  * validate-dependency-graph.mjs byte-compares it, CI's drift guard catches a
@@ -47,7 +47,7 @@ const isSource = (f) => /\.(tsx|ts|css)$/.test(f) && !/\.stories\.tsx?$/.test(f)
 const COLUMNS = [
   { id: 'primitives', label: 'Primitives', sub: 'raw values' },
   { id: 'tokens', label: 'Tokens', sub: 'semantic' },
-  { id: 'library', label: 'Library', sub: '@robr0/design-system' },
+  { id: 'library', label: 'Library', sub: 'rift-ds' },
   { id: 'site', label: 'Site UI', sub: 'website/src/components' },
   { id: 'pages', label: 'Pages', sub: 'app routes' },
 ];
@@ -198,7 +198,7 @@ export function buildGraph() {
         if (target) addEdge(ownerId, `component/${target.slug}`);
         continue;
       }
-      if (spec === '@robr0/design-system' || spec === '@robr0/design-system/charts') {
+      if (spec === 'rift-ds' || spec === 'rift-ds/charts') {
         for (const name of clause.replace(/[{}]/g, '').split(',')) {
           const clean = name.trim().split(/\s+as\s+/)[0].trim();
           const target = componentByName.get(clean);

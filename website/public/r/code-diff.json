@@ -5,7 +5,7 @@
   "title": "Code diff",
   "description": "Unified diff view for code changes, with added, removed, and context lines.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json"
+    "https://rift-ds.com/r/base.json"
   ],
   "files": [
     {

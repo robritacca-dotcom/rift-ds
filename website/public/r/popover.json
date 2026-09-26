@@ -5,7 +5,7 @@
   "title": "Popover",
   "description": "Contextual overlay panel with click and hover triggers, positioned relative to its anchor.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json"
+    "https://rift-ds.com/r/base.json"
   ],
   "files": [
     {

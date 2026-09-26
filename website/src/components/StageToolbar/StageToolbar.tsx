@@ -2,11 +2,11 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Breadcrumb } from "@robr0/design-system/components/Breadcrumb/Breadcrumb";
-import { Button } from "@robr0/design-system/components/Button/Button";
-import { CircularButton } from "@robr0/design-system/components/CircularButton/CircularButton";
-import { Tabs, type Tab } from "@robr0/design-system/components/Tabs/Tabs";
-import { Badge } from "@robr0/design-system/components/Badge/Badge";
+import { Breadcrumb } from "rift-ds/components/Breadcrumb/Breadcrumb";
+import { Button } from "rift-ds/components/Button/Button";
+import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { Tabs, type Tab } from "rift-ds/components/Tabs/Tabs";
+import { Badge } from "rift-ds/components/Badge/Badge";
 import { getBreadcrumbs } from "@/config/navigation";
 import { buildBreadcrumbJsonLd } from "@/lib/structuredData";
 import BrandMark from "@/components/BrandMark/BrandMark";

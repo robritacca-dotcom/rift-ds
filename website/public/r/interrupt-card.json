@@ -5,8 +5,8 @@
   "title": "Interrupt card",
   "description": "A human-in-the-loop checkpoint with a question from the agent and option buttons to decide.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json",
-    "https://dragonspine-delta.vercel.app/r/button.json"
+    "https://rift-ds.com/r/base.json",
+    "https://rift-ds.com/r/button.json"
   ],
   "files": [
     {

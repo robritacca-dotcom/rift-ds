@@ -5,7 +5,7 @@
   "title": "Legend tile",
   "description": "The labelled value tile under a chart: a series dot, the series name, and its reading, on an inset fill.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json"
+    "https://rift-ds.com/r/base.json"
   ],
   "files": [
     {

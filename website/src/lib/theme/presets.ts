@@ -1,5 +1,5 @@
-import type { DropdownOption } from "@robr0/design-system/components/Dropdown/Dropdown";
-import type { RichDropdownOption } from "@robr0/design-system/components/RichDropdown/RichDropdown";
+import type { DropdownOption } from "rift-ds/components/Dropdown/Dropdown";
+import type { RichDropdownOption } from "rift-ds/components/RichDropdown/RichDropdown";
 import {
   ACCENT_NAMES,
   DEFAULT_BRAND,

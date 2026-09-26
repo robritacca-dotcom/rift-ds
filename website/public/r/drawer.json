@@ -5,7 +5,7 @@
   "title": "Drawer",
   "description": "An edge-anchored modal panel that slides in from any side, for filter panels, detail views, and mobile navigation.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json"
+    "https://rift-ds.com/r/base.json"
   ],
   "files": [
     {

@@ -5,7 +5,7 @@
   "title": "Event calendar",
   "description": "A month grid with event pills, overflow counts, and month navigation.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json"
+    "https://rift-ds.com/r/base.json"
   ],
   "files": [
     {

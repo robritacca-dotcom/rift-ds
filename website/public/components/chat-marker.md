@@ -2,13 +2,13 @@
 
 An inline conversation separator for date breaks and system notes.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine-delta.vercel.app/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: ai
-- Import: `import { ChatMarker } from '@robr0/design-system';`
-- Deep import: `import { ChatMarker } from '@robr0/design-system/components/ChatMarker/ChatMarker';`
+- Import: `import { ChatMarker } from 'rift-ds';`
+- Deep import: `import { ChatMarker } from 'rift-ds/components/ChatMarker/ChatMarker';`
 - Rendering: server-renderable (no 'use client')
-- Live docs: https://dragonspine-delta.vercel.app/components/chat-marker
+- Live docs: https://rift-ds.com/components/chat-marker
 
 ## ChatMarker props
 

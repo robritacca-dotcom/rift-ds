@@ -1,14 +1,14 @@
 "use client";
 
 import styles from "../page.module.css";
-import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
+import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import {
   AreaChart,
   BarChart,
   LineChart,
   PieChart,
   StackedBarChart,
-} from "@robr0/design-system/charts";
+} from "rift-ds/charts";
 
 const CHART_DATA = [
   { label: "Mon", value: 320 },

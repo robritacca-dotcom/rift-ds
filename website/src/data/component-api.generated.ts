@@ -48,7 +48,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "data-display",
     "description": "Collapsible content sections for organising related information.",
     "client": true,
-    "importPath": "@robr0/design-system/components/Accordion/Accordion",
+    "importPath": "rift-ds/components/Accordion/Accordion",
     "barrel": "main",
     "exports": [
       {
@@ -92,7 +92,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "ai",
     "description": "A collapsible checklist of an agent's task, with live step states and a progress readout.",
     "client": true,
-    "importPath": "@robr0/design-system/components/AgentPlan/AgentPlan",
+    "importPath": "rift-ds/components/AgentPlan/AgentPlan",
     "barrel": "main",
     "exports": [
       {
@@ -147,7 +147,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "ai",
     "description": "The companion rail of an agent product: the agent's portrait over tabbed panes for activity, approvals, automations, and personalization.",
     "client": false,
-    "importPath": "@robr0/design-system/components/AgentRail/AgentRail",
+    "importPath": "rift-ds/components/AgentRail/AgentRail",
     "barrel": "main",
     "exports": [
       {
@@ -227,7 +227,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "ai",
     "description": "A dot-matrix indicator and status line reporting what an agent is doing right now.",
     "client": true,
-    "importPath": "@robr0/design-system/components/AgentStatus/AgentStatus",
+    "importPath": "rift-ds/components/AgentStatus/AgentStatus",
     "barrel": "main",
     "exports": [
       {
@@ -297,7 +297,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "ai",
     "description": "The AI entry point: icon and label ringed by a turning gradient and glow, with an optional hover-summoned AI-summary panel and prompt chips.",
     "client": true,
-    "importPath": "@robr0/design-system/components/AiButton/AiButton",
+    "importPath": "rift-ds/components/AiButton/AiButton",
     "barrel": "main",
     "exports": [
       {
@@ -398,7 +398,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "feedback",
     "description": "Contextual feedback with status variants, optional dismiss, and compact sizing.",
     "client": false,
-    "importPath": "@robr0/design-system/components/Alert/Alert",
+    "importPath": "rift-ds/components/Alert/Alert",
     "barrel": "main",
     "exports": [
       {
@@ -467,7 +467,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "overlays",
     "description": "Modal confirmation overlay with title, description, and confirm / cancel actions.",
     "client": true,
-    "importPath": "@robr0/design-system/components/AlertDialog/AlertDialog",
+    "importPath": "rift-ds/components/AlertDialog/AlertDialog",
     "barrel": "main",
     "exports": [
       {
@@ -548,7 +548,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "navigation",
     "description": "An on-page list of anchor links that tracks the reader's position and jumps between sections.",
     "client": true,
-    "importPath": "@robr0/design-system/components/AnchorNav/AnchorNav",
+    "importPath": "rift-ds/components/AnchorNav/AnchorNav",
     "barrel": "main",
     "exports": [
       {
@@ -611,7 +611,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "data-display",
     "description": "A number that counts to its value: count-up on mount, eased tweens on change, tabular digits that never jitter.",
     "client": true,
-    "importPath": "@robr0/design-system/components/AnimatedNumber/AnimatedNumber",
+    "importPath": "rift-ds/components/AnimatedNumber/AnimatedNumber",
     "barrel": "main",
     "exports": [
       {
@@ -668,7 +668,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "layout",
     "description": "Full-page template pairing the collapsible App sidebar with a centred content area.",
     "client": true,
-    "importPath": "@robr0/design-system/components/AppLayout/AppLayout",
+    "importPath": "rift-ds/components/AppLayout/AppLayout",
     "barrel": "main",
     "exports": [
       {
@@ -748,7 +748,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "layout",
     "description": "Collapsible navigation rail with accordion sub-items, category headings, and profile section.",
     "client": true,
-    "importPath": "@robr0/design-system/components/AppSidebar/AppSidebar",
+    "importPath": "rift-ds/components/AppSidebar/AppSidebar",
     "barrel": "main",
     "exports": [
       {
@@ -860,7 +860,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "charts",
     "description": "Filled area chart for showing volume over time, with stacked and single-series variants.",
     "client": false,
-    "importPath": "@robr0/design-system/components/Chart/AreaChart",
+    "importPath": "rift-ds/components/Chart/AreaChart",
     "barrel": "charts",
     "exports": [
       {
@@ -949,7 +949,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "data-display",
     "description": "User profile image with initials and icon fallback, status indicator, and multiple sizes.",
     "client": true,
-    "importPath": "@robr0/design-system/components/Avatar/Avatar",
+    "importPath": "rift-ds/components/Avatar/Avatar",
     "barrel": "main",
     "exports": [
       {
@@ -1004,7 +1004,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "data-display",
     "description": "Overlapping avatar stack with a +N counter for the overflow.",
     "client": false,
-    "importPath": "@robr0/design-system/components/AvatarGroup/AvatarGroup",
+    "importPath": "rift-ds/components/AvatarGroup/AvatarGroup",
     "barrel": "main",
     "exports": [
       {
@@ -1054,7 +1054,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "data-display",
     "description": "Small inline status labels with info, positive, warning, error, and neutral variants.",
     "client": false,
-    "importPath": "@robr0/design-system/components/Badge/Badge",
+    "importPath": "rift-ds/components/Badge/Badge",
     "barrel": "main",
     "exports": [
       {
@@ -1091,7 +1091,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "feedback",
     "description": "Full-width status strip for page-level announcements, with an action slot and optional dismissal.",
     "client": false,
-    "importPath": "@robr0/design-system/components/Banner/Banner",
+    "importPath": "rift-ds/components/Banner/Banner",
     "barrel": "main",
     "exports": [
       {
@@ -1166,7 +1166,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "charts",
     "description": "Vertical bars for comparing values across categories or time, with summary stats and tooltips.",
     "client": false,
-    "importPath": "@robr0/design-system/components/Chart/BarChart",
+    "importPath": "rift-ds/components/Chart/BarChart",
     "barrel": "charts",
     "exports": [
       {
@@ -1255,7 +1255,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "navigation",
     "description": "Hierarchical navigation trail showing the user's location within the site.",
     "client": false,
-    "importPath": "@robr0/design-system/components/Breadcrumb/Breadcrumb",
+    "importPath": "rift-ds/components/Breadcrumb/Breadcrumb",
     "barrel": "main",
     "exports": [
       {
@@ -1297,7 +1297,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "actions",
     "description": "Primary, secondary, tertiary, neutral and destructive variants in default and compact sizes, with icon support and multiple states.",
     "client": true,
-    "importPath": "@robr0/design-system/components/Button/Button",
+    "importPath": "rift-ds/components/Button/Button",
     "barrel": "main",
     "exports": [
       {
@@ -1418,7 +1418,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "actions",
     "description": "Horizontal and vertical button group layouts for related actions and navigation patterns.",
     "client": false,
-    "importPath": "@robr0/design-system/components/ButtonGroup/ButtonGroup",
+    "importPath": "rift-ds/components/ButtonGroup/ButtonGroup",
     "barrel": "main",
     "exports": [
       {
@@ -1461,7 +1461,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "data-display",
     "description": "Card components for previews, navigation, and token documentation, from content cards to colour swatches and typography specimens.",
     "client": true,
-    "importPath": "@robr0/design-system/components/Card/Card",
+    "importPath": "rift-ds/components/Card/Card",
     "barrel": "main",
     "exports": [
       {
@@ -1560,7 +1560,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "data-display",
     "description": "A deck of cards showing one at a time, flipped through with a lift-and-settle animation.",
     "client": true,
-    "importPath": "@robr0/design-system/components/CardStack/CardStack",
+    "importPath": "rift-ds/components/CardStack/CardStack",
     "barrel": "main",
     "exports": [
       {
@@ -1636,7 +1636,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "data-display",
     "description": "Sliding content viewer with navigation arrows, dot indicators, auto-play, and keyboard support.",
     "client": true,
-    "importPath": "@robr0/design-system/components/Carousel/Carousel",
+    "importPath": "rift-ds/components/Carousel/Carousel",
     "barrel": "main",
     "exports": [
       {
@@ -1707,7 +1707,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "ai",
     "description": "The top row of a chat surface, with the conversation title and its controls.",
     "client": false,
-    "importPath": "@robr0/design-system/components/ChatHeader/ChatHeader",
+    "importPath": "rift-ds/components/ChatHeader/ChatHeader",
     "barrel": "main",
     "exports": [
       {
@@ -1743,7 +1743,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "ai",
     "description": "An inline conversation separator for date breaks and system notes.",
     "client": false,
-    "importPath": "@robr0/design-system/components/ChatMarker/ChatMarker",
+    "importPath": "rift-ds/components/ChatMarker/ChatMarker",
     "barrel": "main",
     "exports": [
       {
@@ -1786,7 +1786,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "ai",
     "description": "A single chat turn with avatar, author, timestamp, and bubble or plain content aligned by role.",
     "client": false,
-    "importPath": "@robr0/design-system/components/ChatMessage/ChatMessage",
+    "importPath": "rift-ds/components/ChatMessage/ChatMessage",
     "barrel": "main",
     "exports": [
       {
@@ -1908,7 +1908,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "ai",
     "description": "A scrollable conversation column with edge fades, send anchoring, and a subtle scrollbar.",
     "client": true,
-    "importPath": "@robr0/design-system/components/ChatThread/ChatThread",
+    "importPath": "rift-ds/components/ChatThread/ChatThread",
     "barrel": "main",
     "exports": [
       {
@@ -1959,7 +1959,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "forms",
     "description": "Custom checkbox with check and indeterminate states, keyboard accessible with animated transitions.",
     "client": true,
-    "importPath": "@robr0/design-system/components/Checkbox/Checkbox",
+    "importPath": "rift-ds/components/Checkbox/Checkbox",
     "barrel": "main",
     "exports": [
       {
@@ -2135,7 +2135,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "data-display",
     "description": "Compact pills for attributes, filters, and inline metadata.",
     "client": false,
-    "importPath": "@robr0/design-system/components/Chip/Chip",
+    "importPath": "rift-ds/components/Chip/Chip",
     "barrel": "main",
     "exports": [
       {
@@ -2210,7 +2210,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "actions",
     "description": "Round icon button with primary, secondary, tertiary and neutral variants, default and compact sizes.",
     "client": false,
-    "importPath": "@robr0/design-system/components/CircularButton/CircularButton",
+    "importPath": "rift-ds/components/CircularButton/CircularButton",
     "barrel": "main",
     "exports": [
       {
@@ -2316,7 +2316,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "data-display",
     "description": "Monospace code with a header and one-click copy.",
     "client": true,
-    "importPath": "@robr0/design-system/components/CodeBlock/CodeBlock",
+    "importPath": "rift-ds/components/CodeBlock/CodeBlock",
     "barrel": "main",
     "exports": [
       {
@@ -2385,7 +2385,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "ai",
     "description": "Unified diff view for code changes, with added, removed, and context lines.",
     "client": false,
-    "importPath": "@robr0/design-system/components/CodeDiff/CodeDiff",
+    "importPath": "rift-ds/components/CodeDiff/CodeDiff",
     "barrel": "main",
     "exports": [
       {
@@ -2432,7 +2432,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "forms",
     "description": "Swatch trigger opening a saturation area, hue and alpha sliders, and a hex field; controlled or uncontrolled.",
     "client": true,
-    "importPath": "@robr0/design-system/components/ColorPicker/ColorPicker",
+    "importPath": "rift-ds/components/ColorPicker/ColorPicker",
     "barrel": "main",
     "exports": [
       {
@@ -2535,7 +2535,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "charts",
     "description": "Bar and line series in one chart, with an optional second y-axis for pairs in different units, like spend and ROAS.",
     "client": false,
-    "importPath": "@robr0/design-system/components/Chart/ComboChart",
+    "importPath": "rift-ds/components/Chart/ComboChart",
     "barrel": "charts",
     "exports": [
       {
@@ -2647,7 +2647,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "forms",
     "description": "A filterable select that narrows options as the user types, with multi-select chips, grouping, and async loading.",
     "client": true,
-    "importPath": "@robr0/design-system/components/Combobox/Combobox",
+    "importPath": "rift-ds/components/Combobox/Combobox",
     "barrel": "main",
     "exports": [
       {
@@ -2803,7 +2803,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "overlays",
     "description": "A modal Cmd+K launcher that searches a grouped command list, with keyboard navigation and shortcut hints.",
     "client": true,
-    "importPath": "@robr0/design-system/components/CommandPalette/CommandPalette",
+    "importPath": "rift-ds/components/CommandPalette/CommandPalette",
     "barrel": "main",
     "exports": [
       {
@@ -2899,7 +2899,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "ai",
     "description": "An auto-growing message input with send and stop states, a page-context note, an attachment slot, and Enter-to-send.",
     "client": true,
-    "importPath": "@robr0/design-system/components/Composer/Composer",
+    "importPath": "rift-ds/components/Composer/Composer",
     "barrel": "main",
     "exports": [
       {
@@ -3018,7 +3018,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "data-display",
     "description": "Linked contact method with icon, label, and value.",
     "client": true,
-    "importPath": "@robr0/design-system/components/ContactCard/ContactCard",
+    "importPath": "rift-ds/components/ContactCard/ContactCard",
     "barrel": "main",
     "exports": [
       {
@@ -3099,7 +3099,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "overlays",
     "description": "Right-click menu at the pointer with groups, sub-menus, and shortcut hints.",
     "client": true,
-    "importPath": "@robr0/design-system/components/ContextMenu/ContextMenu",
+    "importPath": "rift-ds/components/ContextMenu/ContextMenu",
     "barrel": "main",
     "exports": [
       {
@@ -3148,7 +3148,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "charts",
     "description": "A year of activity, one cell per day.",
     "client": false,
-    "importPath": "@robr0/design-system/components/ContributionGraph/ContributionGraph",
+    "importPath": "rift-ds/components/ContributionGraph/ContributionGraph",
     "barrel": "main",
     "exports": [
       {
@@ -3217,7 +3217,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "data-display",
     "description": "The wired table: sorting, search, row selection, and pagination assembled around Table.",
     "client": true,
-    "importPath": "@robr0/design-system/components/DataTable/DataTable",
+    "importPath": "rift-ds/components/DataTable/DataTable",
     "barrel": "main",
     "exports": [
       {
@@ -3348,7 +3348,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "forms",
     "description": "Date input with native picker, calendar icon, label, and validation states.",
     "client": true,
-    "importPath": "@robr0/design-system/components/DateInput/DateInput",
+    "importPath": "rift-ds/components/DateInput/DateInput",
     "barrel": "main",
     "exports": [
       {
@@ -3429,7 +3429,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "forms",
     "description": "Inline calendar with month navigation, day selection, and today indicator.",
     "client": true,
-    "importPath": "@robr0/design-system/components/DatePicker/DatePicker",
+    "importPath": "rift-ds/components/DatePicker/DatePicker",
     "barrel": "main",
     "exports": [
       {
@@ -3491,7 +3491,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "overlays",
     "description": "A general-purpose modal for focused tasks, with sizes, an optional footer, and full focus management.",
     "client": true,
-    "importPath": "@robr0/design-system/components/Dialog/Dialog",
+    "importPath": "rift-ds/components/Dialog/Dialog",
     "barrel": "main",
     "exports": [
       {
@@ -3565,7 +3565,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "layout",
     "description": "A thin rule separating stacked content, with optional inline label and vertical orientation.",
     "client": false,
-    "importPath": "@robr0/design-system/components/Divider/Divider",
+    "importPath": "rift-ds/components/Divider/Divider",
     "barrel": "main",
     "exports": [
       {
@@ -3616,7 +3616,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "ai",
     "description": "A compact file reference with a type icon, name, metadata, and optional remove.",
     "client": false,
-    "importPath": "@robr0/design-system/components/DocumentChip/DocumentChip",
+    "importPath": "rift-ds/components/DocumentChip/DocumentChip",
     "barrel": "main",
     "exports": [
       {
@@ -3703,7 +3703,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "overlays",
     "description": "An edge-anchored modal panel that slides in from any side, for filter panels, detail views, and mobile navigation.",
     "client": true,
-    "importPath": "@robr0/design-system/components/Drawer/Drawer",
+    "importPath": "rift-ds/components/Drawer/Drawer",
     "barrel": "main",
     "exports": [
       {
@@ -3784,7 +3784,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "forms",
     "description": "Custom select dropdown with keyboard navigation, disabled options, and error states.",
     "client": true,
-    "importPath": "@robr0/design-system/components/Dropdown/Dropdown",
+    "importPath": "rift-ds/components/Dropdown/Dropdown",
     "barrel": "main",
     "exports": [
       {
@@ -3899,7 +3899,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "overlays",
     "description": "Contextual menu with sections, sub-menus, keyboard shortcuts, and inset-gap hover styling.",
     "client": true,
-    "importPath": "@robr0/design-system/components/DropdownMenu/DropdownMenu",
+    "importPath": "rift-ds/components/DropdownMenu/DropdownMenu",
     "barrel": "main",
     "exports": [
       {
@@ -3949,7 +3949,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "feedback",
     "description": "The placeholder for a list, table, or search with nothing to show: icon, headline, guidance, and a next action.",
     "client": false,
-    "importPath": "@robr0/design-system/components/EmptyState/EmptyState",
+    "importPath": "rift-ds/components/EmptyState/EmptyState",
     "barrel": "main",
     "exports": [
       {
@@ -4011,7 +4011,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "data-display",
     "description": "Compact display-only card with a centred icon or image and a label, used in the Icons and Logos galleries.",
     "client": false,
-    "importPath": "@robr0/design-system/components/EntityCard/EntityCard",
+    "importPath": "rift-ds/components/EntityCard/EntityCard",
     "barrel": "main",
     "exports": [
       {
@@ -4059,7 +4059,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "data-display",
     "description": "A month grid with event pills, overflow counts, and month navigation.",
     "client": true,
-    "importPath": "@robr0/design-system/components/EventCalendar/EventCalendar",
+    "importPath": "rift-ds/components/EventCalendar/EventCalendar",
     "barrel": "main",
     "exports": [
       {
@@ -4139,7 +4139,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "forms",
     "description": "The shared scaffolding for labelled form controls: label, required marker, helper and error text, and the ARIA wiring that ties them together.",
     "client": true,
-    "importPath": "@robr0/design-system/components/Field/Field",
+    "importPath": "rift-ds/components/Field/Field",
     "barrel": "main",
     "exports": [
       {
@@ -4228,7 +4228,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "data-display",
     "description": "Images with captions, in the case-study frame.",
     "client": false,
-    "importPath": "@robr0/design-system/components/Figure/Figure",
+    "importPath": "rift-ds/components/Figure/Figure",
     "barrel": "main",
     "exports": [
       {
@@ -4270,7 +4270,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "forms",
     "description": "A click-or-drop upload zone paired with a controlled file list showing size, progress, and per-file errors.",
     "client": true,
-    "importPath": "@robr0/design-system/components/FileInput/FileInput",
+    "importPath": "rift-ds/components/FileInput/FileInput",
     "barrel": "main",
     "exports": [
       {
@@ -4353,7 +4353,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "forms",
     "description": "A row of filter chips for narrowing a collection, each opening a popover of options, with per-filter and clear-all resets.",
     "client": true,
-    "importPath": "@robr0/design-system/components/FilterBar/FilterBar",
+    "importPath": "rift-ds/components/FilterBar/FilterBar",
     "barrel": "main",
     "exports": [
       {
@@ -4415,7 +4415,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "charts",
     "description": "Ordered funnel stages as centred trapezoid bands, each sized by its share of the first stage.",
     "client": false,
-    "importPath": "@robr0/design-system/components/FunnelChart/FunnelChart",
+    "importPath": "rift-ds/components/FunnelChart/FunnelChart",
     "barrel": "charts",
     "exports": [
       {
@@ -4485,7 +4485,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "charts",
     "description": "Phases and tasks as bars on a shared timeline, with milestones, progress, and a today rule.",
     "client": false,
-    "importPath": "@robr0/design-system/components/GanttChart/GanttChart",
+    "importPath": "rift-ds/components/GanttChart/GanttChart",
     "barrel": "main",
     "exports": [
       {
@@ -4579,7 +4579,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "charts",
     "description": "A radial dial for a single bounded reading, recoloured through the status roles as it crosses thresholds.",
     "client": false,
-    "importPath": "@robr0/design-system/components/Gauge/Gauge",
+    "importPath": "rift-ds/components/Gauge/Gauge",
     "barrel": "main",
     "exports": [
       {
@@ -4688,7 +4688,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "maps",
     "description": "An orthographic globe with markers and great-circle arcs, rotated by drag, keys, or a slow spin.",
     "client": true,
-    "importPath": "@robr0/design-system/components/Globe/Globe",
+    "importPath": "rift-ds/components/Globe/Globe",
     "barrel": "main",
     "exports": [
       {
@@ -4804,7 +4804,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "overlays",
     "description": "Rich preview panel that opens from hover or focus, with interactive content and position options.",
     "client": true,
-    "importPath": "@robr0/design-system/components/HoverCard/HoverCard",
+    "importPath": "rift-ds/components/HoverCard/HoverCard",
     "barrel": "main",
     "exports": [
       {
@@ -4861,7 +4861,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "data-display",
     "description": "Before-and-after image comparison with a draggable divider, keyboard control, and corner labels.",
     "client": true,
-    "importPath": "@robr0/design-system/components/ImageCompare/ImageCompare",
+    "importPath": "rift-ds/components/ImageCompare/ImageCompare",
     "barrel": "main",
     "exports": [
       {
@@ -4956,7 +4956,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "forms",
     "description": "Text input with label, placeholder, left and right icons, helper text, and error states.",
     "client": true,
-    "importPath": "@robr0/design-system/components/Input/Input",
+    "importPath": "rift-ds/components/Input/Input",
     "barrel": "main",
     "exports": [
       {
@@ -5044,7 +5044,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "data-display",
     "description": "Step-by-step guidance with numbered badges, connecting lines, and horizontal layout.",
     "client": false,
-    "importPath": "@robr0/design-system/components/Instructions/Instructions",
+    "importPath": "rift-ds/components/Instructions/Instructions",
     "barrel": "main",
     "exports": [
       {
@@ -5101,7 +5101,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "ai",
     "description": "A human-in-the-loop checkpoint with a question from the agent and option buttons to decide.",
     "client": false,
-    "importPath": "@robr0/design-system/components/InterruptCard/InterruptCard",
+    "importPath": "rift-ds/components/InterruptCard/InterruptCard",
     "barrel": "main",
     "exports": [
       {
@@ -5173,7 +5173,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "data-display",
     "description": "A keyboard key rendered as a keycap, for shortcut hints in menus and prose.",
     "client": false,
-    "importPath": "@robr0/design-system/components/Kbd/Kbd",
+    "importPath": "rift-ds/components/Kbd/Kbd",
     "barrel": "main",
     "exports": [
       {
@@ -5210,7 +5210,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "charts",
     "description": "The labelled value tile under a chart: a series dot, the series name, and its reading, on an inset fill.",
     "client": false,
-    "importPath": "@robr0/design-system/components/LegendTile/LegendTile",
+    "importPath": "rift-ds/components/LegendTile/LegendTile",
     "barrel": "main",
     "exports": [
       {
@@ -5252,7 +5252,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "overlays",
     "description": "Fullscreen media viewer on the shared overlay stack: deep scrim, caption chip, gallery stepping, trapped and restored focus.",
     "client": true,
-    "importPath": "@robr0/design-system/components/Lightbox/Lightbox",
+    "importPath": "rift-ds/components/Lightbox/Lightbox",
     "barrel": "main",
     "exports": [
       {
@@ -5331,7 +5331,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "charts",
     "description": "Multi-series line chart for trends over time, with per-series colours and a summary row.",
     "client": false,
-    "importPath": "@robr0/design-system/components/Chart/LineChart",
+    "importPath": "rift-ds/components/Chart/LineChart",
     "barrel": "charts",
     "exports": [
       {
@@ -5406,7 +5406,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "data-display",
     "description": "Linked items with logo, label, and subtitle.",
     "client": false,
-    "importPath": "@robr0/design-system/components/LinkList/LinkList",
+    "importPath": "rift-ds/components/LinkList/LinkList",
     "barrel": "main",
     "exports": [
       {
@@ -5436,7 +5436,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "maps",
     "description": "The annotation beside a map point: a name in capitals over monospace readout lines.",
     "client": false,
-    "importPath": "@robr0/design-system/components/MapCallout/MapCallout",
+    "importPath": "rift-ds/components/MapCallout/MapCallout",
     "barrel": "main",
     "exports": [
       {
@@ -5480,7 +5480,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "maps",
     "description": "The corner block of a map: its name, what it shows, and the key to its markers.",
     "client": false,
-    "importPath": "@robr0/design-system/components/MapLegend/MapLegend",
+    "importPath": "rift-ds/components/MapLegend/MapLegend",
     "barrel": "main",
     "exports": [
       {
@@ -5523,7 +5523,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "ai",
     "description": "An icon-button row for message-level actions like copy, retry, and feedback.",
     "client": false,
-    "importPath": "@robr0/design-system/components/MessageActions/MessageActions",
+    "importPath": "rift-ds/components/MessageActions/MessageActions",
     "barrel": "main",
     "exports": [
       {
@@ -5566,7 +5566,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "ai",
     "description": "A structured rich-content card embedded in a chat message, with media, title, body, and actions.",
     "client": false,
-    "importPath": "@robr0/design-system/components/MessageCard/MessageCard",
+    "importPath": "rift-ds/components/MessageCard/MessageCard",
     "barrel": "main",
     "exports": [
       {
@@ -5632,7 +5632,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "feedback",
     "description": "Level indicator for a known quantity, with a status-coloured fill and an optional value readout.",
     "client": false,
-    "importPath": "@robr0/design-system/components/Meter/Meter",
+    "importPath": "rift-ds/components/Meter/Meter",
     "barrel": "main",
     "exports": [
       {
@@ -5710,7 +5710,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "ai",
     "description": "A model selector for chat surfaces, with per-model descriptions and an optional effort row.",
     "client": true,
-    "importPath": "@robr0/design-system/components/ModelPicker/ModelPicker",
+    "importPath": "rift-ds/components/ModelPicker/ModelPicker",
     "barrel": "main",
     "exports": [
       {
@@ -5797,7 +5797,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "navigation",
     "description": "Desktop top navigation bar with a brand slot, horizontal button group, and optional trailing content.",
     "client": false,
-    "importPath": "@robr0/design-system/components/Nav/Nav",
+    "importPath": "rift-ds/components/Nav/Nav",
     "barrel": "main",
     "exports": [
       {
@@ -5845,7 +5845,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "navigation",
     "description": "Vertical list of navigation links for drawers and menus, with three indent levels and per-row expand toggles.",
     "client": true,
-    "importPath": "@robr0/design-system/components/NavList/NavList",
+    "importPath": "rift-ds/components/NavList/NavList",
     "barrel": "main",
     "exports": [
       {
@@ -5912,7 +5912,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "feedback",
     "description": "A persistent notification inbox with unread count, filter tabs, and per-item actions.",
     "client": true,
-    "importPath": "@robr0/design-system/components/NotificationCenter/NotificationCenter",
+    "importPath": "rift-ds/components/NotificationCenter/NotificationCenter",
     "barrel": "main",
     "exports": [
       {
@@ -6048,7 +6048,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "forms",
     "description": "Numeric field with increment and decrement steppers and min/max clamping.",
     "client": true,
-    "importPath": "@robr0/design-system/components/NumberInput/NumberInput",
+    "importPath": "rift-ds/components/NumberInput/NumberInput",
     "barrel": "main",
     "exports": [
       {
@@ -6135,7 +6135,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "navigation",
     "description": "Numbered page navigation for long datasets, with ellipses, disabled end arrows, and a compact readout mode.",
     "client": true,
-    "importPath": "@robr0/design-system/components/Pagination/Pagination",
+    "importPath": "rift-ds/components/Pagination/Pagination",
     "barrel": "main",
     "exports": [
       {
@@ -6198,7 +6198,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "layout",
     "description": "The plain dashboard surface: a rounded container with no border or shadow, just padding and a gap.",
     "client": false,
-    "importPath": "@robr0/design-system/components/Panel/Panel",
+    "importPath": "rift-ds/components/Panel/Panel",
     "barrel": "main",
     "exports": [
       {
@@ -6235,7 +6235,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "charts",
     "description": "Proportional share of a whole as a pie or donut, with per-slice colours.",
     "client": false,
-    "importPath": "@robr0/design-system/components/Chart/PieChart",
+    "importPath": "rift-ds/components/Chart/PieChart",
     "barrel": "charts",
     "exports": [
       {
@@ -6318,7 +6318,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "forms",
     "description": "Segmented one-time-code input with auto-advance, paste support, and completion callback.",
     "client": true,
-    "importPath": "@robr0/design-system/components/PinInput/PinInput",
+    "importPath": "rift-ds/components/PinInput/PinInput",
     "barrel": "main",
     "exports": [
       {
@@ -6413,7 +6413,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "overlays",
     "description": "Contextual overlay panel with click and hover triggers, positioned relative to its anchor.",
     "client": true,
-    "importPath": "@robr0/design-system/components/Popover/Popover",
+    "importPath": "rift-ds/components/Popover/Popover",
     "barrel": "main",
     "exports": [
       {
@@ -6488,7 +6488,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "feedback",
     "description": "Horizontal bar indicating completion progress, with an optional percentage label.",
     "client": false,
-    "importPath": "@robr0/design-system/components/ProgressBar/ProgressBar",
+    "importPath": "rift-ds/components/ProgressBar/ProgressBar",
     "barrel": "main",
     "exports": [
       {
@@ -6539,7 +6539,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "ai",
     "description": "A horizontal row of tappable prompt suggestions to start or steer a conversation.",
     "client": true,
-    "importPath": "@robr0/design-system/components/PromptSuggestions/PromptSuggestions",
+    "importPath": "rift-ds/components/PromptSuggestions/PromptSuggestions",
     "barrel": "main",
     "exports": [
       {
@@ -6624,7 +6624,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "ai",
     "description": "Token-styled typography for rendered markdown and rich agent output.",
     "client": false,
-    "importPath": "@robr0/design-system/components/Prose/Prose",
+    "importPath": "rift-ds/components/Prose/Prose",
     "barrel": "main",
     "exports": [
       {
@@ -6661,7 +6661,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "data-display",
     "description": "Blockquotes and pull-quotes with attribution.",
     "client": false,
-    "importPath": "@robr0/design-system/components/Quote/Quote",
+    "importPath": "rift-ds/components/Quote/Quote",
     "barrel": "main",
     "exports": [
       {
@@ -6710,7 +6710,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "charts",
     "description": "Multi-axis comparison of series across categories on a radial grid.",
     "client": false,
-    "importPath": "@robr0/design-system/components/Chart/RadarChart",
+    "importPath": "rift-ds/components/Chart/RadarChart",
     "barrel": "charts",
     "exports": [
       {
@@ -6785,7 +6785,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "charts",
     "description": "Concentric progress rings for completion and KPI readouts.",
     "client": false,
-    "importPath": "@robr0/design-system/components/Chart/RadialChart",
+    "importPath": "rift-ds/components/Chart/RadialChart",
     "barrel": "charts",
     "exports": [
       {
@@ -6887,7 +6887,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "forms",
     "description": "Radio button and radio group with vertical and horizontal layouts, animated dot indicator.",
     "client": true,
-    "importPath": "@robr0/design-system/components/RadioButton/RadioButton",
+    "importPath": "rift-ds/components/RadioButton/RadioButton",
     "barrel": "main",
     "exports": [
       {
@@ -7056,7 +7056,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "forms",
     "description": "Star-scale rating control with keyboard selection, a read-only mode, and a configurable icon.",
     "client": true,
-    "importPath": "@robr0/design-system/components/Rating/Rating",
+    "importPath": "rift-ds/components/Rating/Rating",
     "barrel": "main",
     "exports": [
       {
@@ -7148,7 +7148,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "ai",
     "description": "A model's thinking, disclosed behind a one-line summary and collapsed once it finishes.",
     "client": true,
-    "importPath": "@robr0/design-system/components/Reasoning/Reasoning",
+    "importPath": "rift-ds/components/Reasoning/Reasoning",
     "barrel": "main",
     "exports": [
       {
@@ -7235,7 +7235,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "forms",
     "description": "Dropdown's rich sibling: options preview their own heading face, body face, and key colour.",
     "client": true,
-    "importPath": "@robr0/design-system/components/RichDropdown/RichDropdown",
+    "importPath": "rift-ds/components/RichDropdown/RichDropdown",
     "barrel": "main",
     "exports": [
       {
@@ -7329,7 +7329,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "charts",
     "description": "Plots point clusters across two axes to show correlation and distribution.",
     "client": false,
-    "importPath": "@robr0/design-system/components/Chart/ScatterChart",
+    "importPath": "rift-ds/components/Chart/ScatterChart",
     "barrel": "charts",
     "exports": [
       {
@@ -7419,7 +7419,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "layout",
     "description": "Heading with a divider line and optional trailing content for organising page sections.",
     "client": false,
-    "importPath": "@robr0/design-system/components/SectionTitle/SectionTitle",
+    "importPath": "rift-ds/components/SectionTitle/SectionTitle",
     "barrel": "main",
     "exports": [
       {
@@ -7461,7 +7461,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "actions",
     "description": "Pill-style toggle between related views with keyboard navigation and icon support.",
     "client": true,
-    "importPath": "@robr0/design-system/components/SegmentedControl/SegmentedControl",
+    "importPath": "rift-ds/components/SegmentedControl/SegmentedControl",
     "barrel": "main",
     "exports": [
       {
@@ -7537,7 +7537,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "data-display",
     "description": "Large selectable option cards with radio or checkbox indicators for high-visibility choices like settings and onboarding.",
     "client": true,
-    "importPath": "@robr0/design-system/components/SelectionCard/SelectionCard",
+    "importPath": "rift-ds/components/SelectionCard/SelectionCard",
     "barrel": "main",
     "exports": [
       {
@@ -7599,7 +7599,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "effects",
     "description": "An ambient WebGL2 field of soft light sources that sample colour tokens, with a reported fallback status.",
     "client": true,
-    "importPath": "@robr0/design-system/components/ShaderField/ShaderField",
+    "importPath": "rift-ds/components/ShaderField/ShaderField",
     "barrel": "main",
     "exports": [
       {
@@ -7615,7 +7615,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "feedback",
     "description": "Placeholder loading indicators with text, circular, and rectangular variants.",
     "client": false,
-    "importPath": "@robr0/design-system/components/Skeleton/Skeleton",
+    "importPath": "rift-ds/components/Skeleton/Skeleton",
     "barrel": "main",
     "exports": [
       {
@@ -7665,7 +7665,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "forms",
     "description": "Range input for selecting a value between a minimum and maximum, in default and compact sizes.",
     "client": true,
-    "importPath": "@robr0/design-system/components/Slider/Slider",
+    "importPath": "rift-ds/components/Slider/Slider",
     "barrel": "main",
     "exports": [
       {
@@ -7770,7 +7770,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "ai",
     "description": "A numbered citation pill linking a claim to its source.",
     "client": false,
-    "importPath": "@robr0/design-system/components/SourceChip/SourceChip",
+    "importPath": "rift-ds/components/SourceChip/SourceChip",
     "barrel": "main",
     "exports": [
       {
@@ -7818,7 +7818,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "ai",
     "description": "The sources an agent opened while answering, as a collapsible list with per-item status.",
     "client": true,
-    "importPath": "@robr0/design-system/components/SourceTrail/SourceTrail",
+    "importPath": "rift-ds/components/SourceTrail/SourceTrail",
     "barrel": "main",
     "exports": [
       {
@@ -7880,7 +7880,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "charts",
     "description": "Inline trend line for stats and table cells, drawn without axes or chrome.",
     "client": false,
-    "importPath": "@robr0/design-system/components/Sparkline/Sparkline",
+    "importPath": "rift-ds/components/Sparkline/Sparkline",
     "barrel": "main",
     "exports": [
       {
@@ -7958,7 +7958,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "feedback",
     "description": "Animated circular loading indicator in three sizes and primary, neutral, or inherit variants.",
     "client": false,
-    "importPath": "@robr0/design-system/components/Spinner/Spinner",
+    "importPath": "rift-ds/components/Spinner/Spinner",
     "barrel": "main",
     "exports": [
       {
@@ -8003,7 +8003,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "actions",
     "description": "Primary action with an attached menu of alternatives, composing Button and DropdownMenu in one pill.",
     "client": false,
-    "importPath": "@robr0/design-system/components/SplitButton/SplitButton",
+    "importPath": "rift-ds/components/SplitButton/SplitButton",
     "barrel": "main",
     "exports": [
       {
@@ -8093,7 +8093,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "layout",
     "description": "Two resizable regions with a draggable, keyboard-operable divider between them.",
     "client": true,
-    "importPath": "@robr0/design-system/components/SplitPane/SplitPane",
+    "importPath": "rift-ds/components/SplitPane/SplitPane",
     "barrel": "main",
     "exports": [
       {
@@ -8170,7 +8170,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "charts",
     "description": "Bars split into stacked segments to compare totals and their composition.",
     "client": false,
-    "importPath": "@robr0/design-system/components/Chart/StackedBarChart",
+    "importPath": "rift-ds/components/Chart/StackedBarChart",
     "barrel": "charts",
     "exports": [
       {
@@ -8251,7 +8251,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "data-display",
     "description": "Headline metrics with labels and trend deltas.",
     "client": false,
-    "importPath": "@robr0/design-system/components/Stat/Stat",
+    "importPath": "rift-ds/components/Stat/Stat",
     "barrel": "main",
     "exports": [
       {
@@ -8314,7 +8314,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "feedback",
     "description": "The bare status mark: a dot in the five status roles, with an optional label and a live pulse for recording and online-now states.",
     "client": false,
-    "importPath": "@robr0/design-system/components/StatusDot/StatusDot",
+    "importPath": "rift-ds/components/StatusDot/StatusDot",
     "barrel": "main",
     "exports": [
       {
@@ -8365,7 +8365,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "navigation",
     "description": "Step-by-step progress indicator for wizards and multi-stage flows.",
     "client": true,
-    "importPath": "@robr0/design-system/components/Stepper/Stepper",
+    "importPath": "rift-ds/components/Stepper/Stepper",
     "barrel": "main",
     "exports": [
       {
@@ -8414,7 +8414,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "ai",
     "description": "Progressive reveal for text arriving in chunks, with a blinking cursor while more is coming.",
     "client": true,
-    "importPath": "@robr0/design-system/components/StreamingText/StreamingText",
+    "importPath": "rift-ds/components/StreamingText/StreamingText",
     "barrel": "main",
     "exports": [
       {
@@ -8516,7 +8516,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "forms",
     "description": "Clickable colour tile for preset palettes and picker triggers, with a theme-aware selection ring.",
     "client": false,
-    "importPath": "@robr0/design-system/components/Swatch/Swatch",
+    "importPath": "rift-ds/components/Swatch/Swatch",
     "barrel": "main",
     "exports": [
       {
@@ -8580,7 +8580,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "data-display",
     "description": "Data table with flexible cell content, striped rows, compact sizing, and support for icons, inputs, buttons, and interactive controls.",
     "client": false,
-    "importPath": "@robr0/design-system/components/Table/Table",
+    "importPath": "rift-ds/components/Table/Table",
     "barrel": "main",
     "exports": [
       {
@@ -8650,7 +8650,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "navigation",
     "description": "Tab navigation with underline indicator, icon support, compact size, and full-width mode.",
     "client": true,
-    "importPath": "@robr0/design-system/components/Tabs/Tabs",
+    "importPath": "rift-ds/components/Tabs/Tabs",
     "barrel": "main",
     "exports": [
       {
@@ -8713,7 +8713,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "forms",
     "description": "Multi-value text input with entries held as removable tags.",
     "client": true,
-    "importPath": "@robr0/design-system/components/TagInput/TagInput",
+    "importPath": "rift-ds/components/TagInput/TagInput",
     "barrel": "main",
     "exports": [
       {
@@ -8787,7 +8787,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "forms",
     "description": "Multi-line text input with character counter, resize control, helper text, and error states.",
     "client": true,
-    "importPath": "@robr0/design-system/components/Textarea/Textarea",
+    "importPath": "rift-ds/components/Textarea/Textarea",
     "barrel": "main",
     "exports": [
       {
@@ -8870,7 +8870,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "ai",
     "description": "The session-history rail for chat products: brand header, new-thread action, standing controls, projects, grouped detail-rich threads, and a profile footer.",
     "client": false,
-    "importPath": "@robr0/design-system/components/ThreadPanel/ThreadPanel",
+    "importPath": "rift-ds/components/ThreadPanel/ThreadPanel",
     "barrel": "main",
     "exports": [
       {
@@ -9107,7 +9107,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "ai",
     "description": "The strip of open chat sessions: pill tabs with unread dots and hover-revealed close buttons, a new-tab action, and animated enter and exit.",
     "client": true,
-    "importPath": "@robr0/design-system/components/ThreadTabs/ThreadTabs",
+    "importPath": "rift-ds/components/ThreadTabs/ThreadTabs",
     "barrel": "main",
     "exports": [
       {
@@ -9182,7 +9182,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "forms",
     "description": "Time-of-day field with a dropdown list of selectable times.",
     "client": true,
-    "importPath": "@robr0/design-system/components/TimePicker/TimePicker",
+    "importPath": "rift-ds/components/TimePicker/TimePicker",
     "barrel": "main",
     "exports": [
       {
@@ -9299,7 +9299,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "data-display",
     "description": "Ordered sequences: histories and steppers.",
     "client": false,
-    "importPath": "@robr0/design-system/components/Timeline/Timeline",
+    "importPath": "rift-ds/components/Timeline/Timeline",
     "barrel": "main",
     "exports": [
       {
@@ -9347,7 +9347,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "feedback",
     "description": "Temporary notification with status variants, auto-dismiss, and stacking via ToastProvider.",
     "client": true,
-    "importPath": "@robr0/design-system/components/Toast/Toast",
+    "importPath": "rift-ds/components/Toast/Toast",
     "barrel": "main",
     "exports": [
       {
@@ -9432,7 +9432,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "actions",
     "description": "A set of two-state buttons that can be toggled on or off, supporting text and icon items.",
     "client": true,
-    "importPath": "@robr0/design-system/components/ToggleGroup/ToggleGroup",
+    "importPath": "rift-ds/components/ToggleGroup/ToggleGroup",
     "barrel": "main",
     "exports": [
       {
@@ -9517,7 +9517,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "forms",
     "description": "Binary on/off toggle control with sliding thumb and check indicator, used for settings like theme switching.",
     "client": true,
-    "importPath": "@robr0/design-system/components/ToggleSwitch/ToggleSwitch",
+    "importPath": "rift-ds/components/ToggleSwitch/ToggleSwitch",
     "barrel": "main",
     "exports": [
       {
@@ -9602,7 +9602,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "ai",
     "description": "The record of one tool invocation, with its arguments and result behind a disclosure.",
     "client": true,
-    "importPath": "@robr0/design-system/components/ToolCall/ToolCall",
+    "importPath": "rift-ds/components/ToolCall/ToolCall",
     "barrel": "main",
     "exports": [
       {
@@ -9688,7 +9688,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "layout",
     "description": "A grouped strip of controls in one pill shell: clusters, separators, arrow-key focus, and a glass floating variant.",
     "client": true,
-    "importPath": "@robr0/design-system/components/Toolbar/Toolbar",
+    "importPath": "rift-ds/components/Toolbar/Toolbar",
     "barrel": "main",
     "exports": [
       {
@@ -9742,7 +9742,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "overlays",
     "description": "Contextual text label that appears on hover or focus with position and delay options.",
     "client": true,
-    "importPath": "@robr0/design-system/components/Tooltip/Tooltip",
+    "importPath": "rift-ds/components/Tooltip/Tooltip",
     "barrel": "main",
     "exports": [
       {
@@ -9799,7 +9799,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "data-display",
     "description": "Collapsible hierarchy for files, folders, and nested structures.",
     "client": true,
-    "importPath": "@robr0/design-system/components/TreeView/TreeView",
+    "importPath": "rift-ds/components/TreeView/TreeView",
     "barrel": "main",
     "exports": [
       {
@@ -9866,7 +9866,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "charts",
     "description": "Nested rectangles sized by value for part-to-whole breakdowns.",
     "client": false,
-    "importPath": "@robr0/design-system/components/Chart/Treemap",
+    "importPath": "rift-ds/components/Chart/Treemap",
     "barrel": "charts",
     "exports": [
       {
@@ -9935,7 +9935,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "ai",
     "description": "An agent's budgets at a glance: context window and plan limits as meter rows with reset captions.",
     "client": false,
-    "importPath": "@robr0/design-system/components/UsageCard/UsageCard",
+    "importPath": "rift-ds/components/UsageCard/UsageCard",
     "barrel": "main",
     "exports": [
       {
@@ -9990,7 +9990,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "ai",
     "description": "Voice made visible: a row of bars dancing on the shared twelve-slot cycle, or tracking a live analyser level by level.",
     "client": false,
-    "importPath": "@robr0/design-system/components/Waveform/Waveform",
+    "importPath": "rift-ds/components/Waveform/Waveform",
     "barrel": "main",
     "exports": [
       {
@@ -10047,7 +10047,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "category": "maps",
     "description": "A flat world map from Natural Earth land shapes: token-coloured continents, framed bounds, and colour-carrying markers.",
     "client": true,
-    "importPath": "@robr0/design-system/components/WorldMap/WorldMap",
+    "importPath": "rift-ds/components/WorldMap/WorldMap",
     "barrel": "main",
     "exports": [
       {

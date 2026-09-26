@@ -5,7 +5,7 @@
   "title": "Map legend",
   "description": "The corner block of a map: its name, what it shows, and the key to its markers.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json"
+    "https://rift-ds.com/r/base.json"
   ],
   "files": [
     {

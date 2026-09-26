@@ -5,7 +5,7 @@
   "title": "Pagination",
   "description": "Numbered page navigation for long datasets, with ellipses, disabled end arrows, and a compact readout mode.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json"
+    "https://rift-ds.com/r/base.json"
   ],
   "files": [
     {

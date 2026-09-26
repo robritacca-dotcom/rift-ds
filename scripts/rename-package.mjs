@@ -31,11 +31,19 @@ const SKIP_DIRS = new Set([
   'dist',
   'storybook-static',
   'coverage',
+  // A git worktree under .claude/worktrees is a second checkout with its
+  // own branch and another session's work in it. Sweeping it rewrites
+  // files this repo does not own on this branch.
+  'worktrees',
 ]);
 
 /** Files the sweep never touches: npm owns the lockfile (refresh with
-    `npm install` after the sweep). */
-const SKIP_FILES = new Set(['package-lock.json']);
+    `npm install` after the sweep), and brand.mjs is the sweep's own
+    source of truth — it holds the new name AND the old one in
+    RETIRED_PACKAGE_NAMES, so rewriting it would retire the new name and
+    leave the scan chasing itself. validate-package-exports exempts the
+    same file, for the same reason. */
+const SKIP_FILES = new Set(['package-lock.json', 'brand.mjs']);
 
 /** Text extensions worth rewriting; everything else is binary or noise. */
 const TEXT_EXT = /\.(ts|tsx|mjs|js|jsx|json|md|mdx|css|ya?ml|txt)$/;

@@ -5,7 +5,7 @@
   "title": "Hover card",
   "description": "Rich preview panel that opens from hover or focus, with interactive content and position options.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json"
+    "https://rift-ds.com/r/base.json"
   ],
   "files": [
     {

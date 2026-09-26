@@ -1,9 +1,9 @@
 "use client";
 
-import { AgentRail, type AgentRailTab } from "@robr0/design-system/components/AgentRail/AgentRail";
-import { Button } from "@robr0/design-system/components/Button/Button";
-import { EmptyState } from "@robr0/design-system/components/EmptyState/EmptyState";
-import { NotificationItem } from "@robr0/design-system/components/NotificationCenter/NotificationCenter";
+import { AgentRail, type AgentRailTab } from "rift-ds/components/AgentRail/AgentRail";
+import { Button } from "rift-ds/components/Button/Button";
+import { EmptyState } from "rift-ds/components/EmptyState/EmptyState";
+import { NotificationItem } from "rift-ds/components/NotificationCenter/NotificationCenter";
 import styles from "./AgentPanel.module.css";
 
 /* The staged product's agent: a generic assistant with a generic record.

@@ -5,8 +5,8 @@
   "title": "Contribution graph",
   "description": "A year of activity, one cell per day.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json",
-    "https://dragonspine-delta.vercel.app/r/treemap.json"
+    "https://rift-ds.com/r/base.json",
+    "https://rift-ds.com/r/treemap.json"
   ],
   "files": [
     {

@@ -3,8 +3,8 @@
 import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
-import { EntityCard } from "@robr0/design-system/components/EntityCard/EntityCard";
-import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
+import { EntityCard } from "rift-ds/components/EntityCard/EntityCard";
+import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";

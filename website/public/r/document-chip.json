@@ -5,8 +5,8 @@
   "title": "Document chip",
   "description": "A compact file reference with a type icon, name, metadata, and optional remove.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json",
-    "https://dragonspine-delta.vercel.app/r/progress-bar.json"
+    "https://rift-ds.com/r/base.json",
+    "https://rift-ds.com/r/progress-bar.json"
   ],
   "files": [
     {

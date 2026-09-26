@@ -2,13 +2,13 @@
 
 Vertical list of navigation links for drawers and menus, with three indent levels and per-row expand toggles.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine-delta.vercel.app/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: navigation
-- Import: `import { NavList } from '@robr0/design-system';`
-- Deep import: `import { NavList } from '@robr0/design-system/components/NavList/NavList';`
+- Import: `import { NavList } from 'rift-ds';`
+- Deep import: `import { NavList } from 'rift-ds/components/NavList/NavList';`
 - Rendering: client component (declares 'use client')
-- Live docs: https://dragonspine-delta.vercel.app/components/nav-list
+- Live docs: https://rift-ds.com/components/nav-list
 
 ## NavList props
 

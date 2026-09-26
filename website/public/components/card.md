@@ -2,13 +2,13 @@
 
 Card components for previews, navigation, and token documentation, from content cards to colour swatches and typography specimens.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine-delta.vercel.app/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: data-display
-- Import: `import { Card } from '@robr0/design-system';`
-- Deep import: `import { Card } from '@robr0/design-system/components/Card/Card';`
+- Import: `import { Card } from 'rift-ds';`
+- Deep import: `import { Card } from 'rift-ds/components/Card/Card';`
 - Rendering: client component (declares 'use client')
-- Live docs: https://dragonspine-delta.vercel.app/components/card
+- Live docs: https://rift-ds.com/components/card
 
 ## Card props
 

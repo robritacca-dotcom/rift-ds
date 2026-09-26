@@ -2,13 +2,13 @@
 
 A dot-matrix indicator and status line reporting what an agent is doing right now.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine-delta.vercel.app/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: ai
-- Import: `import { AgentStatus } from '@robr0/design-system';`
-- Deep import: `import { AgentStatus } from '@robr0/design-system/components/AgentStatus/AgentStatus';`
+- Import: `import { AgentStatus } from 'rift-ds';`
+- Deep import: `import { AgentStatus } from 'rift-ds/components/AgentStatus/AgentStatus';`
 - Rendering: client component (declares 'use client')
-- Live docs: https://dragonspine-delta.vercel.app/components/agent-status
+- Live docs: https://rift-ds.com/components/agent-status
 
 ## AgentStatus props
 

@@ -125,11 +125,15 @@
    Matches the table style used on markdown content pages.
    ============================================ */
 
+/* The bordered table is a container surface, not a window onto the page:
+   it sits on the same ramp step as the cards and panels around it, so a
+   table reads as an object standing off the page rather than a ruled
+   region of it. */
 .ds-table__wrapper {
   overflow-x: auto;
   border: var(--border-025) solid var(--color-divider);
   border-radius: var(--radius-300); /* 12px */
-  background: var(--color-bg-page-primary);
+  background: var(--color-bg-container-primary);
 }
 
 /* Columns never reflow on a phone: the wrapper scrolls instead
@@ -147,9 +151,10 @@
   border-radius: 0;
 }
 
-/* Thead gets a tinted background to distinguish it from body rows */
+/* Thead steps one notch off the body surface, so the header band reads as
+   a header in both themes without a second border. */
 .ds-table--bordered .ds-table__head {
-  background: var(--color-bg-container-primary);
+  background: var(--color-bg-container-secondary);
 }
 
 /* Remove row-level border — border-collapse: separate ignores it */
@@ -172,9 +177,12 @@
   border-bottom: none;
 }
 
-/* Row hover on bordered variant */
+/* Row hover on bordered variant: the body is now the container surface
+   itself, so the hover has to be a tint over it rather than that same
+   colour. The passive hover token is translucent and works over either
+   theme's body. */
 .ds-table--bordered .ds-table__body .ds-table__row:hover {
-  background-color: var(--color-bg-container-primary);
+  background-color: var(--color-action-passive-bg-hover);
 }
 
 /* ============================================

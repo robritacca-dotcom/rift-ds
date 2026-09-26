@@ -5,7 +5,7 @@
   "title": "Toast",
   "description": "Temporary notification with status variants, auto-dismiss, and stacking via ToastProvider.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json"
+    "https://rift-ds.com/r/base.json"
   ],
   "files": [
     {

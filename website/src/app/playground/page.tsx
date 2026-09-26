@@ -11,10 +11,10 @@ import StageControlBar, {
 } from "@/components/StageControlBar/StageControlBar";
 import StageThemeFlip from "@/components/StageControlBar/StageThemeFlip";
 import styles from "./page.module.css";
-import { Button } from "@robr0/design-system/components/Button/Button";
-import { CodeBlock } from "@robr0/design-system/components/CodeBlock/CodeBlock";
-import { Dialog } from "@robr0/design-system/components/Dialog/Dialog";
-import { Drawer } from "@robr0/design-system/components/Drawer/Drawer";
+import { Button } from "rift-ds/components/Button/Button";
+import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
+import { Dialog } from "rift-ds/components/Dialog/Dialog";
+import { Drawer } from "rift-ds/components/Drawer/Drawer";
 import {
   DEFAULT_ADVANCED,
   DEFAULT_BRAND,
@@ -58,11 +58,11 @@ import { stageMobileCss } from "./stage-mobile-css";
 import { createSimTransport } from "@/lib/chat-sim";
 import { createFetchTransport } from "@/lib/chat-transport";
 import { SiteChatProvider, useSiteChat } from "@/components/SiteChat/ChatContext";
-import { Input } from "@robr0/design-system/components/Input/Input";
-import { RadioGroup } from "@robr0/design-system/components/RadioButton/RadioButton";
-import { SegmentedControl } from "@robr0/design-system/components/SegmentedControl/SegmentedControl";
-import { ShaderField } from "@robr0/design-system/components/ShaderField/ShaderField";
-import { ToggleSwitch } from "@robr0/design-system/components/ToggleSwitch/ToggleSwitch";
+import { Input } from "rift-ds/components/Input/Input";
+import { RadioGroup } from "rift-ds/components/RadioButton/RadioButton";
+import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
+import { ShaderField } from "rift-ds/components/ShaderField/ShaderField";
+import { ToggleSwitch } from "rift-ds/components/ToggleSwitch/ToggleSwitch";
 import { shaderBackground } from "@/data/shader-background";
 import ActionsSection from "./sections/ActionsSection";
 import MapsSection from "./sections/MapsSection";
@@ -867,7 +867,7 @@ export default function PlaygroundPage() {
           <div className={styles.cssDialogBody}>
             <p className={styles.sectionNote}>
               Paste this after importing{" "}
-              <code>@robr0/design-system/tokens/tokens.css</code> and your app
+              <code>rift-ds/tokens/tokens.css</code> and your app
               matches this page, both themes included. The install steps live on{" "}
               <Link href="/docs/get-started" className={styles.inlineLink}>
                 Get started

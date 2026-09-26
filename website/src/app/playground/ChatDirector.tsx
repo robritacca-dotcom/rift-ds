@@ -3,18 +3,18 @@
 import { useEffect, useState, type ReactNode } from "react";
 import layout from "./page.module.css";
 import styles from "./ChatDirector.module.css";
-import { AgentPlan, type AgentPlanStep } from "@robr0/design-system/components/AgentPlan/AgentPlan";
-import { Button } from "@robr0/design-system/components/Button/Button";
-import { ChatMarker } from "@robr0/design-system/components/ChatMarker/ChatMarker";
-import { CodeBlock } from "@robr0/design-system/components/CodeBlock/CodeBlock";
-import { CodeDiff } from "@robr0/design-system/components/CodeDiff/CodeDiff";
-import { AreaChart } from "@robr0/design-system/components/Chart/AreaChart";
-import { BarChart } from "@robr0/design-system/components/Chart/BarChart";
-import { DocumentChip } from "@robr0/design-system/components/DocumentChip/DocumentChip";
-import { InterruptCard } from "@robr0/design-system/components/InterruptCard/InterruptCard";
-import { MessageCard } from "@robr0/design-system/components/MessageCard/MessageCard";
-import { SourceChip } from "@robr0/design-system/components/SourceChip/SourceChip";
-import { ToolCall } from "@robr0/design-system/components/ToolCall/ToolCall";
+import { AgentPlan, type AgentPlanStep } from "rift-ds/components/AgentPlan/AgentPlan";
+import { Button } from "rift-ds/components/Button/Button";
+import { ChatMarker } from "rift-ds/components/ChatMarker/ChatMarker";
+import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
+import { CodeDiff } from "rift-ds/components/CodeDiff/CodeDiff";
+import { AreaChart } from "rift-ds/components/Chart/AreaChart";
+import { BarChart } from "rift-ds/components/Chart/BarChart";
+import { DocumentChip } from "rift-ds/components/DocumentChip/DocumentChip";
+import { InterruptCard } from "rift-ds/components/InterruptCard/InterruptCard";
+import { MessageCard } from "rift-ds/components/MessageCard/MessageCard";
+import { SourceChip } from "rift-ds/components/SourceChip/SourceChip";
+import { ToolCall } from "rift-ds/components/ToolCall/ToolCall";
 import { useSiteChat } from "@/components/SiteChat/ChatContext";
 
 /* ============================================

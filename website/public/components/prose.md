@@ -2,13 +2,13 @@
 
 Token-styled typography for rendered markdown and rich agent output.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine-delta.vercel.app/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: ai
-- Import: `import { Prose } from '@robr0/design-system';`
-- Deep import: `import { Prose } from '@robr0/design-system/components/Prose/Prose';`
+- Import: `import { Prose } from 'rift-ds';`
+- Deep import: `import { Prose } from 'rift-ds/components/Prose/Prose';`
 - Rendering: server-renderable (no 'use client')
-- Live docs: https://dragonspine-delta.vercel.app/components/prose
+- Live docs: https://rift-ds.com/components/prose
 
 ## Prose props
 

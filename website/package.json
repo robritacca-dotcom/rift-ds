@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.116.0",
-    "@robr0/design-system": "file:..",
+    "rift-ds": "file:..",
     "@upstash/ratelimit": "^2.0.8",
     "@upstash/redis": "^1.38.2",
     "mcp-handler": "^2.1.1",

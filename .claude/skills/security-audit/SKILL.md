@@ -7,7 +7,7 @@ invoke: ["run the security audit","/security-audit"]
 
 # security-audit
 
-A skeptical, evidence-first review of the whole system — the `@robr0/design-system` package, the Next.js website, the AI chat layer, the CI/release pipeline, and the analytics/privacy posture. Every claim is confirmed against source or a live request before it reaches the report; nothing is taken on trust.
+A skeptical, evidence-first review of the whole system — the `rift-ds` package, the Next.js website, the AI chat layer, the CI/release pipeline, and the analytics/privacy posture. Every claim is confirmed against source or a live request before it reaches the report; nothing is taken on trust.
 
 ## When invoked
 

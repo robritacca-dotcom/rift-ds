@@ -5,7 +5,7 @@
   "title": "Agent status",
   "description": "A dot-matrix indicator and status line reporting what an agent is doing right now.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json"
+    "https://rift-ds.com/r/base.json"
   ],
   "files": [
     {
@@ -24,7 +24,7 @@
       "path": "src/components/AgentStatus/AgentStatusPatterns.tsx",
       "type": "registry:file",
       "target": "rift/components/AgentStatus/AgentStatusPatterns.tsx",
-      "content": "/**\n * AgentStatus's vocabulary, kept out of the component file so that module\n * exports only a component (react-refresh) — and exported rather than kept\n * private so a consumer building a pattern picker, and this repo's own docs\n * gallery, can iterate the list instead of restating it.\n *\n * `.tsx` despite holding no JSX: the barrel generator and the\n * `./components/*` export subpath both address `.tsx`, so that extension is\n * what makes this reachable as `@robr0/design-system/components/AgentStatus/AgentStatusPatterns`.\n */\n\n/**\n * The dot-matrix animations. Each pattern is a named choreography over the\n * same 4x3 grid, so switching pattern never changes the indicator's footprint.\n */\nexport const agentStatusPatterns = [\n  'braille',\n  'orbit',\n  'breathe',\n  'snake',\n  'fill-sweep',\n  'pulse',\n  'columns',\n  'checkerboard',\n  'scan',\n  'rain',\n  'cascade',\n  'sparkle',\n  'wave-rows',\n  'helix',\n  'diagonal-swipe',\n] as const;\n\nexport type AgentStatusPattern = (typeof agentStatusPatterns)[number];\n\nexport type AgentStatusState =\n  | 'idle'\n  | 'thinking'\n  | 'working'\n  | 'waiting'\n  | 'done'\n  | 'error';\n"
+      "content": "/**\n * AgentStatus's vocabulary, kept out of the component file so that module\n * exports only a component (react-refresh) — and exported rather than kept\n * private so a consumer building a pattern picker, and this repo's own docs\n * gallery, can iterate the list instead of restating it.\n *\n * `.tsx` despite holding no JSX: the barrel generator and the\n * `./components/*` export subpath both address `.tsx`, so that extension is\n * what makes this reachable as `rift-ds/components/AgentStatus/AgentStatusPatterns`.\n */\n\n/**\n * The dot-matrix animations. Each pattern is a named choreography over the\n * same 4x3 grid, so switching pattern never changes the indicator's footprint.\n */\nexport const agentStatusPatterns = [\n  'braille',\n  'orbit',\n  'breathe',\n  'snake',\n  'fill-sweep',\n  'pulse',\n  'columns',\n  'checkerboard',\n  'scan',\n  'rain',\n  'cascade',\n  'sparkle',\n  'wave-rows',\n  'helix',\n  'diagonal-swipe',\n] as const;\n\nexport type AgentStatusPattern = (typeof agentStatusPatterns)[number];\n\nexport type AgentStatusState =\n  | 'idle'\n  | 'thinking'\n  | 'working'\n  | 'waiting'\n  | 'done'\n  | 'error';\n"
     }
   ]
 }

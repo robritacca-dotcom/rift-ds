@@ -9,7 +9,7 @@ import {
   COMPONENT_COUNT,
   componentMetadata,
   componentCategoryMetadata,
-} from "@robr0/design-system/components/registry";
+} from "rift-ds/components/registry";
 
 export interface NavLink {
   href: string;

@@ -7,8 +7,8 @@ import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import {
   ThreadTabs,
   type ThreadTab,
-} from "@robr0/design-system/components/ThreadTabs/ThreadTabs";
-import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
+} from "rift-ds/components/ThreadTabs/ThreadTabs";
+import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";

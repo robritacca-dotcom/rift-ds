@@ -7,8 +7,8 @@ import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import {
   ContributionGraph,
   type ContributionDay,
-} from "@robr0/design-system/components/ContributionGraph/ContributionGraph";
-import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
+} from "rift-ds/components/ContributionGraph/ContributionGraph";
+import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import GitHubContributions from "../../../components/GitHubContributions/GitHubContributions";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";

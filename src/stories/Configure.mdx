@@ -32,15 +32,15 @@ An open source, AI-ready React design system where every visual decision is a to
 Everything on this page ships as a package. Install it, import the token stylesheet once, and use the components:
 
 ```bash
-npm install @robr0/design-system
+npm install rift-ds
 ```
 
 ```tsx
-import '@robr0/design-system/tokens/tokens.css';
-import { Button, Card, Badge } from '@robr0/design-system';
+import 'rift-ds/tokens/tokens.css';
+import { Button, Card, Badge } from 'rift-ds';
 ```
 
-The stylesheet carries the primitives, the semantic tokens, and both themes: import it once at your app root. Deep imports work too (`@robr0/design-system/components/Button/Button`), and the recharts-backed charts live behind a separate `/charts` entry so the optional `recharts` peer is only needed if you use them (the dependency-free chart pieces export from the main barrel with everything else).
+The stylesheet carries the primitives, the semantic tokens, and both themes: import it once at your app root. Deep imports work too (`rift-ds/components/Button/Button`), and the recharts-backed charts live behind a separate `/charts` entry so the optional `recharts` peer is only needed if you use them (the dependency-free chart pieces export from the main barrel with everything else).
 
 The full install and theming guide lives at <a href={`${SITE_URL}/docs/get-started`}>{`${SITE_URL.replace("https://", "")}/docs/get-started`}</a>, with two more ways in beside the package: pull single components as source through the shadcn CLI, or clone the repo outright. Coding agents can read the same reference over MCP: point any Model Context Protocol client at <code>{`${SITE_URL}/api/mcp`}</code> for the component list, prop contracts, and tokens.
 

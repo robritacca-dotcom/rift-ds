@@ -2,13 +2,13 @@
 
 Contextual feedback with status variants, optional dismiss, and compact sizing.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine-delta.vercel.app/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: feedback
-- Import: `import { Alert } from '@robr0/design-system';`
-- Deep import: `import { Alert } from '@robr0/design-system/components/Alert/Alert';`
+- Import: `import { Alert } from 'rift-ds';`
+- Deep import: `import { Alert } from 'rift-ds/components/Alert/Alert';`
 - Rendering: server-renderable (no 'use client')
-- Live docs: https://dragonspine-delta.vercel.app/components/alert
+- Live docs: https://rift-ds.com/components/alert
 
 ## Alert props
 

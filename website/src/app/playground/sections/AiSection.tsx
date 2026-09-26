@@ -2,14 +2,14 @@
 
 import { useState } from "react";
 import styles from "../page.module.css";
-import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
-import { AgentStatus } from "@robr0/design-system/components/AgentStatus/AgentStatus";
-import { AiButton } from "@robr0/design-system/components/AiButton/AiButton";
-import { CodeBlock } from "@robr0/design-system/components/CodeBlock/CodeBlock";
-import { PromptSuggestions } from "@robr0/design-system/components/PromptSuggestions/PromptSuggestions";
-import { Reasoning } from "@robr0/design-system/components/Reasoning/Reasoning";
-import { SourceChip } from "@robr0/design-system/components/SourceChip/SourceChip";
-import { ToolCall } from "@robr0/design-system/components/ToolCall/ToolCall";
+import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
+import { AgentStatus } from "rift-ds/components/AgentStatus/AgentStatus";
+import { AiButton } from "rift-ds/components/AiButton/AiButton";
+import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
+import { PromptSuggestions } from "rift-ds/components/PromptSuggestions/PromptSuggestions";
+import { Reasoning } from "rift-ds/components/Reasoning/Reasoning";
+import { SourceChip } from "rift-ds/components/SourceChip/SourceChip";
+import { ToolCall } from "rift-ds/components/ToolCall/ToolCall";
 
 const AGENT_STATES = ["thinking", "working", "waiting", "done", "error"] as const;
 

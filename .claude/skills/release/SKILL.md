@@ -1,6 +1,6 @@
 ---
 name: release
-description: Cut a new npm release of @robr0/design-system. Bump the version, dry-run, publish via the Release workflow, then tag the published commit. Use when asked to cut a release, publish a new version, or ship the package to npm.
+description: Cut a new npm release of rift-ds. Bump the version, dry-run, publish via the Release workflow, then tag the published commit. Use when asked to cut a release, publish a new version, or ship the package to npm.
 icon: rocket_launch
 displayDescription: "Cuts an npm release of the component library: bumps the single source-of-truth version, runs the Release workflow in dry-run to prove a real consumer can install and build the tarball, publishes with signed provenance, then tags and writes the GitHub Release against the exact commit that shipped. Knows the two things that bite on release day: a version number can never be reused, and the registry lags a green publish by minutes."
 invoke: ["cut a release","publish a new version","ship the package to npm","release [version]"]
@@ -8,7 +8,7 @@ invoke: ["cut a release","publish a new version","ship the package to npm","rele
 
 # release
 
-Cut a new npm release of `@robr0/design-system` — bump, dry-run, publish, tag.
+Cut a new npm release of `rift-ds` — bump, dry-run, publish, tag.
 
 ## When invoked
 
@@ -89,15 +89,15 @@ Watch it the same way (the same watch-the-right-run caution applies, and matters
 
 ### 6. Verify — and do not panic at a 404
 
-**The registry lags a successful publish by several minutes.** A `404` from `npm view` right after a green workflow is propagation, not failure. Confirm the workflow's publish step actually ran (`gh run view <id> --json jobs`) and look for `+ @robr0/design-system@<version>` in its log — if that line is there, it published. **Never re-run the workflow on a 404**; the version is already consumed and the rerun will fail with `EPUBLISHCONFLICT`.
+**The registry lags a successful publish by several minutes.** A `404` from `npm view` right after a green workflow is propagation, not failure. Confirm the workflow's publish step actually ran (`gh run view <id> --json jobs`) and look for `+ rift-ds@<version>` in its log — if that line is there, it published. **Never re-run the workflow on a 404**; the version is already consumed and the rerun will fail with `EPUBLISHCONFLICT`.
 
 Once it propagates, confirm the registry serves the new version:
 
 ```bash
-npm view @robr0/design-system version --prefer-online
+npm view rift-ds version --prefer-online
 ```
 
-The real consumer-shaped check already ran before publish: `scripts/smoke-consumer.mjs` packs the tarball into a scratch Vite app and builds it (bare `node` can't import the barrel because components import their own CSS; that needs a bundler). To repeat it against the *published* artifact rather than the local tarball, scaffold a scratch Vite app, `npm install @robr0/design-system@<version>`, import the barrel plus `tokens/tokens.css`, and run its build.
+The real consumer-shaped check already ran before publish: `scripts/smoke-consumer.mjs` packs the tarball into a scratch Vite app and builds it (bare `node` can't import the barrel because components import their own CSS; that needs a bundler). To repeat it against the *published* artifact rather than the local tarball, scaffold a scratch Vite app, `npm install rift-ds@<version>`, import the barrel plus `tokens/tokens.css`, and run its build.
 
 ### 7. Tag the published commit
 

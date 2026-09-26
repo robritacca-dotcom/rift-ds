@@ -5,8 +5,8 @@
   "title": "Number input",
   "description": "Numeric field with increment and decrement steppers and min/max clamping.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json",
-    "https://dragonspine-delta.vercel.app/r/field.json"
+    "https://rift-ds.com/r/base.json",
+    "https://rift-ds.com/r/field.json"
   ],
   "files": [
     {

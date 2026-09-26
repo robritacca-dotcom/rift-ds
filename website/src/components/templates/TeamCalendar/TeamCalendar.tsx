@@ -19,23 +19,23 @@
  */
 
 import React from "react";
-import { AiButton } from "@robr0/design-system/components/AiButton/AiButton";
+import { AiButton } from "rift-ds/components/AiButton/AiButton";
 import {
   AppSidebar,
   type AppSidebarSection,
-} from "@robr0/design-system/components/AppSidebar/AppSidebar";
-import { Button } from "@robr0/design-system/components/Button/Button";
-import { Checkbox } from "@robr0/design-system/components/Checkbox/Checkbox";
-import { CircularButton } from "@robr0/design-system/components/CircularButton/CircularButton";
-import { Divider } from "@robr0/design-system/components/Divider/Divider";
+} from "rift-ds/components/AppSidebar/AppSidebar";
+import { Button } from "rift-ds/components/Button/Button";
+import { Checkbox } from "rift-ds/components/Checkbox/Checkbox";
+import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { Divider } from "rift-ds/components/Divider/Divider";
 import {
   EventCalendar,
   type EventCalendarColor,
   type EventCalendarEvent,
-} from "@robr0/design-system/components/EventCalendar/EventCalendar";
-import { Input } from "@robr0/design-system/components/Input/Input";
-import { Kbd } from "@robr0/design-system/components/Kbd/Kbd";
-import { Panel } from "@robr0/design-system/components/Panel/Panel";
+} from "rift-ds/components/EventCalendar/EventCalendar";
+import { Input } from "rift-ds/components/Input/Input";
+import { Kbd } from "rift-ds/components/Kbd/Kbd";
+import { Panel } from "rift-ds/components/Panel/Panel";
 import SidebarSwitchers from "../SidebarSwitchers/SidebarSwitchers";
 import TemplateAssistant from "../TemplateAssistant/TemplateAssistant";
 import styles from "./TeamCalendar.module.css";

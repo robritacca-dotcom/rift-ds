@@ -11,7 +11,7 @@ import {
   useSyncExternalStore,
   type ReactNode,
 } from "react";
-import { MOTION_EXIT_SYNC_MS } from "@robr0/design-system/tokens/motion";
+import { MOTION_EXIT_SYNC_MS } from "rift-ds/tokens/motion";
 import { useChat, type ChatTransport } from "@/hooks/useChat";
 import { fallbackFollowups, fetchFollowups, followupTarget } from "@/lib/chat-followups";
 import { createFetchTransport } from "@/lib/chat-transport";

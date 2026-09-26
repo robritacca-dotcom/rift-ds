@@ -4,8 +4,8 @@ import React from "react";
 import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
-import { Instructions } from "@robr0/design-system/components/Instructions/Instructions";
-import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
+import { Instructions } from "rift-ds/components/Instructions/Instructions";
+import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
@@ -91,7 +91,7 @@ export default function InstructionsPage() {
                 size="compact"
                 title="Quick start"
                 steps={[
-                  { label: "Install", description: "npm install @robr0/design-system" },
+                  { label: "Install", description: "npm install rift-ds" },
                   { label: "Import tokens", description: "Add token CSS to your app" },
                   { label: "Use components", description: "Import and render components" },
                 ]}

@@ -2,17 +2,17 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import styles from "./page.module.css";
-import { Button } from "@robr0/design-system/components/Button/Button";
-import { CircularButton } from "@robr0/design-system/components/CircularButton/CircularButton";
-import { ColorPicker } from "@robr0/design-system/components/ColorPicker/ColorPicker";
-import { Swatch } from "@robr0/design-system/components/Swatch/Swatch";
-import { Input } from "@robr0/design-system/components/Input/Input";
-import { SegmentedControl } from "@robr0/design-system/components/SegmentedControl/SegmentedControl";
-import { Slider } from "@robr0/design-system/components/Slider/Slider";
-import { ToggleSwitch } from "@robr0/design-system/components/ToggleSwitch/ToggleSwitch";
+import { Button } from "rift-ds/components/Button/Button";
+import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { ColorPicker } from "rift-ds/components/ColorPicker/ColorPicker";
+import { Swatch } from "rift-ds/components/Swatch/Swatch";
+import { Input } from "rift-ds/components/Input/Input";
+import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
+import { Slider } from "rift-ds/components/Slider/Slider";
+import { ToggleSwitch } from "rift-ds/components/ToggleSwitch/ToggleSwitch";
 import { ACTION_COLOR_PRESETS, type ElevationVariant } from "@/lib/theme/theme-overrides";
-import { Dropdown } from "@robr0/design-system/components/Dropdown/Dropdown";
-import { RichDropdown } from "@robr0/design-system/components/RichDropdown/RichDropdown";
+import { Dropdown } from "rift-ds/components/Dropdown/Dropdown";
+import { RichDropdown } from "rift-ds/components/RichDropdown/RichDropdown";
 import { fontPickerOptions, presetPickerOptions } from "@/lib/theme/presets";
 
 export interface PlaygroundControlsProps {

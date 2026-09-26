@@ -2,17 +2,17 @@
 
 import { useState } from "react";
 import styles from "../page.module.css";
-import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
-import { Input } from "@robr0/design-system/components/Input/Input";
-import { Textarea } from "@robr0/design-system/components/Textarea/Textarea";
-import { Dropdown } from "@robr0/design-system/components/Dropdown/Dropdown";
-import { Combobox } from "@robr0/design-system/components/Combobox/Combobox";
-import { DateInput } from "@robr0/design-system/components/DateInput/DateInput";
-import { Checkbox } from "@robr0/design-system/components/Checkbox/Checkbox";
-import { RadioButton } from "@robr0/design-system/components/RadioButton/RadioButton";
-import { ToggleSwitch } from "@robr0/design-system/components/ToggleSwitch/ToggleSwitch";
-import { Slider } from "@robr0/design-system/components/Slider/Slider";
-import { SelectionCard } from "@robr0/design-system/components/SelectionCard/SelectionCard";
+import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
+import { Input } from "rift-ds/components/Input/Input";
+import { Textarea } from "rift-ds/components/Textarea/Textarea";
+import { Dropdown } from "rift-ds/components/Dropdown/Dropdown";
+import { Combobox } from "rift-ds/components/Combobox/Combobox";
+import { DateInput } from "rift-ds/components/DateInput/DateInput";
+import { Checkbox } from "rift-ds/components/Checkbox/Checkbox";
+import { RadioButton } from "rift-ds/components/RadioButton/RadioButton";
+import { ToggleSwitch } from "rift-ds/components/ToggleSwitch/ToggleSwitch";
+import { Slider } from "rift-ds/components/Slider/Slider";
+import { SelectionCard } from "rift-ds/components/SelectionCard/SelectionCard";
 
 const ROLE_OPTIONS = [
   { label: "Designer", value: "designer" },

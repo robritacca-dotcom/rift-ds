@@ -4,13 +4,13 @@ import { useState, useSyncExternalStore } from "react";
 import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import Sidebar from "../../../components/Sidebar/Sidebar";
-import { ColourSwatch } from "@robr0/design-system/components/ColourSwatch/ColourSwatch";
+import { ColourSwatch } from "rift-ds/components/ColourSwatch/ColourSwatch";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import { getSidebarLinks, foundationsSidebarLinks } from "@/config/navigation";
 import styles from "./page.module.css";
-import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
-import { Tabs } from "@robr0/design-system/components/Tabs/Tabs";
-import { Tooltip } from "@robr0/design-system/components/Tooltip/Tooltip";
+import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
+import { Tabs } from "rift-ds/components/Tabs/Tabs";
+import { Tooltip } from "rift-ds/components/Tooltip/Tooltip";
 import { FIGMA_FILE_URL } from "@/config/brand.generated";
 
 const { sidebarLinks } = getSidebarLinks(foundationsSidebarLinks, "/foundations/colour-primitives");

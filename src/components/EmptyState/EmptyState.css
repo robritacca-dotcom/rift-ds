@@ -123,7 +123,14 @@
    inherited by default: a consumer stylesheet that sets a colour on
    .material-symbols-rounded itself (a common global default) would
    otherwise override inheritance and detach the icon from the state
-   colours this component sets on its parents. */
-.ds-empty-state .material-symbols-rounded {
+   colours this component sets on its parents.
+
+   The action slot is carved out: it holds consumer Buttons, which colour
+   their icon on the icon element itself, through single-class selectors
+   this two-class rule outranks. Left blanket, a primary Button in an
+   empty state painted its icon the page's text colour instead of the
+   on-action one — a near-black glyph on a filled button. :where() keeps
+   the selector at its original specificity. */
+.ds-empty-state .material-symbols-rounded:not(:where(.ds-empty-state__action *)) {
   color: inherit;
 }

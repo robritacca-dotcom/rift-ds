@@ -1,4 +1,4 @@
-import { COMPONENT_COUNT } from "@robr0/design-system/components/registry";
+import { COMPONENT_COUNT } from "rift-ds/components/registry";
 import { sectionMetadata } from "@/config/navigation";
 import { BRAND_NAME } from "@/config/brand.generated";
 

@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import styles from "../page.module.css";
-import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
-import { Tabs } from "@robr0/design-system/components/Tabs/Tabs";
-import { Pagination } from "@robr0/design-system/components/Pagination/Pagination";
-import { Breadcrumb } from "@robr0/design-system/components/Breadcrumb/Breadcrumb";
+import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
+import { Tabs } from "rift-ds/components/Tabs/Tabs";
+import { Pagination } from "rift-ds/components/Pagination/Pagination";
+import { Breadcrumb } from "rift-ds/components/Breadcrumb/Breadcrumb";
 
 const PREVIEW_TABS = [
   { value: "overview", label: "Overview" },

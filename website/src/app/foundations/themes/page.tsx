@@ -5,8 +5,8 @@ import MegaNav from "../../../components/MegaNav/MegaNav";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import { getSidebarLinks, foundationsSidebarLinks } from "@/config/navigation";
-import { Button } from "@robr0/design-system/components/Button/Button";
-import { CodeBlock } from "@robr0/design-system/components/CodeBlock/CodeBlock";
+import { Button } from "rift-ds/components/Button/Button";
+import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
 import {
   THEME_PRESETS,
   themeSelectorTiles,
@@ -22,7 +22,7 @@ const getServerSnapshot = () => "mono";
 const { sidebarLinks } = getSidebarLinks(foundationsSidebarLinks, "/foundations/themes");
 
 const SETUP_SNIPPET = `// Every shipped theme, one generated stylesheet each, plus this aggregate.
-import '@robr0/design-system/tokens/presets/presets.css';
+import 'rift-ds/tokens/presets/presets.css';
 
 <html data-brand="terminal">`;
 

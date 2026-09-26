@@ -4,12 +4,12 @@ import { useSyncExternalStore } from "react";
 import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import Sidebar from "../../../components/Sidebar/Sidebar";
-import { ColourSwatch } from "@robr0/design-system/components/ColourSwatch/ColourSwatch";
+import { ColourSwatch } from "rift-ds/components/ColourSwatch/ColourSwatch";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import { getSidebarLinks, foundationsSidebarLinks } from "@/config/navigation";
 import styles from "./page.module.css";
-import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
-import { TOKEN_COUNTS } from "@robr0/design-system/tokens/registry";
+import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
+import { TOKEN_COUNTS } from "rift-ds/tokens/registry";
 import { FIGMA_FILE_URL } from "@/config/brand.generated";
 
 const { sidebarLinks } = getSidebarLinks(foundationsSidebarLinks, "/foundations/colour-mode");

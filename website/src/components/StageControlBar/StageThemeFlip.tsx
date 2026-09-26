@@ -1,6 +1,6 @@
 "use client";
 
-import { SegmentedControl } from "@robr0/design-system/components/SegmentedControl/SegmentedControl";
+import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
 import { useSiteTheme } from "@/lib/theme/use-theme-overrides";
 
 /**

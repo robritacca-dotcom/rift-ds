@@ -26,7 +26,7 @@ export const consumerMap: ArchMap = {
   width: 1560,
   height: 760,
   nodes: [
-    { id: "z-pkg", x: 60, y: 80, w: 460, h: 560, kind: "zone", title: "The package", sub: "@robr0/design-system · ESM · React 19 peer", },
+    { id: "z-pkg", x: 60, y: 80, w: 460, h: 560, kind: "zone", title: "The package", sub: "rift-ds · ESM · React 19 peer", },
     { id: "pkg-components", x: 100, y: 170, w: 380, h: 76, title: "Components", sub: "one barrel + deep subpaths", icon: "widgets", chip: "info" },
     { id: "pkg-tokens", x: 100, y: 310, w: 380, h: 76, title: "Tokens", sub: "tokens.css · primitives → semantic → components", icon: "palette", chip: "info" },
     { id: "pkg-presets", x: 100, y: 450, w: 380, h: 90, title: "Theme presets", sub: "presets.css · one generated stylesheet per look", icon: "style", chip: "info" },
@@ -59,7 +59,7 @@ export const systemOverviewMap: ArchMap = {
     { id: "repo", x: 60, y: 274, w: 250, h: 72, title: "One repo", sub: "code · registries · specs", logo: "/logos/Git.svg" },
     { id: "chain", x: 440, y: 274, w: 290, h: 72, title: "Generate · validate · gate", sub: "one chain, before every build", icon: "fact_check", chip: "info" },
     { id: "vercel", x: 860, y: 100, w: 250, h: 72, title: "Vercel", sub: "website + Storybook", ...VERCEL_LOGO },
-    { id: "npm-registry", x: 860, y: 448, w: 250, h: 72, title: "npm registry", sub: "@robr0/design-system", kind: "external", logo: "/logos/npm.svg" },
+    { id: "npm-registry", x: 860, y: 448, w: 250, h: 72, title: "npm registry", sub: "rift-ds", kind: "external", logo: "/logos/npm.svg" },
     { id: "visitors", x: 1180, y: 100, w: 240, h: 72, title: "Visitors + agents", sub: "pages · chat · MCP", icon: "groups", chip: "positive" },
     { id: "consumers", x: 1180, y: 448, w: 240, h: 72, title: "Package consumers", sub: "import the components", icon: "download", chip: "positive" },
   ],
@@ -106,7 +106,7 @@ export const pipelineMap: ArchMap = {
     /* Stage 5 */
     { id: "z-ship", x: 330, y: 840, w: 880, h: 320, kind: "zone", title: "5 · Ship + serve", sub: "two destinations, two paths" },
     { id: "release", x: 370, y: 930, w: 320, h: 76, title: "Release workflow", sub: "manual · OIDC trusted publishing · consumer smoke", icon: "rocket_launch", chip: "positive" },
-    { id: "npm-registry", x: 370, y: 1050, w: 320, h: 64, title: "npm registry", sub: "@robr0/design-system", kind: "external", logo: "/logos/npm.svg" },
+    { id: "npm-registry", x: 370, y: 1050, w: 320, h: 64, title: "npm registry", sub: "rift-ds", kind: "external", logo: "/logos/npm.svg" },
     { id: "vercel", x: 770, y: 930, w: 350, h: 76, title: "Vercel", sub: "deploys every push to main · two projects", ...VERCEL_LOGO },
   ],
   edges: [

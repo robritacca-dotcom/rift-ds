@@ -24,7 +24,7 @@ export const BRAND_NAME = 'Rift DS';
 export const BRAND_SHORT = 'Rift';
 
 /** The site chat's public name — the FAB, the palette's ask row. */
-export const ASSISTANT_NAME = 'Rift GPT';
+export const ASSISTANT_NAME = 'Rift AI';
 
 /**
  * The published npm package. Also the specifier every import in this
@@ -36,7 +36,7 @@ export const ASSISTANT_NAME = 'Rift GPT';
  * lockfile. validate-package-exports fails the build between the edit
  * and the sweep, so the two can never ship apart.
  */
-export const PACKAGE_NAME = '@robr0/design-system';
+export const PACKAGE_NAME = 'rift-ds';
 
 /**
  * Names this package used to have. A build fails while any of them
@@ -44,20 +44,40 @@ export const PACKAGE_NAME = '@robr0/design-system';
  * them), so a rename can leave no straggler imports or stale install
  * snippets. Append, never remove.
  */
-export const RETIRED_PACKAGE_NAMES = [];
+export const RETIRED_PACKAGE_NAMES = ['@robr0/design-system'];
 
 /**
  * The deployed site's origin. Baked into the sitemap, canonicals, OG
  * urls, llms.txt, the corpus, and the init bin at build time — point it
  * at the real deployment before any `build:lib`.
  */
-export const SITE_URL = 'https://dragonspine-delta.vercel.app';
+export const SITE_URL = 'https://rift-ds.com';
 
 /** The source repository. */
-export const REPOSITORY_URL = 'https://github.com/robritacca-dotcom/dragonspine';
+export const REPOSITORY_URL = 'https://github.com/robritacca-dotcom/rift-ds';
 
 /** The deployed Storybook (its own Vercel project, built from main). */
-export const STORYBOOK_URL = 'https://dragonspine-storybook.vercel.app';
+export const STORYBOOK_URL = 'https://storybook.rift-ds.com';
+
+/**
+ * Hosts this project used to live on. The package name has had
+ * RETIRED_PACKAGE_NAMES guarding it since rename day; a domain had
+ * nothing, which is how the 2026-09-26 move found eight hand-written
+ * `dragonspine-delta.vercel.app` links sitting in README.md — a file
+ * that ships inside the npm tarball, so every one of them would have
+ * reached a consumer pointing at a host this project had left.
+ *
+ * A build fails while any of these appears in source (the scan in
+ * validate-package-exports.mjs), so a URL written from memory cannot
+ * ship. Entries are bare hosts, never schemes: the Vercel PROJECT is
+ * still named `dragonspine`, and CLAUDE.md says so truthfully.
+ * Append, never remove.
+ */
+export const RETIRED_HOSTS = [
+  'dragonspine-delta.vercel.app',
+  'dragonspine-storybook.vercel.app',
+  'dragonspine.vercel.app',
+];
 
 /** The npm package page, derived — never restated. */
 export const NPM_URL = `https://www.npmjs.com/package/${PACKAGE_NAME}`;
@@ -97,4 +117,4 @@ export const MCP_SERVER_NAME = 'rift-ds';
 export const SKILL_NAME = 'rift-design-system';
 
 /** The package's bin name (the `npx` entry). */
-export const BIN_NAME = 'rift-design-system';
+export const BIN_NAME = 'rift-ds';

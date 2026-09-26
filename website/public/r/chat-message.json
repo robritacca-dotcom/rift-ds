@@ -5,7 +5,7 @@
   "title": "Chat message",
   "description": "A single chat turn with avatar, author, timestamp, and bubble or plain content aligned by role.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json"
+    "https://rift-ds.com/r/base.json"
   ],
   "files": [
     {

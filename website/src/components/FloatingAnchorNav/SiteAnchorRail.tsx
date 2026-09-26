@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import type { AnchorNavItem } from "@robr0/design-system/components/AnchorNav/AnchorNav";
+import type { AnchorNavItem } from "rift-ds/components/AnchorNav/AnchorNav";
 import { CHROMELESS_ROUTES } from "@/config/chromeless";
 import {
   ANCHOR_NAV_EXCLUDED_ROUTES,

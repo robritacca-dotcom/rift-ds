@@ -1,5 +1,5 @@
 import React from "react";
-import type { AnchorNavItem } from "@robr0/design-system/components/AnchorNav/AnchorNav";
+import type { AnchorNavItem } from "rift-ds/components/AnchorNav/AnchorNav";
 
 /* Shared by the three blueprint pages: extractSections reads the h2 list out
    of the raw markdown for the AnchorNav rail, and createAnchoredH2 gives

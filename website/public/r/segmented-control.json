@@ -5,7 +5,7 @@
   "title": "Segmented control",
   "description": "Pill-style toggle between related views with keyboard navigation and icon support.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json"
+    "https://rift-ds.com/r/base.json"
   ],
   "files": [
     {

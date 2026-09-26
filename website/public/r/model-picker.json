@@ -5,7 +5,7 @@
   "title": "Model picker",
   "description": "A model selector for chat surfaces, with per-model descriptions and an optional effort row.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json"
+    "https://rift-ds.com/r/base.json"
   ],
   "files": [
     {

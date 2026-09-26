@@ -5,8 +5,8 @@
   "title": "Nav list",
   "description": "Vertical list of navigation links for drawers and menus, with three indent levels and per-row expand toggles.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json",
-    "https://dragonspine-delta.vercel.app/r/button.json"
+    "https://rift-ds.com/r/base.json",
+    "https://rift-ds.com/r/button.json"
   ],
   "files": [
     {

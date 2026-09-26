@@ -4,10 +4,10 @@ import React from "react";
 import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
-import { HoverCard } from "@robr0/design-system/components/HoverCard/HoverCard";
-import { Avatar } from "@robr0/design-system/components/Avatar/Avatar";
-import { Button } from "@robr0/design-system/components/Button/Button";
-import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
+import { HoverCard } from "rift-ds/components/HoverCard/HoverCard";
+import { Avatar } from "rift-ds/components/Avatar/Avatar";
+import { Button } from "rift-ds/components/Button/Button";
+import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
@@ -29,7 +29,7 @@ const profileContent = (
 // example, where any block element would end the paragraph mid-parse.
 const packageContent = (
   <span style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-    <span style={{ fontWeight: 600 }}>@robr0/design-system</span>
+    <span style={{ fontWeight: 600 }}>rift-ds</span>
     <span>
       React component library with semantic tokens, light and dark themes, and a chat set.
     </span>
@@ -95,7 +95,7 @@ export default function HoverCardPage() {
               The component library ships to npm as{" "}
               <HoverCard content={packageContent}>
                 <a href="/docs/get-started" style={{ color: "var(--color-action-primary-text-tertiary)" }}>
-                  @robr0/design-system
+                  rift-ds
                 </a>
               </HoverCard>{" "}
               and the website consumes it like any other package.

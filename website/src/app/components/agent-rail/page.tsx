@@ -7,11 +7,11 @@ import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import {
   AgentRail,
   type AgentRailTab,
-} from "@robr0/design-system/components/AgentRail/AgentRail";
-import { Button } from "@robr0/design-system/components/Button/Button";
-import { EmptyState } from "@robr0/design-system/components/EmptyState/EmptyState";
-import { NotificationItem } from "@robr0/design-system/components/NotificationCenter/NotificationCenter";
-import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
+} from "rift-ds/components/AgentRail/AgentRail";
+import { Button } from "rift-ds/components/Button/Button";
+import { EmptyState } from "rift-ds/components/EmptyState/EmptyState";
+import { NotificationItem } from "rift-ds/components/NotificationCenter/NotificationCenter";
+import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";

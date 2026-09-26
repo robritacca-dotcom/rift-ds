@@ -6,7 +6,7 @@
  *
  * `.tsx` despite holding no JSX: the barrel generator and the
  * `./components/*` export subpath both address `.tsx`, so that extension is
- * what makes this reachable as `@robr0/design-system/components/AgentStatus/AgentStatusPatterns`.
+ * what makes this reachable as `rift-ds/components/AgentStatus/AgentStatusPatterns`.
  */
 
 /**

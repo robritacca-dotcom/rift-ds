@@ -5,12 +5,12 @@
   "title": "Data table",
   "description": "The wired table: sorting, search, row selection, and pagination assembled around Table.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json",
-    "https://dragonspine-delta.vercel.app/r/checkbox.json",
-    "https://dragonspine-delta.vercel.app/r/empty-state.json",
-    "https://dragonspine-delta.vercel.app/r/input.json",
-    "https://dragonspine-delta.vercel.app/r/pagination.json",
-    "https://dragonspine-delta.vercel.app/r/table.json"
+    "https://rift-ds.com/r/base.json",
+    "https://rift-ds.com/r/checkbox.json",
+    "https://rift-ds.com/r/empty-state.json",
+    "https://rift-ds.com/r/input.json",
+    "https://rift-ds.com/r/pagination.json",
+    "https://rift-ds.com/r/table.json"
   ],
   "files": [
     {

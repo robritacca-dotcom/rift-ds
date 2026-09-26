@@ -5,7 +5,7 @@
   "title": "Toolbar",
   "description": "A grouped strip of controls in one pill shell: clusters, separators, arrow-key focus, and a glass floating variant.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json"
+    "https://rift-ds.com/r/base.json"
   ],
   "files": [
     {

@@ -2,13 +2,13 @@
 
 Multi-line text input with character counter, resize control, helper text, and error states.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine-delta.vercel.app/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: forms
-- Import: `import { Textarea } from '@robr0/design-system';`
-- Deep import: `import { Textarea } from '@robr0/design-system/components/Textarea/Textarea';`
+- Import: `import { Textarea } from 'rift-ds';`
+- Deep import: `import { Textarea } from 'rift-ds/components/Textarea/Textarea';`
 - Rendering: client component (declares 'use client')
-- Live docs: https://dragonspine-delta.vercel.app/components/textarea
+- Live docs: https://rift-ds.com/components/textarea
 
 ## Textarea props
 

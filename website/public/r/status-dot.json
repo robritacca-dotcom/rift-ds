@@ -5,7 +5,7 @@
   "title": "Status dot",
   "description": "The bare status mark: a dot in the five status roles, with an optional label and a live pulse for recording and online-now states.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json"
+    "https://rift-ds.com/r/base.json"
   ],
   "files": [
     {

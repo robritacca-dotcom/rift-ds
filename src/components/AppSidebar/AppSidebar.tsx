@@ -272,13 +272,23 @@ export const AppSidebar = ({
             </span>
             <span className={`${baseClass}__logo-text`}>{logoText}</span>
           </div>
+          {/* In the mobile drawer the rail has nothing to collapse to, so
+              the same button becomes the drawer's close control. Driven by
+              `mobileOpen` rather than a media query: the flag can only be
+              true below the breakpoint, so the two never disagree. */}
           <button
             className={`${baseClass}__toggle`}
-            onClick={toggleExpanded}
-            aria-label={isExpanded ? 'Collapse sidebar' : 'Expand sidebar'}
+            onClick={mobileOpen ? closeMobile : toggleExpanded}
+            aria-label={
+              mobileOpen
+                ? 'Close navigation'
+                : isExpanded
+                  ? 'Collapse sidebar'
+                  : 'Expand sidebar'
+            }
           >
             <span className="material-symbols-rounded">
-              {isExpanded ? 'left_panel_close' : 'left_panel_open'}
+              {mobileOpen ? 'close' : isExpanded ? 'left_panel_close' : 'left_panel_open'}
             </span>
           </button>
         </div>

@@ -2,13 +2,13 @@
 
 Monospace code with a header and one-click copy.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine-delta.vercel.app/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: data-display
-- Import: `import { CodeBlock } from '@robr0/design-system';`
-- Deep import: `import { CodeBlock } from '@robr0/design-system/components/CodeBlock/CodeBlock';`
+- Import: `import { CodeBlock } from 'rift-ds';`
+- Deep import: `import { CodeBlock } from 'rift-ds/components/CodeBlock/CodeBlock';`
 - Rendering: client component (declares 'use client')
-- Live docs: https://dragonspine-delta.vercel.app/components/code-block
+- Live docs: https://rift-ds.com/components/code-block
 
 ## CodeBlock props
 

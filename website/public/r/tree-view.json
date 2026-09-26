@@ -5,7 +5,7 @@
   "title": "Tree view",
   "description": "Collapsible hierarchy for files, folders, and nested structures.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json"
+    "https://rift-ds.com/r/base.json"
   ],
   "files": [
     {

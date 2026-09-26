@@ -2,13 +2,13 @@
 
 Multi-axis comparison of series across categories on a radial grid.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine-delta.vercel.app/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: charts
-- Import: `import { RadarChart } from '@robr0/design-system/charts'; // needs the optional recharts peer`
-- Deep import: `import { RadarChart } from '@robr0/design-system/components/Chart/RadarChart';`
+- Import: `import { RadarChart } from 'rift-ds/charts'; // needs the optional recharts peer`
+- Deep import: `import { RadarChart } from 'rift-ds/components/Chart/RadarChart';`
 - Rendering: server-renderable (no 'use client')
-- Live docs: https://dragonspine-delta.vercel.app/components/radar-chart
+- Live docs: https://rift-ds.com/components/radar-chart
 
 ## RadarChart props
 

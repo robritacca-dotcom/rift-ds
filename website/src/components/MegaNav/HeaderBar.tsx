@@ -5,7 +5,7 @@ import type { MouseEvent as ReactMouseEvent } from "react";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
 import BrandSwitcher from "../BrandSwitcher/BrandSwitcher";
 import { openSitePalette } from "../SitePalette/palette-bus";
-import { Kbd } from "@robr0/design-system/components/Kbd/Kbd";
+import { Kbd } from "rift-ds/components/Kbd/Kbd";
 import { getNavSections } from "@/config/navigation";
 import MegaPanel from "./MegaPanel";
 import SiteLogo from "./SiteLogo";

@@ -6,11 +6,11 @@ import Sidebar from "../../../components/Sidebar/Sidebar";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import { getSidebarLinks, foundationsSidebarLinks } from "@/config/navigation";
 import styles from "./page.module.css";
-import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
+import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import {
   MotionSwatch,
   type MotionSwatchDemo,
-} from "@robr0/design-system/components/MotionSwatch/MotionSwatch";
+} from "rift-ds/components/MotionSwatch/MotionSwatch";
 
 const { sidebarLinks } = getSidebarLinks(foundationsSidebarLinks, "/foundations/motion");
 
@@ -286,7 +286,7 @@ export default function MotionPage() {
               delays, toast auto-dismiss, carousel autoplay, the streaming
               reveal&apos;s pacing, the summary panel&apos;s staging, and a few more. Those
               share one home too, the constants published
-              as <code>@robr0/design-system/tokens/motion</code>, and the module itself
+              as <code>rift-ds/tokens/motion</code>, and the module itself
               is the full list. Components read them as
               defaults and still expose each one through props. Most are schedule timings
               that decide when something appears or is taken away, not animations, so the

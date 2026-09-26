@@ -11,12 +11,12 @@
  * any call is a stranger reading what was already public. Never add a lookup
  * that reads anything else.
  */
-import pkg from "@robr0/design-system/package.json";
+import pkg from "rift-ds/package.json";
 import {
   TOKEN_COUNT,
   TOKEN_COUNTS,
   tokenRegistry,
-} from "@robr0/design-system/tokens/registry";
+} from "rift-ds/tokens/registry";
 
 import { componentApi } from "@/data/component-api.generated";
 import { siteCorpus } from "@/data/site-corpus.generated";

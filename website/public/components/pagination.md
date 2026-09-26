@@ -2,13 +2,13 @@
 
 Numbered page navigation for long datasets, with ellipses, disabled end arrows, and a compact readout mode.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine-delta.vercel.app/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: navigation
-- Import: `import { Pagination } from '@robr0/design-system';`
-- Deep import: `import { Pagination } from '@robr0/design-system/components/Pagination/Pagination';`
+- Import: `import { Pagination } from 'rift-ds';`
+- Deep import: `import { Pagination } from 'rift-ds/components/Pagination/Pagination';`
 - Rendering: client component (declares 'use client')
-- Live docs: https://dragonspine-delta.vercel.app/components/pagination
+- Live docs: https://rift-ds.com/components/pagination
 
 ## Pagination props
 

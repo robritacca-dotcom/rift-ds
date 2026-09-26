@@ -23,30 +23,30 @@
  */
 
 import React from "react";
-import { AiButton } from "@robr0/design-system/components/AiButton/AiButton";
+import { AiButton } from "rift-ds/components/AiButton/AiButton";
 import {
   AppSidebar,
   type AppSidebarSection,
-} from "@robr0/design-system/components/AppSidebar/AppSidebar";
-import { Avatar } from "@robr0/design-system/components/Avatar/Avatar";
-import { Badge } from "@robr0/design-system/components/Badge/Badge";
-import { Breadcrumb } from "@robr0/design-system/components/Breadcrumb/Breadcrumb";
-import { Button } from "@robr0/design-system/components/Button/Button";
-import { CircularButton } from "@robr0/design-system/components/CircularButton/CircularButton";
+} from "rift-ds/components/AppSidebar/AppSidebar";
+import { Avatar } from "rift-ds/components/Avatar/Avatar";
+import { Badge } from "rift-ds/components/Badge/Badge";
+import { Breadcrumb } from "rift-ds/components/Breadcrumb/Breadcrumb";
+import { Button } from "rift-ds/components/Button/Button";
+import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
 import {
   DataTable,
   type DataTableColumn,
   type DataTableRow,
-} from "@robr0/design-system/components/DataTable/DataTable";
-import { Divider } from "@robr0/design-system/components/Divider/Divider";
+} from "rift-ds/components/DataTable/DataTable";
+import { Divider } from "rift-ds/components/Divider/Divider";
 import {
   Dropdown,
   type DropdownOption,
-} from "@robr0/design-system/components/Dropdown/Dropdown";
-import { Input } from "@robr0/design-system/components/Input/Input";
-import { Kbd } from "@robr0/design-system/components/Kbd/Kbd";
-import { Meter } from "@robr0/design-system/components/Meter/Meter";
-import { Sparkline } from "@robr0/design-system/components/Sparkline/Sparkline";
+} from "rift-ds/components/Dropdown/Dropdown";
+import { Input } from "rift-ds/components/Input/Input";
+import { Kbd } from "rift-ds/components/Kbd/Kbd";
+import { Meter } from "rift-ds/components/Meter/Meter";
+import { Sparkline } from "rift-ds/components/Sparkline/Sparkline";
 import SidebarSwitchers from "../SidebarSwitchers/SidebarSwitchers";
 import TemplateAssistant from "../TemplateAssistant/TemplateAssistant";
 import styles from "./SalesPipeline.module.css";

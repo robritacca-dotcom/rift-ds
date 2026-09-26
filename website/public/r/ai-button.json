@@ -5,10 +5,10 @@
   "title": "AI button",
   "description": "The AI entry point: icon and label ringed by a turning gradient and glow, with an optional hover-summoned AI-summary panel and prompt chips.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json",
-    "https://dragonspine-delta.vercel.app/r/prompt-suggestions.json",
-    "https://dragonspine-delta.vercel.app/r/skeleton.json",
-    "https://dragonspine-delta.vercel.app/r/streaming-text.json"
+    "https://rift-ds.com/r/base.json",
+    "https://rift-ds.com/r/prompt-suggestions.json",
+    "https://rift-ds.com/r/skeleton.json",
+    "https://rift-ds.com/r/streaming-text.json"
   ],
   "files": [
     {

@@ -2,7 +2,7 @@
 
 import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
 import { usePathname } from "next/navigation";
-import { AiButton } from "@robr0/design-system/components/AiButton/AiButton";
+import { AiButton } from "rift-ds/components/AiButton/AiButton";
 import { lockBodyScroll, unlockBodyScroll } from "@/lib/scroll-lock";
 import { CHROMELESS_ROUTES } from "@/config/chromeless";
 import { getPageSummary } from "@/data/page-summaries";

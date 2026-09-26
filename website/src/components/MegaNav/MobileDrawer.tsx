@@ -3,7 +3,7 @@
 import type { CSSProperties } from "react";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
 import BrandSwitcher from "../BrandSwitcher/BrandSwitcher";
-import { NavList, type NavListItem } from "@robr0/design-system/components/NavList/NavList";
+import { NavList, type NavListItem } from "rift-ds/components/NavList/NavList";
 import SiteLogo from "./SiteLogo";
 import styles from "./MegaNav.module.css";
 

@@ -5,9 +5,9 @@
   "title": "Agent rail",
   "description": "The companion rail of an agent product: the agent's portrait over tabbed panes for activity, approvals, automations, and personalization.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json",
-    "https://dragonspine-delta.vercel.app/r/avatar.json",
-    "https://dragonspine-delta.vercel.app/r/segmented-control.json"
+    "https://rift-ds.com/r/base.json",
+    "https://rift-ds.com/r/avatar.json",
+    "https://rift-ds.com/r/segmented-control.json"
   ],
   "files": [
     {

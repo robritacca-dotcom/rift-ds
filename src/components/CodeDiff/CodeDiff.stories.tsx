@@ -17,7 +17,7 @@ const FILE_DIFF = `--- a/src/lib/normalize.ts
 +++ b/src/lib/normalize.ts
 ${TS_DIFF}`;
 
-const ADDITIONS_DIFF = `+import { Badge } from '@robr0/design-system';
+const ADDITIONS_DIFF = `+import { Badge } from 'rift-ds';
 +
 +export const shippedBadge = (
 +  <Badge label="Shipped" status="positive" />

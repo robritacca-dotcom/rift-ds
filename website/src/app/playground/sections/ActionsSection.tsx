@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 import styles from "../page.module.css";
-import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
-import { Button } from "@robr0/design-system/components/Button/Button";
-import { ButtonGroup } from "@robr0/design-system/components/ButtonGroup/ButtonGroup";
-import { CircularButton } from "@robr0/design-system/components/CircularButton/CircularButton";
-import { SegmentedControl } from "@robr0/design-system/components/SegmentedControl/SegmentedControl";
-import { ToggleGroup } from "@robr0/design-system/components/ToggleGroup/ToggleGroup";
+import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
+import { Button } from "rift-ds/components/Button/Button";
+import { ButtonGroup } from "rift-ds/components/ButtonGroup/ButtonGroup";
+import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
+import { ToggleGroup } from "rift-ds/components/ToggleGroup/ToggleGroup";
 
 const VIEW_SEGMENTS = [
   { value: "grid", label: "Grid", icon: "grid_view" },

@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import {
   ShaderField,
   type ShaderFieldStatus,
-} from "@robr0/design-system/components/ShaderField/ShaderField";
+} from "rift-ds/components/ShaderField/ShaderField";
 import {
   shaderBackground,
   type BackgroundMode,

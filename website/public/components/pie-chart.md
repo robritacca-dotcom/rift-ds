@@ -2,13 +2,13 @@
 
 Proportional share of a whole as a pie or donut, with per-slice colours.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine-delta.vercel.app/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: charts
-- Import: `import { PieChart } from '@robr0/design-system/charts'; // needs the optional recharts peer`
-- Deep import: `import { PieChart } from '@robr0/design-system/components/Chart/PieChart';`
+- Import: `import { PieChart } from 'rift-ds/charts'; // needs the optional recharts peer`
+- Deep import: `import { PieChart } from 'rift-ds/components/Chart/PieChart';`
 - Rendering: server-renderable (no 'use client')
-- Live docs: https://dragonspine-delta.vercel.app/components/pie-chart
+- Live docs: https://rift-ds.com/components/pie-chart
 
 ## PieChart props
 

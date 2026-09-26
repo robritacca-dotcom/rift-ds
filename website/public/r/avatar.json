@@ -5,7 +5,7 @@
   "title": "Avatar",
   "description": "User profile image with initials and icon fallback, status indicator, and multiple sizes.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json"
+    "https://rift-ds.com/r/base.json"
   ],
   "files": [
     {

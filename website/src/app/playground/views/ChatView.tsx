@@ -1,20 +1,20 @@
 "use client";
 
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { AiButton } from "@robr0/design-system/components/AiButton/AiButton";
-import { CircularButton } from "@robr0/design-system/components/CircularButton/CircularButton";
-import { DocumentChip } from "@robr0/design-system/components/DocumentChip/DocumentChip";
+import { AiButton } from "rift-ds/components/AiButton/AiButton";
+import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { DocumentChip } from "rift-ds/components/DocumentChip/DocumentChip";
 import {
   ModelPicker,
   type ModelPickerModel,
-} from "@robr0/design-system/components/ModelPicker/ModelPicker";
+} from "rift-ds/components/ModelPicker/ModelPicker";
 import {
   ThreadPanel,
   type ThreadPanelGroup,
   type ThreadPanelProject,
   type ThreadPanelThread,
-} from "@robr0/design-system/components/ThreadPanel/ThreadPanel";
-import { ThreadTabs } from "@robr0/design-system/components/ThreadTabs/ThreadTabs";
+} from "rift-ds/components/ThreadPanel/ThreadPanel";
+import { ThreadTabs } from "rift-ds/components/ThreadTabs/ThreadTabs";
 import AgentPanel from "./AgentPanel";
 import { useSiteChat, useTakeoverViewport } from "@/components/SiteChat/ChatContext";
 import { SiteChat } from "@/components/SiteChat/SiteChat";

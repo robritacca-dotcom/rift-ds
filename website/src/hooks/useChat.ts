@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
-import { createStreamReveal } from "@robr0/design-system/components/StreamingText/useStreamReveal";
+import { createStreamReveal } from "rift-ds/components/StreamingText/useStreamReveal";
 
 /* ============================================
    The chat event contract.

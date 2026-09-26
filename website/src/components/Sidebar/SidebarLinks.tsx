@@ -1,6 +1,6 @@
 import Image from "next/image";
-import { ButtonGroup } from "@robr0/design-system/components/ButtonGroup/ButtonGroup";
-import type { ButtonProps } from "@robr0/design-system/components/Button/Button";
+import { ButtonGroup } from "rift-ds/components/ButtonGroup/ButtonGroup";
+import type { ButtonProps } from "rift-ds/components/Button/Button";
 import type { SidebarLink } from "./Sidebar";
 import styles from "./Sidebar.module.css";
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * The package's one command: `npx @robr0/design-system init`.
+ * The package's one command: `npx rift-ds init`.
  *
  * Fetches the generated agent skill (SKILL.md + references/components.md)
  * from the live site into the project's .claude/skills/ folder, then prints
@@ -24,7 +24,7 @@ const MCP_SERVER_NAME = '__MCP_SERVER_NAME__';
 const SKILL_FILES = ['SKILL.md', 'references/components.md'];
 const DEFAULT_OUT = join('.claude', 'skills', SKILL_NAME);
 
-const USAGE = `Usage: npx @robr0/design-system init [--out <dir>]
+const USAGE = `Usage: npx rift-ds init [--out <dir>]
 
 Fetches the agent skill for this package from ${SITE_ORIGIN} into
 ${DEFAULT_OUT}/ so a skill-capable coding agent carries the
@@ -42,7 +42,7 @@ function fail(message) {
 
 async function init(outDir) {
   if (SITE_ORIGIN.startsWith('__')) {
-    fail('this copy was not built: run the published bin (npx @robr0/design-system init).');
+    fail('this copy was not built: run the published bin (npx rift-ds init).');
   }
   for (const file of SKILL_FILES) {
     const url = `${SITE_ORIGIN}/skill/${SKILL_NAME}/${file}`;

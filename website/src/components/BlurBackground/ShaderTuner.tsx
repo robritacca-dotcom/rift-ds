@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
-import type { ShaderFieldStatus } from "@robr0/design-system/components/ShaderField/ShaderField";
+import type { ShaderFieldStatus } from "rift-ds/components/ShaderField/ShaderField";
 import {
   shaderBackground,
   type BackgroundMode,

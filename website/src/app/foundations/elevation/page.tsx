@@ -6,7 +6,7 @@ import Sidebar from "../../../components/Sidebar/Sidebar";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import { getSidebarLinks, foundationsSidebarLinks } from "@/config/navigation";
 import styles from "./page.module.css";
-import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
+import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 
 const { sidebarLinks } = getSidebarLinks(foundationsSidebarLinks, "/foundations/elevation");
 

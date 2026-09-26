@@ -576,7 +576,17 @@
    inherited by default: a consumer stylesheet that sets a colour on
    .material-symbols-rounded itself (a common global default) would
    otherwise override inheritance and detach the icon from the state
-   colours this component sets on its parents. */
-.ds-app-sidebar .material-symbols-rounded {
+   colours this component sets on its parents.
+
+   The two consumer slots are carved out, because inside them the rule
+   does the very damage it exists to prevent: a component mounted in a
+   slot sets its own icon colours through single-class selectors, and a
+   two-class descendant rule outranks every one of them. A SegmentedControl
+   in the footer slot lost its active segment's on-action colour that way
+   and painted a black glyph on a near-black pill. :where() keeps the
+   selector at its original specificity, so nothing else in the cascade
+   moves. */
+.ds-app-sidebar
+  .material-symbols-rounded:not(:where(.ds-app-sidebar__top-slot *, .ds-app-sidebar__footer-slot *)) {
   color: inherit;
 }

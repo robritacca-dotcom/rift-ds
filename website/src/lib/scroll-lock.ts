@@ -19,7 +19,7 @@
 import {
   acquireScrollLock,
   releaseScrollLock,
-} from "@robr0/design-system/behaviors/useScrollLock";
+} from "rift-ds/behaviors/useScrollLock";
 
 const owners = new Set<string>();
 

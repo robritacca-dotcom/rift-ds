@@ -4,10 +4,10 @@ import React from "react";
 import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
-import { GanttChart } from "@robr0/design-system/components/GanttChart/GanttChart";
-import type { GanttChartItem } from "@robr0/design-system/components/GanttChart/GanttChart";
+import { GanttChart } from "rift-ds/components/GanttChart/GanttChart";
+import type { GanttChartItem } from "rift-ds/components/GanttChart/GanttChart";
 import PageLinks from "../../../components/PageLinks/PageLinks";
-import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
+import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import styles from "./page.module.css";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 

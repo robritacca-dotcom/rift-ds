@@ -1,6 +1,6 @@
 import TocCard from "../TocCard/TocCard";
 import { ComponentPreview } from "../ComponentPreviews/ComponentPreviews";
-import type { ComponentMeta } from "@robr0/design-system/components/registry";
+import type { ComponentMeta } from "rift-ds/components/registry";
 import styles from "./ComponentCardGrid.module.css";
 
 interface ComponentCardGridProps {

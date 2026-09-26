@@ -7,10 +7,10 @@ import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import {
   WorldMap,
   type WorldMapPoint,
-} from "@robr0/design-system/components/WorldMap/WorldMap";
-import { MapCallout } from "@robr0/design-system/components/MapCallout/MapCallout";
-import { MapLegend } from "@robr0/design-system/components/MapLegend/MapLegend";
-import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
+} from "rift-ds/components/WorldMap/WorldMap";
+import { MapCallout } from "rift-ds/components/MapCallout/MapCallout";
+import { MapLegend } from "rift-ds/components/MapLegend/MapLegend";
+import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";

@@ -2,13 +2,13 @@
 
 A model selector for chat surfaces, with per-model descriptions and an optional effort row.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine-delta.vercel.app/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: ai
-- Import: `import { ModelPicker } from '@robr0/design-system';`
-- Deep import: `import { ModelPicker } from '@robr0/design-system/components/ModelPicker/ModelPicker';`
+- Import: `import { ModelPicker } from 'rift-ds';`
+- Deep import: `import { ModelPicker } from 'rift-ds/components/ModelPicker/ModelPicker';`
 - Rendering: client component (declares 'use client')
-- Live docs: https://dragonspine-delta.vercel.app/components/model-picker
+- Live docs: https://rift-ds.com/components/model-picker
 
 ## ModelPicker props
 

@@ -2,15 +2,15 @@
 
 import { useState } from "react";
 import styles from "../page.module.css";
-import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
-import { Chip } from "@robr0/design-system/components/Chip/Chip";
-import { Avatar } from "@robr0/design-system/components/Avatar/Avatar";
-import { Stat } from "@robr0/design-system/components/Stat/Stat";
-import { Table } from "@robr0/design-system/components/Table/Table";
-import { Accordion } from "@robr0/design-system/components/Accordion/Accordion";
-import { Badge } from "@robr0/design-system/components/Badge/Badge";
-import { COMPONENT_COUNT } from "@robr0/design-system/components/registry";
-import { TOKEN_COUNT } from "@robr0/design-system/tokens/registry";
+import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
+import { Chip } from "rift-ds/components/Chip/Chip";
+import { Avatar } from "rift-ds/components/Avatar/Avatar";
+import { Stat } from "rift-ds/components/Stat/Stat";
+import { Table } from "rift-ds/components/Table/Table";
+import { Accordion } from "rift-ds/components/Accordion/Accordion";
+import { Badge } from "rift-ds/components/Badge/Badge";
+import { COMPONENT_COUNT } from "rift-ds/components/registry";
+import { TOKEN_COUNT } from "rift-ds/tokens/registry";
 
 const TABLE_COLUMNS = [
   { key: "component", header: "Component" },

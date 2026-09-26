@@ -100,7 +100,7 @@ export const CompactDefault: Story = {
     size: 'compact',
     title: 'Quick start',
     steps: [
-      { label: 'Install', description: 'npm install @robr0/design-system' },
+      { label: 'Install', description: 'npm install rift-ds' },
       { label: 'Import tokens', description: 'Add token CSS to your app' },
       { label: 'Use components', description: 'Import and render components' },
     ],

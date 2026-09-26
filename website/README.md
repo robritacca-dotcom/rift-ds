@@ -1,6 +1,6 @@
 # Documentation website
 
-The Next.js docs site for `@robr0/design-system`, deployed as robertritacca.com. It is an npm-workspace consumer of the component library at the repo root: install at the root (`npm install`), never with another package manager, or the workspace link to the library will not resolve.
+The Next.js docs site for `rift-ds`, deployed as robertritacca.com. It is an npm-workspace consumer of the component library at the repo root: install at the root (`npm install`), never with another package manager, or the workspace link to the library will not resolve.
 
 ## Getting started
 

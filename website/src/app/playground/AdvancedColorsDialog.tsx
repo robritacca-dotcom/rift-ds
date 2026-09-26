@@ -1,10 +1,10 @@
 "use client";
 
 import styles from "./page.module.css";
-import { Button } from "@robr0/design-system/components/Button/Button";
-import { ColorPicker } from "@robr0/design-system/components/ColorPicker/ColorPicker";
-import { Dialog } from "@robr0/design-system/components/Dialog/Dialog";
-import { Slider } from "@robr0/design-system/components/Slider/Slider";
+import { Button } from "rift-ds/components/Button/Button";
+import { ColorPicker } from "rift-ds/components/ColorPicker/ColorPicker";
+import { Dialog } from "rift-ds/components/Dialog/Dialog";
+import { Slider } from "rift-ds/components/Slider/Slider";
 import {
   ACCENT_NAMES,
   CHROMATIC_RAMPS,

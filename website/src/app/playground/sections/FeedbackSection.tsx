@@ -2,14 +2,14 @@
 
 import { useState } from "react";
 import styles from "../page.module.css";
-import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
-import { Alert } from "@robr0/design-system/components/Alert/Alert";
-import { Badge } from "@robr0/design-system/components/Badge/Badge";
-import { Button } from "@robr0/design-system/components/Button/Button";
-import { ProgressBar } from "@robr0/design-system/components/ProgressBar/ProgressBar";
-import { Skeleton } from "@robr0/design-system/components/Skeleton/Skeleton";
-import { Spinner } from "@robr0/design-system/components/Spinner/Spinner";
-import { ToastProvider, useToast } from "@robr0/design-system/components/Toast/Toast";
+import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
+import { Alert } from "rift-ds/components/Alert/Alert";
+import { Badge } from "rift-ds/components/Badge/Badge";
+import { Button } from "rift-ds/components/Button/Button";
+import { ProgressBar } from "rift-ds/components/ProgressBar/ProgressBar";
+import { Skeleton } from "rift-ds/components/Skeleton/Skeleton";
+import { Spinner } from "rift-ds/components/Spinner/Spinner";
+import { ToastProvider, useToast } from "rift-ds/components/Toast/Toast";
 
 const BADGE_VARIANTS = ["info", "positive", "warning", "error", "neutral"] as const;
 

@@ -8,11 +8,11 @@ import {
   Globe,
   type GlobeArc,
   type GlobePoint,
-} from "@robr0/design-system/components/Globe/Globe";
-import { MapCallout } from "@robr0/design-system/components/MapCallout/MapCallout";
-import { MapLegend } from "@robr0/design-system/components/MapLegend/MapLegend";
-import { Kbd } from "@robr0/design-system/components/Kbd/Kbd";
-import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
+} from "rift-ds/components/Globe/Globe";
+import { MapCallout } from "rift-ds/components/MapCallout/MapCallout";
+import { MapLegend } from "rift-ds/components/MapLegend/MapLegend";
+import { Kbd } from "rift-ds/components/Kbd/Kbd";
+import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";

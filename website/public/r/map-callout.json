@@ -5,7 +5,7 @@
   "title": "Map callout",
   "description": "The annotation beside a map point: a name in capitals over monospace readout lines.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json"
+    "https://rift-ds.com/r/base.json"
   ],
   "files": [
     {

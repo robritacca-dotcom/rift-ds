@@ -11,87 +11,87 @@ import { THEME_SELECTOR_ORDER, themeSelectorTiles } from "@/lib/theme/presets";
 import { useSiteTheme } from "@/lib/theme/use-theme-overrides";
 import { applyBrand } from "@/lib/theme/brand";
 import { SHOW_FIGMA_LINKS } from "@/config/social";
-import { AgentPlan } from "@robr0/design-system/components/AgentPlan/AgentPlan";
-import { AnimatedNumber } from "@robr0/design-system/components/AnimatedNumber/AnimatedNumber";
-import { AgentStatus } from "@robr0/design-system/components/AgentStatus/AgentStatus";
-import { AiButton } from "@robr0/design-system/components/AiButton/AiButton";
-import { Avatar } from "@robr0/design-system/components/Avatar/Avatar";
-import { ChatHeader } from "@robr0/design-system/components/ChatHeader/ChatHeader";
-import { ChatMarker } from "@robr0/design-system/components/ChatMarker/ChatMarker";
-import { ChatMessage } from "@robr0/design-system/components/ChatMessage/ChatMessage";
-import { ChatThread } from "@robr0/design-system/components/ChatThread/ChatThread";
-import { Composer } from "@robr0/design-system/components/Composer/Composer";
-import { DocumentChip } from "@robr0/design-system/components/DocumentChip/DocumentChip";
-import { InterruptCard } from "@robr0/design-system/components/InterruptCard/InterruptCard";
-import { MessageActions } from "@robr0/design-system/components/MessageActions/MessageActions";
-import { MessageCard } from "@robr0/design-system/components/MessageCard/MessageCard";
-import { ModelPicker } from "@robr0/design-system/components/ModelPicker/ModelPicker";
-import { PromptSuggestions } from "@robr0/design-system/components/PromptSuggestions/PromptSuggestions";
-import { Prose } from "@robr0/design-system/components/Prose/Prose";
-import { Reasoning } from "@robr0/design-system/components/Reasoning/Reasoning";
-import { SourceChip } from "@robr0/design-system/components/SourceChip/SourceChip";
-import { ToolCall } from "@robr0/design-system/components/ToolCall/ToolCall";
-import { Badge } from "@robr0/design-system/components/Badge/Badge";
-import { Button } from "@robr0/design-system/components/Button/Button";
-import { ButtonGroup } from "@robr0/design-system/components/ButtonGroup/ButtonGroup";
+import { AgentPlan } from "rift-ds/components/AgentPlan/AgentPlan";
+import { AnimatedNumber } from "rift-ds/components/AnimatedNumber/AnimatedNumber";
+import { AgentStatus } from "rift-ds/components/AgentStatus/AgentStatus";
+import { AiButton } from "rift-ds/components/AiButton/AiButton";
+import { Avatar } from "rift-ds/components/Avatar/Avatar";
+import { ChatHeader } from "rift-ds/components/ChatHeader/ChatHeader";
+import { ChatMarker } from "rift-ds/components/ChatMarker/ChatMarker";
+import { ChatMessage } from "rift-ds/components/ChatMessage/ChatMessage";
+import { ChatThread } from "rift-ds/components/ChatThread/ChatThread";
+import { Composer } from "rift-ds/components/Composer/Composer";
+import { DocumentChip } from "rift-ds/components/DocumentChip/DocumentChip";
+import { InterruptCard } from "rift-ds/components/InterruptCard/InterruptCard";
+import { MessageActions } from "rift-ds/components/MessageActions/MessageActions";
+import { MessageCard } from "rift-ds/components/MessageCard/MessageCard";
+import { ModelPicker } from "rift-ds/components/ModelPicker/ModelPicker";
+import { PromptSuggestions } from "rift-ds/components/PromptSuggestions/PromptSuggestions";
+import { Prose } from "rift-ds/components/Prose/Prose";
+import { Reasoning } from "rift-ds/components/Reasoning/Reasoning";
+import { SourceChip } from "rift-ds/components/SourceChip/SourceChip";
+import { ToolCall } from "rift-ds/components/ToolCall/ToolCall";
+import { Badge } from "rift-ds/components/Badge/Badge";
+import { Button } from "rift-ds/components/Button/Button";
+import { ButtonGroup } from "rift-ds/components/ButtonGroup/ButtonGroup";
 import {
   FigmaIcon,
   GitHubIcon,
   NpmIcon,
   StorybookIcon,
 } from "../components/BrandIcons/BrandIcons";
-import { Card } from "@robr0/design-system/components/Card/Card";
-import { CardStack } from "@robr0/design-system/components/CardStack/CardStack";
-import { Checkbox } from "@robr0/design-system/components/Checkbox/Checkbox";
-import { Chip } from "@robr0/design-system/components/Chip/Chip";
-import { CircularButton } from "@robr0/design-system/components/CircularButton/CircularButton";
-import { CodeBlock } from "@robr0/design-system/components/CodeBlock/CodeBlock";
+import { Card } from "rift-ds/components/Card/Card";
+import { CardStack } from "rift-ds/components/CardStack/CardStack";
+import { Checkbox } from "rift-ds/components/Checkbox/Checkbox";
+import { Chip } from "rift-ds/components/Chip/Chip";
+import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
 import {
   ContributionGraph,
   type ContributionDay,
-} from "@robr0/design-system/components/ContributionGraph/ContributionGraph";
-import { DateInput } from "@robr0/design-system/components/DateInput/DateInput";
-import { DatePicker } from "@robr0/design-system/components/DatePicker/DatePicker";
-import { Dropdown } from "@robr0/design-system/components/Dropdown/Dropdown";
-import { EmptyState } from "@robr0/design-system/components/EmptyState/EmptyState";
+} from "rift-ds/components/ContributionGraph/ContributionGraph";
+import { DateInput } from "rift-ds/components/DateInput/DateInput";
+import { DatePicker } from "rift-ds/components/DatePicker/DatePicker";
+import { Dropdown } from "rift-ds/components/Dropdown/Dropdown";
+import { EmptyState } from "rift-ds/components/EmptyState/EmptyState";
 import {
   EventCalendar,
   type EventCalendarEvent,
-} from "@robr0/design-system/components/EventCalendar/EventCalendar";
+} from "rift-ds/components/EventCalendar/EventCalendar";
 import {
   GanttChart,
   type GanttChartItem,
   type GanttChartMilestone,
-} from "@robr0/design-system/components/GanttChart/GanttChart";
+} from "rift-ds/components/GanttChart/GanttChart";
 import {
   Globe,
   type GlobeArc,
   type GlobePoint,
-} from "@robr0/design-system/components/Globe/Globe";
-import { Input } from "@robr0/design-system/components/Input/Input";
-import { Kbd } from "@robr0/design-system/components/Kbd/Kbd";
-import { MapCallout } from "@robr0/design-system/components/MapCallout/MapCallout";
-import { MapLegend } from "@robr0/design-system/components/MapLegend/MapLegend";
-import { Pagination } from "@robr0/design-system/components/Pagination/Pagination";
-import { ProgressBar } from "@robr0/design-system/components/ProgressBar/ProgressBar";
-import { SegmentedControl } from "@robr0/design-system/components/SegmentedControl/SegmentedControl";
-import { SelectionCard } from "@robr0/design-system/components/SelectionCard/SelectionCard";
-import { Skeleton } from "@robr0/design-system/components/Skeleton/Skeleton";
-import { Slider } from "@robr0/design-system/components/Slider/Slider";
-import { Spinner } from "@robr0/design-system/components/Spinner/Spinner";
-import { Stat } from "@robr0/design-system/components/Stat/Stat";
-import { Table } from "@robr0/design-system/components/Table/Table";
-import { Tabs } from "@robr0/design-system/components/Tabs/Tabs";
-import { Timeline } from "@robr0/design-system/components/Timeline/Timeline";
-import { ToggleSwitch } from "@robr0/design-system/components/ToggleSwitch/ToggleSwitch";
+} from "rift-ds/components/Globe/Globe";
+import { Input } from "rift-ds/components/Input/Input";
+import { Kbd } from "rift-ds/components/Kbd/Kbd";
+import { MapCallout } from "rift-ds/components/MapCallout/MapCallout";
+import { MapLegend } from "rift-ds/components/MapLegend/MapLegend";
+import { Pagination } from "rift-ds/components/Pagination/Pagination";
+import { ProgressBar } from "rift-ds/components/ProgressBar/ProgressBar";
+import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
+import { SelectionCard } from "rift-ds/components/SelectionCard/SelectionCard";
+import { Skeleton } from "rift-ds/components/Skeleton/Skeleton";
+import { Slider } from "rift-ds/components/Slider/Slider";
+import { Spinner } from "rift-ds/components/Spinner/Spinner";
+import { Stat } from "rift-ds/components/Stat/Stat";
+import { Table } from "rift-ds/components/Table/Table";
+import { Tabs } from "rift-ds/components/Tabs/Tabs";
+import { Timeline } from "rift-ds/components/Timeline/Timeline";
+import { ToggleSwitch } from "rift-ds/components/ToggleSwitch/ToggleSwitch";
 import {
   WorldMap,
   type WorldMapPoint,
-} from "@robr0/design-system/components/WorldMap/WorldMap";
-import { COMPONENT_COUNT } from "@robr0/design-system/components/registry";
-import { TOKEN_COUNT } from "@robr0/design-system/tokens/registry";
+} from "rift-ds/components/WorldMap/WorldMap";
+import { COMPONENT_COUNT } from "rift-ds/components/registry";
+import { TOKEN_COUNT } from "rift-ds/tokens/registry";
 import { MCP_TOOLS } from "@/lib/mcp-tools";
-import { AreaChart, BarChart, PieChart } from "@robr0/design-system/charts";
+import { AreaChart, BarChart, PieChart } from "rift-ds/charts";
 
 /* ---------- fixed demo data (all mock — a small finance product) ---------- */
 
@@ -797,7 +797,7 @@ export default function DesignSystemLanding() {
       heading="Install"
       sub={`${COMPONENT_COUNT} components on ${TOKEN_COUNT} semantic tokens, one package.`}
     >
-      <CodeBlock code="npm install @robr0/design-system" language="bash" />
+      <CodeBlock code="npm install rift-ds" language="bash" />
       <div className={styles.buttonRow}>
         <Button label="Get started" variant="primary" size="compact" href="/docs/get-started" />
         <Button

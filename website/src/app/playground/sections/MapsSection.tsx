@@ -1,14 +1,14 @@
 "use client";
 
 import styles from "../page.module.css";
-import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
+import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import {
   Globe,
   type GlobeArc,
   type GlobePoint,
-} from "@robr0/design-system/components/Globe/Globe";
-import { MapCallout } from "@robr0/design-system/components/MapCallout/MapCallout";
-import { MapLegend } from "@robr0/design-system/components/MapLegend/MapLegend";
+} from "rift-ds/components/Globe/Globe";
+import { MapCallout } from "rift-ds/components/MapCallout/MapCallout";
+import { MapLegend } from "rift-ds/components/MapLegend/MapLegend";
 
 const POINTS: GlobePoint[] = [
   { id: "vancouver", lat: 49.28, lng: -123.12, label: "YVR", kind: "anchor" },

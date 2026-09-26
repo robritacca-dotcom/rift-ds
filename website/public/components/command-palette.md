@@ -2,13 +2,13 @@
 
 A modal Cmd+K launcher that searches a grouped command list, with keyboard navigation and shortcut hints.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine-delta.vercel.app/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: overlays
-- Import: `import { CommandPalette } from '@robr0/design-system';`
-- Deep import: `import { CommandPalette } from '@robr0/design-system/components/CommandPalette/CommandPalette';`
+- Import: `import { CommandPalette } from 'rift-ds';`
+- Deep import: `import { CommandPalette } from 'rift-ds/components/CommandPalette/CommandPalette';`
 - Rendering: client component (declares 'use client')
-- Live docs: https://dragonspine-delta.vercel.app/components/command-palette
+- Live docs: https://rift-ds.com/components/command-palette
 
 ## CommandPalette props
 

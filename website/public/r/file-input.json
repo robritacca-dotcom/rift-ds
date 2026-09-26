@@ -5,8 +5,8 @@
   "title": "File input",
   "description": "A click-or-drop upload zone paired with a controlled file list showing size, progress, and per-file errors.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json",
-    "https://dragonspine-delta.vercel.app/r/field.json"
+    "https://rift-ds.com/r/base.json",
+    "https://rift-ds.com/r/field.json"
   ],
   "files": [
     {

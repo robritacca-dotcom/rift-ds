@@ -13,12 +13,12 @@
  */
 
 import React from "react";
-import { ChatHeader } from "@robr0/design-system/components/ChatHeader/ChatHeader";
-import { ChatMessage } from "@robr0/design-system/components/ChatMessage/ChatMessage";
-import { ChatThread } from "@robr0/design-system/components/ChatThread/ChatThread";
-import { CircularButton } from "@robr0/design-system/components/CircularButton/CircularButton";
-import { Composer } from "@robr0/design-system/components/Composer/Composer";
-import { PromptSuggestions } from "@robr0/design-system/components/PromptSuggestions/PromptSuggestions";
+import { ChatHeader } from "rift-ds/components/ChatHeader/ChatHeader";
+import { ChatMessage } from "rift-ds/components/ChatMessage/ChatMessage";
+import { ChatThread } from "rift-ds/components/ChatThread/ChatThread";
+import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { Composer } from "rift-ds/components/Composer/Composer";
+import { PromptSuggestions } from "rift-ds/components/PromptSuggestions/PromptSuggestions";
 import {
   readGreeting,
   serverGreeting,

@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import { Button } from "@robr0/design-system/components/Button/Button";
-import { MOTION_FEEDBACK_RESET_MS } from "@robr0/design-system/tokens/motion";
+import { Button } from "rift-ds/components/Button/Button";
+import { MOTION_FEEDBACK_RESET_MS } from "rift-ds/tokens/motion";
 import styles from "./CopyPageMarkdown.module.css";
 
 /**

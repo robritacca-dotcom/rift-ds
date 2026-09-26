@@ -80,7 +80,7 @@ const nextConfig: NextConfig = {
   // The design system arrives as a real (workspace-linked) package whose
   // exports point at TypeScript source — Next compiles it like first-party
   // code. This keeps the website on the exact import surface consumers get.
-  transpilePackages: ['@robr0/design-system'],
+  transpilePackages: ['rift-ds'],
   turbopack: {
     root: worktreeRoot,
   },

@@ -9,14 +9,14 @@ import {
   type ReactNode,
 } from "react";
 import Image from "next/image";
-import { ChatHeader } from "@robr0/design-system/components/ChatHeader/ChatHeader";
-import { ChatMessage } from "@robr0/design-system/components/ChatMessage/ChatMessage";
-import { ChatThread } from "@robr0/design-system/components/ChatThread/ChatThread";
-import { CircularButton } from "@robr0/design-system/components/CircularButton/CircularButton";
-import { Composer } from "@robr0/design-system/components/Composer/Composer";
-import { ModelPicker } from "@robr0/design-system/components/ModelPicker/ModelPicker";
-import { PromptSuggestions } from "@robr0/design-system/components/PromptSuggestions/PromptSuggestions";
-import { MOTION_SUGGESTIONS_THINK_MS } from "@robr0/design-system/tokens/motion";
+import { ChatHeader } from "rift-ds/components/ChatHeader/ChatHeader";
+import { ChatMessage } from "rift-ds/components/ChatMessage/ChatMessage";
+import { ChatThread } from "rift-ds/components/ChatThread/ChatThread";
+import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { Composer } from "rift-ds/components/Composer/Composer";
+import { ModelPicker } from "rift-ds/components/ModelPicker/ModelPicker";
+import { PromptSuggestions } from "rift-ds/components/PromptSuggestions/PromptSuggestions";
+import { MOTION_SUGGESTIONS_THINK_MS } from "rift-ds/tokens/motion";
 import { usePathname } from "next/navigation";
 import { getNavLabel } from "@/config/navigation";
 import { getPageSummary } from "@/data/page-summaries";

@@ -5,7 +5,7 @@
   "title": "Anchor nav",
   "description": "An on-page list of anchor links that tracks the reader's position and jumps between sections.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json"
+    "https://rift-ds.com/r/base.json"
   ],
   "files": [
     {

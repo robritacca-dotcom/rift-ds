@@ -33,7 +33,7 @@ export const PACKAGE_DESCRIPTION =
  * Public subpaths. `srcJs` entries get types+import conditions in the
  * dist form; `asset` entries map through verbatim (CSS, fonts).
  * Wildcards (*) match multi-segment paths, so
- * "@robr0/design-system/components/Button/Button" resolves deep imports.
+ * "rift-ds/components/Button/Button" resolves deep imports.
  */
 const SUBPATHS = [
   { key: '.', srcJs: './src/index.ts', dist: './index' },

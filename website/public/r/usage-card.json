@@ -5,9 +5,9 @@
   "title": "Usage card",
   "description": "An agent's budgets at a glance: context window and plan limits as meter rows with reset captions.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json",
-    "https://dragonspine-delta.vercel.app/r/meter.json",
-    "https://dragonspine-delta.vercel.app/r/treemap.json"
+    "https://rift-ds.com/r/base.json",
+    "https://rift-ds.com/r/meter.json",
+    "https://rift-ds.com/r/treemap.json"
   ],
   "files": [
     {

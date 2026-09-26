@@ -1,24 +1,24 @@
 ---
 name: rift-design-system
-description: Build React UI with @robr0/design-system. Use when installing the package, composing its components, theming with its design tokens, or reading a component's exact prop contract.
+description: Build React UI with rift-ds. Use when installing the package, composing its components, theming with its design tokens, or reading a component's exact prop contract.
 ---
 
-# Using @robr0/design-system
+# Using rift-ds
 
-Generated from the library's registries at version 0.21.0, alongside every deploy of https://dragonspine-delta.vercel.app. The library is 133 React components across 11 categories, themed by 255 semantic design tokens, published to npm.
+Generated from the library's registries at version 0.21.0, alongside every deploy of https://rift-ds.com. The library is 133 React components across 11 categories, themed by 255 semantic design tokens, published to npm.
 
 ## Install
 
 ```bash
-npm install @robr0/design-system
+npm install rift-ds
 ```
 
 Import the token stylesheet once, then components from the barrel or by deep subpath:
 
 ```tsx
-import '@robr0/design-system/tokens/tokens.css';
-import { Button } from '@robr0/design-system';
-import { Input } from '@robr0/design-system/components/Input/Input';
+import 'rift-ds/tokens/tokens.css';
+import { Button } from 'rift-ds';
+import { Input } from 'rift-ds/components/Input/Input';
 ```
 
 The package is ESM-only, resolved via exports subpaths: use a bundler that handles CSS and font imports from node_modules (Vite, Next.js, webpack) and set TypeScript's `moduleResolution` to `"bundler"` (or `"nodenext"`). Components are provider-free with one exception: wrap the tree in `ToastProvider` if (and only if) the toast queue is used via `useToast`.
@@ -29,11 +29,11 @@ Set `data-theme="dark"` on the root element. Every semantic colour token has a l
 
 ## Theming
 
-Components read semantic tokens (`--color-*`, `--radius-*`, `--font-*`, `--motion-*`, ...), and every semantic colour token references a `--primitive-*` value. Re-theme by overriding primitives: one override cascades through both themes at once. Never hardcode a colour beside the components; override the token it should come from. The full token reference lives at https://dragonspine-delta.vercel.app/foundations, and the MCP endpoint's `list_tokens` tool serves the registry.
+Components read semantic tokens (`--color-*`, `--radius-*`, `--font-*`, `--motion-*`, ...), and every semantic colour token references a `--primitive-*` value. Re-theme by overriding primitives: one override cascades through both themes at once. Never hardcode a colour beside the components; override the token it should come from. The full token reference lives at https://rift-ds.com/foundations, and the MCP endpoint's `list_tokens` tool serves the registry.
 
 ## Charts
 
-Components that import recharts ship from `@robr0/design-system/charts` and need the optional recharts peer dependency. Everything in the main barrel is dependency-free.
+Components that import recharts ship from `rift-ds/charts` and need the optional recharts peer dependency. Everything in the main barrel is dependency-free.
 
 ## Fonts
 
@@ -41,7 +41,7 @@ The primary typeface is not bundled: set `--font-family-primary` to your own (th
 
 ## Timings in JavaScript
 
-Timer-driven timings (hover delays, toast auto-dismiss, the streaming reveal's pacing) are exported as constants from `@robr0/design-system/tokens/motion`. Import the constant rather than writing a literal millisecond value.
+Timer-driven timings (hover delays, toast auto-dismiss, the streaming reveal's pacing) are exported as constants from `rift-ds/tokens/motion`. Import the constant rather than writing a literal millisecond value.
 
 ## The catalog
 
@@ -63,6 +63,6 @@ references/components.md lists every component with its import line and descript
 
 Do not guess props. Three equivalent sources, all generated from the same JSDoc that ships in the package:
 
-- The `.d.ts` files in `node_modules/@robr0/design-system` once installed.
-- `https://dragonspine-delta.vercel.app/components/<slug>.md` — one markdown contract per component, next to its live docs page.
-- The MCP endpoint at `https://dragonspine-delta.vercel.app/api/mcp` — the `get_component` tool returns the full contract for one component.
+- The `.d.ts` files in `node_modules/rift-ds` once installed.
+- `https://rift-ds.com/components/<slug>.md` — one markdown contract per component, next to its live docs page.
+- The MCP endpoint at `https://rift-ds.com/api/mcp` — the `get_component` tool returns the full contract for one component.

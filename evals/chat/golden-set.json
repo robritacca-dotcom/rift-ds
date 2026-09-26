@@ -178,13 +178,13 @@
     "assert": [
       {
         "type": "contains",
-        "value": "@robr0/design-system"
+        "value": "rift-ds"
       }
     ],
     "metadata": {
       "seat": "developer",
       "requiredFacts": [
-        "@robr0/design-system"
+        "rift-ds"
       ]
     }
   },

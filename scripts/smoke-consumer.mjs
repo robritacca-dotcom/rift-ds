@@ -41,7 +41,7 @@ try {
         private: true,
         type: 'module',
         dependencies: {
-          '@robr0/design-system': `file:../${tarball}`,
+          'rift-ds': `file:../${tarball}`,
           react: '^19.0.0',
           'react-dom': '^19.0.0',
         },
@@ -95,9 +95,9 @@ export default defineConfig({ plugins: [react()] });
   writeFileSync(
     join(app, 'src', 'main.tsx'),
     `import { createRoot } from 'react-dom/client';
-import '@robr0/design-system/tokens/tokens.css';
-import { Button, Badge, COMPONENT_COUNT } from '@robr0/design-system';
-import { Alert } from '@robr0/design-system/components/Alert/Alert';
+import 'rift-ds/tokens/tokens.css';
+import { Button, Badge, COMPONENT_COUNT } from 'rift-ds';
+import { Alert } from 'rift-ds/components/Alert/Alert';
 
 createRoot(document.getElementById('root')!).render(
   <main>

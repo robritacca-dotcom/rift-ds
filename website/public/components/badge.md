@@ -2,13 +2,13 @@
 
 Small inline status labels with info, positive, warning, error, and neutral variants.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine-delta.vercel.app/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: data-display
-- Import: `import { Badge } from '@robr0/design-system';`
-- Deep import: `import { Badge } from '@robr0/design-system/components/Badge/Badge';`
+- Import: `import { Badge } from 'rift-ds';`
+- Deep import: `import { Badge } from 'rift-ds/components/Badge/Badge';`
 - Rendering: server-renderable (no 'use client')
-- Live docs: https://dragonspine-delta.vercel.app/components/badge
+- Live docs: https://rift-ds.com/components/badge
 
 ## Badge props
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useSyncExternalStore } from "react";
-import { SegmentedControl } from "@robr0/design-system/components/SegmentedControl/SegmentedControl";
+import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
 import styles from "./ThemeToggle.module.css";
 
 const themeSegments = [

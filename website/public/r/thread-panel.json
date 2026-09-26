@@ -5,10 +5,10 @@
   "title": "Thread panel",
   "description": "The session-history rail for chat products: brand header, new-thread action, standing controls, projects, grouped detail-rich threads, and a profile footer.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json",
-    "https://dragonspine-delta.vercel.app/r/avatar.json",
-    "https://dragonspine-delta.vercel.app/r/dropdown-menu.json",
-    "https://dragonspine-delta.vercel.app/r/kbd.json"
+    "https://rift-ds.com/r/base.json",
+    "https://rift-ds.com/r/avatar.json",
+    "https://rift-ds.com/r/dropdown-menu.json",
+    "https://rift-ds.com/r/kbd.json"
   ],
   "files": [
     {

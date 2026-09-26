@@ -28,36 +28,36 @@
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { AiButton } from "@robr0/design-system/components/AiButton/AiButton";
+import { AiButton } from "rift-ds/components/AiButton/AiButton";
 import {
   AgentRail,
   type AgentRailTab,
-} from "@robr0/design-system/components/AgentRail/AgentRail";
+} from "rift-ds/components/AgentRail/AgentRail";
 import {
   AppSidebar,
   type AppSidebarSection,
-} from "@robr0/design-system/components/AppSidebar/AppSidebar";
-import { Badge } from "@robr0/design-system/components/Badge/Badge";
-import { Breadcrumb } from "@robr0/design-system/components/Breadcrumb/Breadcrumb";
-import { Button } from "@robr0/design-system/components/Button/Button";
-import { CircularButton } from "@robr0/design-system/components/CircularButton/CircularButton";
+} from "rift-ds/components/AppSidebar/AppSidebar";
+import { Badge } from "rift-ds/components/Badge/Badge";
+import { Breadcrumb } from "rift-ds/components/Breadcrumb/Breadcrumb";
+import { Button } from "rift-ds/components/Button/Button";
+import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
 import {
   DataTable,
   type DataTableColumn,
-} from "@robr0/design-system/components/DataTable/DataTable";
-import { Divider } from "@robr0/design-system/components/Divider/Divider";
-import { EmptyState } from "@robr0/design-system/components/EmptyState/EmptyState";
-import { Input } from "@robr0/design-system/components/Input/Input";
-import { Kbd } from "@robr0/design-system/components/Kbd/Kbd";
-import { NotificationItem } from "@robr0/design-system/components/NotificationCenter/NotificationCenter";
-import { Panel } from "@robr0/design-system/components/Panel/Panel";
-import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
-import { Stat } from "@robr0/design-system/components/Stat/Stat";
-import { Stepper } from "@robr0/design-system/components/Stepper/Stepper";
+} from "rift-ds/components/DataTable/DataTable";
+import { Divider } from "rift-ds/components/Divider/Divider";
+import { EmptyState } from "rift-ds/components/EmptyState/EmptyState";
+import { Input } from "rift-ds/components/Input/Input";
+import { Kbd } from "rift-ds/components/Kbd/Kbd";
+import { NotificationItem } from "rift-ds/components/NotificationCenter/NotificationCenter";
+import { Panel } from "rift-ds/components/Panel/Panel";
+import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
+import { Stat } from "rift-ds/components/Stat/Stat";
+import { Stepper } from "rift-ds/components/Stepper/Stepper";
 import {
   ThreadPanel,
   type ThreadPanelGroup,
-} from "@robr0/design-system/components/ThreadPanel/ThreadPanel";
+} from "rift-ds/components/ThreadPanel/ThreadPanel";
 import { SiteChat } from "@/components/SiteChat/SiteChat";
 import { SiteChatProvider, useSiteChat } from "@/components/SiteChat/ChatContext";
 import { createSimTransport } from "@/lib/chat-sim";

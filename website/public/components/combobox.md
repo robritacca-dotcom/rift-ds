@@ -2,13 +2,13 @@
 
 A filterable select that narrows options as the user types, with multi-select chips, grouping, and async loading.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine-delta.vercel.app/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: forms
-- Import: `import { Combobox } from '@robr0/design-system';`
-- Deep import: `import { Combobox } from '@robr0/design-system/components/Combobox/Combobox';`
+- Import: `import { Combobox } from 'rift-ds';`
+- Deep import: `import { Combobox } from 'rift-ds/components/Combobox/Combobox';`
 - Rendering: client component (declares 'use client')
-- Live docs: https://dragonspine-delta.vercel.app/components/combobox
+- Live docs: https://rift-ds.com/components/combobox
 
 ## Combobox props
 

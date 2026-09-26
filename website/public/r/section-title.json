@@ -5,7 +5,7 @@
   "title": "Section title",
   "description": "Heading with a divider line and optional trailing content for organising page sections.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json"
+    "https://rift-ds.com/r/base.json"
   ],
   "files": [
     {

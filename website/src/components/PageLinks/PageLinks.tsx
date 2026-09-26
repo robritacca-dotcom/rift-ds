@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "@robr0/design-system/components/Button/Button";
+import { Button } from "rift-ds/components/Button/Button";
 import CopyPageMarkdown from "./CopyPageMarkdown";
 import styles from "./PageLinks.module.css";
 import { STORYBOOK_URL } from "@/config/brand.generated";

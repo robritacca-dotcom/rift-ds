@@ -2,13 +2,13 @@
 
 Concentric progress rings for completion and KPI readouts.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine-delta.vercel.app/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: charts
-- Import: `import { RadialChart } from '@robr0/design-system/charts'; // needs the optional recharts peer`
-- Deep import: `import { RadialChart } from '@robr0/design-system/components/Chart/RadialChart';`
+- Import: `import { RadialChart } from 'rift-ds/charts'; // needs the optional recharts peer`
+- Deep import: `import { RadialChart } from 'rift-ds/components/Chart/RadialChart';`
 - Rendering: server-renderable (no 'use client')
-- Live docs: https://dragonspine-delta.vercel.app/components/radial-chart
+- Live docs: https://rift-ds.com/components/radial-chart
 
 ## RadialChart props
 

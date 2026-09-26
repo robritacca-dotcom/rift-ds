@@ -30,32 +30,32 @@
  */
 
 import React from "react";
-import { AiButton } from "@robr0/design-system/components/AiButton/AiButton";
+import { AiButton } from "rift-ds/components/AiButton/AiButton";
 import {
   AppSidebar,
   type AppSidebarSection,
-} from "@robr0/design-system/components/AppSidebar/AppSidebar";
-import { CircularButton } from "@robr0/design-system/components/CircularButton/CircularButton";
+} from "rift-ds/components/AppSidebar/AppSidebar";
+import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
 import {
   Dropdown,
   type DropdownOption,
-} from "@robr0/design-system/components/Dropdown/Dropdown";
+} from "rift-ds/components/Dropdown/Dropdown";
 import {
   Globe,
   type GlobeArc,
   type GlobePoint,
   type GlobeRotation,
-} from "@robr0/design-system/components/Globe/Globe";
-import { Input } from "@robr0/design-system/components/Input/Input";
-import { Kbd } from "@robr0/design-system/components/Kbd/Kbd";
-import { MapCallout } from "@robr0/design-system/components/MapCallout/MapCallout";
-import { MapLegend } from "@robr0/design-system/components/MapLegend/MapLegend";
-import { SegmentedControl } from "@robr0/design-system/components/SegmentedControl/SegmentedControl";
+} from "rift-ds/components/Globe/Globe";
+import { Input } from "rift-ds/components/Input/Input";
+import { Kbd } from "rift-ds/components/Kbd/Kbd";
+import { MapCallout } from "rift-ds/components/MapCallout/MapCallout";
+import { MapLegend } from "rift-ds/components/MapLegend/MapLegend";
+import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
 import {
   WorldMap,
   type WorldMapBounds,
   type WorldMapPoint,
-} from "@robr0/design-system/components/WorldMap/WorldMap";
+} from "rift-ds/components/WorldMap/WorldMap";
 import SidebarSwitchers from "../SidebarSwitchers/SidebarSwitchers";
 import TemplateAssistant from "../TemplateAssistant/TemplateAssistant";
 import styles from "./RelayConsole.module.css";

@@ -1,14 +1,14 @@
 {
-  "name": "@robr0/design-system",
+  "name": "rift-ds",
   "private": true,
   "version": "0.21.0",
   "description": "An AI-ready React design system: accessible components on composable tokens, light/dark theming, and CSS-variable overrides.",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/robritacca-dotcom/dragonspine.git"
+    "url": "git+https://github.com/robritacca-dotcom/rift-ds.git"
   },
-  "homepage": "https://dragonspine.vercel.app",
+  "homepage": "https://rift-ds.com",
   "type": "module",
   "engines": {
     "node": ">=24",

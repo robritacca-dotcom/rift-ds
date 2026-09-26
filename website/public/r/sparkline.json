@@ -5,7 +5,7 @@
   "title": "Sparkline",
   "description": "Inline trend line for stats and table cells, drawn without axes or chrome.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json"
+    "https://rift-ds.com/r/base.json"
   ],
   "files": [
     {

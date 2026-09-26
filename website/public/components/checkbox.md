@@ -2,13 +2,13 @@
 
 Custom checkbox with check and indeterminate states, keyboard accessible with animated transitions.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine-delta.vercel.app/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: forms
-- Import: `import { Checkbox } from '@robr0/design-system';`
-- Deep import: `import { Checkbox } from '@robr0/design-system/components/Checkbox/Checkbox';`
+- Import: `import { Checkbox } from 'rift-ds';`
+- Deep import: `import { Checkbox } from 'rift-ds/components/Checkbox/Checkbox';`
 - Rendering: client component (declares 'use client')
-- Live docs: https://dragonspine-delta.vercel.app/components/checkbox
+- Live docs: https://rift-ds.com/components/checkbox
 
 ## Checkbox props
 

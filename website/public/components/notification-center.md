@@ -2,13 +2,13 @@
 
 A persistent notification inbox with unread count, filter tabs, and per-item actions.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine-delta.vercel.app/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: feedback
-- Import: `import { NotificationCenter } from '@robr0/design-system';`
-- Deep import: `import { NotificationCenter } from '@robr0/design-system/components/NotificationCenter/NotificationCenter';`
+- Import: `import { NotificationCenter } from 'rift-ds';`
+- Deep import: `import { NotificationCenter } from 'rift-ds/components/NotificationCenter/NotificationCenter';`
 - Rendering: client component (declares 'use client')
-- Live docs: https://dragonspine-delta.vercel.app/components/notification-center
+- Live docs: https://rift-ds.com/components/notification-center
 
 ## NotificationCenter props
 

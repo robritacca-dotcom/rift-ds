@@ -5,7 +5,7 @@
   "title": "Code block",
   "description": "Monospace code with a header and one-click copy.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json"
+    "https://rift-ds.com/r/base.json"
   ],
   "files": [
     {

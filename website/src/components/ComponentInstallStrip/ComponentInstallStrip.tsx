@@ -1,5 +1,5 @@
-import { CodeBlock } from "@robr0/design-system/components/CodeBlock/CodeBlock";
-import { componentMetadata } from "@robr0/design-system/components/registry";
+import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
+import { componentMetadata } from "rift-ds/components/registry";
 import { SITE_URL } from "@/config/brand.generated";
 import styles from "./ComponentInstallStrip.module.css";
 
@@ -17,8 +17,8 @@ export default function ComponentInstallStrip({ slug }: { slug: string }) {
   if (!component) return null;
 
   const importPath = component.recharts
-    ? "@robr0/design-system/charts"
-    : `@robr0/design-system/components/${component.name}/${component.name}`;
+    ? "rift-ds/charts"
+    : `rift-ds/components/${component.name}/${component.name}`;
 
   const snippet = [
     `// From the npm package`,

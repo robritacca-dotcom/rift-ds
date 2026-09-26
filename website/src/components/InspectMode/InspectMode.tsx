@@ -2,10 +2,10 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { tokenRegistry } from "@robr0/design-system/tokens/registry";
-import { MOTION_SCROLL_SETTLE_MS } from "@robr0/design-system/tokens/motion";
-import { ToggleSwitch } from "@robr0/design-system/components/ToggleSwitch/ToggleSwitch";
-import { componentMetadata } from "@robr0/design-system/components/registry";
+import { tokenRegistry } from "rift-ds/tokens/registry";
+import { MOTION_SCROLL_SETTLE_MS } from "rift-ds/tokens/motion";
+import { ToggleSwitch } from "rift-ds/components/ToggleSwitch/ToggleSwitch";
+import { componentMetadata } from "rift-ds/components/registry";
 import {
   collectDeclaredTokens,
   primitiveOf,

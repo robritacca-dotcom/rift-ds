@@ -5,10 +5,10 @@
   "title": "Split button",
   "description": "Primary action with an attached menu of alternatives, composing Button and DropdownMenu in one pill.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json",
-    "https://dragonspine-delta.vercel.app/r/button.json",
-    "https://dragonspine-delta.vercel.app/r/circular-button.json",
-    "https://dragonspine-delta.vercel.app/r/dropdown-menu.json"
+    "https://rift-ds.com/r/base.json",
+    "https://rift-ds.com/r/button.json",
+    "https://rift-ds.com/r/circular-button.json",
+    "https://rift-ds.com/r/dropdown-menu.json"
   ],
   "files": [
     {

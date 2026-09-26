@@ -2,13 +2,13 @@
 
 The shared scaffolding for labelled form controls: label, required marker, helper and error text, and the ARIA wiring that ties them together.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine-delta.vercel.app/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: forms
-- Import: `import { Field } from '@robr0/design-system';`
-- Deep import: `import { Field } from '@robr0/design-system/components/Field/Field';`
+- Import: `import { Field } from 'rift-ds';`
+- Deep import: `import { Field } from 'rift-ds/components/Field/Field';`
 - Rendering: client component (declares 'use client')
-- Live docs: https://dragonspine-delta.vercel.app/components/field
+- Live docs: https://rift-ds.com/components/field
 
 ## Field props
 

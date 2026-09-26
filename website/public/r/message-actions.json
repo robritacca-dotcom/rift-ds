@@ -5,8 +5,8 @@
   "title": "Message actions",
   "description": "An icon-button row for message-level actions like copy, retry, and feedback.",
   "registryDependencies": [
-    "https://dragonspine-delta.vercel.app/r/base.json",
-    "https://dragonspine-delta.vercel.app/r/tooltip.json"
+    "https://rift-ds.com/r/base.json",
+    "https://rift-ds.com/r/tooltip.json"
   ],
   "files": [
     {

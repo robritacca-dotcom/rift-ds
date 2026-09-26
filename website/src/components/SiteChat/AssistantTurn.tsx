@@ -3,10 +3,10 @@
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { AgentStatus } from "@robr0/design-system/components/AgentStatus/AgentStatus";
-import { ChatMessage } from "@robr0/design-system/components/ChatMessage/ChatMessage";
-import { Prose } from "@robr0/design-system/components/Prose/Prose";
-import { Reasoning } from "@robr0/design-system/components/Reasoning/Reasoning";
+import { AgentStatus } from "rift-ds/components/AgentStatus/AgentStatus";
+import { ChatMessage } from "rift-ds/components/ChatMessage/ChatMessage";
+import { Prose } from "rift-ds/components/Prose/Prose";
+import { Reasoning } from "rift-ds/components/Reasoning/Reasoning";
 import type { ChatTurn, LiveResponse } from "@/hooks/useChat";
 import { DOCK_QUERY, useSiteChat } from "./ChatContext";
 import { FollowupSuggestions } from "./FollowupSuggestions";

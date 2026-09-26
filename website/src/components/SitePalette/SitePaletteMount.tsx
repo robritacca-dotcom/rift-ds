@@ -2,9 +2,9 @@
 
 import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { CommandPalette } from "@robr0/design-system/components/CommandPalette/CommandPalette";
-import type { CommandPaletteGroup } from "@robr0/design-system/components/CommandPalette/CommandPalette";
-import { componentMetadata } from "@robr0/design-system/components/registry";
+import { CommandPalette } from "rift-ds/components/CommandPalette/CommandPalette";
+import type { CommandPaletteGroup } from "rift-ds/components/CommandPalette/CommandPalette";
+import { componentMetadata } from "rift-ds/components/registry";
 import {
   docsSidebarLinks,
   getSectionItems,

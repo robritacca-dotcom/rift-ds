@@ -14,7 +14,7 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { CircularButton } from "@robr0/design-system/components/CircularButton/CircularButton";
+import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
 import { resolveEdges } from "./geometry";
 import { MapEdgeLayer, MapEdgeLabels } from "./MapEdges";
 import { MapNode } from "./MapNode";

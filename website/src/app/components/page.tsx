@@ -3,11 +3,11 @@ import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import ComponentsSidebar from "../../components/Sidebar/ComponentsSidebar";
 import PageLinks from "../../components/PageLinks/PageLinks";
 import ComponentCardGrid from "../../components/ComponentCardGrid/ComponentCardGrid";
-import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
+import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import {
   componentMetadata,
   componentCategoryMetadata,
-} from "@robr0/design-system/components/registry";
+} from "rift-ds/components/registry";
 import styles from "./page.module.css";
 import { FIGMA_FILE_URL } from "@/config/brand.generated";
 

@@ -7,9 +7,9 @@ import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import {
   EventCalendar,
   type EventCalendarEvent,
-} from "@robr0/design-system/components/EventCalendar/EventCalendar";
-import { Button } from "@robr0/design-system/components/Button/Button";
-import { SectionTitle } from "@robr0/design-system/components/SectionTitle/SectionTitle";
+} from "rift-ds/components/EventCalendar/EventCalendar";
+import { Button } from "rift-ds/components/Button/Button";
+import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";

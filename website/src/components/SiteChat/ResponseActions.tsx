@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { MOTION_FEEDBACK_RESET_MS } from "@robr0/design-system/tokens/motion";
+import { MOTION_FEEDBACK_RESET_MS } from "rift-ds/tokens/motion";
 import type { ChatTurn } from "@/hooks/useChat";
 import { useSiteChat } from "./ChatContext";
 import styles from "./SiteChat.module.css";

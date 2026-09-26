@@ -31,36 +31,36 @@ import Image from "next/image";
 import {
   AgentPlan,
   type AgentPlanStep,
-} from "@robr0/design-system/components/AgentPlan/AgentPlan";
+} from "rift-ds/components/AgentPlan/AgentPlan";
 import {
   AgentStatus,
   type AgentStatusProps,
-} from "@robr0/design-system/components/AgentStatus/AgentStatus";
-import { Badge, type BadgeProps } from "@robr0/design-system/components/Badge/Badge";
-import { Button } from "@robr0/design-system/components/Button/Button";
-import { ChatHeader } from "@robr0/design-system/components/ChatHeader/ChatHeader";
-import { ChatMessage } from "@robr0/design-system/components/ChatMessage/ChatMessage";
-import { ChatThread } from "@robr0/design-system/components/ChatThread/ChatThread";
-import { CircularButton } from "@robr0/design-system/components/CircularButton/CircularButton";
-import { CodeBlock } from "@robr0/design-system/components/CodeBlock/CodeBlock";
-import { CodeDiff } from "@robr0/design-system/components/CodeDiff/CodeDiff";
-import { Composer } from "@robr0/design-system/components/Composer/Composer";
-import { Divider } from "@robr0/design-system/components/Divider/Divider";
-import { InterruptCard } from "@robr0/design-system/components/InterruptCard/InterruptCard";
-import { ModelPicker } from "@robr0/design-system/components/ModelPicker/ModelPicker";
-import { Reasoning } from "@robr0/design-system/components/Reasoning/Reasoning";
-import { Sparkline } from "@robr0/design-system/components/Sparkline/Sparkline";
-import { Stat } from "@robr0/design-system/components/Stat/Stat";
+} from "rift-ds/components/AgentStatus/AgentStatus";
+import { Badge, type BadgeProps } from "rift-ds/components/Badge/Badge";
+import { Button } from "rift-ds/components/Button/Button";
+import { ChatHeader } from "rift-ds/components/ChatHeader/ChatHeader";
+import { ChatMessage } from "rift-ds/components/ChatMessage/ChatMessage";
+import { ChatThread } from "rift-ds/components/ChatThread/ChatThread";
+import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
+import { CodeDiff } from "rift-ds/components/CodeDiff/CodeDiff";
+import { Composer } from "rift-ds/components/Composer/Composer";
+import { Divider } from "rift-ds/components/Divider/Divider";
+import { InterruptCard } from "rift-ds/components/InterruptCard/InterruptCard";
+import { ModelPicker } from "rift-ds/components/ModelPicker/ModelPicker";
+import { Reasoning } from "rift-ds/components/Reasoning/Reasoning";
+import { Sparkline } from "rift-ds/components/Sparkline/Sparkline";
+import { Stat } from "rift-ds/components/Stat/Stat";
 import {
   ThreadPanel,
   type ThreadPanelGroup,
-} from "@robr0/design-system/components/ThreadPanel/ThreadPanel";
-import { ToolCall } from "@robr0/design-system/components/ToolCall/ToolCall";
+} from "rift-ds/components/ThreadPanel/ThreadPanel";
+import { ToolCall } from "rift-ds/components/ToolCall/ToolCall";
 import {
   TreeView,
   type TreeViewNode,
-} from "@robr0/design-system/components/TreeView/TreeView";
-import { UsageCard } from "@robr0/design-system/components/UsageCard/UsageCard";
+} from "rift-ds/components/TreeView/TreeView";
+import { UsageCard } from "rift-ds/components/UsageCard/UsageCard";
 import SidebarSwitchers from "../SidebarSwitchers/SidebarSwitchers";
 import styles from "./AgentWorkbench.module.css";
 

@@ -1,6 +1,6 @@
 name: Release
 
-# Publishes @robr0/design-system to npm — manually triggered, dry-run by
+# Publishes rift-ds to npm — manually triggered, dry-run by
 # default. The publish happens FROM dist/ (its generated package.json is
 # the one that ships; the root manifest stays private and never publishes).
 #
@@ -80,7 +80,7 @@ name: Release
 #   and StatusDot; Lightbox is the first overlay born on the shared
 #   behavior layer, and the count-up budget joins the motion constants.
 # 0.21.0 shipped 2026-09-19 — the package's first bin: npx
-#   @robr0/design-system init fetches the consumer agent skill from the
+#   rift-ds init fetches the consumer agent skill from the
 #   live site into .claude/skills/ and prints the MCP connect line.
 
 on:

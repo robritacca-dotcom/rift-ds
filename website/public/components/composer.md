@@ -2,13 +2,13 @@
 
 An auto-growing message input with send and stop states, a page-context note, an attachment slot, and Enter-to-send.
 
-Generated from the @robr0/design-system registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://dragonspine-delta.vercel.app/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 0.21.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: ai
-- Import: `import { Composer } from '@robr0/design-system';`
-- Deep import: `import { Composer } from '@robr0/design-system/components/Composer/Composer';`
+- Import: `import { Composer } from 'rift-ds';`
+- Deep import: `import { Composer } from 'rift-ds/components/Composer/Composer';`
 - Rendering: client component (declares 'use client')
-- Live docs: https://dragonspine-delta.vercel.app/components/composer
+- Live docs: https://rift-ds.com/components/composer
 
 ## Composer props
 

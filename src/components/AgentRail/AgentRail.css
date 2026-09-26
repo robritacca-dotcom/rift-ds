@@ -14,10 +14,14 @@
      own sizing model rather than leaning on a host reset — ThreadPanel's
      reasoning, and the same failure without it. */
   box-sizing: border-box;
-  /* The positioning frame for the close affordance, which floats over the
+  /* The positioning frame for the collapse affordance, which floats over the
      header rather than sitting in it: the header is a centred identity
      block, and a control in that column would push the portrait off axis. */
   position: relative;
+  /* CircularButton's default footprint, named because two rules need it:
+     the control itself, and the row the rail reserves for it when there is
+     no header underneath it to float over. */
+  --ds-agent-rail-control: 40px;
   display: flex;
   flex-direction: column;
   gap: var(--gap-300);
@@ -53,17 +57,19 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: var(--ds-agent-rail-control);
+  height: var(--ds-agent-rail-control);
   padding: 0;
   border: none;
   border-radius: var(--radius-pill);
-  background-color: transparent;
-  color: var(--color-icon-secondary);
+  /* A tertiary CircularButton's exact resting treatment, because that is
+     what it sits in a row with: the host's own controls line up opposite it
+     on the same baseline, and a dimmer icon tier beside them would read as a
+     lesser control rather than the same kind of one. */
+  background-color: var(--color-action-passive-bg);
+  color: var(--color-icon-primary);
   cursor: pointer;
-  transition:
-    background-color var(--motion-duration-fast) var(--motion-ease-standard),
-    color var(--motion-duration-fast) var(--motion-ease-standard);
+  transition: background-color var(--motion-duration-base) var(--motion-ease-standard);
 }
 
 .ds-agent-rail__collapse .material-symbols-rounded {
@@ -72,7 +78,10 @@
 
 .ds-agent-rail__collapse:hover {
   background-color: var(--color-action-passive-bg-hover);
-  color: var(--color-icon-primary);
+}
+
+.ds-agent-rail__collapse:active {
+  background-color: var(--color-action-passive-bg-active);
 }
 
 .ds-agent-rail__collapse:focus-visible {
@@ -123,8 +132,13 @@
    anything) so the circle reads as lifted off the face beneath it. */
 .ds-agent-rail__edit {
   position: absolute;
-  right: 0;
-  bottom: 0;
+  /* Seated ON the portrait's lower-right edge, not inside it: a 24px badge
+     dropped flush into a 56px corner lands on the face it is meant to
+     annotate. The offset puts the circle's centre roughly on the portrait's
+     45-degree point, so it straddles the edge the way a badge should and the
+     glyph underneath stays whole. */
+  right: -6px;
+  bottom: -6px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -203,6 +217,14 @@
 /* ============================================
    TABS — the strip that switches panes
    ============================================ */
+
+/* With no identity block above it the strip would sit under the floating
+   collapse control, so the rail reserves the control's own row instead. The
+   header absorbs it whenever there is one. */
+.ds-agent-rail:has(.ds-agent-rail__collapse):not(:has(.ds-agent-rail__header))
+  .ds-agent-rail__tabs {
+  margin-top: var(--ds-agent-rail-control);
+}
 
 .ds-agent-rail__tabs {
   display: flex;

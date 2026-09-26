@@ -55,7 +55,7 @@
    lets its column run panel to panel at any viewport. */
 .dsLayoutChat /* The content column shares the rails' entrance. */
 .dsContentEnter {
-  animation: playgroundEnter var(--motion-duration-slower) var(--motion-ease-entrance) both;
+  animation: playgroundEnter var(--motion-duration-slower) var(--motion-ease-entrance) backwards;
 }
 
 .dsContent {
@@ -99,7 +99,7 @@
    and an animated transform on their ancestor would re-anchor them
    mid-flight. Reduced motion zeroes it via the media block below. */
 .controlRail {
-  animation: playgroundEnter var(--motion-duration-slower) var(--motion-ease-entrance) both;
+  animation: playgroundEnter var(--motion-duration-slower) var(--motion-ease-entrance) backwards;
   position: fixed;
   top: var(--layout-stage-clearance);
   bottom: var(--rail-inset);
@@ -120,7 +120,7 @@
 /* The chat director's panel: the control panel mirrored to the right edge.
    Same card, same float, same glass. */
 .eventRail {
-  animation: playgroundEnter var(--motion-duration-slower) var(--motion-ease-entrance) both;
+  animation: playgroundEnter var(--motion-duration-slower) var(--motion-ease-entrance) backwards;
   position: fixed;
   top: var(--layout-stage-clearance);
   bottom: var(--rail-inset);
@@ -463,6 +463,14 @@
   }
 }
 
+/* `backwards`, never `both`. A filled forwards animation leaves the `to`
+   transform applied as an animated value even when it is `transform: none` —
+   the computed value stays an identity matrix, and a non-none transform
+   makes the element a containing block for every `position: fixed`
+   descendant. That is what stranded the Chat view's full-screen takeover in
+   the content column's box instead of the viewport. `backwards` still holds
+   the `from` state before the run, so nothing flashes, and releases the
+   element to its own styles after it. */
 @keyframes playgroundEnter {
   from {
     opacity: 0;

@@ -117,9 +117,15 @@
 
 /* Custom marks are not Material Symbols, so they size themselves off the
    same scale token the glyphs consume rather than inheriting it. */
+/* A filled brand mark reads heavier than an outlined Material Symbol at the
+   same box, so the provider buttons step their icon slot down: optical
+   weight, not a matching number. Set on the button, since the slot's own
+   declaration is what a plain class on the svg loses to. */
+.providerButton {
+  --ds-button-icon-size: var(--icon-size-500);
+}
+
 .providerMark {
-  width: var(--icon-size-500);
-  height: var(--icon-size-500);
   flex-shrink: 0;
 }
 

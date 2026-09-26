@@ -58,14 +58,8 @@
 }
 
 .ds-button--compact .ds-button__icon {
-  --icon-size: var(--icon-size-500);
-/* Figma: compact icons are 20px (vs 24px default) */
-}
-
-/* Scale any child SVG to fit the compact icon slot */
-.ds-button--compact .ds-button__icon svg {
-  width: 20px;
-  height: 20px;
+  /* Figma: compact icons are 20px (vs 24px default). */
+  --icon-size: var(--ds-button-icon-size, var(--icon-size-500));
 }
 
 /* ============================================
@@ -265,15 +259,29 @@
 
 .ds-button__icon {
   flex-shrink: 0;
-  --icon-size: var(--icon-size-600);
-/* Figma: default icons are 24px */
+  /* The slot's own step, overridable per instance through
+     `--ds-button-icon-size`: the slot declares `--icon-size` on itself, so
+     a value inherited from the button would lose to this declaration and a
+     caller would have no way in. Figma: default icons are 24px. */
+  --icon-size: var(--ds-button-icon-size, var(--icon-size-600));
   line-height: 1;
 }
 
-/* Scale any child SVG to fit the icon slot */
+/* Scale any child SVG to fit the icon slot. It reads the slot's own
+   `--icon-size` rather than restating a pixel value, for two reasons: the
+   size then follows the button's variant on its own (compact sets the
+   smaller step, so no second rule is needed), and a consumer passing a
+   ReactNode icon can size it through `--ds-button-icon-size`. Hardcoded
+   here, this two-class rule silently beat every single-class override a
+   caller wrote: the sign-in template asked its brand marks for 20px and
+   got 24px.
+
+   Solid marks need that hook. A filled brand glyph reads heavier than an
+   outlined Material Symbol at the same box, so it wants a step down to sit
+   level with the label beside it. */
 .ds-button__icon svg {
-  width: 24px;
-  height: 24px;
+  width: var(--icon-size, var(--icon-size-600));
+  height: var(--icon-size, var(--icon-size-600));
 }
 
 /* A trailing icon nudges right on hover — a small confirmation that the

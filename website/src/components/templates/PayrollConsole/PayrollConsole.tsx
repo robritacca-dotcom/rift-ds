@@ -1,19 +1,30 @@
 "use client";
 
 /**
- * The payroll console: a deliberately small product screen whose real
- * subject is the chrome around it. The chat is docked as a side rail the way
- * the site's own panel docks, and the agent panel opens inside that rail — as
- * a sheet, because the rail is the narrow form and the panel measures the
- * container it is actually in rather than the screen around it. The rail
- * never widens to seat it: a companion panel that shoves the product aside
- * to make room for itself is a worse trade than a sheet. Every colour,
- * radius, space and type style is a semantic token; every control is a
- * library component. Expanding the chat to full screen is the other half of
- * the demonstration: the same widget, now measuring the viewport, seats the
- * panel inline instead. All data is fictional.
+ * The payroll console template: Northwind, a fictional payroll product,
+ * deliberately small because its real subject is the chrome around it. The
+ * chat is docked as a side rail the way the site's own panel docks, and the
+ * agent panel opens inside that rail — as a sheet, because the rail is the
+ * narrow form and the panel measures the container it is actually in rather
+ * than the screen around it. The rail never widens to seat it: a companion
+ * panel that shoves the product aside to make room for itself is a worse
+ * trade than a sheet. Expanding the chat to full screen is the other half of
+ * the demonstration — the same widget, now measuring the viewport, seats the
+ * panel inline instead.
  *
- * Not a template: it lives only at /labs/payroll, outside the IA.
+ * Composition calls, against design.md's Template screens rules: the totals
+ * band is the KPI band rule 3 sanctions when the numbers *are* the screen
+ * (a pay run is money); the run stepper and the people table are the stage;
+ * demo humans are Avatar initials (rule 4); every date and figure is a
+ * pinned string, so the built HTML and the hydrating client cannot disagree
+ * over a clock. The screen is itself a chat surface, so it hosts a real
+ * SiteChat rather than the shared TemplateAssistant — the agent-workbench
+ * precedent. Every control is a library component and every value a
+ * semantic token.
+ *
+ * Two routes render it: /templates/payroll-console (the public template) and
+ * /labs/payroll, where it began. All data is fictional, so both routes stay
+ * out of the chat corpus (see EXCLUDED_ROUTES in generate-site-corpus.mjs).
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -50,7 +61,7 @@ import {
 import { SiteChat } from "@/components/SiteChat/SiteChat";
 import { SiteChatProvider, useSiteChat } from "@/components/SiteChat/ChatContext";
 import { createSimTransport } from "@/lib/chat-sim";
-import ThemeToggle from "@/components/ThemeToggle/ThemeToggle";
+import SidebarSwitchers from "../SidebarSwitchers/SidebarSwitchers";
 import styles from "./PayrollConsole.module.css";
 
 /* ---------------------------------------------------------------- data */
@@ -252,9 +263,10 @@ const CHAT_THREADS: ThreadPanelGroup[] = [
   },
 ];
 
-/* The one look this page ships in: Ember, whose id in THEME_PRESETS is
-   `warm` (the label and the key differ — the key is the original name). */
-const PINNED_BRAND = "warm";
+/* The width at which a docked rail and this product can share the screen.
+   Stated here and in the stylesheet's media query, which is the one place
+   the layout half of the same rule lives. */
+const DOCK_MIN_WIDTH = 1280;
 
 const CHAT_STARTERS = [
   { id: "diff", label: "What changed since last run?" },
@@ -296,9 +308,13 @@ function PayrollChat({
   const launcherRef = useRef<HTMLButtonElement | HTMLAnchorElement | null>(null);
 
   /* The provider rests closed (the site's default); this page is about the
-     docked rail, so it opens on arrival. */
+     docked rail, so it opens on arrival — but only where the rail and the
+     product can share the screen. Under the dock threshold the rail stops
+     reserving width and would float over the table it is being asked about,
+     which reads as a layering bug rather than a panel, so there it waits
+     behind the launcher for a deliberate open. */
   useEffect(() => {
-    setOpen(true);
+    if (window.innerWidth >= DOCK_MIN_WIDTH) setOpen(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -336,6 +352,9 @@ function PayrollChat({
     >
       <SiteChat
         title="Northwind AI"
+        /* The staged product's assistant is not reading one of this site's
+           pages, so it says nothing rather than naming the template. */
+        contextLabel={null}
         placeholder="Ask about this run"
         tagline="Ask about the run, the totals, or anyone in it"
         logo={null}
@@ -365,7 +384,7 @@ function PayrollChat({
             profile={overlay ? undefined : { name: "Ada Whitlock", meta: "Admin" }}
           />
         )}
-        aside={({ overlay, close }) => (
+        aside={({ overlay }) => (
           <AgentRail
             className={overlay ? styles.railInSheet : undefined}
             profile={{
@@ -377,7 +396,6 @@ function PayrollChat({
             tabs={AGENT_TABS}
             activeTab={agentTab}
             onTabChange={onTabChange}
-            onCollapse={close}
           />
         )}
       />
@@ -388,22 +406,6 @@ function PayrollChat({
 /* ---------------------------------------------------------------- view */
 
 export default function PayrollConsole() {
-  /* The console ships in one look. The attribute is set directly rather than
-     through applyBrand, which persists the pick to localStorage: a lab page
-     must not rewrite the visitor's own theme for the rest of the site, so the
-     previous value is put back on the way out. The theme switcher is left out
-     of the sidebar footer for the same reason — one look means one look, and
-     the light/dark toggle beside it still works. */
-  useEffect(() => {
-    const root = document.documentElement;
-    const previous = root.getAttribute("data-brand");
-    root.setAttribute("data-brand", PINNED_BRAND);
-    return () => {
-      if (previous === null) root.removeAttribute("data-brand");
-      else root.setAttribute("data-brand", previous);
-    };
-  }, []);
-
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
   const [chatOpen, setChatOpen] = useState(true);
   const [agentTab, setAgentTab] = useState("activity");
@@ -437,7 +439,7 @@ export default function PayrollConsole() {
           onExpandedChange={setSidebarExpanded}
           logoText="Northwind"
           floating
-          footerSlot={<ThemeToggle />}
+          footerSlot={<SidebarSwitchers />}
         />
       </div>
 

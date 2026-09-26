@@ -1,15 +1,15 @@
 /**
- * Labs: the payroll console. A deliberately light product screen whose real
- * subject is the chrome around it — the chat docked as a side rail the way
- * the site's own panel docks, and the agent panel opening inside it at
- * product scale rather than on a review stage.
+ * Labs: the payroll console's original home, kept as the experiment it began
+ * as — the chat imagined as a docked side rail beside a product, where the
+ * agent panel had to earn its room. The implementation now lives in
+ * components/templates/PayrollConsole and also ships publicly at
+ * /templates/payroll-console.
  *
- * Not a template: it lives only here, outside the IA, noindex, chromeless,
- * and excluded from the chat corpus (see EXCLUDED_ROUTES in
- * generate-site-corpus.mjs). All data is fictional.
+ * This route stays noindex, chromeless, and excluded from the chat corpus
+ * (see EXCLUDED_ROUTES in generate-site-corpus.mjs).
  */
 
-import PayrollConsole from "./PayrollConsole";
+import PayrollConsole from "@/components/templates/PayrollConsole/PayrollConsole";
 
 export default function LabsPayrollPage() {
   return <PayrollConsole />;

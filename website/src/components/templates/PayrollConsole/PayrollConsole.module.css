@@ -136,7 +136,9 @@
    to be squinted at is worse than a second row. */
 .totals {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  /* 240 rather than 200 so four tiles land 4-up or 2x2 and never 3 + 1,
+     which reads as a tile that fell off the row rather than a band. */
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: var(--gap-400);
 }
 
@@ -262,15 +264,20 @@
 
 /* ---------------------------------------------------------- responsive */
 
-/* Below the point where a docked rail and a product can share the screen,
-   the chat stops reserving width and floats over the page instead — the
-   site panel's own behaviour under its dock threshold. */
+/* Below the point where a docked rail and a product can share the screen
+   (DOCK_MIN_WIDTH in PayrollConsole.tsx is the other half of this rule), the
+   chat stops reserving width. It also starts closed there, so the rail is
+   something the visitor opens over the page rather than something already
+   covering it. */
 @media (max-width: 1279px) {
   .shellChatOpen .main {
     padding-right: 0;
   }
 
-  .chatRail {
+  /* Never the expanded geometry: this rule sits after .chatRailFull in the
+     cascade, so without the guard a full-screen takeover under the
+     threshold rendered as a 420px column pinned to the left edge. */
+  .chatRail:not(.chatRailFull) {
     width: min(420px, calc(100vw - var(--layout-chat-inset) * 2));
   }
 }

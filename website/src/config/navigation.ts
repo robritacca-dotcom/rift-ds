@@ -431,6 +431,11 @@ export const templatesSidebarLinks: NavLink[] = [
     description: "A CRM companies view built around the wired data table",
   },
   {
+    href: "/templates/payroll-console",
+    label: "Payroll console",
+    description: "A pay run beside a docked assistant whose agent panel opens in place",
+  },
+  {
     href: "/templates/sign-in",
     label: "Sign in",
     description: "A product front door: the providers beside an ambient panel",

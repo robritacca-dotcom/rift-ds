@@ -709,6 +709,8 @@ const EXCLUDED_ROUTES = new Map([
     'the roadmap planner template rendered full viewport — its prose is a fictional product plan; the template\'s facts live on the /templates index, which is covered'],
   ['/templates/sales-pipeline',
     'the sales pipeline template rendered full viewport — its prose is a fictional CRM book of business; the template\'s facts live on the /templates index, which is covered'],
+  ['/templates/payroll-console',
+    'the payroll console template rendered full viewport (the same app shell as /labs/payroll, its origin) — its prose is a fictional pay run; the template\'s facts live on the /templates index, which is covered'],
   ['/templates/sign-in',
     'the sign-in template rendered full viewport — its prose is a fictional product\'s front door; the template\'s facts live on the /templates index, which is covered'],
 ]);

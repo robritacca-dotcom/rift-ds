@@ -24,5 +24,6 @@ export const CHROMELESS_ROUTES = new Set([
   "/templates/agent-workbench",
   "/templates/roadmap-planner",
   "/templates/sales-pipeline",
+  "/templates/payroll-console",
   "/templates/sign-in",
 ]);

@@ -1,3 +1,17 @@
 {
-  "releases": []
+  "releases": [
+    {
+      "version": "1.0.0",
+      "date": "2026-09-26",
+      "title": "The first Rift DS release",
+      "body": [
+        "Rift DS is on npm. `npm install rift-ds` gets you 133 React components built on 255 semantic design tokens, with light and dark modes in the box and React as the only required peer dependency.",
+        "Theming is plain CSS custom properties. There is no provider to mount and no config file to write: every semantic token chains to a primitive, so overriding a handful of primitives restyles everything built on them, the charts and the ambient background included. Eleven complete themes ship as generated stylesheets, and setting one `data-brand` attribute on the root element applies a whole look, self-hosted typefaces and all, with no runtime JavaScript.",
+        "The Recharts-backed charts live behind their own entry point, so `recharts` stays an optional peer dependency you install only if you use them.",
+        "Coding agents are treated as first-class consumers. `npx rift-ds init` installs an agent skill into your project and prints the MCP connect line, and the public MCP endpoint serves the component catalogue, the prop contracts and the token registry with no key and no account. All of it is generated from the same JSDoc that builds the shipped type declarations, so an agent reads the exact contract the package ships.",
+        "Prefer owning the source? Every component is also installable through the shadcn CLI, or you can clone the repo. All three paths are MIT.",
+        "If you were using the earlier scoped package, this is the same system under its own name. Change your import specifier to `rift-ds` and nothing else moves."
+      ]
+    }
+  ]
 }

@@ -91,6 +91,10 @@ name: Release
 # 0.21.0 shipped 2026-09-19 — the package's first bin: npx
 #   rift-ds init fetches the consumer agent skill from the
 #   live site into .claude/skills/ and prints the MCP connect line.
+# 1.0.0 shipped 2026-09-26 — the first release under the rift-ds name, and
+#   the first from this repo. Same system, renamed; 133 components, 255
+#   tokens, 11 themes. Published with bootstrap_token because the name did
+#   not exist yet, so OIDC had nothing to register against.
 
 on:
   workflow_dispatch:

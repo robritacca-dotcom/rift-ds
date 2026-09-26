@@ -16,7 +16,7 @@ Run when asked to "run the chat quality loop" (`/chat-quality`), or by a schedul
 
 ## Scope guardrails (read first)
 
-- **Inoperable until a KV store exists.** There is no live Redis to read yet; the stop-and-ask rule in step 1 already halts the loop safely when no credentials exist.
+- **The KV store is live.** An Upstash Redis has been connected to the site since 2026-09-26, so the loop has real verdicts to read. The stop-and-ask rule in step 1 still stands as the safe failure mode if the credentials are ever missing.
 - **Read-only on the live Redis.** `SCAN`, `GET`, `LRANGE`, `LLEN` against `chat:*` keys only — never `SET`, `DEL`, `EXPIRE`, or anything that writes. The logs are production evidence with a 30-day TTL; this loop observes them.
 - **Visitor privacy.** Logged questions are visitors' own words and may carry personal details. They may appear verbatim in the local report, never in the committed diff: a golden-set case gets a paraphrase that preserves the failure, not the visitor's sentence. Visitor hashes never leave the report.
 - **One eval run per loop.** `npm run eval:chat` spends real API budget (golden set × 3 repeats). Run it once, after the golden-set changes, not iteratively.

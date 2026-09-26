@@ -8,6 +8,7 @@
  * Rewrites README.md in place between marker comments:
  *   <!-- component-count -->…<!-- /component-count -->   (inline)
  *   <!-- component-list:start --> … <!-- component-list:end -->
+ *   <!-- banner:start --> … <!-- banner:end -->
  *
  * Also fails if the README's Tech section names a different major
  * version of React / Next.js / Storybook / Vite than package.json —
@@ -19,6 +20,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { REPOSITORY_URL, SITE_URL } from './brand.mjs';
 import { PACKAGE_NAME } from './package-manifest.mjs';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -38,11 +40,14 @@ const listMarker =
   /(<!-- component-list:start -->\n)[\s\S]*?(\n<!-- component-list:end -->)/;
 const npmBadgeMarker =
   /(<!-- npm-badge:start -->\n)[\s\S]*?(\n<!-- npm-badge:end -->)/;
+const bannerMarker =
+  /(<!-- banner:start -->\n)[\s\S]*?(\n<!-- banner:end -->)/;
 
 for (const [name, re] of [
   ['component-count', countMarker],
   ['component-list', listMarker],
   ['npm-badge', npmBadgeMarker],
+  ['banner', bannerMarker],
 ]) {
   if (!re.test(readme)) {
     console.error(
@@ -69,6 +74,18 @@ const encodedName = PACKAGE_NAME.replace('/', '%2F');
 readme = readme.replace(
   npmBadgeMarker,
   `$1[![npm](https://img.shields.io/npm/v/${encodedName}?logo=npm&color=CB3837)](https://www.npmjs.com/package/${PACKAGE_NAME})$2`
+);
+
+// The banner must be an ABSOLUTE raw URL, not a relative path. README.md
+// ships inside the npm tarball, and npmjs.com does not resolve a relative
+// image path against the repo — 1.0.0 published with `.github/…` and the
+// package page had no banner. The URL restates the repository, so it is
+// generated from brand.mjs rather than typed. (raw.githubusercontent.com
+// serves the default branch; the repo is public, so it needs no auth.)
+const rawBase = `${REPOSITORY_URL.replace('https://github.com/', 'https://raw.githubusercontent.com/')}/main`;
+readme = readme.replace(
+  bannerMarker,
+  `$1<a href="${SITE_URL}"><img src="${rawBase}/.github/readme-banner.jpg" alt="Rift DS, the AI-ready React design system" width="100%"></a>$2`
 );
 
 // Version drift check: README prose vs. package.json majors.

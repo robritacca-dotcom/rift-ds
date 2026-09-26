@@ -1,4 +1,6 @@
-<a href="https://rift-ds.com"><img src=".github/readme-banner.jpg" alt="Rift DS, the AI-ready React design system" width="100%"></a>
+<!-- banner:start -->
+<a href="https://rift-ds.com"><img src="https://raw.githubusercontent.com/robritacca-dotcom/rift-ds/main/.github/readme-banner.jpg" alt="Rift DS, the AI-ready React design system" width="100%"></a>
+<!-- banner:end -->
 
 # Rift DS
 

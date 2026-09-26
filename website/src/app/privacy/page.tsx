@@ -27,8 +27,7 @@ export default function PrivacyPage() {
           <h2 className={styles.sectionTitle}>The site chat</h2>
           <p className={styles.body}>
             The chat answers questions about this design system and its site.
-            When it is live, messages go to Anthropic, whose model writes the
-            replies. For each
+            Messages go to Anthropic, whose model writes the replies. For each
             exchange the site keeps the question, the answer, the page it was
             asked from, which model answered, timing and token counts, and a
             thumbs verdict if you leave one. Each entry carries a scrambled,

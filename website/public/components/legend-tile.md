@@ -2,7 +2,7 @@
 
 The labelled value tile under a chart: a series dot, the series name, and its reading, on an inset fill.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.0.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.0.1. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: charts
 - Import: `import { LegendTile } from 'rift-ds';`

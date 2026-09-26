@@ -2,7 +2,7 @@
 
 An ambient WebGL2 field of soft light sources that sample colour tokens, with a reported fallback status.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.0.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.0.1. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: effects
 - Import: `import { ShaderField } from 'rift-ds';`

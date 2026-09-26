@@ -2,7 +2,7 @@
 
 Primary, secondary, tertiary, neutral and destructive variants in default and compact sizes, with icon support and multiple states.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.0.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.0.1. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: actions
 - Import: `import { Button } from 'rift-ds';`

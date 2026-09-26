@@ -95,6 +95,9 @@ name: Release
 #   the first from this repo. Same system, renamed; 133 components, 255
 #   tokens, 11 themes. Published with bootstrap_token because the name did
 #   not exist yet, so OIDC had nothing to register against.
+# 1.0.1 shipped 2026-09-26 — the README banner as an absolute URL, so the
+#   npm package page renders it. No code change. First release published
+#   over OIDC with no token anywhere.
 
 on:
   workflow_dispatch:

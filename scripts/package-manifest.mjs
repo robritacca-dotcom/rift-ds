@@ -25,7 +25,7 @@
 import { BIN_NAME, PACKAGE_NAME, REPOSITORY_URL, SITE_URL } from './brand.mjs';
 
 export { PACKAGE_NAME, REPOSITORY_URL };
-export const PACKAGE_VERSION = '1.0.0';
+export const PACKAGE_VERSION = '1.0.1';
 export const PACKAGE_DESCRIPTION =
   'An AI-ready React design system: accessible components on composable tokens, light/dark theming, and CSS-variable overrides.';
 

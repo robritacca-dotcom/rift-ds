@@ -1,6 +1,15 @@
 {
   "releases": [
     {
+      "version": "1.0.1",
+      "date": "2026-09-26",
+      "title": "A readable package page",
+      "body": [
+        "No code changed. 1.0.0 shipped with the README's banner image as a relative path, which npm cannot resolve against the repository, so the package page opened with a broken image. This release carries an absolute one.",
+        "The banner is now generated from the repository URL rather than typed by hand, alongside the npm badge that already worked that way, so it cannot drift again."
+      ]
+    },
+    {
       "version": "1.0.0",
       "date": "2026-09-26",
       "title": "The first Rift DS release",

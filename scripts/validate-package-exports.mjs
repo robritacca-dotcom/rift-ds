@@ -72,7 +72,10 @@ if (RETIRED.length > 0) {
     // deliberately does not enter it either).
     'worktrees',
   ]);
-  const SKIP_FILES = new Set(['package-lock.json', 'brand.mjs']);
+  // brand.mjs holds the lists. HISTORY.md is the archived record of the predecessor
+  // package and its build journal, so naming the retired package is the whole point of
+  // the file — it is history, not a straggler the rename failed to sweep.
+  const SKIP_FILES = new Set(['package-lock.json', 'brand.mjs', 'HISTORY.md']);
   const TEXT_EXT = /\.(ts|tsx|mjs|js|jsx|json|md|mdx|css|ya?ml|txt)$/;
   const scan = (dir) => {
     for (const entry of readdirSync(dir)) {

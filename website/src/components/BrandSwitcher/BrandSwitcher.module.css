@@ -18,7 +18,14 @@
   padding: 0;
   background: var(--color-bg-container-primary);
   border: var(--border-025) solid var(--color-bg-container-border);
-  border-radius: var(--radius-pill);
+  /* The mode toggle's track curve, copied from SegmentedControl.css:
+     pill plus the 4px inset its segments sit at. The corner belongs to
+     the row, not to this button's contents — the swatch is an 18px chip
+     with an 11px inset, so deriving the curve from it bowed the trigger
+     rounder than the track beside it in every squared theme (14px against
+     10px in mono). At the shipped 999px pill both terms saturate and the
+     trigger is the same circle it always was. */
+  border-radius: calc(var(--radius-pill) + var(--padding-100));
   cursor: pointer;
   transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
 }

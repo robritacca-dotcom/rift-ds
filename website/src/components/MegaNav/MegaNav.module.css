@@ -222,7 +222,9 @@
   justify-content: center;
   background: var(--color-action-passive-bg);
   border: none;
-  border-radius: var(--radius-pill);
+  /* The row's shared track curve — see .searchBtn, which it sits beside
+     at every width the menu button is visible. */
+  border-radius: calc(var(--radius-pill) + var(--padding-100));
   padding: var(--primitive-padding-200);
   cursor: pointer;
   color: var(--color-text-primary);
@@ -257,10 +259,13 @@
   gap: var(--primitive-gap-200);
   /* Same track recipe as the theme toggle beside it (SegmentedControl's
      container-primary fill and border), so the two pills read as one
-     family — the passive fill is near-invisible on the dark header. */
+     family — the passive fill is near-invisible on the dark header. The
+     corner comes from there too: the toggle's track is pill plus the 4px
+     inset its segments sit at, and a row of 40px controls that curve
+     differently reads as sloppy once a theme squares the pill token. */
   background: var(--color-bg-container-primary);
   border: var(--border-025) solid var(--color-bg-container-border);
-  border-radius: var(--radius-pill);
+  border-radius: calc(var(--radius-pill) + var(--padding-100));
   padding: 0 var(--primitive-padding-300);
   cursor: pointer;
   color: var(--color-text-secondary);
@@ -716,7 +721,9 @@
   height: 40px;
   background: none;
   border: none;
-  border-radius: var(--radius-pill);
+  /* It stands in the menu button's place, so its hover fill wears the
+     same corner — see .mobileMenuBtn. */
+  border-radius: calc(var(--radius-pill) + var(--padding-100));
   color: var(--primitive-neutral-01);
   cursor: pointer;
 }

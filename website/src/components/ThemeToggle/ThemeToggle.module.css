@@ -46,7 +46,15 @@
 
 /* Without an inline label the compact segment's asymmetric padding reads
    lopsided — square it up so each segment is a small even pill around its
-   glyph. */
+   glyph.
+
+   Fixed height, not vertical padding, for the same reason the header's nav
+   pills carry one: the track has to measure 40px, the control height the
+   search pill, the brand trigger and every default Button already share,
+   and a row of controls disagreeing by 2px reads as a misalignment. Padding
+   cannot land it — the glyph's 20px em box inside a 30px segment wants
+   5px above and below, and 5px is not on the padding scale. */
 .themeToggle :global(.ds-segmented-control__segment) {
-  padding: var(--padding-150) var(--padding-200);
+  height: calc(40px - 2 * var(--padding-100) - 2 * var(--border-025));
+  padding: 0 var(--padding-200);
 }

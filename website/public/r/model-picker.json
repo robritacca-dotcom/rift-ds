@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Model picker",
   "description": "A model selector for chat surfaces, with per-model descriptions and an optional effort row.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

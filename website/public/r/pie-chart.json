@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Pie chart",
   "description": "Proportional share of a whole as a pie or donut, with per-slice colours.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "dependencies": [
     "recharts"
   ],

@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Instructions",
   "description": "Step-by-step guidance with numbered badges, connecting lines, and horizontal layout.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

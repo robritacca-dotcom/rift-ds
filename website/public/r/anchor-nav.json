@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Anchor nav",
   "description": "An on-page list of anchor links that tracks the reader's position and jumps between sections.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

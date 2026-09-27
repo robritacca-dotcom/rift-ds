@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Card stack",
   "description": "A deck of cards showing one at a time, flipped through with a lift-and-settle animation.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

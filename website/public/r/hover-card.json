@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Hover card",
   "description": "Rich preview panel that opens from hover or focus, with interactive content and position options.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

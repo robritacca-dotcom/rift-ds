@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Code block",
   "description": "Monospace code with a header and one-click copy.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Alert dialog",
   "description": "Modal confirmation overlay with title, description, and confirm / cancel actions.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json",
     "https://rift-ds.com/r/button.json"

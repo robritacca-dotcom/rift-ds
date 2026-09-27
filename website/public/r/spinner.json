@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Spinner",
   "description": "Animated circular loading indicator in three sizes and primary, neutral, or inherit variants.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

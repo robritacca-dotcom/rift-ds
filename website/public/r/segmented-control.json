@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Segmented control",
   "description": "Pill-style toggle between related views with keyboard navigation and icon support.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Date input",
   "description": "Date input with native picker, calendar icon, label, and validation states.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json",
     "https://rift-ds.com/r/field.json"

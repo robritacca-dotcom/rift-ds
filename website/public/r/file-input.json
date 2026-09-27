@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "File input",
   "description": "A click-or-drop upload zone paired with a controlled file list showing size, progress, and per-file errors.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json",
     "https://rift-ds.com/r/field.json"

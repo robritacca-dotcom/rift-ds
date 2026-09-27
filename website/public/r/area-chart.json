@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Area chart",
   "description": "Filled area chart for showing volume over time, with stacked and single-series variants.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "dependencies": [
     "recharts"
   ],

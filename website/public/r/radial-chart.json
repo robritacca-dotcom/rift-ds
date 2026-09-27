@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Radial chart",
   "description": "Concentric progress rings for completion and KPI readouts.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "dependencies": [
     "recharts"
   ],

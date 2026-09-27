@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Popover",
   "description": "Contextual overlay panel with click and hover triggers, positioned relative to its anchor.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

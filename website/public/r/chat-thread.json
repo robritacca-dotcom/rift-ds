@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Chat thread",
   "description": "A scrollable conversation column with edge fades, send anchoring, and a subtle scrollbar.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

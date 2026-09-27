@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Nav list",
   "description": "Vertical list of navigation links for drawers and menus, with three indent levels and per-row expand toggles.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json",
     "https://rift-ds.com/r/button.json"

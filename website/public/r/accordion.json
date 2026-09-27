@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Accordion",
   "description": "Collapsible content sections for organising related information.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

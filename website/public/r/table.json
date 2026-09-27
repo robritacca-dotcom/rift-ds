@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Table",
   "description": "Data table with flexible cell content, striped rows, compact sizing, and support for icons, inputs, buttons, and interactive controls.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

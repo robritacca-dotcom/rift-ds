@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Notification centre",
   "description": "A persistent notification inbox with unread count, filter tabs, and per-item actions.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json",
     "https://rift-ds.com/r/empty-state.json"

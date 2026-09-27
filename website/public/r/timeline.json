@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Timeline",
   "description": "Ordered sequences: histories and steppers.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

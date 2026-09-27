@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Skeleton",
   "description": "Placeholder loading indicators with text, circular, and rectangular variants.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

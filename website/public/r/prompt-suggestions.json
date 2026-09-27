@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Prompt suggestions",
   "description": "A horizontal row of tappable prompt suggestions to start or steer a conversation.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json",
     "https://rift-ds.com/r/chip.json"

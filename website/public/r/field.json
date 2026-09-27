@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Field",
   "description": "The shared scaffolding for labelled form controls: label, required marker, helper and error text, and the ARIA wiring that ties them together.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

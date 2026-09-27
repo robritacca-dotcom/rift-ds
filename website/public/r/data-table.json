@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Data table",
   "description": "The wired table: sorting, search, row selection, and pagination assembled around Table.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json",
     "https://rift-ds.com/r/checkbox.json",

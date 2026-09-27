@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Combo chart",
   "description": "Bar and line series in one chart, with an optional second y-axis for pairs in different units, like spend and ROAS.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "dependencies": [
     "recharts"
   ],

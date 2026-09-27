@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Empty state",
   "description": "The placeholder for a list, table, or search with nothing to show: icon, headline, guidance, and a next action.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

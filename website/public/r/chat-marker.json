@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Chat marker",
   "description": "An inline conversation separator for date breaks and system notes.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

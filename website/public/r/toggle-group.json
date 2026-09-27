@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Toggle group",
   "description": "A set of two-state buttons that can be toggled on or off, supporting text and icon items.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

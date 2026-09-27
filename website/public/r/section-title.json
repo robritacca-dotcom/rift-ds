@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Section title",
   "description": "Heading with a divider line and optional trailing content for organising page sections.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

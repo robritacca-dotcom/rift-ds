@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Dropdown menu",
   "description": "Contextual menu with sections, sub-menus, keyboard shortcuts, and inset-gap hover styling.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

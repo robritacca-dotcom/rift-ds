@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Chat header",
   "description": "The top row of a chat surface, with the conversation title and its controls.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

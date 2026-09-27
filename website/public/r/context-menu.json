@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Context menu",
   "description": "Right-click menu at the pointer with groups, sub-menus, and shortcut hints.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json",
     "https://rift-ds.com/r/dropdown-menu.json"

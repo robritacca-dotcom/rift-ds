@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Date picker",
   "description": "Inline calendar with month navigation, day selection, and today indicator.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

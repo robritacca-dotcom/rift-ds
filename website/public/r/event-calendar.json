@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Event calendar",
   "description": "A month grid with event pills, overflow counts, and month navigation.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

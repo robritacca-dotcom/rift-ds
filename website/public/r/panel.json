@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Panel",
   "description": "The plain dashboard surface: a rounded container with no border or shadow, just padding and a gap.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

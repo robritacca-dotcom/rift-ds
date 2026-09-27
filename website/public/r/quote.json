@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Quote",
   "description": "Blockquotes and pull-quotes with attribution.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

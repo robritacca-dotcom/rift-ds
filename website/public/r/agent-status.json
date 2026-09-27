@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Agent status",
   "description": "A dot-matrix indicator and status line reporting what an agent is doing right now.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

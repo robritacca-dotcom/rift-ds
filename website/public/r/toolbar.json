@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Toolbar",
   "description": "A grouped strip of controls in one pill shell: clusters, separators, arrow-key focus, and a glass floating variant.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Nav",
   "description": "Desktop top navigation bar with a brand slot, horizontal button group, and optional trailing content.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json",
     "https://rift-ds.com/r/button-group.json"

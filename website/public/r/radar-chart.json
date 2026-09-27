@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Radar chart",
   "description": "Multi-axis comparison of series across categories on a radial grid.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "dependencies": [
     "recharts"
   ],

@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Chip",
   "description": "Compact pills for attributes, filters, and inline metadata.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

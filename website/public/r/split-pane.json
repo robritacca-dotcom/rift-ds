@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Split pane",
   "description": "Two resizable regions with a draggable, keyboard-operable divider between them.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

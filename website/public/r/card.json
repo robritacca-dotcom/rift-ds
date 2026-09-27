@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Card",
   "description": "Card components for previews, navigation, and token documentation, from content cards to colour swatches and typography specimens.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

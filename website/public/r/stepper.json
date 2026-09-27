@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Stepper",
   "description": "Step-by-step progress indicator for wizards and multi-stage flows.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

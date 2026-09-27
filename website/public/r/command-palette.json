@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Command palette",
   "description": "A modal Cmd+K launcher that searches a grouped command list, with keyboard navigation and shortcut hints.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json",
     "https://rift-ds.com/r/kbd.json"

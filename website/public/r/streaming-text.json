@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Streaming text",
   "description": "Progressive reveal for text arriving in chunks, with a blinking cursor while more is coming.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

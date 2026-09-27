@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Treemap",
   "description": "Nested rectangles sized by value for part-to-whole breakdowns.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "dependencies": [
     "recharts"
   ],

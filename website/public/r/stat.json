@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Stat",
   "description": "Headline metrics with labels and trend deltas.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

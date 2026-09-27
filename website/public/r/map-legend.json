@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Map legend",
   "description": "The corner block of a map: its name, what it shows, and the key to its markers.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

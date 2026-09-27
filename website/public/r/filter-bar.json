@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Filter bar",
   "description": "A row of filter chips for narrowing a collection, each opening a popover of options, with per-filter and clear-all resets.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

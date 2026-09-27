@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Composer",
   "description": "An auto-growing message input with send and stop states, a page-context note, an attachment slot, and Enter-to-send.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json",
     "https://rift-ds.com/r/circular-button.json"

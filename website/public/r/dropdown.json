@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Dropdown",
   "description": "Custom select dropdown with keyboard navigation, disabled options, and error states.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json",
     "https://rift-ds.com/r/field.json"

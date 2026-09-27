@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Thread tabs",
   "description": "The strip of open chat sessions: pill tabs with unread dots and hover-revealed close buttons, a new-tab action, and animated enter and exit.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

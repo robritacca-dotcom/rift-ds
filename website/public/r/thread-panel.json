@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Thread panel",
   "description": "The session-history rail for chat products: brand header, new-thread action, standing controls, projects, grouped detail-rich threads, and a profile footer.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json",
     "https://rift-ds.com/r/avatar.json",

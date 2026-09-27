@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "AI button",
   "description": "The AI entry point: icon and label ringed by a turning gradient and glow, with an optional hover-summoned AI-summary panel and prompt chips.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json",
     "https://rift-ds.com/r/prompt-suggestions.json",

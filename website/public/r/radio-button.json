@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Radio button",
   "description": "Radio button and radio group with vertical and horizontal layouts, animated dot indicator.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json",
     "https://rift-ds.com/r/field.json"

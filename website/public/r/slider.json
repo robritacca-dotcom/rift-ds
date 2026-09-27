@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Slider",
   "description": "Range input for selecting a value between a minimum and maximum, in default and compact sizes.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json",
     "https://rift-ds.com/r/field.json"

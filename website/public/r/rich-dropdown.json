@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Rich dropdown",
   "description": "Dropdown's rich sibling: options preview their own heading face, body face, and key colour.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json",
     "https://rift-ds.com/r/field.json"

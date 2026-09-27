@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Divider",
   "description": "A thin rule separating stacked content, with optional inline label and vertical orientation.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

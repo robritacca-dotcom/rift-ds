@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Stacked bar chart",
   "description": "Bars split into stacked segments to compare totals and their composition.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "dependencies": [
     "recharts"
   ],

@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Line chart",
   "description": "Multi-series line chart for trends over time, with per-series colours and a summary row.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "dependencies": [
     "recharts"
   ],

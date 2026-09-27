@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Bar chart",
   "description": "Vertical bars for comparing values across categories or time, with summary stats and tooltips.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "dependencies": [
     "recharts"
   ],

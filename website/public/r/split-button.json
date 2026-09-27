@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Split button",
   "description": "Primary action with an attached menu of alternatives, composing Button and DropdownMenu in one pill.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json",
     "https://rift-ds.com/r/button.json",

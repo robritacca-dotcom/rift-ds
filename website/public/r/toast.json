@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Toast",
   "description": "Temporary notification with status variants, auto-dismiss, and stacking via ToastProvider.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

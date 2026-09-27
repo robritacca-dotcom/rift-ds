@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Code diff",
   "description": "Unified diff view for code changes, with added, removed, and context lines.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

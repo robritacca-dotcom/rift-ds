@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Input",
   "description": "Text input with label, placeholder, left and right icons, helper text, and error states.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json",
     "https://rift-ds.com/r/field.json"

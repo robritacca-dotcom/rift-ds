@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Drawer",
   "description": "An edge-anchored modal panel that slides in from any side, for filter panels, detail views, and mobile navigation.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

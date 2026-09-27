@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Selection card",
   "description": "Large selectable option cards with radio or checkbox indicators for high-visibility choices like settings and onboarding.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

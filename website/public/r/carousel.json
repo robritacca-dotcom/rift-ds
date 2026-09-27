@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Carousel",
   "description": "Sliding content viewer with navigation arrows, dot indicators, auto-play, and keyboard support.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

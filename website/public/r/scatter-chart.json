@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Scatter chart",
   "description": "Plots point clusters across two axes to show correlation and distribution.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "dependencies": [
     "recharts"
   ],

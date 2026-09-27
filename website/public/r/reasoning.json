@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Reasoning",
   "description": "A model's thinking, disclosed behind a one-line summary and collapsed once it finishes.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

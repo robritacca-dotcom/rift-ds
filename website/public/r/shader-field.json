@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Shader field",
   "description": "An ambient WebGL2 field of soft light sources that sample colour tokens, with a reported fallback status.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

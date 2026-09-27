@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Entity card",
   "description": "Compact display-only card with a centred icon or image and a label, used in the Icons and Logos galleries.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

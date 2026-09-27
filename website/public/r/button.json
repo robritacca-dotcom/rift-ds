@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Button",
   "description": "Primary, secondary, tertiary, neutral and destructive variants in default and compact sizes, with icon support and multiple states.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json",
     "https://rift-ds.com/r/spinner.json"

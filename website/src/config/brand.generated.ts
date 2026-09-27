@@ -3,6 +3,8 @@
 // Regenerate: node scripts/generate-brand-module.mjs (runs via predev/prebuild).
 
 export const ASSISTANT_NAME: string = "Rift AI";
+export const AUTHOR_NAME: string = "Robert Ritacca";
+export const AUTHOR_URL: string = "https://robertritacca.com";
 export const BIN_NAME: string = "rift-ds";
 export const BRAND_NAME: string = "Rift DS";
 export const BRAND_SHORT: string = "Rift";

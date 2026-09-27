@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Circular button",
   "description": "Round icon button with primary, secondary, tertiary and neutral variants, default and compact sizes.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json",
     "https://rift-ds.com/r/spinner.json",

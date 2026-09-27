@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Gantt chart",
   "description": "Phases and tasks as bars on a shared timeline, with milestones, progress, and a today rule.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json",
     "https://rift-ds.com/r/treemap.json"

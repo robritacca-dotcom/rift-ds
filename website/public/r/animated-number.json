@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Animated number",
   "description": "A number that counts to its value: count-up on mount, eased tweens on change, tabular digits that never jitter.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

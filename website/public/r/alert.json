@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Alert",
   "description": "Contextual feedback with status variants, optional dismiss, and compact sizing.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Meter",
   "description": "Level indicator for a known quantity, with a status-coloured fill and an optional value readout.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

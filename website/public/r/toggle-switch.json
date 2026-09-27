@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Toggle switch",
   "description": "Binary on/off toggle control with sliding thumb and check indicator, used for settings like theme switching.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Globe",
   "description": "An orthographic globe with markers and great-circle arcs, rotated by drag, keys, or a slow spin.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

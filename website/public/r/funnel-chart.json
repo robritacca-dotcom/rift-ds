@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Funnel chart",
   "description": "Ordered funnel stages as centred trapezoid bands, each sized by its share of the first stage.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "dependencies": [
     "recharts"
   ],

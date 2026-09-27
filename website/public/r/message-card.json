@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Message card",
   "description": "A structured rich-content card embedded in a chat message, with media, title, body, and actions.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

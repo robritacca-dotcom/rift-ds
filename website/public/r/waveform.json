@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Waveform",
   "description": "Voice made visible: a row of bars dancing on the shared twelve-slot cycle, or tracking a live analyser level by level.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

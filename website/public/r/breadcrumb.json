@@ -4,6 +4,7 @@
   "type": "registry:ui",
   "title": "Breadcrumb",
   "description": "Hierarchical navigation trail showing the user's location within the site.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"
   ],

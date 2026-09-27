@@ -33,7 +33,14 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
 import { siteRoutes, isDynamicSegment } from './site-routes.mjs';
-import { NPM_URL, PACKAGE_NAME, REPOSITORY_URL, STORYBOOK_URL } from './brand.mjs';
+import {
+  AUTHOR_NAME,
+  AUTHOR_URL,
+  NPM_URL,
+  PACKAGE_NAME,
+  REPOSITORY_URL,
+  STORYBOOK_URL,
+} from './brand.mjs';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const websiteApp = join(repoRoot, 'website', 'src', 'app');
@@ -659,7 +666,11 @@ ${componentDocLines()}
 
 - Storybook: ${STORYBOOK_URL} (rendered API reference with props tables)
 - npm: ${NPM_URL} (\`npm install ${PACKAGE_NAME}\`)
-- GitHub: ${REPOSITORY_URL} (full source)`;
+- GitHub: ${REPOSITORY_URL} (full source)
+
+### Author
+
+Designed and built by ${AUTHOR_NAME} (${AUTHOR_URL}), who writes the specs Claude Code builds from. The site footer credits the same person on every page. MIT licensed.`;
 }
 
 /* ============================================================

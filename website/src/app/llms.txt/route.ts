@@ -6,7 +6,14 @@ import {
   type NavLink,
 } from "@/config/navigation";
 import { SITE_URL } from "@/lib/structuredData";
-import { NPM_URL, REPOSITORY_URL, SKILL_NAME, STORYBOOK_URL } from "@/config/brand.generated";
+import {
+  AUTHOR_NAME,
+  AUTHOR_URL,
+  NPM_URL,
+  REPOSITORY_URL,
+  SKILL_NAME,
+  STORYBOOK_URL,
+} from "@/config/brand.generated";
 
 /**
  * /llms.txt — a markdown index of the site for AI agents, per llmstxt.org.
@@ -32,6 +39,8 @@ export function GET() {
     "# Design system",
     "",
     "> An AI-ready design system built by Claude Code from published specs (CLAUDE.md, design.md, content-design.md) and shipped to npm as an open React component library, with the docs site it builds.",
+    "",
+    `Designed and built by ${AUTHOR_NAME} (${AUTHOR_URL}), who writes the specs Claude Code builds from. MIT licensed.`,
     "",
     section(
       "Design system docs",

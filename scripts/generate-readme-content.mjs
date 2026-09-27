@@ -9,6 +9,7 @@
  *   <!-- component-count -->…<!-- /component-count -->   (inline)
  *   <!-- component-list:start --> … <!-- component-list:end -->
  *   <!-- banner:start --> … <!-- banner:end -->
+ *   <!-- author:start --> … <!-- author:end -->
  *
  * Also fails if the README's Tech section names a different major
  * version of React / Next.js / Storybook / Vite than package.json —
@@ -20,7 +21,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { REPOSITORY_URL, SITE_URL } from './brand.mjs';
+import { AUTHOR_NAME, AUTHOR_URL, REPOSITORY_URL, SITE_URL } from './brand.mjs';
 import { PACKAGE_NAME } from './package-manifest.mjs';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -42,12 +43,15 @@ const npmBadgeMarker =
   /(<!-- npm-badge:start -->\n)[\s\S]*?(\n<!-- npm-badge:end -->)/;
 const bannerMarker =
   /(<!-- banner:start -->\n)[\s\S]*?(\n<!-- banner:end -->)/;
+const authorMarker =
+  /(<!-- author:start -->\n)[\s\S]*?(\n<!-- author:end -->)/;
 
 for (const [name, re] of [
   ['component-count', countMarker],
   ['component-list', listMarker],
   ['npm-badge', npmBadgeMarker],
   ['banner', bannerMarker],
+  ['author', authorMarker],
 ]) {
   if (!re.test(readme)) {
     console.error(
@@ -86,6 +90,15 @@ const rawBase = `${REPOSITORY_URL.replace('https://github.com/', 'https://raw.gi
 readme = readme.replace(
   bannerMarker,
   `$1<a href="${SITE_URL}"><img src="${rawBase}/.github/readme-banner.jpg" alt="Rift DS, the AI-ready React design system" width="100%"></a>$2`
+);
+
+// The author credit. README.md ships inside the npm tarball, so this is the
+// line a consumer reads on the package page; it is generated from the same
+// AUTHOR_NAME/AUTHOR_URL the site footer and the dist manifest use, so the
+// three can never credit the same person differently.
+readme = readme.replace(
+  authorMarker,
+  `$1Designed and built by [${AUTHOR_NAME}](${AUTHOR_URL}).$2`
 );
 
 // Version drift check: README prose vs. package.json majors.

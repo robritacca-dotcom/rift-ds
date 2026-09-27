@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import BrandMark from "@/components/BrandMark/BrandMark";
-import { BRAND_NAME } from "@/config/brand.generated";
+import { AUTHOR_NAME, AUTHOR_URL, BRAND_NAME } from "@/config/brand.generated";
 import { getSectionItems, docsSidebarLinks, foundationsSidebarLinks } from "@/config/navigation";
 import { SOCIAL_PROFILES, PROJECT_LINKS } from "@/config/social";
 import { InstagramIcon, LinkedInIcon, XIcon } from "../BrandIcons/BrandIcons";
@@ -12,7 +12,7 @@ import styles from "./SiteFooter.module.css";
  * SiteFooter — the sitemap footer: a brand block (mark, name, social
  * icons) beside four columns holding five link groups (Site hand-curated
  * below, three from the nav config, Elsewhere from social.ts), then a
- * quiet copyright row.
+ * quiet bottom row carrying the copyright and the author credit.
  * Server component; column data resolves once at module scope.
  */
 
@@ -147,6 +147,20 @@ export default function SiteFooter() {
       <div className={styles.bottomBar}>
         <p className={styles.bottomText}>
           &copy; {new Date().getFullYear()} {BRAND_NAME} · MIT licensed
+        </p>
+        {/* The author credit. Its own row item rather than a third clause
+            on the copyright line, so the name reads as a credit rather than
+            as part of the licence note. */}
+        <p className={styles.bottomText}>
+          Designed and built by{" "}
+          <a
+            href={AUTHOR_URL}
+            className={styles.authorLink}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {AUTHOR_NAME}
+          </a>
         </p>
       </div>
     </footer>

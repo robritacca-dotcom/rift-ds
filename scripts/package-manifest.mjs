@@ -22,7 +22,14 @@
 // Identity lives in scripts/brand.mjs — the one home for brand facts —
 // re-exported here so the manifest stays the package's single import for
 // the scripts that predate the brand module.
-import { BIN_NAME, PACKAGE_NAME, REPOSITORY_URL, SITE_URL } from './brand.mjs';
+import {
+  AUTHOR_NAME,
+  AUTHOR_URL,
+  BIN_NAME,
+  PACKAGE_NAME,
+  REPOSITORY_URL,
+  SITE_URL,
+} from './brand.mjs';
 
 export { PACKAGE_NAME, REPOSITORY_URL };
 export const PACKAGE_VERSION = '1.0.1';
@@ -97,6 +104,9 @@ export function distManifest(rootPkg) {
     name: PACKAGE_NAME,
     version: PACKAGE_VERSION,
     description: PACKAGE_DESCRIPTION,
+    // No email: the npm page publishes whatever is here, and the author's
+    // name and site are the credit — a mailbox is not.
+    author: { name: AUTHOR_NAME, url: AUTHOR_URL },
     license: rootPkg.license,
     repository: { type: 'git', url: `git+${REPOSITORY_URL}.git` },
     homepage: SITE_URL,

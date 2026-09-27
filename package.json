@@ -3,6 +3,7 @@
   "private": true,
   "version": "1.0.1",
   "description": "An AI-ready React design system: accessible components on composable tokens, light/dark theming, and CSS-variable overrides.",
+  "author": { "name": "Robert Ritacca", "url": "https://robertritacca.com" },
   "license": "MIT",
   "repository": {
     "type": "git",

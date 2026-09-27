@@ -51,7 +51,7 @@ import {
 } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { BRAND_SHORT, SITE_URL } from './brand.mjs';
+import { AUTHOR_NAME, AUTHOR_URL, BRAND_SHORT, SITE_URL } from './brand.mjs';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const srcDir = join(repoRoot, 'src');
@@ -62,6 +62,13 @@ const registry = JSON.parse(
 );
 
 const ITEM_SCHEMA = 'https://ui.shadcn.com/schema/registry-item.json';
+
+/* Every item carries the author, in the registry-item schema's own
+   recommended `name <url>` form. An item hands library source verbatim
+   to a stranger's project, so the credit travels with the code rather
+   than staying on the site it came from. The registry index has no
+   author field in the schema, so it carries none. */
+const ITEM_AUTHOR = `${AUTHOR_NAME} <${AUTHOR_URL}>`;
 /** Consumer-side folder name, derived so it can never drift from the brand. */
 const TARGET_ROOT = BRAND_SHORT.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
@@ -189,6 +196,7 @@ export function assembleShadcnRegistry() {
       type: 'registry:ui',
       title: component.label,
       description: component.description,
+      author: ITEM_AUTHOR,
       ...(npm.size > 0 ? { dependencies: [...npm].sort() } : {}),
       registryDependencies: [
         `${SITE_URL}/r/base.json`,
@@ -224,6 +232,7 @@ export function assembleShadcnRegistry() {
     title: `${BRAND_SHORT} base`,
     description:
       'The shared layer every component builds on: the token stylesheets, the generated theme presets, the icon font, the motion constants, and the overlay behavior hooks.',
+    author: ITEM_AUTHOR,
     files: [...base.files.keys()]
       .sort()
       .map((absPath) => fileEntry(absPath, base.files.get(absPath))),

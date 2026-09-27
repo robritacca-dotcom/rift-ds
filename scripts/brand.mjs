@@ -27,6 +27,17 @@ export const BRAND_SHORT = 'Rift';
 export const ASSISTANT_NAME = 'Rift AI';
 
 /**
+ * The person who designed and built the system. The footer credits them
+ * and the structured data names them as the author of both schema nodes;
+ * nothing else may restate either value. AUTHOR_URL is the personal site,
+ * deliberately a different host from SITE_URL: robertritacca.com was this
+ * project's home until the 2026-09-26 move, and it is now the portfolio
+ * the credit points at, which is why it is not a RETIRED_HOST.
+ */
+export const AUTHOR_NAME = 'Robert Ritacca';
+export const AUTHOR_URL = 'https://robertritacca.com';
+
+/**
  * The published npm package. Also the specifier every import in this
  * repo uses (the workspace consumes the real package name). Renaming it
  * is mechanised: edit this constant, move the old name into

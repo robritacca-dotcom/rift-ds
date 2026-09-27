@@ -30,7 +30,7 @@ import { registry, repoRoot } from './component-docgen.mjs';
 import { assembleComponentApi } from './generate-component-api.mjs';
 import { siteUrl } from './generate-component-md.mjs';
 import { PACKAGE_NAME, PACKAGE_VERSION } from './package-manifest.mjs';
-import { SKILL_NAME } from './brand.mjs';
+import { AUTHOR_NAME, AUTHOR_URL, SKILL_NAME } from './brand.mjs';
 
 export const skillDir = join(repoRoot, 'website', 'public', 'skill', SKILL_NAME);
 
@@ -61,7 +61,7 @@ description: Build React UI with ${PACKAGE_NAME}. Use when installing the packag
 
 # Using ${PACKAGE_NAME}
 
-Generated from the library's registries at version ${PACKAGE_VERSION}, alongside every deploy of ${origin}. The library is ${api.length} React components across ${categories.length} categories, themed by ${tokenCount} semantic design tokens, published to npm.
+Generated from the library's registries at version ${PACKAGE_VERSION}, alongside every deploy of ${origin}. The library is ${api.length} React components across ${categories.length} categories, themed by ${tokenCount} semantic design tokens, published to npm. Designed and built by ${AUTHOR_NAME} (${AUTHOR_URL}), MIT licensed.
 
 ## Install
 

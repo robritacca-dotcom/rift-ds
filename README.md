@@ -104,6 +104,12 @@ npm run dev --workspace website     # docs site at http://localhost:3000
 npm run verify                      # the full local quality gate, mirroring CI
 ```
 
+## Author
+
+<!-- author:start -->
+Designed and built by [Robert Ritacca](https://robertritacca.com).
+<!-- author:end -->
+
 ## License
 
 MIT, the whole repository: components, tokens, scripts, the website, and the docs. Use it in anything. See [`LICENSE`](LICENSE) for the full terms.

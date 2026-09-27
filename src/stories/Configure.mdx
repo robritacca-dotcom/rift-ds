@@ -6,7 +6,7 @@ import { Meta } from "@storybook/addon-docs/blocks";
 import { COMPONENT_COUNT } from "../components/registry";
 import { TOKEN_COUNT } from "../tokens/registry";
 import { THEME_SELECTOR_ORDER } from "../../website/src/lib/theme/presets";
-import { SITE_URL } from "../../website/src/config/brand.generated";
+import { AUTHOR_NAME, AUTHOR_URL, SITE_URL } from "../../website/src/config/brand.generated";
 
 <Meta title="Rift DS" />
 
@@ -148,6 +148,8 @@ The passive (ghost) action tokens use semi-transparent values, so tertiary contr
     <span>One primary type family and one icon font, with heading and body roles you can split: every theme brings its own faces, and the default resolves to Nunito Sans. Complete theme presets ship in the package as stylesheets, applied by one data-brand attribute.</span>
   </div>
 </div>
+
+<p className="ds-credit">Designed and built by <a href={AUTHOR_URL}>{AUTHOR_NAME}</a>.</p>
 
 </div>
 
@@ -342,6 +344,12 @@ The passive (ghost) action tokens use semi-transparent values, so tertiary contr
   }
 
   .ds-convention span {
+    color: #6D6D6D;
+  }
+
+  .ds-credit {
+    margin-top: 32px;
+    font-size: 14px;
     color: #6D6D6D;
   }
 

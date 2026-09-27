@@ -1,5 +1,7 @@
 import type { BreadcrumbItem } from "@/config/navigation";
 import {
+  AUTHOR_NAME,
+  AUTHOR_URL,
   BRAND_NAME,
   REPOSITORY_URL,
   SITE_URL as BRAND_SITE_URL,
@@ -10,12 +12,24 @@ import {
    every import. */
 export const SITE_URL = BRAND_SITE_URL;
 
+/**
+ * The author, as a Person node. The footer credit's machine-readable
+ * twin: both schema nodes name the same person, from the same brand
+ * constants, so a crawler reads the credit a visitor reads.
+ */
+const author = {
+  "@type": "Person",
+  name: AUTHOR_NAME,
+  url: AUTHOR_URL,
+} as const;
+
 export function buildWebsiteJsonLd() {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: BRAND_NAME,
     url: SITE_URL,
+    author,
   };
 }
 
@@ -35,6 +49,7 @@ export function buildDesignSystemJsonLd() {
     operatingSystem: "Web",
     url: `${SITE_URL}/overview`,
     codeRepository: REPOSITORY_URL,
+    author,
   };
 }
 

@@ -1,9 +1,14 @@
 #!/usr/bin/env node
 /**
  * Validates the root package.json against scripts/package-manifest.mjs:
- *   1. name/version/exports match the manifest's source form exactly
+ *   1. name/version/author/exports match the manifest's source form exactly
  *      (SUBPATHS in the manifest is the single source — a subpath change
  *      is made there and mirrored into package.json, never on one side alone).
+ *      The author is a hand mirror of AUTHOR_NAME/AUTHOR_URL in brand.mjs,
+ *      so the credit npm prints cannot drift from the one the site renders.
+ *      LICENSE's copyright line is held to AUTHOR_NAME the same way: it
+ *      is copied into dist/ and ships in the tarball, and it had drifted
+ *      to a short form of the name nothing else used.
  *   2. Every non-wildcard export target exists on disk; wildcard
  *      targets' base directories exist and contain at least one match.
  *   3. package-lock.json's root version matches too. npm records the
@@ -22,8 +27,13 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { PACKAGE_NAME, PACKAGE_VERSION, sourceExports } from './package-manifest.mjs';
-import { RETIRED_HOSTS, RETIRED_PACKAGE_NAMES } from './brand.mjs';
+import {
+  PACKAGE_NAME,
+  PACKAGE_VERSION,
+  distManifest,
+  sourceExports,
+} from './package-manifest.mjs';
+import { AUTHOR_NAME, RETIRED_HOSTS, RETIRED_PACKAGE_NAMES } from './brand.mjs';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const pkg = JSON.parse(readFileSync(join(repoRoot, 'package.json'), 'utf8'));
@@ -35,6 +45,34 @@ if (pkg.name !== PACKAGE_NAME) {
 }
 if (pkg.version !== PACKAGE_VERSION) {
   errors.push(`package.json version is "${pkg.version}", manifest says "${PACKAGE_VERSION}"`);
+}
+
+/* The author credit. It ships on the npm page from the dist manifest and
+   renders in the site footer from the same brand constants, so the root
+   package.json's hand-written copy is held to the generated one. */
+const manifestAuthor = distManifest(pkg).author;
+if (JSON.stringify(pkg.author) !== JSON.stringify(manifestAuthor)) {
+  errors.push(
+    `package.json author is ${JSON.stringify(pkg.author)}, manifest says ` +
+      `${JSON.stringify(manifestAuthor)} — AUTHOR_NAME/AUTHOR_URL in ` +
+      `scripts/brand.mjs are the source`
+  );
+}
+
+/* The licence names the copyright holder, and build-package.mjs copies
+   LICENSE into dist/, so this line ships to every consumer. It is the one
+   place the author's name is a legal statement rather than a credit, which
+   is exactly why it may not be typed from memory. */
+const licenseHolder = readFileSync(join(repoRoot, 'LICENSE'), 'utf8').match(
+  /^Copyright \(c\) \d{4} (.+)$/m
+);
+if (!licenseHolder) {
+  errors.push('LICENSE has no "Copyright (c) <year> <holder>" line');
+} else if (licenseHolder[1].trim() !== AUTHOR_NAME) {
+  errors.push(
+    `LICENSE's copyright holder is "${licenseHolder[1].trim()}", ` +
+      `AUTHOR_NAME in scripts/brand.mjs says "${AUTHOR_NAME}"`
+  );
 }
 
 /* The website workspace must depend on the package by its current name —

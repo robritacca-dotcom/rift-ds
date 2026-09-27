@@ -148,8 +148,10 @@
 
 /* ---- Bottom row ---- */
 
-/* Just the copyright now — the social icons moved up into the brand
-   block. Still left-clustered, so the fixed chat button never covers it. */
+/* The copyright and the author credit — the social icons moved up into
+   the brand block. Both left-clustered, so the fixed chat button never
+   covers either of them, and wrapping puts the credit on its own line
+   before it can reach the button's corner. */
 .bottomBar {
   display: flex;
   align-items: center;
@@ -197,6 +199,28 @@
   font-weight: var(--font-paragraph-sm-weight);
   line-height: var(--font-paragraph-sm-line-height);
   color: var(--color-text-tertiary);
+}
+
+/* The credit's link. It sits inside a sentence rather than in a link
+   column, so the underline is always on: the column links can rely on
+   their position to read as links, a name in running text cannot. The
+   colour stays the row's tertiary and lifts to primary on hover, the
+   same move the column links make. */
+.authorLink {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.authorLink:hover {
+  color: var(--color-text-primary);
+}
+
+.authorLink:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+  border-radius: var(--radius-200);
 }
 
 /* ---- Responsive ---- */

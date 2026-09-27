@@ -36,6 +36,8 @@ import {
 } from "rift-ds/tokens/registry";
 
 import {
+  AUTHOR_NAME,
+  AUTHOR_URL,
   BRAND_NAME,
   MCP_SERVER_NAME,
   NPM_URL,
@@ -336,7 +338,7 @@ function landingPage(): string {
   <ul>
       ${promptRows}
   </ul>
-  <p class="links">Reading as a person? The docs live at <a href="${SITE_URL}/components">${SITE_HOST}/components</a>, the install guide at <a href="${SITE_URL}/docs/get-started">get-started</a>, and the agent index at <a href="${SITE_URL}/llms.txt">llms.txt</a>. The package is <a href="${NPM_URL}">${pkg.name}</a> on npm.</p>
+  <p class="links">Reading as a person? The docs live at <a href="${SITE_URL}/components">${SITE_HOST}/components</a>, the install guide at <a href="${SITE_URL}/docs/get-started">get-started</a>, and the agent index at <a href="${SITE_URL}/llms.txt">llms.txt</a>. The package is <a href="${NPM_URL}">${pkg.name}</a> on npm. Designed and built by <a href="${AUTHOR_URL}">${AUTHOR_NAME}</a>.</p>
 </main>
 </body>
 </html>

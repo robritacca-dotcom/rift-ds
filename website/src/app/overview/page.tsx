@@ -15,7 +15,14 @@ import { SKILL_COUNT } from "@/data/skills-registry";
 import { RELEASE_COUNT } from "@/data/release-log";
 import { chatExchangeMap, consumerMap, operatorsMap, pipelineMap, runtimeMap, systemOverviewMap } from "./maps";
 import styles from "./page.module.css";
-import { BRAND_NAME, FIGMA_FILE_URL, REPOSITORY_URL, STORYBOOK_URL } from "@/config/brand.generated";
+import {
+  AUTHOR_NAME,
+  AUTHOR_URL,
+  BRAND_NAME,
+  FIGMA_FILE_URL,
+  REPOSITORY_URL,
+  STORYBOOK_URL,
+} from "@/config/brand.generated";
 import { SHOW_FIGMA_LINKS } from "@/config/social";
 
 const TOKEN_CATEGORY_COUNT = Object.keys(TOKEN_COUNTS).length;
@@ -56,6 +63,14 @@ export default function AboutDsPage() {
               <Link href="/blueprints/content-design" className={styles.inlineLink}>content-design.md</Link>), the{" "}
               <Link href="/skills" className={styles.inlineLink}>skills</Link>, and the{" "}
               <Link href="/loops" className={styles.inlineLink}>loops</Link> drop into your own codebase or AI tooling. Agents connect to the same docs through the MCP endpoint at <code>/api/mcp</code>: one URL for the component list, exact prop contracts, and the token registry.
+            </p>
+            {/* The authorship line. The footer credits the author on every
+                page, but the footer sits outside app/, so the chat corpus
+                never sees it: this sentence is what lets the site answer
+                who built it. AUTHOR_NAME/AUTHOR_URL own the values. */}
+            <p className={styles.introBody}>
+              The system is designed and built by{" "}
+              <a href={AUTHOR_URL} target="_blank" rel="noopener noreferrer" className={styles.inlineLink}>{AUTHOR_NAME}</a>, who writes the specs Claude Code builds from.
             </p>
           </div>
 

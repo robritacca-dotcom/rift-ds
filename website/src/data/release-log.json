@@ -1,6 +1,15 @@
 {
   "releases": [
     {
+      "version": "1.1.0",
+      "date": "2026-09-27",
+      "title": "Mobile app navigation",
+      "body": [
+        "Three new navigation components. BottomNav is the tab bar of a mobile app, drawn in the Rift style, as the iOS Liquid Glass capsule, or as the Material 3 Expressive bar. TopAppBar is the header of a mobile screen, with a title that collapses as the page scrolls. SidebarPanel lists one section's pages, on its own or beside AppSidebar as a third navigation level.",
+        "Screen readers get more to work with: charts are named by their title, Nav names its landmark and accepts native props, and Stepper announces its steps. Nothing breaks, so upgrading needs no code changes."
+      ]
+    },
+    {
       "version": "1.0.1",
       "date": "2026-09-26",
       "title": "A readable package page",

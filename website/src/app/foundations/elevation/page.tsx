@@ -113,7 +113,7 @@ export default function ElevationPage() {
               container colour ramp, which keeps surfaces flat, crisp, and legible against the
               page floor. Only surfaces that genuinely float above the page (anchored overlays,
               modals, and the floating App sidebar) earn a shadow, and the elevation tokens
-              below are the only ones that exist for it. Never write a literal <code>box-shadow</code> value in component CSS.
+              below are the only ones that exist for it. Never write a literal <code>box-shadow</code> value in component CSS. The one exception is the iOS glass on the mobile navigation components, which restates the platform’s own shadow so the mock reads as the real system chrome.
             </p>
           </div>
 

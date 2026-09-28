@@ -17,7 +17,7 @@ Run when asked to "run the security audit" (`/security-audit`), or to check how 
 
 - **Report only, by default.** This skill audits and reports; it does not change code. Applying fixes is a separate, explicit request. Say what is wrong and how to fix it, not "I fixed it."
 - **Read-only and non-destructive.** Scans, reads, and a small, bounded set of live requests. No state-changing calls to any service.
-- **Live probing is light and bounded.** A handful of requests to the production chat endpoint (injection, rate-limit, oversized-body, malformed-body). It needs a deployment to probe — until one exists, skip the live probes and note the gap in the report. Stop the moment rate limiting kicks in — being throttled is the positive result, not a reason to push harder. Each request bills real API tokens, so keep the count low.
+- **Live probing is light and bounded.** A handful of requests to the production chat endpoint (injection, rate-limit, oversized-body, malformed-body). If the deployment is unreachable, skip the live probes and note the gap in the report. Stop the moment rate limiting kicks in — being throttled is the positive result, not a reason to push harder. Each request bills real API tokens, so keep the count low.
 - **A clean pass is a valid outcome.** If a category has nothing worth flagging, say so and credit what is already strong. Never invent a finding to have something to report.
 - **Evidence or it doesn't ship.** Every finding needs a `file:line`, a command result, or a captured live response. Kill false positives in a verification pass before writing anything up.
 

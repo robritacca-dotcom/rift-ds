@@ -1,0 +1,570 @@
+/* Mobile dashboard template. Every colour, space, radius, and type style is
+   a semantic token; the raw values are structural sizes the page owns (the
+   phone column's width, the tab bar's clearance, the icon tile geometry). */
+
+/* The stage fills the viewport and holds one phone. Fixed rather than in
+   flow, so the body's doc-page inset never reaches it; sized from the
+   pinned viewport variable, never bare 100vh, so the templates carousel's
+   scaled iframes get a fixed-size shell. */
+.stage {
+  --phone-scale: 1;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: calc(var(--layout-viewport-height, 100vh));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* At a phone's width the page is the phone: every wrapper fills the
+   viewport and the drawn OS chrome stays hidden. */
+.frameBox,
+.device,
+.screen {
+  width: 100%;
+  height: 100%;
+}
+
+.screen {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: var(--color-bg-page-primary);
+}
+
+.statusBar,
+.homeBar {
+  display: none;
+}
+
+/* The app area: the scroll column plus the tab bar floating over it. */
+.app {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.scroller {
+  height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+}
+
+.scroller::-webkit-scrollbar {
+  display: none;
+}
+
+/* The framed phone. There is no tablet or desktop layout, so anything
+   wider than a phone gets one: an iPhone Pro Max screen (440 x 956) in a
+   bezel, centred on the dotted ground and scaled to fit the window. The
+   recipe starts from the playground chat stage's device preset
+   (ChatView.module.css owns it): a 12px bezel, a 54px status bar and a 24px
+   home-indicator strip. Two departures. The corners are a real Pro Max's: a
+   56px screen corner (the handset's display radius is about 55pt) inside a
+   concentric 68px bezel, and the bezel itself is pure white or pure black
+   by theme, as the hardware is. And the strips overlay the app rather than stacking above and below it: the app
+   runs the full height of the screen, content scrolls under the clock and
+   the swipe bar, and the tab bar floats above the indicator, the way a real
+   iOS screen is laid out. The frame box takes the scaled footprint so the
+   device centres at any scale. */
+@media (min-width: 600px) {
+  .frameBox {
+    width: calc(464px * var(--phone-scale));
+    height: calc(980px * var(--phone-scale));
+    flex-shrink: 0;
+  }
+
+  .device {
+    width: 464px;
+    height: 980px;
+    box-sizing: border-box;
+    padding: 12px;
+    border-radius: 68px;
+    /* ds-allow(color): the bezel is hardware, drawn as a real handset's
+       glass border: pure white in light, pure black in dark */
+    background: #ffffff;
+    border: var(--border-025) solid var(--color-bg-container-border);
+    box-shadow: var(--shadow-floating);
+    transform: scale(var(--phone-scale));
+    transform-origin: 0 0;
+  }
+
+  .screen {
+    position: relative;
+    border-radius: 56px;
+  }
+
+  .statusBar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 40;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 54px;
+    /* The clock and status icons sit inboard of the deep screen corner,
+       either side of the Dynamic Island. */
+    padding: var(--padding-150) 36px 0 44px;
+    flex-shrink: 0;
+    color: var(--color-text-primary);
+  }
+
+  .homeBar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    min-height: 24px;
+    padding-bottom: var(--padding-150);
+  }
+
+  /* The top bar extends up under the clock, so its scroll-edge blur covers
+     the status bar the way the system bar does. */
+  .app :global(.ds-top-app-bar) {
+    padding-top: 54px;
+  }
+
+  /* The tab bar lifts clear of the swipe bar. */
+  .tabBar {
+    padding-bottom: 20px;
+  }
+
+  .content {
+    padding-bottom: calc(116px + var(--padding-400));
+  }
+
+  /* The assistant sheet keeps its header below the clock and its
+     disclaimer above the swipe bar. */
+  .app .assistantSheet {
+    padding: 54px 0 24px;
+    box-sizing: border-box;
+  }
+}
+
+@media (min-width: 600px) {
+  /* ds-allow(color): the dark bezel, pure black hardware */
+  :global([data-theme="dark"]) .device {
+    background: #000000;
+  }
+}
+
+.statusTime {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ds-allow(color): the Dynamic Island is a camera cutout — true-black
+   hardware in both themes, not a themeable surface */
+.dynamicIsland {
+  position: absolute;
+  left: 50%;
+  top: 12px;
+  transform: translateX(-50%);
+  width: 118px;
+  height: 34px;
+  border-radius: var(--radius-pill);
+  background: #000000;
+}
+
+.statusIcons {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-050);
+  --icon-size: var(--icon-size-500);
+}
+
+.homeIndicator {
+  width: 134px;
+  height: 5px;
+  border-radius: var(--radius-pill);
+  background: var(--color-text-primary);
+}
+
+/* The assistant as a phone sheet: the shared panel's floating card, pinned
+   over the app area instead of the viewport's right edge. Two classes, so
+   it outranks the panel's own placement whatever order the modules load. */
+.app .assistantSheet {
+  position: absolute;
+  inset: 0;
+  width: auto;
+  height: auto;
+  max-width: none;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  background: var(--color-bg-page-primary);
+  z-index: 30;
+}
+
+/* The menu Drawer portals to the body. While the phone is framed, the
+   component pins it over the app area's measured rect at the phone's scale
+   (the --md-app-* properties), so it slides in inside the screen; unframed,
+   the fallbacks leave the Drawer's own full-viewport inset. */
+.menuDrawer {
+  inset: auto;
+  top: var(--md-app-top, 0);
+  left: var(--md-app-left, 0);
+  width: var(--md-app-width, 100%);
+  height: var(--md-app-height, 100%);
+  overflow: hidden;
+  border-radius: 0 0 var(--md-app-radius, 0) var(--md-app-radius, 0);
+  transform: scale(var(--md-app-scale, 1));
+  transform-origin: 0 0;
+}
+
+/* One column of Panels on the dashboard rung set. The bottom padding clears
+   the floating tab bar (62px capsule plus its 21px inset, the component's
+   own geometry) so the last row can scroll clear of the glass. */
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-400);
+  padding: var(--padding-200) var(--padding-400) calc(96px + var(--padding-400));
+}
+
+/* The tab bar rides the app area, not the viewport, so the framed phone
+   carries its bar inside the screen. */
+.tabBar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.tabBar > * {
+  pointer-events: auto;
+}
+
+/* The bottom scroll edge: TopAppBar's iOS scroll-edge recipe mirrored, so
+   content blurs and fades out under the glass capsule and into the screen's
+   bottom edge instead of meeting it in a hard line. */
+.tabBar::before {
+  content: "";
+  position: absolute;
+  inset: -24px 0 0;
+  z-index: -1;
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--color-bg-page-primary) 85%, transparent),
+    transparent
+  );
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  -webkit-mask-image: linear-gradient(to top, #000 55%, transparent);
+  mask-image: linear-gradient(to top, #000 55%, transparent);
+}
+
+/* -------------------------------------------------------------- panels */
+
+.panelHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-200);
+}
+
+.panelTitle {
+  margin: 0;
+  font-family: var(--font-paragraph-emphasis-family);
+  font-size: var(--font-paragraph-emphasis-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-emphasis-line-height);
+  color: var(--color-text-primary);
+}
+
+/* ---------------------------------------------------------------- KPIs */
+
+.kpiGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gap-300);
+}
+
+.kpi {
+  align-items: flex-start;
+  gap: var(--gap-300);
+}
+
+/* design.md's icon tile pattern, at the stat-header size. */
+.kpiIcon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-bg-container-tertiary);
+  color: var(--color-text-primary);
+  --icon-size: var(--icon-size-500);
+}
+
+/* ------------------------------------------------------------- legends */
+
+.legendRow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gap-200);
+}
+
+/* ------------------------------------------------------- channel panel */
+
+.channelList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+}
+
+.channelRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+}
+
+.channelMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-200);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+}
+
+.channelName {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-200);
+  color: var(--color-text-primary);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  min-width: 0;
+}
+
+.channelPct {
+  color: var(--color-text-secondary);
+}
+
+.channelGlyph {
+  color: var(--color-text-secondary);
+  --icon-size: var(--icon-size-500);
+}
+
+/* ------------------------------------------------------- campaign list */
+
+.campaignList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-400);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.campaignRow {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-300);
+  min-width: 0;
+}
+
+/* The icon tile pattern at list-row size. */
+.glyphChip {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-bg-container-tertiary);
+  color: var(--color-text-primary);
+  --icon-size: var(--icon-size-500);
+}
+
+.campaignText {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.campaignName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-text-primary);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+}
+
+.campaignMeta {
+  color: var(--color-text-tertiary);
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+}
+
+.campaignFigures {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--gap-100);
+  flex-shrink: 0;
+}
+
+.campaignSpend {
+  color: var(--color-text-primary);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ----------------------------------------------------------- switchers */
+
+/* On the stage, top right, only while the phone is framed. */
+.stageSwitchers {
+  display: none;
+}
+
+@media (min-width: 600px) {
+  .stageSwitchers {
+    position: absolute;
+    top: var(--padding-500);
+    right: var(--padding-500);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: var(--gap-200);
+  }
+
+}
+
+/* The home link back to /templates: the site header's mark and wordmark
+   (MegaNav.module.css owns the recipe, including the wordmark's sanctioned
+   700 weight), top left on the stage while the phone is framed. */
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-200);
+  text-decoration: none;
+  color: var(--color-text-primary);
+  border-radius: var(--radius-200);
+}
+
+.logo:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: var(--padding-100);
+}
+
+.logoText {
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  /* ds-allow(typography): the site wordmark's one weight-700 setting,
+     restated from the header logo so the mark reads identically here */
+  font-weight: 700;
+  line-height: var(--font-title-body-line-height);
+  letter-spacing: var(--font-title-body-letter-spacing);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.stageLogo {
+  display: none;
+}
+
+@media (min-width: 600px) {
+  .stageLogo {
+    position: absolute;
+    top: var(--padding-500);
+    left: var(--padding-500);
+    z-index: 1;
+    display: inline-flex;
+    /* Level with the 40px switcher row on the right. */
+    min-height: 40px;
+  }
+}
+
+.drawerSwitchers {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-300);
+}
+
+/* Framed, the stage carries the logo and the pair, so the drawer does not
+   repeat them (and the switcher's menu would open inside the drawer's
+   scaled layer). */
+@media (min-width: 600px) {
+  .drawerSwitchers {
+    display: none;
+  }
+}
+
+/* ------------------------------------------------------------- drawer */
+
+/* The Drawer's footer is a button row; this footer is a profile with the
+   switchers under it, spanning the panel. */
+.drawerFooter {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--gap-400);
+  min-width: 0;
+}
+
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-300);
+  min-width: 0;
+}
+
+.profileText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.profileName {
+  color: var(--color-text-primary);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+}
+
+.profileEmail {
+  color: var(--color-text-tertiary);
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+}

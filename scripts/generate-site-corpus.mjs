@@ -573,7 +573,7 @@ function navLinks(source, exportName) {
     const href = field('href');
     const label = field('label');
     if (!href || !label || label === 'Contents') continue;
-    links.push({ href, label, description: field('description') });
+    links.push({ href, label, description: field('description'), mobileOnly: /mobileOnly:\s*true/.test(entry) });
   }
   if (links.length === 0) throw new Error(`navigation.ts: ${exportName} yielded no links`);
   return links;
@@ -581,7 +581,7 @@ function navLinks(source, exportName) {
 
 const linkLines = (links) =>
   links
-    .map((l) => `- ${l.label} (${l.href})${l.description ? `: ${l.description}` : ''}`)
+    .map((l) => `- ${l.label} (${l.href})${l.description ? `: ${l.description}` : ''}${l.mobileOnly ? ' (phone only, no tablet or desktop layout)' : ''}`)
     .join('\n');
 
 /**
@@ -657,6 +657,12 @@ ${linkLines(navLinks(nav, 'docsSidebarLinks'))}
 
 ${linkLines(navLinks(nav, 'foundationsSidebarLinks'))}
 
+### Templates
+
+Complete product screens built from the system alone, with fictional data. The /templates index previews each one live.
+
+${linkLines(navLinks(nav, 'templatesSidebarLinks'))}
+
 ### Component documentation
 
 - Components overview (/components)
@@ -709,21 +715,23 @@ const EXCLUDED_ROUTES = new Map([
   ['/labs/payroll',
     'a noindex test page imagining the chat as a docked side rail beside a payroll product, to exercise the agent panel at product scale — its prose is fictional demo data, not information'],
   ['/templates/marketing-dashboard',
-    'the marketing dashboard template rendered full viewport (the same app shell as /labs/marketing, its origin) — its prose is fictional demo data; the template\'s facts live on the /templates index, which is covered'],
+    'the marketing dashboard template rendered full viewport (the same app shell as /labs/marketing, its origin) — its prose is fictional demo data; its name and summary reach the corpus through the site map\'s Templates list, drawn from templatesSidebarLinks'],
+  ['/templates/mobile-dashboard',
+    'the mobile dashboard template rendered full viewport, a phone-only app screen — its prose is fictional demo data; its name and summary reach the corpus through the site map\'s Templates list, drawn from templatesSidebarLinks'],
   ['/templates/relay-console',
-    'the relay console template rendered full viewport — its prose is fictional network telemetry; the template\'s facts live on the /templates index, which is covered'],
+    'the relay console template rendered full viewport — its prose is fictional network telemetry; its name and summary reach the corpus through the site map\'s Templates list, drawn from templatesSidebarLinks'],
   ['/templates/team-calendar',
-    'the team calendar template rendered full viewport — its prose is fictional schedule data; the template\'s facts live on the /templates index, which is covered'],
+    'the team calendar template rendered full viewport — its prose is fictional schedule data; its name and summary reach the corpus through the site map\'s Templates list, drawn from templatesSidebarLinks'],
   ['/templates/agent-workbench',
-    'the agent workbench template rendered full viewport — its prose is a fictional coding session; the template\'s facts live on the /templates index, which is covered'],
+    'the agent workbench template rendered full viewport — its prose is a fictional coding session; its name and summary reach the corpus through the site map\'s Templates list, drawn from templatesSidebarLinks'],
   ['/templates/roadmap-planner',
-    'the roadmap planner template rendered full viewport — its prose is a fictional product plan; the template\'s facts live on the /templates index, which is covered'],
+    'the roadmap planner template rendered full viewport — its prose is a fictional product plan; its name and summary reach the corpus through the site map\'s Templates list, drawn from templatesSidebarLinks'],
   ['/templates/sales-pipeline',
-    'the sales pipeline template rendered full viewport — its prose is a fictional CRM book of business; the template\'s facts live on the /templates index, which is covered'],
+    'the sales pipeline template rendered full viewport — its prose is a fictional CRM book of business; its name and summary reach the corpus through the site map\'s Templates list, drawn from templatesSidebarLinks'],
   ['/templates/payroll-console',
-    'the payroll console template rendered full viewport (the same app shell as /labs/payroll, its origin) — its prose is a fictional pay run; the template\'s facts live on the /templates index, which is covered'],
+    'the payroll console template rendered full viewport (the same app shell as /labs/payroll, its origin) — its prose is a fictional pay run; its name and summary reach the corpus through the site map\'s Templates list, drawn from templatesSidebarLinks'],
   ['/templates/sign-in',
-    'the sign-in template rendered full viewport — its prose is a fictional product\'s front door; the template\'s facts live on the /templates index, which is covered'],
+    'the sign-in template rendered full viewport — its prose is a fictional product\'s front door; its name and summary reach the corpus through the site map\'s Templates list, drawn from templatesSidebarLinks'],
 ]);
 
 /** Component showcase pages: excluded as a class, with one shared reason. */

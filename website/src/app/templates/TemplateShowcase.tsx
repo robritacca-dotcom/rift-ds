@@ -11,7 +11,8 @@
  * canvas board's trick — BlurBackground detects the frame and drops its GL
  * context, and --layout-viewport-height is pinned so viewport-tall shells
  * get a fixed size) inside a bordered shell. The frame is inert; a link
- * overlay opens the template full screen. The slide list derives from
+ * overlay opens the template full screen. A template flagged `mobileOnly`
+ * is locked to the phone frame at every device size. The slide list derives from
  * templatesSidebarLinks, so the nav config stays the one authoritative
  * list of templates.
  */
@@ -246,7 +247,14 @@ export default function TemplateShowcase() {
       <div ref={trackRef} className={styles.track} onScroll={onScroll}>
         {TEMPLATES.map((template) => (
           <div key={template.href} className={styles.slide}>
-            <LiveFrame href={template.href} title={template.label} device={device} />
+            {/* A mobile-only screen has no tablet or desktop layout to
+                show, so its slide stays in the phone frame whatever the
+                toggle says. */}
+            <LiveFrame
+              href={template.href}
+              title={template.label}
+              device={template.mobileOnly ? "mobile" : device}
+            />
             <div className={styles.slideCaption}>
               <div className={styles.slideText}>
                 <h2 className={styles.slideTitle}>{template.label}</h2>

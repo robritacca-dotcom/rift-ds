@@ -45,6 +45,12 @@ export interface TemplateAssistantProps {
   fallback: string;
   /** One caption line under the composer. */
   disclaimer: string;
+  /**
+   * Extra class on the panel, for a host that places it somewhere other
+   * than the right edge of the viewport (the mobile dashboard hosts it as a
+   * full-screen sheet inside its phone).
+   */
+  className?: string;
 }
 
 export default function TemplateAssistant({
@@ -56,6 +62,7 @@ export default function TemplateAssistant({
   replies,
   fallback,
   disclaimer,
+  className,
 }: TemplateAssistantProps) {
   const [value, setValue] = React.useState("");
   const [turns, setTurns] = React.useState<
@@ -92,7 +99,10 @@ export default function TemplateAssistant({
   if (!open) return null;
 
   return (
-    <aside className={styles.chatPanel} aria-label={title}>
+    <aside
+      className={[styles.chatPanel, className].filter(Boolean).join(" ")}
+      aria-label={title}
+    >
       {/* The site chat's internal anatomy, restated over mock state: a
           zero-basis top region and a growing bottom region split the height
           while the thread is empty, centring the composer; the first

@@ -20,6 +20,11 @@ export interface NavLink {
   logo?: string;
   /** One-line summary — Sidebar's `searchable` filter matches against it too */
   description?: string;
+  /**
+   * Templates only: the screen has no tablet or desktop layout, so the
+   * templates carousel previews it in the phone frame at every device size.
+   */
+  mobileOnly?: boolean;
 }
 
 /** A row in a mega menu — provide either an `icon` (Material Symbol) or a `logo` (image path) */
@@ -404,6 +409,12 @@ export const templatesSidebarLinks: NavLink[] = [
     href: "/templates/marketing-dashboard",
     label: "Marketing dashboard",
     description: "An analytics app shell built from the system alone",
+  },
+  {
+    href: "/templates/mobile-dashboard",
+    label: "Mobile dashboard",
+    description: "The same analytics as an iOS app, under a glass tab bar",
+    mobileOnly: true,
   },
   {
     href: "/templates/relay-console",

@@ -1,0 +1,417 @@
+/* ============================================
+   BOTTOM NAV — the mobile tab bar
+   Three platforms share one markup:
+     default  the Rift bar, fully on-token
+     ios      the iOS 26 Liquid Glass capsule
+     android  the Material 3 Expressive bar
+   Each slot is icon over label; the selection
+   is carried per platform (tint, lens, pill).
+   ============================================ */
+
+/* ============================================
+   BASE (shared by every platform)
+   ============================================ */
+.ds-bottom-nav {
+  display: flex;
+  align-items: stretch;
+  gap: var(--gap-200);
+  box-sizing: border-box;
+  width: 100%;
+  /* The home-indicator area on notched phones; zero elsewhere. */
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.ds-bottom-nav--fixed {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 80;
+}
+
+.ds-bottom-nav__bar {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.ds-bottom-nav__list {
+  position: relative;
+  display: flex;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ds-bottom-nav__slot {
+  display: flex;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.ds-bottom-nav__item {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-100);
+  min-width: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--color-text-secondary);
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-bottom-nav__item:focus-visible,
+.ds-bottom-nav__search:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: -2px;
+}
+
+.ds-bottom-nav__indicator {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ds-bottom-nav__icon {
+  --icon-size: var(--icon-size-600);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  /* The icon font's hooks, never a raw font-variation-settings, so the
+     dark theme's grade and the default weight survive (design.md's icon
+     style hooks). */
+  --material-symbols-fill: 0;
+  transition: font-variation-settings var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+/* Selected icons draw filled, the convention on all three platforms. */
+.ds-bottom-nav__item--active .ds-bottom-nav__icon {
+  --material-symbols-fill: 1;
+}
+
+.ds-bottom-nav__label {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+}
+
+/* Count badge on the icon's top-end corner. */
+.ds-bottom-nav__badge {
+  position: absolute;
+  top: calc(var(--padding-100) * -1);
+  left: calc(50% + var(--padding-150));
+  box-sizing: border-box;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 var(--padding-100);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-status-error-icon);
+  color: var(--color-bg-page-primary);
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: 16px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.ds-bottom-nav__badge--dot {
+  top: 0;
+  left: calc(50% + var(--padding-150));
+  min-width: 0;
+  width: 6px;
+  height: 6px;
+  padding: 0;
+}
+
+.ds-bottom-nav__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.ds-bottom-nav__search {
+  display: none;
+}
+
+/* Icons take the colour of the text around them, whatever a consumer
+   stylesheet sets on the icon font class globally. */
+.ds-bottom-nav .material-symbols-rounded {
+  color: inherit;
+}
+
+/* ============================================
+   DEFAULT — the Rift bar
+   A full-width bar on the page ground with a
+   hairline above; the selected destination is
+   the teal selection of a mutually exclusive set.
+   ============================================ */
+.ds-bottom-nav--default {
+  background-color: var(--color-bg-page-primary);
+  border-top: var(--border-025) solid var(--color-bg-container-border);
+}
+
+.ds-bottom-nav--default .ds-bottom-nav__bar {
+  height: 64px;
+}
+
+.ds-bottom-nav--default .ds-bottom-nav__item:hover {
+  color: var(--color-text-primary);
+}
+
+.ds-bottom-nav--default .ds-bottom-nav__item--active,
+.ds-bottom-nav--default .ds-bottom-nav__item--active:hover {
+  color: var(--color-action-primary-bg);
+}
+
+.ds-bottom-nav--default .ds-bottom-nav__item--active .ds-bottom-nav__label {
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+}
+
+/* ============================================
+   iOS — Liquid Glass (iOS 26)
+   ds-allow(platform): iOS 26 tab-bar geometry and material — the 62pt
+   capsule floating 21pt in from the screen edges, 10pt medium SF labels
+   in the system face, the glass fill, blur and saturation, the white
+   specular rim, and the white badge numeral — restated from the platform
+   so the mock reads as system chrome. The tint stays the action token.
+   ============================================ */
+.ds-bottom-nav--ios {
+  --ds-bottom-nav-ios-height: 62px;
+  --ds-bottom-nav-ios-inset: 21px;
+  /* The glass: a thin tint of the container over a strong blur, with the
+     colour behind pushed up so the material reads as lit, not grey. */
+  --ds-bottom-nav-glass: color-mix(in srgb, var(--color-bg-container-primary) 58%, transparent);
+  --ds-bottom-nav-glass-filter: blur(16px) saturate(180%);
+  --ds-bottom-nav-glass-rim:
+    inset 0 1px 0 0 rgb(255 255 255 / 0.55),
+    inset 0 0 0 0.5px rgb(255 255 255 / 0.28),
+    0 8px 32px rgb(0 0 0 / 0.14),
+    0 1px 3px rgb(0 0 0 / 0.08);
+  padding: 0 var(--ds-bottom-nav-ios-inset) calc(env(safe-area-inset-bottom, 0px) + var(--ds-bottom-nav-ios-inset) - 8px);
+  font-family: system-ui, -apple-system, 'SF Pro Text', sans-serif;
+}
+
+.ds-bottom-nav--ios .ds-bottom-nav__bar {
+  height: var(--ds-bottom-nav-ios-height);
+  padding: 4px;
+  box-sizing: border-box;
+  border-radius: 999px;
+  background-color: var(--ds-bottom-nav-glass);
+  box-shadow: var(--ds-bottom-nav-glass-rim);
+  -webkit-backdrop-filter: var(--ds-bottom-nav-glass-filter);
+  backdrop-filter: var(--ds-bottom-nav-glass-filter);
+  transition: width var(--motion-duration-slow) var(--motion-ease-spring);
+}
+
+/* The lens: a lighter glass pill behind the selected slot, sliding
+   between slots on the platform's springy curve. */
+.ds-bottom-nav--ios .ds-bottom-nav__lens {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: calc((100% - 8px) / var(--ds-bottom-nav-count));
+  border-radius: 999px;
+  background-color: color-mix(in srgb, var(--color-text-primary) 9%, transparent);
+  box-shadow: inset 0 1px 0 0 rgb(255 255 255 / 0.35);
+  transform: translateX(calc(100% * var(--ds-bottom-nav-index)));
+  transition:
+    transform var(--motion-duration-slow) var(--motion-ease-spring),
+    width var(--motion-duration-slow) var(--motion-ease-spring);
+}
+
+.ds-bottom-nav--ios .ds-bottom-nav__item {
+  gap: 1px;
+  color: var(--color-text-primary);
+}
+
+.ds-bottom-nav--ios .ds-bottom-nav__item--active {
+  color: var(--color-action-primary-bg);
+}
+
+.ds-bottom-nav--ios .ds-bottom-nav__icon {
+  --icon-size: var(--icon-size-600);
+}
+
+/* A medium stroke, as SF Symbols draw in a tab bar. */
+.ds-bottom-nav--ios .ds-bottom-nav__icon {
+  --material-symbols-weight: 500;
+}
+
+.ds-bottom-nav--ios .ds-bottom-nav__label {
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 12px;
+  letter-spacing: 0.01em;
+}
+
+.ds-bottom-nav--ios .ds-bottom-nav__badge {
+  /* systemRed, light and dark alike on a badge. */
+  background-color: #ff3b30;
+  color: #fff;
+  font-family: inherit;
+  font-size: 11px;
+}
+
+/* The search destination: its own glass circle, the bar's height. */
+.ds-bottom-nav--ios .ds-bottom-nav__search {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: var(--ds-bottom-nav-ios-height);
+  height: var(--ds-bottom-nav-ios-height);
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background-color: var(--ds-bottom-nav-glass);
+  box-shadow: var(--ds-bottom-nav-glass-rim);
+  -webkit-backdrop-filter: var(--ds-bottom-nav-glass-filter);
+  backdrop-filter: var(--ds-bottom-nav-glass-filter);
+  color: var(--color-text-primary);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Minimised: the capsule closes to a circle holding only the selection;
+   the other slots fold to nothing and the lens fills what is left. */
+.ds-bottom-nav--ios .ds-bottom-nav__slot {
+  transition:
+    flex-grow var(--motion-duration-slow) var(--motion-ease-spring),
+    opacity var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-bottom-nav--ios.ds-bottom-nav--minimized .ds-bottom-nav__bar {
+  flex: 0 0 var(--ds-bottom-nav-ios-height);
+}
+
+.ds-bottom-nav--ios.ds-bottom-nav--minimized .ds-bottom-nav__slot:not(:has(.ds-bottom-nav__item--active)) {
+  flex-grow: 0;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.ds-bottom-nav--ios.ds-bottom-nav--minimized .ds-bottom-nav__lens {
+  width: calc(100% - 8px);
+  transform: none;
+}
+
+/* The label leaves the picture but stays the button's accessible name. */
+.ds-bottom-nav--ios.ds-bottom-nav--minimized .ds-bottom-nav__label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
+/* ============================================
+   ANDROID — Material 3 Expressive
+   ds-allow(platform): the M3 Expressive short navigation bar — a 64dp
+   bar on the surface-container role, a 56 x 32dp pill indicator behind
+   the selected icon, 12/16 medium labels tracked 0.5, the platform face
+   (Google Sans Flex, then Roboto), and the white badge numeral — restated
+   from the Material token set so the mock reads as system chrome.
+   ============================================ */
+.ds-bottom-nav--android {
+  background-color: var(--color-bg-container-secondary);
+  font-family: 'Google Sans Flex', Roboto, system-ui, sans-serif;
+}
+
+.ds-bottom-nav--android .ds-bottom-nav__bar {
+  height: 64px;
+}
+
+.ds-bottom-nav--android .ds-bottom-nav__item {
+  justify-content: flex-start;
+  gap: 4px;
+  padding-top: 6px;
+  color: var(--color-text-secondary);
+}
+
+.ds-bottom-nav--android .ds-bottom-nav__item--active {
+  color: var(--color-text-primary);
+}
+
+.ds-bottom-nav--android .ds-bottom-nav__indicator {
+  width: 56px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+/* The pill grows out from the icon's centre on selection, M3's own
+   indicator motion, on the spring curve. */
+.ds-bottom-nav--android .ds-bottom-nav__indicator::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background-color: color-mix(in srgb, var(--color-action-primary-bg) 22%, var(--color-bg-container-secondary));
+  opacity: 0;
+  transform: scaleX(0.4);
+  transition:
+    opacity var(--motion-duration-fast) var(--motion-ease-standard),
+    transform var(--motion-duration-slow) var(--motion-ease-spring);
+}
+
+.ds-bottom-nav--android .ds-bottom-nav__item--active .ds-bottom-nav__indicator::before {
+  opacity: 1;
+  transform: none;
+}
+
+/* A pressed or hovered slot gets the state layer, the indicator's shape
+   at low strength. */
+.ds-bottom-nav--android .ds-bottom-nav__item:hover:not(.ds-bottom-nav__item--active) .ds-bottom-nav__indicator::before {
+  opacity: 0.35;
+  transform: none;
+  background-color: var(--color-bg-container-tertiary);
+}
+
+.ds-bottom-nav--android .ds-bottom-nav__icon {
+  position: relative;
+}
+
+.ds-bottom-nav--android .ds-bottom-nav__label {
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  letter-spacing: 0.5px;
+}
+
+.ds-bottom-nav--android .ds-bottom-nav__badge {
+  top: 2px;
+  left: calc(50% + 4px);
+  /* The Material error role's baseline red. */
+  background-color: #b3261e;
+  color: #fff;
+  font-family: inherit;
+  font-size: 11px;
+}
+
+.ds-bottom-nav--android .ds-bottom-nav__badge--dot {
+  top: 4px;
+  left: calc(50% + 6px);
+}

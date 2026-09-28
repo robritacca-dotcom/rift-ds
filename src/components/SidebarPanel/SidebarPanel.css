@@ -1,0 +1,291 @@
+/* ============================================
+   SIDEBAR PANEL — the secondary navigation column
+   A heading, optional group labels, flat rows and
+   one level of accordion nesting. Row geometry
+   repeats AppSidebar's sub-items (40px pill rows,
+   12px edge inset, tree-line connectors), so the
+   two columns read as one navigation system.
+   ============================================ */
+
+/* ============================================
+   WRAPPER
+   ============================================ */
+.ds-sidebar-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-400);
+  width: var(--ds-sidebar-panel-width, 240px);
+  height: 100%;
+  min-height: 0;
+  padding: var(--padding-500) 0;
+  box-sizing: border-box;
+  background-color: var(--color-bg-page-primary);
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   BACK ROW — the drill-in's way out
+   ============================================ */
+.ds-sidebar-panel__back {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-100);
+  height: 40px;
+  margin: 0 var(--padding-300);
+  padding: var(--padding-200);
+  /* The chevron glyph carries its own side bearing, so the row drops its
+     left padding and the glyph's ink lands on the rows' text edge. */
+  padding-left: 0;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  text-align: left;
+  flex-shrink: 0;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-sidebar-panel__back:hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-sidebar-panel__back-icon {
+  --icon-size: var(--icon-size-600);
+  color: inherit;
+}
+
+/* ============================================
+   HEADER — title + collapse control
+   ============================================ */
+.ds-sidebar-panel__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--gap-200);
+  min-height: 24px;
+  padding: 0 var(--padding-500);
+  flex-shrink: 0;
+}
+
+.ds-sidebar-panel__title {
+  margin: 0;
+  font-family: var(--font-overline-family);
+  font-size: var(--font-overline-size);
+  font-weight: var(--font-overline-weight);
+  line-height: var(--font-overline-line-height);
+  letter-spacing: var(--font-overline-letter-spacing);
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  min-width: 0;
+  /* Wraps rather than truncates: the heading names the section, and a
+     clipped name is the one thing the reader cannot recover from. */
+  overflow-wrap: anywhere;
+}
+
+.ds-sidebar-panel__collapse {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  /* Pulls the 32px hit area back so the 24px glyph sits on the same
+     right edge as the rows' badges and chevrons. */
+  margin-right: calc(var(--padding-100) * -1);
+  /* Centred on the heading's first line however many lines it wraps to. */
+  margin-top: calc((var(--font-overline-line-height) - 32px) / 2);
+  margin-bottom: calc((var(--font-overline-line-height) - 32px) / 2);
+  padding: 0;
+  flex-shrink: 0;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--color-icon-primary);
+  cursor: pointer;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-sidebar-panel__collapse:hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-sidebar-panel__collapse .material-symbols-rounded {
+  --icon-size: var(--icon-size-600);
+  color: inherit;
+}
+
+/* ============================================
+   BODY + GROUPS
+   ============================================ */
+.ds-sidebar-panel__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-500);
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.ds-sidebar-panel__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-100);
+}
+
+.ds-sidebar-panel__group-label {
+  padding: 0 var(--padding-500);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+}
+
+.ds-sidebar-panel__list,
+.ds-sidebar-panel__nested-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-100);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* ============================================
+   ROWS
+   ============================================ */
+.ds-sidebar-panel__row {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-200);
+  width: calc(100% - var(--padding-300) * 2);
+  height: 40px;
+  margin: 0 var(--padding-300);
+  padding: var(--padding-200);
+  box-sizing: border-box;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  text-align: left;
+  text-decoration: none;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-sidebar-panel__row:hover,
+.ds-sidebar-panel__row--active {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-sidebar-panel__row:focus-visible,
+.ds-sidebar-panel__back:focus-visible,
+.ds-sidebar-panel__collapse:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: -2px;
+}
+
+.ds-sidebar-panel__label {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+  color: inherit;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* The current page and a collapsed accordion hiding it carry the same
+   emphasis, so a reader can find their place without opening anything. */
+.ds-sidebar-panel__row--active .ds-sidebar-panel__label,
+.ds-sidebar-panel__row--holds-active .ds-sidebar-panel__label {
+  font-family: var(--font-paragraph-emphasis-family);
+  font-weight: var(--font-paragraph-emphasis-weight);
+}
+
+.ds-sidebar-panel__badge {
+  flex-shrink: 0;
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-secondary);
+  background-color: var(--color-bg-container-tertiary);
+  border-radius: var(--radius-pill);
+  padding: var(--padding-050) var(--padding-200);
+}
+
+/* On a filled row the pill steps back to the page ground, or it would
+   share the row's fill and dissolve into it. */
+.ds-sidebar-panel__row--active .ds-sidebar-panel__badge,
+.ds-sidebar-panel__row:hover .ds-sidebar-panel__badge {
+  background-color: var(--color-bg-page-primary);
+}
+
+.ds-sidebar-panel__chevron {
+  --icon-size: var(--icon-size-500);
+  flex-shrink: 0;
+  /* Pulls the glyph's side bearing out, so its ink ends on the same right
+     edge as a badge in the row above. */
+  margin-right: calc(var(--padding-100) * -1);
+  color: var(--color-icon-secondary);
+  transition: transform var(--motion-duration-slow) var(--motion-ease-emphasized);
+}
+
+.ds-sidebar-panel__chevron--open {
+  transform: rotate(180deg);
+}
+
+/* ============================================
+   NESTED ROWS (accordion children)
+   The grid-row trick animates to the content's
+   own height, with no max-height guess to clip.
+   ============================================ */
+.ds-sidebar-panel__nested {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--motion-duration-slow) var(--motion-ease-emphasized);
+}
+
+.ds-sidebar-panel__nested--open {
+  grid-template-rows: 1fr;
+}
+
+.ds-sidebar-panel__nested-list {
+  min-height: 0;
+  overflow: hidden;
+  /* The tree line: aligned under the parent label's first letter, so the
+     children visibly hang from it (12px inset + 8px row padding). */
+  position: relative;
+  padding-top: var(--gap-100);
+}
+
+.ds-sidebar-panel__nested-list::before {
+  content: '';
+  position: absolute;
+  top: var(--gap-100);
+  bottom: 0;
+  left: calc(var(--padding-300) + var(--padding-200));
+  width: var(--border-025);
+  background-color: var(--color-bg-container-border);
+}
+
+.ds-sidebar-panel__row--nested {
+  width: calc(100% - var(--padding-300) * 2 - var(--padding-400));
+  margin-left: calc(var(--padding-300) + var(--padding-400));
+}
+
+/* Icons take the colour of the text around them, whatever a consumer
+   stylesheet sets on the icon font class globally. */
+.ds-sidebar-panel .material-symbols-rounded {
+  color: inherit;
+}
+.ds-sidebar-panel .ds-sidebar-panel__chevron {
+  color: var(--color-icon-secondary);
+}

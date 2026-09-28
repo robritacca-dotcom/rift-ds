@@ -142,7 +142,7 @@
       "name": "AppSidebar",
       "label": "App sidebar",
       "slug": "app-sidebar",
-      "description": "Collapsible navigation rail with accordion sub-items, category headings, and profile section.",
+      "description": "Collapsible navigation rail with accordion sub-items, a side panel for a third level, category headings, and a profile section.",
       "category": "layout",
       "client": true
     },
@@ -197,6 +197,14 @@
       "client": false,
       "folder": "Chart",
       "recharts": true
+    },
+    {
+      "name": "BottomNav",
+      "label": "Bottom nav",
+      "slug": "bottom-nav",
+      "description": "Mobile tab bar for three to five destinations, in the Rift style or as iOS Liquid Glass or Material 3 Expressive.",
+      "category": "navigation",
+      "client": true
     },
     {
       "name": "Breadcrumb",
@@ -876,6 +884,14 @@
       "client": true
     },
     {
+      "name": "SidebarPanel",
+      "label": "Sidebar panel",
+      "slug": "sidebar-panel",
+      "description": "Secondary navigation column listing one section's pages, with group headings and one level of accordion nesting.",
+      "category": "layout",
+      "client": true
+    },
+    {
       "name": "Skeleton",
       "label": "Skeleton",
       "slug": "skeleton",
@@ -1099,6 +1115,14 @@
       "slug": "tooltip",
       "description": "Contextual text label that appears on hover or focus with position and delay options.",
       "category": "overlays",
+      "client": true
+    },
+    {
+      "name": "TopAppBar",
+      "label": "Top app bar",
+      "slug": "top-app-bar",
+      "description": "Mobile screen header with a menu or back button, title, and actions, in Rift, iOS, or Android style, collapsing on scroll.",
+      "category": "navigation",
       "client": true
     },
     {

@@ -55,6 +55,40 @@ const demoSections = [
   },
 ];
 
+const reportsChildren = [
+  { key: "standard", label: "Standard reports" },
+  { key: "custom", label: "Custom reports" },
+  { key: "kpis", label: "KPIs", badge: "New" },
+  {
+    key: "planning",
+    label: "Financial planning",
+    children: [
+      { key: "cash-overview", label: "Cash flow overview" },
+      { key: "cash-planner", label: "Cash flow planner" },
+      { key: "budgets", label: "Budgets" },
+      { key: "forecasts", label: "Forecasts" },
+    ],
+  },
+];
+
+const threeLevelSections = [
+  {
+    items: [
+      { key: "home", icon: "home", label: "Home" },
+      { key: "create", icon: "add_circle", label: "Create" },
+      { key: "reports", icon: "monitoring", label: "Reports", children: reportsChildren },
+      { key: "apps", icon: "apps", label: "My apps" },
+    ],
+  },
+  {
+    category: "Pinned",
+    items: [
+      { key: "clients", icon: "group", label: "Clients" },
+      { key: "payroll", icon: "payments", label: "Payroll" },
+    ],
+  },
+];
+
 const demoProfile = {
   name: "Avery",
   email: "avery@example.com",
@@ -84,6 +118,9 @@ export default function AppSidebarPage() {
             <p className={styles.introBody}>
               A two-state sidebar that collapses to a 64px icon rail or expands to 280px with labels, category headings, accordion sub-items with tree-line connectors, and a profile section at the bottom. Items take an optional count badge; topSlot and footerSlot host consumer content that fades out while collapsed; and the floating prop renders the rail as a glass card inset from the viewport edges.
             </p>
+            <p className={styles.introBody}>
+              Navigation runs three levels deep, and subNav picks the shape once per sidebar. In the default accordion mode the second level is the accordion under a row, and a sub-item with children of its own opens them as the third level in a SidebarPanel beside the rail. In panel mode a top-level row opens its sub-items straight into the panel, whose own accordion carries the third level, and the collapsed rail widens to 80px to put a label under every icon. On small screens neither shows a panel: the drawer drills in to a second screen with a back row.
+            </p>
           </div>
 
           {/* Expanded */}
@@ -108,6 +145,64 @@ export default function AppSidebarPage() {
                 profile={demoProfile}
                 activeKey="dashboard"
                 defaultExpanded={false}
+              />
+            </div>
+          </section>
+
+          {/* Third level, accordion mode */}
+          <section className={styles.section}>
+            <SectionTitle title="Third level" />
+            <p className={styles.sectionBody}>
+              Reports holds the second level as its accordion. Financial planning has children of its own, so it carries a trailing chevron and opens them in the panel beside the rail. The accordion and the panel holding the current page both start open. Press Financial planning again, or the panel’s collapse control, to close it.
+            </p>
+            <div className={styles.sidebarDemo} data-anchor-ignore>
+              <AppSidebar
+                sections={threeLevelSections}
+                profile={demoProfile}
+                activeKey="reports"
+                activeSubKey="planning"
+                activeTertiaryKey="budgets"
+                defaultExpanded={true}
+                showMobileTrigger={false}
+              />
+            </div>
+          </section>
+
+          {/* Panel mode */}
+          <section className={styles.section}>
+            <SectionTitle title="Panel mode" />
+            <p className={styles.sectionBody}>
+              With subNav set to panel, the collapsed rail is the whole first level, so it widens to 80px and names each destination under its icon. Reports opens its sub-items straight into the panel, and Financial planning becomes the panel’s own accordion. The row feeding the open panel carries the selection fill.
+            </p>
+            <div className={styles.sidebarDemo} data-anchor-ignore>
+              <AppSidebar
+                sections={threeLevelSections}
+                profile={demoProfile}
+                activeKey="reports"
+                activeSubKey="standard"
+                subNav="panel"
+                defaultExpanded={false}
+                showMobileTrigger={false}
+              />
+            </div>
+          </section>
+
+          {/* Panel mode, floating */}
+          <section className={styles.section}>
+            <SectionTitle title="Panel mode, floating" />
+            <p className={styles.sectionBody}>
+              With floating set, the panel joins the rail as a second glass card, one gap along from the first.
+            </p>
+            <div className={`${styles.sidebarDemo} ${styles.sidebarDemoTinted}`} data-anchor-ignore>
+              <AppSidebar
+                sections={threeLevelSections}
+                profile={demoProfile}
+                activeKey="reports"
+                activeSubKey="kpis"
+                subNav="panel"
+                floating={true}
+                defaultExpanded={false}
+                showMobileTrigger={false}
               />
             </div>
           </section>

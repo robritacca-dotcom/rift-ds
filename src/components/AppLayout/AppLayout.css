@@ -16,14 +16,24 @@
   flex: 1;
   display: flex;
   justify-content: center;
-  margin-left: 64px;
+  /* The rail's width plus, while it shows, the side panel's. */
+  margin-left: calc(var(--ds-app-layout-rail, 64px) + var(--ds-app-layout-panel, 0px));
   padding: var(--padding-1000) var(--padding-500);
   transition: margin-left var(--motion-duration-slow) var(--motion-ease-emphasized);
   min-width: 0;
 }
 
-.ds-app-layout--expanded .ds-app-layout__main {
-  margin-left: 280px;
+.ds-app-layout--expanded {
+  --ds-app-layout-rail: 280px;
+}
+
+/* Panel mode's collapsed rail is the wider, labelled one. */
+.ds-app-layout:not(.ds-app-layout--expanded):has(.ds-app-sidebar--panel-mode) {
+  --ds-app-layout-rail: 80px;
+}
+
+.ds-app-layout:has(.ds-app-sidebar__panel--visible) {
+  --ds-app-layout-panel: 240px;
 }
 
 /* ============================================

@@ -5,6 +5,8 @@ import { useLayer } from '../../behaviors/useLayer';
 import { useFocusScope } from '../../behaviors/useFocusScope';
 import { useScrollLock } from '../../behaviors/useScrollLock';
 import { Avatar } from '../Avatar/Avatar';
+import { SidebarPanel } from '../SidebarPanel/SidebarPanel';
+import type { SidebarPanelItem } from '../SidebarPanel/SidebarPanel';
 import './AppSidebar.css';
 import '../../fonts/material-symbols.css';
 
@@ -19,8 +21,19 @@ export interface AppSidebarSubItem {
   label: string;
   /** Click handler — also fires on a link sub-item, so a consumer can route client-side */
   onClick?: () => void;
-  /** Renders the sub-item as a real link to this URL instead of a button */
+  /** Renders the sub-item as a real link to this URL instead of a button. Ignored when the sub-item has children, whose row opens them */
   href?: string;
+  /** Trailing count pill, e.g. unread items */
+  badge?: string | number;
+  /** Group heading this entry sits under when it is listed in the panel (see `subNav`); ignored in the accordion */
+  group?: string;
+  /**
+   * The next level down. With `subNav="accordion"` a sub-item's children are
+   * level 3 and open in the side panel; with `subNav="panel"` they are the
+   * panel's own accordion. Navigation stops at three levels, so deeper
+   * children are not rendered.
+   */
+  children?: AppSidebarSubItem[];
 }
 
 export interface AppSidebarItem {
@@ -36,7 +49,7 @@ export interface AppSidebarItem {
   href?: string;
   /** Trailing count pill, e.g. unread items; hidden while the rail is collapsed */
   badge?: string | number;
-  /** Sub-items — turns this into an accordion */
+  /** Sub-items: an accordion under the row, or the side panel's contents when `subNav="panel"` */
   children?: AppSidebarSubItem[];
 }
 
@@ -65,6 +78,23 @@ export interface AppSidebarProps {
   activeKey?: string;
   /** Key of the currently active sub-item */
   activeSubKey?: string;
+  /** Key of the currently active third-level item, listed in the side panel */
+  activeTertiaryKey?: string;
+  /**
+   * Where an item's sub-items show. `accordion` (the default) opens them under
+   * the row, and a sub-item's own children open in a side panel as level 3.
+   * `panel` skips the accordion: a top-level item opens its sub-items straight
+   * into the side panel, with their children as the panel's accordion, and the
+   * collapsed rail shows each label under its icon. On small screens both
+   * modes drill in inside the drawer instead.
+   */
+  subNav?: 'accordion' | 'panel';
+  /** Whether the side panel starts open when there is one to show */
+  defaultPanelOpen?: boolean;
+  /** Controlled open state of the side panel */
+  panelOpen?: boolean;
+  /** Called when the side panel opens or collapses */
+  onPanelOpenChange?: (open: boolean) => void;
   /** Whether sidebar starts expanded */
   defaultExpanded?: boolean;
   /** Controlled expanded state */
@@ -132,12 +162,18 @@ function DefaultLogo() {
  * **Collapsed** (64 px): icon-only buttons, logo mark, avatar.
  * **Expanded** (280 px): labels, category headings, accordion
  * sub-items with tree-line connectors, and a profile section.
+ * A third level opens in a `SidebarPanel` beside the rail (see `subNav`).
  */
 export const AppSidebar = ({
   sections,
   profile,
   activeKey,
   activeSubKey,
+  activeTertiaryKey,
+  subNav = 'accordion',
+  defaultPanelOpen = true,
+  panelOpen: controlledPanelOpen,
+  onPanelOpenChange,
   defaultExpanded = false,
   expanded: controlledExpanded,
   onExpandedChange,
@@ -207,8 +243,24 @@ export const AppSidebar = ({
     return () => query.removeEventListener('change', onChange);
   }, [mobileOpen]);
 
-  /* Accordion open keys */
-  const [openKeys, setOpenKeys] = useState<Set<string>>(new Set());
+  /* Accordion open keys. The accordion holding the current page starts
+     open, so a three-level path is visible from the first render. */
+  const [openKeys, setOpenKeys] = useState<Set<string>>(() => {
+    const initial = new Set<string>();
+    if (subNav !== 'panel' && (activeSubKey || activeTertiaryKey)) {
+      for (const section of sections) {
+        for (const item of section.items) {
+          const holdsActive = item.children?.some(
+            (sub) =>
+              sub.key === activeSubKey ||
+              sub.children?.some((leaf) => leaf.key === activeTertiaryKey),
+          );
+          if (holdsActive) initial.add(item.key);
+        }
+      }
+    }
+    return initial;
+  });
 
   const toggleAccordion = useCallback((key: string) => {
     setOpenKeys((prev) => {
@@ -222,6 +274,110 @@ export const AppSidebar = ({
     });
   }, []);
 
+  /* ---- Side panel (the level below the accordion, or the whole
+     second level when subNav is 'panel') ----
+     The panel's source is the row whose children it lists: a sub-item in
+     accordion mode, a top-level item in panel mode. It starts on the row
+     holding the current page, and a click on any row with children moves
+     it there. */
+  const isPanelMode = subNav === 'panel';
+  const [panelSourceKey, setPanelSourceKey] = useState<string | undefined>(() => {
+    for (const section of sections) {
+      for (const item of section.items) {
+        if (isPanelMode) {
+          if (
+            item.children?.length &&
+            (item.key === activeKey || item.children.some((c) => c.key === activeSubKey))
+          ) {
+            return item.key;
+          }
+        } else {
+          for (const sub of item.children ?? []) {
+            if (
+              sub.children?.length &&
+              (sub.key === activeSubKey || sub.children.some((c) => c.key === activeTertiaryKey))
+            ) {
+              return sub.key;
+            }
+          }
+        }
+      }
+    }
+    return undefined;
+  });
+
+  /* Resolve the source to what the panel shows. Accordion mode passes the
+     sub-item's children without their own children: three levels is the
+     cap, so a fourth never renders. */
+  let panelSource: { label: string; parentLabel?: string; items: SidebarPanelItem[] } | undefined;
+  for (const section of sections) {
+    for (const item of section.items) {
+      if (isPanelMode && item.key === panelSourceKey && item.children?.length) {
+        panelSource = { label: item.label, items: item.children };
+      }
+      if (!isPanelMode) {
+        for (const sub of item.children ?? []) {
+          if (sub.key === panelSourceKey && sub.children?.length) {
+            panelSource = {
+              label: sub.label,
+              parentLabel: item.label,
+              items: sub.children.map(({ children: _deeper, ...leaf }) => leaf),
+            };
+          }
+        }
+      }
+    }
+  }
+
+  const [internalPanelOpen, setInternalPanelOpen] = useState(defaultPanelOpen);
+  const isPanelOpen = controlledPanelOpen ?? internalPanelOpen;
+  const setPanelOpen = useCallback(
+    (next: boolean) => {
+      setInternalPanelOpen(next);
+      if (next !== isPanelOpen) onPanelOpenChange?.(next);
+    },
+    [isPanelOpen, onPanelOpenChange],
+  );
+  const panelVisible = Boolean(panelSource) && isPanelOpen;
+  const panelId = useId();
+
+  /* In the drawer the panel's level is a second screen: a row with
+     children drills in, the back row returns. Opening the drawer lands on
+     the screen holding the current page. */
+  const [drilled, setDrilled] = useState(false);
+  const focusAfterDrill = useRef<'in' | 'out' | null>(null);
+  const openMobile = useCallback(() => {
+    setDrilled(Boolean(panelSource));
+    setMobileOpen(true);
+  }, [panelSource]);
+  useEffect(() => {
+    const target = focusAfterDrill.current;
+    focusAfterDrill.current = null;
+    if (!target || !drawerRef.current) return;
+    const selector =
+      target === 'in' ? '.ds-sidebar-panel__back' : '[data-panel-source="true"]';
+    drawerRef.current.querySelector<HTMLElement>(selector)?.focus();
+  }, [drilled]);
+
+  /** A row with children that feeds the panel was pressed. */
+  const selectPanelSource = useCallback(
+    (key: string) => {
+      if (mobileOpen) {
+        setPanelSourceKey(key);
+        focusAfterDrill.current = 'in';
+        setDrilled(true);
+        return;
+      }
+      if (key === panelSourceKey && isPanelOpen) {
+        setPanelOpen(false);
+      } else {
+        setPanelSourceKey(key);
+        setPanelOpen(true);
+      }
+    },
+    [mobileOpen, panelSourceKey, isPanelOpen, setPanelOpen],
+  );
+
   const classes = [
     baseClass,
     // The drawer always shows the expanded layout: an icon rail inside
@@ -229,6 +385,7 @@ export const AppSidebar = ({
     isExpanded || mobileOpen ? `${baseClass}--expanded` : '',
     floating ? `${baseClass}--floating` : '',
     mobileOpen ? `${baseClass}--mobile-open` : '',
+    isPanelMode ? `${baseClass}--panel-mode` : '',
     className,
   ]
     .filter(Boolean)
@@ -243,7 +400,7 @@ export const AppSidebar = ({
           aria-label="Open navigation"
           aria-expanded={mobileOpen}
           aria-controls={drawerId}
-          onClick={() => setMobileOpen(true)}
+          onClick={openMobile}
         >
           <span className="material-symbols-rounded" aria-hidden="true">
             menu
@@ -296,6 +453,22 @@ export const AppSidebar = ({
         {/* Consumer slot under the logo row */}
         {topSlot && <div className={`${baseClass}__top-slot`}>{topSlot}</div>}
 
+        {/* Drawer drill-in: the panel's level as a second screen */}
+        {mobileOpen && drilled && panelSource ? (
+          <SidebarPanel
+            key={panelSourceKey}
+            className={`${baseClass}__drill`}
+            items={panelSource.items}
+            title={panelSource.label}
+            activeKey={activeTertiaryKey ?? activeSubKey}
+            onBack={() => {
+              focusAfterDrill.current = 'out';
+              setDrilled(false);
+            }}
+            backLabel={panelSource.parentLabel ?? 'Menu'}
+          />
+        ) : (
+        <div className={`${baseClass}__sections`}>
         {/* Nav sections */}
         {sections.map((section, si) => (
           <div key={si} className={`${baseClass}__nav`}>
@@ -306,7 +479,12 @@ export const AppSidebar = ({
             {section.items.map((item) => {
               const hasChildren = item.children && item.children.length > 0;
               const isOpen = openKeys.has(item.key);
-              const isActive = activeKey === item.key;
+              /* Panel mode: the row feeding a visible panel carries the
+                 selection, so the rail shows which section is open. */
+              const feedsPanel = isPanelMode && hasChildren;
+              const isSource = feedsPanel && item.key === panelSourceKey;
+              const isActive =
+                isPanelMode && panelVisible ? isSource : activeKey === item.key;
 
               /* A leaf item with an href is a real link; an accordion row
                  stays a button whatever it declares, because its job is to
@@ -333,11 +511,13 @@ export const AppSidebar = ({
                   {item.badge !== undefined && (
                     <span className={`${baseClass}__btn-badge`}>{item.badge}</span>
                   )}
+                  {/* Accordion rows turn the chevron down when open; a row
+                      feeding the panel points it at the panel and holds. */}
                   {hasChildren && (
                     <span
                       className={[
                         `${baseClass}__btn-chevron material-symbols-rounded`,
-                        isOpen ? `${baseClass}__btn-chevron--open` : '',
+                        isOpen && !isPanelMode ? `${baseClass}__btn-chevron--open` : '',
                       ]
                         .filter(Boolean)
                         .join(' ')}
@@ -365,21 +545,40 @@ export const AppSidebar = ({
                       type="button"
                       className={itemClasses}
                       onClick={() => {
-                        if (hasChildren && isExpanded) {
-                          toggleAccordion(item.key);
+                        if (feedsPanel) {
+                          selectPanelSource(item.key);
+                        } else if (hasChildren) {
+                          /* On the collapsed rail the accordion has nowhere
+                             to open, so the row expands the rail first. */
+                          if (!isExpanded && !mobileOpen) {
+                            toggleExpanded();
+                            setOpenKeys((prev) => new Set(prev).add(item.key));
+                          } else {
+                            toggleAccordion(item.key);
+                          }
                         }
                         item.onClick?.();
                       }}
-                      aria-expanded={hasChildren ? isOpen : undefined}
-                      aria-current={isActive ? 'page' : undefined}
-                      title={!isExpanded ? item.label : undefined}
+                      aria-expanded={
+                        feedsPanel
+                          ? mobileOpen
+                            ? undefined
+                            : isSource && panelVisible
+                          : hasChildren
+                            ? isOpen
+                            : undefined
+                      }
+                      aria-controls={feedsPanel && !mobileOpen ? panelId : undefined}
+                      aria-current={activeKey === item.key ? 'page' : undefined}
+                      data-panel-source={isSource ? 'true' : undefined}
+                      title={!isExpanded && !isPanelMode ? item.label : undefined}
                     >
                       {itemContent}
                     </button>
                   )}
 
                   {/* Sub-items */}
-                  {hasChildren && (
+                  {hasChildren && !isPanelMode && (
                     <div
                       className={[
                         `${baseClass}__sub-items`,
@@ -389,7 +588,11 @@ export const AppSidebar = ({
                         .join(' ')}
                     >
                       {item.children!.map((sub) => {
-                        const subActive = activeSubKey === sub.key;
+                        const subHasChildren = Boolean(sub.children?.length);
+                        const subIsSource = subHasChildren && sub.key === panelSourceKey;
+                        const subActive = panelVisible && subHasChildren
+                          ? subIsSource
+                          : activeSubKey === sub.key;
                         const subClasses = [
                           `${baseClass}__sub-btn`,
                           subActive ? `${baseClass}__sub-btn--active` : '',
@@ -397,12 +600,40 @@ export const AppSidebar = ({
                           .filter(Boolean)
                           .join(' ');
                         const subLabel = (
-                          <span className={`${baseClass}__sub-label`}>{sub.label}</span>
+                          <>
+                            <span className={`${baseClass}__sub-label`}>{sub.label}</span>
+                            {sub.badge !== undefined && (
+                              <span className={`${baseClass}__btn-badge`}>{sub.badge}</span>
+                            )}
+                            {subHasChildren && (
+                              <span
+                                className={`${baseClass}__sub-chevron material-symbols-rounded`}
+                                aria-hidden="true"
+                              >
+                                chevron_right
+                              </span>
+                            )}
+                          </>
                         );
                         return (
                           <div key={sub.key} className={`${baseClass}__sub-item`}>
                             <div className={`${baseClass}__sub-line`} />
-                            {sub.href ? (
+                            {subHasChildren ? (
+                              <button
+                                type="button"
+                                className={subClasses}
+                                onClick={() => {
+                                  selectPanelSource(sub.key);
+                                  sub.onClick?.();
+                                }}
+                                aria-expanded={mobileOpen ? undefined : subIsSource && panelVisible}
+                                aria-controls={mobileOpen ? undefined : panelId}
+                                aria-current={activeSubKey === sub.key ? 'page' : undefined}
+                                data-panel-source={subIsSource ? 'true' : undefined}
+                              >
+                                {subLabel}
+                              </button>
+                            ) : sub.href ? (
                               <a
                                 className={subClasses}
                                 href={sub.href}
@@ -431,6 +662,8 @@ export const AppSidebar = ({
             })}
           </div>
         ))}
+        </div>
+        )}
       </div>
 
       {/* ---- BOTTOM — consumer slot + profile ---- */}
@@ -467,6 +700,29 @@ export const AppSidebar = ({
         )}
       </div>
     </nav>
+      {/* The side panel, fixed beside the rail. Kept mounted while it has a
+          source so it can slide; inert while hidden. CSS keeps it off small
+          screens, where the drawer's drill-in shows the same level. */}
+      {panelSource && !mobileOpen && (
+        <SidebarPanel
+          key={panelSourceKey}
+          id={panelId}
+          className={[
+            `${baseClass}__panel`,
+            panelVisible ? `${baseClass}__panel--visible` : '',
+            isExpanded ? `${baseClass}__panel--beside-expanded` : '',
+            isPanelMode ? `${baseClass}__panel--panel-mode` : '',
+            floating ? `${baseClass}__panel--floating` : '',
+          ]
+            .filter(Boolean)
+            .join(' ')}
+          items={panelSource.items}
+          title={panelSource.label}
+          activeKey={activeTertiaryKey ?? activeSubKey}
+          onCollapse={() => setPanelOpen(false)}
+          inert={!panelVisible}
+        />
+      )}
     </>
   );
 };

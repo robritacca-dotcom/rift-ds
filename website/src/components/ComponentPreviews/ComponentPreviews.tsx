@@ -8,6 +8,8 @@
  * directions: every registered slug needs a preview entry here, and every key
  * here must be a registered slug.
  */
+import { BottomNav } from "rift-ds/components/BottomNav/BottomNav";
+import { TopAppBar } from "rift-ds/components/TopAppBar/TopAppBar";
 import Image from "next/image";
 import { AgentStatus } from "rift-ds/components/AgentStatus/AgentStatus";
 import { AnimatedNumber } from "rift-ds/components/AnimatedNumber/AnimatedNumber";
@@ -259,6 +261,29 @@ const previews: Record<string, () => ReactNode> = {
     <>
       <div style={{ width: "210px" }}>
         <Banner variant="info" title="v2 is live.">Read the notes.</Banner>
+      </div>
+    </>
+  ),
+  "bottom-nav": () => (
+    <>
+      {/* The real iOS bar at 60%, over a sketch of the page it floats on. */}
+      <div style={{ position: "relative", width: "220px", height: "84px", borderRadius: "14px", overflow: "hidden", border: "1px solid var(--color-bg-container-border)", background: "var(--color-bg-page-primary)", padding: "8px", boxSizing: "border-box" }}>
+        <div style={{ height: "44px", borderRadius: "8px", background: "var(--color-bg-container-secondary)" }} />
+        {/* inert + aria-hidden: a picture of the bar, not a second nav landmark
+            with live buttons inside the index card. */}
+        <div inert aria-hidden="true" style={{ position: "absolute", left: 0, bottom: 0, width: "366px", transform: "scale(0.6)", transformOrigin: "bottom left" }}>
+          <BottomNav
+            platform="ios"
+            activeKey="home"
+            aria-label="Preview"
+            items={[
+              { key: "home", label: "Home", icon: "home" },
+              { key: "search", label: "Explore", icon: "explore" },
+              { key: "inbox", label: "Inbox", icon: "chat_bubble", badge: 2 },
+              { key: "you", label: "You", icon: "account_circle" },
+            ]}
+          />
+        </div>
       </div>
     </>
   ),
@@ -1315,6 +1340,23 @@ const previews: Record<string, () => ReactNode> = {
       </div>
     </>
   ),
+  "sidebar-panel": () => (
+    <>
+      <div className={styles.previewColumn} style={{ gap: "3px", width: "130px" }}>
+        <span style={{ fontSize: "8px", fontWeight: 600, letterSpacing: "0.08em", color: "var(--color-text-secondary)", padding: "0 6px 4px" }}>REPORTS</span>
+        <div style={{ padding: "4px 6px", borderRadius: "999px", background: "var(--color-action-passive-bg-hover)", fontSize: "10px", fontWeight: 600, color: "var(--color-text-primary)" }}>Standard reports</div>
+        <div style={{ padding: "4px 6px", fontSize: "10px", color: "var(--color-text-primary)" }}>Custom reports</div>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "4px 6px", fontSize: "10px", color: "var(--color-text-primary)" }}>
+          Planning
+          <span className="material-symbols-rounded" style={{ fontSize: "12px", color: "var(--color-icon-secondary)", transform: "rotate(180deg)" }}>expand_more</span>
+        </div>
+        <div style={{ marginLeft: "10px", paddingLeft: "8px", borderLeft: "1px solid var(--color-bg-container-border)", display: "flex", flexDirection: "column", gap: "3px" }}>
+          <span style={{ fontSize: "10px", color: "var(--color-text-primary)", padding: "2px 0" }}>Budgets</span>
+          <span style={{ fontSize: "10px", color: "var(--color-text-primary)", padding: "2px 0" }}>Forecasts</span>
+        </div>
+      </div>
+    </>
+  ),
   "skeleton": () => (
     <>
       <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
@@ -1590,6 +1632,25 @@ const previews: Record<string, () => ReactNode> = {
           Tooltip
         </span>
         <div style={{ width: "8px", height: "8px", background: "var(--color-bg-page-inverse)", transform: "rotate(45deg)", marginTop: "-5px" }} />
+      </div>
+    </>
+  ),
+  "top-app-bar": () => (
+    <>
+      {/* The real Android bar at 60%, above a sketch of the page it heads. */}
+      <div style={{ width: "220px", height: "84px", borderRadius: "14px", overflow: "hidden", border: "1px solid var(--color-bg-container-border)", background: "var(--color-bg-page-primary)" }}>
+        <div inert aria-hidden="true" style={{ width: "366px", transform: "scale(0.6)", transformOrigin: "top left" }}>
+          <TopAppBar
+            platform="android"
+            size="medium"
+            title="Inbox"
+            navigation="back"
+            headingLevel={3}
+            sticky={false}
+            scrolled={false}
+            actions={[{ key: "search", icon: "search", label: "Search" }]}
+          />
+        </div>
       </div>
     </>
   ),

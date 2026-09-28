@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, within } from 'storybook/test';
 import { AppSidebar } from './AppSidebar';
 
 const sampleSections = [
@@ -78,7 +79,7 @@ const meta = {
         <div style={{ display: 'flex', minHeight: '100vh', background: '#0E0E0E' }}>
           <Story />
           <div style={{
-            marginLeft: expanded ? 280 : 64,
+            marginLeft: (ctx.parameters.contentOffset as number | undefined) ?? (expanded ? 280 : 64),
             padding: 40,
             flex: 1,
             transition: 'margin-left 0.25s ease',
@@ -195,5 +196,126 @@ export const WithLinks: Story = {
         ],
       },
     ],
+  },
+};
+
+const reportsChildren = [
+  { key: 'standard', label: 'Standard reports' },
+  { key: 'custom', label: 'Custom reports' },
+  { key: 'kpis', label: 'KPIs', badge: 'New' },
+  {
+    key: 'planning',
+    label: 'Financial planning',
+    children: [
+      { key: 'cash-overview', label: 'Cash flow overview' },
+      { key: 'cash-planner', label: 'Cash flow planner' },
+      { key: 'budgets', label: 'Budgets' },
+      { key: 'forecasts', label: 'Forecasts' },
+    ],
+  },
+];
+
+const threeLevelSections = [
+  {
+    items: [
+      { key: 'home', icon: 'home', label: 'Home' },
+      { key: 'create', icon: 'add_circle', label: 'Create' },
+      { key: 'reports', icon: 'monitoring', label: 'Reports', children: reportsChildren },
+      { key: 'apps', icon: 'apps', label: 'My apps' },
+    ],
+  },
+  {
+    category: 'Pinned',
+    items: [
+      { key: 'clients', icon: 'group', label: 'Clients' },
+      { key: 'payroll', icon: 'payments', label: 'Payroll' },
+    ],
+  },
+];
+
+/** Three levels in accordion mode: the accordion holds level 2, and a
+    sub-item with children (Financial planning) opens level 3 in the side
+    panel. Pressing the sub-item again, or the panel's collapse control,
+    closes it. */
+export const ThirdLevelPanel: Story = {
+  args: {
+    defaultExpanded: true,
+    sections: threeLevelSections,
+    activeKey: 'reports',
+    activeSubKey: 'planning',
+    activeTertiaryKey: 'budgets',
+  },
+  parameters: { contentOffset: 280 + 240 },
+};
+
+/** `subNav="panel"` skips the accordion: Reports opens its sub-items straight
+    into the side panel, with Financial planning as the panel's own accordion.
+    The collapsed rail names every destination under its icon. */
+export const PanelMode: Story = {
+  args: {
+    defaultExpanded: false,
+    subNav: 'panel',
+    sections: threeLevelSections,
+    activeKey: 'reports',
+    activeSubKey: 'standard',
+  },
+  parameters: { contentOffset: 80 + 240 },
+};
+
+/** Panel mode with the rail expanded by hand. */
+export const PanelModeExpanded: Story = {
+  args: {
+    defaultExpanded: true,
+    subNav: 'panel',
+    sections: threeLevelSections,
+    activeKey: 'reports',
+    activeTertiaryKey: 'forecasts',
+  },
+  parameters: { contentOffset: 280 + 240 },
+};
+
+/** Both cards float: the side panel joins the rail as a second glass card. */
+export const PanelModeFloating: Story = {
+  args: {
+    defaultExpanded: false,
+    floating: true,
+    subNav: 'panel',
+    sections: threeLevelSections,
+    activeKey: 'reports',
+    activeSubKey: 'kpis',
+  },
+  parameters: { contentOffset: 20 + 80 + 12 + 240 + 20 },
+};
+
+/** The row feeding the panel toggles it, and the panel's own collapse
+    control closes it too; a closed panel is inert. */
+export const PanelBehaviour: Story = {
+  args: {
+    defaultExpanded: true,
+    sections: threeLevelSections,
+    activeKey: 'reports',
+    activeSubKey: 'planning',
+    activeTertiaryKey: 'budgets',
+  },
+  parameters: { contentOffset: 280 + 240 },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const source = canvas.getByRole('button', { name: 'Financial planning' });
+    const panel = canvasElement.querySelector('.ds-app-sidebar__panel');
+    await expect(source).toHaveAttribute('aria-expanded', 'true');
+    await expect(panel).not.toHaveAttribute('inert');
+
+    await userEvent.click(source);
+    await expect(source).toHaveAttribute('aria-expanded', 'false');
+    await expect(panel).toHaveAttribute('inert');
+
+    await userEvent.click(source);
+    await expect(source).toHaveAttribute('aria-expanded', 'true');
+    await userEvent.click(canvas.getByRole('button', { name: 'Collapse Financial planning' }));
+    await expect(source).toHaveAttribute('aria-expanded', 'false');
+
+    // Rest in the open state the snapshot expects.
+    await userEvent.click(source);
+    await expect(source).toHaveAttribute('aria-expanded', 'true');
   },
 };

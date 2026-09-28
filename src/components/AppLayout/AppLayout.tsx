@@ -14,6 +14,10 @@ export interface AppLayoutProps {
   activeKey?: string;
   /** Active sub-item key */
   activeSubKey?: string;
+  /** Active third-level item key, listed in the sidebar's side panel */
+  activeTertiaryKey?: string;
+  /** Where sub-items show: the sidebar's accordion, or straight into its side panel (see AppSidebar) */
+  subNav?: 'accordion' | 'panel';
   /** Whether sidebar starts expanded */
   defaultExpanded?: boolean;
   /** Logo text next to icon */
@@ -41,6 +45,8 @@ export const AppLayout = ({
   profile,
   activeKey,
   activeSubKey,
+  activeTertiaryKey,
+  subNav,
   defaultExpanded = true,
   logoText,
   logo,
@@ -70,6 +76,8 @@ export const AppLayout = ({
         profile={profile}
         activeKey={activeKey}
         activeSubKey={activeSubKey}
+        activeTertiaryKey={activeTertiaryKey}
+        subNav={subNav}
         expanded={expanded}
         onExpandedChange={handleExpandedChange}
         logoText={logoText}

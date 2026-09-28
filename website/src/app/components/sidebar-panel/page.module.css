@@ -1,5 +1,5 @@
 /* ============================================
-   APP SIDEBAR PAGE LAYOUT
+   SIDEBAR PANEL PAGE LAYOUT
    ============================================ */
 .dsLayout {
   display: flex;
@@ -65,35 +65,6 @@
   width: 100%;
 }
 
-.variantRow {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--primitive-gap-1000);
-  align-items: flex-start;
-}
-
-.variantStack {
-  display: flex;
-  flex-direction: column;
-  gap: var(--primitive-gap-1000);
-  align-items: flex-start;
-}
-
-.sidebarDemo {
-  position: relative;
-  /* The rail's z-index stays inside the box, never over the page header. */
-  isolation: isolate;
-  height: 680px;
-  border-radius: 12px;
-  overflow: hidden;
-  border: 1px solid var(--color-bg-container-border);
-}
-
-/* A tinted ground, so the floating glass cards read as cards. */
-.sidebarDemoTinted {
-  background-color: var(--color-bg-container-secondary);
-}
-
 .sectionBody {
   font-size: var(--font-paragraph-size);
   font-weight: var(--font-paragraph-weight);
@@ -101,17 +72,24 @@
   color: var(--color-text-primary);
 }
 
-/* Contain the fixed-position sidebar and its side panel within the demo box */
-.sidebarDemo :global(.ds-app-sidebar),
-.sidebarDemo :global(.ds-app-sidebar__panel) {
-  position: absolute;
-  height: 100%;
+/* A fixed-height stage, so the panel fills a column the way it would
+   beside a rail and opening an accordion never moves the page. */
+.panelDemo {
+  display: flex;
+  height: 480px;
+  border-radius: var(--radius-300);
+  overflow: hidden;
+  border: var(--border-025) solid var(--color-bg-container-border);
 }
 
-/* The floating cards inset from the box's edges rather than the viewport's. */
-.sidebarDemo :global(.ds-app-sidebar--floating),
-.sidebarDemo :global(.ds-app-sidebar__panel--floating) {
-  height: calc(100% - var(--ds-sidebar-float-inset, 20px) * 2);
+.panelDemo :global(.ds-sidebar-panel) {
+  border-right: var(--border-025) solid var(--color-bg-container-border);
+}
+
+.demoStage {
+  display: flex;
+  align-items: flex-start;
+  padding: var(--padding-500);
 }
 
 @media (max-width: 959px) {

@@ -1,0 +1,156 @@
+/* ============================================
+   TOP APP BAR PAGE LAYOUT
+   ============================================ */
+.dsLayout {
+  display: flex;
+  gap: var(--layout-column-gap);
+  width: 100%;
+  max-width: 1440px;
+  padding-top: var(--primitive-gap-1000);
+}
+
+.dsContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-2000);
+  min-width: 0;
+}
+
+.pageHeader {
+  margin-top: calc(var(--primitive-gap-1000) - var(--gap-2000));
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--primitive-gap-500);
+  width: 100%;
+}
+
+.pageTitle {
+  font-family: var(--font-display-2-family);
+  font-size: var(--font-display-2-size);
+  font-weight: var(--font-display-2-weight);
+  line-height: var(--font-display-2-line-height);
+  letter-spacing: var(--font-display-2-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.subDisplay {
+  font-family: var(--font-sub-display-family);
+  font-size: var(--font-sub-display-size);
+  font-weight: var(--font-sub-display-weight);
+  line-height: var(--font-sub-display-line-height);
+  letter-spacing: var(--font-sub-display-letter-spacing);
+  color: var(--color-text-primary);
+  margin-bottom: 0;
+}
+
+.introSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-500);
+}
+
+.introBody,
+.sectionBody {
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-primary);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-1000);
+  width: 100%;
+}
+
+/* ============================================
+   PHONE STAGES — phone-sized demo containers with
+   colourful content scrolling under the bar. The
+   stage itself is the scroll container the bar sticks to and watches
+   ============================================ */
+.stageRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: var(--gap-1000);
+  align-items: start;
+}
+
+.stageFigure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-400);
+  margin: 0;
+  min-width: 0;
+}
+
+.stage {
+  position: relative;
+  width: 100%;
+  max-width: 375px;
+  height: 560px;
+  overflow-y: auto;
+  /* ds-allow(mockup): hardware-bezel radius of the phone stage, set
+     dressing for the demo rather than a UI radius */
+  border-radius: 40px;
+  border: var(--border-025) solid var(--color-bg-container-border);
+  background: var(--color-bg-page-primary);
+}
+
+.stageContent {
+  display: grid;
+  gap: var(--gap-300);
+  padding: var(--padding-400);
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+  padding: var(--padding-300);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
+  background-color: var(--color-bg-container-primary);
+}
+
+/* A plain content card: a media block and two lines of text, all on the
+   surface ramp, so the bars are judged against a real page rather than
+   against colour. */
+.tileMedia {
+  height: 120px;
+  /* Concentric with the card: its 24px corner less the 12px padding. */
+  border-radius: var(--radius-300);
+  background-color: var(--color-bg-container-secondary);
+}
+
+.tileLine,
+.tileLineShort {
+  height: 10px;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-bg-container-tertiary);
+}
+
+.tileLineShort {
+  width: 55%;
+}
+
+.stageCaption {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+@media (max-width: 959px) {
+  .pageHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .dsLayout { padding-left: 0; min-width: 0; }
+  .dsContent { max-width: 100%; min-width: 0; }
+}

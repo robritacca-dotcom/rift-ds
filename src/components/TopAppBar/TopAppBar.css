@@ -1,0 +1,464 @@
+/* ============================================
+   TOP APP BAR — the header of a mobile screen
+   Three platforms share one markup:
+     default  the Rift bar, fully on-token
+     ios      the iOS 26 navigation bar
+     android  the Material 3 Expressive top app bar
+   A row (leading control, title, trailing
+   actions) and, for medium and large sizes, an
+   expanded title that collapses on scroll.
+   ============================================ */
+
+/* ============================================
+   BASE (shared by every platform)
+   ============================================ */
+.ds-top-app-bar {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  /* The status-bar area on notched phones; zero elsewhere. */
+  padding-top: env(safe-area-inset-top, 0px);
+  color: var(--color-text-primary);
+  transition: background-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-top-app-bar--sticky {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.ds-top-app-bar__row {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+/* Centred titles hold the middle column however wide either side is. */
+.ds-top-app-bar--align-center .ds-top-app-bar__row {
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+}
+
+.ds-top-app-bar__leading,
+.ds-top-app-bar__trailing {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.ds-top-app-bar__trailing {
+  justify-content: flex-end;
+}
+
+.ds-top-app-bar__group {
+  display: flex;
+  align-items: center;
+}
+
+/* The bar's title, and the expanded title under it. */
+.ds-top-app-bar__title,
+.ds-top-app-bar__large-title {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  margin: 0;
+  font: inherit;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-top-app-bar--align-center .ds-top-app-bar__title {
+  align-items: center;
+  text-align: center;
+}
+
+.ds-top-app-bar__title--hidden {
+  opacity: 0;
+}
+
+.ds-top-app-bar__title-text,
+.ds-top-app-bar__subtitle {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ds-top-app-bar__subtitle {
+  color: var(--color-text-secondary);
+}
+
+/* Expanded title: the grid-row trick collapses it to nothing without a
+   height guess, and the fade leads the fold. */
+.ds-top-app-bar__expanded {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition:
+    grid-template-rows var(--motion-duration-slow) var(--motion-ease-emphasized),
+    opacity var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-top-app-bar--scrolled .ds-top-app-bar__expanded {
+  grid-template-rows: 0fr;
+  opacity: 0;
+}
+
+.ds-top-app-bar__expanded-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Icon buttons. */
+.ds-top-app-bar__button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-top-app-bar__button:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: -2px;
+}
+
+.ds-top-app-bar__icon {
+  --icon-size: var(--icon-size-600);
+  display: flex;
+  color: inherit;
+}
+
+.ds-top-app-bar__badge {
+  position: absolute;
+  top: 25%;
+  right: 25%;
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-status-error-icon);
+}
+
+/* The overflow menu's own wrapper takes no room of its own. */
+.ds-top-app-bar__overflow {
+  display: flex;
+}
+
+.ds-top-app-bar .material-symbols-rounded {
+  color: inherit;
+}
+
+/* ============================================
+   DEFAULT — the Rift bar
+   ============================================ */
+.ds-top-app-bar--default {
+  background-color: var(--color-bg-page-primary);
+  /* The hairline is present from the start, transparent until content
+     slides under the bar, so the scrolled state moves no geometry. */
+  border-bottom: var(--border-025) solid transparent;
+  transition:
+    background-color var(--motion-duration-base) var(--motion-ease-standard),
+    border-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-top-app-bar--default.ds-top-app-bar--scrolled {
+  border-bottom-color: var(--color-bg-container-border);
+}
+
+.ds-top-app-bar--default .ds-top-app-bar__row {
+  min-height: 56px;
+  gap: var(--gap-100);
+  padding: 0 var(--padding-200);
+}
+
+.ds-top-app-bar--default .ds-top-app-bar__leading:empty {
+  width: var(--padding-200);
+}
+
+.ds-top-app-bar--default .ds-top-app-bar__button {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-pill);
+}
+
+.ds-top-app-bar--default .ds-top-app-bar__button:hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-top-app-bar--default .ds-top-app-bar__title {
+  padding: 0 var(--padding-100);
+}
+
+.ds-top-app-bar--default .ds-top-app-bar__title-text {
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  letter-spacing: var(--font-title-body-letter-spacing);
+}
+
+.ds-top-app-bar--default .ds-top-app-bar__subtitle {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+}
+
+.ds-top-app-bar--default .ds-top-app-bar__large-title {
+  gap: var(--gap-100);
+  padding: var(--padding-100) var(--padding-400) var(--padding-400);
+}
+
+.ds-top-app-bar--default.ds-top-app-bar--medium .ds-top-app-bar__large-title .ds-top-app-bar__title-text {
+  font-family: var(--font-heading-2-family);
+  font-size: var(--font-heading-2-size);
+  font-weight: var(--font-heading-2-weight);
+  line-height: var(--font-heading-2-line-height);
+  letter-spacing: var(--font-heading-2-letter-spacing);
+}
+
+.ds-top-app-bar--default.ds-top-app-bar--large .ds-top-app-bar__large-title .ds-top-app-bar__title-text {
+  font-family: var(--font-heading-1-family);
+  font-size: var(--font-heading-1-size);
+  font-weight: var(--font-heading-1-weight);
+  line-height: var(--font-heading-1-line-height);
+  letter-spacing: var(--font-heading-1-letter-spacing);
+}
+
+/* ============================================
+   iOS — the iOS 26 navigation bar
+   ds-allow(platform): iOS 26 navigation-bar geometry and type — the 44pt
+   row with 16pt margins, 44pt glass circle buttons and the grouped glass
+   capsule, the 17pt semibold inline title and 34pt bold large title in
+   the system face, the glass fill, blur, saturation and white rim, and
+   the blurred scroll edge — restated from the platform so the mock reads
+   as system chrome.
+   ============================================ */
+.ds-top-app-bar--ios {
+  --ds-top-app-bar-glass: color-mix(in srgb, var(--color-bg-container-primary) 58%, transparent);
+  --ds-top-app-bar-glass-filter: blur(16px) saturate(180%);
+  --ds-top-app-bar-glass-rim:
+    inset 0 1px 0 0 rgb(255 255 255 / 0.55),
+    inset 0 0 0 0.5px rgb(255 255 255 / 0.28),
+    0 6px 24px rgb(0 0 0 / 0.12),
+    0 1px 3px rgb(0 0 0 / 0.08);
+  background: transparent;
+  font-family: system-ui, -apple-system, 'SF Pro Text', sans-serif;
+}
+
+/* The scroll edge: no bar fill and no hairline, just the content under
+   the bar blurring and fading out toward the top edge. */
+.ds-top-app-bar--ios::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 -16px;
+  z-index: -1;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--color-bg-page-primary) 80%, transparent),
+    transparent
+  );
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent);
+  mask-image: linear-gradient(to bottom, #000 55%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-top-app-bar--ios.ds-top-app-bar--scrolled::before {
+  opacity: 1;
+}
+
+.ds-top-app-bar--ios .ds-top-app-bar__row {
+  min-height: 44px;
+  gap: 8px;
+  padding: 6px 16px;
+}
+
+.ds-top-app-bar--ios .ds-top-app-bar__button {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+}
+
+/* A lone leading button and a lone trailing button are their own glass
+   circles; two or more trailing buttons share one capsule. */
+.ds-top-app-bar--ios .ds-top-app-bar__button--nav,
+.ds-top-app-bar--ios .ds-top-app-bar__group {
+  border-radius: 999px;
+  background-color: var(--ds-top-app-bar-glass);
+  box-shadow: var(--ds-top-app-bar-glass-rim);
+  -webkit-backdrop-filter: var(--ds-top-app-bar-glass-filter);
+  backdrop-filter: var(--ds-top-app-bar-glass-filter);
+}
+
+.ds-top-app-bar--ios .ds-top-app-bar__group {
+  padding: 0 2px;
+}
+
+.ds-top-app-bar--ios .ds-top-app-bar__group .ds-top-app-bar__button {
+  width: 40px;
+}
+
+.ds-top-app-bar--ios .ds-top-app-bar__group:has(> :only-child) {
+  padding: 0;
+}
+
+.ds-top-app-bar--ios .ds-top-app-bar__group:has(> :only-child) .ds-top-app-bar__button {
+  width: 44px;
+}
+
+/* SF Symbols in a bar draw at a medium weight; the icon font's default
+   400 read spindly inside the glass circles. */
+.ds-top-app-bar--ios .ds-top-app-bar__icon {
+  font-variation-settings: 'wght' 500;
+}
+
+.ds-top-app-bar--ios .ds-top-app-bar__button--nav .ds-top-app-bar__icon {
+  /* The chevron's glyph sits right of centre in its box; a nudge
+     centres it optically in the circle. */
+  transform: translateX(-1px);
+}
+
+.ds-top-app-bar--ios .ds-top-app-bar__title-text {
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 22px;
+  letter-spacing: -0.02em;
+}
+
+.ds-top-app-bar--ios .ds-top-app-bar__subtitle {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+}
+
+.ds-top-app-bar--ios .ds-top-app-bar__large-title {
+  padding: 2px 16px 8px;
+}
+
+.ds-top-app-bar--ios .ds-top-app-bar__large-title .ds-top-app-bar__title-text {
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 41px;
+  letter-spacing: 0.01em;
+}
+
+.ds-top-app-bar--ios .ds-top-app-bar__large-title .ds-top-app-bar__subtitle {
+  font-size: 15px;
+  line-height: 20px;
+}
+
+/* ============================================
+   ANDROID — Material 3 Expressive top app bar
+   ds-allow(platform): the M3 Expressive app bar — a 64dp row with 4dp
+   edge padding, 48dp touch targets around 40dp icon-button containers,
+   the 22/28 title and 12/16 subtitle, the 28/36 medium and 36/44 large
+   flexible titles, and the platform face (Google Sans Flex, then Roboto)
+   — restated from the Material token set so the mock reads as system
+   chrome. The surface roles map onto the page and container tokens.
+   ============================================ */
+.ds-top-app-bar--android {
+  background-color: var(--color-bg-page-primary);
+  font-family: 'Google Sans Flex', Roboto, system-ui, sans-serif;
+}
+
+/* On scroll the surface lifts to the container role. */
+.ds-top-app-bar--android.ds-top-app-bar--scrolled {
+  background-color: var(--color-bg-container-secondary);
+}
+
+.ds-top-app-bar--android .ds-top-app-bar__row {
+  min-height: 64px;
+  padding: 0 4px;
+}
+
+.ds-top-app-bar--android .ds-top-app-bar__leading:empty {
+  width: 12px;
+}
+
+.ds-top-app-bar--android .ds-top-app-bar__button {
+  width: 48px;
+  height: 48px;
+  color: var(--color-text-secondary);
+}
+
+.ds-top-app-bar--android .ds-top-app-bar__button--nav {
+  color: var(--color-text-primary);
+}
+
+/* The 40dp state layer inside the 48dp target. */
+.ds-top-app-bar--android .ds-top-app-bar__button::before {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border-radius: 999px;
+  background-color: var(--color-text-primary);
+  opacity: 0;
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-top-app-bar--android .ds-top-app-bar__button:hover::before {
+  opacity: 0.08;
+}
+
+.ds-top-app-bar--android .ds-top-app-bar__button:active::before {
+  opacity: 0.12;
+}
+
+.ds-top-app-bar--android .ds-top-app-bar__title {
+  padding: 0 4px;
+}
+
+.ds-top-app-bar--android .ds-top-app-bar__title-text {
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 28px;
+}
+
+.ds-top-app-bar--android .ds-top-app-bar__subtitle {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  letter-spacing: 0.5px;
+}
+
+.ds-top-app-bar--android .ds-top-app-bar__large-title {
+  padding: 0 16px 12px;
+}
+
+.ds-top-app-bar--android.ds-top-app-bar--medium .ds-top-app-bar__large-title .ds-top-app-bar__title-text {
+  font-size: 28px;
+  line-height: 36px;
+}
+
+.ds-top-app-bar--android.ds-top-app-bar--medium .ds-top-app-bar__large-title .ds-top-app-bar__subtitle {
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.1px;
+}
+
+.ds-top-app-bar--android.ds-top-app-bar--large .ds-top-app-bar__large-title {
+  padding-top: 4px;
+}
+
+.ds-top-app-bar--android.ds-top-app-bar--large .ds-top-app-bar__large-title .ds-top-app-bar__title-text {
+  font-size: 36px;
+  line-height: 44px;
+}
+
+.ds-top-app-bar--android.ds-top-app-bar--large .ds-top-app-bar__large-title .ds-top-app-bar__subtitle {
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0.15px;
+}

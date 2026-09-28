@@ -38,6 +38,11 @@ export const CATEGORIES = new Set([
   // chat panel's container-width copy of the sub-display 768px step, which
   // cannot reference the value inside the token layer's media query.
   'typography',
+  // Native-platform fidelity: the iOS and Android variants of the mobile
+  // navigation components restate each platform's own metrics, type,
+  // materials and fixed colours (the glass rim, the white badge numeral)
+  // so a mock reads as the real system chrome. Scoped to those variants.
+  'platform',
 ]);
 
 // Normalize CRLF so Windows checkouts validate identically to CI.

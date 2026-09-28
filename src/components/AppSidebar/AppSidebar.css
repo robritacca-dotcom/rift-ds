@@ -18,7 +18,13 @@
   height: 100vh;
   width: 64px;
   padding: var(--padding-500) 0;
+  /* The vertical padding sits inside the viewport height; content-box
+     sizing ran the rail 40px past the bottom and clipped the profile. */
+  box-sizing: border-box;
   background-color: var(--color-bg-page-primary);
+  /* The logo mark draws in currentColor; without a colour of its own the
+     rail inherited the host's, and the mark vanished on a dark host. */
+  color: var(--color-text-primary);
   overflow: hidden;
   transition: width var(--motion-duration-slow) var(--motion-ease-emphasized);
 }
@@ -358,6 +364,46 @@
   white-space: nowrap;
 }
 
+/* A sub-item with children opens the side panel, and says so with a
+   trailing chevron; a badge sits before it on the same right edge. */
+.ds-app-sidebar__sub-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ds-app-sidebar__sub-btn .ds-app-sidebar__btn-badge {
+  opacity: 1;
+  flex-shrink: 0;
+}
+
+/* On a filled row the pill steps back to the page ground, or it would
+   share the row's fill and dissolve into it. */
+.ds-app-sidebar__btn--active .ds-app-sidebar__btn-badge,
+.ds-app-sidebar__btn:hover .ds-app-sidebar__btn-badge,
+.ds-app-sidebar__sub-btn--active .ds-app-sidebar__btn-badge,
+.ds-app-sidebar__sub-btn:hover .ds-app-sidebar__btn-badge {
+  background-color: var(--color-bg-page-primary);
+}
+
+.ds-app-sidebar__sub-chevron {
+  --icon-size: var(--icon-size-500);
+  flex-shrink: 0;
+}
+
+.ds-app-sidebar .ds-app-sidebar__sub-chevron {
+  color: var(--color-icon-secondary);
+}
+
+/* The nav sections share one wrapper so the drawer's drill-in can swap
+   them for the panel's level as a unit. */
+.ds-app-sidebar__sections {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-1000);
+}
+
 /* ============================================
    CONSUMER SLOTS + BOTTOM WRAPPER
    Slots keep their height in both states so the
@@ -485,6 +531,193 @@
 }
 
 /* ============================================
+   SIDE PANEL — the SidebarPanel fixed beside the
+   rail. It tracks the rail's width through the
+   same slow emphasized glide, and slides a step
+   out from under it on open. Hidden, it stays
+   mounted (inert) so the slide can run both ways.
+   ============================================ */
+.ds-app-sidebar__panel {
+  position: fixed;
+  top: 0;
+  left: 64px;
+  /* One step under the rail, so the slide starts from beneath it. */
+  z-index: 99;
+  height: 100vh;
+  border-left: var(--border-025) solid var(--color-bg-container-border);
+  border-right: var(--border-025) solid var(--color-bg-container-border);
+  opacity: 0;
+  transform: translateX(calc(var(--padding-300) * -1));
+  visibility: hidden;
+  pointer-events: none;
+  /* Visibility waits out the fade on the way out, then flips; on the way
+     in it flips first (the --visible rule resets the delay). */
+  transition:
+    left var(--motion-duration-slow) var(--motion-ease-emphasized),
+    opacity var(--motion-duration-base) var(--motion-ease-standard),
+    transform var(--motion-duration-slow) var(--motion-ease-emphasized),
+    visibility 0s linear var(--motion-duration-base);
+}
+
+.ds-app-sidebar__panel--visible {
+  opacity: 1;
+  transform: none;
+  visibility: visible;
+  pointer-events: auto;
+  transition:
+    left var(--motion-duration-slow) var(--motion-ease-emphasized),
+    opacity var(--motion-duration-base) var(--motion-ease-standard),
+    transform var(--motion-duration-slow) var(--motion-ease-emphasized),
+    visibility 0s linear 0s;
+}
+
+.ds-app-sidebar__panel--panel-mode {
+  left: 80px;
+}
+
+.ds-app-sidebar__panel--beside-expanded {
+  left: 280px;
+}
+
+/* Floating: a second glass card beside the first, one gap along. */
+.ds-app-sidebar__panel--floating {
+  top: var(--ds-sidebar-float-inset, 20px);
+  left: calc(var(--ds-sidebar-float-inset, 20px) + 64px + var(--gap-300));
+  height: calc(100dvh - var(--ds-sidebar-float-inset, 20px) * 2);
+  background-color: var(--color-bg-glass);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
+  box-shadow: var(--shadow-floating);
+  backdrop-filter: blur(24px);
+}
+
+.ds-app-sidebar__panel--floating.ds-app-sidebar__panel--panel-mode {
+  left: calc(var(--ds-sidebar-float-inset, 20px) + 80px + var(--gap-300));
+}
+
+.ds-app-sidebar__panel--floating.ds-app-sidebar__panel--beside-expanded {
+  left: calc(var(--ds-sidebar-float-inset, 20px) + 280px + var(--gap-300));
+}
+
+/* ============================================
+   PANEL MODE RAIL — labels under icons
+   With the second level in the panel, the
+   collapsed rail is the whole of level 1, so it
+   widens to 80px and names every destination:
+   a pill indicator behind the icon, the label
+   beneath (the navigation-rail pattern).
+   ============================================ */
+.ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) {
+  width: 80px;
+}
+
+.ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) .ds-app-sidebar__logo {
+  /* Centres the 24px mark in the 80px rail: (80 - 24) / 2. */
+  padding: 0 calc(var(--padding-500) + var(--padding-200));
+}
+
+.ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) .ds-app-sidebar__nav {
+  gap: 0;
+}
+
+.ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) .ds-app-sidebar__btn {
+  height: auto;
+  margin: 0 var(--padding-100);
+  /* Room between the content and the focus ring; the rows' spacing lives
+     here rather than in the nav gap, so the rhythm is unchanged. */
+  padding: var(--padding-100) 0;
+  justify-content: center;
+  border-radius: var(--radius-300);
+  overflow: visible;
+}
+
+.ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) .ds-app-sidebar__btn:hover,
+.ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) .ds-app-sidebar__btn--active {
+  background-color: transparent;
+}
+
+.ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) .ds-app-sidebar__btn-left {
+  flex-direction: column;
+  gap: var(--gap-100);
+  width: 100%;
+}
+
+/* The trailing chevron and count pill are faded out on any collapsed
+   rail, but faded still takes width: on this centred column it pushed
+   the icon and label off centre. Here they leave the layout outright. */
+.ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) .ds-app-sidebar__btn-chevron,
+.ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) .ds-app-sidebar__btn-badge {
+  display: none;
+}
+
+/* The indicator: a 56 x 32 pill behind the icon carries hover and the
+   selection, so the label stays legible on the page ground. */
+.ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) .ds-app-sidebar__btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 32px;
+  border-radius: var(--radius-pill);
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) .ds-app-sidebar__btn:hover .ds-app-sidebar__btn-icon,
+.ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) .ds-app-sidebar__btn--active .ds-app-sidebar__btn-icon {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) .ds-app-sidebar__btn-label {
+  opacity: 1;
+  max-width: 100%;
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+  text-align: center;
+  text-overflow: ellipsis;
+}
+
+.ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) .ds-app-sidebar__btn--active .ds-app-sidebar__btn-label {
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+}
+
+.ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) .ds-app-sidebar__profile {
+  /* Centres the 40px avatar in the 80px rail. */
+  padding: 0 var(--padding-500);
+}
+
+.ds-app-sidebar__btn:focus-visible,
+.ds-app-sidebar__sub-btn:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: -2px;
+}
+
+/* ============================================
+   DRAWER DRILL-IN — the panel's level as a
+   second screen inside the mobile drawer
+   ============================================ */
+.ds-app-sidebar__drill {
+  width: auto;
+  height: auto;
+  padding: 0;
+  background: transparent;
+  animation: ds-app-sidebar-drill-in var(--motion-duration-slow) var(--motion-ease-emphasized);
+}
+
+@keyframes ds-app-sidebar-drill-in {
+  from {
+    opacity: 0;
+    transform: translateX(var(--padding-1000));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ============================================
    RESPONSIVE — the mobile drawer
    Below the mobile breakpoint (768px — design.md's Breakpoints section
    is the authoritative home) the rail leaves the layout entirely and
@@ -510,6 +743,10 @@
        hides every painted box in one property, whatever the variant;
        the open drawer below restores it. */
     visibility: hidden;
+  }
+
+  .ds-app-sidebar__panel {
+    display: none;
   }
 
   .ds-app-sidebar__mobile-trigger {

@@ -2,7 +2,7 @@
 
 A flat world map from Natural Earth land shapes: token-coloured continents, framed bounds, and colour-carrying markers.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.0.1. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.1.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: maps
 - Import: `import { WorldMap } from 'rift-ds';`

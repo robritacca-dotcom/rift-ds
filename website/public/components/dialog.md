@@ -2,7 +2,7 @@
 
 A general-purpose modal for focused tasks, with sizes, an optional footer, and full focus management.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.0.1. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.1.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: overlays
 - Import: `import { Dialog } from 'rift-ds';`

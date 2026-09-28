@@ -98,6 +98,9 @@ name: Release
 # 1.0.1 shipped 2026-09-26 — the README banner as an absolute URL, so the
 #   npm package page renders it. No code change. First release published
 #   over OIDC with no token anywhere.
+# 1.1.0 shipped 2026-09-27 — mobile app navigation (BottomNav, TopAppBar,
+#   each in Rift, iOS and Android styles), SidebarPanel and AppSidebar's third
+#   level, and screen-reader names on charts, Nav and Stepper.
 
 on:
   workflow_dispatch:

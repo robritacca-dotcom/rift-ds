@@ -44,7 +44,9 @@ export interface StepperProps
  * connectors: completed steps show a check, the active step carries
  * `aria-current="step"`, and upcoming steps show their number.
  *
- * Forwards a ref to the `<ol>` and spreads unrecognised props onto it.
+ * The list is labelled "Progress" by default; pass `aria-label` to name it
+ * for its flow. Forwards a ref to the `<ol>` and spreads unrecognised props
+ * onto it.
  */
 export const Stepper = React.forwardRef<HTMLOListElement, StepperProps>(
   (
@@ -69,7 +71,7 @@ export const Stepper = React.forwardRef<HTMLOListElement, StepperProps>(
       .join(' ');
 
     return (
-      <ol {...rest} ref={ref} className={classes}>
+      <ol aria-label="Progress" {...rest} ref={ref} className={classes}>
         {steps.map((step, index) => {
           const status =
             index < activeStep

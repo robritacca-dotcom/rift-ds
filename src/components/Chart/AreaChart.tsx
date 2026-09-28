@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useId } from 'react';
 import {
   AreaChart as RechartsAreaChart,
   Area,
@@ -106,6 +106,8 @@ export const AreaChart = ({
   bare = false,
   className = '',
 }: AreaChartProps) => {
+  const titleId = useId();
+  const subtitleId = useId();
   const baseClass = 'ds-chart';
   const classes = [baseClass, bare ? `${baseClass}--bare` : '', className]
     .filter(Boolean)
@@ -122,12 +124,17 @@ export const AreaChart = ({
   );
 
   return (
-    <div className={classes}>
+    <div
+      className={classes}
+      role="figure"
+      aria-labelledby={title ? titleId : undefined}
+      aria-describedby={subtitle ? subtitleId : undefined}
+    >
       {(title || subtitle || summaryItems) && (
         <div className={`${baseClass}__header`}>
           <div className={`${baseClass}__header-text`}>
-            {title && <h3 className={`${baseClass}__title`}>{title}</h3>}
-            {subtitle && <p className={`${baseClass}__subtitle`}>{subtitle}</p>}
+            {title && <h3 id={titleId} className={`${baseClass}__title`}>{title}</h3>}
+            {subtitle && <p id={subtitleId} className={`${baseClass}__subtitle`}>{subtitle}</p>}
           </div>
           {summaryItems && summaryItems.length > 0 && (
             <div className={`${baseClass}__summary`}>

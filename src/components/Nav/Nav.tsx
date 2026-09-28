@@ -2,7 +2,8 @@ import React from 'react';
 import { ButtonGroup, type ButtonGroupProps } from '../ButtonGroup/ButtonGroup';
 import './Nav.css';
 
-export interface NavProps {
+/** Props owned by Nav itself — everything else falls through to the `<nav>`. */
+type NavOwnProps = {
   /** Brand/logo text */
   brandText?: string;
   /** Brand icon element (img, svg, etc.) */
@@ -13,11 +14,19 @@ export interface NavProps {
   trailing?: React.ReactNode;
   /** Additional CSS classes */
   className?: string;
-}
+};
+
+export interface NavProps
+  extends NavOwnProps,
+    Omit<React.ComponentPropsWithoutRef<'nav'>, keyof NavOwnProps> {}
 
 /**
  * Nav component from Figma design system
- * Renders a horizontal navigation bar using ButtonGroup
+ * Renders a horizontal navigation bar using ButtonGroup.
+ *
+ * The landmark is labelled "Main" by default so assistive tech can tell it
+ * apart from any other navigation on the page; pass `aria-label` to name it
+ * differently. Unrecognised props are spread onto the `<nav>`.
  */
 export const Nav = ({
   brandText,
@@ -25,11 +34,12 @@ export const Nav = ({
   buttons,
   trailing,
   className = '',
+  ...rest
 }: NavProps) => {
   const baseClass = 'ds-nav';
 
   return (
-    <nav className={`${baseClass} ${className}`}>
+    <nav aria-label="Main" {...rest} className={`${baseClass} ${className}`}>
       {(brandText || brandIcon) && (
         <div className={`${baseClass}__brand`}>
           {brandIcon && (

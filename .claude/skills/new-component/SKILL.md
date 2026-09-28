@@ -57,7 +57,7 @@ Use this skill any time you are asked to add or create a new component to the de
    };
    ```
 
-4. **Spread `{...rest}` onto that same node**, placed *first* so the component's own attributes win. This is what makes `data-testid`, `aria-*`, `autoComplete`, `maxLength` and form-library registration work.
+4. **Spread `{...rest}` onto that same node**, placed *before* the component's own attributes so those win; a consumer-overridable default (a landmark's `aria-label`) goes before the spread instead, so a passed value wins (see Accessibility below). This is what makes `data-testid`, `aria-*`, `autoComplete`, `maxLength` and form-library registration work.
 
 5. **Event handlers keep native React signatures.** `onChange` must be `React.ChangeEventHandler`, never `(value: string) => void` — that shape breaks react-hook-form, Formik and TanStack Form. Put the convenience callback under a name matching the value's shape, and fire both:
 
@@ -102,6 +102,17 @@ Two details worth knowing before you reach for it:
 - `htmlFor` only associates with **labelable** elements (input, select, textarea, button…). If your control is a composite built from a `div` — a `role="combobox"` trigger, say — point `aria-labelledby` at `` `${id}-label` `` instead, which is the id Field puts on its label.
 - Content that belongs *opposite* the helper text (a character counter, a unit) goes in Field's `aside` prop, not a hand-rolled footer.
 
+### Accessibility — what axe will not catch
+
+The story tests run axe in `'error'` mode, but axe only catches roughly a third of WCAG issues, and it passes every rule below while a screen-reader user hears the wrong thing. Write each one in from the start:
+
+- **Everything the eye is told, the ear is told.** When a visual mark is `aria-hidden` (a badge, a check, a status dot, an icon standing for a state), its meaning needs a text equivalent: a visually hidden span or a suffix on the owning control's label. Cover **every shape the prop accepts**. A `badge?: number | true` that announces the count but not the dot is the classic miss, and so is a step indicator whose "complete" check is hidden with nothing said in its place.
+- **Name every landmark and every named-content region.** A `<nav>`, an `<aside>`, a labelled list of steps, a figure: each gets an accessible name, because a page with two unnamed navs gives a screen-reader user two identical entries. Prefer `aria-labelledby` pointing at the component's own visible heading (ids from `useId()`, never hard-coded, so two instances cannot collide) and `aria-describedby` at its subtitle. When there is no visible heading, set a sensible default `aria-label`.
+- **Every default label is overridable, by the consumer's own attribute.** Write the default *before* `{...rest}` (`<nav aria-label="Main" {...rest}>`), so a passed `aria-label` wins with no extra prop. A string the component writes itself and the consumer cannot reach (an overflow button's "More", a close button's "Close") needs a prop of its own, named for the control (`navigationLabel`, `overflowLabel`): hard-coded English cannot be localised.
+- **A shape the type accepts is never silently dropped.** When one prop type feeds two renderings (inline actions and an overflow menu, say), check that every field survives both. If a sub-surface cannot honour a field (a menu row that cannot be a link, a row that draws no badge), narrow that surface's type with `Omit<>` so the compiler says so. A JSDoc "ignored in the menu" note still ships a trap.
+- **Hidden copies leave the accessibility tree.** A duplicate kept for animation (a collapsing title, a cross-fade) is `aria-hidden` while it is the invisible one, and a region collapsed or minimised out of view is `inert` so its controls leave the tab order too. Exactly one copy of any text is announced at a time.
+- **Native semantics first, ARIA second, and never ARIA for coverage.** `/foundations/accessibility` counts components whose source declares ARIA or an accessible name, and those counts are regex reads, not a target. A `<table>`, `<blockquote>` or heading needs nothing added, and an `aria-label` on a plain `div` or `span` is prohibited by ARIA 1.2. If the component is correct with no ARIA, leave it with none.
+
 ### File 2: `ComponentName.css`
 - CSS custom properties exclusively — **no hardcoded hex colours**, no raw `rgb()`/`rgba()`
 - Icons are sized by setting `--icon-size` on the icon element to a step from the `--icon-size-*` scale (`src/tokens/registry.json` is the list) — never `font-size` or raw pixel dimensions on an icon
@@ -123,6 +134,8 @@ Two details worth knowing before you reach for it:
 - A component whose contract is *behavior* (dismissal, focus, keyboard) gets a `play` function asserting it — `Dialog.stories.tsx` is the reference (stories run as tests, so the assertion is CI). End the play in the component's resting state so snapshots stay stable
 
 4. **Pass design QA before registering.** Invoke the `design-qa` skill on the new component (its "Inside new-component" section defines gate mode): render every story in both themes, magnify the joins, corners, and states, line the component up against its nearest rendered siblings, and loop on fixes until a full pass yields no defect or polish findings. One mechanical note for this pass: `npm run storybook` cannot cold-start here, because its `prestorybook` hook runs the `validate-registry` chain, which correctly fails on the still-unregistered folder — use a Storybook that is already running, or start the `storybook-raw` configuration in `.claude/launch.json` (port 6016; it invokes Storybook directly, bypassing the `prestorybook` hook, and exists for exactly this pre-registration case). Fold any open direction calls into the hand-off in step 7. Rendering correctly is necessary and nowhere near sufficient — this step is where "the buttons aren't good enough" gets caught without anyone having to say it.
+
+   The same gate has an accessibility half, run on the rendered stories rather than the source. For every story, list what assistive tech is actually given: each landmark with its name, each interactive element with its accessible name and state (`aria-current`, `aria-expanded`), and any text inside `aria-hidden` or `inert` regions. A short script in the browser that queries `nav, aside, [role], a, button` and reads `aria-label`, `aria-labelledby`, `innerText` and `closest('[inert]')` produces that list. Check it against the Accessibility rules under File 1. Every state a story shows must appear in the list, and no text may appear twice. Then run the `accessibility-audit` skill's structural audit (its step 3, the **[manual]** items) on the component. Fix and re-list until both are clean. A behaviour the list proves (a badge announced, a hidden copy muted) is worth a `play` assertion, so that it stays proven in CI.
 
 5. **Register the component** in `src/components/registry.json` — add an **object** to the `components` array (alphabetical by `name`):
 

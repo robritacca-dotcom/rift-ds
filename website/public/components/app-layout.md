@@ -18,6 +18,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.0.1. The same data
 | profile | `AppSidebarProfile` | no |  | Sidebar profile |
 | activeKey | `string` | no |  | Active nav item key |
 | activeSubKey | `string` | no |  | Active sub-item key |
+| activeTertiaryKey | `string` | no |  | Active third-level item key, listed in the sidebar's side panel |
+| subNav | `"accordion" \| "panel"` | no |  | Where sub-items show: the sidebar's accordion, or straight into its side panel (see AppSidebar) |
 | defaultExpanded | `boolean` | no | `true` | Whether sidebar starts expanded |
 | logoText | `string` | no |  | Logo text next to icon |
 | logo | `ReactNode` | no |  | Custom logo element |

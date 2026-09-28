@@ -1,6 +1,6 @@
 # App sidebar
 
-Collapsible navigation rail with accordion sub-items, category headings, and profile section.
+Collapsible navigation rail with accordion sub-items, a side panel for a third level, category headings, and a profile section.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.0.1. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
@@ -18,6 +18,11 @@ Generated from the rift-ds registry and prop JSDoc, version 1.0.1. The same data
 | profile | `AppSidebarProfile` | no |  | Profile data for the bottom section |
 | activeKey | `string` | no |  | Key of the currently active item |
 | activeSubKey | `string` | no |  | Key of the currently active sub-item |
+| activeTertiaryKey | `string` | no |  | Key of the currently active third-level item, listed in the side panel |
+| subNav | `"accordion" \| "panel"` | no | `accordion` | Where an item's sub-items show. `accordion` (the default) opens them under the row, and a sub-item's own children open in a side panel as level 3. `panel` skips the accordion: a top-level item opens its sub-items straight into the side panel, with their children as the panel's accordion, and the collapsed rail shows each label under its icon. On small screens both modes drill in inside the drawer instead. |
+| defaultPanelOpen | `boolean` | no | `true` | Whether the side panel starts open when there is one to show |
+| panelOpen | `boolean` | no |  | Controlled open state of the side panel |
+| onPanelOpenChange | `((open: boolean) => void)` | no |  | Called when the side panel opens or collapses |
 | defaultExpanded | `boolean` | no | `false` | Whether sidebar starts expanded |
 | expanded | `boolean` | no |  | Controlled expanded state |
 | onExpandedChange | `((expanded: boolean) => void)` | no |  | Callback when expand/collapse changes |

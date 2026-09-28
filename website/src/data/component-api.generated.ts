@@ -699,6 +699,18 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Active sub-item key"
           },
           {
+            "name": "activeTertiaryKey",
+            "type": "string",
+            "required": false,
+            "description": "Active third-level item key, listed in the sidebar's side panel"
+          },
+          {
+            "name": "subNav",
+            "type": "\"accordion\" | \"panel\"",
+            "required": false,
+            "description": "Where sub-items show: the sidebar's accordion, or straight into its side panel (see AppSidebar)"
+          },
+          {
             "name": "defaultExpanded",
             "type": "boolean",
             "required": false,
@@ -746,7 +758,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "App sidebar",
     "slug": "app-sidebar",
     "category": "layout",
-    "description": "Collapsible navigation rail with accordion sub-items, category headings, and profile section.",
+    "description": "Collapsible navigation rail with accordion sub-items, a side panel for a third level, category headings, and a profile section.",
     "client": true,
     "importPath": "rift-ds/components/AppSidebar/AppSidebar",
     "barrel": "main",
@@ -777,6 +789,38 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Key of the currently active sub-item"
+          },
+          {
+            "name": "activeTertiaryKey",
+            "type": "string",
+            "required": false,
+            "description": "Key of the currently active third-level item, listed in the side panel"
+          },
+          {
+            "name": "subNav",
+            "type": "\"accordion\" | \"panel\"",
+            "required": false,
+            "description": "Where an item's sub-items show. `accordion` (the default) opens them under\nthe row, and a sub-item's own children open in a side panel as level 3.\n`panel` skips the accordion: a top-level item opens its sub-items straight\ninto the side panel, with their children as the panel's accordion, and the\ncollapsed rail shows each label under its icon. On small screens both\nmodes drill in inside the drawer instead.",
+            "defaultValue": "accordion"
+          },
+          {
+            "name": "defaultPanelOpen",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the side panel starts open when there is one to show",
+            "defaultValue": "true"
+          },
+          {
+            "name": "panelOpen",
+            "type": "boolean",
+            "required": false,
+            "description": "Controlled open state of the side panel"
+          },
+          {
+            "name": "onPanelOpenChange",
+            "type": "((open: boolean) => void)",
+            "required": false,
+            "description": "Called when the side panel opens or collapses"
           },
           {
             "name": "defaultExpanded",
@@ -1242,6 +1286,82 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes on the wrapper",
+            "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "BottomNav",
+    "label": "Bottom nav",
+    "slug": "bottom-nav",
+    "category": "navigation",
+    "description": "Mobile tab bar for three to five destinations, in the Rift style or as iOS Liquid Glass or Material 3 Expressive.",
+    "client": true,
+    "importPath": "rift-ds/components/BottomNav/BottomNav",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "BottomNav",
+        "props": [
+          {
+            "name": "items",
+            "type": "BottomNavItem[]",
+            "required": true,
+            "description": "Destinations, three to five of them"
+          },
+          {
+            "name": "activeKey",
+            "type": "string",
+            "required": false,
+            "description": "Key of the destination for the current page"
+          },
+          {
+            "name": "onValueChange",
+            "type": "((key: string) => void)",
+            "required": false,
+            "description": "Called with a destination's key when it is pressed"
+          },
+          {
+            "name": "platform",
+            "type": "\"default\" | \"ios\" | \"android\"",
+            "required": false,
+            "description": "Which platform's tab bar to draw. `default` is the Rift bar; `ios` is the\niOS 26 Liquid Glass capsule floating over content with a sliding lens\nbehind the selection; `android` is the Material 3 Expressive navigation\nbar with a pill indicator behind the selected icon.",
+            "defaultValue": "default"
+          },
+          {
+            "name": "search",
+            "type": "BottomNavSearch",
+            "required": false,
+            "description": "A destination set apart from the rest, search unless its `icon` says\notherwise. On iOS it is its own glass circle beside the bar; elsewhere it\njoins the bar as the last destination."
+          },
+          {
+            "name": "minimized",
+            "type": "boolean",
+            "required": false,
+            "description": "iOS only: shrinks the bar to the selected destination alone, the way the\nsystem bar minimises while the page scrolls down. Ignored on other platforms.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "fixed",
+            "type": "boolean",
+            "required": false,
+            "description": "Pins the bar to the bottom of the viewport, above the home-indicator safe area",
+            "defaultValue": "false"
+          },
+          {
+            "name": "aria-label",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the navigation landmark. Defaults to \"Tabs\", distinct\nfrom Nav's \"Main\", so a screen carrying both announces two different navs",
+            "defaultValue": "Tabs"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
             "defaultValue": ""
           }
         ]
@@ -7609,6 +7729,73 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "name": "SidebarPanel",
+    "label": "Sidebar panel",
+    "slug": "sidebar-panel",
+    "category": "layout",
+    "description": "Secondary navigation column listing one section's pages, with group headings and one level of accordion nesting.",
+    "client": true,
+    "importPath": "rift-ds/components/SidebarPanel/SidebarPanel",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "SidebarPanel",
+        "props": [
+          {
+            "name": "items",
+            "type": "SidebarPanelItem[]",
+            "required": true,
+            "description": "Items to list, optionally grouped with `group` and nested one level with `children`"
+          },
+          {
+            "name": "title",
+            "type": "string",
+            "required": false,
+            "description": "Heading at the top of the panel, usually the label of the item that opened it. Also the panel's accessible name"
+          },
+          {
+            "name": "activeKey",
+            "type": "string",
+            "required": false,
+            "description": "Key of the item for the current page. Its accordion parent starts open"
+          },
+          {
+            "name": "defaultOpenKeys",
+            "type": "string[]",
+            "required": false,
+            "description": "Keys of the accordion rows open on first render, in addition to the active item's parent"
+          },
+          {
+            "name": "onCollapse",
+            "type": "(() => void)",
+            "required": false,
+            "description": "Renders a collapse button beside the heading and calls this when it is pressed"
+          },
+          {
+            "name": "onBack",
+            "type": "(() => void)",
+            "required": false,
+            "description": "Renders a back row above the heading and calls this when it is pressed; the drill-in navigation on small screens"
+          },
+          {
+            "name": "backLabel",
+            "type": "string",
+            "required": false,
+            "description": "Label of the back row",
+            "defaultValue": "Back"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
     "name": "Skeleton",
     "label": "Skeleton",
     "slug": "skeleton",
@@ -9780,6 +9967,127 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Delay before hiding (in ms)",
             "defaultValue": "150"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "TopAppBar",
+    "label": "Top app bar",
+    "slug": "top-app-bar",
+    "category": "navigation",
+    "description": "Mobile screen header with a menu or back button, title, and actions, in Rift, iOS, or Android style, collapsing on scroll.",
+    "client": true,
+    "importPath": "rift-ds/components/TopAppBar/TopAppBar",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "TopAppBar",
+        "props": [
+          {
+            "name": "title",
+            "type": "string",
+            "required": true,
+            "description": "The screen's title"
+          },
+          {
+            "name": "subtitle",
+            "type": "string",
+            "required": false,
+            "description": "A second line under the title, e.g. a count or a date range"
+          },
+          {
+            "name": "platform",
+            "type": "\"default\" | \"ios\" | \"android\"",
+            "required": false,
+            "description": "Which platform's bar to draw. `default` is the Rift bar; `ios` is the iOS\n26 navigation bar, with glass circle buttons over content and a soft\nblurred edge; `android` is the Material 3 Expressive top app bar.",
+            "defaultValue": "default"
+          },
+          {
+            "name": "size",
+            "type": "\"small\" | \"large\" | \"medium\"",
+            "required": false,
+            "description": "`small` puts the title in the bar. `medium` and `large` add an expanded\ntitle under it that collapses into the bar as the page scrolls; on iOS\nboth are the large title.",
+            "defaultValue": "small"
+          },
+          {
+            "name": "align",
+            "type": "\"center\" | \"start\"",
+            "required": false,
+            "description": "Title alignment in the bar. Defaults to centred on iOS and to the start edge elsewhere"
+          },
+          {
+            "name": "navigation",
+            "type": "\"menu\" | \"back\" | \"close\"",
+            "required": false,
+            "description": "The leading control: a menu button, a back button, or a close button"
+          },
+          {
+            "name": "onNavigate",
+            "type": "(() => void)",
+            "required": false,
+            "description": "Called when the leading control is pressed"
+          },
+          {
+            "name": "navigationLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible label of the leading control; defaults to \"Open menu\", \"Back\" or \"Close\""
+          },
+          {
+            "name": "actions",
+            "type": "TopAppBarAction[]",
+            "required": false,
+            "description": "Trailing actions. The first three show as icon buttons; any more join the\noverflow menu, ahead of `overflowActions`, where they render as plain rows\n(a menu row draws no badge and routes from `onClick`, not `href`)",
+            "defaultValue": "[]"
+          },
+          {
+            "name": "overflowActions",
+            "type": "TopAppBarOverflowAction[]",
+            "required": false,
+            "description": "Actions listed in a menu behind a trailing \"More\" button",
+            "defaultValue": "[]"
+          },
+          {
+            "name": "overflowLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible label of the button that opens the overflow menu",
+            "defaultValue": "More"
+          },
+          {
+            "name": "scrolled",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether content has scrolled under the bar, which collapses an expanded\ntitle and switches the bar to its scrolled surface. Leave unset to have\nthe bar watch `scrollTarget` itself."
+          },
+          {
+            "name": "scrollTarget",
+            "type": "HTMLElement | null",
+            "required": false,
+            "description": "The element whose scroll the bar watches when `scrolled` is unset. Defaults to the window"
+          },
+          {
+            "name": "headingLevel",
+            "type": "5 | 2 | 3 | 1 | 6 | 4",
+            "required": false,
+            "description": "Level of the title's heading element",
+            "defaultValue": "1"
+          },
+          {
+            "name": "sticky",
+            "type": "boolean",
+            "required": false,
+            "description": "Keeps the bar stuck to the top of its scroll container",
+            "defaultValue": "true"
           },
           {
             "name": "className",

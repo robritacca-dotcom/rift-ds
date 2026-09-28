@@ -73,7 +73,7 @@
       "name": "app-sidebar",
       "type": "registry:ui",
       "title": "App sidebar",
-      "description": "Collapsible navigation rail with accordion sub-items, category headings, and profile section."
+      "description": "Collapsible navigation rail with accordion sub-items, a side panel for a third level, category headings, and a profile section."
     },
     {
       "name": "area-chart",
@@ -110,6 +110,12 @@
       "type": "registry:ui",
       "title": "Bar chart",
       "description": "Vertical bars for comparing values across categories or time, with summary stats and tooltips."
+    },
+    {
+      "name": "bottom-nav",
+      "type": "registry:ui",
+      "title": "Bottom nav",
+      "description": "Mobile tab bar for three to five destinations, in the Rift style or as iOS Liquid Glass or Material 3 Expressive."
     },
     {
       "name": "breadcrumb",
@@ -610,6 +616,12 @@
       "description": "An ambient WebGL2 field of soft light sources that sample colour tokens, with a reported fallback status."
     },
     {
+      "name": "sidebar-panel",
+      "type": "registry:ui",
+      "title": "Sidebar panel",
+      "description": "Secondary navigation column listing one section's pages, with group headings and one level of accordion nesting."
+    },
+    {
       "name": "skeleton",
       "type": "registry:ui",
       "title": "Skeleton",
@@ -776,6 +788,12 @@
       "type": "registry:ui",
       "title": "Tooltip",
       "description": "Contextual text label that appears on hover or focus with position and delay options."
+    },
+    {
+      "name": "top-app-bar",
+      "type": "registry:ui",
+      "title": "Top app bar",
+      "description": "Mobile screen header with a menu or back button, title, and actions, in Rift, iOS, or Android style, collapsing on scroll."
     },
     {
       "name": "tree-view",

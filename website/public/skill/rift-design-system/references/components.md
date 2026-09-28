@@ -870,7 +870,7 @@ Binary on/off toggle control with sliding thumb and check indicator, used for se
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/toggle-switch.md
 
-## Layout (7)
+## Layout (8)
 
 Page scaffolding: app shells, sidebars, dividers, and section headings.
 
@@ -884,7 +884,7 @@ Full-page template pairing the collapsible App sidebar with a centred content ar
 
 ### App sidebar
 
-Collapsible navigation rail with accordion sub-items, category headings, and profile section.
+Collapsible navigation rail with accordion sub-items, a side panel for a third level, category headings, and a profile section.
 
 - Import: `import { AppSidebar } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
@@ -913,6 +913,14 @@ Heading with a divider line and optional trailing content for organising page se
 - Import: `import { SectionTitle } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/section-title.md
+
+### Sidebar panel
+
+Secondary navigation column listing one section's pages, with group headings and one level of accordion nesting.
+
+- Import: `import { SidebarPanel } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/sidebar-panel.md
 
 ### Split pane
 
@@ -966,7 +974,7 @@ A flat world map from Natural Earth land shapes: token-coloured continents, fram
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/world-map.md
 
-## Navigation (7)
+## Navigation (9)
 
 Top bars, breadcrumbs, tabs, steppers, and pagination for moving through a product.
 
@@ -977,6 +985,14 @@ An on-page list of anchor links that tracks the reader's position and jumps betw
 - Import: `import { AnchorNav } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/anchor-nav.md
+
+### Bottom nav
+
+Mobile tab bar for three to five destinations, in the Rift style or as iOS Liquid Glass or Material 3 Expressive.
+
+- Import: `import { BottomNav } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/bottom-nav.md
 
 ### Breadcrumb
 
@@ -1025,6 +1041,14 @@ Tab navigation with underline indicator, icon support, compact size, and full-wi
 - Import: `import { Tabs } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/tabs.md
+
+### Top app bar
+
+Mobile screen header with a menu or back button, title, and actions, in Rift, iOS, or Android style, collapsing on scroll.
+
+- Import: `import { TopAppBar } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/top-app-bar.md
 
 ## Overlays (10)
 

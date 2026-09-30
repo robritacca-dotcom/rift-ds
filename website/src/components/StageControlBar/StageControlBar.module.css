@@ -1,17 +1,33 @@
 /* The stages' bottom pill: the architecture maps' zoom-controls glass,
-   fixed to the viewport's bottom centre. Sits above the stage content and
-   the floating side panels, below every overlay surface. */
+   fixed to the bottom centre of the stage's workspace. Sits above the
+   stage content and the floating side panels, below every overlay surface.
+
+   The workspace is the viewport less whatever floats at its sides, so a
+   host declares those on an ancestor: --stage-bar-start (how far the left
+   panel reaches in) and --stage-bar-end (the right one). The pill centres
+   between them, which is the viewport's centre shifted by half their
+   difference; with neither declared it is the viewport's centre. */
 .bar {
   position: fixed;
   bottom: var(--layout-chat-inset);
-  left: 50%;
+  left: calc(
+    50% + (var(--stage-bar-start, 0px) - var(--stage-bar-end, 0px)) / 2
+  );
   transform: translateX(-50%);
   z-index: 25;
   display: flex;
   align-items: center;
   gap: var(--gap-200);
-  padding: var(--padding-100) var(--padding-150);
-  border-radius: var(--radius-pill);
+  /* One inset all round, so the corner can be concentric on every side. */
+  padding: var(--padding-100);
+  /* Concentric with what it holds: the bar's controls are pill-shaped
+     tracks (SegmentedControl's corner is the pill plus its own padding
+     and hairline), so the bar's curve is that corner plus the bar's
+     padding and hairline again. A theme that squares the pill token
+     squares all three curves in step; at the shipped pill they saturate. */
+  border-radius: calc(
+    var(--radius-pill) + (var(--padding-100) + var(--border-025)) * 2
+  );
   background: var(--color-bg-glass);
   backdrop-filter: blur(24px);
   border: var(--border-025) solid var(--color-bg-container-border);

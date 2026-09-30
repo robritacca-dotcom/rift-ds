@@ -1,0 +1,74 @@
+/* The Dashboard view borrows the Chat view's stage (ChatView.module.css:
+   the safe-zone fit, the grips, the readout, the bezel). The dashboard
+   wears the chat widget's card edge (hairline, radius, floating shadow)
+   around an app on its own page floor rather than the widget's glass. */
+
+.board {
+  display: flex;
+  /* Below this the dashboard's own phone layout takes over, which the
+     Mobile stage shows properly. */
+  min-width: 360px;
+  min-height: 480px;
+  /* The wide wall: the browser's width less the one panel and the padding
+     ring either side (the dashboard layout seats a single panel, where the
+     chat layout seats two). */
+  max-width: calc(
+    100vw - var(--rail-width, 0px) - var(--rail-inset, 0px) -
+      var(--stage-safe-pad, var(--layout-chat-inset)) * 2
+  );
+  max-height: calc(100dvh - var(--chat-clearance));
+  /* The chat widget's card edge, so the two stages read as one family. */
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
+  box-shadow: var(--shadow-floating);
+  overflow: hidden;
+  transition:
+    width var(--motion-duration-base) var(--motion-ease-standard),
+    height var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+/* A drag tracks the pointer, and the frame gives up the pointer so a fast
+   drag over it never loses the grip to the page inside. */
+.boardResizing {
+  transition: none;
+}
+
+.boardResizing .frame {
+  pointer-events: none;
+}
+
+.frame {
+  display: block;
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  opacity: 0;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.frameReady {
+  opacity: 1;
+}
+
+/* In the bezel the app owns the screen's floor, as a phone's app does. */
+.deviceScreen {
+  background: var(--color-bg-page-primary);
+}
+
+/* The app between the OS strips. */
+.deviceApp {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+@media (max-width: 1099px) {
+  /* A phone IS the mobile stage: the app fills the column, like the chat
+     widget does there. */
+  .board {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+}

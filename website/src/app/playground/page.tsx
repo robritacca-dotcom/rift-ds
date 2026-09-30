@@ -54,6 +54,7 @@ import ChatView, {
 } from "./views/ChatView";
 import MockNav from "./views/MockNav";
 import TypeView from "./views/TypeView";
+import DashboardView from "./views/DashboardView";
 import { stageMobileCss } from "./stage-mobile-css";
 import { createSimTransport } from "@/lib/chat-sim";
 import { createFetchTransport } from "@/lib/chat-transport";
@@ -74,13 +75,14 @@ import ChartsSection from "./sections/ChartsSection";
 import OverlaysSection from "./sections/OverlaysSection";
 import FeedbackSection from "./sections/FeedbackSection";
 
-/* The tool's three lenses on the same theme state. One page, one set of
+/* The tool's four lenses on the same theme state. One page, one set of
    levers — switching views never resets what you've styled. */
-type View = "components" | "type" | "chat";
+type View = "components" | "type" | "chat" | "dashboard";
 const VIEWS = [
-  { value: "components", label: "Components", icon: "widgets" },
-  { value: "type", label: "Type", icon: "text_fields" },
-  { value: "chat", label: "Chat", icon: "chat_bubble" },
+  { value: "components", label: "Components" },
+  { value: "type", label: "Type" },
+  { value: "chat", label: "Chat" },
+  { value: "dashboard", label: "Dashboard" },
 ];
 
 /* Below the tool's desktop breakpoint there is no room for the edge
@@ -140,7 +142,7 @@ export default function PlaygroundPage() {
     // MegaNav's navigation effect).
     const q = new URLSearchParams(window.location.search).get("view");
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (q === "chat" || q === "type") setView(q);
+    if (q === "chat" || q === "type" || q === "dashboard") setView(q);
   }, []);
   const pickView = (value: string) => {
     setView(value as View);
@@ -212,7 +214,10 @@ export default function PlaygroundPage() {
      stage-aware grids — so Mobile shows what a phone actually renders.
      On a compact screen the real queries fire and the stage stands
      down; the Chat view reads the lever as its widget preset instead. */
-  const stageMobile = view !== "chat" && stageSize === "mobile" && !compact;
+  /* The Dashboard view reads the lever too, but as which template to stage
+     (the phone version draws its own handset), not as a column width. */
+  const stageMobile =
+    view !== "chat" && view !== "dashboard" && stageSize === "mobile" && !compact;
   const stageCss = stageMobile ? stageMobileCss() : "";
   const [controlsOpen, setControlsOpen] = useState(false);
   const [advOpen, setAdvOpen] = useState(false);
@@ -751,7 +756,7 @@ export default function PlaygroundPage() {
       />
 
       {/* Not the site's full navigation — a full-screen view's floating
-          toolbar pill: brand mark, breadcrumb trail, the view tabs, and
+          toolbar pill: brand mark, breadcrumb trail, the view pills, and
           the X out. (Footer and the site chat still skip this route.) */}
       <StageToolbar
         tabs={VIEWS}
@@ -759,56 +764,6 @@ export default function PlaygroundPage() {
         onTabChange={pickView}
         switchLabel="Switch the playground view"
       />
-
-      {/* The stage's own instruments, in the bottom control bar — the
-          normalized set every immersive surface shares: the theme flip
-          (the immersive format drops the header that carried it) and the
-          desktop/mobile stage switch, then this stage's extras. */}
-      <StageControlBar label="Stage controls">
-        <StageThemeFlip />
-        {/* Desktop rides the stage-size switch and inspect mode beside the
-            flip (a phone IS the mobile preset, and inspection is a hover
-            interaction); compact screens carry the Drawer summons instead,
-            so the bar and the old floating pill can never collide. */}
-        {compact ? (
-          <>
-            <StageControlBarSeparator />
-            <Button
-              label="Theme controls"
-              variant="primary"
-              size="compact"
-              iconLeft="tune"
-              onClick={() => setControlsOpen(true)}
-            />
-          </>
-        ) : (
-          <>
-            <StageControlBarSeparator />
-            <SegmentedControl
-              segments={[
-                { value: "desktop", label: "Desktop", icon: "desktop_windows" },
-                { value: "mobile", label: "Mobile", icon: "smartphone" },
-              ]}
-              activeSegment={stageSize}
-              onSegmentChange={(value) => {
-                /* A manual drag is a size of its own — switching the stage
-                   size discards it rather than resizing around it. */
-                setStageSize(value as StageSize);
-                setChatManual({});
-              }}
-              size="compact"
-              ariaLabel="Stage size"
-            />
-            <StageControlBarSeparator />
-            {/* Inspect mode — hover any staged component to see which
-                tokens its computed styles resolve from, including the
-                levers' live overrides, re-read as they land. */}
-            <StageControlBarEndSlot>
-              <InspectMode desktopOnly />
-            </StageControlBarEndSlot>
-          </>
-        )}
-      </StageControlBar>
 
       {/* One provider around the whole layout: the theme drawer, the chat
           director's rail, and the stage all direct the same conversation,
@@ -819,10 +774,64 @@ export default function PlaygroundPage() {
         className={[
           styles.dsLayout,
           view === "chat" && !compact ? styles.dsLayoutChat : "",
+          view === "dashboard" ? styles.dsLayoutDashboard : "",
         ]
           .filter(Boolean)
           .join(" ")}
       >
+        {/* Inside the layout so the bar reads the panel geometry the
+            layout declares (--stage-bar-start/-end) and centres on the
+            workspace between the floating panels. */}
+        {/* The stage's own instruments, in the bottom control bar — the
+            normalized set every immersive surface shares: the theme flip
+            (the immersive format drops the header that carried it) and the
+            desktop/mobile stage switch, then this stage's extras. */}
+        <StageControlBar label="Stage controls">
+          <StageThemeFlip />
+          {/* Desktop rides the stage-size switch and inspect mode beside the
+              flip (a phone IS the mobile preset, and inspection is a hover
+              interaction); compact screens carry the Drawer summons instead,
+              so the bar and the old floating pill can never collide. */}
+          {compact ? (
+            <>
+              <StageControlBarSeparator />
+              <Button
+                label="Theme controls"
+                variant="primary"
+                size="compact"
+                iconLeft="tune"
+                onClick={() => setControlsOpen(true)}
+              />
+            </>
+          ) : (
+            <>
+              <StageControlBarSeparator />
+              <SegmentedControl
+                segments={[
+                  { value: "desktop", label: "Desktop", icon: "desktop_windows" },
+                  { value: "mobile", label: "Mobile", icon: "smartphone" },
+                ]}
+                activeSegment={stageSize}
+                onSegmentChange={(value) => {
+                  /* A manual drag is a size of its own — switching the stage
+                     size discards it rather than resizing around it. */
+                  setStageSize(value as StageSize);
+                  setChatManual({});
+                }}
+                size="compact"
+                ariaLabel="Stage size"
+              />
+              <StageControlBarSeparator />
+              {/* Inspect mode — hover any staged component to see which
+                  tokens its computed styles resolve from, including the
+                  levers' live overrides, re-read as they land. */}
+              <StageControlBarEndSlot>
+                <InspectMode desktopOnly />
+              </StageControlBarEndSlot>
+            </>
+          )}
+        </StageControlBar>
+
         {/* The control panel floats where the nav sidebar sits on doc pages */}
         {compact ? (
           <>
@@ -892,6 +901,7 @@ export default function PlaygroundPage() {
                as its widget preset, so the views agree on what the bar's
                Desktop/Mobile means. */
             stageMobile ? styles.dsContentMobile : "",
+            view === "dashboard" ? styles.dsContentDashboard : "",
           ]
             .filter(Boolean)
             .join(" ")}
@@ -947,6 +957,17 @@ export default function PlaygroundPage() {
               stage flag re-reads the labels when the phone step-down
               lands, since no root mutation or resize announces it. */}
           {view === "type" && <TypeView stageMobile={stageMobile} />}
+
+          {/* The Dashboard view: the marketing dashboard template, live in
+              a frame that mirrors the levers, on the Chat view's stage.
+              Desktop/Mobile picks the app or its phone version in the
+              bezel; a phone always gets the phone version, bare. */}
+          {view === "dashboard" && (
+            <DashboardView
+              template={compact ? "mobile" : stageSize}
+              device={!compact && stageSize === "mobile"}
+            />
+          )}
 
           {/* The Chat view: the widget on its stage, same levers, plus the
               chat director's rail on the right. */}

@@ -15,6 +15,9 @@
   /* Where the floating panels stand in from each side — the stage
      widget's hard width wall. Read by ChatView.module.css. */
   --stage-walls: calc((var(--rail-width) + var(--rail-inset)) * 2);
+  /* The bottom control bar centres on the workspace, not the viewport:
+     the theme panel reaches this far in from the left. */
+  --stage-bar-start: calc(var(--rail-width) + var(--rail-inset));
   display: flex;
   justify-content: center;
   /* Stretch across the body's own side padding so the centring zone is
@@ -41,12 +44,25 @@
    director), so the workspace centres between the two. Applied by the page
    only when that panel is actually rendered. */
 .dsLayoutChat {
+  /* The chat director mirrors the theme panel on the right, so the bar
+     centres between the two (the viewport's own centre). */
+  --stage-bar-end: calc(var(--rail-width) + var(--rail-inset));
   /* The chat stage owns its safe ring (ChatView's --stage-safe-pad), so
      the layout hands it the zone panel-to-panel on both sides. */
   padding-left: calc(var(--rail-width) + var(--rail-inset));
   padding-right: calc(var(--rail-width) + var(--rail-inset));
   /* The chat stage carries no page heading, so the components view's
      extra title air goes — the widget's top gap matches its bottom one. */
+  padding-top: var(--layout-stage-clearance);
+}
+
+/* The Dashboard view stages a full app with no page heading: the title air
+   goes, as in the Chat view. */
+.dsLayoutDashboard {
+  /* The stage owns its safe ring (the Chat view's --stage-safe-pad), so
+     the layout hands it the zone from the panel to the viewport edge. */
+  padding-left: calc(var(--rail-width) + var(--rail-inset));
+  padding-right: 0;
   padding-top: var(--layout-stage-clearance);
 }
 
@@ -78,6 +94,12 @@
    stage presets — set dressing, not a layout token. */
 .dsContentMobile {
   max-width: 420px;
+}
+
+/* The dashboard window runs the full width right of the rail — a desktop
+   app wants the room the showcase column caps. */
+.dsContentDashboard {
+  max-width: none;
 }
 
 .inlineLink {
@@ -453,6 +475,9 @@
    ============================================ */
 @media (max-width: 1099px) {
   .dsLayout {
+    /* No floating panels: the bar sits at the viewport's centre. */
+    --stage-bar-start: 0px;
+    --stage-bar-end: 0px;
     padding-left: 0;
     padding-right: 0;
     /* No panel means no centring zone to correct. */

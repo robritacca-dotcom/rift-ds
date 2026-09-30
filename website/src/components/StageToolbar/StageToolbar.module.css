@@ -40,9 +40,10 @@
   );
 }
 
-/* The side zones flex equally so the surface switch sits dead centre. */
+/* The trail takes its own width; the switch follows it, and the actions
+   zone takes the rest, pinning the exit to the right. */
 .trail {
-  flex: 1;
+  flex: 0 1 auto;
   display: flex;
   align-items: center;
   gap: var(--gap-400);
@@ -55,6 +56,57 @@
   align-items: center;
   justify-content: flex-end;
   gap: var(--gap-400);
+}
+
+/* The view switch: the site header's section pills (MegaNav.module.css
+   .navLink owns the recipe), so moving between a stage's views reads the
+   same as moving between the site's sections. It floats left, 40px after
+   the breadcrumb (the toolbar's gap plus the difference). */
+.switch {
+  /* The pills' offset parent, for the phone row's scroll-into-view. */
+  position: relative;
+  margin-inline-start: calc(var(--gap-1000) - var(--gap-400));
+  display: flex;
+  align-items: center;
+  gap: var(--primitive-gap-100);
+  flex-shrink: 0;
+}
+
+.switchButton {
+  display: inline-flex;
+  align-items: center;
+  /* Fixed height, like the header's pills: every pill measures 30px. */
+  height: 30px;
+  padding: 0 16px;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--color-text-primary);
+  font-family: var(--font-title-body-family);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background var(--motion-duration-fast) var(--motion-ease-standard), color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.switchButton:hover {
+  background: var(--color-bg-container-secondary);
+}
+
+.switchButton:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+.switchButtonActive {
+  background: var(--color-action-primary-bg);
+  color: var(--color-action-primary-text);
+}
+
+.switchButtonActive:hover {
+  background: var(--color-action-primary-bg-hover);
 }
 
 .logo {
@@ -82,5 +134,37 @@
 @media (max-width: 699px) {
   .crumb {
     display: none;
+  }
+
+  /* More pills than a phone has room for between the logo and the X: the
+     switch takes what is left and scrolls sideways, the logo and the X
+     keep their seats. */
+  .trail,
+  .actions {
+    flex: 0 0 auto;
+  }
+
+  .switch {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    /* Room for the focus ring, which the scroll box would otherwise clip. */
+    padding: 4px;
+  }
+
+  .switch::-webkit-scrollbar {
+    display: none;
+  }
+
+  .switchButton {
+    flex-shrink: 0;
+    padding: 0 12px;
+  }
+
+  /* A flex scroll box drops its end padding from the scroll range, so the
+     last pill carries its own. */
+  .switchButton:last-child {
+    margin-right: 4px;
   }
 }

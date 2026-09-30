@@ -11,7 +11,9 @@ export interface StageControlBarProps {
 
 /**
  * The immersive stages' bottom control bar: a glass pill floating at the
- * bottom centre of the viewport, holding a stage's own instruments (the
+ * bottom centre of the stage's workspace (between the host's side panels,
+ * declared as --stage-bar-start/--stage-bar-end; the viewport's centre when
+ * it declares none), holding a stage's own instruments (the
  * playground's theme flip and inspect switch) — the same furniture as the
  * architecture maps' zoom pill, promoted to a shared shell so every stage
  * hangs its controls in the same place.

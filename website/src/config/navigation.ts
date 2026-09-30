@@ -235,7 +235,7 @@ function buildNavSections(): NavSection[] {
       label: "Playground",
       href: "/playground",
       icon: "tune",
-      description: "Re-theme the whole system live: components, type and chat",
+      description: "Re-theme the whole system live: components, type, chat and a dashboard",
       // Deliberately no mega: the trigger is the destination.
       isActive: (path) => path === "/playground" || path === "/graph",
     },
@@ -488,7 +488,7 @@ export function getNavLabel(href: string): string | undefined {
 
 /** The brand suffix appended to every page's browser-tab title. */
 export { TITLE_SUFFIX } from "./brand.generated";
-import { TITLE_SUFFIX } from "./brand.generated";
+import { BRAND_NAME, TITLE_SUFFIX } from "./brand.generated";
 /** Next.js title template — applied to child route segments' titles. */
 export const TITLE_TEMPLATE = `%s · ${TITLE_SUFFIX}`;
 
@@ -608,7 +608,10 @@ export function componentPageMetadata(slug: string): Metadata {
    Builds a trail based on pathname, walking the
    IA: <Section> > <Page>. Sections are top-level
    now, so a landing page needs no breadcrumb and
-   a sub-page's trail is two items.
+   a sub-page's trail is two items. The top-level
+   exceptions are the immersive stages (the
+   playground and the graph), whose trails lead
+   back to the brand root.
    ============================================ */
 
 interface SectionConfig {
@@ -643,12 +646,13 @@ export function getBreadcrumbs(pathname: string): BreadcrumbItem[] {
 
   // The playground and graph are immersive surfaces: their slim StageToolbar
   // renders this trail (they live in no sidebar array, so the generic
-  // section loop can't resolve them).
+  // section loop can't resolve them). Both hang off the brand root, so their
+  // trails lead home the way a section's leads to its landing.
   if (path === "/playground") {
-    return [{ label: "Playground" }];
+    return [{ label: BRAND_NAME, href: "/" }, { label: "Playground" }];
   }
   if (path === "/graph") {
-    return [{ label: "System graph" }];
+    return [{ label: BRAND_NAME, href: "/" }, { label: "System graph" }];
   }
 
   // Docs cluster — the landing lives at /docs but sub-pages keep their

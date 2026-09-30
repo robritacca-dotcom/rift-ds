@@ -145,7 +145,10 @@
    ============================================ */
 .deviceShell {
   padding: 12px;
-  border-radius: 44px;
+  /* A real handset's corners, matching the mobile dashboard template's
+     frame (MobileDashboard.module.css owns the recipe): a 56px screen
+     corner inside a concentric 68px bezel. */
+  border-radius: 68px;
   background: var(--color-bg-page-primary);
   border: var(--border-025) solid var(--color-bg-container-border);
   box-shadow: var(--shadow-floating);
@@ -153,11 +156,11 @@
 
 /* The screen is one glass surface — OS chrome strips and widget share it,
    so the seams between them are invisible. The corner radius is concentric
-   with the bezel padding, standing in for a handset's screen corners. */
+   with the bezel padding (68px less the 12px bezel). */
 .deviceScreen {
   display: flex;
   flex-direction: column;
-  border-radius: 32px;
+  border-radius: 56px;
   overflow: hidden;
   max-width: 100%;
   max-height: calc(100dvh - var(--chat-clearance) - 24px);
@@ -188,7 +191,9 @@
   align-items: center;
   justify-content: space-between;
   min-height: 54px;
-  padding: var(--padding-150) var(--padding-400) 0;
+  /* The clock and status icons sit inboard of the deep screen corner,
+     either side of the Dynamic Island (the mobile dashboard's insets). */
+  padding: var(--padding-150) 36px 0 44px;
   flex-shrink: 0;
   color: var(--color-text-primary);
 }

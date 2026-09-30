@@ -2,15 +2,21 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useRef } from "react";
 import { Breadcrumb } from "rift-ds/components/Breadcrumb/Breadcrumb";
 import { Button } from "rift-ds/components/Button/Button";
 import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
-import { Tabs, type Tab } from "rift-ds/components/Tabs/Tabs";
 import { Badge } from "rift-ds/components/Badge/Badge";
 import { getBreadcrumbs } from "@/config/navigation";
 import { buildBreadcrumbJsonLd } from "@/lib/structuredData";
 import BrandMark from "@/components/BrandMark/BrandMark";
 import styles from "./StageToolbar.module.css";
+
+/** One view in the view switch. */
+export interface StageToolbarView {
+  value: string;
+  label: string;
+}
 
 export interface StageToolbarProps {
   /** A name beside the brand mark, for a surface that sits in no section
@@ -24,13 +30,13 @@ export interface StageToolbarProps {
       labelled way home for a surface reached by its address alone, where
       "back" would usually mean nowhere. */
   exit?: "close" | "home";
-  /** Centre view tabs — omit to render a toolbar with no switch. */
-  tabs?: Tab[];
-  /** The active tab's value. */
+  /** View switch after the trail — omit to render a toolbar with no switch. */
+  tabs?: StageToolbarView[];
+  /** The active view's value. */
   activeTab?: string;
-  /** Called with the picked tab's value. */
+  /** Called with the picked view's value. */
   onTabChange?: (value: string) => void;
-  /** Accessible label for the centre tab list. */
+  /** Accessible label for the view switch's button group. */
   switchLabel?: string;
   /** Extra controls for the right side, rendered before the exit —
       the hosting page's own toolbar furniture (the inspect-mode switch). */
@@ -46,7 +52,7 @@ export interface StageToolbarProps {
 
 /**
  * The immersive surfaces' header: a slim floating glass pill carrying the
- * brand mark and breadcrumb trail, an optional centre switch (the hosting
+ * brand mark and breadcrumb trail, an optional view switch after the trail (the hosting
  * page decides what it toggles — views, surfaces), and the X out — a
  * full-screen view's toolbar, not the site's full navigation. Pages
  * beneath reserve --layout-stage-clearance (globals.css) of room for it.
@@ -66,6 +72,16 @@ export default function StageToolbar({
   const pathname = usePathname() ?? "/";
   const items = getBreadcrumbs(pathname);
   const trail = append ? [...items, { label: append }] : items;
+
+  /* On a phone the switch scrolls sideways; keep the current view's pill
+     in sight, without moving the page (the toolbar is fixed). */
+  const switchRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const row = switchRef.current;
+    const pill = row?.querySelector<HTMLElement>('[aria-pressed="true"]');
+    if (!row || !pill || row.scrollWidth <= row.clientWidth) return;
+    row.scrollLeft = pill.offsetLeft - (row.clientWidth - pill.offsetWidth) / 2;
+  }, [activeTab]);
 
   const router = useRouter();
   /* The X is the way back to wherever the visitor came from; opened cold
@@ -110,14 +126,26 @@ export default function StageToolbar({
         )}
       </div>
 
+      {/* The switch wears the site header's section pills (MegaNav's
+          navLink): a neutral hover fill, and the action pair on the
+          current view, design.md's teal selection convention. */}
       {tabs && activeTab && (
-        <Tabs
-          tabs={tabs}
-          activeTab={activeTab}
-          onTabChange={onTabChange}
-          size="compact"
-          ariaLabel={switchLabel}
-        />
+        <div ref={switchRef} className={styles.switch} role="group" aria-label={switchLabel}>
+          {tabs.map((tab) => {
+            const active = tab.value === activeTab;
+            return (
+              <button
+                key={tab.value}
+                type="button"
+                className={`${styles.switchButton} ${active ? styles.switchButtonActive : ""}`}
+                aria-pressed={active}
+                onClick={() => onTabChange?.(tab.value)}
+              >
+                {tab.label}
+              </button>
+            );
+          })}
+        </div>
       )}
 
       <div className={styles.actions}>

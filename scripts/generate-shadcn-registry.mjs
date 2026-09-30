@@ -49,7 +49,7 @@ import {
   rmSync,
   writeFileSync,
 } from 'node:fs';
-import { dirname, join, relative, resolve } from 'node:path';
+import { basename, dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { AUTHOR_NAME, AUTHOR_URL, BRAND_SHORT, SITE_URL } from './brand.mjs';
 
@@ -130,7 +130,7 @@ function walkClosure(entryFiles, ownDir) {
     const file = queue.shift();
     if (seen.has(file)) continue;
     seen.add(file);
-    const inOwnDir = ownDir && file.startsWith(ownDir + '/');
+    const inOwnDir = ownDir && file.startsWith(ownDir + sep);
     const rel = relative(srcDir, file).replace(/\\/g, '/');
     const inComponents = rel.startsWith('components/');
     if (inComponents && !inOwnDir) {
@@ -142,7 +142,8 @@ function walkClosure(entryFiles, ownDir) {
       continue;
     }
     if (!inOwnDir) external.add(file);
-    let content = readFileSync(file, 'utf8');
+    // Normalize CRLF so Windows checkouts embed byte-identical source to CI.
+    let content = readFileSync(file, 'utf8').replace(/\r\n/g, '\n');
     const isCss = file.endsWith('.css');
     const specs = isCss ? cssImportsIn(content) : specifiersIn(content);
     for (const spec of specs) {
@@ -157,7 +158,7 @@ function walkClosure(entryFiles, ownDir) {
     if (isCss) {
       for (const fontUrl of fontUrlsIn(content)) {
         const fontPath = resolve(dirname(file), fontUrl);
-        const name = fontPath.split('/').pop();
+        const name = basename(fontPath);
         binaries.set(name, readFileSync(fontPath));
         content = content.replaceAll(fontUrl, `${SITE_URL}/r/assets/${name}`);
       }
@@ -267,7 +268,12 @@ if (isMain) {
   for (const [name, content] of files) {
     const dest = join(outputDir, name);
     mkdirSync(dirname(dest), { recursive: true });
-    const existing = existsSync(dest) ? readFileSync(dest) : null;
+    const existing = !existsSync(dest)
+      ? null
+      : Buffer.isBuffer(content)
+        ? readFileSync(dest)
+        : // A CRLF checkout of an unchanged file is not a change; leave it alone.
+          Buffer.from(readFileSync(dest, 'utf8').replace(/\r\n/g, '\n'));
     const next = Buffer.isBuffer(content) ? content : Buffer.from(content);
     if (existing === null || !existing.equals(next)) {
       writeFileSync(dest, next);

@@ -4,9 +4,12 @@ name: Chromatic
 # and dark (modes declared in .storybook/preview.ts) and diffs against the
 # accepted baseline.
 #
-# DELIBERATELY workflow_dispatch-ONLY. The project, CHROMATIC_PROJECT_TOKEN
-# secret, and accepted baseline all exist (first baseline 2026-07-27:
-# 502 stories x 2 themes). The reason is snapshot budget: a full run is
+# NOT YET PROVISIONED for this repo: the project, CHROMATIC_PROJECT_TOKEN
+# secret and accepted baseline (first baseline 2026-07-27: 502 stories x 2
+# themes) belonged to the predecessor repo, so this repo needs its own
+# project and token before a dispatch can run (first-deploy skill, step 4).
+#
+# DELIBERATELY workflow_dispatch-ONLY. The reason is snapshot budget: a full run is
 # roughly twice the story count in snapshots (about 1,330 today) against
 # the free tier's 5,000/month, so runs are deliberate, not per-push.
 # Revisit the trigger (and TurboSnap) once the real monthly spend is known.

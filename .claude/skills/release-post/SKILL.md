@@ -47,11 +47,11 @@ The values to resolve: the page and container greys, the container border, the t
 
 Author a plain HTML file in the scratchpad (never in the repo tree) at **1200×675** — X's landscape card ratio. The established layout (this repo has no earlier cards of its own to match; the layout below is the record):
 
-- **Header row**: the package name as an uppercase overline in the action teal; the version large in the light display weight with its tracking; the release date beside it; an `npm i` pill and the site's host (from `SITE_URL` in `scripts/brand.mjs`) on the right.
+- **Header row**: the package name as an uppercase overline in the action colour; the version large in the light display weight with its tracking; the release date beside it; an `npm i` pill and the site's host (from `SITE_URL` in `scripts/brand.mjs`) on the right.
 - **Bento grid** below: four columns by two rows. The hero feature takes a 2×2 tile with a title, one sentence, a few pill chips, and a small abstract drawing of the feature (panels, glyphs, a miniature control — drawn with divs and inline stroke SVG, never emoji or screenshots). Each remaining feature gets a 1×1 tile: bold title, a tiny visual or code chip, one caption sentence.
 - A faint accent-coloured radial glow or two behind everything (the accent as the shipped preset resolves it) — the site's ambient background in still form. Subtle; the ground stays near-black.
 
-Nunito Sans loads from Google Fonts via a `<link>` in the head. All copy on the card follows `content-design.md`: sentence case, neutral, no emoji, no em dashes, one idea per line. Tile captions are one short sentence each.
+The faces the served preset declares load from Google Fonts via a `<link>` in the head. All copy on the card follows `content-design.md`: sentence case, neutral, no emoji, no em dashes, one idea per line. Tile captions are one short sentence each.
 
 ### 4. Render to PNG
 

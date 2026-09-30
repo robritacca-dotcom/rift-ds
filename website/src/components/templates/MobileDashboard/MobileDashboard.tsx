@@ -6,8 +6,7 @@
  * else: there is no tablet or desktop layout. At a phone's width the page
  * is the app, edge to edge; anything wider draws an iPhone Pro Max (440 x
  * 956) in a bezel with status bar and home indicator, the playground chat
- * stage's device recipe with a real Pro Max's deeper corners and a pure
- * white or black bezel, scaled to fit and centred on the dotted ground.
+ * stage's device recipe with a pure white or black bezel, scaled to fit and centred on the dotted ground.
  * The templates carousel draws it in its phone mock whichever device is
  * picked (the `mobileOnly` flag on its sidebar entry).
  *

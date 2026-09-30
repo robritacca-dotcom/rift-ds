@@ -62,11 +62,11 @@
    wider than a phone gets one: an iPhone Pro Max screen (440 x 956) in a
    bezel, centred on the dotted ground and scaled to fit the window. The
    recipe starts from the playground chat stage's device preset
-   (ChatView.module.css owns it): a 12px bezel, a 54px status bar and a 24px
-   home-indicator strip. Two departures. The corners are a real Pro Max's: a
-   56px screen corner (the handset's display radius is about 55pt) inside a
-   concentric 68px bezel, and the bezel itself is pure white or pure black
-   by theme, as the hardware is. And the strips overlay the app rather than stacking above and below it: the app
+   (ChatView.module.css owns it): a 12px bezel, a 54px status bar, a 24px
+   home-indicator strip, and a real Pro Max's corners, a 56px screen corner
+   (the handset's display radius is about 55pt) inside a concentric 68px
+   bezel. Two departures. The bezel itself is pure white or pure black by
+   theme, as the hardware is. And the strips overlay the app rather than stacking above and below it: the app
    runs the full height of the screen, content scrolls under the clock and
    the swipe bar, and the tab bar floats above the indicator, the way a real
    iOS screen is laid out. The frame box takes the scaled footprint so the

@@ -6,9 +6,8 @@
  * registers. The registrations live in one place — the `server.registerTool`
  * calls in website/src/app/api/mcp/route.ts — but the roster is restated as
  * data in website/src/lib/mcp-tools.ts (which the landing page and the
- * get-started page render), and its count is restated in prose on surfaces
- * that cannot import it: the README (which ships in the npm tarball, so a
- * wrong count there reaches every consumer) and the overview page. A tool
+ * get-started page render), and its count is restated in prose on a surface
+ * that cannot import it: the overview page (COUNTED_SURFACES below). A tool
  * added or removed without those sentences fails here instead of shipping
  * as a lie.
  *

@@ -43,7 +43,7 @@ Also spot-check the links the script listed under known blockers — they are pr
 
 ### 3. Fix on a branch
 
-Work in the temporary worktree on branch `links/YYYY-MM-DD`. Verify the website build in the worktree; if anchor text changed, the regenerated corpus rides along in the same commit.
+Work in the temporary worktree on branch `links/YYYY-MM-DD`. Do not build in the worktree: a fresh one has no `node_modules`, so the first prebuild generator fails, and installing there is what `land` forbids. The build check happens when the branch is landed, whose combined `npm run verify` builds it; if anchor text changed, the corpus that build regenerates is committed with the landing.
 
 ### 4. Report and hand off
 

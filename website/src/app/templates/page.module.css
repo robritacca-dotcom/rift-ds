@@ -349,9 +349,11 @@
   height: calc(var(--design-h, 844px) + 78px);
   transform: scale(var(--frame-scale, 0));
   transform-origin: top left;
-  /* ds-allow(mockup): 32px hardware-bezel radius, matching the
-     playground device's set dressing rather than the UI radius scale */
-  border-radius: 32px;
+  /* ds-allow(mockup): a real Pro Max's 56px screen corner, the same screen
+     radius as the playground device's set dressing (ChatView.module.css),
+     rather than the UI radius scale. This mock is the bare screen, with no
+     bezel around it. */
+  border-radius: 56px;
   overflow: hidden;
   border: var(--border-025) solid var(--color-bg-container-border);
   background: var(--color-bg-page-primary);
@@ -364,7 +366,8 @@
   align-items: center;
   justify-content: space-between;
   min-height: 54px;
-  padding: var(--padding-150) var(--padding-400) 0;
+  /* Inboard of the deep screen corner, as on the playground device. */
+  padding: var(--padding-150) 36px 0 44px;
   flex-shrink: 0;
   color: var(--color-text-primary);
 }

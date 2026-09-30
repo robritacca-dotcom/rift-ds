@@ -10,11 +10,13 @@
   gap: var(--gap-050); /* 2px */
   padding: var(--padding-100); /* 4px */
   /* Concentric with the segments, the Composer's rule: the track's
-     curve is the segment's radius plus the inset between them, so a
-     theme that squares the pill token keeps the two curves parallel
-     instead of a soft track hugging sharp segments. At the shipped
-     999px pill both terms saturate and nothing changes. */
-  border-radius: calc(var(--radius-pill) + var(--padding-100));
+     curve is the segment's radius plus the inset between them (the
+     padding and the hairline both, since the curve is drawn at the
+     border's outer edge), so a theme that squares the pill token keeps
+     the two curves parallel instead of a soft track hugging sharp
+     segments. At the shipped 999px pill every term saturates and nothing
+     changes. */
+  border-radius: calc(var(--radius-pill) + var(--padding-100) + var(--border-025));
   background-color: var(--color-bg-container-primary);
   border: var(--border-025) solid var(--color-bg-container-border);
 }

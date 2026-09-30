@@ -41,7 +41,10 @@ for (const [name, content] of expected) {
     errors.push(`website/public/r/${name} is missing — ${REGENERATE}`);
     continue;
   }
-  const disk = readFileSync(join(outputDir, name));
+  // Normalize CRLF on text files so Windows checkouts validate identically to CI.
+  const disk = Buffer.isBuffer(content)
+    ? readFileSync(join(outputDir, name))
+    : Buffer.from(readFileSync(join(outputDir, name), 'utf8').replace(/\r\n/g, '\n'));
   const next = Buffer.isBuffer(content) ? content : Buffer.from(content);
   if (!disk.equals(next)) errors.push(`website/public/r/${name} is stale — ${REGENERATE}`);
 }

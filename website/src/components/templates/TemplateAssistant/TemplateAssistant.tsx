@@ -10,9 +10,24 @@
  *
  * Suggestion labels follow the site-wide chip budget (SUGGESTION_MAX_CHARS,
  * 40): a chip never wraps, so a longer question runs off the panel's edge.
+ *
+ * The panel also owns the site chat's responsive contract (design.md's AI
+ * chat responsive rule), so no host restates it:
+ *
+ * - Docked (DOCK_QUERY): a non-modal complementary region. The host reserves
+ *   the width by gating its own padding rule on the same breakpoint.
+ * - Overlay (below the dock threshold): modal over a scrim, with a focus
+ *   trap, the body scroll lock, and Escape or a scrim tap to close.
+ * - Takeover (TAKEOVER_QUERY): the panel fills the viewport, still modal.
+ *
+ * A host that seats the panel inside its own frame (the mobile dashboard's
+ * phone) passes `placement="contained"` and keeps none of that: the frame,
+ * not the viewport, is the panel's world there.
  */
 
 import React from "react";
+import { lockBodyScroll, unlockBodyScroll } from "@/lib/scroll-lock";
+import { DOCK_QUERY } from "../../SiteChat/ChatContext";
 import { ChatHeader } from "rift-ds/components/ChatHeader/ChatHeader";
 import { ChatMessage } from "rift-ds/components/ChatMessage/ChatMessage";
 import { ChatThread } from "rift-ds/components/ChatThread/ChatThread";
@@ -27,6 +42,16 @@ import {
 import styles from "./TemplateAssistant.module.css";
 
 export type TemplateAssistantSuggestion = { id: string; label: string };
+
+const subscribeDock = (onChange: () => void) => {
+  const media = window.matchMedia(DOCK_QUERY);
+  media.addEventListener("change", onChange);
+  return () => media.removeEventListener("change", onChange);
+};
+const readDocked = () => window.matchMedia(DOCK_QUERY).matches;
+
+const FOCUSABLE =
+  'button:not([disabled]), a[href], textarea:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 export interface TemplateAssistantProps {
   /** Whether the panel renders; the host owns the open state. */
@@ -51,6 +76,12 @@ export interface TemplateAssistantProps {
    * full-screen sheet inside its phone).
    */
   className?: string;
+  /**
+   * `viewport` (the default) follows the site chat's dock, overlay and
+   * takeover modes. `contained` is for a host that seats the panel inside a
+   * frame of its own and places it with `className`.
+   */
+  placement?: "viewport" | "contained";
 }
 
 export default function TemplateAssistant({
@@ -63,6 +94,7 @@ export default function TemplateAssistant({
   fallback,
   disclaimer,
   className,
+  placement = "viewport",
 }: TemplateAssistantProps) {
   const [value, setValue] = React.useState("");
   const [turns, setTurns] = React.useState<
@@ -96,12 +128,64 @@ export default function TemplateAssistant({
 
   const empty = turns.length === 0;
 
+  /* The server snapshot is "not docked", matching the stylesheet's default
+     geometry; the panel only renders once opened, which is always after
+     hydration, so the first paint already has the real answer. */
+  const docked = React.useSyncExternalStore(
+    subscribeDock,
+    readDocked,
+    () => false
+  );
+  const viewport = placement === "viewport";
+  const modal = open && viewport && !docked;
+
+  /* Modal mode owns the page behind it, the site panel's rule. */
+  React.useEffect(() => {
+    if (!modal) return;
+    lockBodyScroll("template-assistant");
+    return () => unlockBodyScroll("template-assistant");
+  }, [modal]);
+
+  const panelRef = React.useRef<HTMLElement | null>(null);
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
+    if (event.key === "Escape") {
+      onClose();
+      return;
+    }
+    /* Tab wraps inside the panel only while it is modal; docked, focus
+       flows through the page beside it. */
+    if (modal && event.key === "Tab" && panelRef.current) {
+      const focusables =
+        panelRef.current.querySelectorAll<HTMLElement>(FOCUSABLE);
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+  };
+
   if (!open) return null;
 
   return (
+    <>
+    {modal && (
+      <div className={styles.scrim} onClick={onClose} aria-hidden="true" />
+    )}
     <aside
-      className={[styles.chatPanel, className].filter(Boolean).join(" ")}
+      ref={panelRef}
+      className={[styles.chatPanel, viewport && styles.viewport, className]
+        .filter(Boolean)
+        .join(" ")}
+      role={modal ? "dialog" : undefined}
+      aria-modal={modal || undefined}
       aria-label={title}
+      onKeyDown={handleKeyDown}
     >
       {/* The site chat's internal anatomy, restated over mock state: a
           zero-basis top region and a growing bottom region split the height
@@ -195,5 +279,6 @@ export default function TemplateAssistant({
         </div>
       </div>
     </aside>
+    </>
   );
 }

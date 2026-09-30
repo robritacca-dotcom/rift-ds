@@ -1,17 +1,12 @@
-/* The template screens' shared mock assistant: the site chat's docked-panel
-   geometry, restated. A floating glass card pinned to the right edge, inset
-   like the templates' floating sidebars, over the SiteChat internals: one
+/* The template screens' shared mock assistant: the site chat's panel
+   geometry and responsive modes, restated. A floating glass card pinned to
+   the right edge, inset like the templates' floating sidebars, over the
+   SiteChat internals: one
    shared side inset so the header controls, bubbles, composer edge, starter
    pills and disclaimer sit on a single rail; a zero-basis top region and a
    growing bottom region centre the composer while the thread is empty. */
 
 .chatPanel {
-  position: fixed;
-  top: var(--layout-chat-inset);
-  right: var(--layout-chat-inset);
-  height: calc(100dvh - var(--layout-chat-inset) * 2);
-  width: var(--layout-chat-width);
-  max-width: calc(100vw - var(--layout-chat-inset) * 2);
   display: flex;
   flex-direction: column;
   background: var(--color-bg-glass);
@@ -21,6 +16,59 @@
   overflow: hidden;
   backdrop-filter: blur(24px);
   z-index: 1100;
+}
+
+/* The viewport placement: the site panel's geometry and its three modes
+   (SiteChat.module.css's .panel, restated). Docked and overlay share the
+   inset card; the component adds the scrim and the modal behaviour below
+   DOCK_QUERY, and hosts reserve the width only at or above it. */
+.viewport {
+  position: fixed;
+  top: var(--layout-chat-inset);
+  right: var(--layout-chat-inset);
+  height: calc(100dvh - var(--layout-chat-inset) * 2);
+  width: var(--layout-chat-width);
+  max-width: calc(100vw - var(--layout-chat-inset) * 2);
+}
+
+/* Below the dock threshold the panel covers the page, so the page dims
+   behind it: the site panel's scrim, at the same layer. */
+.scrim {
+  position: fixed;
+  inset: 0;
+  background: var(--color-scrim);
+  z-index: 1090;
+  animation: scrimIn var(--motion-duration-slow) var(--motion-ease-standard);
+}
+
+@keyframes scrimIn {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Short viewports: the vertical insets are height the chat needs more than
+   the chrome does, the site panel's rule. */
+@media (max-height: 619px) {
+  .viewport {
+    top: 0;
+    height: 100dvh;
+  }
+}
+
+/* Phone widths (TAKEOVER_QUERY in SiteChat/ChatContext.tsx, mirrored here):
+   the chat is the screen, not a card over one. */
+@media (max-width: 719px) {
+  .viewport {
+    top: 0;
+    right: 0;
+    height: 100dvh;
+    width: 100vw;
+    max-width: none;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
 }
 
 .chat {

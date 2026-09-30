@@ -27,7 +27,15 @@
  * out of the chat corpus (see EXCLUDED_ROUTES in generate-site-corpus.mjs).
  */
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type KeyboardEvent,
+} from "react";
 import { AiButton } from "rift-ds/components/AiButton/AiButton";
 import {
   AgentRail,
@@ -59,8 +67,14 @@ import {
   type ThreadPanelGroup,
 } from "rift-ds/components/ThreadPanel/ThreadPanel";
 import { SiteChat } from "@/components/SiteChat/SiteChat";
-import { SiteChatProvider, useSiteChat } from "@/components/SiteChat/ChatContext";
+import {
+  DOCK_QUERY,
+  SiteChatProvider,
+  useSiteChat,
+  useTakeoverViewport,
+} from "@/components/SiteChat/ChatContext";
 import { createSimTransport } from "@/lib/chat-sim";
+import { lockBodyScroll, unlockBodyScroll } from "@/lib/scroll-lock";
 import SidebarSwitchers from "../SidebarSwitchers/SidebarSwitchers";
 import styles from "./PayrollConsole.module.css";
 
@@ -263,10 +277,18 @@ const CHAT_THREADS: ThreadPanelGroup[] = [
   },
 ];
 
-/* The width at which a docked rail and this product can share the screen.
-   Stated here and in the stylesheet's media query, which is the one place
-   the layout half of the same rule lives. */
-const DOCK_MIN_WIDTH = 1280;
+/* The width at which a docked rail and this product can share the screen is
+   the site panel's own: DOCK_QUERY, mirrored by the stylesheet's media
+   query, which is the one place the layout half of the same rule lives. */
+const subscribeDock = (onChange: () => void) => {
+  const media = window.matchMedia(DOCK_QUERY);
+  media.addEventListener("change", onChange);
+  return () => media.removeEventListener("change", onChange);
+};
+const readDocked = () => window.matchMedia(DOCK_QUERY).matches;
+
+const FOCUSABLE =
+  'button:not([disabled]), a[href], textarea:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 const CHAT_STARTERS = [
   { id: "diff", label: "What changed since last run?" },
@@ -280,8 +302,8 @@ const CHAT_STARTERS = [
  * The docked chat, and the launcher it collapses to. It lives inside the
  * provider so the close button in the widget's header means something here:
  * the rail leaves, the page reclaims its width, and the corner button brings
- * it back — the site's own panel contract, with the dock always on rather
- * than gated on a viewport width.
+ * it back — the site's own panel contract, including its responsive modes:
+ * docked at DOCK_QUERY, a modal overlay below it, a takeover on phones.
  */
 function PayrollChat({
   agentTab,
@@ -304,8 +326,46 @@ function PayrollChat({
      for the agent panel to sit inline: docked, the widget measures ~420px
      and the panel comes up as a sheet; expanded, it measures the viewport
      and the panel takes the trailing edge, the playground's stage exactly. */
-  const isFull = view === "full";
+  const docked = useSyncExternalStore(subscribeDock, readDocked, () => false);
+  /* Phone widths: the rail fills the viewport whatever the view says, the
+     site mount's takeover rule, so the expand toggle hides there. */
+  const takeover = useTakeoverViewport();
+  const isFull = view === "full" || takeover;
+  /* Docked it is a non-modal complementary region beside the page; under
+     the dock threshold and in full view it covers the page, so it is modal:
+     scrim, focus trap, body scroll lock, Escape closes. The site mount's
+     contract, whole. */
+  const modal = open && (isFull || !docked);
+  const railRef = useRef<HTMLElement | null>(null);
   const launcherRef = useRef<HTMLButtonElement | HTMLAnchorElement | null>(null);
+
+  useEffect(() => {
+    if (!modal) return;
+    lockBodyScroll("payroll-chat");
+    return () => unlockBodyScroll("payroll-chat");
+  }, [modal]);
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLElement>) => {
+    /* SiteChat leaves full view on Escape itself and stops propagation;
+       this one closes the rail from panel view. */
+    if (event.key === "Escape") {
+      setOpen(false);
+      return;
+    }
+    if (modal && event.key === "Tab" && railRef.current) {
+      const focusables = railRef.current.querySelectorAll<HTMLElement>(FOCUSABLE);
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+  };
 
   /* The provider rests closed (the site's default); this page is about the
      docked rail, so it opens on arrival — but only where the rail and the
@@ -314,7 +374,7 @@ function PayrollChat({
      which reads as a layering bug rather than a panel, so there it waits
      behind the launcher for a deliberate open. */
   useEffect(() => {
-    if (window.innerWidth >= DOCK_MIN_WIDTH) setOpen(true);
+    if (readDocked()) setOpen(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -346,11 +406,28 @@ function PayrollChat({
   }
 
   return (
+    <>
+    {modal && !isFull && (
+      <div
+        className={styles.chatScrim}
+        onClick={() => setOpen(false)}
+        aria-hidden="true"
+      />
+    )}
     <aside
-      className={`${styles.chatRail} ${isFull ? styles.chatRailFull : ""}`}
+      ref={railRef}
+      className={`${styles.chatRail} ${isFull ? styles.chatRailFull : ""} ${
+        modal ? styles.chatRailModal : ""
+      }`}
+      role={modal ? "dialog" : undefined}
+      aria-modal={modal || undefined}
       aria-label="Northwind assistant"
+      onKeyDown={handleKeyDown}
     >
       <SiteChat
+        fullscreenEnabled={!takeover}
+        compact={takeover || !isFull}
+        phone={takeover}
         title="Northwind AI"
         /* The staged product's assistant is not reading one of this site's
            pages, so it says nothing rather than naming the template. */
@@ -400,6 +477,7 @@ function PayrollChat({
         )}
       />
     </aside>
+    </>
   );
 }
 

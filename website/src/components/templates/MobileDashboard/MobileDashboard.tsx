@@ -666,6 +666,7 @@ export default function MobileDashboard() {
               <TemplateAssistant
                 open={chatOpen}
                 onClose={() => setChatOpen(false)}
+                placement="contained"
                 className={styles.assistantSheet}
                 title="Boardline AI"
                 askLine="Ask about campaigns, channels, spend, or performance"

@@ -190,6 +190,27 @@
   border-radius: 0;
 }
 
+/* Under the dock threshold the rail covers the page, so it rises over the
+   app sidebar (fixed at z-index 100) with a scrim between them: the site
+   panel's overlay mode. */
+.chatRailModal {
+  z-index: 110;
+}
+
+.chatScrim {
+  position: fixed;
+  inset: 0;
+  z-index: 105;
+  background: var(--color-scrim);
+  animation: chatScrimIn var(--motion-duration-slow) var(--motion-ease-standard);
+}
+
+@keyframes chatScrimIn {
+  from {
+    opacity: 0;
+  }
+}
+
 /* Closed, the chat collapses to the corner launcher the site uses. */
 .launcher {
   position: fixed;
@@ -264,12 +285,13 @@
 
 /* ---------------------------------------------------------- responsive */
 
-/* Below the point where a docked rail and a product can share the screen
-   (DOCK_MIN_WIDTH in PayrollConsole.tsx is the other half of this rule), the
-   chat stops reserving width. It also starts closed there, so the rail is
-   something the visitor opens over the page rather than something already
-   covering it. */
-@media (max-width: 1279px) {
+/* Below the site's dock threshold (DOCK_QUERY in SiteChat/ChatContext.tsx,
+   which PayrollConsole.tsx reads for the behaviour half of this rule), the
+   chat stops reserving width and overlays the page as a modal. It also
+   starts closed there, so the rail is something the visitor opens over the
+   page rather than something already covering it. Phone widths take the
+   expanded geometry outright (.chatRailFull, set by the takeover). */
+@media (max-width: 1439px) {
   .shellChatOpen .main {
     padding-right: 0;
   }
@@ -279,5 +301,15 @@
      threshold rendered as a 420px column pinned to the left edge. */
   .chatRail:not(.chatRailFull) {
     width: min(420px, calc(100vw - var(--layout-chat-inset) * 2));
+  }
+}
+
+/* Phone widths: the takeover is the screen, so it wears the site takeover's
+   denser glass (.panelFull in SiteChat.module.css) rather than the rail's
+   semi surface, which lets the table read through the transcript. */
+@media (max-width: 719px) {
+  .chatRailFull {
+    background-color: var(--color-bg-glass);
+    backdrop-filter: blur(40px);
   }
 }

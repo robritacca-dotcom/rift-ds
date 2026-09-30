@@ -44,9 +44,10 @@
 
 /* The docked chat pushes the page over instead of covering it — the site's
    body-inset pattern, applied to the main column since this shell owns its
-   own layout. Below the stacking breakpoint the page has no width to give,
-   so the panel covers it instead (it is fixed and on top already). */
-@media (min-width: 1081px) {
+   own layout. Only at the site's dock threshold (DOCK_QUERY in
+   SiteChat/ChatContext.tsx): below it the page has no width to give, and
+   TemplateAssistant covers it as a modal overlay instead. */
+@media (min-width: 1440px) {
   .mainChatOpen {
     padding-right: calc(var(--layout-chat-width) + var(--layout-chat-inset) * 2);
   }

@@ -220,10 +220,11 @@
   display: none;
   align-items: center;
   justify-content: center;
-  background: var(--color-action-passive-bg);
-  border: none;
-  /* The row's shared track curve — see .searchBtn, which it sits beside
-     at every width the menu button is visible. */
+  /* The same mini container as the search circle beside it at every
+     width the menu button is visible (fill, hairline border, the row's
+     shared track curve — see .searchBtn). */
+  background: var(--color-bg-container-primary);
+  border: var(--border-025) solid var(--color-bg-container-border);
   border-radius: calc(var(--radius-pill) + var(--padding-100));
   padding: var(--primitive-padding-200);
   cursor: pointer;
@@ -233,7 +234,7 @@
 }
 
 .mobileMenuBtn:hover {
-  background: var(--color-action-passive-bg-hover);
+  background: var(--color-bg-container-secondary);
 }
 
 /* While the drawer is open the header's own button sits under the overlay
@@ -826,14 +827,16 @@
     justify-content: center;
     width: 40px;
     padding: var(--primitive-padding-200);
-    /* Back to the plain circle — the toggle-track costume belongs to the
-       input form. Same passive fill as the mobile menu button beside it. */
-    border: none;
-    background: var(--color-action-passive-bg);
+    /* The circle keeps the track costume (fill, hairline border, curve)
+       from the base rule, so it sits in the same mini container as the
+       theme switcher and mode toggle beside it. */
   }
 
+  /* The circle hovers like the theme switcher's trigger rather than like an
+     input: the fill steps up a container, the border stays put. */
   .searchBtn:hover {
-    background: var(--color-action-passive-bg-hover);
+    border-color: var(--color-bg-container-border);
+    background: var(--color-bg-container-secondary);
   }
 
   .searchLabel,

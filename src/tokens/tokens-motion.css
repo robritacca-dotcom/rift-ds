@@ -26,6 +26,7 @@
 
   --motion-duration-instant: 75ms;        /* Sub-threshold: takes the edge off a size change without reading as motion (Composer grow/shrink) */
   --motion-duration-deliberate: 400ms;    /* Carousel slide */
+  --motion-duration-orbit: 120000ms;      /* One full turn of an auto-rotating surface (Globe): a tempo, so it paces with the schedule durations */
   --motion-duration-loop-spin: 1000ms;    /* Spinner rotation */
   --motion-duration-loop-shimmer: 1800ms; /* Skeleton shimmer, agent label sweep */
   --motion-duration-loop-matrix: 1400ms;  /* Agent dot-matrix cycle (twelve slots) */
@@ -56,6 +57,7 @@
     --motion-duration-slower: 0.01ms;
     --motion-duration-instant: 0.01ms;
     --motion-duration-deliberate: 0.01ms;
+    --motion-duration-orbit: 0.01ms;
     --motion-duration-loop-spin: 0.01ms;
     --motion-duration-loop-shimmer: 0.01ms;
     --motion-duration-loop-matrix: 0.01ms;

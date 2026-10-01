@@ -51,6 +51,7 @@ html[data-brand="gold"] {
   --motion-duration-base: 180ms;
   --motion-duration-deliberate: 360ms;
   --motion-duration-fast: 135ms;
+  --motion-duration-orbit: 108000ms;
   --motion-duration-slow: 270ms;
   --motion-duration-slower: 540ms;
   --primitive-blue-00: #FAFBFE;
@@ -190,6 +191,7 @@ html[data-brand="gold"][data-theme="dark"] {
   --motion-duration-base: 180ms;
   --motion-duration-deliberate: 360ms;
   --motion-duration-fast: 135ms;
+  --motion-duration-orbit: 108000ms;
   --motion-duration-slow: 270ms;
   --motion-duration-slower: 540ms;
   --primitive-blue-00: #FAFBFE;

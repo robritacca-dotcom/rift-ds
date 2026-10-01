@@ -757,8 +757,10 @@ const FONT_LINE_HEIGHT_STEPS: ReadonlyArray<[step: string, px: number]> = [
   ["1100", 44],
 ];
 
-/* The schedule durations a preset may pace. The loop-* namespace is
-   deliberately absent: spinner and shimmer periods are an animation's
+/* The durations a preset may pace: the schedule scale plus orbit, the
+   auto-rotation tempo Globe reads (so a slower theme turns it slower too).
+   The loop-* namespace is deliberately absent: spinner and shimmer periods
+   are an animation's
    identity, not a tempo, and --motion-duration-instant stays fixed
    because it exists to sit under the perception threshold. */
 const MOTION_DURATION_STEPS: ReadonlyArray<[name: string, ms: number]> = [
@@ -767,6 +769,7 @@ const MOTION_DURATION_STEPS: ReadonlyArray<[name: string, ms: number]> = [
   ["slow", 300],
   ["deliberate", 400],
   ["slower", 600],
+  ["orbit", 120000],
 ];
 
 export type ElevationVariant = "default" | "flat" | "soft";
@@ -815,6 +818,22 @@ export function typeScaleOverrides(scale: number): Overrides {
     overrides[`--font-line-height-${step}`] = `${Math.max(10, Math.round(px * scale))}px`;
   }
   return overrides;
+}
+
+/* motionScale is stored as a duration percentage (lower = quicker), but
+   every surface that shows it to a person presents speed, where a bigger
+   number means faster. Mirrored about 100 rather than inverted, so the
+   lever's 50–150 range maps onto itself and a preset's 80 reads 120. These
+   two are the one conversion; never write `200 - x` at a call site. */
+
+/** The speed a person sees for a stored motionScale: 80 → 120. */
+export function motionSpeedPercent(motionScale: number): number {
+  return 200 - motionScale;
+}
+
+/** The stored motionScale for a speed a person picked: 120 → 80. */
+export function motionScaleFromSpeed(speedPercent: number): number {
+  return 200 - speedPercent;
 }
 
 /** Scales the schedule durations (never the loop-* periods). 1 = shipped. */

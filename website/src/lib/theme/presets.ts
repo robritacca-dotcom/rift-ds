@@ -44,7 +44,7 @@ export interface ThemePreset {
   density: number;
   /** Type scale, percent of the shipped size + line-height ladders. */
   typeScale: number;
-  /** Schedule-motion tempo, percent of the shipped durations (never loop-*). */
+  /** Schedule-motion tempo, percent of the shipped durations (never loop-*). Displayed as speed through motionSpeedPercent. */
   motionScale: number;
   /** Shadow treatment: the shipped pair, none, or the softer float. */
   elevation: ElevationVariant;

@@ -264,6 +264,7 @@
       "--motion-duration-loop-matrix",
       "--motion-duration-loop-shimmer",
       "--motion-duration-loop-spin",
+      "--motion-duration-orbit",
       "--motion-duration-slow",
       "--motion-duration-slower",
       "--motion-ease-emphasized",

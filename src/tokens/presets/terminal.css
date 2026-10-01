@@ -122,6 +122,7 @@ html[data-brand="terminal"] {
   --motion-duration-base: 160ms;
   --motion-duration-deliberate: 320ms;
   --motion-duration-fast: 120ms;
+  --motion-duration-orbit: 96000ms;
   --motion-duration-slow: 240ms;
   --motion-duration-slower: 480ms;
   --primitive-blue-00: #FAFBFD;
@@ -263,6 +264,7 @@ html[data-brand="terminal"][data-theme="dark"] {
   --motion-duration-base: 160ms;
   --motion-duration-deliberate: 320ms;
   --motion-duration-fast: 120ms;
+  --motion-duration-orbit: 96000ms;
   --motion-duration-slow: 240ms;
   --motion-duration-slower: 480ms;
   --primitive-blue-00: #FAFBFD;

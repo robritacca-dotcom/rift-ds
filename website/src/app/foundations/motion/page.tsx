@@ -68,6 +68,13 @@ const extendedDurations: DurationToken[] = [
     use: "Carousel slide",
   },
   {
+    label: "Orbit",
+    token: "--motion-duration-orbit",
+    value: "120000ms",
+    use: "One full turn of the Globe's auto-rotation, paced with the other durations",
+    demo: "spin",
+  },
+  {
     label: "Loop spin",
     token: "--motion-duration-loop-spin",
     value: "1000ms",

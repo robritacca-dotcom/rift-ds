@@ -11,7 +11,7 @@ import {
   THEME_PRESETS,
   themeSelectorTiles,
 } from "@/lib/theme/presets";
-import { SHIPPED_ACCENTS } from "@/lib/theme/theme-overrides";
+import { SHIPPED_ACCENTS, motionSpeedPercent } from "@/lib/theme/theme-overrides";
 import { useSiteTheme } from "@/lib/theme/use-theme-overrides";
 import { applyBrand, readBrand, subscribeBrand } from "@/lib/theme/brand";
 import styles from "./page.module.css";
@@ -122,7 +122,7 @@ export default function ThemesPage() {
                   {preset && (
                     <p className={styles.cardLevers}>
                       radius {preset.radiusScale}% · density {preset.density}% ·
-                      motion {preset.motionScale}% · {preset.elevation} elevation
+                      motion {motionSpeedPercent(preset.motionScale)}% · {preset.elevation} elevation
                     </p>
                   )}
                   {!preset && (

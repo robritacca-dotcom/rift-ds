@@ -57,3 +57,6 @@ export const MOTION_SUMMARY_REVEAL_MS = 1600;
 
 /** How long a suggestion row stages its "generation" (PromptSuggestions' pending shimmer) before a pre-written set reveals — the summary panel's think beat, shorter because it replays every time the set swaps rather than once per mount. A schedule timing, so the reduced-motion guard leaves it alone; the shimmer itself stills through the tokenized duration. */
 export const MOTION_SUGGESTIONS_THINK_MS = 600;
+
+/** The shipped period of one full turn for an auto-rotating surface — mirrors --motion-duration-orbit. Not a timer: Globe reads the live token and divides this by it, so its `autoRotate` speed means exactly what it says at the shipped tempo and scales with a theme's motion. */
+export const MOTION_ORBIT_REFERENCE_MS = 120000;

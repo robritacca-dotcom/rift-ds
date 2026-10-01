@@ -8,6 +8,7 @@ import React, {
   useState,
   useSyncExternalStore,
 } from 'react';
+import { MOTION_ORBIT_REFERENCE_MS } from '../../tokens/motion';
 import './Globe.css';
 
 /** A place on the globe. */
@@ -68,9 +69,11 @@ type GlobeOwnProps = {
   /** Fires whenever the view changes — drag, keys, or the auto-rotation. */
   onRotationChange?: (rotation: GlobeRotation) => void;
   /**
-   * Spin slowly on its own, in degrees per second. Pauses while the pointer
-   * is over the globe or it has focus, and never runs under
-   * `prefers-reduced-motion`. `0` switches it off.
+   * Spin slowly on its own, in degrees per second at the shipped motion
+   * tempo. The speed follows `--motion-duration-orbit`, so a theme that
+   * stretches or shortens its durations slows or quickens the spin with
+   * them. Pauses while the pointer is over the globe or it has focus, and
+   * never runs under `prefers-reduced-motion`. `0` switches it off.
    */
   autoRotate?: number;
   /** Drag to rotate, and rotate with the arrow keys (or W, A, S, D) when focused. */
@@ -123,6 +126,20 @@ const KEY_STEP = 10;
 const MAX_LAT = 80;
 /** Marker half-size in viewBox units. */
 const MARKER = 5;
+/** How often the spin re-reads the orbit token, so a live retheme lands. */
+const ORBIT_READ_INTERVAL_MS = 250;
+
+/** Spin multiplier from the orbit token on `node`: 1 at the shipped tempo. */
+const readOrbitTempo = (node: HTMLElement | null): number => {
+  if (!node) return 1;
+  const raw = getComputedStyle(node).getPropertyValue('--motion-duration-orbit').trim();
+  const m = raw.match(/^([\d.]+)(ms|s)$/);
+  if (!m) return 1;
+  const ms = parseFloat(m[1]) * (m[2] === 's' ? 1000 : 1);
+  // The reduced-motion collapse (0.01ms) never reaches here, since the spin
+  // is off under it; the floor keeps any other near-zero value sane.
+  return ms > 0 ? MOTION_ORBIT_REFERENCE_MS / Math.max(ms, MOTION_ORBIT_REFERENCE_MS / 20) : 1;
+};
 
 const DEG = Math.PI / 180;
 
@@ -309,17 +326,27 @@ export const Globe = React.forwardRef<HTMLDivElement, GlobeProps>(
       getServerReducedMotion,
     );
 
+    const rootRef = useRef<HTMLDivElement | null>(null);
+
     // ── Auto-rotation ──────────────────────────────────────────────────────
+    // The speed is paced by --motion-duration-orbit, re-read a few times a
+    // second rather than every frame, so a theme lever moves it live.
     const spinning = autoRotate !== 0 && !paused && !reducedMotion;
     useEffect(() => {
       if (!spinning) return;
       let frame = 0;
       let last = performance.now();
+      let tempo = readOrbitTempo(rootRef.current);
+      let lastRead = last;
       const tick = (now: number) => {
         const dt = (now - last) / 1000;
         last = now;
+        if (now - lastRead >= ORBIT_READ_INTERVAL_MS) {
+          tempo = readOrbitTempo(rootRef.current);
+          lastRead = now;
+        }
         const [lng, lat] = rotationRef.current;
-        commit([lng - autoRotate * dt, lat]);
+        commit([lng - autoRotate * tempo * dt, lat]);
         frame = requestAnimationFrame(tick);
       };
       frame = requestAnimationFrame(tick);
@@ -327,7 +354,6 @@ export const Globe = React.forwardRef<HTMLDivElement, GlobeProps>(
     }, [spinning, autoRotate, commit]);
 
     // ── Drag ───────────────────────────────────────────────────────────────
-    const rootRef = useRef<HTMLDivElement | null>(null);
     const drag = useRef<{ x: number; y: number; rotation: GlobeRotation } | null>(null);
     const [dragging, setDragging] = useState(false);
 

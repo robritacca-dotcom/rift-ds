@@ -64,6 +64,13 @@
  *    direction — and the exemption is itself checked: the file must still
  *    reference --primitive-radius-pill literally, or the exemption fails.
  *
+ * 4b. The lever tables (same file): GAP_STEPS, PADDING_STEPS,
+ *    FONT_SIZE_STEPS and FONT_LINE_HEIGHT_STEPS held to their token
+ *    ladders in both directions; MOTION_DURATION_STEPS held to every
+ *    --motion-duration-* except instant and loop-* (both directions, so a
+ *    new paced duration such as orbit cannot ship unscaled); and
+ *    ELEVATION_VARIANTS.default pinned to the shipped shadows per theme.
+ *
  * 5. website/src/lib/theme/presets.ts — every literal custom-property
  *    name in the file, whether a var(--…) reference or a quoted "--…"
  *    object key, must exist in the token registry or as a --primitive-*
@@ -105,6 +112,12 @@
  *    skipped. A full-name family mention with no trailing hyphen is NOT
  *    skipped — write it with the repo's `-*` placeholder convention
  *    instead, so the checker can tell it from a stale name.
+ *
+ * 9. src/tokens/motion.ts — a JS constant whose doc comment says it
+ *    "mirrors --motion-duration-<name>" must equal that token's ms value
+ *    (MOTION_EXIT_SYNC_MS against base, MOTION_ORBIT_REFERENCE_MS against
+ *    orbit). The doc comment is the opt-in, so a new mirror is guarded the
+ *    moment it says what it mirrors.
  *
  * Runs in the validate-registry chain (and the website prebuild): it reads
  * only source files, token CSS and the generated registry — no build
@@ -840,6 +853,29 @@ function checkDesignMdTokenNames() {
   summaries.push(`design.md: ${mentions} token mentions all name real tokens`);
 }
 
+/* ------------------------------------------------------------------ */
+/* 9. motion.ts constants that mirror a duration token                 */
+/* ------------------------------------------------------------------ */
+function checkMotionMirrors() {
+  const rel = 'src/tokens/motion.ts';
+  const source = read(join(repoRoot, rel));
+  const motionDecls = parseDeclarations(read(join(tokensDir, 'tokens-motion.css')));
+  const re = /\/\*\*((?:(?!\*\/)[\s\S])*?)\*\/\s*export const (\w+) = (\d+);/g;
+  let held = 0;
+  for (const [, doc, name, value] of source.matchAll(re)) {
+    const m = doc.match(/mirrors (--motion-duration-[a-z-]+)/);
+    if (!m) continue;
+    held += 1;
+    const css = motionDecls.get(m[1]);
+    if (css === undefined) {
+      errors.push(`${rel}: ${name} says it mirrors ${m[1]}, which tokens-motion.css does not define`);
+    } else if (css !== `${value}ms`) {
+      errors.push(`${rel}: ${name} is ${value}ms but ${m[1]} is ${css} — the mirror has drifted`);
+    }
+  }
+  summaries.push(`motion.ts: ${held} constants documented as token mirrors match their --motion-duration-* values`);
+}
+
 checkChromaticRamps();
 checkActionColorPresets();
 checkActionSemanticRefs();
@@ -850,6 +886,7 @@ checkPresetTokenNames();
 checkInspectModePrefixes();
 checkSpatialPage();
 checkDesignMdTokenNames();
+checkMotionMirrors();
 
 if (errors.length > 0) {
   console.error(

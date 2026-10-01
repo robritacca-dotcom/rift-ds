@@ -937,6 +937,7 @@ export const Motion: Story = {
       <TokenSection title="Extended durations">
         <MotionTokenRow name="Instant" value="--motion-duration-instant" />
         <MotionTokenRow name="Deliberate" value="--motion-duration-deliberate" />
+        <MotionTokenRow name="Orbit" value="--motion-duration-orbit" />
         <MotionTokenRow name="Loop spin" value="--motion-duration-loop-spin" />
         <MotionTokenRow name="Loop shimmer" value="--motion-duration-loop-shimmer" />
         <MotionTokenRow name="Loop matrix" value="--motion-duration-loop-matrix" />

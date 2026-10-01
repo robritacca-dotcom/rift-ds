@@ -37,6 +37,11 @@
       "description": "Inputs, pickers, and selection controls for collecting and editing values."
     },
     {
+      "id": "inspector",
+      "label": "Inspector",
+      "description": "One-row controls for tool panels and settings rails, each carrying its name inside the control and sized to match Button."
+    },
+    {
       "id": "layout",
       "label": "Layout",
       "description": "Page scaffolding: app shells, sidebars, dividers, and section headings."
@@ -576,6 +581,60 @@
       "description": "Text input with label, placeholder, left and right icons, helper text, and error states.",
       "category": "forms",
       "client": true
+    },
+    {
+      "name": "InspectorDropdown",
+      "label": "Inspector dropdown",
+      "slug": "inspector-dropdown",
+      "description": "One-row select for inspector panels, with the name inside the bar and the library Dropdown's menu and font previews.",
+      "category": "inspector",
+      "client": true,
+      "folder": "Inspector"
+    },
+    {
+      "name": "InspectorInput",
+      "label": "Inspector input",
+      "slug": "inspector-input",
+      "description": "One-row text field for inspector panels, with the name on the left and the value right-aligned in the bar.",
+      "category": "inspector",
+      "client": true,
+      "folder": "Inspector"
+    },
+    {
+      "name": "InspectorSection",
+      "label": "Inspector section",
+      "slug": "inspector-section",
+      "description": "Collapsible, titled run of inspector controls whose open body lets a dropdown menu open past its edge.",
+      "category": "inspector",
+      "client": true,
+      "folder": "Inspector"
+    },
+    {
+      "name": "InspectorSegmentedControl",
+      "label": "Inspector segments",
+      "slug": "inspector-segmented-control",
+      "description": "One-row choice between a few options for inspector panels, as native radios with a neutral selected chip.",
+      "category": "inspector",
+      "client": true,
+      "folder": "Inspector"
+    },
+    {
+      "name": "InspectorSlider",
+      "label": "Inspector slider",
+      "slug": "inspector-slider",
+      "description": "One-row slider for inspector panels, where the whole bar is the control and its fill is the value.",
+      "category": "inspector",
+      "client": true,
+      "folder": "Inspector"
+    },
+    {
+      "name": "InspectorToggleSwitch",
+      "label": "Inspector toggle switch",
+      "slug": "inspector-toggle-switch",
+      "description": "One-row switch for inspector panels, where the whole bar toggles and the track sits at its end.",
+      "category": "inspector",
+      "client": true,
+      "folder": "Inspector"
     },
     {
       "name": "Instructions",

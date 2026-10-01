@@ -1,0 +1,511 @@
+/* ============================================
+   INSPECTOR FAMILY
+   One-row controls for tool panels and settings
+   rails: each control is one bar with its name
+   inside on the left and its state on the right.
+   The form controls (Slider, Input, ToggleSwitch,
+   SegmentedControl, Dropdown) keep their label
+   above; these are their counterparts for a
+   dense panel.
+
+   Shaped and sized like Button, not like Input:
+   the bar reads --radius-pill, and its height,
+   side inset and type are computed from the
+   Button's own tokens for the same size, so a
+   bar and a Button of one size sit level.
+
+   Colour climbs the neutral Button's ladder one
+   step per state, which holds in both themes:
+     bar     passive-hover      (neutral fill at
+                                 80%: a step off
+                                 a glass panel)
+     fill    neutral-bg-hover   (a slider's value,
+                                 a hovered bar, a
+                                 selected segment)
+     press   neutral-bg-active
+   Nothing in the family takes the action colour
+   except the focus ring: a selected segment and
+   an on switch are neutral, the same call
+   SegmentedControl's `neutral` variant makes.
+   ============================================ */
+
+/* ---------- size ----------
+   default  8px + 24px line + 8px  = 40px, 20px sides, paragraph-emphasis
+   compact  6px + 20px line + 6px  = 32px, 12px sides, paragraph-sm-emphasis */
+.ds-inspector-bar,
+.ds-inspector-dropdown {
+  --ds-inspector-height: calc(2 * var(--padding-200) + var(--font-paragraph-emphasis-line-height));
+  --ds-inspector-inset: var(--padding-500);
+  --ds-inspector-font-family: var(--font-paragraph-emphasis-family);
+  --ds-inspector-font-size: var(--font-paragraph-emphasis-size);
+  --ds-inspector-line-height: var(--font-paragraph-emphasis-line-height);
+  --ds-inspector-letter-spacing: var(--font-paragraph-emphasis-letter-spacing);
+  --ds-inspector-label-weight: var(--font-paragraph-emphasis-weight);
+  --ds-inspector-value-weight: var(--font-paragraph-weight);
+}
+
+.ds-inspector-bar--compact,
+.ds-inspector-dropdown--compact {
+  --ds-inspector-height: calc(2 * var(--padding-150) + var(--font-paragraph-sm-emphasis-line-height));
+  --ds-inspector-inset: var(--padding-300);
+  --ds-inspector-font-family: var(--font-paragraph-sm-emphasis-family);
+  --ds-inspector-font-size: var(--font-paragraph-sm-emphasis-size);
+  --ds-inspector-line-height: var(--font-paragraph-sm-emphasis-line-height);
+  --ds-inspector-letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
+  --ds-inspector-label-weight: var(--font-paragraph-sm-emphasis-weight);
+  --ds-inspector-value-weight: var(--font-paragraph-sm-weight);
+}
+
+/* ============================================
+   THE BAR (shared by every control but the dropdown,
+   which dresses the library Dropdown's trigger instead)
+   ============================================ */
+
+.ds-inspector-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-300);
+  min-width: 0;
+  box-sizing: border-box;
+  height: var(--ds-inspector-height);
+  padding: 0 var(--ds-inspector-inset);
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: var(--color-action-passive-bg-hover);
+  font-family: var(--ds-inspector-font-family);
+  font-size: var(--ds-inspector-font-size);
+  line-height: var(--ds-inspector-line-height);
+  letter-spacing: var(--ds-inspector-letter-spacing);
+  font-weight: var(--ds-inspector-value-weight);
+  color: var(--color-text-secondary);
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-inspector-bar:has(:focus-visible) {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+.ds-inspector-bar__label {
+  position: relative;
+  flex-shrink: 0;
+  white-space: nowrap;
+  font-weight: var(--ds-inspector-label-weight);
+  color: var(--color-text-primary);
+  pointer-events: none;
+}
+
+.ds-inspector-bar__value {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+/* An invisible native control laid over the whole bar: the platform's
+   pointer, keyboard and screen-reader behaviour, none of its paint. */
+.ds-inspector-bar__native {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+  appearance: none;
+  background: transparent;
+}
+
+/* Disabled: the system's 0.4 and not-allowed, on the whole bar. */
+.ds-inspector-bar--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ds-inspector-bar--disabled * {
+  cursor: not-allowed;
+}
+
+/* ============================================
+   SLIDER — the fill is the value
+   ============================================ */
+
+.ds-inspector-slider__fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--ds-inspector-pct, 0%);
+  background: var(--color-action-neutral-bg-hover);
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+  pointer-events: none;
+}
+
+.ds-inspector-slider:not(.ds-inspector-bar--disabled):hover .ds-inspector-slider__fill,
+.ds-inspector-slider:has(:active) .ds-inspector-slider__fill {
+  background: var(--color-action-neutral-bg-active);
+}
+
+/* A short grip line just inside the fill's edge, held off both ends of the
+   bar so it never sits on the rounded corners. */
+.ds-inspector-slider__grip {
+  position: absolute;
+  top: 30%;
+  bottom: 30%;
+  left: clamp(
+    var(--padding-200),
+    calc(var(--ds-inspector-pct, 0%) - var(--padding-200)),
+    calc(100% - var(--padding-200))
+  );
+  width: calc(var(--border-050) * 1.5);
+  border-radius: var(--radius-pill);
+  background: var(--color-text-secondary);
+  pointer-events: none;
+  /* Never `left`: the grip tracks the drag, and easing it would lag. */
+  transition:
+    top var(--motion-duration-fast) var(--motion-ease-standard),
+    bottom var(--motion-duration-fast) var(--motion-ease-standard),
+    background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-inspector-slider:not(.ds-inspector-bar--disabled):hover .ds-inspector-slider__grip {
+  background: var(--color-text-primary);
+}
+
+/* Held: the grip stands up taller, so the bar reads as gripped. */
+.ds-inspector-slider:has(:active) .ds-inspector-slider__grip {
+  top: 22%;
+  bottom: 22%;
+  background: var(--color-text-primary);
+}
+
+.ds-inspector-slider .ds-inspector-bar__native {
+  cursor: ew-resize;
+}
+
+.ds-inspector-slider:has(:active) .ds-inspector-bar__native {
+  cursor: grabbing;
+}
+
+/* The range's thumb is drawn one hairline-pair wide, so the input's
+   value-to-position mapping stays within a pixel of the painted fill. */
+.ds-inspector-slider .ds-inspector-bar__native::-webkit-slider-thumb {
+  appearance: none;
+  width: var(--border-050);
+  height: 100%;
+}
+
+.ds-inspector-slider .ds-inspector-bar__native::-moz-range-thumb {
+  width: var(--border-050);
+  height: 100%;
+  border: none;
+}
+
+/* ============================================
+   INPUT — name left, the field in the rest
+   ============================================ */
+
+.ds-inspector-input {
+  cursor: text;
+}
+
+.ds-inspector-input:not(.ds-inspector-bar--disabled):hover,
+.ds-inspector-input:focus-within {
+  background: var(--color-action-neutral-bg-hover);
+}
+
+/* The name is a real <label>, so a click on it focuses the field. */
+.ds-inspector-input .ds-inspector-bar__label {
+  pointer-events: auto;
+  cursor: text;
+}
+
+.ds-inspector-input__field {
+  flex: 1;
+  /* width 0 + flex 1: the field takes the bar's spare room and never asks
+     for its intrinsic 20-character width, which would push its container. */
+  width: 0;
+  min-width: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font: inherit;
+  text-align: right;
+  color: var(--color-text-primary);
+}
+
+.ds-inspector-input__field::placeholder {
+  color: var(--color-text-tertiary);
+}
+
+/* ============================================
+   TOGGLE SWITCH — the whole bar is the switch
+   ============================================ */
+
+.ds-inspector-toggle-switch:not(.ds-inspector-bar--disabled):hover {
+  background: var(--color-action-neutral-bg-hover);
+}
+
+.ds-inspector-toggle-switch:has(:active) {
+  background: var(--color-action-neutral-bg-active);
+}
+
+.ds-inspector-toggle-switch__track {
+  position: relative;
+  flex-shrink: 0;
+  width: calc(var(--padding-400) * 1.75);
+  height: var(--padding-400);
+  border-radius: var(--radius-pill);
+  background: var(--color-action-neutral-bg-active);
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+  pointer-events: none;
+}
+
+.ds-inspector-toggle-switch__knob {
+  position: absolute;
+  top: var(--border-050);
+  left: var(--border-050);
+  width: calc(var(--padding-400) - 2 * var(--border-050));
+  height: calc(var(--padding-400) - 2 * var(--border-050));
+  border-radius: var(--radius-pill);
+  background: var(--color-bg-container-primary);
+  transition: transform var(--motion-duration-base) var(--motion-ease-entrance);
+}
+
+/* On reads from the native checkbox itself, so the paint is right whether
+   the switch is controlled or not. Monochrome on purpose: on is the primary
+   text colour, not the action colour. */
+.ds-inspector-toggle-switch:has(.ds-inspector-bar__native:checked) .ds-inspector-toggle-switch__track {
+  background: var(--color-text-primary);
+}
+
+.ds-inspector-toggle-switch:has(.ds-inspector-bar__native:checked) .ds-inspector-toggle-switch__knob {
+  transform: translateX(calc(var(--padding-400) * 0.75));
+}
+
+/* ============================================
+   SEGMENTED CONTROL — name left, choices right
+   ============================================ */
+
+/* The bar's own inset shrinks on the right, so the selected segment sits
+   as an inset chip in the bar's end rather than touching its edge. */
+.ds-inspector-segmented-control {
+  padding-right: var(--padding-100);
+}
+
+/* Focus rings the segment, not the whole bar. */
+.ds-inspector-segmented-control:has(:focus-visible) {
+  outline: none;
+}
+
+.ds-inspector-segmented-control__segments {
+  position: relative;
+  display: flex;
+  gap: var(--gap-050);
+  min-width: 0;
+}
+
+.ds-inspector-segmented-control__segment {
+  position: relative;
+  padding: var(--padding-050) var(--padding-200);
+  /* The chip nests in the bar's end, so it shares the bar's shape. */
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color var(--motion-duration-fast) var(--motion-ease-standard),
+    color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-inspector-segmented-control__segment:not(:has(:disabled)):hover {
+  color: var(--color-text-primary);
+  background: var(--color-action-passive-bg-active);
+}
+
+.ds-inspector-segmented-control__segment:has(:checked) {
+  color: var(--color-text-primary);
+  font-weight: var(--ds-inspector-label-weight);
+  background: var(--color-action-neutral-bg-hover);
+}
+
+.ds-inspector-segmented-control__segment:not(:has(:disabled)):active {
+  background: var(--color-action-neutral-bg-active);
+}
+
+.ds-inspector-segmented-control__segment:has(:focus-visible) {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 0;
+}
+
+.ds-inspector-segmented-control__segment:has(:disabled) {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* The radio itself is invisible; its segment is the target. */
+.ds-inspector-segmented-control__radio {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+
+/* ============================================
+   DROPDOWN — the library Dropdown, dressed as a bar
+   ============================================ */
+
+.ds-inspector-dropdown {
+  position: relative;
+  min-width: 0;
+}
+
+.ds-inspector-dropdown__label {
+  position: absolute;
+  top: 50%;
+  left: var(--ds-inspector-inset);
+  z-index: 1;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  font-family: var(--ds-inspector-font-family);
+  font-size: var(--ds-inspector-font-size);
+  font-weight: var(--ds-inspector-label-weight);
+  line-height: var(--ds-inspector-line-height);
+  letter-spacing: var(--ds-inspector-letter-spacing);
+  color: var(--color-text-primary);
+  pointer-events: none;
+}
+
+.ds-inspector-dropdown .ds-dropdown__trigger {
+  box-sizing: border-box;
+  height: var(--ds-inspector-height);
+  padding: 0 calc(var(--ds-inspector-inset) - var(--padding-100)) 0
+    calc(var(--ds-inspector-inset) + var(--ds-inspector-label-width, 0px) + var(--gap-300));
+  border-color: transparent;
+  border-radius: var(--radius-pill);
+  background: var(--color-action-passive-bg-hover);
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-inspector-dropdown .ds-dropdown__trigger:hover:not(:focus-visible),
+.ds-inspector-dropdown .ds-dropdown--open .ds-dropdown__trigger {
+  border-color: transparent;
+  background: var(--color-action-neutral-bg-hover);
+}
+
+.ds-inspector-dropdown .ds-dropdown__trigger:active {
+  background: var(--color-action-neutral-bg-active);
+}
+
+/* The trigger's selected-border focus becomes the family's ring, so every
+   inspector control shows focus the same way. */
+.ds-inspector-dropdown .ds-dropdown__trigger:focus-visible {
+  border-color: transparent;
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+.ds-inspector-dropdown .ds-dropdown__value {
+  text-align: right;
+  font-family: var(--ds-dropdown-font, var(--ds-inspector-font-family));
+  font-size: var(--ds-inspector-font-size);
+  font-weight: var(--ds-inspector-value-weight);
+  line-height: var(--ds-inspector-line-height);
+  letter-spacing: var(--ds-inspector-letter-spacing);
+  color: var(--color-text-secondary);
+}
+
+.ds-inspector-dropdown .ds-dropdown__chevron {
+  --icon-size: var(--icon-size-500);
+  color: var(--color-icon-secondary);
+}
+
+/* ============================================
+   SECTION — a collapsible, titled run of controls
+   ============================================ */
+
+.ds-inspector-section {
+  display: flex;
+  flex-direction: column;
+  border-bottom: var(--border-025) solid var(--color-divider);
+}
+
+.ds-inspector-section:last-of-type {
+  border-bottom: none;
+}
+
+.ds-inspector-section__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-200);
+  width: 100%;
+  padding: var(--padding-300) 0;
+  background: none;
+  border: none;
+  border-radius: var(--radius-200);
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--font-paragraph-emphasis-family);
+  font-size: var(--font-paragraph-emphasis-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-emphasis-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.ds-inspector-section__trigger:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+.ds-inspector-section__icon {
+  flex-shrink: 0;
+  --icon-size: var(--icon-size-500);
+  color: var(--color-icon-secondary);
+  transition: transform var(--motion-duration-slow) var(--motion-ease-emphasized);
+}
+
+.ds-inspector-section--open .ds-inspector-section__icon {
+  transform: rotate(180deg);
+}
+
+.ds-inspector-section__panel {
+  display: grid;
+  /* minmax(0, 1fr), not auto: an auto column grows to its content's
+     intrinsic width, which would let a wide control push the panel. */
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--motion-duration-slow) var(--motion-ease-emphasized);
+}
+
+.ds-inspector-section--open .ds-inspector-section__panel {
+  grid-template-rows: 1fr;
+}
+
+/* Clipped while closed or moving; released once settled open, so a
+   Dropdown menu inside can open past the section's edge. */
+.ds-inspector-section__body {
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+}
+
+.ds-inspector-section--settled .ds-inspector-section__body {
+  overflow: visible;
+}
+
+/* The section's foot: an empty flex item sized so the gap above it plus
+   its own height equal the trigger's padding, so the content sits as far
+   from the divider as the title does. Padding instead would keep a closed
+   panel from reaching zero height. */
+.ds-inspector-section__body::after {
+  content: "";
+  flex: 0 0 calc(var(--padding-300) - var(--gap-200));
+}

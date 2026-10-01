@@ -870,6 +870,58 @@ Binary on/off toggle control with sliding thumb and check indicator, used for se
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/toggle-switch.md
 
+## Inspector (6)
+
+One-row controls for tool panels and settings rails, each carrying its name inside the control and sized to match Button.
+
+### Inspector dropdown
+
+One-row select for inspector panels, with the name inside the bar and the library Dropdown's menu and font previews.
+
+- Import: `import { InspectorDropdown } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/inspector-dropdown.md
+
+### Inspector input
+
+One-row text field for inspector panels, with the name on the left and the value right-aligned in the bar.
+
+- Import: `import { InspectorInput } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/inspector-input.md
+
+### Inspector section
+
+Collapsible, titled run of inspector controls whose open body lets a dropdown menu open past its edge.
+
+- Import: `import { InspectorSection } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/inspector-section.md
+
+### Inspector segments
+
+One-row choice between a few options for inspector panels, as native radios with a neutral selected chip.
+
+- Import: `import { InspectorSegmentedControl } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/inspector-segmented-control.md
+
+### Inspector slider
+
+One-row slider for inspector panels, where the whole bar is the control and its fill is the value.
+
+- Import: `import { InspectorSlider } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/inspector-slider.md
+
+### Inspector toggle switch
+
+One-row switch for inspector panels, where the whole bar toggles and the track sits at its end.
+
+- Import: `import { InspectorToggleSwitch } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/inspector-toggle-switch.md
+
 ## Layout (8)
 
 Page scaffolding: app shells, sidebars, dividers, and section headings.

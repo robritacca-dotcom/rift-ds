@@ -394,6 +394,42 @@
       "description": "Text input with label, placeholder, left and right icons, helper text, and error states."
     },
     {
+      "name": "inspector-dropdown",
+      "type": "registry:ui",
+      "title": "Inspector dropdown",
+      "description": "One-row select for inspector panels, with the name inside the bar and the library Dropdown's menu and font previews."
+    },
+    {
+      "name": "inspector-input",
+      "type": "registry:ui",
+      "title": "Inspector input",
+      "description": "One-row text field for inspector panels, with the name on the left and the value right-aligned in the bar."
+    },
+    {
+      "name": "inspector-section",
+      "type": "registry:ui",
+      "title": "Inspector section",
+      "description": "Collapsible, titled run of inspector controls whose open body lets a dropdown menu open past its edge."
+    },
+    {
+      "name": "inspector-segmented-control",
+      "type": "registry:ui",
+      "title": "Inspector segments",
+      "description": "One-row choice between a few options for inspector panels, as native radios with a neutral selected chip."
+    },
+    {
+      "name": "inspector-slider",
+      "type": "registry:ui",
+      "title": "Inspector slider",
+      "description": "One-row slider for inspector panels, where the whole bar is the control and its fill is the value."
+    },
+    {
+      "name": "inspector-toggle-switch",
+      "type": "registry:ui",
+      "title": "Inspector toggle switch",
+      "description": "One-row switch for inspector panels, where the whole bar toggles and the track sits at its end."
+    },
+    {
       "name": "instructions",
       "type": "registry:ui",
       "title": "Instructions",

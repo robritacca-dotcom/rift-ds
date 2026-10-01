@@ -5158,6 +5158,390 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "name": "InspectorDropdown",
+    "label": "Inspector dropdown",
+    "slug": "inspector-dropdown",
+    "category": "inspector",
+    "description": "One-row select for inspector panels, with the name inside the bar and the library Dropdown's menu and font previews.",
+    "client": true,
+    "importPath": "rift-ds/components/Inspector/InspectorDropdown",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "InspectorDropdown",
+        "props": [
+          {
+            "name": "label",
+            "type": "string",
+            "required": true,
+            "description": "The setting's name, drawn inside the bar on the left. Also the dropdown's accessible name."
+          },
+          {
+            "name": "value",
+            "type": "string",
+            "required": false,
+            "description": "Currently selected value."
+          },
+          {
+            "name": "options",
+            "type": "DropdownOption[]",
+            "required": true,
+            "description": "Available options (flat list). Each option's `font` previews the face, as in Dropdown."
+          },
+          {
+            "name": "groups",
+            "type": "DropdownOptionGroup[]",
+            "required": false,
+            "description": "Optional grouped options. When provided, renders groups with labels and separators."
+          },
+          {
+            "name": "placeholder",
+            "type": "string",
+            "required": false,
+            "description": "Shown on the right when nothing is selected."
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the dropdown is disabled.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "size",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "Component size, matching Button: `default` is 40px tall, `compact` 32px.",
+            "defaultValue": "default"
+          },
+          {
+            "name": "onValueChange",
+            "type": "((value: string) => void)",
+            "required": false,
+            "description": "Called with the newly selected value."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes, applied to the wrapper.",
+            "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "InspectorInput",
+    "label": "Inspector input",
+    "slug": "inspector-input",
+    "category": "inspector",
+    "description": "One-row text field for inspector panels, with the name on the left and the value right-aligned in the bar.",
+    "client": true,
+    "importPath": "rift-ds/components/Inspector/InspectorInput",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "InspectorInput",
+        "props": [
+          {
+            "name": "label",
+            "type": "string",
+            "required": true,
+            "description": "The setting's name, drawn inside the bar on the left, as the field's real <label>."
+          },
+          {
+            "name": "value",
+            "type": "string",
+            "required": false,
+            "description": "Current value."
+          },
+          {
+            "name": "type",
+            "type": "\"search\" | \"text\" | \"tel\" | \"url\" | \"email\"",
+            "required": false,
+            "description": "Input type: a curated subset of the single-line text types.",
+            "defaultValue": "text"
+          },
+          {
+            "name": "size",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "Component size, matching Button: `default` is 40px tall, `compact` 32px (not the native character-width `size` attribute).",
+            "defaultValue": "default"
+          },
+          {
+            "name": "onValueChange",
+            "type": "((value: string) => void)",
+            "required": false,
+            "description": "Convenience callback receiving the value directly.\nFires alongside `onChange`, which keeps the standard React event signature\nso form libraries work unmodified."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes, applied to the bar rather than the <input>.",
+            "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "InspectorSection",
+    "label": "Inspector section",
+    "slug": "inspector-section",
+    "category": "inspector",
+    "description": "Collapsible, titled run of inspector controls whose open body lets a dropdown menu open past its edge.",
+    "client": true,
+    "importPath": "rift-ds/components/Inspector/InspectorSection",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "InspectorSection",
+        "props": [
+          {
+            "name": "title",
+            "type": "string",
+            "required": true,
+            "description": "The section's heading, shown on its header row. Not the native tooltip `title` attribute."
+          },
+          {
+            "name": "open",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the section is expanded (controlled). Pair with `onOpenChange`."
+          },
+          {
+            "name": "defaultOpen",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether an uncontrolled section starts expanded.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "onOpenChange",
+            "type": "((open: boolean) => void)",
+            "required": false,
+            "description": "Called with the next expanded state when the header is pressed."
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The section's controls, stacked one rhythm apart."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes, applied to the <section>.",
+            "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "InspectorSegmentedControl",
+    "label": "Inspector segments",
+    "slug": "inspector-segmented-control",
+    "category": "inspector",
+    "description": "One-row choice between a few options for inspector panels, as native radios with a neutral selected chip.",
+    "client": true,
+    "importPath": "rift-ds/components/Inspector/InspectorSegmentedControl",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "InspectorSegmentedControl",
+        "props": [
+          {
+            "name": "label",
+            "type": "string",
+            "required": true,
+            "description": "The setting's name, drawn inside the bar on the left. Names the radiogroup."
+          },
+          {
+            "name": "options",
+            "type": "InspectorSegment[]",
+            "required": true,
+            "description": "The choices, drawn left to right in the bar's end."
+          },
+          {
+            "name": "value",
+            "type": "string",
+            "required": false,
+            "description": "The selected value (controlled). Leave unset and use `defaultValue` for an uncontrolled set."
+          },
+          {
+            "name": "defaultValue",
+            "type": "string",
+            "required": false,
+            "description": "The starting selection for an uncontrolled set."
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "required": false,
+            "description": "The radios' shared `name`, for native form submission. Generated when unset."
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "required": false,
+            "description": "Takes the whole set out of use.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "size",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "Component size, matching Button: `default` is 40px tall, `compact` 32px.",
+            "defaultValue": "default"
+          },
+          {
+            "name": "onValueChange",
+            "type": "((value: string) => void)",
+            "required": false,
+            "description": "Called with the newly chosen value."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes, applied to the bar.",
+            "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "InspectorSlider",
+    "label": "Inspector slider",
+    "slug": "inspector-slider",
+    "category": "inspector",
+    "description": "One-row slider for inspector panels, where the whole bar is the control and its fill is the value.",
+    "client": true,
+    "importPath": "rift-ds/components/Inspector/InspectorSlider",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "InspectorSlider",
+        "props": [
+          {
+            "name": "label",
+            "type": "string",
+            "required": true,
+            "description": "The setting's name, drawn inside the bar on the left. Also the range's accessible name."
+          },
+          {
+            "name": "value",
+            "type": "number",
+            "required": false,
+            "description": "Current value (controlled). Leave unset and use `defaultValue` for an uncontrolled slider."
+          },
+          {
+            "name": "defaultValue",
+            "type": "number",
+            "required": false,
+            "description": "Starting value for an uncontrolled slider. Defaults to `min`."
+          },
+          {
+            "name": "min",
+            "type": "number",
+            "required": false,
+            "description": "Minimum value.",
+            "defaultValue": "0"
+          },
+          {
+            "name": "max",
+            "type": "number",
+            "required": false,
+            "description": "Maximum value.",
+            "defaultValue": "100"
+          },
+          {
+            "name": "step",
+            "type": "number",
+            "required": false,
+            "description": "Step increment. Also sets how many decimals the reading shows (0.02 reads \"0.50\").",
+            "defaultValue": "1"
+          },
+          {
+            "name": "format",
+            "type": "((value: number) => string)",
+            "required": false,
+            "description": "Formats the reading on the right, and the value a screen reader announces. Defaults to the step's precision."
+          },
+          {
+            "name": "size",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "Component size, matching Button: `default` is 40px tall, `compact` 32px (not the native character-width `size` attribute).",
+            "defaultValue": "default"
+          },
+          {
+            "name": "onValueChange",
+            "type": "((value: number) => void)",
+            "required": false,
+            "description": "Convenience callback receiving the numeric value directly.\nFires alongside `onChange`, which keeps the standard React event signature."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes, applied to the bar rather than the <input>.",
+            "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "InspectorToggleSwitch",
+    "label": "Inspector toggle switch",
+    "slug": "inspector-toggle-switch",
+    "category": "inspector",
+    "description": "One-row switch for inspector panels, where the whole bar toggles and the track sits at its end.",
+    "client": true,
+    "importPath": "rift-ds/components/Inspector/InspectorToggleSwitch",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "InspectorToggleSwitch",
+        "props": [
+          {
+            "name": "label",
+            "type": "string",
+            "required": true,
+            "description": "The setting's name, drawn inside the bar on the left. Also the switch's accessible name."
+          },
+          {
+            "name": "size",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "Component size, matching Button: `default` is 40px tall, `compact` 32px (not the native character-width `size` attribute).",
+            "defaultValue": "default"
+          },
+          {
+            "name": "onCheckedChange",
+            "type": "((checked: boolean) => void)",
+            "required": false,
+            "description": "Convenience callback receiving the checked state directly.\nFires alongside `onChange`, which keeps the standard React event signature."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes, applied to the bar rather than the <input>.",
+            "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
     "name": "Instructions",
     "label": "Instructions",
     "slug": "instructions",

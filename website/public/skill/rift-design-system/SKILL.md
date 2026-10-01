@@ -5,7 +5,7 @@ description: Build React UI with rift-ds. Use when installing the package, compo
 
 # Using rift-ds
 
-Generated from the library's registries at version 1.1.0, alongside every deploy of https://rift-ds.com. The library is 136 React components across 11 categories, themed by 255 semantic design tokens, published to npm. Designed and built by Robert Ritacca (https://robertritacca.com), MIT licensed.
+Generated from the library's registries at version 1.1.0, alongside every deploy of https://rift-ds.com. The library is 142 React components across 12 categories, themed by 255 semantic design tokens, published to npm. Designed and built by Robert Ritacca (https://robertritacca.com), MIT licensed.
 
 ## Install
 
@@ -54,6 +54,7 @@ references/components.md lists every component with its import line and descript
 - Effects (1): Ambient and decorative surfaces that sit behind or around the interface.
 - Feedback (10): Alerts, toasts, progress, and empty states that tell people what is happening.
 - Forms (21): Inputs, pickers, and selection controls for collecting and editing values.
+- Inspector (6): One-row controls for tool panels and settings rails, each carrying its name inside the control and sized to match Button.
 - Layout (8): Page scaffolding: app shells, sidebars, dividers, and section headings.
 - Maps (4): Geographic surfaces for showing where things are and what connects them: a globe, a flat world map, and the callout and key that explain them.
 - Navigation (9): Top bars, breadcrumbs, tabs, steppers, and pagination for moving through a product.

@@ -68,14 +68,15 @@
 
 /* The chat stage's safe area is the browser's, not a document's: the
    review-width cap belongs to the components showcase, so the chat view
-   lets its column run panel to panel at any viewport. */
-.dsLayoutChat /* The content column shares the rails' entrance. */
-.dsContentEnter {
-  animation: playgroundEnter var(--motion-duration-slower) var(--motion-ease-entrance) backwards;
+   lets its column run panel to panel at any viewport (the stage's rest
+   width, in ChatView.module.css, is what holds the widget). */
+.dsLayoutChat .dsContent {
+  max-width: none;
 }
 
-.dsContent {
-  max-width: none;
+/* The content column shares the rails' entrance. */
+.dsContentEnter {
+  animation: playgroundEnter var(--motion-duration-slower) var(--motion-ease-entrance) backwards;
 }
 
 .dsContent {

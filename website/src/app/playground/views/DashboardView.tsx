@@ -254,7 +254,6 @@ export default function DashboardView({
       <div
         className={[
           chatStyles.widgetFrame,
-          device ? "" : styles.boardFrame,
           resizing ? chatStyles.resizing : "",
         ]
           .filter(Boolean)

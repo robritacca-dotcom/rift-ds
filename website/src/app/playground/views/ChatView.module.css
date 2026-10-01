@@ -7,6 +7,16 @@
      widget and every piece of floating furniture — panels, toolbar pill,
      control bar. The same inset those pieces keep off the viewport. */
   --stage-safe-pad: var(--layout-chat-inset);
+  /* The two widths every staged surface shares (the chat widget here, the
+     dashboard in DashboardView), so switching views keeps the stage's
+     footprint. The rest width is what a view opens at, held under the
+     chat's room between its two panels on a desktop browser so both views
+     launch at the same size wherever the chat has the room (from about a
+     2120px browser; below that each view fills what it has); the wall is
+     how far a drag may widen either, past which a desktop app only grows
+     empty gutters. Review targets, not layout tokens. */
+  --stage-rest-width: 1440px;
+  --stage-max-width: 2148px;
   /* Everything vertical the page stacks around the widget: the toolbar
      pill's clearance, the bottom control bar's safe area, and the body's
      padding pair — so the widget fits and centres in the zone between the
@@ -27,8 +37,9 @@
 
 /* The frame shrink-wraps the widget and hosts the resize grips, which
    straddle the edges — outside the widget's own overflow clip. No width
-   cap: a dragged widget may outgrow the content column, overflowing the
-   centred stage evenly on both sides. */
+   cap of its own once dragged: a dragged widget may outgrow the content
+   column, overflowing the centred stage evenly on both sides, up to the
+   widget's wall. */
 .widgetFrame {
   position: relative;
   display: flex;
@@ -39,9 +50,13 @@
    The moment a drag sets a width the fit class drops and the frame
    shrink-wraps again — which keeps the grips straddling the widget's real
    edges, and lets a wide drag outgrow the column, overflowing the centred
-   stage evenly on both sides. */
+   stage evenly on both sides. The rest width caps the frame, not just the
+   widget inside it: capped alone, the widget would sit pinned to the
+   frame's left edge with the grips stranded out at the column's. Capped
+   here, the stage centres the frame and the grips sit on the real edges. */
 .widgetFrame:has(> .widgetFitW) {
   width: 100%;
+  max-width: var(--stage-rest-width);
 }
 
 .resizing {
@@ -56,12 +71,15 @@
   min-width: 320px;
   min-height: 480px;
   /* The wide wall is the safe area itself: the browser's width, minus the
-     panels, minus the padding ring — the same box the resting fit fills,
-     so the whole geometry follows the viewport. A drag shrinks the card
-     inside the safe area; nothing ever crosses the ring. */
-  max-width: calc(
-    100vw - var(--stage-walls, 0px) -
-      var(--stage-safe-pad, var(--layout-chat-inset)) * 2
+     panels, minus the padding ring — so the whole geometry follows the
+     viewport and nothing ever crosses the ring. On a monitor wide enough
+     to clear that, the stage's shared wall stops it instead. */
+  max-width: min(
+    var(--stage-max-width),
+    calc(
+      100vw - var(--stage-walls, 0px) -
+        var(--stage-safe-pad, var(--layout-chat-inset)) * 2
+    )
   );
   /* The tall wall: a drag stops at the zone between the toolbar pill and
      the bottom control bar's safe area — the widget can never be pulled

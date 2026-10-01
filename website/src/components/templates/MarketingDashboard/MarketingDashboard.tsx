@@ -49,6 +49,7 @@ import { AreaChart, ComboChart, RadialChart } from "rift-ds/charts";
 import SidebarSwitchers from "../SidebarSwitchers/SidebarSwitchers";
 import TemplateAssistant from "../TemplateAssistant/TemplateAssistant";
 import styles from "./MarketingDashboard.module.css";
+import { useStagedProductName } from "../useStagedProductName";
 
 /* ---------------------------------------------------------------- data */
 
@@ -365,6 +366,8 @@ function seriesSwatch(series: number): string {
 /* ---------------------------------------------------------------- page */
 
 export default function MarketingDashboard() {
+  /* The playground's Product name lever, when staged there. */
+  const productName = useStagedProductName("Boardline");
   const [sidebarExpanded, setSidebarExpanded] = React.useState(true);
   const [channelTab, setChannelTab] = React.useState("channels");
   const [chatOpen, setChatOpen] = React.useState(false);
@@ -495,7 +498,7 @@ export default function MarketingDashboard() {
           activeKey="marketing"
           expanded={sidebarExpanded}
           onExpandedChange={setSidebarExpanded}
-          logoText="Boardline"
+          logoText={productName}
           floating
           footerSlot={<SidebarSwitchers />}
         />
@@ -547,7 +550,7 @@ export default function MarketingDashboard() {
           <div>
             <Breadcrumb
               items={[
-                { label: "Boardline", href: "#" },
+                { label: productName, href: "#" },
                 { label: "Team space", href: "#" },
                 { label: "Marketing" },
               ]}
@@ -839,7 +842,7 @@ export default function MarketingDashboard() {
       <TemplateAssistant
         open={chatOpen}
         onClose={() => setChatOpen(false)}
-        title="Boardline AI"
+        title={`${productName} AI`}
         askLine="Ask about campaigns, channels, spend, or performance"
         suggestions={CHAT_SUGGESTIONS}
         replies={CHAT_REPLIES}

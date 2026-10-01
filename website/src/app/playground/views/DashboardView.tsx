@@ -21,6 +21,7 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { STAGED_PRODUCT_NAME_ATTR } from "@/components/templates/useStagedProductName";
 import chatStyles from "./ChatView.module.css";
 import styles from "./DashboardView.module.css";
 
@@ -56,9 +57,15 @@ export interface DashboardViewProps {
   /** Stage the phone version in the bezel. A phone-sized playground is
       already a phone, so it gets the bare app filling the stage instead. */
   device: boolean;
+  /** The Product name lever, shown in place of the template's own name. */
+  productName: string;
 }
 
-export default function DashboardView({ template, device }: DashboardViewProps) {
+export default function DashboardView({
+  template,
+  device,
+  productName,
+}: DashboardViewProps) {
   const { href, title } = TEMPLATES[template];
   const frameRef = useRef<HTMLIFrameElement>(null);
   const mirroredKeys = useRef<string[]>([]);
@@ -71,6 +78,7 @@ export default function DashboardView({ template, device }: DashboardViewProps) 
   useEffect(() => {
     hrefRef.current = href;
   }, [href]);
+  const productNameRef = useRef(productName);
 
   const sync = useCallback(() => {
     const doc = frameRef.current?.contentDocument;
@@ -85,6 +93,10 @@ export default function DashboardView({ template, device }: DashboardViewProps) 
     const brand = root.getAttribute("data-brand");
     if (brand) frameRoot.setAttribute("data-brand", brand);
     else frameRoot.removeAttribute("data-brand");
+
+    /* The Product name lever, which the template reads from this
+       attribute (useStagedProductName), so typing never reloads the frame. */
+    frameRoot.setAttribute(STAGED_PRODUCT_NAME_ATTR, productNameRef.current);
 
     /* The levers' overrides: every custom property inline on the root,
        replacing the previous mirror so a reset lever clears in the frame. */
@@ -112,6 +124,12 @@ export default function DashboardView({ template, device }: DashboardViewProps) 
 
     setReadyHref(hrefRef.current);
   }, []);
+
+  /* The name is a prop, not a root attribute, so it re-syncs itself. */
+  useEffect(() => {
+    productNameRef.current = productName;
+    sync();
+  }, [productName, sync]);
 
   /* Re-sync on every lever move (the inline style), theme flip, and brand
      change. */

@@ -61,6 +61,7 @@ import { HiddenBackground } from "@/components/BlurBackground/BlurBackground";
 import DotBackground from "@/components/DotBackground/DotBackground";
 import { BRAND_NAME } from "@/config/brand.generated";
 import styles from "./MobileDashboard.module.css";
+import { useStagedProductName } from "../useStagedProductName";
 
 /* ---------------------------------------------------------------- data */
 
@@ -355,6 +356,8 @@ function CampaignList({ campaigns }: { campaigns: Campaign[] }) {
 /* ---------------------------------------------------------------- page */
 
 export default function MobileDashboard() {
+  /* The playground's Product name lever, when staged there. */
+  const productName = useStagedProductName("Boardline");
   const [tab, setTab] = React.useState<Tab>("overview");
   const [range, setRange] = React.useState("30d");
   const [deliveryFilter, setDeliveryFilter] = React.useState("all");
@@ -475,7 +478,7 @@ export default function MobileDashboard() {
                   size="large"
                   title={title}
                   subtitle={
-                    tab === "overview" ? "Boardline · Team space" : undefined
+                    tab === "overview" ? `${productName} · Team space` : undefined
                   }
                   navigation="menu"
                   onNavigate={() => setMenuOpen(true)}
@@ -652,11 +655,11 @@ export default function MobileDashboard() {
                   activeKey={tab}
                   onValueChange={selectTab}
                   search={{
-              label: "Ask Boardline AI",
+              label: `Ask ${productName} AI`,
               icon: "auto_awesome",
               onClick: () => setChatOpen(true),
             }}
-                  aria-label="Boardline"
+                  aria-label={productName}
                 />
               </div>
 
@@ -668,7 +671,7 @@ export default function MobileDashboard() {
                 onClose={() => setChatOpen(false)}
                 placement="contained"
                 className={styles.assistantSheet}
-                title="Boardline AI"
+                title={`${productName} AI`}
                 askLine="Ask about campaigns, channels, spend, or performance"
                 suggestions={CHAT_SUGGESTIONS}
                 replies={CHAT_REPLIES}
@@ -688,7 +691,7 @@ export default function MobileDashboard() {
         open={menuOpen}
         onOpenChange={setMenuOpen}
         className={styles.menuDrawer}
-        title="Boardline"
+        title={productName}
         side="left"
         size="sm"
         footer={

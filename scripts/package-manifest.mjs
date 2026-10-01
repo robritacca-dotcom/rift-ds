@@ -32,7 +32,7 @@ import {
 } from './brand.mjs';
 
 export { PACKAGE_NAME, REPOSITORY_URL };
-export const PACKAGE_VERSION = '1.1.0';
+export const PACKAGE_VERSION = '1.2.0';
 export const PACKAGE_DESCRIPTION =
   'An AI-ready React design system: accessible components on composable tokens, light/dark theming, and CSS-variable overrides.';
 

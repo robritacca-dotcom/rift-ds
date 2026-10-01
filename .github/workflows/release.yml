@@ -101,6 +101,10 @@ name: Release
 # 1.1.0 shipped 2026-09-27 — mobile app navigation (BottomNav, TopAppBar,
 #   each in Rift, iOS and Android styles), SidebarPanel and AppSidebar's third
 #   level, and screen-reader names on charts, Nav and Stepper.
+# 1.2.0 shipped 2026-09-30 — the Inspector family (InspectorSection,
+#   InspectorSlider, InspectorInput, InspectorToggleSwitch,
+#   InspectorSegmentedControl, InspectorDropdown) under a new inspector
+#   category, and SegmentedControl's concentric corner counting its hairline.
 
 on:
   workflow_dispatch:

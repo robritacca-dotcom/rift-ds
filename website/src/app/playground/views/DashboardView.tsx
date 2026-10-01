@@ -21,6 +21,7 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { MOTION_SCROLL_SETTLE_MS } from "rift-ds/tokens/motion";
 import { STAGED_PRODUCT_NAME_ATTR } from "@/components/templates/useStagedProductName";
 import chatStyles from "./ChatView.module.css";
 import styles from "./DashboardView.module.css";
@@ -43,6 +44,19 @@ const PHONE = { w: 390, h: 844 };
 
 /** Marks the frame's mirrored font links, so a resync skips them. */
 const MIRRORED_FONT_ATTR = "data-playground-font";
+
+/** Marks the frame's injected scrollbar sheet, so a resync skips it. */
+const SCROLLBAR_STYLE_ATTR = "data-playground-scrollbars";
+/** Set on the frame's root while anything inside it is scrolling. */
+const SCROLLING_ATTR = "data-playground-scrolling";
+
+/* The staged app's scrollbars stay out of the picture until a scroll: the
+   gutter is kept (so a classic scrollbar never reflows the app as it
+   appears), only the thumb is clear at rest. */
+const SCROLLBAR_CSS = `
+html, html * { scrollbar-width: thin; scrollbar-color: transparent transparent; }
+html[${SCROLLING_ATTR}], html[${SCROLLING_ATTR}] * { scrollbar-color: var(--color-divider) transparent; }
+`;
 
 /* The stage centres the dashboard, so a drag moves both opposing edges;
    doubling the delta keeps the grabbed edge under the cursor (the Chat
@@ -121,6 +135,29 @@ export default function DashboardView({
         copy.setAttribute(MIRRORED_FONT_ATTR, link.id);
         doc.head.appendChild(copy);
       });
+
+    /* The scrollbars, shown while scrolling and hidden once it settles.
+       Scroll does not bubble, so a capturing listener catches every
+       scroller in the app, the document's own included. */
+    if (!doc.head.querySelector(`style[${SCROLLBAR_STYLE_ATTR}]`)) {
+      const style = doc.createElement("style");
+      style.setAttribute(SCROLLBAR_STYLE_ATTR, "");
+      style.textContent = SCROLLBAR_CSS;
+      doc.head.appendChild(style);
+      let settle: number | undefined;
+      doc.addEventListener(
+        "scroll",
+        () => {
+          frameRoot.setAttribute(SCROLLING_ATTR, "");
+          window.clearTimeout(settle);
+          settle = window.setTimeout(
+            () => frameRoot.removeAttribute(SCROLLING_ATTR),
+            MOTION_SCROLL_SETTLE_MS
+          );
+        },
+        { capture: true, passive: true }
+      );
+    }
 
     setReadyHref(hrefRef.current);
   }, []);

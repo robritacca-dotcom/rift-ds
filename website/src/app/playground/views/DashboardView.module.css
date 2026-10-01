@@ -11,10 +11,14 @@
   min-height: 480px;
   /* The wide wall: the browser's width less the one panel and the padding
      ring either side (the dashboard layout seats a single panel, where the
-     chat layout seats two). */
-  max-width: calc(
-    100vw - var(--rail-width, 0px) - var(--rail-inset, 0px) -
-      var(--stage-safe-pad, var(--layout-chat-inset)) * 2
+     chat layout seats two), and never wider than a big desktop monitor's
+     browser, past which the dashboard only grows empty gutters. */
+  max-width: min(
+    2148px,
+    calc(
+      100vw - var(--rail-width, 0px) - var(--rail-inset, 0px) -
+        var(--stage-safe-pad, var(--layout-chat-inset)) * 2
+    )
   );
   max-height: calc(100dvh - var(--chat-clearance));
   /* The chat widget's card edge, so the two stages read as one family. */

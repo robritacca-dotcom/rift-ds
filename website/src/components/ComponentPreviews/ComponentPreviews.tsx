@@ -53,6 +53,12 @@ import { NumberInput } from "rift-ds/components/NumberInput/NumberInput";
 import { Pagination } from "rift-ds/components/Pagination/Pagination";
 import { InterruptCard } from "rift-ds/components/InterruptCard/InterruptCard";
 import { Kbd } from "rift-ds/components/Kbd/Kbd";
+import { InspectorDropdown } from "rift-ds/components/Inspector/InspectorDropdown";
+import { InspectorInput } from "rift-ds/components/Inspector/InspectorInput";
+import { InspectorSection } from "rift-ds/components/Inspector/InspectorSection";
+import { InspectorSegmentedControl } from "rift-ds/components/Inspector/InspectorSegmentedControl";
+import { InspectorSlider } from "rift-ds/components/Inspector/InspectorSlider";
+import { InspectorToggleSwitch } from "rift-ds/components/Inspector/InspectorToggleSwitch";
 import { Globe } from "rift-ds/components/Globe/Globe";
 import { MapCallout } from "rift-ds/components/MapCallout/MapCallout";
 import { MapLegend } from "rift-ds/components/MapLegend/MapLegend";
@@ -908,6 +914,62 @@ const previews: Record<string, () => ReactNode> = {
         <span style={{ color: "var(--color-text-tertiary)", fontSize: "14px" }}>
           Enter text...
         </span>
+      </div>
+    </>
+  ),
+  /* The Inspector family: real controls at compact, held inert so the card
+     link stays the only interactive element in its tile. */
+  "inspector-dropdown": () => (
+    <>
+      <div inert aria-hidden="true" style={{ width: "170px" }}>
+        <InspectorDropdown size="compact" label="Layout" value="grid" options={[{ value: "grid", label: "Grid" }]} />
+      </div>
+    </>
+  ),
+  "inspector-input": () => (
+    <>
+      <div inert aria-hidden="true" style={{ width: "170px" }}>
+        <InspectorInput size="compact" label="Name" defaultValue="Acme" />
+      </div>
+    </>
+  ),
+  "inspector-section": () => (
+    <>
+      <div inert aria-hidden="true" style={{ width: "170px" }}>
+        <InspectorSection title="Shape" defaultOpen>
+          <InspectorSlider size="compact" label="Radius" defaultValue={60} format={(v) => `${v}%`} />
+          <InspectorToggleSwitch size="compact" label="Pill" defaultChecked />
+        </InspectorSection>
+      </div>
+    </>
+  ),
+  "inspector-segmented-control": () => (
+    <>
+      <div inert aria-hidden="true" style={{ width: "170px" }}>
+        <InspectorSegmentedControl
+          size="compact"
+          label="Size"
+          defaultValue="s"
+          options={[
+            { value: "s", label: "S" },
+            { value: "m", label: "M" },
+            { value: "l", label: "L" },
+          ]}
+        />
+      </div>
+    </>
+  ),
+  "inspector-slider": () => (
+    <>
+      <div inert aria-hidden="true" style={{ width: "170px" }}>
+        <InspectorSlider size="compact" label="Density" defaultValue={60} format={(v) => `${v}%`} />
+      </div>
+    </>
+  ),
+  "inspector-toggle-switch": () => (
+    <>
+      <div inert aria-hidden="true" style={{ width: "170px" }}>
+        <InspectorToggleSwitch size="compact" label="Snap to grid" defaultChecked />
       </div>
     </>
   ),

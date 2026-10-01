@@ -1,0 +1,124 @@
+/* ============================================
+   PAGE LAYOUT
+   ============================================ */
+.dsLayout {
+  display: flex;
+  gap: var(--layout-column-gap);
+  width: 100%;
+  max-width: 1440px;
+  padding-top: var(--primitive-gap-1000);
+}
+
+.dsContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-2000);
+  min-width: 0;
+}
+
+.pageHeader {
+  margin-top: calc(var(--primitive-gap-1000) - var(--gap-2000));
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--primitive-gap-500);
+  width: 100%;
+}
+
+.pageTitle {
+  font-family: var(--font-display-2-family);
+  font-size: var(--font-display-2-size);
+  font-weight: var(--font-display-2-weight);
+  line-height: var(--font-display-2-line-height);
+  letter-spacing: var(--font-display-2-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.subDisplay {
+  font-family: var(--font-sub-display-family);
+  font-size: var(--font-sub-display-size);
+  font-weight: var(--font-sub-display-weight);
+  line-height: var(--font-sub-display-line-height);
+  letter-spacing: var(--font-sub-display-letter-spacing);
+  color: var(--color-text-primary);
+  margin-bottom: 0;
+}
+
+/* ============================================
+   INTRO SECTION
+   ============================================ */
+.introSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-500);
+}
+
+.introBody {
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-primary);
+}
+
+.introBody a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ============================================
+   SECTIONS
+   ============================================ */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-1000);
+  width: 100%;
+}
+
+/* Two demo columns (default and compact), wrapping to one on narrow screens */
+.sizeRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--primitive-gap-1000);
+  align-items: flex-start;
+}
+
+/* A bounded stage: inspector bars fill their container, so the demo
+   gives them a rail-sized column rather than the full content width. */
+.demoColumn {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+  width: 100%;
+  max-width: 320px;
+}
+
+.demoCaption {
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-tertiary);
+}
+
+/* The composed panel: a rail-width surface the sections stack inside */
+.panelStage {
+  width: 100%;
+  max-width: 320px;
+  padding: 0 var(--padding-400);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-300);
+  background: var(--color-bg-container-primary);
+}
+
+@media (max-width: 959px) {
+  .pageHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .dsLayout { padding-left: 0; min-width: 0; }
+  .dsContent { max-width: 100%; min-width: 0; }
+}

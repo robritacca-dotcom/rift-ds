@@ -252,7 +252,13 @@ export default function DashboardView({
   return (
     <div className={chatStyles.stage}>
       <div
-        className={`${chatStyles.widgetFrame} ${resizing ? chatStyles.resizing : ""}`}
+        className={[
+          chatStyles.widgetFrame,
+          device ? "" : styles.boardFrame,
+          resizing ? chatStyles.resizing : "",
+        ]
+          .filter(Boolean)
+          .join(" ")}
       >
         {device ? (
           <div className={chatStyles.deviceShell}>

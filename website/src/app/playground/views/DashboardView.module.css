@@ -12,7 +12,8 @@
   /* The wide wall: the browser's width less the one panel and the padding
      ring either side (the dashboard layout seats a single panel, where the
      chat layout seats two), and never wider than a big desktop monitor's
-     browser, past which the dashboard only grows empty gutters. */
+     browser, past which the dashboard only grows empty gutters (the
+     frame carries the same cap, see .boardFrame). */
   max-width: min(
     2148px,
     calc(
@@ -29,6 +30,15 @@
   transition:
     width var(--motion-duration-base) var(--motion-ease-standard),
     height var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+/* The board's widest wall, held by the frame too: at rest the frame
+   stretches to the stage and the board fills it, so capping the board
+   alone would pin it to the frame's left edge with the grips stranded
+   out at the column's. Capped here, the stage centres the frame and the
+   grips sit on the board's real edges. */
+.boardFrame {
+  max-width: 2148px;
 }
 
 /* A drag tracks the pointer, and the frame gives up the pointer so a fast

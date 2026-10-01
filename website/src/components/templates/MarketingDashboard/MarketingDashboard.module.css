@@ -148,8 +148,13 @@
   min-width: 0;
 }
 
+/* The stat and its range select share a row while the panel has room;
+   in a narrow panel (two columns on a narrow window, or a wider face from
+   the type levers) the select drops under the stat rather than running
+   out past the panel's edge. */
 .panelHead {
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-start;
   justify-content: space-between;
   gap: var(--gap-200);

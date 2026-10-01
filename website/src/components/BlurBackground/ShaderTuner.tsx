@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
 import type { ShaderFieldStatus } from "rift-ds/components/ShaderField/ShaderField";
 import {
+  SHADER_PARAM_CONTROLS,
   shaderBackground,
   type BackgroundMode,
   type ShaderParams,
@@ -12,25 +13,7 @@ import styles from "./ShaderTuner.module.css";
 
 type NumericKey = keyof ShaderParams;
 
-/* Ranges are mirrored by PARAM_RANGES in scripts/validate-shader-background.mjs,
-   which fails the build on a config value outside them — so a look dialled in
-   here can always be pasted back into the JSON. */
-const SLIDERS: {
-  key: NumericKey;
-  label: string;
-  min: number;
-  max: number;
-  step: number;
-}[] = [
-  { key: "intensity", label: "Intensity", min: 0.1, max: 1, step: 0.02 },
-  { key: "warp", label: "Warp", min: 0, max: 0.5, step: 0.01 },
-  { key: "streak", label: "Streak", min: 0, max: 1, step: 0.02 },
-  { key: "react", label: "React", min: 0, max: 1, step: 0.02 },
-  { key: "grain", label: "Grain", min: 0, max: 0.4, step: 0.01 },
-  { key: "scale", label: "Scale", min: 0.5, max: 6, step: 0.1 },
-  { key: "speed", label: "Speed", min: 0, max: 4, step: 0.1 },
-  { key: "crop", label: "Crop", min: 0, max: 1, step: 0.05 },
-];
+const SLIDERS = SHADER_PARAM_CONTROLS;
 
 interface FrameStats {
   fps: number;

@@ -15,6 +15,7 @@ import { InterruptCard } from "rift-ds/components/InterruptCard/InterruptCard";
 import { MessageCard } from "rift-ds/components/MessageCard/MessageCard";
 import { SourceChip } from "rift-ds/components/SourceChip/SourceChip";
 import { ToolCall } from "rift-ds/components/ToolCall/ToolCall";
+import { InspectorSection } from "rift-ds/components/Inspector/InspectorSection";
 import { useSiteChat } from "@/components/SiteChat/ChatContext";
 
 /* ============================================
@@ -453,21 +454,21 @@ export default function ChatDirector({
       {levers}
 
       {groups.map((group) => (
-        <div key={group.heading} className={layout.controlGroup}>
-          <h4 className={layout.controlHeading}>{group.heading}</h4>
+        <InspectorSection key={group.heading} title={group.heading} defaultOpen>
           <div className={styles.eventList}>
             {group.events.map((event) => (
               <Button
                 key={event.id}
                 label={event.label}
                 variant="neutral"
+                size="compact"
                 iconLeft={event.icon}
                 disabled={event.disabled || (live && !event.liveSafe)}
                 onClick={event.run}
               />
             ))}
           </div>
-        </div>
+        </InspectorSection>
       ))}
     </>
   );

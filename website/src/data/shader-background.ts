@@ -58,3 +58,27 @@ export interface ShaderBackgroundConfig {
 
 export const shaderBackground: ShaderBackgroundConfig =
   data as ShaderBackgroundConfig;
+
+/**
+ * One slider per shader parameter: the range each control may move in, and
+ * the name a visitor sees. The dev tuner and the playground's shader levers
+ * both render from this list, and PARAM_RANGES in
+ * scripts/validate-shader-background.mjs is held to it, so any look either
+ * one can dial in is a value the config accepts.
+ */
+export const SHADER_PARAM_CONTROLS: readonly {
+  key: keyof ShaderParams;
+  label: string;
+  min: number;
+  max: number;
+  step: number;
+}[] = [
+  { key: "intensity", label: "Intensity", min: 0.1, max: 1, step: 0.02 },
+  { key: "speed", label: "Speed", min: 0, max: 4, step: 0.02 },
+  { key: "scale", label: "Scale", min: 0.5, max: 6, step: 0.1 },
+  { key: "warp", label: "Warp", min: 0, max: 0.5, step: 0.01 },
+  { key: "streak", label: "Streak", min: 0, max: 1, step: 0.02 },
+  { key: "grain", label: "Grain", min: 0, max: 0.4, step: 0.01 },
+  { key: "react", label: "Cursor interaction", min: 0, max: 1, step: 0.02 },
+  { key: "crop", label: "Crop", min: 0, max: 1, step: 0.05 },
+];

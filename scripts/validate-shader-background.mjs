@@ -19,6 +19,9 @@
  *    that nothing defines (which resolves to empty, i.e. an invisible blob).
  *  - PARAM_RANGES below matches DEFAULT_SHADER_PARAMS in the library, in both
  *    directions, so a new parameter cannot ship without a sanity range
+ *  - PARAM_RANGES matches the slider ranges in SHADER_PARAM_CONTROLS (the dev
+ *    tuner's and the playground's), in both directions, so a slider can never
+ *    dial in a value this validator would then reject
  *  - the "<N> parameters" claims match that count in every doc the CLAIM_CHECKS
  *    loop enumerates (the list beside the loop is authoritative — it includes
  *    the ShaderField docs page, which the 2026-09 audit caught still saying
@@ -89,8 +92,10 @@ if (!MODES.includes(config.mode)) {
 
 // -- params -------------------------------------------------------------
 
-/* Ranges mirror the dev tuner's sliders: the panel cannot produce a value
-   outside these, so anything outside them was hand-edited by mistake. */
+/* Ranges mirror SHADER_PARAM_CONTROLS in website/src/data/shader-background.ts,
+   the sliders the dev tuner and the playground both render — neither can
+   produce a value outside these, so anything outside them was hand-edited by
+   mistake. The two lists are held together below, in both directions. */
 const PARAM_RANGES = {
   intensity: [0.1, 1],
   warp: [0, 0.5],
@@ -167,6 +172,43 @@ if (!shipped || shipped.length === 0) {
         `PARAM_RANGES has a range for "${name}" but DEFAULT_SHADER_PARAMS ` +
           'does not declare it — the parameter was renamed or removed'
       );
+    }
+  }
+}
+
+/* The sliders are the other hand copy of the ranges. Read them from the
+   accessor module rather than trusting the two to stay in step. */
+const controlsPath = join(repoRoot, 'website', 'src', 'data', 'shader-background.ts');
+const controls = {};
+try {
+  const source = readFileSync(controlsPath, 'utf8').replace(/\r\n/g, '\n');
+  for (const m of source.matchAll(
+    /\{\s*key:\s*"(\w+)",[^}]*?min:\s*([\d.]+),\s*max:\s*([\d.]+)/g
+  )) {
+    controls[m[1]] = [Number(m[2]), Number(m[3])];
+  }
+} catch {
+  /* reported below */
+}
+if (Object.keys(controls).length === 0) {
+  errors.push(
+    'could not read SHADER_PARAM_CONTROLS from website/src/data/shader-background.ts'
+  );
+} else {
+  for (const [name, [min, max]] of Object.entries(PARAM_RANGES)) {
+    const slider = controls[name];
+    if (!slider) {
+      errors.push(`SHADER_PARAM_CONTROLS has no slider for "${name}"`);
+    } else if (slider[0] !== min || slider[1] !== max) {
+      errors.push(
+        `the "${name}" slider runs ${slider[0]}–${slider[1]} but PARAM_RANGES ` +
+          `allows ${min}–${max} — move both together`
+      );
+    }
+  }
+  for (const name of Object.keys(controls)) {
+    if (!(name in PARAM_RANGES)) {
+      errors.push(`SHADER_PARAM_CONTROLS has a slider for "${name}", which is not a shader parameter`);
     }
   }
 }

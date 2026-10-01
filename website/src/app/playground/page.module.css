@@ -131,6 +131,7 @@
      rail's open Dropdown menu can never be painted over. */
   z-index: 15;
   display: flex;
+  flex-direction: column;
   overflow: hidden;
   background: var(--color-bg-glass);
   border: var(--border-025) solid var(--color-bg-container-border);
@@ -150,6 +151,7 @@
   width: var(--rail-width);
   z-index: 15;
   display: flex;
+  flex-direction: column;
   overflow: hidden;
   background: var(--color-bg-glass);
   border: var(--border-025) solid var(--color-bg-container-border);
@@ -170,7 +172,8 @@
   scrollbar-color: var(--color-divider) transparent;
   display: flex;
   flex-direction: column;
-  gap: var(--gap-400);
+  /* No gap: the stacked sections own their spacing, so a header's room
+     above and below its divider is equal (the trigger's padding). */
   padding: var(--padding-400);
 }
 
@@ -201,11 +204,6 @@
 
 /* The tint toggle doubles as its group's title — match the label weight
    the other group headings use */
-.tintTitleToggle :global(.ds-toggle-switch__label) {
-  font-weight: var(--font-paragraph-emphasis-weight);
-  letter-spacing: var(--font-paragraph-emphasis-letter-spacing);
-}
-
 /* Preset action-colour swatches — one column per hue, one row per ramp step */
 .swatchGrid {
   display: grid;
@@ -250,11 +248,40 @@
   margin-bottom: var(--gap-050);
 }
 
-/* Copy CSS + View CSS + Reset, pinned at the end of the rail */
+/* Copy CSS + View CSS + Reset, pinned under the scroller: the rail's
+   column puts it below railScroll, so it stays in view however far the
+   sections above are scrolled or expanded. */
 .railFooter {
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
   gap: var(--gap-300);
+  padding: var(--padding-400);
+  border-top: var(--border-025) solid var(--color-divider);
+}
+
+/* In the Drawer the footer rides inside the drawer's own scroller, so it
+   sticks to that scroller's bottom edge instead, on the drawer's floor. */
+.drawerControls .railFooter {
+  position: sticky;
+  bottom: 0;
+  margin: 0 calc(-1 * var(--padding-500));
+  padding: var(--padding-400) var(--padding-500) 0;
+  background: var(--color-bg-page-primary);
+}
+
+/* ---------- the rails' InspectorSections ----------
+   A section stacks its controls one rhythm apart. The playground's
+   groups dissolve into that column, so a section reads as one evenly
+   spaced stack, whichever group a control sits in. */
+:global(.ds-inspector-section__body) > .controlGroup {
+  display: contents;
+}
+
+/* A sub-heading inside a section (the chat's Threads, Agent) opens a run
+   of its own, so it takes one extra step of room above it. */
+:global(.ds-inspector-section__body) .controlHeading:not(:first-child) {
+  margin-top: var(--gap-200);
 }
 
 /* The generated-CSS dialog's body: the install note over the code. */
@@ -464,7 +491,6 @@
 .drawerControls {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-400);
 }
 
 /* ============================================

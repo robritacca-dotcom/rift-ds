@@ -59,12 +59,18 @@ import { stageMobileCss } from "./stage-mobile-css";
 import { createSimTransport } from "@/lib/chat-sim";
 import { createFetchTransport } from "@/lib/chat-transport";
 import { SiteChatProvider, useSiteChat } from "@/components/SiteChat/ChatContext";
-import { Input } from "rift-ds/components/Input/Input";
-import { RadioGroup } from "rift-ds/components/RadioButton/RadioButton";
 import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
 import { ShaderField } from "rift-ds/components/ShaderField/ShaderField";
-import { ToggleSwitch } from "rift-ds/components/ToggleSwitch/ToggleSwitch";
-import { shaderBackground } from "@/data/shader-background";
+import { InspectorInput } from "rift-ds/components/Inspector/InspectorInput";
+import { InspectorSection } from "rift-ds/components/Inspector/InspectorSection";
+import { InspectorSegmentedControl } from "rift-ds/components/Inspector/InspectorSegmentedControl";
+import { InspectorSlider } from "rift-ds/components/Inspector/InspectorSlider";
+import { InspectorToggleSwitch } from "rift-ds/components/Inspector/InspectorToggleSwitch";
+import {
+  SHADER_PARAM_CONTROLS,
+  shaderBackground,
+  type ShaderParams,
+} from "@/data/shader-background";
 import ActionsSection from "./sections/ActionsSection";
 import MapsSection from "./sections/MapsSection";
 import AiSection from "./sections/AiSection";
@@ -184,6 +190,17 @@ export default function PlaygroundPage() {
      opens on the plain chat and every extra is something to switch on and
      look at. */
   const [agentRail, setAgentRail] = useState(false);
+
+  /* The staged shader banner's levers (Components view). They tune the
+     banner only, never the site background, and no theme preset owns them,
+     so picking a preset leaves them where they are; their own reset puts
+     them back on the site's config. */
+  const [shaderParams, setShaderParams] = useState<ShaderParams>(
+    shaderBackground.params
+  );
+  const shaderPristine = SHADER_PARAM_CONTROLS.every(
+    (c) => shaderParams[c.key] === shaderBackground.params[c.key]
+  );
 
   /* ---------- levers ---------- */
   const [preset, setPreset] = useState("default");
@@ -602,11 +619,11 @@ export default function PlaygroundPage() {
      or slotted into the Drawer above the event list on compact screens, so
      the whole chat toolkit lives on one side of the stage. */
   const chatLevers = view === "chat" && (
-    <>
+    <InspectorSection title="Chat setup" defaultOpen>
       <div className={styles.controlGroup}>
-        <RadioGroup
+        <InspectorSegmentedControl
+          size="compact"
           label="Transport"
-          name="playground-chat-transport"
           value={transportMode}
           options={[
             { value: "sim", label: "Simulated" },
@@ -617,41 +634,47 @@ export default function PlaygroundPage() {
       </div>
 
       <div className={styles.controlGroup}>
-        <Input
-          label="Composer placeholder"
+        <InspectorInput
+          size="compact"
+          label="Placeholder"
           placeholder="Ask anything"
           value={chatPlaceholder}
           onValueChange={setChatPlaceholder}
         />
-        <ToggleSwitch
+        <InspectorToggleSwitch
+          size="compact"
           label="Starter prompts"
           checked={showStarters}
-          onChange={setShowStarters}
+          onCheckedChange={setShowStarters}
         />
       </div>
 
       {transportMode === "sim" && (
         <div className={styles.controlGroup}>
           <h4 className={styles.controlHeading}>Threads</h4>
-          <ToggleSwitch
+          <InspectorToggleSwitch
+            size="compact"
             label="Projects"
             checked={railProjects}
-            onChange={setRailProjects}
+            onCheckedChange={setRailProjects}
           />
-          <ToggleSwitch
+          <InspectorToggleSwitch
+            size="compact"
             label="Pinned threads"
             checked={railPins}
-            onChange={setRailPins}
+            onCheckedChange={setRailPins}
           />
-          <ToggleSwitch
+          <InspectorToggleSwitch
+            size="compact"
             label="Thread details"
             checked={railDetails}
-            onChange={setRailDetails}
+            onCheckedChange={setRailDetails}
           />
-          <ToggleSwitch
+          <InspectorToggleSwitch
+            size="compact"
             label="Session tabs"
             checked={railTabs}
-            onChange={setRailTabs}
+            onCheckedChange={setRailTabs}
           />
         </div>
       )}
@@ -659,14 +682,44 @@ export default function PlaygroundPage() {
       {transportMode === "sim" && (
         <div className={styles.controlGroup}>
           <h4 className={styles.controlHeading}>Agent</h4>
-          <ToggleSwitch
+          <InspectorToggleSwitch
+            size="compact"
             label="Agent rail"
             checked={agentRail}
-            onChange={setAgentRail}
+            onCheckedChange={setAgentRail}
           />
         </div>
       )}
-    </>
+    </InspectorSection>
+  );
+
+  /* The Components view's shader levers, slotted under the shared ones
+     because the banner is the only thing on any stage they move. */
+  const shaderLevers = view === "components" && (
+    <InspectorSection title="Shader banner" defaultOpen>
+      {SHADER_PARAM_CONTROLS.map((c) => (
+        <InspectorSlider
+          size="compact"
+          key={c.key}
+          label={c.label}
+          value={shaderParams[c.key]}
+          min={c.min}
+          max={c.max}
+          step={c.step}
+          onValueChange={(value) =>
+            setShaderParams((prev) => ({ ...prev, [c.key]: value }))
+          }
+        />
+      ))}
+      <Button
+        label="Reset shader"
+        size="compact"
+        variant="neutral"
+        iconLeft="restart_alt"
+        state={shaderPristine ? "disabled" : "default"}
+        onClick={() => setShaderParams(shaderBackground.params)}
+      />
+    </InspectorSection>
   );
 
   /* The full lever set, host-agnostic — mounted in the floating panel on
@@ -724,7 +777,9 @@ export default function PlaygroundPage() {
                     {chatLevers}
                     <ChatDirector variant="drawer" live={transportMode === "live"} />
                   </>
-                ) : undefined
+                ) : (
+                  shaderLevers || undefined
+                )
               }
             />
   );
@@ -932,11 +987,12 @@ export default function PlaygroundPage() {
                 <MockNav brandName={productName.trim() || "Acme Corp"} />
               </div>
               {/* The ambient shader, demoted from stage backdrop to staged
-                  component: a banner running the site's own field config,
-                  re-theming live with the levers like everything else. */}
+                  component: a banner that opens on the site's own field
+                  config, re-theming live with the levers like everything
+                  else, and tuned by its own shader levers in the rail. */}
               <div className={styles.shaderBanner} aria-hidden="true">
                 <ShaderField
-                  params={shaderBackground.params}
+                  params={shaderParams}
                   blobs={shaderBackground.blobs}
                 />
               </div>
@@ -966,6 +1022,7 @@ export default function PlaygroundPage() {
             <DashboardView
               template={compact ? "mobile" : stageSize}
               device={!compact && stageSize === "mobile"}
+              productName={productName.trim() || "Acme Corp"}
             />
           )}
 

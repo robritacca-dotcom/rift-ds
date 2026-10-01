@@ -6,13 +6,14 @@ import { Button } from "rift-ds/components/Button/Button";
 import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
 import { ColorPicker } from "rift-ds/components/ColorPicker/ColorPicker";
 import { Swatch } from "rift-ds/components/Swatch/Swatch";
-import { Input } from "rift-ds/components/Input/Input";
-import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
-import { Slider } from "rift-ds/components/Slider/Slider";
-import { ToggleSwitch } from "rift-ds/components/ToggleSwitch/ToggleSwitch";
 import { ACTION_COLOR_PRESETS, type ElevationVariant } from "@/lib/theme/theme-overrides";
-import { Dropdown } from "rift-ds/components/Dropdown/Dropdown";
 import { RichDropdown } from "rift-ds/components/RichDropdown/RichDropdown";
+import { InspectorDropdown } from "rift-ds/components/Inspector/InspectorDropdown";
+import { InspectorInput } from "rift-ds/components/Inspector/InspectorInput";
+import { InspectorSection } from "rift-ds/components/Inspector/InspectorSection";
+import { InspectorSegmentedControl } from "rift-ds/components/Inspector/InspectorSegmentedControl";
+import { InspectorSlider } from "rift-ds/components/Inspector/InspectorSlider";
+import { InspectorToggleSwitch } from "rift-ds/components/Inspector/InspectorToggleSwitch";
 import { fontPickerOptions, presetPickerOptions } from "@/lib/theme/presets";
 
 export interface PlaygroundControlsProps {
@@ -173,21 +174,37 @@ export default function PlaygroundControls({
 
   const content = (
     <>
+      <InspectorSection title="Theme" defaultOpen>
         <div className={styles.controlGroup}>
           <RichDropdown
-            label="Theme preset"
+            aria-label="Theme preset"
             value={preset}
             options={presetOptions}
             onValueChange={onPreset}
           />
         </div>
 
+        <div className={styles.controlGroup}>
+          <InspectorInput
+            size="compact"
+            label="Product name"
+            placeholder="Acme Corp"
+            value={productName}
+            onValueChange={onProductName}
+          />
+        </div>
+      </InspectorSection>
+
+      <InspectorSection title="Colour" defaultOpen>
         {/* Colour sits high and every shared lever keeps one fixed slot in
-            all views — the contextual groups render at the bottom, so
+            all views — the contextual sections render at the bottom, so
             nothing above them ever shifts. */}
         <div className={styles.controlGroup}>
-          <h4 className={styles.controlHeading}>Action colour</h4>
-          <div className={styles.swatchGrid}>
+          <div
+            className={styles.swatchGrid}
+            role="group"
+            aria-label="Action colour"
+          >
             {ACTION_COLOR_PRESETS.map((p) => (
               <Swatch
                 key={p.hex}
@@ -206,6 +223,7 @@ export default function PlaygroundControls({
             className={isCustomBrand ? styles.customPickerActive : ""}
           />
           <Button
+            size="compact"
             label="All colour ramps"
             variant="neutral"
             iconLeft="palette"
@@ -217,8 +235,8 @@ export default function PlaygroundControls({
             once. The drop target is the whole tool, so this button is the
             keyboard and touch route to the same thing. */}
         <div className={styles.controlGroup}>
-          <h4 className={styles.controlHeading}>From an image</h4>
           <Button
+            size="compact"
             label={imageBusy ? "Reading the image" : "Upload an image"}
             variant="neutral"
             iconLeft={imageBusy ? "progress_activity" : "add_photo_alternate"}
@@ -247,20 +265,11 @@ export default function PlaygroundControls({
         </div>
 
         <div className={styles.controlGroup}>
-          <Input
-            label="Product name"
-            placeholder="Acme Corp"
-            value={productName}
-            onValueChange={onProductName}
-          />
-        </div>
-
-        <div className={styles.controlGroup}>
-          <ToggleSwitch
-            className={styles.tintTitleToggle}
+          <InspectorToggleSwitch
+            size="compact"
             label="Tint neutrals"
             checked={tintOn}
-            onChange={onTintOn}
+            onCheckedChange={onTintOn}
           />
           {tintOn && (
             <>
@@ -270,108 +279,97 @@ export default function PlaygroundControls({
                 showText
                 aria-label="Neutral tint seed colour"
               />
-              <div className={styles.sliderRow}>
-                <Slider
-                  value={tintStrength}
-                  min={0}
-                  max={16}
-                  step={1}
-                  onValueChange={onTintStrength}
-                  ariaLabel="Tint strength"
-                />
-                <span className={styles.sliderValue}>{tintStrength}%</span>
-              </div>
+              <InspectorSlider
+                size="compact"
+                label="Tint strength"
+                value={tintStrength}
+                min={0}
+                max={16}
+                step={1}
+                onValueChange={onTintStrength}
+                format={(v) => `${v}%`}
+              />
             </>
           )}
         </div>
+      </InspectorSection>
 
+      <InspectorSection title="Shape and depth">
         <div className={styles.controlGroup}>
-          <h4 className={styles.controlHeading}>Corner radius</h4>
-          <div className={styles.sliderRow}>
-            <Slider
-              value={radiusScale}
-              min={0}
-              max={200}
-              step={10}
-              onValueChange={onRadiusScale}
-              ariaLabel="Radius scale"
-            />
-            <span className={styles.sliderValue}>{radiusScale}%</span>
-          </div>
-          <ToggleSwitch label="Pill buttons" checked={pill} onChange={onPill} />
-        </div>
-
-        {/* The remaining preset levers, in the composer's own order:
-            spacing, type, motion, then the elevation variant. Sliders in
-            percent of the shipped ladders, like the radius above. */}
-        <div className={styles.controlGroup}>
-          <h4 className={styles.controlHeading}>Density</h4>
-          <div className={styles.sliderRow}>
-            <Slider
-              value={density}
-              min={70}
-              max={130}
-              step={5}
-              onValueChange={onDensity}
-              ariaLabel="Density scale"
-            />
-            <span className={styles.sliderValue}>{density}%</span>
-          </div>
+          <InspectorSlider
+            size="compact"
+            label="Corner radius"
+            value={radiusScale}
+            min={0}
+            max={200}
+            step={10}
+            onValueChange={onRadiusScale}
+            format={(v) => `${v}%`}
+          />
+          <InspectorToggleSwitch
+            size="compact"
+            label="Pill buttons"
+            checked={pill}
+            onCheckedChange={onPill}
+          />
         </div>
 
         <div className={styles.controlGroup}>
-          <h4 className={styles.controlHeading}>Type scale</h4>
-          <div className={styles.sliderRow}>
-            <Slider
-              value={typeScale}
-              min={80}
-              max={120}
-              step={5}
-              onValueChange={onTypeScale}
-              ariaLabel="Type scale"
-            />
-            <span className={styles.sliderValue}>{typeScale}%</span>
-          </div>
-        </div>
-
-        <div className={styles.controlGroup}>
-          <h4 className={styles.controlHeading}>Motion</h4>
-          <div className={styles.sliderRow}>
-            <Slider
-              value={motionScale}
-              min={50}
-              max={150}
-              step={10}
-              onValueChange={onMotionScale}
-              ariaLabel="Motion duration scale"
-            />
-            <span className={styles.sliderValue}>{motionScale}%</span>
-          </div>
-        </div>
-
-        <div className={styles.controlGroup}>
-          <h4 className={styles.controlHeading}>Elevation</h4>
-          <SegmentedControl
-            segments={[
+          <InspectorSegmentedControl
+            size="compact"
+            label="Elevation"
+            value={elevation}
+            options={[
               { value: "default", label: "Default" },
               { value: "flat", label: "Flat" },
               { value: "soft", label: "Soft" },
             ]}
-            activeSegment={elevation}
-            onSegmentChange={(value) => onElevation(value as ElevationVariant)}
+            onValueChange={(value) => onElevation(value as ElevationVariant)}
+          />
+        </div>
+      </InspectorSection>
+
+      <InspectorSection title="Space and motion">
+        {/* Sliders in percent of the shipped ladders, like the radius
+            above. */}
+        <div className={styles.controlGroup}>
+          <InspectorSlider
             size="compact"
-            ariaLabel="Elevation"
+            label="Density"
+            value={density}
+            min={70}
+            max={130}
+            step={5}
+            onValueChange={onDensity}
+            format={(v) => `${v}%`}
           />
         </div>
 
+        <div className={styles.controlGroup}>
+          <InspectorSlider
+            size="compact"
+            label="Motion"
+            value={motionScale}
+            min={50}
+            max={150}
+            step={10}
+            onValueChange={onMotionScale}
+            format={(v) => `${v}%`}
+          />
+        </div>
+      </InspectorSection>
+
+      <InspectorSection title="Typography">
         <div className={`${styles.controlGroup} ${styles.dropUp}`}>
-          <Dropdown
+          <InspectorDropdown
+            size="compact"
             label="Headings"
             value={headingFontLabel}
             options={fontPickerOptions("heading", fontLabel)}
             onValueChange={onHeadingFontLabel}
           />
-          <Dropdown
+          <InspectorDropdown
+            size="compact"
             label="Body"
             value={fontLabel}
             options={fontPickerOptions("body", fontLabel)}
@@ -379,10 +377,28 @@ export default function PlaygroundControls({
           />
         </div>
 
-        {contextual}
+        <div className={styles.controlGroup}>
+          <InspectorSlider
+            size="compact"
+            label="Type scale"
+            value={typeScale}
+            min={80}
+            max={120}
+            step={5}
+            onValueChange={onTypeScale}
+            format={(v) => `${v}%`}
+          />
+        </div>
+      </InspectorSection>
 
-        <div className={styles.railFooter}>
+      {contextual}
+    </>
+  );
+
+  const footer = (
+    <div className={styles.railFooter}>
           <Button
+            size="compact"
             label={copied ? "Copied" : "Copy CSS"}
             variant="primary"
             iconLeft={copied ? "check" : "content_copy"}
@@ -390,12 +406,14 @@ export default function PlaygroundControls({
             onClick={copyCss}
           />
           <Button
+            size="compact"
             label="View CSS"
             variant="neutral"
             iconLeft="code"
             onClick={onViewCss}
           />
           <Button
+            size="compact"
             label="Reset everything"
             variant="secondary"
             iconLeft="restart_alt"
@@ -403,11 +421,15 @@ export default function PlaygroundControls({
             onClick={onReset}
           />
         </div>
-    </>
   );
 
   if (variant === "drawer") {
-    return <div className={styles.drawerControls}>{content}</div>;
+    return (
+      <div className={styles.drawerControls}>
+        {content}
+        {footer}
+      </div>
+    );
   }
 
   return (
@@ -416,6 +438,7 @@ export default function PlaygroundControls({
        shell owns the clipping (see the CSS). */
     <aside className={styles.controlRail} aria-label="Theme controls">
       <div className={styles.railScroll}>{content}</div>
+      {footer}
     </aside>
   );
 }

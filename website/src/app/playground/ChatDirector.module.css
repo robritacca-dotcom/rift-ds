@@ -8,7 +8,9 @@
 .eventList {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-050);
+  /* The rails' one control rhythm (InspectorSection's body gap), so a stack
+     of event buttons spaces like every other lever in a section. */
+  gap: var(--gap-200);
   align-items: stretch;
 }
 

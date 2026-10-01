@@ -447,9 +447,11 @@ export default function InspectMode({ desktopOnly = false }: InspectModeProps) {
   }
 
   /* The inspection layers, portalled to <body> whichever control hosts
-     them — fixed positioning must not inherit a page stacking context. */
+     them — fixed positioning must not inherit a page stacking context.
+     The wrapper itself draws no box, so it never joins the body's flow
+     (a flex body's gap would otherwise open a scroll under the page). */
   const layers = (
-    <div data-inspect-mode-ui>
+    <div data-inspect-mode-ui className={styles.layers}>
       {active &&
         sections.map(({ el, label }, index) => {
           if (!el.isConnected) return null;

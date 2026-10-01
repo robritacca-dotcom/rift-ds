@@ -4,6 +4,12 @@
    below the site chat (1080+) so the panel stays reachable while
    inspecting. */
 
+/* The portalled wrapper: every layer inside is fixed, so it draws no box
+   and takes no part in the body's flex flow. */
+.layers {
+  display: contents;
+}
+
 /* ── Section redlines ─────────────────────────────────────────── */
 
 .sectionBox {

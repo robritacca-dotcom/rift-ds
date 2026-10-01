@@ -102,3 +102,11 @@
   .dsContent { max-width: 100%; min-width: 0; }
   .chartRow { flex-direction: column; }
 }
+
+.sectionNote {
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-tertiary);
+  max-width: 560px;
+}

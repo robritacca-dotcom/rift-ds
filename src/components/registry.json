@@ -1198,7 +1198,7 @@
       "slug": "treemap",
       "description": "Nested rectangles sized by value for part-to-whole breakdowns.",
       "category": "charts",
-      "client": false,
+      "client": true,
       "folder": "Chart",
       "recharts": true
     },

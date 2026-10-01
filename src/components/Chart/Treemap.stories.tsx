@@ -64,3 +64,21 @@ export const CustomColors: Story = {
     subtitle: 'Annual spending by department ($K)',
   },
 };
+
+/**
+ * Light fills, where the default primary label would vanish in dark mode:
+ * each cell picks the text token that contrasts more with its own fill.
+ */
+export const LightFills: Story = {
+  args: {
+    data: [
+      { name: 'Paper', size: 6200, color: '#F1F1F1' },
+      { name: 'Butter', size: 4100, color: '#FFE9A8' },
+      { name: 'Mint', size: 3600, color: '#BFF5E4' },
+      { name: 'Charcoal', size: 3000, color: '#2A2A2A' },
+      { name: 'Sky', size: 2400, color: '#BFE3F5' },
+    ],
+    title: 'Readable labels',
+    subtitle: 'Light and dark fills side by side',
+  },
+};

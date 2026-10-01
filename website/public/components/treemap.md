@@ -7,7 +7,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.2.0. The same data
 - Category: charts
 - Import: `import { Treemap } from 'rift-ds/charts'; // needs the optional recharts peer`
 - Deep import: `import { Treemap } from 'rift-ds/components/Chart/Treemap';`
-- Rendering: server-renderable (no 'use client')
+- Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/treemap
 
 ## Treemap props

@@ -19,7 +19,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.2.0. The same data
 | rotation | `GlobeRotation` | no |  | Controlled view: `[longitude, latitude]` of the centre, in degrees. Pair with `onRotationChange`. Omit to let the globe own its rotation. |
 | defaultRotation | `GlobeRotation` | no | `[-20, 20]` | Initial view when uncontrolled. |
 | onRotationChange | `((rotation: GlobeRotation) => void)` | no |  | Fires whenever the view changes — drag, keys, or the auto-rotation. |
-| autoRotate | `number` | no | `3` | Spin slowly on its own, in degrees per second. Pauses while the pointer is over the globe or it has focus, and never runs under `prefers-reduced-motion`. `0` switches it off. |
+| autoRotate | `number` | no | `3` | Spin slowly on its own, in degrees per second at the shipped motion tempo. The speed follows `--motion-duration-orbit`, so a theme that stretches or shortens its durations slows or quickens the spin with them. Pauses while the pointer is over the globe or it has focus, and never runs under `prefers-reduced-motion`. `0` switches it off. |
 | interactive | `boolean` | no | `true` | Drag to rotate, and rotate with the arrow keys (or W, A, S, D) when focused. |
 | graticuleStep | `number` | no | `30` | Degrees between graticule lines. `0` removes the graticule. |
 | showLabels | `boolean` | no | `true` | Draw each point's `label` beside its marker. |

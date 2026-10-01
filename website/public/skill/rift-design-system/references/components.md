@@ -395,7 +395,7 @@ Bars split into stacked segments to compare totals and their composition.
 Nested rectangles sized by value for part-to-whole breakdowns.
 
 - Import: `import { Treemap } from 'rift-ds/charts';` (needs the optional recharts peer)
-- Rendering: server-renderable (no 'use client')
+- Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/treemap.md
 
 ## Data display (25)

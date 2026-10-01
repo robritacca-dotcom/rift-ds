@@ -4851,7 +4851,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "autoRotate",
             "type": "number",
             "required": false,
-            "description": "Spin slowly on its own, in degrees per second. Pauses while the pointer\nis over the globe or it has focus, and never runs under\n`prefers-reduced-motion`. `0` switches it off.",
+            "description": "Spin slowly on its own, in degrees per second at the shipped motion\ntempo. The speed follows `--motion-duration-orbit`, so a theme that\nstretches or shortens its durations slows or quickens the spin with\nthem. Pauses while the pointer is over the globe or it has focus, and\nnever runs under `prefers-reduced-motion`. `0` switches it off.",
             "defaultValue": "3"
           },
           {
@@ -10557,7 +10557,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "slug": "treemap",
     "category": "charts",
     "description": "Nested rectangles sized by value for part-to-whole breakdowns.",
-    "client": false,
+    "client": true,
     "importPath": "rift-ds/components/Chart/Treemap",
     "barrel": "charts",
     "exports": [

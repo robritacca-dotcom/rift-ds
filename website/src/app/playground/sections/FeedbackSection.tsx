@@ -5,6 +5,9 @@ import styles from "../page.module.css";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import { Alert } from "rift-ds/components/Alert/Alert";
 import { Badge } from "rift-ds/components/Badge/Badge";
+import { Banner } from "rift-ds/components/Banner/Banner";
+import { Meter } from "rift-ds/components/Meter/Meter";
+import { StatusDot } from "rift-ds/components/StatusDot/StatusDot";
 import { Button } from "rift-ds/components/Button/Button";
 import { ProgressBar } from "rift-ds/components/ProgressBar/ProgressBar";
 import { Skeleton } from "rift-ds/components/Skeleton/Skeleton";
@@ -33,6 +36,7 @@ function ToastDemo() {
 
 export default function FeedbackSection() {
   const [progress, setProgress] = useState(64);
+  const [bannerOpen, setBannerOpen] = useState(true);
 
   return (
     <section className={styles.demoSection} aria-label="Feedback and status">
@@ -50,10 +54,43 @@ export default function FeedbackSection() {
         variant="info"
       />
 
+      {bannerOpen ? (
+        <Banner
+          variant="warning"
+          title="Scheduled maintenance."
+          action={<Button label="Details" variant="secondary" size="compact" />}
+          dismissible
+          onDismiss={() => setBannerOpen(false)}
+        >
+          The editor goes read-only on Sunday from 02:00 to 03:00 UTC.
+        </Banner>
+      ) : (
+        <div className={styles.demoRow}>
+          <Button
+            label="Bring the banner back"
+            variant="tertiary"
+            size="compact"
+            onClick={() => setBannerOpen(true)}
+          />
+        </div>
+      )}
+
       <div className={styles.demoRow}>
         {BADGE_VARIANTS.map((variant) => (
           <Badge key={variant} label={variant} variant={variant} />
         ))}
+      </div>
+
+      <div className={styles.demoRow}>
+        <StatusDot variant="positive" label="Operational" />
+        <StatusDot variant="warning" label="Degraded" />
+        <StatusDot variant="error" label="Recording" pulse />
+        <StatusDot variant="neutral" label="Paused" />
+      </div>
+
+      <div className={styles.demoColumns}>
+        <Meter label="Storage" value={72} showValue variant="info" />
+        <Meter label="Monthly tokens" value={91} showValue variant="warning" />
       </div>
 
       <div className={styles.sliderRow}>

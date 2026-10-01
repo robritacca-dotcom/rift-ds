@@ -7,11 +7,22 @@ import { Button } from "rift-ds/components/Button/Button";
 import { ButtonGroup } from "rift-ds/components/ButtonGroup/ButtonGroup";
 import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
 import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
+import { SplitButton } from "rift-ds/components/SplitButton/SplitButton";
 import { ToggleGroup } from "rift-ds/components/ToggleGroup/ToggleGroup";
 
 const VIEW_SEGMENTS = [
   { value: "grid", label: "Grid", icon: "grid_view" },
   { value: "list", label: "List", icon: "view_list" },
+];
+
+const PUBLISH_ITEMS = [
+  { label: "Schedule for later", icon: "schedule" },
+  { label: "Save as draft", icon: "draft" },
+];
+
+const SHARE_ITEMS = [
+  { label: "Copy link", icon: "link" },
+  { label: "Invite people", icon: "person_add" },
 ];
 
 const FORMAT_ITEMS = [
@@ -30,12 +41,14 @@ export default function ActionsSection() {
       <p className={styles.sectionNote}>
         Every action component draws from the brand ramp your colour pick rebuilds:
         solid fills, hover and pressed states, and focus rings all move together.
-        The radius lever decides whether these stay pills.
+        The Pill buttons switch decides whether these stay pills; the
+        radius lever shapes them when it is off.
       </p>
 
       <div className={styles.demoRow}>
         <Button label="Primary action" variant="primary" />
         <Button label="Secondary" variant="secondary" />
+        <Button label="Neutral" variant="neutral" />
         <Button label="Tertiary" variant="tertiary" />
         <Button label="Primary" variant="primary" size="compact" iconRight="arrow_forward" />
       </div>
@@ -50,7 +63,14 @@ export default function ActionsSection() {
         />
         <CircularButton icon="add" variant="primary" ariaLabel="Add item" />
         <CircularButton icon="edit" variant="secondary" ariaLabel="Edit item" />
+        <CircularButton icon="share" variant="neutral" ariaLabel="Share item" />
         <CircularButton icon="favorite" variant="tertiary" ariaLabel="Favourite item" />
+      </div>
+
+      <div className={styles.demoRow}>
+        <SplitButton label="Publish" iconLeft="send" items={PUBLISH_ITEMS} />
+        <SplitButton label="Export" variant="secondary" items={PUBLISH_ITEMS} />
+        <SplitButton label="Share" variant="neutral" iconLeft="share" items={SHARE_ITEMS} />
       </div>
 
       <div className={styles.demoRow}>

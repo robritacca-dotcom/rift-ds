@@ -9,6 +9,7 @@ import {
 } from "rift-ds/components/Globe/Globe";
 import { MapCallout } from "rift-ds/components/MapCallout/MapCallout";
 import { MapLegend } from "rift-ds/components/MapLegend/MapLegend";
+import { WorldMap } from "rift-ds/components/WorldMap/WorldMap";
 
 const POINTS: GlobePoint[] = [
   { id: "vancouver", lat: 49.28, lng: -123.12, label: "YVR", kind: "anchor" },
@@ -41,7 +42,8 @@ export default function MapsSection() {
       <p className={styles.sectionNote}>
         Every stroke of the sphere is a token, so presets and the colour
         ramps re-draw it live. Drag it, steer it with the arrow keys, or
-        hover a marker for its callout.
+        hover a marker for its callout. The flat map below carries the same
+        seven points on the same tokens.
       </p>
 
       <div className={styles.mapsColumns}>
@@ -68,6 +70,23 @@ export default function MapsSection() {
             { glyph: "point", label: "Relay" },
             { glyph: "arc", label: "Route" },
           ]}
+        />
+      </div>
+
+      {/* The same seven points on the flat projection: the point shape is
+          shared, so one dataset keys identically on both maps. */}
+      <div className={styles.worldMapStage}>
+        <WorldMap
+          points={POINTS}
+          showLabels
+          showZoomControls
+          label="Relay points on the world map"
+          renderCallout={(point) => (
+            <MapCallout
+              title={point.label ?? point.id}
+              lines={[point.kind === "anchor" ? "Hub" : "Relay"]}
+            />
+          )}
         />
       </div>
     </section>

@@ -696,7 +696,7 @@ export default function PlaygroundPage() {
   /* The Components view's shader levers, slotted under the shared ones
      because the banner is the only thing on any stage they move. */
   const shaderLevers = view === "components" && (
-    <InspectorSection title="Shader banner" defaultOpen>
+    <InspectorSection title="Shader banner">
       {SHADER_PARAM_CONTROLS.map((c) => (
         <InspectorSlider
           size="compact"

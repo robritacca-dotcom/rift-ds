@@ -7,8 +7,48 @@ import {
   BarChart,
   LineChart,
   PieChart,
+  RadialChart,
   StackedBarChart,
+  Treemap,
 } from "rift-ds/charts";
+import { Gauge } from "rift-ds/components/Gauge/Gauge";
+import { Panel } from "rift-ds/components/Panel/Panel";
+import { Sparkline } from "rift-ds/components/Sparkline/Sparkline";
+import {
+  ContributionGraph,
+  type ContributionDay,
+} from "rift-ds/components/ContributionGraph/ContributionGraph";
+
+const SPARK_SERIES = [
+  { label: "Revenue", data: [12, 14, 13, 17, 16, 21, 24, 23, 28], tone: "accent" as const },
+  { label: "Churn", data: [9, 8, 9, 7, 7, 6, 5, 6, 4], tone: "positive" as const },
+  { label: "Latency", data: [3, 4, 3, 5, 6, 5, 7, 8, 9], tone: "negative" as const },
+];
+
+const TREEMAP_DATA = [
+  { name: "Forms", size: 21 },
+  { name: "AI", size: 26 },
+  { name: "Data display", size: 18 },
+  { name: "Charts", size: 16 },
+  { name: "Navigation", size: 10 },
+  { name: "Overlays", size: 9 },
+];
+
+/** A year of contribution days ending on a fixed date. Deterministic, so
+    the server render and the client hydration agree. */
+const CONTRIBUTION_DAYS: ContributionDay[] = (() => {
+  const end = Date.UTC(2026, 8, 30);
+  const days: ContributionDay[] = [];
+  for (let i = 364; i >= 0; i--) {
+    const d = new Date(end - i * 86_400_000);
+    const weekday = d.getUTCDay();
+    const wave = Math.sin(i / 9) + Math.sin(i / 23) + (weekday === 0 || weekday === 6 ? -1.2 : 0.4);
+    const level = Math.max(0, Math.min(4, Math.round(wave + 1.4))) as ContributionDay["level"];
+    days.push({ date: d.toISOString().slice(0, 10), count: level * 3, level });
+  }
+  return days;
+})();
+const CONTRIBUTION_TOTAL = CONTRIBUTION_DAYS.reduce((sum, d) => sum + d.count, 0);
 
 const CHART_DATA = [
   { label: "Mon", value: 320 },
@@ -142,6 +182,72 @@ export default function ChartsSection({ brand }: { brand: string }) {
           height={240}
         />
       </div>
+
+      <div className={styles.demoColumns}>
+        <RadialChart
+          data={[
+            { name: "Tokens", value: 82, color: shades[0] },
+            { name: "Components", value: 64, color: shades[1] },
+            { name: "Docs", value: 41, color: shades[2] },
+          ]}
+          title="Coverage"
+          subtitle="Concentric rings on the brand ramp"
+          innerRadius={36}
+          outerRadius={92}
+          height={240}
+        />
+
+        <Treemap
+          data={TREEMAP_DATA.map((item, i) => ({ ...item, color: shades[i % shades.length] }))}
+          title="Components by category"
+          subtitle="Labels pick whichever text colour reads on their cell"
+          height={240}
+        />
+      </div>
+
+      <div className={`${styles.demoColumns} ${styles.chartPair}`}>
+        {/* Gauge sits bare inside a Panel beside the sparklines (design.md's
+            Panel spec: charts dropped in bare, one level of chrome), so the
+            two read as one pair of dashboard surfaces. */}
+        <Panel>
+          <Gauge
+            bare
+            value={68}
+            label="Budget used"
+            title="Monthly spend"
+            subtitle="Turns warning at 70, error at 90"
+            thresholds={[
+              { value: 70, tone: "warning" },
+              { value: 90, tone: "error" },
+            ]}
+            formatValue={(v) => `${v}%`}
+            size={140}
+          />
+        </Panel>
+
+        <Panel>
+          <div className={styles.panelHeader}>
+            <h3 className={styles.panelTitle}>Trends</h3>
+            <p className={styles.panelSubtitle}>Sparklines in the accent and trend tones</p>
+          </div>
+          <div className={styles.sparkList}>
+            {SPARK_SERIES.map((s) => (
+              <div key={s.label} className={styles.sparkRow}>
+                <span className={styles.sparkLabel}>{s.label}</span>
+                <Sparkline data={s.data} tone={s.tone} variant="area" label={`${s.label} trend`} />
+              </div>
+            ))}
+          </div>
+        </Panel>
+      </div>
+
+      <ContributionGraph
+        days={CONTRIBUTION_DAYS}
+        title="Theme edits"
+        subtitle="A year of activity; the sweep-in follows the Motion lever"
+        caption={`${CONTRIBUTION_TOTAL} edits in the last year`}
+      />
+
     </section>
   );
 }

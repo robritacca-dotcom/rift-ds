@@ -6,7 +6,12 @@ import { Button } from "rift-ds/components/Button/Button";
 import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
 import { ColorPicker } from "rift-ds/components/ColorPicker/ColorPicker";
 import { Swatch } from "rift-ds/components/Swatch/Swatch";
-import { ACTION_COLOR_PRESETS, type ElevationVariant } from "@/lib/theme/theme-overrides";
+import {
+  ACTION_COLOR_PRESETS,
+  motionScaleFromSpeed,
+  motionSpeedPercent,
+  type ElevationVariant,
+} from "@/lib/theme/theme-overrides";
 import { RichDropdown } from "rift-ds/components/RichDropdown/RichDropdown";
 import { InspectorDropdown } from "rift-ds/components/Inspector/InspectorDropdown";
 import { InspectorInput } from "rift-ds/components/Inspector/InspectorInput";
@@ -294,7 +299,8 @@ export default function PlaygroundControls({
         </div>
       </InspectorSection>
 
-      <InspectorSection title="Shape and depth">
+      <InspectorSection title="Shape, space and motion" defaultOpen>
+        {/* Sliders in percent of the shipped ladders. */}
         <div className={styles.controlGroup}>
           <InspectorSlider
             size="compact"
@@ -327,11 +333,7 @@ export default function PlaygroundControls({
             onValueChange={(value) => onElevation(value as ElevationVariant)}
           />
         </div>
-      </InspectorSection>
 
-      <InspectorSection title="Space and motion">
-        {/* Sliders in percent of the shipped ladders, like the radius
-            above. */}
         <div className={styles.controlGroup}>
           <InspectorSlider
             size="compact"
@@ -343,23 +345,22 @@ export default function PlaygroundControls({
             onValueChange={onDensity}
             format={(v) => `${v}%`}
           />
-        </div>
-
-        <div className={styles.controlGroup}>
+          {/* Presented as speed, so right means faster; the conversion's
+              doc block in theme-overrides owns why. */}
           <InspectorSlider
             size="compact"
             label="Motion"
-            value={motionScale}
+            value={motionSpeedPercent(motionScale)}
             min={50}
             max={150}
             step={10}
-            onValueChange={onMotionScale}
+            onValueChange={(speed) => onMotionScale(motionScaleFromSpeed(speed))}
             format={(v) => `${v}%`}
           />
         </div>
       </InspectorSection>
 
-      <InspectorSection title="Typography">
+      <InspectorSection title="Typography" defaultOpen>
         <div className={`${styles.controlGroup} ${styles.dropUp}`}>
           <InspectorDropdown
             size="compact"

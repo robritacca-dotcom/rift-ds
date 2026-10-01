@@ -13,6 +13,17 @@ import { RadioButton } from "rift-ds/components/RadioButton/RadioButton";
 import { ToggleSwitch } from "rift-ds/components/ToggleSwitch/ToggleSwitch";
 import { Slider } from "rift-ds/components/Slider/Slider";
 import { SelectionCard } from "rift-ds/components/SelectionCard/SelectionCard";
+import { NumberInput } from "rift-ds/components/NumberInput/NumberInput";
+import { TimePicker } from "rift-ds/components/TimePicker/TimePicker";
+import { TagInput } from "rift-ds/components/TagInput/TagInput";
+import { PinInput } from "rift-ds/components/PinInput/PinInput";
+import { Field } from "rift-ds/components/Field/Field";
+import { Rating } from "rift-ds/components/Rating/Rating";
+import { DatePicker } from "rift-ds/components/DatePicker/DatePicker";
+import {
+  FileInput,
+  type FileInputFile,
+} from "rift-ds/components/FileInput/FileInput";
 
 const ROLE_OPTIONS = [
   { label: "Designer", value: "designer" },
@@ -41,6 +52,16 @@ export default function FormsSection() {
   const [toggle, setToggle] = useState(true);
   const [sliderValue, setSliderValue] = useState(60);
   const [plan, setPlan] = useState("team");
+  const [seats, setSeats] = useState<number | "">(8);
+  const [time, setTime] = useState("09:30");
+  const [tags, setTags] = useState(["tokens", "themes"]);
+  const [pin, setPin] = useState("4821");
+  const [rating, setRating] = useState(4);
+  const [pickedDate, setPickedDate] = useState("2026-10-14");
+  const [files, setFiles] = useState<FileInputFile[]>([
+    { id: "brand-guide", name: "brand-guide.pdf", size: 2_400_000, progress: 100 },
+    { id: "logo-set", name: "logo-set.zip", size: 8_100_000, progress: 46 },
+  ]);
 
   return (
     <section className={styles.demoSection} aria-label="Forms and inputs">
@@ -75,6 +96,52 @@ export default function FormsSection() {
         rows={3}
         maxLength={280}
       />
+
+      <div className={styles.demoColumns}>
+        <NumberInput
+          label="Seats"
+          value={seats}
+          min={1}
+          max={50}
+          onValueChange={(v) => setSeats(v ?? "")}
+          helperText="Steppers stop at 1 and 50."
+        />
+        <TimePicker label="Daily stand-up" value={time} onValueChange={setTime} />
+        <TagInput label="Topics" values={tags} onValuesChange={setTags} maxTags={5} />
+        <PinInput
+          label="Verification code"
+          length={4}
+          value={pin}
+          onValueChange={setPin}
+        />
+      </div>
+
+      <div className={styles.demoColumns}>
+        <Field label="Pick a launch date" group className={styles.fieldStack}>
+          <DatePicker value={pickedDate} onDateSelect={setPickedDate} />
+        </Field>
+        <div className={styles.demoSection}>
+          <FileInput
+            label="Attachments"
+            files={files}
+            onFilesSelected={(added) =>
+              setFiles((prev) => [
+                ...prev,
+                ...added.map((f) => ({ id: `${f.name}-${f.size}`, name: f.name, size: f.size, progress: 100 })),
+              ])
+            }
+            onFileRemove={(id) => setFiles((prev) => prev.filter((f) => f.id !== id))}
+          />
+          <Field
+            label="How did the theme turn out?"
+            helperText="Stars keep their gold; focus one to see the brand ring."
+            group
+            className={styles.fieldStack}
+          >
+            <Rating value={rating} onValueChange={setRating} label="Theme rating" />
+          </Field>
+        </div>
+      </div>
 
       <div className={styles.demoRow}>
         <Checkbox label="Checked state" checked={checked} onChange={setChecked} />

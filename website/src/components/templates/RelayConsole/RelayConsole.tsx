@@ -59,6 +59,7 @@ import {
 import SidebarSwitchers from "../SidebarSwitchers/SidebarSwitchers";
 import TemplateAssistant from "../TemplateAssistant/TemplateAssistant";
 import styles from "./RelayConsole.module.css";
+import { AppFrameScreen, AppFrameTabBar, useAppFrame } from "../AppFrame/AppFrame";
 
 /* ---------------------------------------------------------------- data */
 
@@ -265,6 +266,8 @@ export default function RelayConsole() {
   const [selectedId, setSelectedId] = React.useState<string | null>(null);
   const [hoverId, setHoverId] = React.useState<string | null>(null);
   const [chatOpen, setChatOpen] = React.useState(false);
+  /* The templates carousel's Mobile mode: previewed as a phone app. */
+  const appFrame = useAppFrame();
   const [view, setView] = React.useState("globe");
   const [region, setRegion] = React.useState(REGIONS[0].value);
   const [rotation, setRotation] = React.useState<GlobeRotation>(
@@ -432,6 +435,7 @@ export default function RelayConsole() {
     // data-bg-hidden: the console sits on the flat page colour, the same
     // switch the marketing dashboard uses.
     <div className={styles.shell} data-bg-hidden="">
+      {!appFrame && (
       <div className={styles.sidebar}>
         <AppSidebar
           sections={NAV_SECTIONS}
@@ -444,13 +448,16 @@ export default function RelayConsole() {
           footerSlot={<SidebarSwitchers />}
         />
       </div>
+      )}
 
+      <AppFrameScreen enabled={appFrame} title="Network">
       <main
         className={`${styles.main} ${
           sidebarExpanded ? styles.mainExpanded : ""
         } ${chatOpen ? styles.mainChatOpen : ""}`}
       >
         <div className={styles.content}>
+          {!appFrame && (
           <div className={styles.topBar}>
             <div className={styles.search}>
               <Input
@@ -486,6 +493,7 @@ export default function RelayConsole() {
               />
             </div>
           </div>
+          )}
 
           {/* ------------------------------------------------- the stage */}
           <section className={styles.stage} aria-label="Network view">
@@ -640,6 +648,16 @@ export default function RelayConsole() {
           </section>
         </div>
       </main>
+      </AppFrameScreen>
+
+      {appFrame && (
+        <AppFrameTabBar
+          sections={NAV_SECTIONS}
+          activeKey="network"
+          productName="Meridian"
+          onAsk={() => setChatOpen(true)}
+        />
+      )}
 
       <TemplateAssistant
         open={chatOpen}

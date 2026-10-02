@@ -39,6 +39,7 @@ import { Panel } from "rift-ds/components/Panel/Panel";
 import SidebarSwitchers from "../SidebarSwitchers/SidebarSwitchers";
 import TemplateAssistant from "../TemplateAssistant/TemplateAssistant";
 import styles from "./TeamCalendar.module.css";
+import { AppFrameScreen, AppFrameTabBar, useAppFrame } from "../AppFrame/AppFrame";
 
 /* ---------------------------------------------------------------- data */
 
@@ -197,6 +198,8 @@ function eventsOn(date: string): EventCalendarEvent[] {
 export default function TeamCalendar() {
   const [sidebarExpanded, setSidebarExpanded] = React.useState(true);
   const [chatOpen, setChatOpen] = React.useState(false);
+  /* The templates carousel's Mobile mode: previewed as a phone app. */
+  const appFrame = useAppFrame();
   const [done, setDone] = React.useState<Record<string, boolean>>(INITIAL_DONE);
   const [selectedDay, setSelectedDay] = React.useState("2026-09-15");
 
@@ -208,6 +211,7 @@ export default function TeamCalendar() {
     // data-bg-hidden: the planner sits on the flat page colour, the same
     // switch the other templates use.
     <div className={styles.shell} data-bg-hidden="">
+      {!appFrame && (
       <div className={styles.sidebar}>
         <AppSidebar
           sections={NAV_SECTIONS}
@@ -220,13 +224,16 @@ export default function TeamCalendar() {
           footerSlot={<SidebarSwitchers />}
         />
       </div>
+      )}
 
+      <AppFrameScreen enabled={appFrame} title="Calendar">
       <main
         className={`${styles.main} ${
           sidebarExpanded ? styles.mainExpanded : ""
         } ${chatOpen ? styles.mainChatOpen : ""}`}
       >
         <div className={styles.content}>
+          {!appFrame && (
           <div className={styles.topBar}>
             <div className={styles.search}>
               <Input
@@ -262,6 +269,7 @@ export default function TeamCalendar() {
               />
             </div>
           </div>
+          )}
 
           <div className={styles.board}>
             {/* ------------------------------------------------ the rail */}
@@ -360,6 +368,16 @@ export default function TeamCalendar() {
           </div>
         </div>
       </main>
+      </AppFrameScreen>
+
+      {appFrame && (
+        <AppFrameTabBar
+          sections={NAV_SECTIONS}
+          activeKey="calendar"
+          productName="Cadence"
+          onAsk={() => setChatOpen(true)}
+        />
+      )}
 
       <TemplateAssistant
         open={chatOpen}

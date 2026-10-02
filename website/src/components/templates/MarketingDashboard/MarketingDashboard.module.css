@@ -27,6 +27,17 @@
   --ds-sidebar-float-inset: var(--layout-chat-inset);
 }
 
+/* The staged product's stand-in logo mark: a plain disc in the theme's
+   primary colour, deliberately brandless, so the screen reads as someone
+   else's product under any theme rather than wearing the system's mark. */
+.logoDot {
+  display: block;
+  width: var(--icon-size-600);
+  height: var(--icon-size-600);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-action-primary-bg);
+}
+
 /* AppSidebar positions itself fixed; the main column reserves its width the
    same way AppLayout does (64px rail, 280px expanded — the component's own
    constants). */

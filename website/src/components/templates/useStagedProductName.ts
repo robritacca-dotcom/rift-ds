@@ -31,3 +31,17 @@ export function useStagedProductName(fallback: string): string {
 }
 
 export const STAGED_PRODUCT_NAME_ATTR = ATTR;
+
+/**
+ * Whether the playground is staging this template. A staged screen is
+ * someone else's product in a frame, so it drops the site's own chrome (the
+ * mark and the way back to the templates index) that it shows at its own
+ * route.
+ */
+export function useIsStaged(): boolean {
+  return useSyncExternalStore(
+    subscribe,
+    () => document.documentElement.hasAttribute(ATTR),
+    () => false,
+  );
+}

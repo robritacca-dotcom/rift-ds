@@ -12,7 +12,8 @@
  * context, and --layout-viewport-height is pinned so viewport-tall shells
  * get a fixed size) inside a bordered shell. The frame is inert; a link
  * overlay opens the template full screen. A template flagged `mobileOnly`
- * is locked to the phone frame at every device size. The slide list derives from
+ * is locked to the phone frame at every device size, and one flagged
+ * `hideFromShowcase` gets no slide. The slide list derives from
  * templatesSidebarLinks, so the nav config stays the one authoritative
  * list of templates.
  */
@@ -24,6 +25,7 @@ import { Button } from "rift-ds/components/Button/Button";
 import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
 import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
 import { templatesSidebarLinks } from "@/config/navigation";
+import { APP_FRAME_ATTR } from "@/components/templates/AppFrame/AppFrame";
 import styles from "./page.module.css";
 
 /* The design viewports a template can be drawn at before scaling into
@@ -39,8 +41,11 @@ const DEVICES = {
 } as const;
 type DeviceKey = keyof typeof DEVICES;
 
-/** The templates themselves — every sidebar entry after "Contents". */
-const TEMPLATES = templatesSidebarLinks.slice(1);
+/** The templates themselves: every sidebar entry after "Contents", less the
+    ones flagged out of the carousel. */
+const TEMPLATES = templatesSidebarLinks
+  .slice(1)
+  .filter((template) => !template.hideFromShowcase);
 
 const SLIDE_COUNT = TEMPLATES.length;
 
@@ -82,6 +87,11 @@ function LiveFrame({
       `${designH}px`
     );
     doc.documentElement.style.overflow = "hidden";
+    /* In the phone, the template previews as an app: its top app bar and
+       tab bar in place of the web top bar and sidebar (AppFrame owns the
+       dressing; the full template page never carries the flag). */
+    if (device === "mobile") doc.documentElement.setAttribute(APP_FRAME_ATTR, "");
+    else doc.documentElement.removeAttribute(APP_FRAME_ATTR);
     /* The preview is a picture, not a scroll surface: inner scroll
        areas (a DataTable's wrapper, the Gantt's track) keep working in
        the real page but their bars are noise at postage-stamp scale —
@@ -93,7 +103,7 @@ function LiveFrame({
         "*{scrollbar-width:none}*::-webkit-scrollbar{display:none}";
       doc.head.appendChild(style);
     }
-  }, [designH]);
+  }, [designH, device]);
 
   useEffect(() => {
     const observer = new MutationObserver(sync);

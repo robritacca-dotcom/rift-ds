@@ -50,6 +50,7 @@ import { Sparkline } from "rift-ds/components/Sparkline/Sparkline";
 import SidebarSwitchers from "../SidebarSwitchers/SidebarSwitchers";
 import TemplateAssistant from "../TemplateAssistant/TemplateAssistant";
 import styles from "./SalesPipeline.module.css";
+import { AppFrameScreen, AppFrameTabBar, useAppFrame } from "../AppFrame/AppFrame";
 
 /* ---------------------------------------------------------------- data */
 
@@ -533,6 +534,8 @@ function winVariant(win: number): "positive" | "info" | "warning" {
 export default function SalesPipeline() {
   const [sidebarExpanded, setSidebarExpanded] = React.useState(true);
   const [chatOpen, setChatOpen] = React.useState(false);
+  /* The templates carousel's Mobile mode: previewed as a phone app. */
+  const appFrame = useAppFrame();
   const [activityWindow, setActivityWindow] = React.useState("90");
   const [ownerFilter, setOwnerFilter] = React.useState("all");
   const [motionFilter, setMotionFilter] = React.useState("all");
@@ -680,6 +683,7 @@ export default function SalesPipeline() {
     // data-bg-hidden: the pipeline sits on the flat page colour, the same
     // switch the other templates use.
     <div className={styles.shell} data-bg-hidden="">
+      {!appFrame && (
       <div className={styles.sidebar}>
         <AppSidebar
           sections={NAV_SECTIONS}
@@ -692,13 +696,16 @@ export default function SalesPipeline() {
           footerSlot={<SidebarSwitchers />}
         />
       </div>
+      )}
 
+      <AppFrameScreen enabled={appFrame} title="Companies" subtitle="Meridian · Sales">
       <main
         className={`${styles.main} ${
           sidebarExpanded ? styles.mainExpanded : ""
         } ${chatOpen ? styles.mainChatOpen : ""}`}
       >
         <div className={styles.content}>
+          {!appFrame && (
           <div className={styles.topBar}>
             <div className={styles.search}>
               <Input
@@ -734,10 +741,12 @@ export default function SalesPipeline() {
               />
             </div>
           </div>
-          <Divider spacing="none" />
+          )}
+          {!appFrame && <Divider spacing="none" />}
 
           {/* --------------------------------------------- page head */}
           <header className={styles.pageHead}>
+            {!appFrame && (
             <div>
               <Breadcrumb
                 items={[
@@ -748,6 +757,7 @@ export default function SalesPipeline() {
               />
               <h1 className={styles.title}>Companies</h1>
             </div>
+            )}
             <div className={styles.headActions}>
               <Button
                 variant="secondary"
@@ -810,6 +820,16 @@ export default function SalesPipeline() {
           </section>
         </div>
       </main>
+      </AppFrameScreen>
+
+      {appFrame && (
+        <AppFrameTabBar
+          sections={NAV_SECTIONS}
+          activeKey="companies"
+          productName="Meridian"
+          onAsk={() => setChatOpen(true)}
+        />
+      )}
 
       <TemplateAssistant
         open={chatOpen}

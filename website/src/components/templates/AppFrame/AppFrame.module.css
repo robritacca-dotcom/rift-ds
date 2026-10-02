@@ -1,0 +1,56 @@
+/* The app dressing a template wears in the templates carousel's Mobile
+   mode (AppFrame.tsx owns when). The recipe is the mobile dashboard's: an
+   iOS large-title bar at the top of the screen and a glass tab bar
+   floating above the bottom edge. */
+
+/* The screen column: the bar stacked over the template's main column,
+   taking the main column's place in its shell's row. */
+.screen {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.screen > main {
+  flex: 1;
+}
+
+/* The bar stays the first thing in the screen, above a template's own
+   sticky rows. */
+.header {
+  z-index: 25;
+}
+
+/* The tab bar rides the viewport's bottom edge, over the content. */
+.tabBar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.tabBar > * {
+  pointer-events: auto;
+}
+
+/* The bottom scroll edge, the mobile dashboard's: content blurs and fades
+   out under the capsule instead of meeting the screen edge in a hard line.
+   A mask reads alpha alone, so any opaque token draws its solid stop. */
+.tabBar::before {
+  content: "";
+  position: absolute;
+  inset: -24px 0 0;
+  z-index: -1;
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--color-bg-page-primary) 85%, transparent),
+    transparent
+  );
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  -webkit-mask-image: linear-gradient(to top, var(--color-text-primary) 55%, transparent);
+  mask-image: linear-gradient(to top, var(--color-text-primary) 55%, transparent);
+}

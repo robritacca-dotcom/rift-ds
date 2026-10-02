@@ -61,7 +61,7 @@ import { HiddenBackground } from "@/components/BlurBackground/BlurBackground";
 import DotBackground from "@/components/DotBackground/DotBackground";
 import { BRAND_NAME } from "@/config/brand.generated";
 import styles from "./MobileDashboard.module.css";
-import { useStagedProductName } from "../useStagedProductName";
+import { useIsStaged, useStagedProductName } from "../useStagedProductName";
 
 /* ---------------------------------------------------------------- data */
 
@@ -358,6 +358,7 @@ function CampaignList({ campaigns }: { campaigns: Campaign[] }) {
 export default function MobileDashboard() {
   /* The playground's Product name lever, when staged there. */
   const productName = useStagedProductName("Boardline");
+  const staged = useIsStaged();
   const [tab, setTab] = React.useState<Tab>("overview");
   const [range, setRange] = React.useState("30d");
   const [deliveryFilter, setDeliveryFilter] = React.useState("all");
@@ -437,11 +438,13 @@ export default function MobileDashboard() {
       {/* The site's mark and wordmark, top left on the stage: the way back
           to the templates index, since this chromeless route has no
           header. At a phone's width it moves into the drawer too. */}
-      <Link href="/templates" className={`${styles.stageLogo} ${styles.logo}`}>
-        <BrandMark size={28} />
-        <span className={styles.logoText}>{BRAND_NAME}</span>
-        <span className={styles.srOnly}>, back to templates</span>
-      </Link>
+      {!staged && (
+        <Link href="/templates" className={`${styles.stageLogo} ${styles.logo}`}>
+          <BrandMark size={28} />
+          <span className={styles.logoText}>{BRAND_NAME}</span>
+          <span className={styles.srOnly}>, back to templates</span>
+        </Link>
+      )}
 
       {/* The theme switcher and colour mode toggle, on the stage beside
           the framed phone: the site header's pair, where the other
@@ -704,11 +707,15 @@ export default function MobileDashboard() {
               </span>
             </div>
             <div className={styles.drawerSwitchers}>
-              <Link href="/templates" className={styles.logo}>
-                <BrandMark size={24} />
-                <span className={styles.logoText}>{BRAND_NAME}</span>
-                <span className={styles.srOnly}>, back to templates</span>
-              </Link>
+              {/* Staged in the playground, the screen is a stranger's
+                  product: no system mark, and no way out of the frame. */}
+              {!staged && (
+                <Link href="/templates" className={styles.logo}>
+                  <BrandMark size={24} />
+                  <span className={styles.logoText}>{BRAND_NAME}</span>
+                  <span className={styles.srOnly}>, back to templates</span>
+                </Link>
+              )}
               <SidebarSwitchers />
             </div>
           </div>

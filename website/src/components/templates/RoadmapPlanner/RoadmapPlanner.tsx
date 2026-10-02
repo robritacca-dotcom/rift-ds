@@ -49,6 +49,7 @@ import { ProgressBar } from "rift-ds/components/ProgressBar/ProgressBar";
 import SidebarSwitchers from "../SidebarSwitchers/SidebarSwitchers";
 import TemplateAssistant from "../TemplateAssistant/TemplateAssistant";
 import styles from "./RoadmapPlanner.module.css";
+import { AppFrameScreen, AppFrameTabBar, useAppFrame } from "../AppFrame/AppFrame";
 
 /* ---------------------------------------------------------------- data */
 
@@ -354,6 +355,8 @@ const overlaps = (item: { start: string; end: string }, view: { start: string; e
 export default function RoadmapPlanner() {
   const [sidebarExpanded, setSidebarExpanded] = React.useState(true);
   const [chatOpen, setChatOpen] = React.useState(false);
+  /* The templates carousel's Mobile mode: previewed as a phone app. */
+  const appFrame = useAppFrame();
   const [view, setView] = React.useState("h2");
   const [teamFilter, setTeamFilter] = React.useState("all");
   const [statusFilter, setStatusFilter] = React.useState("all");
@@ -407,6 +410,7 @@ export default function RoadmapPlanner() {
     // data-bg-hidden: the planner sits on the flat page colour, the same
     // switch the other templates use.
     <div className={styles.shell} data-bg-hidden="">
+      {!appFrame && (
       <div className={styles.sidebar}>
         <AppSidebar
           sections={NAV_SECTIONS}
@@ -419,13 +423,16 @@ export default function RoadmapPlanner() {
           footerSlot={<SidebarSwitchers />}
         />
       </div>
+      )}
 
+      <AppFrameScreen enabled={appFrame} title="Roadmap">
       <main
         className={`${styles.main} ${
           sidebarExpanded ? styles.mainExpanded : ""
         } ${chatOpen ? styles.mainChatOpen : ""}`}
       >
         <div className={styles.content}>
+          {!appFrame && (
           <div className={styles.topBar}>
             <div className={styles.search}>
               <Input
@@ -461,6 +468,7 @@ export default function RoadmapPlanner() {
               />
             </div>
           </div>
+          )}
 
           {/* ------------------------------------------- controls row */}
           <div className={styles.controls}>
@@ -647,6 +655,16 @@ export default function RoadmapPlanner() {
           </div>
         </div>
       </main>
+      </AppFrameScreen>
+
+      {appFrame && (
+        <AppFrameTabBar
+          sections={NAV_SECTIONS}
+          activeKey="roadmap"
+          productName="Waypoint"
+          onAsk={() => setChatOpen(true)}
+        />
+      )}
 
       <TemplateAssistant
         open={chatOpen}

@@ -25,6 +25,12 @@ export interface NavLink {
    * templates carousel previews it in the phone frame at every device size.
    */
   mobileOnly?: boolean;
+  /**
+   * Templates only: left out of the templates index carousel. The page still
+   * exists and stays in the sidebar, sitemap and llms.txt; the carousel just
+   * does not preview it.
+   */
+  hideFromShowcase?: boolean;
 }
 
 /** A row in a mega menu — provide either an `icon` (Material Symbol) or a `logo` (image path) */
@@ -415,6 +421,7 @@ export const templatesSidebarLinks: NavLink[] = [
     label: "Mobile dashboard",
     description: "The same analytics as an iOS app, under a glass tab bar",
     mobileOnly: true,
+    hideFromShowcase: true,
   },
   {
     href: "/templates/relay-console",
@@ -445,6 +452,7 @@ export const templatesSidebarLinks: NavLink[] = [
     href: "/templates/payroll-console",
     label: "Payroll console",
     description: "A pay run beside a docked assistant whose agent panel opens in place",
+    hideFromShowcase: true,
   },
   {
     href: "/templates/sign-in",

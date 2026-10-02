@@ -50,6 +50,7 @@ import SidebarSwitchers from "../SidebarSwitchers/SidebarSwitchers";
 import TemplateAssistant from "../TemplateAssistant/TemplateAssistant";
 import styles from "./MarketingDashboard.module.css";
 import { useStagedProductName } from "../useStagedProductName";
+import { AppFrameScreen, AppFrameTabBar, useAppFrame } from "../AppFrame/AppFrame";
 
 /* ---------------------------------------------------------------- data */
 
@@ -368,6 +369,8 @@ function seriesSwatch(series: number): string {
 export default function MarketingDashboard() {
   /* The playground's Product name lever, when staged there. */
   const productName = useStagedProductName("Boardline");
+  /* The templates carousel's Mobile mode: previewed as a phone app. */
+  const appFrame = useAppFrame();
   const [sidebarExpanded, setSidebarExpanded] = React.useState(true);
   const [channelTab, setChannelTab] = React.useState("channels");
   const [chatOpen, setChatOpen] = React.useState(false);
@@ -487,6 +490,7 @@ export default function MarketingDashboard() {
     // (the dotted stages' HiddenBackground marker reads the same way): the
     // dashboard sits on the flat page colour, no gradient.
     <div className={styles.shell} data-bg-hidden="">
+      {!appFrame && (
       <div className={styles.sidebar}>
         <AppSidebar
           sections={NAV_SECTIONS}
@@ -498,18 +502,27 @@ export default function MarketingDashboard() {
           activeKey="marketing"
           expanded={sidebarExpanded}
           onExpandedChange={setSidebarExpanded}
+          logo={<span className={styles.logoDot} />}
           logoText={productName}
           floating
           footerSlot={<SidebarSwitchers />}
         />
       </div>
+      )}
 
+      <AppFrameScreen
+        enabled={appFrame}
+        title="Marketing"
+        subtitle={`${productName} · Team space`}
+      >
       <main
         className={`${styles.main} ${
           sidebarExpanded ? styles.mainExpanded : ""
         } ${chatOpen ? styles.mainChatOpen : ""}`}
       >
         <div className={styles.content}>
+        {!appFrame && (
+        <>
         <div className={styles.topBar}>
           <div className={styles.search}>
             <Input
@@ -546,7 +559,10 @@ export default function MarketingDashboard() {
           </div>
         </div>
         <Divider spacing="none" />
+        </>
+        )}
         <header className={styles.pageHead}>
+          {!appFrame && (
           <div>
             <Breadcrumb
               items={[
@@ -557,6 +573,7 @@ export default function MarketingDashboard() {
             />
             <h1 className={styles.title}>Marketing</h1>
           </div>
+          )}
           <div className={styles.headActions}>
             <Button
               variant="secondary"
@@ -838,6 +855,16 @@ export default function MarketingDashboard() {
         </section>
         </div>
       </main>
+      </AppFrameScreen>
+
+      {appFrame && (
+        <AppFrameTabBar
+          sections={NAV_SECTIONS}
+          activeKey="marketing"
+          productName={productName}
+          onAsk={() => setChatOpen(true)}
+        />
+      )}
 
       <TemplateAssistant
         open={chatOpen}

@@ -14,6 +14,7 @@ import { Nunito_Sans } from "next/font/google";
 import "./globals.css";
 import { buildDesignSystemJsonLd, buildWebsiteJsonLd, SITE_URL } from "@/lib/structuredData";
 import { BRAND_NAME, GA_ID, TITLE_SUFFIX } from "@/config/brand.generated";
+import { BASE_THEME_ID, LEGACY_BASE_THEME_ID, SERVED_THEME_ID } from "@/lib/theme/brand";
 import { SiteChatProvider } from "@/components/SiteChat/ChatContext";
 import { SiteChatMount } from "@/components/SiteChat/SiteChatMount";
 import { SitePaletteMount } from "@/components/SitePalette/SitePaletteMount";
@@ -115,13 +116,14 @@ const themeScript = `
     }
   });
   /* The visitor's theme pick (the hero's dot row) rides the same pre-paint
-     path as light/dark: the stored brand replaces the server's mono default
+     path as light/dark: the stored brand replaces the server's served theme
      before first render, so a returning visitor never flashes the wrong
-     theme. "default" means the Rift-original look (attribute off);
-     storage being unavailable (private mode) leaves the shipped mono. */
+     theme. The base theme's id (or its legacy one) means the raw token
+     files' look (attribute off);
+     storage being unavailable (private mode) leaves the served theme. */
   try {
     var brand = localStorage.getItem('brand');
-    if (brand === 'default') root.removeAttribute('data-brand');
+    if (brand === '${BASE_THEME_ID}' || brand === '${LEGACY_BASE_THEME_ID}') root.removeAttribute('data-brand');
     else if (brand) root.setAttribute('data-brand', brand);
   } catch (e) {}
   /* An attribute, deliberately not a class: React owns <html>'s className
@@ -144,13 +146,13 @@ export default async function RootLayout({
   // var() references on the element that declares it — on <body> the variable
   // would be invisible to :root and the token would go invalid.
   return (
-    // The shipped landing look is the black & white preset, served from its
-    // generated stylesheet: data-brand="mono" on the server-rendered html.
-    // Every theme dot swaps this attribute; the Rift-original dot
-    // removes it (falling back to the raw token files).
+    // The served theme (SERVED_THEME_ID, its one home) rides its generated
+    // stylesheet: data-brand on the server-rendered html. Every theme dot
+    // swaps this attribute; the base theme's dot removes it (falling back
+    // to the raw token files).
     <html
       lang="en"
-      data-brand="mono"
+      data-brand={SERVED_THEME_ID}
       data-theme="dark"
       data-theme-setting="system"
       className={nunitoSans.variable}

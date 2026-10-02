@@ -40,7 +40,8 @@ import {
   elevationOverrides,
   type ElevationVariant,
 } from "@/lib/theme/theme-overrides";
-import { PICKER_FONT_PARAMS, THEME_PRESETS, type ThemePreset } from "@/lib/theme/presets";
+import { PICKER_FONT_PARAMS, THEME_PRESETS, type ThemePreset } from "@/lib/theme/presets";
+import { BASE_THEME_ID, isBaseTheme, SERVED_THEME_ID } from "@/lib/theme/brand";
 import { useAppliedOverrides, useSiteTheme } from "@/lib/theme/use-theme-overrides";
 import PlaygroundControls from "./PlaygroundControls";
 import { ImageThemeCard, ImageThemeDropZone } from "./ImageThemeDrop";
@@ -203,7 +204,7 @@ export default function PlaygroundPage() {
   );
 
   /* ---------- levers ---------- */
-  const [preset, setPreset] = useState("default");
+  const [preset, setPreset] = useState(BASE_THEME_ID);
   const [brand, setBrand] = useState(DEFAULT_BRAND);
   const [tintOn, setTintOn] = useState(false);
   const [tintSeed, setTintSeed] = useState(DEFAULT_NEUTRAL_SEED);
@@ -283,7 +284,7 @@ export default function PlaygroundPage() {
   const syncPresetParam = (value: string) => {
     const url = new URL(window.location.href);
     if (value === "custom") url.searchParams.delete("preset");
-    else url.searchParams.set("preset", value);
+    else url.searchParams.set("preset", isBaseTheme(value) ? BASE_THEME_ID : value);
     window.history.replaceState(null, "", url);
   };
 
@@ -377,7 +378,7 @@ export default function PlaygroundPage() {
 
   const applyPreset = (value: string) => {
     syncPresetParam(value);
-    if (value === "default") {
+    if (isBaseTheme(value)) {
       reset(); // the shipped look — put every lever back
       return;
     }
@@ -532,7 +533,7 @@ export default function PlaygroundPage() {
 
   const reset = () => {
     clearImage();
-    setPreset("default");
+    setPreset(BASE_THEME_ID);
     setPresetExtras({});
     setAdvColors(DEFAULT_ADVANCED);
     setAccents(SHIPPED_ACCENTS);
@@ -559,7 +560,7 @@ export default function PlaygroundPage() {
      definitions exist when it runs. */
   useEffect(() => {
     const linked = new URLSearchParams(window.location.search).get("preset");
-    if (linked && (linked === "default" || THEME_PRESETS[linked])) {
+    if (linked && (isBaseTheme(linked) || THEME_PRESETS[linked])) {
       // A once-on-mount sync from the URL, which the prerender can't
       // see — the same sanctioned pattern as the ?view read above.
       // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -568,7 +569,7 @@ export default function PlaygroundPage() {
     }
     const suspended = suspendedBrandRef.current;
     if (suspended && THEME_PRESETS[suspended]) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
+       
       applyPreset(suspended);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -765,7 +766,7 @@ export default function PlaygroundPage() {
               onClearImage={clearImage}
               /* Reset lands on Smoke, the served default — the raw token
                  files stay reachable as the Tide row in the picker. */
-              onReset={() => applyPreset("mono")}
+              onReset={() => applyPreset(SERVED_THEME_ID)}
               onOpenAdvanced={() => setAdvOpen(true)}
               onViewCss={() => setCssOpen(true)}
               contextual={

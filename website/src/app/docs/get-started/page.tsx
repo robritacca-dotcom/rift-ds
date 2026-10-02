@@ -7,6 +7,7 @@ import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import { getSidebarLinks, docsSidebarLinks } from "@/config/navigation";
 import { THEME_PRESETS, THEME_SELECTOR_ORDER } from "@/lib/theme/presets";
+import { BASE_THEME_ID } from "@/lib/theme/brand";
 import styles from "./page.module.css";
 import FloatingAnchorNav from "@/components/FloatingAnchorNav/FloatingAnchorNav";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
@@ -141,8 +142,9 @@ const FONT_SNIPPET = `/* The whole type scale chains to one token.
 
 const PRIMITIVE_SNIPPET = `/* Every semantic token references a primitive, so overriding a
    primitive re-themes everything built on it — in both themes.
-   The action colour is theme-split: light fills run teal-08/09/10,
-   dark inverts to teal-05/04/03. Re-key those steps to rebrand —
+   In the base token files the action colour runs on the teal ramp:
+   light fills on teal-08/09/10, dark on teal-05/04/03. Re-key those
+   steps to rebrand —
    or copy a complete override from the playground. */
 :root {
   --primitive-teal-08: #6D31D3;  /* light fill */
@@ -431,7 +433,7 @@ export default function GetStartedPage() {
                 <CodeBlock code={PRESET_SNIPPET} language="tsx" showCopy />
                 <p className={styles.sectionNote}>
                   The shipped themes:{" "}
-                  {THEME_SELECTOR_ORDER.filter((id) => id !== "default")
+                  {THEME_SELECTOR_ORDER.filter((id) => id !== BASE_THEME_ID)
                     .map((id) => THEME_PRESETS[id].label)
                     .join(", ")}
                   . Each also loads alone from{" "}

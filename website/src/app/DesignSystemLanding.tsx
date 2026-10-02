@@ -9,7 +9,7 @@ import styles from "./page.module.css";
 import { FIGMA_FILE_URL, NPM_URL, REPOSITORY_URL, STORYBOOK_URL } from "@/config/brand.generated";
 import { THEME_SELECTOR_ORDER, themeSelectorTiles } from "@/lib/theme/presets";
 import { useSiteTheme } from "@/lib/theme/use-theme-overrides";
-import { applyBrand } from "@/lib/theme/brand";
+import { applyBrand, BASE_THEME_ID, SERVED_THEME_ID } from "@/lib/theme/brand";
 import { SHOW_FIGMA_LINKS } from "@/config/social";
 import { AgentPlan } from "rift-ds/components/AgentPlan/AgentPlan";
 import { AnimatedNumber } from "rift-ds/components/AnimatedNumber/AnimatedNumber";
@@ -482,11 +482,11 @@ function useNarrowCollage() {
    the package documents, exercised by the site itself. Each tile is a
    portrait — swatch, name in the theme's own heading face, and the font
    pairing — so the scale of what a pick changes is visible before the
-   click. "default" is the Rift-original look (attribute removed,
-   the raw token files); the server ships data-brand="mono", so black &
-   white is what a visitor lands on and the mono tile wakes up ringed. */
+   click. BASE_THEME_ID is the base look (attribute removed, the raw
+   token files); the server ships SERVED_THEME_ID, so that is what a
+   visitor lands on and its tile wakes up ringed. */
 
-const SSR_BRAND = "mono";
+const SSR_BRAND = SERVED_THEME_ID;
 
 function ThemeSwitcher() {
   const theme = useSiteTheme();
@@ -497,7 +497,7 @@ function ThemeSwitcher() {
      have set it before this mount) — read it once the client is up. */
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setActive(document.documentElement.dataset.brand ?? "default");
+    setActive(document.documentElement.dataset.brand ?? BASE_THEME_ID);
   }, []);
 
   /* The tile names render in their themes' own faces, which need no

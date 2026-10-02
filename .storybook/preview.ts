@@ -8,17 +8,18 @@ import {
   THEME_PRESETS,
   THEME_SELECTOR_ORDER,
 } from '../website/src/lib/theme/presets';
+import { BASE_THEME_ID, isBaseTheme, SERVED_THEME_ID } from '../website/src/lib/theme/brand';
 
 /**
  * The theme-preset toolbar mirrors the site's switcher: the same ids in
  * the same order, applied the same way (data-brand on <html>, which the
- * generated preset stylesheets key on). "default" is the base token
- * files with no attribute — the Tide row. Smoke (mono) is the default
- * here because it is the served site's default look too.
+ * generated preset stylesheets key on). BASE_THEME_ID is the base token
+ * files with no attribute — the Tide row. The toolbar opens on
+ * SERVED_THEME_ID, the served site's look.
  */
 const withBrand: Decorator = (Story, context) => {
   const brand = context.globals.brand;
-  if (brand && brand !== 'default') {
+  if (brand && !isBaseTheme(String(brand))) {
     document.documentElement.setAttribute('data-brand', String(brand));
   } else {
     document.documentElement.removeAttribute('data-brand');
@@ -98,15 +99,15 @@ const preview: Preview = {
         dynamicTitle: true,
         items: THEME_SELECTOR_ORDER.filter((id) => id !== 'custom').map((id) => ({
           value: id,
-          title: id === 'default' ? DEFAULT_THEME_LABEL : (THEME_PRESETS[id]?.label ?? id),
+          title: id === BASE_THEME_ID ? DEFAULT_THEME_LABEL : (THEME_PRESETS[id]?.label ?? id),
         })),
       },
     },
   },
 
-  // Smoke is the served site's default look, so it is Storybook's too.
+  // The served theme is Storybook's opening look too.
   initialGlobals: {
-    brand: 'mono',
+    brand: SERVED_THEME_ID,
   },
 };
 

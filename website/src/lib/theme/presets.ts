@@ -1,5 +1,6 @@
 import type { DropdownOption } from "rift-ds/components/Dropdown/Dropdown";
 import type { RichDropdownOption } from "rift-ds/components/RichDropdown/RichDropdown";
+import { BASE_THEME_ID, SERVED_THEME_ID } from "./brand";
 import {
   ACCENT_NAMES,
   DEFAULT_BRAND,
@@ -147,8 +148,8 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
       purple: "#9C7BBB",
     }),
     // Greyed accents: the background glow blobs and chart series go
-    // monochrome with the rest of the look. Status colours are a separate
-    // token set and deliberately keep their meaning.
+    // monochrome with the rest of the look. Status colours follow the
+    // ink-wash ramps above, so they desaturate too.
     accents: {
       coral: "#A3A3A3",
       violet: "#8F8F8F",
@@ -321,9 +322,9 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     // a deep forest label, heavy tight display type, and near-flat white
     // surfaces on a faintly green-grey page. The key sits a few degrees
     // greener than the reference lime (#9FE870, hue 96) so it lands in the
-    // GREEN family rather than yellow — the nearest-ramp split falls at
-    // hue 103, and a lime keyed into yellow would turn the warning status
-    // colour lime with it. Positive status going lime is the point.
+    // GREEN family rather than yellow (the nearest-ramp split falls at
+    // hue 103). Keyed into green, the positive status goes lime with it,
+    // which is the point.
     brand: "#8AE86E",
     // The forest seed at a whisper: white steps to the grey-green section
     // ground, and the near-blacks pick up the warm green cast of the
@@ -570,14 +571,15 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
 
 /**
  * The selector order every theme surface renders — the landing's dot
- * row and the playground's preset picker walk this list. "default" is
- * the shipped Rift look (no data-brand attribute).
+ * row and the playground's preset picker walk this list. BASE_THEME_ID
+ * ("tide") is the base look the raw token files carry (no data-brand
+ * attribute).
  */
-export const THEME_SELECTOR_ORDER: ReadonlyArray<string> = [
-  // Smoke leads: it is the default the server ships, so the row
-  // opens on the look the visitor is already seeing. The rest walk the
-  // colour wheel by brand hue — red, orange, yellow, the greens, teal,
-  // blue, violet, magenta — so the swatch row reads as a spectrum.
+/* Every look except the served one, walking the colour wheel by brand
+   hue — red, orange, yellow, the greens, teal, blue, violet, magenta — so
+   the swatch row reads as a spectrum. The monochrome look sits with them
+   so a change of served theme never drops it from the row. */
+const HUE_ORDER: ReadonlyArray<string> = [
   "mono",
   "coral",
   "warm",
@@ -585,13 +587,20 @@ export const THEME_SELECTOR_ORDER: ReadonlyArray<string> = [
   "zest",
   "forest",
   "terminal",
-  "default",
+  BASE_THEME_ID,
   "contrast",
   "violet",
   "pink",
 ];
 
-/** The shipped look's display name (the "default" selector entry — no
+// The served theme leads, so the row opens on the look the visitor is
+// already seeing; the rest keep their hue order.
+export const THEME_SELECTOR_ORDER: ReadonlyArray<string> = [
+  SERVED_THEME_ID,
+  ...HUE_ORDER.filter((id) => id !== SERVED_THEME_ID),
+];
+
+/** The base look's display name (the BASE_THEME_ID selector entry — no
     data-brand attribute, the raw token files). Named here, beside the
     presets' own `label` fields, so every selector surface reads the same
     registry rather than hardcoding a string. */
@@ -637,7 +646,7 @@ const pairingLine = (bodyLabel: string, headingLabel?: string) => {
 };
 
 /**
- * One rich cell per shipped look, in THEME_SELECTOR_ORDER with "default"
+ * One rich cell per shipped look, in THEME_SELECTOR_ORDER with the base theme
  * in place mid-list — the landing's theme tiles render this directly, and
  * the playground's preset picker composes from it, so the two surfaces can
  * never disagree on order, portraits, or labels. `theme` resolves the
@@ -646,7 +655,7 @@ const pairingLine = (bodyLabel: string, headingLabel?: string) => {
 export function themeSelectorTiles(theme: "light" | "dark"): RichDropdownOption[] {
   const dark = theme === "dark";
   return THEME_SELECTOR_ORDER.map((value) => {
-    if (value === "default") {
+    if (value === BASE_THEME_ID) {
       return {
         label: DEFAULT_THEME_LABEL,
         value,
@@ -688,7 +697,7 @@ export function presetPickerOptions(args: {
 }): RichDropdownOption[] {
   const tiles = themeSelectorTiles(args.theme);
   return [
-    tiles.find((t) => t.value === "default")!,
+    tiles.find((t) => t.value === BASE_THEME_ID)!,
     {
       label: "Custom",
       value: "custom",
@@ -698,7 +707,7 @@ export function presetPickerOptions(args: {
       bodyFont: bodyStack(args.custom.fontLabel),
       description: pairingLine(args.custom.fontLabel, args.custom.headingFontLabel),
     },
-    ...tiles.filter((t) => t.value !== "default"),
+    ...tiles.filter((t) => t.value !== BASE_THEME_ID),
   ];
 }
 

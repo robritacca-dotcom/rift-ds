@@ -6,6 +6,7 @@ import { Meta } from "@storybook/addon-docs/blocks";
 import { COMPONENT_COUNT } from "../components/registry";
 import { TOKEN_COUNT } from "../tokens/registry";
 import { THEME_SELECTOR_ORDER } from "../../website/src/lib/theme/presets";
+import { BASE_THEME_ID } from "../../website/src/lib/theme/brand";
 import { AUTHOR_NAME, AUTHOR_URL, SITE_URL } from "../../website/src/config/brand.generated";
 
 <Meta title="Rift DS" />
@@ -105,16 +106,16 @@ The system flows in one direction: raw values become purposeful tokens, tokens d
 
 ## Theming
 
-Light and dark are two readings of the same token layer, not separate systems. Components reference semantic tokens and stay agnostic to the active theme; the theme decides what each token resolves to. Beyond the two modes, {THEME_SELECTOR_ORDER.filter((id) => id !== "default").length} complete looks ship in the package as generated stylesheets, each applied by one <code>data-brand</code> attribute. The Theme control in this Storybook's toolbar switches between them, and it opens on Smoke, the served default.
+Light and dark are two readings of the same token layer, not separate systems. Components reference semantic tokens and stay agnostic to the active theme; the theme decides what each token resolves to. Beyond the two modes, {THEME_SELECTOR_ORDER.filter((id) => id !== BASE_THEME_ID).length} complete looks ship in the package as generated stylesheets, each applied by one <code>data-brand</code> attribute. The Theme control in this Storybook's toolbar switches between them, and it opens on Smoke, the served default.
 
 <div className="ds-theme-grid">
   <div className="ds-theme-card ds-theme-light">
     <h4>Light</h4>
-    <p>Neutral backgrounds, near-black text, teal accents. Semi-transparent layers carry depth.</p>
+    <p>A neutral page floor with containers that contrast against it, near-black text, and one action colour. Contrast between the steps carries most of the depth; shadows are reserved for floating surfaces.</p>
   </div>
   <div className="ds-theme-card ds-theme-dark">
     <h4>Dark</h4>
-    <p>Same token names, different primitives. Surfaces darken, text lightens, and the action accent inverts: the deep teal fill under a light label becomes a light fill under a dark one.</p>
+    <p>Same token names, different primitives. Surfaces darken, text lightens, and the action colour takes its own dark-mode pairing of fill and label, held to the same contrast.</p>
   </div>
 </div>
 
@@ -145,7 +146,7 @@ The passive (ghost) action tokens use semi-transparent values, so tertiary contr
   </div>
   <div className="ds-convention">
     <strong>Fonts</strong>
-    <span>One primary type family and one icon font, with heading and body roles you can split: every theme brings its own faces, and the default resolves to Nunito Sans. Complete theme presets ship in the package as stylesheets, applied by one data-brand attribute.</span>
+    <span>One primary type family and one icon font, with heading and body roles you can split: every theme brings its own faces, and the base theme resolves to Nunito Sans. Complete theme presets ship in the package as stylesheets, applied by one data-brand attribute.</span>
   </div>
 </div>
 

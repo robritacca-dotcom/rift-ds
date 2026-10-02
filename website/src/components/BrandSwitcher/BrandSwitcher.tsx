@@ -5,11 +5,11 @@ import { createPortal } from "react-dom";
 import Link from "next/link";
 import { themeSelectorTiles } from "@/lib/theme/presets";
 import { useSiteTheme } from "@/lib/theme/use-theme-overrides";
-import { applyBrand, readBrand, subscribeBrand } from "@/lib/theme/brand";
+import { applyBrand, readBrand, SERVED_THEME_ID, subscribeBrand } from "@/lib/theme/brand";
 import styles from "./BrandSwitcher.module.css";
 
 // Matches the SSR value of data-brand on <html> in layout.tsx.
-const getServerSnapshot = () => "mono";
+const getServerSnapshot = () => SERVED_THEME_ID;
 
 /**
  * The header's theme switcher: a circular trigger wearing the active

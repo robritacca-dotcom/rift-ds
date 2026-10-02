@@ -13,11 +13,11 @@ import {
 } from "@/lib/theme/presets";
 import { SHIPPED_ACCENTS, motionSpeedPercent } from "@/lib/theme/theme-overrides";
 import { useSiteTheme } from "@/lib/theme/use-theme-overrides";
-import { applyBrand, readBrand, subscribeBrand } from "@/lib/theme/brand";
+import { applyBrand, readBrand, SERVED_THEME_ID, subscribeBrand } from "@/lib/theme/brand";
 import styles from "./page.module.css";
 
 /* Matches the SSR value of data-brand on <html> in the root layout. */
-const getServerSnapshot = () => "mono";
+const getServerSnapshot = () => SERVED_THEME_ID;
 
 const { sidebarLinks } = getSidebarLinks(foundationsSidebarLinks, "/foundations/themes");
 
@@ -61,7 +61,7 @@ export default function ThemesPage() {
               These themes are demonstrations, not a menu: each one is the
               whole system restyled through its tokens alone, to show the
               range one set of primitives covers. A look means both colour
-              modes, a heading and body type pairing with self-hosted fonts,
+              modes, a typeface or a heading and body pairing, with self-hosted fonts,
               radius, density, motion, elevation, the ambient background, and
               the chart palette. Apply one and this page rethemes around you,
               which is the honest preview. Your own brand takes the same

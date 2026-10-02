@@ -9,11 +9,33 @@
 /** The localStorage key the layout's pre-paint script reads. */
 export const BRAND_STORAGE_KEY = "brand";
 
-/** Apply a theme id ("default" removes the attribute — the raw token files). */
+/** The base theme's selector id: the look the raw token files carry, applied
+    by removing the data-brand attribute rather than setting one. */
+export const BASE_THEME_ID = "tide";
+
+/** The id the base theme went by until 2026-10-02. Still accepted from a
+    returning visitor's storage and from old ?preset= links, and read as the
+    base theme; nothing writes it any more. */
+export const LEGACY_BASE_THEME_ID = "default";
+
+/** The served theme: the preset the root layout renders on <html> for a
+    visitor with no stored pick, which Storybook's toolbar also opens on. The
+    one home for that fact — change it here and every surface follows
+    (THEME_SELECTOR_ORDER should lead with it, so the row opens on the look
+    the visitor is already seeing). */
+export const SERVED_THEME_ID = "mono";
+
+/** Whether a theme id names the base theme (current or legacy id). */
+export function isBaseTheme(id: string | null | undefined): boolean {
+  return id === BASE_THEME_ID || id === LEGACY_BASE_THEME_ID;
+}
+
+/** Apply a theme id (the base theme removes the attribute — the raw token files). */
 export function applyBrand(id: string) {
   /* setAttribute/removeAttribute rather than the dataset proxy: the hooks
      lint reads a dataset assignment as mutating shared state. */
-  if (id === "default") {
+  if (isBaseTheme(id)) {
+    id = BASE_THEME_ID;
     document.documentElement.removeAttribute("data-brand");
   } else {
     document.documentElement.setAttribute("data-brand", id);
@@ -27,7 +49,7 @@ export function applyBrand(id: string) {
 
 /** The active theme id, as the attribute currently says. */
 export function readBrand(): string {
-  return document.documentElement.getAttribute("data-brand") ?? "default";
+  return document.documentElement.getAttribute("data-brand") ?? BASE_THEME_ID;
 }
 
 /** Subscribe to brand changes from any surface (MutationObserver + storage). */

@@ -25,7 +25,6 @@
 }
 
 html[data-brand="gold"] {
-  --color-action-icon-active: var(--primitive-yellow-11);
   --color-action-primary-bg: var(--primitive-neutral-08);
   --color-action-primary-bg-active: var(--primitive-neutral-10);
   --color-action-primary-bg-hover: var(--primitive-neutral-09);
@@ -165,10 +164,9 @@ html[data-brand="gold"] {
 }
 
 html[data-brand="gold"][data-theme="dark"] {
-  --color-action-icon-active: var(--primitive-yellow-11);
   --color-action-primary-bg: var(--primitive-yellow-07);
-  --color-action-primary-bg-active: var(--primitive-yellow-09);
-  --color-action-primary-bg-hover: var(--primitive-yellow-08);
+  --color-action-primary-bg-active: var(--primitive-yellow-03);
+  --color-action-primary-bg-hover: var(--primitive-yellow-04);
   --color-action-primary-border: var(--primitive-yellow-07);
   --color-action-primary-border-secondary: var(--primitive-yellow-08);
   --color-action-primary-border-tertiary: var(--primitive-yellow-07);

@@ -43,7 +43,6 @@
 }
 
 html[data-brand="violet"] {
-  --color-action-icon-active: var(--primitive-purple-02);
   --color-action-primary-bg: var(--primitive-purple-08);
   --color-action-primary-bg-active: var(--primitive-purple-10);
   --color-action-primary-bg-hover: var(--primitive-purple-09);
@@ -178,10 +177,9 @@ html[data-brand="violet"] {
 }
 
 html[data-brand="violet"][data-theme="dark"] {
-  --color-action-icon-active: var(--primitive-purple-02);
   --color-action-primary-bg: var(--primitive-purple-08);
-  --color-action-primary-bg-active: var(--primitive-purple-06);
-  --color-action-primary-bg-hover: var(--primitive-purple-07);
+  --color-action-primary-bg-active: var(--primitive-purple-10);
+  --color-action-primary-bg-hover: var(--primitive-purple-09);
   --color-action-primary-border: var(--primitive-purple-08);
   --color-action-primary-border-secondary: var(--primitive-purple-09);
   --color-action-primary-border-tertiary: var(--primitive-purple-08);

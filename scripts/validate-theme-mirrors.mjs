@@ -310,7 +310,6 @@ const SANCTIONED_DERIVATION_GAPS = new Set([
   '--color-core-ui-secondary|light|derived:11|css:10',
   '--color-action-primary-text|dark|derived:11|css:10',
   '--color-action-primary-text-active|dark|derived:11|css:10',
-  '--color-action-icon-active|dark|derived:11|css:10',
 ]);
 
 function checkActionSemanticRefs() {
@@ -401,7 +400,8 @@ function checkActionSemanticRefs() {
 
     /* The bg/hover/active collapse fix, as actionPointerOverrides has it. */
     const idx = (s) => order.indexOf(s);
-    const brighten = theme === 'dark' && luminance(hexToRgb(keyHex)) < 0.8;
+    const keyLum = luminance(hexToRgb(keyHex));
+    const brighten = keyLum > 0.5 && keyLum < 0.9;
     const dir = brighten ? -1 : 1;
     const walk = (s) => order[Math.min(order.length - 1, Math.max(0, idx(s) + dir))];
     const collapsed = (outer, inner) =>

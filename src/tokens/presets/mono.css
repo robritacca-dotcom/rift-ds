@@ -43,7 +43,6 @@
 }
 
 html[data-brand="mono"] {
-  --color-action-icon-active: var(--primitive-neutral-02);
   --color-action-primary-bg: var(--primitive-neutral-08);
   --color-action-primary-bg-active: var(--primitive-neutral-10);
   --color-action-primary-bg-hover: var(--primitive-neutral-09);
@@ -164,7 +163,6 @@ html[data-brand="mono"] {
 }
 
 html[data-brand="mono"][data-theme="dark"] {
-  --color-action-icon-active: var(--primitive-neutral-07);
   --color-action-primary-bg: var(--primitive-neutral-01);
   --color-action-primary-bg-active: var(--primitive-neutral-03);
   --color-action-primary-bg-hover: var(--primitive-neutral-02);

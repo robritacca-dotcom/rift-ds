@@ -335,7 +335,7 @@ const actionPrimaryColours: SwatchData[] = [
   {
     label: "Icon Active", cssVar: "--color-action-icon-active",
     dark: { primitive: "--teal--10--", hex: "#052F3E", rgb: "5 / 47 / 62" },
-    light: { primitive: "--teal--02--", hex: "#CFEAF3", rgb: "207 / 234 / 243" },
+    light: { primitive: "--neutral--01--", hex: "#F1F1F1", rgb: "241 / 241 / 241" },
   },
 ];
 
@@ -382,7 +382,7 @@ const actionNeutralColours: SwatchData[] = [
   },
   {
     label: "Text Primary", cssVar: "--color-action-neutral-text",
-    dark: { primitive: "--neutral--01--", hex: "#F1F1F1", rgb: "241 / 241 / 241" },
+    dark: { primitive: "--neutral--00--", hex: "#FFFFFF", rgb: "255 / 255 / 255" },
     light: { primitive: "--neutral--10--", hex: "#050505", rgb: "5 / 5 / 5" },
   },
 ];

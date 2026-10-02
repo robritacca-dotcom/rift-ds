@@ -115,7 +115,6 @@
 }
 
 html[data-brand="coral"] {
-  --color-action-icon-active: var(--primitive-red-01);
   --color-action-primary-bg: var(--primitive-red-07);
   --color-action-primary-bg-active: var(--primitive-red-09);
   --color-action-primary-bg-hover: var(--primitive-red-08);
@@ -235,10 +234,9 @@ html[data-brand="coral"] {
 }
 
 html[data-brand="coral"][data-theme="dark"] {
-  --color-action-icon-active: var(--primitive-red-01);
   --color-action-primary-bg: var(--primitive-red-07);
-  --color-action-primary-bg-active: var(--primitive-red-05);
-  --color-action-primary-bg-hover: var(--primitive-red-06);
+  --color-action-primary-bg-active: var(--primitive-red-09);
+  --color-action-primary-bg-hover: var(--primitive-red-08);
   --color-action-primary-border: var(--primitive-red-07);
   --color-action-primary-border-secondary: var(--primitive-red-08);
   --color-action-primary-border-tertiary: var(--primitive-red-07);

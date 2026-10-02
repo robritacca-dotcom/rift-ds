@@ -515,7 +515,6 @@ const ACTION_SEMANTIC_REFS: ReadonlyArray<{
   { cssVar: "--color-action-primary-border", light: "10", dark: "07" },
   { cssVar: "--color-action-primary-border-secondary", light: "07", dark: "08" },
   { cssVar: "--color-action-primary-border-tertiary", light: "07", dark: "07" },
-  { cssVar: "--color-action-icon-active", light: "02", dark: "02" },
   { cssVar: "--color-core-ui-primary", light: "07", dark: "07" },
   { cssVar: "--color-core-ui-secondary", light: "10", dark: "09" },
   { cssVar: "--color-input-border-hover", light: "05", dark: "08" },
@@ -605,14 +604,22 @@ export function actionPointerOverrides(
     picked[ref.cssVar] = nearest(ideal[tealStep], tealStep);
   }
 
-  /* Nearest-match can collapse bg/hover/active onto one step, which would
-     erase the interaction states — force them onto distinct steps. The
-     direction is the theme's: light hover/active deepen away from the white
-     page, dark ones brighten away from the near-black one — unless the key
-     is already near-white (the black & white preset's dark button), where
-     there is no brightening headroom and a slight deepen reads correctly. */
+  /* Hover and active must land on distinct steps on the far side of the
+     fill from its label, so every state keeps the label's contrast —
+     nearest-match alone can collapse them onto one step, or walk them
+     toward the label. The label's side is the key's: a light key carries a
+     dark label (brandRampValues inverts), so its states brighten; a darker
+     key carries a light label, so its states deepen. That reproduces the
+     shipped teal in both themes (deep fill deepening in light, light fill
+     brightening in dark) and keeps a mid-tone key correct in either theme.
+     A near-white key (the black & white preset's dark button) has no
+     brightening headroom, so it takes a slight deepen instead. The cutoff
+     sits above a light yellow (#FFD166 is 0.83): a yellow does have
+     headroom, and two shade steps under its dark label fall below AA. */
   const idx = (s: string) => order.indexOf(s);
-  const brighten = theme === "dark" && luminance(hexToRgb(keyHex)) < 0.8;
+  const keyLum = luminance(hexToRgb(keyHex));
+  const darkLabel = keyLum > 0.5;
+  const brighten = darkLabel && keyLum < 0.9;
   const dir = brighten ? -1 : 1;
   const walk = (s: string) =>
     order[Math.min(order.length - 1, Math.max(0, idx(s) + dir))];
@@ -623,6 +630,15 @@ export function actionPointerOverrides(
   const active = "--color-action-primary-bg-active";
   if (collapsed(picked[hover], picked[bg])) picked[hover] = walk(picked[bg]);
   if (collapsed(picked[active], picked[hover])) picked[active] = walk(picked[hover]);
+
+  /* A theme whose ref leaves the hover label at its shipped value (light
+     mode's near-white) can only keep it under a light label. A dark-label
+     key takes its derived label for hover and active too, or the near-white
+     would sit on a pale fill. */
+  const textActive = "--color-action-primary-text-active";
+  if (darkLabel && !(textActive in picked)) {
+    picked[textActive] = picked["--color-action-primary-text"];
+  }
 
   for (const [cssVar, step] of Object.entries(picked)) {
     overrides[cssVar] = `var(--primitive-${ramp}-${step})`;

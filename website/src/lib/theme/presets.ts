@@ -295,7 +295,11 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     // Light mode inverts the button: ink fill (mono's exact trio, so the
     // hover/active steps have proven headroom) under the gold label —
     // yellow-07 is the rebased key, #FFD166. Dark mode keeps the derived
-    // gold fill, restored below because extras apply to both themes.
+    // gold fill, restored below because extras apply to both themes. Its
+    // hover and pressed fills brighten away from the dark label, as the
+    // shipped dark teal does; deepening put yellow-09 under the yellow-11
+    // label at 2.49:1. They skip a step each (04, 03) because the yellow
+    // ramp is packed tight above the key, so 06 and 05 barely register.
     extraOverrides: {
       "--color-action-primary-bg": "var(--primitive-neutral-08)",
       "--color-action-primary-bg-hover": "var(--primitive-neutral-09)",
@@ -305,8 +309,8 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     },
     extraOverridesDark: {
       "--color-action-primary-bg": "var(--primitive-yellow-07)",
-      "--color-action-primary-bg-hover": "var(--primitive-yellow-08)",
-      "--color-action-primary-bg-active": "var(--primitive-yellow-09)",
+      "--color-action-primary-bg-hover": "var(--primitive-yellow-04)",
+      "--color-action-primary-bg-active": "var(--primitive-yellow-03)",
       "--color-action-primary-text": "var(--primitive-yellow-11)",
       "--color-action-primary-text-active": "var(--primitive-yellow-11)",
     },

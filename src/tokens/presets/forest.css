@@ -43,7 +43,6 @@
 }
 
 html[data-brand="forest"] {
-  --color-action-icon-active: var(--primitive-green-02);
   --color-action-primary-bg: var(--primitive-green-07);
   --color-action-primary-bg-active: var(--primitive-green-09);
   --color-action-primary-bg-hover: var(--primitive-green-08);
@@ -188,10 +187,9 @@ html[data-brand="forest"] {
 }
 
 html[data-brand="forest"][data-theme="dark"] {
-  --color-action-icon-active: var(--primitive-green-02);
   --color-action-primary-bg: var(--primitive-green-07);
-  --color-action-primary-bg-active: var(--primitive-green-05);
-  --color-action-primary-bg-hover: var(--primitive-green-06);
+  --color-action-primary-bg-active: var(--primitive-green-09);
+  --color-action-primary-bg-hover: var(--primitive-green-08);
   --color-action-primary-border: var(--primitive-green-07);
   --color-action-primary-border-secondary: var(--primitive-green-08);
   --color-action-primary-border-tertiary: var(--primitive-green-07);

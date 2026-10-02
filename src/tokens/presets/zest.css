@@ -43,10 +43,9 @@
 }
 
 html[data-brand="zest"] {
-  --color-action-icon-active: var(--primitive-green-11);
   --color-action-primary-bg: var(--primitive-green-07);
-  --color-action-primary-bg-active: var(--primitive-green-09);
-  --color-action-primary-bg-hover: var(--primitive-green-08);
+  --color-action-primary-bg-active: var(--primitive-green-05);
+  --color-action-primary-bg-hover: var(--primitive-green-06);
   --color-action-primary-border: var(--primitive-green-10);
   --color-action-primary-border-secondary: var(--primitive-green-07);
   --color-action-primary-border-tertiary: var(--primitive-green-07);
@@ -201,7 +200,6 @@ html[data-brand="zest"] {
 }
 
 html[data-brand="zest"][data-theme="dark"] {
-  --color-action-icon-active: var(--primitive-green-11);
   --color-action-primary-bg: var(--primitive-green-07);
   --color-action-primary-bg-active: var(--primitive-green-05);
   --color-action-primary-bg-hover: var(--primitive-green-06);

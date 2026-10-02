@@ -97,9 +97,11 @@
   --color-action-primary-border-secondary: var(--primitive-teal-08);
   --color-action-primary-border-tertiary: var(--primitive-teal-08);
 
-  /* Action - Icon */
+  /* Action - Icon. The active icon sits on the same hover/active fills as
+     the active label, so it IS the active label: a theme that repaints
+     those fills repairs labels and icons in one declaration. */
   --color-action-icon-default: var(--primitive-neutral-10);
-  --color-action-icon-active: var(--primitive-teal-02);
+  --color-action-icon-active: var(--color-action-primary-text-active);
 
   /* Action - Passive (Secondary button) */
   --color-action-passive-text: var(--primitive-neutral-10);

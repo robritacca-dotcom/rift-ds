@@ -28,15 +28,23 @@
  *      lever (they drive the background blobs and chart series 2-7), so
  *      every preset must emit all six in both themes — the shipped keys
  *      are still a declaration.
- *   c. WCAG AA — the resolved action-primary bg and text must contrast
- *      at 4.5:1 or better in both themes. Resolution follows var()
- *      chains through the preset's own override map first, then the
- *      theme's token CSS (dark falling through to light), then the
+ *   c. Contrast in every state — each row of ACTION_PAIRINGS below (an
+ *      action fill, the label or icon a component draws on it, and the
+ *      minimum: 4.5:1 for text, 3:1 for icons and strokes) must hold in
+ *      both themes, for every preset AND for the shipped token files.
+ *      Resting, hover and pressed fills are all rows, because a theme
+ *      override that repaints a fill without its foreground is exactly
+ *      how Volt shipped a near-black hover icon on a near-black fill.
+ *      The table is held in both directions: every --color-action-*-bg*
+ *      token in the registry must be some row's fill, so a new state fill
+ *      cannot ship without naming what sits on it. Resolution follows
+ *      var() chains through the preset's own override map first, then
+ *      the theme's token CSS (dark falling through to light), then the
  *      primitives; rgba() values are composited over the theme's
- *      resolved page background (--color-bg-page-primary). A preset that
- *      genuinely cannot clear AA is pinned in SANCTIONED_AA_GAPS below
- *      with both the pairing and the computed ratio recorded — never
- *      silently weakened.
+ *      resolved page background (--color-bg-page-primary). A cell that
+ *      genuinely cannot clear its minimum is pinned in SANCTIONED_AA_GAPS
+ *      with the pairing and the computed ratio recorded — never silently
+ *      weakened.
  *   d. Lever completeness — density, typeScale, motionScale and
  *      elevation must be present on every preset. The required TS schema
  *      already guarantees this at compile time; the runtime assert
@@ -74,11 +82,39 @@ const registryNames = new Set(
   Object.values(JSON.parse(read(join(tokensDir, 'registry.json'))).categories).flat()
 );
 
-/** AA pairings that genuinely fail today, pinned with their computed
-    ratio so a change in either direction (a fix, or a further regression)
-    fails until the pin moves. Each pin's reason is its authoritative
-    record — pinning is deliberate acceptance, never a silent weakening
-    of the gate. Currently empty: every shipped preset holds AA. */
+/** Every foreground the components draw on an action fill, per state:
+    [fill, foreground, minimum ratio, what draws it]. Text needs WCAG AA
+    4.5:1; an icon or check stroke is non-text UI and needs 3:1 (WCAG
+    1.4.11). The resting pair alone is not enough: hover and pressed fills
+    move while a theme's label override may not move with them, which is
+    how Volt shipped a near-black icon on a near-black hover fill.
+
+    Held in both directions: every --color-action-*-bg* token in the
+    registry must be the fill of at least one row, so a new state fill
+    cannot ship without saying what sits on it. */
+const ACTION_PAIRINGS = [
+  ['--color-action-primary-bg', '--color-action-primary-text', 4.5, 'primary Button, selected Chip and SegmentedControl labels'],
+  ['--color-action-primary-bg-hover', '--color-action-primary-text', 4.5, 'selected Chip and SegmentedControl labels on hover'],
+  ['--color-action-primary-bg-active', '--color-action-primary-text', 4.5, 'selected Chip label when pressed'],
+  ['--color-action-primary-bg-hover', '--color-action-primary-text-active', 4.5, 'Button and CircularButton labels on hover'],
+  ['--color-action-primary-bg-active', '--color-action-primary-text-active', 4.5, 'Button and CircularButton labels when pressed'],
+  ['--color-action-primary-bg', '--color-action-primary-text-active', 3, 'Checkbox check stroke'],
+  ['--color-action-primary-bg-hover', '--color-action-icon-active', 3, 'outlined Button and CircularButton icons on hover'],
+  ['--color-action-primary-bg-active', '--color-action-icon-active', 3, 'outlined Button and CircularButton icons when pressed'],
+  ['--color-action-neutral-bg', '--color-action-neutral-text', 4.5, 'neutral Button labels'],
+  ['--color-action-neutral-bg-hover', '--color-action-neutral-text', 4.5, 'neutral Button labels on hover'],
+  ['--color-action-neutral-bg-active', '--color-action-neutral-text', 4.5, 'neutral Button labels when pressed'],
+  ['--color-action-passive-bg', '--color-action-passive-text', 4.5, 'tertiary Button labels'],
+  ['--color-action-passive-bg-hover', '--color-action-passive-text', 4.5, 'tertiary Button labels on hover'],
+  ['--color-action-passive-bg-active', '--color-action-passive-text', 4.5, 'tertiary Button labels when pressed'],
+];
+
+/** Pairings that genuinely fail today, keyed "<preset>|<theme>|<fill>|<foreground>"
+    (the preset id "shipped" is the unthemed token files) and pinned with
+    their computed ratio, so a change in either direction (a fix, or a
+    further regression) fails until the pin moves. Each pin's reason is
+    its authoritative record — pinning is deliberate acceptance, never a
+    silent weakening of the gate. Currently empty: every cell holds. */
 const SANCTIONED_AA_GAPS = new Map([]);
 
 const REQUIRED_ACTION_ROLES = [
@@ -151,6 +187,44 @@ const contrastRatio = (a, b) => {
 
 let minRatio = Infinity;
 let cells = 0;
+let pairChecks = 0;
+
+/** c. Contrast for every ACTION_PAIRINGS row in one theme cell. */
+const checkPairings = (id, theme, overrides) => {
+  const label = id === 'shipped' ? `shipped tokens (${theme})` : `preset "${id}" (${theme})`;
+  const resolveRgb = (name, under) => {
+    const value = resolveValue(name, theme, overrides);
+    const color = value === null ? null : parseColor(value);
+    if (!color) {
+      errors.push(`${label}: ${name} resolves to ${value ?? 'nothing'}, not a colour — the contrast check cannot judge it`);
+      return null;
+    }
+    return under ? compositeOver(color, under) : color.slice(0, 3);
+  };
+  const pageBg = resolveRgb('--color-bg-page-primary', null);
+  if (!pageBg) return;
+  for (const [fillName, fgName, min, usage] of ACTION_PAIRINGS) {
+    const fill = resolveRgb(fillName, pageBg);
+    const fg = fill && resolveRgb(fgName, fill);
+    if (!fill || !fg) continue;
+    pairChecks += 1;
+    const ratio = contrastRatio(fill, fg);
+    minRatio = Math.min(minRatio, ratio / min);
+    const key = `${id}|${theme}|${fillName}|${fgName}`;
+    const pinned = SANCTIONED_AA_GAPS.get(key);
+    if (ratio < min) {
+      if (pinned !== ratio.toFixed(2)) {
+        errors.push(
+          `${label}: ${fgName} on ${fillName} is ${ratio.toFixed(2)}:1, below ${min}:1 (${usage}; ` +
+            `fill rgb(${fill.map(Math.round).join(', ')}), foreground rgb(${fg.map(Math.round).join(', ')})) — ` +
+            `fix the pairing, or pin "${key}" at "${ratio.toFixed(2)}" in SANCTIONED_AA_GAPS with the reason`
+        );
+      }
+    } else if (pinned !== undefined) {
+      errors.push(`${label}: "${key}" is pinned in SANCTIONED_AA_GAPS but now clears ${min}:1 at ${ratio.toFixed(2)}:1 — remove the pin`);
+    }
+  }
+};
 
 for (const [id, preset] of Object.entries(THEME_PRESETS)) {
   // d. Lever completeness (runtime guard over the required schema).
@@ -203,38 +277,31 @@ for (const [id, preset] of Object.entries(THEME_PRESETS)) {
       }
     }
 
-    // c. WCAG AA between the resolved action bg and text.
-    const resolveRgb = (name, fallbackBg) => {
-      const value = resolveValue(name, theme, overrides);
-      const color = value === null ? null : parseColor(value);
-      if (!color) {
-        errors.push(
-          `preset "${id}" (${theme}): ${name} resolves to ${value ?? 'nothing'}, not a colour — the AA check cannot judge it`
-        );
-        return null;
-      }
-      return fallbackBg ? compositeOver(color, fallbackBg) : color.slice(0, 3);
-    };
-    const pageBg = resolveRgb('--color-bg-page-primary', null);
-    if (!pageBg) continue;
-    const bg = resolveRgb('--color-action-primary-bg', pageBg);
-    const text = bg && resolveRgb('--color-action-primary-text', bg);
-    if (!bg || !text) continue;
-    const ratio = contrastRatio(bg, text);
-    minRatio = Math.min(minRatio, ratio);
-    const pinned = SANCTIONED_AA_GAPS.get(`${id}|${theme}`);
-    if (ratio < 4.5) {
-      if (pinned !== ratio.toFixed(2)) {
-        errors.push(
-          `preset "${id}" (${theme}): action-primary bg/text contrast is ${ratio.toFixed(2)}:1, below WCAG AA 4.5:1 ` +
-            `(bg rgb(${bg.map(Math.round).join(', ')}), text rgb(${text.map(Math.round).join(', ')})) — ` +
-            `fix the pairing, or pin "${id}|${theme}" at "${ratio.toFixed(2)}" in SANCTIONED_AA_GAPS with the reason`
-        );
-      }
-    } else if (pinned !== undefined) {
-      errors.push(
-        `preset "${id}" (${theme}): pinned in SANCTIONED_AA_GAPS but now clears AA at ${ratio.toFixed(2)}:1 — remove the pin`
-      );
+    checkPairings(id, theme, overrides);
+  }
+}
+
+// c (continued). The shipped token files are held to the same table, so
+// the base theme cannot regress a state the presets inherit.
+for (const theme of ['light', 'dark']) {
+  cells += 1;
+  checkPairings('shipped', theme, {});
+}
+
+// c (reverse). Every action fill in the registry is some row's fill.
+const pairedFills = new Set(ACTION_PAIRINGS.map(([fill]) => fill));
+for (const name of registryNames) {
+  if (/^--color-action-.*-bg(-[a-z]+)?$/.test(name) && !pairedFills.has(name)) {
+    errors.push(
+      `${name} is an action fill with no row in ACTION_PAIRINGS (scripts/validate-theme-presets.mjs) — ` +
+        `add the label or icon each component draws on it, so its contrast is checked in every preset`
+    );
+  }
+}
+for (const [fill, fg] of ACTION_PAIRINGS) {
+  for (const name of [fill, fg]) {
+    if (!registryNames.has(name)) {
+      errors.push(`ACTION_PAIRINGS names ${name}, which is not in src/tokens/registry.json`);
     }
   }
 }
@@ -249,6 +316,7 @@ if (errors.length > 0) {
 
 console.log(
   `✓ Theme presets complete — ${Object.keys(THEME_PRESETS).length} presets × 2 themes: every override names a real token, ` +
-    `the action family and all ${REQUIRED_ACCENT_ROLES.length} ambient accents are covered, and action bg/text holds AA across ${cells} cells ` +
-    `(${SANCTIONED_AA_GAPS.size} pinned sub-AA cells, worst ratio ${minRatio.toFixed(2)}:1).`
+    `the action family and all ${REQUIRED_ACCENT_ROLES.length} ambient accents are covered, and all ${ACTION_PAIRINGS.length} action ` +
+    `fill/foreground pairings hold contrast across ${cells} theme cells (${pairChecks} checks, ${SANCTIONED_AA_GAPS.size} pinned gaps, ` +
+    `tightest at ${minRatio.toFixed(2)}× its minimum).`
 );

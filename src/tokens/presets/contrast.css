@@ -25,7 +25,6 @@
 }
 
 html[data-brand="contrast"] {
-  --color-action-icon-active: var(--primitive-blue-02);
   --color-action-primary-bg: var(--primitive-blue-07);
   --color-action-primary-bg-active: var(--primitive-blue-09);
   --color-action-primary-bg-hover: var(--primitive-blue-08);
@@ -170,10 +169,9 @@ html[data-brand="contrast"] {
 }
 
 html[data-brand="contrast"][data-theme="dark"] {
-  --color-action-icon-active: var(--primitive-blue-02);
   --color-action-primary-bg: var(--primitive-blue-07);
-  --color-action-primary-bg-active: var(--primitive-blue-05);
-  --color-action-primary-bg-hover: var(--primitive-blue-06);
+  --color-action-primary-bg-active: var(--primitive-blue-09);
+  --color-action-primary-bg-hover: var(--primitive-blue-08);
   --color-action-primary-border: var(--primitive-blue-07);
   --color-action-primary-border-secondary: var(--primitive-blue-08);
   --color-action-primary-border-tertiary: var(--primitive-blue-07);

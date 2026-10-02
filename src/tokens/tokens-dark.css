@@ -79,10 +79,10 @@
   --color-action-primary-border-secondary: var(--primitive-teal-06);
   --color-action-primary-border-tertiary: var(--primitive-teal-04);
 
-  /* Action - Icon. The active icon sits on the hover/active fills, which
-     are the light half of the ramp here — so it inverts with the label. */
+  /* Action - Icon. The active icon follows the active label (see
+     tokens-light.css), which inverts with the fill here. */
   --color-action-icon-default: var(--primitive-neutral-01);
-  --color-action-icon-active: var(--primitive-teal-10);
+  --color-action-icon-active: var(--color-action-primary-text-active);
 
   /* Action - Passive (Secondary button) */
   --color-action-passive-text: var(--primitive-neutral-01);
@@ -92,11 +92,14 @@
 
   /* Action - Neutral (grey filled buttons). The fill stays visible at
      rest, one step above the container greys; hover and active brighten
-     toward the page's opposite, like the primary family. */
+     toward the page's opposite, like the primary family. The label is
+     the ramp's white end, not neutral-01: the pressed fill (neutral-06)
+     leaves neutral-01 only 4.58:1, and the tint lever pulls the near-white
+     down further, which sank every tinted preset below AA. */
   --color-action-neutral-bg: var(--primitive-neutral-08);
   --color-action-neutral-bg-hover: var(--primitive-neutral-07);
   --color-action-neutral-bg-active: var(--primitive-neutral-06);
-  --color-action-neutral-text: var(--primitive-neutral-01);
+  --color-action-neutral-text: var(--primitive-neutral-00);
 
   /* Status - Positive */
   --color-status-positive-bg: var(--primitive-green-10);

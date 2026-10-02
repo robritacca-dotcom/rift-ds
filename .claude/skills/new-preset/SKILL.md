@@ -2,7 +2,7 @@
 name: new-preset
 description: Add a complete theme preset to the system — every lever declared, the generated stylesheet shipped, the AA gate passed. Use when asked to add a theme, a preset, or a new site look.
 icon: palette
-displayDescription: "Walks a new theme preset from a brand colour to a complete shipped look: every lever declared in the preset registry, the accent sextet curated, the stylesheet generated into the package, and the completeness gate passed, including the WCAG AA check on the action pairing in both themes. Ends with the theme live behind one data-brand attribute, in the home page's selector and the playground's picker with no extra wiring."
+displayDescription: "Walks a new theme preset from a brand colour to a complete shipped look: every lever declared in the preset registry, the accent sextet curated, the stylesheet generated into the package, and the completeness gate passed, including the contrast check on every action fill and what sits on it, resting, hover and pressed, in both themes. Ends with the theme live behind one data-brand attribute, in the home page's selector and the playground's picker with no extra wiring."
 invoke: ["add a theme preset","add a new theme","new preset","add a site look"]
 ---
 
@@ -32,6 +32,8 @@ Add an entry to `THEME_PRESETS` in `website/src/lib/theme/presets.ts`. The `Them
 - **`accents`**: the ambient sextet. These drive the background blobs and chart series 2–7 together, so curate them as one palette around the key. `SHIPPED_ACCENTS` in `website/src/lib/theme/theme-overrides.ts` shows the default set's shape.
 - **`advanced`** ramp rebases and `extraOverrides` where the derived look needs correcting — the existing presets are the worked examples of when each is warranted (a lifted label for contrast, a re-keyed ramp for harmony, re-pitched display weights for a heavier face) — plus `extraOverridesDark` for the roles that cannot hold one value across both themes (the usual repair when the dark cell fails the AA gate in step 3).
 
+**An override that moves a fill moves the whole state set.** Inverting a button (an ink fill under a coloured label, say) means overriding the resting, hover and pressed fills *and* the labels that sit on them, `--color-action-primary-text` and `--color-action-primary-text-active`. Active icons alias the active label, so they follow without a declaration of their own. Hover and pressed fills should step **away from their label**: brighter under a dark label, deeper under a light one. That is the rule the lever's derivation follows, and stepping toward the label is how a pressed state drops below AA.
+
 Existing entries in the file are the reference implementations; read two before writing one.
 
 ### 2. Decide where it appears
@@ -46,7 +48,7 @@ node scripts/validate-preset-stylesheets.mjs
 node scripts/validate-theme-presets.mjs
 ```
 
-The generator writes the preset's `html[data-brand]` stylesheet and refreshes the `presets.css` aggregate; they ship in the npm package. Downstream generators re-embed the preset CSS too (the shadcn registry's base item among them — the `validate-registry` entry in the root `package.json` is the authoritative list), so commit every file the chain regenerates, not just the two named here. The completeness gate then holds every override to a real token, requires the action family and all six accents, and checks the resolved action bg/text pairing at **WCAG AA 4.5:1 in both themes**. A failing pairing means the key needs to move (deepen or lighten it, or lift the label through `extraOverrides`) — pinning a gap in `SANCTIONED_AA_GAPS` is deliberate acceptance with a written reason, never a shortcut, and needs the owner's sign-off.
+The generator writes the preset's `html[data-brand]` stylesheet and refreshes the `presets.css` aggregate; they ship in the npm package. Downstream generators re-embed the preset CSS too (the shadcn registry's base item among them — the `validate-registry` entry in the root `package.json` is the authoritative list), so commit every file the chain regenerates, not just the two named here. The completeness gate then holds every override to a real token, requires the action family and all six accents, and checks **every action fill against what components draw on it, in every state and both themes**: labels at WCAG AA 4.5:1, icons and strokes at 3:1. `ACTION_PAIRINGS` in the script is the authoritative table, and each failure names the fill, the foreground, the ratio and the component that draws it. A failing pairing means the key or an override needs to move (deepen or lighten the key, step a hover or pressed fill away from its label, or lift the label through `extraOverrides`) — pinning a gap in `SANCTIONED_AA_GAPS` is deliberate acceptance with a written reason, never a shortcut, and needs the owner's sign-off.
 
 A face the presets have never shipped needs `node scripts/sync-preset-fonts.mjs` first — a deliberate by-hand fetch, never part of the build; its `FAMILIES` table is the download spec, and CLAUDE.md's Fonts entry owns the contract. The stylesheet generator fails naming the script otherwise, and the downloaded woff2s commit with the preset.
 

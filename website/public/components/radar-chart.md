@@ -2,7 +2,7 @@
 
 Multi-axis comparison of series across categories on a radial grid.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.2.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.3.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: charts
 - Import: `import { RadarChart } from 'rift-ds/charts'; // needs the optional recharts peer`

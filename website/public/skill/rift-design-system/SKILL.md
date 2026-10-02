@@ -5,7 +5,7 @@ description: Build React UI with rift-ds. Use when installing the package, compo
 
 # Using rift-ds
 
-Generated from the library's registries at version 1.2.0, alongside every deploy of https://rift-ds.com. The library is 143 React components across 12 categories, themed by 256 semantic design tokens, published to npm. Designed and built by Robert Ritacca (https://robertritacca.com), MIT licensed.
+Generated from the library's registries at version 1.3.0, alongside every deploy of https://rift-ds.com. The library is 143 React components across 12 categories, themed by 256 semantic design tokens, published to npm. Designed and built by Robert Ritacca (https://robertritacca.com), MIT licensed.
 
 ## Install
 

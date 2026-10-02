@@ -173,6 +173,33 @@
   font-size: inherit;
 }
 
+/* A renderer that maps fenced code to CodeBlock (for its copy button)
+   gets the same block rhythm, and the plain-pre panel and inline-code
+   chip step aside so CodeBlock's own chrome is the only chrome */
+.ds-prose .ds-code-block {
+  margin: 0;
+  margin-block-end: var(--gap-400);
+}
+
+.ds-prose > .ds-code-block:last-child {
+  margin-block-end: 0;
+}
+
+.ds-prose .ds-code-block pre {
+  margin: 0;
+  padding: var(--padding-400);
+  overflow: auto;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+.ds-prose .ds-code-block code {
+  background-color: transparent;
+  border-radius: 0;
+  padding-inline: 0;
+}
+
 /* ============================================
    BLOCKQUOTES
    Mirrors Reasoning's trace rail

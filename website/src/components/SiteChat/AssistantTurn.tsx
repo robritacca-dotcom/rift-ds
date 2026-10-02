@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import ReactMarkdown from "react-markdown";
+import ReactMarkdown, { type ExtraProps } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { AgentStatus } from "rift-ds/components/AgentStatus/AgentStatus";
+import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
 import { ChatMessage } from "rift-ds/components/ChatMessage/ChatMessage";
 import { Prose } from "rift-ds/components/Prose/Prose";
 import { Reasoning } from "rift-ds/components/Reasoning/Reasoning";
@@ -42,6 +43,28 @@ function MarkdownLink({ href, children }: React.ComponentPropsWithoutRef<"a">) {
   );
 }
 
+/* A fenced block's hast: a `pre` holding one `code` element whose text is
+   the code plus the trailing newline the markdown-to-hast step appends. */
+type HastNode = { type: string; value?: string; tagName?: string; properties?: Record<string, unknown>; children?: HastNode[] };
+const hastText = (node: HastNode): string =>
+  node.type === "text" ? (node.value ?? "") : (node.children ?? []).map(hastText).join("");
+
+/* Fenced code renders as the library CodeBlock, so an install command or a
+   snippet the answer hands over is one click from the clipboard. The language
+   comes from the fence's info string (```bash), when the model wrote one. */
+function MarkdownPre({ node, children, ...props }: React.ComponentPropsWithoutRef<"pre"> & ExtraProps) {
+  const code = (node as HastNode | undefined)?.children?.find(
+    (child) => child.type === "element" && child.tagName === "code",
+  );
+  if (!code) return <pre {...props}>{children}</pre>;
+  const classes = code.properties?.className;
+  const language = (Array.isArray(classes) ? classes : [])
+    .map(String)
+    .find((name) => name.startsWith("language-"))
+    ?.slice("language-".length);
+  return <CodeBlock code={hastText(code).replace(/\n$/, "")} language={language} />;
+}
+
 /* A markdown table has a natural minimum width that a docked panel cannot
    meet, and the browser resolves that by breaking headings one letter per
    line. Prose makes the table its own scroll container so it stays readable,
@@ -51,6 +74,7 @@ function MarkdownLink({ href, children }: React.ComponentPropsWithoutRef<"a">) {
    for `role="region"` on the table — that replaces the table semantics. */
 const markdownComponents = {
   a: MarkdownLink,
+  pre: MarkdownPre,
   table: ({ children, ...props }: React.ComponentPropsWithoutRef<"table">) => (
     <table tabIndex={0} {...props}>
       {children}

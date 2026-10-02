@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { CodeBlock } from '../CodeBlock/CodeBlock';
 import { Prose } from './Prose';
 
 const meta = {
@@ -108,6 +109,20 @@ export function Dashboard() {
           stays in step.
         </p>
       </blockquote>
+    </Prose>
+  ),
+};
+
+/** Fenced code rendered as CodeBlock, for a copy button: Prose gives it the block rhythm and steps its own `pre` chrome aside. */
+export const WithCodeBlock: Story = {
+  render: (args) => (
+    <Prose {...args} style={{ maxWidth: '560px' }}>
+      <p>Installing the panel kit is one command:</p>
+      <CodeBlock code="npm install lumen-panel" language="bash" />
+      <p>
+        Then wrap the dashboard in <code>FeedProvider</code> and every widget
+        below it shares one schedule.
+      </p>
     </Prose>
   ),
 };

@@ -394,6 +394,12 @@
       "description": "Text input with label, placeholder, left and right icons, helper text, and error states."
     },
     {
+      "name": "inspector-color-picker",
+      "type": "registry:ui",
+      "title": "Inspector colour picker",
+      "description": "One-row colour setting for inspector panels, with the hex and a round swatch at the bar's end and ColorPicker's own panel."
+    },
+    {
       "name": "inspector-dropdown",
       "type": "registry:ui",
       "title": "Inspector dropdown",

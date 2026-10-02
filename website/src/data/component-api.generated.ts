@@ -5158,6 +5158,81 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "name": "InspectorColorPicker",
+    "label": "Inspector colour picker",
+    "slug": "inspector-color-picker",
+    "category": "inspector",
+    "description": "One-row colour setting for inspector panels, with the hex and a round swatch at the bar's end and ColorPicker's own panel.",
+    "client": true,
+    "importPath": "rift-ds/components/Inspector/InspectorColorPicker",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "InspectorColorPicker",
+        "props": [
+          {
+            "name": "label",
+            "type": "string",
+            "required": true,
+            "description": "The setting's name, drawn inside the bar on the left. Also the start of the trigger's accessible name."
+          },
+          {
+            "name": "value",
+            "type": "string",
+            "required": false,
+            "description": "Current colour as a hex string — 3, 6 or 8 digit, with or without `#`."
+          },
+          {
+            "name": "defaultValue",
+            "type": "string",
+            "required": false,
+            "description": "Initial colour for uncontrolled use."
+          },
+          {
+            "name": "onValueChange",
+            "type": "((value: string) => void)",
+            "required": false,
+            "description": "Called with the colour as an uppercase hex string (`#RRGGBB`, or\n`#RRGGBBAA` when `showAlpha` and alpha is below 100%). Fires live while\ndragging, as in ColorPicker."
+          },
+          {
+            "name": "showAlpha",
+            "type": "boolean",
+            "required": false,
+            "description": "Add an alpha (opacity) slider to the panel and emit 8-digit hex when alpha is below 100%.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "required": false,
+            "description": "When set, a hidden input carries the current hex under this name, so the picker joins native form submission."
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the picker is disabled.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "size",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "Component size, matching Button: `default` is 40px tall, `compact` 32px.",
+            "defaultValue": "default"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes, applied to the wrapper.",
+            "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
     "name": "InspectorDropdown",
     "label": "Inspector dropdown",
     "slug": "inspector-dropdown",

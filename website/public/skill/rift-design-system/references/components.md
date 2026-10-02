@@ -870,9 +870,17 @@ Binary on/off toggle control with sliding thumb and check indicator, used for se
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/toggle-switch.md
 
-## Inspector (6)
+## Inspector (7)
 
 One-row controls for tool panels and settings rails, each carrying its name inside the control and sized to match Button.
+
+### Inspector colour picker
+
+One-row colour setting for inspector panels, with the hex and a round swatch at the bar's end and ColorPicker's own panel.
+
+- Import: `import { InspectorColorPicker } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/inspector-color-picker.md
 
 ### Inspector dropdown
 

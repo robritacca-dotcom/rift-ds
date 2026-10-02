@@ -496,7 +496,7 @@ export default function MarketingDashboard() {
           sections={NAV_SECTIONS}
           profile={{
             name: "Mara Esmer",
-            email: "mara@boardline.app",
+            email: "mara@boardline.example",
             avatarUrl: "/labs/marketing-avatar.png",
           }}
           activeKey="marketing"

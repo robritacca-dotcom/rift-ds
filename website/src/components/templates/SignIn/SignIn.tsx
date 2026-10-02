@@ -219,7 +219,7 @@ export default function SignIn() {
                   type="email"
                   name="email"
                   autoComplete="email"
-                  placeholder="you@company.com"
+                  placeholder="you@company.example"
                   iconLeft="mail"
                   value={email}
                   onValueChange={setEmail}

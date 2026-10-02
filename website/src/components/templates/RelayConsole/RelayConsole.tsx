@@ -439,7 +439,7 @@ export default function RelayConsole() {
       <div className={styles.sidebar}>
         <AppSidebar
           sections={NAV_SECTIONS}
-          profile={{ name: "Noor Haddad", email: "noor@meridian.net" }}
+          profile={{ name: "Noor Haddad", email: "noor@meridian.example" }}
           activeKey="network"
           expanded={sidebarExpanded}
           onExpandedChange={setSidebarExpanded}

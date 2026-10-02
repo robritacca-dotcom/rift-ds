@@ -134,7 +134,7 @@ const module_ = `/**
  */
 
 /** Every landmass as one SVG path in the component's drawing space. */
-export const LAND_PATH =
+export const LAND_PATH: string =
   '${path}';
 `;
 

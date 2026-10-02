@@ -414,7 +414,7 @@ export default function RoadmapPlanner() {
       <div className={styles.sidebar}>
         <AppSidebar
           sections={NAV_SECTIONS}
-          profile={{ name: "Jonas Lindqvist", email: "jonas@waypoint.app" }}
+          profile={{ name: "Jonas Lindqvist", email: "jonas@waypoint.example" }}
           activeKey="roadmap"
           expanded={sidebarExpanded}
           onExpandedChange={setSidebarExpanded}

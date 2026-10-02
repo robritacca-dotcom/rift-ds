@@ -687,7 +687,7 @@ export default function SalesPipeline() {
       <div className={styles.sidebar}>
         <AppSidebar
           sections={NAV_SECTIONS}
-          profile={{ name: "Priya Raman", email: "priya@meridianhq.com" }}
+          profile={{ name: "Priya Raman", email: "priya@meridianhq.example" }}
           activeKey="companies"
           expanded={sidebarExpanded}
           onExpandedChange={setSidebarExpanded}

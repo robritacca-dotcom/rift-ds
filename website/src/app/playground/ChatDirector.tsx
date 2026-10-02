@@ -142,7 +142,7 @@ function FlakyToolCall() {
   return (
     <ToolCall
       name="sync_calendar"
-      summary="team@acme.com"
+      summary="team@acme.example"
       status={status}
       duration={status === "success" ? "1.4s" : status === "error" ? "2.1s" : undefined}
       actions={

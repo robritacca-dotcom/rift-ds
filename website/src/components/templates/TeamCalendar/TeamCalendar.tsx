@@ -215,7 +215,7 @@ export default function TeamCalendar() {
       <div className={styles.sidebar}>
         <AppSidebar
           sections={NAV_SECTIONS}
-          profile={{ name: "Priya Chandra", email: "priya@cadence.app" }}
+          profile={{ name: "Priya Chandra", email: "priya@cadence.example" }}
           activeKey="calendar"
           expanded={sidebarExpanded}
           onExpandedChange={setSidebarExpanded}

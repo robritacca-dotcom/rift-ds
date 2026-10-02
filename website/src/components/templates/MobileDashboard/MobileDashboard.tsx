@@ -703,7 +703,7 @@ export default function MobileDashboard() {
               <Avatar name="Mara Esmer" size="md" />
               <span className={styles.profileText}>
                 <span className={styles.profileName}>Mara Esmer</span>
-                <span className={styles.profileEmail}>mara@boardline.app</span>
+                <span className={styles.profileEmail}>mara@boardline.example</span>
               </span>
             </div>
             <div className={styles.drawerSwitchers}>

@@ -163,8 +163,8 @@ export default function ComposerPage() {
             </p>
             <p className={styles.introBody}>
               The chat input shell: a context note, an attachments row, an
-              auto-growing textarea, a leading actions slot, and a teal send
-              button. Send
+              auto-growing textarea, a leading actions slot, and a send
+              button in the action colour. Send
               is the one primary CTA in the chat set, so it is the one place
               the action colour appears. While a response streams, send
               becomes stop and Enter goes inert.

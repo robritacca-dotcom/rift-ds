@@ -178,7 +178,7 @@ export default function GanttChartPage() {
             <SectionTitle title="Selection" />
             <p className={styles.sectionBody}>
               Bars become buttons only when a click callback is passed, and
-              selection is controlled: the selected bar takes the teal outline
+              selection is controlled: the selected bar takes the action-colour outline
               the system reserves for the chosen item of a set.
             </p>
             <SelectionDemo />

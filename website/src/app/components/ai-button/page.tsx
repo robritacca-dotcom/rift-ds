@@ -36,7 +36,7 @@ export default function AiButtonPage() {
               gradient turning slowly, with a soft glow of the same gradient
               haloing the edge.
               The treatment is reserved: ordinary actions keep the flat action
-              teal, and this ring marks the surfaces where an AI responds, so
+              colour, and this ring marks the surfaces where an AI responds, so
               neither affordance dilutes the other. This site&rsquo;s own chat
               opens from one.
             </p>

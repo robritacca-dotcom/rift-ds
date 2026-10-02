@@ -670,7 +670,7 @@ export default function SemanticColoursPage() {
               Semantic roles that map to primitives per mode
             </p>
             <p className={styles.introBody}>
-              Each colour here has a role, like &quot;page background&quot; or &quot;error border&quot;, and maps to a different primitive value depending on whether the UI is in light or dark mode. Components only reference these roles, so switching themes is just swapping which primitives each role points to. The shipped theme presets work the same way one level up: each is a generated stylesheet re-pointing these roles, applied by one data-brand attribute, with light and dark carried inside it. Toggle the mode above to see the values change. All {TOKEN_COUNTS.colour} colour tokens are below, grouped by the role they play.
+              Each colour here has a role, like &quot;page background&quot; or &quot;error border&quot;, and maps to a different primitive value depending on whether the UI is in light or dark mode. Components only reference these roles, so switching themes is just swapping which primitives each role points to. The shipped theme presets work the same way one level up: each is a generated stylesheet re-pointing these roles, applied by one data-brand attribute, with light and dark carried inside it. Each chip paints the live token, so it follows whichever theme is applied; the primitive and hex printed beside it are the base theme’s wiring. Toggle the mode above to see the values change. All {TOKEN_COUNTS.colour} colour tokens are below, grouped by the role they play.
             </p>
           </div>
 

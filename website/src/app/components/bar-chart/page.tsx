@@ -45,7 +45,7 @@ export default function BarChartPage() {
               Compare values across categories or time
             </p>
             <p className={styles.introBody}>
-              Bars carry a value each, with hover tooltips, an optional data label, and a summary row for headline stats. The default palette leads with the action teal and steps through the accent tokens.
+              Bars carry a value each, with hover tooltips, an optional data label, and a summary row for headline stats. The palette leads with the action colour and steps through the accent tokens.
             </p>
           </div>
 

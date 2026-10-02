@@ -121,8 +121,10 @@ export default function ElevationPage() {
           <section className={`${styles.section} animate-in animate-delay-2`}>
             <SectionTitle title="Shadow tokens" />
             <p className={styles.sectionNote}>
-              Both tokens are defined per theme, with stronger opacity in dark mode so they still
-              read against the #050505 floor.
+              Both tokens are defined per mode, with stronger opacity in dark mode so they still
+              read against the near-black floor. The values below are the base theme’s. A theme
+              can soften them, deepen them, or turn them off entirely, and a flat theme lets the
+              hairline borders carry the depth alone.
             </p>
             <div className={styles.elevationGrid}>
               {shadowTokens.map((shadow) => (
@@ -156,9 +158,9 @@ export default function ElevationPage() {
             <p className={styles.sectionNote}>
               Everything below the floating layer expresses hierarchy through background steps.
               Each level takes its own step on the neutral ramp, so a boundary reads from the
-              contrast between adjacent surfaces, not from a lift. In light the containers are
-              the bright side of that contrast, white against a soft grey floor; in dark they
-              step up from a near-black one.
+              contrast between adjacent surfaces, not from a lift. Which side of that contrast is
+              lighter is the theme’s call: containers can sit brighter than the floor or deeper
+              than it, and light and dark can go opposite ways. The contrast is the point.
             </p>
             <div className={styles.depthList}>
               {depthLevels.map((level) => (

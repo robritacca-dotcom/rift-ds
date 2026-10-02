@@ -197,7 +197,7 @@ const handler = createMcpHandler(
             `Dark mode is data-theme="dark" on the root element; every semantic token has a light and a dark value. ` +
               `Re-theme by overriding the CSS custom properties (call list_tokens for the full set).`,
             "",
-            `Fonts: the primary face is not bundled; set --font-family-primary to your own (the system ships with Nunito Sans in mind). ` +
+            `Fonts: the primary face is not bundled; set --font-family-primary to your own (the base theme is set in Nunito Sans; the preset stylesheets bring their own faces). ` +
               `The Material Symbols icon font ships inside the package.`,
             "",
             `Charts: components from '${pkg.name}/charts' need the optional recharts peer dependency; nothing else does.`,

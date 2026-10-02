@@ -1,6 +1,6 @@
 # Rift DS — history
 
-A private reference, not a published page. It preserves two records whose original homes
+An unpublished reference: kept out of the site, the build and the chat corpus, though readable in the public repository. It preserves two records whose original homes
 were deleted when robertritacca.com stopped being a design-system site: the release log of
 the predecessor package, and the build journal that ran from day one.
 

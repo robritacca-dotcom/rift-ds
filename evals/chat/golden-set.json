@@ -112,9 +112,9 @@
     }
   },
   {
-    "description": "designer: why teal is reserved",
+    "description": "designer: why the action colour is reserved",
     "vars": {
-      "question": "Why is the teal colour only used for primary actions on this site?"
+      "question": "Why is the action colour only used for primary actions on this site?"
     },
     "assert": [
       {
@@ -125,7 +125,7 @@
     "metadata": {
       "seat": "designer",
       "requiredFacts": [
-        "teal"
+        "action colour"
       ]
     }
   },

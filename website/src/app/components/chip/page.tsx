@@ -79,7 +79,7 @@ export default function ChipPage() {
             <p className={styles.introBody}>
               With an <code>onClick</code> handler the chip renders as a real{" "}
               <code>&lt;button&gt;</code>. Add <code>selected</code> for a filter-style toggle:
-              the teal active fill follows the same convention as the segmented control.
+              the action-colour active fill follows the same convention as the segmented control.
             </p>
             <div className={styles.variantRow}>
               {FILTER_OPTIONS.map((option) => (

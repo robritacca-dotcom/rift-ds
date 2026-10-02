@@ -31,80 +31,10 @@ name: Release
 # bump PACKAGE_VERSION in scripts/package-manifest.mjs, dry-run, run for
 # real, then tag the published commit.
 #
-# 0.1.0 shipped 2026-07-26 using a granular NPM_TOKEN; that token is retired.
-# 0.2.0 shipped 2026-07-27 — the first release authenticated by OIDC.
-# 0.3.0 shipped 2026-07-28.
-# 0.4.0 shipped 2026-08-01 — the ai component category.
-# 0.5.0 shipped 2026-08-09 — the chat component set behind the site chat.
-# 0.6.0 shipped 2026-08-11 — the composer radius token, ChatMessage's
-#   showActions, and the README's chat-boundary correction.
-# 0.7.0 shipped 2026-08-15 — ShaderField, the WebGL2 ambient background, plus
-#   Card's cover slot and the --motion-duration-instant token.
-# 0.8.0 shipped 2026-08-16 — AgentPlan, ModelPicker, NotificationCenter,
-#   DataTable and EventCalendar, the five from the dashboard gap analysis.
-# 0.9.0 shipped 2026-08-17 — past 100 components: AnchorNav, Stepper, TagInput,
-#   NumberInput, TreeView, PinInput, CodeDiff, Sparkline and TimePicker, plus
-#   restored "use client" directives in the published dist.
-# 0.10.0 shipped 2026-08-20 — the accessible teal split: the action colour is
-#   theme-dependent (light teal-08 fill, dark inverts to teal-05), all AA;
-#   SectionTitle's optional divider and AppSidebar link rows.
-# 0.11.0 shipped 2026-08-23 — the maps category (Globe, MapCallout, MapLegend),
-#   CardStack, and the overline typography face.
-# 0.12.0 shipped 2026-08-26 — the dashboard set from the labs rebuild: Panel,
-#   LegendTile, FunnelChart, ComboChart; live var() chart colours with bare
-#   mode; Stat's trend tokens and inline delta; borderless badges; the
-#   AppSidebar floating/badges/slots set and its rebuilt transition.
-# 0.13.0 shipped 2026-08-29 — five composition gap-fillers: Gauge, FilterBar,
-#   SplitPane, StreamingText, AvatarGroup, with the stream reveal's motion
-#   constant and the amended JS motion contract.
-# 0.14.0 shipped 2026-08-29 — six components to 120: Banner, HoverCard,
-#   ImageCompare, Meter, Rating, SplitButton, plus LinkList's newTab opt-out.
-# 0.15.0 shipped 2026-09-04 — UsageCard and SourceTrail join the ai category,
-#   Composer's working glow (aiGlow + streaming), and the agent-docs surfaces
-#   around the package: per-component markdown contracts, the consumer agent
-#   skill, and the MCP roster with example prompts.
-# 0.16.0 shipped 2026-09-06 — the shared overlay behavior layer under the
-#   modal components (with useScrollLock published for host chrome),
-#   AiButton's summary panel and Composer's context note, the status icon
-#   step tokens, and overlay listener/timer fixes.
-# 0.17.0 shipped 2026-09-09 — ThreadPanel, the session-history rail for chat
-#   products (AppSidebar's collapse choreography, server-renderable), plus
-#   EventCalendar's selectedDate and whole-cell interactivity on its own
-#   calendar colour family, and the toast exit timer on the motion constant.
-# 0.18.0 shipped 2026-09-11 — ThreadTabs, the animated strip of open chat
-#   sessions, with ThreadPanel's detail rows, pin marks and projects
-#   section; PromptSuggestions' pending shimmer and entrance stagger; and
-#   CommandPalette's trailing slot for a non-interactive row badge.
-# 0.18.1 shipped 2026-09-12 — the section-divider rhythm fix: SectionTitle's
-#   rule clearance drops to --padding-lg (heading, 20px, rule, 40px, content
-#   everywhere), and the rule width and Table's hairlines move onto the
-#   border tokens.
-# 0.19.0 shipped 2026-09-16 — GanttChart and RichDropdown, the heading and
-#   body font family roles for split-face theming, AiButton's signature
-#   refresh, Dropdown's typeface preview, the micro-animation pass
-#   (SegmentedControl's sliding pill, Button's trailing-icon nudge), and
-#   ToggleSwitch labels hugging the track.
-# 0.20.0 shipped 2026-09-18 — six components to 132: WorldMap, the flat
-#   companion to Globe, plus Toolbar, Lightbox, Waveform, AnimatedNumber
-#   and StatusDot; Lightbox is the first overlay born on the shared
-#   behavior layer, and the count-up budget joins the motion constants.
-# 0.21.0 shipped 2026-09-19 — the package's first bin: npx
-#   rift-ds init fetches the consumer agent skill from the
-#   live site into .claude/skills/ and prints the MCP connect line.
-# 1.0.0 shipped 2026-09-26 — the first release under the rift-ds name, and
-#   the first from this repo. Same system, renamed; 133 components, 255
-#   tokens, 11 themes. Published with bootstrap_token because the name did
-#   not exist yet, so OIDC had nothing to register against.
-# 1.0.1 shipped 2026-09-26 — the README banner as an absolute URL, so the
-#   npm package page renders it. No code change. First release published
-#   over OIDC with no token anywhere.
-# 1.1.0 shipped 2026-09-27 — mobile app navigation (BottomNav, TopAppBar,
-#   each in Rift, iOS and Android styles), SidebarPanel and AppSidebar's third
-#   level, and screen-reader names on charts, Nav and Stepper.
-# 1.2.0 shipped 2026-09-30 — the Inspector family (InspectorSection,
-#   InspectorSlider, InspectorInput, InspectorToggleSwitch,
-#   InspectorSegmentedControl, InspectorDropdown) under a new inspector
-#   category, and SegmentedControl's concentric corner counting its hairline.
+# Version history is not kept here: the release log
+# (website/src/data/release-log.json, rendered on /releases) owns every
+# version this repo publishes, and HISTORY.md records the predecessor's 0.x
+# releases.
 
 on:
   workflow_dispatch:

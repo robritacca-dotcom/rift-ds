@@ -60,7 +60,7 @@ const SCENARIOS: SimScenario[] = [
     steps: [
       { status: "Reading the design principles", point: "The principles are stated at the level of token roles." },
       { status: "Tracing them through the tokens", point: "Each principle maps to a small set of semantic tokens." },
-      { status: "Collecting examples", point: "The action teal and the status set are the clearest cases." },
+      { status: "Collecting examples", point: "The action colour and the status set are the clearest cases." },
       { status: "Structuring the answer", point: "Three sections: tokens, colour, motion." },
     ],
     response:
@@ -72,7 +72,7 @@ const SCENARIOS: SimScenario[] = [
       "from a single file.\n\n" +
       "### Colour carries meaning\n\n" +
       "Colour is never decoration. A few examples of how strictly that holds:\n\n" +
-      "- The action teal appears only on primary actions and focus rings, so it " +
+      "- The action colour appears only on primary actions and focus rings, so it " +
       "always means click here.\n" +
       "- Five status roles cover info, positive, warning, error, and neutral, " +
       "shared by every status bearing component.\n" +
@@ -85,7 +85,7 @@ const SCENARIOS: SimScenario[] = [
       "cannot say what it is for, it does not ship.",
     followups: [
       "How does a theme swap work?",
-      "Why is teal reserved for actions?",
+      "Why is the action colour reserved?",
       "What are the five status roles?",
     ],
   },

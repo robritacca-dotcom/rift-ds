@@ -89,7 +89,7 @@ Ask the plain question. Cut any phrase that does not change what is being asked:
 These are the site's own starter questions, and the length and plainness to match:
 How do I install the package?
 How do the theme presets work?
-Why is teal reserved for actions?
+Why is the action colour reserved?
 
 The rest of the rules:
 - Each question must be answerable by this site: the ${BRAND_SHORT} design system, its tokens, components, themes and templates, how the site is built and maintained, or established design craft.

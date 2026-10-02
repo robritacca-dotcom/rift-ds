@@ -117,7 +117,6 @@ export default function AboutDsPage() {
                     { name: "Next.js", logo: "/logos/nextjs black.svg", logoDark: "/logos/nextjs white.svg" },
                     { name: "Vercel", logo: "/logos/vercel black.svg", logoDark: "/logos/vercel white.svg" },
                     { name: "npm", logo: "/logos/npm.svg" },
-                    { name: "Google", logo: "/logos/google.svg" },
                   ].map((tool) => (
                     <li key={tool.name} className={styles.logoChip}>
                       <Image
@@ -236,7 +235,7 @@ export default function AboutDsPage() {
                 </p>
                 <ArchitectureMap
                   map={chatExchangeMap}
-                  caption="One exchange, zoomed in. The teal edge is the moment the model stops answering from prose and reads the contract."
+                  caption="One exchange, zoomed in. The highlighted edge is the moment the model stops answering from prose and reads the contract."
                 />
               </section>
 

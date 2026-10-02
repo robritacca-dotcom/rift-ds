@@ -70,7 +70,7 @@ export default function ModelPickerPage() {
             <SectionTitle title="Trigger and panel" />
             <p className={styles.demoText}>
               The trigger reads as chrome, not as a call to action, so the
-              send button keeps the only teal in a composer. Open it to see
+              send button keeps the only action colour in a composer. Open it to see
               the model list, with the selected model checked.
             </p>
             <div className={styles.demoRow}>

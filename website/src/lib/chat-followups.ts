@@ -35,7 +35,7 @@ const FALLBACK_FOLLOWUPS = [
   "How do I install the package?",
   "How do the theme presets work?",
   "What can the MCP endpoint do?",
-  "Why is teal reserved for actions?",
+  "Why is the action colour reserved?",
   "How is the site kept accurate?",
 ];
 

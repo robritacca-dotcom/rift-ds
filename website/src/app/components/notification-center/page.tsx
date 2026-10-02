@@ -159,7 +159,7 @@ export default function NotificationCenterPage() {
             <p className={styles.demoText}>
               The tabs filter, the counts follow the data, and mark all read
               clears the dots. Unread items carry an emphasised title and an
-              info coloured dot, never the action teal.
+              info coloured dot, never the action colour.
             </p>
             <InboxDemo />
           </section>

@@ -349,7 +349,7 @@ export default function TypographyPage() {
           {/* Intro */}
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
-              One scale, and the faces are yours: the default theme sets it in{" "}
+              One scale, and the faces are yours: the base theme sets it in{" "}
               <a
                 href="https://fonts.google.com/specimen/Nunito+Sans"
                 target="_blank"
@@ -366,12 +366,13 @@ export default function TypographyPage() {
               Every style chains its family through one of two role tokens: the
               display and heading styles read <code>--font-family-heading</code>,
               the body styles read <code>--font-family-body</code>, and both
-              resolve to <code>--font-family-primary</code>. This site keeps the
-              roles on one face by design. Consumers of the package can point
-              them at different faces to pair a heading font with a body font,
-              and preview pairings in the playground. The printed specs are the
-              shipped theme&apos;s values: a preset can re-key the weight tokens
-              too, and Forest sets its display tiers bold.
+              resolve to <code>--font-family-primary</code> by default. The base
+              theme keeps the roles on one face; several presets split them, and
+              consumers of the package can point them at different faces to pair
+              a heading font with a body font, previewing pairings in the
+              playground. The printed specs are the base theme&apos;s values: a
+              preset can re-key the weight tokens too, and Forest sets its
+              display tiers to semibold.
             </p>
           </div>
 

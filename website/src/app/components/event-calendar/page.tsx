@@ -97,10 +97,10 @@ export default function EventCalendarPage() {
             <SectionTitle title="A month with plans" />
             <p className={styles.demoText}>
               Events carry a date, a title, an optional time, and an accent
-              from the core accent roles, never the action teal. Untimed
+              from the core accent roles, never the action colour. Untimed
               events sort first within a day, and rows share the height of
               the fullest day in their week. Clicking a day, or anywhere on
-              its cell, moves the teal selection chip to its number.
+              its cell, moves the selection chip to its number.
             </p>
             <ScheduleDemo />
           </section>

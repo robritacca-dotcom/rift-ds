@@ -40,6 +40,8 @@ Existing entries in the file are the reference implementations; read two before 
 
 Add the id to `THEME_SELECTOR_ORDER` (same file) in its curated position — the array's own comment owns the ordering rule, so read it rather than guessing where the entry belongs. Every theme-picking surface walks this list — the home page's dot row, the playground's preset picker, the theme gallery, get-started's preset list, Storybook's Theme toolbar — so one edit places it everywhere; there is nothing to wire.
 
+**Making it the served theme** (the look every visitor gets before choosing one) is a separate decision for the owner. Its one home is `SERVED_THEME_ID` in `website/src/lib/theme/brand.ts`: change it there and never restate the id elsewhere, since the root layout and Storybook's preview both read the constant. Keep `THEME_SELECTOR_ORDER`'s first slot on the served theme (the constant's doc comment owns why), then run `npm run verify`.
+
 ### 3. Generate, gate, verify
 
 ```bash

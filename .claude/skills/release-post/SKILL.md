@@ -39,9 +39,9 @@ Read the token files before drawing — never write a colour or type value from 
 - `src/tokens/tokens-dark.css` — which primitive each dark-theme role resolves to (the card is dark-theme; it reads best in a feed)
 - `src/tokens/tokens-typography.css` — the display sizes, weights and letter-spacing
 
-**This repo has no earlier cards to match, and the site's shipped default theme is the mono preset** (`data-brand="mono"` is served). Resolve every role through that preset — its generated stylesheet in `src/tokens/presets/` overrides the base tokens (composed by `presetOverrides` in `website/src/lib/theme/presets.ts`) — rather than assuming the base dark-teal look.
+**This repo has no earlier cards to match, and the site does not serve the base theme.** Resolve every role through the served theme: `SERVED_THEME_ID` in `website/src/lib/theme/brand.ts` names it, and the root layout renders it as `data-brand` on `<html>`. Its generated stylesheet in `src/tokens/presets/` overrides the base theme's tokens (composed by `presetOverrides` in `website/src/lib/theme/presets.ts`), so read the base token files and then that sheet, never the base files alone.
 
-The values to resolve: the page and container greys, the container border, the text ramp, the dark-theme action colour and its ink as the shipped preset resolves them, and — if a tile shows status colours — the dark-theme status *icon* hues. Radii follow the system's rules: pill for buttons and chips, the card radius for tiles, the composer radius if a tile draws the composer. `design.md` owns those; check it when unsure rather than guessing.
+The values to resolve: the page and container greys, the container border, the text ramp, the dark-theme action colour and its ink as the served theme resolves them, and — if a tile shows status colours — the dark-theme status *icon* hues. Radii follow the system's rules: pill for buttons and chips, the card radius for tiles, the composer radius if a tile draws the composer. `design.md` owns those; check it when unsure rather than guessing.
 
 ### 3. Draw the card
 
@@ -49,9 +49,9 @@ Author a plain HTML file in the scratchpad (never in the repo tree) at **1200×6
 
 - **Header row**: the package name as an uppercase overline in the action colour; the version large in the light display weight with its tracking; the release date beside it; an `npm i` pill and the site's host (from `SITE_URL` in `scripts/brand.mjs`) on the right.
 - **Bento grid** below: four columns by two rows. The hero feature takes a 2×2 tile with a title, one sentence, a few pill chips, and a small abstract drawing of the feature (panels, glyphs, a miniature control — drawn with divs and inline stroke SVG, never emoji or screenshots). Each remaining feature gets a 1×1 tile: bold title, a tiny visual or code chip, one caption sentence.
-- A faint accent-coloured radial glow or two behind everything (the accent as the shipped preset resolves it) — the site's ambient background in still form. Subtle; the ground stays near-black.
+- A faint accent-coloured radial glow or two behind everything (the accent as the served theme resolves it) — the site's ambient background in still form. Subtle; the ground stays near-black.
 
-The faces the served preset declares load from Google Fonts via a `<link>` in the head. All copy on the card follows `content-design.md`: sentence case, neutral, no emoji, no em dashes, one idea per line. Tile captions are one short sentence each.
+The faces the served theme declares load from Google Fonts via a `<link>` in the head. All copy on the card follows `content-design.md`: sentence case, neutral, no emoji, no em dashes, one idea per line. Tile captions are one short sentence each.
 
 ### 4. Render to PNG
 

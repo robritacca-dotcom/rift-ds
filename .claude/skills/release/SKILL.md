@@ -32,8 +32,6 @@ Check what shipped since the last tag to justify the choice, and confirm it with
 git log $(git describe --tags --abbrev=0)..HEAD --oneline
 ```
 
-(Before 1.0.0 this repo carried no tags and `git describe --tags` failed. `v1.0.0` exists now, so the command above works normally.)
-
 Be deliberate about breaking changes: components are exported both from the barrel and from `./components/*` deep paths, so a renamed component folder breaks consumers even if the barrel still exports the old name.
 
 ### 2. Pre-flight
@@ -53,7 +51,7 @@ Be deliberate about breaking changes: components are exported both from the barr
 
 `scripts/validate-package-exports.mjs` fails the build when any of the three disagree.
 
-**Two hand-maintained release-history mentions ride along with the bump** — nothing generates or validates either, so this step is the only thing keeping them true: the release-history sentence in `CLAUDE.md` (CI & Local Verify section) and the history comment at the top of `.github/workflows/release.yml`. Add the new version, date, and a short what-shipped clause to both in the bump commit.
+**Per-version facts (the version, its date, what shipped) have one home: the release log** (`website/src/data/release-log.json`, written in step 8). Never restate them in prose anywhere else, a doc or a workflow comment: nothing validates a hand copy, so it drifts the first release it is forgotten.
 
 Then:
 

@@ -9,7 +9,9 @@ API, because the thing under test is the system, not the model.
 ```bash
 # 1. Start the dev server with the guardrails open (a full run is the golden
 #    set times three repeats, more than enough to trip the per-IP rate
-#    limiter; blanking the KV vars makes them fail open).
+#    limiter; blanking the KV vars makes them fail open). From an agent
+#    session, start the `website-eval` entry in .claude/launch.json
+#    instead; it wraps this same script.
 npm run dev:eval -w website
 
 # 2. Run the eval from the repo root. --no-cache is deliberate: variance is
@@ -80,8 +82,8 @@ ids they cover; a rule change and its spec row move in the same change.
   gets past the step-down threshold is never graded, and two runs are only
   comparable when the serving model matched — one more reason `dev:eval`,
   not a KV-backed server, is the only valid target.
-- **The config hardcodes `http://localhost:3000`.** Both dev entries in
-  `.claude/launch.json` carry `autoPort`, so a second server already holding
+- **The config hardcodes `http://localhost:3000`.** Every dev entry in
+  `.claude/launch.json` carries `autoPort`, so a second server already holding
   3000 silently points the eval at the wrong app. Confirm which process owns
   port 3000 before trusting a run.
 

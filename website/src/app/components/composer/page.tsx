@@ -228,6 +228,13 @@ export default function ComposerPage() {
               line: a long one clips with an ellipsis, a short one carries no
               trailing dots.
             </p>
+            <p className={styles.demoText}>
+              Set contextPlacement to above and the note leaves the shell for
+              its own bar, a small gap above it, so it reads as what the model
+              can see rather than part of the message. The icon, the typed
+              text and the model picker&apos;s label then start on one line.
+              The site chat uses this placement.
+            </p>
             <div className={styles.stack}>
               <Composer
                 placeholder="Ask about this page"
@@ -243,6 +250,12 @@ export default function ComposerPage() {
                   </>
                 }
                 contextIcon="description"
+              />
+              <Composer
+                placeholder="Ask about this page"
+                context={<>Looking at &ldquo;Release notes&rdquo;</>}
+                contextIcon="description"
+                contextPlacement="above"
               />
             </div>
           </section>

@@ -44,14 +44,22 @@ type ComposerOwnProps = {
    */
   aiGlow?: boolean;
   /**
-   * Contextual note rendered as a full-width, non-interactive chip at the
-   * very top of the shell, above any attachments — the "what the model is
-   * looking at" line a chat host pins over the message ("Looking at
-   * “Page name”"). One line: a note too long for the shell truncates with
-   * an ellipsis. Composer owns the chip's chrome; the caller passes the
-   * text.
+   * Contextual note rendered as a full-width, non-interactive chip — the
+   * "what the model is looking at" line a chat host pins over the message
+   * ("Looking at “Page name”"). `contextPlacement` decides where it sits.
+   * One line: a note too long for the shell truncates with an ellipsis.
+   * Composer owns the chip's chrome; the caller passes the text.
    */
   context?: React.ReactNode;
+  /**
+   * Where the `context` chip sits. `inside` (the default) pins it at the very
+   * top of the shell, above any attachments. `above` lifts it out of the
+   * shell into its own bar a small gap above it, so it reads as what the
+   * model can see rather than part of the message being typed. Either way
+   * its icon starts on the shell's text rail, and a click on it focuses the
+   * textarea.
+   */
+  contextPlacement?: 'inside' | 'above';
   /**
    * Icon at the left of the context chip — Material Symbol name (string,
    * e.g. `visibility`, `article`) or custom element (ReactNode). Decorative
@@ -115,6 +123,7 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
       aiGlow = false,
       context,
       contextIcon,
+      contextPlacement = 'inside',
       attachments,
       actions,
       trailingActions,
@@ -203,6 +212,9 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
       aiGlow ? `${baseClass}--ai-glow` : '',
       streaming ? `${baseClass}--streaming` : '',
       disabled ? `${baseClass}--disabled` : '',
+      // The above placement moves the text onto the chip's rail; the shell
+      // needs to know, since the chip is no longer inside it.
+      context && contextPlacement === 'above' ? `${baseClass}--context-above` : '',
       className,
     ]
       .filter(Boolean)
@@ -213,26 +225,35 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
     const ariaLabel =
       rest['aria-label'] ?? (rest['aria-labelledby'] !== undefined ? undefined : 'Message');
 
-    return (
+    /* One chip, placed by contextPlacement: inside the shell, where the
+       shell's click handler already covers it, or above it as a sibling bar
+       carrying the same handler, so a click still focuses the textarea. */
+    const contextAbove = contextPlacement === 'above';
+    const contextChip = context ? (
+      <div
+        className={`${baseClass}__context${contextAbove ? ` ${baseClass}__context--above` : ''}`}
+        onClick={contextAbove ? handleShellClick : undefined}
+      >
+        {contextIcon && (
+          <span className={`${baseClass}__context-icon`} aria-hidden="true">
+            {typeof contextIcon === 'string' ? (
+              <span className="material-symbols-rounded">{contextIcon}</span>
+            ) : (
+              contextIcon
+            )}
+          </span>
+        )}
+        <span className={`${baseClass}__context-text`}>{context}</span>
+      </div>
+    ) : null;
+
+    const shell = (
       <div
         className={classes}
         style={{ '--ds-composer-max-rows': maxRows } as React.CSSProperties}
         onClick={handleShellClick}
       >
-        {context && (
-          <div className={`${baseClass}__context`}>
-            {contextIcon && (
-              <span className={`${baseClass}__context-icon`} aria-hidden="true">
-                {typeof contextIcon === 'string' ? (
-                  <span className="material-symbols-rounded">{contextIcon}</span>
-                ) : (
-                  contextIcon
-                )}
-              </span>
-            )}
-            <span className={`${baseClass}__context-text`}>{context}</span>
-          </div>
-        )}
+        {!contextAbove && contextChip}
 
         {attachments && <div className={`${baseClass}__attachments`}>{attachments}</div>}
 
@@ -274,6 +295,20 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
         </div>
       </div>
     );
+
+    /* Above the shell, the bar and the shell travel as one block in a
+       wrapper, so a host's own flex or grid gap can never land between
+       them. The wrapper is plain layout; `className` stays on the shell. */
+    if (contextAbove && contextChip) {
+      return (
+        <div className={`${baseClass}-group`}>
+          {contextChip}
+          {shell}
+        </div>
+      );
+    }
+
+    return shell;
   },
 );
 

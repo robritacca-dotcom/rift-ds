@@ -513,6 +513,7 @@ export function SiteChat({
             onStop={stop}
             context={pageName ? <>Looking at “{pageName}”</> : undefined}
             contextIcon="description"
+            contextPlacement="above"
             actions={
               /* A host can slot its own leading actions (the playground's
                  mock picker). The site's default is the live picker: the

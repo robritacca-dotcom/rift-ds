@@ -82,6 +82,16 @@ export const WithContext: Story = {
   },
 };
 
+/** The context chip lifted out of the shell into its own bar above it. */
+export const WithContextAbove: Story = {
+  args: {
+    aiGlow: true,
+    context: 'Looking at “Release notes”',
+    contextIcon: 'description',
+    contextPlacement: 'above',
+  },
+};
+
 /** The attachments row is fully controlled: the consumer owns the list and handles removal. */
 const AttachmentsDemo = () => {
   const [files, setFiles] = useState([

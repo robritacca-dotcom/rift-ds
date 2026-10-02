@@ -3080,7 +3080,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "context",
             "type": "ReactNode",
             "required": false,
-            "description": "Contextual note rendered as a full-width, non-interactive chip at the\nvery top of the shell, above any attachments — the \"what the model is\nlooking at\" line a chat host pins over the message (\"Looking at\n“Page name”\"). One line: a note too long for the shell truncates with\nan ellipsis. Composer owns the chip's chrome; the caller passes the\ntext."
+            "description": "Contextual note rendered as a full-width, non-interactive chip — the\n\"what the model is looking at\" line a chat host pins over the message\n(\"Looking at “Page name”\"). `contextPlacement` decides where it sits.\nOne line: a note too long for the shell truncates with an ellipsis.\nComposer owns the chip's chrome; the caller passes the text."
+          },
+          {
+            "name": "contextPlacement",
+            "type": "\"inside\" | \"above\"",
+            "required": false,
+            "description": "Where the `context` chip sits. `inside` (the default) pins it at the very\ntop of the shell, above any attachments. `above` lifts it out of the\nshell into its own bar a small gap above it, so it reads as what the\nmodel can see rather than part of the message being typed. Either way\nits icon starts on the shell's text rail, and a click on it focuses the\ntextarea.",
+            "defaultValue": "inside"
           },
           {
             "name": "contextIcon",

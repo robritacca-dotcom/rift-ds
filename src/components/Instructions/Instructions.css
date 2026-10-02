@@ -64,14 +64,14 @@
   width: 32px;
   height: 32px;
   border-radius: var(--radius-pill);
-  border: var(--border-025) solid var(--color-action-primary-border);
+  border: var(--border-025) solid var(--color-bg-container-border);
   background-color: transparent;
   flex-shrink: 0;
 }
 
 .ds-instructions__badge .material-symbols-rounded {
   --icon-size: var(--icon-size-600);
-  color: var(--color-action-primary-bg);
+  color: var(--color-icon-primary);
 }
 
 .ds-instructions__number {
@@ -79,14 +79,14 @@
   font-size: var(--font-paragraph-sm-size);
   font-weight: var(--font-title-body-weight);
   line-height: 1;
-  color: var(--color-action-primary-bg);
+  color: var(--color-text-secondary);
 }
 
 .ds-instructions__dot {
   width: 8px;
   height: 8px;
   border-radius: var(--radius-pill);
-  background-color: var(--color-action-primary-bg);
+  background-color: var(--color-icon-primary);
 }
 
 .ds-instructions__connector {

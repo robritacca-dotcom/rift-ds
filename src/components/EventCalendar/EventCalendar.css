@@ -7,7 +7,7 @@
    cell height.
 
    Event accents use the core accent roles —
-   never the action teal, which stays reserved
+   never the action colour, which stays reserved
    for actions.
    ============================================ */
 
@@ -190,7 +190,7 @@ button.ds-event-calendar__day:focus-visible {
   letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
 }
 
-/* Selected — the teal selection chip (the selected item of a mutually
+/* Selected — the action-colour selection chip (the selected item of a mutually
    exclusive set, DatePicker's convention). Declared after the today block
    so a selected today reads as selected. */
 .ds-event-calendar__cell--selected .ds-event-calendar__day {

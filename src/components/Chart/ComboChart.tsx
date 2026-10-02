@@ -128,7 +128,7 @@ export const ComboChart = ({
 
   /* Resolve theme-aware colours once per render */
   const seriesColors = getChartSeriesColors();
-  const resolvedBarColor = barColor || getCSSVar('--color-action-primary-bg', '#0E6E8F');
+  const resolvedBarColor = barColor || getCSSVar('--color-chart-series-1', '#0E6E8F');
   const resolvedLineColor = lineColor || seriesColors[1];
   const textSecondary = getCSSVar('--color-text-secondary', '#303030');
   const gridColor = getCSSVar('--color-divider', 'rgba(214, 214, 214, 0.8)');

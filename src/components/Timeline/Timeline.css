@@ -331,7 +331,7 @@
 }
 
 .ds-timeline__role-bullets a {
-  color: var(--color-action-primary-bg);
+  color: var(--color-action-primary-text-tertiary);
   font-weight: var(--font-paragraph-emphasis-weight);
   text-decoration: underline;
   text-decoration-color: transparent;

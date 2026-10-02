@@ -138,7 +138,7 @@
 
 /* Today indicator */
 .ds-date-picker__cell--today {
-  border: var(--border-025) solid var(--color-action-primary-bg);
+  border: var(--border-025) solid var(--color-bg-page-inverse);
 }
 
 /* Selected */

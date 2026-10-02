@@ -52,7 +52,7 @@
    ============================================ */
 
 .ds-spinner--primary .ds-spinner__arc {
-  stroke: var(--color-action-primary-bg);
+  stroke: var(--color-text-primary);
 }
 
 .ds-spinner--neutral .ds-spinner__arc {

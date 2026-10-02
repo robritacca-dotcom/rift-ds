@@ -12,7 +12,7 @@
   display: inline-block;
   vertical-align: middle;
   flex-shrink: 0;
-  color: var(--color-action-primary-bg);
+  color: var(--color-chart-series-1);
 }
 
 /* Parts */
@@ -60,7 +60,7 @@
 /* Tones */
 
 .ds-sparkline--accent {
-  color: var(--color-action-primary-bg);
+  color: var(--color-chart-series-1);
 }
 
 .ds-sparkline--positive {

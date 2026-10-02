@@ -178,7 +178,7 @@
   display: block;
   height: 100%;
   border-radius: var(--radius-pill);
-  background-color: var(--color-action-primary-bg);
+  background-color: var(--color-core-accent-mint);
   transition: width var(--motion-duration-base) var(--motion-ease-standard);
 }
 

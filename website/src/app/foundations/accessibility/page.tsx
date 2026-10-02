@@ -50,7 +50,7 @@ const gateRows = [
     id: "presets",
     cells: {
       gate: "Theme contrast",
-      runs: "Every shipped theme has its action colour and text resolved through the var() chain and held to the AA threshold.",
+      runs: "Every action fill in every shipped theme, at rest, on hover and when pressed, is resolved through the var() chain and held against the label or icon drawn on it: 4.5:1 for text, 3:1 for icons, in light and dark.",
       when: "The validate-registry chain",
     },
   },
@@ -224,9 +224,10 @@ export default function AccessibilityPage() {
             <SectionTitle title="Themes start from an AA baseline" divider />
             <p className={styles.sectionNote}>
               The shipped themes are examples, and the expectation is that you build your
-              own. What travels is the baseline they are built to: an action colour and
-              the text on it are resolved through the var() chain and held to the AA
-              threshold in light and dark. Every shipped theme clears it, so whichever one
+              own. What travels is the baseline they are built to: every action fill, at
+              rest, on hover and when pressed, is resolved through the var() chain and
+              held against the label or icon drawn on it, AA for text and 3:1 for icons,
+              in light and dark. Every shipped theme clears it, so whichever one
               you start from is a passing starting point.
             </p>
           </section>

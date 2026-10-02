@@ -493,6 +493,10 @@ export const SemanticColors: Story = {
         />
         <ColorToken name="Text" value="--color-action-primary-text" />
         <ColorToken
+          name="Text Active"
+          value="--color-action-primary-text-active"
+        />
+        <ColorToken
           name="Text Secondary"
           value="--color-action-primary-text-secondary"
         />
@@ -509,7 +513,8 @@ export const SemanticColors: Story = {
           name="Border Tertiary"
           value="--color-action-primary-border-tertiary"
         />
-        <ColorToken name="Icon" value="--color-action-icon" />
+        <ColorToken name="Icon Default" value="--color-action-icon-default" />
+        <ColorToken name="Icon Active" value="--color-action-icon-active" />
       </TokenSection>
 
       <TokenSection title="Action - Passive (Secondary)">
@@ -554,6 +559,7 @@ export const SemanticColors: Story = {
       <TokenSection title="Overlay & Controls">
         <ColorToken name="Scrim" value="--color-scrim" />
         <ColorToken name="Control Thumb" value="--color-control-thumb" />
+        <ColorToken name="Divider" value="--color-divider" />
       </TokenSection>
 
       <TokenSection title="Core Colors">

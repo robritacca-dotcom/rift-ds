@@ -94,7 +94,7 @@ EventCalendar's day cells and event pills get their own colour roles, for the sa
 
 ### Overlay & Controls
 - **Scrim** (`--color-scrim` — rgba(0,0,0,0.5) light / rgba(0,0,0,0.7) dark): Modal backdrop behind Dialog, AlertDialog, Drawer and CommandPalette. Darker in dark mode so the modal still separates from the near-black floor.
-- **Control thumb** (`--color-control-thumb` — chains to `--color-action-primary-text` in both themes): The circular thumb inside toggle switches (ToggleSwitch, SelectionCard's toggle indicator). Riding the on-action ink means every theme's AA-held action pairing keeps the thumb legible on its track — a light action fill (Smoke, Volt) gets a dark thumb automatically, where a fixed near-white value vanished into it.
+- **Control thumb** (`--color-control-thumb` — chains to `--color-action-primary-text` in both themes): The circular thumb inside toggle switches (ToggleSwitch, SelectionCard's toggle indicator). Riding the on-action ink means every theme's AA-held action pairing keeps the thumb legible on its track — a light dark-mode action fill (Smoke, Volt) gets a dark thumb automatically, where a fixed near-white value vanished into it.
 
 ### Text
 - **Primary** (`--color-text-primary` — #050505 light / #F1F1F1 dark): Headlines and primary content.

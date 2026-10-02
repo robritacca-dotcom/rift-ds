@@ -265,8 +265,8 @@ const overlayControlColours: SwatchData[] = [
   },
   {
     label: "Control Thumb", cssVar: "--color-control-thumb",
-    dark: { primitive: "--neutral--01--", hex: "#F1F1F1", rgb: "241 / 241 / 241" },
-    light: { primitive: "--neutral--00--", hex: "#FFFFFF", rgb: "255 / 255 / 255" },
+    dark: { primitive: "--teal--10--", hex: "#052F3E", rgb: "5 / 47 / 62" },
+    light: { primitive: "--teal--02--", hex: "#CFEAF3", rgb: "207 / 234 / 243" },
   },
   {
     label: "Divider", cssVar: "--color-divider",

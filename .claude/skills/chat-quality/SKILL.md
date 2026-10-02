@@ -49,7 +49,7 @@ Follow `evals/chat/README.md` exactly — it owns the procedure (the `website-ev
 
 ### 5. Fix on a branch
 
-Work in the temporary worktree on branch `chat/YYYY-MM-DD-<slug>`. One coherent batch: the new golden-set cases plus the corpus/persona fixes they demanded. A persona or tool-definition edit updates its matching rule row in `evals/chat/SPEC.md` in the same commit, and a new rule ships with either a tripwire or an explicit unenforced entry there. Verify the website build in the worktree; commit the regenerated corpus in the same batch when page prose changed.
+Work in the temporary worktree on branch `chat/YYYY-MM-DD-<slug>`. One coherent batch: the new golden-set cases plus the corpus/persona fixes they demanded. A persona or tool-definition edit updates its matching rule row in `evals/chat/SPEC.md` in the same commit, and a new rule ships with either a tripwire or an explicit unenforced entry there. Do not build in the worktree: a fresh one has no `node_modules`, so the prebuild chain fails (the corpus generator needs `typescript`), and installing there is what `land` forbids. The build check happens when the branch is landed, whose combined `npm run verify` builds it; when page prose changed, the corpus that build regenerates is committed with the landing.
 
 ### 6. Report and hand off
 

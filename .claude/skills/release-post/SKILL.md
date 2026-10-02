@@ -23,13 +23,13 @@ Two principles govern everything below: **facts come from the repo, never from m
 Work from the tag, not recollection:
 
 ```bash
-git log --oneline $(git describe --tags --abbrev=0 <previous-tag>^)..v<version>
+git log --oneline $(git describe --tags --abbrev=0 v<version>^)..v<version>
 git show v<version> --no-patch --format='%s%n%b'
 ```
 
-**First release from this repo**: the history is fresh and carries no earlier tags, so there is no `<previous-tag>` to anchor the range — take it from the full history instead (`git log --oneline v<version>`).
+(`git describe` on the version tag's parent resolves to the previous release's tag, so the range is exactly this release.) **The repo's first tag** (`v1.0.0`) has no earlier tag to anchor the range — take it from the full history instead (`git log --oneline v1.0.0`).
 
-The tag message names the headline features; the commit list fills in the rest. The release-history sentence in `CLAUDE.md` (CI & Local Verify section) is the one-line summary of record — the card and copy must agree with it. Pick the strongest feature as the hero and a handful of others as supporting tiles; a release with more features than tiles drops features rather than shrinking them.
+The tag message names the headline features; the commit list fills in the rest. The version's entry in the release log (`website/src/data/release-log.json`, written at publish time by the `release` skill) is the summary of record — the card and copy must agree with it. Pick the strongest feature as the hero and a handful of others as supporting tiles; a release with more features than tiles drops features rather than shrinking them.
 
 ### 2. Lift the real design values
 
@@ -78,7 +78,7 @@ Send the PNG with SendUserFile so it lands as a file the owner can copy straight
 
 ## Guardrails
 
-- Never restate release facts from memory — the tag, the commits, and `CLAUDE.md`'s release-history sentence are the sources, and they must agree with what the card claims
+- Never restate release facts from memory — the tag, the commits, and the version's release-log entry are the sources, and they must agree with what the card claims
 - Never write a hex value or font size the token CSS didn't supply this session; the card is a picture of the system, so a drifted colour is a wrong picture
 - Working files live in the scratchpad, never the repo tree; nothing this skill produces is committed
 - The card carries no screenshots and no third-party marks — abstract drawings only

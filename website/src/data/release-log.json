@@ -1,6 +1,15 @@
 {
   "releases": [
     {
+      "version": "1.3.0",
+      "date": "2026-10-02",
+      "title": "InspectorColorPicker and the action colour",
+      "body": [
+        "InspectorColorPicker joins the Inspector family: the library colour picker dressed as one bar, with its name on the left and the colour on the right. A new motion token, the orbit duration, paces Globe's spin, so a theme's motion scale now reaches it, and Composer can place its context note above the input with contextPlacement=\"above\".",
+        "The action colour is now kept for actions. Spinner, FileInput, Sparkline, the bar charts, Timeline's links, Instructions and DatePicker's today ring each use the role that fits instead, and a build check stops new decorative uses. Every action fill also holds contrast with its label and icon in every state, which repairs the Volt preset, and Treemap labels pick a readable colour for each cell. Nothing breaks, so upgrading needs no code changes."
+      ]
+    },
+    {
       "version": "1.2.0",
       "date": "2026-09-30",
       "title": "The Inspector family",

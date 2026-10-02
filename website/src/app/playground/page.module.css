@@ -213,10 +213,11 @@
   padding: var(--primitive-padding-050) 0;
 }
 
-/* The custom ColorPicker stays lit while the current colour is not one of
-   the preset swatches */
+/* The custom colour bar stays lit while the current colour is not one of
+   the preset swatches: a step up the bar's own neutral ladder, the same
+   paint a hovered bar takes, so nothing but focus wears the action colour */
 .customPickerActive :global(.ds-colorpicker__trigger) {
-  border-color: var(--color-input-border-selected);
+  background: var(--color-action-neutral-bg-hover);
 }
 
 .sliderRow {

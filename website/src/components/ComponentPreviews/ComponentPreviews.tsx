@@ -53,6 +53,7 @@ import { NumberInput } from "rift-ds/components/NumberInput/NumberInput";
 import { Pagination } from "rift-ds/components/Pagination/Pagination";
 import { InterruptCard } from "rift-ds/components/InterruptCard/InterruptCard";
 import { Kbd } from "rift-ds/components/Kbd/Kbd";
+import { InspectorColorPicker } from "rift-ds/components/Inspector/InspectorColorPicker";
 import { InspectorDropdown } from "rift-ds/components/Inspector/InspectorDropdown";
 import { InspectorInput } from "rift-ds/components/Inspector/InspectorInput";
 import { InspectorSection } from "rift-ds/components/Inspector/InspectorSection";
@@ -919,6 +920,13 @@ const previews: Record<string, () => ReactNode> = {
   ),
   /* The Inspector family: real controls at compact, held inert so the card
      link stays the only interactive element in its tile. */
+  "inspector-color-picker": () => (
+    <>
+      <div inert aria-hidden="true" style={{ width: "170px" }}>
+        <InspectorColorPicker size="compact" label="Tint" defaultValue="#8AE86E" />
+      </div>
+    </>
+  ),
   "inspector-dropdown": () => (
     <>
       <div inert aria-hidden="true" style={{ width: "170px" }}>

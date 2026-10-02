@@ -349,7 +349,11 @@ export const ColorPicker = React.forwardRef<HTMLButtonElement, ColorPickerProps>
             style={{ '--ds-cp-color': cssColor } as React.CSSProperties}
             aria-hidden="true"
           />
-          {showText && <span className={`${baseClass}__trigger-text`}>{displayHex}</span>}
+          {showText && (
+            <span id={`${inputId}-value`} className={`${baseClass}__trigger-text`}>
+              {displayHex}
+            </span>
+          )}
         </button>
 
         {name && <input type="hidden" name={name} value={displayHex} />}

@@ -4,7 +4,6 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import styles from "./page.module.css";
 import { Button } from "rift-ds/components/Button/Button";
 import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
-import { ColorPicker } from "rift-ds/components/ColorPicker/ColorPicker";
 import { Swatch } from "rift-ds/components/Swatch/Swatch";
 import {
   ACTION_COLOR_PRESETS,
@@ -13,6 +12,7 @@ import {
   type ElevationVariant,
 } from "@/lib/theme/theme-overrides";
 import { RichDropdown } from "rift-ds/components/RichDropdown/RichDropdown";
+import { InspectorColorPicker } from "rift-ds/components/Inspector/InspectorColorPicker";
 import { InspectorDropdown } from "rift-ds/components/Inspector/InspectorDropdown";
 import { InspectorInput } from "rift-ds/components/Inspector/InspectorInput";
 import { InspectorSection } from "rift-ds/components/Inspector/InspectorSection";
@@ -220,11 +220,11 @@ export default function PlaygroundControls({
               />
             ))}
           </div>
-          <ColorPicker
+          <InspectorColorPicker
+            size="compact"
+            label="Custom colour"
             value={brand}
             onValueChange={onBrand}
-            showText
-            aria-label="Custom brand colour"
             className={isCustomBrand ? styles.customPickerActive : ""}
           />
           <Button
@@ -278,11 +278,11 @@ export default function PlaygroundControls({
           />
           {tintOn && (
             <>
-              <ColorPicker
+              <InspectorColorPicker
+                size="compact"
+                label="Tint colour"
                 value={tintSeed}
                 onValueChange={onTintSeed}
-                showText
-                aria-label="Neutral tint seed colour"
               />
               <InspectorSlider
                 size="compact"

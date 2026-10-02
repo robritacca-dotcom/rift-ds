@@ -65,6 +65,7 @@ export * from './components/Globe/Globe';
 export * from './components/HoverCard/HoverCard';
 export * from './components/ImageCompare/ImageCompare';
 export * from './components/Input/Input';
+export * from './components/Inspector/InspectorColorPicker';
 export * from './components/Inspector/InspectorDropdown';
 export * from './components/Inspector/InspectorInput';
 export * from './components/Inspector/InspectorSection';

@@ -583,6 +583,15 @@
       "client": true
     },
     {
+      "name": "InspectorColorPicker",
+      "label": "Inspector colour picker",
+      "slug": "inspector-color-picker",
+      "description": "One-row colour setting for inspector panels, with the hex and a round swatch at the bar's end and ColorPicker's own panel.",
+      "category": "inspector",
+      "client": true,
+      "folder": "Inspector"
+    },
+    {
       "name": "InspectorDropdown",
       "label": "Inspector dropdown",
       "slug": "inspector-dropdown",

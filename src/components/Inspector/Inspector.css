@@ -4,7 +4,8 @@
    rails: each control is one bar with its name
    inside on the left and its state on the right.
    The form controls (Slider, Input, ToggleSwitch,
-   SegmentedControl, Dropdown) keep their label
+   SegmentedControl, Dropdown, ColorPicker) keep
+   their label
    above; these are their counterparts for a
    dense panel.
 
@@ -33,7 +34,8 @@
    default  8px + 24px line + 8px  = 40px, 20px sides, paragraph-emphasis
    compact  6px + 20px line + 6px  = 32px, 12px sides, paragraph-sm-emphasis */
 .ds-inspector-bar,
-.ds-inspector-dropdown {
+.ds-inspector-dropdown,
+.ds-inspector-color-picker {
   --ds-inspector-height: calc(2 * var(--padding-200) + var(--font-paragraph-emphasis-line-height));
   --ds-inspector-inset: var(--padding-500);
   --ds-inspector-font-family: var(--font-paragraph-emphasis-family);
@@ -45,7 +47,8 @@
 }
 
 .ds-inspector-bar--compact,
-.ds-inspector-dropdown--compact {
+.ds-inspector-dropdown--compact,
+.ds-inspector-color-picker--compact {
   --ds-inspector-height: calc(2 * var(--padding-150) + var(--font-paragraph-sm-emphasis-line-height));
   --ds-inspector-inset: var(--padding-300);
   --ds-inspector-font-family: var(--font-paragraph-sm-emphasis-family);
@@ -422,6 +425,108 @@
 .ds-inspector-dropdown .ds-dropdown__chevron {
   --icon-size: var(--icon-size-500);
   color: var(--color-icon-secondary);
+}
+
+/* ============================================
+   COLOR PICKER — the library ColorPicker, dressed as a bar
+   ============================================ */
+
+.ds-inspector-color-picker {
+  position: relative;
+  min-width: 0;
+}
+
+/* The name rides over the trigger and lets clicks through, so the whole
+   bar opens the panel. The reading sits at the far end, so no room needs
+   reserving for the name the way the dropdown's left-aligned value does. */
+.ds-inspector-color-picker__label {
+  position: absolute;
+  top: calc(var(--ds-inspector-height) / 2);
+  left: var(--ds-inspector-inset);
+  z-index: 1;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  font-family: var(--ds-inspector-font-family);
+  font-size: var(--ds-inspector-font-size);
+  font-weight: var(--ds-inspector-label-weight);
+  line-height: var(--ds-inspector-line-height);
+  letter-spacing: var(--ds-inspector-letter-spacing);
+  color: var(--color-text-primary);
+  pointer-events: none;
+}
+
+.ds-inspector-color-picker .ds-colorpicker {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+}
+
+/* The swatch is a circle one line tall, so its end inset is whatever
+   centres it in the bar: concentric with the pill's end cap. */
+.ds-inspector-color-picker .ds-colorpicker__trigger {
+  justify-content: flex-end;
+  gap: var(--gap-300);
+  width: 100%;
+  box-sizing: border-box;
+  height: var(--ds-inspector-height);
+  padding: 0 calc((var(--ds-inspector-height) - var(--ds-inspector-line-height)) / 2) 0
+    var(--ds-inspector-inset);
+  border-color: transparent;
+  border-radius: var(--radius-pill);
+  background: var(--color-action-passive-bg-hover);
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-inspector-color-picker .ds-colorpicker__trigger:hover:not(:disabled),
+.ds-inspector-color-picker .ds-colorpicker--open .ds-colorpicker__trigger {
+  border-color: transparent;
+  background: var(--color-action-neutral-bg-hover);
+}
+
+.ds-inspector-color-picker .ds-colorpicker__trigger:active:not(:disabled) {
+  background: var(--color-action-neutral-bg-active);
+}
+
+/* The trigger's selected-border focus becomes the family's ring. */
+.ds-inspector-color-picker .ds-colorpicker__trigger:focus-visible {
+  border-color: transparent;
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+/* The reading comes before the swatch, so the colour sits at the bar's end
+   where the switch's track and the dropdown's chevron sit. */
+.ds-inspector-color-picker .ds-colorpicker__trigger-text {
+  order: -1;
+  padding-right: 0;
+  font-family: var(--ds-inspector-font-family);
+  font-size: var(--ds-inspector-font-size);
+  font-weight: var(--ds-inspector-value-weight);
+  line-height: var(--ds-inspector-line-height);
+  letter-spacing: var(--ds-inspector-letter-spacing);
+  color: var(--color-text-secondary);
+}
+
+.ds-inspector-color-picker .ds-colorpicker__trigger-swatch {
+  width: var(--ds-inspector-line-height);
+  height: var(--ds-inspector-line-height);
+  border-radius: var(--radius-pill);
+}
+
+/* The panel opens under the bar and spans it. */
+.ds-inspector-color-picker .ds-colorpicker__panel {
+  right: 0;
+  width: auto;
+}
+
+/* Disabled dims the whole bar, name included, rather than the trigger alone. */
+.ds-inspector-color-picker--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ds-inspector-color-picker--disabled .ds-colorpicker__trigger {
+  opacity: 1;
 }
 
 /* ============================================

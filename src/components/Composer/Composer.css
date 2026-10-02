@@ -261,6 +261,12 @@
   display: inline-flex;
   align-items: center;
   flex-shrink: 0;
+  /* Optical alignment: a glyph's ink starts inside its box, so the box is
+     pulled back by that side bearing to land the ink on the text rail. The
+     default fits the portrait document glyphs a context note usually
+     carries (ink starts 4/24 into the box); the fallback is a consumer
+     hook for a glyph with a different bearing. */
+  margin-left: calc(-1 * var(--ds-composer-context-icon-bearing, var(--icon-size-500) * 4 / 24));
 }
 
 .ds-composer__context-icon .material-symbols-rounded {
@@ -286,8 +292,9 @@
   align-items: flex-end;
   gap: var(--gap-100);
   /* Top ring only — the text zone below keeps its own full padding-md,
-     so chips sit a clear padding-md above the first text line */
-  padding: var(--padding-400) var(--padding-500) 0;
+     so chips sit a clear padding-md above the first text line. Inline on
+     the text rail (see the content zone). */
+  padding: var(--padding-400) calc(var(--padding-200) + var(--padding-400)) 0;
 }
 
 /* ============================================
@@ -304,7 +311,11 @@
   align-items: flex-start;
   box-sizing: border-box;
   width: 100%;
-  padding: var(--padding-400) var(--padding-500) var(--padding-200);
+  /* Inline padding is the text rail: the action bar's --padding-200 ring
+     plus the pill inset (--padding-400) that the context chip and a
+     ModelPicker trigger hold, so the typed text, the chip's icon and the
+     picker's label all start on one line. */
+  padding: var(--padding-400) calc(var(--padding-200) + var(--padding-400)) var(--padding-200);
   /* Growing and shrinking is animated, which needs two pixel heights to run
      between — `auto` has nothing to interpolate. So the zone states its own
      height: the measured textarea (published as --ds-composer-text-height on
@@ -398,6 +409,18 @@
   align-items: center;
   gap: var(--gap-100);
   margin-left: auto;
+}
+
+/* A ModelPicker in the actions slot takes the context chip's resting fill,
+   so the two pills read as one boxed pair: both boxes on the bar's 8px
+   ring, both contents on the text rail. Its hover is restated so the
+   step up still shows over the new resting fill. */
+.ds-composer__actions .ds-model-picker__trigger {
+  background-color: var(--color-chat-context-bg);
+}
+
+.ds-composer__actions .ds-model-picker__trigger:hover {
+  background-color: var(--color-action-passive-bg-hover);
 }
 
 /* ============================================

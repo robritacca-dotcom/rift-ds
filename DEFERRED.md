@@ -38,7 +38,7 @@ The guidance JSON in section 1 already described these fixes as shipped (Badge, 
 - `claude/happy-murdock-7552f2`: a copy of section 1, identical except an older draft of the guidance JSON's accessibility lines.
 - `claude/sad-yalow-bdb83c`: clean, and its commit is already in `main`.
 
-## 4. Branches on GitHub (pushed from the Mac, unmerged)
+## 4. Branches on GitHub (unmerged)
 
 These are safe on the remote. Decide for each: land, keep, or delete.
 
@@ -47,23 +47,19 @@ These are safe on the remote. Decide for each: land, keep, or delete.
 | `wip/guest-app` | 2026-10-03 | One commit on current `main`: guest app concept in labs, the assistant as shell with the marketing dashboard inside (8 files, +831) |
 | `wip/parade-theme` | 2026-10-03 | One commit on current `main`: Parade theme preset and logo colour tokens (26 files, +587) |
 | `wip/header-wordmark` | 2026-09-26 | Two commits, 60 behind `main`: RIFT wordmark trial in the header (`BrandWordmark`, `SiteLogo`) |
-| `claude/zen-allen-exjgbd` | | Fully merged into `main`. Delete. |
+| `wip/member-graph` | 2026-09-30 | One commit on current `main`: the `/labs/member-graph` concept page with its chromeless and corpus-exclusion registration (9 files). Unverified |
+| `wip/icon-colour-rules` | 2026-09-26 | One commit, based on a `main` nine days old: icon colour carve-outs across 17 component stylesheets and a new `scripts/validate-icon-colour-rules.mjs` (39 files). Unverified; regenerate the generated surfaces after rebasing |
+| `wip/button-equal-height` | 2026-09-30 | One commit, based on an older `main`: every Button variant wears a transparent border so all share one height (7 files). Its `design.md` hunk conflicts with the theme-agnostic rewrite |
 
-## 5. The Mac (not yet inventoried)
+`claude/zen-allen-exjgbd` was fully merged and has been deleted from the remote.
 
-Nothing unpushed on the Mac is visible from here. Before discarding anything there, run this in the repo and add what it shows to this file:
+## 5. The Mac (inventoried and reset 2026-10-05)
 
-```bash
-git fetch --all --prune && git status --short | wc -l && git branch -vv && git worktree list && git stash list && git log --oneline origin/main..HEAD
-```
+The Mac held three pieces of uncommitted work, none of it on GitHub: the member graph page in the main working tree, and two idle agent worktrees. Each was committed as found and pushed as a `wip/` branch, listed in section 4. Nothing was landed and nothing was discarded.
 
-Then reset the Mac:
+Removed after that, because they carried nothing else: the two worktrees and their merged `claude/*` branches, and two stashes holding older copies of the member graph registration lines. The stashes are tagged on the Mac only, `archive/member-graph-stash-2026-09-30` and `archive/member-graph-stash-2026-10-02`, and can be deleted once `wip/member-graph` is landed or dropped.
 
-```bash
-git switch main && git reset --hard origin/main && git clean -fd
-```
-
-and remove any leftover worktrees with `git worktree remove --force <path>` and local branches with `git branch -D <name>`.
+The Mac's `main` is clean and level with `origin/main` at `8745bf1`.
 
 ## Staying in sync from here
 

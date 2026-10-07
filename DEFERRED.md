@@ -1,8 +1,8 @@
 # Deferred work
 
-Inventory taken 2026-10-05 on the Windows machine, before resetting both computers to `origin/main` (`8745bf1`, "docs(releases): log 1.3.0"). Local `main` was already level with `origin/main`: nothing committed was ever at risk. Everything below was uncommitted or sitting on an unmerged branch.
+Inventory taken 2026-10-05 on the Windows machine, before resetting both computers to `origin/main`. Local `main` was already level with `origin/main`: nothing committed was ever at risk. Everything below was uncommitted or sitting on an unmerged branch.
 
-Delete each section when its work is redone, landed, or dropped for good.
+**As of 2026-10-07 none of it exists as code.** Every branch and archive tag was deleted, on purpose. Sections 1 to 4 are write-ups of the four pieces worth rebuilding, detailed enough to redo from scratch; nothing here is pending, and nothing needs merging. Delete a section when its work is rebuilt or you decide it never will be.
 
 ## 1. Component page formula (scrapped 2026-10-07, the idea kept here)
 
@@ -115,22 +115,90 @@ Eight components, 20 source files (about 500 lines, half of it stories), plus `d
 - Tabs and EmptyState gain props, and RadioGroup and ToggleGroup change keyboard behaviour, so this is a minor release with a release-log entry, not a patch.
 - The component page formula in section 1 drafted its accessibility guidance as though these had shipped. If that is rebuilt, do this first.
 
-## 3. Branches on GitHub (unmerged)
+## 3. Button equal height (scrapped 2026-10-07, the change kept here)
 
-These are safe on the remote. Decide for each: land, keep, or delete.
+The code is gone. It was one unverified commit on `wip/button-equal-height` (`aa3615d`, parked from an idle session on 2026-09-30, 7 files), deleted from GitHub on 2026-10-07 with no archive tag. Not in `main`.
 
-| Branch | Date | What |
-|---|---|---|
-| `wip/icon-colour-rules` | 2026-09-26 | One commit, based on a `main` nine days old: icon colour carve-outs across 17 component stylesheets and a new `scripts/validate-icon-colour-rules.mjs` (39 files). Unverified; regenerate the generated surfaces after rebasing |
-| `wip/button-equal-height` | 2026-09-30 | One commit, based on an older `main`: every Button variant wears a transparent border so all share one height (7 files). Its `design.md` hunk conflicts with the theme-agnostic rewrite |
+- **Problem:** the outlined Button variants (`secondary`, `destructive`) carry a 1px border and the filled ones (`primary`, `tertiary`, `neutral`) carry none, so an outlined button is 2px taller and wider than a filled one beside it.
+- **Fix:** every variant wears a `--border-025` border, transparent on the borderless ones, and the padding gives that width back, so the hairline replaces 1px of padding instead of adding to it. All variants then share one height and width per size (40px default, 32px compact in the base theme), and content sits where the padding token says.
+- **In `Button.css`:** the base rule becomes `border: var(--border-025) solid transparent` with `padding: calc(var(--padding-200) - var(--border-025)) calc(var(--padding-500) - var(--border-025))`; compact does the same with `--padding-150` and `--padding-300`; the three borderless variants change `border: none` to `border-color: transparent`.
+- **In `SplitButton.css`:** the main segment overrides Button's inline-end padding, so both overrides subtract `--border-025` as well. The comment about secondary's border moving the segment height no longer applies.
+- **In `design.md`:** the Button variant table's Border column reads "transparent 1px" for the three filled variants, and the Sizes line states the shared height and why. That table has since been rewritten theme-agnostic in `main`, so write the edit fresh against the current text.
+- **If redone:** check every component that overrides Button's padding or assumes its height (SplitButton was the only one found, but the search was not exhaustive), then look at it in both themes. It changes the rendered size of the outlined variants by 2px, so it is a visible change and wants a release-log entry.
 
-`claude/zen-allen-exjgbd` was fully merged and has been deleted from the remote.
+## 4. Icon colour carve-outs (scrapped 2026-10-07, the rule kept here)
 
-Dropped on 2026-10-07, deleted from GitHub with no archive tag: `wip/parade-theme` (`13d154c`), `wip/guest-app` (`db9d85a`), `wip/member-graph` (`878f546`) and `wip/header-wordmark` (`480a142`).
+The code is gone. It was one unverified commit on `wip/icon-colour-rules` (`f38eaf6`, parked from an idle session on 2026-09-26, 39 files, 72 commits behind `main`), deleted from GitHub on 2026-10-07 with no archive tag. Not in `main`: the bug below is still in the shipped library, read from `main`'s stylesheets rather than confirmed in a browser.
 
-## 4. The Mac (inventoried and reset 2026-10-05)
+### The bug
 
-The Mac held three pieces of uncommitted work, none of it on GitHub: the member graph page in the main working tree, and two idle agent worktrees. Each was committed as found and pushed as a `wip/` branch, listed in section 3. Nothing was landed and nothing was discarded.
+The icon font sets no colour, so an icon inherits from whatever it sits in, and the default belongs to the consumer. This repo's website supplies one in `globals.css` (`.material-symbols-rounded { color: … }`), and a global like that breaks inheritance for every icon under it. So about 29 components restore it with a blanket rule, written last in the file:
+
+```css
+.ds-alert .material-symbols-rounded { color: inherit; }
+```
+
+That is two classes, specificity (0,2,0), the minimum that beats a consumer's (0,1,0) global. The same weight is the hazard: it outranks every single-class icon rule and ties with every two-class one, and coming last it wins the tie. Whatever it covers loses its own colour and falls back to the surrounding text colour. Two things get hit:
+
+- **The component's own icons.** Where a component puts its own class on the icon element (`ds-alert__icon material-symbols-rounded`) and colours it, the blanket rule overrides that. Alert and Toast lose all five status icon colours (an info alert's icon renders as body text, not the status colour), and CommandPalette's search and command icons lose `--color-icon-primary`.
+- **Nested components.** A component dropped into a slot colours its own icons the same way and is outranked by the host. On a filled control that is a contrast defect, not only a wrong hue.
+
+### The fix
+
+Every blanket rule carves out both cases inside `:not(:where(…))`. `:where()` adds no specificity, so the rule stays (0,2,0) and still beats the consumer's global:
+
+```css
+.ds-tool-call .material-symbols-rounded:not(:where(
+  .ds-tool-call__chevron,        /* carries its own colour rule */
+  .ds-tool-call__content *,      /* consumer slot */
+  .ds-tool-call__actions *       /* consumer slot */
+)) { color: inherit; }
+```
+
+The line for slots: a slot that holds the consumer's *components* is carved out, because those colour their own icons; a slot that holds the consumer's *text* stays covered, because a bare glyph there should follow the surrounding colour. Two consequences. A carve-out is not transitive: if A carves out a slot but sits inside B, B's rule still reaches in, so B must carve out A too. And an icon that is *wrapped* (`__media > span`) rather than classed needs no carve-out, since the wrapper holds the colour and the icon inherits it.
+
+### The carve-outs it made
+
+| Component | Excluded from the blanket rule |
+|---|---|
+| AgentPlan | `__chevron` |
+| Alert | `__icon` |
+| AppSidebar | `__btn-icon`, `__btn-chevron`, the top slot, the footer slot |
+| Carousel | the slide slot |
+| Chip | `__icon` |
+| Combobox | `__search-icon`, `__chevron`, `__check` |
+| CommandPalette | `__search-icon`, `__command-icon`, the trailing slot |
+| ContactCard | `__icon`, `__chevron` |
+| EmptyState | the action slot |
+| FileInput | `__dropzone-icon`, `__file-icon` |
+| FilterBar | `__option-check` |
+| InterruptCard | `__answer-icon`, the detail slot |
+| MessageCard | the media slot, the actions slot |
+| NotificationCenter | the item actions slot, any nested EmptyState |
+| SourceTrail | `__chevron` |
+| Toast | `__icon` |
+| ToolCall | `__chevron`, the content slot, the actions slot |
+
+This list is 17 of the roughly 29 components with a blanket rule. The others were judged to need nothing, but `main` has gained components since, so recount rather than trust it.
+
+### The validator
+
+`scripts/validate-icon-colour-rules.mjs` enforced the mechanical half. For each component with a blanket rule it read the TSX for BEM classes sitting on the same element as `material-symbols-rounded`, checked whether the CSS gave that class a colour of its own, and failed the build if the blanket rule did not exclude it, or if an exclusion was written without `:where()` and so changed the rule's specificity. The slot half stayed a human decision recorded in each rule's comment. A `design.md` section, "Icon colour and the blanket rule", owned the convention.
+
+### If redone
+
+- Start from the validator: write it first and let it list the offenders on the current `main`, since the component list has moved.
+- Fix Alert, Toast and CommandPalette first. Those are the visible defects; the rest are latent.
+- Each stylesheet change regenerates that component's shadcn registry item.
+- It changes rendered icon colours, so check both themes and give it a release-log entry.
+
+## 5. Branches dropped without a write-up
+
+Deleted from GitHub with no archive tag and nothing recorded beyond this line: `claude/zen-allen-exjgbd` (fully merged, so nothing was lost), and on 2026-10-07 `wip/parade-theme` (`13d154c`, a Parade theme preset and logo colour tokens), `wip/guest-app` (`db9d85a`, a guest app concept in labs), `wip/member-graph` (`878f546`, the `/labs/member-graph` concept page) and `wip/header-wordmark` (`480a142`, a RIFT wordmark trial in the header).
+
+## 6. The Mac (inventoried and reset 2026-10-05)
+
+The Mac held three pieces of uncommitted work, none of it on GitHub: the member graph page in the main working tree, and two idle agent worktrees. Each was committed as found and pushed as a `wip/` branch. All three were later dropped: the button and icon changes are written up in sections 3 and 4, and the member graph page is listed in section 5.
 
 Removed after that, because they carried nothing else: the two worktrees and their merged `claude/*` branches, and two stashes holding older copies of the member graph registration lines. The stashes are tagged on the Mac only, `archive/member-graph-stash-2026-09-30` and `archive/member-graph-stash-2026-10-02`, and can be deleted now: `wip/member-graph` was dropped on 2026-10-07 (`git tag -d <tag>` on the Mac).
 

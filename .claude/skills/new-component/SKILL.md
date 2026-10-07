@@ -115,6 +115,7 @@ The story tests run axe in `'error'` mode, but axe only catches roughly a third 
 
 ### File 2: `ComponentName.css`
 - CSS custom properties exclusively — **no hardcoded hex colours**, no raw `rgb()`/`rgba()`
+- **The action colour is reserved, and the build holds the line.** Outside a focus `outline`, a component that references `--color-action-primary-bg` fails `scripts/validate-action-colour.mjs` until it is added to that script's `SANCTIONED` table with the role the use plays (design.md lists the roles). Decide the role first; if none fits, the use is decoration and wants a different token
 - Icons are sized by setting `--icon-size` on the icon element to a step from the `--icon-size-*` scale (`src/tokens/registry.json` is the list) — never `font-size` or raw pixel dimensions on an icon
 - Transitions/animations compose `--motion-duration-*` with `--motion-ease-*` from `tokens-motion.css` — never literal timings like `0.2s ease` (new code must use the motion tokens from the start)
 - The same rule has a TypeScript half: a JS timer (a hover delay, an auto-dismiss, a settle timeout) takes its default from the shared constants in `src/tokens/motion.ts` — import the matching constant, or add a named one there deliberately, never a literal ms value in the component. Schedule timings are deliberately left alone by the reduced-motion guard; a constant that paces an animation must be guarded by its component in JS instead (design.md's Motion section records the contract and the exceptions)

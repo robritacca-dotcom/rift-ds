@@ -271,7 +271,7 @@ export default function AccessibilityPage() {
                 <span className={styles.demoTitle}>Try it with the keyboard</span>
                 <p className={styles.demoBody}>
                   Open the dialog, then press Tab a few times: focus cycles through the
-                  three controls and never reaches the page behind. Press Escape and focus
+                  dialog’s controls and never reaches the page behind. Press Escape and focus
                   lands back on the button you opened it with.
                 </p>
               </div>

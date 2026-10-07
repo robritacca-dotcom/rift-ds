@@ -12,4 +12,4 @@ npm run dev --workspace website
 
 Open [http://localhost:3000](http://localhost:3000). Pages live under `website/src/app/`; the home page is `website/src/app/page.tsx`.
 
-Fonts are Nunito Sans via `next/font/google` (Open Sans loads the same way, scoped to `/covers` only). The root `CLAUDE.md` is the operating manual for the whole repo — read it before changing anything structural, including the registries and generated surfaces this site is built from.
+Fonts are Nunito Sans via `next/font/google`. The root `CLAUDE.md` is the operating manual for the whole repo — read it before changing anything structural, including the registries and generated surfaces this site is built from.

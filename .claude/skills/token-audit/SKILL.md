@@ -16,7 +16,7 @@ Use this skill when asked to check for hardcoded values, audit token usage, find
 
 ## What is already automated
 
-`scripts/validate-token-usage.mjs` already fails the build on any `var(--…)` reference to a custom property nothing defines, so unresolvable-token references need no hand-check; this skill hunts for raw values that never reference a token at all.
+`scripts/validate-token-usage.mjs` already fails the build on any `var(--…)` reference to a custom property nothing defines, so unresolvable-token references need no hand-check; this skill hunts for raw values that never reference a token at all. `scripts/validate-action-colour.mjs` fails it on a component that starts using `--color-action-primary-bg` without a sanctioned role, but its `SANCTIONED` table is per component, not per selector: a decorative use added inside a component already listed passes the build, so that residue is this skill's to catch.
 
 ## Instructions
 
@@ -60,7 +60,7 @@ Use this skill when asked to check for hardcoded values, audit token usage, find
    - The offending value
    - Recommended token replacement (if a clear match exists in the token files)
 
-   Format: `path/to/file.css:42 — #0E6E8F → var(--color-action-primary-bg)`
+   Format (fictional values): `path/to/file.css:42 — #7A1F3D → var(--color-gadget-accent-bg)`
 
 5. **Summarise** at the end:
    - `X violation(s) found`

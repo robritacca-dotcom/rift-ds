@@ -25,7 +25,7 @@ CLAUDE.md's **How to Add a New Token** section is the authoritative checklist �
 3. **Check the prefix.** If the token starts a *new* prefix, generation fails until the prefix is added to `CATEGORY_PREFIXES` in `scripts/generate-token-registry.mjs` — deliberately, so a new category gets a display home at the same time. An existing prefix (`--color-`, `--motion-`, `--radius-`, …) needs nothing here; the registry regenerates on every build.
 
 4. **Give it its documentation homes** (the build enforces the first, a drift audit catches the rest):
-   - Colour tokens need a swatch on `/foundations/colour-mode` — build-enforced in both directions by `scripts/validate-website-surfaces.mjs`. Other categories go on their matching foundations page (CLAUDE.md's checklist maps category → page).
+   - Colour tokens need a swatch on `/foundations/colour-mode` — build-enforced in both directions by `scripts/validate-website-surfaces.mjs`. The values those pages print beside a swatch are build-checked too (`scripts/validate-foundation-mirrors.mjs`), so a caption must state what the token actually resolves to. Other categories go on their matching foundations page (CLAUDE.md's checklist maps category → page).
    - The matching Storybook doc: `src/stories/Tokens.stories.tsx` for colour, status, chart, elevation, spacing and motion; `src/stories/Typography.stories.tsx` for a type style (its Body and All Styles stories list every tier).
    - A sentence in `design.md` recording the role and how it relates to its neighbours (never a colour value: design.md is theme-agnostic), in the section that owns the token's subject.
 

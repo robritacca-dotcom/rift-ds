@@ -113,7 +113,7 @@ export default function ElevationPage() {
               container colour ramp, which keeps surfaces flat, crisp, and legible against the
               page floor. Only surfaces that genuinely float above the page (anchored overlays,
               modals, and the floating App sidebar) earn a shadow, and the elevation tokens
-              below are the only ones that exist for it. Never write a literal <code>box-shadow</code> value in component CSS. The one exception is the iOS glass on the mobile navigation components, which restates the platform’s own shadow so the mock reads as the real system chrome.
+              below are the only ones that exist for it. Never write a literal <code>box-shadow</code> value in component CSS. There are two exceptions: the iOS glass on the mobile navigation components, which restates the platform’s own shadow so the mock reads as the real system chrome, and the hover lift described at the foot of this page.
             </p>
           </div>
 
@@ -178,7 +178,7 @@ export default function ElevationPage() {
 
           {/* Exception */}
           <section className={styles.section}>
-            <SectionTitle title="The one exception" />
+            <SectionTitle title="The hover lift" />
             <p className={styles.sectionNote}>
               Interactive Card and EntityCard navigation tiles lift on hover. That shadow is a
               deliberate navigational affordance, a signal that the whole tile is clickable, not

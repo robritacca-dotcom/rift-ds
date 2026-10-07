@@ -48,7 +48,7 @@ The ordering trap this step existed to catch, worth keeping for any future new p
 
 ### 5. Close the loop
 
-Grep the repo for "until the first deploy" and "does not exist yet" phrasings and retire each one that stopped being true, then update this skill's own registry entry: once everything above is done, `first-deploy` moves to `unlisted` history or is deleted — a completed one-time setup left looking current is exactly the drift the audits exist to catch.
+Grep the repo for "until the first deploy" and "does not exist yet" phrasings and retire each one that stopped being true, then retire this skill: it is already `unlisted` in the registry, and once everything above is done it is deleted — a completed one-time setup left looking current is exactly the drift the audits exist to catch.
 
 ## Guardrails
 

@@ -195,18 +195,18 @@ export const runtimeMap: ArchMap = {
   id: "runtime",
   title: "The architecture at runtime",
   label:
-    "The visitor's browser fetches pages from Vercel and sends analytics events directly to Google; the chat route calls Anthropic and Redis, the MCP route serves generated data with no upstream calls, and a cron smokes production every four hours.",
+    "The visitor's browser fetches pages from Vercel, and analytics stays off until a measurement ID is set; the chat route calls Anthropic and Redis, the MCP route serves generated data with no upstream calls, and a cron smokes production every four hours.",
   width: 1700,
   height: 900,
   nodes: [
-    { id: "browser", x: 140, y: 200, w: 320, h: 90, title: "Visitor's browser", sub: "gtag + the WebGL background run here", icon: "public", chip: "positive" },
+    { id: "browser", x: 140, y: 200, w: 320, h: 90, title: "Visitor's browser", sub: "the WebGL background runs here", icon: "public", chip: "positive" },
     { id: "ga4", x: 140, y: 376, w: 320, h: 64, title: "Google Analytics 4", sub: "off until a measurement ID is set", kind: "external", icon: "monitoring" },
-    { id: "runtime-fonts", x: 140, y: 490, w: 320, h: 64, title: "Google Fonts", sub: "theme faces, fetched on use", kind: "external", icon: "font_download" },
+    { id: "runtime-fonts", x: 140, y: 490, w: 320, h: 64, title: "Google Fonts", sub: "the playground's typeface picker", kind: "external", icon: "font_download" },
     { id: "agents", x: 140, y: 580, w: 320, h: 76, title: "Agents + MCP clients", sub: "connect with one URL, no key", icon: "smart_toy", chip: "positive" },
     { id: "cron", x: 140, y: 720, w: 320, h: 76, title: "GitHub Actions cron", sub: "the uptime workflow", kind: "external", logo: "/logos/Git.svg" },
 
     { id: "z-vercel", x: 700, y: 60, w: 460, h: 780, kind: "zone", title: "Vercel", sub: "static edge + serverless routes" },
-    { id: "pages", x: 740, y: 150, w: 380, h: 76, title: "Static + ISR pages", sub: "fonts, corpus and gtag baked in at build", ...NEXTJS_LOGO },
+    { id: "pages", x: 740, y: 150, w: 380, h: 76, title: "Static + ISR pages", sub: "fonts and corpus baked in at build", ...NEXTJS_LOGO },
     { id: "api-chat", x: 740, y: 290, w: 380, h: 76, title: "/api/chat", sub: "followups · feedback · guardrails", icon: "forum", chip: "info" },
     { id: "api-mcp", x: 740, y: 430, w: 380, h: 90, title: "/api/mcp", sub: "generated data from memory · no model, no auth", icon: "hub", chip: "info" },
     { id: "api-github", x: 740, y: 590, w: 380, h: 76, title: "/api/github-contributions", sub: "the contribution graph", icon: "grid_view", chip: "info" },
@@ -219,8 +219,8 @@ export const runtimeMap: ArchMap = {
   edges: [
     { id: "browser-pages", from: "browser", to: "pages", label: "HTML + assets" },
     { id: "browser-chat", from: "browser", to: "api-chat", label: "chat", bend: 40 },
-    { id: "browser-ga4", from: "browser", to: "ga4", label: "events go straight to Google", kind: "accent" },
-    { id: "browser-fonts", from: "browser", to: "runtime-fonts", fromSide: "left", toSide: "left", label: "a face downloads when a theme uses it", kind: "external" },
+    { id: "browser-ga4", from: "browser", to: "ga4", label: "no events while it is off", kind: "accent" },
+    { id: "browser-fonts", from: "browser", to: "runtime-fonts", fromSide: "left", toSide: "left", label: "a face downloads when the picker previews it", kind: "external" },
     { id: "agents-mcp", from: "agents", to: "api-mcp", label: "MCP tools" },
     { id: "cron-isr", from: "cron", to: "isr", label: "smokes production on a cron", kind: "external" },
     { id: "chat-anthropic", from: "api-chat", to: "anthropic", label: "model calls" },

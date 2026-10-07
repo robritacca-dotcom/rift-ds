@@ -211,7 +211,7 @@ For every candidate marked **Keep**: change nothing. No commits, no deletions, n
 
 ## Guardrails
 
-- **Never push, ever** — not `main`, not a branch. This skill ends local. Deploying is `ship`, always a separate ask
+- **Never push work, ever** — not `main`, not a branch. The one outward-facing action is step 9's deletion of an already-archived remote branch. This skill ends local. Deploying is `ship`, always a separate ask
 - **Never delete anything that was not archived first.** No `-D`, no remote deletion, no worktree removal without a tag already written
 - Never remove a worktree with uncommitted changes, and never reach for `--force`, `git reset --hard`, or `git checkout -f` inside a worktree this session did not create. Those changes are the only copy, and another session may still be writing them
 - Never land, commit, or delete anything not explicitly approved, and never read "clean up" as blanket permission to delete

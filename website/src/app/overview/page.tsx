@@ -264,8 +264,8 @@ export default function AboutDsPage() {
                   </Link>
                   <Link href="/releases" className={styles.statItem}>
                     <span className={styles.statValue}>{RELEASE_COUNT}</span>
-                    <span className={styles.statTitle}>Journal entries</span>
-                    <span className={styles.statLabel}>The build, tracked in public</span>
+                    <span className={styles.statTitle}>Releases</span>
+                    <span className={styles.statLabel}>One entry per npm version</span>
                   </Link>
                 </div>
               </div>

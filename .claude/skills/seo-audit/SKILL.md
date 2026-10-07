@@ -53,4 +53,4 @@ Where a finding is deliberately not a bug — a page intentionally out of the si
 
 ### 5. Report
 
-Repeat the full report in the final message (no report file — the in-place comments from step 4 are the durable record). Plain English, findings grouped as **fixed on the branch** (with before → after), **proposed** (needs a decision), and **checked clean** (what was verified and passed). End with the branch name if one exists, confirmation the build passed, and the reminder that nothing is pushed or deployed: merging the branch (or saying `ship`) approves it; deleting it rejects it.
+Repeat the full report in the final message (no report file — the in-place comments from step 4 are the durable record). Plain English, findings grouped as **fixed on the branch** (with before → after), **proposed** (needs a decision), and **checked clean** (what was verified and passed). End with the branch name if one exists, a note that the build check is deferred to landing (step 4 does not build in the worktree), and the reminder that nothing is pushed or deployed: merging the branch (or saying `ship`) approves it; deleting it rejects it.

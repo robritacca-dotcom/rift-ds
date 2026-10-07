@@ -7,11 +7,11 @@ invoke: ["fix the audit failure","patch the advisory","/dependency-advisory"]
 
 # dependency-advisory
 
-CI's library job runs `npm audit --audit-level=high`, which judges the dependency tree against the registry's advisory feed rather than the code. A new advisory can therefore turn `main` red with no change in the repo, and the response is the same small ritual every time. This skill is that ritual. **It ends with a verified local fix; making it live is `ship`'s job.**
+CI's library job runs `npm audit --audit-level=high --omit=dev`, which judges the shipped dependency tree against the registry's advisory feed rather than the code (dev-only tooling is outside the gate; the comment beside that step in `.github/workflows/ci.yml` records why). A new advisory can therefore turn `main` red with no change in the repo, and the response is the same small ritual every time. This skill is that ritual. **It ends with a verified local fix; making it live is `ship`'s job.**
 
 ## When invoked
 
-Run when CI's audit step fails, when `npm audit` locally reports a high or critical advisory, or when asked to patch a named vulnerable package.
+Run when CI's audit step fails, when `npm audit` locally reports a high or critical advisory, or when asked to patch a named vulnerable package. An advisory in dev-only tooling no longer fails CI, so a plain `npm audit` is the only place it shows: it is still worth fixing by the same routes when a fix exists, and worth leaving alone, with a note of why, when none does.
 
 ## Scope guardrails (read first)
 
@@ -46,7 +46,7 @@ Routes 1 and 2 run a real install (`npm audit fix`, `npm update`, or `npm instal
 
 ```bash
 npm ls <pkg>                    # every copy in the tree is now the patched version, none flagged invalid
-npm audit --audit-level=high    # exits clean: the exact gate CI runs
+npm audit --audit-level=high --omit=dev    # exits clean: the exact gate CI runs
 ```
 
 `npm ls` listing an old copy means some parent still resolves it; go back to step 2. An override that `npm ls` reports as invalid is not working, whatever `package.json` says.

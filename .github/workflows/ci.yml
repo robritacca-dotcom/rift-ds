@@ -21,7 +21,14 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - run: npm audit --audit-level=high
+      # --omit=dev scopes the gate to what ships: the published package and the
+      # deployed site. Dev-only tooling (lint, build, test) is deliberately out,
+      # because an advisory there with no upstream fix would otherwise hold main
+      # red indefinitely and skip every later step in this job (2026-10-07: braces
+      # under eslint-config-next, GHSA-vfj7-8cjw-p6xm, no patched version). A
+      # plain `npm audit` still reports dev advisories; the dependency-advisory
+      # skill owns the response to both kinds.
+      - run: npm audit --audit-level=high --omit=dev
       - run: npm run lint
       - run: npm run build
       - run: npm run build:lib

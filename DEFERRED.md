@@ -74,20 +74,18 @@ These are safe on the remote. Decide for each: land, keep, or delete.
 
 | Branch | Date | What |
 |---|---|---|
-| `wip/guest-app` | 2026-10-03 | One commit on current `main`: guest app concept in labs, the assistant as shell with the marketing dashboard inside (8 files, +831) |
-| `wip/parade-theme` | 2026-10-03 | One commit on current `main`: Parade theme preset and logo colour tokens (26 files, +587) |
-| `wip/header-wordmark` | 2026-09-26 | Two commits, 60 behind `main`: RIFT wordmark trial in the header (`BrandWordmark`, `SiteLogo`) |
-| `wip/member-graph` | 2026-09-30 | One commit on current `main`: the `/labs/member-graph` concept page with its chromeless and corpus-exclusion registration (9 files). Unverified |
 | `wip/icon-colour-rules` | 2026-09-26 | One commit, based on a `main` nine days old: icon colour carve-outs across 17 component stylesheets and a new `scripts/validate-icon-colour-rules.mjs` (39 files). Unverified; regenerate the generated surfaces after rebasing |
 | `wip/button-equal-height` | 2026-09-30 | One commit, based on an older `main`: every Button variant wears a transparent border so all share one height (7 files). Its `design.md` hunk conflicts with the theme-agnostic rewrite |
 
 `claude/zen-allen-exjgbd` was fully merged and has been deleted from the remote.
 
+Dropped on 2026-10-07, deleted from GitHub with no archive tag: `wip/parade-theme` (`13d154c`), `wip/guest-app` (`db9d85a`), `wip/member-graph` (`878f546`) and `wip/header-wordmark` (`480a142`).
+
 ## 4. The Mac (inventoried and reset 2026-10-05)
 
 The Mac held three pieces of uncommitted work, none of it on GitHub: the member graph page in the main working tree, and two idle agent worktrees. Each was committed as found and pushed as a `wip/` branch, listed in section 3. Nothing was landed and nothing was discarded.
 
-Removed after that, because they carried nothing else: the two worktrees and their merged `claude/*` branches, and two stashes holding older copies of the member graph registration lines. The stashes are tagged on the Mac only, `archive/member-graph-stash-2026-09-30` and `archive/member-graph-stash-2026-10-02`, and can be deleted once `wip/member-graph` is landed or dropped.
+Removed after that, because they carried nothing else: the two worktrees and their merged `claude/*` branches, and two stashes holding older copies of the member graph registration lines. The stashes are tagged on the Mac only, `archive/member-graph-stash-2026-09-30` and `archive/member-graph-stash-2026-10-02`, and can be deleted now: `wip/member-graph` was dropped on 2026-10-07 (`git tag -d <tag>` on the Mac).
 
 The Mac's `main` is clean and level with `origin/main` at `8745bf1`.
 

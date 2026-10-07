@@ -40,7 +40,7 @@ One hand-written entry per public component in a JSON registry, rendered at the 
 - Six fields: `whenToUse` (2 to 4 items), `whenNotToUse` (1 to 3), `dos`, `donts`, `accessibility`, `related` (2 to 4 each). `related` holds slugs; the rest hold sentences ending in a full stop, at most 220 characters, unique within their list.
 - Principle-level: never a prop, token, pixel or hex value, because the prop contract has its own homes. A variant's design name (primary, bordered) is vocabulary, not API, and is fine.
 - Voice: no subject, imperatives for habits. A sample of the register, from the accordion entry: "When the sections are peers a reader switches between rather than reads in turn, use Tabs." and "Don't hide content every reader needs, such as a required step or a warning, inside a collapsed section."
-- Every accessibility guarantee must hold in the source. The scrapped draft claimed the fixes in section 2 as shipped, so redo section 2 first or those lines are false.
+- Every accessibility guarantee must hold in the source. The scrapped draft claimed the fixes in section 2 as shipped, and they never were, so redo section 2 first or those lines are false.
 - It was also served beyond the page: the usage and related lines in the chat corpus, and the whole entry beside the prop API through the shared `get_component` tool (chat and MCP).
 
 ### How it was built
@@ -56,17 +56,64 @@ Every page was on the shell, but the formula rules were far from met: 58 pages s
 
 If rebuilt: start with the shell and prove the formula on two or three pages in one family before converting anything else, then go a category at a time. Converting every page to the shell first and leaving the rules as debt is what produced a 473-file tree that never reached a verify.
 
-## 2. Accessibility fixes in the library (Windows, uncommitted)
+## 2. Accessibility fixes in the library (scrapped 2026-10-07, the fixes kept here)
 
-Worktree `claude/elastic-borg-14c992`, zero commits, 35 files. Last touched 2026-10-02.
+The code is gone. It was uncommitted work in an agent worktree on Windows (last touched 2026-10-02, never verified), archived to a local tag on 2026-10-05, and the tag was deleted on 2026-10-07. Nothing of it is on GitHub or on the Mac. What follows is each fix, written so it can be redone from scratch. None of these is in `main`: every problem below still exists in the shipped library.
 
-- `Badge`: dropped `role="status"` (a badge is a static label, not a live region).
-- `Tabs`: optional `content` per tab renders a `tabpanel` wired with `aria-controls` and `aria-labelledby`; new `id` base prop.
-- `AiButton`: summary panel opens on keyboard focus, not hover alone.
-- `Popover`, `Combobox`, `RadioButton`, `ToggleGroup`, `EmptyState`: a11y changes with new stories and play assertions.
-- `design.md` spec updates and the regenerated surfaces that follow (`website/public/r/`, the per-component `.md` pages, the component API data).
+Eight components, 20 source files (about 500 lines, half of it stories), plus `design.md` spec edits and the generated surfaces that follow a component change.
 
-The guidance draft in section 1 described these fixes as shipped (Badge, AiButton, the chart keyboard model), so if the formula is rebuilt, redo this one **before** writing guidance, or the accessibility claims will be false.
+### Badge: stop announcing itself
+
+- **Problem:** the badge renders `role="status"`, a live region, so every badge on a page announces itself to a screen reader whenever it changes.
+- **Fix:** drop the role. A badge is a static label. Where a change must be heard, the consumer wraps the badge in a live region.
+
+### Tabs: optional panels, wired to their tabs
+
+- **Problem:** Tabs renders the tab list only, so nothing ties a tab to the panel it controls unless the consumer does it by hand.
+- **Fix:** an optional `content` on each tab. When any tab has content, Tabs renders the active tab's panel after the strip as a `role="tabpanel"` with `aria-labelledby` pointing at its tab, and the active tab carries `aria-controls` (only the active one, because only the active panel exists in the DOM).
+- The panel takes `tabIndex={0}` so Tab moves from the strip into it even when the content holds no control, and it gets the standard focus ring.
+- A new `id` prop sets the base for generated ids (`<id>-tab-<value>`, `<id>-panel-<value>`, whitespace in a value becoming a hyphen), so a panel rendered outside the component can still be labelled by its tab. Defaults to `useId()`.
+- Strip-only use keeps its exact markup: the tablist stays the root node.
+
+### AiButton: the summary panel opens for keyboard users
+
+- **Problem:** the summary panel opens on hover only, so a keyboard user never sees it.
+- **Fix:** keyboard focus on the button opens the panel at once, and focus leaving the host closes it. Only `:focus-visible` opens it, because a pointer click also focuses the button and would flash the panel ahead of the hover delay.
+- Mouse-leave no longer closes the panel while keyboard focus is still inside.
+
+### Popover: the hover trigger gets a keyboard path
+
+- **Problem:** with `trigger="hover"` and plain (non-interactive) content as the trigger, nothing can take focus, so the popover is unreachable by keyboard.
+- **Fix:** focus reaching the trigger opens the panel, and focus leaving the whole popover closes it. Mouse-leave does not close it while focus is inside.
+- When the trigger content cannot carry the popover semantics, the hover trigger now gets the same synthesised `<button>` the click trigger already had, styled to draw nothing but a focus ring (`ds-popover__trigger-button`).
+
+### Combobox: loading and no-results are spoken
+
+- **Problem:** the "Loading" and empty-message rows sit inside the listbox, which a screen reader does not read while focus stays in the text field.
+- **Fix:** a visually hidden `role="status"` region beside the list that says the same thing. It stays mounted and only its text changes, because a region must exist before its content changes for the change to be announced.
+
+### RadioGroup: one tab stop, arrow keys move selection
+
+- **Problem:** every radio in a group is its own tab stop, and the arrow keys do nothing. The WAI-ARIA radio group pattern expects the opposite.
+- **Fix:** roving tabindex. The group is one tab stop (the checked option, else the first enabled one). Arrow keys move focus and selection together, wrapping at the ends and skipping disabled options.
+- `RadioButton` now honours a passed `tabIndex` (it used to hardcode 0), which is what lets the group rove.
+
+### ToggleGroup: one tab stop, arrow keys move focus
+
+- **Problem:** every toggle in the group is its own tab stop.
+- **Fix:** roving tabindex, the toolbar pattern. The group is one tab stop, landing on the item last focused, else the first active item, else the first item. Arrow keys, Home and End move focus without toggling; Enter and Space toggle, as native buttons do.
+
+### EmptyState: the headline is a real heading
+
+- **Problem:** the title renders as a `<p>`, so it is missing from the page outline.
+- **Fix:** render it as a heading, with a new `headingLevel` prop (2 to 6, default 3, for an empty state inside a section headed at level 2).
+
+### If redone
+
+- Each fix came with stories and `play` assertions (focus order, arrow-key behaviour, the roles and ids). Rewrite those with the fix, since they are what keeps it fixed.
+- Update each component's spec in `design.md`, then let the build regenerate the per-component markdown, the component API data and the shadcn registry.
+- Tabs and EmptyState gain props, and RadioGroup and ToggleGroup change keyboard behaviour, so this is a minor release with a release-log entry, not a patch.
+- The component page formula in section 1 drafted its accessibility guidance as though these had shipped. If that is rebuilt, do this first.
 
 ## 3. Branches on GitHub (unmerged)
 
@@ -95,10 +142,6 @@ The Mac's `main` is clean and level with `origin/main` at `8745bf1`.
 - Start every session on either machine with `git fetch --all --prune` and `git status`.
 - Finish or park (`park`) before switching computers.
 
-## Recovering the archived Windows work
+## The archived Windows work
 
-One archive tag is left, **on the Windows machine only** (it is not pushed): `archive/a11y-fixes-2026-10-05`, holding section 2 as it was committed before the reset.
-
-Bring it back with `git switch -c <branch> <tag>`, or lift single files with `git checkout <tag> -- <path>`. To reach it from the Mac, push it first: `git push origin <tag>`. Delete it with `git tag -d <tag>` once its work is redone or dropped.
-
-The two component page formula tags (the work and its duplicate from an agent worktree) were deleted on 2026-10-07 when section 1 was scrapped.
+Nothing is archived any more. Sections 1 and 2 were each committed and tagged on the Windows machine before the 2026-10-05 reset, and all three tags (the formula, its duplicate from an agent worktree, and the accessibility fixes) were deleted on 2026-10-07 when the work was scrapped. The write-ups in sections 1 and 2 are all that remains.

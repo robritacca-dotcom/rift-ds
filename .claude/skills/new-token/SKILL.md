@@ -26,7 +26,7 @@ CLAUDE.md's **How to Add a New Token** section is the authoritative checklist �
 
 4. **Give it its documentation homes** (the build enforces the first, a drift audit catches the rest):
    - Colour tokens need a swatch on `/foundations/colour-mode` — build-enforced in both directions by `scripts/validate-website-surfaces.mjs`. The values those pages print beside a swatch are build-checked too (`scripts/validate-foundation-mirrors.mjs`), so a caption must state what the token actually resolves to. Other categories go on their matching foundations page (CLAUDE.md's checklist maps category → page).
-   - The matching Storybook doc: `src/stories/Tokens.stories.tsx` for colour, status, chart, elevation, spacing and motion; `src/stories/Typography.stories.tsx` for a type style (its Body and All Styles stories list every tier).
+   - The matching Storybook doc: `src/stories/Tokens.stories.tsx` for colour, status, chart, elevation, spacing and motion; `src/stories/Typography.stories.tsx` for a type style (add it to the matching tier story, `DisplayStyles`, `HeadingStyles` or `BodyTextStyles`, and to `AllStyles`).
    - A sentence in `design.md` recording the role and how it relates to its neighbours (never a colour value: design.md is theme-agnostic), in the section that owns the token's subject.
 
 5. **A TypeScript-side token** (a shared constant, like the JS timing constants in `src/tokens/motion.ts`) has packaging steps CSS tokens do not:

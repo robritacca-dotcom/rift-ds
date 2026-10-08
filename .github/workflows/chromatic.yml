@@ -14,9 +14,9 @@ name: Chromatic
 # the free tier's 5,000/month, so runs are deliberate, not per-push.
 # Revisit the trigger (and TurboSnap) once the real monthly spend is known.
 #
-# NOT part of `npm run verify` — the one deliberate exception to the "CI
-# check ⇒ verify" rule, because every run bills cloud snapshots. See the
-# CI & Local Verify section of CLAUDE.md.
+# NOT part of `npm run verify` — one of the deliberate exceptions to the
+# "CI check ⇒ verify" rule, because every run bills cloud snapshots. The
+# CI & Local Verify section of CLAUDE.md owns the list.
 #
 # fetch-depth: 0 is required — Chromatic walks git history to find the
 # ancestor build whose baseline it should compare against.

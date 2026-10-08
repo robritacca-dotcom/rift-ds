@@ -214,7 +214,7 @@ export const runtimeMap: ArchMap = {
 
     { id: "anthropic", x: 1320, y: 250, w: 320, h: 76, title: "Anthropic API", sub: "Claude, with the corpus as context", kind: "external", logo: "/logos/Claude.svg" },
     { id: "redis", x: 1320, y: 400, w: 320, h: 76, title: "Redis", sub: "chat log (30d) · spend + rate counters · feedback", kind: "external", icon: "memory" },
-    { id: "github-api", x: 1320, y: 590, w: 320, h: 64, title: "GitHub API", sub: "public commit data", kind: "external", logo: "/logos/Git.svg" },
+    { id: "github-api", x: 1320, y: 590, w: 320, h: 64, title: "Contributions API", sub: "public contribution counts · third party", kind: "external", logo: "/logos/Git.svg" },
   ],
   edges: [
     { id: "browser-pages", from: "browser", to: "pages", label: "HTML + assets" },

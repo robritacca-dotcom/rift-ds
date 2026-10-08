@@ -34,7 +34,7 @@
     },
     "/docs": {
       "title": "Docs",
-      "text": "The hub for using the system: getting started, the skills, and the build journal.",
+      "text": "The hub for using the system: getting started, the skills, and the release log.",
       "chips": [
         {
           "id": "start",
@@ -67,7 +67,7 @@
     },
     "/loops": {
       "title": "Agent loops",
-      "text": "The recurring automations on this project: copy experiments, journal updates, chat quality, link checks, and visibility tracking.",
+      "text": "The recurring automations on this project: chat quality and link checks.",
       "chips": [
         {
           "id": "loops",
@@ -149,7 +149,7 @@
     },
     "/foundations/colour-primitives": {
       "title": "Colour primitives",
-      "text": "The raw colour ramps everything derives from: 10-stop scales the semantic tokens reference.",
+      "text": "The raw colour ramps everything derives from: stepped scales the semantic tokens reference.",
       "chips": [
         {
           "id": "primitives",
@@ -182,7 +182,7 @@
     },
     "/foundations/logos": {
       "title": "Logos",
-      "text": "The brand mark and wordmark, their construction, and the rules for using them.",
+      "text": "The brand mark and the tool logos the docs use, as SVG.",
       "chips": [
         {
           "id": "logo",

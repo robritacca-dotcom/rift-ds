@@ -10,7 +10,7 @@ A React component library + design system + documentation website. It has three 
 
 **Every chat suggestion is one chip, and a chip never wraps.** Conversation starters, follow-up questions, and the FAB summary panel's chips share the same row component, so they share one length budget: `SUGGESTION_MAX_CHARS` in `website/src/lib/chat-suggestions.ts`, set to what fits the message column on a small phone, where the panel fills the viewport. It is enforced at every point a suggestion enters the UI — the generator is told the number, the route drops a long one rather than clipping it, and `scripts/validate-chat-starters.mjs` and `scripts/validate-page-summaries.mjs` between them fail the build on written copy that exceeds it. A suggestion that will not fit is dropped, never truncated: half a question is not a question.
 
-The design spec lives in [`design.md`](design.md) — read it before touching tokens, colors, or typography. The content style guide lives in [`content-design.md`](content-design.md) — read it before writing or editing any shipped prose (page copy, journal entries, descriptions, README, release notes, microcopy).
+The design spec lives in [`design.md`](design.md) — read it before touching tokens, colors, or typography. The content style guide lives in [`content-design.md`](content-design.md) — read it before writing or editing any shipped prose (page copy, descriptions, README, release notes, microcopy).
 
 ---
 

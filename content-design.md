@@ -4,12 +4,12 @@
 
 Every word this project ships should be **consistent, human, clear, and neutral**.
 
-- **Consistent**: the same voice, spelling, and register rules on every surface, so a reader moving from the homepage to a component page to the journal never feels the author change.
+- **Consistent**: the same voice, spelling, and register rules on every surface, so a reader moving from the homepage to a component page to the release log never feels the author change.
 - **Human**: specific, committed, rhythmically uneven prose. Text that could only have been written by someone who knows this project.
 - **Clear**: plain verbs, one idea per sentence. A reader who has never seen the repo can follow it.
 - **Neutral**: matter-of-fact, never promotional. State what a thing is and does, and let the specifics carry the weight. Nothing here needs selling.
 
-This document governs all shipped prose: website page copy and metadata, journal entries, component descriptions, README and Storybook copy, release notes, commit bodies, and UI microcopy. It sits beside its siblings with a clean split: `design.md` owns how things look, `CLAUDE.md` owns where facts live (one authoritative home per fact, point instead of enumerating, no counts outside registries), and this file owns how sentences read.
+This document governs all shipped prose: website page copy and metadata, component descriptions, README and Storybook copy, release notes, commit bodies, and UI microcopy. It sits beside its siblings with a clean split: `design.md` owns how things look, `CLAUDE.md` owns where facts live (one authoritative home per fact, point instead of enumerating, no counts outside registries), and this file owns how sentences read.
 
 Deliberately out of scope: the agent-facing markdown references. `CLAUDE.md`, `design.md`, `SECURITY.md`, skill instruction bodies, and this file itself are written for AI agents to parse, and their format optimises for that job: dense sections, bold markers, tables, and em dashes as structural separators. Those are formatting tools there, not voice, and this guide does not restyle them. The published ones appear on /blueprints as artefacts, shown deliberately as they are. What IS in scope on those pages is the shell copy around them (titles, taglines, intros, metadata), which is shipped prose like any other.
 
@@ -21,7 +21,7 @@ A word on the origin of this document. The prose in this project is written by A
 
 ## Voice
 
-**The system is the subject.** System documentation, the journal, and component pages use no first person. Write "The registry drives the sidebar", never "we built the registry to drive the sidebar". The exception is genuine instructions, where "you" is correct because the reader is doing something ("Install the package, then import the stylesheet once").
+**The system is the subject.** System documentation, the release log, and component pages use no first person. Write "The registry drives the sidebar", never "we built the registry to drive the sidebar". The exception is genuine instructions, where "you" is correct because the reader is doing something ("Install the package, then import the stylesheet once").
 
 **British spelling in prose, American in code.** Colour, behaviour, organising, centred. Code identifiers and tokens keep their American spellings (`--color-action-primary-bg`, the `color` CSS property), and prose never respells them. When a sentence names a token, the token wins.
 

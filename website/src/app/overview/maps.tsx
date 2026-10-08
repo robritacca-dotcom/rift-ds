@@ -195,12 +195,12 @@ export const runtimeMap: ArchMap = {
   id: "runtime",
   title: "The architecture at runtime",
   label:
-    "The visitor's browser fetches pages from Vercel, and analytics stays off until a measurement ID is set; the chat route calls Anthropic and Redis, the MCP route serves generated data with no upstream calls, and a cron smokes production every four hours.",
+    "The visitor's browser fetches pages from Vercel and reports page views to Google Analytics; the chat route calls Anthropic and Redis, the MCP route serves generated data with no upstream calls, and a cron smokes production every four hours.",
   width: 1700,
   height: 900,
   nodes: [
     { id: "browser", x: 140, y: 200, w: 320, h: 90, title: "Visitor's browser", sub: "the WebGL background runs here", icon: "public", chip: "positive" },
-    { id: "ga4", x: 140, y: 376, w: 320, h: 64, title: "Google Analytics 4", sub: "off until a measurement ID is set", kind: "external", icon: "monitoring" },
+    { id: "ga4", x: 140, y: 376, w: 320, h: 64, title: "Google Analytics 4", sub: "page views and engagement events", kind: "external", icon: "monitoring" },
     { id: "runtime-fonts", x: 140, y: 490, w: 320, h: 64, title: "Google Fonts", sub: "the playground's typeface picker", kind: "external", icon: "font_download" },
     { id: "agents", x: 140, y: 580, w: 320, h: 76, title: "Agents + MCP clients", sub: "connect with one URL, no key", icon: "smart_toy", chip: "positive" },
     { id: "cron", x: 140, y: 720, w: 320, h: 76, title: "GitHub Actions cron", sub: "the uptime workflow", kind: "external", logo: "/logos/Git.svg" },
@@ -219,7 +219,7 @@ export const runtimeMap: ArchMap = {
   edges: [
     { id: "browser-pages", from: "browser", to: "pages", label: "HTML + assets" },
     { id: "browser-chat", from: "browser", to: "api-chat", label: "chat", bend: 40 },
-    { id: "browser-ga4", from: "browser", to: "ga4", label: "no events while it is off", kind: "accent" },
+    { id: "browser-ga4", from: "browser", to: "ga4", label: "page views + events", kind: "accent" },
     { id: "browser-fonts", from: "browser", to: "runtime-fonts", fromSide: "left", toSide: "left", label: "a face downloads when the picker previews it", kind: "external" },
     { id: "agents-mcp", from: "agents", to: "api-mcp", label: "MCP tools" },
     { id: "cron-isr", from: "cron", to: "isr", label: "smokes production on a cron", kind: "external" },

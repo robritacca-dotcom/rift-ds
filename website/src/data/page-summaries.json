@@ -105,7 +105,7 @@
     },
     "/privacy": {
       "title": "Privacy",
-      "text": "What the site collects and what it does not: analytics off today, and the chat's retention rules for when it is live.",
+      "text": "What the site collects and what it does not: visit counts through Google Analytics, and the chat's retention rules.",
       "chips": [
         {
           "id": "data",

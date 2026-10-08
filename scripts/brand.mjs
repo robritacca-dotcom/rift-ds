@@ -111,11 +111,11 @@ export const FIGMA_FILE_URL = 'https://www.figma.com/design/8NzqDS8iRsBTFPbNGj3W
 export const TITLE_SUFFIX = BRAND_NAME;
 
 /**
- * GA4 measurement id. Empty until the new property exists — an empty id
- * short-circuits the analytics snippet entirely, so the site ships with
- * analytics off rather than reporting into the old property.
+ * GA4 measurement id for the rift-ds.com property (created 2026-10-08).
+ * Public by design: it is visible in every page's source. Emptying it
+ * short-circuits the analytics snippet entirely, which is the off switch.
  */
-export const GA_ID = '';
+export const GA_ID = 'G-Y279CKE2RL';
 
 /** The MCP server's advertised name (client configs, serverInfo). */
 export const MCP_SERVER_NAME = 'rift-ds';

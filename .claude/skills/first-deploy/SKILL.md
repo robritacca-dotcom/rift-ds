@@ -2,7 +2,7 @@
 name: first-deploy
 description: The one-time go-live checklist — everything between this repo building green and the site, package, and monitoring actually existing in public. Use when asked to go live, deploy for the first time, or set up the public phase.
 icon: rocket_launch
-displayDescription: "The one-time path from a green private repo to a live public product: the Vercel projects, the placeholder URL becoming real, the parked uptime cron waking up, the npm Trusted Publishing registration, the first publish, and the wiring the chat and analytics wait on. Ordered so nothing ships pointing at a thing that does not exist yet. Nearly all of it is done: what remains is analytics and Chromatic."
+displayDescription: "The one-time path from a green private repo to a live public product: the Vercel projects, the placeholder URL becoming real, the parked uptime cron waking up, the npm Trusted Publishing registration, the first publish, and the wiring the chat and analytics wait on. Ordered so nothing ships pointing at a thing that does not exist yet. Nearly all of it is done: what remains is Chromatic."
 invoke: ["go live","first deploy","set up the public phase","take the site public"]
 ---
 
@@ -12,7 +12,7 @@ The one-time sequence from a repo that builds green to a site, package, and moni
 
 ## When invoked
 
-Use this skill when asked to go live, do the first deploy, or start the public phase. Most of it is history: the site, the package, the chat and the public repo all exist. What remains is analytics and Chromatic, both in step 4.
+Use this skill when asked to go live, do the first deploy, or start the public phase. Most of it is history: the site, the package, the chat and the public repo all exist. What remains is Chromatic, in step 4.
 
 ## The governing idea
 
@@ -41,7 +41,7 @@ The ordering trap this step existed to catch, worth keeping for any future new p
 ### 4. The optional wiring, each its own decision (owner)
 
 - **Chat** — DONE. An Upstash Redis is connected and the route's env vars are set, so the widget answers and its guardrails are armed.
-- **Analytics**: a GA4 property; setting `GA_ID` in brand.mjs turns the snippet on, and the privacy page's analytics section must be updated in the same change — it currently states analytics is off.
+- **Analytics** — DONE. The GA4 property exists and `GA_ID` in brand.mjs holds its measurement ID, so the snippet is on and the privacy page's analytics section discloses it.
 - **Chromatic**: a project and its token secret; until then the dispatch-only workflow stays unused.
 - **Repo visibility** — DONE. The repo is public, so SECURITY.md's advisory link resolves.
 - **README banner URL** — DONE, but late: 1.0.0 published with the relative path still in place, so that version's package page carries a broken banner. The banner is now a generated region in `scripts/generate-readme-content.mjs`, built from the repo URL in brand.mjs, so it cannot regress. Left here as the record of why the region exists.

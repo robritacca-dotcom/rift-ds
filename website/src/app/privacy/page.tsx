@@ -15,11 +15,13 @@ export default function PrivacyPage() {
         <div className={`${styles.section} animate-in animate-delay-1`}>
           <h2 className={styles.sectionTitle}>Analytics</h2>
           <p className={styles.body}>
-            Analytics is off right now: no measurement runs and no analytics
-            cookie is set. If Google Analytics is enabled later, it will count
-            visits and pages read under a random identifier, not your name,
-            and this page will say so. To opt out then, block cookies in your
-            browser or install Google&apos;s opt-out add-on.
+            This site uses Google Analytics. It counts visits, pages read,
+            and a few interactions such as scrolling, outbound link clicks
+            and file downloads, under a random identifier, not your name. It
+            sets cookies to tell one visit from the next. To opt out, install
+            Google&apos;s opt-out add-on. Blocking cookies in your browser
+            stops your visits being linked together, though each page view
+            is still counted.
           </p>
         </div>
 

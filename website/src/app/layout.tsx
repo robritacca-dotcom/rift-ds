@@ -188,8 +188,8 @@ export default async function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(buildWebsiteJsonLd()) }}
         />
-        {/* Analytics is off until GA_ID has a value (the brand module ships
-            it empty until the product's own GA4 property exists). */}
+        {/* Analytics runs only while GA_ID has a value; emptying it in the
+            brand module is the off switch. */}
         {GA_ID && (
           <>
             <Script

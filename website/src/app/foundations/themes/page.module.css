@@ -81,10 +81,12 @@
   gap: var(--gap-500);
 }
 
-/* The card: a navigation-tile surface wearing the active theme's own
-   corner language through the radius tokens, so the gallery restyles
-   with every Apply. */
+/* The card: a navigation-tile surface that is also a theme scope (the
+   data-theme-scope attribute, see lib/theme/scoped-theme.ts), so its
+   tokens are its own theme's. The font is restated because an inherited
+   font-family arrives already resolved against the page's theme. */
 .card {
+  font-family: var(--font-family-body);
   display: flex;
   flex-direction: column;
   gap: var(--gap-300);
@@ -92,6 +94,37 @@
   background: var(--color-bg-container-primary);
   border: var(--border-025) solid var(--color-bg-container-border);
   border-radius: var(--radius-600);
+  /* Clips the banner to the card's own corners. */
+  position: relative;
+  overflow: hidden;
+}
+
+/* The shader banner: a full-bleed strip across the top of the card, behind
+   the swatch row. It fades out downward so the field melts into the card
+   surface instead of ending on an edge. */
+.banner {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 132px;
+  pointer-events: none;
+  mask-image: linear-gradient(to bottom, #000 35%, transparent);
+}
+
+/* Resting state under the canvas: the same accents as a still gradient,
+   shown while the field is off screen or the shader cannot run. */
+.bannerFallback {
+  position: absolute;
+  inset: 0;
+  opacity: 0.35;
+  background:
+    radial-gradient(60% 120% at 15% 0%, var(--color-core-accent-violet), transparent 70%),
+    radial-gradient(60% 120% at 85% 0%, var(--color-core-accent-coral), transparent 70%),
+    radial-gradient(50% 120% at 50% 20%, var(--color-core-accent-mint), transparent 70%);
+}
+
+/* Everything else in the card sits above the banner. */
+.card > :not(.banner) {
+  position: relative;
 }
 
 .cardActive {

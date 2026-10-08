@@ -1,6 +1,6 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
 import MegaNav from "../../../components/MegaNav/MegaNav";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
@@ -8,10 +8,16 @@ import { getSidebarLinks, foundationsSidebarLinks } from "@/config/navigation";
 import { Button } from "rift-ds/components/Button/Button";
 import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
 import {
+  ShaderField,
+  type ShaderParams,
+} from "rift-ds/components/ShaderField/ShaderField";
+import { shaderBackground } from "@/data/shader-background";
+import {
   THEME_PRESETS,
   themeSelectorTiles,
 } from "@/lib/theme/presets";
 import { SHIPPED_ACCENTS, motionSpeedPercent } from "@/lib/theme/theme-overrides";
+import { installScopedThemes, THEME_SCOPE_ATTRIBUTE } from "@/lib/theme/scoped-theme";
 import { useSiteTheme } from "@/lib/theme/use-theme-overrides";
 import { applyBrand, readBrand, SERVED_THEME_ID, subscribeBrand } from "@/lib/theme/brand";
 import styles from "./page.module.css";
@@ -26,17 +32,72 @@ import 'rift-ds/tokens/presets/presets.css';
 
 <html data-brand="terminal">`;
 
+/* The site field's look, refitted for a card-sized strip: the whole
+   composition fitted to the banner (crop 0, the small-tile setting) and
+   lifted in intensity, since a strip this short has to read at a glance. */
+const BANNER_PARAMS: Partial<ShaderParams> = {
+  ...shaderBackground.params,
+  intensity: 0.85,
+  crop: 0,
+};
+
+/**
+ * A card's shader banner: the site's ambient field in that card's own theme.
+ * The card is a theme scope (see scoped-theme.ts), and ShaderField reads its
+ * colours from the canvas's computed style, so every banner paints its own
+ * theme's accents and surfaces whichever theme the page is wearing.
+ *
+ * The field mounts only while the card is on screen. Browsers cap live WebGL
+ * contexts, the site background already holds one, and ShaderField releases
+ * its context on unmount, so a gallery of any length stays under the cap.
+ * A gradient of the same accents sits underneath as the resting state.
+ */
+function ThemeBanner() {
+  const frameRef = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const frame = frameRef.current;
+    if (!frame) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setVisible(entry.isIntersecting),
+      { rootMargin: "120px" }
+    );
+    observer.observe(frame);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div
+      ref={frameRef}
+      className={styles.banner}
+      aria-hidden="true"
+    >
+      <div className={styles.bannerFallback} />
+      {visible && (
+        <ShaderField params={BANNER_PARAMS} blobs={shaderBackground.blobs} />
+      )}
+    </div>
+  );
+}
+
 /**
  * The theme gallery. Every card is drawn from the same tile builder the
  * header switcher and the playground picker read, and Apply goes through
  * the same shared brand helper — so this page, the switchers, and the
- * generated stylesheets can never disagree. The page itself is the
- * preview: applying a look rethemes everything you are looking at.
+ * generated stylesheets can never disagree. Each card wears its own
+ * theme, held there by a theme scope, so the gallery stays a stable
+ * side-by-side while Apply rethemes the page around it.
  */
 export default function ThemesPage() {
   const theme = useSiteTheme();
   const active = useSyncExternalStore(subscribeBrand, readBrand, getServerSnapshot);
   const tiles = themeSelectorTiles(theme === "dark" ? "dark" : "light");
+
+  /* Every card is a theme scope, so each one keeps its own look while the
+     page around it rethemes. Before paint, so the cards never show the
+     applied theme first. */
+  useLayoutEffect(() => installScopedThemes(), []);
 
   return (
     <>
@@ -85,7 +146,9 @@ export default function ThemesPage() {
                 <article
                   key={tile.value}
                   className={`${styles.card} ${isActive ? styles.cardActive : ""}`}
+                  {...{ [THEME_SCOPE_ATTRIBUTE]: tile.value }}
                 >
+                  <ThemeBanner />
                   <div className={styles.cardSwatches}>
                     <span
                       className={styles.brandSwatch}

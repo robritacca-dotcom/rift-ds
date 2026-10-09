@@ -194,7 +194,7 @@
    RESPONSIVE COLLAPSE
    The display tier steps down once, at 768px — the token layer's only
    breakpoint. Headings and body never step; weights and letter-spacing
-   never change at any breakpoint (weight contrast is the hierarchy rule).
+   never change at any breakpoint.
    ============================================ */
 
 @media (max-width: 768px) {

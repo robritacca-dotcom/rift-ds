@@ -13,8 +13,8 @@
 }
 
 /* ============================================
-   VALUE — display weight (300), per the
-   weight-contrast rule for display numerals
+   VALUE — the display tier's weight (300 in the
+   base theme), so numerals follow the theme
    ============================================ */
 
 .ds-stat__value {

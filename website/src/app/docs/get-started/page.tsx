@@ -378,8 +378,8 @@ export default function GetStartedPage() {
                   in one face and body copy in another? The scale chains through two
                   family roles, both defaulting to the primary token, so you split
                   them instead. The shipped themes prove the range:{" "}
-                  {THEME_SELECTOR_ORDER.length} looks mixing serif, sans, grotesk
-                  and mono pairings over the same components. Try pairings live in
+                  {THEME_SELECTOR_ORDER.length} looks mixing serif, sans, grotesk,
+                  rounded and mono pairings over the same components. Try pairings live in
                   the playground.
                 </p>
                 <CodeBlock code={FONT_SNIPPET} language="css" showCopy />

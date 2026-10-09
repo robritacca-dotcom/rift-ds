@@ -39,12 +39,12 @@ type StepMeta = {
 const TIERS: ReadonlyArray<{ title: string; note: string; steps: string[] }> = [
   {
     title: "Display",
-    note: "The poster tier. Set light, tracked open, and leaded near solid; these are the only steps that shrink on small screens.",
+    note: "The poster tier. One weight across the tier, set by the theme and light in the base look, leaded near solid; these are the only steps that shrink on small screens.",
     steps: ["mega-1", "mega-2", "display-1", "display-2", "sub-display"],
   },
   {
     title: "Headings",
-    note: "Document structure. Hierarchy is carried by weight contrast against the body, not by the typeface changing.",
+    note: "Document structure. Every heading step shares one weight, set by the theme; the Heading weight lever moves them together.",
     steps: ["heading-1", "heading-2", "heading-3"],
   },
   {
@@ -184,8 +184,8 @@ export default function TypeView({
         <SectionTitle title="Type ramp" />
         <p className={pageStyles.sectionNote}>
           The whole scale, rendered live from its tokens: pick a different
-          body or heading face in the panel and every step below restyles in
-          place. Each row lists its size, weight and line height, read off
+          body or heading face in the panel, or move the weight and tracking
+          sliders, and every step below restyles in place. Each row lists its size, weight and line height, read off
           the rendered sample, plus the family role its font token chains
           to.
         </p>

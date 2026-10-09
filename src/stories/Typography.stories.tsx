@@ -222,7 +222,7 @@ export const DisplayStyles: Story = {
         Large display text for hero sections, marketing pages, and major
         headlines. The display tier sits at weight 300 in the shipped theme and
         chains its family through the heading role — a theme can re-key both,
-        and Forest sets the display weights bold. The display tier steps down
+        and Forest sets the display weights semibold. The display tier steps down
         automatically below 768px — the sizes shown resolve at the current
         viewport.
       </p>
@@ -278,8 +278,9 @@ export const HeadingStyles: Story = {
           lineHeight: '1.5',
         }}
       >
-        Heading styles for section titles and content hierarchy. All styles sit
-        at weight 600 in the primary family.
+        Heading styles for section titles and content hierarchy. All three share
+        the heading tier's weight (600 in the shipped theme) and chain their
+        family through the heading role.
       </p>
 
       <TypographyStyle

@@ -360,7 +360,7 @@ export default function TypographyPage() {
               </a>
             </p>
             <p className={styles.introBody}>
-              Mega and Display styles are for hero moments and landing pages. Headings structure sections. Title is for bold labels. Paragraph Em is the default for buttons and interactive controls. Paragraph is body copy. The SM variants scale each of those down for compact components and secondary text. Overline is the uppercase label face, always paired with an uppercase transform at the use site. Caption is the floor, for footnotes and disclaimers only. The faces are theme decisions: the scale chains through heading and body family roles, and the shipped themes mix serif, sans, grotesk and mono pairings over this same scale.
+              Mega and Display styles are for hero moments and landing pages. Headings structure sections. Title is for bold labels. Paragraph Em is the default for buttons and interactive controls. Paragraph is body copy. The SM variants scale each of those down for compact components and secondary text. Overline is the uppercase label face, always paired with an uppercase transform at the use site. Caption is the floor, for footnotes and disclaimers only. The faces are theme decisions: the scale chains through heading and body family roles, and the shipped themes mix serif, sans, grotesk, rounded and mono pairings over this same scale.
             </p>
             <p className={styles.introBody}>
               Every style chains its family through one of two role tokens: the
@@ -371,8 +371,8 @@ export default function TypographyPage() {
               consumers of the package can point them at different faces to pair
               a heading font with a body font, previewing pairings in the
               playground. The printed specs are the base theme&apos;s values: a
-              preset can re-key the weight tokens too, and Forest sets its
-              display tiers to semibold.
+              preset sets its own tier weights and tracking, and Forest sets
+              its display tier to semibold.
             </p>
           </div>
 

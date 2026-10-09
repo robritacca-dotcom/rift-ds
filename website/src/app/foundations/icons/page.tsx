@@ -370,7 +370,8 @@ export default function IconsPage() {
               even across the size scale. Dark mode already applies a -25
               grade so light-on-dark glyphs do not bloom, and the{" "}
               <code>icon-filled</code> class is shorthand for the fill axis
-              on one icon.
+              on one icon. A shipped theme can set the weight and fill too,
+              so icons match the look&apos;s type.
             </p>
 
             <div className={styles.sizeRow}>

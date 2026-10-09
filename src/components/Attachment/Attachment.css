@@ -1,0 +1,1036 @@
+/* ============================================
+   ATTACHMENT FAMILY
+   AttachmentTile: one file as a square.
+   AttachmentGroup: the files on a sent message.
+   AttachmentViewer: the preview dialog.
+   AttachmentDropZone: the drop target over a chat.
+   One stylesheet, shared by every member.
+   ============================================ */
+
+/* ============================================
+   TYPE MARK — what kind of file this is
+   Shared by the tile and the viewer. Every mark, and every glyph a tile
+   swaps it for (spinner, alert, unavailable), fills one square box of the
+   same edge, so a file changing state never moves or resizes anything.
+   ============================================ */
+
+.ds-attachment-mark {
+  /* Consumer and parent hook: the square's edge */
+  --ds-attachment-mark-edge: var(--ds-attachment-mark-size, var(--icon-size-800));
+
+  flex: none;
+  color: var(--color-text-secondary);
+}
+
+.ds-attachment-mark--pdf {
+  color: var(--color-file-pdf);
+}
+
+.ds-attachment-mark--spreadsheet {
+  color: var(--color-file-spreadsheet);
+}
+
+.ds-attachment-mark--document {
+  color: var(--color-file-document);
+}
+
+.ds-attachment-mark--presentation {
+  color: var(--color-file-presentation);
+}
+
+/* ---------- Icon form: one square ---------- */
+
+.ds-attachment-mark--icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--ds-attachment-mark-edge);
+  height: var(--ds-attachment-mark-edge);
+}
+
+.ds-attachment-mark__glyph {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* The folded corner: a darker flap, as on the icons these formats wear in
+   the wild. The scrim over the silhouette deepens whichever colour is
+   beneath it, so no second colour per format is needed. */
+.ds-attachment-mark__fold {
+  fill: var(--color-scrim);
+  opacity: 0.45;
+}
+
+/* The lettering under the page. */
+/* ds-allow(typography): lettering inside an icon. The size and weight are
+   in the glyph's own 32-unit drawing space and scale with the mark, like a
+   stroke width; they are not a step on the type scale. */
+.ds-attachment-mark__letters {
+  /* A text colour, never the format colour: the letters have to be read,
+     and a presentation's yellow cannot carry text on a light tile */
+  fill: var(--color-text-secondary);
+  font-family: var(--font-family-body);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+/* A neutral file's extension, as a chip centred in the same square. It may
+   run wider than the square (a five-letter extension) but never taller. */
+.ds-attachment-mark__chip,
+.ds-attachment-mark--badge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--padding-050) var(--padding-150);
+  border-radius: var(--radius-100);
+  background-color: var(--color-bg-container-secondary);
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-overline-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ---------- Badge form: the label alone, over a preview's corner ---------- */
+
+.ds-attachment-mark--badge {
+  gap: var(--gap-100);
+  background-color: var(--color-bg-container-primary);
+  /* The label reads in a text colour; the format's own colour rides in
+     the dot beside it */
+  color: var(--color-text-secondary);
+}
+
+.ds-attachment-mark__dot {
+  flex: none;
+  width: var(--gap-200);
+  height: var(--gap-200);
+  border-radius: var(--radius-050);
+}
+
+.ds-attachment-mark--pdf .ds-attachment-mark__dot {
+  background-color: var(--color-file-pdf);
+}
+
+.ds-attachment-mark--spreadsheet .ds-attachment-mark__dot {
+  background-color: var(--color-file-spreadsheet);
+}
+
+.ds-attachment-mark--document .ds-attachment-mark__dot {
+  background-color: var(--color-file-document);
+}
+
+.ds-attachment-mark--presentation .ds-attachment-mark__dot {
+  background-color: var(--color-file-presentation);
+}
+
+/* ============================================
+   TILE
+   ============================================ */
+
+.ds-attachment-tile {
+  /* Consumer and parent hooks. A parent that seats tiles inside its own
+     rounded shell (Composer's tray) repoints the radius so the corners
+     stay concentric; the size is the one number that sets the whole tile.
+     The edge lengths are raw values: a tile is a fixed object like an
+     avatar or an icon button, not a step on the spacing scale. */
+  --ds-attachment-tile-edge: var(--ds-attachment-tile-size, 136px);
+  --ds-attachment-tile-corner: var(--ds-attachment-tile-radius, var(--radius-400));
+  /* Border indirection, so the error state repoints one variable */
+  --ds-attachment-tile-border: var(--color-bg-container-border);
+  /* The remove button's diameter; its offset derives from it */
+  --ds-attachment-tile-remove-size: 24px;
+
+  position: relative;
+  flex: none;
+  box-sizing: border-box;
+  display: inline-flex;
+  width: var(--ds-attachment-tile-edge);
+  height: var(--ds-attachment-tile-edge);
+  border: var(--border-025) solid var(--ds-attachment-tile-border);
+  border-radius: var(--ds-attachment-tile-corner);
+  background-color: var(--color-bg-container-primary);
+  color: var(--color-text-primary);
+  transition: border-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-attachment-tile--compact {
+  --ds-attachment-tile-edge: var(--ds-attachment-tile-size, 96px);
+}
+
+/* ---------- State ---------- */
+
+.ds-attachment-tile--error {
+  --ds-attachment-tile-border: var(--color-status-error-border);
+}
+
+/* ============================================
+   BODY — the whole square; a button when clickable
+   ============================================ */
+
+.ds-attachment-tile__body {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: var(--padding-300);
+  border: none;
+  /* Inside the border, so the inner corner is the outer one less the line */
+  border-radius: calc(var(--ds-attachment-tile-corner) - var(--border-025));
+  background: none;
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  text-align: center;
+  /* Full-bleed content is clipped to the tile's own corner */
+  overflow: hidden;
+}
+
+button.ds-attachment-tile__body {
+  cursor: pointer;
+  transition: background-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+/* Hover: a pressable tile lifts its border and warms its surface, and a
+   picture brightens under a light wash. The same answer on every tile, so
+   the grid reads as one set of controls. */
+button.ds-attachment-tile__body:hover {
+  background-color: var(--color-bg-container-secondary);
+}
+
+.ds-attachment-tile--clickable:hover {
+  --ds-attachment-tile-border: var(--color-text-tertiary);
+}
+
+.ds-attachment-tile--clickable.ds-attachment-tile--error:hover {
+  --ds-attachment-tile-border: var(--color-status-error-border);
+}
+
+.ds-attachment-tile__preview,
+.ds-attachment-group__single-image {
+  transition:
+    opacity var(--motion-duration-base) var(--motion-ease-standard),
+    transform var(--motion-duration-slow) var(--motion-ease-emphasized);
+}
+
+button.ds-attachment-tile__body:hover .ds-attachment-tile__preview,
+button.ds-attachment-group__single:hover .ds-attachment-group__single-image {
+  opacity: 0.88;
+  transform: scale(1.03);
+}
+
+/* Full-bleed tiles give the whole square to their content */
+.ds-attachment-tile--preview .ds-attachment-tile__body,
+.ds-attachment-tile--excerpt .ds-attachment-tile__body {
+  padding: 0;
+}
+
+/* ============================================
+   STACK — type mark, name, secondary line
+   ============================================ */
+
+.ds-attachment-tile__stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-050);
+  width: 100%;
+  min-width: 0;
+}
+
+.ds-attachment-tile__mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* One square seat for every mark: the type mark, the spinner and the
+     state glyphs all fill it exactly */
+  width: var(--ds-attachment-tile-mark, var(--icon-size-800));
+  height: var(--ds-attachment-tile-mark, var(--icon-size-800));
+  margin-bottom: var(--gap-100);
+  /* The chip of a long extension may run wider than its seat */
+  overflow: visible;
+}
+
+.ds-attachment-tile__mark > * {
+  --ds-attachment-mark-size: var(--ds-attachment-tile-mark, var(--icon-size-800));
+}
+
+.ds-attachment-tile--compact {
+  --ds-attachment-tile-mark: var(--icon-size-600);
+}
+
+.ds-attachment-tile--compact .ds-attachment-tile__mark {
+  margin-bottom: var(--gap-050);
+}
+
+/* ---------- State glyphs ---------- */
+
+.ds-attachment-tile__state {
+  --icon-size: var(--ds-attachment-tile-mark, var(--icon-size-800));
+  color: var(--color-icon-primary);
+}
+
+.ds-attachment-tile--error .ds-attachment-tile__state {
+  color: var(--color-status-error-icon);
+}
+
+.ds-attachment-tile__spinner {
+  display: inline-flex;
+  width: var(--ds-attachment-tile-mark, var(--icon-size-800));
+  height: var(--ds-attachment-tile-mark, var(--icon-size-800));
+}
+
+.ds-attachment-tile__spinner svg {
+  width: 100%;
+  height: 100%;
+  animation: ds-attachment-tile-spin var(--motion-duration-loop-spin) var(--motion-ease-linear)
+    infinite;
+}
+
+.ds-attachment-tile__spinner-track {
+  stroke: var(--color-bg-container-tertiary);
+}
+
+.ds-attachment-tile__spinner-arc {
+  stroke: var(--color-text-secondary);
+  /* A quarter of the ring (circumference 56.5 at r=9), the rest gap. The
+     ring is drawn to a state glyph's own circle: same diameter, same
+     stroke, so the spinner and the alert beside it weigh the same. */
+  stroke-dasharray: 14 42.5;
+}
+
+@keyframes ds-attachment-tile-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- Name: middle truncation ----------
+   Two halves on one line. The head gives way and ellipsizes; the tail (the
+   end of the stem plus the extension) never shrinks, so a long name still
+   says what the file is. Pure layout: no measuring, no script. */
+
+.ds-attachment-tile__name {
+  display: flex;
+  justify-content: center;
+  max-width: 100%;
+  min-width: 0;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-primary);
+  /* Spaces at the cut are part of the name */
+  white-space: pre;
+}
+
+.ds-attachment-tile__name-head {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ds-attachment-tile__name-tail {
+  flex: none;
+}
+
+.ds-attachment-tile__meta {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-tertiary);
+}
+
+.ds-attachment-tile--error .ds-attachment-tile__meta {
+  color: var(--color-status-error-icon);
+}
+
+/* ============================================
+   FULL BLEED — a preview or a pasted excerpt
+   ============================================ */
+
+.ds-attachment-tile__preview {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ds-attachment-tile__excerpt {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: var(--padding-200) var(--padding-300);
+  overflow: hidden;
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+  color: var(--color-text-secondary);
+  text-align: left;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  /* The text fades out toward the foot instead of being cut mid-line */
+  /* ds-allow(color): mask luminance keying — the #000 paints alpha coverage
+     for the fade, not a theme colour */
+  mask-image: linear-gradient(to bottom, #000 45%, transparent 92%);
+}
+
+/* The type mark over a full-bleed tile's bottom-left corner. It sits on a
+   plate of the tile surface so it reads over any picture. */
+.ds-attachment-tile__corner {
+  position: absolute;
+  left: var(--padding-150);
+  bottom: var(--padding-150);
+  display: inline-flex;
+}
+
+/* ============================================
+   REMOVE — a small circle straddling the corner
+   ============================================ */
+
+.ds-attachment-tile__remove {
+  position: absolute;
+  /* A third of the button hangs outside the tile, as the corner control of
+     a removable thumbnail does on every platform */
+  top: calc(var(--ds-attachment-tile-remove-size) / -3);
+  right: calc(var(--ds-attachment-tile-remove-size) / -3);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--ds-attachment-tile-remove-size);
+  height: var(--ds-attachment-tile-remove-size);
+  margin: 0;
+  padding: 0;
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-bg-container-primary);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  /* Opacity, never visibility: a hidden button would leave the tab order
+     and a keyboard user could never reveal it (ChatMessage's actions row
+     owns the same rule) */
+  opacity: 0;
+  transition:
+    opacity var(--motion-duration-fast) var(--motion-ease-standard),
+    color var(--motion-duration-base) var(--motion-ease-standard),
+    background-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-attachment-tile__remove .material-symbols-rounded {
+  /* ds-allow(icon-size): a 16px close glyph inside the 24px remove circle,
+     one step under the scale's 20px floor */
+  --icon-size: 16px;
+  color: inherit;
+}
+
+.ds-attachment-tile:hover .ds-attachment-tile__remove,
+.ds-attachment-tile:focus-within .ds-attachment-tile__remove,
+.ds-attachment-tile--error .ds-attachment-tile__remove {
+  opacity: 1;
+}
+
+/* Touch has no hover to reveal it */
+@media (hover: none) {
+  .ds-attachment-tile__remove {
+    opacity: 1;
+  }
+}
+
+.ds-attachment-tile__remove:hover {
+  background-color: var(--color-bg-container-secondary);
+  color: var(--color-text-primary);
+}
+
+.ds-attachment-tile__remove:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   FOCUS
+   ============================================ */
+
+button.ds-attachment-tile__body:focus-visible,
+.ds-attachment-tile__remove:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+/* ============================================
+   VISUALLY HIDDEN
+   ============================================ */
+
+.ds-attachment-tile__sr-only,
+.ds-attachment-group__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ============================================
+   REDUCED MOTION
+   The global guard collapses the spin to a still arc, which still reads as
+   "in progress" beside the words under it.
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-attachment-tile__spinner svg {
+    animation: none;
+  }
+}
+
+/* ============================================
+   GROUP — the files on a sent message
+   ============================================ */
+
+.ds-attachment-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-200);
+  /* The full width of whatever holds it, so the grid can ask how much room
+     it has (the container query below); `align` still places the content */
+  width: 100%;
+  min-width: 0;
+  container-type: inline-size;
+}
+
+.ds-attachment-group--end {
+  align-items: flex-end;
+}
+
+/* ---------- Grid ---------- */
+
+.ds-attachment-group__grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-200);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-width: 100%;
+}
+
+.ds-attachment-group--end .ds-attachment-group__grid {
+  justify-content: flex-end;
+}
+
+.ds-attachment-group__cell {
+  display: flex;
+}
+
+/* Four cells that cannot share a row would wrap three and one, which reads
+   as a mistake. Below the width four tiles need, they sit two by two. The
+   thresholds restate the default tile edges (136px, 96px compact) and the
+   grid gap, because a container query cannot read a custom property; a
+   host that resizes the tiles gets the plain wrap. */
+@container (max-width: 567px) {
+  .ds-attachment-group--default .ds-attachment-group__grid[data-cells='4'] {
+    max-width: calc(2 * var(--ds-attachment-tile-size, 136px) + var(--gap-200));
+  }
+}
+
+@container (max-width: 407px) {
+  .ds-attachment-group--compact .ds-attachment-group__grid[data-cells='4'] {
+    max-width: calc(2 * var(--ds-attachment-tile-size, 96px) + var(--gap-200));
+  }
+}
+
+/* The "+N" cell: the next file, dimmed under a scrim that carries the
+   count. The button is the whole cell; the tile beneath is only a picture. */
+.ds-attachment-group__cell--more {
+  position: relative;
+}
+
+.ds-attachment-group__peek {
+  display: flex;
+  pointer-events: none;
+}
+
+.ds-attachment-group__more {
+  position: absolute;
+  inset: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: var(--ds-attachment-tile-radius, var(--radius-400));
+  background-color: var(--color-scrim);
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  letter-spacing: var(--font-title-body-letter-spacing);
+  font-variant-numeric: tabular-nums;
+  /* ds-allow(color): on-scrim text. The scrim is dark in both themes, so
+     its label lives in scrim-world, not page-world (Lightbox's caption owns
+     the same rule) */
+  color: #ffffff;
+  cursor: pointer;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-attachment-group__more:hover {
+  opacity: 0.88;
+}
+
+/* "Show fewer": a quiet text button under the expanded grid */
+.ds-attachment-group__less {
+  margin: 0;
+  padding: var(--padding-050) var(--padding-200);
+  border: none;
+  border-radius: var(--radius-pill);
+  background: none;
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition:
+    background-color var(--motion-duration-base) var(--motion-ease-standard),
+    color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-attachment-group__less:hover {
+  background-color: var(--color-bg-container-secondary);
+  color: var(--color-text-primary);
+}
+
+/* ---------- Single image: its own shape, not a square ---------- */
+
+.ds-attachment-group__single {
+  position: relative;
+  display: block;
+  max-width: min(100%, var(--ds-attachment-single-max-width, 320px));
+  margin: 0;
+  padding: 0;
+  border: var(--border-025) solid var(--color-bg-container-border);
+  /* The bubble's radius: a lone picture is a message surface in its own right */
+  border-radius: var(--radius-600);
+  background: none;
+  overflow: hidden;
+  /* Collapse the inline gap under the image */
+  line-height: 0;
+}
+
+button.ds-attachment-group__single {
+  cursor: zoom-in;
+  transition: border-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+button.ds-attachment-group__single:hover {
+  border-color: var(--color-text-tertiary);
+}
+
+/* The extension, on a plate of the surface so it reads over any picture */
+.ds-attachment-group__single-mark {
+  position: absolute;
+  left: var(--padding-200);
+  bottom: var(--padding-200);
+  display: inline-flex;
+  line-height: normal;
+}
+
+.ds-attachment-group__single-image {
+  display: block;
+  max-width: 100%;
+  max-height: var(--ds-attachment-single-max-height, 320px);
+  width: auto;
+  height: auto;
+}
+
+.ds-attachment-group__more:focus-visible,
+.ds-attachment-group__less:focus-visible,
+button.ds-attachment-group__single:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+/* ============================================
+   VIEWER — the preview dialog
+   A centred dialog on a wide screen, a full-screen sheet on a narrow one.
+   ============================================ */
+
+.ds-attachment-viewer {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--padding-1000);
+  opacity: 0;
+  visibility: hidden; /* keeps the panel's controls out of the tab order when closed */
+  pointer-events: none;
+  transition:
+    opacity var(--motion-duration-base) var(--motion-ease-standard),
+    visibility var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-attachment-viewer--open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.ds-attachment-viewer__backdrop {
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-scrim);
+}
+
+.ds-attachment-viewer__panel {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  /* The dialog's footprint: wide enough for a page or a landscape picture,
+     never taller than the viewport it sits in. Lengths with no token family. */
+  width: min(100%, 960px);
+  height: min(100%, 720px);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-300);
+  background-color: var(--color-bg-page-primary);
+  box-shadow: var(--shadow-modal);
+  overflow: hidden;
+  outline: none;
+  transform: scale(0.96);
+  transition: transform var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-attachment-viewer--open .ds-attachment-viewer__panel {
+  transform: scale(1);
+}
+
+/* ---------- Header ---------- */
+
+.ds-attachment-viewer__header {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--gap-300);
+  padding: var(--padding-300) var(--padding-400);
+  border-bottom: var(--border-025) solid var(--color-bg-container-border);
+  background-color: var(--color-bg-container-primary);
+}
+
+.ds-attachment-viewer__header-mark {
+  display: inline-flex;
+  flex: none;
+}
+
+.ds-attachment-viewer__heading {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.ds-attachment-viewer__title {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-overline-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.ds-attachment-viewer__subtitle {
+  margin: 0;
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-tertiary);
+}
+
+.ds-attachment-viewer__download {
+  flex: none;
+}
+
+/* ---------- Stage ---------- */
+
+.ds-attachment-viewer__stage {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  /* `safe` keeps the top of tall content reachable: plain centring would
+     push it above the scroll origin */
+  align-items: safe center;
+  justify-content: safe center;
+  padding: var(--padding-400);
+  overflow: auto;
+  /* A dotted working-canvas ground: the file sits on a surface that reads
+     as "a place things are laid out", not a flat fill. Dot size and pitch
+     are drawing geometry, not spacing roles, and match the docs site's
+     dotted stages so every one shares a texture. */
+  background-color: var(--color-bg-page-primary);
+  background-image: radial-gradient(
+    circle,
+    var(--color-bg-container-border) 1.25px,
+    transparent 1.25px
+  );
+  background-size: 26px 26px;
+}
+
+.ds-attachment-viewer__image {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  border-radius: var(--radius-200);
+}
+
+.ds-attachment-viewer__text {
+  align-self: flex-start;
+  width: 100%;
+  margin: 0;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-primary);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* Nothing to draw, or a file that failed: a small centred statement */
+.ds-attachment-viewer__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-100);
+  max-width: 100%;
+  text-align: center;
+}
+
+.ds-attachment-viewer__empty-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* A tile-sized seat for the type mark, so the empty state shows the same
+     object the person pressed */
+  width: 88px;
+  height: 88px;
+  margin-bottom: var(--gap-200);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-400);
+  background-color: var(--color-bg-container-primary);
+}
+
+.ds-attachment-viewer__empty-title {
+  margin: 0;
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  letter-spacing: var(--font-title-body-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.ds-attachment-viewer__empty-detail {
+  margin: 0;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-secondary);
+  overflow-wrap: anywhere;
+}
+
+.ds-attachment-viewer__empty-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--gap-200);
+  margin-top: var(--gap-300);
+}
+
+/* ---------- Footer ---------- */
+
+.ds-attachment-viewer__footer {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-300);
+  padding: var(--padding-200) var(--padding-400);
+  border-top: var(--border-025) solid var(--color-bg-container-border);
+  background-color: var(--color-bg-container-primary);
+}
+
+.ds-attachment-viewer__position {
+  /* Room for the widest count, so stepping never shifts the buttons */
+  min-width: 7ch;
+  text-align: center;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-secondary);
+}
+
+/* ---------- Narrow: a full-screen sheet ----------
+   Below 30rem there is no room for a floating dialog and its margin, so
+   the panel takes the whole viewport. */
+
+@media (max-width: 30rem) {
+  .ds-attachment-viewer {
+    padding: 0;
+  }
+
+  .ds-attachment-viewer__panel {
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 0;
+  }
+}
+
+/* ============================================
+   DROP ZONE — a whole surface as a drop target
+   ============================================ */
+
+.ds-attachment-drop-zone {
+  position: relative;
+}
+
+.ds-attachment-drop-zone__overlay {
+  /* The frost's strength and the glow's spread: effect lengths with no
+     token family, chosen by eye (Lightbox's frost and Composer's glow are
+     the precedents) */
+  --ds-attachment-drop-zone-frost: 10px;
+  --ds-attachment-drop-zone-glow: 14px;
+
+  position: absolute;
+  /* Flush with the surface it covers, corners and all, so the edge reads
+     as the surface's own outline lighting up */
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--padding-400);
+  /* A solid edge in the active-input colour: while files hover, the whole
+     surface is the input that is about to take them, and it wears the same
+     border a focused field does (Composer's own drop state uses it too) */
+  border: var(--border-050) solid var(--color-input-border-selected);
+  border-radius: inherit;
+  /* Frosted, not painted over: the surface blurs and dims behind the
+     message, so the person still sees what they are dropping onto without
+     its text competing with the overlay's */
+  background-color: color-mix(in srgb, var(--color-bg-container-primary) 60%, transparent);
+  backdrop-filter: blur(var(--ds-attachment-drop-zone-frost));
+  /* Never a target itself: the zone hears the drag, and an overlay that
+     caught the pointer would fire a leave on everything beneath it */
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--motion-duration-fast) var(--motion-ease-standard),
+    visibility var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+/* The glow: the edge's own colour, blurred, hugging the border inside and
+   out. A colour effect like the Composer's AI ring, not an elevation
+   shadow, so depth stays token-owned. */
+.ds-attachment-drop-zone__overlay::before {
+  content: '';
+  position: absolute;
+  inset: calc(-1 * var(--border-050));
+  /* Twice the edge's weight, so the blur has enough colour to spread */
+  border: calc(var(--border-050) * 2) solid var(--color-input-border-selected);
+  border-radius: inherit;
+  filter: blur(var(--ds-attachment-drop-zone-glow));
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.ds-attachment-drop-zone--active .ds-attachment-drop-zone__overlay {
+  opacity: 1;
+  visibility: visible;
+}
+
+.ds-attachment-drop-zone__message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-100);
+  text-align: center;
+}
+
+.ds-attachment-drop-zone__icon {
+  display: inline-flex;
+  margin-bottom: var(--gap-100);
+  /* The edge's own colour: the icon and the outline light up together */
+  color: var(--color-input-border-selected);
+}
+
+.ds-attachment-drop-zone__icon .material-symbols-rounded {
+  --icon-size: var(--icon-size-800);
+  color: inherit;
+}
+
+.ds-attachment-drop-zone__label {
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  letter-spacing: var(--font-title-body-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.ds-attachment-drop-zone__hint {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-secondary);
+}

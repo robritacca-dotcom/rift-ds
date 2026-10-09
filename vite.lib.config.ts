@@ -37,6 +37,8 @@ export default defineConfig({
         index: 'src/index.ts',
         charts: 'src/charts.ts',
         'components/registry': 'src/components/registry.ts',
+        'components/Attachment/fileTypes': 'src/components/Attachment/fileTypes.ts',
+        'components/Attachment/useAttachments': 'src/components/Attachment/useAttachments.ts',
         'components/Avatar/demoAvatars': 'src/components/Avatar/demoAvatars.ts',
         'components/ShaderField/useShaderField': 'src/components/ShaderField/useShaderField.ts',
         'components/StreamingText/useStreamReveal': 'src/components/StreamingText/useStreamReveal.ts',

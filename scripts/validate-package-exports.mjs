@@ -206,6 +206,8 @@ for (const [key, target] of Object.entries(expected)) {
 const INTERNAL_MODULES = new Map([
   ['src/components/Chart/palette.ts',
     'series-colour reader shared by the chart set; the --color-chart-series tokens it reads are the public surface'],
+  ['src/components/Attachment/typeMark.ts',
+    'the type mark the attachment tile and viewer both draw; the components are the public surface, and the mark has no meaning outside them'],
   ['src/components/WorldMap/land.ts',
     'baked Natural Earth land path in WorldMap\'s private drawing space; the component is the public surface, and the coordinates mean nothing without its projection'],
 ]);

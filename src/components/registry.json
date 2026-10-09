@@ -162,6 +162,42 @@
       "recharts": true
     },
     {
+      "name": "AttachmentDropZone",
+      "label": "Attachment drop zone",
+      "slug": "attachment-drop-zone",
+      "description": "A wrapper that makes a whole surface a file drop target, with an outlined overlay while files hover over it.",
+      "category": "ai",
+      "client": true,
+      "folder": "Attachment"
+    },
+    {
+      "name": "AttachmentGroup",
+      "label": "Attachment group",
+      "slug": "attachment-group",
+      "description": "The files on a sent message: one picture at its own shape, or a grid of tiles that collapses behind a count.",
+      "category": "ai",
+      "client": true,
+      "folder": "Attachment"
+    },
+    {
+      "name": "AttachmentTile",
+      "label": "Attachment tile",
+      "slug": "attachment-tile",
+      "description": "One file as a square: a picture, a coloured mark for well-known formats, or a neutral badge, with upload states.",
+      "category": "ai",
+      "client": false,
+      "folder": "Attachment"
+    },
+    {
+      "name": "AttachmentViewer",
+      "label": "Attachment viewer",
+      "slug": "attachment-viewer",
+      "description": "A preview dialog for a message's files, with download, stepping, and plain states for files it cannot show.",
+      "category": "ai",
+      "client": true,
+      "folder": "Attachment"
+    },
+    {
       "name": "Avatar",
       "label": "Avatar",
       "slug": "avatar",
@@ -369,7 +405,7 @@
       "name": "Composer",
       "label": "Composer",
       "slug": "composer",
-      "description": "An auto-growing message input with send and stop states, a page-context note, an attachment slot, and Enter-to-send.",
+      "description": "An auto-growing message input with send and stop states, a page-context note, a file tray fed by picker, paste and drop, and Enter-to-send.",
       "category": "ai",
       "client": true
     },
@@ -441,7 +477,7 @@
       "name": "DocumentChip",
       "label": "Document chip",
       "slug": "document-chip",
-      "description": "A compact file reference with a type icon, name, metadata, and optional remove.",
+      "description": "A legacy one-row file reference, superseded by the attachment tile and kept for existing consumers.",
       "category": "ai",
       "client": false
     },

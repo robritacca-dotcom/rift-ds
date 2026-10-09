@@ -51,6 +51,12 @@ type ChatMessageOwnProps = {
    * feedback row — rather than a secondary affordance.
    */
   showActions?: boolean;
+  /**
+   * Files sent with this turn, drawn outside the bubble on the speaker's
+   * side, above the text. Pass an AttachmentGroup. A turn that carries
+   * files and no text draws no bubble at all.
+   */
+  attachments?: React.ReactNode;
   /** Footer slot under the content — a sources row, an edited note. */
   footer?: React.ReactNode;
   /** Additional CSS classes */
@@ -91,6 +97,7 @@ export const ChatMessage = React.forwardRef<HTMLDivElement, ChatMessageProps>(
       pendingLabel = 'Waiting for a reply',
       actions,
       showActions = false,
+      attachments,
       footer,
       className = '',
       children,
@@ -101,6 +108,12 @@ export const ChatMessage = React.forwardRef<HTMLDivElement, ChatMessageProps>(
     const baseClass = 'ds-chat-message';
     const hasBubble = bubble ?? role === 'user';
     const hideAvatar = grouped || !showAvatar;
+    /* Files alone are a whole message. Without this the turn would draw an
+       empty padded bubble under them. */
+    const hasChildren = React.Children.toArray(children).some(
+      (child) => typeof child !== 'string' || child.trim() !== '',
+    );
+    const showContent = pending || hasChildren || !attachments;
 
     const classes = [
       baseClass,
@@ -120,10 +133,7 @@ export const ChatMessage = React.forwardRef<HTMLDivElement, ChatMessageProps>(
       <div {...rest} ref={ref} className={classes}>
         {avatar !== undefined && (
           <span
-            className={[
-              `${baseClass}__gutter`,
-              hideAvatar ? `${baseClass}__gutter--hidden` : '',
-            ]
+            className={[`${baseClass}__gutter`, hideAvatar ? `${baseClass}__gutter--hidden` : '']
               .filter(Boolean)
               .join(' ')}
           >
@@ -135,26 +145,28 @@ export const ChatMessage = React.forwardRef<HTMLDivElement, ChatMessageProps>(
           {!grouped && (author || timestamp) && (
             <div className={`${baseClass}__meta`}>
               {author && <span className={`${baseClass}__author`}>{author}</span>}
-              {timestamp && (
-                <span className={`${baseClass}__timestamp`}>{timestamp}</span>
-              )}
+              {timestamp && <span className={`${baseClass}__timestamp`}>{timestamp}</span>}
             </div>
           )}
 
-          <div className={`${baseClass}__content`}>
-            {pending ? (
-              <span className={`${baseClass}__pending`} role="status">
-                <span className={`${baseClass}__sr-only`}>{pendingLabel}</span>
-                <span className={`${baseClass}__dots`} aria-hidden="true">
-                  <span className={`${baseClass}__dot`} />
-                  <span className={`${baseClass}__dot`} />
-                  <span className={`${baseClass}__dot`} />
+          {attachments && <div className={`${baseClass}__attachments`}>{attachments}</div>}
+
+          {showContent && (
+            <div className={`${baseClass}__content`}>
+              {pending ? (
+                <span className={`${baseClass}__pending`} role="status">
+                  <span className={`${baseClass}__sr-only`}>{pendingLabel}</span>
+                  <span className={`${baseClass}__dots`} aria-hidden="true">
+                    <span className={`${baseClass}__dot`} />
+                    <span className={`${baseClass}__dot`} />
+                    <span className={`${baseClass}__dot`} />
+                  </span>
                 </span>
-              </span>
-            ) : (
-              children
-            )}
-          </div>
+              ) : (
+                children
+              )}
+            </div>
+          )}
 
           {actions && <div className={`${baseClass}__actions`}>{actions}</div>}
           {footer && <div className={`${baseClass}__footer`}>{footer}</div>}

@@ -56,14 +56,16 @@ export interface DocumentChipProps
     Omit<React.ComponentPropsWithoutRef<'div'>, keyof DocumentChipOwnProps> {}
 
 /**
- * DocumentChip is a compact file reference: a two-line tile with a type
- * icon, name, metadata line, upload progress, and an optional remove
- * button. It references documents attached to chat messages or queued
- * above a composer — Chip stays the one-line pill for attributes, and
- * FileInput stays the form control that owns selection.
+ * DocumentChip is the earlier, one-row file reference: a type icon, name,
+ * metadata line, upload progress, and an optional remove button. It keeps
+ * working for existing consumers, and new work uses the attachment family:
+ * AttachmentTile for a file, Composer's `files` for a queue, and
+ * AttachmentGroup for the files on a sent message.
  *
  * The root is always a `<div>`; passing `onClick` turns the body into a
  * `<button>` so click and remove coexist without nesting controls.
+ *
+ * @deprecated Use `AttachmentTile` instead.
  */
 export const DocumentChip = React.forwardRef<HTMLDivElement, DocumentChipProps>(
   (

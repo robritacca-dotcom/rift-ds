@@ -1,6 +1,6 @@
 /* ============================================
    COMPOSER COMPONENT
-   The chat input shell: attachments, auto-growing textarea, send/stop
+   The chat input shell: file tray, auto-growing textarea, send/stop
    ============================================ */
 
 /* The focus treatment animates a registered custom property, exactly as
@@ -319,7 +319,100 @@
 }
 
 /* ============================================
-   ATTACHMENTS ROW
+   FILE TRAY
+   The queued files: one row of square tiles that scrolls sideways rather
+   than growing the shell.
+   ============================================ */
+
+.ds-composer__tray {
+  /* How far the tiles sit in from the shell's edge. The tile corner below
+     is derived from it, so the two can only move together. */
+  --ds-composer-tray-inset: var(--padding-300);
+  /* Concentric with the shell: its radius, less the border, less the inset.
+     Floored so a squared theme never computes a negative corner. */
+  --ds-attachment-tile-radius: max(
+    var(--radius-100),
+    calc(var(--ds-composer-radius) - var(--border-025) - var(--ds-composer-tray-inset))
+  );
+
+  display: flex;
+  /* A scroller may be squeezed by the column it sits in; the tray keeps
+     its tiles' full height */
+  flex: none;
+  gap: var(--gap-200);
+  margin: 0;
+  /* The inset on every side but the foot, where the text zone's own top
+     padding takes over and only a sliver is kept so the scrollbar of an
+     overflowing row does not touch the tiles. The top inset also houses the part of a remove
+     button that hangs above its tile: a scroller clips what leaves it. */
+  padding: var(--ds-composer-tray-inset) var(--ds-composer-tray-inset) var(--padding-100);
+  list-style: none;
+  overflow-x: auto;
+  /* Tiles are objects, not text: the shell's text cursor stops at them */
+  cursor: default;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-bg-container-secondary) transparent;
+}
+
+.ds-composer__tray-item {
+  display: flex;
+  flex: none;
+}
+
+/* ============================================
+   DROP HINT
+   While files hover over the shell it says what letting go will do.
+   ============================================ */
+
+.ds-composer--dragging {
+  border-color: var(--color-input-border-selected);
+}
+
+.ds-composer__drop-hint {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: inherit;
+  background-color: var(--color-bg-container-primary-semi);
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
+  color: var(--color-text-primary);
+  /* Never a target: the shell hears the drag, and a hint that caught the
+     pointer would fire a leave on everything under it */
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-composer--dragging .ds-composer__drop-hint {
+  opacity: 1;
+}
+
+/* The picker itself is never seen: the attach button opens it */
+.ds-composer__file-input {
+  display: none;
+}
+
+.ds-composer__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ============================================
+   ATTACHMENTS ROW (legacy free-form slot)
    ============================================ */
 
 .ds-composer__attachments {

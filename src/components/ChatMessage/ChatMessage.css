@@ -88,6 +88,30 @@
 }
 
 /* ============================================
+   ATTACHMENTS
+   Files sent with the turn: outside the bubble, above the text, on the
+   speaker's side (the body's own alignment places them).
+   ============================================ */
+
+.ds-chat-message__attachments {
+  display: flex;
+  /* The full row, not shrink-to-fit: the group inside sizes itself against
+     this width, and a row that took its width from the group would give it
+     nothing to measure */
+  width: 100%;
+  min-width: 0;
+}
+
+.ds-chat-message--user .ds-chat-message__attachments {
+  justify-content: flex-end;
+}
+
+/* A compact thread seats smaller tiles */
+.ds-chat-message--compact .ds-chat-message__attachments {
+  --ds-attachment-tile-size: 96px;
+}
+
+/* ============================================
    CONTENT
    ============================================ */
 

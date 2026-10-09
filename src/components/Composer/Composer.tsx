@@ -1,6 +1,9 @@
 'use client';
 
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { AttachmentTile } from '../Attachment/AttachmentTile';
+import { formatBytes } from '../Attachment/fileTypes';
+import type { AttachmentItem } from '../Attachment/fileTypes';
 import { CircularButton } from '../CircularButton/CircularButton';
 import '../../fonts/material-symbols.css';
 import './Composer.css';
@@ -19,10 +22,12 @@ type ComposerOwnProps = {
   onValueChange?: (value: string) => void;
   /**
    * Fires with the current value on Enter (without Shift) and on the send
-   * button — never while `streaming`, and never when the trimmed value is
-   * empty. Composer does not clear the value: the consumer owns it and clears
-   * it after a successful submit. Shadows the native `onSubmit` attribute,
-   * which never fires on a textarea anyway.
+   * button — never while `streaming`, never while a file in `files` is
+   * still uploading, and never when there is nothing to send. Text is
+   * enough, and so is a ready file on its own, in which case the value is
+   * an empty string. Composer does not clear the value: the consumer owns
+   * it and clears it after a successful submit. Shadows the native
+   * `onSubmit` attribute, which never fires on a textarea anyway.
    */
   onSubmit?: (value: string) => void;
   /**
@@ -69,11 +74,57 @@ type ComposerOwnProps = {
    */
   contextIcon?: string | React.ReactNode;
   /**
-   * Attachment row rendered above the textarea (DocumentChips). Fully
-   * controlled by the caller — Composer never owns the list.
+   * The files queued on this message, drawn as a scrolling row of square
+   * tiles above the textarea. Controlled by the caller: Composer draws the
+   * list and reports what was added or removed, and never stores a file.
+   * `useAttachments` is the usual owner.
+   */
+  files?: AttachmentItem[];
+  /**
+   * Fires with the files a person picked, pasted or dropped. Providing it
+   * arms all three: the attach button and its picker, file paste in the
+   * textarea, and drop on the shell.
+   */
+  onFilesSelected?: (files: File[]) => void;
+  /** Fires with the id of the file whose remove button was pressed. Its presence renders the buttons. */
+  onFileRemove?: (id: string) => void;
+  /** Fires with a queued file when its tile is pressed. Its presence makes the tiles buttons. */
+  onFileClick?: (item: AttachmentItem) => void;
+  /** File types the picker offers, in the native `accept` syntax. */
+  accept?: string;
+  /** Whether the picker allows several files at once. */
+  multiple?: boolean;
+  /** Whether the built-in attach button shows when `onFilesSelected` is set. */
+  attachButton?: boolean;
+  /**
+   * Pasted text at least this many characters long becomes an attachment
+   * instead of landing in the textarea. Off unless set, and inert without
+   * `onPasteAsAttachment`.
+   */
+  pasteThreshold?: number;
+  /** Receives pasted text that met `pasteThreshold`. */
+  onPasteAsAttachment?: (text: string) => void;
+  /** Accessible label for the attach button. */
+  attachLabel?: string;
+  /** Text shown on the shell while files are dragged over it. */
+  dropLabel?: string;
+  /** Accessible label for the list of queued files. */
+  filesLabel?: string;
+  /**
+   * Builds the sentence announced to assistive technology when files join
+   * the queue, leave it, or fail.
+   */
+  formatFileAnnouncement?: (change: {
+    type: 'added' | 'removed' | 'failed';
+    names: string[];
+  }) => string;
+  /**
+   * Free-form row rendered above the textarea, after any `files`.
+   *
+   * @deprecated Use `files` with `onFilesSelected` and `onFileRemove`, which draw the queue as tiles.
    */
   attachments?: React.ReactNode;
-  /** Leading actions on the left of the action bar (attach button, model picker). */
+  /** Leading actions on the left of the action bar, after the attach button (a model picker). */
   actions?: React.ReactNode;
   /**
    * Trailing actions on the right of the action bar, just before the send
@@ -92,9 +143,25 @@ export interface ComposerProps
   extends ComposerOwnProps,
     Omit<React.ComponentPropsWithoutRef<'textarea'>, keyof ComposerOwnProps> {}
 
+const defaultFileAnnouncement = ({
+  type,
+  names,
+}: {
+  type: 'added' | 'removed' | 'failed';
+  names: string[];
+}) => {
+  const list = names.join(', ');
+  if (type === 'added') return `Attached ${list}`;
+  if (type === 'removed') return `Removed ${list}`;
+  return `Could not attach ${list}`;
+};
+
+const dragCarriesFiles = (event: React.DragEvent) =>
+  Array.from(event.dataTransfer?.types ?? []).includes('Files');
+
 /**
  * Composer is the chat input shell: an optional context note ("Looking at
- * “Page name”"), an attachments row, an auto-growing textarea, a leading
+ * “Page name”"), a tray of queued files, an auto-growing textarea, a leading
  * actions slot, and a trailing send button — the one sanctioned
  * primary-action teal in the chat set, because sending a message is a
  * genuine primary CTA. While `streaming`, send becomes stop and Enter
@@ -124,6 +191,19 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
       context,
       contextIcon,
       contextPlacement = 'inside',
+      files,
+      onFilesSelected,
+      onFileRemove,
+      onFileClick,
+      accept,
+      multiple = true,
+      attachButton = true,
+      pasteThreshold,
+      onPasteAsAttachment,
+      attachLabel = 'Attach files',
+      dropLabel = 'Drop files to attach',
+      filesLabel = 'Attachments',
+      formatFileAnnouncement = defaultFileAnnouncement,
       attachments,
       actions,
       trailingActions,
@@ -132,6 +212,7 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
       className = '',
       onChange,
       onKeyDown,
+      onPaste,
       ...rest
     },
     ref,
@@ -145,7 +226,20 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
     const currentValue = isControlled ? value : uncontrolledValue;
 
     const disabled = Boolean(rest.disabled);
-    const canSend = !disabled && currentValue.trim() !== '';
+    const queued = files ?? [];
+    const hasFiles = queued.length > 0;
+    const armed = Boolean(onFilesSelected);
+    /* A message is text, files, or both. A file still uploading holds the
+       send back: sending now would leave it behind. */
+    const anyUploading = queued.some((file) => file.status === 'uploading');
+    const anyReady = queued.some((file) => file.status === 'ready');
+    const canSend = !disabled && !anyUploading && (currentValue.trim() !== '' || anyReady);
+
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
+    const trayRef = useRef<HTMLUListElement | null>(null);
+    const [dragging, setDragging] = useState(false);
+    const dragDepth = useRef(0);
+    const [announcement, setAnnouncement] = useState('');
 
     /** Keep the internal ref (used for auto-grow) while honouring a forwarded one. */
     const setTextareaRef = (node: HTMLTextAreaElement | null) => {
@@ -177,6 +271,114 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
       observer.observe(node);
       return () => observer.disconnect();
     }, []);
+
+    /* Say what changed in the queue. The tiles appear and vanish silently
+       for a screen-reader user otherwise: a paste or a drop moves no focus. */
+    const previousFiles = useRef<AttachmentItem[]>(queued);
+    const announceRef = useRef(formatFileAnnouncement);
+    announceRef.current = formatFileAnnouncement;
+    useEffect(() => {
+      const before = previousFiles.current;
+      const now = files ?? [];
+      previousFiles.current = now;
+      if (before === now) return;
+      const beforeById = new Map(before.map((file) => [file.id, file]));
+      const nowIds = new Set(now.map((file) => file.id));
+      const added = now.filter((file) => !beforeById.has(file.id)).map((file) => file.name);
+      const removed = before.filter((file) => !nowIds.has(file.id)).map((file) => file.name);
+      const failed = now
+        .filter((file) => file.status === 'error' && beforeById.get(file.id)?.status !== 'error')
+        .map((file) => file.name);
+      const parts = [
+        failed.length > 0 ? announceRef.current({ type: 'failed', names: failed }) : '',
+        added.length > 0 ? announceRef.current({ type: 'added', names: added }) : '',
+        removed.length > 0 ? announceRef.current({ type: 'removed', names: removed }) : '',
+      ].filter(Boolean);
+      if (parts.length > 0) setAnnouncement(parts.join('. '));
+    }, [files]);
+
+    /* Removing the focused tile would drop focus to the document. It moves
+       to the tile that took its place, or back to the textarea when the
+       queue empties. */
+    const focusAfterRemove = useRef<number | null>(null);
+    useEffect(() => {
+      const index = focusAfterRemove.current;
+      if (index === null) return;
+      focusAfterRemove.current = null;
+      const buttons = trayRef.current?.querySelectorAll<HTMLButtonElement>(
+        '.ds-attachment-tile__remove',
+      );
+      const next = buttons?.[Math.min(index, (buttons?.length ?? 0) - 1)];
+      if (next) next.focus();
+      else textareaRef.current?.focus();
+    }, [files]);
+
+    const handleFileRemove = (id: string, index: number) => {
+      focusAfterRemove.current = index;
+      onFileRemove?.(id);
+    };
+
+    const handlePick = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const picked = Array.from(event.target.files ?? []);
+      // Reset so picking the same file again still fires a change
+      event.target.value = '';
+      if (picked.length > 0) onFilesSelected?.(picked);
+    };
+
+    const handlePaste = (event: React.ClipboardEvent<HTMLTextAreaElement>) => {
+      onPaste?.(event);
+      if (event.defaultPrevented) return;
+      const pasted = Array.from(event.clipboardData?.files ?? []);
+      if (armed && pasted.length > 0) {
+        event.preventDefault();
+        onFilesSelected?.(pasted);
+        return;
+      }
+      if (pasteThreshold === undefined || !onPasteAsAttachment) return;
+      const text = event.clipboardData?.getData('text/plain') ?? '';
+      if (text.length >= pasteThreshold) {
+        event.preventDefault();
+        onPasteAsAttachment(text);
+      }
+    };
+
+    /* Drop on the shell. A drag that carries files is taken here and goes
+       no further, so a drop target around the composer (a page-level one,
+       say) does not handle the same files a second time. */
+    const takesDrag = (event: React.DragEvent) => armed && !disabled && dragCarriesFiles(event);
+
+    const handleDragEnter = (event: React.DragEvent<HTMLDivElement>) => {
+      if (!takesDrag(event)) return;
+      event.preventDefault();
+      event.stopPropagation();
+      dragDepth.current += 1;
+      setDragging(true);
+    };
+
+    const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+      if (!takesDrag(event)) return;
+      // Without this the browser refuses the drop and opens the file instead
+      event.preventDefault();
+      event.stopPropagation();
+      event.dataTransfer.dropEffect = 'copy';
+    };
+
+    const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
+      if (!takesDrag(event)) return;
+      event.stopPropagation();
+      dragDepth.current = Math.max(0, dragDepth.current - 1);
+      if (dragDepth.current === 0) setDragging(false);
+    };
+
+    const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+      if (!takesDrag(event)) return;
+      event.preventDefault();
+      event.stopPropagation();
+      dragDepth.current = 0;
+      setDragging(false);
+      const dropped = Array.from(event.dataTransfer.files ?? []);
+      if (dropped.length > 0) onFilesSelected?.(dropped);
+    };
 
     const submit = () => {
       if (streaming || !canSend) return;
@@ -212,6 +414,7 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
       aiGlow ? `${baseClass}--ai-glow` : '',
       streaming ? `${baseClass}--streaming` : '',
       disabled ? `${baseClass}--disabled` : '',
+      dragging ? `${baseClass}--dragging` : '',
       // The above placement moves the text onto the chip's rail; the shell
       // needs to know, since the chip is no longer inside it.
       context && contextPlacement === 'above' ? `${baseClass}--context-above` : '',
@@ -252,8 +455,36 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
         className={classes}
         style={{ '--ds-composer-max-rows': maxRows } as React.CSSProperties}
         onClick={handleShellClick}
+        onDragEnter={armed ? handleDragEnter : undefined}
+        onDragOver={armed ? handleDragOver : undefined}
+        onDragLeave={armed ? handleDragLeave : undefined}
+        onDrop={armed ? handleDrop : undefined}
       >
         {!contextAbove && contextChip}
+
+        {hasFiles && (
+          <ul className={`${baseClass}__tray`} ref={trayRef} aria-label={filesLabel}>
+            {queued.map((file, index) => (
+              <li key={file.id} className={`${baseClass}__tray-item`}>
+                <AttachmentTile
+                  name={file.name}
+                  kind={file.kind}
+                  status={file.status}
+                  progress={file.progress}
+                  error={file.error}
+                  previewSrc={file.previewSrc}
+                  previewAlt={file.previewAlt}
+                  excerpt={file.excerpt}
+                  meta={file.size === undefined ? undefined : formatBytes(file.size)}
+                  onClick={onFileClick ? () => onFileClick(file) : undefined}
+                  onRemove={
+                    onFileRemove && !disabled ? () => handleFileRemove(file.id, index) : undefined
+                  }
+                />
+              </li>
+            ))}
+          </ul>
+        )}
 
         {attachments && <div className={`${baseClass}__attachments`}>{attachments}</div>}
 
@@ -267,11 +498,25 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
             aria-label={ariaLabel}
             onChange={handleChange}
             onKeyDown={handleKeyDown}
+            onPaste={handlePaste}
           />
         </div>
 
         <div className={`${baseClass}__footer`}>
-          {actions && <div className={`${baseClass}__actions`}>{actions}</div>}
+          {(actions || (armed && attachButton)) && (
+            <div className={`${baseClass}__actions`}>
+              {armed && attachButton && (
+                <CircularButton
+                  icon="add"
+                  variant="tertiary"
+                  ariaLabel={attachLabel}
+                  disabled={disabled}
+                  onClick={() => fileInputRef.current?.click()}
+                />
+              )}
+              {actions}
+            </div>
+          )}
           <div className={`${baseClass}__trailing`}>
             {trailingActions}
             {streaming ? (
@@ -293,6 +538,33 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
             )}
           </div>
         </div>
+
+        {armed && (
+          <>
+            {/* The picker behind the attach button. Out of the tab order and
+                the accessibility tree: the button is the control. */}
+            <input
+              ref={fileInputRef}
+              className={`${baseClass}__file-input`}
+              type="file"
+              accept={accept}
+              multiple={multiple}
+              tabIndex={-1}
+              aria-hidden="true"
+              onChange={handlePick}
+            />
+            {/* Decorative: the words describe a pointer gesture in progress */}
+            <div className={`${baseClass}__drop-hint`} aria-hidden="true">
+              {dropLabel}
+            </div>
+          </>
+        )}
+
+        {(armed || hasFiles) && (
+          <span className={`${baseClass}__sr-only`} role="status">
+            {announcement}
+          </span>
+        )}
       </div>
     );
 

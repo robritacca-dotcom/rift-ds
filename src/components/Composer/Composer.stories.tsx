@@ -1,8 +1,13 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
 import { Composer } from './Composer';
+import type { ComposerProps } from './Composer';
+import { useAttachments } from '../Attachment/useAttachments';
+import type { AttachmentItem } from '../Attachment/fileTypes';
 import { CircularButton } from '../CircularButton/CircularButton';
-import { DocumentChip } from '../DocumentChip/DocumentChip';
+import { ModelPicker } from '../ModelPicker/ModelPicker';
+import { DOCUMENT_FIRST_PAGE, PHOTO_LANDSCAPE } from '../../stories/attachment-fixtures';
 import { PromptSuggestions } from '../PromptSuggestions/PromptSuggestions';
 
 const meta = {
@@ -92,32 +97,188 @@ export const WithContextAbove: Story = {
   },
 };
 
-/** The attachments row is fully controlled: the consumer owns the list and handles removal. */
-const AttachmentsDemo = () => {
-  const [files, setFiles] = useState([
-    { id: 'brief', name: 'launch-brief.pdf', fileType: 'pdf' as const },
-    { id: 'costs', name: 'costs-q3.xlsx', fileType: 'sheet' as const },
-  ]);
+const QUEUED: AttachmentItem[] = [
+  { id: 'photo', name: 'site-visit.png', kind: 'image', size: 830_000, status: 'ready', previewSrc: PHOTO_LANDSCAPE },
+  { id: 'brief', name: 'launch-brief.pdf', kind: 'pdf', size: 1_200_000, status: 'ready', previewSrc: DOCUMENT_FIRST_PAGE },
+  { id: 'costs', name: 'costs-q3.xlsx', kind: 'spreadsheet', size: 88_000, status: 'ready' },
+  { id: 'deck', name: 'Q4 kickoff deck.pptx', kind: 'presentation', size: 5_600_000, status: 'ready' },
+  { id: 'plan', name: 'Q4 plan.key', kind: 'generic', size: 3_400_000, status: 'ready' },
+];
 
+/**
+ * The queue is controlled: Composer draws `files` and reports what was
+ * picked, pasted, dropped or removed. `useAttachments` owns the list here,
+ * as it would in an app.
+ */
+const FilesDemo = (args: ComposerProps) => {
+  const [value, setValue] = useState('');
+  const attachments = useAttachments();
   return (
     <Composer
       placeholder="Ask about these files"
-      attachments={files.map((file) => (
-        <DocumentChip
-          key={file.id}
-          name={file.name}
-          fileType={file.fileType}
-          size="compact"
-          onRemove={() => setFiles((prev) => prev.filter((f) => f.id !== file.id))}
-          removeLabel={`Remove ${file.name}`}
-        />
-      ))}
+      {...args}
+      value={value}
+      onValueChange={setValue}
+      files={attachments.items}
+      onFilesSelected={(files) => {
+        args.onFilesSelected?.(files);
+        attachments.add(files);
+      }}
+      onFileRemove={attachments.remove}
+      pasteThreshold={args.pasteThreshold}
+      onPasteAsAttachment={(text) => {
+        args.onPasteAsAttachment?.(text);
+        attachments.addText(text);
+      }}
+      onSubmit={(text) => {
+        args.onSubmit?.(text);
+        attachments.clear();
+        setValue('');
+      }}
     />
   );
 };
 
-export const WithAttachments: Story = {
-  render: () => <AttachmentsDemo />,
+/** Queued files sit in a row of square tiles that scrolls sideways. */
+export const WithFiles: Story = {
+  render: () => {
+    const Demo = () => {
+      const [files, setFiles] = useState(QUEUED);
+      return (
+        <Composer
+          placeholder="Ask about these files"
+          files={files}
+          onFilesSelected={() => {}}
+          onFileRemove={(id) => setFiles((prev) => prev.filter((file) => file.id !== id))}
+          actions={<ModelPicker models={[{ value: 'a', label: 'Sonnet 5.5' }]} placement="top" />}
+        />
+      );
+    };
+    return <Demo />;
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const list = canvas.getByRole('list', { name: 'Attachments' });
+    await expect(within(list).getAllByRole('listitem')).toHaveLength(5);
+
+    // Removing a file moves focus to the one that took its place
+    await userEvent.click(canvas.getByRole('button', { name: 'Remove launch-brief.pdf' }));
+    await expect(within(list).getAllByRole('listitem')).toHaveLength(4);
+    await waitFor(() =>
+      expect(canvas.getByRole('button', { name: 'Remove costs-q3.xlsx' })).toHaveFocus(),
+    );
+    await expect(canvas.getByRole('status')).toHaveTextContent('Removed launch-brief.pdf');
+    (document.activeElement as HTMLElement).blur();
+  },
+};
+
+/** While a file uploads, the send button waits for it. */
+export const Uploading: Story = {
+  args: {
+    defaultValue: 'Summarise the brief',
+    onFilesSelected: fn(),
+    files: [
+      QUEUED[1],
+      { id: 'up', name: 'costs-q3.xlsx', kind: 'spreadsheet', status: 'uploading', progress: 40 },
+      { id: 'bad', name: 'old-export.csv', kind: 'spreadsheet', status: 'error' },
+    ],
+    onFileRemove: fn(),
+  },
+  play: async ({ canvasElement }) => {
+    await expect(within(canvasElement).getByRole('button', { name: 'Send message' })).toBeDisabled();
+  },
+};
+
+/** The attach button opens the picker; what is chosen comes back through `onFilesSelected`. */
+export const PickingFiles: Story = {
+  args: { onFilesSelected: fn(), onSubmit: fn() },
+  render: (args) => <FilesDemo {...args} />,
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByRole('button', { name: 'Attach files' })).toBeInTheDocument();
+    const send = canvas.getByRole('button', { name: 'Send message' });
+    await expect(send).toBeDisabled();
+
+    const input = canvasElement.querySelector('.ds-composer__file-input') as HTMLInputElement;
+    const file = new File(['%PDF'], 'contract.pdf', { type: 'application/pdf' });
+    await userEvent.upload(input, file);
+    await expect(args.onFilesSelected).toHaveBeenCalledWith([file]);
+    await expect(await canvas.findByText('contract.pdf', { selector: '.ds-attachment-tile__sr-only' })).toBeInTheDocument();
+
+    // A file alone is a message: send is live with no text, and submits an empty string
+    await waitFor(() => expect(send).toBeEnabled());
+    await userEvent.click(send);
+    await expect(args.onSubmit).toHaveBeenCalledWith('');
+    await waitFor(() => expect(canvas.queryByRole('list', { name: 'Attachments' })).not.toBeInTheDocument());
+  },
+};
+
+const transfer = (files: File[], text?: string) => {
+  const data = new DataTransfer();
+  for (const file of files) data.items.add(file);
+  if (text !== undefined) data.setData('text/plain', text);
+  return data;
+};
+
+/* Real events, dispatched by hand: the test library's fireEvent records its
+   arguments by cloning them, and a DataTransfer does not survive the copy. */
+const paste = (target: Element, files: File[], text?: string) =>
+  target.dispatchEvent(
+    new ClipboardEvent('paste', { bubbles: true, cancelable: true, clipboardData: transfer(files, text) }),
+  );
+
+const drag = (target: Element, type: 'dragenter' | 'drop', files: File[]) =>
+  target.dispatchEvent(
+    new DragEvent(type, { bubbles: true, cancelable: true, dataTransfer: transfer(files) }),
+  );
+
+/** Files can be pasted into the textarea or dropped on the shell. */
+export const PasteAndDrop: Story = {
+  args: { onFilesSelected: fn() },
+  render: (args) => <FilesDemo {...args} />,
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    const textarea = canvas.getByRole('textbox');
+    const shell = canvasElement.querySelector('.ds-composer') as HTMLElement;
+
+    const pasted = new File(['a'], 'screenshot.png', { type: 'image/png' });
+    paste(textarea, [pasted]);
+    await waitFor(() =>
+      expect(args.onFilesSelected).toHaveBeenLastCalledWith([expect.objectContaining({ name: 'screenshot.png' })]),
+    );
+
+    const dropped = new File(['b'], 'notes.md', { type: 'text/markdown' });
+    drag(shell, 'dragenter', [dropped]);
+    await waitFor(() => expect(shell).toHaveClass('ds-composer--dragging'));
+    drag(shell, 'drop', [dropped]);
+    await waitFor(() =>
+      expect(args.onFilesSelected).toHaveBeenLastCalledWith([expect.objectContaining({ name: 'notes.md' })]),
+    );
+    await waitFor(() => expect(shell).not.toHaveClass('ds-composer--dragging'));
+
+    const list = await canvas.findByRole('list', { name: 'Attachments' });
+    await expect(within(list).getAllByRole('listitem')).toHaveLength(2);
+    await expect(canvas.getByRole('status')).toHaveTextContent('Attached notes.md');
+  },
+};
+
+/** With `pasteThreshold` set, a long paste becomes a tile instead of flooding the field. */
+export const LongPaste: Story = {
+  args: { onFilesSelected: fn(), pasteThreshold: 200, onPasteAsAttachment: fn() },
+  render: (args) => <FilesDemo {...args} />,
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    const textarea = canvas.getByRole('textbox') as HTMLTextAreaElement;
+    const long = 'Paid time off policy (2026). '.repeat(12);
+
+    paste(textarea, [], 'short note');
+    await expect(args.onPasteAsAttachment).not.toHaveBeenCalled();
+
+    paste(textarea, [], long);
+    await expect(args.onPasteAsAttachment).toHaveBeenCalledWith(long);
+    await expect(textarea.value).toBe('');
+    await expect(await canvas.findByRole('list', { name: 'Attachments' })).toBeInTheDocument();
+  },
 };
 
 /**
@@ -126,7 +287,7 @@ export const WithAttachments: Story = {
  */
 export const WithActions: Story = {
   args: {
-    actions: <CircularButton icon="add" variant="tertiary" ariaLabel="Attach a file" />,
+    actions: <CircularButton icon="tune" variant="tertiary" ariaLabel="Options" />,
     trailingActions: <CircularButton icon="mic" variant="tertiary" ariaLabel="Dictate" />,
   },
 };

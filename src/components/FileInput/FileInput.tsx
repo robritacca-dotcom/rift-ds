@@ -3,6 +3,7 @@
 import React, { useRef, useState, useId } from 'react';
 import { Field } from '../Field/Field';
 import './FileInput.css';
+import { formatBytes } from '../Attachment/fileTypes';
 import '../../fonts/material-symbols.css';
 
 export interface FileInputFile {
@@ -49,16 +50,6 @@ type FileInputOwnProps = {
 export interface FileInputProps
   extends FileInputOwnProps,
     Omit<React.ComponentPropsWithoutRef<'input'>, keyof FileInputOwnProps | 'type'> {}
-
-/** Render a byte count as a short human-readable string. */
-const formatBytes = (bytes: number): string => {
-  if (bytes === 0) return '0 B';
-  const units = ['B', 'KB', 'MB', 'GB', 'TB'];
-  const exponent = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), units.length - 1);
-  const value = bytes / Math.pow(1024, exponent);
-  // Whole numbers for bytes, one decimal above that
-  return `${exponent === 0 ? value : value.toFixed(1)} ${units[exponent]}`;
-};
 
 /**
  * FileInput component — a click-or-drop zone paired with a list of the

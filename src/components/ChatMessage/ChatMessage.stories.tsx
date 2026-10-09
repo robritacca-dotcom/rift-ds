@@ -1,5 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, waitFor } from 'storybook/test';
 import { ChatMessage } from './ChatMessage';
+import { AttachmentGroup } from '../Attachment/AttachmentGroup';
+import type { AttachmentItem } from '../Attachment/fileTypes';
+import { DOCUMENT_FIRST_PAGE, PHOTO_LANDSCAPE, PHOTO_SQUARE } from '../../stories/attachment-fixtures';
 import { Avatar } from '../Avatar/Avatar';
 
 const meta = {
@@ -217,4 +221,53 @@ export const BubbleOverride: Story = {
       </ChatMessage>
     </div>
   ),
+};
+
+const SENT_FILES: AttachmentItem[] = [
+  { id: 'a', name: 'whiteboard.png', kind: 'image', size: 830_000, status: 'ready', previewSrc: PHOTO_SQUARE },
+  { id: 'b', name: 'Q4 roadmap.xlsx', kind: 'spreadsheet', size: 88_000, status: 'ready' },
+  { id: 'c', name: 'demo_schedule_sep28_oct4.pdf', kind: 'pdf', size: 1_200_000, status: 'ready', previewSrc: DOCUMENT_FIRST_PAGE },
+];
+
+/** Files sent with a turn sit above its bubble, on the speaker's side. */
+export const WithAttachments: Story = {
+  args: {
+    role: 'user',
+    attachments: <AttachmentGroup align="end" items={SENT_FILES} />,
+    children: 'Compare the roadmap with these.',
+  },
+};
+
+/** One picture keeps its own shape above the text. */
+export const WithSingleImage: Story = {
+  args: {
+    role: 'user',
+    attachments: (
+      <AttachmentGroup
+        align="end"
+        items={[{ id: 'p', name: 'schedule.png', kind: 'image', status: 'ready', previewSrc: PHOTO_LANDSCAPE, width: 768, height: 480 }]}
+      />
+    ),
+    children: 'Turn this into a schedule please.',
+  },
+  /* The attachments row must hand the group a real width: a row that took
+     its width from the group would collapse the picture to nothing. */
+  play: async ({ canvasElement }) => {
+    const image = canvasElement.querySelector('.ds-attachment-group__single-image') as HTMLImageElement;
+    await waitFor(() => expect(image.getBoundingClientRect().width).toBeGreaterThan(100));
+    await expect(image.getBoundingClientRect().height).toBeGreaterThan(50);
+  },
+};
+
+/** Files alone are a whole message: no empty bubble is drawn under them. */
+export const AttachmentsOnly: Story = {
+  args: {
+    role: 'user',
+    attachments: <AttachmentGroup align="end" items={SENT_FILES.slice(1)} />,
+    children: undefined,
+  },
+  play: async ({ canvasElement }) => {
+    await expect(canvasElement.querySelector('.ds-chat-message__content')).toBeNull();
+    await expect(canvasElement.querySelector('.ds-chat-message__attachments')).not.toBeNull();
+  },
 };

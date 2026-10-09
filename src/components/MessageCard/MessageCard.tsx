@@ -21,7 +21,7 @@ type MessageCardOwnProps = {
   actions?: React.ReactNode;
   /** Additional CSS classes */
   className?: string;
-  /** Body content between the description and the footer — rich content, a Prose block, a DocumentChip row. */
+  /** Body content between the description and the footer — rich content, a Prose block, an AttachmentGroup. */
   children?: React.ReactNode;
 };
 

@@ -28,26 +28,26 @@ export interface ChatModelOption {
   description: string;
   /**
    * Whether the model takes adaptive thinking and the effort dial. True for
-   * the Claude 4.6+ generation; Haiku 4.5 predates both and rejects them
-   * with a 400, so the route must send it a plain request.
+   * every model on offer today; an entry older than the Claude 4.6 generation
+   * rejects both with a 400, so the route must send it a plain request.
    */
   adaptiveThinking: boolean;
 }
 
 export const CHAT_MODELS: ChatModelOption[] = [
   {
-    value: "sonnet",
-    id: "claude-sonnet-5",
-    label: "Sonnet 5",
-    description: "Fast and capable, the everyday pick.",
+    value: "haiku",
+    id: "claude-haiku-5-5",
+    label: "Haiku 5.5",
+    description: "Fast answers, the everyday pick.",
     adaptiveThinking: true,
   },
   {
-    value: "haiku",
-    id: "claude-haiku-4-5-20251001",
-    label: "Haiku 4.5",
-    description: "Instant answers for quick lookups.",
-    adaptiveThinking: false,
+    value: "sonnet",
+    id: "claude-sonnet-5",
+    label: "Sonnet 5",
+    description: "More depth for harder questions.",
+    adaptiveThinking: true,
   },
 ];
 
@@ -57,8 +57,11 @@ export const DEFAULT_CHAT_MODEL = CHAT_MODELS[0];
 /**
  * What serves once the day's spend passes the step-down threshold — and the
  * only model on offer past the lock threshold (guardrails.ts owns both).
+ * Today it is the default too, so the step-down changes nothing and the lock
+ * is the only tier a visitor can notice; the two stay separate names so a
+ * dearer default can come back without touching the route.
  */
-export const BUDGET_CHAT_MODEL = CHAT_MODELS[1];
+export const BUDGET_CHAT_MODEL = CHAT_MODELS[0];
 
 /** Resolves a client-sent wire value to its entry, or null for anything else. */
 export function chatModelByValue(value: unknown): ChatModelOption | null {
@@ -74,4 +77,4 @@ export function chatModelByValue(value: unknown): ChatModelOption | null {
  * It is not in CHAT_MODELS on purpose: it is plumbing, never on offer in the
  * picker.
  */
-export const FOLLOWUP_MODEL = "claude-haiku-4-5-20251001";
+export const FOLLOWUP_MODEL = "claude-haiku-5-5";

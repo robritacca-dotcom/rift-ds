@@ -515,7 +515,7 @@ export async function POST(request: Request): Promise<Response> {
             {
               model: serving.id,
               max_tokens: MAX_TOKENS,
-              // Haiku 4.5 predates adaptive thinking and the effort dial and
+              // A model that predates adaptive thinking and the effort dial
               // rejects both with a 400, so it gets a plain request — which
               // also means no "Thinking" trace points on its answers, honestly.
               ...(serving.adaptiveThinking

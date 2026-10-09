@@ -33,7 +33,7 @@ const DAILY_SPEND_CAP_TENTHS = Number(process.env.CHAT_DAILY_SPEND_CAP_CENTS ?? 
 
 /**
  * The model-tier thresholds, as fractions of the daily spend cap. Below the
- * step-down the chat defaults to its best model; past it the default drops to
+ * step-down the chat serves its default model; past it the default drops to
  * the budget model (the visitor can still pick the better one); past the lock
  * only the budget model serves, whatever the request asks for. The breaker at
  * 100% is unchanged — the tiers exist so the day degrades gracefully instead
@@ -52,6 +52,11 @@ const MODEL_LOCK_FRACTION = Number(process.env.CHAT_MODEL_LOCK_PCT ?? 85) / 100;
  * over-estimating spend trips the breaker early, which is the safe direction
  * to be wrong in. Real billing comes from the Console, not from this table.
  * An unknown model id prices at the most expensive row for the same reason.
+ *
+ * Haiku 5.5 is priced by prompt size, and the row holds its over-100K rates:
+ * the corpus alone sits at the threshold, so a chat request crosses it. The
+ * follow-ups call is far smaller and bills at a fifth of this, which errs in
+ * the same safe direction.
  */
 interface PriceRow {
   input: number;
@@ -69,11 +74,11 @@ const SONNET_PRICE: PriceRow = {
 
 const PRICE_PER_MTOK: Record<string, PriceRow> = {
   "claude-sonnet-5": SONNET_PRICE,
-  "claude-haiku-4-5-20251001": {
-    input: 1.0,
-    output: 5.0,
-    cacheWrite: 2.0,
-    cacheRead: 0.1,
+  "claude-haiku-5-5": {
+    input: 0.5,
+    output: 2.5,
+    cacheWrite: 1.0,
+    cacheRead: 0.05,
   },
 };
 

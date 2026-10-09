@@ -78,8 +78,8 @@ ids they cover; a rule change and its spec row move in the same change.
 - **The eval only ever scores the default model.** The config sends no
   `model` field, and the route resolves the model server-side through the
   day's budget tier — against `dev:eval` the guardrails fail open, so every
-  run serves the tier-open default (Sonnet). The Haiku path a real visitor
-  gets past the step-down threshold is never graded, and two runs are only
+  run serves the tier-open default (Haiku). The Sonnet answers a visitor
+  gets by picking it in the composer are never graded, and two runs are only
   comparable when the serving model matched — one more reason `dev:eval`,
   not a KV-backed server, is the only valid target.
 - **The config hardcodes `http://localhost:3000`.** Every dev entry in

@@ -179,6 +179,9 @@ export async function POST(request: Request): Promise<Response> {
       {
         model: FOLLOWUP_MODEL,
         max_tokens: MAX_TOKENS,
+        // Thinking is on by default for this model and would spend the small
+        // token cap before the questions are written.
+        thinking: { type: "disabled" },
         system: SYSTEM,
         messages: [
           {

@@ -2,7 +2,7 @@
 
 Voice made visible: a row of bars dancing on the shared twelve-slot cycle, or tracking a live analyser level by level.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.3.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.4.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: ai
 - Import: `import { Waveform } from 'rift-ds';`

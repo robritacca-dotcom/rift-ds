@@ -2,7 +2,7 @@
 
 A set of two-state buttons that can be toggled on or off, supporting text and icon items.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.3.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.4.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: actions
 - Import: `import { ToggleGroup } from 'rift-ds';`

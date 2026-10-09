@@ -2,7 +2,7 @@
 
 Unified diff view for code changes, with added, removed, and context lines.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.3.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.4.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: ai
 - Import: `import { CodeDiff } from 'rift-ds';`

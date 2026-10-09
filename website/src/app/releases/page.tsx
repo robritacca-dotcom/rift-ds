@@ -6,7 +6,13 @@ import GitHubContributions from "../../components/GitHubContributions/GitHubCont
 import { Timeline } from "rift-ds/components/Timeline/Timeline";
 import { EmptyState } from "rift-ds/components/EmptyState/EmptyState";
 import { getSidebarLinks, docsSidebarLinks } from "@/config/navigation";
-import { releases, latestRelease, RELEASE_COUNT } from "@/data/release-log";
+import {
+  releases,
+  latestRelease,
+  RELEASE_COUNT,
+  predecessorReleases,
+  PREDECESSOR_RELEASE_COUNT,
+} from "@/data/release-log";
 import styles from "./page.module.css";
 import { BRAND_NAME, NPM_URL, REPOSITORY_URL, STORYBOOK_URL } from "@/config/brand.generated";
 
@@ -35,6 +41,16 @@ export default function ReleasesPage() {
     ),
   }));
 
+  const earlierItems = predecessorReleases.map((entry) => ({
+    meta: formatDate(entry.date),
+    title: entry.version,
+    description: entry.summary ? (
+      <p className={styles.entryParagraph}>{entry.summary}</p>
+    ) : undefined,
+  }));
+  const firstRelease = releases[releases.length - 1];
+  const firstEarlierRelease = predecessorReleases[predecessorReleases.length - 1];
+
   return (
     <>
       <MegaNav />
@@ -54,7 +70,8 @@ export default function ReleasesPage() {
               What each published version of {BRAND_NAME} shipped, newest
               first. The log is one to one with npm: an entry is written when
               a version is published, and never otherwise, so this page and
-              the registry always tell the same story.
+              the registry always tell the same story. The versions published
+              before the package was renamed are listed beneath it.
             </p>
           </div>
 
@@ -84,6 +101,23 @@ export default function ReleasesPage() {
               ) : (
                 <Timeline items={items} orientation="vertical" />
               )}
+
+              {firstRelease && firstEarlierRelease && (
+                <div className={styles.earlierSection}>
+                  <div className={styles.timelineSectionHeader}>
+                    <h2 className={styles.timelineSectionTitle}>Before {BRAND_NAME}</h2>
+                  </div>
+                  <p className={styles.contributionsIntro}>
+                    {BRAND_NAME} starts at {firstRelease.version}, but the system is older
+                    than that. It first reached npm on {formatDate(firstEarlierRelease.date)} under
+                    an earlier package name, and shipped {PREDECESSOR_RELEASE_COUNT} versions
+                    there before it was renamed and restarted on {formatDate(firstRelease.date)}.
+                    Those versions stayed behind on the old name. This is what each one added,
+                    newest first.
+                  </p>
+                  <Timeline items={earlierItems} orientation="vertical" />
+                </div>
+              )}
             </div>
 
             <aside className={styles.updatesRail} aria-label="Release log details">
@@ -95,6 +129,10 @@ export default function ReleasesPage() {
                   <div className={styles.detailItem}>
                     <span className={styles.detailLabel}>Releases</span>
                     <span className={styles.detailValue}>{RELEASE_COUNT}</span>
+                  </div>
+                  <div className={styles.detailItem}>
+                    <span className={styles.detailLabel}>Before the rename</span>
+                    <span className={styles.detailValue}>{PREDECESSOR_RELEASE_COUNT}</span>
                   </div>
                   <div className={styles.detailItem}>
                     <span className={styles.detailLabel}>Latest</span>

@@ -58,5 +58,116 @@
         "If you were using the earlier scoped package, this is the same system under its own name. Change your import specifier to `rift-ds` and nothing else moves."
       ]
     }
+  ],
+  "predecessorReleases": [
+    {
+      "version": "0.21.0",
+      "date": "2026-09-19",
+      "summary": "The package’s first bin: an init command that fetches the consumer agent skill from the live site into .claude/skills/ and prints the MCP connect line."
+    },
+    {
+      "version": "0.20.0",
+      "date": "2026-09-18",
+      "summary": "Six components taking the registry to 132: WorldMap, the flat companion to Globe, plus Toolbar, Lightbox, Waveform, AnimatedNumber and StatusDot. Lightbox is the first overlay born on the shared behaviour layer, and the count-up budget joins the motion constants."
+    },
+    {
+      "version": "0.19.0",
+      "date": "2026-09-16",
+      "summary": "GanttChart and RichDropdown, the heading and body font family roles for split-face theming, AiButton’s signature refresh, Dropdown’s typeface preview, the micro-animation pass (SegmentedControl’s sliding pill, Button’s trailing-icon nudge), and ToggleSwitch labels hugging the track."
+    },
+    {
+      "version": "0.18.1",
+      "date": "2026-09-12",
+      "summary": "The section-divider rhythm fix. SectionTitle’s rule clearance drops so every divider header runs heading, 20px, rule, 40px, content, and the rule width and Table’s hairlines move onto the border tokens."
+    },
+    {
+      "version": "0.18.0",
+      "date": "2026-09-11",
+      "summary": "ThreadTabs, the animated strip of open chat sessions, with ThreadPanel’s detail rows, pin marks and projects section; PromptSuggestions’ pending shimmer and entrance stagger; and CommandPalette’s trailing slot for a non-interactive row badge."
+    },
+    {
+      "version": "0.17.0",
+      "date": "2026-09-09",
+      "summary": "ThreadPanel, the session-history rail for chat products, plus EventCalendar’s selectedDate and whole-cell interactivity on its own calendar colour family, and the toast exit timer on the motion constant."
+    },
+    {
+      "version": "0.16.0",
+      "date": "2026-09-06",
+      "summary": "The shared overlay behaviour layer under the modal components, with useScrollLock published for host chrome. Also AiButton’s summary panel, Composer’s context note, the status icon step tokens, and overlay listener and timer fixes."
+    },
+    {
+      "version": "0.15.0",
+      "date": "2026-09-04",
+      "summary": "UsageCard and SourceTrail join the ai category, and Composer gains its working glow. The agent-docs surfaces arrive around the package: per-component markdown contracts, the consumer agent skill, and the MCP roster with example prompts."
+    },
+    {
+      "version": "0.14.0",
+      "date": "2026-08-29",
+      "summary": "Six components taking the registry to 120: Banner, HoverCard, ImageCompare, Meter, Rating and SplitButton, plus LinkList’s newTab opt-out. The same JSDoc now also feeds the site’s public MCP endpoint."
+    },
+    {
+      "version": "0.13.0",
+      "date": "2026-08-29",
+      "summary": "Five composition gap-fillers: Gauge, FilterBar, SplitPane, StreamingText and AvatarGroup, plus the stream reveal’s motion constant and the amended JS motion contract."
+    },
+    {
+      "version": "0.12.0",
+      "date": "2026-08-26",
+      "summary": "The dashboard set from the labs rebuild: Panel, LegendTile, FunnelChart and ComboChart, with live var() chart colours and bare mode, Stat’s trend tokens and inline delta, borderless badges, and AppSidebar’s floating variant, item badges, slots and rebuilt transition."
+    },
+    {
+      "version": "0.11.0",
+      "date": "2026-08-23",
+      "summary": "The maps category (Globe, MapCallout, MapLegend), plus CardStack and the overline typography face."
+    },
+    {
+      "version": "0.10.0",
+      "date": "2026-08-20",
+      "summary": "The accessible teal split: the action colour becomes theme-dependent, a deep light-mode fill inverting to a light dark-mode one, with every action pairing at WCAG AA. Also SectionTitle’s optional divider and AppSidebar link rows."
+    },
+    {
+      "version": "0.9.0",
+      "date": "2026-08-17",
+      "summary": "Nine components taking the registry past 100: AnchorNav plus Stepper, TagInput, NumberInput, TreeView, PinInput, CodeDiff, Sparkline and TimePicker. The published dist also gets its ‘use client’ directives back."
+    },
+    {
+      "version": "0.8.0",
+      "date": "2026-08-16",
+      "summary": "Five components from the dashboard gap analysis: AgentPlan, ModelPicker, NotificationCenter, DataTable and EventCalendar."
+    },
+    {
+      "version": "0.7.0",
+      "date": "2026-08-15",
+      "summary": "ShaderField, the WebGL2 ambient background, with Card’s cover slot and the instant motion duration token."
+    },
+    {
+      "version": "0.6.0",
+      "date": "2026-08-11",
+      "summary": "The composer radius token, ChatMessage’s showActions, and a README that states the chat’s UI-only boundary."
+    },
+    {
+      "version": "0.5.0",
+      "date": "2026-08-09",
+      "summary": "The chat component set that powers the site-wide chat."
+    },
+    {
+      "version": "0.4.0",
+      "date": "2026-08-01",
+      "summary": "The ai component category."
+    },
+    {
+      "version": "0.3.0",
+      "date": "2026-07-28"
+    },
+    {
+      "version": "0.2.0",
+      "date": "2026-07-27",
+      "summary": "The first release through Trusted Publishing, authenticated by OIDC with no token."
+    },
+    {
+      "version": "0.1.0",
+      "date": "2026-07-26",
+      "summary": "The first publish, using a granular npm token that has since been retired."
+    }
   ]
 }

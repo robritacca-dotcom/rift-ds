@@ -127,6 +127,15 @@
   margin: 0;
 }
 
+/* The predecessor's versions: a second divider header and timeline
+   under the log, set off by one more step of the section gap. */
+.earlierSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-1000);
+  padding-top: var(--primitive-gap-1000);
+}
+
 .entryParagraph {
   margin: 0 0 var(--primitive-gap-200);
 }

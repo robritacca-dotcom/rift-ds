@@ -11,6 +11,11 @@
  * with the first publish. Deliberately runs no git or npm commands:
  * whether an entry exists for a published version is the release
  * skill's job at publish time, not the build's.
+ *
+ * The same file carries "predecessorReleases": the versions published
+ * under the package's earlier name, which /releases lists beneath the
+ * log. They are held to the same ordering rules and must all predate
+ * the log's first entry.
  */
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -79,6 +84,50 @@ if (!Array.isArray(releases)) {
   });
 }
 
+/* The predecessor's versions, shown under the log on /releases. A closed
+   record of a retired package: same ordering and date rules, a summary
+   in place of title and body (optional, because one version has no
+   surviving record), and every version older than the log's first. */
+const { predecessorReleases } = data;
+if (!Array.isArray(predecessorReleases)) {
+  errors.push('"predecessorReleases" must be an array.');
+} else {
+  const semver = /^\d+\.\d+\.\d+$/;
+  const parse = (v) => v.split('.').map(Number);
+  const newer = (a, b) => {
+    const [A, B] = [parse(a), parse(b)];
+    for (let i = 0; i < 3; i++) {
+      if (A[i] !== B[i]) return A[i] > B[i];
+    }
+    return false;
+  };
+  const oldest = Array.isArray(releases) ? releases[releases.length - 1] : undefined;
+
+  predecessorReleases.forEach((entry, i) => {
+    const label = `predecessorReleases[${i}]${entry?.version ? ` (${entry.version})` : ''}`;
+    if (!semver.test(entry.version ?? '')) {
+      errors.push(`${label}: "version" must be plain semver (X.Y.Z), got: ${entry.version}`);
+      return;
+    }
+    const prev = i === 0 ? oldest : predecessorReleases[i - 1];
+    if (prev && semver.test(prev.version ?? '') && !newer(prev.version, entry.version)) {
+      errors.push(`${label}: versions must be strictly descending; ${prev.version} precedes it.`);
+    }
+    const date = new Date(`${entry.date}T00:00:00Z`);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(entry.date ?? '') || Number.isNaN(date.getTime())) {
+      errors.push(`${label}: "date" must be a valid YYYY-MM-DD date, got: ${entry.date}`);
+    } else if (prev?.date && entry.date > prev.date) {
+      errors.push(`${label}: "date" ${entry.date} is later than ${prev.version}'s ${prev.date}.`);
+    }
+    if ('summary' in entry && (typeof entry.summary !== 'string' || !entry.summary.trim())) {
+      errors.push(`${label}: "summary" must be a non-empty string when present.`);
+    }
+    if (/\b[0-9a-f]{7,40}\b/.test(entry.summary ?? '')) {
+      errors.push(`${label}: summary contains what looks like a commit hash.`);
+    }
+  });
+}
+
 if (errors.length > 0) {
   console.error(
     `✗ release-log.json failed validation:\n` +
@@ -88,5 +137,5 @@ if (errors.length > 0) {
 }
 
 console.log(
-  `✓ Release log valid — ${releases.length} release entr${releases.length === 1 ? 'y' : 'ies'}, 1:1 with npm, newest first.`
+  `✓ Release log valid — ${releases.length} release entr${releases.length === 1 ? 'y' : 'ies'}, 1:1 with npm, newest first; ${predecessorReleases.length} predecessor versions beneath.`
 );

@@ -1,6 +1,9 @@
 # Rift DS — history
 
-An unpublished reference: kept out of the site, the build and the chat corpus, though readable in the public repository. It preserves two records whose original homes
+A reference kept at the repo root and readable in the public repository. The predecessor
+release list below is also published, in condensed form, beneath the release log on
+/releases (from `website/src/data/release-log.json`); the build journal stays out of the
+site, the build and the chat corpus. It preserves two records whose original homes
 were deleted when robertritacca.com stopped being a design-system site: the release log of
 the predecessor package, and the build journal that ran from day one.
 

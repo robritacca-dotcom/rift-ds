@@ -25,3 +25,24 @@ export const RELEASE_COUNT = releases.length;
 
 /** The newest release, or null before the first publish. */
 export const latestRelease: ReleaseEntry | null = releases[0] ?? null;
+
+export interface PredecessorReleaseEntry {
+  /** The version as published under the predecessor's package name */
+  version: string;
+  /** The publish date, ISO YYYY-MM-DD */
+  date: string;
+  /** One or two sentences on what shipped; absent where no record survives */
+  summary?: string;
+}
+
+/**
+ * The versions published before the rename, newest first, shown under
+ * the log on /releases. A closed record: the predecessor package is
+ * retired, so this list never grows. Copied from HISTORY.md at the repo
+ * root, which stays the fuller record (it also holds the build journal).
+ * Validated by the same script as the log above.
+ */
+export const predecessorReleases: PredecessorReleaseEntry[] =
+  data.predecessorReleases;
+
+export const PREDECESSOR_RELEASE_COUNT = predecessorReleases.length;

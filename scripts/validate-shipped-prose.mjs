@@ -189,6 +189,9 @@ surfacesChecked += 1;
 for (const e of releaseLog.releases ?? []) {
   scan(`website/src/data/release-log.json (${e.version ?? '?'})`, `${e.title ?? ''}\n${(e.body ?? []).join('\n')}`);
 }
+for (const e of releaseLog.predecessorReleases ?? []) {
+  scan(`website/src/data/release-log.json (predecessor ${e.version ?? '?'})`, e.summary ?? '');
+}
 
 const loopsRegistry = json('website/src/data/loops.json');
 surfacesChecked += 1;

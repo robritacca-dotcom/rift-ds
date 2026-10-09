@@ -50,7 +50,7 @@ Each surface has its own shape. The full standard for a surface lives in one pla
 
 | Surface | Person | Shape | The rule that matters | Full standard |
 |---|---|---|---|---|
-| Release log entries (`website/src/data/release-log.json`) | None | Short paragraphs per release: what shipped, and what it means for a consumer | Concise and neutral, never commit digests; written for a consumer, not a maintainer; a plain descriptive title a non-technical reader can follow | This file |
+| Release log entries (`website/src/data/release-log.json`) | None | Short paragraphs per release: what shipped, and what it means for a consumer. The predecessor versions listed beneath the log carry one or two sentences each, under the same rules | Concise and neutral, never commit digests; written for a consumer, not a maintainer; a plain descriptive title a non-technical reader can follow | This file |
 | Website page copy + metadata | None | Short paragraphs under sentence-case headings | The system is the subject; specifics over adjectives | This file |
 | Component descriptions (`src/components/registry.json`) | None | One verbless fragment, ≤160 chars, ends in a full stop | One authoritative home: sidebar, metadata, and README all derive from it | This file + registry validator |
 | README + `src/stories/Configure.mdx` | "You" for instructions | Install and usage copy | Production copy: the README ships in the npm tarball | `CLAUDE.md` (Registries section) |

@@ -925,11 +925,21 @@ function sectionReleases() {
     .map((e) => `### ${e.version} — ${e.title} (${e.date})\n\n${e.body.join('\n\n')}`)
     .join('\n\n');
 
+  const earlier = data.predecessorReleases
+    .map((e) => `- ${e.version} (${e.date})${e.summary ? `: ${e.summary}` : ''}`)
+    .join('\n');
+
   return `## Release log
 
 One entry per published npm version, newest first. Published at /releases.
 
-${entries || 'No releases have been published from this repository yet; the first entry lands with the first npm publish.'}`;
+${entries || 'No releases have been published from this repository yet; the first entry lands with the first npm publish.'}
+
+### Before the rename
+
+The versions published under the package's earlier name, before it was renamed and restarted at 1.0.0. Listed beneath the log at /releases, newest first.
+
+${earlier}`;
 }
 
 /* ============================================================

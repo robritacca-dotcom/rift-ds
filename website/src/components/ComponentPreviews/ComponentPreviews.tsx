@@ -48,6 +48,9 @@ import { Swatch } from "rift-ds/components/Swatch/Swatch";
 import { Timeline } from "rift-ds/components/Timeline/Timeline";
 import { ContributionGraph, type ContributionDay } from "rift-ds/components/ContributionGraph/ContributionGraph";
 import { Divider } from "rift-ds/components/Divider/Divider";
+import { AttachmentGroup } from "rift-ds/components/Attachment/AttachmentGroup";
+import { AttachmentTile } from "rift-ds/components/Attachment/AttachmentTile";
+import { PHOTO_LANDSCAPE, PHOTOS } from "@/lib/attachment-demo";
 import { DocumentChip } from "rift-ds/components/DocumentChip/DocumentChip";
 import { NumberInput } from "rift-ds/components/NumberInput/NumberInput";
 import { Pagination } from "rift-ds/components/Pagination/Pagination";
@@ -232,6 +235,51 @@ const previews: Record<string, () => ReactNode> = {
           <span className="material-symbols-rounded" style={{ fontSize: "14px", color: "var(--color-icon-secondary)" }}>settings</span>
           <span style={{ fontSize: "10px", color: "var(--color-text-secondary)" }}>Settings</span>
         </div>
+      </div>
+    </>
+  ),
+  "attachment-drop-zone": () => (
+    <>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "var(--gap-050)", width: "170px", height: "84px", border: "var(--border-050) solid var(--color-input-border-selected)", borderRadius: "var(--radius-400)", background: "var(--color-bg-container-primary)" }}>
+        <span className="material-symbols-rounded" aria-hidden="true" style={{ ["--icon-size" as string]: "var(--icon-size-600)", color: "var(--color-input-border-selected)" }}>upload_file</span>
+        <span style={{ font: "var(--font-paragraph-sm-emphasis-weight) var(--font-paragraph-sm-emphasis-size) / var(--font-paragraph-sm-emphasis-line-height) var(--font-family-body)", color: "var(--color-text-primary)" }}>Drop files to attach</span>
+      </div>
+    </>
+  ),
+  "attachment-group": () => (
+    <>
+      <div style={{ ["--ds-attachment-tile-size" as string]: "64px", pointerEvents: "none" }}>
+        <AttachmentGroup
+          viewer={false}
+          size="compact"
+          items={[
+            { id: "a", name: "a.png", kind: "image", status: "ready", previewSrc: PHOTOS[0] },
+            { id: "b", name: "b.png", kind: "image", status: "ready", previewSrc: PHOTOS[1] },
+            { id: "c", name: "c.png", kind: "image", status: "ready", previewSrc: PHOTOS[2] },
+            { id: "d", name: "d.png", kind: "image", status: "ready", previewSrc: PHOTOS[3] },
+            { id: "e", name: "e.png", kind: "image", status: "ready", previewSrc: PHOTOS[4] },
+          ]}
+        />
+      </div>
+    </>
+  ),
+  "attachment-tile": () => (
+    <>
+      <div style={{ display: "flex", gap: "var(--gap-200)" }}>
+        <AttachmentTile size="compact" name="brief.pdf" kind="pdf" />
+        <AttachmentTile size="compact" name="budget.xlsx" kind="spreadsheet" />
+      </div>
+    </>
+  ),
+  "attachment-viewer": () => (
+    <>
+      <div style={{ display: "flex", flexDirection: "column", width: "170px", height: "100px", borderRadius: "var(--radius-300)", border: "var(--border-025) solid var(--color-bg-container-border)", background: "var(--color-bg-container-secondary)", overflow: "hidden" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "var(--gap-100)", padding: "var(--padding-100) var(--padding-200)", background: "var(--color-bg-container-primary)", borderBottom: "var(--border-025) solid var(--color-bg-container-border)", font: "var(--font-caption-weight) var(--font-caption-size) / var(--font-caption-line-height) var(--font-family-body)", color: "var(--color-text-primary)" }}>
+          receipt.jpg
+          <span style={{ marginLeft: "auto", color: "var(--color-text-tertiary)" }}>2 of 5</span>
+        </div>
+        {/* eslint-disable-next-line @next/next/no-img-element -- an inline data URI, nothing for the optimizer to fetch */}
+        <img src={PHOTO_LANDSCAPE} alt="" style={{ flex: 1, minHeight: 0, width: "100%", objectFit: "cover" }} />
       </div>
     </>
   ),

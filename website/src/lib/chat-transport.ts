@@ -82,7 +82,16 @@ export function createFetchTransport(
         response = await fetch(endpoint, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ messages: messages.slice(-MAX_TURNS), path, model }),
+          body: JSON.stringify({
+            /* Role and text, named field by field: a message may carry
+               attachment details for the simulated chat, and nothing about
+               a file is ever sent to the chat route. */
+            messages: messages
+              .slice(-MAX_TURNS)
+              .map(({ role, content }) => ({ role, content })),
+            path,
+            model,
+          }),
           signal: controller.signal,
         });
       } catch {

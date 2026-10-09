@@ -9,6 +9,9 @@ import {
   type ReactNode,
 } from "react";
 import Image from "next/image";
+import { AttachmentDropZone } from "rift-ds/components/Attachment/AttachmentDropZone";
+import { AttachmentGroup } from "rift-ds/components/Attachment/AttachmentGroup";
+import { useAttachments } from "rift-ds/components/Attachment/useAttachments";
 import { ChatHeader } from "rift-ds/components/ChatHeader/ChatHeader";
 import { ChatMessage } from "rift-ds/components/ChatMessage/ChatMessage";
 import { ChatThread } from "rift-ds/components/ChatThread/ChatThread";
@@ -30,6 +33,15 @@ import styles from "./SiteChat.module.css";
 import { ASSISTANT_NAME } from "@/config/brand.generated";
 
 /** The one line a locked model shows in place of its description. */
+/* Limits on what a visitor may queue where attachments are on. They bound
+   what the browser holds in memory; nothing is uploaded, so they are not a
+   server contract. */
+const MAX_ATTACHMENTS = 10;
+const MAX_ATTACHMENT_BYTES = 50 * 1024 * 1024;
+/* A paste this long is a document, not a sentence: it becomes a tile. */
+const LONG_PASTE_CHARS = 1200;
+const ATTACH_HINT = `Up to 50 MB each · ${MAX_ATTACHMENTS} files max`;
+
 const LOCKED_MODEL_DESCRIPTION = "Paused for today to stay in budget.";
 
 /**
@@ -49,6 +61,7 @@ export function SiteChat({
   tagline,
   starters: startersOverride,
   composerActions,
+  fileAttachments = false,
   threads,
   tabs,
   aside,
@@ -83,6 +96,12 @@ export function SiteChat({
   /** Replaces the composer's leading actions (the live model picker) —
       the playground slots its own mock picker and attach button here. */
   composerActions?: ReactNode;
+  /** Let the visitor attach files: an attach button, paste, drop anywhere
+      on the chat, and long pastes folded into a tile. Off for the site's
+      own chat, whose live backend takes text alone; the playground turns
+      it on for its simulated stage, where files are read in the browser
+      and never uploaded. */
+  fileAttachments?: boolean;
   /** A session-history rail (a ThreadPanel), rendered responsively by the
       widget's own measured width: wide hosts seat it as an inline left
       rail, narrow ones summon it from a header hamburger as a slide-over
@@ -188,9 +207,20 @@ export function SiteChat({
     if (open) focusComposer();
   }, [open]);
 
+  /* The files queued on the next message. Sending hands them to the turn,
+     which keeps their previews alive for as long as the thread shows it. */
+  const queue = useAttachments({ maxCount: MAX_ATTACHMENTS, maxSize: MAX_ATTACHMENT_BYTES });
+
   const handleSubmit = (value: string) => {
-    // send() reports acceptance; an ignored submit keeps the draft.
-    if (send(value)) setDraft("");
+    // send() reports acceptance; an ignored submit keeps the draft and the queue.
+    if (fileAttachments && queue.items.length > 0) {
+      const ready = queue.items.filter((item) => item.status === "ready");
+      if (send(value, { attachments: ready })) {
+        // Ownership of the previews moved to the turn; empty without revoking.
+        queue.take();
+        setDraft("");
+      }
+    } else if (send(value)) setDraft("");
     focusComposer();
   };
 
@@ -360,8 +390,15 @@ export function SiteChat({
     </>
   );
 
+  /* With attachments on, the whole chat column is the drop target, so a
+     file dragged anywhere over the conversation lands. The zone renders the
+     same root div and passes everything through. */
+  const ChatRoot: React.ElementType = fileAttachments ? AttachmentDropZone : "div";
+  const dropProps = fileAttachments ? { onFilesSelected: queue.add, hint: ATTACH_HINT } : {};
+
   const chatColumn = (
-    <div
+    <ChatRoot
+      {...dropProps}
       className={`${styles.chat} ${threads ? styles.chatWithThreads : ""}`}
       data-compact={compact || undefined}
       data-phone={phone || undefined}
@@ -370,7 +407,7 @@ export function SiteChat({
       data-lifted-actions={(asideShown && asideWide) || undefined}
       /* Escape steps out of the takeover first; the host's own Escape
          handling (closing the panel) takes over once back in panel view. */
-      onKeyDown={(e) => {
+      onKeyDown={(e: React.KeyboardEvent) => {
         /* A rail sheet is the topmost layer, so Escape settles it before
            the takeover or the host panel hear anything — one layer per
            press, whichever of the two is standing. */
@@ -388,7 +425,7 @@ export function SiteChat({
       /* On the welcome screen the whole panel is an invitation to type, so a
          click on its dead space lands focus in the composer — unless it hit a
          real control, or the visitor was selecting the greeting text. */
-      onClick={(e) => {
+      onClick={(e: React.MouseEvent) => {
         if (!isEmpty) return;
         const target = e.target as HTMLElement;
         if (target.closest("button, a, input, textarea, [role='button']")) return;
@@ -445,21 +482,21 @@ export function SiteChat({
                      content stands alone in the thread, no message chrome. */
                   <div key={turn.id}>{turn.content}</div>
                 ) : turn.role === "user" ? (
-                  turn.content ? (
-                    /* An injected attachment rides above the bubble, right-
-                       aligned with it — a file lands beside the message,
-                       never inside the sentence. */
-                    <div key={turn.id} className={styles.userTurnStack}>
-                      <div className={styles.userTurnAttachment}>{turn.content}</div>
-                      {turn.text !== "" && (
-                        <ChatMessage role="user">{turn.text}</ChatMessage>
-                      )}
-                    </div>
-                  ) : (
-                    <ChatMessage key={turn.id} role="user">
-                      {turn.text}
-                    </ChatMessage>
-                  )
+                  /* Files ride above the bubble on the sender's side; a
+                     turn of files alone draws no bubble. */
+                  <ChatMessage
+                    key={turn.id}
+                    role="user"
+                    attachments={
+                      turn.attachments ? (
+                        <AttachmentGroup align="end" items={turn.attachments} />
+                      ) : (
+                        turn.content
+                      )
+                    }
+                  >
+                    {turn.text}
+                  </ChatMessage>
                 ) : (
                   <AssistantTurn key={turn.id} turn={turn} />
                 )
@@ -514,6 +551,15 @@ export function SiteChat({
             context={pageName ? <>Looking at “{pageName}”</> : undefined}
             contextIcon="description"
             contextPlacement="above"
+            {...(fileAttachments
+              ? {
+                  files: queue.items,
+                  onFilesSelected: queue.add,
+                  onFileRemove: queue.remove,
+                  pasteThreshold: LONG_PASTE_CHARS,
+                  onPasteAsAttachment: (text: string) => queue.addText(text),
+                }
+              : {})}
             actions={
               /* A host can slot its own leading actions (the playground's
                  mock picker). The site's default is the live picker: the
@@ -553,7 +599,7 @@ export function SiteChat({
           </p>
         </div>
       </div>
-    </div>
+    </ChatRoot>
   );
 
   if (!hasRails) return chatColumn;

@@ -2,8 +2,6 @@
 
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { AiButton } from "rift-ds/components/AiButton/AiButton";
-import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
-import { DocumentChip } from "rift-ds/components/DocumentChip/DocumentChip";
 import {
   ModelPicker,
   type ModelPickerModel,
@@ -215,8 +213,6 @@ export default function ChatView({
     setOpen,
     view,
     returnFocusRef,
-    send,
-    streaming,
     reset,
     turns,
     live,
@@ -819,32 +815,13 @@ export default function ChatView({
           { id: "pricing", label: "What do the plans include?" },
           { id: "invite", label: "Invite my team to a workspace" },
         ]}
+        /* Real files on the simulated stage: the picker, paste and drop
+           all work, previews are built in the browser, and nothing is
+           uploaded. The live stage keeps the site's text-only composer. */
+        fileAttachments={simControls}
         composerActions={
           simControls ? (
             <>
-              {/* The attach button stages a file exactly the way the
-                  director's doc-drop event does — everything on this stage
-                  is simulated, so the click skips the picker and sends the
-                  attachment through the sim story: the chip rides the
-                  visitor's bubble, and the agent answers by reading the
-                  doc and charting its budget. */}
-              <CircularButton
-                icon="add"
-                variant="tertiary"
-                ariaLabel="Attach a file"
-                disabled={streaming}
-                onClick={() =>
-                  send("Here is the launch plan we are working from.", {
-                    content: (
-                      <DocumentChip
-                        name="Q3 launch plan.pdf"
-                        fileType="pdf"
-                        meta="1.2 MB"
-                      />
-                    ),
-                  })
-                }
-              />
               {/* Working mock: the panel opens and the pill follows the
                   choice, but nothing routes anywhere — the sim script is
                   the sim script whatever the pill says. */}

@@ -5,6 +5,7 @@ import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { DocumentChip } from "rift-ds/components/DocumentChip/DocumentChip";
+import { Alert } from "rift-ds/components/Alert/Alert";
 import { Button } from "rift-ds/components/Button/Button";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
@@ -88,6 +89,12 @@ export default function DocumentChipPage() {
               file the host already holds.
             </p>
           </div>
+
+          <Alert
+            variant="warning"
+            title="Superseded by the attachment tile"
+            description="Document chip keeps working for existing consumers. New work uses the attachment tile, which draws previews, upload states and file-type marks."
+          />
 
           {/* File types */}
           <section className={styles.section}>

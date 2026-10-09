@@ -1,6 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import {
+  revokeAttachmentUrls,
+} from "rift-ds/components/Attachment/useAttachments";
+import type { AttachmentItem } from "rift-ds/components/Attachment/fileTypes";
 import { createStreamReveal } from "rift-ds/components/StreamingText/useStreamReveal";
 
 /* ============================================
@@ -53,6 +57,13 @@ export type ChatEvent =
 export interface ChatTransportMessage {
   role: "user" | "assistant";
   content: string;
+  /**
+   * What was attached to a user message: names and kinds, never bytes. The
+   * simulated transport reads it to answer about the files. The live
+   * transport drops it before the request is built, so nothing about an
+   * attachment reaches the chat route.
+   */
+  attachments?: { name: string; kind: AttachmentItem["kind"]; size?: number }[];
 }
 
 /**
@@ -96,8 +107,13 @@ export interface ChatTurn {
    */
   followups?: string[];
   /**
-   * Injected rich content rendered with the turn: a tool call, a card, an
-   * attachment chip. Set by `injectTurn` (the playground's event director)
+   * Files sent with a user turn, drawn above its bubble. Their picture
+   * previews are object URLs this hook owns from the moment of the send:
+   * they are revoked on reset and on unmount.
+   */
+  attachments?: AttachmentItem[];
+  /**
+   * Injected rich content rendered with the turn: a tool call, a card. Set by `injectTurn` (the playground's event director)
    * or carried from a scripted transport's `content` event (the sim story);
    * the live transports produce text alone, so the site widget never
    * carries one. Assistant turns render it between the reasoning and the
@@ -193,6 +209,20 @@ export function useChat(transport: ChatTransport) {
      does not run to completion against an unmounted consumer. */
   useEffect(() => () => abortRef.current?.abort(), []);
 
+  /* The turns as they stand, for the two moments that release what they
+     hold: a reset and the unmount. Sent files keep their preview URLs alive
+     for as long as the thread shows them, and no longer. */
+  const turnsRef = useRef<ChatTurn[]>(turns);
+  useEffect(() => {
+    turnsRef.current = turns;
+  }, [turns]);
+  const releaseAttachments = useCallback(() => {
+    for (const turn of turnsRef.current) {
+      if (turn.attachments) revokeAttachmentUrls(turn.attachments);
+    }
+  }, []);
+  useEffect(() => releaseAttachments, [releaseAttachments]);
+
   const streaming = live !== null;
 
   /**
@@ -233,14 +263,20 @@ export function useChat(transport: ChatTransport) {
    * response is in flight or for an empty draft, so the caller knows not to
    * clear its input.
    *
-   * `options.content` attaches rich content to the user turn — an attachment
-   * chip above the bubble, the way a dropped file lands. Playground staging
-   * only: the transport still receives the text alone.
+   * `options.attachments` sends files with the turn; files alone are a
+   * whole message, so an empty draft is accepted when there are some. The
+   * hook takes ownership of their preview URLs. Only their names and kinds
+   * travel to the transport, and the live transport drops even those.
+   * `options.content` attaches other rich content to the user turn.
    */
   const send = useCallback(
-    (text: string, options?: { content?: ReactNode }): boolean => {
+    (
+      text: string,
+      options?: { content?: ReactNode; attachments?: AttachmentItem[] }
+    ): boolean => {
       const trimmed = text.trim();
-      if (trimmed === "" || busyRef.current) return false;
+      const attachments = options?.attachments?.length ? options.attachments : undefined;
+      if ((trimmed === "" && !attachments) || busyRef.current) return false;
       busyRef.current = true;
 
       const controller = new AbortController();
@@ -250,7 +286,11 @@ export function useChat(transport: ChatTransport) {
 
       const history: ChatTransportMessage[] = [
         ...historyRef.current,
-        { role: "user", content: trimmed },
+        {
+          role: "user",
+          content: trimmed,
+          attachments: attachments?.map(({ name, kind, size }) => ({ name, kind, size })),
+        },
       ];
       historyRef.current = history;
 
@@ -259,7 +299,13 @@ export function useChat(transport: ChatTransport) {
       const userTurnId = makeId();
       setTurns((prev) => [
         ...prev,
-        { id: userTurnId, role: "user", text: trimmed, content: options?.content },
+        {
+          id: userTurnId,
+          role: "user",
+          text: trimmed,
+          content: options?.content,
+          attachments,
+        },
       ]);
 
       let current: LiveResponse = {
@@ -462,9 +508,10 @@ export function useChat(transport: ChatTransport) {
     // conversation accepts sends immediately.
     busyRef.current = false;
     historyRef.current = [];
+    releaseAttachments();
     setTurns([]);
     setLive(null);
-  }, []);
+  }, [releaseAttachments]);
 
   return {
     turns,

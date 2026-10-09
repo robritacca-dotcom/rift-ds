@@ -311,19 +311,6 @@
   gap: var(--gap-500);
 }
 
-/* A visitor turn with an injected attachment: the file tile stacks above
-   the bubble, sharing its right edge. The stack is one thread child, so
-   the thread's own turn spacing treats the pair as a single turn. */
-.userTurnStack {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-100);
-}
-
-.userTurnAttachment {
-  align-self: flex-end;
-}
-
 /* No divider — the composer floats free of the transcript, like the
    reference. The thread's bottom padding provides the separation above;
    the disclaimer row provides it below. */
@@ -341,6 +328,9 @@
   width: 100%;
   max-width: 768px;
   margin-inline: auto;
+  /* The panel is narrow and its welcome screen centres the composer, so
+     queued files sit in smaller tiles here than a full-width composer's. */
+  --ds-attachment-tile-size: 104px;
 }
 
 /* One quiet line, centred with the composer column, at the floor of the

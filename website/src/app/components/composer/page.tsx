@@ -6,7 +6,7 @@ import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { Composer } from "rift-ds/components/Composer/Composer";
 import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
-import { DocumentChip } from "rift-ds/components/DocumentChip/DocumentChip";
+import { useAttachments } from "rift-ds/components/Attachment/useAttachments";
 import { PromptSuggestions } from "rift-ds/components/PromptSuggestions/PromptSuggestions";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
@@ -57,45 +57,27 @@ function StreamingDemo() {
   );
 }
 
-/** The consumer owns the attachment list; the composer only renders it. */
+/** Real files: pick, paste or drop them. `useAttachments` owns the list. */
 function AttachmentsDemo() {
-  const initialFiles = [
-    { id: "brief", name: "launch-brief.pdf", fileType: "pdf" as const },
-    { id: "costs", name: "costs-q3.xlsx", fileType: "sheet" as const },
-    { id: "deck", name: "kickoff-deck.pptx", fileType: "slide" as const },
-  ];
-  const [files, setFiles] = useState(initialFiles);
+  const [value, setValue] = useState("");
+  const queue = useAttachments({ maxCount: 10 });
 
   return (
     <div className={styles.demoColumn}>
       <Composer
-        placeholder="Ask about these files"
-        attachments={
-          files.length > 0
-            ? files.map((file) => (
-                <DocumentChip
-                  key={file.id}
-                  name={file.name}
-                  fileType={file.fileType}
-                  size="compact"
-                  onRemove={() =>
-                    setFiles((prev) => prev.filter((f) => f.id !== file.id))
-                  }
-                  removeLabel={`Remove ${file.name}`}
-                />
-              ))
-            : undefined
-        }
+        placeholder="Attach a file, or paste one"
+        value={value}
+        onValueChange={setValue}
+        files={queue.items}
+        onFilesSelected={queue.add}
+        onFileRemove={queue.remove}
+        pasteThreshold={1200}
+        onPasteAsAttachment={(text) => queue.addText(text)}
+        onSubmit={() => {
+          queue.clear();
+          setValue("");
+        }}
       />
-      {files.length < initialFiles.length && (
-        <button
-          type="button"
-          className={styles.resetButton}
-          onClick={() => setFiles(initialFiles)}
-        >
-          Restore the files
-        </button>
-      )}
     </div>
   );
 }
@@ -128,11 +110,7 @@ function FullFooterDemo() {
           setValue("");
         }}
         actions={
-          <CircularButton
-            icon="add"
-            variant="tertiary"
-            ariaLabel="Attach a file"
-          />
+          <CircularButton icon="tune" variant="tertiary" ariaLabel="Options" />
         }
       />
       <p className={styles.demoNote} aria-live="polite">
@@ -264,10 +242,13 @@ export default function ComposerPage() {
           <section className={styles.section}>
             <SectionTitle title="Attachments" />
             <p className={styles.demoText}>
-              The attachments row renders whatever the caller passes,
-              DocumentChips by intent. The list is fully controlled, the same
-              philosophy as FileInput: the composer never owns the files, it
-              only shows them.
+              Give the composer a way to hear about files and it grows an
+              attach button, accepts files pasted into the field, and takes
+              files dropped on it. The queue is a row of square tiles that
+              scrolls sideways. The list stays the caller’s, the same
+              philosophy as FileInput: the composer shows the files and
+              reports what changed. Try it with files of your own. They are
+              read in your browser and go nowhere.
             </p>
             <AttachmentsDemo />
           </section>

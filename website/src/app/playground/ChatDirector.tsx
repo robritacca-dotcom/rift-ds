@@ -10,7 +10,6 @@ import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
 import { CodeDiff } from "rift-ds/components/CodeDiff/CodeDiff";
 import { AreaChart } from "rift-ds/components/Chart/AreaChart";
 import { BarChart } from "rift-ds/components/Chart/BarChart";
-import { DocumentChip } from "rift-ds/components/DocumentChip/DocumentChip";
 import { InterruptCard } from "rift-ds/components/InterruptCard/InterruptCard";
 import { MessageCard } from "rift-ds/components/MessageCard/MessageCard";
 import { SourceChip } from "rift-ds/components/SourceChip/SourceChip";
@@ -402,14 +401,20 @@ export default function ChatDirector({
           icon: "attach_file",
           disabled: streaming,
           /* The visitor's words ride with the file, the way a real
-             attachment lands: the chip above the bubble, text below. The
+             attachment lands: the tile above the bubble, text below. The
              text is the story key, so the sim answers with the read and
              the budget chart. */
           run: () =>
             send("Here is the launch plan we are working from.", {
-              content: (
-                <DocumentChip name="Q3 launch plan.pdf" fileType="pdf" meta="1.2 MB" />
-              ),
+              attachments: [
+                {
+                  id: "launch-plan",
+                  name: "Q3 launch plan.pdf",
+                  kind: "pdf",
+                  size: 1_258_291,
+                  status: "ready",
+                },
+              ],
             }),
         },
       ],

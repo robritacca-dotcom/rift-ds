@@ -21,7 +21,7 @@ import { ChatMarker } from "rift-ds/components/ChatMarker/ChatMarker";
 import { ChatMessage } from "rift-ds/components/ChatMessage/ChatMessage";
 import { ChatThread } from "rift-ds/components/ChatThread/ChatThread";
 import { Composer } from "rift-ds/components/Composer/Composer";
-import { DocumentChip } from "rift-ds/components/DocumentChip/DocumentChip";
+import { AttachmentTile } from "rift-ds/components/Attachment/AttachmentTile";
 import { InterruptCard } from "rift-ds/components/InterruptCard/InterruptCard";
 import { MessageActions } from "rift-ds/components/MessageActions/MessageActions";
 import { MessageCard } from "rift-ds/components/MessageCard/MessageCard";
@@ -1208,7 +1208,7 @@ export default function DesignSystemLanding() {
       links={[
         { label: "Interrupt card", href: "/components/interrupt-card" },
         { label: "Message card", href: "/components/message-card" },
-        { label: "Document chip", href: "/components/document-chip" },
+        { label: "Attachment tile", href: "/components/attachment-tile" },
       ]}
     >
       <InterruptCard
@@ -1226,7 +1226,7 @@ export default function DesignSystemLanding() {
         description="Nine categories over 86 transactions."
         meta="Generated 1 Aug"
       />
-      <DocumentChip name="statement-july.pdf" fileType="pdf" meta="84 KB" size="compact" />
+      <AttachmentTile name="statement-july.pdf" kind="pdf" meta="84 KB" size="compact" />
     </DemoCard>
 
     <DemoCard

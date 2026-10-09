@@ -408,6 +408,26 @@ const delay = (ms: number, signal: AbortSignal) =>
  * an approval. Without the map (or for a key it lacks) the node still
  * answers in text, so the transport never depends on the caller.
  */
+/** The reply to a turn that carried files and matched no scripted prompt. */
+function attachmentScenario(names: string[]): SimScenario {
+  const shown = names.slice(0, 3).join(", ");
+  const rest = names.length > 3 ? ` and ${names.length - 3} more` : "";
+  const one = names.length === 1;
+  return {
+    steps: [
+      {
+        status: one ? "Looking at the file" : "Looking at the files",
+        point: `${names.length} attached; note what each one is before answering.`,
+      },
+    ],
+    response:
+      `Got ${one ? "it" : "them"}: ${shown}${rest}. This chat is simulated, so ` +
+      `${one ? "the file" : "the files"} stayed in your browser and nothing was ` +
+      "uploaded or read. A live assistant would answer from the contents here.",
+    followups: ["How do I get started?", "What do the plans include?"],
+  };
+}
+
 export function createSimTransport(content?: Record<string, ReactNode>): ChatTransport {
   let exchangeCount = 0;
 
@@ -421,8 +441,16 @@ export function createSimTransport(content?: Record<string, ReactNode>): ChatTra
     const lastUser = [...messages].reverse().find((m) => m.role === "user");
     const node = lastUser ? STORY_BY_PROMPT.get(normalize(lastUser.content)) : undefined;
 
-    const scenario = node ?? SCENARIOS[exchangeCount % SCENARIOS.length];
-    if (!node) exchangeCount += 1;
+    /* Files with no scripted prompt behind them get an answer about the
+       files, built from their names. Nothing was read: the bytes never left
+       the visitor's browser, and the reply says so. */
+    const attached = !node ? (lastUser?.attachments ?? []) : [];
+    const scenario =
+      node ??
+      (attached.length > 0
+        ? attachmentScenario(attached.map((file) => file.name))
+        : SCENARIOS[exchangeCount % SCENARIOS.length]);
+    if (!node && attached.length === 0) exchangeCount += 1;
 
     for (const step of scenario.steps) {
       yield { type: "status", label: step.status, point: step.point };

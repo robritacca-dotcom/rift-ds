@@ -54,7 +54,7 @@ A set of two-state buttons that can be toggled on or off, supporting text and ic
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/toggle-group.md
 
-## AI (26)
+## AI (30)
 
 Chat, agent, and model surfaces for building AI products, from the composer to the reasoning trace and the diff an agent proposes.
 
@@ -89,6 +89,38 @@ The AI entry point: icon and label ringed by a turning gradient and glow, with a
 - Import: `import { AiButton } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/ai-button.md
+
+### Attachment drop zone
+
+A wrapper that makes a whole surface a file drop target, with an outlined overlay while files hover over it.
+
+- Import: `import { AttachmentDropZone } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/attachment-drop-zone.md
+
+### Attachment group
+
+The files on a sent message: one picture at its own shape, or a grid of tiles that collapses behind a count.
+
+- Import: `import { AttachmentGroup } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/attachment-group.md
+
+### Attachment tile
+
+One file as a square: a picture, a coloured mark for well-known formats, or a neutral badge, with upload states.
+
+- Import: `import { AttachmentTile } from 'rift-ds';`
+- Rendering: server-renderable (no 'use client')
+- Contract: https://rift-ds.com/components/attachment-tile.md
+
+### Attachment viewer
+
+A preview dialog for a message's files, with download, stepping, and plain states for files it cannot show.
+
+- Import: `import { AttachmentViewer } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/attachment-viewer.md
 
 ### Chat header
 
@@ -132,7 +164,7 @@ Unified diff view for code changes, with added, removed, and context lines.
 
 ### Composer
 
-An auto-growing message input with send and stop states, a page-context note, an attachment slot, and Enter-to-send.
+An auto-growing message input with send and stop states, a page-context note, a file tray fed by picker, paste and drop, and Enter-to-send.
 
 - Import: `import { Composer } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
@@ -140,7 +172,7 @@ An auto-growing message input with send and stop states, a page-context note, an
 
 ### Document chip
 
-A compact file reference with a type icon, name, metadata, and optional remove.
+A legacy one-row file reference, superseded by the attachment tile and kept for existing consumers.
 
 - Import: `import { DocumentChip } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')

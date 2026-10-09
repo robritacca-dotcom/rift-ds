@@ -27,6 +27,6 @@ Generated from the rift-ds registry and prop JSDoc, version 1.3.0. The same data
 | overflowLabel | `string` | no | `More` | Accessible label of the button that opens the overflow menu |
 | scrolled | `boolean` | no |  | Whether content has scrolled under the bar, which collapses an expanded title and switches the bar to its scrolled surface. Leave unset to have the bar watch `scrollTarget` itself. |
 | scrollTarget | `HTMLElement \| null` | no |  | The element whose scroll the bar watches when `scrolled` is unset. Defaults to the window |
-| headingLevel | `5 \| 2 \| 3 \| 1 \| 6 \| 4` | no | `1` | Level of the title's heading element |
+| headingLevel | `4 \| 2 \| 1 \| 5 \| 3 \| 6` | no | `1` | Level of the title's heading element |
 | sticky | `boolean` | no | `true` | Keeps the bar stuck to the top of its scroll container |
 | className | `string` | no | `` | Additional CSS classes |

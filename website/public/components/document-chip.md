@@ -1,6 +1,6 @@
 # Document chip
 
-A compact file reference with a type icon, name, metadata, and optional remove.
+A legacy one-row file reference, superseded by the attachment tile and kept for existing consumers.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.3.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 

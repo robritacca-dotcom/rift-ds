@@ -27,6 +27,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.3.0. The same data
 | pendingLabel | `string` | no | `Waiting for a reply` | Accessible text announced for the pending state. |
 | actions | `ReactNode` | no |  | Action row under the content, revealed on hover and keyboard focus (always visible on touch) — `showActions` pins it on. |
 | showActions | `boolean` | no | `false` | Always show the action row instead of revealing it on hover and focus. For surfaces where the actions are part of the response — a copy or feedback row — rather than a secondary affordance. |
+| attachments | `ReactNode` | no |  | Files sent with this turn, drawn outside the bubble on the speaker's side, above the text. Pass an AttachmentGroup. A turn that carries files and no text draws no bubble at all. |
 | footer | `ReactNode` | no |  | Footer slot under the content — a sources row, an edited note. |
 | className | `string` | no | `` | Additional CSS classes |
 | children | `ReactNode` | no |  | The message content. The package ships no markdown renderer; render markdown yourself, ideally wrapped in Prose, and pass the result. |

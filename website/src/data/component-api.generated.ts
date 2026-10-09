@@ -987,6 +987,428 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "name": "AttachmentDropZone",
+    "label": "Attachment drop zone",
+    "slug": "attachment-drop-zone",
+    "category": "ai",
+    "description": "A wrapper that makes a whole surface a file drop target, with an outlined overlay while files hover over it.",
+    "client": true,
+    "importPath": "rift-ds/components/Attachment/AttachmentDropZone",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "AttachmentDropZone",
+        "props": [
+          {
+            "name": "onFilesSelected",
+            "type": "((files: File[]) => void)",
+            "required": false,
+            "description": "Fires with the files dropped anywhere on the zone."
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "required": false,
+            "description": "Stops the zone reacting to drags; its children behave as if it were not there.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "icon",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Icon above the overlay's headline: a Material Symbol name, or any\ncustom element. Pass `null` for none.",
+            "defaultValue": "upload_file"
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": false,
+            "description": "Headline of the overlay shown while files are dragged over the zone.",
+            "defaultValue": "Drop files to attach"
+          },
+          {
+            "name": "hint",
+            "type": "string",
+            "required": false,
+            "description": "Second line of the overlay: what may be dropped, e.g. accepted types and limits."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": ""
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The surface that accepts drops: a chat panel, a thread and its composer."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "AttachmentGroup",
+    "label": "Attachment group",
+    "slug": "attachment-group",
+    "category": "ai",
+    "description": "The files on a sent message: one picture at its own shape, or a grid of tiles that collapses behind a count.",
+    "client": true,
+    "importPath": "rift-ds/components/Attachment/AttachmentGroup",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "AttachmentGroup",
+        "props": []
+      }
+    ]
+  },
+  {
+    "name": "AttachmentTile",
+    "label": "Attachment tile",
+    "slug": "attachment-tile",
+    "category": "ai",
+    "description": "One file as a square: a picture, a coloured mark for well-known formats, or a neutral badge, with upload states.",
+    "client": false,
+    "importPath": "rift-ds/components/Attachment/AttachmentTile",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "AttachmentTile",
+        "props": [
+          {
+            "name": "name",
+            "type": "string",
+            "required": true,
+            "description": "File name, extension included. Truncates in the middle so the extension stays visible."
+          },
+          {
+            "name": "kind",
+            "type": "FileKind",
+            "required": false,
+            "description": "What kind of file it is, which picks the type mark: a coloured lettered\nglyph for the well-known formats, a neutral extension badge for the\nrest. Derive it with `getFileKind`.",
+            "defaultValue": "generic"
+          },
+          {
+            "name": "typeLabel",
+            "type": "string",
+            "required": false,
+            "description": "Short uppercase label on the type mark. Defaults from the kind and the extension."
+          },
+          {
+            "name": "status",
+            "type": "AttachmentStatus",
+            "required": false,
+            "description": "Where the file is in its life. Anything but `ready` shows the name with a status line.",
+            "defaultValue": "ready"
+          },
+          {
+            "name": "progress",
+            "type": "number",
+            "required": false,
+            "description": "Upload progress, 0 to 100, reported to assistive technology while `uploading`."
+          },
+          {
+            "name": "previewSrc",
+            "type": "string",
+            "required": false,
+            "description": "Image that fills the tile while `ready`: an object URL for a picture, or\na first page the host rendered for a document. A non-image kind keeps\nits type mark over the corner."
+          },
+          {
+            "name": "previewAlt",
+            "type": "string",
+            "required": false,
+            "description": "Alt text for the preview. Defaults to the file name."
+          },
+          {
+            "name": "previewMark",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the type mark sits over the corner of a preview. Defaults to on\nfor a document's first page, which still has to say what format it is,\nand off for a picture, which is its own description. A sent message\nturns it on for pictures too."
+          },
+          {
+            "name": "excerpt",
+            "type": "string",
+            "required": false,
+            "description": "First lines of a pasted block, drawn as a faded excerpt filling the tile while `ready`."
+          },
+          {
+            "name": "meta",
+            "type": "string",
+            "required": false,
+            "description": "Secondary line under the name while `ready`, e.g. \"1.2 MB\". Callers keep their own formatting."
+          },
+          {
+            "name": "error",
+            "type": "string",
+            "required": false,
+            "description": "Why the file failed. Replaces `errorLabel` on the status line."
+          },
+          {
+            "name": "size",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "Tile size. Compact shrinks the square and drops the secondary line of a\nready file. Unrelated to any native `size` attribute: the root is a div.",
+            "defaultValue": "default"
+          },
+          {
+            "name": "onClick",
+            "type": "MouseEventHandler<HTMLButtonElement>",
+            "required": false,
+            "description": "Click handler. Its presence makes the tile body a button."
+          },
+          {
+            "name": "onRemove",
+            "type": "(() => void)",
+            "required": false,
+            "description": "Remove handler. Its presence renders the corner remove button."
+          },
+          {
+            "name": "uploadingLabel",
+            "type": "string",
+            "required": false,
+            "description": "Status line while `uploading`.",
+            "defaultValue": "Uploading…"
+          },
+          {
+            "name": "errorLabel",
+            "type": "string",
+            "required": false,
+            "description": "Status line while `error`, when no `error` message is given.",
+            "defaultValue": "Upload failed"
+          },
+          {
+            "name": "unavailableLabel",
+            "type": "string",
+            "required": false,
+            "description": "Status line while `unavailable`.",
+            "defaultValue": "Unavailable"
+          },
+          {
+            "name": "removeLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible label for the remove button. Defaults to \"Remove\" and the file name."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": ""
+          }
+        ]
+      },
+      {
+        "component": "AttachmentItem",
+        "props": []
+      },
+      {
+        "component": "AttachmentStatus",
+        "props": []
+      },
+      {
+        "component": "FileKind",
+        "props": []
+      },
+      {
+        "component": "FileKindMeta",
+        "props": []
+      },
+      {
+        "component": "FileLike",
+        "props": []
+      },
+      {
+        "component": "formatBytes",
+        "props": []
+      },
+      {
+        "component": "getFileExtension",
+        "props": []
+      },
+      {
+        "component": "getFileKind",
+        "props": [
+          {
+            "name": "name",
+            "type": "string",
+            "required": true,
+            "description": "File name, extension included."
+          },
+          {
+            "name": "type",
+            "type": "string",
+            "required": false,
+            "description": "Mime type, when the source reported one."
+          }
+        ]
+      },
+      {
+        "component": "getFileTypeLabel",
+        "props": []
+      },
+      {
+        "component": "matchesAccept",
+        "props": []
+      },
+      {
+        "component": "splitFileName",
+        "props": []
+      }
+    ]
+  },
+  {
+    "name": "AttachmentViewer",
+    "label": "Attachment viewer",
+    "slug": "attachment-viewer",
+    "category": "ai",
+    "description": "A preview dialog for a message's files, with download, stepping, and plain states for files it cannot show.",
+    "client": true,
+    "importPath": "rift-ds/components/Attachment/AttachmentViewer",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "AttachmentViewer",
+        "props": [
+          {
+            "name": "open",
+            "type": "boolean",
+            "required": true,
+            "description": "Whether the viewer is open."
+          },
+          {
+            "name": "onOpenChange",
+            "type": "(open: boolean) => void",
+            "required": true,
+            "description": "Fires when the viewer asks to close: the close button, Escape, or the backdrop."
+          },
+          {
+            "name": "items",
+            "type": "AttachmentItem[]",
+            "required": true,
+            "description": "The files the viewer steps through, in order."
+          },
+          {
+            "name": "activeId",
+            "type": "string",
+            "required": false,
+            "description": "Id of the file on show, for controlled use. Pair with `onActiveChange`."
+          },
+          {
+            "name": "defaultActiveId",
+            "type": "string",
+            "required": false,
+            "description": "Id of the file shown first, for uncontrolled use. Defaults to the first item."
+          },
+          {
+            "name": "onActiveChange",
+            "type": "((id: string) => void)",
+            "required": false,
+            "description": "Fires with the id of the file stepped to."
+          },
+          {
+            "name": "renderPreview",
+            "type": "((item: AttachmentItem) => ReactNode)",
+            "required": false,
+            "description": "Draws a file the viewer cannot: the pages of a PDF, a media player, a\nrendered spreadsheet. Return nothing to fall back to the built-in view."
+          },
+          {
+            "name": "onDownload",
+            "type": "((item: AttachmentItem) => void)",
+            "required": false,
+            "description": "Fires with the file on show when Download is pressed. Its presence renders the buttons."
+          },
+          {
+            "name": "onRetry",
+            "type": "((item: AttachmentItem) => void)",
+            "required": false,
+            "description": "Fires with a file that failed to load when \"Try again\" is pressed. Its presence renders the button."
+          },
+          {
+            "name": "dismissible",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether Escape, the backdrop and the close button dismiss the viewer.",
+            "defaultValue": "true"
+          },
+          {
+            "name": "downloadLabel",
+            "type": "string",
+            "required": false,
+            "description": "Text of the Download buttons.",
+            "defaultValue": "Download"
+          },
+          {
+            "name": "closeLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible label for the close button.",
+            "defaultValue": "Close"
+          },
+          {
+            "name": "previousLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible label for the previous-file button.",
+            "defaultValue": "Previous file"
+          },
+          {
+            "name": "nextLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible label for the next-file button.",
+            "defaultValue": "Next file"
+          },
+          {
+            "name": "retryLabel",
+            "type": "string",
+            "required": false,
+            "description": "Text of the retry button.",
+            "defaultValue": "Try again"
+          },
+          {
+            "name": "noPreviewLabel",
+            "type": "string",
+            "required": false,
+            "description": "Headline when a file has nothing the viewer can draw.",
+            "defaultValue": "No preview for this file type"
+          },
+          {
+            "name": "failedLabel",
+            "type": "string",
+            "required": false,
+            "description": "Headline when a file failed to load or is no longer available.",
+            "defaultValue": "Couldn’t load this file"
+          },
+          {
+            "name": "failedDescription",
+            "type": "string",
+            "required": false,
+            "description": "Sentence under `failedLabel`, when the file carries no error message of its own.",
+            "defaultValue": "The link may have expired."
+          },
+          {
+            "name": "formatPosition",
+            "type": "((position: number, total: number) => string)",
+            "required": false,
+            "description": "Builds the position text, e.g. \"2 of 5\", from a one-based index and the total.",
+            "defaultValue": "(position, total) => `${position} of ${total}`"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes — applied to the portal container, not the panel.",
+            "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
     "name": "Avatar",
     "label": "Avatar",
     "slug": "avatar",
@@ -1997,6 +2419,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Always show the action row instead of revealing it on hover and focus.\nFor surfaces where the actions are part of the response — a copy or\nfeedback row — rather than a secondary affordance.",
             "defaultValue": "false"
+          },
+          {
+            "name": "attachments",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Files sent with this turn, drawn outside the bubble on the speaker's\nside, above the text. Pass an AttachmentGroup. A turn that carries\nfiles and no text draws no bubble at all."
           },
           {
             "name": "footer",
@@ -3017,7 +3445,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Composer",
     "slug": "composer",
     "category": "ai",
-    "description": "An auto-growing message input with send and stop states, a page-context note, an attachment slot, and Enter-to-send.",
+    "description": "An auto-growing message input with send and stop states, a page-context note, a file tray fed by picker, paste and drop, and Enter-to-send.",
     "client": true,
     "importPath": "rift-ds/components/Composer/Composer",
     "barrel": "main",
@@ -3047,7 +3475,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "onSubmit",
             "type": "((value: string) => void)",
             "required": false,
-            "description": "Fires with the current value on Enter (without Shift) and on the send\nbutton — never while `streaming`, and never when the trimmed value is\nempty. Composer does not clear the value: the consumer owns it and clears\nit after a successful submit. Shadows the native `onSubmit` attribute,\nwhich never fires on a textarea anyway."
+            "description": "Fires with the current value on Enter (without Shift) and on the send\nbutton — never while `streaming`, never while a file in `files` is\nstill uploading, and never when there is nothing to send. Text is\nenough, and so is a ready file on its own, in which case the value is\nan empty string. Composer does not clear the value: the consumer owns\nit and clears it after a successful submit. Shadows the native\n`onSubmit` attribute, which never fires on a textarea anyway."
           },
           {
             "name": "streaming",
@@ -3096,16 +3524,101 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Icon at the left of the context chip — Material Symbol name (string,\ne.g. `visibility`, `article`) or custom element (ReactNode). Decorative\nand hidden from assistive technology — the chip's text carries the\nmeaning. None by default, matching the ai set's icon-free-unless-asked\nconvention."
           },
           {
+            "name": "files",
+            "type": "AttachmentItem[]",
+            "required": false,
+            "description": "The files queued on this message, drawn as a scrolling row of square\ntiles above the textarea. Controlled by the caller: Composer draws the\nlist and reports what was added or removed, and never stores a file.\n`useAttachments` is the usual owner."
+          },
+          {
+            "name": "onFilesSelected",
+            "type": "((files: File[]) => void)",
+            "required": false,
+            "description": "Fires with the files a person picked, pasted or dropped. Providing it\narms all three: the attach button and its picker, file paste in the\ntextarea, and drop on the shell."
+          },
+          {
+            "name": "onFileRemove",
+            "type": "((id: string) => void)",
+            "required": false,
+            "description": "Fires with the id of the file whose remove button was pressed. Its presence renders the buttons."
+          },
+          {
+            "name": "onFileClick",
+            "type": "((item: AttachmentItem) => void)",
+            "required": false,
+            "description": "Fires with a queued file when its tile is pressed. Its presence makes the tiles buttons."
+          },
+          {
+            "name": "accept",
+            "type": "string",
+            "required": false,
+            "description": "File types the picker offers, in the native `accept` syntax."
+          },
+          {
+            "name": "multiple",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the picker allows several files at once.",
+            "defaultValue": "true"
+          },
+          {
+            "name": "attachButton",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the built-in attach button shows when `onFilesSelected` is set.",
+            "defaultValue": "true"
+          },
+          {
+            "name": "pasteThreshold",
+            "type": "number",
+            "required": false,
+            "description": "Pasted text at least this many characters long becomes an attachment\ninstead of landing in the textarea. Off unless set, and inert without\n`onPasteAsAttachment`."
+          },
+          {
+            "name": "onPasteAsAttachment",
+            "type": "((text: string) => void)",
+            "required": false,
+            "description": "Receives pasted text that met `pasteThreshold`."
+          },
+          {
+            "name": "attachLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible label for the attach button.",
+            "defaultValue": "Attach files"
+          },
+          {
+            "name": "dropLabel",
+            "type": "string",
+            "required": false,
+            "description": "Text shown on the shell while files are dragged over it.",
+            "defaultValue": "Drop files to attach"
+          },
+          {
+            "name": "filesLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible label for the list of queued files.",
+            "defaultValue": "Attachments"
+          },
+          {
+            "name": "formatFileAnnouncement",
+            "type": "((change: { type: \"added\" | \"removed\" | \"failed\"; names: string[]; }) => string)",
+            "required": false,
+            "description": "Builds the sentence announced to assistive technology when files join\nthe queue, leave it, or fail.",
+            "defaultValue": "({\n  type,\n  names,\n}: {\n  type: 'added' | 'removed' | 'failed';\n  names: string[];\n}) => {\n  const list = names.join(', ');\n  if (type === 'added') return `Attached ${list}`;\n  if (type === 'removed') return `Removed ${list}`;\n  return `Could not attach ${list}`;\n}"
+          },
+          {
             "name": "attachments",
             "type": "ReactNode",
             "required": false,
-            "description": "Attachment row rendered above the textarea (DocumentChips). Fully\ncontrolled by the caller — Composer never owns the list."
+            "description": "Free-form row rendered above the textarea, after any `files`.",
+            "deprecated": "Use `files` with `onFilesSelected` and `onFileRemove`, which draw the queue as tiles."
           },
           {
             "name": "actions",
             "type": "ReactNode",
             "required": false,
-            "description": "Leading actions on the left of the action bar (attach button, model picker)."
+            "description": "Leading actions on the left of the action bar, after the attach button (a model picker)."
           },
           {
             "name": "trailingActions",
@@ -3741,7 +4254,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Document chip",
     "slug": "document-chip",
     "category": "ai",
-    "description": "A compact file reference with a type icon, name, metadata, and optional remove.",
+    "description": "A legacy one-row file reference, superseded by the attachment tile and kept for existing consumers.",
     "client": false,
     "importPath": "rift-ds/components/DocumentChip/DocumentChip",
     "barrel": "main",
@@ -6205,7 +6718,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "children",
             "type": "ReactNode",
             "required": false,
-            "description": "Body content between the description and the footer — rich content, a Prose block, a DocumentChip row."
+            "description": "Body content between the description and the footer — rich content, a Prose block, an AttachmentGroup."
           }
         ]
       }
@@ -10543,7 +11056,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "headingLevel",
-            "type": "5 | 2 | 3 | 1 | 6 | 4",
+            "type": "4 | 2 | 1 | 5 | 3 | 6",
             "required": false,
             "description": "Level of the title's heading element",
             "defaultValue": "1"

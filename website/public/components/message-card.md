@@ -21,4 +21,4 @@ Generated from the rift-ds registry and prop JSDoc, version 1.3.0. The same data
 | meta | `string` | no |  | Free-text metadata line, e.g. a domain or date, so callers keep their own formatting. |
 | actions | `ReactNode` | no |  | Action row rendered in a footer outside the body — small secondary or tertiary Buttons, mirroring ToolCall's actions footer. |
 | className | `string` | no | `` | Additional CSS classes |
-| children | `ReactNode` | no |  | Body content between the description and the footer — rich content, a Prose block, a DocumentChip row. |
+| children | `ReactNode` | no |  | Body content between the description and the footer — rich content, a Prose block, an AttachmentGroup. |

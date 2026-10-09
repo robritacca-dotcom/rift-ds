@@ -82,6 +82,30 @@
       "description": "Filled area chart for showing volume over time, with stacked and single-series variants."
     },
     {
+      "name": "attachment-drop-zone",
+      "type": "registry:ui",
+      "title": "Attachment drop zone",
+      "description": "A wrapper that makes a whole surface a file drop target, with an outlined overlay while files hover over it."
+    },
+    {
+      "name": "attachment-group",
+      "type": "registry:ui",
+      "title": "Attachment group",
+      "description": "The files on a sent message: one picture at its own shape, or a grid of tiles that collapses behind a count."
+    },
+    {
+      "name": "attachment-tile",
+      "type": "registry:ui",
+      "title": "Attachment tile",
+      "description": "One file as a square: a picture, a coloured mark for well-known formats, or a neutral badge, with upload states."
+    },
+    {
+      "name": "attachment-viewer",
+      "type": "registry:ui",
+      "title": "Attachment viewer",
+      "description": "A preview dialog for a message's files, with download, stepping, and plain states for files it cannot show."
+    },
+    {
       "name": "avatar",
       "type": "registry:ui",
       "title": "Avatar",
@@ -235,7 +259,7 @@
       "name": "composer",
       "type": "registry:ui",
       "title": "Composer",
-      "description": "An auto-growing message input with send and stop states, a page-context note, an attachment slot, and Enter-to-send."
+      "description": "An auto-growing message input with send and stop states, a page-context note, a file tray fed by picker, paste and drop, and Enter-to-send."
     },
     {
       "name": "contact-card",
@@ -289,7 +313,7 @@
       "name": "document-chip",
       "type": "registry:ui",
       "title": "Document chip",
-      "description": "A compact file reference with a type icon, name, metadata, and optional remove."
+      "description": "A legacy one-row file reference, superseded by the attachment tile and kept for existing consumers."
     },
     {
       "name": "drawer",

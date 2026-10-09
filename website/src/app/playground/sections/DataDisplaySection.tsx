@@ -50,7 +50,7 @@ const ACCORDION_ITEMS = [
     id: "tokens",
     title: "How the tint reaches this text",
     content:
-      "The neutral scale drives page backgrounds, container surfaces, borders, and every text colour, so the tint lever washes all of them toward the seed at once.",
+      "The neutral scale drives page backgrounds, container surfaces, borders, and every text colour, so the tint lever washes all of them toward the seed at once. In light mode the page floor and container white take a lighter share, so the surfaces stay bright.",
   },
   {
     id: "radius",

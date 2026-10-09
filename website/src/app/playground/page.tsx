@@ -472,7 +472,7 @@ export default function PlaygroundPage() {
       Object.assign(merged, actionPlan.primitives, actionPlan.semantics);
     }
     if (tintOn && tintStrength > 0) {
-      Object.assign(merged, neutralOverrides(tintSeed, tintStrength / 100));
+      Object.assign(merged, neutralOverrides(tintSeed, tintStrength / 100, theme === "dark" ? "dark" : "light"));
     }
     if (radiusScale !== 100 || !pill) {
       Object.assign(merged, radiusOverrides(radiusScale / 100, pill));
@@ -636,6 +636,21 @@ export default function PlaygroundPage() {
           ...darkExtras,
         }
       : snippetDarkBlock;
+  }
+  /* The tint is the one lever whose primitives differ by theme: light mode's
+     surface steps take a share of it (LIGHT_SURFACE_TINT_RATIO). So :root
+     states the light values whatever is being previewed, and the dark block
+     restates the steps dark mode holds at full strength. */
+  if (tintOn && tintStrength > 0) {
+    const lightTint = neutralOverrides(tintSeed, tintStrength / 100, "light");
+    const darkTint = neutralOverrides(tintSeed, tintStrength / 100, "dark");
+    snippetOverrides = { ...snippetOverrides, ...lightTint };
+    const darkOnly = Object.fromEntries(
+      Object.entries(darkTint).filter(([name, value]) => lightTint[name] !== value)
+    );
+    if (Object.keys(darkOnly).length > 0) {
+      snippetDarkBlock = { ...darkOnly, ...snippetDarkBlock };
+    }
   }
   const cssSnippet = isPristine
     ? "/* Everything is at its shipped default. Move a lever to generate CSS. */"

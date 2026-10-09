@@ -247,6 +247,15 @@ body:has([data-bg-hidden]) .blur-container {
   display: none;
 }
 
+/* Light mode runs the ambient layer thinner. The field is composed against
+   the dark floor, where its colours glow; over a light floor the same alpha
+   reads as a grey cast that sits behind the page title and intro copy. The
+   whole layer fades, not the canvas alone, so the shader and its CSS
+   fallback thin together and the fade into the page floor stays seamless. */
+html[data-theme="light"] .blur-container {
+  opacity: 0.65;
+}
+
 .blur-container::after {
   content: '';
   position: absolute;

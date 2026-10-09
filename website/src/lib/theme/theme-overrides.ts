@@ -412,16 +412,44 @@ const NEUTRALS: NeutralDef[] = [
 
 export const DEFAULT_NEUTRAL_SEED = "#0E6E8F";
 
+/** The neutral steps light mode paints its surfaces with: the container
+    white and the page floor. Dark mode reads the same two steps as ink. */
+const LIGHT_SURFACE_STEPS: ReadonlySet<string> = new Set(["00", "01"]);
+
+/** How much of the tint light mode's surface steps take. A full-strength
+    tint pulls white and the page floor down far enough that a tinted theme
+    reads grey in light mode and body copy loses contrast against it, so the
+    two surface steps carry half: the hue still shows, the floor stays
+    bright. Every other step, and every step in dark mode, takes it whole. */
+export const LIGHT_SURFACE_TINT_RATIO = 0.5;
+
+/* A renumbered neutral scale must not drop the rule silently: the preset
+   stylesheet generator imports this module, so a stale step fails the build. */
+for (const step of LIGHT_SURFACE_STEPS) {
+  if (!NEUTRALS.some((n) => n.step === step)) {
+    throw new Error(`LIGHT_SURFACE_STEPS names "${step}", which is not a neutral step`);
+  }
+}
+
 /**
  * Tints every neutral primitive toward a seed colour. `strength` is
  * 0..0.2 — even 6% turns the white floor into a subtle brand wash.
- * rgba() variants are regenerated with their original alphas.
+ * rgba() variants are regenerated with their original alphas. In light
+ * mode the two surface steps take LIGHT_SURFACE_TINT_RATIO of the strength.
  */
-export function neutralOverrides(seedHex: string, strength: number): Overrides {
+export function neutralOverrides(
+  seedHex: string,
+  strength: number,
+  theme: "light" | "dark"
+): Overrides {
   const seed = hexToRgb(seedHex);
   const overrides: Overrides = {};
   for (const { step, hex, alphas } of NEUTRALS) {
-    const tinted = mix(hexToRgb(hex), seed, strength);
+    const stepStrength =
+      theme === "light" && LIGHT_SURFACE_STEPS.has(step)
+        ? strength * LIGHT_SURFACE_TINT_RATIO
+        : strength;
+    const tinted = mix(hexToRgb(hex), seed, stepStrength);
     overrides[`--primitive-neutral-${step}`] = rgbToHex(tinted);
     for (const [suffix, alpha] of Object.entries(alphas ?? {})) {
       const [r, g, b] = tinted.map((c) => Math.round(c));
@@ -1052,7 +1080,8 @@ export function googleFontHref(googleParam: string): string {
 
 /** The consumer-ready snippet reproducing the current playground state.
     `darkOverrides` adds a theme-scoped block for presets whose action
-    colour differs between themes; `headingFont` adds the heading role
+    colour differs between themes, and for the neutral surface steps a
+    tint holds at full strength in dark mode; `headingFont` adds the heading role
     when it is split from the body face. */
 export function buildCssSnippet(
   overrides: Overrides,

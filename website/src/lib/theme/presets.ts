@@ -839,7 +839,7 @@ export function presetOverrides(
     Object.assign(merged, plan.primitives, plan.semantics);
   }
   if (preset.tintOn && preset.tintStrength > 0) {
-    Object.assign(merged, neutralOverrides(preset.tintSeed, preset.tintStrength / 100));
+    Object.assign(merged, neutralOverrides(preset.tintSeed, preset.tintStrength / 100, theme));
   }
   if (preset.radiusScale !== 100 || !preset.pill) {
     Object.assign(merged, radiusOverrides(preset.radiusScale / 100, preset.pill));

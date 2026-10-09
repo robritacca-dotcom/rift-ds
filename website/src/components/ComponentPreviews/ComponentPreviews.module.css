@@ -64,7 +64,8 @@
    INPUT PREVIEW (mini input inside circle)
    ============================================ */
 .inputPreview {
-  width: 120px;
+  min-width: 120px;
+  white-space: nowrap;
   padding: 6px 10px;
   border: 1px solid var(--color-bg-container-border);
   border-radius: var(--primitive-radius-200);

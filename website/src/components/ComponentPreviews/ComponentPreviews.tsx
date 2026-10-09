@@ -116,28 +116,28 @@ const previews: Record<string, () => ReactNode> = {
       <div className={styles.previewColumn} style={{ gap: "4px", width: "120px" }}>
         <div className={styles.accordionPreviewRow}>
           <span style={{ fontSize: "11px", fontWeight: 500, color: "var(--color-text-primary)" }}>Section 1</span>
-          <span className="material-symbols-rounded" style={{ fontSize: "14px", color: "var(--color-icon-primary)", transform: "rotate(180deg)" }}>expand_more</span>
+          <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "14px", color: "var(--color-icon-primary)", transform: "rotate(180deg)" }}>expand_more</span>
         </div>
         <div className={styles.accordionPreviewRow}>
           <span style={{ fontSize: "11px", fontWeight: 500, color: "var(--color-text-primary)" }}>Section 2</span>
-          <span className="material-symbols-rounded" style={{ fontSize: "14px", color: "var(--color-icon-primary)" }}>expand_more</span>
+          <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "14px", color: "var(--color-icon-primary)" }}>expand_more</span>
         </div>
       </div>
     </>
   ),
   "agent-plan": () => (
     <>
-      <div aria-hidden="true" style={{ display: "flex", flexDirection: "column", gap: "6px", width: "150px" }}>
+      <div aria-hidden="true" style={{ display: "flex", flexDirection: "column", gap: "6px", whiteSpace: "nowrap" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-          <span className="material-symbols-rounded" style={{ fontSize: "14px", color: "var(--color-status-positive-icon)" }}>check_circle</span>
+          <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "14px", color: "var(--color-status-positive-icon)" }}>check_circle</span>
           <span style={{ fontSize: "11px", color: "var(--color-text-tertiary)" }}>Read project files</span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-          <span className="material-symbols-rounded" style={{ fontSize: "14px", color: "var(--color-status-info-icon)" }}>progress_activity</span>
+          <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "14px", color: "var(--color-status-info-icon)" }}>progress_activity</span>
           <span style={{ fontSize: "11px", fontWeight: 600, color: "var(--color-text-primary)" }}>Update dark tokens</span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-          <span className="material-symbols-rounded" style={{ fontSize: "14px", color: "var(--color-status-neutral-icon)" }}>circle</span>
+          <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "14px", color: "var(--color-status-neutral-icon)" }}>circle</span>
           <span style={{ fontSize: "11px", color: "var(--color-text-primary)" }}>Run the build</span>
         </div>
       </div>
@@ -145,7 +145,7 @@ const previews: Record<string, () => ReactNode> = {
   ),
   "agent-rail": () => (
     <>
-      <div aria-hidden="true" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "6px", width: "150px" }}>
+      <div aria-hidden="true" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "6px" }}>
         <div style={{ width: "28px", height: "28px", borderRadius: "999px", background: "var(--color-bg-container-tertiary)" }} />
         <span style={{ fontSize: "11px", fontWeight: 600, color: "var(--color-text-primary)" }}>Skylark</span>
         <div style={{ display: "flex", gap: "2px", padding: "2px", borderRadius: "999px", background: "var(--color-bg-container-secondary)" }}>
@@ -158,7 +158,7 @@ const previews: Record<string, () => ReactNode> = {
             </span>
           ))}
         </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: "4px", width: "100%" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
           {["Watch the Q3 invoices", "Draft the renewal note"].map((row) => (
             <div key={row} style={{ display: "flex", alignItems: "center", gap: "6px", padding: "0 4px" }}>
               <span style={{ width: "5px", height: "5px", borderRadius: "999px", background: "var(--color-status-positive-icon)", flex: "none" }} />
@@ -208,9 +208,9 @@ const previews: Record<string, () => ReactNode> = {
     <>
       <div style={{ display: "flex", width: "140px", height: "72px", borderRadius: "6px", overflow: "hidden", border: "1px solid var(--color-bg-container-border)" }}>
         <div style={{ width: "34px", background: "var(--color-bg-container-secondary)", display: "flex", flexDirection: "column", alignItems: "center", gap: "5px", paddingTop: "6px" }}>
-          <span className="material-symbols-rounded" style={{ fontSize: "12px", color: "var(--color-icon-primary)" }}>dashboard</span>
-          <span className="material-symbols-rounded" style={{ fontSize: "12px", color: "var(--color-icon-secondary)" }}>analytics</span>
-          <span className="material-symbols-rounded" style={{ fontSize: "12px", color: "var(--color-icon-secondary)" }}>settings</span>
+          <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "12px", color: "var(--color-icon-primary)" }}>dashboard</span>
+          <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "12px", color: "var(--color-icon-secondary)" }}>analytics</span>
+          <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "12px", color: "var(--color-icon-secondary)" }}>settings</span>
         </div>
         <div style={{ flex: 1, background: "var(--color-bg-page-primary)", padding: "8px", display: "flex", flexDirection: "column", gap: "4px" }}>
           <div style={{ width: "50%", height: "8px", borderRadius: "3px", background: "var(--color-bg-container-secondary)" }} />
@@ -224,15 +224,15 @@ const previews: Record<string, () => ReactNode> = {
     <>
       <div className={styles.previewColumn} style={{ gap: "4px", width: "100px" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "6px", padding: "4px 6px", borderRadius: "4px", background: "var(--color-action-passive-bg-hover)" }}>
-          <span className="material-symbols-rounded" style={{ fontSize: "14px", color: "var(--color-icon-primary)" }}>dashboard</span>
+          <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "14px", color: "var(--color-icon-primary)" }}>dashboard</span>
           <span style={{ fontSize: "10px", color: "var(--color-text-primary)" }}>Dashboard</span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "6px", padding: "4px 6px" }}>
-          <span className="material-symbols-rounded" style={{ fontSize: "14px", color: "var(--color-icon-secondary)" }}>analytics</span>
+          <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "14px", color: "var(--color-icon-secondary)" }}>analytics</span>
           <span style={{ fontSize: "10px", color: "var(--color-text-secondary)" }}>Analytics</span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "6px", padding: "4px 6px" }}>
-          <span className="material-symbols-rounded" style={{ fontSize: "14px", color: "var(--color-icon-secondary)" }}>settings</span>
+          <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "14px", color: "var(--color-icon-secondary)" }}>settings</span>
           <span style={{ fontSize: "10px", color: "var(--color-text-secondary)" }}>Settings</span>
         </div>
       </div>
@@ -240,7 +240,7 @@ const previews: Record<string, () => ReactNode> = {
   ),
   "attachment-drop-zone": () => (
     <>
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "var(--gap-050)", width: "170px", height: "84px", border: "var(--border-050) solid var(--color-input-border-selected)", borderRadius: "var(--radius-400)", background: "var(--color-bg-container-primary)" }}>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "var(--gap-050)", minWidth: "170px", height: "84px", padding: "0 var(--padding-300)", whiteSpace: "nowrap", border: "var(--border-050) solid var(--color-input-border-selected)", borderRadius: "var(--radius-400)", background: "var(--color-bg-container-primary)" }}>
         <span className="material-symbols-rounded" aria-hidden="true" style={{ ["--icon-size" as string]: "var(--icon-size-600)", color: "var(--color-input-border-selected)" }}>upload_file</span>
         <span style={{ font: "var(--font-paragraph-sm-emphasis-weight) var(--font-paragraph-sm-emphasis-size) / var(--font-paragraph-sm-emphasis-line-height) var(--font-family-body)", color: "var(--color-text-primary)" }}>Drop files to attach</span>
       </div>
@@ -248,7 +248,11 @@ const previews: Record<string, () => ReactNode> = {
   ),
   "attachment-group": () => (
     <>
-      <div style={{ ["--ds-attachment-tile-size" as string]: "64px", pointerEvents: "none" }}>
+      {/* The group fills its container and sizes its grid by a container
+          query, so inside the tile's shrink-to-fit stage it has no width of
+          its own and stacks one tile per row. The wrapper states one: two
+          56px tiles and the gap between them, the group's two-by-two. */}
+      <div style={{ ["--ds-attachment-tile-size" as string]: "56px", width: "calc(2 * 56px + var(--gap-200))", pointerEvents: "none" }}>
         <AttachmentGroup
           viewer={false}
           size="compact"
@@ -266,8 +270,8 @@ const previews: Record<string, () => ReactNode> = {
   "attachment-tile": () => (
     <>
       <div style={{ display: "flex", gap: "var(--gap-200)" }}>
-        <AttachmentTile size="compact" name="brief.pdf" kind="pdf" />
-        <AttachmentTile size="compact" name="budget.xlsx" kind="spreadsheet" />
+        <AttachmentTile size="compact" name="doc.pdf" kind="pdf" />
+        <AttachmentTile size="compact" name="q3.xlsx" kind="spreadsheet" />
       </div>
     </>
   ),
@@ -346,9 +350,9 @@ const previews: Record<string, () => ReactNode> = {
     <>
       <div className={styles.previewRow} style={{ gap: "4px", fontSize: "12px" }}>
         <span style={{ color: "var(--color-text-secondary)" }}>Home</span>
-        <span className="material-symbols-rounded" style={{ fontSize: "14px", color: "var(--color-text-tertiary)" }}>chevron_right</span>
+        <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "14px", color: "var(--color-text-tertiary)" }}>chevron_right</span>
         <span style={{ color: "var(--color-text-secondary)" }}>Section</span>
-        <span className="material-symbols-rounded" style={{ fontSize: "14px", color: "var(--color-text-tertiary)" }}>chevron_right</span>
+        <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "14px", color: "var(--color-text-tertiary)" }}>chevron_right</span>
         <span style={{ color: "var(--color-text-primary)", fontWeight: 500 }}>Page</span>
       </div>
     </>
@@ -386,19 +390,19 @@ const previews: Record<string, () => ReactNode> = {
   "carousel": () => (
     <>
       <div className={styles.previewRow} style={{ gap: "8px", alignItems: "center" }}>
-        <span className="material-symbols-rounded" style={{ fontSize: "18px", color: "var(--color-icon-secondary)" }}>chevron_left</span>
+        <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "18px", color: "var(--color-icon-secondary)" }}>chevron_left</span>
         <div style={{ display: "flex", gap: "4px" }}>
           <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: "var(--color-action-primary-bg)" }} />
           <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: "var(--color-bg-container-border)" }} />
           <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: "var(--color-bg-container-border)" }} />
         </div>
-        <span className="material-symbols-rounded" style={{ fontSize: "18px", color: "var(--color-icon-secondary)" }}>chevron_right</span>
+        <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "18px", color: "var(--color-icon-secondary)" }}>chevron_right</span>
       </div>
     </>
   ),
   "anchor-nav": () => (
     <>
-      <div aria-hidden="true" style={{ display: "flex", flexDirection: "column", width: "150px", borderLeft: "1px solid var(--color-divider)" }}>
+      <div aria-hidden="true" style={{ display: "flex", flexDirection: "column", paddingRight: "12px", borderLeft: "1px solid var(--color-divider)" }}>
         <span style={{ fontSize: "12px", fontWeight: 600, color: "var(--color-text-primary)", padding: "3px 0 3px 12px", borderLeft: "2px solid var(--color-text-primary)", marginLeft: "-1px" }}>Preview</span>
         <span style={{ fontSize: "12px", color: "var(--color-text-tertiary)", padding: "3px 0 3px 12px" }}>Installation</span>
         <span style={{ fontSize: "12px", color: "var(--color-text-tertiary)", padding: "3px 0 3px 12px" }}>Filtering</span>
@@ -455,9 +459,9 @@ const previews: Record<string, () => ReactNode> = {
       {/* Static miniature of the viewer: media over a deep scrim with chevrons. */}
       <div style={{ position: "relative", width: "140px", height: "84px", borderRadius: "8px", background: "rgba(0,0,0,0.82)", display: "flex", alignItems: "center", justifyContent: "center" }}>
         <div style={{ width: "84px", height: "52px", borderRadius: "4px", background: "linear-gradient(135deg, var(--color-action-primary-bg), var(--color-core-accent-cobalt))" }} />
-        <span className="material-symbols-rounded" style={{ position: "absolute", left: "8px", fontSize: "14px", color: "#fff" }}>chevron_left</span>
-        <span className="material-symbols-rounded" style={{ position: "absolute", right: "8px", fontSize: "14px", color: "#fff" }}>chevron_right</span>
-        <span className="material-symbols-rounded" style={{ position: "absolute", top: "6px", right: "8px", fontSize: "12px", color: "#fff" }}>close</span>
+        <span className="material-symbols-rounded" style={{ position: "absolute", left: "8px", ["--icon-size" as string]: "14px", color: "#fff" }}>chevron_left</span>
+        <span className="material-symbols-rounded" style={{ position: "absolute", right: "8px", ["--icon-size" as string]: "14px", color: "#fff" }}>chevron_right</span>
+        <span className="material-symbols-rounded" style={{ position: "absolute", top: "6px", right: "8px", ["--icon-size" as string]: "12px", color: "#fff" }}>close</span>
       </div>
     </>
   ),
@@ -539,21 +543,21 @@ const previews: Record<string, () => ReactNode> = {
     <>
       <div aria-hidden="true" style={{ display: "flex", flexDirection: "column", gap: "2px", width: "150px" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "4px", padding: "2px 4px" }}>
-          <span className="material-symbols-rounded" style={{ fontSize: "14px", color: "var(--color-icon-primary)", transform: "rotate(90deg)" }}>chevron_right</span>
-          <span className="material-symbols-rounded" style={{ fontSize: "14px", color: "var(--color-icon-primary)" }}>folder</span>
+          <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "14px", color: "var(--color-icon-primary)", transform: "rotate(90deg)" }}>chevron_right</span>
+          <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "14px", color: "var(--color-icon-primary)" }}>folder</span>
           <span style={{ fontSize: "11px", fontWeight: 500, color: "var(--color-text-primary)" }}>src</span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "4px", padding: "2px 4px 2px 18px" }}>
-          <span className="material-symbols-rounded" style={{ fontSize: "14px", color: "var(--color-icon-primary)", transform: "rotate(90deg)" }}>chevron_right</span>
-          <span className="material-symbols-rounded" style={{ fontSize: "14px", color: "var(--color-icon-primary)" }}>folder</span>
+          <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "14px", color: "var(--color-icon-primary)", transform: "rotate(90deg)" }}>chevron_right</span>
+          <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "14px", color: "var(--color-icon-primary)" }}>folder</span>
           <span style={{ fontSize: "11px", fontWeight: 500, color: "var(--color-text-primary)" }}>components</span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "4px", padding: "2px 4px 2px 36px", background: "var(--color-action-passive-bg-active)", borderRadius: "4px" }}>
-          <span className="material-symbols-rounded" style={{ fontSize: "14px", color: "var(--color-icon-primary)" }}>draft</span>
+          <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "14px", color: "var(--color-icon-primary)" }}>draft</span>
           <span style={{ fontSize: "11px", fontWeight: 500, color: "var(--color-text-primary)" }}>Button.tsx</span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "4px", padding: "2px 4px 2px 36px" }}>
-          <span className="material-symbols-rounded" style={{ fontSize: "14px", color: "var(--color-icon-primary)" }}>draft</span>
+          <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "14px", color: "var(--color-icon-primary)" }}>draft</span>
           <span style={{ fontSize: "11px", color: "var(--color-text-secondary)" }}>Badge.tsx</span>
         </div>
       </div>
@@ -571,7 +575,9 @@ const previews: Record<string, () => ReactNode> = {
   ),
   "chat-header": () => (
     <>
-      <div style={{ width: "100%", border: "1px solid var(--color-bg-container-border)", borderRadius: "16px" }}>
+      {/* Wider than the tile and scaled back into it, so the title has room
+          beside the two actions in a wide-set face. */}
+      <div className={styles.scaledComponentPreview} style={{ width: "280px", border: "1px solid var(--color-bg-container-border)", borderRadius: "16px" }}>
         <ChatHeader
           title="Assistant"
           actions={
@@ -696,7 +702,7 @@ const previews: Record<string, () => ReactNode> = {
     <>
       <div className={styles.previewColumn} style={{ gap: "4px", width: "150px" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "6px", width: "100%", padding: "6px 10px", borderRadius: "8px", border: "1px solid var(--color-input-border-selected)", background: "var(--color-input-bg-primary)" }}>
-          <span className="material-symbols-rounded" style={{ fontSize: "12px", width: "12px", height: "12px", color: "var(--color-icon-primary)" }}>search</span>
+          <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "12px", width: "12px", height: "12px", color: "var(--color-icon-primary)" }}>search</span>
           <span style={{ fontSize: "10px", color: "var(--color-text-primary)" }}>Can</span>
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: "2px", width: "100%", padding: "4px", borderRadius: "8px", border: "1px solid var(--color-bg-container-border)", background: "var(--color-bg-page-primary)" }}>
@@ -710,7 +716,7 @@ const previews: Record<string, () => ReactNode> = {
     <>
       <div style={{ width: "160px", borderRadius: "8px", border: "1px solid var(--color-bg-container-border)", background: "var(--color-bg-page-primary)", overflow: "hidden" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "6px", padding: "6px 8px", borderBottom: "1px solid var(--color-divider)" }}>
-          <span className="material-symbols-rounded" style={{ fontSize: "14px", color: "var(--color-icon-primary)" }}>search</span>
+          <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "14px", color: "var(--color-icon-primary)" }}>search</span>
           <span style={{ fontSize: "10px", color: "var(--color-text-tertiary)" }}>Type a command…</span>
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: "2px", padding: "4px" }}>
@@ -728,9 +734,9 @@ const previews: Record<string, () => ReactNode> = {
       <div style={{ display: "flex", flexDirection: "column", gap: "8px", width: "160px", padding: "8px 10px", borderRadius: "12px", border: "1px solid var(--color-input-border-primary)", background: "var(--color-input-bg-primary)" }}>
         <span style={{ fontSize: "10px", color: "var(--color-input-text-placeholder)" }}>Message the agent</span>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <span className="material-symbols-rounded" style={{ fontSize: "14px", color: "var(--color-icon-primary)" }}>add</span>
+          <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "14px", color: "var(--color-icon-primary)" }}>add</span>
           <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: "20px", height: "20px", borderRadius: "50%", background: "var(--color-action-primary-bg)" }}>
-            <span className="material-symbols-rounded" style={{ fontSize: "12px", color: "var(--color-action-primary-text)" }}>arrow_upward</span>
+            <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "12px", color: "var(--color-action-primary-text)" }}>arrow_upward</span>
           </span>
         </div>
       </div>
@@ -744,9 +750,9 @@ const previews: Record<string, () => ReactNode> = {
           { icon: "person", label: "LinkedIn" },
         ].map((item) => (
           <div key={item.label} style={{ display: "flex", alignItems: "center", gap: "8px", padding: "6px 10px", borderRadius: "8px", border: "1px solid var(--color-bg-container-border)", background: "var(--color-bg-container-primary-semi)" }}>
-            <span className="material-symbols-rounded" style={{ fontSize: "14px", color: "var(--color-icon-secondary)" }}>{item.icon}</span>
+            <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "14px", color: "var(--color-icon-secondary)" }}>{item.icon}</span>
             <span style={{ fontSize: "11px", fontWeight: 500, color: "var(--color-text-primary)", flex: 1 }}>{item.label}</span>
-            <span className="material-symbols-rounded" style={{ fontSize: "12px", color: "var(--color-text-tertiary)" }}>open_in_new</span>
+            <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "12px", color: "var(--color-text-tertiary)" }}>open_in_new</span>
           </div>
         ))}
       </div>
@@ -761,7 +767,7 @@ const previews: Record<string, () => ReactNode> = {
           { icon: "delete", label: "Delete", hover: false, destructive: true },
         ].map((item) => (
           <div key={item.label} style={{ display: "flex", alignItems: "center", gap: "6px", padding: "4px 8px", borderRadius: "6px", background: item.hover ? "var(--color-action-passive-bg-hover)" : "transparent" }}>
-            <span className="material-symbols-rounded" style={{ fontSize: "13px", color: item.destructive ? "var(--color-core-accent-coral)" : "var(--color-icon-secondary)" }}>{item.icon}</span>
+            <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "13px", color: item.destructive ? "var(--color-core-accent-coral)" : "var(--color-icon-secondary)" }}>{item.icon}</span>
             <span style={{ fontSize: "11px", fontWeight: 500, color: item.destructive ? "var(--color-core-accent-coral)" : "var(--color-text-primary)" }}>{item.label}</span>
           </div>
         ))}
@@ -788,7 +794,7 @@ const previews: Record<string, () => ReactNode> = {
         <div style={{ display: "flex", alignItems: "center", gap: "6px", paddingBottom: "4px", borderBottom: "1px solid var(--color-divider)" }}>
           <span style={{ fontSize: "10px", fontWeight: 600, color: "var(--color-text-primary)", flex: 1 }}>Customer</span>
           <span style={{ fontSize: "10px", fontWeight: 600, color: "var(--color-text-primary)" }}>Status</span>
-          <span className="material-symbols-rounded" style={{ fontSize: "12px", color: "var(--color-icon-secondary)" }}>arrow_upward</span>
+          <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "12px", color: "var(--color-icon-secondary)" }}>arrow_upward</span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
           <span style={{ fontSize: "10px", color: "var(--color-text-secondary)", flex: 1 }}>Aspen Lubin</span>
@@ -812,7 +818,7 @@ const previews: Record<string, () => ReactNode> = {
   ),
   "date-picker": () => (
     <>
-      <span className="material-symbols-rounded" style={{ fontSize: "36px", color: "var(--color-icon-primary)" }}>
+      <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "36px", color: "var(--color-icon-primary)" }}>
         calendar_month
       </span>
     </>
@@ -822,7 +828,7 @@ const previews: Record<string, () => ReactNode> = {
       <div style={{ padding: "10px", borderRadius: "6px", border: "1px solid var(--color-bg-container-border)", background: "var(--color-bg-page-primary)", display: "flex", flexDirection: "column", gap: "6px", width: "130px" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <span style={{ fontSize: "11px", fontWeight: 600, color: "var(--color-text-primary)" }}>Edit profile</span>
-          <span className="material-symbols-rounded" style={{ fontSize: "12px", color: "var(--color-icon-primary)" }}>close</span>
+          <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "12px", color: "var(--color-icon-primary)" }}>close</span>
         </div>
         <div style={{ height: "5px", borderRadius: "3px", background: "var(--color-bg-container-primary)" }} />
         <div style={{ height: "5px", borderRadius: "3px", background: "var(--color-bg-container-primary)", width: "70%" }} />
@@ -863,7 +869,7 @@ const previews: Record<string, () => ReactNode> = {
     <>
       <div className={styles.dropdownPreview}>
         <span className={styles.dropdownPreviewText}>Select</span>
-        <span className="material-symbols-rounded" style={{ fontSize: "20px", color: "var(--color-icon-primary)" }}>
+        <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "20px", color: "var(--color-icon-primary)" }}>
           expand_more
         </span>
       </div>
@@ -873,16 +879,16 @@ const previews: Record<string, () => ReactNode> = {
     <>
       <div className={styles.dropdownMenuPreview}>
         <div className={styles.dropdownMenuPreviewItem}>
-          <span className="material-symbols-rounded" style={{ fontSize: "14px", color: "var(--color-icon-secondary)" }}>person</span>
+          <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "14px", color: "var(--color-icon-secondary)" }}>person</span>
           <span style={{ fontSize: "11px", color: "var(--color-text-primary)" }}>Profile</span>
         </div>
         <div className={styles.dropdownMenuPreviewItem} style={{ background: "var(--color-action-passive-bg-hover)" }}>
-          <span className="material-symbols-rounded" style={{ fontSize: "14px", color: "var(--color-icon-secondary)" }}>settings</span>
+          <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "14px", color: "var(--color-icon-secondary)" }}>settings</span>
           <span style={{ fontSize: "11px", color: "var(--color-text-primary)" }}>Settings</span>
         </div>
         <div className={styles.dropdownMenuPreviewSep} />
         <div className={styles.dropdownMenuPreviewItem}>
-          <span className="material-symbols-rounded" style={{ fontSize: "14px", color: "var(--color-icon-secondary)" }}>logout</span>
+          <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "14px", color: "var(--color-icon-secondary)" }}>logout</span>
           <span style={{ fontSize: "11px", color: "var(--color-text-primary)" }}>Log out</span>
         </div>
       </div>
@@ -891,7 +897,7 @@ const previews: Record<string, () => ReactNode> = {
   "empty-state": () => (
     <>
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "5px", width: "150px", padding: "12px 8px", borderRadius: "8px", border: "1px dashed var(--color-bg-container-border)" }}>
-        <span className="material-symbols-rounded" style={{ fontSize: "18px", color: "var(--color-icon-primary)", background: "var(--color-bg-container-primary)", borderRadius: "999px", padding: "5px" }}>inbox</span>
+        <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "18px", color: "var(--color-icon-primary)", background: "var(--color-bg-container-primary)", borderRadius: "999px", padding: "5px" }}>inbox</span>
         <span style={{ fontSize: "10px", fontWeight: 600, color: "var(--color-text-primary)" }}>No messages</span>
         <span style={{ fontSize: "9px", color: "var(--color-text-tertiary)" }}>Nothing to show yet</span>
       </div>
@@ -902,7 +908,7 @@ const previews: Record<string, () => ReactNode> = {
       <div className={styles.previewRow} style={{ gap: "8px" }}>
         {["home", "star"].map((name) => (
           <div key={name} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "6px", padding: "10px 14px", borderRadius: "10px", border: "1px solid var(--color-bg-container-border)", background: "var(--color-bg-container-primary)" }}>
-            <span className="material-symbols-rounded" style={{ fontSize: "20px", color: "var(--color-text-primary)" }}>{name}</span>
+            <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "20px", color: "var(--color-text-primary)" }}>{name}</span>
             <span style={{ fontSize: "10px", color: "var(--color-text-tertiary)" }}>{name}</span>
           </div>
         ))}
@@ -927,7 +933,7 @@ const previews: Record<string, () => ReactNode> = {
   ),
   "field": () => (
     <>
-      <div style={{ display: "flex", flexDirection: "column", gap: "6px", width: "150px" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "6px", minWidth: "150px", whiteSpace: "nowrap" }}>
         <span style={{ fontSize: "11px", fontWeight: 600, color: "var(--color-text-primary)" }}>
           Email address <span style={{ color: "var(--color-core-accent-coral)" }}>*</span>
         </span>
@@ -940,7 +946,7 @@ const previews: Record<string, () => ReactNode> = {
     <>
       <div style={{ width: "140px", borderRadius: "8px", overflow: "hidden", border: "1px solid var(--color-bg-container-border)" }}>
         <div style={{ height: "60px", background: "var(--color-bg-container-secondary)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <span className="material-symbols-rounded" style={{ fontSize: "24px", color: "var(--color-icon-secondary)" }}>image</span>
+          <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "24px", color: "var(--color-icon-secondary)" }}>image</span>
         </div>
         <div style={{ padding: "6px 10px", fontSize: "10px", color: "var(--color-text-tertiary)", borderTop: "1px solid var(--color-bg-container-border)" }}>
           Caption text
@@ -951,7 +957,7 @@ const previews: Record<string, () => ReactNode> = {
   "file-input": () => (
     <>
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px", width: "150px", padding: "14px 8px", borderRadius: "8px", border: "1px dashed var(--color-input-border-primary)", background: "var(--color-input-bg-primary)" }}>
-        <span className="material-symbols-rounded" style={{ fontSize: "18px", color: "var(--color-icon-primary)" }}>upload_file</span>
+        <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "18px", color: "var(--color-icon-primary)" }}>upload_file</span>
         <span style={{ fontSize: "10px", fontWeight: 500, color: "var(--color-text-primary)" }}>Drop a file</span>
         <span style={{ fontSize: "9px", color: "var(--color-text-tertiary)" }}>or click to browse</span>
       </div>
@@ -1067,7 +1073,11 @@ const previews: Record<string, () => ReactNode> = {
   ),
   "filter-bar": () => (
     <>
-      <div style={{ pointerEvents: "none" }} aria-hidden="true">
+      {/* At full size the bar wraps onto two rows and the wrapped rows sit
+          left in the tile. Its natural width keeps it on one row, scaled a
+          step past the shared 0.72 so the row clears the tile in the
+          widest face. */}
+      <div style={{ flexShrink: 0, width: "max-content", transform: "scale(0.64)", pointerEvents: "none" }} aria-hidden="true">
         <FilterBar
           size="compact"
           filters={[
@@ -1091,12 +1101,12 @@ const previews: Record<string, () => ReactNode> = {
   ),
   "gantt-chart": () => (
     <>
-      <div aria-hidden="true" style={{ position: "relative", display: "flex", flexDirection: "column", gap: "8px", width: "140px", padding: "6px 0" }}>
-        <span style={{ position: "absolute", top: 0, bottom: 0, left: "62%", width: "2px", background: "var(--color-bg-page-inverse)", opacity: 0.7 }} />
-        <span style={{ height: "8px", borderRadius: "999px", background: "var(--color-core-accent-cobalt)", width: "42%" }} />
-        <span style={{ height: "8px", borderRadius: "999px", background: "var(--color-core-accent-mint)", width: "48%", marginLeft: "28%" }} />
-        <span style={{ height: "8px", borderRadius: "999px", background: "var(--color-core-accent-violet)", width: "34%", marginLeft: "52%" }} />
-        <span style={{ width: "8px", height: "8px", borderRadius: "2px", transform: "rotate(45deg)", background: "var(--color-core-accent-coral)", marginLeft: "78%" }} />
+      <div aria-hidden="true" style={{ position: "relative", display: "flex", flexDirection: "column", gap: "8px", width: "120px", padding: "6px 0" }}>
+        <span style={{ position: "absolute", top: 0, bottom: 0, left: "72%", width: "2px", background: "var(--color-bg-page-inverse)", opacity: 0.7 }} />
+        <span style={{ height: "8px", borderRadius: "999px", background: "var(--color-core-accent-cobalt)", width: "49%" }} />
+        <span style={{ height: "8px", borderRadius: "999px", background: "var(--color-core-accent-mint)", width: "56%", marginLeft: "33%" }} />
+        <span style={{ height: "8px", borderRadius: "999px", background: "var(--color-core-accent-violet)", width: "39%", marginLeft: "61%" }} />
+        <span style={{ width: "8px", height: "8px", borderRadius: "2px", transform: "rotate(45deg)", background: "var(--color-core-accent-coral)", marginLeft: "92%" }} />
       </div>
     </>
   ),
@@ -1192,7 +1202,7 @@ const previews: Record<string, () => ReactNode> = {
             {/* eslint-disable-next-line @next/next/no-img-element -- SVG source: next/image would need images.dangerouslyAllowSVG in next.config.ts to serve it at all. */}
             <img src={item.logo} alt="" width={20} height={20} style={{ objectFit: "contain", flexShrink: 0 }} />
             <span style={{ fontSize: "11px", fontWeight: 500, color: "var(--color-text-primary)" }}>{item.label}</span>
-            <span className="material-symbols-rounded" style={{ fontSize: "12px", color: "var(--color-text-tertiary)", marginLeft: "auto" }}>open_in_new</span>
+            <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "12px", color: "var(--color-text-tertiary)", marginLeft: "auto" }}>open_in_new</span>
           </div>
         ))}
       </div>
@@ -1231,7 +1241,7 @@ const previews: Record<string, () => ReactNode> = {
     <>
       <div aria-hidden="true" style={{ display: "inline-flex", alignItems: "center", gap: "4px", height: "40px", padding: "0 12px", borderRadius: "999px", background: "var(--color-action-passive-bg-hover)" }}>
         <span style={{ fontSize: "12px", fontWeight: 500, color: "var(--color-text-secondary)" }}>Sonnet 5</span>
-        <span className="material-symbols-rounded" style={{ fontSize: "14px", color: "var(--color-icon-secondary)" }}>expand_more</span>
+        <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "14px", color: "var(--color-icon-secondary)" }}>expand_more</span>
       </div>
     </>
   ),
@@ -1368,7 +1378,7 @@ const previews: Record<string, () => ReactNode> = {
   ),
   "quote": () => (
     <>
-      <div style={{ width: "170px" }}>
+      <div style={{ maxWidth: "170px" }}>
         <Quote>
           <span style={{ fontSize: "12px", lineHeight: "16px", display: "block" }}>
             Systems are coordination problems.
@@ -1392,11 +1402,10 @@ const previews: Record<string, () => ReactNode> = {
   ),
   "reasoning": () => (
     <>
-      <div style={{ width: "160px" }}>
-        <Reasoning duration={12}>
-          Converted both regions to USD at the invoice-date rate before
-          summing.
-        </Reasoning>
+      <div style={{ width: "fit-content", maxWidth: "160px" }}>
+        {/* The collapsed body still sets the block's width, so it stays
+            shorter than the trigger and the trigger centres in the tile. */}
+        <Reasoning duration={12}>Done.</Reasoning>
       </div>
     </>
   ),
@@ -1406,7 +1415,7 @@ const previews: Record<string, () => ReactNode> = {
         <div style={{ display: "flex", alignItems: "center", gap: "8px", padding: "5px 8px", borderRadius: "6px" }}>
           <span style={{ width: "14px", height: "14px", borderRadius: "999px", background: "#D97757", flexShrink: 0 }} />
           <span style={{ fontSize: "11px", fontWeight: 600, fontFamily: "Georgia, serif", color: "var(--color-text-primary)" }}>Editorial</span>
-          <span className="material-symbols-rounded" style={{ fontSize: "13px", color: "var(--color-action-primary-bg)", marginLeft: "auto" }}>check</span>
+          <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "13px", color: "var(--color-action-primary-bg)", marginLeft: "auto" }}>check</span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "8px", padding: "5px 8px", borderRadius: "6px", background: "var(--color-action-passive-bg-hover)" }}>
           <span style={{ width: "14px", height: "14px", borderRadius: "999px", background: "#05A67C", flexShrink: 0 }} />
@@ -1466,7 +1475,7 @@ const previews: Record<string, () => ReactNode> = {
         <div style={{ padding: "4px 6px", fontSize: "10px", color: "var(--color-text-primary)" }}>Custom reports</div>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "4px 6px", fontSize: "10px", color: "var(--color-text-primary)" }}>
           Planning
-          <span className="material-symbols-rounded" style={{ fontSize: "12px", color: "var(--color-icon-secondary)", transform: "rotate(180deg)" }}>expand_more</span>
+          <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "12px", color: "var(--color-icon-secondary)", transform: "rotate(180deg)" }}>expand_more</span>
         </div>
         <div style={{ marginLeft: "10px", paddingLeft: "8px", borderLeft: "1px solid var(--color-bg-container-border)", display: "flex", flexDirection: "column", gap: "3px" }}>
           <span style={{ fontSize: "10px", color: "var(--color-text-primary)", padding: "2px 0" }}>Budgets</span>
@@ -1505,11 +1514,11 @@ const previews: Record<string, () => ReactNode> = {
     <>
       <div aria-hidden="true" style={{ display: "flex", flexDirection: "column", gap: "6px", alignItems: "flex-start" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-          <span className="material-symbols-rounded" style={{ fontSize: "14px", color: "var(--color-status-positive-icon)" }}>check_circle</span>
+          <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "14px", color: "var(--color-status-positive-icon)" }}>check_circle</span>
           <SourceChip title="Design tokens quarterly" />
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-          <span className="material-symbols-rounded" style={{ fontSize: "14px", color: "var(--color-status-info-icon)" }}>progress_activity</span>
+          <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "14px", color: "var(--color-status-info-icon)" }}>progress_activity</span>
           <SourceChip title="Contrast group notes" />
         </div>
       </div>
@@ -1566,7 +1575,7 @@ const previews: Record<string, () => ReactNode> = {
     <>
       <div aria-hidden="true" className={styles.previewRow} style={{ gap: "0", alignItems: "center" }}>
         <div style={{ width: "20px", height: "20px", borderRadius: "50%", border: "1.5px solid var(--color-action-primary-border-secondary)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-          <span className="material-symbols-rounded" style={{ fontSize: "12px", width: "12px", height: "12px", color: "var(--color-action-primary-text-tertiary)" }}>check</span>
+          <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "12px", width: "12px", height: "12px", color: "var(--color-action-primary-text-tertiary)" }}>check</span>
         </div>
         <div style={{ width: "26px", height: "2px", background: "var(--color-action-primary-border-secondary)" }} />
         <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: "var(--color-action-primary-bg)", color: "var(--color-action-primary-text)", fontSize: "11px", fontWeight: 600, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>2</div>
@@ -1621,7 +1630,7 @@ const previews: Record<string, () => ReactNode> = {
         {["design", "tokens"].map((tag) => (
           <span key={tag} style={{ display: "inline-flex", alignItems: "center", gap: "2px", padding: "1px 6px", borderRadius: "999px", background: "var(--color-bg-container-secondary)", fontSize: "10px", color: "var(--color-text-primary)" }}>
             {tag}
-            <span className="material-symbols-rounded" style={{ fontSize: "10px", width: "10px", height: "10px", color: "var(--color-icon-primary)" }}>close</span>
+            <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "10px", width: "10px", height: "10px", color: "var(--color-icon-primary)" }}>close</span>
           </span>
         ))}
         <span style={{ fontSize: "10px", color: "var(--color-input-text-placeholder)" }}>Add...</span>
@@ -1642,9 +1651,9 @@ const previews: Record<string, () => ReactNode> = {
       <div aria-hidden="true" style={{ display: "flex", flexDirection: "column", gap: "4px", width: "160px" }}>
         <span style={{ fontSize: "9px", letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--color-text-tertiary)", padding: "0 8px" }}>atlas-app</span>
         {[
-          { title: "Rework the onboarding flow", active: false },
-          { title: "Speed up the search index", active: true },
-          { title: "Untangle billing webhooks", active: false },
+          { title: "Rework onboarding", active: false },
+          { title: "Speed up search", active: true },
+          { title: "Fix billing hooks", active: false },
         ].map((thread) => (
           <div key={thread.title} style={{ display: "flex", alignItems: "center", padding: "5px 8px", borderRadius: "10px", background: thread.active ? "var(--color-bg-container-tertiary)" : "transparent" }}>
             <span style={{ fontSize: "11px", color: "var(--color-text-primary)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{thread.title}</span>
@@ -1655,34 +1664,34 @@ const previews: Record<string, () => ReactNode> = {
   ),
   "thread-tabs": () => (
     <>
-      <div aria-hidden="true" style={{ display: "flex", alignItems: "center", gap: "4px", width: "170px" }}>
+      <div aria-hidden="true" style={{ display: "flex", alignItems: "center", gap: "4px" }}>
         {[
-          { label: "Speed up search", active: true },
-          { label: "Plan launch", active: false },
+          { label: "Search index", active: true },
+          { label: "Launch", active: false },
         ].map((tab) => (
           <div key={tab.label} style={{ display: "flex", alignItems: "center", gap: "4px", padding: "5px 10px", borderRadius: "999px", background: tab.active ? "var(--color-bg-container-tertiary)" : "transparent", minWidth: 0 }}>
             <span style={{ fontSize: "11px", color: tab.active ? "var(--color-text-primary)" : "var(--color-text-secondary)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{tab.label}</span>
             {tab.active && (
-              <span className="material-symbols-rounded" style={{ fontSize: "12px", color: "var(--color-icon-primary)" }}>close</span>
+              <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "12px", color: "var(--color-icon-primary)" }}>close</span>
             )}
           </div>
         ))}
-        <span className="material-symbols-rounded" style={{ fontSize: "14px", color: "var(--color-icon-primary)", padding: "0 2px" }}>add</span>
+        <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "14px", color: "var(--color-icon-primary)", padding: "0 2px" }}>add</span>
       </div>
     </>
   ),
   "time-picker": () => (
     <>
-      <div aria-hidden="true" style={{ display: "flex", alignItems: "center", gap: "8px", padding: "8px 14px", borderRadius: "12px", border: "1px solid var(--color-input-border-primary)", background: "var(--color-input-bg-primary)", width: "150px" }}>
-        <span className="material-symbols-rounded" style={{ fontSize: "18px", color: "var(--color-icon-primary)" }}>schedule</span>
+      <div aria-hidden="true" style={{ display: "flex", alignItems: "center", gap: "8px", padding: "8px 14px", borderRadius: "12px", border: "1px solid var(--color-input-border-primary)", background: "var(--color-input-bg-primary)", minWidth: "150px", whiteSpace: "nowrap" }}>
+        <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "18px", color: "var(--color-icon-primary)" }}>schedule</span>
         <span style={{ flex: 1, fontSize: "14px", color: "var(--color-input-text-primary)", fontVariantNumeric: "tabular-nums" }}>2:30 PM</span>
-        <span className="material-symbols-rounded" style={{ fontSize: "20px", color: "var(--color-icon-primary)" }}>expand_more</span>
+        <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "20px", color: "var(--color-icon-primary)" }}>expand_more</span>
       </div>
     </>
   ),
   "timeline": () => (
     <>
-      <div style={{ width: "150px" }}>
+      <div style={{ width: "fit-content" }}>
         <Timeline
           numbered
           items={[{ title: "Discover" }, { title: "Design" }, { title: "Ship" }]}
@@ -1693,7 +1702,7 @@ const previews: Record<string, () => ReactNode> = {
   "toast": () => (
     <>
       <div style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "6px 10px", borderRadius: "6px", background: "var(--color-status-positive-bg)", border: "1px solid var(--color-status-positive-border)" }}>
-        <span className="material-symbols-rounded" style={{ fontSize: "16px", color: "var(--color-status-positive-border)" }}>check_circle</span>
+        <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "16px", color: "var(--color-status-positive-border)" }}>check_circle</span>
         <span style={{ fontSize: "12px", fontWeight: 500, color: "var(--color-status-positive-text)" }}>Saved</span>
       </div>
     </>
@@ -1717,7 +1726,7 @@ const previews: Record<string, () => ReactNode> = {
       <div className={styles.togglePreview}>
         <div className={styles.toggleSocket}>
           <div className={styles.toggleThumb}>
-            <span className="material-symbols-rounded" style={{ fontSize: "14px", color: "var(--color-action-primary-bg)" }}>
+            <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "14px", color: "var(--color-action-primary-bg)" }}>
               check
             </span>
           </div>

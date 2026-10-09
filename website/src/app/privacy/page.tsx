@@ -41,11 +41,25 @@ export default function PrivacyPage() {
         </div>
 
         <div className={`${styles.section} animate-in animate-delay-3`}>
+          <h2 className={styles.sectionTitle}>Registry downloads</h2>
+          <p className={styles.body}>
+            When a tool fetches a component from the shadcn registry, the
+            site adds one to that day&apos;s tally for that component, along
+            with the kind of client that asked: the shadcn CLI, another
+            script, a browser, or a crawler. Nothing else is recorded. No
+            network address, no identifier and no cookie is kept with the
+            count, so it cannot be traced to you, and it is kept without an
+            end date.
+          </p>
+        </div>
+
+        <div className={`${styles.section} animate-in animate-delay-3`}>
           <h2 className={styles.sectionTitle}>What this site does not do</h2>
           <p className={styles.body}>
             No accounts. No advertising. Nothing is sold or shared for
-            marketing. The only data collected is the analytics and chat logs
-            above, and both are used only to run and improve the site. The
+            marketing. The only data collected is the analytics, the chat logs
+            and the registry tally above, and all three are used only to run
+            and improve the site. The
             machine-readable endpoint at /api/mcp stores nothing: it reads
             published data and answers. An image you drop on the playground
             never leaves your browser: it is read there to sample its

@@ -1,6 +1,15 @@
 {
   "releases": [
     {
+      "version": "1.4.0",
+      "date": "2026-10-09",
+      "title": "File attachments for chat",
+      "body": [
+        "Four new components for files in a conversation. AttachmentTile draws one file as a square: a picture fills it, a PDF, spreadsheet, document or presentation wears a coloured mark, and every other file wears its extension as a neutral badge. AttachmentGroup lays out the files on a sent message, AttachmentViewer opens them in a preview dialog, and AttachmentDropZone lets a file be dropped anywhere on a chat. A headless hook, useAttachments, owns the list of files and their previews.",
+        "Composer now takes files: an attach button, paste and drop feed a row of tiles above the input, and a message can be files alone. ChatMessage shows a turn's files above its bubble. Four new file-format colour tokens keep the colour each format is known by in every theme. DocumentChip is deprecated in favour of the tile and keeps working. Nothing breaks, so upgrading needs no code changes."
+      ]
+    },
+    {
       "version": "1.3.0",
       "date": "2026-10-02",
       "title": "InspectorColorPicker and the action colour",

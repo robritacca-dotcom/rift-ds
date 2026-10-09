@@ -187,6 +187,13 @@ const trueBlackColours: PrimitiveSwatch[] = [
   { label: "True Black Strong", short: "70%", cssVar: "--primitive-true-black-strong", hex: "rgba(0,0,0,0.7)", rgb: "0 / 0 / 0" },
 ];
 
+const fileColours: PrimitiveSwatch[] = [
+  { label: "File PDF", short: "PDF", cssVar: "--primitive-file-pdf", hex: "#FF2116", rgb: "255 / 33 / 22" },
+  { label: "File Spreadsheet", short: "Spreadsheet", cssVar: "--primitive-file-spreadsheet", hex: "#00AC47", rgb: "0 / 172 / 71" },
+  { label: "File Document", short: "Document", cssVar: "--primitive-file-document", hex: "#2684FC", rgb: "38 / 132 / 252" },
+  { label: "File Presentation", short: "Presentation", cssVar: "--primitive-file-presentation", hex: "#FFBA00", rgb: "255 / 186 / 0" },
+];
+
 /* The stepped ramps, in display order. Every one of them runs the full
    00–11 column grid in the ramp view — the neutral scale and the seven
    chromatic ramps share the same twelve steps. */
@@ -210,8 +217,12 @@ const alphaRamps = [
   { title: "True black", swatches: trueBlackColours },
 ];
 
+/* Fixed colours that belong to no ramp: the hues document formats are
+   known by, which no theme repaints. */
+const fixedRamps = [{ title: "File formats", swatches: fileColours }];
+
 /* Every ramp in display order, for the swatch view */
-const colourRamps = [...steppedRamps, ...alphaRamps];
+const colourRamps = [...steppedRamps, ...alphaRamps, ...fixedRamps];
 
 /** The step number a stepped ramp's token ends in, e.g. "--primitive-red-07" → "07". */
 const stepOf = (cssVar: string) => cssVar.slice(-2);
@@ -389,6 +400,42 @@ export default function PrimitiveColoursPage() {
               <p className={styles.rampNote}>
                 These carry an alpha channel, so each one sits over a light and dark half to
                 show what it does to whatever is behind it.
+              </p>
+
+              {fixedRamps.map((ramp) => (
+                <div className={styles.alphaGroup} key={ramp.title}>
+                  <span className={styles.rampLabel}>{ramp.title}</span>
+                  <div className={styles.alphaCells}>
+                    {ramp.swatches.map((s, i) => (
+                      <div className={styles.alphaCell} key={s.cssVar}>
+                        <Tooltip
+                          content={swatchTip(s)}
+                          className={`${styles.rampTip}${tipAlignment(
+                            (i % ALPHA_COLUMNS) + 1,
+                            ALPHA_COLUMNS
+                          )}`}
+                        >
+                          <span
+                            className={styles.alphaSwatch}
+                            role="img"
+                            aria-label={`${s.label}, ${s.hex}`}
+                          >
+                            <span
+                              className={styles.alphaChip}
+                              style={{ background: `var(${s.cssVar})` }}
+                            />
+                          </span>
+                        </Tooltip>
+                        <span className={styles.alphaLabel}>{s.short}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+
+              <p className={styles.rampNote}>
+                The file formats sit outside the ramps. Each is the colour its format is known
+                by everywhere else, so a theme never repaints it.
               </p>
             </div>
           ) : (

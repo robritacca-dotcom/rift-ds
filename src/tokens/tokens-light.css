@@ -134,6 +134,18 @@
   --color-trend-up: var(--primitive-green-10);
   --color-trend-down: var(--primitive-red-10);
 
+  /* File type: "what kind of document is this" on an attachment's type
+     mark. One role per well-known format; every other file wears the
+     neutral extension badge. Wired to the fixed file-format primitives,
+     not to a ramp or the accents: the colour is how a person recognises
+     the format, so it is the same in every theme and both modes. The
+     mark's lettering is drawn in a text colour, never in these, so
+     nothing has to be read against them. */
+  --color-file-pdf: var(--primitive-file-pdf);
+  --color-file-spreadsheet: var(--primitive-file-spreadsheet);
+  --color-file-document: var(--primitive-file-document);
+  --color-file-presentation: var(--primitive-file-presentation);
+
   /* Status - Positive */
   --color-status-positive-bg: var(--primitive-green-01);
   --color-status-positive-border: var(--primitive-green-07);

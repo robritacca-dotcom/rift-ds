@@ -236,6 +236,13 @@ export const Primitives: Story = {
         <ColorToken name="Strong (70%)" value="--primitive-true-black-strong" />
       </TokenSection>
 
+      <TokenSection title="File Formats">
+        <ColorToken name="PDF" value="--primitive-file-pdf" />
+        <ColorToken name="Spreadsheet" value="--primitive-file-spreadsheet" />
+        <ColorToken name="Document" value="--primitive-file-document" />
+        <ColorToken name="Presentation" value="--primitive-file-presentation" />
+      </TokenSection>
+
       <TokenSection title="Red Scale">
         <ColorToken name="00 (Lightest)" value="--primitive-red-00" />
         <ColorToken name="01" value="--primitive-red-01" />
@@ -576,6 +583,13 @@ export const SemanticColors: Story = {
       <TokenSection title="Trend">
         <ColorToken name="Up" value="--color-trend-up" />
         <ColorToken name="Down" value="--color-trend-down" />
+      </TokenSection>
+
+      <TokenSection title="File Types">
+        <ColorToken name="PDF" value="--color-file-pdf" />
+        <ColorToken name="Spreadsheet" value="--color-file-spreadsheet" />
+        <ColorToken name="Document" value="--color-file-document" />
+        <ColorToken name="Presentation" value="--color-file-presentation" />
       </TokenSection>
     </div>
   ),

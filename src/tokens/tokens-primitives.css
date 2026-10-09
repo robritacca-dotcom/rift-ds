@@ -157,6 +157,16 @@
   --primitive-true-black-semi: rgba(0, 0, 0, 0.5);
   --primitive-true-black-strong: rgba(0, 0, 0, 0.7);
 
+  /* File-format colours: the hues each document format wears everywhere
+     else a person meets it (a PDF's red, a spreadsheet's green, a
+     document's blue, a presentation's yellow). Recognition is the whole
+     job, so they are fixed values, not steps on a ramp: a theme that
+     re-keys the chromatic ramps leaves them alone. */
+  --primitive-file-pdf: #FF2116;
+  --primitive-file-spreadsheet: #00AC47;
+  --primitive-file-document: #2684FC;
+  --primitive-file-presentation: #FFBA00;
+
   /* ============================================
      SPACING PRIMITIVES
      ============================================ */

@@ -155,6 +155,30 @@ const trendColours: SwatchData[] = [
   },
 ];
 
+/* --- File types --- */
+const fileTypeColours: SwatchData[] = [
+  {
+    label: "PDF", cssVar: "--color-file-pdf",
+    dark: { primitive: "--file--pdf--", hex: "#FF2116", rgb: "255 / 33 / 22" },
+    light: { primitive: "--file--pdf--", hex: "#FF2116", rgb: "255 / 33 / 22" },
+  },
+  {
+    label: "Spreadsheet", cssVar: "--color-file-spreadsheet",
+    dark: { primitive: "--file--spreadsheet--", hex: "#00AC47", rgb: "0 / 172 / 71" },
+    light: { primitive: "--file--spreadsheet--", hex: "#00AC47", rgb: "0 / 172 / 71" },
+  },
+  {
+    label: "Document", cssVar: "--color-file-document",
+    dark: { primitive: "--file--document--", hex: "#2684FC", rgb: "38 / 132 / 252" },
+    light: { primitive: "--file--document--", hex: "#2684FC", rgb: "38 / 132 / 252" },
+  },
+  {
+    label: "Presentation", cssVar: "--color-file-presentation",
+    dark: { primitive: "--file--presentation--", hex: "#FFBA00", rgb: "255 / 186 / 0" },
+    light: { primitive: "--file--presentation--", hex: "#FFBA00", rgb: "255 / 186 / 0" },
+  },
+];
+
 /* --- Chat surfaces --- */
 const chatSurfaceColours: SwatchData[] = [
   {
@@ -825,6 +849,16 @@ export default function SemanticColoursPage() {
             <SectionTitle title="Trend" />
             <div className={styles.colourSwatches}>
               {trendColours.map((s) => (
+                <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
+              ))}
+            </div>
+          </section>
+
+          {/* File types */}
+          <section className={styles.colourGroup}>
+            <SectionTitle title="File types" />
+            <div className={styles.colourSwatches}>
+              {fileTypeColours.map((s) => (
                 <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
               ))}
             </div>

@@ -186,4 +186,10 @@
   --color-core-accent-mint: var(--primitive-green-07);
   --color-trend-up: var(--primitive-green-07);
   --color-trend-down: var(--primitive-red-07);
+
+  /* File type: the same fixed format colours as light mode */
+  --color-file-pdf: var(--primitive-file-pdf);
+  --color-file-spreadsheet: var(--primitive-file-spreadsheet);
+  --color-file-document: var(--primitive-file-document);
+  --color-file-presentation: var(--primitive-file-presentation);
 }

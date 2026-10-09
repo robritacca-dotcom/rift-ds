@@ -1,5 +1,5 @@
 /**
- * The five architecture maps rendered on /overview.
+ * The architecture maps rendered on /overview.
  *
  * Hardcoded map data, deliberately: the drawings are editorial content, like
  * the case-study covers, and the coordinates are drawing geometry. The

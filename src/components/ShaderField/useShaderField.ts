@@ -26,7 +26,7 @@ export interface ShaderParams {
   /**
    * How much the composition resists shrinking with the container, 0–1.
    *
-   * At 0 — the default, and the behaviour a CSS blob layer has — the whole
+   * At 0 — the behaviour a CSS blob layer has — the whole
    * field is fitted to whatever width it is given, so a phone shows the
    * entire composition at phone scale: every source small, and more of them
    * crowded into view than the look was built for. At 1 the field holds the
@@ -35,9 +35,9 @@ export interface ShaderParams {
    * keeping some of the shrink so colours still bleed together on a small
    * screen. Above the reference width it does nothing.
    *
-   * Raise it for a full-viewport background, which is read on a phone as a
-   * scene rather than a diagram; leave it at 0 wherever the point is to see
-   * the whole composition, such as a small demo tile.
+   * The default sits between the two, which suits a full-viewport background,
+   * read on a phone as a scene rather than a diagram; set it to 0 wherever
+   * the point is to see the whole composition, such as a small demo tile.
    */
   crop: number;
 }

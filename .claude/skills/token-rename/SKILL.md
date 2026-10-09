@@ -36,7 +36,7 @@ npm run validate-registry
 
 Expect failures — they are the checklist, not a problem. The usual remainder, each named by its validator:
 
-- **Hand mirrors** — the playground's ramp/step tables, `presets.ts` overrides, InspectMode's prefix strings (`validate-theme-mirrors.mjs` names each), and the action-family token names in `scripts/validate-theme-presets.mjs` (`ACTION_PAIRINGS`, the required action roles, any `SANCTIONED_AA_GAPS` keys), which that script fails on by name.
+- **Hand mirrors** — the playground's ramp/step tables, `presets.ts` overrides, InspectMode's prefix strings (`validate-theme-mirrors.mjs` names each), and the action-family token names in `scripts/validate-theme-presets.mjs` (`ACTION_PAIRINGS`, the required action roles, any `SANCTIONED_AA_GAPS` keys), which that script fails on by name. One mirror fails at generation rather than in a validator: `LIGHT_SURFACE_STEPS` in `website/src/lib/theme/theme-overrides.ts` names neutral steps, and the tint function throws on a step the neutral table does not hold.
 - **Validator parsers** — a renumbering can break the regexes that parse the old shape (step patterns, label parsers). Fixing a parser to accept the new grammar is expected; weakening what it asserts is not.
 - **design.md** — every token name it mentions is held to the registry, so stale prose fails by name.
 - **Docs and doc pages** — the foundations pages' swatch rows and `src/stories/Tokens.stories.tsx` carry names in data arrays the mirrors guard; page prose that *describes* the old grammar (a "sizes run xs to xl" sentence) is yours to catch by reading, since no validator parses prose meaning.

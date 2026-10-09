@@ -95,7 +95,7 @@ Inside and between a component's own parts, judged at magnification, per theme:
 
 **Theme parity**
 
-- Dark is designed, not inverted. For each key crop, put light and dark side by side: fills, strokes, and elevation must make the same statement in both. A treatment that reads as a solid fill in light and dissolves into the background in dark is a Contrast finding.
+- Dark is designed, not inverted. For each key crop, put light and dark side by side: fills, strokes, and elevation must make the same statement in both. A treatment that reads as a solid fill in light and dissolves into the background in dark is a Contrast finding. One asymmetry is by design: a tinted theme's light surfaces carry less of the tint than its dark ones (`LIGHT_SURFACE_TINT_RATIO` in `website/src/lib/theme/theme-overrides.ts`), so a floor that reads more neutral in light is not a finding.
 
 **System fidelity**
 

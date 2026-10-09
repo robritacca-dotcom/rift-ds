@@ -16,7 +16,7 @@ Use this skill when asked to add a theme, a preset, or a new look — phrases li
 
 ## The governing idea
 
-A preset is a **complete theme, not a tint**: every lever holds a saved position, and `scripts/validate-theme-presets.mjs` is the completeness gate that makes "one attribute, full theme" a guarantee rather than a hope. `THEME_PRESETS` in `website/src/lib/theme/presets.ts` is the single source; the generated stylesheets in `src/tokens/presets/` and the playground's live preview both compile from the same `presetOverrides` composer, so the preview and the shipped CSS cannot disagree.
+A preset is a **complete theme, not a tint**: every lever holds a saved position, and `scripts/validate-theme-presets.mjs` is the completeness gate that makes "one attribute, full theme" a guarantee rather than a hope. `THEME_PRESETS` in `website/src/lib/theme/presets.ts` is the single source; the generated stylesheets in `src/tokens/presets/` compile from `presetOverrides` in that file, and the playground's live preview composes the same lever functions (`website/src/lib/theme/theme-overrides.ts`) in a memo of its own that mirrors it. Nothing holds the two compositions to each other, so a change to how the levers combine has to be made in both.
 
 ## Instructions
 
@@ -25,7 +25,7 @@ A preset is a **complete theme, not a tint**: every lever holds a saved position
 Add an entry to `THEME_PRESETS` in `website/src/lib/theme/presets.ts`. The `ThemePreset` type is the checklist — every field it requires is a decision, not a default to skip:
 
 - **`brand`** (and `brandDark` when one key cannot serve both themes): the action colour. The lever derives the full action family from it, so pick the key with the AA gate in mind (step 3).
-- **Neutral tint** (`tintOn`/`tintSeed`/`tintStrength`): whether the greys lean toward the brand.
+- **Neutral tint** (`tintOn`/`tintSeed`/`tintStrength`): whether the greys lean toward the brand. The strength is not applied evenly: light mode's surface steps take only a share of it (`LIGHT_SURFACE_TINT_RATIO` in `website/src/lib/theme/theme-overrides.ts` owns the rule and the reason), so judge the strength in both themes, never from light mode alone.
 - **Shape** (`radiusScale`, `pill`): the corner language.
 - **The feel levers** (`density`, `typeScale`, `motionScale`, `elevation`): 100/100/100/default is a legitimate position, but state it deliberately. `motionScale` is stored as a percentage of the shipped durations, so a lower number is a *faster* theme; the playground slider and /foundations/themes show it as speed through `motionSpeedPercent`, so a stored 80 reads 120% there.
 - **Type weight and tracking** (`displayWeight`, `headingWeight`, `tracking`): one weight per tier and a letter-spacing offset added to every style's shipped tracking. The `SHIPPED_*` constants in `website/src/lib/theme/theme-overrides.ts` are the base look's positions. A single style that should differ from its tier goes in `extraOverrides`. Keep both weights inside `TYPE_WEIGHT_RANGE` (same file) and inside the axis range `FAMILIES` in `scripts/sync-preset-fonts.mjs` syncs for the face: the playground previews from a wider Google request than the package ships, so a weight past the synced range previews correctly and ships clamped. Widen the `FAMILIES` entry and rerun the sync first.

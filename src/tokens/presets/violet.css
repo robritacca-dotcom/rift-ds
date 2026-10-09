@@ -7,39 +7,39 @@
  * Import after tokens.css, then set data-brand="violet" on <html>.
  */
 @font-face {
-  font-family: 'Work Sans';
+  font-family: 'Plus Jakarta Sans';
   font-style: normal;
-  font-weight: 300 700;
+  font-weight: 300 800;
   font-display: swap;
-  src: url('../../fonts/presets/work-sans-300-700-latin.woff2') format('woff2');
+  src: url('../../fonts/presets/plus-jakarta-sans-300-800-latin.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 @font-face {
-  font-family: 'Work Sans';
+  font-family: 'Plus Jakarta Sans';
   font-style: normal;
-  font-weight: 300 700;
+  font-weight: 300 800;
   font-display: swap;
-  src: url('../../fonts/presets/work-sans-300-700-latin-ext.woff2') format('woff2');
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  src: url('../../fonts/presets/plus-jakarta-sans-300-800-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
 @font-face {
-  font-family: 'Lora';
+  font-family: 'Playfair Display';
   font-style: normal;
-  font-weight: 400 700;
+  font-weight: 400 800;
   font-display: swap;
-  src: url('../../fonts/presets/lora-400-700-latin.woff2') format('woff2');
+  src: url('../../fonts/presets/playfair-display-400-800-latin.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 @font-face {
-  font-family: 'Lora';
+  font-family: 'Playfair Display';
   font-style: normal;
-  font-weight: 400 700;
+  font-weight: 400 800;
   font-display: swap;
-  src: url('../../fonts/presets/lora-400-700-latin-ext.woff2') format('woff2');
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  src: url('../../fonts/presets/playfair-display-400-800-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
 html[data-brand="violet"] {
@@ -63,8 +63,33 @@ html[data-brand="violet"] {
   --color-core-ui-secondary: var(--primitive-purple-11);
   --color-input-border-hover: var(--primitive-purple-06);
   --color-input-border-selected: var(--primitive-purple-08);
-  --font-family-heading: 'Lora', serif;
-  --font-family-primary: 'Work Sans', sans-serif;
+  --font-caption-letter-spacing: -0.005em;
+  --font-display-1-letter-spacing: 0.015em;
+  --font-display-1-weight: 400;
+  --font-display-2-letter-spacing: 0.01em;
+  --font-display-2-weight: 400;
+  --font-family-heading: 'Playfair Display', serif;
+  --font-family-primary: 'Plus Jakarta Sans', sans-serif;
+  --font-heading-1-letter-spacing: 0.01em;
+  --font-heading-1-weight: 500;
+  --font-heading-2-letter-spacing: 0.01em;
+  --font-heading-2-weight: 500;
+  --font-heading-3-letter-spacing: 0.01em;
+  --font-heading-3-weight: 500;
+  --font-mega-1-letter-spacing: 0.015em;
+  --font-mega-1-weight: 400;
+  --font-mega-2-letter-spacing: 0.015em;
+  --font-mega-2-weight: 400;
+  --font-overline-letter-spacing: 0.075em;
+  --font-paragraph-emphasis-letter-spacing: -0.015em;
+  --font-paragraph-letter-spacing: -0.005em;
+  --font-paragraph-sm-emphasis-letter-spacing: -0.005em;
+  --font-paragraph-sm-letter-spacing: -0.005em;
+  --font-sub-display-letter-spacing: 0.01em;
+  --font-sub-display-weight: 400;
+  --font-title-body-letter-spacing: -0.015em;
+  --font-title-body-weight: 500;
+  --material-symbols-weight: 300;
   --primitive-blue-00: #FBFBFE;
   --primitive-blue-01: #F6F6FD;
   --primitive-blue-02: #E6E7F9;
@@ -77,6 +102,16 @@ html[data-brand="violet"] {
   --primitive-blue-09: #303471;
   --primitive-blue-10: #1B1D3E;
   --primitive-blue-11: #12142B;
+  --primitive-gap-050: 2px;
+  --primitive-gap-100: 4px;
+  --primitive-gap-1000: 42px;
+  --primitive-gap-1500: 63px;
+  --primitive-gap-200: 8px;
+  --primitive-gap-2000: 84px;
+  --primitive-gap-300: 13px;
+  --primitive-gap-3000: 126px;
+  --primitive-gap-400: 17px;
+  --primitive-gap-500: 21px;
   --primitive-green-00: #F9FCFC;
   --primitive-green-01: #F0F9F7;
   --primitive-green-02: #D5EDE8;
@@ -129,6 +164,15 @@ html[data-brand="violet"] {
   --primitive-orange-09: #754235;
   --primitive-orange-10: #462820;
   --primitive-orange-11: #341D17;
+  --primitive-padding-050: 2px;
+  --primitive-padding-100: 4px;
+  --primitive-padding-1000: 42px;
+  --primitive-padding-150: 6px;
+  --primitive-padding-1500: 63px;
+  --primitive-padding-200: 8px;
+  --primitive-padding-300: 13px;
+  --primitive-padding-400: 17px;
+  --primitive-padding-500: 21px;
   --primitive-radius-050: 3px;
   --primitive-radius-100: 6px;
   --primitive-radius-1200: 67px;
@@ -198,8 +242,33 @@ html[data-brand="violet"][data-theme="dark"] {
   --color-core-ui-secondary: var(--primitive-purple-09);
   --color-input-border-hover: var(--primitive-purple-09);
   --color-input-border-selected: var(--primitive-purple-09);
-  --font-family-heading: 'Lora', serif;
-  --font-family-primary: 'Work Sans', sans-serif;
+  --font-caption-letter-spacing: -0.005em;
+  --font-display-1-letter-spacing: 0.015em;
+  --font-display-1-weight: 400;
+  --font-display-2-letter-spacing: 0.01em;
+  --font-display-2-weight: 400;
+  --font-family-heading: 'Playfair Display', serif;
+  --font-family-primary: 'Plus Jakarta Sans', sans-serif;
+  --font-heading-1-letter-spacing: 0.01em;
+  --font-heading-1-weight: 500;
+  --font-heading-2-letter-spacing: 0.01em;
+  --font-heading-2-weight: 500;
+  --font-heading-3-letter-spacing: 0.01em;
+  --font-heading-3-weight: 500;
+  --font-mega-1-letter-spacing: 0.015em;
+  --font-mega-1-weight: 400;
+  --font-mega-2-letter-spacing: 0.015em;
+  --font-mega-2-weight: 400;
+  --font-overline-letter-spacing: 0.075em;
+  --font-paragraph-emphasis-letter-spacing: -0.015em;
+  --font-paragraph-letter-spacing: -0.005em;
+  --font-paragraph-sm-emphasis-letter-spacing: -0.005em;
+  --font-paragraph-sm-letter-spacing: -0.005em;
+  --font-sub-display-letter-spacing: 0.01em;
+  --font-sub-display-weight: 400;
+  --font-title-body-letter-spacing: -0.015em;
+  --font-title-body-weight: 500;
+  --material-symbols-weight: 300;
   --primitive-blue-00: #FBFBFE;
   --primitive-blue-01: #F6F6FD;
   --primitive-blue-02: #E6E7F9;
@@ -212,6 +281,16 @@ html[data-brand="violet"][data-theme="dark"] {
   --primitive-blue-09: #303471;
   --primitive-blue-10: #1B1D3E;
   --primitive-blue-11: #12142B;
+  --primitive-gap-050: 2px;
+  --primitive-gap-100: 4px;
+  --primitive-gap-1000: 42px;
+  --primitive-gap-1500: 63px;
+  --primitive-gap-200: 8px;
+  --primitive-gap-2000: 84px;
+  --primitive-gap-300: 13px;
+  --primitive-gap-3000: 126px;
+  --primitive-gap-400: 17px;
+  --primitive-gap-500: 21px;
   --primitive-green-00: #F9FCFC;
   --primitive-green-01: #F0F9F7;
   --primitive-green-02: #D5EDE8;
@@ -264,6 +343,15 @@ html[data-brand="violet"][data-theme="dark"] {
   --primitive-orange-09: #754235;
   --primitive-orange-10: #462820;
   --primitive-orange-11: #341D17;
+  --primitive-padding-050: 2px;
+  --primitive-padding-100: 4px;
+  --primitive-padding-1000: 42px;
+  --primitive-padding-150: 6px;
+  --primitive-padding-1500: 63px;
+  --primitive-padding-200: 8px;
+  --primitive-padding-300: 13px;
+  --primitive-padding-400: 17px;
+  --primitive-padding-500: 21px;
   --primitive-radius-050: 3px;
   --primitive-radius-100: 6px;
   --primitive-radius-1200: 67px;

@@ -38,9 +38,16 @@ import {
   typeScaleOverrides,
   motionScaleOverrides,
   elevationOverrides,
+  weightOverrides,
+  trackingOverrides,
+  iconOverrides,
+  SHIPPED_DISPLAY_WEIGHT,
+  SHIPPED_HEADING_WEIGHT,
+  SHIPPED_ICON_WEIGHT,
   type ElevationVariant,
 } from "@/lib/theme/theme-overrides";
-import { PICKER_FONT_PARAMS, THEME_PRESETS, type ThemePreset } from "@/lib/theme/presets";
+import { PICKER_FONT_PARAMS, THEME_PRESETS, type ThemePreset } from "@/lib/theme/presets";
+
 import { BASE_THEME_ID, isBaseTheme, SERVED_THEME_ID } from "@/lib/theme/brand";
 import { useAppliedOverrides, useSiteTheme } from "@/lib/theme/use-theme-overrides";
 import PlaygroundControls from "./PlaygroundControls";
@@ -215,6 +222,11 @@ export default function PlaygroundPage() {
   const [typeScale, setTypeScale] = useState(100); // percent
   const [motionScale, setMotionScale] = useState(100); // percent
   const [elevation, setElevation] = useState<ElevationVariant>("default");
+  const [displayWeight, setDisplayWeight] = useState(SHIPPED_DISPLAY_WEIGHT);
+  const [headingWeight, setHeadingWeight] = useState(SHIPPED_HEADING_WEIGHT);
+  const [tracking, setTracking] = useState(0); // percent of an em
+  const [iconWeight, setIconWeight] = useState(SHIPPED_ICON_WEIGHT);
+  const [iconFill, setIconFill] = useState(false);
   const [fontLabel, setFontLabel] = useState(FONT_OPTIONS[0].label);
   const [headingFontLabel, setHeadingFontLabel] = useState(
     HEADING_FONT_OPTIONS[0].label
@@ -405,6 +417,11 @@ export default function PlaygroundPage() {
     setTypeScale(p.typeScale);
     setMotionScale(p.motionScale);
     setElevation(p.elevation);
+    setDisplayWeight(p.displayWeight);
+    setHeadingWeight(p.headingWeight);
+    setTracking(p.tracking);
+    setIconWeight(p.iconWeight);
+    setIconFill(p.iconFill);
     setFontLabel(p.fontLabel);
     setHeadingFontLabel(p.headingFontLabel ?? HEADING_FONT_OPTIONS[0].label);
   };
@@ -470,6 +487,9 @@ export default function PlaygroundPage() {
       Object.assign(merged, motionScaleOverrides(motionScale / 100));
     }
     Object.assign(merged, elevationOverrides(elevation, theme === "dark" ? "dark" : "light"));
+    Object.assign(merged, weightOverrides(displayWeight, headingWeight));
+    Object.assign(merged, trackingOverrides(tracking));
+    Object.assign(merged, iconOverrides(iconWeight, iconFill));
     /* The ambient accents apply whenever any differs from the shipped
        keys — mirroring presetOverrides' placement just before the extras. */
     if (!isAccentsPristine(accents)) {
@@ -485,7 +505,7 @@ export default function PlaygroundPage() {
       Object.assign(merged, advancedColorOverrides(advColors, merged));
     }
     return merged;
-  }, [actionPlan, theme, tintOn, tintSeed, tintStrength, radiusScale, pill, density, typeScale, motionScale, elevation, accents, presetExtras, advColors]);
+  }, [actionPlan, theme, tintOn, tintSeed, tintStrength, radiusScale, pill, density, typeScale, motionScale, elevation, displayWeight, headingWeight, tracking, iconWeight, iconFill, accents, presetExtras, advColors]);
 
   /* ---------- apply to the whole page ----------
      The shared hook writes to :root (where the semantic layer is declared,
@@ -547,6 +567,11 @@ export default function PlaygroundPage() {
     setTypeScale(100);
     setMotionScale(100);
     setElevation("default");
+    setDisplayWeight(SHIPPED_DISPLAY_WEIGHT);
+    setHeadingWeight(SHIPPED_HEADING_WEIGHT);
+    setTracking(0);
+    setIconWeight(SHIPPED_ICON_WEIGHT);
+    setIconFill(false);
     setFontLabel(FONT_OPTIONS[0].label);
     setHeadingFontLabel(HEADING_FONT_OPTIONS[0].label);
   };
@@ -740,6 +765,11 @@ export default function PlaygroundPage() {
               typeScale={typeScale}
               motionScale={motionScale}
               elevation={elevation}
+              displayWeight={displayWeight}
+              headingWeight={headingWeight}
+              tracking={tracking}
+              iconWeight={iconWeight}
+              iconFill={iconFill}
               fontLabel={fontLabel}
               headingFontLabel={headingFontLabel}
               productName={productName}
@@ -756,6 +786,11 @@ export default function PlaygroundPage() {
               onTypeScale={asCustom(setTypeScale)}
               onMotionScale={asCustom(setMotionScale)}
               onElevation={asCustom(setElevation)}
+              onDisplayWeight={asCustom(setDisplayWeight)}
+              onHeadingWeight={asCustom(setHeadingWeight)}
+              onTracking={asCustom(setTracking)}
+              onIconWeight={asCustom(setIconWeight)}
+              onIconFill={asCustom(setIconFill)}
               onFontLabel={asCustom(setFontLabel)}
               onHeadingFontLabel={asCustom(setHeadingFontLabel)}
               onProductName={setProductName}

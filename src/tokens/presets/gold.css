@@ -7,6 +7,24 @@
  * Import after tokens.css, then set data-brand="gold" on <html>.
  */
 @font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 300 800;
+  font-display: swap;
+  src: url('../../fonts/presets/manrope-300-800-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 300 800;
+  font-display: swap;
+  src: url('../../fonts/presets/manrope-300-800-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
   font-family: 'Space Grotesk';
   font-style: normal;
   font-weight: 300 700;
@@ -21,7 +39,7 @@
   font-weight: 300 700;
   font-display: swap;
   src: url('../../fonts/presets/space-grotesk-300-700-latin-ext.woff2') format('woff2');
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
 html[data-brand="gold"] {
@@ -46,7 +64,33 @@ html[data-brand="gold"] {
   --color-core-ui-secondary: var(--primitive-yellow-10);
   --color-input-border-hover: var(--primitive-yellow-08);
   --color-input-border-selected: var(--primitive-yellow-07);
-  --font-family-primary: 'Space Grotesk', sans-serif;
+  --font-caption-letter-spacing: -0.01em;
+  --font-display-1-letter-spacing: 0.01em;
+  --font-display-1-weight: 500;
+  --font-display-2-letter-spacing: 0.005em;
+  --font-display-2-weight: 500;
+  --font-family-heading: 'Space Grotesk', sans-serif;
+  --font-family-primary: 'Manrope', sans-serif;
+  --font-heading-1-letter-spacing: 0.005em;
+  --font-heading-1-weight: 700;
+  --font-heading-2-letter-spacing: 0.005em;
+  --font-heading-2-weight: 700;
+  --font-heading-3-letter-spacing: 0.005em;
+  --font-heading-3-weight: 700;
+  --font-mega-1-letter-spacing: 0.01em;
+  --font-mega-1-weight: 500;
+  --font-mega-2-letter-spacing: 0.01em;
+  --font-mega-2-weight: 500;
+  --font-overline-letter-spacing: 0.07em;
+  --font-paragraph-emphasis-letter-spacing: -0.02em;
+  --font-paragraph-letter-spacing: -0.01em;
+  --font-paragraph-sm-emphasis-letter-spacing: -0.01em;
+  --font-paragraph-sm-letter-spacing: -0.01em;
+  --font-sub-display-letter-spacing: 0.005em;
+  --font-sub-display-weight: 500;
+  --font-title-body-letter-spacing: -0.02em;
+  --font-title-body-weight: 700;
+  --material-symbols-weight: 500;
   --motion-duration-base: 180ms;
   --motion-duration-deliberate: 360ms;
   --motion-duration-fast: 135ms;
@@ -65,6 +109,16 @@ html[data-brand="gold"] {
   --primitive-blue-09: #1B2C71;
   --primitive-blue-10: #0F193E;
   --primitive-blue-11: #0A112B;
+  --primitive-gap-050: 2px;
+  --primitive-gap-100: 4px;
+  --primitive-gap-1000: 38px;
+  --primitive-gap-1500: 57px;
+  --primitive-gap-200: 8px;
+  --primitive-gap-2000: 76px;
+  --primitive-gap-300: 11px;
+  --primitive-gap-3000: 114px;
+  --primitive-gap-400: 15px;
+  --primitive-gap-500: 19px;
   --primitive-green-00: #F8FDFB;
   --primitive-green-01: #EFFAF6;
   --primitive-green-02: #D1F1E6;
@@ -117,6 +171,15 @@ html[data-brand="gold"] {
   --primitive-orange-09: #8A5321;
   --primitive-orange-10: #523214;
   --primitive-orange-11: #3D250F;
+  --primitive-padding-050: 2px;
+  --primitive-padding-100: 4px;
+  --primitive-padding-1000: 38px;
+  --primitive-padding-150: 6px;
+  --primitive-padding-1500: 57px;
+  --primitive-padding-200: 8px;
+  --primitive-padding-300: 11px;
+  --primitive-padding-400: 15px;
+  --primitive-padding-500: 19px;
   --primitive-purple-00: #FCFAFE;
   --primitive-purple-01: #F6F2FD;
   --primitive-purple-02: #E2D2F9;
@@ -185,7 +248,33 @@ html[data-brand="gold"][data-theme="dark"] {
   --color-core-ui-secondary: var(--primitive-yellow-09);
   --color-input-border-hover: var(--primitive-yellow-08);
   --color-input-border-selected: var(--primitive-yellow-08);
-  --font-family-primary: 'Space Grotesk', sans-serif;
+  --font-caption-letter-spacing: -0.01em;
+  --font-display-1-letter-spacing: 0.01em;
+  --font-display-1-weight: 500;
+  --font-display-2-letter-spacing: 0.005em;
+  --font-display-2-weight: 500;
+  --font-family-heading: 'Space Grotesk', sans-serif;
+  --font-family-primary: 'Manrope', sans-serif;
+  --font-heading-1-letter-spacing: 0.005em;
+  --font-heading-1-weight: 700;
+  --font-heading-2-letter-spacing: 0.005em;
+  --font-heading-2-weight: 700;
+  --font-heading-3-letter-spacing: 0.005em;
+  --font-heading-3-weight: 700;
+  --font-mega-1-letter-spacing: 0.01em;
+  --font-mega-1-weight: 500;
+  --font-mega-2-letter-spacing: 0.01em;
+  --font-mega-2-weight: 500;
+  --font-overline-letter-spacing: 0.07em;
+  --font-paragraph-emphasis-letter-spacing: -0.02em;
+  --font-paragraph-letter-spacing: -0.01em;
+  --font-paragraph-sm-emphasis-letter-spacing: -0.01em;
+  --font-paragraph-sm-letter-spacing: -0.01em;
+  --font-sub-display-letter-spacing: 0.005em;
+  --font-sub-display-weight: 500;
+  --font-title-body-letter-spacing: -0.02em;
+  --font-title-body-weight: 700;
+  --material-symbols-weight: 500;
   --motion-duration-base: 180ms;
   --motion-duration-deliberate: 360ms;
   --motion-duration-fast: 135ms;
@@ -204,6 +293,16 @@ html[data-brand="gold"][data-theme="dark"] {
   --primitive-blue-09: #1B2C71;
   --primitive-blue-10: #0F193E;
   --primitive-blue-11: #0A112B;
+  --primitive-gap-050: 2px;
+  --primitive-gap-100: 4px;
+  --primitive-gap-1000: 38px;
+  --primitive-gap-1500: 57px;
+  --primitive-gap-200: 8px;
+  --primitive-gap-2000: 76px;
+  --primitive-gap-300: 11px;
+  --primitive-gap-3000: 114px;
+  --primitive-gap-400: 15px;
+  --primitive-gap-500: 19px;
   --primitive-green-00: #F8FDFB;
   --primitive-green-01: #EFFAF6;
   --primitive-green-02: #D1F1E6;
@@ -256,6 +355,15 @@ html[data-brand="gold"][data-theme="dark"] {
   --primitive-orange-09: #8A5321;
   --primitive-orange-10: #523214;
   --primitive-orange-11: #3D250F;
+  --primitive-padding-050: 2px;
+  --primitive-padding-100: 4px;
+  --primitive-padding-1000: 38px;
+  --primitive-padding-150: 6px;
+  --primitive-padding-1500: 57px;
+  --primitive-padding-200: 8px;
+  --primitive-padding-300: 11px;
+  --primitive-padding-400: 15px;
+  --primitive-padding-500: 19px;
   --primitive-purple-00: #FCFAFE;
   --primitive-purple-01: #F6F2FD;
   --primitive-purple-02: #E2D2F9;

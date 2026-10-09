@@ -8,15 +8,21 @@ import {
   DEFAULT_NEUTRAL_SEED,
   FONT_OPTIONS,
   HEADING_FONT_OPTIONS,
+  SHIPPED_DISPLAY_WEIGHT,
+  SHIPPED_HEADING_WEIGHT,
+  SHIPPED_ICON_WEIGHT,
   actionColorPlan,
   advancedColorOverrides,
   densityOverrides,
   elevationOverrides,
+  iconOverrides,
   isAdvancedPristine,
   motionScaleOverrides,
   neutralOverrides,
   radiusOverrides,
+  trackingOverrides,
   typeScaleOverrides,
+  weightOverrides,
   type AccentSextet,
   type AdvancedColorState,
   type ElevationVariant,
@@ -49,6 +55,16 @@ export interface ThemePreset {
   motionScale: number;
   /** Shadow treatment: the shipped pair, none, or the softer float. */
   elevation: ElevationVariant;
+  /** Display-tier weight (Mega, Display, Sub Display); SHIPPED_DISPLAY_WEIGHT is the base look. */
+  displayWeight: number;
+  /** Heading-tier weight (Headings 1 to 3, Title Body); SHIPPED_HEADING_WEIGHT is the base look. */
+  headingWeight: number;
+  /** Letter-spacing offset in percent of an em, added to every style's shipped tracking (0 = shipped). */
+  tracking: number;
+  /** Icon stroke weight on the icon font's `wght` axis; SHIPPED_ICON_WEIGHT is the base look. */
+  iconWeight: number;
+  /** Filled icons instead of outlined ones. */
+  iconFill: boolean;
   fontLabel: string;
   /** Heading face when split from the body face; absent means the heading
       role follows the body typeface (the shipped single-face system). */
@@ -93,6 +109,11 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     typeScale: 100,
     motionScale: 100,
     elevation: "default",
+    displayWeight: SHIPPED_DISPLAY_WEIGHT,
+    headingWeight: SHIPPED_HEADING_WEIGHT,
+    tracking: 0,
+    iconWeight: SHIPPED_ICON_WEIGHT,
+    iconFill: false,
     // The editorial pairing, and the split-face demonstration: Lora
     // carries the display personality while running text stays in a
     // humanist sans.
@@ -134,6 +155,11 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     typeScale: 100,
     motionScale: 100,
     elevation: "flat",
+    displayWeight: SHIPPED_DISPLAY_WEIGHT,
+    headingWeight: SHIPPED_HEADING_WEIGHT,
+    tracking: 0,
+    iconWeight: SHIPPED_ICON_WEIGHT,
+    iconFill: false,
     fontLabel: "Inter",
     headingFontLabel: "Montserrat",
     // Ink-wash chromatics: hue and value hold, saturation drops hard, so
@@ -185,6 +211,11 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     typeScale: 100,
     motionScale: 100,
     elevation: "default",
+    displayWeight: SHIPPED_DISPLAY_WEIGHT,
+    headingWeight: SHIPPED_HEADING_WEIGHT,
+    tracking: 0,
+    iconWeight: SHIPPED_ICON_WEIGHT,
+    iconFill: false,
     fontLabel: "IBM Plex Sans",
     // Electric sextet: the ambient palette run hot around the pure-blue key.
     accents: {
@@ -226,6 +257,11 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     typeScale: 100,
     motionScale: 100,
     elevation: "soft",
+    displayWeight: SHIPPED_DISPLAY_WEIGHT,
+    headingWeight: SHIPPED_HEADING_WEIGHT,
+    tracking: 0,
+    iconWeight: SHIPPED_ICON_WEIGHT,
+    iconFill: false,
     fontLabel: "DM Sans",
     headingFontLabel: "Poppins",
     // Sunset sextet: the ambient palette leans warm around the coral key.
@@ -267,13 +303,23 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     // Crisp: corners cut hard toward square, and no pill anywhere.
     radiusScale: 30,
     pill: false,
-    density: 100,
+    // Packed a notch tighter: the square corners suit a denser grid.
+    density: 95,
     typeScale: 100,
     // Modern and quick on its feet: a notch under the shipped tempo.
     motionScale: 90,
     elevation: "default",
-    // One bold geometric face carries the whole look.
-    fontLabel: "Space Grotesk",
+    // Both tiers a step heavier, and set tight: signage, not editorial.
+    displayWeight: 500,
+    headingWeight: 700,
+    tracking: -1,
+    // Icons carry the same heavy line as the headings.
+    iconWeight: 500,
+    iconFill: false,
+    // Space Grotesk keeps the headings; Manrope takes the text, a
+    // plainer geometric that reads easier at small sizes.
+    fontLabel: "Manrope",
+    headingFontLabel: "Space Grotesk",
     // Warm bold sextet: the ambient palette keyed hot around the gold.
     accents: {
       coral: "#F58B5B",
@@ -342,6 +388,11 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     // Tonal depth (white on grey-green) rather than cast shadows — the
     // softer float where a surface must lift at all.
     elevation: "soft",
+    displayWeight: 800,
+    headingWeight: SHIPPED_HEADING_WEIGHT,
+    tracking: 0,
+    iconWeight: SHIPPED_ICON_WEIGHT,
+    iconFill: false,
     // The reference pairing, near enough: Inter Tight's heavy weights
     // stand in for the brand's own display grotesque over Inter text.
     fontLabel: "Inter",
@@ -368,10 +419,6 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     // derives (Volt and Bubblegum make the same repair).
     extraOverrides: {
       "--color-action-primary-text-active": "var(--primitive-green-11)",
-      "--font-mega-1-weight": "800",
-      "--font-mega-2-weight": "800",
-      "--font-display-1-weight": "800",
-      "--font-display-2-weight": "800",
       "--font-sub-display-weight": "700",
       "--font-mega-1-letter-spacing": "-0.03em",
       "--font-mega-2-letter-spacing": "-0.03em",
@@ -409,6 +456,11 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     // gentler float.
     motionScale: 100,
     elevation: "soft",
+    displayWeight: 600,
+    headingWeight: SHIPPED_HEADING_WEIGHT,
+    tracking: 0,
+    iconWeight: SHIPPED_ICON_WEIGHT,
+    iconFill: false,
     // The trail-brand pairing: Montserrat's bold geometric caps-energy
     // headings over DM Sans text.
     fontLabel: "DM Sans",
@@ -427,10 +479,6 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     // wispy in Montserrat — Forest sets them semibold instead, with the
     // sub-display a step lighter so the hero pair keeps its hierarchy.
     extraOverrides: {
-      "--font-mega-1-weight": "600",
-      "--font-mega-2-weight": "600",
-      "--font-display-1-weight": "600",
-      "--font-display-2-weight": "600",
       "--font-sub-display-weight": "500",
     },
     // Woodland neighbours: every hue muted toward the understory. Green
@@ -457,6 +505,11 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     typeScale: 100,
     motionScale: 80,
     elevation: "flat",
+    displayWeight: SHIPPED_DISPLAY_WEIGHT,
+    headingWeight: SHIPPED_HEADING_WEIGHT,
+    tracking: 0,
+    iconWeight: SHIPPED_ICON_WEIGHT,
+    iconFill: false,
     fontLabel: "IBM Plex Mono",
     // Phosphor band: the whole ambient sextet stays in the emerald band,
     // like a single-phosphor display.
@@ -492,14 +545,25 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     // Bubble-round: a notch past the shipped scale, pills everywhere.
     radiusScale: 120,
     pill: true,
-    density: 100,
+    // A little air around everything, like the rounded faces want.
+    density: 105,
     typeScale: 100,
     // Quick on its feet — playful looks answer fast.
     motionScale: 90,
     elevation: "soft",
-    // The candy-shop split: Fraunces' soft wonk over Inter's plain text.
-    fontLabel: "Inter",
-    headingFontLabel: "Fraunces (serif)",
+    // Fredoka reads thin at the shipped light display weight, so the
+    // display tier comes up a step; headings stay at the shipped bold.
+    displayWeight: 400,
+    headingWeight: SHIPPED_HEADING_WEIGHT,
+    // Rounded letters like a touch of room.
+    tracking: 0.5,
+    // Chunkier strokes to sit beside the soft, heavy letterforms.
+    iconWeight: 400,
+    iconFill: false,
+    // Rounded all the way down: Fredoka's bubble headings over Nunito's
+    // soft-terminal text.
+    fontLabel: "Nunito (rounded)",
+    headingFontLabel: "Fredoka (rounded)",
     // Candy-shop sextet: every ambient colour bright and sugared around
     // the hot-pink key.
     accents: {
@@ -538,14 +602,24 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     // is the theme's signature.
     radiusScale: 140,
     pill: true,
-    density: 100,
+    // Unhurried spacing: the look is generous, not busy.
+    density: 105,
     typeScale: 100,
     motionScale: 100,
     // The gentler float suits the rounded geometry.
     elevation: "soft",
-    // The serif-over-sans split: Lora display over Work Sans text.
-    fontLabel: "Work Sans",
-    headingFontLabel: "Lora (serif)",
+    // Playfair's lightest cut is the regular, and its contrast does the
+    // work a heavy weight would: headings step down to a medium.
+    displayWeight: 400,
+    headingWeight: 500,
+    // Drawn in a touch, the way a display serif is usually set.
+    tracking: -0.5,
+    iconWeight: 300,
+    iconFill: false,
+    // The serif-over-sans split: Playfair Display's high-contrast
+    // headings over Plus Jakarta Sans text.
+    fontLabel: "Plus Jakarta Sans",
+    headingFontLabel: "Playfair Display (serif)",
     // Violet-leaning sextet: the ambient palette calmed around the key.
     accents: {
       coral: "#D96BA8",
@@ -749,7 +823,8 @@ export const PICKER_FONT_PARAMS = Array.from(
    generated [data-brand] stylesheets ship. Both consumers call THIS, so
    the preview and the shipped theme cannot disagree; the merge order
    mirrors the playground page's own memo (action plan, tint, radius,
-   density, type, motion, elevation, fonts, extras, advanced last so
+   density, type, motion, elevation, weight, tracking, icons, fonts,
+   extras, advanced last so
    harmonized ramps see the merged state). */
 export function presetOverrides(
   preset: ThemePreset,
@@ -779,6 +854,9 @@ export function presetOverrides(
     Object.assign(merged, motionScaleOverrides(preset.motionScale / 100));
   }
   Object.assign(merged, elevationOverrides(preset.elevation, theme));
+  Object.assign(merged, weightOverrides(preset.displayWeight, preset.headingWeight));
+  Object.assign(merged, trackingOverrides(preset.tracking));
+  Object.assign(merged, iconOverrides(preset.iconWeight, preset.iconFill));
 
   const font = FONT_OPTIONS.find((f) => f.label === preset.fontLabel);
   if (font?.family) merged["--font-family-primary"] = font.family;

@@ -7,6 +7,8 @@ import { CircularButton } from "rift-ds/components/CircularButton/CircularButton
 import { Swatch } from "rift-ds/components/Swatch/Swatch";
 import {
   ACTION_COLOR_PRESETS,
+  ICON_WEIGHT_RANGE,
+  TYPE_WEIGHT_RANGE,
   motionScaleFromSpeed,
   motionSpeedPercent,
   type ElevationVariant,
@@ -40,6 +42,15 @@ export interface PlaygroundControlsProps {
   /** Schedule-duration scale in percent; under 100 is snappier. */
   motionScale: number;
   elevation: ElevationVariant;
+  /** Display-tier weight (Mega, Display, Sub Display). */
+  displayWeight: number;
+  /** Heading-tier weight (Headings 1 to 3, Title Body). */
+  headingWeight: number;
+  /** Letter-spacing offset in percent of an em; 0 is the shipped tracking. */
+  tracking: number;
+  /** Icon stroke weight on the icon font's weight axis. */
+  iconWeight: number;
+  iconFill: boolean;
   fontLabel: string;
   headingFontLabel: string;
   productName: string;
@@ -67,6 +78,11 @@ export interface PlaygroundControlsProps {
   onTypeScale: (value: number) => void;
   onMotionScale: (value: number) => void;
   onElevation: (value: ElevationVariant) => void;
+  onDisplayWeight: (value: number) => void;
+  onHeadingWeight: (value: number) => void;
+  onTracking: (value: number) => void;
+  onIconWeight: (value: number) => void;
+  onIconFill: (value: boolean) => void;
   onFontLabel: (value: string) => void;
   onHeadingFontLabel: (value: string) => void;
   onProductName: (value: string) => void;
@@ -101,6 +117,11 @@ export default function PlaygroundControls({
   typeScale,
   motionScale,
   elevation,
+  displayWeight,
+  headingWeight,
+  tracking,
+  iconWeight,
+  iconFill,
   fontLabel,
   headingFontLabel,
   productName,
@@ -119,6 +140,11 @@ export default function PlaygroundControls({
   onTypeScale,
   onMotionScale,
   onElevation,
+  onDisplayWeight,
+  onHeadingWeight,
+  onTracking,
+  onIconWeight,
+  onIconFill,
   onFontLabel,
   onHeadingFontLabel,
   onProductName,
@@ -360,6 +386,24 @@ export default function PlaygroundControls({
         </div>
       </InspectorSection>
 
+      <InspectorSection title="Icons" defaultOpen>
+        <div className={styles.controlGroup}>
+          <InspectorSlider
+            size="compact"
+            label="Icon weight"
+            value={iconWeight}
+            {...ICON_WEIGHT_RANGE}
+            onValueChange={onIconWeight}
+          />
+          <InspectorToggleSwitch
+            size="compact"
+            label="Filled icons"
+            checked={iconFill}
+            onCheckedChange={onIconFill}
+          />
+        </div>
+      </InspectorSection>
+
       <InspectorSection title="Typography" defaultOpen>
         <div className={`${styles.controlGroup} ${styles.dropUp}`}>
           <InspectorDropdown
@@ -388,6 +432,31 @@ export default function PlaygroundControls({
             step={5}
             onValueChange={onTypeScale}
             format={(v) => `${v}%`}
+          />
+          <InspectorSlider
+            size="compact"
+            label="Display weight"
+            value={displayWeight}
+            {...TYPE_WEIGHT_RANGE}
+            onValueChange={onDisplayWeight}
+          />
+          <InspectorSlider
+            size="compact"
+            label="Heading weight"
+            value={headingWeight}
+            {...TYPE_WEIGHT_RANGE}
+            onValueChange={onHeadingWeight}
+          />
+          {/* Percent of an em, added to each style's shipped tracking. */}
+          <InspectorSlider
+            size="compact"
+            label="Tracking"
+            value={tracking}
+            min={-4}
+            max={4}
+            step={0.5}
+            onValueChange={onTracking}
+            format={(v) => `${v > 0 ? "+" : ""}${v}%`}
           />
         </div>
       </InspectorSection>

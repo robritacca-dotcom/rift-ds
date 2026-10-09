@@ -11,10 +11,13 @@
  *
  *   a. Every override NAME resolves — each custom property
  *      presetOverrides(preset, theme) emits must exist in
- *      src/tokens/registry.json or as a --primitive-* in
- *      tokens-primitives.css. The lever functions synthesize names from
- *      step tables, so a renamed token could otherwise leave a preset
- *      declaring a property nothing reads.
+ *      src/tokens/registry.json, as a --primitive-* in
+ *      tokens-primitives.css, or as one of the icon font's axis hooks
+ *      (the --material-symbols-* properties src/fonts/material-symbols.css
+ *      consumes with a fallback: documented override hooks, not registry
+ *      tokens, read from that file rather than listed here). The lever
+ *      functions synthesize names from step tables, so a renamed token
+ *      could otherwise leave a preset declaring a property nothing reads.
  *   b. Required coverage — the action family (--color-action-primary-bg,
  *      -bg-hover, -bg-active, -text at minimum) must be explicitly
  *      overridden, or provably intended-default. The rule: a preset
@@ -45,8 +48,8 @@
  *      genuinely cannot clear its minimum is pinned in SANCTIONED_AA_GAPS
  *      with the pairing and the computed ratio recorded — never silently
  *      weakened.
- *   d. Lever completeness — density, typeScale, motionScale and
- *      elevation must be present on every preset. The required TS schema
+ *   d. Lever completeness — every lever in NUMBER_LEVERS below, plus
+ *      elevation and iconFill, must be present on every preset. The required TS schema
  *      already guarantees this at compile time; the runtime assert
  *      guards JS-side consumers of the object (and any future
  *      JSON-shaped source that bypasses the type).
@@ -78,6 +81,13 @@ const parseDeclarations = (css) => {
 const primitives = parseDeclarations(read(join(tokensDir, 'tokens-primitives.css')));
 const lightDecls = parseDeclarations(read(join(tokensDir, 'tokens-light.css')));
 const darkDecls = parseDeclarations(read(join(tokensDir, 'tokens-dark.css')));
+/* The icon font's axis hooks: every custom property material-symbols.css
+   reads with a fallback. The icon levers write these. */
+const iconHooks = new Set(
+  [...read(join(repoRoot, 'src', 'fonts', 'material-symbols.css')).matchAll(
+    /var\((--material-symbols-[a-z-]+)\s*,/g
+  )].map((m) => m[1])
+);
 const registryNames = new Set(
   Object.values(JSON.parse(read(join(tokensDir, 'registry.json'))).categories).flat()
 );
@@ -116,6 +126,17 @@ const ACTION_PAIRINGS = [
     its authoritative record — pinning is deliberate acceptance, never a
     silent weakening of the gate. Currently empty: every cell holds. */
 const SANCTIONED_AA_GAPS = new Map([]);
+
+/** d. The levers a preset stores as a number. */
+const NUMBER_LEVERS = [
+  'density',
+  'typeScale',
+  'motionScale',
+  'displayWeight',
+  'headingWeight',
+  'tracking',
+  'iconWeight',
+];
 
 const REQUIRED_ACTION_ROLES = [
   '--color-action-primary-bg',
@@ -228,13 +249,16 @@ const checkPairings = (id, theme, overrides) => {
 
 for (const [id, preset] of Object.entries(THEME_PRESETS)) {
   // d. Lever completeness (runtime guard over the required schema).
-  for (const lever of ['density', 'typeScale', 'motionScale']) {
+  for (const lever of NUMBER_LEVERS) {
     if (typeof preset[lever] !== 'number') {
       errors.push(`preset "${id}": lever "${lever}" is missing or not a number`);
     }
   }
   if (typeof preset.elevation !== 'string' || preset.elevation.length === 0) {
     errors.push(`preset "${id}": lever "elevation" is missing`);
+  }
+  if (typeof preset.iconFill !== 'boolean') {
+    errors.push(`preset "${id}": lever "iconFill" is missing or not a boolean`);
   }
 
   for (const theme of ['light', 'dark']) {
@@ -243,10 +267,10 @@ for (const [id, preset] of Object.entries(THEME_PRESETS)) {
 
     // a. Every override name is a real token or primitive.
     for (const name of Object.keys(overrides)) {
-      if (!registryNames.has(name) && !primitives.has(name)) {
+      if (!registryNames.has(name) && !primitives.has(name) && !iconHooks.has(name)) {
         errors.push(
           `preset "${id}" (${theme}): overrides ${name}, which exists neither in ` +
-            `src/tokens/registry.json nor in tokens-primitives.css`
+            `src/tokens/registry.json nor in tokens-primitives.css, and is not an icon axis hook in src/fonts/material-symbols.css`
         );
       }
     }

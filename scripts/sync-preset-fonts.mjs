@@ -40,17 +40,20 @@ const outputDir = join(repoRoot, 'src', 'fonts', 'presets');
 /** family name -> css2 axis param (variable range, or static weight list). */
 const FAMILIES = {
   'DM Sans': 'DM+Sans:wght@300..700',
-  Fraunces: 'Fraunces:opsz,wght@9..144,300..700',
+  Fredoka: 'Fredoka:wght@300..700',
   'IBM Plex Mono': 'IBM+Plex+Mono:wght@300;400;500;600;700',
   'IBM Plex Sans': 'IBM+Plex+Sans:wght@300..700',
   Inter: 'Inter:wght@300..700',
   'Inter Tight': 'Inter+Tight:wght@300..900',
   Lora: 'Lora:wght@400..700',
+  Manrope: 'Manrope:wght@300..800',
   Montserrat: 'Montserrat:wght@300..700',
+  Nunito: 'Nunito:wght@300..800',
+  'Playfair Display': 'Playfair+Display:wght@400..800',
+  'Plus Jakarta Sans': 'Plus+Jakarta+Sans:wght@300..800',
   Poppins: 'Poppins:wght@300;400;500;600;700',
   'Source Sans 3': 'Source+Sans+3:wght@300..700',
   'Space Grotesk': 'Space+Grotesk:wght@300..700',
-  'Work Sans': 'Work+Sans:wght@300..700',
 };
 
 const SUBSETS = new Set(['latin', 'latin-ext']);

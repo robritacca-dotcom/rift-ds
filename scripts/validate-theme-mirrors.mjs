@@ -70,6 +70,13 @@
  *    --motion-duration-* except instant and loop-* (both directions, so a
  *    new paced duration such as orbit cannot ship unscaled); and
  *    ELEVATION_VARIANTS.default pinned to the shipped shadows per theme.
+ *    TYPE_STYLES (the weight and tracking levers' table) is held to the
+ *    --font-<style>-weight and --font-<style>-letter-spacing tokens in
+ *    both directions, and its display and heading tiers must each hold
+ *    one weight, because each weight lever has a single shipped position.
+ *    SHIPPED_ICON_WEIGHT and SHIPPED_ICON_FILL are held to the fallbacks
+ *    src/fonts/material-symbols.css gives the axis hooks the icon levers
+ *    write.
  *
  * 5. website/src/lib/theme/presets.ts — every literal custom-property
  *    name in the file, whether a var(--…) reference or a quoted "--…"
@@ -619,6 +626,69 @@ function checkLeverTables() {
     }
   }
 
+  // TYPE_STYLES ↔ the type styles' weight and letter-spacing tokens.
+  const typeBlock = parseTsBlock(overridesSource, 'TYPE_STYLES', overridesRel);
+  const typeRows = typeBlock === null ? [] : [
+    ...typeBlock.matchAll(/\["([a-z0-9-]+)",\s*"(display|heading|body)",\s*(\d+),\s*(-?[0-9.]+)\]/g),
+  ].map((m) => ({ style: m[1], tier: m[2], weight: m[3], tracking: Number(m[4]) }));
+  if (typeBlock !== null && typeRows.length === 0) {
+    errors.push(`${overridesRel}: parsed no entries out of TYPE_STYLES — the mirror guard needs them`);
+  }
+  if (typeRows.length > 0) {
+    const typeDecls = parseDeclarations(typographySource);
+    for (const row of typeRows) {
+      const weightName = `--font-${row.style}-weight`;
+      const trackingName = `--font-${row.style}-letter-spacing`;
+      const cssWeight = typeDecls.get(weightName);
+      const cssTracking = typeDecls.get(trackingName);
+      const mirroredTracking = row.tracking === 0 ? '0' : `${row.tracking}em`;
+      if (cssWeight === undefined || cssTracking === undefined) {
+        errors.push(`${overridesRel}: TYPE_STYLES lists "${row.style}", but ${weightName} or ${trackingName} does not exist`);
+        continue;
+      }
+      if (cssWeight !== row.weight) {
+        errors.push(`${overridesRel}: TYPE_STYLES "${row.style}" weight is ${row.weight} but ${weightName} is ${cssWeight}`);
+      }
+      if (cssTracking !== mirroredTracking) {
+        errors.push(`${overridesRel}: TYPE_STYLES "${row.style}" tracking is ${mirroredTracking} but ${trackingName} is ${cssTracking}`);
+      }
+    }
+    const listed = new Set(typeRows.map((r) => r.style));
+    for (const name of typeDecls.keys()) {
+      const m = name.match(/^--font-([a-z0-9-]+)-weight$/);
+      if (m && !listed.has(m[1])) {
+        errors.push(`${overridesRel}: TYPE_STYLES has no entry for ${name} — the weight and tracking levers would skip it`);
+      }
+    }
+    for (const tier of ['display', 'heading']) {
+      const weights = new Set(typeRows.filter((r) => r.tier === tier).map((r) => r.weight));
+      if (weights.size !== 1) {
+        errors.push(`${overridesRel}: TYPE_STYLES ${tier} tier holds ${weights.size} weights (${[...weights].join(', ')}) — its weight lever needs one shipped position`);
+      }
+    }
+  }
+
+  // SHIPPED_ICON_WEIGHT / SHIPPED_ICON_FILL ↔ the icon font's hook fallbacks.
+  const iconCss = read(join(repoRoot, 'src', 'fonts', 'material-symbols.css'));
+  for (const [constName, hook] of [
+    ['SHIPPED_ICON_WEIGHT', '--material-symbols-weight'],
+    ['SHIPPED_ICON_FILL', '--material-symbols-fill'],
+  ]) {
+    const mirrored = overridesSource.match(new RegExp(`export const ${constName} = (\\d+);`));
+    const fallback = iconCss.match(new RegExp(`var\\(${hook},\\s*(\\d+)\\)`));
+    if (!mirrored) {
+      errors.push(`${overridesRel}: could not parse ${constName} — the icon lever guard needs it`);
+    } else if (!fallback) {
+      errors.push(`src/fonts/material-symbols.css: no longer reads ${hook} with a fallback — the icon lever writes it`);
+    } else if (mirrored[1] !== fallback[1]) {
+      errors.push(`${overridesRel}: ${constName} is ${mirrored[1]} but material-symbols.css falls back to ${fallback[1]} for ${hook}`);
+    }
+    if (!overridesSource.includes(`"${hook}"`)) {
+      errors.push(`${overridesRel}: ${constName} mirrors ${hook}, but the file no longer writes that hook`);
+    }
+  }
+
+  summaries.push(`Type styles match their weight and tracking tokens (${typeRows.length} styles), icon lever defaults match the icon font's fallbacks`);
   summaries.push(`Lever tables match their ladders — gap ${gapCount}, padding ${padCount}, font-size ${sizeCount}, line-height ${lhCount}, motion ${motionTable ? motionTable.size : 0} durations, elevation default pinned to the shipped shadows`);
 }
 

@@ -889,6 +889,100 @@ export function radiusOverrides(scale: number, pill: boolean): Overrides {
   return overrides;
 }
 
+/* ---------- weight, tracking, icons ----------
+   Three more preset levers. TYPE_STYLES mirrors the type styles' shipped
+   weight and letter-spacing by hand (held to tokens-typography.css in
+   both directions by scripts/validate-theme-mirrors.mjs), because both
+   levers need the shipped value to know when they are a no-op, and
+   tracking adds to it. `tier` says which weight lever moves a style:
+   the display lever, the heading lever, or neither (body and labels
+   keep their shipped weights). */
+type TypeTier = "display" | "heading" | "body";
+
+const TYPE_STYLES: ReadonlyArray<
+  [style: string, tier: TypeTier, weight: number, trackingEm: number]
+> = [
+  ["mega-1", "display", 300, 0.02],
+  ["mega-2", "display", 300, 0.02],
+  ["display-1", "display", 300, 0.02],
+  ["display-2", "display", 300, 0.015],
+  ["sub-display", "display", 300, 0.015],
+  ["heading-1", "heading", 600, 0.015],
+  ["heading-2", "heading", 600, 0.015],
+  ["heading-3", "heading", 600, 0.015],
+  ["title-body", "heading", 600, -0.01],
+  ["paragraph-emphasis", "body", 500, -0.01],
+  ["paragraph", "body", 400, 0],
+  ["paragraph-sm", "body", 400, 0],
+  ["paragraph-sm-emphasis", "body", 500, 0],
+  ["overline", "body", 600, 0.08],
+  ["caption", "body", 400, 0],
+];
+
+const tierWeight = (tier: TypeTier) =>
+  TYPE_STYLES.find(([, t]) => t === tier)![2];
+
+/** The shipped display-tier weight: the display lever's no-op position. */
+export const SHIPPED_DISPLAY_WEIGHT = tierWeight("display");
+/** The shipped heading-tier weight: the heading lever's no-op position. */
+export const SHIPPED_HEADING_WEIGHT = tierWeight("heading");
+
+/** The weight levers' range. The floor and ceiling are what the picker
+    faces are loaded at (see FONT_OPTIONS); a face that stops short of a
+    stop renders its nearest weight. */
+export const TYPE_WEIGHT_RANGE = { min: 300, max: 800, step: 100 } as const;
+
+/** Sets a whole tier's weight. A tier left at its shipped weight emits
+    nothing, so a preset's extras can still specialise one style. */
+export function weightOverrides(
+  displayWeight: number,
+  headingWeight: number
+): Overrides {
+  const overrides: Overrides = {};
+  for (const [style, tier, shipped] of TYPE_STYLES) {
+    const weight =
+      tier === "display" ? displayWeight : tier === "heading" ? headingWeight : shipped;
+    if (weight !== shipped) overrides[`--font-${style}-weight`] = String(weight);
+  }
+  return overrides;
+}
+
+/** Shifts every style's letter-spacing by `percent` of an em (1 = 0.01em),
+    added to its shipped value so the scale keeps its relative shape. */
+export function trackingOverrides(percent: number): Overrides {
+  const overrides: Overrides = {};
+  if (percent === 0) return overrides;
+  for (const [style, , , shipped] of TYPE_STYLES) {
+    const em = Math.round((shipped + percent / 100) * 1000) / 1000;
+    overrides[`--font-${style}-letter-spacing`] = em === 0 ? "0" : `${em}em`;
+  }
+  return overrides;
+}
+
+/* The icon levers write the icon font's axis hooks, which are consumed
+   custom properties with fallbacks in src/fonts/material-symbols.css
+   rather than registry tokens. The two constants mirror those fallbacks
+   (held to that file by scripts/validate-theme-mirrors.mjs). */
+
+/** The shipped icon stroke weight: the icon weight lever's no-op position. */
+export const SHIPPED_ICON_WEIGHT = 200;
+/** The shipped icon fill axis: 0 is outlined. */
+export const SHIPPED_ICON_FILL = 0;
+
+/** The icon weight lever's range: the bundled font's whole `wght` axis. */
+export const ICON_WEIGHT_RANGE = { min: 100, max: 700, step: 100 } as const;
+
+/** Sets the icon font's stroke weight and fill. Components that set an
+    axis themselves (a filled rating star) keep their own value. */
+export function iconOverrides(weight: number, fill: boolean): Overrides {
+  const overrides: Overrides = {};
+  if (weight !== SHIPPED_ICON_WEIGHT) {
+    overrides["--material-symbols-weight"] = String(weight);
+  }
+  if (fill) overrides["--material-symbols-fill"] = "1";
+  return overrides;
+}
+
 /* ---------- fonts ---------- */
 
 export interface FontOption {
@@ -900,17 +994,31 @@ export interface FontOption {
   googleParam: string | null;
 }
 
+/* Each face is requested at every weight the weight levers can reach
+   (TYPE_WEIGHT_RANGE) that the family actually has: Google's css2 endpoint
+   rejects the whole request when a listed weight is outside a family's
+   range, so a list stops where the family does. */
 export const FONT_OPTIONS: FontOption[] = [
   { label: "Nunito Sans (default)", family: "", googleParam: null },
-  { label: "Inter", family: "'Inter', sans-serif", googleParam: "Inter:wght@300;400;500;600;700" },
-  { label: "DM Sans", family: "'DM Sans', sans-serif", googleParam: "DM+Sans:wght@300;400;500;600;700" },
-  { label: "Poppins", family: "'Poppins', sans-serif", googleParam: "Poppins:wght@300;400;500;600;700" },
-  { label: "Montserrat", family: "'Montserrat', sans-serif", googleParam: "Montserrat:wght@300;400;500;600;700" },
-  { label: "Work Sans", family: "'Work Sans', sans-serif", googleParam: "Work+Sans:wght@300;400;500;600;700" },
-  { label: "Source Sans 3", family: "'Source Sans 3', sans-serif", googleParam: "Source+Sans+3:wght@300;400;500;600;700" },
+  { label: "Inter", family: "'Inter', sans-serif", googleParam: "Inter:wght@300;400;500;600;700;800" },
+  { label: "Roboto", family: "'Roboto', sans-serif", googleParam: "Roboto:wght@300;400;500;600;700;800" },
+  { label: "Open Sans", family: "'Open Sans', sans-serif", googleParam: "Open+Sans:wght@300;400;500;600;700;800" },
+  { label: "DM Sans", family: "'DM Sans', sans-serif", googleParam: "DM+Sans:wght@300;400;500;600;700;800" },
+  { label: "Manrope", family: "'Manrope', sans-serif", googleParam: "Manrope:wght@300;400;500;600;700;800" },
+  { label: "Plus Jakarta Sans", family: "'Plus Jakarta Sans', sans-serif", googleParam: "Plus+Jakarta+Sans:wght@300;400;500;600;700;800" },
+  { label: "Poppins", family: "'Poppins', sans-serif", googleParam: "Poppins:wght@300;400;500;600;700;800" },
+  { label: "Montserrat", family: "'Montserrat', sans-serif", googleParam: "Montserrat:wght@300;400;500;600;700;800" },
+  { label: "Work Sans", family: "'Work Sans', sans-serif", googleParam: "Work+Sans:wght@300;400;500;600;700;800" },
+  { label: "Source Sans 3", family: "'Source Sans 3', sans-serif", googleParam: "Source+Sans+3:wght@300;400;500;600;700;800" },
   { label: "IBM Plex Sans", family: "'IBM Plex Sans', sans-serif", googleParam: "IBM+Plex+Sans:wght@300;400;500;600;700" },
   { label: "Space Grotesk", family: "'Space Grotesk', sans-serif", googleParam: "Space+Grotesk:wght@300;400;500;600;700" },
+  /* The rounded faces: soft terminals are a property of the typeface, so
+     no lever can supply them. */
+  { label: "Nunito (rounded)", family: "'Nunito', sans-serif", googleParam: "Nunito:wght@300;400;500;600;700;800" },
+  { label: "Quicksand (rounded)", family: "'Quicksand', sans-serif", googleParam: "Quicksand:wght@300;400;500;600;700" },
+  { label: "Fredoka (rounded)", family: "'Fredoka', sans-serif", googleParam: "Fredoka:wght@300;400;500;600;700" },
   { label: "Lora (serif)", family: "'Lora', serif", googleParam: "Lora:wght@400;500;600;700" },
+  { label: "Playfair Display (serif)", family: "'Playfair Display', serif", googleParam: "Playfair+Display:wght@400;500;600;700;800" },
   { label: "IBM Plex Mono", family: "'IBM Plex Mono', monospace", googleParam: "IBM+Plex+Mono:wght@300;400;500;600;700" },
 ];
 
@@ -926,11 +1034,10 @@ export const HEADING_MATCH_LABEL = "Match body";
 
 export const HEADING_FONT_OPTIONS: FontOption[] = [
   { label: HEADING_MATCH_LABEL, family: "", googleParam: null },
-  { label: "Nunito Sans", family: "'Nunito Sans', sans-serif", googleParam: "Nunito+Sans:opsz,wght@6..12,300..700" },
+  { label: "Nunito Sans", family: "'Nunito Sans', sans-serif", googleParam: "Nunito+Sans:opsz,wght@6..12,300..800" },
   ...FONT_OPTIONS.slice(1),
-  /* Heading-only face: a display serif too characterful for body copy,
-     there so a second serif theme does not have to share Lora. */
-  { label: "Fraunces (serif)", family: "'Fraunces', serif", googleParam: "Fraunces:opsz,wght@9..144,300..700" },
+  /* Heading-only face: a display serif too characterful for body copy. */
+  { label: "Fraunces (serif)", family: "'Fraunces', serif", googleParam: "Fraunces:opsz,wght@9..144,300..800" },
   /* Heading-only face: Inter's tight-tracked sibling, requested up to
      900 because its job is heavy fintech display type — a weight the
      body faces never load. */

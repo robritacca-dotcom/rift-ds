@@ -239,6 +239,38 @@
   padding: var(--gap-1000) var(--sitechat-inset) 0;
 }
 
+/* The widget slot: any content, under the composer (and under the starters
+   when both show), on the composer's own bounding box. The cap is the
+   conversation column plus the side insets, so the slot's content edges
+   land exactly on the composer's: a row of tiles reads as hanging from it.
+   (The starters sit a step inside that box on purpose; blocks do not.) */
+.widgetsColumn {
+  width: 100%;
+  max-width: calc(768px + 2 * var(--sitechat-inset));
+  margin-inline: auto;
+  padding: var(--gap-1000) var(--sitechat-inset) var(--padding-400);
+}
+
+/* With widgets the region takes its content's height before the slack is
+   split, so the composer sits above centre by half the widgets' height
+   rather than being squeezed against them. The basis returns to zero with
+   the first message (the slot unmounts with the welcome), and the usual
+   flex-grow glide carries the composer down from there. */
+.bottomRegionWidgets {
+  flex-basis: auto;
+  flex-shrink: 0;
+}
+
+/* The widgets claim their height first, so on a short window an even split
+   of what is left would crowd the greeting into the header. The top region
+   keeps room for the header and the greeting; the bottom region gives up
+   its slack before the top gives up that. The floor is the header row plus
+   the greeting's two lines, measured at the site's type scale. A phone
+   never centres, so it has nothing to protect. */
+.chat[data-widgets="fit"]:not([data-phone]) .topRegion {
+  min-height: 236px;
+}
+
 /* The welcome dressing needs roughly 580px of widget for the greeting and
    460px for the starters (header + composer + disclaimer plus their own
    heights). Shorter than that, each is decoration the layout cannot afford —
@@ -253,6 +285,67 @@
 
 @container sitechat (max-height: 459px) {
   .startersColumn {
+    display: none;
+  }
+}
+
+/* ============================================
+   WIDGETS AS A PAGE — data-widgets="scroll"
+   The welcome screen stops fitting itself to one viewport. The top region
+   takes a fixed share of the height, enough for the header and greeting
+   with the composer landing in the upper half, the widgets take whatever
+   they need on a wider column than the conversation's, and the widget
+   scrolls as one page with the composer travelling with it. Nothing here
+   outlives the welcome: the attribute leaves with the first message, and an
+   element that stops being a scroll container drops its scroll offset, so
+   the conversation always opens at the top.
+   ============================================ */
+
+.chat[data-widgets="scroll"] {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.chat[data-widgets="scroll"] .topRegion {
+  flex: 0 0 auto;
+  height: max(236px, 36cqh);
+}
+
+.chat[data-widgets="scroll"] .footer {
+  flex: 0 0 auto;
+}
+
+/* Never smaller than its content, and it takes any height left over, so
+   when the widgets are short the disclaimer still rides the floor of the
+   page instead of trailing straight after them. */
+.chat[data-widgets="scroll"] .bottomRegion {
+  flex: 1 0 auto;
+  transition: none;
+}
+
+/* A scrolling slot is never dropped for want of height, and ends with room
+   under its last row. */
+.chat[data-widgets="scroll"] .widgetsColumn {
+  display: block;
+  padding-block: var(--gap-1000) var(--padding-1000);
+}
+
+/* A wide slot breaks out of the composer's box: a dashboard wants more
+   width than a line of prose does. Only a host that asks for it gets it. */
+.chat[data-widgets-wide] .widgetsColumn {
+  max-width: 1080px;
+}
+
+/* The phone's bottom-pinned composer has nowhere to pin on a scrolling
+   page, so the greeting goes back to sitting on the composer. */
+.chat[data-widgets="scroll"][data-phone] .welcomeTop {
+  justify-content: flex-end;
+}
+
+/* Widgets are the first dressing to go: they are the tallest, and a window
+   too short for them still has room for the greeting and the composer. */
+@container sitechat (max-height: 719px) {
+  .widgetsColumn {
     display: none;
   }
 }
@@ -296,6 +389,25 @@
 .chat[data-phone] .startersColumn {
   display: block;
   padding-block: 0 var(--gap-400);
+}
+
+/* Fit only: there the slot sits above the bottom-pinned composer, so its
+   gap is below it. A scrolling slot sits under the composer on a phone as
+   everywhere else, and keeps its own gap above. */
+.chat[data-phone][data-widgets="fit"] .widgetsColumn {
+  padding-block: 0 var(--gap-400);
+}
+
+/* The scrolling welcome on a phone: a clear step between the composer and
+   the first block, and the bottom region still grows to carry the
+   disclaimer to the floor (the phone rule above stops it growing for the
+   pinned-composer layout, which this is not). */
+.chat[data-phone][data-widgets="scroll"] .widgetsColumn {
+  padding-block: var(--gap-500) var(--padding-500);
+}
+
+.chat[data-phone][data-widgets="scroll"] .bottomRegionWelcome {
+  flex-grow: 1;
 }
 
 /* The phone stack needs less height than the centred layout — roughly

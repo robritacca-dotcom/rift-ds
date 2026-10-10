@@ -64,8 +64,8 @@ export default function PrivacyPage() {
             published data and answers. An image you drop on the playground
             never leaves your browser: it is read there to sample its
             colours, and nothing about it is uploaded or kept. The same
-            goes for files you attach in the playground’s simulated
-            chat: they are read in your browser to draw their previews, and
+            goes for files you attach in a simulated chat, on the
+            playground or the chat home template: they are read in your browser to draw their previews, and
             are never uploaded or kept. The site’s own chat takes text
             only.
           </p>

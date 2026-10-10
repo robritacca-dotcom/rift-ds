@@ -15,6 +15,7 @@ import {
 import { ThreadTabs } from "rift-ds/components/ThreadTabs/ThreadTabs";
 import AgentPanel from "./AgentPanel";
 import { useSiteChat, useTakeoverViewport } from "@/components/SiteChat/ChatContext";
+import { ChatWelcome, type ChatWelcomeVariant } from "./ChatWelcome";
 import { SiteChat } from "@/components/SiteChat/SiteChat";
 import { dockWidthFromDrag, isFloatDragStart } from "@/components/SiteChat/placement";
 import styles from "./ChatView.module.css";
@@ -154,8 +155,9 @@ export interface ChatViewProps {
   size: StageSize;
   /** The composer's placeholder copy; empty falls back to "Ask anything". */
   placeholder: string;
-  /** Show the conversation starters on the welcome screen. */
-  showStarters: boolean;
+  /** What the welcome screen holds under the composer: the starters, one
+      of the widget fillings, or nothing. */
+  welcome: ChatWelcomeVariant;
   /** The dragged size, held by the page so it survives a switch to the
       Components view and back — and dies with the playground, like every
       other lever. */
@@ -198,7 +200,7 @@ export default function ChatView({
   title,
   size,
   placeholder,
-  showStarters,
+  welcome,
   manual,
   onManual,
   allowFullscreen,
@@ -217,6 +219,7 @@ export default function ChatView({
     floating,
     returnFocusRef,
     reset,
+    send,
     turns,
     live,
   } = useSiteChat();
@@ -860,7 +863,19 @@ export default function ChatView({
         phone={isDevice || phoneViewport}
         title={title}
         placeholder={placeholder.trim() === "" ? "Ask anything" : placeholder}
-        showStarters={showStarters}
+        showStarters={welcome === "starters"}
+        /* The Welcome lever's other fillings ride SiteChat's widget slot.
+           The dashboard runs long, so it always turns the welcome into a
+           page; the tiles and cards only fit beside the greeting on the
+           full-screen stage, so on the card and in the bezel they scroll
+           too, rather than being dropped for want of height. */
+        widgets={
+          welcome === "links" || welcome === "cards" || welcome === "dashboard" ? (
+            <ChatWelcome variant={welcome} onAsk={(prompt) => send(prompt)} />
+          ) : undefined
+        }
+        widgetsLayout={welcome === "dashboard" || !isFull ? "scroll" : "fit"}
+        widgetsWidth={welcome === "dashboard" ? "wide" : "column"}
         /* No site mark on a generic product's chat. */
         logo={null}
         tagline="How can we help you today?"

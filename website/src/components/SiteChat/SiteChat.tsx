@@ -54,6 +54,7 @@ const LOCKED_MODEL_DESCRIPTION = "Paused for today to stay in budget.";
  */
 export function SiteChat({
   fullscreenEnabled = true,
+  closeEnabled = true,
   placementEnabled = false,
   compact = false,
   phone = false,
@@ -69,9 +70,16 @@ export function SiteChat({
   tabs,
   aside,
   contextLabel,
+  widgets,
+  widgetsLayout = "fit",
+  widgetsWidth = "column",
 }: {
   /** Show the expand toggle. The bench's mobile stage is always a takeover, so it hides there. */
   fullscreenEnabled?: boolean;
+  /** Show the header's close button. A host that seats the chat as the page
+      itself rather than as a panel over one has nothing to close back to,
+      so it turns this off. */
+  closeEnabled?: boolean;
   /** Show the header's Chat position menu (dock right, dock left, floating). Off by default: a host turns it on only when it implements the seats the menu offers, as the site mount and the playground stage do. */
   placementEnabled?: boolean;
   /** Narrow insets for phone-width hosts. */
@@ -134,6 +142,26 @@ export function SiteChat({
       is not looking at one of this site's pages, and saying so breaks the
       fiction. A string names something else. */
   contextLabel?: string | null;
+  /** A widget slot on the welcome screen, under the composer and its
+      starters. It takes any content and keeps its natural height, so the
+      composer rides up by half of it instead of holding dead centre: the
+      empty chat reads as a home page rather than a blank prompt. It leaves
+      with the first message, like the rest of the welcome dressing. A
+      phone seats it above the bottom-pinned composer, where the starters
+      go. The playground's Welcome lever and the chat home template fill
+      it; the site's own panel passes nothing. */
+  widgets?: ReactNode;
+  /** How the widget slot takes its room. `fit` (the default) keeps the
+      welcome screen to one viewport: the widgets hold their height and the
+      composer rides up to make room. `scroll` turns the welcome screen into
+      a page: the greeting and composer take the opening of the viewport,
+      the widgets run on below the fold on a wider column, and the whole
+      welcome scrolls as one, a dashboard under a prompt. */
+  widgetsLayout?: "fit" | "scroll";
+  /** How wide the widget slot runs. `column` (the default) holds it to the
+      composer's bounding box, so tiles and cards line up with the composer's
+      edges. `wide` lets it run past them, for a dashboard. */
+  widgetsWidth?: "column" | "wide";
 }) {
   const {
     turns,
@@ -337,6 +365,10 @@ export function SiteChat({
     </div>
   );
 
+  const widgetsNode = isEmpty && widgets && (
+    <div className={styles.widgetsColumn}>{widgets}</div>
+  );
+
   /* The widget's own controls. They live in the chat header normally, and
      move to the card's right edge while the agent rail is seated inline
      (the rail floats them over its top inset): every one of them acts on
@@ -432,13 +464,15 @@ export function SiteChat({
           onClick={() => setView(isFull ? "panel" : "full")}
         />
       )}
-      <CircularButton
-        icon="close"
-        variant="tertiary"
-        ariaLabel="Close chat"
-        tooltipPosition="bottom"
-        onClick={() => setOpen(false)}
-      />
+      {closeEnabled && (
+        <CircularButton
+          icon="close"
+          variant="tertiary"
+          ariaLabel="Close chat"
+          tooltipPosition="bottom"
+          onClick={() => setOpen(false)}
+        />
+      )}
     </>
   );
 
@@ -454,6 +488,8 @@ export function SiteChat({
       className={`${styles.chat} ${threads ? styles.chatWithThreads : ""}`}
       data-compact={compact || undefined}
       data-phone={phone || undefined}
+      data-widgets={widgetsNode ? widgetsLayout : undefined}
+      data-widgets-wide={widgetsNode && widgetsWidth === "wide" ? "" : undefined}
       /* The header's controls have moved out to the card's edge, so the row
          has to be told to keep the height they were giving it. */
       data-lifted-actions={(asideShown && asideWide) || undefined}
@@ -587,6 +623,7 @@ export function SiteChat({
           between the greeting and the input rather than between the input
           and the keyboard. */}
       {phone && startersNode}
+      {phone && widgetsLayout === "fit" && widgetsNode}
 
       <footer className={styles.footer}>
         <div className={styles.composerColumn}>
@@ -638,8 +675,13 @@ export function SiteChat({
           animates, so the flow-down is seamless. On a phone it never grows:
           the composer is already at the bottom, and the starters are above
           it. */}
-      <div className={`${styles.bottomRegion} ${isEmpty ? styles.bottomRegionWelcome : ""}`}>
+      <div
+        className={`${styles.bottomRegion} ${isEmpty ? styles.bottomRegionWelcome : ""} ${
+          widgetsNode ? styles.bottomRegionWidgets : ""
+        }`}
+      >
         {!phone && startersNode}
+        {(!phone || widgetsLayout === "scroll") && widgetsNode}
         <div className={styles.disclaimerRow}>
           {/* The link points at /privacy, which carries the AI-use and 30-day
               logging disclosure required by the privacy decision on record. */}

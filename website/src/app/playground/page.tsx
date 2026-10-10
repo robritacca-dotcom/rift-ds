@@ -60,6 +60,7 @@ import ChatView, {
   type StageSize,
   type TransportMode,
 } from "./views/ChatView";
+import { CHAT_WELCOME_OPTIONS, type ChatWelcomeVariant } from "./views/ChatWelcome";
 import MockNav from "./views/MockNav";
 import TypeView from "./views/TypeView";
 import DashboardView from "./views/DashboardView";
@@ -69,6 +70,7 @@ import { createFetchTransport } from "@/lib/chat-transport";
 import { SiteChatProvider, useSiteChat } from "@/components/SiteChat/ChatContext";
 import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
 import { ShaderField } from "rift-ds/components/ShaderField/ShaderField";
+import { InspectorDropdown } from "rift-ds/components/Inspector/InspectorDropdown";
 import { InspectorInput } from "rift-ds/components/Inspector/InspectorInput";
 import { InspectorSection } from "rift-ds/components/Inspector/InspectorSection";
 import { InspectorSegmentedControl } from "rift-ds/components/Inspector/InspectorSegmentedControl";
@@ -185,7 +187,7 @@ export default function PlaygroundPage() {
      Components view and back; like every lever, it dies with the page. */
   const [chatManual, setChatManual] = useState<{ w?: number; h?: number }>({});
   const [chatPlaceholder, setChatPlaceholder] = useState("");
-  const [showStarters, setShowStarters] = useState(true);
+  const [welcome, setWelcome] = useState<ChatWelcomeVariant>("starters");
   /* The staged thread furniture, feature by feature. All off is the simple
      rail the live site ships, which is where the stage starts: the extras
      are things to add and look at, not the resting state. Simulated
@@ -682,11 +684,12 @@ export default function PlaygroundPage() {
           value={chatPlaceholder}
           onValueChange={setChatPlaceholder}
         />
-        <InspectorToggleSwitch
+        <InspectorDropdown
           size="compact"
-          label="Starter prompts"
-          checked={showStarters}
-          onCheckedChange={setShowStarters}
+          label="Welcome"
+          value={welcome}
+          options={CHAT_WELCOME_OPTIONS}
+          onValueChange={(value) => setWelcome(value as ChatWelcomeVariant)}
         />
       </div>
 
@@ -699,6 +702,7 @@ export default function PlaygroundPage() {
             checked={railProjects}
             onCheckedChange={setRailProjects}
           />
+
           <InspectorToggleSwitch
             size="compact"
             label="Pinned threads"
@@ -1088,7 +1092,7 @@ export default function PlaygroundPage() {
                  on compact screens and the widget goes fluid via CSS. */
               size={compact ? "desktop" : stageSize}
               placeholder={chatPlaceholder}
-              showStarters={showStarters}
+              welcome={welcome}
               manual={chatManual}
               onManual={(next) => setChatManual((m) => ({ ...m, ...next }))}
               allowFullscreen={!compact}

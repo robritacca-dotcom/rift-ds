@@ -1,6 +1,16 @@
 {
   "releases": [
     {
+      "version": "1.6.0",
+      "date": "2026-10-10",
+      "title": "Generated avatars, a dashboard tile, and prompt cards",
+      "body": [
+        "Anything with a name can now have a mark. PixelAvatar draws a small pixel character from a name, the same character and colour every time, so a project or workspace needs nothing designed or stored. AppSidebar rows can use it in place of an icon, and ThreadPanel projects wear it by default instead of a folder. In a list, the colours are spread so neighbours never match.",
+        "Widget is a new titled tile for dashboards and home screens, with rows, labelled groups, and a grid that packs tiles of different heights into columns. PromptSuggestions gains two layouts for an empty-state home screen: tiles, an icon over a label and a line of description, and cards, with the icon in a tinted cover.",
+        "SourceChip gains hover and pressed states and can preview its source in a floating panel. Everything is additive, so upgrading needs no code changes; pass a folder icon to a ThreadPanel project to keep its old look."
+      ]
+    },
+    {
       "version": "1.5.0",
       "date": "2026-10-10",
       "title": "A selected state for menus, and retuned themes",

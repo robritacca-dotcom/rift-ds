@@ -62,13 +62,25 @@ export const WithAdd: Story = {
 };
 
 /** A tab with unseen activity leads its label with the small status dot,
- *  ThreadPanel's unread marker restated at tab scale. */
+ *  the same mark ThreadPanel's rows carry. */
 export const Unread: Story = {
   args: {
     tabs: [
-      { ...TABS[0], unread: true },
+      { ...TABS[0], status: 'unread' },
       TABS[1],
-      { ...TABS[2], unread: true },
+      { ...TABS[2], status: 'unread' },
+    ],
+  },
+};
+
+/** The statuses a tab shows: `working` pulses in neutral, `unread`,
+ *  `waiting` and `error` are solid. An idle tab draws no dot. */
+export const Statuses: Story = {
+  args: {
+    tabs: [
+      { ...TABS[0], status: 'working' },
+      { ...TABS[1], status: 'waiting' },
+      { ...TABS[2], status: 'error' },
     ],
   },
 };

@@ -126,9 +126,11 @@ export const WithMeta: Story = {
   },
 };
 
-/** The full detail anatomy on thread rows: an unread dot leads the title,
+/** The full detail anatomy on thread rows: a status dot leads the title,
  *  a `description` takes a quiet second line under the same trailing fade,
- *  and the trailing cluster holds a session glyph beside the meta. */
+ *  and the trailing cluster holds a session glyph beside the meta. One
+ *  thread with a `status` seats a dot on every row — the rest read `idle`,
+ *  a hollow ring — so the titles share a left edge. */
 export const Details: Story = {
   args: {
     logoText: 'Skylark',
@@ -141,7 +143,7 @@ export const Details: Story = {
             id: 'onboarding',
             title: 'Rework the onboarding flow',
             description: 'atlas-app · main',
-            unread: true,
+            status: 'working',
             icon: 'cloud',
             meta: '32m',
           },
@@ -156,7 +158,7 @@ export const Details: Story = {
             id: 'billing',
             title: 'Untangle the billing webhooks',
             description: 'atlas-app · fix/webhook-retries',
-            unread: true,
+            status: 'unread',
             meta: '3h',
           },
         ],
@@ -170,6 +172,28 @@ export const Details: Story = {
             description: 'atlas-docs · main',
             meta: '15h',
           },
+        ],
+      },
+    ],
+  },
+};
+
+/** The five thread statuses. Fill says whether a thread wants you, colour
+ *  says what it wants, motion says it is live: `idle` is a hollow ring,
+ *  `working` pulses in neutral, and `unread`, `waiting` and `error` are
+ *  solid in the info, warning and error roles. */
+export const Statuses: Story = {
+  args: {
+    logoText: 'Skylark',
+    groups: [
+      {
+        label: 'Today',
+        threads: [
+          { id: 'idle', title: 'Rewrite the quickstart guide', status: 'idle', meta: '15h' },
+          { id: 'working', title: 'Speed up the search index', status: 'working', meta: 'now' },
+          { id: 'unread', title: 'Untangle the billing webhooks', status: 'unread', meta: '3h' },
+          { id: 'waiting', title: 'Rework the onboarding flow', status: 'waiting', meta: '32m' },
+          { id: 'error', title: 'Migrate the staging database', status: 'error', meta: '1h' },
         ],
       },
     ],

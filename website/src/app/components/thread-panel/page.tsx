@@ -187,7 +187,7 @@ function DetailsDemo() {
                 id: "onboarding",
                 title: "Rework the onboarding flow",
                 description: "atlas-app · main",
-                unread: true,
+                status: "working",
                 icon: "cloud",
                 meta: "32m",
               },
@@ -202,8 +202,22 @@ function DetailsDemo() {
                 id: "billing",
                 title: "Untangle the billing webhooks",
                 description: "atlas-app · fix/webhook-retries",
-                unread: true,
+                status: "waiting",
                 meta: "3h",
+              },
+              {
+                id: "quickstart",
+                title: "Rewrite the quickstart guide",
+                description: "atlas-docs · main",
+                status: "unread",
+                meta: "5h",
+              },
+              {
+                id: "staging",
+                title: "Migrate the staging database",
+                description: "atlas-infra · chore/pg-upgrade",
+                status: "error",
+                meta: "1d",
               },
             ],
           },
@@ -418,10 +432,18 @@ export default function ThreadPanelPage() {
           <section className={styles.section}>
             <SectionTitle title="Detail rows" />
             <p className={styles.demoText}>
-              A row scales from a bare title to the full detail anatomy: an
-              unread dot leading the title, a quiet description line under
+              A row scales from a bare title to the full detail anatomy: a
+              status dot leading the title, a quiet description line under
               the same trailing fade, and a trailing cluster pairing a
-              session glyph with the meta caption.
+              session glyph with the meta caption. The dot reads in three
+              parts. Fill says whether the thread wants attention, colour
+              says what it wants, and motion says it is live: a hollow
+              ring is idle, a pulsing neutral dot is working, and solid
+              dots in the info, warning and error colours mean unread,
+              needs input and failed. The dot is decorative, so each state
+              is also read aloud after the title. Once one thread
+              carries a status every row draws a dot, so the titles share
+              a left edge.
             </p>
             <DetailsDemo />
           </section>

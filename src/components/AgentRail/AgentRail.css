@@ -189,8 +189,8 @@
   color: var(--color-text-secondary);
 }
 
-/* ThreadPanel's unread dot, restated at the same size: the gap scale,
-   because no icon token is that small. */
+/* StatusDot's `xs` mark restated at the same size: the gap scale, because
+   no icon token is that small. */
 .ds-agent-rail__status-dot {
   width: var(--gap-200);
   height: var(--gap-200);

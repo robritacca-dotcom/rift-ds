@@ -82,14 +82,14 @@ function LifecycleDemo() {
 function UnreadDemo() {
   const [active, setActive] = React.useState("search");
   const [tabs, setTabs] = React.useState<ThreadTab[]>([
-    { ...TABS[0], unread: true },
-    TABS[1],
-    { ...TABS[2], unread: true },
+    { ...TABS[0], status: "unread" },
+    { ...TABS[1], status: "working" },
+    { ...TABS[2], status: "waiting" },
   ]);
   const select = (id: string) => {
     setActive(id);
     setTabs((current) =>
-      current.map((tab) => (tab.id === id ? { ...tab, unread: false } : tab)),
+      current.map((tab) => (tab.id === id ? { ...tab, status: "idle" } : tab)),
     );
   };
   return (
@@ -174,11 +174,14 @@ export default function ThreadTabsPage() {
           </section>
 
           <section className={styles.section}>
-            <SectionTitle title="Unseen activity" />
+            <SectionTitle title="Status" />
             <p className={styles.demoText}>
-              A tab with unseen activity leads its label with the small
-              status dot, Thread panel&apos;s unread marker restated at tab
-              scale. Here, selecting a tab clears its dot.
+              A tab leads its label with the same status dot Thread
+              panel&apos;s rows carry: a pulsing neutral dot while
+              the session is working, then a solid dot in the info colour
+              for unseen activity, the warning colour when it needs input,
+              and the error colour when it failed. An idle tab draws
+              no dot. Here, selecting a tab clears its dot.
             </p>
             <UnreadDemo />
           </section>

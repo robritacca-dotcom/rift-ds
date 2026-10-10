@@ -1,8 +1,13 @@
 'use client';
 
 import React from 'react';
+import { StatusDot } from '../StatusDot/StatusDot';
+import type { StatusDotProps } from '../StatusDot/StatusDot';
 import './ThreadTabs.css';
 import '../../fonts/material-symbols.css';
+
+/** What a tab's leading dot reports — ThreadPanel's thread statuses, so a session reads the same in the rail and in the strip. */
+export type ThreadTabStatus = 'idle' | 'working' | 'unread' | 'waiting' | 'error';
 
 export interface ThreadTab {
   /** Stable identifier: `activeId` matches against it and the callbacks report it. */
@@ -11,7 +16,9 @@ export interface ThreadTab {
   label: string;
   /** The tab's leading icon — Material Symbol name (string) or custom element (ReactNode). */
   icon?: string | React.ReactNode;
-  /** The thread holds unseen activity: a small status dot leads the label. The dot is decorative — keep the state readable elsewhere when it must be announced. */
+  /** The thread's state, drawn as a dot leading the label: `working` pulses in neutral, `unread`, `waiting` and `error` are solid in the info, warning and error roles. An `idle` tab draws no dot: a strip has no left edge to keep, so only a state worth a glance takes the room. The dot is decorative; the state is also read aloud through `statusLabels`. */
+  status?: ThreadTabStatus;
+  /** Legacy boolean for `status: 'unread'`, ignored when `status` is set. @deprecated Use `status: 'unread'` instead. */
   unread?: boolean;
 }
 
@@ -25,6 +32,8 @@ type ThreadTabsOwnProps = {
   onTabSelect?: (id: string) => void;
   /** Fires with the tab's id when its close button is pressed, or Delete lands on the focused tab. The close affordance renders only when this is given. */
   onTabClose?: (id: string) => void;
+  /** Spoken text for each tab status, read after the tab's label; the dot itself is decorative. Merged over the English defaults (Working, Unread, Needs input, Failed). */
+  statusLabels?: Partial<Record<ThreadTabStatus, string>>;
   /** Accessible name for a tab's close button; the tab's label is appended after it. */
   closeLabel?: string;
   /** Fires when the trailing new-tab button is pressed. The button renders only when this is given. */
@@ -43,13 +52,31 @@ export interface ThreadTabsProps
 
 const baseClass = 'ds-thread-tabs';
 
+/** How each visible status draws its StatusDot (ThreadPanel's mapping). */
+const STATUS_DOTS: Record<
+  Exclude<ThreadTabStatus, 'idle'>,
+  Pick<StatusDotProps, 'variant' | 'pulse'>
+> = {
+  working: { variant: 'neutral', pulse: true },
+  unread: { variant: 'info' },
+  waiting: { variant: 'warning' },
+  error: { variant: 'error' },
+};
+
+const DEFAULT_STATUS_LABELS: Partial<Record<ThreadTabStatus, string>> = {
+  working: 'Working',
+  unread: 'Unread',
+  waiting: 'Needs input',
+  error: 'Failed',
+};
+
 /** A closed tab held on stage while its exit plays, remembering which
     neighbour it stood after so it folds away in place. */
 type LeavingTab = { tab: ThreadTab; afterId: string | null };
 
 /**
  * ThreadTabs is the strip of open chat sessions across a conversation's top
- * edge: pill tabs with a leading glyph, an unread dot, a hover-revealed
+ * edge: pill tabs with a leading glyph, a status dot, a hover-revealed
  * close button, and a trailing new-tab action. Fully controlled — the host
  * owns which tabs exist and which is active; the strip owns the
  * choreography of a tab arriving and leaving. A removed tab is kept on
@@ -72,6 +99,7 @@ export const ThreadTabs = React.forwardRef<HTMLDivElement, ThreadTabsProps>(
       activeId,
       onTabSelect,
       onTabClose,
+      statusLabels,
       closeLabel = 'Close thread',
       onAdd,
       addLabel = 'New thread',
@@ -82,6 +110,7 @@ export const ThreadTabs = React.forwardRef<HTMLDivElement, ThreadTabsProps>(
     ref,
   ) => {
     const iconClass = 'material-symbols-rounded';
+    const labels = { ...DEFAULT_STATUS_LABELS, ...statusLabels };
     const listRef = React.useRef<HTMLUListElement | null>(null);
 
     /* Tabs that have finished (or skipped) their entrance. Seeded with the
@@ -186,6 +215,7 @@ export const ThreadTabs = React.forwardRef<HTMLDivElement, ThreadTabsProps>(
         <ul className={`${baseClass}__list`} aria-label={ariaLabel} ref={listRef}>
           {entries.map(({ tab, leaving: isLeaving }) => {
             const active = !isLeaving && tab.id === activeId;
+            const status = tab.status ?? (tab.unread ? 'unread' : 'idle');
             const entering =
               !isLeaving && !enteredRef.current.has(tab.id);
             return (
@@ -246,10 +276,12 @@ export const ThreadTabs = React.forwardRef<HTMLDivElement, ThreadTabsProps>(
                         }
                       }}
                     >
-                      {tab.unread && (
-                        <span
-                          className={`${baseClass}__unread`}
-                          aria-hidden="true"
+                      {status !== 'idle' && (
+                        <StatusDot
+                          className={`${baseClass}__status`}
+                          size="xs"
+                          decorative
+                          {...STATUS_DOTS[status]}
                         />
                       )}
                       {tab.icon &&
@@ -269,6 +301,11 @@ export const ThreadTabs = React.forwardRef<HTMLDivElement, ThreadTabsProps>(
                           </span>
                         ))}
                       <span className={`${baseClass}__label`}>{tab.label}</span>
+                      {labels[status] && (
+                        <span className={`${baseClass}__status-label`}>
+                          {labels[status]}
+                        </span>
+                      )}
                     </button>
                     {onTabClose && (
                       <button

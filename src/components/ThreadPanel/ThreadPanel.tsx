@@ -3,6 +3,8 @@ import { Avatar } from '../Avatar/Avatar';
 import { DropdownMenu } from '../DropdownMenu/DropdownMenu';
 import { Kbd } from '../Kbd/Kbd';
 import { PixelAvatar, distinctPixelInks } from '../PixelAvatar/PixelAvatar';
+import { StatusDot } from '../StatusDot/StatusDot';
+import type { StatusDotProps } from '../StatusDot/StatusDot';
 import './ThreadPanel.css';
 import '../../fonts/material-symbols.css';
 
@@ -16,6 +18,20 @@ export interface ThreadPanelThreadAction {
   /** Destructive styling (the error text colour) for delete-like actions. */
   destructive?: boolean;
 }
+
+/**
+ * What a thread's leading dot reports. Fill says whether the thread wants
+ * the reader, colour says what it wants, motion says it is live right now:
+ * `idle` is a hollow neutral ring, `working` a pulsing neutral dot, and
+ * `unread`, `waiting` and `error` solid dots in the info, warning and error
+ * roles.
+ */
+export type ThreadPanelThreadStatus =
+  | 'idle'
+  | 'working'
+  | 'unread'
+  | 'waiting'
+  | 'error';
 
 export interface ThreadPanelThread {
   /** Stable identifier: `activeThreadId` matches against it and `onThreadSelect` reports it. */
@@ -32,7 +48,9 @@ export interface ThreadPanelThread {
   actions?: ThreadPanelThreadAction[];
   /** Quiet second line under the title in the caption face — a repo, an environment, a one-line summary. Overflows under the same trailing mask as the title. */
   description?: string;
-  /** The thread holds unseen activity: a small status dot leads the row. The dot is decorative — put the state in `meta` or `description` when it must be read aloud. */
+  /** The thread's state, drawn as the dot leading the row: `idle` (nothing new, nothing running), `working` (an agent is running now), `unread` (finished, not yet seen), `waiting` (blocked on the reader) or `error` (stopped on a failure). Once any thread in the panel carries a status every row draws a dot, the rest reading `idle`, so the titles share one left edge. The dot is decorative; every state but `idle` is also read aloud through `statusLabels`. */
+  status?: ThreadPanelThreadStatus;
+  /** Legacy boolean for `status: 'unread'`, ignored when `status` is set. @deprecated Use `status: 'unread'` instead. */
   unread?: boolean;
   /** Trailing icon before the meta — Material Symbol name (string) or custom element (ReactNode), e.g. `cloud` for a session that lives remotely. */
   icon?: string | React.ReactNode;
@@ -94,6 +112,8 @@ type ThreadPanelOwnProps = {
   threadActions?: ThreadPanelThreadAction[];
   /** Fires with the thread's id and the chosen action's id. */
   onThreadAction?: (threadId: string, actionId: string) => void;
+  /** Spoken text for each thread status, read after the row's title; the dot itself is decorative. Merged over the English defaults (Working, Unread, Needs input, Failed). `idle` is silent unless given a label here. */
+  statusLabels?: Partial<Record<ThreadPanelThreadStatus, string>>;
   /** Accessible name for a row's menu trigger; the thread's title is appended after it. */
   threadMenuLabel?: string;
   /** Id of the thread being renamed: its row swaps to an inline text field, prefilled with the title and selected. The host owns the state, like everything else. */
@@ -161,6 +181,27 @@ export interface ThreadPanelProps
     Omit<React.ComponentPropsWithoutRef<'div'>, keyof ThreadPanelOwnProps> {}
 
 const baseClass = 'ds-thread-panel';
+
+/** How each thread status draws its StatusDot: fill for "wants you",
+    colour for what it wants, the pulse for live. */
+const STATUS_DOTS: Record<
+  ThreadPanelThreadStatus,
+  Pick<StatusDotProps, 'variant' | 'outline' | 'pulse'>
+> = {
+  idle: { variant: 'neutral', outline: true },
+  working: { variant: 'neutral', pulse: true },
+  unread: { variant: 'info' },
+  waiting: { variant: 'warning' },
+  error: { variant: 'error' },
+};
+
+const DEFAULT_STATUS_LABELS: Partial<Record<ThreadPanelThreadStatus, string>> =
+  {
+    working: 'Working',
+    unread: 'Unread',
+    waiting: 'Needs input',
+    error: 'Failed',
+  };
 
 /** A row that is a `<button>`, or an `<a>` when an href is supplied (Button's pattern). */
 function ActionRow({
@@ -281,8 +322,8 @@ function RenameField({
  * control rows, an optional projects section with its own new-project
  * button, the grouped thread history (the one region that scrolls), and a
  * footer for the profile row and host furniture like a theme toggle.
- * Thread rows scale from a bare title to the full detail anatomy: an
- * unread dot, a quiet description line, a trailing glyph, a pin marker,
+ * Thread rows scale from a bare title to the full detail anatomy: a
+ * leading status dot, a quiet description line, a trailing glyph, a pin marker,
  * and the meta caption.
  *
  * Fully controlled and stateless: the host owns the active thread, the
@@ -312,6 +353,7 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
       onThreadSelect,
       threadActions,
       onThreadAction,
+      statusLabels,
       threadMenuLabel = 'Thread options',
       renamingThreadId,
       onThreadRename,
@@ -346,9 +388,17 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
     },
     ref,
   ) => {
+    /* The dot column is all or nothing: one thread with a status seats a
+       dot on every row, so the titles keep a shared left edge. */
+    const dotted = groups.some((group) =>
+      group.threads.some((thread) => thread.status || thread.unread),
+    );
+    const labels = { ...DEFAULT_STATUS_LABELS, ...statusLabels };
+
     const classes = [
       baseClass,
       expanded && `${baseClass}--expanded`,
+      dotted && `${baseClass}--dotted`,
       className,
     ]
       .filter(Boolean)
@@ -602,6 +652,17 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
                           onThreadAction &&
                           !thread.pending,
                       );
+                      /* A thread still being named is, by definition,
+                         mid-run. */
+                      const status: ThreadPanelThreadStatus | undefined =
+                        dotted
+                          ? thread.pending
+                            ? 'working'
+                            : (thread.status ??
+                              (thread.unread ? 'unread' : 'idle'))
+                          : undefined;
+                      const statusLabel =
+                        status && !thread.pending ? labels[status] : undefined;
                       const renaming = Boolean(
                         thread.id === renamingThreadId && onThreadRename,
                       );
@@ -634,8 +695,6 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
                                   thread.description &&
                                     !thread.pending &&
                                     `${baseClass}__thread--detailed`,
-                                  thread.unread &&
-                                    `${baseClass}__thread--unread`,
                                 ]
                                   .filter(Boolean)
                                   .join(' ')}
@@ -654,10 +713,12 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
                                 }
                                 title={thread.title}
                               >
-                                {thread.unread && !thread.pending && (
-                                  <span
-                                    className={`${baseClass}__unread`}
-                                    aria-hidden="true"
+                                {status && (
+                                  <StatusDot
+                                    className={`${baseClass}__status`}
+                                    size="xs"
+                                    decorative
+                                    {...STATUS_DOTS[status]}
                                   />
                                 )}
                                 {thread.pending ? (
@@ -675,6 +736,11 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
                                 ) : (
                                   <span className={`${baseClass}__title`}>
                                     {thread.title}
+                                  </span>
+                                )}
+                                {statusLabel && (
+                                  <span className={`${baseClass}__status-label`}>
+                                    {statusLabel}
                                   </span>
                                 )}
                                 {!thread.pending &&

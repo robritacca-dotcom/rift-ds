@@ -1,7 +1,7 @@
 /* ============================================
    THREAD TABS COMPONENT
    The strip of open chat sessions across a conversation's top edge: pill
-   tabs with a leading glyph, an unread dot, a hover-revealed close button,
+   tabs with a leading glyph, a status dot, a hover-revealed close button,
    and a trailing new-tab action. Deliberately surface-less — the host
    paints the band it sits on.
 
@@ -148,14 +148,24 @@
   outline-offset: -2px;
 }
 
-/* The unread dot: a small status disc leading the label. Sized on the gap
-   scale — there is no icon token this small (ThreadPanel's dot restated). */
-.ds-thread-tabs__unread {
+/* The status dot: a StatusDot at its 8px list-row size leading the label,
+   the same mark ThreadPanel's rows carry. */
+.ds-thread-tabs__status {
   flex: none;
-  width: var(--gap-200);
-  height: var(--gap-200);
-  border-radius: var(--radius-pill);
-  background-color: var(--color-status-info-icon);
+}
+
+/* The status read aloud: the dot is decorative, so its state rides in the
+   tab's text for assistive technology only. */
+.ds-thread-tabs__status-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .ds-thread-tabs__icon {

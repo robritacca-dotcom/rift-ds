@@ -1161,7 +1161,7 @@
       "name": "ThreadTabs",
       "label": "Thread tabs",
       "slug": "thread-tabs",
-      "description": "The strip of open chat sessions: pill tabs with unread dots and hover-revealed close buttons, a new-tab action, and animated enter and exit.",
+      "description": "The strip of open chat sessions: pill tabs with status dots and hover-revealed close buttons, a new-tab action, and animated enter and exit.",
       "category": "ai",
       "client": true
     },

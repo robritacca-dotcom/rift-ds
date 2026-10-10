@@ -66,6 +66,7 @@ const INITIAL_THREAD_GROUPS: ThreadPanelGroup[] = [
         id: "pricing",
         title: "Compare the plan limits",
         description: "Annual pricing options",
+        status: "idle",
         pinned: true,
         meta: "2d",
       },
@@ -78,14 +79,15 @@ const INITIAL_THREAD_GROUPS: ThreadPanelGroup[] = [
         id: "launch",
         title: "Plan the launch week",
         description: "Waiting on the beta invite list",
-        unread: true,
+        status: "waiting",
         icon: "cloud",
         meta: "32m",
       },
       {
         id: "onboarding",
         title: "Rework the onboarding email",
-        description: "Draft shared with the team",
+        description: "Drafting the welcome sequence",
+        status: "working",
         icon: "cloud",
         meta: "2h",
       },
@@ -95,11 +97,16 @@ const INITIAL_THREAD_GROUPS: ThreadPanelGroup[] = [
     label: "Earlier",
     threads: [
       { id: "import", title: "Import last year's invoices", meta: "4d" },
-      { id: "roles", title: "Set up roles for the team", meta: "5d" },
+      {
+        id: "roles",
+        title: "Set up roles for the team",
+        status: "error",
+        meta: "5d",
+      },
       {
         id: "notify",
         title: "Quiet the mention notifications",
-        unread: true,
+        status: "unread",
         meta: "1w",
       },
     ],
@@ -175,7 +182,7 @@ export interface ChatViewProps {
   /** Stage the pinned-threads group and the pin/unpin row action; off, the
       pinned threads fold back into the home group. */
   railPins: boolean;
-  /** Stage the rows' detail anatomy (description, unread dot, session
+  /** Stage the rows' detail anatomy (description, status dot, session
       glyph, meta); off, the rows are bare titles like the live site's. */
   railDetails: boolean;
   /** Stage the open-sessions tab strip across the conversation's top. */
@@ -354,7 +361,7 @@ export default function ChatView({
   };
 
   /* Selecting a thread — from the rail or its tab — moves the pill, opens
-     (or revisits) the session's tab, and clears the row's unread dot. */
+     (or revisits) the session's tab, and settles an unread row to idle. */
   const selectThread = useCallback((id: string) => {
     setActiveThread(id);
     setOpenTabs((tabs) => (tabs.includes(id) ? tabs : [...tabs, id]));
@@ -362,8 +369,8 @@ export default function ChatView({
       groups.map((group) => ({
         ...group,
         threads: group.threads.map((thread) =>
-          thread.id === id && thread.unread
-            ? { ...thread, unread: undefined }
+          thread.id === id && thread.status === "unread"
+            ? { ...thread, status: "idle" as const }
             : thread
         ),
       }))
@@ -459,7 +466,7 @@ export default function ChatView({
           : {
               ...thread,
               description: undefined,
-              unread: undefined,
+              status: undefined,
               icon: undefined,
               meta: undefined,
             };
@@ -500,7 +507,7 @@ export default function ChatView({
                 id,
                 label: thread.title,
                 icon: "chat_bubble",
-                unread: railDetails ? thread.unread : undefined,
+                status: railDetails ? thread.status : undefined,
               },
             ]
           : [];

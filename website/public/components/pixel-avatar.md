@@ -2,7 +2,7 @@
 
 A generated character mark drawn from a name: the same name is always the same pixel creature in the same ink.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.5.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.6.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: data-display
 - Import: `import { PixelAvatar } from 'rift-ds';`

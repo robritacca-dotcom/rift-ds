@@ -2,7 +2,7 @@
 
 A wrapper that makes a whole surface a file drop target, with an outlined overlay while files hover over it.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.5.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.6.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: ai
 - Import: `import { AttachmentDropZone } from 'rift-ds';`

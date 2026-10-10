@@ -1,6 +1,15 @@
 {
   "releases": [
     {
+      "version": "1.5.0",
+      "date": "2026-10-10",
+      "title": "A selected state for menus, and retuned themes",
+      "body": [
+        "Menu items can now show a current choice. Give the items of a DropdownMenu or ContextMenu a selected value and they become a set of radio items: the chosen one holds a quiet fill, full-strength text and icon, and a trailing check. Plain action items are unchanged.",
+        "Three theme presets take new typeface pairings: Bubblegum sets Fredoka over Nunito, Velvet sets Playfair Display over Plus Jakarta Sans, and Volt sets Space Grotesk over Manrope, with the faces shipped in the package. Tinted themes are brighter in light mode, where the two lightest surfaces carry half the tint they did. The Fraunces and Work Sans font files leave the package, since no preset uses them. Nothing else is removed, so upgrading needs no code changes."
+      ]
+    },
+    {
       "version": "1.4.0",
       "date": "2026-10-09",
       "title": "File attachments for chat",

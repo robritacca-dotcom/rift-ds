@@ -84,7 +84,7 @@ export default function AiSection() {
       <div className={styles.demoRow}>
         <SourceChip title="Design tokens" index={1} />
         <SourceChip title="Component registry" index={2} />
-        <SourceChip title="Get started" icon="menu_book" />
+        <SourceChip title="Get started" />
       </div>
     </section>
   );

@@ -15,6 +15,7 @@ import { MessageCard } from "rift-ds/components/MessageCard/MessageCard";
 import { SourceChip } from "rift-ds/components/SourceChip/SourceChip";
 import { ToolCall } from "rift-ds/components/ToolCall/ToolCall";
 import { InspectorSection } from "rift-ds/components/Inspector/InspectorSection";
+import { SourceLogoMock } from "@/components/SourceLogoMock/SourceLogoMock";
 import { useSiteChat } from "@/components/SiteChat/ChatContext";
 
 /* ============================================
@@ -218,9 +219,27 @@ const TRIAL_CHART_CARD = (
 
 const SOURCE_CHIPS = (
   <div className={styles.sourceRow}>
-    <SourceChip title="Pricing guide" index={1} />
-    <SourceChip title="Workspace docs" index={2} />
-    <SourceChip title="Fair use policy" icon="menu_book" />
+    <SourceChip
+      title="Pricing guide"
+      index={1}
+      logo={<SourceLogoMock letter="A" tone="coral" />}
+      source="acme.design/pricing"
+      meta="Updated 3 days ago"
+      excerpt="Team is billed per editor, monthly or yearly. Viewers are free on every plan, and a seat you remove mid-cycle comes back as credit on the next invoice."
+    />
+    <SourceChip
+      title="Workspace docs"
+      index={2}
+      logo={<SourceLogoMock letter="D" tone="cobalt" />}
+      source="docs.acme.design"
+      excerpt="An editor can create and change files in any project they are invited to. Seats belong to the workspace, not to a project, so moving someone between teams costs nothing."
+    />
+    <SourceChip
+      title="Fair use policy"
+      source="acme.design/legal"
+      meta="4 min read"
+      excerpt="Unlimited means no hard cap on files or version history. Automated bulk uploads above the published rate are queued, never dropped."
+    />
   </div>
 );
 

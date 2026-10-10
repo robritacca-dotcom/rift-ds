@@ -1017,7 +1017,7 @@
       "slug": "source-chip",
       "description": "A numbered citation pill linking a claim to its source.",
       "category": "ai",
-      "client": false
+      "client": true
     },
     {
       "name": "SourceTrail",

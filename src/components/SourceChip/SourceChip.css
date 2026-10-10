@@ -9,10 +9,14 @@
   /* Layout */
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-100); /* 4px */
+  gap: var(--gap-200); /* 8px */
 
-  /* Spacing */
-  padding: var(--padding-050) var(--padding-200); /* 2px 8px */
+  /* Spacing — the leading slot is tucked into the pill's start: the same
+     inset above, below and before it, so its circle is concentric with the
+     pill's end cap. */
+  --ds-source-chip-inset: var(--padding-100); /* 4px */
+  padding: var(--ds-source-chip-inset);
+  padding-inline-end: var(--padding-300); /* 12px */
 
   /* Shape — borderless pill on the secondary container */
   border-radius: var(--radius-pill);
@@ -45,8 +49,14 @@
   flex-shrink: 0;
   min-width: var(--icon-size-500);
   height: var(--icon-size-500);
-  border-radius: var(--radius-pill);
-  background-color: var(--color-bg-container-tertiary);
+  /* Concentric with the pill: its radius less the inset between them. A
+     squared theme squares the badge with it. */
+  border-radius: calc(var(--radius-pill) - var(--ds-source-chip-inset));
+  /* A solid inverse disc, so the numeral carries the weight a logo's
+     full-colour disc does: dark on light in dark mode, light on dark in
+     light mode. It holds through hover and press — the pill's wash moves
+     behind it. */
+  background-color: var(--color-bg-container-inverse);
 
   font-family: var(--font-paragraph-sm-emphasis-family);
   font-size: var(--font-paragraph-sm-emphasis-size);
@@ -54,7 +64,17 @@
   letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
   line-height: 1;
   font-variant-numeric: tabular-nums;
-  color: var(--color-text-tertiary);
+  color: var(--color-text-on-inverse);
+}
+
+/* Centre the digit, not its line box. A line box reserves room for
+   descenders a lining figure never uses, so centring the box sets the
+   numeral visibly high in a 20px disc. Trimming the box to cap height and
+   baseline leaves only the glyph for the disc to centre. Browsers without
+   text-box keep the line-box centring. */
+.ds-source-chip__numeral {
+  display: block;
+  text-box: trim-both cap alphabetic;
 }
 
 /* ============================================
@@ -62,10 +82,43 @@
    ============================================ */
 
 .ds-source-chip__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
+  width: var(--icon-size-500);
+  height: var(--icon-size-500);
   --icon-size: var(--icon-size-500);
   line-height: 1;
   color: var(--color-icon-primary);
+}
+
+/* ============================================
+   LOGO (leading, when no index; and the
+   preview's top line). The source's mark,
+   cropped to the badge's shape. An image
+   fills the box; a custom element is
+   stretched to it. The tertiary ground shows
+   through a transparent favicon, so it still
+   reads as a badge.
+   ============================================ */
+
+.ds-source-chip__logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: var(--icon-size-500);
+  height: var(--icon-size-500);
+  border-radius: calc(var(--radius-pill) - var(--ds-source-chip-inset));
+  background-color: var(--color-bg-container-tertiary);
+  overflow: hidden;
+}
+
+.ds-source-chip__logo > * {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* ============================================
@@ -80,15 +133,31 @@
 }
 
 /* ============================================
-   LINK (rendered as <a>)
+   INTERACTIVE (rendered as <a> or <button>)
+   The passive wash, as on Chip: one step on
+   hover, one more while pressed. A chip whose
+   preview is showing holds the hover step.
    ============================================ */
 
-.ds-source-chip--link {
+.ds-source-chip--interactive {
   cursor: pointer;
 }
 
-.ds-source-chip--link:hover {
-  background-color: var(--color-bg-container-tertiary);
+/* The <button> form: clear the UA chrome the anchor never had. */
+button.ds-source-chip {
+  border: 0;
+  margin: 0;
+  appearance: none;
+}
+
+.ds-source-chip--interactive:hover,
+.ds-source-chip--open {
+  background-color: var(--color-action-passive-bg-hover);
+  color: var(--color-text-primary);
+}
+
+.ds-source-chip--interactive:active {
+  background-color: var(--color-action-passive-bg-active);
   color: var(--color-text-primary);
 }
 
@@ -96,9 +165,140 @@
    FOCUS
    ============================================ */
 
-.ds-source-chip--link:focus-visible {
+.ds-source-chip--interactive:focus-visible {
   outline: 2px solid var(--color-action-primary-bg);
   outline-offset: 2px;
+}
+
+/* ============================================
+   PREVIEW
+   The source behind the chip, on the floating
+   surface (see HoverCard). The host is the
+   positioning box; the panel opens above the
+   chip, flush with its leading edge. The
+   component flips it below (data-side) and
+   slides it sideways (--ds-source-chip-shift)
+   when the space runs out.
+   ============================================ */
+
+.ds-source-chip-host {
+  position: relative;
+  display: inline-flex;
+  min-width: 0;
+}
+
+.ds-source-chip__preview {
+  position: absolute;
+  z-index: 50;
+  bottom: 100%;
+  left: var(--ds-source-chip-shift, 0px);
+  margin-block: var(--gap-200);
+  width: max-content;
+  max-width: min(320px, calc(100vw - var(--padding-400)));
+  padding: var(--padding-300) var(--padding-400);
+  flex-direction: column;
+  gap: var(--gap-100);
+
+  border-radius: var(--radius-300);
+  background-color: var(--color-bg-page-primary);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  box-shadow: var(--shadow-floating);
+
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-secondary);
+  text-align: start;
+  white-space: normal;
+  cursor: default;
+
+  /* display:none keeps the closed panel out of the tab order and the page's
+     scrollable overflow; the flip transitions discretely so the fade
+     survives (see HoverCard, which owns the explanation). */
+  display: none;
+  opacity: 0;
+  transform: translateY(4px);
+  transition-property: opacity, transform, display;
+  transition-duration: var(--motion-duration-fast);
+  transition-timing-function: var(--motion-ease-standard);
+  transition-behavior: allow-discrete;
+}
+
+.ds-source-chip__preview[data-side='bottom'] {
+  top: 100%;
+  bottom: auto;
+  transform: translateY(-4px);
+}
+
+.ds-source-chip__preview--visible,
+.ds-source-chip__preview--visible[data-side='bottom'] {
+  display: flex;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@starting-style {
+  .ds-source-chip__preview--visible {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  .ds-source-chip__preview--visible[data-side='bottom'] {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+/* Top line: where the source lives, a trailing fact, and the outbound
+   arrow when the chip is a link. */
+.ds-source-chip__preview-top {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-200);
+  color: var(--color-text-tertiary);
+}
+
+.ds-source-chip__preview-source {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.ds-source-chip__preview-meta {
+  flex-shrink: 0;
+}
+
+/* A middle dot between the two, drawn only when both are present. */
+.ds-source-chip__preview-source + .ds-source-chip__preview-meta::before {
+  content: '\00B7';
+  margin-inline-end: var(--gap-200);
+}
+
+.ds-source-chip__preview-open {
+  flex-shrink: 0;
+  margin-inline-start: auto;
+  --icon-size: var(--icon-size-500);
+}
+
+.ds-source-chip__preview-title {
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+/* The excerpt is a glance, not the document: four lines, then an ellipsis. */
+.ds-source-chip__preview-excerpt {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  overflow: hidden;
 }
 
 /* Icons take the colour of the text around them. Explicit, not just

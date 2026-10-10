@@ -21,6 +21,8 @@ export interface DropdownMenuItem {
   disabled?: boolean;
   /** Destructive / danger styling (red text) for delete, remove, etc. */
   destructive?: boolean;
+  /** Marks the item as the current choice of a set: it holds the passive wash and a trailing check, and is announced as a checked radio item. Leave undefined on plain action items; pass `false` on the unchosen members of a set so they are announced as radio items too. Ignored on an item that opens a sub-menu. */
+  selected?: boolean;
   /** Click handler */
   onClick?: () => void;
   /** Nested sub-menu items */
@@ -237,16 +239,21 @@ const MenuPanel = ({
       `${baseClass}__item`,
       entry.disabled ? `${baseClass}__item--disabled` : '',
       entry.destructive ? `${baseClass}__item--destructive` : '',
+      entry.selected ? `${baseClass}__item--selected` : '',
     ]
       .filter(Boolean)
       .join(' ');
+
+    // `selected` given at all means the item belongs to a choice set.
+    const isChoice = entry.selected !== undefined;
 
     return (
       <li
         key={`item-${index}`}
         id={entryId}
         className={itemClasses}
-        role="menuitem"
+        role={isChoice ? 'menuitemradio' : 'menuitem'}
+        aria-checked={isChoice ? entry.selected : undefined}
         aria-disabled={entry.disabled || undefined}
         onClick={(e) => {
           e.stopPropagation();
@@ -271,6 +278,11 @@ const MenuPanel = ({
         </span>
         {entry.shortcut && (
           <span className={`${baseClass}__shortcut`}>{entry.shortcut}</span>
+        )}
+        {entry.selected && (
+          <span className={`${baseClass}__check material-symbols-rounded`} aria-hidden="true">
+            check
+          </span>
         )}
       </li>
     );
@@ -403,7 +415,7 @@ export const DropdownMenu = ({
   /* Scroll focused item into view */
   useEffect(() => {
     if (isOpen && focusedIndex >= 0 && panelRef.current) {
-      const allItems = panelRef.current.querySelectorAll(`[role="menuitem"]`);
+      const allItems = panelRef.current.querySelectorAll(`[role="menuitem"], [role="menuitemradio"]`);
       const el = allItems[focusedIndex] as HTMLElement | undefined;
       el?.scrollIntoView({ block: 'nearest' });
     }
@@ -453,16 +465,21 @@ export const DropdownMenu = ({
       isFocused ? `${baseClass}__item--focused` : '',
       entry.disabled ? `${baseClass}__item--disabled` : '',
       entry.destructive ? `${baseClass}__item--destructive` : '',
+      entry.selected ? `${baseClass}__item--selected` : '',
     ]
       .filter(Boolean)
       .join(' ');
+
+    // `selected` given at all means the item belongs to a choice set.
+    const isChoice = entry.selected !== undefined;
 
     return (
       <li
         key={`item-${index}`}
         id={`${generatedId}-item-${myIndex}`}
         className={itemClasses}
-        role="menuitem"
+        role={isChoice ? 'menuitemradio' : 'menuitem'}
+        aria-checked={isChoice ? entry.selected : undefined}
         aria-disabled={entry.disabled || undefined}
         onClick={(e) => {
           e.stopPropagation();
@@ -487,6 +504,11 @@ export const DropdownMenu = ({
         </span>
         {entry.shortcut && (
           <span className={`${baseClass}__shortcut`}>{entry.shortcut}</span>
+        )}
+        {entry.selected && (
+          <span className={`${baseClass}__check material-symbols-rounded`} aria-hidden="true">
+            check
+          </span>
         )}
       </li>
     );

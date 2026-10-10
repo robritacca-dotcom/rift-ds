@@ -16,6 +16,34 @@ import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentI
    DEMO DATA
    ============================================ */
 
+const DENSITY_OPTIONS = [
+  { id: "compact", label: "Compact", icon: "density_small" },
+  { id: "comfortable", label: "Comfortable", icon: "density_medium" },
+  { id: "spacious", label: "Spacious", icon: "density_large" },
+];
+
+/* A choice set needs somewhere to keep the choice, so this demo holds state. */
+function SelectedStateDemo() {
+  const [density, setDensity] = React.useState("comfortable");
+  return (
+    <DropdownMenu
+      trigger={<Button label="Density" variant="secondary" state="default" />}
+      items={[
+        {
+          type: "group",
+          label: "Row density",
+          items: DENSITY_OPTIONS.map((option) => ({
+            label: option.label,
+            icon: option.icon,
+            selected: density === option.id,
+            onClick: () => setDensity(option.id),
+          })),
+        },
+      ]}
+    />
+  );
+}
+
 const simpleItems: DropdownMenuEntry[] = [
   { label: "New file", icon: "note_add", onClick: () => {} },
   { label: "Open", icon: "folder_open", onClick: () => {} },
@@ -176,6 +204,19 @@ export default function DropdownMenuPage() {
                   items={simpleItems}
                   size="compact"
                 />
+              </div>
+            </div>
+          </section>
+
+          {/* Selected state */}
+          <section className={styles.section}>
+            <SectionTitle title="Selected state" />
+            <p className={styles.introBody}>
+              When a menu picks one option from a set, give every member a selected value. The current choice holds a quiet fill and a check, and assistive technology hears the rows as radio items.
+            </p>
+            <div className={styles.variantRow}>
+              <div className={styles.variantItem}>
+                <SelectedStateDemo />
               </div>
             </div>
           </section>

@@ -197,14 +197,18 @@ const SubEntry = ({
     `${baseClass}__item`,
     entry.disabled ? `${baseClass}__item--disabled` : '',
     entry.destructive ? `${baseClass}__item--destructive` : '',
+    entry.selected ? `${baseClass}__item--selected` : '',
   ]
     .filter(Boolean)
     .join(' ');
+  // `selected` given at all means the item belongs to a choice set.
+  const isChoice = entry.selected !== undefined;
   return (
     <li
       id={itemId}
       className={itemClasses}
-      role="menuitem"
+      role={isChoice ? 'menuitemradio' : 'menuitem'}
+      aria-checked={isChoice ? entry.selected : undefined}
       aria-disabled={entry.disabled || undefined}
       onClick={(e) => {
         e.stopPropagation();
@@ -223,6 +227,11 @@ const SubEntry = ({
         {entry.label}
       </span>
       {entry.shortcut && <span className={`${baseClass}__shortcut`}>{entry.shortcut}</span>}
+      {entry.selected && (
+        <span className={`${baseClass}__check material-symbols-rounded`} aria-hidden="true">
+          check
+        </span>
+      )}
     </li>
   );
 };
@@ -446,16 +455,21 @@ export const ContextMenu = React.forwardRef<HTMLDivElement, ContextMenuProps>(
         isFocused ? `${baseClass}__item--focused` : '',
         entry.disabled ? `${baseClass}__item--disabled` : '',
         entry.destructive ? `${baseClass}__item--destructive` : '',
+        entry.selected ? `${baseClass}__item--selected` : '',
       ]
         .filter(Boolean)
         .join(' ');
+
+      // `selected` given at all means the item belongs to a choice set.
+      const isChoice = entry.selected !== undefined;
 
       return (
         <li
           key={`item-${index}`}
           id={`${generatedId}-item-${myIndex}`}
           className={itemClasses}
-          role="menuitem"
+          role={isChoice ? 'menuitemradio' : 'menuitem'}
+          aria-checked={isChoice ? entry.selected : undefined}
           aria-disabled={entry.disabled || undefined}
           onClick={(e) => {
             e.stopPropagation();
@@ -477,6 +491,11 @@ export const ContextMenu = React.forwardRef<HTMLDivElement, ContextMenuProps>(
             {entry.label}
           </span>
           {entry.shortcut && <span className={`${baseClass}__shortcut`}>{entry.shortcut}</span>}
+          {entry.selected && (
+            <span className={`${baseClass}__check material-symbols-rounded`} aria-hidden="true">
+              check
+            </span>
+          )}
         </li>
       );
     };

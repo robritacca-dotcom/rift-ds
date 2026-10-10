@@ -79,3 +79,22 @@ export const WithGroupsAndSubmenu: Story = {
 export const Compact: Story = {
   args: { size: 'compact' },
 };
+
+/* A choice set: `selected` on every member turns the rows into radio items,
+   and the chosen one holds the wash and the check (DropdownMenu's recipe). */
+export const SelectedState: Story = {
+  args: {
+    ariaLabel: 'Sort order',
+    items: [
+      {
+        type: 'group',
+        label: 'Sort by',
+        items: [
+          { label: 'Name', icon: 'sort_by_alpha', selected: true, onClick: fn() },
+          { label: 'Date modified', icon: 'schedule', selected: false, onClick: fn() },
+          { label: 'Size', icon: 'straighten', selected: false, onClick: fn() },
+        ],
+      },
+    ],
+  },
+};

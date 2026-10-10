@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DropdownMenu, type DropdownMenuEntry } from './DropdownMenu';
 
@@ -245,4 +246,37 @@ export const AllFeatures: Story = {
     trigger: <TriggerButton label="My account" />,
     items: allFeaturesItems,
   },
+};
+
+/* A choice set: `selected` on every member turns the rows into radio items,
+   and the chosen one holds the wash and the check. */
+const SelectedStateDemo = () => {
+  const [density, setDensity] = useState('comfortable');
+  const options = [
+    { id: 'compact', label: 'Compact', icon: 'density_small' },
+    { id: 'comfortable', label: 'Comfortable', icon: 'density_medium' },
+    { id: 'spacious', label: 'Spacious', icon: 'density_large' },
+  ];
+  return (
+    <DropdownMenu
+      trigger={<TriggerButton label="Density" />}
+      items={[
+        {
+          type: 'group',
+          label: 'Row density',
+          items: options.map((option) => ({
+            label: option.label,
+            icon: option.icon,
+            selected: density === option.id,
+            onClick: () => setDensity(option.id),
+          })),
+        },
+      ]}
+    />
+  );
+};
+
+export const SelectedState: Story = {
+  args: { trigger: null, items: [] },
+  render: () => <SelectedStateDemo />,
 };

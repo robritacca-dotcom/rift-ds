@@ -146,6 +146,35 @@
 }
 
 /* ============================================
+   SELECTED ITEM
+   The current choice of a set: the passive wash held down, text and icon
+   at full strength, and a trailing check — three cues, none of them the
+   action colour, which a menu row has no claim on.
+   ============================================ */
+
+.ds-dropdown-menu__item--selected {
+  background-color: var(--color-action-passive-bg-hover);
+  color: var(--color-text-primary);
+}
+
+.ds-dropdown-menu__item--selected:hover,
+.ds-dropdown-menu__item--selected.ds-dropdown-menu__item--focused {
+  background-color: var(--color-action-passive-bg-active);
+}
+
+.ds-dropdown-menu__item--selected .ds-dropdown-menu__item-icon {
+  color: var(--color-icon-primary);
+}
+
+.ds-dropdown-menu__check {
+  --icon-size: var(--icon-size-500);
+  color: var(--color-icon-primary);
+  margin-left: auto;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+/* ============================================
    DISABLED ITEM
    ============================================ */
 

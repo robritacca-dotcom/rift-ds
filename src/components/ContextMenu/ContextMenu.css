@@ -114,6 +114,31 @@
   background-color: var(--color-action-passive-bg-hover);
 }
 
+/* States — selected: the current choice of a set. DropdownMenu.css owns
+   the recipe (passive wash held, full-strength text and icon, trailing
+   check); the two menus share the entry model, so they share the look. */
+.ds-context-menu__item--selected {
+  background-color: var(--color-action-passive-bg-hover);
+  color: var(--color-text-primary);
+}
+
+.ds-context-menu__item--selected:hover,
+.ds-context-menu__item--selected.ds-context-menu__item--focused {
+  background-color: var(--color-action-passive-bg-active);
+}
+
+.ds-context-menu__item--selected .ds-context-menu__item-icon {
+  color: var(--color-icon-primary);
+}
+
+.ds-context-menu__check {
+  --icon-size: var(--icon-size-500);
+  color: var(--color-icon-primary);
+  margin-left: auto;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
 /* States — disabled */
 .ds-context-menu__item--disabled {
   opacity: 0.4;

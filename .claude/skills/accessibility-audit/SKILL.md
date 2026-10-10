@@ -55,7 +55,7 @@ Report a finding as **already-enforced** if `npm run test` or the page-level axe
    **Keyboard Navigation:**
    - **[manual]** All interactive elements are reachable by Tab, in an order that makes sense — axe cannot judge order
    - Custom interactive components handle `onKeyDown` for Enter/Space (buttons) and arrow keys (any component with roving or list focus — radio groups, segmented controls, listboxes, tablists)
-   - **[manual where no `play` function covers it]** Modal/dialog *actually* traps focus while open and restores it to the trigger on close — axe sees the attributes, not the behaviour. The modal overlays share one behavior implementation (design.md's Components intro owns the contract), so a real trap/restore defect there is a finding against all of them, not one
+   - **[manual where no `play` function covers it]** Modal/dialog *actually* traps focus while open and restores it to the trigger on close — axe sees the attributes, not the behaviour. The modal overlays share one behavior implementation (design.md's Components intro owns the contract), so a real trap/restore defect there is a finding against all of them, not one. The site chat is modal only in some of its forms, and its floating card's move and size grips are pointer-only by a recorded decision: design.md's Site chat pattern says which forms trap focus and why the grips are not a finding
    - Escape key closes dismissible overlays (any floating panel — tooltips, popovers, menus, dialogs, pickers)
 
    **Focus Styles:**

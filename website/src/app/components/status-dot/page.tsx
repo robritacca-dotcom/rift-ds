@@ -51,9 +51,25 @@ export default function StatusDotPage() {
           <section className={styles.section}>
             <SectionTitle title="Sizes" />
             <div className={styles.variantRow}>
+              <StatusDot variant="positive" size="xs" label="Extra small" />
               <StatusDot variant="positive" size="sm" label="Small" />
               <StatusDot variant="positive" size="md" label="Medium" />
               <StatusDot variant="positive" size="lg" label="Large" />
+            </div>
+          </section>
+
+          {/* Outline */}
+          <section className={styles.section}>
+            <SectionTitle title="Outline" />
+            <p className={styles.sectionNote}>
+              The outline draws the dot hollow, for a settled or empty state that still holds its seat beside filled dots. Together with the pulse it gives a list one reading: fill says whether a row wants attention, colour says what it wants, and motion says it is live.
+            </p>
+            <div className={styles.variantRow}>
+              <StatusDot variant="neutral" outline label="Idle" />
+              <StatusDot variant="neutral" pulse label="Working" />
+              <StatusDot variant="info" label="Unread" />
+              <StatusDot variant="warning" label="Needs input" />
+              <StatusDot variant="error" label="Failed" />
             </div>
           </section>
 

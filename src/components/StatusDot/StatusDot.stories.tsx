@@ -46,9 +46,24 @@ export const AllVariants: Story = {
 export const Sizes: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+      <StatusDot variant="positive" size="xs" label="Extra small" />
       <StatusDot variant="positive" size="sm" label="Small" />
       <StatusDot variant="positive" size="md" label="Medium" />
       <StatusDot variant="positive" size="lg" label="Large" />
+    </div>
+  ),
+};
+
+/** The hollow dot: a ring in the role's colour, for a settled or empty
+ *  state that still holds its seat beside filled dots. */
+export const Outline: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+      <StatusDot variant="neutral" outline label="Idle" />
+      <StatusDot variant="neutral" pulse label="Working" />
+      <StatusDot variant="info" label="Unread" />
+      <StatusDot variant="warning" label="Needs input" />
+      <StatusDot variant="error" label="Failed" />
     </div>
   ),
 };

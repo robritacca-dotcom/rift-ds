@@ -1,7 +1,7 @@
 /* ============================================
    STATUS DOT COMPONENT
    Bare presence/status indicator with optional
-   label and live pulse
+   label, hollow outline and live pulse
    ============================================ */
 
 /* Base */
@@ -16,6 +16,7 @@
   position: relative;
   flex-shrink: 0;
   border-radius: var(--radius-pill);
+  background-color: var(--ds-status-dot-color);
 }
 
 .ds-status-dot__label {
@@ -29,7 +30,14 @@
 }
 
 /* Sizes — the dot rides the icon scale at half-diameter, so it can never
-   drift from the glyphs it sits beside. */
+   drift from the glyphs it sits beside. `xs` is the one step off it: the
+   list-row mark sits on the gap scale, because no icon token is that small
+   and 8px matches a title's cap height. */
+
+.ds-status-dot--xs .ds-status-dot__indicator {
+  width: var(--gap-200); /* 8px */
+  height: var(--gap-200);
+}
 
 .ds-status-dot--sm .ds-status-dot__indicator {
   width: calc(var(--icon-size-500) / 2); /* 10px */
@@ -49,24 +57,39 @@
 /* Variants — the plain-surface icon steps, tuned to hold on bare
    containers where the status text tints wash out. */
 
-.ds-status-dot--info .ds-status-dot__indicator {
-  background-color: var(--color-status-info-icon);
+.ds-status-dot--info {
+  --ds-status-dot-color: var(--color-status-info-icon);
 }
 
-.ds-status-dot--positive .ds-status-dot__indicator {
-  background-color: var(--color-status-positive-icon);
+.ds-status-dot--positive {
+  --ds-status-dot-color: var(--color-status-positive-icon);
 }
 
-.ds-status-dot--warning .ds-status-dot__indicator {
-  background-color: var(--color-status-warning-icon);
+.ds-status-dot--warning {
+  --ds-status-dot-color: var(--color-status-warning-icon);
 }
 
-.ds-status-dot--error .ds-status-dot__indicator {
-  background-color: var(--color-status-error-icon);
+.ds-status-dot--error {
+  --ds-status-dot-color: var(--color-status-error-icon);
 }
 
-.ds-status-dot--neutral .ds-status-dot__indicator {
-  background-color: var(--color-status-neutral-icon);
+.ds-status-dot--neutral {
+  --ds-status-dot-color: var(--color-status-neutral-icon);
+}
+
+/* Outline — the hollow dot: the role's colour drawn as an inset ring, so
+   the mark keeps its box and its seat while reading as "nothing here yet".
+   The two small sizes take the hairline; the larger two the heavier step,
+   so the ring keeps its proportion to the diameter. */
+
+.ds-status-dot--outline .ds-status-dot__indicator {
+  background-color: transparent;
+  box-shadow: inset 0 0 0 var(--border-025) var(--ds-status-dot-color);
+}
+
+.ds-status-dot--outline.ds-status-dot--md .ds-status-dot__indicator,
+.ds-status-dot--outline.ds-status-dot--lg .ds-status-dot__indicator {
+  box-shadow: inset 0 0 0 var(--border-050) var(--ds-status-dot-color);
 }
 
 /* Pulse — a ring of the dot's own colour swelling out and fading, on the
@@ -77,7 +100,7 @@
   position: absolute;
   inset: 0;
   border-radius: var(--radius-pill);
-  background-color: inherit;
+  background-color: var(--ds-status-dot-color);
   animation: ds-status-dot-pulse var(--motion-duration-loop-shimmer) var(--motion-ease-standard)
     infinite;
 }

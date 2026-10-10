@@ -2,7 +2,7 @@
 
 Rich preview panel that opens from hover or focus, with interactive content and position options.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.4.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.5.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: overlays
 - Import: `import { HoverCard } from 'rift-ds';`

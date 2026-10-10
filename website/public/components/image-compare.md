@@ -2,7 +2,7 @@
 
 Before-and-after image comparison with a draggable divider, keyboard control, and corner labels.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.4.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.5.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: data-display
 - Import: `import { ImageCompare } from 'rift-ds';`

@@ -1,6 +1,6 @@
 # rift-ds component catalog
 
-Generated from the component registry at version 1.4.0. One entry per public component; each Contract link is the component's full prop table as markdown.
+Generated from the component registry at version 1.5.0. One entry per public component; each Contract link is the component's full prop table as markdown.
 
 ## Actions (6)
 

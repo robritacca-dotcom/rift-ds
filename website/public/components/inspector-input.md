@@ -2,7 +2,7 @@
 
 One-row text field for inspector panels, with the name on the left and the value right-aligned in the bar.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.4.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.5.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: inspector
 - Import: `import { InspectorInput } from 'rift-ds';`

@@ -2,7 +2,7 @@
 
 Bars split into stacked segments to compare totals and their composition.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.4.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.5.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: charts
 - Import: `import { StackedBarChart } from 'rift-ds/charts'; // needs the optional recharts peer`

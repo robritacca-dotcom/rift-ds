@@ -2,7 +2,7 @@
 
 An auto-growing message input with send and stop states, a page-context note, a file tray fed by picker, paste and drop, and Enter-to-send.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.4.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.5.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: ai
 - Import: `import { Composer } from 'rift-ds';`

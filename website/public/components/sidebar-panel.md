@@ -2,7 +2,7 @@
 
 Secondary navigation column listing one section's pages, with group headings and one level of accordion nesting.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.4.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.5.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: layout
 - Import: `import { SidebarPanel } from 'rift-ds';`

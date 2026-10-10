@@ -8935,7 +8935,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "slug": "source-chip",
     "category": "ai",
     "description": "A numbered citation pill linking a claim to its source.",
-    "client": false,
+    "client": true,
     "importPath": "rift-ds/components/SourceChip/SourceChip",
     "barrel": "main",
     "exports": [
@@ -8952,19 +8952,44 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "index",
             "type": "number",
             "required": false,
-            "description": "Citation number, rendered as a leading numeral in its own small badge circle."
+            "description": "Citation number, rendered as a leading numeral in its own small badge circle. Wins the leading slot over `logo` and `icon`."
           },
           {
             "name": "icon",
             "type": "ReactNode",
             "required": false,
-            "description": "Leading icon — a Material Symbol name (string) or custom element (ReactNode).\nThe icon and the index share the leading slot: when both are passed, `index` wins\nand the icon is not rendered."
+            "description": "The glyph for a source with neither a number nor a logo — a Material Symbol\nname (string) or custom element (ReactNode). Defaults to a globe, so the\nleading slot is never empty.",
+            "defaultValue": "language"
           },
           {
             "name": "href",
             "type": "string",
             "required": false,
             "description": "Optional href — renders as an `<a>` instead of a `<span>`."
+          },
+          {
+            "name": "excerpt",
+            "type": "string",
+            "required": false,
+            "description": "The passage the answer drew on. Setting it gives the chip a preview panel\nthat opens on hover, focus or press: the full title over this excerpt.\nWithout an `href` the chip then renders as a `<button>`, so the preview\nis reachable from the keyboard."
+          },
+          {
+            "name": "source",
+            "type": "string",
+            "required": false,
+            "description": "Where the source lives, shown as the preview's top line, e.g. \"docs.acme.com\". Only rendered with `excerpt`."
+          },
+          {
+            "name": "logo",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The source's logo or favicon — an image URL (string) or a custom element\n(ReactNode), cropped to a circle. It fills the chip's leading slot when\nthere is no `index`, and always leads the preview's top line. Decorative:\nthe title and `source` text carry the name."
+          },
+          {
+            "name": "meta",
+            "type": "string",
+            "required": false,
+            "description": "A short trailing fact for the preview's top line, e.g. \"Updated 3 days ago\". Only rendered with `excerpt`."
           },
           {
             "name": "className",

@@ -239,7 +239,7 @@ A model's thinking, disclosed behind a one-line summary and collapsed once it fi
 A numbered citation pill linking a claim to its source.
 
 - Import: `import { SourceChip } from 'rift-ds';`
-- Rendering: server-renderable (no 'use client')
+- Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/source-chip.md
 
 ### Source trail

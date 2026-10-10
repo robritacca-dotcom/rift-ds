@@ -95,6 +95,7 @@ export * from './components/NumberInput/NumberInput';
 export * from './components/Pagination/Pagination';
 export * from './components/Panel/Panel';
 export * from './components/PinInput/PinInput';
+export * from './components/PixelAvatar/PixelAvatar';
 export * from './components/Popover/Popover';
 export * from './components/ProgressBar/ProgressBar';
 export * from './components/PromptSuggestions/PromptSuggestions';
@@ -140,6 +141,7 @@ export * from './components/TopAppBar/TopAppBar';
 export * from './components/TreeView/TreeView';
 export * from './components/UsageCard/UsageCard';
 export * from './components/Waveform/Waveform';
+export * from './components/Widget/Widget';
 export * from './components/WorldMap/WorldMap';
 
 export {

@@ -430,7 +430,7 @@ Nested rectangles sized by value for part-to-whole breakdowns.
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/treemap.md
 
-## Data display (25)
+## Data display (27)
 
 Cards, tables, lists, and badges for presenting structured content.
 
@@ -586,6 +586,14 @@ Linked items with logo, label, and subtitle.
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/link-list.md
 
+### Pixel avatar
+
+A generated character mark drawn from a name: the same name is always the same pixel creature in the same ink.
+
+- Import: `import { PixelAvatar } from 'rift-ds';`
+- Rendering: server-renderable (no 'use client')
+- Contract: https://rift-ds.com/components/pixel-avatar.md
+
 ### Quote
 
 Blockquotes and pull-quotes with attribution.
@@ -633,6 +641,14 @@ Collapsible hierarchy for files, folders, and nested structures.
 - Import: `import { TreeView } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/tree-view.md
+
+### Widget
+
+A titled tile for a dashboard or home screen, with rows, labelled groups, and a board that packs tiles into columns.
+
+- Import: `import { Widget } from 'rift-ds';`
+- Rendering: server-renderable (no 'use client')
+- Contract: https://rift-ds.com/components/widget.md
 
 ## Effects (1)
 

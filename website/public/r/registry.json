@@ -586,6 +586,12 @@
       "description": "Segmented one-time-code input with auto-advance, paste support, and completion callback."
     },
     {
+      "name": "pixel-avatar",
+      "type": "registry:ui",
+      "title": "Pixel avatar",
+      "description": "A generated character mark drawn from a name: the same name is always the same pixel creature in the same ink."
+    },
+    {
       "name": "popover",
       "type": "registry:ui",
       "title": "Popover",
@@ -884,6 +890,12 @@
       "type": "registry:ui",
       "title": "Waveform",
       "description": "Voice made visible: a row of bars dancing on the shared twelve-slot cycle, or tracking a live analyser level by level."
+    },
+    {
+      "name": "widget",
+      "type": "registry:ui",
+      "title": "Widget",
+      "description": "A titled tile for a dashboard or home screen, with rows, labelled groups, and a board that packs tiles into columns."
     },
     {
       "name": "world-map",

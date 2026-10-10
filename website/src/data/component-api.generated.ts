@@ -7506,6 +7506,74 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "name": "PixelAvatar",
+    "label": "Pixel avatar",
+    "slug": "pixel-avatar",
+    "category": "data-display",
+    "description": "A generated character mark drawn from a name: the same name is always the same pixel creature in the same ink.",
+    "client": false,
+    "importPath": "rift-ds/components/PixelAvatar/PixelAvatar",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "PixelAvatar",
+        "props": [
+          {
+            "name": "name",
+            "type": "string",
+            "required": true,
+            "description": "The seed. The same name always draws the same character in the same\nink, so a project, workspace or thread has its mark the moment it has a\nname, with nothing designed or stored for it."
+          },
+          {
+            "name": "size",
+            "type": "\"sm\" | \"md\" | \"lg\" | \"xl\"",
+            "required": false,
+            "description": "Rendered size, on the icon scale (`--icon-size-500/600/800/1200` — 20, 24, 32 and 48px), so the character seats wherever an icon does.",
+            "defaultValue": "md"
+          },
+          {
+            "name": "ink",
+            "type": "PixelInk",
+            "required": false,
+            "description": "Overrides the ink the name picks (1 to 6, the `--color-pixel-ink-*`\ntokens). A name's own ink is one of six, so two neighbours can land on\nthe same one; a host drawing a list passes each row's entry from\n`distinctPixelInks` here to keep them apart. The character's shape still\ncomes from the name."
+          },
+          {
+            "name": "variant",
+            "type": "\"plain\" | \"tile\"",
+            "required": false,
+            "description": "`plain` draws the character alone; `tile` seats it on a rounded wash of its own ink, for a larger standalone mark.",
+            "defaultValue": "plain"
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name. Omit it when the mark sits beside the name it was\ndrawn from, which is the usual case: the character is then decorative\nand hidden from assistive technology. Given, the root becomes an image\nwith this label."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": ""
+          }
+        ]
+      },
+      {
+        "component": "distinctPixelInks",
+        "props": []
+      },
+      {
+        "component": "pixelAvatarInk",
+        "props": []
+      },
+      {
+        "component": "PixelInk",
+        "props": []
+      }
+    ]
+  },
+  {
     "name": "Popover",
     "label": "Popover",
     "slug": "popover",
@@ -7658,9 +7726,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "layout",
-            "type": "\"wrap\" | \"scroll\" | \"stack\"",
+            "type": "\"wrap\" | \"scroll\" | \"stack\" | \"tiles\" | \"cards\"",
             "required": false,
-            "description": "How the suggestions are arranged. `scroll` is one line that scrolls\nsideways behind edge fades. `wrap` runs them across as many lines as\nthey need, for empty-state hero placements. `stack` gives each one its\nown line, for narrow columns where a wrapped row breaks unevenly and\nthe ragged right edge reads as an accident."
+            "description": "How the suggestions are arranged. `scroll` is one line that scrolls\nsideways behind edge fades. `wrap` runs them across as many lines as\nthey need, for empty-state hero placements. `stack` gives each one its\nown line, for narrow columns where a wrapped row breaks unevenly and\nthe ragged right edge reads as an accident. `tiles` and `cards` leave\nthe chip behind for an empty-state home screen: `tiles` is an even row\nof quiet blocks, each an icon over a label and its `description`;\n`cards` gives each suggestion a tinted cover holding its icon, with the\nlabel and description beneath. Both fold to fewer columns as their own\nwidth narrows."
           },
           {
             "name": "wrap",
@@ -11340,6 +11408,152 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "What a screen reader hears the indicator say. Defaults per state\n(\"Listening\", \"Speaking\", \"Microphone idle\")."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Widget",
+    "label": "Widget",
+    "slug": "widget",
+    "category": "data-display",
+    "description": "A titled tile for a dashboard or home screen, with rows, labelled groups, and a board that packs tiles into columns.",
+    "client": false,
+    "importPath": "rift-ds/components/Widget/Widget",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "Widget",
+        "props": [
+          {
+            "name": "title",
+            "type": "string",
+            "required": true,
+            "description": "The tile's heading. Also the section's accessible name, unless an `aria-label` is passed. Note: this shadows the native `title` tooltip attribute, which Widget does not expose."
+          },
+          {
+            "name": "count",
+            "type": "number",
+            "required": false,
+            "description": "A quiet figure after the title: how many rows the tile holds, how many are open."
+          },
+          {
+            "name": "action",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Trailing header slot, opposite the title — a compact button, a link, a period label."
+          },
+          {
+            "name": "titleAs",
+            "type": "\"h2\" | \"h3\" | \"h4\"",
+            "required": false,
+            "description": "Heading element for the title, so the tile takes its place in the page's outline.",
+            "defaultValue": "h3"
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The tile's body: WidgetRows, WidgetGroups, a chart, a figure, anything."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": ""
+          }
+        ]
+      },
+      {
+        "component": "WidgetGrid",
+        "props": [
+          {
+            "name": "columns",
+            "type": "2 | 1 | 3",
+            "required": false,
+            "description": "The most columns the board runs to. It folds to fewer as its own width narrows.",
+            "defaultValue": "2"
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The Widgets on the board, in reading order: they fill the first column, then the next."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": ""
+          }
+        ]
+      },
+      {
+        "component": "WidgetGroup",
+        "props": [
+          {
+            "name": "label",
+            "type": "string",
+            "required": true,
+            "description": "The run's quiet label, e.g. \"Waiting on you\"."
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The rows in this run."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": ""
+          }
+        ]
+      },
+      {
+        "component": "WidgetRow",
+        "props": [
+          {
+            "name": "title",
+            "type": "string",
+            "required": true,
+            "description": "The row's main line. Note: this shadows the native `title` tooltip attribute, which WidgetRow does not expose."
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "required": false,
+            "description": "A quiet second line under the title: who, where, or how much."
+          },
+          {
+            "name": "leading",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Leading mark — a StatusDot, a PixelAvatar, an Avatar, a Spinner, an icon. Decorative unless the element names itself."
+          },
+          {
+            "name": "meta",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Trailing fact in the caption face: a date, an amount, a state."
+          },
+          {
+            "name": "href",
+            "type": "string",
+            "required": false,
+            "description": "Renders the row as a link to this URL."
           },
           {
             "name": "className",

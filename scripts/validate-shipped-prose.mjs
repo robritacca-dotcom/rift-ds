@@ -235,6 +235,7 @@ const STORY_MODULES = [
   'website/src/lib/chat-sim.ts',
   'website/src/app/playground/ChatDirector.tsx',
   'website/src/app/playground/views/ChatView.tsx',
+  'website/src/app/playground/views/ChatWelcome.tsx',
   'website/src/app/playground/views/TypeView.tsx',
   // The graph instrument's panel copy and the overview miniature's caption
   // render on indexed pages (/graph, /overview) while living in component

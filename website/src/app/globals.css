@@ -71,8 +71,12 @@ html[data-theme-ready] {
      Only applied above 1440px, where a fourth column fits beside
      sidebar + content + rail. The width is the resting minimum: the panel's
      widen grip (SiteChatMount) rewrites it inline on <html>, capped at
-     655px — keep its PANEL_MIN/MAX constants in step with this value. */
+     655px — keep DOCK_MIN_WIDTH/DOCK_MAX_WIDTH (SiteChat/placement.ts) in
+     step with this value. */
   --layout-chat-width: 420px;
+  /* The floating chat card's resting height (SiteChat.module.css); its
+     resting width is the docked width above. */
+  --layout-chat-float-height: 640px;
   --layout-chat-inset: 20px;
 
   /* The site's fixed layers, lowest to highest: the floating anchor rail
@@ -134,7 +138,7 @@ body {
   flex-direction: column;
   gap: var(--gap-2000);
   align-items: center;
-  transition: background-color var(--motion-duration-slow) var(--motion-ease-standard), color var(--motion-duration-slow) var(--motion-ease-standard), padding-right var(--motion-duration-base) var(--motion-ease-standard);
+  transition: background-color var(--motion-duration-slow) var(--motion-ease-standard), color var(--motion-duration-slow) var(--motion-ease-standard), padding-right var(--motion-duration-base) var(--motion-ease-standard), padding-left var(--motion-duration-base) var(--motion-ease-standard);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -152,7 +156,7 @@ html[data-chat="docked"] body {
   );
 }
 
-/* Docked, the panel owns the right column and the FAB is gone. A fixed
+/* Docked on the right, the panel owns the right column and the FAB is gone. A fixed
    toast ignores the body padding, so right-placed toasts move left of the
    panel (they glide with the widen grip, since this reads the same width)
    and bottom-placed ones drop to the panel's own inset, aligned with its
@@ -160,6 +164,26 @@ html[data-chat="docked"] body {
 html[data-chat="docked"] {
   --ds-toast-inset-right: calc(var(--layout-chat-width) + var(--layout-chat-inset));
   --ds-toast-inset-bottom: var(--layout-chat-inset);
+}
+
+/* The left dock: the mirror image. Right-placed toasts and the
+   anchor rail keep their own edge, since nothing is in their way. Nothing
+   on the site places a toast on the left; one that did would need its own
+   inset here. */
+html[data-chat="docked-left"] body {
+  padding-left: calc(
+    var(--primitive-padding-1000) + var(--layout-chat-width) + var(--layout-chat-inset)
+  );
+}
+
+/* The header's right slot is wider than the inset bar at most docked
+   widths. On the right dock that overflow tucks under the panel; here it
+   would run off the viewport's open edge and give the page a sideways
+   scroll, so it is clipped instead — the same controls go missing either
+   way. */
+html[data-chat="docked-left"] {
+  --ds-toast-inset-bottom: var(--layout-chat-inset);
+  overflow-x: clip;
 }
 
 /* The phone takeover: SiteChatMount sets data-chat="takeover" on <html>

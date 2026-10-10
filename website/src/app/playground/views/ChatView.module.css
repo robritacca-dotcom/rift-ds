@@ -35,6 +35,16 @@
   padding-inline: var(--stage-safe-pad);
 }
 
+/* Docked from the header's Chat position menu: the card seats against one
+   edge of the stage instead of its centre. */
+.stageDockLeft {
+  justify-content: flex-start;
+}
+
+.stageDockRight {
+  justify-content: flex-end;
+}
+
 /* The frame shrink-wraps the widget and hosts the resize grips, which
    straddle the edges — outside the widget's own overflow clip. No width
    cap of its own once dragged: a dragged widget may outgrow the content
@@ -132,6 +142,26 @@
     border-radius var(--motion-duration-slow) var(--motion-ease-emphasized),
     border-color var(--motion-duration-slow) var(--motion-ease-emphasized),
     backdrop-filter var(--motion-duration-slow) var(--motion-ease-emphasized);
+}
+
+/* The docked seat: the site panel's docked footprint — its resting width,
+   the full height between the two bars — with the site's one grip, the
+   widen handle on the inner edge (the view sizes it inline once dragged). Before the takeover rule in spirit as well as source: the
+   two never apply together. */
+.widgetDocked {
+  width: var(--layout-chat-width);
+  height: calc(100dvh - var(--chat-clearance));
+}
+
+/* The floating seat is moved by its header, as the site's floating panel
+   is (SiteChat.module.css). */
+.widgetFloating :global(.ds-chat-header) {
+  cursor: grab;
+  touch-action: none;
+}
+
+.resizing .widgetFloating :global(.ds-chat-header) {
+  cursor: grabbing;
 }
 
 /* Holds the card's slot in the frame while the widget is off being the

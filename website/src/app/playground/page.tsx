@@ -874,7 +874,9 @@ export default function PlaygroundPage() {
       {/* One provider around the whole layout: the theme drawer, the chat
           director's rail, and the stage all direct the same conversation,
           and the transcript survives a switch between views. */}
-      <SiteChatProvider transport={transport}>
+      {/* The stage card is the floating seat: free of both edges, sized by
+          its grips. The header's Chat position menu docks it from there. */}
+      <SiteChatProvider transport={transport} defaultPlacement="floating">
       <ResetOnTransportChange mode={transportMode} />
       <div
         className={[

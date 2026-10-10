@@ -64,6 +64,25 @@
   margin-left: 0;
 }
 
+/* The placement menu's wrapper is only there to catch Escape; it must not
+   become a box of its own in the header's action row. */
+.placementMenu {
+  display: contents;
+}
+
+/* Open, the menu says what the button is, so the tooltip stands down — it
+   would sit directly under the panel, one stacking accident from showing
+   through. And the trigger holds the passive wash while its menu is up,
+   the agent toggle's on-state: a control that is open says so. */
+.placementMenu :global(.ds-tooltip:has([aria-expanded="true"]) .ds-tooltip__panel) {
+  display: none;
+}
+
+.placementMenu :global(.ds-circular-button[aria-expanded="true"]),
+.placementMenu :global(.ds-circular-button[aria-expanded="true"]:hover) {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
 /* The open-sessions tab strip (playground furniture, like the threads
    rail): its own row under the header, on the shared side inset. */
 .tabsRow {
@@ -455,16 +474,22 @@
 
 /* ============================================
    THE SITE PANEL — SiteChatMount's chrome.
-   A floating card inset from the viewport edges, docked above the threshold
-   (content slides over via the body inset that html[data-chat="docked"]
-   applies in globals.css); an overlay with a scrim below it; a blurred full
-   takeover in fullscreen view. On phones it fills the viewport.
+   A card inset from the viewport edges, docked above the threshold to the
+   edge the visitor chose (content slides over via the body inset that
+   html[data-chat="docked"] or "docked-left" applies in globals.css); an
+   overlay with a scrim below it; a free, non-modal card when floated; a
+   blurred full takeover in fullscreen view. On phones it fills the
+   viewport.
    ============================================ */
 
 .panel {
   position: fixed;
   top: var(--layout-chat-inset);
-  right: var(--layout-chat-inset);
+  /* Placed from the left on both docks, so one property carries every move
+     the card makes — side to side, into the takeover, out to floating — and
+     they all glide. Above the phone width the max-width below never bites,
+     so the right dock's arithmetic holds. */
+  left: calc(100% - var(--layout-chat-width) - var(--layout-chat-inset));
   height: calc(100dvh - var(--layout-chat-inset) * 2);
   width: var(--layout-chat-width);
   max-width: calc(100vw - var(--layout-chat-inset) * 2);
@@ -486,7 +511,7 @@
      it via the tokens. */
   transition:
     top var(--motion-duration-slow) var(--motion-ease-emphasized),
-    right var(--motion-duration-slow) var(--motion-ease-emphasized),
+    left var(--motion-duration-slow) var(--motion-ease-emphasized),
     width var(--motion-duration-slow) var(--motion-ease-emphasized),
     height var(--motion-duration-slow) var(--motion-ease-emphasized),
     max-width var(--motion-duration-slow) var(--motion-ease-emphasized),
@@ -537,13 +562,19 @@
   }
 }
 
+/* The left dock: the same card on the other edge. The page's
+   inset moves with it (html[data-chat="docked-left"] in globals.css). */
+.panelLeft {
+  left: var(--layout-chat-inset);
+}
+
 /* Fullscreen view: a true viewport takeover. The stronger blur is what
    keeps the transcript readable while the page's colours still shine
    through the translucent surface. The border fades rather than vanishing —
    border: none would change border-width and snap the geometry mid-glide. */
 .panelFull {
   top: 0;
-  right: 0;
+  left: 0;
   height: 100dvh;
   width: 100vw;
   max-width: 100vw;
@@ -570,8 +601,9 @@
   }
 }
 
-/* The widen grip — the playground Chat view's left resize handle
-   (views/ChatView.module.css), transplanted to the docked panel: same 20px
+/* The widen grip — the playground Chat view's edge resize handle
+   (views/ChatView.module.css), transplanted to the docked panel's inner
+   edge (.dockHandleLeft below mirrors it for the left dock): same 20px
    grab zone straddling the edge, same hover-revealed 4×48px pill. A fixed
    sibling of the panel, positioned from the same variables, so it tracks
    the edge as the drag rewrites --layout-chat-width. */
@@ -587,6 +619,12 @@
   cursor: ew-resize;
   touch-action: none;
   z-index: 1101;
+}
+
+/* The left dock's grip rides the panel's right edge instead. */
+.dockHandleLeft {
+  right: auto;
+  left: calc(var(--layout-chat-inset) + var(--layout-chat-width) - 10px);
 }
 
 .dockHandle::after {
@@ -622,6 +660,113 @@
   }
 }
 
+/* Floating: popped out of the dock into a shorter card the visitor drags
+   by its header. SiteChatMount writes the two position
+   variables once it has been moved; until then it rests in the FAB's
+   corner. After the short-viewport rule above on purpose, so the card keeps
+   its own height there (source order, same specificity). */
+.panelFloating {
+  --chat-float-height: min(
+    var(--layout-chat-float-height),
+    calc(100dvh - var(--layout-chat-inset) * 2)
+  );
+  top: var(--chat-float-y, calc(100dvh - var(--chat-float-height) - var(--layout-chat-inset)));
+  left: var(
+    --chat-float-x,
+    calc(100% - var(--layout-chat-width) - var(--layout-chat-inset))
+  );
+  /* The size grips write both; until then the card is its resting size,
+     which is also the smallest they allow. */
+  width: var(--chat-float-width, var(--layout-chat-width));
+  height: var(--chat-float-height);
+  max-height: 100dvh;
+}
+
+/* The size grips: an 8px zone along each edge and a 16px square in each
+   corner, all inside the card. The edges show the dock grip's pill on hover
+   (4×48px, turned to lie along the edge); the corners are cursor-only. */
+.floatGrip {
+  position: absolute;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: none;
+}
+
+.floatGrip[data-dir="n"],
+.floatGrip[data-dir="s"] {
+  left: 16px;
+  right: 16px;
+  height: 8px;
+  cursor: ns-resize;
+}
+
+.floatGrip[data-dir="e"],
+.floatGrip[data-dir="w"] {
+  top: 16px;
+  bottom: 16px;
+  width: 8px;
+  cursor: ew-resize;
+}
+
+.floatGrip[data-dir="n"] { top: 0; }
+.floatGrip[data-dir="s"] { bottom: 0; }
+.floatGrip[data-dir="e"] { right: 0; }
+.floatGrip[data-dir="w"] { left: 0; }
+
+.floatGrip[data-dir="ne"],
+.floatGrip[data-dir="nw"],
+.floatGrip[data-dir="se"],
+.floatGrip[data-dir="sw"] {
+  width: 16px;
+  height: 16px;
+}
+
+.floatGrip[data-dir="ne"] { top: 0; right: 0; cursor: nesw-resize; }
+.floatGrip[data-dir="sw"] { bottom: 0; left: 0; cursor: nesw-resize; }
+.floatGrip[data-dir="nw"] { top: 0; left: 0; cursor: nwse-resize; }
+.floatGrip[data-dir="se"] { bottom: 0; right: 0; cursor: nwse-resize; }
+
+.floatGrip[data-dir="n"]::after,
+.floatGrip[data-dir="s"]::after,
+.floatGrip[data-dir="e"]::after,
+.floatGrip[data-dir="w"]::after {
+  content: "";
+  border-radius: var(--radius-pill);
+  background: transparent;
+  transition: background var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.floatGrip[data-dir="n"]::after,
+.floatGrip[data-dir="s"]::after {
+  width: 48px;
+  height: 4px;
+}
+
+.floatGrip[data-dir="e"]::after,
+.floatGrip[data-dir="w"]::after {
+  width: 4px;
+  height: 48px;
+}
+
+.floatGrip:hover::after {
+  background: var(--color-text-tertiary);
+}
+
+.floatGrip:active::after {
+  background: var(--color-text-secondary);
+}
+
+.panelFloating :global(.ds-chat-header) {
+  cursor: grab;
+  touch-action: none;
+}
+
+:global(html[data-chat-resizing]) .panelFloating :global(.ds-chat-header) {
+  cursor: grabbing;
+}
+
 /* Phone widths: the chat is the document, not an overlay. The panel leaves
    the fixed layer for normal flow at 100dvh, and html[data-chat="takeover"]
    (globals.css) hides the page around it, so the soft keyboard is handled
@@ -637,7 +782,7 @@
   .panel {
     position: relative;
     top: auto;
-    right: auto;
+    left: auto;
     height: 100dvh;
     width: 100%;
     max-width: none;

@@ -16,6 +16,7 @@ import { ThreadTabs } from "rift-ds/components/ThreadTabs/ThreadTabs";
 import AgentPanel from "./AgentPanel";
 import { useSiteChat, useTakeoverViewport } from "@/components/SiteChat/ChatContext";
 import { SiteChat } from "@/components/SiteChat/SiteChat";
+import { dockWidthFromDrag, isFloatDragStart } from "@/components/SiteChat/placement";
 import styles from "./ChatView.module.css";
 
 /* The simulated composer's model list — set dressing for a generic product,
@@ -212,6 +213,8 @@ export default function ChatView({
     open,
     setOpen,
     view,
+    side,
+    floating,
     returnFocusRef,
     reset,
     turns,
@@ -586,7 +589,137 @@ export default function ChatView({
   const endResize = () => {
     dragRef.current = null;
     setResizing(false);
+    /* A card that grew may now reach past the stage from where it was
+       moved to; one frame later, once the new size has rendered. */
+    requestAnimationFrame(reclampOffset);
   };
+
+  /* ---------- the docked card's widen grip ----------
+     The site's docked panel widens from its inner edge between two walls;
+     the stage's docked card is its stand-in, so it gets the same grip and
+     the same walls (dockWidthFromDrag owns both). The outer edge is held
+     by the stage, so the delta is the pointer's own — no centred doubling.
+     The width is the view's to keep: it survives a trip to floating and
+     back, and dies with the view. */
+  const [dockWidth, setDockWidth] = useState<number | null>(null);
+  const dockDragRef = useRef<{ startX: number; width: number } | null>(null);
+
+  const beginDockResize = (e: React.PointerEvent<HTMLDivElement>) => {
+    if ((e.pointerType === "mouse" && e.button !== 0) || dockDragRef.current) return;
+    const rect = widgetRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    dockDragRef.current = { startX: e.clientX, width: rect.width };
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch {}
+    setResizing(true);
+  };
+
+  const moveDockResize = (e: React.PointerEvent<HTMLDivElement>) => {
+    const drag = dockDragRef.current;
+    if (!drag) return;
+    setDockWidth(dockWidthFromDrag(drag.width, e.clientX - drag.startX, side));
+  };
+
+  const endDockResize = () => {
+    dockDragRef.current = null;
+    setResizing(false);
+  };
+
+  /* ---------- the floating card's move ----------
+     The site's floating panel is dragged by its header (SiteChatMount);
+     the stage card is that seat's stand-in, so it moves the same way. The
+     walls are the stage's own content box rather than the viewport, which
+     keeps the card off the rails and the two bars — so a card at its
+     resting fit, which fills that box, has nowhere to go until it is
+     sized down. The offset is a relative nudge on the frame, not a
+     transform: a transformed ancestor would capture the takeover's
+     position: fixed. */
+  const stageRef = useRef<HTMLDivElement | null>(null);
+  const frameRef = useRef<HTMLDivElement | null>(null);
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const [moving, setMoving] = useState(false);
+  const moveRef = useRef<{
+    startX: number;
+    startY: number;
+    origin: { x: number; y: number };
+    /* How far the frame may travel each way from where the drag began. */
+    room: { left: number; right: number; up: number; down: number };
+  } | null>(null);
+
+  /* The room between the frame and the stage's content box, per side;
+     never negative, so a card already past a wall simply cannot go
+     further that way. */
+  const measureRoom = () => {
+    const stage = stageRef.current;
+    const frame = frameRef.current;
+    if (!stage || !frame) return null;
+    const box = stage.getBoundingClientRect();
+    const pad = getComputedStyle(stage);
+    const rect = frame.getBoundingClientRect();
+    return {
+      left: Math.max(0, rect.left - (box.left + parseFloat(pad.paddingLeft))),
+      right: Math.max(0, box.right - parseFloat(pad.paddingRight) - rect.right),
+      up: Math.max(0, rect.top - (box.top + parseFloat(pad.paddingTop))),
+      down: Math.max(0, box.bottom - parseFloat(pad.paddingBottom) - rect.bottom),
+    };
+  };
+
+  const beginMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!placeable || !floating || fullPhase !== "closed" || moveRef.current) return;
+    if (e.pointerType === "mouse" && e.button !== 0) return;
+    if (!isFloatDragStart(e.target)) return;
+    const room = measureRoom();
+    if (!room) return;
+    moveRef.current = { startX: e.clientX, startY: e.clientY, origin: offset, room };
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch {}
+    setMoving(true);
+  };
+
+  const moveMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    const move = moveRef.current;
+    if (!move) return;
+    const dx = Math.min(move.room.right, Math.max(-move.room.left, e.clientX - move.startX));
+    const dy = Math.min(move.room.down, Math.max(-move.room.up, e.clientY - move.startY));
+    setOffset({ x: Math.round(move.origin.x + dx), y: Math.round(move.origin.y + dy) });
+  };
+
+  const endMove = () => {
+    if (!moveRef.current) return;
+    moveRef.current = null;
+    setMoving(false);
+  };
+
+  /* Pulls a moved card back inside the stage after the stage or the card
+     changed size under it. */
+  const reclampOffset = () => {
+    const stage = stageRef.current;
+    const frame = frameRef.current;
+    if (!stage || !frame) return;
+    const box = stage.getBoundingClientRect();
+    const pad = getComputedStyle(stage);
+    const rect = frame.getBoundingClientRect();
+    const overRight = rect.right - (box.right - parseFloat(pad.paddingRight));
+    const overLeft = box.left + parseFloat(pad.paddingLeft) - rect.left;
+    const overDown = rect.bottom - (box.bottom - parseFloat(pad.paddingBottom));
+    const overUp = box.top + parseFloat(pad.paddingTop) - rect.top;
+    setOffset((current) => {
+      /* Past one wall, slide back by the overshoot; past both, the card is
+         simply wider than the stage and centring is the fair answer. */
+      const x =
+        overRight > 0 && overLeft > 0 ? 0 : overRight > 0 ? current.x - overRight : overLeft > 0 ? current.x + overLeft : current.x;
+      const y =
+        overDown > 0 && overUp > 0 ? 0 : overDown > 0 ? current.y - overDown : overUp > 0 ? current.y + overUp : current.y;
+      return x === current.x && y === current.y ? current : { x: Math.round(x), y: Math.round(y) };
+    });
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", reclampOffset);
+    return () => window.removeEventListener("resize", reclampOffset);
+  }, []);
 
   /* The devtools-style readout: the widget's actual rendered size while a
      grip is being dragged — the rect, not the requested size, so the CSS
@@ -596,11 +729,18 @@ export default function ChatView({
     if (!resizing) return;
     const rect = widgetRef.current?.getBoundingClientRect();
     if (rect) setReadout({ w: Math.round(rect.width), h: Math.round(rect.height) });
-  }, [manual, resizing]);
+  }, [manual, dockWidth, resizing]);
 
   const preset = STAGE_SIZES[size];
   const isDevice = preset.device;
-  const isCompact = preset.w < 500;
+  /* The header's Chat position menu, and the seats it offers, belong to the
+     desktop card — the same gate as the takeover, for the same reason: a
+     phone is already edge to edge. */
+  const placeable = allowFullscreen && !isDevice;
+  /* Docked, the card takes the site panel's docked footprint against one
+     edge of the stage: its resting width, the stage's full height. */
+  const stageDocked = placeable && !floating;
+  const isCompact = preset.w < 500 || stageDocked;
   /* The takeover: SiteChat's own expand button drives the view; the stage
      just dresses the widget as a full-viewport surface while it lasts. */
   const isFull = allowFullscreen && !isDevice && view === "full";
@@ -683,8 +823,10 @@ export default function ChatView({
            drag drops the matching clamp so the card can grow past both —
            the workspace edge is the one wall that remains. The takeover
            carries no fit clamps at all, or they would cap it. */
-        !takeover && !isDevice && manual.w == null ? styles.widgetFitW : "",
-        !takeover && !isDevice && manual.h == null ? styles.widgetFitH : "",
+        !takeover && !isDevice && !stageDocked && manual.w == null ? styles.widgetFitW : "",
+        !takeover && !isDevice && !stageDocked && manual.h == null ? styles.widgetFitH : "",
+        !takeover && stageDocked ? styles.widgetDocked : "",
+        !takeover && placeable && floating ? styles.widgetFloating : "",
         takeover ? styles.widgetFull : "",
       ]
         .filter(Boolean)
@@ -700,11 +842,18 @@ export default function ChatView({
           ? pinnedStyle
           : isDevice
             ? undefined
-            : { width: manual.w, height: manual.h }
+            : stageDocked
+              ? { width: dockWidth ?? undefined }
+              : { width: manual.w, height: manual.h }
       }
+      onPointerDown={beginMove}
+      onPointerMove={moveMove}
+      onPointerUp={endMove}
+      onPointerCancel={endMove}
     >
       <SiteChat
         fullscreenEnabled={allowFullscreen && !isDevice}
+        placementEnabled={placeable}
         compact={isCompact}
         /* The bezel previews a phone, and a phone is one: both get the
            stacked welcome the site's takeover shows. */
@@ -834,9 +983,20 @@ export default function ChatView({
   );
 
   return (
-    <div className={styles.stage}>
+    <div
+      ref={stageRef}
+      className={`${styles.stage} ${
+        stageDocked ? (side === "left" ? styles.stageDockLeft : styles.stageDockRight) : ""
+      }`}
+    >
       {open ? (
-        <div className={`${styles.widgetFrame} ${resizing ? styles.resizing : ""}`}>
+        <div
+          ref={frameRef}
+          className={`${styles.widgetFrame} ${resizing || moving ? styles.resizing : ""}`}
+          /* Only the floating card carries its nudge; docking seats it
+             against the edge and remembers the spot for the way back. */
+          style={placeable && floating ? { left: offset.x, top: offset.y } : undefined}
+        >
           {/* Holds the card's slot while the widget is off being the
               takeover — the stage doesn't collapse, and coming back has a
               measurable target. */}
@@ -885,6 +1045,7 @@ export default function ChatView({
               interrupted drag would leave transitions and text selection
               disabled. */}
           {!isDevice &&
+            !stageDocked &&
             fullPhase === "closed" &&
             (
               [
@@ -906,6 +1067,21 @@ export default function ChatView({
                 onPointerCancel={endResize}
               />
             ))}
+
+          {/* Docked, one grip: the site panel's widen handle, on the edge
+              that faces the stage. */}
+          {stageDocked && fullPhase === "closed" && (
+            <div
+              className={`${styles.handle} ${
+                side === "left" ? styles.handleRight : styles.handleLeft
+              }`}
+              aria-hidden="true"
+              onPointerDown={beginDockResize}
+              onPointerMove={moveDockResize}
+              onPointerUp={endDockResize}
+              onPointerCancel={endDockResize}
+            />
+          )}
 
           {resizing && readout && (
             <div className={styles.sizeReadout} aria-hidden="true">

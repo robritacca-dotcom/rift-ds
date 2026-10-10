@@ -7,17 +7,36 @@ import { lockBodyScroll, unlockBodyScroll } from "@/lib/scroll-lock";
 import { CHROMELESS_ROUTES } from "@/config/chromeless";
 import { getPageSummary } from "@/data/page-summaries";
 import { DOCK_QUERY, TAKEOVER_QUERY, useSiteChat } from "./ChatContext";
+import {
+  FLOAT_EDGE_GAP,
+  FLOAT_MAX_SCALE,
+  clampFloatPosition,
+  dockWidthFromDrag,
+  isFloatDragStart,
+} from "./placement";
 import { SiteChat } from "./SiteChat";
 import styles from "./SiteChat.module.css";
 import { ASSISTANT_NAME } from "@/config/brand.generated";
 
-/* The docked panel's drag-to-widen range. The minimum mirrors the
-   --layout-chat-width default in globals.css (the resting width); the
-   maximum is a little over half again as wide. The drag writes the variable
-   back onto <html>, so the body inset and the MegaNav content inset — both
-   derived from the same variable — slide with the panel edge for free. */
-const PANEL_MIN_WIDTH = 420;
-const PANEL_MAX_WIDTH = 655;
+/* The eight size grips of the floating card: which way each edge or corner
+   pulls, per axis. */
+const FLOAT_GRIPS = [
+  { dir: "n", dx: 0, dy: -1 },
+  { dir: "s", dx: 0, dy: 1 },
+  { dir: "e", dx: 1, dy: 0 },
+  { dir: "w", dx: -1, dy: 0 },
+  { dir: "ne", dx: 1, dy: -1 },
+  { dir: "nw", dx: -1, dy: -1 },
+  { dir: "se", dx: 1, dy: 1 },
+  { dir: "sw", dx: -1, dy: 1 },
+] as const;
+
+const viewportBounds = () => ({
+  left: 0,
+  top: 0,
+  right: window.innerWidth,
+  bottom: window.innerHeight,
+});
 
 const subscribeQuery = (query: string) => (onChange: () => void) => {
   const media = window.matchMedia(query);
@@ -52,9 +71,14 @@ const readHover = () => window.matchMedia(HOVER_QUERY).matches;
  * no focus trap, the page stays fully usable beside it. Overlaying (below
  * the threshold, and in fullscreen view) it is modal: scrim, focus trap,
  * body scroll locked, Escape closes.
+ *
+ * The visitor picks the seat from the header's Chat position menu: either
+ * edge for the dock (and for the overlay below the threshold), or floating,
+ * a non-modal card that is moved by its header and sized by its edges.
+ * Phones get none of it — the takeover is the only form there.
  */
 export function SiteChatMount() {
-  const { open, setOpen, panelPhase, view, returnFocusRef, send } = useSiteChat();
+  const { open, setOpen, panelPhase, view, side, floating, returnFocusRef, send } = useSiteChat();
   const pathname = usePathname();
 
   /* The FAB's TLDR panel: per-route content from the page-summaries data,
@@ -80,18 +104,25 @@ export function SiteChatMount() {
 
   const denied = CHROMELESS_ROUTES.has(pathname);
   const isFull = view === "full" || takeover;
-  const modal = open && !denied && (isFull || !docked);
+  /* Floating, the panel is a free card over the page — never modal, never
+     insetting the page, at any width above the takeover. */
+  const isFloating = floating && !isFull;
+  const isDocked = docked && !isFull && !isFloating;
+  const modal = open && !denied && (isFull || (!docked && !isFloating));
   const showPanel = open && !denied;
   /* Presence outlives `open` by the exit beat, so the close animation is
      seen; every behavior above keys on `open` and lets go immediately. */
   const renderPanel = (open || panelPhase === "closing") && !denied;
 
   /* The page's relationship to the panel, as an attribute on <html> so the
-     styling needs no subscription anywhere else (globals.css owns both
-     rules, MegaNav.module.css reads the first):
+     styling needs no subscription anywhere else (globals.css owns the
+     rules, MegaNav.module.css reads the docked pair):
 
      - docked: html[data-chat="docked"] pads the body and offsets the fixed
-       sticky header, so the page slides over beside the panel.
+       sticky header, so the page slides over beside the panel. The left
+       dock is the same on the other side, under its own value,
+       html[data-chat="docked-left"]. Floating sets nothing: the page keeps
+       its full width under the card.
      - takeover (phone widths): html[data-chat="takeover"] hides the page
        around the panel, which leaves the fixed layer for normal flow at
        100dvh (SiteChat.module.css) — the chat *is* the document. That is
@@ -116,12 +147,14 @@ export function SiteChatMount() {
         window.scrollTo({ top: scrollY, behavior: "instant" });
       };
     }
-    if (showPanel && docked && !isFull) {
-      root.setAttribute("data-chat", "docked");
+    if (showPanel && isDocked) {
+      /* The left dock is its own value rather than a second attribute, so
+         every existing "docked" rule keeps meaning the right edge untouched. */
+      root.setAttribute("data-chat", side === "left" ? "docked-left" : "docked");
       return () => root.removeAttribute("data-chat");
     }
     root.removeAttribute("data-chat");
-  }, [showPanel, docked, isFull, takeover]);
+  }, [showPanel, isDocked, side, takeover]);
 
   /* Modal mode owns the page behind it. Not on phones: there the page is
      hidden rather than covered, so there is nothing behind to hold still. */
@@ -167,9 +200,10 @@ export function SiteChatMount() {
   const moveResize = (e: React.PointerEvent<HTMLDivElement>) => {
     const drag = dragRef.current;
     if (!drag) return;
-    const width = Math.round(
-      Math.min(PANEL_MAX_WIDTH, Math.max(PANEL_MIN_WIDTH, drag.width + (drag.startX - e.clientX)))
-    );
+    /* The drag writes the variable back onto <html>, so the body inset and
+       the MegaNav content inset — both derived from it — slide with the
+       panel edge for free. */
+    const width = dockWidthFromDrag(drag.width, e.clientX - drag.startX, side);
     /* The chosen width survives close/reopen for the session; everything
        sized from the variable follows it. */
     document.documentElement.style.setProperty("--layout-chat-width", `${width}px`);
@@ -180,6 +214,153 @@ export function SiteChatMount() {
     setResizing(false);
     document.documentElement.removeAttribute("data-chat-resizing");
   };
+
+  /* Drag-to-move, floating view only. The position is null until
+     the first drag (the stylesheet's default corner applies), then lives in
+     state as viewport pixels. During the drag the pointer writes the two
+     variables straight onto the node, so the transcript underneath does not
+     re-render per frame; the state commit on release makes React agree. */
+  const [floatPos, setFloatPos] = useState<{ x: number; y: number } | null>(null);
+  const moveRef = useRef<{ dx: number; dy: number; x: number; y: number } | null>(null);
+
+  const clampFloat = (x: number, y: number, rect: DOMRect) =>
+    clampFloatPosition(x, y, rect, viewportBounds());
+
+  const beginMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isFloating || moveRef.current) return;
+    if (e.pointerType === "mouse" && e.button !== 0) return;
+    if (!isFloatDragStart(e.target)) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    moveRef.current = { dx: e.clientX - rect.left, dy: e.clientY - rect.top, x: rect.left, y: rect.top };
+    /* Capture keeps the drag alive when the pointer outruns the card. It
+       throws for a pointer the browser no longer considers active, and a
+       drag that merely loses that is better than one that never starts. */
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch {}
+    /* Same attribute as the widen grip: it suspends the panel's glide and
+       page text selection while the pointer drives the geometry. */
+    document.documentElement.setAttribute("data-chat-resizing", "");
+  };
+
+  const moveMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    const move = moveRef.current;
+    if (!move) return;
+    const node = e.currentTarget;
+    const next = clampFloat(e.clientX - move.dx, e.clientY - move.dy, node.getBoundingClientRect());
+    move.x = next.x;
+    move.y = next.y;
+    node.style.setProperty("--chat-float-x", `${next.x}px`);
+    node.style.setProperty("--chat-float-y", `${next.y}px`);
+  };
+
+  const endMove = () => {
+    const move = moveRef.current;
+    if (!move) return;
+    moveRef.current = null;
+    setFloatPos({ x: move.x, y: move.y });
+    document.documentElement.removeAttribute("data-chat-resizing");
+  };
+
+  /* Drag-to-size, floating view only. The resting size is both
+     the default and the floor; each axis grows to FLOAT_MAX_SCALE of it, or
+     to the viewport edge if that comes first. An edge that is pulled moves;
+     the opposite one holds still, so a north or west grip rewrites the
+     position as well. Same direct-to-node writes as the move drag. */
+  const [floatSize, setFloatSize] = useState<{ w: number; h: number } | null>(null);
+  const sizeRef = useRef<{
+    dx: number;
+    dy: number;
+    startX: number;
+    startY: number;
+    rect: DOMRect;
+    minW: number;
+    minH: number;
+    next: { x: number; y: number; w: number; h: number };
+  } | null>(null);
+
+  const beginSize = (e: React.PointerEvent<HTMLDivElement>, dx: number, dy: number) => {
+    if ((e.pointerType === "mouse" && e.button !== 0) || sizeRef.current) return;
+    const rect = panelRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    e.stopPropagation();
+    const root = getComputedStyle(document.documentElement);
+    const inset = parseFloat(root.getPropertyValue("--layout-chat-inset")) || 0;
+    const minW = parseFloat(root.getPropertyValue("--layout-chat-width")) || rect.width;
+    /* The resting height is the stylesheet's: the token, or the viewport
+       between the insets when that is shorter (.panelFloating). */
+    const restH = parseFloat(root.getPropertyValue("--layout-chat-float-height")) || rect.height;
+    const minH = Math.min(restH, window.innerHeight - inset * 2);
+    sizeRef.current = {
+      dx,
+      dy,
+      startX: e.clientX,
+      startY: e.clientY,
+      rect,
+      minW,
+      minH,
+      next: { x: rect.left, y: rect.top, w: rect.width, h: rect.height },
+    };
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch {}
+    document.documentElement.setAttribute("data-chat-resizing", "");
+  };
+
+  const moveSize = (e: React.PointerEvent<HTMLDivElement>) => {
+    const drag = sizeRef.current;
+    const node = panelRef.current;
+    if (!drag || !node) return;
+    const { rect, next } = drag;
+    if (drag.dx !== 0) {
+      /* The room between the held edge and the viewport, on the pulled side. */
+      const room =
+        drag.dx > 0 ? window.innerWidth - FLOAT_EDGE_GAP - rect.left : rect.right - FLOAT_EDGE_GAP;
+      const max = Math.max(drag.minW, Math.min(drag.minW * FLOAT_MAX_SCALE, room));
+      next.w = Math.round(
+        Math.min(max, Math.max(drag.minW, rect.width + drag.dx * (e.clientX - drag.startX)))
+      );
+      next.x = Math.round(drag.dx > 0 ? rect.left : rect.right - next.w);
+    }
+    if (drag.dy !== 0) {
+      const room =
+        drag.dy > 0 ? window.innerHeight - FLOAT_EDGE_GAP - rect.top : rect.bottom - FLOAT_EDGE_GAP;
+      const max = Math.max(drag.minH, Math.min(drag.minH * FLOAT_MAX_SCALE, room));
+      next.h = Math.round(
+        Math.min(max, Math.max(drag.minH, rect.height + drag.dy * (e.clientY - drag.startY)))
+      );
+      next.y = Math.round(drag.dy > 0 ? rect.top : rect.bottom - next.h);
+    }
+    node.style.setProperty("--chat-float-x", `${next.x}px`);
+    node.style.setProperty("--chat-float-y", `${next.y}px`);
+    node.style.setProperty("--chat-float-width", `${next.w}px`);
+    node.style.setProperty("--chat-float-height", `${next.h}px`);
+  };
+
+  const endSize = () => {
+    const drag = sizeRef.current;
+    if (!drag) return;
+    sizeRef.current = null;
+    setFloatPos({ x: drag.next.x, y: drag.next.y });
+    setFloatSize({ w: drag.next.w, h: drag.next.h });
+    document.documentElement.removeAttribute("data-chat-resizing");
+  };
+
+  /* A shrinking window must not strand the card off screen. */
+  useEffect(() => {
+    if (!isFloating || !floatPos) return;
+    const onResize = () => {
+      const rect = panelRef.current?.getBoundingClientRect();
+      if (!rect) return;
+      setFloatPos((pos) => {
+        if (!pos) return pos;
+        const next = clampFloat(pos.x, pos.y, rect);
+        return next.x === pos.x && next.y === pos.y ? pos : next;
+      });
+    };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [isFloating, floatPos]);
 
   if (denied) return null;
 
@@ -251,9 +432,27 @@ export function SiteChatMount() {
       <div
         ref={panelRef}
         id="site-chat-panel"
-        className={`${styles.panel} ${isFull ? styles.panelFull : ""} ${
-          panelPhase === "closing" ? styles.panelClosing : ""
-        }`}
+        className={`${styles.panel} ${side === "left" ? styles.panelLeft : ""} ${
+          isFloating ? styles.panelFloating : ""
+        } ${isFull ? styles.panelFull : ""} ${panelPhase === "closing" ? styles.panelClosing : ""}`}
+        style={
+          isFloating && (floatPos || floatSize)
+            ? ({
+                ...(floatPos && {
+                  "--chat-float-x": `${floatPos.x}px`,
+                  "--chat-float-y": `${floatPos.y}px`,
+                }),
+                ...(floatSize && {
+                  "--chat-float-width": `${floatSize.w}px`,
+                  "--chat-float-height": `${floatSize.h}px`,
+                }),
+              } as React.CSSProperties)
+            : undefined
+        }
+        onPointerDown={beginMove}
+        onPointerMove={moveMove}
+        onPointerUp={endMove}
+        onPointerCancel={endMove}
         role={modal ? "dialog" : "complementary"}
         aria-modal={modal || undefined}
         aria-label="Site chat"
@@ -263,19 +462,39 @@ export function SiteChatMount() {
             phone still wants phone insets, where one on a desktop does not. */}
         <SiteChat
           fullscreenEnabled={!takeover}
+          placementEnabled={!takeover}
           compact={takeover || !isFull}
           /* A phone viewport stacks the welcome screen (greeting centred in
              the thread, starters over a bottom-pinned composer), because the keyboard
              is about to take the lower half of it. */
           phone={takeover}
         />
+        {/* The size grips — inside the card's edge rather than straddling
+            it, because the panel clips its own overflow. Pointer-only, like
+            the dock's widen grip. */}
+        {isFloating &&
+          FLOAT_GRIPS.map(({ dir, dx, dy }) => (
+            <div
+              key={dir}
+              className={styles.floatGrip}
+              data-dir={dir}
+              aria-hidden="true"
+              onPointerDown={(e) => beginSize(e, dx, dy)}
+              onPointerMove={moveSize}
+              onPointerUp={endSize}
+              onPointerCancel={endSize}
+            />
+          ))}
       </div>
-      {/* The widen grip — the bench's left handle, docked form only. It
-          rides the panel's left edge as a fixed sibling (the panel clips its
+      {/* The widen grip — the bench's edge handle, docked form only. It
+          rides the panel's inner edge (the left on the right dock, the right
+          on the left dock) as a fixed sibling (the panel clips its
           own overflow, so a straddling child would be cut in half). */}
-      {showPanel && docked && !isFull && (
+      {showPanel && isDocked && (
         <div
-          className={`${styles.dockHandle} ${resizing ? styles.dockHandleResizing : ""}`}
+          className={`${styles.dockHandle} ${side === "left" ? styles.dockHandleLeft : ""} ${
+            resizing ? styles.dockHandleResizing : ""
+          }`}
           aria-hidden="true"
           onPointerDown={beginResize}
           onPointerMove={moveResize}

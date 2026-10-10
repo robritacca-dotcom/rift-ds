@@ -16,6 +16,8 @@ import { ChatHeader } from "rift-ds/components/ChatHeader/ChatHeader";
 import { ChatMessage } from "rift-ds/components/ChatMessage/ChatMessage";
 import { ChatThread } from "rift-ds/components/ChatThread/ChatThread";
 import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { DropdownMenu } from "rift-ds/components/DropdownMenu/DropdownMenu";
+import { CHAT_PLACEMENTS, chatPlacement } from "./placement";
 import { Composer } from "rift-ds/components/Composer/Composer";
 import { ModelPicker } from "rift-ds/components/ModelPicker/ModelPicker";
 import { PromptSuggestions } from "rift-ds/components/PromptSuggestions/PromptSuggestions";
@@ -52,6 +54,7 @@ const LOCKED_MODEL_DESCRIPTION = "Paused for today to stay in budget.";
  */
 export function SiteChat({
   fullscreenEnabled = true,
+  placementEnabled = false,
   compact = false,
   phone = false,
   title = ASSISTANT_NAME,
@@ -69,6 +72,8 @@ export function SiteChat({
 }: {
   /** Show the expand toggle. The bench's mobile stage is always a takeover, so it hides there. */
   fullscreenEnabled?: boolean;
+  /** Show the header's Chat position menu (dock right, dock left, floating). Off by default: a host turns it on only when it implements the seats the menu offers, as the site mount and the playground stage do. */
+  placementEnabled?: boolean;
   /** Narrow insets for phone-width hosts. */
   compact?: boolean;
   /** The host is a phone viewport, where the soft keyboard will claim the
@@ -144,6 +149,8 @@ export function SiteChat({
     setOpen,
     view,
     setView,
+    placement,
+    setPlacement,
     draft,
     setDraft,
   } = useSiteChat();
@@ -370,6 +377,51 @@ export function SiteChat({
           aria-controls={asideShown ? asideId : undefined}
           onClick={toggleAside}
         />
+      )}
+      {/* Placement: one menu naming every seat, the current one checked.
+          The trigger wears the current seat's icon, so the header says where
+          the panel is without opening anything. Full screen has no
+          placement, so the button goes inert there but keeps its seat: the
+          row does not reshuffle on the way in and out. */}
+      {placementEnabled && (
+        <span
+          className={styles.placementMenu}
+          onKeyDown={(event) => {
+            /* The menu closes on Escape without consuming it, and the panel
+               closes the whole chat on the same key. One press, one layer. */
+            if (
+              event.key === "Escape" &&
+              event.currentTarget.querySelector('[aria-expanded="true"]')
+            ) {
+              event.stopPropagation();
+            }
+          }}
+        >
+          <DropdownMenu
+            align="end"
+            trigger={
+              <CircularButton
+                icon={chatPlacement(placement).icon}
+                variant="tertiary"
+                ariaLabel="Chat position"
+                tooltipPosition="bottom"
+                disabled={isFull}
+              />
+            }
+            items={[
+              {
+                type: "group",
+                label: "Chat position",
+                items: CHAT_PLACEMENTS.map(({ id, label, icon }) => ({
+                  label,
+                  icon,
+                  selected: placement === id,
+                  onClick: () => setPlacement(id),
+                })),
+              },
+            ]}
+          />
+        </span>
       )}
       {fullscreenEnabled && (
         <CircularButton

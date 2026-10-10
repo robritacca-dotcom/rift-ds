@@ -15,6 +15,7 @@ import { MOTION_EXIT_SYNC_MS } from "rift-ds/tokens/motion";
 import { useChat, type ChatTransport } from "@/hooks/useChat";
 import { fallbackFollowups, fetchFollowups, followupTarget } from "@/lib/chat-followups";
 import { createFetchTransport } from "@/lib/chat-transport";
+import type { ChatPlacement, ChatSide } from "./placement";
 
 /** Panel is the docked rail; full is the viewport takeover. */
 export type ChatView = "panel" | "full";
@@ -84,6 +85,13 @@ interface SiteChatContextValue {
   freshFollowupsId: string | null;
   view: ChatView;
   setView: (view: ChatView) => void;
+  /** The panel's seat: a dock edge or floating. Provider-lifetime like the rest, so a reload returns to the host's default. */
+  placement: ChatPlacement;
+  setPlacement: (placement: ChatPlacement) => void;
+  /** The dock edge, remembered while floating, so the card has an edge to return to and to overlay from. */
+  side: ChatSide;
+  /** Popped out of the dock: a non-modal card the visitor moves and sizes, with the page left at full width. */
+  floating: boolean;
   draft: string;
   setDraft: (draft: string) => void;
   /** The element to restore focus to when the panel closes. */
@@ -103,10 +111,13 @@ const SiteChatContext = createContext<SiteChatContextValue | null>(null);
  */
 export function SiteChatProvider({
   transport,
+  defaultPlacement = "right",
   children,
 }: {
   /** Injectable for the bench (sim transport); defaults to the live route. */
   transport?: ChatTransport;
+  /** The seat the panel opens in. The site docks right; the playground's stage card is a floating one. */
+  defaultPlacement?: ChatPlacement;
   children: ReactNode;
 }) {
   /* The visitor's explicit model pick. Null means "follow the server's
@@ -209,6 +220,21 @@ export function SiteChatProvider({
     }, MOTION_EXIT_SYNC_MS);
   }, []);
   const [view, setView] = useState<ChatView>("panel");
+  /* Two facts rather than one: floating must not forget the dock edge, or
+     the way back (and the overlay below the dock threshold) has no side. */
+  const [side, setSide] = useState<ChatSide>(
+    defaultPlacement === "floating" ? "right" : defaultPlacement
+  );
+  const [floating, setFloating] = useState(defaultPlacement === "floating");
+  const placement: ChatPlacement = floating ? "floating" : side;
+  const setPlacement = useCallback((next: ChatPlacement) => {
+    if (next === "floating") {
+      setFloating(true);
+      return;
+    }
+    setFloating(false);
+    setSide(next);
+  }, []);
   const [draft, setDraft] = useState("");
   const returnFocusRef = useRef<HTMLElement | null>(null);
 
@@ -230,6 +256,10 @@ export function SiteChatProvider({
       freshFollowupsId,
       view,
       setView,
+      placement,
+      setPlacement,
+      side,
+      floating,
       draft,
       setDraft,
       returnFocusRef,
@@ -247,6 +277,10 @@ export function SiteChatProvider({
       starterSeed,
       freshFollowupsId,
       view,
+      placement,
+      setPlacement,
+      side,
+      floating,
       draft,
     ]
   );

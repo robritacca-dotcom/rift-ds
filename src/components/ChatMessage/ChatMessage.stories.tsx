@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, waitFor } from 'storybook/test';
+import { expect } from 'storybook/test';
 import { ChatMessage } from './ChatMessage';
 import { AttachmentGroup } from '../Attachment/AttachmentGroup';
 import type { AttachmentItem } from '../Attachment/fileTypes';
@@ -254,7 +254,9 @@ export const WithSingleImage: Story = {
      its width from the group would collapse the picture to nothing. */
   play: async ({ canvasElement }) => {
     const image = canvasElement.querySelector('.ds-attachment-group__single-image') as HTMLImageElement;
-    await waitFor(() => expect(image.getBoundingClientRect().width).toBeGreaterThan(100));
+    /* Read at once, with no wait for the pixels: the item states its
+       dimensions, so the box is reserved before the picture loads. */
+    await expect(image.getBoundingClientRect().width).toBeGreaterThan(100);
     await expect(image.getBoundingClientRect().height).toBeGreaterThan(50);
   },
 };

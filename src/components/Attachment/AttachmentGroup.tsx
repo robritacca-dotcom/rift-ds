@@ -159,13 +159,26 @@ export const AttachmentGroup = React.forwardRef<HTMLDivElement, AttachmentGroupP
 
     if (single) {
       const onClick = clickHandler(single);
+      /* Known dimensions reserve the picture's box before it loads; the
+         attributes alone cannot, since the capped box sizes on `auto`. */
+      const sized = Boolean(single.width && single.height);
       const image = (
         <img
-          className={`${baseClass}__single-image`}
+          className={[`${baseClass}__single-image`, sized && `${baseClass}__single-image--sized`]
+            .filter(Boolean)
+            .join(' ')}
           src={single.previewSrc}
           alt={single.previewAlt ?? single.name}
           width={single.width}
           height={single.height}
+          style={
+            sized
+              ? ({
+                  '--ds-attachment-single-width': `${single.width}px`,
+                  '--ds-attachment-single-ratio': single.width! / single.height!,
+                } as React.CSSProperties)
+              : undefined
+          }
         />
       );
       const badge = (

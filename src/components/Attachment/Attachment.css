@@ -674,6 +674,20 @@ button.ds-attachment-group__single:hover {
   height: auto;
 }
 
+/* With its dimensions known the picture holds its final box from the first
+   frame: its own width, or the width the height cap allows at its ratio,
+   whichever is smaller. The ratio cap sits in the width rather than beside
+   the row's percentage in max-width, because a percentage there drops out
+   of the frame's shrink-to-fit measure and the frame would size to the
+   uncapped width. The height follows from the ratio the width and height
+   attributes carry, so nothing moves when the pixels arrive. */
+.ds-attachment-group__single-image--sized {
+  width: min(
+    var(--ds-attachment-single-width, 100%),
+    calc(var(--ds-attachment-single-max-height, 320px) * var(--ds-attachment-single-ratio, 1))
+  );
+}
+
 .ds-attachment-group__more:focus-visible,
 .ds-attachment-group__less:focus-visible,
 button.ds-attachment-group__single:focus-visible {

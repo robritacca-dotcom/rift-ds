@@ -96,6 +96,17 @@ export const SingleImageWide: Story = {
       },
     ],
   },
+  /* The stated dimensions reserve the box: with no pixels at all the
+     picture still holds its capped width at its own ratio. */
+  play: async ({ canvasElement }) => {
+    const image = canvasElement.querySelector('.ds-attachment-group__single-image') as HTMLImageElement;
+    const src = image.getAttribute('src') ?? '';
+    image.removeAttribute('src');
+    const box = image.getBoundingClientRect();
+    image.setAttribute('src', src);
+    await expect(box.width).toBeGreaterThan(100);
+    await expect(box.width / box.height).toBeCloseTo(768 / 480, 1);
+  },
 };
 
 /** A tall picture is capped in height rather than taking over the thread. */
@@ -113,6 +124,19 @@ export const SingleImagePortrait: Story = {
         height: 768,
       },
     ],
+  },
+  /* The height cap narrows the picture, and the frame narrows with it:
+     no blank strip beside a tall picture, loaded or not. */
+  play: async ({ canvasElement }) => {
+    const image = canvasElement.querySelector('.ds-attachment-group__single-image') as HTMLImageElement;
+    const frame = image.parentElement as HTMLElement;
+    const src = image.getAttribute('src') ?? '';
+    image.removeAttribute('src');
+    const box = image.getBoundingClientRect();
+    const frameBox = frame.getBoundingClientRect();
+    image.setAttribute('src', src);
+    await expect(box.width / box.height).toBeCloseTo(549 / 768, 1);
+    await expect(frameBox.width - box.width).toBeLessThan(4);
   },
 };
 

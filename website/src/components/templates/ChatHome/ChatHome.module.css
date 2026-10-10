@@ -1,0 +1,37 @@
+/* The chat home template. The shell is the chat and nothing else: SiteChat
+   fills the viewport, seats its own history rail on the leading edge, and
+   scrolls its welcome screen as a page, so this file owns only the frame it
+   stands in. Every colour, space and radius is a semantic token. */
+
+.shell {
+  /* Pinned to the viewport rather than laid out in the body, so the body's
+     own padding (which changes with the breakpoint) never has to be
+     cancelled. The chat owns its scrolling; the page itself never scrolls. */
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  /* From the pinned viewport variable, never bare 100vh: the templates
+     carousel sizes its scaled previews from it. */
+  height: calc(var(--layout-viewport-height, 100vh));
+  overflow: hidden;
+}
+
+/* The rail's brand mark: a plain disc, the fictional product's stand-in for
+   a logo. */
+.logoDot {
+  display: inline-block;
+  width: var(--icon-size-600);
+  height: var(--icon-size-600);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-core-ui-primary);
+}
+
+/* The Revenue-style tile's period note, beside its title. */
+.widgetNote {
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+  color: var(--color-text-tertiary);
+}

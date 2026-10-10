@@ -12,6 +12,8 @@ import { BottomNav } from "rift-ds/components/BottomNav/BottomNav";
 import { TopAppBar } from "rift-ds/components/TopAppBar/TopAppBar";
 import Image from "next/image";
 import { AgentStatus } from "rift-ds/components/AgentStatus/AgentStatus";
+import { PixelAvatar } from "rift-ds/components/PixelAvatar/PixelAvatar";
+import { Widget, WidgetRow } from "rift-ds/components/Widget/Widget";
 import { AnimatedNumber } from "rift-ds/components/AnimatedNumber/AnimatedNumber";
 import { StatusDot } from "rift-ds/components/StatusDot/StatusDot";
 import { Toolbar, ToolbarSeparator } from "rift-ds/components/Toolbar/Toolbar";
@@ -1334,6 +1336,15 @@ const previews: Record<string, () => ReactNode> = {
       </div>
     </>
   ),
+  "pixel-avatar": () => (
+    <>
+      <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", justifyContent: "center", maxWidth: "200px" }}>
+        {["Northwind Trading", "Harbor & Vine", "Bluepeak Logistics", "Juniper Health", "Oakline Retail", "Meridian Foods"].map((name) => (
+          <PixelAvatar key={name} name={name} size="xl" />
+        ))}
+      </div>
+    </>
+  ),
   "popover": () => (
     <>
       <div className={styles.popoverPreview}>
@@ -1795,6 +1806,16 @@ const previews: Record<string, () => ReactNode> = {
   "waveform": () => (
     <>
       <Waveform state="speaking" bars={9} />
+    </>
+  ),
+  "widget": () => (
+    <>
+      <div style={{ width: "100%", maxWidth: "260px" }}>
+        <Widget title="Invoices" count={2} titleAs="h4">
+          <WidgetRow title="Northwind Trading" description="Due Oct 14" meta="$12,400" />
+          <WidgetRow title="Juniper Health" description="12 days late" meta="$8,950" />
+        </Widget>
+      </div>
     </>
   ),
   "world-map": () => (

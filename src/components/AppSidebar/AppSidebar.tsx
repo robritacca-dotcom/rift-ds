@@ -5,6 +5,8 @@ import { useLayer } from '../../behaviors/useLayer';
 import { useFocusScope } from '../../behaviors/useFocusScope';
 import { useScrollLock } from '../../behaviors/useScrollLock';
 import { Avatar } from '../Avatar/Avatar';
+import { PixelAvatar, distinctPixelInks } from '../PixelAvatar/PixelAvatar';
+import type { PixelInk } from '../PixelAvatar/PixelAvatar';
 import { SidebarPanel } from '../SidebarPanel/SidebarPanel';
 import type { SidebarPanelItem } from '../SidebarPanel/SidebarPanel';
 import './AppSidebar.css';
@@ -39,8 +41,18 @@ export interface AppSidebarSubItem {
 export interface AppSidebarItem {
   /** Unique key for this item */
   key: string;
-  /** Item icon — Material Symbol name (string) or custom element (ReactNode) */
-  icon: string | React.ReactNode;
+  /** Item icon — Material Symbol name (string) or custom element (ReactNode). Optional only when `pixelAvatar` draws the mark instead */
+  icon?: string | React.ReactNode;
+  /**
+   * Draws a generated PixelAvatar in the icon seat instead of `icon`, for
+   * rows that name a thing rather than a place — projects, workspaces,
+   * accounts. `true` seeds the character from `label`; a string seeds it
+   * from that value, so a renamed item can keep its character by passing a
+   * stable id. The sidebar spreads the inks across all of its avatar rows,
+   * so neighbours differ in colour as well as shape. The character is
+   * decorative: the label beside it is the name
+   */
+  pixelAvatar?: boolean | string;
   /** Display label (shown when expanded) */
   label: string;
   /** Click handler — also fires on a link item, so a consumer can route client-side */
@@ -187,6 +199,18 @@ export const AppSidebar = ({
   showMobileTrigger = true,
 }: AppSidebarProps) => {
   const baseClass = 'ds-app-sidebar';
+
+  /* The avatar rows' inks, spread across the whole sidebar so neighbours
+     differ in colour as well as shape. */
+  const avatarSeed = (item: AppSidebarItem) =>
+    typeof item.pixelAvatar === 'string' ? item.pixelAvatar : item.label;
+  const avatarItems = sections.flatMap((section) =>
+    section.items.filter((item) => item.pixelAvatar),
+  );
+  const avatarInks = new Map<string, PixelInk>();
+  distinctPixelInks(avatarItems.map(avatarSeed)).forEach((ink, index) => {
+    avatarInks.set(avatarItems[index].key, ink);
+  });
 
   /* Expand / collapse */
   const [internalExpanded, setInternalExpanded] = useState(defaultExpanded);
@@ -501,11 +525,17 @@ export const AppSidebar = ({
               const itemContent = (
                 <>
                   <span className={`${baseClass}__btn-left`}>
-                    <span
-                      className={`${baseClass}__btn-icon${typeof item.icon === 'string' ? ' material-symbols-rounded' : ''}`}
-                    >
-                      {item.icon}
-                    </span>
+                    {item.pixelAvatar ? (
+                      <span className={`${baseClass}__btn-icon ${baseClass}__btn-icon--avatar`}>
+                        <PixelAvatar name={avatarSeed(item)} ink={avatarInks.get(item.key)} />
+                      </span>
+                    ) : (
+                      <span
+                        className={`${baseClass}__btn-icon${typeof item.icon === 'string' ? ' material-symbols-rounded' : ''}`}
+                      >
+                        {item.icon}
+                      </span>
+                    )}
                     <span className={`${baseClass}__btn-label`}>{item.label}</span>
                   </span>
                   {item.badge !== undefined && (

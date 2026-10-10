@@ -644,6 +644,40 @@ const chartSeriesColours: SwatchData[] = [
   },
 ];
 
+/* --- Pixel ink --- */
+const pixelInkColours: SwatchData[] = [
+  {
+    label: "Ink 1", cssVar: "--color-pixel-ink-1",
+    dark: { primitive: "--red--05--", hex: "#F37F9B", rgb: "243 / 127 / 155" },
+    light: { primitive: "--red--08--", hex: "#C93A5C", rgb: "201 / 58 / 92" },
+  },
+  {
+    label: "Ink 2", cssVar: "--color-pixel-ink-2",
+    dark: { primitive: "--orange--05--", hex: "#F09263", rgb: "240 / 146 / 99" },
+    light: { primitive: "--orange--08--", hex: "#C65E33", rgb: "198 / 94 / 51" },
+  },
+  {
+    label: "Ink 3", cssVar: "--color-pixel-ink-3",
+    dark: { primitive: "--yellow--05--", hex: "#FFD677", rgb: "255 / 214 / 119" },
+    light: { primitive: "--yellow--09--", hex: "#8A6B2A", rgb: "138 / 107 / 42" },
+  },
+  {
+    label: "Ink 4", cssVar: "--color-pixel-ink-4",
+    dark: { primitive: "--green--05--", hex: "#5ADDB6", rgb: "90 / 221 / 182" },
+    light: { primitive: "--green--09--", hex: "#03765A", rgb: "3 / 118 / 90" },
+  },
+  {
+    label: "Ink 5", cssVar: "--color-pixel-ink-5",
+    dark: { primitive: "--blue--04--", hex: "#7F99E3", rgb: "127 / 153 / 227" },
+    light: { primitive: "--blue--07--", hex: "#1E47B0", rgb: "30 / 71 / 176" },
+  },
+  {
+    label: "Ink 6", cssVar: "--color-pixel-ink-6",
+    dark: { primitive: "--purple--05--", hex: "#A86AE8", rgb: "168 / 106 / 232" },
+    light: { primitive: "--purple--08--", hex: "#7434B3", rgb: "116 / 52 / 179" },
+  },
+];
+
 /* ============================================
    THEME HOOK
    ============================================ */
@@ -889,6 +923,16 @@ export default function SemanticColoursPage() {
             <SectionTitle title="Chart / series" />
             <div className={styles.colourSwatches}>
               {chartSeriesColours.map((s) => (
+                <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
+              ))}
+            </div>
+          </section>
+
+          {/* Pixel ink */}
+          <section className={styles.colourGroup}>
+            <SectionTitle title="Pixel ink" />
+            <div className={styles.colourSwatches}>
+              {pixelInkColours.map((s) => (
                 <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
               ))}
             </div>

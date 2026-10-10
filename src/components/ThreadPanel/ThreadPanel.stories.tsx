@@ -32,8 +32,9 @@ const CONTROLS = [
 ];
 
 const PROJECTS = [
-  { id: 'atlas-app', label: 'Atlas app', icon: 'folder', meta: '1m' },
-  { id: 'atlas-docs', label: 'Atlas docs', icon: 'folder', meta: '2d' },
+  { id: 'atlas-app', label: 'Atlas app', meta: '1m' },
+  { id: 'atlas-docs', label: 'Atlas docs', meta: '2d' },
+  { id: 'atlas-api', label: 'Atlas API', meta: '5d' },
 ];
 
 const meta = {
@@ -208,8 +209,9 @@ export const Pinned: Story = {
 };
 
 /** The projects section: rows under their own overline header between the
- *  standing controls and the history, with a quiet new-project button. The
- *  active project renders filled and carries `aria-current`. */
+ *  standing controls and the history, with a quiet new-project button. Each
+ *  project wears its generated pixel avatar, the inks spread so neighbours
+ *  differ. The active project renders filled and carries `aria-current`. */
 export const Projects: Story = {
   args: {
     logoText: 'Skylark',

@@ -717,6 +717,15 @@ export const ChartColors: Story = {
         <ColorToken name="Series 6" value="--color-chart-series-6" />
         <ColorToken name="Series 7" value="--color-chart-series-7" />
       </TokenSection>
+
+      <TokenSection title="Pixel Ink">
+        <ColorToken name="Ink 1" value="--color-pixel-ink-1" />
+        <ColorToken name="Ink 2" value="--color-pixel-ink-2" />
+        <ColorToken name="Ink 3" value="--color-pixel-ink-3" />
+        <ColorToken name="Ink 4" value="--color-pixel-ink-4" />
+        <ColorToken name="Ink 5" value="--color-pixel-ink-5" />
+        <ColorToken name="Ink 6" value="--color-pixel-ink-6" />
+      </TokenSection>
     </div>
   ),
 };

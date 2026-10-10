@@ -32,10 +32,12 @@ export default function PromptSuggestionsPage() {
               A row of tappable prompts to start or steer a conversation
             </p>
             <p className={styles.introBody}>
-              Each suggestion is a clickable chip, so one component owns the
-              pill look. The row scrolls sideways with pure CSS edge fades,
-              wraps into a block for empty-state hero placements, or stacks
-              one per line for narrow columns. Tapping a suggestion fires a
+              As a row, each suggestion is a clickable chip, so one component
+              owns the pill look. The row scrolls sideways with pure CSS edge
+              fades, wraps into a block for empty-state hero placements, or
+              stacks one per line for narrow columns. For an empty-state home
+              screen the same suggestions lay out as tiles or cards, with a
+              line of description under each. Tapping a suggestion fires a
               callback with its stable id, never its display text.
             </p>
           </div>
@@ -162,6 +164,61 @@ export default function PromptSuggestionsPage() {
                 ]}
               />
             </div>
+          </section>
+
+          {/* Tiles */}
+          <section className={styles.section}>
+            <SectionTitle title="Tiles" />
+            <p className={styles.demoText}>
+              An even row of quiet blocks, each an icon over its label and a
+              line saying what it leads to. Tiles answer the pointer in
+              place: the fill firms up and the border darkens. The row folds
+              to fewer columns as it narrows.
+            </p>
+            <PromptSuggestions
+              layout="tiles"
+              suggestions={[
+                { id: "components", icon: "widgets", label: "Components", description: "Browse the library" },
+                { id: "tokens", icon: "palette", label: "Tokens", description: "Colour, type and space" },
+                { id: "themes", icon: "tune", label: "Themes", description: "Every shipped look" },
+                { id: "start", icon: "rocket_launch", label: "Get started", description: "Install and theme" },
+              ]}
+            />
+          </section>
+
+          {/* Cards */}
+          <section className={styles.section}>
+            <SectionTitle title="Cards" />
+            <p className={styles.demoText}>
+              Each suggestion under a tinted cover that holds its icon, with
+              the label over the question it asks. The covers take the pixel
+              inks in turn, so a row is told apart by colour as well as by
+              title, and a card lifts on hover the way a navigation tile
+              does.
+            </p>
+            <PromptSuggestions
+              layout="cards"
+              suggestions={[
+                {
+                  id: "philosophy",
+                  icon: "lightbulb",
+                  label: "The philosophy",
+                  description: "Describe the system's design philosophy.",
+                },
+                {
+                  id: "recent",
+                  icon: "new_releases",
+                  label: "What is new",
+                  description: "What shipped in the latest release?",
+                },
+                {
+                  id: "system",
+                  icon: "account_tree",
+                  label: "How it works",
+                  description: "How does this design system work?",
+                },
+              ]}
+            />
           </section>
 
           {/* Pending */}

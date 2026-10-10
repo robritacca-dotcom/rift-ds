@@ -12,7 +12,7 @@ const meta = {
   argTypes: {
     layout: {
       control: 'inline-radio',
-      options: ['scroll', 'wrap', 'stack'],
+      options: ['scroll', 'wrap', 'stack', 'tiles', 'cards'],
     },
     size: {
       control: 'inline-radio',
@@ -177,3 +177,53 @@ export const AboveAComposer: Story = {
     </div>
   ),
 };
+
+/** Tiles: an even row of quiet blocks, each an icon over a label and what it leads to. */
+export const Tiles: Story = {
+  args: {
+    layout: 'tiles',
+    suggestions: [
+      { id: 'reports', icon: 'bar_chart', label: 'Reports', description: 'Revenue and margin' },
+      { id: 'invoices', icon: 'receipt_long', label: 'Invoices', description: '23 open' },
+      { id: 'pipeline', icon: 'filter_alt', label: 'Pipeline', description: '$1.2M in play' },
+      { id: 'team', icon: 'group', label: 'Team', description: '3 out this week' },
+    ],
+  },
+};
+
+/** Cards: each suggestion under a tinted cover, the label over the question it asks. */
+export const Cards: Story = {
+  args: {
+    layout: 'cards',
+    suggestions: [
+      {
+        id: 'quarter',
+        icon: 'insights',
+        label: 'Sum up the quarter',
+        description: 'How did we do this quarter against plan?',
+      },
+      {
+        id: 'invoices',
+        icon: 'receipt_long',
+        label: 'Chase what is owed',
+        description: 'Which invoices are overdue, and who should I nudge?',
+      },
+      {
+        id: 'forecast',
+        icon: 'trending_up',
+        label: 'Forecast next month',
+        description: 'What does next month look like?',
+      },
+    ],
+  },
+};
+
+/** Blocks hold their place while generating, the same as the chips. */
+export const CardsPending: Story = {
+  args: {
+    layout: 'cards',
+    pending: true,
+    suggestions: [],
+  },
+};
+

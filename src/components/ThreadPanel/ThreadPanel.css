@@ -396,6 +396,12 @@
   flex-shrink: 0;
 }
 
+/* A generated avatar in the icon seat: a block-level sprite, so the seat
+   lays it out as a box rather than on the text baseline. */
+.ds-thread-panel__project-icon--avatar {
+  display: inline-flex;
+}
+
 .ds-thread-panel__project-label {
   flex: 1;
   min-width: 0;

@@ -212,6 +212,20 @@
   --color-chart-series-6: var(--color-core-accent-amber);
   --color-chart-series-7: var(--color-core-accent-cobalt);
 
+  /* Pixel ink - The six inks a generated pixel avatar is drawn in, one per
+     chromatic ramp that is not the brand's (a theme re-points the brand
+     ramp, so an ink on it would turn into a second copy of whichever ink
+     the theme's colour resembles). A sprite is small solid shapes on the page, so it
+     wants a text-like contrast rather than a chart fill's: deep on the ramp
+     here, high on it in the dark theme. Yellow and green sit a step deeper
+     than the rest because their ramps stay bright for longer. */
+  --color-pixel-ink-1: var(--primitive-red-08);
+  --color-pixel-ink-2: var(--primitive-orange-08);
+  --color-pixel-ink-3: var(--primitive-yellow-09);
+  --color-pixel-ink-4: var(--primitive-green-09);
+  --color-pixel-ink-5: var(--primitive-blue-07);
+  --color-pixel-ink-6: var(--primitive-purple-08);
+
   /* Input */
   --color-input-text-primary: var(--primitive-neutral-10);
   --color-input-text-placeholder: var(--primitive-neutral-06);

@@ -107,6 +107,34 @@ export const Expanded: Story = {
   },
 };
 
+/** Rows that name a thing rather than a place draw a generated pixel avatar
+ *  in the icon seat; the sidebar spreads the inks so neighbours differ. */
+export const WithPixelAvatars: Story = {
+  args: {
+    defaultExpanded: true,
+    activeKey: 'Northwind Trading',
+    sections: [
+      {
+        items: [
+          { key: 'inbox', icon: 'inbox', label: 'Inbox', badge: 3 },
+          { key: 'reports', icon: 'bar_chart', label: 'Reports' },
+        ],
+      },
+      {
+        category: 'Accounts',
+        items: [
+          'Northwind Trading',
+          'Harbor & Vine',
+          'Bluepeak Logistics',
+          'Juniper Health',
+          'Oakline Retail',
+          'Meridian Foods',
+        ].map((name) => ({ key: name, label: name, pixelAvatar: true })),
+      },
+    ],
+  },
+};
+
 export const Collapsed: Story = {
   args: {
     defaultExpanded: false,

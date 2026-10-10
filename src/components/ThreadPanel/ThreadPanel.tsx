@@ -2,6 +2,7 @@ import React from 'react';
 import { Avatar } from '../Avatar/Avatar';
 import { DropdownMenu } from '../DropdownMenu/DropdownMenu';
 import { Kbd } from '../Kbd/Kbd';
+import { PixelAvatar, distinctPixelInks } from '../PixelAvatar/PixelAvatar';
 import './ThreadPanel.css';
 import '../../fonts/material-symbols.css';
 
@@ -62,8 +63,10 @@ export interface ThreadPanelProject {
   id: string;
   /** The project's name. */
   label: string;
-  /** Leading icon on the row — Material Symbol name (string) or custom element (ReactNode). Defaults to `folder`. */
+  /** Leading icon on the row — Material Symbol name (string) or custom element (ReactNode). Omit it and the row draws the project's generated PixelAvatar, which is the default mark. */
   icon?: string | React.ReactNode;
+  /** Seed for the generated PixelAvatar a project wears when it has no `icon`. Defaults to `label`; pass a stable id so a renamed project keeps its character. The panel spreads the inks across its projects, so neighbours differ in colour as well as shape. */
+  pixelAvatar?: string;
   /** Small trailing annotation in the caption face, e.g. how recently the project was touched. */
   meta?: string;
   /** Optional href — the row renders as an `<a>` instead of a `<button>`. */
@@ -351,6 +354,10 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
       .filter(Boolean)
       .join(' ');
     const iconClass = 'material-symbols-rounded';
+    /* One ink per project row, spread so neighbours differ. */
+    const projectInks = distinctPixelInks(
+      (projects ?? []).map((project) => project.pixelAvatar ?? project.label),
+    );
 
     const showHeader = Boolean(logo || logoText || onExpandedChange);
     const showNew = Boolean(newThreadLabel || onNewThread || newThreadHref);
@@ -513,7 +520,7 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
               )}
             </div>
             <ul className={`${baseClass}__list`} aria-label={projectsLabel}>
-              {projects.map((project) => {
+              {projects.map((project, projectIndex) => {
                 const active = project.id === activeProjectId;
                 return (
                   <li key={project.id} className={`${baseClass}__row`}>
@@ -535,12 +542,24 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
                       }
                       title={project.label}
                     >
-                      <span
-                        className={`${baseClass}__project-icon${typeof project.icon === 'string' || project.icon == null ? ` ${iconClass}` : ''}`}
-                        aria-hidden="true"
-                      >
-                        {project.icon ?? 'folder'}
-                      </span>
+                      {project.icon == null ? (
+                        <span
+                          className={`${baseClass}__project-icon ${baseClass}__project-icon--avatar`}
+                          aria-hidden="true"
+                        >
+                          <PixelAvatar
+                            name={project.pixelAvatar ?? project.label}
+                            ink={projectInks[projectIndex]}
+                          />
+                        </span>
+                      ) : (
+                        <span
+                          className={`${baseClass}__project-icon${typeof project.icon === 'string' ? ` ${iconClass}` : ''}`}
+                          aria-hidden="true"
+                        >
+                          {project.icon}
+                        </span>
+                      )}
                       <span className={`${baseClass}__project-label`}>
                         {project.label}
                       </span>

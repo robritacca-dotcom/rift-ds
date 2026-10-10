@@ -227,6 +227,12 @@
   flex-shrink: 0;
 }
 
+/* A generated avatar in the icon seat: a block-level sprite, so the seat
+   lays it out as a box rather than on the text baseline. */
+.ds-app-sidebar__btn-icon--avatar {
+  display: inline-flex;
+}
+
 .ds-app-sidebar__btn-label {
   font-family: var(--font-paragraph-emphasis-family);
   font-size: var(--font-paragraph-emphasis-size);

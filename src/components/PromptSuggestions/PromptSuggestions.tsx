@@ -4,6 +4,7 @@ import React from 'react';
 import { Chip } from '../Chip/Chip';
 import { MOTION_EXIT_SYNC_MS } from '../../tokens/motion';
 import './PromptSuggestions.css';
+import '../../fonts/material-symbols.css';
 
 /** One tappable suggestion in the row. */
 export interface PromptSuggestion {
@@ -11,8 +12,10 @@ export interface PromptSuggestion {
   id: string;
   /** The suggestion text shown in the chip. */
   label: string;
-  /** Optional leading icon — Material Symbol name (string) or custom element (ReactNode). */
+  /** Optional leading icon — Material Symbol name (string) or custom element (ReactNode). In the `cards` layout it stands in the card's cover. */
   icon?: string | React.ReactNode;
+  /** A quiet second line under the label, drawn by the `tiles` and `cards` layouts: what the tile leads to, or the full question a card asks. The chip layouts have no room for it and leave it out. */
+  description?: string;
 }
 
 /** Props owned by PromptSuggestions itself — everything else falls through to the root element. */
@@ -26,9 +29,14 @@ type PromptSuggestionsOwnProps = {
    * sideways behind edge fades. `wrap` runs them across as many lines as
    * they need, for empty-state hero placements. `stack` gives each one its
    * own line, for narrow columns where a wrapped row breaks unevenly and
-   * the ragged right edge reads as an accident.
+   * the ragged right edge reads as an accident. `tiles` and `cards` leave
+   * the chip behind for an empty-state home screen: `tiles` is an even row
+   * of quiet blocks, each an icon over a label and its `description`;
+   * `cards` gives each suggestion a tinted cover holding its icon, with the
+   * label and description beneath. Both fold to fewer columns as their own
+   * width narrows.
    */
-  layout?: 'scroll' | 'wrap' | 'stack';
+  layout?: 'scroll' | 'wrap' | 'stack' | 'tiles' | 'cards';
   /**
    * Legacy alias for `layout="wrap"`; ignored when `layout` is set.
    * @deprecated Use `layout` instead, which also covers `stack`.
@@ -128,6 +136,22 @@ export const PromptSuggestions = React.forwardRef<HTMLDivElement, PromptSuggesti
        the pill look — the row only picks which of its sizes to ask for. */
     const chipSize = size === 'compact' ? 'default' : 'large';
 
+    /* Tiles and cards are blocks rather than pills, so they draw their own
+       button instead of composing Chip. Everything around the item — the
+       list semantics, the pending and entrance beats, the tap
+       acknowledgment — is the row's and stays shared. */
+    const block = arrangement === 'tiles' ? 'tile' : arrangement === 'cards' ? 'card' : null;
+    const renderIcon = (icon: PromptSuggestion['icon']) =>
+      typeof icon === 'string' ? (
+        <span className={`${baseClass}__icon material-symbols-rounded`} aria-hidden="true">
+          {icon}
+        </span>
+      ) : (
+        <span className={`${baseClass}__icon`} aria-hidden="true">
+          {icon}
+        </span>
+      );
+
     const classes = [
       baseClass,
       `${baseClass}--${size}`,
@@ -157,9 +181,17 @@ export const PromptSuggestions = React.forwardRef<HTMLDivElement, PromptSuggesti
               <div key={index} aria-hidden="true" className={`${baseClass}__item`}>
                 {/* The chip's shell with a text-height shimmer bar where the
                     label will be: the label generating, not the pill. */}
-                <span className={`${baseClass}__skeleton`}>
-                  <span className={`${baseClass}__skeleton-bar`} />
-                </span>
+                {block ? (
+                  /* The block's own shell, holding the label's bar. */
+                  <span className={`${baseClass}__${block} ${baseClass}__${block}--pending`}>
+                    {block === 'card' && <span className={`${baseClass}__cover`} />}
+                    <span className={`${baseClass}__skeleton-bar`} />
+                  </span>
+                ) : (
+                  <span className={`${baseClass}__skeleton`}>
+                    <span className={`${baseClass}__skeleton-bar`} />
+                  </span>
+                )}
               </div>
             ))
           : suggestions.map((suggestion) => (
@@ -178,12 +210,36 @@ export const PromptSuggestions = React.forwardRef<HTMLDivElement, PromptSuggesti
                   }
                 }}
               >
-                <Chip
-                  label={suggestion.label}
-                  icon={suggestion.icon}
-                  size={chipSize}
-                  onClick={() => choose(suggestion.id)}
-                />
+                {block ? (
+                  <button
+                    type="button"
+                    className={`${baseClass}__${block}`}
+                    onClick={() => choose(suggestion.id)}
+                  >
+                    {block === 'card' ? (
+                      <span className={`${baseClass}__cover`}>
+                        {suggestion.icon != null && renderIcon(suggestion.icon)}
+                      </span>
+                    ) : (
+                      suggestion.icon != null && renderIcon(suggestion.icon)
+                    )}
+                    <span className={`${baseClass}__text`}>
+                      <span className={`${baseClass}__label`}>{suggestion.label}</span>
+                      {suggestion.description && (
+                        <span className={`${baseClass}__description`}>
+                          {suggestion.description}
+                        </span>
+                      )}
+                    </span>
+                  </button>
+                ) : (
+                  <Chip
+                    label={suggestion.label}
+                    icon={suggestion.icon}
+                    size={chipSize}
+                    onClick={() => choose(suggestion.id)}
+                  />
+                )}
               </div>
             ))}
       </div>

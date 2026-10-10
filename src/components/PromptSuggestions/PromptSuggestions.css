@@ -78,6 +78,224 @@
 }
 
 /* ============================================
+   TILES and CARDS — blocks for a home screen
+   Where the chip layouts are a line of prompts,
+   these are a row of places to start: an even
+   grid that folds as the row's own width narrows,
+   so a docked panel folds while a full-width page
+   does not.
+   ============================================ */
+
+/* The column floor is stated on the icon scale, the one size both blocks
+   are drawn from: a tile is never narrower than three cover icons, a card
+   than four. Four tiles or three cards sit in one row on a conversation
+   column and fold to two columns and one on a phone, with no breakpoint. */
+.ds-prompt-suggestions--tiles,
+.ds-prompt-suggestions--cards {
+  display: grid;
+}
+
+.ds-prompt-suggestions--tiles {
+  grid-template-columns: repeat(auto-fit, minmax(calc(var(--icon-size-1200) * 3), 1fr));
+}
+
+.ds-prompt-suggestions--cards {
+  grid-template-columns: repeat(auto-fit, minmax(calc(var(--icon-size-1200) * 4), 1fr));
+}
+
+.ds-prompt-suggestions--tiles .ds-prompt-suggestions__item,
+.ds-prompt-suggestions--cards .ds-prompt-suggestions__item {
+  flex-shrink: 1;
+  min-width: 0;
+}
+
+/* One surface for both blocks: a hairline round a container that lets the
+   page through, blurred so text stays on a calm field over an ambient
+   background. The navigation-tile radius, per the radius scale. */
+.ds-prompt-suggestions__tile,
+.ds-prompt-suggestions__card {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
+  background-color: var(--color-bg-container-primary-semi);
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+/* A tile answers the pointer quietly, in place: the fill firms up to the
+   solid container and the hairline steps up to the tertiary text ink, so
+   the block reads as picked out without moving. */
+.ds-prompt-suggestions__tile {
+  transition:
+    background-color var(--motion-duration-fast) var(--motion-ease-standard),
+    border-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-prompt-suggestions__tile:hover {
+  background-color: var(--color-bg-container-primary);
+  border-color: var(--color-text-tertiary);
+}
+
+/* A card lifts: the Card component's own hover, the same rise and the same
+   sanctioned shadow, so a prompt card and a navigation tile answer the
+   pointer the same way. */
+.ds-prompt-suggestions__card {
+  transition:
+    transform var(--motion-duration-slow) var(--motion-ease-standard),
+    box-shadow var(--motion-duration-slow) var(--motion-ease-standard);
+  /* ds-allow(color): transparent resting state of the sanctioned Card
+     hover-lift shadow (see design.md — Do's and Don'ts). */
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+}
+
+.ds-prompt-suggestions__card:hover {
+  transform: translateY(-4px);
+  /* ds-allow(color): the sanctioned Card hover-lift shadow, restated so the
+     two tiles lift alike (see design.md — Do's and Don'ts). */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* The pending shells are not targets, so they neither lift nor light. */
+.ds-prompt-suggestions__tile--pending:hover {
+  background-color: var(--color-bg-container-primary-semi);
+  border-color: var(--color-bg-container-border);
+}
+
+.ds-prompt-suggestions__card--pending:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.ds-prompt-suggestions__tile:focus-visible,
+.ds-prompt-suggestions__card:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+.ds-prompt-suggestions__tile {
+  gap: var(--gap-300);
+  padding: var(--padding-400);
+}
+
+.ds-prompt-suggestions__card {
+  gap: var(--gap-200);
+  padding: var(--padding-200) var(--padding-200) var(--padding-400);
+}
+
+.ds-prompt-suggestions__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-050);
+  min-width: 0;
+}
+
+.ds-prompt-suggestions__card .ds-prompt-suggestions__text {
+  padding-inline: var(--padding-200);
+}
+
+.ds-prompt-suggestions__label {
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.ds-prompt-suggestions__description {
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+  color: var(--color-text-tertiary);
+}
+
+.ds-prompt-suggestions__icon {
+  display: inline-flex;
+  --icon-size: var(--icon-size-600);
+  color: var(--color-icon-secondary);
+}
+
+/* The card's cover: a wash of one pixel ink, strong at the top and nearly
+   gone by the floor, with the subject's icon standing in it in the same
+   ink. The inks cycle by position, so a row of cards is told apart by
+   colour as well as by title, and they are the theme-split set, so the icon
+   holds its contrast in both modes. */
+.ds-prompt-suggestions__cover {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Twice the cover icon's own size: the icon scale sets the proportion. */
+  height: calc(var(--icon-size-1200) * 2);
+  border-radius: var(--radius-400);
+  background-image: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--ds-prompt-suggestions-tint) 24%, transparent),
+    color-mix(in srgb, var(--ds-prompt-suggestions-tint) 6%, transparent)
+  );
+}
+
+.ds-prompt-suggestions__cover .ds-prompt-suggestions__icon {
+  --icon-size: var(--icon-size-1200);
+  color: var(--ds-prompt-suggestions-tint);
+}
+
+.ds-prompt-suggestions__item:nth-child(6n + 1) { --ds-prompt-suggestions-tint: var(--color-pixel-ink-4); }
+.ds-prompt-suggestions__item:nth-child(6n + 2) { --ds-prompt-suggestions-tint: var(--color-pixel-ink-1); }
+.ds-prompt-suggestions__item:nth-child(6n + 3) { --ds-prompt-suggestions-tint: var(--color-pixel-ink-2); }
+.ds-prompt-suggestions__item:nth-child(6n + 4) { --ds-prompt-suggestions-tint: var(--color-pixel-ink-5); }
+.ds-prompt-suggestions__item:nth-child(6n + 5) { --ds-prompt-suggestions-tint: var(--color-pixel-ink-6); }
+.ds-prompt-suggestions__item:nth-child(6n) { --ds-prompt-suggestions-tint: var(--color-pixel-ink-3); }
+
+/* Pending blocks: the real shell holding the label's bar, so the row keeps
+   its height when the suggestions land. */
+.ds-prompt-suggestions__tile--pending,
+.ds-prompt-suggestions__card--pending {
+  cursor: default;
+  font-size: var(--font-paragraph-sm-emphasis-size);
+}
+
+.ds-prompt-suggestions__tile--pending {
+  justify-content: flex-end;
+  min-height: calc(
+    var(--icon-size-600) + var(--gap-300) + var(--font-paragraph-sm-emphasis-line-height) +
+      var(--font-caption-line-height) + 2 * var(--padding-400)
+  );
+}
+
+/* A pending card stands as tall as the loaded one it holds room for: the
+   cover, the label line, and two lines of description (the longest a card's
+   question runs at this width), so the row does not grow when they land. */
+.ds-prompt-suggestions__card--pending {
+  min-height: calc(
+    var(--icon-size-1200) * 2 + var(--gap-200) + var(--font-paragraph-sm-emphasis-line-height) +
+      var(--gap-050) + 2 * var(--font-caption-line-height) + var(--padding-200) +
+      var(--padding-400) + 2 * var(--border-025)
+  );
+}
+
+.ds-prompt-suggestions__card--pending .ds-prompt-suggestions__skeleton-bar {
+  margin: var(--padding-150) var(--padding-200);
+  width: auto;
+}
+
+/* The chosen block takes the same press-and-spring the chips do. */
+.ds-prompt-suggestions__item--chosen .ds-prompt-suggestions__tile,
+.ds-prompt-suggestions__item--chosen .ds-prompt-suggestions__card {
+  animation: ds-prompt-suggestions-choose var(--motion-duration-slow) var(--motion-ease-spring);
+}
+
+/* ============================================
    ITEMS
    ============================================ */
 

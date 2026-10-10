@@ -163,6 +163,15 @@
   --color-chart-series-6: var(--color-core-accent-amber);
   --color-chart-series-7: var(--color-core-accent-cobalt);
 
+  /* Pixel ink - The generated pixel avatar's six inks, high on each ramp
+     so the sprite holds its contrast on a dark page. */
+  --color-pixel-ink-1: var(--primitive-red-05);
+  --color-pixel-ink-2: var(--primitive-orange-05);
+  --color-pixel-ink-3: var(--primitive-yellow-05);
+  --color-pixel-ink-4: var(--primitive-green-05);
+  --color-pixel-ink-5: var(--primitive-blue-04);
+  --color-pixel-ink-6: var(--primitive-purple-05);
+
   /* Input */
   --color-input-text-primary: var(--primitive-neutral-01);
   --color-input-text-placeholder: var(--primitive-neutral-04);

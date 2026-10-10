@@ -1,0 +1,79 @@
+/* ============================================
+   PIXEL AVATAR COMPONENT
+   A generated character mark, drawn from a name
+   ============================================ */
+
+/* Base — the character rides the icon scale, so it seats wherever an icon
+   does. A host that already sets --icon-size on its icon seat is matched by
+   the size classes below, which set the same variable. */
+
+.ds-pixel-avatar {
+  display: inline-flex;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  width: var(--icon-size);
+  height: var(--icon-size);
+  color: var(--ds-pixel-avatar-ink);
+}
+
+.ds-pixel-avatar__sprite {
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
+/* Sizes */
+
+.ds-pixel-avatar--sm {
+  --icon-size: var(--icon-size-500);
+}
+
+.ds-pixel-avatar--md {
+  --icon-size: var(--icon-size-600);
+}
+
+.ds-pixel-avatar--lg {
+  --icon-size: var(--icon-size-800);
+}
+
+.ds-pixel-avatar--xl {
+  --icon-size: var(--icon-size-1200);
+}
+
+/* Inks — one rule per pixel ink token. The tokens carry a light and a dark
+   value each, so the character holds its contrast in both themes. */
+
+.ds-pixel-avatar--ink-1 {
+  --ds-pixel-avatar-ink: var(--color-pixel-ink-1);
+}
+
+.ds-pixel-avatar--ink-2 {
+  --ds-pixel-avatar-ink: var(--color-pixel-ink-2);
+}
+
+.ds-pixel-avatar--ink-3 {
+  --ds-pixel-avatar-ink: var(--color-pixel-ink-3);
+}
+
+.ds-pixel-avatar--ink-4 {
+  --ds-pixel-avatar-ink: var(--color-pixel-ink-4);
+}
+
+.ds-pixel-avatar--ink-5 {
+  --ds-pixel-avatar-ink: var(--color-pixel-ink-5);
+}
+
+.ds-pixel-avatar--ink-6 {
+  --ds-pixel-avatar-ink: var(--color-pixel-ink-6);
+}
+
+/* Variants — the tile is the same sprite on a wash of its own ink. The
+   padding comes from the size, not a percentage, which would resolve against
+   the host's width rather than the tile's. */
+
+.ds-pixel-avatar--tile {
+  padding: calc(var(--icon-size) / 16);
+  border-radius: var(--radius-200);
+  background-color: color-mix(in srgb, var(--ds-pixel-avatar-ink) 16%, transparent);
+}

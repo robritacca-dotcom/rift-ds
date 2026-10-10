@@ -1,0 +1,207 @@
+/* ============================================
+   WIDGET COMPONENT
+   A titled tile for a dashboard or home screen,
+   with its rows, its groups, and the board that
+   packs tiles into columns
+   ============================================ */
+
+/* Tile — the translucent container behind a hairline, blurred so the body
+   stays on a calm field when the tile sits over an ambient background. The
+   navigation-tile radius, per the radius scale. */
+
+.ds-widget {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+  box-sizing: border-box;
+  min-width: 0;
+  padding: var(--padding-500);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
+  background-color: var(--color-bg-container-primary-semi);
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
+}
+
+.ds-widget__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-200);
+}
+
+.ds-widget__title {
+  display: flex;
+  align-items: baseline;
+  gap: var(--gap-200);
+  min-width: 0;
+  margin: 0;
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  letter-spacing: var(--font-title-body-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.ds-widget__count {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.ds-widget__action {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.ds-widget__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-100);
+  min-width: 0;
+}
+
+/* Group — a labelled run of rows */
+
+.ds-widget-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-100);
+  min-width: 0;
+}
+
+.ds-widget-group + .ds-widget-group {
+  margin-top: var(--gap-300);
+}
+
+.ds-widget-group__label {
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+  color: var(--color-text-tertiary);
+}
+
+/* Row — a leading mark, a title over a description, a trailing fact */
+
+.ds-widget-row {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-300);
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: var(--padding-150) 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  text-decoration: none;
+}
+
+.ds-widget-row__leading {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  --icon-size: var(--icon-size-600);
+  color: var(--color-icon-secondary);
+}
+
+.ds-widget-row__main {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.ds-widget-row__title,
+.ds-widget-row__description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ds-widget-row__title {
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.ds-widget-row__description {
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+  color: var(--color-text-tertiary);
+}
+
+.ds-widget-row__meta {
+  flex-shrink: 0;
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+  color: var(--color-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* A row that goes somewhere: the hover fill bleeds past the text into the
+   tile's padding, so the whole line reads as one target. */
+
+.ds-widget-row--interactive {
+  width: calc(100% + 2 * var(--padding-200));
+  margin-inline: calc(-1 * var(--padding-200));
+  padding-inline: var(--padding-200);
+  border-radius: var(--radius-300);
+  cursor: pointer;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-widget-row--interactive:hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-widget-row--interactive:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+/* Grid — CSS columns, so tiles of different heights pack with no holes and
+   the board folds as it narrows. The column floor is stated on the icon
+   scale (seven cover icons, the narrowest a row of title, description and
+   fact stays readable), not as a breakpoint. */
+
+.ds-widget-grid {
+  column-gap: var(--gap-400);
+  column-width: calc(var(--icon-size-1200) * 7);
+}
+
+.ds-widget-grid--columns-1 {
+  column-count: 1;
+}
+
+.ds-widget-grid--columns-2 {
+  column-count: 2;
+}
+
+.ds-widget-grid--columns-3 {
+  column-count: 3;
+}
+
+.ds-widget-grid > * {
+  break-inside: avoid;
+  margin-bottom: var(--gap-400);
+}

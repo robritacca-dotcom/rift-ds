@@ -9588,10 +9588,17 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "size",
-            "type": "\"sm\" | \"md\" | \"lg\"",
+            "type": "\"sm\" | \"md\" | \"lg\" | \"xs\"",
             "required": false,
-            "description": "Dot diameter, derived from the icon scale (half of `--icon-size-500/md/lg`).",
+            "description": "Dot diameter, derived from the icon scale (half of `--icon-size-500/600/800`); `xs` is the 8px list-row mark, sized on the gap scale.",
             "defaultValue": "md"
+          },
+          {
+            "name": "outline",
+            "type": "boolean",
+            "required": false,
+            "description": "Draws the dot hollow: a ring in the role's colour around an empty\ncentre, for a settled or empty state that still holds its seat beside\nfilled dots.",
+            "defaultValue": "false"
           },
           {
             "name": "pulse",
@@ -9605,6 +9612,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Visible text beside the dot. Omit it for a bare dot only when the meaning\nhas another home — a row label, or an `aria-label` passed through — since\na colour alone announces nothing."
+          },
+          {
+            "name": "decorative",
+            "type": "boolean",
+            "required": false,
+            "description": "Renders the dot as decoration: no `role=\"status\"`, hidden from assistive\ntechnology. For a dot repeated down a list, where the host announces the\nstate in the row's own text and a live region per row would be noise.",
+            "defaultValue": "false"
           },
           {
             "name": "className",
@@ -10166,6 +10180,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Fires with the thread's id and the chosen action's id."
           },
           {
+            "name": "statusLabels",
+            "type": "Partial<Record<ThreadPanelThreadStatus, string>>",
+            "required": false,
+            "description": "Spoken text for each thread status, read after the row's title; the dot itself is decorative. Merged over the English defaults (Working, Unread, Needs input, Failed). `idle` is silent unless given a label here."
+          },
+          {
             "name": "threadMenuLabel",
             "type": "string",
             "required": false,
@@ -10364,7 +10384,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Thread tabs",
     "slug": "thread-tabs",
     "category": "ai",
-    "description": "The strip of open chat sessions: pill tabs with unread dots and hover-revealed close buttons, a new-tab action, and animated enter and exit.",
+    "description": "The strip of open chat sessions: pill tabs with status dots and hover-revealed close buttons, a new-tab action, and animated enter and exit.",
     "client": true,
     "importPath": "rift-ds/components/ThreadTabs/ThreadTabs",
     "barrel": "main",
@@ -10395,6 +10415,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "((id: string) => void)",
             "required": false,
             "description": "Fires with the tab's id when its close button is pressed, or Delete lands on the focused tab. The close affordance renders only when this is given."
+          },
+          {
+            "name": "statusLabels",
+            "type": "Partial<Record<ThreadTabStatus, string>>",
+            "required": false,
+            "description": "Spoken text for each tab status, read after the tab's label; the dot itself is decorative. Merged over the English defaults (Working, Unread, Needs input, Failed)."
           },
           {
             "name": "closeLabel",

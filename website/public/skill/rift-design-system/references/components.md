@@ -268,7 +268,7 @@ The session-history rail for chat products: brand header, new-thread action, sta
 
 ### Thread tabs
 
-The strip of open chat sessions: pill tabs with unread dots and hover-revealed close buttons, a new-tab action, and animated enter and exit.
+The strip of open chat sessions: pill tabs with status dots and hover-revealed close buttons, a new-tab action, and animated enter and exit.
 
 - Import: `import { ThreadTabs } from 'rift-ds';`
 - Rendering: client component (declares 'use client')

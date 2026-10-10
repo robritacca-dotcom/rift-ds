@@ -62,8 +62,10 @@ for (const [name, re] of [
   }
 }
 
+// Global: the count appears in the Why section and again in the component
+// section, and both must move together.
 readme = readme.replace(
-  countMarker,
+  new RegExp(countMarker.source, 'g'),
   `<!-- component-count -->${registry.components.length}<!-- /component-count -->`
 );
 readme = readme.replace(

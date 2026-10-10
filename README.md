@@ -13,13 +13,11 @@ An open source React design system built for AI products and coding agents: comp
 
 ## Why Rift DS
 
-- **One package, zero dependencies.** React is the only required peer dependency; recharts is optional and only for the charts entry. No configuration API, no providers, no build-tool integration: theming is plain CSS custom properties, so it works in any bundler, in any stack, beside anything you already use.
-- **Free, open source, consumed your way.** MIT end to end, no pro tier, no paywalled components. Install the npm package, pull single components as source through the shadcn CLI, or clone the repo and own every line; all three are first-class paths.
-- **A few primitives re-theme everything.** Every semantic token chains to a primitive, so a handful of overrides cascade through every component, the charts, and the ambient background, in both colour modes. Your brand is a short CSS block, not a fork.
-- **The shipped themes prove it.** Each one is the same system under different primitives, saved as a complete look: colour modes, a type pairing with self-hosted fonts, type weight and tracking, icon weight, radius, density, motion, elevation, the chart palette. Setting `data-brand` on the root element applies all of it with zero runtime JavaScript, the build holds every theme's action colours to WCAG AA in both modes, and the playground builds yours the same way.
-- **The AI product set is in the box.** Composer, streaming chat thread, tool calls, reasoning, thread panel and tabs: the components an assistant UI needs, the same set this repo's own site chat is built from.
-- **Legible to coding agents.** One command installs the agent skill and prints the MCP connect line, and the MCP tools and per-component markdown are generated from the same JSDoc that builds the shipped `.d.ts`: an agent reads the exact contract npm ships, no key, no account.
-- **Docs that cannot lie.** Every count, list, and prop table is generated from source registries and build-validated; CI fails on drift, and every component story ships through an accessibility audit. What the docs say is what ships.
+- **<!-- component-count -->149<!-- /component-count --> components.** Buttons, forms and tables through to charts, navigation and overlays, each typed and documented with live examples. React is the only required peer dependency.
+- **AI patterns and templates, ready to use.** Composer, streaming chat thread, tool calls, reasoning and thread panel are in the box, and the docs site has complete template screens built from them.
+- **Fully themeable.** The shipped themes are complete looks to start from, each in light and dark. One `data-brand` attribute applies a theme, and a few CSS overrides make your own.
+- **Ready for coding agents.** One command installs an agent skill, and a public MCP endpoint serves every component's props, so your agent builds with the library as it actually is. No key, no account.
+- **Free, consumed your way.** MIT, with no pro tier. Install the npm package, pull single components as source through the shadcn CLI, or clone the repo.
 
 ## Documentation
 

@@ -11,7 +11,10 @@
  * canvas board's trick — BlurBackground detects the frame and drops its GL
  * context, and --layout-viewport-height is pinned so viewport-tall shells
  * get a fixed size) inside a bordered shell. The frame is inert; a link
- * overlay opens the template full screen. A template flagged `mobileOnly`
+ * overlay opens the template full screen. A frame is only mounted while its
+ * slide is near the track's viewport (see LIVE_MARGIN): every preview is a
+ * whole app document, and mounting them all at once ran a phone's tab out
+ * of memory. A template flagged `mobileOnly`
  * is locked to the phone frame at every device size, and one flagged
  * `hideFromShowcase` gets no slide. The slide list derives from
  * templatesSidebarLinks, so the nav config stays the one authoritative
@@ -49,14 +52,20 @@ const TEMPLATES = templatesSidebarLinks
 
 const SLIDE_COUNT = TEMPLATES.length;
 
+/* How far past the track's edges a slide counts as near enough to mount
+   its frame: the visible slides plus the one about to arrive. */
+const LIVE_MARGIN = "0px 25% 0px 25%";
+
 function LiveFrame({
   href,
   title,
   device,
+  trackRef,
 }: {
   href: string;
   title: string;
   device: DeviceKey;
+  trackRef: React.RefObject<HTMLDivElement | null>;
 }) {
   const { w: designW, h: designH } = DEVICES[device];
   /* The phone mockup's OS strips (54px status bar + 24px home bar),
@@ -66,6 +75,24 @@ function LiveFrame({
   const chromeH = device === "mobile" ? 78 : 0;
   const shellRef = useRef<HTMLDivElement>(null);
   const frameRef = useRef<HTMLIFrameElement>(null);
+  const [live, setLive] = useState(false);
+
+  /* Mount the frame as its slide nears the viewport. A touch-first device
+     also releases it once the slide is far again, because that is where
+     memory is tight; elsewhere a loaded preview stays, so scrolling back
+     never shows it reloading. */
+  useEffect(() => {
+    const shell = shellRef.current;
+    if (!shell) return;
+    const release = window.matchMedia("(hover: none)").matches;
+    const observer = new IntersectionObserver(
+      ([entry]) =>
+        setLive((was) => (entry.isIntersecting ? true : release ? false : was)),
+      { root: trackRef.current, rootMargin: LIVE_MARGIN }
+    );
+    observer.observe(shell);
+    return () => observer.disconnect();
+  }, [trackRef]);
 
   /* The page inside follows the site's theme, live: same-origin, so the
      board's applyTheme pattern reaches straight into the document. The
@@ -153,14 +180,16 @@ function LiveFrame({
               </span>
             </div>
             <div className={styles.mockScreen}>
-              <iframe
-                ref={frameRef}
-                src={href}
-                title={title}
-                className={styles.frame}
-                tabIndex={-1}
-                onLoad={sync}
-              />
+              {live && (
+                <iframe
+                  ref={frameRef}
+                  src={href}
+                  title={title}
+                  className={styles.frame}
+                  tabIndex={-1}
+                  onLoad={sync}
+                />
+              )}
             </div>
             <div className={styles.mockHomeBar} aria-hidden="true">
               <span className={styles.mockHomeIndicator} />
@@ -169,14 +198,16 @@ function LiveFrame({
         </div>
       ) : (
         <div className={styles.frameViewport}>
-          <iframe
-            ref={frameRef}
-            src={href}
-            title={title}
-            className={styles.frame}
-            tabIndex={-1}
-            onLoad={sync}
-          />
+          {live && (
+            <iframe
+              ref={frameRef}
+              src={href}
+              title={title}
+              className={styles.frame}
+              tabIndex={-1}
+              onLoad={sync}
+            />
+          )}
         </div>
       )}
       <Link
@@ -264,6 +295,7 @@ export default function TemplateShowcase() {
               href={template.href}
               title={template.label}
               device={template.mobileOnly ? "mobile" : device}
+              trackRef={trackRef}
             />
             <div className={styles.slideCaption}>
               <div className={styles.slideText}>

@@ -6,12 +6,34 @@ import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { Composer } from "rift-ds/components/Composer/Composer";
 import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import type { MentionSource } from "rift-ds/components/Mention/Mention";
 import { useAttachments } from "rift-ds/components/Attachment/useAttachments";
 import { PromptSuggestions } from "rift-ds/components/PromptSuggestions/PromptSuggestions";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
+
+const MENTION_SOURCES: MentionSource[] = [
+  {
+    trigger: "@",
+    label: "People and files",
+    items: [
+      { id: "mira", label: "Mira Castellan", description: "Design lead", icon: "person" },
+      { id: "tobias", label: "Tobias Renner", description: "Platform", icon: "person" },
+      { id: "roadmap", label: "roadmap.md", description: "Docs", icon: "description" },
+    ],
+  },
+  {
+    trigger: "/",
+    label: "Skills",
+    items: [
+      { id: "summarize", label: "summarize", description: "The thread so far, in brief" },
+      { id: "draft", label: "draft", description: "Write a first version" },
+      { id: "review", label: "review", description: "Read it for problems" },
+    ],
+  },
+];
 
 
 /** Send flips into a short fake stream, with stop cutting it off early. */
@@ -268,6 +290,25 @@ export default function ComposerPage() {
                 defaultValue={
                   "Draft the release notes for 2.4.\nCover the new alignment options,\nthe keyboard shortcuts,\nand the fixed focus trap.\nKeep it under 200 words."
                 }
+              />
+            </div>
+          </section>
+
+          {/* Mentions */}
+          <section className={styles.section}>
+            <SectionTitle title="Mentions" />
+            <p className={styles.demoText}>
+              Pass mentions, one source per trigger character, and typing @
+              or / at the start of a word opens a menu of that source from
+              the line it was typed on. Arrows move, Enter or Tab writes the
+              choice, Escape closes. The Mention page covers the tag, the
+              menu and the sent message.
+            </p>
+            <div className={styles.stack}>
+              <Composer
+                placeholder="Type @ to mention, / for skills"
+                mentions={MENTION_SOURCES}
+                mentionPlacement="bottom"
               />
             </div>
           </section>

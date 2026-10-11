@@ -756,6 +756,14 @@
       "client": false
     },
     {
+      "name": "Mention",
+      "label": "Mention",
+      "slug": "mention",
+      "description": "An inline reference to an entity or a skill, with the menu that @ or / opens while typing and the tag it leaves in the message.",
+      "category": "ai",
+      "client": true
+    },
+    {
       "name": "MessageActions",
       "label": "Message actions",
       "slug": "message-actions",

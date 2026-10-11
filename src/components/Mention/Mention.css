@@ -1,0 +1,186 @@
+/* ============================================
+   MENTION COMPONENT
+   A reference written into a sentence, and the menu a trigger opens:
+   `@` for entities, `/` for skills.
+   ============================================ */
+
+/* ============================================
+   TAG
+   Composer lays this exact tag over the text of its textarea, so nothing
+   here may move a glyph off its advance: no weight, no spacing, and a
+   chip whose padding is paid back in margin.
+   ============================================ */
+
+.ds-mention {
+  /* How far the chip's fill reaches past the glyphs on each side. Padding
+     out, margin back in: the box grows and the text does not move. */
+  --ds-mention-bleed: var(--padding-050);
+  margin: 0 calc(-1 * var(--ds-mention-bleed));
+  padding: 0 var(--ds-mention-bleed);
+  /* The info family, used as a highlight and not a status: its saturated
+     tone for the name, and a faint wash of the same tone behind it. The saturated tone is
+     the one colour every theme keeps bright and recognisably a colour on
+     both an input and a bubble, where a theme's link colour ranges from
+     vivid to nearly invisible. The fill backs it up, because in a neutral
+     theme the colour alone says little. */
+  /* A wash of the name's own colour, barely there: enough to give the tag
+     an edge, never enough to read as a chip sitting on the line */
+  background-color: var(
+    --ds-mention-bg,
+    color-mix(in srgb, var(--color-status-info-icon) 10%, transparent)
+  );
+  border-radius: var(--radius-100);
+  /* A name that wraps keeps its fill and corners on both lines */
+  box-decoration-break: clone;
+  color: var(--ds-mention-color, var(--color-status-info-icon));
+}
+
+/* The trigger is punctuation; the name is the word */
+.ds-mention__trigger {
+  opacity: 0.64;
+}
+
+/* ============================================
+   MENU
+   The floating-surface recipe the chat set's other menus use.
+   ============================================ */
+
+.ds-mention-menu {
+  box-sizing: border-box;
+  /* Consumer hooks: how wide the menu is, and how many rows show before
+     the list scrolls */
+  width: var(--ds-mention-menu-width, 320px);
+  max-width: 100%;
+  /* Page background, not container: the container fill is semi-transparent
+     in dark mode, and a floating panel must not show text through itself */
+  background-color: var(--color-bg-page-primary);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-300);
+  box-shadow: var(--shadow-floating);
+  overflow: hidden;
+  animation: ds-mention-menu-appear var(--motion-duration-fast) var(--motion-ease-entrance);
+}
+
+@keyframes ds-mention-menu-appear {
+  from {
+    opacity: 0;
+  }
+}
+
+.ds-mention-menu__list {
+  /* Anchors each row's offsetTop, which is how the highlighted row is kept
+     in view */
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-050);
+  padding: var(--padding-100);
+  /* Rows × (one line, its block padding, and the gap under it), plus half a
+     row more, so a longer list is cut mid-row and reads as scrollable */
+  max-height: calc(
+    (var(--ds-mention-menu-max-rows, 8) + 0.5) *
+      (var(--font-paragraph-sm-line-height) + 2 * var(--padding-150) + var(--gap-050)) +
+      var(--padding-100)
+  );
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-bg-container-secondary) transparent;
+}
+
+.ds-mention-menu__list:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: -2px;
+  border-radius: var(--radius-300);
+}
+
+/* ============================================
+   OPTION
+   ============================================ */
+
+.ds-mention-menu__option {
+  display: flex;
+  align-items: center;
+  flex: none;
+  gap: var(--gap-200);
+  padding: var(--padding-150) var(--padding-200);
+  border-radius: var(--radius-200);
+  cursor: pointer;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+/* One highlight, shared by the pointer and the arrow keys: the pointer
+   moves it rather than drawing a second one. DropdownMenu's focused wash,
+   a translucent neutral, because it is the only sign of where Enter will
+   land and an opaque surface step can equal the panel's own fill in a
+   theme that flattens the two. */
+.ds-mention-menu__option--active {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-mention-menu__option--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ds-mention-menu__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  /* The row's own line box, so an icon never makes its row taller than a
+     row without one */
+  height: var(--font-paragraph-sm-line-height);
+  color: var(--color-icon-secondary);
+}
+
+.ds-mention-menu__icon .material-symbols-rounded {
+  --icon-size: var(--icon-size-500);
+}
+
+.ds-mention-menu__label {
+  flex: none;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* While a query narrows the list, the typed part of each name holds full
+   strength and the rest steps back. Colour carries it as well as weight,
+   because a theme may set both paragraph weights the same. */
+.ds-mention-menu--filtered .ds-mention-menu__label {
+  color: var(--color-text-secondary);
+}
+
+.ds-mention-menu__match {
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  color: var(--color-text-primary);
+}
+
+.ds-mention-menu__description {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-text-tertiary);
+}
+
+/* ============================================
+   EMPTY
+   ============================================ */
+
+.ds-mention-menu__empty {
+  padding: var(--padding-300) var(--padding-400);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-tertiary);
+}

@@ -82,6 +82,7 @@ import { Sparkline } from "rift-ds/components/Sparkline/Sparkline";
 import { Spinner } from "rift-ds/components/Spinner/Spinner";
 import { Tabs } from "rift-ds/components/Tabs/Tabs";
 import { ToggleGroup } from "rift-ds/components/ToggleGroup/ToggleGroup";
+import { Mention } from "rift-ds/components/Mention/Mention";
 import { MessageActions } from "rift-ds/components/MessageActions/MessageActions";
 import { MessageCard } from "rift-ds/components/MessageCard/MessageCard";
 import type { ReactNode } from "react";
@@ -1208,6 +1209,13 @@ const previews: Record<string, () => ReactNode> = {
           </div>
         ))}
       </div>
+    </>
+  ),
+  "mention": () => (
+    <>
+      <span aria-hidden="true" style={{ fontSize: "14px", lineHeight: "20px", color: "var(--color-text-primary)", whiteSpace: "nowrap" }}>
+        Ask <Mention>Mira</Mention> to <Mention trigger="/">ship</Mention>
+      </span>
     </>
   ),
   "message-actions": () => (

@@ -41,6 +41,9 @@
   background-color: var(--color-input-bg-primary);
   border: var(--border-025) solid var(--color-input-border-primary);
   border-radius: var(--ds-composer-radius);
+  /* Where the typed text starts and ends. One value, because the mention
+     overlay has to sit on exactly the rail the textarea does. */
+  --ds-composer-text-inset: var(--padding-500);
   box-shadow: var(--shadow-floating);
   transition: border-color var(--motion-duration-fast) var(--motion-ease-standard);
   /* The whole shell is the input affordance — clicking anywhere that is
@@ -304,9 +307,12 @@
   margin-left: calc(-1 * var(--ds-composer-context-icon-bearing, var(--icon-size-500) * 4 / 24));
 }
 
-.ds-composer--context-above .ds-composer__attachments,
-.ds-composer--context-above .ds-composer__content {
-  padding-inline: calc(var(--padding-200) + var(--padding-400));
+.ds-composer--context-above {
+  --ds-composer-text-inset: calc(var(--padding-200) + var(--padding-400));
+}
+
+.ds-composer--context-above .ds-composer__attachments {
+  padding-inline: var(--ds-composer-text-inset);
 }
 
 /* The text owns the truncation: one line, ellipsized only when the note
@@ -439,7 +445,7 @@
   align-items: flex-start;
   box-sizing: border-box;
   width: 100%;
-  padding: var(--padding-400) var(--padding-500) var(--padding-200);
+  padding: var(--padding-400) var(--ds-composer-text-inset) var(--padding-200);
   /* Growing and shrinking is animated, which needs two pixel heights to run
      between — `auto` has nothing to interpolate. So the zone states its own
      height: the measured textarea (published as --ds-composer-text-height on
@@ -508,6 +514,76 @@
 }
 
 /* ============================================
+   MENTIONS — armed by the `mentions` prop
+   A textarea cannot colour part of its own text, so the words are drawn
+   twice: the textarea keeps the caret, the selection and the keystrokes
+   with its text transparent, and an overlay of the same string, in the
+   same type on the same rail, is what a person reads. Only colour differs
+   between the two, so they can never drift apart by a glyph.
+   ============================================ */
+
+.ds-composer--mentions .ds-composer__content {
+  position: relative;
+}
+
+.ds-composer--mentions .ds-composer__textarea {
+  /* Above the overlay: a tag carries a fill, and the caret and the
+     selection highlight must never be painted under it */
+  position: relative;
+  z-index: 1;
+  color: transparent;
+  caret-color: var(--color-input-text-primary);
+}
+
+.ds-composer__backdrop {
+  position: absolute;
+  top: var(--padding-400);
+  left: var(--ds-composer-text-inset);
+  /* The textarea's measured box: its height, and its client width, which
+     is what its text wraps at once a scrollbar takes its share */
+  width: var(
+    --ds-composer-text-width,
+    calc(100% - 2 * var(--ds-composer-text-inset))
+  );
+  height: var(--ds-composer-text-height, var(--font-paragraph-line-height));
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.ds-composer__backdrop-text {
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+  color: var(--color-input-text-primary);
+  /* A textarea's own wrapping rules */
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
+/* The menu a trigger opens. It grows out of the line the trigger is on:
+   `left` and the two line offsets are set inline from where the trigger
+   character sits, and the menu rests a hair clear of that line, over the
+   text before it (top) or after it (bottom). Until the first measurement
+   the fallbacks seat it against the shell's edge. */
+.ds-composer__mention-menu {
+  position: absolute;
+  left: 0;
+  z-index: 10;
+  /* A list, not a text field */
+  cursor: default;
+}
+
+.ds-composer__mention-menu--top {
+  bottom: calc(100% - var(--ds-composer-mention-line-top, 0px) + var(--gap-100));
+}
+
+.ds-composer__mention-menu--bottom {
+  top: calc(var(--ds-composer-mention-line-bottom, 100%) + var(--gap-100));
+}
+
+/* ============================================
    FOOTER ROW
    ============================================ */
 
@@ -559,4 +635,12 @@
 .ds-composer--disabled .ds-composer__textarea {
   cursor: not-allowed;
   color: var(--color-input-text-disabled);
+}
+
+.ds-composer--disabled .ds-composer__backdrop-text {
+  color: var(--color-input-text-disabled);
+}
+
+.ds-composer--disabled.ds-composer--mentions .ds-composer__textarea {
+  color: transparent;
 }

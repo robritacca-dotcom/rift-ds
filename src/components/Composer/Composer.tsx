@@ -1,10 +1,20 @@
 'use client';
 
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import { AttachmentTile } from '../Attachment/AttachmentTile';
 import { formatBytes } from '../Attachment/fileTypes';
 import type { AttachmentItem } from '../Attachment/fileTypes';
 import { CircularButton } from '../CircularButton/CircularButton';
+import {
+  MentionMenu,
+  MentionText,
+  filterMentionItems,
+  getMentionQuery,
+  insertMention,
+  mentionListboxId,
+  mentionOptionId,
+} from '../Mention/Mention';
+import type { MentionItem, MentionSource } from '../Mention/Mention';
 import '../../fonts/material-symbols.css';
 import './Composer.css';
 
@@ -124,6 +134,26 @@ type ComposerOwnProps = {
    * @deprecated Use `files` with `onFilesSelected` and `onFileRemove`, which draw the queue as tiles.
    */
   attachments?: React.ReactNode;
+  /**
+   * What a person can reference while typing, one source per trigger
+   * character: `@` for entities, `/` for skills. Typing a trigger at the
+   * start of a word opens a menu of that source's items, filtered as the
+   * word grows. Arrows move through it, Enter or Tab writes the choice into
+   * the text, Escape closes it. A mention is drawn in the tag colour
+   * wherever its exact name stands in the text; the value stays a plain
+   * string.
+   */
+  mentions?: MentionSource[];
+  /** Fires with the item a person chose from the mention menu, and the trigger that opened it. */
+  onMentionSelect?: (item: MentionItem, trigger: string) => void;
+  /**
+   * Which side of the trigger's line the mention menu opens on: `top` lays
+   * it over the text above, `bottom` over the text below. `top` suits a
+   * composer at the foot of a view.
+   */
+  mentionPlacement?: 'top' | 'bottom';
+  /** Builds the sentence announced to assistive technology when the mention menu opens or its matches change. */
+  formatMentionAnnouncement?: (count: number) => string;
   /** Leading actions on the left of the action bar, after the attach button (a model picker). */
   actions?: React.ReactNode;
   /**
@@ -154,6 +184,20 @@ const defaultFileAnnouncement = ({
   if (type === 'added') return `Attached ${list}`;
   if (type === 'removed') return `Removed ${list}`;
   return `Could not attach ${list}`;
+};
+
+const defaultMentionAnnouncement = (count: number) =>
+  count === 1 ? '1 suggestion' : `${count} suggestions`;
+
+/* A programmatic edit has to arrive as an ordinary change, so `onChange`
+   gets a genuine event and form libraries see what a keystroke would have
+   shown them. Writing `node.value` cannot do that: React records the value
+   it last saw through that property and would find nothing new. Replacing
+   a range goes around the record, and the input event that follows is then
+   read as a real edit. */
+const replaceRange = (node: HTMLTextAreaElement, text: string, start: number, end: number) => {
+  node.setRangeText(text, start, end, 'end');
+  node.dispatchEvent(new Event('input', { bubbles: true }));
 };
 
 const dragCarriesFiles = (event: React.DragEvent) =>
@@ -205,6 +249,10 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
       filesLabel = 'Attachments',
       formatFileAnnouncement = defaultFileAnnouncement,
       attachments,
+      mentions,
+      onMentionSelect,
+      mentionPlacement = 'top',
+      formatMentionAnnouncement = defaultMentionAnnouncement,
       actions,
       trailingActions,
       sendLabel = 'Send message',
@@ -213,6 +261,10 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
       onChange,
       onKeyDown,
       onPaste,
+      onSelect,
+      onFocus,
+      onBlur,
+      onScroll,
       ...rest
     },
     ref,
@@ -241,6 +293,46 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
     const dragDepth = useRef(0);
     const [announcement, setAnnouncement] = useState('');
 
+    /* Mentions. Nothing is stored beside the text: the trigger being typed
+       is read from the value and the caret on every render, and a finished
+       mention is recognised wherever its name stands. */
+    const mentionSources = mentions ?? [];
+    const mentionsArmed = mentionSources.length > 0;
+    const mentionMenuId = useId();
+    const backdropTextRef = useRef<HTMLDivElement | null>(null);
+    const shellRef = useRef<HTMLDivElement | null>(null);
+    const mentionMenuRef = useRef<HTMLDivElement | null>(null);
+    const [caret, setCaret] = useState<number | null>(null);
+    const [focused, setFocused] = useState(false);
+    const [activeMention, setActiveMention] = useState(0);
+    /* Escape closes the menu for the trigger it was opened on, remembered by
+       position, so the menu stays shut while that word is finished and opens
+       again for the next trigger. */
+    const [dismissedAt, setDismissedAt] = useState<number | null>(null);
+    const pendingCaret = useRef<number | null>(null);
+
+    const mentionQuery =
+      mentionsArmed && focused && !disabled && caret !== null
+        ? getMentionQuery(
+            currentValue,
+            caret,
+            mentionSources.map((source) => source.trigger),
+          )
+        : null;
+    const mentionSource = mentionQuery
+      ? mentionSources.find((source) => source.trigger === mentionQuery.trigger)
+      : undefined;
+    const mentionMatches =
+      mentionQuery && mentionSource
+        ? filterMentionItems(mentionSource.items, mentionQuery.query)
+        : [];
+    const choosable = mentionMatches.filter((item) => !item.disabled);
+    const mentionOpen =
+      mentionQuery !== null && choosable.length > 0 && dismissedAt !== mentionQuery.start;
+    const activeItem = mentionOpen
+      ? choosable[Math.min(activeMention, choosable.length - 1)]
+      : undefined;
+
     /** Keep the internal ref (used for auto-grow) while honouring a forwarded one. */
     const setTextareaRef = (node: HTMLTextAreaElement | null) => {
       textareaRef.current = node;
@@ -267,10 +359,77 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
       if (!node || !content) return;
       const observer = new ResizeObserver(() => {
         content.style.setProperty('--ds-composer-text-height', `${node.offsetHeight}px`);
+        // The mention overlay wraps at the textarea's own measure
+        content.style.setProperty('--ds-composer-text-width', `${node.clientWidth}px`);
       });
       observer.observe(node);
       return () => observer.disconnect();
     }, []);
+
+    /* The overlay that draws the mentions has to wrap and scroll exactly as
+       the textarea does. Its width is the textarea's client width, which
+       narrows when a scrollbar appears at the row cap without the box itself
+       resizing, so it is read again on every value change. A caret waiting
+       from a just-written mention lands here too, once the new value is in. */
+    useLayoutEffect(() => {
+      const node = textareaRef.current;
+      if (!node) return;
+      if (pendingCaret.current !== null) {
+        const next = pendingCaret.current;
+        pendingCaret.current = null;
+        node.setSelectionRange(next, next);
+        setCaret(next);
+      }
+      if (!mentionsArmed) return;
+      contentRef.current?.style.setProperty('--ds-composer-text-width', `${node.clientWidth}px`);
+      if (backdropTextRef.current) {
+        backdropTextRef.current.style.transform = `translateY(${-node.scrollTop}px)`;
+      }
+    }, [currentValue, mentionsArmed]);
+
+    /* The menu opens from the trigger that called it, not from the shell's
+       corner: it sits directly over (or under) the line the trigger is on,
+       with its first column of content lined up on the trigger character,
+       held inside the shell's own width. A textarea
+       cannot say where one of its characters sits, but the overlay holds
+       the same string in the same place, so the position is read there. */
+    const mentionStart = mentionOpen && mentionQuery ? mentionQuery.start : null;
+    useLayoutEffect(() => {
+      const menu = mentionMenuRef.current;
+      const shell = shellRef.current;
+      const overlay = backdropTextRef.current;
+      if (mentionStart === null || !menu || !shell || !overlay) return;
+      const walker = document.createTreeWalker(overlay, NodeFilter.SHOW_TEXT);
+      let remaining = mentionStart;
+      let node = walker.nextNode();
+      while (node && remaining >= (node.textContent ?? '').length) {
+        remaining -= (node.textContent ?? '').length;
+        node = walker.nextNode();
+      }
+      if (!node) return;
+      const range = document.createRange();
+      range.setStart(node, remaining);
+      range.setEnd(node, remaining + 1);
+      const triggerBox = range.getBoundingClientRect();
+      const triggerLeft = triggerBox.left;
+      const shellBox = shell.getBoundingClientRect();
+      const menuBox = menu.getBoundingClientRect();
+      // Where a row's content begins inside the menu: its border and insets
+      const firstCell = menu.querySelector('[role="option"] > *');
+      const inset = firstCell ? firstCell.getBoundingClientRect().left - menuBox.left : 0;
+      const room = Math.max(0, shell.clientWidth - menu.offsetWidth);
+      const left = Math.min(Math.max(0, triggerLeft - shellBox.left - shell.clientLeft - inset), room);
+      menu.style.left = `${left}px`;
+      // The trigger's line, measured from the shell's padding box, which is
+      // what the menu's own offsets are measured from. The stylesheet turns
+      // these into the menu's edge for whichever side it opens on.
+      const origin = shellBox.top + shell.clientTop;
+      menu.style.setProperty('--ds-composer-mention-line-top', `${triggerBox.top - origin}px`);
+      menu.style.setProperty(
+        '--ds-composer-mention-line-bottom',
+        `${triggerBox.bottom - origin}px`,
+      );
+    }, [mentionStart, currentValue]);
 
     /* Say what changed in the queue. The tiles appear and vanish silently
        for a screen-reader user otherwise: a paste or a drop moves no focus. */
@@ -385,14 +544,94 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
       onSubmit?.(currentValue);
     };
 
+    const readCaret = (node: HTMLTextAreaElement) =>
+      node.selectionStart === node.selectionEnd ? node.selectionStart : null;
+
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
       if (!isControlled) setUncontrolledValue(e.target.value);
+      if (mentionsArmed) {
+        setCaret(readCaret(e.target));
+        // A new query starts its list from the top
+        setActiveMention(0);
+      }
       onChange?.(e);
       onValueChange?.(e.target.value);
     };
 
+    const handleSelect = (e: React.SyntheticEvent<HTMLTextAreaElement>) => {
+      onSelect?.(e);
+      if (!mentionsArmed) return;
+      const next = readCaret(e.currentTarget);
+      setCaret(next);
+      // Leaving the dismissed word forgets the dismissal
+      if (dismissedAt !== null && next !== null) {
+        const query = getMentionQuery(
+          e.currentTarget.value,
+          next,
+          mentionSources.map((source) => source.trigger),
+        );
+        if (query?.start !== dismissedAt) setDismissedAt(null);
+      }
+    };
+
+    const handleFocus = (e: React.FocusEvent<HTMLTextAreaElement>) => {
+      onFocus?.(e);
+      setFocused(true);
+      if (mentionsArmed) setCaret(readCaret(e.currentTarget));
+    };
+
+    const handleBlur = (e: React.FocusEvent<HTMLTextAreaElement>) => {
+      onBlur?.(e);
+      setFocused(false);
+    };
+
+    const handleScroll = (e: React.UIEvent<HTMLTextAreaElement>) => {
+      onScroll?.(e);
+      // Written straight to the node: a scroll must not cost a render
+      if (backdropTextRef.current) {
+        backdropTextRef.current.style.transform = `translateY(${-e.currentTarget.scrollTop}px)`;
+      }
+    };
+
+    const chooseMention = (item: MentionItem) => {
+      const node = textareaRef.current;
+      if (!node || !mentionQuery) return;
+      const next = insertMention(currentValue, mentionQuery, item);
+      pendingCaret.current = next.caret;
+      // Only the typed query is replaced; the text either side is the same string
+      const tail = currentValue.length - mentionQuery.end;
+      replaceRange(
+        node,
+        next.value.slice(mentionQuery.start, next.value.length - tail),
+        mentionQuery.start,
+        mentionQuery.end,
+      );
+      onMentionSelect?.(item, mentionQuery.trigger);
+    };
+
     const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
       onKeyDown?.(e);
+      if (mentionOpen && activeItem && mentionQuery && !e.nativeEvent.isComposing) {
+        const at = choosable.indexOf(activeItem);
+        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+          e.preventDefault();
+          const step = e.key === 'ArrowDown' ? 1 : -1;
+          setActiveMention((at + step + choosable.length) % choosable.length);
+          return;
+        }
+        if ((e.key === 'Enter' && !e.shiftKey) || e.key === 'Tab') {
+          e.preventDefault();
+          chooseMention(activeItem);
+          return;
+        }
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          // The menu takes this Escape; a dialog around the composer stays open
+          e.stopPropagation();
+          setDismissedAt(mentionQuery.start);
+          return;
+        }
+      }
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
         // Inert while streaming or trimmed-empty — submit() guards both.
@@ -415,6 +654,7 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
       streaming ? `${baseClass}--streaming` : '',
       disabled ? `${baseClass}--disabled` : '',
       dragging ? `${baseClass}--dragging` : '',
+      mentionsArmed ? `${baseClass}--mentions` : '',
       // The above placement moves the text onto the chip's rail; the shell
       // needs to know, since the chip is no longer inside it.
       context && contextPlacement === 'above' ? `${baseClass}--context-above` : '',
@@ -452,6 +692,7 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
 
     const shell = (
       <div
+        ref={shellRef}
         className={classes}
         style={{ '--ds-composer-max-rows': maxRows } as React.CSSProperties}
         onClick={handleShellClick}
@@ -496,11 +737,47 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
             rows={1}
             value={currentValue}
             aria-label={ariaLabel}
+            aria-autocomplete={mentionsArmed ? 'list' : undefined}
+            aria-controls={mentionOpen ? mentionListboxId(mentionMenuId) : undefined}
+            aria-activedescendant={
+              activeItem ? mentionOptionId(mentionMenuId, activeItem.id) : undefined
+            }
             onChange={handleChange}
             onKeyDown={handleKeyDown}
             onPaste={handlePaste}
+            onSelect={handleSelect}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            onScroll={handleScroll}
           />
+          {mentionsArmed && (
+            /* The words a person sees. The textarea beneath keeps the caret,
+               the selection and every keystroke, with its own text
+               transparent; this copy of the same string is where a mention
+               gets its colour. Decorative: the textarea is the control. */
+            <div className={`${baseClass}__backdrop`} aria-hidden="true">
+              <div className={`${baseClass}__backdrop-text`} ref={backdropTextRef}>
+                <MentionText text={currentValue} sources={mentionSources} />
+              </div>
+            </div>
+          )}
         </div>
+
+        {mentionOpen && activeItem && mentionQuery && (
+          <MentionMenu
+            ref={mentionMenuRef}
+            id={mentionMenuId}
+            className={`${baseClass}__mention-menu ${baseClass}__mention-menu--${mentionPlacement}`}
+            items={mentionMatches}
+            activeId={activeItem.id}
+            query={mentionQuery.query}
+            label={mentionSource?.label}
+            onActiveChange={(id) =>
+              setActiveMention(Math.max(0, choosable.findIndex((item) => item.id === id)))
+            }
+            onSelect={chooseMention}
+          />
+        )}
 
         <div className={`${baseClass}__footer`}>
           {(actions || (armed && attachButton)) && (
@@ -563,6 +840,13 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
         {(armed || hasFiles) && (
           <span className={`${baseClass}__sr-only`} role="status">
             {announcement}
+          </span>
+        )}
+
+        {mentionsArmed && (
+          /* The menu opens without moving focus, so its arrival is said here */
+          <span className={`${baseClass}__sr-only`} role="status">
+            {mentionOpen ? formatMentionAnnouncement(choosable.length) : ''}
           </span>
         )}
       </div>

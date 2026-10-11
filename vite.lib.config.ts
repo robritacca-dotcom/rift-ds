@@ -38,6 +38,7 @@ export default defineConfig({
         charts: 'src/charts.ts',
         'components/registry': 'src/components/registry.ts',
         'components/Attachment/fileTypes': 'src/components/Attachment/fileTypes.ts',
+        'components/Mention/mentions': 'src/components/Mention/mentions.ts',
         'components/Attachment/useAttachments': 'src/components/Attachment/useAttachments.ts',
         'components/Avatar/demoAvatars': 'src/components/Avatar/demoAvatars.ts',
         'components/ShaderField/useShaderField': 'src/components/ShaderField/useShaderField.ts',

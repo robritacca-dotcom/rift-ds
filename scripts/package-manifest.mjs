@@ -55,6 +55,7 @@ const SUBPATHS = [
   // hook behind Composer's file tray. Both .ts modules, so the *.tsx
   // wildcard below can't serve them.
   { key: './components/Attachment/fileTypes', srcJs: './src/components/Attachment/fileTypes.ts', dist: './components/Attachment/fileTypes' },
+  { key: './components/Mention/mentions', srcJs: './src/components/Mention/mentions.ts', dist: './components/Mention/mentions' },
   { key: './components/Attachment/useAttachments', srcJs: './src/components/Attachment/useAttachments.ts', dist: './components/Attachment/useAttachments' },
   // ShaderField's headless renderer, for a consumer who wants the WebGL
   // lifetime without the component's canvas. A .ts module, so the *.tsx

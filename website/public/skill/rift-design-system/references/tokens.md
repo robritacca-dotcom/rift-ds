@@ -11,7 +11,7 @@ How to read it:
 
 The live reference with swatches is at https://rift-ds.com/foundations, and the MCP endpoint's `list_tokens` tool serves the names.
 
-## Colour (116)
+## Colour (122)
 
 Prefix: `--color-*`.
 
@@ -41,6 +41,12 @@ Prefix: `--color-*`.
 | `--color-ai-gradient-end` | `#118AB2` (`--primitive-teal-07`) | `#118AB2` (`--primitive-teal-07`) |
 | `--color-ai-gradient-mid` | `#5475D4` (`--primitive-blue-05`) | `#5475D4` (`--primitive-blue-05`) |
 | `--color-ai-gradient-start` | `#F37F9B` (`--primitive-red-05`) | `#F37F9B` (`--primitive-red-05`) |
+| `--color-ambient-1` | `#FFD166` (`--primitive-yellow-07`) | `#FFD166` (`--primitive-yellow-07`) |
+| `--color-ambient-2` | `#06D6A0` (`--primitive-green-07`) | `#06D6A0` (`--primitive-green-07`) |
+| `--color-ambient-3` | `#9E47EF` (`--primitive-purple-07`) | `#9E47EF` (`--primitive-purple-07`) |
+| `--color-ambient-4` | `#1E47B0` (`--primitive-blue-07`) | `#1E47B0` (`--primitive-blue-07`) |
+| `--color-ambient-5` | `#EF476F` (`--primitive-red-07`) | `#EF476F` (`--primitive-red-07`) |
+| `--color-ambient-6` | `#EF8247` (`--primitive-orange-07`) | `#EF8247` (`--primitive-orange-07`) |
 | `--color-bg-container-border` | `#D6D6D6` (`--primitive-neutral-02`) | `#232323` (`--primitive-neutral-08`) |
 | `--color-bg-container-inverse` | `#0E0E0E` (`--primitive-neutral-09`) | `#F1F1F1` (`--primitive-neutral-01`) |
 | `--color-bg-container-primary` | `#FFFFFF` (`--primitive-neutral-00`) | `rgba(14, 14, 14, 0.8)` (`--primitive-neutral-09-a80`) |

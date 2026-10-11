@@ -2,7 +2,7 @@
 
 The shared scaffolding for labelled form controls: label, required marker, helper and error text, and the ARIA wiring that ties them together.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.6.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.7.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: forms
 - Import: `import { Field } from 'rift-ds';`

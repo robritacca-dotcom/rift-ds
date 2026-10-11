@@ -2,7 +2,7 @@
 
 An agent's budgets at a glance: context window and plan limits as meter rows with reset captions.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.6.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.7.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: ai
 - Import: `import { UsageCard } from 'rift-ds';`

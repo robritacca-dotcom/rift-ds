@@ -5,7 +5,7 @@ description: Restyle existing screens onto the rift-ds design tokens and compone
 
 # Applying a rift-ds theme
 
-Generated from the library's registries at version 1.6.0. You take screens that already exist and move them onto the library's components and semantic tokens, so one theme styles all of them. Token names and values are in the `rift-design-system` skill's `references/tokens.md`; the component catalogue is the `rift-design-system` skill's `references/components.md`. Both files install beside this skill with `npx rift-ds init`. If they are missing, run that command, or read them at https://rift-ds.com/skill/rift-design-system/references/tokens.md and https://rift-ds.com/skill/rift-design-system/references/components.md.
+Generated from the library's registries at version 1.7.0. You take screens that already exist and move them onto the library's components and semantic tokens, so one theme styles all of them. Token names and values are in the `rift-design-system` skill's `references/tokens.md`; the component catalogue is the `rift-design-system` skill's `references/components.md`. Both files install beside this skill with `npx rift-ds init`. If they are missing, run that command, or read them at https://rift-ds.com/skill/rift-design-system/references/tokens.md and https://rift-ds.com/skill/rift-design-system/references/components.md.
 
 ## Before you change anything
 

@@ -5,7 +5,7 @@ description: Scan a project's styles for hardcoded values that should use the ri
 
 # Auditing styles against rift-ds tokens
 
-Generated from the library's registries at version 1.6.0. You scan the project's own styles for hardcoded values that should reference a design token, and you report them. You do not fix anything unless the user asks. Token names and values are in the `rift-design-system` skill's `references/tokens.md`. That file installs beside this skill with `npx rift-ds init`. If it is missing, run that command, or read it at https://rift-ds.com/skill/rift-design-system/references/tokens.md.
+Generated from the library's registries at version 1.7.0. You scan the project's own styles for hardcoded values that should reference a design token, and you report them. You do not fix anything unless the user asks. Token names and values are in the `rift-design-system` skill's `references/tokens.md`. That file installs beside this skill with `npx rift-ds init`. If it is missing, run that command, or read it at https://rift-ds.com/skill/rift-design-system/references/tokens.md.
 
 ## Instructions
 

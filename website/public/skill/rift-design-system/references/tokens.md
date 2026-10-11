@@ -1,6 +1,6 @@
 # rift-ds token reference
 
-Generated from the token registry and the token stylesheets at version 1.6.0. One row per semantic token, grouped by category, with the value it resolves to in the base theme. A name in brackets is the primitive the token points at.
+Generated from the token registry and the token stylesheets at version 1.7.0. One row per semantic token, grouped by category, with the value it resolves to in the base theme. A name in brackets is the primitive the token points at.
 
 How to read it:
 

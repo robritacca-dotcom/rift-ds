@@ -2,7 +2,7 @@
 
 One-row colour setting for inspector panels, with the hex and a round swatch at the bar's end and ColorPicker's own panel.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.6.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.7.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: inspector
 - Import: `import { InspectorColorPicker } from 'rift-ds';`

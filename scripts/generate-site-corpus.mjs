@@ -647,7 +647,7 @@ Every page on the site. Link to these paths when pointing someone at more detail
 ### Main pages
 
 - Home (/): the design system on one page, with live component demos
-- Playground (/playground): re-theme the design system live and copy the CSS
+- Playground (/playground): re-theme the design system live and export the theme as CSS, a THEME.md and an agent prompt
 
 ### Design system docs
 

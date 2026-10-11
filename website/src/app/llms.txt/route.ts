@@ -72,7 +72,7 @@ export function GET() {
     "",
     "Live tools for exploring and re-theming the design system.",
     "",
-    `- [Playground](${SITE_URL}/playground): re-theme the design system live (components, type, chat and a full dashboard) and copy the generated CSS`,
+    `- [Playground](${SITE_URL}/playground): re-theme the design system live (components, type, chat and a full dashboard) and export the theme as CSS, a THEME.md and a setup prompt for a coding agent`,
     `- [Theme presets](${SITE_URL}/docs/get-started): complete looks ship in the package as generated stylesheets, applied by one data-brand attribute on the root element`,
     `- [System graph](${SITE_URL}/graph): every token, component and page as one dependency graph, traceable in both directions`,
     `- [Home](${SITE_URL}/): the whole system working on one page, with live component demos`,

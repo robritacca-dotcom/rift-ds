@@ -281,7 +281,7 @@ export default function GetStartedPage() {
               <Link href="/playground" className={styles.inlineLink}>
                 Try it live in the playground
               </Link>
-              : it generates the exact CSS you would paste into your app.
+              : it generates the exact CSS you would paste into your app, with a THEME.md and a setup prompt for a coding agent.
             </p>
           </div>
 
@@ -568,8 +568,8 @@ export default function GetStartedPage() {
                   The playground applies these overrides to a full page in real time
                   (navigation, components, the type specimen, the chat
                   widget, and a full dashboard): pick a brand colour,
-                  tint the neutrals, reshape the radii, swap the font, then copy the
-                  generated CSS.
+                  tint the neutrals, reshape the radii, swap the font, then export the
+                  theme as CSS, with a THEME.md for a coding agent.
                 </p>
                 <Link href="/playground" className={styles.ctaLink}>
                   <Button label="Open the playground" variant="primary" iconRight="arrow_forward" />

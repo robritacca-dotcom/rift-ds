@@ -1011,6 +1011,67 @@ export function iconOverrides(weight: number, fill: boolean): Overrides {
   return overrides;
 }
 
+/* ---------- lever ranges and vocabulary ----------
+   The numeric levers' slider ranges and the word each position reads as.
+   One home for both: the rail spreads a range onto its slider, and the
+   theme export (theme-export.ts) describes a look in the same words the
+   rail shows beside the number. scripts/validate-theme-export.mjs holds
+   every lever's bands to its range, ascending and reaching the top, so a
+   widened slider cannot land on a position with no name. */
+
+export type NumericLever = "radius" | "density" | "typeScale" | "motion" | "tracking";
+
+/** Slider ranges, in the units the rail shows (motion as speed). */
+export const LEVER_RANGES: Record<
+  NumericLever,
+  { min: number; max: number; step: number }
+> = {
+  radius: { min: 0, max: 200, step: 10 },
+  density: { min: 70, max: 130, step: 5 },
+  typeScale: { min: 80, max: 120, step: 5 },
+  motion: { min: 50, max: 150, step: 10 },
+  tracking: { min: -4, max: 4, step: 0.5 },
+};
+
+/** Named bands per lever: a value reads as the first band it does not exceed. */
+export const LEVER_VOCABULARY: Record<
+  NumericLever,
+  ReadonlyArray<{ upTo: number; word: string }>
+> = {
+  radius: [
+    { upTo: 0, word: "Square" },
+    { upTo: 70, word: "Subtle" },
+    { upTo: 120, word: "Regular" },
+    { upTo: 200, word: "Round" },
+  ],
+  density: [
+    { upTo: 85, word: "Compact" },
+    { upTo: 110, word: "Regular" },
+    { upTo: 130, word: "Roomy" },
+  ],
+  typeScale: [
+    { upTo: 90, word: "Small" },
+    { upTo: 105, word: "Regular" },
+    { upTo: 120, word: "Large" },
+  ],
+  motion: [
+    { upTo: 80, word: "Calm" },
+    { upTo: 110, word: "Regular" },
+    { upTo: 150, word: "Snappy" },
+  ],
+  tracking: [
+    { upTo: -0.5, word: "Tight" },
+    { upTo: 0, word: "Regular" },
+    { upTo: 4, word: "Open" },
+  ],
+};
+
+/** The word a lever position reads as, e.g. `leverWord("density", 80)` is "Compact". */
+export function leverWord(lever: NumericLever, value: number): string {
+  const bands = LEVER_VOCABULARY[lever];
+  return (bands.find((band) => value <= band.upTo) ?? bands[bands.length - 1]).word;
+}
+
 /* ---------- fonts ---------- */
 
 export interface FontOption {
@@ -1078,11 +1139,10 @@ export function googleFontHref(googleParam: string): string {
 
 /* ---------- copy-paste CSS ---------- */
 
-/** The consumer-ready snippet reproducing the current playground state.
-    `darkOverrides` adds a theme-scoped block for presets whose action
-    colour differs between themes, and for the neutral surface steps a
-    tint holds at full strength in dark mode; `headingFont` adds the heading role
-    when it is split from the body face. */
+/** Prints a theme as paste-ready CSS: `overrides` in `:root`, and
+    `darkOverrides` in a `[data-theme="dark"]` block when there are any.
+    theme-export.ts decides what goes in each block; `headingFont` adds the
+    heading role when it is split from the body face. */
 export function buildCssSnippet(
   overrides: Overrides,
   font: FontOption,

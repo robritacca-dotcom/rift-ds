@@ -250,7 +250,7 @@
   margin-bottom: var(--gap-050);
 }
 
-/* Copy CSS + View CSS + Reset, pinned under the scroller: the rail's
+/* Copy CSS + Export theme + Reset, pinned under the scroller: the rail's
    column puts it below railScroll, so it stays in view however far the
    sections above are scrolled or expanded. */
 .railFooter {
@@ -260,6 +260,16 @@
   gap: var(--gap-300);
   padding: var(--padding-400);
   border-top: var(--border-025) solid var(--color-divider);
+}
+
+/* The copy control is a split button among full-width buttons: it takes
+   the column's width too, the label segment absorbing the slack. */
+.railSplit {
+  display: flex;
+}
+
+.railSplit > :global(.ds-split-button__main) {
+  flex: 1;
 }
 
 /* In the Drawer the footer rides inside the drawer's own scroller, so it
@@ -286,7 +296,7 @@
   margin-top: var(--gap-200);
 }
 
-/* The generated-CSS dialog's body: the install note over the code. */
+/* The export dialog's body: the file tabs, a note, then the code. */
 .cssDialogBody {
   display: flex;
   flex-direction: column;

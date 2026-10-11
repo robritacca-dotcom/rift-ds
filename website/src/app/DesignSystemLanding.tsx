@@ -565,11 +565,15 @@ function ThemeSwitcher() {
 const SUBTITLE_FULL =
   "Open source and fully themeable, built for AI products and coding agents.";
 
+/* One headline per reason the README leads with, in the same order and
+   held to a similar length so every sweep covers about the same ground.
+   The component figure is the registry's count, never a typed number. */
 const SUBTITLE_PHRASES = [
-  "Open source and free.",
-  "Fully themeable.",
-  "Built for AI products.",
-  "Ready for coding agents.",
+  `${COMPONENT_COUNT} typed components, from buttons to charts.`,
+  "AI chat patterns and templates, ready to use.",
+  "Complete themes, applied with one attribute.",
+  "Agent skills and an MCP endpoint, no key needed.",
+  "Free and MIT, by npm, the shadcn CLI or a clone.",
 ];
 
 function RotatingSubtitle() {

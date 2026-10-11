@@ -74,6 +74,15 @@ import { BarChart, LineChart } from 'rift-ds/charts';`;
 const DARK_MODE_SNIPPET = `<!-- Light is the default; flip the whole system with one attribute -->
 <html data-theme="dark">`;
 
+const PAGE_PAINT_SNIPPET = `/* The token stylesheet defines values and styles no element, so
+   paint the page from the tokens once. It then follows the theme
+   and any preset along with the components. */
+body {
+  font-family: var(--font-family-primary);
+  color: var(--color-text-primary);
+  background: var(--color-bg-page-primary);
+}`;
+
 const SHADCN_SNIPPET = `npx shadcn@latest add ${SITE_URL}/r/button.json`;
 
 const CLONE_SNIPPET = `git clone ${REPOSITORY_URL}.git
@@ -397,6 +406,14 @@ export default function GetStartedPage() {
                   your app decides when.
                 </p>
                 <CodeBlock code={DARK_MODE_SNIPPET} language="html" showCopy />
+                <p className={styles.sectionNote}>
+                  The components theme themselves, but the page behind them is
+                  yours. The token stylesheet only defines custom properties,
+                  so until you apply them the body keeps the browser default,
+                  and a dark theme lands as dark components on a white page.
+                  Set the page colours from the tokens once:
+                </p>
+                <CodeBlock code={PAGE_PAINT_SNIPPET} language="css" showCopy />
               </section>
 
               {/* Fonts */}

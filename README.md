@@ -65,6 +65,7 @@ import 'rift-ds/tokens/presets/presets.css';
 ```
 
 - **Dark mode**: `data-theme="dark"` on the root element; light is the default.
+- **Page colours**: the token stylesheet defines custom properties and styles no element, so paint the page once: set `background: var(--color-bg-page-primary)`, `color: var(--color-text-primary)` and `font-family: var(--font-family-primary)` on `body`. Without it a dark theme lands as dark components on a white page.
 - **Your own brand**: every semantic token chains to a primitive, so overriding one primitive re-themes everything built on it. The [playground](https://rift-ds.com/playground) restyles the system live and copies out a complete, paste-ready override.
 - **Fonts**: the base theme bundles no text face, and the whole scale chains to `--font-family-primary` (split heading and body faces via `--font-family-heading` and `--font-family-body`); point them at any font you load. Only the preset stylesheets carry faces, each self-hosting its own, and only the presets you import pull them in.
 - **Icons**: a Material Symbols Rounded variable font is bundled and components import it themselves, with every Google axis exposed as a custom property. Every icon prop also takes your own element, so any icon set drops in.

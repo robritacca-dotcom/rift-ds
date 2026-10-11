@@ -197,6 +197,10 @@ const handler = createMcpHandler(
             `Dark mode is data-theme="dark" on the root element; every semantic token has a light and a dark value. ` +
               `Re-theme by overriding the CSS custom properties (call list_tokens for the full set).`,
             "",
+            `Page colours: the token stylesheet defines custom properties and styles no element, so set ` +
+              `background: var(--color-bg-page-primary), color: var(--color-text-primary) and ` +
+              `font-family: var(--font-family-primary) on body. Without it a dark theme renders dark components on a white page.`,
+            "",
             `Fonts: the primary face is not bundled; set --font-family-primary to your own (the base theme is set in Nunito Sans; the preset stylesheets bring their own faces). ` +
               `The Material Symbols icon font ships inside the package.`,
             "",

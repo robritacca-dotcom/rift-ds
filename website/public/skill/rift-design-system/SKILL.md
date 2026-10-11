@@ -27,6 +27,8 @@ The package is ESM-only, resolved via exports subpaths: use a bundler that handl
 
 Set `data-theme="dark"` on the root element. Every semantic colour token has a light and a dark value; components never query `prefers-color-scheme` themselves.
 
+The token stylesheet defines custom properties and styles no element, so paint the page yourself or a dark theme renders dark components on a white page: set `background: var(--color-bg-page-primary)`, `color: var(--color-text-primary)` and `font-family: var(--font-family-primary)` on `body`.
+
 ## Theming
 
 Components read semantic tokens (`--color-*`, `--radius-*`, `--font-*`, `--motion-*`, ...), and every semantic colour token references a `--primitive-*` value. Re-theme by overriding primitives: one override cascades through both themes at once. Never hardcode a colour beside the components; override the token it should come from. references/tokens.md lists every semantic token with the value it resolves to in light and dark; the live reference is at https://rift-ds.com/foundations, and the MCP endpoint's `list_tokens` tool serves the registry.

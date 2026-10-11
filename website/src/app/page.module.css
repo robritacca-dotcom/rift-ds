@@ -54,6 +54,9 @@
   display: flex;
   justify-content: center;
   width: 100%;
+  /* The row opens the hero, so it stands clear of the headline: the same
+     step again on top of the hero's own gap. */
+  margin-bottom: var(--gap-400);
   opacity: 0;
   animation: heroThemesIn var(--motion-duration-slower) var(--motion-ease-entrance) both;
 }
@@ -300,11 +303,14 @@
 
 /* The tooltip card: floats above the dot, names the theme in its own
    heading face with the font pairing underneath, and previews the
-   theme's corner language on its swatch. Fades up after a beat, so
+   theme's corner language on its swatch. Rises in after a beat, so
    sweeping the row doesn't strobe cards. */
 .swatchTip {
   position: absolute;
-  top: calc(100% + 12px);
+  /* Opens upward: the row heads the hero, so a card dropping down would
+     land on the headline. Above the dots there is only the ambient
+     field. */
+  bottom: calc(100% + 12px);
   left: 50%;
   display: flex;
   flex-direction: column;
@@ -323,7 +329,7 @@
   border-radius: var(--radius-400);
   box-shadow: var(--shadow-floating);
   opacity: 0;
-  transform: translate(-50%, -6px);
+  transform: translate(-50%, 6px);
   pointer-events: none;
   z-index: 5;
   /* No exit transition: the moment the pointer moves to a neighbour the

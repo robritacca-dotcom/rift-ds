@@ -1371,22 +1371,21 @@ export default function DesignSystemLanding() {
              the resources strip below the collage, plus the footer and the
              Install card.) ---------- */}
         <section className={styles.hero} aria-label="About the design system">
+          {/* The theme row opens the hero: picking a look comes first, and
+              everything beneath it answers in that look. It enters by
+              opacity alone, outside the animated wrapper below. */}
+          <div className={styles.heroThemes}>
+            <ThemeSwitcher />
+          </div>
           {/* The entrance animation lives on this wrapper, NOT the section:
               .animate-in's will-change makes an ancestor a backdrop root,
               which would stop the theme tooltips blurring the page behind
-              them. The theme row enters by opacity alone, outside it. */}
+              them. */}
           <div className={`${styles.heroInner} animate-in`}>
           {/* The tagline is the h1: the nav wordmark owns the name. */}
           <h1 className={styles.pageTitle}>The AI-ready React design system</h1>
           <RotatingSubtitle />
-          <ButtonGroup
-            ariaLabel="Get started"
-            buttons={[
-              { label: "Get started", variant: "primary" as const, href: "/docs/get-started" },
-              { label: "Browse components", variant: "secondary" as const, href: "/components" },
-            ]}
-          />
-          {/* The counts sit between the two rules; the theme dots close
+          {/* The counts sit between the two rules; the section links close
               the hero. Every figure imports from the registry export that
               owns it, so the band can never overstate. */}
           <FadeDivider className={styles.heroDivider} />
@@ -1401,9 +1400,13 @@ export default function DesignSystemLanding() {
             />
           </div>
           <FadeDivider className={styles.heroDivider} />
-          </div>
-          <div className={`${styles.heroThemes} animate-delay-1`}>
-            <ThemeSwitcher />
+          <ButtonGroup
+            ariaLabel="Get started"
+            buttons={[
+              { label: "Get started", variant: "primary" as const, href: "/docs/get-started" },
+              { label: "Browse components", variant: "secondary" as const, href: "/components" },
+            ]}
+          />
           </div>
         </section>
 

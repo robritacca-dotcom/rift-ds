@@ -24,6 +24,7 @@ import {
   type Overrides,
   accentOverrides,
   actionColorPlan,
+  aiGradientTonalOverrides,
   advancedColorOverrides,
   isAccentsPristine,
   googleFontHref,
@@ -152,6 +153,20 @@ const withoutActionColours = (extras?: Overrides): Overrides | undefined => {
   return Object.keys(kept).length > 0 ? kept : undefined;
 };
 
+/**
+ * Extras with the ambient blob colours removed. A preset may tune its
+ * background field apart from its accents; once the accents are picked by
+ * hand or sampled from an image, the blobs go back to following them, or
+ * the accent lever would stop moving the background it is shown beside.
+ */
+const withoutAmbient = (extras?: Overrides): Overrides | undefined => {
+  if (!extras) return extras;
+  const kept = Object.fromEntries(
+    Object.entries(extras).filter(([name]) => !name.startsWith("--color-ambient-"))
+  );
+  return Object.keys(kept).length > 0 ? kept : undefined;
+};
+
 export default function PlaygroundPage() {
   /* ---------- the active view ----------
      Local state (the levers must survive a switch), mirrored into ?view=
@@ -264,8 +279,9 @@ export default function PlaygroundPage() {
   const [exportTab, setExportTab] = useState<ExportTab>("css");
   const [advColors, setAdvColors] = useState<AdvancedColorState>(DEFAULT_ADVANCED);
   /* The ambient accent sextet — the six --color-core-accent-* roles,
-     which colour the background blobs and chart series 2–7 together.
-     Seeded by a preset, hand-picked in the Advanced colours dialog. */
+     which colour chart series 2–7 and, through the --color-ambient-*
+     tokens that follow them by default, the background blobs. Seeded by a
+     preset, hand-picked in the Advanced colours dialog. */
   const [accents, setAccents] = useState<AccentSextet>(SHIPPED_ACCENTS);
 
   /* ---------- theming from an image ----------
@@ -300,7 +316,7 @@ export default function PlaygroundPage() {
       that lever, never snap the rest of the look back to the shipped
       defaults. */
   const [presetExtras, setPresetExtras] = useState<
-    Pick<ThemePreset, "brandDark" | "extraOverrides" | "extraOverridesDark">
+    Pick<ThemePreset, "brandDark" | "aiGradient" | "ambient" | "extraOverrides" | "extraOverridesDark">
   >({});
 
   const syncPresetParam = (value: string) => {
@@ -318,6 +334,15 @@ export default function PlaygroundPage() {
     syncPresetParam("custom");
     setter(value);
   };
+
+  /** Hand the background blobs back to the accents (see withoutAmbient). */
+  const releaseAmbient = () =>
+    setPresetExtras((e) => ({
+      ...e,
+      ambient: undefined,
+      extraOverrides: withoutAmbient(e.extraOverrides),
+      extraOverridesDark: withoutAmbient(e.extraOverridesDark),
+    }));
 
   /** Explicitly picking an action colour also retires the inherited
       theme-dependent brand — the pick applies to both themes. The neutral
@@ -358,8 +383,9 @@ export default function PlaygroundPage() {
        their positions. */
     setPresetExtras((e) => ({
       brandDark: undefined,
-      extraOverrides: withoutActionColours(e.extraOverrides),
-      extraOverridesDark: withoutActionColours(e.extraOverridesDark),
+      aiGradient: e.aiGradient,
+      extraOverrides: withoutAmbient(withoutActionColours(e.extraOverrides)),
+      extraOverridesDark: withoutAmbient(withoutActionColours(e.extraOverridesDark)),
     }));
     setAdvColors(DEFAULT_ADVANCED);
     setBrand(source.theme.brand);
@@ -414,6 +440,8 @@ export default function PlaygroundPage() {
     setAccents({ ...p.accents }); // the theme's ambient sextet
     setPresetExtras({
       brandDark: p.brandDark,
+      aiGradient: p.aiGradient,
+      ambient: p.ambient,
       extraOverrides: p.extraOverrides,
       extraOverridesDark: p.extraOverridesDark,
     });
@@ -481,6 +509,9 @@ export default function PlaygroundPage() {
     if (actionPlan) {
       Object.assign(merged, actionPlan.primitives, actionPlan.semantics);
     }
+    if (presetExtras.aiGradient === "tonal") {
+      Object.assign(merged, aiGradientTonalOverrides(actionPlan));
+    }
     if (tintOn && tintStrength > 0) {
       Object.assign(merged, neutralOverrides(tintSeed, tintStrength / 100, theme === "dark" ? "dark" : "light"));
     }
@@ -505,6 +536,9 @@ export default function PlaygroundPage() {
     if (!isAccentsPristine(accents)) {
       Object.assign(merged, accentOverrides(accents));
     }
+    presetExtras.ambient?.forEach((hex, i) => {
+      merged[`--color-ambient-${i + 1}`] = hex;
+    });
     if (presetExtras.extraOverrides) {
       Object.assign(merged, presetExtras.extraOverrides);
     }
@@ -638,6 +672,8 @@ export default function PlaygroundPage() {
       headingFontLabel,
       accents,
       advanced: advColors,
+      aiGradient: presetExtras.aiGradient,
+      ambient: presetExtras.ambient,
       extraOverrides: presetExtras.extraOverrides,
       extraOverridesDark: presetExtras.extraOverridesDark,
     });
@@ -973,8 +1009,12 @@ export default function PlaygroundPage() {
           accents={accents}
           overrides={overrides}
           onChange={changeAdvColors}
-          onAccentsChange={asCustom(setAccents)}
+          onAccentsChange={asCustom((next: AccentSextet) => {
+            releaseAmbient();
+            setAccents(next);
+          })}
           onResetColors={() => {
+            releaseAmbient();
             setAdvColors(DEFAULT_ADVANCED);
             setAccents(SHIPPED_ACCENTS);
           }}

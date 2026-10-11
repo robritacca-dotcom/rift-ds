@@ -12,7 +12,7 @@
   },
   "blobs": [
     {
-      "token": "--color-core-accent-gold",
+      "token": "--color-ambient-1",
       "size": 0.45,
       "cx": 0.175,
       "cy": 0.125,
@@ -21,7 +21,7 @@
       "weight": 1
     },
     {
-      "token": "--color-core-accent-mint",
+      "token": "--color-ambient-2",
       "size": 0.55,
       "cx": 0.125,
       "cy": 0.125,
@@ -30,7 +30,7 @@
       "weight": 1
     },
     {
-      "token": "--color-core-accent-violet",
+      "token": "--color-ambient-3",
       "size": 0.9,
       "cx": 0.35,
       "cy": 0.25,
@@ -48,7 +48,7 @@
       "weight": 1
     },
     {
-      "token": "--color-core-accent-cobalt",
+      "token": "--color-ambient-4",
       "size": 0.55,
       "cx": -0.125,
       "cy": 0.475,
@@ -57,7 +57,7 @@
       "weight": 1
     },
     {
-      "token": "--color-core-accent-coral",
+      "token": "--color-ambient-5",
       "size": 0.48,
       "cx": 0.39,
       "cy": -0.26,
@@ -66,7 +66,7 @@
       "weight": 1
     },
     {
-      "token": "--color-core-accent-amber",
+      "token": "--color-ambient-6",
       "size": 0.3,
       "cx": 0.35,
       "cy": 0.3,

@@ -193,6 +193,16 @@
   --color-core-accent-amber: var(--primitive-orange-07);
   --color-core-accent-gold: var(--primitive-yellow-07);
   --color-core-accent-mint: var(--primitive-green-07);
+
+  /* Ambient: the background shader's six blob colours. Each follows a core
+     accent by default; a theme re-points them to tune the ambient field
+     without moving the chart series the accents also feed. */
+  --color-ambient-1: var(--color-core-accent-gold);
+  --color-ambient-2: var(--color-core-accent-mint);
+  --color-ambient-3: var(--color-core-accent-violet);
+  --color-ambient-4: var(--color-core-accent-cobalt);
+  --color-ambient-5: var(--color-core-accent-coral);
+  --color-ambient-6: var(--color-core-accent-amber);
   --color-trend-up: var(--primitive-green-07);
   --color-trend-down: var(--primitive-red-07);
 

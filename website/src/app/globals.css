@@ -396,14 +396,14 @@ html[data-embedded] *::after {
 .blur-yellow {
   --blob-size: 45vw;
   --blob-ml: -5%; --blob-mt: -10%;
-  --blob-color: var(--color-core-accent-gold);
+  --blob-color: var(--color-ambient-1);
   animation-duration: 18s;
 }
 
 .blur-green {
   --blob-size: 55vw;
   --blob-ml: -15%; --blob-mt: -15%;
-  --blob-color: var(--color-core-accent-mint);
+  --blob-color: var(--color-ambient-2);
   animation-duration: 16s;
   animation-delay: 1s;
 }
@@ -411,7 +411,7 @@ html[data-embedded] *::after {
 .blur-purple {
   --blob-size: 90vw;
   --blob-ml: -10%; --blob-mt: -20%;
-  --blob-color: var(--color-core-accent-violet);
+  --blob-color: var(--color-ambient-3);
   animation-duration: 22s;
   animation-delay: 0.5s;
 }
@@ -427,7 +427,7 @@ html[data-embedded] *::after {
 .blur-blue {
   --blob-size: 55vw;
   --blob-ml: -40%; --blob-mt: 20%;
-  --blob-color: var(--color-core-accent-cobalt);
+  --blob-color: var(--color-ambient-4);
   animation-duration: 17s;
   animation-delay: 0.8s;
 }
@@ -435,7 +435,7 @@ html[data-embedded] *::after {
 .blur-red {
   --blob-size: 48vw;
   --blob-ml: 15%; --blob-mt: -50%;
-  --blob-color: var(--color-core-accent-coral);
+  --blob-color: var(--color-ambient-5);
   animation-duration: 19s;
   animation-delay: 0.3s;
 }
@@ -443,7 +443,7 @@ html[data-embedded] *::after {
 .blur-orange {
   --blob-size: 30vw;
   --blob-ml: 20%; --blob-mt: 15%;
-  --blob-color: var(--color-core-accent-amber);
+  --blob-color: var(--color-ambient-6);
   animation-duration: 15s;
   animation-delay: 1.2s;
 }

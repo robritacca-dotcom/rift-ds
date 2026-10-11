@@ -13,6 +13,7 @@ import {
   SHIPPED_ICON_WEIGHT,
   actionColorPlan,
   advancedColorOverrides,
+  aiGradientTonalOverrides,
   densityOverrides,
   elevationOverrides,
   iconOverrides,
@@ -70,9 +71,18 @@ export interface ThemePreset {
       role follows the body typeface (the shipped single-face system). */
   headingFontLabel?: string;
   /** The ambient accent sextet — the six `--color-core-accent-*` roles as
-      hexes. They colour the WebGL background blobs and feed chart series
-      2–7, so every theme must say what its ambient colours are. */
+      hexes. They feed chart series 2–7 and are what the background blobs
+      follow unless `ambient` says otherwise, so every theme must say what
+      its ambient colours are. */
   accents: AccentSextet;
+  /** The background shader's six blob colours (`--color-ambient-1` to
+      `-6`) as hexes, for a theme that wants its ambient field tuned apart
+      from the accents. Absent, each blob follows its accent slot. */
+  ambient?: readonly [string, string, string, string, string, string];
+  /** The AI gradient's stops. "tonal" draws all three from the action
+      key's ramp (see aiGradientTonalOverrides); absent keeps the base
+      look's red and blue stops with the end stop on the key. */
+  aiGradient?: "tonal";
   /** Hand-tuned adjacent ramp keys: every chromatic ramp re-keyed to sit
       in the theme (the action colour's own family is left to the action
       lever). Loads into the Advanced colours state. */
@@ -120,6 +130,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     fontLabel: "Source Sans 3",
     headingFontLabel: "Lora (serif)",
     // Earth sextet: every ambient colour muted toward the terracotta key.
+    aiGradient: "tonal",
     accents: {
       coral: "#D4695F",
       violet: "#A5789F",
@@ -128,6 +139,9 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
       gold: "#E7C175",
       mint: "#7FAE8F",
     },
+    // The ambient field keeps the accents' gold, mint, violet and cobalt
+    // and trades the coral and amber blobs for lighter tones of the key colour.
+    ambient: ["#E7C175", "#7FAE8F", "#A5789F", "#5E6FA8", "#E6A792", "#F0C9BC"],
     // Earthy neighbours: every hue muted and pulled a few degrees toward
     // the terracotta key. Orange is the action family, left alone.
     advanced: bases({
@@ -176,6 +190,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     // Greyed accents: the background glow blobs and chart series go
     // monochrome with the rest of the look. Status colours follow the
     // ink-wash ramps above, so they desaturate too.
+    aiGradient: "tonal",
     accents: {
       coral: "#A3A3A3",
       violet: "#8F8F8F",
@@ -184,6 +199,9 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
       gold: "#C9C9C9",
       mint: "#ADADAD",
     },
+    // The ambient field keeps the accents' gold, mint, violet and cobalt
+    // and trades the coral and amber blobs for lighter tones of the key colour.
+    ambient: ["#C9C9C9", "#ADADAD", "#8F8F8F", "#5C5C5C", "#707070", "#A7A7A7"],
     // Hairlines carry Smoke's depth, so its dividers step ONE ramp
     // notch stronger than the base theme's (which they inherit as
     // near-invisible on this look's flat grounds): 02 to 03 in light,
@@ -195,6 +213,10 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     },
     extraOverridesDark: {
       "--color-divider": "var(--primitive-neutral-07)",
+      // Smoke's key flips to near-white in dark mode, so the two blobs that
+      // carry its lighter tones flip with it.
+      "--color-ambient-5": "#F6F6F6",
+      "--color-ambient-6": "#F9F9F9",
     },
   },
   contrast: {
@@ -265,6 +287,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     fontLabel: "DM Sans",
     headingFontLabel: "Poppins",
     // Sunset sextet: the ambient palette leans warm around the coral key.
+    aiGradient: "tonal",
     accents: {
       coral: "#FF5A5F",
       violet: "#C86B98",
@@ -273,6 +296,9 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
       gold: "#FFC24B",
       mint: "#2EBFA5",
     },
+    // The ambient field keeps the accents' gold, mint, violet and cobalt
+    // and trades the coral and amber blobs for lighter tones of the key colour.
+    ambient: ["#FFC24B", "#2EBFA5", "#C86B98", "#5E7BD0", "#E6708C", "#F0A7B8"],
     // Red is the action family, left alone.
     advanced: bases({
       orange: "#FC642D",
@@ -321,6 +347,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     fontLabel: "Manrope",
     headingFontLabel: "Space Grotesk",
     // Warm bold sextet: the ambient palette keyed hot around the gold.
+    aiGradient: "tonal",
     accents: {
       coral: "#F58B5B",
       violet: "#B78AD9",
@@ -329,6 +356,9 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
       gold: "#FFD166",
       mint: "#7FC9A0",
     },
+    // The ambient field keeps the accents' gold, mint, violet and cobalt
+    // and trades the coral and amber blobs for lighter tones of the key colour.
+    ambient: ["#FFD166", "#7FC9A0", "#B78AD9", "#6E7FD9", "#FFE19C", "#FFEDC2"],
     // Bold neighbours: every hue keyed hot around the gold. Yellow is
     // the action family, left alone.
     advanced: bases({
@@ -399,6 +429,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     headingFontLabel: "Inter Tight",
     // Bright sextet: the reference's candy-bright secondaries brought up
     // to chart strength around the lime, which doubles as mint.
+    aiGradient: "tonal",
     accents: {
       coral: "#FF7A66",
       violet: "#B18CFF",
@@ -407,6 +438,9 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
       gold: "#FFE14D",
       mint: "#8AE86E",
     },
+    // The ambient field keeps the accents' gold, mint, violet and cobalt
+    // and trades the coral and amber blobs for lighter tones of the key colour.
+    ambient: ["#FFE14D", "#8AE86E", "#B18CFF", "#5AA9E6", "#B3F0A1", "#D0F6C5"],
     // Poster-heavy display: the display tiers ship light with open
     // tracking; Zest sets them extra-bold and pulls the tracking negative,
     // the sub-display a step lighter so the hero pair keeps its hierarchy.
@@ -467,6 +501,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     headingFontLabel: "Montserrat",
     // Deep-woods sextet: lit bark, dusk heather, shaded lake, the amber
     // light shaft, leaf-litter ochre and fern around the pine key.
+    aiGradient: "tonal",
     accents: {
       coral: "#B45E4A",
       violet: "#7E6899",
@@ -475,6 +510,9 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
       gold: "#C2A147",
       mint: "#4E9A6C",
     },
+    // The ambient field keeps the accents' gold, mint, violet and cobalt
+    // and trades the coral and amber blobs for lighter tones of the key colour.
+    ambient: ["#C2A147", "#4E9A6C", "#7E6899", "#446E93", "#709282", "#A7BCB2"],
     // Trail-sign bold: the display tiers ship at a light 300, which reads
     // wispy in Montserrat — Forest sets them semibold instead, with the
     // sub-display a step lighter so the hero pair keeps its hierarchy.
@@ -513,6 +551,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     fontLabel: "IBM Plex Mono",
     // Phosphor band: the whole ambient sextet stays in the emerald band,
     // like a single-phosphor display.
+    aiGradient: "tonal",
     accents: {
       coral: "#35D6A0",
       violet: "#3DBFA8",
@@ -521,6 +560,9 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
       gold: "#7CE8C2",
       mint: "#06D6A0",
     },
+    // The ambient field keeps the accents' gold, mint, violet and cobalt
+    // and trades the coral and amber blobs for lighter tones of the key colour.
+    ambient: ["#7CE8C2", "#06D6A0", "#3DBFA8", "#2FA98F", "#5DE4C1", "#9BEFD9"],
     // Phosphor neighbours: hues lean toward the emerald key, slightly
     // softened. Green is the action family, left alone.
     advanced: bases({
@@ -566,6 +608,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     headingFontLabel: "Fredoka (rounded)",
     // Candy-shop sextet: every ambient colour bright and sugared around
     // the hot-pink key.
+    aiGradient: "tonal",
     accents: {
       coral: "#FF5A8A",
       violet: "#C45CFF",
@@ -574,6 +617,9 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
       gold: "#FFD34D",
       mint: "#3DDCB8",
     },
+    // The ambient field keeps the accents' gold, mint, violet and cobalt
+    // and trades the coral and amber blobs for lighter tones of the key colour.
+    ambient: ["#FFD34D", "#3DDCB8", "#C45CFF", "#5C7CFF", "#E064AB", "#ECA0CB"],
     // Candy neighbours: every hue keyed sweet and bright beside the pink.
     // Red is the action family, left alone.
     advanced: bases({
@@ -621,6 +667,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     fontLabel: "Plus Jakarta Sans",
     headingFontLabel: "Playfair Display (serif)",
     // Violet-leaning sextet: the ambient palette calmed around the key.
+    aiGradient: "tonal",
     accents: {
       coral: "#D96BA8",
       violet: "#9E47EF",
@@ -629,6 +676,9 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
       gold: "#D9BE7A",
       mint: "#6BAE9E",
     },
+    // The ambient field keeps the accents' gold, mint, violet and cobalt
+    // and trades the coral and amber blobs for lighter tones of the key colour.
+    ambient: ["#D9BE7A", "#6BAE9E", "#9E47EF", "#6A5BE0", "#A57BCE", "#C7AEE1"],
     // Violet-leaning neighbours, slightly calmed. Purple is the action
     // family, left alone.
     advanced: bases({
@@ -838,6 +888,9 @@ export function presetOverrides(
   if (plan) {
     Object.assign(merged, plan.primitives, plan.semantics);
   }
+  if (preset.aiGradient === "tonal") {
+    Object.assign(merged, aiGradientTonalOverrides(plan));
+  }
   if (preset.tintOn && preset.tintStrength > 0) {
     Object.assign(merged, neutralOverrides(preset.tintSeed, preset.tintStrength / 100, theme));
   }
@@ -871,6 +924,10 @@ export function presetOverrides(
   for (const name of ACCENT_NAMES) {
     merged[`--color-core-accent-${name}`] = preset.accents[name];
   }
+
+  preset.ambient?.forEach((hex, i) => {
+    merged[`--color-ambient-${i + 1}`] = hex;
+  });
 
   if (preset.extraOverrides) Object.assign(merged, preset.extraOverrides);
   if (theme === "dark" && preset.extraOverridesDark) {

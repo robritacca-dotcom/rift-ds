@@ -90,7 +90,8 @@ export const DEFAULT_SHADER_PARAMS: ShaderParams = {
 };
 
 /**
- * The default composition: eight sources on core accent tokens, filling
+ * The default composition: eight sources, six on the ambient tokens and two
+ * on surface tokens, filling
  * BLOB_COUNT exactly.
  *
  * `--color-action-primary-bg` is deliberately absent. The action colour is
@@ -99,13 +100,13 @@ export const DEFAULT_SHADER_PARAMS: ShaderParams = {
  * source takes `--color-core-ui-secondary` instead.
  */
 export const DEFAULT_SHADER_BLOBS: readonly ShaderBlob[] = [
-  { token: "--color-core-accent-gold", size: 0.45, cx: 0.175, cy: 0.125, period: 18, phase: 0, weight: 1 },
-  { token: "--color-core-accent-mint", size: 0.55, cx: 0.125, cy: 0.125, period: 16, phase: 1, weight: 1 },
-  { token: "--color-core-accent-violet", size: 0.9, cx: 0.35, cy: 0.25, period: 22, phase: 0.5, weight: 1 },
+  { token: "--color-ambient-1", size: 0.45, cx: 0.175, cy: 0.125, period: 18, phase: 0, weight: 1 },
+  { token: "--color-ambient-2", size: 0.55, cx: 0.125, cy: 0.125, period: 16, phase: 1, weight: 1 },
+  { token: "--color-ambient-3", size: 0.9, cx: 0.35, cy: 0.25, period: 22, phase: 0.5, weight: 1 },
   { token: "--color-bg-container-secondary", size: 0.55, cx: 0.025, cy: 0.075, period: 14, phase: 1.5, weight: 1 },
-  { token: "--color-core-accent-cobalt", size: 0.55, cx: -0.125, cy: 0.475, period: 17, phase: 0.8, weight: 1 },
-  { token: "--color-core-accent-coral", size: 0.48, cx: 0.39, cy: -0.26, period: 19, phase: 0.3, weight: 1 },
-  { token: "--color-core-accent-amber", size: 0.3, cx: 0.35, cy: 0.3, period: 15, phase: 1.2, weight: 1 },
+  { token: "--color-ambient-4", size: 0.55, cx: -0.125, cy: 0.475, period: 17, phase: 0.8, weight: 1 },
+  { token: "--color-ambient-5", size: 0.48, cx: 0.39, cy: -0.26, period: 19, phase: 0.3, weight: 1 },
+  { token: "--color-ambient-6", size: 0.3, cx: 0.35, cy: 0.3, period: 15, phase: 1.2, weight: 1 },
   { token: "--color-core-ui-secondary", size: 0.75, cx: -0.125, cy: -0.025, period: 20, phase: 0.7, weight: 1 },
 ];
 

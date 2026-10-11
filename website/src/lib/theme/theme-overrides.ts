@@ -7,7 +7,9 @@
  * once. Two deliberate exceptions ride the same pipeline: the typeface
  * levers set `--font-family-primary` (body) and `--font-family-heading`
  * (the heading role, when split from the body face), and the ambient
- * accent lever sets the semantic `--color-core-accent-*` sextet.
+ * accent lever sets the semantic `--color-core-accent-*` sextet (a preset
+ * may also set the `--color-ambient-*` blob colours directly, and re-point
+ * the `--color-ai-gradient-*` stops along its action ramp).
  */
 
 export interface Overrides {
@@ -461,10 +463,11 @@ export function neutralOverrides(
 
 /* ---------- ambient accents ---------- */
 
-/** The six ambient accent roles, in display order. They colour the WebGL
-    background blobs (website/src/data/shader-background.json points every
-    blob at one) and feed chart series 2–7, so a sextet retunes the
-    ambient field and the categorical chart palette together. */
+/** The six ambient accent roles, in display order. They feed chart series
+    2–7 and are the default for the background blobs: each
+    `--color-ambient-*` token the shader reads points at one, so a sextet
+    retunes the ambient field and the categorical chart palette together
+    unless a preset declares its own `ambient` colours. */
 export const ACCENT_NAMES = [
   "coral",
   "violet",
@@ -727,6 +730,31 @@ export function actionColorPlan(
     isPrimitive: false,
     primitives,
     semantics: actionPointerOverrides(ramp, upper, theme, rebased),
+  };
+}
+
+/**
+ * The tonal AI gradient: all three stops on the action key's own ramp, so
+ * the ring reads as the theme's key colour at three depths instead of
+ * carrying the base look's red and blue. The mid stop is the key's step,
+ * the start four steps lighter, the end two deeper; a key too near the
+ * light end to give four (a near-white button) hands the shortfall to the
+ * deep side, so the ring keeps its spread. Null plan (the shipped key)
+ * means there is nothing to derive from.
+ */
+export function aiGradientTonalOverrides(plan: ActionColorPlan | null): Overrides {
+  const key = /-(\d\d)\)$/.exec(plan?.semantics["--color-action-primary-bg"] ?? "");
+  if (!plan || !key) return {};
+  const last = rampStepsOf(plan.ramp).length - 1;
+  const at = Number(key[1]);
+  const start = Math.max(0, at - 4);
+  const end = Math.min(last, at + 2 + (start - (at - 4)));
+  const ref = (step: number) =>
+    `var(--primitive-${plan.ramp}-${String(step).padStart(2, "0")})`;
+  return {
+    "--color-ai-gradient-start": ref(start),
+    "--color-ai-gradient-mid": ref(at),
+    "--color-ai-gradient-end": ref(end),
   };
 }
 

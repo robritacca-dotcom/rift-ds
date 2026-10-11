@@ -83,6 +83,40 @@ const accentColours: SwatchData[] = [
   },
 ];
 
+/* --- Ambient --- */
+const ambientColours: SwatchData[] = [
+  {
+    label: "Ambient 1", cssVar: "--color-ambient-1",
+    dark: { primitive: "--yellow--07--", hex: "#FFD166", rgb: "255 / 209 / 102" },
+    light: { primitive: "--yellow--07--", hex: "#FFD166", rgb: "255 / 209 / 102" },
+  },
+  {
+    label: "Ambient 2", cssVar: "--color-ambient-2",
+    dark: { primitive: "--green--07--", hex: "#06D6A0", rgb: "6 / 214 / 160" },
+    light: { primitive: "--green--07--", hex: "#06D6A0", rgb: "6 / 214 / 160" },
+  },
+  {
+    label: "Ambient 3", cssVar: "--color-ambient-3",
+    dark: { primitive: "--purple--07--", hex: "#9E47EF", rgb: "158 / 71 / 239" },
+    light: { primitive: "--purple--07--", hex: "#9E47EF", rgb: "158 / 71 / 239" },
+  },
+  {
+    label: "Ambient 4", cssVar: "--color-ambient-4",
+    dark: { primitive: "--blue--07--", hex: "#1E47B0", rgb: "30 / 71 / 176" },
+    light: { primitive: "--blue--07--", hex: "#1E47B0", rgb: "30 / 71 / 176" },
+  },
+  {
+    label: "Ambient 5", cssVar: "--color-ambient-5",
+    dark: { primitive: "--red--07--", hex: "#EF476F", rgb: "239 / 71 / 111" },
+    light: { primitive: "--red--07--", hex: "#EF476F", rgb: "239 / 71 / 111" },
+  },
+  {
+    label: "Ambient 6", cssVar: "--color-ambient-6",
+    dark: { primitive: "--orange--07--", hex: "#EF8247", rgb: "239 / 130 / 71" },
+    light: { primitive: "--orange--07--", hex: "#EF8247", rgb: "239 / 130 / 71" },
+  },
+];
+
 /* --- Page --- */
 const pageColours: SwatchData[] = [
   {
@@ -747,6 +781,16 @@ export default function SemanticColoursPage() {
             <SectionTitle title="Accent colours" />
             <div className={styles.colourSwatches}>
               {accentColours.map((s) => (
+                <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
+              ))}
+            </div>
+          </section>
+
+          {/* Ambient Colours */}
+          <section className={styles.colourGroup}>
+            <SectionTitle title="Ambient colours" />
+            <div className={styles.colourSwatches}>
+              {ambientColours.map((s) => (
                 <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
               ))}
             </div>

@@ -21,13 +21,13 @@ export type OgTheme = "light" | "dark";
    fallbacks and the playground's NEUTRALS mirror live under — so a new,
    dropped, or recoloured blob fails the build until this map agrees. */
 const BLOB_HEX: Record<string, { light: string; dark: string }> = {
-  "--color-core-accent-gold": { light: "#FFD166", dark: "#FFD166" },
-  "--color-core-accent-mint": { light: "#06D6A0", dark: "#06D6A0" },
-  "--color-core-accent-violet": { light: "#9E47EF", dark: "#9E47EF" },
+  "--color-ambient-1": { light: "#FFD166", dark: "#FFD166" },
+  "--color-ambient-2": { light: "#06D6A0", dark: "#06D6A0" },
+  "--color-ambient-3": { light: "#9E47EF", dark: "#9E47EF" },
   "--color-bg-container-secondary": { light: "#F1F1F1", dark: "#303030" },
-  "--color-core-accent-cobalt": { light: "#1E47B0", dark: "#1E47B0" },
-  "--color-core-accent-coral": { light: "#EF476F", dark: "#EF476F" },
-  "--color-core-accent-amber": { light: "#EF8247", dark: "#EF8247" },
+  "--color-ambient-4": { light: "#1E47B0", dark: "#1E47B0" },
+  "--color-ambient-5": { light: "#EF476F", dark: "#EF476F" },
+  "--color-ambient-6": { light: "#EF8247", dark: "#EF8247" },
   "--color-core-ui-secondary": { light: "#052F3E", dark: "#0A4E66" },
 };
 

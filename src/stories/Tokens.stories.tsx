@@ -580,6 +580,15 @@ export const SemanticColors: Story = {
         <ColorToken name="Accent Green" value="--color-core-accent-mint" />
       </TokenSection>
 
+      <TokenSection title="Ambient Colors">
+        <ColorToken name="Ambient 1" value="--color-ambient-1" />
+        <ColorToken name="Ambient 2" value="--color-ambient-2" />
+        <ColorToken name="Ambient 3" value="--color-ambient-3" />
+        <ColorToken name="Ambient 4" value="--color-ambient-4" />
+        <ColorToken name="Ambient 5" value="--color-ambient-5" />
+        <ColorToken name="Ambient 6" value="--color-ambient-6" />
+      </TokenSection>
+
       <TokenSection title="Trend">
         <ColorToken name="Up" value="--color-trend-up" />
         <ColorToken name="Down" value="--color-trend-down" />

@@ -45,11 +45,11 @@ Routes 1 and 2 run a real install (`npm audit fix`, `npm update`, or `npm instal
 ### 4. Prove it took
 
 ```bash
-npm ls <pkg>                    # every copy in the tree is now the patched version, none flagged invalid
+npm ls <pkg>                    # every copy in the tree is now the patched version
 npm audit --audit-level=high --omit=dev    # exits clean: the exact gate CI runs
 ```
 
-`npm ls` listing an old copy means some parent still resolves it; go back to step 2. An override that `npm ls` reports as invalid is not working, whatever `package.json` says.
+`npm ls` listing an old copy means some parent still resolves it; go back to step 2. The installed version is the test, not the `invalid` label: a parent that pins the package to one exact version makes `npm ls` print `invalid` beside a copy the override has correctly raised past that pin, and exit non-zero for it. That is the override working. What matters is that every copy shows the patched version and the audit below exits clean.
 
 ### 5. Verify
 

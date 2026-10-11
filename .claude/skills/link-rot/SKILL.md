@@ -43,7 +43,7 @@ Also spot-check the links the script listed under known blockers — they are pr
 
 ### 3. Fix on a branch
 
-Work in the temporary worktree on branch `links/YYYY-MM-DD`. Do not build in the worktree: a fresh one has no `node_modules`, so the prebuild chain fails (the corpus generator needs `typescript`), and installing there is what `land` forbids. The build check happens when the branch is landed, whose combined `npm run verify` builds it; if anchor text changed, the corpus that build regenerates is committed with the landing.
+Work in the temporary worktree on branch `links/YYYY-MM-DD`. Do not build in the worktree: a fresh one has no `node_modules` of its own, so the prebuild chain fails wherever module lookup cannot climb to the main checkout's install (the corpus generator needs `typescript`), and a worktree that happens to sit inside the checkout only borrows that install, and installing there is what `land` forbids. The build check happens when the branch is landed, whose combined `npm run verify` builds it; if anchor text changed, the corpus that build regenerates is committed with the landing.
 
 ### 4. Report and hand off
 

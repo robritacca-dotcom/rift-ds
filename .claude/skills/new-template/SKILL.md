@@ -35,6 +35,8 @@ The live implementations under `website/src/components/templates/` are the sourc
 - An assistant home (the real chat as the page, a board of tiles under the composer) — the chat home
 - An instrument with one subject in two projections (a map or globe stage, a stage-mounted toolbar, full-width content) — the relay console
 - A phone-only app screen (platform chrome, drawn as a framed device on the dotted stage at wider widths) — the mobile dashboard
+- A console with the real chat docked beside it as a rail — the payroll console
+- A single centred form with no app shell — the sign-in screen
 
 Each implementation's doc comment records its own composition decisions; read the chosen exemplar's before writing.
 

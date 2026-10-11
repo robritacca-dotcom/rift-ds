@@ -3615,6 +3615,32 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "deprecated": "Use `files` with `onFilesSelected` and `onFileRemove`, which draw the queue as tiles."
           },
           {
+            "name": "mentions",
+            "type": "MentionSource[]",
+            "required": false,
+            "description": "What a person can reference while typing, one source per trigger\ncharacter: `@` for entities, `/` for skills. Typing a trigger at the\nstart of a word opens a menu of that source's items, filtered as the\nword grows. Arrows move through it, Enter or Tab writes the choice into\nthe text, Escape closes it. A mention is drawn in the tag colour\nwherever its exact name stands in the text; the value stays a plain\nstring."
+          },
+          {
+            "name": "onMentionSelect",
+            "type": "((item: MentionItem, trigger: string) => void)",
+            "required": false,
+            "description": "Fires with the item a person chose from the mention menu, and the trigger that opened it."
+          },
+          {
+            "name": "mentionPlacement",
+            "type": "\"top\" | \"bottom\"",
+            "required": false,
+            "description": "Which side of the trigger's line the mention menu opens on: `top` lays\nit over the text above, `bottom` over the text below. `top` suits a\ncomposer at the foot of a view.",
+            "defaultValue": "top"
+          },
+          {
+            "name": "formatMentionAnnouncement",
+            "type": "((count: number) => string)",
+            "required": false,
+            "description": "Builds the sentence announced to assistive technology when the mention menu opens or its matches change.",
+            "defaultValue": "(count: number) =>\n  count === 1 ? '1 suggestion' : `${count} suggestions`"
+          },
+          {
             "name": "actions",
             "type": "ReactNode",
             "required": false,
@@ -6603,6 +6629,123 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "The key itself: one row per marker kind.",
             "defaultValue": "[]"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Mention",
+    "label": "Mention",
+    "slug": "mention",
+    "category": "ai",
+    "description": "An inline reference to an entity or a skill, with the menu that @ or / opens while typing and the tag it leaves in the message.",
+    "client": true,
+    "importPath": "rift-ds/components/Mention/Mention",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "Mention",
+        "props": [
+          {
+            "name": "trigger",
+            "type": "string",
+            "required": false,
+            "description": "The character that opened the mention, drawn a step quieter than the name.",
+            "defaultValue": "@"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": ""
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The name: a person, a file, a skill."
+          }
+        ]
+      },
+      {
+        "component": "MentionMenu",
+        "props": [
+          {
+            "name": "items",
+            "type": "MentionItem[]",
+            "required": true,
+            "description": "The items to list, already filtered and ordered."
+          },
+          {
+            "name": "activeId",
+            "type": "string",
+            "required": false,
+            "description": "The `id` of the highlighted item: the one Enter would choose."
+          },
+          {
+            "name": "onActiveChange",
+            "type": "((id: string) => void)",
+            "required": false,
+            "description": "Fires with an item's `id` when the pointer moves onto it."
+          },
+          {
+            "name": "onSelect",
+            "type": "((item: MentionItem) => void)",
+            "required": false,
+            "description": "Fires with the item a person chose."
+          },
+          {
+            "name": "query",
+            "type": "string",
+            "required": false,
+            "description": "The text typed so far. The part of each label that matches it is drawn stronger.",
+            "defaultValue": ""
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name for the list.",
+            "defaultValue": "Suggestions"
+          },
+          {
+            "name": "emptyText",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Shown in place of the list when `items` is empty. Without it an empty menu renders nothing."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": ""
+          }
+        ]
+      },
+      {
+        "component": "MentionText",
+        "props": [
+          {
+            "name": "text",
+            "type": "string",
+            "required": true,
+            "description": "The plain text, exactly as it was typed or sent."
+          },
+          {
+            "name": "sources",
+            "type": "MentionSource[]",
+            "required": true,
+            "description": "The sources whose items count as mentions in this text."
           },
           {
             "name": "className",

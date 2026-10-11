@@ -84,6 +84,7 @@ export * from './components/Lightbox/Lightbox';
 export * from './components/LinkList/LinkList';
 export * from './components/MapCallout/MapCallout';
 export * from './components/MapLegend/MapLegend';
+export * from './components/Mention/Mention';
 export * from './components/MessageActions/MessageActions';
 export * from './components/MessageCard/MessageCard';
 export * from './components/Meter/Meter';

@@ -54,7 +54,7 @@ A set of two-state buttons that can be toggled on or off, supporting text and ic
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/toggle-group.md
 
-## AI (30)
+## AI (31)
 
 Chat, agent, and model surfaces for building AI products, from the composer to the reasoning trace and the diff an agent proposes.
 
@@ -185,6 +185,14 @@ A human-in-the-loop checkpoint with a question from the agent and option buttons
 - Import: `import { InterruptCard } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/interrupt-card.md
+
+### Mention
+
+An inline reference to an entity or a skill, with the menu that @ or / opens while typing and the tag it leaves in the message.
+
+- Import: `import { Mention } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/mention.md
 
 ### Message actions
 

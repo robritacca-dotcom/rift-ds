@@ -514,6 +514,12 @@
       "description": "The corner block of a map: its name, what it shows, and the key to its markers."
     },
     {
+      "name": "mention",
+      "type": "registry:ui",
+      "title": "Mention",
+      "description": "An inline reference to an entity or a skill, with the menu that @ or / opens while typing and the tag it leaves in the message."
+    },
+    {
       "name": "message-actions",
       "type": "registry:ui",
       "title": "Message actions",

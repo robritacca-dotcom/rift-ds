@@ -17,22 +17,31 @@
   --ds-mention-bleed: var(--padding-050);
   margin: 0 calc(-1 * var(--ds-mention-bleed));
   padding: 0 var(--ds-mention-bleed);
-  /* The info family, used as a highlight and not a status: its saturated
-     tone for the name, and a faint wash of the same tone behind it. The saturated tone is
-     the one colour every theme keeps bright and recognisably a colour on
-     both an input and a bubble, where a theme's link colour ranges from
-     vivid to nearly invisible. The fill backs it up, because in a neutral
-     theme the colour alone says little. */
-  /* A wash of the name's own colour, barely there: enough to give the tag
-     an edge, never enough to read as a chip sitting on the line */
+  /* The theme's action colour in its text form, the tone a tertiary button
+     writes its label in. A mention is the one word in a sentence that was
+     chosen from a menu and points at something, so it wears the colour that
+     means "this does something", and it moves with the theme where a fixed
+     hue blended into the themes built near it. Behind it, a wash of the
+     same tone, barely there: enough to give the tag an edge, never enough
+     to read as a chip sitting on the line. The wash carries the tag in a
+     theme whose action colour is a neutral. */
   background-color: var(
     --ds-mention-bg,
-    color-mix(in srgb, var(--color-status-info-icon) 10%, transparent)
+    color-mix(in srgb, var(--color-action-primary-text-tertiary) 10%, transparent)
   );
   border-radius: var(--radius-100);
   /* A name that wraps keeps its fill and corners on both lines */
   box-decoration-break: clone;
-  color: var(--ds-mention-color, var(--color-status-info-icon));
+  /* Two parts in five of the body colour are mixed in. A button label is
+     large and bold enough to carry an action colour that sits near the
+     page; a name set in running text is not, and unmixed it fell under
+     3:1 in the themes whose action colour is closest to their surface.
+     At this ratio it clears 4.5:1 on the page in every shipped theme and
+     both modes, and still reads as the action colour. */
+  color: var(
+    --ds-mention-color,
+    color-mix(in srgb, var(--color-action-primary-text-tertiary) 60%, var(--color-text-primary))
+  );
 }
 
 /* The trigger is punctuation; the name is the word */

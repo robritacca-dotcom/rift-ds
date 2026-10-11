@@ -12,9 +12,10 @@
   width: 100%;
   min-width: 0; /* a flex-item main must not grow to the chart's intrinsic width */
   margin: 0 auto;
-  /* Same token every other page puts above its title, so the h1 sits at
-     the same height site-wide */
-  padding: var(--primitive-gap-1000) 32px 96px;
+  /* A step tighter than the token every other page puts above its title:
+     the hero is the one page whose opening has to land above the fold, so
+     the whole stack rides up a touch. */
+  padding: var(--primitive-gap-500) 32px 96px;
 }
 
 /* ---------- page header (site-standard treatment) ---------- */
@@ -96,6 +97,109 @@
   margin: 0;
 }
 
+/* The rotating subtitle. The tagline above it stays put; this line is
+   what changes, one point per sweep. Every phrase sits in the same grid
+   cell, so the line is always as tall as its tallest phrase and nothing
+   below it moves when the words change.
+
+   .subFull is the whole pitch as one sentence. With motion reduced it is
+   the line a visitor sees and the phrases never show; with motion on it
+   is clipped out of sight but stays in the accessibility tree, so a
+   screen reader hears one sentence rather than a line that keeps
+   changing. */
+.subRotating {
+  display: grid;
+  position: relative;
+}
+
+.subFull,
+.subPhrase {
+  grid-area: 1 / 1;
+  text-wrap: balance;
+}
+
+.subPhrase {
+  visibility: hidden;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .subFull {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+/* The swap is the sweep: a band of the AI gradient (the three stops the
+   Composer's glow and AiButton turn through, so it follows the theme)
+   crosses the line, and the words change behind it. Both phrases are
+   painted through the same oversized gradient, clipped to their text:
+   the arriving one is solid behind the band and clear ahead of it, the
+   leaving one the reverse, so one pass wipes the old line out and the
+   new one in. The arriving phrase then holds for the rest of its cycle,
+   and its animationend is what advances the rotation (no JS timer).
+
+   The sweep is one third of the cycle: the 33.333% keyframe below and
+   the leaving phrase's duration are the same span, which is what keeps
+   the two wipes locked together. */
+@media (prefers-reduced-motion: no-preference) {
+  .subPhrase {
+    background-size: 250% 100%;
+    background-position: 100% 0;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  .subPhraseIn {
+    visibility: visible;
+    background-image: linear-gradient(
+      100deg,
+      var(--color-text-primary) 41%,
+      var(--color-ai-gradient-start) 46%,
+      var(--color-ai-gradient-mid) 50%,
+      var(--color-ai-gradient-end) 54%,
+      transparent 59%
+    );
+    animation: subPhraseIn calc(var(--motion-duration-loop-shimmer) * 3)
+      var(--motion-ease-emphasized) both;
+  }
+
+  .subPhraseOut {
+    visibility: visible;
+    background-image: linear-gradient(
+      100deg,
+      transparent 54%,
+      var(--color-text-primary) 59%
+    );
+    animation: subPhraseOut var(--motion-duration-loop-shimmer)
+      var(--motion-ease-emphasized) both;
+  }
+}
+
+@keyframes subPhraseIn {
+  0% {
+    background-position: 100% 0;
+  }
+  33.333%,
+  100% {
+    background-position: 0% 0;
+  }
+}
+
+@keyframes subPhraseOut {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: 0% 0;
+  }
+}
+
+
 /* ============================================
    STAT STRIP — the metrics band under the
    tagline: the library's own Stat, centred,
@@ -154,6 +258,30 @@
 
 .accentSwatch:hover {
   transform: scale(1.15);
+}
+
+/* The dots pop in one after another, left to right, once the row itself
+   has faded up. The animation sits on the buttons, never on .swatchWrap:
+   an animated wrapper would become a backdrop root and stop the tooltip
+   cards blurring the page. Fill is backwards only, so a landed dot hands
+   its transform back to the hover rule. --swatch-i is the dot's index,
+   set inline by ThemeSwitcher. */
+@media (prefers-reduced-motion: no-preference) {
+  .accentSwatch,
+  .accentSwatchAdd {
+    animation: swatchIn var(--motion-duration-slow) var(--motion-ease-spring) backwards;
+    /* ds-allow(motion): entrance stagger step, a cascade offset between
+       dots rather than an interaction duration, so no --motion-* token
+       applies. */
+    animation-delay: calc(var(--motion-duration-slow) + var(--swatch-i, 0) * 45ms);
+  }
+}
+
+@keyframes swatchIn {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
+  }
 }
 
 .accentSwatch:focus-visible {

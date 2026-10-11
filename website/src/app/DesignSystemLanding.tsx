@@ -510,12 +510,12 @@ function ThemeSwitcher() {
 
   return (
     <div className={styles.accentRow} role="group" aria-label="Theme">
-      {tiles.map((tile) => (
+      {tiles.map((tile, index) => (
         <span key={tile.value} className={styles.swatchWrap}>
           <button
             type="button"
             className={`${styles.accentSwatch} ${active === tile.value ? styles.accentSwatchActive : ""}`}
-            style={{ backgroundColor: tile.color }}
+            style={{ backgroundColor: tile.color, "--swatch-i": index } as React.CSSProperties}
             aria-pressed={active === tile.value}
             aria-label={`${tile.label} (${tile.description})`}
             onClick={() => pick(tile.value)}
@@ -539,6 +539,7 @@ function ThemeSwitcher() {
         <Link
           href="/playground"
           className={styles.accentSwatchAdd}
+          style={{ "--swatch-i": tiles.length } as React.CSSProperties}
           aria-label="Make your own theme in the playground"
         >
           <span className="material-symbols-rounded" aria-hidden="true">
@@ -551,6 +552,57 @@ function ThemeSwitcher() {
         </span>
       </span>
     </div>
+  );
+}
+
+/* The hero's rotating subtitle. The tagline above it is static; this
+   line cycles, one point per sweep. SUBTITLE_FULL is the whole pitch as
+   one sentence: it is what assistive technology reads and what shows
+   with motion reduced, so the rotating phrases are visual only. The
+   rotation has no timer of its own: each phrase's CSS animation is its
+   sweep in plus its hold, and the animation ending is what brings the
+   next phrase on. */
+const SUBTITLE_FULL =
+  "Open source and fully themeable, built for AI products and coding agents.";
+
+const SUBTITLE_PHRASES = [
+  "Open source and free.",
+  "Fully themeable.",
+  "Built for AI products.",
+  "Ready for coding agents.",
+];
+
+function RotatingSubtitle() {
+  const [current, setCurrent] = useState(0);
+  const [previous, setPrevious] = useState<number | null>(null);
+
+  const advance = (event: React.AnimationEvent<HTMLSpanElement>) => {
+    // The leaving phrase's animation ends too; only the arriving one's
+    // end (its hold running out) moves the rotation on.
+    if (event.currentTarget.dataset.phrase !== String(current)) return;
+    setPrevious(current);
+    setCurrent((current + 1) % SUBTITLE_PHRASES.length);
+  };
+
+  return (
+    <p className={`${styles.subDisplay} ${styles.subRotating}`}>
+      <span className={styles.subFull}>{SUBTITLE_FULL}</span>
+      {SUBTITLE_PHRASES.map((phrase, index) => {
+        const state =
+          index === current ? styles.subPhraseIn : index === previous ? styles.subPhraseOut : "";
+        return (
+          <span
+            key={phrase}
+            data-phrase={index}
+            className={`${styles.subPhrase} ${state}`}
+            aria-hidden="true"
+            onAnimationEnd={advance}
+          >
+            {phrase}
+          </span>
+        );
+      })}
+    </p>
   );
 }
 
@@ -1306,10 +1358,7 @@ export default function DesignSystemLanding() {
           <div className={`${styles.heroInner} animate-in`}>
           {/* The tagline is the h1: the nav wordmark owns the name. */}
           <h1 className={styles.pageTitle}>The AI-ready React design system</h1>
-          <p className={styles.subDisplay}>
-            Open source and fully themeable, built for AI products and coding
-            agents.
-          </p>
+          <RotatingSubtitle />
           <ButtonGroup
             ariaLabel="Get started"
             buttons={[

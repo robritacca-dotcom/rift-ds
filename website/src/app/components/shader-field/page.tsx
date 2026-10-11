@@ -87,8 +87,8 @@ export default function ShaderFieldPage() {
           <section className={styles.section}>
             <SectionTitle title="Default" />
             <p className={styles.demoText}>
-              Eight sources on the core accent tokens, drifting on 14 to 22
-              second cycles. The field fills its positioned ancestor and ignores
+              Eight sources, six on the ambient tokens and two on surface
+              tokens, drifting on 14 to 22 second cycles. The field fills its positioned ancestor and ignores
               pointer events, so placement, clipping and any mask belong to the
               box you put it in.
             </p>

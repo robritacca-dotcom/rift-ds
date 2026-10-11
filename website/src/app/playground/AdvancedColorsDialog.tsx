@@ -36,7 +36,8 @@ export interface AdvancedColorsDialogProps {
  * 07. The mini swatches read from the applied overrides, so they show the
  * same values the page behind the dialog is rendering. Below the ramps,
  * the ambient accent sextet — the six --color-core-accent-* roles that
- * colour the background blobs and chart series 2–7 — gets a swatch row
+ * colour chart series 2–7 and, once picked by hand, the background blobs
+ * (a preset may tune those apart until then) — gets a swatch row
  * per role on the same row grammar.
  */
 export default function AdvancedColorsDialog({

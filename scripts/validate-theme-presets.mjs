@@ -28,7 +28,7 @@
  *      action colour is, or the preset silently inherits the teal.
  *      The ambient accent sextet (--color-core-accent-*) is required too,
  *      with NO intended-default exemption: the accents are a declared
- *      lever (they drive the background blobs and chart series 2-7), so
+ *      lever (they feed chart series 2-7 and the background blobs' default), so
  *      every preset must emit all six in both themes — the shipped keys
  *      are still a declaration.
  *   c. Contrast in every state — each row of ACTION_PAIRINGS below (an
@@ -296,7 +296,7 @@ for (const [id, preset] of Object.entries(THEME_PRESETS)) {
       if (typeof value !== 'string' || value.trim().length === 0) {
         errors.push(
           `preset "${id}" (${theme}): ${role} is ${value === undefined ? 'not declared' : 'empty'} — ` +
-            `the ambient accent sextet is a required lever (it drives the background blobs and chart series 2-7)`
+            `the ambient accent sextet is a required lever (it feeds chart series 2-7 and the background blobs' default)`
         );
       }
     }

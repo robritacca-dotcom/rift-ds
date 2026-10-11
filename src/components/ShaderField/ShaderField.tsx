@@ -39,8 +39,9 @@ type ShaderFieldOwnProps = {
    */
   params?: Partial<ShaderParams>;
   /**
-   * The light sources. Defaults to an eight-source composition on the core
-   * accent tokens. Fewer than `BLOB_COUNT` entries is fine — unused slots park
+   * The light sources. Defaults to an eight-source composition: six on the
+   * ambient tokens (`--color-ambient-*`, which follow the core accents unless a
+   * theme re-points them) and two on surface tokens. Fewer than `BLOB_COUNT` entries is fine — unused slots park
    * off-field; more are ignored, because the shader's uniform arrays are
    * fixed-size.
    */

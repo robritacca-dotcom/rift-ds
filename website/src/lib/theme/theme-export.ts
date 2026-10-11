@@ -185,7 +185,13 @@ export function buildThemeMarkdown(
       : "- Neutrals: untinted greys.",
     `- Ambient accents: ${ACCENT_NAMES.map(
       (accent) => `${accent} \`${preset.accents[accent]}\``
-    ).join(", ")}. They colour the background field and chart series after the first.`,
+    ).join(", ")}. They colour chart series after the first, and the background field unless the theme sets its own ambient colours.`,
+    ...(preset.ambient
+      ? [`- Background field: ${preset.ambient.map((hex) => `\`${hex}\``).join(", ")}, carried by \`--color-ambient-1\` to \`--color-ambient-6\`.`]
+      : []),
+    ...(preset.aiGradient === "tonal"
+      ? ["- AI gradient: three depths of the action colour, through the `--color-ai-gradient-*` tokens."]
+      : []),
     "- Status uses five roles: info, positive, warning, error and neutral, through the `--color-status-*` tokens.",
   ];
 

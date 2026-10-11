@@ -9,7 +9,7 @@
 <!-- npm-badge:end -->
 [![license: MIT](https://img.shields.io/badge/license-MIT-4c1)](LICENSE)
 
-An open source React design system built for AI products and coding agents: components on a three-tier token architecture, complete theme presets that restyle everything with one attribute, and machine surfaces (an MCP endpoint, per-component contracts, an installable agent skill) so your coding agent knows the library as well as you do.
+An open source React design system built for AI products and coding agents: components on a three-tier token architecture, complete theme presets that restyle everything with one attribute, and machine surfaces (an MCP endpoint, per-component contracts, installable agent skills) so your coding agent knows the library as well as you do.
 
 ## Why Rift DS
 
@@ -40,7 +40,7 @@ React 19+ is a peer dependency. The package is ESM-only and resolved via `export
 
 ## Set up your agent
 
-One command teaches a coding agent the system: it installs the generated agent skills into your project and prints the MCP connect line.
+One command teaches a coding agent the system: it installs the generated agent skills into your project and prints the MCP connect line. The skills cover the library's rules, moving existing screens onto the tokens and components, and auditing styles against them.
 
 ```bash
 npx rift-ds init
@@ -52,7 +52,7 @@ The MCP endpoint serves the component catalogue, per-component prop APIs, the to
 claude mcp add --transport http rift-ds https://rift-ds.com/api/mcp
 ```
 
-Every component's prop contract is also plain markdown (append `.md` to its docs URL), and [llms.txt](https://rift-ds.com/llms.txt) indexes every machine surface. Then just ask: "Build a settings page with Rift components."
+Every component's prop contract is also plain markdown (append `.md` to its docs URL), and [llms.txt](https://rift-ds.com/llms.txt) indexes every machine surface. A theme made in the [playground](https://rift-ds.com/playground) exports as CSS, a THEME.md and a setup prompt, so the agent can read the look as well as the code. Then just ask: "Build a settings page with Rift components."
 
 ## Theming
 

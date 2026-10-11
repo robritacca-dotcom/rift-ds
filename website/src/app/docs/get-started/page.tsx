@@ -26,14 +26,14 @@ const { sidebarLinks } = getSidebarLinks(docsSidebarLinks, "/docs/get-started");
 
 /** On-this-page rail entries — ids match the section elements below, in document order. */
 const PAGE_SECTIONS = [
-  { id: "agent-quickstart", label: "Quick start with an agent" },
+  { id: "agent-quickstart", label: "Build with a coding agent" },
   { id: "install", label: "Install" },
   { id: "shadcn-registry", label: "Or pull single components" },
   { id: "clone", label: "Or clone the repo" },
   { id: "dark-mode", label: "Dark mode" },
   { id: "fonts", label: "Bring your own font" },
-  { id: "icons", label: "Tune the icons" },
   { id: "re-theme", label: "Re-theme with primitives" },
+  { id: "icons", label: "Tune the icons" },
   { id: "preset-themes", label: "Ship a theme" },
   { id: "chat-agent-ui", label: "Chat and agent UI" },
   { id: "agent-docs", label: "Docs for your agent" },
@@ -293,17 +293,46 @@ export default function GetStartedPage() {
               {/* Agent quick start — before the human steps, because for many
                   readers the agent IS the installer */}
               <section id="agent-quickstart" className={`${styles.section} animate-in animate-delay-2`}>
-                <SectionTitle title="Quick start with an agent" />
+                <SectionTitle title="Build with a coding agent" />
                 <p className={styles.sectionNote}>
-                  Building with a coding agent? One command teaches it the
-                  system before you write anything: it installs the generated
-                  agent skills into your project and prints the MCP connect
-                  line, so the agent knows the components, the tokens, and the
-                  theming contract from its first session. The{" "}
+                  The system is set up so the coding agent you already use
+                  can build with it, restyle what you have, and check its
+                  own work. Three pieces do that:
+                </p>
+                <ul className={styles.promptList}>
+                  <li className={styles.promptItem}>
+                    <span>
+                      Agent skills it loads every session: the library’s
+                      rules, how to move existing screens onto the tokens
+                      and components, and how to audit styles against them.
+                    </span>
+                    <code className={styles.promptTool}>npx rift-ds init</code>
+                  </li>
+                  <li className={styles.promptItem}>
+                    <span>
+                      An MCP endpoint that answers exact prop and token
+                      questions while it writes code.
+                    </span>
+                    <code className={styles.promptTool}>/api/mcp</code>
+                  </li>
+                  <li className={styles.promptItem}>
+                    <span>
+                      A theme it can read: the playground exports yours as
+                      CSS, a THEME.md that describes the look in words, and
+                      a setup prompt.
+                    </span>
+                    <code className={styles.promptTool}>/playground</code>
+                  </li>
+                </ul>
+                <p className={styles.sectionNote}>
+                  Start with one command. It installs the skills and prints
+                  the MCP connect line, and the{" "}
                   <a href="#agent-docs" className={styles.inlineLink}>
                     docs for your agent
                   </a>{" "}
-                  section below has everything it sets up.
+                  section below covers everything it sets up. Then ask in
+                  plain words: “Apply the theme to the settings screen”,
+                  or “Audit the styles in this folder”.
                 </p>
                 <CodeBlock code={INIT_SNIPPET} language="bash" showCopy />
               </section>
@@ -539,6 +568,16 @@ export default function GetStartedPage() {
                   are one curl each:
                 </p>
                 <CodeBlock code={SKILL_SNIPPET} language="bash" showCopy />
+                <p className={styles.sectionNote}>
+                  Made a theme in the{" "}
+                  <Link href="/playground" className={styles.inlineLink}>
+                    playground
+                  </Link>
+                  ? Its Export theme button gives you the theme as CSS, a
+                  THEME.md and a setup prompt. Hand all three to your agent:
+                  the prompt wires the theme in, and the restyling skill
+                  reads THEME.md before it changes anything.
+                </p>
                 <p className={styles.sectionNote}>
                   Not sure your agent needs any of this? Paste this check
                   into it before it writes code with the package. Every

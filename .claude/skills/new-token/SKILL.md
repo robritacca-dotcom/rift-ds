@@ -34,7 +34,7 @@ CLAUDE.md's **How to Add a New Token** section is the authoritative checklist �
    - Or, if it is internal-only, an entry in `INTERNAL_MODULES` in `scripts/validate-package-exports.mjs` with the reason.
    - If component code mirrors the token's value outside CSS (a `var()` fallback, a serialized config), route the mirror through a validator so it cannot drift — the chart palette guard in `scripts/validate-token-references.mjs` is the pattern to copy.
 
-6. **Verify**: `npm run validate-registry` must pass end to end (it regenerates `src/tokens/registry.json` and re-checks every home), then `npm run build` for the type-check. Displayed counts update themselves — never hardcode one.
+6. **Verify**: `npm run validate-registry` must pass end to end (it regenerates `src/tokens/registry.json` and the other derived surfaces that carry token names or values, the consumer skills' token reference among them, and re-checks every home; the generator scripts at the front of the `validate-registry` entry in the root `package.json` are the authoritative list, so commit every file the chain rewrites), then `npm run build` for the type-check. Displayed counts update themselves — never hardcode one.
 
 ## Guardrails
 

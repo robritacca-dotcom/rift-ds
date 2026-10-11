@@ -202,7 +202,7 @@ const handler = createMcpHandler(
             "",
             `Charts: components from '${pkg.name}/charts' need the optional recharts peer dependency; nothing else does.`,
             "",
-            `Providers: none required — no theme provider, no configuration API. The one provider in the ` +
+            `Providers: none required. There is no theme provider and no configuration API. The one provider in the ` +
               `library is ToastProvider, needed only for the toast queue via useToast.`,
             "",
             `Full guide: ${SITE_URL}/docs/get-started. Live docs: ${SITE_URL}/components. ` +

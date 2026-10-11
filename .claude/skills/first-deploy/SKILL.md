@@ -34,7 +34,7 @@ The cron in `.github/workflows/uptime.yml` runs on schedule against production, 
 
 ### 3. The package exists — DONE
 
-`rift-ds` 1.0.0 published 2026-09-26, provenance-signed, tagged `v1.0.0`. The consumer path is proven: `npx rift-ds init` against the live site installs the agent skill and prints the MCP connect line.
+`rift-ds` 1.0.0 published 2026-09-26, provenance-signed, tagged `v1.0.0`. The consumer path is proven: `npx rift-ds init` against the live site installed the agent skill and printed the MCP connect line.
 
 The ordering trap this step existed to catch, worth keeping for any future new package: **a trusted publisher can only be attached to a package that already exists**, so a first publish cannot use OIDC however carefully it is registered. npm says so outright, returning `404 ... OIDC token exchange error - package not found`. The workflow's `bootstrap_token` input covers exactly that case and is off by default; the registration happens after the name exists, and the token is revoked immediately.
 

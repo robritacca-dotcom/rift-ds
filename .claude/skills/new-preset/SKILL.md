@@ -16,7 +16,7 @@ Use this skill when asked to add a theme, a preset, or a new look — phrases li
 
 ## The governing idea
 
-A preset is a **complete theme, not a tint**: every lever holds a saved position, and `scripts/validate-theme-presets.mjs` is the completeness gate that makes "one attribute, full theme" a guarantee rather than a hope. `THEME_PRESETS` in `website/src/lib/theme/presets.ts` is the single source; the generated stylesheets in `src/tokens/presets/` compile from `presetOverrides` in that file, and the playground's live preview composes the same lever functions (`website/src/lib/theme/theme-overrides.ts`) in a memo of its own that mirrors it. Nothing holds the two compositions to each other, so a change to how the levers combine has to be made in both.
+A preset is a **complete theme, not a tint**: every lever holds a saved position, and `scripts/validate-theme-presets.mjs` is the completeness gate that makes "one attribute, full theme" a guarantee rather than a hope. `THEME_PRESETS` in `website/src/lib/theme/presets.ts` is the single source; the generated stylesheets in `src/tokens/presets/` compile from `presetOverrides` in that file, and the playground's live preview composes the same lever functions (`website/src/lib/theme/theme-overrides.ts`) in a memo of its own that mirrors it. Nothing holds the two compositions to each other, so a change to how the levers combine has to be made in both. The playground's theme export is a third consumer of the composer, and `scripts/validate-theme-export.mjs` holds it to `presetOverrides` for every preset in both themes, so a new preset is checked there too.
 
 ## Instructions
 
@@ -50,13 +50,14 @@ Add the id to `HUE_ORDER` (same file) in its curated position — the array's ow
 node scripts/generate-preset-stylesheets.mjs
 node scripts/validate-preset-stylesheets.mjs
 node scripts/validate-theme-presets.mjs
+node scripts/validate-theme-export.mjs
 ```
 
 The generator writes the preset's `html[data-brand]` stylesheet and refreshes the `presets.css` aggregate; they ship in the npm package. Downstream generators re-embed the preset CSS too (the shadcn registry's base item among them — the `validate-registry` entry in the root `package.json` is the authoritative list), so commit every file the chain regenerates, not just the two named here. The completeness gate then holds every override to a real token, primitive or icon axis hook (the script's doc block owns the rule), requires the action family and all six accents, and checks **every action fill against what components draw on it, in every state and both themes**: labels at WCAG AA 4.5:1, icons and strokes at 3:1. `ACTION_PAIRINGS` in the script is the authoritative table, and each failure names the fill, the foreground, the ratio and the component that draws it. A failing pairing means the key or an override needs to move (deepen or lighten the key, step a hover or pressed fill away from its label, or lift the label through `extraOverrides`) — pinning a gap in `SANCTIONED_AA_GAPS` is deliberate acceptance with a written reason, never a shortcut, and needs the owner's sign-off.
 
 A face the presets have never shipped needs `node scripts/sync-preset-fonts.mjs` first — a deliberate by-hand fetch, never part of the build; its `FAMILIES` table is the download spec, and CLAUDE.md's Fonts entry owns the contract. The stylesheet generator fails naming the script otherwise, and the downloaded woff2s commit with the preset.
 
-Then `npm run verify` — the mirror guards and the site build exercise everything the three scripts do not.
+Then `npm run verify` — the mirror guards and the site build exercise everything those scripts do not.
 
 ### 4. Prove it live
 

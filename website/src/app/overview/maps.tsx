@@ -42,7 +42,7 @@ export const consumerMap: ArchMap = {
     { id: "components-app", from: "pkg-components", to: "you-app", label: "npm install, then import" },
     { id: "tokens-app", from: "pkg-tokens", to: "you-app", label: "one stylesheet import", bend: -40 },
     { id: "presets-root", from: "pkg-presets", to: "you-root", label: "one attribute applies a complete look", kind: "accent" },
-    { id: "site-agent", from: "docs-site", to: "you-agent", label: "npx init installs the agent skills" },
+    { id: "site-agent", from: "docs-site", to: "you-agent", label: "npx rift-ds init installs the skills" },
     { id: "agent-site", from: "you-agent", to: "docs-site", label: "reads contracts over MCP", bend: 60 },
   ],
 };

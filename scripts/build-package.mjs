@@ -4,8 +4,8 @@
  *   1. vite build --config vite.lib.config.ts (JS + d.ts, one module
  *      per source file — see that config's header comment)
  *   2. copies the runtime assets the emitted JS references verbatim:
- *      every non-story .css under src/, the icon font, and the
- *      registry JSON files
+ *      every non-story .css under src/, the icon font and the presets'
+ *      faces, and the registry JSON files
  *   3. writes dist/bin/<BIN_NAME>.mjs — the init bin, with the site
  *      origin, library skill folder and MCP server name stamped in from
  *      scripts/brand.mjs and the executable bit set (publint checks the

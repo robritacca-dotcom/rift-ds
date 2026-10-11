@@ -26,7 +26,8 @@
    specificity with every single-class component rule and — being imported
    later — won, rendering 24px glyphs inside 20px boxes.
 
-   Use one of the semantic steps: --icon-size-500 | -md | -lg | -xl.
+   Use one of the semantic steps on the --icon-size-* scale
+   (tokens-light.css defines them).
 */
 .material-symbols-rounded {
   font-family: 'Material Symbols Rounded';

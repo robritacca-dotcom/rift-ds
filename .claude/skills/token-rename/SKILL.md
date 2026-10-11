@@ -26,7 +26,7 @@ Old name to new name, one line per token, primitives and semantics both. The map
 
 ### 2. Codemod the mechanical layer
 
-A scripted replace over the token files and every consumer: `src/**` and `website/src/**` CSS and TSX. Order the replacements longest-name-first so a shorter name never clobbers a longer one's substring, and match whole custom-property names (the name followed by a non-name character), never bare substrings. Run it, then `git diff --stat` — the shape of the diff should match the mapping's reach, and a file count far off the expectation means the pattern over- or under-matched.
+A scripted replace over the token files and every consumer: CSS, TS/TSX and JSON under `src/**` and `website/src/**`, plus the token names in `scripts/generate-agent-skill.mjs`. Order the replacements longest-name-first so a shorter name never clobbers a longer one's substring, and match whole custom-property names (the name followed by a non-name character), never bare substrings. Run it, then `git diff --stat` — the shape of the diff should match the mapping's reach, and a file count far off the expectation means the pattern over- or under-matched.
 
 ### 3. Let the chain enumerate the rest
 
@@ -36,7 +36,7 @@ npm run validate-registry
 
 Expect failures — they are the checklist, not a problem. The usual remainder, each named by its validator:
 
-- **Hand mirrors** — the playground's ramp/step tables, `presets.ts` overrides, InspectMode's prefix strings (`validate-theme-mirrors.mjs` names each), and the action-family token names in `scripts/validate-theme-presets.mjs` (`ACTION_PAIRINGS`, the required action roles, any `SANCTIONED_AA_GAPS` keys), which that script fails on by name. One mirror fails at generation rather than in a validator: `LIGHT_SURFACE_STEPS` in `website/src/lib/theme/theme-overrides.ts` names neutral steps, and the tint function throws on a step the neutral table does not hold.
+- **Hand mirrors** — the playground's ramp/step tables, `presets.ts` overrides, InspectMode's prefix strings (`validate-theme-mirrors.mjs` names each), and the action-family token names in `scripts/validate-theme-presets.mjs` (`ACTION_PAIRINGS`, the required action roles, any `SANCTIONED_AA_GAPS` keys), which that script fails on by name. Two fail at generation rather than in a validator: `LIGHT_SURFACE_STEPS` in `website/src/lib/theme/theme-overrides.ts` names neutral steps, and the tint function throws on a step the neutral table does not hold; and the consumer skills' prose in `scripts/generate-agent-skill.mjs` names tokens through a lookup that throws on a name the registry does not hold. The playground export's THEME.md and prompt templates in `website/src/lib/theme/theme-export.ts` name tokens too, and `scripts/validate-theme-export.mjs` fails on one that no longer exists.
 - **Validator parsers** — a renumbering can break the regexes that parse the old shape (step patterns, label parsers). Fixing a parser to accept the new grammar is expected; weakening what it asserts is not.
 - **design.md** — every token name it mentions is held to the registry, so stale prose fails by name.
 - **Docs and doc pages** — the foundations pages' swatch rows and `src/stories/Tokens.stories.tsx` carry names in data arrays the mirrors guard; page prose that *describes* the old grammar (a "sizes run xs to xl" sentence) is yours to catch by reading, since no validator parses prose meaning.

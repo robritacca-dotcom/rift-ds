@@ -25,9 +25,6 @@ export interface AgentSkill {
 /** Every published consumer skill, in install order. */
 export const AGENT_SKILLS: readonly AgentSkill[] = manifest.skills;
 
-/** The official consumer-skill count. */
-export const AGENT_SKILL_COUNT: number = AGENT_SKILLS.length;
-
 /** Where the manifest itself is served. */
 export const AGENT_SKILL_MANIFEST_URL = `${SITE_URL}/skill/manifest.json`;
 

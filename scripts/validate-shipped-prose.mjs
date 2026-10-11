@@ -260,6 +260,9 @@ const STORY_MODULES = [
   // strings can be repeated verbatim to a visitor or an agent.
   'website/src/app/api/chat/route.ts',
   'website/src/lib/site-tools.ts',
+  // The MCP route's tool descriptions, server instructions, setup text and
+  // browser landing page are read by agents and by people who open the URL.
+  'website/src/app/api/mcp/route.ts',
   // The guardrail notices (burst limit, daily limit, budget breaker) render
   // in the chat widget when a limit trips — visitor-visible strings in a
   // module the page scan never sees.

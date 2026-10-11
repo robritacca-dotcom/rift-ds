@@ -1,6 +1,16 @@
 {
   "releases": [
     {
+      "version": "1.7.0",
+      "date": "2026-10-11",
+      "title": "Mentions for chat, thread status dots, and three agent skills",
+      "body": [
+        "A chat input can now reference people, files and skills. Mention is the inline tag, MentionMenu the list a trigger opens, and MentionText draws a sent message with its mentions as tags. Composer takes a mentions prop: typing @ or / at the start of a word opens the menu, and the value stays a plain string throughout.",
+        "Threads say what state they are in. ThreadPanel rows and ThreadTabs tabs carry a status (idle, working, unread, waiting or error), drawn by StatusDot, which gains an 8px size for list rows, a hollow outline for a settled state, and a decorative mode so a list of dots is not a list of announcements. The old unread flag still works and is deprecated.",
+        "`npx rift-ds init` now installs three agent skills instead of one: the library skill, with a new reference of every token and its light and dark value, a skill for restyling existing screens onto the system, and one for auditing styles against the tokens. The command reads the list from the site, so later skills arrive without a package update. Add --skill to install one, and use --dir in place of --out, which still works. Everything is additive, so upgrading needs no code changes."
+      ]
+    },
+    {
       "version": "1.6.0",
       "date": "2026-10-10",
       "title": "Generated avatars, a dashboard tile, and prompt cards",

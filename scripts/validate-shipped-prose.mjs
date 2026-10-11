@@ -237,6 +237,14 @@ const STORY_MODULES = [
   'website/src/app/playground/views/ChatView.tsx',
   'website/src/app/playground/views/ChatWelcome.tsx',
   'website/src/app/playground/views/TypeView.tsx',
+  // The theme rail's control labels and the export dialog's notes sit in
+  // component files beside the playground's page.tsx, and the export's
+  // THEME.md and agent prompt are templates in a lib module: copy a
+  // visitor reads, or carries into their own repo, that the page scan
+  // never opens.
+  'website/src/app/playground/PlaygroundControls.tsx',
+  'website/src/app/playground/ExportThemeDialog.tsx',
+  'website/src/lib/theme/theme-export.ts',
   // The graph instrument's panel copy and the overview miniature's caption
   // render on indexed pages (/graph, /overview) while living in component
   // files outside those route folders, so the page scan never sees them.

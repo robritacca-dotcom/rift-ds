@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
-import Link from "next/link";
 import StageToolbar from "@/components/StageToolbar/StageToolbar";
 import { HiddenBackground } from "@/components/BlurBackground/BlurBackground";
 import DotBackground from "@/components/DotBackground/DotBackground";
@@ -12,8 +11,6 @@ import StageControlBar, {
 import StageThemeFlip from "@/components/StageControlBar/StageThemeFlip";
 import styles from "./page.module.css";
 import { Button } from "rift-ds/components/Button/Button";
-import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
-import { Dialog } from "rift-ds/components/Dialog/Dialog";
 import { Drawer } from "rift-ds/components/Drawer/Drawer";
 import {
   DEFAULT_ADVANCED,
@@ -28,7 +25,6 @@ import {
   accentOverrides,
   actionColorPlan,
   advancedColorOverrides,
-  buildCssSnippet,
   isAccentsPristine,
   googleFontHref,
   isAdvancedPristine,
@@ -50,10 +46,20 @@ import { PICKER_FONT_PARAMS, THEME_PRESETS, type ThemePreset } from "@/lib/theme
 
 import { BASE_THEME_ID, isBaseTheme, SERVED_THEME_ID } from "@/lib/theme/brand";
 import { useAppliedOverrides, useSiteTheme } from "@/lib/theme/use-theme-overrides";
+import {
+  buildAgentBundle,
+  buildAgentPrompt,
+  buildThemeCss,
+  buildThemeMarkdown,
+  themeFromLevers,
+} from "@/lib/theme/theme-export";
+import { MCP_ENDPOINT } from "@/lib/mcp-clients";
+import { BIN_NAME, MCP_SERVER_NAME, PACKAGE_NAME, SITE_URL } from "@/config/brand.generated";
 import PlaygroundControls from "./PlaygroundControls";
 import { ImageThemeCard, ImageThemeDropZone } from "./ImageThemeDrop";
 import { themeFromFile, type ImageThemeSource } from "@/lib/theme/image-palette";
 import AdvancedColorsDialog from "./AdvancedColorsDialog";
+import ExportThemeDialog, { type ExportTab } from "./ExportThemeDialog";
 import ChatDirector, { STORY_CONTENT } from "./ChatDirector";
 import InspectMode from "@/components/InspectMode/InspectMode";
 import ChatView, {
@@ -254,7 +260,8 @@ export default function PlaygroundPage() {
   const stageCss = stageMobile ? stageMobileCss() : "";
   const [controlsOpen, setControlsOpen] = useState(false);
   const [advOpen, setAdvOpen] = useState(false);
-  const [cssOpen, setCssOpen] = useState(false);
+  const [exportOpen, setExportOpen] = useState(false);
+  const [exportTab, setExportTab] = useState<ExportTab>("css");
   const [advColors, setAdvColors] = useState<AdvancedColorState>(DEFAULT_ADVANCED);
   /* The ambient accent sextet — the six --color-core-accent-* roles,
      which colour the background blobs and chart series 2–7 together.
@@ -603,61 +610,52 @@ export default function PlaygroundPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  /* The copied CSS always puts the light-mode values in :root, whatever
-     theme is being previewed. Any non-default action colour ships a
-     [data-theme="dark"] block too, because the two themes point a few
-     roles at different steps; a theme-dependent preset brand (black &
-     white) swaps in its own dark plan there. Rebased primitives are
-     theme-agnostic and stay in :root unless the dark brand differs. */
-  const darkHex = presetExtras.brandDark ?? brand;
-  const lightPlan = actionColorPlan(brand, "light");
-  const darkPlan = actionColorPlan(darkHex, "dark");
-
-  /* Dark-only extras belong in the dark block whether or not the action
-     colour itself differs, or the copied CSS would not reproduce what is
-     on screen. They layer last, over the derived dark pointers. */
-  const darkExtras = presetExtras.extraOverridesDark;
-
-  let snippetOverrides = overrides;
-  let snippetDarkBlock: Overrides | undefined = darkExtras
-    ? { ...darkExtras }
-    : undefined;
-  if (lightPlan || darkPlan) {
-    /* Primitives first, then the applied overrides: a rebased ramp may
-       have been further transformed by the all-ramps levers, and those
-       final values are the accurate ones. Only the semantic pointers are
-       forced back to the light-theme map. */
-    snippetOverrides = {
-      ...(lightPlan?.primitives ?? {}),
-      ...overrides,
-      ...(lightPlan?.semantics ?? {}),
+  /* What leaves the playground: the levers as one complete theme, and the
+     three files built from it. The CSS comes from the composer the shipped
+     preset stylesheets are written from, once per theme, so :root always
+     states the light values and the dark block what differs, whichever
+     theme is being previewed (theme-export.ts owns the details). */
+  const exported = useMemo(() => {
+    const theme = themeFromLevers({
+      preset,
+      brand,
+      brandDark: presetExtras.brandDark,
+      tintOn,
+      tintSeed,
+      tintStrength,
+      radiusScale,
+      pill,
+      density,
+      typeScale,
+      motionScale,
+      elevation,
+      displayWeight,
+      headingWeight,
+      tracking,
+      iconWeight,
+      iconFill,
+      fontLabel,
+      headingFontLabel,
+      accents,
+      advanced: advColors,
+      extraOverrides: presetExtras.extraOverrides,
+      extraOverridesDark: presetExtras.extraOverridesDark,
+    });
+    const context = {
+      productName,
+      packageName: PACKAGE_NAME,
+      binName: BIN_NAME,
+      siteUrl: SITE_URL,
+      mcpEndpoint: MCP_ENDPOINT,
+      mcpServerName: MCP_SERVER_NAME,
     };
-    snippetDarkBlock = darkPlan
-      ? {
-          ...(darkHex !== brand ? darkPlan.primitives : {}),
-          ...darkPlan.semantics,
-          ...darkExtras,
-        }
-      : snippetDarkBlock;
-  }
-  /* The tint is the one lever whose primitives differ by theme: light mode's
-     surface steps take a share of it (LIGHT_SURFACE_TINT_RATIO). So :root
-     states the light values whatever is being previewed, and the dark block
-     restates the steps dark mode holds at full strength. */
-  if (tintOn && tintStrength > 0) {
-    const lightTint = neutralOverrides(tintSeed, tintStrength / 100, "light");
-    const darkTint = neutralOverrides(tintSeed, tintStrength / 100, "dark");
-    snippetOverrides = { ...snippetOverrides, ...lightTint };
-    const darkOnly = Object.fromEntries(
-      Object.entries(darkTint).filter(([name, value]) => lightTint[name] !== value)
-    );
-    if (Object.keys(darkOnly).length > 0) {
-      snippetDarkBlock = { ...darkOnly, ...snippetDarkBlock };
-    }
-  }
-  const cssSnippet = isPristine
-    ? "/* Everything is at its shipped default. Move a lever to generate CSS. */"
-    : buildCssSnippet(snippetOverrides, font, snippetDarkBlock, headingFont);
+    return {
+      css: buildThemeCss(theme),
+      markdown: buildThemeMarkdown(theme, context),
+      prompt: buildAgentPrompt(theme, context),
+      bundle: buildAgentBundle(theme, context),
+    };
+  }, [preset, brand, presetExtras, tintOn, tintSeed, tintStrength, radiusScale, pill, density, typeScale, motionScale, elevation, displayWeight, headingWeight, tracking, iconWeight, iconFill, fontLabel, headingFontLabel, accents, advColors, productName]);
 
   /* The Chat view's levers — hosted by the chat director's rail on desktop,
      or slotted into the Drawer above the event list on compact screens, so
@@ -794,7 +792,8 @@ export default function PlaygroundPage() {
               headingFontLabel={headingFontLabel}
               productName={productName}
               isPristine={isPristine}
-              cssSnippet={cssSnippet}
+              cssSnippet={exported.css}
+              agentBundle={exported.bundle}
               onPreset={applyPreset}
               onBrand={pickBrand}
               onTintOn={asCustom(setTintOn)}
@@ -823,7 +822,10 @@ export default function PlaygroundPage() {
                  files stay reachable as the Tide row in the picker. */
               onReset={() => applyPreset(SERVED_THEME_ID)}
               onOpenAdvanced={() => setAdvOpen(true)}
-              onViewCss={() => setCssOpen(true)}
+              onExport={() => {
+                setExportTab("css");
+                setExportOpen(true);
+              }}
               contextual={
                 /* On compact screens the chat director has no rail of its
                    own — its levers and events ride in the Drawer with the
@@ -978,32 +980,20 @@ export default function PlaygroundPage() {
           }}
         />
 
-        {/* The generated CSS, inspectable from any view — the rail's Copy
-            button grabs it without opening this. */}
-        <Dialog
-          open={cssOpen}
-          onOpenChange={setCssOpen}
-          title="Your theme as CSS"
-          size="lg"
-        >
-          <div className={styles.cssDialogBody}>
-            <p className={styles.sectionNote}>
-              Paste this after importing{" "}
-              <code>rift-ds/tokens/tokens.css</code> and your app
-              matches this page, both themes included. The install steps live on{" "}
-              <Link href="/docs/get-started" className={styles.inlineLink}>
-                Get started
-              </Link>
-              .
-            </p>
-            <CodeBlock
-              code={cssSnippet}
-              language="css"
-              filename="theme-overrides.css"
-              showCopy
-            />
-          </div>
-        </Dialog>
+        {/* The theme as files to take away, from any view: the CSS, a
+            THEME.md describing the look, and the prompt that hands both to
+            a coding agent. The rail's copy button grabs the CSS without
+            opening this. */}
+        <ExportThemeDialog
+          open={exportOpen}
+          onOpenChange={setExportOpen}
+          tab={exportTab}
+          onTabChange={setExportTab}
+          css={exported.css}
+          markdown={exported.markdown}
+          prompt={exported.prompt}
+          bundle={exported.bundle}
+        />
 
         <main
           className={[

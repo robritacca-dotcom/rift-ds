@@ -5,7 +5,7 @@ import { pageOpenGraph } from "@/config/navigation";
 // sidebar array, so its metadata is a literal rather than pageMetadata().
 const title = "Playground";
 const description =
-  "Re-theme the design system live across a component showcase, a type specimen, the chat widget and a full dashboard: pick a brand colour, reshape the radii, swap the typeface, then copy the CSS.";
+  "Re-theme the design system live across a component showcase, a type specimen, the chat widget and a full dashboard: pick a brand colour, reshape the radii, swap the typeface, then export the theme as CSS with a brief for a coding agent.";
 
 export const metadata: Metadata = {
   title,

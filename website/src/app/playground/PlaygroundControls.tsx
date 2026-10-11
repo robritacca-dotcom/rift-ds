@@ -3,12 +3,16 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import styles from "./page.module.css";
 import { Button } from "rift-ds/components/Button/Button";
+import { SplitButton } from "rift-ds/components/SplitButton/SplitButton";
+import { MOTION_FEEDBACK_RESET_MS } from "rift-ds/tokens/motion";
 import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
 import { Swatch } from "rift-ds/components/Swatch/Swatch";
 import {
   ACTION_COLOR_PRESETS,
   ICON_WEIGHT_RANGE,
+  LEVER_RANGES,
   TYPE_WEIGHT_RANGE,
+  leverWord,
   motionScaleFromSpeed,
   motionSpeedPercent,
   type ElevationVariant,
@@ -56,6 +60,8 @@ export interface PlaygroundControlsProps {
   productName: string;
   isPristine: boolean;
   cssSnippet: string;
+  /** The setup prompt, THEME.md and the CSS as one paste for a coding agent. */
+  agentBundle: string;
   /** View-specific control groups (e.g. the chat view's transport picker),
       slotted after the shared levers so those never shift between views —
       the rail stays consistent where the views agree and contextual where
@@ -99,8 +105,8 @@ export interface PlaygroundControlsProps {
   onReset: () => void;
   /** Opens the advanced-mode dialog (every primitive ramp). */
   onOpenAdvanced: () => void;
-  /** Opens the generated-CSS dialog (the Copy button's contents, visible). */
-  onViewCss: () => void;
+  /** Opens the export dialog: the CSS, THEME.md and the agent prompt. */
+  onExport: () => void;
 }
 
 /** The sticky theme-control rail — presentational; all state lives in the page. */
@@ -127,6 +133,7 @@ export default function PlaygroundControls({
   productName,
   isPristine,
   cssSnippet,
+  agentBundle,
   contextual,
   variant = "panel",
   onPreset,
@@ -155,7 +162,7 @@ export default function PlaygroundControls({
   onClearImage,
   onReset,
   onOpenAdvanced,
-  onViewCss,
+  onExport,
 }: PlaygroundControlsProps) {
   /* Theme-dependent entries (the neutrals) show and match their dark-mode
      counterpart while dark mode is active. */
@@ -182,7 +189,7 @@ export default function PlaygroundControls({
       ? allPresetOptions
       : allPresetOptions.filter((o) => o.value !== "custom");
 
-  const [copied, setCopied] = useState(false);
+  const [copied, setCopied] = useState<"css" | "agents" | null>(null);
   const copiedTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -191,15 +198,15 @@ export default function PlaygroundControls({
     };
   }, []);
 
-  const copyCss = async () => {
+  const copy = async (what: "css" | "agents") => {
     try {
-      await navigator.clipboard.writeText(cssSnippet);
-      setCopied(true);
+      await navigator.clipboard.writeText(what === "css" ? cssSnippet : agentBundle);
+      setCopied(what);
       if (copiedTimer.current) clearTimeout(copiedTimer.current);
-      copiedTimer.current = setTimeout(() => setCopied(false), 2000);
+      copiedTimer.current = setTimeout(() => setCopied(null), MOTION_FEEDBACK_RESET_MS);
     } catch {
-      // Clipboard unavailable (permissions) — the end-of-page CodeBlock
-      // still offers its own copy affordance.
+      // Clipboard unavailable (permissions): the export dialog's code
+      // blocks still offer their own copy and download.
     }
   };
 
@@ -332,11 +339,9 @@ export default function PlaygroundControls({
             size="compact"
             label="Corner radius"
             value={radiusScale}
-            min={0}
-            max={200}
-            step={10}
+            {...LEVER_RANGES.radius}
             onValueChange={onRadiusScale}
-            format={(v) => `${v}%`}
+            format={(v) => `${leverWord("radius", v)} ${v}%`}
           />
           <InspectorToggleSwitch
             size="compact"
@@ -365,11 +370,9 @@ export default function PlaygroundControls({
             size="compact"
             label="Density"
             value={density}
-            min={70}
-            max={130}
-            step={5}
+            {...LEVER_RANGES.density}
             onValueChange={onDensity}
-            format={(v) => `${v}%`}
+            format={(v) => `${leverWord("density", v)} ${v}%`}
           />
           {/* Presented as speed, so right means faster; the conversion's
               doc block in theme-overrides owns why. */}
@@ -377,11 +380,9 @@ export default function PlaygroundControls({
             size="compact"
             label="Motion"
             value={motionSpeedPercent(motionScale)}
-            min={50}
-            max={150}
-            step={10}
+            {...LEVER_RANGES.motion}
             onValueChange={(speed) => onMotionScale(motionScaleFromSpeed(speed))}
-            format={(v) => `${v}%`}
+            format={(v) => `${leverWord("motion", v)} ${v}%`}
           />
         </div>
       </InspectorSection>
@@ -427,11 +428,9 @@ export default function PlaygroundControls({
             size="compact"
             label="Type scale"
             value={typeScale}
-            min={80}
-            max={120}
-            step={5}
+            {...LEVER_RANGES.typeScale}
             onValueChange={onTypeScale}
-            format={(v) => `${v}%`}
+            format={(v) => `${leverWord("typeScale", v)} ${v}%`}
           />
           <InspectorSlider
             size="compact"
@@ -452,11 +451,9 @@ export default function PlaygroundControls({
             size="compact"
             label="Tracking"
             value={tracking}
-            min={-4}
-            max={4}
-            step={0.5}
+            {...LEVER_RANGES.tracking}
             onValueChange={onTracking}
-            format={(v) => `${v > 0 ? "+" : ""}${v}%`}
+            format={(v) => `${leverWord("tracking", v)} ${v > 0 ? "+" : ""}${v}%`}
           />
         </div>
       </InspectorSection>
@@ -467,20 +464,35 @@ export default function PlaygroundControls({
 
   const footer = (
     <div className={styles.railFooter}>
-          <Button
+          <SplitButton
             size="compact"
-            label={copied ? "Copied" : "Copy CSS"}
+            className={styles.railSplit}
+            label={
+              copied === "css"
+                ? "Copied"
+                : copied === "agents"
+                  ? "Copied for agents"
+                  : "Copy CSS"
+            }
             variant="primary"
             iconLeft={copied ? "check" : "content_copy"}
-            state={isPristine ? "disabled" : "default"}
-            onClick={copyCss}
+            disabled={isPristine}
+            onClick={() => copy("css")}
+            menuLabel="More ways to copy the theme"
+            items={[
+              {
+                label: "Copy for agents",
+                icon: "smart_toy",
+                onClick: () => copy("agents"),
+              },
+            ]}
           />
           <Button
             size="compact"
-            label="View CSS"
+            label="Export theme"
             variant="neutral"
-            iconLeft="code"
-            onClick={onViewCss}
+            iconLeft="ios_share"
+            onClick={onExport}
           />
           <Button
             size="compact"

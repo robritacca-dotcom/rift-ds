@@ -57,6 +57,7 @@ import AdvancedColorsDialog from "./AdvancedColorsDialog";
 import ChatDirector, { STORY_CONTENT } from "./ChatDirector";
 import InspectMode from "@/components/InspectMode/InspectMode";
 import ChatView, {
+  defaultChatPlaceholder,
   type StageSize,
   type TransportMode,
 } from "./views/ChatView";
@@ -680,7 +681,7 @@ export default function PlaygroundPage() {
         <InspectorInput
           size="compact"
           label="Placeholder"
-          placeholder="Ask anything"
+          placeholder={defaultChatPlaceholder(transportMode === "sim")}
           value={chatPlaceholder}
           onValueChange={setChatPlaceholder}
         />

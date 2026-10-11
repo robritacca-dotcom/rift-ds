@@ -13,6 +13,7 @@ import {
   type ThreadPanelThread,
 } from "rift-ds/components/ThreadPanel/ThreadPanel";
 import { ThreadTabs } from "rift-ds/components/ThreadTabs/ThreadTabs";
+import type { MentionSource } from "rift-ds/components/Mention/Mention";
 import AgentPanel from "./AgentPanel";
 import { useSiteChat, useTakeoverViewport } from "@/components/SiteChat/ChatContext";
 import { ChatWelcome, type ChatWelcomeVariant } from "./ChatWelcome";
@@ -23,6 +24,46 @@ import styles from "./ChatView.module.css";
 /* The simulated composer's model list — set dressing for a generic product,
    so choosing one changes nothing but the pill. The default matches the
    label the live composer shows, so switching transports doesn't jump. */
+/* Mock mention sources for the simulated stage: `@` reaches for a person
+   or a file, `/` for a skill. Invented, like the models below — the stage
+   previews a consumer's product, not this site. */
+const MOCK_MENTIONS: MentionSource[] = [
+  {
+    trigger: "@",
+    label: "People and files",
+    items: [
+      { id: "mira", label: "Mira Castellan", description: "Design lead", icon: "person" },
+      { id: "tobias", label: "Tobias Renner", description: "Platform", icon: "person" },
+      { id: "ines", label: "Ines Okonjo", description: "Research", icon: "person" },
+      { id: "roadmap", label: "roadmap.md", description: "Docs", icon: "description" },
+      { id: "pricing", label: "pricing.csv", description: "Finance", icon: "description" },
+      { id: "onboarding", label: "onboarding.pdf", description: "Docs", icon: "description" },
+    ],
+  },
+  {
+    trigger: "/",
+    label: "Skills",
+    items: [
+      { id: "summarize", label: "summarize", description: "The thread so far, in brief" },
+      { id: "draft", label: "draft", description: "Write a first version" },
+      { id: "review", label: "review", description: "Read it for problems" },
+      { id: "translate", label: "translate", description: "Into another language" },
+      { id: "schedule", label: "schedule", description: "Run this later" },
+      { id: "invite", label: "invite", description: "Add a teammate to the workspace" },
+      { id: "export", label: "export", description: "Save the thread as a file" },
+      { id: "status", label: "status", description: "Where things stand" },
+      { id: "share", label: "share", description: "Send a link to this thread" },
+      { id: "search", label: "search", description: "Look across the workspace" },
+    ],
+  },
+];
+
+/** The composer's placeholder when the Placeholder lever is empty. The
+    simulated stage has mentions on, so its line says how to reach them;
+    the live stage has none to offer and keeps the plain ask. */
+export const defaultChatPlaceholder = (simulated: boolean) =>
+  simulated ? "Ask anything, @ for entities or / for commands" : "Ask anything";
+
 const MOCK_MODELS: ModelPickerModel[] = [
   {
     label: "Sonnet 5",
@@ -160,7 +201,7 @@ export interface ChatViewProps {
   title: string;
   /** The review footprint: desktop as a resizable card, mobile in a bezel. */
   size: StageSize;
-  /** The composer's placeholder copy; empty falls back to "Ask anything". */
+  /** The composer's placeholder copy; empty falls back to `defaultChatPlaceholder`. */
   placeholder: string;
   /** What the welcome screen holds under the composer: the starters, one
       of the widget fillings, or nothing. */
@@ -869,7 +910,9 @@ export default function ChatView({
            stacked welcome the site's takeover shows. */
         phone={isDevice || phoneViewport}
         title={title}
-        placeholder={placeholder.trim() === "" ? "Ask anything" : placeholder}
+        placeholder={
+          placeholder.trim() === "" ? defaultChatPlaceholder(simControls) : placeholder
+        }
         showStarters={welcome === "starters"}
         /* The Welcome lever's other fillings ride SiteChat's widget slot.
            The dashboard runs long, so it always turns the welcome into a
@@ -990,6 +1033,9 @@ export default function ChatView({
            all work, previews are built in the browser, and nothing is
            uploaded. The live stage keeps the site's text-only composer. */
         fileAttachments={simControls}
+        /* Mentions ride the same switch: mock people, files and skills on
+           the simulated stage, nothing on the live one. */
+        mentions={simControls ? MOCK_MENTIONS : undefined}
         composerActions={
           simControls ? (
             <>

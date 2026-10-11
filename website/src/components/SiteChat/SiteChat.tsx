@@ -19,6 +19,8 @@ import { CircularButton } from "rift-ds/components/CircularButton/CircularButton
 import { DropdownMenu } from "rift-ds/components/DropdownMenu/DropdownMenu";
 import { CHAT_PLACEMENTS, chatPlacement } from "./placement";
 import { Composer } from "rift-ds/components/Composer/Composer";
+import { MentionText } from "rift-ds/components/Mention/Mention";
+import type { MentionSource } from "rift-ds/components/Mention/Mention";
 import { ModelPicker } from "rift-ds/components/ModelPicker/ModelPicker";
 import { PromptSuggestions } from "rift-ds/components/PromptSuggestions/PromptSuggestions";
 import { MOTION_SUGGESTIONS_THINK_MS } from "rift-ds/tokens/motion";
@@ -66,6 +68,7 @@ export function SiteChat({
   starters: startersOverride,
   composerActions,
   fileAttachments = false,
+  mentions,
   threads,
   tabs,
   aside,
@@ -115,6 +118,11 @@ export function SiteChat({
       it on for its simulated stage, where files are read in the browser
       and never uploaded. */
   fileAttachments?: boolean;
+  /** What the visitor can reference while typing: one source per trigger
+      character, drawn as tags in the composer and in the sent bubble. Off
+      for the site's own chat, which has no entities or skills to offer;
+      the playground passes mock sources on its simulated stage. */
+  mentions?: MentionSource[];
   /** A session-history rail (a ThreadPanel), rendered responsively by the
       widget's own measured width: wide hosts seat it as an inline left
       rail, narrow ones summon it from a header hamburger as a slide-over
@@ -583,7 +591,11 @@ export function SiteChat({
                       )
                     }
                   >
-                    {turn.text}
+                    {mentions && turn.text ? (
+                      <MentionText text={turn.text} sources={mentions} />
+                    ) : (
+                      turn.text
+                    )}
                   </ChatMessage>
                 ) : (
                   <AssistantTurn key={turn.id} turn={turn} />
@@ -640,6 +652,7 @@ export function SiteChat({
             context={pageName ? <>Looking at “{pageName}”</> : undefined}
             contextIcon="description"
             contextPlacement="above"
+            mentions={mentions}
             {...(fileAttachments
               ? {
                   files: queue.items,

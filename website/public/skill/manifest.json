@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "skills": [
+    {
+      "name": "rift-design-system",
+      "summary": "Install, theming and dark mode rules, the component catalogue and the token reference.",
+      "files": [
+        "SKILL.md",
+        "references/components.md",
+        "references/tokens.md"
+      ]
+    },
+    {
+      "name": "rift-apply-theme",
+      "summary": "Restyles existing screens onto the tokens and components.",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "rift-style-audit",
+      "summary": "Audits a project's styles for hardcoded values that should be tokens.",
+      "files": [
+        "SKILL.md"
+      ]
+    }
+  ]
+}

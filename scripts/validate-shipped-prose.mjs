@@ -245,6 +245,9 @@ const STORY_MODULES = [
   'website/src/app/playground/PlaygroundControls.tsx',
   'website/src/app/playground/ExportThemeDialog.tsx',
   'website/src/lib/theme/theme-export.ts',
+  // The lever words (LEVER_VOCABULARY) print beside each slider in the
+  // rail and describe the look in the exported THEME.md.
+  'website/src/lib/theme/theme-overrides.ts',
   // The graph instrument's panel copy and the overview miniature's caption
   // render on indexed pages (/graph, /overview) while living in component
   // files outside those route folders, so the page scan never sees them.

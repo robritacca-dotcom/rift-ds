@@ -39,6 +39,7 @@
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { parseCss } from './token-values.mjs';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 // Normalize CRLF so Windows checkouts validate identically to CI.
@@ -55,52 +56,8 @@ const summaries = [];
 /* CSS reading                                                          */
 /* ------------------------------------------------------------------ */
 
-const stripComments = (css) => css.replace(/\/\*[\s\S]*?\*\//g, '');
-
-/**
- * Split a stylesheet into the declarations outside any at-rule and those
- * inside each @media block, keyed by the block's prelude. The token files
- * nest no deeper than `@media { :root { … } }`.
- */
-function parseCss(css) {
-  const base = new Map();
-  const media = new Map();
-  const text = stripComments(css);
-  let depth = 0;
-  let current = null; // the @media prelude we are inside, if any
-  let mediaDepth = -1;
-  let buffer = '';
-  const flush = (target) => {
-    for (const m of buffer.matchAll(/(--[a-z0-9-]+)\s*:\s*([^;]+);/gi)) target.set(m[1], m[2].trim());
-    buffer = '';
-  };
-  let prelude = '';
-  for (const ch of text) {
-    if (ch === '{') {
-      if (prelude.trim().startsWith('@media') && current === null) {
-        current = prelude.trim().replace(/\s+/g, ' ');
-        mediaDepth = depth;
-        if (!media.has(current)) media.set(current, new Map());
-      }
-      depth++;
-      prelude = '';
-      buffer = '';
-    } else if (ch === '}') {
-      flush(current === null ? base : media.get(current));
-      depth--;
-      if (current !== null && depth === mediaDepth) {
-        current = null;
-        mediaDepth = -1;
-      }
-      prelude = '';
-    } else {
-      prelude += ch;
-      buffer += ch;
-    }
-  }
-  return { base, media };
-}
-
+// The parser is shared with the consumer skills' token reference, so the
+// two surfaces cannot read the token files differently.
 const primitives = parseCss(tokenFile('tokens-primitives.css')).base;
 const light = parseCss(tokenFile('tokens-light.css')).base;
 const dark = parseCss(tokenFile('tokens-dark.css')).base;

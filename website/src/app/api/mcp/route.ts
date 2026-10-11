@@ -42,8 +42,8 @@ import {
   MCP_SERVER_NAME,
   NPM_URL,
   SITE_URL,
-  SKILL_NAME,
 } from "@/config/brand.generated";
+import { AGENT_SKILLS, skillFileUrl } from "@/data/agent-skills";
 import { componentApi } from "@/data/component-api.generated";
 import { MCP_CLIENTS } from "@/lib/mcp-clients";
 import { MCP_TOOLS } from "@/lib/mcp-tools";
@@ -208,10 +208,15 @@ const handler = createMcpHandler(
             `Full guide: ${SITE_URL}/docs/get-started. Live docs: ${SITE_URL}/components. ` +
               `Design spec: ${SITE_URL}/design.md.`,
             "",
-            `Agent skill: ${SITE_URL}/skill/${SKILL_NAME}/SKILL.md — run \`npx ${pkg.name} init\` ` +
-              `to fetch it (with its references/components.md) into the project's ` +
-              `.claude/skills/${SKILL_NAME}/, or save the pair by hand. It carries the library's ` +
-              `install, theming and catalogue rules into every session.`,
+            `Agent skills: run \`npx ${pkg.name} init\` to fetch them into the project's ` +
+              `.claude/skills/ (add --skill <name> for one), or save the files by hand. ` +
+              `A coding agent loads them every session.`,
+            ...AGENT_SKILLS.map(
+              (skill) =>
+                `- ${skill.name}: ${skill.summary} ${skill.files
+                  .map((file) => skillFileUrl(skill, file))
+                  .join(" ")}`
+            ),
           ].join("\n")
         )
     );

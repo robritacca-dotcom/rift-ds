@@ -11,9 +11,13 @@ import {
   AUTHOR_URL,
   NPM_URL,
   REPOSITORY_URL,
-  SKILL_NAME,
   STORYBOOK_URL,
 } from "@/config/brand.generated";
+import {
+  AGENT_SKILLS,
+  AGENT_SKILL_MANIFEST_URL,
+  skillFileUrl,
+} from "@/data/agent-skills";
 
 /**
  * /llms.txt — a markdown index of the site for AI agents, per llmstxt.org.
@@ -82,7 +86,11 @@ export function GET() {
     "Raw markdown sources and machine-readable indexes.",
     "",
     `- [MCP server](${SITE_URL}/api/mcp): a Model Context Protocol endpoint (Streamable HTTP, no auth). Tools cover the component list, per-component prop APIs, the design token registry, install setup, and full-text site search. Point any MCP client at this URL`,
-    `- [Agent skill](${SITE_URL}/skill/${SKILL_NAME}/SKILL.md): a SKILL.md for consumers of the package, generated from the registries. Save it (with its references/components.md catalogue) into a project's .claude/skills/${SKILL_NAME}/ and a coding agent loads the library's install, theming and catalogue rules every session. \`npx rift-ds init\` fetches the pair and prints the MCP connect line`,
+    `- [Agent skills](${AGENT_SKILL_MANIFEST_URL}): skills for consumers of the package, generated from the registries, listed with their files in this manifest. \`npx rift-ds init\` fetches every one into a project's .claude/skills/, where a coding agent loads them each session, and prints the MCP connect line`,
+    ...AGENT_SKILLS.map(
+      (skill) =>
+        `- [${skill.name}](${skillFileUrl(skill, "SKILL.md")}): ${skill.summary} Files: ${skill.files.join(", ")}`
+    ),
     `- [Storybook](${STORYBOOK_URL}): the rendered API reference. Every component has a props table with types, defaults, and deprecations`,
     `- [npm package](${NPM_URL}): \`npm install rift-ds\` ships complete .d.ts type declarations for every component`,
     `- [shadcn registry](${SITE_URL}/r/registry.json): a shadcn-compatible registry serving every component as installable source. \`npx shadcn@latest add ${SITE_URL}/r/<slug>.json\` copies the component, its dependencies, and the shared base (tokens, presets, icon font, behaviors) into your project`,

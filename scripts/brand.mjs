@@ -5,7 +5,7 @@
  * The whole point of this module is rename day: when a name changes,
  * this file (plus the mark component) is the edit, and everything else —
  * the package manifest, the generated TS module the website reads, the
- * README regions, the agent skill, the MCP server name, the init bin —
+ * README regions, the agent skills, the MCP server name, the init bin —
  * follows through generators and validators. The move off the
  * "Dragonspine" codename to Rift DS was one commit here, which is the
  * proof the arrangement works.
@@ -121,11 +121,28 @@ export const GA_ID = 'G-Y279CKE2RL';
 export const MCP_SERVER_NAME = 'rift-ds';
 
 /**
- * The consumer agent skill's folder name: what `npx <pkg> init` installs
- * under .claude/skills/ and where the site publishes the pair under
- * /skill/<name>/.
+ * The library skill's folder name: the consumer agent skill that teaches
+ * the package itself. It is the skill `npx <pkg> init --out <dir>` writes
+ * (the flag predates the other skills), which is why it keeps a constant
+ * of its own beside the table below.
  */
 export const SKILL_NAME = 'rift-design-system';
+
+/**
+ * Every consumer agent skill the site publishes under /skill/<name>/ and
+ * `npx <pkg> init` installs under .claude/skills/<name>/, in install
+ * order. The folder names are brand facts, so they live here; `role`
+ * binds each row to its builder in scripts/generate-agent-skill.mjs,
+ * which fails generation on a row with no builder or a builder with no
+ * row. Which files a skill holds is the generator's to say, and
+ * /skill/manifest.json is where everything else (the init bin, the
+ * website) reads the answer.
+ */
+export const AGENT_SKILLS = [
+  { role: 'library', name: SKILL_NAME },
+  { role: 'apply-theme', name: 'rift-apply-theme' },
+  { role: 'style-audit', name: 'rift-style-audit' },
+];
 
 /** The package's bin name (the `npx` entry). */
 export const BIN_NAME = 'rift-ds';

@@ -19,7 +19,8 @@ import { MCP_CLIENTS } from "@/lib/mcp-clients";
 import { MCP_TOOLS } from "@/lib/mcp-tools";
 import { SITE_URL } from "@/lib/structuredData";
 import { SHOW_FIGMA_LINKS } from "@/config/social";
-import { ASSISTANT_NAME, FIGMA_FILE_URL, NPM_URL, REPOSITORY_URL, SKILL_NAME, STORYBOOK_URL } from "@/config/brand.generated";
+import { ASSISTANT_NAME, FIGMA_FILE_URL, NPM_URL, REPOSITORY_URL, STORYBOOK_URL } from "@/config/brand.generated";
+import { AGENT_SKILLS, skillCurlSnippet } from "@/data/agent-skills";
 
 const { sidebarLinks } = getSidebarLinks(docsSidebarLinks, "/docs/get-started");
 
@@ -101,11 +102,12 @@ import 'rift-ds/tokens/presets/presets.css';
 
 const INIT_SNIPPET = `npx rift-ds init`;
 
-const SKILL_SNIPPET = `curl --create-dirs -o .claude/skills/${SKILL_NAME}/SKILL.md ${SITE_URL}/skill/${SKILL_NAME}/SKILL.md
-curl --create-dirs -o .claude/skills/${SKILL_NAME}/references/components.md ${SITE_URL}/skill/${SKILL_NAME}/references/components.md`;
+/* One curl per file of every skill, built from the generated manifest
+   (the same list the init bin installs from), never restated here. */
+const SKILL_SNIPPET = skillCurlSnippet();
 
 /* Three questions a model answers wrong without the docs above — each one
-   is a fact the agent skill and one MCP tool both hold, and each has a
+   is a fact the library skill and one MCP tool both hold, and each has a
    generic-React guess that misses. */
 const SELF_CHECK_SNIPPET = `Before writing any rift-ds code, answer these:
 
@@ -295,7 +297,7 @@ export default function GetStartedPage() {
                 <p className={styles.sectionNote}>
                   Building with a coding agent? One command teaches it the
                   system before you write anything: it installs the generated
-                  agent skill into your project and prints the MCP connect
+                  agent skills into your project and prints the MCP connect
                   line, so the agent knows the components, the tokens, and the
                   theming contract from its first session. The{" "}
                   <a href="#agent-docs" className={styles.inlineLink}>
@@ -512,25 +514,35 @@ export default function GetStartedPage() {
                 </p>
                 <p className={styles.sectionNote}>
                   The MCP tools answer on demand. For knowledge an agent
-                  carries into every session, there is also a generated
-                  agent skill: two markdown files built from the same
-                  registries, covering install, theming and the full
-                  component catalogue. One command fetches the current pair
-                  from this site into a project&apos;s{" "}
-                  <code>.claude/skills/</code>, where skill-capable agents
-                  load them automatically:
+                  carries into every session, there are also generated
+                  agent skills: folders of markdown built from the same
+                  registries.
+                </p>
+                <ul className={styles.promptList}>
+                  {AGENT_SKILLS.map((skill) => (
+                    <li key={skill.name} className={styles.promptItem}>
+                      <span>{skill.summary}</span>
+                      <code className={styles.promptTool}>{skill.name}</code>
+                    </li>
+                  ))}
+                </ul>
+                <p className={styles.sectionNote}>
+                  One command fetches the current set from this site into a
+                  project&apos;s <code>.claude/skills/</code>, where
+                  skill-capable agents load them automatically. Add{" "}
+                  <code>--skill</code> and a name to install one of them:
                 </p>
                 <CodeBlock code={INIT_SNIPPET} language="bash" showCopy />
                 <p className={styles.sectionNote}>
                   The files regenerate with every deploy, so re-run the
-                  command to refresh them. No npm nearby? The same pair is
-                  one curl each:
+                  command to refresh them. No npm nearby? The same files
+                  are one curl each:
                 </p>
                 <CodeBlock code={SKILL_SNIPPET} language="bash" showCopy />
                 <p className={styles.sectionNote}>
                   Not sure your agent needs any of this? Paste this check
                   into it before it writes code with the package. Every
-                  answer is in the skill and one MCP call away; a model
+                  answer is in the skills and one MCP call away; a model
                   working from generic React patterns misses all three.
                 </p>
                 <CodeBlock code={SELF_CHECK_SNIPPET} language="text" showCopy />

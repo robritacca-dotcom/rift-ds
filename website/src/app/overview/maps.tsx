@@ -36,13 +36,13 @@ export const consumerMap: ArchMap = {
     { id: "you-root", x: 1080, y: 310, w: 380, h: 76, title: "Root element", sub: 'data-theme="dark" · data-brand="<look>"', icon: "toggle_on", chip: "positive" },
     { id: "you-agent", x: 1080, y: 450, w: 380, h: 90, title: "Your coding agent", sub: "builds with exact prop and token contracts", icon: "smart_toy", chip: "positive" },
 
-    { id: "docs-site", x: 560, y: 620, w: 400, h: 90, title: "This site", sub: "/api/mcp · the agent skill · component .md pages", kind: "external", icon: "hub" },
+    { id: "docs-site", x: 560, y: 620, w: 400, h: 90, title: "This site", sub: "/api/mcp · the agent skills · component .md pages", kind: "external", icon: "hub" },
   ],
   edges: [
     { id: "components-app", from: "pkg-components", to: "you-app", label: "npm install, then import" },
     { id: "tokens-app", from: "pkg-tokens", to: "you-app", label: "one stylesheet import", bend: -40 },
     { id: "presets-root", from: "pkg-presets", to: "you-root", label: "one attribute applies a complete look", kind: "accent" },
-    { id: "site-agent", from: "docs-site", to: "you-agent", label: "npx init installs the agent skill" },
+    { id: "site-agent", from: "docs-site", to: "you-agent", label: "npx init installs the agent skills" },
     { id: "agent-site", from: "you-agent", to: "docs-site", label: "reads contracts over MCP", bend: 60 },
   ],
 };
@@ -89,7 +89,7 @@ export const pipelineMap: ArchMap = {
 
     /* Stage 2 */
     { id: "z-chain", x: 880, y: 240, w: 430, h: 340, kind: "zone", title: "2 · Generate + validate", sub: "no build starts before this passes" },
-    { id: "generators", x: 920, y: 330, w: 350, h: 76, title: "Generators", sub: "barrels · corpus · prop API · README · agent skill", icon: "auto_awesome", chip: "warning" },
+    { id: "generators", x: 920, y: 330, w: 350, h: 76, title: "Generators", sub: "barrels · corpus · prop API · README · agent skills", icon: "auto_awesome", chip: "warning" },
     { id: "validators", x: 920, y: 450, w: 350, h: 76, title: "Validators", sub: "byte-compare + cross-check every claim", icon: "rule", chip: "warning" },
 
     /* Stage 3 */

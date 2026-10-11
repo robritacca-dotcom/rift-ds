@@ -277,7 +277,7 @@ export function buildAgentPrompt(
 1. Install the design system if it is missing: npm install ${pkg}
 2. Import ${pkg}/tokens/tokens.css once at the root of the app, then import theme.css after it.
 3. Save THEME.md at the project root and read it before you style anything.
-4. Install the ${pkg} agent skill: npx ${context.binName} init
+4. Install the ${pkg} agent skills: npx ${context.binName} init
 5. Connect the MCP server for exact prop and token contracts: claude mcp add --transport http ${context.mcpServerName} ${context.mcpEndpoint}
 
 Then restyle the existing screens to match THEME.md. Replace hardcoded colours, radii, spacing and shadows with the semantic tokens, and replace hand-built controls with ${pkg} components where one exists. List what you changed and anything you could not map to a token.`;

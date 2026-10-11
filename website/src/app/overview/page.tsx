@@ -87,7 +87,7 @@ export default function AboutDsPage() {
                   <code>data-brand</code> attribute on your root element
                   applies a complete theme, light and dark included. Your
                   coding agent joins through this site: one command installs
-                  the generated agent skill, and the MCP endpoint serves the
+                  the generated agent skills, and the MCP endpoint serves the
                   exact prop and token contracts while it builds.
                 </p>
                 <ArchitectureMap

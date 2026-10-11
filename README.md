@@ -16,7 +16,7 @@ An open source React design system built for AI products and coding agents: comp
 - **<!-- component-count -->150<!-- /component-count --> components.** Buttons, forms and tables through to charts, navigation and overlays, each typed and documented with live examples. React is the only required peer dependency.
 - **AI patterns and templates, ready to use.** Composer, streaming chat thread, tool calls, reasoning and thread panel are in the box, and the docs site has complete template screens built from them.
 - **Fully themeable.** The shipped themes are complete looks to start from, each in light and dark. One `data-brand` attribute applies a theme, and a few CSS overrides make your own.
-- **Ready for coding agents.** One command installs an agent skill, and a public MCP endpoint serves every component's props, so your agent builds with the library as it actually is. No key, no account.
+- **Ready for coding agents.** One command installs the agent skills, and a public MCP endpoint serves every component's props, so your agent builds with the library as it actually is. No key, no account.
 - **Free, consumed your way.** MIT, with no pro tier. Install the npm package, pull single components as source through the shadcn CLI, or clone the repo.
 
 ## Documentation
@@ -40,7 +40,7 @@ React 19+ is a peer dependency. The package is ESM-only and resolved via `export
 
 ## Set up your agent
 
-One command teaches a coding agent the system: it installs the generated agent skill into your project and prints the MCP connect line.
+One command teaches a coding agent the system: it installs the generated agent skills into your project and prints the MCP connect line.
 
 ```bash
 npx rift-ds init

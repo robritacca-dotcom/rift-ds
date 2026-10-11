@@ -29,7 +29,7 @@ Set `data-theme="dark"` on the root element. Every semantic colour token has a l
 
 ## Theming
 
-Components read semantic tokens (`--color-*`, `--radius-*`, `--font-*`, `--motion-*`, ...), and every semantic colour token references a `--primitive-*` value. Re-theme by overriding primitives: one override cascades through both themes at once. Never hardcode a colour beside the components; override the token it should come from. The full token reference lives at https://rift-ds.com/foundations, and the MCP endpoint's `list_tokens` tool serves the registry.
+Components read semantic tokens (`--color-*`, `--radius-*`, `--font-*`, `--motion-*`, ...), and every semantic colour token references a `--primitive-*` value. Re-theme by overriding primitives: one override cascades through both themes at once. Never hardcode a colour beside the components; override the token it should come from. references/tokens.md lists every semantic token with the value it resolves to in light and dark; the live reference is at https://rift-ds.com/foundations, and the MCP endpoint's `list_tokens` tool serves the registry.
 
 ## Charts
 
@@ -65,5 +65,12 @@ references/components.md lists every component with its import line and descript
 Do not guess props. Three equivalent sources, all generated from the same JSDoc that ships in the package:
 
 - The `.d.ts` files in `node_modules/rift-ds` once installed.
-- `https://rift-ds.com/components/<slug>.md` — one markdown contract per component, next to its live docs page.
-- The MCP endpoint at `https://rift-ds.com/api/mcp` — the `get_component` tool returns the full contract for one component.
+- `https://rift-ds.com/components/<slug>.md`: one markdown contract per component, next to its live docs page.
+- The MCP endpoint at `https://rift-ds.com/api/mcp`: the `get_component` tool returns the full contract for one component.
+
+## Related skills
+
+The other skills `npx rift-ds init` installs beside this one read this skill's references:
+
+- `rift-apply-theme`: Restyles existing screens onto the tokens and components.
+- `rift-style-audit`: Audits a project's styles for hardcoded values that should be tokens.

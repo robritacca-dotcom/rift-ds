@@ -7,7 +7,7 @@
  *      every non-story .css under src/, the icon font, and the
  *      registry JSON files
  *   3. writes dist/bin/<BIN_NAME>.mjs — the init bin, with the site
- *      origin, skill folder and MCP server name stamped in from
+ *      origin, library skill folder and MCP server name stamped in from
  *      scripts/brand.mjs and the executable bit set (publint checks the
  *      shebang and the bit)
  *   4. writes dist/package.json — the manifest that actually ships to
@@ -90,8 +90,10 @@ console.log(`▸ Restored "use client" on ${clientDistFiles.length} dist modules
 
 // The init bin. The site origin, skill folder and MCP server name are
 // stamped in from scripts/brand.mjs — the one home for brand facts — so
-// the CLI can never fetch from a domain the site no longer lives at, or
-// install a skill folder the site no longer publishes. Executable bit
+// the CLI can never fetch from a domain the site no longer lives at.
+// Which skills it installs is not stamped: it reads the site's
+// /skill/manifest.json at run time (SKILL_NAME is only the default for
+// the deprecated --out flag). Executable bit
 // and shebang are what publint checks a bin for.
 const binSource = readFileSync(join(srcDir, 'cli', 'init.mjs'), 'utf8');
 const binTarget = join(distDir, 'bin', `${BIN_NAME}.mjs`);

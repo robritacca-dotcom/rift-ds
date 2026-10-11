@@ -28,7 +28,3 @@ Generated from the rift-ds registry and prop JSDoc, version 1.6.0. The same data
 | children | `ReactNode` | yes |  | Children that can access the toast context |
 | position | `"top-right" \| "top-left" \| "bottom-right" \| "bottom-left" \| "top-center" \| "bottom-center"` | no | `bottom-right` | Position of the toast stack |
 | maxToasts | `number` | no | `5` | Maximum number of visible toasts |
-
-## useToast props
-
-No own props; native attributes pass through.

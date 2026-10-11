@@ -22,16 +22,3 @@ Generated from the rift-ds registry and prop JSDoc, version 1.6.0. The same data
 | cursor | `boolean` | no | `true` | Shows the blinking cursor while streaming or revealing. |
 | onRevealComplete | `(() => void)` | no |  | Fires once when the reveal catches up with `text` after `streaming` has ended — the moment the message is fully on screen. |
 | className | `string` | no | `` | Additional CSS classes |
-
-## createStreamReveal props
-
-| Prop | Type | Required | Default | Description |
-| --- | --- | --- | --- | --- |
-| onUpdate | `(visible: string) => void` | yes |  | Receives the visible slice each time the reveal moves it. |
-| floorCps | `number` | no |  | Slowest the reveal ever runs, in characters per second. Defaults to MOTION_STREAM_FLOOR_CPS. |
-| drainMs | `number` | no |  | However much text is waiting, it is fully on screen within this long, in milliseconds. Defaults to MOTION_STREAM_DRAIN_MS. |
-| paced | `boolean \| (() => boolean)` | no |  | Whether appended text is paced at all. Pass false (or a function returning false — it is read on every append) to show each chunk whole: the reduced-motion path. |
-
-## useStreamReveal props
-
-No own props; native attributes pass through.

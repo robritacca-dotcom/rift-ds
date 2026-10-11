@@ -10,23 +10,6 @@ import {
 } from './useShaderField';
 import './ShaderField.css';
 
-export type {
-  ShaderBlob,
-  ShaderParams,
-  ShaderFieldParams,
-  ShaderFieldState,
-} from './useShaderField';
-/* The barrel is generated from the .tsx modules in each component folder, so a
-   hook that only ever lived in a .ts file could never be imported from the
-   package root — and the headless hook is a documented escape hatch, not an
-   implementation detail. Re-exporting it here is what puts it in the barrel.
-   Fast-refresh granularity is the price, and it is not one a published
-   library pays: the .ts modules underneath are where the code actually lives. */
-/* eslint-disable react-refresh/only-export-components */
-export { useShaderField, DEFAULT_SHADER_BLOBS, DEFAULT_SHADER_PARAMS } from './useShaderField';
-export { BLOB_COUNT } from './field.glsl';
-/* eslint-enable react-refresh/only-export-components */
-
 /**
  * How the renderer has resolved.
  *
@@ -168,3 +151,26 @@ export const ShaderField = React.forwardRef<HTMLCanvasElement, ShaderFieldProps>
 );
 
 ShaderField.displayName = 'ShaderField';
+
+/* The barrel is generated from the .tsx modules in each component folder, so a
+   hook that only ever lived in a .ts file could never be imported from the
+   package root — and the headless hook is a documented escape hatch, not an
+   implementation detail. Re-exporting it here is what puts it in the barrel.
+   Fast-refresh granularity is the price, and it is not one a published
+   library pays: the .ts modules underneath are where the code actually lives.
+
+   They sit below the component on purpose. The docs parser behind the props
+   tables names every export of a single-component file after that component
+   and keeps the first one it meets, so a re-export placed above it takes the
+   component's name and leaves its props table empty
+   (scripts/validate-prop-docs.mjs fails the build on that). */
+export type {
+  ShaderBlob,
+  ShaderParams,
+  ShaderFieldParams,
+  ShaderFieldState,
+} from './useShaderField';
+/* eslint-disable react-refresh/only-export-components */
+export { useShaderField, DEFAULT_SHADER_BLOBS, DEFAULT_SHADER_PARAMS } from './useShaderField';
+export { BLOB_COUNT } from './field.glsl';
+/* eslint-enable react-refresh/only-export-components */

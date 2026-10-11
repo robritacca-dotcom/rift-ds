@@ -8,19 +8,6 @@ import { renderTypeMark } from './typeMark';
 import { AttachmentViewer } from './AttachmentViewer';
 import './Attachment.css';
 
-/* Re-exported so the headless hook reaches the package root through the
-   barrel, which only walks .tsx modules (see AttachmentTile). */
-/* eslint-disable react-refresh/only-export-components */
-export { revokeAttachmentUrls, useAttachments } from './useAttachments';
-/* eslint-enable react-refresh/only-export-components */
-export type {
-  AttachmentRejection,
-  AttachmentRejectionReason,
-  AttachmentUploadContext,
-  UseAttachmentsOptions,
-  UseAttachmentsResult,
-} from './useAttachments';
-
 /** Props owned by AttachmentGroup itself — everything else falls through to the root element. */
 type AttachmentGroupOwnProps = {
   /** The files on the message, in order. */
@@ -295,3 +282,21 @@ export const AttachmentGroup = React.forwardRef<HTMLDivElement, AttachmentGroupP
 );
 
 AttachmentGroup.displayName = 'AttachmentGroup';
+
+/* Re-exported so the headless hook reaches the package root through the
+   barrel, which only walks .tsx modules (see AttachmentTile). Below the
+   component on purpose: the docs parser behind the props tables names every
+   export of a single-component file after that component and keeps the first
+   one it meets, so a re-export placed above it takes the component's name
+   and leaves its props table empty (scripts/validate-prop-docs.mjs fails the
+   build on that). */
+/* eslint-disable react-refresh/only-export-components */
+export { revokeAttachmentUrls, useAttachments } from './useAttachments';
+/* eslint-enable react-refresh/only-export-components */
+export type {
+  AttachmentRejection,
+  AttachmentRejectionReason,
+  AttachmentUploadContext,
+  UseAttachmentsOptions,
+  UseAttachmentsResult,
+} from './useAttachments';

@@ -20,15 +20,3 @@ Generated from the rift-ds registry and prop JSDoc, version 1.6.0. The same data
 | variant | `"plain" \| "tile"` | no | `plain` | `plain` draws the character alone; `tile` seats it on a rounded wash of its own ink, for a larger standalone mark. |
 | label | `string` | no |  | Accessible name. Omit it when the mark sits beside the name it was drawn from, which is the usual case: the character is then decorative and hidden from assistive technology. Given, the root becomes an image with this label. |
 | className | `string` | no | `` | Additional CSS classes |
-
-## distinctPixelInks props
-
-No own props; native attributes pass through.
-
-## pixelAvatarInk props
-
-No own props; native attributes pass through.
-
-## PixelInk props
-
-No own props; native attributes pass through.

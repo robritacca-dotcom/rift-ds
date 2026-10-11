@@ -18,7 +18,3 @@ Generated from the rift-ds registry and prop JSDoc, version 1.6.0. The same data
 | filename | `string` | no |  | Filename shown in a header bar above the diff, with an additions/deletions summary |
 | showLineNumbers | `boolean` | no | `true` | Show the old and new line number gutters |
 | className | `string` | no | `` | Additional CSS classes |
-
-## parseUnifiedDiff props
-
-No own props; native attributes pass through.

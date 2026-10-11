@@ -1061,7 +1061,113 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "exports": [
       {
         "component": "AttachmentGroup",
-        "props": []
+        "props": [
+          {
+            "name": "items",
+            "type": "AttachmentItem[]",
+            "required": true,
+            "description": "The files on the message, in order."
+          },
+          {
+            "name": "align",
+            "type": "\"start\" | \"end\"",
+            "required": false,
+            "description": "Which edge the layout hugs: `end` for the sender's own turns.",
+            "defaultValue": "start"
+          },
+          {
+            "name": "max",
+            "type": "number",
+            "required": false,
+            "description": "Most cells shown before the rest collapse. Over the limit, the last\ncell becomes a \"+N\" button standing for the hidden files.",
+            "defaultValue": "4"
+          },
+          {
+            "name": "open",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the overflow is expanded, for controlled use. Pair with `onOpenChange`."
+          },
+          {
+            "name": "defaultOpen",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the overflow starts expanded, for uncontrolled use.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "onOpenChange",
+            "type": "((open: boolean) => void)",
+            "required": false,
+            "description": "Fires when the overflow expands or collapses."
+          },
+          {
+            "name": "viewer",
+            "type": "boolean",
+            "required": false,
+            "description": "Open a pressed file in the built-in AttachmentViewer, which steps\nthrough the rest of the group. Turn it off to handle presses yourself\nthrough `onItemClick`.",
+            "defaultValue": "true"
+          },
+          {
+            "name": "onItemClick",
+            "type": "((item: AttachmentItem) => void)",
+            "required": false,
+            "description": "Fires when a file is pressed, whether or not the viewer opens."
+          },
+          {
+            "name": "renderPreview",
+            "type": "((item: AttachmentItem) => ReactNode)",
+            "required": false,
+            "description": "Passed to the viewer: draws a file it cannot, such as the pages of a PDF."
+          },
+          {
+            "name": "onDownload",
+            "type": "((item: AttachmentItem) => void)",
+            "required": false,
+            "description": "Passed to the viewer: fires when Download is pressed, and renders the buttons."
+          },
+          {
+            "name": "onRetry",
+            "type": "((item: AttachmentItem) => void)",
+            "required": false,
+            "description": "Passed to the viewer: fires when \"Try again\" is pressed on a file that failed to load."
+          },
+          {
+            "name": "size",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "Tile size, passed to every tile.",
+            "defaultValue": "default"
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": false,
+            "description": "Accessible label for the list.",
+            "defaultValue": "Attachments"
+          },
+          {
+            "name": "showMoreLabel",
+            "type": "((hidden: number) => string)",
+            "required": false,
+            "description": "Builds the accessible label of the \"+N\" button from the hidden count.",
+            "defaultValue": "(hidden) => `Show ${hidden} more`"
+          },
+          {
+            "name": "showLessLabel",
+            "type": "string",
+            "required": false,
+            "description": "Text of the collapse button under an expanded group.",
+            "defaultValue": "Show fewer"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": ""
+          }
+        ]
       }
     ]
   },
@@ -1200,63 +1306,6 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": ""
           }
         ]
-      },
-      {
-        "component": "AttachmentItem",
-        "props": []
-      },
-      {
-        "component": "AttachmentStatus",
-        "props": []
-      },
-      {
-        "component": "FileKind",
-        "props": []
-      },
-      {
-        "component": "FileKindMeta",
-        "props": []
-      },
-      {
-        "component": "FileLike",
-        "props": []
-      },
-      {
-        "component": "formatBytes",
-        "props": []
-      },
-      {
-        "component": "getFileExtension",
-        "props": []
-      },
-      {
-        "component": "getFileKind",
-        "props": [
-          {
-            "name": "name",
-            "type": "string",
-            "required": true,
-            "description": "File name, extension included."
-          },
-          {
-            "name": "type",
-            "type": "string",
-            "required": false,
-            "description": "Mime type, when the source reported one."
-          }
-        ]
-      },
-      {
-        "component": "getFileTypeLabel",
-        "props": []
-      },
-      {
-        "component": "matchesAccept",
-        "props": []
-      },
-      {
-        "component": "splitFileName",
-        "props": []
       }
     ]
   },
@@ -2966,10 +3015,6 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": ""
           }
         ]
-      },
-      {
-        "component": "parseUnifiedDiff",
-        "props": []
       }
     ]
   },
@@ -7701,18 +7746,6 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": ""
           }
         ]
-      },
-      {
-        "component": "distinctPixelInks",
-        "props": []
-      },
-      {
-        "component": "pixelAvatarInk",
-        "props": []
-      },
-      {
-        "component": "PixelInk",
-        "props": []
       }
     ]
   },
@@ -8914,7 +8947,41 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "exports": [
       {
         "component": "ShaderField",
-        "props": []
+        "props": [
+          {
+            "name": "params",
+            "type": "Partial<ShaderParams>",
+            "required": false,
+            "description": "Field parameters, merged over the shipped defaults, so passing one\nproperty changes one thing. Changing them never rebuilds the GL state."
+          },
+          {
+            "name": "blobs",
+            "type": "readonly ShaderBlob[]",
+            "required": false,
+            "description": "The light sources. Defaults to an eight-source composition on the core\naccent tokens. Fewer than `BLOB_COUNT` entries is fine — unused slots park\noff-field; more are ignored, because the shader's uniform arrays are\nfixed-size.",
+            "defaultValue": "[\n  { token: \"--color-core-accent-gold\", size: 0.45, cx: 0.175, cy: 0.125, period: 18, phase: 0, weight: 1 },\n  { token: \"--color-core-accent-mint\", size: 0.55, cx: 0.125, cy: 0.125, period: 16, phase: 1, weight: 1 },\n  { token: \"--color-core-accent-violet\", size: 0.9, cx: 0.35, cy: 0.25, period: 22, phase: 0.5, weight: 1 },\n  { token: \"--color-bg-container-secondary\", size: 0.55, cx: 0.025, cy: 0.075, period: 14, phase: 1.5, weight: 1 },\n  { token: \"--color-core-accent-cobalt\", size: 0.55, cx: -0.125, cy: 0.475, period: 17, phase: 0.8, weight: 1 },\n  { token: \"--color-core-accent-coral\", size: 0.48, cx: 0.39, cy: -0.26, period: 19, phase: 0.3, weight: 1 },\n  { token: \"--color-core-accent-amber\", size: 0.3, cx: 0.35, cy: 0.3, period: 15, phase: 1.2, weight: 1 },\n  { token: \"--color-core-ui-secondary\", size: 0.75, cx: -0.125, cy: -0.025, period: 20, phase: 0.7, weight: 1 },\n]"
+          },
+          {
+            "name": "enabled",
+            "type": "boolean",
+            "required": false,
+            "description": "False keeps WebGL entirely unmounted and reports `unavailable`, so the\ncaller's fallback is the whole background. This is the kill switch: a\nconfig lever, or an A/B against the fallback.",
+            "defaultValue": "true"
+          },
+          {
+            "name": "onStatusChange",
+            "type": "((status: ShaderFieldStatus) => void)",
+            "required": false,
+            "description": "Called whenever the renderer's status changes. Drive the fallback layer's\nvisibility from this — the component deliberately does not own one, since\nwhat to paint instead is a design decision, not a rendering one."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": ""
+          }
+        ]
       }
     ]
   },
@@ -9889,39 +9956,6 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": ""
           }
         ]
-      },
-      {
-        "component": "createStreamReveal",
-        "props": [
-          {
-            "name": "onUpdate",
-            "type": "(visible: string) => void",
-            "required": true,
-            "description": "Receives the visible slice each time the reveal moves it."
-          },
-          {
-            "name": "floorCps",
-            "type": "number",
-            "required": false,
-            "description": "Slowest the reveal ever runs, in characters per second. Defaults to\nMOTION_STREAM_FLOOR_CPS."
-          },
-          {
-            "name": "drainMs",
-            "type": "number",
-            "required": false,
-            "description": "However much text is waiting, it is fully on screen within this long,\nin milliseconds. Defaults to MOTION_STREAM_DRAIN_MS."
-          },
-          {
-            "name": "paced",
-            "type": "boolean | (() => boolean)",
-            "required": false,
-            "description": "Whether appended text is paced at all. Pass false (or a function\nreturning false — it is read on every append) to show each chunk\nwhole: the reduced-motion path."
-          }
-        ]
-      },
-      {
-        "component": "useStreamReveal",
-        "props": []
       }
     ]
   },
@@ -10846,10 +10880,6 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "5"
           }
         ]
-      },
-      {
-        "component": "useToast",
-        "props": []
       }
     ]
   },

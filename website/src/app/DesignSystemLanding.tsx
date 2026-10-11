@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import MegaNav from "../components/MegaNav/MegaNav";
 import { ExtendedBackground } from "../components/BlurBackground/BlurBackground";
@@ -162,11 +163,26 @@ const ACTIVITY = [
   { name: "Jasper Eriksson", action: "Created 4 invoices", when: "Yesterday" },
 ];
 
-/* The stack behind the system, named without versions: the README's Tech
-   section owns the version claims, and the build holds those to
-   package.json — a second surface restating numbers would just be a
-   second place for them to rot. */
-const TECH_STACK = ["React", "TypeScript", "Vite", "Next.js", "Storybook", "Recharts"];
+/* What the system is built with, shown under the resource links as a
+   mark and a name with no link: none of these has a page of ours to
+   point at. Named without versions, since the README's Tech section owns
+   the version claims and the build holds those to package.json.
+   Storybook is absent because it is a link in the row above. Next.js
+   ships a black and a white mark, swapped by theme in the stylesheet;
+   TypeScript and Recharts carry a stand-in icon until their marks are
+   added to /public/logos. */
+const BUILT_WITH: readonly {
+  name: string;
+  logo?: string;
+  logoDark?: string;
+  placeholderIcon?: string;
+}[] = [
+  { name: "React", logo: "/logos/React.svg" },
+  { name: "TypeScript", placeholderIcon: "code" },
+  { name: "Vite", logo: "/logos/vite.svg" },
+  { name: "Next.js", logo: "/logos/nextjs black.svg", logoDark: "/logos/nextjs white.svg" },
+  { name: "Recharts", placeholderIcon: "show_chart" },
+];
 
 const SAVINGS_GOALS = [
   { label: "Retirement", target: "$420,000 target", value: 72 },
@@ -1462,12 +1478,54 @@ export default function DesignSystemLanding() {
                 target: "_blank",
                 rel: "noopener noreferrer",
               },
+              /* The endpoint answers a browser with its own landing page:
+                 the tools, a connect snippet, a live preview. */
+              {
+                label: "MCP",
+                variant: "tertiary" as const,
+                iconLeft: "hub",
+                iconRight: "open_in_new",
+                href: "/api/mcp",
+                target: "_blank",
+                rel: "noopener noreferrer",
+              },
+              {
+                label: "shadcn registry",
+                variant: "tertiary" as const,
+                iconLeft: "terminal",
+                iconRight: "arrow_forward",
+                href: "/docs/get-started#shadcn-registry",
+              },
             ]}
           />
-          <ul className={styles.techRow} aria-label="Built with">
-            {TECH_STACK.map((name) => (
-              <li key={name} className={styles.techItem}>
-                {name}
+          <ul className={styles.builtWith} aria-label="Built with">
+            {BUILT_WITH.map((item) => (
+              <li key={item.name} className={styles.builtWithItem}>
+                {item.logo ? (
+                  <>
+                    <Image
+                      src={item.logo}
+                      alt=""
+                      width={24}
+                      height={24}
+                      className={`${styles.builtWithLogo} ${item.logoDark ? styles.builtWithLogoLight : ""}`}
+                    />
+                    {item.logoDark && (
+                      <Image
+                        src={item.logoDark}
+                        alt=""
+                        width={24}
+                        height={24}
+                        className={`${styles.builtWithLogo} ${styles.builtWithLogoDark}`}
+                      />
+                    )}
+                  </>
+                ) : (
+                  <span className={`material-symbols-rounded ${styles.builtWithPlaceholder}`} aria-hidden="true">
+                    {item.placeholderIcon}
+                  </span>
+                )}
+                {item.name}
               </li>
             ))}
           </ul>

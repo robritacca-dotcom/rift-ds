@@ -400,8 +400,8 @@
 
 /* ============================================
    RESOURCES STRIP — below the collage: the
-   external homes of the system, then the stack
-   it is built on
+   places the system lives beyond this page as
+   link buttons, then the stack it is built on
    ============================================ */
 
 .resourcesStrip {
@@ -417,28 +417,50 @@
   justify-content: center;
 }
 
-.techRow {
+/* The stack row under the link buttons: a mark and a name each, set in
+   the buttons' own label face so the two rows read as one list, but with
+   no arrow and no hover, because nothing here is a link. */
+.builtWith {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: var(--gap-100) var(--gap-200);
+  gap: var(--gap-300) var(--gap-1000);
   list-style: none;
   margin: 0;
   padding: 0;
-  font-size: var(--font-caption-size);
-  font-weight: var(--font-caption-weight);
-  line-height: var(--font-caption-line-height);
-  color: var(--color-text-tertiary);
+  font-family: var(--font-paragraph-emphasis-family);
+  font-size: var(--font-paragraph-emphasis-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-emphasis-line-height);
+  color: var(--color-text-secondary);
 }
 
-.techItem {
+.builtWithItem {
   display: inline-flex;
   align-items: center;
   gap: var(--gap-200);
 }
 
-.techItem:not(:first-child)::before {
-  content: "·";
+.builtWithLogo {
+  width: var(--icon-size-600);
+  height: var(--icon-size-600);
+}
+
+/* A mark that ships in black and in white shows the one its theme can
+   read. */
+.builtWithLogoDark,
+:global([data-theme="dark"]) .builtWithLogoLight {
+  display: none;
+}
+
+:global([data-theme="dark"]) .builtWithLogoDark {
+  display: block;
+}
+
+/* Stand-in for a logo that has not been added yet. */
+.builtWithPlaceholder {
+  --icon-size: var(--icon-size-600);
+  color: var(--color-text-tertiary);
 }
 
 /* ---------- collage ---------- */

@@ -23,18 +23,33 @@ function Staged({
   phone,
   widget,
   setup,
+  loopAfterMs,
 }: {
   height: number;
   phone: boolean;
   widget?: ChatStageWidget;
   setup?: ChatStageSetup;
+  loopAfterMs?: number;
 }) {
   const chat = useChatWidget();
   const latest = useRef(chat);
   const [root, setRoot] = useState<HTMLDivElement | null>(null);
+  const [staged, setStaged] = useState(false);
   useEffect(() => {
     latest.current = chat;
   });
+  // A looping example: once its reply has landed, it rests, clears and asks
+  // again, so a reader arriving at any moment sees the status and the
+  // reasoning live rather than finished.
+  const settled = staged && !chat.streaming && chat.turns.length > 0;
+  useEffect(() => {
+    if (!loopAfterMs || !setup || !settled) return;
+    const timer = setTimeout(() => {
+      latest.current.reset();
+      setup(latest.current);
+    }, loopAfterMs);
+    return () => clearTimeout(timer);
+  }, [loopAfterMs, setup, settled]);
   useEffect(() => {
     // The panel opens at mount; the staging waits until the example first
     // scrolls into view, so a send is seen arriving rather than found
@@ -43,12 +58,13 @@ function Staged({
     // first unmount then aborts. Neither is a subscription.
     const open = setTimeout(() => latest.current.setOpen(true), 0);
     if (!root || !setup) return () => clearTimeout(open);
-    let staged = false;
+    let seen = false;
     const observer = new IntersectionObserver((entries) => {
-      if (staged || !entries.some((entry) => entry.isIntersecting)) return;
-      staged = true;
+      if (seen || !entries.some((entry) => entry.isIntersecting)) return;
+      seen = true;
       observer.disconnect();
       setup(latest.current);
+      setStaged(true);
     }, { threshold: 0.4 });
     observer.observe(root);
     return () => {
@@ -81,6 +97,7 @@ export function ChatStage({
   timing,
   widget,
   setup,
+  loopAfterMs,
 }: {
   /** The card's height; the chat fills it. */
   height?: number;
@@ -90,12 +107,14 @@ export function ChatStage({
   timing?: Partial<SimTiming>;
   widget?: ChatStageWidget;
   setup?: ChatStageSetup;
+  /** Rest this long after the reply lands, then clear the chat and stage it again. */
+  loopAfterMs?: number;
 }) {
   const transport = useMemo(() => createDemoTransport(timing), [timing]);
   return (
     <div className={phone ? s.stagePhone : undefined}>
       <SiteChatProvider transport={transport} renderers={DEMO_RENDERERS} threads={DEMO_THREADS}>
-        <Staged height={height} phone={phone} widget={widget} setup={setup} />
+        <Staged height={height} phone={phone} widget={widget} setup={setup} loopAfterMs={loopAfterMs} />
       </SiteChatProvider>
     </div>
   );

@@ -34,7 +34,6 @@ import {
   demoAgentTabs,
   type DemoChartCard,
   type DemoPlanCard,
-  type DemoToolCallCard,
 } from "rift-ds/chat/demo";
 import { componentApi } from "@/data/component-api.generated";
 import { ChatStage, type ChatStageSetup } from "./ChatStage";
@@ -123,13 +122,18 @@ const PLAN_CARD: DemoPlanCard = {
   ],
 };
 
-const INVITE_CARD: DemoToolCallCard = {
-  name: "invite_teammates",
-  summary: "3 editors to acme-design",
-  status: "success",
-  duration: "0.6s",
-  args: ['{', '  "workspace": "acme-design",', '  "role": "editor",', '  "emails": 3', '}'].join("\n"),
-};
+/* One picture on its own: the tile keeps the photo's ratio rather than cropping it square. */
+const ONE_PICTURE: AttachmentItem[] = [
+  {
+    id: "hero",
+    name: "launch-hero.jpg",
+    kind: "image",
+    size: 1_240_000,
+    status: "ready",
+    previewSrc: "/images/attachments/photo-wide.jpg",
+    previewAlt: "The launch hero shot",
+  },
+];
 
 const ONE_FILE: AttachmentItem[] = [{ id: "brief", name: "Launch brief.docx", kind: "document", size: 412_000, status: "ready" }];
 
@@ -163,20 +167,10 @@ const stageRichContent: ChatStageSetup = (chat) => {
     durationSeconds: 3,
     card: { kind: "chart", data: SIGNUPS_CARD },
   });
-  chat.injectTurn({ role: "user", text: "Set it all up for me" });
   chat.injectTurn({
     role: "assistant",
-    text: "On it. Two steps are done already, and the invites are going out now.",
-    tracePoints: ["Four steps, from quota check to welcome note."],
-    durationSeconds: 2,
+    text: "While you were away the workspace setup carried on. Two steps are done; the invites are going out now.",
     card: { kind: "plan", data: PLAN_CARD },
-  });
-  chat.injectTurn({
-    role: "assistant",
-    text: "All three invites are out. Everyone lands in the workspace with editor access.",
-    tracePoints: ["Three teammates to invite, all editors."],
-    durationSeconds: 1,
-    card: { kind: "tool-call", data: INVITE_CARD },
   });
 };
 
@@ -189,6 +183,11 @@ const stageThreads: ChatStageSetup = (chat) => {
 };
 
 const stageDocuments: ChatStageSetup = (chat) => {
+  chat.injectTurn({ role: "user", text: "Here is the hero shot for launch week.", attachments: ONE_PICTURE });
+  chat.injectTurn({
+    role: "assistant",
+    text: "Looks right for the landing page. The crop leaves room for the headline on the left.",
+  });
   chat.injectTurn({ role: "user", text: "Here is the brief we are working from.", attachments: ONE_FILE });
   chat.injectTurn({
     role: "assistant",
@@ -238,7 +237,11 @@ export default function AiChatPage() {
               <Link href="/docs/chat" className={styles.inlineLink}>
                 the AI chat docs page
               </Link>
-              .
+              , and{" "}
+              <Link href="/playground" className={styles.inlineLink}>
+                the playground
+              </Link>{" "}
+              stages the same chat with every option on a lever.
             </p>
           </div>
 
@@ -415,9 +418,9 @@ export default function AiChatPage() {
               kind, and the provider&apos;s <code>renderers</code> map each kind to a component, so
               any component in this library can sit inside a reply. The demo subpath ships
               renderers for a chart, a plan, a tool call, a diff, an approval, a source list and a
-              product card; here a chart, a plan and a tool call.
+              product card; here a chart and a plan.
             </p>
-            <ChatStage key={`cards-${viewport}`} phone={phone} height={phone ? 800 : 900} setup={stageRichContent} />
+            <ChatStage key={`cards-${viewport}`} phone={phone} height={phone ? 800 : 860} setup={stageRichContent} />
           </section>
 
           <section id="status" className={`${styles.section} animate-in animate-delay-3`}>
@@ -427,10 +430,10 @@ export default function AiChatPage() {
               current step shows as a live status above the reply and its reasoning collects
               underneath, open. When the first words arrive the reasoning folds into one line that
               says how long it took. The reply streams in at an even pace whatever rate the model
-              sends it at; reduced motion turns the pacing off. This example sends a question as it
-              scrolls into view, slowed down so the thinking can be read.
+              sends it at; reduced motion turns the pacing off. This example asks its question over
+              and over, slowed down so the thinking can be read.
             </p>
-            <ChatStage key={`status-${viewport}`} phone={phone} height={stageHeight} timing={SLOW_TIMING} setup={stageStatus} />
+            <ChatStage key={`status-${viewport}`} phone={phone} height={stageHeight} timing={SLOW_TIMING} setup={stageStatus} loopAfterMs={4000} />
           </section>
 
           <section id="documents" className={`${styles.section} animate-in animate-delay-3`}>
@@ -440,16 +443,16 @@ export default function AiChatPage() {
               paste, or a drop anywhere on the chat, with <code>maxAttachments</code> and{" "}
               <code>maxAttachmentBytes</code> as the limits. A long paste becomes a file of its own.
               Previews are built in the browser and nothing is uploaded unless the host&apos;s
-              transport sends it. In the thread, one file is one tile above the message; several
-              form a grid, and past a limit the rest collapse behind a count. Pressing a tile opens
-              the viewer. <code>mentions</code> supplies the people, files and commands typed with
+              transport sends it. In the thread, a sent file is a tile above the message: a picture
+              keeps its own ratio, a document wears its type; several form a grid, and past a limit
+              the rest collapse behind a count. Pressing a tile opens the viewer. <code>mentions</code> supplies the people, files and commands typed with
               @ and /, and <code>models</code> the picker&apos;s list, with{" "}
               <code>lockedModelDescription</code> for one the budget has locked.
             </p>
             <ChatStage
               key={`documents-${viewport}`}
               phone={phone}
-              height={phone ? 800 : 820}
+              height={phone ? 800 : 920}
               widget={{
                 fileAttachments: true,
                 mentions: DEMO_MENTIONS,

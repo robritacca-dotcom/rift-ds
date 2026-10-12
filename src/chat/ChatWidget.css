@@ -308,6 +308,26 @@
 .ds-chat-widget[data-widgets="scroll"] {
   overflow-y: auto;
   overscroll-behavior: contain;
+
+  /* The thread's scroll treatment, on the welcome page too. The scrollbar
+     is invisible until the page is actually scrolling (data-scrolling, set
+     by the widget and settled by MOTION_SCROLL_SETTLE_MS), with its gutter
+     reserved so it never reflows the content sideways. */
+  scrollbar-width: thin;
+  scrollbar-gutter: stable;
+  scrollbar-color: transparent transparent;
+  transition: scrollbar-color var(--motion-duration-base) var(--motion-ease-standard);
+
+  /* The bottom fade the thread has under the conversation: a CSS mask, so
+     the widgets scrolling out through the floor pass through it. The root
+     carries no background of its own, so only the content fades.
+     ds-allow(color): mask alpha keywords (black/transparent), not palette colours */
+  -webkit-mask-image: linear-gradient(to bottom, black calc(100% - var(--gap-1000)), transparent);
+  mask-image: linear-gradient(to bottom, black calc(100% - var(--gap-1000)), transparent);
+}
+
+.ds-chat-widget[data-widgets="scroll"][data-scrolling] {
+  scrollbar-color: var(--color-divider) transparent;
 }
 
 .ds-chat-widget[data-widgets="scroll"] .ds-chat-widget__top {

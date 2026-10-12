@@ -21,7 +21,7 @@ import { DropdownMenu } from '../components/DropdownMenu/DropdownMenu';
 import { MentionText, type MentionSource } from '../components/Mention/Mention';
 import { ModelPicker } from '../components/ModelPicker/ModelPicker';
 import { PromptSuggestions } from '../components/PromptSuggestions/PromptSuggestions';
-import { MOTION_SUGGESTIONS_THINK_MS } from '../tokens/motion';
+import { MOTION_SCROLL_SETTLE_MS, MOTION_SUGGESTIONS_THINK_MS } from '../tokens/motion';
 import { AssistantTurn } from './AssistantTurn';
 import { ChatAgentPane } from './ChatAgentPane';
 import { ChatTabs } from './ChatTabs';
@@ -485,6 +485,19 @@ export function ChatWidget({
   const ChatRoot: React.ElementType = fileAttachments ? AttachmentDropZone : 'div';
   const dropProps = fileAttachments ? { onFilesSelected: queue.add, hint: attachHint } : {};
 
+  /* When the welcome screen scrolls as a page, the root is the scroll
+     container and takes the thread's treatment: its scrollbar shows only
+     while scrolling is actually happening, and settles away after. */
+  const [rootScrolling, setRootScrolling] = useState(false);
+  const rootSettleTimer = useRef<number | undefined>(undefined);
+  const handleRootScroll = () => {
+    if (widgetsLayout !== 'scroll') return;
+    setRootScrolling(true);
+    window.clearTimeout(rootSettleTimer.current);
+    rootSettleTimer.current = window.setTimeout(() => setRootScrolling(false), MOTION_SCROLL_SETTLE_MS);
+  };
+  useEffect(() => () => window.clearTimeout(rootSettleTimer.current), []);
+
   const chatColumn = (
     <ChatRoot
       {...dropProps}
@@ -493,6 +506,8 @@ export function ChatWidget({
       data-phone={phone || undefined}
       data-widgets={widgetsNode ? widgetsLayout : undefined}
       data-widgets-wide={widgetsNode && widgetsWidth === 'wide' ? '' : undefined}
+      data-scrolling={(widgetsNode && widgetsLayout === 'scroll' && rootScrolling) || undefined}
+      onScroll={handleRootScroll}
       /* The header's controls have moved out to the card's edge, so the row
          has to be told to keep the height they were giving it. */
       data-lifted-actions={(asideShown && asideWide) || undefined}

@@ -614,21 +614,25 @@ const previews: Record<string, () => ReactNode> = {
     </>
   ),
   "ai-chat": () => (
-    <>
-      <div style={{ width: "100%", height: "150px", display: "flex", flexDirection: "column", border: "1px solid var(--color-bg-container-border)", borderRadius: "16px", overflow: "hidden" }}>
-        <ChatThread anchor={false} style={{ flex: 1, "--ds-chat-thread-padding-inline": "var(--padding-300)" } as React.CSSProperties}>
-          <ChatMessage role="user" size="compact">
-            How is the trial going?
-          </ChatMessage>
-          <ChatMessage role="assistant" size="compact">
-            Signups have climbed for five of the six weeks since the trial opened.
-          </ChatMessage>
-        </ChatThread>
-        <div style={{ padding: "var(--padding-200) var(--padding-300)", borderTop: "1px solid var(--color-divider)" }}>
-          <PromptSuggestions size="compact" layout="scroll" suggestions={[{ id: "plans", label: "What do the plans include?" }, { id: "invite", label: "Invite my team" }]} />
-        </div>
+    <div style={{ width: "100%", height: "150px", display: "flex", flexDirection: "column", border: "1px solid var(--color-bg-container-border)", borderRadius: "16px", overflow: "hidden", background: "var(--color-bg-container-primary)" }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "var(--padding-200) var(--padding-300)", borderBottom: "1px solid var(--color-divider)" }}>
+        <span style={{ fontSize: "var(--font-caption-size)", fontWeight: "var(--font-paragraph-emphasis-weight)", color: "var(--color-text-primary)" }}>Acme Assistant</span>
+        <span className="material-symbols-rounded" aria-hidden="true" style={{ "--icon-size": "var(--icon-size-500)", color: "var(--color-text-secondary)" } as React.CSSProperties}>
+          smart_toy
+        </span>
       </div>
-    </>
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "flex-end", gap: "var(--gap-100)", padding: "var(--padding-200) var(--padding-300)", overflow: "hidden" }}>
+        <ChatMessage role="user" size="compact">
+          How is the trial going?
+        </ChatMessage>
+        <ChatMessage role="assistant" size="compact">
+          Up five of the last six weeks.
+        </ChatMessage>
+      </div>
+      <div style={{ margin: "0 var(--padding-300) var(--padding-300)", padding: "var(--padding-100) var(--padding-300)", border: "1px solid var(--color-bg-container-border)", borderRadius: "var(--radius-pill)", fontSize: "var(--font-caption-size)", lineHeight: "var(--font-caption-line-height)", color: "var(--color-text-tertiary)" }}>
+        Ask anything
+      </div>
+    </div>
   ),
   "chat-thread": () => (
     <>

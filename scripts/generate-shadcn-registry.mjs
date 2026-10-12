@@ -52,6 +52,8 @@ import {
 import { basename, dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { AUTHOR_NAME, AUTHOR_URL, BRAND_SHORT, SITE_URL } from './brand.mjs';
+import { chatRegistry } from './component-docgen.mjs';
+import { OPTIONAL_PEER_PACKAGES } from './optional-peers.mjs';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const srcDir = join(repoRoot, 'src');
@@ -148,8 +150,11 @@ function walkClosure(entryFiles, ownDir) {
     const specs = isCss ? cssImportsIn(content) : specifiersIn(content);
     for (const spec of specs) {
       if (!spec.startsWith('.')) {
-        if (spec === 'recharts') npm.add('recharts');
-        continue; // react/react-dom are peers; everything else is flagged by tsc anyway
+        // The optional peers become npm dependencies of the item that
+        // reaches them; react and react-dom are the consumer's already.
+        const peer = OPTIONAL_PEER_PACKAGES.find((name) => spec === name || spec.startsWith(`${name}/`));
+        if (peer) npm.add(peer);
+        continue;
       }
       const resolved = resolveSpecifier(file, spec);
       if (!resolved) throw new Error(`${rel}: unresolvable import "${spec}"`);
@@ -208,6 +213,38 @@ export function assembleShadcnRegistry() {
         .map((absPath) => fileEntry(absPath, files.get(absPath))),
     };
     out.set(`${component.slug}.json`, stringify(item));
+    items.push({ name: item.name, type: item.type, title: item.title, description: item.description });
+  }
+
+  /* The chat widget: one lib item carrying all of src/chat (its four barrels'
+     closure), with the components it composes as dependency edges and its
+     optional peers as npm dependencies, so `shadcn add .../r/chat.json`
+     installs the whole widget as source beside the components it needs. */
+  for (const widget of chatRegistry.widgets) {
+    const ownDir = join(srcDir, 'chat');
+    const entries = ['index.ts', 'server.ts', 'upstash.ts', 'demo.ts'].map((name) => join(ownDir, name));
+    for (const entry of entries) {
+      if (!existsSync(entry)) throw new Error(`No chat entry file at ${entry}`);
+    }
+    const { files, deps, npm, external } = walkClosure(entries, ownDir);
+    for (const file of external) baseExternal.add(file);
+    const item = {
+      $schema: ITEM_SCHEMA,
+      name: widget.slug,
+      type: 'registry:lib',
+      title: `${BRAND_SHORT} ${widget.label.toLowerCase()}`,
+      description: widget.description,
+      author: ITEM_AUTHOR,
+      ...(npm.size > 0 ? { dependencies: [...npm].sort() } : {}),
+      registryDependencies: [
+        `${SITE_URL}/r/base.json`,
+        ...[...deps].sort().map((slug) => `${SITE_URL}/r/${slug}.json`),
+      ],
+      files: [...files.keys()]
+        .sort()
+        .map((absPath) => fileEntry(absPath, files.get(absPath))),
+    };
+    out.set(`${widget.slug}.json`, stringify(item));
     items.push({ name: item.name, type: item.type, title: item.title, description: item.description });
   }
 

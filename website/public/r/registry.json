@@ -908,6 +908,12 @@
       "type": "registry:ui",
       "title": "World map",
       "description": "A flat world map from Natural Earth land shapes: token-coloured continents, framed bounds, and colour-carrying markers."
+    },
+    {
+      "name": "chat",
+      "type": "registry:lib",
+      "title": "Rift chat",
+      "description": "The whole AI chat as one installable widget: the panel, the conversation engine, the streaming protocol and the server handlers, configured with props."
     }
   ]
 }

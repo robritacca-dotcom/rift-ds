@@ -75,7 +75,7 @@ gh run list --workflow=release.yml --limit 3 --json databaseId,createdAt,display
 gh run watch <the-new-databaseId> --exit-status
 ```
 
-The dry run does everything except upload: builds `dist/`, packs the tarball, installs it into a scratch Vite + React app and **builds that app without recharts installed** (the optional-peer path — the regression this catches), then prints the publish preview. It needs no npm token, so it is free to run as often as you like. Read the preview's file count and package size and sanity-check them against the previous release; a sudden jump means something got swept into the tarball. Expect `LICENSE`, `README.md` and the init bin under `bin/` (named by `BIN_NAME` in `scripts/brand.mjs`, origin-stamped and executable) alongside the build output; anything else new is not deliberate.
+The dry run does everything except upload: builds `dist/`, packs the tarball, installs it into two scratch Vite + React apps — one that **builds with none of the optional peers installed** (the regression this catches: a peer leaking into the main barrel), and one that installs every peer, runs the packed bin's `init chat` against an app-router layout and builds the scaffold — then prints the publish preview. It needs no npm token, so it is free to run as often as you like. Read the preview's file count and package size and sanity-check them against the previous release; a sudden jump means something got swept into the tarball. Expect `LICENSE`, `README.md`, the init bin under `bin/` (named by `BIN_NAME` in `scripts/brand.mjs`, origin-stamped and executable) and its chat templates under `bin/templates/` alongside the build output; anything else new is not deliberate.
 
 ### 5. Publish
 

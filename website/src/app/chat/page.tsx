@@ -39,6 +39,7 @@ import { componentApi } from "@/data/component-api.generated";
 import { chatExchangeMap } from "../overview/maps";
 import { widgetMap } from "./maps";
 import { PACKAGE_NAME } from "@/config/brand.generated";
+import { SITE_URL } from "@/lib/structuredData";
 import styles from "./page.module.css";
 
 /* Every fact on this page comes from the widget's registry, the package's
@@ -53,6 +54,8 @@ const parts = chatWidget.parts
 
 const INSTALL_SNIPPET = `npm install ${PACKAGE_NAME}
 npx ${PACKAGE_NAME} ${chatWidget.command}`;
+
+const SHADCN_SNIPPET = `npx shadcn@latest add ${SITE_URL}/r/${chatWidget.slug}.json`;
 
 const MOUNT_SNIPPET = `// app/layout.tsx: render the mount once, after the page content.
 import { ChatMount } from '../components/chat/ChatMount';
@@ -258,6 +261,11 @@ export default function ChatPage() {
               enable flag to go live.
             </p>
             <CodeBlock code={MOUNT_SNIPPET} language="tsx" showCopy />
+            <p className={styles.sectionNote}>
+              Prefer owning the source? The shadcn registry carries the whole widget
+              as one item, with the components it composes as its dependencies:
+            </p>
+            <CodeBlock code={SHADCN_SNIPPET} language="bash" showCopy />
             <p className={styles.sectionNote}>
               The widget occupies its own subpaths, each with the optional peers it
               needs, so the main barrel stays free of them:

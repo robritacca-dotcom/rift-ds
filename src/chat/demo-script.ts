@@ -224,7 +224,7 @@ export const DEMO_SCRIPT: ChatScript = scriptChat()
     steps: [{ status: 'Starting the calendar sync', point: 'The calendar sync runs after the invites.' }],
     card: card<DemoToolCallCard>('tool-call', {
       name: 'sync_calendar',
-      summary: 'team@acme.example',
+      summary: 'the shared team calendar',
       status: 'error',
       duration: '2.1s',
       retryable: true,

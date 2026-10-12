@@ -1,0 +1,9 @@
+/* The site's own additions to the package's chat chrome. The widget and the
+   launcher are styled by rift-ds/chat/chat.css; what lives here is only what
+   the site adds on top. */
+
+.disclaimerLink {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

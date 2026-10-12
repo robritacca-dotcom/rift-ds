@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useSiteChat } from "@/components/SiteChat/ChatContext";
+import { CHAT_PANEL_ID, useChatWidget } from "rift-ds/chat";
 
 /**
  * Inline text link that opens the site chat panel, using the FAB's open
@@ -15,12 +15,12 @@ export function OpenChatLink({
   className?: string;
   children: ReactNode;
 }) {
-  const { setOpen, returnFocusRef } = useSiteChat();
+  const { setOpen, returnFocusRef } = useChatWidget();
   return (
     <button
       type="button"
       className={className}
-      aria-controls="site-chat-panel"
+      aria-controls={CHAT_PANEL_ID}
       onClick={(event) => {
         returnFocusRef.current = event.currentTarget;
         setOpen(true);

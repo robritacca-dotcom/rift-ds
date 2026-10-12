@@ -41,6 +41,24 @@ Components that import recharts ship from `rift-ds/charts` and need the optional
 
 The primary typeface is not bundled: set `--font-family-primary` to your own (the system is designed around Nunito Sans). The Material Symbols icon font ships inside the package, and any component import loads it.
 
+## The chat widget
+
+The whole AI chat as one installable widget: the panel, the conversation engine, the streaming protocol and the server handlers, configured with props. It is the package's one widget, separate from the components: `ChatWidget`, `ChatProvider` and `ChatLauncher` over a `useChat` engine, with the server half as web-standard request handlers. Scaffold it into a Next.js app router project with one command, which writes the three routes, the mount and an env example and never overwrites a file:
+
+```bash
+npx rift-ds init chat
+```
+
+Its subpaths, each with the optional peers it needs:
+
+- `rift-ds/chat`: The widget, the provider, the launcher and the engine under them. Peers: react-markdown, remark-gfm.
+- `rift-ds/chat/server`: The streaming chat handler and its follow-ups and feedback siblings, for any web-standard route. Peers: @anthropic-ai/sdk.
+- `rift-ds/chat/upstash`: Rate limits, a daily budget and the exchange log over Upstash Redis, as the handlers' guardrails. Peers: @upstash/ratelimit, @upstash/redis.
+- `rift-ds/chat/demo`: A scripted conversation with rich cards and fixtures, for a preview that needs no key. Peers: recharts.
+- `rift-ds/chat/chat.css`: The widget's stylesheet.
+
+Its props, protocol and server options are documented at https://rift-ds.com/chat (the contract as markdown at https://rift-ds.com/chat.md, and through the MCP `get_component` tool by the name `ChatWidget`). A scripted transport (`scriptChat()`, and the ready-made story in `rift-ds/chat/demo`) runs the widget with no model, route or key, for previews and tests.
+
 ## Timings in JavaScript
 
 Timer-driven timings (hover delays, toast auto-dismiss, the streaming reveal's pacing) are exported as constants from `rift-ds/tokens/motion`. Import the constant rather than writing a literal millisecond value.

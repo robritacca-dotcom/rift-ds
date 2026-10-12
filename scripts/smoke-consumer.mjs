@@ -1,38 +1,68 @@
 #!/usr/bin/env node
 /**
  * Pre-publish consumer smoke test. Packs dist/ into a tarball, scaffolds
- * a minimal Vite + React + TypeScript app in a temp directory, installs
- * the tarball, and runs `tsc` + `vite build`.
+ * minimal Vite + React + TypeScript apps in a temp directory, installs the
+ * tarball, and runs `tsc` + `vite build`. Two scenarios, because the package
+ * has two kinds of consumer:
  *
- * Deliberately does NOT install recharts: the main barrel must build for
- * consumers without the optional peer (the regression this suite exists
- * to catch). Deep imports, the tokens.css subpath, and type resolution
- * are all exercised. Run by the release workflow before `npm publish`,
- * and runnable locally after `npm run build:lib`.
+ *   1. The plain consumer: no optional peer installed. The main barrel, a
+ *      deep import and the tokens stylesheet must build with none of
+ *      recharts, react-markdown, remark-gfm, the Anthropic SDK or the Upstash
+ *      packages present (the regression this suite exists to catch: an
+ *      optional peer that leaks into the main barrel breaks everyone).
+ *
+ *   2. The chat consumer: every optional peer installed, the packed bin's
+ *      `init chat` run against a scaffolded app-router layout, and the
+ *      result type-checked and built. This is the proof behind "one command
+ *      wires the whole chat": the templates the bin writes must import
+ *      subpaths the tarball resolves, the route files must type-check
+ *      against the shipped server types, and the mount must bundle.
+ *
+ * Run by the release workflow before `npm publish`, and runnable locally
+ * after `npm run build:lib`.
  */
 import { execSync } from 'node:child_process';
-import { mkdtempSync, mkdirSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
-import { dirname } from 'node:path';
+import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { BIN_NAME, PACKAGE_NAME } from './brand.mjs';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const distDir = join(repoRoot, 'dist');
+const distPkg = JSON.parse(readFileSync(join(distDir, 'package.json'), 'utf8'));
+
+/* The optional peers, from the manifest that ships: whatever is marked
+   optional is what scenario 1 must build without and scenario 2 installs. */
+const OPTIONAL_PEERS = Object.entries(distPkg.peerDependenciesMeta ?? {})
+  .filter(([, meta]) => meta?.optional)
+  .map(([name]) => name);
 
 const run = (cmd, cwd) => execSync(cmd, { cwd, stdio: 'inherit' });
 
-const work = mkdtempSync(join(tmpdir(), 'ds-smoke-'));
-console.log(`▸ Smoke test workspace: ${work}`);
+const TSCONFIG = {
+  compilerOptions: {
+    target: 'ES2022',
+    lib: ['ES2022', 'DOM', 'DOM.Iterable'],
+    module: 'ESNext',
+    moduleResolution: 'bundler',
+    jsx: 'react-jsx',
+    strict: true,
+    noEmit: true,
+    skipLibCheck: true,
+  },
+  include: ['src', 'app', 'components'],
+};
 
-try {
-  run(`npm pack --pack-destination "${work}"`, distDir);
-  const tarball = readdirSync(work).find((f) => f.endsWith('.tgz'));
-  if (!tarball) throw new Error('npm pack produced no tarball');
+const VITE_CONFIG = `import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+export default defineConfig({ plugins: [react()] });
+`;
 
-  const app = join(work, 'app');
+const INDEX_HTML = `<!doctype html><html><body><div id="root"></div><script type="module" src="/src/main.tsx"></script></body></html>`;
+
+function scaffold(app, tarball, { peers }) {
   mkdirSync(join(app, 'src'), { recursive: true });
-
   writeFileSync(
     join(app, 'package.json'),
     JSON.stringify(
@@ -41,9 +71,10 @@ try {
         private: true,
         type: 'module',
         dependencies: {
-          'rift-ds': `file:../${tarball}`,
+          [PACKAGE_NAME]: `file:../${tarball}`,
           react: '^19.0.0',
           'react-dom': '^19.0.0',
+          ...Object.fromEntries(peers.map((name) => [name, distPkg.peerDependencies[name]])),
         },
         devDependencies: {
           '@types/react': '^19.0.0',
@@ -57,47 +88,28 @@ try {
       2
     )
   );
+  writeFileSync(join(app, 'tsconfig.json'), JSON.stringify(TSCONFIG, null, 2));
+  writeFileSync(join(app, 'vite.config.ts'), VITE_CONFIG);
+  writeFileSync(join(app, 'index.html'), INDEX_HTML);
+}
 
-  writeFileSync(
-    join(app, 'tsconfig.json'),
-    JSON.stringify(
-      {
-        compilerOptions: {
-          target: 'ES2022',
-          lib: ['ES2022', 'DOM', 'DOM.Iterable'],
-          module: 'ESNext',
-          moduleResolution: 'bundler',
-          jsx: 'react-jsx',
-          strict: true,
-          noEmit: true,
-          skipLibCheck: true,
-        },
-        include: ['src'],
-      },
-      null,
-      2
-    )
-  );
+const work = mkdtempSync(join(tmpdir(), 'ds-smoke-'));
+console.log(`▸ Smoke test workspace: ${work}`);
 
-  writeFileSync(
-    join(app, 'vite.config.ts'),
-    `import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-export default defineConfig({ plugins: [react()] });
-`
-  );
+try {
+  run(`npm pack --pack-destination "${work}"`, distDir);
+  const tarball = readdirSync(work).find((f) => f.endsWith('.tgz'));
+  if (!tarball) throw new Error('npm pack produced no tarball');
 
+  /* ---- 1. The plain consumer: no optional peers ------------------------- */
+  const plain = join(work, 'plain');
+  scaffold(plain, tarball, { peers: [] });
   writeFileSync(
-    join(app, 'index.html'),
-    `<!doctype html><html><body><div id="root"></div><script type="module" src="/src/main.tsx"></script></body></html>`
-  );
-
-  writeFileSync(
-    join(app, 'src', 'main.tsx'),
+    join(plain, 'src', 'main.tsx'),
     `import { createRoot } from 'react-dom/client';
-import 'rift-ds/tokens/tokens.css';
-import { Button, Badge, COMPONENT_COUNT } from 'rift-ds';
-import { Alert } from 'rift-ds/components/Alert/Alert';
+import '${PACKAGE_NAME}/tokens/tokens.css';
+import { Button, Badge, COMPONENT_COUNT } from '${PACKAGE_NAME}';
+import { Alert } from '${PACKAGE_NAME}/components/Alert/Alert';
 
 createRoot(document.getElementById('root')!).render(
   <main>
@@ -108,11 +120,51 @@ createRoot(document.getElementById('root')!).render(
 );
 `
   );
+  run('npm install --no-fund --no-audit', plain);
+  run('npx tsc -p tsconfig.json', plain);
+  run('npx vite build', plain);
+  console.log(
+    `✓ Plain consumer: tarball installs, type-checks and builds with none of the optional peers (${OPTIONAL_PEERS.join(', ')}).`
+  );
 
-  run('npm install --no-fund --no-audit', app);
-  run('npx tsc -p tsconfig.json', app);
-  run('npx vite build', app);
-  console.log('✓ Consumer smoke test passed — tarball installs, type-checks, and builds without recharts.');
+  /* ---- 2. The chat consumer: every peer, plus `init chat` --------------- */
+  const chat = join(work, 'chat');
+  scaffold(chat, tarball, { peers: OPTIONAL_PEERS });
+  // An app-router shape for the bin to find: the templates land under app/
+  // and components/ beside it.
+  mkdirSync(join(chat, 'app'), { recursive: true });
+  writeFileSync(join(chat, 'app', 'layout.tsx'), `export default function Layout({ children }: { children: React.ReactNode }) { return <>{children}</>; }\n`);
+  run('npm install --no-fund --no-audit', chat);
+  // The packed bin, exactly as npx would run it, writing into the scaffold.
+  run(`node node_modules/${PACKAGE_NAME}/bin/${BIN_NAME}.mjs init chat`, chat);
+  writeFileSync(
+    join(chat, 'src', 'main.tsx'),
+    `import { createRoot } from 'react-dom/client';
+import '${PACKAGE_NAME}/tokens/tokens.css';
+import { ChatMount } from '../components/chat/ChatMount';
+import { scriptChat, type ChatEvent } from '${PACKAGE_NAME}/chat';
+
+// The scripted transport is the no-key path; one exchange proves the type.
+const transport = scriptChat().user('Hello').assistant('Hi there.').transport();
+void transport;
+const kinds: ChatEvent['type'][] = ['status', 'delta', 'done'];
+void kinds;
+
+createRoot(document.getElementById('root')!).render(<ChatMount />);
+`
+  );
+  // Next's route segment exports and process.env are plain TypeScript; the
+  // handlers behind them are the package's. tsc covers the whole scaffold,
+  // vite bundles the client half.
+  writeFileSync(
+    join(chat, 'src', 'env.d.ts'),
+    `declare const process: { env: Record<string, string | undefined> };\n`
+  );
+  run('npx tsc -p tsconfig.json', chat);
+  run('npx vite build', chat);
+  console.log(
+    `✓ Chat consumer: \`${BIN_NAME} init chat\` scaffolds against the tarball, and the routes and the mount type-check and build.`
+  );
 } finally {
   rmSync(work, { recursive: true, force: true });
 }

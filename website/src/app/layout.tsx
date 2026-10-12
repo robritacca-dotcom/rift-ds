@@ -15,7 +15,7 @@ import "./globals.css";
 import { buildDesignSystemJsonLd, buildWebsiteJsonLd, SITE_URL } from "@/lib/structuredData";
 import { BRAND_NAME, GA_ID, TITLE_SUFFIX } from "@/config/brand.generated";
 import { BASE_THEME_ID, LEGACY_BASE_THEME_ID, SERVED_THEME_ID } from "@/lib/theme/brand";
-import { SiteChatProvider } from "@/components/SiteChat/ChatContext";
+import { SiteChatProvider } from "@/components/SiteChat/SiteChatProvider";
 import { SiteChatMount } from "@/components/SiteChat/SiteChatMount";
 import { SitePaletteMount } from "@/components/SitePalette/SitePaletteMount";
 import SiteFooter from "@/components/SiteFooter/SiteFooter";

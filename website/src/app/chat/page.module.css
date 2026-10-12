@@ -1,0 +1,333 @@
+/* ============================================
+   CHAT — the chat widget's page
+   The standard doc page shell (no sidebar: the section has one member), a
+   stage for the live demo, a feature grid, props tables and two maps.
+   ============================================ */
+.dsLayout {
+  display: flex;
+  gap: var(--layout-column-gap);
+  width: 100%;
+  max-width: 1440px;
+  padding-top: var(--primitive-gap-1000);
+}
+
+.dsContent {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-2000);
+}
+
+/* ============================================
+   PAGE TITLE - Display 2
+   ============================================ */
+.pageHeader {
+  margin-top: calc(var(--primitive-gap-1000) - var(--gap-2000));
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--primitive-gap-500);
+  width: 100%;
+}
+
+.pageTitle {
+  font-family: var(--font-display-2-family);
+  font-size: var(--font-display-2-size);
+  font-weight: var(--font-display-2-weight);
+  line-height: var(--font-display-2-line-height);
+  letter-spacing: var(--font-display-2-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.subDisplay {
+  font-family: var(--font-sub-display-family);
+  font-size: var(--font-sub-display-size);
+  font-weight: var(--font-sub-display-weight);
+  line-height: var(--font-sub-display-line-height);
+  letter-spacing: var(--font-sub-display-letter-spacing);
+  color: var(--color-text-primary);
+  margin-bottom: 0;
+}
+
+.introSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-500);
+}
+
+.introBody {
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-secondary);
+}
+
+/* ============================================
+   SECTIONS
+   ============================================ */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-500);
+  scroll-margin-top: var(--layout-anchor-clearance);
+}
+
+.section > :global(.ds-section-title:not(.ds-section-title--no-divider)) {
+  margin-bottom: calc(var(--gap-1000) - var(--primitive-gap-500));
+}
+
+.sectionNote {
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-secondary);
+}
+
+.sectionNote code {
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   THE STAGE — the live demo
+   The card the widget fills: the panel's own glass and radius, so the demo
+   reads as the thing itself rather than a picture of it. The phone preset
+   narrows the card to a handset and the widget stacks its welcome.
+   ============================================ */
+.stageBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap-400);
+}
+
+.stageNote {
+  margin: 0;
+  flex: 1 1 320px;
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+}
+
+.stage {
+  display: flex;
+  margin-inline: auto;
+  background: var(--color-bg-glass);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
+  box-shadow: var(--shadow-floating);
+  overflow: hidden;
+  backdrop-filter: blur(24px);
+}
+
+.disclaimerAction {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+/* ============================================
+   INSTALL — the subpaths
+   ============================================ */
+.subpathList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+}
+
+.subpathItem {
+  display: grid;
+  grid-template-columns: minmax(0, 260px) 1fr;
+  gap: var(--gap-100) var(--gap-500);
+  align-items: baseline;
+  padding: var(--padding-300) 0;
+  border-bottom: var(--border-025) solid var(--color-divider);
+}
+
+.subpathName {
+  font-family: var(--font-family-code);
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-primary);
+  word-break: break-word;
+}
+
+.subpathWhat {
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+}
+
+.subpathPeers {
+  grid-column: 2;
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-tertiary);
+}
+
+/* ============================================
+   FEATURES
+   ============================================ */
+.featureGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gap-800) var(--layout-column-gap);
+}
+
+.feature {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+}
+
+.featureTitle {
+  margin: 0;
+  font-family: var(--font-heading-3-family);
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+  letter-spacing: var(--font-heading-3-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.featureBody {
+  margin: 0;
+  font-size: var(--font-paragraph-size);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-secondary);
+}
+
+/* ============================================
+   CONFIGURE — the props tables
+   ============================================ */
+.propsBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+}
+
+.propsHeading {
+  margin: 0;
+  font-family: var(--font-heading-3-family);
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+  letter-spacing: var(--font-heading-3-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   ANATOMY — the composed parts
+   ============================================ */
+.partsList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gap-200) var(--gap-500);
+}
+
+.partLink {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-050);
+  padding: var(--padding-300);
+  border-radius: var(--radius-400);
+  text-decoration: none;
+  color: inherit;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.partLink:hover {
+  background-color: var(--color-bg-container-secondary);
+}
+
+.partName {
+  font-family: var(--font-paragraph-emphasis-family);
+  font-size: var(--font-paragraph-emphasis-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-emphasis-line-height);
+  color: var(--color-text-primary);
+}
+
+.partDescription {
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+}
+
+/* ============================================
+   PROTOCOL — the event kinds
+   ============================================ */
+.eventList {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.eventRow {
+  display: grid;
+  grid-template-columns: minmax(0, 160px) 1fr;
+  gap: var(--gap-500);
+  padding: var(--padding-300) 0;
+  border-bottom: var(--border-025) solid var(--color-divider);
+}
+
+.eventKind {
+  margin: 0;
+  font-family: var(--font-family-code);
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-primary);
+}
+
+.eventWhat {
+  margin: 0;
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+}
+
+.ctaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-300);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+  .dsLayout {
+    padding-left: 0;
+    min-width: 0;
+  }
+
+  .dsContent {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .featureGrid,
+  .partsList {
+    grid-template-columns: 1fr;
+  }
+
+  .subpathItem,
+  .eventRow {
+    grid-template-columns: 1fr;
+  }
+
+  .subpathPeers {
+    grid-column: 1;
+  }
+}

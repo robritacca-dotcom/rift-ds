@@ -80,6 +80,29 @@ export function librarySourceFiles() {
   return [...new Set(files)];
 }
 
+/** The chat widget registry: the one widget's metadata (see src/chat/registry.json). */
+export const chatRegistry = JSON.parse(
+  readFileSync(join(repoRoot, 'src', 'chat', 'registry.json'), 'utf8')
+);
+
+/**
+ * The chat widget's documented components: the exports its registry names
+ * under `documented`, each in its own src/chat/<Name>.tsx. Parsed by the same
+ * pass as the components, so the /chat page's props tables, the widget's .md
+ * page and the MCP get_component tool read the contract the .d.ts ships.
+ */
+export function chatSourceFiles() {
+  const posix = (path) => path.replaceAll('\\', '/');
+  return chatRegistry.widgets.flatMap((widget) =>
+    widget.documented.map((name) => posix(join(repoRoot, 'src', 'chat', `${name}.tsx`)))
+  );
+}
+
+/** Every file docgen reads: the components and the widget's documented exports. */
+export function allSourceFiles() {
+  return [...librarySourceFiles(), ...chatSourceFiles()];
+}
+
 /**
  * Whether a docgen result is a component rather than some other export of
  * the same module. Two facts decide it, both React's own rules for what JSX
@@ -111,5 +134,5 @@ export function parseLibrary() {
     propFilter: (prop) =>
       !(prop.parent && prop.parent.fileName.includes('node_modules')),
   });
-  return parser.parse(librarySourceFiles()).filter(isComponentDoc);
+  return parser.parse(allSourceFiles()).filter(isComponentDoc);
 }

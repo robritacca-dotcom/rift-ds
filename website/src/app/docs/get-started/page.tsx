@@ -15,6 +15,7 @@ import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
 import { Button } from "rift-ds/components/Button/Button";
 import { OpenChatLink } from "./OpenChatLink";
 import { componentMetadata } from "rift-ds/components/registry";
+import { chatWidget } from "rift-ds/chat";
 import { MCP_CLIENTS } from "@/lib/mcp-clients";
 import { MCP_TOOLS } from "@/lib/mcp-tools";
 import { SITE_URL } from "@/lib/structuredData";
@@ -73,6 +74,10 @@ import { BarChart, LineChart } from 'rift-ds/charts';`;
 
 const DARK_MODE_SNIPPET = `<!-- Light is the default; flip the whole system with one attribute -->
 <html data-theme="dark">`;
+
+/* The widget's scaffold: the registry owns the subcommand and the peers it
+   installs beside the package. */
+const CHAT_SNIPPET = `npx rift-ds ${chatWidget.command}`;
 
 const PAGE_PAINT_SNIPPET = `/* The token stylesheet defines values and styles no element, so
    paint the page from the tokens once. It then follows the theme
@@ -505,16 +510,24 @@ export default function GetStartedPage() {
                   and they render whatever conversation you hand them.
                 </p>
                 <p className={styles.sectionNote}>
-                  What the package does not ship is the conversation itself. You
-                  bring the state (the transcript, which turn is streaming), a
-                  transport that talks to your backend, and a server-side endpoint
-                  holding your LLM API key. Keys stay on the server; nothing in the
-                  package or your client code ever holds one. This site&apos;s chat
-                  is the reference implementation:{" "}
+                  The conversation itself ships too, as one widget. The{" "}
+                  <Link href="/chat" className={styles.inlineLink}>chat widget</Link>{" "}
+                  composes those components into the whole thing: the panel with its
+                  docked, overlay and takeover forms, the streaming engine, the
+                  threads, the rich cards, and the server handlers that call the
+                  model. One command scaffolds it into a Next.js app, and a
+                  scripted mode runs it with no key. Keys stay on the server;
+                  nothing in the package or your client code ever holds one. This
+                  site&apos;s chat is that widget, configured for this site:{" "}
                   <OpenChatLink className={styles.inlineLinkButton}>
                     open {ASSISTANT_NAME}
                   </OpenChatLink>{" "}
-                  and you are looking at those components at work.
+                  and you are looking at it at work.
+                </p>
+                <CodeBlock code={CHAT_SNIPPET} language="bash" showCopy />
+                <p className={styles.sectionNote}>
+                  Everything the widget takes and does, feature by feature, is on
+                  its own page: <Link href="/chat" className={styles.inlineLink}>the chat widget</Link>.
                 </p>
               </section>
 

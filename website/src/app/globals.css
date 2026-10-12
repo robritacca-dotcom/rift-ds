@@ -73,11 +73,11 @@ html[data-theme-ready] {
      widen grip (SiteChatMount) rewrites it inline on <html>, capped at
      655px — keep DOCK_MIN_WIDTH/DOCK_MAX_WIDTH (SiteChat/placement.ts) in
      step with this value. */
-  --layout-chat-width: 420px;
+  --layout-chat-width: var(--ds-chat-width);
   /* The floating chat card's resting height (SiteChat.module.css); its
      resting width is the docked width above. */
-  --layout-chat-float-height: 640px;
-  --layout-chat-inset: 20px;
+  --layout-chat-float-height: var(--ds-chat-float-height);
+  --layout-chat-inset: var(--ds-chat-inset);
 
   /* The site's fixed layers, lowest to highest: the floating anchor rail
      (5, under the header so its panel can never sit on the bar), sticky
@@ -201,7 +201,7 @@ html[data-chat="takeover"] body {
   transition: none;
 }
 
-html[data-chat="takeover"] body > :not(#site-chat-panel):not(.blur-container) {
+html[data-chat="takeover"] body > :not(#ds-chat-panel):not(.blur-container) {
   display: none;
 }
 
@@ -214,6 +214,13 @@ html[data-chat-resizing] {
 }
 html[data-chat-resizing] body {
   transition: none;
+}
+
+/* MegaNav's mobile drawer is open (it sets the attribute on <html>). The chat
+   launcher sits above the drawer's scrim, where it reads as a stray button
+   laid over the menu, so it stands down until the menu closes. */
+html[data-nav-drawer="open"] .ds-chat-launcher__fab {
+  display: none;
 }
 
 a {

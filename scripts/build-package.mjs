@@ -27,7 +27,7 @@ import {
 } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { BIN_NAME, MCP_SERVER_NAME, SITE_URL, SKILL_NAME } from './brand.mjs';
+import { BIN_NAME, MCP_SERVER_NAME, PACKAGE_NAME, SITE_URL, SKILL_NAME } from './brand.mjs';
 import { distManifest } from './package-manifest.mjs';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -66,7 +66,11 @@ console.log(`▸ Copied ${assets.length} runtime assets (css, fonts, registries)
 // module, or importing one from a Server Component throws. The registry
 // cross-check keeps this step honest: a `client: true` component whose
 // built module ends up unmarked fails the build.
-const sourceModules = collect(srcDir, (name) => /\.(ts|tsx)$/.test(name) && !name.includes('.stories.'));
+// The init bin's scaffold templates under src/cli are shipped as files, never
+// built, so they have no dist module to mark.
+const sourceModules = collect(srcDir, (name) => /\.(ts|tsx)$/.test(name) && !name.includes('.stories.')).filter(
+  (file) => !file.startsWith(join(srcDir, 'cli'))
+);
 const clientDistFiles = [];
 for (const sourceFile of sourceModules) {
   const firstLine = readFileSync(sourceFile, 'utf8').split('\n', 1)[0].trim();
@@ -104,9 +108,22 @@ writeFileSync(
     .replaceAll('__SITE_URL__', SITE_URL)
     .replaceAll('__SKILL_NAME__', SKILL_NAME)
     .replaceAll('__MCP_SERVER_NAME__', MCP_SERVER_NAME)
+    .replaceAll('__PACKAGE_NAME__', PACKAGE_NAME)
 );
 chmodSync(binTarget, 0o755);
 console.log(`▸ Wrote bin/${BIN_NAME}.mjs (brand facts stamped).`);
+
+// The `init chat` templates ride beside the bin. They import the installed
+// version's own subpaths, so unlike the skills they are shipped rather than
+// fetched: the copy a consumer scaffolds must match the package they have.
+const templatesSrc = join(srcDir, 'cli', 'templates');
+const templates = collect(templatesSrc, () => true);
+for (const template of templates) {
+  const target = join(distDir, 'bin', 'templates', relative(templatesSrc, template));
+  mkdirSync(dirname(target), { recursive: true });
+  copyFileSync(template, target);
+}
+console.log(`▸ Copied ${templates.length} init templates beside the bin.`);
 
 const rootPkg = JSON.parse(readFileSync(join(repoRoot, 'package.json'), 'utf8'));
 writeFileSync(join(distDir, 'package.json'), JSON.stringify(distManifest(rootPkg), null, 2) + '\n');

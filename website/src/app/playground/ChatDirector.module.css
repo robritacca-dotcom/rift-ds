@@ -1,8 +1,7 @@
 /* ============================================
-   CHAT DIRECTOR — the event rail's own pieces,
-   plus the styling for content it injects into
-   the thread. The rail geometry itself lives in
-   page.module.css beside the control rail's.
+   CHAT DIRECTOR — the event rail's own pieces. The rail geometry itself
+   lives in page.module.css beside the control rail's; the cards the events
+   land in the thread are the demo's (rift-ds/chat/demo), styled there.
    ============================================ */
 
 .eventList {
@@ -19,31 +18,3 @@
 .eventList :global(.ds-button) {
   justify-content: flex-start;
 }
-
-/* ---------- injected thread content ---------- */
-
-/* The product card's media slot: a drawn stand-in, because the stage shows
-   a generic product with no real imagery to load. Chart-series tokens keep
-   it on-theme in both modes and re-theme with the levers like every chart. */
-.cardMedia {
-  height: 120px;
-  background: linear-gradient(
-    135deg,
-    var(--color-chart-series-1),
-    var(--color-chart-series-2)
-  );
-}
-
-.sourceRow {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--gap-200);
-}
-
-/* Two rich elements landing as one turn's content stack. */
-.contentStack {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-300);
-}
-

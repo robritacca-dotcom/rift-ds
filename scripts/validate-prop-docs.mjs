@@ -38,7 +38,7 @@
 import { readFileSync } from 'node:fs';
 import { relative } from 'node:path';
 import ts from 'typescript';
-import { librarySourceFiles, parseLibrary, repoRoot } from './component-docgen.mjs';
+import { allSourceFiles, parseLibrary, repoRoot } from './component-docgen.mjs';
 
 // Normalize CRLF so Windows checkouts validate identically to CI.
 const read = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
@@ -113,7 +113,7 @@ const propCountByComponent = new Map(
 
 let ownPropsCount = 0;
 
-for (const file of librarySourceFiles()) {
+for (const file of allSourceFiles()) {
   const source = ts.createSourceFile(file, read(file), ts.ScriptTarget.Latest, true);
   for (const statement of source.statements) {
     if (!ts.isTypeAliasDeclaration(statement) && !ts.isInterfaceDeclaration(statement)) continue;

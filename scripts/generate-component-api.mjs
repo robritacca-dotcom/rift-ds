@@ -31,12 +31,14 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
+  chatRegistry,
   componentsDir,
   parseLibrary,
   registry,
   repoRoot,
   sourceFilesFor,
 } from './component-docgen.mjs';
+import { PACKAGE_NAME } from './package-manifest.mjs';
 
 export const outputPath = join(
   repoRoot, 'website', 'src', 'data', 'component-api.generated.ts'
@@ -69,37 +71,36 @@ export function assembleComponentApi() {
   // restating the rule that produced it.
   const chartsBarrel = readFileSync(join(repoRoot, 'src', 'charts.ts'), 'utf8');
 
-  return registry.components.map((component) => {
+  const propsOf = (doc) =>
+    Object.entries(doc.props ?? {}).map(([propName, prop]) => {
+      const entry = {
+        name: propName,
+        // Docgen collapses a literal union to the name "enum"; the raw
+        // text is the actual contract, so prefer it there.
+        type: lf(
+          (prop.type?.name === 'enum' ? prop.type?.raw : prop.type?.name) ??
+            prop.type?.name ??
+            'unknown'
+        ),
+        required: Boolean(prop.required),
+        description: lf((prop.description ?? '').trim()),
+      };
+      if (prop.defaultValue?.value != null) {
+        entry.defaultValue = lf(String(prop.defaultValue.value));
+      }
+      if (prop.tags && 'deprecated' in prop.tags) {
+        entry.deprecated = lf(String(prop.tags.deprecated || '').trim()) || 'Deprecated.';
+      }
+      return entry;
+    });
+
+  const componentEntries = registry.components.map((component) => {
     const folder = component.folder ?? component.name;
     const files = sourceFilesFor(component.name, join(componentsDir, folder));
 
     const exportedComponents = files
       .flatMap((file) => byFile.get(file) ?? [])
-      .map((doc) => ({
-        component: doc.displayName,
-        props: Object.entries(doc.props ?? {}).map(([propName, prop]) => {
-          const entry = {
-            name: propName,
-            // Docgen collapses a literal union to the name "enum"; the raw
-            // text is the actual contract, so prefer it there.
-            type: lf(
-              (prop.type?.name === 'enum' ? prop.type?.raw : prop.type?.name) ??
-                prop.type?.name ??
-                'unknown'
-            ),
-            required: Boolean(prop.required),
-            description: lf((prop.description ?? '').trim()),
-          };
-          if (prop.defaultValue?.value != null) {
-            entry.defaultValue = lf(String(prop.defaultValue.value));
-          }
-          if (prop.tags && 'deprecated' in prop.tags) {
-            entry.deprecated =
-              lf(String(prop.tags.deprecated || '').trim()) || 'Deprecated.';
-          }
-          return entry;
-        }),
-      }))
+      .map((doc) => ({ component: doc.displayName, props: propsOf(doc) }))
       // The registry-named component leads; companions follow alphabetically.
       .sort((a, b) => {
         if (a.component === component.name) return -1;
@@ -108,19 +109,47 @@ export function assembleComponentApi() {
       });
 
     return {
+      kind: 'component',
       name: component.name,
       label: component.label,
       slug: component.slug,
       category: component.category,
       description: component.description,
       client: component.client,
-      importPath: `rift-ds/components/${folder}/${component.name}`,
+      importPath: `${PACKAGE_NAME}/components/${folder}/${component.name}`,
       barrel: chartsBarrel.includes(`./components/${folder}/${component.name}'`)
         ? 'charts'
         : 'main',
       exports: exportedComponents,
     };
   });
+
+  // The chat widget: one entry per registered widget, its documented exports
+  // in the registry's order (the widget itself first). Served through the
+  // same tool and the same .md shape as a component, distinguished by `kind`
+  // so the component listings can leave it out and the /chat page can find it.
+  const widgetEntries = chatRegistry.widgets.map((widget) => {
+    const exportedComponents = widget.documented.flatMap((name) => {
+      const file = join(repoRoot, 'src', 'chat', `${name}.tsx`).replaceAll('\\', '/');
+      return (byFile.get(file) ?? [])
+        .filter((doc) => doc.displayName === name)
+        .map((doc) => ({ component: doc.displayName, props: propsOf(doc) }));
+    });
+    return {
+      kind: 'widget',
+      name: widget.name,
+      label: widget.label,
+      slug: widget.slug,
+      category: 'widget',
+      description: widget.description,
+      client: true,
+      importPath: `${PACKAGE_NAME}/chat`,
+      barrel: 'chat',
+      exports: exportedComponents,
+    };
+  });
+
+  return [...componentEntries, ...widgetEntries];
 }
 
 export function buildComponentApiFile() {
@@ -136,9 +165,10 @@ export function buildComponentApiFile() {
   }
 
   return `// AUTO-GENERATED — do not edit by hand.
-// Source of truth: src/components/registry.json and the prop JSDoc in
-// src/components (via react-docgen-typescript — settings in
-// scripts/component-docgen.mjs, shared with Storybook's props tables).
+// Source of truth: src/components/registry.json, src/chat/registry.json and
+// the prop JSDoc in src/components and src/chat (via react-docgen-typescript
+// — settings in scripts/component-docgen.mjs, shared with Storybook's props
+// tables).
 // Regenerate: node scripts/generate-component-api.mjs (runs via predev/prebuild).
 
 /** One documented own prop, as it ships in the .d.ts and Storybook. */
@@ -160,23 +190,26 @@ export interface ComponentExportApi {
   props: ComponentPropApi[];
 }
 
-/** One public registry component: metadata, import paths, and every export behind it. */
+/** One public registry entry: a component, or the chat widget. */
 export interface ComponentApiEntry {
+  /** A library component, or the composed chat widget (src/chat/registry.json). */
+  kind: 'component' | 'widget';
   name: string;
   label: string;
   slug: string;
+  /** A component category id, or 'widget'. */
   category: string;
   description: string;
   /** Whether the module declares 'use client'. */
   client: boolean;
   /** Deep import subpath; the barrel named in \`barrel\` also re-exports it. */
   importPath: string;
-  /** 'charts' modules need the optional recharts peer; 'main' modules never do. */
-  barrel: 'main' | 'charts';
+  /** 'charts' modules need the optional recharts peer; 'main' modules never do; 'chat' is the widget's own subpath with its own peers. */
+  barrel: 'main' | 'charts' | 'chat';
   exports: ComponentExportApi[];
 }
 
-/** The full prop API for every public component, in registry (alphabetical) order. */
+/** The full prop API for every public component, in registry (alphabetical) order, then the chat widget. */
 export const componentApi: readonly ComponentApiEntry[] = ${JSON.stringify(entries, null, 2)};
 `;
 }

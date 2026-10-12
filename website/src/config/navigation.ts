@@ -227,6 +227,17 @@ function buildNavSections(): NavSection[] {
       isActive: (path) => path.startsWith("/foundations"),
     },
     {
+      id: "chat",
+      label: "Chat",
+      href: "/chat",
+      icon: "forum",
+      description:
+        "The whole AI chat as one widget: install it, configure it with props, ship it",
+      // Deliberately no mega: the one widget is the destination, the way the
+      // playground is. If a second widget ever lands, this grows a panel.
+      isActive: (path) => path === "/chat",
+    },
+    {
       id: "templates",
       label: "Templates",
       href: "/templates",
@@ -666,6 +677,11 @@ export function getBreadcrumbs(pathname: string): BreadcrumbItem[] {
   }
   if (path === "/graph") {
     return [{ label: BRAND_NAME, href: "/" }, { label: "System graph" }];
+  }
+  // The chat widget's page is a top-level section with one member, so its
+  // trail leads home like the playground's rather than to a section landing.
+  if (path === "/chat") {
+    return [{ label: BRAND_NAME, href: "/" }, { label: "Chat" }];
   }
 
   // Docs cluster — the landing lives at /docs but sub-pages keep their

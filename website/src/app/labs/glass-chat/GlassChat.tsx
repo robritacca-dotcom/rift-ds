@@ -23,15 +23,16 @@
 
 import React from "react";
 import { AiButton } from "rift-ds/components/AiButton/AiButton";
-import { useSiteChat } from "@/components/SiteChat/ChatContext";
-import { SiteChat } from "@/components/SiteChat/SiteChat";
+import { ChatWidget, useChatWidget } from "rift-ds/chat";
+import { useSiteWidgetProps } from "@/components/SiteChat/useSiteWidgetProps";
 import { ASSISTANT_NAME } from "@/config/brand.generated";
 import BlossomCanvas from "./BlossomCanvas";
 import GlassRail from "./GlassRail";
 import styles from "./GlassChat.module.css";
 
 export default function GlassChat({ backdrop }: { backdrop?: string }) {
-  const { open, setOpen, turns, live } = useSiteChat();
+  const { open, setOpen, turns, live } = useChatWidget();
+  const widget = useSiteWidgetProps();
   /* A conversation on the pane closes the reveal (see .frostFull). */
   const active = turns.length > 0 || Boolean(live);
 
@@ -70,7 +71,8 @@ export default function GlassChat({ backdrop }: { backdrop?: string }) {
             <span />
             <div className={styles.frostFull} />
           </div>
-          <SiteChat
+          <ChatWidget
+            {...widget}
             fullscreenEnabled={false}
             threads={({ overlay, close }) => (
               <GlassRail

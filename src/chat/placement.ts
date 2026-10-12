@@ -1,19 +1,19 @@
 /**
  * Where a chat panel sits: docked to either edge, or popped out as a
  * floating card the visitor moves and sizes. One roster, so the header menu
- * (SiteChat), the site mount and the playground stage all name the same
- * three seats the same way. design.md's Site chat pattern owns the
- * behaviour each seat promises.
+ * (ChatWidget), the launcher and any host stage all name the same three
+ * seats the same way. design.md's ChatWidget spec owns the behaviour each
+ * seat promises.
  *
- * No React and no component imports, like DOCK_QUERY's home in
- * ChatContext: hosts deep in the tree read it without pulling the widget.
+ * No React and no component imports, like the dock query's home in
+ * ChatProvider: hosts deep in the tree read it without pulling the widget.
  */
 
 /** The edge a docked panel takes, and the edge it overlays from below the dock threshold. */
-export type ChatSide = "left" | "right";
+export type ChatSide = 'left' | 'right';
 
 /** A panel's seat: a dock edge, or floating free of both. */
-export type ChatPlacement = ChatSide | "floating";
+export type ChatPlacement = ChatSide | 'floating';
 
 /* The menu's rows, in menu order. The two dock glyphs are deliberately
    crossed with their names: Material's dock_to_right draws the panel bar on
@@ -23,20 +23,19 @@ export const CHAT_PLACEMENTS: readonly {
   label: string;
   icon: string;
 }[] = [
-  { id: "right", label: "Dock right", icon: "dock_to_left" },
-  { id: "left", label: "Dock left", icon: "dock_to_right" },
-  { id: "floating", label: "Floating", icon: "picture_in_picture" },
+  { id: 'right', label: 'Dock right', icon: 'dock_to_left' },
+  { id: 'left', label: 'Dock left', icon: 'dock_to_right' },
+  { id: 'floating', label: 'Floating', icon: 'picture_in_picture' },
 ];
 
-/** The roster entry for a placement — the header trigger wears its icon. */
+/** The roster entry for a placement: the header trigger wears its icon. */
 export const chatPlacement = (id: ChatPlacement) =>
   CHAT_PLACEMENTS.find((placement) => placement.id === id) ?? CHAT_PLACEMENTS[0];
 
 /* A docked panel's drag-to-widen range. The minimum mirrors the
-   --layout-chat-width default in globals.css (the resting width); the
-   maximum is a little over half again as wide. One pair for every host
-   with a dock, so the site panel and the playground's docked stage card
-   stop at the same two walls. */
+   --ds-chat-width default in ChatWidget.css (the resting width); the maximum
+   is a little over half again as wide. One pair for every host with a dock,
+   so a docked panel and a docked stage card stop at the same two walls. */
 export const DOCK_MIN_WIDTH = 420;
 export const DOCK_MAX_WIDTH = 655;
 
@@ -47,7 +46,7 @@ export function dockWidthFromDrag(
   pointerDelta: number,
   side: ChatSide
 ): number {
-  const grown = startWidth + (side === "left" ? pointerDelta : -pointerDelta);
+  const grown = startWidth + (side === 'left' ? pointerDelta : -pointerDelta);
   return Math.round(Math.min(DOCK_MAX_WIDTH, Math.max(DOCK_MIN_WIDTH, grown)));
 }
 
@@ -60,7 +59,7 @@ export const FLOAT_MAX_SCALE = 1.2;
 export const FLOAT_EDGE_GAP = 8;
 
 /* A floating card is moved by its header, minus the header's controls. */
-const FLOAT_DRAG_ZONE = ".ds-chat-header";
+const FLOAT_DRAG_ZONE = '.ds-chat-header';
 const FLOAT_DRAG_EXEMPT =
   "button, a, input, textarea, select, [role='button'], [role='menu']";
 

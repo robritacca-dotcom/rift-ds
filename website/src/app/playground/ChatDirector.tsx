@@ -1,43 +1,31 @@
 "use client";
 
-import { useEffect, useState, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import layout from "./page.module.css";
 import styles from "./ChatDirector.module.css";
-import { AgentPlan, type AgentPlanStep } from "rift-ds/components/AgentPlan/AgentPlan";
 import { Button } from "rift-ds/components/Button/Button";
 import { ChatMarker } from "rift-ds/components/ChatMarker/ChatMarker";
-import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
-import { CodeDiff } from "rift-ds/components/CodeDiff/CodeDiff";
-import { AreaChart } from "rift-ds/components/Chart/AreaChart";
-import { BarChart } from "rift-ds/components/Chart/BarChart";
-import { InterruptCard } from "rift-ds/components/InterruptCard/InterruptCard";
-import { MessageCard } from "rift-ds/components/MessageCard/MessageCard";
-import { SourceChip } from "rift-ds/components/SourceChip/SourceChip";
-import { ToolCall } from "rift-ds/components/ToolCall/ToolCall";
 import { InspectorSection } from "rift-ds/components/Inspector/InspectorSection";
-import { SourceLogoMock } from "@/components/SourceLogoMock/SourceLogoMock";
-import { useSiteChat } from "@/components/SiteChat/ChatContext";
+import { useChatWidget } from "rift-ds/chat";
 
 /* ============================================
    The chat director: the Chat view's own rail.
 
    Every event plays a scripted beat into the conversation the stage is
-   rendering, built from the library's chat components — the same primitives
-   the widget itself is made of. The rich-content beats send a story prompt
-   through the sim transport (lib/chat-sim.ts), so one press plays as a
-   real exchange: the visitor's bubble, the thinking choreography with its
-   reasoning trace, the streamed answer, the rich element, and follow-up
-   chips. Only the instant events (a reply, a day marker) still land in the
-   transcript directly via injectTurn. Nothing here calls a model or a
-   server: "Ask as the visitor" goes through whichever transport the lever
-   picked.
+   rendering. The rich-content beats send a story prompt through the demo
+   transport (rift-ds/chat/demo), so one press plays as a real exchange: the
+   visitor's bubble, the thinking choreography with its reasoning trace, the
+   streamed answer, the card, and follow-up chips. Only the instant events
+   (a reply, a day marker) land in the transcript directly via injectTurn,
+   the widget's public staging API. Nothing here calls a model or a server:
+   "Ask as the visitor" goes through whichever transport the lever picked.
    ============================================ */
 
 /* Rotating scripts, so pressing an event twice stays varied. The stage
-   shows a generic product (the Product name lever's Acme Corp), so the
-   copy is a consumer product's, never the site's own assistant. */
-/* Each one is a story key in lib/chat-sim.ts, so asking as the visitor
-   always enters the branching script rather than the fallback rotation. */
+   shows a generic product (the Product name lever's Acme Corp), so the copy
+   is a consumer product's, never the site's own assistant. Each one is a
+   prompt in the demo script, so asking as the visitor always enters the
+   branching story rather than the fallback rotation. */
 const VISITOR_QUESTIONS = [
   "How do I get started?",
   "What do the plans include?",
@@ -70,231 +58,12 @@ const ASSISTANT_REPLIES = [
   },
 ];
 
-/* Rotation cursors at module scope, the way useChat mints turn ids — they
-   are not view state (nothing re-renders when they move), just which line
-   of the script comes up next. */
+/* Rotation cursors at module scope: they are not view state (nothing
+   re-renders when they move), just which line of the script comes up next. */
 let questionCursor = 0;
 let replyCursor = 0;
 const nextQuestion = () => VISITOR_QUESTIONS[questionCursor++ % VISITOR_QUESTIONS.length];
 const nextReply = () => ASSISTANT_REPLIES[replyCursor++ % ASSISTANT_REPLIES.length];
-
-const TOOL_ARGS = `{
-  "workspace": "acme-design",
-  "role": "editor",
-  "emails": 3
-}`;
-
-const CONFIG_DIFF = `@@ -12,7 +12,7 @@
- export const workspace = {
-   name: "acme-design",
--  seats: 5,
-+  seats: 12,
-   region: "eu-west",
- };`;
-
-const PLAN_STEPS: AgentPlanStep[] = [
-  { label: "Check the workspace quota", status: "completed" },
-  {
-    label: "Create the shared project",
-    status: "completed",
-    detail: "acme-design / launch",
-  },
-  { label: "Invite the three teammates", status: "active" },
-  { label: "Post the welcome note", status: "pending" },
-];
-
-/* A schedule timing, not an animation: how long the staged retry "runs"
-   before it lands. Local on purpose, like the sim transport's beats — it is
-   this mock's pacing, not a timing any shipped surface shares. */
-const RETRY_RUN_MS = 1400;
-
-/* Chart data for the injected cards — a trial that is going well, and the
-   budget read out of the dropped launch plan. */
-const TRIAL_SIGNUPS = [
-  { week: "W1", signups: 320 },
-  { week: "W2", signups: 410 },
-  { week: "W3", signups: 380 },
-  { week: "W4", signups: 520 },
-  { week: "W5", signups: 610 },
-  { week: "W6", signups: 720 },
-];
-
-const LAUNCH_BUDGET = [
-  { phase: "Beta", spend: 12 },
-  { phase: "Launch week", spend: 34 },
-  { phase: "Follow-up", spend: 18 },
-];
-
-/**
- * A tool call that failed and can be retried in place — the retry is part
- * of the injected content, so the staged failure resolves the way a real
- * one would: run again, then land as a success.
- */
-function FlakyToolCall() {
-  const [status, setStatus] = useState<"error" | "running" | "success">("error");
-
-  useEffect(() => {
-    if (status !== "running") return;
-    const timer = setTimeout(() => setStatus("success"), RETRY_RUN_MS);
-    return () => clearTimeout(timer);
-  }, [status]);
-
-  return (
-    <ToolCall
-      name="sync_calendar"
-      summary="team@acme.example"
-      status={status}
-      duration={status === "success" ? "1.4s" : status === "error" ? "2.1s" : undefined}
-      actions={
-        status === "error" ? (
-          <Button
-            label="Retry"
-            variant="secondary"
-            size="compact"
-            onClick={() => setStatus("running")}
-          />
-        ) : undefined
-      }
-    />
-  );
-}
-
-/**
- * A human-in-the-loop checkpoint that actually answers: choosing an option
- * flips the card to its answered state, the way a live agent run would.
- */
-function ApprovalMock() {
-  const [value, setValue] = useState<string | undefined>(undefined);
-  return (
-    <InterruptCard
-      title="Connect the shared calendar?"
-      description="The assistant wants read access to the team calendar to suggest meeting times."
-      options={[
-        { value: "allow", label: "Allow once", variant: "primary" },
-        { value: "always", label: "Always allow", variant: "secondary" },
-        { value: "deny", label: "Not now", variant: "secondary" },
-      ]}
-      value={value}
-      onValueChange={setValue}
-    />
-  );
-}
-
-/* ============================================
-   The story's rich elements, defined once: the sim transport's branching
-   story (lib/chat-sim.ts) names them by key, and the director's events
-   reuse the same nodes — so a chip path and a rail press land the exact
-   same furniture in the thread.
-   ============================================ */
-
-const TEAM_PLAN_CARD = (
-  <MessageCard
-    media={<div className={styles.cardMedia} aria-hidden="true" />}
-    title="Team plan"
-    description="Shared workspaces, guest seats, and version history for the whole team."
-    meta="Billed monthly, cancel any time"
-    actions={
-      <>
-        <Button label="Choose plan" variant="secondary" size="compact" />
-        <Button label="Compare plans" variant="tertiary" size="compact" />
-      </>
-    }
-  />
-);
-
-const TRIAL_CHART_CARD = (
-  <MessageCard
-    media={
-      <AreaChart
-        data={TRIAL_SIGNUPS}
-        xKey="week"
-        series={[{ dataKey: "signups", label: "Signups" }]}
-        height={150}
-      />
-    }
-    title="Trial signups"
-    meta="Last six weeks"
-  />
-);
-
-const SOURCE_CHIPS = (
-  <div className={styles.sourceRow}>
-    <SourceChip
-      title="Pricing guide"
-      index={1}
-      logo={<SourceLogoMock letter="A" tone="coral" />}
-      source="acme.design/pricing"
-      meta="Updated 3 days ago"
-      excerpt="Team is billed per editor, monthly or yearly. Viewers are free on every plan, and a seat you remove mid-cycle comes back as credit on the next invoice."
-    />
-    <SourceChip
-      title="Workspace docs"
-      index={2}
-      logo={<SourceLogoMock letter="D" tone="cobalt" />}
-      source="docs.acme.design"
-      excerpt="An editor can create and change files in any project they are invited to. Seats belong to the workspace, not to a project, so moving someone between teams costs nothing."
-    />
-    <SourceChip
-      title="Fair use policy"
-      source="acme.design/legal"
-      meta="4 min read"
-      excerpt="Unlimited means no hard cap on files or version history. Automated bulk uploads above the published rate are queued, never dropped."
-    />
-  </div>
-);
-
-const INVITE_TOOL_CALL = (
-  <ToolCall name="invite_teammates" summary="3 editors to acme-design" status="success" duration="0.6s">
-    <CodeBlock code={TOOL_ARGS} language="json" />
-  </ToolCall>
-);
-
-const SEAT_DIFF = <CodeDiff diff={CONFIG_DIFF} filename="workspace.config.ts" />;
-
-const SETUP_PLAN = <AgentPlan steps={PLAN_STEPS} />;
-
-/* The doc drop's answer: the read shows its work, then the chart reads the
-   budget out of the plan — two elements landing as one turn's stack. */
-const LAUNCH_ANALYSIS = (
-  <div className={styles.contentStack}>
-    <ToolCall
-      name="read_document"
-      summary="Q3 launch plan.pdf"
-      status="success"
-      duration="1.8s"
-    />
-    <MessageCard
-      media={
-        <BarChart
-          data={LAUNCH_BUDGET}
-          xKey="phase"
-          yKey="spend"
-          dataLabel="Spend ($k)"
-          height={150}
-        />
-      }
-      title="Budget by phase"
-      meta="From Q3 launch plan.pdf"
-    />
-  </div>
-);
-
-/**
- * The rich elements the sim story attaches to its answers, keyed by the
- * `contentKey` values in lib/chat-sim.ts. The page hands this map to
- * `createSimTransport`, keeping the JSX here where components can live.
- */
-export const STORY_CONTENT: Record<string, ReactNode> = {
-  "team-plan-card": TEAM_PLAN_CARD,
-  "trial-chart": TRIAL_CHART_CARD,
-  sources: SOURCE_CHIPS,
-  "invite-tool": INVITE_TOOL_CALL,
-  "seat-diff": SEAT_DIFF,
-  "setup-plan": SETUP_PLAN,
-  "calendar-approval": <ApprovalMock />,
-  "launch-analysis": LAUNCH_ANALYSIS,
-  "flaky-tool": <FlakyToolCall />,
-};
 
 interface DirectorEvent {
   id: string;
@@ -326,7 +95,7 @@ export default function ChatDirector({
   levers,
   live = false,
 }: ChatDirectorProps) {
-  const { injectTurn, send, reset, setDraft, streaming } = useSiteChat();
+  const { injectTurn, send, reset, setDraft, streaming } = useChatWidget();
 
   const groups: { heading: string; events: DirectorEvent[] }[] = [
     {
@@ -346,7 +115,7 @@ export default function ChatDirector({
           id: "ask",
           label: "Ask as the visitor",
           icon: "person",
-          /* The one event that spends tokens on Live — deliberately, it IS
+          /* The one event that spends tokens on Live, deliberately: it IS
              the live exchange. send() would refuse mid-stream anyway; the
              disabled state says so. */
           liveSafe: true,
@@ -421,7 +190,7 @@ export default function ChatDirector({
           disabled: streaming,
           /* The visitor's words ride with the file, the way a real
              attachment lands: the tile above the bubble, text below. The
-             text is the story key, so the sim answers with the read and
+             text is the story key, so the script answers with the read and
              the budget chart. */
           run: () =>
             send("Here is the launch plan we are working from.", {

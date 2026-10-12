@@ -70,6 +70,18 @@ const SUBPATHS = [
   // locks fight over document.body — the rest of src/behaviors stays
   // internal (design.md's Components intro owns the contract).
   { key: './behaviors/useScrollLock', srcJs: './src/behaviors/useScrollLock.ts', dist: './behaviors/useScrollLock' },
+  // The chat widget: the composed chat as one installable thing, in four
+  // subpaths so the main barrel never pulls a peer a consumer did not ask
+  // for. `./chat` needs react-markdown and remark-gfm, `./chat/server` the
+  // Anthropic SDK, `./chat/upstash` the two Upstash packages, and
+  // `./chat/demo` recharts (every one an optional peer). The stylesheet is
+  // an asset like the token files. src/chat/registry.json names the same
+  // subpaths, and scripts/validate-chat-widget.mjs holds the two together.
+  { key: './chat', srcJs: './src/chat/index.ts', dist: './chat/index' },
+  { key: './chat/server', srcJs: './src/chat/server.ts', dist: './chat/server' },
+  { key: './chat/upstash', srcJs: './src/chat/upstash.ts', dist: './chat/upstash' },
+  { key: './chat/demo', srcJs: './src/chat/demo.ts', dist: './chat/demo' },
+  { key: './chat/chat.css', asset: './src/chat/ChatWidget.css', dist: './chat/ChatWidget.css' },
   { key: './tokens/registry', srcJs: './src/tokens/registry.ts', dist: './tokens/registry' },
   // The JS-timing constants — the TypeScript side of the motion tokens,
   // for timers a CSS variable cannot reach.

@@ -66,14 +66,9 @@ import {
   ThreadPanel,
   type ThreadPanelGroup,
 } from "rift-ds/components/ThreadPanel/ThreadPanel";
-import { SiteChat } from "@/components/SiteChat/SiteChat";
-import {
-  DOCK_QUERY,
-  SiteChatProvider,
-  useSiteChat,
-  useTakeoverViewport,
-} from "@/components/SiteChat/ChatContext";
-import { createSimTransport } from "@/lib/chat-sim";
+import { ChatWidget, DOCK_QUERY, useChatWidget, useTakeoverViewport } from "rift-ds/chat";
+import { DEMO_RENDERERS, createDemoTransport } from "rift-ds/chat/demo";
+import { SiteChatProvider } from "@/components/SiteChat/SiteChatProvider";
 import { lockBodyScroll, unlockBodyScroll } from "@/lib/scroll-lock";
 import SidebarSwitchers from "../SidebarSwitchers/SidebarSwitchers";
 import styles from "./PayrollConsole.module.css";
@@ -314,7 +309,7 @@ function PayrollChat({
   onTabChange: (id: string) => void;
   onOpenChange: (open: boolean) => void;
 }) {
-  const { open, setOpen, view, reset, returnFocusRef } = useSiteChat();
+  const { open, setOpen, view, reset, returnFocusRef } = useChatWidget();
   /* The history rail's own state. SiteChat decides where it sits from the
      widget's measured width, so nothing here is a breakpoint: docked, the
      widget is ~420px and the rail arrives as the header's hamburger sheet;
@@ -424,7 +419,7 @@ function PayrollChat({
       aria-label="Northwind assistant"
       onKeyDown={handleKeyDown}
     >
-      <SiteChat
+      <ChatWidget
         fullscreenEnabled={!takeover}
         compact={takeover || !isFull}
         phone={takeover}
@@ -490,7 +485,7 @@ export default function PayrollConsole() {
 
   /* The scripted transport the playground's Simulated mode runs on, with no
      rich content registered: this page is about the chrome, not the story. */
-  const transport = useMemo(() => createSimTransport({}), []);
+  const transport = useMemo(() => createDemoTransport(), []);
 
   const rows = useMemo(
     () => PEOPLE.map((person) => ({ id: person.id, values: { ...person } })),
@@ -500,7 +495,7 @@ export default function PayrollConsole() {
   const handleChatOpen = useCallback((next: boolean) => setChatOpen(next), []);
 
   return (
-    <SiteChatProvider transport={transport}>
+    <SiteChatProvider transport={transport} renderers={DEMO_RENDERERS}>
     {/* data-bg-hidden is the layout's own switch for the ambient background:
         the console sits on the flat page colour, the marketing dashboard's
         reasoning. */}

@@ -44,6 +44,12 @@ export default defineConfig({
         'components/ShaderField/useShaderField': 'src/components/ShaderField/useShaderField.ts',
         'components/StreamingText/useStreamReveal': 'src/components/StreamingText/useStreamReveal.ts',
         'behaviors/useScrollLock': 'src/behaviors/useScrollLock.ts',
+        // The chat widget's four subpaths (scripts/package-manifest.mjs owns
+        // the list; each carries its own optional peers, externalised below).
+        'chat/index': 'src/chat/index.ts',
+        'chat/server': 'src/chat/server.ts',
+        'chat/upstash': 'src/chat/upstash.ts',
+        'chat/demo': 'src/chat/demo.ts',
         'tokens/registry': 'src/tokens/registry.ts',
         'tokens/motion': 'src/tokens/motion.ts',
         // Doc-only helpers: not in the barrel, but reachable via the
@@ -56,11 +62,19 @@ export default defineConfig({
       formats: ['es'],
     },
     rollupOptions: {
+      // Every peer stays external: bundled, an optional peer would ship
+      // inside the tarball (and bill every consumer for it). The list is
+      // OPTIONAL_PEER_PACKAGES in scripts/generate-library-barrel.mjs plus
+      // the two required peers.
       external: (id) =>
         id.endsWith('.css') ||
         /^react($|\/)/.test(id) ||
         /^react-dom($|\/)/.test(id) ||
-        /^recharts($|\/)/.test(id),
+        /^recharts($|\/)/.test(id) ||
+        /^react-markdown($|\/)/.test(id) ||
+        /^remark-gfm($|\/)/.test(id) ||
+        /^@anthropic-ai\/sdk($|\/)/.test(id) ||
+        /^@upstash\/(ratelimit|redis)($|\/)/.test(id),
       output: {
         preserveModules: true,
         preserveModulesRoot: 'src',

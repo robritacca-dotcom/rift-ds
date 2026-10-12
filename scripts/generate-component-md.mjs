@@ -4,7 +4,8 @@
  *
  * Builds website/public/components/<slug>.md — one markdown page per public
  * component, served beside the live docs page (append .md to a component
- * URL). The content is the component's prop contract for an agent to read
+ * URL) — and website/public/<slug>.md for the chat widget, served beside
+ * /chat the same way. The content is the prop contract for an agent to read
  * or a visitor to copy: registry metadata, import lines, and the documented
  * props of every export, from the same assembleComponentApi() pass that
  * feeds Storybook's props tables, the shipped .d.ts and the /api/mcp
@@ -15,18 +16,21 @@
  * Deterministic and public-only, like every generated surface: no network,
  * no timestamps (the version stamp is PACKAGE_VERSION, which only moves on
  * a release), and nothing that is not already published through the
- * registry and the prop JSDoc. Runs via the validate-registry chain and the
- * website's predev/prebuild — never edit the generated files by hand.
+ * registries and the prop JSDoc. Runs via the validate-registry chain and
+ * the website's predev/prebuild — never edit the generated files by hand.
  */
 import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { assembleComponentApi } from './generate-component-api.mjs';
 import { PACKAGE_NAME, PACKAGE_VERSION } from './package-manifest.mjs';
 import { SITE_URL } from './brand.mjs';
-import { repoRoot } from './component-docgen.mjs';
+import { chatRegistry, repoRoot } from './component-docgen.mjs';
 
+/** The component pages' folder. */
 export const outputDir = join(repoRoot, 'website', 'public', 'components');
+/** The widget pages' folder: the site root, beside the widget's own route. */
+export const widgetOutputDir = join(repoRoot, 'website', 'public');
 
 /**
  * The canonical site origin — scripts/brand.mjs is the one home for it,
@@ -41,15 +45,21 @@ export function siteUrl() {
 /** One markdown table cell: pipes escaped, newlines flattened. */
 const cell = (value) => String(value ?? '').replace(/\|/g, '\\|').replace(/\r?\n/g, ' ').trim();
 
+/** The widget's route and import lines come from its registry, never from a rule restated here. */
+const widgetFor = (entry) => chatRegistry.widgets.find((widget) => widget.name === entry.name);
+
 /** The markdown document for one component-api entry. */
 export function buildComponentMarkdown(entry, origin) {
-  const usage =
-    entry.barrel === 'charts'
+  const isWidget = entry.kind === 'widget';
+  const usage = isWidget
+    ? `import { ${entry.exports.map((e) => e.component).join(', ')} } from '${entry.importPath}';`
+    : entry.barrel === 'charts'
       ? `import { ${entry.name} } from '${PACKAGE_NAME}/charts'; // needs the optional recharts peer`
       : `import { ${entry.name} } from '${PACKAGE_NAME}';`;
   const rendering = entry.client
     ? `client component (declares 'use client')`
     : `server-renderable (no 'use client')`;
+  const docsPath = isWidget ? `/${entry.slug}` : `/components/${entry.slug}`;
 
   const lines = [
     `# ${entry.label}`,
@@ -61,10 +71,22 @@ export function buildComponentMarkdown(entry, origin) {
     '',
     `- Category: ${entry.category}`,
     `- Import: \`${usage}\``,
-    `- Deep import: \`import { ${entry.name} } from '${entry.importPath}';\``,
-    `- Rendering: ${rendering}`,
-    `- Live docs: ${origin}/components/${entry.slug}`,
   ];
+  if (isWidget) {
+    const widget = widgetFor(entry);
+    for (const [subpath, what] of Object.entries(widget.subpaths)) {
+      const peers = widget.peers[subpath];
+      lines.push(
+        `- Subpath \`${PACKAGE_NAME}${subpath.slice(1)}\`: ${what}` +
+          (peers ? ` Optional peers: ${peers.join(', ')}.` : '')
+      );
+    }
+    lines.push(`- Scaffold: \`npx ${PACKAGE_NAME} ${widget.command}\``);
+    lines.push(`- Composes: ${widget.parts.join(', ')}`);
+  } else {
+    lines.push(`- Deep import: \`import { ${entry.name} } from '${entry.importPath}';\``);
+  }
+  lines.push(`- Rendering: ${rendering}`, `- Live docs: ${origin}${docsPath}`);
 
   for (const exported of entry.exports) {
     lines.push('', `## ${exported.component} props`, '');
@@ -91,11 +113,15 @@ export function buildComponentMarkdown(entry, origin) {
   return lines.join('\n');
 }
 
-/** Every generated file as { slug, content }, in registry order. */
+/**
+ * Every generated file as { slug, dir, content }, in registry order:
+ * components into outputDir, widgets into widgetOutputDir.
+ */
 export function assembleComponentMdFiles() {
   const origin = siteUrl();
   return assembleComponentApi().map((entry) => ({
     slug: entry.slug,
+    dir: entry.kind === 'widget' ? widgetOutputDir : outputDir,
     content: buildComponentMarkdown(entry, origin),
   }));
 }
@@ -104,11 +130,10 @@ const isMain = process.argv[1] === fileURLToPath(import.meta.url);
 if (isMain) {
   mkdirSync(outputDir, { recursive: true });
   const files = assembleComponentMdFiles();
-  const wanted = new Set(files.map((file) => `${file.slug}.md`));
 
   let written = 0;
   for (const file of files) {
-    const dest = join(outputDir, `${file.slug}.md`);
+    const dest = join(file.dir, `${file.slug}.md`);
     const existing = existsSync(dest) ? readFileSync(dest, 'utf8') : null;
     if (existing !== file.content) {
       writeFileSync(dest, file.content);
@@ -116,7 +141,9 @@ if (isMain) {
     }
   }
 
-  // A component leaving the registry takes its markdown page with it.
+  // A component leaving the registry takes its markdown page with it. Only
+  // the components folder is pruned: the site root holds other files.
+  const wanted = new Set(files.filter((f) => f.dir === outputDir).map((file) => `${file.slug}.md`));
   let pruned = 0;
   for (const name of readdirSync(outputDir)) {
     if (!wanted.has(name)) {

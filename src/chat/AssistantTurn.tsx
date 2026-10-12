@@ -1,68 +1,68 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import ReactMarkdown, { type ExtraProps } from "react-markdown";
-import remarkGfm from "remark-gfm";
-import { AgentStatus } from "rift-ds/components/AgentStatus/AgentStatus";
-import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
-import { ChatMessage } from "rift-ds/components/ChatMessage/ChatMessage";
-import { Prose } from "rift-ds/components/Prose/Prose";
-import { Reasoning } from "rift-ds/components/Reasoning/Reasoning";
-import type { ChatTurn, LiveResponse } from "@/hooks/useChat";
-import { DOCK_QUERY, useSiteChat } from "./ChatContext";
-import { FollowupSuggestions } from "./FollowupSuggestions";
-import { ResponseActions } from "./ResponseActions";
-import styles from "./SiteChat.module.css";
-
-/* Model output is untrusted, so an href becomes a link only when it is a
-   same-site path: the slug charset sanitisePath enforces on the way in,
-   optionally rooted at "/". Anything else — external hosts, protocols,
-   fragments — renders as plain text. A hallucinated-but-clean path is
-   inert: it lands on the site's 404 page. */
-const INTERNAL_PATH = /^\/(?:[a-z0-9-]+(?:\/[a-z0-9-]+){0,3})?$/;
+import ReactMarkdown, { type ExtraProps } from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { AgentStatus } from '../components/AgentStatus/AgentStatus';
+import { CodeBlock } from '../components/CodeBlock/CodeBlock';
+import { ChatMessage } from '../components/ChatMessage/ChatMessage';
+import { Prose } from '../components/Prose/Prose';
+import { Reasoning } from '../components/Reasoning/Reasoning';
+import { useChatWidget } from './context';
+import { DOCK_QUERY } from './queries';
+import { FollowupSuggestions } from './FollowupSuggestions';
+import { ResponseActions } from './ResponseActions';
+import { TurnCard } from './TurnContent';
+import type { ChatTurn, LiveResponse } from './types';
 
 /**
- * Internal links navigate client-side, so the panel — mounted from the root
- * layout — survives the trip and the conversation keeps going beside the new
- * page. When the panel covers the page (fullscreen view, or any viewport
- * below the dock threshold), navigating behind it would be invisible, so
- * following a link closes the chat first.
+ * Internal links navigate through the host's link renderer, so a panel
+ * mounted from a root layout survives the trip and the conversation keeps
+ * going beside the new page. When the panel covers the page (fullscreen
+ * view, or any viewport below the dock threshold), navigating behind it
+ * would be invisible, so following a link closes the chat first.
  */
-function MarkdownLink({ href, children }: React.ComponentPropsWithoutRef<"a">) {
-  const { view, setOpen } = useSiteChat();
-  if (!href || !INTERNAL_PATH.test(href)) return <>{children}</>;
+function MarkdownLink({ href, children }: React.ComponentPropsWithoutRef<'a'>) {
+  const { view, setOpen, renderLink, isInternalHref } = useChatWidget();
+  if (!href || !isInternalHref(href)) return <>{children}</>;
   return (
-    <Link
-      href={href}
-      onClick={() => {
-        if (view === "full" || !window.matchMedia(DOCK_QUERY).matches) setOpen(false);
-      }}
-    >
-      {children}
-    </Link>
+    <>
+      {renderLink({
+        href,
+        children,
+        onNavigate: () => {
+          if (view === 'full' || !window.matchMedia(DOCK_QUERY).matches) setOpen(false);
+        },
+      })}
+    </>
   );
 }
 
 /* A fenced block's hast: a `pre` holding one `code` element whose text is
    the code plus the trailing newline the markdown-to-hast step appends. */
-type HastNode = { type: string; value?: string; tagName?: string; properties?: Record<string, unknown>; children?: HastNode[] };
+type HastNode = {
+  type: string;
+  value?: string;
+  tagName?: string;
+  properties?: Record<string, unknown>;
+  children?: HastNode[];
+};
 const hastText = (node: HastNode): string =>
-  node.type === "text" ? (node.value ?? "") : (node.children ?? []).map(hastText).join("");
+  node.type === 'text' ? (node.value ?? '') : (node.children ?? []).map(hastText).join('');
 
 /* Fenced code renders as the library CodeBlock, so an install command or a
    snippet the answer hands over is one click from the clipboard. The language
    comes from the fence's info string (```bash), when the model wrote one. */
-function MarkdownPre({ node, children, ...props }: React.ComponentPropsWithoutRef<"pre"> & ExtraProps) {
+function MarkdownPre({ node, children, ...props }: React.ComponentPropsWithoutRef<'pre'> & ExtraProps) {
   const code = (node as HastNode | undefined)?.children?.find(
-    (child) => child.type === "element" && child.tagName === "code",
+    (child) => child.type === 'element' && child.tagName === 'code'
   );
   if (!code) return <pre {...props}>{children}</pre>;
   const classes = code.properties?.className;
   const language = (Array.isArray(classes) ? classes : [])
     .map(String)
-    .find((name) => name.startsWith("language-"))
-    ?.slice("language-".length);
-  return <CodeBlock code={hastText(code).replace(/\n$/, "")} language={language} />;
+    .find((name) => name.startsWith('language-'))
+    ?.slice('language-'.length);
+  return <CodeBlock code={hastText(code).replace(/\n$/, '')} language={language} />;
 }
 
 /* A markdown table has a natural minimum width that a docked panel cannot
@@ -71,11 +71,11 @@ function MarkdownPre({ node, children, ...props }: React.ComponentPropsWithoutRe
    which leaves one thing only the renderer can supply: a scrollable region
    has to be reachable without a mouse, and Prose styles markup it does not
    render, so it cannot put `tabIndex` on the element itself. Never swap this
-   for `role="region"` on the table — that replaces the table semantics. */
+   for `role="region"` on the table: that replaces the table semantics. */
 const markdownComponents = {
   a: MarkdownLink,
   pre: MarkdownPre,
-  table: ({ children, ...props }: React.ComponentPropsWithoutRef<"table">) => (
+  table: ({ children, ...props }: React.ComponentPropsWithoutRef<'table'>) => (
     <table tabIndex={0} {...props}>
       {children}
     </table>
@@ -84,25 +84,25 @@ const markdownComponents = {
 
 /* One component for the assistant turn in both states. The live turn and
    its committed form share an id (and so a key), so React reconciles the
-   finished response in place — separate components remounted the whole
+   finished response in place: separate components remounted the whole
    subtree at commit, which read as a flicker after the response rendered. */
 export function AssistantTurn({ turn, live }: { turn?: ChatTurn; live?: LiveResponse }) {
-  const thinking = live?.phase === "thinking";
+  const thinking = live?.phase === 'thinking';
   const tracePoints = live ? live.tracePoints : (turn?.tracePoints ?? []);
   const durationSeconds = live ? live.durationSeconds : turn?.durationSeconds;
-  const text = live ? live.text : (turn?.text ?? "");
+  const text = live ? live.text : (turn?.text ?? '');
 
-  /* Whether this turn's follow-up questions are still being generated:
-     the request fires when a backend answer commits (see ChatContext) and
-     lands as the `followups` field — an empty array when there was nothing
-     to offer — so "eligible but unset" is the in-flight window. Shown only
+  /* Whether this turn's follow-up questions are still being generated: the
+     request fires when a backend answer commits (see ChatProvider) and lands
+     as the `followups` field (an empty array when there was nothing to
+     offer), so "eligible but unset" is the in-flight window. Shown only
      while this is the newest turn and nothing new is streaming: once the
      visitor has moved on, a late resolution just appears, and a shimmer
      under an old answer would pull the eye backwards. */
-  const { turns, live: liveTurn, freshFollowupsId } = useSiteChat();
+  const { turns, live: liveTurn, freshFollowupsId } = useChatWidget();
   const followupsPending =
     !!turn &&
-    turn.text !== "" &&
+    turn.text !== '' &&
     !!turn.exchangeId &&
     !turn.followups &&
     !liveTurn &&
@@ -113,13 +113,13 @@ export function AssistantTurn({ turn, live }: { turn?: ChatTurn; live?: LiveResp
       role="assistant"
       /* Only a committed turn gets the row: while streaming there is nothing
          final to copy or judge, and an empty turn has nothing to act on.
-         Pinned visible — in a chat panel the actions are part of the
-         response, not a hover affordance to discover. */
+         Pinned visible: in a chat panel the actions are part of the response,
+         not a hover affordance to discover. */
       showActions
-      actions={turn && turn.text !== "" ? <ResponseActions turn={turn} /> : undefined}
+      actions={turn && turn.text !== '' ? <ResponseActions turn={turn} /> : undefined}
       /* Where the conversation could go next, under the actions row. They
-         arrive a beat after the answer commits — see lib/chat-followups —
-         and the row shimmers in their place while they are generated. */
+         arrive a beat after the answer commits, and the row shimmers in their
+         place while they are generated. */
       footer={
         turn?.followups?.length ? (
           <FollowupSuggestions
@@ -127,7 +127,7 @@ export function AssistantTurn({ turn, live }: { turn?: ChatTurn; live?: LiveResp
             suggestions={turn.followups}
             /* Only the row whose suggestions just landed pops its chips in;
                a row remounted by closing and reopening the panel shows them
-               standing — they already arrived once. */
+               standing: they already arrived once. */
             entrance={turn.id === freshFollowupsId}
           />
         ) : followupsPending && turn ? (
@@ -135,12 +135,12 @@ export function AssistantTurn({ turn, live }: { turn?: ChatTurn; live?: LiveResp
         ) : undefined
       }
     >
-      <div className={styles.responseStack}>
+      <div className="ds-chat-widget__response">
         {/* While thinking the disclosure carries the live status; once
-            streaming, it stays only if a trace actually accumulated —
-            an empty collapsed panel is noise. Until a trace point arrives
-            there is nothing behind the line either, so it renders as a
-            plain status: no chevron, nothing to open. */}
+            streaming, it stays only if a trace actually accumulated: an
+            empty collapsed panel is noise. Until a trace point arrives there
+            is nothing behind the line either, so it renders as a plain
+            status: no chevron, nothing to open. */}
         {(thinking || tracePoints.length > 0) && (
           <Reasoning
             streaming={thinking}
@@ -161,11 +161,12 @@ export function AssistantTurn({ turn, live }: { turn?: ChatTurn; live?: LiveResp
             )}
           </Reasoning>
         )}
-        {/* Injected rich content (a tool call, a card) sits where an agent's
+        {/* Rich content (a tool call, a card) sits where an agent's
             structured output belongs: after the reasoning, before the prose
             that reads off what it shows. */}
         {turn?.content}
-        {text !== "" && (
+        {turn?.card && <TurnCard card={turn.card} />}
+        {text !== '' && (
           <Prose>
             {/* gfm: a real model emits tables and strikethrough, which plain
                 CommonMark renders as literal pipes and tildes. */}

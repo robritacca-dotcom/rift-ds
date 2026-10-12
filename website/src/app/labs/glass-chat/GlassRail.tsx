@@ -24,7 +24,7 @@ import {
   type ThreadPanelProject,
   type ThreadPanelThread,
 } from "rift-ds/components/ThreadPanel/ThreadPanel";
-import { useSiteChat } from "@/components/SiteChat/ChatContext";
+import { useChatWidget } from "rift-ds/chat";
 import SidebarSwitchers from "@/components/templates/SidebarSwitchers/SidebarSwitchers";
 import { ASSISTANT_NAME } from "@/config/brand.generated";
 
@@ -134,7 +134,7 @@ export default function GlassRail({
   close: () => void;
   className?: string;
 }) {
-  const { turns, live, reset } = useSiteChat();
+  const { turns, live, reset } = useChatWidget();
 
   const [expanded, setExpanded] = React.useState(true);
   const [threads, setThreads] = React.useState<RailThread[]>(HISTORY);

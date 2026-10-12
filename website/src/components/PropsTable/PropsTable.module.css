@@ -1,0 +1,29 @@
+/* The props table's cells: prop names and types in the code face, a required
+   marker in the error role, and the empty line for a component with no own
+   props. The table itself is the library Table (bordered, compact), which is
+   the one table style the doc pages use. */
+
+.name,
+.type {
+  font-family: var(--font-family-code);
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-primary);
+  word-break: break-word;
+}
+
+.type {
+  color: var(--color-text-secondary);
+}
+
+.required {
+  color: var(--color-status-error-text);
+  margin-left: 2px;
+}
+
+.empty {
+  margin: 0;
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+}

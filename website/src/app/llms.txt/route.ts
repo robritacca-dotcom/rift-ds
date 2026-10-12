@@ -76,6 +76,7 @@ export function GET() {
     "",
     "Live tools for exploring and re-theming the design system.",
     "",
+    `- [Chat](${SITE_URL}/chat): the whole AI chat as one installable widget, with its props, streaming protocol, server handlers and the one command that scaffolds it; append .md to the URL for the contract as markdown`,
     `- [Playground](${SITE_URL}/playground): re-theme the design system live (components, type, chat and a full dashboard) and export the theme as CSS, a THEME.md and a setup prompt for a coding agent`,
     `- [Theme presets](${SITE_URL}/docs/get-started): complete looks ship in the package as generated stylesheets, applied by one data-brand attribute on the root element`,
     `- [System graph](${SITE_URL}/graph): every token, component and page as one dependency graph, traceable in both directions`,

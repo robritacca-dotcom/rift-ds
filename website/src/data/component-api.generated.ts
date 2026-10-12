@@ -1,7 +1,8 @@
 // AUTO-GENERATED — do not edit by hand.
-// Source of truth: src/components/registry.json and the prop JSDoc in
-// src/components (via react-docgen-typescript — settings in
-// scripts/component-docgen.mjs, shared with Storybook's props tables).
+// Source of truth: src/components/registry.json, src/chat/registry.json and
+// the prop JSDoc in src/components and src/chat (via react-docgen-typescript
+// — settings in scripts/component-docgen.mjs, shared with Storybook's props
+// tables).
 // Regenerate: node scripts/generate-component-api.mjs (runs via predev/prebuild).
 
 /** One documented own prop, as it ships in the .d.ts and Storybook. */
@@ -23,25 +24,29 @@ export interface ComponentExportApi {
   props: ComponentPropApi[];
 }
 
-/** One public registry component: metadata, import paths, and every export behind it. */
+/** One public registry entry: a component, or the chat widget. */
 export interface ComponentApiEntry {
+  /** A library component, or the composed chat widget (src/chat/registry.json). */
+  kind: 'component' | 'widget';
   name: string;
   label: string;
   slug: string;
+  /** A component category id, or 'widget'. */
   category: string;
   description: string;
   /** Whether the module declares 'use client'. */
   client: boolean;
   /** Deep import subpath; the barrel named in `barrel` also re-exports it. */
   importPath: string;
-  /** 'charts' modules need the optional recharts peer; 'main' modules never do. */
-  barrel: 'main' | 'charts';
+  /** 'charts' modules need the optional recharts peer; 'main' modules never do; 'chat' is the widget's own subpath with its own peers. */
+  barrel: 'main' | 'charts' | 'chat';
   exports: ComponentExportApi[];
 }
 
-/** The full prop API for every public component, in registry (alphabetical) order. */
+/** The full prop API for every public component, in registry (alphabetical) order, then the chat widget. */
 export const componentApi: readonly ComponentApiEntry[] = [
   {
+    "kind": "component",
     "name": "Accordion",
     "label": "Accordion",
     "slug": "accordion",
@@ -86,6 +91,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "AgentPlan",
     "label": "Agent plan",
     "slug": "agent-plan",
@@ -141,6 +147,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "AgentRail",
     "label": "Agent rail",
     "slug": "agent-rail",
@@ -221,6 +228,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "AgentStatus",
     "label": "Agent status",
     "slug": "agent-status",
@@ -291,6 +299,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "AiButton",
     "label": "AI button",
     "slug": "ai-button",
@@ -392,6 +401,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Alert",
     "label": "Alert",
     "slug": "alert",
@@ -461,6 +471,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "AlertDialog",
     "label": "Alert dialog",
     "slug": "alert-dialog",
@@ -542,6 +553,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "AnchorNav",
     "label": "Anchor nav",
     "slug": "anchor-nav",
@@ -605,6 +617,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "AnimatedNumber",
     "label": "Animated number",
     "slug": "animated-number",
@@ -662,6 +675,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "AppLayout",
     "label": "App layout",
     "slug": "app-layout",
@@ -754,6 +768,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "AppSidebar",
     "label": "App sidebar",
     "slug": "app-sidebar",
@@ -898,6 +913,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "AreaChart",
     "label": "Area chart",
     "slug": "area-chart",
@@ -987,6 +1003,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "AttachmentDropZone",
     "label": "Attachment drop zone",
     "slug": "attachment-drop-zone",
@@ -1050,6 +1067,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "AttachmentGroup",
     "label": "Attachment group",
     "slug": "attachment-group",
@@ -1172,6 +1190,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "AttachmentTile",
     "label": "Attachment tile",
     "slug": "attachment-tile",
@@ -1310,6 +1329,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "AttachmentViewer",
     "label": "Attachment viewer",
     "slug": "attachment-viewer",
@@ -1458,6 +1478,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Avatar",
     "label": "Avatar",
     "slug": "avatar",
@@ -1513,6 +1534,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "AvatarGroup",
     "label": "Avatar group",
     "slug": "avatar-group",
@@ -1563,6 +1585,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Badge",
     "label": "Badge",
     "slug": "badge",
@@ -1600,6 +1623,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Banner",
     "label": "Banner",
     "slug": "banner",
@@ -1675,6 +1699,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "BarChart",
     "label": "Bar chart",
     "slug": "bar-chart",
@@ -1764,6 +1789,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "BottomNav",
     "label": "Bottom nav",
     "slug": "bottom-nav",
@@ -1840,6 +1866,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Breadcrumb",
     "label": "Breadcrumb",
     "slug": "breadcrumb",
@@ -1882,6 +1909,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Button",
     "label": "Button",
     "slug": "button",
@@ -2003,6 +2031,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "ButtonGroup",
     "label": "Button group",
     "slug": "button-group",
@@ -2046,6 +2075,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Card",
     "label": "Card",
     "slug": "card",
@@ -2145,6 +2175,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "CardStack",
     "label": "Card stack",
     "slug": "card-stack",
@@ -2221,6 +2252,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Carousel",
     "label": "Carousel",
     "slug": "carousel",
@@ -2292,6 +2324,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "ChatHeader",
     "label": "Chat header",
     "slug": "chat-header",
@@ -2328,6 +2361,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "ChatMarker",
     "label": "Chat marker",
     "slug": "chat-marker",
@@ -2371,6 +2405,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "ChatMessage",
     "label": "Chat message",
     "slug": "chat-message",
@@ -2499,6 +2534,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "ChatThread",
     "label": "Chat thread",
     "slug": "chat-thread",
@@ -2550,6 +2586,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Checkbox",
     "label": "Checkbox",
     "slug": "checkbox",
@@ -2726,6 +2763,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Chip",
     "label": "Chip",
     "slug": "chip",
@@ -2801,6 +2839,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "CircularButton",
     "label": "Circular button",
     "slug": "circular-button",
@@ -2907,6 +2946,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "CodeBlock",
     "label": "Code block",
     "slug": "code-block",
@@ -2976,6 +3016,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "CodeDiff",
     "label": "Code diff",
     "slug": "code-diff",
@@ -3019,6 +3060,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "ColorPicker",
     "label": "Colour picker",
     "slug": "color-picker",
@@ -3122,6 +3164,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "ComboChart",
     "label": "Combo chart",
     "slug": "combo-chart",
@@ -3234,6 +3277,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Combobox",
     "label": "Combobox",
     "slug": "combobox",
@@ -3390,6 +3434,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "CommandPalette",
     "label": "Command palette",
     "slug": "command-palette",
@@ -3486,6 +3531,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Composer",
     "label": "Composer",
     "slug": "composer",
@@ -3723,6 +3769,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "ContactCard",
     "label": "Contact card",
     "slug": "contact-card",
@@ -3804,6 +3851,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "ContextMenu",
     "label": "Context menu",
     "slug": "context-menu",
@@ -3853,6 +3901,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "ContributionGraph",
     "label": "Contribution graph",
     "slug": "contribution-graph",
@@ -3922,6 +3971,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "DataTable",
     "label": "Data table",
     "slug": "data-table",
@@ -4053,6 +4103,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "DateInput",
     "label": "Date input",
     "slug": "date-input",
@@ -4134,6 +4185,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "DatePicker",
     "label": "Date picker",
     "slug": "date-picker",
@@ -4196,6 +4248,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Dialog",
     "label": "Dialog",
     "slug": "dialog",
@@ -4270,6 +4323,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Divider",
     "label": "Divider",
     "slug": "divider",
@@ -4321,6 +4375,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "DocumentChip",
     "label": "Document chip",
     "slug": "document-chip",
@@ -4408,6 +4463,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Drawer",
     "label": "Drawer",
     "slug": "drawer",
@@ -4489,6 +4545,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Dropdown",
     "label": "Dropdown",
     "slug": "dropdown",
@@ -4604,6 +4661,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "DropdownMenu",
     "label": "Dropdown menu",
     "slug": "dropdown-menu",
@@ -4654,6 +4712,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "EmptyState",
     "label": "Empty state",
     "slug": "empty-state",
@@ -4716,6 +4775,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "EntityCard",
     "label": "Entity card",
     "slug": "entity-card",
@@ -4764,6 +4824,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "EventCalendar",
     "label": "Event calendar",
     "slug": "event-calendar",
@@ -4844,6 +4905,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Field",
     "label": "Field",
     "slug": "field",
@@ -4933,6 +4995,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Figure",
     "label": "Figure",
     "slug": "figure",
@@ -4975,6 +5038,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "FileInput",
     "label": "File input",
     "slug": "file-input",
@@ -5058,6 +5122,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "FilterBar",
     "label": "Filter bar",
     "slug": "filter-bar",
@@ -5120,6 +5185,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "FunnelChart",
     "label": "Funnel chart",
     "slug": "funnel-chart",
@@ -5190,6 +5256,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "GanttChart",
     "label": "Gantt chart",
     "slug": "gantt-chart",
@@ -5284,6 +5351,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Gauge",
     "label": "Gauge",
     "slug": "gauge",
@@ -5393,6 +5461,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Globe",
     "label": "Globe",
     "slug": "globe",
@@ -5509,6 +5578,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "HoverCard",
     "label": "Hover card",
     "slug": "hover-card",
@@ -5566,6 +5636,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "ImageCompare",
     "label": "Image compare",
     "slug": "image-compare",
@@ -5661,6 +5732,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Input",
     "label": "Input",
     "slug": "input",
@@ -5749,6 +5821,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "InspectorColorPicker",
     "label": "Inspector colour picker",
     "slug": "inspector-color-picker",
@@ -5824,6 +5897,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "InspectorDropdown",
     "label": "Inspector dropdown",
     "slug": "inspector-dropdown",
@@ -5898,6 +5972,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "InspectorInput",
     "label": "Inspector input",
     "slug": "inspector-input",
@@ -5954,6 +6029,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "InspectorSection",
     "label": "Inspector section",
     "slug": "inspector-section",
@@ -6009,6 +6085,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "InspectorSegmentedControl",
     "label": "Inspector segments",
     "slug": "inspector-segmented-control",
@@ -6083,6 +6160,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "InspectorSlider",
     "label": "Inspector slider",
     "slug": "inspector-slider",
@@ -6165,6 +6243,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "InspectorToggleSwitch",
     "label": "Inspector toggle switch",
     "slug": "inspector-toggle-switch",
@@ -6208,6 +6287,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Instructions",
     "label": "Instructions",
     "slug": "instructions",
@@ -6265,6 +6345,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "InterruptCard",
     "label": "Interrupt card",
     "slug": "interrupt-card",
@@ -6337,6 +6418,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Kbd",
     "label": "Kbd",
     "slug": "kbd",
@@ -6374,6 +6456,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "LegendTile",
     "label": "Legend tile",
     "slug": "legend-tile",
@@ -6416,6 +6499,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Lightbox",
     "label": "Lightbox",
     "slug": "lightbox",
@@ -6495,6 +6579,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "LineChart",
     "label": "Line chart",
     "slug": "line-chart",
@@ -6570,6 +6655,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "LinkList",
     "label": "Link list",
     "slug": "link-list",
@@ -6600,6 +6686,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "MapCallout",
     "label": "Map callout",
     "slug": "map-callout",
@@ -6644,6 +6731,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "MapLegend",
     "label": "Map legend",
     "slug": "map-legend",
@@ -6687,6 +6775,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Mention",
     "label": "Mention",
     "slug": "mention",
@@ -6804,6 +6893,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "MessageActions",
     "label": "Message actions",
     "slug": "message-actions",
@@ -6847,6 +6937,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "MessageCard",
     "label": "Message card",
     "slug": "message-card",
@@ -6913,6 +7004,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Meter",
     "label": "Meter",
     "slug": "meter",
@@ -6991,6 +7083,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "ModelPicker",
     "label": "Model picker",
     "slug": "model-picker",
@@ -7078,6 +7171,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Nav",
     "label": "Nav",
     "slug": "nav",
@@ -7126,6 +7220,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "NavList",
     "label": "Nav list",
     "slug": "nav-list",
@@ -7193,6 +7288,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "NotificationCenter",
     "label": "Notification centre",
     "slug": "notification-center",
@@ -7329,6 +7425,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "NumberInput",
     "label": "Number input",
     "slug": "number-input",
@@ -7416,6 +7513,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Pagination",
     "label": "Pagination",
     "slug": "pagination",
@@ -7479,6 +7577,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Panel",
     "label": "Panel",
     "slug": "panel",
@@ -7516,6 +7615,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "PieChart",
     "label": "Pie chart",
     "slug": "pie-chart",
@@ -7599,6 +7699,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "PinInput",
     "label": "Pin input",
     "slug": "pin-input",
@@ -7694,6 +7795,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "PixelAvatar",
     "label": "Pixel avatar",
     "slug": "pixel-avatar",
@@ -7750,6 +7852,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Popover",
     "label": "Popover",
     "slug": "popover",
@@ -7825,6 +7928,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "ProgressBar",
     "label": "Progress bar",
     "slug": "progress-bar",
@@ -7876,6 +7980,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "PromptSuggestions",
     "label": "Prompt suggestions",
     "slug": "prompt-suggestions",
@@ -7961,6 +8066,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Prose",
     "label": "Prose",
     "slug": "prose",
@@ -7998,6 +8104,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Quote",
     "label": "Quote",
     "slug": "quote",
@@ -8047,6 +8154,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "RadarChart",
     "label": "Radar chart",
     "slug": "radar-chart",
@@ -8122,6 +8230,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "RadialChart",
     "label": "Radial chart",
     "slug": "radial-chart",
@@ -8224,6 +8333,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "RadioButton",
     "label": "Radio button",
     "slug": "radio-button",
@@ -8393,6 +8503,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Rating",
     "label": "Rating",
     "slug": "rating",
@@ -8485,6 +8596,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Reasoning",
     "label": "Reasoning",
     "slug": "reasoning",
@@ -8572,6 +8684,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "RichDropdown",
     "label": "Rich dropdown",
     "slug": "rich-dropdown",
@@ -8666,6 +8779,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "ScatterChart",
     "label": "Scatter chart",
     "slug": "scatter-chart",
@@ -8756,6 +8870,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "SectionTitle",
     "label": "Section title",
     "slug": "section-title",
@@ -8798,6 +8913,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "SegmentedControl",
     "label": "Segmented control",
     "slug": "segmented-control",
@@ -8874,6 +8990,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "SelectionCard",
     "label": "Selection card",
     "slug": "selection-card",
@@ -8936,6 +9053,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "ShaderField",
     "label": "Shader field",
     "slug": "shader-field",
@@ -8986,6 +9104,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "SidebarPanel",
     "label": "Sidebar panel",
     "slug": "sidebar-panel",
@@ -9053,6 +9172,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Skeleton",
     "label": "Skeleton",
     "slug": "skeleton",
@@ -9103,6 +9223,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Slider",
     "label": "Slider",
     "slug": "slider",
@@ -9208,6 +9329,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "SourceChip",
     "label": "Source chip",
     "slug": "source-chip",
@@ -9281,6 +9403,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "SourceTrail",
     "label": "Source trail",
     "slug": "source-trail",
@@ -9343,6 +9466,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Sparkline",
     "label": "Sparkline",
     "slug": "sparkline",
@@ -9421,6 +9545,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Spinner",
     "label": "Spinner",
     "slug": "spinner",
@@ -9466,6 +9591,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "SplitButton",
     "label": "Split button",
     "slug": "split-button",
@@ -9556,6 +9682,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "SplitPane",
     "label": "Split pane",
     "slug": "split-pane",
@@ -9633,6 +9760,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "StackedBarChart",
     "label": "Stacked bar chart",
     "slug": "stacked-bar-chart",
@@ -9714,6 +9842,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Stat",
     "label": "Stat",
     "slug": "stat",
@@ -9777,6 +9906,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "StatusDot",
     "label": "Status dot",
     "slug": "status-dot",
@@ -9842,6 +9972,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Stepper",
     "label": "Stepper",
     "slug": "stepper",
@@ -9891,6 +10022,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "StreamingText",
     "label": "Streaming text",
     "slug": "streaming-text",
@@ -9960,6 +10092,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Swatch",
     "label": "Swatch",
     "slug": "swatch",
@@ -10024,6 +10157,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Table",
     "label": "Table",
     "slug": "table",
@@ -10094,6 +10228,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Tabs",
     "label": "Tabs",
     "slug": "tabs",
@@ -10157,6 +10292,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "TagInput",
     "label": "Tag input",
     "slug": "tag-input",
@@ -10231,6 +10367,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Textarea",
     "label": "Textarea",
     "slug": "textarea",
@@ -10314,6 +10451,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "ThreadPanel",
     "label": "Thread panel",
     "slug": "thread-panel",
@@ -10557,6 +10695,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "ThreadTabs",
     "label": "Thread tabs",
     "slug": "thread-tabs",
@@ -10638,6 +10777,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "TimePicker",
     "label": "Time picker",
     "slug": "time-picker",
@@ -10755,6 +10895,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Timeline",
     "label": "Timeline",
     "slug": "timeline",
@@ -10803,6 +10944,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Toast",
     "label": "Toast",
     "slug": "toast",
@@ -10884,6 +11026,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "ToggleGroup",
     "label": "Toggle group",
     "slug": "toggle-group",
@@ -10969,6 +11112,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "ToggleSwitch",
     "label": "Toggle switch",
     "slug": "toggle-switch",
@@ -11054,6 +11198,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "ToolCall",
     "label": "Tool call",
     "slug": "tool-call",
@@ -11140,6 +11285,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Toolbar",
     "label": "Toolbar",
     "slug": "toolbar",
@@ -11194,6 +11340,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Tooltip",
     "label": "Tooltip",
     "slug": "tooltip",
@@ -11251,6 +11398,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "TopAppBar",
     "label": "Top app bar",
     "slug": "top-app-bar",
@@ -11372,6 +11520,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "TreeView",
     "label": "Tree view",
     "slug": "tree-view",
@@ -11439,6 +11588,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Treemap",
     "label": "Treemap",
     "slug": "treemap",
@@ -11508,6 +11658,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "UsageCard",
     "label": "Usage card",
     "slug": "usage-card",
@@ -11563,6 +11714,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Waveform",
     "label": "Waveform",
     "slug": "waveform",
@@ -11620,6 +11772,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "Widget",
     "label": "Widget",
     "slug": "widget",
@@ -11766,6 +11919,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     ]
   },
   {
+    "kind": "component",
     "name": "WorldMap",
     "label": "World map",
     "slug": "world-map",
@@ -11877,6 +12031,468 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Additional CSS classes",
             "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "widget",
+    "name": "ChatWidget",
+    "label": "Chat",
+    "slug": "chat",
+    "category": "widget",
+    "description": "The whole AI chat as one installable widget: the panel, the conversation engine, the streaming protocol and the server handlers, configured with props.",
+    "client": true,
+    "importPath": "rift-ds/chat",
+    "barrel": "chat",
+    "exports": [
+      {
+        "component": "ChatWidget",
+        "props": [
+          {
+            "name": "fullscreenEnabled",
+            "type": "boolean",
+            "required": false,
+            "description": "Show the expand toggle. A host whose stage is always a takeover hides it.",
+            "defaultValue": "true"
+          },
+          {
+            "name": "closeEnabled",
+            "type": "boolean",
+            "required": false,
+            "description": "Show the header's close button. A host that seats the chat as the page\nitself rather than as a panel over one has nothing to close back to,\nso it turns this off.",
+            "defaultValue": "true"
+          },
+          {
+            "name": "placementEnabled",
+            "type": "boolean",
+            "required": false,
+            "description": "Show the header's Chat position menu (dock right, dock left, floating). Off by default: a host turns it on only when it implements the seats the menu offers, as ChatLauncher does.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "compact",
+            "type": "boolean",
+            "required": false,
+            "description": "Narrow insets for phone-width hosts.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "phone",
+            "type": "boolean",
+            "required": false,
+            "description": "The host is a phone viewport, where the soft keyboard will claim the\nlower half of the screen the moment the composer is focused. The\nwelcome screen stacks instead of centring the composer: greeting in\nthe middle of the empty thread, starters directly above the composer,\ncomposer pinned to the bottom from the first paint.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "title",
+            "type": "string",
+            "required": false,
+            "description": "The header brand name.",
+            "defaultValue": "Assistant"
+          },
+          {
+            "name": "placeholder",
+            "type": "string",
+            "required": false,
+            "description": "The composer's placeholder text.",
+            "defaultValue": "Ask anything"
+          },
+          {
+            "name": "showStarters",
+            "type": "boolean",
+            "required": false,
+            "description": "Show the conversation starters on the welcome screen.",
+            "defaultValue": "true"
+          },
+          {
+            "name": "logo",
+            "type": "string | null",
+            "required": false,
+            "description": "The header mark's image src; null (the default) shows the name alone.",
+            "defaultValue": "null"
+          },
+          {
+            "name": "tagline",
+            "type": "string",
+            "required": false,
+            "description": "The welcome screen's line under the greeting.",
+            "defaultValue": "How can I help you today?"
+          },
+          {
+            "name": "starters",
+            "type": "Starter[]",
+            "required": false,
+            "description": "The conversation starters: a few pre-written questions. Each must fit the chip budget (SUGGESTION_MAX_CHARS); one that does not is dropped rather than clipped."
+          },
+          {
+            "name": "startersKey",
+            "type": "string",
+            "required": false,
+            "description": "Keys the starters' staged reveal: a new key replays the generation beat, the same key shows the set standing. A host whose starters follow the page passes the pathname.",
+            "defaultValue": ""
+          },
+          {
+            "name": "composerActions",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Replaces the composer's leading actions (the model picker)."
+          },
+          {
+            "name": "models",
+            "type": "ChatModelOption[]",
+            "required": false,
+            "description": "The models the picker offers. The pick rides on each send as a wire value; the server resolves it. Omit for no picker."
+          },
+          {
+            "name": "defaultModel",
+            "type": "string",
+            "required": false,
+            "description": "The picker's selection before the server has reported its default. Defaults to the first model."
+          },
+          {
+            "name": "lockedModelDescription",
+            "type": "string",
+            "required": false,
+            "description": "The one line a locked model shows in place of its description.",
+            "defaultValue": "Paused for today to stay in budget."
+          },
+          {
+            "name": "fileAttachments",
+            "type": "boolean",
+            "required": false,
+            "description": "Let the visitor attach files: an attach button, paste, drop anywhere\non the chat, and long pastes folded into a tile. Files are read in the\nbrowser for previews; what reaches the transport is names and kinds.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "maxAttachments",
+            "type": "number",
+            "required": false,
+            "description": "Most files the visitor may queue on one message.",
+            "defaultValue": "10"
+          },
+          {
+            "name": "maxAttachmentBytes",
+            "type": "number",
+            "required": false,
+            "description": "Largest file the visitor may queue, in bytes.",
+            "defaultValue": "50 * 1024 * 1024"
+          },
+          {
+            "name": "mentions",
+            "type": "MentionSource[]",
+            "required": false,
+            "description": "What the visitor can reference while typing: one source per trigger\ncharacter, drawn as tags in the composer and in the sent bubble."
+          },
+          {
+            "name": "threads",
+            "type": "RailSlot",
+            "required": false,
+            "description": "A session-history rail. `true` seats the built-in ChatThreads over the\nprovider's thread lifecycle; a render prop seats your own. Wide hosts\nseat it as an inline left rail, narrow ones summon it from a header\nhamburger as a slide-over sheet behind a scrim."
+          },
+          {
+            "name": "threadsProps",
+            "type": "Omit<ChatThreadsProps, \"close\" | \"overlay\">",
+            "required": false,
+            "description": "Props for the built-in threads rail when `threads` is `true`."
+          },
+          {
+            "name": "tabs",
+            "type": "ReactNode",
+            "required": false,
+            "description": "An open-sessions tab strip as its own row under the header. `true` seats the built-in ChatTabs; a node seats your own."
+          },
+          {
+            "name": "aside",
+            "type": "((ctx: { overlay: boolean; close: () => void; }) => ReactNode)",
+            "required": false,
+            "description": "A companion rail on the trailing edge, the mirror of `threads`: a render prop for your own pane, seated inline on a wide host and raised as a bottom sheet from a header button on a narrow one. For the built-in pane pass `agent` instead."
+          },
+          {
+            "name": "agent",
+            "type": "ChatAgentOptions",
+            "required": false,
+            "description": "The built-in agent pane: who the agent is and what it has been doing. Seated like `aside`."
+          },
+          {
+            "name": "contextLabel",
+            "type": "string | null",
+            "required": false,
+            "description": "The composer's context note, naming what the chat is looking at. Omit for none."
+          },
+          {
+            "name": "widgets",
+            "type": "ReactNode",
+            "required": false,
+            "description": "A widget slot on the welcome screen, under the composer and its\nstarters. It takes any content and keeps its natural height, so the\ncomposer rides up by half of it instead of holding dead centre: the\nempty chat reads as a home page rather than a blank prompt. It leaves\nwith the first message, like the rest of the welcome dressing."
+          },
+          {
+            "name": "widgetsLayout",
+            "type": "\"scroll\" | \"fit\"",
+            "required": false,
+            "description": "How the widget slot takes its room. `fit` keeps the welcome screen to\none viewport: the widgets hold their height and the composer rides up\nto make room. `scroll` turns the welcome screen into a page: the\ngreeting and composer take the opening of the viewport, the widgets\nrun on below the fold, and the whole welcome scrolls as one.",
+            "defaultValue": "fit"
+          },
+          {
+            "name": "widgetsWidth",
+            "type": "\"column\" | \"wide\"",
+            "required": false,
+            "description": "How wide the widget slot runs. `column` holds it to the composer's\nbounding box; `wide` lets it run past them, for a dashboard.",
+            "defaultValue": "column"
+          },
+          {
+            "name": "disclaimer",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The quiet line pinned to the widget's floor: what the chat is and where its policy lives.",
+            "defaultValue": "Answers may be wrong."
+          }
+        ]
+      },
+      {
+        "component": "ChatProvider",
+        "props": [
+          {
+            "name": "transport",
+            "type": "ChatTransport",
+            "required": false,
+            "description": "Where the conversation goes. Defaults to the fetch transport against\n`endpoint`, carrying the visitor's model pick. A script from\n`scriptChat()` runs the widget with no backend at all."
+          },
+          {
+            "name": "endpoint",
+            "type": "string",
+            "required": false,
+            "description": "The endpoint the default transport posts to.",
+            "defaultValue": "/api/chat"
+          },
+          {
+            "name": "defaultPlacement",
+            "type": "ChatPlacement",
+            "required": false,
+            "description": "The seat the panel opens in.",
+            "defaultValue": "right"
+          },
+          {
+            "name": "followups",
+            "type": "string | false | FollowupsSource",
+            "required": false,
+            "description": "Where follow-up questions come from after an answer commits: a source\nfunction, an endpoint for the built-in fetcher, or `false` for none.\nDefaults to the fetcher against `/api/chat/followups`.",
+            "defaultValue": "/api/chat/followups"
+          },
+          {
+            "name": "fallbackFollowups",
+            "type": "readonly string[]",
+            "required": false,
+            "description": "The written questions offered when the source returns none.",
+            "defaultValue": "[\n  'Can you say more about that?',\n  'What should I do next?',\n  'Where can I read more?',\n  'Can you give an example?',\n  'What are the alternatives?',\n]"
+          },
+          {
+            "name": "feedback",
+            "type": "string | false | FeedbackSink",
+            "required": false,
+            "description": "Where a thumbs verdict goes: a sink function, an endpoint for the\nbuilt-in poster, or `false` to hide the thumbs. Defaults to the poster\nagainst `/api/chat/feedback`. Thumbs only ever show on a turn the\nserver logged (one with an exchange id).",
+            "defaultValue": "/api/chat/feedback"
+          },
+          {
+            "name": "renderers",
+            "type": "ChatCardRenderers",
+            "required": false,
+            "description": "Draws `card` events by kind."
+          },
+          {
+            "name": "renderLink",
+            "type": "ChatLinkRenderer",
+            "required": false,
+            "description": "Renders a same-site link in an answer. The default is a plain anchor; a Next.js host passes its Link.",
+            "defaultValue": "({ href, children, onNavigate }) => (\n  <a href={href} onClick={onNavigate}>\n    {children}\n  </a>\n)"
+          },
+          {
+            "name": "isInternalHref",
+            "type": "((href: string) => boolean)",
+            "required": false,
+            "description": "Which hrefs in an answer become links. Everything else renders as text.",
+            "defaultValue": "(href: string) => INTERNAL_PATH.test(href)"
+          },
+          {
+            "name": "threads",
+            "type": "ThreadsOptions",
+            "required": false,
+            "description": "Seeds the thread lifecycle behind the `threads` and `tabs` slots."
+          },
+          {
+            "name": "placeholders",
+            "type": "Partial<ChatPlaceholderCopy>",
+            "required": false,
+            "description": "Replacement copy for the hook's placeholder replies."
+          }
+        ]
+      },
+      {
+        "component": "ChatLauncher",
+        "props": [
+          {
+            "name": "label",
+            "type": "string",
+            "required": false,
+            "description": "The floating button's text.",
+            "defaultValue": "Ask"
+          },
+          {
+            "name": "icon",
+            "type": "string",
+            "required": false,
+            "description": "The button's icon.",
+            "defaultValue": "forum"
+          },
+          {
+            "name": "summary",
+            "type": "(AiButtonSummary & { chips?: { id: string; label: string; prompt: string; }[]; })",
+            "required": false,
+            "description": "A TLDR panel the button summons on hover: a pre-written summary and\nprompt chips. A tapped chip opens the chat and sends the chip's\n`prompt`. Hover-capable devices only: the launcher never renders it on\ntouch, and never in server HTML."
+          },
+          {
+            "name": "hidden",
+            "type": "boolean",
+            "required": false,
+            "description": "Render nothing at all: for routes that carry no chrome.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "panelId",
+            "type": "string",
+            "required": false,
+            "description": "The panel's DOM id, for a host control's `aria-controls`.",
+            "defaultValue": "ds-chat-panel"
+          },
+          {
+            "name": "hostAttribute",
+            "type": "string | false",
+            "required": false,
+            "description": "The attribute the launcher writes on `<html>` to say how the panel sits\n(`docked`, `docked-left`, `takeover`), so the host's stylesheet can pad\nthe page or hide it. `false` writes none.",
+            "defaultValue": "data-chat"
+          },
+          {
+            "name": "panelLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name for the panel.",
+            "defaultValue": "Chat"
+          },
+          {
+            "name": "widget",
+            "type": "Omit<ChatWidgetProps, \"compact\" | \"fullscreenEnabled\" | \"placementEnabled\" | \"phone\">",
+            "required": false,
+            "description": "Everything the widget takes. The launcher sets the responsive ones itself."
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Rendered inside the panel after the widget: for a host's extra chrome."
+          }
+        ]
+      },
+      {
+        "component": "ChatThreads",
+        "props": [
+          {
+            "name": "overlay",
+            "type": "boolean",
+            "required": true,
+            "description": "The widget seated the rail as a sheet over the conversation rather than beside it."
+          },
+          {
+            "name": "close",
+            "type": "() => void",
+            "required": true,
+            "description": "Closes the sheet; a no-op on the inline rail."
+          },
+          {
+            "name": "logo",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The brand row's mark, in both seats."
+          },
+          {
+            "name": "logoText",
+            "type": "string",
+            "required": false,
+            "description": "The brand row's text. Shown on the sheet by default, where the chat header is hidden behind it."
+          },
+          {
+            "name": "profile",
+            "type": "ThreadPanelProfile",
+            "required": false,
+            "description": "The signed-in person, shown on the inline rail."
+          },
+          {
+            "name": "collapsible",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the inline rail can collapse to its icon strip.",
+            "defaultValue": "true"
+          },
+          {
+            "name": "defaultExpanded",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the rail starts collapsed.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "historyLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible heading over the history.",
+            "defaultValue": "Chat history"
+          }
+        ]
+      },
+      {
+        "component": "ChatTabs",
+        "props": [
+          {
+            "name": "ariaLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name for the tab strip.",
+            "defaultValue": "Open chats"
+          }
+        ]
+      },
+      {
+        "component": "ChatAgentPane",
+        "props": [
+          {
+            "name": "profile",
+            "type": "AgentRailProfile",
+            "required": true,
+            "description": "The agent this pane belongs to: the portrait block at the top."
+          },
+          {
+            "name": "tabs",
+            "type": "AgentRailTab[]",
+            "required": true,
+            "description": "The panes, in display order: activity, approvals, automations, personalisation, or whatever the agent has."
+          },
+          {
+            "name": "activeTab",
+            "type": "string",
+            "required": false,
+            "description": "The tab on stage, when the host owns the state; otherwise the pane keeps its own."
+          },
+          {
+            "name": "onTabChange",
+            "type": "((id: string) => void)",
+            "required": false,
+            "description": "Fires with the chosen tab's id."
+          },
+          {
+            "name": "overlay",
+            "type": "boolean",
+            "required": true,
+            "description": "The widget seated the pane as a bottom sheet, where it fills the width instead of holding its own column."
           }
         ]
       }

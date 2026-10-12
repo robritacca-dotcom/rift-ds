@@ -86,7 +86,10 @@ const handler = createMcpHandler(
         }),
       },
       async ({ category }) => {
+        // Components only: the chat widget rides the same data (get_component
+        // serves it by name) but is not one of the COMPONENT_COUNT.
         const components = componentApi
+          .filter((entry) => entry.kind === "component")
           .filter((entry) => !category || entry.category === category)
           .map((entry) => ({
             name: entry.name,

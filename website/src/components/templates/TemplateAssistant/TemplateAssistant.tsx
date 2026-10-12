@@ -27,18 +27,13 @@
 
 import React from "react";
 import { lockBodyScroll, unlockBodyScroll } from "@/lib/scroll-lock";
-import { DOCK_QUERY } from "../../SiteChat/ChatContext";
+import { DOCK_QUERY, readGreeting, serverGreeting, subscribeClock } from "rift-ds/chat";
 import { ChatHeader } from "rift-ds/components/ChatHeader/ChatHeader";
 import { ChatMessage } from "rift-ds/components/ChatMessage/ChatMessage";
 import { ChatThread } from "rift-ds/components/ChatThread/ChatThread";
 import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
 import { Composer } from "rift-ds/components/Composer/Composer";
 import { PromptSuggestions } from "rift-ds/components/PromptSuggestions/PromptSuggestions";
-import {
-  readGreeting,
-  serverGreeting,
-  subscribeClock,
-} from "../../SiteChat/greeting";
 import styles from "./TemplateAssistant.module.css";
 
 export type TemplateAssistantSuggestion = { id: string; label: string };

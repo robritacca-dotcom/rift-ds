@@ -11,7 +11,7 @@ import {
   foundationsSidebarLinks,
 } from "@/config/navigation";
 import { CHROMELESS_ROUTES } from "@/config/chromeless";
-import { useSiteChat } from "@/components/SiteChat/ChatContext";
+import { useChatWidget } from "rift-ds/chat";
 import { SITE_PALETTE_OPEN_EVENT } from "./palette-bus";
 import styles from "./SitePalette.module.css";
 import { ASSISTANT_NAME } from "@/config/brand.generated";
@@ -71,7 +71,7 @@ const DOC_ICONS: Record<string, string> = {
 export function SitePaletteMount() {
   const pathname = usePathname() ?? "/";
   const router = useRouter();
-  const { setOpen: setChatOpen, send: sendChat } = useSiteChat();
+  const { setOpen: setChatOpen, send: sendChat } = useChatWidget();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const isDesktop = useSyncExternalStore(subscribeDesktop, readDesktop, () => false);

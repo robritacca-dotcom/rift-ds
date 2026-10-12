@@ -48,14 +48,19 @@ export function lookupComponent(name: string) {
       hint: "Call list_components for the full list.",
     };
   }
+  // The chat widget is served through the same tool as a component, but it
+  // lives at its own route and imports from its own subpath.
+  const path = entry.kind === "widget" ? `/${entry.slug}` : `/components/${entry.slug}`;
   return {
     ...entry,
-    docsUrl: `${SITE_URL}/components/${entry.slug}`,
-    markdownUrl: `${SITE_URL}/components/${entry.slug}.md`,
+    docsUrl: `${SITE_URL}${path}`,
+    markdownUrl: `${SITE_URL}${path}.md`,
     usage:
-      entry.barrel === "charts"
-        ? `import { ${entry.name} } from '${pkg.name}/charts'; // needs the optional recharts peer`
-        : `import { ${entry.name} } from '${pkg.name}';`,
+      entry.kind === "widget"
+        ? `import { ${entry.exports.map((e) => e.component).join(", ")} } from '${entry.importPath}'; // see ${SITE_URL}${path} for the server half and the scaffold`
+        : entry.barrel === "charts"
+          ? `import { ${entry.name} } from '${pkg.name}/charts'; // needs the optional recharts peer`
+          : `import { ${entry.name} } from '${pkg.name}';`,
   };
 }
 

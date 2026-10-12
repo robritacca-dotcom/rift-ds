@@ -23,7 +23,7 @@
  *      covers shipped copy, and this copy ships); one or two chips per
  *      entry, each with id, label, and prompt.
  *   4. Chip labels fit the suggestion chip budget (SUGGESTION_MAX_CHARS,
- *      read from website/src/lib/chat-suggestions.ts — a chip never wraps).
+ *      read from src/chat/suggestions.ts — a chip never wraps).
  *      The component pages' derived label template is re-derived here
  *      against every registered component label; the template string lives
  *      in website/src/data/page-summaries.ts (componentChipLabel) and a
@@ -56,11 +56,11 @@ const componentRegistry = JSON.parse(
 );
 /* The chip budget has one home; read it the way validate-chat-starters does. */
 const suggestionsSource = read(
-  join(repoRoot, 'website', 'src', 'lib', 'chat-suggestions.ts')
+  join(repoRoot, 'src', 'chat', 'suggestions.ts')
 );
 const budgetMatch = suggestionsSource.match(/export const SUGGESTION_MAX_CHARS\s*=\s*(\d+)/);
 if (!budgetMatch) {
-  console.error('✗ Could not read SUGGESTION_MAX_CHARS from chat-suggestions.ts');
+  console.error('✗ Could not read SUGGESTION_MAX_CHARS from src/chat/suggestions.ts');
   process.exit(1);
 }
 const maxChipChars = Number(budgetMatch[1]);

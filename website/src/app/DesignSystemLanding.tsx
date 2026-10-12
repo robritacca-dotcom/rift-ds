@@ -744,6 +744,7 @@ export default function DesignSystemLanding() {
       heading="Ask about your money"
       sub="Answers grounded in your own transactions."
       links={[
+        { label: "The chat widget", href: "/chat" },
         { label: "Chat thread", href: "/components/chat-thread" },
         { label: "Chat message", href: "/components/chat-message" },
         { label: "Reasoning", href: "/components/reasoning" },
@@ -976,6 +977,7 @@ export default function DesignSystemLanding() {
       heading="Start a conversation"
       sub="Ask in plain language; pick the model behind it."
       links={[
+        { label: "The chat widget", href: "/chat" },
         { label: "Composer", href: "/components/composer" },
         { label: "Prompt suggestions", href: "/components/prompt-suggestions" },
         { label: "Model picker", href: "/components/model-picker" },

@@ -278,6 +278,22 @@
           "prompt": "What does a complete Rift theme include, and how do I apply one in my own app?"
         }
       ]
+    },
+    "/chat": {
+      "title": "The chat widget",
+      "text": "The whole AI chat as one installable widget: props, streaming protocol, server handlers, and one command that scaffolds it.",
+      "chips": [
+        {
+          "id": "install",
+          "label": "How do I install the chat?",
+          "prompt": "How do I add the chat widget to my app?"
+        },
+        {
+          "id": "transport",
+          "label": "What is a transport?",
+          "prompt": "What is a chat transport and how do I write one?"
+        }
+      ]
     }
   },
   "essays": {}

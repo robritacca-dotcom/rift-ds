@@ -10,48 +10,36 @@
  *
  * Composition calls, and the design.md rules behind them:
  *
- *   - The screen's subject is the chat, so it hosts the real SiteChat on the
- *     simulated transport inside its own provider (Template screens rule 7,
- *     the payroll console's precedent) instead of the mock TemplateAssistant.
- *     Here the chat is the page, not a panel beside one: it has no close and
- *     no full-screen toggle, and it fills the viewport at every width, which
- *     is the site chat's takeover mode held permanently.
- *   - The history rail is ThreadPanel in SiteChat's `threads` slot, so it is
- *     an inline rail on a wide window and a sheet behind the header's menu
- *     on a narrow one, with no breakpoint of this screen's own. Projects
- *     wear their generated PixelAvatars, the panel's default mark.
- *   - The board is the Widget family in SiteChat's widget slot, on the wide
+ *   - The screen's subject is the chat, so it hosts the package's ChatWidget
+ *     on the scripted demo transport inside its own provider (Template
+ *     screens rule 7, the payroll console's precedent) instead of the mock
+ *     TemplateAssistant. Here the chat is the page, not a panel beside one:
+ *     it has no close and no full-screen toggle, and it fills the viewport
+ *     at every width, which is the chat's takeover mode held permanently.
+ *   - The history rail is the widget's built-in threads rail over the
+ *     provider's thread lifecycle, so it is an inline rail on a wide window
+ *     and a sheet behind the header's menu on a narrow one, with no
+ *     breakpoint of this screen's own. Projects wear their generated
+ *     PixelAvatars, the panel's default mark.
+ *   - The board is the demo's Widget board in the widget slot, on the wide
  *     scrolling layout: the stage earns the viewport (rule 3), so the tiles
  *     run past the composer's column and below the fold.
  *   - People are initials (rule 4): the one person here is the profile row.
  *   - No app-frame dressing (rule 8): a chat session has no tab-bar shape on
  *     a phone, where this screen is already the full-screen chat.
  *
- * Every prompt a tile sends is one the simulated transport has a scripted
- * answer for, so the screen answers in character. Nothing leaves the
- * browser. The demo data is fictional, which keeps the route out of the
- * chat corpus (see EXCLUDED_ROUTES in scripts/generate-site-corpus.mjs).
+ * Every prompt a tile sends is one the demo script has an answer for, so
+ * the screen answers in character. Nothing leaves the browser. The demo
+ * data is fictional, which keeps the route out of the chat corpus (see
+ * EXCLUDED_ROUTES in scripts/generate-site-corpus.mjs).
  */
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import { BarChart } from "rift-ds/components/Chart/BarChart";
+import { useEffect, useMemo } from "react";
 import { ModelPicker, type ModelPickerModel } from "rift-ds/components/ModelPicker/ModelPicker";
-import { PixelAvatar, distinctPixelInks } from "rift-ds/components/PixelAvatar/PixelAvatar";
-import { Spinner } from "rift-ds/components/Spinner/Spinner";
-import { StatusDot } from "rift-ds/components/StatusDot/StatusDot";
-import {
-  ThreadPanel,
-  type ThreadPanelGroup,
-  type ThreadPanelProject,
-} from "rift-ds/components/ThreadPanel/ThreadPanel";
-import { Widget, WidgetGrid, WidgetGroup, WidgetRow } from "rift-ds/components/Widget/Widget";
-import { SiteChat } from "@/components/SiteChat/SiteChat";
-import {
-  SiteChatProvider,
-  useSiteChat,
-  useTakeoverViewport,
-} from "@/components/SiteChat/ChatContext";
-import { createSimTransport } from "@/lib/chat-sim";
+import type { ThreadPanelGroup, ThreadPanelProject } from "rift-ds/components/ThreadPanel/ThreadPanel";
+import { ChatWidget, useChatWidget, useTakeoverViewport } from "rift-ds/chat";
+import { DEMO_RENDERERS, DemoBoard, createDemoTransport } from "rift-ds/chat/demo";
+import { SiteChatProvider } from "@/components/SiteChat/SiteChatProvider";
 import { useStagedProductName } from "../useStagedProductName";
 import styles from "./ChatHome.module.css";
 
@@ -62,14 +50,6 @@ const PROJECTS: ThreadPanelProject[] = [
   { id: "billing-cleanup", label: "Billing cleanup", meta: "3d" },
   { id: "launch-week", label: "Launch week", meta: "5d" },
 ];
-
-/* The same spread the rail gives its project rows, keyed by label, so a
-   project keeps its colour where the board draws it again. */
-const PROJECT_INKS = new Map(
-  distinctPixelInks(PROJECTS.map((project) => project.label)).map(
-    (ink, index) => [PROJECTS[index].label, ink] as const
-  )
-);
 
 const THREADS: ThreadPanelGroup[] = [
   {
@@ -100,110 +80,19 @@ const MODELS: ModelPickerModel[] = [
   { label: "Fable 5", value: "fable-5", description: "Slower and more thorough, for the hard ones." },
 ];
 
-/* ------------------------------------------------------------- the board */
-
-const SIGNUPS = [
-  { label: "W1", value: 320 },
-  { label: "W2", value: 410 },
-  { label: "W3", value: 380 },
-  { label: "W4", value: 520 },
-  { label: "W5", value: 560 },
-  { label: "W6", value: 640 },
-];
-
-const PROJECT_STATE: Record<string, string> = {
-  "Workspace revamp": "4 open tasks",
-  "Billing cleanup": "Waiting on finance",
-  "Launch week": "Plan attached",
-};
-
-function Board({ onAsk }: { onAsk: (prompt: string) => void }) {
-  return (
-    <WidgetGrid>
-      <Widget title="Working now" count={1}>
-        <WidgetRow
-          leading={<Spinner size="sm" />}
-          title="Importing last year’s invoices"
-          description="212 of 340 matched"
-          meta="2m 13s"
-        />
-      </Widget>
-
-      <Widget
-        title="Trial signups"
-        action={<span className={styles.widgetNote}>Last six weeks</span>}
-      >
-        <BarChart data={SIGNUPS} dataLabel="Signups" height={160} bare />
-        <WidgetRow
-          title="How is the trial going?"
-          meta="Ask"
-          onClick={() => onAsk("How is the trial going?")}
-        />
-      </Widget>
-
-      <Widget title="Projects" count={PROJECTS.length}>
-        {PROJECTS.map((project) => (
-          <WidgetRow
-            key={project.id}
-            leading={<PixelAvatar name={project.label} ink={PROJECT_INKS.get(project.label)} />}
-            title={project.label}
-            description={PROJECT_STATE[project.label]}
-            meta={project.meta}
-          />
-        ))}
-      </Widget>
-
-      <Widget title="To do" count={4}>
-        <WidgetGroup label="Waiting on you">
-          <WidgetRow
-            leading={<StatusDot variant="warning" size="sm" aria-hidden="true" />}
-            title="Invite the other three"
-            description="2 of 5 seats filled"
-            meta="Today"
-            onClick={() => onAsk("Go ahead and invite the other three")}
-          />
-          <WidgetRow
-            leading={<StatusDot variant="info" size="sm" aria-hidden="true" />}
-            title="Choose a plan"
-            description="Trial ends in 9 days"
-            meta="Oct 19"
-            onClick={() => onAsk("Which plan fits a team of five?")}
-          />
-        </WidgetGroup>
-        <WidgetGroup label="In progress">
-          <WidgetRow
-            leading={<StatusDot variant="positive" size="sm" aria-hidden="true" />}
-            title="Shared calendar"
-            description="Synced an hour ago"
-            meta="On"
-          />
-          <WidgetRow
-            leading={<StatusDot variant="neutral" size="sm" aria-hidden="true" />}
-            title="Mention notifications"
-            description="Quiet hours, 6pm to 8am"
-            meta="Paused"
-          />
-        </WidgetGroup>
-      </Widget>
-
-      <Widget title="This week">
-        <WidgetRow title="Signups" meta="640" />
-        <WidgetRow title="Seats in use" meta="5 of 12" />
-        <WidgetRow title="Messages sent" meta="1,284" />
-      </Widget>
-    </WidgetGrid>
-  );
-}
-
 /* ------------------------------------------------------------- the page */
 
 export default function ChatHome() {
-  /* The scripted transport the playground's Simulated mode runs on. Its
-     turns carry no exchange id, which also keeps the provider from asking
-     the follow-ups route about them. */
-  const transport = useMemo(() => createSimTransport({}), []);
+  /* The scripted demo transport, with the demo's cards registered so a chip
+     path ends on a plan, a chart or an approval. Its turns carry no exchange
+     id, which also keeps the provider from asking the follow-ups route. */
+  const transport = useMemo(() => createDemoTransport(), []);
   return (
-    <SiteChatProvider transport={transport}>
+    <SiteChatProvider
+      transport={transport}
+      renderers={DEMO_RENDERERS}
+      threads={{ groups: THREADS, projects: PROJECTS, pinnedGroup: "Pinned", homeGroup: "This week", details: false }}
+    >
       <ChatHomeShell />
     </SiteChatProvider>
   );
@@ -211,13 +100,8 @@ export default function ChatHome() {
 
 function ChatHomeShell() {
   const product = useStagedProductName("Acme Corp");
-  const { setOpen, reset, setDraft, send } = useSiteChat();
+  const { setOpen, send } = useChatWidget();
   const takeover = useTakeoverViewport();
-  const [activeThread, setActiveThread] = useState("");
-  const [railExpanded, setRailExpanded] = useState(true);
-  const [projects, setProjects] = useState(PROJECTS);
-  const [activeProject, setActiveProject] = useState(PROJECTS[0].id);
-  const projectSeq = useRef(0);
 
   /* The chat's state machine reads `open` for everything a visible chat
      does (composer focus, the welcome's reveal). Here the chat is the page,
@@ -226,69 +110,33 @@ function ChatHomeShell() {
     setOpen(true);
   }, [setOpen]);
 
-  const newChat = () => {
-    reset();
-    setDraft("");
-    setActiveThread("");
-  };
-
   return (
     /* data-bg-hidden is the layout's own switch for the ambient background:
        the screen sits on the flat page colour, like the rest of the family. */
     <div className={styles.shell} data-bg-hidden="">
-      <SiteChat
+      <ChatWidget
         fullscreenEnabled={false}
         closeEnabled={false}
         compact={takeover}
         phone={takeover}
         title={product}
-        logo={null}
-        /* The staged product's assistant is not reading one of this site's
-           pages, so it says nothing rather than naming the template. */
-        contextLabel={null}
         tagline="How can we help you today?"
         showStarters={false}
         fileAttachments
         composerActions={<ModelPicker models={MODELS} placement="top" />}
-        widgets={<Board onAsk={(prompt) => send(prompt)} />}
+        widgets={<DemoBoard onAsk={(prompt) => send(prompt)} />}
         widgetsLayout="scroll"
         widgetsWidth="wide"
-        threads={({ overlay, close }) => (
-          <ThreadPanel
-            groups={THREADS}
-            activeThreadId={activeThread}
-            onThreadSelect={(id) => {
-              setActiveThread(id);
-              close();
-            }}
-            newThreadLabel="New chat"
-            onNewThread={() => {
-              newChat();
-              close();
-            }}
-            projects={projects}
-            activeProjectId={activeProject}
-            onProjectSelect={setActiveProject}
-            onProjectCreate={() => {
-              projectSeq.current += 1;
-              const id = `project-${projectSeq.current}`;
-              setProjects((list) => [
-                ...list,
-                { id, label: `New project ${projectSeq.current}`, meta: "now" },
-              ]);
-              setActiveProject(id);
-            }}
-            historyLabel="Chat history"
-            /* The sheet names the product and skips the collapse (its scrim
-               is the dismissal); the inline rail skips the name, since the
-               chat header already says it, and offers the collapse. */
-            logo={<span className={styles.logoDot} />}
-            logoText={overlay ? product : undefined}
-            expanded={overlay ? true : railExpanded}
-            onExpandedChange={overlay ? undefined : setRailExpanded}
-            profile={{ name: "Jordan Reyes", meta: "Pro" }}
-          />
-        )}
+        threads
+        threadsProps={{
+          /* The sheet names the product and skips the collapse (its scrim is
+             the dismissal); the inline rail skips the name, since the chat
+             header already says it, and offers the collapse. */
+          logo: <span className={styles.logoDot} />,
+          logoText: product,
+          defaultExpanded: true,
+          profile: { name: "Jordan Reyes", meta: "Pro" },
+        }}
       />
     </div>
   );

@@ -1,0 +1,1018 @@
+/* ============================================
+   CHAT WIDGET — the composed chat and the launcher's panel chrome.
+
+   .ds-chat-widget is the widget's internals: header, thread, composer,
+   starters, disclaimer, and the optional rails. It fills whichever container
+   hosts it; compact hosts (phone-width panels) set data-compact for the
+   narrower insets.
+
+   .ds-chat-launcher__* is ChatLauncher's chrome: the floating button, the
+   fixed panel in its docked, overlay, floating and takeover forms, the scrim
+   and the grips. The three variables on :root are the panel's geometry and
+   the one contract a host stylesheet reads: --ds-chat-width (rewritten on
+   <html> by the widen grip), --ds-chat-inset and --ds-chat-float-height.
+   ============================================ */
+
+:root {
+  /* The docked panel's resting width; DOCK_MIN_WIDTH in placement.ts mirrors it. */
+  --ds-chat-width: 420px;
+  /* The gap the panel and the launcher float off the viewport edges. */
+  --ds-chat-inset: 20px;
+  /* The floating card's resting height. */
+  --ds-chat-float-height: 640px;
+}
+
+.ds-chat-widget {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  /* A small breath above the header on every host: it seats the title row on
+     the same line as the threads rail's own header, whose panel carries this
+     inset built in. */
+  padding-top: var(--padding-200);
+  /* The one side inset every row shares (header controls, greeting, thread
+     bubbles, composer edge, starter pills, disclaimer), so they sit on a
+     single rail. A step tighter on compact hosts. */
+  --ds-chat-widget-inset: var(--padding-500);
+  /* A size container, so the welcome dressing below can step aside when the
+     host is too short for it. */
+  container-type: size;
+  container-name: ds-chat-widget;
+}
+
+.ds-chat-widget[data-compact] {
+  --ds-chat-widget-inset: var(--padding-400);
+}
+
+/* The header rides the same rail as everything under it; the component's
+   own default is a step tighter than the widget wants. */
+.ds-chat-widget .ds-chat-header {
+  padding-inline: var(--ds-chat-widget-inset);
+}
+
+/* With the controls lifted to the card's edge, the header row has nothing
+   40px tall left in it and would collapse to the title's own line. The row
+   holds the height its buttons were giving it: the control plus the
+   header's own block padding either side. */
+.ds-chat-widget[data-lifted-actions] .ds-chat-header {
+  min-height: calc(40px + var(--padding-150) * 2);
+}
+
+/* The close button hugs the panel's clipped right edge, so its centred
+   bottom tooltip would lose its right cap to overflow: hidden. End-align
+   the last header tooltip to the button and walk the arrow back to the
+   button's centre (20px in, minus half the 8px arrow). */
+.ds-chat-widget .ds-chat-header__actions .ds-tooltip:last-child .ds-tooltip__panel--bottom,
+.ds-chat-widget__rail-actions .ds-tooltip:last-child .ds-tooltip__panel--bottom {
+  left: auto;
+  right: 0;
+  transform: translateY(-4px);
+}
+
+.ds-chat-widget .ds-chat-header__actions .ds-tooltip:last-child .ds-tooltip__panel--bottom.ds-tooltip__panel--visible,
+.ds-chat-widget__rail-actions .ds-tooltip:last-child .ds-tooltip__panel--bottom.ds-tooltip__panel--visible {
+  transform: translateY(0);
+}
+
+.ds-chat-widget .ds-chat-header__actions .ds-tooltip:last-child .ds-tooltip__panel--bottom .ds-tooltip__arrow,
+.ds-chat-widget__rail-actions .ds-tooltip:last-child .ds-tooltip__panel--bottom .ds-tooltip__arrow {
+  left: auto;
+  right: 16px;
+  margin-left: 0;
+}
+
+/* The placement menu's wrapper is only there to catch Escape; it must not
+   become a box of its own in the header's action row. */
+.ds-chat-widget__placement-menu {
+  display: contents;
+}
+
+/* Open, the menu says what the button is, so the tooltip stands down. And
+   the trigger holds the passive wash while its menu is up: a control that
+   is open says so. */
+.ds-chat-widget__placement-menu .ds-tooltip:has([aria-expanded="true"]) .ds-tooltip__panel {
+  display: none;
+}
+
+.ds-chat-widget__placement-menu .ds-circular-button[aria-expanded="true"],
+.ds-chat-widget__placement-menu .ds-circular-button[aria-expanded="true"]:hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+/* The open-sessions tab strip: its own row under the header, on the shared
+   side inset. */
+.ds-chat-widget__tabs-row {
+  min-width: 0;
+  padding: var(--padding-150) var(--ds-chat-widget-inset) 0;
+}
+
+/* The header brand: the mark beside the chat name. */
+.ds-chat-widget__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-200);
+  min-width: 0;
+}
+
+.ds-chat-widget__brand img {
+  flex-shrink: 0;
+}
+
+.ds-chat-widget__brand-name {
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  color: var(--color-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The top region: header + thread. Zero basis so welcome mode splits the
+   height exactly with the bottom region, centring the composer. */
+.ds-chat-widget__top {
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* The body hosts the thread, with the welcome greeting overlaid while the
+   conversation is empty. */
+.ds-chat-widget__body {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* The thread owns scrolling, gutters, fades, and send anchoring. However
+   wide the container gets, the conversation column caps at 768px and
+   centres; the header above is the one row that spans the full width. */
+.ds-chat-widget__thread {
+  flex: 1;
+  --ds-chat-thread-content-max-width: 768px;
+  /* Match the composer and header inset, so bubbles, composer edge, and
+     the header controls all share one right rail. */
+  --ds-chat-thread-padding-inline: var(--ds-chat-widget-inset);
+}
+
+/* ============================================
+   WELCOME — the new-chat empty state
+   ============================================ */
+
+.ds-chat-widget__welcome {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 100%;
+  max-width: 768px;
+  margin-inline: auto;
+  /* The block-end padding is the gap between the greeting and the composer;
+     block-start is inert, since the overlay bottom-aligns its content. */
+  padding: var(--padding-500) var(--ds-chat-widget-inset) var(--gap-1000);
+  pointer-events: none;
+}
+
+.ds-chat-widget__greeting {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+}
+
+/* Small and semibold over the ask line's large light face: the pair
+   separates by weight contrast. Tertiary text, a step quieter than the ask
+   line, so the time-of-day pleasantry supports the invitation rather than
+   competing with it. */
+.ds-chat-widget__hello {
+  margin: 0;
+  /* The greeting is read from the visitor's clock after mount, so this line
+     is empty for the first paint. An empty block has no line box at all:
+     reserve the height, or the ask line below jumps up a row and back. */
+  min-height: var(--font-heading-3-line-height);
+  font-family: var(--font-heading-3-family);
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+  letter-spacing: var(--font-heading-3-letter-spacing);
+  color: var(--color-text-tertiary);
+}
+
+.ds-chat-widget__ask {
+  margin: 0;
+  font-family: var(--font-sub-display-family);
+  font-size: var(--font-sub-display-size);
+  font-weight: var(--font-sub-display-weight);
+  line-height: var(--font-sub-display-line-height);
+  letter-spacing: var(--font-sub-display-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+/* The panel is a viewport of its own. tokens-typography.css collapses
+   sub-display to 24px/36px under a 768px *viewport*, but a docked panel is
+   phone-width on a desktop window, where that media query still serves the
+   30px desktop size into a 420px card. So the ask line takes the same step
+   on the *container's* width, at the same 768px line. The values restate
+   the token layer's own phone step rather than referencing it, because a
+   value inside an unmatched media query is unreachable; tokens-typography.css
+   owns the pair, and the two must move together. */
+/* ds-allow(typography): the token layer's 768px sub-display step, restated for the panel's container width — tokens-typography.css owns the values */
+@container ds-chat-widget (max-width: 768px) {
+  .ds-chat-widget__ask {
+    --font-sub-display-size: 24px;
+    --font-sub-display-line-height: 36px;
+  }
+}
+
+/* The bottom region: starters at its top, disclaimer pinned to its bottom.
+   Grown while the chat is empty (centring the composer against the
+   zero-basis top region), collapsing to the disclaimer's height on the
+   first utterance. Basis stays 0 in both states so only flex-grow ever
+   animates: the flow-down is one continuous glide. Reduced motion zeroes it
+   via the token. */
+.ds-chat-widget__bottom {
+  display: flex;
+  flex-direction: column;
+  flex: 0 1 0;
+  transition: flex-grow var(--motion-duration-slower) var(--motion-ease-entrance);
+}
+
+.ds-chat-widget__bottom--welcome {
+  flex-grow: 1;
+}
+
+.ds-chat-widget__starters {
+  width: 100%;
+  max-width: 768px;
+  margin-inline: auto;
+  padding: var(--gap-1000) var(--ds-chat-widget-inset) 0;
+}
+
+/* The widget slot: any content, under the composer (and under the starters
+   when both show), on the composer's own bounding box. The cap is the
+   conversation column plus the side insets, so the slot's content edges
+   land exactly on the composer's. */
+.ds-chat-widget__widgets {
+  width: 100%;
+  max-width: calc(768px + 2 * var(--ds-chat-widget-inset));
+  margin-inline: auto;
+  padding: var(--gap-1000) var(--ds-chat-widget-inset) var(--padding-400);
+}
+
+/* With widgets the region takes its content's height before the slack is
+   split, so the composer sits above centre by half the widgets' height
+   rather than being squeezed against them. */
+.ds-chat-widget__bottom--widgets {
+  flex-basis: auto;
+  flex-shrink: 0;
+}
+
+/* The widgets claim their height first, so on a short window an even split
+   of what is left would crowd the greeting into the header. The top region
+   keeps room for the header and the greeting. A phone never centres, so it
+   has nothing to protect. */
+.ds-chat-widget[data-widgets="fit"]:not([data-phone]) .ds-chat-widget__top {
+  min-height: 236px;
+}
+
+/* The welcome dressing needs roughly 580px of widget for the greeting and
+   460px for the starters. Shorter than that, each is decoration the layout
+   cannot afford, so it steps aside and the empty state falls back to header,
+   centred composer, disclaimer. */
+@container ds-chat-widget (max-height: 579px) {
+  .ds-chat-widget__welcome {
+    display: none;
+  }
+}
+
+@container ds-chat-widget (max-height: 459px) {
+  .ds-chat-widget__starters {
+    display: none;
+  }
+}
+
+/* ============================================
+   WIDGETS AS A PAGE — data-widgets="scroll"
+   The welcome screen stops fitting itself to one viewport: the top region
+   takes a fixed share of the height, the widgets take whatever they need on
+   a wider column, and the widget scrolls as one page with the composer
+   travelling with it. Nothing here outlives the welcome.
+   ============================================ */
+
+.ds-chat-widget[data-widgets="scroll"] {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.ds-chat-widget[data-widgets="scroll"] .ds-chat-widget__top {
+  flex: 0 0 auto;
+  height: max(236px, 36cqh);
+}
+
+.ds-chat-widget[data-widgets="scroll"] .ds-chat-widget__footer {
+  flex: 0 0 auto;
+}
+
+/* Never smaller than its content, and it takes any height left over, so
+   when the widgets are short the disclaimer still rides the floor. */
+.ds-chat-widget[data-widgets="scroll"] .ds-chat-widget__bottom {
+  flex: 1 0 auto;
+  transition: none;
+}
+
+/* A scrolling slot is never dropped for want of height, and ends with room
+   under its last row. */
+.ds-chat-widget[data-widgets="scroll"] .ds-chat-widget__widgets {
+  display: block;
+  padding-block: var(--gap-1000) var(--padding-1000);
+}
+
+/* A wide slot breaks out of the composer's box: a dashboard wants more
+   width than a line of prose does. */
+.ds-chat-widget[data-widgets-wide] .ds-chat-widget__widgets {
+  max-width: 1080px;
+}
+
+/* The phone's bottom-pinned composer has nowhere to pin on a scrolling
+   page, so the greeting goes back to sitting on the composer. */
+.ds-chat-widget[data-widgets="scroll"][data-phone] .ds-chat-widget__welcome {
+  justify-content: flex-end;
+}
+
+/* Widgets are the first dressing to go: they are the tallest, and a window
+   too short for them still has room for the greeting and the composer. */
+@container ds-chat-widget (max-height: 719px) {
+  .ds-chat-widget__widgets {
+    display: none;
+  }
+}
+
+/* ============================================
+   WELCOME ON A PHONE — data-phone
+   The soft keyboard claims the lower half of a phone screen the moment the
+   composer is focused, so a phone never centres: the top region takes all
+   the slack, which pins the composer to the bottom from the first paint,
+   the greeting floats in the middle of the empty thread, and the starters
+   render directly above the composer.
+   ============================================ */
+
+.ds-chat-widget[data-phone] .ds-chat-widget__welcome {
+  /* Restated, not inherited: the desktop height guard above hides the
+     overlay under 580px, which is most phones once the keyboard is up. */
+  display: flex;
+  justify-content: center;
+  padding-block: var(--padding-400);
+}
+
+.ds-chat-widget[data-phone] .ds-chat-widget__bottom--welcome {
+  flex-grow: 0;
+}
+
+.ds-chat-widget[data-phone] .ds-chat-widget__bottom {
+  transition: none;
+}
+
+/* Above the composer: its gap is the block-end padding now. */
+.ds-chat-widget[data-phone] .ds-chat-widget__starters {
+  display: block;
+  padding-block: 0 var(--gap-400);
+}
+
+.ds-chat-widget[data-phone][data-widgets="fit"] .ds-chat-widget__widgets {
+  padding-block: 0 var(--gap-400);
+}
+
+.ds-chat-widget[data-phone][data-widgets="scroll"] .ds-chat-widget__widgets {
+  padding-block: var(--gap-500) var(--padding-500);
+}
+
+.ds-chat-widget[data-phone][data-widgets="scroll"] .ds-chat-widget__bottom--welcome {
+  flex-grow: 1;
+}
+
+/* The phone stack needs less height than the centred layout, and it is the
+   keyboard, not a short window, that usually takes it away. The greeting
+   steps aside first, the starters only when even they would crowd the
+   composer. */
+@container ds-chat-widget (max-height: 499px) {
+  .ds-chat-widget[data-phone] .ds-chat-widget__welcome {
+    display: none;
+  }
+}
+
+@container ds-chat-widget (max-height: 379px) {
+  .ds-chat-widget[data-phone] .ds-chat-widget__starters {
+    display: none;
+  }
+}
+
+/* Locked to the bottom of the widget, in every state. */
+.ds-chat-widget__disclaimer-row {
+  margin-top: auto;
+  padding: var(--gap-100) var(--ds-chat-widget-inset) var(--padding-200);
+}
+
+.ds-chat-widget__response {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-500);
+}
+
+/* No divider: the composer floats free of the transcript. */
+.ds-chat-widget__footer {
+  display: flex;
+  flex-direction: column;
+  /* The composer never gives up height in a squeeze. */
+  flex-shrink: 0;
+  padding: 0 var(--ds-chat-widget-inset);
+}
+
+/* The composer shares the conversation column's cap and centre. */
+.ds-chat-widget__composer {
+  width: 100%;
+  max-width: 768px;
+  margin-inline: auto;
+  /* The panel is narrow and its welcome screen centres the composer, so
+     queued files sit in smaller tiles here than a full-width composer's. */
+  --ds-attachment-tile-size: 104px;
+}
+
+/* One quiet line, centred with the composer column, at the floor of the
+   type scale: a visitor can find it, and never has to read it to chat. */
+.ds-chat-widget__disclaimer {
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+  color: var(--color-text-tertiary);
+}
+
+.ds-chat-widget__disclaimer a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ============================================
+   MESSAGE ACTIONS — the copy and thumbs row under a committed assistant turn.
+   ============================================ */
+
+.ds-chat-widget__action {
+  display: grid;
+  place-items: center;
+  padding: var(--padding-100);
+  border: none;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  cursor: pointer;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-chat-widget__action:hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-chat-widget__action:active {
+  background-color: var(--color-action-passive-bg-active);
+}
+
+.ds-chat-widget__action-icon {
+  /* Both of the copy button's icons share this single grid cell, so the
+     swap happens in place rather than reflowing the row. */
+  grid-area: 1 / 1;
+  --icon-size: var(--icon-size-500);
+  color: var(--color-icon-secondary);
+  transition:
+    opacity var(--motion-duration-fast) var(--motion-ease-standard),
+    transform var(--motion-duration-fast) var(--motion-ease-standard),
+    color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-chat-widget__action:hover .ds-chat-widget__action-icon {
+  color: var(--color-icon-primary);
+}
+
+/* The hidden half of the copy swap: faded and slightly shrunk, so the
+   arriving icon reads as popping in rather than teleporting. */
+.ds-chat-widget__action-icon--hidden {
+  opacity: 0;
+  transform: scale(0.6);
+}
+
+/* The tick wears the positive status role while it shows. */
+.ds-chat-widget__action-icon--tick,
+.ds-chat-widget__action:hover .ds-chat-widget__action-icon--tick {
+  color: var(--color-status-positive-border);
+}
+
+/* A chosen thumb: filled glyph, full-strength colour, no hover needed. */
+.ds-chat-widget__action[aria-pressed="true"] .ds-chat-widget__action-icon {
+  --material-symbols-fill: 1;
+  color: var(--color-icon-primary);
+}
+
+/* ============================================
+   FOLLOW-UP SUGGESTIONS — the chips under an answer.
+   ============================================ */
+
+.ds-chat-widget__followups {
+  width: 100%;
+  margin-top: var(--gap-200);
+  /* They land a beat after the answer commits, so they arrive rather than
+     appear. Reduced motion zeroes the duration through the token. */
+  animation: ds-chat-widget-followups-in var(--motion-duration-slow) var(--motion-ease-entrance) both;
+}
+
+@keyframes ds-chat-widget-followups-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--gap-100));
+  }
+}
+
+/* Visually hidden, still announced. */
+.ds-chat-widget__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ============================================
+   THE RAILS — the optional session-history rail (leading) and agent pane
+   (trailing). Wide widgets seat them inline; narrow ones summon the history
+   from the header hamburger as a slide-over sheet and the agent pane from a
+   header button as a bottom sheet, each behind a scrim.
+   ============================================ */
+
+.ds-chat-widget__rails {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.ds-chat-widget--with-threads {
+  flex: 1;
+  min-width: 0;
+}
+
+.ds-chat-widget__threads-rail {
+  flex: none;
+  display: flex;
+  min-height: 0;
+  border-right: var(--border-025) solid var(--color-bg-container-border);
+}
+
+/* The sheet layer: hidden entirely (visibility) while closed, so nothing in
+   it can take focus or reach assistive technology. */
+.ds-chat-widget__threads-overlay,
+.ds-chat-widget__aside-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  visibility: hidden;
+  transition: visibility 0s var(--motion-duration-slow);
+}
+
+.ds-chat-widget__threads-overlay--open,
+.ds-chat-widget__aside-overlay--open {
+  visibility: visible;
+  transition: visibility 0s;
+}
+
+.ds-chat-widget__rail-scrim {
+  position: absolute;
+  inset: 0;
+  border: none;
+  padding: 0;
+  background-color: var(--color-scrim);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--motion-duration-slow) var(--motion-ease-standard);
+}
+
+.ds-chat-widget__threads-overlay--open .ds-chat-widget__rail-scrim,
+.ds-chat-widget__aside-overlay--open .ds-chat-widget__rail-scrim {
+  opacity: 1;
+}
+
+/* The glass recipe: the translucent fill over a backdrop blur, so the
+   dimmed chat shows through the sheet. */
+.ds-chat-widget__threads-sheet {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  background-color: var(--color-bg-glass);
+  backdrop-filter: blur(24px);
+  border-right: var(--border-025) solid var(--color-bg-container-border);
+  box-shadow: var(--shadow-floating);
+  transform: translateX(-100%);
+  transition: transform var(--motion-duration-slow) var(--motion-ease-emphasized);
+}
+
+.ds-chat-widget__threads-overlay--open .ds-chat-widget__threads-sheet {
+  transform: translateX(0);
+}
+
+/* The agent rail floats rather than butting against the widget's edges: its
+   own rounded card, inset on three sides. The top margin is the header
+   row's exact height (the chat column's top padding, plus the header's own
+   block padding either side of a 40px control), so the panel begins where
+   that row ends and the lifted controls sit in the clear above it. */
+.ds-chat-widget__aside-rail {
+  flex: none;
+  display: flex;
+  min-height: 0;
+  margin: calc(var(--padding-200) + var(--padding-150) * 2 + 40px)
+    var(--padding-500) var(--padding-500) 0;
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
+  overflow: hidden;
+}
+
+/* The widget's controls, lifted out of the chat header to the card's own
+   right edge while the rail is seated inline. */
+.ds-chat-widget__rail-actions {
+  position: absolute;
+  top: calc(var(--padding-200) + var(--padding-150));
+  right: var(--padding-500);
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  gap: var(--gap-100);
+}
+
+/* Narrow hosts raise the agent pane from the bottom: a phone's secondary
+   surface comes up from the edge the thumb is nearest. Deliberately short
+   of the full height, so the last turns stay visible above it. */
+.ds-chat-widget__aside-sheet {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  max-height: 82%;
+  background-color: var(--color-bg-glass);
+  backdrop-filter: blur(24px);
+  border-top: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600) var(--radius-600) 0 0;
+  box-shadow: var(--shadow-floating);
+  transform: translateY(100%);
+  transition: transform var(--motion-duration-slow) var(--motion-ease-emphasized);
+}
+
+.ds-chat-widget__aside-overlay--open .ds-chat-widget__aside-sheet {
+  transform: translateY(0);
+}
+
+.ds-chat-widget__aside-grabber {
+  flex: none;
+  width: 36px;
+  height: 4px;
+  margin: var(--gap-200) auto 0;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-divider);
+}
+
+.ds-chat-widget__aside-sheet-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+/* The agent toggle's on-state: the passive wash, held down while the panel
+   is up. Paired with the library class so it beats the variant's resting
+   background whatever order the stylesheets load in. */
+.ds-circular-button.ds-chat-widget__agent-toggle--on,
+.ds-circular-button.ds-chat-widget__agent-toggle--on:hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+/* ============================================
+   THE LAUNCHER'S PANEL — a card inset from the viewport edges, docked above
+   the threshold to the edge the visitor chose; an overlay with a scrim below
+   it; a free, non-modal card when floated; a blurred full takeover in
+   fullscreen view. On phones it fills the viewport.
+   ============================================ */
+
+.ds-chat-launcher__panel {
+  position: fixed;
+  top: var(--ds-chat-inset);
+  /* Placed from the left on both docks, so one property carries every move
+     the card makes and they all glide. */
+  left: calc(100% - var(--ds-chat-width) - var(--ds-chat-inset));
+  height: calc(100dvh - var(--ds-chat-inset) * 2);
+  width: var(--ds-chat-width);
+  max-width: calc(100vw - var(--ds-chat-inset) * 2);
+  display: flex;
+  flex-direction: column;
+  /* The glass token: deliberately translucent in both themes, so the page's
+     colours reach the surface; the blur is what keeps the transcript
+     readable over them. */
+  background: var(--color-bg-glass);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
+  box-shadow: var(--shadow-floating);
+  overflow: hidden;
+  backdrop-filter: blur(24px);
+  z-index: 1100;
+  /* The panel-to-takeover glide: the same card grows to fill the viewport,
+     so every property that differs between the two views animates together. */
+  transition:
+    top var(--motion-duration-slow) var(--motion-ease-emphasized),
+    left var(--motion-duration-slow) var(--motion-ease-emphasized),
+    width var(--motion-duration-slow) var(--motion-ease-emphasized),
+    height var(--motion-duration-slow) var(--motion-ease-emphasized),
+    max-width var(--motion-duration-slow) var(--motion-ease-emphasized),
+    border-radius var(--motion-duration-slow) var(--motion-ease-emphasized),
+    border-color var(--motion-duration-slow) var(--motion-ease-emphasized),
+    backdrop-filter var(--motion-duration-slow) var(--motion-ease-emphasized);
+  /* Open: the card fades in with a small rise from its resting spot. Plays
+     on mount, so the view toggle, which keeps the node, never replays it. */
+  animation: ds-chat-launcher-panel-in var(--motion-duration-slow) var(--motion-ease-entrance);
+}
+
+/* The widen grip drives --ds-chat-width frame by frame; the width glide
+   above would rubber-band behind the pointer, so resizing suspends it. */
+html[data-chat-resizing] .ds-chat-launcher__panel {
+  transition: none;
+}
+
+/* Close: the mirror image. The provider keeps the panel mounted for
+   MOTION_EXIT_SYNC_MS while this plays, and pointer-events off so a dying
+   panel swallows no clicks. */
+.ds-chat-launcher__panel--closing {
+  animation: ds-chat-launcher-panel-out var(--motion-duration-base) var(--motion-ease-standard) forwards;
+  pointer-events: none;
+}
+
+@keyframes ds-chat-launcher-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes ds-chat-launcher-panel-out {
+  to {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+/* The left dock: the same card on the other edge. */
+.ds-chat-launcher__panel--left {
+  left: var(--ds-chat-inset);
+}
+
+/* Fullscreen view: a true viewport takeover. The stronger blur keeps the
+   transcript readable while the page's colours still shine through. The
+   border fades rather than vanishing, so the geometry never snaps mid-glide. */
+.ds-chat-launcher__panel--full {
+  top: 0;
+  left: 0;
+  height: 100dvh;
+  width: 100vw;
+  max-width: 100vw;
+  border-color: transparent;
+  border-radius: 0;
+  backdrop-filter: blur(40px);
+}
+
+/* Below the dock threshold the panel overlays the page behind a scrim. */
+.ds-chat-launcher__scrim {
+  position: fixed;
+  inset: 0;
+  background: var(--color-scrim);
+  z-index: 1090;
+  animation: ds-chat-launcher-scrim-in var(--motion-duration-slow) var(--motion-ease-standard);
+}
+
+@keyframes ds-chat-launcher-scrim-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* The widen grip: a 20px grab zone straddling the panel's inner edge, with
+   a hover-revealed 4×48px pill. A fixed sibling of the panel, positioned
+   from the same variables, so it tracks the edge as the drag rewrites
+   --ds-chat-width. */
+.ds-chat-launcher__dock-handle {
+  position: fixed;
+  top: var(--ds-chat-inset);
+  height: calc(100dvh - var(--ds-chat-inset) * 2);
+  right: calc(var(--ds-chat-inset) + var(--ds-chat-width) - 10px);
+  width: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: ew-resize;
+  touch-action: none;
+  z-index: 1101;
+}
+
+.ds-chat-launcher__dock-handle--left {
+  right: auto;
+  left: calc(var(--ds-chat-inset) + var(--ds-chat-width) - 10px);
+}
+
+.ds-chat-launcher__dock-handle::after {
+  content: "";
+  width: 4px;
+  height: 48px;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  transition: background var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-chat-launcher__dock-handle:hover::after,
+.ds-chat-launcher__dock-handle--resizing::after {
+  background: var(--color-text-tertiary);
+}
+
+.ds-chat-launcher__dock-handle:active::after {
+  background: var(--color-text-secondary);
+}
+
+/* On short viewports the vertical insets are height the widget needs more
+   than the chrome does. */
+@media (max-height: 619px) {
+  .ds-chat-launcher__panel {
+    top: 0;
+    height: 100dvh;
+  }
+
+  .ds-chat-launcher__dock-handle {
+    top: 0;
+    height: 100dvh;
+  }
+}
+
+/* Floating: popped out of the dock into a shorter card the visitor drags by
+   its header. The launcher writes the position variables once it has been
+   moved; until then it rests in the launcher's corner. After the
+   short-viewport rule above on purpose, so the card keeps its own height. */
+.ds-chat-launcher__panel--floating {
+  --ds-chat-float-h: min(
+    var(--ds-chat-float-height),
+    calc(100dvh - var(--ds-chat-inset) * 2)
+  );
+  top: var(--ds-chat-float-y, calc(100dvh - var(--ds-chat-float-h) - var(--ds-chat-inset)));
+  left: var(--ds-chat-float-x, calc(100% - var(--ds-chat-width) - var(--ds-chat-inset)));
+  width: var(--ds-chat-float-w, var(--ds-chat-width));
+  height: var(--ds-chat-float-h);
+  max-height: 100dvh;
+}
+
+/* The size grips: an 8px zone along each edge and a 16px square in each
+   corner, all inside the card. */
+.ds-chat-launcher__float-grip {
+  position: absolute;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: none;
+}
+
+.ds-chat-launcher__float-grip[data-dir="n"],
+.ds-chat-launcher__float-grip[data-dir="s"] {
+  left: 16px;
+  right: 16px;
+  height: 8px;
+  cursor: ns-resize;
+}
+
+.ds-chat-launcher__float-grip[data-dir="e"],
+.ds-chat-launcher__float-grip[data-dir="w"] {
+  top: 16px;
+  bottom: 16px;
+  width: 8px;
+  cursor: ew-resize;
+}
+
+.ds-chat-launcher__float-grip[data-dir="n"] { top: 0; }
+.ds-chat-launcher__float-grip[data-dir="s"] { bottom: 0; }
+.ds-chat-launcher__float-grip[data-dir="e"] { right: 0; }
+.ds-chat-launcher__float-grip[data-dir="w"] { left: 0; }
+
+.ds-chat-launcher__float-grip[data-dir="ne"],
+.ds-chat-launcher__float-grip[data-dir="nw"],
+.ds-chat-launcher__float-grip[data-dir="se"],
+.ds-chat-launcher__float-grip[data-dir="sw"] {
+  width: 16px;
+  height: 16px;
+}
+
+.ds-chat-launcher__float-grip[data-dir="ne"] { top: 0; right: 0; cursor: nesw-resize; }
+.ds-chat-launcher__float-grip[data-dir="sw"] { bottom: 0; left: 0; cursor: nesw-resize; }
+.ds-chat-launcher__float-grip[data-dir="nw"] { top: 0; left: 0; cursor: nwse-resize; }
+.ds-chat-launcher__float-grip[data-dir="se"] { bottom: 0; right: 0; cursor: nwse-resize; }
+
+.ds-chat-launcher__float-grip[data-dir="n"]::after,
+.ds-chat-launcher__float-grip[data-dir="s"]::after,
+.ds-chat-launcher__float-grip[data-dir="e"]::after,
+.ds-chat-launcher__float-grip[data-dir="w"]::after {
+  content: "";
+  border-radius: var(--radius-pill);
+  background: transparent;
+  transition: background var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-chat-launcher__float-grip[data-dir="n"]::after,
+.ds-chat-launcher__float-grip[data-dir="s"]::after {
+  width: 48px;
+  height: 4px;
+}
+
+.ds-chat-launcher__float-grip[data-dir="e"]::after,
+.ds-chat-launcher__float-grip[data-dir="w"]::after {
+  width: 4px;
+  height: 48px;
+}
+
+.ds-chat-launcher__float-grip:hover::after {
+  background: var(--color-text-tertiary);
+}
+
+.ds-chat-launcher__float-grip:active::after {
+  background: var(--color-text-secondary);
+}
+
+.ds-chat-launcher__panel--floating .ds-chat-header {
+  cursor: grab;
+  touch-action: none;
+}
+
+html[data-chat-resizing] .ds-chat-launcher__panel--floating .ds-chat-header {
+  cursor: grabbing;
+}
+
+/* Phone widths: the chat is the document, not an overlay. The panel leaves
+   the fixed layer for normal flow at 100dvh, and the host hides the page
+   around it on the takeover attribute, so the soft keyboard is handled the
+   way the browser handles any page with a field at the bottom. The launcher
+   reads the same threshold as TAKEOVER_QUERY; this rule covers the first
+   render, before a media query has been read, so the two must stay in step.
+   No transition: there is no card form to glide from. */
+@media (max-width: 719px) {
+  .ds-chat-launcher__panel {
+    position: relative;
+    top: auto;
+    left: auto;
+    height: 100dvh;
+    width: 100%;
+    max-width: none;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    transition: none;
+  }
+}
+
+/* ============================================
+   THE FAB — the chat's persistent entry point, bottom right on every page.
+   Hidden while the panel is open; the panel's close returns here.
+   ============================================ */
+
+.ds-chat-launcher__fab {
+  position: fixed;
+  right: var(--ds-chat-inset);
+  bottom: var(--ds-chat-inset);
+  z-index: 1080;
+}
+
+/* The button's own solid field keeps it legible over whatever content
+   scrolls beneath it; the FAB only adds the floating elevation. No
+   backdrop-filter here: the fill is opaque, and an ancestor backdrop root
+   would blind the summary panel's frost. */
+.ds-chat-launcher__fab .ds-ai-button {
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-floating);
+}

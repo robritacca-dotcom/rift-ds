@@ -1,84 +1,26 @@
 /**
- * Conversation starters, keyed to where the visitor is standing. A new chat
- * opened on the about page should not ask the same three questions as one
- * opened on a blueprint page — the starter is the widget's first guess at
- * why someone opened it here.
+ * The site's conversation starters, keyed to where the visitor is standing.
+ * A new chat opened on a component page should not ask the same three
+ * questions as one opened on a blueprint page: the starter is the widget's
+ * first guess at why someone opened it here.
  *
- * Each route holds a pool of pre-written questions, and a seeded pick draws
- * three of them. The seed lives in the chat provider: rolled once per page
- * load and again on "New chat", so a refresh or a fresh conversation shows a
- * different mix while re-renders and client-side navigation never reshuffle
- * under the visitor. Pre-written on purpose — the variety is theatre, not
- * tokens: no model is asked for any of these.
+ * Each route holds a pool of pre-written questions, and the package's
+ * seeded draw (`pickStarters` from rift-ds/chat) shows three of them. The
+ * seed lives in the chat provider: rolled once per page load and again on
+ * "New chat", so a refresh or a fresh conversation shows a different mix
+ * while re-renders never reshuffle under the visitor.
  *
  * Every label follows one pattern: a single crisp question with no filler,
- * or a bare imperative (Summarise, Explain, Describe, Walk me through).
- *
- * The route also travels to the model as page context (see the sanitised
- * `path` in /api/chat), which is what lets a starter say "this page" or
- * "this component" and resolve.
- *
- * Every label here has to fit on one chip: the budget is SUGGESTION_MAX_CHARS
- * and `scripts/validate-chat-starters.mjs` holds the written ones to it. The
- * item starters below name the thing the visitor is looking at, so their
- * length depends on runtime data — those fall back to the unnamed wording
- * rather than overflowing.
+ * or a bare imperative (Summarise, Explain, Describe, Walk me through), and
+ * every label has to fit on one chip: `scripts/validate-chat-starters.mjs`
+ * holds the written ones to SUGGESTION_MAX_CHARS. The item starters below
+ * name the thing the visitor is looking at, so their length depends on
+ * runtime data; those fall back to the unnamed wording rather than
+ * overflowing (`namedStarter`).
  */
-import { fitsChip } from "@/lib/chat-suggestions";
+import { namedStarter, pickStarters, type Starter } from "rift-ds/chat";
 
-export interface Starter {
-  id: string;
-  label: string;
-}
-
-/** How many chips the welcome screen shows, drawn from the pools below. */
-export const STARTER_COUNT = 3;
-
-/** The named wording when it fits the chip, the unnamed one when it does not. */
-const named = (withName: string, without: string): string =>
-  fitsChip(withName) ? withName : without;
-
-/* FNV-1a over the pathname, so each page draws a different slice of the
-   load's seed — two pages seen in one visit should not echo each other. */
-function hashString(input: string): number {
-  let hash = 2166136261;
-  for (let i = 0; i < input.length; i += 1) {
-    hash ^= input.charCodeAt(i);
-    hash = Math.imul(hash, 16777619);
-  }
-  return hash >>> 0;
-}
-
-/* mulberry32 — a tiny deterministic PRNG. Deterministic matters more than
-   quality here: the same (seed, page) must pick the same chips on every
-   render, or the set would churn as the visitor types. */
-function mulberry32(seed: number): () => number {
-  let state = seed >>> 0;
-  return () => {
-    state = (state + 0x6d2b79f5) | 0;
-    let t = Math.imul(state ^ (state >>> 15), 1 | state);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-
-/**
- * Draw STARTER_COUNT starters from a pool, deterministically for a given
- * (seed, key) pair. A null seed returns the head of the pool unshuffled —
- * the pools lead with their strongest questions, so callers without a seed
- * (and the server, if one ever renders this) get the curated order.
- */
-function pickStarters(pool: Starter[], seed: number | null, key: string): Starter[] {
-  if (pool.length <= STARTER_COUNT) return pool;
-  if (seed === null) return pool.slice(0, STARTER_COUNT);
-  const rand = mulberry32(hashString(key) ^ Math.floor(seed * 0xffffffff));
-  const shuffled = [...pool];
-  for (let i = shuffled.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(rand() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-  return shuffled.slice(0, STARTER_COUNT);
-}
+export type { Starter };
 
 const DEFAULT_STARTERS: Starter[] = [
   { id: "recent", label: "What shipped recently?" },
@@ -111,6 +53,16 @@ const STARTERS_BY_PREFIX: Array<[string, Starter[]]> = [
     { id: "type", label: "What typefaces are used?" },
     { id: "motion", label: "How is motion kept consistent?" },
     { id: "override", label: "How do I override the theme?" },
+  ]],
+  ["/chat", [
+    { id: "what", label: "What is the chat widget?" },
+    { id: "install", label: "How do I install the chat?" },
+    { id: "server", label: "What does the server handler do?" },
+    { id: "transport", label: "What is a transport?" },
+    { id: "demo", label: "Can I try it without a key?" },
+    { id: "cards", label: "How do cards render in a reply?" },
+    { id: "threads", label: "How do threads and tabs work?" },
+    { id: "parts", label: "Which components does it use?" },
   ]],
   ["/blueprints", [
     { id: "this-spec", label: "What does this spec govern?" },
@@ -196,7 +148,7 @@ function itemStarterPool(pathname: string, itemLabel?: string | null): Starter[]
       {
         id: "use",
         label: itemLabel
-          ? named(`How do I use the ${itemLabel} component?`, "How do I use this component?")
+          ? namedStarter(`How do I use the ${itemLabel} component?`, "How do I use this component?")
           : "How do I use this component?",
       },
       { id: "tokens", label: "Which tokens does it use?" },
@@ -211,7 +163,7 @@ function itemStarterPool(pathname: string, itemLabel?: string | null): Starter[]
       {
         id: "this-foundation",
         label: itemLabel
-          ? named(
+          ? namedStarter(
               `Explain how ${itemLabel.toLowerCase()} works here`,
               "Explain this part of the system"
             )

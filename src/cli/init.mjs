@@ -1,16 +1,24 @@
 #!/usr/bin/env node
 /**
- * The package's one command: `npx rift-ds init`.
+ * The package's one bin: `npx rift-ds init` and `npx rift-ds init chat`.
  *
- * Fetches the generated agent skills from the live site into the
+ * `init` fetches the generated agent skills from the live site into the
  * project's .claude/skills/ folder, one folder per skill, then prints the
  * MCP connect line. Which skills exist and which files each holds comes
  * from the site's /skill/manifest.json, never from a list in this file:
  * the skills regenerate with every site deploy while the package moves
  * only on a release, so a bundled list (or a bundled copy of the files)
- * would always be the staler one, and a skill added to the site reaches
- * this command with no new version of the package. Re-running overwrites
- * what is there; that is the refresh story.
+ * would always be the staler one. Re-running overwrites what is there;
+ * that is the refresh story.
+ *
+ * `init chat` scaffolds the chat widget into a Next.js app router project:
+ * the three route files under app/api/chat/, the guardrails module beside
+ * them, the mount component and its model list under components/chat/, and
+ * an .env.chat.example at the project root. These templates ride inside
+ * the package (dist/bin/templates/chat/, copied from src/cli/templates/chat/
+ * by build-package.mjs) rather than being fetched, because they import the
+ * installed version's own subpaths and must match it. It never overwrites:
+ * a file that exists is skipped and listed, so re-running is safe.
  *
  * The manifest is data from the network that decides where this command
  * writes, so every name and path in it is checked before anything touches
@@ -18,35 +26,61 @@
  * relative path, and nothing may climb out of the target folder.
  *
  * Zero dependencies by design: global fetch plus node:fs, so npx never
- * installs anything beyond the package itself. SITE_ORIGIN, SKILL_NAME
- * and MCP_SERVER_NAME are stamped by build-package.mjs from
+ * installs anything beyond the package itself. SITE_ORIGIN, SKILL_NAME,
+ * MCP_SERVER_NAME and PACKAGE_NAME are stamped by build-package.mjs from
  * scripts/brand.mjs (the one home for brand facts); running this file
  * straight from source fails fast rather than guessing a domain.
  * SKILL_NAME is the library skill, kept only for --out without --skill,
  * which has always meant that one.
  */
-import { mkdirSync, writeFileSync } from 'node:fs';
-import { dirname, join, resolve } from 'node:path';
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { dirname, join, relative, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const SITE_ORIGIN = '__SITE_URL__';
 const SKILL_NAME = '__SKILL_NAME__';
 const MCP_SERVER_NAME = '__MCP_SERVER_NAME__';
+const PACKAGE_NAME = '__PACKAGE_NAME__';
 const MANIFEST_URL = `${SITE_ORIGIN}/skill/manifest.json`;
 const DEFAULT_DIR = join('.claude', 'skills');
+const TEMPLATES_DIR = join(dirname(fileURLToPath(import.meta.url)), 'templates', 'chat');
 
-const USAGE = `Usage: npx rift-ds init [--skill <name>] [--dir <dir>]
+/* What `init chat` needs installed beside the package. The optional peers
+   each chat subpath imports; the demo's recharts is only for the scripted
+   preview and goes when the demo import does. */
+const CHAT_PEERS = [
+  'react-markdown',
+  'remark-gfm',
+  '@anthropic-ai/sdk',
+  '@upstash/ratelimit',
+  '@upstash/redis',
+  'recharts',
+];
 
-Fetches the agent skills for this package from ${SITE_ORIGIN} into
-${DEFAULT_DIR}/, one folder per skill, so a skill-capable coding agent
-carries the library's install, theming and catalogue rules into every
-session. Re-run any time to refresh; the files regenerate with every
-site deploy.
+const USAGE = `Usage: npx ${PACKAGE_NAME} init [--skill <name>] [--dir <dir>]
+       npx ${PACKAGE_NAME} init chat [--app <dir>] [--dry-run]
 
-Options:
+init
+  Fetches the agent skills for this package from ${SITE_ORIGIN} into
+  ${DEFAULT_DIR}/, one folder per skill, so a skill-capable coding agent
+  carries the library's install, theming and catalogue rules into every
+  session. Re-run any time to refresh; the files regenerate with every
+  site deploy.
+
   --skill <name>  Install one skill instead of all of them
   --dir <dir>     Folder that receives one folder per skill (default: ${DEFAULT_DIR})
   --out <dir>     Deprecated: write one skill's files straight into <dir>
                   (${SKILL_NAME} unless --skill names another). Use --dir.
+
+init chat
+  Scaffolds the chat widget into a Next.js app router project: the chat,
+  follow-ups and feedback routes under app/api/chat/, the guardrails beside
+  them, the mount and its model list under components/chat/, and an
+  .env.chat.example. Existing files are never overwritten.
+
+  --app <dir>     The app router folder (default: app/ or src/app/, whichever exists)
+  --dry-run       Print what would be written and write nothing
+
   --help          Show this message
 
 The list of skills is at ${MANIFEST_URL}`;
@@ -79,7 +113,7 @@ async function readManifest() {
   }
   const skills = manifest?.skills;
   if (!Array.isArray(skills) || skills.length === 0) {
-    fail(`${MANIFEST_URL} lists no skills. Update the package (npm install rift-ds@latest) and retry.`);
+    fail(`${MANIFEST_URL} lists no skills. Update the package (npm install ${PACKAGE_NAME}@latest) and retry.`);
   }
   const segment = /^[A-Za-z0-9][A-Za-z0-9._-]*$/;
   for (const skill of skills) {
@@ -97,9 +131,6 @@ async function readManifest() {
 }
 
 async function init({ only, dir, out }) {
-  if (SITE_ORIGIN.startsWith('__')) {
-    fail('this copy was not built: run the published bin (npx rift-ds init).');
-  }
   const skills = await readManifest();
   const wanted = only ?? (out ? SKILL_NAME : null);
   const selected = wanted ? skills.filter((skill) => skill.name === wanted) : skills;
@@ -129,6 +160,78 @@ async function init({ only, dir, out }) {
   console.log(`  claude mcp add --transport http ${MCP_SERVER_NAME} ${SITE_ORIGIN}/api/mcp`);
 }
 
+/** Every template file, as a path relative to the templates folder (forward slashes). */
+function templateFiles(dir = TEMPLATES_DIR) {
+  const out = [];
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const full = join(dir, entry.name);
+    if (entry.isDirectory()) out.push(...templateFiles(full));
+    else out.push(relative(TEMPLATES_DIR, full).split('\\').join('/'));
+  }
+  return out.sort();
+}
+
+/**
+ * Where a template lands. `app/**` goes into the app router folder,
+ * `components/**` beside it (src/components when the app is src/app), and
+ * the env example at the project root.
+ */
+function destinationFor(file, appDir) {
+  if (file.startsWith('app/')) return join(appDir, ...file.slice('app/'.length).split('/'));
+  if (file.startsWith('components/')) return join(dirname(appDir), ...file.split('/'));
+  return join(process.cwd(), ...file.split('/'));
+}
+
+function initChat({ app, dryRun }) {
+  if (!existsSync(TEMPLATES_DIR)) {
+    fail('this copy carries no chat templates: run the published bin (npx ' + PACKAGE_NAME + ' init chat).');
+  }
+  const appDir = app ?? ['app', join('src', 'app')].map((d) => resolve(d)).find((d) => existsSync(d));
+  if (!appDir) {
+    fail('no app/ or src/app/ folder found. Run this inside a Next.js app router project, or pass --app <dir>.');
+  }
+
+  const files = templateFiles();
+  const written = [];
+  const skipped = [];
+  for (const file of files) {
+    const dest = destinationFor(file, appDir);
+    if (existsSync(dest)) {
+      skipped.push(dest);
+      continue;
+    }
+    if (!dryRun) {
+      mkdirSync(dirname(dest), { recursive: true });
+      writeFileSync(dest, readFileSync(join(TEMPLATES_DIR, ...file.split('/'))));
+    }
+    written.push(dest);
+    console.log(`${dryRun ? '○' : '▸'} ${relative(process.cwd(), dest)}`);
+  }
+  for (const dest of skipped) {
+    console.log(`· ${relative(process.cwd(), dest)} exists, left as it is`);
+  }
+
+  console.log(
+    dryRun
+      ? `\n✓ Dry run: ${written.length} files would be written, ${skipped.length} left alone.`
+      : `\n✓ Chat scaffolded: ${written.length} files written, ${skipped.length} left alone.`
+  );
+  console.log(`\nNext:`);
+  console.log(`  1. Install the peers the chat imports:\n       npm install ${CHAT_PEERS.join(' ')}`);
+  console.log(
+    `  2. Render <ChatMount /> at the end of your root layout's body, after the page content:\n` +
+      `       import { ChatMount } from '${relative(appDir, join(dirname(appDir), 'components', 'chat', 'ChatMount')).split('\\').join('/')}';`
+  );
+  console.log(
+    `  3. Copy .env.chat.example into .env.local. With NEXT_PUBLIC_CHAT_DEMO=true the widget plays a scripted\n` +
+      `     conversation and needs no key; set ANTHROPIC_API_KEY and CHAT_ENABLED=true to go live.`
+  );
+  console.log(
+    `  4. Your layout's viewport should set interactiveWidget: "resizes-content", so the phone takeover ends above the keyboard.`
+  );
+  console.log(`\nThe widget's props, protocol and server options: ${SITE_ORIGIN}/chat`);
+}
+
 const args = process.argv.slice(2);
 if (args.includes('--help') || args.includes('-h') || args.length === 0) {
   console.log(USAGE);
@@ -136,6 +239,9 @@ if (args.includes('--help') || args.includes('-h') || args.length === 0) {
 }
 if (args[0] !== 'init') {
   fail(`unknown command "${args[0]}"\n\n${USAGE}`);
+}
+if (SITE_ORIGIN.startsWith('__')) {
+  fail(`this copy was not built: run the published bin (npx ${PACKAGE_NAME} init).`);
 }
 /** The value after a flag, or undefined when the flag is absent. */
 function option(flag, what) {
@@ -145,12 +251,19 @@ function option(flag, what) {
   if (!value || value.startsWith('--')) fail(`${flag} needs ${what}`);
   return value;
 }
-const only = option('--skill', 'a skill name');
-const dirFlag = option('--dir', 'a directory');
-const outFlag = option('--out', 'a directory');
-if (dirFlag && outFlag) fail('use --dir or --out, not both');
-await init({
-  only,
-  dir: dirFlag ? resolve(dirFlag) : DEFAULT_DIR,
-  out: outFlag ? resolve(outFlag) : undefined,
-});
+
+if (args[1] === 'chat') {
+  const appFlag = option('--app', 'a directory');
+  initChat({ app: appFlag ? resolve(appFlag) : undefined, dryRun: args.includes('--dry-run') });
+} else {
+  if (args[1] && !args[1].startsWith('--')) fail(`unknown init target "${args[1]}"\n\n${USAGE}`);
+  const only = option('--skill', 'a skill name');
+  const dirFlag = option('--dir', 'a directory');
+  const outFlag = option('--out', 'a directory');
+  if (dirFlag && outFlag) fail('use --dir or --out, not both');
+  await init({
+    only,
+    dir: dirFlag ? resolve(dirFlag) : DEFAULT_DIR,
+    out: outFlag ? resolve(outFlag) : undefined,
+  });
+}

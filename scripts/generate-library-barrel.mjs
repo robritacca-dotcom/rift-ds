@@ -30,8 +30,21 @@ const componentsDir = join(repoRoot, 'src', 'components');
 
 const registry = JSON.parse(readFileSync(join(componentsDir, 'registry.json'), 'utf8'));
 
-const importsRecharts = (path) =>
-  /from\s+['"]recharts['"]/.test(readFileSync(path, 'utf8'));
+/* The optional peer dependencies (scripts/optional-peers.mjs owns the list).
+   A module that imports one may never land in the main barrel: recharts
+   modules go to charts.ts, and the rest belong to the chat widget's own
+   subpaths (src/chat, which this generator never walks). A registered
+   component importing any of them fails here rather than forcing every
+   consumer's bundler to resolve a package it did not install. */
+import { OPTIONAL_PEER_PACKAGES } from './optional-peers.mjs';
+
+const importsPackage = (path, name) =>
+  new RegExp(`from\\s+['"]${name.replace(/[/@]/g, '\\$&')}['"]`).test(readFileSync(path, 'utf8'));
+const importsRecharts = (path) => importsPackage(path, 'recharts');
+const importsOtherPeer = (path) =>
+  OPTIONAL_PEER_PACKAGES.filter((name) => name !== 'recharts').find((name) =>
+    importsPackage(path, name)
+  );
 
 const mainLines = [];
 const chartLines = [];
@@ -66,6 +79,15 @@ for (const name of componentFolders) {
     process.exit(1);
   }
   for (const file of modules) {
+    const peer = importsOtherPeer(join(componentsDir, name, file));
+    if (peer) {
+      console.error(
+        `✗ Barrel generation failed: components/${name}/${file} imports the optional peer ` +
+          `"${peer}", which no component barrel may force a consumer to resolve. Only the ` +
+          `chat widget's subpaths (src/chat) may import it.`,
+      );
+      process.exit(1);
+    }
     const line = `export * from './components/${name}/${file.replace(/\.tsx$/, '')}';`;
     (importsRecharts(join(componentsDir, name, file)) ? chartLines : mainLines).push(line);
   }

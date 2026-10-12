@@ -1,0 +1,47 @@
+{
+  "$comment": "The widget registry: the fourth kind of thing the package ships, between the components and the templates. One member by design. `parts` names the library components the widget composes (held to src/components/registry.json by scripts/validate-chat-widget.mjs), `subpaths` the package exports it occupies (held to scripts/package-manifest.mjs), `peers` the optional peer dependencies each subpath needs (held to package.json). The /chat page, the chat corpus and the MCP tools read this file; never type its facts elsewhere.",
+  "widgets": [
+    {
+      "name": "ChatWidget",
+      "slug": "chat",
+      "label": "Chat",
+      "description": "The whole AI chat as one installable widget: the panel, the conversation engine, the streaming protocol and the server handlers, configured with props.",
+      "command": "init chat",
+      "subpaths": {
+        "./chat": "The widget, the provider, the launcher and the engine under them.",
+        "./chat/server": "The streaming chat handler and its follow-ups and feedback siblings, for any web-standard route.",
+        "./chat/upstash": "Rate limits, a daily budget and the exchange log over Upstash Redis, as the handlers' guardrails.",
+        "./chat/demo": "A scripted conversation with rich cards and fixtures, for a preview that needs no key.",
+        "./chat/chat.css": "The widget's stylesheet."
+      },
+      "peers": {
+        "./chat": ["react-markdown", "remark-gfm"],
+        "./chat/server": ["@anthropic-ai/sdk"],
+        "./chat/upstash": ["@upstash/ratelimit", "@upstash/redis"],
+        "./chat/demo": ["recharts"]
+      },
+      "parts": [
+        "AgentRail",
+        "AgentStatus",
+        "AiButton",
+        "AttachmentDropZone",
+        "AttachmentGroup",
+        "ChatHeader",
+        "ChatMessage",
+        "ChatThread",
+        "CircularButton",
+        "CodeBlock",
+        "Composer",
+        "DropdownMenu",
+        "Mention",
+        "ModelPicker",
+        "PromptSuggestions",
+        "Prose",
+        "Reasoning",
+        "ThreadPanel",
+        "ThreadTabs"
+      ],
+      "documented": ["ChatWidget", "ChatProvider", "ChatLauncher", "ChatThreads", "ChatTabs", "ChatAgentPane"]
+    }
+  ]
+}

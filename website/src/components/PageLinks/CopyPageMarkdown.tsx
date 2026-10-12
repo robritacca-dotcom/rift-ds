@@ -26,9 +26,13 @@ export default function CopyPageMarkdown() {
     };
   }, []);
 
+  // Component pages carry /components/<slug>.md; the chat widget's page
+  // carries /chat.md beside its route (scripts/generate-component-md.mjs
+  // writes both from the same pass).
   const match = pathname?.match(/^\/components\/([a-z0-9-]+)$/);
-  if (!match) return null;
-  const markdownUrl = `/components/${match[1]}.md`;
+  const isWidget = pathname === "/chat";
+  if (!match && !isWidget) return null;
+  const markdownUrl = isWidget ? "/chat.md" : `/components/${match![1]}.md`;
 
   const copy = async () => {
     try {

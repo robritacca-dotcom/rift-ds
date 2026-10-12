@@ -47,7 +47,7 @@ import {
 } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { registry, repoRoot } from './component-docgen.mjs';
+import { chatRegistry, registry, repoRoot } from './component-docgen.mjs';
 import { assembleComponentApi } from './generate-component-api.mjs';
 import { siteUrl } from './generate-component-md.mjs';
 import { CATEGORY_PREFIXES } from './generate-token-registry.mjs';
@@ -196,7 +196,10 @@ ${sections.join('\n\n')}
 /** The files of every skill as { skill, path, content }; paths are relative to the skill's folder, forward-slashed. */
 export function assembleAgentSkill() {
   const origin = siteUrl();
-  const api = assembleComponentApi();
+  // Components only: the chat widget rides the same API data but is its own
+  // kind, with its own section below.
+  const api = assembleComponentApi().filter((entry) => entry.kind === 'component');
+  const widget = chatRegistry.widgets[0];
   const categories = registry.categories;
   const countFor = (id) => api.filter((entry) => entry.category === id).length;
   const tokenCount = tokenNames.size;
@@ -256,6 +259,25 @@ Components that import recharts ship from \`${PACKAGE_NAME}/charts\` and need th
 ## Fonts
 
 The primary typeface is not bundled: set \`--font-family-primary\` to your own (the system is designed around Nunito Sans). The Material Symbols icon font ships inside the package, and any component import loads it.
+
+## The chat widget
+
+${widget.description} It is the package's one widget, separate from the components: \`${widget.name}\`, \`ChatProvider\` and \`ChatLauncher\` over a \`useChat\` engine, with the server half as web-standard request handlers. Scaffold it into a Next.js app router project with one command, which writes the three routes, the mount and an env example and never overwrites a file:
+
+\`\`\`bash
+npx ${BIN_NAME} ${widget.command}
+\`\`\`
+
+Its subpaths, each with the optional peers it needs:
+
+${Object.entries(widget.subpaths)
+  .map(([subpath, what]) => {
+    const peers = widget.peers[subpath];
+    return `- \`${PACKAGE_NAME}${subpath.slice(1)}\`: ${what}${peers ? ` Peers: ${peers.join(', ')}.` : ''}`;
+  })
+  .join('\n')}
+
+Its props, protocol and server options are documented at ${origin}/${widget.slug} (the contract as markdown at ${origin}/${widget.slug}.md, and through the MCP \`get_component\` tool by the name \`${widget.name}\`). A scripted transport (\`scriptChat()\`, and the ready-made story in \`${PACKAGE_NAME}/chat/demo\`) runs the widget with no model, route or key, for previews and tests.
 
 ## Timings in JavaScript
 

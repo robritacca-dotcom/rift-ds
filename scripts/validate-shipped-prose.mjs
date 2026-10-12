@@ -232,10 +232,15 @@ if (desc) scan('scripts/package-manifest.mjs (PACKAGE_DESCRIPTION)', desc[2]);
  * so comments never register — only what a visitor can read.
  */
 const STORY_MODULES = [
-  'website/src/lib/chat-sim.ts',
+  'src/chat/demo-script.ts',
+  'src/chat/demo-fixtures.ts',
+  'src/chat/sim.ts',
+  'src/chat/server.ts',
+  'src/chat/upstash.ts',
   'website/src/app/playground/ChatDirector.tsx',
   'website/src/app/playground/views/ChatView.tsx',
-  'website/src/app/playground/views/ChatWelcome.tsx',
+  'src/chat/DemoWelcome.tsx',
+  'src/chat/demo-agent-panes.tsx',
   'website/src/app/playground/views/TypeView.tsx',
   // The theme rail's control labels and the export dialog's notes sit in
   // component files beside the playground's page.tsx, and the export's

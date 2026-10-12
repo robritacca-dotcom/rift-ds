@@ -1,0 +1,56 @@
+/* The built-in agent pane. The rail owns its shell; this only says how it
+   sits in the widget's bottom sheet, where it fills the width rather than
+   holding its own column and the sheet's rounded top edge is the surface. */
+.ds-chat-agent-pane--sheet {
+  width: 100%;
+}
+
+/* The pane furniture a host's panes commonly carry: a date heading over a
+   run of rows, and a small card. Host content, offered as classes rather
+   than components so a pane stays whatever the host writes. */
+.ds-chat-agent-pane__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-100);
+}
+
+.ds-chat-agent-pane__group + .ds-chat-agent-pane__group,
+.ds-chat-agent-pane__card + .ds-chat-agent-pane__group {
+  margin-top: var(--gap-400);
+}
+
+.ds-chat-agent-pane__heading {
+  font-family: var(--font-overline-family);
+  font-size: var(--font-overline-size);
+  font-weight: var(--font-overline-weight);
+  line-height: var(--font-overline-line-height);
+  letter-spacing: var(--font-overline-letter-spacing);
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+  padding: var(--padding-100) var(--padding-200);
+  margin: 0;
+}
+
+.ds-chat-agent-pane__card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+  padding: var(--padding-300);
+  background-color: var(--color-bg-container-secondary);
+  border-radius: var(--radius-400);
+}
+
+.ds-chat-agent-pane__card-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-300);
+}
+
+.ds-chat-agent-pane__card-label {
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  color: var(--color-text-primary);
+}

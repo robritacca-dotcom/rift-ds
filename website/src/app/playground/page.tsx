@@ -61,21 +61,27 @@ import { ImageThemeCard, ImageThemeDropZone } from "./ImageThemeDrop";
 import { themeFromFile, type ImageThemeSource } from "@/lib/theme/image-palette";
 import AdvancedColorsDialog from "./AdvancedColorsDialog";
 import ExportThemeDialog, { type ExportTab } from "./ExportThemeDialog";
-import ChatDirector, { STORY_CONTENT } from "./ChatDirector";
+import ChatDirector from "./ChatDirector";
 import InspectMode from "@/components/InspectMode/InspectMode";
 import ChatView, {
   defaultChatPlaceholder,
   type StageSize,
   type TransportMode,
 } from "./views/ChatView";
-import { CHAT_WELCOME_OPTIONS, type ChatWelcomeVariant } from "./views/ChatWelcome";
+import {
+  DEMO_PROJECTS,
+  DEMO_RENDERERS,
+  DEMO_THREADS,
+  DEMO_WELCOME_OPTIONS as CHAT_WELCOME_OPTIONS,
+  createDemoTransport,
+  type DemoWelcomeVariant as ChatWelcomeVariant,
+} from "rift-ds/chat/demo";
 import MockNav from "./views/MockNav";
 import TypeView from "./views/TypeView";
 import DashboardView from "./views/DashboardView";
 import { stageMobileCss } from "./stage-mobile-css";
-import { createSimTransport } from "@/lib/chat-sim";
-import { createFetchTransport } from "@/lib/chat-transport";
-import { SiteChatProvider, useSiteChat } from "@/components/SiteChat/ChatContext";
+import { createFetchTransport, useChatWidget } from "rift-ds/chat";
+import { SiteChatProvider } from "@/components/SiteChat/SiteChatProvider";
 import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
 import { ShaderField } from "rift-ds/components/ShaderField/ShaderField";
 import { InspectorDropdown } from "rift-ds/components/Inspector/InspectorDropdown";
@@ -129,7 +135,7 @@ const subscribeCompact = (callback: () => void) => {
  * that makes any late event from it inert.
  */
 function ResetOnTransportChange({ mode }: { mode: TransportMode }) {
-  const { reset } = useSiteChat();
+  const { reset } = useChatWidget();
   const previous = useRef(mode);
   useEffect(() => {
     if (previous.current === mode) return;
@@ -199,9 +205,9 @@ export default function PlaygroundPage() {
     () =>
       transportMode === "live"
         ? createFetchTransport()
-        : /* The sim gets the story's rich elements — the map is what lets a
-             chip path end on a card, a chart, or an approval. */
-          createSimTransport(STORY_CONTENT),
+        : /* The demo script, whose replies carry the cards the provider's
+             renderers draw: a plan, a chart, a diff, an approval. */
+          createDemoTransport(),
     [transportMode]
   );
   const [stageSize, setStageSize] = useState<StageSize>("desktop");
@@ -919,7 +925,20 @@ export default function PlaygroundPage() {
           and the transcript survives a switch between views. */}
       {/* The stage card is the floating seat: free of both edges, sized by
           its grips. The header's Chat position menu docks it from there. */}
-      <SiteChatProvider transport={transport} defaultPlacement="floating">
+      <SiteChatProvider
+        transport={transport}
+        defaultPlacement="floating"
+        renderers={DEMO_RENDERERS}
+        /* The staged history behind the rail and the tabs, shaped by the rail
+           levers: pins off folds the pinned group away, details off strips
+           the rows to titles, projects off hides the section. */
+        threads={{
+          ...DEMO_THREADS,
+          projects: railProjects ? DEMO_PROJECTS : [],
+          pins: railPins,
+          details: railDetails,
+        }}
+      >
       <ResetOnTransportChange mode={transportMode} />
       <div
         className={[
@@ -1128,9 +1147,6 @@ export default function PlaygroundPage() {
               onManual={(next) => setChatManual((m) => ({ ...m, ...next }))}
               allowFullscreen={!compact}
               simControls={transportMode === "sim"}
-              railProjects={railProjects}
-              railPins={railPins}
-              railDetails={railDetails}
               railTabs={railTabs}
               agentRail={agentRail}
             />

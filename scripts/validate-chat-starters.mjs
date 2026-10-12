@@ -6,7 +6,7 @@
  * follow-up question under an answer — renders as a Chip, which never wraps.
  * Past the column width the pill runs off the edge of the docked panel, so the
  * budget is a hard limit rather than a preference. The limit itself lives in
- * website/src/lib/chat-suggestions.ts and is read from there, so this script
+ * src/chat/suggestions.ts and is read from there, so this script
  * never restates it.
  *
  * Generated suggestions are held to the same number at runtime (the follow-ups
@@ -23,7 +23,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-const budgetPath = join(repoRoot, 'website', 'src', 'lib', 'chat-suggestions.ts');
+const budgetPath = join(repoRoot, 'src', 'chat', 'suggestions.ts');
 
 /** `label: "…"` in any quote style — a suggestion written as an object. */
 const LABELLED = /label:\s*(?:"([^"]*)"|'([^']*)'|`([^`]*)`)/g;
@@ -49,15 +49,25 @@ const SOURCES = [
     pattern: BARE,
   },
   {
-    path: join('website', 'src', 'app', 'playground', 'views', 'ChatView.tsx'),
-    scope: /starters=\{\[([\s\S]*?)\]\}/g,
+    /* The package's own written fallbacks: what a host that passes no pool
+       of its own gets under an answer. Shipped copy, on the same chip row. */
+    path: join('src', 'chat', 'followups.ts'),
+    scope: /DEFAULT_FALLBACK_FOLLOWUPS: readonly string\[\] = \[([\s\S]*?)\]/g,
+    pattern: BARE,
   },
   {
-    /* The sim transport's scripted follow-ups. These reach the playground's
-       Chat view through the same chip row as everything else, and no runtime
-       filter stands between them and it: the route's own check only guards
-       suggestions a model wrote. Written copy, so this is where they are held. */
-    path: join('website', 'src', 'lib', 'chat-sim.ts'),
+    /* The demo script's starters (rift-ds/chat/demo), shown on the welcome
+       screen of the playground's stage, the chat home template and the
+       widget's own stories. */
+    path: join('src', 'chat', 'demo-script.ts'),
+    scope: /DEMO_STARTERS: Starter\[\] = \[([\s\S]*?)\]/g,
+  },
+  {
+    /* The demo script's scripted follow-ups. These reach the widget through
+       the same chip row as everything else, and no runtime filter stands
+       between them and it: the handler's own check only guards suggestions
+       a model wrote. Written copy, so this is where they are held. */
+    path: join('src', 'chat', 'demo-script.ts'),
     scope: /followups:\s*\[([\s\S]*?)\]/g,
     pattern: BARE,
   },
@@ -92,7 +102,7 @@ try {
   if (!match) throw new Error('SUGGESTION_MAX_CHARS not found');
   maxChars = Number(match[1]);
 } catch (err) {
-  console.error(`✗ Could not read the chip budget from chat-suggestions.ts: ${err.message}`);
+  console.error(`✗ Could not read the chip budget from src/chat/suggestions.ts: ${err.message}`);
   process.exit(1);
 }
 

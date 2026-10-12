@@ -38,6 +38,16 @@ import { Button, Card, Badge } from 'rift-ds';
 
 React 19+ is a peer dependency. The package is ESM-only and resolved via `exports` subpaths: use a bundler that handles CSS and font imports from `node_modules` (Vite, Next.js, webpack) and set TypeScript's `moduleResolution` to `"bundler"` or `"nodenext"`. The Recharts-backed charts live behind `rift-ds/charts`, so the optional `recharts` peer dependency is only needed if you use them. Prefer owning the source? Pull single components through the shadcn CLI (`npx shadcn@latest add https://rift-ds.com/r/button.json`, with details in the [get-started guide](https://rift-ds.com/docs/get-started)), or clone this repo and build on it directly; all of it is MIT.
 
+## The chat widget
+
+The whole AI chat ships as one widget: the panel with its docked, overlay and takeover forms, the streaming engine, the threads, the rich cards, and the server handlers that call the model. One command scaffolds it into a Next.js app, and a scripted mode runs it with no key, so you see it working before you wire a model.
+
+```bash
+npx rift-ds init chat
+```
+
+Its props, protocol and server options are on [the chat page](https://rift-ds.com/chat).
+
 ## Set up your agent
 
 One command teaches a coding agent the system: it installs the generated agent skills into your project and prints the MCP connect line. The skills cover the library's rules, moving existing screens onto the tokens and components, and auditing styles against them.

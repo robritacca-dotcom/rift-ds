@@ -237,7 +237,8 @@ export function ChatWidget({
      on open, on new chat, and again after every send. The host restores
      focus to its own trigger when the chat closes. */
   const composerRef = useRef<HTMLTextAreaElement | null>(null);
-  const focusComposer = () => composerRef.current?.focus();
+  /* preventScroll: a panel opening, or a click on its dead space, must not drag the page to the composer. The panel is fixed on the hosts that open it; an example seated in a page would scroll the page otherwise. */
+  const focusComposer = () => composerRef.current?.focus({ preventScroll: true });
   useEffect(() => {
     if (open) focusComposer();
   }, [open]);

@@ -334,10 +334,10 @@ export default function AiChatPage() {
             </p>
             <div className={styles.stageGrid}>
               {WELCOME_VARIANTS.map((variant) => (
-                <figure key={`welcome-${variant.value}-${viewport}`} className={`${styles.stageCell} ${variant.wide ? styles.stageCellWide : ""}`}>
+                <figure key={`welcome-${variant.value}-${viewport}`} className={styles.stageCell}>
                   <ChatStage
                     phone={phone}
-                    height={variant.wide ? 800 : 780}
+                    height={780}
                     widget={(chat) => ({
                       compact: true,
                       showStarters: variant.value === "none",

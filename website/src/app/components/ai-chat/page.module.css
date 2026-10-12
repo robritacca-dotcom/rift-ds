@@ -133,10 +133,6 @@
   gap: var(--gap-200);
 }
 
-.stageCellWide {
-  grid-column: 1 / -1;
-}
-
 .stageCaption {
   font-size: var(--font-caption-size);
   line-height: var(--font-caption-line-height);

@@ -211,7 +211,7 @@ const SLOW_TIMING = { statusMs: 2200, handoffMs: 500, streamMs: 45 } as const;
 export default function AiChatPage() {
   const [viewport, setViewport] = useState("desktop");
   const phone = viewport === "mobile";
-  const stageHeight = phone ? 720 : 600;
+  const stageHeight = phone ? 760 : 720;
 
   return (
     <>
@@ -261,7 +261,7 @@ export default function AiChatPage() {
             <ChatStage
               key={`live-${viewport}`}
               phone={phone}
-              height={phone ? 760 : 760}
+              height={phone ? 800 : 820}
               widget={{
                 threads: !phone,
                 threadsProps: { defaultExpanded: false, logoText: "Acme Assistant", profile: { name: "Jordan Reyes", meta: "Pro" } },
@@ -367,7 +367,7 @@ export default function AiChatPage() {
             <ChatStage
               key={`threads-${viewport}`}
               phone={phone}
-              height={phone ? 760 : 640}
+              height={phone ? 780 : 780}
               widget={{
                 threads: true,
                 threadsProps: { defaultExpanded: !phone, logoText: "Acme Assistant", profile: { name: "Jordan Reyes", meta: "Pro" } },
@@ -389,7 +389,7 @@ export default function AiChatPage() {
             <ChatStage
               key={`agent-${viewport}`}
               phone={phone}
-              height={phone ? 760 : 640}
+              height={phone ? 780 : 780}
               widget={{ agent: { tabs: demoAgentTabs("Acme Assistant"), defaultOpen: !phone } }}
               setup={stageQuickReplies}
             />
@@ -417,7 +417,7 @@ export default function AiChatPage() {
               renderers for a chart, a plan, a tool call, a diff, an approval, a source list and a
               product card; here a chart, a plan and a tool call.
             </p>
-            <ChatStage key={`cards-${viewport}`} phone={phone} height={phone ? 760 : 840} setup={stageRichContent} />
+            <ChatStage key={`cards-${viewport}`} phone={phone} height={phone ? 800 : 900} setup={stageRichContent} />
           </section>
 
           <section id="status" className={`${styles.section} animate-in animate-delay-3`}>
@@ -449,7 +449,7 @@ export default function AiChatPage() {
             <ChatStage
               key={`documents-${viewport}`}
               phone={phone}
-              height={phone ? 760 : 720}
+              height={phone ? 800 : 820}
               widget={{
                 fileAttachments: true,
                 mentions: DEMO_MENTIONS,

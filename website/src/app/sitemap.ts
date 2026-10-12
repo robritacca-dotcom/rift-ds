@@ -4,7 +4,6 @@ import path from "node:path";
 import {
   componentsSidebarLinks,
   docsSidebarLinks,
-  chatSidebarLinks,
   foundationsSidebarLinks,
   templatesSidebarLinks,
 } from "@/config/navigation";
@@ -72,7 +71,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/playground",
     "/graph",
     ...docsSidebarLinks.map((l) => l.href),
-    ...chatSidebarLinks.map((l) => l.href),
     ...foundationsSidebarLinks.map((l) => l.href),
     ...templatesSidebarLinks.map((l) => l.href),
     ...componentsSidebarLinks.map((l) => l.href),

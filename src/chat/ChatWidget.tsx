@@ -57,6 +57,8 @@ export interface ChatAgentOptions {
   profile?: AgentRailProfile;
   /** The panes, in display order. */
   tabs: AgentRailTab[];
+  /** Open the pane at mount, where the panel is wide enough to seat it inline. Off by default: the header button opens it. */
+  defaultOpen?: boolean;
 }
 
 /** Props owned by ChatWidget itself. */
@@ -311,7 +313,7 @@ export function ChatWidget({
   /* One piece of state for the agent panel, resting closed: it is the same
      panel in either seat, and it only ever opens because someone asked. The
      seat decides how it is drawn, never whether it is up. */
-  const [asideOpen, setAsideOpen] = useState(false);
+  const [asideOpen, setAsideOpen] = useState(Boolean(agent?.defaultOpen));
   const railsHostRef = useRef<HTMLDivElement | null>(null);
   const [threadsWide, setThreadsWide] = useState(false);
   const [asideWide, setAsideWide] = useState(false);

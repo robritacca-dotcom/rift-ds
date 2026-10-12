@@ -42,7 +42,10 @@ const notCentralized = [];
 
 // slug and label are stored in the registry, so a name-to-slug exception is
 // data, not a special case each validator has to remember.
-for (const { name, slug } of registry.components) {
+// The chat widget's page sits under /components too (src/chat/registry.json).
+const widgets = JSON.parse(read(join(repoRoot, 'src', 'chat', 'registry.json'))).widgets;
+
+for (const { name, slug } of [...registry.components, ...widgets]) {
   const layoutPath = join(componentsDir, slug, 'layout.tsx');
   if (!existsSync(layoutPath)) {
     missingLayout.push(

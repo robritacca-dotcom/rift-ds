@@ -26,14 +26,12 @@ export default function CopyPageMarkdown() {
     };
   }, []);
 
-  // Component pages carry /components/<slug>.md; the chat widget's contract
-  // is /chat.md (scripts/generate-component-md.mjs writes both from the same
-  // pass), offered on the section's overview and on the page that holds the
-  // props tables.
+  // Every page under /components carries its contract at
+  // /components/<slug>.md, the chat widget's included
+  // (scripts/generate-component-md.mjs writes them all from one pass).
   const match = pathname?.match(/^\/components\/([a-z0-9-]+)$/);
-  const isWidget = pathname === "/chat/overview" || pathname === "/chat/install";
-  if (!match && !isWidget) return null;
-  const markdownUrl = isWidget ? "/chat.md" : `/components/${match![1]}.md`;
+  if (!match) return null;
+  const markdownUrl = `/components/${match[1]}.md`;
 
   const copy = async () => {
     try {

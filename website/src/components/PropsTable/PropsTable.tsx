@@ -9,6 +9,14 @@ import styles from "./PropsTable.module.css";
  * and the MCP get_component tool, so a table here can never say something
  * the package does not.
  */
+/* A default that is a literal of several lines (a written pool, a render
+   function) shows its first line here and the whole value on hover; the
+   column is for reading a default, not a source file. */
+const shortDefault = (value: string): string => {
+  const [first] = value.split("\n");
+  return first.length < value.length ? `${first.trimEnd()} …` : value;
+};
+
 export default function PropsTable({ exported }: { exported: ComponentExportApi }) {
   if (exported.props.length === 0) {
     return <p className={styles.empty}>No own props; native attributes pass through.</p>;
@@ -35,7 +43,7 @@ export default function PropsTable({ exported }: { exported: ComponentExportApi 
             </code>
           ),
           type: <code className={styles.type}>{prop.type}</code>,
-          default: prop.defaultValue != null ? <code className={styles.type}>{prop.defaultValue}</code> : "",
+          default: prop.defaultValue != null ? <code className={styles.type} title={prop.defaultValue}>{shortDefault(prop.defaultValue)}</code> : "",
           description: prop.deprecated ? (
             <>
               {prop.description} <em>Deprecated: {prop.deprecated}</em>

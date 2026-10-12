@@ -1,4 +1,4 @@
-import { componentMetadata } from "rift-ds/components/registry";
+import { componentPages } from "./component-pages";
 import registry from "./page-summaries.json";
 
 /**
@@ -43,7 +43,7 @@ const staticSummaries = registry.routes as Record<string, PageSummary>;
 export const componentChipLabel = (label: string) => `How do I use ${label}?`;
 
 function componentSummary(slug: string): PageSummary | null {
-  const meta = componentMetadata.find((c) => c.slug === slug);
+  const meta = componentPages.find((c) => c.slug === slug);
   if (!meta) return null;
   return {
     title: meta.label,

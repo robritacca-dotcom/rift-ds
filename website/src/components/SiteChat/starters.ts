@@ -54,7 +54,7 @@ const STARTERS_BY_PREFIX: Array<[string, Starter[]]> = [
     { id: "motion", label: "How is motion kept consistent?" },
     { id: "override", label: "How do I override the theme?" },
   ]],
-  ["/chat", [
+  ["/docs/chat", [
     { id: "what", label: "What is the chat widget?" },
     { id: "install", label: "How do I install the chat?" },
     { id: "server", label: "What does the server handler do?" },

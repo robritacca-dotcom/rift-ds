@@ -74,7 +74,12 @@ const missingInstallStrip = [];
 
 // slug and label are stored in the registry, so a name-to-slug exception is
 // data, not a special case each validator has to remember.
-for (const { name, slug } of registry.components) {
+// The chat widget's page sits under /components with the rest: same page,
+// preview, install strip and design.md section rules, from its own registry.
+const widgets = JSON.parse(read(join(repoRoot, 'src', 'chat', 'registry.json'))).widgets;
+const componentPages = [...registry.components, ...widgets];
+
+for (const { name, slug } of componentPages) {
 
   const pagePath = join(repoRoot, 'website', 'src', 'app', 'components', slug, 'page.tsx');
   if (!existsSync(pagePath)) {
@@ -102,7 +107,7 @@ for (const { name, slug } of registry.components) {
 // Every folder under website/src/app/components must be a registered slug —
 // an orphan folder is usually a rename that missed the registry, and it
 // would ship as an unlisted page.
-const knownSegments = new Set(registry.components.map((c) => c.slug));
+const knownSegments = new Set(componentPages.map((c) => c.slug));
 const orphanFolders = readdirSync(
   join(repoRoot, 'website', 'src', 'app', 'components'),
   { withFileTypes: true }
@@ -213,7 +218,7 @@ const colourSwatchDrift = [
 
 // Reverse direction: a preview entry for a slug the registry doesn't know is
 // dead artwork — usually a rename that missed the map.
-const registeredSlugs = new Set(registry.components.map((c) => c.slug));
+const registeredSlugs = new Set(componentPages.map((c) => c.slug));
 const orphanPreviews = [...previewKeys]
   .filter((k) => !registeredSlugs.has(k))
   .map((k) => `"${k}" in ComponentPreviews.tsx is not a registered component slug`);

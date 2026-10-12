@@ -2,11 +2,10 @@
 
 import MegaNav from "@/components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import PageLinks from "@/components/PageLinks/PageLinks";
-import PropsTable from "@/components/PropsTable/PropsTable";
+import Link from "next/link";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import { ArchitectureMap } from "@/components/ArchitectureMap/ArchitectureMap";
-import { getSidebarLinks, chatSidebarLinks } from "@/config/navigation";
+import { getSidebarLinks, docsSidebarLinks } from "@/config/navigation";
 import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import { Table } from "rift-ds/components/Table/Table";
@@ -20,27 +19,24 @@ import {
   chatWidget,
   type ChatEvent,
 } from "rift-ds/chat";
-import { componentApi } from "@/data/component-api.generated";
 import { PACKAGE_NAME } from "@/config/brand.generated";
 import { SITE_URL } from "@/lib/structuredData";
 import { chatExchangeMap } from "../../overview/maps";
-import { widgetMap } from "../maps";
-import s from "../section.module.css";
+import { widgetMap } from "./maps";
+import s from "./page.module.css";
 
-const { sidebarLinks } = getSidebarLinks(chatSidebarLinks, "/chat/install");
+const { sidebarLinks } = getSidebarLinks(docsSidebarLinks, "/docs/chat");
 
-/* The technical page, in the blueprints' register: headings, short notes,
-   code and tables, in the order a consumer works through them. Three ways
-   in, each a section: the full install (one command, bring a key), UI only
-   (the panel over your own endpoint) and headless (the engine under your
-   own UI), then the props and the packages. The command and the packages
-   come from the widget registry, the props from the generated component
-   API, the thresholds and event kinds from the package itself. The file
-   list and the env names are hand mirrors of the init bin's templates
-   (src/cli/templates/chat/), held to them in both directions by
-   scripts/validate-chat-widget.mjs. */
-
-const widgetApi = componentApi.find((entry) => entry.kind === "widget" && entry.name === chatWidget.name);
+/* The chat's docs page: a light overview, then how to add it, in the
+   blueprints' register: headings, short notes, code and tables, in the
+   order a consumer works through them. Three ways in, each a section: the
+   full install (one command, bring a key), UI only (the panel over your own
+   endpoint) and headless (the engine under your own UI), then the packages.
+   The props live on the widget's own page under /components. The command
+   and the packages come from the widget registry, the thresholds and event
+   kinds from the package itself. The file list and the env names are hand
+   mirrors of the init bin's templates (src/cli/templates/chat/), held to
+   them in both directions by scripts/validate-chat-widget.mjs. */
 
 const INSTALL_SNIPPET = `npm install ${PACKAGE_NAME}
 npx ${PACKAGE_NAME} ${chatWidget.command}`;
@@ -243,16 +239,27 @@ export default function ChatInstallPage() {
           <PageBreadcrumb />
 
           <div className={`${s.pageHeader} animate-in`}>
-            <h1 className={s.pageTitle}>Install</h1>
-            <PageLinks storybookPath="/?path=/docs/chat-chatwidget--docs" />
+            <h1 className={s.pageTitle}>AI chat</h1>
           </div>
 
           <div className={`${s.introSection} animate-in animate-delay-1`}>
-            <p className={s.subDisplay}>Three ways to add the chat</p>
+            <p className={s.subDisplay}>A complete chat, added with one command</p>
             <p className={s.introBody}>
-              The full install adds everything to a Next.js app with one command; bring a key. UI only
-              puts the chat panel over an endpoint you already have. Headless gives you the engine
-              under your own design. The props and the packages are at the end.
+              The package ships the whole AI chat assembled: the panel in its docked, overlay and
+              full-screen forms, the streaming replies with their status and reasoning, the cards a
+              reply can carry, the thread history and tabs, the agent pane, the composer with files
+              and mentions, and the server handlers behind it all. The chat in the corner of this
+              page is it. Every option is a prop, listed on{" "}
+              <Link href={`/components/${chatWidget.slug}`} className={s.inlineLink}>
+                its component page
+              </Link>
+              , and the playground stages it with every option live.
+            </p>
+            <p className={s.introBody}>
+              There are three ways to add it. The full install adds everything to a Next.js app
+              with one command; bring a key. UI only puts the chat panel over an endpoint you
+              already have. Headless gives you the engine under your own design. The packages are
+              at the end.
             </p>
           </div>
 
@@ -345,8 +352,8 @@ export default function ChatInstallPage() {
             <h3 className={s.propsHeading}>Try it with no key</h3>
             <p className={s.sectionNote}>
               A script is a transport. Write the exchange in advance and the panel plays it back with
-              everything: the thinking, the reveal, the cards, the chips. The preview on the overview
-              is one of these.
+              everything: the thinking, the reveal, the cards, the chips. The examples on the
+              component page are these.
             </p>
             <CodeBlock code={SCRIPT_SNIPPET} language="tsx" showCopy />
 
@@ -424,21 +431,6 @@ export default function ChatInstallPage() {
               turn. A staged turn never reaches the model.
             </p>
             <CodeBlock code={DIRECTOR_SNIPPET} language="ts" showCopy />
-          </section>
-
-          {/* ----------------------------------------------------- props */}
-          <section id="props" className={`${s.section} animate-in animate-delay-3`}>
-            <SectionTitle title="Props" />
-            <p className={s.sectionNote}>
-              Read from the same JSDoc that ships in the package&apos;s types. Copy for agents hands
-              your coding agent the same contract.
-            </p>
-            {widgetApi?.exports.map((exported) => (
-              <div key={exported.component} className={s.propsBlock}>
-                <h3 className={s.propsHeading}>{exported.component}</h3>
-                <PropsTable exported={exported} />
-              </div>
-            ))}
           </section>
 
           {/* -------------------------------------------------- packages */}

@@ -511,7 +511,7 @@ export default function GetStartedPage() {
                 </p>
                 <p className={styles.sectionNote}>
                   The conversation itself ships too, as one widget. The{" "}
-                  <Link href="/chat/install" className={styles.inlineLink}>chat widget</Link>{" "}
+                  <Link href="/docs/chat" className={styles.inlineLink}>chat widget</Link>{" "}
                   composes those components into the whole thing: the panel with its
                   docked, overlay and takeover forms, the streaming engine, the
                   threads, the rich cards, and the server handlers that call the
@@ -526,8 +526,8 @@ export default function GetStartedPage() {
                 </p>
                 <CodeBlock code={CHAT_SNIPPET} language="bash" showCopy />
                 <p className={styles.sectionNote}>
-                  Everything the widget takes and does, feature by feature, is on
-                  its own page: <Link href="/chat" className={styles.inlineLink}>the chat widget</Link>.
+                  Every option it takes, shown on the chat itself, is on{" "}
+                  <Link href="/components/ai-chat" className={styles.inlineLink}>its component page</Link>.
                 </p>
               </section>
 

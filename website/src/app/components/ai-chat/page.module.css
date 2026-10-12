@@ -1,0 +1,297 @@
+/* ============================================
+   AI CHAT (component page)
+   The standard component page shell, the live preview's stage, and the
+   plain stacks the examples sit in, the way the other component pages
+   show theirs.
+   ============================================ */
+.dsLayout {
+  display: flex;
+  gap: var(--layout-column-gap);
+  width: 100%;
+  max-width: 1440px;
+  padding-top: var(--primitive-gap-1000);
+}
+
+.dsContent {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-2000);
+}
+
+.pageHeader {
+  margin-top: calc(var(--primitive-gap-1000) - var(--gap-2000));
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--primitive-gap-500);
+  width: 100%;
+}
+
+.pageTitle {
+  font-family: var(--font-display-2-family);
+  font-size: var(--font-display-2-size);
+  font-weight: var(--font-display-2-weight);
+  line-height: var(--font-display-2-line-height);
+  letter-spacing: var(--font-display-2-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.introSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-500);
+}
+
+.subDisplay {
+  font-family: var(--font-sub-display-family);
+  font-size: var(--font-sub-display-size);
+  font-weight: var(--font-sub-display-weight);
+  line-height: var(--font-sub-display-line-height);
+  letter-spacing: var(--font-sub-display-letter-spacing);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.introBody {
+  margin: 0;
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-secondary);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-500);
+  scroll-margin-top: var(--layout-anchor-clearance);
+}
+
+.section > :global(.ds-section-title:not(.ds-section-title--no-divider)) {
+  margin-bottom: calc(var(--gap-1000) - var(--primitive-gap-500));
+}
+
+.sectionNote {
+  margin: 0;
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-secondary);
+}
+
+.sectionNote code {
+  color: var(--color-text-primary);
+}
+
+.inlineLink {
+  color: var(--color-text-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ============================================
+   VIEWPORT TOGGLE: the Desktop and Mobile tabs every example follows
+   ============================================ */
+.viewportToggle {
+  display: flex;
+  align-items: center;
+  gap: var(--primitive-gap-400);
+  flex-wrap: wrap;
+}
+
+.viewportNote {
+  margin: 0;
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-tertiary);
+}
+
+/* ============================================
+   THE STAGES: the chat itself, one per example
+   ============================================ */
+.stagePhone {
+  display: flex;
+  justify-content: center;
+}
+
+/* Several stages side by side, each a compact chat, so a change of one
+   option can be read across them without the page growing by a stage each. */
+.stageGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gap-500);
+}
+
+.stageCell {
+  margin: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+}
+
+.stageCellWide {
+  grid-column: 1 / -1;
+}
+
+.stageCaption {
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-secondary);
+}
+
+.stagePhone .stage {
+  max-width: 390px;
+}
+
+.stage {
+  display: flex;
+  margin-inline: auto;
+  background: var(--color-bg-glass);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
+  box-shadow: var(--shadow-floating);
+  overflow: hidden;
+  backdrop-filter: blur(24px);
+}
+
+.disclaimerAction {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+/* ============================================
+   PARTS: the components inside
+   ============================================ */
+.parts {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-200);
+}
+
+.partChip {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--padding-100) var(--padding-300);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-bg-container-primary);
+  color: var(--color-text-primary);
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  text-decoration: none;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.partChip:hover {
+  background: var(--color-bg-container-secondary);
+}
+
+/* ============================================
+   REFERENCE: props, events, packages
+   ============================================ */
+.propsBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+}
+
+/* A subheading inside a section opens a new run: it sits a step further
+   from what precedes it than from what follows. */
+.section > .propsHeading:not(:first-of-type) {
+  margin-top: var(--gap-500);
+}
+
+.propsHeading {
+  margin: 0;
+  font-family: var(--font-heading-3-family);
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+  letter-spacing: var(--font-heading-3-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.defList {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.defRow {
+  display: grid;
+  grid-template-columns: minmax(0, 220px) 1fr;
+  gap: var(--gap-100) var(--gap-500);
+  align-items: baseline;
+  padding: var(--padding-300) 0;
+  border-bottom: var(--border-025) solid var(--color-divider);
+}
+
+.defKey {
+  margin: 0;
+  font-family: var(--font-family-code);
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-primary);
+  word-break: break-word;
+}
+
+.defWhat {
+  margin: 0;
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+}
+
+.defMeta {
+  grid-column: 2;
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-tertiary);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 959px) {
+  /* The title and its links stack, the way every component page's header
+     does, so the two links can never push the page wider than a phone. */
+  .pageHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .dsLayout {
+    padding-left: 0;
+    min-width: 0;
+  }
+
+  .dsContent {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .defRow {
+    grid-template-columns: 1fr;
+  }
+
+  .stageGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .defMeta {
+    grid-column: 1;
+  }
+}

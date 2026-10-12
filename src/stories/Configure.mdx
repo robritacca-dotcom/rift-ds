@@ -4,6 +4,7 @@
     and the content-audit skill owns that. */}
 import { Meta } from "@storybook/addon-docs/blocks";
 import { COMPONENT_COUNT } from "../components/registry";
+import { chatWidget } from "../chat/registry";
 import { TOKEN_COUNT } from "../tokens/registry";
 import { THEME_SELECTOR_ORDER } from "../../website/src/lib/theme/presets";
 import { BASE_THEME_ID } from "../../website/src/lib/theme/brand";
@@ -43,7 +44,7 @@ import { Button, Card, Badge } from 'rift-ds';
 
 The stylesheet carries the primitives, the semantic tokens, and both themes: import it once at your app root. Deep imports work too (`rift-ds/components/Button/Button`), and the recharts-backed charts live behind a separate `/charts` entry so the optional `recharts` peer is only needed if you use them (the dependency-free chart pieces export from the main barrel with everything else).
 
-The AI chat ships as one widget too, under `rift-ds/chat`: the panel, the streaming engine, the threads and the server handlers, scaffolded into a Next.js app by `npx rift-ds init chat` and documented at <a href={`${SITE_URL}/chat`}>{`${SITE_URL.replace("https://", "")}/chat`}</a> (the `Chat/ChatWidget` stories here run it on its scripted transport).
+The AI chat ships as one widget too, under `rift-ds/chat`: the panel, the streaming engine, the threads and the server handlers, scaffolded into a Next.js app by `npx rift-ds init chat` and documented at <a href={`${SITE_URL}/components/${chatWidget.slug}`}>{`${SITE_URL.replace("https://", "")}/components/${chatWidget.slug}`}</a>, with how to add it at <a href={`${SITE_URL}/docs/chat`}>{`${SITE_URL.replace("https://", "")}/docs/chat`}</a> (the `Chat/ChatWidget` stories here run it on its scripted transport).
 
 The full install and theming guide lives at <a href={`${SITE_URL}/docs/get-started`}>{`${SITE_URL.replace("https://", "")}/docs/get-started`}</a>, with two more ways in beside the package: pull single components as source through the shadcn CLI, or clone the repo outright. Coding agents can read the same reference over MCP: point any Model Context Protocol client at <code>{`${SITE_URL}/api/mcp`}</code> for the component list, prop contracts, and tokens.
 

@@ -1,5 +1,6 @@
 import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
-import { componentMetadata } from "rift-ds/components/registry";
+import { componentPages, isWidgetSlug } from "@/data/component-pages";
+import { chatWidget } from "rift-ds/chat";
 import { SITE_URL } from "@/config/brand.generated";
 import styles from "./ComponentInstallStrip.module.css";
 
@@ -13,12 +14,17 @@ import styles from "./ComponentInstallStrip.module.css";
  * one, so the strip can neither drift nor go missing.
  */
 export default function ComponentInstallStrip({ slug }: { slug: string }) {
-  const component = componentMetadata.find((c) => c.slug === slug);
+  const component = componentPages.find((c) => c.slug === slug);
   if (!component) return null;
 
-  const importPath = component.recharts
-    ? "rift-ds/charts"
-    : `rift-ds/components/${component.name}/${component.name}`;
+  // The chat widget lives in its own subpath (src/chat/registry.json names it);
+  // every library component is a deep path under components/, or the charts
+  // barrel when it needs recharts.
+  const importPath = isWidgetSlug(slug)
+    ? `rift-ds${Object.keys(chatWidget.subpaths)[0].slice(1)}`
+    : component.recharts
+      ? "rift-ds/charts"
+      : `rift-ds/components/${component.name}/${component.name}`;
 
   const snippet = [
     `// From the npm package`,

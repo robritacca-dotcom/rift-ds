@@ -43,7 +43,7 @@ The primary typeface is not bundled: set `--font-family-primary` to your own (th
 
 ## The chat widget
 
-The whole AI chat as one installable widget: the panel, the conversation engine, the streaming protocol and the server handlers, configured with props. It is the package's one widget, separate from the components: `ChatWidget`, `ChatProvider` and `ChatLauncher` over a `useChat` engine, with the server half as web-standard request handlers. Scaffold it into a Next.js app router project with one command, which writes the three routes, the mount and an env example and never overwrites a file:
+The whole AI chat, assembled: the panel, the streaming replies, the history, the cards a reply can carry and the server handlers, set up with props. It is the package's one widget, separate from the components: `ChatWidget`, `ChatProvider` and `ChatLauncher` over a `useChat` engine, with the server half as web-standard request handlers. Scaffold it into a Next.js app router project with one command, which writes the three routes, the mount and an env example and never overwrites a file:
 
 ```bash
 npx rift-ds init chat
@@ -57,7 +57,7 @@ Its subpaths, each with the optional peers it needs:
 - `rift-ds/chat/demo`: A scripted conversation with rich cards and fixtures, for a preview that needs no key. Peers: recharts.
 - `rift-ds/chat/chat.css`: The widget's stylesheet.
 
-Its props, protocol and server options are documented at https://rift-ds.com/chat (the contract as markdown at https://rift-ds.com/chat.md, and through the MCP `get_component` tool by the name `ChatWidget`). A scripted transport (`scriptChat()`, and the ready-made story in `rift-ds/chat/demo`) runs the widget with no model, route or key, for previews and tests.
+Every prop is documented at https://rift-ds.com/components/ai-chat (the contract as markdown at https://rift-ds.com/components/ai-chat.md, and through the MCP `get_component` tool by the name `ChatWidget`); how to add it, the protocol and the server options are at https://rift-ds.com/docs/chat. A scripted transport (`scriptChat()`, and the ready-made story in `rift-ds/chat/demo`) runs the widget with no model, route or key, for previews and tests.
 
 ## Timings in JavaScript
 

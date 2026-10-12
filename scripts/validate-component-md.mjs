@@ -3,14 +3,14 @@
  * validate-component-md.mjs
  *
  * Holds the generated markdown contract pages to their source: one
- * <slug>.md per public component under website/public/components/, and the
- * chat widget's beside its route at website/public/<slug>.md. Regenerates
- * the set in memory and checks three things:
+ * <slug>.md per public component under website/public/components/, the
+ * chat widget's included. Regenerates the set in memory and checks three
+ * things:
  *
  *   1. Every entry has its markdown page on disk.
  *   2. Every file in the components folder is a registered slug — an
  *      orphan means a component left the registry without taking its page
- *      along. (The site root is not swept: it holds other files.)
+ *      along.
  *   3. Every page byte-matches what the generator produces now, so a prop
  *      or description change cannot ship with a stale contract beside it.
  *

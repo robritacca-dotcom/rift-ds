@@ -592,7 +592,9 @@ const linkLines = (links) =>
  */
 function componentDocLines() {
   const registry = JSON.parse(read(join(repoRoot, 'src', 'components', 'registry.json')));
-  return registry.components
+  const widgets = JSON.parse(read(join(repoRoot, 'src', 'chat', 'registry.json')));
+  // The chat widget's page sits under /components with the rest (src/chat/registry.json).
+  return [...registry.components, ...widgets.widgets]
     .map((c) => `- ${c.label} (/components/${c.slug})`)
     .sort((a, b) => a.localeCompare(b))
     .join('\n');
@@ -647,7 +649,6 @@ Every page on the site. Link to these paths when pointing someone at more detail
 ### Main pages
 
 - Home (/): the design system on one page, with live component demos
-- Chat (/chat): the whole AI chat as one installable widget; /chat/overview shows what it does, and /chat/install covers the three ways in (the full install with one command, the panel over your own endpoint, the headless engine under your own UI) and every prop
 - Playground (/playground): re-theme the design system live and export the theme as CSS, a THEME.md and an agent prompt
 
 ### Design system docs

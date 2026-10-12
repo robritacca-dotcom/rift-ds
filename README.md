@@ -46,7 +46,7 @@ The whole AI chat ships as one widget: the panel with its docked, overlay and ta
 npx rift-ds init chat
 ```
 
-Its props, protocol and server options are on [the chat page](https://rift-ds.com/chat).
+Every prop it takes is on [its component page](https://rift-ds.com/components/ai-chat), and the three ways to add it, with the protocol and the server options, are on [the AI chat docs page](https://rift-ds.com/docs/chat).
 
 ## Set up your agent
 

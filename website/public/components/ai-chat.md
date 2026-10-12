@@ -1,6 +1,6 @@
-# Chat
+# AI chat
 
-The whole AI chat as one installable widget: the panel, the conversation engine, the streaming protocol and the server handlers, configured with props.
+The whole AI chat, assembled: the panel, the streaming replies, the history, the cards a reply can carry and the server handlers, set up with props.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.7.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
@@ -14,7 +14,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.7.0. The same data
 - Scaffold: `npx rift-ds init chat`
 - Composes: AgentRail, AgentStatus, AiButton, AttachmentDropZone, AttachmentGroup, ChatHeader, ChatMessage, ChatThread, CircularButton, CodeBlock, Composer, DropdownMenu, Mention, ModelPicker, PromptSuggestions, Prose, Reasoning, ThreadPanel, ThreadTabs
 - Rendering: client component (declares 'use client')
-- Live docs: https://rift-ds.com/chat
+- Live docs: https://rift-ds.com/components/ai-chat
 
 ## ChatWidget props
 

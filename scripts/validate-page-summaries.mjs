@@ -125,7 +125,10 @@ for (const [route, entry] of Object.entries(summaries.routes)) {
 /* ---- Coverage: every route has a summary or a reason not to ---- */
 
 const routes = siteRoutes();
-const componentSlugs = new Set(componentRegistry.components.map((c) => c.slug));
+// The chat widget's page derives its summary like a component's (src/chat/registry.json).
+const widgetRegistry = JSON.parse(read(join(repoRoot, 'src', 'chat', 'registry.json')));
+const componentPages = [...componentRegistry.components, ...widgetRegistry.widgets];
+const componentSlugs = new Set(componentPages.map((c) => c.slug));
 
 for (const route of routes) {
   if (chromeless.has(route)) continue; // no FAB, no panel
@@ -150,7 +153,7 @@ for (const route of Object.keys(summaries.routes)) {
 }
 
 /* The derived component chip label must fit the budget for every label. */
-for (const c of componentRegistry.components) {
+for (const c of componentPages) {
   const label = `How do I use ${c.label}?`;
   if (label.length > maxChipChars)
     errors.push(

@@ -4,7 +4,7 @@
  *
  * Builds website/public/components/<slug>.md — one markdown page per public
  * component, served beside the live docs page (append .md to a component
- * URL) — and website/public/<slug>.md for the chat widget, served beside
+ * URL), the chat widget's page under /components included, served beside
  * /chat the same way. The content is the prop contract for an agent to read
  * or a visitor to copy: registry metadata, import lines, and the documented
  * props of every export, from the same assembleComponentApi() pass that
@@ -27,10 +27,8 @@ import { PACKAGE_NAME, PACKAGE_VERSION } from './package-manifest.mjs';
 import { SITE_URL } from './brand.mjs';
 import { chatRegistry, repoRoot } from './component-docgen.mjs';
 
-/** The component pages' folder. */
+/** The component pages' folder, the chat widget's page included. */
 export const outputDir = join(repoRoot, 'website', 'public', 'components');
-/** The widget pages' folder: the site root, beside the widget's own route. */
-export const widgetOutputDir = join(repoRoot, 'website', 'public');
 
 /**
  * The canonical site origin — scripts/brand.mjs is the one home for it,
@@ -59,7 +57,7 @@ export function buildComponentMarkdown(entry, origin) {
   const rendering = entry.client
     ? `client component (declares 'use client')`
     : `server-renderable (no 'use client')`;
-  const docsPath = isWidget ? `/${entry.slug}` : `/components/${entry.slug}`;
+  const docsPath = `/components/${entry.slug}`;
 
   const lines = [
     `# ${entry.label}`,
@@ -114,14 +112,14 @@ export function buildComponentMarkdown(entry, origin) {
 }
 
 /**
- * Every generated file as { slug, dir, content }, in registry order:
- * components into outputDir, widgets into widgetOutputDir.
+ * Every generated file as { slug, dir, content }, in registry order, all
+ * into outputDir: the chat widget's page sits under /components too.
  */
 export function assembleComponentMdFiles() {
   const origin = siteUrl();
   return assembleComponentApi().map((entry) => ({
     slug: entry.slug,
-    dir: entry.kind === 'widget' ? widgetOutputDir : outputDir,
+    dir: outputDir,
     content: buildComponentMarkdown(entry, origin),
   }));
 }

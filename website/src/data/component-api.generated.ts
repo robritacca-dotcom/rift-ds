@@ -12039,10 +12039,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
   {
     "kind": "widget",
     "name": "ChatWidget",
-    "label": "Chat",
-    "slug": "chat",
+    "label": "AI chat",
+    "slug": "ai-chat",
     "category": "widget",
-    "description": "The whole AI chat as one installable widget: the panel, the conversation engine, the streaming protocol and the server handlers, configured with props.",
+    "description": "The whole AI chat, assembled: the panel, the streaming replies, the history, the cards a reply can carry and the server handlers, set up with props.",
     "client": true,
     "importPath": "rift-ds/chat",
     "barrel": "chat",

@@ -1,9 +1,7 @@
 /* ============================================
-   CHAT SECTION
-   One stylesheet for the chat pages: the index, the overview and install.
-   The standard doc page shell, the live preview's stage, and the few
-   containers the examples and reference lists need. Examples sit in a
-   plain stack, the way the component pages show theirs.
+   AI CHAT (docs)
+   The standard doc page shell, plus the reference lists the install
+   sections need.
    ============================================ */
 .dsLayout {
   display: flex;
@@ -86,101 +84,10 @@
   color: var(--color-text-primary);
 }
 
-/* ============================================
-   EXAMPLES: a plain stack, no box
-   ============================================ */
-.stack {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-400);
-  width: 100%;
-  max-width: 760px;
-}
-
-.stackNarrow {
-  max-width: 340px;
-}
-
-.stackRow {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  gap: var(--gap-500);
-}
-
-.stackRow > * {
-  flex: 1 1 320px;
-  min-width: 0;
-}
-
-/* ============================================
-   THE STAGE: the live preview
-   ============================================ */
-.stageBar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--gap-400);
-}
-
-.stageNote {
-  margin: 0;
-  flex: 1 1 320px;
-  font-size: var(--font-paragraph-sm-size);
-  line-height: var(--font-paragraph-sm-line-height);
-  color: var(--color-text-secondary);
-}
-
-.stage {
-  display: flex;
-  margin-inline: auto;
-  background: var(--color-bg-glass);
-  border: var(--border-025) solid var(--color-bg-container-border);
-  border-radius: var(--radius-600);
-  box-shadow: var(--shadow-floating);
-  overflow: hidden;
-  backdrop-filter: blur(24px);
-}
-
-.disclaimerAction {
-  background: none;
-  border: 0;
-  padding: 0;
-  font: inherit;
-  color: inherit;
+.inlineLink {
+  color: var(--color-text-primary);
   text-decoration: underline;
   text-underline-offset: 2px;
-  cursor: pointer;
-}
-
-/* ============================================
-   PARTS: the components inside
-   ============================================ */
-.parts {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--gap-200);
-}
-
-.partChip {
-  display: inline-flex;
-  align-items: center;
-  padding: var(--padding-100) var(--padding-300);
-  border: var(--border-025) solid var(--color-bg-container-border);
-  border-radius: var(--radius-pill);
-  background: var(--color-bg-container-primary);
-  color: var(--color-text-primary);
-  font-size: var(--font-paragraph-sm-size);
-  line-height: var(--font-paragraph-sm-line-height);
-  text-decoration: none;
-  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
-}
-
-.partChip:hover {
-  background: var(--color-bg-container-secondary);
 }
 
 /* ============================================
@@ -190,6 +97,12 @@
   display: flex;
   flex-direction: column;
   gap: var(--gap-300);
+}
+
+/* A subheading inside a section opens a new run: it sits a step further
+   from what precedes it than from what follows. */
+.section > .propsHeading:not(:first-of-type) {
+  margin-top: var(--gap-500);
 }
 
 .propsHeading {
@@ -241,47 +154,16 @@
 }
 
 /* ============================================
-   INDEX: the TOC grid, in the house format
-   ============================================ */
-.tocGrid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--primitive-gap-500);
-  width: 100%;
-}
-
-.circlePreview {
-  width: 184px;
-  height: 184px;
-  min-width: 184px;
-  min-height: 184px;
-  aspect-ratio: 1 / 1;
-  flex-shrink: 0;
-  border-radius: 999px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--color-bg-container-primary);
-}
-
-.circlePreview > :global(.material-symbols-rounded) {
-  --icon-size: var(--icon-size-1200);
-  color: var(--color-text-secondary);
-}
-
-/* ============================================
    RESPONSIVE
    ============================================ */
 @media (max-width: 959px) {
-  .circlePreview {
-    width: 150px;
-    height: 150px;
-    min-width: 150px;
-    min-height: 150px;
+  /* The title and its links stack, the way every component page's header
+     does, so the two links can never push the page wider than a phone. */
+  .pageHeader {
+    flex-direction: column;
+    align-items: flex-start;
   }
-}
 
-@media (max-width: 768px) {
   .dsLayout {
     padding-left: 0;
     min-width: 0;
@@ -298,18 +180,5 @@
 
   .defMeta {
     grid-column: 1;
-  }
-
-  .stackNarrow {
-    max-width: none;
-  }
-}
-
-@media (max-width: 600px) {
-  .circlePreview {
-    width: 120px;
-    height: 120px;
-    min-width: 120px;
-    min-height: 120px;
   }
 }

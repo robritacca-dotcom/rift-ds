@@ -6,6 +6,8 @@ export interface ChatWidgetMeta {
   slug: string;
   label: string;
   description: string;
+  /** The component category whose /components section and sidebar group the widget's page joins. */
+  category: string;
   /** The init bin's subcommand that scaffolds it. */
   command: string;
   /** Each package subpath the widget occupies, with what it holds. */

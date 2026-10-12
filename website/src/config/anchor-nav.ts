@@ -23,7 +23,6 @@ export const ANCHOR_NAV_EXCLUDED_ROUTES = new Set([
   "/",
   "/docs",
   "/foundations",
-  "/chat",
   "/templates",
   "/playground",
   "/graph",

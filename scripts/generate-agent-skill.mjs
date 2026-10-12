@@ -277,7 +277,7 @@ ${Object.entries(widget.subpaths)
   })
   .join('\n')}
 
-Its props, protocol and server options are documented at ${origin}/${widget.slug} (the contract as markdown at ${origin}/${widget.slug}.md, and through the MCP \`get_component\` tool by the name \`${widget.name}\`). A scripted transport (\`scriptChat()\`, and the ready-made story in \`${PACKAGE_NAME}/chat/demo\`) runs the widget with no model, route or key, for previews and tests.
+Every prop is documented at ${origin}/components/${widget.slug} (the contract as markdown at ${origin}/components/${widget.slug}.md, and through the MCP \`get_component\` tool by the name \`${widget.name}\`); how to add it, the protocol and the server options are at ${origin}/docs/chat. A scripted transport (\`scriptChat()\`, and the ready-made story in \`${PACKAGE_NAME}/chat/demo\`) runs the widget with no model, route or key, for previews and tests.
 
 ## Timings in JavaScript
 

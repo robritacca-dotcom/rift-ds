@@ -4,10 +4,8 @@ import ComponentsSidebar from "../../components/Sidebar/ComponentsSidebar";
 import PageLinks from "../../components/PageLinks/PageLinks";
 import ComponentCardGrid from "../../components/ComponentCardGrid/ComponentCardGrid";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
-import {
-  componentMetadata,
-  componentCategoryMetadata,
-} from "rift-ds/components/registry";
+import { componentCategoryMetadata } from "rift-ds/components/registry";
+import { componentPages } from "@/data/component-pages";
 import styles from "./page.module.css";
 import { FIGMA_FILE_URL } from "@/config/brand.generated";
 
@@ -43,11 +41,11 @@ export default function ComponentsPage() {
               <section key={cat.id} id={cat.id} className={styles.categorySection}>
                 <SectionTitle
                   title={cat.label}
-                  trailing={`${componentMetadata.filter((c) => c.category === cat.id).length}`}
+                  trailing={`${componentPages.filter((c) => c.category === cat.id).length}`}
                   divider={false}
                 />
                 <ComponentCardGrid
-                  components={componentMetadata.filter((c) => c.category === cat.id)}
+                  components={componentPages.filter((c) => c.category === cat.id)}
                 />
               </section>
             ))}

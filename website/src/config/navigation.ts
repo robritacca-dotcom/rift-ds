@@ -5,11 +5,9 @@
    ============================================ */
 
 import type { Metadata } from "next";
-import {
-  COMPONENT_COUNT,
-  componentMetadata,
-  componentCategoryMetadata,
-} from "rift-ds/components/registry";
+import { COMPONENT_COUNT, componentCategoryMetadata } from "rift-ds/components/registry";
+import { componentPages } from "@/data/component-pages";
+import { chatWidget } from "rift-ds/chat";
 
 export interface NavLink {
   href: string;
@@ -150,17 +148,10 @@ const FOUNDATION_ICONS: Record<string, string> = {
   "/foundations/typography": "text_fields",
 };
 
-/* The Chat panel's rows: the Install page's three sections, so a visitor
-   lands on the way in they want. The overview is the panel's showcase. */
-const CHAT_PANEL_ITEMS: MegaItem[] = [
-  { href: "/chat/install#full-install", label: "Full install", description: "One command adds the chat, its routes and its limits", icon: "download" },
-  { href: "/chat/install#ui-only", label: "UI only", description: "The chat panel over your own endpoint", icon: "web_asset" },
-  { href: "/chat/install#headless", label: "Headless", description: "The engine under your own UI", icon: "code" },
-];
-
 const DOC_ITEM_ICONS: Record<string, string> = {
   "/overview": "account_tree",
   "/docs/get-started": "rocket_launch",
+  "/docs/chat": "forum",
   "/blueprints/claude": "description",
   "/blueprints/design": "description",
   "/blueprints/content-design": "description",
@@ -199,6 +190,16 @@ function buildNavSections(): NavSection[] {
             items: componentCategoryItems,
           },
         ],
+        // The chat widget leaves the grid: it is the panel's showcase, the
+        // one page under /components that is a whole product surface
+        // rather than a part (src/chat/registry.json names it).
+        showcase: {
+          href: `/components/${chatWidget.slug}`,
+          overline: "The whole chat",
+          label: chatWidget.label,
+          description: chatWidget.description,
+          graphic: "chat",
+        },
       },
       isActive: (path) => path.startsWith("/components"),
     },
@@ -235,25 +236,6 @@ function buildNavSections(): NavSection[] {
       isActive: (path) => path.startsWith("/foundations"),
     },
     {
-      id: "chat",
-      label: "Chat",
-      href: "/chat",
-      icon: "forum",
-      description:
-        "An AI chat for your app, added in minutes: install it, set it up with props, ship it",
-      mega: {
-        groups: [{ id: "install", label: "Install", items: CHAT_PANEL_ITEMS }],
-        showcase: {
-          href: "/chat/overview",
-          overline: "See it working",
-          label: "Overview",
-          description: "Replies that arrive as they are written, cards inside a reply, and a panel that fits any screen.",
-          graphic: "chat",
-        },
-      },
-      isActive: (path) => path.startsWith("/chat"),
-    },
-    {
       id: "templates",
       label: "Templates",
       href: "/templates",
@@ -286,7 +268,7 @@ function buildNavSections(): NavSection[] {
             label: "Learn",
             // Get started leaves the grid: it is the panel's showcase.
             items: linksToMegaItems(
-              docsSidebarLinks.filter((l) => l.href === "/overview"),
+              docsSidebarLinks.filter((l) => ["/overview", "/docs/chat"].includes(l.href)),
               DOC_ITEM_ICONS
             ),
           },
@@ -364,7 +346,7 @@ export function getSectionItems(): MegaItem[] {
  */
 export const componentsSidebarLinks: NavLink[] = [
   { href: "/components", label: "Components overview" },
-  ...[...componentMetadata]
+  ...[...componentPages]
     .sort((a, b) => a.label.localeCompare(b.label))
     .map((c) => ({
       href: `/components/${c.slug}`,
@@ -390,7 +372,7 @@ export const componentsSidebarGroups: SidebarGroup[] = componentCategoryMetadata
   (cat) => ({
     id: cat.id,
     label: cat.label,
-    links: [...componentMetadata]
+    links: [...componentPages]
       .filter((c) => c.category === cat.id)
       .sort((a, b) => a.label.localeCompare(b.label))
       .map((c) => ({
@@ -424,22 +406,13 @@ export const docsSidebarLinks: NavLink[] = [
   { href: "/docs", label: "Contents" },
   { href: "/overview", label: "Overview", description: "How the system is built, tested, and shipped" },
   { href: "/docs/get-started", label: "Get started", description: "Install the package and theme it" },
+  { href: "/docs/chat", label: "AI chat", description: "Add the chat: one command, the panel alone, or the engine" },
   { href: "/blueprints/claude", label: "Claude MD", description: "The agent instructions behind this repo" },
   { href: "/blueprints/design", label: "Design MD", description: "The design spec behind the system" },
   { href: "/blueprints/content-design", label: "Content MD", description: "The style guide behind the words" },
   { href: "/skills", label: "Skills", description: "The agent skills that maintain the site" },
   { href: "/loops", label: "Loops", description: "The recurring loops that keep it current" },
   { href: "/releases", label: "Release log", description: "One entry per npm release" },
-];
-
-/**
- * Sidebar for the Chat section: the widget's overview, then the three ways
- * in, named by what the consumer brings. The order is the reading order.
- */
-export const chatSidebarLinks: NavLink[] = [
-  { href: "/chat", label: "Contents" },
-  { href: "/chat/overview", label: "Overview", description: "What the chat does, shown live: replies, cards, screens, history" },
-  { href: "/chat/install", label: "Install", description: "Three ways to add it: the full install, UI only, or headless; then the props" },
 ];
 
 /**
@@ -528,7 +501,6 @@ const allSidebarLinks: NavLink[] = [
   ...componentsSidebarLinks,
   ...foundationsSidebarLinks,
   ...docsSidebarLinks,
-  ...chatSidebarLinks,
   ...templatesSidebarLinks,
 ];
 
@@ -552,7 +524,7 @@ export const TITLE_TEMPLATE = `%s · ${TITLE_SUFFIX}`;
  * scripts/validate-website-surfaces.mjs, so an added or removed section image
  * can't leave this list stale.
  */
-export const SECTION_OG_IMAGE_SEGMENTS = ["/chat", "/components", "/foundations"];
+export const SECTION_OG_IMAGE_SEGMENTS = ["/components", "/foundations"];
 
 /** The og:image for a page: its section's own card when one exists, else the root card. */
 function ogImageForPath(path?: string): string {
@@ -644,11 +616,11 @@ export function pageMetadata(href: string, description?: string): Metadata {
  * the page's layout.tsx — the registry is the only place it lives now.
  */
 export function componentPageMetadata(slug: string): Metadata {
-  const meta = componentMetadata.find((c) => c.slug === slug);
+  const meta = componentPages.find((c) => c.slug === slug);
   if (!meta) {
     throw new Error(
-      `componentPageMetadata: no component registered with slug "${slug}". ` +
-        `Add it to src/components/registry.json.`
+      `componentPageMetadata: no component or widget registered with slug "${slug}". ` +
+        `Add it to src/components/registry.json (or src/chat/registry.json for a widget).`
     );
   }
   return pageMetadata(`/components/${slug}`, meta.description);
@@ -677,7 +649,6 @@ const breadcrumbSections: SectionConfig[] = [
   { base: "/foundations", label: "Foundations", sidebar: foundationsSidebarLinks },
   { base: "/components", label: "Components", sidebar: componentsSidebarLinks },
   { base: "/templates", label: "Templates", sidebar: templatesSidebarLinks },
-  { base: "/chat", label: "Chat", sidebar: chatSidebarLinks },
 ];
 
 function slugToTitle(slug: string): string {

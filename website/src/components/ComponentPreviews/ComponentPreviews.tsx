@@ -613,6 +613,23 @@ const previews: Record<string, () => ReactNode> = {
       </div>
     </>
   ),
+  "ai-chat": () => (
+    <>
+      <div style={{ width: "100%", height: "150px", display: "flex", flexDirection: "column", border: "1px solid var(--color-bg-container-border)", borderRadius: "16px", overflow: "hidden" }}>
+        <ChatThread anchor={false} style={{ flex: 1, "--ds-chat-thread-padding-inline": "var(--padding-300)" } as React.CSSProperties}>
+          <ChatMessage role="user" size="compact">
+            How is the trial going?
+          </ChatMessage>
+          <ChatMessage role="assistant" size="compact">
+            Signups have climbed for five of the six weeks since the trial opened.
+          </ChatMessage>
+        </ChatThread>
+        <div style={{ padding: "var(--padding-200) var(--padding-300)", borderTop: "1px solid var(--color-divider)" }}>
+          <PromptSuggestions size="compact" layout="scroll" suggestions={[{ id: "plans", label: "What do the plans include?" }, { id: "invite", label: "Invite my team" }]} />
+        </div>
+      </div>
+    </>
+  ),
   "chat-thread": () => (
     <>
       <div style={{ width: "100%", height: "150px", display: "flex", flexDirection: "column", border: "1px solid var(--color-bg-container-border)", borderRadius: "16px", overflow: "hidden" }}>

@@ -31,16 +31,19 @@ function ChatWireframe({ className }: { className?: string }) {
     <div
       className={className}
       aria-hidden="true"
-      style={{ display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "var(--primitive-padding-400)" }}
+      style={{ display: "flex", padding: "var(--primitive-padding-400) var(--primitive-padding-400) 0" }}
     >
       <div
         style={{
-          width: "72%",
+          width: "100%",
           display: "flex",
           flexDirection: "column",
-          gap: "var(--primitive-gap-200)",
+          gap: "var(--primitive-gap-300)",
+          borderBottom: 0,
+          borderBottomLeftRadius: 0,
+          borderBottomRightRadius: 0,
           padding: "var(--primitive-padding-300)",
-          borderRadius: "var(--radius-500)",
+          borderRadius: "var(--radius-400)",
           border: "var(--border-025) solid var(--color-bg-container-border)",
           background: "var(--color-bg-container-primary)",
         }}
@@ -54,21 +57,21 @@ function ChatWireframe({ className }: { className?: string }) {
             alignSelf: "flex-end",
             width: "48%",
             padding: "var(--primitive-padding-200)",
-            borderRadius: "var(--radius-500)",
+            borderRadius: "var(--radius-400)",
             background: "var(--color-bg-container-tertiary)",
           }}
         >
           <span style={{ display: "block", height: 6, borderRadius: "var(--radius-pill)", background: "var(--color-bg-container-secondary)" }} />
         </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: "var(--primitive-gap-100)", width: "78%" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "var(--primitive-gap-100)", width: "84%" }}>
           {line("100%")}
           {line("82%")}
           <div
             style={{
               display: "flex",
               alignItems: "flex-end",
-              gap: 3,
-              height: 34,
+              gap: 4,
+              height: 56,
               padding: "var(--primitive-padding-200)",
               borderRadius: "var(--radius-300)",
               border: "var(--border-025) solid var(--color-bg-container-border)",
@@ -81,8 +84,23 @@ function ChatWireframe({ className }: { className?: string }) {
         </div>
         <div
           style={{
-            marginTop: "var(--primitive-gap-100)",
-            height: 18,
+            alignSelf: "flex-end",
+            width: "40%",
+            padding: "var(--primitive-padding-200)",
+            borderRadius: "var(--radius-400)",
+            background: "var(--color-bg-container-tertiary)",
+          }}
+        >
+          <span style={{ display: "block", height: 6, borderRadius: "var(--radius-pill)", background: "var(--color-bg-container-secondary)" }} />
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: "var(--primitive-gap-100)", width: "70%" }}>
+          {line("100%")}
+          {line("64%")}
+        </div>
+        <div
+          style={{
+            marginTop: "var(--primitive-gap-200)",
+            height: 22,
             borderRadius: "var(--radius-pill)",
             border: "var(--border-025) solid var(--color-bg-container-border)",
           }}

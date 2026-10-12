@@ -1,11 +1,12 @@
 {
-  "$comment": "The widget registry: the fourth kind of thing the package ships, between the components and the templates. One member by design. `parts` names the library components the widget composes (held to src/components/registry.json by scripts/validate-chat-widget.mjs), `subpaths` the package exports it occupies (held to scripts/package-manifest.mjs), `peers` the optional peer dependencies each subpath needs (held to package.json). The /chat page, the chat corpus and the MCP tools read this file; never type its facts elsewhere.",
+  "$comment": "The widget registry: the fourth kind of thing the package ships, between the components and the templates. One member by design. `parts` names the library components the widget composes (held to src/components/registry.json by scripts/validate-chat-widget.mjs), `subpaths` the package exports it occupies (held to scripts/package-manifest.mjs), `category` the component category whose section and sidebar group its page joins (held to src/components/registry.json), `peers` the optional peer dependencies each subpath needs (held to package.json). The widget's page under /components, the /docs/chat page, the chat corpus and the MCP tools read this file; never type its facts elsewhere.",
   "widgets": [
     {
       "name": "ChatWidget",
-      "slug": "chat",
-      "label": "Chat",
-      "description": "The whole AI chat as one installable widget: the panel, the conversation engine, the streaming protocol and the server handlers, configured with props.",
+      "slug": "ai-chat",
+      "label": "AI chat",
+      "category": "ai",
+      "description": "The whole AI chat, assembled: the panel, the streaming replies, the history, the cards a reply can carry and the server handlers, set up with props.",
       "command": "init chat",
       "subpaths": {
         "./chat": "The widget, the provider, the launcher and the engine under them.",

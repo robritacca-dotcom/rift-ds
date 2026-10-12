@@ -1,0 +1,266 @@
+/* Labs: the glass chat. Colours, spaces, radii and type are semantic
+   tokens; the raw values are structural layout sizes (pane widths,
+   breakpoints), which pages own everywhere else on the site, and the two
+   that are the experiment itself: the blur radii and the scanline pitch. The glass tints are mixed from tokens in place, so they follow
+   the theme with no colour of their own. */
+
+.stage {
+  /* The experiment's own dials. */
+  --glass-blur: 44px;
+  --composer-blur: 72px;
+  --glass-tint: color-mix(in srgb, var(--color-bg-page-primary) 62%, transparent);
+  --glass-tint-deep: color-mix(in srgb, var(--color-bg-page-primary) 88%, transparent);
+  --scanline-pitch: 3px;
+
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  isolation: isolate;
+  background-color: var(--color-bg-page-primary);
+  height: calc(var(--layout-viewport-height, 100vh));
+  /* Stretch across the body's own padding (the templates' shell pattern),
+     so the stage runs edge to edge; the primitives mirror the body's
+     inset in globals.css. */
+  width: calc(100% + var(--primitive-padding-1000) * 2);
+  margin: calc(-1 * var(--primitive-padding-500))
+    calc(-1 * var(--primitive-padding-1000));
+}
+
+/* ----------------------------------------------------------------- art */
+
+/* The picture fills the stage. The canvas holds one cell per few CSS
+   pixels and is scaled up unsmoothed, which is the whole pixel look. A
+   raster of ground-coloured lines is cut into it here, behind the window,
+   at full strength: under the glass the blur dissolves them, in the clear
+   they read as a display's scanlines. */
+.art {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.art canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+}
+
+/* A picture in the backdrop slot covers the stage the same way. */
+.photo {
+  background-position: center;
+  background-size: cover;
+}
+
+.art::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent calc(var(--scanline-pitch) - 1px),
+    color-mix(in srgb, var(--color-bg-page-primary) 45%, transparent)
+      calc(var(--scanline-pitch) - 1px),
+    color-mix(in srgb, var(--color-bg-page-primary) 45%, transparent)
+      var(--scanline-pitch)
+  );
+}
+
+/* A second, faint pass over everything, the window included, so the
+   glass sits behind the same raster as the art without the text paying
+   for it in contrast. */
+.scanlines {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent calc(var(--scanline-pitch) - 1px),
+    color-mix(in srgb, var(--color-bg-page-primary) 10%, transparent)
+      calc(var(--scanline-pitch) - 1px),
+    color-mix(in srgb, var(--color-bg-page-primary) 10%, transparent)
+      var(--scanline-pitch)
+  );
+}
+
+/* -------------------------------------------------------------- window */
+
+/* The app window. It paints no glass of its own: the frost layers inside
+   it do, so the blur can vary across the pane. Inset far enough that the
+   top of the canopy clears the window's edge and stands crisp above it. */
+.window {
+  position: absolute;
+  z-index: 1;
+  inset: clamp(var(--padding-500), 7vh, 88px) clamp(var(--padding-500), 5vw, 96px);
+  display: flex;
+  overflow: hidden;
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
+  box-shadow: var(--shadow-modal);
+}
+
+/* The chat sits above the frost. */
+.window > :not(.frost) {
+  position: relative;
+  z-index: 1;
+}
+
+/* --------------------------------------------------------------- frost */
+
+/* The progressive blur. A stack of backdrop blurs, each masked to leave an
+   elliptical opening around the reveal point; the openings widen as the
+   blurs strengthen, and each layer blurs what the ones before it already
+   softened. So the pane is fully frosted at its edges, clears by degrees
+   toward the reveal, and at the centre the art comes through untouched.
+   The reveal sits over the canopy, just above the centred composer. */
+.frost {
+  --reveal-x: 60%;
+  --reveal-y: 30%;
+  --reveal-rx: 34%;
+  --reveal-ry: 36%;
+
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.frost > span {
+  position: absolute;
+  inset: 0;
+  -webkit-backdrop-filter: blur(var(--step-blur));
+  backdrop-filter: blur(var(--step-blur));
+  -webkit-mask-image: radial-gradient(
+    ellipse var(--reveal-rx) var(--reveal-ry) at var(--reveal-x) var(--reveal-y),
+    transparent var(--step-from),
+    black var(--step-to)
+  );
+  mask-image: radial-gradient(
+    ellipse var(--reveal-rx) var(--reveal-ry) at var(--reveal-x) var(--reveal-y),
+    transparent var(--step-from),
+    black var(--step-to)
+  );
+}
+
+.frost > span:nth-child(1) {
+  --step-blur: 1px;
+  --step-from: 55%;
+  --step-to: 80%;
+}
+
+.frost > span:nth-child(2) {
+  --step-blur: 3px;
+  --step-from: 70%;
+  --step-to: 95%;
+}
+
+.frost > span:nth-child(3) {
+  --step-blur: 8px;
+  --step-from: 85%;
+  --step-to: 110%;
+}
+
+.frost > span:nth-child(4) {
+  --step-blur: 18px;
+  --step-from: 100%;
+  --step-to: 125%;
+}
+
+.frost > span:nth-child(5) {
+  --step-blur: var(--glass-blur);
+  --step-from: 115%;
+  --step-to: 145%;
+}
+
+/* The tint rides the same opening, so the pane darkens toward its edges
+   as it blurs and the reveal keeps the art's own brightness. */
+.frost > span:nth-child(6) {
+  --step-blur: 0px;
+  --step-from: 60%;
+  --step-to: 135%;
+  -webkit-backdrop-filter: saturate(1.4);
+  backdrop-filter: saturate(1.4);
+  background-color: var(--glass-tint);
+}
+
+/* Once a conversation is on the pane the reveal closes: one even coat of
+   frost fades in over the opening, because a transcript cannot be read
+   over hard pixels. */
+.frostFull {
+  position: absolute;
+  inset: 0;
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.4);
+  backdrop-filter: blur(var(--glass-blur)) saturate(1.4);
+  background-color: var(--glass-tint);
+  opacity: 0;
+  transition: opacity var(--motion-duration-slow) var(--motion-ease-standard);
+}
+
+.window[data-active] .frostFull {
+  opacity: 1;
+}
+
+/* Everything below restyles the site chat in place; none of it changes
+   what the chat is. SiteChat paints no ground of its own (its host does),
+   so the frost shows through it untouched. */
+
+/* The threads rail: a near-solid coat of the ground over the frost, the
+   one opaque band in the window. */
+.rail {
+  background-color: var(--glass-tint-deep);
+}
+
+/* The composer is the hardest glass on the pane: a blur of its own, well
+   past the pane's, under a thin coat of the container colour. It sits at
+   the lip of the reveal, so the canopy above it is crisp and the same
+   canopy behind it is pure colour. */
+.window :global(.ds-composer) {
+  background-color: color-mix(
+    in srgb,
+    var(--color-bg-container-primary) 40%,
+    transparent
+  );
+  -webkit-backdrop-filter: blur(var(--composer-blur)) saturate(1.6);
+  backdrop-filter: blur(var(--composer-blur)) saturate(1.6);
+}
+
+/* ------------------------------------------------------------ launcher */
+
+.launcher {
+  position: absolute;
+  z-index: 1;
+  right: var(--padding-500);
+  bottom: var(--padding-500);
+}
+
+/* ---------------------------------------------------------- responsive */
+
+/* Below the dock threshold the window takes the stage back (the chat
+   folds its own rail into a sheet by measuring itself); the art shows around a slimmer margin and through the
+   glass. The negative margins mirror the body's inset in globals.css,
+   which steps down at these same breakpoints. */
+@media (max-width: 959px) {
+  .stage {
+    width: calc(100% + var(--primitive-padding-500) * 2);
+    margin: calc(-1 * var(--primitive-padding-500));
+  }
+
+  .window {
+    inset: var(--padding-300);
+  }
+}
+
+@media (max-width: 600px) {
+  .stage {
+    width: calc(100% + var(--primitive-padding-400) * 2);
+    margin: calc(-1 * var(--primitive-padding-500))
+      calc(-1 * var(--primitive-padding-400));
+  }
+
+  .window {
+    inset: var(--padding-200);
+  }
+}

@@ -647,7 +647,7 @@ Every page on the site. Link to these paths when pointing someone at more detail
 ### Main pages
 
 - Home (/): the design system on one page, with live component demos
-- Chat (/chat): the whole AI chat as one installable widget, with its props, protocol and server handlers
+- Chat (/chat): the whole AI chat as one installable widget; /chat/overview shows what it does, and /chat/install covers the three ways in (the full install with one command, the panel over your own endpoint, the headless engine under your own UI) and every prop
 - Playground (/playground): re-theme the design system live and export the theme as CSS, a THEME.md and an agent prompt
 
 ### Design system docs

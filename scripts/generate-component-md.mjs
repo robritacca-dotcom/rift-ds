@@ -20,7 +20,7 @@
  * the website's predev/prebuild — never edit the generated files by hand.
  */
 import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { assembleComponentApi } from './generate-component-api.mjs';
 import { PACKAGE_NAME, PACKAGE_VERSION } from './package-manifest.mjs';

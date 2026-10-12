@@ -12,6 +12,87 @@ const SHOWCASE_RAMPS = ["teal", "blue", "purple", "red", "orange", "yellow", "gr
 const SHOWCASE_STEPS = ["02", "03", "04", "05", "06", "07", "08"];
 
 /**
+ * A chat panel in outline: a header bar, a user bubble, an assistant reply
+ * carrying a small chart, and the composer. Token-drawn, decorative.
+ */
+function ChatWireframe({ className }: { className?: string }) {
+  const line = (width: string) => (
+    <span
+      style={{
+        display: "block",
+        width,
+        height: 6,
+        borderRadius: "var(--radius-pill)",
+        background: "var(--color-bg-container-tertiary)",
+      }}
+    />
+  );
+  return (
+    <div
+      className={className}
+      aria-hidden="true"
+      style={{ display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "var(--primitive-padding-400)" }}
+    >
+      <div
+        style={{
+          width: "72%",
+          display: "flex",
+          flexDirection: "column",
+          gap: "var(--primitive-gap-200)",
+          padding: "var(--primitive-padding-300)",
+          borderRadius: "var(--radius-500)",
+          border: "var(--border-025) solid var(--color-bg-container-border)",
+          background: "var(--color-bg-container-primary)",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: "var(--primitive-gap-100)" }}>
+          <span style={{ width: 10, height: 10, borderRadius: "50%", background: "var(--color-text-secondary)" }} />
+          {line("34%")}
+        </div>
+        <div
+          style={{
+            alignSelf: "flex-end",
+            width: "48%",
+            padding: "var(--primitive-padding-200)",
+            borderRadius: "var(--radius-500)",
+            background: "var(--color-bg-container-tertiary)",
+          }}
+        >
+          <span style={{ display: "block", height: 6, borderRadius: "var(--radius-pill)", background: "var(--color-bg-container-secondary)" }} />
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: "var(--primitive-gap-100)", width: "78%" }}>
+          {line("100%")}
+          {line("82%")}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "flex-end",
+              gap: 3,
+              height: 34,
+              padding: "var(--primitive-padding-200)",
+              borderRadius: "var(--radius-300)",
+              border: "var(--border-025) solid var(--color-bg-container-border)",
+            }}
+          >
+            {[40, 55, 45, 70, 85, 100].map((h, i) => (
+              <span key={i} style={{ flex: 1, height: `${h}%`, borderRadius: 2, background: "var(--color-chart-series-1)" }} />
+            ))}
+          </div>
+        </div>
+        <div
+          style={{
+            marginTop: "var(--primitive-gap-100)",
+            height: 18,
+            borderRadius: "var(--radius-pill)",
+            border: "var(--border-025) solid var(--color-bg-container-border)",
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+/**
  * A live specimen of the primitive colour ramps: one row per ramp, one cell
  * per step, every cell reading its ramp token directly — this card IS the
  * raw layer, so referencing primitives here is the point, not a violation.
@@ -108,6 +189,8 @@ function MegaShowcaseCard({
             drawing stays decorative — a token-drawn vector per graphic key. */}
         {showcase.graphic === "primitives" ? (
           <PrimitiveRampField className={styles.megaShowcaseCover} />
+        ) : showcase.graphic === "chat" ? (
+          <ChatWireframe className={styles.megaShowcaseCover} />
         ) : (
           <PipelineWireframe className={styles.megaShowcaseCover} />
         )}

@@ -23,11 +23,18 @@
  *      TAKEOVER_QUERY's width against the panel's phone media query in
  *      ChatWidget.css, and DOCK_MIN_WIDTH against the --ds-chat-width default.
  *   6. The surfaces that document the widget exist: website/src/app/chat/
- *      page.tsx and a `### ChatWidget` section in design.md.
+ *      page.tsx (the section index; the overview and install pages sit
+ *      under it) and a `### ChatWidget` section in design.md.
  *   7. Every `documented` export is a component the barrel exports.
  *   8. The init bin's chat templates (src/cli/templates/chat/) import only
  *      package subpaths the manifest declares, so `npx rift-ds init chat`
  *      can never scaffold an import that does not resolve.
+ *   9. The install page (website/src/app/chat/install/page.tsx) states
+ *      what the command writes and which env it reads: its SCAFFOLD_FILES
+ *      list is held to the template files and its ENV_VARS names to
+ *      .env.chat.example, in both directions, so a template added or an env
+ *      renamed cannot leave the page describing a scaffold that no longer
+ *      exists.
  *
  * Part of the validate-registry chain.
  */
@@ -274,6 +281,46 @@ function optionalPeersInClosure(entry) {
   }
 }
 
+/* 9. The full-install page mirrors the scaffold's file list and env names. */
+{
+  const templatesDir = join(repoRoot, 'src', 'cli', 'templates', 'chat');
+  const pagePath = join(repoRoot, 'website', 'src', 'app', 'chat', 'install', 'page.tsx');
+  if (!existsSync(pagePath)) {
+    errors.push('website/src/app/chat/install/page.tsx does not exist (the full-install page)');
+  } else if (existsSync(templatesDir)) {
+    const page = read(pagePath);
+    const templateFiles = [];
+    const collect = (dir) => {
+      for (const entry of readdirSync(dir, { withFileTypes: true })) {
+        const full = join(dir, entry.name);
+        if (entry.isDirectory()) collect(full);
+        else templateFiles.push(posix(relative(templatesDir, full)));
+      }
+    };
+    collect(templatesDir);
+    const listMatch = page.match(/SCAFFOLD_FILES\s*=\s*\[([^\]]*)\]/);
+    const listed = listMatch ? [...listMatch[1].matchAll(/"([^"]+)"/g)].map((m) => m[1]) : [];
+    if (!listMatch) errors.push('chat/install/page.tsx has no SCAFFOLD_FILES list');
+    for (const file of templateFiles) {
+      if (!listed.includes(file)) errors.push(`chat/install/page.tsx SCAFFOLD_FILES is missing template "${file}"`);
+    }
+    for (const file of listed) {
+      if (!templateFiles.includes(file)) errors.push(`chat/install/page.tsx SCAFFOLD_FILES lists "${file}", which src/cli/templates/chat/ does not hold`);
+    }
+    const envExample = read(join(templatesDir, '.env.chat.example'));
+    const envNames = [...envExample.matchAll(/^([A-Z][A-Z0-9_]*)=/gm)].map((m) => m[1]);
+    const envMatch = page.match(/ENV_VARS\s*=\s*\[([\s\S]*?)\n\];/);
+    const pageEnv = envMatch ? [...envMatch[1].matchAll(/name:\s*"([A-Z][A-Z0-9_]*)"/g)].map((m) => m[1]) : [];
+    if (!envMatch) errors.push('chat/install/page.tsx has no ENV_VARS table');
+    for (const name of envNames) {
+      if (!pageEnv.includes(name)) errors.push(`chat/install/page.tsx ENV_VARS is missing "${name}" from .env.chat.example`);
+    }
+    for (const name of pageEnv) {
+      if (!envNames.includes(name)) errors.push(`chat/install/page.tsx ENV_VARS lists "${name}", which .env.chat.example does not set`);
+    }
+  }
+}
+
 if (errors.length > 0) {
   console.error(`✗ Chat widget registry invalid:\n` + errors.map((e) => `    - ${e}`).join('\n'));
   process.exit(1);
@@ -283,5 +330,5 @@ const widget = registry.widgets[0];
 console.log(
   `✓ Chat widget: ${widget.name} composes ${widget.parts.length} registered components across ` +
     `${Object.keys(widget.subpaths).length} subpaths; main barrel clean of src/chat and optional peers; ` +
-    `CSS mirrors agree; scaffold imports resolve.`
+    `CSS mirrors agree; scaffold imports resolve; the install page mirrors the scaffold.`
 );

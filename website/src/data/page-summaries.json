@@ -280,8 +280,8 @@
       ]
     },
     "/chat": {
-      "title": "The chat widget",
-      "text": "The whole AI chat as one installable widget: props, streaming protocol, server handlers, and one command that scaffolds it.",
+      "title": "Chat",
+      "text": "The door to the chat: an overview of what it does and three ways to add it, full, UI only and headless.",
       "chips": [
         {
           "id": "install",
@@ -289,9 +289,41 @@
           "prompt": "How do I add the chat widget to my app?"
         },
         {
+          "id": "ways",
+          "label": "Which way in should I pick?",
+          "prompt": "Should I use the full chat install, the UI only, or the headless engine?"
+        }
+      ]
+    },
+    "/chat/overview": {
+      "title": "Chat overview",
+      "text": "What the chat does, shown live: paced replies, cards inside a reply, the three screens, history, suggestions and input.",
+      "chips": [
+        {
+          "id": "cards",
+          "label": "What can a reply contain?",
+          "prompt": "What rich content can a chat reply carry, and how is it sent?"
+        },
+        {
           "id": "transport",
           "label": "What is a transport?",
           "prompt": "What is a chat transport and how do I write one?"
+        }
+      ]
+    },
+    "/chat/install": {
+      "title": "Install the chat",
+      "text": "Three ways to add the chat: one command for the full install, the panel over your own endpoint, or the headless engine; then every prop.",
+      "chips": [
+        {
+          "id": "command",
+          "label": "What does init chat write?",
+          "prompt": "What files does npx rift-ds init chat write into my app?"
+        },
+        {
+          "id": "events",
+          "label": "What events must my endpoint send?",
+          "prompt": "What events does the chat widget expect from a transport?"
         }
       ]
     }

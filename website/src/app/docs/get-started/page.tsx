@@ -511,7 +511,7 @@ export default function GetStartedPage() {
                 </p>
                 <p className={styles.sectionNote}>
                   The conversation itself ships too, as one widget. The{" "}
-                  <Link href="/chat" className={styles.inlineLink}>chat widget</Link>{" "}
+                  <Link href="/chat/install" className={styles.inlineLink}>chat widget</Link>{" "}
                   composes those components into the whole thing: the panel with its
                   docked, overlay and takeover forms, the streaming engine, the
                   threads, the rich cards, and the server handlers that call the

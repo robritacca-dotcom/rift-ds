@@ -75,7 +75,7 @@ export interface MegaShowcase {
   label: string;
   description: string;
   /** Which cover the card draws — a token-drawn vector, never a raster. */
-  graphic: "pipeline" | "primitives";
+  graphic: "pipeline" | "primitives" | "chat";
 }
 
 /**
@@ -149,6 +149,14 @@ const FOUNDATION_ICONS: Record<string, string> = {
   "/foundations/themes": "palette",
   "/foundations/typography": "text_fields",
 };
+
+/* The Chat panel's rows: the Install page's three sections, so a visitor
+   lands on the way in they want. The overview is the panel's showcase. */
+const CHAT_PANEL_ITEMS: MegaItem[] = [
+  { href: "/chat/install#full-install", label: "Full install", description: "One command adds the chat, its routes and its limits", icon: "download" },
+  { href: "/chat/install#ui-only", label: "UI only", description: "The chat panel over your own endpoint", icon: "web_asset" },
+  { href: "/chat/install#headless", label: "Headless", description: "The engine under your own UI", icon: "code" },
+];
 
 const DOC_ITEM_ICONS: Record<string, string> = {
   "/overview": "account_tree",
@@ -232,10 +240,18 @@ function buildNavSections(): NavSection[] {
       href: "/chat",
       icon: "forum",
       description:
-        "The whole AI chat as one widget: install it, configure it with props, ship it",
-      // Deliberately no mega: the one widget is the destination, the way the
-      // playground is. If a second widget ever lands, this grows a panel.
-      isActive: (path) => path === "/chat",
+        "An AI chat for your app, added in minutes: install it, set it up with props, ship it",
+      mega: {
+        groups: [{ id: "install", label: "Install", items: CHAT_PANEL_ITEMS }],
+        showcase: {
+          href: "/chat/overview",
+          overline: "See it working",
+          label: "Overview",
+          description: "Replies that arrive as they are written, cards inside a reply, and a panel that fits any screen.",
+          graphic: "chat",
+        },
+      },
+      isActive: (path) => path.startsWith("/chat"),
     },
     {
       id: "templates",
@@ -417,6 +433,16 @@ export const docsSidebarLinks: NavLink[] = [
 ];
 
 /**
+ * Sidebar for the Chat section: the widget's overview, then the three ways
+ * in, named by what the consumer brings. The order is the reading order.
+ */
+export const chatSidebarLinks: NavLink[] = [
+  { href: "/chat", label: "Contents" },
+  { href: "/chat/overview", label: "Overview", description: "What the chat does, shown live: replies, cards, screens, history" },
+  { href: "/chat/install", label: "Install", description: "Three ways to add it: the full install, UI only, or headless; then the props" },
+];
+
+/**
  * Sidebar for the Templates section — complete screens built from the
  * library's components and tokens alone. Curated order: strongest first.
  */
@@ -502,6 +528,7 @@ const allSidebarLinks: NavLink[] = [
   ...componentsSidebarLinks,
   ...foundationsSidebarLinks,
   ...docsSidebarLinks,
+  ...chatSidebarLinks,
   ...templatesSidebarLinks,
 ];
 
@@ -525,7 +552,7 @@ export const TITLE_TEMPLATE = `%s · ${TITLE_SUFFIX}`;
  * scripts/validate-website-surfaces.mjs, so an added or removed section image
  * can't leave this list stale.
  */
-export const SECTION_OG_IMAGE_SEGMENTS = ["/components", "/foundations"];
+export const SECTION_OG_IMAGE_SEGMENTS = ["/chat", "/components", "/foundations"];
 
 /** The og:image for a page: its section's own card when one exists, else the root card. */
 function ogImageForPath(path?: string): string {
@@ -650,6 +677,7 @@ const breadcrumbSections: SectionConfig[] = [
   { base: "/foundations", label: "Foundations", sidebar: foundationsSidebarLinks },
   { base: "/components", label: "Components", sidebar: componentsSidebarLinks },
   { base: "/templates", label: "Templates", sidebar: templatesSidebarLinks },
+  { base: "/chat", label: "Chat", sidebar: chatSidebarLinks },
 ];
 
 function slugToTitle(slug: string): string {
@@ -678,12 +706,6 @@ export function getBreadcrumbs(pathname: string): BreadcrumbItem[] {
   if (path === "/graph") {
     return [{ label: BRAND_NAME, href: "/" }, { label: "System graph" }];
   }
-  // The chat widget's page is a top-level section with one member, so its
-  // trail leads home like the playground's rather than to a section landing.
-  if (path === "/chat") {
-    return [{ label: BRAND_NAME, href: "/" }, { label: "Chat" }];
-  }
-
   // Docs cluster — the landing lives at /docs but sub-pages keep their
   // original URLs, so match against the sidebar links (no shared prefix).
   const docsLink = docsSidebarLinks.find((l) => l.href === path && l.href !== "/docs");

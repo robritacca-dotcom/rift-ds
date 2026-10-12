@@ -56,13 +56,13 @@ const parts = chatWidget.parts
   .filter((component): component is NonNullable<typeof component> => Boolean(component));
 
 /* The welcome slot's fillings, from the demo's own list, none first: the
-   bare welcome, then links and cards in place of the starters, then the
-   dashboard, which keeps them and runs wide. */
+   bare welcome, then links, cards and the dashboard in place of the
+   starters, the dashboard running wide. */
 const WELCOME_ORDER = ["none", "links", "cards", "dashboard"];
 const WELCOME_VARIANTS = WELCOME_ORDER.map((value) => {
   const option = DEMO_WELCOME_OPTIONS.find((candidate) => candidate.value === value);
   if (!option) throw new Error(`DEMO_WELCOME_OPTIONS has no "${value}" variant`);
-  return { ...option, wide: value === "dashboard", starters: value === "dashboard" };
+  return { ...option, wide: value === "dashboard" };
 });
 
 const viewportTabs = [
@@ -329,8 +329,8 @@ export default function AiChatPage() {
               puts anything under the composer: links, cards or a whole dashboard, held to one
               screen or scrolling as a page with <code>widgetsLayout</code>, and as wide as the
               composer or the panel with <code>widgetsWidth</code>. It all leaves with the first
-              message. The four fillings, side by side in the compact layout: nothing, links in
-              place of the starters, cards in their place, and a dashboard running wide under them.
+              message. The four fillings, side by side in the compact layout, each in place of
+              the starters: nothing, links, cards, and a dashboard running wide.
             </p>
             <div className={styles.stageGrid}>
               {WELCOME_VARIANTS.map((variant) => (
@@ -340,7 +340,7 @@ export default function AiChatPage() {
                     height={variant.wide ? 800 : 780}
                     widget={(chat) => ({
                       compact: true,
-                      showStarters: variant.starters,
+                      showStarters: false,
                       widgets: <DemoWelcome variant={variant.value} onAsk={chat.send} />,
                       widgetsLayout: variant.wide || phone ? "scroll" : "fit",
                       widgetsWidth: variant.wide ? "wide" : "column",

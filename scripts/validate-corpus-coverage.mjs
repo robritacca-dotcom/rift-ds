@@ -77,6 +77,10 @@ const CONDENSED_ROUTES = new Map([
   ['/docs/get-started',
     'the shortfall is the install and import code samples, which the page shows ' +
     'as code blocks — the chat links the page rather than reciting snippets'],
+  ['/docs/chat',
+    'the shortfall is the install, mount, route and transport code samples, which ' +
+    'the page shows as code blocks — the chat links the page rather than reciting ' +
+    'snippets, and its prose (the three ways in, the env table, the event list) is carried'],
   ['/templates',
     'the shortfall is the template cards\' one-line descriptions, which live in ' +
     'templatesSidebarLinks (navigation.ts) outside the route folder the prose ' +

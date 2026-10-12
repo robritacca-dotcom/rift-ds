@@ -614,23 +614,24 @@ const previews: Record<string, () => ReactNode> = {
     </>
   ),
   "ai-chat": () => (
-    <div style={{ width: "100%", height: "150px", display: "flex", flexDirection: "column", border: "1px solid var(--color-bg-container-border)", borderRadius: "16px", overflow: "hidden", background: "var(--color-bg-container-primary)" }}>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "var(--padding-200) var(--padding-300)", borderBottom: "1px solid var(--color-divider)" }}>
-        <span style={{ fontSize: "var(--font-caption-size)", fontWeight: "var(--font-paragraph-emphasis-weight)", color: "var(--color-text-primary)" }}>Acme Assistant</span>
-        <span className="material-symbols-rounded" aria-hidden="true" style={{ "--icon-size": "var(--icon-size-500)", color: "var(--color-text-secondary)" } as React.CSSProperties}>
-          smart_toy
+    <div style={{ width: "228px", display: "flex", flexDirection: "column", gap: "var(--gap-200)", padding: "var(--padding-300)", border: "1px solid var(--color-bg-container-border)", borderRadius: "var(--radius-400)", background: "var(--color-bg-container-primary)", boxShadow: "var(--shadow-floating)" }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <span style={{ fontSize: "var(--font-caption-size)", lineHeight: "var(--font-caption-line-height)", fontWeight: "var(--font-paragraph-emphasis-weight)", color: "var(--color-text-primary)" }}>Assistant</span>
+        <span className="material-symbols-rounded" aria-hidden="true" style={{ "--icon-size": "var(--icon-size-500)", color: "var(--color-text-tertiary)" } as React.CSSProperties}>
+          close
         </span>
       </div>
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "flex-end", gap: "var(--gap-100)", padding: "var(--padding-200) var(--padding-300)", overflow: "hidden" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "var(--gap-100)" }}>
         <ChatMessage role="user" size="compact">
-          How is the trial going?
+          Trial so far?
         </ChatMessage>
         <ChatMessage role="assistant" size="compact">
-          Up five of the last six weeks.
+          Up five of six weeks.
         </ChatMessage>
       </div>
-      <div style={{ margin: "0 var(--padding-300) var(--padding-300)", padding: "var(--padding-100) var(--padding-300)", border: "1px solid var(--color-bg-container-border)", borderRadius: "var(--radius-pill)", fontSize: "var(--font-caption-size)", lineHeight: "var(--font-caption-line-height)", color: "var(--color-text-tertiary)" }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "var(--padding-100) var(--padding-100) var(--padding-100) var(--padding-300)", border: "1px solid var(--color-bg-container-border)", borderRadius: "var(--radius-pill)", fontSize: "var(--font-caption-size)", lineHeight: "var(--font-caption-line-height)", color: "var(--color-text-tertiary)" }}>
         Ask anything
+        <span style={{ width: "20px", height: "20px", borderRadius: "var(--radius-pill)", background: "var(--color-action-primary-bg)" }} aria-hidden="true" />
       </div>
     </div>
   ),

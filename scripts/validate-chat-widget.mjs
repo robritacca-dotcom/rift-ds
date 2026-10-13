@@ -8,7 +8,7 @@
  * and the templates and has registries on both sides to agree with:
  *
  *   1. Every name in `parts` is a registered component
- *      (src/components/registry.json), so the anatomy the /chat page draws
+ *      (src/components/registry.json), so the anatomy the component page draws
  *      links to pages that exist.
  *   2. Every key in `subpaths` is a SUBPATHS row in
  *      scripts/package-manifest.mjs, and every explicit `./chat*` subpath the

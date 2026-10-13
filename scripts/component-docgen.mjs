@@ -88,7 +88,7 @@ export const chatRegistry = JSON.parse(
 /**
  * The chat widget's documented components: the exports its registry names
  * under `documented`, each in its own src/chat/<Name>.tsx. Parsed by the same
- * pass as the components, so the /chat page's props tables, the widget's .md
+ * pass as the components, so the component page's props tables, the widget's .md
  * page and the MCP get_component tool read the contract the .d.ts ships.
  */
 export function chatSourceFiles() {

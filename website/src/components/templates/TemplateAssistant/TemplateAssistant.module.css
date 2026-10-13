@@ -19,7 +19,7 @@
 }
 
 /* The viewport placement: the site panel's geometry and its three modes
-   (SiteChat.module.css's .panel, restated). Docked and overlay share the
+   (.ds-chat-launcher__panel in the package's ChatWidget.css, restated). Docked and overlay share the
    inset card; the component adds the scrim and the modal behaviour below
    DOCK_QUERY, and hosts reserve the width only at or above it. */
 .viewport {
@@ -56,7 +56,7 @@
   }
 }
 
-/* Phone widths (TAKEOVER_QUERY in SiteChat/ChatContext.tsx, mirrored here):
+/* Phone widths (TAKEOVER_QUERY in src/chat/queries.ts, published from rift-ds/chat, mirrored here):
    the chat is the screen, not a card over one. */
 @media (max-width: 719px) {
   .viewport {

@@ -285,7 +285,7 @@
 
 /* ---------------------------------------------------------- responsive */
 
-/* Below the site's dock threshold (DOCK_QUERY in SiteChat/ChatContext.tsx,
+/* Below the site's dock threshold (DOCK_QUERY in src/chat/queries.ts, published from rift-ds/chat,
    which PayrollConsole.tsx reads for the behaviour half of this rule), the
    chat stops reserving width and overlays the page as a modal. It also
    starts closed there, so the rail is something the visitor opens over the
@@ -305,7 +305,7 @@
 }
 
 /* Phone widths: the takeover is the screen, so it wears the site takeover's
-   denser glass (.panelFull in SiteChat.module.css) rather than the rail's
+   denser glass (.ds-chat-launcher__panel--full in the package's ChatWidget.css) rather than the rail's
    semi surface, which lets the table read through the transcript. */
 @media (max-width: 719px) {
   .chatRailFull {

@@ -207,7 +207,12 @@ const handler = createMcpHandler(
             `Fonts: the primary face is not bundled; set --font-family-primary to your own (the base theme is set in Nunito Sans; the preset stylesheets bring their own faces). ` +
               `The Material Symbols icon font ships inside the package.`,
             "",
-            `Charts: components from '${pkg.name}/charts' need the optional recharts peer dependency; nothing else does.`,
+            `Charts: components from '${pkg.name}/charts' need the optional recharts peer dependency.`,
+            "",
+            `AI chat: the whole conversation ships as one widget under '${pkg.name}/chat' (the panel, the launcher and the engine), ` +
+              `with the server handlers under '${pkg.name}/chat/server' and the guardrails under '${pkg.name}/chat/upstash'; each subpath has optional peers. ` +
+              `In a Next.js app router project, 'npx ${pkg.name} init chat' scaffolds the routes, the mount and an env example, never overwriting a file. ` +
+              `Props: get_component with the name ChatWidget. Guide: ${SITE_URL}/docs/chat.`,
             "",
             `Providers: none required. There is no theme provider and no configuration API. The one provider in the ` +
               `library is ToastProvider, needed only for the toast queue via useToast.`,

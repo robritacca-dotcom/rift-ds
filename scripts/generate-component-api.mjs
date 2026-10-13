@@ -127,7 +127,7 @@ export function assembleComponentApi() {
   // The chat widget: one entry per registered widget, its documented exports
   // in the registry's order (the widget itself first). Served through the
   // same tool and the same .md shape as a component, distinguished by `kind`
-  // so the component listings can leave it out and the /chat page can find it.
+  // so the component listings can leave it out and the widget's component page can find it.
   const widgetEntries = chatRegistry.widgets.map((widget) => {
     const exportedComponents = widget.documented.flatMap((name) => {
       const file = join(repoRoot, 'src', 'chat', `${name}.tsx`).replaceAll('\\', '/');

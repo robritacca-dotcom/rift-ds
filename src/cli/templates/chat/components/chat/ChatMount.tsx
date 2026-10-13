@@ -8,7 +8,7 @@
  * Two modes, switched by NEXT_PUBLIC_CHAT_DEMO in .env.local:
  *   - demo: a scripted conversation plays back in the browser. No model, no
  *     route, no key. Use it to see the widget working and to show it round.
- *   - live: the widget posts to /app/api/chat, which this scaffold also
+ *   - live: the widget posts to /api/chat, which this scaffold also
  *     wrote. Set ANTHROPIC_API_KEY and CHAT_ENABLED=true there.
  *
  * The demo imports rift-ds/chat/demo, which needs the optional `recharts`

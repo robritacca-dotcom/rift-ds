@@ -74,7 +74,7 @@ html[data-theme-ready] {
      655px — keep DOCK_MIN_WIDTH/DOCK_MAX_WIDTH (SiteChat/placement.ts) in
      step with this value. */
   --layout-chat-width: var(--ds-chat-width);
-  /* The floating chat card's resting height (SiteChat.module.css); its
+  /* The floating chat card's resting height (the package's ChatWidget.css); its
      resting width is the docked width above. */
   --layout-chat-float-height: var(--ds-chat-float-height);
   --layout-chat-inset: var(--ds-chat-inset);
@@ -188,7 +188,7 @@ html[data-chat="docked-left"] {
 
 /* The phone takeover: SiteChatMount sets data-chat="takeover" on <html>
    while the chat is open at phone width. The chat is the document there —
-   the panel sits in normal flow at 100dvh (SiteChat.module.css) and the
+   the panel sits in normal flow at 100dvh (the package's ChatWidget.css) and the
    page around it is hidden, not covered, so Safari handles the soft
    keyboard as it does for any page with a field at the bottom, by scrolling
    the document. The ambient background stays: it is what the panel's glass

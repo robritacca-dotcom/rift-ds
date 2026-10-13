@@ -154,7 +154,7 @@
 }
 
 /* The floating seat is moved by its header, as the site's floating panel
-   is (SiteChat.module.css). */
+   is (the package's ChatWidget.css). */
 .widgetFloating :global(.ds-chat-header) {
   cursor: grab;
   touch-action: none;

@@ -4,8 +4,7 @@
  *
  * Builds website/public/components/<slug>.md — one markdown page per public
  * component, served beside the live docs page (append .md to a component
- * URL), the chat widget's page under /components included, served beside
- * /chat the same way. The content is the prop contract for an agent to read
+ * URL), the chat widget's page under /components included. The content is the prop contract for an agent to read
  * or a visitor to copy: registry metadata, import lines, and the documented
  * props of every export, from the same assembleComponentApi() pass that
  * feeds Storybook's props tables, the shipped .d.ts and the /api/mcp

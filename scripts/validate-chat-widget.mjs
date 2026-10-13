@@ -34,7 +34,13 @@
  *   7. Every `documented` export is a component the barrel exports.
  *   8. The init bin's chat templates (src/cli/templates/chat/) import only
  *      package subpaths the manifest declares, so `npx rift-ds init chat`
- *      can never scaffold an import that does not resolve.
+ *      can never scaffold an import that does not resolve; and every file
+ *      under the templates folder is tracked by git, because the tarball is
+ *      built from the working tree while CI and the release build from a
+ *      checkout. The scaffold's env example is a dotfile the root `.env.*`
+ *      ignore rule would swallow (it did, on 2026-10-13: the local smoke
+ *      passed and CI could not open the file), so this check fails locally
+ *      for exactly the file a consumer would never receive.
  *   9. The docs page (website/src/app/docs/chat/page.tsx) states
  *      what the command writes and which env it reads: its SCAFFOLD_FILES
  *      list is held to the template files and its ENV_VARS names to
@@ -44,6 +50,7 @@
  *
  * Part of the validate-registry chain.
  */
+import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -302,6 +309,20 @@ function optionalPeersInClosure(entry) {
       }
     };
     collect(templatesDir);
+    const tracked = new Set(
+      execFileSync('git', ['ls-files', '--', posix(relative(repoRoot, templatesDir))], {
+        cwd: repoRoot,
+        encoding: 'utf8',
+      })
+        .split('\n')
+        .filter(Boolean)
+    );
+    for (const file of files) {
+      const rel = posix(relative(repoRoot, file));
+      if (!tracked.has(rel)) {
+        errors.push(`${rel} is not tracked by git (an ignore rule?), so CI and the release tarball will not have it`);
+      }
+    }
     const specifierRe = new RegExp(`from\\s+['"](${PACKAGE_NAME.replace('/', '\\/')}(?:\\/[^'"]+)?)['"]`, 'g');
     for (const file of files) {
       for (const match of read(file).matchAll(specifierRe)) {

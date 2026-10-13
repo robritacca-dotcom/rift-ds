@@ -16,6 +16,10 @@ dist-ssr
 # own tree; the root rule covers everything else)
 .env
 .env.*
+# The init bin's scaffold env example is a template, not an env file: empty
+# values and defaults only, read by validate-chat-widget.mjs and shipped in
+# the tarball, so it must be tracked.
+!src/cli/templates/chat/.env.chat.example
 
 # The website's static assets live in website/public. A root public/ tree is
 # always an accident (deleted as orphaned in c755c93, reappeared once since).

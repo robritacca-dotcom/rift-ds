@@ -660,10 +660,44 @@
    that row ends and the lifted controls sit in the clear above it. */
 .ds-chat-widget__aside-rail {
   flex: none;
-  display: flex;
   min-height: 0;
-  margin: calc(var(--padding-200) + var(--padding-150) * 2 + 40px)
-    var(--padding-500) var(--padding-500) 0;
+  margin: calc(var(--padding-200) + var(--padding-150) * 2 + 40px) 0 var(--padding-500) 0;
+  /* The open and close glide, the threads rail's own: a one-column grid
+     whose track runs 0fr to 1fr, so the pane's width animates without the
+     widget knowing it, while the pane's own card fades with it. Closed, the
+     rail keeps no width, no inset and no border, and goes invisible once
+     the collapse has finished (the visibility delay), so nothing of it can
+     be seen, hovered or reached. The reduced-motion guard in
+     tokens-motion.css zeroes every duration here. */
+  display: grid;
+  grid-template-columns: 0fr;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    grid-template-columns var(--motion-duration-slow) var(--motion-ease-emphasized),
+    margin var(--motion-duration-slow) var(--motion-ease-emphasized),
+    opacity var(--motion-duration-base) var(--motion-ease-standard),
+    visibility 0s linear var(--motion-duration-slow);
+}
+
+.ds-chat-widget__aside-rail--open {
+  grid-template-columns: 1fr;
+  margin-right: var(--padding-500);
+  opacity: 1;
+  visibility: visible;
+  transition:
+    grid-template-columns var(--motion-duration-slow) var(--motion-ease-emphasized),
+    margin var(--motion-duration-slow) var(--motion-ease-emphasized),
+    opacity var(--motion-duration-base) var(--motion-ease-standard) calc(var(--motion-duration-slow) - var(--motion-duration-base)),
+    visibility 0s linear 0s;
+}
+
+/* The pane's card: the border and radius live here, inside the animated
+   track, so the collapsing rail never shows a sliver of frame. */
+.ds-chat-widget__aside-rail-inner {
+  display: flex;
+  min-width: 0;
+  min-height: 0;
   border: var(--border-025) solid var(--color-bg-container-border);
   border-radius: var(--radius-600);
   overflow: hidden;

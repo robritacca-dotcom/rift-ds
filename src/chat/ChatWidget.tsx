@@ -715,9 +715,17 @@ export function ChatWidget({
       {asideShown && asideWide && (
         <div className="ds-chat-widget__rail-actions">{headerActions}</div>
       )}
-      {renderAside && asideWide && asideOpen && (
-        <div className="ds-chat-widget__aside-rail" id={asideId}>
-          {renderAside({ overlay: false, close: closeAside })}
+      {/* The inline pane stays mounted while the widget is wide enough to
+          seat it, so opening and closing can glide (ChatWidget.css owns the
+          choreography); closed, it is inert and hidden from assistive
+          technology, the same contract as the sheet below. */}
+      {renderAside && asideWide && (
+        <div
+          className={`ds-chat-widget__aside-rail ${asideOpen ? 'ds-chat-widget__aside-rail--open' : ''}`}
+          id={asideId}
+          inert={!asideOpen || undefined}
+        >
+          <div className="ds-chat-widget__aside-rail-inner">{renderAside({ overlay: false, close: closeAside })}</div>
         </div>
       )}
       {renderThreads && !threadsWide && (

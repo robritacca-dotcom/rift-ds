@@ -5,10 +5,12 @@ import { ChatProvider } from './ChatProvider';
 import { ChatWidget, type ChatWidgetProps } from './ChatWidget';
 import { ChatLauncher } from './ChatLauncher';
 import { useChatWidget } from './context';
+import type { ChatCard } from './types';
 import {
   DEMO_MENTIONS,
   DEMO_MODELS,
   DEMO_RENDERERS,
+  DEMO_SCRIPT,
   DEMO_STARTERS,
   DEMO_THREADS,
   DemoWelcome,
@@ -149,6 +151,52 @@ export const RichContent: Story = {
       () => expect(canvas.getByText('Invite the three teammates')).toBeInTheDocument(),
       { timeout: 15000 }
     );
+  },
+};
+
+/* One card of every kind the demo renders, lifted from the script itself so
+   a renderer added to the demo without a reply that carries it fails here,
+   and every kind is rendered and axe-checked on every change. */
+const EVERY_CARD = (() => {
+  const seen = new Map<string, ChatCard>();
+  for (const reply of [...DEMO_SCRIPT.nodes, ...DEMO_SCRIPT.fallbacks]) {
+    if (reply.card && !seen.has(reply.card.kind)) seen.set(reply.card.kind, reply.card);
+  }
+  return [...seen.values()];
+})();
+
+function InjectEveryCard({ children }: { children: ReactNode }) {
+  const { injectTurn, turns } = useChatWidget();
+  useEffect(() => {
+    if (turns.length > 0) return;
+    for (const card of EVERY_CARD) {
+      injectTurn({ role: 'assistant', text: `A ${card.kind} card.`, card });
+    }
+  }, [injectTurn, turns.length]);
+  return <>{children}</>;
+}
+
+/** Every card kind the demo ships, one turn each, rendered through the provider's renderers. */
+export const EveryCard: Story = {
+  render: (args) => (
+    <ChatProvider transport={createDemoTransport(FAST)} renderers={DEMO_RENDERERS} followups={false} feedback={false}>
+      <OpenOnMount>
+        <InjectEveryCard>
+          <Stage height={900}>
+            <ChatWidget {...args} />
+          </Stage>
+        </InjectEveryCard>
+      </OpenOnMount>
+    </ChatProvider>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    // The script must carry a card for every renderer the demo exports.
+    const kinds = EVERY_CARD.map((card) => card.kind).sort();
+    expect(kinds).toEqual(Object.keys(DEMO_RENDERERS).sort());
+    for (const kind of kinds) {
+      await waitFor(() => expect(canvas.getByText(`A ${kind} card.`)).toBeInTheDocument(), { timeout: 4000 });
+    }
   },
 };
 

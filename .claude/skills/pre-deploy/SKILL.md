@@ -48,7 +48,7 @@ Use this skill when asked to check if changes are ready to push, deploy, or ship
    If everything passes:
    > Verify passed (lint + story tests + library, package, Storybook, and website builds, plus the publish lint, the built-HTML validators, and the served-site checks). Safe to push.
 
-   **If the change touched component CSS, `src/tokens/`, or `.storybook/`, also dispatch the Chromatic workflow** (`gh workflow run chromatic.yml`) — once a Chromatic project is provisioned for this repo (none exists yet) — and check the diff before or right after pushing — visual regressions are the one thing `verify` cannot see, and Chromatic is deliberately not part of it because every run bills cloud snapshots against a monthly budget. Text-only, script-only, or website-prose changes don't need a run.
+   **If the change touched component CSS (the chat widget's under `src/chat/` included), `src/tokens/`, or `.storybook/`, also dispatch the Chromatic workflow** (`gh workflow run chromatic.yml`) — once a Chromatic project is provisioned for this repo (none exists yet) — and check the diff before or right after pushing — visual regressions are the one thing `verify` cannot see, and Chromatic is deliberately not part of it because every run bills cloud snapshots against a monthly budget. Text-only, script-only, or website-prose changes don't need a run.
 
    If any step fails, show:
    - Which step failed (lint, component library, story tests, Storybook, website lint, website build, or one of the checks that run after it — the built-HTML validators or the served-site checks; the tail of the `verify` entry in the root `package.json` is the authoritative list)

@@ -32,7 +32,7 @@ Check what shipped since the last tag to justify the choice, and confirm it with
 git log $(git describe --tags --abbrev=0)..HEAD --oneline
 ```
 
-Be deliberate about breaking changes: components are exported both from the barrel and from `./components/*` deep paths, so a renamed component folder breaks consumers even if the barrel still exports the old name.
+Be deliberate about breaking changes: components are exported both from the barrel and from `./components/*` deep paths, so a renamed component folder breaks consumers even if the barrel still exports the old name. The chat subpaths (`SUBPATHS` in `scripts/package-manifest.mjs` lists them: `./chat` and its server, upstash, demo and stylesheet siblings) are public paths on the same terms, and the scaffold templates under `src/cli/templates/chat/` ride in the tarball, so a renamed chat export breaks files the bin has already written into consumer apps.
 
 ### 2. Pre-flight
 
@@ -95,7 +95,7 @@ Once it propagates, confirm the registry serves the new version:
 npm view rift-ds version --prefer-online
 ```
 
-The real consumer-shaped check already ran before publish: `scripts/smoke-consumer.mjs` packs the tarball into a scratch Vite app and builds it (bare `node` can't import the barrel because components import their own CSS; that needs a bundler). To repeat it against the *published* artifact rather than the local tarball, scaffold a scratch Vite app, `npm install rift-ds@<version>`, import the barrel plus `tokens/tokens.css`, and run its build.
+The real consumer-shaped check already ran before publish: `scripts/smoke-consumer.mjs` packs the tarball into two scratch Vite apps and builds them: one with no optional peer installed, importing the barrel, and one with every optional peer that also runs the packed bin's `init chat` and builds the scaffold (bare `node` can't import the barrel because components import their own CSS; that needs a bundler). To repeat it against the *published* artifact rather than the local tarball, scaffold a scratch Vite app, `npm install rift-ds@<version>`, import the barrel plus `tokens/tokens.css`, and run its build; for the chat, install every optional peer in a scratch Next.js app router project, run `npx rift-ds@<version> init chat` there, and build it.
 
 ### 7. Tag the published commit
 

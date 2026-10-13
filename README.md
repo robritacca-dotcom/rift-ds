@@ -14,7 +14,7 @@ An open source React design system built for AI products and coding agents: comp
 ## Why Rift DS
 
 - **<!-- component-count -->150<!-- /component-count --> components.** Buttons, forms and tables through to charts, navigation and overlays, each typed and documented with live examples. React is the only required peer dependency.
-- **AI patterns and templates, ready to use.** Composer, streaming chat thread, tool calls, reasoning and thread panel are in the box, and the docs site has complete template screens built from them.
+- **AI patterns, the whole chat and templates, ready to use.** Composer, streaming chat thread, tool calls, reasoning and thread panel are in the box, the complete AI chat ships assembled as one widget that one command scaffolds, and the docs site has complete template screens built from them.
 - **Fully themeable.** The shipped themes are complete looks to start from, each in light and dark. One `data-brand` attribute applies a theme, and a few CSS overrides make your own.
 - **Ready for coding agents.** One command installs the agent skills, and a public MCP endpoint serves every component's props, so your agent builds with the library as it actually is. No key, no account.
 - **Free, consumed your way.** MIT, with no pro tier. Install the npm package, pull single components as source through the shadcn CLI, or clone the repo.
@@ -36,7 +36,7 @@ import 'rift-ds/tokens/tokens.css';
 import { Button, Card, Badge } from 'rift-ds';
 ```
 
-React 19+ is a peer dependency. The package is ESM-only and resolved via `exports` subpaths: use a bundler that handles CSS and font imports from `node_modules` (Vite, Next.js, webpack) and set TypeScript's `moduleResolution` to `"bundler"` or `"nodenext"`. The Recharts-backed charts live behind `rift-ds/charts`, so the optional `recharts` peer dependency is only needed if you use them. Prefer owning the source? Pull single components through the shadcn CLI (`npx shadcn@latest add https://rift-ds.com/r/button.json`, with details in the [get-started guide](https://rift-ds.com/docs/get-started)), or clone this repo and build on it directly; all of it is MIT.
+React 19+ is a peer dependency. The package is ESM-only and resolved via `exports` subpaths: use a bundler that handles CSS and font imports from `node_modules` (Vite, Next.js, webpack) and set TypeScript's `moduleResolution` to `"bundler"` or `"nodenext"`. The Recharts-backed charts live behind `rift-ds/charts`, so the optional `recharts` peer dependency is only needed if you use them. The chat widget's subpaths bring their own optional peers (`react-markdown` and `remark-gfm` for the panel, `@anthropic-ai/sdk` for the server handlers, `@upstash/ratelimit` and `@upstash/redis` for the guardrails), needed only if you use them. Prefer owning the source? Pull single components through the shadcn CLI (`npx shadcn@latest add https://rift-ds.com/r/button.json`, with details in the [get-started guide](https://rift-ds.com/docs/get-started)), or clone this repo and build on it directly; all of it is MIT.
 
 ## The chat widget
 
@@ -46,7 +46,19 @@ The whole AI chat ships as one widget: the panel with its docked, overlay and ta
 npx rift-ds init chat
 ```
 
-Every prop it takes is on [its component page](https://rift-ds.com/components/ai-chat), and the three ways to add it, with the protocol and the server options, are on [the AI chat docs page](https://rift-ds.com/docs/chat).
+The panel alone, with no route behind it, is three imports:
+
+```tsx
+import 'rift-ds/chat/chat.css';
+import { ChatProvider, ChatLauncher } from 'rift-ds/chat';
+import { createDemoTransport, DEMO_RENDERERS } from 'rift-ds/chat/demo';
+
+<ChatProvider transport={createDemoTransport()} renderers={DEMO_RENDERERS}>
+  <ChatLauncher label="Ask" />
+</ChatProvider>
+```
+
+Swap the scripted transport for `createFetchTransport('/api/chat')` and the panel talks to your route. Every prop it takes is on [its component page](https://rift-ds.com/components/ai-chat), and the three ways to add it, with the protocol and the server options, are on [the AI chat docs page](https://rift-ds.com/docs/chat).
 
 ## Set up your agent
 

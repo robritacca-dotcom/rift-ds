@@ -22,7 +22,7 @@ Use this skill when asked to check for hardcoded values, audit token usage, find
 
 1. **Determine scope.** Accept one of:
    - A specific component name (e.g. `Avatar`) → scans `src/components/Avatar/Avatar.css`
-   - `all-components` → scans all `src/components/**/*.css`
+   - `all-components` → scans all `src/components/**/*.css` and the chat widget's stylesheets, `src/chat/*.css`
    - `website` → scans all `website/src/**/*.css` (which includes the `.module.css` files)
    - A specific file path
 
@@ -52,7 +52,7 @@ Use this skill when asked to check for hardcoded values, audit token usage, find
 
    **Hunt near-twins, not just strays.** A raw value that is *almost* an existing token is a typo recorded as a decision, and the legality check alone never sees it — it can even sit under a `ds-allow`. Compare every collected raw value against the resolved values in the generated token reference (step 2) **and against the other raw values in scope**: a colour within a few points per channel of a token (including cross-notation twins — a hex, an `hsl()`, and an `rgb()` of the same colour are one value written three ways), or a spacing value one pixel off a neighbouring scale step. Report a near-twin as its own finding class, distinct from a plain stray, naming what it is a twin of — `path/to/GadgetTile.css:17 — #0E6D8E → near-twin of var(--color-action-primary-bg), probably a mistyped copy` (a fictional example by design — `GadgetTile` is not a real component). A twin of a token is repaired by pointing at the token; a twin pair of raw values collapses into whichever one is sanctioned.
 
-   **Component TS/TSX files are in scope for colour-shaped literals.** The CSS glob is not the whole surface: hex, `rgb()`/`rgba()`, and `hsl()` literals also live in component `.ts`/`.tsx` files, where no `ds-allow` mechanism exists. Scan them too, and judge each hit against the mirror checks in `scripts/validate-token-references.mjs` and `scripts/validate-theme-mirrors.mjs` (between them the authoritative list of sanctioned out-of-CSS token surfaces — the chart palette, every `getCSSVar` fallback, and the remaining hand mirrors split across the two). A literal outside those mirrors is a finding to judge, not skip — deliberately theme-frozen fixture data can be legitimate, but a near-twin of a token in it is still a typo.
+   **Component TS/TSX files are in scope for colour-shaped literals.** The CSS glob is not the whole surface: hex, `rgb()`/`rgba()`, and `hsl()` literals also live in component `.ts`/`.tsx` files (under `src/components/` and `src/chat/` alike), where no `ds-allow` mechanism exists. Scan them too, and judge each hit against the mirror checks in `scripts/validate-token-references.mjs` and `scripts/validate-theme-mirrors.mjs` (between them the authoritative list of sanctioned out-of-CSS token surfaces — the chart palette, every `getCSSVar` fallback, and the remaining hand mirrors split across the two). A literal outside those mirrors is a finding to judge, not skip — deliberately theme-frozen fixture data can be legitimate, but a near-twin of a token in it is still a typo.
 
 4. **For each violation**, output:
    - File path (relative to repo root)

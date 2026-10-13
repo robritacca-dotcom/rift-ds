@@ -7,9 +7,12 @@
  * something other than what it is. The widget sits between the components
  * and the templates and has registries on both sides to agree with:
  *
- *   1. Every name in `parts` is a registered component
- *      (src/components/registry.json), so the anatomy the component page draws
- *      links to pages that exist.
+ *   1. `parts` is exactly the set of registered components the widget's own
+ *      modules import (src/components/registry.json names, read from the
+ *      `../components/<Folder>/<Name>` imports in src/chat/ outside the demo
+ *      and the stories), in both directions: a part that nothing imports is
+ *      a claim the code contradicts, and a component the widget starts
+ *      composing cannot stay out of the anatomy the component page draws.
  *   2. Every key in `subpaths` is a SUBPATHS row in
  *      scripts/package-manifest.mjs, and every explicit `./chat*` subpath the
  *      manifest declares is in the registry (both directions).
@@ -84,10 +87,33 @@ for (const widget of registry.widgets ?? []) {
     errors.push(`${at}: description must end with a full stop`);
   }
 
-  /* 1. Parts are registered components. */
+  /* 1. Parts are the registered components the widget's modules import,
+     both directions. The demo and the stories are not the widget: a demo
+     card's chart or plan is content a reply carries, not the widget's
+     anatomy, so those files are left out of the census. */
   for (const part of widget.parts ?? []) {
     if (!componentNames.has(part)) {
       errors.push(`${at}: part "${part}" is not in src/components/registry.json`);
+    }
+  }
+  const composed = new Set();
+  const widgetDir = join(repoRoot, 'src', 'chat');
+  for (const file of readdirSync(widgetDir)) {
+    if (!/\.tsx?$/.test(file) || /^demo|^DemoWelcome|\.stories\./.test(file)) continue;
+    const source = read(join(widgetDir, file));
+    for (const m of source.matchAll(/from '\.\.\/components\/[A-Za-z]+\/([A-Za-z]+)'/g)) {
+      if (componentNames.has(m[1])) composed.add(m[1]);
+    }
+  }
+  const parts = new Set(widget.parts ?? []);
+  for (const name of composed) {
+    if (!parts.has(name)) {
+      errors.push(`${at}: the widget imports ${name} but "parts" does not list it`);
+    }
+  }
+  for (const name of parts) {
+    if (!composed.has(name)) {
+      errors.push(`${at}: "parts" lists ${name} but no widget module imports it (the demo and stories do not count)`);
     }
   }
 

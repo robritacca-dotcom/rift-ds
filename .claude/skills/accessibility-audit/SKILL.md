@@ -35,9 +35,9 @@ Report a finding as **already-enforced** if `npm run test` or the page-level axe
 ## Instructions
 
 1. **Determine scope.** Accept one of:
-   - A component name (e.g. `Dropdown`) → audits `src/components/Dropdown/Dropdown.tsx` and its CSS
+   - A component name (e.g. `Dropdown`) → audits `src/components/Dropdown/Dropdown.tsx` and its CSS (the chat widget's own components, `ChatWidget`, `ChatLauncher`, `ChatThreads`, `ChatTabs` and `ChatAgentPane`, live in `src/chat/`)
    - A website page URL (e.g. `/components/button`) → audits the live rendered page
-   - `all-components` → audits all components in `src/components/`
+   - `all-components` → audits all components in `src/components/` and the chat widget in `src/chat/`
 
 2. **Read the source files.** For each component in scope, read the `.tsx` and `.css` files before taking screenshots.
 
@@ -55,7 +55,7 @@ Report a finding as **already-enforced** if `npm run test` or the page-level axe
    **Keyboard Navigation:**
    - **[manual]** All interactive elements are reachable by Tab, in an order that makes sense — axe cannot judge order
    - Custom interactive components handle `onKeyDown` for Enter/Space (buttons) and arrow keys (any component with roving or list focus — radio groups, segmented controls, listboxes, tablists)
-   - **[manual where no `play` function covers it]** Modal/dialog *actually* traps focus while open and restores it to the trigger on close — axe sees the attributes, not the behaviour. The modal overlays share one behavior implementation (design.md's Components intro owns the contract), so a real trap/restore defect there is a finding against all of them, not one. The site chat is modal only in some of its forms, and its floating card's move and size grips are pointer-only by a recorded decision: design.md's Site chat pattern says which forms trap focus and why the grips are not a finding
+   - **[manual where no `play` function covers it]** Modal/dialog *actually* traps focus while open and restores it to the trigger on close — axe sees the attributes, not the behaviour. The modal overlays share one behavior implementation (design.md's Components intro owns the contract), so a real trap/restore defect there is a finding against all of them, not one. The site chat is modal only in some of its forms, and its floating card's move and size grips are pointer-only by a recorded decision: design.md's ChatWidget spec says which forms trap focus and why the grips are not a finding
    - Escape key closes dismissible overlays (any floating panel — tooltips, popovers, menus, dialogs, pickers)
 
    **Focus Styles:**
@@ -64,7 +64,7 @@ Report a finding as **already-enforced** if `npm run test` or the page-level axe
 
    **Motion** (axe evaluates none of this):
    - **[manual]** Anything that animates for more than five seconds, or loops indefinitely, can be paused, stopped, or hidden (WCAG 2.2.2). CSS motion satisfies this through the reduced-motion block in `tokens-motion.css`, which carries two mechanisms and whose own header comment owns the contract: token collapse for token-consuming CSS, and a universal `*` guard that also covers hardcoded and `ds-allow(motion)`-sanctioned literal timings (an infinite loop on an off-scale duration is still guarded). Read it there rather than assuming which half applies
-   - **[manual]** Animation driven from JavaScript is **outside that guard** — a `requestAnimationFrame` loop cannot be seen by CSS, so each one has to check `prefers-reduced-motion` itself. Enumerate the JS-side checks with a grep for `prefers-reduced-motion` across `src/components/**/*.tsx` and `website/src` — the grep is the inventory, not any list written here (the site's ambient background, which renders a single static frame under the preference, is one illustration; more exist and new ones keep arriving) — and confirm each still honours the preference rather than assuming the token layer covers it. That grep has one known blind spot: the recharts-backed charts animate their marks in from JavaScript but never contain the string — their guard is recharts' own `isAnimationActive: 'auto'` default, and design.md's chart-set spec owns the contract (a literal `true` would override the guard). Run a second grep for `isAnimationActive` across `src/components/` — a clean result means the default guard holds everywhere; any explicit override is a finding to check against that spec
+   - **[manual]** Animation driven from JavaScript is **outside that guard** — a `requestAnimationFrame` loop cannot be seen by CSS, so each one has to check `prefers-reduced-motion` itself. Enumerate the JS-side checks with a grep for `prefers-reduced-motion` across `src/components/**/*.tsx`, `src/chat/**/*.{ts,tsx}` (the streaming reveal's check is in a `.ts` file) and `website/src` — the grep is the inventory, not any list written here (the site's ambient background, which renders a single static frame under the preference, is one illustration; more exist and new ones keep arriving) — and confirm each still honours the preference rather than assuming the token layer covers it. That grep has one known blind spot: the recharts-backed charts animate their marks in from JavaScript but never contain the string — their guard is recharts' own `isAnimationActive: 'auto'` default, and design.md's chart-set spec owns the contract (a literal `true` would override the guard). Run a second grep for `isAnimationActive` across `src/components/` — a clean result means the default guard holds everywhere; any explicit override is a finding to check against that spec
    - **[manual]** Motion triggered by interaction (parallax, cursor-reactive effects) is disabled under reduced motion, or is not essential (WCAG 2.3.3)
 
 4. **Visual audit (from screenshots).** Start the preview server and screenshot the target in both light and dark mode (follow the `visual-review` skill pattern). Check:

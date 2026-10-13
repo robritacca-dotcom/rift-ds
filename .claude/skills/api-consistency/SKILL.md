@@ -18,7 +18,7 @@ Use this skill when asked to review component APIs, check prop naming consistenc
 
 1. **Determine scope.** Accept one of:
    - A list of specific components (e.g. `Button, CircularButton, ButtonGroup`) → compare those
-   - `all` → scan all components in `src/components/`
+   - `all` → scan all components in `src/components/`, plus the chat widget's documented exports in `src/chat/` (they ride the same generated API with `importPath` `rift-ds/chat`)
    - A category description (e.g. "all button-like components", "all form inputs") → infer the relevant components
 
 2. **Read every component's TypeScript interface.** Start from `website/src/data/component-api.generated.ts` for the prop inventory — it holds every own prop with type, default, requiredness and description, parsed exactly as the published `.d.ts` documents them. Then read the `.tsx` files in scope for what the generated file does not capture:

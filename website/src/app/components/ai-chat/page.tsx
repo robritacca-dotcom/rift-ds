@@ -238,7 +238,7 @@ export default function AiChatPage() {
                 the AI chat docs page
               </Link>
               , and{" "}
-              <Link href="/playground" className={styles.inlineLink}>
+              <Link href="/playground?view=chat" className={styles.inlineLink}>
                 the playground
               </Link>{" "}
               stages the same chat with every option on a lever.

@@ -253,7 +253,11 @@ export default function ChatInstallPage() {
               <Link href={`/components/${chatWidget.slug}`} className={s.inlineLink}>
                 its component page
               </Link>
-              , and the playground stages it with every option live.
+              , and{" "}
+              <Link href="/playground?view=chat" className={s.inlineLink}>
+                the playground
+              </Link>{" "}
+              stages it with every option live.
             </p>
             <p className={s.introBody}>
               There are three ways to add it. The full install adds everything to a Next.js app

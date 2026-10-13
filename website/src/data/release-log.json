@@ -1,6 +1,16 @@
 {
   "releases": [
     {
+      "version": "1.8.0",
+      "date": "2026-10-13",
+      "title": "The AI chat as an installable widget",
+      "body": [
+        "The chat is now one thing you install. `rift-ds/chat` holds the whole assembly: ChatProvider keeps the conversation, ChatWidget is the panel, and ChatLauncher is the floating button that opens it. Replies stream, follow-up questions and thumbs come built in, and the conversation survives moving between pages. The engine under it is exported too, for a chat with your own UI.",
+        "The launcher's header menu docks the panel to the right or left edge, or floats it as a card the visitor moves and sizes. The server side ships beside it: the streaming handler for Claude in `rift-ds/chat/server`, optional rate limits and a daily budget over Upstash in `rift-ds/chat/upstash`, and a scripted conversation in `rift-ds/chat/demo` that runs with no model or key.",
+        "`npx rift-ds init chat` scaffolds all of it into a Next.js app: the routes, the mount and an env example, starting in demo mode and never overwriting a file. Six ambient tokens now colour the ShaderField background, and most theme presets key the AI gradient to their own action colour. Everything is additive, and the chat's dependencies are optional peers, so upgrading needs no code changes."
+      ]
+    },
+    {
       "version": "1.7.0",
       "date": "2026-10-11",
       "title": "Mentions for chat, thread status dots, and three agent skills",

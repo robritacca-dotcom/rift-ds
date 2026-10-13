@@ -41,6 +41,7 @@ import {
   AgentRail,
   type AgentRailTab,
 } from "rift-ds/components/AgentRail/AgentRail";
+import { PixelAvatar } from "rift-ds/components/PixelAvatar/PixelAvatar";
 import {
   AppSidebar,
   type AppSidebarSection,
@@ -462,6 +463,7 @@ function PayrollChat({
             profile={{
               name: "Northwind AI",
               status: "Connected",
+              avatar: <PixelAvatar name="Northwind AI" size="lg" label="Northwind AI" />,
               onEdit: () => {},
               editLabel: "Edit the agent profile",
             }}

@@ -49,12 +49,23 @@ const formatBytes = (bytes: number) =>
     ? `${Math.round(bytes / (1024 * 1024 * 1024))} GB`
     : `${Math.round(bytes / (1024 * 1024))} MB`;
 
+/**
+ * The agent's mark on a profile that brings none of its own: a PixelAvatar
+ * seeded by the widget's title, the same mark the header toggle wears, so
+ * the control and the pane it opens read as one character. A host's own
+ * `avatar` or `avatarSrc` is left alone.
+ */
+const withAgentMark = (profile: AgentRailProfile, title: string): AgentRailProfile =>
+  profile.avatar || profile.avatarSrc
+    ? profile
+    : { ...profile, avatar: <PixelAvatar name={title} size="lg" label={title} /> };
+
 /** A rail slot: the widget's own panel, or a render prop for a custom one. */
 export type RailSlot = boolean | ((ctx: { overlay: boolean; close: () => void }) => ReactNode);
 
 /** What the built-in agent pane shows. */
 export interface ChatAgentOptions {
-  /** The agent's portrait block. Defaults to the widget's title with a "Connected" status and a PixelAvatar seeded by the title, the mark the projects list and the header toggle wear. */
+  /** The agent's portrait block. Defaults to the widget's title with a "Connected" status. A profile with neither `avatar` nor `avatarSrc` wears a PixelAvatar seeded by the widget's title, the mark the header toggle wears. */
   profile?: AgentRailProfile;
   /** The panes, in display order. */
   tabs: AgentRailTab[];
@@ -302,13 +313,7 @@ export function ChatWidget({
     (agent
       ? (ctx: { overlay: boolean; close: () => void }) => (
           <ChatAgentPane
-            profile={
-              agent.profile ?? {
-                name: title,
-                status: 'Connected',
-                avatar: <PixelAvatar name={title} size="lg" label={title} />,
-              }
-            }
+            profile={withAgentMark(agent.profile ?? { name: title, status: 'Connected' }, title)}
             tabs={agent.tabs}
             overlay={ctx.overlay}
           />

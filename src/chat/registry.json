@@ -16,10 +16,20 @@
         "./chat/chat.css": "The widget's stylesheet."
       },
       "peers": {
-        "./chat": ["react-markdown", "remark-gfm"],
-        "./chat/server": ["@anthropic-ai/sdk"],
-        "./chat/upstash": ["@upstash/ratelimit", "@upstash/redis"],
-        "./chat/demo": ["recharts"]
+        "./chat": [
+          "react-markdown",
+          "remark-gfm"
+        ],
+        "./chat/server": [
+          "@anthropic-ai/sdk"
+        ],
+        "./chat/upstash": [
+          "@upstash/ratelimit",
+          "@upstash/redis"
+        ],
+        "./chat/demo": [
+          "recharts"
+        ]
       },
       "parts": [
         "AgentRail",
@@ -36,13 +46,21 @@
         "DropdownMenu",
         "Mention",
         "ModelPicker",
+        "PixelAvatar",
         "PromptSuggestions",
         "Prose",
         "Reasoning",
         "ThreadPanel",
         "ThreadTabs"
       ],
-      "documented": ["ChatWidget", "ChatProvider", "ChatLauncher", "ChatThreads", "ChatTabs", "ChatAgentPane"]
+      "documented": [
+        "ChatWidget",
+        "ChatProvider",
+        "ChatLauncher",
+        "ChatThreads",
+        "ChatTabs",
+        "ChatAgentPane"
+      ]
     }
   ]
 }

@@ -16,6 +16,7 @@ import { ChatHeader } from '../components/ChatHeader/ChatHeader';
 import { ChatMessage } from '../components/ChatMessage/ChatMessage';
 import { ChatThread } from '../components/ChatThread/ChatThread';
 import { CircularButton } from '../components/CircularButton/CircularButton';
+import { PixelAvatar } from '../components/PixelAvatar/PixelAvatar';
 import { Composer } from '../components/Composer/Composer';
 import { DropdownMenu } from '../components/DropdownMenu/DropdownMenu';
 import { MentionText, type MentionSource } from '../components/Mention/Mention';
@@ -53,7 +54,7 @@ export type RailSlot = boolean | ((ctx: { overlay: boolean; close: () => void })
 
 /** What the built-in agent pane shows. */
 export interface ChatAgentOptions {
-  /** The agent's portrait block. Defaults to the widget's title with a "Connected" status. */
+  /** The agent's portrait block. Defaults to the widget's title with a "Connected" status and a PixelAvatar seeded by the title, the mark the projects list and the header toggle wear. */
   profile?: AgentRailProfile;
   /** The panes, in display order. */
   tabs: AgentRailTab[];
@@ -301,7 +302,13 @@ export function ChatWidget({
     (agent
       ? (ctx: { overlay: boolean; close: () => void }) => (
           <ChatAgentPane
-            profile={agent.profile ?? { name: title, status: 'Connected' }}
+            profile={
+              agent.profile ?? {
+                name: title,
+                status: 'Connected',
+                avatar: <PixelAvatar name={title} size="lg" label={title} />,
+              }
+            }
             tabs={agent.tabs}
             overlay={ctx.overlay}
           />
@@ -406,7 +413,9 @@ export function ChatWidget({
           nobody learns. */}
       {renderAside && (
         <CircularButton
-          icon="smart_toy"
+          /* The agent's own mark, the same seed the pane's portrait uses, so
+             the toggle and the panel it opens read as one character. */
+          icon={<PixelAvatar name={title} size="sm" />}
           variant="tertiary"
           className={asideShown ? 'ds-chat-widget__agent-toggle--on' : undefined}
           ariaLabel={asideShown ? 'Hide the agent panel' : 'Show the agent panel'}

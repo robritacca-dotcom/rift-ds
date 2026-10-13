@@ -12,7 +12,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.7.0. The same data
 - Subpath `rift-ds/chat/demo`: A scripted conversation with rich cards and fixtures, for a preview that needs no key. Optional peers: recharts.
 - Subpath `rift-ds/chat/chat.css`: The widget's stylesheet.
 - Scaffold: `npx rift-ds init chat`
-- Composes: AgentRail, AgentStatus, AiButton, AttachmentDropZone, AttachmentGroup, ChatHeader, ChatMessage, ChatThread, CircularButton, CodeBlock, Composer, DropdownMenu, Mention, ModelPicker, PromptSuggestions, Prose, Reasoning, ThreadPanel, ThreadTabs
+- Composes: AgentRail, AgentStatus, AiButton, AttachmentDropZone, AttachmentGroup, ChatHeader, ChatMessage, ChatThread, CircularButton, CodeBlock, Composer, DropdownMenu, Mention, ModelPicker, PixelAvatar, PromptSuggestions, Prose, Reasoning, ThreadPanel, ThreadTabs
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/ai-chat
 

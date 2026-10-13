@@ -344,7 +344,9 @@ export default function AiChatPage() {
                     widget={(chat) => ({
                       compact: true,
                       showStarters: variant.value === "none",
-                      widgets: <DemoWelcome variant={variant.value} onAsk={chat.send} />,
+                      /* No slot at all for the bare welcome: an element that renders nothing
+                         would still reserve the slot's room and lift the greeting off centre. */
+                      widgets: variant.value === "none" ? undefined : <DemoWelcome variant={variant.value} onAsk={chat.send} />,
                       widgetsLayout: variant.wide || phone ? "scroll" : "fit",
                       widgetsWidth: variant.wide ? "wide" : "column",
                     })}

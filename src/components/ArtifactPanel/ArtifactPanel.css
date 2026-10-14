@@ -1,0 +1,159 @@
+/* ============================================
+   ARTIFACT PANEL COMPONENT
+   The surface a chat opens beside the conversation to show something it
+   made. A header names the artifact and carries its controls; the body is
+   the preview (live content, or a sandboxed frame) or the source.
+   Deliberately surface-less, like AgentRail and ThreadPanel — the host
+   paints the card it sits in, and decides where that card goes.
+
+   One scroll region only: the body. The header stays put, so the controls
+   never leave with the content.
+   ============================================ */
+
+/* Base */
+
+.ds-artifact-panel {
+  /* Width, height and padding combine on the root, so the component declares
+     its own sizing model rather than leaning on a host reset. */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ============================================
+   HEADER — the artifact's name, then its controls
+   ============================================ */
+
+/* The controls stand --padding-300 in from the top and trailing edges, the
+   inset AgentRail gives its own corner control, so the two panels that
+   share a chat's trailing seat put their close in the same place and a
+   rounded host card has room to turn its corner around it. */
+.ds-artifact-panel__header {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-300);
+  min-width: 0;
+  padding: var(--padding-300) var(--padding-300) var(--padding-300)
+    var(--padding-400);
+  border-bottom: var(--border-025) solid var(--color-bg-container-border);
+}
+
+.ds-artifact-panel__heading {
+  display: flex;
+  flex: 1;
+  align-items: baseline;
+  gap: var(--gap-200);
+  min-width: 0;
+}
+
+/* The mark sits on the row's centre line while the name and its meta share
+   a baseline. */
+.ds-artifact-panel__icon {
+  --icon-size: var(--icon-size-500);
+  display: inline-flex;
+  flex: none;
+  align-self: center;
+  color: var(--color-icon-secondary);
+}
+
+/* ChatHeader's title face, so the two headers read as one line of type.
+   The name outranks its meta when the row runs short: the meta carries a
+   shrink factor large enough to give way entirely before the name loses a
+   letter. */
+.ds-artifact-panel__title {
+  flex: 0 1 auto;
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  color: var(--color-text-primary);
+}
+
+.ds-artifact-panel__meta {
+  flex: 0 1000 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-tertiary);
+}
+
+.ds-artifact-panel__controls {
+  display: flex;
+  flex: none;
+  align-items: center;
+  /* The row is the buttons' height whatever it holds: the view switch
+     stands a hair taller than a button, and a header that grew with it
+     would move every control when an artifact with source took the stage. */
+  height: 40px;
+  gap: var(--gap-100);
+  min-width: 0;
+}
+
+/* The view switch stands a beat clear of the icon buttons it leads. */
+.ds-artifact-panel__controls > .ds-segmented-control {
+  margin-inline-end: var(--gap-100);
+}
+
+/* ============================================
+   BODY — the preview or the source
+   ============================================ */
+
+.ds-artifact-panel__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* Live content scrolls inside the body and brings its own padding: a
+   dashboard wants an inset, a full-bleed page does not. */
+.ds-artifact-panel__content,
+.ds-artifact-panel__code {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  /* ThreadPanel's tucked-away thin scrollbar: no track fill, the thumb
+     showing only while the region is hovered or scrolled from the keyboard. */
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.ds-artifact-panel__content:hover,
+.ds-artifact-panel__content:focus-within,
+.ds-artifact-panel__code:hover,
+.ds-artifact-panel__code:focus-within {
+  scrollbar-color: var(--color-bg-container-border) transparent;
+}
+
+.ds-artifact-panel__code {
+  padding: var(--padding-400);
+}
+
+/* A framed document is its own page: it fills the body edge to edge and
+   owns its own scrolling. */
+.ds-artifact-panel__frame {
+  display: block;
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  border: none;
+}

@@ -1,0 +1,106 @@
+/* ============================================
+   ARTIFACT CARD COMPONENT
+   An artifact's place in a conversation: a mark, the name over its kind,
+   and a cue for what a press does. One row, the width of a card, and a
+   toggle button: pressed while its artifact is on stage in the panel.
+   ============================================ */
+
+/* Base */
+
+.ds-artifact-card {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: var(--gap-300);
+  width: 100%;
+  max-width: 360px;
+  padding: var(--padding-300);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
+  background-color: var(--color-bg-container-primary);
+  cursor: pointer;
+  text-align: left;
+  transition:
+    background-color var(--motion-duration-fast) var(--motion-ease-standard),
+    border-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-artifact-card:hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-artifact-card:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+/* States */
+
+/* On stage, the tile holds the "on stage" fill ThreadPanel's active row and
+   ThreadTabs' active tab wear. */
+.ds-artifact-card--open {
+  background-color: var(--color-bg-container-tertiary);
+}
+
+/* The mark steps to the card's resting fill while the card holds the
+   on-stage one, so it stays a tile on the card instead of dissolving into
+   a fill of nearly its own value. */
+.ds-artifact-card--open .ds-artifact-card__mark {
+  background-color: var(--color-bg-container-primary);
+}
+
+.ds-artifact-card__mark {
+  --icon-size: var(--icon-size-600);
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  /* Concentric with the card: its radius less the padding between them,
+     computed from the live tokens so the corner holds under any theme's
+     radius scale, and squares off with a squared theme. */
+  border-radius: max(0px, calc(var(--radius-600) - var(--padding-300)));
+  background-color: var(--color-bg-container-secondary);
+  color: var(--color-icon-primary);
+}
+
+.ds-artifact-card__text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.ds-artifact-card__title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  color: var(--color-text-primary);
+}
+
+.ds-artifact-card__meta {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-tertiary);
+}
+
+.ds-artifact-card__cue {
+  --icon-size: var(--icon-size-500);
+  flex: none;
+  color: var(--color-icon-secondary);
+}
+
+.ds-artifact-card:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

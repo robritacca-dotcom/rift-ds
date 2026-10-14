@@ -51,10 +51,9 @@
    HEADER — brand row and the collapse toggle
    ============================================ */
 
-/* Collapsed, --padding-200 centres the 24px mark on the rail's axis
-   (12 + 8 = the rows' icon seat); expanded it deepens to the 28px optical
-   seat with everything else, the padding gliding with the sweep. The
-   margin sits the brand row evenly between the panel's top edge and the
+/* --padding-200 centres the 24px mark on the rail's axis (12 + 8 = the
+   rows' icon seat) and holds it there expanded, so the logo never moves
+   as the rail sweeps. The margin sits the brand row evenly between the panel's top edge and the
    new-thread row: 6 + 12 + the panel's 4px gap below mirrors the 16px
    panel padding + 6 above. */
 .ds-thread-panel__header {
@@ -64,11 +63,6 @@
   min-width: 0;
   padding: var(--padding-150) var(--padding-200);
   margin-bottom: var(--gap-300);
-  transition: padding var(--motion-duration-slow) var(--motion-ease-emphasized);
-}
-
-.ds-thread-panel--expanded .ds-thread-panel__header {
-  padding: var(--padding-150) var(--padding-400);
 }
 
 /* A logo-less header collapsed to the rail: the empty brand slot would
@@ -151,11 +145,57 @@
   overflow: hidden;
   opacity: 0;
   transition: opacity var(--motion-duration-base) var(--motion-ease-standard),
-    width var(--motion-duration-slow) var(--motion-ease-emphasized);
+    width var(--motion-duration-slow) var(--motion-ease-emphasized),
+    margin var(--motion-duration-slow) var(--motion-ease-emphasized);
 }
 
+/* The hover wash is a circle drawn around the 24px mark rather than a
+   bigger button, so the glyph keeps its place on the trailing rail. The
+   toggle clips while it folds, so the wash only exists once it is open. */
+.ds-thread-panel__toggle::before {
+  content: '';
+  position: absolute;
+  inset: calc(-1 * var(--gap-100));
+  z-index: -1;
+  border-radius: var(--radius-pill);
+  background-color: transparent;
+  transition: background-color var(--motion-duration-fast)
+    var(--motion-ease-standard);
+}
+
+.ds-thread-panel--expanded .ds-thread-panel__toggle,
+.ds-thread-panel__toggle--standalone {
+  position: relative;
+  z-index: 0;
+  overflow: visible;
+}
+
+.ds-thread-panel__toggle:hover::before {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-thread-panel__toggle:active::before {
+  background-color: var(--color-action-passive-bg-active);
+}
+
+/* Collapsed, the rail is too narrow for a tooltip and clips it; the
+   native title carries the name there instead. */
+.ds-thread-panel__toggle-tip {
+  flex: none;
+}
+
+.ds-thread-panel:not(.ds-thread-panel--expanded)
+  .ds-thread-panel__toggle-tip
+  .ds-tooltip__panel {
+  display: none;
+}
+
+/* The glyph's ink stops a bearing short of its 24px box, so the box is
+   pulled out by that much: the mark's right edge lands on the rail the
+   rows' meta captions and the profile's caption end on. */
 .ds-thread-panel--expanded .ds-thread-panel__toggle {
   width: 24px;
+  margin-inline-end: calc(-1 * var(--gap-100));
   opacity: 1;
 }
 
@@ -199,20 +239,13 @@
   text-align: left;
   text-decoration: none;
   transition: background-color var(--motion-duration-fast)
-      var(--motion-ease-standard),
-    padding var(--motion-duration-slow) var(--motion-ease-emphasized);
+    var(--motion-ease-standard);
 }
 
-/* Expanded, the rows breathe: --padding-400 inline sets the 28px optical
-   seat (12 + 16) that everything in the panel aligns to — the pen icon's
-   box is the guide. Collapsed returns to --padding-200, which is what the
-   40px circle's math needs; the padding glides with the rail's sweep. */
-.ds-thread-panel--expanded .ds-thread-panel__new,
-.ds-thread-panel--expanded .ds-thread-panel__control,
-.ds-thread-panel--expanded .ds-thread-panel__project,
-.ds-thread-panel--expanded .ds-thread-panel__thread {
-  padding: var(--padding-200) var(--padding-400);
-}
+/* One seat in both states: the 20px inset (12 + 8) the collapsed circle's
+   math needs is also where the expanded panel's marks sit, so no mark
+   shifts as the rail sweeps. Text-led content sits a bearing deeper — see
+   TEXT SEAT at the end of the file. */
 
 .ds-thread-panel__new:hover,
 .ds-thread-panel__control:hover,
@@ -335,8 +368,7 @@
   align-items: center;
   gap: var(--gap-200);
   min-width: 0;
-  padding: var(--padding-150) var(--padding-200) var(--padding-150)
-    var(--padding-400);
+  padding: var(--padding-150) var(--padding-200);
   opacity: 0;
   visibility: hidden;
   transition: opacity var(--motion-duration-base) var(--motion-ease-standard),
@@ -356,7 +388,7 @@
   overflow: hidden;
   white-space: nowrap;
   font-family: var(--font-overline-family);
-  font-size: var(--font-overline-size);
+  font-size: var(--font-caption-size);
   font-weight: var(--font-overline-weight);
   line-height: var(--font-overline-line-height);
   letter-spacing: var(--font-overline-letter-spacing);
@@ -477,16 +509,19 @@
   gap: var(--gap-050);
 }
 
-/* Aligned with the expanded rows' 28px optical seat. The vertical padding
+/* The overline face set one step down, at the caption's size: the labels
+   sit among caption-sized meta and second lines, and the full overline
+   outweighed the thread titles it files. The overline's own line-height
+   stays, so the rhythm below is unchanged. Aligned with the text seat. The vertical padding
    is the rows' own inset restated — as if the label sat inside a row —
    so the overline keeps the pills' rhythm instead of hugging the
    new-thread row above and the first thread below. */
 .ds-thread-panel__group-label {
-  padding: var(--padding-200) var(--padding-400);
+  padding: var(--padding-200);
   overflow: hidden;
   white-space: nowrap;
   font-family: var(--font-overline-family);
-  font-size: var(--font-overline-size);
+  font-size: var(--font-caption-size);
   font-weight: var(--font-overline-weight);
   line-height: var(--font-overline-line-height);
   letter-spacing: var(--font-overline-letter-spacing);
@@ -760,7 +795,7 @@
   width: 100%;
   height: 40px;
   min-width: 0;
-  padding: 0 var(--padding-400);
+  padding: 0 var(--padding-200);
   border: var(--border-025) solid var(--color-action-primary-bg);
   border-radius: var(--radius-pill);
   background-color: var(--color-bg-container-primary);
@@ -778,7 +813,7 @@
 
 .ds-thread-panel__more {
   align-self: flex-start;
-  padding: var(--padding-150) var(--padding-400);
+  padding: var(--padding-150) var(--padding-200);
   border: none;
   border-radius: var(--radius-pill);
   background: transparent;
@@ -826,8 +861,9 @@
   pointer-events: auto;
 }
 
-/* Same per-state seat as the header: collapsed, --padding-100 centres the
-   32px avatar on the rail's axis (12 + 4); expanded joins the 28px seat. */
+/* --padding-100 centres the 32px avatar on the rail's axis (12 + 4) in
+   both states, so it holds still like the header's mark; expanded, only
+   the trailing inset deepens, landing the caption on the rows' meta rail. */
 .ds-thread-panel__profile {
   display: flex;
   align-items: center;
@@ -838,7 +874,8 @@
 }
 
 .ds-thread-panel--expanded .ds-thread-panel__profile {
-  padding: var(--padding-100) var(--padding-400);
+  padding: var(--padding-100) var(--padding-200) var(--padding-100)
+    var(--padding-100);
 }
 
 .ds-thread-panel__profile-name {
@@ -874,4 +911,21 @@
 
 .ds-thread-panel--expanded .ds-thread-panel__profile-meta {
   opacity: 1;
+}
+
+/* ============================================
+   TEXT SEAT — last, so it wins over each rule's padding shorthand
+   ============================================ */
+
+/* Text-led content — group labels, thread rows, the more row, the rename
+   field — sits a bearing deeper than the icon seat: a glyph's ink starts
+   that far inside its 24px box, so this is what lands the labels and status
+   dots under the pen's visible edge while the glyph itself stays centred
+   under the logo. None of it shows collapsed, so nothing moves. */
+.ds-thread-panel__thread,
+.ds-thread-panel__group-label,
+.ds-thread-panel__projects-header,
+.ds-thread-panel__more,
+.ds-thread-panel__rename {
+  padding-inline-start: var(--padding-300);
 }

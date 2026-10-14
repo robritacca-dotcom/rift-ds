@@ -5,6 +5,7 @@ import { Kbd } from '../Kbd/Kbd';
 import { PixelAvatar, distinctPixelInks } from '../PixelAvatar/PixelAvatar';
 import { StatusDot } from '../StatusDot/StatusDot';
 import type { StatusDotProps } from '../StatusDot/StatusDot';
+import { Tooltip } from '../Tooltip/Tooltip';
 import './ThreadPanel.css';
 import '../../fonts/material-symbols.css';
 
@@ -417,23 +418,35 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
        the toggle carries it only while expanded, or always when there is
        no logo to hand the job to. */
     const logoExpands = Boolean(logo && !expanded && onExpandedChange);
+    /* The tooltip opens leftward, into the panel: the rail clips its
+       overflow, so a panel centred on the trailing-edge button would be cut
+       off. Collapsed there is no room for one at all, and the native title
+       stands in. */
+    const toggleLabel = expanded ? collapseLabel : expandLabel;
     const toggle = onExpandedChange && (
-      <button
-        type="button"
-        className={[
-          `${baseClass}__toggle`,
-          !logo && `${baseClass}__toggle--standalone`,
-        ]
-          .filter(Boolean)
-          .join(' ')}
-        aria-label={expanded ? collapseLabel : expandLabel}
-        aria-expanded={expanded}
-        onClick={() => onExpandedChange(!expanded)}
+      <Tooltip
+        content={toggleLabel}
+        position="left"
+        className={`${baseClass}__toggle-tip`}
       >
-        <span className={iconClass} aria-hidden="true">
-          {expanded ? 'left_panel_close' : 'left_panel_open'}
-        </span>
-      </button>
+        <button
+          type="button"
+          className={[
+            `${baseClass}__toggle`,
+            !logo && `${baseClass}__toggle--standalone`,
+          ]
+            .filter(Boolean)
+            .join(' ')}
+          aria-label={toggleLabel}
+          title={expanded ? undefined : toggleLabel}
+          aria-expanded={expanded}
+          onClick={() => onExpandedChange(!expanded)}
+        >
+          <span className={iconClass} aria-hidden="true">
+            {expanded ? 'left_panel_close' : 'left_panel_open'}
+          </span>
+        </button>
+      </Tooltip>
     );
 
     /* Collapsed, the whole rail is an expand target: a click on its dead

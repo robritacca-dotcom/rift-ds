@@ -1,0 +1,171 @@
+/* A template drawn live in a scaled, inert same-origin frame: the window
+   the templates carousel and the home page's template showcase both show.
+   TemplateFrame.tsx owns the design sizes and sets --frame-scale. */
+
+/* The window: a drawn browser bar over the template's viewport, so the
+   preview reads as its own entity rather than a region of this page. */
+.frameShell {
+  position: relative;
+  width: 100%;
+  /* The shell holds the desktop frame's aspect at every device size, so
+     the carousel's geometry never jumps when the toggle switches — a
+     narrower device centres inside it like hardware on a stage. */
+  aspect-ratio: 1440 / 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
+  background: var(--color-bg-container-primary);
+  overflow: hidden;
+}
+
+/* The template's viewport: a 16:10 desktop drawn at the design size and
+   scaled to the shell. 1440x900 lives in TemplateFrame.tsx, which sets
+   --frame-scale from the shell's measured width. */
+.frameViewport {
+  position: relative;
+  width: calc(var(--design-w, 1440px) * var(--frame-scale, 0));
+  height: calc(var(--design-h, 900px) * var(--frame-scale, 0));
+  overflow: hidden;
+}
+
+/* A non-desktop device floats on the dotted working-canvas ground —
+   the playground stages' surface. The dot geometry mirrors
+   DotBackground.module.css (the texture's home); it cannot be reused
+   directly because that layer is viewport-fixed. */
+.frameShellDevice {
+  background-color: var(--color-bg-page-primary);
+  background-image: radial-gradient(
+    circle,
+    var(--color-bg-container-border) 1.25px,
+    transparent 1.25px
+  );
+  background-size: 26px 26px;
+}
+
+/* The device's own chrome: phone corners at the phone size, softer at
+   tablet, floating shadow either way. */
+.frameShellDevice .frameViewport {
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
+  box-shadow: var(--shadow-floating);
+}
+
+.frame {
+  /* Absolute, so the design-size frame adds no intrinsic width: the
+     carousel slide must size from the column, not from the device-size
+     page inside it. */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--design-w, 1440px);
+  height: var(--design-h, 900px);
+  border: 0;
+  transform: scale(var(--frame-scale, 0.5));
+  transform-origin: top left;
+  /* Inert by design: the overlay link owns the pointer, and the full page
+     is one click away. */
+  pointer-events: none;
+}
+
+.frameLink {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-600);
+}
+
+.frameLink:focus-visible {
+  outline: var(--border-050) solid var(--color-action-primary-bg);
+  outline-offset: calc(-1 * var(--border-050));
+}
+
+/* ============================================
+   PHONE MOCKUP — the mobile preview wears the playground chat stage's
+   device chrome (ChatView.module.css owns the strip geometry): status
+   bar above, home bar below, the whole device scaled as one block so
+   the OS strips shrink with the screen.
+   ============================================ */
+.phoneMock {
+  position: relative;
+  width: calc(var(--design-w, 390px) * var(--frame-scale, 0));
+  height: calc((var(--design-h, 844px) + 78px) * var(--frame-scale, 0));
+}
+
+.phoneMockInner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  width: var(--design-w, 390px);
+  height: calc(var(--design-h, 844px) + 78px);
+  transform: scale(var(--frame-scale, 0));
+  transform-origin: top left;
+  /* ds-allow(mockup): a real Pro Max's 56px screen corner, the same screen
+     radius as the playground device's set dressing (ChatView.module.css),
+     rather than the UI radius scale. This mock is the bare screen, with no
+     bezel around it. */
+  border-radius: 56px;
+  overflow: hidden;
+  border: var(--border-025) solid var(--color-bg-container-border);
+  background: var(--color-bg-page-primary);
+  box-shadow: var(--shadow-floating);
+}
+
+.mockStatusBar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 54px;
+  /* Inboard of the deep screen corner, as on the playground device. */
+  padding: var(--padding-150) 36px 0 44px;
+  flex-shrink: 0;
+  color: var(--color-text-primary);
+}
+
+.mockStatusTime {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  font-variant-numeric: tabular-nums;
+}
+
+.mockStatusIcons {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-050);
+  --icon-size: var(--icon-size-500);
+}
+
+.mockScreen {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Inside the mockup the WHOLE device is already scaled as one block, so
+   the frame's own scale must not apply again — double-scaling shrank
+   the app to a strip inside the phone. */
+.mockScreen .frame {
+  transform: none;
+}
+
+.mockHomeBar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 24px;
+  padding-bottom: var(--padding-150);
+  flex-shrink: 0;
+}
+
+.mockHomeIndicator {
+  width: 134px;
+  height: 5px;
+  border-radius: var(--radius-pill);
+  background: var(--color-text-primary);
+}

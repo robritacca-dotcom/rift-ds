@@ -1,0 +1,688 @@
+/* Labs: the bento. Colours, spaces, radii and type are semantic tokens; the
+   raw values are structural layout sizes (row heights, mock device sizes,
+   breakpoints) that pages own everywhere else on the site, and the dials
+   the experiment exists to tune: the hover ring, the morph timing, and the
+   textures' masks. */
+
+.page {
+  --bento-row: 620px;
+  --bento-radius: var(--radius-400);
+
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--gap-3000) var(--padding-500) var(--gap-3000);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-body);
+}
+
+.icon {
+  --icon-size: var(--icon-size-600);
+  font-size: var(--icon-size);
+  line-height: 1;
+}
+
+/* --------------------------------------------------------- theme bar */
+
+.themeBar {
+  position: fixed;
+  top: var(--padding-400);
+  right: var(--padding-400);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: var(--gap-200);
+  padding: var(--padding-100);
+  border-radius: var(--radius-pill);
+  background: var(--color-bg-glass);
+  border: 1px solid var(--color-bg-container-border);
+  box-shadow: var(--shadow-floating);
+  backdrop-filter: blur(16px);
+}
+
+/* ------------------------------------------------------------- intro */
+
+.intro {
+  max-width: 760px;
+  margin-bottom: var(--gap-2000);
+}
+
+.headline {
+  margin: 0;
+  font-family: var(--font-sub-display-family);
+  font-size: var(--font-sub-display-size);
+  font-weight: var(--font-heading-1-weight);
+  line-height: var(--font-sub-display-line-height);
+  letter-spacing: var(--font-sub-display-letter-spacing);
+}
+
+.headline span {
+  color: var(--color-text-secondary);
+  font-weight: var(--font-sub-display-weight);
+}
+
+/* -------------------------------------------------------------- grid */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-rows: var(--bento-row);
+  gap: var(--gap-400);
+}
+
+.card[data-span="2"] { grid-column: span 2; }
+.card[data-span="3"] { grid-column: span 3; grid-row: span 1; }
+
+/* The tile's hover ring is Composer's AI glow, restated: a conic gradient
+   on the AI gradient tokens, turning on Composer's three-uneven-turns
+   cadence. The angle is a registered property so it can tween; browsers
+   without @property show the ring static at its first angle. */
+@property --bento-glow-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+/* No overflow clip on the card itself: the glow has to spill past its edge.
+   The art layer clips instead, to the card's inner radius. No isolation
+   either, so the glow's negative z-index sits behind the card's surface,
+   exactly as it sits behind Composer's shell. */
+.card {
+  position: relative;
+  border-radius: var(--bento-radius);
+  background: var(--color-bg-container-primary);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  cursor: pointer;
+  transition: border-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.card:hover,
+.card:has(.toggle:focus-visible) {
+  border-color: transparent;
+}
+
+/* The ring: the gradient across the whole box, masked to the border band. */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: calc(-1 * var(--border-025));
+  z-index: 5;
+  border-radius: inherit;
+  padding: var(--border-050);
+  background: conic-gradient(
+    from var(--bento-glow-angle),
+    var(--color-ai-gradient-start),
+    var(--color-ai-gradient-mid),
+    var(--color-ai-gradient-end),
+    var(--color-ai-gradient-mid),
+    var(--color-ai-gradient-start)
+  );
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+  animation: bento-glow-turn 21s var(--motion-ease-emphasized) infinite paused;
+}
+
+/* The glow: the same gradient blurred behind the surface. At rest it waits
+   collapsed at the expand control's corner, so waking blooms out of it. */
+.card::after {
+  content: "";
+  position: absolute;
+  inset: calc(-1 * var(--border-025));
+  z-index: -1;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--bento-glow-angle),
+    var(--color-ai-gradient-start),
+    var(--color-ai-gradient-mid),
+    var(--color-ai-gradient-end),
+    var(--color-ai-gradient-mid),
+    var(--color-ai-gradient-start)
+  );
+  filter: blur(14px);
+  opacity: 0;
+  transform-origin: 92% 6%;
+  transform: scale(0.35);
+  pointer-events: none;
+  transition:
+    opacity var(--motion-duration-base) var(--motion-ease-standard),
+    transform var(--motion-duration-base) var(--motion-ease-standard);
+  animation: bento-glow-turn 21s var(--motion-ease-emphasized) infinite paused;
+}
+
+/* Waking, on Composer's entry: the glow blooms over the entrance pace and
+   the ring fades up a fast beat behind it. */
+.card:hover::before,
+.card:has(.toggle:focus-visible)::before {
+  opacity: 1;
+  transition: opacity var(--motion-duration-slower) var(--motion-ease-entrance) var(--motion-duration-fast);
+  animation-play-state: running;
+}
+
+.card:hover::after,
+.card:has(.toggle:focus-visible)::after {
+  opacity: 0.3;
+  transform: none;
+  transition:
+    opacity var(--motion-duration-slower) var(--motion-ease-entrance),
+    transform var(--motion-duration-slower) var(--motion-ease-entrance);
+  animation-play-state: running;
+}
+
+/* The tile that is opening, open or closing never wears the glow: its ring
+   and halo would be captured in the morph's snapshot and vanish mid-flight
+   on the way out, and on the way back the browser drops :hover for the
+   length of the transition, so the glow would fade off and bloom again.
+   The attribute holds until the close has finished, then hover resumes.
+   Scoped under .page to outrank the :has(:focus-visible) wake rule, so a
+   tile opened from the keyboard is covered too. */
+.page .card[data-linked]::before,
+.page .card[data-linked]::after {
+  opacity: 0;
+  transition: none;
+}
+
+@keyframes bento-glow-turn {
+  0% { --bento-glow-angle: 0deg; }
+  14% { --bento-glow-angle: 168deg; }
+  31% { --bento-glow-angle: 306deg; }
+  46% { --bento-glow-angle: 570deg; }
+  62% { --bento-glow-angle: 690deg; }
+  79% { --bento-glow-angle: 936deg; }
+  100% { --bento-glow-angle: 1080deg; }
+}
+
+.cardTitle {
+  position: relative;
+  z-index: 2;
+  max-width: 15em;
+  margin: 0;
+  padding: var(--padding-500) calc(var(--padding-500) + 56px) 0 var(--padding-500);
+  font-family: var(--font-sub-display-family);
+  font-size: var(--font-heading-1-size);
+  font-weight: var(--font-sub-display-weight);
+  line-height: var(--font-heading-1-line-height);
+  letter-spacing: var(--font-sub-display-letter-spacing);
+  pointer-events: none;
+}
+
+.cardArt {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  border-radius: calc(var(--bento-radius) - var(--border-025));
+  pointer-events: none;
+}
+
+.cardHit {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+/* The expand control is the library's CircularButton; the page only seats
+   it in the corner. Its variant steps to primary while the card is hovered
+   or focused (see Bento.tsx). */
+.toggle {
+  position: absolute;
+  top: var(--padding-400);
+  right: var(--padding-400);
+  z-index: 4;
+}
+
+/* ------------------------------------------------------------ scenes */
+
+/* Scenes are library components placed over a texture; this file only
+   positions them. Every scene is inert (see Bento.tsx): it is a picture of
+   the product, so nothing inside takes focus or input. */
+
+.scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.artCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.wash {
+  position: absolute;
+  inset: 0;
+}
+
+.washFallback,
+.washField {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.washField {
+  opacity: 0;
+  transition: opacity var(--motion-duration-slower) var(--motion-ease-standard);
+}
+
+.wash[data-status="active"] .washField { opacity: 1; }
+.wash[data-status="active"] .washFallback,
+.wash[data-status="pending"] .washFallback { opacity: 0; }
+
+.washSweep {
+  mask: linear-gradient(170deg, transparent 18%, #000 48%);
+}
+
+.washRise {
+  mask: linear-gradient(to bottom, transparent 22%, #000 78%);
+}
+
+.washFoil {
+  mask: radial-gradient(90% 70% at 50% 100%, #000 20%, transparent 75%);
+}
+
+.washCorner {
+  mask: radial-gradient(70% 120% at 0% 100%, #000 10%, transparent 60%);
+}
+
+/* A placed component: absolutely positioned, floating on the texture. */
+.place {
+  position: absolute;
+  box-shadow: var(--shadow-floating);
+}
+
+.revealed {
+  opacity: 0;
+  transform: translateY(10px) scale(0.98);
+  transition:
+    opacity var(--motion-duration-slow) var(--motion-ease-standard),
+    transform var(--motion-duration-deliberate) var(--motion-ease-entrance);
+}
+
+.revealed[data-on="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+/* Theme scene. */
+.themeChart {
+  left: 34%;
+  top: 30%;
+  width: min(60%, 520px);
+  animation: floatY 9s ease-in-out infinite;
+}
+
+.themeStat {
+  left: 6%;
+  top: 44%;
+  width: min(34%, 250px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+  animation: floatY 9s ease-in-out -4.5s infinite;
+}
+
+.panelBar,
+.panelFoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-300);
+}
+
+.panelBar { margin-bottom: var(--gap-300); }
+.panelFoot { margin-top: var(--gap-300); }
+.swatchRow { display: flex; gap: var(--gap-100); }
+
+/* The theme scene eases every re-pointed fill between accents. */
+.scene :global(.ds-button),
+.scene :global(.ds-swatch),
+.scene :global(.recharts-area-area),
+.scene :global(.recharts-area-curve) {
+  transition:
+    background-color var(--motion-duration-slower) var(--motion-ease-standard),
+    fill var(--motion-duration-slower) var(--motion-ease-standard),
+    stroke var(--motion-duration-slower) var(--motion-ease-standard);
+}
+
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* Usage scene. */
+.usageStack {
+  left: 50%;
+  top: 22%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+  width: min(84%, 380px);
+  transform: translateX(-50%);
+  box-shadow: none;
+}
+
+.usageStack > * { box-shadow: var(--shadow-floating); }
+
+/* Chat scene. */
+.chatStack {
+  left: 50%;
+  top: 22%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+  width: min(84%, 380px);
+  transform: translateX(-50%);
+  box-shadow: none;
+}
+
+/* Tokens scene. */
+.tokenStack {
+  left: 50%;
+  top: 22%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+  width: min(84%, 340px);
+  transform: translateX(-50%);
+  box-shadow: none;
+}
+
+.tokenStack > :first-child { box-shadow: var(--shadow-floating); }
+
+.legendGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--gap-200);
+}
+
+.legendOn,
+.legendOff {
+  transition:
+    opacity var(--motion-duration-slow) var(--motion-ease-standard),
+    transform var(--motion-duration-deliberate) var(--motion-ease-spring);
+}
+
+.legendOff { opacity: 0.55; }
+.legendOn { transform: translateY(-3px); }
+
+/* MCP scene. */
+.globeWrap {
+  position: absolute;
+  left: -6%;
+  right: -6%;
+  bottom: -30%;
+  aspect-ratio: 1;
+}
+
+.toolStack {
+  left: var(--padding-500);
+  top: 24%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+  width: min(78%, 320px);
+  box-shadow: none;
+}
+
+.toolStack > * > * { box-shadow: var(--shadow-floating); }
+
+/* Templates scene. */
+.hairlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    -45deg,
+    color-mix(in srgb, var(--color-core-accent-violet) 40%, transparent) 0 1px,
+    transparent 1px 7px
+  );
+  mask:
+    radial-gradient(120% 90% at 100% 0%, #000, transparent 55%),
+    radial-gradient(80% 90% at 0% 100%, #000, transparent 50%);
+  animation: drift 30s linear infinite;
+}
+
+@keyframes drift {
+  to { background-position: 99px 0; }
+}
+
+.templatesMain {
+  overflow: hidden;
+  left: 40%;
+  top: 8%;
+  width: 54%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-400);
+}
+
+.templatesSide {
+  left: 20%;
+  top: 34%;
+  width: 260px;
+  animation: floatY 8s ease-in-out infinite;
+}
+
+.templatesSide > * + * { margin-top: var(--gap-400); }
+
+/* ----------------------------------------------------------- overlay */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: color-mix(in srgb, var(--color-bg-page-primary) 55%, transparent);
+  backdrop-filter: blur(14px) saturate(1.2);
+  animation: fadeIn var(--motion-duration-deliberate) var(--motion-ease-standard) both;
+}
+
+/* Fading out, it no longer catches clicks meant for the page it reveals. */
+.backdrop[data-state="out"] {
+  pointer-events: none;
+  animation: fadeOut var(--motion-duration-slow) var(--motion-ease-standard) both;
+}
+
+.scroller {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--gap-1500) var(--padding-500);
+}
+
+.panel {
+  position: relative;
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: var(--gap-1500) 72px var(--gap-2000);
+  border-radius: var(--bento-radius);
+  background: var(--color-bg-container-primary);
+  border: 1px solid var(--color-bg-container-border);
+  box-shadow: var(--shadow-modal);
+}
+
+.close {
+  top: var(--padding-500);
+  right: var(--padding-500);
+}
+
+.panelHead {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: var(--gap-1500);
+  align-items: start;
+}
+
+.panelTitle {
+  margin: 0 0 var(--gap-400);
+  font-family: var(--font-sub-display-family);
+  font-size: var(--font-sub-display-size);
+  font-weight: var(--font-sub-display-weight);
+  line-height: var(--font-sub-display-line-height);
+  letter-spacing: var(--font-sub-display-letter-spacing);
+}
+
+.panelLede {
+  margin: 0 0 var(--gap-1000);
+  color: var(--color-text-secondary);
+  font-size: var(--font-paragraph-size);
+  line-height: var(--font-paragraph-line-height);
+}
+
+.panelCtas { display: flex; flex-wrap: wrap; gap: var(--gap-300); }
+
+.checks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-400);
+  margin: var(--gap-300) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.checks li {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-300);
+}
+
+.check {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--color-core-accent-coral) 16%, transparent);
+  color: var(--color-core-accent-coral);
+  font-size: 14px;
+}
+
+.showcase {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: var(--gap-400);
+  margin: var(--gap-2000) 0;
+}
+
+.showMain,
+.showSide {
+  position: relative;
+  min-height: 460px;
+  border-radius: var(--radius-300);
+  overflow: hidden;
+  background: var(--color-bg-container-secondary);
+}
+
+.showSide {
+  padding: var(--padding-500);
+  background:
+    radial-gradient(120% 70% at 100% 100%, color-mix(in srgb, var(--color-core-accent-violet) 26%, transparent), transparent 70%),
+    radial-gradient(90% 60% at 0% 100%, color-mix(in srgb, var(--color-core-accent-coral) 20%, transparent), transparent 70%),
+    var(--color-bg-container-secondary);
+}
+
+.sideTitle {
+  margin: 0 0 var(--gap-400);
+  font-weight: var(--font-title-body-weight);
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  margin: 0;
+  padding: var(--padding-300) var(--padding-400);
+  border-radius: var(--radius-300);
+  background: var(--color-bg-container-primary);
+  box-shadow: var(--shadow-floating);
+  font-size: var(--font-paragraph-sm-size);
+}
+
+.facts dt,
+.facts dd {
+  margin: 0;
+  padding: var(--padding-300) 0;
+  border-top: 1px solid var(--color-divider);
+}
+
+.facts dt:first-of-type,
+.facts dt:first-of-type + dd { border-top: 0; }
+.facts dt { color: var(--color-text-secondary); padding-right: var(--gap-400); }
+.facts dd { text-align: right; }
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--gap-1000);
+}
+
+.features p {
+  margin: var(--gap-400) 0 0;
+  color: var(--color-text-secondary);
+  line-height: var(--font-paragraph-line-height);
+}
+
+.featureIcon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-200);
+  border: 1px solid color-mix(in srgb, var(--color-core-accent-coral) 30%, var(--color-bg-container-border));
+  color: var(--color-core-accent-coral);
+}
+
+/* The panel's contents rise in after the morph has carried the box over. */
+.rise {
+  animation: rise var(--motion-duration-slower) var(--motion-ease-entrance) both;
+  animation-delay: calc(220ms + var(--i, 0) * 60ms);
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+}
+
+@keyframes fadeOut {
+  to { opacity: 0; }
+}
+
+/* -------------------------------------------------------- responsive */
+
+@media (max-width: 960px) {
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .card[data-span="3"] { grid-column: span 2; }
+  .panelHead { grid-template-columns: 1fr; gap: var(--gap-1000); }
+  .showcase { grid-template-columns: 1fr; }
+  .panel { padding: var(--gap-1000) var(--padding-500) var(--gap-1500); }
+}
+
+@media (max-width: 640px) {
+  .page { --bento-row: 540px; padding-top: var(--gap-2000); }
+  .grid { grid-template-columns: 1fr; }
+  .card[data-span] { grid-column: auto; }
+  .features { grid-template-columns: 1fr; gap: var(--gap-500); }
+  .scroller { padding: 0; }
+  .panel { border-radius: 0; min-height: 100%; }
+  .templatesSide { left: 4%; width: 220px; }
+  .templatesMain { left: 30%; width: 80%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card::before, .card::after { animation: none; }
+  .themeChart, .themeStat, .templatesSide, .hairlines, .rise { animation: none; }
+}

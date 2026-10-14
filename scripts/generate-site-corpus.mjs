@@ -718,6 +718,8 @@ const EXCLUDED_ROUTES = new Map([
     'a noindex test page imagining the chat as a docked side rail beside a payroll product, to exercise the agent panel at product scale — its prose is fictional demo data, not information'],
   ['/labs/glass-chat',
     'a noindex test page hosting the site chat as frosted glass over a piece of art — a surface experiment whose only prose is the chat widget\'s own'],
+  ['/labs/bento',
+    'a noindex test page for feature banners that open into an overlay — a surface experiment whose prose restates facts the covered pages already carry'],
   ['/templates/marketing-dashboard',
     'the marketing dashboard template rendered full viewport (the same app shell as /labs/marketing, its origin) — its prose is fictional demo data; its name and summary reach the corpus through the site map\'s Templates list, drawn from templatesSidebarLinks'],
   ['/templates/chat-home',

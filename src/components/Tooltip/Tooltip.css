@@ -14,7 +14,7 @@
 
 .ds-tooltip__panel {
   position: absolute;
-  z-index: 50;
+  z-index: var(--layer-floating);
   padding: var(--padding-150) var(--padding-200); /* 6px 8px */
   border-radius: var(--radius-100); /* 4px */
   /* The floating surface, same recipe as Popover: page background (the

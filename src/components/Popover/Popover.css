@@ -23,7 +23,7 @@
 
 .ds-popover__panel {
   position: absolute;
-  z-index: 10;
+  z-index: var(--layer-dropdown);
   min-width: 200px;
   padding: var(--padding-400); /* 16px */
   border: var(--border-025) solid var(--color-bg-container-border);

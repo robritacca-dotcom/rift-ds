@@ -4,7 +4,7 @@
    1000. Lifted here rather than in the library because the stacking order
    of the site's chrome is the site's business. */
 .palette {
-  z-index: 1200;
+  z-index: var(--layer-site-overlay);
 }
 
 /* The ask-chat row's trailing chip: AiButton's gradient ring (the system's

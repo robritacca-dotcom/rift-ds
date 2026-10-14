@@ -19,6 +19,7 @@
 /* The bar stays the first thing in the screen, above a template's own
    sticky rows. */
 .header {
+  /* ds-allow(stacking): local order inside the drawn app frame: its header over its tab bar. */
   z-index: 25;
 }
 
@@ -28,6 +29,7 @@
   left: 0;
   right: 0;
   bottom: 0;
+  /* ds-allow(stacking): local order inside the drawn app frame: its header over its tab bar. */
   z-index: 20;
   pointer-events: none;
 }

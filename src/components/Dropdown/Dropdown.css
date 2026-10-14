@@ -109,7 +109,7 @@
   list-style: none;
   max-height: 240px;
   overflow-y: auto;
-  z-index: 10;
+  z-index: var(--layer-dropdown);
   box-shadow: var(--shadow-floating);
 
   /* Animation */

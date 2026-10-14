@@ -6,7 +6,7 @@
 .ds-drawer {
   position: fixed;
   inset: 0;
-  z-index: 100;
+  z-index: var(--layer-modal);
   display: flex;
   visibility: hidden; /* keeps panel controls out of the tab order when closed */
   pointer-events: none;

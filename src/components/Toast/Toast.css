@@ -17,7 +17,7 @@
 
 .ds-toast-container {
   position: fixed;
-  z-index: var(--ds-toast-z, 200);
+  z-index: var(--ds-toast-z, var(--layer-toast));
   display: flex;
   flex-direction: column;
   gap: var(--gap-200); /* 8px */

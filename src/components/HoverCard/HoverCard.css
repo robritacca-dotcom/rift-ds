@@ -18,7 +18,7 @@
 .ds-hover-card__panel {
   /* Rendered as a <span> so the card survives inside a <p>. */
   position: absolute;
-  z-index: 50;
+  z-index: var(--layer-floating);
   min-width: 240px;
   max-width: 320px;
   padding: var(--padding-400);

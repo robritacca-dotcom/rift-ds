@@ -11,7 +11,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 100;
+  z-index: var(--layer-nav-rail);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -548,7 +548,7 @@
   top: 0;
   left: 64px;
   /* One step under the rail, so the slide starts from beneath it. */
-  z-index: 99;
+  z-index: calc(var(--layer-nav-rail) - 1);
   height: 100vh;
   border-left: var(--border-025) solid var(--color-bg-container-border);
   border-right: var(--border-025) solid var(--color-bg-container-border);
@@ -762,7 +762,7 @@
        a 40px header row's. */
     top: var(--padding-400);
     left: var(--padding-400);
-    z-index: 80;
+    z-index: var(--layer-nav);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -781,7 +781,7 @@
     display: block;
     position: fixed;
     inset: 0;
-    z-index: 90;
+    z-index: var(--layer-nav-scrim);
     background: var(--color-scrim);
   }
 
@@ -794,7 +794,7 @@
     top: 0;
     left: 0;
     bottom: 0;
-    z-index: 100;
+    z-index: var(--layer-nav-rail);
     width: 280px;
     height: 100dvh;
     padding: var(--padding-500) 0;

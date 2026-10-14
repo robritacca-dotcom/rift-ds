@@ -570,7 +570,7 @@
 .ds-composer__mention-menu {
   position: absolute;
   left: 0;
-  z-index: 10;
+  z-index: var(--layer-dropdown);
   /* A list, not a text field */
   cursor: default;
 }

@@ -147,7 +147,7 @@
   list-style: none;
   max-height: 320px; /* taller cells than Dropdown's plain rows */
   overflow-y: auto;
-  z-index: 10;
+  z-index: var(--layer-dropdown);
   box-shadow: var(--shadow-floating);
 
   /* Animation */

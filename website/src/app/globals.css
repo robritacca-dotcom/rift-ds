@@ -79,14 +79,20 @@ html[data-theme-ready] {
   --layout-chat-float-height: var(--ds-chat-float-height);
   --layout-chat-inset: var(--ds-chat-inset);
 
-  /* The site's fixed layers, lowest to highest: the floating anchor rail
-     (5, under the header so its panel can never sit on the bar), sticky
-     header (10), the ambient tuner (20), the library's floating surfaces (tooltip 50,
-     Dialog/Drawer 100, CommandPalette 110), the mega-nav drawer (1000), the
-     chat FAB (1080), scrim (1090), panel (1100) and its grip (1101). Toasts
-     go last: they are transient feedback and must be seen, so they outrank
-     the chat chrome the same way they outrank a dialog in the library. */
-  --ds-toast-z: 1200;
+  /* Toasts go last: they are transient feedback and must be seen, so on
+     the site they outrank the chat chrome the same way they outrank a
+     dialog in the library. The whole stack, library and site, is the
+     --layer-* tokens (lowest to highest in tokens-light.css, then the
+     site's below), rendered on /foundations/layout. */
+  --ds-toast-z: var(--layer-site-overlay);
+
+  /* The site's own stacking layers, above the library's (--layer-* in
+     tokens-light.css). Every z-index of 10 or more in the site's CSS is a
+     layer token or says in place why it is local
+     (scripts/validate-stacking.mjs). */
+  --layer-site-chrome: 1000;   /* the sticky header, its mobile menu, and the skip link onto it */
+  --layer-site-inspect: 1040;  /* inspect mode's section boxes; its hover box and popover step up from here */
+  --layer-site-overlay: 1200;  /* what must cover the chat panel: the command palette, an expanded diagram, toasts */
 
   /* The chat FAB holds the bottom-right corner on every page, which is
      also the toast queue's default corner. Bottom-placed toasts start
@@ -507,7 +513,7 @@ html[data-embedded] *::after {
   position: absolute;
   top: -48px;
   left: var(--gap-400);
-  z-index: 1000;
+  z-index: var(--layer-site-chrome);
   padding: 10px 20px;
   background: var(--color-bg-container-primary);
   color: var(--color-text-primary);

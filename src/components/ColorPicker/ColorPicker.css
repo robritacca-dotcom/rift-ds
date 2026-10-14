@@ -98,7 +98,7 @@
   border: var(--border-025) solid var(--color-input-border-primary);
   border-radius: var(--radius-300);
   box-shadow: var(--shadow-floating);
-  z-index: 10;
+  z-index: var(--layer-dropdown);
 }
 
 /* Saturation / brightness area */

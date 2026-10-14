@@ -15,7 +15,7 @@
   box-shadow: var(--shadow-floating);
   overflow: hidden;
   backdrop-filter: blur(24px);
-  z-index: 1100;
+  z-index: var(--layer-chat-panel);
 }
 
 /* The viewport placement: the site panel's geometry and its three modes
@@ -37,7 +37,7 @@
   position: fixed;
   inset: 0;
   background: var(--color-scrim);
-  z-index: 1090;
+  z-index: var(--layer-chat-scrim);
   animation: scrimIn var(--motion-duration-slow) var(--motion-ease-standard);
 }
 

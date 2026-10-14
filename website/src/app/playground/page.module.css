@@ -130,6 +130,7 @@
   width: var(--rail-width);
   /* Above the showcase sections' animate-in stacking contexts, so the
      rail's open Dropdown menu can never be painted over. */
+  /* ds-allow(stacking): local order on the immersive stage, its own ladder: floating rails 15, control bar 25, toolbar 30, full-size panels above. */
   z-index: 15;
   display: flex;
   flex-direction: column;
@@ -150,6 +151,7 @@
   bottom: var(--rail-inset);
   right: var(--rail-inset);
   width: var(--rail-width);
+  /* ds-allow(stacking): local order on the immersive stage, its own ladder: floating rails 15, control bar 25, toolbar 30, full-size panels above. */
   z-index: 15;
   display: flex;
   flex-direction: column;

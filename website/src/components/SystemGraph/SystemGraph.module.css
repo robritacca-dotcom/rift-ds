@@ -48,6 +48,7 @@
   top: calc(100% + var(--gap-050));
   left: 0;
   right: 0;
+  /* ds-allow(stacking): local order on the immersive stage, its own ladder: floating rails 15, control bar 25, toolbar 30, full-size panels above. */
   z-index: 30;
   background-color: var(--color-bg-container-primary);
   border: var(--border-025) solid var(--color-bg-container-border);

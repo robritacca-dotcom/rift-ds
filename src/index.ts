@@ -15,6 +15,8 @@ export * from './components/AnchorNav/AnchorNav';
 export * from './components/AnimatedNumber/AnimatedNumber';
 export * from './components/AppLayout/AppLayout';
 export * from './components/AppSidebar/AppSidebar';
+export * from './components/ArtifactCard/ArtifactCard';
+export * from './components/ArtifactPanel/ArtifactPanel';
 export * from './components/Attachment/AttachmentDropZone';
 export * from './components/Attachment/AttachmentGroup';
 export * from './components/Attachment/AttachmentTile';

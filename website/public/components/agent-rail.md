@@ -22,5 +22,6 @@ Generated from the rift-ds registry and prop JSDoc, version 1.8.0. The same data
 | ariaLabel | `string` | no |  | Accessible name for the rail itself. |
 | onCollapse | `(() => void)` | no |  | Fires when the rail's collapse affordance is pressed. The button renders only when this is given, pinned to the rail's top trailing corner. It is a chevron rather than a cross on purpose: the host's own close control is usually a cross a few pixels away, and two of them side by side read as two ways to dismiss the same thing. |
 | collapseLabel | `string` | no | `Collapse the agent panel` | Accessible name for the collapse affordance. |
+| collapseVariant | `"chevron" \| "close"` | no | `chevron` | How the collapse affordance is drawn. `chevron` (the default) pins a chevron to the leading corner, clear of a host's own controls. `close` pins a cross to the trailing corner, for a rail that is its card's only way out or whose host wants the way out where a panel's close usually is. |
 | footer | `ReactNode` | no |  | Rendered under the pane, outside its scroll — a sign-out row, a quiet hint. |
 | className | `string` | no | `` | Additional CSS classes |

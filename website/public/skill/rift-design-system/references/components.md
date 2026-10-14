@@ -54,7 +54,7 @@ A set of two-state buttons that can be toggled on or off, supporting text and ic
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/toggle-group.md
 
-## AI (31)
+## AI (33)
 
 Chat, agent, and model surfaces for building AI products, from the composer to the reasoning trace and the diff an agent proposes.
 
@@ -89,6 +89,22 @@ The AI entry point: icon and label ringed by a turning gradient and glow, with a
 - Import: `import { AiButton } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/ai-button.md
+
+### Artifact card
+
+The tile a chat leaves in the thread for something it made, a toggle that opens the artifact in its panel.
+
+- Import: `import { ArtifactCard } from 'rift-ds';`
+- Rendering: server-renderable (no 'use client')
+- Contract: https://rift-ds.com/components/artifact-card.md
+
+### Artifact panel
+
+The panel a chat opens beside the conversation to preview what it made: live content, a sandboxed page or a site, with the source a switch away.
+
+- Import: `import { ArtifactPanel } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/artifact-panel.md
 
 ### Attachment drop zone
 

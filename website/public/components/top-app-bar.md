@@ -19,7 +19,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.8.0. The same data
 | platform | `"default" \| "ios" \| "android"` | no | `default` | Which platform's bar to draw. `default` is the Rift bar; `ios` is the iOS 26 navigation bar, with glass circle buttons over content and a soft blurred edge; `android` is the Material 3 Expressive top app bar. |
 | size | `"small" \| "large" \| "medium"` | no | `small` | `small` puts the title in the bar. `medium` and `large` add an expanded title under it that collapses into the bar as the page scrolls; on iOS both are the large title. |
 | align | `"center" \| "start"` | no |  | Title alignment in the bar. Defaults to centred on iOS and to the start edge elsewhere |
-| navigation | `"menu" \| "back" \| "close"` | no |  | The leading control: a menu button, a back button, or a close button |
+| navigation | `"menu" \| "close" \| "back"` | no |  | The leading control: a menu button, a back button, or a close button |
 | onNavigate | `(() => void)` | no |  | Called when the leading control is pressed |
 | navigationLabel | `string` | no |  | Accessible label of the leading control; defaults to "Open menu", "Back" or "Close" |
 | actions | `TopAppBarAction[]` | no | `[]` | Trailing actions. The first three show as icon buttons; any more join the overflow menu, ahead of `overflowActions`, where they render as plain rows (a menu row draws no badge and routes from `onClick`, not `href`) |

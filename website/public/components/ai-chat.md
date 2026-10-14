@@ -5,14 +5,14 @@ The whole AI chat, assembled: the panel, the streaming replies, the history, the
 Generated from the rift-ds registry and prop JSDoc, version 1.8.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: widget
-- Import: `import { ChatWidget, ChatProvider, ChatLauncher, ChatThreads, ChatTabs, ChatAgentPane } from 'rift-ds/chat';`
+- Import: `import { ChatWidget, ChatProvider, ChatLauncher, ChatThreads, ChatTabs, ChatAgentPane, ChatArtifactPane, ChatArtifactCard } from 'rift-ds/chat';`
 - Subpath `rift-ds/chat`: The widget, the provider, the launcher and the engine under them. Optional peers: react-markdown, remark-gfm.
 - Subpath `rift-ds/chat/server`: The streaming chat handler and its follow-ups and feedback siblings, for any web-standard route. Optional peers: @anthropic-ai/sdk.
 - Subpath `rift-ds/chat/upstash`: Rate limits, a daily budget and the exchange log over Upstash Redis, as the handlers' guardrails. Optional peers: @upstash/ratelimit, @upstash/redis.
 - Subpath `rift-ds/chat/demo`: A scripted conversation with rich cards and fixtures, for a preview that needs no key. Optional peers: recharts.
 - Subpath `rift-ds/chat/chat.css`: The widget's stylesheet.
 - Scaffold: `npx rift-ds init chat`
-- Composes: AgentRail, AgentStatus, AiButton, AttachmentDropZone, AttachmentGroup, ChatHeader, ChatMessage, ChatThread, CircularButton, CodeBlock, Composer, DropdownMenu, Mention, ModelPicker, PixelAvatar, PromptSuggestions, Prose, Reasoning, ThreadPanel, ThreadTabs
+- Composes: AgentRail, AgentStatus, AiButton, ArtifactCard, ArtifactPanel, AttachmentDropZone, AttachmentGroup, ChatHeader, ChatMessage, ChatThread, CircularButton, CodeBlock, Composer, DropdownMenu, EmptyState, Mention, ModelPicker, PixelAvatar, PromptSuggestions, Prose, Reasoning, ThreadPanel, ThreadTabs
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/ai-chat
 
@@ -45,6 +45,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.8.0. The same data
 | tabs | `ReactNode` | no |  | An open-sessions tab strip as its own row under the header. `true` seats the built-in ChatTabs; a node seats your own. |
 | aside | `((ctx: { overlay: boolean; close: () => void; }) => ReactNode)` | no |  | A companion rail on the trailing edge, the mirror of `threads`: a render prop for your own pane, seated inline on a wide host and raised as a bottom sheet from a header button on a narrow one. For the built-in pane pass `agent` instead. |
 | agent | `ChatAgentOptions` | no |  | The built-in agent pane: who the agent is and what it has been doing. Seated like `aside`. |
+| artifacts | `boolean` | no | `false` | Seat the artifact panel: a reply that carries an artifact draws a tile in the thread, and the tile (or the header's artifact button) opens the artifact beside the conversation on a wide host and as a bottom sheet on a narrow one. The trailing seat holds one panel at a time, so an open artifact stands in for the agent pane. Off, none of it exists: no header button, no tile, no panel. |
 | contextLabel | `string \| null` | no |  | The composer's context note, naming what the chat is looking at. Omit for none. |
 | widgets | `ReactNode` | no |  | A widget slot on the welcome screen, under the composer and its starters. It takes any content and keeps its natural height, so the composer rides up by half of it instead of holding dead centre: the empty chat reads as a home page rather than a blank prompt. It leaves with the first message, like the rest of the welcome dressing. |
 | widgetsLayout | `"scroll" \| "fit"` | no | `fit` | How the widget slot takes its room. `fit` keeps the welcome screen to one viewport: the widgets hold their height and the composer rides up to make room. `scroll` turns the welcome screen into a page: the greeting and composer take the opening of the viewport, the widgets run on below the fold, and the whole welcome scrolls as one. |
@@ -62,6 +63,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.8.0. The same data
 | fallbackFollowups | `readonly string[]` | no | `[   'Can you say more about that?',   'What should I do next?',   'Where can I read more?',   'Can you give an example?',   'What are the alternatives?', ]` | The written questions offered when the source returns none. |
 | feedback | `string \| false \| FeedbackSink` | no | `/api/chat/feedback` | Where a thumbs verdict goes: a sink function, an endpoint for the built-in poster, or `false` to hide the thumbs. Defaults to the poster against `/api/chat/feedback`. Thumbs only ever show on a turn the server logged (one with an exchange id). |
 | renderers | `ChatCardRenderers` | no |  | Draws `card` events by kind. |
+| artifactRenderers | `ChatArtifactRenderers` | no |  | Draws an artifact's preview by kind, for artifacts that are live React content rather than a document or a URL. |
 | renderLink | `ChatLinkRenderer` | no | `({ href, children, onNavigate }) => (   <a href={href} onClick={onNavigate}>     {children}   </a> )` | Renders a same-site link in an answer. The default is a plain anchor; a Next.js host passes its Link. |
 | isInternalHref | `((href: string) => boolean)` | no | `(href: string) => INTERNAL_PATH.test(href)` | Which hrefs in an answer become links. Everything else renders as text. |
 | threads | `ThreadsOptions` | no |  | Seeds the thread lifecycle behind the `threads` and `tabs` slots. |
@@ -109,3 +111,19 @@ Generated from the rift-ds registry and prop JSDoc, version 1.8.0. The same data
 | activeTab | `string` | no |  | The tab on stage, when the host owns the state; otherwise the pane keeps its own. |
 | onTabChange | `((id: string) => void)` | no |  | Fires with the chosen tab's id. |
 | overlay | `boolean` | yes |  | The widget seated the pane as a bottom sheet, where it fills the width instead of holding its own column. |
+| onClose | `(() => void)` | no |  | Fires from the pane's own close button, a cross in its top trailing corner. Omit for a pane with no close of its own. |
+
+## ChatArtifactPane props
+
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| artifact | `ChatArtifact \| null` | yes |  | The artifact on stage, or null for the empty state: the panel opened before the conversation has made anything. |
+| expanded | `boolean` | no |  | Whether the widget is showing the pane at its expanded size. |
+| onExpandedChange | `((expanded: boolean) => void)` | no |  | Fires with the next state from the expand toggle; omit where the seat has one size. |
+| onClose | `(() => void)` | no |  | Fires from the pane's close button; omit where another control closes the seat. |
+
+## ChatArtifactCard props
+
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| artifact | `ChatArtifact` | yes |  | The artifact this tile stands for. |

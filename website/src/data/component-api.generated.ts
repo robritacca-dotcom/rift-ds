@@ -211,6 +211,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "Collapse the agent panel"
           },
           {
+            "name": "collapseVariant",
+            "type": "\"chevron\" | \"close\"",
+            "required": false,
+            "description": "How the collapse affordance is drawn. `chevron` (the default) pins a chevron to the leading corner, clear of a host's own controls. `close` pins a cross to the trailing corner, for a rail that is its card's only way out or whose host wants the way out where a panel's close usually is.",
+            "defaultValue": "chevron"
+          },
+          {
             "name": "footer",
             "type": "ReactNode",
             "required": false,
@@ -996,6 +1003,228 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes on the wrapper",
+            "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
+    "name": "ArtifactCard",
+    "label": "Artifact card",
+    "slug": "artifact-card",
+    "category": "ai",
+    "description": "The tile a chat leaves in the thread for something it made, a toggle that opens the artifact in its panel.",
+    "client": false,
+    "importPath": "rift-ds/components/ArtifactCard/ArtifactCard",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "ArtifactCard",
+        "props": [
+          {
+            "name": "title",
+            "type": "ReactNode",
+            "required": true,
+            "description": "The artifact's name. Collides with the native `title` tooltip attribute on purpose: the card shows its name, it does not hide it in a tooltip."
+          },
+          {
+            "name": "meta",
+            "type": "ReactNode",
+            "required": false,
+            "description": "A quiet line under the name: what kind of thing this is, or which version."
+          },
+          {
+            "name": "icon",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The leading mark — Material Symbol name (string) or custom element (ReactNode).",
+            "defaultValue": "draft"
+          },
+          {
+            "name": "open",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether this card's artifact is on stage in its panel. The card holds the on-stage fill, announces itself pressed, and its trailing cue turns from open to close.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
+    "name": "ArtifactPanel",
+    "label": "Artifact panel",
+    "slug": "artifact-panel",
+    "category": "ai",
+    "description": "The panel a chat opens beside the conversation to preview what it made: live content, a sandboxed page or a site, with the source a switch away.",
+    "client": true,
+    "importPath": "rift-ds/components/ArtifactPanel/ArtifactPanel",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "ArtifactPanel",
+        "props": [
+          {
+            "name": "title",
+            "type": "ReactNode",
+            "required": true,
+            "description": "The artifact's name, shown in the header and used as the panel's accessible name. Collides with the native `title` tooltip attribute on purpose: a panel has a heading, not a tooltip."
+          },
+          {
+            "name": "meta",
+            "type": "ReactNode",
+            "required": false,
+            "description": "A quiet line beside the name: what kind of thing this is, or which version."
+          },
+          {
+            "name": "icon",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Leading mark in the header — Material Symbol name (string) or custom element (ReactNode)."
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The preview, as live React content. Wins over `html` and `src`."
+          },
+          {
+            "name": "html",
+            "type": "string",
+            "required": false,
+            "description": "The preview, as a complete HTML document drawn in a sandboxed frame. Wins over `src`. A document that honours `prefers-color-scheme` follows the `color-scheme` of the page around the panel, so set that with your theme and the preview turns light or dark with it."
+          },
+          {
+            "name": "src",
+            "type": "string",
+            "required": false,
+            "description": "The preview, as a URL drawn in a sandboxed frame: a deployed page, a site."
+          },
+          {
+            "name": "sandbox",
+            "type": "string",
+            "required": false,
+            "description": "The frame's `sandbox` tokens for `html` and `src`. The default lets a document run its own scripts and forms in an origin of its own, with no reach into the host page; widen it only for a source you trust.",
+            "defaultValue": "allow-scripts allow-forms"
+          },
+          {
+            "name": "frameTitle",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name for the preview frame. Defaults to the title when that is a string."
+          },
+          {
+            "name": "code",
+            "type": "string",
+            "required": false,
+            "description": "The artifact's source. Given, the header offers a Code view beside the preview (or shows the code alone when there is no preview)."
+          },
+          {
+            "name": "language",
+            "type": "string",
+            "required": false,
+            "description": "The source's language, shown on the code view."
+          },
+          {
+            "name": "view",
+            "type": "ArtifactPanelView",
+            "required": false,
+            "description": "The view on stage, when the host owns the state."
+          },
+          {
+            "name": "defaultView",
+            "type": "ArtifactPanelView",
+            "required": false,
+            "description": "The view the panel opens on when it keeps its own state."
+          },
+          {
+            "name": "onViewChange",
+            "type": "((view: ArtifactPanelView) => void)",
+            "required": false,
+            "description": "Fires with the chosen view."
+          },
+          {
+            "name": "expanded",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the host is showing the panel at its expanded size. The panel never sizes itself: this only picks the toggle's icon and name.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "onExpandedChange",
+            "type": "((expanded: boolean) => void)",
+            "required": false,
+            "description": "Fires with the next state when the expand toggle is pressed. The toggle renders only when this is given."
+          },
+          {
+            "name": "onClose",
+            "type": "(() => void)",
+            "required": false,
+            "description": "Fires when the close button is pressed. The button renders only when this is given."
+          },
+          {
+            "name": "actions",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Extra header controls, seated ahead of the expand and close buttons: a download, a share, a version menu."
+          },
+          {
+            "name": "previewLabel",
+            "type": "string",
+            "required": false,
+            "description": "Label for the preview segment of the view switch.",
+            "defaultValue": "Preview"
+          },
+          {
+            "name": "codeLabel",
+            "type": "string",
+            "required": false,
+            "description": "Label for the code segment of the view switch.",
+            "defaultValue": "Code"
+          },
+          {
+            "name": "viewLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name for the view switch.",
+            "defaultValue": "Artifact view"
+          },
+          {
+            "name": "expandLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name for the expand toggle while the panel is at its resting size.",
+            "defaultValue": "Expand the artifact"
+          },
+          {
+            "name": "collapseLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name for the expand toggle while the panel is expanded.",
+            "defaultValue": "Collapse the artifact"
+          },
+          {
+            "name": "closeLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name for the close button.",
+            "defaultValue": "Close the artifact"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
             "defaultValue": ""
           }
         ]
@@ -11445,7 +11674,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "navigation",
-            "type": "\"menu\" | \"back\" | \"close\"",
+            "type": "\"menu\" | \"close\" | \"back\"",
             "required": false,
             "description": "The leading control: a menu button, a back button, or a close button"
           },
@@ -12216,6 +12445,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "The built-in agent pane: who the agent is and what it has been doing. Seated like `aside`."
           },
           {
+            "name": "artifacts",
+            "type": "boolean",
+            "required": false,
+            "description": "Seat the artifact panel: a reply that carries an artifact draws a tile in the thread, and the tile (or the header's artifact button) opens the artifact beside the conversation on a wide host and as a bottom sheet on a narrow one. The trailing seat holds one panel at a time, so an open artifact stands in for the agent pane. Off, none of it exists: no header button, no tile, no panel.",
+            "defaultValue": "false"
+          },
+          {
             "name": "contextLabel",
             "type": "string | null",
             "required": false,
@@ -12299,6 +12535,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "ChatCardRenderers",
             "required": false,
             "description": "Draws `card` events by kind."
+          },
+          {
+            "name": "artifactRenderers",
+            "type": "ChatArtifactRenderers",
+            "required": false,
+            "description": "Draws an artifact's preview by kind, for artifacts that are live React content rather than a document or a URL."
           },
           {
             "name": "renderLink",
@@ -12493,6 +12735,52 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "boolean",
             "required": true,
             "description": "The widget seated the pane as a bottom sheet, where it fills the width instead of holding its own column."
+          },
+          {
+            "name": "onClose",
+            "type": "(() => void)",
+            "required": false,
+            "description": "Fires from the pane's own close button, a cross in its top trailing corner. Omit for a pane with no close of its own."
+          }
+        ]
+      },
+      {
+        "component": "ChatArtifactPane",
+        "props": [
+          {
+            "name": "artifact",
+            "type": "ChatArtifact | null",
+            "required": true,
+            "description": "The artifact on stage, or null for the empty state: the panel opened before the conversation has made anything."
+          },
+          {
+            "name": "expanded",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the widget is showing the pane at its expanded size."
+          },
+          {
+            "name": "onExpandedChange",
+            "type": "((expanded: boolean) => void)",
+            "required": false,
+            "description": "Fires with the next state from the expand toggle; omit where the seat has one size."
+          },
+          {
+            "name": "onClose",
+            "type": "(() => void)",
+            "required": false,
+            "description": "Fires from the pane's close button; omit where another control closes the seat."
+          }
+        ]
+      },
+      {
+        "component": "ChatArtifactCard",
+        "props": [
+          {
+            "name": "artifact",
+            "type": "ChatArtifact",
+            "required": true,
+            "description": "The artifact this tile stands for."
           }
         ]
       }

@@ -15,7 +15,7 @@
   /* A step tighter than the token every other page puts above its title:
      the hero is the one page whose opening has to land above the fold, so
      the whole stack rides up a touch. */
-  padding: var(--primitive-gap-500) 32px 96px;
+  padding: var(--primitive-gap-500) 0 96px;
 }
 
 /* ---------- page header (site-standard treatment) ---------- */
@@ -484,8 +484,10 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--gap-400);
   /* The page container no longer caps itself (the hero runs full width),
-     so the collage holds the 1440px line on its own. */
-  max-width: 1376px; /* 1440 minus the old container's 32px side padding */
+     so the collage holds the header's 1440px line on its own. The page adds
+     no side padding over the body gutters, so the outer cards land under
+     the logo and the theme toggle exactly. */
+  max-width: 1440px;
   margin-inline: auto;
   align-items: stretch;
   height: clamp(640px, 130vh, 1400px);
@@ -1065,7 +1067,7 @@
 
 @media (max-width: 768px) {
   .page {
-    padding: var(--primitive-gap-1000) 20px 64px;
+    padding: var(--primitive-gap-1000) 0 64px;
   }
 }
 

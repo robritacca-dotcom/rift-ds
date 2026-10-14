@@ -7,6 +7,7 @@ import MegaNav from "../components/MegaNav/MegaNav";
 import { ExtendedBackground } from "../components/BlurBackground/BlurBackground";
 import FadeDivider from "../components/FadeDivider/FadeDivider";
 import styles from "./page.module.css";
+import HomeTemplates from "./HomeTemplates";
 import { FIGMA_FILE_URL, NPM_URL, REPOSITORY_URL, STORYBOOK_URL } from "@/config/brand.generated";
 import { THEME_SELECTOR_ORDER, themeSelectorTiles } from "@/lib/theme/presets";
 import { useSiteTheme } from "@/lib/theme/use-theme-overrides";
@@ -1406,8 +1407,8 @@ export default function DesignSystemLanding() {
           <ButtonGroup
             ariaLabel="Get started"
             buttons={[
-              { label: "Get started", variant: "primary" as const, href: "/docs/get-started" },
-              { label: "Browse components", variant: "secondary" as const, href: "/components" },
+              { label: "Get started", variant: "primary" as const, href: "/docs/get-started", iconLeft: "terminal" },
+              { label: "Browse components", variant: "secondary" as const, href: "/components", iconLeft: "category" },
             ]}
           />
           </div>
@@ -1435,6 +1436,9 @@ export default function DesignSystemLanding() {
             </>
           )}
         </section>
+
+        {/* ---------- one template, live ---------- */}
+        <HomeTemplates />
 
         {/* ---------- where the system lives, and what it is built on ---------- */}
         <section

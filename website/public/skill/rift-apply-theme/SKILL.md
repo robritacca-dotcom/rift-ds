@@ -36,6 +36,7 @@ Choose by role, never by the nearest value. A grey that is body text and the sam
 - Type: each text style is a bundle of tokens, `--font-<style>-family`, `-size`, `-weight`, `-line-height` and `-letter-spacing`. The styles are `caption`, `display-1`, `display-2`, `heading-1`, `heading-2`, `heading-3`, `mega-1`, `mega-2`, `overline`, `paragraph-emphasis`, `paragraph`, `paragraph-sm-emphasis`, `paragraph-sm`, `sub-display`, `title-body`. Apply a whole bundle. Do not mix one style's size with another's weight.
 - Icons: set `--icon-size` on the icon to a step from `--icon-size-*`. Never set `font-size` on an icon.
 - Motion: `--motion-*` for durations and easings in CSS. A timing that lives in a JavaScript timer comes from `rift-ds/tokens/motion`.
+- Stacking: `--layer-*`. A surface that rises over the page (a menu, a dialog, a toast) takes the layer for its role instead of a picked z-index. Order inside one component (a label over a pill) can stay a small number under 10.
 
 In Tailwind, point the theme at the tokens (a colour named for its role whose value is the token's `var()`), then use those names. An arbitrary value such as `bg-[#1a1a1a]` is a hardcoded value with extra steps. In CSS-in-JS and inline styles, write the same `var()` reference a stylesheet would.
 

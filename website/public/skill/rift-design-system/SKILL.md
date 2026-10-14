@@ -5,7 +5,7 @@ description: Build React UI with rift-ds. Use when installing the package, compo
 
 # Using rift-ds
 
-Generated from the library's registries at version 1.9.0, alongside every deploy of https://rift-ds.com. The library is 152 React components across 12 categories, themed by 272 semantic design tokens, published to npm. Designed and built by Robert Ritacca (https://robertritacca.com), MIT licensed.
+Generated from the library's registries at version 1.9.0, alongside every deploy of https://rift-ds.com. The library is 152 React components across 12 categories, themed by 284 semantic design tokens, published to npm. Designed and built by Robert Ritacca (https://robertritacca.com), MIT licensed.
 
 ## Install
 
@@ -62,6 +62,10 @@ Every prop is documented at https://rift-ds.com/components/ai-chat (the contract
 ## Timings in JavaScript
 
 Timer-driven timings (hover delays, toast auto-dismiss, the streaming reveal's pacing) are exported as constants from `rift-ds/tokens/motion`. Import the constant rather than writing a literal millisecond value.
+
+## Breakpoints
+
+The widths the library's layouts switch at are exported from `rift-ds/tokens/breakpoints`, each the last width of the narrower side. In JavaScript, build a query with `mediaBelow(BREAKPOINT_MOBILE_PX)` or `mediaAbove(...)` rather than writing the string. In CSS, a media query cannot read a variable, so write the number from that module, and match the library's steps where your layout meets its components.
 
 ## The catalog
 

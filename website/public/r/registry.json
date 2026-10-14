@@ -7,7 +7,7 @@
       "name": "base",
       "type": "registry:lib",
       "title": "Rift base",
-      "description": "The shared layer every component builds on: the token stylesheets, the generated theme presets, the icon font, the motion constants, and the overlay behavior hooks."
+      "description": "The shared layer every component builds on: the token stylesheets, the generated theme presets, the icon font, the motion constants and breakpoints, and the overlay behavior hooks."
     },
     {
       "name": "accordion",

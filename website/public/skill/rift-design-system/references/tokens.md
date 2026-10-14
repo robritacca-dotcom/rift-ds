@@ -338,3 +338,22 @@ Prefix: `--motion-*`.
 | `--motion-ease-linear` | `linear` |  |
 | `--motion-ease-spring` | `cubic-bezier(0.34, 1.56, 0.64, 1)` |  |
 | `--motion-ease-standard` | `ease` |  |
+
+## Stacking (12)
+
+Prefix: `--layer-*`.
+
+| Token | Value |
+| --- | --- |
+| `--layer-chat-launcher` | `1080` |
+| `--layer-chat-panel` | `1100` |
+| `--layer-chat-scrim` | `1090` |
+| `--layer-command` | `110` |
+| `--layer-dropdown` | `10` |
+| `--layer-floating` | `50` |
+| `--layer-modal` | `100` |
+| `--layer-nav` | `80` |
+| `--layer-nav-rail` | `100` |
+| `--layer-nav-scrim` | `90` |
+| `--layer-sticky` | `10` |
+| `--layer-toast` | `200` |

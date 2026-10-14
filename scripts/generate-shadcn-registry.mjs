@@ -17,7 +17,7 @@
  *   - base.json                   the shared layer every item depends
  *                                 on: tokens.css and its imports, the
  *                                 generated theme presets, the icon
- *                                 font's CSS, the JS motion constants,
+ *                                 font's CSS, the JS motion constants and breakpoints,
  *                                 and src/behaviors/
  *   - assets/<name>.woff2         font binaries, copied so the site can
  *                                 serve them (JSON can only embed text)
@@ -249,13 +249,14 @@ export function assembleShadcnRegistry() {
   }
 
   /* The base item: the token layer whole (tokens.css closure + the
-     generated presets), the icon font's CSS, the JS motion constants,
+     generated presets), the icon font's CSS, the JS motion constants and breakpoints,
      all of src/behaviors/, and whatever else a component reached
      outside its own folder. */
   const baseEntries = [
     join(srcDir, 'tokens', 'tokens.css'),
     join(srcDir, 'tokens', 'presets', 'presets.css'),
     join(srcDir, 'tokens', 'motion.ts'),
+    join(srcDir, 'tokens', 'breakpoints.ts'),
     join(srcDir, 'fonts', 'material-symbols.css'),
     ...readdirSync(join(srcDir, 'behaviors'))
       .filter((n) => n.endsWith('.ts'))
@@ -269,7 +270,7 @@ export function assembleShadcnRegistry() {
     type: 'registry:lib',
     title: `${BRAND_SHORT} base`,
     description:
-      'The shared layer every component builds on: the token stylesheets, the generated theme presets, the icon font, the motion constants, and the overlay behavior hooks.',
+      'The shared layer every component builds on: the token stylesheets, the generated theme presets, the icon font, the motion constants and breakpoints, and the overlay behavior hooks.',
     author: ITEM_AUTHOR,
     files: [...base.files.keys()]
       .sort()

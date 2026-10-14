@@ -461,6 +461,12 @@ Standard containers never carry shadows. The only shadows in the system are two 
 
 Never write a literal *elevation* shadow in component CSS — use one of these two tokens or no shadow at all. Hairline inset rings and focus halos built with `box-shadow` are not elevation and are permitted: Swatch and ColorPicker use inset rings to keep pale swatches legible, and Slider's thumb carries a `box-shadow` focus halo. (Two documented elevation exceptions: the interactive Card hover lift — see Do's and Don'ts — and the iOS glass of BottomNav and TopAppBar, which restates the platform's own shadow under the `platform` directive category; the BottomNav spec owns it.)
 
+### Stacking
+
+Depth on the page has a second axis: which surface sits over which. Every surface that rises out of its component into the page's layers takes a `--layer-*` token, declared lowest to highest in `tokens-light.css` with what sits on each layer beside it, and rendered on `/foundations/layout`. From the bottom: `--layer-dropdown` (menus and panels anchored to a control) and `--layer-sticky` (bars pinned while the page scrolls) share a step, since the two never compete for the same space; `--layer-floating` (tooltips, hover cards, context menus); the mobile navigation's `--layer-nav`, `--layer-nav-scrim` and `--layer-nav-rail`; `--layer-modal` (dialogs, drawers and viewers), level with the app rail it covers by DOM order; `--layer-command` for the command palette, which can open over a modal; `--layer-toast`, above every modal, because feedback has to be seen; then the chat launcher's `--layer-chat-launcher`, `--layer-chat-scrim` and `--layer-chat-panel`. A surface that must sit exactly one step off a layer (AppSidebar's panel under its rail, the dock grip over the chat panel) writes `calc()` off the token rather than a new number.
+
+Order inside a single component (a label over a sliding pill, a handle over its track) stays a small local integer under 10. A larger local number takes a `ds-allow(stacking)` directive saying why; `scripts/validate-stacking.mjs` fails the build on anything else. The site adds `--layer-site-*` layers above the library's in its own stylesheet, for its header, inspect mode, and the overlays that must cover the chat panel.
+
 ---
 
 ## Motion
@@ -695,7 +701,7 @@ Event pills are `--color-calendar-event-bg` chips at `--radius-100`: an accent d
 
 ### Toast
 
-**`ds-toast`** — Ephemeral notification via `ToastProvider` + `useToast()` hook. Rendered via React portal into `document.body`. Default duration: 5000ms. Pauses on hover/focus. Progress bar animates across bottom. Position: configurable (`top-right`, `bottom-right`, etc.), defaults to `bottom-right`. Max stack: 5 toasts. Five variants share the same `--color-status-*` token mapping as Badge/Alert. The container sits at `z-index: 200`, the library's top layer, flush to its corner; both are consumer hooks. A host that keeps its own fixed chrome in that corner sets `--ds-toast-inset-top/bottom/left/right` so the queue stacks clear of it, and raises `--ds-toast-z` above its own overlays: toasts are transient feedback and must be seen, so they outrank persistent chrome. The website does exactly this for its chat launcher (`globals.css`), and moves the queue left of the panel while it is docked on the right; on the left dock only the bottom inset changes, since nothing stands in the queue's way.
+**`ds-toast`** — Ephemeral notification via `ToastProvider` + `useToast()` hook. Rendered via React portal into `document.body`. Default duration: 5000ms. Pauses on hover/focus. Progress bar animates across bottom. Position: configurable (`top-right`, `bottom-right`, etc.), defaults to `bottom-right`. Max stack: 5 toasts. Five variants share the same `--color-status-*` token mapping as Badge/Alert. The container sits on `--layer-toast`, above every modal (Elevation & Depth → Stacking owns the ladder), flush to its corner; the layer and the corner are both consumer hooks. A host that keeps its own fixed chrome in that corner sets `--ds-toast-inset-top/bottom/left/right` so the queue stacks clear of it, and raises `--ds-toast-z` above its own overlays: toasts are transient feedback and must be seen, so they outrank persistent chrome. The website does exactly this for its chat launcher (`globals.css`), and moves the queue left of the panel while it is docked on the right; on the left dock only the bottom inset changes, since nothing stands in the queue's way.
 
 Default icons (Material Symbols Rounded): `info`, `check_circle`, `warning`, `error`, `info` for each variant. Override via `icon` prop. Dismissal plays the exit animation (`--motion-duration-base`), the unmount following on `MOTION_EXIT_SYNC_MS`.
 
@@ -1368,7 +1374,7 @@ The theme is activated by `data-theme="dark"` on the HTML root element. The `tok
 ## Responsive Behavior
 
 ### Breakpoints
-The canonical set is **1279 / 1151 / 959 / 768 / 600**, all `max-width`. The rail widths and column gap live as `--layout-*` custom properties in `globals.css`, so the mid-breakpoint narrowing applies to every page at once:
+Breakpoints have one home: `src/tokens/breakpoints.ts`, published as `rift-ds/tokens/breakpoints`, with the site's own families in `website/src/config/breakpoints.ts`. Each value is the last width of the narrower side, so `max-width: N` and `min-width: N + 1` both name it, and JavaScript builds its queries from the module (`mediaBelow`, `mediaAbove`) rather than restating a number. Each module also describes its steps as data (`BREAKPOINTS`, `SITE_BREAKPOINTS`), which `/foundations/layout` renders as its Breakpoints section. The canonical layout set is **1279 / 1151 / 959 / 768 / 600**, all `max-width`. The rail widths and column gap live as `--layout-*` custom properties in `globals.css`, so the mid-breakpoint narrowing applies to every page at once (`/foundations/layout` draws the shell from the declared values and lists every other `--layout-*` property):
 - **≥ 1280px** — full shell: 291px left nav (`--layout-sidebar-width`), 320px right rail (`--layout-rail-width`), 60px column gaps (`--layout-column-gap`).
 - **≤ 1279px (mid)** — both rails narrow (nav 240px, rail 280px) and the column gap tightens to 40px, keeping the center column at a readable measure.
 - **≤ 1151px** — the right details rail stacks below the main content (per-page media query on the `resumeLayout`/`updatesLayout` flex row); the left nav stays.
@@ -1376,9 +1382,11 @@ The canonical set is **1279 / 1151 / 959 / 768 / 600**, all `max-width`. The rai
 - **≤ 768px (mobile)** — **the token layer's only breakpoint**: display-tier typography and section-rhythm spacing collapse (see Typography → Hierarchy and Spacing → Gap Scale).
 - **≤ 600px (phone)** — body side gutters tighten; dense grids switch to horizontal scroll inside their own blocks.
 
-A section-specific threshold outside this set is allowed only when it is content-driven (a bespoke grid that breaks at its own natural width) and commented in place; everything else uses the canonical five.
+Beside the layout set, the module names the steps components switch at: **480px (sheet)**, where the modal overlays drop their floating margin, and the chat widget's three thresholds: the takeover at 719px, the dock above 1439px, and the short-viewport height at 619px (see ChatWidget). The site's own families are the template screens' 1080px and 760px steps and the immersive stages' 1099px compact step.
 
-The thresholds themselves stay raw numbers in the media queries, and that is settled rather than pending: CSS custom properties cannot drive `@media` conditions, and a preprocessor dependency is not worth it for five documented literals. This section is their single authoritative home — the rail widths and gutters they switch are tokenized (`--layout-*`), the numbers that trigger the switch are not.
+A threshold outside these sets is allowed only when it is content-driven (a bespoke grid that breaks at its own natural width) or deliberately sits on a step's other edge, and it says so in place with a `/* ds-allow(breakpoint): <reason> */` directive directly above the query. `scripts/validate-breakpoints.mjs` fails the build on any `@media` width, or media-query string in TypeScript, that is neither in the set nor sanctioned, and holds the layout set stated above to the module.
+
+The thresholds stay raw numbers in the stylesheets, and that is settled rather than pending: CSS custom properties cannot drive `@media` conditions, and a preprocessor dependency is not worth it for a handful of documented literals. The module is the number's home and the validator is what keeps the literals honest; the rail widths and gutters they switch are tokenized (`--layout-*`).
 
 ### Typography Collapse
 - Handled by the token layer at ≤768px — Display 2 64px → 40px, Sub Display 30px → 24px, Mega/Display 1 proportional. No per-page overrides.

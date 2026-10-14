@@ -218,6 +218,22 @@
         }
       ]
     },
+    "/foundations/layout": {
+      "title": "Layout",
+      "text": "Where layouts switch, the page shell's measurements, and the order surfaces stack in.",
+      "chips": [
+        {
+          "id": "breakpoints",
+          "label": "Which breakpoints exist?",
+          "prompt": "Which breakpoints does the design system use, and what changes at each?"
+        },
+        {
+          "id": "stacking",
+          "label": "How does stacking work?",
+          "prompt": "How do the stacking layers work, and which z-index should a new overlay use?"
+        }
+      ]
+    },
     "/foundations/spatial": {
       "title": "Spatial system",
       "text": "Spacing, radius, and border scales: the geometry every layout composes from.",

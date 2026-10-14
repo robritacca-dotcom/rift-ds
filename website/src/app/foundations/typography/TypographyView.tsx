@@ -323,7 +323,7 @@ const viewportTabs = [
   { value: "mobile", label: "Mobile", icon: "smartphone" },
 ];
 
-export default function TypographyPage() {
+export default function TypographyView({ scaleTable }: { scaleTable: React.ReactNode }) {
   const [viewport, setViewport] = useState("desktop");
   const isMobileView = viewport === "mobile";
 
@@ -420,6 +420,8 @@ export default function TypographyPage() {
               </div>
             </section>
           ))}
+
+          {scaleTable}
         </main>
       </div>
 

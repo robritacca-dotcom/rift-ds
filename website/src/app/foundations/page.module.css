@@ -259,6 +259,36 @@
 }
 
 /* Spatial preview */
+/* Layout preview: three viewports standing on one baseline */
+.layoutFrames {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--gap-200);
+}
+
+.layoutPhone,
+.layoutTablet,
+.layoutDesktop {
+  display: block;
+  border: var(--border-050) solid var(--color-text-tertiary);
+  border-radius: var(--radius-100);
+}
+
+.layoutPhone {
+  width: 16px;
+  height: 28px;
+}
+
+.layoutTablet {
+  width: 30px;
+  height: 40px;
+}
+
+.layoutDesktop {
+  width: 52px;
+  height: 36px;
+}
+
 .spatialBox {
   width: 60px;
   height: 50px;

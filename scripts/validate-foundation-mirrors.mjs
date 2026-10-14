@@ -31,6 +31,10 @@
  *   5. /foundations/typography — every style row's size, weight, line-height
  *      and letter-spacing equals its --font-<style>-* bundle resolved through
  *      tokens-typography.css, including the 768px step-down a row declares.
+ *   6. /foundations/layout — the page reads the --layout-* values from
+ *      globals.css itself, so this holds only its descriptions
+ *      (config/layout-properties.ts) to the properties :root declares, both
+ *      directions.
  *
  * All of it is the base theme's values, which is what those pages document.
  *
@@ -184,8 +188,10 @@ const hexToRgbCaption = (hex) => {
 /* 5. /foundations/typography                                           */
 /* ------------------------------------------------------------------ */
 {
-  const rel = pageRel('typography');
-  const source = pageFile('typography');
+  // The style rows live in the page's client view; page.tsx is the server
+  // shell that reads the scale ladders from the CSS and hands them in.
+  const rel = 'website/src/app/foundations/typography/TypographyView.tsx';
+  const source = read(join(repoRoot, rel));
   const WEIGHT_NAMES = { Thin: 100, ExtraLight: 200, Light: 300, Regular: 400, Medium: 500, SemiBold: 600, Bold: 700, ExtraBold: 800, Black: 900 };
   const scopes = [typography.base];
   const mobile = [...typography.media.entries()].find(([prelude]) => /max-width:\s*768px/.test(prelude))?.[1] ?? new Map();
@@ -235,6 +241,32 @@ const hexToRgbCaption = (hex) => {
   });
   if (!checked) errors.push(`${rel}: parsed no type style rows — the typography guard needs them`);
   summaries.push(`${checked} type styles`);
+}
+
+/* ------------------------------------------------------------------ */
+/* 6. /foundations/layout — the --layout-* descriptions                 */
+/* ------------------------------------------------------------------ */
+/* The page reads the values from globals.css itself, so there is no
+   caption to drift; what can drift is the list of descriptions in
+   config/layout-properties.ts. Both directions: a property the stylesheet
+   declares on :root with no description, or a description for a property
+   it no longer declares. */
+{
+  const rel = 'website/src/config/layout-properties.ts';
+  const described = [...read(join(repoRoot, rel)).matchAll(/name:\s*"(--layout-[\w-]+)"/g)].map((m) => m[1]);
+  const globals = read(join(repoRoot, 'website', 'src', 'app', 'globals.css')).replace(/\/\*[\s\S]*?\*\//g, '');
+  const rootStart = globals.indexOf(':root');
+  const rootBody = globals.slice(globals.indexOf('{', rootStart) + 1, globals.indexOf('}', rootStart));
+  const declared = [...rootBody.matchAll(/(--layout-[\w-]+)\s*:/g)].map((m) => m[1]);
+  if (!declared.length) errors.push(`website/src/app/globals.css: found no --layout-* declarations on :root — the layout guard needs them`);
+  for (const name of declared) {
+    if (!described.includes(name)) errors.push(`${rel}: ${name} is declared in globals.css but has no description`);
+  }
+  for (const name of described) {
+    if (!declared.includes(name)) errors.push(`${rel}: describes ${name}, which globals.css no longer declares on :root`);
+  }
+  if (new Set(described).size !== described.length) errors.push(`${rel}: a property is described twice`);
+  summaries.push(`${declared.length} layout properties described`);
 }
 
 /* ------------------------------------------------------------------ */

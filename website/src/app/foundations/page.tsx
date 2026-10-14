@@ -35,7 +35,7 @@ export default function FoundationsPage() {
               The shared values behind every component
             </p>
             <p className={styles.introBody}>
-              Foundations are the colours, spacing, type styles, and motion values that all components are built on. Every value here is a CSS token in the repo (the foundation was originally designed as Figma variables), and components reference tokens rather than hard-coded values. That means updating a colour or spacing value in one place updates it everywhere it is used.
+              Foundations are the colours, spacing, type styles, motion, layout and stacking values that all components are built on. Every value here is a CSS token in the repo (the foundation was originally designed as Figma variables), and components reference tokens rather than hard-coded values. That means updating a colour or spacing value in one place updates it everywhere it is used.
             </p>
           </div>
 
@@ -66,6 +66,17 @@ export default function FoundationsPage() {
                 <span className="material-symbols-rounded" style={{ color: "var(--color-text-secondary)" }}>
                   apps
                 </span>
+              </div>
+            </TocCard>
+
+            {/* Layout */}
+            <TocCard href="/foundations/layout" title="Layout">
+              <div className={`${styles.circlePreview} ${styles.circleNeutral}`}>
+                <div className={styles.layoutFrames}>
+                  <span className={styles.layoutPhone} />
+                  <span className={styles.layoutTablet} />
+                  <span className={styles.layoutDesktop} />
+                </div>
               </div>
             </TocCard>
 

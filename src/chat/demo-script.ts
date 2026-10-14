@@ -14,6 +14,8 @@ import type {
   DemoStackCard,
   DemoToolCallCard,
 } from './demo-cards';
+import { artifactCard } from './artifacts';
+import { DEMO_DASHBOARD_ARTIFACT, DEMO_PAGE_ARTIFACT } from './demo-artifacts';
 import { scriptChat, type ChatScript } from './sim';
 import type { ChatCard, Starter } from './types';
 
@@ -248,6 +250,30 @@ export const DEMO_SCRIPT: ChatScript = scriptChat()
     }),
     followups: ['Go ahead and invite the other three', 'How is the trial going?', 'How do I get started?'],
   })
+  .user('Build me a launch dashboard')
+  .assistant(
+    'Here is the launch on one board: what is running now, the trial signups, the projects and what is waiting on you. The rows that ask a question will ask it here.',
+    {
+      steps: [
+        { status: 'Gathering the launch numbers', point: 'Signups, seats and open work all belong on one board.' },
+        { status: 'Laying out the dashboard', point: 'Too much for a card; build it as an artifact.' },
+      ],
+      card: artifactCard(DEMO_DASHBOARD_ARTIFACT),
+      followups: ['Draft the launch page', 'How is the trial going?', 'Which plan fits a team of five?'],
+    }
+  )
+  .user('Draft the launch page')
+  .assistant(
+    'A first draft of the launch page is up beside the chat: the headline, the three things the Team plan adds, and one call to action. The source is behind the Code view.',
+    {
+      steps: [
+        { status: 'Reading the launch plan', point: 'The page should lead with the workspace, then the plan.' },
+        { status: 'Writing the page', point: 'One document, its own styles, no scripts.' },
+      ],
+      card: artifactCard(DEMO_PAGE_ARTIFACT),
+      followups: ['Build me a launch dashboard', 'What do the plans include?', 'How is the trial going?'],
+    }
+  )
   /* Free text that matches no prompt lands here, rotating. */
   .fallback(
     'The launch is on track overall. Three of the four readiness tracks are green, and the one item I would watch is the **legal review**, since it gates the pricing rollout.',
@@ -263,7 +289,7 @@ export const DEMO_SCRIPT: ChatScript = scriptChat()
   .fallback(
     'This chat is a scripted preview of the widget, so free text gets one of a few written replies. ' +
       'The suggestion chips lead through the parts of the story that show off the rich content: ' +
-      'a plan, a chart, a diff, a tool call and an approval.',
+      'a plan, a chart, a diff, a tool call, an approval and an artifact.',
     {
       steps: [{ status: 'Reading the question', point: 'Nothing scripted matches this one.' }],
       followups: ['How do I get started?', 'What do the plans include?', 'How is the trial going?'],

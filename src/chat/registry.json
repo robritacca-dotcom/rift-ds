@@ -35,6 +35,8 @@
         "AgentRail",
         "AgentStatus",
         "AiButton",
+        "ArtifactCard",
+        "ArtifactPanel",
         "AttachmentDropZone",
         "AttachmentGroup",
         "ChatHeader",
@@ -44,6 +46,7 @@
         "CodeBlock",
         "Composer",
         "DropdownMenu",
+        "EmptyState",
         "Mention",
         "ModelPicker",
         "PixelAvatar",
@@ -59,7 +62,9 @@
         "ChatLauncher",
         "ChatThreads",
         "ChatTabs",
-        "ChatAgentPane"
+        "ChatAgentPane",
+        "ChatArtifactPane",
+        "ChatArtifactCard"
       ]
     }
   ]

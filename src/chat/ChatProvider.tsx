@@ -6,6 +6,7 @@ import {
   ChatWidgetContext,
   createFeedbackPoster,
   isInternalPath,
+  type ChatArtifactRenderers,
   type ChatCardRenderers,
   type ChatLinkRenderer,
   type ChatView,
@@ -22,7 +23,7 @@ import {
 import type { ChatPlacement, ChatSide } from './placement';
 import { useThreads, type ThreadsOptions } from './threads';
 import { createFetchTransport } from './transport';
-import type { ChatFeedbackVerdict, ChatTransport } from './types';
+import type { ChatArtifact, ChatFeedbackVerdict, ChatTransport } from './types';
 import { DEFAULT_PLACEHOLDER_COPY, useChat, type ChatPlaceholderCopy } from './useChat';
 
 const defaultRenderLink: ChatLinkRenderer = ({ href, children, onNavigate }) => (
@@ -59,6 +60,8 @@ export interface ChatProviderProps {
   feedback?: FeedbackSink | string | false;
   /** Draws `card` events by kind. */
   renderers?: ChatCardRenderers;
+  /** Draws an artifact's preview by kind, for artifacts that are live React content rather than a document or a URL. */
+  artifactRenderers?: ChatArtifactRenderers;
   /** Renders a same-site link in an answer. The default is a plain anchor; a Next.js host passes its Link. */
   renderLink?: ChatLinkRenderer;
   /** Which hrefs in an answer become links. Everything else renders as text. */
@@ -85,6 +88,7 @@ export function ChatProvider({
   fallbackFollowups = DEFAULT_FALLBACK_FOLLOWUPS,
   feedback = '/api/chat/feedback',
   renderers,
+  artifactRenderers,
   renderLink = defaultRenderLink,
   isInternalHref = isInternalPath,
   threads: threadsOptions,
@@ -179,11 +183,24 @@ export function ChatProvider({
      the server HTML. */
   const [starterSeed, setStarterSeed] = useState<number>(() => Math.random());
 
+  /* The artifact on stage. Provider-lifetime like the transcript it came
+     from, so it survives the panel closing and reopening around it. */
+  const [artifact, setArtifact] = useState<ChatArtifact | null>(null);
+  const openArtifact = useCallback((next: ChatArtifact) => setArtifact(next), []);
+  const closeArtifact = useCallback(() => setArtifact(null), []);
+  /* An artifact belongs to the conversation that made it. Every road back to
+     an empty thread (New chat, another thread, a deleted one) takes it off
+     stage; adjusted during render so the panel never paints over a welcome
+     screen. */
+  if (artifact && chat.turns.length === 0 && !chat.live) setArtifact(null);
+
   /* New chat re-rolls the draw and forgets the staged reveal, so the welcome
-     screen replays its short generation beat over a different set. */
+     screen replays its short generation beat over a different set. It also
+     closes the artifact: the conversation that made it is gone. */
   const { reset: resetChat } = chat;
   const reset = useCallback(() => {
     resetChat();
+    setArtifact(null);
     setStarterSeed(Math.random());
     setStarterRevealKey(null);
   }, [resetChat]);
@@ -242,6 +259,7 @@ export function ChatProvider({
   const toggleOpen = useCallback(() => setOpen(!open), [open, setOpen]);
 
   const renderersValue = useMemo(() => renderers ?? {}, [renderers]);
+  const artifactRenderersValue = useMemo(() => artifactRenderers ?? {}, [artifactRenderers]);
 
   const value = useMemo<ChatWidgetContextValue>(
     () => ({
@@ -268,6 +286,10 @@ export function ChatProvider({
       returnFocusRef,
       threads,
       renderers: renderersValue,
+      artifact,
+      openArtifact,
+      closeArtifact,
+      artifactRenderers: artifactRenderersValue,
       renderLink,
       isInternalHref,
       submitFeedback,
@@ -291,6 +313,10 @@ export function ChatProvider({
       draft,
       threads,
       renderersValue,
+      artifact,
+      openArtifact,
+      closeArtifact,
+      artifactRenderersValue,
       renderLink,
       isInternalHref,
       submitFeedback,

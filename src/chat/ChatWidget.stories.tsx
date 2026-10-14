@@ -5,8 +5,9 @@ import { ChatProvider } from './ChatProvider';
 import { ChatWidget, type ChatWidgetProps } from './ChatWidget';
 import { ChatLauncher } from './ChatLauncher';
 import { useChatWidget } from './context';
-import type { ChatCard } from './types';
+import { ARTIFACT_CARD_KIND, type ChatCard } from './types';
 import {
+  DEMO_ARTIFACT_RENDERERS,
   DEMO_MENTIONS,
   DEMO_MODELS,
   DEMO_RENDERERS,
@@ -191,9 +192,10 @@ export const EveryCard: Story = {
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    // The script must carry a card for every renderer the demo exports.
+    // The script must carry a card for every renderer the demo exports, plus
+    // the one kind the widget draws itself: the artifact's tile.
     const kinds = EVERY_CARD.map((card) => card.kind).sort();
-    expect(kinds).toEqual(Object.keys(DEMO_RENDERERS).sort());
+    expect(kinds).toEqual([...Object.keys(DEMO_RENDERERS), ARTIFACT_CARD_KIND].sort());
     for (const kind of kinds) {
       await waitFor(() => expect(canvas.getByText(`A ${kind} card.`)).toBeInTheDocument(), { timeout: 4000 });
     }
@@ -256,6 +258,42 @@ export const Rails: Story = {
       await canvas.findByRole('button', { name: 'How do I get started?' }, { timeout: 4000 })
     );
     await waitFor(() => expect(canvas.getAllByText('New chat').length).toBeGreaterThan(0), { timeout: 4000 });
+  },
+};
+
+/** The artifact panel: a reply that makes something opens it beside the conversation, and the header toggle closes and reopens it. */
+export const Artifacts: Story = {
+  args: { artifacts: true },
+  render: (args) => (
+    <ChatProvider
+      transport={createDemoTransport(FAST)}
+      renderers={DEMO_RENDERERS}
+      artifactRenderers={DEMO_ARTIFACT_RENDERERS}
+      followups={false}
+      feedback={false}
+    >
+      <OpenOnMount>
+        <Stage width={1100} height={760}>
+          <ChatWidget {...args} />
+        </Stage>
+      </OpenOnMount>
+    </ChatProvider>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    // Before the conversation has made anything, the toggle opens an empty state.
+    await userEvent.click(await canvas.findByRole('button', { name: 'Show the artifact panel' }));
+    await waitFor(() => expect(canvas.getByText('Nothing here yet')).toBeInTheDocument(), { timeout: 4000 });
+    await userEvent.click(canvas.getByRole('button', { name: 'Hide the artifact panel' }));
+    // An artifact that arrives at this width opens itself beside the chat.
+    await userEvent.type(canvas.getByRole('textbox'), 'Draft the launch page{Enter}');
+    const tile = await canvas.findByRole('button', { name: /Launch page/, pressed: true }, { timeout: 15000 });
+    await waitFor(() => expect(canvas.getByTitle('Launch page')).toBeVisible(), { timeout: 4000 });
+    // The tile is the one control both ways.
+    await userEvent.click(tile);
+    await waitFor(() => expect(tile).toHaveAttribute('aria-pressed', 'false'), { timeout: 4000 });
+    await userEvent.click(canvas.getByRole('button', { name: 'Show the artifact panel' }));
+    await waitFor(() => expect(tile).toHaveAttribute('aria-pressed', 'true'), { timeout: 4000 });
   },
 };
 

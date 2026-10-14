@@ -19,11 +19,14 @@ export { ChatLauncher, CHAT_PANEL_ID, type ChatLauncherProps } from './ChatLaunc
 export { ChatThreads, type ChatThreadsProps } from './ChatThreads';
 export { ChatTabs, type ChatTabsProps } from './ChatTabs';
 export { ChatAgentPane, type ChatAgentPaneProps } from './ChatAgentPane';
+export { ChatArtifactPane, type ChatArtifactPaneProps } from './ChatArtifactPane';
+export { ChatArtifactCard, type ChatArtifactCardProps } from './ChatArtifactCard';
 export {
   useChatWidget,
   isInternalPath,
   createFeedbackPoster,
   type ChatView,
+  type ChatArtifactRenderers,
   type ChatCardRenderers,
   type ChatLinkRenderer,
   type ChatWidgetContextValue,
@@ -34,6 +37,8 @@ export {
   TAKEOVER_QUERY,
   THREADS_RAIL_MIN_WIDTH,
   ASIDE_RAIL_MIN_WIDTH,
+  ARTIFACT_MIN_COLUMN_WIDTH,
+  ASIDE_WITH_THREADS_MIN_WIDTH,
   useTakeoverViewport,
 } from './queries';
 export {
@@ -102,8 +107,11 @@ export {
   type ChatPlacement,
   type ChatSide,
 } from './placement';
+export { artifactCard, cardArtifact } from './artifacts';
 export {
+  ARTIFACT_CARD_KIND,
   CHAT_EVENT_KINDS,
+  type ChatArtifact,
   type ChatCard,
   type ChatEvent,
   type ChatTransport,

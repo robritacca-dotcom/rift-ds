@@ -3,6 +3,7 @@
 import {
   useEffect,
   useId,
+  useMemo,
   useRef,
   useState,
   useSyncExternalStore,
@@ -24,13 +25,20 @@ import { ModelPicker } from '../components/ModelPicker/ModelPicker';
 import { PromptSuggestions } from '../components/PromptSuggestions/PromptSuggestions';
 import { MOTION_SCROLL_SETTLE_MS, MOTION_SUGGESTIONS_THINK_MS } from '../tokens/motion';
 import { AssistantTurn } from './AssistantTurn';
+import { cardArtifact } from './artifacts';
 import { ChatAgentPane } from './ChatAgentPane';
+import { ChatArtifactPane } from './ChatArtifactPane';
 import { ChatTabs } from './ChatTabs';
 import { ChatThreads, type ChatThreadsProps } from './ChatThreads';
-import { useChatWidget } from './context';
+import { ArtifactSeatContext, useChatWidget } from './context';
 import { readGreeting, serverGreeting, subscribeClock } from './greeting';
 import { CHAT_PLACEMENTS, chatPlacement } from './placement';
-import { ASIDE_RAIL_MIN_WIDTH, THREADS_RAIL_MIN_WIDTH } from './queries';
+import {
+  ARTIFACT_MIN_COLUMN_WIDTH,
+  ASIDE_RAIL_MIN_WIDTH,
+  ASIDE_WITH_THREADS_MIN_WIDTH,
+  THREADS_RAIL_MIN_WIDTH,
+} from './queries';
 import { fitsChip } from './suggestions';
 import { TurnCard } from './TurnContent';
 import type { ChatModelOption, Starter } from './types';
@@ -137,6 +145,8 @@ export interface ChatWidgetProps {
   aside?: (ctx: { overlay: boolean; close: () => void }) => ReactNode;
   /** The built-in agent pane: who the agent is and what it has been doing. Seated like `aside`. */
   agent?: ChatAgentOptions;
+  /** Seat the artifact panel: a reply that carries an artifact draws a tile in the thread, and the tile (or the header's artifact button) opens the artifact beside the conversation on a wide host and as a bottom sheet on a narrow one. The trailing seat holds one panel at a time, so an open artifact stands in for the agent pane. Off, none of it exists: no header button, no tile, no panel. */
+  artifacts?: boolean;
   /** The composer's context note, naming what the chat is looking at. Omit for none. */
   contextLabel?: string | null;
   /** A widget slot on the welcome screen, under the composer and its
@@ -190,6 +200,7 @@ export function ChatWidget({
   tabs,
   aside,
   agent,
+  artifacts = false,
   contextLabel,
   widgets,
   widgetsLayout = 'fit',
@@ -217,6 +228,9 @@ export function ChatWidget({
     starterSeed,
     starterRevealKey,
     setStarterRevealKey,
+    artifact,
+    openArtifact,
+    closeArtifact,
   } = useChatWidget();
 
   /* The picker shows the visitor's pick, or the server's current default
@@ -316,12 +330,13 @@ export function ChatWidget({
             profile={withAgentMark(agent.profile ?? { name: title, status: 'Connected' }, title)}
             tabs={agent.tabs}
             overlay={ctx.overlay}
+            onClose={ctx.close}
           />
         )
       : undefined);
   const tabsNode = tabs === true ? <ChatTabs /> : tabs || null;
 
-  const hasRails = Boolean(renderThreads || renderAside);
+  const hasRails = Boolean(renderThreads || renderAside || artifacts);
   const [threadsOpen, setThreadsOpen] = useState(false);
   /* One piece of state for the agent panel, resting closed: it is the same
      panel in either seat, and it only ever opens because someone asked. The
@@ -330,8 +345,20 @@ export function ChatWidget({
   const railsHostRef = useRef<HTMLDivElement | null>(null);
   const [threadsWide, setThreadsWide] = useState(false);
   const [asideWide, setAsideWide] = useState(false);
-  /* Only the crossing matters, not every measurement. */
-  const wasAsideWideRef = useRef(false);
+  /* The trailing seat is one seat with one set of rules, whichever panel
+     holds it: `asideWide` is room to sit beside the conversation at all,
+     `asideRoomy` room to do it without the threads rail giving up its own. */
+  const [asideRoomy, setAsideRoomy] = useState(false);
+  /* The artifact panel's own two pieces of state, declared here because the
+     measuring effect below closes the trailing seat when it loses its room. */
+  const [artifactEmptyOpen, setArtifactEmptyOpen] = useState(false);
+  const [artifactExpandedWanted, setArtifactExpanded] = useState(false);
+  /* Only the crossing matters, not every measurement. It starts as if the
+     seat had been wide, so a widget that mounts narrow counts as having
+     left rail territory: a panel held over from a wider life (the provider
+     keeps the artifact across a remount) does not come back as a sheet
+     nobody asked for, and `defaultOpen` stays an inline-only promise. */
+  const wasAsideWideRef = useRef(true);
   useEffect(() => {
     if (!hasRails) return;
     const host = railsHostRef.current;
@@ -342,28 +369,163 @@ export function ChatWidget({
       const asideRoom = width >= ASIDE_RAIL_MIN_WIDTH;
       setThreadsWide(wide);
       setAsideWide(asideRoom);
+      setAsideRoomy(width >= ASIDE_WITH_THREADS_MIN_WIDTH);
       /* Growing into rail territory retires the sheet, so it cannot pop
          back open on a later trip below the breakpoint. */
       if (wide) setThreadsOpen(false);
-      /* Leaving rail territory closes the agent panel rather than handing
-         it to the other seat; growing back in does not reopen it. The panel
-         opens on a click and nothing else. */
-      if (wasAsideWideRef.current && !asideRoom) setAsideOpen(false);
+      /* Leaving rail territory closes whichever panel holds the trailing
+         seat rather than handing it to the sheet; growing back in does not
+         reopen it. A panel opens because someone asked, and a sheet nobody
+         asked for covers the conversation. */
+      if (wasAsideWideRef.current && !asideRoom) {
+        setAsideOpen(false);
+        setArtifactEmptyOpen(false);
+        setArtifactExpanded(false);
+        closeArtifact();
+      }
       wasAsideWideRef.current = asideRoom;
     };
     measure();
     const observer = new ResizeObserver(measure);
     observer.observe(host);
     return () => observer.disconnect();
-  }, [hasRails]);
+  }, [hasRails, closeArtifact]);
   const closeThreads = () => setThreadsOpen(false);
+
+  /* ---------- the artifact panel ----------
+     The trailing seat holds one panel at a time: an artifact on stage
+     stands in for the agent pane, which returns when the artifact closes if
+     it was up. The panel is drawn from the artifact the provider holds; the
+     last one is kept through the exit, so a closing panel does not empty
+     before it has gone. */
+  const artifactId = useId();
+  /* The panel can be up with nothing on stage: the header button opens it
+     before the conversation has made anything, onto an empty state. */
+  const artifactShown = artifacts && (artifact !== null || artifactEmptyOpen);
+  const [heldArtifact, setHeldArtifact] = useState(artifact);
+  if (artifactShown && artifact !== heldArtifact) setHeldArtifact(artifact);
+  const artifactInline = artifactShown && asideWide;
+  const artifactExpanded = artifactInline && artifactExpandedWanted;
+  const closeArtifactPanel = () => {
+    setArtifactExpanded(false);
+    setArtifactEmptyOpen(false);
+    closeArtifact();
+  };
+  /* Drag-to-size, inline seat only: the card's leading edge is a grip. The
+     panel's trailing edge is fixed, so its width grows as the pointer moves
+     toward the conversation, which keeps a floor of its own. During the drag
+     the pointer writes the variable straight onto the row, so the transcript
+     does not re-render per frame; the commit on release makes React agree.
+     A mouse affordance, like the dock's widen grip: the panel is fully
+     usable at its resting share without it. */
+  const [artifactWidth, setArtifactWidth] = useState<number | null>(null);
+  const [artifactResizing, setArtifactResizing] = useState(false);
+  const artifactRailRef = useRef<HTMLDivElement | null>(null);
+  const artifactDragRef = useRef<{ startX: number; width: number; max: number; next: number } | null>(null);
+  const beginArtifactResize = (e: React.PointerEvent<HTMLDivElement>) => {
+    if ((e.pointerType === 'mouse' && e.button !== 0) || artifactDragRef.current) return;
+    const rail = artifactRailRef.current;
+    const column = railsHostRef.current?.querySelector<HTMLElement>(':scope > .ds-chat-widget');
+    if (!rail || !column) return;
+    const width = rail.getBoundingClientRect().width;
+    const spare = column.getBoundingClientRect().width - ARTIFACT_MIN_COLUMN_WIDTH;
+    artifactDragRef.current = { startX: e.clientX, width, max: width + Math.max(0, spare), next: width };
+    e.currentTarget.setPointerCapture(e.pointerId);
+    setArtifactResizing(true);
+  };
+  const moveArtifactResize = (e: React.PointerEvent<HTMLDivElement>) => {
+    const drag = artifactDragRef.current;
+    if (!drag) return;
+    const grown = drag.width - (e.clientX - drag.startX);
+    drag.next = Math.round(Math.min(drag.max, Math.max(ARTIFACT_MIN_COLUMN_WIDTH, grown)));
+    railsHostRef.current?.style.setProperty('--ds-chat-artifact-width', `${drag.next}px`);
+  };
+  const endArtifactResize = () => {
+    const drag = artifactDragRef.current;
+    if (!drag) return;
+    artifactDragRef.current = null;
+    setArtifactWidth(drag.next);
+    setArtifactResizing(false);
+  };
+
+  /* The header button reopens the conversation's newest artifact. */
+  const latestArtifact = useMemo(() => {
+    for (let index = turns.length - 1; index >= 0; index -= 1) {
+      const found = cardArtifact(turns[index].card);
+      if (found) return found;
+    }
+    return null;
+  }, [turns]);
+  /* An artifact that arrives while the visitor is watching opens itself,
+     where there is room to seat it beside the conversation. In the sheet's
+     territory it waits for its tile: a sheet nobody asked for covers the
+     answer that announced it. Turns already in the thread at mount are not
+     arrivals. */
+  const seenArtifactTurns = useRef<Set<string> | null>(null);
+  const asideWideRef = useRef(asideWide);
+  useEffect(() => {
+    asideWideRef.current = asideWide;
+  }, [asideWide]);
+  useEffect(() => {
+    if (!artifacts) return;
+    const carrying = turns.filter((turn) => cardArtifact(turn.card));
+    if (seenArtifactTurns.current === null) {
+      seenArtifactTurns.current = new Set(carrying.map((turn) => turn.id));
+      return;
+    }
+    for (const turn of carrying) {
+      if (seenArtifactTurns.current.has(turn.id)) continue;
+      seenArtifactTurns.current.add(turn.id);
+      const arrived = cardArtifact(turn.card);
+      if (arrived && asideWideRef.current) openArtifact(arrived);
+    }
+  }, [artifacts, turns, openArtifact]);
+
+  /* The inline threads rail yields to a trailing panel that needs its room,
+     the agent pane and the artifact alike: under the roomy threshold, or
+     whenever the artifact is expanded, the history goes back behind the
+     header's hamburger. */
+  const trailingUp = artifactInline || (Boolean(renderAside) && asideOpen && asideWide);
+  const threadsInline = threadsWide && !(trailingUp && (!asideRoomy || artifactExpanded));
+
+  /* The inline rail glides to its pane's own width, which only the pane
+     knows: measured here and handed to the stylesheet as a variable, written
+     straight onto the node so a pane that resizes does not re-render the
+     transcript. A pane with no width of its own measures nothing and the
+     rail falls back to its content's width, unanimated. */
+  const asideRailRef = useRef<HTMLDivElement | null>(null);
+  const asideMounted = Boolean(renderAside) && asideWide;
+  useEffect(() => {
+    if (!asideMounted) return;
+    const rail = asideRailRef.current;
+    const card = rail?.firstElementChild as HTMLElement | null;
+    const pane = card?.firstElementChild as HTMLElement | null;
+    if (!rail || !card || !pane) return;
+    const measure = () => {
+      const width = pane.offsetWidth + (card.offsetWidth - card.clientWidth);
+      if (pane.offsetWidth > 0) rail.style.setProperty('--ds-chat-aside-width', `${width}px`);
+      else rail.style.removeProperty('--ds-chat-aside-width');
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(pane);
+    return () => observer.disconnect();
+  }, [asideMounted]);
 
   /* One panel, two seats. `asideShown` is what the visitor can actually see,
      so it drives the toggle, the header button and the Escape order alike. */
   const asideId = useId();
-  const asideShown = Boolean(renderAside) && asideOpen;
+  const asideShown = Boolean(renderAside) && asideOpen && !artifactShown;
   const closeAside = () => setAsideOpen(false);
-  const toggleAside = () => setAsideOpen((current) => !current);
+  const toggleAside = () => {
+    /* Asking for the agent while an artifact holds the seat swaps them. */
+    if (artifactShown) {
+      closeArtifactPanel();
+      setAsideOpen(true);
+      return;
+    }
+    setAsideOpen((current) => !current);
+  };
 
   /* The starters sit in one of two places: under the centred composer on
      the desktop welcome, directly above the bottom-pinned one on a phone.
@@ -389,18 +551,40 @@ export function ChatWidget({
     <div className="ds-chat-widget__widgets">{widgets}</div>
   );
 
-  /* The widget's own controls. They live in the chat header normally, and
-     move to the card's right edge while the agent rail is seated inline:
-     every one of them acts on the whole widget, so a cluster stranded
+  /* The widget's own controls. Every one of them acts on the whole widget,
+     so where a trailing panel can seat inline they live at the card's own
+     top trailing corner (see `actionsFloat` below): a cluster stranded
      mid-card above the conversation column reads as the column's chrome
-     instead. The buttons self-label with tooltips, opening downward because
-     the header hugs the panel's clipped top edge. */
+     instead. On a narrower widget they sit in the chat header. The buttons
+     self-label with tooltips, opening downward because the header hugs the
+     panel's clipped top edge. */
+  /* A panel seated inline on the trailing edge, whichever tenant it is. */
+  const trailingInline = (asideShown && asideWide) || artifactInline;
+  /* Wherever the widget is wide enough to seat a trailing panel inline, its
+     controls have one home for good: the card's own top trailing corner,
+     over the header row with no panel up and over the panel's top inset with
+     one. They used to move between the chat header and that corner as a
+     panel opened and closed, which remounted every button and, on the way
+     out, landed them on a column that was still narrow. One home means
+     nothing moves and nothing remounts. The header keeps a spacer of the
+     cluster's size while no panel is up, so the title still stops short of
+     the controls. */
+  const actionsFloat = (Boolean(renderAside) || artifacts) && asideWide;
+  /* With the inline threads rail offered, its own new-thread row is the one
+     New chat. Keyed on the rail having room, not on whether an open artifact
+     has borrowed it: the cluster should not gain a button because a panel
+     opened. */
+  const showNewChat = !(renderThreads && threadsWide);
+  const actionCount =
+    Number(showNewChat) +
+    Number(Boolean(renderAside)) +
+    Number(artifacts) +
+    Number(placementEnabled) +
+    Number(fullscreenEnabled) +
+    Number(closeEnabled);
   const headerActions = (
     <>
-      {/* With the inline threads rail showing, its own new-thread row is the
-          one New chat: a second pen in the header would be the same action
-          twice. */}
-      {!(renderThreads && threadsWide) && (
+      {showNewChat && (
         <CircularButton
           icon="edit_square"
           variant="tertiary"
@@ -428,6 +612,26 @@ export function ChatWidget({
           aria-expanded={asideShown}
           aria-controls={asideShown ? asideId : undefined}
           onClick={toggleAside}
+        />
+      )}
+      {/* The artifact toggle, the agent toggle's sibling, and like it the
+          one control both ways: it opens the panel on the conversation's
+          newest artifact (or, before there is one, on the empty state) and
+          closes whatever is up. */}
+      {artifacts && (
+        <CircularButton
+          icon={artifactShown ? 'right_panel_close' : 'right_panel_open'}
+          variant="tertiary"
+          className={artifactShown ? 'ds-chat-widget__agent-toggle--on' : undefined}
+          ariaLabel={artifactShown ? 'Hide the artifact panel' : 'Show the artifact panel'}
+          tooltipPosition="bottom"
+          aria-expanded={artifactShown}
+          aria-controls={artifactShown ? artifactId : undefined}
+          onClick={() => {
+            if (artifactShown) closeArtifactPanel();
+            else if (latestArtifact) openArtifact(latestArtifact);
+            else setArtifactEmptyOpen(true);
+          }}
         />
       )}
       {/* Placement: one menu naming every seat, the current one checked.
@@ -523,17 +727,22 @@ export function ChatWidget({
       data-widgets-wide={widgetsNode && widgetsWidth === 'wide' ? '' : undefined}
       data-scrolling={(widgetsNode && widgetsLayout === 'scroll' && rootScrolling) || undefined}
       onScroll={handleRootScroll}
-      /* The header's controls have moved out to the card's edge, so the row
-         has to be told to keep the height they were giving it. */
-      data-lifted-actions={(asideShown && asideWide) || undefined}
+      /* With a trailing panel up the header carries neither the controls
+         nor their spacer, so the row has to be told to keep the height they
+         were giving it. */
+      data-lifted-actions={trailingInline || undefined}
       /* Escape steps out of the takeover first; the host's own Escape
          handling (closing the panel) takes over once back in panel view. */
       onKeyDown={(e: React.KeyboardEvent) => {
         /* A rail sheet is the topmost layer, so Escape settles it before
            the takeover or the host panel hear anything: one layer per press. */
-        if (e.key === 'Escape' && (threadsOpen || (asideShown && !asideWide))) {
+        if (
+          e.key === 'Escape' &&
+          (threadsOpen || (asideShown && !asideWide) || (artifactShown && !asideWide))
+        ) {
           e.stopPropagation();
           if (threadsOpen) closeThreads();
+          else if (artifactShown) closeArtifactPanel();
           else closeAside();
           return;
         }
@@ -557,7 +766,7 @@ export function ChatWidget({
         <ChatHeader
           title={
             <span className="ds-chat-widget__brand">
-              {renderThreads && !threadsWide && (
+              {renderThreads && !threadsInline && (
                 <CircularButton
                   icon="menu"
                   variant="tertiary"
@@ -573,13 +782,22 @@ export function ChatWidget({
           actions={
             /* With the agent rail seated inline the cluster moves to the
                widget's own right edge (see headerActions). */
-            asideShown && asideWide ? undefined : headerActions
+            !actionsFloat ? (
+              headerActions
+            ) : trailingInline ? undefined : (
+              <span
+                className="ds-chat-widget__actions-spacer"
+                style={{ '--ds-chat-action-count': actionCount } as React.CSSProperties}
+                aria-hidden="true"
+              />
+            )
           }
         />
 
         {tabsNode && <div className="ds-chat-widget__tabs-row">{tabsNode}</div>}
 
         <div className="ds-chat-widget__body">
+          <ArtifactSeatContext.Provider value={artifacts}>
           <ChatThread className="ds-chat-widget__thread">
             {/* One array, so the live turn and its committed form match by
                 key: split expressions are separate children slots and React
@@ -620,6 +838,7 @@ export function ChatWidget({
               ...(live ? [<AssistantTurn key={live.id} live={live} />] : []),
             ]}
           </ChatThread>
+          </ArtifactSeatContext.Provider>
 
           {/* Welcome greeting: an overlay on the empty thread, sitting just
               above the centred composer; centred in the empty thread on a
@@ -715,8 +934,27 @@ export function ChatWidget({
      narrow, the bottom sheet the header button raises) trailing, the
      conversation between them. */
   return (
-    <div ref={railsHostRef} className="ds-chat-widget__rails">
-      {renderThreads && threadsWide && (
+    <div
+      ref={railsHostRef}
+      className="ds-chat-widget__rails"
+      data-artifact-expanded={artifactExpanded || undefined}
+      data-artifact-sized={artifactWidth !== null || artifactResizing || undefined}
+      data-artifact-resizing={artifactResizing || undefined}
+      style={
+        artifactWidth !== null
+          ? ({ '--ds-chat-artifact-width': `${artifactWidth}px` } as React.CSSProperties)
+          : undefined
+      }
+      onKeyDown={(event) => {
+        /* Expanded, the conversation is off stage and cannot hear the key:
+           Escape steps the artifact back beside it. */
+        if (event.key === 'Escape' && artifactExpanded) {
+          event.stopPropagation();
+          setArtifactExpanded(false);
+        }
+      }}
+    >
+      {renderThreads && threadsInline && (
         <div className="ds-chat-widget__threads-rail">
           {renderThreads({ overlay: false, close: closeThreads })}
         </div>
@@ -726,7 +964,7 @@ export function ChatWidget({
           rail's top inset, which is empty by construction. Ahead of the rail
           in the DOM as well as above it on screen, so the keyboard reaches
           the card's own controls before the panel's contents. */}
-      {asideShown && asideWide && (
+      {actionsFloat && (
         <div className="ds-chat-widget__rail-actions">{headerActions}</div>
       )}
       {/* The inline pane stays mounted while the widget is wide enough to
@@ -735,14 +973,72 @@ export function ChatWidget({
           technology, the same contract as the sheet below. */}
       {renderAside && asideWide && (
         <div
-          className={`ds-chat-widget__aside-rail ${asideOpen ? 'ds-chat-widget__aside-rail--open' : ''}`}
+          ref={asideRailRef}
+          className={`ds-chat-widget__aside-rail ${asideShown ? 'ds-chat-widget__aside-rail--open' : ''}`}
           id={asideId}
-          inert={!asideOpen || undefined}
+          inert={!asideShown || undefined}
         >
           <div className="ds-chat-widget__aside-rail-inner">{renderAside({ overlay: false, close: closeAside })}</div>
         </div>
       )}
-      {renderThreads && !threadsWide && (
+      {/* The artifact's inline seat: mounted while the widget is wide enough
+          to hold it, so opening and closing can glide; closed, it is inert
+          and out of the accessibility tree, the aside rail's contract. */}
+      {/* The size grip: a zero-width seat on the card's leading edge, its
+          grab zone straddling the border. Not offered expanded, where there
+          is no conversation to trade room with. */}
+      {artifactInline && !artifactExpanded && (
+        <div
+          className={`ds-chat-widget__artifact-grip ${artifactResizing ? 'ds-chat-widget__artifact-grip--resizing' : ''}`}
+          aria-hidden="true"
+          onPointerDown={beginArtifactResize}
+          onPointerMove={moveArtifactResize}
+          onPointerUp={endArtifactResize}
+          onPointerCancel={endArtifactResize}
+        />
+      )}
+      {artifacts && asideWide && (
+        <div
+          ref={artifactRailRef}
+          className={`ds-chat-widget__artifact-rail ${artifactShown ? 'ds-chat-widget__artifact-rail--open' : ''}`}
+          id={artifactId}
+          inert={!artifactShown || undefined}
+        >
+          <div className="ds-chat-widget__artifact-rail-inner">
+            <ChatArtifactPane
+              artifact={heldArtifact}
+              expanded={artifactExpanded}
+              onExpandedChange={setArtifactExpanded}
+              onClose={closeArtifactPanel}
+            />
+          </div>
+        </div>
+      )}
+      {artifacts && !asideWide && (
+        <div
+          className={`ds-chat-widget__aside-overlay ${
+            artifactShown ? 'ds-chat-widget__aside-overlay--open' : ''
+          }`}
+        >
+          <button
+            type="button"
+            className="ds-chat-widget__rail-scrim"
+            aria-label="Close the artifact panel"
+            tabIndex={artifactShown ? 0 : -1}
+            onClick={closeArtifactPanel}
+          />
+          <div
+            className="ds-chat-widget__aside-sheet ds-chat-widget__aside-sheet--artifact"
+            id={artifactId}
+          >
+            <span className="ds-chat-widget__aside-grabber" aria-hidden="true" />
+            <div className="ds-chat-widget__aside-sheet-body">
+              <ChatArtifactPane artifact={heldArtifact} onClose={closeArtifactPanel} />
+            </div>
+          </div>
+        </div>
+      )}
+      {renderThreads && !threadsInline && (
         <div
           className={`ds-chat-widget__threads-overlay ${
             threadsOpen ? 'ds-chat-widget__threads-overlay--open' : ''
@@ -763,14 +1059,14 @@ export function ChatWidget({
       {renderAside && !asideWide && (
         <div
           className={`ds-chat-widget__aside-overlay ${
-            asideOpen ? 'ds-chat-widget__aside-overlay--open' : ''
+            asideShown ? 'ds-chat-widget__aside-overlay--open' : ''
           }`}
         >
           <button
             type="button"
             className="ds-chat-widget__rail-scrim"
             aria-label="Close the agent panel"
-            tabIndex={asideOpen ? 0 : -1}
+            tabIndex={asideShown ? 0 : -1}
             onClick={closeAside}
           />
           <div className="ds-chat-widget__aside-sheet" id={asideId}>

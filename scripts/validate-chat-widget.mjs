@@ -24,7 +24,11 @@
  *      a consumer who installed none of them must still build.
  *   5. The two numbers the stylesheet mirrors from the TypeScript side agree:
  *      TAKEOVER_QUERY's width against the panel's phone media query in
- *      ChatWidget.css, and DOCK_MIN_WIDTH against the --ds-chat-width default.
+ *      ChatWidget.css, and DOCK_MIN_WIDTH against the --ds-chat-width default;
+ *      and the rail thresholds design.md states (threads, the trailing seat,
+ *      the width under which the threads rail yields, the artifact grip's
+ *      column floor) are the ones queries.ts holds, the last also against
+ *      the stylesheet's flex basis.
  *   6. The surfaces that document the widget exist: its page under
  *      website/src/app/components/<slug>/ (the props and every option, held
  *      to the component page rules by validate-website-surfaces.mjs), the
@@ -291,6 +295,30 @@ function optionalPeersInClosure(entry) {
   }
   if (aside && !spec.includes(`ASIDE_RAIL_MIN_WIDTH\` (${aside[1]}px)`)) {
     errors.push(`design.md's ChatWidget section does not state ASIDE_RAIL_MIN_WIDTH as ${aside[1]}px`);
+  }
+  /* The trailing seat's other two numbers: the width under which the
+     threads rail yields, stated in the spec, and the floor both columns
+     keep under the artifact's size grip, stated in the spec and mirrored
+     by the stylesheet's flex basis for the conversation. */
+  const withThreads = queries.match(/ASIDE_WITH_THREADS_MIN_WIDTH = (\d+)/);
+  const columnFloor = queries.match(/ARTIFACT_MIN_COLUMN_WIDTH = (\d+)/);
+  if (!withThreads || !columnFloor) {
+    errors.push('could not read ASIDE_WITH_THREADS_MIN_WIDTH or ARTIFACT_MIN_COLUMN_WIDTH from src/chat/queries.ts');
+  } else {
+    if (!spec.includes(`ASIDE_WITH_THREADS_MIN_WIDTH\` (${withThreads[1]}px)`)) {
+      errors.push(`design.md's ChatWidget section does not state ASIDE_WITH_THREADS_MIN_WIDTH as ${withThreads[1]}px`);
+    }
+    if (!spec.includes(`ARTIFACT_MIN_COLUMN_WIDTH\` (${columnFloor[1]}px)`)) {
+      errors.push(`design.md's ChatWidget section does not state ARTIFACT_MIN_COLUMN_WIDTH as ${columnFloor[1]}px`);
+    }
+    const cssFloor = css.match(/\[data-artifact-sized\] > \.ds-chat-widget \{\s*flex: 1 0 (\d+)px;/);
+    if (!cssFloor) {
+      errors.push("could not read the sized conversation's flex basis from ChatWidget.css");
+    } else if (cssFloor[1] !== columnFloor[1]) {
+      errors.push(
+        `ARTIFACT_MIN_COLUMN_WIDTH is ${columnFloor[1]} but ChatWidget.css floors the sized conversation at ${cssFloor[1]}px: the two must agree`
+      );
+    }
   }
 }
 

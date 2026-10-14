@@ -20,7 +20,16 @@ export const TAKEOVER_QUERY = '(max-width: 719px)';
 
 /** The widget's own width thresholds for seating its rails inline. */
 export const THREADS_RAIL_MIN_WIDTH = 720;
-export const ASIDE_RAIL_MIN_WIDTH = 860;
+/** The trailing seat's threshold, one number for both of its tenants: at
+    this width and up the agent pane and the artifact panel sit beside the
+    conversation, below it each rises as a bottom sheet. */
+export const ASIDE_RAIL_MIN_WIDTH = 760;
+/** Below this the inline threads rail yields its room to a trailing panel
+    seated inline, and goes back behind the header's hamburger. */
+export const ASIDE_WITH_THREADS_MIN_WIDTH = 1040;
+/** The floor either column keeps while an artifact is dragged wider or
+    narrower: the conversation never loses more than this, nor the panel. */
+export const ARTIFACT_MIN_COLUMN_WIDTH = 320;
 
 const subscribeTakeover = (onChange: () => void) => {
   const media = window.matchMedia(TAKEOVER_QUERY);

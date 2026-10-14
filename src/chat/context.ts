@@ -3,7 +3,7 @@
 import { createContext, useContext, type ReactNode } from 'react';
 import type { ChatPlacement, ChatSide } from './placement';
 import type { ThreadsState } from './threads';
-import type { ChatFeedbackVerdict } from './types';
+import type { ChatArtifact, ChatFeedbackVerdict } from './types';
 import type { ChatState } from './useChat';
 
 /** Panel is the docked rail; full is the viewport takeover. */
@@ -14,6 +14,19 @@ export type ChatView = 'panel' | 'full';
  * a kind with no renderer draws nothing.
  */
 export type ChatCardRenderers = Record<string, (data: unknown) => ReactNode>;
+
+/**
+ * Draws an artifact's preview as a React node, keyed by the artifact's
+ * `kind`. A kind with no renderer falls back to the built-in frames.
+ */
+export type ChatArtifactRenderers = Record<string, (artifact: ChatArtifact) => ReactNode>;
+
+/**
+ * Whether the widget rendering this subtree seats the artifact panel (its
+ * `artifacts` prop). With no seat an artifact has nowhere to open, so the
+ * thread draws no tile for it: the feature is whole or it is absent.
+ */
+export const ArtifactSeatContext = createContext(false);
 
 /** How the widget renders a link the model wrote. */
 export type ChatLinkRenderer = (props: {
@@ -59,6 +72,12 @@ export interface ChatWidgetContextValue extends ChatState {
   /** The thread lifecycle behind the built-in threads and tabs. */
   threads: ThreadsState;
   renderers: ChatCardRenderers;
+  /** The artifact on stage in the artifact panel, or null while it is closed. */
+  artifact: ChatArtifact | null;
+  /** Puts an artifact on stage. The widget seats the panel; this only says which. */
+  openArtifact: (artifact: ChatArtifact) => void;
+  closeArtifact: () => void;
+  artifactRenderers: ChatArtifactRenderers;
   renderLink: ChatLinkRenderer;
   isInternalHref: (href: string) => boolean;
   /** Record and send a thumbs verdict; null when feedback is off. */

@@ -24,6 +24,44 @@ export interface ChatCard {
   data: unknown;
 }
 
+/**
+ * Something the chat made that is worth more room than a turn can give it: a
+ * dashboard, a document, a page, a site. It travels as an ordinary card of
+ * kind `ARTIFACT_CARD_KIND`, so any transport that can send a card can send
+ * one; the thread draws it as a tile, and the tile opens the artifact panel
+ * beside the conversation.
+ */
+export interface ChatArtifact {
+  /** Stable identity: the same id reopened is the same artifact. */
+  id: string;
+  /** The artifact's name, on the tile and in the panel's header. */
+  title: string;
+  /**
+   * How to draw it. `html` frames the `html` document, `url` frames the
+   * `url`, `code` shows the `code` alone; any other kind is drawn by the
+   * provider's `artifactRenderers`. An unknown kind with no renderer falls
+   * back to whichever of `html`, `url` and `code` it carries.
+   */
+  kind: string;
+  /** A quiet line beside the name: what it is, or which version. */
+  meta?: string;
+  /** A Material Symbol name for the tile and the header. */
+  icon?: string;
+  /** A complete HTML document, drawn in a sandboxed frame. */
+  html?: string;
+  /** A page to frame. Only http(s) URLs and same-site paths are framed. */
+  url?: string;
+  /** The source, offered as the panel's Code view. An `html` artifact offers its document when this is absent. */
+  code?: string;
+  /** The source's language. */
+  language?: string;
+  /** Whatever a custom renderer for `kind` expects. Must survive JSON. */
+  data?: unknown;
+}
+
+/** The card kind an artifact travels as. Its `data` is a `ChatArtifact`. */
+export const ARTIFACT_CARD_KIND = 'artifact';
+
 export type ChatEvent =
   /** A live status step: the AgentStatus label, with an optional reasoning trace point. */
   | { type: 'status'; label: string; point?: string }

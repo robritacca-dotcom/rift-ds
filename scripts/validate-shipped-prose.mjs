@@ -241,6 +241,10 @@ const STORY_MODULES = [
   'website/src/app/playground/views/ChatView.tsx',
   'src/chat/DemoWelcome.tsx',
   'src/chat/demo-agent-panes.tsx',
+  // The artifact panel's empty state and the demo's two artifacts, the
+  // framed page's own copy included.
+  'src/chat/ChatArtifactPane.tsx',
+  'src/chat/demo-artifacts.tsx',
   'website/src/app/playground/views/TypeView.tsx',
   // The theme rail's control labels and the export dialog's notes sit in
   // component files beside the playground's page.tsx, and the export's

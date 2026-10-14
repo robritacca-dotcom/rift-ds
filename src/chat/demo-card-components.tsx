@@ -13,7 +13,8 @@ import { CodeBlock } from '../components/CodeBlock/CodeBlock';
 import { InterruptCard } from '../components/InterruptCard/InterruptCard';
 import { MessageCard } from '../components/MessageCard/MessageCard';
 import { ToolCall } from '../components/ToolCall/ToolCall';
-import type { ChatCardRenderers } from './context';
+import { useChatWidget, type ChatCardRenderers } from './context';
+import { DemoBoard } from './DemoWelcome';
 import type { ChatCard } from './types';
 
 export interface DemoChartCard {
@@ -105,6 +106,16 @@ export function DemoStack({ card, renderers }: { card: DemoStackCard; renderers:
         const render = renderers[item.kind];
         return render ? <div key={index}>{render(item.data)}</div> : null;
       })}
+    </div>
+  );
+}
+
+/** The dashboard's rows ask the chat, like the welcome board's. */
+export function DemoDashboardArtifact() {
+  const { send } = useChatWidget();
+  return (
+    <div className="ds-chat-demo__artifact-board">
+      <DemoBoard onAsk={(prompt) => send(prompt)} />
     </div>
   );
 }

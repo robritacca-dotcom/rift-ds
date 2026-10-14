@@ -52,8 +52,9 @@
   padding-inline: var(--ds-chat-widget-inset);
 }
 
-/* With the controls lifted to the card's edge, the header row has nothing
-   40px tall left in it and would collapse to the title's own line. The row
+/* With a trailing panel seated inline, the controls stand over the panel's
+   top inset and the header row has nothing 40px tall left in it, so it
+   would collapse to the title's own line. The row
    holds the height its buttons were giving it: the control plus the
    header's own block padding either side. */
 .ds-chat-widget[data-lifted-actions] .ds-chat-header {
@@ -657,54 +658,240 @@
    own rounded card, inset on three sides. The top margin is the header
    row's exact height (the chat column's top padding, plus the header's own
    block padding either side of a 40px control), so the panel begins where
-   that row ends and the lifted controls sit in the clear above it. */
+   that row ends and the widget's controls sit in the clear above it. */
 .ds-chat-widget__aside-rail {
+  display: flex;
   flex: none;
+  /* The open and close glide, the artifact panel's own: the rail's width
+     runs from nothing to the pane's, and the card is the rail at every
+     frame, a whole rounded card growing from the trailing edge with its
+     content revealed behind the leading border. The target is the pane's
+     natural width, which the widget measures and hands over as
+     --ds-chat-aside-width (a rail holds a width of its own, so there is no
+     share of the row to animate as the artifact does). Closed, the rail
+     keeps no width, no inset and no border, and goes invisible once the
+     collapse has finished (the visibility delay), so nothing of it can be
+     seen, hovered or reached. The reduced-motion guard in tokens-motion.css
+     zeroes every duration here. */
+  width: 0;
+  min-width: 0;
   min-height: 0;
   margin: calc(var(--padding-200) + var(--padding-150) * 2 + 40px) 0 var(--padding-500) 0;
-  /* The open and close glide, the threads rail's own: a one-column grid
-     whose track runs 0fr to 1fr, so the pane's width animates without the
-     widget knowing it, while the pane's own card fades with it. Closed, the
-     rail keeps no width, no inset and no border, and goes invisible once
-     the collapse has finished (the visibility delay), so nothing of it can
-     be seen, hovered or reached. The reduced-motion guard in
-     tokens-motion.css zeroes every duration here. */
-  display: grid;
-  grid-template-columns: 0fr;
   opacity: 0;
   visibility: hidden;
+  overflow: hidden;
   transition:
-    grid-template-columns var(--motion-duration-slow) var(--motion-ease-emphasized),
+    width var(--motion-duration-slow) var(--motion-ease-emphasized),
     margin var(--motion-duration-slow) var(--motion-ease-emphasized),
     opacity var(--motion-duration-base) var(--motion-ease-standard),
     visibility 0s linear var(--motion-duration-slow);
 }
 
 .ds-chat-widget__aside-rail--open {
-  grid-template-columns: 1fr;
+  /* Before the first measurement there is no number to glide to, so the
+     rail simply takes its content's width. */
+  width: var(--ds-chat-aside-width, max-content);
   margin-right: var(--padding-500);
   opacity: 1;
   visibility: visible;
   transition:
-    grid-template-columns var(--motion-duration-slow) var(--motion-ease-emphasized),
+    width var(--motion-duration-slow) var(--motion-ease-emphasized),
     margin var(--motion-duration-slow) var(--motion-ease-emphasized),
     opacity var(--motion-duration-base) var(--motion-ease-standard) calc(var(--motion-duration-slow) - var(--motion-duration-base)),
     visibility 0s linear 0s;
 }
 
-/* The pane's card: the border and radius live here, inside the animated
-   track, so the collapsing rail never shows a sliver of frame. */
+/* The pane's card fills the rail, so the two are one shape through the
+   glide; the pane inside keeps its own width and is clipped by the card. A
+   trailing panel is a solid surface, the page's own ground, not the
+   widget's glass: it is a place to read and work in, and what shows through
+   glass (the host's page, an ambient background) would sit under its
+   content. */
 .ds-chat-widget__aside-rail-inner {
+  box-sizing: border-box;
   display: flex;
+  flex: 1 0 auto;
+  width: 100%;
   min-width: 0;
   min-height: 0;
   border: var(--border-025) solid var(--color-bg-container-border);
   border-radius: var(--radius-600);
+  background-color: var(--color-bg-page-primary);
   overflow: hidden;
 }
 
-/* The widget's controls, lifted out of the chat header to the card's own
-   right edge while the rail is seated inline. */
+/* The pane never squeezes with the card around it. */
+.ds-chat-widget__aside-rail-inner > * {
+  flex: none;
+}
+
+/* ============================================
+   THE ARTIFACT PANEL — the trailing seat's other tenant. Wide widgets seat
+   it beside the conversation as a second column; narrow ones raise it as a
+   tall bottom sheet. Unlike the agent rail it has no width of its own: it
+   shares the row with the conversation, a little the larger of the two.
+   ============================================ */
+
+/* Any child of the row that is the conversation takes the room the rails
+   leave, and can shrink under an artifact. */
+.ds-chat-widget__rails > .ds-chat-widget {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+/* The artifact's card floats exactly as the agent rail's does: inset from
+   the widget's edges, beginning under the header row (the same top margin,
+   the row's own height), with the widget's lifted controls in the clear
+   above it. The glide is the flex share running from nothing, the card
+   fading in behind it; closed, the rail keeps no width and no inset and
+   goes invisible once the collapse has finished. The reduced-motion guard
+   in tokens-motion.css zeroes every duration here. */
+.ds-chat-widget__artifact-rail {
+  display: flex;
+  flex: 0 1 0;
+  min-width: 0;
+  min-height: 0;
+  margin: calc(var(--padding-200) + var(--padding-150) * 2 + 40px) 0 var(--padding-500) 0;
+  opacity: 0;
+  visibility: hidden;
+  overflow: hidden;
+  transition:
+    flex-grow var(--motion-duration-slow) var(--motion-ease-emphasized),
+    margin var(--motion-duration-slow) var(--motion-ease-emphasized),
+    opacity var(--motion-duration-base) var(--motion-ease-standard),
+    visibility 0s linear var(--motion-duration-slow);
+}
+
+.ds-chat-widget__artifact-rail--open {
+  flex-grow: 1.2;
+  margin-right: var(--padding-500);
+  opacity: 1;
+  visibility: visible;
+  transition:
+    flex-grow var(--motion-duration-slow) var(--motion-ease-emphasized),
+    margin var(--motion-duration-slow) var(--motion-ease-emphasized),
+    opacity var(--motion-duration-base) var(--motion-ease-standard) calc(var(--motion-duration-slow) - var(--motion-duration-base)),
+    visibility 0s linear 0s;
+}
+
+.ds-chat-widget__artifact-rail-inner {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
+  /* Solid, the agent pane's ground: see the aside rail's card. */
+  background-color: var(--color-bg-page-primary);
+  overflow: hidden;
+}
+
+/* The panel opened before the conversation has made anything. */
+.ds-chat-widget__artifact-empty {
+  display: grid;
+  place-items: center;
+  min-height: 100%;
+  padding: var(--padding-400);
+}
+
+/* Sized by the grip: the panel holds the width the visitor gave it, and
+   gives it back before the conversation drops under its floor (the 320px
+   mirrors ARTIFACT_MIN_COLUMN_WIDTH in queries.ts). */
+.ds-chat-widget__rails[data-artifact-sized] > .ds-chat-widget__artifact-rail--open {
+  flex: 0 1 var(--ds-chat-artifact-width);
+}
+
+.ds-chat-widget__rails[data-artifact-sized] > .ds-chat-widget {
+  flex: 1 0 320px;
+}
+
+/* The pointer drives the width frame by frame, so the glides stand down
+   and nothing under the drag selects. */
+.ds-chat-widget__rails[data-artifact-resizing] {
+  user-select: none;
+}
+
+.ds-chat-widget__rails[data-artifact-resizing] > .ds-chat-widget__artifact-rail {
+  transition: none;
+}
+
+/* The grip: the dock's widen grip, restated for the card's leading edge. A
+   20px grab zone straddling the border, with a hover-revealed 4×48px pill.
+   The seat itself has no width, so the row's layout never knows it is
+   there; the zone spans the card's own height. */
+.ds-chat-widget__artifact-grip {
+  position: relative;
+  z-index: 4;
+  flex: none;
+  width: 0;
+  margin: calc(var(--padding-200) + var(--padding-150) * 2 + 40px) 0 var(--padding-500) 0;
+  cursor: ew-resize;
+  touch-action: none;
+}
+
+.ds-chat-widget__artifact-grip::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -10px;
+  width: 20px;
+}
+
+.ds-chat-widget__artifact-grip::after {
+  content: "";
+  position: absolute;
+  top: calc(50% - 24px);
+  left: -2px;
+  width: 4px;
+  height: 48px;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  transition: background var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-chat-widget__artifact-grip:hover::after,
+.ds-chat-widget__artifact-grip--resizing::after {
+  background: var(--color-text-tertiary);
+}
+
+.ds-chat-widget__artifact-grip:active::after {
+  background: var(--color-text-secondary);
+}
+
+/* Expanded, the artifact has the widget: the conversation and the history
+   leave the row (and with them the tab order), and the card takes an inset
+   on its leading edge too. */
+.ds-chat-widget__rails[data-artifact-expanded] > .ds-chat-widget,
+.ds-chat-widget__rails[data-artifact-expanded] > .ds-chat-widget__threads-rail {
+  display: none;
+}
+
+.ds-chat-widget__rails[data-artifact-expanded] > .ds-chat-widget__artifact-rail--open {
+  flex: 1 1 0;
+  margin-left: var(--padding-500);
+}
+
+/* The sheet runs nearly the widget's height: a preview has no natural
+   height to hug, and a short frame is no preview. The strip left above it
+   keeps the header, and so the way back, in view. */
+.ds-chat-widget__aside-sheet--artifact {
+  height: 92%;
+  max-height: none;
+}
+
+/* The room the floating controls take in the header row while no panel is
+   up: as many 40px controls as the cluster holds, a gap between each. */
+.ds-chat-widget__actions-spacer {
+  flex: none;
+  width: calc(
+    var(--ds-chat-action-count) * 40px + (var(--ds-chat-action-count) - 1) * var(--gap-100)
+  );
+  height: 40px;
+}
+
+/* The widget's controls at the card's own top trailing corner, their one
+   home wherever a trailing panel can seat inline. */
 .ds-chat-widget__rail-actions {
   position: absolute;
   top: calc(var(--padding-200) + var(--padding-150));
@@ -726,8 +913,8 @@
   display: flex;
   flex-direction: column;
   max-height: 82%;
-  background-color: var(--color-bg-glass);
-  backdrop-filter: blur(24px);
+  /* The same solid ground the panel has inline: one panel, two seats. */
+  background-color: var(--color-bg-page-primary);
   border-top: var(--border-025) solid var(--color-bg-container-border);
   border-radius: var(--radius-600) var(--radius-600) 0 0;
   box-shadow: var(--shadow-floating);

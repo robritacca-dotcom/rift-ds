@@ -25,6 +25,11 @@ export {
   type DemoInterruptCard,
   type DemoStackCard,
 } from './demo-cards';
+export {
+  DEMO_ARTIFACT_RENDERERS,
+  DEMO_DASHBOARD_ARTIFACT,
+  DEMO_PAGE_ARTIFACT,
+} from './demo-artifacts';
 export { DEMO_SCRIPT, DEMO_STARTERS } from './demo-script';
 export {
   DEMO_MENTIONS,

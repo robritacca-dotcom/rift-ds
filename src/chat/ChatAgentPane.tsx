@@ -19,16 +19,19 @@ export interface ChatAgentPaneProps {
   onTabChange?: (id: string) => void;
   /** The widget seated the pane as a bottom sheet, where it fills the width instead of holding its own column. */
   overlay: boolean;
+  /** Fires from the pane's own close button, a cross in its top trailing corner. Omit for a pane with no close of its own. */
+  onClose?: () => void;
 }
 
 /**
  * The built-in agent pane: an AgentRail the widget seats on the
- * conversation's trailing edge (inline at 860px and up, a bottom sheet
- * below). A host hands it the agent's profile and panes; the widget owns
- * whether it is up, so `onCollapse` is deliberately unwired here: the
- * header's agent toggle is the one control, both ways.
+ * conversation's trailing edge (inline from ASIDE_RAIL_MIN_WIDTH, a bottom sheet
+ * below, the artifact panel's own rule). A host hands it the agent's profile and panes; the widget owns
+ * whether it is up. The header's agent toggle opens and closes it, and the
+ * pane carries a close of its own in its top corner, where a panel's way
+ * out is looked for.
  */
-export function ChatAgentPane({ profile, tabs, activeTab, onTabChange, overlay }: ChatAgentPaneProps) {
+export function ChatAgentPane({ profile, tabs, activeTab, onTabChange, overlay, onClose }: ChatAgentPaneProps) {
   const [ownTab, setOwnTab] = useState(tabs[0]?.id ?? '');
   const current = activeTab ?? ownTab;
   return (
@@ -37,6 +40,9 @@ export function ChatAgentPane({ profile, tabs, activeTab, onTabChange, overlay }
       profile={profile}
       tabs={tabs}
       activeTab={current}
+      onCollapse={onClose}
+      collapseVariant="close"
+      collapseLabel="Close the agent panel"
       onTabChange={(id) => {
         setOwnTab(id);
         onTabChange?.(id);

@@ -44,3 +44,9 @@
 .ds-chat-demo__logo--three {
   background-color: var(--color-chart-series-3);
 }
+
+/* The dashboard artifact: the welcome board, given the inset a panel's
+   live content brings for itself. */
+.ds-chat-demo__artifact-board {
+  padding: var(--padding-400);
+}

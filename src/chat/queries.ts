@@ -1,6 +1,12 @@
 'use client';
 
 import { useSyncExternalStore } from 'react';
+import {
+  BREAKPOINT_CHAT_DOCK_PX,
+  BREAKPOINT_CHAT_TAKEOVER_PX,
+  mediaAbove,
+  mediaBelow,
+} from '../tokens/breakpoints';
 
 /* Above this the panel docks and the page slides over (the host's body
    inset reads the same attribute the launcher sets); below it the panel
@@ -9,14 +15,14 @@ import { useSyncExternalStore } from 'react';
    on navigation) can read it without importing the launcher and its
    component graph. Also used by hosts that auto-open the panel, which must
    only do so when it docks beside the page rather than covering it. */
-export const DOCK_QUERY = '(min-width: 1440px)';
+export const DOCK_QUERY = mediaAbove(BREAKPOINT_CHAT_DOCK_PX);
 
 /* Below this the panel has no card form to return to: it fills the viewport
    whatever the view says, so the launcher opens it as a takeover and hides
    the expand toggle rather than offering a switch between a state and itself.
    The width is mirrored by the panel's phone rule in ChatWidget.css, which is
    what covers the first render, before this query has been read. */
-export const TAKEOVER_QUERY = '(max-width: 719px)';
+export const TAKEOVER_QUERY = mediaBelow(BREAKPOINT_CHAT_TAKEOVER_PX);
 
 /** The widget's own width thresholds for seating its rails inline. */
 export const THREADS_RAIL_MIN_WIDTH = 720;

@@ -12,6 +12,7 @@
 .overlay {
   position: fixed;
   inset: 0;
+  /* ds-allow(stacking): local order on the immersive stage, its own ladder: floating rails 15, control bar 25, toolbar 30, full-size panels above. */
   z-index: 60;
   display: flex;
   align-items: center;
@@ -162,6 +163,7 @@
 /* Real phone widths. The readout stays one row rather than stacking, which
    cost the picture most of the card; it wraps if it has to, and the file name
    stands down, because the control panel names the image as well. */
+/* ds-allow(breakpoint): the phone step on its other edge (below 600px, not at or below it); aligning it would change this rule at exactly 600px. */
 @media (max-width: 599px) {
   .bar {
     flex-wrap: wrap;

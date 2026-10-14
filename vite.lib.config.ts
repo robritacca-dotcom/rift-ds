@@ -52,6 +52,7 @@ export default defineConfig({
         'chat/demo': 'src/chat/demo.ts',
         'tokens/registry': 'src/tokens/registry.ts',
         'tokens/motion': 'src/tokens/motion.ts',
+        'tokens/breakpoints': 'src/tokens/breakpoints.ts',
         // Doc-only helpers: not in the barrel, but reachable via the
         // ./components/* subpath export, so they need built output too.
         'components/ColourSwatch/ColourSwatch': 'src/components/ColourSwatch/ColourSwatch.tsx',

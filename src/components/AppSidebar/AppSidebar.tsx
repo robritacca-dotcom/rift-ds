@@ -4,6 +4,7 @@ import React, { useState, useCallback, useEffect, useId, useRef } from 'react';
 import { useLayer } from '../../behaviors/useLayer';
 import { useFocusScope } from '../../behaviors/useFocusScope';
 import { useScrollLock } from '../../behaviors/useScrollLock';
+import { BREAKPOINT_MOBILE_PX, BREAKPOINT_TABLET_PX, mediaAbove, mediaBelow } from '../../tokens/breakpoints';
 import { Avatar } from '../Avatar/Avatar';
 import { PixelAvatar, distinctPixelInks } from '../PixelAvatar/PixelAvatar';
 import type { PixelInk } from '../PixelAvatar/PixelAvatar';
@@ -231,7 +232,7 @@ export const AppSidebar = ({
      through the same path a click takes, so controlled hosts hear it.
      Deliberately entry-only: the visitor can re-expand by hand. */
   useEffect(() => {
-    const band = window.matchMedia('(min-width: 769px) and (max-width: 959px)');
+    const band = window.matchMedia(`${mediaAbove(BREAKPOINT_MOBILE_PX)} and ${mediaBelow(BREAKPOINT_TABLET_PX)}`);
     const onChange = () => {
       if (band.matches) {
         setInternalExpanded(false);
@@ -258,7 +259,7 @@ export const AppSidebar = ({
   useScrollLock(mobileOpen);
   useEffect(() => {
     if (!mobileOpen) return;
-    const query = window.matchMedia('(min-width: 769px)');
+    const query = window.matchMedia(mediaAbove(BREAKPOINT_MOBILE_PX));
     const onChange = () => {
       if (query.matches) setMobileOpen(false);
     };

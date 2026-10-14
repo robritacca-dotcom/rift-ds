@@ -468,7 +468,8 @@ function EscalatorColumn({
    window), but which columns exist is a render decision, so the same
    breakpoint is read here. The server snapshot is the three-column
    layout: the markup hydrates identically everywhere and a narrow
-   viewport switches on the client's first paint. */
+   viewport switches on the client's first paint.
+   ds-allow(breakpoint): content-driven, sanctioned with page.module.css's collage rule. */
 const NARROW_COLLAGE_QUERY = "(max-width: 1023px)";
 
 function subscribeNarrowCollage(onChange: () => void) {

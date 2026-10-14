@@ -353,6 +353,7 @@
   }
 }
 
+/* ds-allow(breakpoint): content-driven: the width where the mid grid runs out of room for three columns. */
 @media (max-width: 1360px) {
   .midGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));

@@ -201,6 +201,7 @@
    RESPONSIVE — stack header on small screens
    ============================================ */
 
+/* ds-allow(breakpoint): the phone step on its other edge (below 600px, not at or below it); aligning it would change this rule at exactly 600px. */
 @media (max-width: 599px) {
   .ds-chart {
     padding: var(--padding-400);

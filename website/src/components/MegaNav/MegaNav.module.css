@@ -8,7 +8,7 @@
 .header {
   position: relative;
   background: transparent;
-  z-index: 10;
+  z-index: var(--layer-sticky);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -589,7 +589,7 @@
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000;
+  z-index: var(--layer-site-chrome);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -686,7 +686,7 @@
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
+  z-index: var(--layer-site-chrome);
   opacity: 0;
   visibility: hidden;
   transition: opacity var(--motion-duration-slow) var(--motion-ease-standard), visibility var(--motion-duration-slow) var(--motion-ease-standard);
@@ -819,6 +819,7 @@
 /* ============================================
    RESPONSIVE
    ============================================ */
+/* ds-allow(breakpoint): content-driven: the measured room the full search pill needs beside the nav pills. */
 @media (max-width: 1535px) {
   /* Not enough room for the input dressing beside five nav pills (the
      full pill needs ~1510px of viewport, measured) — the field folds

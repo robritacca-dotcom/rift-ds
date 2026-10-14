@@ -43,6 +43,15 @@ export const CATEGORIES = new Set([
   // materials and fixed colours (the glass rim, the white badge numeral)
   // so a mock reads as the real system chrome. Scoped to those variants.
   'platform',
+  // A media query switching at a width outside the breakpoint set
+  // (src/tokens/breakpoints.ts and website/src/config/breakpoints.ts),
+  // content-driven or deliberately on a step's other edge.
+  // scripts/validate-breakpoints.mjs is what requires it.
+  'breakpoint',
+  // A z-index of 10 or more that is not a --layer-* token: local order
+  // inside one component that happens to need a larger number.
+  // scripts/validate-stacking.mjs is what requires it.
+  'stacking',
 ]);
 
 // Normalize CRLF so Windows checkouts validate identically to CI.

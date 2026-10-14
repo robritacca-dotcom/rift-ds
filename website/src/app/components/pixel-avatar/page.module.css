@@ -148,6 +148,7 @@
   gap: var(--gap-500) var(--primitive-gap-1000);
 }
 
+/* ds-allow(breakpoint): the phone step on its other edge (below 600px, not at or below it); aligning it would change this rule at exactly 600px. */
 @media (max-width: 599px) {
   .castGrid {
     grid-template-columns: repeat(4, max-content);

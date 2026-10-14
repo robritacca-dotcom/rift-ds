@@ -15,10 +15,11 @@ import { useChatWidget } from "rift-ds/chat";
 import { SITE_PALETTE_OPEN_EVENT } from "./palette-bus";
 import styles from "./SitePalette.module.css";
 import { ASSISTANT_NAME } from "@/config/brand.generated";
+import { BREAKPOINT_TABLET_PX, mediaAbove } from "rift-ds/tokens/breakpoints";
 
-/* Mirrors the page rail's 959px breakpoint: desktopOnly pages (the canvas) stay
-   out of the mobile IA, so the palette hides their rows below it too. */
-const DESKTOP_QUERY = "(min-width: 960px)";
+/* Above the tablet step, where the page rail shows: desktopOnly pages (the
+   canvas) stay out of the mobile IA, so the palette hides their rows below it too. */
+const DESKTOP_QUERY = mediaAbove(BREAKPOINT_TABLET_PX);
 
 const subscribeDesktop = (onChange: () => void) => {
   const media = window.matchMedia(DESKTOP_QUERY);

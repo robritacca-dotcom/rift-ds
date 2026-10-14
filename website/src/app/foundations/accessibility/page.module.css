@@ -91,6 +91,7 @@
   gap: var(--gap-500);
 }
 
+/* ds-allow(breakpoint): content-driven: the width where the two-column layout runs out of room. */
 @media (max-width: 900px) {
   .dsLayout {
     flex-direction: column;

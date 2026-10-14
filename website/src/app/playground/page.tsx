@@ -10,6 +10,8 @@ import StageControlBar, {
 } from "@/components/StageControlBar/StageControlBar";
 import StageThemeFlip from "@/components/StageControlBar/StageThemeFlip";
 import styles from "./page.module.css";
+import { mediaBelow } from "rift-ds/tokens/breakpoints";
+import { BREAKPOINT_STAGE_COMPACT_PX } from "@/config/breakpoints";
 import { Button } from "rift-ds/components/Button/Button";
 import { Drawer } from "rift-ds/components/Drawer/Drawer";
 import {
@@ -120,7 +122,7 @@ const VIEWS = [
    panel: the controls move into a bottom Drawer summoned by a fixed pill,
    and the workspace gets the whole screen. Must match the breakpoint in
    page.module.css. */
-const COMPACT_QUERY = "(max-width: 1099px)";
+const COMPACT_QUERY = mediaBelow(BREAKPOINT_STAGE_COMPACT_PX);
 const subscribeCompact = (callback: () => void) => {
   const media = window.matchMedia(COMPACT_QUERY);
   media.addEventListener("change", callback);

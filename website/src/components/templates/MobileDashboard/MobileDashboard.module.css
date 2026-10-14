@@ -1,6 +1,7 @@
 /* Mobile dashboard template. Every colour, space, radius, and type style is
    a semantic token; the raw values are structural sizes the page owns (the
-   phone column's width, the tab bar's clearance, the icon tile geometry). */
+   phone column's width, the tab bar's clearance, the icon tile geometry).
+   ds-allow-file(breakpoint): the framed phone appears from 600px, the phone step on its other edge (min-width 600 rather than 601); MobileDashboard.tsx's FRAMED_QUERY reads the same width, and aligning both would change the screen at exactly 600px. */
 
 /* The stage fills the viewport and holds one phone. Fixed rather than in
    flow, so the body's doc-page inset never reaches it; sized from the
@@ -103,6 +104,7 @@
     top: 0;
     left: 0;
     right: 0;
+    /* ds-allow(stacking): local order inside the drawn phone: system bars 40, sheet 30, tab bar 20. */
     z-index: 40;
     pointer-events: none;
     display: flex;
@@ -121,6 +123,7 @@
     left: 0;
     right: 0;
     bottom: 0;
+    /* ds-allow(stacking): local order inside the drawn phone: system bars 40, sheet 30, tab bar 20. */
     z-index: 40;
     pointer-events: none;
     display: flex;
@@ -209,6 +212,7 @@
   border-radius: 0;
   box-shadow: none;
   background: var(--color-bg-page-primary);
+  /* ds-allow(stacking): local order inside the drawn phone: system bars 40, sheet 30, tab bar 20. */
   z-index: 30;
 }
 
@@ -245,6 +249,7 @@
   left: 0;
   right: 0;
   bottom: 0;
+  /* ds-allow(stacking): local order inside the drawn phone: system bars 40, sheet 30, tab bar 20. */
   z-index: 20;
   pointer-events: none;
 }

@@ -38,11 +38,12 @@
 }
 
 /* ============================================
-   COLLAPSE — the way out, pinned to the LEADING corner. The trailing one
-   belongs to the host: a rail seated at a card's edge puts the card's own
-   controls above it, and the collapse would sit under them. A chevron,
-   never a cross, for the same reason: two crosses a few pixels apart read
-   as two ways to dismiss the same thing.
+   COLLAPSE — the way out. By default a chevron pinned to the LEADING
+   corner: the trailing one usually belongs to the host, since a rail seated
+   at a card's edge puts the card's own controls above it, and two crosses a
+   few pixels apart read as two ways to dismiss the same thing. A host that
+   has weighed that and wants the way out where a panel's close is looked
+   for takes the close variant below: a cross in the trailing corner.
    ============================================ */
 
 .ds-agent-rail__collapse {
@@ -70,6 +71,14 @@
   color: var(--color-icon-primary);
   cursor: pointer;
   transition: background-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+/* The close variant: a cross in the trailing corner, where a panel's own
+   way out usually sits. The host that asks for it has decided its controls
+   and this one do not collide. */
+.ds-agent-rail__collapse--close {
+  left: auto;
+  right: var(--padding-300);
 }
 
 .ds-agent-rail__collapse .material-symbols-rounded {

@@ -56,6 +56,8 @@ type AgentRailOwnProps = {
   onCollapse?: () => void;
   /** Accessible name for the collapse affordance. */
   collapseLabel?: string;
+  /** How the collapse affordance is drawn. `chevron` (the default) pins a chevron to the leading corner, clear of a host's own controls. `close` pins a cross to the trailing corner, for a rail that is its card's only way out or whose host wants the way out where a panel's close usually is. */
+  collapseVariant?: 'chevron' | 'close';
   /** Rendered under the pane, outside its scroll — a sign-out row, a quiet hint. */
   footer?: React.ReactNode;
   /** Additional CSS classes */
@@ -91,6 +93,7 @@ export const AgentRail = React.forwardRef<HTMLDivElement, AgentRailProps>(
       ariaLabel,
       onCollapse,
       collapseLabel = 'Collapse the agent panel',
+      collapseVariant = 'chevron',
       footer,
       className = '',
       ...rest
@@ -105,12 +108,12 @@ export const AgentRail = React.forwardRef<HTMLDivElement, AgentRailProps>(
         {onCollapse && (
           <button
             type="button"
-            className={`${baseClass}__collapse`}
+            className={`${baseClass}__collapse${collapseVariant === 'close' ? ` ${baseClass}__collapse--close` : ''}`}
             aria-label={collapseLabel}
             onClick={onCollapse}
           >
             <span className="material-symbols-rounded" aria-hidden="true">
-              chevron_right
+              {collapseVariant === 'close' ? 'close' : 'chevron_right'}
             </span>
           </button>
         )}

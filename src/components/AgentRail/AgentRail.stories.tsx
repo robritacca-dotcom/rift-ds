@@ -143,3 +143,12 @@ export const Switching: Story = {
     await expect(canvas.getByRole('tabpanel', { name: 'Activity' })).toBeInTheDocument();
   },
 };
+
+/** The way out as a cross in the trailing corner, where a panel's close is looked for. */
+export const CloseVariant: Story = {
+  args: {
+    onCollapse: fn(),
+    collapseVariant: 'close',
+    collapseLabel: 'Close the agent panel',
+  },
+};

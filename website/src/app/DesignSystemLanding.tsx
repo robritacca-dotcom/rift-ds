@@ -11,7 +11,7 @@ import HomeTemplates from "./HomeTemplates";
 import { FIGMA_FILE_URL, NPM_URL, REPOSITORY_URL, STORYBOOK_URL } from "@/config/brand.generated";
 import { THEME_SELECTOR_ORDER, themeSelectorTiles } from "@/lib/theme/presets";
 import { useSiteTheme } from "@/lib/theme/use-theme-overrides";
-import { applyBrand, BASE_THEME_ID, SERVED_THEME_ID } from "@/lib/theme/brand";
+import { applyBrand, readBrand, SERVED_THEME_ID, subscribeBrand } from "@/lib/theme/brand";
 import { SHOW_FIGMA_LINKS } from "@/config/social";
 import { AgentPlan } from "rift-ds/components/AgentPlan/AgentPlan";
 import { AnimatedNumber } from "rift-ds/components/AnimatedNumber/AnimatedNumber";
@@ -504,27 +504,23 @@ function useNarrowCollage() {
    token files); the server ships SERVED_THEME_ID, so that is what a
    visitor lands on and its tile wakes up ringed. */
 
-const SSR_BRAND = SERVED_THEME_ID;
+// Matches the SSR value of data-brand on <html> in layout.tsx.
+const getServerBrand = () => SERVED_THEME_ID;
 
 function ThemeSwitcher() {
   const theme = useSiteTheme();
-  const [active, setActive] = useState(SSR_BRAND);
-  const tiles = themeSelectorTiles(theme === "dark" ? "dark" : "light");
-
   /* The attribute is the truth (it survives navigation, and anything may
-     have set it before this mount) — read it once the client is up. */
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setActive(document.documentElement.dataset.brand ?? BASE_THEME_ID);
-  }, []);
+     set it: the header switcher, the playground). Subscribing to it, the
+     way BrandSwitcher does, keeps the two selectors in step both ways. */
+  const active = useSyncExternalStore(subscribeBrand, readBrand, getServerBrand);
+  const tiles = themeSelectorTiles(theme === "dark" ? "dark" : "light");
 
   /* The tile names render in their themes' own faces, which need no
      loading here: every shipped face has self-hosted @font-face blocks
-     in its preset's generated stylesheet, imported site-wide. */
-  const pick = (id: string) => {
-    applyBrand(id); // the shared helper owns the attribute + persistence
-    setActive(id);
-  };
+     in its preset's generated stylesheet, imported site-wide. The shared
+     helper owns the attribute and persistence; the subscription above
+     picks the change up. */
+  const pick = (id: string) => applyBrand(id);
 
   return (
     <div className={styles.accentRow} role="group" aria-label="Theme">

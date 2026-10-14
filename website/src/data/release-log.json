@@ -1,6 +1,16 @@
 {
   "releases": [
     {
+      "version": "1.9.0",
+      "date": "2026-10-14",
+      "title": "An artifact panel for the AI chat",
+      "body": [
+        "The chat can now open what it makes in a panel beside the conversation. Set `artifacts` on ChatWidget and a reply can carry a dashboard, a page or a file: the thread shows a tile, and the tile or a header button opens it. On a narrow chat it rises as a sheet. The panel can be dragged wider or expanded to fill the chat, and a page drawn in it runs in a sandboxed frame with its source one switch away.",
+        "An artifact travels as an ordinary card, so a server that already sends cards can send one. ArtifactPanel and ArtifactCard are library components of their own, for use outside the chat, and `rift-ds/chat/demo` adds a dashboard and a web page to its scripted conversation.",
+        "Two layouts shift without any change on your side. The agent panel now sits beside the conversation from 760px of chat width, where it waited for 860px, and gains a close button and a solid background. ThreadPanel keeps one inset whether collapsed or expanded, so its marks no longer move when it opens, and its expanded content sits 8px closer to each edge. Nothing was renamed or removed, so upgrading needs no code changes."
+      ]
+    },
+    {
       "version": "1.8.0",
       "date": "2026-10-13",
       "title": "The AI chat as an installable widget",

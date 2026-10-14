@@ -457,9 +457,14 @@ function PayrollChat({
             profile={overlay ? undefined : { name: "Ada Whitlock", meta: "Admin" }}
           />
         )}
-        aside={({ overlay }) => (
+        aside={({ overlay, close }) => (
           <AgentRail
             className={overlay ? styles.railInSheet : undefined}
+            /* The built-in pane's close, so this rail and the widget's own
+               panels put their way out in the same corner. */
+            onCollapse={close}
+            collapseVariant="close"
+            collapseLabel="Close the agent panel"
             profile={{
               name: "Northwind AI",
               status: "Connected",

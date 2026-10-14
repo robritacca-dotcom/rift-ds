@@ -241,6 +241,45 @@ const previews: Record<string, () => ReactNode> = {
       </div>
     </>
   ),
+  "artifact-card": () => (
+    <>
+      <div aria-hidden="true" style={{ display: "flex", alignItems: "center", gap: "8px", width: "150px", padding: "8px", borderRadius: "10px", border: "1px solid var(--color-bg-container-border)", background: "var(--color-bg-container-primary)" }}>
+        <span style={{ width: "26px", height: "26px", borderRadius: "6px", background: "var(--color-bg-container-tertiary)", flex: "none" }} />
+        <span style={{ display: "flex", flexDirection: "column", gap: "2px", flex: 1, minWidth: 0 }}>
+          <span style={{ fontSize: "10px", fontWeight: 600, color: "var(--color-text-primary)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>Trail report</span>
+          <span style={{ fontSize: "8px", color: "var(--color-text-tertiary)" }}>Dashboard</span>
+        </span>
+        <span style={{ width: "8px", height: "8px", borderRadius: "2px", border: "1px solid var(--color-icon-secondary)", flex: "none" }} />
+      </div>
+    </>
+  ),
+  "artifact-panel": () => (
+    <>
+      <div aria-hidden="true" style={{ display: "flex", flexDirection: "column", width: "150px", borderRadius: "6px", overflow: "hidden", border: "1px solid var(--color-bg-container-border)", background: "var(--color-bg-page-primary)" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "6px", padding: "5px 6px 5px 8px", borderBottom: "1px solid var(--color-bg-container-border)" }}>
+          <span style={{ fontSize: "10px", fontWeight: 600, color: "var(--color-text-primary)", whiteSpace: "nowrap" }}>Trail report</span>
+          <div style={{ display: "flex", gap: "2px", padding: "2px", borderRadius: "999px", background: "var(--color-bg-container-secondary)" }}>
+            {["Preview", "Code"].map((label, i) => (
+              <span
+                key={label}
+                style={{ fontSize: "8px", padding: "2px 5px", borderRadius: "999px", color: i === 0 ? "var(--color-text-primary)" : "var(--color-text-tertiary)", background: i === 0 ? "var(--color-bg-container-tertiary)" : "transparent" }}
+              >
+                {label}
+              </span>
+            ))}
+          </div>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: "5px", padding: "8px" }}>
+          <div style={{ display: "flex", gap: "4px" }}>
+            <div style={{ flex: 1, height: "18px", borderRadius: "4px", background: "var(--color-bg-container-secondary)" }} />
+            <div style={{ flex: 1, height: "18px", borderRadius: "4px", background: "var(--color-bg-container-secondary)" }} />
+          </div>
+          <div style={{ width: "85%", height: "5px", borderRadius: "3px", background: "var(--color-bg-container-tertiary)" }} />
+          <div style={{ width: "60%", height: "5px", borderRadius: "3px", background: "var(--color-bg-container-tertiary)" }} />
+        </div>
+      </div>
+    </>
+  ),
   "attachment-drop-zone": () => (
     <>
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "var(--gap-050)", minWidth: "170px", height: "84px", padding: "0 var(--padding-300)", whiteSpace: "nowrap", border: "var(--border-050) solid var(--color-input-border-selected)", borderRadius: "var(--radius-400)", background: "var(--color-bg-container-primary)" }}>

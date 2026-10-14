@@ -71,6 +71,8 @@ export interface ChatViewProps {
       Wide cards seat it inline, narrow ones raise it as a bottom sheet from
       the header's agent button. */
   agentRail: boolean;
+  /** The Artifact panel lever: seats the widget's artifact panel. */
+  artifactPanel: boolean;
 }
 
 /**
@@ -99,6 +101,7 @@ export default function ChatView({
   simControls,
   railTabs,
   agentRail,
+  artifactPanel,
 }: ChatViewProps) {
   const { open, setOpen, view, side, floating, returnFocusRef, send } = useChatWidget();
 
@@ -475,6 +478,9 @@ export default function ChatView({
           logoText: title,
           profile: { name: "Jordan Reyes", meta: "Pro" },
         }}
+        /* The artifact panel, staged like the agent pane and gated the same
+           way: its artifacts come from the demo script. */
+        artifacts={simControls && artifactPanel}
         /* The agent pane, staged like the threads rail and gated the same
            way: simulated transport only, since it stands for a consumer's
            own agent rather than this site's chat. */

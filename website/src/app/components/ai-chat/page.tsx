@@ -24,11 +24,14 @@ import {
   TAKEOVER_QUERY,
   THREADS_RAIL_MIN_WIDTH,
   ASIDE_RAIL_MIN_WIDTH,
+  ARTIFACT_CARD_KIND,
+  artifactCard,
   chatWidget,
 } from "rift-ds/chat";
 import {
   DEMO_MENTIONS,
   DEMO_MODELS,
+  DEMO_PAGE_ARTIFACT,
   DEMO_WELCOME_OPTIONS,
   DemoWelcome,
   demoAgentTabs,
@@ -158,6 +161,22 @@ const stageQuickReplies: ChatStageSetup = (chat) => {
   });
 };
 
+/* The artifact example: a reply that made a page, already open beside the
+   chat where the stage is wide enough to seat it there. */
+const stageArtifact =
+  (openIt: boolean): ChatStageSetup =>
+  (chat) => {
+    chat.injectTurn({ role: "user", text: "Draft the launch page" });
+    chat.injectTurn({
+      role: "assistant",
+      text: "A first draft of the launch page is up beside the chat. The source is behind the Code view.",
+      tracePoints: ["One document, its own styles, no scripts."],
+      durationSeconds: 3,
+      card: artifactCard(DEMO_PAGE_ARTIFACT),
+    });
+    if (openIt) chat.openArtifact(DEMO_PAGE_ARTIFACT);
+  };
+
 const stageRichContent: ChatStageSetup = (chat) => {
   chat.injectTurn({ role: "user", text: "How is the trial going?" });
   chat.injectTurn({
@@ -258,7 +277,7 @@ export default function AiChatPage() {
             <SectionTitle title="Live" />
             <p className={styles.sectionNote}>
               Everything on, the way the playground stages it: threads and tabs, the agent panel,
-              files, mentions and the model picker. Pick a question to see a reply arrive with its
+              the artifact panel, files, mentions and the model picker. Pick a question to see a reply arrive with its
               reasoning, a card and the follow-up chips.
             </p>
             <ChatStage
@@ -270,6 +289,7 @@ export default function AiChatPage() {
                 threadsProps: { defaultExpanded: false, logoText: "Acme Assistant", profile: { name: "Jordan Reyes", meta: "Pro" } },
                 tabs: !phone,
                 agent: { tabs: demoAgentTabs("Acme Assistant") },
+                artifacts: true,
                 fileAttachments: true,
                 mentions: DEMO_MENTIONS,
                 placeholder: "Ask anything, @ for entities or / for commands",
@@ -397,6 +417,29 @@ export default function AiChatPage() {
               height={phone ? 780 : 780}
               widget={{ agent: { tabs: demoAgentTabs("Acme Assistant"), defaultOpen: !phone } }}
               setup={stageQuickReplies}
+            />
+          </section>
+
+          <section id="artifact-panel" className={`${styles.section} animate-in animate-delay-3`}>
+            <SectionTitle title="Artifact panel" />
+            <p className={styles.sectionNote}>
+              <code>artifacts</code> turns the panel on, for a reply that makes something too big
+              for a turn: a dashboard, a page, a file. The artifact arrives as a card of kind{" "}
+              <code>{ARTIFACT_CARD_KIND}</code>, so the server sends it like any other card. The
+              thread shows it as a tile, and the tile or the header button opens it beside the
+              conversation. An HTML document or a URL is drawn in a sandboxed frame, with the
+              source behind the Code view; the provider&apos;s <code>artifactRenderers</code> draw
+              a kind of your own as live components. Drag the panel&apos;s left edge to size it, or
+              expand it to fill the chat. The panel sits beside the conversation from{" "}
+              {ASIDE_RAIL_MIN_WIDTH}px of chat width, and opens as a sheet below that and on a
+              phone. It shares its seat with the agent panel, one at a time.
+            </p>
+            <ChatStage
+              key={`artifact-${viewport}`}
+              phone={phone}
+              height={phone ? 780 : 720}
+              widget={{ artifacts: true }}
+              setup={stageArtifact(!phone)}
             />
           </section>
 

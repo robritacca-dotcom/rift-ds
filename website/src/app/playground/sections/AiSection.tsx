@@ -5,6 +5,8 @@ import styles from "../page.module.css";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import { AgentStatus } from "rift-ds/components/AgentStatus/AgentStatus";
 import { AiButton } from "rift-ds/components/AiButton/AiButton";
+import { ArtifactCard } from "rift-ds/components/ArtifactCard/ArtifactCard";
+import { ArtifactPanel } from "rift-ds/components/ArtifactPanel/ArtifactPanel";
 import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
 import { PromptSuggestions } from "rift-ds/components/PromptSuggestions/PromptSuggestions";
 import { Reasoning } from "rift-ds/components/Reasoning/Reasoning";
@@ -25,8 +27,22 @@ const TOOL_ARGS = `{
   "limit": 5
 }`;
 
+const THEME_SOURCE = `:root {
+  --radius-pill: 999px;
+  --font-family-heading: "Inter Tight", sans-serif;
+}`;
+
+/* What the artifact holds: three of the levers' own facts, drawn from
+   tokens so the panel's content re-themes with the rest of the stage. */
+const ARTIFACT_ROWS = [
+  ["Action colour", "Primary buttons and focus rings"],
+  ["Corner radius", "Buttons, inputs and cards"],
+  ["Typeface", "Headings over body"],
+];
+
 export default function AiSection() {
   const [suggestion, setSuggestion] = useState<string | null>(null);
+  const [artifactOpen, setArtifactOpen] = useState(true);
 
   return (
     <section className={styles.demoSection} aria-label="AI">
@@ -79,6 +95,37 @@ export default function AiSection() {
           You picked <code>{suggestion}</code>. In a real chat this would become
           the next message.
         </p>
+      )}
+
+      {/* The artifact pair: the tile a reply leaves in the thread, and the
+          panel it opens. One piece of state between them, as in the chat. */}
+      <ArtifactCard
+        title="Theme summary"
+        meta="Document"
+        icon="article"
+        open={artifactOpen}
+        onClick={() => setArtifactOpen((current) => !current)}
+      />
+      {artifactOpen && (
+        <div className={styles.artifactFrame}>
+          <ArtifactPanel
+            title="Theme summary"
+            meta="Document"
+            icon="article"
+            code={THEME_SOURCE}
+            language="css"
+            onClose={() => setArtifactOpen(false)}
+          >
+            <ul className={styles.artifactList}>
+              {ARTIFACT_ROWS.map(([name, what]) => (
+                <li key={name} className={styles.artifactRow}>
+                  <span className={styles.artifactName}>{name}</span>
+                  <span className={styles.artifactWhat}>{what}</span>
+                </li>
+              ))}
+            </ul>
+          </ArtifactPanel>
+        </div>
       )}
 
       <div className={styles.demoRow}>

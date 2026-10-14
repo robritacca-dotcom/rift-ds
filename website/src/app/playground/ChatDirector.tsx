@@ -87,6 +87,9 @@ export interface ChatDirectorProps {
       backend answers in text alone, so a staged tool call or card under a
       real conversation would misrepresent what it can do. */
   live?: boolean;
+  /** The Artifact panel lever is on. Off, the events that make an artifact
+      leave the list: there is no panel for what they would make. */
+  artifacts?: boolean;
 }
 
 /** The Chat view's right-hand rail: the chat levers, then the event list. */
@@ -94,6 +97,7 @@ export default function ChatDirector({
   variant = "panel",
   levers,
   live = false,
+  artifacts = false,
 }: ChatDirectorProps) {
   const { injectTurn, send, reset, setDraft, streaming } = useChatWidget();
 
@@ -183,6 +187,24 @@ export default function ChatDirector({
           disabled: streaming,
           run: () => send("Take us up to twelve seats"),
         },
+        ...(artifacts
+          ? [
+              {
+                id: "artifact-dashboard",
+                label: "Build a dashboard artifact",
+                icon: "space_dashboard",
+                disabled: streaming,
+                run: () => send("Build me a launch dashboard"),
+              },
+              {
+                id: "artifact-page",
+                label: "Draft a web page artifact",
+                icon: "web",
+                disabled: streaming,
+                run: () => send("Draft the launch page"),
+              },
+            ]
+          : []),
         {
           id: "attachment",
           label: "Drop a doc for analysis",

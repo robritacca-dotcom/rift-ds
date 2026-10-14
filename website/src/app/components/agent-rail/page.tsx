@@ -208,9 +208,13 @@ export default function AgentRailPage() {
               which is what keeps the portrait on the centre axis. The
               trailing corner is left to the host, because a rail seated at a
               card&apos;s edge is where the card&apos;s own controls end up. A
-              chevron and not a cross, for the same reason: two crosses a few
-              pixels apart read as two ways to dismiss the same thing. The way
-              back in belongs to the host. Try the tabs, then collapse it.
+              chevron by default and not a cross, for the same reason: two
+              crosses a few pixels apart can read as two ways to dismiss the
+              same thing. A host that wants the way out where a panel&apos;s
+              close usually sits sets collapseVariant to close, which draws a
+              cross in the trailing corner instead; the AI chat&apos;s agent
+              panel does. The way back in belongs to the host. Try the tabs,
+              then collapse it.
             </p>
             <FullAnatomy />
           </section>

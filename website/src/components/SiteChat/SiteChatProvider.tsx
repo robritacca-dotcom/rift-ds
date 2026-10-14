@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import {
   ChatProvider,
+  type ChatArtifactRenderers,
   type ChatCardRenderers,
   type ChatLinkRenderer,
   type ChatPlacement,
@@ -35,6 +36,7 @@ export function SiteChatProvider({
   transport,
   defaultPlacement = "right",
   renderers,
+  artifactRenderers,
   threads,
   children,
 }: {
@@ -44,6 +46,8 @@ export function SiteChatProvider({
   defaultPlacement?: ChatPlacement;
   /** Draws a scripted transport's cards; the live route sends none. */
   renderers?: ChatCardRenderers;
+  /** Draws a scripted transport's live artifacts; the live route sends none. */
+  artifactRenderers?: ChatArtifactRenderers;
   /** Seeds the thread lifecycle a staged chat's rail shows. */
   threads?: ThreadsOptions;
   children: ReactNode;
@@ -57,6 +61,7 @@ export function SiteChatProvider({
       fallbackFollowups={FALLBACK_FOLLOWUPS}
       renderLink={renderLink}
       renderers={renderers}
+      artifactRenderers={artifactRenderers}
       threads={threads}
       defaultPlacement={defaultPlacement}
     >

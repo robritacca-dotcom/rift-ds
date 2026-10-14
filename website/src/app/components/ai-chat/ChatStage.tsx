@@ -4,7 +4,13 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { SiteChatProvider } from "@/components/SiteChat/SiteChatProvider";
 import { ChatWidget, useChatWidget, type ChatWidgetContextValue, type ChatWidgetProps } from "rift-ds/chat";
 import { type SimTiming } from "rift-ds/chat";
-import { DEMO_RENDERERS, DEMO_STARTERS, DEMO_THREADS, createDemoTransport } from "rift-ds/chat/demo";
+import {
+  DEMO_ARTIFACT_RENDERERS,
+  DEMO_RENDERERS,
+  DEMO_STARTERS,
+  DEMO_THREADS,
+  createDemoTransport,
+} from "rift-ds/chat/demo";
 import s from "./page.module.css";
 
 /**
@@ -113,7 +119,12 @@ export function ChatStage({
   const transport = useMemo(() => createDemoTransport(timing), [timing]);
   return (
     <div className={phone ? s.stagePhone : undefined}>
-      <SiteChatProvider transport={transport} renderers={DEMO_RENDERERS} threads={DEMO_THREADS}>
+      <SiteChatProvider
+        transport={transport}
+        renderers={DEMO_RENDERERS}
+        artifactRenderers={DEMO_ARTIFACT_RENDERERS}
+        threads={DEMO_THREADS}
+      >
         <Staged height={height} phone={phone} widget={widget} setup={setup} loopAfterMs={loopAfterMs} />
       </SiteChatProvider>
     </div>

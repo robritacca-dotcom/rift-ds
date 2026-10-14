@@ -11,6 +11,7 @@ import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import { Table } from "rift-ds/components/Table/Table";
 import {
   ASIDE_RAIL_MIN_WIDTH,
+  ARTIFACT_CARD_KIND,
   CHAT_EVENT_KINDS,
   DOCK_QUERY,
   SUGGESTION_MAX_CHARS,
@@ -157,6 +158,21 @@ const STREAM_SNIPPET = `// POST /api/chat, one JSON object per line
 
 /* One line per event kind, typed against the protocol: a kind added to the
    union without a line here fails the build rather than the page. */
+const ARTIFACT_SNIPPET = `// What the server sends, as one line of the stream:
+// {"type":"card","card":{"kind":"${ARTIFACT_CARD_KIND}","data":{
+//   "id":"launch-page","title":"Launch page","kind":"html",
+//   "meta":"Web page","html":"<!doctype html>..."}}}
+
+<ChatProvider
+  endpoint="/api/chat"
+  artifactRenderers={{
+    // A kind of your own, drawn as live components.
+    "sales-board": (artifact) => <SalesBoard data={artifact.data} />,
+  }}
+>
+  <ChatLauncher widget={{ artifacts: true }} />
+</ChatProvider>`;
+
 const EVENT_LINES: Record<ChatEvent["type"], string> = {
   status: "What the model is doing, shown while it thinks. An optional trace point collects under it.",
   model: "The model serving this reply, as a label.",
@@ -247,7 +263,8 @@ export default function ChatInstallPage() {
             <p className={s.introBody}>
               The package ships the whole AI chat assembled: the panel in its docked, overlay and
               full-screen forms, the streaming replies with their status and reasoning, the cards a
-              reply can carry, the thread history and tabs, the agent pane, the composer with files
+              reply can carry, the thread history and tabs, the agent pane, the artifact panel for
+              what a reply makes, the composer with files
               and mentions, and the server handlers behind it all. The chat in the corner of this
               page is it. Every option is a prop, listed on{" "}
               <Link href={`/components/${chatWidget.slug}`} className={s.inlineLink}>
@@ -395,6 +412,19 @@ export default function ChatInstallPage() {
                 </div>
               ))}
             </dl>
+
+            <h3 className={s.propsHeading}>Artifacts</h3>
+            <p className={s.sectionNote}>
+              An artifact is something a reply makes that wants more room than a turn: a
+              dashboard, a page, a file. Send it as a card of kind {ARTIFACT_CARD_KIND} and turn{" "}
+              <code>artifacts</code> on. The thread shows a tile, and the tile opens the artifact in
+              a panel beside the conversation, from {ASIDE_RAIL_MIN_WIDTH}px of chat width, or
+              as a sheet below that. An <code>html</code> document or a <code>url</code> is drawn
+              in a sandboxed frame with no reach into your page. For live components, give the
+              artifact a kind of your own and draw it with the provider&apos;s{" "}
+              <code>artifactRenderers</code>.
+            </p>
+            <CodeBlock code={ARTIFACT_SNIPPET} language="tsx" showCopy />
           </section>
 
           {/* -------------------------------------------------- headless */}

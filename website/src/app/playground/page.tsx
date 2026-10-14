@@ -70,6 +70,7 @@ import ChatView, {
 } from "./views/ChatView";
 import {
   DEMO_PROJECTS,
+  DEMO_ARTIFACT_RENDERERS,
   DEMO_RENDERERS,
   DEMO_THREADS,
   DEMO_WELCOME_OPTIONS as CHAT_WELCOME_OPTIONS,
@@ -228,6 +229,10 @@ export default function PlaygroundPage() {
      opens on the plain chat and every extra is something to switch on and
      look at. */
   const [agentRail, setAgentRail] = useState(false);
+  /* The artifact panel, an extra like the rest: on, a reply that makes
+     something leaves a tile and the header gains its button; off, none of
+     it exists and the director's artifact events stand down with it. */
+  const [artifactPanel, setArtifactPanel] = useState(false);
 
   /* The staged shader banner's levers (Components view). They tune the
      banner only, never the site background, and no theme preset owns them,
@@ -767,12 +772,18 @@ export default function PlaygroundPage() {
 
       {transportMode === "sim" && (
         <div className={styles.controlGroup}>
-          <h4 className={styles.controlHeading}>Agent</h4>
+          <h4 className={styles.controlHeading}>Panels</h4>
           <InspectorToggleSwitch
             size="compact"
             label="Agent rail"
             checked={agentRail}
             onCheckedChange={setAgentRail}
+          />
+          <InspectorToggleSwitch
+            size="compact"
+            label="Artifact panel"
+            checked={artifactPanel}
+            onCheckedChange={setArtifactPanel}
           />
         </div>
       )}
@@ -875,7 +886,11 @@ export default function PlaygroundPage() {
                 view === "chat" && compact ? (
                   <>
                     {chatLevers}
-                    <ChatDirector variant="drawer" live={transportMode === "live"} />
+                    <ChatDirector
+                      variant="drawer"
+                      live={transportMode === "live"}
+                      artifacts={artifactPanel}
+                    />
                   </>
                 ) : (
                   shaderLevers || undefined
@@ -929,6 +944,7 @@ export default function PlaygroundPage() {
         transport={transport}
         defaultPlacement="floating"
         renderers={DEMO_RENDERERS}
+        artifactRenderers={DEMO_ARTIFACT_RENDERERS}
         /* The staged history behind the rail and the tabs, shaped by the rail
            levers: pins off folds the pinned group away, details off strips
            the rows to titles, projects off hides the section. */
@@ -1149,6 +1165,7 @@ export default function PlaygroundPage() {
               simControls={transportMode === "sim"}
               railTabs={railTabs}
               agentRail={agentRail}
+              artifactPanel={artifactPanel}
             />
           )}
         </main>
@@ -1162,6 +1179,7 @@ export default function PlaygroundPage() {
             variant="panel"
             levers={chatLevers}
             live={transportMode === "live"}
+            artifacts={artifactPanel}
           />
         )}
       </div>

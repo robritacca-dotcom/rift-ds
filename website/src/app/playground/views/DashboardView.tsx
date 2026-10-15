@@ -231,11 +231,20 @@ export default function DashboardView({
   };
 
   /* The devtools-style readout: the rendered size, so a clamp shows the
-     moment a drag hits it. */
+     moment a drag hits it. Read a frame later rather than inside the
+     effect, so the readout's own update never chains onto the commit the
+     drag caused (a fast drag on the chat stage stacked those past React's
+     nested-update limit), and an unchanged size sets nothing. */
   useEffect(() => {
     if (!resizing) return;
-    const rect = boardRef.current?.getBoundingClientRect();
-    if (rect) setReadout({ w: Math.round(rect.width), h: Math.round(rect.height) });
+    const raf = requestAnimationFrame(() => {
+      const rect = boardRef.current?.getBoundingClientRect();
+      if (!rect) return;
+      const w = Math.round(rect.width);
+      const h = Math.round(rect.height);
+      setReadout((current) => (current?.w === w && current?.h === h ? current : { w, h }));
+    });
+    return () => cancelAnimationFrame(raf);
   }, [manual, resizing]);
 
   const frame = (

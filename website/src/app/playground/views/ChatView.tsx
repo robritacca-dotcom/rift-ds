@@ -311,12 +311,21 @@ export default function ChatView({
 
   /* The devtools-style readout: the widget's actual rendered size while a
      grip is being dragged, the rect rather than the requested size, so the
-     CSS clamps are visible the moment a drag hits one. */
+     CSS clamps are visible the moment a drag hits one. Read a frame later
+     rather than inside the effect, so the readout's own update never chains
+     onto the commit the drag caused (a fast drag stacked those past React's
+     nested-update limit, error #185), and an unchanged size sets nothing. */
   const [readout, setReadout] = useState<{ w: number; h: number } | null>(null);
   useEffect(() => {
     if (!resizing) return;
-    const rect = widgetRef.current?.getBoundingClientRect();
-    if (rect) setReadout({ w: Math.round(rect.width), h: Math.round(rect.height) });
+    const raf = requestAnimationFrame(() => {
+      const rect = widgetRef.current?.getBoundingClientRect();
+      if (!rect) return;
+      const w = Math.round(rect.width);
+      const h = Math.round(rect.height);
+      setReadout((current) => (current?.w === w && current?.h === h ? current : { w, h }));
+    });
+    return () => cancelAnimationFrame(raf);
   }, [manual, dockWidth, resizing]);
 
   const preset = STAGE_SIZES[size];

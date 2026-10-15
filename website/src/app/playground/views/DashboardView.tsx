@@ -212,6 +212,22 @@ export default function DashboardView({
     setResizing(true);
   };
 
+  /* One size per animation frame, however fast the pointer reports:
+     recharts answers every re-render that moves its ticks with a store
+     dispatch of its own, and pointer events arriving faster than frames
+     stacked those past React's nested-update limit (error #185,
+     recharts/recharts#7563). The release flushes the last pending size so
+     the card lands where the pointer let go. */
+  const pendingSizeRef = useRef<{ w?: number; h?: number } | null>(null);
+  const sizeFrameRef = useRef(0);
+  const flushSize = () => {
+    sizeFrameRef.current = 0;
+    const next = pendingSizeRef.current;
+    pendingSizeRef.current = null;
+    if (next) setManual((m) => ({ ...m, ...next }));
+  };
+  useEffect(() => () => cancelAnimationFrame(sizeFrameRef.current), []);
+
   const moveResize = (e: React.PointerEvent<HTMLDivElement>) => {
     const drag = dragRef.current;
     if (!drag) return;
@@ -222,19 +238,22 @@ export default function DashboardView({
       );
     if (drag.axis !== "x")
       next.h = Math.round(drag.height + (e.clientY - drag.startY) * CENTERED_DRAG_FACTOR);
-    setManual((m) => ({ ...m, ...next }));
+    pendingSizeRef.current = next;
+    if (!sizeFrameRef.current) sizeFrameRef.current = requestAnimationFrame(flushSize);
   };
 
   const endResize = () => {
     dragRef.current = null;
+    cancelAnimationFrame(sizeFrameRef.current);
+    flushSize();
     setResizing(false);
   };
 
   /* The devtools-style readout: the rendered size, so a clamp shows the
      moment a drag hits it. Read a frame later rather than inside the
      effect, so the readout's own update never chains onto the commit the
-     drag caused (a fast drag on the chat stage stacked those past React's
-     nested-update limit), and an unchanged size sets nothing. */
+     drag caused (see the frame coalescing above), and an unchanged size
+     sets nothing. */
   useEffect(() => {
     if (!resizing) return;
     const raf = requestAnimationFrame(() => {

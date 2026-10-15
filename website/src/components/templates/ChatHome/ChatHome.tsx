@@ -24,6 +24,9 @@
  *   - The board is the demo's Widget board in the widget slot, on the wide
  *     scrolling layout: the stage earns the viewport (rule 3), so the tiles
  *     run past the composer's column and below the fold.
+ *   - The trailing seat carries the agent pane and the artifact panel, the
+ *     playground stage's pair from the same demo fixtures: inline beside
+ *     the conversation on a wide window, a sheet on a narrow one.
  *   - People are initials (rule 4): the one person here is the profile row.
  *   - No app-frame dressing (rule 8): a chat session has no tab-bar shape on
  *     a phone, where this screen is already the full-screen chat.
@@ -38,7 +41,13 @@ import { useEffect, useMemo } from "react";
 import { ModelPicker, type ModelPickerModel } from "rift-ds/components/ModelPicker/ModelPicker";
 import type { ThreadPanelGroup, ThreadPanelProject } from "rift-ds/components/ThreadPanel/ThreadPanel";
 import { ChatWidget, useChatWidget, useTakeoverViewport } from "rift-ds/chat";
-import { DEMO_RENDERERS, DemoBoard, createDemoTransport } from "rift-ds/chat/demo";
+import {
+  DEMO_ARTIFACT_RENDERERS,
+  DEMO_RENDERERS,
+  DemoBoard,
+  createDemoTransport,
+  demoAgentTabs,
+} from "rift-ds/chat/demo";
 import { SiteChatProvider } from "@/components/SiteChat/SiteChatProvider";
 import { useStagedProductName } from "../useStagedProductName";
 import styles from "./ChatHome.module.css";
@@ -91,6 +100,7 @@ export default function ChatHome() {
     <SiteChatProvider
       transport={transport}
       renderers={DEMO_RENDERERS}
+      artifactRenderers={DEMO_ARTIFACT_RENDERERS}
       threads={{ groups: THREADS, projects: PROJECTS, pinnedGroup: "Pinned", homeGroup: "This week", details: false }}
     >
       <ChatHomeShell />
@@ -137,6 +147,16 @@ function ChatHomeShell() {
           defaultExpanded: true,
           profile: { name: "Jordan Reyes", meta: "Pro" },
         }}
+        agent={{
+          tabs: demoAgentTabs(product),
+          profile: {
+            name: product,
+            status: "Connected",
+            onEdit: () => {},
+            editLabel: `Edit ${product}`,
+          },
+        }}
+        artifacts
       />
     </div>
   );

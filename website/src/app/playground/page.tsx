@@ -218,23 +218,21 @@ export default function PlaygroundPage() {
      Components view and back; like every lever, it dies with the page. */
   const [chatManual, setChatManual] = useState<{ w?: number; h?: number }>({});
   const [chatPlaceholder, setChatPlaceholder] = useState("");
-  const [welcome, setWelcome] = useState<ChatWelcomeVariant>("starters");
-  /* The staged thread furniture, feature by feature. All off is the simple
-     rail the live site ships, which is where the stage starts: the extras
-     are things to add and look at, not the resting state. Simulated
-     transport only, like the rail itself. */
-  const [railProjects, setRailProjects] = useState(false);
-  const [railPins, setRailPins] = useState(false);
-  const [railDetails, setRailDetails] = useState(false);
-  const [railTabs, setRailTabs] = useState(false);
-  /* The agent rail, off with the rest of the staged furniture: the stage
-     opens on the plain chat and every extra is something to switch on and
-     look at. */
-  const [agentRail, setAgentRail] = useState(false);
+  const [welcome, setWelcome] = useState<ChatWelcomeVariant>("dashboard");
+  /* The staged thread furniture, feature by feature. The stage opens with
+     every extra on and the dashboard welcome, the fullest version of the
+     widget; switching them off walks back to the simple rail the live site
+     ships. Simulated transport only, like the rail itself. */
+  const [railProjects, setRailProjects] = useState(true);
+  const [railPins, setRailPins] = useState(true);
+  const [railDetails, setRailDetails] = useState(true);
+  const [railTabs, setRailTabs] = useState(true);
+  /* The agent rail, on with the rest of the staged furniture. */
+  const [agentRail, setAgentRail] = useState(true);
   /* The artifact panel, an extra like the rest: on, a reply that makes
      something leaves a tile and the header gains its button; off, none of
      it exists and the director's artifact events stand down with it. */
-  const [artifactPanel, setArtifactPanel] = useState(false);
+  const [artifactPanel, setArtifactPanel] = useState(true);
 
   /* The staged shader banner's levers (Components view). They tune the
      banner only, never the site background, and no theme preset owns them,

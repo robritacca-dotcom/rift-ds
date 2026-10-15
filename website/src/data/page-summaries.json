@@ -14,6 +14,40 @@
           "label": "What's in the library?",
           "prompt": "What components does the design system include?"
         }
+      ],
+      "starters": [
+        {
+          "id": "nutshell",
+          "label": "What is this system?"
+        },
+        {
+          "id": "install",
+          "label": "How do I install it?"
+        },
+        {
+          "id": "different",
+          "label": "What makes it different?"
+        },
+        {
+          "id": "count",
+          "label": "How many components are there?"
+        },
+        {
+          "id": "theming",
+          "label": "How does theming work?"
+        },
+        {
+          "id": "agents",
+          "label": "Can my coding agent use this?"
+        },
+        {
+          "id": "claude",
+          "label": "How was this built with Claude?"
+        },
+        {
+          "id": "storybook",
+          "label": "Where is the Storybook?"
+        }
       ]
     },
     "/overview": {
@@ -30,16 +64,72 @@
           "label": "What do the validators do?",
           "prompt": "What do the build validators on this project check?"
         }
+      ],
+      "starters": [
+        {
+          "id": "pipeline",
+          "label": "Explain the build pipeline"
+        },
+        {
+          "id": "registries",
+          "label": "What do the registries prevent?"
+        },
+        {
+          "id": "ci",
+          "label": "What runs in CI?"
+        },
+        {
+          "id": "counts",
+          "label": "How do counts stay accurate?"
+        },
+        {
+          "id": "push",
+          "label": "What happens on a push to main?"
+        },
+        {
+          "id": "mcp",
+          "label": "How does the MCP endpoint work?"
+        },
+        {
+          "id": "claude",
+          "label": "How was this built with Claude?"
+        }
       ]
     },
     "/docs": {
       "title": "Docs",
-      "text": "The hub for using the system: getting started, the skills, and the release log.",
+      "text": "The hub for using the system: getting started, the AI chat, the specs, and the release log.",
       "chips": [
         {
           "id": "start",
           "label": "Get me started",
           "prompt": "How do I get started with the design system?"
+        }
+      ],
+      "starters": [
+        {
+          "id": "start",
+          "label": "Where should I start?"
+        },
+        {
+          "id": "install",
+          "label": "How do I install the package?"
+        },
+        {
+          "id": "chat",
+          "label": "How do I add the AI chat?"
+        },
+        {
+          "id": "agents",
+          "label": "Can my coding agent use this?"
+        },
+        {
+          "id": "spec",
+          "label": "Which spec should I read first?"
+        },
+        {
+          "id": "latest",
+          "label": "What shipped in the latest release?"
         }
       ]
     },
@@ -51,6 +141,36 @@
           "id": "theme",
           "label": "How does theming work?",
           "prompt": "How do I re-theme the design system for my own brand?"
+        }
+      ],
+      "starters": [
+        {
+          "id": "install",
+          "label": "Walk me through the install"
+        },
+        {
+          "id": "theme",
+          "label": "How do I apply a theme?"
+        },
+        {
+          "id": "dark",
+          "label": "How do I switch to dark mode?"
+        },
+        {
+          "id": "init",
+          "label": "What does npx rift-ds init install?"
+        },
+        {
+          "id": "mcp",
+          "label": "How do I connect the MCP endpoint?"
+        },
+        {
+          "id": "shadcn",
+          "label": "Can I pull single components?"
+        },
+        {
+          "id": "charts",
+          "label": "Which import serves the charts?"
         }
       ]
     },
@@ -68,6 +188,40 @@
           "label": "What events must my endpoint send?",
           "prompt": "What events does the chat widget expect from a transport?"
         }
+      ],
+      "starters": [
+        {
+          "id": "what",
+          "label": "What is the chat widget?"
+        },
+        {
+          "id": "install",
+          "label": "How do I install the chat?"
+        },
+        {
+          "id": "server",
+          "label": "What does the server handler do?"
+        },
+        {
+          "id": "transport",
+          "label": "What is a transport?"
+        },
+        {
+          "id": "demo",
+          "label": "Can I try it without a key?"
+        },
+        {
+          "id": "cards",
+          "label": "How do cards render in a reply?"
+        },
+        {
+          "id": "threads",
+          "label": "How do threads and tabs work?"
+        },
+        {
+          "id": "parts",
+          "label": "Which components does it use?"
+        }
       ]
     },
     "/skills": {
@@ -78,6 +232,36 @@
           "id": "skills",
           "label": "How do the skills work?",
           "prompt": "How do the agent skills on this project work?"
+        }
+      ],
+      "starters": [
+        {
+          "id": "skills",
+          "label": "What are the agent skills?"
+        },
+        {
+          "id": "ship",
+          "label": "What does the ship skill do?"
+        },
+        {
+          "id": "vs-loops",
+          "label": "How do skills differ from loops?"
+        },
+        {
+          "id": "copy",
+          "label": "Can I copy these for my repo?"
+        },
+        {
+          "id": "new-component",
+          "label": "Which skill adds a component?"
+        },
+        {
+          "id": "honest",
+          "label": "How do skills keep the site honest?"
+        },
+        {
+          "id": "claude",
+          "label": "How was this built with Claude?"
         }
       ]
     },
@@ -90,6 +274,32 @@
           "label": "What runs on a loop?",
           "prompt": "What recurring agent loops run on this project?"
         }
+      ],
+      "starters": [
+        {
+          "id": "loops",
+          "label": "What do the loops do?"
+        },
+        {
+          "id": "chat-quality",
+          "label": "What does the chat quality loop do?"
+        },
+        {
+          "id": "link-rot",
+          "label": "How does the link rot check work?"
+        },
+        {
+          "id": "guardrails",
+          "label": "What guards the loops?"
+        },
+        {
+          "id": "cadence",
+          "label": "How often does each loop run?"
+        },
+        {
+          "id": "deploy",
+          "label": "Do loops deploy on their own?"
+        }
       ]
     },
     "/templates": {
@@ -100,6 +310,28 @@
           "id": "templates",
           "label": "What do they prove?",
           "prompt": "What do the template screens demonstrate about the design system?"
+        }
+      ],
+      "starters": [
+        {
+          "id": "purpose",
+          "label": "What are the templates for?"
+        },
+        {
+          "id": "which",
+          "label": "Which template should I look at?"
+        },
+        {
+          "id": "package",
+          "label": "Are templates in the npm package?"
+        },
+        {
+          "id": "built",
+          "label": "How is a template built?"
+        },
+        {
+          "id": "data",
+          "label": "Is the data in them real?"
         }
       ]
     },
@@ -117,6 +349,40 @@
           "label": "How are the APIs shaped?",
           "prompt": "How are the component APIs in this design system shaped?"
         }
+      ],
+      "starters": [
+        {
+          "id": "organised",
+          "label": "How are components organised?"
+        },
+        {
+          "id": "install",
+          "label": "How do I install the system?"
+        },
+        {
+          "id": "count",
+          "label": "How many components are there?"
+        },
+        {
+          "id": "ai-set",
+          "label": "Which components are AI-specific?"
+        },
+        {
+          "id": "charts",
+          "label": "How do the charts work?"
+        },
+        {
+          "id": "server",
+          "label": "Do these work in Server Components?"
+        },
+        {
+          "id": "pick",
+          "label": "Help me pick a component"
+        },
+        {
+          "id": "props",
+          "label": "How are the props shaped?"
+        }
       ]
     },
     "/privacy": {
@@ -128,16 +394,68 @@
           "label": "What data is collected?",
           "prompt": "What data does this site collect about visitors?"
         }
+      ],
+      "starters": [
+        {
+          "id": "chat",
+          "label": "What does the chat keep?"
+        },
+        {
+          "id": "retention",
+          "label": "How long are chat logs kept?"
+        },
+        {
+          "id": "analytics",
+          "label": "What does analytics track?"
+        },
+        {
+          "id": "opt-out",
+          "label": "How do I opt out of analytics?"
+        },
+        {
+          "id": "who",
+          "label": "Who sees my chat messages?"
+        }
       ]
     },
     "/foundations": {
       "title": "Foundations",
-      "text": "The design language's ground floor: colour, type, spacing, elevation, motion, and icons, each documented with live tokens.",
+      "text": "The design language's ground floor: colour, type, spacing, layout, elevation, motion and icons, each documented with live tokens.",
       "chips": [
         {
           "id": "tokens",
           "label": "How do tokens work?",
           "prompt": "How does the token architecture in this design system work?"
+        }
+      ],
+      "starters": [
+        {
+          "id": "tokens",
+          "label": "Explain the token architecture"
+        },
+        {
+          "id": "semantic",
+          "label": "What are semantic tokens?"
+        },
+        {
+          "id": "dark",
+          "label": "How does dark mode work?"
+        },
+        {
+          "id": "action",
+          "label": "Why is the action colour reserved?"
+        },
+        {
+          "id": "override",
+          "label": "How do I override the theme?"
+        },
+        {
+          "id": "motion",
+          "label": "How is motion kept consistent?"
+        },
+        {
+          "id": "breakpoints",
+          "label": "What are the breakpoints?"
         }
       ]
     },
@@ -150,6 +468,32 @@
           "label": "What a11y does the build check?",
           "prompt": "What accessibility checks does the build enforce on every change?"
         }
+      ],
+      "starters": [
+        {
+          "id": "checks",
+          "label": "What accessibility checks run?"
+        },
+        {
+          "id": "focus",
+          "label": "How do overlays handle focus?"
+        },
+        {
+          "id": "contrast",
+          "label": "How is button contrast checked?"
+        },
+        {
+          "id": "human",
+          "label": "What still needs human review?"
+        },
+        {
+          "id": "reduced-motion",
+          "label": "How is reduced motion handled?"
+        },
+        {
+          "id": "level",
+          "label": "Which WCAG level is enforced?"
+        }
       ]
     },
     "/foundations/colour-mode": {
@@ -160,6 +504,32 @@
           "id": "dark",
           "label": "How does dark mode work?",
           "prompt": "How does dark mode work in the design system?"
+        }
+      ],
+      "starters": [
+        {
+          "id": "dark",
+          "label": "How does dark mode work?"
+        },
+        {
+          "id": "semantic",
+          "label": "What are semantic colour tokens?"
+        },
+        {
+          "id": "action",
+          "label": "Why is the action colour reserved?"
+        },
+        {
+          "id": "status",
+          "label": "How do status colours work?"
+        },
+        {
+          "id": "ai",
+          "label": "What are the AI colour tokens for?"
+        },
+        {
+          "id": "themes",
+          "label": "How do themes re-point colours?"
         }
       ]
     },
@@ -172,6 +542,28 @@
           "label": "What are primitives?",
           "prompt": "What are primitive tokens in the design system, and how do they differ from semantic tokens?"
         }
+      ],
+      "starters": [
+        {
+          "id": "purpose",
+          "label": "What are primitives for?"
+        },
+        {
+          "id": "key",
+          "label": "What is a ramp’s key colour?"
+        },
+        {
+          "id": "rebase",
+          "label": "How do I rebase a colour ramp?"
+        },
+        {
+          "id": "file",
+          "label": "Why are file colours fixed?"
+        },
+        {
+          "id": "vs-semantic",
+          "label": "How do primitives differ from roles?"
+        }
       ]
     },
     "/foundations/elevation": {
@@ -182,6 +574,28 @@
           "id": "depth",
           "label": "How does elevation work?",
           "prompt": "How does elevation work in the design system?"
+        }
+      ],
+      "starters": [
+        {
+          "id": "flat",
+          "label": "Why do most surfaces have no shadow?"
+        },
+        {
+          "id": "when",
+          "label": "When does a surface get a shadow?"
+        },
+        {
+          "id": "ramp",
+          "label": "How does the container ramp work?"
+        },
+        {
+          "id": "dark",
+          "label": "Why are dark mode shadows stronger?"
+        },
+        {
+          "id": "off",
+          "label": "Can a theme turn shadows off?"
         }
       ]
     },
@@ -194,6 +608,28 @@
           "label": "How do I use icons?",
           "prompt": "How do I use icons from the design system?"
         }
+      ],
+      "starters": [
+        {
+          "id": "size",
+          "label": "How do I size an icon?"
+        },
+        {
+          "id": "own-set",
+          "label": "Can I use my own icon set?"
+        },
+        {
+          "id": "fill",
+          "label": "How do I make icons filled?"
+        },
+        {
+          "id": "floor",
+          "label": "Why does the scale start at 20px?"
+        },
+        {
+          "id": "grade",
+          "label": "Why do icons change in dark mode?"
+        }
       ]
     },
     "/foundations/logos": {
@@ -205,6 +641,24 @@
           "label": "Tell me about the logo",
           "prompt": "Tell me about the logo system on this site."
         }
+      ],
+      "starters": [
+        {
+          "id": "which",
+          "label": "Which logos are on this page?"
+        },
+        {
+          "id": "sized",
+          "label": "How are the logos sized?"
+        },
+        {
+          "id": "mark",
+          "label": "Where is the brand mark used?"
+        },
+        {
+          "id": "tools",
+          "label": "Why show the tool logos?"
+        }
       ]
     },
     "/foundations/motion": {
@@ -215,6 +669,32 @@
           "id": "motion",
           "label": "How is motion tokenized?",
           "prompt": "How is motion tokenized in the design system?"
+        }
+      ],
+      "starters": [
+        {
+          "id": "consistent",
+          "label": "How is motion kept consistent?"
+        },
+        {
+          "id": "duration",
+          "label": "Which duration should I use?"
+        },
+        {
+          "id": "easing",
+          "label": "What do the easing curves do?"
+        },
+        {
+          "id": "reduced",
+          "label": "How is reduced motion handled?"
+        },
+        {
+          "id": "js",
+          "label": "Where do JavaScript timings live?"
+        },
+        {
+          "id": "background",
+          "label": "Why does the background move?"
         }
       ]
     },
@@ -232,6 +712,36 @@
           "label": "How does stacking work?",
           "prompt": "How do the stacking layers work, and which z-index should a new overlay use?"
         }
+      ],
+      "starters": [
+        {
+          "id": "breakpoints",
+          "label": "Which breakpoints ship in the package?"
+        },
+        {
+          "id": "js-query",
+          "label": "How do I build a media query in JS?"
+        },
+        {
+          "id": "css-number",
+          "label": "Why can’t CSS use a breakpoint token?"
+        },
+        {
+          "id": "shell",
+          "label": "What is the page shell?"
+        },
+        {
+          "id": "stacking",
+          "label": "How do the stacking layers work?"
+        },
+        {
+          "id": "new-overlay",
+          "label": "Which layer should a new overlay use?"
+        },
+        {
+          "id": "tablet",
+          "label": "What changes at the tablet step?"
+        }
       ]
     },
     "/foundations/spatial": {
@@ -242,6 +752,28 @@
           "id": "spacing",
           "label": "How does spacing work?",
           "prompt": "How does the spacing system work in the design system?"
+        }
+      ],
+      "starters": [
+        {
+          "id": "scale",
+          "label": "How does the spacing scale work?"
+        },
+        {
+          "id": "gap-padding",
+          "label": "When do I use gap or padding?"
+        },
+        {
+          "id": "buttons",
+          "label": "Which radius do buttons use?"
+        },
+        {
+          "id": "mobile",
+          "label": "What changes below 768px?"
+        },
+        {
+          "id": "radius",
+          "label": "How do I pick a radius?"
         }
       ]
     },
@@ -254,6 +786,32 @@
           "label": "Can I use two typefaces?",
           "prompt": "How do I pair a heading font with a body font?"
         }
+      ],
+      "starters": [
+        {
+          "id": "pair",
+          "label": "How do I pair two typefaces?"
+        },
+        {
+          "id": "which",
+          "label": "Which type style should I use?"
+        },
+        {
+          "id": "scale",
+          "label": "How does the type scale work?"
+        },
+        {
+          "id": "overline",
+          "label": "Why is Overline uppercase?"
+        },
+        {
+          "id": "mobile",
+          "label": "What happens to type on mobile?"
+        },
+        {
+          "id": "weights",
+          "label": "How do heading weights work?"
+        }
       ]
     },
     "/blueprints/claude": {
@@ -264,6 +822,32 @@
           "id": "claude",
           "label": "What's in CLAUDE.md?",
           "prompt": "What does this project's CLAUDE.md cover?"
+        }
+      ],
+      "starters": [
+        {
+          "id": "covers",
+          "label": "What does CLAUDE.md cover?"
+        },
+        {
+          "id": "maintain",
+          "label": "How does the system maintain itself?"
+        },
+        {
+          "id": "validators",
+          "label": "What do the validators enforce?"
+        },
+        {
+          "id": "why-publish",
+          "label": "Why publish the specs?"
+        },
+        {
+          "id": "adapt",
+          "label": "Can I adapt this for my repo?"
+        },
+        {
+          "id": "claude",
+          "label": "How was this built with Claude?"
         }
       ]
     },
@@ -276,6 +860,32 @@
           "label": "What's in design.md?",
           "prompt": "What does this project's design.md cover?"
         }
+      ],
+      "starters": [
+        {
+          "id": "covers",
+          "label": "What does design.md cover?"
+        },
+        {
+          "id": "tiers",
+          "label": "How are the tokens tiered?"
+        },
+        {
+          "id": "dos",
+          "label": "What are the do’s and don’ts?"
+        },
+        {
+          "id": "responsive",
+          "label": "How does it respond on mobile?"
+        },
+        {
+          "id": "why-publish",
+          "label": "Why publish the specs?"
+        },
+        {
+          "id": "split",
+          "label": "How do the specs divide the work?"
+        }
       ]
     },
     "/blueprints/content-design": {
@@ -286,6 +896,32 @@
           "id": "content",
           "label": "What are the writing rules?",
           "prompt": "What are the content design rules for this site?"
+        }
+      ],
+      "starters": [
+        {
+          "id": "rules",
+          "label": "What are the writing rules?"
+        },
+        {
+          "id": "banned",
+          "label": "Which words are banned?"
+        },
+        {
+          "id": "em-dash",
+          "label": "Why are em dashes banned?"
+        },
+        {
+          "id": "voice",
+          "label": "How is the voice described?"
+        },
+        {
+          "id": "register",
+          "label": "How does register change by surface?"
+        },
+        {
+          "id": "detector",
+          "label": "What is the detector question?"
         }
       ]
     },
@@ -298,6 +934,32 @@
           "label": "What shipped in the latest release?",
           "prompt": "What shipped in the latest release of the design system?"
         }
+      ],
+      "starters": [
+        {
+          "id": "latest",
+          "label": "What shipped in the latest release?"
+        },
+        {
+          "id": "install",
+          "label": "How do I install the latest version?"
+        },
+        {
+          "id": "accurate",
+          "label": "How is this log kept accurate?"
+        },
+        {
+          "id": "before",
+          "label": "What came before the rename?"
+        },
+        {
+          "id": "contents",
+          "label": "What’s in the npm package?"
+        },
+        {
+          "id": "published",
+          "label": "How are releases published?"
+        }
       ]
     },
     "/foundations/themes": {
@@ -308,6 +970,32 @@
           "id": "themes-complete",
           "label": "What makes a theme complete?",
           "prompt": "What does a complete Rift theme include, and how do I apply one in my own app?"
+        }
+      ],
+      "starters": [
+        {
+          "id": "complete",
+          "label": "What makes a theme complete?"
+        },
+        {
+          "id": "apply",
+          "label": "How do I apply a theme?"
+        },
+        {
+          "id": "own",
+          "label": "Can I build my own theme?"
+        },
+        {
+          "id": "package",
+          "label": "Do themes ship in the package?"
+        },
+        {
+          "id": "dark",
+          "label": "How do themes handle dark mode?"
+        },
+        {
+          "id": "fonts",
+          "label": "How are theme fonts loaded?"
         }
       ]
     }

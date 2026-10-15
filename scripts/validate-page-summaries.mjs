@@ -3,8 +3,9 @@
  * validate-page-summaries.mjs
  *
  * Guards the page-summaries registry (website/src/data/page-summaries.json)
- * — the per-page content for the chat FAB's TLDR panel — so a page can never
- * ship without a summary, and a summary can never ship malformed:
+ * — the per-page content for the site chat: the FAB's TLDR panel and the
+ * welcome screen's starter pool — so a page can never ship without a
+ * summary or its own starters, and neither can ship malformed:
  *
  *   1. Coverage: every route on the site (scripts/site-routes.mjs) either
  *      has a summary or is deliberately without one. A static route must
@@ -21,7 +22,13 @@
  *      characters (the panel is a TLDR — a paragraph is a failure), ending
  *      in a full stop, and free of em dashes (content-design.md's ban
  *      covers shipped copy, and this copy ships); one or two chips per
- *      entry, each with id, label, and prompt.
+ *      entry, each with id, label, and prompt; a starters pool larger than
+ *      the welcome screen's draw (STARTER_COUNT, read from
+ *      src/chat/starters.ts), each with a unique id and a label. Before
+ *      this, starters were pooled by URL prefix in starters.ts, so a new
+ *      page silently inherited its section's questions (the Layout page
+ *      shipped asking about semantic colour tokens). Their budget and the
+ *      theme-owned-word ban are validate-chat-starters.mjs's.
  *   4. Chip labels fit the suggestion chip budget (SUGGESTION_MAX_CHARS,
  *      read from src/chat/suggestions.ts — a chip never wraps).
  *      The component pages' derived label template is re-derived here
@@ -65,6 +72,16 @@ if (!budgetMatch) {
 }
 const maxChipChars = Number(budgetMatch[1]);
 
+/* How many starters the welcome screen draws, from the module that owns it. */
+const starterCountMatch = read(join(repoRoot, 'src', 'chat', 'starters.ts')).match(
+  /export const STARTER_COUNT\s*=\s*(\d+)/
+);
+if (!starterCountMatch) {
+  console.error('✗ Could not read STARTER_COUNT from src/chat/starters.ts');
+  process.exit(1);
+}
+const starterCount = Number(starterCountMatch[1]);
+
 /* The chromeless set has one home; parse the Set literal out of it. */
 const chromelessSource = read(
   join(repoRoot, 'website', 'src', 'config', 'chromeless.ts')
@@ -99,6 +116,28 @@ const checkEntry = (where, entry) => {
   for (const field of ['title', 'text']) {
     if (entry[field]?.includes('—'))
       errors.push(`${where}: ${field} contains an em dash (banned in shipped copy — rewrite with a colon or comma)`);
+  }
+  /* The welcome screen's starter pool for this page. The draw shows
+     STARTER_COUNT of them and "New chat" redraws, so a pool no larger than
+     the draw would never vary. */
+  const starters = entry.starters;
+  if (!Array.isArray(starters) || starters.length <= starterCount) {
+    errors.push(
+      `${where}: needs a starters pool of more than ${starterCount} questions about this page, has ${Array.isArray(starters) ? starters.length : 'none'}`
+    );
+  } else {
+    const ids = new Set();
+    for (const s of starters) {
+      const label = s.label?.trim() ?? '';
+      if (!s.id?.trim() || !label) {
+        errors.push(`${where}: starter "${s.id ?? '?'}" needs id and label`);
+        continue;
+      }
+      if (ids.has(s.id)) errors.push(`${where}: starter id "${s.id}" is repeated`);
+      ids.add(s.id);
+      if (label.includes('—'))
+        errors.push(`${where}: starter "${label}" contains an em dash (banned in shipped copy)`);
+    }
   }
   const chips = entry.chips;
   if (!Array.isArray(chips) || chips.length < 1 || chips.length > 2) {

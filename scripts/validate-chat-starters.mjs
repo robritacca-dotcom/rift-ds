@@ -14,6 +14,15 @@
  * the written copy: a starter is a string a person types, and nothing else
  * would notice it had grown two words too long.
  *
+ * The site's own suggestions are also held to the theme: a starter that names
+ * a theme-owned value (a primitive colour family such as the base theme's
+ * action ramp, or the base typeface) goes stale the day a theme moves it,
+ * which is how "Why is teal reserved for actions?" outlived the action
+ * colour becoming a per-theme choice. The words are derived, not listed:
+ * every chromatic ramp with a key step in tokens-primitives.css, and the
+ * face --font-family-primary names. Scoped to sources flagged `themed`,
+ * so the demo script's fictional product keeps its own vocabulary.
+ *
  * Labels built from runtime data are checked as their static skeleton only —
  * a name substituted into one can be any length, which is why starters.ts
  * falls back to the unnamed wording when the named one does not fit.
@@ -39,7 +48,21 @@ const BARE = /(?:"([^"]*)"|'([^']*)'|`([^`]*)`)/g;
  * scenarios full of prose.
  */
 const SOURCES = [
-  { path: join('website', 'src', 'components', 'SiteChat', 'starters.ts') },
+  { path: join('website', 'src', 'components', 'SiteChat', 'starters.ts'), themed: true },
+  {
+    /* The per-page starter pools and the FAB panel's chips, written beside
+       each page's TLDR. Labels are chips; prompts are not, so they are
+       held to the theme but not to the budget. */
+    path: join('website', 'src', 'data', 'page-summaries.json'),
+    pattern: /"label":\s*"([^"]*)"/g,
+    themed: true,
+  },
+  {
+    path: join('website', 'src', 'data', 'page-summaries.json'),
+    pattern: /"(?:prompt|text)":\s*"([^"]*)"/g,
+    themed: true,
+    budget: false,
+  },
   {
     /* The follow-ups' written fallbacks, offered when the generated set
        comes back empty. They render on the same chip row with no runtime
@@ -47,6 +70,7 @@ const SOURCES = [
     path: join('website', 'src', 'lib', 'chat-followups.ts'),
     scope: /FALLBACK_FOLLOWUPS = \[([\s\S]*?)\]/g,
     pattern: BARE,
+    themed: true,
   },
   {
     /* The package's own written fallbacks: what a host that passes no pool
@@ -106,9 +130,24 @@ try {
   process.exit(1);
 }
 
+/* Theme-owned words, derived from the token files that own them. */
+const primitivesSource = readFileSync(join(repoRoot, 'src', 'tokens', 'tokens-primitives.css'), 'utf8');
+const typographySource = readFileSync(join(repoRoot, 'src', 'tokens', 'tokens-typography.css'), 'utf8');
+const themeWords = new Set(
+  [...primitivesSource.matchAll(/--primitive-([a-z]+)-07:/g)]
+    .map((match) => match[1])
+    .filter((family) => family !== 'neutral')
+);
+const baseFace = typographySource.match(/--font-family-primary:\s*['"]([^'"]+)['"]/)?.[1];
+if (baseFace) themeWords.add(baseFace.split(' ')[0].toLowerCase());
+if (themeWords.size === 0) {
+  errors.push('No theme-owned words derived from the token files — the theme check is now inert.');
+}
+const themeWordPattern = new RegExp(`\\b(${[...themeWords].join('|')})\\b`, 'i');
+
 let checked = 0;
 
-for (const { path: relative, scope, pattern = LABELLED, optional = false } of SOURCES) {
+for (const { path: relative, scope, pattern = LABELLED, optional = false, themed = false, budget = true } of SOURCES) {
   let source;
   try {
     source = readFileSync(join(repoRoot, relative), 'utf8');
@@ -134,6 +173,15 @@ for (const { path: relative, scope, pattern = LABELLED, optional = false } of SO
     // A `${…}` stands for runtime data of unknown length; measure what is
     // written around it and leave the substitution to the runtime fallback.
     const written = label.replace(/\$\{[^}]*\}/g, '');
+    if (themed) {
+      const hit = written.match(themeWordPattern);
+      if (hit) {
+        errors.push(
+          `${relative}: "${label}" names "${hit[1]}", a value the theme owns. Ask about the role instead (the action colour, the heading face).`
+        );
+      }
+    }
+    if (!budget) continue;
     checked += 1;
     if (written.length > maxChars) {
       errors.push(

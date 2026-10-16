@@ -140,6 +140,7 @@
 
 /* Stack the rail above the specimen when the column tightens (the mobile
    stage preset, or a phone). */
+/* ds-allow(breakpoint): the view's own column width: below it the lever rail and the specimen cannot sit side by side */
 @container (max-width: 719px) {
   .rampRow {
     grid-template-columns: 1fr;

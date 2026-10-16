@@ -224,6 +224,7 @@
    value inside an unmatched media query is unreachable; tokens-typography.css
    owns the pair, and the two must move together. */
 /* ds-allow(typography): the token layer's 768px sub-display step, restated for the panel's container width — tokens-typography.css owns the values */
+/* ds-allow(breakpoint): the panel's own width, at the token layer's 768px sub-display step so a docked panel takes the phone size */
 @container ds-chat-widget (max-width: 768px) {
   .ds-chat-widget__ask {
     --font-sub-display-size: 24px;
@@ -286,12 +287,14 @@
    460px for the starters. Shorter than that, each is decoration the layout
    cannot afford, so it steps aside and the empty state falls back to header,
    centred composer, disclaimer. */
+/* ds-allow(breakpoint): the widget's own height: the room the welcome greeting needs above the composer */
 @container ds-chat-widget (max-height: 579px) {
   .ds-chat-widget__welcome {
     display: none;
   }
 }
 
+/* ds-allow(breakpoint): the widget's own height: the room the starters need beside the composer */
 @container ds-chat-widget (max-height: 459px) {
   .ds-chat-widget__starters {
     display: none;
@@ -368,6 +371,7 @@
 
 /* Widgets are the first dressing to go: they are the tallest, and a window
    too short for them still has room for the greeting and the composer. */
+/* ds-allow(breakpoint): the widget's own height: the room the welcome widgets need, the tallest dressing */
 @container ds-chat-widget (max-height: 719px) {
   .ds-chat-widget__widgets {
     display: none;
@@ -421,12 +425,14 @@
    keyboard, not a short window, that usually takes it away. The greeting
    steps aside first, the starters only when even they would crowd the
    composer. */
+/* ds-allow(breakpoint): the widget's own height on a phone: the room the greeting needs above the pinned composer */
 @container ds-chat-widget (max-height: 499px) {
   .ds-chat-widget[data-phone] .ds-chat-widget__welcome {
     display: none;
   }
 }
 
+/* ds-allow(breakpoint): the widget's own height on a phone: the room the starters need above the pinned composer */
 @container ds-chat-widget (max-height: 379px) {
   .ds-chat-widget[data-phone] .ds-chat-widget__starters {
     display: none;

@@ -555,12 +555,14 @@ button.ds-attachment-tile__body:focus-visible,
    thresholds restate the default tile edges (136px, 96px compact) and the
    grid gap, because a container query cannot read a custom property; a
    host that resizes the tiles gets the plain wrap. */
+/* ds-allow(breakpoint): the group's own width: four default 136px tiles and their gaps */
 @container (max-width: 567px) {
   .ds-attachment-group--default .ds-attachment-group__grid[data-cells='4'] {
     max-width: calc(2 * var(--ds-attachment-tile-size, 136px) + var(--gap-200));
   }
 }
 
+/* ds-allow(breakpoint): the group's own width: four compact 96px tiles and their gaps */
 @container (max-width: 407px) {
   .ds-attachment-group--compact .ds-attachment-group__grid[data-cells='4'] {
     max-width: calc(2 * var(--ds-attachment-tile-size, 96px) + var(--gap-200));

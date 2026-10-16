@@ -1386,6 +1386,8 @@ Beside the layout set, the module names the steps components switch at: **480px 
 
 A threshold outside these sets is allowed only when it is content-driven (a bespoke grid that breaks at its own natural width) or deliberately sits on a step's other edge, and it says so in place with a `/* ds-allow(breakpoint): <reason> */` directive directly above the query. `scripts/validate-breakpoints.mjs` fails the build on any `@media` width, or media-query string in TypeScript, that is neither in the set nor sanctioned, and holds the layout set stated above to the module.
 
+Container queries are not breakpoints. An `@container` width or height measures a box (the docked chat panel, the site header's own row, a grid's column), not the viewport, so the set has nothing to say about it, and a container step that equals a viewport step is either a coincidence or a deliberate restatement. Every `@container` size condition therefore carries the same `ds-allow(breakpoint)` directive directly above it, saying what the box is and why the width is where it is, whatever the number. The validator fails a bare one. Reach for a container query when the layout answers to room a host can take away (the site header folds on its own width, so a docked chat folds it as surely as a narrow window), and for a media query when it answers to the device.
+
 The thresholds stay raw numbers in the stylesheets, and that is settled rather than pending: CSS custom properties cannot drive `@media` conditions, and a preprocessor dependency is not worth it for a handful of documented literals. The module is the number's home and the validator is what keeps the literals honest; the rail widths and gutters they switch are tokenized (`--layout-*`).
 
 ### Typography Collapse

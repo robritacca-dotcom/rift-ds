@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
  * Holds every media-query width in the library and the site to the
- * breakpoint set.
+ * breakpoint set, and requires every container-query width to say what it
+ * measures.
  *
  * CSS custom properties cannot drive an @media condition, so the widths a
  * layout switches at are written as literals wherever a query lives. That
@@ -36,6 +37,16 @@
  * commented in place" rule, made mechanical. Units other than px fail the
  * same way unless sanctioned, since an em or rem query tracks the reader's
  * font setting rather than the viewport the set is written in.
+ *
+ * Container queries are held differently. An @container size condition
+ * measures a box (the docked chat panel, the site header, a grid's own
+ * width), not the viewport, so whether its number matches the set says
+ * nothing: a box step that equals a viewport step is either a coincidence
+ * or a deliberate restatement, and both need saying. Every @container
+ * prelude with a size feature (width, height, inline-size, block-size, in
+ * min-/max- or range form) therefore needs the same directive directly
+ * above it, naming what the width measures, whatever the number. A style()
+ * query has no width and is not checked.
  *
  * Also holds design.md's statement of the canonical layout steps to the
  * library module, so the spec cannot name a different set from the one the
@@ -144,6 +155,9 @@ const SANCTION = /ds-allow\(breakpoint\):\s*\S/;
 const FILE_SANCTION = /ds-allow-file\(breakpoint\):\s*\S/;
 const MALFORMED = /ds-allow(-file)?\(breakpoint\)(?!:\s*\S)/;
 const FEATURE = /\((min|max)-(width|height)\s*:\s*([\d.]+)([a-z]+)\s*\)/g;
+/* A size feature in a container prelude, in any syntax: (max-width: …),
+   (inline-size < …), (400px <= width). style() queries never match. */
+const CONTAINER_SIZE = /\((?:[^()]*?\b)?(?:(?:min|max)-)?(?:width|height|inline-size|block-size)\b[^()]*\)/g;
 
 /** The comment(s) directly above `index`: everything back to the previous
     non-comment, non-whitespace text. */
@@ -200,6 +214,7 @@ function check(feature, set) {
 }
 
 let queries = 0;
+let containerQueries = 0;
 let sanctioned = 0;
 
 for (const { file, kind, set } of targets) {
@@ -215,6 +230,9 @@ for (const { file, kind, set } of targets) {
     for (const m of source.matchAll(/@media([^{]*)\{/g)) {
       sites.push({ index: m.index, prelude: m[1], anchor: m.index });
     }
+    for (const m of source.matchAll(/@container([^{]*)\{/g)) {
+      sites.push({ index: m.index, prelude: m[1], anchor: m.index, container: true });
+    }
   } else {
     for (const m of source.matchAll(/(['"`])([^'"`\n]*\((?:min|max)-(?:width|height)\s*:\s*[\d.]+[a-z]+\)[^'"`\n]*)\1/g)) {
       // Skip a match inside a comment line.
@@ -227,7 +245,15 @@ for (const { file, kind, set } of targets) {
 
   for (const s of sites) {
     const problems = [];
-    for (const f of s.prelude.matchAll(FEATURE)) {
+    if (s.container) {
+      // A container measures a box, not the viewport: every size condition
+      // needs its directive, whatever the number (see the doc block).
+      for (const f of s.prelude.matchAll(CONTAINER_SIZE)) {
+        containerQueries += 1;
+        problems.push(`${f[0]} measures a box, not the viewport, and nothing says what`);
+      }
+    }
+    for (const f of s.container ? [] : s.prelude.matchAll(FEATURE)) {
       queries += 1;
       const problem = check(f, set);
       if (problem) problems.push(`${f[0]}: ${problem}`);
@@ -245,6 +271,12 @@ for (const { file, kind, set } of targets) {
       continue;
     }
     const line = source.slice(0, s.index).split('\n').length;
+    if (s.container) {
+      errors.push(
+        `${file}:${line} — @container ${problems.join('; ')}. Say what it measures in the comment directly above with ds-allow(breakpoint): <reason>`
+      );
+      continue;
+    }
     errors.push(
       `${file}:${line} — ${problems.join('; ')}. Use a breakpoint from ${
         set === librarySet ? LIBRARY_MODULE : `${LIBRARY_MODULE} or ${SITE_MODULE}`
@@ -278,5 +310,6 @@ if (errors.length > 0) {
 
 console.log(
   `✓ Breakpoints — ${queries} media feature(s) across ${targets.length} files held to ` +
-    `${library.size} library + ${site.size} site breakpoints (${sanctioned} sanctioned in place).`
+    `${library.size} library + ${site.size} site breakpoints, plus ${containerQueries} container size condition(s) ` +
+    `(${sanctioned} sanctioned in place).`
 );

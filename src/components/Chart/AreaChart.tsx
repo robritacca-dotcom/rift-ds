@@ -12,6 +12,7 @@ import {
 import type { ChartSummaryItem } from './BarChart';
 import { getChartSeriesColors } from './palette';
 import './Chart.css';
+import { useReducedMotion } from '../../behaviors/useReducedMotion';
 
 interface AreaTooltipPayloadEntry {
   value?: number;
@@ -106,6 +107,9 @@ export const AreaChart = ({
   bare = false,
   className = '',
 }: AreaChartProps) => {
+  /* JS animation (the series drawing in) stands down under reduced motion,
+     the OS setting or a host's data-motion="reduce" alike. */
+  const reducedMotion = useReducedMotion();
   const titleId = useId();
   const subtitleId = useId();
   const baseClass = 'ds-chart';
@@ -180,6 +184,7 @@ export const AreaChart = ({
             <Tooltip content={renderTooltip} />
             {series.map((s, i) => (
               <Area
+                isAnimationActive={reducedMotion ? false : 'auto'}
                 key={s.dataKey}
                 type="monotone"
                 dataKey={s.dataKey}

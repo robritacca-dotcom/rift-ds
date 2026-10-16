@@ -20,7 +20,7 @@ export const a11yCoverage: A11yCoverage = {
   "stories": 1118,
   "withAria": 140,
   "withAccessibleName": 114,
-  "behaviourModules": 5,
+  "behaviourModules": 6,
   "overlayComponents": [
     "Alert dialog",
     "App sidebar",

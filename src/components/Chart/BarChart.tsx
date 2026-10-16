@@ -9,6 +9,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import './Chart.css';
+import { useReducedMotion } from '../../behaviors/useReducedMotion';
 
 interface ChartTooltipPayloadEntry {
   value?: number;
@@ -112,6 +113,9 @@ export const BarChart = ({
   bare = false,
   className = '',
 }: BarChartProps) => {
+  /* JS animation (the series drawing in) stands down under reduced motion,
+     the OS setting or a host's data-motion="reduce" alike. */
+  const reducedMotion = useReducedMotion();
   const titleId = useId();
   const subtitleId = useId();
   const baseClass = 'ds-chart';
@@ -187,6 +191,7 @@ export const BarChart = ({
               cursor={{ fill: cursorColor, opacity: 0.4 }}
             />
             <Bar
+              isAnimationActive={reducedMotion ? false : 'auto'}
               dataKey={yKey}
               fill={resolvedBarColor}
               radius={[3, 3, 0, 0]}

@@ -13,6 +13,7 @@ import {
 import type { ChartSummaryItem } from './BarChart';
 import { getChartSeriesColors } from './palette';
 import './Chart.css';
+import { useReducedMotion } from '../../behaviors/useReducedMotion';
 
 interface ScatterTooltipPayloadEntry {
   value?: number;
@@ -113,6 +114,9 @@ export const ScatterChart = ({
   bare = false,
   className = '',
 }: ScatterChartProps) => {
+  /* JS animation (the series drawing in) stands down under reduced motion,
+     the OS setting or a host's data-motion="reduce" alike. */
+  const reducedMotion = useReducedMotion();
   const titleId = useId();
   const subtitleId = useId();
   const baseClass = 'ds-chart';
@@ -182,6 +186,7 @@ export const ScatterChart = ({
             <Tooltip content={renderTooltip} />
             {datasets.map((ds, i) => (
               <Scatter
+                isAnimationActive={reducedMotion ? false : 'auto'}
                 key={ds.name}
                 name={ds.name}
                 data={ds.data}

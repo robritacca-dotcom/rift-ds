@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { MouseEvent as ReactMouseEvent } from "react";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
 import BrandSwitcher from "../BrandSwitcher/BrandSwitcher";
+import A11yToggle from "../ThemeToggle/A11yToggle";
 import { openSitePalette } from "../SitePalette/palette-bus";
 import { Kbd } from "rift-ds/components/Kbd/Kbd";
 import { getNavSections } from "@/config/navigation";
@@ -150,6 +151,7 @@ export default function HeaderBar({
         <SearchButton tabIndex={linkTab} />
         <BrandSwitcher className={styles.desktopBrandSwitcher} />
         <ThemeToggle className={styles.desktopThemeToggle} />
+        <A11yToggle className={styles.desktopThemeToggle} />
         <button
           type="button"
           className={`${styles.mobileMenuBtn} ${mobileOpen ? styles.mobileMenuBtnHidden : ""}`}

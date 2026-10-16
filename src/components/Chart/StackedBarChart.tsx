@@ -11,6 +11,7 @@ import {
 import type { ChartSummaryItem } from './BarChart';
 import { getChartSeriesColors } from './palette';
 import './Chart.css';
+import { useReducedMotion } from '../../behaviors/useReducedMotion';
 
 interface StackedTooltipPayloadEntry {
   value?: number;
@@ -100,6 +101,9 @@ export const StackedBarChart = ({
   bare = false,
   className = '',
 }: StackedBarChartProps) => {
+  /* JS animation (the series drawing in) stands down under reduced motion,
+     the OS setting or a host's data-motion="reduce" alike. */
+  const reducedMotion = useReducedMotion();
   const titleId = useId();
   const subtitleId = useId();
   const baseClass = 'ds-chart';
@@ -168,6 +172,7 @@ export const StackedBarChart = ({
             />
             {series.map((s, i) => (
               <Bar
+                isAnimationActive={reducedMotion ? false : 'auto'}
                 key={s.dataKey}
                 dataKey={s.dataKey}
                 name={s.label}

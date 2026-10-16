@@ -1081,3 +1081,63 @@
     display: none;
   }
 }
+
+/* ---------- max accessibility mode (POC) ----------
+   With the mode on (the header's A11yToggle), the page drops to the same
+   static layout reduced motion gets, then goes further: no theme row (the
+   mode has one look), no rotating subtitle, one plain sentence. */
+:global(html[data-a11y="max"]) .heroThemes {
+  display: none;
+}
+
+:global(html[data-a11y="max"]) .subFull {
+  position: static;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  clip-path: none;
+  white-space: normal;
+}
+
+/* display: none, not just hidden: a phrase that never renders never fires
+   the animationend that advances the rotation. */
+:global(html[data-a11y="max"]) .subPhrase {
+  display: none;
+}
+
+/* The collage becomes a bounded box: a solid edge and its own visible
+   scrollbar, so the columns' uneven lengths end inside one frame instead
+   of trailing down the page. Shorter than the screen, so the whole frame
+   and its scrollbar are always in view at once. */
+:global(html[data-a11y="max"]) .collage {
+  height: 75vh;
+  overflow-y: scroll;
+  align-items: start;
+  padding: var(--padding-400);
+  border: var(--border-050) solid var(--color-divider);
+  scrollbar-gutter: stable;
+  scrollbar-color: var(--color-text-primary) var(--color-bg-page-primary);
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+:global(html[data-a11y="max"]) .col {
+  overflow: visible;
+}
+
+:global(html[data-a11y="max"][data-a11y="max"]) .escalatorTrack {
+  animation: none !important;
+}
+
+:global(html[data-a11y="max"]) .escalatorStack {
+  padding-bottom: 0;
+}
+
+:global(html[data-a11y="max"]) .escalatorDupe {
+  display: none;
+}
+
+/* Cards separate by a full-strength edge, not a tint. */
+:global(html[data-a11y="max"]) .card {
+  border-width: 2px;
+}

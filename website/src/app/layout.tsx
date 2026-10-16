@@ -12,6 +12,10 @@ import "rift-ds/tokens/presets/presets.css";
 import "rift-ds/fonts/material-symbols.css";
 import { Nunito_Sans } from "next/font/google";
 import "./globals.css";
+// The max accessibility mode (POC): inert until data-a11y="max" lands on
+// <html>. Imported after the presets so its blocks win any tie.
+import "./a11y-max.generated.css";
+import "./a11y-max.css";
 import { buildDesignSystemJsonLd, buildWebsiteJsonLd, SITE_URL } from "@/lib/structuredData";
 import { BRAND_NAME, GA_ID, TITLE_SUFFIX } from "@/config/brand.generated";
 import { BASE_THEME_ID, LEGACY_BASE_THEME_ID, SERVED_THEME_ID } from "@/lib/theme/brand";
@@ -126,6 +130,26 @@ const themeScript = `
     if (brand === '${BASE_THEME_ID}' || brand === '${LEGACY_BASE_THEME_ID}') root.removeAttribute('data-brand');
     else if (brand) root.setAttribute('data-brand', brand);
   } catch (e) {}
+  /* The max accessibility mode rides the same pre-paint path, so a visitor
+     who turned it on never sees one frame of the themed page. A manual
+     pick ("max" or "standard") always wins; with none saved, the mode
+     follows the OS's increased-contrast setting, live. The storage event
+     keeps a same-origin frame (the home page's template preview) in step. */
+  var contrast = window.matchMedia('(prefers-contrast: more)');
+  function syncA11y() {
+    var saved = null;
+    try { saved = localStorage.getItem('a11y'); } catch (e) {}
+    var on = saved === 'max' || (saved !== 'standard' && contrast.matches);
+    /* data-motion is the library's own switch: every component that
+       moves in JS (charts, counters, the globe) stands down for it. */
+    if (on) { root.setAttribute('data-a11y', 'max'); root.setAttribute('data-motion', 'reduce'); }
+    else { root.removeAttribute('data-a11y'); root.removeAttribute('data-motion'); }
+  }
+  syncA11y();
+  contrast.addEventListener('change', syncA11y);
+  window.addEventListener('storage', function (event) {
+    if (event.key === 'a11y' || event.key === null) syncA11y();
+  });
   /* An attribute, deliberately not a class: React owns <html>'s className
      (the next/font variable class), so a hydration failure's client
      re-render rewrites it — a ready *class* gets wiped and the site stays

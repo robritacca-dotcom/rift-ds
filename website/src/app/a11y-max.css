@@ -1,0 +1,416 @@
+/* Max accessibility mode, the non-colour half. PROOF OF CONCEPT.
+
+   One attribute, data-a11y="max" on <html>, set before first paint by the
+   root layout's theme script from localStorage ("a11y" = "max") and
+   flipped by the A11yMaxToggle. The colour half is generated beside this
+   file (a11y-max.generated.css): every colour token goes to black or
+   white. This half removes everything that is not content: motion,
+   blur, shadows, rounded shapes, decorative backgrounds, and overlays
+   that float over a page instead of replacing it.
+
+   The attribute is doubled in every selector for the same reason as in
+   the generated file: it has to outrank the theme presets' blocks. */
+
+/* ---------- tokens that are not colour ---------- */
+
+html[data-a11y="max"][data-a11y="max"] {
+  /* No depth: a surface is told apart by its border, never a shadow. */
+  --shadow-floating: none;
+  --shadow-modal: none;
+
+  /* Square corners everywhere, buttons and inputs included. */
+  --radius-050: 0;
+  --radius-100: 0;
+  --radius-200: 0;
+  --radius-300: 0;
+  --radius-400: 0;
+  --radius-600: 0;
+  --radius-1200: 0;
+  --radius-pill: 0;
+
+  /* The same collapse the reduced-motion guard in tokens-motion.css
+     applies, so a component that times itself by a token lands at once. */
+  --motion-duration-fast: 0.01ms;
+  --motion-duration-base: 0.01ms;
+  --motion-duration-slow: 0.01ms;
+  --motion-duration-slower: 0.01ms;
+  --motion-duration-instant: 0.01ms;
+  --motion-duration-deliberate: 0.01ms;
+  --motion-duration-orbit: 0.01ms;
+  --motion-duration-loop-spin: 0.01ms;
+  --motion-duration-loop-shimmer: 0.01ms;
+  --motion-duration-loop-matrix: 0.01ms;
+
+  /* One plain face for every role, whatever the preset chose, and no
+     light display weights: thin strokes are the first thing low vision
+     loses. */
+  --font-family-primary: var(--font-nunito-sans), Arial, sans-serif;
+  --font-family-heading: var(--font-nunito-sans), Arial, sans-serif;
+  --font-family-body: var(--font-nunito-sans), Arial, sans-serif;
+  --font-mega-1-weight: 700;
+  --font-mega-2-weight: 700;
+  --font-display-1-weight: 700;
+  --font-display-2-weight: 700;
+  --font-sub-display-weight: 600;
+}
+
+/* ---------- zero motion, zero effects ---------- */
+
+/* Durations collapse rather than animations being removed, so anything
+   that starts hidden and animates in still lands in its final state. */
+html[data-a11y="max"][data-a11y="max"] *,
+html[data-a11y="max"][data-a11y="max"] *::before,
+html[data-a11y="max"][data-a11y="max"] *::after {
+  animation-duration: 0.01ms !important;
+  animation-delay: 0s !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  transition-delay: 0s !important;
+  scroll-behavior: auto !important;
+  /* No hand-written -webkit- twin: the build adds the prefix, and a manual
+     one beside it makes the pipeline drop the property entirely. */
+  backdrop-filter: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+
+html[data-a11y="max"][data-a11y="max"] .animate-in {
+  opacity: 1;
+  transform: none;
+  animation: none;
+}
+
+/* The ambient background is decoration: gone, shader and fallback both. */
+html[data-a11y="max"][data-a11y="max"] .blur-container {
+  display: none !important;
+}
+
+/* ---------- links and focus ---------- */
+
+/* A text link is the palette's blue (AAA on the page, like every hue)
+   and underlined, so it is told apart by more than colour. Links built as
+   controls or cards (buttons, chips, cards) keep their own look. */
+html[data-a11y="max"][data-a11y="max"] :is(main, footer) a:not(.ds-button, .ds-chip, [class*="card"], [class*="Card"]) {
+  color: var(--a11y-blue);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+}
+
+/* One focus indicator for everything: a thick ink ring with a paper gap,
+   which meets 2.4.13 Focus Appearance (AAA) on any surface. */
+html[data-a11y="max"][data-a11y="max"] :focus-visible {
+  outline: 3px solid var(--a11y-ink) !important;
+  outline-offset: 3px !important;
+}
+
+/* Secondary and tertiary buttons sit on paper with paper fills, so they
+   need an edge to read as controls. */
+html[data-a11y="max"][data-a11y="max"] .ds-button:not(.ds-button--primary) {
+  box-shadow: inset 0 0 0 2px var(--a11y-ink);
+}
+
+/* ---------- overlays become pages ---------- */
+
+/* A modal never floats over the page it interrupts: it replaces it. */
+html[data-a11y="max"][data-a11y="max"] .ds-dialog__panel,
+html[data-a11y="max"][data-a11y="max"] .ds-alert-dialog__panel,
+html[data-a11y="max"][data-a11y="max"] .ds-drawer__panel,
+html[data-a11y="max"][data-a11y="max"] .ds-command-palette__panel {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100% !important;
+  max-width: none !important;
+  height: 100% !important;
+  max-height: none !important;
+  margin: 0 !important;
+  transform: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+}
+
+/* ---------- no fades ---------- */
+
+/* Nothing dissolves into the page: a masked edge (scroll fades, the
+   collage window, clipped text) shows in full, and every rule is solid (FadeDivider holds its own override). */
+html[data-a11y="max"][data-a11y="max"] *,
+html[data-a11y="max"][data-a11y="max"] *::before,
+html[data-a11y="max"][data-a11y="max"] *::after {
+  mask-image: none !important;
+}
+
+/* ---------- controls stay still ---------- */
+
+/* A button never moves: no nudged arrow, no press scale. Transforms on
+   these are feedback only, never layout, so dropping them is safe. */
+html[data-a11y="max"][data-a11y="max"] :is(.ds-button, .ds-circular-button, .ds-ai-button, .ds-chip),
+html[data-a11y="max"][data-a11y="max"] :is(.ds-button, .ds-circular-button, .ds-ai-button, .ds-chip) * {
+  transform: none !important;
+  scale: none !important;
+}
+
+/* The AI rings are gradients cut to a border band with a mask, so with
+   masks gone they would flood the whole control. They are decoration:
+   drop them and leave a plain edge. */
+html[data-a11y="max"][data-a11y="max"] :is(.ds-ai-button, .ds-composer)::before,
+html[data-a11y="max"][data-a11y="max"] :is(.ds-ai-button, .ds-composer)::after {
+  display: none !important;
+}
+
+html[data-a11y="max"][data-a11y="max"] .ds-ai-button {
+  box-shadow: inset 0 0 0 2px var(--a11y-ink);
+}
+
+/* ---------- nothing dimmed ----------
+   Opacity is how the system de-emphasises, and a dimmed ink is a grey.
+   Text and marks that carry meaning go to full strength; marks that only
+   add depth or decoration go entirely. */
+html[data-a11y="max"][data-a11y="max"] :is(
+  .ds-attachment-mark__fold,
+  .ds-agent-status__dot,
+  .ds-globe__limb
+) {
+  opacity: 1 !important;
+}
+
+/* Two dimmed marks go entirely: the spinner's ghost track (at full
+   strength it would swallow the arc that turns over it) and the 10px
+   lettering on a file mark, under the type floor (the filename beside it
+   names the type). */
+html[data-a11y="max"][data-a11y="max"] :is(
+  .ds-spinner__track,
+  .ds-attachment-mark__letters
+) {
+  display: none !important;
+}
+
+/* Everything else that was dimmed is content, so it comes back at full
+   strength. Where the dimming said "behind" (the far side of the globe),
+   a dash says it instead. Days outside the month are dates like any
+   other, shown as such. */
+html[data-a11y="max"][data-a11y="max"] :is(
+  .ds-globe__graticule-back,
+  .ds-globe__arc-back,
+  .ds-globe__point--back,
+  .ds-world-map__graticule,
+  .ds-date-picker__cell--outside
+) {
+  opacity: 1 !important;
+}
+
+html[data-a11y="max"][data-a11y="max"] :is(.ds-globe__graticule-back, .ds-globe__arc-back) {
+  stroke-dasharray: 2 4;
+}
+
+/* ---------- no gradient paint ---------- */
+
+/* A gradient keeps its colour and loses its fade: every stop goes fully
+   opaque, so a gradient stroke or fill paints as a hard fill of its own
+   colour (the globe's arcs, any chart gradient). The one exception is the
+   wash under an area chart's line, which would bury the series beneath
+   it once solid: it goes, and the coloured line carries the data. */
+html[data-a11y="max"][data-a11y="max"] svg stop {
+  stop-opacity: 1 !important;
+}
+
+html[data-a11y="max"][data-a11y="max"] svg .recharts-area-area {
+  fill: none !important;
+}
+
+/* Colour that is content stays: brand marks and logos keep their own
+   colours, like the primitive swatches in the mega menu. The mode replaces
+   fades and dimming with hard fills; it never hides a colour. */
+
+/* The shimmering status label is text clipped to a moving gradient:
+   plain text instead. */
+html[data-a11y="max"][data-a11y="max"] .ds-agent-status__label--shimmer {
+  background: none !important;
+  color: var(--a11y-ink) !important;
+  -webkit-text-fill-color: currentColor;
+}
+
+/* ---------- every state says itself ---------- */
+
+/* Off is an outlined track with an ink thumb, on a solid track with a
+   paper thumb, so the state never rests on where the thumb sits. */
+html[data-a11y="max"][data-a11y="max"] .ds-toggle-switch--off .ds-toggle-switch__track {
+  background: var(--a11y-paper);
+  box-shadow: inset 0 0 0 2px var(--a11y-ink);
+}
+
+html[data-a11y="max"][data-a11y="max"] .ds-toggle-switch--off .ds-toggle-switch__thumb {
+  background: var(--a11y-ink);
+}
+
+/* The thumb's glyph is drawn in the action colour for the on state's
+   paper thumb; on the off state's ink thumb it would sink, so it goes
+   paper there. */
+html[data-a11y="max"][data-a11y="max"] .ds-toggle-switch--off .ds-toggle-switch__thumb-icon {
+  color: var(--a11y-paper);
+}
+
+/* The slider's empty track is a paper fill on a paper page: give the whole
+   track an edge, so the filled part reads against it. */
+html[data-a11y="max"][data-a11y="max"] .ds-slider__input {
+  box-shadow: 0 0 0 2px var(--a11y-ink);
+}
+
+/* A neutral segmented control selects with a neutral fill, which is paper
+   here: the selected segment gets an ink edge. */
+html[data-a11y="max"][data-a11y="max"] .ds-segmented-control--neutral .ds-segmented-control__pill {
+  box-shadow: inset 0 0 0 2px var(--a11y-ink);
+}
+
+/* One hover for every control: a dashed ink outline outside the control,
+   and solid while pressed. Colour never changes on hover, so no hover can
+   collide with a label. Focus keeps its own thicker solid ring above. */
+html[data-a11y="max"][data-a11y="max"] :is(a, button, summary, select, label, input, [role="button"], [role="tab"], [role="option"], [role="menuitem"], [role="switch"]):not(:disabled, [aria-disabled="true"]):hover {
+  outline: 2px dashed var(--a11y-ink);
+  outline-offset: 2px;
+}
+
+html[data-a11y="max"][data-a11y="max"] :is(a, button, summary, select, label, input, [role="button"], [role="tab"], [role="option"], [role="menuitem"], [role="switch"]):not(:disabled, [aria-disabled="true"]):active {
+  outline-style: solid;
+}
+
+/* A hovered map marker does not grow. */
+html[data-a11y="max"][data-a11y="max"] .ds-world-map__marker .ds-world-map__dot {
+  transform: none !important;
+}
+
+/* ---------- AAA type ----------
+   1.4.8 Visual Presentation: a 16px floor for every role, 18px reading
+   text, and line spacing of at least one and a half. The ladder steps
+   move, so every type style built on them follows. */
+html[data-a11y="max"][data-a11y="max"] {
+  --font-size-300: 16px;
+  --font-size-350: 16px;
+  --font-size-400: 18px;
+  --font-line-height-400: 24px;
+  --font-line-height-500: 24px;
+  --font-line-height-600: 28px;
+  --font-line-height-700: 34px;
+  --font-line-height-800: 40px;
+  --font-line-height-900: 40px;
+  --font-line-height-1100: 46px;
+  --font-mega-1-line-height: 1.2;
+  --font-mega-2-line-height: 1.2;
+  --font-display-1-line-height: 1.2;
+  --font-display-2-line-height: 1.2;
+}
+
+/* The components that set a raw px size under the floor (the compact
+   calendar, avatar initials, chart axes and legends) are lifted to it
+   here, since the ladder override above cannot reach a literal. */
+html[data-a11y="max"][data-a11y="max"] :is(
+  .ds-date-picker__cell,
+  .ds-date-picker__day-header,
+  .ds-avatar__initials,
+  .recharts-text,
+  .recharts-legend-item-text,
+  .recharts-legend-item-text *
+) {
+  font-size: 16px !important;
+}
+
+/* ---------- no text cut off ----------
+   The larger type makes clamped descriptions run out of lines, and a
+   clamp hides the rest of the sentence behind an ellipsis. Every clamp
+   lets go, so a block shows its whole text. */
+html[data-a11y="max"][data-a11y="max"] * {
+  -webkit-line-clamp: unset !important;
+  line-clamp: none !important;
+}
+
+/* Single-line labels that would end in an ellipsis wrap instead. The
+   Gantt rows grow to two lines of the larger type so a wrapped label
+   still fits its row. */
+html[data-a11y="max"][data-a11y="max"] :is(
+  .ds-tool-call__summary,
+  .ds-gantt__label,
+  .ds-attachment-tile__name-head
+) {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  overflow-wrap: anywhere;
+}
+
+html[data-a11y="max"][data-a11y="max"] .ds-gantt {
+  --ds-gantt-row-height: 56px;
+}
+
+/* The contribution heatmap's levels are tints of one colour, and a pale
+   tint fails contrast. Here a level is an amount of the heatmap's colour
+   (AAA against the page, from the generated palette): an ink hairline
+   when empty, then a ring that thickens with each level until the cell is
+   solid, so "darker means more" holds without a single low-contrast cell.
+   Legend swatches share the classes. */
+html[data-a11y="max"][data-a11y="max"] [class*="ds-contribution-graph__cell--level-"] {
+  background-color: var(--a11y-paper);
+}
+html[data-a11y="max"][data-a11y="max"] .ds-contribution-graph__cell--level-0 { box-shadow: inset 0 0 0 1px var(--a11y-ink); }
+html[data-a11y="max"][data-a11y="max"] .ds-contribution-graph__cell--level-1 { box-shadow: inset 0 0 0 2px var(--color-chart-contribution-4); }
+html[data-a11y="max"][data-a11y="max"] .ds-contribution-graph__cell--level-2 { box-shadow: inset 0 0 0 4px var(--color-chart-contribution-4); }
+html[data-a11y="max"][data-a11y="max"] .ds-contribution-graph__cell--level-3 { box-shadow: inset 0 0 0 5px var(--color-chart-contribution-4); }
+html[data-a11y="max"][data-a11y="max"] .ds-contribution-graph__cell--level-4 { background-color: var(--color-chart-contribution-4); }
+
+/* Icons at full strength: filled, at the font's heaviest weight and
+   highest grade. Set on the glyph itself so a component's own axis
+   choice (an outlined idle state, a lighter preset) cannot thin it. */
+html[data-a11y="max"][data-a11y="max"] .material-symbols-rounded {
+  --material-symbols-fill: 1 !important;
+  --material-symbols-weight: 700 !important;
+  --material-symbols-grade: 200 !important;
+}
+
+/* Every series is ink, so series are told apart by line style rather
+   than colour (1.4.1): the first solid, the second dashed, the third
+   dotted. */
+html[data-a11y="max"][data-a11y="max"] :is(.recharts-area, .recharts-line):nth-of-type(2) :is(.recharts-area-curve, .recharts-line-curve) {
+  stroke-dasharray: 8 5;
+}
+
+html[data-a11y="max"][data-a11y="max"] :is(.recharts-area, .recharts-line):nth-of-type(3) :is(.recharts-area-curve, .recharts-line-curve) {
+  stroke-dasharray: 2 4;
+}
+
+/* Control labels at bold, so a control's text reads heavier than the
+   prose around it. The icon font's weight is its own axis, set above. */
+html[data-a11y="max"][data-a11y="max"] :is(button, [role="button"], [role="tab"], [role="switch"], .ds-button, .ds-ai-button, .ds-chip),
+html[data-a11y="max"][data-a11y="max"] :is(button, [role="button"], [role="tab"], [role="switch"], .ds-button, .ds-ai-button, .ds-chip) :not(.material-symbols-rounded) {
+  font-weight: 700 !important;
+}
+
+/* ---------- the Composer's focus ----------
+   With AI glow on, focus hands the shell's border to the gradient ring,
+   which this mode removes, so focus would leave no edge at all. The shell
+   is the one focus indicator here, drawn like every other focus ring, and
+   the textarea inside it draws none of its own. */
+html[data-a11y="max"][data-a11y="max"] .ds-composer:focus-within {
+  /* Drawn inside the shell, not as an outset outline: the chat panel
+     clips at its edge, and an outline outside the shell would be cut. */
+  border-color: var(--a11y-ink) !important;
+  box-shadow: inset 0 0 0 3px var(--a11y-ink) !important;
+}
+
+html[data-a11y="max"][data-a11y="max"] .ds-composer :is(textarea, [contenteditable]):focus-visible {
+  outline: none !important;
+}
+
+/* ---------- disabled, solid ----------
+   A disabled control is drawn at 40% opacity, which turns ink into grey.
+   Here it stays full strength and says "unavailable" by its edge instead:
+   a paper fill inside a dashed ink border, with ink content. */
+html[data-a11y="max"][data-a11y="max"] :is(button, .ds-button, .ds-circular-button, .ds-ai-button):is(:disabled, [aria-disabled="true"], .ds-button--disabled, .ds-circular-button--disabled, .ds-ai-button--disabled) {
+  opacity: 1 !important;
+  background: var(--a11y-paper) !important;
+  color: var(--a11y-ink) !important;
+  box-shadow: none !important;
+  outline: 2px dashed var(--a11y-ink);
+  outline-offset: -2px;
+}
+
+html[data-a11y="max"][data-a11y="max"] :is(button, .ds-button, .ds-circular-button, .ds-ai-button):is(:disabled, [aria-disabled="true"], .ds-button--disabled, .ds-circular-button--disabled, .ds-ai-button--disabled) * {
+  color: var(--a11y-ink) !important;
+}

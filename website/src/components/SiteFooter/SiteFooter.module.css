@@ -271,3 +271,9 @@
     display: none;
   }
 }
+
+/* The max accessibility mode (website/src/lib/a11y-mode.ts): the mark is
+   a link, so it stays full strength rather than dimmed until hovered. */
+:global(html[data-a11y="max"]) .brandMark {
+  opacity: 1;
+}

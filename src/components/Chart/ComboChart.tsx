@@ -12,6 +12,7 @@ import {
 import type { ChartSummaryItem } from './BarChart';
 import { getChartSeriesColors } from './palette';
 import './Chart.css';
+import { useReducedMotion } from '../../behaviors/useReducedMotion';
 
 interface ComboTooltipPayloadEntry {
   value?: number;
@@ -119,6 +120,9 @@ export const ComboChart = ({
   bare = false,
   className = '',
 }: ComboChartProps) => {
+  /* JS animation (the series drawing in) stands down under reduced motion,
+     the OS setting or a host's data-motion="reduce" alike. */
+  const reducedMotion = useReducedMotion();
   const titleId = useId();
   const subtitleId = useId();
   const baseClass = 'ds-chart';
@@ -206,6 +210,7 @@ export const ComboChart = ({
               cursor={{ fill: cursorColor, opacity: 0.4 }}
             />
             <Bar
+              isAnimationActive={reducedMotion ? false : 'auto'}
               yAxisId="bar"
               dataKey={barKey}
               name={resolvedBarLabel}
@@ -214,6 +219,7 @@ export const ComboChart = ({
               maxBarSize={32}
             />
             <Line
+              isAnimationActive={reducedMotion ? false : 'auto'}
               yAxisId={secondaryAxis ? 'line' : 'bar'}
               type="monotone"
               dataKey={lineKey}

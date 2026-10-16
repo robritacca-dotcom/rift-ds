@@ -936,3 +936,40 @@
   transition: none;
 }
 
+
+/* The max accessibility mode (website/src/lib/a11y-mode.ts): no
+   progressive blur, no fade below the bar. One solid surface the bar's own
+   height, closed by a full-strength rule. */
+:global(html[data-a11y="max"]) .stickyBackdrop {
+  height: 100%;
+  background: var(--color-bg-page-primary);
+  border-bottom: var(--border-050) solid var(--color-divider);
+}
+
+:global(html[data-a11y="max"]) .stickyBackdrop > span {
+  display: none;
+}
+
+/* Every surface the menus draw is solid: the mega panel, the mobile menu
+   and its overlay are translucent glass by default, and with the blur
+   gone the page would read straight through them. */
+:global(html[data-a11y="max"]) :is(.mega, .mobileMenu, .mobileMenuOverlay) {
+  background: var(--color-bg-page-primary);
+}
+
+
+/* The bar's links and search label are set at a raw 14px, under the
+   mode's 16px floor: lift them onto the reading size. */
+:global(html[data-a11y="max"]) :is(.navLink, .searchLabel) {
+  font-size: var(--font-paragraph-sm-size);
+}
+
+/* The showcase cover is content (the primitive ramps are the point of
+   the card), so it stays. Only the fade under the caption goes: the
+   caption sits on a hard paper fill, closed off from the drawing by a
+   full-strength rule. */
+:global(html[data-a11y="max"]) .megaShowcaseText {
+  padding-top: var(--primitive-padding-500);
+  background: var(--color-bg-page-primary);
+  border-top: var(--border-050) solid var(--color-divider);
+}

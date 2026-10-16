@@ -11,6 +11,7 @@ import {
 import type { ChartSummaryItem } from './BarChart';
 import { getChartSeriesColors } from './palette';
 import './Chart.css';
+import { useReducedMotion } from '../../behaviors/useReducedMotion';
 
 interface LineChartTooltipPayloadEntry {
   value?: number;
@@ -99,6 +100,9 @@ export const LineChart = ({
   bare = false,
   className = '',
 }: LineChartProps) => {
+  /* JS animation (the series drawing in) stands down under reduced motion,
+     the OS setting or a host's data-motion="reduce" alike. */
+  const reducedMotion = useReducedMotion();
   const titleId = useId();
   const subtitleId = useId();
   const baseClass = 'ds-chart';
@@ -162,6 +166,7 @@ export const LineChart = ({
             <Tooltip content={renderTooltip} />
             {series.map((s, i) => (
               <Line
+                isAnimationActive={reducedMotion ? false : 'auto'}
                 key={s.dataKey}
                 type="monotone"
                 dataKey={s.dataKey}

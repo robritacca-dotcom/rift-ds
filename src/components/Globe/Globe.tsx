@@ -6,10 +6,10 @@ import React, {
   useId,
   useRef,
   useState,
-  useSyncExternalStore,
 } from 'react';
 import { MOTION_ORBIT_REFERENCE_MS } from '../../tokens/motion';
 import './Globe.css';
+import { useReducedMotion } from '../../behaviors/useReducedMotion';
 
 /** A place on the globe. */
 export interface GlobePoint {
@@ -233,16 +233,8 @@ const arcVectors = (a: Vec3, b: Vec3, altitude: number): [Vec3, number][] => {
 const normalizeLng = (lng: number) => ((((lng + 180) % 360) + 360) % 360) - 180;
 const clampLat = (lat: number) => Math.max(-MAX_LAT, Math.min(MAX_LAT, lat));
 
-// ── Reduced motion as an external store (same recipe as Carousel) ──────────
-
-const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
-const subscribeReducedMotion = (callback: () => void) => {
-  const query = window.matchMedia(REDUCED_MOTION_QUERY);
-  query.addEventListener('change', callback);
-  return () => query.removeEventListener('change', callback);
-};
-const getReducedMotion = () => window.matchMedia(REDUCED_MOTION_QUERY).matches;
-const getServerReducedMotion = () => false;
+// Reduced motion comes from the shared behaviour: the OS setting or a
+// host's data-motion="reduce" on <html>.
 
 const KEY_DELTAS: Record<string, GlobeRotation> = {
   ArrowLeft: [KEY_STEP, 0],
@@ -320,11 +312,7 @@ export const Globe = React.forwardRef<HTMLDivElement, GlobeProps>(
 
     const [hoveredId, setHoveredId] = useState<string | null>(null);
     const [paused, setPaused] = useState(false);
-    const reducedMotion = useSyncExternalStore(
-      subscribeReducedMotion,
-      getReducedMotion,
-      getServerReducedMotion,
-    );
+    const reducedMotion = useReducedMotion();
 
     const rootRef = useRef<HTMLDivElement | null>(null);
 

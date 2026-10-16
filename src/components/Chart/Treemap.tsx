@@ -9,6 +9,7 @@ import {
 import type { ChartSummaryItem } from './BarChart';
 import { getChartSeriesColors } from './palette';
 import './Chart.css';
+import { useReducedMotion } from '../../behaviors/useReducedMotion';
 
 interface TreemapTooltipPayloadEntry {
   value?: number;
@@ -241,6 +242,9 @@ export const Treemap = ({
   bare = false,
   className = '',
 }: TreemapProps) => {
+  /* JS animation (the series drawing in) stands down under reduced motion,
+     the OS setting or a host's data-motion="reduce" alike. */
+  const reducedMotion = useReducedMotion();
   const titleId = useId();
   const subtitleId = useId();
   const themeVersion = useThemeVersion();
@@ -286,6 +290,7 @@ export const Treemap = ({
       <div className={`${baseClass}__body`}>
         <ResponsiveContainer width="100%" height={height}>
           <RechartsTreemap
+            isAnimationActive={reducedMotion ? false : 'auto'}
             data={data}
             dataKey={dataKey}
             aspectRatio={4 / 3}

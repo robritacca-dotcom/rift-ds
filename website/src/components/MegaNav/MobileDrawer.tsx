@@ -3,6 +3,7 @@
 import type { CSSProperties } from "react";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
 import BrandSwitcher from "../BrandSwitcher/BrandSwitcher";
+import A11yToggle from "../ThemeToggle/A11yToggle";
 import { NavList, type NavListItem } from "rift-ds/components/NavList/NavList";
 import SiteLogo from "./SiteLogo";
 import styles from "./MegaNav.module.css";
@@ -74,6 +75,7 @@ export default function MobileDrawer({
               opens upward — the row sits on the drawer floor. */}
           <BrandSwitcher placement="up" align="left" />
           <ThemeToggle />
+          <A11yToggle />
         </div>
       </div>
     </div>

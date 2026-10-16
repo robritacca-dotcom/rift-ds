@@ -9,6 +9,7 @@ import {
 import { getChartSeriesColors } from '../Chart/palette';
 import '../Chart/Chart.css';
 import './FunnelChart.css';
+import { useReducedMotion } from '../../behaviors/useReducedMotion';
 
 /** One stage of the funnel, ordered widest first. */
 export interface FunnelStage {
@@ -119,6 +120,9 @@ export const FunnelChart = React.forwardRef<HTMLDivElement, FunnelChartProps>(
     },
     ref,
   ) => {
+    /* JS animation (the bands drawing in) stands down under reduced motion,
+       the OS setting or a host's data-motion="reduce" alike. */
+    const reducedMotion = useReducedMotion();
     const baseClass = 'ds-funnel-chart';
     const chartClass = 'ds-chart';
     const classes = [chartClass, bare && `${chartClass}--bare`, baseClass, className]
@@ -165,10 +169,12 @@ export const FunnelChart = React.forwardRef<HTMLDivElement, FunnelChartProps>(
           <ResponsiveContainer width="100%" height={height}>
             <RechartsFunnelChart margin={{ top: 4, right: 4, bottom: 4, left: 4 }}>
               <Tooltip content={renderTooltip} />
-              {/* Animation stays on the recharts 'auto' default, which already
-                  turns itself off under prefers-reduced-motion and in SSR. The
-                  surface-coloured stroke separates the bands in either theme. */}
+              {/* Animation keeps the recharts 'auto' default (off in SSR and
+                  under prefers-reduced-motion) and also stands down for a
+                  host's data-motion="reduce". The surface-coloured stroke
+                  separates the bands in either theme. */}
               <Funnel
+                isAnimationActive={reducedMotion ? false : 'auto'}
                 dataKey="value"
                 nameKey="name"
                 data={stages}

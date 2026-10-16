@@ -8,3 +8,9 @@
     var(--color-bg-container-primary-transparent)
   );
 }
+
+/* The max accessibility mode (website/src/lib/a11y-mode.ts): a solid rule,
+   no fade at either end. */
+:global(html[data-a11y="max"]) .rule {
+  background: var(--color-divider);
+}

@@ -10,6 +10,7 @@ import {
 import type { ChartSummaryItem } from './BarChart';
 import { getChartSeriesColors } from './palette';
 import './Chart.css';
+import { useReducedMotion } from '../../behaviors/useReducedMotion';
 
 interface PieChartTooltipPayloadEntry {
   value?: number;
@@ -98,6 +99,9 @@ export const PieChart = ({
   bare = false,
   className = '',
 }: PieChartProps) => {
+  /* JS animation (the series drawing in) stands down under reduced motion,
+     the OS setting or a host's data-motion="reduce" alike. */
+  const reducedMotion = useReducedMotion();
   const titleId = useId();
   const subtitleId = useId();
   const baseClass = 'ds-chart';
@@ -145,6 +149,7 @@ export const PieChart = ({
         <ResponsiveContainer width="100%" height={height}>
           <RechartsPieChart>
             <Pie
+              isAnimationActive={reducedMotion ? false : 'auto'}
               data={data}
               dataKey="value"
               nameKey="name"

@@ -10,6 +10,7 @@ import {
 import type { ChartSummaryItem } from './BarChart';
 import { getChartSeriesColors } from './palette';
 import './Chart.css';
+import { useReducedMotion } from '../../behaviors/useReducedMotion';
 
 interface RadialTooltipPayloadEntry {
   value?: number;
@@ -107,6 +108,9 @@ export const RadialChart = ({
   bare = false,
   className = '',
 }: RadialChartProps) => {
+  /* JS animation (the series drawing in) stands down under reduced motion,
+     the OS setting or a host's data-motion="reduce" alike. */
+  const reducedMotion = useReducedMotion();
   const titleId = useId();
   const subtitleId = useId();
   const baseClass = 'ds-chart';
@@ -171,6 +175,7 @@ export const RadialChart = ({
           >
             <PolarAngleAxis type="number" domain={[0, maxValue]} tick={false} />
             <RadialBar
+              isAnimationActive={reducedMotion ? false : 'auto'}
               background={{ fill: bgColor }}
               dataKey="value"
               cornerRadius={8}

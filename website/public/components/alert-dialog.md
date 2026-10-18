@@ -22,5 +22,6 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | cancelLabel | `string` | no | `Cancel` | Cancel button label |
 | onConfirm | `(() => void)` | no |  | Callback when confirm is clicked |
 | onCancel | `(() => void)` | no |  | Callback when cancel is clicked |
-| variant | `"default" \| "destructive"` | no | `default` | Destructive variant for dangerous actions |
+| tone | `"default" \| "destructive"` | no |  | Colour of the dialog's icon, title and confirm action: `destructive` for dangerous or irreversible actions. |
+| variant | `"default" \| "destructive"` | no |  | Legacy name for `tone`, from before colour moved onto its own prop. Deprecated: Use `tone` instead. |
 | className | `string` | no | `` | Additional CSS classes |

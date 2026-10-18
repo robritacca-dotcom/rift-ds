@@ -542,11 +542,17 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Callback when cancel is clicked"
           },
           {
+            "name": "tone",
+            "type": "\"default\" | \"destructive\"",
+            "required": false,
+            "description": "Colour of the dialog's icon, title and confirm action: `destructive`\nfor dangerous or irreversible actions."
+          },
+          {
             "name": "variant",
             "type": "\"default\" | \"destructive\"",
             "required": false,
-            "description": "Destructive variant for dangerous actions",
-            "defaultValue": "default"
+            "description": "Legacy name for `tone`, from before colour moved onto its own prop.",
+            "deprecated": "Use `tone` instead."
           },
           {
             "name": "className",
@@ -2143,7 +2149,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Button",
     "slug": "button",
     "category": "actions",
-    "description": "Primary, secondary, tertiary, neutral and destructive variants in default and compact sizes, with icon support and multiple states.",
+    "description": "Primary, secondary and tertiary emphasis, each in a default, neutral or destructive tone, with icons, loading, and default and compact sizes.",
     "client": true,
     "importPath": "rift-ds/components/Button/Button",
     "barrel": "main",
@@ -2180,7 +2186,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "tone",
             "type": "\"default\" | \"neutral\" | \"destructive\"",
             "required": false,
-            "description": "Colour, independent of emphasis. `default` carries the action colour,\n`neutral` the greys, `destructive` the danger colour. Tertiary is\nalready grey, so `neutral` leaves it unchanged; `destructive` currently\nhas one look, the outlined button, whichever emphasis it is given."
+            "description": "Colour, independent of emphasis. `default` carries the action colour,\n`neutral` the greys, `destructive` the danger colour. Tertiary is\nalready grey, so `neutral` leaves it unchanged; a tertiary\n`destructive` takes the outlined look, since a danger action needs a\nvisible edge."
           },
           {
             "name": "size",
@@ -3034,7 +3040,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "selected",
             "type": "boolean",
             "required": false,
-            "description": "Selected state (filter-style chips) — renders the teal active fill"
+            "description": "Selected state (filter-style chips): renders the active fill, coloured by `tone`"
+          },
+          {
+            "name": "tone",
+            "type": "\"default\" | \"neutral\"",
+            "required": false,
+            "description": "Colour of the selected fill: `default` takes the action colour, `neutral`\nfills it grey, for filter rows whose selection should read quietly.",
+            "defaultValue": "default"
           },
           {
             "name": "disabled",
@@ -3086,7 +3099,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Circular button",
     "slug": "circular-button",
     "category": "actions",
-    "description": "Round icon button with primary, secondary, tertiary and neutral variants, default and compact sizes.",
+    "description": "Round icon button in primary, secondary and tertiary emphasis and a default, neutral or destructive tone, in default and compact sizes.",
     "client": false,
     "importPath": "rift-ds/components/CircularButton/CircularButton",
     "barrel": "main",
@@ -3110,7 +3123,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "tone",
             "type": "\"default\" | \"neutral\" | \"destructive\"",
             "required": false,
-            "description": "Colour, independent of emphasis: `default` carries the action colour,\n`neutral` the greys, `destructive` the danger colour. Tertiary is\nalready grey, so `neutral` leaves it unchanged; `destructive` currently\nhas one look, the outlined button, whichever emphasis it is given."
+            "description": "Colour, independent of emphasis: `default` carries the action colour,\n`neutral` the greys, `destructive` the danger colour. Tertiary is\nalready grey, so `neutral` leaves it unchanged; a tertiary\n`destructive` takes the outlined look, since a danger action needs a\nvisible edge."
           },
           {
             "name": "priority",
@@ -9300,11 +9313,17 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "default"
           },
           {
+            "name": "tone",
+            "type": "\"default\" | \"neutral\"",
+            "required": false,
+            "description": "Colour of the active segment: `default` takes the action colour, `neutral`\nfills it grey, for a set whose selection should not carry the action\ncolour's weight."
+          },
+          {
             "name": "variant",
             "type": "\"neutral\" | \"primary\"",
             "required": false,
-            "description": "Visual treatment of the active segment — teal by default, `neutral` fills it grey",
-            "defaultValue": "primary"
+            "description": "Legacy name for `tone`, from before colour moved onto its own prop:\n`primary` is `tone=\"default\"`.",
+            "deprecated": "Use `tone` instead."
           },
           {
             "name": "fullWidth",
@@ -9842,9 +9861,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "tone",
-            "type": "\"positive\" | \"neutral\" | \"accent\" | \"negative\"",
+            "type": "\"error\" | \"positive\" | \"neutral\" | \"accent\" | \"negative\"",
             "required": false,
-            "description": "Colour role for the line and end dot. `accent` follows the chart palette's\nlead colour; `positive`/`negative` map to the status text tokens; `neutral`\nrecedes to secondary text.",
+            "description": "Colour role for the line and end dot. `accent` follows the chart palette's\nlead colour; `positive`/`error` map to the trend pair (up and down), named\nlike the status roles Gauge and the status components use; `neutral`\nrecedes to secondary text. `negative` is the legacy name for `error`.",
             "defaultValue": "accent"
           },
           {
@@ -9898,7 +9917,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Spinner",
     "slug": "spinner",
     "category": "feedback",
-    "description": "Animated circular loading indicator in three sizes and primary, neutral, or inherit variants.",
+    "description": "Animated circular loading indicator in three sizes and a default, neutral or inherit tone.",
     "client": false,
     "importPath": "rift-ds/components/Spinner/Spinner",
     "barrel": "main",
@@ -9914,11 +9933,17 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "md"
           },
           {
+            "name": "tone",
+            "type": "\"inherit\" | \"default\" | \"neutral\"",
+            "required": false,
+            "description": "Colour of the arc: `default` in the primary text colour, `neutral` in\nthe secondary one, `inherit` in `currentColor`, for use inside coloured\ncontrols."
+          },
+          {
             "name": "variant",
             "type": "\"inherit\" | \"neutral\" | \"primary\"",
             "required": false,
-            "description": "Visual variant — `inherit` draws the spinner in `currentColor`, for use inside coloured controls",
-            "defaultValue": "primary"
+            "description": "Legacy name for `tone`, from before colour moved onto its own prop:\n`primary` is `tone=\"default\"`.",
+            "deprecated": "Use `tone` instead."
           },
           {
             "name": "label",
@@ -9944,7 +9969,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Split button",
     "slug": "split-button",
     "category": "actions",
-    "description": "Primary action with an attached menu of alternatives, composing Button and DropdownMenu in one pill.",
+    "description": "Primary action with an attached menu of alternatives, composing Button and DropdownMenu in one pill, in primary or secondary emphasis and any tone.",
     "client": false,
     "importPath": "rift-ds/components/SplitButton/SplitButton",
     "barrel": "main",
@@ -9981,7 +10006,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "tone",
             "type": "\"default\" | \"neutral\" | \"destructive\"",
             "required": false,
-            "description": "Colour, shared by both segments: `default` carries the action colour,\n`neutral` the greys, `destructive` the danger colour. Like Button,\n`destructive` currently has one look, the outlined control, whichever\nemphasis it is given."
+            "description": "Colour, shared by both segments: `default` carries the action colour,\n`neutral` the greys, `destructive` the danger colour."
           },
           {
             "name": "size",
@@ -11421,11 +11446,17 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "default"
           },
           {
+            "name": "tone",
+            "type": "\"default\" | \"neutral\"",
+            "required": false,
+            "description": "Colour of active items: `default` takes the action colour, `neutral`\nfills them grey, for a set whose selection should not carry the action\ncolour's weight."
+          },
+          {
             "name": "variant",
             "type": "\"neutral\" | \"primary\"",
             "required": false,
-            "description": "Visual treatment of active items — teal by default, `neutral` fills them grey",
-            "defaultValue": "primary"
+            "description": "Legacy name for `tone`, from before colour moved onto its own prop:\n`primary` is `tone=\"default\"`.",
+            "deprecated": "Use `tone` instead."
           },
           {
             "name": "disabled",

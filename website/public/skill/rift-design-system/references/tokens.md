@@ -11,12 +11,18 @@ How to read it:
 
 The live reference with swatches is at https://rift-ds.com/foundations, and the MCP endpoint's `list_tokens` tool serves the names.
 
-## Colour (123)
+## Colour (129)
 
 Prefix: `--color-*`.
 
 | Token | Light | Dark |
 | --- | --- | --- |
+| `--color-action-destructive-bg` | `#EF476F` (`--primitive-red-07`) | `#EF476F` (`--primitive-red-07`) |
+| `--color-action-destructive-bg-active` | `#8E2641` (`--primitive-red-09`) | `#F37F9B` (`--primitive-red-05`) |
+| `--color-action-destructive-bg-hover` | `#C93A5C` (`--primitive-red-08`) | `#F16385` (`--primitive-red-06`) |
+| `--color-action-destructive-border` | `#EF476F` (`--primitive-red-07`) | `#EF476F` (`--primitive-red-07`) |
+| `--color-action-destructive-text` | `#FDEFF3` (`--primitive-red-01`) | `#571727` (`--primitive-red-10`) |
+| `--color-action-destructive-text-secondary` | `#EF476F` (`--primitive-red-07`) | `#EF476F` (`--primitive-red-07`) |
 | `--color-action-icon-active` | `#F1F1F1` (`--primitive-neutral-01`) | `#052F3E` (`--primitive-teal-10`) |
 | `--color-action-icon-default` | `#050505` (`--primitive-neutral-10`) | `#F1F1F1` (`--primitive-neutral-01`) |
 | `--color-action-neutral-bg` | `#D6D6D6` (`--primitive-neutral-02`) | `#232323` (`--primitive-neutral-08`) |

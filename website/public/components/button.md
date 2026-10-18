@@ -1,6 +1,6 @@
 # Button
 
-Primary, secondary, tertiary, neutral and destructive variants in default and compact sizes, with icon support and multiple states.
+Primary, secondary and tertiary emphasis, each in a default, neutral or destructive tone, with icons, loading, and default and compact sizes.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
@@ -18,7 +18,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | iconLeft | `ReactNode` | no |  | Icon for left side — Material Symbol name (string) or custom element (ReactNode) |
 | iconRight | `ReactNode` | no |  | Icon for right side — Material Symbol name (string) or custom element (ReactNode) |
 | variant | `"neutral" \| "destructive" \| "primary" \| "secondary" \| "tertiary"` | no |  | Emphasis: `primary` (filled), `secondary` (outlined) or `tertiary` (ghost). The colour is `tone`'s job. `neutral` and `destructive` are legacy values from before the split: `neutral` renders as `variant="primary" tone="neutral"` and `destructive` as `variant="secondary" tone="destructive"`. |
-| tone | `"default" \| "neutral" \| "destructive"` | no |  | Colour, independent of emphasis. `default` carries the action colour, `neutral` the greys, `destructive` the danger colour. Tertiary is already grey, so `neutral` leaves it unchanged; `destructive` currently has one look, the outlined button, whichever emphasis it is given. |
+| tone | `"default" \| "neutral" \| "destructive"` | no |  | Colour, independent of emphasis. `default` carries the action colour, `neutral` the greys, `destructive` the danger colour. Tertiary is already grey, so `neutral` leaves it unchanged; a tertiary `destructive` takes the outlined look, since a danger action needs a visible edge. |
 | size | `"default" \| "compact"` | no | `default` | Button size |
 | disabled | `boolean` | no |  | Whether the button is disabled |
 | loading | `boolean` | no |  | Shows a spinner in the left icon slot and blocks interaction while an async action runs. Keeps the variant's full-colour appearance (unlike `disabled`) and sets `aria-busy` on the rendered element. |

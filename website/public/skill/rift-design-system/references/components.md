@@ -8,7 +8,7 @@ Buttons, button groups, and toggles for triggering actions and switching modes.
 
 ### Button
 
-Primary, secondary, tertiary, neutral and destructive variants in default and compact sizes, with icon support and multiple states.
+Primary, secondary and tertiary emphasis, each in a default, neutral or destructive tone, with icons, loading, and default and compact sizes.
 
 - Import: `import { Button } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
@@ -24,7 +24,7 @@ Horizontal and vertical button group layouts for related actions and navigation 
 
 ### Circular button
 
-Round icon button with primary, secondary, tertiary and neutral variants, default and compact sizes.
+Round icon button in primary, secondary and tertiary emphasis and a default, neutral or destructive tone, in default and compact sizes.
 
 - Import: `import { CircularButton } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')
@@ -40,7 +40,7 @@ Pill-style toggle between related views with keyboard navigation and icon suppor
 
 ### Split button
 
-Primary action with an attached menu of alternatives, composing Button and DropdownMenu in one pill.
+Primary action with an attached menu of alternatives, composing Button and DropdownMenu in one pill, in primary or secondary emphasis and any tone.
 
 - Import: `import { SplitButton } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')
@@ -756,7 +756,7 @@ Placeholder loading indicators with text, circular, and rectangular variants.
 
 ### Spinner
 
-Animated circular loading indicator in three sizes and primary, neutral, or inherit variants.
+Animated circular loading indicator in three sizes and a default, neutral or inherit tone.
 
 - Import: `import { Spinner } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')

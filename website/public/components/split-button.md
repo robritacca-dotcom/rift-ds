@@ -1,6 +1,6 @@
 # Split button
 
-Primary action with an attached menu of alternatives, composing Button and DropdownMenu in one pill.
+Primary action with an attached menu of alternatives, composing Button and DropdownMenu in one pill, in primary or secondary emphasis and any tone.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
@@ -18,7 +18,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | onClick | `MouseEventHandler<HTMLButtonElement>` | no |  | Click handler for the primary action |
 | items | `DropdownMenuEntry[]` | yes |  | Menu entries for the alternative actions |
 | variant | `"neutral" \| "primary" \| "secondary"` | no | `primary` | Emphasis, shared by both segments: `primary` (filled) or `secondary` (outlined). The colour is `tone`'s job. `neutral` is the legacy value from before the split and renders as `variant="primary" tone="neutral"`. |
-| tone | `"default" \| "neutral" \| "destructive"` | no |  | Colour, shared by both segments: `default` carries the action colour, `neutral` the greys, `destructive` the danger colour. Like Button, `destructive` currently has one look, the outlined control, whichever emphasis it is given. |
+| tone | `"default" \| "neutral" \| "destructive"` | no |  | Colour, shared by both segments: `default` carries the action colour, `neutral` the greys, `destructive` the danger colour. |
 | size | `"default" \| "compact"` | no | `default` | Component size |
 | disabled | `boolean` | no | `false` | Disables both segments |
 | loading | `boolean` | no | `false` | Shows a spinner on the primary segment and blocks interaction while an async action runs |

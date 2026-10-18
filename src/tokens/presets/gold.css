@@ -43,6 +43,8 @@
 }
 
 html[data-brand="gold"] {
+  --color-action-destructive-bg-active: #D34B0D;
+  --color-action-destructive-bg-hover: #F2692B;
   --color-action-primary-bg: var(--primitive-neutral-08);
   --color-action-primary-bg-active: var(--primitive-neutral-10);
   --color-action-primary-bg-hover: var(--primitive-neutral-09);
@@ -235,6 +237,8 @@ html[data-brand="gold"] {
 }
 
 html[data-brand="gold"][data-theme="dark"] {
+  --color-action-destructive-bg-active: #F7A681;
+  --color-action-destructive-bg-hover: #F6996E;
   --color-action-primary-bg: var(--primitive-yellow-07);
   --color-action-primary-bg-active: var(--primitive-yellow-03);
   --color-action-primary-bg-hover: var(--primitive-yellow-04);

@@ -18,7 +18,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | activeSegment | `string` | yes |  | Currently active segment value |
 | onSegmentChange | `((value: string) => void)` | no |  | Callback when segment changes |
 | size | `"default" \| "compact"` | no | `default` | Component size |
-| variant | `"neutral" \| "primary"` | no | `primary` | Visual treatment of the active segment — teal by default, `neutral` fills it grey |
+| tone | `"default" \| "neutral"` | no |  | Colour of the active segment: `default` takes the action colour, `neutral` fills it grey, for a set whose selection should not carry the action colour's weight. |
+| variant | `"neutral" \| "primary"` | no |  | Legacy name for `tone`, from before colour moved onto its own prop: `primary` is `tone="default"`. Deprecated: Use `tone` instead. |
 | fullWidth | `boolean` | no | `false` | Full width — segments fill container |
 | collapse | `boolean` | no | `false` | Shed parts rather than overflow when the container is too narrow for the strip. The control measures its own natural widths and drops to labels alone, then to icons alone, in that order — the label carries the meaning, so the icon goes first. It only falls to icons when every segment has one, and hidden labels stay in the accessibility tree, so nothing loses its name. Off by default; the control overflows as before. |
 | ariaLabel | `string` | no |  | Accessible label for the tablist |

@@ -43,6 +43,8 @@
 }
 
 html[data-brand="warm"] {
+  --color-action-destructive-bg-active: #9A3329;
+  --color-action-destructive-bg-hover: #C94337;
   --color-action-primary-bg: var(--primitive-orange-07);
   --color-action-primary-bg-active: var(--primitive-orange-05);
   --color-action-primary-bg-hover: var(--primitive-orange-06);
@@ -189,6 +191,8 @@ html[data-brand="warm"] {
 }
 
 html[data-brand="warm"][data-theme="dark"] {
+  --color-action-destructive-bg-active: #DD877F;
+  --color-action-destructive-bg-hover: #D8786F;
   --color-action-primary-bg: var(--primitive-orange-07);
   --color-action-primary-bg-active: var(--primitive-orange-05);
   --color-action-primary-bg-hover: var(--primitive-orange-06);

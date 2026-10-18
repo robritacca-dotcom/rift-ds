@@ -97,6 +97,8 @@
 }
 
 html[data-brand="terminal"] {
+  --color-action-destructive-bg-active: #1A815E;
+  --color-action-destructive-bg-hover: #24B484;
   --color-action-primary-bg: var(--primitive-green-07);
   --color-action-primary-bg-active: var(--primitive-green-05);
   --color-action-primary-bg-hover: var(--primitive-green-06);
@@ -246,6 +248,8 @@ html[data-brand="terminal"] {
 }
 
 html[data-brand="terminal"][data-theme="dark"] {
+  --color-action-destructive-bg-active: #57DDB0;
+  --color-action-destructive-bg-hover: #46D9A8;
   --color-action-primary-bg: var(--primitive-green-07);
   --color-action-primary-bg-active: var(--primitive-green-05);
   --color-action-primary-bg-hover: var(--primitive-green-06);

@@ -43,6 +43,8 @@
 }
 
 html[data-brand="violet"] {
+  --color-action-destructive-bg-active: #A92B71;
+  --color-action-destructive-bg-hover: #CF4290;
   --color-action-primary-bg: var(--primitive-purple-08);
   --color-action-primary-bg-active: var(--primitive-purple-10);
   --color-action-primary-bg-hover: var(--primitive-purple-09);
@@ -229,6 +231,8 @@ html[data-brand="violet"] {
 }
 
 html[data-brand="violet"][data-theme="dark"] {
+  --color-action-destructive-bg-active: #E18BBB;
+  --color-action-destructive-bg-hover: #DD7BB2;
   --color-action-primary-bg: var(--primitive-purple-08);
   --color-action-primary-bg-active: var(--primitive-purple-10);
   --color-action-primary-bg-hover: var(--primitive-purple-09);

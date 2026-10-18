@@ -42,7 +42,8 @@ borderline, which is worth reading, not averaging away.
 ## Where the rules are written down
 
 `SPEC.md` in this directory maps every behavioural rule the chat is held to
-(from the persona and content-design.md) to the check that enforces it, and
+(from the persona, content-design.md and the `ask_user` tool's description) to
+the check that enforces it, and
 names the rules that have no tripwire yet. New golden-set cases cite the rule
 ids they cover; a rule change and its spec row move in the same change.
 
@@ -56,6 +57,9 @@ ids they cover; a rule change and its spec row move in the same change.
   the chat's lookup tools over the generated prop and token data, not the
   corpus, so they carry empty `requiredFacts` (SPEC.md's T4 owns this).
 - **Layer 1 — this config.** Deterministic assertions through the real route.
+  `transform-response.js` assembles the answer text and, when the reply asked
+  the visitor something, appends a `[question]` line naming each prompt, so a
+  case can assert that a reply asked (`contains`) or did not (`not-contains`).
 - **Layer 2 — LLM judge. Not built.** Gated on real logged failures to grade.
   Do not add `llm-rubric` assertions before then.
 - **Layer 3 — you, reading.** The conduct questions especially.

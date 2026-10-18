@@ -6,11 +6,11 @@
       "slug": "ai-chat",
       "label": "AI chat",
       "category": "ai",
-      "description": "The whole AI chat, assembled: the panel, the streaming replies, the history, the cards a reply can carry and the server handlers, set up with props.",
+      "description": "The whole AI chat: the panel, the streaming replies, the history, the cards and questions a reply can carry and the server handlers, set up with props.",
       "command": "init chat",
       "subpaths": {
         "./chat": "The widget, the provider, the launcher and the engine under them.",
-        "./chat/server": "The streaming chat handler and its follow-ups and feedback siblings, for any web-standard route.",
+        "./chat/server": "The streaming chat handler, with an opt-in tool for asking the visitor questions, and its follow-ups and feedback siblings, for any web-standard route.",
         "./chat/upstash": "Rate limits, a daily budget and the exchange log over Upstash Redis, as the handlers' guardrails.",
         "./chat/demo": "A scripted conversation with rich cards and fixtures, for a preview that needs no key.",
         "./chat/chat.css": "The widget's stylesheet."
@@ -52,6 +52,7 @@
         "PixelAvatar",
         "PromptSuggestions",
         "Prose",
+        "QuestionCard",
         "Reasoning",
         "ThreadPanel",
         "ThreadTabs"

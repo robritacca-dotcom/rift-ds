@@ -161,6 +161,18 @@ const stageQuickReplies: ChatStageSetup = (chat) => {
   });
 };
 
+/* The questions example: a scripted prompt whose reply asks, so the card is
+   live and answering it plays the branch written for that answer. */
+const stageQuestions: ChatStageSetup = (chat) => {
+  chat.send("Help me pick a plan");
+};
+
+/* The flow example: the same short exchange as the quick replies, in the
+   classic bottom-up thread, so the two layouts read side by side. */
+const stageFlow: ChatStageSetup = (chat) => {
+  stageQuickReplies(chat);
+};
+
 /* The artifact example: a reply that made a page, already open beside the
    chat where the stage is wide enough to seat it there. */
 const stageArtifact =
@@ -451,9 +463,44 @@ export default function AiChatPage() {
               endpoint or function that writes follow-up questions from each answer, shown under
               it with a shimmer while they are on their way; <code>fallbackFollowups</code> covers
               a miss. A chip holds {SUGGESTION_MAX_CHARS} characters; a longer one is dropped rather
-              than cut.
+              than cut. Once a chip is sent, its row stays as the record: the sent chip outlined,
+              the rest faded, none of them tappable.
             </p>
             <ChatStage key={`replies-${viewport}`} phone={phone} height={stageHeight} setup={stageQuickReplies} />
+          </section>
+
+          <section id="questions" className={`${styles.section} animate-in animate-delay-3`}>
+            <SectionTitle title="Questions" />
+            <p className={styles.sectionNote}>
+              When a reply needs a decision before it can go on, it ends in a question with the
+              answers to pick, drawn as a question card under the prose in place of the follow-up
+              chips. One answer is a tap, several are ticked and sent together, and a short set is
+              asked a step at a time. The answer is sent as the next message, plain text for the
+              model, and the card stays as the record of the choice. A set of more than one question
+              holds the composer under <code>questionsPlaceholder</code> until it is answered or
+              skipped. On the server, <code>askUser</code> gives the model the tool it asks through;
+              a script attaches a <code>question</code> to a reply, with the replies its answers
+              lead to.
+            </p>
+            <ChatStage key={`questions-${viewport}`} phone={phone} height={stageHeight} setup={stageQuestions} />
+          </section>
+
+          <section id="flow" className={`${styles.section} animate-in animate-delay-3`}>
+            <SectionTitle title="Flow" />
+            <p className={styles.sectionNote}>
+              <code>flow</code> sets which way the conversation reads. The default,{" "}
+              <code>top-down</code>, floats each new message to the top of the thread and streams
+              the answer in below it. <code>bottom-up</code> is the classic message thread: turns
+              stack from the bottom, the newest just above the composer, and the view follows the
+              answer down until you scroll up to reread.
+            </p>
+            <ChatStage
+              key={`flow-${viewport}`}
+              phone={phone}
+              height={stageHeight}
+              widget={{ flow: "bottom-up" }}
+              setup={stageFlow}
+            />
           </section>
 
           <section id="rich-content" className={`${styles.section} animate-in animate-delay-3`}>

@@ -522,5 +522,53 @@
       "source": "tools",
       "requiredFacts": []
     }
+  },
+  {
+    "description": "developer: ask_user when the next step depends on an enumerable answer (A1)",
+    "vars": {
+      "question": "Help me choose one of the shipped theme presets for my product."
+    },
+    "assert": [
+      {
+        "type": "contains",
+        "value": "[question]"
+      }
+    ],
+    "metadata": {
+      "seat": "developer",
+      "requiredFacts": []
+    }
+  },
+  {
+    "description": "developer: no ask_user when the question can simply be answered (A2)",
+    "vars": {
+      "question": "What radius token do buttons use?"
+    },
+    "assert": [
+      {
+        "type": "not-contains",
+        "value": "[question]"
+      }
+    ],
+    "metadata": {
+      "seat": "developer",
+      "requiredFacts": []
+    }
+  },
+  {
+    "description": "designer: no ask_user for an open question (A2)",
+    "vars": {
+      "question": "Why does the system reserve the action colour for actions?"
+    },
+    "assert": [
+      {
+        "type": "not-contains",
+        "value": "[question]"
+      }
+    ],
+    "metadata": {
+      "seat": "designer",
+      "requiredFacts": []
+    }
   }
 ]

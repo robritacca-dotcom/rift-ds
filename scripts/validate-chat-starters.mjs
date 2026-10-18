@@ -95,6 +95,13 @@ const SOURCES = [
     scope: /followups:\s*\[([\s\S]*?)\]/g,
     pattern: BARE,
   },
+  {
+    /* The demo script's question options. The widget's runtime check drops a
+       question whose option outruns the budget, which would silently cut a
+       branch out of the story, so the written labels are held here first. */
+    path: join('src', 'chat', 'demo-script.ts'),
+    scope: /options:\s*\[([\s\S]*?)\n\s*\]/g,
+  },
   /* The template screens' chips, through the same non-wrapping chip row with
      no runtime filter in front of them — written copy, held here like the
      playground's. Two names, because a screen reaches that row two ways: a

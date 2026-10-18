@@ -106,8 +106,8 @@ export function createFollowupsFetcher(endpoint = '/api/chat/followups'): Follow
 /**
  * The turn to ask about, or null when there is nothing to ask about yet:
  * the newest turn must be a committed assistant answer that came from a
- * backend (an exchange id is the marker, as it is for the thumbs) and has
- * not been asked about already.
+ * backend (an exchange id is the marker, as it is for the thumbs), has
+ * not been asked about already, and asks no question of its own.
  */
 export function followupTarget(
   turns: ChatTurn[]
@@ -115,6 +115,9 @@ export function followupTarget(
   const last = turns[turns.length - 1];
   if (!last || last.role !== 'assistant') return null;
   if (!last.exchangeId || last.followups || last.text === '') return null;
+  /* A turn that asks the visitor something already ends in a choice. Its
+     question is the next step; chips beside it would compete with it. */
+  if (last.question) return null;
 
   // The question this answer replied to, which is the turn before it.
   const question = turns[turns.length - 2];

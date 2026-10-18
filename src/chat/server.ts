@@ -7,8 +7,9 @@
  *
  * The protocol is fixed here; the configuration is the host's. Fixed: the
  * NDJSON framing, the event order (`status`, `model`, `models`, then status
- * and delta events, an optional `notice`, `exchange`, and always `done`
- * last), the body caps, the rule that guardrail outcomes are 200 plus a
+ * and delta events, a `question` when the model asked one through the
+ * opt-in `ask_user` tool, an optional `notice`, `exchange`, and always
+ * `done` last), the body caps, the rule that guardrail outcomes are 200 plus a
  * `notice` (a rate limit reads as a reply, not a broken widget; non-2xx is
  * reserved for malformed requests), and the rule that `error` is only ever
  * emitted before the first delta (an error event replaces streamed text, so
@@ -21,6 +22,7 @@
  * owns the segment config and the environment reads.
  */
 import Anthropic from '@anthropic-ai/sdk';
+import { ASK_USER_INPUT_SCHEMA, sanitizeQuestionSet } from './questions';
 import { SUGGESTION_MAX_CHARS, fitsChip } from './suggestions';
 import type { ChatCard, ChatEvent, ChatFeedbackVerdict, ChatModelOption, ChatTransportMessage } from './types';
 
@@ -45,6 +47,22 @@ export interface ChatTool {
   /** The trace point shown while the round runs, e.g. "Checked the Button prop contract". */
   tracePoint?: (input: Record<string, unknown>) => string;
 }
+
+/** The name of the built-in tool the model asks the visitor questions through. */
+export const ASK_USER_TOOL_NAME = 'ask_user';
+
+/**
+ * What the model is told about asking. Lives in the tool's description, not
+ * the system prompt, so switching it on never disturbs a cached prefix.
+ */
+export const DEFAULT_ASK_USER_DESCRIPTION = [
+  'Offer the person answers to pick for a question your reply has just asked in words.',
+  'Use it only when the most useful next step depends on their answer and the likely answers can be listed: which framework, which of these options, which parts apply.',
+  'Do not use it for open questions, for confirming something they already said, or when you can simply answer. Most replies should not ask.',
+  'Write the question in your reply first, then call this once, as your last action. The conversation waits for their answer.',
+  'Prefer one question. Use several (at most 4) only when you need all the answers before you can continue. mode is single when one answer fits and multi when several can be true together.',
+  'Set other to true when the options may not cover every answer.',
+].join(' ');
 
 /* ============================================
    Guardrails
@@ -152,6 +170,8 @@ export interface ChatHandlerCopy {
   thinking: string;
   /** The status label while a tool round runs. */
   lookingUp: string;
+  /** The reply text when the model asks several questions without writing any. One question stands in for itself. */
+  questionsIntro: string;
   /** The error for a busy or overloaded model. */
   busy: string;
   /** The error for a rejected key. */
@@ -168,6 +188,7 @@ export const DEFAULT_CHAT_COPY: ChatHandlerCopy = {
   reading: 'Reading',
   thinking: 'Thinking',
   lookingUp: 'Looking it up',
+  questionsIntro: 'A few questions before I go on.',
   busy: 'The model is busy right now. Give it a moment and ask again.',
   unauthorised: 'This chat is not configured correctly at the moment.',
   failed: 'Something went wrong reaching the model. Try that again in a moment.',
@@ -199,6 +220,14 @@ export interface ChatHandlerOptions {
   /** The wire value that serves once the budget steps down, and the only one past the lock. Defaults to `defaultModel`. */
   budgetModel?: string;
   tools?: ChatTool[];
+  /**
+   * Give the model the built-in `ask_user` tool, through which a reply can
+   * end in questions the widget draws as answers to pick. Pass an object to
+   * replace the guidance the model reads. Off by default. Calling it ends
+   * the exchange: no further model call is made, so it never counts against
+   * `maxModelCalls` beyond the pass that asked.
+   */
+  askUser?: boolean | { description?: string };
   /** Model calls per exchange: the first pass plus tool rounds. The last allowed pass withholds the tools. */
   maxModelCalls?: number;
   /** Caps thinking and response text together. */
@@ -357,7 +386,19 @@ export function createChatHandler(options: ChatHandlerOptions): (request: Reques
   const copy = { ...DEFAULT_CHAT_COPY, ...options.copy };
   const sanitise = options.sanitiseContext ?? sanitisePath;
   const tools = options.tools ?? [];
-  const toolDefinitions = tools.map((tool) => tool.definition);
+  const askUserDefinition: Anthropic.Messages.Tool | null = options.askUser
+    ? {
+        name: ASK_USER_TOOL_NAME,
+        description:
+          (typeof options.askUser === 'object' ? options.askUser.description : undefined) ??
+          DEFAULT_ASK_USER_DESCRIPTION,
+        input_schema: ASK_USER_INPUT_SCHEMA as unknown as Anthropic.Messages.Tool.InputSchema,
+      }
+    : null;
+  const toolDefinitions = [
+    ...tools.map((tool) => tool.definition),
+    ...(askUserDefinition ? [askUserDefinition] : []),
+  ];
   const toolByName = new Map(tools.map((tool) => [tool.definition.name, tool]));
   const maxModelCalls = options.maxModelCalls ?? 3;
   const maxTokens = options.maxTokens ?? 3000;
@@ -561,7 +602,43 @@ export function createChatHandler(options: ChatHandlerOptions): (request: Reques
               (block): block is Anthropic.Messages.ToolUseBlock => block.type === 'tool_use'
             );
             const results: Anthropic.Messages.ToolResultBlockParam[] = [];
+
+            /* A well-formed question ends the exchange: the next move is the
+               visitor's. Checked before any other tool runs, so nothing is
+               looked up for a pass that will never be read. A malformed one
+               goes back to the model as an error it can correct or answer
+               around in text. */
+            const ask = askUserDefinition
+              ? toolUses.find((block) => block.name === ASK_USER_TOOL_NAME)
+              : undefined;
+            const set = ask ? sanitizeQuestionSet(ask.input, `${exchangeId}-questions`) : null;
+            if (set) {
+              if (!streamedText) {
+                // The reply must ask in words too; a model that skipped them
+                // gets the question itself as its text.
+                const lead = set.questions.length === 1 ? set.questions[0].prompt : copy.questionsIntro;
+                reasoning.close();
+                streamedText = true;
+                firstTextMs = Date.now() - startedAt;
+                answerText += lead;
+                send({ type: 'delta', text: lead });
+              }
+              send({ type: 'question', set });
+              break;
+            }
+
             for (const block of toolUses) {
+              if (block.name === ASK_USER_TOOL_NAME) {
+                results.push({
+                  type: 'tool_result',
+                  tool_use_id: block.id,
+                  is_error: true,
+                  content:
+                    'Those questions could not be shown. Each needs a short prompt and 2 to 5 distinct options of at most ' +
+                    `${SUGGESTION_MAX_CHARS} characters, and a set holds at most 4. Fix them, or ask in plain text.`,
+                });
+                continue;
+              }
               const args = (typeof block.input === 'object' && block.input !== null
                 ? block.input
                 : {}) as Record<string, unknown>;

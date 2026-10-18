@@ -3,7 +3,9 @@
 Every rule the site chat is held to, each with a stable id and the check that
 enforces it. This file is a traceability map, not a second home for the rules:
 the rules themselves live in `website/src/app/api/chat/persona.ts` (the system
-prompt) and `content-design.md` (the voice), and the wording there wins if this
+prompt), `content-design.md` (the voice) and, for when to ask the visitor a
+question, `DEFAULT_ASK_USER_DESCRIPTION` in `src/chat/server.ts` (the
+`ask_user` tool's own description), and the wording there wins if this
 file ever disagrees. What this file adds is the mapping nothing else records:
 which assertion, validator, or human pass covers each rule, and which rules
 have no tripwire yet.
@@ -19,6 +21,9 @@ How to use it:
 - **Editing `persona.ts`?** Update the matching row here in the same change,
   and re-read the "unenforced" column: a new rule ships with either a tripwire
   or an explicit entry under human review.
+- **Editing the `ask_user` description?** Rows A1 and A2 take their authority
+  from it; update them in the same change. A site that overrides it passes
+  `askUser: { description }` in `website/src/app/api/chat/route.ts`.
 
 Enforcement lives in four layers (defined in `evals/chat/README.md`):
 **L0** build-time validators, **L1** deterministic assertions through the real
@@ -53,6 +58,8 @@ shared with `/api/mcp` through `website/src/lib/site-tools.ts`.
 | T2 | An empty lookup means the component or category is not findable: say so, never fill the gap with a plausible contract. | Unenforced, L3 |
 | T3 | The tools are plumbing, not content: never mentioned to the visitor; tool rounds surface only as trace points under the status label. | Unenforced, L3 |
 | T4 | Tool-answered eval cases carry empty `requiredFacts`: the facts live in the generated prop/token data, not the corpus, and `validate-chat-coverage.mjs` checks `requiredFacts` against the corpus alone. | L0 by construction; this row records why those cases look different |
+| A1 | When the most useful next step depends on an answer whose likely values can be listed, the reply asks in words and then calls `ask_user` with those answers, once, as its last action. Authority: `DEFAULT_ASK_USER_DESCRIPTION` in `src/chat/server.ts`, the tool's own description. | L1 the theme-preset case asserts a `[question]` line, which `transform-response.js` appends for a `question` event |
+| A2 | A question that can simply be answered, or an open one, is answered: most replies never ask. Over-asking is the failure this rule exists for. | L1 two cases assert no `[question]` line |
 
 ## Identity and scope
 

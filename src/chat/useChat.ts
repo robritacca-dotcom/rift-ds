@@ -4,7 +4,10 @@ import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 import { revokeAttachmentUrls } from '../components/Attachment/useAttachments';
 import type { AttachmentItem } from '../components/Attachment/fileTypes';
 import { createStreamReveal } from '../components/StreamingText/useStreamReveal';
+import { describeAnswers, sanitizeQuestionSet, serializeReply } from './questions';
 import type {
+  ChatQuestionAnswer,
+  ChatReply,
   ChatTransport,
   ChatTransportMessage,
   ChatTurn,
@@ -67,8 +70,22 @@ export interface ChatState {
    */
   send: (
     text: string,
-    options?: { content?: ReactNode; attachments?: AttachmentItem[] }
+    options?: { content?: ReactNode; attachments?: AttachmentItem[]; reply?: ChatReply }
   ) => boolean;
+  /**
+   * Answer the questions an assistant turn asked: records the answers on
+   * that turn, so its card renders the record, and sends them as the next
+   * message. Returns false, recording nothing, when the send is refused
+   * (a response in flight) or the turn asks nothing.
+   */
+  answerQuestion: (turnId: string, answers: ChatQuestionAnswer[]) => boolean;
+  /** Decline the questions an assistant turn asked. Records the skip and sends nothing. */
+  skipQuestion: (turnId: string) => void;
+  /**
+   * Send a follow-up chip from under a turn and record which it was, so the
+   * row keeps the choice. Returns whether the send was accepted.
+   */
+  chooseFollowup: (turnId: string, label: string) => boolean;
   /** Stop the in-flight response, keeping the text that already arrived. */
   stop: () => void;
   /** New chat: abort anything in flight and clear the conversation. */
@@ -169,6 +186,7 @@ export function useChat(
           followups: finished.followups,
           content: finished.content,
           card: finished.card,
+          question: finished.question,
           durationSeconds:
             finished.durationSeconds ??
             Math.max(1, Math.round((Date.now() - startedAt) / 1000)),
@@ -211,6 +229,7 @@ export function useChat(
           text: trimmed,
           content: options?.content,
           attachments,
+          reply: options?.reply,
         },
       ]);
 
@@ -268,6 +287,13 @@ export function useChat(
               case 'card':
                 current = { ...current, card: event.card };
                 break;
+              case 'question': {
+                /* Checked again here, whatever the transport did: the set is
+                   about to be drawn as choices the host appears to offer. */
+                const set = sanitizeQuestionSet(event.set, `${current.id}-questions`);
+                if (set) current = { ...current, question: set };
+                break;
+              }
               case 'status':
                 update({
                   ...current,
@@ -369,6 +395,38 @@ export function useChat(
     );
   }, []);
 
+  const patchTurn = useCallback((turnId: string, patch: Partial<ChatTurn>) => {
+    setTurns((prev) => prev.map((turn) => (turn.id === turnId ? { ...turn, ...patch } : turn)));
+  }, []);
+
+  const answerQuestion = useCallback(
+    (turnId: string, answers: ChatQuestionAnswer[]) => {
+      const set = turnsRef.current.find((turn) => turn.id === turnId)?.question;
+      if (!set) return false;
+      const reply = describeAnswers(set, answers);
+      /* Sent first, recorded after: a refused send leaves the card open to
+         try again rather than marked with an answer nobody received. */
+      if (!send(serializeReply(reply), { reply })) return false;
+      patchTurn(turnId, { answers });
+      return true;
+    },
+    [send, patchTurn]
+  );
+
+  const skipQuestion = useCallback(
+    (turnId: string) => patchTurn(turnId, { answers: [] }),
+    [patchTurn]
+  );
+
+  const chooseFollowup = useCallback(
+    (turnId: string, label: string) => {
+      if (!send(label)) return false;
+      patchTurn(turnId, { followupChosen: label });
+      return true;
+    },
+    [send, patchTurn]
+  );
+
   const injectTurn = useCallback((turn: Omit<ChatTurn, 'id'>) => {
     setTurns((prev) => [...prev, { ...turn, id: makeId() }]);
   }, []);
@@ -401,5 +459,8 @@ export function useChat(
     injectTurn,
     setTurnFeedback,
     setTurnFollowups,
+    answerQuestion,
+    skipQuestion,
+    chooseFollowup,
   };
 }

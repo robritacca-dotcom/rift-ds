@@ -12,6 +12,7 @@ import { DOCK_QUERY } from './queries';
 import { FollowupSuggestions } from './FollowupSuggestions';
 import { ResponseActions } from './ResponseActions';
 import { TurnCard } from './TurnContent';
+import { TurnQuestion } from './TurnQuestion';
 import type { ChatTurn, LiveResponse } from './types';
 
 /**
@@ -105,6 +106,7 @@ export function AssistantTurn({ turn, live }: { turn?: ChatTurn; live?: LiveResp
     turn.text !== '' &&
     !!turn.exchangeId &&
     !turn.followups &&
+    !turn.question &&
     !liveTurn &&
     turns[turns.length - 1]?.id === turn.id;
 
@@ -125,6 +127,7 @@ export function AssistantTurn({ turn, live }: { turn?: ChatTurn; live?: LiveResp
           <FollowupSuggestions
             turnId={turn.id}
             suggestions={turn.followups}
+            chosen={turn.followupChosen}
             /* Only the row whose suggestions just landed pops its chips in;
                a row remounted by closing and reopening the panel shows them
                standing: they already arrived once. */
@@ -175,6 +178,9 @@ export function AssistantTurn({ turn, live }: { turn?: ChatTurn; live?: LiveResp
             </ReactMarkdown>
           </Prose>
         )}
+        {/* The answers to what the prose just asked sit straight under it,
+            above the actions row: they are part of the reply. */}
+        {turn?.question && <TurnQuestion turn={turn} />}
       </div>
     </ChatMessage>
   );

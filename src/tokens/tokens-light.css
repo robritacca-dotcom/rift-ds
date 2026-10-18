@@ -117,6 +117,10 @@
   --color-action-neutral-bg-hover: var(--primitive-neutral-03);
   --color-action-neutral-bg-active: var(--primitive-neutral-04);
   --color-action-neutral-text: var(--primitive-neutral-10);
+  /* The outlined neutral button's edge (secondary emphasis, neutral tone):
+     a mid grey that reads as a control edge on the page without the
+     action colour. */
+  --color-action-neutral-border: var(--primitive-neutral-05);
 
   /* Core colours */
   --color-core-ui-primary: var(--primitive-teal-08);

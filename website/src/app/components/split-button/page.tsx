@@ -31,7 +31,16 @@ const states = [
   { label: "Loading", props: { loading: true } },
 ] as const;
 
-const variants = ["primary", "secondary", "neutral"] as const;
+/* Every emphasis × tone cell, shared by both segments. */
+const variants = [
+  { key: "primary", variant: "primary", tone: "default", label: "Primary" },
+  { key: "secondary", variant: "secondary", tone: "default", label: "Secondary" },
+  { key: "primary-neutral", variant: "primary", tone: "neutral", label: "Primary, neutral" },
+  { key: "secondary-neutral", variant: "secondary", tone: "neutral", label: "Secondary, neutral" },
+  { key: "destructive", variant: "secondary", tone: "destructive", label: "Destructive", action: ["Delete", "Deleting"] },
+] as const;
+
+type SplitButtonCell = (typeof variants)[number];
 
 const sizes = [
   { label: "", value: "default" as const },
@@ -43,12 +52,6 @@ const iconVariants = [
   { label: "Icon, left", iconLeft: "save" },
 ] as const;
 
-const variantLabels: Record<string, string> = {
-  primary: "Primary",
-  secondary: "Secondary",
-  neutral: "Neutral",
-};
-
 /* ============================================
    SPLIT BUTTON GRID — 3-column layout per variant
    col 1: state label
@@ -57,17 +60,17 @@ const variantLabels: Record<string, string> = {
    ============================================ */
 
 function SplitButtonGrid({
-  variant,
+  cell,
   size,
   sizeLabel,
 }: {
-  variant: "primary" | "secondary" | "neutral";
+  cell: SplitButtonCell;
   size: "default" | "compact";
   sizeLabel: string;
 }) {
   return (
     <section className={styles.variantBlock}>
-      <SectionTitle title={`${variantLabels[variant]}${sizeLabel}`} />
+      <SectionTitle title={`${cell.label}${sizeLabel}`} />
 
       <div className={styles.buttonGrid}>
         {/* Column headers */}
@@ -85,8 +88,9 @@ function SplitButtonGrid({
             {iconVariants.map((iv) => (
               <div key={`${st.label}-${iv.label}`} className={styles.gridCell}>
                 <SplitButton
-                  label={st.label === "Loading" ? "Saving" : "Save"}
-                  variant={variant}
+                  label={("action" in cell ? cell.action : ["Save", "Saving"])[st.label === "Loading" ? 1 : 0]}
+                  variant={cell.variant}
+                  tone={cell.tone}
                   size={size}
                   iconLeft={iv.iconLeft}
                   items={saveItems}
@@ -127,16 +131,16 @@ export default function SplitButtonPage() {
               One default action, with the alternatives attached
             </p>
             <p className={styles.introBody}>
-              The label fires the primary action directly; the chevron opens a menu of variants. One pill silhouette, two segments, so the common case stays one click away while the rest stays discoverable. All three variants come in default and compact sizes; hover and press the segments to see their interactive states, and the loading rows keep full colour while blocking clicks.
+              The label fires the primary action directly; the chevron opens a menu of variants. One pill silhouette, two segments, so the common case stays one click away while the rest stays discoverable. <code>variant</code> sets the emphasis (primary or secondary) and <code>tone</code> the colour (default, neutral or destructive), and every combination comes in default and compact sizes; hover and press the segments to see their interactive states, and the loading rows keep full colour while blocking clicks.
             </p>
           </div>
 
           {/* Variant grids — one per variant × size, like the Button page */}
           {sizes.map((sz) =>
-            variants.map((v) => (
+            variants.map((cell) => (
               <SplitButtonGrid
-                key={`${v}-${sz.value}`}
-                variant={v}
+                key={`${cell.key}-${sz.value}`}
+                cell={cell}
                 size={sz.value}
                 sizeLabel={sz.label}
               />

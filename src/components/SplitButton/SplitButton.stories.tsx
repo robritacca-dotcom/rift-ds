@@ -18,7 +18,11 @@ const meta = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['primary', 'secondary', 'neutral'],
+      options: ['primary', 'secondary'],
+    },
+    tone: {
+      control: 'select',
+      options: ['default', 'neutral', 'destructive'],
     },
     size: {
       control: 'select',
@@ -54,11 +58,36 @@ export const Secondary: Story = {
 
 export const Neutral: Story = {
   args: {
-    variant: 'neutral',
+    variant: 'primary',
+    tone: 'neutral',
     label: 'Duplicate',
     items: [
       { label: 'Duplicate with children', icon: 'account_tree' },
       { label: 'Duplicate as template', icon: 'content_copy' },
+    ],
+  },
+};
+
+export const SecondaryNeutral: Story = {
+  args: {
+    variant: 'secondary',
+    tone: 'neutral',
+    label: 'Share',
+    items: [
+      { label: 'Copy link', icon: 'link' },
+      { label: 'Share by email', icon: 'mail' },
+    ],
+  },
+};
+
+export const Destructive: Story = {
+  args: {
+    variant: 'secondary',
+    tone: 'destructive',
+    label: 'Delete',
+    items: [
+      { label: 'Delete and archive', icon: 'archive' },
+      { label: 'Delete permanently', icon: 'delete_forever' },
     ],
   },
 };

@@ -13,7 +13,11 @@ const meta = {
     icon: { control: 'text' },
     variant: {
       control: 'select',
-      options: ['primary', 'secondary', 'tertiary', 'neutral'],
+      options: ['primary', 'secondary', 'tertiary'],
+    },
+    tone: {
+      control: 'select',
+      options: ['default', 'neutral', 'destructive'],
     },
     state: {
       control: 'select',
@@ -95,21 +99,55 @@ export const TertiaryDisabled: Story = {
   args: { variant: 'tertiary', state: 'disabled', icon: 'close', ariaLabel: 'Close' },
 };
 
-// Neutral states (Solid Grey)
+// Neutral tone, primary emphasis (Solid Grey)
 export const NeutralDefault: Story = {
-  args: { variant: 'neutral', state: 'default', icon: 'tune', ariaLabel: 'Filters' },
+  args: { variant: 'primary', tone: 'neutral', state: 'default', icon: 'tune', ariaLabel: 'Filters' },
 };
 
 export const NeutralHover: Story = {
-  args: { variant: 'neutral', state: 'hover', icon: 'tune', ariaLabel: 'Filters' },
+  args: { variant: 'primary', tone: 'neutral', state: 'hover', icon: 'tune', ariaLabel: 'Filters' },
 };
 
 export const NeutralActive: Story = {
-  args: { variant: 'neutral', state: 'active', icon: 'tune', ariaLabel: 'Filters' },
+  args: { variant: 'primary', tone: 'neutral', state: 'active', icon: 'tune', ariaLabel: 'Filters' },
 };
 
 export const NeutralDisabled: Story = {
-  args: { variant: 'neutral', state: 'disabled', icon: 'tune', ariaLabel: 'Filters' },
+  args: { variant: 'primary', tone: 'neutral', state: 'disabled', icon: 'tune', ariaLabel: 'Filters' },
+};
+
+// Neutral tone, secondary emphasis (Outlined Grey)
+export const SecondaryNeutralDefault: Story = {
+  args: { variant: 'secondary', tone: 'neutral', state: 'default', icon: 'tune', ariaLabel: 'Filters' },
+};
+
+export const SecondaryNeutralHover: Story = {
+  args: { variant: 'secondary', tone: 'neutral', state: 'hover', icon: 'tune', ariaLabel: 'Filters' },
+};
+
+export const SecondaryNeutralActive: Story = {
+  args: { variant: 'secondary', tone: 'neutral', state: 'active', icon: 'tune', ariaLabel: 'Filters' },
+};
+
+export const SecondaryNeutralDisabled: Story = {
+  args: { variant: 'secondary', tone: 'neutral', state: 'disabled', icon: 'tune', ariaLabel: 'Filters' },
+};
+
+// Destructive tone (Outlined Danger)
+export const DestructiveDefault: Story = {
+  args: { variant: 'secondary', tone: 'destructive', state: 'default', icon: 'delete', ariaLabel: 'Delete' },
+};
+
+export const DestructiveHover: Story = {
+  args: { variant: 'secondary', tone: 'destructive', state: 'hover', icon: 'delete', ariaLabel: 'Delete' },
+};
+
+export const DestructiveActive: Story = {
+  args: { variant: 'secondary', tone: 'destructive', state: 'active', icon: 'delete', ariaLabel: 'Delete' },
+};
+
+export const DestructiveDisabled: Story = {
+  args: { variant: 'secondary', tone: 'destructive', state: 'disabled', icon: 'delete', ariaLabel: 'Delete' },
 };
 
 // Compact
@@ -138,7 +176,7 @@ export const CompactTertiaryHover: Story = {
 };
 
 export const CompactNeutralDefault: Story = {
-  args: { variant: 'neutral', state: 'default', size: 'compact', icon: 'tune', ariaLabel: 'Filters' },
+  args: { variant: 'primary', tone: 'neutral', state: 'default', size: 'compact', icon: 'tune', ariaLabel: 'Filters' },
 };
 
 // Loading

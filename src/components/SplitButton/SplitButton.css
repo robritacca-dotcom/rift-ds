@@ -84,10 +84,14 @@
    border is the one divider line.
    ============================================ */
 
-.ds-split-button--secondary {
+/* The destructive tone is outlined whatever the emphasis, so it takes the
+   same single-divider seam. */
+.ds-split-button--secondary,
+.ds-split-button--tone-destructive {
   gap: 0;
 }
 
-.ds-split-button--secondary .ds-split-button__trigger {
+.ds-split-button--secondary .ds-split-button__trigger,
+.ds-split-button--tone-destructive .ds-split-button__trigger {
   border-inline-start: none;
 }

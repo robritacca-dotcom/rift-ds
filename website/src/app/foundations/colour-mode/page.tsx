@@ -443,6 +443,11 @@ const actionNeutralColours: SwatchData[] = [
     dark: { primitive: "--neutral--00--", hex: "#FFFFFF", rgb: "255 / 255 / 255" },
     light: { primitive: "--neutral--10--", hex: "#050505", rgb: "5 / 5 / 5" },
   },
+  {
+    label: "Border", cssVar: "--color-action-neutral-border",
+    dark: { primitive: "--neutral--06--", hex: "#6D6D6D", rgb: "109 / 109 / 109" },
+    light: { primitive: "--neutral--05--", hex: "#888888", rgb: "136 / 136 / 136" },
+  },
 ];
 
 /* --- Input --- */

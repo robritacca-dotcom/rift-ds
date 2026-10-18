@@ -10,6 +10,14 @@ const meta = {
   },
   tags: ['autodocs'],
   argTypes: {
+    variant: {
+      control: 'select',
+      options: ['primary', 'secondary', 'tertiary'],
+    },
+    tone: {
+      control: 'select',
+      options: ['default', 'neutral', 'destructive'],
+    },
     priority: {
       control: 'select',
       options: ['primary', 'secondary', 'tertiary', 'destructive'],
@@ -184,12 +192,13 @@ export const TertiaryDisabled: Story = {
 };
 
 // ============================================
-// Neutral Button States (Solid Grey)
+// Neutral Tone, Primary Emphasis (Solid Grey)
 // ============================================
 
 export const NeutralDefault: Story = {
   args: {
-    variant: 'neutral',
+    variant: 'primary',
+    tone: 'neutral',
     state: 'default',
     label: 'Button',
     text: true,
@@ -199,7 +208,8 @@ export const NeutralDefault: Story = {
 
 export const NeutralHover: Story = {
   args: {
-    variant: 'neutral',
+    variant: 'primary',
+    tone: 'neutral',
     state: 'hover',
     label: 'Button',
     text: true,
@@ -209,7 +219,8 @@ export const NeutralHover: Story = {
 
 export const NeutralActive: Story = {
   args: {
-    variant: 'neutral',
+    variant: 'primary',
+    tone: 'neutral',
     state: 'active',
     label: 'Button',
     text: true,
@@ -219,7 +230,8 @@ export const NeutralActive: Story = {
 
 export const NeutralDisabled: Story = {
   args: {
-    variant: 'neutral',
+    variant: 'primary',
+    tone: 'neutral',
     state: 'disabled',
     label: 'Button',
     text: true,
@@ -229,7 +241,68 @@ export const NeutralDisabled: Story = {
 
 export const CompactNeutralDefault: Story = {
   args: {
-    variant: 'neutral',
+    variant: 'primary',
+    tone: 'neutral',
+    state: 'default',
+    size: 'compact',
+    label: 'Button',
+    text: true,
+    iconRight: 'arrow_forward',
+  },
+};
+
+// ============================================
+// Neutral Tone, Secondary Emphasis (Outlined Grey)
+// ============================================
+
+export const SecondaryNeutralDefault: Story = {
+  args: {
+    variant: 'secondary',
+    tone: 'neutral',
+    state: 'default',
+    label: 'Button',
+    text: true,
+    iconRight: 'arrow_forward',
+  },
+};
+
+export const SecondaryNeutralHover: Story = {
+  args: {
+    variant: 'secondary',
+    tone: 'neutral',
+    state: 'hover',
+    label: 'Button',
+    text: true,
+    iconRight: 'arrow_forward',
+  },
+};
+
+export const SecondaryNeutralActive: Story = {
+  args: {
+    variant: 'secondary',
+    tone: 'neutral',
+    state: 'active',
+    label: 'Button',
+    text: true,
+    iconRight: 'arrow_forward',
+  },
+};
+
+export const SecondaryNeutralDisabled: Story = {
+  args: {
+    variant: 'secondary',
+    tone: 'neutral',
+    state: 'disabled',
+    label: 'Button',
+    text: true,
+    iconRight: 'arrow_forward',
+  },
+};
+
+export const CompactSecondaryNeutralDefault: Story = {
+  args: {
+    variant: 'secondary',
+    tone: 'neutral',
     state: 'default',
     size: 'compact',
     label: 'Button',
@@ -268,7 +341,8 @@ export const TertiaryLoading: Story = {
 
 export const NeutralLoading: Story = {
   args: {
-    variant: 'neutral',
+    variant: 'primary',
+    tone: 'neutral',
     label: 'Saving…',
     loading: true,
   },

@@ -100,6 +100,7 @@
   --color-action-neutral-bg-hover: var(--primitive-neutral-07);
   --color-action-neutral-bg-active: var(--primitive-neutral-06);
   --color-action-neutral-text: var(--primitive-neutral-00);
+  --color-action-neutral-border: var(--primitive-neutral-06);
 
   /* Status - Positive */
   --color-status-positive-bg: var(--primitive-green-10);

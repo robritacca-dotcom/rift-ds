@@ -549,6 +549,7 @@ export const SemanticColors: Story = {
           value="--color-action-neutral-bg-active"
         />
         <ColorToken name="Text" value="--color-action-neutral-text" />
+        <ColorToken name="Border" value="--color-action-neutral-border" />
       </TokenSection>
 
       <TokenSection title="Input">

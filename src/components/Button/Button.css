@@ -209,6 +209,42 @@
 }
 
 /* ============================================
+   SECONDARY NEUTRAL BUTTON (OUTLINED GREY)
+   variant="secondary" tone="neutral": the outlined
+   silhouette in the neutral greys. Hover and press
+   fill with the neutral button's fills, the way the
+   action-coloured secondary fills with the primary's.
+   ============================================ */
+
+.ds-button--secondary-neutral {
+  border: var(--border-025) solid var(--color-action-neutral-border);
+  background-color: transparent;
+}
+
+.ds-button--secondary-neutral .ds-button__text {
+  color: var(--color-text-primary);
+}
+
+.ds-button--secondary-neutral.ds-button--hover {
+  background-color: var(--color-action-neutral-bg-hover);
+}
+
+.ds-button--secondary-neutral.ds-button--active {
+  background-color: var(--color-action-neutral-bg-active);
+}
+
+.ds-button--secondary-neutral.ds-button--hover .ds-button__text,
+.ds-button--secondary-neutral.ds-button--active .ds-button__text {
+  color: var(--color-action-neutral-text);
+}
+
+.ds-button--secondary-neutral.ds-button--disabled {
+  background-color: transparent;
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ============================================
    DESTRUCTIVE BUTTON
    For dangerous actions: delete, remove, etc.
    Uses accent-coral as the border / fill colour.
@@ -322,6 +358,15 @@
   color: var(--color-action-neutral-text);
 }
 
+.ds-button--secondary-neutral .ds-button__icon {
+  color: var(--color-action-icon-default);
+}
+
+.ds-button--secondary-neutral.ds-button--hover .ds-button__icon,
+.ds-button--secondary-neutral.ds-button--active .ds-button__icon {
+  color: var(--color-action-neutral-text);
+}
+
 .ds-button--destructive .ds-button__icon {
   color: var(--color-core-accent-coral);
 }
@@ -375,6 +420,15 @@
   background-color: var(--color-action-neutral-bg-hover);
 }
 
+.ds-button--secondary-neutral:not(.ds-button--disabled):hover {
+  background-color: var(--color-action-neutral-bg-hover);
+}
+
+.ds-button--secondary-neutral:not(.ds-button--disabled):hover .ds-button__text,
+.ds-button--secondary-neutral:not(.ds-button--disabled):hover .ds-button__icon {
+  color: var(--color-action-neutral-text);
+}
+
 .ds-button--destructive:not(.ds-button--disabled):hover {
   background-color: var(--color-core-accent-coral);
 }
@@ -421,6 +475,15 @@
 
 .ds-button--neutral:not(.ds-button--disabled):active {
   background-color: var(--color-action-neutral-bg-active);
+}
+
+.ds-button--secondary-neutral:not(.ds-button--disabled):active {
+  background-color: var(--color-action-neutral-bg-active);
+}
+
+.ds-button--secondary-neutral:not(.ds-button--disabled):active .ds-button__text,
+.ds-button--secondary-neutral:not(.ds-button--disabled):active .ds-button__icon {
+  color: var(--color-action-neutral-text);
 }
 
 .ds-button--destructive:not(.ds-button--disabled):active {

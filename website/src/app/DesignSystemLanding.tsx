@@ -1404,7 +1404,7 @@ export default function DesignSystemLanding() {
             ariaLabel="Get started"
             buttons={[
               { label: "Get started", variant: "primary" as const, href: "/docs/get-started", iconLeft: "terminal" },
-              { label: "Browse components", variant: "secondary" as const, href: "/components", iconLeft: "category" },
+              { label: "Browse components", variant: "secondary" as const, tone: "neutral" as const, href: "/components", iconLeft: "category" },
             ]}
           />
           </div>

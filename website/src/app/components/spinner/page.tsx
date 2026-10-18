@@ -32,7 +32,7 @@ export default function SpinnerPage() {
               Loading in progress
             </p>
             <p className={styles.introBody}>
-              An animated circular indicator that communicates an ongoing process. Available in three sizes and three colour variants: primary, neutral, and inherit, which takes the colour of the control it sits in.
+              An animated circular indicator that communicates an ongoing process. Available in three sizes and three tones: default, neutral, and inherit, which takes the colour of the control it sits in.
             </p>
           </div>
 
@@ -50,8 +50,8 @@ export default function SpinnerPage() {
           <section className={styles.section}>
             <SectionTitle title="Variants" />
             <div className={styles.variantRow}>
-              <Spinner variant="primary" size="lg" />
-              <Spinner variant="neutral" size="lg" />
+              <Spinner tone="default" size="lg" />
+              <Spinner tone="neutral" size="lg" />
             </div>
           </section>
 

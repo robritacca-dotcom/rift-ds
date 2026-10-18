@@ -117,6 +117,9 @@ const ACTION_PAIRINGS = [
   ['--color-action-passive-bg', '--color-action-passive-text', 4.5, 'tertiary Button labels'],
   ['--color-action-passive-bg-hover', '--color-action-passive-text', 4.5, 'tertiary Button labels on hover'],
   ['--color-action-passive-bg-active', '--color-action-passive-text', 4.5, 'tertiary Button labels when pressed'],
+  ['--color-action-destructive-bg', '--color-action-destructive-text', 4.5, 'destructive Button labels on hover and press, and the filled destructive Button at rest'],
+  ['--color-action-destructive-bg-hover', '--color-action-destructive-text', 4.5, 'filled destructive Button labels on hover'],
+  ['--color-action-destructive-bg-active', '--color-action-destructive-text', 4.5, 'filled destructive Button labels when pressed'],
 ];
 
 /** Pairings that genuinely fail today, keyed "<preset>|<theme>|<fill>|<foreground>"
@@ -124,8 +127,52 @@ const ACTION_PAIRINGS = [
     their computed ratio, so a change in either direction (a fix, or a
     further regression) fails until the pin moves. Each pin's reason is
     its authoritative record — pinning is deliberate acceptance, never a
-    silent weakening of the gate. Currently empty: every cell holds. */
-const SANCTIONED_AA_GAPS = new Map([]);
+    silent weakening of the gate.
+
+    The destructive family (2026-10-17). Its fill aliases each theme's coral
+    accent, so the danger colour is whatever a preset picked as an ambient
+    accent, and the label on it is that theme's error tint: the look
+    destructive buttons had before the family existed, never checked until
+    the family put it under this gate. The owner chose to keep that look
+    rather than move every preset's danger colour, so every failing
+    destructive cell is pinned here, one reason for all of them. */
+const SANCTIONED_AA_GAPS = new Map([
+  ['warm|light|--color-action-destructive-bg|--color-action-destructive-text', '3.13'],
+  ['warm|light|--color-action-destructive-bg-hover|--color-action-destructive-text', '4.31'],
+  ['warm|dark|--color-action-destructive-bg|--color-action-destructive-text', '3.95'],
+  ['mono|light|--color-action-destructive-bg|--color-action-destructive-text', '2.28'],
+  ['mono|light|--color-action-destructive-bg-hover|--color-action-destructive-text', '3.12'],
+  ['contrast|light|--color-action-destructive-bg|--color-action-destructive-text', '2.95'],
+  ['contrast|light|--color-action-destructive-bg-hover|--color-action-destructive-text', '3.36'],
+  ['contrast|dark|--color-action-destructive-bg|--color-action-destructive-text', '4.10'],
+  ['contrast|dark|--color-action-destructive-bg-hover|--color-action-destructive-text', '4.49'],
+  ['coral|light|--color-action-destructive-bg|--color-action-destructive-text', '2.62'],
+  ['coral|light|--color-action-destructive-bg-hover|--color-action-destructive-text', '3.22'],
+  ['coral|light|--color-action-destructive-bg-active|--color-action-destructive-text', '4.03'],
+  ['gold|light|--color-action-destructive-bg|--color-action-destructive-text', '2.14'],
+  ['gold|light|--color-action-destructive-bg-hover|--color-action-destructive-text', '2.74'],
+  ['gold|light|--color-action-destructive-bg-active|--color-action-destructive-text', '3.91'],
+  ['zest|light|--color-action-destructive-bg|--color-action-destructive-text', '2.24'],
+  ['zest|light|--color-action-destructive-bg-hover|--color-action-destructive-text', '2.89'],
+  ['zest|light|--color-action-destructive-bg-active|--color-action-destructive-text', '3.63'],
+  ['forest|light|--color-action-destructive-bg|--color-action-destructive-text', '3.99'],
+  ['forest|dark|--color-action-destructive-bg|--color-action-destructive-text', '3.22'],
+  ['forest|dark|--color-action-destructive-bg-hover|--color-action-destructive-text', '3.70'],
+  ['forest|dark|--color-action-destructive-bg-active|--color-action-destructive-text', '4.21'],
+  ['terminal|light|--color-action-destructive-bg|--color-action-destructive-text', '1.65'],
+  ['terminal|light|--color-action-destructive-bg-hover|--color-action-destructive-text', '2.35'],
+  ['terminal|light|--color-action-destructive-bg-active|--color-action-destructive-text', '4.29'],
+  ['pink|light|--color-action-destructive-bg|--color-action-destructive-text', '2.53'],
+  ['pink|light|--color-action-destructive-bg-hover|--color-action-destructive-text', '3.12'],
+  ['pink|light|--color-action-destructive-bg-active|--color-action-destructive-text', '3.93'],
+  ['violet|light|--color-action-destructive-bg|--color-action-destructive-text', '2.82'],
+  ['violet|light|--color-action-destructive-bg-hover|--color-action-destructive-text', '3.86'],
+  ['violet|dark|--color-action-destructive-bg|--color-action-destructive-text', '4.25'],
+  ['shipped|light|--color-action-destructive-bg|--color-action-destructive-text', '3.24'],
+  ['shipped|light|--color-action-destructive-bg-hover|--color-action-destructive-text', '4.43'],
+  ['shipped|dark|--color-action-destructive-bg|--color-action-destructive-text', '3.73'],
+  ['shipped|dark|--color-action-destructive-bg-hover|--color-action-destructive-text', '4.41'],
+]);
 
 /** d. The levers a preset stores as a number. */
 const NUMBER_LEVERS = [

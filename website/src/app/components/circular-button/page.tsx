@@ -159,9 +159,34 @@ export default function CircularButtonPage() {
             </div>
           </section>
 
+          {/* Destructive tone, primary emphasis (Solid Danger) */}
+          <section className={styles.section}>
+            <SectionTitle title="Primary, destructive" />
+            <p className={styles.introBody}>
+              The filled circle in the danger colour, for the one
+              irreversible action a surface leads with.
+            </p>
+            <div className={styles.stateGrid}>
+              <div className={styles.gridCorner} />
+              {states.map((s) => (
+                <span key={s.value} className={styles.gridColHeader}>{s.label}</span>
+              ))}
+              {icons.map((icon) => (
+                <React.Fragment key={icon}>
+                  <span className={styles.gridRowHeader}>{icon}</span>
+                  {states.map((s) => (
+                    <div key={s.value} className={styles.gridCell}>
+                      <CircularButton icon={icon} variant="primary" tone="destructive" state={s.value} ariaLabel={icon} />
+                    </div>
+                  ))}
+                </React.Fragment>
+              ))}
+            </div>
+          </section>
+
           {/* Destructive tone (Outlined Danger) */}
           <section className={styles.section}>
-            <SectionTitle title="Destructive" />
+            <SectionTitle title="Secondary, destructive" />
             <p className={styles.introBody}>
               For dangerous or irreversible actions like delete. The outline
               and icon take the danger colour, and hover and press fill with it.

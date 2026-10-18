@@ -24,8 +24,9 @@ type ButtonOwnProps = {
   /**
    * Colour, independent of emphasis. `default` carries the action colour,
    * `neutral` the greys, `destructive` the danger colour. Tertiary is
-   * already grey, so `neutral` leaves it unchanged; `destructive` currently
-   * has one look, the outlined button, whichever emphasis it is given.
+   * already grey, so `neutral` leaves it unchanged; a tertiary
+   * `destructive` takes the outlined look, since a danger action needs a
+   * visible edge.
    */
   tone?: 'default' | 'neutral' | 'destructive';
   /** Button size */
@@ -107,7 +108,9 @@ function resolveButtonCell(
       ? LEGACY_VARIANTS[variant]
       : [variant, 'default' as const];
   const resolvedTone = tone ?? legacyTone;
-  if (resolvedTone === 'destructive') return 'destructive';
+  if (resolvedTone === 'destructive') {
+    return emphasis === 'primary' ? 'primary-destructive' : 'destructive';
+  }
   if (resolvedTone === 'neutral') {
     if (emphasis === 'primary') return 'neutral';
     if (emphasis === 'secondary') return 'secondary-neutral';
@@ -177,7 +180,7 @@ export const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, Bu
     // keeps its position and the button doesn't change width.
     const spinnerSize = size === 'compact' ? 'sm' : 'md';
     const leftIcon = isLoading ? (
-      <Spinner size={spinnerSize} variant="inherit" />
+      <Spinner size={spinnerSize} tone="inherit" />
     ) : (
       iconLeft || icon
     );

@@ -15,9 +15,9 @@ const meta = {
       control: 'select',
       options: ['default', 'compact'],
     },
-    variant: {
+    tone: {
       control: 'select',
-      options: ['primary', 'neutral'],
+      options: ['default', 'neutral'],
     },
     fullWidth: { control: 'boolean' },
   },
@@ -60,7 +60,7 @@ export const Neutral: Story = {
       { label: 'Month', value: 'month' },
     ],
     activeSegment: 'week',
-    variant: 'neutral',
+    tone: 'neutral',
   },
 };
 

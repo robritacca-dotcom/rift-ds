@@ -22,9 +22,7 @@ type SplitButtonOwnProps = {
   variant?: 'primary' | 'secondary' | 'neutral';
   /**
    * Colour, shared by both segments: `default` carries the action colour,
-   * `neutral` the greys, `destructive` the danger colour. Like Button,
-   * `destructive` currently has one look, the outlined control, whichever
-   * emphasis it is given.
+   * `neutral` the greys, `destructive` the danger colour.
    */
   tone?: 'default' | 'neutral' | 'destructive';
   /** Component size */

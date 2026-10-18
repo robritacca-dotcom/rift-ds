@@ -133,6 +133,15 @@ export const SecondaryNeutralDisabled: Story = {
   args: { variant: 'secondary', tone: 'neutral', state: 'disabled', icon: 'tune', ariaLabel: 'Filters' },
 };
 
+// Destructive tone, primary emphasis (Solid Danger)
+export const PrimaryDestructiveDefault: Story = {
+  args: { variant: 'primary', tone: 'destructive', state: 'default', icon: 'delete', ariaLabel: 'Delete' },
+};
+
+export const PrimaryDestructiveHover: Story = {
+  args: { variant: 'primary', tone: 'destructive', state: 'hover', icon: 'delete', ariaLabel: 'Delete' },
+};
+
 // Destructive tone (Outlined Danger)
 export const DestructiveDefault: Story = {
   args: { variant: 'secondary', tone: 'destructive', state: 'default', icon: 'delete', ariaLabel: 'Delete' },

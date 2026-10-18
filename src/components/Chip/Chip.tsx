@@ -7,8 +7,13 @@ export interface ChipProps {
   label: React.ReactNode;
   /** Leading icon — Material Symbol name (string) or custom element (ReactNode) */
   icon?: string | React.ReactNode;
-  /** Selected state (filter-style chips) — renders the teal active fill */
+  /** Selected state (filter-style chips): renders the active fill, coloured by `tone` */
   selected?: boolean;
+  /**
+   * Colour of the selected fill: `default` takes the action colour, `neutral`
+   * fills it grey, for filter rows whose selection should read quietly.
+   */
+  tone?: 'default' | 'neutral';
   /** Disabled state */
   disabled?: boolean;
   /** Chip size — `large` matches the default Button and paragraph body scale, for pills that are a primary tap target rather than metadata */
@@ -32,6 +37,7 @@ export const Chip = ({
   label,
   icon,
   selected,
+  tone = 'default',
   disabled = false,
   size = 'default',
   onClick,
@@ -45,6 +51,7 @@ export const Chip = ({
     baseClass,
     `${baseClass}--${size}`,
     selected && `${baseClass}--selected`,
+    selected && tone === 'neutral' && `${baseClass}--selected-neutral`,
     disabled && `${baseClass}--disabled`,
     onClick && !onRemove && `${baseClass}--clickable`,
     onRemove && `${baseClass}--removable`,

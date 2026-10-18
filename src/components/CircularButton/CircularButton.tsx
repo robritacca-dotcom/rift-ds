@@ -21,8 +21,9 @@ type CircularButtonOwnProps = {
   /**
    * Colour, independent of emphasis: `default` carries the action colour,
    * `neutral` the greys, `destructive` the danger colour. Tertiary is
-   * already grey, so `neutral` leaves it unchanged; `destructive` currently
-   * has one look, the outlined button, whichever emphasis it is given.
+   * already grey, so `neutral` leaves it unchanged; a tertiary
+   * `destructive` takes the outlined look, since a danger action needs a
+   * visible edge.
    */
   tone?: 'default' | 'neutral' | 'destructive';
   /**
@@ -90,7 +91,9 @@ function resolveCircularButtonCell(
 ): string {
   const emphasis = variant === 'neutral' ? 'primary' : variant;
   const resolvedTone = tone ?? (variant === 'neutral' ? 'neutral' : 'default');
-  if (resolvedTone === 'destructive') return 'destructive';
+  if (resolvedTone === 'destructive') {
+    return emphasis === 'primary' ? 'primary-destructive' : 'destructive';
+  }
   if (resolvedTone === 'neutral' && emphasis !== 'tertiary') {
     return emphasis === 'primary' ? 'neutral' : 'secondary-neutral';
   }
@@ -155,7 +158,7 @@ export const CircularButton = React.forwardRef<
 
     const children = isLoading ? (
       <span className={`${baseClass}__icon`} aria-hidden="true">
-        <Spinner size={size === 'compact' ? 'sm' : 'md'} variant="inherit" />
+        <Spinner size={size === 'compact' ? 'sm' : 'md'} tone="inherit" />
       </span>
     ) : (
       <span className={`${baseClass}__icon${typeof icon === 'string' ? ' material-symbols-rounded' : ''}`} aria-hidden="true">

@@ -37,7 +37,8 @@ const variants = [
   { key: "secondary", variant: "secondary", tone: "default", label: "Secondary" },
   { key: "primary-neutral", variant: "primary", tone: "neutral", label: "Primary, neutral" },
   { key: "secondary-neutral", variant: "secondary", tone: "neutral", label: "Secondary, neutral" },
-  { key: "destructive", variant: "secondary", tone: "destructive", label: "Destructive", action: ["Delete", "Deleting"] },
+  { key: "primary-destructive", variant: "primary", tone: "destructive", label: "Primary, destructive", action: ["Delete", "Deleting"] },
+  { key: "destructive", variant: "secondary", tone: "destructive", label: "Secondary, destructive", action: ["Delete", "Deleting"] },
 ] as const;
 
 type SplitButtonCell = (typeof variants)[number];

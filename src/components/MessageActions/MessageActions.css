@@ -46,6 +46,14 @@
   color: var(--color-text-primary);
 }
 
+/* A destructive action rests like the rest of the row, which stays quiet
+   by design, and shows its danger on hover: the danger colour over the
+   error tint, as a destructive menu item does. */
+.ds-message-actions__button--destructive:hover:not(:disabled) {
+  background-color: var(--color-status-error-bg);
+  color: var(--color-action-destructive-text-secondary);
+}
+
 /* ============================================
    ACTIVE
    The selected item, e.g. the chosen feedback

@@ -275,7 +275,7 @@
       "name": "Button",
       "label": "Button",
       "slug": "button",
-      "description": "Primary, secondary, tertiary, neutral and destructive variants in default and compact sizes, with icon support and multiple states.",
+      "description": "Primary, secondary and tertiary emphasis, each in a default, neutral or destructive tone, with icons, loading, and default and compact sizes.",
       "category": "actions",
       "client": true
     },
@@ -363,7 +363,7 @@
       "name": "CircularButton",
       "label": "Circular button",
       "slug": "circular-button",
-      "description": "Round icon button with primary, secondary, tertiary and neutral variants, default and compact sizes.",
+      "description": "Round icon button in primary, secondary and tertiary emphasis and a default, neutral or destructive tone, in default and compact sizes.",
       "category": "actions",
       "client": false
     },
@@ -1079,7 +1079,7 @@
       "name": "Spinner",
       "label": "Spinner",
       "slug": "spinner",
-      "description": "Animated circular loading indicator in three sizes and primary, neutral, or inherit variants.",
+      "description": "Animated circular loading indicator in three sizes and a default, neutral or inherit tone.",
       "category": "feedback",
       "client": false
     },
@@ -1087,7 +1087,7 @@
       "name": "SplitButton",
       "label": "Split button",
       "slug": "split-button",
-      "description": "Primary action with an attached menu of alternatives, composing Button and DropdownMenu in one pill.",
+      "description": "Primary action with an attached menu of alternatives, composing Button and DropdownMenu in one pill, in primary or secondary emphasis and any tone.",
       "category": "actions",
       "client": false
     },

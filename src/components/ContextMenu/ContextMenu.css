@@ -250,15 +250,15 @@
    ============================================ */
 
 .ds-context-menu__item--destructive {
-  color: var(--color-core-accent-coral);
+  color: var(--color-action-destructive-text-secondary);
 }
 
 .ds-context-menu__item--destructive .ds-context-menu__item-icon {
-  color: var(--color-core-accent-coral);
+  color: var(--color-action-destructive-text-secondary);
 }
 
 .ds-context-menu__item--destructive .ds-context-menu__shortcut {
-  color: var(--color-core-accent-coral);
+  color: var(--color-action-destructive-text-secondary);
   opacity: 0.7;
 }
 

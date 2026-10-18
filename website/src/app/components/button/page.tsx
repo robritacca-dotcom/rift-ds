@@ -22,14 +22,16 @@ const states = [
 ];
 
 /* Every emphasis × tone cell the Button draws. Tertiary is already grey,
-   so it has no separate neutral cell, and the destructive tone has one look. */
+   so it has no separate neutral cell, and a tertiary destructive takes the
+   outlined look. */
 const variants = [
   { key: "primary", variant: "primary", tone: "default", label: "Primary" },
   { key: "secondary", variant: "secondary", tone: "default", label: "Secondary" },
   { key: "tertiary", variant: "tertiary", tone: "default", label: "Tertiary" },
   { key: "primary-neutral", variant: "primary", tone: "neutral", label: "Primary, neutral" },
   { key: "secondary-neutral", variant: "secondary", tone: "neutral", label: "Secondary, neutral" },
-  { key: "destructive", variant: "secondary", tone: "destructive", label: "Destructive" },
+  { key: "primary-destructive", variant: "primary", tone: "destructive", label: "Primary, destructive" },
+  { key: "destructive", variant: "secondary", tone: "destructive", label: "Secondary, destructive" },
 ] as const;
 
 type ButtonCell = (typeof variants)[number];
@@ -130,7 +132,7 @@ export default function ButtonPage() {
               The main action element
             </p>
             <p className={styles.introBody}>
-              Two props set a button&apos;s look. <code>variant</code> is the emphasis: primary buttons are solid-filled for the highest-emphasis actions, secondary buttons have a border and fill on hover, and tertiary buttons are transparent and blend into the surface for lower-priority options. <code>tone</code> is the colour: the default carries the accent colour, neutral moves the same shape into quiet grey for actions that deserve a button&apos;s full shape without the accent, and destructive signals dangerous or irreversible actions like delete and remove. Every combination comes in default and compact sizes.
+              Two props set a button&apos;s look. <code>variant</code> is the emphasis: primary buttons are solid-filled for the highest-emphasis actions, secondary buttons have a border and fill on hover, and tertiary buttons are transparent and blend into the surface for lower-priority options. <code>tone</code> is the colour: the default carries the action colour, neutral moves the same shape into quiet grey for actions that deserve a button&apos;s full shape without the accent, and destructive signals dangerous or irreversible actions like delete and remove. Every combination comes in default and compact sizes.
             </p>
           </div>
 

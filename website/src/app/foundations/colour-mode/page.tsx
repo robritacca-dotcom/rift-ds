@@ -450,6 +450,40 @@ const actionNeutralColours: SwatchData[] = [
   },
 ];
 
+/* --- Action / Destructive --- */
+const actionDestructiveColours: SwatchData[] = [
+  {
+    label: "Background Default", cssVar: "--color-action-destructive-bg",
+    dark: { primitive: "--red--07--", hex: "#EF476F", rgb: "239 / 71 / 111" },
+    light: { primitive: "--red--07--", hex: "#EF476F", rgb: "239 / 71 / 111" },
+  },
+  {
+    label: "Background Hover", cssVar: "--color-action-destructive-bg-hover",
+    dark: { primitive: "--red--06--", hex: "#F16385", rgb: "241 / 99 / 133" },
+    light: { primitive: "--red--08--", hex: "#C93A5C", rgb: "201 / 58 / 92" },
+  },
+  {
+    label: "Background Active", cssVar: "--color-action-destructive-bg-active",
+    dark: { primitive: "--red--05--", hex: "#F37F9B", rgb: "243 / 127 / 155" },
+    light: { primitive: "--red--09--", hex: "#8E2641", rgb: "142 / 38 / 65" },
+  },
+  {
+    label: "Text Primary", cssVar: "--color-action-destructive-text",
+    dark: { primitive: "--red--10--", hex: "#571727", rgb: "87 / 23 / 39" },
+    light: { primitive: "--red--01--", hex: "#FDEFF3", rgb: "253 / 239 / 243" },
+  },
+  {
+    label: "Text Secondary", cssVar: "--color-action-destructive-text-secondary",
+    dark: { primitive: "--red--07--", hex: "#EF476F", rgb: "239 / 71 / 111" },
+    light: { primitive: "--red--07--", hex: "#EF476F", rgb: "239 / 71 / 111" },
+  },
+  {
+    label: "Border", cssVar: "--color-action-destructive-border",
+    dark: { primitive: "--red--07--", hex: "#EF476F", rgb: "239 / 71 / 111" },
+    light: { primitive: "--red--07--", hex: "#EF476F", rgb: "239 / 71 / 111" },
+  },
+];
+
 /* --- Input --- */
 const inputColours: SwatchData[] = [
   {
@@ -886,6 +920,16 @@ export default function SemanticColoursPage() {
             <SectionTitle title="Action / neutral" />
             <div className={styles.colourSwatches}>
               {actionNeutralColours.map((s) => (
+                <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
+              ))}
+            </div>
+          </section>
+
+          {/* Action / Destructive */}
+          <section className={styles.colourGroup}>
+            <SectionTitle title="Action / destructive" />
+            <div className={styles.colourSwatches}>
+              {actionDestructiveColours.map((s) => (
                 <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
               ))}
             </div>

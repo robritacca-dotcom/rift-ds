@@ -37,7 +37,7 @@ export default function ToggleGroupPage() {
               Grouped toggle buttons
             </p>
             <p className={styles.introBody}>
-              A set of two-state buttons that can be toggled on or off. Supports single or multiple selection, text or icon items, default or compact sizing, and a neutral variant that fills active items grey.
+              A set of two-state buttons that can be toggled on or off. Supports single or multiple selection, text or icon items, default or compact sizing, and a neutral tone that fills active items grey.
             </p>
           </div>
 
@@ -52,7 +52,7 @@ export default function ToggleGroupPage() {
                   { value: "right", label: "Right" },
                 ]}
                 value={align}
-                onChange={(v) => setAlign(v as string)}
+                onValueChange={(v) => setAlign(v as string)}
               />
             </div>
           </section>
@@ -69,7 +69,7 @@ export default function ToggleGroupPage() {
                 ]}
                 value={formats}
                 multiple
-                onChange={(v) => setFormats(v as string[])}
+                onValueChange={(v) => setFormats(v as string[])}
               />
             </div>
           </section>
@@ -85,7 +85,7 @@ export default function ToggleGroupPage() {
                 ]}
                 value={view}
                 size="compact"
-                onChange={(v) => setView(v as string)}
+                onValueChange={(v) => setView(v as string)}
               />
             </div>
           </section>
@@ -94,19 +94,19 @@ export default function ToggleGroupPage() {
           <section className={styles.section}>
             <SectionTitle title="Neutral" />
             <p className={styles.introBody}>
-              The neutral variant fills active items with a solid grey instead
+              <code>tone=&quot;neutral&quot;</code> fills active items with a solid grey instead
               of the primary colour, for toggles that should read quietly.
             </p>
             <div>
               <ToggleGroup
-                variant="neutral"
+                tone="neutral"
                 items={[
                   { value: "compact", label: "Compact" },
                   { value: "cozy", label: "Cozy" },
                   { value: "comfortable", label: "Comfortable" },
                 ]}
                 value={density}
-                onChange={(v) => setDensity(v as string)}
+                onValueChange={(v) => setDensity(v as string)}
               />
             </div>
           </section>

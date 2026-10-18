@@ -27,6 +27,8 @@ export interface CommandPaletteCommand {
   keywords?: string[];
   /** Whether the command is disabled */
   disabled?: boolean;
+  /** Marks a dangerous or irreversible command (delete, remove…): the row takes the danger colour, the same as a destructive DropdownMenu item */
+  destructive?: boolean;
   /** Called when this command is chosen */
   onSelect?: () => void;
 }
@@ -307,6 +309,7 @@ export const CommandPalette = ({
                         `${baseClass}__command`,
                         isActive ? `${baseClass}__command--active` : '',
                         command.disabled ? `${baseClass}__command--disabled` : '',
+                        command.destructive ? `${baseClass}__command--destructive` : '',
                       ]
                         .filter(Boolean)
                         .join(' ')}

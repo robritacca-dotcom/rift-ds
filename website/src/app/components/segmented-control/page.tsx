@@ -32,7 +32,7 @@ export default function SegmentedControlPage() {
               Toggle between a small set of related options
             </p>
             <p className={styles.introBody}>
-              For view modes or filters where the active segment fills with the primary colour, or a quiet grey with the neutral variant. Works well for 2 to 4 choices. Use Tabs instead when the options represent distinct content sections with their own panels.
+              For view modes or filters where the active segment fills with the action colour, or a quiet grey with the neutral tone. Works well for 2 to 4 choices. Use Tabs instead when the options represent distinct content sections with their own panels.
             </p>
           </div>
 
@@ -80,13 +80,13 @@ export default function SegmentedControlPage() {
           <section className={styles.section}>
             <SectionTitle title="Neutral" />
             <p className={styles.introBody}>
-              The neutral variant fills the active segment with a solid grey
+              <code>tone=&quot;neutral&quot;</code> fills the active segment with a solid grey
               instead of the primary colour, for sets where the selection
               should read quietly.
             </p>
             <div className={styles.variantStack}>
               <SegmentedControl
-                variant="neutral"
+                tone="neutral"
                 segments={[
                   { label: "Day", value: "day" },
                   { label: "Week", value: "week" },
@@ -96,7 +96,7 @@ export default function SegmentedControlPage() {
                 onSegmentChange={() => {}}
               />
               <SegmentedControl
-                variant="neutral"
+                tone="neutral"
                 segments={[
                   { label: "Grid", value: "grid", icon: "grid_view" },
                   { label: "List", value: "list", icon: "view_list" },

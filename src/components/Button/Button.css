@@ -180,7 +180,8 @@
 }
 
 /* ============================================
-   NEUTRAL BUTTON (SOLID GREY)
+   PRIMARY × NEUTRAL TONE (SOLID GREY)
+   The class the legacy variant="neutral" kept.
    Filled like primary but in the neutral greys —
    unlike tertiary, the background is always shown.
    ============================================ */
@@ -245,45 +246,84 @@
 }
 
 /* ============================================
+   PRIMARY DESTRUCTIVE BUTTON (SOLID DANGER)
+   variant="primary" tone="destructive": the filled
+   silhouette in the danger colour, for the one
+   irreversible action a surface leads with.
+   ============================================ */
+
+.ds-button--primary-destructive {
+  background-color: var(--color-action-destructive-bg);
+  border: none;
+}
+
+.ds-button--primary-destructive .ds-button__text,
+.ds-button--primary-destructive .ds-button__icon {
+  color: var(--color-action-destructive-text);
+}
+
+.ds-button--primary-destructive.ds-button--hover {
+  background-color: var(--color-action-destructive-bg-hover);
+}
+
+.ds-button--primary-destructive.ds-button--active {
+  background-color: var(--color-action-destructive-bg-active);
+}
+
+.ds-button--primary-destructive.ds-button--disabled {
+  background-color: var(--color-action-destructive-bg);
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ds-button--primary-destructive:not(.ds-button--disabled):hover {
+  background-color: var(--color-action-destructive-bg-hover);
+}
+
+.ds-button--primary-destructive:not(.ds-button--disabled):active {
+  background-color: var(--color-action-destructive-bg-active);
+}
+
+/* ============================================
    DESTRUCTIVE BUTTON
    For dangerous actions: delete, remove, etc.
-   Uses accent-coral as the border / fill colour.
+   Uses the --color-action-destructive-* family.
    ============================================ */
 
 .ds-button--destructive {
-  border: var(--border-025) solid var(--color-core-accent-coral);
+  border: var(--border-025) solid var(--color-action-destructive-border);
   background-color: transparent;
 }
 
 .ds-button--destructive .ds-button__text {
-  color: var(--color-core-accent-coral);
+  color: var(--color-action-destructive-text-secondary);
 }
 
 .ds-button--destructive.ds-button--default {
-  border: var(--border-025) solid var(--color-core-accent-coral);
+  border: var(--border-025) solid var(--color-action-destructive-border);
   background-color: transparent;
 }
 
 .ds-button--destructive.ds-button--hover {
-  border: var(--border-025) solid var(--color-core-accent-coral);
-  background-color: var(--color-core-accent-coral);
+  border: var(--border-025) solid var(--color-action-destructive-border);
+  background-color: var(--color-action-destructive-bg);
 }
 
 .ds-button--destructive.ds-button--hover .ds-button__text {
-  color: var(--color-status-error-bg);
+  color: var(--color-action-destructive-text);
 }
 
 .ds-button--destructive.ds-button--active {
-  border: var(--border-025) solid var(--color-core-accent-coral);
-  background-color: var(--color-core-accent-coral);
+  border: var(--border-025) solid var(--color-action-destructive-border);
+  background-color: var(--color-action-destructive-bg);
 }
 
 .ds-button--destructive.ds-button--active .ds-button__text {
-  color: var(--color-status-error-bg);
+  color: var(--color-action-destructive-text);
 }
 
 .ds-button--destructive.ds-button--disabled {
-  border: var(--border-025) solid var(--color-core-accent-coral);
+  border: var(--border-025) solid var(--color-action-destructive-border);
   background-color: transparent;
   opacity: 0.4;
   cursor: not-allowed;
@@ -368,12 +408,12 @@
 }
 
 .ds-button--destructive .ds-button__icon {
-  color: var(--color-core-accent-coral);
+  color: var(--color-action-destructive-text-secondary);
 }
 
 .ds-button--destructive.ds-button--hover .ds-button__icon,
 .ds-button--destructive.ds-button--active .ds-button__icon {
-  color: var(--color-status-error-bg);
+  color: var(--color-action-destructive-text);
 }
 
 /* ============================================
@@ -430,15 +470,15 @@
 }
 
 .ds-button--destructive:not(.ds-button--disabled):hover {
-  background-color: var(--color-core-accent-coral);
+  background-color: var(--color-action-destructive-bg);
 }
 
 .ds-button--destructive:not(.ds-button--disabled):hover .ds-button__text {
-  color: var(--color-status-error-bg);
+  color: var(--color-action-destructive-text);
 }
 
 .ds-button--destructive:not(.ds-button--disabled):hover .ds-button__icon {
-  color: var(--color-status-error-bg);
+  color: var(--color-action-destructive-text);
 }
 
 /* ============================================
@@ -487,15 +527,15 @@
 }
 
 .ds-button--destructive:not(.ds-button--disabled):active {
-  background-color: var(--color-core-accent-coral);
+  background-color: var(--color-action-destructive-bg);
 }
 
 .ds-button--destructive:not(.ds-button--disabled):active .ds-button__text {
-  color: var(--color-status-error-bg);
+  color: var(--color-action-destructive-text);
 }
 
 .ds-button--destructive:not(.ds-button--disabled):active .ds-button__icon {
-  color: var(--color-status-error-bg);
+  color: var(--color-action-destructive-text);
 }
 
 /* ============================================

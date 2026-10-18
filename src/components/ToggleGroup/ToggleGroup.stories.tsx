@@ -10,7 +10,7 @@ const meta = {
   tags: ['autodocs'],
   argTypes: {
     size: { control: 'select', options: ['default', 'compact'] },
-    variant: { control: 'select', options: ['primary', 'neutral'] },
+    tone: { control: 'select', options: ['default', 'neutral'] },
     multiple: { control: 'boolean' },
     disabled: { control: 'boolean' },
   },
@@ -61,7 +61,7 @@ export const Neutral: Story = {
       { value: 'right', label: 'Right' },
     ],
     value: 'center',
-    variant: 'neutral',
+    tone: 'neutral',
   },
 };
 

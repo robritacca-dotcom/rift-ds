@@ -22,7 +22,18 @@ type ToggleGroupOwnProps = {
   multiple?: boolean;
   /** Component size */
   size?: 'default' | 'compact';
-  /** Visual treatment of active items — teal by default, `neutral` fills them grey */
+  /**
+   * Colour of active items: `default` takes the action colour, `neutral`
+   * fills them grey, for a set whose selection should not carry the action
+   * colour's weight.
+   */
+  tone?: 'default' | 'neutral';
+  /**
+   * Legacy name for `tone`, from before colour moved onto its own prop:
+   * `primary` is `tone="default"`.
+   *
+   * @deprecated Use `tone` instead.
+   */
   variant?: 'primary' | 'neutral';
   /** Whether the whole group is disabled */
   disabled?: boolean;
@@ -61,7 +72,8 @@ export const ToggleGroup = React.forwardRef<HTMLDivElement, ToggleGroupProps>(
       value = [],
       multiple = false,
       size = 'default',
-      variant = 'primary',
+      tone,
+      variant,
       disabled = false,
       onValueChange,
       onChange,
@@ -72,10 +84,13 @@ export const ToggleGroup = React.forwardRef<HTMLDivElement, ToggleGroupProps>(
     ref,
   ) => {
     const baseClass = 'ds-toggle-group';
+    // `variant` is the deprecated spelling of `tone`; the modifier class keeps
+    // its original names so styles written against them still apply.
+    const resolvedTone = tone ?? (variant === 'neutral' ? 'neutral' : 'default');
     const classes = [
       baseClass,
       `${baseClass}--${size}`,
-      `${baseClass}--${variant}`,
+      `${baseClass}--${resolvedTone === 'neutral' ? 'neutral' : 'primary'}`,
       disabled ? `${baseClass}--disabled` : '',
       className,
     ]

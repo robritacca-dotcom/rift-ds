@@ -145,7 +145,7 @@ export default function OverlaysSection() {
         title="Delete this project?"
         description="Its themes and saved presets go with it. This cannot be undone."
         confirmLabel="Delete project"
-        variant="destructive"
+        tone="destructive"
       />
 
       {/* hotkey off: the site owns Cmd+K, and this demo must not fight it. */}

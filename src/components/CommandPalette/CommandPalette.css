@@ -220,6 +220,17 @@
   cursor: not-allowed;
 }
 
+/* A destructive command takes the danger colour on its label and icon, and
+   the error tint when active, matching a destructive DropdownMenu item. */
+.ds-command-palette__command--destructive .ds-command-palette__command-label,
+.ds-command-palette__command--destructive .ds-command-palette__command-icon {
+  color: var(--color-action-destructive-text-secondary);
+}
+
+.ds-command-palette__command--destructive.ds-command-palette__command--active {
+  background-color: var(--color-status-error-bg);
+}
+
 .ds-command-palette__command-icon {
   --icon-size: var(--icon-size-500);
   color: var(--color-icon-primary);

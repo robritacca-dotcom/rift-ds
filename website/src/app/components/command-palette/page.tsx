@@ -53,6 +53,7 @@ const groups: CommandPaletteGroup[] = [
         keywords: ["theme", "light", "appearance"],
       },
       { id: "export", label: "Export tokens", icon: "download", disabled: true },
+      { id: "reset", label: "Reset all tokens", icon: "delete", destructive: true },
     ],
   },
   {

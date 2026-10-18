@@ -90,7 +90,7 @@
 
 /* Loading grid: one column per variant (five), not the four icon columns */
 .loadingGrid {
-  grid-template-columns: auto repeat(6, 1fr);
+  grid-template-columns: auto repeat(7, 1fr);
 }
 
 /* Empty corner cell (top-left of headers) */
@@ -161,6 +161,6 @@
   }
 
   .loadingGrid {
-    min-width: 720px;
+    min-width: 840px;
   }
 }

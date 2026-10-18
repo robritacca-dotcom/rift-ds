@@ -157,7 +157,7 @@ export const ArtifactPanel = React.forwardRef<HTMLElement, ArtifactPanelProps>(
             {hasPreview && hasCode && (
               <SegmentedControl
                 size="compact"
-                variant="neutral"
+                tone="neutral"
                 ariaLabel={viewLabel}
                 segments={[
                   { value: 'preview', label: previewLabel },

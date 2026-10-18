@@ -160,7 +160,7 @@ export const AgentRail = React.forwardRef<HTMLDivElement, AgentRailProps>(
         <div className={`${baseClass}__tabs`}>
           <SegmentedControl
             size="compact"
-            variant="neutral"
+            tone="neutral"
             collapse
             ariaLabel={tabsLabel}
             activeSegment={active?.id ?? ''}

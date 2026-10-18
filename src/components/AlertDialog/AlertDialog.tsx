@@ -27,7 +27,16 @@ export interface AlertDialogProps {
   onConfirm?: () => void;
   /** Callback when cancel is clicked */
   onCancel?: () => void;
-  /** Destructive variant for dangerous actions */
+  /**
+   * Colour of the dialog's icon, title and confirm action: `destructive`
+   * for dangerous or irreversible actions.
+   */
+  tone?: 'default' | 'destructive';
+  /**
+   * Legacy name for `tone`, from before colour moved onto its own prop.
+   *
+   * @deprecated Use `tone` instead.
+   */
   variant?: 'default' | 'destructive';
   /** Additional CSS classes */
   className?: string;
@@ -48,7 +57,8 @@ export const AlertDialog = ({
   cancelLabel = 'Cancel',
   onConfirm,
   onCancel,
-  variant = 'default',
+  tone,
+  variant,
   className = '',
 }: AlertDialogProps) => {
   const panelRef = useRef<HTMLDivElement>(null);
@@ -82,10 +92,12 @@ export const AlertDialog = ({
   });
   useScrollLock(open);
 
-  const variantClass = variant !== 'default' ? `${baseClass}--${variant}` : '';
+  // `variant` is the deprecated spelling of `tone`; `tone` wins when both are set.
+  const resolvedTone = tone ?? variant ?? 'default';
+  const toneClass = resolvedTone !== 'default' ? `${baseClass}--${resolvedTone}` : '';
   const openClass = open ? `${baseClass}--open` : '';
 
-  const containerClasses = [baseClass, variantClass, openClass, className]
+  const containerClasses = [baseClass, toneClass, openClass, className]
     .filter(Boolean)
     .join(' ');
 
@@ -107,7 +119,7 @@ export const AlertDialog = ({
             className={`${baseClass}__icon material-symbols-rounded`}
             aria-hidden="true"
           >
-            {variant === 'destructive' ? 'warning' : 'info'}
+            {resolvedTone === 'destructive' ? 'warning' : 'info'}
           </span>
           <h2 className={`${baseClass}__title`} id={titleId}>
             {title}
@@ -123,12 +135,13 @@ export const AlertDialog = ({
         <div className={`${baseClass}__actions`}>
           <Button
             label={cancelLabel}
-            priority="tertiary"
+            variant="tertiary"
             onClick={handleCancel}
           />
           <Button
             label={confirmLabel}
-            priority={variant === 'destructive' ? 'destructive' : 'primary'}
+            variant={resolvedTone === 'destructive' ? 'secondary' : 'primary'}
+            tone={resolvedTone}
             onClick={handleConfirm}
           />
         </div>

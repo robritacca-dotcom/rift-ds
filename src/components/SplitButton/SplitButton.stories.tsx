@@ -80,6 +80,18 @@ export const SecondaryNeutral: Story = {
   },
 };
 
+export const PrimaryDestructive: Story = {
+  args: {
+    variant: 'primary',
+    tone: 'destructive',
+    label: 'Delete',
+    items: [
+      { label: 'Delete and archive', icon: 'archive' },
+      { label: 'Delete permanently', icon: 'delete_forever' },
+    ],
+  },
+};
+
 export const Destructive: Story = {
   args: {
     variant: 'secondary',

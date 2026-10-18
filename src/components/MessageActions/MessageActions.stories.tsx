@@ -41,6 +41,17 @@ export const WithActiveState: Story = {
   },
 };
 
+/** `destructive` rests like its neighbours and takes the danger colour on hover. */
+export const WithDestructiveAction: Story = {
+  args: {
+    items: [
+      { id: 'copy', icon: 'content_copy', label: 'Copy' },
+      { id: 'retry', icon: 'refresh', label: 'Retry' },
+      { id: 'delete', icon: 'delete', label: 'Delete message', destructive: true },
+    ],
+  },
+};
+
 /** The row owns no state: the consumer swaps the item's icon and label, then swaps them back. */
 const CopyFeedbackDemo = () => {
   const [copied, setCopied] = useState(false);

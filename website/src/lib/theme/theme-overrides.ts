@@ -501,15 +501,39 @@ export const isAccentsPristine = (a: AccentSextet): boolean =>
     (name) => a[name].toUpperCase() === SHIPPED_ACCENTS[name].toUpperCase()
   );
 
-/** The sextet as its six semantic overrides. Always emits all six — a
-    theme declares the whole set; callers that want the shipped keys to
-    mean "no override" guard with isAccentsPristine first. */
-export function accentOverrides(accents: AccentSextet): Overrides {
+/** Lightness steps the filled destructive button walks from the coral it
+    rests on: darker in light mode, lighter in dark, away from the page like
+    the primary family. Sized to land the shipped coral on the shipped
+    steps (red-07 to red-08 and red-09 in light, red-06 and red-05 in dark). */
+const DESTRUCTIVE_STEPS = {
+  light: { hover: -0.1, active: -0.22 },
+  dark: { hover: 0.04, active: 0.08 },
+} as const;
+
+/** The destructive family's hover and pressed fills, derived from a theme's
+    coral. The rest of the family aliases coral in the token files, so a
+    theme that recolours coral would otherwise rest in its own colour and
+    hover in the shipped red. */
+export function destructiveStepOverrides(coral: string, theme: "light" | "dark"): Overrides {
+  const [h, s, l] = rgbToHsl(hexToRgb(coral));
+  const step = (delta: number) =>
+    rgbToHex(hslToRgb([h, s, Math.min(0.95, Math.max(0.05, l + delta))]));
+  return {
+    "--color-action-destructive-bg-hover": step(DESTRUCTIVE_STEPS[theme].hover),
+    "--color-action-destructive-bg-active": step(DESTRUCTIVE_STEPS[theme].active),
+  };
+}
+
+/** The sextet as its six semantic overrides, plus the destructive steps
+    derived from its coral. Always emits all six — a theme declares the
+    whole set; callers that want the shipped keys to mean "no override"
+    guard with isAccentsPristine first. */
+export function accentOverrides(accents: AccentSextet, theme: "light" | "dark"): Overrides {
   const overrides: Overrides = {};
   for (const name of ACCENT_NAMES) {
     overrides[`--color-core-accent-${name}`] = accents[name];
   }
-  return overrides;
+  return { ...overrides, ...destructiveStepOverrides(accents.coral, theme) };
 }
 
 /* ---------- pointer mode: repoint semantics at a real ramp ---------- */

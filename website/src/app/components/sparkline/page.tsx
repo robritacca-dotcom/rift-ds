@@ -19,7 +19,7 @@ const flat = [5, 5, 5, 5, 5, 5, 5, 5];
 const tones = [
   { tone: "accent", label: "Accent", data: wobble },
   { tone: "positive", label: "Positive", data: trendUp },
-  { tone: "negative", label: "Negative", data: trendDown },
+  { tone: "error", label: "Error", data: trendDown },
   { tone: "neutral", label: "Neutral", data: wobble },
 ] as const;
 
@@ -110,7 +110,7 @@ export default function SparklinePage() {
                 />
                 <Sparkline
                   data={trendDown}
-                  tone="negative"
+                  tone="error"
                   label="Signups, trending down"
                 />
               </div>

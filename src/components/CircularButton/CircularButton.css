@@ -197,7 +197,8 @@
 }
 
 /* ============================================
-   NEUTRAL VARIANT (SOLID GREY)
+   PRIMARY × NEUTRAL TONE (SOLID GREY)
+   The class the legacy variant="neutral" kept.
    Filled like primary but in the neutral greys —
    unlike tertiary, the background is always shown.
    ============================================ */
@@ -234,9 +235,9 @@
 }
 
 /* ============================================
-   SECONDARY NEUTRAL VARIANT (OUTLINED GREY)
+   SECONDARY × NEUTRAL TONE (OUTLINED GREY)
    variant="secondary" tone="neutral": hover and
-   press fill with the neutral variant's fills.
+   press fill with the solid neutral fills.
    ============================================ */
 
 .ds-circular-button--secondary-neutral {
@@ -281,30 +282,65 @@
 }
 
 /* ============================================
+   PRIMARY DESTRUCTIVE (SOLID DANGER)
+   variant="primary" tone="destructive".
+   ============================================ */
+
+.ds-circular-button--primary-destructive {
+  background-color: var(--color-action-destructive-bg);
+  border: none;
+}
+
+.ds-circular-button--primary-destructive .ds-circular-button__icon {
+  color: var(--color-action-destructive-text);
+}
+
+.ds-circular-button--primary-destructive.ds-circular-button--hover {
+  background-color: var(--color-action-destructive-bg-hover);
+}
+
+.ds-circular-button--primary-destructive.ds-circular-button--active {
+  background-color: var(--color-action-destructive-bg-active);
+}
+
+.ds-circular-button--primary-destructive.ds-circular-button--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ds-circular-button--primary-destructive:not(.ds-circular-button--disabled):hover {
+  background-color: var(--color-action-destructive-bg-hover);
+}
+
+.ds-circular-button--primary-destructive:not(.ds-circular-button--disabled):active {
+  background-color: var(--color-action-destructive-bg-active);
+}
+
+/* ============================================
    DESTRUCTIVE TONE (OUTLINED DANGER)
-   tone="destructive": Button's destructive look on
-   the circle. One look whatever the emphasis: the
-   outline in the danger colour, filling with it on
-   hover and press.
+   tone="destructive" at secondary or tertiary
+   emphasis: Button's outlined danger look on the
+   circle, filling with the danger colour on hover
+   and press.
    ============================================ */
 
 .ds-circular-button--destructive {
-  border: var(--border-025) solid var(--color-core-accent-coral);
+  border: var(--border-025) solid var(--color-action-destructive-border);
   background-color: transparent;
 }
 
 .ds-circular-button--destructive .ds-circular-button__icon {
-  color: var(--color-core-accent-coral);
+  color: var(--color-action-destructive-text-secondary);
 }
 
 .ds-circular-button--destructive.ds-circular-button--hover,
 .ds-circular-button--destructive.ds-circular-button--active {
-  background-color: var(--color-core-accent-coral);
+  background-color: var(--color-action-destructive-bg);
 }
 
 .ds-circular-button--destructive.ds-circular-button--hover .ds-circular-button__icon,
 .ds-circular-button--destructive.ds-circular-button--active .ds-circular-button__icon {
-  color: var(--color-status-error-bg);
+  color: var(--color-action-destructive-text);
 }
 
 .ds-circular-button--destructive.ds-circular-button--disabled {
@@ -315,12 +351,12 @@
 /* Interactive hover/active */
 .ds-circular-button--destructive:not(.ds-circular-button--disabled):hover,
 .ds-circular-button--destructive:not(.ds-circular-button--disabled):active {
-  background-color: var(--color-core-accent-coral);
+  background-color: var(--color-action-destructive-bg);
 }
 
 .ds-circular-button--destructive:not(.ds-circular-button--disabled):hover .ds-circular-button__icon,
 .ds-circular-button--destructive:not(.ds-circular-button--disabled):active .ds-circular-button__icon {
-  color: var(--color-status-error-bg);
+  color: var(--color-action-destructive-text);
 }
 
 /* ============================================

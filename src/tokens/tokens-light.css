@@ -122,6 +122,22 @@
      action colour. */
   --color-action-neutral-border: var(--primitive-neutral-05);
 
+  /* Action - Destructive (dangerous or irreversible actions). The family
+     aliases the coral accent, so a theme's coral is its danger colour, the
+     look destructive buttons always had. The fill is what the outlined
+     destructive button takes on hover and press, and the filled
+     (primary-emphasis) one at rest; hover and active are the filled
+     button's own steps, walking away from the page like the primary
+     family; a theme that recolours coral re-derives the two from it. Labels on the fill are known to sit under AA in the shipped
+     theme; the owner kept the look on 2026-10-17, and the pinned gaps in
+     validate-theme-presets.mjs are the record. */
+  --color-action-destructive-bg: var(--color-core-accent-coral);
+  --color-action-destructive-bg-hover: var(--primitive-red-08);
+  --color-action-destructive-bg-active: var(--primitive-red-09);
+  --color-action-destructive-text: var(--color-status-error-bg);
+  --color-action-destructive-text-secondary: var(--color-core-accent-coral);
+  --color-action-destructive-border: var(--color-core-accent-coral);
+
   /* Core colours */
   --color-core-ui-primary: var(--primitive-teal-08);
   --color-core-ui-secondary: var(--primitive-teal-10);

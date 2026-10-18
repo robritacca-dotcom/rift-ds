@@ -75,6 +75,16 @@ export const Selected: Story = {
   },
 };
 
+export const SelectedNeutral: Story = {
+  args: {
+    label: 'Selected',
+    icon: 'check',
+    selected: true,
+    tone: 'neutral',
+    onClick: () => {},
+  },
+};
+
 // Removable (input-style) chip — trailing close button
 export const Removable: Story = {
   args: {

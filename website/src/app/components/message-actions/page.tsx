@@ -103,6 +103,25 @@ export default function MessageActionsPage() {
             </div>
           </section>
 
+          {/* Destructive */}
+          <section className={styles.section}>
+            <SectionTitle title="Destructive" />
+            <p className={styles.demoText}>
+              Mark a dangerous action, like deleting the message, with{" "}
+              <code>destructive</code>. It rests like its neighbours, so the
+              row stays quiet, and takes the danger colour on hover.
+            </p>
+            <div className={styles.stack}>
+              <MessageActions
+                items={[
+                  { id: "copy", icon: "content_copy", label: "Copy" },
+                  { id: "retry", icon: "refresh", label: "Retry" },
+                  { id: "delete", icon: "delete", label: "Delete message", destructive: true },
+                ]}
+              />
+            </div>
+          </section>
+
           {/* Copy feedback */}
           <section className={styles.section}>
             <SectionTitle title="Copy feedback" />

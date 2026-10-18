@@ -3,7 +3,18 @@ import './Spinner.css';
 export interface SpinnerProps {
   /** Size of the spinner */
   size?: 'sm' | 'md' | 'lg';
-  /** Visual variant — `inherit` draws the spinner in `currentColor`, for use inside coloured controls */
+  /**
+   * Colour of the arc: `default` in the primary text colour, `neutral` in
+   * the secondary one, `inherit` in `currentColor`, for use inside coloured
+   * controls.
+   */
+  tone?: 'default' | 'neutral' | 'inherit';
+  /**
+   * Legacy name for `tone`, from before colour moved onto its own prop:
+   * `primary` is `tone="default"`.
+   *
+   * @deprecated Use `tone` instead.
+   */
   variant?: 'primary' | 'neutral' | 'inherit';
   /** Accessible label */
   label?: string;
@@ -16,15 +27,20 @@ export interface SpinnerProps {
  */
 export const Spinner = ({
   size = 'md',
-  variant = 'primary',
+  tone,
+  variant,
   label = 'Loading',
   className = '',
 }: SpinnerProps) => {
   const baseClass = 'ds-spinner';
+  // `variant` is the deprecated spelling of `tone`; the modifier class keeps
+  // its original names so styles written against them still apply.
+  const resolvedTone = tone ?? (variant === 'primary' ? 'default' : variant) ?? 'default';
+  const toneClass = resolvedTone === 'default' ? 'primary' : resolvedTone;
   const classes = [
     baseClass,
     `${baseClass}--${size}`,
-    `${baseClass}--${variant}`,
+    `${baseClass}--${toneClass}`,
     className,
   ]
     .filter(Boolean)

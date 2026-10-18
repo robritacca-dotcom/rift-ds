@@ -67,7 +67,7 @@ export default function AlertDialogPage() {
                 title="Delete item"
                 description="This will permanently delete the item. This action cannot be undone."
                 confirmLabel="Delete"
-                variant="destructive"
+                tone="destructive"
                 onConfirm={() => setDestructiveOpen(false)}
               />
             </div>

@@ -15,7 +15,7 @@ import { useChatWidget } from "rift-ds/chat";
    rendering. The rich-content beats send a story prompt through the demo
    transport (rift-ds/chat/demo), so one press plays as a real exchange: the
    visitor's bubble, the thinking choreography with its reasoning trace, the
-   streamed answer, the card, and follow-up chips. Only the instant events
+   streamed answer, the card, and follow-up chips or the agent's questions. Only the instant events
    (a reply, a day marker) land in the transcript directly via injectTurn,
    the widget's public staging API. Nothing here calls a model or a server:
    "Ask as the visitor" goes through whichever transport the lever picked.
@@ -226,6 +226,42 @@ export default function ChatDirector({
                 },
               ],
             }),
+        },
+      ],
+    },
+    {
+      /* The four ways a reply can end: chips the visitor might send, then
+         the agent asking with answers to pick. Each is a prompt in the demo
+         script, whose answer branches play out whichever option is picked. */
+      heading: "Quick replies",
+      events: [
+        {
+          id: "followups",
+          label: "Offer follow-up chips",
+          icon: "chat_bubble",
+          disabled: streaming,
+          run: () => send("What do the plans include?"),
+        },
+        {
+          id: "ask-one",
+          label: "Ask one question",
+          icon: "radio_button_checked",
+          disabled: streaming,
+          run: () => send("Help me pick a plan"),
+        },
+        {
+          id: "ask-several",
+          label: "Ask for several answers",
+          icon: "checklist_rtl",
+          disabled: streaming,
+          run: () => send("Set up notifications for me"),
+        },
+        {
+          id: "ask-set",
+          label: "Ask a set of questions",
+          icon: "quiz",
+          disabled: streaming,
+          run: () => send("Plan our launch kickoff"),
         },
       ],
     },

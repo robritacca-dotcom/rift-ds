@@ -83,21 +83,31 @@ export function DemoBoard({ onAsk }: { onAsk: (prompt: string) => void }) {
         ))}
       </Widget>
 
-      <Widget title="To do" count={4}>
+      {/* Every row that waits on the visitor opens the conversation that
+          settles it, and each of those ends in a question to answer: one
+          answer, several, or a short set. */}
+      <Widget title="To do" count={5}>
         <WidgetGroup label="Waiting on you">
           <WidgetRow
             leading={<StatusDot variant="warning" size="sm" aria-hidden="true" />}
             title="Invite the other three"
             description="2 of 5 seats filled"
             meta="Today"
-            onClick={() => onAsk('Go ahead and invite the other three')}
+            onClick={() => onAsk('Invite my team to a workspace')}
           />
           <WidgetRow
             leading={<StatusDot variant="info" size="sm" aria-hidden="true" />}
             title="Choose a plan"
             description="Trial ends in 9 days"
             meta="Oct 19"
-            onClick={() => onAsk('Which plan fits a team of five?')}
+            onClick={() => onAsk('Help me pick a plan')}
+          />
+          <WidgetRow
+            leading={<StatusDot variant="info" size="sm" aria-hidden="true" />}
+            title="Plan the launch kickoff"
+            description="A date, who comes, and how"
+            meta="Oct 21"
+            onClick={() => onAsk('Plan our launch kickoff')}
           />
         </WidgetGroup>
         <WidgetGroup label="In progress">
@@ -106,12 +116,14 @@ export function DemoBoard({ onAsk }: { onAsk: (prompt: string) => void }) {
             title="Shared calendar"
             description="Synced an hour ago"
             meta="On"
+            onClick={() => onAsk('Find a time we can all meet')}
           />
           <WidgetRow
             leading={<StatusDot variant="neutral" size="sm" aria-hidden="true" />}
             title="Mention notifications"
             description="Quiet hours, 6pm to 8am"
             meta="Paused"
+            onClick={() => onAsk('Set up notifications for me')}
           />
         </WidgetGroup>
       </Widget>

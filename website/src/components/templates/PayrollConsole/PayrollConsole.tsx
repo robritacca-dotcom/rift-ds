@@ -490,8 +490,9 @@ export default function PayrollConsole() {
   const [chatOpen, setChatOpen] = useState(true);
   const [agentTab, setAgentTab] = useState("activity");
 
-  /* The scripted transport the playground's Simulated mode runs on, with no
-     rich content registered: this page is about the chrome, not the story. */
+  /* The scripted transport the playground's Simulated mode runs on, with the
+     demo's renderers registered so its cards and questions draw as they do
+     on the playground stage. */
   const transport = useMemo(() => createDemoTransport(), []);
 
   const rows = useMemo(

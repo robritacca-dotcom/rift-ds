@@ -209,7 +209,8 @@ export default function PlaygroundPage() {
       transportMode === "live"
         ? createFetchTransport()
         : /* The demo script, whose replies carry the cards the provider's
-             renderers draw: a plan, a chart, a diff, an approval. */
+             renderers draw (a plan, a chart, a diff, a tool call) and end
+             in follow-up chips or a question to answer. */
           createDemoTransport(),
     [transportMode]
   );
@@ -219,6 +220,9 @@ export default function PlaygroundPage() {
   const [chatManual, setChatManual] = useState<{ w?: number; h?: number }>({});
   const [chatPlaceholder, setChatPlaceholder] = useState("");
   const [welcome, setWelcome] = useState<ChatWelcomeVariant>("dashboard");
+  /* Which way the conversation reads: the widget's top-down default, or the
+     classic bottom-up thread. */
+  const [chatFlow, setChatFlow] = useState<"top-down" | "bottom-up">("top-down");
   /* The staged thread furniture, feature by feature. The stage opens with
      every extra on and the dashboard welcome, the fullest version of the
      widget; switching them off walks back to the simple rail the live site
@@ -720,6 +724,16 @@ export default function PlaygroundPage() {
           ]}
           onValueChange={(value) => setTransportMode(value as TransportMode)}
         />
+        <InspectorSegmentedControl
+          size="compact"
+          label="Flow"
+          value={chatFlow}
+          options={[
+            { value: "top-down", label: "Top down" },
+            { value: "bottom-up", label: "Bottom up" },
+          ]}
+          onValueChange={(value) => setChatFlow(value as "top-down" | "bottom-up")}
+        />
       </div>
 
       <div className={styles.controlGroup}>
@@ -1159,6 +1173,7 @@ export default function PlaygroundPage() {
               size={compact ? "desktop" : stageSize}
               placeholder={chatPlaceholder}
               welcome={welcome}
+              flow={chatFlow}
               manual={chatManual}
               onManual={(next) => setChatManual((m) => ({ ...m, ...next }))}
               allowFullscreen={!compact}

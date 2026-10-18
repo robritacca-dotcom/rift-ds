@@ -27,14 +27,18 @@
  *   - Every option the playground stage offers is on, from the same demo
  *     fixtures: the history with projects, pins and thread details, the
  *     session tabs, mentions, and the trailing seat's pair, the agent pane
- *     (open on arrival) and the artifact panel, inline beside the
+ *     (closed on arrival, a header toggle away) and the artifact panel, inline beside the
  *     conversation on a wide window and a sheet on a narrow one.
  *   - People are initials (rule 4): the one person here is the profile row.
  *   - No app-frame dressing (rule 8): a chat session has no tab-bar shape on
  *     a phone, where this screen is already the full-screen chat.
  *
  * Every prompt a tile sends is one the demo script has an answer for, so
- * the screen answers in character. Nothing leaves the browser. The demo
+ * the screen answers in character. The board's to-do rows open the chats
+ * that settle them, and each of those ends in a question card: one answer
+ * (the plan, the calendar access, the invites), several (notifications), or
+ * a set that holds the composer (the kickoff). The conversation is carried
+ * by those quick replies, never by buttons inside a card. Nothing leaves the browser. The demo
  * data is fictional, which keeps the route out of the chat corpus (see
  * EXCLUDED_ROUTES in scripts/generate-site-corpus.mjs).
  */
@@ -60,7 +64,7 @@ import styles from "./ChatHome.module.css";
 
 export default function ChatHome() {
   /* The scripted demo transport, with the demo's cards registered so a chip
-     path ends on a plan, a chart or an approval. Its turns carry no exchange
+     path ends on a plan, a chart, a diff or a question to answer. Its turns carry no exchange
      id, which also keeps the provider from asking the follow-ups route. */
   const transport = useMemo(() => createDemoTransport(), []);
   return (
@@ -121,10 +125,11 @@ function ChatHomeShell() {
           profile: { name: "Jordan Reyes", meta: "Pro" },
         }}
         agent={{
-          /* Up on arrival when the window seats it inline; the trailing seat
-             holds one panel at a time, so the artifact panel takes over when
-             an answer makes one or its header button asks. */
-          defaultOpen: true,
+          /* Closed on arrival, so the home screen opens on the board and the
+             conversation; the header's agent toggle raises it. The trailing
+             seat holds one panel at a time, so the artifact panel takes over
+             when an answer makes one or its header button asks. */
+          defaultOpen: false,
           tabs: demoAgentTabs(product),
           profile: {
             name: product,

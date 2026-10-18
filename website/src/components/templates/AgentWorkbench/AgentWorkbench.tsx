@@ -46,7 +46,10 @@ import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
 import { CodeDiff } from "rift-ds/components/CodeDiff/CodeDiff";
 import { Composer } from "rift-ds/components/Composer/Composer";
 import { Divider } from "rift-ds/components/Divider/Divider";
-import { InterruptCard } from "rift-ds/components/InterruptCard/InterruptCard";
+import {
+  QuestionCard,
+  type QuestionCardQuestion,
+} from "rift-ds/components/QuestionCard/QuestionCard";
 import { ModelPicker } from "rift-ds/components/ModelPicker/ModelPicker";
 import { Reasoning } from "rift-ds/components/Reasoning/Reasoning";
 import { Sparkline } from "rift-ds/components/Sparkline/Sparkline";
@@ -308,7 +311,20 @@ const PATCH_NOTE =
   "worker shutdown and client disconnects at the same abort path, makes " +
   "the backoff jitter injectable so the spec can pin the clock, and notes " +
   "the new contract in the upload guide. The full diff is staged in the " +
-  "workspace.";
+  "workspace. Apply it and re-run the suite?";
+
+/* The checkpoint, asked as a question in the conversation's own flow: the
+   answer is sent as the person's reply, and the next turn follows it. */
+const CHECKPOINT: QuestionCardQuestion[] = [
+  {
+    id: "patch",
+    prompt: "Apply the patch and re-run the suite?",
+    options: [
+      { value: "apply", label: "Apply and re-run", description: "vitest run uploads, in the session sandbox" },
+      { value: "hold", label: "Hold the patch", description: "The diff stays staged; nothing runs" },
+    ],
+  },
+];
 
 const APPLY_REPLY =
   "The suite is green: 218 passed, 0 failed, in 41 seconds. Twelve repeat " +
@@ -519,26 +535,24 @@ export default function AgentWorkbench() {
               <div className={styles.turnStack}>
                 <AgentPlan steps={planSteps} />
                 <p className={styles.turnText}>{PATCH_NOTE}</p>
-                <InterruptCard
-                  title="Apply the patch and re-run the suite?"
-                  description="vitest run uploads, in the session sandbox. Review the staged diff first if you like."
-                  options={[
-                    {
-                      value: "apply",
-                      label: "Apply and re-run",
-                      variant: "primary",
-                    },
-                    {
-                      value: "hold",
-                      label: "Hold the patch",
-                      variant: "secondary",
-                    },
-                  ]}
-                  value={decision}
-                  onValueChange={setDecision}
+                <QuestionCard
+                  questions={CHECKPOINT}
+                  values={
+                    decision ? [{ questionId: "patch", values: [decision] }] : undefined
+                  }
+                  /* A typed message before an answer moves the session on,
+                     and the checkpoint stays as it was offered, inert. */
+                  disabled={!decision && typedTurns.length > 0}
+                  onValuesChange={(answers) => setDecision(answers[0]?.values[0])}
                 />
               </div>
             </ChatMessage>
+
+            {decision && (
+              <ChatMessage role="user">
+                {CHECKPOINT[0].options.find((option) => option.value === decision)?.label}
+              </ChatMessage>
+            )}
 
             {decision && (
               <ChatMessage role="assistant">

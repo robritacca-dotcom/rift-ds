@@ -1,9 +1,10 @@
 'use client';
 
 /**
- * The stateful pieces behind the demo's card renderers: a tool call that
- * can be retried in place, an interrupt card that answers, a chart card,
- * and a stack of cards landing as one. demo-cards.tsx maps kinds onto them.
+ * The stateful pieces behind the demo's card renderers: a tool call (one
+ * that can be retried in place, for a host that wants that), an interrupt
+ * card, a chart card, and a stack of cards landing as one. demo-cards.tsx
+ * maps kinds onto them.
  */
 import { useEffect, useState } from 'react';
 import { Button } from '../components/Button/Button';

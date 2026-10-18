@@ -51,6 +51,8 @@ export interface ChatViewProps {
   /** What the welcome screen holds under the composer: the starters, one
       of the demo fillings, or nothing. */
   welcome: DemoWelcomeVariant;
+  /** Which way the conversation reads: top-down (the widget's default) or bottom-up. */
+  flow: "top-down" | "bottom-up";
   /** The dragged size, held by the page so it survives a switch to the
       Components view and back, and dies with the playground like every
       other lever. */
@@ -95,6 +97,7 @@ export default function ChatView({
   size,
   placeholder,
   welcome,
+  flow,
   manual,
   onManual,
   allowFullscreen,
@@ -491,6 +494,7 @@ export default function ChatView({
         placeholder={
           placeholder.trim() === "" ? defaultChatPlaceholder(simControls) : placeholder
         }
+        flow={flow}
         showStarters={welcome === "starters"}
         /* The Welcome lever's other fillings ride the widget slot. The
            dashboard runs long, so it always turns the welcome into a page;

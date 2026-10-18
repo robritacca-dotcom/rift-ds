@@ -4,8 +4,9 @@
  *
  * Holds the library's uses of the action colour, `--color-action-primary-bg`,
  * to the roles design.md reserves it for: primary CTAs, focus rings, active
- * input borders, the checked or on state of a form control, and the selected
- * item of a mutually exclusive set (plus the one data-viz exception, which
+ * input borders, the checked or on state of a form control, the selected
+ * item of a mutually exclusive set, and the hover signal of a surface that is
+ * itself a control (plus the one data-viz exception, which
  * reaches charts through `--color-chart-series-1`, never the action token
  * directly). The colour only means "click here" while nothing else wears it;
  * the 2026-10-02 drift audit found six components spending it on decoration
@@ -26,8 +27,10 @@
  * The table is per component, not per selector: it guards against a new
  * consumer, not against a decorative use added inside a component already
  * listed. That residue is the token-audit and design-qa skills' job.
- * Only the fill token itself is tracked; its `-hover`/`-active` steps and the
- * rest of the action family only ever appear beside it.
+ * The fill token is tracked with its `-hover` and `-active` steps, since a
+ * component can spend the colour through a state step alone (BentoTile's
+ * hover border does); the rest of the action family (`-text` and friends)
+ * only ever appears beside the fill.
  *
  * Runs in the validate-registry chain: it reads source only.
  */
@@ -40,6 +43,7 @@ const componentsDir = join(repoRoot, 'src', 'components');
 
 /** Component folder → the design.md role its non-focus uses play. */
 export const SANCTIONED = {
+  BentoTile: 'hover signal of a surface that is itself a control (the expandable tile\'s border)',
   BottomNav: 'selected item (the active destination)',
   Button: 'primary CTA',
   Carousel: 'selected item (the active slide dot)',
@@ -51,11 +55,11 @@ export const SANCTIONED = {
   Dropdown: 'checked state (the selected-option check)',
   EventCalendar: 'selected item (the selected day)',
   FilterBar: 'selected item (an active filter) and its option checks',
+  Inspector: 'selected item (the selected segment of InspectorSegmentedControl)',
   Pagination: 'selected item (the current page)',
   RadioButton: 'checked state of a form control',
   RichDropdown: 'checked state (the selected-option check)',
   SegmentedControl: 'selected item (the active segment)',
-  Inspector: 'selected item (the selected segment of InspectorSegmentedControl)',
   SelectionCard: 'checked state of its radio, checkbox and toggle indicators',
   Slider: 'on state of a form control (the filled track and thumb)',
   Stepper: 'selected item (the active step)',
@@ -66,7 +70,7 @@ export const SANCTIONED = {
   ToggleSwitch: 'on state of a form control',
 };
 
-const TOKEN = /--color-action-primary-bg(?![\w-])/;
+const TOKEN = /--color-action-primary-bg(?:-hover|-active)?(?![\w-])/;
 
 // Normalize CRLF so Windows checkouts validate identically to CI.
 const read = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
@@ -98,7 +102,7 @@ for (const file of files) {
       errors.push(
         `${rel}:${i + 1} — ${component} uses --color-action-primary-bg outside a focus outline. ` +
           `Use a neutral, status or chart role instead, or, if the use is a primary CTA, an active input border, ` +
-          `the checked/on state of a form control or the selected item of a mutually exclusive set, ` +
+          `the checked/on state of a form control or the selected item of a mutually exclusive set or the hover signal of a surface that is itself a control, ` +
           `add ${component} to SANCTIONED in scripts/validate-action-colour.mjs with that role.`
       );
     }

@@ -2,7 +2,7 @@
 
 Inline trend line for stats and table cells, drawn without axes or chrome.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.9.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: charts
 - Import: `import { Sparkline } from 'rift-ds';`
@@ -16,7 +16,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.9.0. The same data
 | --- | --- | --- | --- | --- |
 | data | `number[]` | yes |  | The series to plot, in order. Values are normalised into the viewBox. |
 | variant | `"area" \| "line"` | no | `line` | Rendering treatment — a bare line, or a line with a soft fill underneath. |
-| tone | `"positive" \| "neutral" \| "accent" \| "negative"` | no | `accent` | Colour role for the line and end dot. `accent` follows the chart palette's lead colour; `positive`/`negative` map to the status text tokens; `neutral` recedes to secondary text. |
+| tone | `"error" \| "positive" \| "neutral" \| "accent" \| "negative"` | no | `accent` | Colour role for the line and end dot. `accent` follows the chart palette's lead colour; `positive`/`error` map to the trend pair (up and down), named like the status roles Gauge and the status components use; `neutral` recedes to secondary text. `negative` is the legacy name for `error`. |
 | showDot | `boolean` | no | `true` | Marks the final point with a small dot. |
 | strokeWidth | `number` | no | `2` | Line thickness in viewBox units — an SVG geometry attribute, not a token. |
 | width | `number` | no | `120` | ViewBox width. Also the default rendered width; the SVG scales to its container when sized externally via CSS. Intentionally shadows the native SVG `width` attribute, which it sets. |

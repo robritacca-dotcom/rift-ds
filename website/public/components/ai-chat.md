@@ -1,18 +1,18 @@
 # AI chat
 
-The whole AI chat, assembled: the panel, the streaming replies, the history, the cards a reply can carry and the server handlers, set up with props.
+The whole AI chat: the panel, the streaming replies, the history, the cards and questions a reply can carry and the server handlers, set up with props.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.9.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: widget
 - Import: `import { ChatWidget, ChatProvider, ChatLauncher, ChatThreads, ChatTabs, ChatAgentPane, ChatArtifactPane, ChatArtifactCard } from 'rift-ds/chat';`
 - Subpath `rift-ds/chat`: The widget, the provider, the launcher and the engine under them. Optional peers: react-markdown, remark-gfm.
-- Subpath `rift-ds/chat/server`: The streaming chat handler and its follow-ups and feedback siblings, for any web-standard route. Optional peers: @anthropic-ai/sdk.
+- Subpath `rift-ds/chat/server`: The streaming chat handler, with an opt-in tool for asking the visitor questions, and its follow-ups and feedback siblings, for any web-standard route. Optional peers: @anthropic-ai/sdk.
 - Subpath `rift-ds/chat/upstash`: Rate limits, a daily budget and the exchange log over Upstash Redis, as the handlers' guardrails. Optional peers: @upstash/ratelimit, @upstash/redis.
 - Subpath `rift-ds/chat/demo`: A scripted conversation with rich cards and fixtures, for a preview that needs no key. Optional peers: recharts.
 - Subpath `rift-ds/chat/chat.css`: The widget's stylesheet.
 - Scaffold: `npx rift-ds init chat`
-- Composes: AgentRail, AgentStatus, AiButton, ArtifactCard, ArtifactPanel, AttachmentDropZone, AttachmentGroup, ChatHeader, ChatMessage, ChatThread, CircularButton, CodeBlock, Composer, DropdownMenu, EmptyState, Mention, ModelPicker, PixelAvatar, PromptSuggestions, Prose, Reasoning, ThreadPanel, ThreadTabs
+- Composes: AgentRail, AgentStatus, AiButton, ArtifactCard, ArtifactPanel, AttachmentDropZone, AttachmentGroup, ChatHeader, ChatMessage, ChatThread, CircularButton, CodeBlock, Composer, DropdownMenu, EmptyState, Mention, ModelPicker, PixelAvatar, PromptSuggestions, Prose, QuestionCard, Reasoning, ThreadPanel, ThreadTabs
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/ai-chat
 
@@ -26,7 +26,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.9.0. The same data
 | compact | `boolean` | no | `false` | Narrow insets for phone-width hosts. |
 | phone | `boolean` | no | `false` | The host is a phone viewport, where the soft keyboard will claim the lower half of the screen the moment the composer is focused. The welcome screen stacks instead of centring the composer: greeting in the middle of the empty thread, starters directly above the composer, composer pinned to the bottom from the first paint. |
 | title | `string` | no | `Assistant` | The header brand name. |
+| flow | `"top-down" \| "bottom-up"` | no | `top-down` | Which way the conversation reads. `top-down` (the default) floats each new turn to the top of the thread and streams the answer in below it. `bottom-up` is the classic message thread: turns stack from the bottom, the newest just above the composer, and the view follows the answer. |
 | placeholder | `string` | no | `Ask anything` | The composer's placeholder text. |
+| questionsPlaceholder | `string` | no | `Answer the questions above, or skip them` | The composer's placeholder while a set of questions holds it: the answer goes in the card, or the card is skipped. |
 | showStarters | `boolean` | no | `true` | Show the conversation starters on the welcome screen. |
 | logo | `string \| null` | no | `null` | The header mark's image src; null (the default) shows the name alone. |
 | tagline | `string` | no | `How can I help you today?` | The welcome screen's line under the greeting. |

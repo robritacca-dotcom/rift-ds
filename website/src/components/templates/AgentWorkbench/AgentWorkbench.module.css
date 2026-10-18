@@ -348,6 +348,7 @@
 
 /* Below the three-panel width the threads panel bows out first: it is
    history, and the session on stage matters more than the sessions past. */
+/* ds-allow(breakpoint): content-driven: the three-panel board's width, one pixel above the mid step; aligning it would change the board at exactly 1280px. */
 @media (max-width: 1280px) {
   .board {
     grid-template-columns: minmax(400px, 480px) minmax(0, 1fr);

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import React from 'react';
+import { tokenRegistry } from '../tokens/registry';
 
 const meta = {
   title: 'Foundations/Tokens',
@@ -548,6 +549,25 @@ export const SemanticColors: Story = {
           value="--color-action-neutral-bg-active"
         />
         <ColorToken name="Text" value="--color-action-neutral-text" />
+        <ColorToken name="Border" value="--color-action-neutral-border" />
+      </TokenSection>
+
+      <TokenSection title="Action - Destructive">
+        <ColorToken name="Background" value="--color-action-destructive-bg" />
+        <ColorToken
+          name="Background Hover"
+          value="--color-action-destructive-bg-hover"
+        />
+        <ColorToken
+          name="Background Active"
+          value="--color-action-destructive-bg-active"
+        />
+        <ColorToken name="Text" value="--color-action-destructive-text" />
+        <ColorToken
+          name="Text Secondary"
+          value="--color-action-destructive-text-secondary"
+        />
+        <ColorToken name="Border" value="--color-action-destructive-border" />
       </TokenSection>
 
       <TokenSection title="Input">
@@ -987,6 +1007,41 @@ export const Motion: Story = {
         <MotionTokenRow name="Entrance" value="--motion-ease-entrance" />
         <MotionTokenRow name="Linear" value="--motion-ease-linear" />
         <MotionTokenRow name="Spring" value="--motion-ease-spring" />
+      </TokenSection>
+    </div>
+  ),
+};
+
+export const Stacking: Story = {
+  render: () => (
+    <div style={{ maxWidth: '800px' }}>
+      <h2
+        style={{
+          fontSize: '24px',
+          fontWeight: 700,
+          color: 'var(--color-text-primary)',
+          marginBottom: '24px',
+        }}
+      >
+        Stacking Tokens
+      </h2>
+      <p
+        style={{
+          fontSize: '14px',
+          color: 'var(--color-text-secondary)',
+          marginBottom: '32px',
+          lineHeight: '1.5',
+        }}
+      >
+        The z-index of every surface that rises out of its component into the
+        page&apos;s layers, defined in tokens-light.css and listed lowest first.
+        Ordering inside one component stays a small local number.
+      </p>
+
+      <TokenSection title="Layers">
+        {tokenRegistry.stacking.map((token) => (
+          <MotionTokenRow key={token} name={token.replace('--layer-', '')} value={token} />
+        ))}
       </TokenSection>
     </div>
   ),

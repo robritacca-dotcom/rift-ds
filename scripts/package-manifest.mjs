@@ -32,7 +32,7 @@ import {
 } from './brand.mjs';
 
 export { PACKAGE_NAME, REPOSITORY_URL };
-export const PACKAGE_VERSION = '1.9.0';
+export const PACKAGE_VERSION = '1.10.0';
 export const PACKAGE_DESCRIPTION =
   'An AI-ready React design system: accessible components on composable tokens, light/dark theming, and CSS-variable overrides.';
 
@@ -86,6 +86,9 @@ const SUBPATHS = [
   // The JS-timing constants — the TypeScript side of the motion tokens,
   // for timers a CSS variable cannot reach.
   { key: './tokens/motion', srcJs: './src/tokens/motion.ts', dist: './tokens/motion' },
+  // The viewport breakpoints: the widths every media query is held to
+  // (scripts/validate-breakpoints.mjs), and the queries JS reads.
+  { key: './tokens/breakpoints', srcJs: './src/tokens/breakpoints.ts', dist: './tokens/breakpoints' },
   { key: './components/*', srcJs: './src/components/*.tsx', dist: './components/*' },
   { key: './tokens/*.css', asset: './src/tokens/*.css', dist: './tokens/*.css' },
   // The generated data-brand preset stylesheets (see

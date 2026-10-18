@@ -392,6 +392,7 @@
 
 /* Below the two-pane width the board stacks: the stage first, since it is
    the point of the screen, then the rail in normal flow. */
+/* ds-allow(breakpoint): content-driven: the two-pane board's width. */
 @media (max-width: 1200px) {
   .board {
     grid-template-columns: minmax(0, 1fr);

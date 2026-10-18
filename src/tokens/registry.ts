@@ -23,7 +23,8 @@ export type TokenCategory =
   | 'border'
   | 'shadow'
   | 'icons'
-  | 'motion';
+  | 'motion'
+  | 'stacking';
 
 /** Semantic token names, grouped by category. */
 export const tokenRegistry = registry.categories as Record<TokenCategory, readonly string[]>;

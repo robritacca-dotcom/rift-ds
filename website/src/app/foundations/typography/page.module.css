@@ -133,3 +133,25 @@
   }
 
 }
+
+/* ============================================
+   SCALE LADDERS — the raw size and line-height steps, as a table
+   ============================================ */
+.scaleSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-500);
+  width: 100%;
+}
+
+.scaleNote {
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-tertiary);
+}
+
+/* A token name or value reads as one unit; wrapping splits it. */
+.scaleCode {
+  white-space: nowrap;
+}

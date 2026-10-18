@@ -111,7 +111,7 @@ export const ToolCall = React.forwardRef<HTMLDivElement, ToolCallProps>(
       <>
         <span className={`${baseClass}__indicator`} aria-hidden="true">
           {status === 'running' ? (
-            <Spinner size="sm" variant="inherit" />
+            <Spinner size="sm" tone="inherit" />
           ) : (
             <span className="material-symbols-rounded">{STATUS_ICONS[status]}</span>
           )}

@@ -976,7 +976,7 @@
   box-shadow: var(--shadow-floating);
   overflow: hidden;
   backdrop-filter: blur(24px);
-  z-index: 1100;
+  z-index: var(--layer-chat-panel);
   /* The panel-to-takeover glide: the same card grows to fill the viewport,
      so every property that differs between the two views animates together. */
   transition:
@@ -1050,7 +1050,7 @@ html[data-chat-resizing] .ds-chat-launcher__panel {
   position: fixed;
   inset: 0;
   background: var(--color-scrim);
-  z-index: 1090;
+  z-index: var(--layer-chat-scrim);
   animation: ds-chat-launcher-scrim-in var(--motion-duration-slow) var(--motion-ease-standard);
 }
 
@@ -1075,7 +1075,7 @@ html[data-chat-resizing] .ds-chat-launcher__panel {
   justify-content: center;
   cursor: ew-resize;
   touch-action: none;
-  z-index: 1101;
+  z-index: calc(var(--layer-chat-panel) + 1);
 }
 
 .ds-chat-launcher__dock-handle--left {
@@ -1135,6 +1135,7 @@ html[data-chat-resizing] .ds-chat-launcher__panel {
    corner, all inside the card. */
 .ds-chat-launcher__float-grip {
   position: absolute;
+  /* ds-allow(stacking): local order inside the floating card, above its own content; the card itself sits on --layer-chat-panel. */
   z-index: 10;
   display: flex;
   align-items: center;
@@ -1246,7 +1247,7 @@ html[data-chat-resizing] .ds-chat-launcher__panel--floating .ds-chat-header {
   position: fixed;
   right: var(--ds-chat-inset);
   bottom: var(--ds-chat-inset);
-  z-index: 1080;
+  z-index: var(--layer-chat-launcher);
 }
 
 /* The button's own solid field keeps it legible over whatever content

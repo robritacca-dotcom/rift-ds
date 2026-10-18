@@ -71,6 +71,7 @@
 /* Narrow column: the centre links give way first, the way the real
    header's do below its own breakpoint. The stage's Mobile preset can't
    move the real viewport, so its marker hides them the same way. */
+/* ds-allow(breakpoint): content-driven: the width where the mock header has no room for its centre links. */
 @media (max-width: 899px) {
   .links {
     display: none;

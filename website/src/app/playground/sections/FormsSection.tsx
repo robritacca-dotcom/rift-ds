@@ -144,22 +144,22 @@ export default function FormsSection() {
       </div>
 
       <div className={styles.demoRow}>
-        <Checkbox label="Checked state" checked={checked} onChange={setChecked} />
+        <Checkbox label="Checked state" checked={checked} onCheckedChange={setChecked} />
         <RadioButton
           label="Weekly digest"
-          name="playground-cadence"
+
           value="weekly"
           checked={cadence === "weekly"}
-          onChange={() => setCadence("weekly")}
+          onValueChange={() => setCadence("weekly")}
         />
         <RadioButton
           label="Monthly"
-          name="playground-cadence"
+
           value="monthly"
           checked={cadence === "monthly"}
-          onChange={() => setCadence("monthly")}
+          onValueChange={() => setCadence("monthly")}
         />
-        <ToggleSwitch label="Toggle" checked={toggle} onChange={setToggle} />
+        <ToggleSwitch label="Toggle" checked={toggle} onCheckedChange={setToggle} />
       </div>
 
       <div className={styles.sliderRow}>
@@ -168,7 +168,7 @@ export default function FormsSection() {
           min={0}
           max={100}
           onValueChange={setSliderValue}
-          ariaLabel="Demo slider"
+          aria-label="Demo slider"
         />
         <span className={styles.sliderValue}>{sliderValue}</span>
       </div>
@@ -178,7 +178,7 @@ export default function FormsSection() {
         name="playground-plan"
         options={PLAN_OPTIONS}
         value={plan}
-        onChange={(v) => setPlan(v as string)}
+        onValueChange={(v) => setPlan(v as string)}
       />
     </section>
   );

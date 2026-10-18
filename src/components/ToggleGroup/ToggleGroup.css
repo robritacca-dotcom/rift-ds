@@ -63,9 +63,10 @@
 }
 
 /* ============================================
-   NEUTRAL VARIANT
+   NEUTRAL TONE (tone="neutral"; the legacy
+   variant="neutral" keeps this class)
    Active items fill grey instead of the action
-   teal — for sets where the selection should
+   colour — for sets where the selection should
    not carry the action colour's weight.
    ============================================ */
 

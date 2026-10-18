@@ -5,10 +5,16 @@ import styles from "../page.module.css";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import { AgentStatus } from "rift-ds/components/AgentStatus/AgentStatus";
 import { AiButton } from "rift-ds/components/AiButton/AiButton";
+import { Button } from "rift-ds/components/Button/Button";
 import { ArtifactCard } from "rift-ds/components/ArtifactCard/ArtifactCard";
 import { ArtifactPanel } from "rift-ds/components/ArtifactPanel/ArtifactPanel";
 import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
 import { PromptSuggestions } from "rift-ds/components/PromptSuggestions/PromptSuggestions";
+import {
+  QuestionCard,
+  type QuestionCardAnswer,
+  type QuestionCardQuestion,
+} from "rift-ds/components/QuestionCard/QuestionCard";
 import { Reasoning } from "rift-ds/components/Reasoning/Reasoning";
 import { SourceChip } from "rift-ds/components/SourceChip/SourceChip";
 import { ToolCall } from "rift-ds/components/ToolCall/ToolCall";
@@ -19,6 +25,22 @@ const SUGGESTIONS = [
   { id: "retheme", label: "How does re-theming work?", icon: "palette" },
   { id: "tokens", label: "Explain the token architecture", icon: "account_tree" },
   { id: "install", label: "How do I install the design system?", icon: "download" },
+];
+
+/* A question the agent might ask about the theme being built: the option
+   rows, their marks and the record they leave all move with the levers. */
+const THEME_QUESTION: QuestionCardQuestion[] = [
+  {
+    id: "surfaces",
+    prompt: "Where should the theme apply?",
+    mode: "multi",
+    options: [
+      { value: "site", label: "The marketing site" },
+      { value: "app", label: "The product app" },
+      { value: "docs", label: "The documentation" },
+    ],
+    other: true,
+  },
 ];
 
 const TOOL_ARGS = `{
@@ -43,6 +65,7 @@ const ARTIFACT_ROWS = [
 export default function AiSection() {
   const [suggestion, setSuggestion] = useState<string | null>(null);
   const [artifactOpen, setArtifactOpen] = useState(true);
+  const [answers, setAnswers] = useState<QuestionCardAnswer[] | undefined>(undefined);
 
   return (
     <section className={styles.demoSection} aria-label="AI">
@@ -96,6 +119,20 @@ export default function AiSection() {
           the next message.
         </p>
       )}
+
+      {/* A question with answers to pick; answered, it stays as the record.
+          Pressing it again starts over. */}
+      <div className={styles.questionFrame}>
+        <QuestionCard
+          key={answers ? "answered" : "open"}
+          questions={THEME_QUESTION}
+          values={answers}
+          onValuesChange={setAnswers}
+        />
+        {answers && (
+          <Button variant="tertiary" size="compact" label="Ask again" onClick={() => setAnswers(undefined)} />
+        )}
+      </div>
 
       {/* The artifact pair: the tile a reply leaves in the thread, and the
           panel it opens. One piece of state between them, as in the chat. */}

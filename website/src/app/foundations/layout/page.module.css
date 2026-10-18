@@ -1,0 +1,320 @@
+/* ============================================
+   LAYOUT PAGE
+   ============================================ */
+.dsLayout {
+  display: flex;
+  gap: var(--layout-column-gap);
+  width: 100%;
+  max-width: 1440px;
+  padding-top: var(--primitive-gap-1000);
+}
+
+.dsContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-2000);
+  min-width: 0;
+}
+
+/* ============================================
+   PAGE TITLE - Display 2
+   ============================================ */
+.pageHeader {
+  margin-top: calc(var(--primitive-gap-1000) - var(--gap-2000));
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--primitive-gap-500);
+  width: 100%;
+}
+
+.pageTitle {
+  font-family: var(--font-display-2-family);
+  font-size: var(--font-display-2-size);
+  font-weight: var(--font-display-2-weight);
+  line-height: var(--font-display-2-line-height);
+  letter-spacing: var(--font-display-2-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.subDisplay {
+  font-family: var(--font-sub-display-family);
+  font-size: var(--font-sub-display-size);
+  font-weight: var(--font-sub-display-weight);
+  line-height: var(--font-sub-display-line-height);
+  letter-spacing: var(--font-sub-display-letter-spacing);
+  color: var(--color-text-primary);
+  margin-bottom: 0;
+}
+
+/* ============================================
+   INTRO SECTION
+   ============================================ */
+.introSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-500);
+}
+
+.introBody {
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   SECTION GROUP
+   ============================================ */
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-500);
+  width: 100%;
+}
+
+.groupNote {
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-tertiary);
+}
+
+/* ============================================
+   BREAKPOINTS — one row per step: name, query and scope, the ruler
+   with the side the rules apply to filled, then what changes.
+   ============================================ */
+.breakpointList {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.breakpoint {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+  padding: var(--padding-400) 0;
+  border-bottom: var(--border-025) solid var(--color-divider);
+}
+
+.breakpoint:last-child {
+  border-bottom: none;
+}
+
+.breakpointHead {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--gap-300);
+}
+
+.breakpointName {
+  font-size: var(--font-paragraph-emphasis-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-emphasis-line-height);
+  color: var(--color-text-primary);
+}
+
+/* A query reads as one token; wrapping it at its space splits the
+   feature from its value. */
+.query {
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.breakpointRole {
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+}
+
+/* The ruler: the full track is the viewport from 0 to RULER_PX, the fill
+   the side the step's rules apply to, the edge the boundary itself.
+   --bp-pct is set per row from the step's width. */
+.track {
+  position: relative;
+  height: var(--padding-200);
+  border-radius: var(--radius-pill);
+  background: var(--color-bg-container-tertiary);
+  overflow: hidden;
+}
+
+.fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--bp-pct);
+  background: var(--color-text-tertiary);
+}
+
+.trackAbove .fill {
+  inset: 0 0 0 auto;
+  width: calc(100% - var(--bp-pct));
+}
+
+.edge {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--bp-pct);
+  width: var(--border-050);
+  transform: translateX(-50%);
+  background: var(--color-text-primary);
+}
+
+/* ============================================
+   PAGE SHELL — the doc frame drawn to scale: each column's share of the
+   reference viewport arrives as a percentage custom property from the
+   values globals.css declares.
+   ============================================ */
+.shells {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--gap-500);
+}
+
+.shell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+  margin: 0;
+}
+
+.shellFrame {
+  display: flex;
+  gap: var(--shell-gap);
+  aspect-ratio: 16 / 9;
+  padding: var(--padding-200);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-300);
+  background: var(--color-bg-container-primary);
+}
+
+.shellColumn {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  min-width: 0;
+  padding-top: var(--padding-200);
+  border-radius: var(--radius-100);
+  background: var(--color-bg-container-tertiary);
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-tertiary);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.shellSidebar {
+  flex: 0 0 var(--shell-sidebar);
+}
+
+.shellContent {
+  flex: 1;
+}
+
+.shellRail {
+  flex: 0 0 var(--shell-rail);
+}
+
+.shellCaption {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-100);
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+}
+
+.shellTitle {
+  font-weight: var(--font-paragraph-emphasis-weight);
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   STACKING — one row per layer, highest first. The slab grows with the
+   layer's rank in the stack (--stack-rank, 0 to 1), so the list reads as
+   a staircase from the toast down to an anchored menu.
+   ============================================ */
+.layerList {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.layer {
+  display: grid;
+  grid-template-columns: 3.5rem minmax(48px, 160px) 1fr auto;
+  align-items: center;
+  gap: var(--gap-400);
+  padding: var(--padding-300) 0;
+  border-bottom: var(--border-025) solid var(--color-divider);
+}
+
+.layer:last-child {
+  border-bottom: none;
+}
+
+.layerValue {
+  font-size: var(--font-paragraph-emphasis-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-emphasis-line-height);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  color: var(--color-text-primary);
+}
+
+.layerSlab {
+  display: block;
+  width: calc(var(--stack-rank) * 100%);
+  height: var(--padding-400);
+  border-radius: var(--radius-100);
+  background: var(--color-text-tertiary);
+}
+
+.layerText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-050);
+  min-width: 0;
+}
+
+.layerRole {
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+}
+
+/* A table value reads as code, but a long calc() may wrap. */
+.value {
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 959px) {
+  .pageHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .dsLayout {
+    padding-left: 0;
+    min-width: 0;
+  }
+
+  .dsContent {
+    max-width: 100%;
+  }
+}

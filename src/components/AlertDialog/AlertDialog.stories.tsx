@@ -17,7 +17,7 @@ const meta = {
     description: { control: 'text' },
     confirmLabel: { control: 'text' },
     cancelLabel: { control: 'text' },
-    variant: {
+    tone: {
       control: 'select',
       options: ['default', 'destructive'],
     },
@@ -49,7 +49,7 @@ export const Destructive: Story = {
     description: 'This will permanently delete the item. This action cannot be undone.',
     confirmLabel: 'Delete',
     cancelLabel: 'Cancel',
-    variant: 'destructive',
+    tone: 'destructive',
   },
 };
 
@@ -108,14 +108,14 @@ export const InteractiveDestructive: Story = {
 
     return (
       <>
-        <Button label="Delete item" variant="destructive" onClick={() => setOpen(true)} />
+        <Button label="Delete item" variant="secondary" tone="destructive" onClick={() => setOpen(true)} />
         <AlertDialog
           open={open}
           onOpenChange={setOpen}
           title="Delete item"
           description="This will permanently delete the item. This action cannot be undone."
           confirmLabel="Delete"
-          variant="destructive"
+          tone="destructive"
           onConfirm={() => console.log('Deleted')}
         />
       </>

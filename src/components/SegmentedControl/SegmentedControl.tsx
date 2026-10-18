@@ -24,7 +24,18 @@ export interface SegmentedControlProps {
   onSegmentChange?: (value: string) => void;
   /** Component size */
   size?: 'default' | 'compact';
-  /** Visual treatment of the active segment — teal by default, `neutral` fills it grey */
+  /**
+   * Colour of the active segment: `default` takes the action colour, `neutral`
+   * fills it grey, for a set whose selection should not carry the action
+   * colour's weight.
+   */
+  tone?: 'default' | 'neutral';
+  /**
+   * Legacy name for `tone`, from before colour moved onto its own prop:
+   * `primary` is `tone="default"`.
+   *
+   * @deprecated Use `tone` instead.
+   */
   variant?: 'primary' | 'neutral';
   /** Full width — segments fill container */
   fullWidth?: boolean;
@@ -53,7 +64,8 @@ export const SegmentedControl = ({
   activeSegment,
   onSegmentChange,
   size = 'default',
-  variant = 'primary',
+  tone,
+  variant,
   fullWidth = false,
   collapse = false,
   ariaLabel,
@@ -61,7 +73,11 @@ export const SegmentedControl = ({
 }: SegmentedControlProps) => {
   const baseClass = 'ds-segmented-control';
   const sizeClass = `${baseClass}--${size}`;
-  const variantClass = `${baseClass}--${variant}`;
+  // `variant` is the deprecated spelling of `tone`; the modifier class keeps
+  // its original names (`--primary`, `--neutral`) so styles written against
+  // them still apply.
+  const resolvedTone = tone ?? (variant === 'neutral' ? 'neutral' : 'default');
+  const variantClass = `${baseClass}--${resolvedTone === 'neutral' ? 'neutral' : 'primary'}`;
   const fullWidthClass = fullWidth ? `${baseClass}--full-width` : '';
   const containerRef = useRef<HTMLDivElement>(null);
   const pillRef = useRef<HTMLSpanElement>(null);

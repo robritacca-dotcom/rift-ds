@@ -103,6 +103,7 @@ export * from './components/Popover/Popover';
 export * from './components/ProgressBar/ProgressBar';
 export * from './components/PromptSuggestions/PromptSuggestions';
 export * from './components/Prose/Prose';
+export * from './components/QuestionCard/QuestionCard';
 export * from './components/Quote/Quote';
 export * from './components/RadioButton/RadioButton';
 export * from './components/Rating/Rating';

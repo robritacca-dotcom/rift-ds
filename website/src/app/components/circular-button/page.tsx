@@ -41,7 +41,7 @@ export default function CircularButtonPage() {
               An icon-only button in a circular shape
             </p>
             <p className={styles.introBody}>
-              For actions where a label is not needed, like close, menu, or navigation arrows. Uses the same primary, secondary, tertiary, and neutral styles as Button. Good for toolbars and compact UI where space is tight.
+              For actions where a label is not needed, like close, menu, or navigation arrows. Uses the same two props as Button: <code>variant</code> for the emphasis (primary, secondary, tertiary) and <code>tone</code> for the colour (default, neutral or destructive). Good for toolbars and compact UI where space is tight.
             </p>
           </div>
 
@@ -108,9 +108,9 @@ export default function CircularButtonPage() {
             </div>
           </section>
 
-          {/* Neutral states (Solid Grey) */}
+          {/* Neutral tone, primary emphasis (Solid Grey) */}
           <section className={styles.section}>
-            <SectionTitle title="Neutral" />
+            <SectionTitle title="Primary, neutral" />
             <p className={styles.introBody}>
               A solid grey fill that stays visible at rest, unlike the
               transparent tertiary. For toolbar actions that deserve a
@@ -126,7 +126,82 @@ export default function CircularButtonPage() {
                   <span className={styles.gridRowHeader}>{icon}</span>
                   {states.map((s) => (
                     <div key={s.value} className={styles.gridCell}>
-                      <CircularButton icon={icon} variant="neutral" state={s.value} ariaLabel={icon} />
+                      <CircularButton icon={icon} variant="primary" tone="neutral" state={s.value} ariaLabel={icon} />
+                    </div>
+                  ))}
+                </React.Fragment>
+              ))}
+            </div>
+          </section>
+
+          {/* Neutral tone, secondary emphasis (Outlined Grey) */}
+          <section className={styles.section}>
+            <SectionTitle title="Secondary, neutral" />
+            <p className={styles.introBody}>
+              The outlined shape with a grey edge in place of the accent.
+              Hover and press fill it with the neutral greys.
+            </p>
+            <div className={styles.stateGrid}>
+              <div className={styles.gridCorner} />
+              {states.map((s) => (
+                <span key={s.value} className={styles.gridColHeader}>{s.label}</span>
+              ))}
+              {icons.map((icon) => (
+                <React.Fragment key={icon}>
+                  <span className={styles.gridRowHeader}>{icon}</span>
+                  {states.map((s) => (
+                    <div key={s.value} className={styles.gridCell}>
+                      <CircularButton icon={icon} variant="secondary" tone="neutral" state={s.value} ariaLabel={icon} />
+                    </div>
+                  ))}
+                </React.Fragment>
+              ))}
+            </div>
+          </section>
+
+          {/* Destructive tone, primary emphasis (Solid Danger) */}
+          <section className={styles.section}>
+            <SectionTitle title="Primary, destructive" />
+            <p className={styles.introBody}>
+              The filled circle in the danger colour, for the one
+              irreversible action a surface leads with.
+            </p>
+            <div className={styles.stateGrid}>
+              <div className={styles.gridCorner} />
+              {states.map((s) => (
+                <span key={s.value} className={styles.gridColHeader}>{s.label}</span>
+              ))}
+              {icons.map((icon) => (
+                <React.Fragment key={icon}>
+                  <span className={styles.gridRowHeader}>{icon}</span>
+                  {states.map((s) => (
+                    <div key={s.value} className={styles.gridCell}>
+                      <CircularButton icon={icon} variant="primary" tone="destructive" state={s.value} ariaLabel={icon} />
+                    </div>
+                  ))}
+                </React.Fragment>
+              ))}
+            </div>
+          </section>
+
+          {/* Destructive tone (Outlined Danger) */}
+          <section className={styles.section}>
+            <SectionTitle title="Secondary, destructive" />
+            <p className={styles.introBody}>
+              For dangerous or irreversible actions like delete. The outline
+              and icon take the danger colour, and hover and press fill with it.
+            </p>
+            <div className={styles.stateGrid}>
+              <div className={styles.gridCorner} />
+              {states.map((s) => (
+                <span key={s.value} className={styles.gridColHeader}>{s.label}</span>
+              ))}
+              {icons.map((icon) => (
+                <React.Fragment key={icon}>
+                  <span className={styles.gridRowHeader}>{icon}</span>
+                  {states.map((s) => (
+                    <div key={s.value} className={styles.gridCell}>
+                      <CircularButton icon={icon} variant="secondary" tone="destructive" state={s.value} ariaLabel={icon} />
                     </div>
                   ))}
                 </React.Fragment>
@@ -164,7 +239,7 @@ export default function CircularButtonPage() {
               <CircularButton icon="add" variant="primary" loading ariaLabel="Saving" />
               <CircularButton icon="edit" variant="secondary" loading ariaLabel="Saving" />
               <CircularButton icon="refresh" variant="tertiary" loading ariaLabel="Refreshing" />
-              <CircularButton icon="tune" variant="neutral" loading ariaLabel="Applying filters" />
+              <CircularButton icon="tune" variant="primary" tone="neutral" loading ariaLabel="Applying filters" />
               <CircularButton icon="add" variant="primary" size="compact" loading ariaLabel="Saving" />
               <CircularButton icon="edit" variant="secondary" size="compact" loading ariaLabel="Saving" />
               <CircularButton icon="refresh" variant="tertiary" size="compact" loading ariaLabel="Refreshing" />
@@ -183,8 +258,9 @@ export default function CircularButtonPage() {
               <CircularButton icon="more_vert" variant="tertiary" size="compact" ariaLabel="More" />
               <CircularButton icon="search" variant="tertiary" size="compact" ariaLabel="Search" />
               <CircularButton icon="settings" variant="tertiary" size="compact" ariaLabel="Settings" />
-              <CircularButton icon="tune" variant="neutral" size="compact" ariaLabel="Filters" />
-              <CircularButton icon="sort" variant="neutral" size="compact" ariaLabel="Sort" />
+              <CircularButton icon="tune" variant="primary" tone="neutral" size="compact" ariaLabel="Filters" />
+              <CircularButton icon="sort" variant="primary" tone="neutral" size="compact" ariaLabel="Sort" />
+              <CircularButton icon="filter_list" variant="secondary" tone="neutral" size="compact" ariaLabel="Filter" />
             </div>
           </section>
 

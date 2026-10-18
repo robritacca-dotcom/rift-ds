@@ -7,7 +7,7 @@
       "name": "base",
       "type": "registry:lib",
       "title": "Rift base",
-      "description": "The shared layer every component builds on: the token stylesheets, the generated theme presets, the icon font, the motion constants, and the overlay behavior hooks."
+      "description": "The shared layer every component builds on: the token stylesheets, the generated theme presets, the icon font, the motion constants and breakpoints, and the overlay behavior hooks."
     },
     {
       "name": "accordion",
@@ -163,7 +163,7 @@
       "name": "button",
       "type": "registry:ui",
       "title": "Button",
-      "description": "Primary, secondary, tertiary, neutral and destructive variants in default and compact sizes, with icon support and multiple states."
+      "description": "Primary, secondary and tertiary emphasis, each in a default, neutral or destructive tone, with icons, loading, and default and compact sizes."
     },
     {
       "name": "button-group",
@@ -229,7 +229,7 @@
       "name": "circular-button",
       "type": "registry:ui",
       "title": "Circular button",
-      "description": "Round icon button with primary, secondary, tertiary and neutral variants, default and compact sizes."
+      "description": "Round icon button in primary, secondary and tertiary emphasis and a default, neutral or destructive tone, in default and compact sizes."
     },
     {
       "name": "code-block",
@@ -634,6 +634,12 @@
       "description": "Token-styled typography for rendered markdown and rich agent output."
     },
     {
+      "name": "question-card",
+      "type": "registry:ui",
+      "title": "Question card",
+      "description": "An agent's question with answers to pick: one or several, a set asked a step at a time, kept as a record once answered."
+    },
+    {
       "name": "quote",
       "type": "registry:ui",
       "title": "Quote",
@@ -745,13 +751,13 @@
       "name": "spinner",
       "type": "registry:ui",
       "title": "Spinner",
-      "description": "Animated circular loading indicator in three sizes and primary, neutral, or inherit variants."
+      "description": "Animated circular loading indicator in three sizes and a default, neutral or inherit tone."
     },
     {
       "name": "split-button",
       "type": "registry:ui",
       "title": "Split button",
-      "description": "Primary action with an attached menu of alternatives, composing Button and DropdownMenu in one pill."
+      "description": "Primary action with an attached menu of alternatives, composing Button and DropdownMenu in one pill, in primary or secondary emphasis and any tone."
     },
     {
       "name": "split-pane",
@@ -925,7 +931,7 @@
       "name": "ai-chat",
       "type": "registry:lib",
       "title": "Rift ai chat",
-      "description": "The whole AI chat, assembled: the panel, the streaming replies, the history, the cards a reply can carry and the server handlers, set up with props."
+      "description": "The whole AI chat: the panel, the streaming replies, the history, the cards and questions a reply can carry and the server handlers, set up with props."
     }
   ]
 }

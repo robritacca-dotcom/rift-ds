@@ -23,6 +23,9 @@ const handler = createChatHandler({
   models: CHAT_MODELS,
   defaultModel: DEFAULT_CHAT_MODEL,
   // tools: [], // Deterministic lookups the model may call; a tool can answer with a card.
+  // A reply can end in a question with answers to pick, drawn as a card the
+  // visitor taps. Asking ends the exchange; the answer arrives as the next message.
+  askUser: true,
   guardrails,
 });
 

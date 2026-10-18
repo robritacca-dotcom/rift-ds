@@ -13,8 +13,22 @@ type ButtonOwnProps = {
   iconLeft?: string | React.ReactNode;
   /** Icon for right side — Material Symbol name (string) or custom element (ReactNode) */
   iconRight?: string | React.ReactNode;
-  /** Visual treatment */
+  /**
+   * Emphasis: `primary` (filled), `secondary` (outlined) or `tertiary`
+   * (ghost). The colour is `tone`'s job. `neutral` and `destructive` are
+   * legacy values from before the split: `neutral` renders as
+   * `variant="primary" tone="neutral"` and `destructive` as
+   * `variant="secondary" tone="destructive"`.
+   */
   variant?: 'primary' | 'secondary' | 'tertiary' | 'neutral' | 'destructive';
+  /**
+   * Colour, independent of emphasis. `default` carries the action colour,
+   * `neutral` the greys, `destructive` the danger colour. Tertiary is
+   * already grey, so `neutral` leaves it unchanged; a tertiary
+   * `destructive` takes the outlined look, since a danger action needs a
+   * visible edge.
+   */
+  tone?: 'default' | 'neutral' | 'destructive';
   /** Button size */
   size?: 'default' | 'compact';
   /** Whether the button is disabled */
@@ -70,9 +84,44 @@ export interface ButtonProps
   extends ButtonOwnProps,
     Omit<React.ComponentPropsWithoutRef<'button'>, keyof ButtonOwnProps | 'type'> {}
 
+type ButtonEmphasis = 'primary' | 'secondary' | 'tertiary';
+type ButtonTone = NonNullable<ButtonOwnProps['tone']>;
+
+/** The legacy single-axis values, each one emphasis in one tone. */
+const LEGACY_VARIANTS: Record<'neutral' | 'destructive', [ButtonEmphasis, ButtonTone]> = {
+  neutral: ['primary', 'neutral'],
+  destructive: ['secondary', 'destructive'],
+};
+
+/**
+ * The emphasis × tone cell a button renders, as its modifier class. The
+ * cells that existed before the split keep their original class names
+ * (`neutral` is filled grey, `destructive` the outlined danger button), so
+ * styles written against them still apply.
+ */
+function resolveButtonCell(
+  variant: NonNullable<ButtonOwnProps['variant']>,
+  tone: ButtonTone | undefined,
+): string {
+  const [emphasis, legacyTone] =
+    variant === 'neutral' || variant === 'destructive'
+      ? LEGACY_VARIANTS[variant]
+      : [variant, 'default' as const];
+  const resolvedTone = tone ?? legacyTone;
+  if (resolvedTone === 'destructive') {
+    return emphasis === 'primary' ? 'primary-destructive' : 'destructive';
+  }
+  if (resolvedTone === 'neutral') {
+    if (emphasis === 'primary') return 'neutral';
+    if (emphasis === 'secondary') return 'secondary-neutral';
+  }
+  return emphasis;
+}
+
 /**
  * Button component from Figma design system.
- * Supports primary, secondary, tertiary, neutral and destructive variants.
+ * Two independent axes: `variant` sets the emphasis (primary, secondary,
+ * tertiary) and `tone` the colour (default, neutral, destructive).
  * Icons can be placed on the left and/or right side of the text.
  *
  * Renders a `<button>`, or an `<a>` when `href` is supplied. Forwards a ref to
@@ -85,6 +134,7 @@ export const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, Bu
       iconLeft,
       iconRight,
       variant,
+      tone,
       size = 'default',
       disabled,
       loading,
@@ -104,7 +154,7 @@ export const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, Bu
     const baseClass = 'ds-button';
 
     // `priority` is the deprecated spelling of `variant`; `variant` wins when both are set.
-    const resolvedVariant = variant ?? priority ?? 'primary';
+    const resolvedVariant = resolveButtonCell(variant ?? priority ?? 'primary', tone);
     // `disabled` is the real prop; `state="disabled"` is the deprecated path.
     const isDisabled = disabled ?? state === 'disabled';
     // Keep the state modifier class so the disabled styling applies either way.
@@ -130,7 +180,7 @@ export const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, Bu
     // keeps its position and the button doesn't change width.
     const spinnerSize = size === 'compact' ? 'sm' : 'md';
     const leftIcon = isLoading ? (
-      <Spinner size={spinnerSize} variant="inherit" />
+      <Spinner size={spinnerSize} tone="inherit" />
     ) : (
       iconLeft || icon
     );

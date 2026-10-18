@@ -19,7 +19,7 @@ export interface DropdownMenuItem {
   icon?: string | React.ReactNode;
   /** Disabled state */
   disabled?: boolean;
-  /** Destructive / danger styling (red text) for delete, remove, etc. */
+  /** Marks a dangerous or irreversible item (delete, remove…): it takes the destructive colour, with the error tint on hover and focus */
   destructive?: boolean;
   /** Marks the item as the current choice of a set: it holds the passive wash and a trailing check, and is announced as a checked radio item. Leave undefined on plain action items; pass `false` on the unchosen members of a set so they are announced as radio items too. Ignored on an item that opens a sub-menu. */
   selected?: boolean;

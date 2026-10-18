@@ -159,6 +159,7 @@
   top: var(--layout-chat-inset);
   right: var(--layout-chat-inset);
   bottom: var(--layout-chat-inset);
+  /* ds-allow(stacking): the template's own chat rail ladder (rail 20, scrim 105, modal rail 110), kept above its app rail on --layer-nav-rail. */
   z-index: 20;
   display: flex;
   width: var(--payroll-chat-width);
@@ -184,6 +185,7 @@
    to transparent rather than dropping, so its width never snaps mid-glide. */
 .chatRailFull {
   inset: 0;
+  /* ds-allow(stacking): the template's own chat rail ladder (rail 20, scrim 105, modal rail 110), kept above its app rail on --layer-nav-rail. */
   z-index: 110;
   width: auto;
   border-color: transparent;
@@ -194,12 +196,14 @@
    app sidebar (fixed at z-index 100) with a scrim between them: the site
    panel's overlay mode. */
 .chatRailModal {
+  /* ds-allow(stacking): the template's own chat rail ladder (rail 20, scrim 105, modal rail 110), kept above its app rail on --layer-nav-rail. */
   z-index: 110;
 }
 
 .chatScrim {
   position: fixed;
   inset: 0;
+  /* ds-allow(stacking): the template's own chat rail ladder (rail 20, scrim 105, modal rail 110), kept above its app rail on --layer-nav-rail. */
   z-index: 105;
   background: var(--color-scrim);
   animation: chatScrimIn var(--motion-duration-slow) var(--motion-ease-standard);
@@ -216,6 +220,7 @@
   position: fixed;
   right: var(--layout-chat-inset);
   bottom: var(--layout-chat-inset);
+  /* ds-allow(stacking): the template's own chat rail ladder (rail 20, scrim 105, modal rail 110), kept above its app rail on --layer-nav-rail. */
   z-index: 20;
 }
 

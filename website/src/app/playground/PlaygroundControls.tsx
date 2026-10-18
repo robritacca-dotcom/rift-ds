@@ -263,7 +263,8 @@ export default function PlaygroundControls({
           <Button
             size="compact"
             label="All colour ramps"
-            variant="neutral"
+            variant="primary"
+            tone="neutral"
             iconLeft="palette"
             onClick={onOpenAdvanced}
           />
@@ -276,9 +277,10 @@ export default function PlaygroundControls({
           <Button
             size="compact"
             label={imageBusy ? "Reading the image" : "Upload an image"}
-            variant="neutral"
+            variant="primary"
+            tone="neutral"
             iconLeft={imageBusy ? "progress_activity" : "add_photo_alternate"}
-            state={imageBusy ? "disabled" : "default"}
+            disabled={imageBusy}
             onClick={onPickImage}
           />
           {imageName ? (
@@ -288,7 +290,8 @@ export default function PlaygroundControls({
               </span>
               <CircularButton
                 icon="close"
-                variant="neutral"
+                variant="primary"
+                tone="neutral"
                 size="compact"
                 ariaLabel="Remove the theme source image"
                 onClick={onClearImage}
@@ -490,7 +493,8 @@ export default function PlaygroundControls({
           <Button
             size="compact"
             label="Export theme"
-            variant="neutral"
+            variant="primary"
+            tone="neutral"
             iconLeft="ios_share"
             onClick={onExport}
           />
@@ -499,7 +503,7 @@ export default function PlaygroundControls({
             label="Reset everything"
             variant="secondary"
             iconLeft="restart_alt"
-            state={isPristine ? "disabled" : "default"}
+            disabled={isPristine}
             onClick={onReset}
           />
         </div>

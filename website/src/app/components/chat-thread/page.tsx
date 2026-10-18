@@ -32,7 +32,7 @@ const EXCHANGES = [
   },
 ];
 
-function AnchoringDemo() {
+function AnchoringDemo({ flow }: { flow?: "top-down" | "bottom-up" }) {
   const [count, setCount] = useState(1);
 
   const send = () => setCount((c) => Math.min(c + 1, EXCHANGES.length));
@@ -41,7 +41,7 @@ function AnchoringDemo() {
   return (
     <>
       <div className={styles.threadFrame}>
-        <ChatThread className={styles.thread}>
+        <ChatThread className={styles.thread} flow={flow}>
           {EXCHANGES.slice(0, count).flatMap(({ q, a }) => [
             <ChatMessage key={`${q}-q`} role="user">
               {q}
@@ -96,7 +96,8 @@ export default function ChatThreadPage() {
               a fade at either end, and a scrollbar that only appears while
               scrolling is happening. When a new turn is appended it floats
               to the top of the viewport, pushing the conversation upward and
-              leaving the response room to stream in below.
+              leaving the response room to stream in below. The classic
+              bottom-up thread is one prop away.
             </p>
           </div>
 
@@ -112,6 +113,19 @@ export default function ChatThreadPage() {
               time the answer lands instead of leaving a void under it.
             </p>
             <AnchoringDemo />
+          </section>
+
+          {/* Bottom up */}
+          <section className={styles.section}>
+            <SectionTitle title="Bottom up" />
+            <p className={styles.demoText}>
+              Set flow to bottom-up for the classic message thread. Turns
+              stack from the bottom edge, so a short conversation sits just
+              above the composer, and the view follows a growing answer down
+              for as long as the reader stays at the bottom. Scrolling up to
+              reread lets go; the next send takes hold again.
+            </p>
+            <AnchoringDemo flow="bottom-up" />
           </section>
 
           {/* Edge fades */}

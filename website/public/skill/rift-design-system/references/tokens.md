@@ -1,6 +1,6 @@
 # rift-ds token reference
 
-Generated from the token registry and the token stylesheets at version 1.9.0. One row per semantic token, grouped by category, with the value it resolves to in the base theme. A name in brackets is the primitive the token points at.
+Generated from the token registry and the token stylesheets at version 1.10.0. One row per semantic token, grouped by category, with the value it resolves to in the base theme. A name in brackets is the primitive the token points at.
 
 How to read it:
 
@@ -11,17 +11,24 @@ How to read it:
 
 The live reference with swatches is at https://rift-ds.com/foundations, and the MCP endpoint's `list_tokens` tool serves the names.
 
-## Colour (122)
+## Colour (129)
 
 Prefix: `--color-*`.
 
 | Token | Light | Dark |
 | --- | --- | --- |
+| `--color-action-destructive-bg` | `#C93A5C` (`--primitive-red-08`) | `#F37F9B` (`--primitive-red-05`) |
+| `--color-action-destructive-bg-active` | `#571727` (`--primitive-red-10`) | `#F8B7C7` (`--primitive-red-03`) |
+| `--color-action-destructive-bg-hover` | `#8E2641` (`--primitive-red-09`) | `#F69BB1` (`--primitive-red-04`) |
+| `--color-action-destructive-border` | `#C93A5C` (`--primitive-red-08`) | `#F37F9B` (`--primitive-red-05`) |
+| `--color-action-destructive-text` | `#FFFFFF` (`--primitive-neutral-00`) | `#45101D` (`--primitive-red-11`) |
+| `--color-action-destructive-text-secondary` | `#8E2641` (`--primitive-red-09`) | `#F69BB1` (`--primitive-red-04`) |
 | `--color-action-icon-active` | `#F1F1F1` (`--primitive-neutral-01`) | `#052F3E` (`--primitive-teal-10`) |
 | `--color-action-icon-default` | `#050505` (`--primitive-neutral-10`) | `#F1F1F1` (`--primitive-neutral-01`) |
 | `--color-action-neutral-bg` | `#D6D6D6` (`--primitive-neutral-02`) | `#232323` (`--primitive-neutral-08`) |
 | `--color-action-neutral-bg-active` | `#A2A2A2` (`--primitive-neutral-04`) | `#6D6D6D` (`--primitive-neutral-06`) |
 | `--color-action-neutral-bg-hover` | `#BCBCBC` (`--primitive-neutral-03`) | `#303030` (`--primitive-neutral-07`) |
+| `--color-action-neutral-border` | `#888888` (`--primitive-neutral-05`) | `#6D6D6D` (`--primitive-neutral-06`) |
 | `--color-action-neutral-text` | `#050505` (`--primitive-neutral-10`) | `#FFFFFF` (`--primitive-neutral-00`) |
 | `--color-action-passive-bg` | `rgba(241, 241, 241, 0.01)` (`--primitive-neutral-01-a01`) | `rgba(14, 14, 14, 0.01)` (`--primitive-neutral-09-a01`) |
 | `--color-action-passive-bg-active` | `rgba(188, 188, 188, 0.8)` (`--primitive-neutral-03-a80`) | `rgba(48, 48, 48, 0.8)` (`--primitive-neutral-07-a80`) |
@@ -338,3 +345,22 @@ Prefix: `--motion-*`.
 | `--motion-ease-linear` | `linear` |  |
 | `--motion-ease-spring` | `cubic-bezier(0.34, 1.56, 0.64, 1)` |  |
 | `--motion-ease-standard` | `ease` |  |
+
+## Stacking (12)
+
+Prefix: `--layer-*`.
+
+| Token | Value |
+| --- | --- |
+| `--layer-chat-launcher` | `1080` |
+| `--layer-chat-panel` | `1100` |
+| `--layer-chat-scrim` | `1090` |
+| `--layer-command` | `110` |
+| `--layer-dropdown` | `10` |
+| `--layer-floating` | `50` |
+| `--layer-modal` | `100` |
+| `--layer-nav` | `80` |
+| `--layer-nav-rail` | `100` |
+| `--layer-nav-scrim` | `90` |
+| `--layer-sticky` | `10` |
+| `--layer-toast` | `200` |

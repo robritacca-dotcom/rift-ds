@@ -46,6 +46,7 @@
 /* Phones: the fit is width-constrained, so a tall panel just frames empty
    canvas around a small drawing. Shorter keeps the preview honest — the
    expanded view is the real reading surface there. */
+/* ds-allow(breakpoint): content-driven: the width where the drawing becomes width-constrained inside its panel. */
 @media (max-width: 699px) {
   .surfaceEmbed {
     height: 300px;
@@ -132,6 +133,7 @@
 }
 
 /* Phones: the hint would collide with the controls. */
+/* ds-allow(breakpoint): content-driven: the width where the hint meets the map controls. */
 @media (max-width: 699px) {
   .hint {
     display: none;
@@ -146,7 +148,7 @@
   inset: 0;
   /* Above the chat layers (SiteChat tops out at 1101): an expanded map is a
      modal takeover, and the floating chat button must not ride on top of it. */
-  z-index: 1200;
+  z-index: var(--layer-site-overlay);
   display: flex;
   flex-direction: column;
   /* The StageToolbar inside is a floating pill, like the canvas and

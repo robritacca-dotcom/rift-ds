@@ -10,9 +10,13 @@ const meta = {
   },
   tags: ['autodocs'],
   argTypes: {
-    priority: {
+    variant: {
       control: 'select',
-      options: ['primary', 'secondary', 'tertiary', 'destructive'],
+      options: ['primary', 'secondary', 'tertiary'],
+    },
+    tone: {
+      control: 'select',
+      options: ['default', 'neutral', 'destructive'],
     },
     state: {
       control: 'select',
@@ -57,7 +61,7 @@ type Story = StoryObj<typeof meta>;
 
 export const PrimaryDefault: Story = {
   args: {
-    priority: 'primary',
+    variant: 'primary',
     state: 'default',
     label: 'Button',
     text: true,
@@ -67,7 +71,7 @@ export const PrimaryDefault: Story = {
 
 export const PrimaryHover: Story = {
   args: {
-    priority: 'primary',
+    variant: 'primary',
     state: 'hover',
     label: 'Button',
     text: true,
@@ -77,7 +81,7 @@ export const PrimaryHover: Story = {
 
 export const PrimaryActive: Story = {
   args: {
-    priority: 'primary',
+    variant: 'primary',
     state: 'active',
     label: 'Button',
     text: true,
@@ -87,7 +91,7 @@ export const PrimaryActive: Story = {
 
 export const PrimaryDisabled: Story = {
   args: {
-    priority: 'primary',
+    variant: 'primary',
     state: 'disabled',
     label: 'Button',
     text: true,
@@ -101,7 +105,7 @@ export const PrimaryDisabled: Story = {
 
 export const SecondaryDefault: Story = {
   args: {
-    priority: 'secondary',
+    variant: 'secondary',
     state: 'default',
     label: 'Button',
     text: true,
@@ -111,7 +115,7 @@ export const SecondaryDefault: Story = {
 
 export const SecondaryHover: Story = {
   args: {
-    priority: 'secondary',
+    variant: 'secondary',
     state: 'hover',
     label: 'Button',
     text: true,
@@ -121,7 +125,7 @@ export const SecondaryHover: Story = {
 
 export const SecondaryActive: Story = {
   args: {
-    priority: 'secondary',
+    variant: 'secondary',
     state: 'active',
     label: 'Button',
     text: true,
@@ -131,7 +135,7 @@ export const SecondaryActive: Story = {
 
 export const SecondaryDisabled: Story = {
   args: {
-    priority: 'secondary',
+    variant: 'secondary',
     state: 'disabled',
     label: 'Button',
     text: true,
@@ -145,7 +149,7 @@ export const SecondaryDisabled: Story = {
 
 export const TertiaryDefault: Story = {
   args: {
-    priority: 'tertiary',
+    variant: 'tertiary',
     state: 'default',
     label: 'Button',
     text: true,
@@ -155,7 +159,7 @@ export const TertiaryDefault: Story = {
 
 export const TertiaryHover: Story = {
   args: {
-    priority: 'tertiary',
+    variant: 'tertiary',
     state: 'hover',
     label: 'Button',
     text: true,
@@ -165,7 +169,7 @@ export const TertiaryHover: Story = {
 
 export const TertiaryActive: Story = {
   args: {
-    priority: 'tertiary',
+    variant: 'tertiary',
     state: 'active',
     label: 'Button',
     text: true,
@@ -175,7 +179,7 @@ export const TertiaryActive: Story = {
 
 export const TertiaryDisabled: Story = {
   args: {
-    priority: 'tertiary',
+    variant: 'tertiary',
     state: 'disabled',
     label: 'Button',
     text: true,
@@ -184,12 +188,13 @@ export const TertiaryDisabled: Story = {
 };
 
 // ============================================
-// Neutral Button States (Solid Grey)
+// Neutral Tone, Primary Emphasis (Solid Grey)
 // ============================================
 
 export const NeutralDefault: Story = {
   args: {
-    variant: 'neutral',
+    variant: 'primary',
+    tone: 'neutral',
     state: 'default',
     label: 'Button',
     text: true,
@@ -199,7 +204,8 @@ export const NeutralDefault: Story = {
 
 export const NeutralHover: Story = {
   args: {
-    variant: 'neutral',
+    variant: 'primary',
+    tone: 'neutral',
     state: 'hover',
     label: 'Button',
     text: true,
@@ -209,7 +215,8 @@ export const NeutralHover: Story = {
 
 export const NeutralActive: Story = {
   args: {
-    variant: 'neutral',
+    variant: 'primary',
+    tone: 'neutral',
     state: 'active',
     label: 'Button',
     text: true,
@@ -219,7 +226,8 @@ export const NeutralActive: Story = {
 
 export const NeutralDisabled: Story = {
   args: {
-    variant: 'neutral',
+    variant: 'primary',
+    tone: 'neutral',
     state: 'disabled',
     label: 'Button',
     text: true,
@@ -229,7 +237,8 @@ export const NeutralDisabled: Story = {
 
 export const CompactNeutralDefault: Story = {
   args: {
-    variant: 'neutral',
+    variant: 'primary',
+    tone: 'neutral',
     state: 'default',
     size: 'compact',
     label: 'Button',
@@ -239,12 +248,92 @@ export const CompactNeutralDefault: Story = {
 };
 
 // ============================================
+// Neutral Tone, Secondary Emphasis (Outlined Grey)
+// ============================================
+
+export const SecondaryNeutralDefault: Story = {
+  args: {
+    variant: 'secondary',
+    tone: 'neutral',
+    state: 'default',
+    label: 'Button',
+    text: true,
+    iconRight: 'arrow_forward',
+  },
+};
+
+export const SecondaryNeutralHover: Story = {
+  args: {
+    variant: 'secondary',
+    tone: 'neutral',
+    state: 'hover',
+    label: 'Button',
+    text: true,
+    iconRight: 'arrow_forward',
+  },
+};
+
+export const SecondaryNeutralActive: Story = {
+  args: {
+    variant: 'secondary',
+    tone: 'neutral',
+    state: 'active',
+    label: 'Button',
+    text: true,
+    iconRight: 'arrow_forward',
+  },
+};
+
+export const SecondaryNeutralDisabled: Story = {
+  args: {
+    variant: 'secondary',
+    tone: 'neutral',
+    state: 'disabled',
+    label: 'Button',
+    text: true,
+    iconRight: 'arrow_forward',
+  },
+};
+
+export const CompactSecondaryNeutralDefault: Story = {
+  args: {
+    variant: 'secondary',
+    tone: 'neutral',
+    state: 'default',
+    size: 'compact',
+    label: 'Button',
+    text: true,
+    iconRight: 'arrow_forward',
+  },
+};
+
+// ============================================
+// Destructive Tone, Primary Emphasis (Solid Danger)
+// ============================================
+
+export const PrimaryDestructiveDefault: Story = {
+  args: { variant: 'primary', tone: 'destructive', state: 'default', label: 'Delete', iconLeft: 'delete' },
+};
+
+export const PrimaryDestructiveHover: Story = {
+  args: { variant: 'primary', tone: 'destructive', state: 'hover', label: 'Delete', iconLeft: 'delete' },
+};
+
+export const PrimaryDestructiveActive: Story = {
+  args: { variant: 'primary', tone: 'destructive', state: 'active', label: 'Delete', iconLeft: 'delete' },
+};
+
+export const PrimaryDestructiveDisabled: Story = {
+  args: { variant: 'primary', tone: 'destructive', state: 'disabled', label: 'Delete', iconLeft: 'delete' },
+};
+
+// ============================================
 // Loading
 // ============================================
 
 export const PrimaryLoading: Story = {
   args: {
-    priority: 'primary',
+    variant: 'primary',
     label: 'Saving…',
     loading: true,
   },
@@ -252,7 +341,7 @@ export const PrimaryLoading: Story = {
 
 export const SecondaryLoading: Story = {
   args: {
-    priority: 'secondary',
+    variant: 'secondary',
     label: 'Saving…',
     loading: true,
   },
@@ -260,7 +349,7 @@ export const SecondaryLoading: Story = {
 
 export const TertiaryLoading: Story = {
   args: {
-    priority: 'tertiary',
+    variant: 'tertiary',
     label: 'Saving…',
     loading: true,
   },
@@ -268,7 +357,8 @@ export const TertiaryLoading: Story = {
 
 export const NeutralLoading: Story = {
   args: {
-    variant: 'neutral',
+    variant: 'primary',
+    tone: 'neutral',
     label: 'Saving…',
     loading: true,
   },
@@ -276,7 +366,8 @@ export const NeutralLoading: Story = {
 
 export const DestructiveLoading: Story = {
   args: {
-    priority: 'destructive',
+    variant: 'secondary',
+    tone: 'destructive',
     label: 'Deleting…',
     loading: true,
   },
@@ -284,7 +375,7 @@ export const DestructiveLoading: Story = {
 
 export const CompactLoading: Story = {
   args: {
-    priority: 'primary',
+    variant: 'primary',
     size: 'compact',
     label: 'Saving…',
     loading: true,
@@ -297,7 +388,7 @@ export const CompactLoading: Story = {
 
 export const PrimaryWithIconLeft: Story = {
   args: {
-    priority: 'primary',
+    variant: 'primary',
     state: 'default',
     label: 'Menu',
     text: true,
@@ -308,7 +399,7 @@ export const PrimaryWithIconLeft: Story = {
 
 export const SecondaryWithIconLeft: Story = {
   args: {
-    priority: 'secondary',
+    variant: 'secondary',
     state: 'default',
     label: 'Edit',
     text: true,
@@ -319,7 +410,7 @@ export const SecondaryWithIconLeft: Story = {
 
 export const TertiaryWithIconLeft: Story = {
   args: {
-    priority: 'tertiary',
+    variant: 'tertiary',
     state: 'default',
     label: 'Home',
     text: true,
@@ -331,7 +422,7 @@ export const TertiaryWithIconLeft: Story = {
 // With Both Icons
 export const WithBothIcons: Story = {
   args: {
-    priority: 'primary',
+    variant: 'primary',
     state: 'default',
     label: 'Next Step',
     text: true,
@@ -342,7 +433,7 @@ export const WithBothIcons: Story = {
 
 export const WithIconLeftAndRight: Story = {
   args: {
-    priority: 'tertiary',
+    variant: 'tertiary',
     state: 'default',
     label: 'Download',
     text: true,
@@ -354,7 +445,7 @@ export const WithIconLeftAndRight: Story = {
 // Icon Only
 export const PrimaryIconOnly: Story = {
   args: {
-    priority: 'primary',
+    variant: 'primary',
     state: 'default',
     text: false,
     iconLeft: 'add',
@@ -364,7 +455,7 @@ export const PrimaryIconOnly: Story = {
 
 export const SecondaryIconOnly: Story = {
   args: {
-    priority: 'secondary',
+    variant: 'secondary',
     state: 'default',
     text: false,
     iconLeft: 'close',
@@ -374,7 +465,7 @@ export const SecondaryIconOnly: Story = {
 
 export const TertiaryIconOnly: Story = {
   args: {
-    priority: 'tertiary',
+    variant: 'tertiary',
     state: 'default',
     text: false,
     iconLeft: 'close',
@@ -385,7 +476,7 @@ export const TertiaryIconOnly: Story = {
 // Text Only (No Icons)
 export const TextOnly: Story = {
   args: {
-    priority: 'primary',
+    variant: 'primary',
     state: 'default',
     label: 'Simple Button',
     text: true,
@@ -400,7 +491,7 @@ export const TextOnly: Story = {
 
 export const CompactPrimaryDefault: Story = {
   args: {
-    priority: 'primary',
+    variant: 'primary',
     state: 'default',
     size: 'compact',
     label: 'Button',
@@ -411,7 +502,7 @@ export const CompactPrimaryDefault: Story = {
 
 export const CompactPrimaryHover: Story = {
   args: {
-    priority: 'primary',
+    variant: 'primary',
     state: 'hover',
     size: 'compact',
     label: 'Button',
@@ -422,7 +513,7 @@ export const CompactPrimaryHover: Story = {
 
 export const CompactPrimaryActive: Story = {
   args: {
-    priority: 'primary',
+    variant: 'primary',
     state: 'active',
     size: 'compact',
     label: 'Button',
@@ -433,7 +524,7 @@ export const CompactPrimaryActive: Story = {
 
 export const CompactPrimaryDisabled: Story = {
   args: {
-    priority: 'primary',
+    variant: 'primary',
     state: 'disabled',
     size: 'compact',
     label: 'Button',
@@ -444,7 +535,7 @@ export const CompactPrimaryDisabled: Story = {
 
 export const CompactSecondaryDefault: Story = {
   args: {
-    priority: 'secondary',
+    variant: 'secondary',
     state: 'default',
     size: 'compact',
     label: 'Button',
@@ -455,7 +546,7 @@ export const CompactSecondaryDefault: Story = {
 
 export const CompactSecondaryHover: Story = {
   args: {
-    priority: 'secondary',
+    variant: 'secondary',
     state: 'hover',
     size: 'compact',
     label: 'Button',
@@ -466,7 +557,7 @@ export const CompactSecondaryHover: Story = {
 
 export const CompactSecondaryActive: Story = {
   args: {
-    priority: 'secondary',
+    variant: 'secondary',
     state: 'active',
     size: 'compact',
     label: 'Button',
@@ -477,7 +568,7 @@ export const CompactSecondaryActive: Story = {
 
 export const CompactSecondaryDisabled: Story = {
   args: {
-    priority: 'secondary',
+    variant: 'secondary',
     state: 'disabled',
     size: 'compact',
     label: 'Button',
@@ -488,7 +579,7 @@ export const CompactSecondaryDisabled: Story = {
 
 export const CompactTertiaryDefault: Story = {
   args: {
-    priority: 'tertiary',
+    variant: 'tertiary',
     state: 'default',
     size: 'compact',
     label: 'Button',
@@ -499,7 +590,7 @@ export const CompactTertiaryDefault: Story = {
 
 export const CompactTertiaryHover: Story = {
   args: {
-    priority: 'tertiary',
+    variant: 'tertiary',
     state: 'hover',
     size: 'compact',
     label: 'Button',
@@ -510,7 +601,7 @@ export const CompactTertiaryHover: Story = {
 
 export const CompactTertiaryActive: Story = {
   args: {
-    priority: 'tertiary',
+    variant: 'tertiary',
     state: 'active',
     size: 'compact',
     label: 'Button',
@@ -521,7 +612,7 @@ export const CompactTertiaryActive: Story = {
 
 export const CompactTertiaryDisabled: Story = {
   args: {
-    priority: 'tertiary',
+    variant: 'tertiary',
     state: 'disabled',
     size: 'compact',
     label: 'Button',
@@ -536,7 +627,8 @@ export const CompactTertiaryDisabled: Story = {
 
 export const DestructiveDefault: Story = {
   args: {
-    priority: 'destructive',
+    variant: 'secondary',
+    tone: 'destructive',
     state: 'default',
     label: 'Delete',
     text: true,
@@ -546,7 +638,8 @@ export const DestructiveDefault: Story = {
 
 export const DestructiveHover: Story = {
   args: {
-    priority: 'destructive',
+    variant: 'secondary',
+    tone: 'destructive',
     state: 'hover',
     label: 'Delete',
     text: true,
@@ -556,7 +649,8 @@ export const DestructiveHover: Story = {
 
 export const DestructiveActive: Story = {
   args: {
-    priority: 'destructive',
+    variant: 'secondary',
+    tone: 'destructive',
     state: 'active',
     label: 'Delete',
     text: true,
@@ -566,7 +660,8 @@ export const DestructiveActive: Story = {
 
 export const DestructiveDisabled: Story = {
   args: {
-    priority: 'destructive',
+    variant: 'secondary',
+    tone: 'destructive',
     state: 'disabled',
     label: 'Delete',
     text: true,
@@ -577,7 +672,8 @@ export const DestructiveDisabled: Story = {
 // Compact Destructive States
 export const CompactDestructiveDefault: Story = {
   args: {
-    priority: 'destructive',
+    variant: 'secondary',
+    tone: 'destructive',
     state: 'default',
     size: 'compact',
     label: 'Remove',
@@ -588,7 +684,8 @@ export const CompactDestructiveDefault: Story = {
 
 export const CompactDestructiveHover: Story = {
   args: {
-    priority: 'destructive',
+    variant: 'secondary',
+    tone: 'destructive',
     state: 'hover',
     size: 'compact',
     label: 'Remove',
@@ -599,7 +696,8 @@ export const CompactDestructiveHover: Story = {
 
 export const CompactDestructiveActive: Story = {
   args: {
-    priority: 'destructive',
+    variant: 'secondary',
+    tone: 'destructive',
     state: 'active',
     size: 'compact',
     label: 'Remove',
@@ -610,7 +708,8 @@ export const CompactDestructiveActive: Story = {
 
 export const CompactDestructiveDisabled: Story = {
   args: {
-    priority: 'destructive',
+    variant: 'secondary',
+    tone: 'destructive',
     state: 'disabled',
     size: 'compact',
     label: 'Remove',
@@ -622,7 +721,8 @@ export const CompactDestructiveDisabled: Story = {
 // Destructive Icon Only
 export const DestructiveIconOnly: Story = {
   args: {
-    priority: 'destructive',
+    variant: 'secondary',
+    tone: 'destructive',
     state: 'default',
     text: false,
     iconLeft: 'delete',

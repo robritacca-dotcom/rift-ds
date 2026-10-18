@@ -6,6 +6,8 @@ import { Button } from "rift-ds/components/Button/Button";
 import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
 import type { ImageThemeSource } from "@/lib/theme/image-palette";
 import styles from "./ImageThemeDrop.module.css";
+import { mediaBelow } from "rift-ds/tokens/breakpoints";
+import { BREAKPOINT_STAGE_COMPACT_PX } from "@/config/breakpoints";
 
 /**
  * Drag a picture anywhere onto the playground and the levers move to match
@@ -133,7 +135,7 @@ export function ImageThemeCard({
         alt={`Theme source: ${source.name}`}
         fill
         unoptimized
-        sizes="(max-width: 1099px) 100vw, 960px"
+        sizes={`${mediaBelow(BREAKPOINT_STAGE_COMPACT_PX)} 100vw, 960px`}
         className={styles.image}
       />
 
@@ -161,14 +163,16 @@ export function ImageThemeCard({
         <div className={styles.actions}>
           <Button
             label="Replace"
-            variant="neutral"
+            variant="primary"
+            tone="neutral"
             size="compact"
             iconLeft="swap_horiz"
             onClick={onReplace}
           />
           <CircularButton
             icon="close"
-            variant="neutral"
+            variant="primary"
+            tone="neutral"
             size="compact"
             ariaLabel="Remove the theme source image"
             onClick={onClear}

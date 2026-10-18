@@ -225,7 +225,7 @@
 }
 
 /* Unread dot — informational, so it takes the info status colour rather
-   than the action teal, at the full-strength border weight for the same
+   than the action colour, at the full-strength border weight for the same
    reason Meter's fill does: a tint vanishes in a small mark. 8px because
    a 4px dot is sub-perceptual at reading distance — the dot is the row's
    one unmistakable unread signal, so it has to register at a glance. */

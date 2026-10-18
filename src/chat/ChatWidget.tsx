@@ -41,6 +41,8 @@ import {
 } from './queries';
 import { fitsChip } from './suggestions';
 import { TurnCard } from './TurnContent';
+import { isBlockingQuestion } from './questions';
+import { ReplyBody } from './TurnQuestion';
 import type { ChatModelOption, Starter } from './types';
 import './ChatWidget.css';
 
@@ -101,8 +103,17 @@ export interface ChatWidgetProps {
   phone?: boolean;
   /** The header brand name. */
   title?: string;
+  /**
+   * Which way the conversation reads. `top-down` (the default) floats each
+   * new turn to the top of the thread and streams the answer in below it.
+   * `bottom-up` is the classic message thread: turns stack from the bottom,
+   * the newest just above the composer, and the view follows the answer.
+   */
+  flow?: 'top-down' | 'bottom-up';
   /** The composer's placeholder text. */
   placeholder?: string;
+  /** The composer's placeholder while a set of questions holds it: the answer goes in the card, or the card is skipped. */
+  questionsPlaceholder?: string;
   /** Show the conversation starters on the welcome screen. */
   showStarters?: boolean;
   /** The header mark's image src; null (the default) shows the name alone. */
@@ -181,7 +192,9 @@ export function ChatWidget({
   compact = false,
   phone = false,
   title = 'Assistant',
+  flow = 'top-down',
   placeholder = 'Ask anything',
+  questionsPlaceholder = 'Answer the questions above, or skip them',
   showStarters = true,
   logo = null,
   tagline = 'How can I help you today?',
@@ -232,6 +245,20 @@ export function ChatWidget({
     openArtifact,
     closeArtifact,
   } = useChatWidget();
+
+  /* A set of questions on the newest turn holds the composer until it is
+     answered or skipped: the answers belong in the card. */
+  const questionsOpen = isBlockingQuestion(turns[turns.length - 1], live !== null);
+  /* The set held focus in its card; once it is answered or skipped the card
+     becomes a record with nothing left to press, so focus would fall to the
+     page. Hand it back to the composer, which has just come back on. */
+  const questionsWereOpen = useRef(questionsOpen);
+  useEffect(() => {
+    if (questionsWereOpen.current && !questionsOpen) {
+      composerRef.current?.focus({ preventScroll: true });
+    }
+    questionsWereOpen.current = questionsOpen;
+  }, [questionsOpen]);
 
   /* The picker shows the visitor's pick, or the server's current default
      when they have not made one, which is how a budget step-down moves the
@@ -798,7 +825,7 @@ export function ChatWidget({
 
         <div className="ds-chat-widget__body">
           <ArtifactSeatContext.Provider value={artifacts}>
-          <ChatThread className="ds-chat-widget__thread">
+          <ChatThread className="ds-chat-widget__thread" flow={flow}>
             {/* One array, so the live turn and its committed form match by
                 key: split expressions are separate children slots and React
                 would remount across them. */}
@@ -825,7 +852,9 @@ export function ChatWidget({
                       )
                     }
                   >
-                    {mentions && turn.text ? (
+                    {turn.reply ? (
+                      <ReplyBody reply={turn.reply} text={turn.text} />
+                    ) : mentions && turn.text ? (
                       <MentionText text={turn.text} sources={mentions} />
                     ) : (
                       turn.text
@@ -866,7 +895,8 @@ export function ChatWidget({
         <div className="ds-chat-widget__composer">
           <Composer
             ref={composerRef}
-            placeholder={placeholder}
+            placeholder={questionsOpen ? questionsPlaceholder : placeholder}
+            disabled={questionsOpen}
             sendLabel="Send"
             aiGlow
             value={draft}

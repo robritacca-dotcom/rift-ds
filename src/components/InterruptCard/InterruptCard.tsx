@@ -9,19 +9,23 @@ export interface InterruptCardOption {
   value: string;
   /** Button text, e.g. "Allow once". */
   label: string;
-  /** Visual weight. `primary` for the recommended choice, `danger` for destructive approvals. */
+  /**
+   * Visual weight: `primary` for the recommended choice, `secondary` (the
+   * default) for the rest. `danger` is the legacy value from before colour
+   * moved onto `tone`, and renders as `variant="secondary" tone="destructive"`.
+   */
   variant?: 'primary' | 'secondary' | 'danger';
+  /** Colour, passed to the option's Button: `destructive` for dangerous approvals. */
+  tone?: 'default' | 'destructive';
 }
 
-/** Maps an option's weight onto the Button variant that renders it. */
-const OPTION_VARIANTS: Record<
-  NonNullable<InterruptCardOption['variant']>,
-  'primary' | 'secondary' | 'destructive'
-> = {
-  primary: 'primary',
-  secondary: 'secondary',
-  danger: 'destructive',
-};
+/** The Button emphasis and tone an option renders with, legacy `danger` included. */
+function optionButtonProps(option: InterruptCardOption) {
+  if (option.variant === 'danger') {
+    return { variant: 'secondary', tone: option.tone ?? 'destructive' } as const;
+  }
+  return { variant: option.variant ?? 'secondary', tone: option.tone ?? 'default' } as const;
+}
 
 /** Props owned by InterruptCard itself — everything else falls through to the root element. */
 type InterruptCardOwnProps = {
@@ -133,7 +137,7 @@ export const InterruptCard = React.forwardRef<HTMLDivElement, InterruptCardProps
               {options.map((option) => (
                 <Button
                   key={option.value}
-                  variant={OPTION_VARIANTS[option.variant ?? 'secondary']}
+                  {...optionButtonProps(option)}
                   size="compact"
                   label={option.label}
                   onClick={() => onValueChange?.(option.value)}

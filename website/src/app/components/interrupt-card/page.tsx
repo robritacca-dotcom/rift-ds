@@ -134,9 +134,9 @@ export default function InterruptCardPage() {
 
           {/* Danger options */}
           <section className={styles.section}>
-            <SectionTitle title="Danger options" />
+            <SectionTitle title="Destructive options" />
             <p className={styles.demoText}>
-              A destructive approval takes the danger weight, which renders
+              A destructive approval takes <code>tone: &quot;destructive&quot;</code>, which renders
               the destructive button. The card itself stays quiet either way,
               because the state is still the same: waiting on a person.
             </p>
@@ -145,7 +145,7 @@ export default function InterruptCardPage() {
                 title="Delete 3 files?"
                 description="This removes the generated fixtures and cannot be undone."
                 options={[
-                  { value: "delete", label: "Delete", variant: "danger" },
+                  { value: "delete", label: "Delete", variant: "secondary", tone: "destructive" },
                   { value: "cancel", label: "Cancel" },
                 ]}
               />

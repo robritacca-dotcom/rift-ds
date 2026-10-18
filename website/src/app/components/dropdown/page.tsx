@@ -49,13 +49,13 @@ export default function DropdownPage() {
             <SectionTitle title="Default" />
             <div className={styles.variantRow}>
               <div className={styles.variantItem}>
-                <Dropdown label="Placeholder" placeholder="Select a colour" options={colourOptions} onChange={() => {}} />
+                <Dropdown label="Placeholder" placeholder="Select a colour" options={colourOptions} onValueChange={() => {}} />
               </div>
               <div className={styles.variantItem}>
-                <Dropdown label="With value" value="teal" options={colourOptions} onChange={() => {}} />
+                <Dropdown label="With value" value="teal" options={colourOptions} onValueChange={() => {}} />
               </div>
               <div className={styles.variantItem}>
-                <Dropdown label="Required" placeholder="Select..." required options={colourOptions} onChange={() => {}} />
+                <Dropdown label="Required" placeholder="Select..." required options={colourOptions} onValueChange={() => {}} />
               </div>
             </div>
           </section>
@@ -65,13 +65,13 @@ export default function DropdownPage() {
             <SectionTitle title="Compact" />
             <div className={styles.variantRow}>
               <div className={styles.variantItem}>
-                <Dropdown label="Placeholder" placeholder="Select a colour" size="compact" options={colourOptions} onChange={() => {}} />
+                <Dropdown label="Placeholder" placeholder="Select a colour" size="compact" options={colourOptions} onValueChange={() => {}} />
               </div>
               <div className={styles.variantItem}>
-                <Dropdown label="With value" value="teal" size="compact" options={colourOptions} onChange={() => {}} />
+                <Dropdown label="With value" value="teal" size="compact" options={colourOptions} onValueChange={() => {}} />
               </div>
               <div className={styles.variantItem}>
-                <Dropdown label="Required" placeholder="Select..." required size="compact" options={colourOptions} onChange={() => {}} />
+                <Dropdown label="Required" placeholder="Select..." required size="compact" options={colourOptions} onValueChange={() => {}} />
               </div>
             </div>
           </section>
@@ -109,7 +109,7 @@ export default function DropdownPage() {
                       ],
                     },
                   ]}
-                  onChange={() => {}}
+                  onValueChange={() => {}}
                 />
               </div>
             </div>
@@ -129,7 +129,7 @@ export default function DropdownPage() {
                     { label: "Courier New", value: "courier", font: "'Courier New', monospace" },
                     { label: "Arial", value: "arial", font: "Arial, sans-serif" },
                   ]}
-                  onChange={() => {}}
+                  onValueChange={() => {}}
                 />
               </div>
             </div>
@@ -140,13 +140,13 @@ export default function DropdownPage() {
             <SectionTitle title="States" />
             <div className={styles.variantRow}>
               <div className={styles.variantItem}>
-                <Dropdown label="Helper text" placeholder="Choose..." helperText="This sets the primary colour" options={colourOptions} onChange={() => {}} />
+                <Dropdown label="Helper text" placeholder="Choose..." helperText="This sets the primary colour" options={colourOptions} onValueChange={() => {}} />
               </div>
               <div className={styles.variantItem}>
-                <Dropdown label="Error" placeholder="Select..." error helperText="Please select an option" options={colourOptions} onChange={() => {}} />
+                <Dropdown label="Error" placeholder="Select..." error helperText="Please select an option" options={colourOptions} onValueChange={() => {}} />
               </div>
               <div className={styles.variantItem}>
-                <Dropdown label="Disabled" value="teal" disabled options={colourOptions} onChange={() => {}} />
+                <Dropdown label="Disabled" value="teal" disabled options={colourOptions} onValueChange={() => {}} />
               </div>
               <div className={styles.variantItem}>
                 <Dropdown
@@ -157,7 +157,7 @@ export default function DropdownPage() {
                     { label: "Pro", value: "pro" },
                     { label: "Enterprise (coming soon)", value: "enterprise", disabled: true },
                   ]}
-                  onChange={() => {}}
+                  onValueChange={() => {}}
                 />
               </div>
             </div>

@@ -14,8 +14,17 @@ type SplitButtonOwnProps = {
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   /** Menu entries for the alternative actions */
   items: DropdownMenuEntry[];
-  /** Visual treatment, shared by both segments */
+  /**
+   * Emphasis, shared by both segments: `primary` (filled) or `secondary`
+   * (outlined). The colour is `tone`'s job. `neutral` is the legacy value
+   * from before the split and renders as `variant="primary" tone="neutral"`.
+   */
   variant?: 'primary' | 'secondary' | 'neutral';
+  /**
+   * Colour, shared by both segments: `default` carries the action colour,
+   * `neutral` the greys, `destructive` the danger colour.
+   */
+  tone?: 'default' | 'neutral' | 'destructive';
   /** Component size */
   size?: 'default' | 'compact';
   /** Disables both segments */
@@ -55,6 +64,7 @@ export const SplitButton = React.forwardRef<HTMLButtonElement, SplitButtonProps>
       onClick,
       items,
       variant = 'primary',
+      tone,
       size = 'default',
       disabled = false,
       loading = false,
@@ -68,7 +78,18 @@ export const SplitButton = React.forwardRef<HTMLButtonElement, SplitButtonProps>
   ) => {
     const baseClass = 'ds-split-button';
 
-    const classes = [baseClass, `${baseClass}--${variant}`, className].filter(Boolean).join(' ');
+    // The legacy `neutral` variant is primary emphasis in the neutral tone.
+    const emphasis = variant === 'neutral' ? 'primary' : variant;
+    const resolvedTone = tone ?? (variant === 'neutral' ? 'neutral' : 'default');
+
+    const classes = [
+      baseClass,
+      `${baseClass}--${emphasis}`,
+      `${baseClass}--tone-${resolvedTone}`,
+      className,
+    ]
+      .filter(Boolean)
+      .join(' ');
 
     return (
       <span className={classes}>
@@ -78,7 +99,8 @@ export const SplitButton = React.forwardRef<HTMLButtonElement, SplitButtonProps>
           className={`${baseClass}__main`}
           label={label}
           iconLeft={iconLeft}
-          variant={variant}
+          variant={emphasis}
+          tone={resolvedTone}
           size={size}
           disabled={disabled}
           loading={loading}
@@ -98,7 +120,8 @@ export const SplitButton = React.forwardRef<HTMLButtonElement, SplitButtonProps>
                  main segment — the tooltip wrapper would sit between them. */
               tooltip={false}
               ariaLabel={menuLabel}
-              variant={variant}
+              variant={emphasis}
+              tone={resolvedTone}
               size={size}
               disabled={disabled || loading}
             />

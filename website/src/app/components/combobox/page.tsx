@@ -108,7 +108,7 @@ export default function ComboboxPage() {
                 placeholder="Search countries…"
                 options={countries}
                 value={basic}
-                onChange={setBasic}
+                onValueChange={setBasic}
                 helperText="Start typing to narrow the list."
               />
             </div>
@@ -126,7 +126,7 @@ export default function ComboboxPage() {
                 placeholder="Search countries…"
                 options={countries}
                 value={clearable}
-                onChange={setClearable}
+                onValueChange={setClearable}
                 clearable
               />
             </div>
@@ -145,7 +145,7 @@ export default function ComboboxPage() {
                 placeholder="Search countries…"
                 options={countries}
                 value={multi}
-                onChange={setMulti}
+                onValueChange={setMulti}
                 multiple
                 clearable
               />
@@ -166,7 +166,7 @@ export default function ComboboxPage() {
                 options={[]}
                 groups={regionGroups}
                 value={grouped}
-                onChange={setGrouped}
+                onValueChange={setGrouped}
               />
             </div>
           </section>
@@ -183,7 +183,7 @@ export default function ComboboxPage() {
                 placeholder="Search teammates…"
                 options={teammates}
                 value={described}
-                onChange={setDescribed}
+                onValueChange={setDescribed}
               />
             </div>
           </section>
@@ -199,7 +199,7 @@ export default function ComboboxPage() {
                   placeholder="Search countries…"
                   options={countries}
                   value={errored}
-                  onChange={setErrored}
+                  onValueChange={setErrored}
                   error
                   required
                   helperText="Please choose a country."
@@ -227,7 +227,7 @@ export default function ComboboxPage() {
                 placeholder="Search countries…"
                 options={countries}
                 value={compact}
-                onChange={setCompact}
+                onValueChange={setCompact}
                 size="compact"
               />
             </div>

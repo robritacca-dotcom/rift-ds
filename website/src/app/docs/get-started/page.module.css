@@ -238,6 +238,7 @@ a.toolItem:hover {
 /* ============================================
    RESPONSIVE
    ============================================ */
+/* ds-allow(breakpoint): the mobile step on its other edge (below 768px, not at or below it); aligning it would change the tool list at exactly 768px. */
 @media (max-width: 767px) {
   .toolList {
     grid-template-columns: 1fr;

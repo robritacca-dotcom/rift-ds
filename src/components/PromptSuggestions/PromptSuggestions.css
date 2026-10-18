@@ -480,3 +480,70 @@
     transform: translateX(100%);
   }
 }
+
+/* ============================================
+   KEPT — the record of a choice
+   A row that stays on screen after use keeps
+   the choice in view with QuestionCard's own
+   treatment: the taken suggestion outlined
+   solid in the strongest ink, doubled by an
+   inset ring so it does not grow, and the rest
+   faded behind a dashed line. No check: a chip
+   is a line of text, and it keeps its shape.
+   Nothing in the row answers the pointer.
+   ============================================ */
+
+.ds-prompt-suggestions--kept .ds-prompt-suggestions__item:not(.ds-prompt-suggestions__item--kept) {
+  opacity: 0.4;
+}
+
+.ds-prompt-suggestions--kept .ds-chip,
+.ds-prompt-suggestions--kept .ds-prompt-suggestions__tile,
+.ds-prompt-suggestions--kept .ds-prompt-suggestions__card {
+  border-style: dashed;
+  border-color: var(--color-text-tertiary);
+  /* A record carries no fill, like QuestionCard's rows once answered: the
+     outline alone says which way the conversation went. */
+  background-color: transparent;
+}
+
+.ds-prompt-suggestions__item--kept .ds-chip,
+.ds-prompt-suggestions__item--kept .ds-prompt-suggestions__tile,
+.ds-prompt-suggestions__item--kept .ds-prompt-suggestions__card,
+.ds-prompt-suggestions--kept .ds-prompt-suggestions__item--kept .ds-prompt-suggestions__tile:hover {
+  border-style: solid;
+  border-color: var(--color-text-primary);
+  box-shadow: inset 0 0 0 var(--border-025) var(--color-text-primary);
+  color: var(--color-text-primary);
+}
+
+.ds-prompt-suggestions--kept .ds-prompt-suggestions__tile,
+.ds-prompt-suggestions--kept .ds-prompt-suggestions__card {
+  cursor: default;
+}
+
+.ds-prompt-suggestions--kept .ds-prompt-suggestions__tile:hover {
+  background-color: var(--color-bg-container-primary-semi);
+}
+
+.ds-prompt-suggestions--kept .ds-prompt-suggestions__card:hover {
+  transform: none;
+}
+
+.ds-prompt-suggestions--kept
+  .ds-prompt-suggestions__item:not(.ds-prompt-suggestions__item--kept)
+  .ds-prompt-suggestions__card:hover {
+  box-shadow: none;
+}
+
+.ds-prompt-suggestions__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

@@ -1,6 +1,16 @@
 {
   "releases": [
     {
+      "version": "1.10.0",
+      "date": "2026-10-18",
+      "title": "Questions in the AI chat",
+      "body": [
+        "The chat can now ask. When a reply needs a decision before it can go on, it ends in a question with the answers to pick: one answer, several, or a short set asked a step at a time, with a \"Something else\" field when the list may not cover it. The answer is sent as the next message, and the card stays in the conversation as the record of the choice. On the server, `askUser` on createChatHandler gives the model the tool it asks through, and `npx rift-ds init chat` now writes it on.",
+        "QuestionCard is a library component of its own, for use outside the chat, with QuestionSummary as the record of a set. PromptSuggestions gains `value`, which keeps a used row as the record of the choice, and ChatThread and ChatWidget gain `flow`, where `bottom-up` is the classic message thread beside the send-to-top default. The breakpoints are published as `rift-ds/tokens/breakpoints`, and every stacking layer is a `--layer-*` token.",
+        "A few behaviours shift without any change on your side. A follow-up chip once sent stays as the record and no longer takes a tap, a reply that asks gets no follow-up chips, and the `rift-ds/chat/demo` story now asks its questions instead of carrying buttons in its cards. Nothing was renamed or removed, so upgrading needs no code changes."
+      ]
+    },
+    {
       "version": "1.9.0",
       "date": "2026-10-14",
       "title": "An artifact panel for the AI chat",

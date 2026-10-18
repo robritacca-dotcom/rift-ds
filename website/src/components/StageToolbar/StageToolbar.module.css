@@ -13,6 +13,7 @@
   align-items: center;
   gap: var(--gap-400);
   padding: 0 var(--padding-500);
+  /* ds-allow(stacking): local order on the immersive stage, its own ladder: floating rails 15, control bar 25, toolbar 30, full-size panels above. */
   z-index: 30;
   background: var(--color-bg-glass);
   backdrop-filter: blur(24px);
@@ -31,6 +32,7 @@
   left: 0;
   right: 0;
   height: calc(var(--layout-stage-clearance) * 1.25);
+  /* ds-allow(stacking): local order on the immersive stage, its own ladder: floating rails 15, control bar 25, toolbar 30, full-size panels above. */
   z-index: 10;
   pointer-events: none;
   background: linear-gradient(
@@ -131,6 +133,7 @@
 
 /* Phones: the bar keeps logo, switch, and X on one line — the breadcrumb
    trail gives way (the logo is the way up, and the switch names the page). */
+/* ds-allow(breakpoint): content-driven: the width where logo, switch, breadcrumb and close stop fitting on one line. */
 @media (max-width: 699px) {
   .crumb {
     display: none;

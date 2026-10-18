@@ -143,7 +143,7 @@ export const AgentPlan = React.forwardRef<HTMLDivElement, AgentPlanProps>(
                   >
                     <span className={`${baseClass}__indicator`} aria-hidden="true">
                       {status === 'active' ? (
-                        <Spinner size="sm" variant="inherit" />
+                        <Spinner size="sm" tone="inherit" />
                       ) : (
                         <span className="material-symbols-rounded">{STEP_ICONS[status]}</span>
                       )}

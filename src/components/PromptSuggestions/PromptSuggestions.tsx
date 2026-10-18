@@ -65,6 +65,14 @@ type PromptSuggestionsOwnProps = {
    * the quieter row for placements alongside a live conversation.
    */
   size?: 'default' | 'compact';
+  /**
+   * The `id` of the suggestion already taken. Set, the row becomes the
+   * record of that choice: the taken suggestion outlined solid in the
+   * strongest ink, the rest faded behind a dashed line, and none of them
+   * tappable any more. The same treatment QuestionCard gives a pick. For a row that stays
+   * on screen after use, such as the follow-ups under an earlier answer.
+   */
+  value?: string;
   /** Accessible name for the list. */
   ariaLabel?: string;
   /** Additional CSS classes */
@@ -93,6 +101,7 @@ export const PromptSuggestions = React.forwardRef<HTMLDivElement, PromptSuggesti
       pendingCount = 3,
       entrance = true,
       size = 'default',
+      value,
       ariaLabel = 'Suggested prompts',
       className = '',
       ...rest
@@ -117,9 +126,10 @@ export const PromptSuggestions = React.forwardRef<HTMLDivElement, PromptSuggesti
       },
       [],
     );
+    const kept = value !== undefined;
     const choose = (id: string) => {
       /* The ref guards the same-tick double-tap the state cannot see yet. */
-      if (chosenId || chooseTimer.current) return;
+      if (kept || chosenId || chooseTimer.current) return;
       setChosenId(id);
       chooseTimer.current = window.setTimeout(() => {
         chooseTimer.current = null;
@@ -157,6 +167,7 @@ export const PromptSuggestions = React.forwardRef<HTMLDivElement, PromptSuggesti
       `${baseClass}--${size}`,
       `${baseClass}--${arrangement}`,
       chosenId ? `${baseClass}--choosing` : '',
+      kept ? `${baseClass}--kept` : '',
       entrance ? '' : `${baseClass}--still`,
       className,
     ]
@@ -200,7 +211,7 @@ export const PromptSuggestions = React.forwardRef<HTMLDivElement, PromptSuggesti
                 role="listitem"
                 className={`${baseClass}__item${
                   chosenId === suggestion.id ? ` ${baseClass}__item--chosen` : ''
-                }`}
+                }${value === suggestion.id ? ` ${baseClass}__item--kept` : ''}`}
                 /* The pulse finishing is what ends the chosen state — no
                    second timer. The entrance animation also ends here, so
                    filter by name. */
@@ -214,6 +225,8 @@ export const PromptSuggestions = React.forwardRef<HTMLDivElement, PromptSuggesti
                   <button
                     type="button"
                     className={`${baseClass}__${block}`}
+                    /* A kept row is a record, not a set of targets. */
+                    disabled={kept}
                     onClick={() => choose(suggestion.id)}
                   >
                     {block === 'card' ? (
@@ -231,14 +244,23 @@ export const PromptSuggestions = React.forwardRef<HTMLDivElement, PromptSuggesti
                         </span>
                       )}
                     </span>
+                    {value === suggestion.id && (
+                      <span className={`${baseClass}__sr-only`}> (chosen)</span>
+                    )}
                   </button>
                 ) : (
                   <Chip
                     label={suggestion.label}
+                    /* Without a click handler a chip renders as plain text,
+                       which is what a record is. The outline says which was
+                       taken; no mark is added, so the chip keeps its shape. */
                     icon={suggestion.icon}
                     size={chipSize}
-                    onClick={() => choose(suggestion.id)}
+                    onClick={kept ? undefined : () => choose(suggestion.id)}
                   />
+                )}
+                {!block && value === suggestion.id && (
+                  <span className={`${baseClass}__sr-only`}> (chosen)</span>
                 )}
               </div>
             ))}

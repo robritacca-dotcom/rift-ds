@@ -2,7 +2,7 @@
 
 Compact pills for attributes, filters, and inline metadata.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.9.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: data-display
 - Import: `import { Chip } from 'rift-ds';`
@@ -16,7 +16,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.9.0. The same data
 | --- | --- | --- | --- | --- |
 | label | `ReactNode` | yes |  | Chip label — string for plain text, ReactNode for richer content (e.g. a numbered prefix) |
 | icon | `ReactNode` | no |  | Leading icon — Material Symbol name (string) or custom element (ReactNode) |
-| selected | `boolean` | no |  | Selected state (filter-style chips) — renders the teal active fill |
+| selected | `boolean` | no |  | Selected state (filter-style chips): renders the active fill, coloured by `tone` |
+| tone | `"default" \| "neutral"` | no | `default` | Colour of the selected fill: `default` takes the action colour, `neutral` fills it grey, for filter rows whose selection should read quietly. |
 | disabled | `boolean` | no | `false` | Disabled state |
 | size | `"default" \| "compact" \| "large"` | no | `default` | Chip size — `large` matches the default Button and paragraph body scale, for pills that are a primary tap target rather than metadata |
 | onClick | `(() => void)` | no |  | Click handler — presence makes the chip an interactive <button> |

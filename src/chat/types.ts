@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import type { AttachmentItem } from '../components/Attachment/fileTypes';
+import type { QuestionCardAnswer, QuestionCardQuestion } from '../components/QuestionCard/QuestionCard';
 
 /* ============================================
    The chat event contract.
@@ -62,6 +63,34 @@ export interface ChatArtifact {
 /** The card kind an artifact travels as. Its `data` is a `ChatArtifact`. */
 export const ARTIFACT_CARD_KIND = 'artifact';
 
+/** One question the agent asks: a prompt and the answers on offer. The shape QuestionCard draws. */
+export type ChatQuestion = QuestionCardQuestion;
+
+/** What the visitor answered to one question. */
+export type ChatQuestionAnswer = QuestionCardAnswer;
+
+/**
+ * Questions the agent asks at the end of a reply, with the answers it can
+ * list: one question or a short set, each taking one option or several.
+ * The reply's text asks in words too, so a transport or a renderer that
+ * drops the set still leaves a conversation that reads correctly.
+ */
+export interface ChatQuestionSet {
+  /** Stable identity within the conversation. */
+  id: string;
+  /** Asked one at a time when there is more than one. A set of more than one holds the composer until it is answered or skipped. */
+  questions: ChatQuestion[];
+}
+
+/**
+ * The answers to a question set as a user turn draws them: each question's
+ * prompt and the labels picked. The turn's `text` is the same answers as
+ * the plain message the model reads.
+ */
+export interface ChatReply {
+  items: { prompt: string; answers: string[] }[];
+}
+
 export type ChatEvent =
   /** A live status step: the AgentStatus label, with an optional reasoning trace point. */
   | { type: 'status'; label: string; point?: string }
@@ -94,6 +123,9 @@ export type ChatEvent =
   /** Rich content to render with the committed turn, as serialisable data
       the provider's `renderers` draw. The form a server can send. */
   | { type: 'card'; card: ChatCard }
+  /** Questions the agent asks with answers to pick, drawn under the committed
+      turn in place of follow-ups: a turn that asks is never asked about. */
+  | { type: 'question'; set: ChatQuestionSet }
   /** Terminal: the response is complete. */
   | { type: 'done' }
   /** A guardrail response (rate limit, circuit breaker): rendered as a normal assistant message. */
@@ -111,6 +143,7 @@ export const CHAT_EVENT_KINDS = [
   'followups',
   'content',
   'card',
+  'question',
   'done',
   'notice',
   'error',
@@ -187,6 +220,27 @@ export interface ChatTurn {
    */
   card?: ChatCard;
   /**
+   * Questions this assistant turn asks, drawn under it as a QuestionCard in
+   * place of follow-ups. Carried from a transport's `question` event.
+   */
+  question?: ChatQuestionSet;
+  /**
+   * The answers given to `question`. Undefined while it is open; an empty
+   * array records a skip. Kept on the asking turn, so the card renders its
+   * answered state where it was asked.
+   */
+  answers?: ChatQuestionAnswer[];
+  /**
+   * The answers a user turn carries, drawn as the bubble when there is more
+   * than one to show. Its `text` is the same answers as a plain message.
+   */
+  reply?: ChatReply;
+  /**
+   * The follow-up chip the visitor sent from under this turn. Once set the
+   * row is a record: the chip marked, the rest dimmed and inert.
+   */
+  followupChosen?: string;
+  /**
    * Render `content` on its own in the thread, outside any message chrome,
    * for conversation furniture like a day marker.
    */
@@ -217,6 +271,8 @@ export interface LiveResponse {
   content?: ReactNode;
   /** Carried from the transport's `card` event into the committed turn. */
   card?: ChatCard;
+  /** Carried from the transport's `question` event into the committed turn. */
+  question?: ChatQuestionSet;
 }
 
 /* ============================================

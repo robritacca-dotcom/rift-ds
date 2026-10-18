@@ -117,6 +117,25 @@
   --color-action-neutral-bg-hover: var(--primitive-neutral-03);
   --color-action-neutral-bg-active: var(--primitive-neutral-04);
   --color-action-neutral-text: var(--primitive-neutral-10);
+  /* The outlined neutral button's edge (secondary emphasis, neutral tone):
+     a mid grey that reads as a control edge on the page without the
+     action colour. */
+  --color-action-neutral-border: var(--primitive-neutral-05);
+
+  /* Action - Destructive (dangerous or irreversible actions). Keyed to the
+     red ramp the error status uses, never to an accent, so danger reads as
+     danger in every preset (a preset whose action colour sits on the red
+     ramp rebases it, and danger follows that red like its error status). The fill is what the outlined
+     destructive button takes on hover and press, and the filled
+     (primary-emphasis) one at rest; hover and active walk away from the
+     page like the primary family. Every label clears AA on its fill, and
+     the outlined label clears it on the page. */
+  --color-action-destructive-bg: var(--primitive-red-08);
+  --color-action-destructive-bg-hover: var(--primitive-red-09);
+  --color-action-destructive-bg-active: var(--primitive-red-10);
+  --color-action-destructive-text: var(--primitive-neutral-00);
+  --color-action-destructive-text-secondary: var(--primitive-red-09);
+  --color-action-destructive-border: var(--primitive-red-08);
 
   /* Core colours */
   --color-core-ui-primary: var(--primitive-teal-08);
@@ -294,6 +313,28 @@
   --gap-2000: var(--primitive-gap-2000);     /* 80px */
   --gap-3000: var(--primitive-gap-3000);   /* 120px */
   --padding-1500: var(--primitive-padding-1500); /* 60px */
+
+  /* Stacking — the z-index of every surface that rises out of its
+     component into the page's layers, lowest to highest. Theme-independent
+     like the spacing above. A plain ordering, so it holds integers rather
+     than chaining to primitives (the motion durations are the precedent).
+     Ordering inside one component (a label over a sliding pill, a handle
+     over its track) stays a small local integer; validate-stacking.mjs
+     owns the line between the two. Equal values are deliberate: an
+     anchored menu and a sticky bar never compete for the same space, and
+     a modal sits level with the app rail it covers by DOM order. */
+  --layer-dropdown: 10;        /* menus and panels anchored to a control */
+  --layer-sticky: 10;          /* bars pinned to an edge while the page scrolls */
+  --layer-floating: 50;        /* tooltips, hover cards, context menus */
+  --layer-nav: 80;             /* fixed mobile navigation and its trigger */
+  --layer-nav-scrim: 90;       /* the scrim behind the mobile nav drawer */
+  --layer-nav-rail: 100;       /* the app rail and its open mobile drawer */
+  --layer-modal: 100;          /* dialogs, drawers and viewers */
+  --layer-command: 110;        /* the command palette, above an open modal */
+  --layer-toast: 200;          /* transient feedback, above every modal */
+  --layer-chat-launcher: 1080; /* the chat button */
+  --layer-chat-scrim: 1090;    /* the scrim behind the chat panel */
+  --layer-chat-panel: 1100;    /* the chat panel itself */
 }
 
 /* ============================================

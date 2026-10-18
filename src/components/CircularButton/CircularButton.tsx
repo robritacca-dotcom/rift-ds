@@ -12,8 +12,20 @@ import '../../fonts/material-symbols.css';
 type CircularButtonOwnProps = {
   /** The icon — Material Symbol name (string) or custom element (ReactNode) */
   icon: string | React.ReactNode;
-  /** Visual treatment */
+  /**
+   * Emphasis: `primary` (filled), `secondary` (outlined) or `tertiary`
+   * (ghost). The colour is `tone`'s job. `neutral` is the legacy value from
+   * before the split and renders as `variant="primary" tone="neutral"`.
+   */
   variant?: 'primary' | 'secondary' | 'tertiary' | 'neutral';
+  /**
+   * Colour, independent of emphasis: `default` carries the action colour,
+   * `neutral` the greys, `destructive` the danger colour. Tertiary is
+   * already grey, so `neutral` leaves it unchanged; a tertiary
+   * `destructive` takes the outlined look, since a danger action needs a
+   * visible edge.
+   */
+  tone?: 'default' | 'neutral' | 'destructive';
   /**
    * Legacy alias for `variant`.
    *
@@ -69,9 +81,31 @@ export interface CircularButtonProps
     Omit<React.ComponentPropsWithoutRef<'button'>, keyof CircularButtonOwnProps | 'type'> {}
 
 /**
+ * The emphasis × tone cell the button renders, as its modifier class, named
+ * like Button's. Filled grey keeps its original `neutral` class, so styles
+ * written against it still apply.
+ */
+function resolveCircularButtonCell(
+  variant: NonNullable<CircularButtonOwnProps['variant']>,
+  tone: CircularButtonOwnProps['tone'],
+): string {
+  const emphasis = variant === 'neutral' ? 'primary' : variant;
+  const resolvedTone = tone ?? (variant === 'neutral' ? 'neutral' : 'default');
+  if (resolvedTone === 'destructive') {
+    return emphasis === 'primary' ? 'primary-destructive' : 'destructive';
+  }
+  if (resolvedTone === 'neutral' && emphasis !== 'tertiary') {
+    return emphasis === 'primary' ? 'neutral' : 'secondary-neutral';
+  }
+  return emphasis;
+}
+
+/**
  * Circular icon button component.
- * A round button containing a single icon, available in
- * primary, secondary, tertiary and neutral variants with default and compact sizes.
+ * A round button containing a single icon. `variant` sets the emphasis
+ * (primary, secondary, tertiary) and `tone` the colour (default, neutral,
+ * destructive),
+ * in default and compact sizes.
  *
  * Renders a `<button>`, or an `<a>` when `href` is supplied. Forwards a ref to
  * whichever element it renders, and spreads unrecognised props onto it.
@@ -84,6 +118,7 @@ export const CircularButton = React.forwardRef<
     {
       icon,
       variant,
+      tone,
       priority,
       disabled,
       state,
@@ -103,7 +138,7 @@ export const CircularButton = React.forwardRef<
     const baseClass = 'ds-circular-button';
 
     // `priority` is the deprecated spelling of `variant`; `variant` wins when both are set.
-    const resolvedVariant = variant ?? priority ?? 'primary';
+    const resolvedVariant = resolveCircularButtonCell(variant ?? priority ?? 'primary', tone);
     // `disabled` is the real prop; `state="disabled"` is the deprecated path.
     const isDisabled = disabled ?? state === 'disabled';
     // Keep the state modifier class so the disabled styling applies either way.
@@ -123,7 +158,7 @@ export const CircularButton = React.forwardRef<
 
     const children = isLoading ? (
       <span className={`${baseClass}__icon`} aria-hidden="true">
-        <Spinner size={size === 'compact' ? 'sm' : 'md'} variant="inherit" />
+        <Spinner size={size === 'compact' ? 'sm' : 'md'} tone="inherit" />
       </span>
     ) : (
       <span className={`${baseClass}__icon${typeof icon === 'string' ? ' material-symbols-rounded' : ''}`} aria-hidden="true">

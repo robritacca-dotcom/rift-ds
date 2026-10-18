@@ -15,6 +15,8 @@ export interface MessageAction {
   active?: boolean;
   /** Disables just this action. */
   disabled?: boolean;
+  /** Marks a dangerous or irreversible action, e.g. deleting the message: it rests like its neighbours and takes the danger colour on hover. */
+  destructive?: boolean;
 }
 
 /** Props owned by MessageActions itself — everything else falls through to the root element. */
@@ -57,6 +59,7 @@ export const MessageActions = React.forwardRef<HTMLDivElement, MessageActionsPro
               className={[
                 `${baseClass}__button`,
                 item.active ? `${baseClass}__button--active` : '',
+                item.destructive ? `${baseClass}__button--destructive` : '',
               ]
                 .filter(Boolean)
                 .join(' ')}

@@ -93,6 +93,7 @@ const handler = createChatHandler({
   system: SYSTEM_PROMPT,
   models: CHAT_MODELS,
   tools: [lookupTool],   // a tool may answer with a card
+  askUser: true,         // let a reply end in answers to pick
   guardrails: createUpstashGuardrails({ url, token, salt }),
 });
 
@@ -182,6 +183,7 @@ const EVENT_LINES: Record<ChatEvent["type"], string> = {
   followups: "Questions to offer under the finished reply.",
   content: "Rich content as a React node. Only a transport in the browser can send one.",
   card: "Rich content as data, drawn by your renderers by kind. What a server sends.",
+  question: "Questions the agent asks with answers to pick, drawn in place of the follow-ups.",
   notice: "A limit's reply, shown as an ordinary message.",
   error: "A failure the person should see. Only before the first delta.",
   done: "The reply is complete. Always last.",
@@ -335,7 +337,9 @@ export default function ChatInstallPage() {
             <p className={s.sectionNote}>
               Each handler is a plain function from a request to a response, so it mounts on any
               framework. You set the prompt, the models, the tools and the limits. A tool can answer
-              with a chart, a plan or a card. A limit answers as a normal reply, never a broken chat.
+              with a chart, a plan or a card. With <code>askUser</code> on, a reply can end in a
+              question with answers to pick, drawn in place of the follow-ups. A limit answers as a
+              normal reply, never a broken chat.
             </p>
             <CodeBlock code={ROUTE_SNIPPET} language="ts" showCopy />
 
@@ -438,7 +442,11 @@ export default function ChatInstallPage() {
             <h3 className={s.propsHeading}>The conversation</h3>
             <p className={s.sectionNote}>
               Give the hook a transport. It hands back the turns, the reply in flight, and the
-              controls: send, stop and reset. The reveal is paced for you.
+              controls: send, stop and reset. The reveal is paced for you. A turn that asks
+              carries its <code>question</code>; draw it with the question card, then pass what was
+              picked to <code>answerQuestion</code>, which sends it as the next message, or call{" "}
+              <code>skipQuestion</code>. Sending a follow-up chip through{" "}
+              <code>chooseFollowup</code> keeps the choice on its turn.
             </p>
             <CodeBlock code={USE_CHAT_SNIPPET} language="tsx" showCopy />
 

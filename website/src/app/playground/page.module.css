@@ -130,6 +130,7 @@
   width: var(--rail-width);
   /* Above the showcase sections' animate-in stacking contexts, so the
      rail's open Dropdown menu can never be painted over. */
+  /* ds-allow(stacking): local order on the immersive stage, its own ladder: floating rails 15, control bar 25, toolbar 30, full-size panels above. */
   z-index: 15;
   display: flex;
   flex-direction: column;
@@ -150,6 +151,7 @@
   bottom: var(--rail-inset);
   right: var(--rail-inset);
   width: var(--rail-width);
+  /* ds-allow(stacking): local order on the immersive stage, its own ladder: floating rails 15, control bar 25, toolbar 30, full-size panels above. */
   z-index: 15;
   display: flex;
   flex-direction: column;
@@ -682,6 +684,17 @@
 
 /* The AI section's artifact pair: the panel is surface-less and fills its
    box, so the stage gives it the card a chat would. */
+/* The AI section's question card, at the width a chat column gives it,
+   with its reset under it. */
+.questionFrame {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-300);
+  width: 100%;
+  max-width: 480px;
+}
+
 .artifactFrame {
   display: flex;
   width: 100%;

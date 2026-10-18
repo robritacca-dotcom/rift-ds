@@ -130,7 +130,7 @@ export const SourceTrail = React.forwardRef<HTMLDivElement, SourceTrailProps>(
         >
           <span className={`${baseClass}__indicator`} aria-hidden="true">
             {unsettled || streaming ? (
-              <Spinner size="sm" variant="inherit" />
+              <Spinner size="sm" tone="inherit" />
             ) : (
               <span className="material-symbols-rounded">travel_explore</span>
             )}
@@ -157,7 +157,7 @@ export const SourceTrail = React.forwardRef<HTMLDivElement, SourceTrailProps>(
                 >
                   <span className={`${baseClass}__row-indicator`} aria-hidden="true">
                     {status === 'active' ? (
-                      <Spinner size="sm" variant="inherit" />
+                      <Spinner size="sm" tone="inherit" />
                     ) : (
                       <span className="material-symbols-rounded">{STATUS_ICONS[status]}</span>
                     )}

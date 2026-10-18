@@ -102,7 +102,7 @@
 
 .ds-anchor-nav__panel {
   position: absolute;
-  z-index: 10;
+  z-index: var(--layer-dropdown);
   top: 50%;
   right: 0;
   min-width: 200px;

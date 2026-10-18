@@ -10,12 +10,12 @@ const meta = {
   tags: ['autodocs'],
   argTypes: {
     size: { control: 'select', options: ['sm', 'md', 'lg'] },
-    variant: { control: 'select', options: ['primary', 'neutral', 'inherit'] },
+    tone: { control: 'select', options: ['default', 'neutral', 'inherit'] },
     label: { control: 'text' },
   },
   args: {
     size: 'md',
-    variant: 'primary',
+    tone: 'default',
     label: 'Loading',
   },
 } satisfies Meta<typeof Spinner>;
@@ -34,12 +34,12 @@ export const Large: Story = {
 };
 
 export const Neutral: Story = {
-  args: { variant: 'neutral' },
+  args: { tone: 'neutral' },
 };
 
 /** `inherit` draws in `currentColor` — here it picks up the wrapping element's colour. */
 export const Inherit: Story = {
-  args: { variant: 'inherit' },
+  args: { tone: 'inherit' },
   render: (args) => (
     <span style={{ color: 'var(--color-text-secondary)' }}>
       <Spinner {...args} />

@@ -703,7 +703,7 @@ button.ds-attachment-group__single:focus-visible {
 .ds-attachment-viewer {
   position: fixed;
   inset: 0;
-  z-index: 100;
+  z-index: var(--layer-modal);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -934,6 +934,7 @@ button.ds-attachment-group__single:focus-visible {
    Below 30rem there is no room for a floating dialog and its margin, so
    the panel takes the whole viewport. */
 
+/* ds-allow(breakpoint): a rem query, so a reader with a larger default font gets the full-screen sheet sooner; it is the sheet step (480px) at the default size, and rewriting it in px would change when a large-text reader sees it. */
 @media (max-width: 30rem) {
   .ds-attachment-viewer {
     padding: 0;
@@ -966,6 +967,7 @@ button.ds-attachment-group__single:focus-visible {
   /* Flush with the surface it covers, corners and all, so the edge reads
      as the surface's own outline lighting up */
   inset: 0;
+  /* ds-allow(stacking): local order, above the surface the drop zone covers; it never leaves that surface's stacking context. */
   z-index: 10;
   display: flex;
   align-items: center;

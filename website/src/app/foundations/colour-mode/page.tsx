@@ -443,6 +443,45 @@ const actionNeutralColours: SwatchData[] = [
     dark: { primitive: "--neutral--00--", hex: "#FFFFFF", rgb: "255 / 255 / 255" },
     light: { primitive: "--neutral--10--", hex: "#050505", rgb: "5 / 5 / 5" },
   },
+  {
+    label: "Border", cssVar: "--color-action-neutral-border",
+    dark: { primitive: "--neutral--06--", hex: "#6D6D6D", rgb: "109 / 109 / 109" },
+    light: { primitive: "--neutral--05--", hex: "#888888", rgb: "136 / 136 / 136" },
+  },
+];
+
+/* --- Action / Destructive --- */
+const actionDestructiveColours: SwatchData[] = [
+  {
+    label: "Background Default", cssVar: "--color-action-destructive-bg",
+    dark: { primitive: "--red--05--", hex: "#F37F9B", rgb: "243 / 127 / 155" },
+    light: { primitive: "--red--08--", hex: "#C93A5C", rgb: "201 / 58 / 92" },
+  },
+  {
+    label: "Background Hover", cssVar: "--color-action-destructive-bg-hover",
+    dark: { primitive: "--red--04--", hex: "#F69BB1", rgb: "246 / 155 / 177" },
+    light: { primitive: "--red--09--", hex: "#8E2641", rgb: "142 / 38 / 65" },
+  },
+  {
+    label: "Background Active", cssVar: "--color-action-destructive-bg-active",
+    dark: { primitive: "--red--03--", hex: "#F8B7C7", rgb: "248 / 183 / 199" },
+    light: { primitive: "--red--10--", hex: "#571727", rgb: "87 / 23 / 39" },
+  },
+  {
+    label: "Text Primary", cssVar: "--color-action-destructive-text",
+    dark: { primitive: "--red--11--", hex: "#45101D", rgb: "69 / 16 / 29" },
+    light: { primitive: "--neutral--00--", hex: "#FFFFFF", rgb: "255 / 255 / 255" },
+  },
+  {
+    label: "Text Secondary", cssVar: "--color-action-destructive-text-secondary",
+    dark: { primitive: "--red--04--", hex: "#F69BB1", rgb: "246 / 155 / 177" },
+    light: { primitive: "--red--09--", hex: "#8E2641", rgb: "142 / 38 / 65" },
+  },
+  {
+    label: "Border", cssVar: "--color-action-destructive-border",
+    dark: { primitive: "--red--05--", hex: "#F37F9B", rgb: "243 / 127 / 155" },
+    light: { primitive: "--red--08--", hex: "#C93A5C", rgb: "201 / 58 / 92" },
+  },
 ];
 
 /* --- Input --- */
@@ -881,6 +920,16 @@ export default function SemanticColoursPage() {
             <SectionTitle title="Action / neutral" />
             <div className={styles.colourSwatches}>
               {actionNeutralColours.map((s) => (
+                <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
+              ))}
+            </div>
+          </section>
+
+          {/* Action / Destructive */}
+          <section className={styles.colourGroup}>
+            <SectionTitle title="Action / destructive" />
+            <div className={styles.colourSwatches}>
+              {actionDestructiveColours.map((s) => (
                 <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
               ))}
             </div>

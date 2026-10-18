@@ -25,7 +25,7 @@
 .ds-top-app-bar--sticky {
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: var(--layer-sticky);
 }
 
 .ds-top-app-bar__row {

@@ -33,6 +33,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
 import { siteRoutes, isDynamicSegment } from './site-routes.mjs';
+import { readBreakpoints } from './breakpoint-source.mjs';
 import {
   AUTHOR_NAME,
   AUTHOR_URL,
@@ -774,12 +775,39 @@ export function routeCoverage() {
   return { covered, excluded };
 }
 
+/**
+ * Data a page renders from a module rather than writing in its source, so
+ * the prose extractor cannot see it. Each entry reads the same module the
+ * page does, keyed by route; validate-corpus-coverage.mjs is what notices
+ * when a page needs one.
+ */
+const ROUTE_DATA = new Map([
+  ['/foundations/layout', () =>
+    'Breakpoints, from the library (src/tokens/breakpoints.ts, published as rift-ds/tokens/breakpoints) and the site (website/src/config/breakpoints.ts):\n\n' +
+    readBreakpoints(repoRoot)
+      .map((b) => `- ${b.label}, ${b.query}, ${b.scope}: ${b.role}`)
+      .join('\n') +
+    '\n\nThe site\'s layout custom properties (declared in its global stylesheet; the page prints their values from it):\n\n' +
+    [...read(join(repoRoot, 'website', 'src', 'config', 'layout-properties.ts'))
+      .matchAll(/name:\s*"(--layout-[\w-]+)",\s*role:\s*"([^"]+)"/g)]
+      .map((m) => `- ${m[1]}: ${m[2]}`)
+      .join('\n') +
+    '\n\nStacking layers, lowest first (the library\'s --layer-* in src/tokens/tokens-light.css, then the site\'s --layer-site-* in its global stylesheet):\n\n' +
+    [
+      ...read(join(repoRoot, 'src', 'tokens', 'tokens-light.css')).matchAll(/(--layer-[\w-]*)\s*:\s*(\d+)\s*;[ \t]*\/\*\s*([^*]+?)\s*\*\//g),
+      ...read(join(repoRoot, 'website', 'src', 'app', 'globals.css')).matchAll(/(--layer-site-[\w-]*)\s*:\s*(\d+)\s*;[ \t]*\/\*\s*([^*]+?)\s*\*\//g),
+    ]
+      .sort((a, b) => Number(a[2]) - Number(b[2]))
+      .map((m) => `- ${m[1]}, z-index ${m[2]}: ${m[3]}`)
+      .join('\n')],
+]);
+
 function sectionSitePages() {
   const pages = sitePageRoutes()
     .map((route) => {
       const segments = route === '/' ? [] : route.slice(1).split('/');
       const { prose, factsMarkdown } = pageContent(...segments);
-      const body = [prose, factsMarkdown].filter(Boolean).join('\n\n');
+      const body = [prose, factsMarkdown, ROUTE_DATA.get(route)?.()].filter(Boolean).join('\n\n');
       return body ? `### ${route === '/' ? '/ (home)' : route}\n\n${body}` : null;
     })
     .filter(Boolean)

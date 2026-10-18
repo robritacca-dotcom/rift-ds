@@ -27,7 +27,7 @@ function SelectedStateDemo() {
   const [density, setDensity] = React.useState("comfortable");
   return (
     <DropdownMenu
-      trigger={<Button label="Density" variant="secondary" state="default" />}
+      trigger={<Button label="Density" variant="secondary" />}
       items={[
         {
           type: "group",
@@ -148,7 +148,7 @@ export default function DropdownMenuPage() {
             <div className={styles.variantRow}>
               <div className={styles.variantItem}>
                 <DropdownMenu
-                  trigger={<Button label="Open menu" variant="secondary" state="default" />}
+                  trigger={<Button label="Open menu" variant="secondary" />}
                   items={simpleItems}
                 />
               </div>
@@ -161,7 +161,7 @@ export default function DropdownMenuPage() {
             <div className={styles.variantRow}>
               <div className={styles.variantItem}>
                 <DropdownMenu
-                  trigger={<Button label="My account" variant="secondary" state="default" />}
+                  trigger={<Button label="My account" variant="secondary" />}
                   items={groupedItems}
                 />
               </div>
@@ -174,7 +174,7 @@ export default function DropdownMenuPage() {
             <div className={styles.variantRow}>
               <div className={styles.variantItem}>
                 <DropdownMenu
-                  trigger={<Button label="Actions" variant="secondary" state="default" />}
+                  trigger={<Button label="Actions" variant="secondary" />}
                   items={subMenuItems}
                 />
               </div>
@@ -187,7 +187,7 @@ export default function DropdownMenuPage() {
             <div className={styles.variantRow}>
               <div className={styles.variantItem}>
                 <DropdownMenu
-                  trigger={<Button label="Edit" variant="secondary" state="default" />}
+                  trigger={<Button label="Edit" variant="secondary" />}
                   items={shortcutItems}
                 />
               </div>
@@ -200,7 +200,7 @@ export default function DropdownMenuPage() {
             <div className={styles.variantRow}>
               <div className={styles.variantItem}>
                 <DropdownMenu
-                  trigger={<Button label="Compact" variant="secondary" state="default" size="compact" />}
+                  trigger={<Button label="Compact" variant="secondary" size="compact" />}
                   items={simpleItems}
                   size="compact"
                 />

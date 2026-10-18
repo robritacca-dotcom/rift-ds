@@ -117,6 +117,9 @@ const ACTION_PAIRINGS = [
   ['--color-action-passive-bg', '--color-action-passive-text', 4.5, 'tertiary Button labels'],
   ['--color-action-passive-bg-hover', '--color-action-passive-text', 4.5, 'tertiary Button labels on hover'],
   ['--color-action-passive-bg-active', '--color-action-passive-text', 4.5, 'tertiary Button labels when pressed'],
+  ['--color-action-destructive-bg', '--color-action-destructive-text', 4.5, 'destructive Button labels on hover and press, and the filled destructive Button at rest'],
+  ['--color-action-destructive-bg-hover', '--color-action-destructive-text', 4.5, 'filled destructive Button labels on hover'],
+  ['--color-action-destructive-bg-active', '--color-action-destructive-text', 4.5, 'filled destructive Button labels when pressed'],
 ];
 
 /** Pairings that genuinely fail today, keyed "<preset>|<theme>|<fill>|<foreground>"

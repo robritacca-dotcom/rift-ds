@@ -189,7 +189,7 @@ button.ds-source-chip {
 
 .ds-source-chip__preview {
   position: absolute;
-  z-index: 50;
+  z-index: var(--layer-floating);
   bottom: 100%;
   left: var(--ds-source-chip-shift, 0px);
   margin-block: var(--gap-200);

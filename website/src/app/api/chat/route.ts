@@ -11,7 +11,8 @@
  * matches how visitors arrive, so the guardrails' price table assumes 2x
  * cache writes), the model allowlist and its budget tiers, the two
  * deterministic lookup tools over the generated registries (shared with
- * /api/mcp through @/lib/site-tools), the Upstash guardrails, and the
+ * /api/mcp through @/lib/site-tools), the package's ask_user tool switched
+ * on, the Upstash guardrails, and the
  * notice copy that points people at the docs.
  */
 import { createChatHandler, type ChatTool } from "rift-ds/chat/server";
@@ -116,6 +117,12 @@ const handler = createChatHandler({
   defaultModel: DEFAULT_CHAT_MODEL.value,
   budgetModel: BUDGET_CHAT_MODEL.value,
   tools: CHAT_TOOLS,
+  /* The package's built-in ask_user tool: a reply can end in answers to pick
+     (which framework, which parts of the system) when the next step depends
+     on them. Its guidance lives in the tool description, which sits before
+     the cached system blocks and never changes per request, so the corpus
+     cache is untouched. Asking ends the exchange with no further call. */
+  askUser: true,
   maxModelCalls: 3,
   maxTokens: 3000,
   effort: EFFORT,

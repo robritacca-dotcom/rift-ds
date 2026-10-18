@@ -21,7 +21,20 @@ const states = [
   { label: "Active", value: "active" as const },
 ];
 
-const variants = ["primary", "secondary", "tertiary", "neutral", "destructive"] as const;
+/* Every emphasis × tone cell the Button draws. Tertiary is already grey,
+   so it has no separate neutral cell, and a tertiary destructive takes the
+   outlined look. */
+const variants = [
+  { key: "primary", variant: "primary", tone: "default", label: "Primary" },
+  { key: "secondary", variant: "secondary", tone: "default", label: "Secondary" },
+  { key: "tertiary", variant: "tertiary", tone: "default", label: "Tertiary" },
+  { key: "primary-neutral", variant: "primary", tone: "neutral", label: "Primary, neutral" },
+  { key: "secondary-neutral", variant: "secondary", tone: "neutral", label: "Secondary, neutral" },
+  { key: "primary-destructive", variant: "primary", tone: "destructive", label: "Primary, destructive" },
+  { key: "destructive", variant: "secondary", tone: "destructive", label: "Secondary, destructive" },
+] as const;
+
+type ButtonCell = (typeof variants)[number];
 
 const sizes = [
   { label: "Default", value: "default" as const },
@@ -35,14 +48,6 @@ const iconVariants = [
   { label: "Both icons", iconLeft: "grid_view", iconRight: "arrow_forward" },
 ] as const;
 
-const variantLabels: Record<string, string> = {
-  primary: "Primary",
-  secondary: "Secondary",
-  tertiary: "Tertiary",
-  neutral: "Neutral",
-  destructive: "Destructive",
-};
-
 /* ============================================
    BUTTON GRID — 5-column layout per variant
    col 1: state label
@@ -51,13 +56,13 @@ const variantLabels: Record<string, string> = {
    ============================================ */
 
 function ButtonGrid({
-  variant,
+  cell,
   size,
 }: {
-  variant: "primary" | "secondary" | "tertiary" | "neutral" | "destructive";
+  cell: ButtonCell;
   size: "default" | "compact";
 }) {
-  const heading = `${variantLabels[variant]}${size === "compact" ? ", compact" : ""}`;
+  const heading = `${cell.label}${size === "compact" ? ", compact" : ""}`;
 
   return (
     <section className={styles.variantBlock}>
@@ -80,7 +85,8 @@ function ButtonGrid({
               <div key={`${st.value}-${iv.label}`} className={styles.gridCell}>
                 <Button
                   label="Button"
-                  variant={variant}
+                  variant={cell.variant}
+                  tone={cell.tone}
                   state={st.value}
                   size={size}
                   iconLeft={iv.iconLeft}
@@ -126,14 +132,14 @@ export default function ButtonPage() {
               The main action element
             </p>
             <p className={styles.introBody}>
-              Primary buttons are solid-filled for the highest-emphasis actions. Secondary buttons have a border and fill on hover. Tertiary buttons are transparent and blend into the surface for lower-priority options. Neutral buttons keep the solid fill in quiet grey, for actions that deserve a button&apos;s full shape without the accent colour. Destructive buttons signal dangerous or irreversible actions like delete and remove. All variants come in default and compact sizes.
+              Two props set a button&apos;s look. <code>variant</code> is the emphasis: primary buttons are solid-filled for the highest-emphasis actions, secondary buttons have a border and fill on hover, and tertiary buttons are transparent and blend into the surface for lower-priority options. <code>tone</code> is the colour: the default carries the action colour, neutral moves the same shape into quiet grey for actions that deserve a button&apos;s full shape without the accent, and destructive signals dangerous or irreversible actions like delete and remove. Every combination comes in default and compact sizes.
             </p>
           </div>
 
           {/* Variant grids — one per variant × size */}
           {sizes.map((sz) =>
-            variants.map((p) => (
-              <ButtonGrid key={`${p}-${sz.value}`} variant={p} size={sz.value} />
+            variants.map((cell) => (
+              <ButtonGrid key={`${cell.key}-${sz.value}`} cell={cell} size={sz.value} />
             ))
           )}
 
@@ -148,19 +154,20 @@ export default function ButtonPage() {
             </p>
             <div className={`${styles.buttonGrid} ${styles.loadingGrid}`}>
               <div className={styles.gridCorner} />
-              {variants.map((p) => (
-                <span key={p} className={styles.gridColHeader}>
-                  {variantLabels[p]}
+              {variants.map((cell) => (
+                <span key={cell.key} className={styles.gridColHeader}>
+                  {cell.label}
                 </span>
               ))}
               {sizes.map((sz) => (
                 <React.Fragment key={sz.value}>
                   <span className={styles.gridRowHeader}>{sz.label}</span>
-                  {variants.map((p) => (
-                    <div key={`${sz.value}-${p}`} className={styles.gridCell}>
+                  {variants.map((cell) => (
+                    <div key={`${sz.value}-${cell.key}`} className={styles.gridCell}>
                       <Button
                         label="Saving…"
-                        variant={p}
+                        variant={cell.variant}
+                        tone={cell.tone}
                         size={sz.value}
                         loading
                       />

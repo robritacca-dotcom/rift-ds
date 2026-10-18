@@ -4,21 +4,32 @@
  * questions as one opened on a blueprint page: the starter is the widget's
  * first guess at why someone opened it here.
  *
- * Each route holds a pool of pre-written questions, and the package's
- * seeded draw (`pickStarters` from rift-ds/chat) shows three of them. The
- * seed lives in the chat provider: rolled once per page load and again on
+ * Each page holds a pool of pre-written questions, and the package's seeded
+ * draw (`pickStarters` from rift-ds/chat) shows three of them. The seed
+ * lives in the chat provider: rolled once per page load and again on
  * "New chat", so a refresh or a fresh conversation shows a different mix
  * while re-renders never reshuffle under the visitor.
+ *
+ * The pools have one home per kind of page:
+ *   - every static route writes its own pool in the page-summaries registry
+ *     (`website/src/data/page-summaries.json`, beside the page's TLDR), and
+ *     `scripts/validate-page-summaries.mjs` fails the build on a route
+ *     without one, so a new page cannot ship with another page's questions;
+ *   - component pages share the item pool below, which names the component;
+ *   - anything else (a labs page, a 404) gets the site-wide default.
  *
  * Every label follows one pattern: a single crisp question with no filler,
  * or a bare imperative (Summarise, Explain, Describe, Walk me through), and
  * every label has to fit on one chip: `scripts/validate-chat-starters.mjs`
- * holds the written ones to SUGGESTION_MAX_CHARS. The item starters below
- * name the thing the visitor is looking at, so their length depends on
- * runtime data; those fall back to the unnamed wording rather than
- * overflowing (`namedStarter`).
+ * holds the written ones to SUGGESTION_MAX_CHARS, and fails a label that
+ * names a theme-owned value (a primitive colour family, the base typeface),
+ * because a theme can change those and the starter would go stale. The item
+ * starters name the thing the visitor is looking at, so their length
+ * depends on runtime data; those fall back to the unnamed wording rather
+ * than overflowing (`namedStarter`).
  */
 import { namedStarter, pickStarters, type Starter } from "rift-ds/chat";
+import { getPageStarters } from "@/data/page-summaries";
 
 export type { Starter };
 
@@ -33,150 +44,25 @@ const DEFAULT_STARTERS: Starter[] = [
   { id: "agents", label: "Can my coding agent use this?" },
 ];
 
-/** Longest-prefix wins, so /components/button beats /components. */
-const STARTERS_BY_PREFIX: Array<[string, Starter[]]> = [
-  ["/components", [
-    { id: "organised", label: "How are components organised?" },
-    { id: "install", label: "How do I install the system?" },
-    { id: "different", label: "What makes this system different?" },
-    { id: "count", label: "How many components are there?" },
-    { id: "ai-set", label: "Which components are AI-specific?" },
-    { id: "charts", label: "How do the charts work?" },
-    { id: "server", label: "Do these work in Server Components?" },
-    { id: "standout", label: "Which component stands out?" },
-  ]],
-  ["/foundations", [
-    { id: "tokens", label: "Explain the token architecture" },
-    { id: "dark", label: "How does dark mode work?" },
-    { id: "teal", label: "Why is teal reserved for actions?" },
-    { id: "semantic", label: "What are semantic tokens?" },
-    { id: "type", label: "What typefaces are used?" },
-    { id: "motion", label: "How is motion kept consistent?" },
-    { id: "override", label: "How do I override the theme?" },
-  ]],
-  ["/docs/chat", [
-    { id: "what", label: "What is the chat widget?" },
-    { id: "install", label: "How do I install the chat?" },
-    { id: "server", label: "What does the server handler do?" },
-    { id: "transport", label: "What is a transport?" },
-    { id: "demo", label: "Can I try it without a key?" },
-    { id: "cards", label: "How do cards render in a reply?" },
-    { id: "threads", label: "How do threads and tabs work?" },
-    { id: "parts", label: "Which components does it use?" },
-  ]],
-  ["/blueprints", [
-    { id: "this-spec", label: "What does this spec govern?" },
-    { id: "maintain", label: "How does the system maintain itself?" },
-    { id: "claude", label: "How was this built with Claude?" },
-    { id: "why-publish", label: "Why publish the specs?" },
-    { id: "validators", label: "What do the validators enforce?" },
-    { id: "first", label: "Which spec should I read?" },
-    { id: "split", label: "How do the specs divide the work?" },
-  ]],
-  ["/overview", [
-    { id: "pipeline", label: "Explain the build pipeline" },
-    { id: "registries", label: "What do the registries prevent?" },
-    { id: "claude", label: "How was this built with Claude?" },
-    { id: "ci", label: "What runs in CI?" },
-    { id: "counts", label: "How do counts stay accurate?" },
-    { id: "push", label: "What happens on a push to main?" },
-    { id: "honest", label: "How does the site stay honest?" },
-  ]],
-  ["/docs", [
-    { id: "start", label: "How do I get started?" },
-    { id: "install", label: "How do I install the package?" },
-    { id: "theme", label: "How do I theme it for my brand?" },
-    { id: "agents", label: "Can my coding agent use this?" },
-    { id: "mcp", label: "What's the MCP endpoint for?" },
-    { id: "tokens", label: "Explain the token architecture" },
-    { id: "honest", label: "How do the docs stay honest?" },
-  ]],
-  ["/skills", [
-    { id: "skills", label: "What are the agent skills?" },
-    { id: "loops", label: "What runs on a schedule?" },
-    { id: "claude", label: "How was this built with Claude?" },
-    { id: "ship", label: "What does the ship skill do?" },
-    { id: "honest", label: "How do skills keep the site honest?" },
-    { id: "vs-loops", label: "How do skills differ from loops?" },
-    { id: "copy", label: "Can I copy these for my repo?" },
-  ]],
-  ["/loops", [
-    { id: "loops", label: "What do the loops do?" },
-    { id: "growth", label: "How does the growth loop work?" },
-    { id: "journal", label: "Who writes the project journal?" },
-    { id: "guardrails", label: "What guards the loops?" },
-    { id: "cadence", label: "How often does each loop run?" },
-    { id: "chat-quality", label: "What does the chat quality loop do?" },
-    { id: "deploy", label: "Do loops deploy on their own?" },
-  ]],
-  ["/releases", [
-    { id: "latest", label: "What shipped in the latest release?" },
-    { id: "install", label: "How do I install the latest version?" },
-    { id: "cadence", label: "How often do releases happen?" },
-    { id: "contents", label: "What's in the npm package?" },
-    { id: "log", label: "How is this log kept accurate?" },
-  ]],
-  ["/playground", [
-    { id: "retheme", label: "How does re-theming work?" },
-    { id: "tokens", label: "Explain the token architecture" },
-    { id: "install", label: "How do I install the system?" },
-    { id: "levers", label: "How do the theme levers work?" },
-    { id: "purpose", label: "What is this playground for?" },
-    { id: "whole-site", label: "Why does the whole site re-theme?" },
-    { id: "override", label: "How do I override the theme?" },
-  ]],
-  ["/", [
-    { id: "nutshell", label: "What is this system?" },
-    { id: "install", label: "How do I install it?" },
-    { id: "different", label: "What makes it different?" },
-    { id: "count", label: "How many components are there?" },
-    { id: "tokens", label: "How do tokens drive theming?" },
-    { id: "storybook", label: "Where is the Storybook?" },
-    { id: "claude", label: "How was this built with Claude?" },
-    { id: "agents", label: "Can my coding agent use this?" },
-  ]],
-];
-
 /**
- * Item pages get item-aware starter pools. The route already travels to the
+ * Component pages get an item-aware pool. The route already travels to the
  * model as page context, so "this component" resolves; when the nav
  * registry knows the item's label, one starter names it.
  */
-function itemStarterPool(pathname: string, itemLabel?: string | null): Starter[] | null {
-  if (/^\/components\/[^/]+$/.test(pathname)) {
-    return [
-      {
-        id: "use",
-        label: itemLabel
-          ? namedStarter(`How do I use the ${itemLabel} component?`, "How do I use this component?")
-          : "How do I use this component?",
-      },
-      { id: "tokens", label: "Which tokens does it use?" },
-      { id: "props", label: "What props does it take?" },
-      { id: "client", label: "Is it a client component?" },
-      { id: "dark", label: "How does it look in dark mode?" },
-      { id: "install", label: "How do I install the system?" },
-    ];
-  }
-  if (/^\/foundations\/[^/]+$/.test(pathname)) {
-    return [
-      {
-        id: "this-foundation",
-        label: itemLabel
-          ? namedStarter(
-              `Explain how ${itemLabel.toLowerCase()} works here`,
-              "Explain this part of the system"
-            )
-          : "Explain this part of the system",
-      },
-      { id: "tokens", label: "Explain the token architecture" },
-      { id: "teal", label: "Why is teal reserved for actions?" },
-      { id: "semantic", label: "What are semantic tokens?" },
-      { id: "override", label: "How do I override the theme?" },
-      { id: "dark", label: "How does dark mode work?" },
-    ];
-  }
-  return null;
+function componentStarterPool(itemLabel?: string | null): Starter[] {
+  return [
+    {
+      id: "use",
+      label: itemLabel
+        ? namedStarter(`How do I use the ${itemLabel} component?`, "How do I use this component?")
+        : "How do I use this component?",
+    },
+    { id: "tokens", label: "Which tokens does it use?" },
+    { id: "props", label: "What props does it take?" },
+    { id: "client", label: "Is it a client component?" },
+    { id: "example", label: "Show me a quick example" },
+    { id: "install", label: "How do I install the system?" },
+  ];
 }
 
 /**
@@ -192,16 +78,12 @@ export function startersForPath(
 ): Starter[] {
   if (!pathname) return pickStarters(DEFAULT_STARTERS, seed, "");
 
-  const item = itemStarterPool(pathname, itemLabel);
-  if (item) return pickStarters(item, seed, pathname);
+  const written = getPageStarters(pathname);
+  if (written) return pickStarters(written, seed, pathname);
 
-  let best: Starter[] | null = null;
-  let bestLength = 0;
-  for (const [prefix, starters] of STARTERS_BY_PREFIX) {
-    if (pathname.startsWith(prefix) && prefix.length > bestLength) {
-      best = starters;
-      bestLength = prefix.length;
-    }
+  if (/^\/components\/[^/]+$/.test(pathname)) {
+    return pickStarters(componentStarterPool(itemLabel), seed, pathname);
   }
-  return pickStarters(best ?? DEFAULT_STARTERS, seed, pathname);
+
+  return pickStarters(DEFAULT_STARTERS, seed, pathname);
 }

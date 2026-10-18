@@ -95,7 +95,7 @@ export default function AdvancedColorsDialog({
               max={20}
               step={1}
               onValueChange={(v) => onChange({ ...state, hueShift: v })}
-              ariaLabel="Hue nudge, all ramps"
+              aria-label="Hue nudge, all ramps"
             />
             <span className={styles.sliderValue}>{state.hueShift}°</span>
           </div>
@@ -107,7 +107,7 @@ export default function AdvancedColorsDialog({
               max={200}
               step={5}
               onValueChange={(v) => onChange({ ...state, satScale: v })}
-              ariaLabel="Saturation, all ramps"
+              aria-label="Saturation, all ramps"
             />
             <span className={styles.sliderValue}>{state.satScale}%</span>
           </div>

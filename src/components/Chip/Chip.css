@@ -119,7 +119,8 @@
 }
 
 /* ============================================
-   SELECTED — teal active fill, matching the
+   SELECTED — action-colour fill (or the neutral
+   greys under tone="neutral"), matching the
    SegmentedControl selection convention
    ============================================ */
 
@@ -139,6 +140,28 @@
 
 .ds-chip--selected.ds-chip--clickable:not(.ds-chip--disabled):active {
   background-color: var(--color-action-primary-bg-active);
+}
+
+/* tone="neutral": the same selection in the neutral greys, for filter rows
+   whose selection should not carry the action colour's weight. */
+.ds-chip--selected-neutral {
+  background-color: var(--color-action-neutral-bg);
+  border-color: var(--color-action-neutral-bg);
+  color: var(--color-action-neutral-text);
+}
+
+.ds-chip--selected-neutral .ds-chip__icon,
+.ds-chip--selected-neutral .ds-chip__remove,
+.ds-chip--selected-neutral .ds-chip__remove:not(:disabled):hover {
+  color: var(--color-action-neutral-text);
+}
+
+.ds-chip--selected-neutral.ds-chip--clickable:not(.ds-chip--disabled):hover {
+  background-color: var(--color-action-neutral-bg-hover);
+}
+
+.ds-chip--selected-neutral.ds-chip--clickable:not(.ds-chip--disabled):active {
+  background-color: var(--color-action-neutral-bg-active);
 }
 
 /* ============================================

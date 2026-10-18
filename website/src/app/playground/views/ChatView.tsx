@@ -51,6 +51,8 @@ export interface ChatViewProps {
   /** What the welcome screen holds under the composer: the starters, one
       of the demo fillings, or nothing. */
   welcome: DemoWelcomeVariant;
+  /** Which way the conversation reads: top-down (the widget's default) or bottom-up. */
+  flow: "top-down" | "bottom-up";
   /** The dragged size, held by the page so it survives a switch to the
       Components view and back, and dies with the playground like every
       other lever. */
@@ -95,6 +97,7 @@ export default function ChatView({
   size,
   placeholder,
   welcome,
+  flow,
   manual,
   onManual,
   allowFullscreen,
@@ -162,6 +165,34 @@ export default function ChatView({
      doubling the delta keeps the grabbed edge under the cursor. */
   const CENTERED_DRAG_FACTOR = 2;
 
+  /* One size per animation frame, however fast the pointer reports: a
+     chart on the stage (the dashboard welcome, a chart card) answers every
+     re-render that moves its ticks with a recharts store dispatch of its
+     own, and pointer events arriving faster than frames stacked those past
+     React's nested-update limit (error #185, recharts/recharts#7563). Both
+     grips queue their latest value here; a release flushes it so the card
+     lands where the pointer let go. */
+  const pendingSizeRef = useRef<{ w?: number; h?: number } | null>(null);
+  const pendingDockRef = useRef<number | null>(null);
+  const sizeFrameRef = useRef(0);
+  const flushSize = () => {
+    sizeFrameRef.current = 0;
+    const next = pendingSizeRef.current;
+    const dock = pendingDockRef.current;
+    pendingSizeRef.current = null;
+    pendingDockRef.current = null;
+    if (next) onManual(next);
+    if (dock != null) setDockWidth(dock);
+  };
+  const queueSize = () => {
+    if (!sizeFrameRef.current) sizeFrameRef.current = requestAnimationFrame(flushSize);
+  };
+  const flushSizeNow = () => {
+    cancelAnimationFrame(sizeFrameRef.current);
+    flushSize();
+  };
+  useEffect(() => () => cancelAnimationFrame(sizeFrameRef.current), []);
+
   const moveResize = (e: React.PointerEvent<HTMLDivElement>) => {
     const drag = dragRef.current;
     if (!drag) return;
@@ -172,11 +203,13 @@ export default function ChatView({
       );
     if (drag.axis !== "x")
       next.h = Math.round(drag.height + (e.clientY - drag.startY) * CENTERED_DRAG_FACTOR);
-    onManual(next);
+    pendingSizeRef.current = next;
+    queueSize();
   };
 
   const endResize = () => {
     dragRef.current = null;
+    flushSizeNow();
     setResizing(false);
     /* A card that grew may now reach past the stage from where it was
        moved to; one frame later, once the new size has rendered. */
@@ -207,11 +240,13 @@ export default function ChatView({
   const moveDockResize = (e: React.PointerEvent<HTMLDivElement>) => {
     const drag = dockDragRef.current;
     if (!drag) return;
-    setDockWidth(dockWidthFromDrag(drag.width, e.clientX - drag.startX, side));
+    pendingDockRef.current = dockWidthFromDrag(drag.width, e.clientX - drag.startX, side);
+    queueSize();
   };
 
   const endDockResize = () => {
     dockDragRef.current = null;
+    flushSizeNow();
     setResizing(false);
   };
 
@@ -311,12 +346,21 @@ export default function ChatView({
 
   /* The devtools-style readout: the widget's actual rendered size while a
      grip is being dragged, the rect rather than the requested size, so the
-     CSS clamps are visible the moment a drag hits one. */
+     CSS clamps are visible the moment a drag hits one. Read a frame later
+     rather than inside the effect, so the readout's own update never chains
+     onto the commit the drag caused (see the frame coalescing above), and
+     an unchanged size sets nothing. */
   const [readout, setReadout] = useState<{ w: number; h: number } | null>(null);
   useEffect(() => {
     if (!resizing) return;
-    const rect = widgetRef.current?.getBoundingClientRect();
-    if (rect) setReadout({ w: Math.round(rect.width), h: Math.round(rect.height) });
+    const raf = requestAnimationFrame(() => {
+      const rect = widgetRef.current?.getBoundingClientRect();
+      if (!rect) return;
+      const w = Math.round(rect.width);
+      const h = Math.round(rect.height);
+      setReadout((current) => (current?.w === w && current?.h === h ? current : { w, h }));
+    });
+    return () => cancelAnimationFrame(raf);
   }, [manual, dockWidth, resizing]);
 
   const preset = STAGE_SIZES[size];
@@ -450,6 +494,7 @@ export default function ChatView({
         placeholder={
           placeholder.trim() === "" ? defaultChatPlaceholder(simControls) : placeholder
         }
+        flow={flow}
         showStarters={welcome === "starters"}
         /* The Welcome lever's other fillings ride the widget slot. The
            dashboard runs long, so it always turns the welcome into a page;

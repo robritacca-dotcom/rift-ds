@@ -1,8 +1,8 @@
 # Spinner
 
-Animated circular loading indicator in three sizes and primary, neutral, or inherit variants.
+Animated circular loading indicator in three sizes and a default, neutral or inherit tone.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.9.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: feedback
 - Import: `import { Spinner } from 'rift-ds';`
@@ -15,6 +15,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.9.0. The same data
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | size | `"sm" \| "md" \| "lg"` | no | `md` | Size of the spinner |
-| variant | `"inherit" \| "neutral" \| "primary"` | no | `primary` | Visual variant — `inherit` draws the spinner in `currentColor`, for use inside coloured controls |
+| tone | `"inherit" \| "default" \| "neutral"` | no |  | Colour of the arc: `default` in the primary text colour, `neutral` in the secondary one, `inherit` in `currentColor`, for use inside coloured controls. |
+| variant | `"inherit" \| "neutral" \| "primary"` | no |  | Legacy name for `tone`, from before colour moved onto its own prop: `primary` is `tone="default"`. Deprecated: Use `tone` instead. |
 | label | `string` | no | `Loading` | Accessible label |
 | className | `string` | no | `` | Additional CSS classes |

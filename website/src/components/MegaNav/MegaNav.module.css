@@ -8,7 +8,7 @@
 .header {
   position: relative;
   background: transparent;
-  z-index: 10;
+  z-index: var(--layer-sticky);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -19,6 +19,14 @@
      descendants see them too. */
   --mn-bar-height: 78px;
   --mn-logo-mark: 24px;
+  /* The nav folds on the room the bar actually has, not the viewport: a
+     docked chat takes up to its widened width out of the row without the
+     viewport changing, so viewport queries kept the full pill row beside a
+     420–655px panel and ran it under it. The in-flow header's width is the
+     body's content box, which the docked padding already narrows; the
+     sticky bar names the same container below, so both bars fold
+     together. See RESPONSIVE. */
+  container: site-header / inline-size;
 }
 
 .headerInner {
@@ -48,6 +56,9 @@
      and re-centre the content against the full viewport instead. The
      gradient is unaffected: backgrounds paint across the padding box. */
   padding: 0 var(--primitive-padding-1000);
+  /* Its content box is the viewport minus the gutters and any docked
+     chat, the same room as the in-flow header's. */
+  container: site-header / inline-size;
 }
 
 .logoSlot {
@@ -589,7 +600,7 @@
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000;
+  z-index: var(--layer-site-chrome);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -686,7 +697,7 @@
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
+  z-index: var(--layer-site-chrome);
   opacity: 0;
   visibility: hidden;
   transition: opacity var(--motion-duration-slow) var(--motion-ease-standard), visibility var(--motion-duration-slow) var(--motion-ease-standard);
@@ -819,9 +830,16 @@
 /* ============================================
    RESPONSIVE
    ============================================ */
-@media (max-width: 1535px) {
+/* The two fold steps are container queries on site-header (see .header),
+   so a docked chat folds the row as surely as a narrow window does. Each
+   width is the measured viewport step minus what the bar never gets: the
+   80px of body gutters above 959px and a classic 15px scrollbar (a
+   container measures inside it; a viewport query does not), so 1535px of
+   viewport is 1440px of bar and the undocked fold lands where it did.
+   ds-allow(breakpoint): content-driven: the measured room the full search pill needs beside the nav pills. */
+@container site-header (max-width: 1440px) {
   /* Not enough room for the input dressing beside five nav pills (the
-     full pill needs ~1510px of viewport, measured) — the field folds
+     full pill needs ~1415px of bar, measured) — the field folds
      back to the icon circle. */
   .searchBtn {
     justify-content: center;
@@ -845,8 +863,9 @@
   }
 }
 
-@media (max-width: 1279px) {
-  /* Even icon-search, the full pill row needs ~1230px of viewport
+/* ds-allow(breakpoint): content-driven: the measured room the icon-search pill row needs; 1279px of viewport minus the gutters and scrollbar. */
+@container site-header (max-width: 1184px) {
+  /* Even icon-search, the full pill row needs ~1135px of bar
      (measured) — below that the nav hands over to the hamburger
      drawer rather than clipping its right controls. */
   .navCenter,

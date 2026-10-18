@@ -267,7 +267,11 @@ function optionalPeersInClosure(entry) {
   const placement = read(join(repoRoot, 'src', 'chat', 'placement.ts'));
   const css = read(join(repoRoot, 'src', 'chat', 'ChatWidget.css'));
 
-  const takeover = queries.match(/TAKEOVER_QUERY = '\(max-width: (\d+)px\)'/);
+  /* TAKEOVER_QUERY is built from the breakpoint module, so its width is
+     read there. */
+  const takeover = queries.includes('TAKEOVER_QUERY = mediaBelow(BREAKPOINT_CHAT_TAKEOVER_PX)')
+    ? read(join(repoRoot, 'src', 'tokens', 'breakpoints.ts')).match(/BREAKPOINT_CHAT_TAKEOVER_PX = (\d+);/)
+    : null;
   const cssTakeover = css.match(/@media \(max-width: (\d+)px\) \{\s*\n\s*\.ds-chat-launcher__panel \{/);
   if (!takeover || !cssTakeover) {
     errors.push('could not read TAKEOVER_QUERY or the panel\'s phone media query');

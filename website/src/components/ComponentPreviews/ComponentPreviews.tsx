@@ -71,6 +71,7 @@ import { MapLegend } from "rift-ds/components/MapLegend/MapLegend";
 import { WorldMap } from "rift-ds/components/WorldMap/WorldMap";
 import { ProgressBar } from "rift-ds/components/ProgressBar/ProgressBar";
 import { PromptSuggestions } from "rift-ds/components/PromptSuggestions/PromptSuggestions";
+import { QuestionCard } from "rift-ds/components/QuestionCard/QuestionCard";
 import { Prose } from "rift-ds/components/Prose/Prose";
 import { RadioButton } from "rift-ds/components/RadioButton/RadioButton";
 import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
@@ -401,14 +402,14 @@ const previews: Record<string, () => ReactNode> = {
   ),
   "button": () => (
     <>
-      <Button label="Button" variant="secondary" state="default" />
+      <Button label="Button" variant="secondary" />
     </>
   ),
   "button-group": () => (
     <>
       <div className={styles.previewRow} style={{ gap: "10px" }}>
         <Button label="Active" variant="tertiary" state="active" />
-        <Button label="Inactive" variant="tertiary" state="default" />
+        <Button label="Inactive" variant="tertiary" />
       </div>
     </>
   ),
@@ -691,8 +692,8 @@ const previews: Record<string, () => ReactNode> = {
   "checkbox": () => (
     <>
       <div className={styles.previewRow} style={{ gap: "16px" }}>
-        <Checkbox checked={true} ariaLabel="Checked" onChange={() => {}} />
-        <Checkbox checked={false} ariaLabel="Unchecked" onChange={() => {}} />
+        <Checkbox checked={true} aria-label="Checked" onCheckedChange={() => {}} />
+        <Checkbox checked={false} aria-label="Unchecked" onCheckedChange={() => {}} />
       </div>
     </>
   ),
@@ -1126,6 +1127,25 @@ const previews: Record<string, () => ReactNode> = {
       </div>
     </>
   ),
+  "question-card": () => (
+    <>
+      <div className={styles.scaledComponentPreview} style={{ width: "220px" }}>
+        <QuestionCard
+          questions={[
+            {
+              id: "framework",
+              prompt: "Which framework?",
+              options: [
+                { value: "next", label: "Next.js" },
+                { value: "vite", label: "Vite" },
+              ],
+            },
+          ]}
+          values={[{ questionId: "framework", values: ["next"] }]}
+        />
+      </div>
+    </>
+  ),
   "kbd": () => (
     <>
       <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
@@ -1470,8 +1490,8 @@ const previews: Record<string, () => ReactNode> = {
   "radio-button": () => (
     <>
       <div className={styles.previewColumn} style={{ gap: "16px" }}>
-        <RadioButton label="Option A" checked={true} onChange={() => {}} />
-        <RadioButton label="Option B" checked={false} onChange={() => {}} />
+        <RadioButton label="Option A" checked={true} onValueChange={() => {}} />
+        <RadioButton label="Option B" checked={false} onValueChange={() => {}} />
       </div>
     </>
   ),
@@ -1608,7 +1628,7 @@ const previews: Record<string, () => ReactNode> = {
     <>
       <div style={{ display: "flex", flexDirection: "column", gap: "12px", alignItems: "flex-start" }}>
         <Sparkline data={[4, 6, 5, 8, 7, 10, 9, 12, 14, 13, 16]} tone="positive" variant="area" />
-        <Sparkline data={[16, 14, 15, 12, 13, 10, 11, 8, 7, 8, 5]} tone="negative" />
+        <Sparkline data={[16, 14, 15, 12, 13, 10, 11, 8, 7, 8, 5]} tone="error" />
       </div>
     </>
   ),

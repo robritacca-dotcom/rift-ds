@@ -7,10 +7,11 @@ import MegaNav from "../components/MegaNav/MegaNav";
 import { ExtendedBackground } from "../components/BlurBackground/BlurBackground";
 import FadeDivider from "../components/FadeDivider/FadeDivider";
 import styles from "./page.module.css";
+import HomeTemplates from "./HomeTemplates";
 import { FIGMA_FILE_URL, NPM_URL, REPOSITORY_URL, STORYBOOK_URL } from "@/config/brand.generated";
 import { THEME_SELECTOR_ORDER, themeSelectorTiles } from "@/lib/theme/presets";
 import { useSiteTheme } from "@/lib/theme/use-theme-overrides";
-import { applyBrand, BASE_THEME_ID, SERVED_THEME_ID } from "@/lib/theme/brand";
+import { applyBrand, readBrand, SERVED_THEME_ID, subscribeBrand } from "@/lib/theme/brand";
 import { SHOW_FIGMA_LINKS } from "@/config/social";
 import { AgentPlan } from "rift-ds/components/AgentPlan/AgentPlan";
 import { AnimatedNumber } from "rift-ds/components/AnimatedNumber/AnimatedNumber";
@@ -468,7 +469,8 @@ function EscalatorColumn({
    window), but which columns exist is a render decision, so the same
    breakpoint is read here. The server snapshot is the three-column
    layout: the markup hydrates identically everywhere and a narrow
-   viewport switches on the client's first paint. */
+   viewport switches on the client's first paint.
+   ds-allow(breakpoint): content-driven, sanctioned with page.module.css's collage rule. */
 const NARROW_COLLAGE_QUERY = "(max-width: 1023px)";
 
 function subscribeNarrowCollage(onChange: () => void) {
@@ -502,27 +504,23 @@ function useNarrowCollage() {
    token files); the server ships SERVED_THEME_ID, so that is what a
    visitor lands on and its tile wakes up ringed. */
 
-const SSR_BRAND = SERVED_THEME_ID;
+// Matches the SSR value of data-brand on <html> in layout.tsx.
+const getServerBrand = () => SERVED_THEME_ID;
 
 function ThemeSwitcher() {
   const theme = useSiteTheme();
-  const [active, setActive] = useState(SSR_BRAND);
-  const tiles = themeSelectorTiles(theme === "dark" ? "dark" : "light");
-
   /* The attribute is the truth (it survives navigation, and anything may
-     have set it before this mount) — read it once the client is up. */
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setActive(document.documentElement.dataset.brand ?? BASE_THEME_ID);
-  }, []);
+     set it: the header switcher, the playground). Subscribing to it, the
+     way BrandSwitcher does, keeps the two selectors in step both ways. */
+  const active = useSyncExternalStore(subscribeBrand, readBrand, getServerBrand);
+  const tiles = themeSelectorTiles(theme === "dark" ? "dark" : "light");
 
   /* The tile names render in their themes' own faces, which need no
      loading here: every shipped face has self-hosted @font-face blocks
-     in its preset's generated stylesheet, imported site-wide. */
-  const pick = (id: string) => {
-    applyBrand(id); // the shared helper owns the attribute + persistence
-    setActive(id);
-  };
+     in its preset's generated stylesheet, imported site-wide. The shared
+     helper owns the attribute and persistence; the subscription above
+     picks the change up. */
+  const pick = (id: string) => applyBrand(id);
 
   return (
     <div className={styles.accentRow} role="group" aria-label="Theme">
@@ -1062,12 +1060,12 @@ export default function DesignSystemLanding() {
         name={`ds-landing-schedule-${copy}`}
         options={SCHEDULE_OPTIONS}
         value={schedule}
-        onChange={(v) => setSchedule(v as string)}
+        onValueChange={(v) => setSchedule(v as string)}
       />
       <Checkbox
         label="Email a receipt for each payout"
         checked={receipt}
-        onChange={setReceipt}
+        onCheckedChange={setReceipt}
       />
     </DemoCard>
 
@@ -1247,7 +1245,7 @@ export default function DesignSystemLanding() {
           label="Transaction alerts"
           showLabel={false}
           checked={alerts.transactions}
-          onChange={(v) => setAlerts((a) => ({ ...a, transactions: v }))}
+          onCheckedChange={(v) => setAlerts((a) => ({ ...a, transactions: v }))}
         />
       </div>
       <div className={styles.settingRow}>
@@ -1259,7 +1257,7 @@ export default function DesignSystemLanding() {
           label="Security alerts"
           showLabel={false}
           checked={alerts.security}
-          onChange={(v) => setAlerts((a) => ({ ...a, security: v }))}
+          onCheckedChange={(v) => setAlerts((a) => ({ ...a, security: v }))}
         />
       </div>
       <div className={styles.settingRow}>
@@ -1271,7 +1269,7 @@ export default function DesignSystemLanding() {
           label="Market updates"
           showLabel={false}
           checked={alerts.market}
-          onChange={(v) => setAlerts((a) => ({ ...a, market: v }))}
+          onCheckedChange={(v) => setAlerts((a) => ({ ...a, market: v }))}
         />
       </div>
     </DemoCard>
@@ -1339,7 +1337,7 @@ export default function DesignSystemLanding() {
           min={10}
           max={200}
           onValueChange={setThreshold}
-          ariaLabel="Minimum payout amount"
+          aria-label="Minimum payout amount"
         />
         <Button label="Save threshold" variant="secondary" size="compact" />
       </div>
@@ -1405,8 +1403,8 @@ export default function DesignSystemLanding() {
           <ButtonGroup
             ariaLabel="Get started"
             buttons={[
-              { label: "Get started", variant: "primary" as const, href: "/docs/get-started" },
-              { label: "Browse components", variant: "secondary" as const, href: "/components" },
+              { label: "Get started", variant: "primary" as const, href: "/docs/get-started", iconLeft: "terminal" },
+              { label: "Browse components", variant: "secondary" as const, tone: "neutral" as const, href: "/components", iconLeft: "category" },
             ]}
           />
           </div>
@@ -1434,6 +1432,9 @@ export default function DesignSystemLanding() {
             </>
           )}
         </section>
+
+        {/* ---------- one template, live ---------- */}
+        <HomeTemplates />
 
         {/* ---------- where the system lives, and what it is built on ---------- */}
         <section

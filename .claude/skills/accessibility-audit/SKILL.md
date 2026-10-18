@@ -35,7 +35,7 @@ Report a finding as **already-enforced** if `npm run test` or the page-level axe
 ## Instructions
 
 1. **Determine scope.** Accept one of:
-   - A component name (e.g. `Dropdown`) → audits `src/components/Dropdown/Dropdown.tsx` and its CSS (the chat widget's own components, `ChatWidget`, `ChatLauncher`, `ChatThreads`, `ChatTabs` and `ChatAgentPane`, live in `src/chat/`)
+   - A component name (e.g. `Dropdown`) → audits `src/components/Dropdown/Dropdown.tsx` and its CSS (the chat widget's own components are the `.tsx` modules in `src/chat/`; read the folder rather than a list. Its question flow moves focus deliberately: into the first option when a set of questions holds the composer, and back to the composer once the set is answered or skipped; check both by keyboard)
    - A website page URL (e.g. `/components/button`) → audits the live rendered page
    - `all-components` → audits all components in `src/components/` and the chat widget in `src/chat/`
 
@@ -68,7 +68,7 @@ Report a finding as **already-enforced** if `npm run test` or the page-level axe
    - **[manual]** Motion triggered by interaction (parallax, cursor-reactive effects) is disabled under reduced motion, or is not essential (WCAG 2.3.3)
 
 4. **Visual audit (from screenshots).** Start the preview server and screenshot the target in both light and dark mode (follow the `visual-review` skill pattern). Check:
-   - **Colour contrast (the priority — axe does not check it):** compute the ratio for every foreground/background pair actually rendered, not just body text. Flag anything below 4.5:1 for normal text or 3:1 for large text and UI components (WCAG 1.4.3 / 1.4.11). Note which token is used. The `color-contrast` axe rule is off for every pair (see item 1 under "What is already automated"); the action-fill pairings are the one slice the build gates, so cross-check a failing action pair against `ACTION_PAIRINGS` in `scripts/validate-theme-presets.mjs` — a pair it lists is already enforced (a hit there means the render is not using the token the table names), and a label or icon on an action fill that it does not list is a gap in the table worth reporting.
+   - **Colour contrast (the priority — axe does not check it):** compute the ratio for every foreground/background pair actually rendered, not just body text. Flag anything below 4.5:1 for normal text or 3:1 for large text and UI components (WCAG 1.4.3 / 1.4.11). Note which token is used. The `color-contrast` axe rule is off for every pair (see item 1 under "What is already automated"); the action-fill pairings are the one slice the build gates, so cross-check a failing action pair against `ACTION_PAIRINGS` in `scripts/validate-theme-presets.mjs` — a pair it lists is already enforced (a hit there means the render is not using the token the table names, unless the cell is pinned in `SANCTIONED_AA_GAPS` in the same script, which is an owner-accepted gap to note rather than raise), and a label or icon on an action fill that it does not list is a gap in the table worth reporting.
    - **Text sizing:** No text visually below ~12px (WCAG 1.4.4)
    - **Focus visibility:** Confirm focus rings are clearly visible in both light and dark themes
 

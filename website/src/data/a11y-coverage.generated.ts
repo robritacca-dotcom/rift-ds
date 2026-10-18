@@ -17,9 +17,9 @@ export interface A11yCoverage {
 }
 
 export const a11yCoverage: A11yCoverage = {
-  "stories": 1117,
-  "withAria": 140,
-  "withAccessibleName": 114,
+  "stories": 1158,
+  "withAria": 141,
+  "withAccessibleName": 115,
   "behaviourModules": 5,
   "overlayComponents": [
     "Alert dialog",

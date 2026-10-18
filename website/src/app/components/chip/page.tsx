@@ -79,13 +79,26 @@ export default function ChipPage() {
             <p className={styles.introBody}>
               With an <code>onClick</code> handler the chip renders as a real{" "}
               <code>&lt;button&gt;</code>. Add <code>selected</code> for a filter-style toggle:
-              the action-colour active fill follows the same convention as the segmented control.
+              the action-colour active fill follows the same convention as the segmented control,
+              and <code>tone=&quot;neutral&quot;</code> fills it grey for rows that should read quietly.
             </p>
             <div className={styles.variantRow}>
               {FILTER_OPTIONS.map((option) => (
                 <Chip
                   key={option}
                   label={option}
+                  selected={filter === option}
+                  icon={filter === option ? "check" : undefined}
+                  onClick={() => setFilter(option)}
+                />
+              ))}
+            </div>
+            <div className={styles.variantRow}>
+              {FILTER_OPTIONS.map((option) => (
+                <Chip
+                  key={option}
+                  label={option}
+                  tone="neutral"
                   selected={filter === option}
                   icon={filter === option ? "check" : undefined}
                   onClick={() => setFilter(option)}

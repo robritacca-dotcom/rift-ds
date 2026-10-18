@@ -302,7 +302,8 @@ const CHAT_FALLBACK =
 
 /* The framed phone's geometry: an iPhone Pro Max screen (440 x 956
    points) inside a 12px bezel with a Pro Max's deep corners, and the clearance kept from the window's
-   edges. The breakpoint matches the stylesheet's framed media query. */
+   edges. The breakpoint matches the stylesheet's framed media query.
+   ds-allow(breakpoint): the phone step on its other edge, sanctioned with the stylesheet's. */
 const FRAMED_QUERY = "(min-width: 600px)";
 const DEVICE_W = 440 + 24;
 const DEVICE_H = 956 + 24;

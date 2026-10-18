@@ -20,7 +20,7 @@ const meta = {
     },
     tone: {
       control: 'select',
-      options: ['accent', 'positive', 'negative', 'neutral'],
+      options: ['accent', 'positive', 'error', 'neutral'],
     },
     showDot: { control: 'boolean' },
     strokeWidth: { control: 'number' },
@@ -56,7 +56,7 @@ export const Positive: Story = {
 export const Negative: Story = {
   args: {
     data: trendDown,
-    tone: 'negative',
+    tone: 'error',
     label: 'Trending down',
   },
 };
@@ -71,7 +71,7 @@ export const InsideStat: Story = {
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
         <Stat value="1,204" label="Weekly signups" delta="-8%" trend="down" />
-        <Sparkline data={trendDown} tone="negative" label="Signups, trending down" />
+        <Sparkline data={trendDown} tone="error" label="Signups, trending down" />
       </div>
     </div>
   ),

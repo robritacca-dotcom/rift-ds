@@ -13,6 +13,7 @@
   position: absolute;
   top: 100%;
   left: 50%;
+  /* ds-allow(stacking): local order: the labels read above the segmented control's sliding pill. */
   z-index: 50;
   margin-top: var(--gap-100);
   padding: var(--padding-150) var(--padding-200);

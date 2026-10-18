@@ -2,8 +2,8 @@ import type { DropdownOption } from "rift-ds/components/Dropdown/Dropdown";
 import type { RichDropdownOption } from "rift-ds/components/RichDropdown/RichDropdown";
 import { BASE_THEME_ID, SERVED_THEME_ID } from "./brand";
 import {
-  ACCENT_NAMES,
   DEFAULT_BRAND,
+  accentOverrides,
   DEFAULT_BRAND_DARK,
   DEFAULT_NEUTRAL_SEED,
   FONT_OPTIONS,
@@ -921,9 +921,7 @@ export function presetOverrides(
   /* The ambient accent sextet, always all six — a declared lever, so a
      stylesheet states its ambient colours even at the shipped keys. Just
      before the extras, so a preset's extras could still specialise one. */
-  for (const name of ACCENT_NAMES) {
-    merged[`--color-core-accent-${name}`] = preset.accents[name];
-  }
+  Object.assign(merged, accentOverrides(preset.accents));
 
   preset.ambient?.forEach((hex, i) => {
     merged[`--color-ambient-${i + 1}`] = hex;

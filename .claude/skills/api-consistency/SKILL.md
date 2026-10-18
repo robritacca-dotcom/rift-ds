@@ -1,9 +1,9 @@
 ---
 name: api-consistency
-description: Review component prop interfaces across the design system for naming inconsistencies, missing standard props, and pattern violations. Use when asked to review component APIs, audit prop naming consistency, or check TypeScript interfaces for API inconsistencies.
+description: Review component prop interfaces across the design system, or scoped to one component or family, for naming inconsistencies, missing standard props, mixed colour vocabulary, contract violations, and descriptions that disagree with the contract. Use when asked to review component APIs, audit prop naming consistency, check a component's API, or check TypeScript interfaces for API inconsistencies.
 icon: compare
-displayDescription: "Reads all component Props interfaces and flags inconsistencies across the library: mixed boolean naming (disabled vs isDisabled), mismatched size enums, missing standard props (className, disabled), and structural mismatches within component families. Produces a grouped findings report prioritised by breaking impact."
-invoke: ["review component APIs","prop consistency audit","are our component props consistent","check for API inconsistencies"]
+displayDescription: "Reads component Props interfaces, across the library or scoped to one component and its family, and flags inconsistencies: mixed boolean naming (disabled vs isDisabled), mismatched size enums, emphasis and colour mixed in one prop, missing standard props, structural mismatches within families, and registry descriptions or specs that name a prop the contract no longer carries. Produces a grouped findings report prioritised by breaking impact."
+invoke: ["review component APIs","prop consistency audit","are our component props consistent","check for API inconsistencies","check this component's API"]
 ---
 
 # api-consistency
@@ -12,11 +12,14 @@ Review component prop interfaces across the design system for naming inconsisten
 
 ## When invoked
 
-Use this skill when asked to review component APIs, check prop naming consistency, or audit TypeScript interfaces — phrases like "review component APIs", "prop consistency audit", "are our component props consistent", "check for API inconsistencies".
+Use this skill when asked to review component APIs, check prop naming consistency, or audit TypeScript interfaces — phrases like "review component APIs", "prop consistency audit", "are our component props consistent", "check for API inconsistencies", "check this component's API".
+
+It also runs **scoped** inside other flows: `new-component` runs it on a new component before registering, and `ship` and `super-ship` run it on the components a diff touched. When run scoped inside another flow, report only findings about the components in scope (the touched components and their family). Library-wide findings the owner has already reviewed and accepted are not news to that flow, and re-raising them there buries the finding the flow exists to catch.
 
 ## Instructions
 
 1. **Determine scope.** Accept one of:
+   - **Scoped** (the cheap mode other skills call): one component, or a family. A family is the component's shared folder (the registry entry's `folder`) or its `category` in `src/components/registry.json`, plus any component that composes it or that it composes. Every check below runs, but only over these components, and the family is the comparison set for the family checks.
    - A list of specific components (e.g. `Button, CircularButton, ButtonGroup`) → compare those
    - `all` → scan all components in `src/components/`, plus the chat widget's documented exports in `src/chat/` (they ride the same generated API with `importPath` `rift-ds/chat`)
    - A category description (e.g. "all button-like components", "all form inputs") → infer the relevant components
@@ -56,6 +59,12 @@ Use this skill when asked to review component APIs, check prop naming consistenc
    - Should use a consistent vocabulary across components
    - Flag: `"sm"/"md"/"lg"` on one component and `"small"/"medium"/"large"` on another, or `"compact"/"default"` on one and `"small"/"medium"` on another
 
+   **Colour vocabulary:**
+   - **Emphasis and colour are separate axes.** `variant` holds emphasis (`primary`/`secondary`/`tertiary`); `tone` holds colour (`default`/`neutral`/`destructive`). Flag a `variant` union that mixes the two without the colour values marked as legacy aliases beside a `tone` prop (CLAUDE.md's Component Anatomy states the rule; design.md's Components intro owns the details; `scripts/validate-prop-vocabulary.mjs` enforces the mechanical half). Its `SANCTIONED_TONES` and `LEGACY_VALUES` tables are the record of the deliberate exceptions, a `tone` in another vocabulary and a labelled legacy alias, so read them before flagging either
+   - **One status set.** A status-bearing component carries the five status roles on `variant`, the same five every other status component uses. Flag a sixth role, a missing one, or a synonym (`success` for `positive`, `danger` for `error`)
+   - **One word for danger: `destructive`.** Flag `danger`, `negative` and other strays naming the same thing, unless the value is a labelled legacy alias in `LEGACY_VALUES`
+   - **Data entries take a boolean, components take a tone.** An item inside a data array (a menu item, a command row) marks danger with `destructive?: boolean`; a component marks it with `tone`. Flag the two crossed
+
    **Missing standard props on interactive components:**
    - All components rendering clickable/interactive elements should have `className?: string`
    - All components with visual disabled states should have `disabled?: boolean`
@@ -67,7 +76,13 @@ Use this skill when asked to review component APIs, check prop naming consistenc
    - If one component accepts `iconLeft`/`iconRight`, siblings in the same family should follow the same pattern
    - Default values: if `size` defaults to `"default"` on a Gadget, it should not default to `"medium"` on a related Sprocket
 
-5. **Output a grouped findings report.** The component names in this example are **fictional by design** — findings about real components go stale the moment someone fixes them, so this block only demonstrates the format:
+5. **Then check the contract agrees with its description.** For each component in scope, read its entry in `website/src/data/component-api.generated.ts` (exactly what `/api/mcp`'s `get_component` serves, so this is the contract strangers' agents see), then read the two prose descriptions of it against that entry:
+   - its registry `description` (`src/components/registry.json`, or `src/chat/registry.json` for the widget), which also ships through the site chat's corpus, the consumer agent skill and the page metadata
+   - its `###` spec section in `design.md`
+
+   Flag any prop or value a description names that the contract does not carry, or carries only as `@deprecated` (a description still saying "neutral and destructive variants" after those moved to `tone` is the classic case), and any public prop the design.md spec omits. The fix goes in the source of the description, never in a generated file.
+
+6. **Output a grouped findings report.** The component names in this example are **fictional by design** — findings about real components go stale the moment someone fixes them, so this block only demonstrates the format:
 
    ```
    ## API Consistency Report
@@ -87,6 +102,13 @@ Use this skill when asked to review component APIs, check prop naming consistenc
    - Whatsit: "small" | "medium" | "large"
    → Standardise to the enum of the most-used component in the family
 
+   ### Colour vocabulary
+   - Whatsit: `variant` holds "primary" | "danger"; danger is a colour, and a stray word for destructive
+   → Move it to `tone="destructive"`, keep `variant="danger"` as a deprecated alias
+
+   ### Description disagrees with contract
+   - Doodad — registry description names a "ghost variant"; the contract has no such value
+
    ### Missing className prop
    - Doodad — no className passthrough
    - Gadget — no className passthrough
@@ -95,7 +117,7 @@ Use this skill when asked to review component APIs, check prop naming consistenc
    X naming inconsistencies · Y missing props · Z structural mismatches
    ```
 
-6. **Prioritise fixes** by impact:
+7. **Prioritise fixes** by impact:
    - **High:** Renames that would require consuming code changes — flag these clearly so the owner can decide whether to batch into a breaking release
    - **Medium:** Missing props that are commonly needed by consumers
    - **Low:** Style preferences with no breaking impact

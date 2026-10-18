@@ -37,6 +37,7 @@ export const CATEGORY_PREFIXES = [
   ['shadow', ['--shadow-']],
   ['icons', ['--icon-size-']],
   ['motion', ['--motion-']],
+  ['stacking', ['--layer-']],
 ];
 
 /** All custom-property names defined in a CSS source string. */

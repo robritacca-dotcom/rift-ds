@@ -53,6 +53,7 @@ These are checkable by grep and should be exhaustive. For each, the question is 
 - **Every import specifier in docs matches the real exports map.** Any `import … from "…"` in documentation or example code should resolve against the package's current `exports` (or be an obvious third-party import). Renamed aliases and scopes hide here.
 - **Internal links resolve.** Route strings in website prose (`/foundations/...`, `/playground`) should correspond to real app directories, and the nav config should agree.
 - **Counts come from registries, never literals.** Grep displayed numbers near countable nouns; each should be an imported constant.
+- **Retired wording has left the generated surfaces.** After a vocabulary or API change (a renamed prop, a value moved to another prop, a deprecated spelling), grep the generated outputs that carry prose to strangers for the retired word: `website/src/data/component-api.generated.ts`, `website/src/data/site-corpus.generated.ts`, `website/public/skill/` and `website/public/components/`. They regenerate on every build, so a hit means a **source** still says it (a registry description, a prop's JSDoc, a design.md spec, page prose). Trace it back and fix the source; never edit the generated file.
 - **Config still applies where it is declared.** A restructure can leave a config block sitting somewhere the tool no longer reads, and nothing warns you — it just silently stops taking effect. Check that declared intent matches installed reality: dependency `overrides`/`resolutions` (npm honours these **only** in the workspace root), engine constraints, lint and TS config inheritance, and bundler aliases. For dependency pins specifically, compare the declared range against what is actually installed (`npm ls <pkg>`) and run `npm audit` — pins are usually security fixes, so one that stops applying is a silent regression, not a style issue.
 
 ### 3. Prose surfaces — read against reality
@@ -60,13 +61,22 @@ These are checkable by grep and should be exhaustive. For each, the question is 
 For each surface, the test is: *if a stranger followed this exactly, would it work, and would what they believe afterwards be true?*
 
 - **README.md** — highest stakes: it ships inside the npm tarball, so its install and usage instructions reach every consumer. Verify the install command, import examples, customization recipes, and local-dev steps against the real package.
+- **Data registries that ship as prose** — the registry fields that reach readers verbatim: component and widget descriptions, page summaries, loops, release stories (CLAUDE.md's **Registries** table is the authoritative list of registries; read it to find which carry prose). They are read against reality like README, not merely validated for shape: a description can pass every structural check while naming a prop value the contract retired, and it ships word for word through the MCP endpoint, the site chat's corpus and the consumer agent skill.
 - **CLAUDE.md** — the project's operating manual: structure diagram, quick start, command list, registries/generated surfaces, architecture invariants, infrastructure facts. Every generated surface must be listed with its markers and its generator.
 - **design.md** — design language claims and per-component specs. Check that stated invariants are still enforced and that specs match the components.
 - **content-design.md** — the content style guide. Check that its Register by Surface table still lists every prose surface that exists, that its pointers at skill-owned standards still land, and that no rule in it duplicates one CLAUDE.md owns (fact-architecture rules live in CLAUDE.md, style rules here — a rule restated in both is drift).
 - **Website self-descriptions** — any page that explains how the system is built (the overview/pipeline, get-started and docs pages, foundations pages). These are public claims; treat inaccuracy as a bug.
 - **Other root specs** — any tracked root spec beyond the three above, published or not (the doc list in `scripts/validate-doc-refs.mjs` is the authoritative set; `FILES` in `scripts/sync-blueprints.mjs` lists only the ones published to /blueprints). Each makes claims about code it describes; spot-check its heavily-referenced facts the same way, and check that its published-vs-repo-only status is stated where readers would assume otherwise.
 - **Blueprint copies** — if the repo publishes copies of its own docs, confirm they are generated rather than hand-maintained, and that they regenerated.
-- **Statistical drift — the code outvotes the docs.** An agent (or a new contributor) learns the system from what is most *common* in the codebase, not from what the prose asserts: the most-used stray pattern outvotes the documented one, because prevalence reads as canon. For a few core conventions the docs state — tokens over raw values, the canonical component over ad-hoc rewrites, the published import paths — census actual usage and check that the dominant pattern is the sanctioned one. A convention can be drift even when every individual instance is legal, if an unsanctioned variant outnumbers the documented form; and when the census is mechanically repeatable, the fix to recommend is a validator (see Guardrails), not a docs edit. The same lens covers adoption: a surface the repo publishes but nothing consumes — a component no page or story renders, an export subpath nothing imports — is a public claim the numbers contradict; judge whether it is merely early or actually dead, and say which.
+- **Statistical drift — the code outvotes the docs.** An agent (or a new contributor) learns the system from what is most *common* in the codebase, not from what the prose asserts: the most-used stray pattern outvotes the documented one, because prevalence reads as canon. For a few core conventions the docs state — tokens over raw values, the canonical component over ad-hoc rewrites, the published import paths, the prop vocabulary (a census of internal callers passing a deprecated `variant` spelling against those passing the documented `variant` and `tone` pair is the worked example) — census actual usage and check that the dominant pattern is the sanctioned one. A convention can be drift even when every individual instance is legal, if an unsanctioned variant outnumbers the documented form; and when the census is mechanically repeatable, the fix to recommend is a validator (see Guardrails), not a docs edit. The same lens covers adoption: a surface the repo publishes but nothing consumes — a component no page or story renders, an export subpath nothing imports — is a public claim the numbers contradict; judge whether it is merely early or actually dead, and say which.
+
+### Change-type playbook
+
+The recent commits say what kind of change landed; each kind has surfaces that must have moved with it. Check them all for the kinds present:
+
+- **Public API change** (a prop renamed, added, deprecated, or a value moved to another prop): the registry description, the design.md spec section, the showcase page and the stories, internal callers of **every** deprecated spelling (older aliases included, not only the newest), the components that compose it, and the generated outputs (the retired-wording check in section 2). Run the `api-consistency` skill scoped to the component and its family.
+- **Token change**: the homes the `new-token` skill lists (or `token-rename` for a rename), the foundations page captions, and the theme presets.
+- **Route change**: navigation config, cross-links in page prose, the sitemap, llms.txt, page summaries, and `EXCLUDED_ROUTES` or other route lists in the corpus generator.
 
 ### 4. Skills self-audit — the highest-yield section
 
@@ -110,7 +120,21 @@ Group by severity, most actionable first. Every finding needs a file path (with 
 X broken · Y stale · Z gaps · N surfaces verified
 ```
 
-State plainly what you **executed** versus what you only **read** — an unverified pass is weaker evidence, and the reader deserves to know which they are getting.
+State plainly what you **executed** versus what you only **read** — an unverified pass is weaker evidence, and the reader deserves to know which they are getting. The report always ends with a coverage table, one row per section 1 to 5 (and the playbook), marked **executed**, **read** or **skipped**, with the reason for anything short of executed:
+
+```
+### Coverage
+| Section | Status | Note |
+|---|---|---|
+| 1. Current reality | executed | |
+| 2. Mechanical cross-checks | executed | |
+| Change-type playbook | executed | public API change |
+| 3. Prose surfaces | read | |
+| 4. Skills self-audit | read | recipes not re-run, no tooling change |
+| 5. Consumer and privacy | skipped | no package change since the last audit |
+```
+
+A narrowed audit is a legitimate choice for a small change; an unlabelled one is not, because whoever acts on the report reads silence as coverage.
 
 Then ask whether to apply the fixes. Do not fix silently as you go: the report is the deliverable, and some findings are judgement calls (a "gap" may be deliberate scope).
 

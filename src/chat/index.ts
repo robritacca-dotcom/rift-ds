@@ -80,6 +80,18 @@ export {
 } from './followups';
 export { SUGGESTION_MAX_CHARS, fitsChip } from './suggestions';
 export {
+  sanitizeQuestionSet,
+  describeAnswers,
+  serializeReply,
+  isBlockingQuestion,
+  ASK_USER_INPUT_SCHEMA,
+  MAX_QUESTIONS,
+  MAX_QUESTION_OPTIONS,
+  MIN_QUESTION_OPTIONS,
+  QUESTION_PROMPT_MAX_CHARS,
+  OPTION_DESCRIPTION_MAX_CHARS,
+} from './questions';
+export {
   STARTER_COUNT,
   pickStarters,
   namedStarter,
@@ -114,6 +126,10 @@ export {
   type ChatArtifact,
   type ChatCard,
   type ChatEvent,
+  type ChatQuestion,
+  type ChatQuestionAnswer,
+  type ChatQuestionSet,
+  type ChatReply,
   type ChatTransport,
   type ChatTransportMessage,
   type ChatTurn,

@@ -164,7 +164,7 @@
 }
 
 /* Today is current, not selected: the inverse role, like EventCalendar's
-   today chip. Teal stays reserved for the selected bar. */
+   today chip. The action colour stays reserved for the selected bar. */
 .ds-gantt__today {
   position: absolute;
   top: 0;

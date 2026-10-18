@@ -243,6 +243,7 @@
 
 /* Below the split's own breakpoint the ambient pane drops out and the form
    takes the screen — which is what a phone should get regardless. */
+/* ds-allow(breakpoint): content-driven: the split layout's own width, below which the ambient pane drops out. */
 @media (max-width: 900px) {
   .artPane {
     display: none;

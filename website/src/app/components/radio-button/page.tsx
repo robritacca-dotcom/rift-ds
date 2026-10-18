@@ -46,34 +46,34 @@ export default function RadioButtonPage() {
 
               <span className={styles.gridRowHeader}>Unselected</span>
               <div className={styles.gridCell}>
-                <RadioButton label="Option A" checked={false} onChange={() => {}} />
+                <RadioButton label="Option A" checked={false} onValueChange={() => {}} />
               </div>
               <div className={styles.gridCell}>
-                <RadioButton checked={false} ariaLabel="Unselected" onChange={() => {}} />
+                <RadioButton checked={false} aria-label="Unselected" onValueChange={() => {}} />
               </div>
 
               <span className={styles.gridRowHeader}>Selected</span>
               <div className={styles.gridCell}>
-                <RadioButton label="Option A" checked={true} onChange={() => {}} />
+                <RadioButton label="Option A" checked={true} onValueChange={() => {}} />
               </div>
               <div className={styles.gridCell}>
-                <RadioButton checked={true} ariaLabel="Selected" onChange={() => {}} />
+                <RadioButton checked={true} aria-label="Selected" onValueChange={() => {}} />
               </div>
 
               <span className={styles.gridRowHeader}>Disabled, unselected</span>
               <div className={styles.gridCell}>
-                <RadioButton label="Disabled" checked={false} disabled onChange={() => {}} />
+                <RadioButton label="Disabled" checked={false} disabled onValueChange={() => {}} />
               </div>
               <div className={styles.gridCell}>
-                <RadioButton checked={false} disabled ariaLabel="Disabled" onChange={() => {}} />
+                <RadioButton checked={false} disabled aria-label="Disabled" onValueChange={() => {}} />
               </div>
 
               <span className={styles.gridRowHeader}>Disabled, selected</span>
               <div className={styles.gridCell}>
-                <RadioButton label="Disabled" checked={true} disabled onChange={() => {}} />
+                <RadioButton label="Disabled" checked={true} disabled onValueChange={() => {}} />
               </div>
               <div className={styles.gridCell}>
-                <RadioButton checked={true} disabled ariaLabel="Disabled selected" onChange={() => {}} />
+                <RadioButton checked={true} disabled aria-label="Disabled selected" onValueChange={() => {}} />
               </div>
             </div>
           </section>
@@ -92,7 +92,7 @@ export default function RadioButtonPage() {
                     { label: "Large", value: "large" },
                   ]}
                   direction="vertical"
-                  onChange={() => {}}
+                  onValueChange={() => {}}
                 />
               </div>
               <div className={styles.variantItem}>
@@ -105,7 +105,7 @@ export default function RadioButtonPage() {
                     { label: "Purple", value: "purple" },
                   ]}
                   direction="horizontal"
-                  onChange={() => {}}
+                  onValueChange={() => {}}
                 />
               </div>
               <div className={styles.variantItem}>
@@ -118,7 +118,7 @@ export default function RadioButtonPage() {
                     { label: "Enterprise", value: "enterprise", disabled: true },
                   ]}
                   direction="vertical"
-                  onChange={() => {}}
+                  onValueChange={() => {}}
                 />
               </div>
             </div>

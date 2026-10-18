@@ -22,7 +22,7 @@ import {
 const SPARK_SERIES = [
   { label: "Revenue", data: [12, 14, 13, 17, 16, 21, 24, 23, 28], tone: "accent" as const },
   { label: "Churn", data: [9, 8, 9, 7, 7, 6, 5, 6, 4], tone: "positive" as const },
-  { label: "Latency", data: [3, 4, 3, 5, 6, 5, 7, 8, 9], tone: "negative" as const },
+  { label: "Latency", data: [3, 4, 3, 5, 6, 5, 7, 8, 9], tone: "error" as const },
 ];
 
 const TREEMAP_DATA = [

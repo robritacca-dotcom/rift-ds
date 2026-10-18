@@ -55,14 +55,14 @@ export const WithToolCall: Story = {
   },
 };
 
-/** A destructive approval takes the `danger` weight, which renders Button's destructive variant. */
+/** A destructive approval takes `tone: 'destructive'`, which renders Button's destructive tone. */
 export const DangerOption: Story = {
   args: {
     title: 'Delete 3 files?',
     description: 'This removes the generated fixtures and cannot be undone.',
     icon: 'warning',
     options: [
-      { value: 'delete', label: 'Delete', variant: 'danger' },
+      { value: 'delete', label: 'Delete', variant: 'secondary', tone: 'destructive' },
       { value: 'cancel', label: 'Cancel' },
     ],
   },

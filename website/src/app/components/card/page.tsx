@@ -65,7 +65,7 @@ export default function CardPage() {
                 />
               </Card>
               <Card title="Toggle switch">
-                <ToggleSwitch checked={true} label="Dark mode" onChange={() => {}} />
+                <ToggleSwitch checked={true} label="Dark mode" onCheckedChange={() => {}} />
               </Card>
               <Card title="Card" interactive>
                 <Button

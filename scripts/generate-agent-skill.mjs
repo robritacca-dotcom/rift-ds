@@ -283,6 +283,10 @@ Every prop is documented at ${origin}/components/${widget.slug} (the contract as
 
 Timer-driven timings (hover delays, toast auto-dismiss, the streaming reveal's pacing) are exported as constants from \`${PACKAGE_NAME}/tokens/motion\`. Import the constant rather than writing a literal millisecond value.
 
+## Breakpoints
+
+The widths the library's layouts switch at are exported from \`${PACKAGE_NAME}/tokens/breakpoints\`, each the last width of the narrower side. In JavaScript, build a query with \`mediaBelow(BREAKPOINT_MOBILE_PX)\` or \`mediaAbove(...)\` rather than writing the string. In CSS, a media query cannot read a variable, so write the number from that module, and match the library's steps where your layout meets its components.
+
 ## The catalog
 
 references/components.md lists every component with its import line and description. The categories:
@@ -381,6 +385,7 @@ ${catalogSections.join('\n\n')}
     `- Type: each text style is a bundle of tokens, ${c('--font-<style>-family')}, ${c('-size')}, ${c('-weight')}, ${c('-line-height')} and ${c('-letter-spacing')}. The styles are ${typeStyles.map(c).join(', ')}. Apply a whole bundle. Do not mix one style's size with another's weight.`,
     `- Icons: set ${c('--icon-size')} on the icon to a step from ${prefixes('icons')}. Never set ${c('font-size')} on an icon.`,
     `- Motion: ${prefixes('motion')} for durations and easings in CSS. A timing that lives in a JavaScript timer comes from ${c(`${PACKAGE_NAME}/tokens/motion`)}.`,
+    `- Stacking: ${prefixes('stacking')}. A surface that rises over the page (a menu, a dialog, a toast) takes the layer for its role instead of a picked z-index. Order inside one component (a label over a pill) can stay a small number under 10.`,
     '',
     'In Tailwind, point the theme at the tokens (a colour named for its role whose value is the token\'s `var()`), then use those names. An arbitrary value such as `bg-[#1a1a1a]` is a hardcoded value with extra steps. In CSS-in-JS and inline styles, write the same `var()` reference a stylesheet would.',
     '',

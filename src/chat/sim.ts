@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { STARTER_COUNT } from './starters';
 import { fitsChip } from './suggestions';
-import type { ChatCard, ChatEvent, ChatTransport, ChatTransportMessage } from './types';
+import type { ChatCard, ChatEvent, ChatQuestionSet, ChatTransport, ChatTransportMessage } from './types';
 
 /* ============================================
    The scripted transport.
@@ -42,6 +42,17 @@ export interface ScriptedReply {
   content?: ReactNode;
   /** The chips offered under the reply. Each should be a scripted prompt so no path dead-ends. */
   followups?: string[];
+  /**
+   * Questions the reply asks, drawn as a QuestionCard in place of the chips.
+   * The `text` should ask them in words too, as a live model's reply would.
+   */
+  question?: ChatQuestionSet;
+  /**
+   * The reply to whatever the visitor answers to `question`: one reply for
+   * every answer, or a function of the answer as the message it was sent
+   * as. A scripted prompt that matches the answer exactly still wins.
+   */
+  answered?: ScriptedReply | ((answer: string) => ScriptedReply);
 }
 
 /** A prompt the visitor can send, and the reply it routes to. */
@@ -148,6 +159,17 @@ export function createSimTransport(
   const byPrompt = new Map(script.nodes.map((node) => [normalize(node.prompt), node]));
   const fallbacks = script.fallbacks.length > 0 ? script.fallbacks : [DEFAULT_FALLBACK_REPLY];
   const filesReply = script.filesReply ?? defaultFilesReply;
+  /* Every reply that asks a question, by its text. The history the hook
+     sends carries the asking reply word for word, so the answer's reply is
+     found from the conversation itself, with no state kept here that a
+     new chat would have to clear. */
+  const asking = new Map<string, ScriptedReply>();
+  const collect = (reply: ScriptedReply) => {
+    if (!reply.question || asking.has(normalize(reply.text))) return;
+    asking.set(normalize(reply.text), reply);
+    if (reply.answered && typeof reply.answered !== 'function') collect(reply.answered);
+  };
+  for (const reply of [...script.nodes, ...script.fallbacks]) collect(reply);
   const defaultFollowups = script.nodes
     .map((node) => node.prompt)
     .filter(fitsChip)
@@ -159,7 +181,19 @@ export function createSimTransport(
     signal: AbortSignal
   ): AsyncGenerator<ChatEvent> {
     const lastUser = [...messages].reverse().find((m) => m.role === 'user');
-    const node = lastUser ? byPrompt.get(normalize(lastUser.content)) : undefined;
+    const prompted = lastUser ? byPrompt.get(normalize(lastUser.content)) : undefined;
+    /* An answer to a scripted question routes to the reply written for it. */
+    const previous = messages[messages.length - 2];
+    const asked =
+      !prompted && previous?.role === 'assistant' ? asking.get(normalize(previous.content)) : undefined;
+    const answered =
+      asked?.answered && lastUser
+        ? typeof asked.answered === 'function'
+          ? asked.answered(lastUser.content)
+          : asked.answered
+        : undefined;
+    if (answered) collect(answered);
+    const node: ScriptedReply | undefined = prompted ?? answered;
 
     /* Files with no scripted prompt behind them get an answer about the
        files, built from their names. Nothing was read: the bytes never left
@@ -191,8 +225,13 @@ export function createSimTransport(
     /* Before `done`, like the event contract asks: the hook carries them
        into the turn when it commits, so the chips are there with the copy
        row rather than a beat behind it. */
-    const followups = (reply.followups ?? defaultFollowups).filter(fitsChip);
-    if (followups.length > 0) yield { type: 'followups', items: followups };
+    if (reply.question) {
+      // A reply that asks ends in the question, not in chips beside it.
+      yield { type: 'question', set: reply.question };
+    } else {
+      const followups = (reply.followups ?? defaultFollowups).filter(fitsChip);
+      if (followups.length > 0) yield { type: 'followups', items: followups };
+    }
     yield { type: 'done' };
   };
 }

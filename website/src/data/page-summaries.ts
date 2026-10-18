@@ -1,11 +1,13 @@
+import type { Starter } from "rift-ds/chat";
 import { componentPages } from "./component-pages";
 import registry from "./page-summaries.json";
 
 /**
  * Accessors for the page-summaries registry — the per-page content for the
- * chat FAB's TLDR panel (AiButton's `summary` prop): a super-concise
- * pre-written summary plus one or two prompt chips that launch the site chat
- * mid-answer.
+ * site chat: the FAB's TLDR panel (ChatLauncher's `summary` prop), a
+ * super-concise pre-written summary plus one or two prompt chips that launch
+ * the chat mid-answer, and the pool of conversation starters the chat's
+ * welcome screen draws from on that page (`getPageStarters`).
  *
  * `page-summaries.json` holds the hand-written entries (the static
  * routes). Component pages derive theirs from the component registry's
@@ -27,6 +29,9 @@ export interface PageSummary {
   caption?: string;
   text: string;
   chips: PageSummaryChip[];
+  /** The welcome screen's starter pool for this page. Written for every
+      static route; component pages draw theirs from starters.ts instead. */
+  starters?: Starter[];
 }
 
 const chip = (id: string, label: string, prompt: string): PageSummaryChip => ({
@@ -36,6 +41,9 @@ const chip = (id: string, label: string, prompt: string): PageSummaryChip => ({
 });
 
 const staticSummaries = registry.routes as Record<string, PageSummary>;
+
+const normalise = (pathname: string) =>
+  pathname.length > 1 && pathname.endsWith("/") ? pathname.slice(0, -1) : pathname;
 
 /* The derived chip label for a component page. The validator re-derives
    this template to hold every label inside the suggestion chip budget, so
@@ -60,10 +68,7 @@ function componentSummary(slug: string): PageSummary | null {
 
 /** The FAB panel's content for a route, or null for the plain button. */
 export function getPageSummary(pathname: string): PageSummary | null {
-  const path =
-    pathname.length > 1 && pathname.endsWith("/")
-      ? pathname.slice(0, -1)
-      : pathname;
+  const path = normalise(pathname);
 
   const fixed = staticSummaries[path];
   if (fixed) return fixed;
@@ -72,4 +77,9 @@ export function getPageSummary(pathname: string): PageSummary | null {
   if (component) return componentSummary(component[1]);
 
   return null;
+}
+
+/** The written starter pool for a static route, or null where none is written. */
+export function getPageStarters(pathname: string): Starter[] | null {
+  return staticSummaries[normalise(pathname)]?.starters ?? null;
 }

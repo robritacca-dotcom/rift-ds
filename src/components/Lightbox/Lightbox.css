@@ -6,7 +6,7 @@
 .ds-lightbox {
   position: fixed;
   inset: 0;
-  z-index: 100;
+  z-index: var(--layer-modal);
   opacity: 0;
   visibility: hidden; /* keeps panel controls out of the tab order when closed */
   pointer-events: none;

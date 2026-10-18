@@ -10,6 +10,8 @@ import StageControlBar, {
 } from "@/components/StageControlBar/StageControlBar";
 import StageThemeFlip from "@/components/StageControlBar/StageThemeFlip";
 import styles from "./page.module.css";
+import { mediaBelow } from "rift-ds/tokens/breakpoints";
+import { BREAKPOINT_STAGE_COMPACT_PX } from "@/config/breakpoints";
 import { Button } from "rift-ds/components/Button/Button";
 import { Drawer } from "rift-ds/components/Drawer/Drawer";
 import {
@@ -120,7 +122,7 @@ const VIEWS = [
    panel: the controls move into a bottom Drawer summoned by a fixed pill,
    and the workspace gets the whole screen. Must match the breakpoint in
    page.module.css. */
-const COMPACT_QUERY = "(max-width: 1099px)";
+const COMPACT_QUERY = mediaBelow(BREAKPOINT_STAGE_COMPACT_PX);
 const subscribeCompact = (callback: () => void) => {
   const media = window.matchMedia(COMPACT_QUERY);
   media.addEventListener("change", callback);
@@ -207,7 +209,8 @@ export default function PlaygroundPage() {
       transportMode === "live"
         ? createFetchTransport()
         : /* The demo script, whose replies carry the cards the provider's
-             renderers draw: a plan, a chart, a diff, an approval. */
+             renderers draw (a plan, a chart, a diff, a tool call) and end
+             in follow-up chips or a question to answer. */
           createDemoTransport(),
     [transportMode]
   );
@@ -216,23 +219,24 @@ export default function PlaygroundPage() {
      Components view and back; like every lever, it dies with the page. */
   const [chatManual, setChatManual] = useState<{ w?: number; h?: number }>({});
   const [chatPlaceholder, setChatPlaceholder] = useState("");
-  const [welcome, setWelcome] = useState<ChatWelcomeVariant>("starters");
-  /* The staged thread furniture, feature by feature. All off is the simple
-     rail the live site ships, which is where the stage starts: the extras
-     are things to add and look at, not the resting state. Simulated
-     transport only, like the rail itself. */
-  const [railProjects, setRailProjects] = useState(false);
-  const [railPins, setRailPins] = useState(false);
-  const [railDetails, setRailDetails] = useState(false);
-  const [railTabs, setRailTabs] = useState(false);
-  /* The agent rail, off with the rest of the staged furniture: the stage
-     opens on the plain chat and every extra is something to switch on and
-     look at. */
-  const [agentRail, setAgentRail] = useState(false);
+  const [welcome, setWelcome] = useState<ChatWelcomeVariant>("dashboard");
+  /* Which way the conversation reads: the widget's top-down default, or the
+     classic bottom-up thread. */
+  const [chatFlow, setChatFlow] = useState<"top-down" | "bottom-up">("top-down");
+  /* The staged thread furniture, feature by feature. The stage opens with
+     every extra on and the dashboard welcome, the fullest version of the
+     widget; switching them off walks back to the simple rail the live site
+     ships. Simulated transport only, like the rail itself. */
+  const [railProjects, setRailProjects] = useState(true);
+  const [railPins, setRailPins] = useState(true);
+  const [railDetails, setRailDetails] = useState(true);
+  const [railTabs, setRailTabs] = useState(true);
+  /* The agent rail, on with the rest of the staged furniture. */
+  const [agentRail, setAgentRail] = useState(true);
   /* The artifact panel, an extra like the rest: on, a reply that makes
      something leaves a tile and the header gains its button; off, none of
      it exists and the director's artifact events stand down with it. */
-  const [artifactPanel, setArtifactPanel] = useState(false);
+  const [artifactPanel, setArtifactPanel] = useState(true);
 
   /* The staged shader banner's levers (Components view). They tune the
      banner only, never the site background, and no theme preset owns them,
@@ -720,6 +724,16 @@ export default function PlaygroundPage() {
           ]}
           onValueChange={(value) => setTransportMode(value as TransportMode)}
         />
+        <InspectorSegmentedControl
+          size="compact"
+          label="Flow"
+          value={chatFlow}
+          options={[
+            { value: "top-down", label: "Top down" },
+            { value: "bottom-up", label: "Bottom up" },
+          ]}
+          onValueChange={(value) => setChatFlow(value as "top-down" | "bottom-up")}
+        />
       </div>
 
       <div className={styles.controlGroup}>
@@ -811,9 +825,10 @@ export default function PlaygroundPage() {
       <Button
         label="Reset shader"
         size="compact"
-        variant="neutral"
+        variant="primary"
+        tone="neutral"
         iconLeft="restart_alt"
-        state={shaderPristine ? "disabled" : "default"}
+        disabled={shaderPristine}
         onClick={() => setShaderParams(shaderBackground.params)}
       />
     </InspectorSection>
@@ -1159,6 +1174,7 @@ export default function PlaygroundPage() {
               size={compact ? "desktop" : stageSize}
               placeholder={chatPlaceholder}
               welcome={welcome}
+              flow={chatFlow}
               manual={chatManual}
               onManual={(next) => setChatManual((m) => ({ ...m, ...next }))}
               allowFullscreen={!compact}

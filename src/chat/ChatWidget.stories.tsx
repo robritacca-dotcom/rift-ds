@@ -126,6 +126,58 @@ export const Conversation: Story = {
       () => expect(canvas.getByRole('button', { name: 'Set it all up for me' })).toBeInTheDocument(),
       { timeout: 4000 }
     );
+    // Sending one keeps the row as the record: no chip in it is a button any
+    // more, and the sent one is named as chosen.
+    await userEvent.click(canvas.getByRole('button', { name: 'What do the plans include?' }));
+    await waitFor(
+      () => {
+        const row = canvasElement.querySelector('.ds-prompt-suggestions--kept');
+        expect(row).not.toBeNull();
+        expect(within(row as HTMLElement).queryAllByRole('button')).toHaveLength(0);
+        expect(row?.querySelector('.ds-prompt-suggestions__item--kept')?.textContent).toContain(
+          'What do the plans include?'
+        );
+      },
+      { timeout: 4000 }
+    );
+  },
+};
+
+/** The agent asks: one tap answers, the card keeps the record, and the answer is sent as the next message. */
+export const Questions: Story = {
+  render: (args) => (
+    <ChatProvider transport={createDemoTransport(FAST)} renderers={DEMO_RENDERERS} followups={false} feedback={false}>
+      <OpenOnMount>
+        <Stage>
+          <ChatWidget {...args} />
+        </Stage>
+      </OpenOnMount>
+    </ChatProvider>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const ask = async (prompt: string) => {
+      await userEvent.type(canvas.getByRole('textbox'), `${prompt}{Enter}`);
+    };
+    await ask('Plan our launch kickoff');
+    // A set holds the composer until it is answered.
+    await waitFor(() => expect(canvas.getByText('1 of 3')).toBeInTheDocument(), { timeout: 15000 });
+    await expect(canvas.getByRole('textbox')).toBeDisabled();
+    await userEvent.click(canvas.getByRole('button', { name: 'Skip' }));
+    await expect(canvas.getAllByText('Skipped')).toHaveLength(3);
+    await expect(canvas.getByRole('textbox')).not.toBeDisabled();
+    // Focus comes back to the composer, rather than falling to the page.
+    await waitFor(() => expect(canvas.getByRole('textbox')).toHaveFocus());
+
+    await ask('Help me pick a plan');
+    const option = await canvas.findByRole('button', { name: 'Just me' }, { timeout: 15000 });
+    await userEvent.click(option);
+    await waitFor(
+      () => expect(canvas.getByText(/the Starter plan covers you/)).toBeInTheDocument(),
+      { timeout: 15000 }
+    );
+    // The card stays as the record, no longer a set of buttons.
+    await expect(canvas.queryByRole('button', { name: 'Just me' })).toBeNull();
   },
 };
 
@@ -163,6 +215,24 @@ const EVERY_CARD = (() => {
   for (const reply of [...DEMO_SCRIPT.nodes, ...DEMO_SCRIPT.fallbacks]) {
     if (reply.card && !seen.has(reply.card.kind)) seen.set(reply.card.kind, reply.card);
   }
+  /* A renderer the demo still exports but the story no longer plays: the
+     calendar permission is asked as a question now, in the conversation's
+     own flow. Its card stays here, so the renderer is still drawn and
+     axe-checked. */
+  const unscripted: ChatCard[] = [
+    {
+      kind: 'interrupt',
+      data: {
+        title: 'Connect the shared calendar?',
+        description: 'The assistant wants read access to the team calendar to suggest meeting times.',
+        options: [
+          { value: 'allow', label: 'Allow once', variant: 'primary' },
+          { value: 'deny', label: 'Not now', variant: 'secondary' },
+        ],
+      },
+    },
+  ];
+  for (const card of unscripted) if (!seen.has(card.kind)) seen.set(card.kind, card);
   return [...seen.values()];
 })();
 
@@ -192,8 +262,9 @@ export const EveryCard: Story = {
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    // The script must carry a card for every renderer the demo exports, plus
-    // the one kind the widget draws itself: the artifact's tile.
+    // The script (or the unscripted fixtures above) must carry a card for
+    // every renderer the demo exports, plus the one kind the widget draws
+    // itself: the artifact's tile.
     const kinds = EVERY_CARD.map((card) => card.kind).sort();
     expect(kinds).toEqual([...Object.keys(DEMO_RENDERERS), ARTIFACT_CARD_KIND].sort());
     for (const kind of kinds) {

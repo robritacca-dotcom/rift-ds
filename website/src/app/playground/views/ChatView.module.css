@@ -133,6 +133,7 @@
   border-radius: 0;
   /* Stronger in the takeover, where readability matters most. */
   backdrop-filter: blur(40px);
+  /* ds-allow(stacking): local order on the immersive stage, its own ladder: floating rails 15, control bar 25, toolbar 30, full-size panels above. */
   z-index: 40;
   transition:
     top var(--motion-duration-slow) var(--motion-ease-emphasized),

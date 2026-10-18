@@ -9,10 +9,11 @@ type SparklineOwnProps = {
   variant?: 'line' | 'area';
   /**
    * Colour role for the line and end dot. `accent` follows the chart palette's
-   * lead colour; `positive`/`negative` map to the status text tokens; `neutral`
-   * recedes to secondary text.
+   * lead colour; `positive`/`error` map to the trend pair (up and down), named
+   * like the status roles Gauge and the status components use; `neutral`
+   * recedes to secondary text. `negative` is the legacy name for `error`.
    */
-  tone?: 'accent' | 'positive' | 'negative' | 'neutral';
+  tone?: 'accent' | 'positive' | 'error' | 'negative' | 'neutral';
   /** Marks the final point with a small dot. */
   showDot?: boolean;
   /** Line thickness in viewBox units — an SVG geometry attribute, not a token. */
@@ -111,10 +112,14 @@ export const Sparkline = React.forwardRef<SVGSVGElement, SparklineProps>(
   ) => {
     const baseClass = 'ds-sparkline';
 
+    // `negative` is the legacy spelling of `error`; both draw the falling
+    // trend colour under the original `--negative` class.
+    const toneClass = tone === 'error' ? 'negative' : tone;
+
     const classes = [
       baseClass,
       `${baseClass}--${variant}`,
-      `${baseClass}--${tone}`,
+      `${baseClass}--${toneClass}`,
       className,
     ]
       .filter(Boolean)

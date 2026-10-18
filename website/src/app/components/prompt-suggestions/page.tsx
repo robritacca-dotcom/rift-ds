@@ -270,6 +270,31 @@ export default function PromptSuggestionsPage() {
             </div>
           </section>
 
+          {/* Keeping the choice */}
+          <section className={styles.section}>
+            <SectionTitle title="Keeping the choice" />
+            <p className={styles.demoText}>
+              A row that stays on screen after use can keep the choice in
+              view. Pass the chip that was taken as the value and the row
+              becomes a record: that chip outlined in the strongest ink, the
+              rest faded behind a dotted line, none of them tappable. It is
+              the same treatment an answered question card gets, without
+              the mark.
+            </p>
+            <div className={styles.conversation}>
+              <PromptSuggestions
+                size="compact"
+                layout="stack"
+                value="rain"
+                suggestions={[
+                  { id: "rain", label: "Which is better in the rain?" },
+                  { id: "cycle", label: "Add a cycling option" },
+                  { id: "save", label: "Save this comparison" },
+                ]}
+              />
+            </div>
+          </section>
+
           <ComponentInstallStrip slug="prompt-suggestions" />
         </main>
       </div>

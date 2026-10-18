@@ -1060,12 +1060,12 @@ export default function DesignSystemLanding() {
         name={`ds-landing-schedule-${copy}`}
         options={SCHEDULE_OPTIONS}
         value={schedule}
-        onChange={(v) => setSchedule(v as string)}
+        onValueChange={(v) => setSchedule(v as string)}
       />
       <Checkbox
         label="Email a receipt for each payout"
         checked={receipt}
-        onChange={setReceipt}
+        onCheckedChange={setReceipt}
       />
     </DemoCard>
 
@@ -1245,7 +1245,7 @@ export default function DesignSystemLanding() {
           label="Transaction alerts"
           showLabel={false}
           checked={alerts.transactions}
-          onChange={(v) => setAlerts((a) => ({ ...a, transactions: v }))}
+          onCheckedChange={(v) => setAlerts((a) => ({ ...a, transactions: v }))}
         />
       </div>
       <div className={styles.settingRow}>
@@ -1257,7 +1257,7 @@ export default function DesignSystemLanding() {
           label="Security alerts"
           showLabel={false}
           checked={alerts.security}
-          onChange={(v) => setAlerts((a) => ({ ...a, security: v }))}
+          onCheckedChange={(v) => setAlerts((a) => ({ ...a, security: v }))}
         />
       </div>
       <div className={styles.settingRow}>
@@ -1269,7 +1269,7 @@ export default function DesignSystemLanding() {
           label="Market updates"
           showLabel={false}
           checked={alerts.market}
-          onChange={(v) => setAlerts((a) => ({ ...a, market: v }))}
+          onCheckedChange={(v) => setAlerts((a) => ({ ...a, market: v }))}
         />
       </div>
     </DemoCard>
@@ -1337,7 +1337,7 @@ export default function DesignSystemLanding() {
           min={10}
           max={200}
           onValueChange={setThreshold}
-          ariaLabel="Minimum payout amount"
+          aria-label="Minimum payout amount"
         />
         <Button label="Save threshold" variant="secondary" size="compact" />
       </div>

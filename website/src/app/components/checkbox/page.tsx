@@ -41,16 +41,16 @@ export default function CheckboxPage() {
             <SectionTitle title="Default" />
             <div className={styles.variantRow}>
               <div className={styles.variantItem}>
-                <Checkbox label="Unchecked" checked={false} onChange={() => {}} />
+                <Checkbox label="Unchecked" checked={false} onCheckedChange={() => {}} />
               </div>
               <div className={styles.variantItem}>
-                <Checkbox label="Checked" checked={true} onChange={() => {}} />
+                <Checkbox label="Checked" checked={true} onCheckedChange={() => {}} />
               </div>
               <div className={styles.variantItem}>
-                <Checkbox label="Indeterminate" indeterminate={true} checked={false} onChange={() => {}} />
+                <Checkbox label="Indeterminate" indeterminate={true} checked={false} onCheckedChange={() => {}} />
               </div>
               <div className={styles.variantItem}>
-                <Checkbox checked={true} ariaLabel="No label" onChange={() => {}} />
+                <Checkbox checked={true} aria-label="No label" onCheckedChange={() => {}} />
               </div>
             </div>
           </section>
@@ -60,16 +60,16 @@ export default function CheckboxPage() {
             <SectionTitle title="Compact" />
             <div className={styles.variantRow}>
               <div className={styles.variantItem}>
-                <Checkbox label="Unchecked" checked={false} size="compact" onChange={() => {}} />
+                <Checkbox label="Unchecked" checked={false} size="compact" onCheckedChange={() => {}} />
               </div>
               <div className={styles.variantItem}>
-                <Checkbox label="Checked" checked={true} size="compact" onChange={() => {}} />
+                <Checkbox label="Checked" checked={true} size="compact" onCheckedChange={() => {}} />
               </div>
               <div className={styles.variantItem}>
-                <Checkbox label="Indeterminate" indeterminate={true} checked={false} size="compact" onChange={() => {}} />
+                <Checkbox label="Indeterminate" indeterminate={true} checked={false} size="compact" onCheckedChange={() => {}} />
               </div>
               <div className={styles.variantItem}>
-                <Checkbox checked={true} size="compact" ariaLabel="No label" onChange={() => {}} />
+                <Checkbox checked={true} size="compact" aria-label="No label" onCheckedChange={() => {}} />
               </div>
             </div>
           </section>
@@ -79,13 +79,13 @@ export default function CheckboxPage() {
             <SectionTitle title="States" />
             <div className={styles.variantRow}>
               <div className={styles.variantItem}>
-                <Checkbox label="Disabled, unchecked" checked={false} disabled onChange={() => {}} />
+                <Checkbox label="Disabled, unchecked" checked={false} disabled onCheckedChange={() => {}} />
               </div>
               <div className={styles.variantItem}>
-                <Checkbox label="Disabled, checked" checked={true} disabled onChange={() => {}} />
+                <Checkbox label="Disabled, checked" checked={true} disabled onCheckedChange={() => {}} />
               </div>
               <div className={styles.variantItem}>
-                <Checkbox label="Disabled, indeterminate" indeterminate={true} checked={false} disabled onChange={() => {}} />
+                <Checkbox label="Disabled, indeterminate" indeterminate={true} checked={false} disabled onCheckedChange={() => {}} />
               </div>
             </div>
           </section>
@@ -103,7 +103,7 @@ export default function CheckboxPage() {
                     { label: "Push", value: "push" },
                   ]}
                   values={["email", "push"]}
-                  onChange={() => {}}
+                  onValuesChange={() => {}}
                 />
               </div>
             </div>
@@ -124,7 +124,7 @@ export default function CheckboxPage() {
                     { label: "Anchovies", value: "anchovies", disabled: true },
                   ]}
                   values={["cheese"]}
-                  onChange={() => {}}
+                  onValuesChange={() => {}}
                 />
               </div>
             </div>
@@ -144,7 +144,7 @@ export default function CheckboxPage() {
                     { label: "Auto-save", value: "autosave" },
                   ]}
                   values={["dark", "autosave"]}
-                  onChange={() => {}}
+                  onValuesChange={() => {}}
                 />
               </div>
             </div>

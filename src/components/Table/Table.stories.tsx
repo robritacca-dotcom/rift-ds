@@ -317,7 +317,7 @@ export const MixedContent: Story = {
       {
         id: '1',
         cells: {
-          select: <Checkbox checked ariaLabel="Select Alice" />,
+          select: <Checkbox checked aria-label="Select Alice" />,
           name: (
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
               <span className="material-symbols-rounded" style={{ fontSize: '24px' }}>person</span>
@@ -337,7 +337,7 @@ export const MixedContent: Story = {
       {
         id: '2',
         cells: {
-          select: <Checkbox ariaLabel="Select Bob" />,
+          select: <Checkbox aria-label="Select Bob" />,
           name: (
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
               <span className="material-symbols-rounded" style={{ fontSize: '24px' }}>person</span>
@@ -357,7 +357,7 @@ export const MixedContent: Story = {
       {
         id: '3',
         cells: {
-          select: <Checkbox ariaLabel="Select Carol" />,
+          select: <Checkbox aria-label="Select Carol" />,
           name: (
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
               <span className="material-symbols-rounded" style={{ fontSize: '24px' }}>person</span>

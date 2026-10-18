@@ -50,13 +50,13 @@ export default function ToggleSwitchPage() {
             <SectionTitle title="Default" />
             <div className={styles.variantRow}>
               <div className={styles.variantItem}>
-                <ToggleSwitch checked={true} label="On" onChange={() => {}} />
+                <ToggleSwitch checked={true} label="On" onCheckedChange={() => {}} />
               </div>
               <div className={styles.variantItem}>
-                <ToggleSwitch checked={false} label="Off" onChange={() => {}} />
+                <ToggleSwitch checked={false} label="Off" onCheckedChange={() => {}} />
               </div>
               <div className={styles.variantItem}>
-                <ToggleSwitch checked={true} showLabel={false} ariaLabel="No label" onChange={() => {}} />
+                <ToggleSwitch checked={true} showLabel={false} aria-label="No label" onCheckedChange={() => {}} />
               </div>
             </div>
           </section>
@@ -66,13 +66,13 @@ export default function ToggleSwitchPage() {
             <SectionTitle title="Compact" />
             <div className={styles.variantRow}>
               <div className={styles.variantItem}>
-                <ToggleSwitch checked={true} label="On" size="compact" onChange={() => {}} />
+                <ToggleSwitch checked={true} label="On" size="compact" onCheckedChange={() => {}} />
               </div>
               <div className={styles.variantItem}>
-                <ToggleSwitch checked={false} label="Off" size="compact" onChange={() => {}} />
+                <ToggleSwitch checked={false} label="Off" size="compact" onCheckedChange={() => {}} />
               </div>
               <div className={styles.variantItem}>
-                <ToggleSwitch checked={true} showLabel={false} size="compact" ariaLabel="No label" onChange={() => {}} />
+                <ToggleSwitch checked={true} showLabel={false} size="compact" aria-label="No label" onCheckedChange={() => {}} />
               </div>
             </div>
           </section>
@@ -82,10 +82,10 @@ export default function ToggleSwitchPage() {
             <SectionTitle title="States" />
             <div className={styles.variantRow}>
               <div className={styles.variantItem}>
-                <ToggleSwitch checked={true} disabled label="Disabled, on" onChange={() => {}} />
+                <ToggleSwitch checked={true} disabled label="Disabled, on" onCheckedChange={() => {}} />
               </div>
               <div className={styles.variantItem}>
-                <ToggleSwitch checked={false} disabled label="Disabled, off" onChange={() => {}} />
+                <ToggleSwitch checked={false} disabled label="Disabled, off" onCheckedChange={() => {}} />
               </div>
             </div>
           </section>

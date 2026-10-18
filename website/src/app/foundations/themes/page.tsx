@@ -200,7 +200,7 @@ export default function ThemesPage() {
                       variant="primary"
                       size="compact"
                       iconLeft={isActive ? "check" : "brush"}
-                      state={isActive ? "disabled" : "default"}
+                      disabled={isActive}
                       onClick={() => applyBrand(tile.value)}
                     />
                     <Button

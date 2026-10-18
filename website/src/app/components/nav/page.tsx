@@ -96,7 +96,7 @@ export default function NavigationPage() {
                     <ToggleSwitch
                       checked={true}
                       label="Dark mode"
-                      onChange={() => {}}
+                      onCheckedChange={() => {}}
                     />
                   }
                 />
@@ -152,7 +152,7 @@ export default function NavigationPage() {
                     <ToggleSwitch
                       checked={true}
                       label="Dark Mode"
-                      onChange={() => {}}
+                      onCheckedChange={() => {}}
                       className={styles.hamburgerThemeToggle}
                     />
                   </div>

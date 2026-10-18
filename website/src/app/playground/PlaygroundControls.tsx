@@ -280,7 +280,7 @@ export default function PlaygroundControls({
             variant="primary"
             tone="neutral"
             iconLeft={imageBusy ? "progress_activity" : "add_photo_alternate"}
-            state={imageBusy ? "disabled" : "default"}
+            disabled={imageBusy}
             onClick={onPickImage}
           />
           {imageName ? (
@@ -503,7 +503,7 @@ export default function PlaygroundControls({
             label="Reset everything"
             variant="secondary"
             iconLeft="restart_alt"
-            state={isPristine ? "disabled" : "default"}
+            disabled={isPristine}
             onClick={onReset}
           />
         </div>

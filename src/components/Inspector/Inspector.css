@@ -24,10 +24,12 @@
                                  a hovered bar, a
                                  selected segment)
      press   neutral-bg-active
-   Nothing in the family takes the action colour
-   except the focus ring: a selected segment and
-   an on switch are neutral, the same call
-   SegmentedControl's `neutral` variant makes.
+   The action colour appears where the library's
+   own controls put it, and nowhere else: the
+   focus ring, an on switch (ToggleSwitch's own
+   track) and a selected segment (the pill
+   SegmentedControl slides), so a setting reads
+   the same in a panel as in a form.
    ============================================ */
 
 /* ---------- size ----------
@@ -257,37 +259,12 @@
   background: var(--color-action-neutral-bg-active);
 }
 
-.ds-inspector-toggle-switch__track {
-  position: relative;
+/* The switch itself is ToggleSwitch's, track, thumb and on/off paint
+   included (ToggleSwitch.css); the bar only seats it and lets clicks
+   through to the native checkbox that covers the bar. */
+.ds-inspector-toggle-switch__switch {
   flex-shrink: 0;
-  width: calc(var(--padding-400) * 1.75);
-  height: var(--padding-400);
-  border-radius: var(--radius-pill);
-  background: var(--color-action-neutral-bg-active);
-  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
   pointer-events: none;
-}
-
-.ds-inspector-toggle-switch__knob {
-  position: absolute;
-  top: var(--border-050);
-  left: var(--border-050);
-  width: calc(var(--padding-400) - 2 * var(--border-050));
-  height: calc(var(--padding-400) - 2 * var(--border-050));
-  border-radius: var(--radius-pill);
-  background: var(--color-bg-container-primary);
-  transition: transform var(--motion-duration-base) var(--motion-ease-entrance);
-}
-
-/* On reads from the native checkbox itself, so the paint is right whether
-   the switch is controlled or not. Monochrome on purpose: on is the primary
-   text colour, not the action colour. */
-.ds-inspector-toggle-switch:has(.ds-inspector-bar__native:checked) .ds-inspector-toggle-switch__track {
-  background: var(--color-text-primary);
-}
-
-.ds-inspector-toggle-switch:has(.ds-inspector-bar__native:checked) .ds-inspector-toggle-switch__knob {
-  transform: translateX(calc(var(--padding-400) * 0.75));
 }
 
 /* ============================================
@@ -324,19 +301,59 @@
     color var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
-.ds-inspector-segmented-control__segment:not(:has(:disabled)):hover {
+/* The selection is SegmentedControl's: the action colour with its text
+   colour on top, as one pill that slides from chip to chip. Until the
+   component has measured the selected chip (server render, first frame),
+   the chip paints its own fill instead. */
+.ds-inspector-segmented-control__pill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: var(--ds-inspector-pill-w, 0px);
+  transform: translateX(var(--ds-inspector-pill-x, 0px));
+  border-radius: var(--radius-pill);
+  background: var(--color-action-primary-bg);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ds-inspector-segmented-control--pill-ready .ds-inspector-segmented-control__pill {
+  opacity: 1;
+  transition:
+    transform var(--motion-duration-base) var(--motion-ease-entrance),
+    width var(--motion-duration-base) var(--motion-ease-entrance),
+    background-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-inspector-segmented-control__segment:not(:has(:checked)):not(:has(:disabled)):hover {
   color: var(--color-text-primary);
   background: var(--color-action-passive-bg-active);
 }
 
-.ds-inspector-segmented-control__segment:has(:checked) {
-  color: var(--color-text-primary);
-  font-weight: var(--ds-inspector-label-weight);
-  background: var(--color-action-neutral-bg-hover);
+.ds-inspector-segmented-control__segment:not(:has(:checked)):not(:has(:disabled)):active {
+  background: var(--color-action-neutral-bg-active);
 }
 
-.ds-inspector-segmented-control__segment:not(:has(:disabled)):active {
-  background: var(--color-action-neutral-bg-active);
+.ds-inspector-segmented-control__segment:has(:checked) {
+  color: var(--color-action-primary-text);
+  font-weight: var(--ds-inspector-label-weight);
+  background: var(--color-action-primary-bg);
+}
+
+.ds-inspector-segmented-control__segment:has(:checked):hover {
+  background: var(--color-action-primary-bg-hover);
+}
+
+/* Once the pill carries the selection, the chip's own fill retires and the
+   chip's hover darkens the pill instead. */
+.ds-inspector-segmented-control--pill-ready .ds-inspector-segmented-control__segment:has(:checked),
+.ds-inspector-segmented-control--pill-ready .ds-inspector-segmented-control__segment:has(:checked):hover {
+  background: transparent;
+}
+
+.ds-inspector-segmented-control--pill-ready:has(.ds-inspector-segmented-control__segment:has(:checked):hover) .ds-inspector-segmented-control__pill {
+  background: var(--color-action-primary-bg-hover);
 }
 
 .ds-inspector-segmented-control__segment:has(:focus-visible) {

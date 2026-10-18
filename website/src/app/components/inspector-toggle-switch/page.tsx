@@ -32,7 +32,7 @@ export default function InspectorToggleSwitchPage() {
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>An on or off setting in one row</p>
             <p className={styles.introBody}>
-              The whole bar is the switch, with the name on the left and a small track at the end. A native checkbox with <code>{'role="switch"'}</code> covers the bar, so a click anywhere toggles it, Space toggles it from the keyboard, and both <code>checked</code> and <code>defaultChecked</code> work. The on state is neutral, never the action colour.
+              The whole bar is the switch, with the name on the left and the ToggleSwitch track at the end, compact in a compact bar. A native checkbox with <code>{'role="switch"'}</code> covers the bar, so a click anywhere toggles it, Space toggles it from the keyboard, and both <code>checked</code> and <code>defaultChecked</code> work. On looks the same as a form switch: the action colour, with a check in the thumb.
             </p>
           </div>
 

@@ -44,7 +44,7 @@ export default function InspectorSegmentedControlPage() {
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>A choice between a few options in one row</p>
             <p className={styles.introBody}>
-              The name sits on the left and the options as chips at the bar’s end. The selected chip takes a neutral fill, never the action colour. Each option is a native radio, so the set announces as one radiogroup named by the label, arrow keys move the selection, and it submits with a form.
+              The name sits on the left and the options as chips at the bar’s end. The selection is SegmentedControl’s: an action-colour pill that slides from chip to chip. Each option is a native radio, so the set announces as one radiogroup named by the label, arrow keys move the selection, and it submits with a form.
             </p>
           </div>
 

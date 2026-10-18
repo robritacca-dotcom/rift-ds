@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import '../ToggleSwitch/ToggleSwitch.css';
 import './Inspector.css';
 
 /** Props owned by InspectorToggleSwitch itself — everything else falls through to the <input type="checkbox">. */
@@ -24,12 +25,13 @@ export interface InspectorToggleSwitchProps
 
 /**
  * A one-row switch for inspector panels: the whole bar is the switch, with
- * the name on the left and a small track on the right. The form
+ * the name on the left and ToggleSwitch's own track on the right, so an
+ * on switch in a panel looks exactly like one in a form. The form
  * counterpart, a standalone switch with its label beside it, is
  * ToggleSwitch.
  *
- * A native checkbox with `role="switch"` covers the bar, and the paint
- * reads its `:checked` state, so `checked` and `defaultChecked` both work.
+ * A native checkbox with `role="switch"` covers the bar; `checked` and
+ * `defaultChecked` both work.
  * Forwards a ref to that input and spreads unrecognised props onto it.
  */
 export const InspectorToggleSwitch = React.forwardRef<
@@ -41,6 +43,8 @@ export const InspectorToggleSwitch = React.forwardRef<
       label,
       size = 'default',
       disabled = false,
+      checked,
+      defaultChecked,
       onChange,
       onCheckedChange,
       className = '',
@@ -62,7 +66,30 @@ export const InspectorToggleSwitch = React.forwardRef<
       .filter(Boolean)
       .join(' ');
 
+    // ToggleSwitch's paint keys off a class, not the checkbox, so the state
+    // is mirrored here: the prop when controlled, the last change when not.
+    const [uncontrolledOn, setUncontrolledOn] = React.useState(Boolean(defaultChecked));
+    const on = checked ?? uncontrolledOn;
+
+    // A form reset moves the checkbox without a change event, so the mirror
+    // re-reads it once the reset has landed.
+    const inputRef = React.useRef<HTMLInputElement | null>(null);
+    const setRefs = (node: HTMLInputElement | null) => {
+      inputRef.current = node;
+      if (typeof ref === 'function') ref(node);
+      else if (ref) ref.current = node;
+    };
+    React.useEffect(() => {
+      const form = inputRef.current?.form;
+      if (!form) return;
+      const onReset = () =>
+        setTimeout(() => setUncontrolledOn(Boolean(inputRef.current?.checked)));
+      form.addEventListener('reset', onReset);
+      return () => form.removeEventListener('reset', onReset);
+    }, []);
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setUncontrolledOn(e.target.checked);
       onChange?.(e);
       onCheckedChange?.(e.target.checked);
     };
@@ -72,16 +99,35 @@ export const InspectorToggleSwitch = React.forwardRef<
         <label htmlFor={inputId} className="ds-inspector-bar__label">
           {label}
         </label>
-        <span className="ds-inspector-toggle-switch__track" aria-hidden="true">
-          <span className="ds-inspector-toggle-switch__knob" />
+        {/* ToggleSwitch's track and thumb, drawn by its stylesheet at the size
+            that fits the bar: the full switch in a default bar, the compact
+            one in a compact bar. */}
+        <span
+          className={[
+            'ds-toggle-switch',
+            'ds-inspector-toggle-switch__switch',
+            size === 'compact' ? 'ds-toggle-switch--compact' : '',
+            on ? '' : 'ds-toggle-switch--off',
+          ]
+            .filter(Boolean)
+            .join(' ')}
+          aria-hidden="true"
+        >
+          <span className="ds-toggle-switch__track">
+            <span className="ds-toggle-switch__thumb">
+              <span className="ds-toggle-switch__thumb-icon material-symbols-rounded">check</span>
+            </span>
+          </span>
         </span>
         <input
           {...rest}
-          ref={ref}
+          ref={setRefs}
           id={inputId}
           className="ds-inspector-bar__native"
           type="checkbox"
           role="switch"
+          checked={checked}
+          defaultChecked={defaultChecked}
           disabled={disabled}
           onChange={handleChange}
         />

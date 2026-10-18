@@ -55,6 +55,7 @@ export const SANCTIONED = {
   RadioButton: 'checked state of a form control',
   RichDropdown: 'checked state (the selected-option check)',
   SegmentedControl: 'selected item (the active segment)',
+  Inspector: 'selected item (the selected segment of InspectorSegmentedControl)',
   SelectionCard: 'checked state of its radio, checkbox and toggle indicators',
   Slider: 'on state of a form control (the filled track and thumb)',
   Stepper: 'selected item (the active step)',

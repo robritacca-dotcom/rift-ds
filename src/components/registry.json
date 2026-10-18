@@ -691,7 +691,7 @@
       "name": "InspectorSegmentedControl",
       "label": "Inspector segments",
       "slug": "inspector-segmented-control",
-      "description": "One-row choice between a few options for inspector panels, as native radios with a neutral selected chip.",
+      "description": "One-row choice between a few options for inspector panels, as native radios under a sliding selection pill.",
       "category": "inspector",
       "client": true,
       "folder": "Inspector"

@@ -3146,6 +3146,39 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "deprecated": "Use `onValuesChange` instead."
           }
         ]
+      },
+      {
+        "component": "CheckboxIndicator",
+        "props": [
+          {
+            "name": "checked",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the box shows as checked",
+            "defaultValue": "false"
+          },
+          {
+            "name": "indeterminate",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the box shows the indeterminate minus",
+            "defaultValue": "false"
+          },
+          {
+            "name": "size",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "Component size, matching Checkbox's",
+            "defaultValue": "default"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": ""
+          }
+        ]
       }
     ]
   },
@@ -8997,6 +9030,25 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Legacy change handler, kept for backwards compatibility.",
             "deprecated": "Use `onValueChange` instead."
+          }
+        ]
+      },
+      {
+        "component": "RadioIndicator",
+        "props": [
+          {
+            "name": "checked",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the circle shows as selected",
+            "defaultValue": "false"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": ""
           }
         ]
       }

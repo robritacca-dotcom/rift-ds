@@ -42,3 +42,12 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | onValuesChange | `((values: string[]) => void)` | no |  | Called with the next selected values |
 | className | `string` | no | `` | Additional CSS classes |
 | onChange | `((values: string[]) => void)` | no |  | Legacy change handler, kept for backwards compatibility. Deprecated: Use `onValuesChange` instead. |
+
+## CheckboxIndicator props
+
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| checked | `boolean` | no | `false` | Whether the box shows as checked |
+| indeterminate | `boolean` | no | `false` | Whether the box shows the indeterminate minus |
+| size | `"default" \| "compact"` | no | `default` | Component size, matching Checkbox's |
+| className | `string` | no | `` | Additional CSS classes |

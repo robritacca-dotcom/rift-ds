@@ -51,7 +51,8 @@ function ToastTriggers() {
       />
       <Button
         label="Error toast"
-        variant="destructive"
+        variant="secondary"
+        tone="destructive"
         onClick={() =>
           toast({
             variant: "error",

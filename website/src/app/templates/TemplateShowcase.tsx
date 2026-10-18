@@ -151,7 +151,8 @@ export default function TemplateShowcase() {
         <div className={styles.arrows}>
           <CircularButton
             icon="chevron_left"
-            variant="neutral"
+            variant="primary"
+            tone="neutral"
             ariaLabel="Previous template"
             tooltip={false}
             disabled={active === 0}
@@ -159,7 +160,8 @@ export default function TemplateShowcase() {
           />
           <CircularButton
             icon="chevron_right"
-            variant="neutral"
+            variant="primary"
+            tone="neutral"
             ariaLabel="Next template"
             tooltip={false}
             disabled={active === SLIDE_COUNT - 1}

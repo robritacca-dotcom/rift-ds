@@ -311,7 +311,8 @@ export default function ChatDirector({
               <Button
                 key={event.id}
                 label={event.label}
-                variant="neutral"
+                variant="primary"
+                tone="neutral"
                 size="compact"
                 iconLeft={event.icon}
                 disabled={event.disabled || (live && !event.liveSafe)}

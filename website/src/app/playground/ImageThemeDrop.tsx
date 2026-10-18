@@ -163,14 +163,16 @@ export function ImageThemeCard({
         <div className={styles.actions}>
           <Button
             label="Replace"
-            variant="neutral"
+            variant="primary"
+            tone="neutral"
             size="compact"
             iconLeft="swap_horiz"
             onClick={onReplace}
           />
           <CircularButton
             icon="close"
-            variant="neutral"
+            variant="primary"
+            tone="neutral"
             size="compact"
             ariaLabel="Remove the theme source image"
             onClick={onClear}

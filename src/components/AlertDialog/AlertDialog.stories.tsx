@@ -108,7 +108,7 @@ export const InteractiveDestructive: Story = {
 
     return (
       <>
-        <Button label="Delete item" variant="destructive" onClick={() => setOpen(true)} />
+        <Button label="Delete item" variant="secondary" tone="destructive" onClick={() => setOpen(true)} />
         <AlertDialog
           open={open}
           onOpenChange={setOpen}

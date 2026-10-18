@@ -825,7 +825,8 @@ export default function PlaygroundPage() {
       <Button
         label="Reset shader"
         size="compact"
-        variant="neutral"
+        variant="primary"
+        tone="neutral"
         iconLeft="restart_alt"
         state={shaderPristine ? "disabled" : "default"}
         onClick={() => setShaderParams(shaderBackground.params)}

@@ -137,7 +137,8 @@ export default function ExportThemeDialog({
         <>
           <Button
             label={copied ? "Copied" : "Copy all for agents"}
-            variant="neutral"
+            variant="primary"
+            tone="neutral"
             iconLeft={copied ? "check" : "content_copy"}
             onClick={copyBundle}
           />

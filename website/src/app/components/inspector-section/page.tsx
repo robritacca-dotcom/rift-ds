@@ -65,7 +65,7 @@ export default function InspectorSectionPage() {
                     { value: "serif", label: "Serif", font: "Georgia, serif" },
                   ]}
                 />
-                <Button size="compact" variant="neutral" label="All colour ramps" iconLeft="palette" />
+                <Button size="compact" variant="primary" tone="neutral" label="All colour ramps" iconLeft="palette" />
               </InspectorSection>
               <InspectorSection title="Shape and depth" defaultOpen>
                 <InspectorSlider

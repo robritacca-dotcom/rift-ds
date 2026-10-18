@@ -60,7 +60,7 @@ export default function AlertDialogPage() {
           <section className={styles.section}>
             <SectionTitle title="Destructive" />
             <div className={styles.variantRow}>
-              <Button label="Delete item" variant="destructive" onClick={() => setDestructiveOpen(true)} />
+              <Button label="Delete item" variant="secondary" tone="destructive" onClick={() => setDestructiveOpen(true)} />
               <AlertDialog
                 open={destructiveOpen}
                 onOpenChange={setDestructiveOpen}

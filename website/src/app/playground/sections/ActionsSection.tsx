@@ -48,7 +48,7 @@ export default function ActionsSection() {
       <div className={styles.demoRow}>
         <Button label="Primary action" variant="primary" />
         <Button label="Secondary" variant="secondary" />
-        <Button label="Neutral" variant="neutral" />
+        <Button label="Neutral" variant="primary" tone="neutral" />
         <Button label="Tertiary" variant="tertiary" />
         <Button label="Primary" variant="primary" size="compact" iconRight="arrow_forward" />
       </div>
@@ -63,14 +63,14 @@ export default function ActionsSection() {
         />
         <CircularButton icon="add" variant="primary" ariaLabel="Add item" />
         <CircularButton icon="edit" variant="secondary" ariaLabel="Edit item" />
-        <CircularButton icon="share" variant="neutral" ariaLabel="Share item" />
+        <CircularButton icon="share" variant="primary" tone="neutral" ariaLabel="Share item" />
         <CircularButton icon="favorite" variant="tertiary" ariaLabel="Favourite item" />
       </div>
 
       <div className={styles.demoRow}>
         <SplitButton label="Publish" iconLeft="send" items={PUBLISH_ITEMS} />
         <SplitButton label="Export" variant="secondary" items={PUBLISH_ITEMS} />
-        <SplitButton label="Share" variant="neutral" iconLeft="share" items={SHARE_ITEMS} />
+        <SplitButton label="Share" variant="primary" tone="neutral" iconLeft="share" items={SHARE_ITEMS} />
       </div>
 
       <div className={styles.demoRow}>

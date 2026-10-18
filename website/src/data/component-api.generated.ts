@@ -2174,7 +2174,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "variant",
             "type": "\"neutral\" | \"destructive\" | \"primary\" | \"secondary\" | \"tertiary\"",
             "required": false,
-            "description": "Visual treatment"
+            "description": "Emphasis: `primary` (filled), `secondary` (outlined) or `tertiary`\n(ghost). The colour is `tone`'s job. `neutral` and `destructive` are\nlegacy values from before the split: `neutral` renders as\n`variant=\"primary\" tone=\"neutral\"` and `destructive` as\n`variant=\"secondary\" tone=\"destructive\"`."
+          },
+          {
+            "name": "tone",
+            "type": "\"default\" | \"neutral\" | \"destructive\"",
+            "required": false,
+            "description": "Colour, independent of emphasis. `default` carries the action colour,\n`neutral` the greys, `destructive` the danger colour. Tertiary is\nalready grey, so `neutral` leaves it unchanged; `destructive` currently\nhas one look, the outlined button, whichever emphasis it is given."
           },
           {
             "name": "size",
@@ -3098,7 +3104,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "variant",
             "type": "\"neutral\" | \"primary\" | \"secondary\" | \"tertiary\"",
             "required": false,
-            "description": "Visual treatment"
+            "description": "Emphasis: `primary` (filled), `secondary` (outlined) or `tertiary`\n(ghost). The colour is `tone`'s job. `neutral` is the legacy value from\nbefore the split and renders as `variant=\"primary\" tone=\"neutral\"`."
+          },
+          {
+            "name": "tone",
+            "type": "\"default\" | \"neutral\" | \"destructive\"",
+            "required": false,
+            "description": "Colour, independent of emphasis: `default` carries the action colour,\n`neutral` the greys, `destructive` the danger colour. Tertiary is\nalready grey, so `neutral` leaves it unchanged; `destructive` currently\nhas one look, the outlined button, whichever emphasis it is given."
           },
           {
             "name": "priority",
@@ -9962,8 +9974,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "variant",
             "type": "\"neutral\" | \"primary\" | \"secondary\"",
             "required": false,
-            "description": "Visual treatment, shared by both segments",
+            "description": "Emphasis, shared by both segments: `primary` (filled) or `secondary`\n(outlined). The colour is `tone`'s job. `neutral` is the legacy value\nfrom before the split and renders as `variant=\"primary\" tone=\"neutral\"`.",
             "defaultValue": "primary"
+          },
+          {
+            "name": "tone",
+            "type": "\"default\" | \"neutral\" | \"destructive\"",
+            "required": false,
+            "description": "Colour, shared by both segments: `default` carries the action colour,\n`neutral` the greys, `destructive` the danger colour. Like Button,\n`destructive` currently has one look, the outlined control, whichever\nemphasis it is given."
           },
           {
             "name": "size",

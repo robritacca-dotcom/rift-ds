@@ -17,7 +17,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | label | `string` | no | `Button` | Button text content |
 | iconLeft | `ReactNode` | no |  | Icon for left side — Material Symbol name (string) or custom element (ReactNode) |
 | iconRight | `ReactNode` | no |  | Icon for right side — Material Symbol name (string) or custom element (ReactNode) |
-| variant | `"neutral" \| "destructive" \| "primary" \| "secondary" \| "tertiary"` | no |  | Visual treatment |
+| variant | `"neutral" \| "destructive" \| "primary" \| "secondary" \| "tertiary"` | no |  | Emphasis: `primary` (filled), `secondary` (outlined) or `tertiary` (ghost). The colour is `tone`'s job. `neutral` and `destructive` are legacy values from before the split: `neutral` renders as `variant="primary" tone="neutral"` and `destructive` as `variant="secondary" tone="destructive"`. |
+| tone | `"default" \| "neutral" \| "destructive"` | no |  | Colour, independent of emphasis. `default` carries the action colour, `neutral` the greys, `destructive` the danger colour. Tertiary is already grey, so `neutral` leaves it unchanged; `destructive` currently has one look, the outlined button, whichever emphasis it is given. |
 | size | `"default" \| "compact"` | no | `default` | Button size |
 | disabled | `boolean` | no |  | Whether the button is disabled |
 | loading | `boolean` | no |  | Shows a spinner in the left icon slot and blocks interaction while an async action runs. Keeps the variant's full-colour appearance (unlike `disabled`) and sets `aria-busy` on the rendered element. |

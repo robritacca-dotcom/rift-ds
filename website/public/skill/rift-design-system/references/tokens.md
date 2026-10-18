@@ -11,7 +11,7 @@ How to read it:
 
 The live reference with swatches is at https://rift-ds.com/foundations, and the MCP endpoint's `list_tokens` tool serves the names.
 
-## Colour (122)
+## Colour (123)
 
 Prefix: `--color-*`.
 
@@ -22,6 +22,7 @@ Prefix: `--color-*`.
 | `--color-action-neutral-bg` | `#D6D6D6` (`--primitive-neutral-02`) | `#232323` (`--primitive-neutral-08`) |
 | `--color-action-neutral-bg-active` | `#A2A2A2` (`--primitive-neutral-04`) | `#6D6D6D` (`--primitive-neutral-06`) |
 | `--color-action-neutral-bg-hover` | `#BCBCBC` (`--primitive-neutral-03`) | `#303030` (`--primitive-neutral-07`) |
+| `--color-action-neutral-border` | `#888888` (`--primitive-neutral-05`) | `#6D6D6D` (`--primitive-neutral-06`) |
 | `--color-action-neutral-text` | `#050505` (`--primitive-neutral-10`) | `#FFFFFF` (`--primitive-neutral-00`) |
 | `--color-action-passive-bg` | `rgba(241, 241, 241, 0.01)` (`--primitive-neutral-01-a01`) | `rgba(14, 14, 14, 0.01)` (`--primitive-neutral-09-a01`) |
 | `--color-action-passive-bg-active` | `rgba(188, 188, 188, 0.8)` (`--primitive-neutral-03-a80`) | `rgba(48, 48, 48, 0.8)` (`--primitive-neutral-07-a80`) |

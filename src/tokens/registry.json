@@ -7,6 +7,7 @@
       "--color-action-neutral-bg",
       "--color-action-neutral-bg-active",
       "--color-action-neutral-bg-hover",
+      "--color-action-neutral-border",
       "--color-action-neutral-text",
       "--color-action-passive-bg",
       "--color-action-passive-bg-active",

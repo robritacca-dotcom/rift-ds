@@ -15,7 +15,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | icon | `ReactNode` | yes |  | The icon — Material Symbol name (string) or custom element (ReactNode) |
-| variant | `"neutral" \| "primary" \| "secondary" \| "tertiary"` | no |  | Visual treatment |
+| variant | `"neutral" \| "primary" \| "secondary" \| "tertiary"` | no |  | Emphasis: `primary` (filled), `secondary` (outlined) or `tertiary` (ghost). The colour is `tone`'s job. `neutral` is the legacy value from before the split and renders as `variant="primary" tone="neutral"`. |
+| tone | `"default" \| "neutral" \| "destructive"` | no |  | Colour, independent of emphasis: `default` carries the action colour, `neutral` the greys, `destructive` the danger colour. Tertiary is already grey, so `neutral` leaves it unchanged; `destructive` currently has one look, the outlined button, whichever emphasis it is given. |
 | priority | `"primary" \| "secondary" \| "tertiary"` | no |  | Legacy alias for `variant`. Deprecated: Use `variant` instead. |
 | disabled | `boolean` | no |  | Whether the button is disabled |
 | state | `"default" \| "disabled" \| "hover" \| "active"` | no |  | Documentation-only interaction state. Deprecated: Use `disabled` for the disabled state.  Documentation-only affordance for rendering a *static* interaction state in Storybook and the showcase site. Real hover/active styling comes from CSS pseudo-classes and needs no prop — for docs, prefer `className="ds-circular-button--hover"`. |

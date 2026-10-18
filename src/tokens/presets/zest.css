@@ -43,8 +43,6 @@
 }
 
 html[data-brand="zest"] {
-  --color-action-destructive-bg-active: #F52000;
-  --color-action-destructive-bg-hover: #FF4E33;
   --color-action-primary-bg: var(--primitive-green-07);
   --color-action-primary-bg-active: var(--primitive-green-05);
   --color-action-primary-bg-hover: var(--primitive-green-06);
@@ -210,8 +208,6 @@ html[data-brand="zest"] {
 }
 
 html[data-brand="zest"][data-theme="dark"] {
-  --color-action-destructive-bg-active: #FF9D8F;
-  --color-action-destructive-bg-hover: #FF8C7A;
   --color-action-primary-bg: var(--primitive-green-07);
   --color-action-primary-bg-active: var(--primitive-green-05);
   --color-action-primary-bg-hover: var(--primitive-green-06);

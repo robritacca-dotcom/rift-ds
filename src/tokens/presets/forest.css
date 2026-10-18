@@ -43,8 +43,6 @@
 }
 
 html[data-brand="forest"] {
-  --color-action-destructive-bg-active: #643429;
-  --color-action-destructive-bg-hover: #904B3B;
   --color-action-primary-bg: var(--primitive-green-07);
   --color-action-primary-bg-active: var(--primitive-green-09);
   --color-action-primary-bg-hover: var(--primitive-green-08);
@@ -197,8 +195,6 @@ html[data-brand="forest"] {
 }
 
 html[data-brand="forest"][data-theme="dark"] {
-  --color-action-destructive-bg-active: #C07766;
-  --color-action-destructive-bg-hover: #BA6B58;
   --color-action-primary-bg: var(--primitive-green-07);
   --color-action-primary-bg-active: var(--primitive-green-09);
   --color-action-primary-bg-hover: var(--primitive-green-08);

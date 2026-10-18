@@ -43,8 +43,6 @@
 }
 
 html[data-brand="mono"] {
-  --color-action-destructive-bg-active: #6B6B6B;
-  --color-action-destructive-bg-hover: #8A8A8A;
   --color-action-primary-bg: var(--primitive-neutral-08);
   --color-action-primary-bg-active: var(--primitive-neutral-10);
   --color-action-primary-bg-hover: var(--primitive-neutral-09);
@@ -173,8 +171,6 @@ html[data-brand="mono"] {
 }
 
 html[data-brand="mono"][data-theme="dark"] {
-  --color-action-destructive-bg-active: #B7B7B7;
-  --color-action-destructive-bg-hover: #ADADAD;
   --color-action-primary-bg: var(--primitive-neutral-01);
   --color-action-primary-bg-active: var(--primitive-neutral-03);
   --color-action-primary-bg-hover: var(--primitive-neutral-02);

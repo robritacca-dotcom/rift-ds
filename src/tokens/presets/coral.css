@@ -115,8 +115,6 @@
 }
 
 html[data-brand="coral"] {
-  --color-action-destructive-bg-active: #E90007;
-  --color-action-destructive-bg-hover: #FF272E;
   --color-action-primary-bg: var(--primitive-red-07);
   --color-action-primary-bg-active: var(--primitive-red-09);
   --color-action-primary-bg-hover: var(--primitive-red-08);
@@ -244,8 +242,6 @@ html[data-brand="coral"] {
 }
 
 html[data-brand="coral"][data-theme="dark"] {
-  --color-action-destructive-bg-active: #FF8387;
-  --color-action-destructive-bg-hover: #FF6E73;
   --color-action-primary-bg: var(--primitive-red-07);
   --color-action-primary-bg-active: var(--primitive-red-09);
   --color-action-primary-bg-hover: var(--primitive-red-08);

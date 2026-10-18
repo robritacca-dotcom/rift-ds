@@ -17,12 +17,12 @@ Prefix: `--color-*`.
 
 | Token | Light | Dark |
 | --- | --- | --- |
-| `--color-action-destructive-bg` | `#EF476F` (`--primitive-red-07`) | `#EF476F` (`--primitive-red-07`) |
-| `--color-action-destructive-bg-active` | `#8E2641` (`--primitive-red-09`) | `#F37F9B` (`--primitive-red-05`) |
-| `--color-action-destructive-bg-hover` | `#C93A5C` (`--primitive-red-08`) | `#F16385` (`--primitive-red-06`) |
-| `--color-action-destructive-border` | `#EF476F` (`--primitive-red-07`) | `#EF476F` (`--primitive-red-07`) |
-| `--color-action-destructive-text` | `#FDEFF3` (`--primitive-red-01`) | `#571727` (`--primitive-red-10`) |
-| `--color-action-destructive-text-secondary` | `#EF476F` (`--primitive-red-07`) | `#EF476F` (`--primitive-red-07`) |
+| `--color-action-destructive-bg` | `#C93A5C` (`--primitive-red-08`) | `#F37F9B` (`--primitive-red-05`) |
+| `--color-action-destructive-bg-active` | `#571727` (`--primitive-red-10`) | `#F8B7C7` (`--primitive-red-03`) |
+| `--color-action-destructive-bg-hover` | `#8E2641` (`--primitive-red-09`) | `#F69BB1` (`--primitive-red-04`) |
+| `--color-action-destructive-border` | `#C93A5C` (`--primitive-red-08`) | `#F37F9B` (`--primitive-red-05`) |
+| `--color-action-destructive-text` | `#FFFFFF` (`--primitive-neutral-00`) | `#45101D` (`--primitive-red-11`) |
+| `--color-action-destructive-text-secondary` | `#8E2641` (`--primitive-red-09`) | `#F69BB1` (`--primitive-red-04`) |
 | `--color-action-icon-active` | `#F1F1F1` (`--primitive-neutral-01`) | `#052F3E` (`--primitive-teal-10`) |
 | `--color-action-icon-default` | `#050505` (`--primitive-neutral-10`) | `#F1F1F1` (`--primitive-neutral-01`) |
 | `--color-action-neutral-bg` | `#D6D6D6` (`--primitive-neutral-02`) | `#232323` (`--primitive-neutral-08`) |

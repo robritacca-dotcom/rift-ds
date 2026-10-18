@@ -25,8 +25,6 @@
 }
 
 html[data-brand="contrast"] {
-  --color-action-destructive-bg-active: #CC0040;
-  --color-action-destructive-bg-hover: #FF0A57;
   --color-action-primary-bg: var(--primitive-blue-07);
   --color-action-primary-bg-active: var(--primitive-blue-09);
   --color-action-primary-bg-hover: var(--primitive-blue-08);
@@ -171,8 +169,6 @@ html[data-brand="contrast"] {
 }
 
 html[data-brand="contrast"][data-theme="dark"] {
-  --color-action-destructive-bg-active: #FF6696;
-  --color-action-destructive-bg-hover: #FF5188;
   --color-action-primary-bg: var(--primitive-blue-07);
   --color-action-primary-bg-active: var(--primitive-blue-09);
   --color-action-primary-bg-hover: var(--primitive-blue-08);

@@ -157,13 +157,14 @@ button.ds-question-card__option:disabled {
   cursor: not-allowed;
 }
 
-/* The chosen row: a solid outline one weight heavier, taken up inside the
-   padding so the row does not grow when it is picked. */
+/* The chosen row: SelectionCard's selected treatment, a solid line in the
+   action border colour over the semi container fill, so a pick reads the
+   same in a chat as it does in a settings list. */
 .ds-question-card__option--chosen,
-button.ds-question-card__option--chosen:hover {
+button.ds-question-card__option--chosen:hover:not(:disabled) {
   border-style: solid;
-  border-color: var(--color-text-primary);
-  box-shadow: inset 0 0 0 var(--border-025) var(--color-text-primary);
+  border-color: var(--color-action-primary-border);
+  background-color: var(--color-bg-container-primary-semi);
 }
 
 .ds-question-card__text {
@@ -192,14 +193,16 @@ button.ds-question-card__option--chosen:hover {
   color: var(--color-text-tertiary);
 }
 
+/* The trailing mark: Checkbox's or RadioButton's own indicator, which
+   brings its size, shape and colours. Only the closed "Something else"
+   row's pencil is a glyph, and it takes the icon scale. */
 .ds-question-card__mark {
   flex: none;
-  --icon-size: var(--icon-size-500);
-  color: var(--color-icon-secondary);
 }
 
-.ds-question-card__option--chosen .ds-question-card__mark {
-  color: var(--color-text-primary);
+.ds-question-card__mark.material-symbols-rounded {
+  --icon-size: var(--icon-size-500);
+  color: var(--color-icon-secondary);
 }
 
 /* "Something else" reads as the way out, not one more answer. */

@@ -485,10 +485,10 @@
    KEPT — the record of a choice
    A row that stays on screen after use keeps
    the choice in view with QuestionCard's own
-   treatment: the taken suggestion outlined
-   solid in the strongest ink, doubled by an
-   inset ring so it does not grow, and the rest
-   faded behind a dashed line. No check: a chip
+   treatment: the taken suggestion in a solid
+   line of the action border colour over the
+   semi container fill, SelectionCard's selected
+   look, and the rest faded behind a dashed line. No check: a chip
    is a line of text, and it keeps its shape.
    Nothing in the row answers the pointer.
    ============================================ */
@@ -502,8 +502,7 @@
 .ds-prompt-suggestions--kept .ds-prompt-suggestions__card {
   border-style: dashed;
   border-color: var(--color-text-tertiary);
-  /* A record carries no fill, like QuestionCard's rows once answered: the
-     outline alone says which way the conversation went. */
+  /* The rows not taken carry no fill: only the taken one is marked. */
   background-color: transparent;
 }
 
@@ -512,8 +511,8 @@
 .ds-prompt-suggestions__item--kept .ds-prompt-suggestions__card,
 .ds-prompt-suggestions--kept .ds-prompt-suggestions__item--kept .ds-prompt-suggestions__tile:hover {
   border-style: solid;
-  border-color: var(--color-text-primary);
-  box-shadow: inset 0 0 0 var(--border-025) var(--color-text-primary);
+  border-color: var(--color-action-primary-border);
+  background-color: var(--color-bg-container-primary-semi);
   color: var(--color-text-primary);
 }
 

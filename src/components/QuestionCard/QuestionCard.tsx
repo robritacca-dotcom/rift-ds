@@ -2,7 +2,9 @@
 
 import React from 'react';
 import { Button } from '../Button/Button';
+import { CheckboxIndicator } from '../Checkbox/Checkbox';
 import { CircularButton } from '../CircularButton/CircularButton';
+import { RadioIndicator } from '../RadioButton/RadioButton';
 import './QuestionCard.css';
 import '../../fonts/material-symbols.css';
 
@@ -620,22 +622,13 @@ function OptionText({ base, option }: { base: string; option: QuestionCardOption
 }
 
 /* The trailing mark says what kind of question it is before anything is
-   touched: a radio for one answer, a square checkbox for several. Every
-   row carries it, picked or not, the way a form control would. */
+   touched: the system's own radio for one answer, its checkbox for several,
+   drawn by the controls' indicators so size, shape and colour are theirs.
+   Every row carries it, picked or not, the way a form control would. */
 function Mark({ base, chosen, multi }: { base: string; chosen: boolean; multi: boolean }) {
-  const icon = multi
-    ? chosen
-      ? 'check_box'
-      : 'check_box_outline_blank'
-    : chosen
-      ? 'radio_button_checked'
-      : 'radio_button_unchecked';
-  return (
-    <span
-      className={`${base}__mark material-symbols-rounded${chosen ? ' icon-filled' : ''}`}
-      aria-hidden="true"
-    >
-      {icon}
-    </span>
+  return multi ? (
+    <CheckboxIndicator className={`${base}__mark`} checked={chosen} />
+  ) : (
+    <RadioIndicator className={`${base}__mark`} checked={chosen} />
   );
 }

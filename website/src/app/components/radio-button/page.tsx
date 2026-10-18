@@ -4,7 +4,7 @@ import React from "react";
 import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
-import { RadioButton, RadioGroup } from "rift-ds/components/RadioButton/RadioButton";
+import { RadioButton, RadioGroup, RadioIndicator } from "rift-ds/components/RadioButton/RadioButton";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
@@ -120,6 +120,22 @@ export default function RadioButtonPage() {
                   direction="vertical"
                   onValueChange={() => {}}
                 />
+              </div>
+            </div>
+          </section>
+
+          {/* Indicator */}
+          <section className={styles.section}>
+            <SectionTitle title="Indicator" />
+            <p className={styles.introBody}>
+              The circle alone, for a row that is itself the control, like a QuestionCard option. The row owns the role, the state and the keyboard; the indicator draws the same ring, dot and colours as the radio, and lights when the row is hovered.
+            </p>
+            <div className={styles.variantRow}>
+              <div className={styles.variantItem}>
+                <RadioIndicator />
+              </div>
+              <div className={styles.variantItem}>
+                <RadioIndicator checked />
               </div>
             </div>
           </section>

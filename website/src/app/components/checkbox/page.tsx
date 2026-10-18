@@ -4,7 +4,7 @@ import React from "react";
 import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
-import { Checkbox, CheckboxGroup } from "rift-ds/components/Checkbox/Checkbox";
+import { Checkbox, CheckboxGroup, CheckboxIndicator } from "rift-ds/components/Checkbox/Checkbox";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
@@ -146,6 +146,28 @@ export default function CheckboxPage() {
                   values={["dark", "autosave"]}
                   onValuesChange={() => {}}
                 />
+              </div>
+            </div>
+          </section>
+
+          {/* Indicator */}
+          <section className={styles.section}>
+            <SectionTitle title="Indicator" />
+            <p className={styles.introBody}>
+              The box alone, for a row that is itself the control, like a QuestionCard option. The row owns the role, the state and the keyboard; the indicator draws the same box, check and colours as the checkbox, and lights when the row is hovered.
+            </p>
+            <div className={styles.variantRow}>
+              <div className={styles.variantItem}>
+                <CheckboxIndicator />
+              </div>
+              <div className={styles.variantItem}>
+                <CheckboxIndicator checked />
+              </div>
+              <div className={styles.variantItem}>
+                <CheckboxIndicator indeterminate />
+              </div>
+              <div className={styles.variantItem}>
+                <CheckboxIndicator checked size="compact" />
               </div>
             </div>
           </section>

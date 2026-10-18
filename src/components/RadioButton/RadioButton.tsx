@@ -259,3 +259,44 @@ export const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
 );
 
 RadioGroup.displayName = 'RadioGroup';
+
+/* ============================================
+   RADIO INDICATOR — the circle alone
+   ============================================ */
+
+/** Props owned by RadioIndicator itself — everything else falls through to the span. */
+type RadioIndicatorOwnProps = {
+  /** Whether the circle shows as selected */
+  checked?: boolean;
+  /** Additional CSS classes */
+  className?: string;
+};
+
+export interface RadioIndicatorProps
+  extends RadioIndicatorOwnProps,
+    Omit<React.ComponentPropsWithoutRef<'span'>, keyof RadioIndicatorOwnProps> {}
+
+/**
+ * The radio's circle and dot with no behaviour of its own, for a row that is
+ * itself the control (a QuestionCard option): the host owns the role, the
+ * state and the keyboard, and this draws the same ring, dot and colours as
+ * RadioButton. Hidden from assistive technology; the host announces the state.
+ */
+export const RadioIndicator = React.forwardRef<HTMLSpanElement, RadioIndicatorProps>(
+  ({ checked = false, className = '', ...rest }, ref) => {
+    const baseClass = 'ds-radio';
+    const classes = [baseClass, `${baseClass}--indicator`, checked ? `${baseClass}--checked` : '', className]
+      .filter(Boolean)
+      .join(' ');
+
+    return (
+      <span {...rest} ref={ref} className={classes} aria-hidden="true">
+        <span className={`${baseClass}__circle`}>
+          <span className={`${baseClass}__dot`} />
+        </span>
+      </span>
+    );
+  },
+);
+
+RadioIndicator.displayName = 'RadioIndicator';

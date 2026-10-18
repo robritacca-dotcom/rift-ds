@@ -214,9 +214,9 @@ export const SomethingElseMarked: Story = {
     const field = canvas.getByRole('textbox', { name: 'Something else' });
     const row = field.closest('.ds-question-card__other') as HTMLElement;
     await userEvent.type(field, 'Billing');
-    await expect(row.querySelector('.ds-question-card__mark')?.textContent).toBe('check_box');
+    await expect(row.querySelector('.ds-question-card__mark')).toHaveClass('ds-checkbox--checked');
     await userEvent.clear(field);
-    await expect(row.querySelector('.ds-question-card__mark')?.textContent).toBe('check_box_outline_blank');
+    await expect(row.querySelector('.ds-question-card__mark')).not.toHaveClass('ds-checkbox--checked');
   },
 };
 

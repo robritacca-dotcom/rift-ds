@@ -181,3 +181,18 @@
   flex-direction: row;
   gap: var(--gap-500); /* 20px */
 }
+
+/* ============================================
+   INDICATOR — the box alone, inside a host
+   that is itself the control
+   ============================================ */
+
+.ds-checkbox--indicator {
+  cursor: inherit;
+}
+
+/* An interactive host's hover is the control's hover; a static row
+   (a record of an answer) never lights. */
+:is(button, [role="option"], [role="menuitemcheckbox"], [role="menuitemradio"]):hover:not(:disabled):not([aria-disabled="true"]) > .ds-checkbox--indicator:not(.ds-checkbox--checked):not(.ds-checkbox--indeterminate) .ds-checkbox__box {
+  border-color: var(--color-action-primary-bg);
+}

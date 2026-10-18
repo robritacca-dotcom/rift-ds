@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
-import { Checkbox, CheckboxGroup } from './Checkbox';
+import { Checkbox, CheckboxGroup, CheckboxIndicator } from './Checkbox';
 
 const meta = {
   title: 'Components/Checkbox',
@@ -181,4 +181,27 @@ export const GroupError: GroupStory = {
     values: [],
     direction: 'vertical',
   },
+};
+
+/** The box alone, for a row that is itself the control: the host button owns the role, state and keyboard, and its hover lights the box. */
+export const Indicator: StoryObj<typeof CheckboxIndicator> = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 8, width: 280 }}>
+      {[
+        { label: 'Mentions', checked: true },
+        { label: 'Comments', checked: false },
+      ].map((row) => (
+        <button
+          key={row.label}
+          type="button"
+          role="checkbox"
+          aria-checked={row.checked}
+          style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 12, font: 'inherit', color: 'inherit', background: 'none', border: '1px solid var(--color-bg-container-border)', borderRadius: 12, cursor: 'pointer' }}
+        >
+          {row.label}
+          <CheckboxIndicator checked={row.checked} />
+        </button>
+      ))}
+    </div>
+  ),
 };

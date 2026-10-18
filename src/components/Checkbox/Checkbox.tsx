@@ -294,3 +294,56 @@ export const CheckboxGroup = React.forwardRef<HTMLDivElement, CheckboxGroupProps
 );
 
 CheckboxGroup.displayName = 'CheckboxGroup';
+
+/* ============================================
+   CHECKBOX INDICATOR — the box alone
+   ============================================ */
+
+/** Props owned by CheckboxIndicator itself — everything else falls through to the span. */
+type CheckboxIndicatorOwnProps = {
+  /** Whether the box shows as checked */
+  checked?: boolean;
+  /** Whether the box shows the indeterminate minus */
+  indeterminate?: boolean;
+  /** Component size, matching Checkbox's */
+  size?: 'default' | 'compact';
+  /** Additional CSS classes */
+  className?: string;
+};
+
+export interface CheckboxIndicatorProps
+  extends CheckboxIndicatorOwnProps,
+    Omit<React.ComponentPropsWithoutRef<'span'>, keyof CheckboxIndicatorOwnProps> {}
+
+/**
+ * The checkbox's box with no behaviour of its own, for a row that is itself
+ * the control (a QuestionCard option, a selectable list row): the host owns
+ * the role, the state and the keyboard, and this draws the same box, check
+ * and colours as Checkbox so the mark is the system's checkbox. Hidden from
+ * assistive technology; the host announces the state.
+ */
+export const CheckboxIndicator = React.forwardRef<HTMLSpanElement, CheckboxIndicatorProps>(
+  ({ checked = false, indeterminate = false, size = 'default', className = '', ...rest }, ref) => {
+    const baseClass = 'ds-checkbox';
+    const classes = [
+      baseClass,
+      `${baseClass}--indicator`,
+      size === 'compact' ? `${baseClass}--compact` : '',
+      checked ? `${baseClass}--checked` : '',
+      indeterminate && !checked ? `${baseClass}--indeterminate` : '',
+      className,
+    ]
+      .filter(Boolean)
+      .join(' ');
+
+    return (
+      <span {...rest} ref={ref} className={classes} aria-hidden="true">
+        <span className={`${baseClass}__box`}>
+          {indeterminate && !checked ? <MinusIcon /> : <CheckIcon />}
+        </span>
+      </span>
+    );
+  },
+);
+
+CheckboxIndicator.displayName = 'CheckboxIndicator';

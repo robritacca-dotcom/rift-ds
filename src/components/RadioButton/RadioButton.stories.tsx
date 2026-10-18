@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
-import { RadioButton, RadioGroup } from './RadioButton';
+import { RadioButton, RadioGroup, RadioIndicator } from './RadioButton';
 
 /* ============================================
    SINGLE RADIO BUTTON STORIES
@@ -143,4 +143,27 @@ export const GroupError: StoryObj<typeof RadioGroup> = {
     direction: 'vertical',
     onChange: fn(),
   },
+};
+
+/** The circle alone, for a row that is itself the control: the host button owns the role, state and keyboard, and its hover lights the ring. */
+export const Indicator: StoryObj<typeof RadioIndicator> = {
+  render: () => (
+    <div role="radiogroup" aria-label="Team size" style={{ display: 'flex', flexDirection: 'column', gap: 8, width: 280 }}>
+      {[
+        { label: 'Just me', checked: false },
+        { label: '2 to 10 people', checked: true },
+      ].map((row) => (
+        <button
+          key={row.label}
+          type="button"
+          role="radio"
+          aria-checked={row.checked}
+          style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 12, font: 'inherit', color: 'inherit', background: 'none', border: '1px solid var(--color-bg-container-border)', borderRadius: 12, cursor: 'pointer' }}
+        >
+          {row.label}
+          <RadioIndicator checked={row.checked} />
+        </button>
+      ))}
+    </div>
+  ),
 };

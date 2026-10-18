@@ -95,6 +95,9 @@ export const ChatThread = React.forwardRef<HTMLDivElement, ChatThreadProps>(
     flowRef.current = flow;
     const stuck = useRef(true);
     const lastScrollTop = useRef(0);
+    /* Where the reader last was, as of the latest scroll event: the position
+       a send starts its glide from. See restoreClamp. */
+    const settledTop = useRef(0);
     const scrollToEnd = (behavior?: ScrollBehavior) => {
       const container = scrollRef.current;
       if (!container) return;
@@ -213,6 +216,21 @@ export const ChatThread = React.forwardRef<HTMLDivElement, ChatThreadProps>(
        is a layout effect so the spacer and scroll are in place before the
        appended turn ever paints — an ordinary effect lets one frame paint
        un-anchored first, which reads as a jitter on send. */
+    /* A send can clamp the scroll position inside its own commit, before
+       this effect runs. The mutation phase can force a layout partway
+       through: removing a focused element is the case that bites (a
+       QuestionCard's Send button, folded away in the same render that
+       appends the reply). The DOM is half-updated at that moment, the range
+       is briefly shorter, and a reader sitting at its very end is pulled up
+       with it. Gliding from there reads as a stutter: the conversation drops
+       a few hundred pixels, then rises. The clamp's own scroll event has not
+       fired yet, so settledTop still holds where the reader really was, and
+       the glide starts from that position instead. */
+    const restoreClamp = (container: HTMLDivElement) => {
+      const before = settledTop.current;
+      if (container.scrollTop < before - 1) container.scrollTo({ top: before, behavior: 'instant' });
+    };
+
     useLayoutEffect(() => {
       const container = scrollRef.current;
       const content = contentRef.current;
@@ -237,6 +255,7 @@ export const ChatThread = React.forwardRef<HTMLDivElement, ChatThreadProps>(
         }
         if (childCount === 0 || !anchor) return;
         stuck.current = true;
+        if (!isFirstRun) restoreClamp(container);
         // Restored transcripts open at the end instantly; a send glides.
         scrollToEnd(isFirstRun ? 'instant' : undefined);
         updateJump();
@@ -301,6 +320,8 @@ export const ChatThread = React.forwardRef<HTMLDivElement, ChatThreadProps>(
       const targetTop = target.offsetTop - paddingTop;
       anchorTop.current = targetTop;
       sizeSpacer();
+      // After sizing, so the range reaches back to where the reader was.
+      restoreClamp(container);
 
       // No behavior option: the element's CSS scroll-behavior decides, so
       // the reduced-motion guard makes this instant without any JS branch.
@@ -314,6 +335,7 @@ export const ChatThread = React.forwardRef<HTMLDivElement, ChatThreadProps>(
     /* The scrollbar shows only while scrolling is actually happening. */
     const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
       onScroll?.(e);
+      settledTop.current = e.currentTarget.scrollTop;
       if (bottomUp) {
         const container = e.currentTarget;
         const atEnd =

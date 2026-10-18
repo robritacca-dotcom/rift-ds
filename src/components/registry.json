@@ -918,6 +918,14 @@
       "client": false
     },
     {
+      "name": "QuestionCard",
+      "label": "Question card",
+      "slug": "question-card",
+      "description": "An agent's question with answers to pick: one or several, a set asked a step at a time, kept as a record once answered.",
+      "category": "ai",
+      "client": true
+    },
+    {
       "name": "Quote",
       "label": "Quote",
       "slug": "quote",

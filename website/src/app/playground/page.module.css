@@ -684,6 +684,17 @@
 
 /* The AI section's artifact pair: the panel is surface-less and fills its
    box, so the stage gives it the card a chat would. */
+/* The AI section's question card, at the width a chat column gives it,
+   with its reset under it. */
+.questionFrame {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-300);
+  width: 100%;
+  max-width: 480px;
+}
+
 .artifactFrame {
   display: flex;
   width: 100%;

@@ -1,0 +1,358 @@
+/* ============================================
+   QUESTION CARD COMPONENT
+   An agent's question with answers it can list:
+   option rows stacked full width under the
+   reply that asked, a heading and a step count
+   when there is a set, and a footer when there
+   is something to press.
+
+   No shell of its own: the card sits inside the
+   assistant's message, under the prose that
+   asked the question, so the options read as
+   part of the reply rather than a panel beside
+   it. The rows carry the structure.
+   ============================================ */
+
+.ds-question-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+  width: 100%;
+  min-width: 0;
+}
+
+/* ============================================
+   HEADER — a set's question and its count
+   ============================================ */
+
+.ds-question-card__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--gap-300);
+}
+
+.ds-question-card__prompt {
+  margin: 0;
+  font-family: var(--font-paragraph-emphasis-family);
+  font-size: var(--font-paragraph-emphasis-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-emphasis-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.ds-question-card__step {
+  flex: none;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* What kind of question it is, in words: "Choose one", "Choose one or
+   more". Quiet, and pulled up under a set's heading so the two read as
+   one block. */
+.ds-question-card__hint {
+  margin: 0;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-tertiary);
+}
+
+.ds-question-card__header + .ds-question-card__hint {
+  margin-top: calc(var(--gap-300) * -1 + var(--gap-050));
+}
+
+/* ============================================
+   OPTIONS
+   ============================================ */
+
+.ds-question-card__options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ds-question-card__item {
+  display: flex;
+  /* Rows rise in one after another, the suggestion row's arrival. */
+  animation: ds-question-card-pop var(--motion-duration-slow) var(--motion-ease-spring) backwards;
+}
+
+.ds-question-card__item:nth-child(2) {
+  animation-delay: var(--motion-duration-instant);
+}
+
+.ds-question-card__item:nth-child(3) {
+  animation-delay: calc(var(--motion-duration-instant) * 2);
+}
+
+.ds-question-card__item:nth-child(n + 4) {
+  animation-delay: calc(var(--motion-duration-instant) * 3);
+}
+
+@keyframes ds-question-card-pop {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* An open row is drawn dashed: an answer on offer, not yet given. A pick
+   turns it solid, in the strongest ink, with a filled check at its end, so
+   a chosen row reads as decided at a glance and stays readable after the
+   moment has passed. */
+.ds-question-card__option {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-300);
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: var(--padding-300) var(--padding-400);
+  border: var(--border-025) dashed var(--color-text-tertiary);
+  border-radius: var(--radius-400);
+  background: none;
+  color: var(--color-text-primary);
+  font: inherit;
+  text-align: left;
+  transition:
+    border-color var(--motion-duration-fast) var(--motion-ease-standard),
+    background-color var(--motion-duration-fast) var(--motion-ease-standard),
+    opacity var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+button.ds-question-card__option {
+  cursor: pointer;
+}
+
+button.ds-question-card__option:hover:not(:disabled) {
+  border-style: solid;
+  background-color: var(--color-bg-container-secondary);
+}
+
+button.ds-question-card__option:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+button.ds-question-card__option:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* The chosen row: a solid outline one weight heavier, taken up inside the
+   padding so the row does not grow when it is picked. */
+.ds-question-card__option--chosen,
+button.ds-question-card__option--chosen:hover {
+  border-style: solid;
+  border-color: var(--color-text-primary);
+  box-shadow: inset 0 0 0 var(--border-025) var(--color-text-primary);
+}
+
+.ds-question-card__text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--gap-050);
+  min-width: 0;
+}
+
+.ds-question-card__label {
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+  overflow-wrap: anywhere;
+}
+
+.ds-question-card__description {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-tertiary);
+}
+
+.ds-question-card__mark {
+  flex: none;
+  --icon-size: var(--icon-size-500);
+  color: var(--color-icon-secondary);
+}
+
+.ds-question-card__option--chosen .ds-question-card__mark {
+  color: var(--color-text-primary);
+}
+
+/* "Something else" reads as the way out, not one more answer. */
+.ds-question-card__option--other .ds-question-card__label {
+  color: var(--color-text-secondary);
+}
+
+/* ============================================
+   SOMETHING ELSE — the row opened into a field
+   ============================================ */
+
+.ds-question-card__other {
+  padding-block: var(--padding-150);
+  border-style: solid;
+}
+
+/* A lone question's field sends from its own button, which sits closer to
+   the edge than an option's mark; elsewhere the mark lines up with theirs. */
+.ds-question-card__other--send {
+  padding-inline-end: var(--padding-150);
+}
+
+.ds-question-card__other:focus-within {
+  border-color: var(--color-input-border-selected);
+}
+
+.ds-question-card__other-input {
+  flex: 1;
+  min-width: 0;
+  padding-block: var(--padding-150);
+  border: 0;
+  background: none;
+  color: var(--color-text-primary);
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  line-height: var(--font-paragraph-line-height);
+  outline: none;
+}
+
+.ds-question-card__other-input::placeholder {
+  color: var(--color-text-tertiary);
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+
+.ds-question-card__footer {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-200);
+}
+
+.ds-question-card__spacer {
+  flex: 1;
+}
+
+/* ============================================
+   ANSWERED and PASSED BY
+   The rows stay where they were offered. The
+   picked ones keep their mark; everything else
+   takes the system's dimmed convention, so the
+   transcript still shows what was on offer and
+   which was chosen.
+   ============================================ */
+
+.ds-question-card--answered .ds-question-card__option:not(.ds-question-card__option--chosen),
+.ds-question-card--disabled .ds-question-card__option {
+  opacity: 0.4;
+}
+
+.ds-question-card--answered .ds-question-card__options,
+.ds-question-card--disabled .ds-question-card__options {
+  animation: none;
+}
+
+.ds-question-card__note {
+  margin: 0;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-tertiary);
+}
+
+/* ============================================
+   QUESTION SUMMARY — a set's record
+   Each prompt, quiet, over its answer. The card
+   variant frames it as the record under the
+   reply that asked; plain drops the frame for a
+   surface that brings its own, the bubble that
+   sent the answers, and takes its ink from it.
+   ============================================ */
+
+.ds-question-summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+  margin: 0;
+}
+
+.ds-question-summary--card {
+  padding: var(--padding-300) var(--padding-400);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-400);
+  color: var(--color-text-primary);
+}
+
+.ds-question-summary__row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-050);
+}
+
+.ds-question-summary__prompt {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-tertiary);
+}
+
+/* On a bubble's fill the tertiary ink sits too close to the surface; the
+   secondary keeps the prompt quiet and legible. */
+.ds-question-summary--plain .ds-question-summary__prompt {
+  color: var(--color-text-secondary);
+}
+
+.ds-question-summary__answer {
+  margin: 0;
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+}
+
+/* A question left without an answer reads as quiet as the line a single
+   card prints under its rows. */
+.ds-question-summary__answer--missing {
+  color: var(--color-text-tertiary);
+}
+
+.ds-question-card__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

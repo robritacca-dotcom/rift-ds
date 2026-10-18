@@ -71,6 +71,7 @@ import { MapLegend } from "rift-ds/components/MapLegend/MapLegend";
 import { WorldMap } from "rift-ds/components/WorldMap/WorldMap";
 import { ProgressBar } from "rift-ds/components/ProgressBar/ProgressBar";
 import { PromptSuggestions } from "rift-ds/components/PromptSuggestions/PromptSuggestions";
+import { QuestionCard } from "rift-ds/components/QuestionCard/QuestionCard";
 import { Prose } from "rift-ds/components/Prose/Prose";
 import { RadioButton } from "rift-ds/components/RadioButton/RadioButton";
 import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
@@ -1122,6 +1123,25 @@ const previews: Record<string, () => ReactNode> = {
             { value: "allow", label: "Allow", variant: "primary" },
             { value: "deny", label: "Deny" },
           ]}
+        />
+      </div>
+    </>
+  ),
+  "question-card": () => (
+    <>
+      <div className={styles.scaledComponentPreview} style={{ width: "220px" }}>
+        <QuestionCard
+          questions={[
+            {
+              id: "framework",
+              prompt: "Which framework?",
+              options: [
+                { value: "next", label: "Next.js" },
+                { value: "vite", label: "Vite" },
+              ],
+            },
+          ]}
+          values={[{ questionId: "framework", values: ["next"] }]}
         />
       </div>
     </>

@@ -97,7 +97,7 @@ export function ComponentsTileScene() {
       <div className={styles.samplerControls}>
         <Button label="Primary" variant="primary" size="compact" />
         <Button label="Secondary" variant="secondary" size="compact" />
-        <ToggleSwitch checked label="Alerts" ariaLabel="Alerts" />
+        <ToggleSwitch checked label="Alerts" />
         <Badge label="Positive" variant="positive" />
         <Chip label="Filter" icon="tune" />
       </div>
@@ -629,7 +629,7 @@ function LeverPreview({ scope, full = false }: { scope: React.CSSProperties; ful
         <div className={styles.buttonRow}>
           <Button label="Publish" variant="primary" size="compact" />
           <Button label="Preview" variant="secondary" size="compact" />
-          <ToggleSwitch checked label="Live" ariaLabel="Live" size="compact" />
+          <ToggleSwitch checked label="Live" size="compact" />
         </div>
       </Panel>
     </div>

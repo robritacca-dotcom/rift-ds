@@ -7,7 +7,7 @@ import MegaNav from "../components/MegaNav/MegaNav";
 import { ExtendedBackground } from "../components/BlurBackground/BlurBackground";
 import FadeDivider from "../components/FadeDivider/FadeDivider";
 import styles from "./page.module.css";
-import HomeTemplates from "./HomeTemplates";
+import HomeBento from "@/components/HomeBento/HomeBento";
 import { FIGMA_FILE_URL, NPM_URL, REPOSITORY_URL, STORYBOOK_URL } from "@/config/brand.generated";
 import { THEME_SELECTOR_ORDER, themeSelectorTiles } from "@/lib/theme/presets";
 import { useSiteTheme } from "@/lib/theme/use-theme-overrides";
@@ -1433,8 +1433,8 @@ export default function DesignSystemLanding() {
           )}
         </section>
 
-        {/* ---------- one template, live ---------- */}
-        <HomeTemplates />
+        {/* ---------- the subtitle's points, one tile each ---------- */}
+        <HomeBento />
 
         {/* ---------- where the system lives, and what it is built on ---------- */}
         <section

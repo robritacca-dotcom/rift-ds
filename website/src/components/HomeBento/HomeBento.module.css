@@ -1,0 +1,602 @@
+/* ============================================
+   HOME BENTO — one tile per point the hero's
+   rotating subtitle makes. It holds the
+   collage's 1440px line, so its edges land
+   under the logo and the theme toggle.
+   ============================================ */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-1000);
+  max-width: 1440px;
+  margin: var(--gap-3000) auto 0;
+}
+
+/* One centred statement: the claim in the primary text colour, the
+   rest stepping back to the secondary colour at the same size. */
+.statement {
+  max-width: 860px;
+  text-align: center;
+  margin: 0;
+  font-family: var(--font-sub-display-family);
+  font-size: var(--font-sub-display-size);
+  font-weight: var(--font-heading-1-weight);
+  line-height: var(--font-sub-display-line-height);
+  letter-spacing: var(--font-sub-display-letter-spacing);
+  color: var(--color-text-primary);
+  text-wrap: balance;
+}
+
+.statement span {
+  color: var(--color-text-secondary);
+  font-weight: var(--font-sub-display-weight);
+}
+
+/* Four columns: the chat takes a two-by-two block, room for a whole
+   agent turn; templates and the playground share a row; the install
+   lines run the full width underneath as a strip. */
+.grid {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: 360px 360px 400px 260px;
+  grid-template-areas:
+    "components components chat chat"
+    "themes agents chat chat"
+    "templates templates playground playground"
+    "install install install install";
+  gap: var(--gap-400);
+}
+
+.components { grid-area: components; }
+.chat { grid-area: chat; }
+.themes { grid-area: themes; }
+.agents { grid-area: agents; }
+.install { grid-area: install; }
+.templates { grid-area: templates; }
+.playground { grid-area: playground; }
+
+/* ---------- tile content ----------
+   Scenes are pictures of the product: BentoTile makes them inert while
+   the tile is expandable. In the overlay they are live. */
+
+.sampler {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-1000);
+}
+
+.samplerStat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+}
+
+.samplerControls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap-300);
+  max-width: 320px;
+}
+
+/* A step of a looping scene, eased in when it arrives. */
+.revealed {
+  opacity: 0;
+  transform: translateY(var(--gap-200)) scale(0.98);
+  transition:
+    opacity var(--motion-duration-slow) var(--motion-ease-standard),
+    transform var(--motion-duration-deliberate) var(--motion-ease-entrance);
+}
+
+.revealed[data-on="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+.chatStack,
+.toolStack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+  width: 100%;
+  max-width: 480px;
+  margin-inline: auto;
+}
+
+.toolStack .revealed > * { box-shadow: var(--shadow-floating); }
+
+/* A conversation needs air: turns sit apart, and the composer stands
+   clear of the thread above it. */
+.chatStack { gap: var(--gap-400); }
+.chatStack > :last-child { margin-top: var(--gap-300); }
+
+.themeStack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-500);
+}
+
+.swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-200);
+}
+
+.swatch {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-pill);
+}
+
+/* ---------- overlay showcases ---------- */
+
+.workbench {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-500);
+  width: 100%;
+  max-width: 380px;
+  box-shadow: var(--shadow-floating);
+}
+
+.workbenchHead,
+.workbenchFoot,
+.panelBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-300);
+}
+
+.workbenchFoot {
+  padding-top: var(--gap-400);
+  border-top: var(--border-025) solid var(--color-divider);
+}
+
+.themeDash {
+  display: grid;
+  grid-template-columns: minmax(200px, 0.8fr) minmax(0, 1.6fr);
+  align-items: stretch;
+  gap: var(--gap-400);
+  width: 100%;
+}
+
+.themeDashStat,
+.themeDashChart {
+  box-shadow: var(--shadow-floating);
+}
+
+.themeDashStat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-400);
+}
+
+.panelBar { margin-bottom: var(--gap-300); }
+
+.buttonRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-200);
+}
+
+.snippets {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-400);
+  width: 100%;
+  max-width: 560px;
+}
+
+.snippetLabel {
+  margin: var(--gap-200) 0 0;
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  color: var(--color-text-primary);
+}
+
+.snippetNote {
+  margin: 0;
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+}
+
+.picker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-100);
+}
+
+.pickerRow {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-300);
+  width: 100%;
+  padding: var(--padding-200) var(--padding-300);
+  border: var(--border-025) solid transparent;
+  border-radius: var(--radius-300);
+  background: transparent;
+  color: var(--color-text-primary);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.pickerRow:hover { background: var(--color-bg-container-primary); }
+
+.pickerRow[aria-pressed="true"] {
+  background: var(--color-bg-container-primary);
+  border-color: var(--color-action-primary-bg);
+}
+
+.pickerText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.pickerName {
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-title-body-weight);
+}
+
+.pickerFont {
+  font-size: var(--font-paragraph-sm-size);
+  color: var(--color-text-secondary);
+}
+
+
+/* Themes showcase: a small app, two rows of panels. */
+.themeDashForm,
+.themeDashTeam {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-400);
+  box-shadow: var(--shadow-floating);
+}
+
+.badgeRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-200);
+}
+
+/* Templates tile: a members widget beside a console. */
+.console {
+  display: grid;
+  grid-template-columns: minmax(200px, 0.7fr) minmax(0, 1.6fr);
+  align-items: start;
+  gap: var(--gap-400);
+  width: 100%;
+}
+
+.consoleSide,
+.consoleMain { box-shadow: var(--shadow-floating); }
+
+.consoleMain {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-400);
+}
+
+@container ds-bento-tile (max-width: 560px) {
+  .console { grid-template-columns: minmax(0, 1fr); }
+  .consoleSide { display: none; }
+}
+
+/* Templates showcase: the live frame under its bar. */
+.templateStage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-400);
+  width: 100%;
+}
+
+.templateBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-300);
+  width: 100%;
+}
+
+.templateName {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-100);
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  color: var(--color-text-primary);
+  text-decoration: none;
+}
+
+.templateName :global(.material-symbols-rounded) {
+  --icon-size: var(--icon-size-500);
+  font-size: var(--icon-size);
+}
+
+.templateName:hover { text-decoration: underline; }
+
+/* Playground: an inspector rail beside the panel it restyles. */
+.lever {
+  display: grid;
+  grid-template-columns: minmax(270px, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--gap-500);
+  width: 100%;
+}
+
+.leverRail {
+  padding: var(--padding-300);
+  border-radius: var(--radius-300);
+  background: var(--color-bg-container-primary);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  box-shadow: var(--shadow-floating);
+}
+
+.leverCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-400);
+  box-shadow: var(--shadow-floating);
+}
+
+/* The levers ease between positions. */
+.leverPreview :global(.ds-button),
+.leverPreview :global(.ds-input),
+.leverPreview :global(.ds-panel) {
+  transition:
+    background-color var(--motion-duration-slower) var(--motion-ease-standard),
+    border-radius var(--motion-duration-slower) var(--motion-ease-standard),
+    box-shadow var(--motion-duration-slower) var(--motion-ease-standard);
+}
+
+@container ds-bento-tile (max-width: 560px) {
+  .lever { grid-template-columns: minmax(0, 1fr); }
+  .leverRail { display: none; }
+}
+
+/* ---------- overlay layout ---------- */
+
+.detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-2000);
+}
+
+/* The head shares the showcase's columns, so the checklist starts where
+   the side panel does and its text lines up with the panel's content. */
+.detailHead,
+.showcase {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  column-gap: var(--gap-400);
+}
+
+.detailHead {
+  align-items: start;
+  row-gap: var(--gap-1000);
+}
+
+.detailHead > div { padding-right: var(--gap-1000); }
+
+.detailLede {
+  margin: 0 0 var(--gap-1000);
+  font-size: var(--font-paragraph-size);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-secondary);
+  text-wrap: pretty;
+}
+
+.detailCtas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-300);
+}
+
+.checks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-400);
+  margin: var(--gap-200) 0 0;
+  padding: 0 var(--padding-500);
+  list-style: none;
+}
+
+.checks li {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-300);
+}
+
+.check {
+  --icon-size: var(--icon-size-500);
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--icon-size-800);
+  height: var(--icon-size-800);
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--color-status-positive-fg) 16%, transparent);
+  color: var(--color-status-positive-fg);
+  font-size: var(--icon-size);
+}
+
+.showcase { row-gap: var(--gap-400); }
+
+.showMain,
+.showSide {
+  position: relative;
+  min-height: 460px;
+  border-radius: var(--radius-300);
+  background: var(--color-bg-container-secondary);
+}
+
+/* The primary surface, so a user bubble (drawn on the secondary one)
+   still reads as a bubble. */
+.showMain {
+  background: var(--color-bg-container-primary);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  display: grid;
+  place-items: center;
+  padding: var(--padding-1000);
+}
+
+.showSide {
+  padding: var(--padding-500);
+  overflow: hidden;
+  background:
+    radial-gradient(120% 70% at 100% 100%, color-mix(in srgb, var(--color-ambient-3) 22%, transparent), transparent 70%),
+    radial-gradient(90% 60% at 0% 100%, color-mix(in srgb, var(--color-ambient-5) 16%, transparent), transparent 70%),
+    var(--color-bg-container-secondary);
+}
+
+.sideTitle {
+  margin: 0 0 var(--gap-400);
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+}
+
+.facts,
+.factsStacked {
+  display: grid;
+  margin: 0;
+  padding: var(--padding-200) var(--padding-400);
+  border-radius: var(--radius-300);
+  background: var(--color-bg-container-primary);
+  box-shadow: var(--shadow-floating);
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+}
+
+.facts { grid-template-columns: auto 1fr; }
+
+.facts dt,
+.facts dd {
+  margin: 0;
+  padding: var(--padding-300) 0;
+  border-top: var(--border-025) solid var(--color-divider);
+}
+
+.facts dt:first-of-type,
+.facts dt:first-of-type + dd { border-top: 0; }
+.facts dt { color: var(--color-text-secondary); padding-right: var(--gap-400); }
+.facts dd { text-align: right; font-variant-numeric: tabular-nums; }
+
+.factsStacked dt {
+  margin: 0;
+  padding-top: var(--padding-300);
+  border-top: var(--border-025) solid var(--color-divider);
+  font-family: var(--font-family-code);
+  color: var(--color-text-primary);
+}
+
+.factsStacked dt:first-of-type { border-top: 0; }
+
+.factsStacked dd {
+  margin: var(--gap-100) 0 0;
+  padding-bottom: var(--padding-300);
+  color: var(--color-text-secondary);
+}
+
+/* The same columns again: the first two features split the showcase's
+   width, the third sits under the side panel, inset like its content. */
+.features {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 0.8fr) minmax(0, 1fr);
+  column-gap: var(--gap-400);
+  row-gap: var(--gap-500);
+}
+
+.features > * { padding-right: var(--gap-1000); }
+.features > :nth-child(3) { padding-inline: var(--padding-500); }
+
+.features p {
+  margin: var(--gap-400) 0 0;
+  color: var(--color-text-secondary);
+  line-height: var(--font-paragraph-line-height);
+}
+
+.featureIcon {
+  --icon-size: var(--icon-size-600);
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-200);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  background: var(--color-bg-container-secondary);
+  color: var(--color-text-primary);
+  font-size: var(--icon-size);
+}
+
+/* ---------- narrower windows ---------- */
+
+@media (max-width: 959px) {
+  .detailHead,
+  .showcase,
+  .themeDash,
+  .lever { grid-template-columns: minmax(0, 1fr); }
+  .showMain, .showSide { min-height: 0; }
+  .detailHead > div { padding-right: 0; }
+  .checks { padding: 0; }
+
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: none;
+    grid-auto-rows: 340px;
+    grid-template-areas:
+      "components components"
+      "chat chat"
+      "chat chat"
+      "themes agents"
+      "templates templates"
+      "playground playground"
+      "install install";
+  }
+}
+
+@media (max-width: 600px) {
+  /* A phone preview in a landscape box shrinks to a sliver; turn it portrait. */
+  .phoneShell { aspect-ratio: 3 / 4; }
+
+  .features { grid-template-columns: minmax(0, 1fr); gap: var(--gap-500); }
+  .features > *, .features > :nth-child(3) { padding-inline: 0; }
+  .showMain { padding: var(--padding-400); }
+
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+    grid-auto-rows: auto;
+    grid-template-areas:
+      "components"
+      "chat"
+      "themes"
+      "agents"
+      "templates"
+      "playground"
+      "install";
+  }
+
+  .grid > * {
+    min-height: 320px;
+  }
+
+  .chat {
+    min-height: 640px;
+  }
+}

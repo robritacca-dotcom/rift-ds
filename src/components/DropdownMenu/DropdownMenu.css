@@ -293,19 +293,19 @@
 
 /* ============================================
    DESTRUCTIVE ITEM
-   Red text/icon for dangerous actions (delete, remove…)
+   The destructive colour on text and icon, for dangerous actions (delete, remove…)
    ============================================ */
 
 .ds-dropdown-menu__item--destructive {
-  color: var(--color-core-accent-coral);
+  color: var(--color-action-destructive-text-secondary);
 }
 
 .ds-dropdown-menu__item--destructive .ds-dropdown-menu__item-icon {
-  color: var(--color-core-accent-coral);
+  color: var(--color-action-destructive-text-secondary);
 }
 
 .ds-dropdown-menu__item--destructive .ds-dropdown-menu__shortcut {
-  color: var(--color-core-accent-coral);
+  color: var(--color-action-destructive-text-secondary);
   opacity: 0.7;
 }
 

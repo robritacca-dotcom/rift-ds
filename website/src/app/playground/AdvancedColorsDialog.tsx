@@ -95,7 +95,7 @@ export default function AdvancedColorsDialog({
               max={20}
               step={1}
               onValueChange={(v) => onChange({ ...state, hueShift: v })}
-              ariaLabel="Hue nudge, all ramps"
+              aria-label="Hue nudge, all ramps"
             />
             <span className={styles.sliderValue}>{state.hueShift}°</span>
           </div>
@@ -107,7 +107,7 @@ export default function AdvancedColorsDialog({
               max={200}
               step={5}
               onValueChange={(v) => onChange({ ...state, satScale: v })}
-              ariaLabel="Saturation, all ramps"
+              aria-label="Saturation, all ramps"
             />
             <span className={styles.sliderValue}>{state.satScale}%</span>
           </div>
@@ -219,7 +219,7 @@ export default function AdvancedColorsDialog({
           })}
           <p className={styles.controlNote}>
             The accents colour the ambient background blobs and chart series 2–7
-            together, never semantic status.
+            together. Coral is also the danger colour on destructive buttons.
           </p>
         </div>
       </div>

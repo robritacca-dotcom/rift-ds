@@ -164,7 +164,7 @@
    DEFAULT — the Rift bar
    A full-width bar on the page ground with a
    hairline above; the selected destination is
-   the teal selection of a mutually exclusive set.
+   the action-colour selection of a mutually exclusive set.
    ============================================ */
 .ds-bottom-nav--default {
   background-color: var(--color-bg-page-primary);

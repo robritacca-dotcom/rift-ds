@@ -2,7 +2,7 @@
    FILTER BAR COMPONENT
    A row of filter chips, each opening a
    popover listbox. The chips share Chip's pill
-   language; active state uses the teal fill
+   language; active state uses the action-colour fill
    convention from Chip's selected state.
    ============================================ */
 
@@ -56,7 +56,7 @@
   background-color: var(--color-action-passive-bg-active);
 }
 
-/* Active — teal fill, matching Chip's selected convention */
+/* Active — action-colour fill, matching Chip's selected convention */
 
 .ds-filter-bar__chip--active {
   background-color: var(--color-action-primary-bg);

@@ -256,6 +256,23 @@
       "recharts": true
     },
     {
+      "name": "BentoTile",
+      "label": "Bento tile",
+      "slug": "bento-tile",
+      "description": "A feature tile for a bento grid, with a safe content area, a shader pair, solid or transparent background, and an overlay it opens into.",
+      "category": "data-display",
+      "client": true
+    },
+    {
+      "name": "BentoTileArt",
+      "label": "Bento tile art",
+      "slug": "bento-tile-art",
+      "description": "The texture half of a bento tile's shader pair: six fine patterns in one vocabulary, fading in from a corner.",
+      "category": "effects",
+      "client": false,
+      "folder": "BentoTile"
+    },
+    {
       "name": "BottomNav",
       "label": "Bottom nav",
       "slug": "bottom-nav",

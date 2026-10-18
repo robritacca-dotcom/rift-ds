@@ -3,9 +3,11 @@
 /**
  * The live UI inside each banner, composed only from library components:
  * no hand-built mocks. Each scene is a small product moment that moves
- * quietly on a loop, and fills its box, so the same scene renders in the
- * card and, larger, in the overlay. The textures underneath (art.tsx) are
- * page art, not UI.
+ * quietly on a loop, laid out in flow so BentoTile can seat it in its safe
+ * area, and sized so every component inside keeps its natural width: a
+ * scene may fade at the tile's edge, but nothing inside it truncates. The
+ * same scene renders in the tile and, larger, in the overlay. The textures
+ * behind them are BentoTile's background and its BentoTileArt pattern.
  */
 
 import React, { useEffect, useMemo, useState, useSyncExternalStore } from "react";
@@ -21,7 +23,6 @@ import { StreamingText } from "rift-ds/components/StreamingText/StreamingText";
 import { PromptSuggestions } from "rift-ds/components/PromptSuggestions/PromptSuggestions";
 import { Composer } from "rift-ds/components/Composer/Composer";
 import { LegendTile } from "rift-ds/components/LegendTile/LegendTile";
-import { Globe, type GlobeArc, type GlobePoint } from "rift-ds/components/Globe/Globe";
 import { ToolCall } from "rift-ds/components/ToolCall/ToolCall";
 import { Widget } from "rift-ds/components/Widget/Widget";
 import { Avatar } from "rift-ds/components/Avatar/Avatar";
@@ -34,7 +35,6 @@ import { BarChart } from "rift-ds/components/Chart/BarChart";
 import { PieChart } from "rift-ds/components/Chart/PieChart";
 import { demoAvatar1, demoAvatar2, demoAvatar3 } from "rift-ds/components/Avatar/demoAvatars";
 import { TOKEN_COUNT, TOKEN_COUNTS } from "rift-ds/tokens/registry";
-import { ParticleHalo, ShaderWash, WASHES } from "./art";
 import styles from "./Bento.module.css";
 
 const REDUCED = "(prefers-reduced-motion: reduce)";
@@ -99,8 +99,11 @@ export function ThemeScene() {
   }, []);
 
   return (
-    <div className={styles.scene} style={scope}>
-      <ShaderWash className={styles.washSweep} {...WASHES.sweep} fallback="linear-gradient(120deg, transparent 40%, var(--color-core-accent-amber), var(--color-core-accent-violet))" />
+    <div className={`${styles.scene} ${styles.themeScene}`} style={scope}>
+      <Panel className={`${styles.place} ${styles.themeStat}`}>
+        <Stat label="Monthly revenue" value="$48,210" delta="+12.4%" trend="up" />
+        <Sparkline data={data.map((d) => d.revenue)} variant="area" tone="accent" showDot width={200} height={56} label="Revenue, last ten months" />
+      </Panel>
 
       <Panel className={`${styles.place} ${styles.themeChart}`}>
         <div className={styles.panelBar}>
@@ -134,11 +137,6 @@ export function ThemeScene() {
           <Button label={`Apply ${accent.name}`} size="compact" />
         </div>
       </Panel>
-
-      <Panel className={`${styles.place} ${styles.themeStat}`}>
-        <Stat label="Monthly revenue" value="$48,210" delta="+12.4%" trend="up" />
-        <Sparkline data={data.map((d) => d.revenue)} variant="area" tone="accent" showDot width={200} height={56} label="Revenue, last ten months" />
-      </Panel>
     </div>
   );
 }
@@ -156,9 +154,8 @@ export function UsageScene() {
   }, [step]);
 
   return (
-    <div className={styles.scene}>
-      <ShaderWash className={styles.washRise} {...WASHES.rise} fallback="linear-gradient(to bottom, transparent 30%, var(--color-core-accent-violet))" />
-      <div className={`${styles.place} ${styles.usageStack}`}>
+    <div className={`${styles.scene} ${styles.stack}`}>
+      <div className={styles.stackInner}>
         <UsageCard
           title="Pro plan"
           subtitle="Billed monthly"
@@ -175,7 +172,7 @@ export function UsageScene() {
           yKey="tokens"
           dataLabel="Tokens"
           barColor="var(--color-chart-series-5)"
-          height={150}
+          height={120}
         />
       </div>
     </div>
@@ -195,9 +192,8 @@ export function ChatScene() {
   const step = useStep(5, 2200);
   const streaming = step === 2;
   return (
-    <div className={styles.scene}>
-      <ParticleHalo />
-      <div className={`${styles.place} ${styles.chatStack}`}>
+    <div className={`${styles.scene} ${styles.stack}`}>
+      <div className={`${styles.stackInner} ${styles.chatStack}`}>
         <div className={styles.revealed} data-on={step >= 1}>
           <ChatMessage role="user" size="compact">How do I add a chat to my docs site?</ChatMessage>
         </div>
@@ -243,9 +239,8 @@ export function TokensScene() {
     { name: "Other", value: rest, color: "var(--color-chart-series-7)" },
   ];
   return (
-    <div className={styles.scene}>
-      <ShaderWash className={styles.washFoil} {...WASHES.foil} fallback="radial-gradient(80% 60% at 50% 100%, var(--color-core-accent-coral), transparent)" />
-      <div className={`${styles.place} ${styles.tokenStack}`}>
+    <div className={`${styles.scene} ${styles.stack}`}>
+      <div className={styles.stackInner}>
         <PieChart
           title="Semantic tokens"
           subtitle="Read from the registry at build"
@@ -274,40 +269,20 @@ export function TokensScene() {
 
 /* -------------------------------------------------------------- mcp */
 
-const PLACES: GlobePoint[] = [
-  { id: "lis", lat: 38.7, lng: -9.1, label: "Lisbon" },
-  { id: "nyc", lat: 40.7, lng: -74, label: "New York" },
-  { id: "tor", lat: 43.7, lng: -79.4, label: "Toronto" },
-  { id: "ber", lat: 52.5, lng: 13.4, label: "Berlin" },
-  { id: "lag", lat: 6.5, lng: 3.4, label: "Lagos" },
-  { id: "sao", lat: -23.5, lng: -46.6, label: "São Paulo" },
-];
-const ROUTES: GlobeArc[] = [
-  { from: "nyc", to: "lis" },
-  { from: "tor", to: "ber" },
-  { from: "sao", to: "lag" },
-];
-const TOOLS = [
-  { name: "get_component", summary: "Button: props and usage" },
-  { name: "list_tokens", summary: "Colour: semantic roles" },
-  { name: "get_setup", summary: "Next.js install steps" },
-];
+const TOOLS = [{ name: "get_component" }, { name: "list_tokens" }, { name: "get_setup" }];
 
-/** A turning globe, with tool calls resolving one after another beside it. */
+/** Tool calls resolving one after another. */
 export function McpScene() {
   const step = useStep(TOOLS.length * 2 + 1, 1300);
   const at = Math.floor(step / 2);
   return (
-    <div className={styles.scene}>
-      <div className={styles.globeWrap}>
-        <Globe points={PLACES} arcs={ROUTES} autoRotate={6} defaultRotation={[30, -18]} interactive={false} label="A globe with arcs between six cities" />
-      </div>
-      <div className={`${styles.place} ${styles.toolStack}`}>
+    <div className={`${styles.scene} ${styles.stack}`}>
+      <div className={styles.toolStack}>
         {TOOLS.map((t, i) => {
           const status = i < at ? "success" : i === at ? (step % 2 ? "success" : "running") : "pending";
           return (
             <div key={t.name} className={styles.revealed} data-on={i <= at}>
-              <ToolCall name={t.name} status={status} summary={t.summary} duration={status === "success" ? `${120 + i * 40}ms` : undefined} />
+              <ToolCall name={t.name} status={status} duration={status === "success" ? `${120 + i * 40}ms` : undefined} />
             </div>
           );
         })}
@@ -322,8 +297,6 @@ const TEAMS = [
   ["Northwind", "Design", "12", "Active"],
   ["Halcyon", "Payroll", "48", "Active"],
   ["Meridian", "Support", "9", "Review"],
-  ["Lumen", "Growth", "23", "Active"],
-  ["Basalt", "Platform", "31", "Active"],
 ];
 
 /** Twenty weeks of activity, seeded so it is the same on every visit. */
@@ -344,9 +317,17 @@ export function TemplatesScene() {
   const step = useStep(TEAMS.length, 1500);
   const days = useMemo(() => activity(), []);
   return (
-    <div className={styles.scene}>
-      <div className={styles.hairlines} aria-hidden="true" />
-      <ShaderWash className={styles.washCorner} {...WASHES.rise} fallback="radial-gradient(60% 80% at 0% 100%, var(--color-core-accent-violet), transparent)" />
+    <div className={`${styles.scene} ${styles.templatesScene}`}>
+      <Widget title="Members" count={48} className={`${styles.place} ${styles.templatesSide}`}>
+        <AvatarGroup max={4} size="md">
+          <Avatar src={demoAvatar1} name="Ada Moreno" />
+          <Avatar src={demoAvatar2} name="Kofi Mensah" />
+          <Avatar src={demoAvatar3} name="Ines Duarte" />
+          <Avatar name="Sam Okafor" />
+          <Avatar name="Lee Park" />
+        </AvatarGroup>
+        <Stat label="Active this week" value="41" delta="+6" trend="up" />
+      </Widget>
 
       <Panel className={`${styles.place} ${styles.templatesMain}`}>
         <ContributionGraph bare days={days} title="Team activity" showMonthLabels />
@@ -369,17 +350,6 @@ export function TemplatesScene() {
           }))}
         />
       </Panel>
-
-      <Widget title="Members" count={48} className={`${styles.place} ${styles.templatesSide}`}>
-        <AvatarGroup max={4} size="md">
-          <Avatar src={demoAvatar1} name="Ada Moreno" />
-          <Avatar src={demoAvatar2} name="Kofi Mensah" />
-          <Avatar src={demoAvatar3} name="Ines Duarte" />
-          <Avatar name="Sam Okafor" />
-          <Avatar name="Lee Park" />
-        </AvatarGroup>
-        <Stat label="Active this week" value="41" delta="+6" trend="up" />
-      </Widget>
     </div>
   );
 }

@@ -12,6 +12,7 @@ import { BottomNav } from "rift-ds/components/BottomNav/BottomNav";
 import { TopAppBar } from "rift-ds/components/TopAppBar/TopAppBar";
 import Image from "next/image";
 import { AgentStatus } from "rift-ds/components/AgentStatus/AgentStatus";
+import { BentoTileArt } from "rift-ds/components/BentoTile/BentoTileArt";
 import { PixelAvatar } from "rift-ds/components/PixelAvatar/PixelAvatar";
 import { Widget, WidgetRow } from "rift-ds/components/Widget/Widget";
 import { AnimatedNumber } from "rift-ds/components/AnimatedNumber/AnimatedNumber";
@@ -363,6 +364,26 @@ const previews: Record<string, () => ReactNode> = {
     <>
       <div style={{ width: "210px" }}>
         <Banner variant="info" title="v2 is live.">Read the notes.</Banner>
+      </div>
+    </>
+  ),
+  "bento-tile": () => (
+    <>
+      {/* A miniature of the tile with its shader pair: the wash drawn as a
+          plain corner gradient, so the index runs no WebGL for it, under the
+          real texture layer. */}
+      <div aria-hidden="true" style={{ position: "relative", width: "170px", height: "100px", overflow: "hidden", borderRadius: "12px", border: "1px solid var(--color-bg-container-border)", background: "var(--color-bg-container-primary)" }}>
+        <div style={{ position: "absolute", inset: 0, opacity: 0.5, background: "radial-gradient(80% 110% at 0% 100%, var(--color-ambient-3), transparent 65%)" }} />
+        <BentoTileArt pattern="rings" style={{ ["--_h1" as string]: "var(--color-ambient-3)" }} />
+        <span style={{ position: "absolute", top: "12px", left: "12px", width: "70px", height: "8px", borderRadius: "4px", background: "var(--color-text-primary)", opacity: 0.7 }} />
+        <span style={{ position: "absolute", top: "10px", right: "10px", width: "14px", height: "14px", borderRadius: "999px", border: "1px solid var(--color-bg-container-border)" }} />
+      </div>
+    </>
+  ),
+  "bento-tile-art": () => (
+    <>
+      <div aria-hidden="true" style={{ position: "relative", width: "170px", height: "100px", overflow: "hidden", borderRadius: "12px", border: "1px solid var(--color-bg-container-border)", background: "var(--color-bg-container-primary)" }}>
+        <BentoTileArt pattern="rays" />
       </div>
     </>
   ),

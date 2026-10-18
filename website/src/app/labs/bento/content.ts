@@ -5,7 +5,15 @@
  */
 
 import type React from "react";
-import { ChatScene, McpScene, TemplatesScene, ThemeScene, TokensScene, UsageScene } from "./scenes";
+import type { BentoTileProps } from "rift-ds/components/BentoTile/BentoTile";
+import {
+  ChatScene,
+  McpScene,
+  TemplatesScene,
+  ThemeScene,
+  TokensScene,
+  UsageScene,
+} from "./scenes";
 
 export interface Banner {
   id: string;
@@ -13,6 +21,8 @@ export interface Banner {
   span: 1 | 2 | 3;
   title: string;
   Scene: React.ComponentType;
+  /** How the tile is dressed: BentoTile's own options, passed straight through. */
+  tile: Pick<BentoTileProps, "background" | "align">;
   lede: string;
   points: string[];
   primary: { label: string; href: string };
@@ -28,6 +38,7 @@ export const BANNERS: Banner[] = [
     span: 2,
     title: "Re-theme every screen with one attribute",
     Scene: ThemeScene,
+    tile: { background: "shader" },
     lede: "Every preset is a complete look, light and dark, shipped as plain CSS. Set data-brand on the root and the whole product follows, with no runtime JavaScript.",
     points: [
       "Swap the whole look from a single attribute",
@@ -56,6 +67,7 @@ export const BANNERS: Banner[] = [
     span: 1,
     title: "Charts that wear the theme",
     Scene: UsageScene,
+    tile: { background: "shader", align: "start" },
     lede: "The series palette is built from tokens, so every chart re-colours with the preset and the mode, and the action colour always leads.",
     points: [
       "Line, bar, area, pie, radar and more",
@@ -83,6 +95,7 @@ export const BANNERS: Banner[] = [
     span: 1,
     title: "Add an AI chat with one command",
     Scene: ChatScene,
+    tile: { background: "solid", align: "end" },
     lede: "npx rift-ds init chat scaffolds the routes, the mount and an env example, and never overwrites a file you already have. Bring a key and the widget is live.",
     points: [
       "Docks beside the page on wide screens",
@@ -111,6 +124,7 @@ export const BANNERS: Banner[] = [
     span: 1,
     title: "Three tiers, never skipped",
     Scene: TokensScene,
+    tile: { background: "shader", align: "start" },
     lede: "Primitives hold the raw values, semantic tokens give them roles, and components only ever read roles. Change a primitive and it cascades everywhere.",
     points: [
       "Components never reference a raw value",
@@ -137,6 +151,7 @@ export const BANNERS: Banner[] = [
     span: 1,
     title: "Give your agent the real API",
     Scene: McpScene,
+    tile: { background: "solid", align: "start" },
     lede: "A public MCP endpoint serves every component's props, the token registry and install setup. Your coding agent reads the contract instead of guessing it.",
     points: [
       "No auth, just one URL",
@@ -165,6 +180,7 @@ export const BANNERS: Banner[] = [
     span: 3,
     title: "Complete screens, from the system alone",
     Scene: TemplatesScene,
+    tile: { background: "shader" },
     lede: "Dashboards, consoles, calendars and chat homes, each built only from the library's components and tokens. Open one, re-theme it, take it apart.",
     points: [
       "Every screen is built from shipped parts",

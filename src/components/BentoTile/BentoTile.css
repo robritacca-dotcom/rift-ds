@@ -1,0 +1,526 @@
+/* BentoTile. Colours, spaces, radii and type are semantic tokens. The
+   consumer hooks are --ds-bento-tile-inset (the safe area around the
+   content), --ds-bento-tile-fade (how far an overflowing edge fades),
+   --ds-bento-tile-shader-opacity (the shader pair's strength, wash and
+   texture together) and
+   --ds-bento-tile-panel-width (the open overlay's width). */
+
+/* ------------------------------------------------------------- base */
+
+/* No overflow clip on the tile itself: the surface and the body clip
+   instead, each to the radius it needs. */
+.ds-bento-tile {
+  --ds-bento-tile-radius: var(--radius-400);
+  --_inset: var(--ds-bento-tile-inset, var(--padding-500));
+  --_fade: var(--ds-bento-tile-fade, var(--gap-1000));
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  min-width: 0;
+  height: 100%;
+  border-radius: var(--ds-bento-tile-radius);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-body);
+  transition: border-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+/* ------------------------------------------------------- backgrounds */
+
+.ds-bento-tile--solid,
+.ds-bento-tile--shader {
+  background: var(--color-bg-container-primary);
+}
+
+.ds-bento-tile--transparent {
+  background: transparent;
+}
+
+/* The shader highlights: a set of six, one per ambient token, each led by
+   its own slot with its two neighbours under it, so tiles in a grid read
+   as a set told apart by colour. The default composition samples these
+   three tile-local properties (ShaderField reads colours through the
+   canvas's computed style, so CSS can hand each tile its own). Tiles
+   rotate through the set by position; `highlight` pins one, and is
+   written after the rotation so it wins at equal specificity. */
+.ds-bento-tile:nth-child(6n + 1) {
+  --_h1: var(--color-ambient-1); --_h2: var(--color-ambient-2); --_h3: var(--color-ambient-6);
+}
+.ds-bento-tile:nth-child(6n + 2) {
+  --_h1: var(--color-ambient-2); --_h2: var(--color-ambient-3); --_h3: var(--color-ambient-1);
+}
+.ds-bento-tile:nth-child(6n + 3) {
+  --_h1: var(--color-ambient-3); --_h2: var(--color-ambient-4); --_h3: var(--color-ambient-2);
+}
+.ds-bento-tile:nth-child(6n + 4) {
+  --_h1: var(--color-ambient-4); --_h2: var(--color-ambient-5); --_h3: var(--color-ambient-3);
+}
+.ds-bento-tile:nth-child(6n + 5) {
+  --_h1: var(--color-ambient-5); --_h2: var(--color-ambient-6); --_h3: var(--color-ambient-4);
+}
+.ds-bento-tile:nth-child(6n + 6) {
+  --_h1: var(--color-ambient-6); --_h2: var(--color-ambient-1); --_h3: var(--color-ambient-5);
+}
+
+.ds-bento-tile[data-highlight="1"] {
+  --_h1: var(--color-ambient-1); --_h2: var(--color-ambient-2); --_h3: var(--color-ambient-6);
+}
+.ds-bento-tile[data-highlight="2"] {
+  --_h1: var(--color-ambient-2); --_h2: var(--color-ambient-3); --_h3: var(--color-ambient-1);
+}
+.ds-bento-tile[data-highlight="3"] {
+  --_h1: var(--color-ambient-3); --_h2: var(--color-ambient-4); --_h3: var(--color-ambient-2);
+}
+.ds-bento-tile[data-highlight="4"] {
+  --_h1: var(--color-ambient-4); --_h2: var(--color-ambient-5); --_h3: var(--color-ambient-3);
+}
+.ds-bento-tile[data-highlight="5"] {
+  --_h1: var(--color-ambient-5); --_h2: var(--color-ambient-6); --_h3: var(--color-ambient-4);
+}
+.ds-bento-tile[data-highlight="6"] {
+  --_h1: var(--color-ambient-6); --_h2: var(--color-ambient-1); --_h3: var(--color-ambient-5);
+}
+
+/* The surface holds the background layers, clipped to the inner radius. */
+.ds-bento-tile__surface {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  border-radius: calc(var(--ds-bento-tile-radius) - var(--border-025));
+  pointer-events: none;
+}
+
+.ds-bento-tile__shader,
+.ds-bento-tile__shader-fallback,
+.ds-bento-tile__shader-field {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* At full strength the pair competes with the content over it, so it sits
+   at half by default; --ds-bento-tile-shader-opacity tunes the wash and its
+   texture together, per tile. */
+.ds-bento-tile__shader {
+  opacity: var(--ds-bento-tile-shader-opacity, 0.5);
+}
+
+.ds-bento-tile__shader-fallback {
+  opacity: 0.5;
+}
+
+/* The field paints over its fallback once it resolves; ShaderField reports
+   its status on the canvas, and an active field hides the gradient under it. */
+.ds-bento-tile__shader:has(.ds-bento-tile__shader-field[data-status="active"]) .ds-bento-tile__shader-fallback {
+  opacity: 0;
+}
+
+/* The wash always pools in the bottom-left corner, under its texture. */
+.ds-bento-tile__shader {
+  mask: radial-gradient(80% 110% at 0% 100%, #000 10%, transparent 65%);
+}
+
+/* -------------------------------------------------------------- art */
+
+/* The texture half of each pair: six patterns in one vocabulary. Every one
+   is drawn in 1px marks of the tile's highlight colour at the same quiet
+   strength, eases in and out around the bottom-left corner over the shader
+   wash, so pattern and light read as one texture, and drifts slowly along
+   its own repeat (rings and rays hold still). Only the geometry differs.
+   Pattern sizes are drawing geometry, not spacing, so they are written in
+   px.
+
+   Pair N is ambient colour N with pattern N. Inside a tile the pattern
+   follows the tile's pair: by position, or pinned by data-highlight, which
+   is written one step more specific so a pin always wins. data-pattern on
+   the layer itself pins a pattern for BentoTileArt used on its own. Every
+   pattern rule sets the same complete set of properties, so whichever rule
+   wins, nothing of another pattern leaks through. */
+.ds-bento-tile-art {
+  /* Full-strength ink, scaled by the pair's shared opacity below: at the
+     default half strength it lands at 22.5%. */
+  /* Inside a tile the ink is the pair's highlight. On its own there is no
+     pair and no wash under it, so it takes a neutral ink that reads on
+     either theme's surface. */
+  --_ink: color-mix(in srgb, var(--_h1, var(--color-text-tertiary)) 45%, transparent);
+  /* The fade: nothing at the very corner, where rings and rays converge
+     and would otherwise be densest, swelling in and fading out again
+     toward the middle, with the bottom and left edges eased in as well so
+     no mark meets the border hard. Three layers, intersected. */
+  --_edge: var(--gap-1000);
+  --_fade:
+    radial-gradient(120% 100% at 0% 100%, transparent 0%, #000 28%, transparent 70%),
+    linear-gradient(to top, transparent, #000 var(--_edge)),
+    linear-gradient(to right, transparent, #000 var(--_edge));
+
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* The texture and its wash are one pair, so one hook sets both strengths. */
+  opacity: var(--ds-bento-tile-shader-opacity, 0.5);
+  /* One keyframe drives every pattern; a still pattern drifts by zero. */
+  animation: ds-bento-art-drift 48s linear infinite; /* ds-allow(motion): decorative drift, far slower than any duration token */
+}
+
+.ds-bento-tile-art,
+.ds-bento-tile-art[data-pattern="dots"],
+.ds-bento-tile:nth-child(6n + 1) .ds-bento-tile-art:not([data-pattern]),
+.ds-bento-tile[data-highlight="1"][data-highlight] .ds-bento-tile-art:not([data-pattern]) {
+  background: radial-gradient(circle, var(--_ink) 1px, transparent 1.5px) 0 0 / 14px 14px;
+  mask:
+    var(--_fade);
+  mask-composite: intersect;
+  --_drift: 14px;
+  --_mask-drift: 0 0;
+}
+
+/* One repeat of 9px spacing at 45deg, measured along the x axis. */
+.ds-bento-tile-art[data-pattern="lines"],
+.ds-bento-tile:nth-child(6n + 2) .ds-bento-tile-art:not([data-pattern]),
+.ds-bento-tile[data-highlight="2"][data-highlight] .ds-bento-tile-art:not([data-pattern]) {
+  background: repeating-linear-gradient(-45deg, var(--_ink) 0 1px, transparent 1px 9px);
+  mask:
+    var(--_fade);
+  mask-composite: intersect;
+  --_drift: 12.728px;
+  --_mask-drift: 0 0;
+}
+
+/* Rings and rays spread from the corner and hold still. */
+.ds-bento-tile-art[data-pattern="rings"],
+.ds-bento-tile:nth-child(6n + 3) .ds-bento-tile-art:not([data-pattern]),
+.ds-bento-tile[data-highlight="3"][data-highlight] .ds-bento-tile-art:not([data-pattern]) {
+  background: repeating-radial-gradient(circle at 0% 100%, var(--_ink) 0 1px, transparent 1px 16px);
+  mask:
+    var(--_fade);
+  mask-composite: intersect;
+  --_drift: 0px;
+  --_mask-drift: 0 0;
+}
+
+.ds-bento-tile-art[data-pattern="grid"],
+.ds-bento-tile:nth-child(6n + 4) .ds-bento-tile-art:not([data-pattern]),
+.ds-bento-tile[data-highlight="4"][data-highlight] .ds-bento-tile-art:not([data-pattern]) {
+  background: linear-gradient(var(--_ink) 1px, transparent 1px) 0 0 / 24px 24px,
+    linear-gradient(90deg, var(--_ink) 1px, transparent 1px) 0 0 / 24px 24px;
+  mask:
+    var(--_fade);
+  mask-composite: intersect;
+  --_drift: 24px;
+  --_mask-drift: 0 0;
+}
+
+/* Waves are a stroked path, so the shape rides a mask over a fill of the
+   ink, layered with the fade. */
+.ds-bento-tile-art[data-pattern="waves"],
+.ds-bento-tile:nth-child(6n + 5) .ds-bento-tile-art:not([data-pattern]),
+.ds-bento-tile[data-highlight="5"][data-highlight] .ds-bento-tile-art:not([data-pattern]) {
+  background: var(--_ink);
+  mask:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='12'%3E%3Cpath d='M0 6 Q10 0 20 6 T40 6' fill='none' stroke='%23000'/%3E%3C/svg%3E") 0 0 / 40px 12px repeat,
+    var(--_fade);
+  mask-composite: intersect;
+  --_drift: 0px;
+  --_mask-drift: 40px 0, 0 0, 0 0, 0 0;
+}
+
+/* Rays are stroked lines rather than a conic gradient: a conic mark is a
+   fixed angle wide, so it thickens with distance from the corner, where a
+   non-scaling stroke stays 1px however far the line runs. The SVG stretches
+   to the tile, so the fan follows the tile's shape. */
+.ds-bento-tile-art[data-pattern="rays"],
+.ds-bento-tile:nth-child(6n + 6) .ds-bento-tile-art:not([data-pattern]),
+.ds-bento-tile[data-highlight="6"][data-highlight] .ds-bento-tile-art:not([data-pattern]) {
+  background: var(--_ink);
+  mask:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M0 100L299.6 84.3M0 100L298.4 68.6M0 100L296.3 53.1M0 100L293.4 37.6M0 100L289.8 22.4M0 100L285.3 7.3M0 100L280.1 -7.5M0 100L274.1 -22.0M0 100L267.3 -36.2M0 100L259.8 -50.0M0 100L251.6 -63.4M0 100L242.7 -76.3M0 100L233.1 -88.8M0 100L222.9 -100.7M0 100L212.1 -112.1M0 100L200.7 -122.9M0 100L188.8 -133.1M0 100L176.3 -142.7M0 100L163.4 -151.6M0 100L150.0 -159.8M0 100L136.2 -167.3M0 100L122.0 -174.1M0 100L107.5 -180.1M0 100L92.7 -185.3M0 100L77.6 -189.8M0 100L62.4 -193.4M0 100L46.9 -196.3M0 100L31.4 -198.4M0 100L15.7 -199.6' fill='none' stroke='%23000' stroke-width='1' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") 0 0 / 100% 100% no-repeat,
+    var(--_fade);
+  mask-composite: intersect;
+  --_drift: 0px;
+  --_mask-drift: 0 0;
+}
+
+@keyframes ds-bento-art-drift {
+  to {
+    background-position: var(--_drift) 0;
+    mask-position: var(--_mask-drift);
+  }
+}
+
+/* ----------------------------------------------------------- header */
+
+/* The heading keeps clear of the expand control in the corner. */
+.ds-bento-tile__header {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+  padding: var(--_inset) var(--_inset) 0;
+  pointer-events: none;
+}
+
+.ds-bento-tile--expandable .ds-bento-tile__header {
+  padding-inline-end: calc(var(--_inset) + var(--gap-1000));
+}
+
+.ds-bento-tile__title {
+  margin: 0;
+  max-width: 22ch;
+  font-family: var(--font-heading-2-family);
+  font-size: var(--font-heading-2-size);
+  font-weight: var(--font-sub-display-weight);
+  line-height: var(--font-heading-2-line-height);
+  letter-spacing: var(--font-heading-2-letter-spacing);
+  text-wrap: balance;
+}
+
+.ds-bento-tile__description {
+  margin: 0;
+  max-width: 48ch;
+  color: var(--color-text-secondary);
+  font-size: var(--font-paragraph-size);
+  line-height: var(--font-paragraph-line-height);
+}
+
+/* ------------------------------------------------------------- body */
+
+/* The content area: everything under the heading, inside the safe inset.
+   Content lays out in flow, so it can never sit under the heading, and
+   whatever does not fit is clipped here and faded at the edge it overflows. */
+.ds-bento-tile__body {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  padding: var(--_inset);
+}
+
+/* Auto margins centre the content without the unsafe-overflow trap of
+   justify-content: centre: a box taller than the body starts at the top
+   and overflows the bottom, where the fade is, never the top. */
+/* The content area is a size container, so content can answer the tile's
+   width with @container ds-bento-tile rather than the viewport's: a tile
+   is as narrow in a three-column grid as on a phone. */
+/* Plain block flow, not a flex column: a flex column stretches every child
+   to the full width, which would draw a badge as a bar. In flow, block
+   content (a panel, a chart) fills the width and inline content keeps its
+   natural size, which is the content rule. flow-root keeps a child's
+   margins inside, so they cannot leak past the safe inset. */
+.ds-bento-tile__content {
+  display: flow-root;
+  min-width: 0;
+  container: ds-bento-tile / inline-size;
+}
+
+.ds-bento-tile--align-center .ds-bento-tile__content { margin-block: auto; }
+.ds-bento-tile--align-end .ds-bento-tile__content { margin-top: auto; }
+
+.ds-bento-tile__body[data-overflow-y] {
+  mask: linear-gradient(to bottom, #000 calc(100% - var(--_fade)), transparent);
+}
+
+.ds-bento-tile__body[data-overflow-x] {
+  mask: linear-gradient(to right, #000 calc(100% - var(--_fade)), transparent);
+}
+
+.ds-bento-tile__body[data-overflow-x][data-overflow-y] {
+  mask:
+    linear-gradient(to bottom, #000 calc(100% - var(--_fade)), transparent),
+    linear-gradient(to right, #000 calc(100% - var(--_fade)), transparent);
+  mask-composite: intersect;
+}
+
+/* ------------------------------------------------------- expandable */
+
+.ds-bento-tile--expandable {
+  cursor: pointer;
+}
+
+.ds-bento-tile__hit {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+}
+
+/* The handle sits on the content inset, centred on the heading's first
+   line, so it reads as part of the heading row whatever the type scale.
+   32px is CircularButton's compact size. */
+.ds-bento-tile__toggle {
+  position: absolute;
+  top: calc(var(--_inset) + (var(--font-heading-2-line-height) - 32px) / 2);
+  right: var(--_inset);
+  z-index: 4;
+}
+
+/* ------------------------------------------------------------ hover */
+
+/* An expandable tile is a control: hovered or focused, its border takes the
+   action colour's hover step, the same signal its expand button gives as it
+   steps up to primary. The outline doubles the border's weight on the
+   inside edge without moving the layout. */
+.ds-bento-tile--expandable:hover,
+.ds-bento-tile--expandable:has(.ds-bento-tile__toggle:focus-visible) {
+  border-color: var(--color-action-primary-bg-hover);
+  outline: var(--border-025) solid var(--color-action-primary-bg-hover);
+  outline-offset: calc(-2 * var(--border-025));
+}
+
+/* The tile that is opening, open or closing drops the hover border: it
+   would be captured in the morph's snapshot, and on the way back the
+   browser drops :hover for the transition's length. */
+.ds-bento-tile.ds-bento-tile--expandable[data-linked] {
+  border-color: var(--color-bg-container-border);
+  outline: none;
+}
+
+/* ---------------------------------------------------------- overlay */
+
+.ds-bento-tile-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: var(--layer-modal);
+  background: color-mix(in srgb, var(--color-bg-page-primary) 55%, transparent);
+  backdrop-filter: blur(14px) saturate(1.2);
+  animation: ds-bento-fade-in var(--motion-duration-deliberate) var(--motion-ease-standard) both;
+}
+
+/* Fading out, it no longer catches clicks meant for the page it reveals. */
+.ds-bento-tile-backdrop[data-state="out"] {
+  pointer-events: none;
+  animation: ds-bento-fade-out var(--motion-duration-slow) var(--motion-ease-standard) both;
+}
+
+.ds-bento-tile-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--layer-modal);
+}
+
+.ds-bento-tile-overlay__scroller {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--gap-1500) var(--padding-500);
+}
+
+.ds-bento-tile-overlay__panel {
+  --_panel-inset: var(--gap-1500);
+  --_panel-top: var(--gap-1500);
+
+  position: relative;
+  max-width: var(--ds-bento-tile-panel-width, 72rem);
+  margin: 0 auto;
+  padding: var(--_panel-top) var(--_panel-inset) var(--gap-2000);
+  border-radius: var(--radius-400);
+  background: var(--color-bg-container-primary);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  box-shadow: var(--shadow-modal);
+  /* The overlay renders in a portal at the end of the body, outside the
+     tile, so it states its own text colour and face rather than inheriting
+     whatever the host page's body carries. */
+  color: var(--color-text-primary);
+  font-family: var(--font-family-body);
+}
+
+/* As in the tile: the close control sits on the panel's inset, centred on
+   the title's first line, so it reads as part of the title row. */
+.ds-bento-tile-overlay__close {
+  position: absolute;
+  top: calc(var(--_panel-top) + (var(--font-sub-display-line-height) - 32px) / 2);
+  right: var(--_panel-inset);
+}
+
+.ds-bento-tile-overlay__title {
+  margin: 0 0 var(--gap-400);
+  padding-inline-end: var(--gap-1500);
+  font-family: var(--font-sub-display-family);
+  font-size: var(--font-sub-display-size);
+  font-weight: var(--font-sub-display-weight);
+  line-height: var(--font-sub-display-line-height);
+  letter-spacing: var(--font-sub-display-letter-spacing);
+}
+
+/* The panel's contents rise in after the morph has carried the box over. */
+.ds-bento-tile-overlay__body {
+  animation: ds-bento-rise var(--motion-duration-slower) var(--motion-ease-entrance) var(--motion-duration-base) both;
+}
+
+@keyframes ds-bento-rise {
+  from { opacity: 0; transform: translateY(var(--gap-400)); }
+}
+
+@keyframes ds-bento-fade-in {
+  from { opacity: 0; }
+}
+
+@keyframes ds-bento-fade-out {
+  to { opacity: 0; }
+}
+
+/* ------------------------------------------------------------- morph */
+
+/* View-transition pseudo-elements originate on the root, so they are scoped
+   by the class BentoTile puts on the root for the length of its own morph
+   and leave every other transition on the page alone. The travelling box
+   wears the panel's radius and shadow; its snapshots keep their aspect,
+   anchored top left, so text never stretches mid-flight. */
+:root.ds-bento-tile-morphing::view-transition-group(*) {
+  animation-duration: 560ms; /* ds-allow(motion): the morph is tuned by eye, longer than any duration token */
+  animation-timing-function: var(--motion-ease-entrance);
+}
+
+:root.ds-bento-tile-morphing::view-transition-image-pair(*) {
+  overflow: clip;
+  border-radius: var(--radius-400);
+}
+
+:root.ds-bento-tile-morphing::view-transition-old(*),
+:root.ds-bento-tile-morphing::view-transition-new(*) {
+  height: 100%;
+  width: 100%;
+  object-fit: none;
+  object-position: top left;
+}
+
+:root.ds-bento-tile-morphing::view-transition-old(*) {
+  animation-duration: var(--motion-duration-base);
+}
+
+:root.ds-bento-tile-morphing::view-transition-new(*) {
+  animation-duration: var(--motion-duration-slow);
+}
+
+/* The rest of the page never crossfades: the old root snapshot is a frozen
+   frame of tiles that keep animating, so blending it with the live new one
+   would ghost every other tile. Only the live page shows. */
+:root.ds-bento-tile-morphing::view-transition-group(root) { animation: none; }
+:root.ds-bento-tile-morphing::view-transition-old(root) { display: none; }
+:root.ds-bento-tile-morphing::view-transition-new(root) { animation: none; }
+:root.ds-bento-tile-morphing::view-transition-image-pair(root) { border-radius: 0; }
+
+/* -------------------------------------------------------- responsive */
+
+@media (max-width: 600px) {
+  .ds-bento-tile-overlay__scroller { padding: 0; }
+  .ds-bento-tile-overlay__panel {
+    min-height: 100%;
+    --_panel-inset: var(--padding-500);
+    --_panel-top: var(--gap-1000);
+    padding: var(--_panel-top) var(--_panel-inset) var(--gap-1500);
+    border-radius: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-bento-tile-overlay__body,
+  .ds-bento-tile-art { animation: none; }
+}

@@ -1,0 +1,150 @@
+/* ============================================
+   BENTO TILE PAGE LAYOUT
+   ============================================ */
+.dsLayout {
+  display: flex;
+  gap: var(--layout-column-gap);
+  width: 100%;
+  max-width: 1440px;
+  padding-top: var(--primitive-gap-1000);
+}
+
+.dsContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-2000);
+  min-width: 0;
+}
+
+/* ============================================
+   PAGE TITLE - Display 2
+   ============================================ */
+.pageHeader {
+  margin-top: calc(var(--primitive-gap-1000) - var(--gap-2000));
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--primitive-gap-500);
+  width: 100%;
+}
+
+.pageTitle {
+  font-family: var(--font-display-2-family);
+  font-size: var(--font-display-2-size);
+  font-weight: var(--font-display-2-weight);
+  line-height: var(--font-display-2-line-height);
+  letter-spacing: var(--font-display-2-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+/* Sub Display */
+.subDisplay {
+  font-family: var(--font-sub-display-family);
+  font-size: var(--font-sub-display-size);
+  font-weight: var(--font-sub-display-weight);
+  line-height: var(--font-sub-display-line-height);
+  letter-spacing: var(--font-sub-display-letter-spacing);
+  color: var(--color-text-primary);
+  margin-bottom: 0;
+}
+
+/* ============================================
+   INTRO SECTION
+   ============================================ */
+.introSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-500);
+}
+
+.introBody {
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   SECTION
+   ============================================ */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-1000);
+  width: 100%;
+}
+
+/* ============================================
+   DEMO GRIDS
+   ============================================ */
+.sectionBody {
+  margin: 0;
+  font-size: var(--font-paragraph-size);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-secondary);
+}
+
+/* Rows grow to fit their tallest tile, so no demo fades unless it means
+   to; the overflow demo sits in a fixed row of its own. */
+.grid3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-rows: minmax(260px, auto);
+  gap: var(--gap-400);
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: 320px;
+  gap: var(--gap-400);
+}
+
+.wide {
+  grid-column: span 2;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+}
+
+/* The revenue demo sits on the tile itself, with no nested surface: on a
+   solid tile a Panel would be the tile's surface again and vanish. */
+.revenue {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-400);
+}
+
+.split {
+  display: grid;
+  grid-template-columns: minmax(200px, 0.8fr) minmax(0, 1.4fr);
+  gap: var(--gap-400);
+  align-items: center;
+}
+
+/* The container-query demo: the side stat drops out when the tile is
+   too narrow to hold both at their natural widths. */
+@container ds-bento-tile (max-width: 480px) {
+  .split { grid-template-columns: minmax(0, 1fr); }
+  .splitSide { display: none; }
+}
+
+@media (max-width: 959px) {
+  .grid3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 600px) {
+  .grid3,
+  .grid2 { grid-template-columns: minmax(0, 1fr); }
+  .wide { grid-column: auto; }
+}

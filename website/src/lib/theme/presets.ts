@@ -921,7 +921,7 @@ export function presetOverrides(
   /* The ambient accent sextet, always all six — a declared lever, so a
      stylesheet states its ambient colours even at the shipped keys. Just
      before the extras, so a preset's extras could still specialise one. */
-  Object.assign(merged, accentOverrides(preset.accents, theme));
+  Object.assign(merged, accentOverrides(preset.accents));
 
   preset.ambient?.forEach((hex, i) => {
     merged[`--color-ambient-${i + 1}`] = hex;

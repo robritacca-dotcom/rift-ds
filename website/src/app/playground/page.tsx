@@ -549,7 +549,7 @@ export default function PlaygroundPage() {
     /* The ambient accents apply whenever any differs from the shipped
        keys — mirroring presetOverrides' placement just before the extras. */
     if (!isAccentsPristine(accents)) {
-      Object.assign(merged, accentOverrides(accents, theme === "dark" ? "dark" : "light"));
+      Object.assign(merged, accentOverrides(accents));
     }
     presetExtras.ambient?.forEach((hex, i) => {
       merged[`--color-ambient-${i + 1}`] = hex;

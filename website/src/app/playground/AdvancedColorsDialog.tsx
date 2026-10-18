@@ -219,7 +219,7 @@ export default function AdvancedColorsDialog({
           })}
           <p className={styles.controlNote}>
             The accents colour the ambient background blobs and chart series 2–7
-            together. Coral is also the danger colour on destructive buttons.
+            together, never semantic status.
           </p>
         </div>
       </div>

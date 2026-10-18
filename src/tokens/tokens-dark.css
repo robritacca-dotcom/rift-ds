@@ -101,12 +101,12 @@
   --color-action-neutral-bg-active: var(--primitive-neutral-06);
   --color-action-neutral-text: var(--primitive-neutral-00);
   --color-action-neutral-border: var(--primitive-neutral-06);
-  --color-action-destructive-bg: var(--color-core-accent-coral);
-  --color-action-destructive-bg-hover: var(--primitive-red-06);
-  --color-action-destructive-bg-active: var(--primitive-red-05);
-  --color-action-destructive-text: var(--color-status-error-bg);
-  --color-action-destructive-text-secondary: var(--color-core-accent-coral);
-  --color-action-destructive-border: var(--color-core-accent-coral);
+  --color-action-destructive-bg: var(--primitive-red-05);
+  --color-action-destructive-bg-hover: var(--primitive-red-04);
+  --color-action-destructive-bg-active: var(--primitive-red-03);
+  --color-action-destructive-text: var(--primitive-red-11);
+  --color-action-destructive-text-secondary: var(--primitive-red-04);
+  --color-action-destructive-border: var(--primitive-red-05);
 
   /* Status - Positive */
   --color-status-positive-bg: var(--primitive-green-10);

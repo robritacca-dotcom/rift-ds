@@ -454,33 +454,33 @@ const actionNeutralColours: SwatchData[] = [
 const actionDestructiveColours: SwatchData[] = [
   {
     label: "Background Default", cssVar: "--color-action-destructive-bg",
-    dark: { primitive: "--red--07--", hex: "#EF476F", rgb: "239 / 71 / 111" },
-    light: { primitive: "--red--07--", hex: "#EF476F", rgb: "239 / 71 / 111" },
-  },
-  {
-    label: "Background Hover", cssVar: "--color-action-destructive-bg-hover",
-    dark: { primitive: "--red--06--", hex: "#F16385", rgb: "241 / 99 / 133" },
+    dark: { primitive: "--red--05--", hex: "#F37F9B", rgb: "243 / 127 / 155" },
     light: { primitive: "--red--08--", hex: "#C93A5C", rgb: "201 / 58 / 92" },
   },
   {
-    label: "Background Active", cssVar: "--color-action-destructive-bg-active",
-    dark: { primitive: "--red--05--", hex: "#F37F9B", rgb: "243 / 127 / 155" },
+    label: "Background Hover", cssVar: "--color-action-destructive-bg-hover",
+    dark: { primitive: "--red--04--", hex: "#F69BB1", rgb: "246 / 155 / 177" },
     light: { primitive: "--red--09--", hex: "#8E2641", rgb: "142 / 38 / 65" },
   },
   {
+    label: "Background Active", cssVar: "--color-action-destructive-bg-active",
+    dark: { primitive: "--red--03--", hex: "#F8B7C7", rgb: "248 / 183 / 199" },
+    light: { primitive: "--red--10--", hex: "#571727", rgb: "87 / 23 / 39" },
+  },
+  {
     label: "Text Primary", cssVar: "--color-action-destructive-text",
-    dark: { primitive: "--red--10--", hex: "#571727", rgb: "87 / 23 / 39" },
-    light: { primitive: "--red--01--", hex: "#FDEFF3", rgb: "253 / 239 / 243" },
+    dark: { primitive: "--red--11--", hex: "#45101D", rgb: "69 / 16 / 29" },
+    light: { primitive: "--neutral--00--", hex: "#FFFFFF", rgb: "255 / 255 / 255" },
   },
   {
     label: "Text Secondary", cssVar: "--color-action-destructive-text-secondary",
-    dark: { primitive: "--red--07--", hex: "#EF476F", rgb: "239 / 71 / 111" },
-    light: { primitive: "--red--07--", hex: "#EF476F", rgb: "239 / 71 / 111" },
+    dark: { primitive: "--red--04--", hex: "#F69BB1", rgb: "246 / 155 / 177" },
+    light: { primitive: "--red--09--", hex: "#8E2641", rgb: "142 / 38 / 65" },
   },
   {
     label: "Border", cssVar: "--color-action-destructive-border",
-    dark: { primitive: "--red--07--", hex: "#EF476F", rgb: "239 / 71 / 111" },
-    light: { primitive: "--red--07--", hex: "#EF476F", rgb: "239 / 71 / 111" },
+    dark: { primitive: "--red--05--", hex: "#F37F9B", rgb: "243 / 127 / 155" },
+    light: { primitive: "--red--08--", hex: "#C93A5C", rgb: "201 / 58 / 92" },
   },
 ];
 

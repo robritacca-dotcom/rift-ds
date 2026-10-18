@@ -148,6 +148,18 @@
       "description": "Vertical bars for comparing values across categories or time, with summary stats and tooltips."
     },
     {
+      "name": "bento-tile",
+      "type": "registry:ui",
+      "title": "Bento tile",
+      "description": "A feature tile for a bento grid, with a safe content area, a shader pair, solid or transparent background, and an overlay it opens into."
+    },
+    {
+      "name": "bento-tile-art",
+      "type": "registry:ui",
+      "title": "Bento tile art",
+      "description": "The texture half of a bento tile's shader pair: six fine patterns in one vocabulary, fading in from a corner."
+    },
+    {
       "name": "bottom-nav",
       "type": "registry:ui",
       "title": "Bottom nav",
@@ -457,7 +469,7 @@
       "name": "inspector-segmented-control",
       "type": "registry:ui",
       "title": "Inspector segments",
-      "description": "One-row choice between a few options for inspector panels, as native radios with a neutral selected chip."
+      "description": "One-row choice between a few options for inspector panels, as native radios under a sliding selection pill."
     },
     {
       "name": "inspector-slider",

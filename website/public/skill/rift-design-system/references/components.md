@@ -462,7 +462,7 @@ Nested rectangles sized by value for part-to-whole breakdowns.
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/treemap.md
 
-## Data display (27)
+## Data display (28)
 
 Cards, tables, lists, and badges for presenting structured content.
 
@@ -505,6 +505,14 @@ Small inline status labels with info, positive, warning, error, and neutral vari
 - Import: `import { Badge } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/badge.md
+
+### Bento tile
+
+A feature tile for a bento grid, with a safe content area, a shader pair, solid or transparent background, and an overlay it opens into.
+
+- Import: `import { BentoTile } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/bento-tile.md
 
 ### Card
 
@@ -682,9 +690,17 @@ A titled tile for a dashboard or home screen, with rows, labelled groups, and a 
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/widget.md
 
-## Effects (1)
+## Effects (2)
 
 Ambient and decorative surfaces that sit behind or around the interface.
+
+### Bento tile art
+
+The texture half of a bento tile's shader pair: six fine patterns in one vocabulary, fading in from a corner.
+
+- Import: `import { BentoTileArt } from 'rift-ds';`
+- Rendering: server-renderable (no 'use client')
+- Contract: https://rift-ds.com/components/bento-tile-art.md
 
 ### Shader field
 
@@ -988,7 +1004,7 @@ Collapsible, titled run of inspector controls whose open body lets a dropdown me
 
 ### Inspector segments
 
-One-row choice between a few options for inspector panels, as native radios with a neutral selected chip.
+One-row choice between a few options for inspector panels, as native radios under a sliding selection pill.
 
 - Import: `import { InspectorSegmentedControl } from 'rift-ds';`
 - Rendering: client component (declares 'use client')

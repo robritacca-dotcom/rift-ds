@@ -25,6 +25,8 @@ export * from './components/Avatar/Avatar';
 export * from './components/AvatarGroup/AvatarGroup';
 export * from './components/Badge/Badge';
 export * from './components/Banner/Banner';
+export * from './components/BentoTile/BentoTile';
+export * from './components/BentoTile/BentoTileArt';
 export * from './components/BottomNav/BottomNav';
 export * from './components/Breadcrumb/Breadcrumb';
 export * from './components/Button/Button';

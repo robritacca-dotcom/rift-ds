@@ -2025,6 +2025,145 @@ export const componentApi: readonly ComponentApiEntry[] = [
   },
   {
     "kind": "component",
+    "name": "BentoTile",
+    "label": "Bento tile",
+    "slug": "bento-tile",
+    "category": "data-display",
+    "description": "A feature tile for a bento grid, with a safe content area, a shader pair, solid or transparent background, and an overlay it opens into.",
+    "client": true,
+    "importPath": "rift-ds/components/BentoTile/BentoTile",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "BentoTile",
+        "props": [
+          {
+            "name": "title",
+            "type": "ReactNode",
+            "required": true,
+            "description": "The tile's heading, also the overlay's title.\nNote: this shadows the native `title` tooltip attribute, which BentoTile does not expose."
+          },
+          {
+            "name": "description",
+            "type": "ReactNode",
+            "required": false,
+            "description": "A line under the heading."
+          },
+          {
+            "name": "headingLevel",
+            "type": "4 | 2 | 5 | 3 | 6",
+            "required": false,
+            "description": "The heading level the title renders at, to fit the page's outline. Never `1`: a tile is never the page's top heading.",
+            "defaultValue": "3"
+          },
+          {
+            "name": "background",
+            "type": "\"solid\" | \"shader\" | \"transparent\"",
+            "required": false,
+            "description": "What sits behind the content: the container surface with a shader pair\nover it (a wash of light in the bottom-left corner with a line texture\nlaid over it, the default), the plain surface, or nothing.",
+            "defaultValue": "shader"
+          },
+          {
+            "name": "highlight",
+            "type": "4 | 2 | 1 | 5 | 3 | 6",
+            "required": false,
+            "description": "Which of the six shader pairs the tile wears: pair N is ambient colour N\nwith texture N. Unset, tiles rotate through the set by their position\namong their siblings, so a grid of shader tiles comes out told apart."
+          },
+          {
+            "name": "align",
+            "type": "\"center\" | \"start\" | \"end\"",
+            "required": false,
+            "description": "Where the content sits in the space under the heading. Content that does not fit fades out at the edge it overflows.",
+            "defaultValue": "center"
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The tile's content. Inert while the tile is expandable, since the whole tile is then the control."
+          },
+          {
+            "name": "expandedContent",
+            "type": "ReactNode",
+            "required": false,
+            "description": "What the overlay shows under the title. Passing it makes the tile expandable."
+          },
+          {
+            "name": "open",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the overlay is open (controlled)."
+          },
+          {
+            "name": "defaultOpen",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the overlay starts open (uncontrolled).",
+            "defaultValue": "false"
+          },
+          {
+            "name": "onOpenChange",
+            "type": "((open: boolean) => void)",
+            "required": false,
+            "description": "Called when the overlay opens or closes."
+          },
+          {
+            "name": "expandLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the expand control. Defaults to \"Open\" and the title, when the title is a string."
+          },
+          {
+            "name": "closeLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the overlay's close control.",
+            "defaultValue": "Close"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes on the tile.",
+            "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
+    "name": "BentoTileArt",
+    "label": "Bento tile art",
+    "slug": "bento-tile-art",
+    "category": "effects",
+    "description": "The texture half of a bento tile's shader pair: six fine patterns in one vocabulary, fading in from a corner.",
+    "client": false,
+    "importPath": "rift-ds/components/BentoTile/BentoTileArt",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "BentoTileArt",
+        "props": [
+          {
+            "name": "pattern",
+            "type": "BentoTileArtPattern",
+            "required": false,
+            "description": "Which pattern to draw. Unset, it follows its tile's shader pair (pinned by `highlight`, or by position); outside a tile it draws `dots`."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes on the layer.",
+            "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
     "name": "BottomNav",
     "label": "Bottom nav",
     "slug": "bottom-nav",
@@ -6351,7 +6490,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Inspector segments",
     "slug": "inspector-segmented-control",
     "category": "inspector",
-    "description": "One-row choice between a few options for inspector panels, as native radios with a neutral selected chip.",
+    "description": "One-row choice between a few options for inspector panels, as native radios under a sliding selection pill.",
     "client": true,
     "importPath": "rift-ds/components/Inspector/InspectorSegmentedControl",
     "barrel": "main",

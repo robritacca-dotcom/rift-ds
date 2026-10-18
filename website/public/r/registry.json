@@ -634,6 +634,12 @@
       "description": "Token-styled typography for rendered markdown and rich agent output."
     },
     {
+      "name": "question-card",
+      "type": "registry:ui",
+      "title": "Question card",
+      "description": "An agent's question with answers to pick: one or several, a set asked a step at a time, kept as a record once answered."
+    },
+    {
       "name": "quote",
       "type": "registry:ui",
       "title": "Quote",
@@ -925,7 +931,7 @@
       "name": "ai-chat",
       "type": "registry:lib",
       "title": "Rift ai chat",
-      "description": "The whole AI chat, assembled: the panel, the streaming replies, the history, the cards a reply can carry and the server handlers, set up with props."
+      "description": "The whole AI chat: the panel, the streaming replies, the history, the cards and questions a reply can carry and the server handlers, set up with props."
     }
   ]
 }

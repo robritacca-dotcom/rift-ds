@@ -2784,6 +2784,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "true"
           },
           {
+            "name": "flow",
+            "type": "\"top-down\" | \"bottom-up\"",
+            "required": false,
+            "description": "Which way the conversation reads. `top-down` (the default) is the send\nchoreography above: each new turn floats to the top of the viewport and\nthe answer streams in below it. `bottom-up` is the classic message\nthread: turns stack from the bottom edge, the newest always just above\nthe composer, and the view follows a streaming answer down for as long\nas the reader stays at the bottom. Scrolling up to reread lets go;\nreturning to the bottom, or the next send, takes hold again.",
+            "defaultValue": "top-down"
+          },
+          {
             "name": "ariaLabel",
             "type": "string",
             "required": false,
@@ -8277,6 +8284,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "default"
           },
           {
+            "name": "value",
+            "type": "string",
+            "required": false,
+            "description": "The `id` of the suggestion already taken. Set, the row becomes the\nrecord of that choice: the taken suggestion outlined solid in the\nstrongest ink, the rest faded behind a dashed line, and none of them\ntappable any more. The same treatment QuestionCard gives a pick. For a row that stays\non screen after use, such as the follow-ups under an earlier answer."
+          },
+          {
             "name": "ariaLabel",
             "type": "string",
             "required": false,
@@ -8327,6 +8340,100 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "ReactNode",
             "required": false,
             "description": "The rendered markup to style — the output of whatever markdown renderer the consumer uses."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
+    "name": "QuestionCard",
+    "label": "Question card",
+    "slug": "question-card",
+    "category": "ai",
+    "description": "An agent's question with answers to pick: one or several, a set asked a step at a time, kept as a record once answered.",
+    "client": true,
+    "importPath": "rift-ds/components/QuestionCard/QuestionCard",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "QuestionCard",
+        "props": [
+          {
+            "name": "questions",
+            "type": "QuestionCardQuestion[]",
+            "required": true,
+            "description": "The questions, asked one at a time when there is more than one."
+          },
+          {
+            "name": "values",
+            "type": "QuestionCardAnswer[]",
+            "required": false,
+            "description": "The answers already given. When set, the card renders its answered\nstate and stops taking input: the options stay where they were, the\npicked ones marked and the rest dimmed, so the record of the choice\nstays in place. An empty array records a skip."
+          },
+          {
+            "name": "onValuesChange",
+            "type": "((answers: QuestionCardAnswer[]) => void)",
+            "required": false,
+            "description": "Fires with every question's answer once the last one is given."
+          },
+          {
+            "name": "onSkip",
+            "type": "(() => void)",
+            "required": false,
+            "description": "Fires when the person declines to answer. Its presence is what shows the Skip button."
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "required": false,
+            "description": "The moment to answer has passed: the options stay on screen, dimmed and inert, under a line saying so.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "labels",
+            "type": "Partial<QuestionCardLabels>",
+            "required": false,
+            "description": "Replacement copy for the words the card draws itself."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": ""
+          }
+        ]
+      },
+      {
+        "component": "QuestionSummary",
+        "props": [
+          {
+            "name": "items",
+            "type": "QuestionSummaryItem[]",
+            "required": true,
+            "description": "The questions and their answers, in the order they were asked."
+          },
+          {
+            "name": "missingLabel",
+            "type": "string",
+            "required": false,
+            "description": "What stands in the answer's place for a question left without one.",
+            "defaultValue": "No answer"
+          },
+          {
+            "name": "variant",
+            "type": "\"plain\" | \"card\"",
+            "required": false,
+            "description": "`card` draws the summary in its own hairline frame, as a set's record\nunder the reply that asked it. `plain` drops the frame, for a surface\nthat brings its own, such as the message bubble that sent the answers.",
+            "defaultValue": "card"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": ""
           }
         ]
       }
@@ -12271,7 +12378,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "AI chat",
     "slug": "ai-chat",
     "category": "widget",
-    "description": "The whole AI chat, assembled: the panel, the streaming replies, the history, the cards a reply can carry and the server handlers, set up with props.",
+    "description": "The whole AI chat: the panel, the streaming replies, the history, the cards and questions a reply can carry and the server handlers, set up with props.",
     "client": true,
     "importPath": "rift-ds/chat",
     "barrel": "chat",
@@ -12322,11 +12429,25 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "Assistant"
           },
           {
+            "name": "flow",
+            "type": "\"top-down\" | \"bottom-up\"",
+            "required": false,
+            "description": "Which way the conversation reads. `top-down` (the default) floats each\nnew turn to the top of the thread and streams the answer in below it.\n`bottom-up` is the classic message thread: turns stack from the bottom,\nthe newest just above the composer, and the view follows the answer.",
+            "defaultValue": "top-down"
+          },
+          {
             "name": "placeholder",
             "type": "string",
             "required": false,
             "description": "The composer's placeholder text.",
             "defaultValue": "Ask anything"
+          },
+          {
+            "name": "questionsPlaceholder",
+            "type": "string",
+            "required": false,
+            "description": "The composer's placeholder while a set of questions holds it: the answer goes in the card, or the card is skipped.",
+            "defaultValue": "Answer the questions above, or skip them"
           },
           {
             "name": "showStarters",

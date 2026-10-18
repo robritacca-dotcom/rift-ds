@@ -5,7 +5,7 @@ description: Build React UI with rift-ds. Use when installing the package, compo
 
 # Using rift-ds
 
-Generated from the library's registries at version 1.9.0, alongside every deploy of https://rift-ds.com. The library is 152 React components across 12 categories, themed by 284 semantic design tokens, published to npm. Designed and built by Robert Ritacca (https://robertritacca.com), MIT licensed.
+Generated from the library's registries at version 1.9.0, alongside every deploy of https://rift-ds.com. The library is 153 React components across 12 categories, themed by 284 semantic design tokens, published to npm. Designed and built by Robert Ritacca (https://robertritacca.com), MIT licensed.
 
 ## Install
 
@@ -43,7 +43,7 @@ The primary typeface is not bundled: set `--font-family-primary` to your own (th
 
 ## The chat widget
 
-The whole AI chat, assembled: the panel, the streaming replies, the history, the cards a reply can carry and the server handlers, set up with props. It is the package's one widget, separate from the components: `ChatWidget`, `ChatProvider` and `ChatLauncher` over a `useChat` engine, with the server half as web-standard request handlers. Scaffold it into a Next.js app router project with one command, which writes the three routes, the mount and an env example and never overwrites a file:
+The whole AI chat: the panel, the streaming replies, the history, the cards and questions a reply can carry and the server handlers, set up with props. It is the package's one widget, separate from the components: `ChatWidget`, `ChatProvider` and `ChatLauncher` over a `useChat` engine, with the server half as web-standard request handlers. Scaffold it into a Next.js app router project with one command, which writes the three routes, the mount and an env example and never overwrites a file:
 
 ```bash
 npx rift-ds init chat
@@ -52,7 +52,7 @@ npx rift-ds init chat
 Its subpaths, each with the optional peers it needs:
 
 - `rift-ds/chat`: The widget, the provider, the launcher and the engine under them. Peers: react-markdown, remark-gfm.
-- `rift-ds/chat/server`: The streaming chat handler and its follow-ups and feedback siblings, for any web-standard route. Peers: @anthropic-ai/sdk.
+- `rift-ds/chat/server`: The streaming chat handler, with an opt-in tool for asking the visitor questions, and its follow-ups and feedback siblings, for any web-standard route. Peers: @anthropic-ai/sdk.
 - `rift-ds/chat/upstash`: Rate limits, a daily budget and the exchange log over Upstash Redis, as the handlers' guardrails. Peers: @upstash/ratelimit, @upstash/redis.
 - `rift-ds/chat/demo`: A scripted conversation with rich cards and fixtures, for a preview that needs no key. Peers: recharts.
 - `rift-ds/chat/chat.css`: The widget's stylesheet.
@@ -72,7 +72,7 @@ The widths the library's layouts switch at are exported from `rift-ds/tokens/bre
 references/components.md lists every component with its import line and description. The categories:
 
 - Actions (6): Buttons, button groups, and toggles for triggering actions and switching modes.
-- AI (33): Chat, agent, and model surfaces for building AI products, from the composer to the reasoning trace and the diff an agent proposes.
+- AI (34): Chat, agent, and model surfaces for building AI products, from the composer to the reasoning trace and the diff an agent proposes.
 - Charts (16): Data visualisation components for plotting series and activity over time.
 - Data display (27): Cards, tables, lists, and badges for presenting structured content.
 - Effects (1): Ambient and decorative surfaces that sit behind or around the interface.

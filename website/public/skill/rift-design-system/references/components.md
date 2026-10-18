@@ -54,7 +54,7 @@ A set of two-state buttons that can be toggled on or off, supporting text and ic
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/toggle-group.md
 
-## AI (33)
+## AI (34)
 
 Chat, agent, and model surfaces for building AI products, from the composer to the reasoning trace and the diff an agent proposes.
 
@@ -249,6 +249,14 @@ Token-styled typography for rendered markdown and rich agent output.
 - Import: `import { Prose } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/prose.md
+
+### Question card
+
+An agent's question with answers to pick: one or several, a set asked a step at a time, kept as a record once answered.
+
+- Import: `import { QuestionCard } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/question-card.md
 
 ### Reasoning
 

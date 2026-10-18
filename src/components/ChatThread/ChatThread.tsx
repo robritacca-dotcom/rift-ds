@@ -20,6 +20,16 @@ type ChatThreadOwnProps = {
    * edit-last-turn) neither re-anchors nor resizes the spacer.
    */
   anchor?: boolean;
+  /**
+   * Which way the conversation reads. `top-down` (the default) is the send
+   * choreography above: each new turn floats to the top of the viewport and
+   * the answer streams in below it. `bottom-up` is the classic message
+   * thread: turns stack from the bottom edge, the newest always just above
+   * the composer, and the view follows a streaming answer down for as long
+   * as the reader stays at the bottom. Scrolling up to reread lets go;
+   * returning to the bottom, or the next send, takes hold again.
+   */
+  flow?: 'top-down' | 'bottom-up';
   /** Accessible name for the scrollable conversation region. */
   ariaLabel?: string;
   /** Accessible name for the scroll-to-bottom control. */
@@ -39,7 +49,8 @@ export interface ChatThreadProps
  * pure-CSS fade at either end so content scrolling out passes through it,
  * and the send choreography — a newly appended turn floats to the top of
  * the viewport while the prior conversation is pushed upward, leaving the
- * response room to stream in below.
+ * response room to stream in below. `flow="bottom-up"` swaps that for the
+ * classic thread, stacked from the bottom and following the newest turn.
  *
  * A trailing spacer grows just enough that even a short newest exchange can
  * reach the top, so the anchor position never depends on how much has been
@@ -54,6 +65,7 @@ export const ChatThread = React.forwardRef<HTMLDivElement, ChatThreadProps>(
   (
     {
       anchor = true,
+      flow = 'top-down',
       ariaLabel = 'Conversation',
       jumpLabel = 'Scroll to the latest message',
       className = '',
@@ -75,6 +87,21 @@ export const ChatThread = React.forwardRef<HTMLDivElement, ChatThreadProps>(
     /* The scroll offset the newest turn is anchored at, kept reachable by
        the spacer for the whole exchange — not just at send time. */
     const anchorTop = useRef<number | null>(null);
+    /* Bottom-up only: whether the view is holding the newest content in
+       sight. Let go when the reader scrolls up; taken again at the bottom
+       or on send. A ref, read by the observer and the layout effect alike. */
+    const bottomUp = flow === 'bottom-up';
+    const flowRef = useRef(flow);
+    flowRef.current = flow;
+    const stuck = useRef(true);
+    const lastScrollTop = useRef(0);
+    const scrollToEnd = (behavior?: ScrollBehavior) => {
+      const container = scrollRef.current;
+      if (!container) return;
+      const top = container.scrollHeight - container.clientHeight;
+      if (behavior) container.scrollTo({ top, behavior });
+      else container.scrollTo({ top });
+    };
 
     /* Size the trailing spacer so the anchor position stays scrollable, and
        so it holds no more room than that. The spacer is exactly the shortfall
@@ -139,6 +166,10 @@ export const ChatThread = React.forwardRef<HTMLDivElement, ChatThreadProps>(
         sizeSpacer();
         // Instant: this is undoing a jump, not performing one.
         if (top != null && wasClamped) container.scrollTo({ top, behavior: 'instant' });
+        /* Bottom-up: content growing under a reader at the bottom (a
+           streaming answer, a card landing) keeps the newest line in view.
+           Instant, so the follow never lags behind the text. */
+        if (flowRef.current === 'bottom-up' && stuck.current) scrollToEnd('instant');
         updateJump();
       });
       observer.observe(container);
@@ -194,6 +225,23 @@ export const ChatThread = React.forwardRef<HTMLDivElement, ChatThreadProps>(
       mounted.current = true;
       if (childCount === previous) return;
       prevCount.current = childCount;
+
+      /* Bottom-up has no anchor and no spacer: a new turn lands at the
+         bottom, and the view goes to meet it. */
+      if (bottomUp) {
+        anchorTop.current = null;
+        spacer.style.height = '0px';
+        if (childCount < previous) {
+          container.scrollTo({ top: 0 });
+          return;
+        }
+        if (childCount === 0 || !anchor) return;
+        stuck.current = true;
+        // Restored transcripts open at the end instantly; a send glides.
+        scrollToEnd(isFirstRun ? 'instant' : undefined);
+        updateJump();
+        return;
+      }
 
       if (childCount < previous) {
         // Conversation reset — collapse the spacer and return to the top.
@@ -266,6 +314,16 @@ export const ChatThread = React.forwardRef<HTMLDivElement, ChatThreadProps>(
     /* The scrollbar shows only while scrolling is actually happening. */
     const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
       onScroll?.(e);
+      if (bottomUp) {
+        const container = e.currentTarget;
+        const atEnd =
+          container.scrollHeight - container.scrollTop - container.clientHeight <= JUMP_THRESHOLD_PX;
+        /* Only a move upward lets go: a glide down to the end passes
+           through positions short of it, and must not count as leaving. */
+        if (atEnd) stuck.current = true;
+        else if (container.scrollTop < lastScrollTop.current) stuck.current = false;
+        lastScrollTop.current = container.scrollTop;
+      }
       updateJump();
       setScrolling(true);
       window.clearTimeout(settleTimer.current);
@@ -287,7 +345,12 @@ export const ChatThread = React.forwardRef<HTMLDivElement, ChatThreadProps>(
 
     useEffect(() => () => window.clearTimeout(settleTimer.current), []);
 
-    const classes = [baseClass, scrolling ? `${baseClass}--scrolling` : '', className]
+    const classes = [
+      baseClass,
+      bottomUp ? `${baseClass}--bottom-up` : '',
+      scrolling ? `${baseClass}--scrolling` : '',
+      className,
+    ]
       .filter(Boolean)
       .join(' ');
 

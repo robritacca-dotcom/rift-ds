@@ -13,6 +13,7 @@ const meta = {
   tags: ['autodocs'],
   argTypes: {
     anchor: { control: 'boolean' },
+    flow: { control: 'inline-radio', options: ['top-down', 'bottom-up'] },
     ariaLabel: { control: 'text' },
   },
 } satisfies Meta<typeof ChatThread>;
@@ -81,7 +82,7 @@ export const EdgeFades: Story = {
   ),
 };
 
-const AnchoringDemo = () => {
+const AnchoringDemo = ({ flow }: { flow?: 'top-down' | 'bottom-up' }) => {
   const [exchanges, setExchanges] = useState(EXCHANGES.slice(0, 1));
 
   const send = () => {
@@ -92,7 +93,7 @@ const AnchoringDemo = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
       <div style={stage}>
-        <ChatThread style={{ flex: 1 }}>
+        <ChatThread style={{ flex: 1 }} flow={flow}>
           {exchanges.flatMap(({ q, a }, i) => [
             <ChatMessage key={`${q}-${i}-q`} role="user">
               {q}
@@ -110,4 +111,9 @@ const AnchoringDemo = () => {
 
 export const SendAnchoring: Story = {
   render: () => <AnchoringDemo />,
+};
+
+/** The classic thread: turns stack from the bottom edge and the view follows the newest one. */
+export const BottomUp: Story = {
+  render: () => <AnchoringDemo flow="bottom-up" />,
 };

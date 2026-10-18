@@ -169,3 +169,24 @@
 .ds-chat-thread__jump-icon {
   --icon-size: var(--icon-size-600);
 }
+
+/* ============================================
+   BOTTOM-UP — the classic message thread
+   Turns stack from the bottom edge: a short
+   conversation sits just above the composer
+   rather than at the top of an empty column.
+   The content fills the viewport at least and
+   pushes its turns to the end of it.
+   ============================================ */
+
+.ds-chat-thread--bottom-up {
+  display: flex;
+  flex-direction: column;
+}
+
+.ds-chat-thread--bottom-up .ds-chat-thread__content {
+  box-sizing: border-box;
+  flex: 1 0 auto;
+  justify-content: flex-end;
+  width: 100%;
+}

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect } from 'storybook/test';
 import { PromptSuggestions } from './PromptSuggestions';
 import { Textarea } from '../Textarea/Textarea';
 
@@ -227,3 +228,12 @@ export const CardsPending: Story = {
   },
 };
 
+
+/** `value` keeps the choice on screen: the taken suggestion checked, the rest dimmed, none tappable. */
+export const Kept: Story = {
+  args: { layout: 'stack', value: 'recipe' },
+  play: async ({ canvas }) => {
+    await expect(canvas.queryAllByRole('button')).toHaveLength(0);
+    await expect(canvas.getByText('(chosen)', { exact: false })).toBeInTheDocument();
+  },
+};

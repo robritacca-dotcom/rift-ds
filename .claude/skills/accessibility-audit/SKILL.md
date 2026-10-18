@@ -35,7 +35,7 @@ Report a finding as **already-enforced** if `npm run test` or the page-level axe
 ## Instructions
 
 1. **Determine scope.** Accept one of:
-   - A component name (e.g. `Dropdown`) → audits `src/components/Dropdown/Dropdown.tsx` and its CSS (the chat widget's own components, `ChatWidget`, `ChatLauncher`, `ChatThreads`, `ChatTabs` and `ChatAgentPane`, live in `src/chat/`)
+   - A component name (e.g. `Dropdown`) → audits `src/components/Dropdown/Dropdown.tsx` and its CSS (the chat widget's own components are the `.tsx` modules in `src/chat/`; read the folder rather than a list. Its question flow moves focus deliberately: into the first option when a set of questions holds the composer, and back to the composer once the set is answered or skipped; check both by keyboard)
    - A website page URL (e.g. `/components/button`) → audits the live rendered page
    - `all-components` → audits all components in `src/components/` and the chat widget in `src/chat/`
 

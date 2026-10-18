@@ -185,7 +185,7 @@ export const chatExchangeMap: ArchMap = {
     { id: "anthropic-tools", from: "chat-anthropic", to: "chat-tools", label: "a prop or token question triggers a lookup", kind: "accent", bend: -50 },
     { id: "tools-contracts", from: "chat-tools", to: "chat-contracts", label: "in-memory read" },
     { id: "tools-anthropic", from: "chat-tools", to: "chat-anthropic", label: "tool result, then the answer", bend: -50 },
-    { id: "anthropic-visitor", from: "chat-anthropic", to: "visitor", fromSide: "bottom", toSide: "bottom", label: "the answer streams back · lookups show as trace points", bend: -300 },
+    { id: "anthropic-visitor", from: "chat-anthropic", to: "visitor", fromSide: "bottom", toSide: "bottom", label: "the answer streams back · lookups show as trace points · it can end in a question to tap", bend: -300 },
     { id: "contracts-mcp", from: "chat-contracts", to: "chat-mcp", label: "shared implementations" },
   ],
 };

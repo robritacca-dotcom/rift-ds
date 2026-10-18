@@ -237,6 +237,11 @@ const STORY_MODULES = [
   'src/chat/sim.ts',
   'src/chat/server.ts',
   'src/chat/upstash.ts',
+  // The quick-reply questions: the ask_user schema's field descriptions,
+  // which the model reads, and QuestionCard's default labels ("Choose one",
+  // "Something else"), which every consumer's chat shows.
+  'src/chat/questions.ts',
+  'src/components/QuestionCard/QuestionCard.tsx',
   'website/src/app/playground/ChatDirector.tsx',
   'website/src/app/playground/views/ChatView.tsx',
   'src/chat/DemoWelcome.tsx',

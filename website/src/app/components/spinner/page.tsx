@@ -32,7 +32,7 @@ export default function SpinnerPage() {
               Loading in progress
             </p>
             <p className={styles.introBody}>
-              An animated circular indicator that communicates an ongoing process. Available in three sizes and two colour variants to suit different contexts.
+              An animated circular indicator that communicates an ongoing process. Available in three sizes and three colour variants: primary, neutral, and inherit, which takes the colour of the control it sits in.
             </p>
           </div>
 

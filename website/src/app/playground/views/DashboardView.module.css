@@ -17,7 +17,7 @@
   max-width: min(
     var(--stage-max-width),
     calc(
-      100vw - var(--rail-width, 0px) - var(--rail-inset, 0px) -
+      100vw - var(--rail-left, 0px) -
         var(--stage-safe-pad, var(--layout-chat-inset)) * 2
     )
   );

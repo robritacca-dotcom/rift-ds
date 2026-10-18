@@ -191,7 +191,12 @@ export default function PlaygroundPage() {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     if (q === "chat" || q === "type" || q === "dashboard") setView(q);
   }, []);
+  /* Flipped on every view switch: the layout swaps between two copies of
+     the entrance keyframes, so the panels and the stage arrive again
+     without remounting (see data-enter in the CSS). */
+  const [enterAlt, setEnterAlt] = useState(false);
   const pickView = (value: string) => {
+    if (value !== view) setEnterAlt((alt) => !alt);
     setView(value as View);
     const url = new URL(window.location.href);
     if (value === "components") url.searchParams.delete("view");
@@ -237,6 +242,24 @@ export default function PlaygroundPage() {
      something leaves a tile and the header gains its button; off, none of
      it exists and the director's artifact events stand down with it. */
   const [artifactPanel, setArtifactPanel] = useState(true);
+  /* The chat director's reset: every chat setup lever back where the stage
+     opens (the director clears the conversation itself). */
+  const resetChatSetup = () => {
+    setTransportMode("sim");
+    setChatPlaceholder("");
+    setWelcome("dashboard");
+    setChatFlow("top-down");
+    setRailProjects(true);
+    setRailPins(true);
+    setRailDetails(true);
+    setRailTabs(true);
+    setAgentRail(true);
+    setArtifactPanel(true);
+  };
+  /* The floating rails can each fold into their toggle; the layout reads
+     the flags to hand the freed room to the workspace. */
+  const [themeRailCollapsed, setThemeRailCollapsed] = useState(false);
+  const [chatRailCollapsed, setChatRailCollapsed] = useState(false);
 
   /* The staged shader banner's levers (Components view). They tune the
      banner only, never the site background, and no theme preset owns them,
@@ -894,6 +917,8 @@ export default function PlaygroundPage() {
                 setExportTab("css");
                 setExportOpen(true);
               }}
+              collapsed={themeRailCollapsed}
+              onCollapsedChange={setThemeRailCollapsed}
               contextual={
                 /* On compact screens the chat director has no rail of its
                    own — its levers and events ride in the Drawer with the
@@ -979,6 +1004,9 @@ export default function PlaygroundPage() {
         ]
           .filter(Boolean)
           .join(" ")}
+        data-enter={enterAlt ? "alt" : undefined}
+        data-left-rail={themeRailCollapsed ? "collapsed" : undefined}
+        data-right-rail={chatRailCollapsed ? "collapsed" : undefined}
       >
         {/* Inside the layout so the bar reads the panel geometry the
             layout declares (--stage-bar-start/-end) and centres on the
@@ -1196,6 +1224,9 @@ export default function PlaygroundPage() {
             levers={chatLevers}
             live={transportMode === "live"}
             artifacts={artifactPanel}
+            onResetSetup={resetChatSetup}
+            collapsed={chatRailCollapsed}
+            onCollapsedChange={setChatRailCollapsed}
           />
         )}
       </div>

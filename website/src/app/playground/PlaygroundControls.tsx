@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import styles from "./page.module.css";
+import { FloatingRail } from "./FloatingRail";
 import { Button } from "rift-ds/components/Button/Button";
 import { SplitButton } from "rift-ds/components/SplitButton/SplitButton";
 import { MOTION_FEEDBACK_RESET_MS } from "rift-ds/tokens/motion";
@@ -107,6 +108,9 @@ export interface PlaygroundControlsProps {
   onOpenAdvanced: () => void;
   /** Opens the export dialog: the CSS, THEME.md and the agent prompt. */
   onExport: () => void;
+  /** The floating panel is folded into its toggle (panel variant only). */
+  collapsed?: boolean;
+  onCollapsedChange?: (collapsed: boolean) => void;
 }
 
 /** The sticky theme-control rail — presentational; all state lives in the page. */
@@ -163,6 +167,8 @@ export default function PlaygroundControls({
   onReset,
   onOpenAdvanced,
   onExport,
+  collapsed = false,
+  onCollapsedChange = () => {},
 }: PlaygroundControlsProps) {
   /* Theme-dependent entries (the neutrals) show and match their dark-mode
      counterpart while dark mode is active. */
@@ -498,14 +504,18 @@ export default function PlaygroundControls({
             iconLeft="ios_share"
             onClick={onExport}
           />
-          <Button
-            size="compact"
-            label="Reset everything"
-            variant="secondary"
-            iconLeft="restart_alt"
-            disabled={isPristine}
-            onClick={onReset}
-          />
+          {/* The floating panel carries its reset in the header; the Drawer
+              has no header of ours, so its reset stays down here. */}
+          {variant === "drawer" && (
+            <Button
+              size="compact"
+              label="Reset everything"
+              variant="secondary"
+              iconLeft="restart_alt"
+              disabled={isPristine}
+              onClick={onReset}
+            />
+          )}
         </div>
   );
 
@@ -522,9 +532,18 @@ export default function PlaygroundControls({
     /* No animate-in here: the panel is fixed and the entrance animation's
        transform would fight the layout. The inner wrapper scrolls; the
        shell owns the clipping (see the CSS). */
-    <aside className={styles.controlRail} aria-label="Theme controls">
-      <div className={styles.railScroll}>{content}</div>
-      {footer}
-    </aside>
+    <FloatingRail
+      side="left"
+      label="Theme controls"
+      title="Theme"
+      collapsed={collapsed}
+      onCollapsedChange={onCollapsedChange}
+      onReset={onReset}
+      resetLabel="Reset everything"
+      resetDisabled={isPristine}
+      footer={footer}
+    >
+      {content}
+    </FloatingRail>
   );
 }

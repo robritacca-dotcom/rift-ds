@@ -3,6 +3,7 @@
 import type { ReactNode } from "react";
 import layout from "./page.module.css";
 import styles from "./ChatDirector.module.css";
+import { FloatingRail } from "./FloatingRail";
 import { Button } from "rift-ds/components/Button/Button";
 import { ChatMarker } from "rift-ds/components/ChatMarker/ChatMarker";
 import { InspectorSection } from "rift-ds/components/Inspector/InspectorSection";
@@ -90,6 +91,12 @@ export interface ChatDirectorProps {
   /** The Artifact panel lever is on. Off, the events that make an artifact
       leave the list: there is no panel for what they would make. */
   artifacts?: boolean;
+  /** Puts the chat setup levers back on their defaults (the director also
+      starts a fresh conversation). */
+  onResetSetup?: () => void;
+  /** The floating panel is folded into its toggle (panel variant only). */
+  collapsed?: boolean;
+  onCollapsedChange?: (collapsed: boolean) => void;
 }
 
 /** The Chat view's right-hand rail: the chat levers, then the event list. */
@@ -98,6 +105,9 @@ export default function ChatDirector({
   levers,
   live = false,
   artifacts = false,
+  onResetSetup = () => {},
+  collapsed = false,
+  onCollapsedChange = () => {},
 }: ChatDirectorProps) {
   const { injectTurn, send, reset, setDraft, streaming } = useChatWidget();
 
@@ -332,8 +342,20 @@ export default function ChatDirector({
   return (
     /* The mirror of the theme rail: fixed to the right edge, everything
        scrolling inside. */
-    <aside className={layout.eventRail} aria-label="Chat controls">
-      <div className={layout.railScroll}>{content}</div>
-    </aside>
+    <FloatingRail
+      side="right"
+      label="Chat controls"
+      title="Chat"
+      collapsed={collapsed}
+      onCollapsedChange={onCollapsedChange}
+      onReset={() => {
+        onResetSetup();
+        reset();
+        setDraft("");
+      }}
+      resetLabel="Reset the chat"
+    >
+      {content}
+    </FloatingRail>
   );
 }

@@ -12,12 +12,31 @@
   /* How far the panels float off the viewport edges — the same inset the
      toolbar pill and the docked site chat keep. */
   --rail-inset: var(--layout-chat-inset);
+  /* A folded rail: the glass button its card closes into. The toggle
+     grows to fill it, so the folded card is one control, not a ring
+     around a smaller one. */
+  --rail-collapsed: 48px;
+  /* The folded card's corner, the theme's button shape: a circle on a pill
+     theme, a rounded square where the theme squares its buttons. The
+     toggle wears the same corner, so the two never disagree. */
+  --rail-collapsed-radius: min(var(--radius-pill), calc(var(--rail-collapsed) / 2));
+  /* How far each panel reaches in from its edge, open or folded. The page
+     marks a folded rail on this element (data-left-rail / data-right-rail),
+     and everything that makes room for a panel reads these two, so the
+     workspace slides into the space a fold frees. */
+  --rail-left: calc(var(--rail-width) + var(--rail-inset));
+  --rail-right: calc(var(--rail-width) + var(--rail-inset));
   /* Where the floating panels stand in from each side — the stage
      widget's hard width wall. Read by ChatView.module.css. */
-  --stage-walls: calc((var(--rail-width) + var(--rail-inset)) * 2);
+  --stage-walls: calc(var(--rail-left) + var(--rail-right));
   /* The bottom control bar centres on the workspace, not the viewport:
      the theme panel reaches this far in from the left. */
-  --stage-bar-start: calc(var(--rail-width) + var(--rail-inset));
+  --stage-bar-start: var(--rail-left);
+  /* Registered lengths (the @property rules below), so the reach
+     interpolates and every reader moves with the card as it folds. */
+  transition:
+    --rail-left var(--motion-duration-slow) var(--motion-ease-emphasized),
+    --rail-right var(--motion-duration-slow) var(--motion-ease-emphasized);
   display: flex;
   justify-content: center;
   /* Stretch across the body's own side padding so the centring zone is
@@ -28,7 +47,7 @@
   /* Panel, then the same safe ring the chat stage keeps — the column can
      narrow to the panel's edge on tight viewports, and flush against the
      glass is a collision, not a fit. */
-  padding-left: calc(var(--rail-width) + var(--rail-inset) * 2);
+  padding-left: calc(var(--rail-left) + var(--rail-inset));
   /* The workspace keeps the float inset off the right edge too, so the
      content column never touches the viewport where no panel floats. */
   padding-right: var(--rail-inset);
@@ -40,17 +59,37 @@
   padding-bottom: var(--layout-stage-bottom-clearance);
 }
 
+.dsLayout[data-left-rail="collapsed"] {
+  --rail-left: calc(var(--rail-collapsed) + var(--rail-inset));
+}
+
+.dsLayout[data-right-rail="collapsed"] {
+  --rail-right: calc(var(--rail-collapsed) + var(--rail-inset));
+}
+
+@property --rail-left {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+
+@property --rail-right {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+
 /* The Chat view runs a second floating panel on the right (the chat
    director), so the workspace centres between the two. Applied by the page
    only when that panel is actually rendered. */
 .dsLayoutChat {
   /* The chat director mirrors the theme panel on the right, so the bar
      centres between the two (the viewport's own centre). */
-  --stage-bar-end: calc(var(--rail-width) + var(--rail-inset));
+  --stage-bar-end: var(--rail-right);
   /* The chat stage owns its safe ring (ChatView's --stage-safe-pad), so
      the layout hands it the zone panel-to-panel on both sides. */
-  padding-left: calc(var(--rail-width) + var(--rail-inset));
-  padding-right: calc(var(--rail-width) + var(--rail-inset));
+  padding-left: var(--rail-left);
+  padding-right: var(--rail-right);
   /* The chat stage carries no page heading, so the components view's
      extra title air goes — the widget's top gap matches its bottom one. */
   padding-top: var(--layout-stage-clearance);
@@ -61,7 +100,7 @@
 .dsLayoutDashboard {
   /* The stage owns its safe ring (the Chat view's --stage-safe-pad), so
      the layout hands it the zone from the panel to the viewport edge. */
-  padding-left: calc(var(--rail-width) + var(--rail-inset));
+  padding-left: var(--rail-left);
   padding-right: 0;
   padding-top: var(--layout-stage-clearance);
 }
@@ -121,46 +160,198 @@
    column each carry the entrance themselves, because the rails are fixed
    and an animated transform on their ancestor would re-anchor them
    mid-flight. Reduced motion zeroes it via the media block below. */
-.controlRail {
+.floatingRail {
   animation: playgroundEnter var(--motion-duration-slower) var(--motion-ease-entrance) backwards;
   position: fixed;
   top: var(--layout-stage-clearance);
-  bottom: var(--rail-inset);
-  left: var(--rail-inset);
   width: var(--rail-width);
+  /* A height, not a bottom edge, so the fold can interpolate it. */
+  height: calc(100dvh - var(--layout-stage-clearance) - var(--rail-inset));
   /* Above the showcase sections' animate-in stacking contexts, so the
      rail's open Dropdown menu can never be painted over. */
   /* ds-allow(stacking): local order on the immersive stage, its own ladder: floating rails 15, control bar 25, toolbar 30, full-size panels above. */
   z-index: 15;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
   background: var(--color-bg-glass);
   border: var(--border-025) solid var(--color-bg-container-border);
   border-radius: var(--radius-600);
   box-shadow: var(--shadow-floating);
   backdrop-filter: blur(24px);
+  transition:
+    width var(--motion-duration-slow) var(--motion-ease-emphasized),
+    height var(--motion-duration-slow) var(--motion-ease-emphasized),
+    border-radius var(--motion-duration-slow) var(--motion-ease-emphasized);
 }
 
-/* The chat director's panel: the control panel mirrored to the right edge.
-   Same card, same float, same glass. */
-.eventRail {
-  animation: playgroundEnter var(--motion-duration-slower) var(--motion-ease-entrance) backwards;
-  position: fixed;
-  top: var(--layout-stage-clearance);
-  bottom: var(--rail-inset);
+.floatingRail[data-side="left"] {
+  left: var(--rail-inset);
+}
+
+/* The chat director: the theme rail mirrored to the right edge. Its
+   fixed-width contents hang from the right, so a fold clips them from the
+   left and the toggle in the top-right corner stays put. */
+.floatingRail[data-side="right"] {
   right: var(--rail-inset);
-  width: var(--rail-width);
-  /* ds-allow(stacking): local order on the immersive stage, its own ladder: floating rails 15, control bar 25, toolbar 30, full-size panels above. */
-  z-index: 15;
+}
+
+/* The card's clipping lives here rather than on the card, so the toggle
+   (positioned on the card) can open its tooltip past the edge. */
+.railBody {
   display: flex;
   flex-direction: column;
+  height: 100%;
   overflow: hidden;
-  background: var(--color-bg-glass);
-  border: var(--border-025) solid var(--color-bg-container-border);
-  border-radius: var(--radius-600);
-  box-shadow: var(--shadow-floating);
-  backdrop-filter: blur(24px);
+  border-radius: inherit;
+}
+
+.floatingRail[data-side="right"] .railBody {
+  align-items: flex-end;
+}
+
+/* Folded: the card closes around its toggle into a round glass button in
+   the same corner, shadow and blur intact. */
+.floatingRail[data-collapsed] {
+  width: var(--rail-collapsed);
+  height: var(--rail-collapsed);
+  border-radius: var(--rail-collapsed-radius);
+}
+
+/* The rail's contents keep the open width while the card narrows, so
+   nothing reflows mid-fold; the card's overflow clips them instead. */
+.railHead,
+.railScroll,
+.railFootWrap {
+  width: var(--rail-width);
+}
+
+.railHead,
+.railFootWrap {
+  flex-shrink: 0;
+}
+
+/* Open, the row stands well in from the card's corner, so a theme with a
+   large card radius never crowds the toggle into the curve. Folded, the
+   padding goes and the toggle takes the whole card: the row is the folded
+   button with everything else gone. */
+.railHead {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-200);
+  padding: var(--padding-400);
+  transition: padding var(--motion-duration-slow) var(--motion-ease-emphasized);
+}
+
+.floatingRail[data-collapsed] .railHead {
+  padding: 0;
+}
+
+/* Holds the toggle's place in the row: the compact CircularButton's size. */
+.railToggleSlot {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+}
+
+/* Over the header's slot, open; on the corner, folded. Its tooltip is the
+   card's only content that escapes the clip. (A seat around the button,
+   because the Tooltip wrapper is the button's positioned parent.) */
+.railToggleSeat {
+  position: absolute;
+  top: var(--padding-400);
+  display: flex;
+  /* ds-allow(stacking): local order inside the rail, the toggle above the clipped body. */
+  z-index: 1;
+  transition:
+    top var(--motion-duration-slow) var(--motion-ease-emphasized),
+    left var(--motion-duration-slow) var(--motion-ease-emphasized),
+    right var(--motion-duration-slow) var(--motion-ease-emphasized);
+}
+
+.railToggle {
+  transition:
+    width var(--motion-duration-slow) var(--motion-ease-emphasized),
+    height var(--motion-duration-slow) var(--motion-ease-emphasized),
+    border-radius var(--motion-duration-slow) var(--motion-ease-emphasized),
+    background-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+/* Inside the card's border, so its hover fill and focus ring trace the
+   card's own edge. */
+.floatingRail[data-side="left"] .railToggleSeat {
+  left: var(--padding-400);
+}
+
+.floatingRail[data-side="right"] .railToggleSeat {
+  right: var(--padding-400);
+}
+
+.floatingRail[data-collapsed][data-side="left"] .railToggleSeat {
+  left: 0;
+}
+
+.floatingRail[data-collapsed][data-side="right"] .railToggleSeat {
+  right: 0;
+}
+
+.floatingRail[data-collapsed] .railToggleSeat {
+  top: 0;
+}
+
+.floatingRail[data-collapsed] .railToggle {
+  width: calc(var(--rail-collapsed) - var(--border-025) * 2);
+  height: calc(var(--rail-collapsed) - var(--border-025) * 2);
+  border-radius: var(--rail-collapsed-radius);
+}
+
+.railTitle {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--font-paragraph-emphasis-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-emphasis-letter-spacing);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}
+
+.floatingRail[data-side="right"] .railTitle {
+  padding-inline-start: var(--padding-200);
+}
+
+/* Everything but the toggle fades: out quickly as the fold starts, back
+   in a beat after the card has begun to open, so the levers never show
+   crushed against a half-open edge. */
+.railFade {
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard) var(--motion-duration-fast);
+}
+
+.floatingRail[data-collapsed] .railFade {
+  opacity: 0;
+  transition-duration: var(--motion-duration-fast);
+  transition-delay: 0s;
+}
+
+/* The toggle's two panel marks, stacked and crossfaded: the close mark
+   shrinks away as the open one grows in. */
+.railToggleGlyphs {
+  display: grid;
+}
+
+.railToggleGlyphs > * {
+  grid-area: 1 / 1;
+  transition:
+    opacity var(--motion-duration-base) var(--motion-ease-standard),
+    transform var(--motion-duration-slow) var(--motion-ease-spring);
+}
+
+.railToggleGlyphs > [data-glyph="open"],
+.floatingRail[data-collapsed] .railToggleGlyphs > [data-glyph="close"] {
+  opacity: 0;
+  transform: scale(0.5);
+}
+
+.floatingRail[data-collapsed] .railToggleGlyphs > [data-glyph="open"] {
+  opacity: 1;
+  transform: none;
 }
 
 .railScroll {
@@ -178,6 +369,7 @@
   /* No gap: the stacked sections own their spacing, so a header's room
      above and below its divider is equal (the trigger's padding). */
   padding: var(--padding-400);
+  border-top: var(--border-025) solid var(--color-divider);
 }
 
 .controlGroup {
@@ -634,10 +826,31 @@
   }
 }
 
+/* A view switch replays the entrance without remounting anything: the page
+   flips data-enter, which swaps in this identical copy of the keyframes,
+   and a changed animation-name restarts the run. Remounting would throw
+   away the rails' open sections and scroll. */
+.dsLayout[data-enter="alt"] .floatingRail,
+.dsLayout[data-enter="alt"] .dsContentEnter {
+  animation-name: playgroundEnterAlt;
+}
+
+@keyframes playgroundEnterAlt {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.992);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .controlRail,
-  .eventRail,
-  .dsContentEnter {
+  .floatingRail,
+  .dsContentEnter,
+  .dsLayout[data-enter="alt"] .floatingRail,
+  .dsLayout[data-enter="alt"] .dsContentEnter {
     animation: none;
   }
 }

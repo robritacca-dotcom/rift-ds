@@ -1,0 +1,329 @@
+/* Labs: quick replies. Colours, spaces, radii and type are semantic tokens;
+   the raw values are structural layout sizes the page owns (the rail's
+   width, the phone frame's handset geometry, the stage's glass blur). */
+
+.page {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 380px minmax(0, 1fr);
+  gap: var(--gap-500);
+  padding: var(--padding-500);
+  height: calc(var(--layout-viewport-height, 100vh));
+  color: var(--color-text-primary);
+  font-family: var(--font-family-body);
+}
+
+/* ------------------------------------------------------------ the rail */
+
+.rail {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--color-bg-glass);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
+  box-shadow: var(--shadow-floating);
+  backdrop-filter: blur(24px);
+  overflow: hidden;
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+  padding: var(--padding-400) var(--padding-500);
+}
+
+.eyebrow {
+  margin: 0;
+  font-family: var(--font-overline-family);
+  font-size: var(--font-overline-size);
+  font-weight: var(--font-overline-weight);
+  line-height: var(--font-overline-line-height);
+  letter-spacing: var(--font-overline-letter-spacing);
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-heading-3-family);
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+  letter-spacing: var(--font-heading-3-letter-spacing);
+  text-wrap: balance;
+}
+
+.lede {
+  margin: 0;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-secondary);
+}
+
+.levels {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+  margin: 0;
+  padding: 0 var(--padding-400) var(--padding-400);
+  list-style: none;
+  overflow-y: auto;
+}
+
+.level {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--gap-100);
+  width: 100%;
+  padding: var(--padding-300) var(--padding-400);
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  background: var(--color-bg-container-primary-transparent);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-400);
+  cursor: pointer;
+  transition:
+    background-color var(--motion-duration-fast) var(--motion-ease-standard),
+    border-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.level:hover:not(:disabled) {
+  background: var(--color-bg-container-secondary);
+}
+
+.level:focus-visible {
+  outline: var(--border-050) solid var(--color-action-primary-bg);
+  outline-offset: var(--border-050);
+}
+
+.level:disabled {
+  cursor: progress;
+}
+
+.level[data-active] {
+  background: var(--color-bg-container-primary-semi);
+  border-color: var(--color-action-primary-border);
+}
+
+.levelHead {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-200);
+}
+
+.levelNumber {
+  display: inline-grid;
+  place-items: center;
+  width: var(--icon-size-600);
+  height: var(--icon-size-600);
+  border: var(--border-025) solid var(--color-text-secondary);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: 1;
+  color: var(--color-text-secondary);
+}
+
+.level[data-active] .levelNumber {
+  border-color: var(--color-text-primary);
+  background: var(--color-text-primary);
+  color: var(--color-text-inverse);
+}
+
+.levelAction {
+  flex: 1;
+  font-family: var(--font-overline-family);
+  font-size: var(--font-overline-size);
+  font-weight: var(--font-overline-weight);
+  line-height: var(--font-overline-line-height);
+  letter-spacing: var(--font-overline-letter-spacing);
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+}
+
+.level[data-active] .levelAction {
+  color: var(--color-text-secondary);
+}
+
+.levelIcon {
+  --icon-size: var(--icon-size-500);
+  font-size: var(--icon-size);
+  color: var(--color-text-tertiary);
+}
+
+.level[data-active] .levelIcon {
+  color: var(--color-text-primary);
+}
+
+.levelTitle {
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  letter-spacing: var(--font-title-body-letter-spacing);
+}
+
+.levelWhen {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-secondary);
+}
+
+/* The one instruction on the level that is playing: what to do in the
+   chat right now. */
+.tryIt {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-200);
+  margin-top: var(--gap-200);
+  padding: var(--padding-200) var(--padding-300);
+  border-radius: var(--radius-300);
+  background: var(--color-bg-container-secondary);
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.tryIcon {
+  --icon-size: var(--icon-size-500);
+  font-size: var(--icon-size);
+  flex: none;
+}
+
+.railFoot {
+  display: flex;
+  padding: var(--padding-300) var(--padding-400);
+  border-top: var(--border-025) solid var(--color-bg-container-border);
+}
+
+/* ----------------------------------------------------------- the stage */
+
+.stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-400);
+  min-width: 0;
+  min-height: 0;
+}
+
+/* The page's own instruments, at the head of the rail: the theme, the
+   colour mode and the chat's frame. */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap-200);
+  padding: var(--padding-400) var(--padding-400) 0;
+}
+
+.card {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  background: color-mix(in srgb, var(--color-bg-container-primary) 82%, transparent);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
+  box-shadow: var(--shadow-floating);
+  backdrop-filter: blur(24px);
+  overflow: hidden;
+}
+
+/* A handset: a 390pt screen inside a concentric bezel, the playground's
+   phone recipe (a 56px screen corner inside a 68px bezel), shrunk to the
+   stage's height when the window is short. */
+.phone {
+  flex: 0 1 auto;
+  display: flex;
+  min-height: 0;
+  height: min(868px, 100%);
+  aspect-ratio: 414 / 868;
+  max-width: 100%;
+  padding: 12px;
+  border-radius: 68px;
+  background: var(--color-bg-page-primary);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  box-shadow: var(--shadow-floating);
+}
+
+.phoneScreen {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  padding-top: var(--padding-500);
+  border-radius: 56px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--color-bg-container-primary) 82%, transparent);
+}
+
+/* The frame switch sits at the far end of the row. */
+.deviceSwitch {
+  margin-left: auto;
+}
+
+/* ------------------------------------------------------ narrow windows */
+
+/* Below a tablet the rail stacks over the chat: the intro shortens, the
+   levels become a row to swipe through, and the chat takes the rest. The
+   frame switch steps aside, because the window already is the frame. */
+@media (max-width: 959px) {
+  .page {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    gap: var(--gap-300);
+    padding: var(--padding-300);
+  }
+
+  .intro {
+    padding: var(--padding-400) var(--padding-400) var(--padding-300);
+  }
+
+  .lede,
+  .railFoot,
+  .deviceSwitch {
+    display: none;
+  }
+
+  .levels {
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0 var(--padding-400) var(--padding-400);
+    scroll-snap-type: x mandatory;
+  }
+
+  .levels > li {
+    flex: 0 0 200px;
+    scroll-snap-align: start;
+  }
+
+  .level {
+    height: 100%;
+  }
+
+  .levelWhen,
+  .tryIt {
+    display: none;
+  }
+
+  .stage {
+    gap: var(--gap-300);
+  }
+}

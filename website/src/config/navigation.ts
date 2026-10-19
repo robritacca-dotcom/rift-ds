@@ -41,7 +41,7 @@ export interface MegaItem {
   /**
    * The page needs a pointer and a wide viewport, so it stays out of the
    * mobile IA: the drawer never lists it, and the surfaces that render on
-   * every viewport (footer, DS landing hero, home DS card) hide its link
+   * every viewport (the footer and the command palette) hide its link
    * below the nav's 959px breakpoint. The mega panels need no guard — they
    * only exist above it.
    */

@@ -1,5 +1,5 @@
 /* A template drawn live in a scaled, inert same-origin frame: the window
-   the templates carousel and the home page's template showcase both show.
+   the templates carousel and the home bento's templates tile both show.
    TemplateFrame.tsx owns the design sizes and sets --frame-scale. */
 
 /* The window: a drawn browser bar over the template's viewport, so the

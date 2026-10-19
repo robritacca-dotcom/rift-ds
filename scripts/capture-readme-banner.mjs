@@ -3,8 +3,8 @@
  *
  * Re-shoots `.github/readme-banner.jpg`, the image at the top of README.md.
  *
- * This exists because the banner is the one surface in the repo that states
- * facts without a generator behind it. On 2026-09-26 the committed banner
+ * This exists because the banner states facts without a generator behind it
+ * (CLAUDE.md's README banner paragraph lists the other screenshot surfaces). On 2026-09-26 the committed banner
  * still showed the old codename wordmark, an install line naming the retired
  * scoped package (RETIRED_PACKAGE_NAMES in brand.mjs is its only home), 132
  * components and 8 themes: a brand, a package name and two counts that had

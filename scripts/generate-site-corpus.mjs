@@ -710,7 +710,7 @@ function coveredElsewhere() {
  */
 const EXCLUDED_ROUTES = new Map([
   ['/',
-    'the home page is the landing collage — its prose is demo filler for the live components, not information; the sections it links to are all covered'],
+    'the home page is the landing collage — its prose is demo filler for the live components, and its closing questions restate facts the pages they link to own (get-started, the chat docs, the playground); the sections it links to are all covered'],
   ['/graph',
     'the dependency-graph instrument — its prose is the instrument\'s own controls and panel labels; the graph\'s data is the registries the corpus already carries, and the /overview section that links to it is covered'],
   ['/labs/marketing',

@@ -11,6 +11,7 @@ import {
 } from 'recharts';
 import type { ChartSummaryItem } from './BarChart';
 import { getChartSeriesColors } from './palette';
+import { useChartAnimation } from './useChartAnimation';
 import './Chart.css';
 
 interface AreaTooltipPayloadEntry {
@@ -108,6 +109,7 @@ export const AreaChart = ({
 }: AreaChartProps) => {
   const titleId = useId();
   const subtitleId = useId();
+  const animation = useChartAnimation(data, series.length);
   const baseClass = 'ds-chart';
   const classes = [baseClass, bare ? `${baseClass}--bare` : '', className]
     .filter(Boolean)
@@ -181,6 +183,7 @@ export const AreaChart = ({
             {series.map((s, i) => (
               <Area
                 key={s.dataKey}
+                {...animation}
                 type="monotone"
                 dataKey={s.dataKey}
                 name={s.label}

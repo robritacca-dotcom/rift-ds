@@ -46,6 +46,9 @@ export const MOTION_STREAM_CHAR_INTERVAL_MS = 15;
 /** The count-up tween's full budget: however far the number travels, AnimatedNumber has it settled within this. An animation pace, not a schedule timing: the tween is skipped under reduced motion. */
 export const MOTION_COUNT_UP_MS = 800;
 
+/** How long ScatterChart's points sweep in — mirrors --motion-duration-deliberate. The other charts ride recharts' own default pacing and report when the entrance has ended; Scatter is the one recharts item with no end callback, so its wrapper sets the duration itself and drops the entrance flag on a timer of the same length. An animation pace recharts' 'auto' guard already skips under reduced motion. */
+export const MOTION_CHART_ENTRANCE_MS = 400;
+
 /** Grace period before a hover-summoned surface hides once the pointer has left it — long enough to cross the gap between a launcher and its panel without the panel dying under a mouse that is heading for it. */
 export const MOTION_HOVER_EXIT_GRACE_MS = 600;
 

@@ -9,6 +9,7 @@ import {
 } from 'recharts';
 import type { ChartSummaryItem } from './BarChart';
 import { getChartSeriesColors } from './palette';
+import { useChartAnimation } from './useChartAnimation';
 import './Chart.css';
 
 interface PieChartTooltipPayloadEntry {
@@ -100,6 +101,7 @@ export const PieChart = ({
 }: PieChartProps) => {
   const titleId = useId();
   const subtitleId = useId();
+  const animation = useChartAnimation(data);
   const baseClass = 'ds-chart';
   const classes = [baseClass, bare ? `${baseClass}--bare` : '', className]
     .filter(Boolean)
@@ -145,6 +147,7 @@ export const PieChart = ({
         <ResponsiveContainer width="100%" height={height}>
           <RechartsPieChart>
             <Pie
+              {...animation}
               data={data}
               dataKey="value"
               nameKey="name"

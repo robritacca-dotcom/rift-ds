@@ -9,6 +9,7 @@ import {
 } from 'recharts';
 import type { ChartSummaryItem } from './BarChart';
 import { getChartSeriesColors } from './palette';
+import { useChartAnimation } from './useChartAnimation';
 import './Chart.css';
 
 interface RadialTooltipPayloadEntry {
@@ -109,6 +110,7 @@ export const RadialChart = ({
 }: RadialChartProps) => {
   const titleId = useId();
   const subtitleId = useId();
+  const animation = useChartAnimation(data);
   const baseClass = 'ds-chart';
   const classes = [baseClass, bare ? `${baseClass}--bare` : '', className]
     .filter(Boolean)
@@ -171,6 +173,7 @@ export const RadialChart = ({
           >
             <PolarAngleAxis type="number" domain={[0, maxValue]} tick={false} />
             <RadialBar
+              {...animation}
               background={{ fill: bgColor }}
               dataKey="value"
               cornerRadius={8}

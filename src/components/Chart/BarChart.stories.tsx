@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { BarChart } from './BarChart';
+import { Button } from '../Button/Button';
 
 /* ============================================
    Sample data — 3 months of page views
@@ -135,4 +137,51 @@ export const AllStates: Story = {
       />
     </div>
   ),
+};
+
+/* ============================================
+   Resize and new data
+   A chart animates its marks in on mount and again when its data
+   changes. A container resize is a re-layout only: the bars take their
+   new geometry in one step, without replaying the entrance. The two
+   buttons exercise each case; the container also answers a direct
+   style change, which is how a dragged panel resizes it.
+   ============================================ */
+function ResizeAndNewDataDemo(args: React.ComponentProps<typeof BarChart>) {
+  const [narrow, setNarrow] = useState(false);
+  const [data, setData] = useState(args.data);
+  return (
+    <div>
+      <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
+        <Button
+          variant="secondary"
+          size="compact"
+          data-testid="resize"
+          onClick={() => setNarrow((n) => !n)}
+        >
+          Resize container
+        </Button>
+        <Button
+          variant="secondary"
+          size="compact"
+          data-testid="new-data"
+          onClick={() => setData(generatePageViews())}
+        >
+          New data
+        </Button>
+      </div>
+      <div data-testid="container" style={{ width: narrow ? '60%' : '100%' }}>
+        <BarChart {...args} data={data} />
+      </div>
+    </div>
+  );
+}
+
+export const ResizeAndNewData: Story = {
+  args: {
+    title: 'Resize and new data',
+    subtitle: 'A resize re-lays out the bars in one step; new data animates them in',
+    summaryItems: undefined,
+  },
+  render: (args) => <ResizeAndNewDataDemo {...args} />,
 };

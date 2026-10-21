@@ -8,6 +8,7 @@ import {
 } from 'recharts';
 import type { ChartSummaryItem } from './BarChart';
 import { getChartSeriesColors } from './palette';
+import { useChartAnimation } from './useChartAnimation';
 import './Chart.css';
 
 interface TreemapTooltipPayloadEntry {
@@ -243,6 +244,7 @@ export const Treemap = ({
 }: TreemapProps) => {
   const titleId = useId();
   const subtitleId = useId();
+  const animation = useChartAnimation(data);
   const themeVersion = useThemeVersion();
   const baseClass = 'ds-chart';
   const classes = [baseClass, bare ? `${baseClass}--bare` : '', className]
@@ -286,6 +288,7 @@ export const Treemap = ({
       <div className={`${baseClass}__body`}>
         <ResponsiveContainer width="100%" height={height}>
           <RechartsTreemap
+            {...animation}
             data={data}
             dataKey={dataKey}
             aspectRatio={4 / 3}

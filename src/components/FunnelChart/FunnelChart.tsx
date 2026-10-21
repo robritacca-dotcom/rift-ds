@@ -7,6 +7,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import { getChartSeriesColors } from '../Chart/palette';
+import { useChartAnimation } from '../Chart/useChartAnimation';
 import '../Chart/Chart.css';
 import './FunnelChart.css';
 
@@ -120,6 +121,7 @@ export const FunnelChart = React.forwardRef<HTMLDivElement, FunnelChartProps>(
     ref,
   ) => {
     const baseClass = 'ds-funnel-chart';
+    const animation = useChartAnimation(data);
     const chartClass = 'ds-chart';
     const classes = [chartClass, bare && `${chartClass}--bare`, baseClass, className]
       .filter(Boolean)
@@ -165,10 +167,12 @@ export const FunnelChart = React.forwardRef<HTMLDivElement, FunnelChartProps>(
           <ResponsiveContainer width="100%" height={height}>
             <RechartsFunnelChart margin={{ top: 4, right: 4, bottom: 4, left: 4 }}>
               <Tooltip content={renderTooltip} />
-              {/* Animation stays on the recharts 'auto' default, which already
-                  turns itself off under prefers-reduced-motion and in SSR. The
-                  surface-coloured stroke separates the bands in either theme. */}
+              {/* The shared hook keeps the sweep-in to mount and new data, on
+                  recharts' 'auto' guard, which already turns itself off under
+                  prefers-reduced-motion and in SSR. The surface-coloured stroke
+                  separates the bands in either theme. */}
               <Funnel
+                {...animation}
                 dataKey="value"
                 nameKey="name"
                 data={stages}

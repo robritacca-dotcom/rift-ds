@@ -11,6 +11,7 @@ import {
 } from 'recharts';
 import type { ChartSummaryItem } from './BarChart';
 import { getChartSeriesColors } from './palette';
+import { useChartAnimation } from './useChartAnimation';
 import './Chart.css';
 
 interface RadarTooltipPayloadEntry {
@@ -102,6 +103,7 @@ export const RadarChart = ({
 }: RadarChartProps) => {
   const titleId = useId();
   const subtitleId = useId();
+  const animation = useChartAnimation(data, series.length);
   const baseClass = 'ds-chart';
   const classes = [baseClass, bare ? `${baseClass}--bare` : '', className]
     .filter(Boolean)
@@ -162,6 +164,7 @@ export const RadarChart = ({
             {series.map((s, i) => (
               <Radar
                 key={s.dataKey}
+                {...animation}
                 name={s.label}
                 dataKey={s.dataKey}
                 stroke={s.color || seriesColors[i % seriesColors.length]}

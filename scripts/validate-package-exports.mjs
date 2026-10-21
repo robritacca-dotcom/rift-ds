@@ -210,6 +210,8 @@ const INTERNAL_MODULES = new Map([
     'the type mark the attachment tile and viewer both draw; the components are the public surface, and the mark has no meaning outside them'],
   ['src/components/WorldMap/land.ts',
     'baked Natural Earth land path in WorldMap\'s private drawing space; the component is the public surface, and the coordinates mean nothing without its projection'],
+  ['src/components/Chart/useChartAnimation.ts',
+    'the entrance hook every chart in the set spreads into its series; the charts are the public surface, and the contract it keeps (animate on mount and on new data, never on a resize) is design.md\'s chart spec'],
 ]);
 
 const componentsDir = join(repoRoot, 'src', 'components');

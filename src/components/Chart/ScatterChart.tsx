@@ -12,6 +12,8 @@ import {
 } from 'recharts';
 import type { ChartSummaryItem } from './BarChart';
 import { getChartSeriesColors } from './palette';
+import { useChartAnimation } from './useChartAnimation';
+import { MOTION_CHART_ENTRANCE_MS } from '../../tokens/motion';
 import './Chart.css';
 
 interface ScatterTooltipPayloadEntry {
@@ -115,6 +117,11 @@ export const ScatterChart = ({
 }: ScatterChartProps) => {
   const titleId = useId();
   const subtitleId = useId();
+  /* Scatter is the one recharts item with no end callback, so the wrapper
+     paces the sweep itself and the hook drops the flag on a timer. */
+  const animation = useChartAnimation(datasets, datasets.length, {
+    durationMs: MOTION_CHART_ENTRANCE_MS,
+  });
   const baseClass = 'ds-chart';
   const classes = [baseClass, bare ? `${baseClass}--bare` : '', className]
     .filter(Boolean)
@@ -183,6 +190,7 @@ export const ScatterChart = ({
             {datasets.map((ds, i) => (
               <Scatter
                 key={ds.name}
+                {...animation}
                 name={ds.name}
                 data={ds.data}
                 fill={ds.color || seriesColors[i % seriesColors.length]}

@@ -10,6 +10,7 @@ import {
 } from 'recharts';
 import type { ChartSummaryItem } from './BarChart';
 import { getChartSeriesColors } from './palette';
+import { useChartAnimation } from './useChartAnimation';
 import './Chart.css';
 
 interface StackedTooltipPayloadEntry {
@@ -102,6 +103,7 @@ export const StackedBarChart = ({
 }: StackedBarChartProps) => {
   const titleId = useId();
   const subtitleId = useId();
+  const animation = useChartAnimation(data, series.length);
   const baseClass = 'ds-chart';
   const classes = [baseClass, bare ? `${baseClass}--bare` : '', className]
     .filter(Boolean)
@@ -169,6 +171,7 @@ export const StackedBarChart = ({
             {series.map((s, i) => (
               <Bar
                 key={s.dataKey}
+                {...animation}
                 dataKey={s.dataKey}
                 name={s.label}
                 fill={s.color || defaultColors[i % defaultColors.length]}

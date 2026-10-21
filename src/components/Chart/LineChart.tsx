@@ -10,6 +10,7 @@ import {
 } from 'recharts';
 import type { ChartSummaryItem } from './BarChart';
 import { getChartSeriesColors } from './palette';
+import { useChartAnimation } from './useChartAnimation';
 import './Chart.css';
 
 interface LineChartTooltipPayloadEntry {
@@ -101,6 +102,7 @@ export const LineChart = ({
 }: LineChartProps) => {
   const titleId = useId();
   const subtitleId = useId();
+  const animation = useChartAnimation(data, series.length);
   const baseClass = 'ds-chart';
   const classes = [baseClass, bare ? `${baseClass}--bare` : '', className]
     .filter(Boolean)
@@ -163,6 +165,7 @@ export const LineChart = ({
             {series.map((s, i) => (
               <Line
                 key={s.dataKey}
+                {...animation}
                 type="monotone"
                 dataKey={s.dataKey}
                 name={s.label}

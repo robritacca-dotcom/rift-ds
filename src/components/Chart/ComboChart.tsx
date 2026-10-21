@@ -11,6 +11,7 @@ import {
 } from 'recharts';
 import type { ChartSummaryItem } from './BarChart';
 import { getChartSeriesColors } from './palette';
+import { useChartAnimation } from './useChartAnimation';
 import './Chart.css';
 
 interface ComboTooltipPayloadEntry {
@@ -121,6 +122,7 @@ export const ComboChart = ({
 }: ComboChartProps) => {
   const titleId = useId();
   const subtitleId = useId();
+  const animation = useChartAnimation(data, 2);
   const baseClass = 'ds-chart';
   const classes = [baseClass, bare ? `${baseClass}--bare` : '', className]
     .filter(Boolean)
@@ -206,6 +208,7 @@ export const ComboChart = ({
               cursor={{ fill: cursorColor, opacity: 0.4 }}
             />
             <Bar
+              {...animation}
               yAxisId="bar"
               dataKey={barKey}
               name={resolvedBarLabel}
@@ -214,6 +217,7 @@ export const ComboChart = ({
               maxBarSize={32}
             />
             <Line
+              {...animation}
               yAxisId={secondaryAxis ? 'line' : 'bar'}
               type="monotone"
               dataKey={lineKey}

@@ -8,6 +8,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
+import { useChartAnimation } from './useChartAnimation';
 import './Chart.css';
 
 interface ChartTooltipPayloadEntry {
@@ -114,6 +115,7 @@ export const BarChart = ({
 }: BarChartProps) => {
   const titleId = useId();
   const subtitleId = useId();
+  const animation = useChartAnimation(data);
   const baseClass = 'ds-chart';
   const classes = [baseClass, bare ? `${baseClass}--bare` : '', className]
     .filter(Boolean)
@@ -187,6 +189,7 @@ export const BarChart = ({
               cursor={{ fill: cursorColor, opacity: 0.4 }}
             />
             <Bar
+              {...animation}
               dataKey={yKey}
               fill={resolvedBarColor}
               radius={[3, 3, 0, 0]}

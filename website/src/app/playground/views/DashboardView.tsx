@@ -20,7 +20,7 @@
  * show through as a grey slab).
  */
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { MOTION_SCROLL_SETTLE_MS } from "rift-ds/tokens/motion";
 import { STAGED_PRODUCT_NAME_ATTR } from "@/components/templates/useStagedProductName";
 import chatStyles from "./ChatView.module.css";
@@ -193,7 +193,6 @@ export default function DashboardView({
   } | null>(null);
   const [manual, setManual] = useState<{ w?: number; h?: number }>({});
   const [resizing, setResizing] = useState(false);
-  const [readout, setReadout] = useState<{ w: number; h: number } | null>(null);
 
   const beginResize = (e: React.PointerEvent<HTMLDivElement>) => {
     if ((e.pointerType === "mouse" && e.button !== 0) || dragRef.current) return;
@@ -208,25 +207,52 @@ export default function DashboardView({
       width: rect.width,
       height: rect.height,
     };
+    /* Dropping the fit classes is React's job: commit the starting size on
+       the dragged axes now (a discrete event, so it lands before the first
+       move writes the DOM). */
+    const start: { w?: number; h?: number } = {};
+    if (axis !== "y") start.w = Math.round(rect.width);
+    if (axis !== "x") start.h = Math.round(rect.height);
+    setManual((m) => ({ ...m, ...start }));
     e.currentTarget.setPointerCapture(e.pointerId);
     setResizing(true);
   };
 
-  /* One size per animation frame, however fast the pointer reports:
-     recharts answers every re-render that moves its ticks with a store
-     dispatch of its own, and pointer events arriving faster than frames
-     stacked those past React's nested-update limit (error #185,
-     recharts/recharts#7563). The release flushes the last pending size so
-     the card lands where the pointer let go. */
+  /* A drag renders nothing until the pointer lets go: the grips write the
+     size straight onto the board one frame at a time, and the readout's
+     text onto its node, and the release commits the final size through
+     React. The Chat view's resize owns the reasoning (React 19.2 counts a
+     commit that ends with the next move queued as a nested update, and a
+     real drag over a re-rendering stage reached its limit, error #185). */
   const pendingSizeRef = useRef<{ w?: number; h?: number } | null>(null);
   const sizeFrameRef = useRef(0);
-  const flushSize = () => {
+  const readoutRef = useRef<HTMLDivElement | null>(null);
+  const paintReadout = (board: HTMLElement) => {
+    const out = readoutRef.current;
+    if (!out) return;
+    const rect = board.getBoundingClientRect();
+    out.textContent = `${Math.round(rect.width)} × ${Math.round(rect.height)}`;
+  };
+  const paintSize = () => {
     sizeFrameRef.current = 0;
+    const board = boardRef.current;
+    if (!board) return;
+    const next = pendingSizeRef.current;
+    if (next?.w != null) board.style.width = `${next.w}px`;
+    if (next?.h != null) board.style.height = `${next.h}px`;
+    paintReadout(board);
+  };
+  const commitSize = () => {
+    cancelAnimationFrame(sizeFrameRef.current);
+    paintSize();
     const next = pendingSizeRef.current;
     pendingSizeRef.current = null;
     if (next) setManual((m) => ({ ...m, ...next }));
   };
   useEffect(() => () => cancelAnimationFrame(sizeFrameRef.current), []);
+  useLayoutEffect(() => {
+    if (resizing && boardRef.current) paintReadout(boardRef.current);
+  }, [resizing]);
 
   const moveResize = (e: React.PointerEvent<HTMLDivElement>) => {
     const drag = dragRef.current;
@@ -239,32 +265,14 @@ export default function DashboardView({
     if (drag.axis !== "x")
       next.h = Math.round(drag.height + (e.clientY - drag.startY) * CENTERED_DRAG_FACTOR);
     pendingSizeRef.current = next;
-    if (!sizeFrameRef.current) sizeFrameRef.current = requestAnimationFrame(flushSize);
+    if (!sizeFrameRef.current) sizeFrameRef.current = requestAnimationFrame(paintSize);
   };
 
   const endResize = () => {
     dragRef.current = null;
-    cancelAnimationFrame(sizeFrameRef.current);
-    flushSize();
+    commitSize();
     setResizing(false);
   };
-
-  /* The devtools-style readout: the rendered size, so a clamp shows the
-     moment a drag hits it. Read a frame later rather than inside the
-     effect, so the readout's own update never chains onto the commit the
-     drag caused (see the frame coalescing above), and an unchanged size
-     sets nothing. */
-  useEffect(() => {
-    if (!resizing) return;
-    const raf = requestAnimationFrame(() => {
-      const rect = boardRef.current?.getBoundingClientRect();
-      if (!rect) return;
-      const w = Math.round(rect.width);
-      const h = Math.round(rect.height);
-      setReadout((current) => (current?.w === w && current?.h === h ? current : { w, h }));
-    });
-    return () => cancelAnimationFrame(raf);
-  }, [manual, resizing]);
 
   const frame = (
     <iframe
@@ -353,10 +361,8 @@ export default function DashboardView({
               />
             ))}
 
-            {resizing && readout && (
-              <div className={chatStyles.sizeReadout} aria-hidden="true">
-                {readout.w} &times; {readout.h}
-              </div>
+            {resizing && (
+              <div ref={readoutRef} className={chatStyles.sizeReadout} aria-hidden="true" />
             )}
           </>
         )}

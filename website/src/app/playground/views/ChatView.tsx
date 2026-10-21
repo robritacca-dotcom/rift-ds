@@ -129,7 +129,23 @@ export default function ChatView({
   /* ---------- manual resize via the edge handles ----------
      The stage centres the widget, so a drag moves both opposing edges:
      deltas are doubled to keep the grabbed edge under the cursor. Sizes
-     are clamped by the CSS min/max. */
+     are clamped by the CSS min/max.
+
+     A drag renders nothing until the pointer lets go. The grips write the
+     size straight onto the card, one frame at a time, and the readout's
+     text onto its own node; the release commits the final size through
+     React, so the page's state and the DOM agree from then on. This is
+     the pattern the package's grips already follow (the dock's widen grip
+     rewrites `--ds-chat-width`, the artifact panel's grip its own
+     variable). Rendering per move is what blanked the site: each move
+     re-rendered the whole widget, the welcome's chart re-laid out and
+     replayed its entrance animation for frames afterwards, and React 19.2
+     counts a commit that ends with the next pointer move already queued
+     as a nested update, exactly as it counts a setState loop. A real
+     drag kept one queued through every commit, the count reached 50 and
+     React threw error #185 (recharts/recharts#7563 is the same shape).
+     Coalescing the moves to one per frame, the earlier fix, only slowed
+     the climb. */
   const widgetRef = useRef<HTMLDivElement | null>(null);
   const dragRef = useRef<{
     axis: ResizeAxis;
@@ -157,6 +173,14 @@ export default function ChatView({
       width: rect.width,
       height: rect.height,
     };
+    /* The resting fit classes clamp the card to the column and viewport,
+       and dropping them is React's job: the drag's first act commits the
+       size it starts from on the dragged axes. A pointerdown is a discrete
+       event, so this lands before the first move writes the DOM. */
+    const start: { w?: number; h?: number } = {};
+    if (axis !== "y") start.w = Math.round(rect.width);
+    if (axis !== "x") start.h = Math.round(rect.height);
+    onManual(start);
     e.currentTarget.setPointerCapture(e.pointerId);
     setResizing(true);
   };
@@ -165,18 +189,40 @@ export default function ChatView({
      doubling the delta keeps the grabbed edge under the cursor. */
   const CENTERED_DRAG_FACTOR = 2;
 
-  /* One size per animation frame, however fast the pointer reports: a
-     chart on the stage (the dashboard welcome, a chart card) answers every
-     re-render that moves its ticks with a recharts store dispatch of its
-     own, and pointer events arriving faster than frames stacked those past
-     React's nested-update limit (error #185, recharts/recharts#7563). Both
-     grips queue their latest value here; a release flushes it so the card
-     lands where the pointer let go. */
+  /* The drag's latest request, kept until the release commits it. Both
+     grips queue here; one paint per animation frame however fast the
+     pointer reports. */
   const pendingSizeRef = useRef<{ w?: number; h?: number } | null>(null);
   const pendingDockRef = useRef<number | null>(null);
   const sizeFrameRef = useRef(0);
-  const flushSize = () => {
+  const readoutRef = useRef<HTMLDivElement | null>(null);
+  /* The devtools-style readout shows the rendered size, the rect rather
+     than the request, so a CSS clamp is visible the moment a drag hits it. */
+  const paintReadout = (card: HTMLElement) => {
+    const out = readoutRef.current;
+    if (!out) return;
+    const rect = card.getBoundingClientRect();
+    out.textContent = `${Math.round(rect.width)} × ${Math.round(rect.height)}`;
+  };
+  const paintSize = () => {
     sizeFrameRef.current = 0;
+    const card = widgetRef.current;
+    if (!card) return;
+    const next = pendingSizeRef.current;
+    const dock = pendingDockRef.current;
+    if (next?.w != null) card.style.width = `${next.w}px`;
+    if (next?.h != null) card.style.height = `${next.h}px`;
+    if (dock != null) card.style.width = `${dock}px`;
+    paintReadout(card);
+  };
+  const queueSize = () => {
+    if (!sizeFrameRef.current) sizeFrameRef.current = requestAnimationFrame(paintSize);
+  };
+  /* The release: the last request reaches the DOM now and React once, so
+     the card lands where the pointer let go. */
+  const commitSize = () => {
+    cancelAnimationFrame(sizeFrameRef.current);
+    paintSize();
     const next = pendingSizeRef.current;
     const dock = pendingDockRef.current;
     pendingSizeRef.current = null;
@@ -184,14 +230,12 @@ export default function ChatView({
     if (next) onManual(next);
     if (dock != null) setDockWidth(dock);
   };
-  const queueSize = () => {
-    if (!sizeFrameRef.current) sizeFrameRef.current = requestAnimationFrame(flushSize);
-  };
-  const flushSizeNow = () => {
-    cancelAnimationFrame(sizeFrameRef.current);
-    flushSize();
-  };
   useEffect(() => () => cancelAnimationFrame(sizeFrameRef.current), []);
+  /* The readout mounts with the drag and reads its first value here, before
+     paint; every later value comes from the frame loop above. */
+  useLayoutEffect(() => {
+    if (resizing && widgetRef.current) paintReadout(widgetRef.current);
+  }, [resizing]);
 
   const moveResize = (e: React.PointerEvent<HTMLDivElement>) => {
     const drag = dragRef.current;
@@ -209,7 +253,7 @@ export default function ChatView({
 
   const endResize = () => {
     dragRef.current = null;
-    flushSizeNow();
+    commitSize();
     setResizing(false);
     /* A card that grew may now reach past the stage from where it was
        moved to; one frame later, once the new size has rendered. */
@@ -246,7 +290,7 @@ export default function ChatView({
 
   const endDockResize = () => {
     dockDragRef.current = null;
-    flushSizeNow();
+    commitSize();
     setResizing(false);
   };
 
@@ -301,17 +345,30 @@ export default function ChatView({
     setMoving(true);
   };
 
+  /* Like the grips, a move writes the frame's nudge straight onto it per
+     pointer event (a style write forces no layout) and commits the spot
+     once on release. */
+  const pendingOffsetRef = useRef<{ x: number; y: number } | null>(null);
   const moveMove = (e: React.PointerEvent<HTMLDivElement>) => {
     const move = moveRef.current;
     if (!move) return;
     const dx = Math.min(move.room.right, Math.max(-move.room.left, e.clientX - move.startX));
     const dy = Math.min(move.room.down, Math.max(-move.room.up, e.clientY - move.startY));
-    setOffset({ x: Math.round(move.origin.x + dx), y: Math.round(move.origin.y + dy) });
+    const next = { x: Math.round(move.origin.x + dx), y: Math.round(move.origin.y + dy) };
+    pendingOffsetRef.current = next;
+    const frame = frameRef.current;
+    if (frame) {
+      frame.style.left = `${next.x}px`;
+      frame.style.top = `${next.y}px`;
+    }
   };
 
   const endMove = () => {
     if (!moveRef.current) return;
     moveRef.current = null;
+    const next = pendingOffsetRef.current;
+    pendingOffsetRef.current = null;
+    if (next) setOffset(next);
     setMoving(false);
   };
 
@@ -343,25 +400,6 @@ export default function ChatView({
     window.addEventListener("resize", reclampOffset);
     return () => window.removeEventListener("resize", reclampOffset);
   }, []);
-
-  /* The devtools-style readout: the widget's actual rendered size while a
-     grip is being dragged, the rect rather than the requested size, so the
-     CSS clamps are visible the moment a drag hits one. Read a frame later
-     rather than inside the effect, so the readout's own update never chains
-     onto the commit the drag caused (see the frame coalescing above), and
-     an unchanged size sets nothing. */
-  const [readout, setReadout] = useState<{ w: number; h: number } | null>(null);
-  useEffect(() => {
-    if (!resizing) return;
-    const raf = requestAnimationFrame(() => {
-      const rect = widgetRef.current?.getBoundingClientRect();
-      if (!rect) return;
-      const w = Math.round(rect.width);
-      const h = Math.round(rect.height);
-      setReadout((current) => (current?.w === w && current?.h === h ? current : { w, h }));
-    });
-    return () => cancelAnimationFrame(raf);
-  }, [manual, dockWidth, resizing]);
 
   const preset = STAGE_SIZES[size];
   const isDevice = preset.device;
@@ -666,11 +704,8 @@ export default function ChatView({
             />
           )}
 
-          {resizing && readout && (
-            <div className={styles.sizeReadout} aria-hidden="true">
-              {readout.w} &times; {readout.h}
-            </div>
-          )}
+          {/* Written by the drag's frame loop, never rendered per move. */}
+          {resizing && <div ref={readoutRef} className={styles.sizeReadout} aria-hidden="true" />}
         </div>
       ) : (
         <div className={styles.launcher}>

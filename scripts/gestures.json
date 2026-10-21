@@ -1,0 +1,131 @@
+{
+  "$comment": "The gesture registry: every pointer grip on the site that a visitor can drag, driven by scripts/validate-gestures.mjs after the website build. Nothing on the site displays it, so it lives beside the script. Each entry: `label` (the printed line), `route` (served path, query included), `grip` (a CSS selector the pointer presses; the first match wins), `axis` (`x`, `y` or `both`: the directions the sweep moves), optional `at` (where on the grip the pointer lands, as fractions of its box; the centre by default), optional `ready` (a selector to wait for before the setup runs; the grip itself by default) and optional `setup`, a list of steps run in order before the press: `{\"click\": selector}`, `{\"fill\": [selector, text]}`, `{\"press\": key}`, `{\"drag\": [selector, dx, dy]}` (a plain awaited drag, to put the page in the state the gesture needs) or `{\"waitFor\": selector}`. The script scrolls the grip into view before the press, so a grip below the fold needs no setup of its own. The viewport is one desktop size for every entry: the grips are mouse affordances, and the dock and the inline artifact seat only exist above the chat's width thresholds.",
+  "viewport": { "width": 1600, "height": 1000 },
+  "gestures": [
+    {
+      "label": "playground stage card: right edge",
+      "route": "/playground?preset=contrast&view=chat",
+      "grip": "[data-axis=\"x\"]:not([data-edge=\"left\"])",
+      "axis": "x"
+    },
+    {
+      "label": "playground stage card: left edge",
+      "route": "/playground?preset=contrast&view=chat",
+      "grip": "[data-axis=\"x\"][data-edge=\"left\"]",
+      "axis": "x"
+    },
+    {
+      "label": "playground stage card: bottom edge",
+      "route": "/playground?preset=contrast&view=chat",
+      "grip": "[data-axis=\"y\"]",
+      "axis": "y"
+    },
+    {
+      "label": "playground stage card: corner",
+      "route": "/playground?preset=contrast&view=chat",
+      "grip": "[data-axis=\"both\"]",
+      "axis": "both"
+    },
+    {
+      "label": "playground stage card: header move",
+      "route": "/playground?preset=contrast&view=chat",
+      "ready": ".ds-chat-widget",
+      "setup": [{ "drag": ["[data-axis=\"both\"]", -160, -160] }],
+      "grip": ".ds-chat-widget .ds-chat-header .ds-chat-widget__brand",
+      "axis": "both"
+    },
+    {
+      "label": "playground stage card: docked widen grip",
+      "route": "/playground?preset=contrast&view=chat",
+      "ready": ".ds-chat-widget",
+      "setup": [
+        { "click": "button[aria-label=\"Chat position\"]" },
+        { "click": "[role=\"menuitemradio\"]:has-text(\"Dock right\")" }
+      ],
+      "grip": "[class*=\"handleLeft\"]:not([data-axis])",
+      "axis": "x"
+    },
+    {
+      "label": "playground stage card: artifact panel grip",
+      "route": "/playground?preset=contrast&view=chat",
+      "ready": ".ds-chat-widget",
+      "setup": [
+        { "fill": [".ds-chat-widget .ds-composer__textarea", "Build me a launch dashboard"] },
+        { "press": "Enter" },
+        { "waitFor": ".ds-chat-widget__artifact-grip" }
+      ],
+      "grip": ".ds-chat-widget__artifact-grip",
+      "axis": "x"
+    },
+    {
+      "label": "playground dashboard stage: right edge",
+      "route": "/playground?preset=contrast&view=dashboard",
+      "grip": "[data-axis=\"x\"]:not([data-edge=\"left\"])",
+      "axis": "x"
+    },
+    {
+      "label": "playground dashboard stage: left edge",
+      "route": "/playground?preset=contrast&view=dashboard",
+      "grip": "[data-axis=\"x\"][data-edge=\"left\"]",
+      "axis": "x"
+    },
+    {
+      "label": "playground dashboard stage: bottom edge",
+      "route": "/playground?preset=contrast&view=dashboard",
+      "grip": "[data-axis=\"y\"]",
+      "axis": "y"
+    },
+    {
+      "label": "playground dashboard stage: corner",
+      "route": "/playground?preset=contrast&view=dashboard",
+      "grip": "[data-axis=\"both\"]",
+      "axis": "both"
+    },
+    {
+      "label": "site chat: docked widen grip",
+      "route": "/overview",
+      "ready": ".ds-chat-launcher__fab button",
+      "setup": [
+        { "click": ".ds-chat-launcher__fab button" },
+        { "waitFor": ".ds-chat-launcher__dock-handle" }
+      ],
+      "grip": ".ds-chat-launcher__dock-handle",
+      "axis": "x"
+    },
+    {
+      "label": "overview: architecture map pan",
+      "route": "/overview",
+      "grip": "[class*=\"surfaceEmbed\"]",
+      "axis": "both"
+    },
+    {
+      "label": "home: payroll compare handle",
+      "route": "/",
+      "grip": ".ds-image-compare__handle",
+      "axis": "x"
+    },
+    {
+      "label": "split pane page: separator",
+      "route": "/components/split-pane",
+      "grip": ".ds-split-pane__separator",
+      "axis": "x"
+    },
+    {
+      "label": "image compare page: handle",
+      "route": "/components/image-compare",
+      "grip": ".ds-image-compare__handle",
+      "axis": "x"
+    },
+    {
+      "label": "colour picker page: saturation field",
+      "route": "/components/color-picker",
+      "ready": ".ds-colorpicker__trigger",
+      "setup": [
+        { "click": ".ds-colorpicker__trigger" },
+        { "waitFor": ".ds-colorpicker__saturation" }
+      ],
+      "grip": ".ds-colorpicker__saturation",
+      "axis": "both"
+    }
+  ]
+}

@@ -96,6 +96,12 @@ jobs:
       # every JS browser showed a blank page.
       - run: npx playwright install --with-deps chromium
       - run: node scripts/smoke-hydration.mjs
+      # Drives every drag grip on the served site with a 250Hz pointer flood
+      # under CPU throttling and fails on a page error, an empty body or a
+      # run of React commits that ends with work still pending. A rendered
+      # page proves nothing about a grip: on 2026-10-20 the playground's
+      # resize grip blanked the live site under a real drag, twice.
+      - run: node scripts/validate-gestures.mjs
       # axe over the served pages in both themes: page-level composition
       # (landmarks, heading order, the mounted chrome) that the per-component
       # story gate cannot see. Rule set mirrors .storybook/preview.ts.

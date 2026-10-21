@@ -63,7 +63,7 @@
     "lint": "eslint .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "verify": "npm run lint && npm run build && npm run build:lib && node scripts/validate-package-publish.mjs && npm run test && npm run build-storybook && npm --prefix website run lint && npm --prefix website run build && node scripts/validate-rendered-spacing.mjs && node scripts/validate-corpus-coverage.mjs && node scripts/validate-internal-links.mjs && node scripts/smoke-hydration.mjs && node scripts/validate-website-a11y.mjs",
+    "verify": "npm run lint && npm run build && npm run build:lib && node scripts/validate-package-publish.mjs && npm run test && npm run build-storybook && npm --prefix website run lint && npm --prefix website run build && node scripts/validate-rendered-spacing.mjs && node scripts/validate-corpus-coverage.mjs && node scripts/validate-internal-links.mjs && node scripts/smoke-hydration.mjs && node scripts/validate-gestures.mjs && node scripts/validate-website-a11y.mjs",
     "eval:chat": "npx -y promptfoo@0.122.0 eval -c evals/chat/promptfooconfig.yaml --no-cache --output evals/chat/runs/latest.json",
     "prestorybook": "npm run validate-registry",
     "storybook": "storybook dev -p 6006",

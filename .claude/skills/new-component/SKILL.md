@@ -36,6 +36,7 @@ Not for a widget: the chat (`src/chat/`) is a kind of its own, with its own regi
 - Modifier classes follow `ds-componentname--variant` pattern
 - Imports CSS: `import "./ComponentName.css"`
 - If the component renders as `<a>` when an `href` prop is passed, follow the Button pattern of conditional element rendering
+- A continuous pointer gesture (a drag, a resize grip, a scrub, a move) writes the DOM per frame and commits React state once, on release: the move handler sets the style or custom property straight on the node, and the pointer-up handler does the one `setState`. Per-move state re-renders everything under that state on every frame, and React counts a commit that ends with the next move already queued as a nested update, so a real drag over a re-animating sibling can hit the update-depth limit and unmount the root (the site lost a whole page to exactly that). The widen grip in `src/chat/ChatLauncher.tsx` is the reference implementation. One exception: when the subtree the per-move update re-renders is small (a fictional `GadgetKnob` whose state drives only its own dial), per-move state is fine, and a comment beside the handler says so, so the next reader knows it was judged rather than missed
 
 **The component API contract — every one of these, no exceptions.** This package is published to npm, so the props interface is a public contract. Getting it wrong is a breaking change later. `src/components/Button/Button.tsx` (button-or-anchor) and `src/components/Input/Input.tsx` (form control) are the reference implementations.
 

@@ -1,6 +1,16 @@
 {
   "releases": [
     {
+      "version": "1.12.0",
+      "date": "2026-10-21",
+      "title": "Links go through your router",
+      "body": [
+        "Links in a routed app now navigate without reloading the page. Wrap your app in `LinkProvider`, published as `rift-ds/behaviors/LinkProvider`, with Next.js's `Link` or your router's, and every client-rendered component below it renders its links through the router, the chat's answer links included.",
+        "Every component that takes an `href`, its own or an item's, also takes a `linkComponent` prop that wins over the provider; NavList, SourceTrail and AppLayout pass it on to the parts they render. Breadcrumb, CircularButton, LinkList, ThreadPanel and WidgetRow can render in a Server Component, where no provider reaches them, so pass the prop on the instance there.",
+        "The Smoke theme carries more colour, so its status colours no longer read as grey. Nothing was renamed or removed, and with neither the provider nor the prop set every link stays a plain `<a>`, so upgrading needs no code changes."
+      ]
+    },
+    {
       "version": "1.11.0",
       "date": "2026-10-21",
       "title": "One contract, one layer stack, every word translatable",

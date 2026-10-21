@@ -1,4 +1,8 @@
 import type { StorybookConfig } from '@storybook/react-vite';
+// The shared docgen patch (each component's defaults read from its own
+// declaration): applied to the one deduped react-docgen-typescript the props
+// tables use, so they match the generated API (scripts/docgen-scoped-defaults.mjs).
+import '../scripts/docgen-scoped-defaults.mjs';
 
 const config: StorybookConfig = {
   "stories": [
@@ -23,7 +27,8 @@ const config: StorybookConfig = {
   // scripts/component-docgen.mjs mirrors these settings for its two
   // consumers: validate-prop-docs.mjs (the build fails before a prop can
   // render blank) and generate-component-api.mjs (the /api/mcp prop
-  // reference), so every documented surface sees the same parse.
+  // reference), so every documented surface sees the same parse, the
+  // scoped-defaults patch imported above included.
   "typescript": {
     "reactDocgen": "react-docgen-typescript",
     "reactDocgenTypescriptOptions": {

@@ -52,6 +52,11 @@ export const CATEGORIES = new Set([
   // inside one component that happens to need a larger number.
   // scripts/validate-stacking.mjs is what requires it.
   'stacking',
+  // A padding, margin, gap or radius off the spacing scale: geometry that
+  // centres or aligns one element against another (half an arrow's width,
+  // a dot against a line box) rather than spacing content.
+  // scripts/validate-raw-values.mjs is what requires it.
+  'spacing',
 ]);
 
 // Normalize CRLF so Windows checkouts validate identically to CI.

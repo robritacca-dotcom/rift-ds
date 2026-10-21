@@ -35,12 +35,28 @@
  * component a story names. The prop reference would serve every one of them
  * as a component, so parseLibrary() keeps components only: isComponentDoc
  * below owns the test.
+ *
+ * A second thing it does that this module corrects: it reads a component's
+ * code defaults from the destructuring of *every* function statement in the
+ * file, not only the component's own, merging them in file order. In a file
+ * with two components the later one's defaults land on the earlier one's
+ * props of the same name, and a prop with a default is reported as not
+ * required, so the contract published the wrong default and the wrong
+ * required flag (NotificationItem's required `title` came out optional with
+ * NotificationCenter's "Notifications"; RadioGroup's `value` took
+ * RadioButton's empty string). scripts/docgen-scoped-defaults.mjs narrows the
+ * search to the component's own declaration, and .storybook/main.ts loads the
+ * same patch, so the props tables carry the same defaults.
  */
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { withCustomConfig } from 'react-docgen-typescript';
 import ts from 'typescript';
+
+// The shared parser patch: each component's defaults come from its own
+// declaration only (the module's doc block owns the why).
+import './docgen-scoped-defaults.mjs';
 
 export const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 export const componentsDir = join(repoRoot, 'src', 'components');

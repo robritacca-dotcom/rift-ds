@@ -8,6 +8,7 @@
  * Storybook, and website — so the public component count can never
  * silently drift from reality.
  */
+import { execFileSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -56,8 +57,93 @@ const folders = readdirSync(componentsDir, { withFileTypes: true })
 
 const componentNames = registry.components.map((c) => c.name);
 // A component's implementation folder is its name unless `folder` points at a
-// shared one (the nine chart components live in Chart/).
+// shared one (the chart set lives in Chart/).
 const componentFolder = (c) => c.folder ?? c.name;
+
+/*
+ * Does a component without 'use client' actually need it?
+ *
+ * The flag check below only proves the registry matches the file. It cannot
+ * see a component that should declare the directive and doesn't, which is
+ * how every recharts chart shipped server-unsafe: a consumer rendering one
+ * from a React Server Component crashed, and nothing here noticed, because
+ * the site only ever renders charts from client pages.
+ *
+ * So walk the file's relative-import closure, stopping at any module that
+ * declares 'use client' itself (that is a boundary, and fine). A module in
+ * the closure needs the directive when it uses a React API the server build
+ * lacks, or imports a package that renders client-only.
+ *
+ * The API list is not typed here: it is the difference between React's
+ * default build and its react-server build, asked of the installed React,
+ * so a React upgrade that moves an API moves this check with it.
+ */
+const reactKeys = (conditions) =>
+  new Set(
+    JSON.parse(
+      execFileSync(
+        process.execPath,
+        [...conditions, '-e', "process.stdout.write(JSON.stringify(Object.keys(require('react'))))"],
+        { cwd: repoRoot, encoding: 'utf8' }
+      )
+    )
+  );
+const serverReact = reactKeys(['--conditions=react-server']);
+const CLIENT_ONLY_REACT = new Set([...reactKeys([])].filter((k) => !serverReact.has(k)));
+
+/** Packages that call client-only React APIs and ship no 'use client' boundary of their own. */
+const CLIENT_ONLY_PACKAGES = {
+  recharts: 'calls useContext and useState internally and declares no client boundary',
+};
+
+const stripComments = (src) => src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+
+function resolveRelative(fromFile, spec) {
+  const base = join(dirname(fromFile), spec);
+  for (const candidate of [base, `${base}.tsx`, `${base}.ts`, join(base, 'index.tsx'), join(base, 'index.ts')]) {
+    if (/\.(tsx?|jsx?)$/.test(candidate) && existsSync(candidate)) return candidate;
+  }
+  return null;
+}
+
+function clientNeeds(entry) {
+  const needs = [];
+  const seen = new Set();
+  const stack = [entry];
+  while (stack.length) {
+    const file = stack.pop();
+    if (seen.has(file)) continue;
+    seen.add(file);
+    const raw = readFileSync(file, 'utf8');
+    if (file !== entry && /^'use client'/m.test(raw)) continue;
+    const src = stripComments(raw);
+    const where = relative(repoRoot, file).replaceAll('\\', '/');
+    const used = new Set();
+    for (const m of src.matchAll(/import\s+(?:type\s+)?([^'";]*?)\s+from\s+['"]react['"]/g)) {
+      const named = m[1].match(/\{([^}]*)\}/);
+      if (!named) continue;
+      for (const part of named[1].split(',')) {
+        const name = part.trim().replace(/^type\s+/, '').split(/\s+as\s+/)[0];
+        if (CLIENT_ONLY_REACT.has(name) && !/^\s*type\s/.test(part)) used.add(name);
+      }
+    }
+    for (const m of src.matchAll(/\bReact\.(\w+)/g)) if (CLIENT_ONLY_REACT.has(m[1])) used.add(m[1]);
+    if (used.size) needs.push(`${where} uses ${[...used].sort().join(', ')} (absent from React's server build)`);
+    for (const m of src.matchAll(/(?:import|export)\s[^'";]*?from\s+['"]([^'"]+)['"]|import\s+['"]([^'"]+)['"]/g)) {
+      const spec = m[1] ?? m[2];
+      if (spec.startsWith('.')) {
+        const next = resolveRelative(file, spec);
+        if (next) stack.push(next);
+      } else {
+        const pkg = spec.startsWith('@') ? spec.split('/').slice(0, 2).join('/') : spec.split('/')[0];
+        if (CLIENT_ONLY_PACKAGES[pkg] && !/^\s*import\s+type\s/m.test(m[0])) {
+          needs.push(`${where} imports ${pkg}, which ${CLIENT_ONLY_PACKAGES[pkg]}`);
+        }
+      }
+    }
+  }
+  return needs;
+}
 const registered = [
   ...new Set([
     ...registry.components.map(componentFolder),
@@ -175,6 +261,15 @@ for (const c of registry.components) {
       `components["${c.name}"].client is ${c.client} but ${c.name}.tsx ` +
         `${declares ? 'declares' : 'does not declare'} 'use client'`
     );
+  }
+  if (!declares) {
+    const needs = clientNeeds(file);
+    if (needs.length) {
+      metaErrors.push(
+        `${c.name}.tsx does not declare 'use client', so rendering it from a Server Component ` +
+          `crashes: ${needs.join('; ')}. Add the directive and set client: true`
+      );
+    }
   }
 }
 

@@ -12,14 +12,22 @@
  * Five facts, each derived from one pass over src/:
  *   1. stories            — every exported Storybook story, each of which is a
  *                           render test plus an axe audit in `npm run test`
- *   2. withAria           — components whose source declares an ARIA role or
- *                           attribute
- *   3. withAccessibleName — components that name themselves for assistive
- *                           technology (aria-label / aria-labelledby)
- *   4. behaviourModules   — modules in the shared overlay behaviour layer
- *   5. overlayComponents  — the components built on that layer, derived from
- *                           the dismissal-stack import rather than listed by
- *                           hand, so a new overlay joins the page by existing
+ *   2. storiedComponents  — registered components with a story file of their
+ *                           own in their folder, so audited by name; the page
+ *                           states it as a share of the registry, and a
+ *                           component without a story drops that share below
+ *                           all of them instead of being claimed
+ *   3. behaviourModules   — modules in the shared overlay behaviour layer
+ *   4. modalOverlays      — the overlays that hold focus: the components that
+ *                           import the focus scope, which traps Tab, restores
+ *                           focus and makes the page behind inert
+ *   5. layerComponents    — every component on the dismissal stack, modal or
+ *                           not (the popovers, menus, pickers and tooltips
+ *                           joined it on 2026-10-21), derived from the stack's
+ *                           import
+ *   The last two are derived from imports rather than listed by hand, so a new
+ *   overlay joins the page by existing, and a non-modal one can never be
+ *   claimed to trap focus.
  *
  * The component list comes from src/components/registry.json, so a component
  * that is not registered is not counted: the registry is the authority on what
@@ -49,13 +57,17 @@ const read = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
  *  variants (`GroupStory`, `StoryObj<typeof X>`) the library also uses. */
 const STORY_EXPORT = /^export const [A-Z][A-Za-z0-9_]*\s*:\s*[^=]*Story[^=]*=/gm;
 
-/** ARIA surface in a component's own source. */
-const ARIA_ATTRIBUTE = /\brole=|\baria-[a-z]+/;
-const ACCESSIBLE_NAME = /\baria-label\b|\baria-labelledby\b/;
+/* No ARIA census, deliberately. A component built on a native element (a
+ * table, a blockquote, a button with a text label) needs no ARIA at all, so a
+ * count of the ones that declare it reads as a shortfall when it is the first
+ * rule of ARIA working. Naming is judged by axe and by
+ * validate-accessible-names.mjs instead. */
 
-/** The dismissal stack is the overlay signature: a component that joins it is
- *  one Escape and one outside click away from the shared contract. */
+/** The dismissal stack: a component that joins it dismisses through the
+ *  shared one-press-one-layer contract. */
 const LAYER_IMPORT = /from ['"][^'"]*behaviors\/useLayer['"]/;
+/** The focus scope: a component that imports it holds focus while open. */
+const FOCUS_SCOPE_IMPORT = /from ['"][^'"]*behaviors\/useFocusScope['"]/;
 
 /** Every *.stories.ts(x) under src/, recursively. */
 function storyFiles(dir, found = []) {
@@ -78,16 +90,25 @@ export function collectA11yCoverage() {
     stories += read(file).match(STORY_EXPORT)?.length ?? 0;
   }
 
-  let withAria = 0;
-  let withAccessibleName = 0;
-  const overlayComponents = [];
+  let storiedComponents = 0;
+  const modalOverlays = [];
+  const layerComponents = [];
 
   for (const component of registry.components) {
     const folder = component.folder ?? component.name;
-    const source = read(join(root, 'src', 'components', folder, `${component.name}.tsx`));
-    if (ARIA_ATTRIBUTE.test(source)) withAria += 1;
-    if (ACCESSIBLE_NAME.test(source)) withAccessibleName += 1;
-    if (LAYER_IMPORT.test(source)) overlayComponents.push(component.label);
+    const dir = join(root, 'src', 'components', folder);
+    const source = read(join(dir, `${component.name}.tsx`));
+    // A shared folder (the chart set) holds one story file per component, so
+    // a story counts when it is named for the component or imports it.
+    const storied = readdirSync(dir).some(
+      (file) =>
+        /\.stories\.tsx?$/.test(file) &&
+        (file.startsWith(`${component.name}.`) ||
+          new RegExp(`from ['"]\\./${component.name}['"]`).test(read(join(dir, file))))
+    );
+    if (storied) storiedComponents += 1;
+    if (LAYER_IMPORT.test(source)) layerComponents.push(component.label);
+    if (FOCUS_SCOPE_IMPORT.test(source)) modalOverlays.push(component.label);
   }
 
   const behaviourModules = readdirSync(join(root, 'src', 'behaviors')).filter((f) =>
@@ -96,10 +117,10 @@ export function collectA11yCoverage() {
 
   return {
     stories,
-    withAria,
-    withAccessibleName,
+    storiedComponents,
     behaviourModules,
-    overlayComponents: overlayComponents.sort(),
+    modalOverlays: modalOverlays.sort(),
+    layerComponents: layerComponents.sort(),
   };
 }
 
@@ -114,14 +135,14 @@ export function buildA11yCoverageFile() {
 export interface A11yCoverage {
   /** Exported Storybook stories — each one a render test plus an axe audit. */
   stories: number;
-  /** Components whose source declares an ARIA role or attribute. */
-  withAria: number;
-  /** Components that name themselves for assistive technology. */
-  withAccessibleName: number;
+  /** Registered components with a story file of their own. */
+  storiedComponents: number;
   /** Modules in the shared overlay behaviour layer. */
   behaviourModules: number;
-  /** Components built on that layer, by display label. */
-  overlayComponents: string[];
+  /** The modal overlays (they import the focus scope), by display label. */
+  modalOverlays: string[];
+  /** Every component on the dismissal stack, modal or not, by display label. */
+  layerComponents: string[];
 }
 
 export const a11yCoverage: A11yCoverage = ${JSON.stringify(coverage, null, 2)};
@@ -135,7 +156,7 @@ if (isMain) {
   writeFileSync(outputPath, content);
   const coverage = collectA11yCoverage();
   console.log(
-    `✓ Generated a11y coverage: ${coverage.stories} stories, ${coverage.withAria} components with ARIA, ` +
-      `${coverage.overlayComponents.length} on the behaviour layer.`
+    `✓ Generated a11y coverage: ${coverage.stories} stories, ` +
+      `${coverage.layerComponents.length} on the dismissal stack (${coverage.modalOverlays.length} of them modal).`
   );
 }

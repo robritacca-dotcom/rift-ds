@@ -15,7 +15,11 @@ jobs:
     name: Lint + build library
     runs-on: ubuntu-latest
     steps:
+      # Full history with tags: the API compatibility gate below compares the
+      # working tree with the latest release tag, and fails in CI without one.
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v7
         with:
           node-version: 24
@@ -31,6 +35,9 @@ jobs:
       - run: npm audit --audit-level=high --omit=dev
       - run: npm run lint
       - run: npm run build
+      # Deprecate, never remove: nothing the latest release published may
+      # vanish or narrow (props, export names, subpaths, deep-import files).
+      - run: node scripts/validate-api-compat.mjs
       - run: npm run build:lib
       # publint + arethetypeswrong against dist/: the manifest must match the
       # tarball and every export subpath must resolve for ESM and bundler

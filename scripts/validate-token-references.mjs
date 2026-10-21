@@ -40,6 +40,7 @@
 import { readFileSync, readdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { resolveTokenValues } from './token-values.mjs';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const tokensDir = join(repoRoot, 'src', 'tokens');
@@ -164,8 +165,20 @@ const walkFiles = (dir, out = []) => {
 let cssVarFallbackCount = 0;
 for (const file of walkFiles(join(repoRoot, 'src', 'components'))) {
   const source = readFileSync(file, 'utf8');
-  for (const m of source.matchAll(/getCSSVar\(\s*'(--[a-z0-9-]+)'\s*,\s*'([^']+)'\s*\)/g)) {
+  for (const m of source.matchAll(/(?:getCSSVar|readTokenPx)\(\s*'(--[a-z0-9-]+)'\s*,\s*'([^']+)'\s*\)/g)) {
     const [, token, fallback] = m;
+    // Type tokens read the same way (the charts' tick size) are held too,
+    // against the shared resolver, since they live in tokens-typography.css.
+    if (token.startsWith('--font-')) {
+      cssVarFallbackCount += 1;
+      const rel = file.slice(repoRoot.length + 1);
+      const resolved = resolveTokenValues([token]).get(token)?.light?.value;
+      if (!resolved) errors.push(`${rel}: getCSSVar falls back for ${token}, which resolves to nothing`);
+      else if (resolved.trim() !== fallback.trim()) {
+        errors.push(`${rel}: getCSSVar fallback for ${token} is ${fallback} but the token resolves to ${resolved} — keep SSR fallbacks equal to the tokens`);
+      }
+      continue;
+    }
     if (!token.startsWith('--color-')) continue;
     cssVarFallbackCount += 1;
     const rel = file.slice(repoRoot.length + 1);

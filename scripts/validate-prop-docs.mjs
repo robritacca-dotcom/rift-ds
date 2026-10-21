@@ -66,6 +66,40 @@ for (const component of parsed) {
   }
 }
 
+/* ── 3. An own prop that shadows a native name says so ─────────────────── */
+
+/*
+ * CLAUDE.md's contract: a prop that takes a native attribute's or DOM event's
+ * name with a different meaning (`title` as a heading, `onSelect` taking an
+ * item, `hidden` meaning something else) documents the collision, because the
+ * native attribute becomes unreachable through that component and a reader of
+ * the props table cannot otherwise tell. The JSDoc names it ("replaces the
+ * native `title` attribute"). A deprecated alias is exempt (it collides by
+ * history and its tag names the replacement), and so is a handler typed as
+ * the native handler (`MouseEventHandler`), which keeps the native meaning.
+ */
+const NATIVE_NAMES = new Set([
+  'title', 'content', 'color', 'hidden', 'dir', 'lang', 'translate', 'slot', 'draggable', 'spellCheck',
+  'onCopy', 'onCut', 'onPaste', 'onSelect', 'onChange', 'onInput', 'onSubmit', 'onToggle', 'onLoad',
+  'onError', 'onScroll', 'onDrag', 'onDrop', 'onFocus', 'onBlur', 'onClick', 'onKeyDown', 'onResize',
+]);
+const NATIVE_HANDLER = /EventHandler</;
+let collisions = 0;
+for (const component of parsed) {
+  for (const [propName, prop] of Object.entries(component.props ?? {})) {
+    if (!NATIVE_NAMES.has(propName)) continue;
+    collisions += 1;
+    if (prop.tags && 'deprecated' in prop.tags) continue;
+    if (NATIVE_HANDLER.test(prop.type?.name ?? '')) continue;
+    if (/\bnative\b/i.test(prop.description ?? '')) continue;
+    errors.push(
+      `${display(component.filePath ?? '')} — ${component.displayName}.${propName} shadows the native ` +
+        `\`${propName}\` with a different meaning (${prop.type?.name}). Say so in its JSDoc ("replaces the ` +
+        `native \`${propName}\` attribute"), as Dialog's \`title\` does, or type it as the native handler.`
+    );
+  }
+}
+
 /* ── 2. Every declared props type reaches the parse ─── ────────────────── */
 
 /** Whether a type declaration writes out at least one member of its own. */
@@ -148,5 +182,5 @@ if (errors.length > 0) {
 console.log(
   `✓ Prop docs complete — ${propCount} own props across ${parsed.length} ` +
     `exported components, all documented; ${ownPropsCount} declared props ` +
-    `types all reach the parse.`
+    `types all reach the parse; ${collisions} native-name props checked for a collision note.`
 );

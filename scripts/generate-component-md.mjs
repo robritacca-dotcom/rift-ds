@@ -61,6 +61,7 @@ export function buildComponentMarkdown(entry, origin) {
   const lines = [
     `# ${entry.label}`,
     '',
+    ...(entry.deprecated ? [`**Deprecated.** ${entry.deprecated}`, ''] : []),
     entry.description,
     '',
     `Generated from the ${PACKAGE_NAME} registry and prop JSDoc, version ${PACKAGE_VERSION}. ` +
@@ -87,6 +88,9 @@ export function buildComponentMarkdown(entry, origin) {
 
   for (const exported of entry.exports) {
     lines.push('', `## ${exported.component} props`, '');
+    if (exported.deprecated && exported.component !== entry.name) {
+      lines.push(`**Deprecated.** ${exported.deprecated}`, '');
+    }
     if (exported.props.length === 0) {
       lines.push('No own props; native attributes pass through.');
       continue;

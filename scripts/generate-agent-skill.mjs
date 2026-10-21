@@ -319,11 +319,15 @@ ${AGENT_SKILLS.filter((skill) => skill.role !== 'library').map((skill) => `- \`$
         const rendering = entry.client
           ? `client component (declares 'use client')`
           : `server-renderable (no 'use client')`;
+        // A deprecated component still ships, so it stays listed, but marked:
+        // the guidance is the component's own @deprecated tag, read through
+        // the generated API rather than restated here.
         return [
-          `### ${entry.label}`,
+          `### ${entry.label}${entry.deprecated ? ' (deprecated)' : ''}`,
           '',
           entry.description,
           '',
+          ...(entry.deprecated ? [`- Deprecated: not for new code. ${entry.deprecated}`] : []),
           `- Import: ${importLine}`,
           `- Rendering: ${rendering}`,
           `- Contract: ${origin}/components/${entry.slug}.md`,
@@ -334,7 +338,7 @@ ${AGENT_SKILLS.filter((skill) => skill.role !== 'library').map((skill) => `- \`$
 
   const componentsMd = `# ${PACKAGE_NAME} component catalog
 
-Generated from the component registry at version ${PACKAGE_VERSION}. One entry per public component; each Contract link is the component's full prop table as markdown.
+Generated from the component registry at version ${PACKAGE_VERSION}. One entry per public component; each Contract link is the component's full prop table as markdown. A component marked deprecated still works in existing code; its Deprecated line names what to use instead.
 
 ${catalogSections.join('\n\n')}
 `;

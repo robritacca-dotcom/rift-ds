@@ -94,13 +94,28 @@ export function assembleComponentApi() {
       return entry;
     });
 
+  // A whole component deprecated in its JSDoc (`@deprecated` on the
+  // component, not a prop) says so on the export, and on the entry when it is
+  // the registry-named one, so an agent reading the API is told before it
+  // reaches for it.
+  const deprecationOf = (doc) =>
+    doc.tags && 'deprecated' in doc.tags
+      ? lf(String(doc.tags.deprecated || '').trim()) || 'Deprecated.'
+      : undefined;
+  const exportOf = (doc) => {
+    const entry = { component: doc.displayName, props: propsOf(doc) };
+    const deprecated = deprecationOf(doc);
+    if (deprecated) entry.deprecated = deprecated;
+    return entry;
+  };
+
   const componentEntries = registry.components.map((component) => {
     const folder = component.folder ?? component.name;
     const files = sourceFilesFor(component.name, join(componentsDir, folder));
 
     const exportedComponents = files
       .flatMap((file) => byFile.get(file) ?? [])
-      .map((doc) => ({ component: doc.displayName, props: propsOf(doc) }))
+      .map(exportOf)
       // The registry-named component leads; companions follow alphabetically.
       .sort((a, b) => {
         if (a.component === component.name) return -1;
@@ -108,6 +123,7 @@ export function assembleComponentApi() {
         return a.component.localeCompare(b.component);
       });
 
+    const deprecated = exportedComponents.find((e) => e.component === component.name)?.deprecated;
     return {
       kind: 'component',
       name: component.name,
@@ -120,6 +136,7 @@ export function assembleComponentApi() {
       barrel: chartsBarrel.includes(`./components/${folder}/${component.name}'`)
         ? 'charts'
         : 'main',
+      ...(deprecated ? { deprecated } : {}),
       exports: exportedComponents,
     };
   });
@@ -133,7 +150,7 @@ export function assembleComponentApi() {
       const file = join(repoRoot, 'src', 'chat', `${name}.tsx`).replaceAll('\\', '/');
       return (byFile.get(file) ?? [])
         .filter((doc) => doc.displayName === name)
-        .map((doc) => ({ component: doc.displayName, props: propsOf(doc) }));
+        .map(exportOf);
     });
     return {
       kind: 'widget',
@@ -188,6 +205,8 @@ export interface ComponentPropApi {
 export interface ComponentExportApi {
   component: string;
   props: ComponentPropApi[];
+  /** Set when the component itself carries an @deprecated tag; the replacement guidance. */
+  deprecated?: string;
 }
 
 /** One public registry entry: a component, or the chat widget. */
@@ -206,6 +225,8 @@ export interface ComponentApiEntry {
   importPath: string;
   /** 'charts' modules need the optional recharts peer; 'main' modules never do; 'chat' is the widget's own subpath with its own peers. */
   barrel: 'main' | 'charts' | 'chat';
+  /** Set when the registry-named component is deprecated; the replacement guidance. */
+  deprecated?: string;
   exports: ComponentExportApi[];
 }
 

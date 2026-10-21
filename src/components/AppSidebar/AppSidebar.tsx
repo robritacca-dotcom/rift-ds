@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useCallback, useEffect, useId, useRef } from 'react';
+import { useLinkComponent, type LinkComponent } from '../../behaviors/LinkProvider';
 import { useLayer } from '../../behaviors/useLayer';
 import { useFocusScope } from '../../behaviors/useFocusScope';
 import { useScrollLock } from '../../behaviors/useScrollLock';
@@ -130,6 +131,12 @@ type AppSidebarOwnProps = {
   footerSlot?: React.ReactNode;
   /** Additional CSS classes */
   className?: string;
+  /**
+   * The component its links render with, such as Next.js's `Link`, so they
+   * navigate through the app's router. Wins over a LinkProvider's; a plain
+   * `<a>` when neither is set.
+   */
+  linkComponent?: LinkComponent;
   /** Logo element — defaults to the built-in brand mark */
   logo?: React.ReactNode;
   /** Text shown next to logo when expanded */
@@ -230,9 +237,11 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
   collapseLabel = 'Collapse sidebar',
   profileMoreLabel = 'Profile options',
   menuLabel = 'Menu',
+  linkComponent,
   ...rest
 }, ref) {
   const baseClass = 'ds-app-sidebar';
+  const Link = useLinkComponent(linkComponent);
 
   /* The avatar rows' inks, spread across the whole sidebar so neighbours
      differ in colour as well as shape. */
@@ -523,6 +532,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
         {/* Drawer drill-in: the panel's level as a second screen */}
         {mobileOpen && drilled && panelSource ? (
           <SidebarPanel
+            linkComponent={Link}
             key={panelSourceKey}
             className={`${baseClass}__drill`}
             items={panelSource.items}
@@ -603,8 +613,8 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
 
               return (
                 <React.Fragment key={item.key}>
-                  {isLink ? (
-                    <a
+                  {isLink && item.href ? (
+                    <Link
                       className={itemClasses}
                       href={item.href}
                       onClick={() => item.onClick?.()}
@@ -612,7 +622,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
                       title={!isExpanded ? item.label : undefined}
                     >
                       {itemContent}
-                    </a>
+                    </Link>
                   ) : (
                     <button
                       type="button"
@@ -707,14 +717,14 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
                                 {subLabel}
                               </button>
                             ) : sub.href ? (
-                              <a
+                              <Link
                                 className={subClasses}
                                 href={sub.href}
                                 onClick={sub.onClick}
                                 aria-current={subActive ? 'page' : undefined}
                               >
                                 {subLabel}
-                              </a>
+                              </Link>
                             ) : (
                               <button
                                 type="button"
@@ -778,6 +788,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
           screens, where the drawer's drill-in shows the same level. */}
       {panelSource && !mobileOpen && (
         <SidebarPanel
+          linkComponent={Link}
           key={panelSourceKey}
           id={panelId}
           className={[

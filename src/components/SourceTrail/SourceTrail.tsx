@@ -2,6 +2,7 @@
 
 import React, { useCallback, useId, useState } from 'react';
 import { SourceChip } from '../SourceChip/SourceChip';
+import type { LinkComponent } from '../../behaviors/LinkProvider';
 import { Spinner } from '../Spinner/Spinner';
 import './SourceTrail.css';
 import '../../fonts/material-symbols.css';
@@ -72,6 +73,12 @@ type SourceTrailOwnProps = {
   defaultOpen?: boolean;
   /** Fires whenever the panel opens or closes. */
   onOpenChange?: (open: boolean) => void;
+  /**
+   * The component its links render with, such as Next.js's `Link`, so they
+   * navigate through the app's router; passed on to each source's SourceChip. Wins over a
+   * LinkProvider's; a plain `<a>` when neither is set.
+   */
+  linkComponent?: LinkComponent;
   /** Additional CSS classes */
   className?: string;
 };
@@ -101,6 +108,7 @@ export const SourceTrail = React.forwardRef<HTMLDivElement, SourceTrailProps>(
       open,
       defaultOpen = true,
       onOpenChange,
+      linkComponent,
       className = '',
       ...rest
     },
@@ -185,6 +193,7 @@ export const SourceTrail = React.forwardRef<HTMLDivElement, SourceTrailProps>(
                   <SourceChip
                     title={item.title}
                     href={item.href}
+                    linkComponent={linkComponent}
                     icon={item.icon}
                     target={item.href ? '_blank' : undefined}
                     rel={item.href ? 'noopener noreferrer' : undefined}

@@ -15,9 +15,13 @@
  * syntax tree of `<folder>/<Name>.tsx` (no type checker, so it is fast and
  * cannot be fooled by inference):
  *
- *   1. forwardRef: the exported `<Name>` is a `forwardRef(...)` call
- *      (`React.forwardRef`, or wrapped in `memo`).
- *   2. displayName: the module assigns `<Name>.displayName`.
+ *   1. takes a ref: the exported `<Name>` is a `forwardRef(...)` call
+ *      (`React.forwardRef`, or wrapped in `memo`), or a plain function
+ *      component that destructures `ref` from its props, React 19's form
+ *      (the package's react peer is ^19, so every consumer has it).
+ *   2. displayName: a forwardRef component assigns `<Name>.displayName`; a
+ *      plain function component is named by its declaration, so it needs
+ *      none.
  *   3. native props: `<Name>Props` extends or intersects the native element's
  *      props (`ComponentPropsWithoutRef`, `ComponentProps` or an
  *      `*HTMLAttributes`/`SVGProps` type).
@@ -32,10 +36,23 @@
  * the build. The library reached full conformance on 2026-10-21, when the
  * migration ledger this script started with emptied and was deleted.
  *
+ * Router links, over every module in src/components (stories aside): a
+ * link renders through the link component, never as a raw `<a href>`, so
+ * a consumer's router reaches it (`linkComponent` prop, and LinkProvider
+ * from src/behaviors/LinkProvider.tsx in a client component). A module
+ * without 'use client' may not call `useLinkComponent`: it would render on
+ * the server, where a provider cannot reach it, so it takes the prop alone.
+ * SANCTIONED_ANCHORS holds the raw anchors that are not navigation.
+ *
+ * The runtime half, src/stories/Contract.stories.tsx, keeps a SKIP list of
+ * the components whose ref deliberately misses the attributes' node; this
+ * script holds it to the "ref and rest" rows below in both directions, so
+ * the departure has one home.
+ *
  * Runs in the `validate-registry` chain: it reads source only.
  */
-import { existsSync, readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { dirname, join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
 
@@ -44,7 +61,7 @@ const componentsDir = join(repoRoot, 'src', 'components');
 // Normalize CRLF so Windows checkouts validate identically to CI.
 const read = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
 
-const CHECKS = ['forwardRef', 'displayName', 'native props', 'ref and rest'];
+const CHECKS = ['takes a ref', 'displayName', 'native props', 'ref and rest'];
 
 /**
  * Deliberate, documented departures from the contract. A sanctioned
@@ -56,6 +73,12 @@ const SANCTIONED = {
       'the ref forwards to the first cell so ref.current.focus() lands in the code (its JSDoc says so); ' +
       'native attributes go on the role="group" cell row, the one node standing for the whole field',
   },
+};
+
+/** Modules whose raw `<a href>` is deliberate, with the reason. */
+const SANCTIONED_ANCHORS = {
+  'AnchorNav/AnchorNav.tsx':
+    'in-page `#id` jumps the component scrolls and tracks itself; a router link would only add a history entry per jump',
 };
 
 const NATIVE_PROPS = /ComponentPropsWithoutRef|ComponentPropsWithRef|ComponentProps<|HTMLAttributes|SVGProps|SVGAttributes/;
@@ -73,29 +96,50 @@ function forwardRefCall(node) {
   return /(^|\.)memo$/.test(callee) ? forwardRefCall(node.arguments[0]) : node;
 }
 
+const isFunctionNode = (node) => node && (ts.isArrowFunction(node) || ts.isFunctionExpression(node));
+
+/** The function a plain component renders through: itself, or the one `memo` wraps. */
+function plainRender(node) {
+  if (isFunctionNode(node)) return node;
+  if (node && ts.isCallExpression(node) && /(^|\.)memo$/.test(node.expression.getText())) {
+    return plainRender(node.arguments[0]);
+  }
+  return null;
+}
+
+/** True when the render function's props binding names `ref` (React 19's ref-as-prop). */
+function bindsRef(pattern) {
+  return Boolean(pattern?.elements.some((e) => !e.dotDotDotToken && (e.propertyName ?? e.name).getText() === 'ref'));
+}
+
 function checkComponent(name, file) {
   const source = ts.createSourceFile(file, read(file), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
   const failing = new Set();
 
-  // 1. forwardRef
+  // 1. takes a ref: forwardRef, or a plain function component binding `ref`
   let init = null;
+  let declaration = null;
   for (const statement of source.statements) {
+    if (ts.isFunctionDeclaration(statement) && statement.name?.text === name) declaration = statement;
     if (!ts.isVariableStatement(statement)) continue;
     for (const d of statement.declarationList.declarations) {
       if (ts.isIdentifier(d.name) && d.name.text === name) init = d.initializer;
     }
   }
   const usesForwardRef = isForwardRefCall(init);
-  if (!usesForwardRef) failing.add('forwardRef');
+  const render = usesForwardRef ? forwardRefCall(init).arguments[0] : (declaration ?? plainRender(init));
+  const renderIsFunction = Boolean(render && (isFunctionNode(render) || ts.isFunctionDeclaration(render)));
 
-  // 2. displayName
+  // 2. displayName: a plain function component is named by its declaration;
+  // only `memo` around an anonymous function loses the name.
   const assignsDisplayName = source.statements.some(
     (s) =>
       ts.isExpressionStatement(s) &&
       ts.isBinaryExpression(s.expression) &&
       s.expression.left.getText() === `${name}.displayName`
   );
-  if (!assignsDisplayName) failing.add('displayName');
+  const namedByDeclaration = !usesForwardRef && (Boolean(declaration) || isFunctionNode(init));
+  if (!assignsDisplayName && !namedByDeclaration) failing.add('displayName');
 
   // 3. native props
   const propsDecl = source.statements.find(
@@ -110,9 +154,9 @@ function checkComponent(name, file) {
 
   // 4. ref and rest on one element, className after the spread
   let refAndRest = false;
-  if (usesForwardRef) {
-    const render = forwardRefCall(init).arguments[0];
-    const param = render && (ts.isArrowFunction(render) || ts.isFunctionExpression(render)) ? render.parameters[0] : null;
+  let takesRef = usesForwardRef;
+  if (renderIsFunction) {
+    const param = render.parameters[0] ?? null;
     // The rest binding is destructured in the parameter list, or from the
     // props parameter inside the body (`const { a, ...rest } = props`).
     let pattern = param && ts.isObjectBindingPattern(param.name) ? param.name : null;
@@ -131,6 +175,7 @@ function checkComponent(name, file) {
       };
       find(render.body);
     }
+    if (!usesForwardRef) takesRef = bindsRef(pattern);
     const restName = pattern?.elements.find((e) => e.dotDotDotToken)?.name.getText() ?? null;
     // A className written before the spread is only overwritten when the
     // rest binding can still carry one, i.e. className was not destructured.
@@ -172,6 +217,7 @@ function checkComponent(name, file) {
       visit(render.body);
     }
   }
+  if (!takesRef) failing.add('takes a ref');
   if (!refAndRest) failing.add('ref and rest');
 
   return failing;
@@ -208,6 +254,67 @@ for (const name of Object.keys(SANCTIONED)) {
   }
   for (const check of Object.keys(SANCTIONED[name])) {
     if (!CHECKS.includes(check)) errors.push(`SANCTIONED["${name}"] names an unknown check "${check}".`);
+  }
+}
+
+// Router links: no raw `<a href>`, and no provider hook on the server.
+const moduleFiles = [];
+const walk = (dir) => {
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const path = join(dir, entry.name);
+    if (entry.isDirectory()) walk(path);
+    else if (entry.name.endsWith('.tsx') && !entry.name.includes('.stories.')) moduleFiles.push(path);
+  }
+};
+walk(componentsDir);
+const anchorsSeen = new Set();
+for (const file of moduleFiles) {
+  const rel = relative(componentsDir, file).split(sep).join('/');
+  const text = read(file);
+  const source = ts.createSourceFile(file, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+  const visit = (node) => {
+    if (
+      (ts.isJsxOpeningElement(node) || ts.isJsxSelfClosingElement(node)) &&
+      node.tagName.getText() === 'a' &&
+      node.attributes.properties.some((p) => ts.isJsxAttribute(p) && p.name.getText() === 'href')
+    ) {
+      if (SANCTIONED_ANCHORS[rel]) anchorsSeen.add(rel);
+      else {
+        const { line } = source.getLineAndCharacterOfPosition(node.getStart());
+        errors.push(
+          `${rel}:${line + 1} renders a raw <a href>. Render links through the link component so a consumer's ` +
+            `router reaches them: a \`linkComponent\` prop, resolved with useLinkComponent() in a client component ` +
+            `or \`linkComponent ?? 'a'\` in a server one (Button.tsx and Breadcrumb.tsx are the patterns).`
+        );
+      }
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(source);
+  if (!/^\s*['"]use client['"]/.test(text) && /\buseLinkComponent\s*\(/.test(text)) {
+    errors.push(
+      `${rel} calls useLinkComponent() without 'use client': it renders on the server, where no LinkProvider ` +
+        `reaches it. Resolve the prop alone (\`linkComponent ?? 'a'\`).`
+    );
+  }
+}
+for (const rel of Object.keys(SANCTIONED_ANCHORS)) {
+  if (!anchorsSeen.has(rel)) errors.push(`SANCTIONED_ANCHORS lists ${rel}, which renders no raw <a href>: remove the row.`);
+}
+
+// The runtime story's SKIP list mirrors the "ref and rest" sanctions.
+const storyFile = join(repoRoot, 'src', 'stories', 'Contract.stories.tsx');
+const skipMatch = /const SKIP = new Set\(\[([^\]]*)\]\)/.exec(read(storyFile));
+if (!skipMatch) {
+  errors.push('Could not find `const SKIP = new Set([...])` in src/stories/Contract.stories.tsx.');
+} else {
+  const skipped = new Set([...skipMatch[1].matchAll(/'([^']+)'/g)].map((m) => m[1]));
+  const refSanctioned = new Set(Object.keys(SANCTIONED).filter((n) => SANCTIONED[n]['ref and rest']));
+  for (const n of skipped) {
+    if (!refSanctioned.has(n)) errors.push(`Contract.stories.tsx skips ${n}, which has no "ref and rest" sanction here: render-check it.`);
+  }
+  for (const n of refSanctioned) {
+    if (!skipped.has(n)) errors.push(`${n} has a "ref and rest" sanction, but Contract.stories.tsx's SKIP does not list it.`);
   }
 }
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import type { LinkComponent } from '../../behaviors/LinkProvider';
 import { Avatar } from '../Avatar/Avatar';
 import { DropdownMenu } from '../DropdownMenu/DropdownMenu';
 import { Kbd } from '../Kbd/Kbd';
@@ -182,6 +183,13 @@ type ThreadPanelOwnProps = {
   footerSlot?: React.ReactNode;
   /** Additional CSS classes */
   className?: string;
+  /**
+   * The component its links render with, such as Next.js's `Link`, so they
+   * navigate through the app's router; a plain `<a>` when unset. This
+   * component can render on the server, so it never reads a LinkProvider:
+   * pass the prop even under one.
+   */
+  linkComponent?: LinkComponent;
 };
 
 export interface ThreadPanelProps
@@ -219,6 +227,7 @@ function ActionRow({
   ariaCurrent,
   title,
   children,
+  link: Link,
 }: {
   className: string;
   href?: string;
@@ -226,10 +235,11 @@ function ActionRow({
   ariaCurrent?: 'page' | 'true';
   title?: string;
   children: React.ReactNode;
+  link: LinkComponent;
 }) {
   if (href) {
     return (
-      <a
+      <Link
         className={className}
         href={href}
         onClick={onClick}
@@ -237,7 +247,7 @@ function ActionRow({
         title={title}
       >
         {children}
-      </a>
+      </Link>
     );
   }
   return (
@@ -393,6 +403,7 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
       profile,
       footerSlot,
       className = '',
+      linkComponent,
       ...rest
     },
     ref,
@@ -403,6 +414,7 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
       group.threads.some((thread) => thread.status || thread.unread),
     );
     const labels = { ...DEFAULT_STATUS_LABELS, ...statusLabels };
+    const Link = linkComponent ?? 'a';
 
     const classes = [
       baseClass,
@@ -519,6 +531,7 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
 
         {showNew && (
           <ActionRow
+            link={Link}
             className={`${baseClass}__new`}
             href={newThreadHref}
             onClick={onNewThread}
@@ -548,6 +561,7 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
           <div className={`${baseClass}__controls`}>
             {controls.map((control) => (
               <ActionRow
+                link={Link}
                 key={control.id}
                 className={`${baseClass}__control`}
                 href={control.href}
@@ -596,6 +610,7 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
                 return (
                   <li key={project.id} className={`${baseClass}__row`}>
                     <ActionRow
+                      link={Link}
                       className={[
                         `${baseClass}__project`,
                         active && `${baseClass}__project--active`,
@@ -710,6 +725,7 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
                           ) : (
                             <>
                               <ActionRow
+                                link={Link}
                                 className={[
                                   `${baseClass}__thread`,
                                   active && `${baseClass}__thread--active`,

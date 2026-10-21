@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Spinner } from '../Spinner/Spinner';
+import { useLinkComponent, type LinkComponent } from '../../behaviors/LinkProvider';
 import './Button.css';
 import '../../fonts/material-symbols.css';
 
@@ -45,6 +46,12 @@ type ButtonOwnProps = {
   target?: string;
   /** Optional rel attribute for links */
   rel?: string;
+  /**
+   * The component the link renders with, such as Next.js's `Link`, so it
+   * navigates through the app's router. Wins over a LinkProvider's; a plain
+   * `<a>` when neither is set.
+   */
+  linkComponent?: LinkComponent;
   /** Marks this link as the current page (adds aria-current="page") */
   ariaCurrent?: boolean;
   /** Additional CSS classes */
@@ -141,6 +148,7 @@ export const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, Bu
       href,
       target,
       rel,
+      linkComponent,
       ariaCurrent,
       className = '',
       priority,
@@ -152,6 +160,7 @@ export const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, Bu
     ref,
   ) => {
     const baseClass = 'ds-button';
+    const Link = useLinkComponent(linkComponent);
 
     // `priority` is the deprecated spelling of `variant`; `variant` wins when both are set.
     const resolvedVariant = resolveButtonCell(variant ?? priority ?? 'primary', tone);
@@ -220,7 +229,7 @@ export const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, Bu
     // A loading link renders the button branch so interaction is truly blocked.
     if (href && !isDisabled && !isLoading) {
       return (
-        <a
+        <Link
           {...(rest as React.ComponentPropsWithoutRef<'a'>)}
           ref={ref as React.Ref<HTMLAnchorElement>}
           className={classes}
@@ -231,7 +240,7 @@ export const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, Bu
           aria-label={fallbackAriaLabel ?? rest['aria-label']}
         >
           {content}
-        </a>
+        </Link>
       );
     }
 

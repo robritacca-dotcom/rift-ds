@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useLinkComponent, type LinkComponent } from '../../behaviors/LinkProvider';
 import './ContactCard.css';
 import '../../fonts/material-symbols.css';
 
@@ -45,6 +46,12 @@ type ContactCardOwnProps = {
   copyLabel?: string;
   /** Additional CSS classes */
   className?: string;
+  /**
+   * The component its links render with, such as Next.js's `Link`, so they
+   * navigate through the app's router. Wins over a LinkProvider's; a plain
+   * `<a>` when neither is set.
+   */
+  linkComponent?: LinkComponent;
 };
 
 export interface ContactCardProps
@@ -71,11 +78,13 @@ export const ContactCard = React.forwardRef<HTMLAnchorElement | HTMLButtonElemen
       copyOnClick = false,
       copyLabel,
       className = '',
+      linkComponent,
       ...rest
     },
     ref,
   ) => {
     const classes = ['ds-contact-card', className].filter(Boolean).join(' ');
+    const Link = useLinkComponent(linkComponent);
 
     // Protocol links (mailto:, tel:) hand off to the OS default client. Opening
     // them in a new tab leaves an empty blank tab behind, so never set _blank for
@@ -163,7 +172,7 @@ export const ContactCard = React.forwardRef<HTMLAnchorElement | HTMLButtonElemen
     }
 
     return (
-      <a
+      <Link
         {...rest}
         ref={ref as React.Ref<HTMLAnchorElement>}
         href={href}
@@ -172,7 +181,7 @@ export const ContactCard = React.forwardRef<HTMLAnchorElement | HTMLButtonElemen
         className={classes}
       >
         {content}
-      </a>
+      </Link>
     );
   },
 );

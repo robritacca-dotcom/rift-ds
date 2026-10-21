@@ -70,6 +70,11 @@ const SUBPATHS = [
   // locks fight over document.body — the rest of src/behaviors stays
   // internal (design.md's Components intro owns the contract).
   { key: './behaviors/useScrollLock', srcJs: './src/behaviors/useScrollLock.ts', dist: './behaviors/useScrollLock' },
+  // The router link setting: LinkProvider hands every client-rendered
+  // component that takes an href the app's link component (Next.js's
+  // `Link`), so links navigate without a reload. Consumers mount it, so it
+  // is published; design.md's Components intro owns the contract.
+  { key: './behaviors/LinkProvider', srcJs: './src/behaviors/LinkProvider.tsx', dist: './behaviors/LinkProvider' },
   // The chat widget: the composed chat as one installable thing, in four
   // subpaths so the main barrel never pulls a peer a consumer did not ask
   // for. `./chat` needs react-markdown and remark-gfm, `./chat/server` the

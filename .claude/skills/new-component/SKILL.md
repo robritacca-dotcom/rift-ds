@@ -21,7 +21,7 @@ Not for a widget: the chat (`src/chat/`) is a kind of its own, with its own regi
 1. **Ask** for the component name (PascalCase) and a one-sentence description of its purpose, if not already provided.
 
 2. **Read these reference files before writing anything:**
-   - `src/components/Button/Button.tsx` — structural reference for a button-or-anchor component (own-props split, forwardRef, rest spread, BEM class usage, conditional rendering)
+   - `src/components/Button/Button.tsx` — structural reference for a button-or-anchor component (own-props split, ref forwarding, rest spread, BEM class usage, conditional rendering)
    - `src/components/Input/Input.tsx` — structural reference for a form control (native `onChange` + `onValueChange` convenience callback, label/helper/error wiring)
    - `src/components/Badge/Badge.css` — CSS token reference (no raw hex/pixels, semantic token usage)
    - `src/components/Badge/Badge.stories.tsx` — stories file reference (`satisfies Meta`, `StoryObj`, autodocs)
@@ -52,7 +52,13 @@ Not for a widget: the chat (`src/chat/`) is a kind of its own, with its own regi
    ```
    Add `| 'type'` (or any other attribute the component hardcodes) to the `Omit` list.
 
-3. **`React.forwardRef`** onto the primary DOM node, with `ComponentName.displayName = 'ComponentName'` after it. If the component already keeps an internal ref (focus trap, click-outside, picker trigger), merge them:
+3. **Take a ref onto the primary DOM node**, in one of two forms the validator accepts. A new component uses React 19's form: a named function component that destructures `ref` from its props and passes it to the node, with the props interface built on `ComponentPropsWithRef<'div'>` instead of `ComponentPropsWithoutRef` (the package's react peer is `^19`, so every consumer has ref-as-prop; the function's name is its DevTools name, so it needs no `displayName`):
+   ```tsx
+   export function ComponentName({ className = '', ref, ...rest }: ComponentNameProps) {
+     return <div {...rest} ref={ref} className={['ds-component-name', className].filter(Boolean).join(' ')} />;
+   }
+   ```
+   The existing components use `React.forwardRef` with `ComponentName.displayName = 'ComponentName'` after it, which stays valid. The two are identical to a consumer, so there is no migration: leave a forwardRef component alone unless you are rewriting it anyway. If the component already keeps an internal ref (focus trap, click-outside, picker trigger), merge them:
    ```ts
    const setRef = (node: HTMLDivElement | null) => {
      internalRef.current = node;
@@ -85,7 +91,9 @@ Not for a widget: the chat (`src/chat/`) is a kind of its own, with its own regi
 
 8. **Deprecate, never remove.** Keep the old prop working and mark it `@deprecated` with the replacement named — and put a description sentence **before** the tag, or the prop renders as a blank cell (see 9). `className` stays wherever it already is (usually the wrapper) — moving it is a silent visual break.
 
-9. **Give every own prop a JSDoc description — this is build-enforced.** That JSDoc is the single source for Storybook's props table, the `.d.ts` consumers get, and the machine-readable prop API the site's `/api/mcp` route serves to any agent and the site chat's `get_component` tool repeats to visitors (`website/src/data/component-api.generated.ts`) — so a prop description is public copy strangers' agents and site visitors both read, and `scripts/validate-component-api.mjs` leak-screens it (a hit there is a leak in the npm tarball too). All three consumers see the same parse: the settings live in `scripts/component-docgen.mjs`, mirroring `.storybook/main.ts`. `scripts/validate-prop-docs.mjs` fails the build on a prop without a description. Two traps it catches:
+9. **A link renders through the link component, never a raw `<a href>` — build-enforced.** A component that takes an `href` (its own, or an item's) adds an optional `linkComponent?: LinkComponent` prop and renders every link with the resolved component, so a consumer's router (Next.js's `Link`) navigates without a reload. In a client component, resolve it with `const Link = useLinkComponent(linkComponent);` from `src/behaviors/LinkProvider.tsx` at the top of the render, before any early return (prop, else the nearest `LinkProvider`, else `<a>`); in a server-renderable one, `const Link = linkComponent ?? 'a';`, since context cannot reach it, and say so in the prop's JSDoc. Button.tsx and Breadcrumb.tsx are the two patterns, and design.md's Components intro owns the contract. A link that is genuinely not navigation (an in-page jump the component scrolls itself) is a row in `SANCTIONED_ANCHORS` in `scripts/validate-component-contract.mjs`, with the reason.
+
+10. **Give every own prop a JSDoc description — this is build-enforced.** That JSDoc is the single source for Storybook's props table, the `.d.ts` consumers get, and the machine-readable prop API the site's `/api/mcp` route serves to any agent and the site chat's `get_component` tool repeats to visitors (`website/src/data/component-api.generated.ts`) — so a prop description is public copy strangers' agents and site visitors both read, and `scripts/validate-component-api.mjs` leak-screens it (a hit there is a leak in the npm tarball too). All three consumers see the same parse: the settings live in `scripts/component-docgen.mjs`, mirroring `.storybook/main.ts`. `scripts/validate-prop-docs.mjs` fails the build on a prop without a description. Two traps it catches:
 
    ```ts
    /** Visual treatment */
@@ -133,7 +141,7 @@ The story tests run axe in `'error'` mode, but axe only catches roughly a third 
 
 ### File 3: `ComponentName.stories.tsx`
 - Import: `import type { Meta, StoryObj } from '@storybook/react-vite'`
-- Meta uses `satisfies Meta<typeof ComponentName>`
+- Meta uses `satisfies Meta<typeof ComponentName>`, and sets `component: ComponentName`. The props-contract story finds the component through that field and borrows its props from the meta's `args` or the first story with `args`, so a component the meta does not name, or whose stories supply its required props only through a `render` function, fails as uncovered. When the stories cannot carry the props as args, add a `FIXTURES` entry in `src/stories/Contract.stories.tsx`
 - `title: 'Components/ComponentName'`
 - `tags: ['autodocs']`
 - `parameters: { layout: 'centered' }` for compact components; `'padded'` for full-width ones (cards, layouts, nav)

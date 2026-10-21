@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useLinkComponent, type LinkComponent } from '../../behaviors/LinkProvider';
 import './Card.css';
 import '../../fonts/material-symbols.css';
 
@@ -41,6 +42,12 @@ type CardOwnProps = {
   dek?: string;
   /** Render as a disabled placeholder (no href, dimmed, not interactive) */
   placeholder?: boolean;
+  /**
+   * The component the link renders with, such as Next.js's `Link`, so it
+   * navigates through the app's router. Wins over a LinkProvider's; a plain
+   * `<a>` when neither is set.
+   */
+  linkComponent?: LinkComponent;
 };
 
 export interface CardProps
@@ -72,10 +79,13 @@ export const Card = React.forwardRef<HTMLDivElement | HTMLAnchorElement, CardPro
       companyName,
       dek,
       placeholder = false,
+      linkComponent,
       ...rest
     },
     ref,
   ) => {
+    const Link = useLinkComponent(linkComponent);
+
     // ── Case-study variant ────────────────────────────────────────────────────
     if (variant === 'case-study') {
       const inner = (
@@ -141,7 +151,7 @@ export const Card = React.forwardRef<HTMLDivElement | HTMLAnchorElement, CardPro
       }
 
       return (
-        <a
+        <Link
           {...(rest as React.ComponentPropsWithoutRef<'a'>)}
           ref={ref as React.Ref<HTMLAnchorElement>}
           href={href}
@@ -149,7 +159,7 @@ export const Card = React.forwardRef<HTMLDivElement | HTMLAnchorElement, CardPro
           onClick={onClick as unknown as React.MouseEventHandler<HTMLAnchorElement>}
         >
           {inner}
-        </a>
+        </Link>
       );
     }
 

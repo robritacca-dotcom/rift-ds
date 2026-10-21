@@ -25,12 +25,25 @@ import { useThreads, type ThreadsOptions } from './threads';
 import { createFetchTransport } from './transport';
 import type { ChatArtifact, ChatFeedbackVerdict, ChatTransport } from './types';
 import { DEFAULT_PLACEHOLDER_COPY, useChat, type ChatPlaceholderCopy } from './useChat';
+import { useLinkComponent } from '../behaviors/LinkProvider';
 
-const defaultRenderLink: ChatLinkRenderer = ({ href, children, onNavigate }) => (
-  <a href={href} onClick={onNavigate}>
-    {children}
-  </a>
-);
+/* The default answer link renders through the app's router when a
+   LinkProvider sets one, the same link the library's own components use,
+   so a provider set once covers the chat too. A component, so it can read
+   the provider; the renderer itself is a plain function. */
+function DefaultChatLink({ href, children, onNavigate }: Parameters<ChatLinkRenderer>[0]) {
+  const Link = useLinkComponent();
+  return (
+    // The hook returns a stable reference from context (or 'a'), never a
+    // component created here, which is what the rule guards against.
+    // eslint-disable-next-line react-hooks/static-components
+    <Link href={href} onClick={onNavigate}>
+      {children}
+    </Link>
+  );
+}
+
+const defaultRenderLink: ChatLinkRenderer = (props) => <DefaultChatLink {...props} />;
 
 export interface ChatProviderProps {
   /**
@@ -63,7 +76,11 @@ export interface ChatProviderProps {
   renderers?: ChatCardRenderers;
   /** Draws an artifact's preview by kind, for artifacts that are live React content rather than a document or a URL. */
   artifactRenderers?: ChatArtifactRenderers;
-  /** Renders a same-site link in an answer. The default is a plain anchor; a Next.js host passes its Link. */
+  /**
+   * Renders a same-site link in an answer. The default renders through the
+   * nearest LinkProvider's link component, else a plain anchor; passing
+   * this wins over both.
+   */
   renderLink?: ChatLinkRenderer;
   /** Which hrefs in an answer become links. Everything else renders as text. */
   isInternalHref?: (href: string) => boolean;

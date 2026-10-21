@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
+import { useLinkComponent, type LinkComponent } from '../../behaviors/LinkProvider';
 import { PromptSuggestions, type PromptSuggestion } from '../PromptSuggestions/PromptSuggestions';
 import { Skeleton } from '../Skeleton/Skeleton';
 import { StreamingText } from '../StreamingText/StreamingText';
@@ -73,6 +74,12 @@ type AiButtonOwnProps = {
   suggestionsLabel?: string;
   /** Additional CSS classes */
   className?: string;
+  /**
+   * The component the link renders with, such as Next.js's `Link`, so it
+   * navigates through the app's router. Wins over a LinkProvider's; a plain
+   * `<a>` when neither is set.
+   */
+  linkComponent?: LinkComponent;
 };
 
 export interface AiButtonProps
@@ -117,11 +124,13 @@ export const AiButton = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, 
       dismissLabel = 'Dismiss summary',
       suggestionsLabel = 'Suggested prompts',
       className = '',
+      linkComponent,
       ...rest
     },
     ref,
   ) => {
     const baseClass = 'ds-ai-button';
+    const Link = useLinkComponent(linkComponent);
 
     const [hoverOpen, setHoverOpen] = useState(false);
     const [dismissed, setDismissed] = useState(false);
@@ -215,7 +224,7 @@ export const AiButton = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, 
 
     const control =
       href && !disabled ? (
-        <a
+        <Link
           {...(rest as React.ComponentPropsWithoutRef<'a'>)}
           ref={ref as React.Ref<HTMLAnchorElement>}
           className={classes}
@@ -224,7 +233,7 @@ export const AiButton = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, 
           rel={rel}
         >
           {content}
-        </a>
+        </Link>
       ) : (
         <button
           {...rest}

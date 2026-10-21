@@ -1,4 +1,5 @@
 import React from 'react';
+import type { LinkComponent } from '../../behaviors/LinkProvider';
 import './Widget.css';
 
 /* ============================================
@@ -120,6 +121,13 @@ type WidgetRowOwnProps = {
   href?: string;
   /** Additional CSS classes */
   className?: string;
+  /**
+   * The component its links render with, such as Next.js's `Link`, so they
+   * navigate through the app's router; a plain `<a>` when unset. This
+   * component can render on the server, so it never reads a LinkProvider:
+   * pass the prop even under one.
+   */
+  linkComponent?: LinkComponent;
 };
 
 export interface WidgetRowProps
@@ -133,8 +141,9 @@ export interface WidgetRowProps
  * list only offers a target where there is somewhere to go.
  */
 export const WidgetRow = React.forwardRef<HTMLElement, WidgetRowProps>(
-  ({ title, description, leading, meta, href, className = '', onClick, ...rest }, ref) => {
+  ({ title, description, leading, meta, href, className = '', onClick, linkComponent, ...rest }, ref) => {
     const baseClass = 'ds-widget-row';
+    const Link = linkComponent ?? 'a';
     const interactive = Boolean(href || onClick);
 
     const classes = [baseClass, interactive ? `${baseClass}--interactive` : '', className]
@@ -156,7 +165,7 @@ export const WidgetRow = React.forwardRef<HTMLElement, WidgetRowProps>(
 
     if (href) {
       return (
-        <a
+        <Link
           {...(rest as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
           ref={ref as React.Ref<HTMLAnchorElement>}
           href={href}
@@ -164,7 +173,7 @@ export const WidgetRow = React.forwardRef<HTMLElement, WidgetRowProps>(
           onClick={onClick as React.MouseEventHandler<HTMLAnchorElement> | undefined}
         >
           {content}
-        </a>
+        </Link>
       );
     }
 

@@ -3,6 +3,7 @@
 import React, { useState, useCallback } from 'react';
 import { AppSidebar } from '../AppSidebar/AppSidebar';
 import type { AppSidebarSection, AppSidebarProfile } from '../AppSidebar/AppSidebar';
+import type { LinkComponent } from '../../behaviors/LinkProvider';
 import './AppLayout.css';
 
 /** Props owned by AppLayout itself — everything else falls through to the outer wrapper `<div>`. */
@@ -33,6 +34,12 @@ type AppLayoutOwnProps = {
    * follows the surrounding data-theme like any other component.
    */
   theme?: 'dark' | 'inherit';
+  /**
+   * The component its links render with, such as Next.js's `Link`, so they
+   * navigate through the app's router; passed on to the AppSidebar rail. Wins over a
+   * LinkProvider's; a plain `<a>` when neither is set.
+   */
+  linkComponent?: LinkComponent;
   /** Additional CSS classes on outer wrapper */
   className?: string;
 };
@@ -63,6 +70,7 @@ export const AppLayout = React.forwardRef<HTMLDivElement, AppLayoutProps>(
       logo,
       children,
       theme = 'dark',
+      linkComponent,
       className = '',
       ...rest
     },
@@ -103,6 +111,7 @@ export const AppLayout = React.forwardRef<HTMLDivElement, AppLayoutProps>(
           onExpandedChange={handleExpandedChange}
           logoText={logoText}
           logo={logo}
+          linkComponent={linkComponent}
         />
         <main className={`${baseClass}__main`}>
           <div className={`${baseClass}__content`}>

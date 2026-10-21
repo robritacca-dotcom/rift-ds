@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useCallback, useId, useState } from 'react';
+import { useLinkComponent, type LinkComponent } from '../../behaviors/LinkProvider';
 import './SidebarPanel.css';
 import '../../fonts/material-symbols.css';
 
@@ -47,6 +48,12 @@ type SidebarPanelOwnProps = {
   backLabel?: string;
   /** Additional CSS classes */
   className?: string;
+  /**
+   * The component its links render with, such as Next.js's `Link`, so they
+   * navigate through the app's router. Wins over a LinkProvider's; a plain
+   * `<a>` when neither is set.
+   */
+  linkComponent?: LinkComponent;
 };
 
 export interface SidebarPanelProps
@@ -86,11 +93,13 @@ export const SidebarPanel = React.forwardRef<HTMLElement, SidebarPanelProps>(
       onBack,
       backLabel = 'Back',
       className = '',
+      linkComponent,
       ...rest
     },
     ref,
   ) => {
     const baseClass = 'ds-sidebar-panel';
+    const Link = useLinkComponent(linkComponent);
     const uid = useId();
 
     /* The accordion holding the current page starts open, so the reader
@@ -130,14 +139,14 @@ export const SidebarPanel = React.forwardRef<HTMLElement, SidebarPanelProps>(
         </>
       );
       return item.href ? (
-        <a
+        <Link
           className={classes}
           href={item.href}
           onClick={() => item.onClick?.()}
           aria-current={isActive ? 'page' : undefined}
         >
           {content}
-        </a>
+        </Link>
       ) : (
         <button
           type="button"

@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useLinkComponent, type LinkComponent } from '../../behaviors/LinkProvider';
 import './BottomNav.css';
 import '../../fonts/material-symbols.css';
 
@@ -78,6 +79,12 @@ type BottomNavOwnProps = {
   badgeLabel?: (badge: number | string | true) => string;
   /** Additional CSS classes */
   className?: string;
+  /**
+   * The component its links render with, such as Next.js's `Link`, so they
+   * navigate through the app's router. Wins over a LinkProvider's; a plain
+   * `<a>` when neither is set.
+   */
+  linkComponent?: LinkComponent;
 };
 
 const defaultBadgeLabel = (badge: number | string | true) =>
@@ -110,11 +117,13 @@ export const BottomNav = React.forwardRef<HTMLElement, BottomNavProps>(
       badgeLabel = defaultBadgeLabel,
       className = '',
       style,
+      linkComponent,
       ...rest
     },
     ref,
   ) => {
     const baseClass = 'ds-bottom-nav';
+    const Link = useLinkComponent(linkComponent);
     const isIos = platform === 'ios';
 
     /* Outside iOS the search destination is simply the last tab. */
@@ -203,14 +212,14 @@ export const BottomNav = React.forwardRef<HTMLElement, BottomNavProps>(
                   inert={isMinimized && !isActive}
                 >
                   {item.href ? (
-                    <a
+                    <Link
                       className={itemClasses}
                       href={item.href}
                       onClick={handleClick}
                       aria-current={isActive ? 'page' : undefined}
                     >
                       {content}
-                    </a>
+                    </Link>
                   ) : (
                     <button
                       type="button"
@@ -230,9 +239,9 @@ export const BottomNav = React.forwardRef<HTMLElement, BottomNavProps>(
         {isIos &&
           search &&
           (search.href ? (
-            <a className={`${baseClass}__search`} href={search.href} onClick={search.onClick} aria-label={search.label}>
+            <Link className={`${baseClass}__search`} href={search.href} onClick={search.onClick} aria-label={search.label}>
               {renderIcon(search.icon ?? 'search')}
-            </a>
+            </Link>
           ) : (
             <button type="button" className={`${baseClass}__search`} onClick={search.onClick} aria-label={search.label}>
               {renderIcon(search.icon ?? 'search')}

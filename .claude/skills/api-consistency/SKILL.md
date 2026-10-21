@@ -25,12 +25,12 @@ It also runs **scoped** inside other flows: `new-component` runs it on a new com
    - A category description (e.g. "all button-like components", "all form inputs") → infer the relevant components
 
 2. **Read every component's TypeScript interface.** Start from `website/src/data/component-api.generated.ts` for the prop inventory — it holds every own prop with type, default, requiredness and description, parsed exactly as the published `.d.ts` documents them. Then read the `.tsx` files in scope for what the generated file does not capture:
-   - The structural contract (`forwardRef`, `{...rest}` placement, the own-props split, `'use client'`)
+   - The structural contract (the ref, `{...rest}` placement, the own-props split, `'use client'`)
    - Default values (from destructuring defaults in the function signature)
 
 3. **First, check conformance to the published contract.** This is the highest-value part of the review and takes precedence over style preferences below. The contract is defined in the `new-component` skill and summarised in CLAUDE.md's **Component Anatomy** — read one of them rather than trusting this list, which exists to tell you *what to look for*, not to restate the rules:
 
-   - **The ref, the rest spread and the native props.** `node scripts/validate-component-contract.mjs` build-enforces forwardRef with a `displayName`, props extending the native element's type, and the ref and `{...rest}` on one node with the root class after the spread; the props-contract story (`src/stories/Contract.stories.tsx`) proves at runtime that both reach the same element. Run the script rather than re-reading for these. What it cannot judge, and you still check: whether the node it found is the *primary* one (the panel for a portal component, the control for a form field), and whether own handlers the component sets on that node compose with the consumer's (`onMouseEnter` from rest must still fire) instead of overwriting them.
+   - **The ref, the rest spread and the native props.** `node scripts/validate-component-contract.mjs` build-enforces a ref (forwardRef with a `displayName`, or React 19's plain `ref` prop), props extending the native element's type, and the ref and `{...rest}` on one node with the root class after the spread; the props-contract story (`src/stories/Contract.stories.tsx`) proves at runtime that both reach the same element. Run the script rather than re-reading for these. What it cannot judge, and you still check: whether the node it found is the *primary* one (the panel for a portal component, the control for a form field), and whether own handlers the component sets on that node compose with the consumer's (`onMouseEnter` from rest must still fire) instead of overwriting them.
    - **`'use client'` present when the component is interactive, and absent when it is purely presentational.** A needless directive silently costs consumers Server Component rendering — flag both directions.
    - **Native event signatures keep the standard names.** `onChange` must be a `ChangeEventHandler`, never `(value) => void`. The convenience callback is named for the value's shape: `onValueChange` (string/number), `onCheckedChange` (boolean), `onValuesChange` (array) — and both fire.
    - **The controlled/uncontrolled pair convention.** State a consumer can own comes as `x` / `defaultX` / `onXChange`, and works with `x` omitted. A controlled-only prop with no `default*` partner, or a selection named `activeTab`/`onTabChange` where the convention says `value`/`onValueChange`, is a finding, unless the component's design.md spec says it is fully controlled by design.
@@ -88,7 +88,7 @@ It also runs **scoped** inside other flows: `new-component` runs it on a new com
    ## API Consistency Report
 
    ### Contract violations (highest impact)
-   - Gadget — no forwardRef; a consumer cannot take a ref
+   - Gadget — takes no ref; a consumer cannot reach its node
    - Sprocket — props do not extend ComponentPropsWithoutRef<'span'>; data-* unreachable
    - MetricPod — has 'use client' but no hooks or handlers; blocks Server Component rendering
 

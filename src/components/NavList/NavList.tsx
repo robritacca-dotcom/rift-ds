@@ -2,6 +2,7 @@
 
 import React, { useId, useState } from 'react';
 import { Button } from '../Button/Button';
+import type { LinkComponent } from '../../behaviors/LinkProvider';
 import './NavList.css';
 import '../../fonts/material-symbols.css';
 
@@ -47,6 +48,12 @@ type NavListOwnProps = {
   expandLabel?: (label: string) => string;
   /** Accessible name of an expanded section's chevron toggle, given the row's label. Defaults to "Collapse <label>". */
   collapseLabel?: (label: string) => string;
+  /**
+   * The component its links render with, such as Next.js's `Link`, so they
+   * navigate through the app's router; passed on to each row's Button. Wins over a
+   * LinkProvider's; a plain `<a>` when neither is set.
+   */
+  linkComponent?: LinkComponent;
   /** Additional CSS classes */
   className?: string;
 };
@@ -80,6 +87,7 @@ export const NavList = React.forwardRef<HTMLUListElement, NavListProps>(
       onNavigate,
       expandLabel = (label) => `Expand ${label}`,
       collapseLabel = (label) => `Collapse ${label}`,
+      linkComponent,
       className = '',
       ...rest
     },
@@ -120,6 +128,7 @@ export const NavList = React.forwardRef<HTMLUListElement, NavListProps>(
             size={level === 1 ? 'default' : 'compact'}
             label={item.label}
             href={item.href}
+            linkComponent={linkComponent}
             ariaCurrent={isCurrent}
             className={isCurrent ? 'ds-button--active' : undefined}
             onClick={(event) => onNavigate?.(item, event)}

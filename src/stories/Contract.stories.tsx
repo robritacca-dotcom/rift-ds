@@ -4,6 +4,9 @@ import { flushSync } from 'react-dom';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect } from 'storybook/test';
 import registry from '../components/registry.json';
+import { LinkProvider, type LinkComponentProps } from '../behaviors/LinkProvider';
+import { Breadcrumb } from '../components/Breadcrumb/Breadcrumb';
+import { Button } from '../components/Button/Button';
 
 /*
  * The props contract, proven at runtime. scripts/validate-component-contract.mjs
@@ -18,6 +21,12 @@ import registry from '../components/registry.json';
  * keep working. FIXTURES fills in where a story drives its component through
  * a render function instead. A component whose stories cannot supply its
  * required props fails here by name, which is the cue to add a fixture.
+ *
+ * Every registered component is checked or the story fails: one whose
+ * stories never name it as their meta's `component`, and that has no
+ * FIXTURES entry, is reported as uncovered rather than skipped. SKIP mirrors
+ * the "ref and rest" rows of SANCTIONED in validate-component-contract.mjs,
+ * which holds the two together.
  */
 
 type StoryModule = {
@@ -25,7 +34,10 @@ type StoryModule = {
   [name: string]: unknown;
 };
 
-const storyModules = import.meta.glob<StoryModule>('../components/**/*.stories.tsx', { eager: true });
+// `.ts` too: a story file with no JSX (Button's) is still a story file.
+const storyModules = import.meta.glob<StoryModule>('../components/**/*.stories.{ts,tsx}', { eager: true });
+const storyFor = (name: string) =>
+  Object.entries(storyModules).find(([path]) => /\/(\w+)\.stories\.tsx?$/.exec(path)?.[1] === name)?.[1];
 
 /** Components whose primary node is deliberately not the ref target (validate-component-contract.mjs's SANCTIONED). */
 const SKIP = new Set(['PinInput']);
@@ -40,19 +52,20 @@ const FIXTURES: Record<string, Record<string, unknown>> = {
 };
 
 const argsFor = (name: string): Record<string, unknown> | null => {
-  const entry = Object.entries(storyModules).find(([path]) => path.endsWith(`/${name}.stories.tsx`));
-  if (!entry) return FIXTURES[name] ?? null;
-  const mod = entry[1];
+  const mod = storyFor(name);
+  if (!mod) return FIXTURES[name] ?? null;
   const firstWithArgs = Object.entries(mod).find(
     ([key, value]) => key !== 'default' && value && typeof value === 'object' && 'args' in (value as object),
   )?.[1] as { args?: Record<string, unknown> } | undefined;
   return { ...(mod.default.args ?? {}), ...(firstWithArgs?.args ?? {}), ...(FIXTURES[name] ?? {}) };
 };
 
+// A forwardRef component names itself through displayName; a plain function
+// component (React 19's ref-as-prop form) through its function name.
 const componentFor = (name: string): React.ElementType | null => {
-  const entry = Object.entries(storyModules).find(([path]) => path.endsWith(`/${name}.stories.tsx`));
-  const fromMeta = entry?.[1].default.component;
-  return fromMeta && (fromMeta as { displayName?: string }).displayName === name ? fromMeta : null;
+  const fromMeta = storyFor(name)?.default.component;
+  const named = fromMeta as { displayName?: string; name?: string } | undefined;
+  return fromMeta && (named?.displayName ?? named?.name) === name ? fromMeta : null;
 };
 
 const meta = {
@@ -85,7 +98,12 @@ export const RefAndAttributesShareANode: Story = {
       if (SKIP.has(name)) continue;
       const Component = componentFor(name);
       const args = argsFor(name);
-      if (!Component || !args) continue; // no story names the component as its meta: nothing to borrow
+      if (!Component || !args) {
+        failures.push(
+          `${name}: uncovered. No story names it as its meta's component; set \`component: ${name}\` in its stories' meta, or add a FIXTURES entry`,
+        );
+        continue;
+      }
       current = name;
       const host = document.createElement('div');
       document.body.appendChild(host);
@@ -109,6 +127,31 @@ export const RefAndAttributesShareANode: Story = {
     }
     console.error = originalError;
     await expect(failures).toEqual([]);
-    await expect(checked).toBeGreaterThan(100);
+    await expect(checked).toBe(registry.components.length - SKIP.size);
+  },
+};
+
+/** Stands in for a router's link: an anchor the test can tell apart from a plain one. */
+function RouterLink(props: LinkComponentProps) {
+  return <a {...props} data-router-link="" />;
+}
+
+export const LinksRouteThroughTheLinkComponent: Story = {
+  render: () => (
+    <div>
+      <LinkProvider linkComponent={RouterLink}>
+        <Button label="Docs" href="/docs" />
+      </LinkProvider>
+      <Breadcrumb items={[{ label: 'Home', href: '/' }, { label: 'Docs' }]} linkComponent={RouterLink} />
+      <Button label="Plain" href="/plain" />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const link = (href: string) => canvasElement.querySelector(`a[href="${href}"]`);
+    // A client component reads the provider; a server one takes the prop.
+    await expect(link('/docs')?.hasAttribute('data-router-link')).toBe(true);
+    await expect(link('/')?.hasAttribute('data-router-link')).toBe(true);
+    // Outside a provider, a link stays a plain anchor.
+    await expect(link('/plain')?.hasAttribute('data-router-link')).toBe(false);
   },
 };

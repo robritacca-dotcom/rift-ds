@@ -16,6 +16,7 @@ import { buildDesignSystemJsonLd, buildWebsiteJsonLd, SITE_URL } from "@/lib/str
 import { BRAND_NAME, GA_ID, TITLE_SUFFIX } from "@/config/brand.generated";
 import { BASE_THEME_ID, LEGACY_BASE_THEME_ID, SERVED_THEME_ID } from "@/lib/theme/brand";
 import { SiteChatProvider } from "@/components/SiteChat/SiteChatProvider";
+import { SiteLinkProvider } from "@/components/SiteLinkProvider/SiteLinkProvider";
 import { SiteChatMount } from "@/components/SiteChat/SiteChatMount";
 import { SitePaletteMount } from "@/components/SitePalette/SitePaletteMount";
 import SiteFooter from "@/components/SiteFooter/SiteFooter";
@@ -234,6 +235,9 @@ export default async function RootLayout({
             remounts on client-side navigation: the transcript, a stream in
             flight, and the draft all survive route changes. The panel mounts
             after {children} so it sits last in the tab order. */}
+        {/* Next's Link for every library link on the site, the chat's
+            answer links included (see SiteLinkProvider). */}
+        <SiteLinkProvider>
         <SiteChatProvider>
           {/* Internal plain-anchor clicks become client-side navigations, so
               the providers above (and an open chat) survive card links. */}
@@ -255,6 +259,7 @@ export default async function RootLayout({
               a question (the ask row's send). */}
           <SitePaletteMount />
         </SiteChatProvider>
+        </SiteLinkProvider>
       </body>
     </html>
   );

@@ -1,4 +1,5 @@
 import React from 'react';
+import type { LinkComponent } from '../../behaviors/LinkProvider';
 import './LinkList.css';
 import '../../fonts/material-symbols.css';
 
@@ -25,6 +26,13 @@ type LinkListOwnProps = {
   items: LinkListItem[];
   /** Additional CSS classes */
   className?: string;
+  /**
+   * The component its links render with, such as Next.js's `Link`, so they
+   * navigate through the app's router; a plain `<a>` when unset. This
+   * component can render on the server, so it never reads a LinkProvider:
+   * pass the prop even under one.
+   */
+  linkComponent?: LinkComponent;
 };
 
 export interface LinkListProps
@@ -37,8 +45,9 @@ export interface LinkListProps
  * Forwards a ref to the root div and spreads native attributes onto it.
  */
 export const LinkList = React.forwardRef<HTMLDivElement, LinkListProps>(
-  ({ items, className = '', ...rest }, ref) => {
+  ({ items, className = '', linkComponent, ...rest }, ref) => {
     const classes = ['ds-link-list', className].filter(Boolean).join(' ');
+    const Link = linkComponent ?? 'a';
     return (
       <div {...rest} ref={ref} className={classes}>
         {items.map((item) => {
@@ -51,7 +60,7 @@ export const LinkList = React.forwardRef<HTMLDivElement, LinkListProps>(
           const newTab = item.newTab ?? true;
 
           return (
-            <a
+            <Link
               key={item.href + item.label}
               href={item.href}
               target={newTab ? '_blank' : undefined}
@@ -87,7 +96,7 @@ export const LinkList = React.forwardRef<HTMLDivElement, LinkListProps>(
                   <span key={i} className="ds-link-list__sub">{s}</span>
                 ))}
               </div>
-            </a>
+            </Link>
           );
         })}
       </div>

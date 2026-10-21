@@ -1,12 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import type { ReactNode } from "react";
 import {
   ChatProvider,
   type ChatArtifactRenderers,
   type ChatCardRenderers,
-  type ChatLinkRenderer,
   type ChatPlacement,
   type ChatTransport,
   type ThreadsOptions,
@@ -15,9 +13,11 @@ import { FALLBACK_FOLLOWUPS } from "@/lib/chat-followups";
 
 /**
  * The site's configuration of the package's ChatProvider: the three routes
- * under /api/chat, the written follow-up fallbacks, and Next's Link for the
- * same-site paths an answer links to, so a docked panel survives the trip
- * and the conversation keeps going beside the new page.
+ * under /api/chat and the written follow-up fallbacks. Answer links need no
+ * renderer here: the package's default reads the LinkProvider the root
+ * layout mounts (SiteLinkProvider), so the same-site paths an answer links
+ * to go through Next's Link, a docked panel survives the trip, and the
+ * conversation keeps going beside the new page.
  *
  * Mounted once in the root layout. The root layout never remounts on
  * client-side navigation, so the transcript, a stream in flight, the draft
@@ -26,12 +26,6 @@ import { FALLBACK_FOLLOWUPS } from "@/lib/chat-followups";
  * playground, the chat home and payroll templates) mount their own with a
  * scripted transport.
  */
-const renderLink: ChatLinkRenderer = ({ href, children, onNavigate }) => (
-  <Link href={href} onClick={onNavigate}>
-    {children}
-  </Link>
-);
-
 export function SiteChatProvider({
   transport,
   defaultPlacement = "right",
@@ -59,7 +53,6 @@ export function SiteChatProvider({
       followups="/api/chat/followups"
       feedback="/api/chat/feedback"
       fallbackFollowups={FALLBACK_FOLLOWUPS}
-      renderLink={renderLink}
       renderers={renderers}
       artifactRenderers={artifactRenderers}
       threads={threads}

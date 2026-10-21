@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useLinkComponent, type LinkComponent } from '../../behaviors/LinkProvider';
 import { DropdownMenu } from '../DropdownMenu/DropdownMenu';
 import './TopAppBar.css';
 import '../../fonts/material-symbols.css';
@@ -88,6 +89,12 @@ type TopAppBarOwnProps = {
   sticky?: boolean;
   /** Additional CSS classes */
   className?: string;
+  /**
+   * The component its links render with, such as Next.js's `Link`, so they
+   * navigate through the app's router. Wins over a LinkProvider's; a plain
+   * `<a>` when neither is set.
+   */
+  linkComponent?: LinkComponent;
 };
 
 export interface TopAppBarProps
@@ -134,11 +141,13 @@ export const TopAppBar = React.forwardRef<HTMLElement, TopAppBarProps>(
       headingLevel = 1,
       sticky = true,
       className = '',
+      linkComponent,
       ...rest
     },
     ref,
   ) => {
     const baseClass = 'ds-top-app-bar';
+    const Link = useLinkComponent(linkComponent);
     const isIos = platform === 'ios';
     const resolvedAlign = align ?? (isIos ? 'center' : 'start');
     const expandable = size !== 'small';
@@ -198,7 +207,7 @@ export const TopAppBar = React.forwardRef<HTMLElement, TopAppBarProps>(
       );
       const label = action.badge ? badgeLabel(action.label) : action.label;
       return action.href ? (
-        <a
+        <Link
           key={action.key}
           className={`${baseClass}__button`}
           href={action.href}
@@ -206,7 +215,7 @@ export const TopAppBar = React.forwardRef<HTMLElement, TopAppBarProps>(
           aria-label={label}
         >
           {content}
-        </a>
+        </Link>
       ) : (
         <button
           key={action.key}

@@ -1,4 +1,5 @@
 import React from 'react';
+import type { LinkComponent } from '../../behaviors/LinkProvider';
 import './Breadcrumb.css';
 import '../../fonts/material-symbols.css';
 
@@ -23,6 +24,13 @@ type BreadcrumbOwnProps = {
    * @deprecated Pass the native `aria-label` attribute instead.
    */
   ariaLabel?: string;
+  /**
+   * The component its links render with, such as Next.js's `Link`, so they
+   * navigate through the app's router; a plain `<a>` when unset. This
+   * component can render on the server, so it never reads a LinkProvider:
+   * pass the prop even under one.
+   */
+  linkComponent?: LinkComponent;
 };
 
 export interface BreadcrumbProps
@@ -40,8 +48,9 @@ export interface BreadcrumbProps
  * indistinguishable to assistive technology.
  */
 export const Breadcrumb = React.forwardRef<HTMLElement, BreadcrumbProps>(
-  ({ items, maxItems, className = '', ariaLabel, ...rest }, ref) => {
+  ({ items, maxItems, className = '', ariaLabel, linkComponent, ...rest }, ref) => {
     const baseClass = 'ds-breadcrumb';
+    const Link = linkComponent ?? 'a';
     const classes = [baseClass, className].filter(Boolean).join(' ');
 
     const shouldCollapse = maxItems !== undefined && maxItems >= 2 && items.length > maxItems;
@@ -87,9 +96,9 @@ export const Breadcrumb = React.forwardRef<HTMLElement, BreadcrumbProps>(
                     {item.label}
                   </span>
                 ) : (
-                  <a href={item.href} className={`${baseClass}__link`}>
+                  <Link href={item.href} className={`${baseClass}__link`}>
                     {item.label}
-                  </a>
+                  </Link>
                 )}
               </li>
             );

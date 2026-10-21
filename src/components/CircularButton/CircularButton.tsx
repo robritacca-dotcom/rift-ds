@@ -3,6 +3,7 @@
 // The default Tooltip wrapper is the client island; like MessageActions, the
 // button itself stays server-renderable.
 import React from 'react';
+import type { LinkComponent } from '../../behaviors/LinkProvider';
 import { Spinner } from '../Spinner/Spinner';
 import { Tooltip } from '../Tooltip/Tooltip';
 import './CircularButton.css';
@@ -74,6 +75,13 @@ type CircularButtonOwnProps = {
   rel?: string;
   /** Additional CSS classes */
   className?: string;
+  /**
+   * The component the link renders with, such as Next.js's `Link`, so it
+   * navigates through the app's router; a plain `<a>` when unset. This
+   * component can render on the server, so it never reads a LinkProvider:
+   * pass the prop even under one.
+   */
+  linkComponent?: LinkComponent;
 };
 
 export interface CircularButtonProps
@@ -131,11 +139,13 @@ export const CircularButton = React.forwardRef<
       target,
       rel,
       className = '',
+      linkComponent,
       ...rest
     },
     ref,
   ) => {
     const baseClass = 'ds-circular-button';
+    const Link = linkComponent ?? 'a';
 
     // `priority` is the deprecated spelling of `variant`; `variant` wins when both are set.
     const resolvedVariant = resolveCircularButtonCell(variant ?? priority ?? 'primary', tone);
@@ -169,7 +179,7 @@ export const CircularButton = React.forwardRef<
     // A loading link renders the button branch so interaction is truly blocked.
     const control =
       href && !isDisabled && !isLoading ? (
-        <a
+        <Link
           {...(rest as React.ComponentPropsWithoutRef<'a'>)}
           ref={ref as React.Ref<HTMLAnchorElement>}
           className={classes}
@@ -179,7 +189,7 @@ export const CircularButton = React.forwardRef<
           aria-label={ariaLabel}
         >
           {children}
-        </a>
+        </Link>
       ) : (
         <button
           {...rest}

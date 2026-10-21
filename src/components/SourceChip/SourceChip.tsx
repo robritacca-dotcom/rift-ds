@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
+import { useLinkComponent, type LinkComponent } from '../../behaviors/LinkProvider';
 import { useLayer } from '../../behaviors/useLayer';
 import './SourceChip.css';
 import '../../fonts/material-symbols.css';
@@ -43,6 +44,12 @@ type SourceChipOwnProps = {
   meta?: string;
   /** Additional CSS classes */
   className?: string;
+  /**
+   * The component the link renders with, such as Next.js's `Link`, so it
+   * navigates through the app's router. Wins over a LinkProvider's; a plain
+   * `<a>` when neither is set.
+   */
+  linkComponent?: LinkComponent;
 };
 
 export interface SourceChipProps
@@ -94,8 +101,9 @@ function clipBounds(el: HTMLElement) {
 export const SourceChip = React.forwardRef<
   HTMLAnchorElement | HTMLButtonElement | HTMLSpanElement,
   SourceChipProps
->(({ title, index, icon = 'language', href, excerpt, source, logo, meta, className = '', ...rest }, ref) => {
+>(({ title, index, icon = 'language', href, excerpt, source, logo, meta, className = '', linkComponent, ...rest }, ref) => {
   const baseClass = 'ds-source-chip';
+  const Link = useLinkComponent(linkComponent);
   const hasPreview = Boolean(excerpt);
 
   const [visible, setVisible] = useState(false);
@@ -231,8 +239,8 @@ export const SourceChip = React.forwardRef<
   const describedBy = hasPreview ? panelId : undefined;
 
   const chip =
-    element === 'a' ? (
-      <a
+    element === 'a' && href ? (
+      <Link
         aria-describedby={describedBy}
         {...rest}
         ref={ref as React.Ref<HTMLAnchorElement>}
@@ -240,7 +248,7 @@ export const SourceChip = React.forwardRef<
         href={href}
       >
         {content}
-      </a>
+      </Link>
     ) : element === 'button' ? (
       <button
         type="button"

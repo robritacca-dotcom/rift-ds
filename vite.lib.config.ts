@@ -44,6 +44,7 @@ export default defineConfig({
         'components/ShaderField/useShaderField': 'src/components/ShaderField/useShaderField.ts',
         'components/StreamingText/useStreamReveal': 'src/components/StreamingText/useStreamReveal.ts',
         'behaviors/useScrollLock': 'src/behaviors/useScrollLock.ts',
+        'behaviors/LinkProvider': 'src/behaviors/LinkProvider.tsx',
         // The chat widget's four subpaths (scripts/package-manifest.mjs owns
         // the list; each carries its own optional peers, externalised below).
         'chat/index': 'src/chat/index.ts',

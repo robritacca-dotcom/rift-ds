@@ -1,0 +1,54 @@
+/* ============================================
+   ROUTE ERROR FALLBACK
+   The recovery card an error.tsx boundary renders
+   ============================================ */
+
+/* The immersive surfaces' ground: full viewport, like the graph page and
+   the playground, with the card centred on the dotted canvas. */
+.stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--layout-stage-clearance) var(--padding-500);
+}
+
+/* The chrome-bearing variant mirrors the 404 page's container. */
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 1440px;
+  flex: 1;
+  position: relative;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-400);
+}
+
+/* One reading column, so the card never spans the canvas. */
+.panel {
+  width: 100%;
+  max-width: 560px;
+  align-items: center;
+}
+
+.reference {
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+  color: var(--color-text-tertiary);
+  text-align: center;
+  margin: 0;
+}

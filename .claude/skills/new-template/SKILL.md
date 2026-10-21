@@ -59,11 +59,12 @@ Create `website/src/app/templates/<slug>/` with two files, mirroring a live temp
 - **`page.tsx`** — a doc comment (why the route is chromeless and corpus-excluded, pointing at both lists) and a default export that renders the implementation. Nothing else.
 - **`layout.tsx`** — `export const metadata = pageMetadata("/templates/<slug>", "<description>")` (import from `@/config/navigation`). The description is real page metadata, so it follows content-design.md like any shipped copy.
 
-### 5. Register the screen — three lists, in one change
+### 5. Register the screen — three lists, in one change (a fourth when the screen has a grip)
 
 - **`templatesSidebarLinks` in `website/src/config/navigation.ts`** — add `{ href, label, description }`, plus `mobileOnly: true` for a screen with no tablet or desktop layout (the carousel then keeps its slide in the phone frame at every device size; the field's doc on `NavLink` owns the contract), and `hideFromShowcase: true` only if the screen should stay out of the index carousel while keeping its page, sidebar entry and sitemap row: the index link stays first, then one entry per screen in the family's curated order. This is the one authoritative list of templates: the index carousel, the home bento's templates tile, the sidebar, the sitemap, llms.txt, and the chat corpus's Templates list all derive from it. **No validator holds it**, so a skipped entry fails silently — the screen simply never appears anywhere.
 - **`CHROMELESS_ROUTES` in `website/src/config/chromeless.ts`** — the shared footer, chat panel, and palette would otherwise render inside the app shell being shown. Build-enforced indirectly: `validate-page-summaries.mjs` reads this list as its coverage exemption, so a template route left out fails the build demanding a page summary the screen should not have.
 - **`EXCLUDED_ROUTES` in `scripts/generate-site-corpus.mjs`** — with a written reason in the existing entries' shape (fictional demo data; the screen's name and summary reach the corpus through the site map's Templates list, drawn from the sidebar entry). This one **is a gate**: `validate-chat-coverage.mjs` fails the build for an uncovered route.
+- **`scripts/gestures.json`**, only when the screen carries a grip a visitor can drag (a resizable pane, a docked rail's widen grip): one entry per grip with the setup that reaches it, so the gesture stress check drives it in `verify` and CI (CLAUDE.md's Gestures row owns the registry). No validator notices a missing entry.
 
 Nothing else needs registering. Chromeless routes are automatically exempt from the AI-summary panel (`validate-page-summaries.mjs`) and the anchor rail; breadcrumbs and page title derive from the sidebar entry.
 

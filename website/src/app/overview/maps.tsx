@@ -101,7 +101,7 @@ export const pipelineMap: ArchMap = {
 
     /* Stage 4 */
     { id: "z-gate", x: 1430, y: 840, w: 430, h: 300, kind: "zone", title: "4 · Gate", sub: "every push and pull request" },
-    { id: "ci", x: 1470, y: 930, w: 350, h: 90, title: "GitHub Actions CI", sub: "axe on every story · hydration smoke · drift guard", logo: "/logos/Git.svg" },
+    { id: "ci", x: 1470, y: 930, w: 350, h: 90, title: "GitHub Actions CI", sub: "axe on every story · hydration smoke · gesture stress · drift guard", logo: "/logos/Git.svg" },
 
     /* Stage 5 */
     { id: "z-ship", x: 330, y: 840, w: 880, h: 320, kind: "zone", title: "5 · Ship + serve", sub: "two destinations, two paths" },

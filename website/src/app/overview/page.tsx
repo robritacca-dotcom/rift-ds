@@ -165,7 +165,8 @@ export default function AboutDsPage() {
                   gate, ship. A push to main deploys the site; the package
                   takes its own lane, published to npm with provenance and
                   no stored token. The map carries the detail: the drift
-                  guard, the hydration smoke, the axe audit on every story.
+                  guard, the hydration smoke, the gesture stress check, the
+                  axe audit on every story.
                 </p>
                 <ArchitectureMap
                   map={pipelineMap}

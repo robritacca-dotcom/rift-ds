@@ -32,6 +32,8 @@ Check what shipped since the last tag to justify the choice, and confirm it with
 git log $(git describe --tags --abbrev=0)..HEAD --oneline
 ```
 
+`node scripts/validate-api-compat.mjs` answers half of this mechanically: it compares the working tree's props, export names, subpaths, deep-import files and bin with the last tag, and fails on anything removed or narrowed. A clean run means nothing published has gone, which rules out a major for shape reasons (a moved default is behaviour, and still needs a reader). A deliberate break ships only as a major, with a `SANCTIONED_BREAKS` row in that script naming the version and the reason. The one other kind of row is a correction to the baseline's own record, where the published types never changed and only the generated API misreported them (its reason starts "not a break" and says so); that rides in a minor. Either way, after the tag in step 7 the row goes stale and the next run fails until it is deleted.
+
 Be deliberate about breaking changes: components are exported both from the barrel and from `./components/*` deep paths, so a renamed component folder breaks consumers even if the barrel still exports the old name. The chat subpaths (`SUBPATHS` in `scripts/package-manifest.mjs` lists them: `./chat` and its server, upstash, demo and stylesheet siblings) are public paths on the same terms, and the scaffold templates under `src/cli/templates/chat/` ride in the tarball, so a renamed chat export breaks files the bin has already written into consumer apps.
 
 ### 2. Pre-flight
@@ -106,6 +108,8 @@ git tag -a v<version> <published-sha> -m "v<version> — <one-line summary>"
 git push origin v<version>
 gh release create v<version> --verify-tag --title "v<version> — <short title>" --notes-file <notes>
 ```
+
+Tagging moves the compatibility gate's baseline, so any `SANCTIONED_BREAKS` row this release carried now matches nothing. Delete it in the next commit.
 
 Write the notes for a consumer, not a maintainer: what's new, anything breaking with the migration step spelled out, and the install snippet. The previous release is the format reference; the prose follows `content-design.md`.
 

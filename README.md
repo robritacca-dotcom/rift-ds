@@ -13,7 +13,7 @@ An open source React design system built for AI products and coding agents: comp
 
 ## Why Rift DS
 
-- **<!-- component-count -->155<!-- /component-count --> components.** Buttons, forms and tables through to charts, navigation and overlays, each typed and documented with live examples. React and React DOM are the only required peer dependencies.
+- **<!-- component-count -->155<!-- /component-count --> components.** Buttons, forms and tables through to charts, navigation and overlays, each typed and documented with live examples. Every one forwards a ref and your own attributes to its element, state you can own works controlled or uncontrolled (a modal opens when your app says so, by design), and every word a component writes has a prop you can localise. The build checks the first two on every component, and the words wherever they sit in markup. React and React DOM are the only required peer dependencies.
 - **AI patterns, the whole chat and templates, ready to use.** Composer, streaming chat thread, tool calls, reasoning and thread panel are in the box, the complete AI chat ships assembled as one widget that one command scaffolds, and the docs site has complete template screens built from them.
 - **Fully themeable.** The shipped themes are complete looks to start from, each in light and dark. One `data-brand` attribute applies a theme, and a few CSS overrides make your own.
 - **Ready for coding agents.** One command installs the agent skills, and a public MCP endpoint serves every component's props, so your agent builds with the library as it actually is. No key, no account.

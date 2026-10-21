@@ -43,7 +43,9 @@ import {
   SHIPPED_DISPLAY_WEIGHT,
   SHIPPED_HEADING_WEIGHT,
   SHIPPED_ICON_WEIGHT,
+  addSessionFont,
   type ElevationVariant,
+  type FontOption,
 } from "@/lib/theme/theme-overrides";
 import { PICKER_FONT_PARAMS, THEME_PRESETS, type ThemePreset } from "@/lib/theme/presets";
 
@@ -61,6 +63,13 @@ import { BIN_NAME, MCP_SERVER_NAME, PACKAGE_NAME, SITE_URL } from "@/config/bran
 import PlaygroundControls from "./PlaygroundControls";
 import { ImageThemeCard, ImageThemeDropZone } from "./ImageThemeDrop";
 import { themeFromFile, type ImageThemeSource } from "@/lib/theme/image-palette";
+import { DesignMdCard } from "./DesignMdCard";
+import { ThemeSourceInvite } from "./ThemeSourceInvite";
+import {
+  isDesignMdFile,
+  themeFromDesignMd,
+  type DesignMdSource,
+} from "@/lib/theme/design-md";
 import AdvancedColorsDialog from "./AdvancedColorsDialog";
 import ExportThemeDialog, { type ExportTab } from "./ExportThemeDialog";
 import ChatDirector from "./ChatDirector";
@@ -334,11 +343,17 @@ export default function PlaygroundPage() {
   /* The live URL, so the revoke on unmount does not need imageSource in a
      dependency array that would re-run the cleanup on every swap. */
   const imageUrlRef = useRef<string | null>(null);
+  /* A DESIGN.md is the other kind of theme source: the same drop, the same
+     button, read as text in this tab (lib/theme/design-md.ts). One source
+     at a time, so each clears the other. */
+  const [designSource, setDesignSource] = useState<DesignMdSource | null>(null);
 
+  /** Drops the theme source, picture or DESIGN.md. The levers stay put. */
   const clearImage = () => {
     if (imageUrlRef.current) URL.revokeObjectURL(imageUrlRef.current);
     imageUrlRef.current = null;
     setImageSource(null);
+    setDesignSource(null);
     setImageError("");
   };
 
@@ -409,6 +424,7 @@ export default function PlaygroundPage() {
     if (imageUrlRef.current) URL.revokeObjectURL(imageUrlRef.current);
     imageUrlRef.current = source.url;
     setImageSource(source);
+    setDesignSource(null);
 
     setPreset("custom");
     syncPresetParam("custom");
@@ -436,6 +452,75 @@ export default function PlaygroundPage() {
        view lands somewhere it can be seen. */
     pickView("components");
   };
+
+  /** A matched face's picker entry, loaded and selectable. A face outside
+      the roster joins both pickers for the session, and its stylesheet is
+      requested the way the roster's are (removed with them on unmount). */
+  const loadMatchedFont = (option: FontOption) => {
+    addSessionFont(option);
+    const param = option.googleParam;
+    if (param && !document.getElementById(`playground-font-${param}`)) {
+      const link = document.createElement("link");
+      link.id = `playground-font-${param}`;
+      link.rel = "stylesheet";
+      link.href = googleFontHref(param);
+      document.head.appendChild(link);
+    }
+    return option.label;
+  };
+
+  /** Reads a local DESIGN.md and fits every lever it has an opinion about:
+      colour, tint, shape, density, type and depth. Unlike a picture, the
+      file describes a whole look, so the levers it says nothing about go
+      back to the base theme's positions rather than keeping whatever was
+      there: the result is the file's look and rift's defaults, nothing
+      left over from the last preset. The card's report says which is which. */
+  const applyDesignMd = async (file: File) => {
+    setImageBusy(true);
+    setImageError("");
+    const source = await themeFromDesignMd(file);
+    setImageBusy(false);
+    if (!source) {
+      setImageError(
+        "That file has no DESIGN.md tokens to read. It needs YAML front matter with colors or typography."
+      );
+      return;
+    }
+
+    clearImage();
+    setDesignSource(source);
+    const t = source.theme;
+    setPreset("custom");
+    syncPresetParam("custom");
+    setPresetExtras({ brandDark: t.brandDark });
+    setAdvColors(DEFAULT_ADVANCED);
+    setBrand(t.brand ?? DEFAULT_BRAND);
+    setTintOn(t.tintOn);
+    setTintSeed(t.tintSeed ?? DEFAULT_NEUTRAL_SEED);
+    setTintStrength(t.tintStrength ?? 6);
+    setAccents(t.accents ?? SHIPPED_ACCENTS);
+    setRadiusScale(t.radiusScale ?? 100);
+    setPill(t.pill ?? true);
+    setDensity(t.density ?? 100);
+    setTypeScale(t.typeScale ?? 100);
+    setMotionScale(100);
+    setElevation(t.elevation ?? "default");
+    setDisplayWeight(t.displayWeight ?? SHIPPED_DISPLAY_WEIGHT);
+    setHeadingWeight(t.headingWeight ?? SHIPPED_HEADING_WEIGHT);
+    setTracking(t.tracking ?? 0);
+    setIconWeight(SHIPPED_ICON_WEIGHT);
+    setIconFill(false);
+    setFontLabel(t.bodyFont ? loadMatchedFont(t.bodyFont.option) : FONT_OPTIONS[0].label);
+    setHeadingFontLabel(
+      t.headingFont ? loadMatchedFont(t.headingFont.option) : HEADING_FONT_OPTIONS[0].label
+    );
+    pickView("components");
+  };
+
+  /** The one entry point for a dropped or chosen file: a DESIGN.md is read
+      as tokens, anything else as a picture. */
+  const applySourceFile = (file: File) =>
+    isDesignMdFile(file) ? applyDesignMd(file) : applyImageTheme(file);
 
   /* A deep link can seed the action-colour lever with ?brand=<hex> (no
      leading #). Nothing on the site emits one today — the design-system
@@ -904,7 +989,7 @@ export default function PlaygroundPage() {
               onFontLabel={asCustom(setFontLabel)}
               onHeadingFontLabel={asCustom(setHeadingFontLabel)}
               onProductName={setProductName}
-              imageName={imageSource?.name}
+              imageName={designSource?.name ?? imageSource?.name}
               imageBusy={imageBusy}
               imageError={imageError}
               onPickImage={() => imageInputRef.current?.click()}
@@ -947,13 +1032,14 @@ export default function PlaygroundPage() {
       <HiddenBackground />
       <DotBackground />
 
-      {/* Drag a picture onto any part of the tool and the colour levers move
-          to match it. The file is read in this tab and nowhere else. */}
-      <ImageThemeDropZone onFile={applyImageTheme} rejected={imageError} />
+      {/* Drag a picture or a DESIGN.md onto any part of the tool and the
+          levers move to match it. The file is read in this tab and nowhere
+          else. */}
+      <ImageThemeDropZone onFile={applySourceFile} rejected={imageError} />
       <input
         ref={imageInputRef}
         type="file"
-        accept="image/*"
+        accept="image/*,.md,.markdown,text/markdown"
         className={styles.visuallyHidden}
         tabIndex={-1}
         aria-hidden="true"
@@ -961,7 +1047,7 @@ export default function PlaygroundPage() {
           const file = event.target.files?.[0];
           // Cleared so choosing the same file twice still fires a change.
           event.target.value = "";
-          if (file) applyImageTheme(file);
+          if (file) applySourceFile(file);
         }}
       />
 
@@ -1146,6 +1232,22 @@ export default function PlaygroundPage() {
                 {imageSource && (
                   <ImageThemeCard
                     source={imageSource}
+                    onReplace={() => imageInputRef.current?.click()}
+                    onClear={clearImage}
+                  />
+                )}
+                {/* With no source yet, the stage opens on the invitation to
+                    bring one, with a working dropzone. */}
+                {!imageSource && !designSource && (
+                  <ThemeSourceInvite
+                    onFile={applySourceFile}
+                    busy={imageBusy}
+                    error={imageError}
+                  />
+                )}
+                {designSource && (
+                  <DesignMdCard
+                    source={designSource}
                     onReplace={() => imageInputRef.current?.click()}
                     onClear={clearImage}
                   />

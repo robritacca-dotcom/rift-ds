@@ -75,6 +75,11 @@
   /* 16:9 rather than a fixed height, so the frame shows as much of a
      landscape photograph as it can and scales with the column. */
   aspect-ratio: 16 / 9;
+  /* On a phone-width stage 16:9 leaves little above the bar; the floor
+     keeps room for a DESIGN.md's report to scroll, and a picture just
+     crops a little more. Both sources share the frame, so both stay the
+     same size. */
+  min-height: 320px;
   overflow: hidden;
   border-radius: var(--radius-600);
   border: var(--border-025) solid var(--color-bg-container-border);

@@ -315,6 +315,22 @@ function accentsFrom(chromatic: PaletteSwatch[]): AccentSextet {
 
 /** A set of lever positions read from an image. Every field is a lever the
     playground already owns. */
+/**
+ * The six accent roles filled from a list of stated colours rather than an
+ * image's pixels: each colour counts once. Fewer than two distinct hues
+ * cannot fill six roles honestly, so that case returns null and the caller
+ * keeps the shipped sextet.
+ */
+export function accentsFromColours(hexes: string[]): AccentSextet | null {
+  const swatches: PaletteSwatch[] = hexes.map((hex) => ({
+    hex,
+    hsl: rgbToHsl(hexToRgb(hex)),
+    weight: 1 / hexes.length,
+  }));
+  const chromatic = distinctChromatic(swatches);
+  return chromatic.length < 2 ? null : accentsFrom(chromatic);
+}
+
 export interface ImageTheme {
   /** The action colour. */
   brand: string;

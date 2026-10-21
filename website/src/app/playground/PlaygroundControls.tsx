@@ -93,15 +93,16 @@ export interface PlaygroundControlsProps {
   onFontLabel: (value: string) => void;
   onHeadingFontLabel: (value: string) => void;
   onProductName: (value: string) => void;
-  /** File name of the image the theme was read from, when there is one. */
+  /** File name of the image or DESIGN.md the theme was read from, when
+      there is one. */
   imageName?: string;
-  /** True while a dropped or chosen image is being decoded and sampled. */
+  /** True while a dropped or chosen file is being read. */
   imageBusy?: boolean;
-  /** Why the last image could not be used, if it could not. */
+  /** Why the last file could not be used, if it could not. */
   imageError?: string;
-  /** Opens the file picker for the theme source image. */
+  /** Opens the file picker for the theme source, picture or DESIGN.md. */
   onPickImage: () => void;
-  /** Drops the source image. The levers it moved stay where they are. */
+  /** Drops the source file. The levers it moved stay where they are. */
   onClearImage: () => void;
   onReset: () => void;
   /** Opens the advanced-mode dialog (every primitive ramp). */
@@ -276,13 +277,13 @@ export default function PlaygroundControls({
           />
         </div>
 
-        {/* Theming from a picture: the same colour levers, moved all at
-            once. The drop target is the whole tool, so this button is the
+        {/* Theming from a picture or a DESIGN.md: the same levers, moved all
+            at once. The drop target is the whole tool, so this button is the
             keyboard and touch route to the same thing. */}
         <div className={styles.controlGroup}>
           <Button
             size="compact"
-            label={imageBusy ? "Reading the image" : "Upload an image"}
+            label={imageBusy ? "Reading the file" : "Upload image or DESIGN.md"}
             variant="primary"
             tone="neutral"
             iconLeft={imageBusy ? "progress_activity" : "add_photo_alternate"}
@@ -299,7 +300,7 @@ export default function PlaygroundControls({
                 variant="primary"
                 tone="neutral"
                 size="compact"
-                ariaLabel="Remove the theme source image"
+                ariaLabel="Remove the theme source file"
                 onClick={onClearImage}
               />
             </div>

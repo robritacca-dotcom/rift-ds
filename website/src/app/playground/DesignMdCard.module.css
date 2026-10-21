@@ -1,0 +1,55 @@
+/* ============================================
+   DESIGN.MD SOURCE — the match report, scrolling
+   inside the frame a picture fills
+   (ThemeSourceFrame owns the frame and the bar).
+   ============================================ */
+
+/* Fills the frame and scrolls on its own. The bottom padding clears the
+   bar that rides the foot of the frame, so the last row can scroll up
+   past it rather than ending underneath. */
+.scroll {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+  overflow: auto;
+  /* The surface the bar's fade runs from, so the report passes under the
+     bar with no seam where the fade begins. */
+  background: var(--color-bg-container-primary);
+  padding: var(--padding-500) var(--padding-500)
+    calc(var(--padding-1500) + var(--padding-1000));
+}
+
+/* A flex column of fixed height shrinks its children to fit, which would
+   squeeze the table into a scroller of its own; the report scrolls as one. */
+.scroll > * {
+  flex-shrink: 0;
+}
+
+.scroll:focus-visible {
+  outline: var(--border-050) solid var(--color-action-primary-bg);
+  outline-offset: calc(-1 * var(--border-050));
+}
+
+.title {
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  color: var(--color-text-primary);
+}
+
+.description {
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+}
+
+.note {
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-secondary);
+}

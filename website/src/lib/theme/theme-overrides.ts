@@ -770,6 +770,11 @@ const RADIUS_STEPS: ReadonlyArray<[step: string, px: number]> = [
   ["1200", 48],
 ];
 
+/** The input radius at the shipped scale: inputs and standard containers
+    sit on --radius-300, so this is what the radius lever scales from when
+    a theme is fitted to a measured corner (lib/theme/design-md.ts). */
+export const SHIPPED_INPUT_RADIUS_PX = RADIUS_STEPS.find(([step]) => step === "300")![1];
+
 /* ---------- density, type scale, motion, elevation ----------
    The remaining preset levers, each a scale (100 = shipped) over one
    token ladder. Like RADIUS_STEPS, every table here mirrors the token
@@ -828,6 +833,14 @@ const FONT_LINE_HEIGHT_STEPS: ReadonlyArray<[step: string, px: number]> = [
   ["900", 36],
   ["1100", 44],
 ];
+
+/** The gap ladder at the shipped scale, for fitting the density lever to
+    a measured spacing scale. */
+export const SHIPPED_GAP_LADDER_PX: readonly number[] = GAP_STEPS.map(([, px]) => px);
+
+/** Paragraph copy sits on --font-size-400: the type scale lever's anchor
+    when a theme is fitted to a measured body size. */
+export const SHIPPED_BODY_SIZE_PX = FONT_SIZE_STEPS.find(([step]) => step === "400")![1];
 
 /* The durations a preset may pace: the schedule scale plus orbit, the
    auto-rotation tempo Globe reads (so a slower theme turns it slower too).
@@ -982,6 +995,12 @@ const tierWeight = (tier: TypeTier) =>
 export const SHIPPED_DISPLAY_WEIGHT = tierWeight("display");
 /** The shipped heading-tier weight: the heading lever's no-op position. */
 export const SHIPPED_HEADING_WEIGHT = tierWeight("heading");
+
+/** The paragraph style's shipped tracking, in em: the tracking lever adds
+    to it, so a fitted lever position is the measured tracking minus this. */
+export const SHIPPED_PARAGRAPH_TRACKING_EM = TYPE_STYLES.find(
+  ([style]) => style === "paragraph"
+)![3];
 
 /** The weight levers' range. The floor and ceiling are what the picker
     faces are loaded at (see FONT_OPTIONS); a face that stops short of a
@@ -1160,6 +1179,20 @@ export const HEADING_FONT_OPTIONS: FontOption[] = [
      body faces never load. */
   { label: "Inter Tight", family: "'Inter Tight', sans-serif", googleParam: "Inter+Tight:wght@300..900" },
 ];
+
+/**
+ * Adds a face to both pickers for the rest of the session. The playground's
+ * DESIGN.md import calls it when a file names a Google face the roster does
+ * not carry: the face then behaves like any roster entry (the pickers show
+ * it, and the CSS and THEME.md exports find it by label). Nothing persists;
+ * a reload is back to the shipped roster.
+ */
+export function addSessionFont(option: FontOption): void {
+  if (!FONT_OPTIONS.some((f) => f.label === option.label)) FONT_OPTIONS.push(option);
+  if (!HEADING_FONT_OPTIONS.some((f) => f.label === option.label)) {
+    HEADING_FONT_OPTIONS.push(option);
+  }
+}
 
 export function googleFontHref(googleParam: string): string {
   return `https://fonts.googleapis.com/css2?family=${googleParam}&display=swap`;

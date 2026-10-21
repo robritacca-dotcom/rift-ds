@@ -1,0 +1,76 @@
+/* ============================================
+   THEME SOURCE DROPZONE — opens the Components
+   view while no file is loaded: the full column
+   width, a heading, and the upload button.
+   ============================================ */
+
+.zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-300);
+  padding: var(--padding-1000) var(--padding-500);
+  text-align: center;
+  /* The library dropzone's hairline (FileInput), so the two read as one
+     pattern; the corner is the source frame's, since the frame takes this
+     place once a file is read. */
+  border: var(--border-025) dashed var(--color-input-border-primary);
+  border-radius: var(--radius-600);
+  background: var(--color-bg-container-primary);
+  transition:
+    border-color var(--motion-duration-base) var(--motion-ease-standard),
+    background-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+/* A file is over the zone: the border takes the selected-input colour,
+   the same signal FileInput's dropzone gives. */
+.dragging {
+  border-color: var(--color-input-border-selected);
+  background: var(--color-bg-container-secondary);
+}
+
+.icon {
+  font-size: var(--icon-size-800);
+  color: var(--color-text-secondary);
+}
+
+.title {
+  font-family: var(--font-heading-3-family);
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+  letter-spacing: var(--font-heading-3-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.note {
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+}
+
+/* A file that could not be read: the colour a form field's error message
+   takes (Field), so the failure reads as one rather than as guidance. */
+.error {
+  color: var(--color-status-error-border);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--gap-200);
+  margin-top: var(--gap-200);
+}
+
+/* The picker is opened by the button; the input itself stays out of sight
+   and out of the tab order. */
+.native {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

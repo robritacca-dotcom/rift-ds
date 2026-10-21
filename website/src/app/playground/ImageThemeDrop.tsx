@@ -5,13 +5,15 @@ import Image from "next/image";
 import { Button } from "rift-ds/components/Button/Button";
 import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
 import type { ImageThemeSource } from "@/lib/theme/image-palette";
+import { isDesignMdFile } from "@/lib/theme/design-md";
 import styles from "./ImageThemeDrop.module.css";
 import { mediaBelow } from "rift-ds/tokens/breakpoints";
 import { BREAKPOINT_STAGE_COMPACT_PX } from "@/config/breakpoints";
 
 /**
- * Drag a picture anywhere onto the playground and the levers move to match
- * it. Two pieces, because they live in different places on the page:
+ * Drag a picture or a DESIGN.md anywhere onto the playground and the levers
+ * move to match it (a DESIGN.md's card is DesignMdCard, beside this file).
+ * Two pieces, because they live in different places on the page:
  *
  *   ImageThemeDropZone — the document-level listeners and the full-screen
  *                        invitation that appears while a file is over the
@@ -32,7 +34,7 @@ export function ImageThemeDropZone({
   onFile,
   rejected,
 }: {
-  /** Called with the first image file dropped on the document. */
+  /** Called with the first image or DESIGN.md file dropped on the document. */
   onFile: (file: File) => void;
   /** Message to show in the overlay instead of the invitation, if the last
       attempt failed. */
@@ -72,11 +74,15 @@ export function ImageThemeDropZone({
 
     const onDrop = (event: DragEvent) => {
       if (!carriesFiles(event.dataTransfer)) return;
-      event.preventDefault();
       depth.current = 0;
       setDragging(false);
-      const file = Array.from(event.dataTransfer?.files ?? []).find((candidate) =>
-        candidate.type.startsWith("image/")
+      /* A dropzone on the page (the stage's invitation) has already taken
+         this file and routed it the same way; reading it again here would
+         apply it twice. */
+      if (event.defaultPrevented) return;
+      event.preventDefault();
+      const file = Array.from(event.dataTransfer?.files ?? []).find(
+        (candidate) => candidate.type.startsWith("image/") || isDesignMdFile(candidate)
       );
       if (file) onFileRef.current(file);
     };
@@ -101,7 +107,7 @@ export function ImageThemeDropZone({
         <span className={`material-symbols-rounded ${styles.overlayIcon}`}>
           palette
         </span>
-        <p className={styles.overlayTitle}>Drop an image to theme from it</p>
+        <p className={styles.overlayTitle}>Drop an image or a DESIGN.md to theme from it</p>
         <p className={styles.overlayNote}>
           {/* `||`, not `??`: the caller holds the failure as an empty string
               when there has been none. */}
@@ -113,19 +119,97 @@ export function ImageThemeDropZone({
   );
 }
 
+/**
+ * The frame every theme source sits in, picture or DESIGN.md: the same
+ * 16:9 card, and the same bar along its foot with the file name, the key
+ * colours, the upload button and the remove button, so swapping one kind
+ * of source for the other moves nothing the visitor has learned to find.
+ * The source's own content fills the frame behind the bar.
+ */
+export function ThemeSourceFrame({
+  name,
+  swatches,
+  onReplace,
+  onClear,
+  children,
+}: {
+  /** The source file's name. */
+  name: string;
+  /** The key colours read from the file, as hex. */
+  swatches: string[];
+  /** Opens the file picker to load a different source. */
+  onReplace: () => void;
+  /** Drops the source. The levers it moved stay where they are. */
+  onClear: () => void;
+  /** What fills the frame behind the bar. */
+  children: React.ReactNode;
+}) {
+  return (
+    <div className={styles.card}>
+      {children}
+
+      {/* The readout rides the foot of the frame on a fade into it, so the
+          colours and the controls stay legible over any content. */}
+      <div className={styles.bar}>
+        <div className={styles.body}>
+          <p className={styles.fileName} title={name}>
+            {name}
+          </p>
+          <div className={styles.swatches}>
+            {swatches.map((hex) => (
+              <span
+                key={hex}
+                className={styles.chip}
+                /* A colour read from the file itself, so it has to come
+                   from the data rather than a token. */
+                style={{ background: hex }}
+                title={hex}
+              />
+            ))}
+          </div>
+        </div>
+
+        <div className={styles.actions}>
+          <Button
+            label="Upload new"
+            variant="primary"
+            tone="neutral"
+            size="compact"
+            iconLeft="upload"
+            onClick={onReplace}
+          />
+          <CircularButton
+            icon="close"
+            variant="primary"
+            tone="neutral"
+            size="compact"
+            ariaLabel="Remove the theme source file"
+            onClick={onClear}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function ImageThemeCard({
   source,
   onReplace,
   onClear,
 }: {
   source: ImageThemeSource;
-  /** Opens the file picker to swap the source image. */
+  /** Opens the file picker to load a different source. */
   onReplace: () => void;
-  /** Drops the image and puts the levers back where they were. */
+  /** Drops the image. The levers it moved stay where they are. */
   onClear: () => void;
 }) {
   return (
-    <div className={styles.card}>
+    <ThemeSourceFrame
+      name={source.name}
+      swatches={source.theme.swatches.map((swatch) => swatch.hex)}
+      onReplace={onReplace}
+      onClear={onClear}
+    >
       {/* An object URL for a local file: next/image cannot optimize bytes
           that exist only in this tab, so the plain loader carries it. It
           covers the frame at any aspect ratio, like the shader banner
@@ -138,47 +222,6 @@ export function ImageThemeCard({
         sizes={`${mediaBelow(BREAKPOINT_STAGE_COMPACT_PX)} 100vw, 960px`}
         className={styles.image}
       />
-
-      {/* The readout rides the foot of the picture on a fade into it, so the
-          colours and the controls stay legible over any image. */}
-      <div className={styles.bar}>
-        <div className={styles.body}>
-          <p className={styles.fileName} title={source.name}>
-            {source.name}
-          </p>
-          <div className={styles.swatches}>
-            {source.theme.swatches.map((swatch) => (
-              <span
-                key={swatch.hex}
-                className={styles.chip}
-                /* The sampled colour itself, so it has to come from the data
-                   rather than a token. */
-                style={{ background: swatch.hex }}
-                title={swatch.hex}
-              />
-            ))}
-          </div>
-        </div>
-
-        <div className={styles.actions}>
-          <Button
-            label="Replace"
-            variant="primary"
-            tone="neutral"
-            size="compact"
-            iconLeft="swap_horiz"
-            onClick={onReplace}
-          />
-          <CircularButton
-            icon="close"
-            variant="primary"
-            tone="neutral"
-            size="compact"
-            ariaLabel="Remove the theme source image"
-            onClick={onClear}
-          />
-        </div>
-      </div>
-    </div>
+    </ThemeSourceFrame>
   );
 }

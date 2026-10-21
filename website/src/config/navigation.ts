@@ -466,15 +466,24 @@ export const templatesSidebarLinks: NavLink[] = [
     description: "A CRM companies view built around the wired data table",
   },
   {
-    href: "/templates/payroll-console",
-    label: "Payroll console",
-    description: "A pay run beside a docked assistant whose agent panel opens in place",
-    hideFromShowcase: true,
-  },
-  {
     href: "/templates/sign-in",
     label: "Sign in",
     description: "A product front door: the providers beside an ambient panel",
+  },
+];
+
+/**
+ * Template screens parked out of the IA: the route still renders (noindex),
+ * but it sits in no sidebar, carousel, sitemap, llms.txt or corpus site map,
+ * because every one of those reads templatesSidebarLinks. Kept here so the
+ * page's title still resolves. Move an entry back into the array above to
+ * restore it everywhere.
+ */
+export const hiddenTemplateLinks: NavLink[] = [
+  {
+    href: "/templates/payroll-console",
+    label: "Payroll console",
+    description: "A pay run beside a docked assistant whose agent panel opens in place",
   },
 ];
 
@@ -504,6 +513,7 @@ const allSidebarLinks: NavLink[] = [
   ...foundationsSidebarLinks,
   ...docsSidebarLinks,
   ...templatesSidebarLinks,
+  ...hiddenTemplateLinks,
 ];
 
 /** The canonical label for a route, taken from the nav config (or undefined). */

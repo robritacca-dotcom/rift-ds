@@ -99,12 +99,6 @@
       "axis": "both"
     },
     {
-      "label": "home: payroll compare handle",
-      "route": "/",
-      "grip": ".ds-image-compare__handle",
-      "axis": "x"
-    },
-    {
       "label": "split pane page: separator",
       "route": "/components/split-pane",
       "grip": ".ds-split-pane__separator",

@@ -110,7 +110,7 @@ export const HOME_TILES: HomeTile[] = [
     features: [
       { icon: "terminal", text: "npx rift-ds init chat scaffolds the routes, the mount and an env example, and never overwrites a file." },
       { icon: "swap_horiz", text: "The widget talks to any backend through one transport function." },
-      { icon: "view_quilt", text: "The templates show it docked in a product and as a whole page." },
+      { icon: "view_quilt", text: "The chat home template shows it as a whole page." },
     ],
   },
   {
@@ -133,7 +133,6 @@ export const HOME_TILES: HomeTile[] = [
     features: [
       { icon: "view_quilt", text: "Full-viewport app shells, rendered with no site chrome." },
       { icon: "smartphone", text: "Sidebar shells dress as an app in the phone frame." },
-      { icon: "forum", text: "The payroll console docks the real chat widget as a rail." },
     ],
   },
   {

@@ -738,7 +738,7 @@ const EXCLUDED_ROUTES = new Map([
   ['/templates/sales-pipeline',
     'the sales pipeline template rendered full viewport — its prose is a fictional CRM book of business; its name and summary reach the corpus through the site map\'s Templates list, drawn from templatesSidebarLinks'],
   ['/templates/payroll-console',
-    'the payroll console template rendered full viewport (the same app shell as /labs/payroll, its origin) — its prose is a fictional pay run; its name and summary reach the corpus through the site map\'s Templates list, drawn from templatesSidebarLinks'],
+    'the payroll console template rendered full viewport (the same app shell as /labs/payroll, its origin) — its prose is a fictional pay run, and the screen is parked in hiddenTemplateLinks (noindex, in no nav), so not even its name reaches the corpus'],
   ['/templates/sign-in',
     'the sign-in template rendered full viewport — its prose is a fictional product\'s front door; its name and summary reach the corpus through the site map\'s Templates list, drawn from templatesSidebarLinks'],
 ]);

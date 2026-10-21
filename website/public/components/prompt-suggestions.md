@@ -2,7 +2,7 @@
 
 Tappable prompt suggestions to start or steer a conversation, as a scrolling or wrapping row, a stack, tiles or cards.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.11.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.12.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: ai
 - Import: `import { PromptSuggestions } from 'rift-ds';`

@@ -2,7 +2,7 @@
 
 One-row choice between a few options for inspector panels, as native radios under a sliding selection pill.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.11.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.12.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: inspector
 - Import: `import { InspectorSegmentedControl } from 'rift-ds';`

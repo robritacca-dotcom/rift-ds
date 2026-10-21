@@ -2,7 +2,7 @@
 
 The panel a chat opens beside the conversation to preview what it made: live content, a sandboxed page or a site, with the source a switch away.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.11.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.12.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: ai
 - Import: `import { ArtifactPanel } from 'rift-ds';`

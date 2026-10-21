@@ -1,4 +1,6 @@
-import { useCallback, useId } from 'react';
+'use client';
+
+import React, { useCallback, useId } from 'react';
 import {
   ScatterChart as RechartsScatterChart,
   Scatter,
@@ -11,7 +13,7 @@ import {
   ZAxis,
 } from 'recharts';
 import type { ChartSummaryItem } from './BarChart';
-import { getChartSeriesColors } from './palette';
+import { getChartSeriesColors, readTokenPx } from './palette';
 import { useChartAnimation } from './useChartAnimation';
 import { MOTION_CHART_ENTRANCE_MS } from '../../tokens/motion';
 import './Chart.css';
@@ -40,7 +42,8 @@ export interface ScatterDatasetConfig {
   color?: string;
 }
 
-export interface ScatterChartProps {
+/** Props owned by ScatterChart itself; everything else falls through to the root div. */
+type ScatterChartOwnProps = {
   /** One or more scatter datasets to plot */
   datasets: ScatterDatasetConfig[];
   /** Key in data for x-axis values */
@@ -51,7 +54,10 @@ export interface ScatterChartProps {
   xLabel?: string;
   /** Display label for y-axis */
   yLabel?: string;
-  /** Chart title */
+  /**
+   * Chart title, in the shared chart header; it also names the figure.
+   * Note: this replaces the native `title` tooltip attribute, which the chart does not expose.
+   */
   title?: string;
   /** Description text below the title */
   subtitle?: string;
@@ -63,7 +69,11 @@ export interface ScatterChartProps {
   bare?: boolean;
   /** Additional CSS classes on the wrapper */
   className?: string;
-}
+};
+
+export interface ScatterChartProps
+  extends ScatterChartOwnProps,
+    Omit<React.ComponentPropsWithoutRef<'div'>, keyof ScatterChartOwnProps | 'children'> {}
 
 function getCSSVar(name: string, fallback: string): string {
   // A var() reference resolves live in SVG paint, so the chart follows a
@@ -102,7 +112,7 @@ function ScatterTooltip({ active, payload, xLabel, yLabel }: ScatterTooltipProps
  * Scatter chart built on Recharts with design-system tokens.
  * Plots one or more datasets as point clouds on an X/Y grid.
  */
-export const ScatterChart = ({
+export const ScatterChart = React.forwardRef<HTMLDivElement, ScatterChartProps>(({
   datasets,
   xKey = 'x',
   yKey = 'y',
@@ -114,7 +124,8 @@ export const ScatterChart = ({
   height = 350,
   bare = false,
   className = '',
-}: ScatterChartProps) => {
+  ...rest
+}, ref) => {
   const titleId = useId();
   const subtitleId = useId();
   /* Scatter is the one recharts item with no end callback, so the wrapper
@@ -129,6 +140,10 @@ export const ScatterChart = ({
 
   const seriesColors = getChartSeriesColors();
   const textSecondary = getCSSVar('--color-text-secondary', '#303030');
+  // Ticks and legend read the caption type token, so a theme's type scale
+  // reaches them. recharts sizes text through an SVG attribute, which cannot
+  // hold var(), so the resolved number is read at render.
+  const textSize = readTokenPx('--font-caption-size', '12px');
   const gridColor = getCSSVar('--color-divider', 'rgba(214, 214, 214, 0.8)');
 
   const renderTooltip = useCallback(
@@ -139,10 +154,12 @@ export const ScatterChart = ({
 
   return (
     <div
+      {...rest}
+      ref={ref}
       className={classes}
       role="figure"
-      aria-labelledby={title ? titleId : undefined}
-      aria-describedby={subtitle ? subtitleId : undefined}
+      aria-labelledby={title ? titleId : rest['aria-labelledby']}
+      aria-describedby={subtitle ? subtitleId : rest['aria-describedby']}
     >
       {(title || subtitle || summaryItems) && (
         <div className={`${baseClass}__header`}>
@@ -173,7 +190,7 @@ export const ScatterChart = ({
               type="number"
               dataKey={xKey}
               name={xLabel}
-              tick={{ fill: textSecondary, fontSize: 12 }}
+              tick={{ fill: textSecondary, fontSize: textSize }}
               tickLine={false}
               axisLine={{ stroke: gridColor }}
             />
@@ -181,7 +198,7 @@ export const ScatterChart = ({
               type="number"
               dataKey={yKey}
               name={yLabel}
-              tick={{ fill: textSecondary, fontSize: 12 }}
+              tick={{ fill: textSecondary, fontSize: textSize }}
               tickLine={false}
               axisLine={false}
             />
@@ -197,11 +214,13 @@ export const ScatterChart = ({
               />
             ))}
             {datasets.length > 1 && (
-              <Legend wrapperStyle={{ color: textSecondary, fontSize: 12 }} />
+              <Legend wrapperStyle={{ color: textSecondary, fontSize: textSize }} />
             )}
           </RechartsScatterChart>
         </ResponsiveContainer>
       </div>
     </div>
   );
-};
+});
+
+ScatterChart.displayName = 'ScatterChart';

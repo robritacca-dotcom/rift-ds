@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { fn } from 'storybook/test';
+import { expect, fn, screen, waitFor } from 'storybook/test';
 import { AlertDialog } from './AlertDialog';
 import { Button } from '../Button/Button';
 
@@ -120,5 +120,64 @@ export const InteractiveDestructive: Story = {
         />
       </>
     );
+  },
+};
+
+/**
+ * The keyboard contract: focus opens on the cancel button (the safe action),
+ * Tab and Shift+Tab stay inside the panel, and Escape cancels, calling
+ * `onCancel` and `onOpenChange(false)` and handing focus back to the trigger.
+ */
+export const KeyboardContract: Story = {
+  args: {
+    open: false,
+    title: 'Delete project',
+    description: 'This removes the project and its history.',
+    confirmLabel: 'Delete',
+    cancelLabel: 'Keep project',
+    tone: 'destructive',
+  },
+  render: function KeyboardContractStory(args) {
+    const [open, setOpen] = useState(false);
+    return (
+      <>
+        <Button label="Open alert" variant="secondary" onClick={() => setOpen(true)} />
+        <AlertDialog
+          {...args}
+          open={open}
+          onOpenChange={(next) => {
+            args.onOpenChange(next);
+            setOpen(next);
+          }}
+        />
+      </>
+    );
+  },
+  play: async ({ canvas, userEvent, args }) => {
+    const trigger = await canvas.findByRole('button', { name: 'Open alert' });
+    await userEvent.click(trigger);
+
+    const dialog = await screen.findByRole('alertdialog', { name: 'Delete project' });
+    const cancel = screen.getByRole('button', { name: 'Keep project' });
+    const confirm = screen.getByRole('button', { name: 'Delete' });
+    await waitFor(() => expect(cancel).toHaveFocus());
+
+    // Tab cycles the two actions and never leaves the panel.
+    await userEvent.tab();
+    await expect(confirm).toHaveFocus();
+    await userEvent.tab();
+    await expect(cancel).toHaveFocus();
+    await userEvent.tab({ shift: true });
+    await expect(confirm).toHaveFocus();
+    await expect(dialog.contains(document.activeElement)).toBe(true);
+
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() =>
+      expect(screen.queryByRole('alertdialog', { name: 'Delete project' })).toBeNull(),
+    );
+    await expect(args.onCancel).toHaveBeenCalledTimes(1);
+    await expect(args.onOpenChange).toHaveBeenCalledWith(false);
+    await expect(args.onConfirm).not.toHaveBeenCalled();
+    await expect(trigger).toHaveFocus();
   },
 };

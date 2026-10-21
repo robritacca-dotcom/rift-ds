@@ -336,6 +336,7 @@
    REDUCED MOTION
    ============================================ */
 
+/* ds-allow(motion): drops the open and close transitions outright, so the delayed visibility flip cannot leave the panel a frame behind. */
 @media (prefers-reduced-motion: reduce) {
   .ds-command-palette,
   .ds-command-palette__panel {

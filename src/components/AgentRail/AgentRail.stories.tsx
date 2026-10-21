@@ -70,18 +70,18 @@ const meta = {
   parameters: { layout: 'padded' },
   tags: ['autodocs'],
   argTypes: {
-    activeTab: { control: 'text' },
+    value: { control: 'text' },
     tabsLabel: { control: 'text' },
   },
   args: {
     tabs: TABS,
-    activeTab: 'activity',
+    value: 'activity',
     profile: {
       name: 'Skylark',
       status: 'Connected',
       onEdit: fn(),
     },
-    onTabChange: fn(),
+    onValueChange: fn(),
     onCollapse: fn(),
   },
   decorators: [
@@ -104,7 +104,7 @@ export const Default: Story = {};
  *  its life empty, which is the point — a quiet rail means nothing is
  *  waiting on a human. */
 export const EmptyPane: Story = {
-  args: { activeTab: 'approvals' },
+  args: { value: 'approvals' },
 };
 
 /** Without onCollapse the rail has no way out of its own: the shape for a
@@ -131,7 +131,7 @@ export const Disconnected: Story = {
 export const Switching: Story = {
   render: (args) => {
     const [tab, setTab] = useState('activity');
-    return <AgentRail {...args} activeTab={tab} onTabChange={setTab} />;
+    return <AgentRail {...args} value={tab} onValueChange={setTab} />;
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

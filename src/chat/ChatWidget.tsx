@@ -9,30 +9,45 @@ import {
   useSyncExternalStore,
   type ReactNode,
 } from 'react';
-import type { AgentRailProfile, AgentRailTab } from '../components/AgentRail/AgentRail';
-import { AttachmentDropZone } from '../components/Attachment/AttachmentDropZone';
-import { AttachmentGroup } from '../components/Attachment/AttachmentGroup';
+import type { AgentRailProfile, AgentRailProps, AgentRailTab } from '../components/AgentRail/AgentRail';
+import type { ArtifactPanelProps } from '../components/ArtifactPanel/ArtifactPanel';
+import {
+  AttachmentDropZone,
+  type AttachmentDropZoneProps,
+} from '../components/Attachment/AttachmentDropZone';
+import { AttachmentGroup, type AttachmentGroupProps } from '../components/Attachment/AttachmentGroup';
 import { useAttachments } from '../components/Attachment/useAttachments';
 import { ChatHeader } from '../components/ChatHeader/ChatHeader';
 import { ChatMessage } from '../components/ChatMessage/ChatMessage';
-import { ChatThread } from '../components/ChatThread/ChatThread';
+import { ChatThread, type ChatThreadProps } from '../components/ChatThread/ChatThread';
+import type { CodeBlockProps } from '../components/CodeBlock/CodeBlock';
 import { CircularButton } from '../components/CircularButton/CircularButton';
 import { PixelAvatar } from '../components/PixelAvatar/PixelAvatar';
-import { Composer } from '../components/Composer/Composer';
+import { Composer, type ComposerProps } from '../components/Composer/Composer';
 import { DropdownMenu } from '../components/DropdownMenu/DropdownMenu';
 import { MentionText, type MentionSource } from '../components/Mention/Mention';
-import { ModelPicker } from '../components/ModelPicker/ModelPicker';
-import { PromptSuggestions } from '../components/PromptSuggestions/PromptSuggestions';
+import { ModelPicker, type ModelPickerProps } from '../components/ModelPicker/ModelPicker';
+import {
+  PromptSuggestions,
+  type PromptSuggestionsProps,
+} from '../components/PromptSuggestions/PromptSuggestions';
+import type { QuestionCardLabels, QuestionSummaryProps } from '../components/QuestionCard/QuestionCard';
 import { MOTION_SCROLL_SETTLE_MS, MOTION_SUGGESTIONS_THINK_MS } from '../tokens/motion';
-import { AssistantTurn } from './AssistantTurn';
+import { AssistantTurn, type AssistantTurnLabels } from './AssistantTurn';
 import { cardArtifact } from './artifacts';
 import { ChatAgentPane } from './ChatAgentPane';
 import { ChatArtifactPane } from './ChatArtifactPane';
-import { ChatTabs } from './ChatTabs';
+import { ChatTabs, type ChatTabsProps } from './ChatTabs';
 import { ChatThreads, type ChatThreadsProps } from './ChatThreads';
 import { ArtifactSeatContext, useChatWidget } from './context';
-import { readGreeting, serverGreeting, subscribeClock } from './greeting';
-import { CHAT_PLACEMENTS, chatPlacement } from './placement';
+import {
+  DEFAULT_GREETING_COPY,
+  greetingFor,
+  serverGreeting,
+  subscribeClock,
+  type GreetingCopy,
+} from './greeting';
+import { CHAT_PLACEMENTS, chatPlacement, type ChatPlacement } from './placement';
 import {
   ARTIFACT_MIN_COLUMN_WIDTH,
   ASIDE_RAIL_MIN_WIDTH,
@@ -43,6 +58,8 @@ import { fitsChip } from './suggestions';
 import { TurnCard } from './TurnContent';
 import { isBlockingQuestion } from './questions';
 import { ReplyBody } from './TurnQuestion';
+import { ResponseActionsLabelsContext } from './ResponseActions';
+import { FollowupSuggestionsLabelContext } from './FollowupSuggestions';
 import type { ChatModelOption, Starter } from './types';
 import './ChatWidget.css';
 
@@ -58,6 +75,12 @@ const formatBytes = (bytes: number) =>
   bytes >= 1024 * 1024 * 1024
     ? `${Math.round(bytes / (1024 * 1024 * 1024))} GB`
     : `${Math.round(bytes / (1024 * 1024))} MB`;
+
+/* The English defaults of the widget's interpolated copy, at module level so
+   the defaults keep one identity across renders. */
+const defaultAttachHint = (maxSize: string, maxFiles: number) =>
+  `Up to ${maxSize} each · ${maxFiles} files max`;
+const defaultContextNote = (title: string) => `Looking at “${title}”`;
 
 /**
  * The agent's mark on a profile that brings none of its own: a PixelAvatar
@@ -75,7 +98,7 @@ export type RailSlot = boolean | ((ctx: { overlay: boolean; close: () => void })
 
 /** What the built-in agent pane shows. */
 export interface ChatAgentOptions {
-  /** The agent's portrait block. Defaults to the widget's title with a "Connected" status. A profile with neither `avatar` nor `avatarSrc` wears a PixelAvatar seeded by the widget's title, the mark the header toggle wears. */
+  /** The agent's portrait block. Defaults to the widget's title with the widget's `agentStatus` ("Connected" unless set). A profile with neither `avatar` nor `avatarSrc` wears a PixelAvatar seeded by the widget's title, the mark the header toggle wears. */
   profile?: AgentRailProfile;
   /** The panes, in display order. */
   tabs: AgentRailTab[];
@@ -101,7 +124,10 @@ export interface ChatWidgetProps {
       the middle of the empty thread, starters directly above the composer,
       composer pinned to the bottom from the first paint. */
   phone?: boolean;
-  /** The header brand name. */
+  /**
+   * The header brand name, which also seeds the agent's PixelAvatar.
+   * Note: not the native `title` tooltip attribute; ChatWidget spreads no native attributes.
+   */
   title?: string;
   /**
    * Which way the conversation reads. `top-down` (the default) floats each
@@ -152,14 +178,32 @@ export interface ChatWidgetProps {
   threadsProps?: Omit<ChatThreadsProps, 'overlay' | 'close'>;
   /** An open-sessions tab strip as its own row under the header. `true` seats the built-in ChatTabs; a node seats your own. */
   tabs?: boolean | ReactNode;
+  /** Props for the built-in tab strip when `tabs` is `true`: its name, its close buttons' names and its spoken statuses. */
+  tabsProps?: ChatTabsProps;
   /** A companion rail on the trailing edge, the mirror of `threads`: a render prop for your own pane, seated inline on a wide host and raised as a bottom sheet from a header button on a narrow one. For the built-in pane pass `agent` instead. */
   aside?: (ctx: { overlay: boolean; close: () => void }) => ReactNode;
   /** The built-in agent pane: who the agent is and what it has been doing. Seated like `aside`. */
   agent?: ChatAgentOptions;
   /** Seat the artifact panel: a reply that carries an artifact draws a tile in the thread, and the tile (or the header's artifact button) opens the artifact beside the conversation on a wide host and as a bottom sheet on a narrow one. The trailing seat holds one panel at a time, so an open artifact stands in for the agent pane. Off, none of it exists: no header button, no tile, no panel. */
   artifacts?: boolean;
-  /** The composer's context note, naming what the chat is looking at. Omit for none. */
+  /** The composer's context note, naming what the chat is looking at. Omit for none. The note's wording comes from `contextNote`. */
   contextLabel?: string | null;
+  /** The composer's context note, written from `contextLabel`. Defaults to `Looking at “<title>”`. */
+  contextNote?: (title: string) => string;
+  /** The second line of the drop overlay with attachments on, written from the limits: the largest file as text ("50 MB"), the most files per message, and the largest file in bytes for a host that formats sizes itself. Defaults to `Up to <maxSize> each · <maxFiles> files max`. */
+  attachHint?: (maxSize: string, maxFiles: number, maxBytes: number) => string;
+  /** The welcome greeting for each part of the visitor's day; a key left out keeps its English. Defaults to "Good morning", "Good afternoon" and "Good evening". */
+  greetings?: Partial<GreetingCopy>;
+  /** The Chat position menu's rows, one per seat; a key left out keeps its English. Defaults to "Dock right", "Dock left" and "Floating". */
+  placementLabels?: Partial<Record<ChatPlacement, string>>;
+  /** The status line under the agent's name in the agent pane, where `agent` brings no `profile` of its own. Defaults to "Connected". */
+  agentStatus?: string;
+  /** The artifact panel's title while nothing is on stage. Defaults to "Artifacts". */
+  artifactPanelTitle?: string;
+  /** The artifact panel's empty-state heading. Defaults to "Nothing here yet". */
+  artifactEmptyTitle?: string;
+  /** The artifact panel's empty-state description. Defaults to "What the chat makes for you, like a dashboard or a page, opens in this panel." */
+  artifactEmptyDescription?: string;
   /** A widget slot on the welcome screen, under the composer and its
       starters. It takes any content and keeps its natural height, so the
       composer rides up by half of it instead of holding dead centre: the
@@ -177,6 +221,106 @@ export interface ChatWidgetProps {
   widgetsWidth?: 'column' | 'wide';
   /** The quiet line pinned to the widget's floor: what the chat is and where its policy lives. */
   disclaimer?: ReactNode;
+  /** Accessible name of the welcome screen's conversation starters. Defaults to "Conversation starters". */
+  startersLabel?: string;
+  /** Accessible name of the header's new-chat button. Defaults to "New chat". */
+  newChatLabel?: string;
+  /** Accessible name of the agent-pane toggle while the pane is closed. Defaults to "Show the agent panel". */
+  showAgentLabel?: string;
+  /** Accessible name of the agent-pane toggle while the pane is open. Defaults to "Hide the agent panel". */
+  hideAgentLabel?: string;
+  /** Accessible name of the agent pane's own close button, and of the scrim that closes the pane's bottom sheet. Defaults to "Close the agent panel". */
+  closeAgentLabel?: string;
+  /** Accessible name of the artifact-panel toggle while the panel is closed. Defaults to "Show the artifact panel". */
+  showArtifactLabel?: string;
+  /** Accessible name of the artifact-panel toggle while the panel is open. Defaults to "Hide the artifact panel". */
+  hideArtifactLabel?: string;
+  /** Accessible name of the scrim that closes the artifact panel's bottom sheet. Defaults to "Close the artifact panel". */
+  closeArtifactLabel?: string;
+  /** Accessible name of the Chat position menu's button, and the heading of its group. Defaults to "Chat position". */
+  placementLabel?: string;
+  /** Accessible name of the expand toggle in panel view. Defaults to "Enter full screen". */
+  enterFullscreenLabel?: string;
+  /** Accessible name of the expand toggle in full-screen view. Defaults to "Exit full screen". */
+  exitFullscreenLabel?: string;
+  /** Accessible name of the header's close button. Defaults to "Close chat". */
+  closeLabel?: string;
+  /** Accessible name of the header button that opens the chat-history sheet on a narrow host. Defaults to "Open the chat history". */
+  openThreadsLabel?: string;
+  /** Accessible name of the scrim that closes the chat-history sheet. Defaults to "Close the chat history". */
+  closeThreadsLabel?: string;
+  /** Accessible name of the composer's model picker. Defaults to "Choose a model". */
+  modelPickerLabel?: string;
+  /** Accessible name of the composer's send button. Defaults to "Send". */
+  sendLabel?: string;
+  /** Accessible name of a reply's copy button. Defaults to "Copy response". */
+  copyResponseLabel?: string;
+  /** Accessible name of a reply's copy button once the copy has landed. Defaults to "Copied". */
+  copiedResponseLabel?: string;
+  /** What screen readers hear once a reply has been copied. Defaults to "Copied to clipboard". */
+  copiedAnnouncementLabel?: string;
+  /** Accessible name of a reply's thumbs-up button. Defaults to "Good response". */
+  goodResponseLabel?: string;
+  /** Accessible name of a reply's thumbs-down button. Defaults to "Bad response". */
+  badResponseLabel?: string;
+  /** Accessible name of the follow-up question row under a finished answer. Defaults to "Follow-up questions". */
+  followupsLabel?: string;
+  /** The name a long paste's tile wears in the composer and the sent message. Defaults to "Pasted text". */
+  pastedTextLabel?: string;
+  /** The reasoning disclosure's summary once the thinking is over, given the seconds it took when known. Defaults to "Thought for <n>s", or "Thought process" with no duration. */
+  reasoningLabel?: (durationSeconds: number | undefined) => string;
+
+  /* The words of the library components the widget composes. One prop per
+     component, named after it and typed from that component's own props:
+     each key passed replaces that one string, and a key left out keeps the
+     component's English default. Only what the widget actually renders is
+     offered. The threads rail takes its words through `threadsProps`, and
+     the tab strip through `tabsProps`. */
+
+  /** The composer's words, over Composer's English defaults: the attach button ("Attach files"), the drop overlay on the shell ("Drop files to attach"), the queued files' list ("Attachments") and their tiles (`attachmentTileLabels`), the stop button ("Stop generating"), the text field's name ("Message"), and the sentences announced when files or mention matches change. The send button's name is `sendLabel`. */
+  composerLabels?: Pick<
+    ComposerProps,
+    | 'attachLabel'
+    | 'dropLabel'
+    | 'filesLabel'
+    | 'attachmentTileLabels'
+    | 'stopLabel'
+    | 'aria-label'
+    | 'formatFileAnnouncement'
+    | 'formatMentionAnnouncement'
+  >;
+  /** The drop overlay's headline when a file is dragged over the chat with attachments on, over AttachmentDropZone's "Drop files to attach". Its second line is `attachHint`. */
+  attachmentDropZoneLabels?: Pick<AttachmentDropZoneProps, 'label'>;
+  /** The words of the files on a sent message, over AttachmentGroup's English defaults: the list's name ("Attachments"), the overflow buttons ("Show 3 more", "Show fewer"), the tiles' status lines (`attachmentTileLabels`) and the viewer a pressed file opens in (`attachmentViewerLabels`). */
+  attachmentGroupLabels?: Pick<
+    AttachmentGroupProps,
+    | 'label'
+    | 'showMoreLabel'
+    | 'showLessLabel'
+    | 'attachmentTileLabels'
+    | 'attachmentViewerLabels'
+  >;
+  /** The conversation's names, over ChatThread's English defaults: the scrolling region ("Conversation") and the scroll-to-latest control ("Scroll to the latest message"). */
+  chatThreadLabels?: Pick<ChatThreadProps, 'ariaLabel' | 'jumpLabel'>;
+  /** The model picker's words, over ModelPicker's English defaults: the open list's name ("Model") and the trigger's text when nothing is selected ("Choose a model"). The trigger's own name is `modelPickerLabel`. */
+  modelPickerLabels?: Pick<ModelPickerProps, 'listLabel' | 'placeholder'>;
+  /** The artifact panel's words, over ArtifactPanel's English defaults: the view switch ("Preview", "Code", "Artifact view"), the expand and close buttons ("Expand the artifact", "Collapse the artifact", "Close the artifact") and the code view's CodeBlock (`codeBlockLabels`). */
+  artifactPanelLabels?: Pick<
+    ArtifactPanelProps,
+    'previewLabel' | 'codeLabel' | 'viewLabel' | 'expandLabel' | 'collapseLabel' | 'closeLabel' | 'codeBlockLabels'
+  >;
+  /** The agent pane's words, over AgentRail's English defaults: the tab strip's name ("Agent views"). The pane's close is `closeAgentLabel`. */
+  agentRailLabels?: Pick<AgentRailProps, 'tabsLabel'>;
+  /** The words of a question card a reply ends in, over QuestionCard's English defaults: the step count ("1 of 3"), the buttons ("Back", "Next", "Send", "Skip"), the records ("Skipped", "Not answered", "(chosen)"), the pick lines ("Choose one") and the "Something else" row. */
+  questionCardLabels?: Partial<QuestionCardLabels>;
+  /** The words of a sent set of answers, over QuestionSummary's English default: what stands in for a question left without an answer ("No answer"). */
+  questionSummaryLabels?: Pick<QuestionSummaryProps, 'missingLabel'>;
+  /** The words of a reply's fenced code, over CodeBlock's English defaults: the copy button ("Copy code", "Copy", "Copied"), and the code region's name, given the fence's language ("Code: bash", or "Code" with none). */
+  codeBlockLabels?: Pick<CodeBlockProps, 'copyLabel' | 'copyText' | 'copiedLabel'> & {
+    codeLabel?: (language: string | undefined) => string;
+  };
+  /** The follow-up row's words, over PromptSuggestions' English default: the hidden text read after the sent suggestion ("(chosen)"). The row's name is `followupsLabel`. */
+  promptSuggestionsLabels?: Pick<PromptSuggestionsProps, 'chosenLabel'>;
 }
 
 /**
@@ -215,11 +359,75 @@ export function ChatWidget({
   agent,
   artifacts = false,
   contextLabel,
+  contextNote = defaultContextNote,
+  attachHint: attachHintText = defaultAttachHint,
+  greetings,
+  placementLabels,
+  agentStatus = 'Connected',
+  artifactPanelTitle = 'Artifacts',
+  artifactEmptyTitle = 'Nothing here yet',
+  artifactEmptyDescription = 'What the chat makes for you, like a dashboard or a page, opens in this panel.',
   widgets,
   widgetsLayout = 'fit',
   widgetsWidth = 'column',
   disclaimer = 'Answers may be wrong.',
+  startersLabel = 'Conversation starters',
+  newChatLabel = 'New chat',
+  showAgentLabel = 'Show the agent panel',
+  hideAgentLabel = 'Hide the agent panel',
+  closeAgentLabel = 'Close the agent panel',
+  showArtifactLabel = 'Show the artifact panel',
+  hideArtifactLabel = 'Hide the artifact panel',
+  closeArtifactLabel = 'Close the artifact panel',
+  placementLabel = 'Chat position',
+  enterFullscreenLabel = 'Enter full screen',
+  exitFullscreenLabel = 'Exit full screen',
+  closeLabel = 'Close chat',
+  openThreadsLabel = 'Open the chat history',
+  closeThreadsLabel = 'Close the chat history',
+  modelPickerLabel = 'Choose a model',
+  sendLabel = 'Send',
+  copyResponseLabel = 'Copy response',
+  copiedResponseLabel = 'Copied',
+  copiedAnnouncementLabel = 'Copied to clipboard',
+  goodResponseLabel = 'Good response',
+  badResponseLabel = 'Bad response',
+  followupsLabel = 'Follow-up questions',
+  pastedTextLabel,
+  reasoningLabel,
+  tabsProps,
+  composerLabels,
+  attachmentDropZoneLabels,
+  attachmentGroupLabels,
+  chatThreadLabels,
+  modelPickerLabels,
+  artifactPanelLabels,
+  agentRailLabels,
+  questionCardLabels,
+  questionSummaryLabels,
+  codeBlockLabels,
+  promptSuggestionsLabels,
 }: ChatWidgetProps) {
+  const responseActionsLabels = useMemo(
+    () => ({
+      copy: copyResponseLabel,
+      copied: copiedResponseLabel,
+      copiedAnnouncement: copiedAnnouncementLabel,
+      good: goodResponseLabel,
+      bad: badResponseLabel,
+    }),
+    [copyResponseLabel, copiedResponseLabel, copiedAnnouncementLabel, goodResponseLabel, badResponseLabel],
+  );
+  /* What each assistant turn hands down to the parts it draws. */
+  const turnLabels = useMemo<AssistantTurnLabels>(
+    () => ({
+      codeBlock: codeBlockLabels,
+      reasoning: reasoningLabel,
+      questionCard: questionCardLabels,
+      promptSuggestions: promptSuggestionsLabels,
+    }),
+    [codeBlockLabels, reasoningLabel, questionCardLabels, promptSuggestionsLabels],
+  );
   const {
     turns,
     live,
@@ -278,7 +486,14 @@ export function ChatWidget({
     disabled: lockedValues.includes(option.value),
   }));
 
-  const greeting = useSyncExternalStore(subscribeClock, readGreeting, serverGreeting);
+  /* The snapshot is a string, so a fresh closure per render is safe: the
+     store compares what it returns, not the function. */
+  const greetingCopy: GreetingCopy = { ...DEFAULT_GREETING_COPY, ...greetings };
+  const greeting = useSyncExternalStore(
+    subscribeClock,
+    () => greetingFor(new Date().getHours(), greetingCopy),
+    serverGreeting,
+  );
 
   /* Filtered, not truncated: a chip is a question the visitor is about to
      ask, and half a question is not one. */
@@ -299,7 +514,7 @@ export function ChatWidget({
   /* The files queued on the next message. Sending hands them to the turn,
      which keeps their previews alive for as long as the thread shows it. */
   const queue = useAttachments({ maxCount: maxAttachments, maxSize: maxAttachmentBytes });
-  const attachHint = `Up to ${formatBytes(maxAttachmentBytes)} each · ${maxAttachments} files max`;
+  const attachHint = attachHintText(formatBytes(maxAttachmentBytes), maxAttachments, maxAttachmentBytes);
 
   const handleSubmit = (value: string) => {
     // send() reports acceptance; an ignored submit keeps the draft and the queue.
@@ -354,14 +569,16 @@ export function ChatWidget({
     (agent
       ? (ctx: { overlay: boolean; close: () => void }) => (
           <ChatAgentPane
-            profile={withAgentMark(agent.profile ?? { name: title, status: 'Connected' }, title)}
+            profile={withAgentMark(agent.profile ?? { name: title, status: agentStatus }, title)}
             tabs={agent.tabs}
+            closeLabel={closeAgentLabel}
+            agentRailLabels={agentRailLabels}
             overlay={ctx.overlay}
             onClose={ctx.close}
           />
         )
       : undefined);
-  const tabsNode = tabs === true ? <ChatTabs /> : tabs || null;
+  const tabsNode = tabs === true ? <ChatTabs {...tabsProps} /> : tabs || null;
 
   const hasRails = Boolean(renderThreads || renderAside || artifacts);
   const [threadsOpen, setThreadsOpen] = useState(false);
@@ -562,7 +779,7 @@ export function ChatWidget({
     <div className="ds-chat-widget__starters">
       <PromptSuggestions
         layout="stack"
-        ariaLabel="Conversation starters"
+        ariaLabel={startersLabel}
         pending={startersThinking}
         entrance={startersEntrance}
         suggestions={starters}
@@ -615,7 +832,7 @@ export function ChatWidget({
         <CircularButton
           icon="edit_square"
           variant="tertiary"
-          ariaLabel="New chat"
+          ariaLabel={newChatLabel}
           tooltipPosition="bottom"
           onClick={() => {
             reset();
@@ -634,7 +851,7 @@ export function ChatWidget({
           icon={<PixelAvatar name={title} size="sm" />}
           variant="tertiary"
           className={asideShown ? 'ds-chat-widget__agent-toggle--on' : undefined}
-          ariaLabel={asideShown ? 'Hide the agent panel' : 'Show the agent panel'}
+          ariaLabel={asideShown ? hideAgentLabel : showAgentLabel}
           tooltipPosition="bottom"
           aria-expanded={asideShown}
           aria-controls={asideShown ? asideId : undefined}
@@ -650,7 +867,7 @@ export function ChatWidget({
           icon={artifactShown ? 'right_panel_close' : 'right_panel_open'}
           variant="tertiary"
           className={artifactShown ? 'ds-chat-widget__agent-toggle--on' : undefined}
-          ariaLabel={artifactShown ? 'Hide the artifact panel' : 'Show the artifact panel'}
+          ariaLabel={artifactShown ? hideArtifactLabel : showArtifactLabel}
           tooltipPosition="bottom"
           aria-expanded={artifactShown}
           aria-controls={artifactShown ? artifactId : undefined}
@@ -665,26 +882,14 @@ export function ChatWidget({
           Full screen has no placement, so the button goes inert there but
           keeps its seat. */}
       {placementEnabled && (
-        <span
-          className="ds-chat-widget__placement-menu"
-          onKeyDown={(event) => {
-            /* The menu closes on Escape without consuming it, and the panel
-               closes the whole chat on the same key. One press, one layer. */
-            if (
-              event.key === 'Escape' &&
-              event.currentTarget.querySelector('[aria-expanded="true"]')
-            ) {
-              event.stopPropagation();
-            }
-          }}
-        >
+        <span className="ds-chat-widget__placement-menu">
           <DropdownMenu
             align="end"
             trigger={
               <CircularButton
                 icon={chatPlacement(placement).icon}
                 variant="tertiary"
-                ariaLabel="Chat position"
+                ariaLabel={placementLabel}
                 tooltipPosition="bottom"
                 disabled={isFull}
               />
@@ -692,9 +897,9 @@ export function ChatWidget({
             items={[
               {
                 type: 'group',
-                label: 'Chat position',
+                label: placementLabel,
                 items: CHAT_PLACEMENTS.map(({ id, label, icon }) => ({
-                  label,
+                  label: placementLabels?.[id] ?? label,
                   icon,
                   selected: placement === id,
                   onClick: () => setPlacement(id),
@@ -708,7 +913,7 @@ export function ChatWidget({
         <CircularButton
           icon={isFull ? 'close_fullscreen' : 'open_in_full'}
           variant="tertiary"
-          ariaLabel={isFull ? 'Exit full screen' : 'Enter full screen'}
+          ariaLabel={isFull ? exitFullscreenLabel : enterFullscreenLabel}
           tooltipPosition="bottom"
           onClick={() => setView(isFull ? 'panel' : 'full')}
         />
@@ -717,7 +922,7 @@ export function ChatWidget({
         <CircularButton
           icon="close"
           variant="tertiary"
-          ariaLabel="Close chat"
+          ariaLabel={closeLabel}
           tooltipPosition="bottom"
           onClick={() => setOpen(false)}
         />
@@ -729,7 +934,9 @@ export function ChatWidget({
      file dragged anywhere over the conversation lands. The zone renders the
      same root div and passes everything through. */
   const ChatRoot: React.ElementType = fileAttachments ? AttachmentDropZone : 'div';
-  const dropProps = fileAttachments ? { onFilesSelected: queue.add, hint: attachHint } : {};
+  const dropProps = fileAttachments
+    ? { ...attachmentDropZoneLabels, onFilesSelected: queue.add, hint: attachHint }
+    : {};
 
   /* When the welcome screen scrolls as a page, the root is the scroll
      container and takes the thread's treatment: its scrollbar shows only
@@ -761,6 +968,9 @@ export function ChatWidget({
       /* Escape steps out of the takeover first; the host's own Escape
          handling (closing the panel) takes over once back in panel view. */
       onKeyDown={(e: React.KeyboardEvent) => {
+        /* An Escape a menu or picker inside the widget already handled (it
+           calls preventDefault) closed that layer: one press, one layer. */
+        if (e.key === 'Escape' && e.defaultPrevented) return;
         /* A rail sheet is the topmost layer, so Escape settles it before
            the takeover or the host panel hear anything: one layer per press. */
         if (
@@ -797,7 +1007,7 @@ export function ChatWidget({
                 <CircularButton
                   icon="menu"
                   variant="tertiary"
-                  ariaLabel="Open the chat history"
+                  ariaLabel={openThreadsLabel}
                   tooltipPosition="bottom"
                   onClick={() => setThreadsOpen(true)}
                 />
@@ -825,7 +1035,9 @@ export function ChatWidget({
 
         <div className="ds-chat-widget__body">
           <ArtifactSeatContext.Provider value={artifacts}>
-          <ChatThread className="ds-chat-widget__thread" flow={flow}>
+          <ResponseActionsLabelsContext.Provider value={responseActionsLabels}>
+          <FollowupSuggestionsLabelContext.Provider value={followupsLabel}>
+          <ChatThread {...chatThreadLabels} className="ds-chat-widget__thread" flow={flow}>
             {/* One array, so the live turn and its committed form match by
                 key: split expressions are separate children slots and React
                 would remount across them. */}
@@ -843,7 +1055,7 @@ export function ChatWidget({
                     role="user"
                     attachments={
                       turn.attachments ? (
-                        <AttachmentGroup align="end" items={turn.attachments} />
+                        <AttachmentGroup {...attachmentGroupLabels} align="end" items={turn.attachments} />
                       ) : (
                         <>
                           {turn.content}
@@ -853,7 +1065,7 @@ export function ChatWidget({
                     }
                   >
                     {turn.reply ? (
-                      <ReplyBody reply={turn.reply} text={turn.text} />
+                      <ReplyBody reply={turn.reply} text={turn.text} missingLabel={questionSummaryLabels?.missingLabel} />
                     ) : mentions && turn.text ? (
                       <MentionText text={turn.text} sources={mentions} />
                     ) : (
@@ -861,12 +1073,14 @@ export function ChatWidget({
                     )}
                   </ChatMessage>
                 ) : (
-                  <AssistantTurn key={turn.id} turn={turn} />
+                  <AssistantTurn key={turn.id} turn={turn} labels={turnLabels} />
                 )
               ),
-              ...(live ? [<AssistantTurn key={live.id} live={live} />] : []),
+              ...(live ? [<AssistantTurn key={live.id} live={live} labels={turnLabels} />] : []),
             ]}
           </ChatThread>
+          </FollowupSuggestionsLabelContext.Provider>
+          </ResponseActionsLabelsContext.Provider>
           </ArtifactSeatContext.Provider>
 
           {/* Welcome greeting: an overlay on the empty thread, sitting just
@@ -894,17 +1108,18 @@ export function ChatWidget({
       <footer className="ds-chat-widget__footer">
         <div className="ds-chat-widget__composer">
           <Composer
+            {...composerLabels}
             ref={composerRef}
             placeholder={questionsOpen ? questionsPlaceholder : placeholder}
             disabled={questionsOpen}
-            sendLabel="Send"
+            sendLabel={sendLabel}
             aiGlow
             value={draft}
             onValueChange={setDraft}
             onSubmit={handleSubmit}
             streaming={streaming}
             onStop={stop}
-            context={contextLabel ? <>Looking at “{contextLabel}”</> : undefined}
+            context={contextLabel ? contextNote(contextLabel) : undefined}
             contextIcon="description"
             contextPlacement="above"
             mentions={mentions}
@@ -914,7 +1129,7 @@ export function ChatWidget({
                   onFilesSelected: queue.add,
                   onFileRemove: queue.remove,
                   pasteThreshold: LONG_PASTE_CHARS,
-                  onPasteAsAttachment: (text: string) => queue.addText(text),
+                  onPasteAsAttachment: (text: string) => queue.addText(text, pastedTextLabel),
                 }
               : {})}
             actions={
@@ -926,11 +1141,12 @@ export function ChatWidget({
               composerActions ??
               (pickerModels.length > 0 ? (
                 <ModelPicker
+                  {...modelPickerLabels}
                   models={pickerModels}
                   value={pickerValue}
                   onValueChange={setChosenModel}
                   placement="top"
-                  aria-label="Choose a model"
+                  aria-label={modelPickerLabel}
                 />
               ) : undefined)
             }
@@ -978,7 +1194,7 @@ export function ChatWidget({
       onKeyDown={(event) => {
         /* Expanded, the conversation is off stage and cannot hear the key:
            Escape steps the artifact back beside it. */
-        if (event.key === 'Escape' && artifactExpanded) {
+        if (event.key === 'Escape' && artifactExpanded && !event.defaultPrevented) {
           event.stopPropagation();
           setArtifactExpanded(false);
         }
@@ -1040,6 +1256,10 @@ export function ChatWidget({
               expanded={artifactExpanded}
               onExpandedChange={setArtifactExpanded}
               onClose={closeArtifactPanel}
+              artifactPanelLabels={artifactPanelLabels}
+              emptyPanelTitle={artifactPanelTitle}
+              emptyTitle={artifactEmptyTitle}
+              emptyDescription={artifactEmptyDescription}
             />
           </div>
         </div>
@@ -1053,7 +1273,7 @@ export function ChatWidget({
           <button
             type="button"
             className="ds-chat-widget__rail-scrim"
-            aria-label="Close the artifact panel"
+            aria-label={closeArtifactLabel}
             tabIndex={artifactShown ? 0 : -1}
             onClick={closeArtifactPanel}
           />
@@ -1063,7 +1283,14 @@ export function ChatWidget({
           >
             <span className="ds-chat-widget__aside-grabber" aria-hidden="true" />
             <div className="ds-chat-widget__aside-sheet-body">
-              <ChatArtifactPane artifact={heldArtifact} onClose={closeArtifactPanel} />
+              <ChatArtifactPane
+                artifact={heldArtifact}
+                onClose={closeArtifactPanel}
+                artifactPanelLabels={artifactPanelLabels}
+                emptyPanelTitle={artifactPanelTitle}
+                emptyTitle={artifactEmptyTitle}
+                emptyDescription={artifactEmptyDescription}
+              />
             </div>
           </div>
         </div>
@@ -1077,7 +1304,7 @@ export function ChatWidget({
           <button
             type="button"
             className="ds-chat-widget__rail-scrim"
-            aria-label="Close the chat history"
+            aria-label={closeThreadsLabel}
             tabIndex={threadsOpen ? 0 : -1}
             onClick={closeThreads}
           />
@@ -1095,7 +1322,7 @@ export function ChatWidget({
           <button
             type="button"
             className="ds-chat-widget__rail-scrim"
-            aria-label="Close the agent panel"
+            aria-label={closeAgentLabel}
             tabIndex={asideShown ? 0 : -1}
             onClick={closeAside}
           />

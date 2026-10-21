@@ -1,4 +1,6 @@
-import { useCallback, useId } from 'react';
+'use client';
+
+import React, { useCallback, useId } from 'react';
 import {
   RadialBarChart as RechartsRadialBarChart,
   RadialBar,
@@ -8,7 +10,7 @@ import {
   PolarAngleAxis,
 } from 'recharts';
 import type { ChartSummaryItem } from './BarChart';
-import { getChartSeriesColors } from './palette';
+import { getChartSeriesColors, readTokenPx } from './palette';
 import { useChartAnimation } from './useChartAnimation';
 import './Chart.css';
 
@@ -32,12 +34,16 @@ export interface RadialDataItem {
   color?: string;
 }
 
-export interface RadialChartProps {
+/** Props owned by RadialChart itself; everything else falls through to the root div. */
+type RadialChartOwnProps = {
   /** Array of data items — each renders as a concentric ring */
   data: RadialDataItem[];
   /** Maximum value for the radial scale (100 = percentage) */
   maxValue?: number;
-  /** Chart title */
+  /**
+   * Chart title, in the shared chart header; it also names the figure.
+   * Note: this replaces the native `title` tooltip attribute, which the chart does not expose.
+   */
   title?: string;
   /** Description text below the title */
   subtitle?: string;
@@ -59,7 +65,11 @@ export interface RadialChartProps {
   bare?: boolean;
   /** Additional CSS classes on the wrapper */
   className?: string;
-}
+};
+
+export interface RadialChartProps
+  extends RadialChartOwnProps,
+    Omit<React.ComponentPropsWithoutRef<'div'>, keyof RadialChartOwnProps | 'children'> {}
 
 function getCSSVar(name: string, fallback: string): string {
   // A var() reference resolves live in SVG paint, so the chart follows a
@@ -93,7 +103,7 @@ function RadialTooltip({ active, payload }: RadialTooltipProps) {
  * Each data item renders as a concentric ring — great for
  * progress indicators and comparative gauges.
  */
-export const RadialChart = ({
+export const RadialChart = React.forwardRef<HTMLDivElement, RadialChartProps>(({
   data,
   maxValue = 100,
   title,
@@ -107,7 +117,8 @@ export const RadialChart = ({
   centerSublabel,
   bare = false,
   className = '',
-}: RadialChartProps) => {
+  ...rest
+}, ref) => {
   const titleId = useId();
   const subtitleId = useId();
   const animation = useChartAnimation(data);
@@ -117,6 +128,10 @@ export const RadialChart = ({
     .join(' ');
   const defaultColors = getChartSeriesColors();
   const textSecondary = getCSSVar('--color-text-secondary', '#303030');
+  // Ticks and legend read the caption type token, so a theme's type scale
+  // reaches them. recharts sizes text through an SVG attribute, which cannot
+  // hold var(), so the resolved number is read at render.
+  const textSize = readTokenPx('--font-caption-size', '12px');
   const bgColor = getCSSVar('--color-bg-container-primary', '#FFFFFF');
 
   /* Recharts RadialBarChart needs fill on each data item */
@@ -133,10 +148,12 @@ export const RadialChart = ({
 
   return (
     <div
+      {...rest}
+      ref={ref}
       className={classes}
       role="figure"
-      aria-labelledby={title ? titleId : undefined}
-      aria-describedby={subtitle ? subtitleId : undefined}
+      aria-labelledby={title ? titleId : rest['aria-labelledby']}
+      aria-describedby={subtitle ? subtitleId : rest['aria-describedby']}
     >
       {(title || subtitle || summaryItems) && (
         <div className={`${baseClass}__header`}>
@@ -191,7 +208,7 @@ export const RadialChart = ({
                   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
                 })) } as any)}
                 formatter={(value: string) => (
-                  <span style={{ color: textSecondary, fontSize: 12 }}>{value}</span>
+                  <span style={{ color: textSecondary, fontSize: textSize }}>{value}</span>
                 )}
               />
             )}
@@ -208,4 +225,6 @@ export const RadialChart = ({
       </div>
     </div>
   );
-};
+});
+
+RadialChart.displayName = 'RadialChart';

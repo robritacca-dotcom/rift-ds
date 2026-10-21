@@ -57,15 +57,15 @@
 }
 
 .ds-avatar--sm .ds-avatar__initials {
-  font-size: 12px;
+  font-size: 12px; /* ds-allow(typography): initials are sized to the fixed avatar box, not the type ladder, so a type-scale lever cannot overflow them */
 }
 
 .ds-avatar--md .ds-avatar__initials {
-  font-size: 14px;
+  font-size: 14px; /* ds-allow(typography): sized to the avatar box, as above */
 }
 
 .ds-avatar--lg .ds-avatar__initials {
-  font-size: 18px;
+  font-size: 18px; /* ds-allow(typography): sized to the avatar box, as above */
 }
 
 /* ============================================

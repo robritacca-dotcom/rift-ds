@@ -60,3 +60,23 @@ export const OpensMenu: Story = {
 export const Disabled: Story = {
   args: { disabled: true },
 };
+
+/** No `value`: the bar keeps its own selection, starting from `defaultValue`. */
+export const Uncontrolled: Story = {
+  render: (args) => (
+    <InspectorDropdown
+      label={args.label}
+      options={args.options}
+      size={args.size}
+      disabled={args.disabled}
+      defaultValue="Serif"
+    />
+  ),
+  play: async ({ canvas, userEvent }) => {
+    const trigger = canvas.getByRole('combobox', { name: 'Headings' });
+    await expect(trigger).toHaveTextContent('Serif');
+    await userEvent.click(trigger);
+    await userEvent.click(screen.getByRole('option', { name: /Monospace/ }));
+    await expect(trigger).toHaveTextContent('Monospace');
+  },
+};

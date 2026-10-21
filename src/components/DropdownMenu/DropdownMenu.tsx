@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useCallback, useId } from 'react';
+import { useLayer } from '../../behaviors/useLayer';
 import { MOTION_HOVER_HIDE_DELAY_MS } from '../../tokens/motion';
 import './DropdownMenu.css';
 import '../../fonts/material-symbols.css';
@@ -46,7 +47,7 @@ export type DropdownMenuEntry =
   | DropdownMenuSeparator
   | DropdownMenuGroup;
 
-export interface DropdownMenuProps {
+type DropdownMenuOwnProps = {
   /** Trigger element that opens the menu */
   trigger: React.ReactNode;
   /** Menu entries (items, groups, separators) */
@@ -55,9 +56,19 @@ export interface DropdownMenuProps {
   align?: 'start' | 'end';
   /** Component size */
   size?: 'default' | 'compact';
-  /** Additional CSS classes */
+  /** Whether the menu is open (controlled mode) */
+  open?: boolean;
+  /** Whether the menu starts open when uncontrolled */
+  defaultOpen?: boolean;
+  /** Callback when the menu opens or closes */
+  onOpenChange?: (open: boolean) => void;
+  /** Additional CSS classes on the root wrapper, which holds the trigger and the panel */
   className?: string;
-}
+};
+
+export interface DropdownMenuProps
+  extends DropdownMenuOwnProps,
+    Omit<React.ComponentPropsWithoutRef<'div'>, keyof DropdownMenuOwnProps | 'children'> {}
 
 /* ============================================
    HELPERS
@@ -299,16 +310,35 @@ const MenuPanel = ({
    DROPDOWN MENU — ROOT COMPONENT
    ============================================ */
 
-export const DropdownMenu = ({
+export const DropdownMenu = React.forwardRef<HTMLDivElement, DropdownMenuProps>(({
   trigger,
   items,
   align = 'start',
   size = 'default',
+  open: controlledOpen,
+  defaultOpen = false,
+  onOpenChange,
   className = '',
-}: DropdownMenuProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+  ...rest
+}, ref) => {
+  const [internalOpen, setInternalOpen] = useState(defaultOpen);
+  const isControlled = controlledOpen !== undefined;
+  const isOpen = isControlled ? controlledOpen : internalOpen;
+  // Reports every change, and stores the value only when uncontrolled.
+  const setIsOpen = useCallback(
+    (value: boolean) => {
+      if (!isControlled) setInternalOpen(value);
+      onOpenChange?.(value);
+    },
+    [isControlled, onOpenChange],
+  );
   const [focusedIndex, setFocusedIndex] = useState(-1);
   const rootRef = useRef<HTMLDivElement>(null);
+  const setRootRef = (node: HTMLDivElement | null) => {
+    rootRef.current = node;
+    if (typeof ref === 'function') ref(node);
+    else if (ref) ref.current = node;
+  };
   const panelRef = useRef<HTMLUListElement | null>(null);
   const generatedId = useId();
 
@@ -322,28 +352,23 @@ export const DropdownMenu = ({
     isOpen && focusedIndex >= 0 ? `${generatedId}-item-${focusedIndex}` : undefined;
 
   const handleToggle = () => {
-    setIsOpen((prev) => {
-      if (!prev) setFocusedIndex(-1);
-      return !prev;
-    });
+    if (!isOpen) setFocusedIndex(-1);
+    setIsOpen(!isOpen);
   };
 
   const handleClose = useCallback(() => {
     setIsOpen(false);
     setFocusedIndex(-1);
-  }, []);
+  }, [setIsOpen]);
 
-  /* Click outside */
-  useEffect(() => {
-    if (!isOpen) return;
-    const handler = (e: MouseEvent) => {
-      if (rootRef.current && !rootRef.current.contains(e.target as Node)) {
-        handleClose();
-      }
-    };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
-  }, [isOpen, handleClose]);
+  /* A press outside closes the menu, through the shared layer stack, so it
+     never also closes a Dialog the menu sits in. */
+  useLayer({
+    open: isOpen,
+    onDismiss: handleClose,
+    dismissOnOutsidePress: true,
+    getElements: () => [rootRef.current],
+  });
 
   /* Keyboard navigation */
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -406,6 +431,13 @@ export const DropdownMenu = ({
         }
         break;
       case 'Escape':
+        // Handled: the layer stack leaves a prevented Escape alone, so
+        // closing the menu does not also close a Dialog around it.
+        if (isOpen) {
+          e.preventDefault();
+          handleClose();
+        }
+        break;
       case 'Tab':
         handleClose();
         break;
@@ -534,7 +566,7 @@ export const DropdownMenu = ({
     : undefined;
 
   return (
-    <div className={classes} ref={rootRef}>
+    <div {...rest} className={classes} ref={setRootRef}>
       {/*
         The trigger is consumer-supplied and is virtually always already a
         control (a Button). Wrapping it in role="button" tabIndex=0 put an
@@ -586,4 +618,6 @@ export const DropdownMenu = ({
       )}
     </div>
   );
-};
+});
+
+DropdownMenu.displayName = 'DropdownMenu';

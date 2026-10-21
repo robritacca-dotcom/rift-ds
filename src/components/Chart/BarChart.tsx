@@ -1,4 +1,6 @@
-import { useCallback, useId } from 'react';
+'use client';
+
+import React, { useCallback, useId } from 'react';
 import {
   BarChart as RechartsBarChart,
   Bar,
@@ -10,6 +12,7 @@ import {
 } from 'recharts';
 import { useChartAnimation } from './useChartAnimation';
 import './Chart.css';
+import { readTokenPx } from './palette';
 
 interface ChartTooltipPayloadEntry {
   value?: number;
@@ -31,7 +34,8 @@ export interface ChartSummaryItem {
   value: string | number;
 }
 
-export interface BarChartProps {
+/** Props owned by BarChart itself; everything else falls through to the root div. */
+type BarChartOwnProps = {
   /** Array of data objects */
   data: Record<string, unknown>[];
   /** Key in data for x-axis values */
@@ -40,7 +44,10 @@ export interface BarChartProps {
   yKey?: string;
   /** Display name for the data series (shown in tooltip) */
   dataLabel?: string;
-  /** Chart title */
+  /**
+   * Chart title, in the shared chart header; it also names the figure.
+   * Note: this replaces the native `title` tooltip attribute, which the chart does not expose.
+   */
   title?: string;
   /** Description text below the title */
   subtitle?: string;
@@ -54,7 +61,11 @@ export interface BarChartProps {
   bare?: boolean;
   /** Additional CSS classes on the wrapper */
   className?: string;
-}
+};
+
+export interface BarChartProps
+  extends BarChartOwnProps,
+    Omit<React.ComponentPropsWithoutRef<'div'>, keyof BarChartOwnProps | 'children'> {}
 
 /**
  * Reads a CSS custom property from the document root.
@@ -100,7 +111,7 @@ function ChartTooltip({
  * Part of the Chart component family — shares wrapper, header,
  * tooltip, and summary-stat styles with future chart types.
  */
-export const BarChart = ({
+export const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>(({
   data,
   xKey = 'label',
   yKey = 'value',
@@ -112,7 +123,8 @@ export const BarChart = ({
   height = 350,
   bare = false,
   className = '',
-}: BarChartProps) => {
+  ...rest
+}, ref) => {
   const titleId = useId();
   const subtitleId = useId();
   const animation = useChartAnimation(data);
@@ -124,6 +136,10 @@ export const BarChart = ({
   /* Resolve theme-aware colours once per render */
   const resolvedBarColor = barColor || getCSSVar('--color-chart-series-1', '#0E6E8F');
   const textSecondary = getCSSVar('--color-text-secondary', '#303030');
+  // Ticks and legend read the caption type token, so a theme's type scale
+  // reaches them. recharts sizes text through an SVG attribute, which cannot
+  // hold var(), so the resolved number is read at render.
+  const textSize = readTokenPx('--font-caption-size', '12px');
   const gridColor = getCSSVar('--color-divider', 'rgba(214, 214, 214, 0.8)');
   const cursorColor = getCSSVar('--color-bg-container-secondary', '#F1F1F1');
 
@@ -137,10 +153,12 @@ export const BarChart = ({
 
   return (
     <div
+      {...rest}
+      ref={ref}
       className={classes}
       role="figure"
-      aria-labelledby={title ? titleId : undefined}
-      aria-describedby={subtitle ? subtitleId : undefined}
+      aria-labelledby={title ? titleId : rest['aria-labelledby']}
+      aria-describedby={subtitle ? subtitleId : rest['aria-describedby']}
     >
       {/* Header */}
       {(title || subtitle || summaryItems) && (
@@ -175,12 +193,12 @@ export const BarChart = ({
             />
             <XAxis
               dataKey={xKey}
-              tick={{ fill: textSecondary, fontSize: 12 }}
+              tick={{ fill: textSecondary, fontSize: textSize }}
               tickLine={false}
               axisLine={{ stroke: gridColor }}
             />
             <YAxis
-              tick={{ fill: textSecondary, fontSize: 12 }}
+              tick={{ fill: textSecondary, fontSize: textSize }}
               tickLine={false}
               axisLine={false}
             />
@@ -200,4 +218,6 @@ export const BarChart = ({
       </div>
     </div>
   );
-};
+});
+
+BarChart.displayName = 'BarChart';

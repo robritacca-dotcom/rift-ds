@@ -56,7 +56,7 @@
 .ds-contact-card__text {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: var(--gap-050);
   flex: 1;
   min-width: 0;
 }

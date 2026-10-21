@@ -35,6 +35,14 @@ type LightboxOwnProps = {
   onPrev?: () => void;
   /** Steps to the next item — the next chevron and the Right arrow key. */
   onNext?: () => void;
+  /** The panel's accessible name when neither `alt` nor `caption` is set. */
+  viewerLabel?: string;
+  /** Accessible name of the close button. */
+  closeLabel?: string;
+  /** Accessible name of the previous button, shown with `onPrev`. */
+  previousLabel?: string;
+  /** Accessible name of the next button, shown with `onNext`. */
+  nextLabel?: string;
   /** Additional CSS classes — applied to the portal container, not the panel */
   className?: string;
 };
@@ -66,6 +74,10 @@ export const Lightbox = React.forwardRef<HTMLDivElement, LightboxProps>(
       dismissible = true,
       onPrev,
       onNext,
+      viewerLabel = 'Media viewer',
+      closeLabel = 'Close viewer',
+      previousLabel = 'Previous',
+      nextLabel = 'Next',
       className = '',
       ...rest
     },
@@ -88,7 +100,7 @@ export const Lightbox = React.forwardRef<HTMLDivElement, LightboxProps>(
     // layer stack, focus is trapped with the page inert behind the panel,
     // and the scroll lock is counted. Backdrop dismissal stays below — it
     // is this component's own DOM.
-    useLayer({ open, dismissOnEscape: dismissible, onDismiss: () => onOpenChange(false) });
+    const layer = useLayer({ open, dismissOnEscape: dismissible, onDismiss: () => onOpenChange(false) });
     useFocusScope(panelRef, { active: open });
     useScrollLock(open);
 
@@ -107,8 +119,10 @@ export const Lightbox = React.forwardRef<HTMLDivElement, LightboxProps>(
       return () => document.removeEventListener('keydown', onKey);
     }, [open, onPrev, onNext]);
 
+    // A press that began while a menu or popover was open above this layer was
+    // that layer's press: it closed the menu, and must not also close this.
     const handleBackdropClick = () => {
-      if (dismissible) onOpenChange(false);
+      if (dismissible && layer.ownsPress()) onOpenChange(false);
     };
 
     const containerClasses = [baseClass, open ? `${baseClass}--open` : '', className]
@@ -125,7 +139,9 @@ export const Lightbox = React.forwardRef<HTMLDivElement, LightboxProps>(
           className={`${baseClass}__panel`}
           role="dialog"
           aria-modal="true"
-          aria-label={alt || caption || 'Media viewer'}
+          // A consumer's own aria-label wins; written after the spread for the
+          // fallbacks, so it reads the rest value explicitly.
+          aria-label={rest['aria-label'] ?? (alt || caption || viewerLabel)}
           tabIndex={-1}
         >
           {dismissible && (
@@ -133,7 +149,7 @@ export const Lightbox = React.forwardRef<HTMLDivElement, LightboxProps>(
               type="button"
               className={`${baseClass}__control ${baseClass}__close`}
               onClick={() => onOpenChange(false)}
-              aria-label="Close viewer"
+              aria-label={closeLabel}
             >
               <span className={`${baseClass}__control-icon material-symbols-rounded`} aria-hidden="true">
                 close
@@ -146,7 +162,7 @@ export const Lightbox = React.forwardRef<HTMLDivElement, LightboxProps>(
               type="button"
               className={`${baseClass}__control ${baseClass}__nav ${baseClass}__nav--prev`}
               onClick={onPrev}
-              aria-label="Previous"
+              aria-label={previousLabel}
             >
               <span className={`${baseClass}__control-icon material-symbols-rounded`} aria-hidden="true">
                 chevron_left
@@ -164,7 +180,7 @@ export const Lightbox = React.forwardRef<HTMLDivElement, LightboxProps>(
               type="button"
               className={`${baseClass}__control ${baseClass}__nav ${baseClass}__nav--next`}
               onClick={onNext}
-              aria-label="Next"
+              aria-label={nextLabel}
             >
               <span className={`${baseClass}__control-icon material-symbols-rounded`} aria-hidden="true">
                 chevron_right

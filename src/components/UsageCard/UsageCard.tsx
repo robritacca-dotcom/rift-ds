@@ -23,7 +23,10 @@ export interface UsageItem {
 type UsageCardOwnProps = {
   /** The budgets to show, one meter row each */
   items: UsageItem[];
-  /** Card title in the shared chart-chrome header */
+  /**
+   * Card title in the shared chart-chrome header.
+   * Note: this shadows the native `title` tooltip attribute, which UsageCard does not expose.
+   */
   title?: string;
   /** Supporting line under the title */
   subtitle?: string;

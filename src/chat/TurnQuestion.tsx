@@ -1,7 +1,11 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { QuestionCard, QuestionSummary } from '../components/QuestionCard/QuestionCard';
+import {
+  QuestionCard,
+  QuestionSummary,
+  type QuestionCardLabels,
+} from '../components/QuestionCard/QuestionCard';
 import { useChatWidget } from './context';
 import { isBlockingQuestion } from './questions';
 import type { ChatReply, ChatTurn } from './types';
@@ -12,7 +16,14 @@ import type { ChatReply, ChatTurn } from './types';
  * conversation moves on without an answer the card stays as it was offered,
  * inert, so the transcript still shows what was asked.
  */
-export function TurnQuestion({ turn }: { turn: ChatTurn }) {
+export function TurnQuestion({
+  turn,
+  labels,
+}: {
+  turn: ChatTurn;
+  /** The card's words, merged over QuestionCard's English defaults. */
+  labels?: Partial<QuestionCardLabels>;
+}) {
   const { turns, live, answerQuestion, skipQuestion } = useChatWidget();
   const set = turn.question;
   const newest = turns[turns.length - 1]?.id === turn.id;
@@ -32,6 +43,7 @@ export function TurnQuestion({ turn }: { turn: ChatTurn }) {
     <QuestionCard
       ref={ref}
       className="ds-chat-widget__question"
+      labels={labels}
       questions={set.questions}
       values={turn.answers}
       disabled={turn.answers === undefined && (!newest || live !== null)}
@@ -46,11 +58,20 @@ export function TurnQuestion({ turn }: { turn: ChatTurn }) {
  * answers. One question, with one pick or several, stays the ordinary
  * bubble, its picks joined with commas.
  */
-export function ReplyBody({ reply, text }: { reply?: ChatReply; text: string }) {
+export function ReplyBody({
+  reply,
+  text,
+  missingLabel,
+}: {
+  reply?: ChatReply;
+  text: string;
+  /** What stands in for a question left without an answer. Defaults to QuestionSummary's "No answer". */
+  missingLabel?: string;
+}) {
   /* One question, however many picks, reads as its answers in a line: the
      plain text the model receives, commas and all. */
   if (!reply || reply.items.length === 1) return <>{text}</>;
   /* The same summary QuestionCard folds a set to, frameless inside the
      bubble: the question and the reply read as one pattern. */
-  return <QuestionSummary variant="plain" items={reply.items} />;
+  return <QuestionSummary variant="plain" items={reply.items} missingLabel={missingLabel} />;
 }

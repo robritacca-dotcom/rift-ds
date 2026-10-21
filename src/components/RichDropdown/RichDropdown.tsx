@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useLayer } from '../../behaviors/useLayer';
 import { Field } from '../Field/Field';
 import './RichDropdown.css';
 import '../../fonts/material-symbols.css';
@@ -108,7 +109,9 @@ const OptionCell = ({ option }: { option: RichDropdownOption }) => (
  *
  * Same combobox + listbox pattern as Dropdown, with full keyboard
  * navigation. Forwards a ref to the wrapping element and spreads
- * unrecognised props onto it.
+ * unrecognised props onto it, except `aria-label`, `aria-labelledby` and
+ * `aria-describedby`, which go to the trigger, the element that carries the
+ * combobox role.
  */
 export const RichDropdown = React.forwardRef<HTMLDivElement, RichDropdownProps>(
   (
@@ -126,6 +129,11 @@ export const RichDropdown = React.forwardRef<HTMLDivElement, RichDropdownProps>(
       className = '',
       name,
       id,
+      // The naming and description attributes belong on the combobox
+      // trigger, not the role-less wrapper the other rest props land on.
+      'aria-label': ariaLabelAttr,
+      'aria-labelledby': ariaLabelledBy,
+      'aria-describedby': ariaDescribedBy,
       ...rest
     },
     ref,
@@ -172,17 +180,14 @@ export const RichDropdown = React.forwardRef<HTMLDivElement, RichDropdownProps>(
       setIsOpen(false);
     };
 
-    const handleClickOutside = useCallback((e: MouseEvent) => {
-      if (rootRef.current && !rootRef.current.contains(e.target as Node)) {
-        setIsOpen(false);
-      }
-    }, []);
-
-    useEffect(() => {
-      if (!isOpen) return;
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [isOpen, handleClickOutside]);
+    // Light dismiss through the shared layer stack: a press outside closes the
+    // list, and never also closes a Dialog it sits in.
+    useLayer({
+      open: isOpen,
+      onDismiss: () => setIsOpen(false),
+      dismissOnOutsidePress: true,
+      getElements: () => [rootRef.current],
+    });
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
       if (disabled) return;
@@ -235,7 +240,12 @@ export const RichDropdown = React.forwardRef<HTMLDivElement, RichDropdownProps>(
           }
           break;
         case 'Escape':
-          setIsOpen(false);
+          // Handled: the layer stack leaves a prevented Escape alone, so
+          // closing the list does not also close a Dialog around it.
+          if (isOpen) {
+            e.preventDefault();
+            setIsOpen(false);
+          }
           break;
         case 'Tab':
           setIsOpen(false);
@@ -274,11 +284,15 @@ export const RichDropdown = React.forwardRef<HTMLDivElement, RichDropdownProps>(
           aria-haspopup="listbox"
           // A div is not a labelable element, so Field's htmlFor cannot reach
           // it — point at the label's id instead (Field renders `${id}-label`).
-          aria-labelledby={label ? `${inputId}-label` : undefined}
-          aria-label={rest['aria-label'] || (!label ? placeholder : undefined)}
+          aria-labelledby={ariaLabelledBy ?? (label ? `${inputId}-label` : undefined)}
+          aria-label={ariaLabelAttr ?? (!label ? placeholder : undefined)}
           aria-controls={isOpen ? `${inputId}-listbox` : undefined}
           aria-activedescendant={activeOptionId}
-          aria-describedby={helperText ? `${inputId}-helper` : rest['aria-describedby']}
+          aria-describedby={
+            [ariaDescribedBy, helperText ? `${inputId}-helper` : undefined]
+              .filter(Boolean)
+              .join(' ') || undefined
+          }
           aria-invalid={error || undefined}
           tabIndex={disabled ? -1 : 0}
           onClick={handleToggle}

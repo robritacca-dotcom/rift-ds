@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useCallback, useEffect, useId, useRef, useState } from 'react';
+import React, { useEffect, useId, useRef, useState } from 'react';
+import { useLayer } from '../../behaviors/useLayer';
 import './ModelPicker.css';
 import '../../fonts/material-symbols.css';
 
@@ -41,6 +42,11 @@ type ModelPickerOwnProps = {
   /** Fires with the newly selected model's value. */
   onValueChange?: (value: string) => void;
   /**
+   * Text the trigger shows when no model is selected, and the trigger's
+   * accessible name when no `aria-label` is passed. Defaults to "Choose a model".
+   */
+  placeholder?: string;
+  /**
    * Selected effort level for controlled use. Setting this (or `defaultEffort`)
    * is what makes the effort row appear at all.
    */
@@ -51,6 +57,10 @@ type ModelPickerOwnProps = {
   onEffortChange?: (effort: string) => void;
   /** The effort levels on offer. Defaults to low, medium and high. */
   effortOptions?: ModelPickerEffortOption[];
+  /** Accessible name of the model list in the open panel. */
+  listLabel?: string;
+  /** Heading of the effort row, which is also the accessible name of its radio group. */
+  effortLabel?: string;
   /** Which side of the trigger the panel opens on. In a composer pinned to the bottom of the screen, use `top`. */
   placement?: 'bottom' | 'top';
   /** Whether the whole control is disabled. */
@@ -70,7 +80,9 @@ export interface ModelPickerProps
  * effort levels below a divider.
  *
  * Built for Composer's `actions` slot, but freestanding anywhere. Forwards a
- * ref to the root element and spreads unrecognised props onto it.
+ * ref to the root element and spreads unrecognised props onto it, except
+ * `aria-label`, `aria-labelledby` and `aria-describedby`, which go to the
+ * trigger, the element that carries the combobox role.
  */
 export const ModelPicker = React.forwardRef<HTMLDivElement, ModelPickerProps>(
   (
@@ -79,13 +91,21 @@ export const ModelPicker = React.forwardRef<HTMLDivElement, ModelPickerProps>(
       value,
       defaultValue,
       onValueChange,
+      placeholder = 'Choose a model',
       effort,
       defaultEffort,
       onEffortChange,
       effortOptions = DEFAULT_EFFORT_OPTIONS,
+      listLabel = 'Model',
+      effortLabel = 'Effort',
       placement = 'bottom',
       disabled = false,
       className = '',
+      // The naming and description attributes belong on the combobox
+      // trigger, not the role-less root the other rest props land on.
+      'aria-label': ariaLabelAttr,
+      'aria-labelledby': ariaLabelledBy,
+      'aria-describedby': ariaDescribedBy,
       ...rest
     },
     ref,
@@ -130,17 +150,14 @@ export const ModelPicker = React.forwardRef<HTMLDivElement, ModelPickerProps>(
       onEffortChange?.(effortValue);
     };
 
-    const handleClickOutside = useCallback((e: MouseEvent) => {
-      if (rootRef.current && !rootRef.current.contains(e.target as Node)) {
-        setIsOpen(false);
-      }
-    }, []);
-
-    useEffect(() => {
-      if (!isOpen) return;
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [isOpen, handleClickOutside]);
+    // Light dismiss through the shared layer stack: a press outside closes the
+    // menu, and never also closes a Dialog it sits in.
+    useLayer({
+      open: isOpen,
+      onDismiss: () => setIsOpen(false),
+      dismissOnOutsidePress: true,
+      getElements: () => [rootRef.current],
+    });
 
     const handleTriggerKeyDown = (e: React.KeyboardEvent) => {
       if (disabled) return;
@@ -194,7 +211,12 @@ export const ModelPicker = React.forwardRef<HTMLDivElement, ModelPickerProps>(
           }
           break;
         case 'Escape':
-          setIsOpen(false);
+          // Handled: the layer stack leaves a prevented Escape alone, so
+          // closing the list does not also close a Dialog around it.
+          if (isOpen) {
+            e.preventDefault();
+            setIsOpen(false);
+          }
           break;
         case 'Tab':
           // Leave the panel open so the effort row is reachable; a click
@@ -254,11 +276,16 @@ export const ModelPicker = React.forwardRef<HTMLDivElement, ModelPickerProps>(
           type="button"
           className={`${baseClass}__trigger`}
           disabled={disabled}
+          // A select-only combobox, Dropdown's pattern: aria-activedescendant
+          // is not allowed on a plain button, so the open list failed axe.
+          role="combobox"
           aria-expanded={isOpen}
           aria-haspopup="listbox"
           aria-controls={isOpen ? listboxId : undefined}
           aria-activedescendant={activeOptionId}
-          aria-label={rest['aria-label'] ?? 'Choose a model'}
+          aria-label={ariaLabelAttr ?? placeholder}
+          aria-labelledby={ariaLabelledBy}
+          aria-describedby={ariaDescribedBy}
           onClick={() => {
             setIsOpen((prev) => !prev);
             setFocusedIndex(-1);
@@ -266,7 +293,7 @@ export const ModelPicker = React.forwardRef<HTMLDivElement, ModelPickerProps>(
           onKeyDown={handleTriggerKeyDown}
         >
           <span className={`${baseClass}__trigger-label`}>
-            {selectedModel ? selectedModel.label : 'Choose a model'}
+            {selectedModel ? selectedModel.label : placeholder}
           </span>
           <span className={`${baseClass}__chevron material-symbols-rounded`} aria-hidden="true">
             expand_more
@@ -280,7 +307,7 @@ export const ModelPicker = React.forwardRef<HTMLDivElement, ModelPickerProps>(
               role="listbox"
               id={listboxId}
               ref={listRef}
-              aria-label="Model"
+              aria-label={listLabel}
             >
               {models.map((model, index) => (
                 <li
@@ -327,7 +354,7 @@ export const ModelPicker = React.forwardRef<HTMLDivElement, ModelPickerProps>(
             {hasEffort && (
               <div className={`${baseClass}__effort`}>
                 <span className={`${baseClass}__effort-label`} id={`${id}-effort-label`}>
-                  Effort
+                  {effortLabel}
                 </span>
                 <div
                   className={`${baseClass}__effort-options`}

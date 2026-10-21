@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef, useContext, useCallback, useSyncExternalStore, createContext, type ReactNode } from 'react';
+import React, { useState, useEffect, useRef, useContext, useCallback, useSyncExternalStore, createContext, type ReactNode } from 'react';
 import { MOTION_AUTO_DISMISS_MS, MOTION_EXIT_SYNC_MS } from '../../tokens/motion';
 
 const emptySubscribe = () => () => {};
@@ -36,6 +36,10 @@ export interface ToastProviderProps {
   position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'top-center' | 'bottom-center';
   /** Maximum number of visible toasts */
   maxToasts?: number;
+  /** Accessible name of the toast stack's region landmark */
+  regionLabel?: string;
+  /** Accessible name of every toast's dismiss button */
+  dismissLabel?: string;
 }
 
 export interface ToastContextValue {
@@ -91,6 +95,7 @@ interface ToastItemProps extends Required<Pick<ToastData, 'variant'>> {
   dismissible: boolean;
   icon?: string | React.ReactNode;
   duration: number;
+  dismissLabel: string;
   onDismiss: (id: string) => void;
 }
 
@@ -102,6 +107,7 @@ const ToastItem = ({
   dismissible,
   icon,
   duration,
+  dismissLabel,
   onDismiss,
 }: ToastItemProps) => {
   const [exiting, setExiting] = useState(false);
@@ -174,7 +180,7 @@ const ToastItem = ({
           type="button"
           className={`${baseClass}__dismiss`}
           onClick={handleDismiss}
-          aria-label="Dismiss notification"
+          aria-label={dismissLabel}
         >
           <span className="material-symbols-rounded" aria-hidden="true">
             close
@@ -212,6 +218,8 @@ export const ToastProvider = ({
   children,
   position = 'bottom-right',
   maxToasts = 5,
+  regionLabel = 'Notifications',
+  dismissLabel = 'Dismiss notification',
 }: ToastProviderProps) => {
   const [toasts, setToasts] = useState<InternalToast[]>([]);
 
@@ -262,7 +270,7 @@ export const ToastProvider = ({
           <div
             className={containerClasses}
             role="region"
-            aria-label="Notifications"
+            aria-label={regionLabel}
             // The live region lives on this always-mounted container, not on
             // the toasts themselves: a region that enters the DOM together
             // with its text is not reliably announced.
@@ -278,6 +286,7 @@ export const ToastProvider = ({
                 dismissible={t.dismissible ?? true}
                 icon={t.icon}
                 duration={t.duration ?? MOTION_AUTO_DISMISS_MS}
+                dismissLabel={dismissLabel}
                 onDismiss={dismiss}
               />
             ))}
@@ -292,68 +301,93 @@ export const ToastProvider = ({
    STANDALONE TOAST (for Storybook previews)
    ============================================ */
 
-export interface ToastProps {
-  /** Toast title text */
+/** Props owned by the standalone Toast itself — everything else falls through to its `role="status"` `<div>`. */
+type ToastOwnProps = {
+  /**
+   * Toast title text.
+   * Note: this shadows the native `title` tooltip attribute, which Toast does not expose.
+   */
   title?: string;
   /** Toast description / body text */
   description?: string;
   /** Toast variant */
   variant?: 'info' | 'positive' | 'warning' | 'error' | 'neutral';
-  /** Whether the toast can be manually dismissed */
+  /** Whether the toast can be manually dismissed. The dismiss button renders only when `onDismiss` is also given */
   dismissible?: boolean;
   /** Custom icon override — Material Symbol name (string) or custom element (ReactNode) */
   icon?: string | React.ReactNode;
+  /** Fires when the dismiss button is pressed. The button renders only when this is given (and `dismissible` is not false); the host owns removing the toast */
+  onDismiss?: () => void;
+  /** Accessible name of the dismiss button */
+  dismissLabel?: string;
   /** Additional CSS classes */
   className?: string;
-}
+};
+
+export interface ToastProps
+  extends ToastOwnProps,
+    Omit<React.ComponentPropsWithoutRef<'div'>, keyof ToastOwnProps | 'role' | 'children'> {}
 
 /**
  * Standalone Toast component for static display.
  * For dynamic toast notifications, use ToastProvider + useToast.
+ *
+ * The forwarded ref and any unrecognised props target the `role="status"`
+ * `<div>`.
  */
-export const Toast = ({
-  title,
-  description,
-  variant = 'info',
-  dismissible = true,
-  icon,
-  className = '',
-}: ToastProps) => {
-  const baseClass = 'ds-toast';
-  const iconName = icon || defaultIcons[variant];
+export const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
+  (
+    {
+      title,
+      description,
+      variant = 'info',
+      dismissible = true,
+      icon,
+      onDismiss,
+      dismissLabel = 'Dismiss notification',
+      className = '',
+      ...rest
+    },
+    ref,
+  ) => {
+    const baseClass = 'ds-toast';
+    const iconName = icon || defaultIcons[variant];
 
-  const classes = [baseClass, `${baseClass}--${variant}`, className]
-    .filter(Boolean)
-    .join(' ');
+    const classes = [baseClass, `${baseClass}--${variant}`, className]
+      .filter(Boolean)
+      .join(' ');
 
-  return (
-    <div className={classes} role="status">
-      <span
-        className={`${baseClass}__icon${typeof iconName === 'string' ? ' material-symbols-rounded' : ''}`}
-        aria-hidden="true"
-      >
-        {iconName}
-      </span>
+    return (
+      <div {...rest} ref={ref} className={classes} role="status">
+        <span
+          className={`${baseClass}__icon${typeof iconName === 'string' ? ' material-symbols-rounded' : ''}`}
+          aria-hidden="true"
+        >
+          {iconName}
+        </span>
 
-      <div className={`${baseClass}__content`}>
-        {title && <p className={`${baseClass}__title`}>{title}</p>}
-        {description && (
-          <p className={`${baseClass}__description`}>{description}</p>
+        <div className={`${baseClass}__content`}>
+          {title && <p className={`${baseClass}__title`}>{title}</p>}
+          {description && (
+            <p className={`${baseClass}__description`}>{description}</p>
+          )}
+        </div>
+
+        {dismissible && onDismiss && (
+          <button
+            type="button"
+            className={`${baseClass}__dismiss`}
+            onClick={() => onDismiss()}
+            aria-label={dismissLabel}
+          >
+            <span className="material-symbols-rounded" aria-hidden="true">
+              close
+            </span>
+          </button>
         )}
       </div>
+    );
+  },
+);
 
-      {dismissible && (
-        <button
-          type="button"
-          className={`${baseClass}__dismiss`}
-          onClick={() => {}}
-          aria-label="Dismiss notification"
-        >
-          <span className="material-symbols-rounded" aria-hidden="true">
-            close
-          </span>
-        </button>
-      )}
-    </div>
-  );
-};
+Toast.displayName = 'Toast';

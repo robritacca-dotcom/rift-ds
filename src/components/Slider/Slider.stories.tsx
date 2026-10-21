@@ -9,7 +9,7 @@ const meta = {
   },
   tags: ['autodocs'],
   argTypes: {
-    value: { control: { type: 'range', min: 0, max: 100 } },
+    defaultValue: { control: { type: 'range', min: 0, max: 100 } },
     min: { control: 'number' },
     max: { control: 'number' },
     step: { control: 'number' },
@@ -17,7 +17,7 @@ const meta = {
     disabled: { control: 'boolean' },
   },
   args: {
-    value: 50,
+    defaultValue: 50,
     min: 0,
     max: 100,
     step: 1,
@@ -30,23 +30,23 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
 
 export const Compact: Story = {
-  args: { size: 'compact', value: 30 },
+  args: { size: 'compact', defaultValue: 30 },
 };
 
 export const Disabled: Story = {
-  args: { disabled: true, value: 60 },
+  args: { disabled: true, defaultValue: 60 },
 };
 
 export const CustomRange: Story = {
-  args: { min: 0, max: 10, step: 1, value: 7 },
+  args: { min: 0, max: 10, step: 1, defaultValue: 7 },
 };
 
 export const AllStates: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', width: '300px' }}>
-      <Slider value={75} />
-      <Slider value={40} size="compact" />
-      <Slider value={60} disabled />
+      <Slider defaultValue={75} />
+      <Slider defaultValue={40} size="compact" />
+      <Slider defaultValue={60} disabled />
     </div>
   ),
 };
@@ -60,7 +60,7 @@ export const Labelled: Story = {
   args: {
     label: 'Volume',
     helperText: 'Applies to alerts and previews.',
-    value: 65,
+    defaultValue: 65,
   },
 };
 
@@ -73,7 +73,7 @@ export const WithValue: Story = {
   args: {
     label: 'Opacity',
     showValue: true,
-    value: 80,
+    defaultValue: 80,
   },
 };
 
@@ -87,6 +87,6 @@ export const ErrorState: Story = {
     label: 'Budget cap',
     helperText: 'The cap must be above the committed spend.',
     error: true,
-    value: 10,
+    defaultValue: 10,
   },
 };

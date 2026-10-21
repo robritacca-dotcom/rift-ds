@@ -63,3 +63,21 @@ export const MOTION_SUGGESTIONS_THINK_MS = 600;
 
 /** The shipped period of one full turn for an auto-rotating surface — mirrors --motion-duration-orbit. Not a timer: Globe reads the live token and divides this by it, so its `autoRotate` speed means exactly what it says at the shipped tempo and scales with a theme's motion. */
 export const MOTION_ORBIT_REFERENCE_MS = 120000;
+
+/** How often Globe's spin re-reads the orbit token, so a live retheme of --motion-duration-orbit lands mid-spin. A polling schedule, not an animation pace. */
+export const MOTION_TOKEN_REREAD_MS = 250;
+
+/** How long ShaderField waits for its renderer to resolve before falling back, so an unresolved field can never be terminal (a context lost before the first frame and never restored). Generous next to a healthy start, which lands within a frame of mount. A schedule timing. */
+export const MOTION_RENDERER_WATCHDOG_MS = 1500;
+
+/** ShaderField's colour crossfade when the theme changes — mirrors --motion-duration-slow. An animation pace: the field honours reduced motion in JS. */
+export const MOTION_SHADER_COLOR_FADE_MS = 300;
+
+/** How long the scripted demo's staged retry "runs" before it lands. A schedule timing. */
+export const MOTION_DEMO_RETRY_RUN_MS = 1400;
+
+/** How long a new thread's name shimmer runs after its first message before the name arrives, paced like a fast title-generation call. A schedule timing. */
+export const MOTION_THREAD_NAMING_DELAY_MS = 1600;
+
+/** How long ShaderField waits for the browser to restore a lost WebGL context on its own before forcing a restore. A schedule timing. */
+export const MOTION_CONTEXT_RESTORE_WAIT_MS = 700;

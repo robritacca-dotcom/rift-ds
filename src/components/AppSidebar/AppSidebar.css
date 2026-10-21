@@ -273,7 +273,7 @@
 }
 
 .ds-app-sidebar__btn-chevron {
-  font-size: 24px;
+  --icon-size: var(--icon-size-600);
   color: var(--color-icon-secondary);
   min-width: 0;
   flex-shrink: 1;
@@ -318,7 +318,7 @@
   width: 44px;
   height: 100%;
   flex-shrink: 0;
-  padding-left: 16px;
+  padding-left: var(--padding-400);
 }
 
 .ds-app-sidebar__sub-line::after {
@@ -332,7 +332,7 @@
 .ds-app-sidebar__sub-btn {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--gap-200);
   height: 40px;
   /* The same edge inset the parent pills get; sub-items only render while
      the rail is expanded, so this needs no state selector. */
@@ -462,7 +462,7 @@
 .ds-app-sidebar__profile-left {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 10px; /* ds-allow(spacing): the avatar-to-name gap sits between the 8px and 12px steps, as designed */
   min-width: 0;
 }
 

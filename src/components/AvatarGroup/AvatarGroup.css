@@ -45,17 +45,17 @@
 .ds-avatar-group--sm .ds-avatar-group__overflow {
   width: 32px;
   height: 32px;
-  font-size: 12px;
+  font-size: 12px; /* ds-allow(typography): the +N counter matches Avatar's box-sized initials */
 }
 
 .ds-avatar-group--md .ds-avatar-group__overflow {
   width: 40px;
   height: 40px;
-  font-size: 14px;
+  font-size: 14px; /* ds-allow(typography): matches Avatar's box-sized initials */
 }
 
 .ds-avatar-group--lg .ds-avatar-group__overflow {
   width: 56px;
   height: 56px;
-  font-size: 18px;
+  font-size: 18px; /* ds-allow(typography): matches Avatar's box-sized initials */
 }

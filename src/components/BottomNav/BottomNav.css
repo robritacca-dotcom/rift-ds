@@ -127,7 +127,7 @@
   font-family: var(--font-caption-family);
   font-size: var(--font-caption-size);
   font-weight: var(--font-paragraph-sm-emphasis-weight);
-  line-height: 16px;
+  line-height: var(--font-caption-line-height);
   text-align: center;
   white-space: nowrap;
 }

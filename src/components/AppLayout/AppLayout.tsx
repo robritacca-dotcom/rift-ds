@@ -5,7 +5,8 @@ import { AppSidebar } from '../AppSidebar/AppSidebar';
 import type { AppSidebarSection, AppSidebarProfile } from '../AppSidebar/AppSidebar';
 import './AppLayout.css';
 
-export interface AppLayoutProps {
+/** Props owned by AppLayout itself — everything else falls through to the outer wrapper `<div>`. */
+type AppLayoutOwnProps = {
   /** Sidebar navigation sections */
   sections: AppSidebarSection[];
   /** Sidebar profile */
@@ -34,60 +35,83 @@ export interface AppLayoutProps {
   theme?: 'dark' | 'inherit';
   /** Additional CSS classes on outer wrapper */
   className?: string;
-}
+};
+
+export interface AppLayoutProps
+  extends AppLayoutOwnProps,
+    Omit<React.ComponentPropsWithoutRef<'div'>, keyof AppLayoutOwnProps> {}
 
 /**
  * AppLayout — full-page template with a collapsible sidebar
  * and a centred content area.
+ *
+ * The forwarded ref and any unrecognised props target the outer wrapper
+ * `<div>`. With `theme="inherit"` a `data-theme` passed by the consumer
+ * reaches the wrapper; with the default `dark` pin the component's own wins.
  */
-export const AppLayout = ({
-  sections,
-  profile,
-  activeKey,
-  activeSubKey,
-  activeTertiaryKey,
-  subNav,
-  defaultExpanded = true,
-  logoText,
-  logo,
-  children,
-  theme = 'dark',
-  className = '',
-}: AppLayoutProps) => {
-  const baseClass = 'ds-app-layout';
-  const [expanded, setExpanded] = useState(defaultExpanded);
+export const AppLayout = React.forwardRef<HTMLDivElement, AppLayoutProps>(
+  (
+    {
+      sections,
+      profile,
+      activeKey,
+      activeSubKey,
+      activeTertiaryKey,
+      subNav,
+      defaultExpanded = true,
+      logoText,
+      logo,
+      children,
+      theme = 'dark',
+      className = '',
+      ...rest
+    },
+    ref,
+  ) => {
+    const baseClass = 'ds-app-layout';
+    const [expanded, setExpanded] = useState(defaultExpanded);
 
-  const handleExpandedChange = useCallback((next: boolean) => {
-    setExpanded(next);
-  }, []);
+    const handleExpandedChange = useCallback((next: boolean) => {
+      setExpanded(next);
+    }, []);
 
-  const classes = [
-    baseClass,
-    expanded ? `${baseClass}--expanded` : '',
-    className,
-  ]
-    .filter(Boolean)
-    .join(' ');
+    const classes = [
+      baseClass,
+      expanded ? `${baseClass}--expanded` : '',
+      className,
+    ]
+      .filter(Boolean)
+      .join(' ');
 
-  return (
-    <div className={classes} data-theme={theme === 'dark' ? 'dark' : undefined}>
-      <AppSidebar
-        sections={sections}
-        profile={profile}
-        activeKey={activeKey}
-        activeSubKey={activeSubKey}
-        activeTertiaryKey={activeTertiaryKey}
-        subNav={subNav}
-        expanded={expanded}
-        onExpandedChange={handleExpandedChange}
-        logoText={logoText}
-        logo={logo}
-      />
-      <main className={`${baseClass}__main`}>
-        <div className={`${baseClass}__content`}>
-          {children}
-        </div>
-      </main>
-    </div>
-  );
-};
+    return (
+      <div
+        {...rest}
+        ref={ref}
+        className={classes}
+        // Spread conditionally so `inherit` leaves a consumer's own
+        // data-theme in place rather than overwriting it with undefined.
+        {...(theme === 'dark' ? { 'data-theme': 'dark' } : {})}
+      >
+        <AppSidebar
+          sections={sections}
+          profile={profile}
+          activeKey={activeKey}
+          activeSubKey={activeSubKey}
+          activeTertiaryKey={activeTertiaryKey}
+          subNav={subNav}
+          expanded={expanded}
+          onExpandedChange={handleExpandedChange}
+          logoText={logoText}
+          logo={logo}
+        />
+        <main className={`${baseClass}__main`}>
+          <div className={`${baseClass}__content`}>
+            {children}
+          </div>
+        </main>
+      </div>
+    );
+  },
+);
+
+AppLayout.displayName = 'AppLayout';

@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useId, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useId, useRef, useState } from 'react';
 import {
   Treemap as RechartsTreemap,
   Tooltip,
@@ -21,6 +21,7 @@ interface TreemapTooltipPayloadEntry {
 interface TreemapTooltipProps {
   active?: boolean;
   payload?: TreemapTooltipPayloadEntry[];
+  sizeLabel: string;
 }
 
 export interface TreemapDataItem {
@@ -35,12 +36,16 @@ export interface TreemapDataItem {
   [key: string]: unknown;
 }
 
-export interface TreemapProps {
+/** Props owned by Treemap itself; everything else falls through to the root div. */
+type TreemapOwnProps = {
   /** Hierarchical data — each item needs `name` and `size` (or `children`) */
   data: TreemapDataItem[];
   /** Key used for sizing rectangles */
   dataKey?: string;
-  /** Chart title */
+  /**
+   * Chart title, in the shared chart header; it also names the figure.
+   * Note: this replaces the native `title` tooltip attribute, which the chart does not expose.
+   */
   title?: string;
   /** Description text below the title */
   subtitle?: string;
@@ -50,9 +55,15 @@ export interface TreemapProps {
   height?: number;
   /** Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface */
   bare?: boolean;
+  /** The tooltip's name for a tile's value. Defaults to "Size". */
+  sizeLabel?: string;
   /** Additional CSS classes on the wrapper */
   className?: string;
-}
+};
+
+export interface TreemapProps
+  extends TreemapOwnProps,
+    Omit<React.ComponentPropsWithoutRef<'div'>, keyof TreemapOwnProps | 'children'> {}
 
 function getCSSVar(name: string, fallback: string): string {
   // A var() reference resolves live in SVG paint, so the chart follows a
@@ -194,8 +205,10 @@ function TreemapContent(props: any) {
           dominantBaseline="central"
           style={{
             fill: textColor,
-            fontSize: 12,
-            fontWeight: 600,
+            // The tile label reads as a small title: the caption size at the
+            // title tier's weight, both from the type tokens.
+            fontSize: 'var(--font-caption-size)',
+            fontWeight: 'var(--font-title-body-weight)' as React.CSSProperties['fontWeight'],
             ...(label.halo && {
               stroke: haloColor,
               strokeWidth: 3,
@@ -211,7 +224,7 @@ function TreemapContent(props: any) {
   );
 }
 
-function TreemapTooltip({ active, payload }: TreemapTooltipProps) {
+function TreemapTooltip({ active, payload, sizeLabel }: TreemapTooltipProps) {
   if (!active || !payload?.length) return null;
   const entry = payload[0];
 
@@ -219,7 +232,7 @@ function TreemapTooltip({ active, payload }: TreemapTooltipProps) {
     <div className="ds-chart__tooltip">
       <div className="ds-chart__tooltip-label">{entry.name}</div>
       <div className="ds-chart__tooltip-row">
-        <span className="ds-chart__tooltip-name">Size</span>
+        <span className="ds-chart__tooltip-name">{sizeLabel}</span>
         <span className="ds-chart__tooltip-value">
           {entry.value?.toLocaleString()}
         </span>
@@ -232,7 +245,7 @@ function TreemapTooltip({ active, payload }: TreemapTooltipProps) {
  * Treemap chart built on Recharts with design-system tokens.
  * Displays hierarchical data as nested coloured rectangles sized by value.
  */
-export const Treemap = ({
+export const Treemap = React.forwardRef<HTMLDivElement, TreemapProps>(({
   data,
   dataKey = 'size',
   title,
@@ -240,8 +253,10 @@ export const Treemap = ({
   summaryItems,
   height = 350,
   bare = false,
+  sizeLabel = 'Size',
   className = '',
-}: TreemapProps) => {
+  ...rest
+}, ref) => {
   const titleId = useId();
   const subtitleId = useId();
   const animation = useChartAnimation(data);
@@ -253,16 +268,18 @@ export const Treemap = ({
 
   const renderTooltip = useCallback(
     /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-    (props: any) => <TreemapTooltip {...props} />,
-    [],
+    (props: any) => <TreemapTooltip {...props} sizeLabel={sizeLabel} />,
+    [sizeLabel],
   );
 
   return (
     <div
+      {...rest}
+      ref={ref}
       className={classes}
       role="figure"
-      aria-labelledby={title ? titleId : undefined}
-      aria-describedby={subtitle ? subtitleId : undefined}
+      aria-labelledby={title ? titleId : rest['aria-labelledby']}
+      aria-describedby={subtitle ? subtitleId : rest['aria-describedby']}
     >
       {(title || subtitle || summaryItems) && (
         <div className={`${baseClass}__header`}>
@@ -300,4 +317,6 @@ export const Treemap = ({
       </div>
     </div>
   );
-};
+});
+
+Treemap.displayName = 'Treemap';

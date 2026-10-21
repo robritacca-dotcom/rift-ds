@@ -1,4 +1,6 @@
-import { useCallback, useId } from 'react';
+'use client';
+
+import React, { useCallback, useId } from 'react';
 import {
   LineChart as RechartsLineChart,
   Line,
@@ -9,7 +11,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import type { ChartSummaryItem } from './BarChart';
-import { getChartSeriesColors } from './palette';
+import { getChartSeriesColors, readTokenPx } from './palette';
 import { useChartAnimation } from './useChartAnimation';
 import './Chart.css';
 
@@ -38,14 +40,18 @@ export interface LineSeriesConfig {
   strokeDasharray?: string;
 }
 
-export interface LineChartProps {
+/** Props owned by LineChart itself; everything else falls through to the root div. */
+type LineChartOwnProps = {
   /** Array of data objects */
   data: Record<string, unknown>[];
   /** Key in data for x-axis values */
   xKey?: string;
   /** One or more line series to render */
   series: LineSeriesConfig[];
-  /** Chart title */
+  /**
+   * Chart title, in the shared chart header; it also names the figure.
+   * Note: this replaces the native `title` tooltip attribute, which the chart does not expose.
+   */
   title?: string;
   /** Description text below the title */
   subtitle?: string;
@@ -57,7 +63,11 @@ export interface LineChartProps {
   bare?: boolean;
   /** Additional CSS classes on the wrapper */
   className?: string;
-}
+};
+
+export interface LineChartProps
+  extends LineChartOwnProps,
+    Omit<React.ComponentPropsWithoutRef<'div'>, keyof LineChartOwnProps | 'children'> {}
 
 function getCSSVar(name: string, fallback: string): string {
   // A var() reference resolves live in SVG paint, so the chart follows a
@@ -89,7 +99,7 @@ function LineChartTooltip({ active, payload, label }: LineChartTooltipProps) {
  * Line chart built on Recharts with design-system tokens.
  * Supports multiple series with individual colours.
  */
-export const LineChart = ({
+export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(({
   data,
   xKey = 'label',
   series,
@@ -99,7 +109,8 @@ export const LineChart = ({
   height = 350,
   bare = false,
   className = '',
-}: LineChartProps) => {
+  ...rest
+}, ref) => {
   const titleId = useId();
   const subtitleId = useId();
   const animation = useChartAnimation(data, series.length);
@@ -109,6 +120,14 @@ export const LineChart = ({
     .join(' ');
 
   const textSecondary = getCSSVar('--color-text-secondary', '#303030');
+
+  // Ticks and legend read the caption type token, so a theme's type scale
+
+  // reaches them. recharts sizes text through an SVG attribute, which cannot
+
+  // hold var(), so the resolved number is read at render.
+
+  const textSize = readTokenPx('--font-caption-size', '12px');
   const gridColor = getCSSVar('--color-divider', 'rgba(214, 214, 214, 0.8)');
   const seriesColors = getChartSeriesColors();
 
@@ -120,10 +139,12 @@ export const LineChart = ({
 
   return (
     <div
+      {...rest}
+      ref={ref}
       className={classes}
       role="figure"
-      aria-labelledby={title ? titleId : undefined}
-      aria-describedby={subtitle ? subtitleId : undefined}
+      aria-labelledby={title ? titleId : rest['aria-labelledby']}
+      aria-describedby={subtitle ? subtitleId : rest['aria-describedby']}
     >
       {(title || subtitle || summaryItems) && (
         <div className={`${baseClass}__header`}>
@@ -152,12 +173,12 @@ export const LineChart = ({
             <CartesianGrid vertical={false} stroke={gridColor} />
             <XAxis
               dataKey={xKey}
-              tick={{ fill: textSecondary, fontSize: 12 }}
+              tick={{ fill: textSecondary, fontSize: textSize }}
               tickLine={false}
               axisLine={{ stroke: gridColor }}
             />
             <YAxis
-              tick={{ fill: textSecondary, fontSize: 12 }}
+              tick={{ fill: textSecondary, fontSize: textSize }}
               tickLine={false}
               axisLine={false}
             />
@@ -181,4 +202,6 @@ export const LineChart = ({
       </div>
     </div>
   );
-};
+});
+
+LineChart.displayName = 'LineChart';

@@ -276,6 +276,14 @@ export interface AttachmentItem {
   name: string;
   /** What kind of file it is. */
   kind: FileKind;
+  /**
+   * Short label on the file's type mark, replacing the one derived from its
+   * kind and extension (`getFileTypeLabel`: "PDF", "DOC", the extension, or
+   * "FILE"), wherever the family draws the mark: the tile, a lone picture's
+   * badge, the viewer and a composer's queue. Set it to localise the mark or
+   * to name a format the derivation does not know.
+   */
+  typeLabel?: string;
   /** Size in bytes. */
   size?: number;
   /** Mime type, when the source reported one. */

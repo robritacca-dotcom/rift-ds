@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect } from 'storybook/test';
 import { ToggleGroup } from './ToggleGroup';
 
 const meta = {
@@ -74,6 +75,25 @@ export const Disabled: Story = {
     ],
     value: 'a',
     disabled: true,
+  },
+};
+
+/** No `value`: the group keeps its own selection, starting from `defaultValue`. */
+export const Uncontrolled: Story = {
+  args: {
+    items: [
+      { value: 'left', label: 'Left' },
+      { value: 'center', label: 'Center' },
+      { value: 'right', label: 'Right' },
+    ],
+    defaultValue: 'left',
+    'aria-label': 'Alignment',
+  },
+  play: async ({ canvas, userEvent }) => {
+    const right = canvas.getByRole('button', { name: 'Right' });
+    await userEvent.click(right);
+    await expect(right).toHaveAttribute('aria-pressed', 'true');
+    await expect(canvas.getByRole('button', { name: 'Left' })).toHaveAttribute('aria-pressed', 'false');
   },
 };
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect } from 'storybook/test';
 import { Stepper } from './Stepper';
 
 const checkoutSteps = [
@@ -84,8 +85,47 @@ const ClickableDemo = () => {
   );
 };
 
+/**
+ * Completed and active steps are buttons. A completed step says so in its
+ * name (the check mark is decorative), the active step carries
+ * `aria-current="step"`, and upcoming steps are plain, unannounced text.
+ */
 export const Clickable: Story = {
   render: () => <ClickableDemo />,
+  play: async ({ canvas, userEvent }) => {
+    const items = canvas.getAllByRole('listitem');
+    await expect(canvas.getByRole('button', { name: 'Account Completed' })).toBeInTheDocument();
+    await expect(canvas.getByRole('button', { name: 'Delivery Completed' })).toBeInTheDocument();
+    const payment = canvas.getByRole('button', { name: 'Payment' });
+    await expect(items[2]).toHaveAttribute('aria-current', 'step');
+    await expect(items[3]).not.toHaveTextContent('Completed');
+    await expect(canvas.queryByRole('button', { name: /Review/ })).toBeNull();
+
+    // Revisiting the first step turns the later ones back to upcoming.
+    await userEvent.click(canvas.getByRole('button', { name: 'Account Completed' }));
+    await expect(items[0]).toHaveAttribute('aria-current', 'step');
+    await expect(canvas.getByRole('button', { name: 'Account' })).toBeInTheDocument();
+    await expect(payment).not.toBeInTheDocument();
+    await expect(canvas.queryByText('Completed')).toBeNull();
+  },
+};
+
+/** `completeLabel` replaces the spoken status, for a localised flow. */
+export const LocalisedStatus: Story = {
+  args: {
+    activeStep: 2,
+    completeLabel: 'Terminé',
+    'aria-label': 'Progression',
+  },
+  render: (args) => (
+    <div style={{ width: '560px' }}>
+      <Stepper {...args} />
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    await expect(canvas.getAllByText('Terminé')).toHaveLength(2);
+    await expect(canvas.queryByText('Completed')).toBeNull();
+  },
 };
 
 export const FirstStep: Story = {

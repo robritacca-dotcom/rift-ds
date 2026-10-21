@@ -2,10 +2,10 @@
 
 import React, { useMemo, useState } from 'react';
 import { Table, type TableColumn, type TableRow } from '../Table/Table';
-import { Pagination } from '../Pagination/Pagination';
+import { Pagination, type PaginationProps } from '../Pagination/Pagination';
 import { Checkbox } from '../Checkbox/Checkbox';
 import { Input } from '../Input/Input';
-import { EmptyState } from '../EmptyState/EmptyState';
+import { EmptyState, type EmptyStateProps } from '../EmptyState/EmptyState';
 import './DataTable.css';
 import '../../fonts/material-symbols.css';
 
@@ -86,6 +86,33 @@ type DataTableOwnProps = {
   caption?: string;
   /** What to render when no rows match — defaults to a built-in empty state. */
   emptyState?: React.ReactNode;
+  /** Accessible name of the select-all checkbox in the header, shown with `selectable`. */
+  selectAllLabel?: string;
+  /** Accessible name of a row's checkbox, given the row. Defaults to "Select row" followed by the row id. */
+  selectRowLabel?: (row: DataTableRow) => string;
+  /**
+   * Accessible name of a sortable header, given the column's header text (its
+   * `key` when the header is not a string) and its current sort direction,
+   * `null` when unsorted. Defaults to "Sort by" with the header and the state.
+   */
+  sortLabel?: (header: string, direction: DataTableSort['direction'] | null) => string;
+  /** Footer count of the rows that match, given the count. Defaults to "1 result" or "N results". */
+  resultsLabel?: (count: number) => string;
+  /** Footer count shown instead of the results while rows are selected, given the count. Defaults to "N selected". */
+  selectedLabel?: (count: number) => string;
+  /**
+   * The built-in pager's words, merged over its English defaults: the arrows'
+   * names ("Previous page", "Next page"), the readout ("Page 2 of 4") and the
+   * landmark's name ("Pagination"). The pager is always the compact size, so
+   * its numbered-page names never render and are not offered here.
+   */
+  paginationLabels?: Pick<PaginationProps, 'previousLabel' | 'nextLabel' | 'readoutLabel' | 'aria-label'>;
+  /**
+   * The built-in empty state's words, merged over its English defaults
+   * ("No matching rows", "Adjust the search or filters and try again.").
+   * Ignored when `emptyState` replaces the whole node.
+   */
+  emptyStateLabels?: Partial<Pick<EmptyStateProps, 'title' | 'description'>>;
   /** Additional CSS classes */
   className?: string;
 };
@@ -125,6 +152,20 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
       striped = false,
       caption,
       emptyState,
+      selectAllLabel = 'Select all rows on this page',
+      selectRowLabel = (row: DataTableRow) => `Select row ${row.id}`,
+      sortLabel = (header: string, direction: DataTableSort['direction'] | null) =>
+        `Sort by ${header}, ${
+          direction === null
+            ? 'not sorted'
+            : direction === 'asc'
+              ? 'sorted ascending'
+              : 'sorted descending'
+        }`,
+      resultsLabel = (count: number) => `${count} result${count === 1 ? '' : 's'}`,
+      selectedLabel = (count: number) => `${count} selected`,
+      paginationLabels,
+      emptyStateLabels,
       className = '',
       ...rest
     },
@@ -209,10 +250,8 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
       return currentSort.direction === 'asc' ? 'arrow_upward' : 'arrow_downward';
     };
 
-    const sortStateText = (key: string): string => {
-      if (currentSort?.key !== key) return 'not sorted';
-      return currentSort.direction === 'asc' ? 'sorted ascending' : 'sorted descending';
-    };
+    const sortDirection = (key: string): DataTableSort['direction'] | null =>
+      currentSort?.key === key ? currentSort.direction : null;
 
     const tableColumns: TableColumn[] = [
       ...(selectable
@@ -225,7 +264,7 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
                   checked={allVisibleSelected}
                   indeterminate={someVisibleSelected}
                   onCheckedChange={toggleAllVisible}
-                  aria-label="Select all rows on this page"
+                  aria-label={selectAllLabel}
                 />
               ),
               width: '40px',
@@ -242,7 +281,7 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
               <button
                 type="button"
                 className={`${baseClass}__sort`}
-                aria-label={`Sort by ${typeof col.header === 'string' ? col.header : col.key}, ${sortStateText(col.key)}`}
+                aria-label={sortLabel(typeof col.header === 'string' ? col.header : col.key, sortDirection(col.key))}
                 onClick={() => cycleSort(col.key)}
               >
                 <span>{col.header}</span>
@@ -276,7 +315,7 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
                   size="compact"
                   checked={currentSelection.includes(row.id)}
                   onCheckedChange={(checked) => toggleRow(row.id, checked)}
-                  aria-label={`Select row ${row.id}`}
+                  aria-label={selectRowLabel(row)}
                 />
               ),
             }
@@ -326,8 +365,8 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
           emptyState ?? (
             <EmptyState
               icon="search_off"
-              title="No matching rows"
-              description="Adjust the search or filters and try again."
+              title={emptyStateLabels?.title ?? 'No matching rows'}
+              description={emptyStateLabels?.description ?? 'Adjust the search or filters and try again.'}
               variant="bordered"
               size="compact"
             />
@@ -338,11 +377,12 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
           <div className={`${baseClass}__footer`}>
             <span className={`${baseClass}__count`} aria-live="polite">
               {selectable && currentSelection.length > 0
-                ? `${currentSelection.length} selected`
-                : `${sortedRows.length} result${sortedRows.length === 1 ? '' : 's'}`}
+                ? selectedLabel(currentSelection.length)
+                : resultsLabel(sortedRows.length)}
             </span>
             {pageSize !== undefined && pageCount > 1 && (
               <Pagination
+                {...paginationLabels}
                 page={clampedPage}
                 pageCount={pageCount}
                 onPageChange={setPage}

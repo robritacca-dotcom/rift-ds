@@ -73,6 +73,8 @@ type PromptSuggestionsOwnProps = {
    * on screen after use, such as the follow-ups under an earlier answer.
    */
   value?: string;
+  /** Visually hidden text read after the taken suggestion once `value` is set. Defaults to "(chosen)". */
+  chosenLabel?: string;
   /** Accessible name for the list. */
   ariaLabel?: string;
   /** Additional CSS classes */
@@ -102,6 +104,7 @@ export const PromptSuggestions = React.forwardRef<HTMLDivElement, PromptSuggesti
       entrance = true,
       size = 'default',
       value,
+      chosenLabel = '(chosen)',
       ariaLabel = 'Suggested prompts',
       className = '',
       ...rest
@@ -245,7 +248,7 @@ export const PromptSuggestions = React.forwardRef<HTMLDivElement, PromptSuggesti
                       )}
                     </span>
                     {value === suggestion.id && (
-                      <span className={`${baseClass}__sr-only`}> (chosen)</span>
+                      <span className={`${baseClass}__sr-only`}> {chosenLabel}</span>
                     )}
                   </button>
                 ) : (
@@ -260,7 +263,7 @@ export const PromptSuggestions = React.forwardRef<HTMLDivElement, PromptSuggesti
                   />
                 )}
                 {!block && value === suggestion.id && (
-                  <span className={`${baseClass}__sr-only`}> (chosen)</span>
+                  <span className={`${baseClass}__sr-only`}> {chosenLabel}</span>
                 )}
               </div>
             ))}

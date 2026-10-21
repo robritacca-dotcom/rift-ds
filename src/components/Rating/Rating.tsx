@@ -29,6 +29,12 @@ type RatingOwnProps = {
   size?: 'default' | 'compact';
   /** Accessible name for the group, and the base of each step's label */
   label?: string;
+  /**
+   * The spoken value, given a step (or, in `readOnly` mode, the current
+   * rating) and `max`. Defaults to "3 out of 5". It follows `label` and a
+   * colon, as in "Rating: 3 out of 5".
+   */
+  valueLabel?: (value: number, max: number) => string;
   /** Additional CSS classes */
   className?: string;
 };
@@ -36,6 +42,8 @@ type RatingOwnProps = {
 export interface RatingProps
   extends RatingOwnProps,
     Omit<React.ComponentPropsWithoutRef<'div'>, keyof RatingOwnProps> {}
+
+const defaultValueLabel = (value: number, max: number) => `${value} out of ${max}`;
 
 /**
  * Star-scale rating control. Behaves as a radio group: each step is a
@@ -58,6 +66,7 @@ export const Rating = React.forwardRef<HTMLDivElement, RatingProps>(
       icon = 'star',
       size = 'default',
       label = 'Rating',
+      valueLabel = defaultValueLabel,
       className = '',
       ...rest
     },
@@ -124,7 +133,7 @@ export const Rating = React.forwardRef<HTMLDivElement, RatingProps>(
           ref={ref}
           className={classes}
           role="img"
-          aria-label={rest['aria-label'] ?? `${label}: ${currentValue} out of ${max}`}
+          aria-label={rest['aria-label'] ?? `${label}: ${valueLabel(currentValue, max)}`}
         >
           {steps.map((step) => (
             <span
@@ -160,7 +169,7 @@ export const Rating = React.forwardRef<HTMLDivElement, RatingProps>(
               type="button"
               role="radio"
               aria-checked={checked}
-              aria-label={label ? `${label}: ${step} out of ${max}` : `${step} out of ${max}`}
+              aria-label={label ? `${label}: ${valueLabel(step, max)}` : valueLabel(step, max)}
               tabIndex={tabStop ? 0 : -1}
               disabled={disabled}
               className={`${baseClass}__step ${step <= displayValue ? `${baseClass}__step--filled` : ''}`}

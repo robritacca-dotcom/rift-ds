@@ -28,6 +28,11 @@ type CardStackOwnProps = {
   advanceOnClick?: boolean;
   /** Accessible name for the stack, e.g. "Open roles". */
   label?: string;
+  /**
+   * Visually hidden status announcing the top card's place in the deck, given
+   * its 1-based position and the card count. Defaults to "Card 2 of 5".
+   */
+  positionLabel?: (position: number, count: number) => string;
   /** Additional CSS classes */
   className?: string;
 };
@@ -65,6 +70,7 @@ export const CardStack = React.forwardRef<HTMLDivElement, CardStackProps>(
       loop = true,
       advanceOnClick = true,
       label,
+      positionLabel = (position: number, total: number) => `Card ${position} of ${total}`,
       className = '',
       onClick,
       onKeyDown,
@@ -148,11 +154,11 @@ export const CardStack = React.forwardRef<HTMLDivElement, CardStackProps>(
 
     return (
       <div
+        aria-roledescription="card stack"
         {...rest}
         ref={ref}
         className={classes}
         role="group"
-        aria-roledescription="card stack"
         aria-label={label}
         tabIndex={count > 1 ? 0 : undefined}
         style={{ ...style, '--ds-card-stack-depth': visiblePeek } as React.CSSProperties}
@@ -198,7 +204,7 @@ export const CardStack = React.forwardRef<HTMLDivElement, CardStackProps>(
         })}
         {count > 1 && (
           <div className={`${baseClass}__sr-only`} role="status">
-            Card {index + 1} of {count}
+            {positionLabel(index + 1, count)}
           </div>
         )}
       </div>

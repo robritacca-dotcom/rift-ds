@@ -6,7 +6,11 @@ import './Slider.css';
 
 /** Props owned by Slider itself — everything else falls through to the <input type="range">. */
 type SliderOwnProps = {
-  /** Label text rendered above the slider */
+  /**
+   * Label text rendered above the slider, which names it. Without one the
+   * slider is named by the native `aria-label`, then the deprecated
+   * `ariaLabel`, and defaults to "Slider" so it is never nameless.
+   */
   label?: string;
   /** Helper or error message rendered below the slider */
   helperText?: string;
@@ -16,8 +20,13 @@ type SliderOwnProps = {
   required?: boolean;
   /** Shows the current value opposite the helper line */
   showValue?: boolean;
-  /** Current value */
+  /**
+   * Current value (controlled). Leave it undefined for an uncontrolled
+   * slider, which keeps its own state seeded from `defaultValue`.
+   */
   value?: number;
+  /** Initial value when uncontrolled (`value` undefined). Defaults to 50. */
+  defaultValue?: number;
   /** Minimum value */
   min?: number;
   /** Maximum value */
@@ -60,7 +69,8 @@ export const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
       error = false,
       required = false,
       showValue = false,
-      value = 50,
+      value,
+      defaultValue = 50,
       min = 0,
       max = 100,
       step = 1,
@@ -93,11 +103,20 @@ export const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
 
     const generatedId = useId();
     const inputId = id || generatedId;
-    const describedBy = helperText ? `${inputId}-helper` : rest['aria-describedby'];
+    /* A consumer's aria-describedby joins the helper id rather than losing to it. */
+    const describedBy =
+      [rest['aria-describedby'], helperText ? `${inputId}-helper` : undefined]
+        .filter(Boolean)
+        .join(' ') || undefined;
 
-    const percentage = ((value - min) / (max - min)) * 100;
+    const isControlled = value !== undefined;
+    const [internalValue, setInternalValue] = React.useState(defaultValue);
+    const currentValue = isControlled ? value : internalValue;
+
+    const percentage = ((currentValue - min) / (max - min)) * 100;
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (!isControlled) setInternalValue(Number(e.target.value));
       onChange?.(e);
       onValueChange?.(Number(e.target.value));
     };
@@ -112,7 +131,7 @@ export const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
         disabled={disabled}
         size={size}
         id={inputId}
-        aside={showValue ? <span className={`${baseClass}__value`}>{value}</span> : undefined}
+        aside={showValue ? <span className={`${baseClass}__value`}>{currentValue}</span> : undefined}
       >
         <input
           {...rest}
@@ -120,7 +139,7 @@ export const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
           type="range"
           className={`${baseClass}__input`}
           id={inputId}
-          value={value}
+          value={currentValue}
           min={min}
           max={max}
           step={step}
@@ -131,7 +150,7 @@ export const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
              wins over the deprecated prop (whose old 'Slider' default made
              the native attribute unreachable), with 'Slider' as the final
              fallback so an unlabelled slider is never nameless. */
-          aria-label={label ? undefined : rest['aria-label'] || ariaLabel || 'Slider'}
+          aria-label={label ? undefined : rest['aria-label'] ?? ariaLabel ?? 'Slider'}
           aria-describedby={describedBy}
           aria-invalid={error || undefined}
           style={{

@@ -51,7 +51,7 @@
 .ds-typography-swatch__values {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 10px; /* ds-allow(spacing): the docs swatch's value row, between the 8px and 12px steps, as designed */
   width: 100%;
 }
 

@@ -253,6 +253,7 @@
    REDUCED MOTION
    ============================================ */
 
+/* ds-allow(motion): drops the slide and the scrim fade outright rather than playing them at 0.01ms. */
 @media (prefers-reduced-motion: reduce) {
   .ds-drawer,
   .ds-drawer__panel,

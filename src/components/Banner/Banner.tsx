@@ -18,6 +18,8 @@ type BannerOwnProps = {
   dismissible?: boolean;
   /** Callback when the dismiss button is clicked */
   onDismiss?: () => void;
+  /** Accessible name of the dismiss button. */
+  dismissLabel?: string;
   /** Horizontal alignment of the banner content */
   align?: 'start' | 'center';
   /** Additional CSS classes */
@@ -56,6 +58,7 @@ export const Banner = React.forwardRef<HTMLDivElement, BannerProps>(
       action,
       dismissible = false,
       onDismiss,
+      dismissLabel = 'Dismiss banner',
       align = 'start',
       className = '',
       ...rest
@@ -100,7 +103,7 @@ export const Banner = React.forwardRef<HTMLDivElement, BannerProps>(
             type="button"
             className={`${baseClass}__dismiss`}
             onClick={onDismiss}
-            aria-label="Dismiss banner"
+            aria-label={dismissLabel}
           >
             <span className="material-symbols-rounded" aria-hidden="true">
               close

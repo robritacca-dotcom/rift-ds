@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, fn } from 'storybook/test';
 import { NavList } from './NavList';
 
 const flatItems = [
@@ -135,5 +136,66 @@ export const StaticGroup: Story = {
       },
     ],
     'aria-label': 'Documentation',
+  },
+};
+
+/**
+ * The expansion contract from the keyboard: the chevron toggle is its own
+ * tab stop beside the link, Enter and Space flip it, `aria-expanded` and the
+ * toggle's name follow the state, single-open collapses the other section,
+ * and a collapsed sublist is inert, so its links cannot take focus.
+ */
+export const KeyboardExpansion: Story = {
+  args: {
+    items: nestedItems,
+    defaultExpandedIds: ['guides'],
+    onExpandedChange: fn(),
+    'aria-label': 'Documentation',
+  },
+  play: async ({ canvas, userEvent, args }) => {
+    const collapseGuides = canvas.getByRole('button', { name: 'Collapse Guides' });
+    const expandReference = canvas.getByRole('button', { name: 'Expand Reference' });
+    await expect(collapseGuides).toHaveAttribute('aria-expanded', 'true');
+    await expect(expandReference).toHaveAttribute('aria-expanded', 'false');
+
+    // Collapsed: Tokens sits in an inert panel and refuses focus.
+    const tokens = canvas.getByRole('link', { name: 'Tokens' });
+    tokens.focus();
+    await expect(tokens).not.toHaveFocus();
+
+    // Tab order: Overview, Guides, its toggle, then the open section's links.
+    await userEvent.tab();
+    await expect(canvas.getByRole('link', { name: 'Overview' })).toHaveFocus();
+    await userEvent.tab();
+    await expect(canvas.getByRole('link', { name: 'Guides' })).toHaveFocus();
+    await userEvent.tab();
+    await expect(collapseGuides).toHaveFocus();
+    await userEvent.tab();
+    await expect(canvas.getByRole('link', { name: 'Theming' })).toHaveFocus();
+
+    // Enter on Reference's toggle opens it and, single-open, closes Guides.
+    expandReference.focus();
+    await userEvent.keyboard('{Enter}');
+    await expect(args.onExpandedChange).toHaveBeenLastCalledWith(['reference']);
+    await expect(expandReference).toHaveAttribute('aria-expanded', 'true');
+    await expect(expandReference).toHaveAccessibleName('Collapse Reference');
+    await expect(expandReference).toHaveFocus();
+    await expect(canvas.getByRole('button', { name: 'Expand Guides' })).toHaveAttribute(
+      'aria-expanded',
+      'false',
+    );
+    const theming = canvas.getByRole('link', { name: 'Theming' });
+    theming.focus();
+    await expect(theming).not.toHaveFocus();
+    tokens.focus();
+    await expect(tokens).toHaveFocus();
+
+    // Space on the same toggle collapses it again.
+    expandReference.focus();
+    await userEvent.keyboard(' ');
+    await expect(args.onExpandedChange).toHaveBeenLastCalledWith([]);
+    await expect(expandReference).toHaveAttribute('aria-expanded', 'false');
+    tokens.focus();
+    await expect(tokens).not.toHaveFocus();
   },
 };

@@ -20,6 +20,10 @@ type ImageCompareOwnProps = {
   afterLabel?: string;
   /** Whether the corner labels render */
   showLabels?: boolean;
+  /** Accessible name of the divider handle. Defaults to the two corner labels joined as "Before and After comparison". */
+  handleLabel?: string;
+  /** Spoken value of the divider handle, given its whole-percent position. Defaults to the percentage followed by the before label in lower case. */
+  handleValueText?: (position: number) => string;
   /** Divider position as a percentage from the left (controlled) */
   position?: number;
   /** Initial divider position for uncontrolled use */
@@ -56,6 +60,8 @@ export const ImageCompare = React.forwardRef<HTMLDivElement, ImageCompareProps>(
       beforeLabel = 'Before',
       afterLabel = 'After',
       showLabels = true,
+      handleLabel,
+      handleValueText,
       position,
       defaultPosition = 50,
       onPositionChange,
@@ -178,11 +184,15 @@ export const ImageCompare = React.forwardRef<HTMLDivElement, ImageCompareProps>(
           className={`${baseClass}__handle`}
           role="slider"
           tabIndex={0}
-          aria-label={`${beforeLabel} and ${afterLabel} comparison`}
+          aria-label={handleLabel ?? `${beforeLabel} and ${afterLabel} comparison`}
           aria-valuemin={0}
           aria-valuemax={100}
           aria-valuenow={Math.round(currentPosition)}
-          aria-valuetext={`${Math.round(currentPosition)}% ${beforeLabel.toLowerCase()}`}
+          aria-valuetext={
+            handleValueText
+              ? handleValueText(Math.round(currentPosition))
+              : `${Math.round(currentPosition)}% ${beforeLabel.toLowerCase()}`
+          }
           aria-orientation="horizontal"
           onKeyDown={handleKeyDown}
         >

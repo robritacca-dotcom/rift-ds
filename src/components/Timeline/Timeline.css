@@ -116,7 +116,7 @@
 
 /* Align dot markers with the title's line box */
 .ds-timeline--vertical .ds-timeline__marker {
-  margin-top: 6px;
+  margin-top: 6px; /* ds-allow(spacing): centres the dot on the title's first line box */
 }
 
 .ds-timeline--vertical .ds-timeline__marker--badge,
@@ -315,7 +315,7 @@
 
 .ds-timeline__role-bullets {
   margin: 0;
-  padding-left: 20px;
+  padding-left: var(--padding-500);
   list-style: disc;
   display: flex;
   flex-direction: column;

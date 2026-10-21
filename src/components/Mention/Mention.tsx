@@ -112,7 +112,10 @@ type MentionMenuOwnProps = {
   activeId?: string;
   /** Fires with an item's `id` when the pointer moves onto it. */
   onActiveChange?: (id: string) => void;
-  /** Fires with the item a person chose. */
+  /**
+   * Fires with the item a person chose.
+   * Note: this replaces the native `onSelect` text-selection event, which MentionMenu does not expose.
+   */
   onSelect?: (item: MentionItem) => void;
   /** The text typed so far. The part of each label that matches it is drawn stronger. */
   query?: string;

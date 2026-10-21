@@ -6,6 +6,9 @@ import { Drawer } from '../Drawer/Drawer';
 import { acquireScrollLock, releaseScrollLock } from '../../behaviors/useScrollLock';
 import { Button } from '../Button/Button';
 import { Input } from '../Input/Input';
+import { Popover } from '../Popover/Popover';
+import { Dropdown } from '../Dropdown/Dropdown';
+import { Tooltip } from '../Tooltip/Tooltip';
 
 const meta = {
   title: 'Components/Dialog',
@@ -291,4 +294,137 @@ export const LongContent: Story = {
       ))}
     </DialogDemo>
   ),
+};
+
+/*
+ * One press, one layer, for the non-modal overlays. Before 2026-10-21 a
+ * popover, menu or tooltip open inside a modal owned its own document
+ * listener, so one Escape closed it and the modal together, and a press on
+ * the backdrop closed both. They now ride the shared layer stack
+ * (src/behaviors/useLayer); these stories hold that.
+ */
+export const PopoverInDialog: Story = {
+  render: (args) => {
+    const Demo = () => {
+      const [open, setOpen] = useState(false);
+      return (
+        <>
+          <Button label="Open dialog" variant="secondary" onClick={() => setOpen(true)} />
+          <Dialog {...args} open={open} onOpenChange={setOpen} title="Share settings">
+            <p style={{ margin: 0 }}>Body text outside the popover.</p>
+            <Popover ariaLabel="Link details" content={<span>Anyone with the link can view.</span>}>
+              <Button label="Details" variant="tertiary" />
+            </Popover>
+          </Dialog>
+        </>
+      );
+    };
+    return <Demo />;
+  },
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.click(await canvas.findByRole('button', { name: 'Open dialog' }));
+    const dialog = await screen.findByRole('dialog', { name: 'Share settings' });
+    const openPopover = async () => {
+      await userEvent.click(screen.getByRole('button', { name: 'Link details' }));
+      await screen.findByRole('dialog', { name: 'Link details' });
+    };
+    const popoverClosed = () =>
+      waitFor(() => expect(screen.queryByRole('dialog', { name: 'Link details' })).toBeNull());
+
+    // Escape closes the popover and only the popover.
+    await openPopover();
+    await userEvent.keyboard('{Escape}');
+    await popoverClosed();
+    await expect(dialog).toBeVisible();
+
+    // A press on the dialog's own body light-dismisses the popover above it.
+    await openPopover();
+    await userEvent.click(screen.getByText('Body text outside the popover.'));
+    await popoverClosed();
+    await expect(dialog).toBeVisible();
+
+    // A press on the backdrop was the popover's press: the dialog stays.
+    await openPopover();
+    await userEvent.click(document.querySelector<HTMLElement>('.ds-dialog__backdrop')!);
+    await popoverClosed();
+    await expect(screen.getByRole('dialog', { name: 'Share settings' })).toBeVisible();
+
+    // With nothing above it, the dialog takes the next Escape.
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(screen.queryByRole('dialog', { name: 'Share settings' })).toBeNull());
+  },
+};
+
+export const DropdownInDrawer: Story = {
+  render: () => {
+    const Demo = () => {
+      const [open, setOpen] = useState(false);
+      return (
+        <>
+          <Button label="Open drawer" variant="secondary" onClick={() => setOpen(true)} />
+          <Drawer open={open} onOpenChange={setOpen} title="Filters">
+            <Dropdown
+              label="Status"
+              placeholder="Any status"
+              options={[
+                { label: 'Open', value: 'open' },
+                { label: 'Closed', value: 'closed' },
+              ]}
+            />
+          </Drawer>
+        </>
+      );
+    };
+    return <Demo />;
+  },
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.click(await canvas.findByRole('button', { name: 'Open drawer' }));
+    const drawer = await screen.findByRole('dialog', { name: 'Filters' });
+    const combobox = screen.getByRole('combobox', { name: 'Status' });
+
+    await userEvent.click(combobox);
+    await expect(combobox).toHaveAttribute('aria-expanded', 'true');
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(combobox).toHaveAttribute('aria-expanded', 'false'));
+    await expect(drawer).toBeVisible();
+
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(screen.queryByRole('dialog', { name: 'Filters' })).toBeNull());
+  },
+};
+
+export const TooltipInDialog: Story = {
+  render: (args) => {
+    const Demo = () => {
+      const [open, setOpen] = useState(false);
+      return (
+        <>
+          <Button label="Open dialog" variant="secondary" onClick={() => setOpen(true)} />
+          <Dialog {...args} open={open} onOpenChange={setOpen} title="Rename file">
+            <Input label="Name" />
+            <Tooltip content="Keeps the original extension">
+              <Button label="Keep extension" variant="tertiary" />
+            </Tooltip>
+          </Dialog>
+        </>
+      );
+    };
+    return <Demo />;
+  },
+  // A visible tooltip is a layer (WCAG 1.4.13: dismissible without moving
+  // focus), so the first Escape clears it and the second closes the dialog.
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.click(await canvas.findByRole('button', { name: 'Open dialog' }));
+    const dialog = await screen.findByRole('dialog', { name: 'Rename file' });
+    await userEvent.hover(screen.getByRole('button', { name: 'Keep extension' }));
+    const tooltip = screen.getByRole('tooltip', { hidden: true });
+    await waitFor(() => expect(tooltip).toBeVisible());
+
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(tooltip).not.toBeVisible());
+    await expect(dialog).toBeVisible();
+
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(screen.queryByRole('dialog', { name: 'Rename file' })).toBeNull());
+  },
 };

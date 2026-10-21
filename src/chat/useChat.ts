@@ -34,7 +34,7 @@ const makeId = () => `turn-${++nextId}`;
    MOTION_STREAM_FLOOR_CPS, both from tokens/motion.
    ============================================ */
 
-/** The copy the hook shows when a transport ends a turn with nothing to show. */
+/** The copy the hook writes itself: the status line of a reply that has not started, and the reply it shows when a transport ends a turn with nothing to show. */
 export interface ChatPlaceholderCopy {
   /** A completion that produced no text. */
   empty: string;
@@ -42,12 +42,19 @@ export interface ChatPlaceholderCopy {
   stopped: string;
   /** The transport failed before any text arrived. */
   failed: string;
+  /**
+   * The status line of a reply in flight before the transport reports one of
+   * its own. Defaults to "Thinking". Optional so a full object written
+   * against the earlier shape still type-checks.
+   */
+  thinking?: string;
 }
 
-export const DEFAULT_PLACEHOLDER_COPY: ChatPlaceholderCopy = {
+export const DEFAULT_PLACEHOLDER_COPY: Required<ChatPlaceholderCopy> = {
   empty: 'The reply came back empty. Try sending that again.',
   stopped: 'Stopped before a reply arrived.',
   failed: 'Something went wrong while replying. Try sending that again.',
+  thinking: 'Thinking',
 };
 
 /** What `useChat` returns: the conversation and the actions that move it. */
@@ -236,7 +243,7 @@ export function useChat(
       let current: LiveResponse = {
         id: makeId(),
         phase: 'thinking',
-        statusLabel: 'Thinking',
+        statusLabel: placeholders.thinking ?? DEFAULT_PLACEHOLDER_COPY.thinking,
         tracePoints: [],
         text: '',
       };

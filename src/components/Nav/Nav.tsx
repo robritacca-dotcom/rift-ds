@@ -26,34 +26,31 @@ export interface NavProps
  *
  * The landmark is labelled "Main" by default so assistive tech can tell it
  * apart from any other navigation on the page; pass `aria-label` to name it
- * differently. Unrecognised props are spread onto the `<nav>`.
+ * differently. The forwarded ref and any unrecognised props target the `<nav>`.
  */
-export const Nav = ({
-  brandText,
-  brandIcon,
-  buttons,
-  trailing,
-  className = '',
-  ...rest
-}: NavProps) => {
-  const baseClass = 'ds-nav';
+export const Nav = React.forwardRef<HTMLElement, NavProps>(
+  ({ brandText, brandIcon, buttons, trailing, className = '', ...rest }, ref) => {
+    const baseClass = 'ds-nav';
 
-  return (
-    <nav aria-label="Main" {...rest} className={`${baseClass} ${className}`}>
-      {(brandText || brandIcon) && (
-        <div className={`${baseClass}__brand`}>
-          {brandIcon && (
-            <span className={`${baseClass}__brand-icon`}>{brandIcon}</span>
-          )}
-          {brandText && (
-            <span className={`${baseClass}__brand-text`}>{brandText}</span>
-          )}
+    return (
+      <nav aria-label="Main" {...rest} ref={ref} className={`${baseClass} ${className}`}>
+        {(brandText || brandIcon) && (
+          <div className={`${baseClass}__brand`}>
+            {brandIcon && (
+              <span className={`${baseClass}__brand-icon`}>{brandIcon}</span>
+            )}
+            {brandText && (
+              <span className={`${baseClass}__brand-text`}>{brandText}</span>
+            )}
+          </div>
+        )}
+        <div className={`${baseClass}__right`}>
+          <ButtonGroup orientation="horizontal" buttons={buttons} />
+          {trailing}
         </div>
-      )}
-      <div className={`${baseClass}__right`}>
-        <ButtonGroup orientation="horizontal" buttons={buttons} />
-        {trailing}
-      </div>
-    </nav>
-  );
-};
+      </nav>
+    );
+  },
+);
+
+Nav.displayName = 'Nav';

@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useCallback } from 'react';
 import {
   FunnelChart as RechartsFunnelChart,
@@ -28,7 +30,10 @@ export interface FunnelStage {
 type FunnelChartOwnProps = {
   /** Ordered stages, first stage widest. Each later stage's width is its share of the first. */
   data: FunnelStage[];
-  /** Chart title, in the shared chart header. */
+  /**
+   * Chart title, in the shared chart header.
+   * Note: this shadows the native `title` tooltip attribute, which FunnelChart does not expose.
+   */
   title?: string;
   /** Description text below the title. */
   subtitle?: string;
@@ -38,6 +43,15 @@ type FunnelChartOwnProps = {
   height?: number;
   /** Shows each stage's name beside its band. Turn off when a legend under the chart already carries the names. */
   showLabels?: boolean;
+  /**
+   * The chart's accessible name, summarising every stage, given `data` when it
+   * holds at least one stage. Defaults to "Funnel: " then each stage's label and
+   * reading (its `displayValue`, else the value in the reader's locale),
+   * comma-separated, e.g. "Funnel: Visits 12,400, Sign-ups 3,100".
+   */
+  summaryLabel?: (data: FunnelStage[]) => string;
+  /** The chart's accessible name when `data` is empty. Defaults to "Funnel, no data". */
+  emptyLabel?: string;
   /**
    * Floor percentage from the stepped-bar rendering this chart used to have.
    * @deprecated The funnel now draws true trapezoids sized by value, so a
@@ -51,6 +65,11 @@ type FunnelChartOwnProps = {
 export interface FunnelChartProps
   extends FunnelChartOwnProps,
     Omit<React.ComponentPropsWithoutRef<'div'>, keyof FunnelChartOwnProps | 'children'> {}
+
+const defaultSummaryLabel = (data: FunnelStage[]) =>
+  `Funnel: ${data
+    .map((stage) => `${stage.label} ${stage.displayValue ?? stage.value.toLocaleString()}`)
+    .join(', ')}`;
 
 interface FunnelTooltipPayloadEntry {
   value?: number;
@@ -114,6 +133,8 @@ export const FunnelChart = React.forwardRef<HTMLDivElement, FunnelChartProps>(
       bare = false,
       height = 190,
       showLabels = true,
+      summaryLabel = defaultSummaryLabel,
+      emptyLabel = 'Funnel, no data',
       minStageShare,
       className = '',
       ...rest
@@ -140,12 +161,7 @@ export const FunnelChart = React.forwardRef<HTMLDivElement, FunnelChartProps>(
       fill: seriesColors[i % seriesColors.length],
     }));
 
-    const ariaLabel =
-      stages.length > 0
-        ? `Funnel: ${stages
-            .map((s) => `${s.name} ${s.displayValue ?? s.value.toLocaleString()}`)
-            .join(', ')}`
-        : 'Funnel, no data';
+    const ariaLabel = data.length > 0 ? summaryLabel(data) : emptyLabel;
 
     const renderTooltip = useCallback(
       /* eslint-disable-next-line @typescript-eslint/no-explicit-any */

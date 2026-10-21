@@ -8,7 +8,7 @@ import React, {
   useState,
   useSyncExternalStore,
 } from 'react';
-import { MOTION_ORBIT_REFERENCE_MS } from '../../tokens/motion';
+import { MOTION_ORBIT_REFERENCE_MS, MOTION_TOKEN_REREAD_MS } from '../../tokens/motion';
 import './Globe.css';
 
 /** A place on the globe. */
@@ -84,9 +84,13 @@ type GlobeOwnProps = {
   showLabels?: boolean;
   /** The point to single out: its marker enlarges and its callout renders. */
   activePointId?: string;
-  /** Fires as the pointer enters a marker, and with `null` as it leaves. */
+  /** Fires as the pointer enters a marker (or it takes focus), and with `null` as it leaves. */
   onPointHover?: (point: GlobePoint | null) => void;
-  /** Fires when a marker is clicked. */
+  /**
+   * Fires when a marker is clicked, or activated with Enter or Space while
+   * focused. Setting it makes the markers real buttons on a non-interactive
+   * globe too.
+   */
   onPointClick?: (point: GlobePoint) => void;
   /**
    * Renders the annotation for the active (or hovered) point. It is placed
@@ -100,6 +104,19 @@ type GlobeOwnProps = {
    * network". The point and arc counts are appended for screen readers.
    */
   label?: string;
+  /** The point count appended to the globe's accessible name, given the count. Defaults to "<count> point" or "<count> points". */
+  pointsLabel?: (count: number) => string;
+  /** The arc count appended to the globe's accessible name, given the count. Defaults to "<count> arc" or "<count> arcs". */
+  arcsLabel?: (count: number) => string;
+  /** The pointer and keyboard instructions appended to the accessible name while `interactive`. */
+  rotateHintLabel?: string;
+  /**
+   * What assistive technology calls the globe in place of its role, applied
+   * whichever role it takes: `application` while `interactive`, `group` when
+   * only `onPointClick` makes the markers buttons, and `img` otherwise.
+   * Defaults to "globe".
+   */
+  roleDescription?: string;
   /** Additional CSS classes */
   className?: string;
 };
@@ -120,6 +137,16 @@ const GRATICULE_SAMPLES = 60;
 const ARC_SAMPLES = 48;
 /** Drag sensitivity: rotating across the full radius turns the globe a quarter turn. */
 const DRAG_DEGREES_PER_RADIUS = 90;
+/** Pointer travel, in pixels, before a press on the globe becomes a drag. Below it the press stays a click, so a marker under it still receives one. */
+const DRAG_THRESHOLD = 3;
+/** Marker hit radius in viewBox units, larger than the glyph. */
+const HIT_RADIUS = 12;
+/**
+ * A percentage at the precision the browser keeps when it parses a style
+ * attribute: the server and client then write the same string, so hydration
+ * agrees (full float precision mismatched on every marker).
+ */
+const pct = (n: number) => `${Number(n.toFixed(4))}%`;
 /** Keyboard step per press, in degrees. */
 const KEY_STEP = 10;
 /** Latitude clamp so the poles never flip over the top. */
@@ -127,7 +154,7 @@ const MAX_LAT = 80;
 /** Marker half-size in viewBox units. */
 const MARKER = 5;
 /** How often the spin re-reads the orbit token, so a live retheme lands. */
-const ORBIT_READ_INTERVAL_MS = 250;
+const ORBIT_READ_INTERVAL_MS = MOTION_TOKEN_REREAD_MS;
 
 /** Spin multiplier from the orbit token on `node`: 1 at the shipped tempo. */
 const readOrbitTempo = (node: HTMLElement | null): number => {
@@ -283,6 +310,10 @@ export const Globe = React.forwardRef<HTMLDivElement, GlobeProps>(
       onPointClick,
       renderCallout,
       label = 'Globe',
+      pointsLabel = (count: number) => `${count} ${count === 1 ? 'point' : 'points'}`,
+      arcsLabel = (count: number) => `${count} ${count === 1 ? 'arc' : 'arcs'}`,
+      rotateHintLabel = 'Drag to rotate, or use the arrow keys when focused.',
+      roleDescription = 'globe',
       className = '',
       onPointerDown,
       onPointerMove,
@@ -354,7 +385,15 @@ export const Globe = React.forwardRef<HTMLDivElement, GlobeProps>(
     }, [spinning, autoRotate, commit]);
 
     // ── Drag ───────────────────────────────────────────────────────────────
-    const drag = useRef<{ x: number; y: number; rotation: GlobeRotation } | null>(null);
+    const drag = useRef<{
+      x: number;
+      y: number;
+      rotation: GlobeRotation;
+      pointerId: number;
+      moved: boolean;
+    } | null>(null);
+    /** Whether the last press turned into a drag, so the click it ends with is not a marker click. */
+    const dragMoved = useRef(false);
     const [dragging, setDragging] = useState(false);
 
     const setRef = (node: HTMLDivElement | null) => {
@@ -366,15 +405,31 @@ export const Globe = React.forwardRef<HTMLDivElement, GlobeProps>(
     const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
       onPointerDown?.(e);
       if (!interactive || e.button !== 0) return;
-      drag.current = { x: e.clientX, y: e.clientY, rotation: rotationRef.current };
+      drag.current = {
+        x: e.clientX,
+        y: e.clientY,
+        rotation: rotationRef.current,
+        pointerId: e.pointerId,
+        moved: false,
+      };
+      dragMoved.current = false;
       setDragging(true);
       setPaused(true);
-      e.currentTarget.setPointerCapture(e.pointerId);
     };
 
     const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
       onPointerMove?.(e);
       if (!drag.current || !rootRef.current) return;
+      /* The pointer is captured only once the press travels, never on the
+         press itself: a captured pointerup retargets the click to the root,
+         and a marker under a plain click would never receive it. */
+      if (!drag.current.moved) {
+        const travel = Math.abs(e.clientX - drag.current.x) + Math.abs(e.clientY - drag.current.y);
+        if (travel < DRAG_THRESHOLD) return;
+        drag.current.moved = true;
+        dragMoved.current = true;
+        e.currentTarget.setPointerCapture(drag.current.pointerId);
+      }
       const radiusPx = (rootRef.current.clientWidth * (RADIUS / VIEW)) || 1;
       const perPx = DRAG_DEGREES_PER_RADIUS / radiusPx;
       const [lng, lat] = drag.current.rotation;
@@ -408,7 +463,7 @@ export const Globe = React.forwardRef<HTMLDivElement, GlobeProps>(
     };
     const handlePointerLeave = (e: React.PointerEvent<HTMLDivElement>) => {
       onPointerLeave?.(e);
-      if (document.activeElement !== e.currentTarget) setPaused(false);
+      if (!e.currentTarget.contains(document.activeElement)) setPaused(false);
     };
 
     // ── Keyboard ───────────────────────────────────────────────────────────
@@ -493,19 +548,34 @@ export const Globe = React.forwardRef<HTMLDivElement, GlobeProps>(
       .filter(Boolean)
       .join(' ');
 
-    const description = `${points.length} ${points.length === 1 ? 'point' : 'points'}, ${
-      arcs.length
-    } ${arcs.length === 1 ? 'arc' : 'arcs'}.${
-      interactive ? ' Drag to rotate, or use the arrow keys when focused.' : ''
+    const description = `${pointsLabel(points.length)}, ${arcsLabel(arcs.length)}.${
+      interactive ? ` ${rotateHintLabel}` : ''
     }`;
+
+    /* Markers are real buttons whenever there is something to do with them:
+       on an interactive globe (focus shows the callout a hover would), or
+       wherever a click handler is set. Otherwise they stay glyphs inside the
+       drawing and the globe is one image. */
+    const markerButtons = interactive || Boolean(onPointClick);
+
+    const enterPoint = (point: GlobePoint) => {
+      setHoveredId(point.id);
+      onPointHover?.(point);
+    };
+    const leavePoint = (point: GlobePoint) => {
+      setHoveredId((id) => (id === point.id ? null : id));
+      onPointHover?.(null);
+    };
+
+    const hitSize = pct(((HIT_RADIUS * 2) / VIEW) * 100);
 
     return (
       <div
         {...rest}
         ref={setRef}
         className={classes}
-        role={interactive ? 'application' : 'img'}
-        aria-roledescription="globe"
+        role={interactive ? 'application' : markerButtons ? 'group' : 'img'}
+        aria-roledescription={roleDescription}
         aria-label={`${label}. ${description}`}
         tabIndex={interactive ? 0 : undefined}
         onPointerDown={handlePointerDown}
@@ -583,18 +653,13 @@ export const Globe = React.forwardRef<HTMLDivElement, GlobeProps>(
                   className={markerClasses}
                   style={point.color ? { color: point.color } : undefined}
                   transform={`translate(${x} ${y})`}
-                  onPointerEnter={() => {
-                    setHoveredId(point.id);
-                    onPointHover?.(point);
-                  }}
-                  onPointerLeave={() => {
-                    setHoveredId((id) => (id === point.id ? null : id));
-                    onPointHover?.(null);
-                  }}
-                  onClick={onPointClick ? () => onPointClick(point) : undefined}
+                  // With marker buttons over the drawing, the button is the
+                  // pointer target and the glyph only shows its state.
+                  onPointerEnter={markerButtons ? undefined : () => enterPoint(point)}
+                  onPointerLeave={markerButtons ? undefined : () => leavePoint(point)}
                 >
                   {/* Hit area, larger than the glyph. */}
-                  <circle className={`${baseClass}__hit`} r={MARKER * 2.4} />
+                  {!markerButtons && <circle className={`${baseClass}__hit`} r={HIT_RADIUS} />}
                   {point.kind === 'anchor' ? (
                     <rect
                       className={`${baseClass}__glyph`}
@@ -609,7 +674,9 @@ export const Globe = React.forwardRef<HTMLDivElement, GlobeProps>(
                       d={`M${-MARKER} 0H${MARKER}M0 ${-MARKER}V${MARKER}`}
                     />
                   )}
-                  {showLabels && point.label && (
+                  {/* The open callout's title repeats the label and opens over
+                      the same spot, so the label steps aside while it shows. */}
+                  {showLabels && point.label && !(active && renderCallout) && (
                     <text className={`${baseClass}__label`} x={MARKER * 1.8} y={-MARKER * 1.2}>
                       {point.label}
                     </text>
@@ -619,6 +686,36 @@ export const Globe = React.forwardRef<HTMLDivElement, GlobeProps>(
             })}
           </g>
         </svg>
+
+        {markerButtons &&
+          projectedPoints.map(({ point, at }) => (
+            <button
+              key={point.id}
+              type="button"
+              className={`${baseClass}__marker`}
+              style={{
+                left: pct((at.x / VIEW) * 100),
+                top: pct((at.y / VIEW) * 100),
+                width: hitSize,
+                height: hitSize,
+              }}
+              aria-label={point.label ?? point.id}
+              onPointerEnter={() => enterPoint(point)}
+              onPointerLeave={() => leavePoint(point)}
+              onFocus={() => enterPoint(point)}
+              onBlur={() => leavePoint(point)}
+              onClick={
+                onPointClick
+                  ? (e) => {
+                      // A drag that started on a marker is not a click. A
+                      // keyboard activation (detail 0) never follows a drag.
+                      if (e.detail > 0 && dragMoved.current) return;
+                      onPointClick(point);
+                    }
+                  : undefined
+              }
+            />
+          ))}
 
         {callout && renderCallout && (
           <div

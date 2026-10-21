@@ -27,15 +27,17 @@ export interface ParsedCodeDiff {
   deletions: number;
 }
 
-const HUNK_HEADER = /^@@\s+-(\d+)(?:,\d+)?\s+\+(\d+)(?:,\d+)?\s+@@/;
+const HUNK_HEADER = /^@@\s+-(\d+)(?:,(\d+))?\s+\+(\d+)(?:,(\d+))?\s+@@/;
 
 /**
  * Parse a unified-format diff body into typed lines with old/new line
  * numbers. Lines starting with `+` are additions, `-` removals, `@@ … @@`
- * hunk headers, and everything else context. File header lines (`+++`,
- * `---`) and no-newline markers (`\ No newline at end of file`) carry no
- * content and are skipped. A diff with no hunk headers is treated as one
- * hunk starting at line 1.
+ * hunk headers, and everything else context. File header lines (a `---`
+ * line directly followed by a `+++` line, outside a hunk's counted body)
+ * and no-newline markers (`\ No newline at end of file`) carry no content
+ * and are skipped, so a removed `-- comment` or an added `++i` stays a
+ * content line. A diff with no hunk headers is treated as one hunk starting
+ * at line 1.
  */
 // eslint-disable-next-line react-refresh/only-export-components -- the parser is part of CodeDiff's public API and lives with the component that renders its output
 export function parseUnifiedDiff(diff: string): ParsedCodeDiff {
@@ -45,18 +47,40 @@ export function parseUnifiedDiff(diff: string): ParsedCodeDiff {
   let deletions = 0;
   let oldLine = 1;
   let newLine = 1;
+  // Lines a hunk header says are still to come on each side. Inside that
+  // counted body every line is content, whatever it starts with.
+  let oldRemaining = 0;
+  let newRemaining = 0;
+  // Set when a `---` header was skipped, so the `+++` after it goes too.
+  let inFileHeader = false;
 
-  for (const raw of rawLines) {
-    // File headers name the two sides; the no-newline marker is metadata.
-    // Neither consumes a line on either side of the diff.
-    if (raw.startsWith('+++') || raw.startsWith('---') || raw.startsWith('\\')) {
-      continue;
+  for (let index = 0; index < rawLines.length; index += 1) {
+    const raw = rawLines[index];
+
+    // The no-newline marker is metadata and consumes no line on either side.
+    if (raw.startsWith('\\')) continue;
+
+    // File headers come as a pair, `---` then `+++`, and name the two sides.
+    // Matching the pair rather than either prefix alone keeps a removed
+    // `-- comment` (`--- comment`) or an added `++i` (`+++i`) as content.
+    if (oldRemaining <= 0 && newRemaining <= 0) {
+      if (raw.startsWith('---') && rawLines[index + 1]?.startsWith('+++')) {
+        inFileHeader = true;
+        continue;
+      }
+      if (inFileHeader && raw.startsWith('+++')) {
+        inFileHeader = false;
+        continue;
+      }
     }
+    inFileHeader = false;
 
     const hunk = raw.match(HUNK_HEADER);
     if (hunk) {
       oldLine = parseInt(hunk[1], 10);
-      newLine = parseInt(hunk[2], 10);
+      newLine = parseInt(hunk[3], 10);
+      oldRemaining = hunk[2] === undefined ? 1 : parseInt(hunk[2], 10);
+      newRemaining = hunk[4] === undefined ? 1 : parseInt(hunk[4], 10);
       lines.push({ type: 'hunk', content: raw, oldLine: null, newLine: null });
       continue;
     }
@@ -65,6 +89,7 @@ export function parseUnifiedDiff(diff: string): ParsedCodeDiff {
       additions += 1;
       lines.push({ type: 'add', content: raw.slice(1), oldLine: null, newLine });
       newLine += 1;
+      newRemaining -= 1;
       continue;
     }
 
@@ -72,6 +97,7 @@ export function parseUnifiedDiff(diff: string): ParsedCodeDiff {
       deletions += 1;
       lines.push({ type: 'remove', content: raw.slice(1), oldLine, newLine: null });
       oldLine += 1;
+      oldRemaining -= 1;
       continue;
     }
 
@@ -85,6 +111,8 @@ export function parseUnifiedDiff(diff: string): ParsedCodeDiff {
     });
     oldLine += 1;
     newLine += 1;
+    oldRemaining -= 1;
+    newRemaining -= 1;
   }
 
   return { lines, additions, deletions };
@@ -103,6 +131,23 @@ type CodeDiffOwnProps = {
   filename?: string;
   /** Show the old and new line number gutters */
   showLineNumbers?: boolean;
+  /**
+   * Accessible name for the scrolling diff region, given the `filename` when
+   * there is one. Defaults to "Code diff: <filename>", or "Code diff" without one.
+   */
+  diffLabel?: (filename?: string) => string;
+  /**
+   * Visually hidden text announced before each changed line, so the change
+   * type is not carried by colour and the marker alone. Merged over the
+   * English defaults: `added` "Added line:", `removed` "Removed line:".
+   */
+  changeLabels?: Partial<CodeDiffChangeLabels>;
+  /**
+   * The header's additions and deletions summary as a screen reader hears it,
+   * given both counts; the visible `+3 -1` is hidden from assistive technology.
+   * Defaults to "3 added, 1 removed".
+   */
+  statsLabel?: (additions: number, deletions: number) => string;
   /** Additional CSS classes */
   className?: string;
 };
@@ -111,10 +156,24 @@ export interface CodeDiffProps
   extends CodeDiffOwnProps,
     Omit<React.ComponentPropsWithoutRef<'div'>, keyof CodeDiffOwnProps> {}
 
-const CHANGE_LABELS: Partial<Record<CodeDiffLineType, string>> = {
-  add: 'Added line:',
-  remove: 'Removed line:',
+/** The visually hidden text announced before a changed line, per change type. */
+export interface CodeDiffChangeLabels {
+  /** Announced before an added line */
+  added: string;
+  /** Announced before a removed line */
+  removed: string;
+}
+
+const CHANGE_LABELS: CodeDiffChangeLabels = {
+  added: 'Added line:',
+  removed: 'Removed line:',
 };
+
+const defaultDiffLabel = (filename: string | undefined) =>
+  filename ? `Code diff: ${filename}` : 'Code diff';
+
+const defaultStatsLabel = (additions: number, deletions: number) =>
+  `${additions} added, ${deletions} removed`;
 
 /**
  * CodeDiff component — unified diff view for code changes. Added lines tint
@@ -125,9 +184,22 @@ const CHANGE_LABELS: Partial<Record<CodeDiffLineType, string>> = {
  * text while the marker column stays decorative.
  */
 export const CodeDiff = React.forwardRef<HTMLDivElement, CodeDiffProps>(
-  ({ diff, filename, showLineNumbers = true, className = '', ...rest }, ref) => {
+  (
+    {
+      diff,
+      filename,
+      showLineNumbers = true,
+      diffLabel = defaultDiffLabel,
+      changeLabels,
+      statsLabel = defaultStatsLabel,
+      className = '',
+      ...rest
+    },
+    ref,
+  ) => {
     const baseClass = 'ds-codediff';
     const { lines, additions, deletions } = parseUnifiedDiff(diff);
+    const changeText = { ...CHANGE_LABELS, ...changeLabels };
 
     const classes = [baseClass, className].filter(Boolean).join(' ');
 
@@ -137,13 +209,20 @@ export const CodeDiff = React.forwardRef<HTMLDivElement, CodeDiffProps>(
           <div className={`${baseClass}__header`}>
             <code className={`${baseClass}__filename`}>{filename}</code>
             <span className={`${baseClass}__stats`}>
-              <span className={`${baseClass}__stat ${baseClass}__stat--add`}>
+              <span
+                className={`${baseClass}__stat ${baseClass}__stat--add`}
+                aria-hidden="true"
+              >
                 +{additions}
-                <span className={`${baseClass}__sr-only`}> added</span>
               </span>
-              <span className={`${baseClass}__stat ${baseClass}__stat--remove`}>
+              <span
+                className={`${baseClass}__stat ${baseClass}__stat--remove`}
+                aria-hidden="true"
+              >
                 -{deletions}
-                <span className={`${baseClass}__sr-only`}> removed</span>
+              </span>
+              <span className={`${baseClass}__sr-only`}>
+                {statsLabel(additions, deletions)}
               </span>
             </span>
           </div>
@@ -158,11 +237,16 @@ export const CodeDiff = React.forwardRef<HTMLDivElement, CodeDiffProps>(
           className={`${baseClass}__scroll`}
           tabIndex={0}
           role="region"
-          aria-label={filename ? `Code diff: ${filename}` : 'Code diff'}
+          aria-label={diffLabel(filename)}
         >
           <ol className={`${baseClass}__lines`}>
             {lines.map((line, index) => {
-              const changeLabel = CHANGE_LABELS[line.type];
+              const changeLabel =
+                line.type === 'add'
+                  ? changeText.added
+                  : line.type === 'remove'
+                    ? changeText.removed
+                    : undefined;
               return (
                 <li
                   key={index}

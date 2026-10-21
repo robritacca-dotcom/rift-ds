@@ -214,3 +214,16 @@ button.ds-stepper__content:hover .ds-stepper__label {
 .ds-stepper .material-symbols-rounded {
   color: inherit;
 }
+/* The completed step's status, read aloud while invisible: the check mark
+   beside it is decorative. */
+.ds-stepper__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

@@ -119,9 +119,13 @@ export const DateInput = React.forwardRef<HTMLInputElement, DateInputProps>(
             required={required}
             min={min}
             max={max}
-            aria-label={ariaLabel || rest['aria-label'] || label}
+            aria-label={rest['aria-label'] ?? ariaLabel ?? label}
             aria-invalid={error}
-            aria-describedby={helperText ? `${inputId}-helper` : rest['aria-describedby']}
+            aria-describedby={
+              [rest['aria-describedby'], helperText ? `${inputId}-helper` : undefined]
+                .filter(Boolean)
+                .join(' ') || undefined
+            }
             onChange={handleChange}
           />
         </div>

@@ -32,6 +32,10 @@ type NumberInputOwnProps = {
    * unmodified) and also on stepper clicks, where no native change event exists.
    */
   onValueChange?: (value: number | null) => void;
+  /** Accessible name of the decrement stepper button. Defaults to "Decrease value". */
+  decreaseLabel?: string;
+  /** Accessible name of the increment stepper button. Defaults to "Increase value". */
+  increaseLabel?: string;
   /** Additional CSS classes — applied to the wrapper, not the <input> */
   className?: string;
 };
@@ -77,6 +81,8 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
       helperText,
       onChange,
       onValueChange,
+      decreaseLabel = 'Decrease value',
+      increaseLabel = 'Increase value',
       onBlur,
       className = '',
       name,
@@ -159,7 +165,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
           <button
             type="button"
             className={`${baseClass}__stepper`}
-            aria-label="Decrease value"
+            aria-label={decreaseLabel}
             disabled={disabled || atMin}
             onClick={() => stepBy(-1)}
           >
@@ -189,7 +195,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
           <button
             type="button"
             className={`${baseClass}__stepper`}
-            aria-label="Increase value"
+            aria-label={increaseLabel}
             disabled={disabled || atMax}
             onClick={() => stepBy(1)}
           >

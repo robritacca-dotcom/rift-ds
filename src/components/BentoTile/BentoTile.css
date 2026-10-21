@@ -520,6 +520,7 @@
   }
 }
 
+/* ds-allow(motion): parks a looping animation, which the collapsed duration would strobe rather than stop (the art drift) and drops the overlay body's entrance. */
 @media (prefers-reduced-motion: reduce) {
   .ds-bento-tile-overlay__body,
   .ds-bento-tile-art { animation: none; }

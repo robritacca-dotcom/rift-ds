@@ -12,7 +12,7 @@ const meta = {
   argTypes: {
     label: { control: 'text' },
     placeholder: { control: 'text' },
-    value: { control: 'text' },
+    defaultValue: { control: 'text' },
     rows: { control: 'number' },
     disabled: { control: 'boolean' },
     required: { control: 'boolean' },
@@ -51,7 +51,7 @@ export const Default: Story = {
 export const WithValue: Story = {
   args: {
     label: 'Bio',
-    value: 'Design systems engineer passionate about tokens, components, and scalable UI architecture.',
+    defaultValue: 'Design systems engineer passionate about tokens, components, and scalable UI architecture.',
   },
 };
 
@@ -68,7 +68,7 @@ export const WithCounter: Story = {
     label: 'Tweet',
     placeholder: 'What\'s happening?',
     maxLength: 280,
-    value: 'Building a design system',
+    defaultValue: 'Building a design system',
   },
 };
 
@@ -83,7 +83,7 @@ export const Required: Story = {
 export const Error: Story = {
   args: {
     label: 'Description',
-    value: 'Too short',
+    defaultValue: 'Too short',
     error: true,
     helperText: 'Description must be at least 50 characters',
   },
@@ -92,7 +92,7 @@ export const Error: Story = {
 export const ErrorWithCounter: Story = {
   args: {
     label: 'Bio',
-    value: 'This bio has exceeded the maximum character limit for the field and needs to be shortened.',
+    defaultValue: 'This bio has exceeded the maximum character limit for the field and needs to be shortened.',
     maxLength: 80,
     error: true,
     helperText: 'Exceeds character limit',
@@ -102,8 +102,18 @@ export const ErrorWithCounter: Story = {
 export const Disabled: Story = {
   args: {
     label: 'Notes',
-    value: 'This field is not editable',
+    defaultValue: 'This field is not editable',
     disabled: true,
+  },
+};
+
+/** The compact size, for dense forms and side panels. */
+export const Compact: Story = {
+  args: {
+    label: 'Notes',
+    placeholder: 'Add a note...',
+    helperText: 'Visible to your team',
+    size: 'compact',
   },
 };
 

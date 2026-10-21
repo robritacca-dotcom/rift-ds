@@ -5,7 +5,7 @@ import './AgentRail.css';
 import '../../fonts/material-symbols.css';
 
 export interface AgentRailTab {
-  /** Stable identifier: `activeTab` matches against it and `onTabChange` reports it. */
+  /** Stable identifier: `value` matches against it and `onValueChange` reports it. */
   id: string;
   /** The tab's label, shown beside its icon and used as the pane's accessible name. */
   label: string;
@@ -40,13 +40,33 @@ type AgentRailOwnProps = {
   profile?: AgentRailProfile;
   /** The rail's tabs, in display order. Each carries its own pane. */
   tabs: AgentRailTab[];
-  /** Id of the tab on stage. The rail is controlled, so the host owns the state. */
-  activeTab: string;
+  /**
+   * Id of the tab on stage. The rail is fully controlled by design, so the
+   * host owns the state: it holds no hooks and renders from a Server Component.
+   * Falls back to the first tab.
+   */
+  value?: string;
   /** Fires with the chosen tab's id. */
+  onValueChange?: (id: string) => void;
+  /**
+   * Legacy name for `value`.
+   *
+   * @deprecated Use `value` instead.
+   */
+  activeTab?: string;
+  /**
+   * Legacy change callback; fires alongside `onValueChange`.
+   *
+   * @deprecated Use `onValueChange` instead.
+   */
   onTabChange?: (id: string) => void;
   /** Accessible name for the tab strip. */
   tabsLabel?: string;
-  /** Accessible name for the rail itself. */
+  /**
+   * Legacy accessible-name prop for the rail.
+   *
+   * @deprecated Pass the native `aria-label` attribute instead.
+   */
   ariaLabel?: string;
   /** Fires when the rail's collapse affordance is pressed. The button renders
       only when this is given, pinned to the rail's top trailing corner. It is
@@ -87,6 +107,8 @@ export const AgentRail = React.forwardRef<HTMLDivElement, AgentRailProps>(
     {
       profile,
       tabs,
+      value,
+      onValueChange,
       activeTab,
       onTabChange,
       tabsLabel = 'Agent views',
@@ -101,10 +123,15 @@ export const AgentRail = React.forwardRef<HTMLDivElement, AgentRailProps>(
     ref,
   ) => {
     const classes = [baseClass, className].filter(Boolean).join(' ');
-    const active = tabs.find((tab) => tab.id === activeTab) ?? tabs[0];
+    const current = value ?? activeTab;
+    const active = tabs.find((tab) => tab.id === current) ?? tabs[0];
+    const select = (id: string) => {
+      onValueChange?.(id);
+      onTabChange?.(id);
+    };
 
     return (
-      <div {...rest} ref={ref} className={classes} aria-label={ariaLabel}>
+      <div aria-label={ariaLabel} {...rest} ref={ref} className={classes}>
         {onCollapse && (
           <button
             type="button"
@@ -162,9 +189,9 @@ export const AgentRail = React.forwardRef<HTMLDivElement, AgentRailProps>(
             size="compact"
             tone="neutral"
             collapse
-            ariaLabel={tabsLabel}
-            activeSegment={active?.id ?? ''}
-            onSegmentChange={onTabChange}
+            aria-label={tabsLabel}
+            value={active?.id ?? ''}
+            onValueChange={select}
             segments={tabs.map((tab) => ({
               value: tab.id,
               label: tab.label,

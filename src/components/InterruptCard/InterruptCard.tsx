@@ -29,7 +29,10 @@ function optionButtonProps(option: InterruptCardOption) {
 
 /** Props owned by InterruptCard itself — everything else falls through to the root element. */
 type InterruptCardOwnProps = {
-  /** The question, e.g. "Allow file edit?". */
+  /**
+   * The question, e.g. "Allow file edit?".
+   * Note: this shadows the native `title` tooltip attribute, which InterruptCard does not expose.
+   */
   title: string;
   /** One line of context under the title. */
   description?: string;
@@ -46,6 +49,8 @@ type InterruptCardOwnProps = {
   value?: string;
   /** Override the echoed text in the answered state (default: the chosen option's label). */
   answeredLabel?: string;
+  /** Visually hidden status announced while the card waits for a decision. Defaults to "Waiting for your decision". */
+  waitingLabel?: string;
   /** Additional CSS classes */
   className?: string;
   /**
@@ -82,6 +87,7 @@ export const InterruptCard = React.forwardRef<HTMLDivElement, InterruptCardProps
       onValueChange,
       value,
       answeredLabel,
+      waitingLabel = 'Waiting for your decision',
       className = '',
       children,
       ...rest
@@ -116,7 +122,7 @@ export const InterruptCard = React.forwardRef<HTMLDivElement, InterruptCardProps
           </div>
           {!answered && (
             <span className={`${baseClass}__sr-only`} role="status">
-              Waiting for your decision
+              {waitingLabel}
             </span>
           )}
         </div>

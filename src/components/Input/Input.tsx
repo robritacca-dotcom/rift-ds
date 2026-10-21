@@ -97,7 +97,11 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     // fallback, so an explicit id/name/label still wins and existing markup
     // (and any consumer's own htmlFor) is unchanged.
     const inputId = id || name || label?.toLowerCase().replace(/\s+/g, '-');
-    const describedBy = helperText ? `${inputId}-helper` : rest['aria-describedby'];
+    /* A consumer's aria-describedby joins the helper id rather than losing to it. */
+    const describedBy =
+      [rest['aria-describedby'], helperText ? `${inputId}-helper` : undefined]
+        .filter(Boolean)
+        .join(' ') || undefined;
 
     return (
       <Field
@@ -130,7 +134,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             placeholder={placeholder}
             disabled={disabled}
             required={required}
-            aria-label={ariaLabel || rest['aria-label'] || label}
+            aria-label={rest['aria-label'] ?? ariaLabel ?? label}
             aria-invalid={error}
             aria-describedby={describedBy}
             onChange={handleChange}

@@ -157,7 +157,7 @@
       "slug": "area-chart",
       "description": "Filled area chart for showing volume over time, with stacked and single-series variants.",
       "category": "charts",
-      "client": false,
+      "client": true,
       "folder": "Chart",
       "recharts": true
     },
@@ -251,7 +251,7 @@
       "slug": "bar-chart",
       "description": "Vertical bars for comparing values across categories or time, with summary stats and tooltips.",
       "category": "charts",
-      "client": false,
+      "client": true,
       "folder": "Chart",
       "recharts": true
     },
@@ -308,7 +308,7 @@
       "name": "Card",
       "label": "Card",
       "slug": "card",
-      "description": "Card components for previews, navigation, and token documentation, from content cards to colour swatches and typography specimens.",
+      "description": "A titled preview tile for index grids, with a case-study variant carrying a cover, company logo and dek.",
       "category": "data-display",
       "client": true
     },
@@ -414,7 +414,7 @@
       "slug": "combo-chart",
       "description": "Bar and line series in one chart, with an optional second y-axis for pairs in different units, like spend and ROAS.",
       "category": "charts",
-      "client": false,
+      "client": true,
       "folder": "Chart",
       "recharts": true
     },
@@ -600,7 +600,7 @@
       "slug": "funnel-chart",
       "description": "Ordered funnel stages as centred trapezoid bands, each sized by its share of the first stage.",
       "category": "charts",
-      "client": false,
+      "client": true,
       "recharts": true
     },
     {
@@ -760,7 +760,7 @@
       "slug": "line-chart",
       "description": "Multi-series line chart for trends over time, with per-series colours and a summary row.",
       "category": "charts",
-      "client": false,
+      "client": true,
       "folder": "Chart",
       "recharts": true
     },
@@ -882,7 +882,7 @@
       "slug": "pie-chart",
       "description": "Proportional share of a whole as a pie or donut, with per-slice colours.",
       "category": "charts",
-      "client": false,
+      "client": true,
       "folder": "Chart",
       "recharts": true
     },
@@ -922,7 +922,7 @@
       "name": "PromptSuggestions",
       "label": "Prompt suggestions",
       "slug": "prompt-suggestions",
-      "description": "A horizontal row of tappable prompt suggestions to start or steer a conversation.",
+      "description": "Tappable prompt suggestions to start or steer a conversation, as a scrolling or wrapping row, a stack, tiles or cards.",
       "category": "ai",
       "client": true
     },
@@ -956,7 +956,7 @@
       "slug": "radar-chart",
       "description": "Multi-axis comparison of series across categories on a radial grid.",
       "category": "charts",
-      "client": false,
+      "client": true,
       "folder": "Chart",
       "recharts": true
     },
@@ -966,7 +966,7 @@
       "slug": "radial-chart",
       "description": "Concentric progress rings for completion and KPI readouts.",
       "category": "charts",
-      "client": false,
+      "client": true,
       "folder": "Chart",
       "recharts": true
     },
@@ -1008,7 +1008,7 @@
       "slug": "scatter-chart",
       "description": "Plots point clusters across two axes to show correlation and distribution.",
       "category": "charts",
-      "client": false,
+      "client": true,
       "folder": "Chart",
       "recharts": true
     },
@@ -1032,7 +1032,7 @@
       "name": "SelectionCard",
       "label": "Selection card",
       "slug": "selection-card",
-      "description": "Large selectable option cards with radio or checkbox indicators for high-visibility choices like settings and onboarding.",
+      "description": "Large option cards for high-visibility choices like settings and onboarding, with radio, checkbox or per-card toggle indicators.",
       "category": "data-display",
       "client": true
     },
@@ -1122,7 +1122,7 @@
       "slug": "stacked-bar-chart",
       "description": "Bars split into stacked segments to compare totals and their composition.",
       "category": "charts",
-      "client": false,
+      "client": true,
       "folder": "Chart",
       "recharts": true
     },
@@ -1250,7 +1250,7 @@
       "name": "ToggleSwitch",
       "label": "Toggle switch",
       "slug": "toggle-switch",
-      "description": "Binary on/off toggle control with sliding thumb and check indicator, used for settings like theme switching.",
+      "description": "Binary on/off toggle control with sliding thumb and check indicator, for settings that take effect immediately.",
       "category": "forms",
       "client": true
     },

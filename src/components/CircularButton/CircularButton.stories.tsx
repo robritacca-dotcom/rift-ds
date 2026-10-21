@@ -19,13 +19,18 @@ const meta = {
       control: 'select',
       options: ['default', 'neutral', 'destructive'],
     },
+    // `state` survives only as the documentation affordance for drawing a
+    // static hover or active look; disabled is the `disabled` prop.
     state: {
       control: 'select',
-      options: ['default', 'hover', 'active', 'disabled'],
+      options: ['hover', 'active'],
     },
     size: {
       control: 'select',
       options: ['default', 'compact'],
+    },
+    disabled: {
+      control: 'boolean',
     },
     loading: {
       control: 'boolean',
@@ -50,7 +55,7 @@ type Story = StoryObj<typeof meta>;
 
 // Primary states (Solid)
 export const PrimaryDefault: Story = {
-  args: { variant: 'primary', state: 'default', icon: 'add', ariaLabel: 'Add' },
+  args: { variant: 'primary', icon: 'add', ariaLabel: 'Add' },
 };
 
 export const PrimaryHover: Story = {
@@ -62,12 +67,12 @@ export const PrimaryActive: Story = {
 };
 
 export const PrimaryDisabled: Story = {
-  args: { variant: 'primary', state: 'disabled', icon: 'add', ariaLabel: 'Add' },
+  args: { variant: 'primary', disabled: true, icon: 'add', ariaLabel: 'Add' },
 };
 
 // Secondary states (Outlined)
 export const SecondaryDefault: Story = {
-  args: { variant: 'secondary', state: 'default', icon: 'edit', ariaLabel: 'Edit' },
+  args: { variant: 'secondary', icon: 'edit', ariaLabel: 'Edit' },
 };
 
 export const SecondaryHover: Story = {
@@ -79,12 +84,12 @@ export const SecondaryActive: Story = {
 };
 
 export const SecondaryDisabled: Story = {
-  args: { variant: 'secondary', state: 'disabled', icon: 'edit', ariaLabel: 'Edit' },
+  args: { variant: 'secondary', disabled: true, icon: 'edit', ariaLabel: 'Edit' },
 };
 
 // Tertiary states (Ghost / Passive)
 export const TertiaryDefault: Story = {
-  args: { variant: 'tertiary', state: 'default', icon: 'close', ariaLabel: 'Close' },
+  args: { variant: 'tertiary', icon: 'close', ariaLabel: 'Close' },
 };
 
 export const TertiaryHover: Story = {
@@ -96,12 +101,12 @@ export const TertiaryActive: Story = {
 };
 
 export const TertiaryDisabled: Story = {
-  args: { variant: 'tertiary', state: 'disabled', icon: 'close', ariaLabel: 'Close' },
+  args: { variant: 'tertiary', disabled: true, icon: 'close', ariaLabel: 'Close' },
 };
 
 // Neutral tone, primary emphasis (Solid Grey)
 export const NeutralDefault: Story = {
-  args: { variant: 'primary', tone: 'neutral', state: 'default', icon: 'tune', ariaLabel: 'Filters' },
+  args: { variant: 'primary', tone: 'neutral', icon: 'tune', ariaLabel: 'Filters' },
 };
 
 export const NeutralHover: Story = {
@@ -113,12 +118,12 @@ export const NeutralActive: Story = {
 };
 
 export const NeutralDisabled: Story = {
-  args: { variant: 'primary', tone: 'neutral', state: 'disabled', icon: 'tune', ariaLabel: 'Filters' },
+  args: { variant: 'primary', tone: 'neutral', disabled: true, icon: 'tune', ariaLabel: 'Filters' },
 };
 
 // Neutral tone, secondary emphasis (Outlined Grey)
 export const SecondaryNeutralDefault: Story = {
-  args: { variant: 'secondary', tone: 'neutral', state: 'default', icon: 'tune', ariaLabel: 'Filters' },
+  args: { variant: 'secondary', tone: 'neutral', icon: 'tune', ariaLabel: 'Filters' },
 };
 
 export const SecondaryNeutralHover: Story = {
@@ -130,12 +135,12 @@ export const SecondaryNeutralActive: Story = {
 };
 
 export const SecondaryNeutralDisabled: Story = {
-  args: { variant: 'secondary', tone: 'neutral', state: 'disabled', icon: 'tune', ariaLabel: 'Filters' },
+  args: { variant: 'secondary', tone: 'neutral', disabled: true, icon: 'tune', ariaLabel: 'Filters' },
 };
 
 // Destructive tone, primary emphasis (Solid Danger)
 export const PrimaryDestructiveDefault: Story = {
-  args: { variant: 'primary', tone: 'destructive', state: 'default', icon: 'delete', ariaLabel: 'Delete' },
+  args: { variant: 'primary', tone: 'destructive', icon: 'delete', ariaLabel: 'Delete' },
 };
 
 export const PrimaryDestructiveHover: Story = {
@@ -144,7 +149,7 @@ export const PrimaryDestructiveHover: Story = {
 
 // Destructive tone (Outlined Danger)
 export const DestructiveDefault: Story = {
-  args: { variant: 'secondary', tone: 'destructive', state: 'default', icon: 'delete', ariaLabel: 'Delete' },
+  args: { variant: 'secondary', tone: 'destructive', icon: 'delete', ariaLabel: 'Delete' },
 };
 
 export const DestructiveHover: Story = {
@@ -156,12 +161,12 @@ export const DestructiveActive: Story = {
 };
 
 export const DestructiveDisabled: Story = {
-  args: { variant: 'secondary', tone: 'destructive', state: 'disabled', icon: 'delete', ariaLabel: 'Delete' },
+  args: { variant: 'secondary', tone: 'destructive', disabled: true, icon: 'delete', ariaLabel: 'Delete' },
 };
 
 // Compact
 export const CompactPrimaryDefault: Story = {
-  args: { variant: 'primary', state: 'default', size: 'compact', icon: 'add', ariaLabel: 'Add' },
+  args: { variant: 'primary', size: 'compact', icon: 'add', ariaLabel: 'Add' },
 };
 
 export const CompactPrimaryHover: Story = {
@@ -169,7 +174,7 @@ export const CompactPrimaryHover: Story = {
 };
 
 export const CompactSecondaryDefault: Story = {
-  args: { variant: 'secondary', state: 'default', size: 'compact', icon: 'edit', ariaLabel: 'Edit' },
+  args: { variant: 'secondary', size: 'compact', icon: 'edit', ariaLabel: 'Edit' },
 };
 
 export const CompactSecondaryHover: Story = {
@@ -177,7 +182,7 @@ export const CompactSecondaryHover: Story = {
 };
 
 export const CompactTertiaryDefault: Story = {
-  args: { variant: 'tertiary', state: 'default', size: 'compact', icon: 'more_vert', ariaLabel: 'More options' },
+  args: { variant: 'tertiary', size: 'compact', icon: 'more_vert', ariaLabel: 'More options' },
 };
 
 export const CompactTertiaryHover: Story = {
@@ -185,7 +190,7 @@ export const CompactTertiaryHover: Story = {
 };
 
 export const CompactNeutralDefault: Story = {
-  args: { variant: 'primary', tone: 'neutral', state: 'default', size: 'compact', icon: 'tune', ariaLabel: 'Filters' },
+  args: { variant: 'primary', tone: 'neutral', size: 'compact', icon: 'tune', ariaLabel: 'Filters' },
 };
 
 // Loading

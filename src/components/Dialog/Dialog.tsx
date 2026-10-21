@@ -30,6 +30,8 @@ type DialogOwnProps = {
   size?: 'sm' | 'md' | 'lg';
   /** Whether ESC, backdrop click, and the close button can dismiss */
   dismissible?: boolean;
+  /** Accessible name of the close button. */
+  closeLabel?: string;
   /** Additional CSS classes — applied to the portal container, not the panel */
   className?: string;
 };
@@ -59,6 +61,7 @@ export const Dialog = React.forwardRef<HTMLDivElement, DialogProps>(
       footer,
       size = 'md',
       dismissible = true,
+      closeLabel = 'Close dialog',
       className = '',
       ...rest
     },
@@ -84,12 +87,14 @@ export const Dialog = React.forwardRef<HTMLDivElement, DialogProps>(
     // and restored with the page inert behind the panel; the scroll lock is
     // counted, so closing this dialog over another modal keeps its lock.
     // Backdrop dismissal stays below — it is this component's own DOM.
-    useLayer({ open, dismissOnEscape: dismissible, onDismiss: () => onOpenChange(false) });
+    const layer = useLayer({ open, dismissOnEscape: dismissible, onDismiss: () => onOpenChange(false) });
     useFocusScope(panelRef, { active: open });
     useScrollLock(open);
 
+    // A press that began while a menu or popover was open above this layer was
+    // that layer's press: it closed the menu, and must not also close this.
     const handleBackdropClick = () => {
-      if (dismissible) onOpenChange(false);
+      if (dismissible && layer.ownsPress()) onOpenChange(false);
     };
 
     const containerClasses = [
@@ -132,7 +137,7 @@ export const Dialog = React.forwardRef<HTMLDivElement, DialogProps>(
                 type="button"
                 className={`${baseClass}__close`}
                 onClick={() => onOpenChange(false)}
-                aria-label="Close dialog"
+                aria-label={closeLabel}
               >
                 <span
                   className={`${baseClass}__close-icon material-symbols-rounded`}

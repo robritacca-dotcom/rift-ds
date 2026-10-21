@@ -4,7 +4,10 @@ import '../../fonts/material-symbols.css';
 
 /** Props owned by MessageCard itself — everything else falls through to the root element. */
 type MessageCardOwnProps = {
-  /** Card heading. */
+  /**
+   * Card heading.
+   * Note: this shadows the native `title` tooltip attribute, which MessageCard does not expose.
+   */
   title?: string;
   /** One or two lines under the title. */
   description?: string;

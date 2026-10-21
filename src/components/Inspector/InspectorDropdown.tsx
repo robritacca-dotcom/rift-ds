@@ -12,8 +12,13 @@ import './Inspector.css';
 type InspectorDropdownOwnProps = {
   /** The setting's name, drawn inside the bar on the left. Also the dropdown's accessible name. */
   label: string;
-  /** Currently selected value. */
+  /**
+   * Currently selected value, controlled. Leave undefined to let the
+   * dropdown keep its own selection, seeded from `defaultValue`.
+   */
   value?: string;
+  /** Selected value on first render when uncontrolled (`value` undefined). */
+  defaultValue?: string;
   /** Available options (flat list). Each option's `font` previews the face, as in Dropdown. */
   options: DropdownOption[];
   /** Optional grouped options. When provided, renders groups with labels and separators. */
@@ -51,6 +56,7 @@ export const InspectorDropdown = React.forwardRef<HTMLDivElement, InspectorDropd
     {
       label,
       value,
+      defaultValue,
       options,
       groups,
       placeholder,
@@ -105,6 +111,7 @@ export const InspectorDropdown = React.forwardRef<HTMLDivElement, InspectorDropd
           aria-label={label}
           size={size}
           value={value}
+          defaultValue={defaultValue}
           options={options}
           groups={groups}
           placeholder={placeholder}

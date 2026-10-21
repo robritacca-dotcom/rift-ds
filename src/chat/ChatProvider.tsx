@@ -45,11 +45,12 @@ export interface ChatProviderProps {
   defaultPlacement?: ChatPlacement;
   /**
    * Where follow-up questions come from after an answer commits: a source
-   * function, an endpoint for the built-in fetcher, or `false` for none.
-   * Defaults to the fetcher against `/api/chat/followups`.
+   * function, an endpoint for the built-in fetcher, or `false` for none:
+   * with `false` no chips show under an answer at all, not even the written
+   * `fallbackFollowups`. Defaults to the fetcher against `/api/chat/followups`.
    */
   followups?: FollowupsSource | string | false;
-  /** The written questions offered when the source returns none. */
+  /** The written questions offered when the source returns none or fails. Unused when `followups` is `false`. */
   fallbackFollowups?: readonly string[];
   /**
    * Where a thumbs verdict goes: a sink function, an endpoint for the
@@ -68,7 +69,7 @@ export interface ChatProviderProps {
   isInternalHref?: (href: string) => boolean;
   /** Seeds the thread lifecycle behind the `threads` and `tabs` slots. */
   threads?: ThreadsOptions;
-  /** Replacement copy for the hook's placeholder replies. */
+  /** Replacement copy for the words the hook writes itself, merged over the English defaults: the status line of a reply that has not started ("Thinking") and the placeholder replies for an empty, stopped or failed turn. */
   placeholders?: Partial<ChatPlaceholderCopy>;
   children: ReactNode;
 }
@@ -144,7 +145,10 @@ export function ChatProvider({
       setFreshFollowupsId(target.id);
     };
     if (!followupsSource) {
-      offer([]);
+      // `followups={false}` means no chips at all, written fallbacks included.
+      // The empty set still lands on the turn, which settles the pending row
+      // rather than leaving it shimmering.
+      setTurnFollowups(target.id, []);
       return;
     }
     // A write to a turn that has since been cleared by a new chat is a

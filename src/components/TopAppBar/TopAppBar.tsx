@@ -32,7 +32,10 @@ export interface TopAppBarAction {
 export type TopAppBarOverflowAction = Omit<TopAppBarAction, 'href' | 'badge'>;
 
 type TopAppBarOwnProps = {
-  /** The screen's title */
+  /**
+   * The screen's title.
+   * Note: this shadows the native `title` tooltip attribute, which TopAppBar does not expose.
+   */
   title: string;
   /** A second line under the title, e.g. a count or a date range */
   subtitle?: string;
@@ -67,6 +70,11 @@ type TopAppBarOwnProps = {
   /** Accessible label of the button that opens the overflow menu */
   overflowLabel?: string;
   /**
+   * The accessible name of an action that carries a `badge`, given the
+   * action's `label`. Defaults to "<label>, new", e.g. "Notifications, new".
+   */
+  badgeLabel?: (label: string) => string;
+  /**
    * Whether content has scrolled under the bar, which collapses an expanded
    * title and switches the bar to its scrolled surface. Leave unset to have
    * the bar watch `scrollTarget` itself.
@@ -95,6 +103,8 @@ const NAV_ICONS: Record<'default' | 'ios' | 'android', Record<'menu' | 'back' | 
 
 const NAV_LABELS = { menu: 'Open menu', back: 'Back', close: 'Close' } as const;
 
+const defaultBadgeLabel = (label: string) => `${label}, new`;
+
 /* ============================================
    COMPONENT
    ============================================ */
@@ -118,6 +128,7 @@ export const TopAppBar = React.forwardRef<HTMLElement, TopAppBarProps>(
       actions = [],
       overflowActions = [],
       overflowLabel = 'More',
+      badgeLabel = defaultBadgeLabel,
       scrolled: controlledScrolled,
       scrollTarget,
       headingLevel = 1,
@@ -185,7 +196,7 @@ export const TopAppBar = React.forwardRef<HTMLElement, TopAppBarProps>(
           {action.badge && <span className={`${baseClass}__badge`} aria-hidden="true" />}
         </>
       );
-      const label = action.badge ? `${action.label}, new` : action.label;
+      const label = action.badge ? badgeLabel(action.label) : action.label;
       return action.href ? (
         <a
           key={action.key}

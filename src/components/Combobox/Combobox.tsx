@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useCallback, useMemo, useId } from 'react';
+import { useLayer } from '../../behaviors/useLayer';
 import { Field } from '../Field/Field';
 import './Combobox.css';
 import '../../fonts/material-symbols.css';
@@ -30,10 +31,17 @@ type ComboboxOwnProps = {
   /** Placeholder shown in the text field when nothing is selected */
   placeholder?: string;
   /**
-   * Selected value — a `string` in single mode, `string[]` when `multiple`
-   * is set. Leave undefined for an empty selection.
+   * Selected value, controlled — a `string` in single mode, `string[]` when
+   * `multiple` is set. Leave undefined to let the combobox keep its own
+   * selection, seeded from `defaultValue`.
    */
   value?: string | string[];
+  /**
+   * Selection on first render when uncontrolled (`value` undefined) — a
+   * `string` in single mode, `string[]` when `multiple` is set. Omitted, the
+   * selection starts empty.
+   */
+  defaultValue?: string | string[];
   /** Available options (flat list) */
   options: ComboboxOption[];
   /** Optional grouped options — when provided, `options` is ignored */
@@ -54,8 +62,17 @@ type ComboboxOwnProps = {
   loading?: boolean;
   /** Message shown when the filter matches no options */
   emptyMessage?: string;
+  /** Status text shown in the menu while `loading` is set. Defaults to "Loading…". */
+  loadingMessage?: string;
   /** Show a clear button once something is selected */
   clearable?: boolean;
+  /** Accessible name of the clear button. Defaults to "Clear selection". */
+  clearLabel?: string;
+  /**
+   * Accessible name of a chip's remove button in `multiple` mode, given the
+   * option's label. Defaults to "Remove <label>".
+   */
+  removeLabel?: (label: string) => string;
   /**
    * Called with the new selection — a `string` in single mode,
    * `string[]` when `multiple` is set.
@@ -80,11 +97,11 @@ type ComboboxOwnProps = {
    */
   ariaLabel?: string;
   /**
-   * Used only as a fallback for deriving the element id (`id || name || generated`).
-   *
-   * Note: Combobox renders a `<div>` wrapper around a text input, not a native
-   * `<select>`, so `name` does **not** make the selection participate in native
-   * form submission.
+   * Form field name. When set, the selection submits with an enclosing form
+   * under this name through hidden inputs: the selected option's `value` in
+   * single mode (nothing until one is chosen), one entry per selected value in
+   * `multiple` mode, nothing while disabled. The search text the user types
+   * is never submitted. Also the fallback for the element id (`id || name || generated`).
    */
   name?: string;
 };
@@ -98,12 +115,15 @@ export interface ComboboxProps
  * Unlike Dropdown (a static select), it narrows options as the user types
  * and supports multi-select chips and async option loading.
  *
- * Forwards a ref to the wrapping element and spreads unrecognised props onto it.
+ * Forwards a ref to the wrapping element and spreads unrecognised props onto
+ * it, except `aria-label`, `aria-labelledby` and `aria-describedby`, which go
+ * to the text input, the element that carries the combobox role.
  */
 export const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>(({
   label,
   placeholder = 'Search…',
-  value,
+  value: valueProp,
+  defaultValue,
   options,
   groups,
   multiple = false,
@@ -114,7 +134,10 @@ export const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>(({
   helperText,
   loading = false,
   emptyMessage = 'No results found',
+  loadingMessage = 'Loading…',
   clearable = false,
+  clearLabel = 'Clear selection',
+  removeLabel = (optionLabel) => `Remove ${optionLabel}`,
   onValueChange,
   onChange,
   onSearchChange,
@@ -123,11 +146,19 @@ export const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>(({
   ariaLabel,
   name,
   id,
+  // The naming and description attributes belong on the combobox input, not
+  // the role-less wrapper the other rest props land on.
+  'aria-label': ariaLabelAttr,
+  'aria-labelledby': ariaLabelledBy,
+  'aria-describedby': ariaDescribedBy,
   ...rest
 }, ref) => {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [focusedIndex, setFocusedIndex] = useState(-1);
+  const [internalValue, setInternalValue] = useState(defaultValue);
+  const isControlled = valueProp !== undefined;
+  const value = isControlled ? valueProp : internalValue;
   const rootRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
@@ -203,6 +234,7 @@ export const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>(({
 
   const emitChange = (next: string[]) => {
     const payload = multiple ? next : (next[0] ?? '');
+    if (!isControlled) setInternalValue(payload);
     onValueChange?.(payload);
     onChange?.(payload);
   };
@@ -243,19 +275,18 @@ export const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>(({
     onSearchChange?.(next);
   };
 
-  const handleClickOutside = useCallback((e: MouseEvent) => {
-    if (rootRef.current && !rootRef.current.contains(e.target as Node)) {
+  // Light dismiss through the shared layer stack: a press outside closes the
+  // list, and never also closes a Dialog the combobox sits in.
+  useLayer({
+    open: isOpen,
+    onDismiss: () => {
       setIsOpen(false);
       setFocusedIndex(-1);
       setQuery('');
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!isOpen) return;
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isOpen, handleClickOutside]);
+    },
+    dismissOnOutsidePress: true,
+    getElements: () => [rootRef.current],
+  });
 
   const moveFocus = (direction: 1 | -1) => {
     setFocusedIndex((prev) => {
@@ -406,7 +437,7 @@ export const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>(({
                     handleRemove(option.value);
                   }}
                   disabled={disabled}
-                  aria-label={`Remove ${option.label}`}
+                  aria-label={removeLabel(option.label)}
                 >
                   <span className="material-symbols-rounded" aria-hidden="true">
                     close
@@ -418,7 +449,6 @@ export const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>(({
           <input
             ref={inputRef}
             id={inputId}
-            name={name}
             type="text"
             className={`${baseClass}__input`}
             role="combobox"
@@ -427,8 +457,13 @@ export const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>(({
             aria-controls={listboxId}
             aria-autocomplete="list"
             aria-activedescendant={activeOptionId}
-            aria-label={ariaLabel || rest['aria-label'] || (!label ? placeholder : undefined)}
-            aria-describedby={helperText ? `${inputId}-helper` : undefined}
+            aria-label={ariaLabelAttr ?? ariaLabel ?? (!label ? placeholder : undefined)}
+            aria-labelledby={ariaLabelledBy}
+            aria-describedby={
+              [ariaDescribedBy, helperText ? `${inputId}-helper` : undefined]
+                .filter(Boolean)
+                .join(' ') || undefined
+            }
             aria-invalid={error || undefined}
             aria-required={required || undefined}
             placeholder={multiple && hasSelection ? '' : placeholder}
@@ -438,6 +473,17 @@ export const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>(({
             onFocus={openMenu}
             onKeyDown={handleKeyDown}
           />
+          {/* The selection, not the search text, is what a form submits. */}
+          {name &&
+            (multiple ? (
+              selectedValues.map((v) => (
+                <input key={v} type="hidden" name={name} value={v} disabled={disabled} />
+              ))
+            ) : (
+              selectedValues[0] !== undefined && (
+                <input type="hidden" name={name} value={selectedValues[0]} disabled={disabled} />
+              )
+            ))}
         </div>
 
         {clearable && hasSelection && !disabled && (
@@ -448,7 +494,7 @@ export const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>(({
               e.stopPropagation();
               handleClear();
             }}
-            aria-label="Clear selection"
+            aria-label={clearLabel}
           >
             <span className="material-symbols-rounded" aria-hidden="true">
               close
@@ -465,7 +511,7 @@ export const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>(({
         <ul className={`${baseClass}__menu`} role="listbox" id={listboxId} ref={listRef}>
           {loading && (
             <li className={`${baseClass}__status`} role="presentation">
-              Loading…
+              {loadingMessage}
             </li>
           )}
 

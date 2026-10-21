@@ -1,8 +1,12 @@
 import React from "react";
 import "./SectionTitle.css";
 
-export interface SectionTitleProps {
-  /** Section heading text */
+/** Props owned by SectionTitle itself — everything else falls through to the root div. */
+type SectionTitleOwnProps = {
+  /**
+   * Section heading text.
+   * Note: this shadows the native `title` tooltip attribute, which SectionTitle does not expose.
+   */
   title: string;
   /** Optional trailing content (count, badge, metadata) */
   trailing?: React.ReactNode;
@@ -10,28 +14,36 @@ export interface SectionTitleProps {
   divider?: boolean;
   /** Additional CSS classes */
   className?: string;
-}
+};
 
-export function SectionTitle({
-  title,
-  trailing,
-  divider = true,
-  className,
-}: SectionTitleProps) {
-  const classes = [
-    "ds-section-title",
-    !divider && "ds-section-title--no-divider",
-    className,
-  ]
-    .filter(Boolean)
-    .join(" ");
+export interface SectionTitleProps
+  extends SectionTitleOwnProps,
+    Omit<React.ComponentPropsWithoutRef<"div">, keyof SectionTitleOwnProps | "children"> {}
 
-  return (
-    <div className={classes}>
-      <h2 className="ds-section-title__heading">{title}</h2>
-      {trailing !== undefined && trailing !== null && (
-        <span className="ds-section-title__trailing">{trailing}</span>
-      )}
-    </div>
-  );
-}
+/**
+ * SectionTitle — an `<h2>` section heading with optional trailing content
+ * and a bottom divider. Forwards a ref to the root div and spreads native
+ * attributes onto it.
+ */
+export const SectionTitle = React.forwardRef<HTMLDivElement, SectionTitleProps>(
+  ({ title, trailing, divider = true, className, ...rest }, ref) => {
+    const classes = [
+      "ds-section-title",
+      !divider && "ds-section-title--no-divider",
+      className,
+    ]
+      .filter(Boolean)
+      .join(" ");
+
+    return (
+      <div {...rest} ref={ref} className={classes}>
+        <h2 className="ds-section-title__heading">{title}</h2>
+        {trailing !== undefined && trailing !== null && (
+          <span className="ds-section-title__trailing">{trailing}</span>
+        )}
+      </div>
+    );
+  },
+);
+
+SectionTitle.displayName = "SectionTitle";

@@ -342,6 +342,7 @@
    label still says what is happening.
    ============================================ */
 
+/* ds-allow(motion): parks a looping animation, which the collapsed duration would strobe rather than stop (the typing dots). */
 @media (prefers-reduced-motion: reduce) {
   .ds-chat-message__dot {
     animation: none;

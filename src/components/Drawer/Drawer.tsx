@@ -32,6 +32,8 @@ type DrawerOwnProps = {
   size?: 'sm' | 'md' | 'lg';
   /** Whether ESC, scrim click, and the close button can dismiss */
   dismissible?: boolean;
+  /** Accessible name of the close button. */
+  closeLabel?: string;
   /** Additional CSS classes — applied to the portal container, not the panel */
   className?: string;
 };
@@ -62,6 +64,7 @@ export const Drawer = React.forwardRef<HTMLDivElement, DrawerProps>(
       side = 'right',
       size = 'md',
       dismissible = true,
+      closeLabel = 'Close drawer',
       className = '',
       ...rest
     },
@@ -84,12 +87,14 @@ export const Drawer = React.forwardRef<HTMLDivElement, DrawerProps>(
 
     // Shared overlay behaviors (src/behaviors/) — see Dialog for the
     // contract. Scrim dismissal stays below: it is this component's own DOM.
-    useLayer({ open, dismissOnEscape: dismissible, onDismiss: () => onOpenChange(false) });
+    const layer = useLayer({ open, dismissOnEscape: dismissible, onDismiss: () => onOpenChange(false) });
     useFocusScope(panelRef, { active: open });
     useScrollLock(open);
 
+    // A press that began while a menu or popover was open above this layer was
+    // that layer's press: it closed the menu, and must not also close this.
     const handleScrimClick = () => {
-      if (dismissible) onOpenChange(false);
+      if (dismissible && layer.ownsPress()) onOpenChange(false);
     };
 
     const classes = [
@@ -133,7 +138,7 @@ export const Drawer = React.forwardRef<HTMLDivElement, DrawerProps>(
                 type="button"
                 className={`${baseClass}__close`}
                 onClick={() => onOpenChange(false)}
-                aria-label="Close drawer"
+                aria-label={closeLabel}
               >
                 <span
                   className={`${baseClass}__close-icon material-symbols-rounded`}

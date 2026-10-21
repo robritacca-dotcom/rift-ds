@@ -105,6 +105,29 @@
   color: var(--color-text-primary);
 }
 
+/* Marker buttons — transparent, focusable hit targets laid over the drawing
+   at each marker, sized from the hit circle in the component. The glyph
+   underneath shows the state; the button carries the name, the focus ring
+   and the pointer. */
+
+.ds-globe__marker {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: none;
+  cursor: pointer;
+}
+
+/* The ring sits on the hit circle itself, with no offset: the callout opens
+   beside the marker with its text one padding step from the centre, and an
+   offset ring reached into that text. */
+.ds-globe__marker:focus-visible {
+  outline: var(--border-050) solid var(--color-action-primary-bg);
+  outline-offset: 0;
+}
+
 .ds-globe__hit {
   fill: transparent;
   stroke: none;

@@ -82,6 +82,8 @@ type AttachmentTileOwnProps = {
   unavailableLabel?: string;
   /** Accessible label for the remove button. Defaults to "Remove" and the file name. */
   removeLabel?: string;
+  /** Accessible name of the upload progress spinner while `uploading`, given the file name. Defaults to "Uploading" followed by the name. */
+  progressLabel?: (name: string) => string;
   /** Additional CSS classes */
   className?: string;
 };
@@ -127,6 +129,7 @@ export const AttachmentTile = React.forwardRef<HTMLDivElement, AttachmentTilePro
       errorLabel = 'Upload failed',
       unavailableLabel = 'Unavailable',
       removeLabel,
+      progressLabel = (fileName: string) => `Uploading ${fileName}`,
       className = '',
       ...rest
     },
@@ -167,7 +170,7 @@ export const AttachmentTile = React.forwardRef<HTMLDivElement, AttachmentTilePro
         <span
           className={`${baseClass}__spinner`}
           role="progressbar"
-          aria-label={`Uploading ${name}`}
+          aria-label={progressLabel(name)}
           aria-valuemin={0}
           aria-valuemax={100}
           aria-valuenow={value}

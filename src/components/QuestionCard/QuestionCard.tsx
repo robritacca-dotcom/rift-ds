@@ -68,6 +68,8 @@ export interface QuestionCardLabels {
   chooseOne: string;
   /** The line above a several-answer question's options, from its `min` and `max`. */
   chooseMany: (min: number, max: number, total: number) => string;
+  /** Visually hidden text read after each picked option in the answered record. Defaults to "(chosen)". */
+  chosen?: string;
 }
 
 
@@ -337,7 +339,7 @@ export const QuestionCard = React.forwardRef<HTMLDivElement, QuestionCardProps>(
                 >
                   <OptionText base={baseClass} option={option} />
                   <Mark base={baseClass} chosen={chosen} multi={shown.mode === 'multi'} />
-                  {chosen && <span className={`${baseClass}__sr-only`}> (chosen)</span>}
+                  {chosen && <span className={`${baseClass}__sr-only`}> {labels.chosen}</span>}
                 </li>
               );
             })}
@@ -346,7 +348,7 @@ export const QuestionCard = React.forwardRef<HTMLDivElement, QuestionCardProps>(
                 <li className={`${baseClass}__option ${baseClass}__option--static ${baseClass}__option--chosen`}>
                   <OptionText base={baseClass} option={{ value: '', label: answer.other }} />
                   <Mark base={baseClass} chosen multi={shown.mode === 'multi'} />
-                  <span className={`${baseClass}__sr-only`}> (chosen)</span>
+                  <span className={`${baseClass}__sr-only`}> {labels.chosen}</span>
                 </li>
               ) : (
                 <li className={`${baseClass}__option ${baseClass}__option--static ${baseClass}__option--other`}>
@@ -587,7 +589,7 @@ export const QuestionSummary = React.forwardRef<HTMLDListElement, QuestionSummar
 QuestionSummary.displayName = 'QuestionSummary';
 
 /* Below the component, so the props parser names the file after it. */
-const DEFAULT_QUESTION_CARD_LABELS: QuestionCardLabels = {
+const DEFAULT_QUESTION_CARD_LABELS: Required<QuestionCardLabels> = {
   other: 'Something else',
   otherPlaceholder: 'Type your answer',
   submit: 'Send',
@@ -608,6 +610,7 @@ const DEFAULT_QUESTION_CARD_LABELS: QuestionCardLabels = {
           : max < total
             ? `Choose up to ${max}`
             : 'Choose one or more',
+  chosen: '(chosen)',
 };
 
 function OptionText({ base, option }: { base: string; option: QuestionCardOption }) {

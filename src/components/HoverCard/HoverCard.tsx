@@ -1,13 +1,17 @@
 'use client';
 
 import React, { useEffect, useId, useRef, useState } from 'react';
+import { useLayer } from '../../behaviors/useLayer';
 import './HoverCard.css';
 import { MOTION_HOVER_SHOW_DELAY_MS, MOTION_HOVER_HIDE_DELAY_MS } from '../../tokens/motion';
 
 type HoverCardOwnProps = {
   /** Trigger element */
   children?: React.ReactNode;
-  /** Panel content — arbitrary elements, unlike Tooltip's plain text. In running text inside a `<p>`, keep it phrasing-level (spans): a block element would end the paragraph mid-parse. */
+  /**
+   * Panel content — arbitrary elements, unlike Tooltip's plain text. In running text inside a `<p>`, keep it phrasing-level (spans): a block element would end the paragraph mid-parse.
+   * Note: this shadows the native `content` attribute, which HoverCard does not expose.
+   */
   content: React.ReactNode;
   /** Preferred position */
   position?: 'top' | 'bottom' | 'left' | 'right';
@@ -42,6 +46,10 @@ export const HoverCard = React.forwardRef<HTMLSpanElement, HoverCardProps>(
       showDelay = MOTION_HOVER_SHOW_DELAY_MS,
       hideDelay = MOTION_HOVER_HIDE_DELAY_MS,
       className = '',
+      onMouseEnter,
+      onMouseLeave,
+      onFocus,
+      onBlur,
       ...rest
     },
     ref,
@@ -70,23 +78,21 @@ export const HoverCard = React.forwardRef<HTMLSpanElement, HoverCardProps>(
       };
     }, []);
 
-    // Escape dismisses while visible, wherever focus is (WCAG 1.4.13).
-    useEffect(() => {
-      if (!visible) return;
-      const onKeyDown = (e: KeyboardEvent) => {
-        if (e.key === 'Escape') {
-          clearTimeout(showTimeoutRef.current);
-          clearTimeout(hideTimeoutRef.current);
-          setVisible(false);
-        }
-      };
-      document.addEventListener('keydown', onKeyDown);
-      return () => document.removeEventListener('keydown', onKeyDown);
-    }, [visible]);
+    // Escape dismisses while visible, wherever focus is (WCAG 1.4.13), through
+    // the shared layer stack, so it never also closes a Dialog beneath.
+    useLayer({
+      open: visible,
+      onDismiss: () => {
+        clearTimeout(showTimeoutRef.current);
+        clearTimeout(hideTimeoutRef.current);
+        setVisible(false);
+      },
+    });
 
     // Focus moving within the container (trigger → a link in the panel)
     // must not close the card; only focus leaving it entirely does.
     const handleBlur = (event: React.FocusEvent<HTMLSpanElement>) => {
+      onBlur?.(event);
       if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
         hide();
       }
@@ -113,9 +119,18 @@ export const HoverCard = React.forwardRef<HTMLSpanElement, HoverCardProps>(
         {...rest}
         ref={ref}
         className={containerClasses}
-        onMouseEnter={show}
-        onMouseLeave={hide}
-        onFocus={show}
+        onMouseEnter={(event) => {
+          onMouseEnter?.(event);
+          show();
+        }}
+        onMouseLeave={(event) => {
+          onMouseLeave?.(event);
+          hide();
+        }}
+        onFocus={(event) => {
+          onFocus?.(event);
+          show();
+        }}
         onBlur={handleBlur}
       >
         {trigger}

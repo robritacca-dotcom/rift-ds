@@ -1,7 +1,13 @@
 'use client';
 
+import { createContext, useContext } from 'react';
 import { PromptSuggestions } from '../components/PromptSuggestions/PromptSuggestions';
 import { useChatWidget } from './context';
+
+/* Carried by context, like the reply row's labels, because the row sits under
+   ChatWidget through AssistantTurn; ChatWidget's `followupsLabel` feeds it. */
+// eslint-disable-next-line react-refresh/only-export-components -- the label context is the row's one input from ChatWidget and lives with the row
+export const FollowupSuggestionsLabelContext = createContext('Follow-up questions');
 
 /**
  * The follow-up questions under a finished answer. Deliberately the same
@@ -24,6 +30,7 @@ export function FollowupSuggestions({
   pending = false,
   entrance = true,
   chosen,
+  chosenLabel,
 }: {
   /** The turn these belong to; makes each suggestion's id unique in the thread. */
   turnId: string;
@@ -34,8 +41,11 @@ export function FollowupSuggestions({
   entrance?: boolean;
   /** The label already sent from this row, which keeps the row as a record. */
   chosen?: string;
+  /** Visually hidden text read after the sent suggestion. Defaults to PromptSuggestions' "(chosen)". */
+  chosenLabel?: string;
 }) {
   const { chooseFollowup } = useChatWidget();
+  const rowLabel = useContext(FollowupSuggestionsLabelContext);
 
   const items = suggestions.map((label, index) => ({
     id: `${turnId}-followup-${index}`,
@@ -46,7 +56,8 @@ export function FollowupSuggestions({
     <PromptSuggestions
       className="ds-chat-widget__followups"
       layout="stack"
-      ariaLabel="Follow-up questions"
+      ariaLabel={rowLabel}
+      chosenLabel={chosenLabel}
       pending={pending}
       entrance={entrance}
       suggestions={items}

@@ -30,7 +30,7 @@ const siteNavButtons = [
   { label: 'Home' },
   { label: 'About' },
   { label: 'Design System', state: 'active' as const },
-  { label: 'Blog', state: 'disabled' as const },
+  { label: 'Blog', disabled: true },
 ];
 
 export const Default: Story = {

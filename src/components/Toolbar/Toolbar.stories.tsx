@@ -91,12 +91,12 @@ const FloatingToolbar = (args: Omit<ComponentProps<typeof Toolbar>, 'children'>)
       <ToolbarSeparator />
       <SegmentedControl
         size="compact"
-        ariaLabel="Canvas mode"
+        aria-label="Canvas mode"
         segments={[
           { label: 'Select', value: 'select' },
           { label: 'Pan', value: 'pan' },
         ]}
-        activeSegment="select"
+        value="select"
       />
       <ToolbarSeparator />
       <CircularButton icon="delete" variant="tertiary" ariaLabel="Delete selection" />

@@ -17,7 +17,7 @@ type WaveformOwnProps = {
    * stops and each bar tracks its level, easing between updates.
    */
   levels?: number[];
-  /** Bar height scale — `default` sits on the md icon size, `compact` on sm. */
+  /** Bar height scale — `default` sits on `--icon-size-600`, `compact` on `--icon-size-500`. */
   size?: 'default' | 'compact';
   /**
    * What a screen reader hears the indicator say. Defaults per state

@@ -36,6 +36,12 @@ type PinInputOwnProps = {
   error?: boolean;
   /** Whether the whole control is disabled */
   disabled?: boolean;
+  /**
+   * Accessible name of each cell, given its 1-based position and the cell count.
+   * Defaults to "Digit <position> of <count>" for the numeric format and
+   * "Character <position> of <count>" for alphanumeric.
+   */
+  cellLabel?: (position: number, count: number) => string;
   /** Additional CSS classes — applied to the wrapper, not the cells */
   className?: string;
 };
@@ -68,6 +74,7 @@ export const PinInput = React.forwardRef<HTMLInputElement, PinInputProps>(
       helperText,
       error = false,
       disabled = false,
+      cellLabel,
       className = '',
       id,
       ...rest
@@ -186,6 +193,8 @@ export const PinInput = React.forwardRef<HTMLInputElement, PinInputProps>(
 
     const describedBy = helperText ? `${controlId}-helper` : rest['aria-describedby'];
     const characterNoun = format === 'numeric' ? 'Digit' : 'Character';
+    const labelCell =
+      cellLabel ?? ((position: number, count: number) => `${characterNoun} ${position} of ${count}`);
 
     return (
       <Field
@@ -216,7 +225,7 @@ export const PinInput = React.forwardRef<HTMLInputElement, PinInputProps>(
               value={char}
               disabled={disabled}
               id={index === 0 ? controlId : undefined}
-              aria-label={`${characterNoun} ${index + 1} of ${length}`}
+              aria-label={labelCell(index + 1, length)}
               aria-invalid={error || undefined}
               onChange={handleCellChange(index)}
               onKeyDown={handleCellKeyDown(index)}

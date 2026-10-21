@@ -55,7 +55,7 @@ export interface ThreadPanelThread {
   unread?: boolean;
   /** Trailing icon before the meta — Material Symbol name (string) or custom element (ReactNode), e.g. `cloud` for a session that lives remotely. */
   icon?: string | React.ReactNode;
-  /** Marks the thread pinned with a trailing pin glyph. A marker only: the host groups pinned threads (typically a leading group) and offers pin/unpin through the row menu. */
+  /** Marks the thread pinned with a trailing pin glyph, read aloud through the panel's `pinnedLabel`. A marker only: the host groups pinned threads (typically a leading group) and offers pin/unpin through the row menu. */
   pinned?: boolean;
 }
 
@@ -115,8 +115,15 @@ type ThreadPanelOwnProps = {
   onThreadAction?: (threadId: string, actionId: string) => void;
   /** Spoken text for each thread status, read after the row's title; the dot itself is decorative. Merged over the English defaults (Working, Unread, Needs input, Failed). `idle` is silent unless given a label here. */
   statusLabels?: Partial<Record<ThreadPanelThreadStatus, string>>;
-  /** Accessible name for a row's menu trigger; the thread's title is appended after it. */
-  threadMenuLabel?: string;
+  /** Spoken text for a `pinned` thread, read after the title and any status; the pin glyph itself is decorative. Not read on a `pending` row, whose name is its tooltip alone. */
+  pinnedLabel?: string;
+  /**
+   * Accessible name for a row's menu trigger. A string is followed by a colon
+   * and the thread's title ("Thread options: Q3 plan"); a function is given
+   * the title and returns the whole name, so a translation can put the title
+   * where its grammar needs it.
+   */
+  threadMenuLabel?: string | ((title: string) => string);
   /** Id of the thread being renamed: its row swaps to an inline text field, prefilled with the title and selected. The host owns the state, like everything else. */
   renamingThreadId?: string;
   /** Fires with the thread's id and the trimmed new title when a rename commits (Enter, or focus leaving the field). An empty or unchanged value fires `onRenameCancel` instead. */
@@ -129,7 +136,7 @@ type ThreadPanelOwnProps = {
   logo?: React.ReactNode;
   /** Brand name beside the logo. The header row renders only when `logo`, `logoText`, or `onExpandedChange` is given. */
   logoText?: string;
-  /** Text for the new-thread row. The row renders when this, `onNewThread`, or `newThreadHref` is given. */
+  /** Text for the new-thread row. Defaults to "New thread". The row renders when this, `onNewThread`, or `newThreadHref` is given. */
   newThreadLabel?: string;
   /** Icon for the new-thread row — Material Symbol name (string) or custom element (ReactNode). Defaults to the pen-in-a-box `edit_square`, the same glyph chat headers use for New chat. */
   newThreadIcon?: string | React.ReactNode;
@@ -355,6 +362,7 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
       threadActions,
       onThreadAction,
       statusLabels,
+      pinnedLabel = 'Pinned',
       threadMenuLabel = 'Thread options',
       renamingThreadId,
       onThreadRename,
@@ -756,6 +764,14 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
                                     {statusLabel}
                                   </span>
                                 )}
+                                {/* The pin glyph below is decorative, so its
+                                    meaning rides in the row's text, the
+                                    status label's manner. */}
+                                {thread.pinned && !thread.pending && (
+                                  <span className={`${baseClass}__status-label`}>
+                                    {pinnedLabel}
+                                  </span>
+                                )}
                                 {!thread.pending &&
                                   (thread.icon ||
                                     thread.pinned ||
@@ -808,7 +824,11 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
                                     <button
                                       type="button"
                                       className={`${baseClass}__menu-trigger`}
-                                      aria-label={`${threadMenuLabel}: ${thread.title}`}
+                                      aria-label={
+                                        typeof threadMenuLabel === 'function'
+                                          ? threadMenuLabel(thread.title)
+                                          : `${threadMenuLabel}: ${thread.title}`
+                                      }
                                     >
                                       <span
                                         className={iconClass}

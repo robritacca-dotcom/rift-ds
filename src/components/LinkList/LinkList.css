@@ -33,7 +33,7 @@
 }
 
 .ds-link-list__symbol {
-  font-size: 28px;
+  font-size: 28px; /* ds-allow(icon-size): matches the 28px image slot it stands in for, off the icon scale by design */
   line-height: 1;
   color: var(--color-text-secondary);
 }
@@ -41,7 +41,7 @@
 .ds-link-list__content {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: var(--gap-050);
   min-width: 0;
   flex: 1;
 }

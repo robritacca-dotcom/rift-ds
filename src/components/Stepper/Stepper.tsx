@@ -30,6 +30,12 @@ type StepperOwnProps = {
   onStepClick?: (index: number) => void;
   /** Layout direction */
   orientation?: 'horizontal' | 'vertical';
+  /**
+   * Status read after a completed step's label. The check mark that draws the
+   * state is decorative, so this visually hidden text is what tells a screen
+   * reader a done step from an upcoming one. Defaults to "Completed".
+   */
+  completeLabel?: string;
   /** Additional CSS classes */
   className?: string;
 };
@@ -37,6 +43,7 @@ type StepperOwnProps = {
 export interface StepperProps
   extends StepperOwnProps,
     Omit<React.ComponentPropsWithoutRef<'ol'>, keyof StepperOwnProps> {}
+
 
 /**
  * Stepper component — step-by-step progress indicator for wizards and
@@ -55,6 +62,7 @@ export const Stepper = React.forwardRef<HTMLOListElement, StepperProps>(
       activeStep,
       onStepClick,
       orientation = 'horizontal',
+      completeLabel = 'Completed',
       className = '',
       ...rest
     },
@@ -97,6 +105,9 @@ export const Stepper = React.forwardRef<HTMLOListElement, StepperProps>(
           const text = (
             <span className={`${baseClass}__text`}>
               <span className={`${baseClass}__label`}>{step.label}</span>
+              {status === 'complete' && (
+                <span className="ds-stepper__sr-only">{completeLabel}</span>
+              )}
               {step.description && (
                 <span className={`${baseClass}__description`}>
                   {step.description}

@@ -1,9 +1,35 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { MOTION_FEEDBACK_RESET_MS } from '../tokens/motion';
 import { useChatWidget } from './context';
 import type { ChatTurn } from './types';
+
+/** The row's accessible names and its copy announcement, set from ChatWidget's label props. */
+export interface ResponseActionsLabels {
+  /** The copy button's name. */
+  copy: string;
+  /** The copy button's name once the copy has landed. */
+  copied: string;
+  /** What the polite live region says once the copy has landed. */
+  copiedAnnouncement: string;
+  /** The thumbs-up button's name. */
+  good: string;
+  /** The thumbs-down button's name. */
+  bad: string;
+}
+
+/* Carried by context rather than props because the row sits two levels under
+   ChatWidget (through AssistantTurn), and only the widget's own label props
+   ever set it. */
+// eslint-disable-next-line react-refresh/only-export-components -- the labels context is the row's one input from ChatWidget and lives with the row
+export const ResponseActionsLabelsContext = createContext<ResponseActionsLabels>({
+  copy: 'Copy response',
+  copied: 'Copied',
+  copiedAnnouncement: 'Copied to clipboard',
+  good: 'Good response',
+  bad: 'Bad response',
+});
 
 /**
  * The row under a committed assistant turn: copy, and, when the server
@@ -21,6 +47,7 @@ import type { ChatTurn } from './types';
  */
 export function ResponseActions({ turn }: { turn: ChatTurn }) {
   const { submitFeedback } = useChatWidget();
+  const labels = useContext(ResponseActionsLabelsContext);
   const [copied, setCopied] = useState(false);
   const revertTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -64,7 +91,7 @@ export function ResponseActions({ turn }: { turn: ChatTurn }) {
         type="button"
         className="ds-chat-widget__action"
         onClick={copy}
-        aria-label={copied ? 'Copied' : 'Copy response'}
+        aria-label={copied ? labels.copied : labels.copy}
       >
         {/* Both icons occupy the same cell; the swap is a crossfade-and-scale
             between them, not a text change, which is what makes it animatable. */}
@@ -82,7 +109,7 @@ export function ResponseActions({ turn }: { turn: ChatTurn }) {
             type="button"
             className="ds-chat-widget__action"
             onClick={() => vote('up')}
-            aria-label="Good response"
+            aria-label={labels.good}
             aria-pressed={turn.feedback === 'up'}
           >
             <span className={iconClass(false)} aria-hidden="true">
@@ -93,7 +120,7 @@ export function ResponseActions({ turn }: { turn: ChatTurn }) {
             type="button"
             className="ds-chat-widget__action"
             onClick={() => vote('down')}
-            aria-label="Bad response"
+            aria-label={labels.bad}
             aria-pressed={turn.feedback === 'down'}
           >
             <span className={iconClass(false)} aria-hidden="true">
@@ -105,7 +132,7 @@ export function ResponseActions({ turn }: { turn: ChatTurn }) {
 
       {/* The visual state change is silent to a screen reader; this is not. */}
       <span className="ds-chat-widget__sr-only" aria-live="polite">
-        {copied ? 'Copied to clipboard' : ''}
+        {copied ? labels.copiedAnnouncement : ''}
       </span>
     </>
   );

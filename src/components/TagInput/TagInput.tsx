@@ -32,6 +32,8 @@ type TagInputOwnProps = {
   error?: boolean;
   /** Helper or error message displayed below the control */
   helperText?: string;
+  /** Accessible name of a tag's remove button, given the tag. Defaults to "Remove <tag>". */
+  removeLabel?: (tag: string) => string;
   /** Additional CSS classes — applied to the wrapper, not the <input> */
   className?: string;
 };
@@ -62,6 +64,7 @@ export const TagInput = React.forwardRef<HTMLInputElement, TagInputProps>(
       size = 'default',
       error = false,
       helperText,
+      removeLabel = (tag) => `Remove ${tag}`,
       className = '',
       placeholder = '',
       disabled = false,
@@ -107,7 +110,13 @@ export const TagInput = React.forwardRef<HTMLInputElement, TagInputProps>(
 
     const commitDraft = () => {
       const tag = draft.trim();
-      if (!tag || atLimit) return;
+      // A whitespace-only draft commits nothing, and its spaces go with it
+      // rather than lingering ahead of the next entry.
+      if (!tag) {
+        if (draft !== '') setDraft('');
+        return;
+      }
+      if (atLimit) return;
       if (!tags.includes(tag)) updateValues([...tags, tag]);
       setDraft('');
     };
@@ -169,7 +178,7 @@ export const TagInput = React.forwardRef<HTMLInputElement, TagInputProps>(
                 className={`${baseClass}__remove`}
                 onClick={() => removeTag(index)}
                 disabled={disabled}
-                aria-label={`Remove ${tag}`}
+                aria-label={removeLabel(tag)}
               >
                 <span className="material-symbols-rounded" aria-hidden="true">
                   close

@@ -40,7 +40,7 @@ export interface CommandPaletteGroup {
   commands: CommandPaletteCommand[];
 }
 
-export interface CommandPaletteProps {
+type CommandPaletteOwnProps = {
   /** Whether the palette is open */
   open: boolean;
   /** Callback when the palette requests to open or close */
@@ -53,12 +53,17 @@ export interface CommandPaletteProps {
   emptyMessage?: string;
   /** Show a loading affordance in place of results */
   loading?: boolean;
+  /** Status text shown in place of results while `loading` is set. Defaults to "Loading…". */
+  loadingMessage?: string;
   /**
    * Bind Cmd+K / Ctrl+K globally to toggle the palette. Set to false when the
    * host app owns the shortcut.
    */
   hotkey?: boolean;
-  /** Called with the chosen command, after its own `onSelect` */
+  /**
+   * Called with the chosen command, after its own `onSelect`. Replaces the
+   * native `onSelect` (text-selection) handler on the panel.
+   */
   onSelect?: (command: CommandPaletteCommand) => void;
   /** Called as the user types, for async/server-side search */
   onSearchChange?: (query: string) => void;
@@ -66,34 +71,65 @@ export interface CommandPaletteProps {
   manualFiltering?: boolean;
   /** Hide the hint row at the bottom of the panel */
   hideFooter?: boolean;
-  /** Additional CSS classes */
+  /**
+   * The words in the hint row, merged over the English defaults: the text
+   * beside each key ("to navigate", "to select", "to close") and `escapeKey`,
+   * the visible name on the Escape key cap ("esc").
+   */
+  hintLabels?: { navigate?: string; select?: string; close?: string; escapeKey?: string };
+  /** Accessible name of the close button */
+  closeLabel?: string;
+  /** Additional CSS classes on the overlay container (the ref and native attributes go on the panel) */
   className?: string;
-}
+};
+
+export interface CommandPaletteProps
+  extends CommandPaletteOwnProps,
+    Omit<React.ComponentPropsWithoutRef<'div'>, keyof CommandPaletteOwnProps | 'children' | 'role'> {}
 
 /**
  * CommandPalette component — a modal Cmd+K launcher that searches a grouped
  * command list. Filtering matches labels, descriptions, and keywords; the
  * arrow keys move a highlight that stays in view, and Enter runs the command.
  */
-export const CommandPalette = ({
+export const CommandPalette = React.forwardRef<HTMLDivElement, CommandPaletteProps>(({
   open,
   onOpenChange,
   groups,
   placeholder = 'Type a command or search…',
   emptyMessage = 'No matching commands',
   loading = false,
+  loadingMessage = 'Loading…',
   hotkey = true,
   onSelect,
   onSearchChange,
   manualFiltering = false,
   hideFooter = false,
+  hintLabels,
+  closeLabel = 'Close command palette',
   className = '',
-}: CommandPaletteProps) => {
+  ...rest
+}, ref) => {
+  const hints = {
+    navigate: hintLabels?.navigate ?? 'to navigate',
+    select: hintLabels?.select ?? 'to select',
+    close: hintLabels?.close ?? 'to close',
+    escapeKey: hintLabels?.escapeKey ?? 'esc',
+  };
   const [query, setQuery] = useState('');
   const [rawActiveIndex, setActiveIndex] = useState(0);
   const [prevOpen, setPrevOpen] = useState(open);
   const inputRef = useRef<HTMLInputElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+  // The focus scope needs the panel, and so does the consumer's ref.
+  const setPanelRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      panelRef.current = node;
+      if (typeof ref === 'function') ref(node);
+      else if (ref) ref.current = node;
+    },
+    [ref]
+  );
   const listRef = useRef<HTMLDivElement>(null);
   const generatedId = useId();
   const baseClass = 'ds-command-palette';
@@ -164,7 +200,7 @@ export const CommandPalette = ({
   // platforms — so the page keeps its scrollbar and scroll *input* is
   // cancelled outside the command list instead. Dragging the scrollbar thumb
   // itself remains possible; the scrim makes that a deliberate act.
-  useLayer({ open, onDismiss: () => onOpenChange(false) });
+  const layer = useLayer({ open, onDismiss: () => onOpenChange(false) });
   useFocusScope(panelRef, { active: open, initialFocus: () => inputRef.current });
   useScrollLock(open, { strategy: 'cancel-events', allowWithin: listRef });
 
@@ -222,7 +258,8 @@ export const CommandPalette = ({
 
   const listboxId = `${generatedId}-listbox`;
   const activeCommand = flatCommands[activeIndex];
-  const activeDescendantId = activeCommand
+  // While loading no command is rendered, so the input must not point at one.
+  const activeDescendantId = activeCommand && !loading
     ? `${generatedId}-command-${activeCommand.id}`
     : undefined;
 
@@ -235,14 +272,21 @@ export const CommandPalette = ({
 
   const palette = (
     <div className={classes}>
-      <div className={`${baseClass}__backdrop`} onClick={() => onOpenChange(false)} />
+      {/* A press that began while another layer was on top was that layer's. */}
+      <div
+        className={`${baseClass}__backdrop`}
+        onClick={() => {
+          if (layer.ownsPress()) onOpenChange(false);
+        }}
+      />
 
       <div
+        aria-label="Command palette"
+        {...rest}
         className={`${baseClass}__panel`}
-        ref={panelRef}
+        ref={setPanelRef}
         role="dialog"
         aria-modal="true"
-        aria-label="Command palette"
       >
         <div className={`${baseClass}__search`}>
           <span className={`${baseClass}__search-icon material-symbols-rounded`} aria-hidden="true">
@@ -268,7 +312,7 @@ export const CommandPalette = ({
             type="button"
             className={`${baseClass}__close`}
             onClick={() => onOpenChange(false)}
-            aria-label="Close command palette"
+            aria-label={closeLabel}
           >
             <span className="material-symbols-rounded" aria-hidden="true">
               close
@@ -276,11 +320,23 @@ export const CommandPalette = ({
           </button>
         </div>
 
-        <div className={`${baseClass}__list`} role="listbox" id={listboxId} ref={listRef}>
-          {loading && <p className={`${baseClass}__status`}>Loading…</p>}
+        {/* A listbox may hold only options and groups, so the container takes the
+            role only while it shows commands; the loading and empty messages are
+            status regions in the same box (axe: aria-required-children). */}
+        <div
+          className={`${baseClass}__list`}
+          role={!loading && filteredGroups.length > 0 ? 'listbox' : undefined}
+          id={listboxId}
+          ref={listRef}
+        >
+          {loading && (
+            <p className={`${baseClass}__status`} role="status">
+              {loadingMessage}
+            </p>
+          )}
 
           {!loading && filteredGroups.length === 0 && (
-            <p className={`${baseClass}__status`} aria-live="polite">
+            <p className={`${baseClass}__status`} role="status">
               {emptyMessage}
             </p>
           )}
@@ -363,15 +419,15 @@ export const CommandPalette = ({
             <span className={`${baseClass}__hint`}>
               <Kbd size="compact">↑</Kbd>
               <Kbd size="compact">↓</Kbd>
-              to navigate
+              {hints.navigate}
             </span>
             <span className={`${baseClass}__hint`}>
               <Kbd size="compact">↵</Kbd>
-              to select
+              {hints.select}
             </span>
             <span className={`${baseClass}__hint`}>
-              <Kbd size="compact">esc</Kbd>
-              to close
+              <Kbd size="compact">{hints.escapeKey}</Kbd>
+              {hints.close}
             </span>
           </div>
         )}
@@ -381,4 +437,6 @@ export const CommandPalette = ({
 
   if (!mounted) return null;
   return ReactDOM.createPortal(palette, document.body);
-};
+});
+
+CommandPalette.displayName = 'CommandPalette';

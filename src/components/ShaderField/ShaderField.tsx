@@ -9,6 +9,7 @@ import {
   type ShaderParams,
 } from './useShaderField';
 import './ShaderField.css';
+import { MOTION_RENDERER_WATCHDOG_MS } from '../../tokens/motion';
 
 /**
  * How the renderer has resolved.
@@ -29,7 +30,7 @@ export type ShaderFieldStatus = 'pending' | 'active' | 'unavailable';
  * start, which lands within a frame of mount, so a healthy field never trips
  * it; the point is only that the unresolved state can never be terminal.
  */
-const WATCHDOG_MS = 1500;
+const WATCHDOG_MS = MOTION_RENDERER_WATCHDOG_MS;
 
 /** Props owned by ShaderField itself — everything else falls through to the canvas. */
 type ShaderFieldOwnProps = {

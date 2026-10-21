@@ -31,6 +31,9 @@ const STEP_STATUS_TEXT: Record<AgentPlanStepStatus, string> = {
   failed: 'Failed',
 };
 
+const defaultRemainingLabel = (remaining: number) =>
+  `${remaining} step${remaining === 1 ? '' : 's'} left`;
+
 /** Props owned by AgentPlan itself — everything else falls through to the root element. */
 type AgentPlanOwnProps = {
   /** The plan, in order. Step status drives each row's indicator and colour. */
@@ -38,8 +41,24 @@ type AgentPlanOwnProps = {
   /**
    * Header text. Left unset, it is computed from the steps —
    * "3 steps left", or "All steps complete" once everything is done.
+   * Note: this shadows the native `title` tooltip attribute, which AgentPlan does not expose.
    */
   title?: string;
+  /**
+   * The computed header while steps remain, given how many are left.
+   * Defaults to "1 step left" or "N steps left". Ignored when `title` is set.
+   */
+  remainingLabel?: (remaining: number) => string;
+  /**
+   * The computed header once every step is complete. Defaults to
+   * "All steps complete". Ignored when `title` is set.
+   */
+  completeLabel?: string;
+  /**
+   * Visually hidden text announcing each step's status after its label.
+   * Merged over the English defaults (Not started, In progress, Completed, Failed).
+   */
+  statusLabels?: Partial<Record<AgentPlanStepStatus, string>>;
   /** Open state for controlled use. Pair with `onOpenChange`. */
   open?: boolean;
   /** Open state for uncontrolled use. */
@@ -68,6 +87,9 @@ export const AgentPlan = React.forwardRef<HTMLDivElement, AgentPlanProps>(
     {
       steps,
       title,
+      remainingLabel = defaultRemainingLabel,
+      completeLabel = 'All steps complete',
+      statusLabels,
       open,
       defaultOpen = true,
       onOpenChange,
@@ -95,10 +117,8 @@ export const AgentPlan = React.forwardRef<HTMLDivElement, AgentPlanProps>(
     const completed = steps.filter((step) => step.status === 'completed').length;
     const remaining = total - completed;
     const resolvedTitle =
-      title ??
-      (total > 0 && remaining === 0
-        ? 'All steps complete'
-        : `${remaining} step${remaining === 1 ? '' : 's'} left`);
+      title ?? (total > 0 && remaining === 0 ? completeLabel : remainingLabel(remaining));
+    const statusText = { ...STEP_STATUS_TEXT, ...statusLabels };
 
     const classes = [baseClass, isOpen ? `${baseClass}--open` : '', className]
       .filter(Boolean)
@@ -154,7 +174,7 @@ export const AgentPlan = React.forwardRef<HTMLDivElement, AgentPlanProps>(
                         <span className={`${baseClass}__detail`}>{step.detail}</span>
                       )}
                     </span>
-                    <span className={`${baseClass}__sr`}>{STEP_STATUS_TEXT[status]}</span>
+                    <span className={`${baseClass}__sr`}>{statusText[status]}</span>
                   </li>
                 );
               })}

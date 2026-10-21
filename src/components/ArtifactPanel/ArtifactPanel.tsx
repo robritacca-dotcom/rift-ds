@@ -2,7 +2,7 @@
 
 import React, { useId, useState } from 'react';
 import { CircularButton } from '../CircularButton/CircularButton';
-import { CodeBlock } from '../CodeBlock/CodeBlock';
+import { CodeBlock, type CodeBlockProps } from '../CodeBlock/CodeBlock';
 import { SegmentedControl } from '../SegmentedControl/SegmentedControl';
 import './ArtifactPanel.css';
 import '../../fonts/material-symbols.css';
@@ -58,6 +58,8 @@ type ArtifactPanelOwnProps = {
   collapseLabel?: string;
   /** Accessible name for the close button. */
   closeLabel?: string;
+  /** The words the code view's CodeBlock writes, merged over its English defaults: the copy button's name and text ("Copy code", "Copy", "Copied") and the code region's name ("Code: <language>"). */
+  codeBlockLabels?: Pick<CodeBlockProps, 'copyLabel' | 'copyText' | 'copiedLabel' | 'codeLabel'>;
   /** Additional CSS classes */
   className?: string;
 };
@@ -106,6 +108,7 @@ export const ArtifactPanel = React.forwardRef<HTMLElement, ArtifactPanelProps>(
       expandLabel = 'Expand the artifact',
       collapseLabel = 'Collapse the artifact',
       closeLabel = 'Close the artifact',
+      codeBlockLabels,
       className = '',
       ...rest
     },
@@ -158,13 +161,13 @@ export const ArtifactPanel = React.forwardRef<HTMLElement, ArtifactPanelProps>(
               <SegmentedControl
                 size="compact"
                 tone="neutral"
-                ariaLabel={viewLabel}
+                aria-label={viewLabel}
                 segments={[
                   { value: 'preview', label: previewLabel },
                   { value: 'code', label: codeLabel },
                 ]}
-                activeSegment={current}
-                onSegmentChange={changeView}
+                value={current}
+                onValueChange={changeView}
               />
             )}
             {actions}
@@ -193,7 +196,7 @@ export const ArtifactPanel = React.forwardRef<HTMLElement, ArtifactPanelProps>(
         <div className={`${baseClass}__body`} data-view={current}>
           {current === 'code' && hasCode ? (
             <div className={`${baseClass}__code`}>
-              <CodeBlock code={code ?? ''} language={language} />
+              <CodeBlock {...codeBlockLabels} code={code ?? ''} language={language} />
             </div>
           ) : children ? (
             <div className={`${baseClass}__content`}>{children}</div>

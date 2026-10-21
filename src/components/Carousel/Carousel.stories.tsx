@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { Carousel } from './Carousel';
@@ -157,4 +158,30 @@ export const ImageSlides: Story = {
       ))}
     </Carousel>
   ),
+};
+
+/** Controlled: the parent owns the position through `slide` and `onSlideChange`. */
+export const Controlled: Story = {
+  args: {
+    children: undefined,
+  },
+  render: function ControlledCarousel(args) {
+    const [slide, setSlide] = useState(2);
+    return (
+      <Carousel
+        {...args}
+        slide={slide}
+        onSlideChange={(next) => {
+          setSlide(next);
+          args.onSlideChange?.(next);
+        }}
+      >
+        {slides.map((s, i) => (
+          <div key={i} style={{ ...slideStyle, backgroundColor: s.bg }}>
+            {s.label}
+          </div>
+        ))}
+      </Carousel>
+    );
+  },
 };

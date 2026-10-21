@@ -47,7 +47,7 @@
   border-radius: var(--radius-pill);
   background-color: transparent;
   color: var(--color-text-secondary);
-  font-size: 24px;
+  font-size: 24px; /* ds-allow(icon-size): the glyph is the button, which keeps its own box, so it sizes the icon by font-size rather than --icon-size (which would resize the button) */
   cursor: pointer;
   transition: background-color var(--motion-duration-base) var(--motion-ease-standard);
 }
@@ -78,6 +78,21 @@
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: var(--gap-050); /* 2px */
+}
+
+/*
+ * The grid's rows (the weekday headers, then one per week) exist for the
+ * ARIA grid structure. Each spans the whole grid and takes its columns from
+ * it as a subgrid, so the cells sit in the same seven tracks as before (the
+ * repeat() line is the fallback where subgrid is unsupported). The gridcell
+ * wrapping each day button is a plain block, so the button keeps its box.
+ */
+.ds-date-picker__row {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: subgrid;
+  column-gap: var(--gap-050); /* 2px, the grid's own gap */
 }
 
 /* ============================================
@@ -174,18 +189,18 @@
 .ds-date-picker--compact .ds-date-picker__nav-btn {
   width: 28px;
   height: 28px;
-  font-size: 20px;
+  font-size: 20px; /* ds-allow(icon-size): the compact glyph-button, as above */
 }
 
 .ds-date-picker--compact .ds-date-picker__day-header {
   height: 28px;
-  font-size: 12px;
+  font-size: var(--font-caption-size);
 }
 
 .ds-date-picker--compact .ds-date-picker__cell {
   width: 28px;
   height: 28px;
-  font-size: 12px;
+  font-size: var(--font-caption-size);
 }
 
 /* ============================================

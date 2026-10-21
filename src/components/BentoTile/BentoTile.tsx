@@ -75,7 +75,11 @@ const DEFAULT_BLOBS: readonly ShaderBlob[] = [
 const DEFAULT_PARAMS: Partial<ShaderParams> = { crop: 0, react: 0, intensity: 0.9, streak: 0.15, warp: 0.18, grain: 0.05, speed: 1.2 };
 
 type ViewTransitionDoc = Document & {
-  startViewTransition?: (cb: () => void) => { finished: Promise<void> };
+  startViewTransition?: (cb: () => void) => {
+    finished: Promise<void>;
+    ready?: Promise<void>;
+    updateCallbackDone?: Promise<void>;
+  };
 };
 
 /** The class on the root while a tile morphs, scoping the transition rules in BentoTile.css. */
@@ -95,10 +99,13 @@ function morph(update: () => void): Promise<void> {
   }
   const root = document.documentElement;
   root.classList.add(MORPHING);
-  return doc
-    .startViewTransition(() => flushSync(update))
-    .finished.catch(() => {})
-    .finally(() => root.classList.remove(MORPHING));
+  const transition = doc.startViewTransition(() => flushSync(update));
+  // A transition skipped by a newer one (a fast reopen) rejects `ready` with
+  // an AbortError, and nothing else observes it: left alone it surfaces as an
+  // unhandled rejection in the host page. The state change still applied.
+  transition.ready?.catch(() => {});
+  transition.updateCallbackDone?.catch(() => {});
+  return transition.finished.catch(() => {}).finally(() => root.classList.remove(MORPHING));
 }
 
 /**
@@ -403,7 +410,7 @@ function BentoTileOverlay({ title, titleId, panelName, toggleName, closeLabel, o
   // Shared overlay behaviors (src/behaviors/). The scroll lock cancels input
   // rather than pinning the body: pinning hides the page scrollbar, and on a
   // classic-scrollbar platform the page then shifts sideways under the morph.
-  useLayer({ open: true, dismissOnEscape: true, onDismiss: onClose });
+  const layer = useLayer({ open: true, dismissOnEscape: true, onDismiss: onClose });
   useFocusScope(panelRef, { active: mounted, initialFocus: () => closeRef.current });
   useScrollLock(true, { strategy: 'cancel-events', allowWithin: scrollerRef });
 
@@ -413,7 +420,7 @@ function BentoTileOverlay({ title, titleId, panelName, toggleName, closeLabel, o
       <div
         ref={scrollerRef}
         className="ds-bento-tile-overlay__scroller"
-        onClick={(e) => e.target === e.currentTarget && onClose()}
+        onClick={(e) => e.target === e.currentTarget && layer.ownsPress() && onClose()}
       >
         <div
           ref={panelRef}

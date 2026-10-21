@@ -18,9 +18,11 @@ const meta = {
       control: 'select',
       options: ['default', 'neutral', 'destructive'],
     },
+    // `state` survives only as the documentation affordance for drawing a
+    // static hover or active look; disabled is the `disabled` prop.
     state: {
       control: 'select',
-      options: ['default', 'hover', 'active', 'disabled'],
+      options: ['hover', 'active'],
     },
     size: {
       control: 'select',
@@ -29,7 +31,7 @@ const meta = {
     label: {
       control: 'text',
     },
-    text: {
+    disabled: {
       control: 'boolean',
     },
     loading: {
@@ -39,9 +41,6 @@ const meta = {
       control: 'text',
     },
     iconRight: {
-      control: 'text',
-    },
-    icon: {
       control: 'text',
     },
   },
@@ -62,9 +61,7 @@ type Story = StoryObj<typeof meta>;
 export const PrimaryDefault: Story = {
   args: {
     variant: 'primary',
-    state: 'default',
     label: 'Button',
-    text: true,
     iconRight: 'arrow_forward',
   },
 };
@@ -74,7 +71,6 @@ export const PrimaryHover: Story = {
     variant: 'primary',
     state: 'hover',
     label: 'Button',
-    text: true,
     iconRight: 'arrow_forward',
   },
 };
@@ -84,7 +80,6 @@ export const PrimaryActive: Story = {
     variant: 'primary',
     state: 'active',
     label: 'Button',
-    text: true,
     iconRight: 'arrow_forward',
   },
 };
@@ -92,9 +87,8 @@ export const PrimaryActive: Story = {
 export const PrimaryDisabled: Story = {
   args: {
     variant: 'primary',
-    state: 'disabled',
+    disabled: true,
     label: 'Button',
-    text: true,
     iconRight: 'arrow_forward',
   },
 };
@@ -106,9 +100,7 @@ export const PrimaryDisabled: Story = {
 export const SecondaryDefault: Story = {
   args: {
     variant: 'secondary',
-    state: 'default',
     label: 'Button',
-    text: true,
     iconRight: 'arrow_forward',
   },
 };
@@ -118,7 +110,6 @@ export const SecondaryHover: Story = {
     variant: 'secondary',
     state: 'hover',
     label: 'Button',
-    text: true,
     iconRight: 'arrow_forward',
   },
 };
@@ -128,7 +119,6 @@ export const SecondaryActive: Story = {
     variant: 'secondary',
     state: 'active',
     label: 'Button',
-    text: true,
     iconRight: 'arrow_forward',
   },
 };
@@ -136,9 +126,8 @@ export const SecondaryActive: Story = {
 export const SecondaryDisabled: Story = {
   args: {
     variant: 'secondary',
-    state: 'disabled',
+    disabled: true,
     label: 'Button',
-    text: true,
     iconRight: 'arrow_forward',
   },
 };
@@ -150,9 +139,7 @@ export const SecondaryDisabled: Story = {
 export const TertiaryDefault: Story = {
   args: {
     variant: 'tertiary',
-    state: 'default',
     label: 'Button',
-    text: true,
     iconRight: 'arrow_forward',
   },
 };
@@ -162,7 +149,6 @@ export const TertiaryHover: Story = {
     variant: 'tertiary',
     state: 'hover',
     label: 'Button',
-    text: true,
     iconRight: 'arrow_forward',
   },
 };
@@ -172,7 +158,6 @@ export const TertiaryActive: Story = {
     variant: 'tertiary',
     state: 'active',
     label: 'Button',
-    text: true,
     iconRight: 'arrow_forward',
   },
 };
@@ -180,9 +165,8 @@ export const TertiaryActive: Story = {
 export const TertiaryDisabled: Story = {
   args: {
     variant: 'tertiary',
-    state: 'disabled',
+    disabled: true,
     label: 'Button',
-    text: true,
     iconRight: 'arrow_forward',
   },
 };
@@ -195,9 +179,7 @@ export const NeutralDefault: Story = {
   args: {
     variant: 'primary',
     tone: 'neutral',
-    state: 'default',
     label: 'Button',
-    text: true,
     iconRight: 'arrow_forward',
   },
 };
@@ -208,7 +190,6 @@ export const NeutralHover: Story = {
     tone: 'neutral',
     state: 'hover',
     label: 'Button',
-    text: true,
     iconRight: 'arrow_forward',
   },
 };
@@ -219,7 +200,6 @@ export const NeutralActive: Story = {
     tone: 'neutral',
     state: 'active',
     label: 'Button',
-    text: true,
     iconRight: 'arrow_forward',
   },
 };
@@ -228,9 +208,8 @@ export const NeutralDisabled: Story = {
   args: {
     variant: 'primary',
     tone: 'neutral',
-    state: 'disabled',
+    disabled: true,
     label: 'Button',
-    text: true,
     iconRight: 'arrow_forward',
   },
 };
@@ -239,10 +218,8 @@ export const CompactNeutralDefault: Story = {
   args: {
     variant: 'primary',
     tone: 'neutral',
-    state: 'default',
     size: 'compact',
     label: 'Button',
-    text: true,
     iconRight: 'arrow_forward',
   },
 };
@@ -255,9 +232,7 @@ export const SecondaryNeutralDefault: Story = {
   args: {
     variant: 'secondary',
     tone: 'neutral',
-    state: 'default',
     label: 'Button',
-    text: true,
     iconRight: 'arrow_forward',
   },
 };
@@ -268,7 +243,6 @@ export const SecondaryNeutralHover: Story = {
     tone: 'neutral',
     state: 'hover',
     label: 'Button',
-    text: true,
     iconRight: 'arrow_forward',
   },
 };
@@ -279,7 +253,6 @@ export const SecondaryNeutralActive: Story = {
     tone: 'neutral',
     state: 'active',
     label: 'Button',
-    text: true,
     iconRight: 'arrow_forward',
   },
 };
@@ -288,9 +261,8 @@ export const SecondaryNeutralDisabled: Story = {
   args: {
     variant: 'secondary',
     tone: 'neutral',
-    state: 'disabled',
+    disabled: true,
     label: 'Button',
-    text: true,
     iconRight: 'arrow_forward',
   },
 };
@@ -299,10 +271,8 @@ export const CompactSecondaryNeutralDefault: Story = {
   args: {
     variant: 'secondary',
     tone: 'neutral',
-    state: 'default',
     size: 'compact',
     label: 'Button',
-    text: true,
     iconRight: 'arrow_forward',
   },
 };
@@ -312,7 +282,7 @@ export const CompactSecondaryNeutralDefault: Story = {
 // ============================================
 
 export const PrimaryDestructiveDefault: Story = {
-  args: { variant: 'primary', tone: 'destructive', state: 'default', label: 'Delete', iconLeft: 'delete' },
+  args: { variant: 'primary', tone: 'destructive', label: 'Delete', iconLeft: 'delete' },
 };
 
 export const PrimaryDestructiveHover: Story = {
@@ -324,7 +294,7 @@ export const PrimaryDestructiveActive: Story = {
 };
 
 export const PrimaryDestructiveDisabled: Story = {
-  args: { variant: 'primary', tone: 'destructive', state: 'disabled', label: 'Delete', iconLeft: 'delete' },
+  args: { variant: 'primary', tone: 'destructive', disabled: true, label: 'Delete', iconLeft: 'delete' },
 };
 
 // ============================================
@@ -389,9 +359,7 @@ export const CompactLoading: Story = {
 export const PrimaryWithIconLeft: Story = {
   args: {
     variant: 'primary',
-    state: 'default',
     label: 'Menu',
-    text: true,
     iconLeft: 'menu',
     iconRight: undefined,
   },
@@ -400,9 +368,7 @@ export const PrimaryWithIconLeft: Story = {
 export const SecondaryWithIconLeft: Story = {
   args: {
     variant: 'secondary',
-    state: 'default',
     label: 'Edit',
-    text: true,
     iconLeft: 'edit',
     iconRight: undefined,
   },
@@ -411,9 +377,7 @@ export const SecondaryWithIconLeft: Story = {
 export const TertiaryWithIconLeft: Story = {
   args: {
     variant: 'tertiary',
-    state: 'default',
     label: 'Home',
-    text: true,
     iconLeft: 'home',
     iconRight: undefined,
   },
@@ -423,9 +387,7 @@ export const TertiaryWithIconLeft: Story = {
 export const WithBothIcons: Story = {
   args: {
     variant: 'primary',
-    state: 'default',
     label: 'Next Step',
-    text: true,
     iconLeft: 'check',
     iconRight: 'arrow_forward',
   },
@@ -434,9 +396,7 @@ export const WithBothIcons: Story = {
 export const WithIconLeftAndRight: Story = {
   args: {
     variant: 'tertiary',
-    state: 'default',
     label: 'Download',
-    text: true,
     iconLeft: 'download',
     iconRight: 'chevron_right',
   },
@@ -446,7 +406,6 @@ export const WithIconLeftAndRight: Story = {
 export const PrimaryIconOnly: Story = {
   args: {
     variant: 'primary',
-    state: 'default',
     text: false,
     iconLeft: 'add',
     iconRight: undefined,
@@ -456,7 +415,6 @@ export const PrimaryIconOnly: Story = {
 export const SecondaryIconOnly: Story = {
   args: {
     variant: 'secondary',
-    state: 'default',
     text: false,
     iconLeft: 'close',
     iconRight: undefined,
@@ -466,7 +424,6 @@ export const SecondaryIconOnly: Story = {
 export const TertiaryIconOnly: Story = {
   args: {
     variant: 'tertiary',
-    state: 'default',
     text: false,
     iconLeft: 'close',
     iconRight: undefined,
@@ -477,9 +434,7 @@ export const TertiaryIconOnly: Story = {
 export const TextOnly: Story = {
   args: {
     variant: 'primary',
-    state: 'default',
     label: 'Simple Button',
-    text: true,
     iconLeft: undefined,
     iconRight: undefined,
   },
@@ -492,10 +447,8 @@ export const TextOnly: Story = {
 export const CompactPrimaryDefault: Story = {
   args: {
     variant: 'primary',
-    state: 'default',
     size: 'compact',
     label: 'Button',
-    text: true,
     iconRight: 'arrow_forward',
   },
 };
@@ -506,7 +459,6 @@ export const CompactPrimaryHover: Story = {
     state: 'hover',
     size: 'compact',
     label: 'Button',
-    text: true,
     iconRight: 'arrow_forward',
   },
 };
@@ -517,7 +469,6 @@ export const CompactPrimaryActive: Story = {
     state: 'active',
     size: 'compact',
     label: 'Button',
-    text: true,
     iconRight: 'arrow_forward',
   },
 };
@@ -525,10 +476,9 @@ export const CompactPrimaryActive: Story = {
 export const CompactPrimaryDisabled: Story = {
   args: {
     variant: 'primary',
-    state: 'disabled',
+    disabled: true,
     size: 'compact',
     label: 'Button',
-    text: true,
     iconRight: 'arrow_forward',
   },
 };
@@ -536,10 +486,8 @@ export const CompactPrimaryDisabled: Story = {
 export const CompactSecondaryDefault: Story = {
   args: {
     variant: 'secondary',
-    state: 'default',
     size: 'compact',
     label: 'Button',
-    text: true,
     iconRight: 'arrow_forward',
   },
 };
@@ -550,7 +498,6 @@ export const CompactSecondaryHover: Story = {
     state: 'hover',
     size: 'compact',
     label: 'Button',
-    text: true,
     iconRight: 'arrow_forward',
   },
 };
@@ -561,7 +508,6 @@ export const CompactSecondaryActive: Story = {
     state: 'active',
     size: 'compact',
     label: 'Button',
-    text: true,
     iconRight: 'arrow_forward',
   },
 };
@@ -569,10 +515,9 @@ export const CompactSecondaryActive: Story = {
 export const CompactSecondaryDisabled: Story = {
   args: {
     variant: 'secondary',
-    state: 'disabled',
+    disabled: true,
     size: 'compact',
     label: 'Button',
-    text: true,
     iconRight: 'arrow_forward',
   },
 };
@@ -580,10 +525,8 @@ export const CompactSecondaryDisabled: Story = {
 export const CompactTertiaryDefault: Story = {
   args: {
     variant: 'tertiary',
-    state: 'default',
     size: 'compact',
     label: 'Button',
-    text: true,
     iconRight: 'arrow_forward',
   },
 };
@@ -594,7 +537,6 @@ export const CompactTertiaryHover: Story = {
     state: 'hover',
     size: 'compact',
     label: 'Button',
-    text: true,
     iconRight: 'arrow_forward',
   },
 };
@@ -605,7 +547,6 @@ export const CompactTertiaryActive: Story = {
     state: 'active',
     size: 'compact',
     label: 'Button',
-    text: true,
     iconRight: 'arrow_forward',
   },
 };
@@ -613,10 +554,9 @@ export const CompactTertiaryActive: Story = {
 export const CompactTertiaryDisabled: Story = {
   args: {
     variant: 'tertiary',
-    state: 'disabled',
+    disabled: true,
     size: 'compact',
     label: 'Button',
-    text: true,
     iconRight: 'arrow_forward',
   },
 };
@@ -629,9 +569,7 @@ export const DestructiveDefault: Story = {
   args: {
     variant: 'secondary',
     tone: 'destructive',
-    state: 'default',
     label: 'Delete',
-    text: true,
     iconLeft: 'delete',
   },
 };
@@ -642,7 +580,6 @@ export const DestructiveHover: Story = {
     tone: 'destructive',
     state: 'hover',
     label: 'Delete',
-    text: true,
     iconLeft: 'delete',
   },
 };
@@ -653,7 +590,6 @@ export const DestructiveActive: Story = {
     tone: 'destructive',
     state: 'active',
     label: 'Delete',
-    text: true,
     iconLeft: 'delete',
   },
 };
@@ -662,9 +598,8 @@ export const DestructiveDisabled: Story = {
   args: {
     variant: 'secondary',
     tone: 'destructive',
-    state: 'disabled',
+    disabled: true,
     label: 'Delete',
-    text: true,
     iconLeft: 'delete',
   },
 };
@@ -674,10 +609,8 @@ export const CompactDestructiveDefault: Story = {
   args: {
     variant: 'secondary',
     tone: 'destructive',
-    state: 'default',
     size: 'compact',
     label: 'Remove',
-    text: true,
     iconLeft: 'close',
   },
 };
@@ -689,7 +622,6 @@ export const CompactDestructiveHover: Story = {
     state: 'hover',
     size: 'compact',
     label: 'Remove',
-    text: true,
     iconLeft: 'close',
   },
 };
@@ -701,7 +633,6 @@ export const CompactDestructiveActive: Story = {
     state: 'active',
     size: 'compact',
     label: 'Remove',
-    text: true,
     iconLeft: 'close',
   },
 };
@@ -710,10 +641,9 @@ export const CompactDestructiveDisabled: Story = {
   args: {
     variant: 'secondary',
     tone: 'destructive',
-    state: 'disabled',
+    disabled: true,
     size: 'compact',
     label: 'Remove',
-    text: true,
     iconLeft: 'close',
   },
 };
@@ -723,7 +653,6 @@ export const DestructiveIconOnly: Story = {
   args: {
     variant: 'secondary',
     tone: 'destructive',
-    state: 'default',
     text: false,
     iconLeft: 'delete',
     iconRight: undefined,

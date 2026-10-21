@@ -9,6 +9,7 @@ import type {
 } from '../components/ThreadPanel/ThreadPanel';
 import type { ThreadTab } from '../components/ThreadTabs/ThreadTabs';
 import type { ChatState } from './useChat';
+import { MOTION_THREAD_NAMING_DELAY_MS } from '../tokens/motion';
 
 /* ============================================
    The thread lifecycle.
@@ -33,7 +34,23 @@ import type { ChatState } from './useChat';
  * "arrives". Paced like a fast title-generation call, not a UI transition,
  * so it is a schedule rather than a motion token.
  */
-export const THREAD_NAMING_DELAY_MS = 1600;
+export const THREAD_NAMING_DELAY_MS = MOTION_THREAD_NAMING_DELAY_MS;
+
+/** The words the thread engine writes into its state, each with an English default. */
+export interface ThreadsLabels {
+  /** The row menu's pin action. Defaults to "Pin". */
+  pin?: string;
+  /** The row menu's unpin action. Defaults to "Unpin". */
+  unpin?: string;
+  /** The row menu's rename action. Defaults to "Rename". */
+  rename?: string;
+  /** The row menu's delete action. Defaults to "Delete". */
+  delete?: string;
+  /** A new project's name, given its ordinal. Defaults to "New project <n>". */
+  newProject?: (index: number) => string;
+  /** A new project's meta line. Defaults to "now". */
+  newProjectMeta?: string;
+}
 
 export interface ThreadsOptions {
   /** The history to start from. The groups' labels are the host's. */
@@ -57,6 +74,8 @@ export interface ThreadsOptions {
   details?: boolean;
   /** The label of the New chat row and tab. */
   newThreadLabel?: string;
+  /** The row actions' names and a new project's name and meta, merged over their English defaults. */
+  labels?: ThreadsLabels;
   /** Called when a thread is selected, so a host can load its conversation. */
   onSelect?: (threadId: string) => void;
   onRename?: (threadId: string, title: string) => void;
@@ -94,12 +113,13 @@ export interface ThreadsState {
   newThreadLabel: string;
 }
 
-const RENAME_ACTION: ThreadPanelThreadAction = { id: 'rename', label: 'Rename', icon: 'edit' };
-const DELETE_ACTION: ThreadPanelThreadAction = {
-  id: 'delete',
-  label: 'Delete',
-  icon: 'delete',
-  destructive: true,
+const DEFAULT_LABELS: Required<ThreadsLabels> = {
+  pin: 'Pin',
+  unpin: 'Unpin',
+  rename: 'Rename',
+  delete: 'Delete',
+  newProject: (index) => `New project ${index}`,
+  newProjectMeta: 'now',
 };
 
 const DEFAULT_NAMES = ['New conversation'];
@@ -125,6 +145,8 @@ export function useThreads(
     onDelete,
     onPin,
   } = options;
+  const labelsOption = options.labels;
+  const labels = useMemo(() => ({ ...DEFAULT_LABELS, ...labelsOption }), [labelsOption]);
   const nameThreadOption = options.nameThread;
   const nameThread = useMemo(
     () => nameThreadOption ?? ((index: number) => DEFAULT_NAMES[index % DEFAULT_NAMES.length]),
@@ -333,20 +355,24 @@ export function useThreads(
   const createProject = useCallback(() => {
     projectSeq.current += 1;
     const id = `project-${projectSeq.current}`;
-    setProjects((list) => [...list, { id, label: `New project ${projectSeq.current}`, meta: 'now' }]);
+    const index = projectSeq.current;
+    setProjects((list) => [...list, { id, label: labels.newProject(index), meta: labels.newProjectMeta }]);
     setActiveProjectId(id);
-  }, []);
+  }, [labels]);
 
   const actionsFor = useCallback(
     (thread: ThreadPanelThread): ThreadPanelThreadAction[] =>
       pins
         ? [
-            { id: 'pin', label: thread.pinned ? 'Unpin' : 'Pin', icon: 'keep' },
-            RENAME_ACTION,
-            DELETE_ACTION,
+            { id: 'pin', label: thread.pinned ? labels.unpin : labels.pin, icon: 'keep' },
+            { id: 'rename', label: labels.rename, icon: 'edit' },
+            { id: 'delete', label: labels.delete, icon: 'delete', destructive: true },
           ]
-        : [RENAME_ACTION, DELETE_ACTION],
-    [pins]
+        : [
+            { id: 'rename', label: labels.rename, icon: 'edit' },
+            { id: 'delete', label: labels.delete, icon: 'delete', destructive: true },
+          ],
+    [pins, labels]
   );
 
   const runAction = useCallback(

@@ -88,6 +88,7 @@
 /* The looping wave parks on its resting contour rather than strobing
    through the collapsed duration — same treatment as the other looping
    indicators. */
+/* ds-allow(motion): parks a looping animation, which the collapsed duration would strobe rather than stop (the wave, parked on its resting contour). */
 @media (prefers-reduced-motion: reduce) {
   .ds-waveform--listening .ds-waveform__bar,
   .ds-waveform--speaking .ds-waveform__bar {

@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { useLayer } from '../../behaviors/useLayer';
 import { Field } from '../Field/Field';
 import './Dropdown.css';
 import '../../fonts/material-symbols.css';
@@ -40,8 +41,13 @@ type DropdownOwnProps = {
   label?: string;
   /** Placeholder when no value selected */
   placeholder?: string;
-  /** Currently selected value */
+  /**
+   * Currently selected value, controlled. Leave undefined to let the
+   * dropdown keep its own selection, seeded from `defaultValue`.
+   */
   value?: string;
+  /** Selected value on first render when uncontrolled (`value` undefined). */
+  defaultValue?: string;
   /** Available options (flat list) */
   options: DropdownOption[];
   /** Optional grouped options — when provided, renders groups with labels and separators */
@@ -95,14 +101,17 @@ const fontStyle = (font?: string) =>
  * `role="listbox"` menu; supports flat and grouped options with full keyboard
  * navigation.
  *
- * Forwards a ref to the wrapping element and spreads unrecognised props onto it.
+ * Forwards a ref to the wrapping element and spreads unrecognised props onto
+ * it, except `aria-label`, `aria-labelledby` and `aria-describedby`, which go
+ * to the trigger, the element that carries the combobox role.
  */
 export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
   (
     {
       label,
       placeholder = 'Select an option',
-      value,
+      value: valueProp,
+      defaultValue,
       options,
       groups,
       size = 'default',
@@ -116,12 +125,20 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
       ariaLabel,
       name,
       id,
+      // The naming and description attributes belong on the combobox
+      // trigger, not the role-less wrapper the other rest props land on.
+      'aria-label': ariaLabelAttr,
+      'aria-labelledby': ariaLabelledBy,
+      'aria-describedby': ariaDescribedBy,
       ...rest
     },
     ref,
   ) => {
     const [isOpen, setIsOpen] = useState(false);
     const [focusedIndex, setFocusedIndex] = useState(-1);
+    const [internalValue, setInternalValue] = useState(defaultValue);
+    const isControlled = valueProp !== undefined;
+    const value = isControlled ? valueProp : internalValue;
     const dropdownRef = useRef<HTMLDivElement | null>(null);
     const listRef = useRef<HTMLUListElement>(null);
 
@@ -160,22 +177,20 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
     };
 
     const handleSelect = (optionValue: string) => {
+      if (!isControlled) setInternalValue(optionValue);
       onValueChange?.(optionValue);
       onChange?.(optionValue);
       setIsOpen(false);
     };
 
-    const handleClickOutside = useCallback((e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setIsOpen(false);
-      }
-    }, []);
-
-    useEffect(() => {
-      if (!isOpen) return;
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [isOpen, handleClickOutside]);
+    // Light dismiss through the shared layer stack: a press outside closes the
+    // list, and never also closes a Dialog the dropdown sits in.
+    useLayer({
+      open: isOpen,
+      onDismiss: () => setIsOpen(false),
+      dismissOnOutsidePress: true,
+      getElements: () => [dropdownRef.current],
+    });
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
       if (disabled) return;
@@ -228,7 +243,12 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
           }
           break;
         case 'Escape':
-          setIsOpen(false);
+          // Handled: the layer stack leaves a prevented Escape alone, so
+          // closing the list does not also close a Dialog around it.
+          if (isOpen) {
+            e.preventDefault();
+            setIsOpen(false);
+          }
           break;
         case 'Tab':
           setIsOpen(false);
@@ -270,13 +290,17 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
           aria-haspopup="listbox"
           // A div is not a labelable element, so Field's htmlFor cannot reach
           // it — point at the label's id instead (Field renders `${id}-label`).
-          aria-labelledby={label ? `${inputId}-label` : undefined}
-          aria-label={ariaLabel || rest['aria-label'] || (!label ? placeholder : undefined)}
+          aria-labelledby={ariaLabelledBy ?? (label ? `${inputId}-label` : undefined)}
+          aria-label={ariaLabelAttr ?? ariaLabel ?? (!label ? placeholder : undefined)}
           aria-controls={isOpen ? `${inputId}-listbox` : undefined}
           aria-activedescendant={activeOptionId}
-          // Previously missing entirely: the helper/error message was rendered
-          // but never announced, and the error state was visual-only.
-          aria-describedby={helperText ? `${inputId}-helper` : rest['aria-describedby']}
+          // The helper/error message is announced, joined to any description
+          // the consumer passes rather than replacing it.
+          aria-describedby={
+            [ariaDescribedBy, helperText ? `${inputId}-helper` : undefined]
+              .filter(Boolean)
+              .join(' ') || undefined
+          }
           aria-invalid={error || undefined}
           tabIndex={disabled ? -1 : 0}
           onClick={handleToggle}

@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, useRef, useEffect, useCallback, useId, useMemo } from 'react';
+import React, { useState, useRef, useEffect, useId, useMemo } from 'react';
+import { useLayer } from '../../behaviors/useLayer';
 import { Field } from '../Field/Field';
 import './TimePicker.css';
 import '../../fonts/material-symbols.css';
@@ -43,7 +44,17 @@ type TimePickerOwnProps = {
   helperText?: string;
   /** Called with the newly selected 24-hour "HH:MM" value */
   onValueChange?: (value: string) => void;
-  /** Additional CSS classes */
+  /**
+   * The period suffixes a 12-hour time is written with, merged over the
+   * English defaults `{ am: 'AM', pm: 'PM' }`. Only read when `hourFormat` is
+   * `'12'`.
+   */
+  periodLabels?: { am?: string; pm?: string };
+  /**
+   * Additional CSS classes, applied to the Field wrapper around the label,
+   * trigger and helper text, not to the trigger button the ref and the other
+   * props reach.
+   */
   className?: string;
 };
 
@@ -65,10 +76,14 @@ function toTimeValue(minutes: number): string {
 }
 
 /** Format a 24-hour "HH:MM" value for display ("2:30 PM" or "14:30"). */
-function formatTime(time: string, hourFormat: '12' | '24'): string {
+function formatTime(
+  time: string,
+  hourFormat: '12' | '24',
+  period: { am: string; pm: string },
+): string {
   if (hourFormat === '24') return time;
   const [h, m] = time.split(':').map(Number);
-  const suffix = h < 12 ? 'AM' : 'PM';
+  const suffix = h < 12 ? period.am : period.pm;
   const hour12 = h % 12 === 0 ? 12 : h % 12;
   return `${hour12}:${String(m).padStart(2, '0')} ${suffix}`;
 }
@@ -98,6 +113,7 @@ export const TimePicker = React.forwardRef<HTMLButtonElement, TimePickerProps>(
       error = false,
       helperText,
       onValueChange,
+      periodLabels,
       className = '',
       id,
       ...rest
@@ -136,17 +152,21 @@ export const TimePicker = React.forwardRef<HTMLButtonElement, TimePickerProps>(
       .filter(Boolean)
       .join(' ');
 
+    const amLabel = periodLabels?.am ?? 'AM';
+    const pmLabel = periodLabels?.pm ?? 'PM';
+
     const timeOptions = useMemo<TimeOption[]>(() => {
       const step = Math.max(1, Math.floor(stepMinutes));
       const start = parseMinutes(minTime);
       const end = parseMinutes(maxTime);
+      const period = { am: amLabel, pm: pmLabel };
       const opts: TimeOption[] = [];
       for (let mins = start; mins <= end; mins += step) {
         const v = toTimeValue(mins);
-        opts.push({ value: v, label: formatTime(v, hourFormat) });
+        opts.push({ value: v, label: formatTime(v, hourFormat, period) });
       }
       return opts;
-    }, [minTime, maxTime, stepMinutes, hourFormat]);
+    }, [minTime, maxTime, stepMinutes, hourFormat, amLabel, pmLabel]);
 
     const selectedIndex = timeOptions.findIndex((opt) => opt.value === selectedValue);
     const selectedOption = selectedIndex >= 0 ? timeOptions[selectedIndex] : undefined;
@@ -174,17 +194,14 @@ export const TimePicker = React.forwardRef<HTMLButtonElement, TimePickerProps>(
       closeMenu();
     };
 
-    const handleClickOutside = useCallback((e: MouseEvent) => {
-      if (rootRef.current && !rootRef.current.contains(e.target as Node)) {
-        setIsOpen(false);
-      }
-    }, []);
-
-    useEffect(() => {
-      if (!isOpen) return;
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [isOpen, handleClickOutside]);
+    // Light dismiss through the shared layer stack: a press outside closes the
+    // list, and never also closes a Dialog it sits in.
+    useLayer({
+      open: isOpen,
+      onDismiss: () => setIsOpen(false),
+      dismissOnOutsidePress: true,
+      getElements: () => [rootRef.current],
+    });
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
       if (disabled) return;
@@ -230,7 +247,12 @@ export const TimePicker = React.forwardRef<HTMLButtonElement, TimePickerProps>(
           }
           break;
         case 'Escape':
-          closeMenu();
+          // Handled: the layer stack leaves a prevented Escape alone, so
+          // closing the list does not also close a Dialog around it.
+          if (isOpen) {
+            e.preventDefault();
+            closeMenu();
+          }
           break;
         case 'Tab':
           closeMenu();
@@ -268,11 +290,14 @@ export const TimePicker = React.forwardRef<HTMLButtonElement, TimePickerProps>(
           id={inputId}
           ref={setTriggerRef}
           className={`${baseClass}__trigger`}
+          // A select-only combobox, Dropdown's pattern: aria-activedescendant
+          // is not allowed on a plain button, so the open list failed axe.
+          role="combobox"
           aria-expanded={isOpen}
           aria-haspopup="listbox"
           aria-controls={isOpen ? `${inputId}-listbox` : undefined}
           aria-activedescendant={activeOptionId}
-          aria-describedby={helperText ? `${inputId}-helper` : rest['aria-describedby']}
+          aria-describedby={[rest['aria-describedby'], helperText ? `${inputId}-helper` : undefined].filter(Boolean).join(' ') || undefined}
           aria-invalid={error || undefined}
           disabled={disabled}
           onClick={handleToggle}

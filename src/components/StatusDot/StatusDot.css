@@ -119,6 +119,7 @@
 
 /* The looping ring parks rather than strobing through the collapsed
    duration — same treatment as the other looping indicators. */
+/* ds-allow(motion): parks a looping animation, which the collapsed duration would strobe rather than stop (the pulse ring). */
 @media (prefers-reduced-motion: reduce) {
   .ds-status-dot--pulse .ds-status-dot__indicator::after {
     animation: none;

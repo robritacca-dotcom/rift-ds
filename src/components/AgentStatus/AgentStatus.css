@@ -496,6 +496,7 @@
    let the label carry the meaning on its own.
    ============================================ */
 
+/* ds-allow(motion): parks a looping animation, which the collapsed duration would strobe rather than stop (the dot cycle and the label shimmer). */
 @media (prefers-reduced-motion: reduce) {
   .ds-agent-status--animated .ds-agent-status__dot {
     animation: none;

@@ -15,6 +15,8 @@ export interface MotionSwatchProps {
   kind: MotionSwatchKind;
   /** Which preview animation to render (default "slide") */
   demo?: MotionSwatchDemo;
+  /** Accessible name of the preview's replay button, given the swatch label. Defaults to "Replay" with the label and "animation". */
+  replayLabel?: (label: string) => string;
   /** Additional CSS classes */
   className?: string;
 }
@@ -33,6 +35,7 @@ export const MotionSwatch = ({
   value,
   kind,
   demo = 'slide',
+  replayLabel = (swatchLabel: string) => `Replay ${swatchLabel} animation`,
   className = '',
 }: MotionSwatchProps) => {
   const [playCount, setPlayCount] = useState(0);
@@ -60,7 +63,7 @@ export const MotionSwatch = ({
         type="button"
         className={`${baseClass}__preview`}
         onClick={() => setPlayCount((count) => count + 1)}
-        aria-label={`Replay ${label} animation`}
+        aria-label={replayLabel(label)}
       >
         {demo === 'slide' && (
           <span className={`${baseClass}__track`}>

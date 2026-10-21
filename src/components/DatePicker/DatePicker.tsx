@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import './DatePicker.css';
 import '../../fonts/material-symbols.css';
 
@@ -18,6 +18,31 @@ type DatePickerOwnProps = {
   max?: string;
   /** Callback when a date is selected */
   onDateSelect?: (date: string) => void;
+  /** Accessible name of the previous-month button. */
+  previousLabel?: string;
+  /** Accessible name of the next-month button. */
+  nextLabel?: string;
+  /**
+   * The month heading, given the first day of the month in view: the visible
+   * title, the name of the day grid, and the text announced on navigation.
+   * Defaults to the English month name and the year.
+   */
+  monthLabel?: (month: Date) => string;
+  /** Accessible name of a day button, given its date and whether it is selected. Defaults to the full date in the user's locale, with ", selected" appended when selected. */
+  dayLabel?: (date: Date, selected: boolean) => string;
+  /**
+   * The visible weekday column headers: seven entries, Sunday first.
+   * Defaults to the English two-letter abbreviations ("Su" to "Sa"); a list
+   * of any other length falls back to the default.
+   */
+  weekdayLabels?: string[];
+  /**
+   * The weekday column headers' accessible names, read in full where the
+   * visible header is abbreviated: seven entries, Sunday first. Defaults to
+   * the English weekday names ("Sunday" to "Saturday"); a list of any other
+   * length falls back to the default.
+   */
+  weekdayNames?: string[];
   /** Additional CSS classes */
   className?: string;
 };
@@ -27,6 +52,10 @@ export interface DatePickerProps
     Omit<React.ComponentPropsWithoutRef<'div'>, keyof DatePickerOwnProps> {}
 
 const DAYS = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+/** A consumer's weekday list when it has the seven entries the grid needs, else the default. */
+const weekdaysOr = (labels: string[] | undefined, fallback: string[]): string[] =>
+  labels && labels.length === 7 ? labels : fallback;
 const MONTHS = [
   'January',
   'February',
@@ -72,6 +101,17 @@ const visuallyHidden: React.CSSProperties = {
   border: 0,
 };
 
+const defaultMonthLabel = (month: Date): string =>
+  `${MONTHS[month.getMonth()]} ${month.getFullYear()}`;
+
+const defaultDayLabel = (date: Date, selected: boolean): string =>
+  `${date.toLocaleDateString(undefined, {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  })}${selected ? ', selected' : ''}`;
+
 function isSameDay(a: Date, b: Date): boolean {
   return (
     a.getFullYear() === b.getFullYear() &&
@@ -80,26 +120,79 @@ function isSameDay(a: Date, b: Date): boolean {
   );
 }
 
+const addDays = (date: Date, days: number): Date =>
+  new Date(date.getFullYear(), date.getMonth(), date.getDate() + days);
+
+/** The same day of the month `months` away, pulled back to that month's last day when it is shorter. */
+const addMonths = (date: Date, months: number): Date => {
+  const lastDay = new Date(date.getFullYear(), date.getMonth() + months + 1, 0).getDate();
+  return new Date(date.getFullYear(), date.getMonth() + months, Math.min(date.getDate(), lastDay));
+};
+
 /**
  * Inline date picker calendar component.
  * Displays a full month grid with navigation,
  * day headers, and selectable date cells.
  *
+ * The days are a WAI-ARIA date grid with one roving tab stop: arrows move a
+ * day or a week, Home and End go to the ends of the week, Page Up and Page
+ * Down move a month (a year with Shift), and a move past the month in view
+ * turns the page. Focus never lands on a day outside `min`/`max`: a move
+ * that would is held at the nearest bound.
+ *
  * Forwards a ref to the wrapping element and spreads unrecognised props onto it.
  */
 export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(
-  ({ value, size = 'default', disabled = false, min, max, onDateSelect, className = '', ...rest }, ref) => {
+  (
+    {
+      value,
+      size = 'default',
+      disabled = false,
+      min,
+      max,
+      onDateSelect,
+      previousLabel = 'Previous month',
+      nextLabel = 'Next month',
+      monthLabel = defaultMonthLabel,
+      dayLabel = defaultDayLabel,
+      weekdayLabels,
+      weekdayNames,
+      className = '',
+      ...rest
+    },
+    ref,
+  ) => {
     const selectedDate = parseDate(value);
     const minDate = parseDate(min);
     const maxDate = parseDate(max);
+    const weekdays = weekdaysOr(weekdayLabels, DAYS);
+    const weekdayFullNames = weekdaysOr(weekdayNames, DAY_NAMES);
 
     const today = useMemo(() => new Date(), []);
+    const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
     const [viewMonth, setViewMonth] = useState(
       selectedDate ? selectedDate.getMonth() : today.getMonth(),
     );
     const [viewYear, setViewYear] = useState(
       selectedDate ? selectedDate.getFullYear() : today.getFullYear(),
     );
+    // The day that last held focus in the grid: the roving tab stop returns
+    // to it while its month is in view.
+    const [focusedDate, setFocusedDate] = useState<Date | null>(null);
+    // Set by a keyboard move (or a click that turns the page), so the effect
+    // below moves focus to the new day once it has rendered.
+    const pendingFocus = useRef(false);
+    const gridRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+      if (!pendingFocus.current || !focusedDate) return;
+      pendingFocus.current = false;
+      gridRef.current
+        ?.querySelector<HTMLButtonElement>(`[data-date="${formatDate(focusedDate)}"]`)
+        ?.focus();
+    }, [focusedDate, viewMonth, viewYear]);
+
+    const monthTitle = monthLabel(new Date(viewYear, viewMonth, 1));
 
     const baseClass = 'ds-date-picker';
     const classes = [
@@ -158,15 +251,88 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(
       return false;
     };
 
+    const isInView = (date: Date): boolean =>
+      date.getMonth() === viewMonth && date.getFullYear() === viewYear;
+
+    /** Moves focus to a day, turning the page first when it lies outside the month in view. */
+    const moveFocusTo = (date: Date) => {
+      if (!isInView(date)) {
+        setViewMonth(date.getMonth());
+        setViewYear(date.getFullYear());
+      }
+      setFocusedDate(date);
+      pendingFocus.current = true;
+    };
+
     const handleSelect = (cell: { date: Date; inMonth: boolean }) => {
       if (isDateDisabled(cell.date)) return;
       if (!cell.inMonth) {
-        // Navigate to the month of the out-of-range day
-        setViewMonth(cell.date.getMonth());
-        setViewYear(cell.date.getFullYear());
+        // Navigate to the month of the out-of-range day, and keep focus on
+        // the day that was chosen rather than the button left in its place.
+        moveFocusTo(cell.date);
       }
       onDateSelect?.(formatDate(cell.date));
     };
+
+    /** Holds a keyboard move inside `min`/`max`, so focus never lands on a disabled day. */
+    const clampToRange = (date: Date): Date => {
+      if (minDate && date < minDate) return minDate;
+      if (maxDate && date > maxDate) return maxDate;
+      return date;
+    };
+
+    const handleDayKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>, date: Date) => {
+      let next: Date;
+      switch (event.key) {
+        case 'ArrowLeft':
+          next = addDays(date, -1);
+          break;
+        case 'ArrowRight':
+          next = addDays(date, 1);
+          break;
+        case 'ArrowUp':
+          next = addDays(date, -7);
+          break;
+        case 'ArrowDown':
+          next = addDays(date, 7);
+          break;
+        case 'Home':
+          next = addDays(date, -date.getDay());
+          break;
+        case 'End':
+          next = addDays(date, 6 - date.getDay());
+          break;
+        case 'PageUp':
+          next = addMonths(date, event.shiftKey ? -12 : -1);
+          break;
+        case 'PageDown':
+          next = addMonths(date, event.shiftKey ? 12 : 1);
+          break;
+        default:
+          // Enter and Space stay with the button's own click.
+          return;
+      }
+      event.preventDefault();
+      next = clampToRange(next);
+      // Held at a bound: focus is already where the move would leave it.
+      if (isSameDay(next, date)) return;
+      moveFocusTo(next);
+    };
+
+    // The one day in the tab order: the day last focused, else the selected
+    // day, else today, else the month's first enabled day, whichever is the
+    // first to sit in the month in view and be enabled.
+    let tabStop: Date | null =
+      [focusedDate, selectedDate, todayStart].find(
+        (date): date is Date => date !== null && isInView(date) && !isDateDisabled(date),
+      ) ?? null;
+    for (let d = 1; !tabStop && d <= daysInMonth; d++) {
+      const date = new Date(viewYear, viewMonth, d);
+      if (!isDateDisabled(date)) tabStop = date;
+    }
+
+    const weeks: (typeof cells)[] = [];
+    for (let i = 0; i < cells.length; i += 7) weeks.push(cells.slice(i, i + 7));
 
     return (
       <div {...rest} ref={ref} className={classes}>
@@ -177,19 +343,17 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(
             className={`${baseClass}__nav-btn material-symbols-rounded`}
             onClick={goToPrevMonth}
             disabled={disabled}
-            aria-label="Previous month"
+            aria-label={previousLabel}
           >
             chevron_left
           </button>
-          <span className={`${baseClass}__month-year`}>
-            {MONTHS[viewMonth]} {viewYear}
-          </span>
+          <span className={`${baseClass}__month-year`}>{monthTitle}</span>
           <button
             type="button"
             className={`${baseClass}__nav-btn material-symbols-rounded`}
             onClick={goToNextMonth}
             disabled={disabled}
-            aria-label="Next month"
+            aria-label={nextLabel}
           >
             chevron_right
           </button>
@@ -203,69 +367,76 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(
           text are unreliable.
         */}
         <span aria-live="polite" style={visuallyHidden}>
-          {MONTHS[viewMonth]} {viewYear}
+          {monthTitle}
         </span>
 
         {/*
-          Deliberately NOT role="grid". A grid promises 2D arrow-key navigation
-          with a roving tabindex, and this component implements none of it —
-          claiming the role tells assistive technology a lie. gridcell and
-          columnheader also require a row parent, which the CSS-grid layout has
-          no element for. A labelled group of buttons is honest and, without
-          the keyboard model, more usable.
+          A WAI-ARIA date grid: a header row of column headers, then one row
+          per week. The rows are subgrids of the one CSS grid, so the layout
+          is the same seven columns it always was. Each gridcell holds a real
+          button; only the roving tab stop is in the tab order, and the arrow,
+          Home/End and Page keys move it (handleDayKeyDown).
         */}
-        <div
-          className={`${baseClass}__grid`}
-          role="group"
-          aria-label={`${MONTHS[viewMonth]} ${viewYear}`}
-        >
-          {DAYS.map((day) => (
-            // Each cell's aria-label already carries the full weekday name, so
-            // the visual column headers are redundant noise for a screen reader.
-            <div key={day} className={`${baseClass}__day-header`} aria-hidden="true">
-              {day}
+        <div ref={gridRef} className={`${baseClass}__grid`} role="grid" aria-label={monthTitle}>
+          <div className={`${baseClass}__row`} role="row">
+            {weekdays.map((day, index) => (
+              <div key={index} className={`${baseClass}__day-header`} role="columnheader">
+                {/* The abbreviation is what the eye reads; the full name is
+                    what a screen reader announces as the column's header. */}
+                <span aria-hidden="true">{day}</span>
+                <span style={visuallyHidden}>{weekdayFullNames[index]}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Day cells, a week to a row */}
+          {weeks.map((week, weekIndex) => (
+            <div key={weekIndex} className={`${baseClass}__row`} role="row">
+              {week.map((cell) => {
+                const isSelected = selectedDate && isSameDay(cell.date, selectedDate);
+                const isToday = isSameDay(cell.date, today);
+                const isCellDisabled = isDateDisabled(cell.date);
+                const isTabStop = tabStop !== null && isSameDay(cell.date, tabStop);
+
+                const cellClasses = [
+                  `${baseClass}__cell`,
+                  !cell.inMonth ? `${baseClass}__cell--outside` : '',
+                  isSelected ? `${baseClass}__cell--selected` : '',
+                  isToday && !isSelected ? `${baseClass}__cell--today` : '',
+                  isCellDisabled ? `${baseClass}__cell--disabled` : '',
+                ]
+                  .filter(Boolean)
+                  .join(' ');
+
+                return (
+                  <div key={formatDate(cell.date)} className={`${baseClass}__gridcell`} role="gridcell">
+                    <button
+                      type="button"
+                      className={cellClasses}
+                      onClick={() => handleSelect(cell)}
+                      onKeyDown={(event) => handleDayKeyDown(event, cell.date)}
+                      onFocus={() => {
+                        if (!focusedDate || !isSameDay(focusedDate, cell.date)) {
+                          setFocusedDate(cell.date);
+                        }
+                      }}
+                      disabled={isCellDisabled}
+                      tabIndex={isTabStop ? 0 : -1}
+                      data-date={formatDate(cell.date)}
+                      // Selection is spoken as part of the name rather than via
+                      // aria-selected, which is not permitted on role="button".
+                      aria-label={dayLabel(cell.date, Boolean(isSelected))}
+                      // "the current date within a collection of dates" — this is
+                      // exactly what aria-current="date" is for.
+                      aria-current={isToday ? 'date' : undefined}
+                    >
+                      {cell.day}
+                    </button>
+                  </div>
+                );
+              })}
             </div>
           ))}
-
-          {/* Day cells */}
-          {cells.map((cell, idx) => {
-            const isSelected = selectedDate && isSameDay(cell.date, selectedDate);
-            const isToday = isSameDay(cell.date, today);
-            const isCellDisabled = isDateDisabled(cell.date);
-
-            const cellClasses = [
-              `${baseClass}__cell`,
-              !cell.inMonth ? `${baseClass}__cell--outside` : '',
-              isSelected ? `${baseClass}__cell--selected` : '',
-              isToday && !isSelected ? `${baseClass}__cell--today` : '',
-              isCellDisabled ? `${baseClass}__cell--disabled` : '',
-            ]
-              .filter(Boolean)
-              .join(' ');
-
-            return (
-              <button
-                key={idx}
-                type="button"
-                className={cellClasses}
-                onClick={() => handleSelect(cell)}
-                disabled={isCellDisabled}
-                // Selection is spoken as part of the name rather than via
-                // aria-selected, which is not permitted on role="button".
-                aria-label={`${cell.date.toLocaleDateString(undefined, {
-                  weekday: 'long',
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                })}${isSelected ? ', selected' : ''}`}
-                // "the current date within a collection of dates" — this is
-                // exactly what aria-current="date" is for.
-                aria-current={isToday ? 'date' : undefined}
-              >
-                {cell.day}
-              </button>
-            );
-          })}
         </div>
       </div>
     );

@@ -28,7 +28,10 @@ export interface SidebarPanelItem {
 type SidebarPanelOwnProps = {
   /** Items to list, optionally grouped with `group` and nested one level with `children` */
   items: SidebarPanelItem[];
-  /** Heading at the top of the panel, usually the label of the item that opened it. Also the panel's accessible name */
+  /**
+   * Heading at the top of the panel, usually the label of the item that opened it. Also the panel's accessible name, after a native `aria-label`; with neither, the panel is named "Section navigation".
+   * Note: this shadows the native `title` tooltip attribute, which SidebarPanel does not expose.
+   */
   title?: string;
   /** Key of the item for the current page. Its accordion parent starts open */
   activeKey?: string;
@@ -36,6 +39,8 @@ type SidebarPanelOwnProps = {
   defaultOpenKeys?: string[];
   /** Renders a collapse button beside the heading and calls this when it is pressed */
   onCollapse?: () => void;
+  /** Accessible name of the collapse button. Defaults to "Collapse <title>", or "Collapse panel" when there is no title */
+  collapseLabel?: string;
   /** Renders a back row above the heading and calls this when it is pressed; the drill-in navigation on small screens */
   onBack?: () => void;
   /** Label of the back row */
@@ -77,6 +82,7 @@ export const SidebarPanel = React.forwardRef<HTMLElement, SidebarPanelProps>(
       activeKey,
       defaultOpenKeys,
       onCollapse,
+      collapseLabel,
       onBack,
       backLabel = 'Back',
       className = '',
@@ -227,7 +233,7 @@ export const SidebarPanel = React.forwardRef<HTMLElement, SidebarPanelProps>(
                 type="button"
                 className={`${baseClass}__collapse`}
                 onClick={onCollapse}
-                aria-label={title ? `Collapse ${title}` : 'Collapse panel'}
+                aria-label={collapseLabel ?? (title ? `Collapse ${title}` : 'Collapse panel')}
               >
                 <span className="material-symbols-rounded" aria-hidden="true">
                   left_panel_close

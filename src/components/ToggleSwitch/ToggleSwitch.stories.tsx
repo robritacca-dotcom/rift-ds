@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { fn } from 'storybook/test';
+import { expect, fn } from 'storybook/test';
 import { ToggleSwitch } from './ToggleSwitch';
 
 const meta = {
@@ -24,7 +24,7 @@ const meta = {
     },
   },
   args: {
-    onChange: fn(),
+    onCheckedChange: fn(),
   },
 } satisfies Meta<typeof ToggleSwitch>;
 
@@ -49,7 +49,7 @@ export const WithoutLabel: Story = {
   args: {
     checked: true,
     showLabel: false,
-    ariaLabel: 'Toggle theme',
+    'aria-label': 'Toggle theme',
   },
 };
 
@@ -66,6 +66,29 @@ export const DisabledOff: Story = {
     checked: false,
     label: 'Disabled Off',
     disabled: true,
+  },
+};
+
+/** The compact size, for dense settings lists. */
+export const Compact: Story = {
+  args: {
+    checked: true,
+    label: 'Compact',
+    size: 'compact',
+  },
+};
+
+/** No `checked`: the switch keeps its own state, starting from `defaultChecked`. */
+export const Uncontrolled: Story = {
+  args: {
+    defaultChecked: false,
+    label: 'Notifications',
+  },
+  play: async ({ canvas, userEvent }) => {
+    const toggle = canvas.getByRole('switch', { name: 'Notifications' });
+    await expect(toggle).toHaveAttribute('aria-checked', 'false');
+    await userEvent.click(toggle);
+    await expect(toggle).toHaveAttribute('aria-checked', 'true');
   },
 };
 

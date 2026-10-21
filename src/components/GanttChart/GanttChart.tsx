@@ -54,7 +54,7 @@ type GanttChartOwnProps = {
   items: GanttChartItem[];
   /** Point-in-time markers, each rendered as its own diamond row at the end of its group. */
   milestones?: GanttChartMilestone[];
-  /** Explicit timeline window (YYYY-MM-DD both ends). Without it the range fits the data, snapped outward to whole months. */
+  /** Explicit timeline window (YYYY-MM-DD both ends). Without it the range fits the data. Either way the window snaps outward to whole months, so an explicit range starts on the first of its start month and runs to the end of its end month. */
   range?: { start: string; end: string };
   /** Draws the vertical today rule when today falls inside the range. */
   showToday?: boolean;
@@ -66,12 +66,29 @@ type GanttChartOwnProps = {
   selectedId?: string;
   /** Called with the item when a bar is clicked. Bars render as buttons only when this is set; without it the chart is inert and renders from a Server Component. */
   onItemClick?: (item: GanttChartItem) => void;
-  /** Chart title, in the shared chart header. */
+  /**
+   * Chart title, in the shared chart header.
+   * Note: this shadows the native `title` tooltip attribute, which GanttChart does not expose.
+   */
   title?: string;
   /** Description text below the title. */
   subtitle?: string;
   /** Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface */
   bare?: boolean;
+  /** The visible label on the today rule. Defaults to "Today". */
+  todayLabel?: string;
+  /**
+   * The BCP 47 locale the dates are written in: the month names on the axis
+   * ("Jan 2026", then "Feb"), and the days in each bar's and milestone's
+   * tooltip and accessible text ("Mar 9, 2026"). Defaults to `en-US`.
+   */
+  locale?: string;
+  /** The span in a bar's tooltip and accessible text, given its first and last day already formatted in `locale`. Defaults to "<start> to <end>". */
+  rangeLabel?: (start: string, end: string) => string;
+  /** The completion in a bar's tooltip and accessible text, given the rounded percentage. Defaults to "<percent>% complete". */
+  progressLabel?: (percent: number) => string;
+  /** The word a `projected` bar's tooltip and accessible text carries. Defaults to "projected". */
+  projectedLabel?: string;
   /** Additional CSS classes */
   className?: string;
 };
@@ -90,8 +107,13 @@ const isValidDay = (date: Date) => !Number.isNaN(date.getTime());
 /** Whole days from `from` to `to` — local-midnight dates, so DST cannot skew the count by a full day. */
 const daysBetween = (from: Date, to: Date) => Math.round((to.getTime() - from.getTime()) / MS_PER_DAY);
 
-const formatDay = (date: Date) =>
-  date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+const formatDay = (date: Date, locale: string) =>
+  date.toLocaleDateString(locale, { month: 'short', day: 'numeric', year: 'numeric' });
+
+/* The English defaults of the reading text, at module level so they keep one
+   identity across renders. */
+const defaultRangeLabel = (start: string, end: string) => `${start} to ${end}`;
+const defaultProgressLabel = (percent: number) => `${percent}% complete`;
 
 /** One row block per group label, in first-appearance order; ungrouped rows form an unlabelled block. */
 const buildBlocks = (items: GanttChartItem[], milestones: GanttChartMilestone[]) => {
@@ -136,6 +158,11 @@ export const GanttChart = React.forwardRef<HTMLDivElement, GanttChartProps>(
       title,
       subtitle,
       bare = false,
+      todayLabel = 'Today',
+      locale = 'en-US',
+      rangeLabel = defaultRangeLabel,
+      progressLabel = defaultProgressLabel,
+      projectedLabel = 'projected',
       className = '',
       ...rest
     },
@@ -187,11 +214,15 @@ export const GanttChart = React.forwardRef<HTMLDivElement, GanttChartProps>(
       const end = new Date(rangeStart.getTime());
       end.setDate(end.getDate() + totalDays);
       while (cursor.getTime() < end.getTime()) {
-        const monthName = cursor.toLocaleDateString('en-US', { month: 'short' });
-        const label =
+        /* The year rides on the first month and on every January, written
+           by the locale itself so its order is the language's ("Jan 2026",
+           "2026年1月"), not a month and a number glued together. */
+        const label = cursor.toLocaleDateString(
+          locale,
           cursor.getMonth() === 0 || months.length === 0
-            ? `${monthName} ${cursor.getFullYear()}`
-            : monthName;
+            ? { month: 'short', year: 'numeric' }
+            : { month: 'short' },
+        );
         months.push({ label, left: percentOf(cursor) });
         cursor.setMonth(cursor.getMonth() + 1);
       }
@@ -211,18 +242,18 @@ export const GanttChart = React.forwardRef<HTMLDivElement, GanttChartProps>(
       const endDate = parseDay(item.end);
       const span =
         isValidDay(startDate) && isValidDay(endDate)
-          ? `${formatDay(startDate)} to ${formatDay(endDate)}`
+          ? rangeLabel(formatDay(startDate, locale), formatDay(endDate, locale))
           : '';
       const parts = [item.label, span];
-      if (typeof item.progress === 'number') parts.push(`${Math.round(item.progress)}% complete`);
-      if (item.projected) parts.push('projected');
+      if (typeof item.progress === 'number') parts.push(progressLabel(Math.round(item.progress)));
+      if (item.projected) parts.push(projectedLabel);
       if (item.detail) parts.push(item.detail);
       return parts.filter(Boolean).join(', ');
     };
 
     const milestoneText = (milestone: GanttChartMilestone) => {
       const date = parseDay(milestone.date);
-      return isValidDay(date) ? `${milestone.label}, ${formatDay(date)}` : milestone.label;
+      return isValidDay(date) ? `${milestone.label}, ${formatDay(date, locale)}` : milestone.label;
     };
 
     const renderBar = (item: GanttChartItem) => {
@@ -311,7 +342,7 @@ export const GanttChart = React.forwardRef<HTMLDivElement, GanttChartProps>(
           ))}
         {todayVisible && (
           <span className={`${baseClass}__today`} style={{ left: `${todayPercent}%` }}>
-            <span className={`${baseClass}__today-label`}>Today</span>
+            <span className={`${baseClass}__today-label`}>{todayLabel}</span>
           </span>
         )}
       </div>

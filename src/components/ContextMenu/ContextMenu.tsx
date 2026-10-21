@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useCallback, useLayoutEffect, useId } from 'react';
+import { useLayer } from '../../behaviors/useLayer';
 import { MOTION_HOVER_HIDE_DELAY_MS } from '../../tokens/motion';
 import type {
   DropdownMenuEntry,
@@ -308,17 +309,14 @@ export const ContextMenu = React.forwardRef<HTMLDivElement, ContextMenuProps>(
       setFocusedIndex(-1);
     };
 
-    /* Click outside */
-    useEffect(() => {
-      if (!isOpen) return;
-      const handler = (e: MouseEvent) => {
-        if (panelRef.current && !panelRef.current.contains(e.target as Node)) {
-          handleClose();
-        }
-      };
-      document.addEventListener('mousedown', handler);
-      return () => document.removeEventListener('mousedown', handler);
-    }, [isOpen, handleClose]);
+    /* A press outside the panel closes it, through the shared layer stack, so
+       it never also closes a Dialog the menu sits in. */
+    useLayer({
+      open: isOpen,
+      onDismiss: handleClose,
+      dismissOnOutsidePress: true,
+      getElements: () => [panelRef.current],
+    });
 
     /* The panel is fixed-positioned, so scrolling would leave it stranded — close instead */
     useEffect(() => {

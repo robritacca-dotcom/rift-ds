@@ -1,8 +1,9 @@
-import type React from 'react';
+import React from 'react';
 import './Stat.css';
 import '../../fonts/material-symbols.css';
 
-export interface StatProps {
+/** Props owned by Stat itself — everything else falls through to the root div. */
+type StatOwnProps = {
   /** The headline number, e.g. "~900%" or "3.8M" — or a node, such as an AnimatedNumber, for figures that move */
   value: React.ReactNode;
   /** What the number measures */
@@ -17,9 +18,13 @@ export interface StatProps {
   size?: 'default' | 'large';
   /** Additional CSS classes */
   className?: string;
-}
+};
 
-const TREND_ICONS: Record<NonNullable<StatProps['trend']>, string> = {
+export interface StatProps
+  extends StatOwnProps,
+    Omit<React.ComponentPropsWithoutRef<'div'>, keyof StatOwnProps | 'children'> {}
+
+const TREND_ICONS: Record<NonNullable<StatOwnProps['trend']>, string> = {
   up: 'arrow_upward',
   down: 'arrow_downward',
   neutral: 'remove',
@@ -28,39 +33,48 @@ const TREND_ICONS: Record<NonNullable<StatProps['trend']>, string> = {
 /**
  * Stat component — a single headline metric with a label and an
  * optional trend delta. Compose several in a row for a metrics band.
+ * Forwards a ref to the root div and spreads native attributes onto it.
  */
-export const Stat = ({
-  value,
-  label,
-  delta,
-  trend = 'neutral',
-  deltaPlacement = 'stacked',
-  size = 'default',
-  className = '',
-}: StatProps) => {
-  const baseClass = 'ds-stat';
+export const Stat = React.forwardRef<HTMLDivElement, StatProps>(
+  (
+    {
+      value,
+      label,
+      delta,
+      trend = 'neutral',
+      deltaPlacement = 'stacked',
+      size = 'default',
+      className = '',
+      ...rest
+    },
+    ref,
+  ) => {
+    const baseClass = 'ds-stat';
 
-  const classes = [
-    baseClass,
-    `${baseClass}--${size}`,
-    deltaPlacement === 'inline' ? `${baseClass}--delta-inline` : '',
-    className,
-  ]
-    .filter(Boolean)
-    .join(' ');
+    const classes = [
+      baseClass,
+      `${baseClass}--${size}`,
+      deltaPlacement === 'inline' ? `${baseClass}--delta-inline` : '',
+      className,
+    ]
+      .filter(Boolean)
+      .join(' ');
 
-  return (
-    <div className={classes}>
-      <span className={`${baseClass}__value`}>{value}</span>
-      <span className={`${baseClass}__label`}>{label}</span>
-      {delta && (
-        <span className={`${baseClass}__delta ${baseClass}__delta--${trend}`}>
-          <span className="material-symbols-rounded" aria-hidden="true">
-            {TREND_ICONS[trend]}
+    return (
+      <div {...rest} ref={ref} className={classes}>
+        <span className={`${baseClass}__value`}>{value}</span>
+        <span className={`${baseClass}__label`}>{label}</span>
+        {delta && (
+          <span className={`${baseClass}__delta ${baseClass}__delta--${trend}`}>
+            <span className="material-symbols-rounded" aria-hidden="true">
+              {TREND_ICONS[trend]}
+            </span>
+            {delta}
           </span>
-          {delta}
-        </span>
-      )}
-    </div>
-  );
-};
+        )}
+      </div>
+    );
+  },
+);
+
+Stat.displayName = 'Stat';

@@ -186,7 +186,7 @@
 }
 
 .ds-instructions--compact .ds-instructions__number {
-  font-size: 12px;
+  font-size: var(--font-caption-size);
 }
 
 .ds-instructions--compact .ds-instructions__dot {

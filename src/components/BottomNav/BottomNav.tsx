@@ -70,9 +70,18 @@ type BottomNavOwnProps = {
    * from Nav's "Main", so a screen carrying both announces two different navs
    */
   'aria-label'?: string;
+  /**
+   * Visually hidden text read after a destination's label when it carries a
+   * badge, given the item's `badge`. Defaults to ", new" for a dot (`true`)
+   * and ", 3 new" for a count; the leading comma and space are part of the text.
+   */
+  badgeLabel?: (badge: number | string | true) => string;
   /** Additional CSS classes */
   className?: string;
 };
+
+const defaultBadgeLabel = (badge: number | string | true) =>
+  badge === true ? ', new' : `, ${badge} new`;
 
 export interface BottomNavProps
   extends BottomNavOwnProps,
@@ -98,6 +107,7 @@ export const BottomNav = React.forwardRef<HTMLElement, BottomNavProps>(
       minimized = false,
       fixed = false,
       'aria-label': ariaLabel = 'Tabs',
+      badgeLabel = defaultBadgeLabel,
       className = '',
       style,
       ...rest
@@ -169,12 +179,7 @@ export const BottomNav = React.forwardRef<HTMLElement, BottomNavProps>(
               ]
                 .filter(Boolean)
                 .join(' ');
-              const badgeText =
-                item.badge === undefined
-                  ? ''
-                  : item.badge === true
-                    ? ', new'
-                    : `, ${item.badge} new`;
+              const badgeText = item.badge === undefined ? '' : badgeLabel(item.badge);
               const content = (
                 <>
                   <span className={`${baseClass}__indicator`}>

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { fn } from 'storybook/test';
 import { Toast, ToastProvider, useToast } from './Toast';
 import { Button } from '../Button/Button';
 
@@ -25,6 +26,7 @@ const meta = {
   },
   args: {
     dismissible: true,
+    onDismiss: fn(),
   },
   decorators: [
     (Story) => (

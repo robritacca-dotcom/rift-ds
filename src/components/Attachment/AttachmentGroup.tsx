@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useEffect, useId, useRef, useState } from 'react';
-import { AttachmentTile } from './AttachmentTile';
+import { AttachmentTile, type AttachmentTileProps } from './AttachmentTile';
 import { formatBytes } from './fileTypes';
 import type { AttachmentItem } from './fileTypes';
 import { renderTypeMark } from './typeMark';
-import { AttachmentViewer } from './AttachmentViewer';
+import { AttachmentViewer, type AttachmentViewerProps } from './AttachmentViewer';
 import './Attachment.css';
 
 /** Props owned by AttachmentGroup itself — everything else falls through to the root element. */
@@ -47,6 +47,21 @@ type AttachmentGroupOwnProps = {
   showMoreLabel?: (hidden: number) => string;
   /** Text of the collapse button under an expanded group. */
   showLessLabel?: string;
+  /** The status lines and progress name every tile writes, merged over the tile's English defaults ("Uploading…", "Upload failed", "Unavailable"). */
+  attachmentTileLabels?: Pick<AttachmentTileProps, 'uploadingLabel' | 'errorLabel' | 'unavailableLabel' | 'progressLabel'>;
+  /** The words the built-in viewer writes, merged over its English defaults: its buttons ("Download", "Close", "Previous file", "Next file", "Try again"), its fallback headlines and the position text ("2 of 5"). */
+  attachmentViewerLabels?: Pick<
+    AttachmentViewerProps,
+    | 'downloadLabel'
+    | 'closeLabel'
+    | 'previousLabel'
+    | 'nextLabel'
+    | 'retryLabel'
+    | 'noPreviewLabel'
+    | 'failedLabel'
+    | 'failedDescription'
+    | 'formatPosition'
+  >;
   /** Additional CSS classes */
   className?: string;
 };
@@ -87,6 +102,8 @@ export const AttachmentGroup = React.forwardRef<HTMLDivElement, AttachmentGroupP
       label = 'Attachments',
       showMoreLabel = (hidden) => `Show ${hidden} more`,
       showLessLabel = 'Show fewer',
+      attachmentTileLabels,
+      attachmentViewerLabels,
       className = '',
       ...rest
     },
@@ -170,7 +187,10 @@ export const AttachmentGroup = React.forwardRef<HTMLDivElement, AttachmentGroupP
       );
       const badge = (
         <span className={`${baseClass}__single-mark`} aria-hidden="true">
-          {renderTypeMark(single.name, single.kind, { form: 'badge' })}
+          {renderTypeMark(single.name, single.kind, {
+            typeLabel: single.typeLabel,
+            form: 'badge',
+          })}
         </span>
       );
       layout = onClick ? (
@@ -197,8 +217,10 @@ export const AttachmentGroup = React.forwardRef<HTMLDivElement, AttachmentGroupP
             {visible.map((item) => (
               <li key={item.id} className={`${baseClass}__cell`}>
                 <AttachmentTile
+                  {...attachmentTileLabels}
                   name={item.name}
                   kind={item.kind}
+                  typeLabel={item.typeLabel}
                   status={item.status}
                   progress={item.progress}
                   error={item.error}
@@ -222,6 +244,7 @@ export const AttachmentGroup = React.forwardRef<HTMLDivElement, AttachmentGroupP
                   <AttachmentTile
                     name={items[visible.length].name}
                     kind={items[visible.length].kind}
+                    typeLabel={items[visible.length].typeLabel}
                     previewSrc={items[visible.length].previewSrc}
                     previewAlt=""
                     size={size}
@@ -264,6 +287,7 @@ export const AttachmentGroup = React.forwardRef<HTMLDivElement, AttachmentGroupP
 
         {viewer && (
           <AttachmentViewer
+            {...attachmentViewerLabels}
             open={viewed !== undefined}
             onOpenChange={(next) => {
               if (!next) setViewing(null);

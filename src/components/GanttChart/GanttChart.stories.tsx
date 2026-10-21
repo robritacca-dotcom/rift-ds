@@ -105,6 +105,68 @@ export const Projected: Story = {
   },
 };
 
+const readingItems: GanttChartItem[] = [
+  { id: 'shipped', label: 'Shipped work', start: '2026-02-02', end: '2026-03-27', color: 'cobalt', progress: 100 },
+  {
+    id: 'planned',
+    label: 'Planned work',
+    start: '2026-05-04',
+    end: '2026-06-26',
+    color: 'violet',
+    projected: true,
+    detail: 'Target: late Q2',
+  },
+];
+
+/** The words the chart writes at their defaults: the month axis and each bar's and milestone's reading text, in English. */
+export const DefaultCopy: Story = {
+  args: {
+    items: readingItems,
+    milestones: [{ id: 'beta', label: 'Beta release', date: '2026-04-17', color: 'violet' }],
+    title: 'Roadmap',
+    subtitle: 'The reading text at its defaults',
+  },
+  play: async ({ canvasElement }) => {
+    const months = [...canvasElement.querySelectorAll('.ds-gantt__month-label')].map((node) => node.textContent);
+    await expect(months).toEqual(['Feb 2026', 'Mar', 'Apr', 'May', 'Jun']);
+    const reading = [...canvasElement.querySelectorAll('.ds-gantt__sr')].map((node) => node.textContent);
+    await expect(reading).toEqual([
+      'Shipped work, Feb 2, 2026 to Mar 27, 2026, 100% complete',
+      'Planned work, May 4, 2026 to Jun 26, 2026, projected, Target: late Q2',
+      'Beta release, Apr 17, 2026',
+    ]);
+  },
+};
+
+/** The same chart written in Spanish: `locale` for the dates, and the reading sentences as props, so word order can change. */
+export const LocalisedCopy: Story = {
+  args: {
+    ...DefaultCopy.args,
+    title: 'Hoja de ruta',
+    subtitle: 'El texto de lectura en español',
+    locale: 'es-ES',
+    rangeLabel: (start: string, end: string) => `del ${start} al ${end}`,
+    progressLabel: (percent: number) => `${percent} % completado`,
+    projectedLabel: 'previsto',
+    todayLabel: 'Hoy',
+  },
+  play: async ({ canvasElement }) => {
+    const months = [...canvasElement.querySelectorAll('.ds-gantt__month-label')].map((node) => node.textContent);
+    const spanish = (date: Date, options: Intl.DateTimeFormatOptions) => date.toLocaleDateString('es-ES', options);
+    await expect(months[0]).toBe(spanish(new Date(2026, 1, 1), { month: 'short', year: 'numeric' }));
+    await expect(months[1]).toBe(spanish(new Date(2026, 2, 1), { month: 'short' }));
+    const day = (iso: string) =>
+      spanish(new Date(`${iso}T00:00:00`), { month: 'short', day: 'numeric', year: 'numeric' });
+    const reading = [...canvasElement.querySelectorAll('.ds-gantt__sr')].map((node) => node.textContent);
+    await expect(reading).toEqual([
+      `Shipped work, del ${day('2026-02-02')} al ${day('2026-03-27')}, 100 % completado`,
+      `Planned work, del ${day('2026-05-04')} al ${day('2026-06-26')}, previsto, Target: late Q2`,
+      `Beta release, ${day('2026-04-17')}`,
+    ]);
+    await expect(reading.join(' ')).not.toMatch(/ to |complete|projected/);
+  },
+};
+
 export const Interactive: Story = {
   args: {
     items: quarterItems,

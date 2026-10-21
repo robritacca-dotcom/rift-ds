@@ -17,6 +17,7 @@ import { ToolCall } from '../components/ToolCall/ToolCall';
 import { useChatWidget, type ChatCardRenderers } from './context';
 import { DemoBoard } from './DemoWelcome';
 import type { ChatCard } from './types';
+import { MOTION_DEMO_RETRY_RUN_MS } from '../tokens/motion';
 
 export interface DemoChartCard {
   type: 'area' | 'bar';
@@ -51,7 +52,7 @@ export interface DemoStackCard {
 
 /* A schedule timing, not an animation: how long the staged retry "runs"
    before it lands. */
-const RETRY_RUN_MS = 1400;
+const RETRY_RUN_MS = MOTION_DEMO_RETRY_RUN_MS;
 
 export function DemoToolCall({ card }: { card: DemoToolCallCard }) {
   const [status, setStatus] = useState(card.status);

@@ -1,13 +1,17 @@
 'use client';
 
 import React, { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
+import { useLayer } from '../../behaviors/useLayer';
 import './SourceChip.css';
 import '../../fonts/material-symbols.css';
 import { MOTION_HOVER_SHOW_DELAY_MS, MOTION_HOVER_HIDE_DELAY_MS } from '../../tokens/motion';
 
 /** Props owned by SourceChip itself — everything else falls through to the root element. */
 type SourceChipOwnProps = {
-  /** The source name, e.g. "Design tokens quarterly". Truncates with an ellipsis when long. */
+  /**
+   * The source name, e.g. "Design tokens quarterly". Truncates with an ellipsis when long.
+   * Note: this shadows the native `title` tooltip attribute, which SourceChip does not expose.
+   */
   title: string;
   /** Citation number, rendered as a leading numeral in its own small badge circle. Wins the leading slot over `logo` and `icon`. */
   index?: number;
@@ -124,30 +128,34 @@ export const SourceChip = React.forwardRef<
 
   useEffect(() => clearTimers, []);
 
+  const close = () => {
+    clearTimers();
+    setVisible(false);
+  };
+
   // While open: Escape dismisses from anywhere (WCAG 1.4.13), and so does a
   // press outside — touch browsers do not reliably blur on an outside tap.
+  // Both go through the shared layer stack, so neither also closes a Dialog
+  // the chip sits in.
+  useLayer({
+    open: visible,
+    onDismiss: close,
+    dismissOnOutsidePress: true,
+    getElements: () => [hostRef.current],
+  });
+
+  // One preview at a time: a chip held open by keyboard focus gives way
+  // when the pointer opens its neighbour.
   useEffect(() => {
     if (!visible) return;
-    const close = () => {
+    const closeThis = () => {
       clearTimers();
       setVisible(false);
     };
-    // One preview at a time: a chip held open by keyboard focus gives way
-    // when the pointer opens its neighbour.
     closeOpenPreview?.();
-    closeOpenPreview = close;
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') close();
-    };
-    const onPointerDown = (e: PointerEvent) => {
-      if (!hostRef.current?.contains(e.target as Node)) close();
-    };
-    document.addEventListener('keydown', onKeyDown);
-    document.addEventListener('pointerdown', onPointerDown);
+    closeOpenPreview = closeThis;
     return () => {
-      if (closeOpenPreview === close) closeOpenPreview = null;
-      document.removeEventListener('keydown', onKeyDown);
-      document.removeEventListener('pointerdown', onPointerDown);
+      if (closeOpenPreview === closeThis) closeOpenPreview = null;
     };
   }, [visible]);
 

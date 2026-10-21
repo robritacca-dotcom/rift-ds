@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect } from 'storybook/test';
 import { SelectionCard } from './SelectionCard';
 
 const meta: Meta<typeof SelectionCard> = {
@@ -160,5 +161,28 @@ export const Toggle: Story = {
         description: 'Get early access to experimental features.',
       },
     ],
+  },
+};
+
+/* ============================================
+   UNCONTROLLED
+   ============================================ */
+
+/** No `value`: the group keeps its own selection, starting from `defaultValue`. */
+export const Uncontrolled: Story = {
+  args: {
+    mode: 'checkbox',
+    name: 'Notifications',
+    defaultValue: ['email'],
+    options: [
+      { value: 'email', label: 'Email', description: 'A digest once a day.' },
+      { value: 'sms', label: 'SMS', description: 'Urgent alerts only.' },
+    ],
+  },
+  play: async ({ canvas, userEvent }) => {
+    const sms = canvas.getByRole('checkbox', { name: /SMS/ });
+    await userEvent.click(sms);
+    await expect(sms).toHaveAttribute('aria-checked', 'true');
+    await expect(canvas.getByRole('checkbox', { name: /Email/ })).toHaveAttribute('aria-checked', 'true');
   },
 };

@@ -368,6 +368,7 @@
    REDUCED MOTION
    ============================================ */
 
+/* ds-allow(motion): drops the menu's entrance outright rather than playing it at 0.01ms. */
 @media (prefers-reduced-motion: reduce) {
   .ds-combobox__menu {
     animation: none;

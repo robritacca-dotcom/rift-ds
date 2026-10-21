@@ -132,7 +132,7 @@ export const InputGroup: Story = {
           <Chip
             key={tag}
             label={tag}
-            removeLabel={`Remove ${tag}`}
+            removeLabel={(chipLabel) => `Remove ${chipLabel}`}
             onRemove={() => setTags(tags.filter((t) => t !== tag))}
           />
         ))}

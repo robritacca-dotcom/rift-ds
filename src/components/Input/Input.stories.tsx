@@ -138,9 +138,19 @@ export const Disabled: Story = {
   },
 };
 
+/** The compact size, for dense forms and toolbars. */
+export const Compact: Story = {
+  args: {
+    label: 'Email',
+    placeholder: 'Enter your email',
+    helperText: 'We never share it',
+    size: 'compact',
+  },
+};
+
 export const NoLabel: Story = {
   args: {
     placeholder: 'No label input',
-    ariaLabel: 'Unlabelled input',
+    'aria-label': 'Unlabelled input',
   },
 };

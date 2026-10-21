@@ -149,8 +149,8 @@ const WithTabsDemo = () => {
           { label: 'Mentions', value: 'mentions', count: countOf('mentions') },
           { label: 'System', value: 'system', count: countOf('system') },
         ]}
-        activeTab={active}
-        onTabChange={setActive}
+        value={active}
+        onValueChange={setActive}
         onMarkAllRead={() => {}}
       >
         {visible.map((n) => (

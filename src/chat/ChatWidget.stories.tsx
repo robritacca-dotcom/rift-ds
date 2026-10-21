@@ -5,7 +5,8 @@ import { ChatProvider } from './ChatProvider';
 import { ChatWidget, type ChatWidgetProps } from './ChatWidget';
 import { ChatLauncher } from './ChatLauncher';
 import { useChatWidget } from './context';
-import { ARTIFACT_CARD_KIND, type ChatCard } from './types';
+import { scriptChat } from './sim';
+import { ARTIFACT_CARD_KIND, type ChatCard, type ChatModelOption, type ChatTransport } from './types';
 import {
   DEMO_ARTIFACT_RENDERERS,
   DEMO_MENTIONS,
@@ -366,6 +367,486 @@ export const Artifacts: Story = {
     await userEvent.click(canvas.getByRole('button', { name: 'Show the artifact panel' }));
     await waitFor(() => expect(tile).toHaveAttribute('aria-pressed', 'true'), { timeout: 4000 });
   },
+};
+
+/* The stage both copy stories share: every slot that writes visible English
+   switched on, so each string can be found on screen. */
+function CopyStage(args: ChatWidgetProps) {
+  return (
+    <ChatProvider transport={createDemoTransport(FAST)} renderers={DEMO_RENDERERS} followups={false} feedback={false}>
+      <OpenOnMount>
+        <Stage width={1100} height={760}>
+          <ChatWidget
+            {...args}
+            artifacts
+            fileAttachments
+            placementEnabled
+            contextLabel="Pricing"
+            agent={{ tabs: demoAgentTabs(args.title ?? 'Assistant') }}
+          />
+        </Stage>
+      </OpenOnMount>
+    </ChatProvider>
+  );
+}
+
+/** Opens each surface that writes copy and checks what it says, in the order the visitor meets it. */
+async function expectCopy(
+  canvasElement: HTMLElement,
+  copy: {
+    greetings: string[];
+    context: string;
+    hint: string;
+    agentStatus: string;
+    placements: string[];
+    panelTitle: string;
+    emptyTitle: string;
+    emptyDescription: string;
+  },
+  names: { showAgent: string; hideAgent: string; placement: string; showArtifact: string }
+) {
+  const canvas = within(canvasElement);
+  await waitFor(() =>
+    expect(copy.greetings).toContain(canvasElement.querySelector('.ds-chat-widget__hello')?.textContent)
+  );
+  await expect(canvas.getByText(copy.context)).toBeInTheDocument();
+  await expect(canvasElement.querySelector('.ds-attachment-drop-zone__hint')?.textContent).toBe(copy.hint);
+  await userEvent.click(canvas.getByRole('button', { name: names.showAgent }));
+  await waitFor(() => expect(canvas.getByText(copy.agentStatus)).toBeInTheDocument(), { timeout: 4000 });
+  await userEvent.click(canvas.getByRole('button', { name: names.hideAgent }));
+  await userEvent.click(canvas.getByRole('button', { name: names.placement }));
+  for (const placement of copy.placements) {
+    await expect(await screen.findByText(placement, undefined, { timeout: 2000 })).toBeInTheDocument();
+  }
+  await userEvent.keyboard('{Escape}');
+  await userEvent.click(canvas.getByRole('button', { name: names.showArtifact }));
+  await waitFor(() => expect(canvas.getByText(copy.emptyTitle)).toBeInTheDocument(), { timeout: 4000 });
+  await expect(canvas.getByText(copy.panelTitle)).toBeInTheDocument();
+  await expect(canvas.getByText(copy.emptyDescription)).toBeInTheDocument();
+}
+
+/** The widget's visible English at its defaults: the context note, the drop hint, the agent's status, the placement rows and the artifact panel's empty state. */
+export const DefaultCopy: Story = {
+  render: (args) => <CopyStage {...args} />,
+  play: async ({ canvasElement }) => {
+    await expectCopy(
+      canvasElement,
+      {
+        greetings: ['Good morning', 'Good afternoon', 'Good evening'],
+        context: 'Looking at “Pricing”',
+        hint: 'Up to 50 MB each · 10 files max',
+        agentStatus: 'Connected',
+        placements: ['Dock right', 'Dock left', 'Floating'],
+        panelTitle: 'Artifacts',
+        emptyTitle: 'Nothing here yet',
+        emptyDescription: 'What the chat makes for you, like a dashboard or a page, opens in this panel.',
+      },
+      {
+        showAgent: 'Show the agent panel',
+        hideAgent: 'Hide the agent panel',
+        placement: 'Chat position',
+        showArtifact: 'Show the artifact panel',
+      }
+    );
+  },
+};
+
+/** Every string the widget writes, localised through its props: here in Spanish. */
+export const LocalisedCopy: Story = {
+  args: {
+    title: 'Asistente Acme',
+    tagline: '¿En qué podemos ayudarte hoy?',
+    placeholder: 'Pregunta lo que quieras',
+    disclaimer: 'Las respuestas pueden contener errores.',
+    greetings: { morning: 'Buenos días', afternoon: 'Buenas tardes', evening: 'Buenas noches' },
+    contextNote: (title: string) => `Viendo «${title}»`,
+    attachHint: (maxSize: string, maxFiles: number) => `Hasta ${maxSize} cada uno · ${maxFiles} archivos como máximo`,
+    agentStatus: 'Conectado',
+    placementLabels: { right: 'Acoplar a la derecha', left: 'Acoplar a la izquierda', floating: 'Flotante' },
+    artifactPanelTitle: 'Artefactos',
+    artifactEmptyTitle: 'Aún no hay nada',
+    artifactEmptyDescription: 'Lo que el chat crea para ti, como un panel o una página, se abre aquí.',
+    showAgentLabel: 'Mostrar el panel del agente',
+    hideAgentLabel: 'Ocultar el panel del agente',
+    placementLabel: 'Posición del chat',
+    showArtifactLabel: 'Mostrar el panel de artefactos',
+  },
+  render: (args) => <CopyStage {...args} />,
+  play: async ({ canvasElement }) => {
+    await expectCopy(
+      canvasElement,
+      {
+        greetings: ['Buenos días', 'Buenas tardes', 'Buenas noches'],
+        context: 'Viendo «Pricing»',
+        hint: 'Hasta 50 MB cada uno · 10 archivos como máximo',
+        agentStatus: 'Conectado',
+        placements: ['Acoplar a la derecha', 'Acoplar a la izquierda', 'Flotante'],
+        panelTitle: 'Artefactos',
+        emptyTitle: 'Aún no hay nada',
+        emptyDescription: 'Lo que el chat crea para ti, como un panel o una página, se abre aquí.',
+      },
+      {
+        showAgent: 'Mostrar el panel del agente',
+        hideAgent: 'Ocultar el panel del agente',
+        placement: 'Posición del chat',
+        showArtifact: 'Mostrar el panel de artefactos',
+      }
+    );
+  },
+};
+
+/* The composed-copy stories' conversation: the demo script, plus one reply
+   that carries a trace and a fenced block, so the reasoning summary and a
+   reply's CodeBlock both draw. */
+const INSTALL_PROMPT = 'Show the install command';
+function composedCopyTransport(): ChatTransport {
+  const install = scriptChat()
+    .user(INSTALL_PROMPT)
+    .assistant('Run this in your project:\n\n```bash\nnpm install rift-ds\n```', {
+      steps: [{ status: 'Reading the docs', point: 'Found the install line.' }],
+      followups: ['How do I get started?'],
+    })
+    .transport(FAST);
+  const demo = createDemoTransport(FAST);
+  return (messages, signal) => {
+    const last = [...messages].reverse().find((message) => message.role === 'user');
+    return last?.content === INSTALL_PROMPT ? install(messages, signal) : demo(messages, signal);
+  };
+}
+
+const COPY_MODELS: ChatModelOption[] = [
+  { value: 'fast', id: 'model-fast', label: 'Fast', description: 'Quick answers', adaptiveThinking: false },
+  { value: 'deep', id: 'model-deep', label: 'Deep', description: 'Careful answers', adaptiveThinking: true },
+];
+
+/* Every composed component that writes words switched on: the threads
+   rail, the tab strip, the agent pane, the artifact panel, attachments and
+   the model picker. */
+function ComposedCopyStage(args: ChatWidgetProps) {
+  return (
+    <ChatProvider
+      transport={composedCopyTransport()}
+      renderers={DEMO_RENDERERS}
+      artifactRenderers={DEMO_ARTIFACT_RENDERERS}
+      followups={false}
+      feedback={false}
+      threads={DEMO_THREADS}
+    >
+      <OpenOnMount>
+        <Stage width={1100} height={760}>
+          <ChatWidget
+            {...args}
+            threads
+            tabs
+            artifacts
+            fileAttachments
+            models={COPY_MODELS}
+            agent={{ tabs: demoAgentTabs(args.title ?? 'Assistant') }}
+          />
+        </Stage>
+      </OpenOnMount>
+    </ChatProvider>
+  );
+}
+
+type ComposedCopy = {
+  attach: string;
+  files: string;
+  remove: string;
+  message: string;
+  drop: string;
+  conversation: string;
+  modelPicker: string;
+  modelList: string;
+  threadOptions: string;
+  pin: string;
+  rename: string;
+  showAgent: string;
+  hideAgent: string;
+  agentViews: string;
+  copyCode: string;
+  copyText: string;
+  codeRegion: string;
+  reasoning: RegExp;
+  chosen: string;
+  openChats: string;
+  closeTab: string;
+  step: string;
+  skip: string;
+  skipped: string;
+  preview: string;
+  code: string;
+  view: string;
+  expand: string;
+  closeArtifact: string;
+  panelCodeRegion: string;
+};
+
+const askIn = (canvasElement: HTMLElement, copy: ComposedCopy) => async (prompt: string) => {
+  await userEvent.type(within(canvasElement).getByRole('textbox', { name: copy.message }), `${prompt}{Enter}`);
+};
+
+/** The parts that write words before anything is said: the composer, the drop overlay, the conversation region, the model picker, the threads rail and the agent pane. */
+async function expectChromeCopy(canvasElement: HTMLElement, copy: ComposedCopy) {
+  const canvas = within(canvasElement);
+  await expect(await canvas.findByRole('button', { name: copy.attach })).toBeInTheDocument();
+  await expect(canvas.getByRole('textbox', { name: copy.message })).toBeInTheDocument();
+  await expect(canvasElement.querySelector('.ds-attachment-drop-zone__label')?.textContent).toBe(copy.drop);
+  await expect(canvas.getByRole('region', { name: copy.conversation })).toBeInTheDocument();
+
+  // The model picker's open list.
+  await userEvent.click(canvas.getByRole('combobox', { name: copy.modelPicker }));
+  await expect(await screen.findByRole('listbox', { name: copy.modelList })).toBeInTheDocument();
+  await userEvent.keyboard('{Escape}');
+
+  // The threads rail: a row's menu trigger, and the menu's own rows. The
+  // trigger is hover-revealed, so the test skips the pointer check (see
+  // ThreadLifecycle).
+  const menu = await canvas.findByRole(
+    'button',
+    { name: `${copy.threadOptions}: Plan the launch week` },
+    { timeout: 4000 }
+  );
+  await userEvent.click(menu, { pointerEventsCheck: 0 });
+  await expect(await screen.findByRole('menuitem', { name: copy.pin }, { timeout: 2000 })).toBeInTheDocument();
+  await expect(screen.getByRole('menuitem', { name: copy.rename })).toBeInTheDocument();
+  await userEvent.keyboard('{Escape}');
+
+  // The agent pane's tab strip.
+  await userEvent.click(canvas.getByRole('button', { name: copy.showAgent }));
+  await expect(await canvas.findByRole('tablist', { name: copy.agentViews }, { timeout: 4000 })).toBeInTheDocument();
+  await userEvent.click(canvas.getByRole('button', { name: copy.hideAgent }));
+
+  // A queued file: the tray's name and the tile's remove button, then the
+  // sent message's files.
+  const input = canvasElement.querySelector<HTMLInputElement>('.ds-composer input[type="file"]');
+  await userEvent.upload(input as HTMLInputElement, new File(['hello'], 'notes.txt', { type: 'text/plain' }));
+  await expect(await canvas.findByRole('button', { name: `${copy.remove} notes.txt` })).toBeInTheDocument();
+  await expect(canvas.getByRole('list', { name: copy.files })).toBeInTheDocument();
+  await userEvent.type(canvas.getByRole('textbox', { name: copy.message }), '{Enter}');
+  await waitFor(() => expect(canvasElement.querySelector(`.ds-attachment-group [aria-label="${copy.files}"]`)).not.toBeNull(), {
+    timeout: 4000,
+  });
+}
+
+/** A reply's parts: its fenced code and reasoning summary, the follow-up row's record, and the tab strip the conversation opens. */
+async function expectReplyCopy(canvasElement: HTMLElement, copy: ComposedCopy) {
+  const canvas = within(canvasElement);
+  await askIn(canvasElement, copy)(INSTALL_PROMPT);
+  // The fence's language streams in with the words, so the region's name settles last.
+  await expect(await canvas.findByRole('region', { name: copy.codeRegion }, { timeout: 8000 })).toBeInTheDocument();
+  await expect(canvas.getByRole('button', { name: copy.copyCode }).textContent).toContain(copy.copyText);
+  await waitFor(() => expect(canvas.getByText(copy.reasoning)).toBeInTheDocument(), { timeout: 4000 });
+
+  // A follow-up sent from the row keeps it as the record, its pick named as chosen.
+  await userEvent.click(await canvas.findByRole('button', { name: 'How do I get started?' }, { timeout: 4000 }));
+  await waitFor(
+    () =>
+      expect(canvasElement.querySelector('.ds-prompt-suggestions__item--kept')?.textContent).toContain(copy.chosen),
+    { timeout: 4000 }
+  );
+
+  // The tab strip the conversation opened, and its close buttons.
+  await waitFor(() => expect(canvasElement.querySelector(`[aria-label="${copy.openChats}"]`)).not.toBeNull(), {
+    timeout: 4000,
+  });
+  await expect(canvas.getAllByRole('button', { name: new RegExp(`^${copy.closeTab}: `) }).length).toBeGreaterThan(0);
+}
+
+/** A set of questions (the step count, Skip and the record it leaves), then the artifact panel (its view switch, its buttons and the code view's CodeBlock). */
+async function expectPanelCopy(canvasElement: HTMLElement, copy: ComposedCopy) {
+  const canvas = within(canvasElement);
+  const ask = askIn(canvasElement, copy);
+  await ask('Plan our launch kickoff');
+  await waitFor(() => expect(canvas.getByText(copy.step)).toBeInTheDocument(), { timeout: 8000 });
+  await userEvent.click(canvas.getByRole('button', { name: copy.skip }));
+  await expect(canvas.getAllByText(copy.skipped)).toHaveLength(3);
+
+  await waitFor(() => expect(canvas.getByRole('textbox', { name: copy.message })).not.toBeDisabled());
+  await ask('Draft the launch page');
+  const panel = await waitFor(
+    () => {
+      const node = canvasElement.querySelector<HTMLElement>('.ds-chat-widget__artifact-rail--open .ds-artifact-panel');
+      expect(node).not.toBeNull();
+      return node as HTMLElement;
+    },
+    { timeout: 8000 }
+  );
+  const inPanel = within(panel);
+  await expect(inPanel.getByRole('tablist', { name: copy.view })).toBeInTheDocument();
+  await expect(inPanel.getByRole('tab', { name: copy.preview })).toBeInTheDocument();
+  await expect(inPanel.getByRole('button', { name: copy.expand })).toBeInTheDocument();
+  await expect(inPanel.getByRole('button', { name: copy.closeArtifact })).toBeInTheDocument();
+  await userEvent.click(inPanel.getByRole('tab', { name: copy.code }));
+  await expect(await inPanel.findByRole('region', { name: copy.panelCodeRegion })).toBeInTheDocument();
+  await expect(inPanel.getByRole('button', { name: copy.copyCode })).toBeInTheDocument();
+}
+
+const ENGLISH_COMPOSED: ComposedCopy = {
+  attach: 'Attach files',
+  files: 'Attachments',
+  remove: 'Remove',
+  message: 'Message',
+  drop: 'Drop files to attach',
+  conversation: 'Conversation',
+  modelPicker: 'Choose a model',
+  modelList: 'Model',
+  threadOptions: 'Thread options',
+  pin: 'Pin',
+  rename: 'Rename',
+  showAgent: 'Show the agent panel',
+  hideAgent: 'Hide the agent panel',
+  agentViews: 'Agent views',
+  copyCode: 'Copy code',
+  copyText: 'Copy',
+  codeRegion: 'Code: bash',
+  reasoning: /^(Thought for \d+s|Thought process)$/,
+  chosen: '(chosen)',
+  openChats: 'Open chats',
+  closeTab: 'Close chat',
+  step: '1 of 3',
+  skip: 'Skip',
+  skipped: 'Skipped',
+  preview: 'Preview',
+  code: 'Code',
+  view: 'Artifact view',
+  expand: 'Expand the artifact',
+  closeArtifact: 'Close the artifact',
+  panelCodeRegion: 'Code: html',
+};
+
+const SPANISH_COMPOSED: ComposedCopy = {
+  attach: 'Adjuntar archivos',
+  files: 'Archivos adjuntos',
+  remove: 'Quitar',
+  message: 'Mensaje',
+  drop: 'Suelta los archivos para adjuntarlos',
+  conversation: 'Conversación',
+  modelPicker: 'Elegir un modelo',
+  modelList: 'Modelo',
+  threadOptions: 'Opciones del hilo',
+  pin: 'Fijar',
+  rename: 'Renombrar',
+  showAgent: 'Mostrar el panel del agente',
+  hideAgent: 'Ocultar el panel del agente',
+  agentViews: 'Vistas del agente',
+  copyCode: 'Copiar el código',
+  copyText: 'Copiar',
+  codeRegion: 'Código: bash',
+  reasoning: /^(Razonó durante \d+ s|Proceso de razonamiento)$/,
+  chosen: '(elegida)',
+  openChats: 'Chats abiertos',
+  closeTab: 'Cerrar el chat',
+  step: '1 de 3',
+  skip: 'Omitir',
+  skipped: 'Omitida',
+  preview: 'Vista previa',
+  code: 'Código',
+  view: 'Vista del artefacto',
+  expand: 'Ampliar el artefacto',
+  closeArtifact: 'Cerrar el artefacto',
+  panelCodeRegion: 'Código: html',
+};
+
+/* The rail opens expanded in both languages, so its rows' menus are reachable. */
+const ENGLISH_ARGS: Partial<ChatWidgetProps> = { threadsProps: { defaultExpanded: true } };
+
+/* Every grouped label prop set, plus the threads rail's and the tab strip's
+   own props, in Spanish. */
+const SPANISH_ARGS: Partial<ChatWidgetProps> = {
+  modelPickerLabel: 'Elegir un modelo',
+  showAgentLabel: 'Mostrar el panel del agente',
+  hideAgentLabel: 'Ocultar el panel del agente',
+  pastedTextLabel: 'Texto pegado',
+  reasoningLabel: (seconds?: number) =>
+    seconds === undefined ? 'Proceso de razonamiento' : `Razonó durante ${seconds} s`,
+  composerLabels: {
+    attachLabel: 'Adjuntar archivos',
+    dropLabel: 'Suelta los archivos para adjuntarlos',
+    filesLabel: 'Archivos adjuntos',
+    stopLabel: 'Detener la respuesta',
+    'aria-label': 'Mensaje',
+    attachmentTileLabels: { removeLabel: (name: string) => `Quitar ${name}` },
+  },
+  attachmentDropZoneLabels: { label: 'Suelta los archivos para adjuntarlos' },
+  attachmentGroupLabels: {
+    label: 'Archivos adjuntos',
+    attachmentViewerLabels: { closeLabel: 'Cerrar' },
+  },
+  chatThreadLabels: { ariaLabel: 'Conversación', jumpLabel: 'Ir al último mensaje' },
+  modelPickerLabels: { listLabel: 'Modelo', placeholder: 'Elegir un modelo' },
+  threadsProps: {
+    defaultExpanded: true,
+    historyLabel: 'Historial',
+    threadPanelLabels: { threadMenuLabel: 'Opciones del hilo', pinnedLabel: 'Fijado', projectsLabel: 'Proyectos' },
+    actionLabels: { pin: 'Fijar', unpin: 'Soltar', rename: 'Renombrar', delete: 'Eliminar' },
+  },
+  tabsProps: { ariaLabel: 'Chats abiertos', closeLabel: 'Cerrar el chat' },
+  agentRailLabels: { tabsLabel: 'Vistas del agente' },
+  codeBlockLabels: {
+    copyLabel: 'Copiar el código',
+    copyText: 'Copiar',
+    copiedLabel: 'Copiado',
+    codeLabel: (language?: string) => (language ? `Código: ${language}` : 'Código'),
+  },
+  promptSuggestionsLabels: { chosenLabel: '(elegida)' },
+  questionCardLabels: {
+    step: (current: number, total: number) => `${current} de ${total}`,
+    skip: 'Omitir',
+    skipped: 'Omitida',
+  },
+  questionSummaryLabels: { missingLabel: 'Sin respuesta' },
+  artifactPanelLabels: {
+    previewLabel: 'Vista previa',
+    codeLabel: 'Código',
+    viewLabel: 'Vista del artefacto',
+    expandLabel: 'Ampliar el artefacto',
+    collapseLabel: 'Reducir el artefacto',
+    closeLabel: 'Cerrar el artefacto',
+    codeBlockLabels: { copyLabel: 'Copiar el código', copyText: 'Copiar', codeLabel: 'Código: html' },
+  },
+};
+
+/** The composed parts' English at its defaults, before anything is said: the composer, the drop overlay, the conversation, the model picker, the threads rail and the agent pane. */
+export const ComposedDefaultCopy: Story = {
+  args: ENGLISH_ARGS,
+  render: (args) => <ComposedCopyStage {...args} />,
+  play: async ({ canvasElement }) => expectChromeCopy(canvasElement, ENGLISH_COMPOSED),
+};
+
+/** The same parts localised through the grouped label props and `threadsProps`: here in Spanish. */
+export const ComposedLocalisedCopy: Story = {
+  args: SPANISH_ARGS,
+  render: (args) => <ComposedCopyStage {...args} />,
+  play: async ({ canvasElement }) => expectChromeCopy(canvasElement, SPANISH_COMPOSED),
+};
+
+/** A reply's English at its defaults: its fenced code, its reasoning summary, the follow-up row's record and the tab strip. */
+export const ReplyDefaultCopy: Story = {
+  args: ENGLISH_ARGS,
+  render: (args) => <ComposedCopyStage {...args} />,
+  play: async ({ canvasElement }) => expectReplyCopy(canvasElement, ENGLISH_COMPOSED),
+};
+
+/** The same reply localised through `codeBlockLabels`, `reasoningLabel`, `promptSuggestionsLabels` and `tabsProps`: here in Spanish. */
+export const ReplyLocalisedCopy: Story = {
+  args: SPANISH_ARGS,
+  render: (args) => <ComposedCopyStage {...args} />,
+  play: async ({ canvasElement }) => expectReplyCopy(canvasElement, SPANISH_COMPOSED),
+};
+
+/** A set of questions and the artifact panel at their English defaults. */
+export const PanelsDefaultCopy: Story = {
+  args: ENGLISH_ARGS,
+  render: (args) => <ComposedCopyStage {...args} />,
+  play: async ({ canvasElement }) => expectPanelCopy(canvasElement, ENGLISH_COMPOSED),
+};
+
+/** The same localised through `questionCardLabels` and `artifactPanelLabels`: here in Spanish. */
+export const PanelsLocalisedCopy: Story = {
+  args: SPANISH_ARGS,
+  render: (args) => <ComposedCopyStage {...args} />,
+  play: async ({ canvasElement }) => expectPanelCopy(canvasElement, SPANISH_COMPOSED),
 };
 
 /** A thread's lifecycle: pin it, rename it, and the row follows. */

@@ -34,8 +34,13 @@ type ThreadTabsOwnProps = {
   onTabClose?: (id: string) => void;
   /** Spoken text for each tab status, read after the tab's label; the dot itself is decorative. Merged over the English defaults (Working, Unread, Needs input, Failed). */
   statusLabels?: Partial<Record<ThreadTabStatus, string>>;
-  /** Accessible name for a tab's close button; the tab's label is appended after it. */
-  closeLabel?: string;
+  /**
+   * Accessible name for a tab's close button. A string is followed by a colon
+   * and the tab's label ("Close thread: Q3 plan"); a function is given the
+   * label and returns the whole name, so a translation can put the label where
+   * its grammar needs it.
+   */
+  closeLabel?: string | ((title: string) => string);
   /** Fires when the trailing new-tab button is pressed. The button renders only when this is given. */
   onAdd?: () => void;
   /** Accessible name for the new-tab button. */
@@ -311,7 +316,11 @@ export const ThreadTabs = React.forwardRef<HTMLDivElement, ThreadTabsProps>(
                       <button
                         type="button"
                         className={`${baseClass}__close`}
-                        aria-label={`${closeLabel}: ${tab.label}`}
+                        aria-label={
+                          typeof closeLabel === 'function'
+                            ? closeLabel(tab.label)
+                            : `${closeLabel}: ${tab.label}`
+                        }
                         tabIndex={isLeaving ? -1 : 0}
                         onClick={(e) => closeTab(tab.id, e.currentTarget)}
                       >

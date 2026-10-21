@@ -95,6 +95,18 @@ type WorldMapOwnProps = {
    * point count is appended for screen readers.
    */
   label?: string;
+  /** The point count appended to the map's accessible name, given the count. Defaults to "<count> point" or "<count> points". */
+  pointsLabel?: (count: number) => string;
+  /** The keyboard and pointer instructions appended to the map's accessible name while zooming is on. */
+  zoomHintLabel?: string;
+  /** Accessible name of the zoom toolbar. Defaults to "Map zoom controls". */
+  zoomControlsLabel?: string;
+  /** Accessible name of the zoom-out button. Defaults to "Zoom out". */
+  zoomOutLabel?: string;
+  /** Accessible name of the zoom-in button. Defaults to "Zoom in". */
+  zoomInLabel?: string;
+  /** Accessible name of the zoom readout that resets the view, given the zoom as a whole percentage. Defaults to "Zoom <percent>%. Reset the view". */
+  zoomResetLabel?: (percent: number) => string;
   /** Additional CSS classes */
   className?: string;
 };
@@ -201,6 +213,12 @@ export const WorldMap = React.forwardRef<HTMLDivElement, WorldMapProps>(
       renderCallout,
       renderHoverCard,
       label = 'World map',
+      pointsLabel = (count) => `${count} ${count === 1 ? 'point' : 'points'}`,
+      zoomHintLabel = 'Zoom with the controls or the plus and minus keys; drag or use the arrow keys to move the map.',
+      zoomControlsLabel = 'Map zoom controls',
+      zoomOutLabel = 'Zoom out',
+      zoomInLabel = 'Zoom in',
+      zoomResetLabel = (percent) => `Zoom ${percent}%. Reset the view`,
       className = '',
       onKeyDown,
       ...rest
@@ -510,11 +528,7 @@ export const WorldMap = React.forwardRef<HTMLDivElement, WorldMapProps>(
       ...(color ? ({ '--ds-world-map-marker-color': color } as React.CSSProperties) : {}),
     });
 
-    const description = `${placed.length} ${placed.length === 1 ? 'point' : 'points'}.${
-      zoomEnabled
-        ? ' Zoom with the controls or the plus and minus keys; drag or use the arrow keys to move the map.'
-        : ''
-    }`;
+    const description = `${pointsLabel(placed.length)}.${zoomEnabled ? ` ${zoomHintLabel}` : ''}`;
 
     return (
       <div
@@ -625,12 +639,12 @@ export const WorldMap = React.forwardRef<HTMLDivElement, WorldMapProps>(
         </div>
 
         {zoomEnabled && (
-          <div className={`${baseClass}__zoom`} role="toolbar" aria-label="Map zoom controls">
+          <div className={`${baseClass}__zoom`} role="toolbar" aria-label={zoomControlsLabel}>
             <CircularButton
               icon="remove"
               variant="tertiary"
               size="compact"
-              ariaLabel="Zoom out"
+              ariaLabel={zoomOutLabel}
               disabled={zoom <= minZoom + 0.001}
               onClick={() => stepZoom(-1)}
             />
@@ -638,7 +652,7 @@ export const WorldMap = React.forwardRef<HTMLDivElement, WorldMapProps>(
               type="button"
               className={`${baseClass}__zoom-level`}
               onClick={() => setStoredView(null)}
-              aria-label={`Zoom ${Math.round(zoom * 100)}%. Reset the view`}
+              aria-label={zoomResetLabel(Math.round(zoom * 100))}
             >
               {Math.round(zoom * 100)}%
             </button>
@@ -646,7 +660,7 @@ export const WorldMap = React.forwardRef<HTMLDivElement, WorldMapProps>(
               icon="add"
               variant="tertiary"
               size="compact"
-              ariaLabel="Zoom in"
+              ariaLabel={zoomInLabel}
               disabled={zoom >= maxZoom}
               onClick={() => stepZoom(1)}
             />

@@ -21,6 +21,10 @@ const STATUS_TEXT: Record<SourceTrailStatus, string> = {
   done: 'Read',
 };
 
+const defaultReadingLabel = (count: number) =>
+  `Reading ${count} source${count === 1 ? '' : 's'}`;
+const defaultReadLabel = (count: number) => `Read ${count} source${count === 1 ? '' : 's'}`;
+
 /** One source the agent opened while answering. */
 export interface SourceTrailItem {
   /** The source name, passed through to the row's SourceChip. */
@@ -43,8 +47,23 @@ type SourceTrailOwnProps = {
    * Header text. Left unset, it is computed from the items —
    * "Reading 3 sources" while any is still pending or active,
    * "Read 3 sources" once every visit has settled.
+   * Note: this shadows the native `title` tooltip attribute, which SourceTrail does not expose.
    */
   title?: string;
+  /**
+   * The computed header while any visit is pending or active, or while
+   * `streaming`, given the number of sources. Defaults to "Reading 1 source"
+   * or "Reading N sources". Ignored when `title` is set.
+   */
+  readingLabel?: (count: number) => string;
+  /**
+   * The computed header once every visit has settled, given the number of
+   * sources. Defaults to "Read 1 source" or "Read N sources". Ignored when
+   * `title` is set.
+   */
+  readLabel?: (count: number) => string;
+  /** Visually hidden text announcing each row's status after its source. Merged over the English defaults (Not opened yet, Reading now, Read). */
+  statusLabels?: Partial<Record<SourceTrailStatus, string>>;
   /** Still researching: newly appended rows animate in. */
   streaming?: boolean;
   /** Open state for controlled use. Pair with `onOpenChange`. */
@@ -75,6 +94,9 @@ export const SourceTrail = React.forwardRef<HTMLDivElement, SourceTrailProps>(
     {
       items,
       title,
+      readingLabel = defaultReadingLabel,
+      readLabel = defaultReadLabel,
+      statusLabels,
       streaming = false,
       open,
       defaultOpen = true,
@@ -102,12 +124,10 @@ export const SourceTrail = React.forwardRef<HTMLDivElement, SourceTrailProps>(
     const unsettled = items.some(
       (item) => item.status === 'pending' || item.status === 'active',
     );
+    const statusText = { ...STATUS_TEXT, ...statusLabels };
     const count = items.length;
     const heading =
-      title ??
-      (unsettled || streaming
-        ? `Reading ${count} source${count === 1 ? '' : 's'}`
-        : `Read ${count} source${count === 1 ? '' : 's'}`);
+      title ?? (unsettled || streaming ? readingLabel(count) : readLabel(count));
 
     const classes = [
       baseClass,
@@ -172,7 +192,7 @@ export const SourceTrail = React.forwardRef<HTMLDivElement, SourceTrailProps>(
                   {item.detail && (
                     <span className={`${baseClass}__detail`}>{item.detail}</span>
                   )}
-                  <span className={`${baseClass}__sr`}>{STATUS_TEXT[status]}</span>
+                  <span className={`${baseClass}__sr`}>{statusText[status]}</span>
                 </li>
               );
             })}

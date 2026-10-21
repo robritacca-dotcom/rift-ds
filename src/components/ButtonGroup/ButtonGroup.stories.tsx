@@ -124,11 +124,11 @@ export const HorizontalWithIcons: Story = {
   args: {
     orientation: 'horizontal',
     buttons: [
-      { label: 'Home', icon: 'home' },
-      { label: 'Search', icon: 'search' },
-      { label: 'Settings', icon: 'settings' },
-      { label: 'Profile', icon: 'person' },
-      { label: 'Notifications', icon: 'notifications' },
+      { label: 'Home', iconLeft: 'home' },
+      { label: 'Search', iconLeft: 'search' },
+      { label: 'Settings', iconLeft: 'settings' },
+      { label: 'Profile', iconLeft: 'person' },
+      { label: 'Notifications', iconLeft: 'notifications' },
     ],
   },
   parameters: {
@@ -145,13 +145,13 @@ export const VerticalWithIcons: Story = {
   args: {
     orientation: 'vertical',
     buttons: [
-      { label: 'Dashboard', icon: 'dashboard' },
-      { label: 'Analytics', icon: 'analytics' },
-      { label: 'Reports', icon: 'assessment' },
-      { label: 'Settings', icon: 'settings' },
-      { label: 'Users', icon: 'group' },
-      { label: 'Billing', icon: 'receipt' },
-      { label: 'Support', icon: 'support_agent' },
+      { label: 'Dashboard', iconLeft: 'dashboard' },
+      { label: 'Analytics', iconLeft: 'analytics' },
+      { label: 'Reports', iconLeft: 'assessment' },
+      { label: 'Settings', iconLeft: 'settings' },
+      { label: 'Users', iconLeft: 'group' },
+      { label: 'Billing', iconLeft: 'receipt' },
+      { label: 'Support', iconLeft: 'support_agent' },
     ],
   },
   parameters: {
@@ -168,10 +168,10 @@ export const WithActiveState: Story = {
   args: {
     orientation: 'horizontal',
     buttons: [
-      { label: 'Home', state: 'default' },
+      { label: 'Home' },
       { label: 'About', state: 'active' },
-      { label: 'Services', state: 'default' },
-      { label: 'Contact', state: 'default' },
+      { label: 'Services' },
+      { label: 'Contact' },
     ],
   },
   parameters: {
@@ -188,12 +188,12 @@ export const MobileMenu: Story = {
   args: {
     orientation: 'vertical',
     buttons: [
-      { label: 'Home', icon: 'home' },
-      { label: 'Products', icon: 'inventory_2' },
-      { label: 'About', icon: 'info' },
-      { label: 'Contact', icon: 'mail' },
-      { label: 'Account', icon: 'account_circle' },
-      { label: 'Settings', icon: 'settings' },
+      { label: 'Home', iconLeft: 'home' },
+      { label: 'Products', iconLeft: 'inventory_2' },
+      { label: 'About', iconLeft: 'info' },
+      { label: 'Contact', iconLeft: 'mail' },
+      { label: 'Account', iconLeft: 'account_circle' },
+      { label: 'Settings', iconLeft: 'settings' },
     ],
   },
   parameters: {

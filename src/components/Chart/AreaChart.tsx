@@ -1,4 +1,6 @@
-import { useCallback, useId } from 'react';
+'use client';
+
+import React, { useCallback, useId } from 'react';
 import {
   AreaChart as RechartsAreaChart,
   Area,
@@ -10,7 +12,7 @@ import {
   Legend,
 } from 'recharts';
 import type { ChartSummaryItem } from './BarChart';
-import { getChartSeriesColors } from './palette';
+import { getChartSeriesColors, readTokenPx } from './palette';
 import { useChartAnimation } from './useChartAnimation';
 import './Chart.css';
 
@@ -39,7 +41,8 @@ export interface AreaSeriesConfig {
   fillOpacity?: number;
 }
 
-export interface AreaChartProps {
+/** Props owned by AreaChart itself; everything else falls through to the root div. */
+type AreaChartOwnProps = {
   /** Array of data objects */
   data: Record<string, unknown>[];
   /** Key in data for x-axis values */
@@ -48,7 +51,10 @@ export interface AreaChartProps {
   series: AreaSeriesConfig[];
   /** Whether areas stack on top of each other */
   stacked?: boolean;
-  /** Chart title */
+  /**
+   * Chart title, in the shared chart header; it also names the figure.
+   * Note: this replaces the native `title` tooltip attribute, which the chart does not expose.
+   */
   title?: string;
   /** Description text below the title */
   subtitle?: string;
@@ -62,7 +68,11 @@ export interface AreaChartProps {
   bare?: boolean;
   /** Additional CSS classes on the wrapper */
   className?: string;
-}
+};
+
+export interface AreaChartProps
+  extends AreaChartOwnProps,
+    Omit<React.ComponentPropsWithoutRef<'div'>, keyof AreaChartOwnProps | 'children'> {}
 
 function getCSSVar(name: string, fallback: string): string {
   // A var() reference resolves live in SVG paint, so the chart follows a
@@ -94,7 +104,7 @@ function AreaTooltip({ active, payload, label }: AreaTooltipProps) {
  * Area chart built on Recharts with design-system tokens.
  * Supports multiple stacked or overlapping series with gradient fills.
  */
-export const AreaChart = ({
+export const AreaChart = React.forwardRef<HTMLDivElement, AreaChartProps>(({
   data,
   xKey = 'label',
   series,
@@ -106,7 +116,8 @@ export const AreaChart = ({
   showLegend = true,
   bare = false,
   className = '',
-}: AreaChartProps) => {
+  ...rest
+}, ref) => {
   const titleId = useId();
   const subtitleId = useId();
   const animation = useChartAnimation(data, series.length);
@@ -116,6 +127,14 @@ export const AreaChart = ({
     .join(' ');
 
   const textSecondary = getCSSVar('--color-text-secondary', '#303030');
+
+  // Ticks and legend read the caption type token, so a theme's type scale
+
+  // reaches them. recharts sizes text through an SVG attribute, which cannot
+
+  // hold var(), so the resolved number is read at render.
+
+  const textSize = readTokenPx('--font-caption-size', '12px');
   const gridColor = getCSSVar('--color-divider', 'rgba(214, 214, 214, 0.8)');
   const seriesColors = getChartSeriesColors();
 
@@ -127,10 +146,12 @@ export const AreaChart = ({
 
   return (
     <div
+      {...rest}
+      ref={ref}
       className={classes}
       role="figure"
-      aria-labelledby={title ? titleId : undefined}
-      aria-describedby={subtitle ? subtitleId : undefined}
+      aria-labelledby={title ? titleId : rest['aria-labelledby']}
+      aria-describedby={subtitle ? subtitleId : rest['aria-describedby']}
     >
       {(title || subtitle || summaryItems) && (
         <div className={`${baseClass}__header`}>
@@ -170,12 +191,12 @@ export const AreaChart = ({
             <CartesianGrid vertical={false} stroke={gridColor} />
             <XAxis
               dataKey={xKey}
-              tick={{ fill: textSecondary, fontSize: 12 }}
+              tick={{ fill: textSecondary, fontSize: textSize }}
               tickLine={false}
               axisLine={{ stroke: gridColor }}
             />
             <YAxis
-              tick={{ fill: textSecondary, fontSize: 12 }}
+              tick={{ fill: textSecondary, fontSize: textSize }}
               tickLine={false}
               axisLine={false}
             />
@@ -195,11 +216,13 @@ export const AreaChart = ({
               />
             ))}
             {showLegend && series.length > 1 && (
-              <Legend wrapperStyle={{ color: textSecondary, fontSize: 12 }} />
+              <Legend wrapperStyle={{ color: textSecondary, fontSize: textSize }} />
             )}
           </RechartsAreaChart>
         </ResponsiveContainer>
       </div>
     </div>
   );
-};
+});
+
+AreaChart.displayName = 'AreaChart';

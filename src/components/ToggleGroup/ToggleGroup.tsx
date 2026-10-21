@@ -16,9 +16,17 @@ export interface ToggleGroupItem {
 type ToggleGroupOwnProps = {
   /** Available items */
   items: ToggleGroupItem[];
-  /** Currently active value(s) */
+  /**
+   * Currently active value(s), controlled. Leave undefined to let the group
+   * keep its own selection, seeded from `defaultValue`.
+   */
   value?: string | string[];
-  /** Allow multiple selection */
+  /** Active value(s) on first render when uncontrolled (`value` undefined). */
+  defaultValue?: string | string[];
+  /**
+   * Allow multiple selection, where each item toggles on or off. Without it
+   * exactly one item is active once chosen, and pressing it again keeps it.
+   */
   multiple?: boolean;
   /** Component size */
   size?: 'default' | 'compact';
@@ -60,7 +68,10 @@ export interface ToggleGroupProps
     Omit<React.ComponentPropsWithoutRef<'div'>, keyof ToggleGroupOwnProps> {}
 
 /**
- * ToggleGroup is a set of two-state buttons that can be toggled on or off.
+ * ToggleGroup is a set of pressable buttons. By default it is single
+ * selection: pressing an item makes it the one active item, and pressing the
+ * active item again keeps it active. With `multiple`, each item toggles on or
+ * off independently.
  *
  * Forwards a ref to the wrapping group element and spreads unrecognised props
  * onto it.
@@ -69,7 +80,8 @@ export const ToggleGroup = React.forwardRef<HTMLDivElement, ToggleGroupProps>(
   (
     {
       items,
-      value = [],
+      value,
+      defaultValue = [],
       multiple = false,
       size = 'default',
       tone,
@@ -97,9 +109,13 @@ export const ToggleGroup = React.forwardRef<HTMLDivElement, ToggleGroupProps>(
       .filter(Boolean)
       .join(' ');
 
-    const activeValues = Array.isArray(value) ? value : [value];
+    const [internalValue, setInternalValue] = React.useState<string | string[]>(defaultValue);
+    const isControlled = value !== undefined;
+    const currentValue = isControlled ? value : internalValue;
+    const activeValues = Array.isArray(currentValue) ? currentValue : [currentValue];
 
     const emit = (next: string | string[]) => {
+      if (!isControlled) setInternalValue(next);
       onValueChange?.(next);
       onChange?.(next);
     };
@@ -123,7 +139,7 @@ export const ToggleGroup = React.forwardRef<HTMLDivElement, ToggleGroupProps>(
         ref={ref}
         className={classes}
         role="group"
-        aria-label={ariaLabel || rest['aria-label']}
+        aria-label={rest['aria-label'] ?? ariaLabel}
       >
         {items.map((item) => {
           const isActive = activeValues.includes(item.value);

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useId, useState } from 'react';
-import { EmptyState } from '../EmptyState/EmptyState';
+import { EmptyState, type EmptyStateProps } from '../EmptyState/EmptyState';
 import './NotificationCenter.css';
 import '../../fonts/material-symbols.css';
 
@@ -16,12 +16,17 @@ export interface NotificationCenterTab {
 
 /** Props owned by NotificationItem itself — everything else falls through to the root element. */
 type NotificationItemOwnProps = {
-  /** One-line headline, e.g. who did what. */
+  /**
+   * One-line headline, e.g. who did what.
+   * Note: this shadows the native `title` tooltip attribute, which NotificationItem does not expose.
+   */
   title: string;
   /** When it happened, as already-formatted text like "2m" or "Mon". */
   time?: string;
   /** Marks the notification as not yet read: a dot beside the time and emphasised title. */
   unread?: boolean;
+  /** Visually hidden text announcing the unread dot. Defaults to "Unread". */
+  unreadLabel?: string;
   /** Leading visual — a Material Symbol name (string) or a custom element (e.g. an Avatar). */
   media?: string | React.ReactNode;
   /** Action row under the body — typically compact Buttons like "Reply" or "Retry". */
@@ -42,7 +47,20 @@ export interface NotificationItemProps
  * An unread item takes a dot and an emphasised title.
  */
 export const NotificationItem = React.forwardRef<HTMLElement, NotificationItemProps>(
-  ({ title, time, unread = false, media, actions, className = '', children, ...rest }, ref) => {
+  (
+    {
+      title,
+      time,
+      unread = false,
+      unreadLabel = 'Unread',
+      media,
+      actions,
+      className = '',
+      children,
+      ...rest
+    },
+    ref,
+  ) => {
     const baseClass = 'ds-notification-item';
 
     const classes = [baseClass, unread ? `${baseClass}--unread` : '', className]
@@ -66,7 +84,7 @@ export const NotificationItem = React.forwardRef<HTMLElement, NotificationItemPr
             {time && <span className={`${baseClass}__time`}>{time}</span>}
             {unread && (
               <span className={`${baseClass}__dot`}>
-                <span className={`${baseClass}__sr`}>Unread</span>
+                <span className={`${baseClass}__sr`}>{unreadLabel}</span>
               </span>
             )}
           </div>
@@ -82,24 +100,61 @@ NotificationItem.displayName = 'NotificationItem';
 
 /** Props owned by NotificationCenter itself — everything else falls through to the root element. */
 type NotificationCenterOwnProps = {
-  /** Heading shown in the header. */
+  /**
+   * Heading shown in the header.
+   * Note: this shadows the native `title` tooltip attribute, which NotificationCenter does not expose.
+   */
   title?: string;
   /** How many notifications are unread, shown under the heading. Omit to hide the line. */
   unreadCount?: number;
+  /** Text of the unread line under the heading, given the count. Defaults to "<count> unread". */
+  unreadCountLabel?: (count: number) => string;
+  /** Accessible name of the filter tablist. Defaults to "<title> filters". */
+  tabsLabel?: string;
   /** Fires when "Mark all read" is pressed; the control only renders when this is set. */
   onMarkAllRead?: () => void;
   /** Text of the mark-all-read control. */
   markAllLabel?: string;
   /** Filter tabs under the header, each with an optional count. */
   tabs?: NotificationCenterTab[];
-  /** Active tab value for controlled use. Pair with `onTabChange`. */
-  activeTab?: string;
-  /** Initially active tab value for uncontrolled use. Defaults to the first tab. */
-  defaultTab?: string;
+  /**
+   * Value of the active filter tab, for controlled use. Leave it undefined to
+   * let the component keep its own selection, seeded from `defaultValue`.
+   */
+  value?: string;
+  /**
+   * Value of the tab active on first render when the tabs are uncontrolled.
+   * Falls back to the first tab.
+   */
+  defaultValue?: string;
   /** Fires with the newly selected tab's value. */
+  onValueChange?: (value: string) => void;
+  /**
+   * Legacy name for `value`; `value` wins when both are set.
+   *
+   * @deprecated Use `value` instead.
+   */
+  activeTab?: string;
+  /**
+   * Legacy name for `defaultValue`; `defaultValue` wins when both are set.
+   *
+   * @deprecated Use `defaultValue` instead.
+   */
+  defaultTab?: string;
+  /**
+   * Legacy change callback; fires alongside `onValueChange`.
+   *
+   * @deprecated Use `onValueChange` instead.
+   */
   onTabChange?: (value: string) => void;
   /** What to render when there are no children — defaults to a built-in empty state. */
   emptyState?: React.ReactNode;
+  /**
+   * The built-in empty state's copy, merged over the English defaults: title
+   * "Nothing new", description "Notifications will collect here as they
+   * arrive." Ignored when `emptyState` is set.
+   */
+  emptyStateLabels?: Partial<Pick<EmptyStateProps, 'title' | 'description'>>;
   /** Additional CSS classes */
   className?: string;
   /** The notifications, newest first — typically NotificationItems. */
@@ -124,13 +179,19 @@ export const NotificationCenter = React.forwardRef<HTMLElement, NotificationCent
     {
       title = 'Notifications',
       unreadCount,
+      unreadCountLabel = (count) => `${count} unread`,
+      tabsLabel,
       onMarkAllRead,
       markAllLabel = 'Mark all read',
       tabs,
+      value,
+      defaultValue,
+      onValueChange,
       activeTab,
       defaultTab,
       onTabChange,
       emptyState,
+      emptyStateLabels,
       className = '',
       children,
       ...rest
@@ -139,9 +200,14 @@ export const NotificationCenter = React.forwardRef<HTMLElement, NotificationCent
   ) => {
     const baseClass = 'ds-notification-center';
 
-    const isTabControlled = activeTab !== undefined;
-    const [uncontrolledTab, setUncontrolledTab] = useState(defaultTab ?? tabs?.[0]?.value);
-    const currentTab = isTabControlled ? activeTab : uncontrolledTab;
+    // `activeTab` and `defaultTab` are the deprecated spellings of `value`
+    // and `defaultValue`; the new names win when both are set.
+    const controlledTab = value ?? activeTab;
+    const isTabControlled = controlledTab !== undefined;
+    const [uncontrolledTab, setUncontrolledTab] = useState(
+      defaultValue ?? defaultTab ?? tabs?.[0]?.value,
+    );
+    const currentTab = isTabControlled ? controlledTab : uncontrolledTab;
 
     // Ids tying each tab to the list as its tabpanel. Index-based, because
     // tab values are consumer strings and not guaranteed id-safe.
@@ -151,9 +217,10 @@ export const NotificationCenter = React.forwardRef<HTMLElement, NotificationCent
     const activeTabIndex = tabs?.findIndex((tab) => tab.value === currentTab) ?? -1;
     const hasTabs = !!tabs && tabs.length > 0;
 
-    const selectTab = (value: string) => {
-      if (!isTabControlled) setUncontrolledTab(value);
-      onTabChange?.(value);
+    const selectTab = (next: string) => {
+      if (!isTabControlled) setUncontrolledTab(next);
+      onValueChange?.(next);
+      onTabChange?.(next);
     };
 
     const handleTabKeyDown = (e: React.KeyboardEvent, index: number) => {
@@ -196,7 +263,7 @@ export const NotificationCenter = React.forwardRef<HTMLElement, NotificationCent
             <span className={`${baseClass}__title`}>{title}</span>
             {unreadCount !== undefined && unreadCount > 0 && (
               <span className={`${baseClass}__unread`} aria-live="polite">
-                {unreadCount} unread
+                {unreadCountLabel(unreadCount)}
               </span>
             )}
           </div>
@@ -208,7 +275,7 @@ export const NotificationCenter = React.forwardRef<HTMLElement, NotificationCent
         </header>
 
         {hasTabs && (
-          <div className={`${baseClass}__tabs`} role="tablist" aria-label={`${title} filters`}>
+          <div className={`${baseClass}__tabs`} role="tablist" aria-label={tabsLabel ?? `${title} filters`}>
             {tabs.map((tab, index) => {
               const isActive = tab.value === currentTab;
               return (
@@ -251,8 +318,11 @@ export const NotificationCenter = React.forwardRef<HTMLElement, NotificationCent
             : emptyState ?? (
                 <EmptyState
                   icon="notifications"
-                  title="Nothing new"
-                  description="Notifications will collect here as they arrive."
+                  title={emptyStateLabels?.title ?? 'Nothing new'}
+                  description={
+                    emptyStateLabels?.description ??
+                    'Notifications will collect here as they arrive.'
+                  }
                   size="compact"
                 />
               )}

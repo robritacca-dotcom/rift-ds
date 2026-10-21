@@ -82,7 +82,8 @@ export interface AppSidebarProfile {
   avatarUrl?: string;
 }
 
-export interface AppSidebarProps {
+/** Props owned by AppSidebar itself — everything else falls through to the `<nav>`. */
+type AppSidebarOwnProps = {
   /** Navigation sections */
   sections: AppSidebarSection[];
   /** Profile data for the bottom section */
@@ -139,7 +140,26 @@ export interface AppSidebarProps {
    * host renders its own trigger in the page chrome.
    */
   showMobileTrigger?: boolean;
-}
+  /** Accessible name of the mobile hamburger trigger that opens the drawer */
+  openLabel?: string;
+  /** Accessible name of the toggle when it closes the mobile drawer */
+  closeLabel?: string;
+  /** Accessible name of the toggle (and the collapsed logo) when it expands the rail */
+  expandLabel?: string;
+  /** Accessible name of the toggle when it collapses the rail */
+  collapseLabel?: string;
+  /** Accessible name of the profile block's more button */
+  profileMoreLabel?: string;
+  /**
+   * Back-button text in the mobile drawer's drill-in when the open level
+   * has no parent row to name (a top-level item opened with `subNav="panel"`)
+   */
+  menuLabel?: string;
+};
+
+export interface AppSidebarProps
+  extends AppSidebarOwnProps,
+    Omit<React.ComponentPropsWithoutRef<'nav'>, keyof AppSidebarOwnProps | 'children'> {}
 
 /* ============================================
    INLINE LOGO SVG
@@ -176,8 +196,14 @@ function DefaultLogo() {
  * **Expanded** (280 px): labels, category headings, accordion
  * sub-items with tree-line connectors, and a profile section.
  * A third level opens in a `SidebarPanel` beside the rail (see `subNav`).
+ *
+ * The forwarded ref and any unrecognised props target the `<nav>` (the rail,
+ * and the drawer on small screens). The landmark is labelled "App
+ * navigation" by default; pass `aria-label` to name it differently. A
+ * passed `id` replaces the generated one, and the mobile trigger's
+ * `aria-controls` follows it.
  */
-export const AppSidebar = ({
+export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(function AppSidebar({
   sections,
   profile,
   activeKey,
@@ -198,7 +224,14 @@ export const AppSidebar = ({
   logo,
   logoText = 'Rift',
   showMobileTrigger = true,
-}: AppSidebarProps) => {
+  openLabel = 'Open navigation',
+  closeLabel = 'Close navigation',
+  expandLabel = 'Expand sidebar',
+  collapseLabel = 'Collapse sidebar',
+  profileMoreLabel = 'Profile options',
+  menuLabel = 'Menu',
+  ...rest
+}, ref) {
   const baseClass = 'ds-app-sidebar';
 
   /* The avatar rows' inks, spread across the whole sidebar so neighbours
@@ -251,10 +284,19 @@ export const AppSidebar = ({
      overlay can only ever activate there; crossing back up while open
      closes it, or the scroll lock would outlive the drawer. */
   const [mobileOpen, setMobileOpen] = useState(false);
-  const drawerRef = useRef<HTMLElement>(null);
-  const drawerId = useId();
+  const drawerRef = useRef<HTMLElement | null>(null);
+  /** Keep the internal ref (focus trap, drill focus) while honouring a forwarded one. */
+  const setDrawerRef = (node: HTMLElement | null) => {
+    drawerRef.current = node;
+    if (typeof ref === 'function') ref(node);
+    else if (ref) ref.current = node;
+  };
+  const generatedDrawerId = useId();
+  // The trigger's aria-controls points here, so a consumer id must replace
+  // the generated one rather than be overwritten by it.
+  const drawerId = rest.id ?? generatedDrawerId;
   const closeMobile = useCallback(() => setMobileOpen(false), []);
-  useLayer({ open: mobileOpen, onDismiss: closeMobile });
+  const layer = useLayer({ open: mobileOpen, onDismiss: closeMobile });
   useFocusScope(drawerRef, { active: mobileOpen });
   useScrollLock(mobileOpen);
   useEffect(() => {
@@ -422,7 +464,7 @@ export const AppSidebar = ({
         <button
           type="button"
           className={`${baseClass}__mobile-trigger`}
-          aria-label="Open navigation"
+          aria-label={openLabel}
           aria-expanded={mobileOpen}
           aria-controls={drawerId}
           onClick={openMobile}
@@ -433,9 +475,9 @@ export const AppSidebar = ({
         </button>
       )}
       {mobileOpen && (
-        <div className={`${baseClass}__scrim`} onClick={closeMobile} aria-hidden="true" />
+        <div className={`${baseClass}__scrim`} onClick={() => layer.ownsPress() && closeMobile()} aria-hidden="true" />
       )}
-    <nav ref={drawerRef} id={drawerId} className={classes} aria-label="App navigation">
+    <nav aria-label="App navigation" {...rest} ref={setDrawerRef} id={drawerId} className={classes}>
       {/* ---- TOP ---- */}
       <div className={`${baseClass}__top`}>
         {/* Logo */}
@@ -445,7 +487,7 @@ export const AppSidebar = ({
             onClick={!isExpanded ? toggleExpanded : undefined}
             role={!isExpanded ? 'button' : undefined}
             tabIndex={!isExpanded ? 0 : undefined}
-            aria-label={!isExpanded ? 'Expand sidebar' : undefined}
+            aria-label={!isExpanded ? expandLabel : undefined}
             onKeyDown={!isExpanded ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleExpanded(); } } : undefined}
             style={!isExpanded ? { cursor: 'pointer' } : undefined}
           >
@@ -463,10 +505,10 @@ export const AppSidebar = ({
             onClick={mobileOpen ? closeMobile : toggleExpanded}
             aria-label={
               mobileOpen
-                ? 'Close navigation'
+                ? closeLabel
                 : isExpanded
-                  ? 'Collapse sidebar'
-                  : 'Expand sidebar'
+                  ? collapseLabel
+                  : expandLabel
             }
           >
             <span className="material-symbols-rounded">
@@ -490,7 +532,7 @@ export const AppSidebar = ({
               focusAfterDrill.current = 'out';
               setDrilled(false);
             }}
-            backLabel={panelSource.parentLabel ?? 'Menu'}
+            backLabel={panelSource.parentLabel ?? menuLabel}
           />
         ) : (
         <div className={`${baseClass}__sections`}>
@@ -723,7 +765,7 @@ export const AppSidebar = ({
           <button
             className={`${baseClass}__profile-more`}
             onClick={onProfileMore}
-            aria-label="Profile options"
+            aria-label={profileMoreLabel}
           >
             <span className="material-symbols-rounded">more_horiz</span>
           </button>
@@ -756,4 +798,6 @@ export const AppSidebar = ({
       )}
     </>
   );
-};
+});
+
+AppSidebar.displayName = 'AppSidebar';

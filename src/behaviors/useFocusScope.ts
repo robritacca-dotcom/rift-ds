@@ -7,11 +7,15 @@ import { getFocusable, getInitialFocus } from './focusable';
  * Focus containment for modal overlays: initial focus, Tab wrapping, focus
  * restore, and background isolation.
  *
- * Restore is guarded by `document.contains` — the element that opened a
- * dialog can be gone by the time it closes (a row the dialog itself deleted),
- * and restoring into a detached node silently drops focus to `<body>`. It
- * also runs when the component unmounts while open, which the per-component
- * implementations this replaces never handled.
+ * Restore is guarded twice. The element that opened a dialog can be gone by
+ * the time it closes (a row the dialog itself deleted), and it can still be in
+ * the document but hidden: a button inside a popover that closed underneath
+ * the dialog sits in a `display: none` panel, and `.focus()` on it silently
+ * drops focus to `<body>`. A detached element is skipped; a hidden one hands
+ * focus to the first visible control of its nearest visible ancestor, which
+ * for a closed popover is its trigger. It also runs when the component
+ * unmounts while open, which the per-component implementations this replaced
+ * never handled.
  *
  * Background isolation uses `inert`, not `aria-hidden`: a JS focus trap only
  * fences the Tab key, while a screen reader's virtual cursor walks the page
@@ -22,7 +26,9 @@ import { getFocusable, getInitialFocus } from './focusable';
  * inert set is recomputed only when a scope activates or deactivates, so a
  * portal that mounts *while* a modal is open (a toast, say) is not inerted
  * until the stack next changes — under `aria-modal` that content is outside
- * the dialog's world anyway.
+ * the dialog's world anyway. Live regions are never inerted: a toast region
+ * (`aria-live`, a direct child of the body) must keep announcing, and keep
+ * its actions pressable, while a modal is open.
  */
 
 type FocusScopeOptions = {
@@ -52,6 +58,7 @@ const applyInert = () => {
   for (const child of Array.from(document.body.children)) {
     if (!(child instanceof HTMLElement)) continue;
     if (child.tagName === 'SCRIPT' || child.tagName === 'STYLE') continue;
+    if (child.hasAttribute('aria-live')) continue;
     const shouldBeInert = top !== undefined && !child.contains(top.panel);
     if (shouldBeInert && !child.inert) {
       child.inert = true;
@@ -67,6 +74,18 @@ const applyInert = () => {
     for (const el of inerted) el.inert = false;
     inerted.clear();
   }
+};
+
+const isVisible = (el: HTMLElement) => el.getClientRects().length > 0;
+
+/** Where focus goes back to on close: the opener, or the nearest visible stand-in for it. */
+const restoreTarget = (previous: HTMLElement): HTMLElement | null => {
+  if (!document.contains(previous)) return null;
+  if (isVisible(previous)) return previous;
+  for (let el = previous.parentElement; el && el !== document.body; el = el.parentElement) {
+    if (isVisible(el)) return getFocusable(el)[0] ?? null;
+  }
+  return null;
 };
 
 export function useFocusScope(
@@ -132,12 +151,8 @@ export function useFocusScope(
         inertScopes.splice(index, 1);
         applyInert();
       }
-      if (
-        optionsRef.current.restoreFocus !== false &&
-        previousFocus &&
-        document.contains(previousFocus)
-      ) {
-        previousFocus.focus();
+      if (optionsRef.current.restoreFocus !== false && previousFocus) {
+        restoreTarget(previousFocus)?.focus();
       }
     };
   }, [active, ref]);

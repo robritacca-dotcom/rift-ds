@@ -129,7 +129,7 @@ export const AttachmentViewer = React.forwardRef<HTMLDivElement, AttachmentViewe
     // Shared overlay behaviors (src/behaviors/): Escape routes through the
     // layer stack, focus is trapped with the page inert behind the panel,
     // and the scroll lock is counted.
-    useLayer({
+    const layer = useLayer({
       open,
       dismissOnEscape: dismissible,
       onDismiss: () => onOpenChange(false),
@@ -194,7 +194,7 @@ export const AttachmentViewer = React.forwardRef<HTMLDivElement, AttachmentViewe
         stage = (
           <div className={`${baseClass}__empty`}>
             <span className={`${baseClass}__empty-mark`}>
-              {renderTypeMark(item.name, item.kind)}
+              {renderTypeMark(item.name, item.kind, { typeLabel: item.typeLabel })}
             </span>
             <p className={`${baseClass}__empty-title`}>{failed ? failedLabel : noPreviewLabel}</p>
             <p className={`${baseClass}__empty-detail`}>
@@ -232,7 +232,7 @@ export const AttachmentViewer = React.forwardRef<HTMLDivElement, AttachmentViewe
       <div className={containerClasses}>
         <div
           className={`${baseClass}__backdrop`}
-          onClick={dismissible ? () => onOpenChange(false) : undefined}
+          onClick={dismissible ? () => layer.ownsPress() && onOpenChange(false) : undefined}
         />
 
         <div
@@ -247,7 +247,7 @@ export const AttachmentViewer = React.forwardRef<HTMLDivElement, AttachmentViewe
           <div className={`${baseClass}__header`}>
             {item && (
               <span className={`${baseClass}__header-mark`}>
-                {renderTypeMark(item.name, item.kind)}
+                {renderTypeMark(item.name, item.kind, { typeLabel: item.typeLabel })}
               </span>
             )}
             <div className={`${baseClass}__heading`}>

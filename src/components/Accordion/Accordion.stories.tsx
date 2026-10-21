@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Accordion } from './Accordion';
 
@@ -85,4 +86,12 @@ export const AllVariants: Story = {
       <Accordion items={sampleItems} multiple defaultExpanded={['1', '2']} />
     </div>
   ),
+};
+
+/** Controlled: the parent owns the open items through `expanded` and `onExpandedChange`. */
+export const Controlled: Story = {
+  render: function ControlledAccordion(args) {
+    const [expanded, setExpanded] = useState<string[]>(['2']);
+    return <Accordion {...args} expanded={expanded} onExpandedChange={setExpanded} />;
+  },
 };

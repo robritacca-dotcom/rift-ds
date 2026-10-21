@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, within } from 'storybook/test';
 import { DataTable, type DataTableColumn, type DataTableRow } from './DataTable';
 import { Badge } from '../Badge/Badge';
 
@@ -101,6 +102,11 @@ export const EmptyResult: Story = {
     rows: [],
     searchable: true,
   },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByText('No matching rows')).toBeInTheDocument();
+    await expect(canvas.getByText('Adjust the search or filters and try again.')).toBeInTheDocument();
+  },
 };
 
 export const Compact: Story = {
@@ -108,5 +114,56 @@ export const Compact: Story = {
     size: 'compact',
     striped: true,
     pageSize: 5,
+  },
+};
+
+/** The built-in pager at its English defaults. */
+export const DefaultCopy: Story = {
+  args: {
+    pageSize: 4,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const pager = canvas.getByRole('navigation', { name: 'Pagination' });
+    await expect(within(pager).getByRole('button', { name: 'Previous page' })).toBeDisabled();
+    await expect(within(pager).getByRole('button', { name: 'Next page' })).toBeEnabled();
+    await expect(within(pager).getByText('Page 1 of 3')).toBeInTheDocument();
+  },
+};
+
+/** The pager localised through `paginationLabels`: here in Spanish. */
+export const LocalisedCopy: Story = {
+  args: {
+    pageSize: 4,
+    paginationLabels: {
+      'aria-label': 'Paginación',
+      previousLabel: 'Página anterior',
+      nextLabel: 'Página siguiente',
+      readoutLabel: (page: number, pageCount: number) => `Página ${page} de ${pageCount}`,
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const pager = canvas.getByRole('navigation', { name: 'Paginación' });
+    await expect(within(pager).getByRole('button', { name: 'Página anterior' })).toBeDisabled();
+    await expect(within(pager).getByRole('button', { name: 'Página siguiente' })).toBeEnabled();
+    await expect(within(pager).getByText('Página 1 de 3')).toBeInTheDocument();
+  },
+};
+
+/** The empty state's words localised through `emptyStateLabels`; EmptyResult checks the English defaults. */
+export const LocalisedEmptyResult: Story = {
+  args: {
+    rows: [],
+    searchable: true,
+    emptyStateLabels: {
+      title: 'Ninguna fila coincide',
+      description: 'Ajusta la búsqueda o los filtros y vuelve a intentarlo.',
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByText('Ninguna fila coincide')).toBeInTheDocument();
+    await expect(canvas.getByText('Ajusta la búsqueda o los filtros y vuelve a intentarlo.')).toBeInTheDocument();
   },
 };

@@ -47,7 +47,7 @@ export {
   type ChatState,
   type ChatPlaceholderCopy,
 } from './useChat';
-export { useThreads, THREAD_NAMING_DELAY_MS, type ThreadsOptions, type ThreadsState } from './threads';
+export { useThreads, THREAD_NAMING_DELAY_MS, type ThreadsLabels, type ThreadsOptions, type ThreadsState } from './threads';
 export {
   createFetchTransport,
   DEFAULT_FETCH_COPY,

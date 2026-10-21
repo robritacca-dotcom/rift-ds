@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { fn } from 'storybook/test';
+import { expect, fn } from 'storybook/test';
 import { RadioButton, RadioGroup } from './RadioButton';
 
 /* ============================================
@@ -20,7 +20,7 @@ const radioMeta = {
     value: { control: 'text' },
   },
   args: {
-    onChange: fn(),
+    onValueChange: fn(),
   },
 } satisfies Meta<typeof RadioButton>;
 
@@ -69,7 +69,6 @@ export const GroupVertical: StoryObj<typeof RadioGroup> = {
   render: (args) => <RadioGroup {...args} />,
   args: {
     label: 'Select size',
-    name: 'size',
     value: 'medium',
     options: [
       { label: 'Small', value: 'small' },
@@ -77,7 +76,29 @@ export const GroupVertical: StoryObj<typeof RadioGroup> = {
       { label: 'Large', value: 'large' },
     ],
     direction: 'vertical',
-    onChange: fn(),
+    onValueChange: fn(),
+  },
+};
+
+/** No `value`: the group keeps its own selection, starting from `defaultValue`. */
+export const GroupUncontrolled: StoryObj<typeof RadioGroup> = {
+  render: (args) => <RadioGroup {...args} />,
+  args: {
+    label: 'Delivery',
+    defaultValue: 'standard',
+    options: [
+      { label: 'Standard', value: 'standard' },
+      { label: 'Express', value: 'express' },
+      { label: 'Overnight', value: 'overnight' },
+    ],
+    direction: 'vertical',
+    onValueChange: fn(),
+  },
+  play: async ({ canvas, userEvent }) => {
+    const express = canvas.getByRole('radio', { name: 'Express' });
+    await userEvent.click(express);
+    await expect(express).toHaveAttribute('aria-checked', 'true');
+    await expect(canvas.getByRole('radio', { name: 'Standard' })).toHaveAttribute('aria-checked', 'false');
   },
 };
 
@@ -85,7 +106,6 @@ export const GroupHorizontal: StoryObj<typeof RadioGroup> = {
   render: (args) => <RadioGroup {...args} />,
   args: {
     label: 'Select colour',
-    name: 'colour',
     value: 'teal',
     options: [
       { label: 'Red', value: 'red' },
@@ -93,7 +113,7 @@ export const GroupHorizontal: StoryObj<typeof RadioGroup> = {
       { label: 'Purple', value: 'purple' },
     ],
     direction: 'horizontal',
-    onChange: fn(),
+    onValueChange: fn(),
   },
 };
 
@@ -101,7 +121,6 @@ export const GroupWithDisabled: StoryObj<typeof RadioGroup> = {
   render: (args) => <RadioGroup {...args} />,
   args: {
     label: 'Plan',
-    name: 'plan',
     value: 'pro',
     options: [
       { label: 'Free', value: 'free' },
@@ -109,7 +128,7 @@ export const GroupWithDisabled: StoryObj<typeof RadioGroup> = {
       { label: 'Enterprise', value: 'enterprise', disabled: true },
     ],
     direction: 'vertical',
-    onChange: fn(),
+    onValueChange: fn(),
   },
 };
 
@@ -125,7 +144,7 @@ export const GroupWithHelper: StoryObj<typeof RadioGroup> = {
       { label: 'Yearly', value: 'yearly' },
     ],
     direction: 'vertical',
-    onChange: fn(),
+    onValueChange: fn(),
   },
 };
 
@@ -141,6 +160,6 @@ export const GroupError: StoryObj<typeof RadioGroup> = {
       { label: 'Yearly', value: 'yearly' },
     ],
     direction: 'vertical',
-    onChange: fn(),
+    onValueChange: fn(),
   },
 };

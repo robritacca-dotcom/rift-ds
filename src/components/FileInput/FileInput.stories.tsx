@@ -148,7 +148,7 @@ export const Disabled: Story = {
 export const WithoutLabel: Story = {
   args: {
     label: undefined,
-    ariaLabel: 'Upload attachments',
+    'aria-label': 'Upload attachments',
   },
   render: InteractiveTemplate,
 };

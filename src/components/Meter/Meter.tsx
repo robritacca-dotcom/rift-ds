@@ -9,7 +9,11 @@ type MeterOwnProps = {
   min?: number;
   /** Upper bound of the range */
   max?: number;
-  /** Visible label naming what is measured, doubling as the accessible name */
+  /**
+   * Visible label naming what is measured, doubling as the meter's accessible
+   * name. A native `aria-label` takes precedence, and with neither the meter
+   * is announced as "Level".
+   */
   label?: string;
   /** Shows the value readout on the trailing edge of the label row */
   showValue?: boolean;

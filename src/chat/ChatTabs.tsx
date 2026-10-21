@@ -1,6 +1,6 @@
 'use client';
 
-import { ThreadTabs } from '../components/ThreadTabs/ThreadTabs';
+import { ThreadTabs, type ThreadTabsProps } from '../components/ThreadTabs/ThreadTabs';
 import { useChatWidget } from './context';
 
 /**
@@ -14,9 +14,13 @@ import { useChatWidget } from './context';
 export interface ChatTabsProps {
   /** Accessible name for the tab strip. */
   ariaLabel?: string;
+  /** Accessible name of each tab's close button. A string is followed by a colon and the tab's title; a function is given the title and returns the whole name. Defaults to "Close chat". */
+  closeLabel?: ThreadTabsProps['closeLabel'];
+  /** Spoken text for each tab's status, merged over ThreadTabs' English defaults (Working, Unread, Needs input, Failed). */
+  statusLabels?: ThreadTabsProps['statusLabels'];
 }
 
-export function ChatTabs({ ariaLabel = 'Open chats' }: ChatTabsProps) {
+export function ChatTabs({ ariaLabel = 'Open chats', closeLabel = 'Close chat', statusLabels }: ChatTabsProps) {
   const { threads } = useChatWidget();
   if (threads.tabs.length === 0) return null;
   return (
@@ -27,7 +31,8 @@ export function ChatTabs({ ariaLabel = 'Open chats' }: ChatTabsProps) {
       onTabClose={threads.closeTab}
       onAdd={threads.startNew}
       addLabel={threads.newThreadLabel}
-      closeLabel="Close chat"
+      closeLabel={closeLabel}
+      statusLabels={statusLabels}
       ariaLabel={ariaLabel}
     />
   );

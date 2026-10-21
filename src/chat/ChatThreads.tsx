@@ -1,7 +1,11 @@
 'use client';
 
-import { useState, type ReactNode } from 'react';
-import { ThreadPanel, type ThreadPanelProfile } from '../components/ThreadPanel/ThreadPanel';
+import { useMemo, useState, type ReactNode } from 'react';
+import {
+  ThreadPanel,
+  type ThreadPanelProfile,
+  type ThreadPanelProps,
+} from '../components/ThreadPanel/ThreadPanel';
 import { useChatWidget } from './context';
 
 export interface ChatThreadsProps {
@@ -11,16 +15,41 @@ export interface ChatThreadsProps {
   close: () => void;
   /** The brand row's mark, in both seats. */
   logo?: ReactNode;
-  /** The brand row's text. Shown on the sheet by default, where the chat header is hidden behind it. */
+  /** The brand row's text. Shown only on the sheet, where the chat header is hidden behind it; the inline rail leaves it out. */
   logoText?: string;
   /** The signed-in person, shown on the inline rail. */
   profile?: ThreadPanelProfile;
   /** Whether the inline rail can collapse to its icon strip. */
   collapsible?: boolean;
-  /** Whether the rail starts collapsed. */
+  /**
+   * Whether the inline rail starts expanded. Defaults to `false`: it starts
+   * collapsed to its icon strip. The sheet, and a rail that is not
+   * `collapsible`, always show expanded.
+   */
   defaultExpanded?: boolean;
   /** Accessible heading over the history. */
   historyLabel?: string;
+  /**
+   * The words the ThreadPanel writes, merged over its English defaults: the
+   * spoken pin and status text ("Pinned", "Working"…), each row's menu
+   * trigger ("Thread options"), the rename field ("Rename thread"), the
+   * projects header and its add button ("Projects", "New project"), and the
+   * collapse toggle ("Collapse the panel", "Expand the panel"). The history's
+   * own name is `historyLabel`.
+   */
+  threadPanelLabels?: Pick<
+    ThreadPanelProps,
+    | 'statusLabels'
+    | 'pinnedLabel'
+    | 'threadMenuLabel'
+    | 'renameLabel'
+    | 'projectsLabel'
+    | 'newProjectLabel'
+    | 'collapseLabel'
+    | 'expandLabel'
+  >;
+  /** The rows of each thread's menu, by action; a key left out keeps its English. Defaults to "Pin", "Unpin", "Rename" and "Delete". */
+  actionLabels?: Partial<Record<'pin' | 'unpin' | 'rename' | 'delete', string>>;
 }
 
 /**
@@ -37,14 +66,40 @@ export function ChatThreads({
   collapsible = true,
   defaultExpanded = false,
   historyLabel = 'Chat history',
+  threadPanelLabels,
+  actionLabels,
 }: ChatThreadsProps) {
   const { threads } = useChatWidget();
   const [expanded, setExpanded] = useState(defaultExpanded);
   const hasProjects = threads.projects.length > 0;
 
+  /* The lifecycle writes each row's menu in English; the labels are
+     relabelled here by action id, so the ids the menu reports stay the ones
+     `runAction` reads. Pin and unpin share an id, so the thread's own pin
+     state says which word it wears. */
+  const groups = useMemo(() => {
+    if (!actionLabels) return threads.groups;
+    return threads.groups.map((group) => ({
+      ...group,
+      threads: group.threads.map((thread) =>
+        thread.actions
+          ? {
+              ...thread,
+              actions: thread.actions.map((action) => {
+                const key = action.id === 'pin' ? (thread.pinned ? 'unpin' : 'pin') : action.id;
+                const label = actionLabels[key as keyof typeof actionLabels];
+                return label === undefined ? action : { ...action, label };
+              }),
+            }
+          : thread
+      ),
+    }));
+  }, [threads.groups, actionLabels]);
+
   return (
     <ThreadPanel
-      groups={threads.groups}
+      {...threadPanelLabels}
+      groups={groups}
       activeThreadId={threads.activeThreadId}
       onThreadSelect={(id) => {
         threads.select(id);

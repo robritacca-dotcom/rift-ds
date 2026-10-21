@@ -33,10 +33,16 @@ type FileInputOwnProps = {
   error?: boolean;
   /** Helper or error message displayed below the field */
   helperText?: string;
+  /** Hint shown under the placeholder when `accept` is set, given the `accept` value. Defaults to "Accepts" followed by the value. */
+  acceptHint?: (accept: string) => string;
   /** Called with the newly selected files */
   onFilesSelected?: (files: File[]) => void;
   /** Called with the id of a file whose remove button was pressed */
   onFileRemove?: (id: string) => void;
+  /** Accessible name of a listed file's progress bar, given the file name. Defaults to "Uploading" followed by the name. */
+  progressLabel?: (name: string) => string;
+  /** Accessible name of a listed file's remove button, given the file name. Defaults to "Remove" followed by the name. */
+  removeLabel?: (name: string) => string;
   /** Additional CSS classes — applied to the wrapper, not the <input> */
   className?: string;
   /**
@@ -76,6 +82,9 @@ export const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
       helperText,
       onFilesSelected,
       onFileRemove,
+      acceptHint = (acceptValue: string) => `Accepts ${acceptValue}`,
+      progressLabel = (fileName: string) => `Uploading ${fileName}`,
+      removeLabel = (fileName: string) => `Remove ${fileName}`,
       onChange,
       className = '',
       ariaLabel,
@@ -165,8 +174,8 @@ export const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
           className={`${baseClass}__dropzone`}
           role="button"
           tabIndex={disabled ? -1 : 0}
-          aria-label={ariaLabel || rest['aria-label'] || placeholder}
-          aria-describedby={helperText ? `${inputId}-helper` : undefined}
+          aria-label={rest['aria-label'] ?? ariaLabel ?? placeholder}
+          aria-describedby={[rest['aria-describedby'], helperText ? `${inputId}-helper` : undefined].filter(Boolean).join(' ') || undefined}
           // Was missing: FileInput exposed an `error` prop it never reflected.
           aria-invalid={error || undefined}
           aria-disabled={disabled || undefined}
@@ -183,7 +192,7 @@ export const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
             upload_file
           </span>
           <span className={`${baseClass}__dropzone-text`}>{placeholder}</span>
-          {accept && <span className={`${baseClass}__dropzone-hint`}>Accepts {accept}</span>}
+          {accept && <span className={`${baseClass}__dropzone-hint`}>{acceptHint(accept)}</span>}
 
         </div>
 
@@ -205,7 +214,7 @@ export const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
           // The native input is the real form control, so it needs its own
           // name — Field's <label htmlFor> covers the labelled case, this
           // covers the label-less one.
-          aria-label={label ? undefined : ariaLabel || rest['aria-label'] || placeholder}
+          aria-label={label ? undefined : rest['aria-label'] ?? ariaLabel ?? placeholder}
           onChange={handleChange}
         />
 
@@ -243,7 +252,7 @@ export const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
                       aria-valuenow={file.progress}
                       aria-valuemin={0}
                       aria-valuemax={100}
-                      aria-label={`Uploading ${file.name}`}
+                      aria-label={progressLabel(file.name)}
                     >
                       <span
                         className={`${baseClass}__progress-fill`}
@@ -259,7 +268,7 @@ export const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
                     className={`${baseClass}__file-remove`}
                     onClick={() => onFileRemove(file.id)}
                     disabled={disabled}
-                    aria-label={`Remove ${file.name}`}
+                    aria-label={removeLabel(file.name)}
                   >
                     <span className="material-symbols-rounded" aria-hidden="true">
                       close

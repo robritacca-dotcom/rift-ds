@@ -10,8 +10,14 @@ type ReasoningOwnProps = {
   streaming?: boolean;
   /** Seconds spent reasoning, shown in the summary once complete. */
   duration?: number;
-  /** Override the summary line. By default it reports the streaming state and the duration. */
+  /** Override the summary line in every state. By default it reports the streaming state and the duration through the three labels below. */
   label?: string;
+  /** The summary while reasoning streams. Defaults to "Thinking". */
+  thinkingLabel?: string;
+  /** The summary once complete with a duration, given the seconds. Defaults to "Thought for <n>s". */
+  durationLabel?: (seconds: number) => string;
+  /** The summary once complete with no duration. Defaults to "Thought process". */
+  doneLabel?: string;
   /**
    * Replace the summary text with custom content — typically an AgentStatus,
    * pairing the live indicator with the trace disclosure. The node owns its
@@ -65,6 +71,9 @@ export const Reasoning = React.forwardRef<HTMLDivElement, ReasoningProps>(
       streaming = false,
       duration,
       label,
+      thinkingLabel = 'Thinking',
+      durationLabel = (seconds: number) => `Thought for ${seconds}s`,
+      doneLabel = 'Thought process',
       summary,
       summaryOnly = false,
       size = 'default',
@@ -122,10 +131,10 @@ export const Reasoning = React.forwardRef<HTMLDivElement, ReasoningProps>(
     const summaryText =
       label ??
       (streaming
-        ? 'Thinking'
+        ? thinkingLabel
         : duration !== undefined
-          ? `Thought for ${duration}s`
-          : 'Thought process');
+          ? durationLabel(duration)
+          : doneLabel);
 
     const classes = [
       baseClass,

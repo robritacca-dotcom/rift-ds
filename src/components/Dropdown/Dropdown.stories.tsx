@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { fn } from 'storybook/test';
+import { expect, fn } from 'storybook/test';
 import { Dropdown } from './Dropdown';
 
 const sampleOptions = [
@@ -27,7 +27,7 @@ const meta = {
     helperText: { control: 'text' },
   },
   args: {
-    onChange: fn(),
+    onValueChange: fn(),
     options: sampleOptions,
   },
   decorators: [
@@ -53,6 +53,21 @@ export const WithValue: Story = {
   args: {
     label: 'Colour',
     value: 'teal',
+  },
+};
+
+/** No `value`: the dropdown keeps its own selection, starting from `defaultValue`. */
+export const Uncontrolled: Story = {
+  args: {
+    label: 'Colour',
+    defaultValue: 'teal',
+  },
+  play: async ({ canvas, userEvent }) => {
+    const trigger = canvas.getByRole('combobox', { name: 'Colour' });
+    await expect(trigger).toHaveTextContent('Teal');
+    await userEvent.click(trigger);
+    await userEvent.click(canvas.getByRole('option', { name: 'Purple' }));
+    await expect(trigger).toHaveTextContent('Purple');
   },
 };
 
@@ -107,6 +122,15 @@ export const Disabled: Story = {
   },
 };
 
+/** The compact size, for dense forms and toolbars. */
+export const Compact: Story = {
+  args: {
+    label: 'Colour',
+    placeholder: 'Select a colour',
+    size: 'compact',
+  },
+};
+
 export const ManyOptions: Story = {
   args: {
     label: 'Icon',
@@ -131,7 +155,7 @@ export const ManyOptions: Story = {
 export const NoLabel: Story = {
   args: {
     placeholder: 'Filter by...',
-    ariaLabel: 'Filter options',
+    'aria-label': 'Filter options',
   },
 };
 

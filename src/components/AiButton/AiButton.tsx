@@ -65,6 +65,12 @@ type AiButtonOwnProps = {
   onSummaryDismiss?: () => void;
   /** Fires with the tapped summary suggestion's `id`. */
   onSummarySuggestion?: (id: string) => void;
+  /** Accessible name of the summary panel, given the summary's title. Defaults to "Summary: " followed by the title. */
+  summaryRegionLabel?: (title: string) => string;
+  /** Accessible name of the summary panel's dismiss button. */
+  dismissLabel?: string;
+  /** Accessible name of the summary panel's group of prompt chips. */
+  suggestionsLabel?: string;
   /** Additional CSS classes */
   className?: string;
 };
@@ -107,6 +113,9 @@ export const AiButton = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, 
       summaryPinned = false,
       onSummaryDismiss,
       onSummarySuggestion,
+      summaryRegionLabel = (title: string) => `Summary: ${title}`,
+      dismissLabel = 'Dismiss summary',
+      suggestionsLabel = 'Suggested prompts',
       className = '',
       ...rest
     },
@@ -249,11 +258,11 @@ export const AiButton = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, 
             class, so closing can ease out the way HoverCard does —
             visibility keeps the hidden panel out of the accessibility tree
             and the tab order. */}
-        <aside className={panelClass} aria-label={`Summary: ${summary.title}`}>
+        <aside className={panelClass} aria-label={summaryRegionLabel(summary.title)}>
             <button
               type="button"
               className={`${panelClass}-dismiss`}
-              aria-label="Dismiss summary"
+              aria-label={dismissLabel}
               onClick={() => {
                 setDismissed(true);
                 setHoverOpen(false);
@@ -308,7 +317,7 @@ export const AiButton = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, 
                 <PromptSuggestions
                   layout="stack"
                   size="compact"
-                  ariaLabel="Suggested prompts"
+                  ariaLabel={suggestionsLabel}
                   suggestions={summary.suggestions}
                   onValueChange={onSummarySuggestion}
                 />

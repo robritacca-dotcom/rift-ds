@@ -81,3 +81,12 @@ export const FewPages: Story = {
   },
   render: (args) => <Interactive {...args} />,
 };
+
+/** Uncontrolled: the pager keeps its own page, starting from `defaultPage`. */
+export const Uncontrolled: Story = {
+  args: {
+    page: undefined,
+    defaultPage: 4,
+    pageCount: 10,
+  },
+};

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, screen } from 'storybook/test';
 import { CommandPalette } from './CommandPalette';
 import type { CommandPaletteGroup } from './CommandPalette';
 import { Badge } from '../Badge/Badge';
@@ -113,6 +114,13 @@ export const WithoutFooter: Story = {
 
 export const Loading: Story = {
   render: (args) => <PaletteDemo {...args} loading />,
+  // Opened, so the axe pass sees the loading state: the message is a status
+  // region, and the list drops its listbox role while it holds no options.
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.click(canvas.getByRole('button', { name: /Open palette/ }));
+    await expect(await screen.findByRole('status')).toHaveTextContent('Loading…');
+    await expect(screen.queryByRole('listbox')).toBeNull();
+  },
 };
 
 export const NoResults: Story = {

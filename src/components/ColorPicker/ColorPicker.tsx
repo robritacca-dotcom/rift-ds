@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useLayer } from '../../behaviors/useLayer';
 import { Field } from '../Field/Field';
 import './ColorPicker.css';
 
@@ -122,6 +123,24 @@ type ColorPickerOwnProps = {
    * under this name so the picker participates in native form submission.
    */
   name?: string;
+  /** Accessible name of the open panel. Defaults to the field label followed by "colour picker", or "Colour picker" without a label. */
+  panelLabel?: string;
+  /** Accessible name of the saturation and brightness area. */
+  saturationLabel?: string;
+  /** Spoken value of the saturation and brightness area, given both as whole percentages. */
+  saturationValueText?: (saturation: number, brightness: number) => string;
+  /** Accessible name of the hue slider. */
+  hueLabel?: string;
+  /** Accessible name of the alpha slider, shown with `showAlpha`. */
+  alphaLabel?: string;
+  /** Accessible name of the hex text field. */
+  hexLabel?: string;
+  /**
+   * Accessible name of the swatch trigger when there is no visible `label`,
+   * given the current hex value. Defaults to "Choose colour, " followed by the
+   * hex (`Choose colour, #118AB2`). A passed `aria-label` still wins.
+   */
+  triggerLabel?: (hex: string) => string;
   /** Additional CSS classes — applied to the wrapper, not the trigger */
   className?: string;
 };
@@ -154,6 +173,14 @@ export const ColorPicker = React.forwardRef<HTMLButtonElement, ColorPickerProps>
       error = false,
       helperText,
       name,
+      panelLabel,
+      saturationLabel = 'Saturation and brightness',
+      saturationValueText = (saturation: number, brightness: number) =>
+        `Saturation ${saturation}%, brightness ${brightness}%`,
+      hueLabel = 'Hue',
+      alphaLabel = 'Alpha',
+      hexLabel = 'Hex colour value',
+      triggerLabel = (hex: string) => `Choose colour, ${hex}`,
       className = '',
       id,
       ...rest
@@ -201,22 +228,23 @@ export const ColorPicker = React.forwardRef<HTMLButtonElement, ColorPickerProps>
       [onValueChange, showAlpha],
     );
 
-    // Close on click outside
-    useEffect(() => {
-      if (!isOpen) return;
-      const onMouseDown = (e: MouseEvent) => {
-        if (rootRef.current && !rootRef.current.contains(e.target as Node)) {
-          setIsOpen(false);
-          setHexDraft(null);
-        }
-      };
-      document.addEventListener('mousedown', onMouseDown);
-      return () => document.removeEventListener('mousedown', onMouseDown);
-    }, [isOpen]);
+    // A press outside closes the panel, through the shared layer stack, so it
+    // never also closes a Dialog the picker sits in.
+    useLayer({
+      open: isOpen,
+      onDismiss: () => {
+        setIsOpen(false);
+        setHexDraft(null);
+      },
+      dismissOnOutsidePress: true,
+      getElements: () => [rootRef.current],
+    });
 
     const handleRootKeyDown = (e: React.KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen) {
-        e.stopPropagation();
+        // Handled: the layer stack leaves a prevented Escape alone, so a
+        // host Dialog stays open.
+        e.preventDefault();
         setIsOpen(false);
         setHexDraft(null);
         triggerRef.current?.focus();
@@ -337,9 +365,9 @@ export const ColorPicker = React.forwardRef<HTMLButtonElement, ColorPickerProps>
           disabled={disabled}
           aria-haspopup="dialog"
           aria-expanded={isOpen}
-          aria-describedby={helperText ? `${inputId}-helper` : rest['aria-describedby']}
+          aria-describedby={[rest['aria-describedby'], helperText ? `${inputId}-helper` : undefined].filter(Boolean).join(' ') || undefined}
           aria-invalid={error || undefined}
-          aria-label={rest['aria-label'] ?? (!label ? `Choose colour, ${displayHex}` : undefined)}
+          aria-label={rest['aria-label'] ?? (!label ? triggerLabel(displayHex) : undefined)}
           onClick={() => {
             if (!disabled) setIsOpen((prev) => !prev);
           }}
@@ -356,13 +384,13 @@ export const ColorPicker = React.forwardRef<HTMLButtonElement, ColorPickerProps>
           )}
         </button>
 
-        {name && <input type="hidden" name={name} value={displayHex} />}
+        {name && <input type="hidden" name={name} value={displayHex} disabled={disabled} />}
 
         {isOpen && (
           <div
             className={`${baseClass}__panel`}
             role="dialog"
-            aria-label={label ? `${label} colour picker` : 'Colour picker'}
+            aria-label={panelLabel ?? (label ? `${label} colour picker` : 'Colour picker')}
             style={
               {
                 '--ds-cp-hue': hsva.h,
@@ -376,11 +404,11 @@ export const ColorPicker = React.forwardRef<HTMLButtonElement, ColorPickerProps>
               className={`${baseClass}__saturation`}
               role="slider"
               tabIndex={0}
-              aria-label="Saturation and brightness"
+              aria-label={saturationLabel}
               aria-valuemin={0}
               aria-valuemax={100}
               aria-valuenow={Math.round(hsva.v)}
-              aria-valuetext={`Saturation ${Math.round(hsva.s)}%, brightness ${Math.round(hsva.v)}%`}
+              aria-valuetext={saturationValueText(Math.round(hsva.s), Math.round(hsva.v))}
               onPointerDown={handleSatPointerDown}
               onPointerMove={handleSatPointerMove}
               onKeyDown={handleSatKeyDown}
@@ -403,7 +431,7 @@ export const ColorPicker = React.forwardRef<HTMLButtonElement, ColorPickerProps>
                   max={359}
                   step={1}
                   value={Math.round(hsva.h)}
-                  aria-label="Hue"
+                  aria-label={hueLabel}
                   onChange={(e) => commit({ ...hsvaRef.current, h: Number(e.target.value) })}
                 />
                 {showAlpha && (
@@ -414,7 +442,7 @@ export const ColorPicker = React.forwardRef<HTMLButtonElement, ColorPickerProps>
                     max={100}
                     step={1}
                     value={Math.round(hsva.a)}
-                    aria-label="Alpha"
+                    aria-label={alphaLabel}
                     onChange={(e) => commit({ ...hsvaRef.current, a: Number(e.target.value) })}
                   />
                 )}
@@ -433,7 +461,7 @@ export const ColorPicker = React.forwardRef<HTMLButtonElement, ColorPickerProps>
                 maxLength={8}
                 spellCheck={false}
                 autoComplete="off"
-                aria-label="Hex colour value"
+                aria-label={hexLabel}
                 onChange={handleHexChange}
                 onFocus={() => setHexDraft(displayHex.replace(/^#/, ''))}
                 onBlur={() => setHexDraft(null)}

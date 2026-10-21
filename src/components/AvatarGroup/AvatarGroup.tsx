@@ -13,10 +13,13 @@ type AvatarGroupOwnProps = {
    */
   size?: 'sm' | 'md' | 'lg';
   /**
-   * Accessible label for the overflow counter. Defaults to "N more" —
-   * override it to localise or add context, e.g. "4 more reviewers".
+   * Accessible label for the overflow counter. Defaults to "N more" (for
+   * example "4 more"), with N the number of hidden avatars. Pass a function
+   * given that count to localise or add context, e.g.
+   * `(count) => \`${count} more reviewers\``; a plain string replaces the
+   * label outright, whatever the count.
    */
-  overflowLabel?: string;
+  overflowLabel?: string | ((count: number) => string);
   /** Additional CSS classes */
   className?: string;
 };
@@ -41,7 +44,16 @@ export const AvatarGroup = React.forwardRef<HTMLDivElement, AvatarGroupProps>(
       .filter(Boolean)
       .join(' ');
 
-    const allChildren = React.Children.toArray(children);
+    // Children.toArray keeps a Fragment as one child, so `<>…</>` used to land
+    // every avatar in a single slot, miss the cloned size and miscount the
+    // overflow. Flatten Fragments first: each avatar is one member.
+    const flatten = (nodes: React.ReactNode): React.ReactNode[] =>
+      React.Children.toArray(nodes).flatMap((node) =>
+        React.isValidElement(node) && node.type === React.Fragment
+          ? flatten((node.props as { children?: React.ReactNode }).children)
+          : [node],
+      );
+    const allChildren = flatten(children);
     const visible = allChildren.slice(0, Math.max(max, 0));
     const overflow = allChildren.length - visible.length;
 
@@ -58,7 +70,11 @@ export const AvatarGroup = React.forwardRef<HTMLDivElement, AvatarGroupProps>(
           <span
             className={`${baseClass}__item ${baseClass}__overflow`}
             role="img"
-            aria-label={overflowLabel ?? `${overflow} more`}
+            aria-label={
+              typeof overflowLabel === 'function'
+                ? overflowLabel(overflow)
+                : (overflowLabel ?? `${overflow} more`)
+            }
           >
             <span aria-hidden="true">+{overflow}</span>
           </span>

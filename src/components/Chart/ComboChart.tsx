@@ -1,4 +1,6 @@
-import { useCallback, useId } from 'react';
+'use client';
+
+import React, { useCallback, useId } from 'react';
 import {
   ComposedChart as RechartsComposedChart,
   Bar,
@@ -10,7 +12,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import type { ChartSummaryItem } from './BarChart';
-import { getChartSeriesColors } from './palette';
+import { getChartSeriesColors, readTokenPx } from './palette';
 import { useChartAnimation } from './useChartAnimation';
 import './Chart.css';
 
@@ -28,7 +30,8 @@ interface ComboTooltipProps {
   label?: string | number;
 }
 
-export interface ComboChartProps {
+/** Props owned by ComboChart itself; everything else falls through to the root div. */
+type ComboChartOwnProps = {
   /** Array of data objects */
   data: Record<string, unknown>[];
   /** Key in data for x-axis values */
@@ -47,7 +50,10 @@ export interface ComboChartProps {
   lineColor?: string;
   /** Plot the line on its own right-hand y-axis, for series in different units */
   secondaryAxis?: boolean;
-  /** Chart title */
+  /**
+   * Chart title, in the shared chart header; it also names the figure.
+   * Note: this replaces the native `title` tooltip attribute, which the chart does not expose.
+   */
   title?: string;
   /** Description text below the title */
   subtitle?: string;
@@ -59,7 +65,11 @@ export interface ComboChartProps {
   bare?: boolean;
   /** Additional CSS classes on the wrapper */
   className?: string;
-}
+};
+
+export interface ComboChartProps
+  extends ComboChartOwnProps,
+    Omit<React.ComponentPropsWithoutRef<'div'>, keyof ComboChartOwnProps | 'children'> {}
 
 /**
  * Reads a CSS custom property from the document root.
@@ -103,7 +113,7 @@ function ComboTooltip({ active, payload, label }: ComboTooltipProps) {
  * like monthly spend (bars) against ROAS (line). Part of the Chart component
  * family, sharing wrapper, header, tooltip, and summary-stat styles.
  */
-export const ComboChart = ({
+export const ComboChart = React.forwardRef<HTMLDivElement, ComboChartProps>(({
   data,
   xKey = 'label',
   barKey,
@@ -119,7 +129,8 @@ export const ComboChart = ({
   height = 350,
   bare = false,
   className = '',
-}: ComboChartProps) => {
+  ...rest
+}, ref) => {
   const titleId = useId();
   const subtitleId = useId();
   const animation = useChartAnimation(data, 2);
@@ -133,6 +144,10 @@ export const ComboChart = ({
   const resolvedBarColor = barColor || getCSSVar('--color-chart-series-1', '#0E6E8F');
   const resolvedLineColor = lineColor || seriesColors[1];
   const textSecondary = getCSSVar('--color-text-secondary', '#303030');
+  // Ticks and legend read the caption type token, so a theme's type scale
+  // reaches them. recharts sizes text through an SVG attribute, which cannot
+  // hold var(), so the resolved number is read at render.
+  const textSize = readTokenPx('--font-caption-size', '12px');
   const gridColor = getCSSVar('--color-divider', 'rgba(214, 214, 214, 0.8)');
   const cursorColor = getCSSVar('--color-bg-container-secondary', '#F1F1F1');
 
@@ -147,10 +162,12 @@ export const ComboChart = ({
 
   return (
     <div
+      {...rest}
+      ref={ref}
       className={classes}
       role="figure"
-      aria-labelledby={title ? titleId : undefined}
-      aria-describedby={subtitle ? subtitleId : undefined}
+      aria-labelledby={title ? titleId : rest['aria-labelledby']}
+      aria-describedby={subtitle ? subtitleId : rest['aria-describedby']}
     >
       {/* Header */}
       {(title || subtitle || summaryItems) && (
@@ -184,13 +201,13 @@ export const ComboChart = ({
             <CartesianGrid vertical={false} stroke={gridColor} />
             <XAxis
               dataKey={xKey}
-              tick={{ fill: textSecondary, fontSize: 12 }}
+              tick={{ fill: textSecondary, fontSize: textSize }}
               tickLine={false}
               axisLine={{ stroke: gridColor }}
             />
             <YAxis
               yAxisId="bar"
-              tick={{ fill: textSecondary, fontSize: 12 }}
+              tick={{ fill: textSecondary, fontSize: textSize }}
               tickLine={false}
               axisLine={false}
             />
@@ -198,7 +215,7 @@ export const ComboChart = ({
               <YAxis
                 yAxisId="line"
                 orientation="right"
-                tick={{ fill: textSecondary, fontSize: 12 }}
+                tick={{ fill: textSecondary, fontSize: textSize }}
                 tickLine={false}
                 axisLine={false}
               />
@@ -232,4 +249,6 @@ export const ComboChart = ({
       </div>
     </div>
   );
-};
+});
+
+ComboChart.displayName = 'ComboChart';

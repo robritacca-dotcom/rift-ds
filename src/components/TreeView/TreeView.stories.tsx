@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, fn } from 'storybook/test';
 import { TreeView, type TreeViewNode } from './TreeView';
 
 const fileTree: TreeViewNode[] = [
@@ -157,4 +158,74 @@ export const DeepNesting: Story = {
       <TreeView {...args} />
     </div>
   ),
+};
+
+/**
+ * The WAI-ARIA tree keyboard model: one tab stop, ArrowDown and ArrowUp
+ * walk the visible rows, ArrowRight expands a closed branch and then steps
+ * into it, ArrowLeft collapses an open branch or moves to the parent, Home
+ * and End jump, Enter and Space select, and `aria-expanded` follows.
+ */
+export const KeyboardNavigation: Story = {
+  args: {
+    onSelect: fn(),
+    onExpandedChange: fn(),
+  },
+  render: (args) => (
+    <div style={{ width: '280px' }}>
+      <TreeView {...args} />
+    </div>
+  ),
+  play: async ({ canvas, userEvent, args }) => {
+    const item = (name: string) => canvas.getByRole('treeitem', { name });
+    await expect(item('src')).toHaveAttribute('aria-expanded', 'false');
+    await expect(item('package.json')).not.toHaveAttribute('aria-expanded');
+    await expect(canvas.queryByRole('treeitem', { name: 'components' })).toBeNull();
+
+    await userEvent.tab();
+    await expect(item('src')).toHaveFocus();
+
+    // ArrowRight on a closed branch expands it; focus stays.
+    await userEvent.keyboard('{ArrowRight}');
+    await expect(item('src')).toHaveAttribute('aria-expanded', 'true');
+    await expect(item('src')).toHaveFocus();
+    await expect(args.onExpandedChange).toHaveBeenLastCalledWith(['src']);
+
+    // ArrowRight again steps into the first child.
+    await userEvent.keyboard('{ArrowRight}');
+    await expect(item('components')).toHaveFocus();
+
+    // ArrowDown walks visible rows only: components is closed, so tokens.
+    await userEvent.keyboard('{ArrowDown}');
+    await expect(item('tokens')).toHaveFocus();
+    await userEvent.keyboard('{ArrowRight}{ArrowRight}');
+    await expect(item('tokens-light.css')).toHaveFocus();
+
+    // ArrowLeft on a leaf moves to its parent; again collapses the parent.
+    await userEvent.keyboard('{ArrowLeft}');
+    await expect(item('tokens')).toHaveFocus();
+    await userEvent.keyboard('{ArrowLeft}');
+    await expect(item('tokens')).toHaveAttribute('aria-expanded', 'false');
+    await expect(canvas.queryByRole('treeitem', { name: 'tokens-light.css' })).toBeNull();
+
+    await userEvent.keyboard('{End}');
+    await expect(item('README.md')).toHaveFocus();
+    await userEvent.keyboard('{ArrowUp}');
+    await expect(item('package.json')).toHaveFocus();
+    await userEvent.keyboard('{Enter}');
+    await expect(args.onSelect).toHaveBeenLastCalledWith('package-json');
+    await expect(item('package.json')).toHaveAttribute('aria-selected', 'true');
+
+    await userEvent.keyboard('{Home}');
+    await expect(item('src')).toHaveFocus();
+    await userEvent.keyboard(' ');
+    await expect(args.onSelect).toHaveBeenLastCalledWith('src');
+    await expect(item('package.json')).toHaveAttribute('aria-selected', 'false');
+
+    // Roving tabindex: exactly one item is tabbable, the focused one.
+    const tabbable = canvas
+      .getAllByRole('treeitem')
+      .filter((el) => el.getAttribute('tabindex') === '0');
+    await expect(tabbable).toEqual([item('src')]);
+  },
 };

@@ -142,7 +142,7 @@
 .ds-tooltip__panel--top .ds-tooltip__arrow {
   bottom: -5px;
   left: 50%;
-  margin-left: -4px;
+  margin-left: -4px; /* ds-allow(spacing): half the 8px arrow, centring it on the panel edge */
   border-right: var(--border-025) solid var(--color-bg-container-border);
   border-bottom: var(--border-025) solid var(--color-bg-container-border);
 }
@@ -151,7 +151,7 @@
 .ds-tooltip__panel--bottom .ds-tooltip__arrow {
   top: -5px;
   left: 50%;
-  margin-left: -4px;
+  margin-left: -4px; /* ds-allow(spacing): half the 8px arrow */
   border-top: var(--border-025) solid var(--color-bg-container-border);
   border-left: var(--border-025) solid var(--color-bg-container-border);
 }
@@ -160,7 +160,7 @@
 .ds-tooltip__panel--left .ds-tooltip__arrow {
   right: -5px;
   top: 50%;
-  margin-top: -4px;
+  margin-top: -4px; /* ds-allow(spacing): half the 8px arrow */
   border-top: var(--border-025) solid var(--color-bg-container-border);
   border-right: var(--border-025) solid var(--color-bg-container-border);
 }
@@ -169,7 +169,7 @@
 .ds-tooltip__panel--right .ds-tooltip__arrow {
   left: -5px;
   top: 50%;
-  margin-top: -4px;
+  margin-top: -4px; /* ds-allow(spacing): half the 8px arrow */
   border-bottom: var(--border-025) solid var(--color-bg-container-border);
   border-left: var(--border-025) solid var(--color-bg-container-border);
 }

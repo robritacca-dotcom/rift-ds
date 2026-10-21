@@ -2,7 +2,7 @@
 
 import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore, type ReactNode } from 'react';
 import { useScrollLock } from '../behaviors/useScrollLock';
-import { AiButton, type AiButtonSummary } from '../components/AiButton/AiButton';
+import { AiButton, type AiButtonProps, type AiButtonSummary } from '../components/AiButton/AiButton';
 import { ChatWidget, type ChatWidgetProps } from './ChatWidget';
 import { useChatWidget } from './context';
 import {
@@ -56,11 +56,16 @@ export interface ChatLauncherProps {
   /**
    * A TLDR panel the button summons on hover: a pre-written summary and
    * prompt chips. A tapped chip opens the chat and sends the chip's
-   * `prompt`. Hover-capable devices only: the launcher never renders it on
-   * touch, and never in server HTML.
+   * `prompt`. The launcher hands it to the closed button's AiButton, which
+   * opens the panel on pointer hover; it does no device or hydration gating
+   * of its own, so a host that wants the panel on hover-capable devices only,
+   * or kept out of server HTML, passes `summary` only there.
    */
   summary?: AiButtonSummary & { chips?: { id: string; label: string; prompt: string }[] };
-  /** Render nothing at all: for routes that carry no chrome. */
+  /**
+   * Render nothing at all: for routes that carry no chrome.
+   * Note: not the native `hidden` attribute, which keeps an element mounted and only hides it; the launcher unmounts its button and panel, and spreads no native attributes.
+   */
   hidden?: boolean;
   /** The panel's DOM id, for a host control's `aria-controls`. */
   panelId?: string;
@@ -72,6 +77,8 @@ export interface ChatLauncherProps {
   hostAttribute?: string | false;
   /** Accessible name for the panel. */
   panelLabel?: string;
+  /** The words of the floating button's summary panel, over AiButton's English defaults: the panel's name, given the summary's title ("Summary: <title>"), its dismiss button ("Dismiss summary") and its chips' group ("Suggested prompts"). */
+  aiButtonLabels?: Pick<AiButtonProps, 'summaryRegionLabel' | 'dismissLabel' | 'suggestionsLabel'>;
   /** Everything the widget takes. The launcher sets the responsive ones itself. */
   widget?: Omit<ChatWidgetProps, 'fullscreenEnabled' | 'placementEnabled' | 'compact' | 'phone'>;
   /** Rendered inside the panel after the widget: for a host's extra chrome. */
@@ -109,6 +116,7 @@ export function ChatLauncher({
   panelId = CHAT_PANEL_ID,
   hostAttribute = 'data-chat',
   panelLabel = 'Chat',
+  aiButtonLabels,
   widget,
   children,
 }: ChatLauncherProps) {
@@ -387,6 +395,7 @@ export function ChatLauncher({
     return (
       <div className="ds-chat-launcher__fab">
         <AiButton
+          {...aiButtonLabels}
           label={label}
           icon={icon}
           aria-expanded={false}
@@ -418,7 +427,9 @@ export function ChatLauncher({
     /* The widget handles Escape-in-fullscreen itself (and stops propagation);
        this one closes the panel from panel view. */
     if (event.key === 'Escape') {
-      setOpen(false);
+      /* An Escape a menu or picker inside the panel already handled closed
+         that layer, not the panel. */
+      if (!event.defaultPrevented) setOpen(false);
       return;
     }
     /* A minimal focus trap, only while modal: Tab wraps within the panel.

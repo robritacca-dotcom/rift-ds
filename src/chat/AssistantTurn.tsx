@@ -1,11 +1,14 @@
 'use client';
 
+import { createContext, useContext } from 'react';
 import ReactMarkdown, { type ExtraProps } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { AgentStatus } from '../components/AgentStatus/AgentStatus';
-import { CodeBlock } from '../components/CodeBlock/CodeBlock';
+import { CodeBlock, type CodeBlockProps } from '../components/CodeBlock/CodeBlock';
 import { ChatMessage } from '../components/ChatMessage/ChatMessage';
 import { Prose } from '../components/Prose/Prose';
+import type { PromptSuggestionsProps } from '../components/PromptSuggestions/PromptSuggestions';
+import type { QuestionCardLabels } from '../components/QuestionCard/QuestionCard';
 import { Reasoning } from '../components/Reasoning/Reasoning';
 import { useChatWidget } from './context';
 import { DOCK_QUERY } from './queries';
@@ -14,6 +17,24 @@ import { ResponseActions } from './ResponseActions';
 import { TurnCard } from './TurnContent';
 import { TurnQuestion } from './TurnQuestion';
 import type { ChatTurn, LiveResponse } from './types';
+
+/** The words an assistant turn's parts write, set from ChatWidget's label props. Every key left out keeps the part's English. */
+export interface AssistantTurnLabels {
+  /** The fenced-code CodeBlocks in a reply; `codeLabel` is given the fence's language. */
+  codeBlock?: Pick<CodeBlockProps, 'copyLabel' | 'copyText' | 'copiedLabel'> & {
+    codeLabel?: (language: string | undefined) => string;
+  };
+  /** The reasoning disclosure's summary once thinking is over, given the seconds it took when known. */
+  reasoning?: (durationSeconds: number | undefined) => string;
+  /** The question card a reply ends in. */
+  questionCard?: Partial<QuestionCardLabels>;
+  /** The follow-up row's hidden "(chosen)" text. */
+  promptSuggestions?: Pick<PromptSuggestionsProps, 'chosenLabel'>;
+}
+
+/* The code blocks are drawn by react-markdown through a module-level
+   components map, so their labels arrive by context rather than props. */
+const CodeBlockLabelsContext = createContext<AssistantTurnLabels['codeBlock']>(undefined);
 
 /**
  * Internal links navigate through the host's link renderer, so a panel
@@ -54,6 +75,7 @@ const hastText = (node: HastNode): string =>
    snippet the answer hands over is one click from the clipboard. The language
    comes from the fence's info string (```bash), when the model wrote one. */
 function MarkdownPre({ node, children, ...props }: React.ComponentPropsWithoutRef<'pre'> & ExtraProps) {
+  const { codeLabel, ...labels } = useContext(CodeBlockLabelsContext) ?? {};
   const code = (node as HastNode | undefined)?.children?.find(
     (child) => child.type === 'element' && child.tagName === 'code'
   );
@@ -63,7 +85,14 @@ function MarkdownPre({ node, children, ...props }: React.ComponentPropsWithoutRe
     .map(String)
     .find((name) => name.startsWith('language-'))
     ?.slice('language-'.length);
-  return <CodeBlock code={hastText(code).replace(/\n$/, '')} language={language} />;
+  return (
+    <CodeBlock
+      {...labels}
+      codeLabel={codeLabel?.(language)}
+      code={hastText(code).replace(/\n$/, '')}
+      language={language}
+    />
+  );
 }
 
 /* A markdown table has a natural minimum width that a docked panel cannot
@@ -87,7 +116,15 @@ const markdownComponents = {
    its committed form share an id (and so a key), so React reconciles the
    finished response in place: separate components remounted the whole
    subtree at commit, which read as a flicker after the response rendered. */
-export function AssistantTurn({ turn, live }: { turn?: ChatTurn; live?: LiveResponse }) {
+export function AssistantTurn({
+  turn,
+  live,
+  labels,
+}: {
+  turn?: ChatTurn;
+  live?: LiveResponse;
+  labels?: AssistantTurnLabels;
+}) {
   const thinking = live?.phase === 'thinking';
   const tracePoints = live ? live.tracePoints : (turn?.tracePoints ?? []);
   const durationSeconds = live ? live.durationSeconds : turn?.durationSeconds;
@@ -132,6 +169,7 @@ export function AssistantTurn({ turn, live }: { turn?: ChatTurn; live?: LiveResp
                a row remounted by closing and reopening the panel shows them
                standing: they already arrived once. */
             entrance={turn.id === freshFollowupsId}
+            chosenLabel={labels?.promptSuggestions?.chosenLabel}
           />
         ) : followupsPending && turn ? (
           <FollowupSuggestions turnId={turn.id} suggestions={[]} pending />
@@ -149,6 +187,9 @@ export function AssistantTurn({ turn, live }: { turn?: ChatTurn; live?: LiveResp
             streaming={thinking}
             summaryOnly={tracePoints.length === 0}
             duration={durationSeconds}
+            /* Thinking, the AgentStatus below owns the line; the label is
+               the text that takes over once it is done. */
+            label={labels?.reasoning && !thinking ? labels.reasoning(durationSeconds) : undefined}
             summary={
               thinking && live ? (
                 <AgentStatus state="working" label={live.statusLabel} />
@@ -170,6 +211,7 @@ export function AssistantTurn({ turn, live }: { turn?: ChatTurn; live?: LiveResp
         {turn?.content}
         {turn?.card && <TurnCard card={turn.card} />}
         {text !== '' && (
+          <CodeBlockLabelsContext.Provider value={labels?.codeBlock}>
           <Prose>
             {/* gfm: a real model emits tables and strikethrough, which plain
                 CommonMark renders as literal pipes and tildes. */}
@@ -177,10 +219,11 @@ export function AssistantTurn({ turn, live }: { turn?: ChatTurn; live?: LiveResp
               {text}
             </ReactMarkdown>
           </Prose>
+          </CodeBlockLabelsContext.Provider>
         )}
         {/* The answers to what the prose just asked sit straight under it,
             above the actions row: they are part of the reply. */}
-        {turn?.question && <TurnQuestion turn={turn} />}
+        {turn?.question && <TurnQuestion turn={turn} labels={labels?.questionCard} />}
       </div>
     </ChatMessage>
   );

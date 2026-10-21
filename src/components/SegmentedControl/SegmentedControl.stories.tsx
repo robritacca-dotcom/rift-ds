@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { fn } from 'storybook/test';
+import { expect, fn } from 'storybook/test';
 import { SegmentedControl } from './SegmentedControl';
 
 const meta = {
@@ -10,7 +11,7 @@ const meta = {
   },
   tags: ['autodocs'],
   argTypes: {
-    activeSegment: { control: 'text' },
+    defaultValue: { control: 'text' },
     size: {
       control: 'select',
       options: ['default', 'compact'],
@@ -22,7 +23,7 @@ const meta = {
     fullWidth: { control: 'boolean' },
   },
   args: {
-    onSegmentChange: fn(),
+    onValueChange: fn(),
     size: 'default',
   },
 } satisfies Meta<typeof SegmentedControl>;
@@ -37,7 +38,7 @@ export const Default: Story = {
       { label: 'Week', value: 'week' },
       { label: 'Month', value: 'month' },
     ],
-    activeSegment: 'week',
+    defaultValue: 'week',
   },
 };
 
@@ -48,7 +49,7 @@ export const WithIcons: Story = {
       { label: 'List', value: 'list', icon: 'view_list' },
       { label: 'Board', value: 'board', icon: 'view_column' },
     ],
-    activeSegment: 'grid',
+    defaultValue: 'grid',
   },
 };
 
@@ -59,7 +60,7 @@ export const Neutral: Story = {
       { label: 'Week', value: 'week' },
       { label: 'Month', value: 'month' },
     ],
-    activeSegment: 'week',
+    defaultValue: 'week',
     tone: 'neutral',
   },
 };
@@ -70,7 +71,7 @@ export const TwoOptions: Story = {
       { label: 'Light', value: 'light', icon: 'light_mode' },
       { label: 'Dark', value: 'dark', icon: 'dark_mode' },
     ],
-    activeSegment: 'dark',
+    defaultValue: 'dark',
   },
 };
 
@@ -81,7 +82,7 @@ export const WithDisabled: Story = {
       { label: 'Pro', value: 'pro' },
       { label: 'Enterprise', value: 'enterprise', disabled: true },
     ],
-    activeSegment: 'pro',
+    defaultValue: 'pro',
   },
 };
 
@@ -92,7 +93,7 @@ export const FullWidth: Story = {
       { label: 'Analytics', value: 'analytics' },
       { label: 'Reports', value: 'reports' },
     ],
-    activeSegment: 'overview',
+    defaultValue: 'overview',
     fullWidth: true,
   },
   decorators: [
@@ -113,7 +114,7 @@ export const CompactDefault: Story = {
       { label: 'Active', value: 'active' },
       { label: 'Archived', value: 'archived' },
     ],
-    activeSegment: 'all',
+    defaultValue: 'all',
   },
 };
 
@@ -125,7 +126,7 @@ export const CompactWithIcons: Story = {
       { label: 'Preview', value: 'preview', icon: 'visibility' },
       { label: 'Split', value: 'split', icon: 'vertical_split' },
     ],
-    activeSegment: 'code',
+    defaultValue: 'code',
   },
 };
 
@@ -138,7 +139,7 @@ export const CompactFullWidth: Story = {
       { label: 'Code', value: 'code' },
       { label: 'Docs', value: 'docs' },
     ],
-    activeSegment: 'design',
+    defaultValue: 'design',
   },
   decorators: [
     (Story) => (
@@ -147,4 +148,80 @@ export const CompactFullWidth: Story = {
       </div>
     ),
   ],
+};
+
+/** Controlled: the parent owns the selection through `value` and `onValueChange`. */
+export const Controlled: Story = {
+  args: {
+    segments: [
+      { label: 'Day', value: 'day' },
+      { label: 'Week', value: 'week' },
+      { label: 'Month', value: 'month' },
+    ],
+  },
+  render: function ControlledSegmentedControl(args) {
+    const [value, setValue] = useState('month');
+    return (
+      <SegmentedControl
+        {...args}
+        value={value}
+        onValueChange={(next) => {
+          setValue(next);
+          args.onValueChange?.(next);
+        }}
+      />
+    );
+  },
+};
+
+/**
+ * Keyboard selection, uncontrolled: `defaultValue` seeds the active segment
+ * and its single tab stop, arrows move the selection (and focus) across the
+ * enabled segments, skipping a disabled one and wrapping at the ends, and
+ * Home and End jump to the first and last enabled segments.
+ */
+export const KeyboardNavigation: Story = {
+  args: {
+    'aria-label': 'Range',
+    segments: [
+      { label: 'Day', value: 'day' },
+      { label: 'Week', value: 'week' },
+      { label: 'Month', value: 'month', disabled: true },
+      { label: 'Year', value: 'year' },
+    ],
+    defaultValue: 'week',
+  },
+  play: async ({ canvas, userEvent, args }) => {
+    const tab = (name: string) => canvas.getByRole('tab', { name });
+    await expect(canvas.getByRole('tablist', { name: 'Range' })).toBeInTheDocument();
+    await expect(tab('Week')).toHaveAttribute('aria-selected', 'true');
+    await expect(tab('Week')).toHaveAttribute('tabindex', '0');
+    await expect(tab('Day')).toHaveAttribute('tabindex', '-1');
+
+    await userEvent.tab();
+    await expect(tab('Week')).toHaveFocus();
+
+    // Month is disabled, so ArrowRight goes straight to Year.
+    await userEvent.keyboard('{ArrowRight}');
+    await expect(tab('Year')).toHaveAttribute('aria-selected', 'true');
+    await expect(tab('Year')).toHaveFocus();
+    await expect(args.onValueChange).toHaveBeenLastCalledWith('year');
+    await expect(tab('Week')).toHaveAttribute('aria-selected', 'false');
+
+    // Wraps from the last segment to the first, and back.
+    await userEvent.keyboard('{ArrowRight}');
+    await expect(tab('Day')).toHaveFocus();
+    await expect(tab('Day')).toHaveAttribute('aria-selected', 'true');
+    await userEvent.keyboard('{ArrowLeft}');
+    await expect(tab('Year')).toHaveFocus();
+
+    await userEvent.keyboard('{Home}');
+    await expect(tab('Day')).toHaveAttribute('aria-selected', 'true');
+    await userEvent.keyboard('{End}');
+    await expect(tab('Year')).toHaveAttribute('aria-selected', 'true');
+    await expect(tab('Year')).toHaveFocus();
+
+    await expect(args.onValueChange).not.toHaveBeenCalledWith('month');
+    await expect(tab('Month')).toHaveAttribute('aria-selected', 'false');
+  },
 };

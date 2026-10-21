@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useRef, useId } from 'react';
+import React, { useCallback, useRef, useId } from 'react';
 import ReactDOM from 'react-dom';
 import { Button } from '../Button/Button';
 import './AlertDialog.css';
@@ -10,12 +10,15 @@ import { useLayer } from '../../behaviors/useLayer';
 import { useFocusScope } from '../../behaviors/useFocusScope';
 import { useScrollLock } from '../../behaviors/useScrollLock';
 
-export interface AlertDialogProps {
+type AlertDialogOwnProps = {
   /** Whether the dialog is open */
   open: boolean;
   /** Callback when dialog requests to close */
   onOpenChange: (open: boolean) => void;
-  /** Dialog title */
+  /**
+   * Dialog title, rendered as the heading that names the dialog. Replaces the
+   * native `title` tooltip attribute.
+   */
   title: string;
   /** Dialog description / body text */
   description?: string;
@@ -38,9 +41,13 @@ export interface AlertDialogProps {
    * @deprecated Use `tone` instead.
    */
   variant?: 'default' | 'destructive';
-  /** Additional CSS classes */
+  /** Additional CSS classes on the overlay container (the ref and native attributes go on the panel) */
   className?: string;
-}
+};
+
+export interface AlertDialogProps
+  extends AlertDialogOwnProps,
+    Omit<React.ComponentPropsWithoutRef<'div'>, keyof AlertDialogOwnProps | 'children' | 'role'> {}
 
 /**
  * AlertDialog component for important confirmations.
@@ -48,7 +55,7 @@ export interface AlertDialogProps {
  * and confirm / cancel actions. Traps focus and
  * supports ESC key dismissal.
  */
-export const AlertDialog = ({
+export const AlertDialog = React.forwardRef<HTMLDivElement, AlertDialogProps>(({
   open,
   onOpenChange,
   title,
@@ -60,8 +67,15 @@ export const AlertDialog = ({
   tone,
   variant,
   className = '',
-}: AlertDialogProps) => {
+  ...rest
+}, ref) => {
   const panelRef = useRef<HTMLDivElement>(null);
+  // The focus scope needs the panel, and so does the consumer's ref.
+  const setPanelRef = (node: HTMLDivElement | null) => {
+    panelRef.current = node;
+    if (typeof ref === 'function') ref(node);
+    else if (ref) ref.current = node;
+  };
   const titleId = useId();
   const descId = useId();
 
@@ -83,7 +97,7 @@ export const AlertDialog = ({
   // Shared overlay behaviors (src/behaviors/) — see Dialog. Escape cancels;
   // initial focus lands on the cancel button, so the safe action is one
   // keypress away from the destructive one.
-  useLayer({ open, onDismiss: handleCancel });
+  const layer = useLayer({ open, onDismiss: handleCancel });
   useFocusScope(panelRef, {
     active: open,
     initialFocus: () =>
@@ -103,15 +117,23 @@ export const AlertDialog = ({
 
   const dialog = (
     <div className={containerClasses}>
-      <div className={`${baseClass}__backdrop`} onClick={handleCancel} />
+      {/* A press that began while a menu was open above the dialog was the
+          menu's press: it closed the menu, and must not also cancel. */}
+      <div
+        className={`${baseClass}__backdrop`}
+        onClick={() => {
+          if (layer.ownsPress()) handleCancel();
+        }}
+      />
 
       <div
+        {...rest}
         className={`${baseClass}__panel`}
-        ref={panelRef}
+        ref={setPanelRef}
         role="alertdialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        aria-describedby={description ? descId : undefined}
+        aria-describedby={description ? descId : rest['aria-describedby']}
         tabIndex={-1}
       >
         <div className={`${baseClass}__header`}>
@@ -151,4 +173,6 @@ export const AlertDialog = ({
 
   if (!mounted) return null;
   return ReactDOM.createPortal(dialog, document.body);
-};
+});
+
+AlertDialog.displayName = 'AlertDialog';

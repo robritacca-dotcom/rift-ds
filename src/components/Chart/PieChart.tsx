@@ -1,4 +1,6 @@
-import { useCallback, useId } from 'react';
+'use client';
+
+import React, { useCallback, useId } from 'react';
 import {
   PieChart as RechartsPieChart,
   Pie,
@@ -8,7 +10,7 @@ import {
   Legend,
 } from 'recharts';
 import type { ChartSummaryItem } from './BarChart';
-import { getChartSeriesColors } from './palette';
+import { getChartSeriesColors, readTokenPx } from './palette';
 import { useChartAnimation } from './useChartAnimation';
 import './Chart.css';
 
@@ -33,10 +35,14 @@ export interface PieSlice {
   color?: string;
 }
 
-export interface PieChartProps {
+/** Props owned by PieChart itself; everything else falls through to the root div. */
+type PieChartOwnProps = {
   /** Array of slices */
   data: PieSlice[];
-  /** Chart title */
+  /**
+   * Chart title, in the shared chart header; it also names the figure.
+   * Note: this replaces the native `title` tooltip attribute, which the chart does not expose.
+   */
   title?: string;
   /** Description text below the title */
   subtitle?: string;
@@ -54,7 +60,11 @@ export interface PieChartProps {
   bare?: boolean;
   /** Additional CSS classes on the wrapper */
   className?: string;
-}
+};
+
+export interface PieChartProps
+  extends PieChartOwnProps,
+    Omit<React.ComponentPropsWithoutRef<'div'>, keyof PieChartOwnProps | 'children'> {}
 
 function getCSSVar(name: string, fallback: string): string {
   // A var() reference resolves live in SVG paint, so the chart follows a
@@ -87,7 +97,7 @@ function PieChartTooltip({ active, payload }: PieChartTooltipProps) {
  * Pie / donut chart built on Recharts with design-system tokens.
  * Set innerRadius > 0 for a donut variant.
  */
-export const PieChart = ({
+export const PieChart = React.forwardRef<HTMLDivElement, PieChartProps>(({
   data,
   title,
   subtitle,
@@ -98,7 +108,8 @@ export const PieChart = ({
   showLegend = true,
   bare = false,
   className = '',
-}: PieChartProps) => {
+  ...rest
+}, ref) => {
   const titleId = useId();
   const subtitleId = useId();
   const animation = useChartAnimation(data);
@@ -108,6 +119,10 @@ export const PieChart = ({
     .join(' ');
   const defaultColors = getChartSeriesColors();
   const textSecondary = getCSSVar('--color-text-secondary', '#303030');
+  // Ticks and legend read the caption type token, so a theme's type scale
+  // reaches them. recharts sizes text through an SVG attribute, which cannot
+  // hold var(), so the resolved number is read at render.
+  const textSize = readTokenPx('--font-caption-size', '12px');
 
   const renderTooltip = useCallback(
     /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
@@ -117,10 +132,12 @@ export const PieChart = ({
 
   return (
     <div
+      {...rest}
+      ref={ref}
       className={classes}
       role="figure"
-      aria-labelledby={title ? titleId : undefined}
-      aria-describedby={subtitle ? subtitleId : undefined}
+      aria-labelledby={title ? titleId : rest['aria-labelledby']}
+      aria-describedby={subtitle ? subtitleId : rest['aria-describedby']}
     >
       {(title || subtitle || summaryItems) && (
         <div className={`${baseClass}__header`}>
@@ -172,7 +189,7 @@ export const PieChart = ({
                 iconType="circle"
                 iconSize={8}
                 formatter={(value: string) => (
-                  <span style={{ color: textSecondary, fontSize: 12 }}>{value}</span>
+                  <span style={{ color: textSecondary, fontSize: textSize }}>{value}</span>
                 )}
               />
             )}
@@ -181,4 +198,6 @@ export const PieChart = ({
       </div>
     </div>
   );
-};
+});
+
+PieChart.displayName = 'PieChart';

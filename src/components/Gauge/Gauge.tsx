@@ -39,7 +39,10 @@ type GaugeOwnProps = {
    * accessible name, e.g. "CPU usage".
    */
   label?: string;
-  /** Chart title, in the shared chart header. */
+  /**
+   * Chart title, in the shared chart header.
+   * Note: this shadows the native `title` tooltip attribute, which Gauge does not expose.
+   */
   title?: string;
   /** Description text below the title. */
   subtitle?: string;

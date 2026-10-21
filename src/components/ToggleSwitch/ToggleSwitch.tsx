@@ -1,13 +1,18 @@
 'use client';
 
-import React, { useId } from 'react';
+import React, { useId, useState } from 'react';
 import './ToggleSwitch.css';
 import '../../fonts/material-symbols.css';
 
 /** Props owned by ToggleSwitch itself — everything else falls through to the <button>. */
 type ToggleSwitchOwnProps = {
-  /** Whether the toggle is on (checked) */
+  /**
+   * Whether the toggle is on, controlled. Leave undefined to let the switch
+   * keep its own state, seeded from `defaultChecked`.
+   */
   checked?: boolean;
+  /** Whether the toggle starts on when uncontrolled (`checked` undefined). Defaults to true, so an uncontrolled switch starts on unless this is false. */
+  defaultChecked?: boolean;
   /** Label text displayed next to the toggle */
   label?: string;
   /** Whether to show the label */
@@ -50,7 +55,8 @@ export interface ToggleSwitchProps
 export const ToggleSwitch = React.forwardRef<HTMLButtonElement, ToggleSwitchProps>(
   (
     {
-      checked = true,
+      checked: checkedProp,
+      defaultChecked = true,
       label = 'Toggle',
       showLabel = true,
       helperText,
@@ -67,6 +73,9 @@ export const ToggleSwitch = React.forwardRef<HTMLButtonElement, ToggleSwitchProp
     ref,
   ) => {
     const baseClass = 'ds-toggle-switch';
+    const [internalChecked, setInternalChecked] = useState(defaultChecked);
+    const isControlled = checkedProp !== undefined;
+    const checked = isControlled ? checkedProp : internalChecked;
     const generatedId = useId();
     const helperId = helperText ? `${generatedId}-helper` : undefined;
     const describedBy = helperId ?? rest['aria-describedby'];
@@ -85,6 +94,7 @@ export const ToggleSwitch = React.forwardRef<HTMLButtonElement, ToggleSwitchProp
     const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
       onClick?.(e);
       if (disabled) return;
+      if (!isControlled) setInternalChecked(!checked);
       onCheckedChange?.(!checked);
       onChange?.(!checked);
     };

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { fn } from 'storybook/test';
+import { expect, fn } from 'storybook/test';
 import { Checkbox, CheckboxGroup } from './Checkbox';
 
 const meta = {
@@ -16,7 +16,7 @@ const meta = {
     disabled: { control: 'boolean' },
   },
   args: {
-    onChange: fn(),
+    onCheckedChange: fn(),
   },
 } satisfies Meta<typeof Checkbox>;
 
@@ -61,10 +61,25 @@ export const DisabledChecked: Story = {
   },
 };
 
+/** No `checked`: the checkbox keeps its own state, starting from `defaultChecked`. */
+export const Uncontrolled: Story = {
+  args: {
+    label: 'Remember me',
+    defaultChecked: false,
+  },
+  play: async ({ canvas, userEvent }) => {
+    const checkbox = canvas.getByRole('checkbox', { name: 'Remember me' });
+    await userEvent.click(checkbox);
+    await expect(checkbox).toHaveAttribute('aria-checked', 'true');
+    await userEvent.keyboard(' ');
+    await expect(checkbox).toHaveAttribute('aria-checked', 'false');
+  },
+};
+
 export const NoLabel: Story = {
   args: {
     checked: true,
-    ariaLabel: 'Standalone checkbox',
+    'aria-label': 'Standalone checkbox',
   },
 };
 
@@ -86,6 +101,27 @@ export const GroupVertical: GroupStory = {
     ],
     values: ['email', 'push'],
     direction: 'vertical',
+  },
+};
+
+/** No `values`: the group keeps its own selection, starting from `defaultValues`. */
+export const GroupUncontrolled: GroupStory = {
+  render: (args) => <CheckboxGroup {...args} />,
+  args: {
+    label: 'Toppings',
+    items: [
+      { label: 'Cheese', value: 'cheese' },
+      { label: 'Olives', value: 'olives' },
+      { label: 'Basil', value: 'basil' },
+    ],
+    defaultValues: ['cheese'],
+    direction: 'vertical',
+  },
+  play: async ({ canvas, userEvent }) => {
+    const olives = canvas.getByRole('checkbox', { name: 'Olives' });
+    await userEvent.click(olives);
+    await expect(olives).toHaveAttribute('aria-checked', 'true');
+    await expect(canvas.getByRole('checkbox', { name: 'Cheese' })).toHaveAttribute('aria-checked', 'true');
   },
 };
 

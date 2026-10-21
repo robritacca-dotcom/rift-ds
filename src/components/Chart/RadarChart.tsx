@@ -1,4 +1,6 @@
-import { useCallback, useId } from 'react';
+'use client';
+
+import React, { useCallback, useId } from 'react';
 import {
   Radar,
   RadarChart as RechartsRadarChart,
@@ -10,7 +12,7 @@ import {
   Legend,
 } from 'recharts';
 import type { ChartSummaryItem } from './BarChart';
-import { getChartSeriesColors } from './palette';
+import { getChartSeriesColors, readTokenPx } from './palette';
 import { useChartAnimation } from './useChartAnimation';
 import './Chart.css';
 
@@ -39,14 +41,18 @@ export interface RadarSeriesConfig {
   fillOpacity?: number;
 }
 
-export interface RadarChartProps {
+/** Props owned by RadarChart itself; everything else falls through to the root div. */
+type RadarChartOwnProps = {
   /** Array of data objects — each should have a category key and one or more value keys */
   data: Record<string, unknown>[];
   /** Key in data for the category labels on each axis */
   categoryKey?: string;
   /** One or more radar series to render */
   series: RadarSeriesConfig[];
-  /** Chart title */
+  /**
+   * Chart title, in the shared chart header; it also names the figure.
+   * Note: this replaces the native `title` tooltip attribute, which the chart does not expose.
+   */
   title?: string;
   /** Description text below the title */
   subtitle?: string;
@@ -58,7 +64,11 @@ export interface RadarChartProps {
   bare?: boolean;
   /** Additional CSS classes on the wrapper */
   className?: string;
-}
+};
+
+export interface RadarChartProps
+  extends RadarChartOwnProps,
+    Omit<React.ComponentPropsWithoutRef<'div'>, keyof RadarChartOwnProps | 'children'> {}
 
 function getCSSVar(name: string, fallback: string): string {
   // A var() reference resolves live in SVG paint, so the chart follows a
@@ -90,7 +100,7 @@ function RadarTooltip({ active, payload, label }: RadarTooltipProps) {
  * Radar chart built on Recharts with design-system tokens.
  * Renders one or more data series as filled polygons on a polar grid.
  */
-export const RadarChart = ({
+export const RadarChart = React.forwardRef<HTMLDivElement, RadarChartProps>(({
   data,
   categoryKey = 'subject',
   series,
@@ -100,7 +110,8 @@ export const RadarChart = ({
   height = 350,
   bare = false,
   className = '',
-}: RadarChartProps) => {
+  ...rest
+}, ref) => {
   const titleId = useId();
   const subtitleId = useId();
   const animation = useChartAnimation(data, series.length);
@@ -110,6 +121,14 @@ export const RadarChart = ({
     .join(' ');
 
   const textSecondary = getCSSVar('--color-text-secondary', '#303030');
+
+  // Ticks and legend read the caption type token, so a theme's type scale
+
+  // reaches them. recharts sizes text through an SVG attribute, which cannot
+
+  // hold var(), so the resolved number is read at render.
+
+  const textSize = readTokenPx('--font-caption-size', '12px');
   const gridColor = getCSSVar('--color-divider', 'rgba(214, 214, 214, 0.8)');
   const seriesColors = getChartSeriesColors();
 
@@ -121,10 +140,12 @@ export const RadarChart = ({
 
   return (
     <div
+      {...rest}
+      ref={ref}
       className={classes}
       role="figure"
-      aria-labelledby={title ? titleId : undefined}
-      aria-describedby={subtitle ? subtitleId : undefined}
+      aria-labelledby={title ? titleId : rest['aria-labelledby']}
+      aria-describedby={subtitle ? subtitleId : rest['aria-describedby']}
     >
       {(title || subtitle || summaryItems) && (
         <div className={`${baseClass}__header`}>
@@ -153,10 +174,10 @@ export const RadarChart = ({
             <PolarGrid stroke={gridColor} />
             <PolarAngleAxis
               dataKey={categoryKey}
-              tick={{ fill: textSecondary, fontSize: 12 }}
+              tick={{ fill: textSecondary, fontSize: textSize }}
             />
             <PolarRadiusAxis
-              tick={{ fill: textSecondary, fontSize: 10 }}
+              tick={{ fill: textSecondary, fontSize: textSize }}
               axisLine={false}
               tickCount={5}
             />
@@ -174,7 +195,7 @@ export const RadarChart = ({
             ))}
             {series.length > 1 && (
               <Legend
-                wrapperStyle={{ color: textSecondary, fontSize: 12 }}
+                wrapperStyle={{ color: textSecondary, fontSize: textSize }}
               />
             )}
           </RechartsRadarChart>
@@ -182,4 +203,6 @@ export const RadarChart = ({
       </div>
     </div>
   );
-};
+});
+
+RadarChart.displayName = 'RadarChart';

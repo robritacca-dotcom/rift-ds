@@ -43,6 +43,10 @@ type NavListOwnProps = {
   multiple?: boolean;
   /** Fires when any link is clicked, alongside native navigation — e.g. to close the drawer that contains the list. */
   onNavigate?: (item: NavListItem, event: React.MouseEvent<HTMLElement>) => void;
+  /** Accessible name of a collapsed section's chevron toggle, given the row's label. Defaults to "Expand <label>". */
+  expandLabel?: (label: string) => string;
+  /** Accessible name of an expanded section's chevron toggle, given the row's label. Defaults to "Collapse <label>". */
+  collapseLabel?: (label: string) => string;
   /** Additional CSS classes */
   className?: string;
 };
@@ -74,6 +78,8 @@ export const NavList = React.forwardRef<HTMLUListElement, NavListProps>(
       onExpandedChange,
       multiple = false,
       onNavigate,
+      expandLabel = (label) => `Expand ${label}`,
+      collapseLabel = (label) => `Collapse ${label}`,
       className = '',
       ...rest
     },
@@ -146,7 +152,7 @@ export const NavList = React.forwardRef<HTMLUListElement, NavListProps>(
                 className={`${baseClass}__toggle`}
                 aria-expanded={isOpen}
                 aria-controls={panelId}
-                aria-label={`${isOpen ? 'Collapse' : 'Expand'} ${item.label}`}
+                aria-label={isOpen ? collapseLabel(item.label) : expandLabel(item.label)}
                 onClick={() => toggle(id)}
               >
                 <span

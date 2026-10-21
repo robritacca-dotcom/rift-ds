@@ -230,6 +230,19 @@ export const Pinned: Story = {
     ],
     onThreadAction: fn(),
   },
+  // The pin glyph is decorative, so a pinned row says "Pinned" in its name
+  // (`pinnedLabel`) and an unpinned row says nothing extra.
+  play: async ({ canvas }) => {
+    await expect(
+      canvas.getByRole('button', { name: 'Untangle the billing webhooks Pinned' }),
+    ).toBeInTheDocument();
+    await expect(
+      canvas.getByRole('button', { name: 'Rewrite the quickstart guide Pinned' }),
+    ).toBeInTheDocument();
+    await expect(
+      canvas.getByRole('button', { name: 'Rework the onboarding flow' }),
+    ).toBeInTheDocument();
+  },
 };
 
 /** The projects section: rows under their own overline header between the

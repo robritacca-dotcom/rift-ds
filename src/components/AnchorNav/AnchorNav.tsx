@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import { useLayer } from '../../behaviors/useLayer';
 import './AnchorNav.css';
 
 export interface AnchorNavItem {
@@ -15,7 +16,10 @@ type AnchorNavOwnProps = {
   items: AnchorNavItem[];
   /** Visual form: `list` renders the inline "On this page" rail; `floating` collapses to a stack of short lines that expands into a panel on hover, keyboard focus, or tap, so it can ride a page edge without taking column width */
   variant?: 'list' | 'floating';
-  /** Header text above the list; pass an empty string to render no header */
+  /**
+   * Header text above the list; pass an empty string to render no header.
+   * Note: this shadows the native `title` tooltip attribute, which AnchorNav does not expose.
+   */
   title?: string;
   /** Icon beside the header — Material Symbol name (string) or custom element (ReactNode); pass an empty string for none */
   icon?: string | React.ReactNode;
@@ -111,20 +115,22 @@ export const AnchorNav = React.forwardRef<HTMLElement, AnchorNavProps>(
       };
     }, [isControlled, items, offset, setActive]);
 
-    // Tap-to-open only exists on the floating variant; a click elsewhere or
-    // Escape closes it again.
-    useEffect(() => {
-      if (!open) return;
-      const onPointerDown = (event: PointerEvent) => {
-        if (navRef.current && !navRef.current.contains(event.target as Node)) setOpen(false);
-      };
-      document.addEventListener('pointerdown', onPointerDown);
-      return () => document.removeEventListener('pointerdown', onPointerDown);
-    }, [open]);
+    // Tap-to-open only exists on the floating variant; a press elsewhere or
+    // Escape closes it again, through the shared layer stack, so neither also
+    // closes a Dialog beneath.
+    useLayer({
+      open,
+      onDismiss: () => setOpen(false),
+      dismissOnOutsidePress: true,
+      getElements: () => [navRef.current],
+    });
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
       onKeyDown?.(event);
       if (floating && event.key === 'Escape') {
+        // Handled while the floating panel is open or focus-expanded: the
+        // layer stack leaves a prevented Escape alone.
+        if (open || navRef.current?.contains(document.activeElement)) event.preventDefault();
         setOpen(false);
         // Collapse the :focus-within expansion too
         const focused = document.activeElement;

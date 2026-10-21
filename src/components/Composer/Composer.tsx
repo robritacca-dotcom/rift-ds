@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
-import { AttachmentTile } from '../Attachment/AttachmentTile';
+import { AttachmentTile, type AttachmentTileProps } from '../Attachment/AttachmentTile';
 import { formatBytes } from '../Attachment/fileTypes';
 import type { AttachmentItem } from '../Attachment/fileTypes';
 import { CircularButton } from '../CircularButton/CircularButton';
@@ -120,6 +120,15 @@ type ComposerOwnProps = {
   dropLabel?: string;
   /** Accessible label for the list of queued files. */
   filesLabel?: string;
+  /**
+   * The words each queued file's tile writes, merged over the tile's English
+   * defaults: its status lines ("Uploading…", "Upload failed", "Unavailable"),
+   * its progress spinner's name, and its remove button's name, which is given
+   * the file name and defaults to "Remove" followed by it.
+   */
+  attachmentTileLabels?: Pick<AttachmentTileProps, 'uploadingLabel' | 'errorLabel' | 'unavailableLabel' | 'progressLabel'> & {
+    removeLabel?: (name: string) => string;
+  };
   /**
    * Builds the sentence announced to assistive technology when files join
    * the queue, leave it, or fail.
@@ -247,6 +256,7 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
       attachLabel = 'Attach files',
       dropLabel = 'Drop files to attach',
       filesLabel = 'Attachments',
+      attachmentTileLabels,
       formatFileAnnouncement = defaultFileAnnouncement,
       attachments,
       mentions,
@@ -708,8 +718,14 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
             {queued.map((file, index) => (
               <li key={file.id} className={`${baseClass}__tray-item`}>
                 <AttachmentTile
+                  uploadingLabel={attachmentTileLabels?.uploadingLabel}
+                  errorLabel={attachmentTileLabels?.errorLabel}
+                  unavailableLabel={attachmentTileLabels?.unavailableLabel}
+                  progressLabel={attachmentTileLabels?.progressLabel}
+                  removeLabel={attachmentTileLabels?.removeLabel?.(file.name)}
                   name={file.name}
                   kind={file.kind}
+                  typeLabel={file.typeLabel}
                   status={file.status}
                   progress={file.progress}
                   error={file.error}

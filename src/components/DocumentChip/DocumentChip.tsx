@@ -42,11 +42,13 @@ type DocumentChipOwnProps = {
   /** Tile size. Compact drops the metadata line — name only — for dense composer rows. */
   size?: 'default' | 'compact';
   /** Click handler — presence makes the chip body (icon + text) an interactive button. */
-  onClick?: () => void;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
   /** Remove handler — renders a trailing close button. */
   onRemove?: () => void;
   /** Accessible label for the remove button. */
   removeLabel?: string;
+  /** Accessible name of the upload progress bar, given the file name. Defaults to "Uploading <name>". */
+  progressLabel?: (name: string) => string;
   /** Additional CSS classes */
   className?: string;
 };
@@ -80,6 +82,7 @@ export const DocumentChip = React.forwardRef<HTMLDivElement, DocumentChipProps>(
       onClick,
       onRemove,
       removeLabel = 'Remove file',
+      progressLabel = (fileName: string) => `Uploading ${fileName}`,
       className = '',
       ...rest
     },
@@ -123,7 +126,7 @@ export const DocumentChip = React.forwardRef<HTMLDivElement, DocumentChipProps>(
               size="compact"
               value={progress}
               showLabel
-              ariaLabel={`Uploading ${name}`}
+              ariaLabel={progressLabel(name)}
             />
           )}
 

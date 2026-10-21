@@ -24,8 +24,14 @@ type SelectionCardOwnProps = {
   mode?: 'radio' | 'checkbox' | 'toggle';
   /** Available options */
   options: SelectionCardOption[];
-  /** Currently selected value(s) — string for radio, string[] for checkbox */
+  /**
+   * Currently selected value(s), controlled: a string for radio, a string[]
+   * otherwise. Leave undefined to let the group keep its own selection,
+   * seeded from `defaultValue`.
+   */
   value?: string | string[];
+  /** Selected value(s) on first render when uncontrolled (`value` undefined). */
+  defaultValue?: string | string[];
   /** Called with the next selection — a string in radio mode, an array otherwise */
   onValueChange?: (value: string | string[]) => void;
   /** Group name (used for aria-label on the group) */
@@ -72,8 +78,24 @@ const CheckIcon = () => (
    ============================================ */
 
 export const SelectionCard = React.forwardRef<HTMLDivElement, SelectionCardProps>(
-  ({ mode = 'radio', options, value, onValueChange, onChange, name, className = '', ...rest }, ref) => {
+  (
+    {
+      mode = 'radio',
+      options,
+      value: valueProp,
+      defaultValue,
+      onValueChange,
+      onChange,
+      name,
+      className = '',
+      ...rest
+    },
+    ref,
+  ) => {
     const baseClass = 'ds-selection-card';
+    const [internalValue, setInternalValue] = React.useState(defaultValue);
+    const isControlled = valueProp !== undefined;
+    const value = isControlled ? valueProp : internalValue;
 
     const selectedValues: string[] = Array.isArray(value)
       ? value
@@ -93,6 +115,7 @@ export const SelectionCard = React.forwardRef<HTMLDivElement, SelectionCardProps
             ? selectedValues.filter((v) => v !== option.value)
             : [...selectedValues, option.value];
 
+      if (!isControlled) setInternalValue(next);
       onValueChange?.(next);
       onChange?.(next);
     };
@@ -115,7 +138,7 @@ export const SelectionCard = React.forwardRef<HTMLDivElement, SelectionCardProps
         ref={ref}
         className={groupClasses}
         role={groupRole}
-        aria-label={name || rest['aria-label']}
+        aria-label={rest['aria-label'] ?? name}
       >
         {options.map((option) => {
           const selected = isSelected(option.value);

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type RefObject } from "react";
 import { BLOB_COUNT, fragmentSource, vertexSource } from "./field.glsl";
+import { MOTION_CONTEXT_RESTORE_WAIT_MS, MOTION_SHADER_COLOR_FADE_MS } from '../../tokens/motion';
 
 /** The eight tuneable properties of the field. */
 export interface ShaderParams {
@@ -161,7 +162,7 @@ const FRAME_MS_ACTIVE = 1000 / 60;
 /* Wake speed below which the field is treated as at rest. */
 const WAKE_IDLE = 0.015;
 /* Colour crossfade on theme change, matching --motion-duration-slow. */
-const COLOR_FADE_MS = 300;
+const COLOR_FADE_MS = MOTION_SHADER_COLOR_FADE_MS;
 
 /* Token colour → linear RGB. Computed custom-property values arrive with the
    var() chain already resolved, so this only needs hex and rgb() forms. */
@@ -591,7 +592,7 @@ export function useShaderField(
         } catch {
           setSupported(false);
         }
-      }, 700);
+      }, MOTION_CONTEXT_RESTORE_WAIT_MS);
     };
     const onContextRestored = () => {
       if (initGL()) {

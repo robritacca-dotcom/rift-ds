@@ -8,8 +8,13 @@ import './Textarea.css';
 type TextareaOwnProps = {
   /** Textarea label text */
   label?: string;
-  /** Current value */
+  /**
+   * Current value (controlled). Leave it undefined for an uncontrolled
+   * textarea, which keeps its own state seeded from `defaultValue`.
+   */
   value?: string;
+  /** Initial value when uncontrolled (`value` undefined). */
+  defaultValue?: string;
   /** Component size */
   size?: 'default' | 'compact';
   /** Error state — shows error styling and message */
@@ -52,7 +57,8 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     {
       label,
       placeholder = '',
-      value = '',
+      value,
+      defaultValue,
       rows = 4,
       size = 'default',
       disabled = false,
@@ -84,13 +90,23 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       .filter(Boolean)
       .join(' ');
 
+    const isControlled = value !== undefined;
+    const [internalValue, setInternalValue] = React.useState(defaultValue ?? '');
+    const currentValue = isControlled ? value : internalValue;
+
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      if (!isControlled) setInternalValue(e.target.value);
       onChange?.(e);
       onValueChange?.(e.target.value);
     };
 
     const inputId = id || name || label?.toLowerCase().replace(/\s+/g, '-');
-    const charCount = value?.length || 0;
+    const charCount = currentValue.length;
+    /* A consumer's aria-describedby joins the helper id rather than losing to it. */
+    const describedBy =
+      [rest['aria-describedby'], helperText ? `${inputId}-helper` : undefined]
+        .filter(Boolean)
+        .join(' ') || undefined;
 
     return (
       <Field
@@ -116,15 +132,15 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           className={`${baseClass}__field`}
           id={inputId}
           name={name}
-          value={value}
+          value={currentValue}
           placeholder={placeholder}
           rows={rows}
           disabled={disabled}
           required={required}
           maxLength={maxLength}
-          aria-label={ariaLabel || rest['aria-label'] || label}
+          aria-label={rest['aria-label'] ?? ariaLabel ?? label}
           aria-invalid={error}
-          aria-describedby={helperText ? `${inputId}-helper` : rest['aria-describedby']}
+          aria-describedby={describedBy}
           onChange={handleChange}
           style={{ resize, ...style }}
         />

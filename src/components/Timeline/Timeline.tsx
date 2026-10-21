@@ -61,21 +61,28 @@ export interface TimelineCompanyProps {
   variant: 'company';
   /** Ordered list of company/tool entries */
   items: TimelineCompany[];
+  /** Text shown in place of the end date for a role marked `present` */
+  presentLabel?: string;
   /** Additional CSS classes */
   className?: string;
 }
 
-export type TimelineProps = TimelineDefaultProps | TimelineCompanyProps;
+/**
+ * Timeline props: one of the two variants' own props, plus the native `<ol>`
+ * attributes, which reach the list in both variants.
+ */
+export type TimelineProps = (TimelineDefaultProps | TimelineCompanyProps) &
+  Omit<React.ComponentPropsWithoutRef<'ol'>, keyof TimelineDefaultProps | keyof TimelineCompanyProps | 'children'>;
 
 const BASE_CLASS = 'ds-timeline';
 
-const renderRoleDates = (role: TimelineRole) => {
+const renderRoleDates = (role: TimelineRole, presentLabel: string) => {
   if (!role.start) return null;
   return (
     <span className={`${BASE_CLASS}__role-dates`}>
       {role.start} –{' '}
       {role.present ? (
-        <span className={`${BASE_CLASS}__present`}>Present</span>
+        <span className={`${BASE_CLASS}__present`}>{presentLabel}</span>
       ) : (
         role.end
       )}
@@ -83,62 +90,84 @@ const renderRoleDates = (role: TimelineRole) => {
   );
 };
 
-const CompanyTimeline = ({ items, className = '' }: TimelineCompanyProps) => {
-  const classes = [BASE_CLASS, `${BASE_CLASS}--vertical`, `${BASE_CLASS}--company`, className]
-    .filter(Boolean)
-    .join(' ');
+const CompanyTimeline = React.forwardRef<HTMLOListElement, Extract<TimelineProps, { variant: 'company' }>>(
+  // `variant` is the discriminant, not an <ol> attribute, so it is held back from the spread.
+  ({ variant: _variant, items, presentLabel = 'Present', className = '', ...rest }, ref) => {
+    const classes = [BASE_CLASS, `${BASE_CLASS}--vertical`, `${BASE_CLASS}--company`, className]
+      .filter(Boolean)
+      .join(' ');
 
-  return (
-    <ol className={classes}>
-      {items.map((company, index) => (
-        <li key={`${company.name}-${index}`} className={`${BASE_CLASS}__item`}>
-          <span className={`${BASE_CLASS}__marker ${BASE_CLASS}__marker--logo`} aria-hidden="true">
-            {company.logo}
-          </span>
-          <div className={`${BASE_CLASS}__content`}>
-            <span className={`${BASE_CLASS}__company-name`}>{company.name}</span>
-            <div className={`${BASE_CLASS}__roles`}>
-              {company.roles.map((role, roleIndex) => (
-                <div key={`${role.title}-${roleIndex}`} className={`${BASE_CLASS}__role`}>
-                  <div className={`${BASE_CLASS}__role-header`}>
-                    <h3 className={`${BASE_CLASS}__role-title`}>{role.title}</h3>
-                    {renderRoleDates(role)}
+    return (
+      <ol {...rest} ref={ref} className={classes}>
+        {items.map((company, index) => (
+          <li key={`${company.name}-${index}`} className={`${BASE_CLASS}__item`}>
+            <span className={`${BASE_CLASS}__marker ${BASE_CLASS}__marker--logo`} aria-hidden="true">
+              {company.logo}
+            </span>
+            <div className={`${BASE_CLASS}__content`}>
+              <span className={`${BASE_CLASS}__company-name`}>{company.name}</span>
+              <div className={`${BASE_CLASS}__roles`}>
+                {company.roles.map((role, roleIndex) => (
+                  <div key={`${role.title}-${roleIndex}`} className={`${BASE_CLASS}__role`}>
+                    <div className={`${BASE_CLASS}__role-header`}>
+                      <h3 className={`${BASE_CLASS}__role-title`}>{role.title}</h3>
+                      {renderRoleDates(role, presentLabel)}
+                    </div>
+                    {role.subtitle && (
+                      <p className={`${BASE_CLASS}__role-subtitle`}>{role.subtitle}</p>
+                    )}
+                    {role.description && (
+                      <p className={`${BASE_CLASS}__role-description`}>{role.description}</p>
+                    )}
+                    {role.bullets && role.bullets.length > 0 && (
+                      <ul className={`${BASE_CLASS}__role-bullets`}>
+                        {role.bullets.map((bullet, bulletIndex) => (
+                          <li key={bulletIndex}>{bullet}</li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
-                  {role.subtitle && (
-                    <p className={`${BASE_CLASS}__role-subtitle`}>{role.subtitle}</p>
-                  )}
-                  {role.description && (
-                    <p className={`${BASE_CLASS}__role-description`}>{role.description}</p>
-                  )}
-                  {role.bullets && role.bullets.length > 0 && (
-                    <ul className={`${BASE_CLASS}__role-bullets`}>
-                      {role.bullets.map((bullet, bulletIndex) => (
-                        <li key={bulletIndex}>{bullet}</li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        </li>
-      ))}
-    </ol>
-  );
-};
+          </li>
+        ))}
+      </ol>
+    );
+  },
+);
+
+CompanyTimeline.displayName = 'CompanyTimeline';
 
 /**
  * Timeline component — an ordered sequence of steps or events with
  * connected markers. Vertical for histories and process narratives,
  * horizontal for compact steppers. The `company` variant groups one or
  * more roles under a logo marker for résumé/pipeline histories.
+ *
+ * The forwarded ref and any unrecognised props target the `<ol>` in both
+ * variants.
  */
-export const Timeline = (props: TimelineProps) => {
+// The defaults sit in the parameter, where docgen reads them for the props
+// tables and the published contract. The parameter type names each variant's
+// layout props on both, only so they can be destructured before the split.
+export const Timeline = React.forwardRef<HTMLOListElement, TimelineProps>((
+  {
+    orientation = 'vertical',
+    numbered = false,
+    presentLabel = 'Present',
+    className = '',
+    ...props
+  }: TimelineProps &
+    Pick<TimelineDefaultProps, 'orientation' | 'numbered'> &
+    Pick<TimelineCompanyProps, 'presentLabel'>,
+  ref,
+) => {
   if (props.variant === 'company') {
-    return <CompanyTimeline {...props} />;
+    return <CompanyTimeline {...props} presentLabel={presentLabel} className={className} ref={ref} />;
   }
 
-  const { items, orientation = 'vertical', numbered = false, className = '' } = props;
+  const { variant: _variant, items, ...rest } = props;
 
   const classes = [
     BASE_CLASS,
@@ -171,7 +200,7 @@ export const Timeline = (props: TimelineProps) => {
   };
 
   return (
-    <ol className={classes}>
+    <ol {...rest} ref={ref} className={classes}>
       {items.map((item, index) => (
         <li key={`${item.title}-${index}`} className={`${BASE_CLASS}__item`}>
           <span
@@ -196,4 +225,6 @@ export const Timeline = (props: TimelineProps) => {
       ))}
     </ol>
   );
-};
+});
+
+Timeline.displayName = 'Timeline';

@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useCallback, useEffect, useId, useRef, useState } from 'react';
+import React, { useCallback, useId, useRef, useState } from 'react';
+import { useLayer } from '../../behaviors/useLayer';
 import './FilterBar.css';
 import '../../fonts/material-symbols.css';
 
@@ -22,7 +23,10 @@ export interface FilterBarFilter {
   icon?: string | React.ReactNode;
   /** The choices this filter offers. */
   options: FilterBarOption[];
-  /** Whether several options can be active at once. Single-select closes on choice. */
+  /**
+   * Whether several options can be active at once. Defaults to true; set it
+   * to false for a single-select filter, which closes on choice.
+   */
   multiple?: boolean;
 }
 
@@ -42,6 +46,8 @@ type FilterBarOwnProps = {
   onValuesChange?: (values: Record<string, string[]>) => void;
   /** Label for the button that clears every filter at once. */
   clearLabel?: string;
+  /** Accessible name of an active filter's own clear button, given the filter's label. Defaults to "Clear" followed by the label. */
+  clearFilterLabel?: (filterLabel: string) => string;
   /** Component size */
   size?: 'default' | 'compact';
   /** Additional CSS classes */
@@ -69,6 +75,7 @@ export const FilterBar = React.forwardRef<HTMLDivElement, FilterBarProps>(
       defaultValues,
       onValuesChange,
       clearLabel = 'Clear all',
+      clearFilterLabel = (filterLabel: string) => `Clear ${filterLabel}`,
       size = 'default',
       className = '',
       ...rest
@@ -97,16 +104,14 @@ export const FilterBar = React.forwardRef<HTMLDivElement, FilterBarProps>(
       setFocusedIndex(-1);
     }, []);
 
-    /* Click outside the open filter closes its popover. */
-    useEffect(() => {
-      if (!openId) return;
-      const handler = (e: MouseEvent) => {
-        const node = filterRefs.current.get(openId);
-        if (node && !node.contains(e.target as Node)) closePopover();
-      };
-      document.addEventListener('mousedown', handler);
-      return () => document.removeEventListener('mousedown', handler);
-    }, [openId, closePopover]);
+    /* A press outside the open filter closes its popover, through the shared
+       layer stack, so it never also closes a Dialog the bar sits in. */
+    useLayer({
+      open: openId !== null,
+      onDismiss: closePopover,
+      dismissOnOutsidePress: true,
+      getElements: () => [openId ? filterRefs.current.get(openId) : null],
+    });
 
     const toggleOption = (filter: FilterBarFilter, optionValue: string) => {
       const current = activeValues[filter.id] ?? [];
@@ -179,6 +184,13 @@ export const FilterBar = React.forwardRef<HTMLDivElement, FilterBarProps>(
           }
           break;
         case 'Escape':
+          // Handled: the layer stack leaves a prevented Escape alone, so
+          // closing the popover does not also close a Dialog around it.
+          if (isOpen) {
+            e.preventDefault();
+            closePopover();
+          }
+          break;
         case 'Tab':
           closePopover();
           break;
@@ -267,7 +279,7 @@ export const FilterBar = React.forwardRef<HTMLDivElement, FilterBarProps>(
                   <button
                     type="button"
                     className={`${baseClass}__chip-clear`}
-                    aria-label={`Clear ${filter.label}`}
+                    aria-label={clearFilterLabel(filter.label)}
                     onClick={() => clearFilter(filter.id)}
                   >
                     <span className="material-symbols-rounded" aria-hidden="true">

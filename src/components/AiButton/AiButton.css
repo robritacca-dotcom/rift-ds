@@ -225,6 +225,7 @@
 }
 
 /* Reduced motion: the ring and glow stay, the turning stops. */
+/* ds-allow(motion): parks a looping animation, which the collapsed duration would strobe rather than stop (the ring's turn). */
 @media (prefers-reduced-motion: reduce) {
   .ds-ai-button::before,
   .ds-ai-button::after {
@@ -542,6 +543,7 @@
   margin-top: var(--gap-100);
 }
 
+/* ds-allow(motion): drops the summary panel's staggered entrance outright rather than playing each row at 0.01ms. */
 @media (prefers-reduced-motion: reduce) {
   .ds-ai-button-host--open .ds-ai-button,
   .ds-ai-button-host--open .ds-ai-button__summary,

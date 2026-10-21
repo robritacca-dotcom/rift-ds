@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useId } from 'react';
+import React, { useId, useState } from 'react';
 import { Field } from '../Field/Field';
 import './RadioButton.css';
 
@@ -158,8 +158,13 @@ type RadioGroupOwnProps = {
   error?: boolean;
   /** Marks the group required and renders the required marker on its label */
   required?: boolean;
-  /** Currently selected value */
+  /**
+   * Currently selected value, controlled. Leave undefined to let the group
+   * keep its own selection, seeded from `defaultValue`.
+   */
   value?: string;
+  /** Selected value on first render when uncontrolled (`value` undefined). */
+  defaultValue?: string;
   /**
    * Legacy grouping name, never used.
    *
@@ -195,7 +200,8 @@ export const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
       helperText,
       error = false,
       required = false,
-      value,
+      value: valueProp,
+      defaultValue,
       name: _name,
       options,
       direction = 'vertical',
@@ -208,6 +214,9 @@ export const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
     ref,
   ) => {
     const baseClass = 'ds-radio-group';
+    const [internalValue, setInternalValue] = useState(defaultValue);
+    const isControlled = valueProp !== undefined;
+    const value = isControlled ? valueProp : internalValue;
     const classes = [baseClass, `${baseClass}--${direction}`, className]
       .filter(Boolean)
       .join(' ');
@@ -221,6 +230,7 @@ export const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
     const describedBy = helperText ? `${groupId}-helper` : rest['aria-describedby'];
 
     const handleSelect = (next: string) => {
+      if (!isControlled) setInternalValue(next);
       onValueChange?.(next);
       onChange?.(next);
     };

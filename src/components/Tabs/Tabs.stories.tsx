@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { fn } from 'storybook/test';
+import { expect, fn } from 'storybook/test';
 import { Tabs } from './Tabs';
 
 const meta = {
@@ -10,7 +11,7 @@ const meta = {
   },
   tags: ['autodocs'],
   argTypes: {
-    activeTab: { control: 'text' },
+    defaultValue: { control: 'text' },
     size: {
       control: 'select',
       options: ['default', 'compact'],
@@ -18,7 +19,7 @@ const meta = {
     fullWidth: { control: 'boolean' },
   },
   args: {
-    onTabChange: fn(),
+    onValueChange: fn(),
   },
 } satisfies Meta<typeof Tabs>;
 
@@ -32,7 +33,7 @@ export const Default: Story = {
       { label: 'Tokens', value: 'tokens' },
       { label: 'Usage', value: 'usage' },
     ],
-    activeTab: 'overview',
+    defaultValue: 'overview',
   },
 };
 
@@ -43,7 +44,7 @@ export const WithIcons: Story = {
       { label: 'Code', value: 'code', icon: 'code' },
       { label: 'Accessibility', value: 'a11y', icon: 'accessibility' },
     ],
-    activeTab: 'design',
+    defaultValue: 'design',
   },
 };
 
@@ -92,7 +93,7 @@ export const WithCustomIconNodes: Story = {
         ),
       },
     ],
-    activeTab: 'design',
+    defaultValue: 'design',
   },
 };
 
@@ -103,7 +104,7 @@ export const Compact: Story = {
       { label: 'Active', value: 'active' },
       { label: 'Archived', value: 'archived' },
     ],
-    activeTab: 'all',
+    defaultValue: 'all',
     size: 'compact',
   },
 };
@@ -115,7 +116,7 @@ export const FullWidth: Story = {
       { label: 'Reviews', value: 'reviews' },
       { label: 'Related', value: 'related' },
     ],
-    activeTab: 'details',
+    defaultValue: 'details',
     fullWidth: true,
   },
   decorators: [
@@ -134,7 +135,7 @@ export const WithDisabledTab: Story = {
       { label: 'Drafts', value: 'drafts' },
       { label: 'Scheduled', value: 'scheduled', disabled: true },
     ],
-    activeTab: 'published',
+    defaultValue: 'published',
   },
 };
 
@@ -148,7 +149,7 @@ export const ManyTabs: Story = {
       { label: 'Radio', value: 'radio' },
       { label: 'Tabs', value: 'tabs' },
     ],
-    activeTab: 'button',
+    defaultValue: 'button',
   },
 };
 
@@ -159,7 +160,90 @@ export const IconsOnly: Story = {
       { label: 'List', value: 'list', icon: 'view_list' },
       { label: 'Board', value: 'board', icon: 'view_kanban' },
     ],
-    activeTab: 'grid',
-    ariaLabel: 'View mode',
+    defaultValue: 'grid',
+    'aria-label': 'View mode',
+  },
+};
+
+/** Controlled: the parent owns the selection through `value` and `onValueChange`. */
+export const Controlled: Story = {
+  args: {
+    tabs: [
+      { label: 'Overview', value: 'overview' },
+      { label: 'Tokens', value: 'tokens' },
+      { label: 'Usage', value: 'usage' },
+    ],
+  },
+  render: function ControlledTabs(args) {
+    const [value, setValue] = useState('tokens');
+    return (
+      <Tabs
+        {...args}
+        value={value}
+        onValueChange={(next) => {
+          setValue(next);
+          args.onValueChange?.(next);
+        }}
+      />
+    );
+  },
+};
+
+/**
+ * Keyboard selection, uncontrolled: `defaultValue` seeds the selected tab
+ * and its single tab stop, arrows move the selection (and focus) across the
+ * enabled tabs, skipping a disabled one and wrapping at the ends, and
+ * Home and End jump to the first and last enabled tabs.
+ */
+export const KeyboardNavigation: Story = {
+  args: {
+    'aria-label': 'Range',
+    tabs: [
+      { label: 'Day', value: 'day' },
+      { label: 'Week', value: 'week' },
+      { label: 'Month', value: 'month', disabled: true },
+      { label: 'Year', value: 'year' },
+    ],
+    defaultValue: 'week',
+  },
+  play: async ({ canvas, userEvent, args }) => {
+    const tab = (name: string) => canvas.getByRole('tab', { name });
+    await expect(canvas.getByRole('tablist', { name: 'Range' })).toBeInTheDocument();
+    await expect(tab('Week')).toHaveAttribute('aria-selected', 'true');
+    await expect(tab('Week')).toHaveAttribute('tabindex', '0');
+    await expect(tab('Day')).toHaveAttribute('tabindex', '-1');
+
+    await userEvent.tab();
+    await expect(tab('Week')).toHaveFocus();
+
+    // Month is disabled, so ArrowRight goes straight to Year.
+    await userEvent.keyboard('{ArrowRight}');
+    await expect(tab('Year')).toHaveAttribute('aria-selected', 'true');
+    await expect(tab('Year')).toHaveFocus();
+    await expect(args.onValueChange).toHaveBeenLastCalledWith('year');
+    await expect(tab('Week')).toHaveAttribute('aria-selected', 'false');
+
+    // Wraps from the last tab to the first, and back.
+    await userEvent.keyboard('{ArrowRight}');
+    await expect(tab('Day')).toHaveFocus();
+    await expect(tab('Day')).toHaveAttribute('aria-selected', 'true');
+    await userEvent.keyboard('{ArrowLeft}');
+    await expect(tab('Year')).toHaveFocus();
+
+    await userEvent.keyboard('{Home}');
+    await expect(tab('Day')).toHaveAttribute('aria-selected', 'true');
+    await userEvent.keyboard('{End}');
+    await expect(tab('Year')).toHaveAttribute('aria-selected', 'true');
+    await expect(tab('Year')).toHaveFocus();
+
+    await expect(args.onValueChange).not.toHaveBeenCalledWith('month');
+    await expect(tab('Month')).toHaveAttribute('aria-selected', 'false');
+
+    // A disabled tab stays focusable for discovery (aria-disabled) but a
+    // click never selects it.
+    await expect(tab('Month')).toHaveAttribute('aria-disabled', 'true');
+    await userEvent.click(tab('Month'));
+    await expect(tab('Month')).toHaveAttribute('aria-selected', 'false');
+    await expect(tab('Year')).toHaveAttribute('aria-selected', 'true');
   },
 };

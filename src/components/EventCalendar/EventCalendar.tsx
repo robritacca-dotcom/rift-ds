@@ -27,6 +27,9 @@ export interface EventCalendarEvent {
 }
 
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+/** A consumer's weekday list when it has the seven entries the grid needs, else the default. */
+const weekdaysOr = (labels: string[] | undefined): string[] =>
+  labels && labels.length === 7 ? labels : DAYS;
 const MONTHS = [
   'January',
   'February',
@@ -59,6 +62,24 @@ function formatDate(date: Date): string {
   return `${y}-${m}-${d}`;
 }
 
+/** A day's full date in the user's locale, the spoken half of every day-level name. */
+function formatDayLabel(date: Date): string {
+  return date.toLocaleDateString(undefined, {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}
+
+const defaultMonthLabel = (month: Date): string =>
+  `${MONTHS[month.getMonth()]} ${month.getFullYear()}`;
+
+const defaultMoreLabel = (count: number): string => `+${count} more`;
+
+const defaultOverflowLabel = (count: number, date: Date): string =>
+  `${count} more event${count === 1 ? '' : 's'}, ${formatDayLabel(date)}`;
+
 /** Props owned by EventCalendar itself — everything else falls through to the root element. */
 type EventCalendarOwnProps = {
   /** The events to place on the grid, including any that fall on the visible leading and trailing days of the neighbouring months. */
@@ -88,6 +109,34 @@ type EventCalendarOwnProps = {
   selectedDate?: string;
   /** Trailing header slot, e.g. a "New event" Button. */
   actions?: React.ReactNode;
+  /** Accessible name of the previous-month button. */
+  previousLabel?: string;
+  /** Accessible name of the next-month button. */
+  nextLabel?: string;
+  /**
+   * The month heading, given the first day of the month in view: the visible
+   * title and the name of the day grid. Defaults to the English month name
+   * and the year.
+   */
+  monthLabel?: (month: Date) => string;
+  /**
+   * Accessible name of a day's "+N more" overflow button, given the number of
+   * hidden events and the day. Defaults to "N more events" followed by the
+   * full date in the user's locale.
+   */
+  overflowLabel?: (count: number, date: Date) => string;
+  /**
+   * The visible text of a day's overflow row, given the number of hidden
+   * events. Defaults to "+N more". The row's accessible name is
+   * `overflowLabel` when it is a button.
+   */
+  moreLabel?: (count: number) => string;
+  /**
+   * The weekday headers above the grid: seven entries, Sunday first.
+   * Defaults to the English three-letter abbreviations ("Sun" to "Sat"); a
+   * list of any other length falls back to the default.
+   */
+  weekdayLabels?: string[];
   /** Additional CSS classes */
   className?: string;
 };
@@ -117,6 +166,12 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
       onDateClick,
       selectedDate,
       actions,
+      previousLabel = 'Previous month',
+      nextLabel = 'Next month',
+      monthLabel = defaultMonthLabel,
+      overflowLabel = defaultOverflowLabel,
+      moreLabel = defaultMoreLabel,
+      weekdayLabels,
       className = '',
       ...rest
     },
@@ -170,19 +225,18 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
     }
 
     const classes = [baseClass, className].filter(Boolean).join(' ');
+    const monthTitle = monthLabel(new Date(viewYear, viewMonth, 1));
 
     return (
       <div {...rest} ref={ref} className={classes}>
         <div className={`${baseClass}__header`}>
-          <span className={`${baseClass}__month`}>
-            {MONTHS[viewMonth]} {viewYear}
-          </span>
+          <span className={`${baseClass}__month`}>{monthTitle}</span>
           <div className={`${baseClass}__nav`}>
             <button
               type="button"
               className={`${baseClass}__nav-btn material-symbols-rounded`}
               onClick={() => navigate(-1)}
-              aria-label="Previous month"
+              aria-label={previousLabel}
             >
               chevron_left
             </button>
@@ -190,7 +244,7 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
               type="button"
               className={`${baseClass}__nav-btn material-symbols-rounded`}
               onClick={() => navigate(1)}
-              aria-label="Next month"
+              aria-label={nextLabel}
             >
               chevron_right
             </button>
@@ -199,19 +253,19 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
         </div>
 
         <div className={`${baseClass}__weekdays`} aria-hidden="true">
-          {DAYS.map((day) => (
-            <div key={day} className={`${baseClass}__weekday`}>
+          {weekdaysOr(weekdayLabels).map((day, index) => (
+            <div key={index} className={`${baseClass}__weekday`}>
               {day}
             </div>
           ))}
         </div>
 
-        {/* Like DatePicker, deliberately NOT role="grid": there is no 2D
-            arrow-key model here, so claiming the role would be a lie. */}
+        {/* Deliberately NOT role="grid": unlike DatePicker's day grid there
+            is no 2D arrow-key model here, so claiming the role would be a lie. */}
         <div
           className={`${baseClass}__grid`}
           role="group"
-          aria-label={`${MONTHS[viewMonth]} ${viewYear}`}
+          aria-label={monthTitle}
         >
           {cells.map(({ date, inMonth }) => {
             const dateStr = formatDate(date);
@@ -223,12 +277,7 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
               date.getMonth() === today.getMonth() &&
               date.getDate() === today.getDate();
 
-            const dayLabel = date.toLocaleDateString(undefined, {
-              weekday: 'long',
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            });
+            const dayLabel = formatDayLabel(date);
 
             const isSelected = dateStr === selectedDate;
 
@@ -318,12 +367,12 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
                         type="button"
                         className={`${baseClass}__more`}
                         onClick={() => onDateClick(dateStr)}
-                        aria-label={`${overflow} more event${overflow === 1 ? '' : 's'}, ${dayLabel}`}
+                        aria-label={overflowLabel(overflow, date)}
                       >
-                        +{overflow} more
+                        {moreLabel(overflow)}
                       </button>
                     ) : (
-                      <span className={`${baseClass}__more`}>+{overflow} more</span>
+                      <span className={`${baseClass}__more`}>{moreLabel(overflow)}</span>
                     ))}
                 </div>
               </div>

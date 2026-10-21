@@ -282,6 +282,7 @@
    REDUCED MOTION
    ============================================ */
 
+/* ds-allow(motion): parks a looping animation, which the collapsed duration would strobe rather than stop (the streaming summary's shimmer). */
 @media (prefers-reduced-motion: reduce) {
   .ds-reasoning--streaming .ds-reasoning__summary:not(.ds-reasoning__summary--node) {
     background-image: none;

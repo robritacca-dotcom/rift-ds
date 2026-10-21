@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect } from 'storybook/test';
 import { Combobox } from './Combobox';
 
 const countries = [
@@ -59,12 +60,12 @@ type Story = StoryObj<typeof meta>;
 /** Local state wrappers so the stories are actually interactive. */
 const SingleTemplate: Story['render'] = (args) => {
   const [value, setValue] = useState<string | string[]>('');
-  return <Combobox {...args} value={value} onChange={setValue} />;
+  return <Combobox {...args} value={value} onValueChange={setValue} />;
 };
 
 const MultiTemplate: Story['render'] = (args) => {
   const [value, setValue] = useState<string | string[]>([]);
-  return <Combobox {...args} value={value} onChange={setValue} />;
+  return <Combobox {...args} value={value} onValueChange={setValue} />;
 };
 
 export const Default: Story = {
@@ -103,7 +104,27 @@ export const Preselected: Story = {
   },
   render: (args) => {
     const [value, setValue] = useState<string | string[]>(['ca', 'jp', 'pt']);
-    return <Combobox {...args} value={value} onChange={setValue} />;
+    return <Combobox {...args} value={value} onValueChange={setValue} />;
+  },
+};
+
+/**
+ * No `value` and no state wrapper: the combobox keeps its own selection,
+ * starting from `defaultValue`, and removes chips on its own.
+ */
+export const Uncontrolled: Story = {
+  args: {
+    label: 'Countries',
+    multiple: true,
+    clearable: true,
+    defaultValue: ['ca', 'jp'],
+  },
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.click(canvas.getByRole('button', { name: 'Remove Japan' }));
+    await expect(canvas.queryByRole('button', { name: 'Remove Japan' })).not.toBeInTheDocument();
+    await expect(canvas.getByRole('button', { name: 'Remove Canada' })).toBeInTheDocument();
+    await userEvent.click(canvas.getByRole('button', { name: 'Clear selection' }));
+    await expect(canvas.queryByRole('button', { name: 'Remove Canada' })).not.toBeInTheDocument();
   },
 };
 

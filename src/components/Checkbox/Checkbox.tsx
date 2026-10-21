@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useId } from 'react';
+import React, { useId, useState } from 'react';
 import { Field } from '../Field/Field';
 import './Checkbox.css';
 
@@ -12,8 +12,13 @@ type CheckboxOwnProps = {
   helperText?: string;
   /** Error state — recolours the helper text and marks the checkbox invalid */
   error?: boolean;
-  /** Whether the checkbox is checked */
+  /**
+   * Whether the checkbox is checked, controlled. Leave undefined to let the
+   * checkbox keep its own state, seeded from `defaultChecked`.
+   */
   checked?: boolean;
+  /** Whether the checkbox starts checked when uncontrolled (`checked` undefined). */
+  defaultChecked?: boolean;
   /** Whether the checkbox is in an indeterminate state */
   indeterminate?: boolean;
   /** Whether the checkbox is disabled */
@@ -90,7 +95,8 @@ export const Checkbox = React.forwardRef<HTMLDivElement, CheckboxProps>(
       label,
       helperText,
       error = false,
-      checked = false,
+      checked: checkedProp,
+      defaultChecked = false,
       indeterminate = false,
       disabled = false,
       size = 'default',
@@ -106,6 +112,9 @@ export const Checkbox = React.forwardRef<HTMLDivElement, CheckboxProps>(
     ref,
   ) => {
     const baseClass = 'ds-checkbox';
+    const [internalChecked, setInternalChecked] = useState(defaultChecked);
+    const isControlled = checkedProp !== undefined;
+    const checked = isControlled ? checkedProp : internalChecked;
     const generatedId = useId();
     const helperId = helperText ? `${generatedId}-helper` : undefined;
     const describedBy = helperId ?? rest['aria-describedby'];
@@ -125,6 +134,7 @@ export const Checkbox = React.forwardRef<HTMLDivElement, CheckboxProps>(
 
     const toggle = () => {
       if (disabled) return;
+      if (!isControlled) setInternalChecked(!checked);
       onCheckedChange?.(!checked);
       onChange?.(!checked);
     };
@@ -195,8 +205,13 @@ type CheckboxGroupOwnProps = {
   required?: boolean;
   /** Checkbox options */
   items: { label: string; value: string; disabled?: boolean }[];
-  /** Currently selected values */
+  /**
+   * Currently selected values, controlled. Leave undefined to let the group
+   * keep its own selection, seeded from `defaultValues`.
+   */
   values?: string[];
+  /** Selected values on first render when uncontrolled (`values` undefined). */
+  defaultValues?: string[];
   /** Layout direction */
   direction?: 'vertical' | 'horizontal';
   /** Component size */
@@ -225,7 +240,8 @@ export const CheckboxGroup = React.forwardRef<HTMLDivElement, CheckboxGroupProps
       error = false,
       required = false,
       items,
-      values = [],
+      values: valuesProp,
+      defaultValues = [],
       direction = 'vertical',
       size = 'default',
       onValuesChange,
@@ -237,6 +253,9 @@ export const CheckboxGroup = React.forwardRef<HTMLDivElement, CheckboxGroupProps
     ref,
   ) => {
     const baseClass = 'ds-checkbox-group';
+    const [internalValues, setInternalValues] = useState<string[]>(defaultValues);
+    const isControlled = valuesProp !== undefined;
+    const values = isControlled ? valuesProp : internalValues;
     const classes = [baseClass, `${baseClass}--${direction}`, className]
       .filter(Boolean)
       .join(' ');
@@ -253,6 +272,7 @@ export const CheckboxGroup = React.forwardRef<HTMLDivElement, CheckboxGroupProps
       const next = values.includes(itemValue)
         ? values.filter((v) => v !== itemValue)
         : [...values, itemValue];
+      if (!isControlled) setInternalValues(next);
       onValuesChange?.(next);
       onChange?.(next);
     };

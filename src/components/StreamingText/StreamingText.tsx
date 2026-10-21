@@ -4,22 +4,6 @@ import React, { useEffect, useRef } from 'react';
 import { useStreamReveal } from './useStreamReveal';
 import './StreamingText.css';
 
-export type {
-  StreamReveal,
-  StreamRevealOptions,
-  UseStreamRevealOptions,
-} from './useStreamReveal';
-/* The generated barrel only walks a component folder's .tsx modules, so an
-   engine that only ever lived in a .ts file could never be imported from
-   the package root — and the headless engine is a documented escape hatch,
-   not an implementation detail. Re-exporting it here is what puts it in
-   the barrel. Fast-refresh granularity is the price, and it is not one a
-   published library pays: the .ts module underneath is where the code
-   actually lives. */
-/* eslint-disable react-refresh/only-export-components */
-export { createStreamReveal, useStreamReveal } from './useStreamReveal';
-/* eslint-enable react-refresh/only-export-components */
-
 /** Props owned by StreamingText itself — everything else falls through to the root span. */
 type StreamingTextOwnProps = {
   /**
@@ -45,8 +29,8 @@ type StreamingTextOwnProps = {
    */
   drainMs?: number;
   /**
-   * The retired interval between reveal steps; when set, its equivalent
-   * rate becomes the reveal's floor.
+   * The retired interval between reveal steps; when set and `floorCps` is
+   * not, its equivalent rate becomes the reveal's floor.
    * @deprecated The reveal is frame-driven now — pace it with `floorCps`
    * and `drainMs` instead.
    */
@@ -99,8 +83,9 @@ export const StreamingText = React.forwardRef<HTMLSpanElement, StreamingTextProp
     const baseClass = 'ds-streaming-text';
 
     const { visible, caughtUp } = useStreamReveal(text, {
-      // The legacy interval's equivalent rate: one character per step.
-      floorCps: charIntervalMs != null ? 1000 / charIntervalMs : floorCps,
+      // The replacement wins; the legacy interval only stands in for it,
+      // at its equivalent rate of one character per step.
+      floorCps: floorCps ?? (charIntervalMs != null ? 1000 / charIntervalMs : undefined),
       drainMs,
     });
 
@@ -131,3 +116,22 @@ export const StreamingText = React.forwardRef<HTMLSpanElement, StreamingTextProp
 );
 
 StreamingText.displayName = 'StreamingText';
+
+/* The generated barrel only walks a component folder's .tsx modules, so an
+   engine that only ever lived in a .ts file could never be imported from
+   the package root — and the headless engine is a documented escape hatch,
+   not an implementation detail. Re-exporting it here is what puts it in
+   the barrel. Fast-refresh granularity is the price, and it is not one a
+   published library pays: the .ts module underneath is where the code
+   actually lives. The re-exports sit below the component on purpose: the
+   docgen parser names every export in a one-component file after the
+   component and keeps the first it meets, so a re-export above it would
+   take its name and empty the props table. */
+export type {
+  StreamReveal,
+  StreamRevealOptions,
+  UseStreamRevealOptions,
+} from './useStreamReveal';
+/* eslint-disable react-refresh/only-export-components */
+export { createStreamReveal, useStreamReveal } from './useStreamReveal';
+/* eslint-enable react-refresh/only-export-components */

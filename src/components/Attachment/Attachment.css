@@ -504,6 +504,7 @@ button.ds-attachment-tile__body:focus-visible,
    "in progress" beside the words under it.
    ============================================ */
 
+/* ds-allow(motion): parks a looping animation, which the collapsed duration would strobe rather than stop (the upload spinner). */
 @media (prefers-reduced-motion: reduce) {
   .ds-attachment-tile__spinner svg {
     animation: none;

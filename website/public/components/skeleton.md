@@ -18,4 +18,5 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | width | `string` | no |  | Width (CSS value, e.g. '100%', '200px') |
 | height | `string` | no |  | Height (CSS value, e.g. '20px', '100px') |
 | lines | `number` | no | `1` | Number of text lines to render (only for text variant) |
-| className | `string` | no | `` | Additional CSS classes |
+| loadingLabel | `string` | no | `Loading` | Accessible name announced while the placeholder shows. A passed `aria-label` takes precedence. |
+| className | `string` | no | `` | Additional CSS classes. On a multi-line text skeleton they apply to each line, not the group. |

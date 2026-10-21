@@ -16,5 +16,5 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | --- | --- | --- | --- | --- |
 | orientation | `"horizontal" \| "vertical"` | no | `horizontal` | Orientation of the button group |
 | buttons | `ButtonProps[]` | yes |  | Array of button configurations |
-| ariaLabel | `string` | no |  | Accessible label for the group |
+| ariaLabel | `string` | no |  | Legacy accessible-name prop for the group. Deprecated: Pass the native `aria-label` attribute instead. |
 | className | `string` | no | `` | Additional CSS class |

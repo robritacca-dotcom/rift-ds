@@ -14,12 +14,13 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| label | `string` | no |  | Label text rendered above the slider |
+| label | `string` | no |  | Label text rendered above the slider, which names it. Without one the slider is named by the native `aria-label`, then the deprecated `ariaLabel`, and defaults to "Slider" so it is never nameless. |
 | helperText | `string` | no |  | Helper or error message rendered below the slider |
 | error | `boolean` | no | `false` | Error state — recolours the helper text and marks the slider invalid |
 | required | `boolean` | no | `false` | Marks the slider required and renders the required marker on its label |
 | showValue | `boolean` | no | `false` | Shows the current value opposite the helper line |
-| value | `number` | no | `50` | Current value |
+| value | `number` | no |  | Current value (controlled). Leave it undefined for an uncontrolled slider, which keeps its own state seeded from `defaultValue`. |
+| defaultValue | `number` | no | `50` | Initial value when uncontrolled (`value` undefined). Defaults to 50. |
 | min | `number` | no | `0` | Minimum value |
 | max | `number` | no | `100` | Maximum value |
 | step | `number` | no | `1` | Step increment |

@@ -23,4 +23,5 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | side | `"top" \| "bottom" \| "left" \| "right"` | no | `right` | Edge the panel slides in from |
 | size | `"sm" \| "md" \| "lg"` | no | `md` | Panel size along the axis it slides on |
 | dismissible | `boolean` | no | `true` | Whether ESC, scrim click, and the close button can dismiss |
+| closeLabel | `string` | no | `Close drawer` | Accessible name of the close button. |
 | className | `string` | no | `` | Additional CSS classes — applied to the portal container, not the panel |

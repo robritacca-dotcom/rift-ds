@@ -14,11 +14,12 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| title | `string` | no |  | Alert title text |
+| title | `string` | no |  | Alert title text. Note: this shadows the native `title` tooltip attribute, which Alert does not expose. |
 | description | `string` | no |  | Alert description / body text |
 | variant | `"error" \| "info" \| "positive" \| "warning" \| "neutral"` | no | `info` | Alert variant determines colour and icon |
 | size | `"default" \| "compact"` | no | `default` | Component size |
 | dismissible | `boolean` | no | `false` | Whether the alert can be dismissed |
 | icon | `ReactNode` | no |  | Custom icon override — Material Symbol name (string) or custom element (ReactNode) |
 | onDismiss | `(() => void)` | no |  | Callback when dismiss button is clicked |
+| dismissLabel | `string` | no | `Dismiss alert` | Accessible name for the dismiss button |
 | className | `string` | no | `` | Additional CSS classes |

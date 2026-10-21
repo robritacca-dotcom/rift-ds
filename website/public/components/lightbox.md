@@ -23,4 +23,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | dismissible | `boolean` | no | `true` | Whether ESC, backdrop click, and the close button can dismiss |
 | onPrev | `(() => void)` | no |  | Steps to the previous item. Providing it renders the previous chevron and arms the Left arrow key — the consumer owns the collection and the index. |
 | onNext | `(() => void)` | no |  | Steps to the next item — the next chevron and the Right arrow key. |
+| viewerLabel | `string` | no | `Media viewer` | The panel's accessible name when neither `alt` nor `caption` is set. |
+| closeLabel | `string` | no | `Close viewer` | Accessible name of the close button. |
+| previousLabel | `string` | no | `Previous` | Accessible name of the previous button, shown with `onPrev`. |
+| nextLabel | `string` | no | `Next` | Accessible name of the next button, shown with `onNext`. |
 | className | `string` | no | `` | Additional CSS classes — applied to the portal container, not the panel |

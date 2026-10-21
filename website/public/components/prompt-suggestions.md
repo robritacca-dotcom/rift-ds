@@ -1,6 +1,6 @@
 # Prompt suggestions
 
-A horizontal row of tappable prompt suggestions to start or steer a conversation.
+Tappable prompt suggestions to start or steer a conversation, as a scrolling or wrapping row, a stack, tiles or cards.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
@@ -23,5 +23,6 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | entrance | `boolean` | no | `true` | Play the staggered pop-in when the items mount. On by default; a host re-showing a set that has already landed (reopening a panel over the same suggestions) turns it off, so the chips stand where they were instead of arriving twice. |
 | size | `"default" \| "compact"` | no | `default` | Row scale. `default` sits at the body-paragraph scale, so a suggestion reads at the same weight as the messages it will become; `compact` is the quieter row for placements alongside a live conversation. |
 | value | `string` | no |  | The `id` of the suggestion already taken. Set, the row becomes the record of that choice: the taken suggestion outlined solid in the strongest ink, the rest faded behind a dashed line, and none of them tappable any more. The same treatment QuestionCard gives a pick. For a row that stays on screen after use, such as the follow-ups under an earlier answer. |
+| chosenLabel | `string` | no | `(chosen)` | Visually hidden text read after the taken suggestion once `value` is set. Defaults to "(chosen)". |
 | ariaLabel | `string` | no | `Suggested prompts` | Accessible name for the list. |
 | className | `string` | no | `` | Additional CSS classes |

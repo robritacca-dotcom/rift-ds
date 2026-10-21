@@ -187,7 +187,7 @@
       "name": "card",
       "type": "registry:ui",
       "title": "Card",
-      "description": "Card components for previews, navigation, and token documentation, from content cards to colour swatches and typography specimens."
+      "description": "A titled preview tile for index grids, with a case-study variant carrying a cover, company logo and dek."
     },
     {
       "name": "card-stack",
@@ -637,7 +637,7 @@
       "name": "prompt-suggestions",
       "type": "registry:ui",
       "title": "Prompt suggestions",
-      "description": "A horizontal row of tappable prompt suggestions to start or steer a conversation."
+      "description": "Tappable prompt suggestions to start or steer a conversation, as a scrolling or wrapping row, a stack, tiles or cards."
     },
     {
       "name": "prose",
@@ -715,7 +715,7 @@
       "name": "selection-card",
       "type": "registry:ui",
       "title": "Selection card",
-      "description": "Large selectable option cards with radio or checkbox indicators for high-visibility choices like settings and onboarding."
+      "description": "Large option cards for high-visibility choices like settings and onboarding, with radio, checkbox or per-card toggle indicators."
     },
     {
       "name": "shader-field",
@@ -877,7 +877,7 @@
       "name": "toggle-switch",
       "type": "registry:ui",
       "title": "Toggle switch",
-      "description": "Binary on/off toggle control with sliding thumb and check indicator, used for settings like theme switching."
+      "description": "Binary on/off toggle control with sliding thumb and check indicator, for settings that take effect immediately."
     },
     {
       "name": "tool-call",

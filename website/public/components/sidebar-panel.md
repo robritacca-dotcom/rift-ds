@@ -15,10 +15,11 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | items | `SidebarPanelItem[]` | yes |  | Items to list, optionally grouped with `group` and nested one level with `children` |
-| title | `string` | no |  | Heading at the top of the panel, usually the label of the item that opened it. Also the panel's accessible name |
+| title | `string` | no |  | Heading at the top of the panel, usually the label of the item that opened it. Also the panel's accessible name, after a native `aria-label`; with neither, the panel is named "Section navigation". Note: this shadows the native `title` tooltip attribute, which SidebarPanel does not expose. |
 | activeKey | `string` | no |  | Key of the item for the current page. Its accordion parent starts open |
 | defaultOpenKeys | `string[]` | no |  | Keys of the accordion rows open on first render, in addition to the active item's parent |
 | onCollapse | `(() => void)` | no |  | Renders a collapse button beside the heading and calls this when it is pressed |
+| collapseLabel | `string` | no |  | Accessible name of the collapse button. Defaults to "Collapse <title>", or "Collapse panel" when there is no title |
 | onBack | `(() => void)` | no |  | Renders a back row above the heading and calls this when it is pressed; the drill-in navigation on small screens |
 | backLabel | `string` | no | `Back` | Label of the back row |
 | className | `string` | no | `` | Additional CSS classes |

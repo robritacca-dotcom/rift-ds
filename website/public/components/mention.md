@@ -25,7 +25,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | items | `MentionItem[]` | yes |  | The items to list, already filtered and ordered. |
 | activeId | `string` | no |  | The `id` of the highlighted item: the one Enter would choose. |
 | onActiveChange | `((id: string) => void)` | no |  | Fires with an item's `id` when the pointer moves onto it. |
-| onSelect | `((item: MentionItem) => void)` | no |  | Fires with the item a person chose. |
+| onSelect | `((item: MentionItem) => void)` | no |  | Fires with the item a person chose. Note: this replaces the native `onSelect` text-selection event, which MentionMenu does not expose. |
 | query | `string` | no | `` | The text typed so far. The part of each label that matches it is drawn stronger. |
 | label | `string` | no | `Suggestions` | Accessible name for the list. |
 | emptyText | `ReactNode` | no |  | Shown in place of the list when `items` is empty. Without it an empty menu renders nothing. |

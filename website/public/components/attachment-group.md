@@ -29,4 +29,6 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | label | `string` | no | `Attachments` | Accessible label for the list. |
 | showMoreLabel | `((hidden: number) => string)` | no | `(hidden) => `Show ${hidden} more`` | Builds the accessible label of the "+N" button from the hidden count. |
 | showLessLabel | `string` | no | `Show fewer` | Text of the collapse button under an expanded group. |
+| attachmentTileLabels | `Pick<AttachmentTileProps, "uploadingLabel" \| "errorLabel" \| "unavailableLabel" \| "progressLabel">` | no |  | The status lines and progress name every tile writes, merged over the tile's English defaults ("Uploading…", "Upload failed", "Unavailable"). |
+| attachmentViewerLabels | `Pick<AttachmentViewerProps, "closeLabel" \| "downloadLabel" \| "previousLabel" \| "nextLabel" \| "retryLabel" \| "noPreviewLabel" \| "failedLabel" \| "failedDescription" \| "formatPosition">` | no |  | The words the built-in viewer writes, merged over its English defaults: its buttons ("Download", "Close", "Previous file", "Next file", "Try again"), its fallback headlines and the position text ("2 of 5"). |
 | className | `string` | no | `` | Additional CSS classes |

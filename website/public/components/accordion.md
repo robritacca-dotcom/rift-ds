@@ -16,5 +16,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | --- | --- | --- | --- | --- |
 | items | `AccordionItem[]` | yes |  | List of accordion items |
 | multiple | `boolean` | no | `false` | Allow multiple items open at once |
-| defaultExpanded | `string[]` | no | `[]` | IDs of initially expanded items |
+| expanded | `string[]` | no |  | IDs of the expanded items, for a controlled accordion. Leave it undefined to let the component keep its own open state, seeded from `defaultExpanded`. |
+| defaultExpanded | `string[]` | no | `[]` | IDs of initially expanded items when the accordion is uncontrolled |
+| onExpandedChange | `((expanded: string[]) => void)` | no |  | Called with the IDs of the expanded items after the user opens or closes one |
 | className | `string` | no | `` | Additional CSS classes |

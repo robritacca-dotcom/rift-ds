@@ -14,7 +14,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| title | `string` | yes |  | The source name, e.g. "Design tokens quarterly". Truncates with an ellipsis when long. |
+| title | `string` | yes |  | The source name, e.g. "Design tokens quarterly". Truncates with an ellipsis when long. Note: this shadows the native `title` tooltip attribute, which SourceChip does not expose. |
 | index | `number` | no |  | Citation number, rendered as a leading numeral in its own small badge circle. Wins the leading slot over `logo` and `icon`. |
 | icon | `ReactNode` | no | `language` | The glyph for a source with neither a number nor a logo — a Material Symbol name (string) or custom element (ReactNode). Defaults to a globe, so the leading slot is never empty. |
 | href | `string` | no |  | Optional href — renders as an `<a>` instead of a `<span>`. |

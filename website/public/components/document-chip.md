@@ -1,5 +1,7 @@
 # Document chip
 
+**Deprecated.** Use `AttachmentTile` instead.
+
 A legacy one-row file reference, superseded by the attachment tile and kept for existing consumers.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
@@ -21,7 +23,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | progress | `number` | no |  | Upload progress, 0–100. While set, replaces the metadata line with a progress bar. |
 | error | `string` | no |  | Error message — replaces the metadata line and colours the tile with the error pair. |
 | size | `"default" \| "compact"` | no | `default` | Tile size. Compact drops the metadata line — name only — for dense composer rows. |
-| onClick | `(() => void)` | no |  | Click handler — presence makes the chip body (icon + text) an interactive button. |
+| onClick | `MouseEventHandler<HTMLButtonElement>` | no |  | Click handler — presence makes the chip body (icon + text) an interactive button. |
 | onRemove | `(() => void)` | no |  | Remove handler — renders a trailing close button. |
 | removeLabel | `string` | no | `Remove file` | Accessible label for the remove button. |
+| progressLabel | `((name: string) => string)` | no | `(fileName: string) => `Uploading ${fileName}`` | Accessible name of the upload progress bar, given the file name. Defaults to "Uploading <name>". |
 | className | `string` | no | `` | Additional CSS classes |

@@ -15,9 +15,12 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | tabs | `Tab[]` | yes |  | Array of tab definitions |
-| activeTab | `string` | yes |  | Currently active tab value |
-| onTabChange | `((value: string) => void)` | no |  | Callback when tab is selected |
+| value | `string` | no |  | Value of the selected tab, for a controlled set. Leave it undefined to let the component keep its own selection, seeded from `defaultValue`. |
+| defaultValue | `string` | no |  | Value of the tab selected on first render when the set is uncontrolled. Falls back to the first enabled tab. |
+| onValueChange | `((value: string) => void)` | no |  | Called with the value of the tab the user selects |
+| activeTab | `string` | no |  | Legacy name for `value`. Deprecated: Use `value` instead. |
+| onTabChange | `((value: string) => void)` | no |  | Legacy change callback; fires alongside `onValueChange`. Deprecated: Use `onValueChange` instead. |
 | size | `"default" \| "compact"` | no | `default` | Visual size |
 | fullWidth | `boolean` | no | `false` | Whether tabs fill the available width |
 | className | `string` | no | `` | Additional CSS classes |
-| ariaLabel | `string` | no | `Tabs` | Accessible label for the tab list |
+| ariaLabel | `string` | no |  | Legacy accessible-name prop for the tab list. Deprecated: Pass the native `aria-label` attribute instead. |

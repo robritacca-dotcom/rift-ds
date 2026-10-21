@@ -22,6 +22,8 @@ export interface ComponentPropApi {
 export interface ComponentExportApi {
   component: string;
   props: ComponentPropApi[];
+  /** Set when the component itself carries an @deprecated tag; the replacement guidance. */
+  deprecated?: string;
 }
 
 /** One public registry entry: a component, or the chat widget. */
@@ -40,6 +42,8 @@ export interface ComponentApiEntry {
   importPath: string;
   /** 'charts' modules need the optional recharts peer; 'main' modules never do; 'chat' is the widget's own subpath with its own peers. */
   barrel: 'main' | 'charts' | 'chat';
+  /** Set when the registry-named component is deprecated; the replacement guidance. */
+  deprecated?: string;
   exports: ComponentExportApi[];
 }
 
@@ -73,11 +77,23 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "false"
           },
           {
+            "name": "expanded",
+            "type": "string[]",
+            "required": false,
+            "description": "IDs of the expanded items, for a controlled accordion. Leave it undefined\nto let the component keep its own open state, seeded from\n`defaultExpanded`."
+          },
+          {
             "name": "defaultExpanded",
             "type": "string[]",
             "required": false,
-            "description": "IDs of initially expanded items",
+            "description": "IDs of initially expanded items when the accordion is uncontrolled",
             "defaultValue": "[]"
+          },
+          {
+            "name": "onExpandedChange",
+            "type": "((expanded: string[]) => void)",
+            "required": false,
+            "description": "Called with the IDs of the expanded items after the user opens or closes one"
           },
           {
             "name": "className",
@@ -114,7 +130,27 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "title",
             "type": "string",
             "required": false,
-            "description": "Header text. Left unset, it is computed from the steps —\n\"3 steps left\", or \"All steps complete\" once everything is done."
+            "description": "Header text. Left unset, it is computed from the steps —\n\"3 steps left\", or \"All steps complete\" once everything is done.\nNote: this shadows the native `title` tooltip attribute, which AgentPlan does not expose."
+          },
+          {
+            "name": "remainingLabel",
+            "type": "((remaining: number) => string)",
+            "required": false,
+            "description": "The computed header while steps remain, given how many are left.\nDefaults to \"1 step left\" or \"N steps left\". Ignored when `title` is set.",
+            "defaultValue": "(remaining: number) =>\n  `${remaining} step${remaining === 1 ? '' : 's'} left`"
+          },
+          {
+            "name": "completeLabel",
+            "type": "string",
+            "required": false,
+            "description": "The computed header once every step is complete. Defaults to\n\"All steps complete\". Ignored when `title` is set.",
+            "defaultValue": "All steps complete"
+          },
+          {
+            "name": "statusLabels",
+            "type": "Partial<Record<AgentPlanStepStatus, string>>",
+            "required": false,
+            "description": "Visually hidden text announcing each step's status after its label.\nMerged over the English defaults (Not started, In progress, Completed, Failed)."
           },
           {
             "name": "open",
@@ -173,16 +209,30 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "The rail's tabs, in display order. Each carries its own pane."
           },
           {
+            "name": "value",
+            "type": "string",
+            "required": false,
+            "description": "Id of the tab on stage. The rail is fully controlled by design, so the\nhost owns the state: it holds no hooks and renders from a Server Component.\nFalls back to the first tab."
+          },
+          {
+            "name": "onValueChange",
+            "type": "((id: string) => void)",
+            "required": false,
+            "description": "Fires with the chosen tab's id."
+          },
+          {
             "name": "activeTab",
             "type": "string",
-            "required": true,
-            "description": "Id of the tab on stage. The rail is controlled, so the host owns the state."
+            "required": false,
+            "description": "Legacy name for `value`.",
+            "deprecated": "Use `value` instead."
           },
           {
             "name": "onTabChange",
             "type": "((id: string) => void)",
             "required": false,
-            "description": "Fires with the chosen tab's id."
+            "description": "Legacy change callback; fires alongside `onValueChange`.",
+            "deprecated": "Use `onValueChange` instead."
           },
           {
             "name": "tabsLabel",
@@ -195,7 +245,8 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "ariaLabel",
             "type": "string",
             "required": false,
-            "description": "Accessible name for the rail itself."
+            "description": "Legacy accessible-name prop for the rail.",
+            "deprecated": "Pass the native `aria-label` attribute instead."
           },
           {
             "name": "onCollapse",
@@ -397,6 +448,27 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Fires with the tapped summary suggestion's `id`."
           },
           {
+            "name": "summaryRegionLabel",
+            "type": "((title: string) => string)",
+            "required": false,
+            "description": "Accessible name of the summary panel, given the summary's title. Defaults to \"Summary: \" followed by the title.",
+            "defaultValue": "(title: string) => `Summary: ${title}`"
+          },
+          {
+            "name": "dismissLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the summary panel's dismiss button.",
+            "defaultValue": "Dismiss summary"
+          },
+          {
+            "name": "suggestionsLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the summary panel's group of prompt chips.",
+            "defaultValue": "Suggested prompts"
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -425,7 +497,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "title",
             "type": "string",
             "required": false,
-            "description": "Alert title text"
+            "description": "Alert title text.\nNote: this shadows the native `title` tooltip attribute, which Alert does not expose."
           },
           {
             "name": "description",
@@ -465,6 +537,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "(() => void)",
             "required": false,
             "description": "Callback when dismiss button is clicked"
+          },
+          {
+            "name": "dismissLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name for the dismiss button",
+            "defaultValue": "Dismiss alert"
           },
           {
             "name": "className",
@@ -507,7 +586,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "title",
             "type": "string",
             "required": true,
-            "description": "Dialog title"
+            "description": "Dialog title, rendered as the heading that names the dialog. Replaces the\nnative `title` tooltip attribute."
           },
           {
             "name": "description",
@@ -558,7 +637,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "className",
             "type": "string",
             "required": false,
-            "description": "Additional CSS classes",
+            "description": "Additional CSS classes on the overlay container (the ref and native attributes go on the panel)",
             "defaultValue": ""
           }
         ]
@@ -596,7 +675,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "title",
             "type": "string",
             "required": false,
-            "description": "Header text above the list; pass an empty string to render no header",
+            "description": "Header text above the list; pass an empty string to render no header.\nNote: this shadows the native `title` tooltip attribute, which AnchorNav does not expose.",
             "defaultValue": "On this page"
           },
           {
@@ -920,6 +999,48 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Below the mobile breakpoint the rail hides and this fixed hamburger\nbutton opens it as an overlay drawer instead. Set false when the\nhost renders its own trigger in the page chrome.",
             "defaultValue": "true"
+          },
+          {
+            "name": "openLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the mobile hamburger trigger that opens the drawer",
+            "defaultValue": "Open navigation"
+          },
+          {
+            "name": "closeLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the toggle when it closes the mobile drawer",
+            "defaultValue": "Close navigation"
+          },
+          {
+            "name": "expandLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the toggle (and the collapsed logo) when it expands the rail",
+            "defaultValue": "Expand sidebar"
+          },
+          {
+            "name": "collapseLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the toggle when it collapses the rail",
+            "defaultValue": "Collapse sidebar"
+          },
+          {
+            "name": "profileMoreLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the profile block's more button",
+            "defaultValue": "Profile options"
+          },
+          {
+            "name": "menuLabel",
+            "type": "string",
+            "required": false,
+            "description": "Back-button text in the mobile drawer's drill-in when the open level\nhas no parent row to name (a top-level item opened with `subNav=\"panel\"`)",
+            "defaultValue": "Menu"
           }
         ]
       }
@@ -932,7 +1053,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "slug": "area-chart",
     "category": "charts",
     "description": "Filled area chart for showing volume over time, with stacked and single-series variants.",
-    "client": false,
+    "client": true,
     "importPath": "rift-ds/components/Chart/AreaChart",
     "barrel": "charts",
     "exports": [
@@ -969,7 +1090,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "title",
             "type": "string",
             "required": false,
-            "description": "Chart title"
+            "description": "Chart title, in the shared chart header; it also names the figure.\nNote: this replaces the native `title` tooltip attribute, which the chart does not expose."
           },
           {
             "name": "subtitle",
@@ -1227,6 +1348,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "Close the artifact"
           },
           {
+            "name": "codeBlockLabels",
+            "type": "Pick<CodeBlockProps, \"codeLabel\" | \"copyLabel\" | \"copyText\" | \"copiedLabel\">",
+            "required": false,
+            "description": "The words the code view's CodeBlock writes, merged over its English defaults: the copy button's name and text (\"Copy code\", \"Copy\", \"Copied\") and the code region's name (\"Code: <language>\")."
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -1414,6 +1541,18 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "Show fewer"
           },
           {
+            "name": "attachmentTileLabels",
+            "type": "Pick<AttachmentTileProps, \"uploadingLabel\" | \"errorLabel\" | \"unavailableLabel\" | \"progressLabel\">",
+            "required": false,
+            "description": "The status lines and progress name every tile writes, merged over the tile's English defaults (\"Uploading…\", \"Upload failed\", \"Unavailable\")."
+          },
+          {
+            "name": "attachmentViewerLabels",
+            "type": "Pick<AttachmentViewerProps, \"closeLabel\" | \"downloadLabel\" | \"previousLabel\" | \"nextLabel\" | \"retryLabel\" | \"noPreviewLabel\" | \"failedLabel\" | \"failedDescription\" | \"formatPosition\">",
+            "required": false,
+            "description": "The words the built-in viewer writes, merged over its English defaults: its buttons (\"Download\", \"Close\", \"Previous file\", \"Next file\", \"Try again\"), its fallback headlines and the position text (\"2 of 5\")."
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -1551,6 +1690,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible label for the remove button. Defaults to \"Remove\" and the file name."
+          },
+          {
+            "name": "progressLabel",
+            "type": "((name: string) => string)",
+            "required": false,
+            "description": "Accessible name of the upload progress spinner while `uploading`, given the file name. Defaults to \"Uploading\" followed by the name.",
+            "defaultValue": "(fileName: string) => `Uploading ${fileName}`"
           },
           {
             "name": "className",
@@ -1736,7 +1882,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "alt",
             "type": "string",
             "required": false,
-            "description": "Alt text for the image"
+            "description": "Alt text for the image, also the avatar's accessible name. A passed `aria-label` takes precedence."
           },
           {
             "name": "name",
@@ -1756,6 +1902,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"online\" | \"away\" | \"offline\" | \"busy\"",
             "required": false,
             "description": "Online status indicator"
+          },
+          {
+            "name": "statusLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name for the status dot. Defaults to the `status` value itself (e.g. \"online\")."
           },
           {
             "name": "className",
@@ -1804,9 +1956,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "overflowLabel",
-            "type": "string",
+            "type": "string | ((count: number) => string)",
             "required": false,
-            "description": "Accessible label for the overflow counter. Defaults to \"N more\" —\noverride it to localise or add context, e.g. \"4 more reviewers\"."
+            "description": "Accessible label for the overflow counter. Defaults to \"N more\" (for\nexample \"4 more\"), with N the number of hidden avatars. Pass a function\ngiven that count to localise or add context, e.g.\n`(count) => \\`${count} more reviewers\\``; a plain string replaces the\nlabel outright, whatever the count."
           },
           {
             "name": "className",
@@ -1916,6 +2068,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Callback when the dismiss button is clicked"
           },
           {
+            "name": "dismissLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the dismiss button.",
+            "defaultValue": "Dismiss banner"
+          },
+          {
             "name": "align",
             "type": "\"center\" | \"start\"",
             "required": false,
@@ -1940,7 +2099,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "slug": "bar-chart",
     "category": "charts",
     "description": "Vertical bars for comparing values across categories or time, with summary stats and tooltips.",
-    "client": false,
+    "client": true,
     "importPath": "rift-ds/components/Chart/BarChart",
     "barrel": "charts",
     "exports": [
@@ -1978,7 +2137,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "title",
             "type": "string",
             "required": false,
-            "description": "Chart title"
+            "description": "Chart title, in the shared chart header; it also names the figure.\nNote: this replaces the native `title` tooltip attribute, which the chart does not expose."
           },
           {
             "name": "subtitle",
@@ -2051,7 +2210,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "headingLevel",
-            "type": "4 | 2 | 5 | 3 | 6",
+            "type": "2 | 4 | 5 | 3 | 6",
             "required": false,
             "description": "The heading level the title renders at, to fit the page's outline. Never `1`: a tile is never the page's top heading.",
             "defaultValue": "3"
@@ -2065,7 +2224,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "highlight",
-            "type": "4 | 2 | 1 | 5 | 3 | 6",
+            "type": "1 | 2 | 4 | 5 | 3 | 6",
             "required": false,
             "description": "Which of the six shader pairs the tile wears: pair N is ambient colour N\nwith texture N. Unset, tiles rotate through the set by their position\namong their siblings, so a grid of shader tiles comes out told apart."
           },
@@ -2229,6 +2388,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "Tabs"
           },
           {
+            "name": "badgeLabel",
+            "type": "((badge: string | number | true) => string)",
+            "required": false,
+            "description": "Visually hidden text read after a destination's label when it carries a\nbadge, given the item's `badge`. Defaults to \", new\" for a dot (`true`)\nand \", 3 new\" for a count; the leading comma and space are part of the text.",
+            "defaultValue": "(badge: number | string | true) =>\n  badge === true ? ', new' : `, ${badge} new`"
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -2276,7 +2442,8 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "ariaLabel",
             "type": "string",
             "required": false,
-            "description": "Accessible name for the nav landmark. Override when more than one\nBreadcrumb can appear on a page — identically-named landmarks are\nindistinguishable to assistive technology."
+            "description": "Legacy accessible-name prop for the nav landmark.",
+            "deprecated": "Pass the native `aria-label` attribute instead."
           }
         ]
       }
@@ -2386,7 +2553,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "state",
-            "type": "\"default\" | \"disabled\" | \"hover\" | \"active\"",
+            "type": "\"active\" | \"default\" | \"disabled\" | \"hover\"",
             "required": false,
             "description": "Documentation-only interaction state.",
             "deprecated": "Use `disabled` for the disabled state.\n\nDocumentation-only affordance for rendering a *static* interaction state in\nStorybook and the showcase site. Real hover/active styling comes from CSS\npseudo-classes and needs no prop — for docs, prefer `className=\"ds-button--hover\"`."
@@ -2441,7 +2608,8 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "ariaLabel",
             "type": "string",
             "required": false,
-            "description": "Accessible label for the group"
+            "description": "Legacy accessible-name prop for the group.",
+            "deprecated": "Pass the native `aria-label` attribute instead."
           },
           {
             "name": "className",
@@ -2460,7 +2628,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Card",
     "slug": "card",
     "category": "data-display",
-    "description": "Card components for previews, navigation, and token documentation, from content cards to colour swatches and typography specimens.",
+    "description": "A titled preview tile for index grids, with a case-study variant carrying a cover, company logo and dek.",
     "client": true,
     "importPath": "rift-ds/components/Card/Card",
     "barrel": "main",
@@ -2621,6 +2789,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Accessible name for the stack, e.g. \"Open roles\"."
           },
           {
+            "name": "positionLabel",
+            "type": "((position: number, count: number) => string)",
+            "required": false,
+            "description": "Visually hidden status announcing the top card's place in the deck, given\nits 1-based position and the card count. Defaults to \"Card 2 of 5\".",
+            "defaultValue": "(position: number, total: number) => `Card ${position} of ${total}`"
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -2687,10 +2862,65 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "false"
           },
           {
+            "name": "slide",
+            "type": "number",
+            "required": false,
+            "description": "Index of the active slide (zero-based), for a controlled carousel. Leave\nit undefined to let the component keep its own position, seeded from\n`defaultSlide`."
+          },
+          {
+            "name": "defaultSlide",
+            "type": "number",
+            "required": false,
+            "description": "Index of the slide shown on first render when the carousel is uncontrolled (zero-based)",
+            "defaultValue": "0"
+          },
+          {
             "name": "onSlideChange",
             "type": "((index: number) => void)",
             "required": false,
-            "description": "Callback when active slide changes"
+            "description": "Called with the index of the slide being moved to"
+          },
+          {
+            "name": "previousLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the previous-slide arrow",
+            "defaultValue": "Previous slide"
+          },
+          {
+            "name": "nextLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the next-slide arrow",
+            "defaultValue": "Next slide"
+          },
+          {
+            "name": "slideLabel",
+            "type": "((position: number, count: number) => string)",
+            "required": false,
+            "description": "Accessible name of each slide, given its 1-based position and the slide count",
+            "defaultValue": "(position: number, count: number) => `Slide ${position} of ${count}`"
+          },
+          {
+            "name": "slideRoleDescription",
+            "type": "string",
+            "required": false,
+            "description": "Role description announced for each slide",
+            "defaultValue": "slide"
+          },
+          {
+            "name": "dotsLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the dot indicators' tab list",
+            "defaultValue": "Slide indicators"
+          },
+          {
+            "name": "dotLabel",
+            "type": "((position: number) => string)",
+            "required": false,
+            "description": "Accessible name of each dot indicator, given its slide's 1-based position",
+            "defaultValue": "(position: number) => `Go to slide ${position}`"
           },
           {
             "name": "className",
@@ -3009,7 +3239,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "checked",
             "type": "boolean",
             "required": false,
-            "description": "Whether the checkbox is checked",
+            "description": "Whether the checkbox is checked, controlled. Leave undefined to let the\ncheckbox keep its own state, seeded from `defaultChecked`."
+          },
+          {
+            "name": "defaultChecked",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the checkbox starts checked when uncontrolled (`checked` undefined).",
             "defaultValue": "false"
           },
           {
@@ -3108,7 +3344,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "values",
             "type": "string[]",
             "required": false,
-            "description": "Currently selected values",
+            "description": "Currently selected values, controlled. Leave undefined to let the group\nkeep its own selection, seeded from `defaultValues`."
+          },
+          {
+            "name": "defaultValues",
+            "type": "string[]",
+            "required": false,
+            "description": "Selected values on first render when uncontrolled (`values` undefined).",
             "defaultValue": "[]"
           },
           {
@@ -3204,9 +3446,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "onClick",
-            "type": "(() => void)",
+            "type": "MouseEventHandler<HTMLButtonElement>",
             "required": false,
-            "description": "Click handler — presence makes the chip an interactive <button>"
+            "description": "Click handler — presence makes the chip an interactive <button>. On a\nremovable chip it is attached to the main region's button rather than\nthe root span."
           },
           {
             "name": "onRemove",
@@ -3216,9 +3458,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "removeLabel",
-            "type": "string",
+            "type": "string | ((label: string) => string)",
             "required": false,
-            "description": "Accessible label for the remove button",
+            "description": "Accessible label for the remove button. Defaults to \"Remove\". Pass a\nfunction to name each chip's button after its own label, so a row of\nchips does not announce one name for every button: it is given the\nlabel's text (a rich label's text content), e.g.\n`(label) => \\`Remove ${label}\\``. A plain string is used as given.",
             "defaultValue": "Remove"
           },
           {
@@ -3279,7 +3521,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "state",
-            "type": "\"default\" | \"disabled\" | \"hover\" | \"active\"",
+            "type": "\"active\" | \"default\" | \"disabled\" | \"hover\"",
             "required": false,
             "description": "Documentation-only interaction state.",
             "deprecated": "Use `disabled` for the disabled state.\n\nDocumentation-only affordance for rendering a *static* interaction state in\nStorybook and the showcase site. Real hover/active styling comes from CSS\npseudo-classes and needs no prop — for docs, prefer\n`className=\"ds-circular-button--hover\"`."
@@ -3405,6 +3647,47 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "false"
           },
           {
+            "name": "copyLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name for the copy button before it is pressed",
+            "defaultValue": "Copy code"
+          },
+          {
+            "name": "copyText",
+            "type": "string",
+            "required": false,
+            "description": "Visible text on the copy button before it is pressed",
+            "defaultValue": "Copy"
+          },
+          {
+            "name": "copiedLabel",
+            "type": "string",
+            "required": false,
+            "description": "Text and accessible name the copy button shows once the code is copied",
+            "defaultValue": "Copied"
+          },
+          {
+            "name": "expandLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name for the collapse toggle while the code is collapsed",
+            "defaultValue": "Expand code"
+          },
+          {
+            "name": "collapseLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name for the collapse toggle while the code is showing",
+            "defaultValue": "Collapse code"
+          },
+          {
+            "name": "codeLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name for the scrollable code region. Defaults to\n\"Code: <filename>\", then \"Code: <language>\", then \"Code\"."
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -3447,6 +3730,26 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Show the old and new line number gutters",
             "defaultValue": "true"
+          },
+          {
+            "name": "diffLabel",
+            "type": "((filename?: string) => string)",
+            "required": false,
+            "description": "Accessible name for the scrolling diff region, given the `filename` when\nthere is one. Defaults to \"Code diff: <filename>\", or \"Code diff\" without one.",
+            "defaultValue": "(filename: string | undefined) =>\n  filename ? `Code diff: ${filename}` : 'Code diff'"
+          },
+          {
+            "name": "changeLabels",
+            "type": "Partial<CodeDiffChangeLabels>",
+            "required": false,
+            "description": "Visually hidden text announced before each changed line, so the change\ntype is not carried by colour and the marker alone. Merged over the\nEnglish defaults: `added` \"Added line:\", `removed` \"Removed line:\"."
+          },
+          {
+            "name": "statsLabel",
+            "type": "((additions: number, deletions: number) => string)",
+            "required": false,
+            "description": "The header's additions and deletions summary as a screen reader hears it,\ngiven both counts; the visible `+3 -1` is hidden from assistive technology.\nDefaults to \"3 added, 1 removed\".",
+            "defaultValue": "(additions: number, deletions: number) =>\n  `${additions} added, ${deletions} removed`"
           },
           {
             "name": "className",
@@ -3553,6 +3856,54 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "When set, a hidden `<input type=\"hidden\">` carries the current hex value\nunder this name so the picker participates in native form submission."
           },
           {
+            "name": "panelLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the open panel. Defaults to the field label followed by \"colour picker\", or \"Colour picker\" without a label."
+          },
+          {
+            "name": "saturationLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the saturation and brightness area.",
+            "defaultValue": "Saturation and brightness"
+          },
+          {
+            "name": "saturationValueText",
+            "type": "((saturation: number, brightness: number) => string)",
+            "required": false,
+            "description": "Spoken value of the saturation and brightness area, given both as whole percentages.",
+            "defaultValue": "(saturation: number, brightness: number) =>\n        `Saturation ${saturation}%, brightness ${brightness}%`"
+          },
+          {
+            "name": "hueLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the hue slider.",
+            "defaultValue": "Hue"
+          },
+          {
+            "name": "alphaLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the alpha slider, shown with `showAlpha`.",
+            "defaultValue": "Alpha"
+          },
+          {
+            "name": "hexLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the hex text field.",
+            "defaultValue": "Hex colour value"
+          },
+          {
+            "name": "triggerLabel",
+            "type": "((hex: string) => string)",
+            "required": false,
+            "description": "Accessible name of the swatch trigger when there is no visible `label`,\ngiven the current hex value. Defaults to \"Choose colour, \" followed by the\nhex (`Choose colour, #118AB2`). A passed `aria-label` still wins.",
+            "defaultValue": "(hex: string) => `Choose colour, ${hex}`"
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -3570,7 +3921,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "slug": "combo-chart",
     "category": "charts",
     "description": "Bar and line series in one chart, with an optional second y-axis for pairs in different units, like spend and ROAS.",
-    "client": false,
+    "client": true,
     "importPath": "rift-ds/components/Chart/ComboChart",
     "barrel": "charts",
     "exports": [
@@ -3637,7 +3988,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "title",
             "type": "string",
             "required": false,
-            "description": "Chart title"
+            "description": "Chart title, in the shared chart header; it also names the figure.\nNote: this replaces the native `title` tooltip attribute, which the chart does not expose."
           },
           {
             "name": "subtitle",
@@ -3707,7 +4058,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "value",
             "type": "string | string[]",
             "required": false,
-            "description": "Selected value — a `string` in single mode, `string[]` when `multiple`\nis set. Leave undefined for an empty selection."
+            "description": "Selected value, controlled — a `string` in single mode, `string[]` when\n`multiple` is set. Leave undefined to let the combobox keep its own\nselection, seeded from `defaultValue`."
+          },
+          {
+            "name": "defaultValue",
+            "type": "string | string[]",
+            "required": false,
+            "description": "Selection on first render when uncontrolled (`value` undefined) — a\n`string` in single mode, `string[]` when `multiple` is set. Omitted, the\nselection starts empty."
           },
           {
             "name": "options",
@@ -3777,11 +4134,32 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "No results found"
           },
           {
+            "name": "loadingMessage",
+            "type": "string",
+            "required": false,
+            "description": "Status text shown in the menu while `loading` is set. Defaults to \"Loading…\".",
+            "defaultValue": "Loading…"
+          },
+          {
             "name": "clearable",
             "type": "boolean",
             "required": false,
             "description": "Show a clear button once something is selected",
             "defaultValue": "false"
+          },
+          {
+            "name": "clearLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the clear button. Defaults to \"Clear selection\".",
+            "defaultValue": "Clear selection"
+          },
+          {
+            "name": "removeLabel",
+            "type": "((label: string) => string)",
+            "required": false,
+            "description": "Accessible name of a chip's remove button in `multiple` mode, given the\noption's label. Defaults to \"Remove <label>\".",
+            "defaultValue": "(optionLabel) => `Remove ${optionLabel}`"
           },
           {
             "name": "onValueChange",
@@ -3827,7 +4205,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "name",
             "type": "string",
             "required": false,
-            "description": "Used only as a fallback for deriving the element id (`id || name || generated`).\n\nNote: Combobox renders a `<div>` wrapper around a text input, not a native\n`<select>`, so `name` does **not** make the selection participate in native\nform submission."
+            "description": "Form field name. When set, the selection submits with an enclosing form\nunder this name through hidden inputs: the selected option's `value` in\nsingle mode (nothing until one is chosen), one entry per selected value in\n`multiple` mode, nothing while disabled. The search text the user types\nis never submitted. Also the fallback for the element id (`id || name || generated`)."
           }
         ]
       }
@@ -3887,6 +4265,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "false"
           },
           {
+            "name": "loadingMessage",
+            "type": "string",
+            "required": false,
+            "description": "Status text shown in place of results while `loading` is set. Defaults to \"Loading…\".",
+            "defaultValue": "Loading…"
+          },
+          {
             "name": "hotkey",
             "type": "boolean",
             "required": false,
@@ -3897,7 +4282,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "onSelect",
             "type": "((command: CommandPaletteCommand) => void)",
             "required": false,
-            "description": "Called with the chosen command, after its own `onSelect`"
+            "description": "Called with the chosen command, after its own `onSelect`. Replaces the\nnative `onSelect` (text-selection) handler on the panel."
           },
           {
             "name": "onSearchChange",
@@ -3920,10 +4305,23 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "false"
           },
           {
+            "name": "hintLabels",
+            "type": "{ navigate?: string; select?: string; close?: string | undefined; escapeKey?: string | undefined; } | undefined",
+            "required": false,
+            "description": "The words in the hint row, merged over the English defaults: the text\nbeside each key (\"to navigate\", \"to select\", \"to close\") and `escapeKey`,\nthe visible name on the Escape key cap (\"esc\")."
+          },
+          {
+            "name": "closeLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the close button",
+            "defaultValue": "Close command palette"
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
-            "description": "Additional CSS classes",
+            "description": "Additional CSS classes on the overlay container (the ref and native attributes go on the panel)",
             "defaultValue": ""
           }
         ]
@@ -4092,8 +4490,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "Attachments"
           },
           {
+            "name": "attachmentTileLabels",
+            "type": "(Pick<AttachmentTileProps, \"uploadingLabel\" | \"errorLabel\" | \"unavailableLabel\" | \"progressLabel\"> & { removeLabel?: ((name: string) => string); })",
+            "required": false,
+            "description": "The words each queued file's tile writes, merged over the tile's English\ndefaults: its status lines (\"Uploading…\", \"Upload failed\", \"Unavailable\"),\nits progress spinner's name, and its remove button's name, which is given\nthe file name and defaults to \"Remove\" followed by it."
+          },
+          {
             "name": "formatFileAnnouncement",
-            "type": "((change: { type: \"added\" | \"removed\" | \"failed\"; names: string[]; }) => string)",
+            "type": "((change: { type: \"failed\" | \"added\" | \"removed\"; names: string[]; }) => string)",
             "required": false,
             "description": "Builds the sentence announced to assistive technology when files join\nthe queue, leave it, or fail.",
             "defaultValue": "({\n  type,\n  names,\n}: {\n  type: 'added' | 'removed' | 'failed';\n  names: string[];\n}) => {\n  const list = names.join(', ');\n  if (type === 'added') return `Attached ${list}`;\n  if (type === 'removed') return `Removed ${list}`;\n  return `Could not attach ${list}`;\n}"
@@ -4223,21 +4627,27 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "copyable",
             "type": "boolean",
             "required": false,
-            "description": "Renders a copy-to-clipboard button; fires onCopy(value) when clicked",
+            "description": "Renders a copy button beside the trailing icon. Pressing it calls\n`onCopy(value)`; ContactCard never writes to the clipboard itself.",
             "defaultValue": "false"
           },
           {
             "name": "onCopy",
             "type": "((value: string) => void)",
             "required": false,
-            "description": "Called with the card's value when the copy button is clicked"
+            "description": "Called with the card's value when the copy control is pressed: the copy\nbutton, or the whole card when `copyOnClick` is set. ContactCard does not\ntouch the clipboard, so write the value there in this handler.\nNote: this replaces the native `onCopy` clipboard-event handler, which\nContactCard does not expose."
           },
           {
             "name": "copyOnClick",
             "type": "boolean",
             "required": false,
-            "description": "Renders the whole card as a button that copies `value` on click — no navigation",
+            "description": "Renders the whole card as a button that calls `onCopy(value)` on click,\nwith no navigation. The copying itself is the `onCopy` handler's job.",
             "defaultValue": "false"
+          },
+          {
+            "name": "copyLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name for the copy control: the copy button, or the whole card\nwhen `copyOnClick` is set. Defaults to \"Copy <value>\", and to\n\"Copy <value> to clipboard\" on a `copyOnClick` card; both defaults assume\nyour `onCopy` writes the value to the clipboard."
           },
           {
             "name": "className",
@@ -4324,7 +4734,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "title",
             "type": "string",
             "required": false,
-            "description": "Chart title, in the shared chart header."
+            "description": "Chart title, in the shared chart header.\nNote: this replaces the native `title` tooltip attribute, which the graph does not expose."
           },
           {
             "name": "subtitle",
@@ -4358,6 +4768,45 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Show the Less → More legend under the grid",
             "defaultValue": "true"
+          },
+          {
+            "name": "gridLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name for the grid of day cells, which renders as one image. Falls back to `caption`, then to \"Contribution activity\"."
+          },
+          {
+            "name": "lessLabel",
+            "type": "string",
+            "required": false,
+            "description": "The legend's low-end word. Defaults to \"Less\".",
+            "defaultValue": "Less"
+          },
+          {
+            "name": "moreLabel",
+            "type": "string",
+            "required": false,
+            "description": "The legend's high-end word. Defaults to \"More\".",
+            "defaultValue": "More"
+          },
+          {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the dates are written in: the default month labels\nabove the grid (\"Jan\" to \"Dec\" in `en-US`) and the date in each cell's\ndefault tooltip (\"Jul 8, 2026\"). Defaults to `en-US`.",
+            "defaultValue": "en-US"
+          },
+          {
+            "name": "monthLabels",
+            "type": "string[]",
+            "required": false,
+            "description": "The month labels above the grid: twelve entries, January first.\nDefaults to the short month names in `locale` (\"Jan\" to \"Dec\" in\n`en-US`); a list of any other length falls back to the default."
+          },
+          {
+            "name": "cellLabel",
+            "type": "((count: number, date: Date) => string)",
+            "required": false,
+            "description": "A day cell's tooltip, given its count and date. Defaults to \"No\ncontributions\", \"1 contribution\" or \"N contributions\", then \"on\" and the\ndate in `locale`'s short form (e.g. \"Jul 8, 2026\")."
           },
           {
             "name": "className",
@@ -4490,6 +4939,53 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "ReactNode",
             "required": false,
             "description": "What to render when no rows match — defaults to a built-in empty state."
+          },
+          {
+            "name": "selectAllLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the select-all checkbox in the header, shown with `selectable`.",
+            "defaultValue": "Select all rows on this page"
+          },
+          {
+            "name": "selectRowLabel",
+            "type": "((row: DataTableRow) => string)",
+            "required": false,
+            "description": "Accessible name of a row's checkbox, given the row. Defaults to \"Select row\" followed by the row id.",
+            "defaultValue": "(row: DataTableRow) => `Select row ${row.id}`"
+          },
+          {
+            "name": "sortLabel",
+            "type": "((header: string, direction: \"desc\" | \"asc\" | null) => string)",
+            "required": false,
+            "description": "Accessible name of a sortable header, given the column's header text (its\n`key` when the header is not a string) and its current sort direction,\n`null` when unsorted. Defaults to \"Sort by\" with the header and the state.",
+            "defaultValue": "(header: string, direction: DataTableSort['direction'] | null) =>\n        `Sort by ${header}, ${\n          direction === null\n            ? 'not sorted'\n            : direction === 'asc'\n              ? 'sorted ascending'\n              : 'sorted descending'\n        }`"
+          },
+          {
+            "name": "resultsLabel",
+            "type": "((count: number) => string)",
+            "required": false,
+            "description": "Footer count of the rows that match, given the count. Defaults to \"1 result\" or \"N results\".",
+            "defaultValue": "(count: number) => `${count} result${count === 1 ? '' : 's'}`"
+          },
+          {
+            "name": "selectedLabel",
+            "type": "((count: number) => string)",
+            "required": false,
+            "description": "Footer count shown instead of the results while rows are selected, given the count. Defaults to \"N selected\".",
+            "defaultValue": "(count: number) => `${count} selected`"
+          },
+          {
+            "name": "paginationLabels",
+            "type": "Pick<PaginationProps, \"aria-label\" | \"previousLabel\" | \"nextLabel\" | \"readoutLabel\">",
+            "required": false,
+            "description": "The built-in pager's words, merged over its English defaults: the arrows'\nnames (\"Previous page\", \"Next page\"), the readout (\"Page 2 of 4\") and the\nlandmark's name (\"Pagination\"). The pager is always the compact size, so\nits numbered-page names never render and are not offered here."
+          },
+          {
+            "name": "emptyStateLabels",
+            "type": "Partial<Pick<EmptyStateProps, \"title\" | \"description\">>",
+            "required": false,
+            "description": "The built-in empty state's words, merged over its English defaults\n(\"No matching rows\", \"Adjust the search or filters and try again.\").\nIgnored when `emptyState` replaces the whole node."
           },
           {
             "name": "className",
@@ -4637,6 +5133,46 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Callback when a date is selected"
           },
           {
+            "name": "previousLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the previous-month button.",
+            "defaultValue": "Previous month"
+          },
+          {
+            "name": "nextLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the next-month button.",
+            "defaultValue": "Next month"
+          },
+          {
+            "name": "monthLabel",
+            "type": "((month: Date) => string)",
+            "required": false,
+            "description": "The month heading, given the first day of the month in view: the visible\ntitle, the name of the day grid, and the text announced on navigation.\nDefaults to the English month name and the year.",
+            "defaultValue": "(month: Date): string =>\n  `${MONTHS[month.getMonth()]} ${month.getFullYear()}`"
+          },
+          {
+            "name": "dayLabel",
+            "type": "((date: Date, selected: boolean) => string)",
+            "required": false,
+            "description": "Accessible name of a day button, given its date and whether it is selected. Defaults to the full date in the user's locale, with \", selected\" appended when selected.",
+            "defaultValue": "(date: Date, selected: boolean): string =>\n  `${date.toLocaleDateString(undefined, {\n    weekday: 'long',\n    year: 'numeric',\n    month: 'long',\n    day: 'numeric',\n  })}${selected ? ', selected' : ''}`"
+          },
+          {
+            "name": "weekdayLabels",
+            "type": "string[]",
+            "required": false,
+            "description": "The visible weekday column headers: seven entries, Sunday first.\nDefaults to the English two-letter abbreviations (\"Su\" to \"Sa\"); a list\nof any other length falls back to the default."
+          },
+          {
+            "name": "weekdayNames",
+            "type": "string[]",
+            "required": false,
+            "description": "The weekday column headers' accessible names, read in full where the\nvisible header is abbreviated: seven entries, Sunday first. Defaults to\nthe English weekday names (\"Sunday\" to \"Saturday\"); a list of any other\nlength falls back to the default."
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -4712,6 +5248,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "true"
           },
           {
+            "name": "closeLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the close button.",
+            "defaultValue": "Close dialog"
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -4784,6 +5327,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "client": false,
     "importPath": "rift-ds/components/DocumentChip/DocumentChip",
     "barrel": "main",
+    "deprecated": "Use `AttachmentTile` instead.",
     "exports": [
       {
         "component": "DocumentChip",
@@ -4834,7 +5378,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "onClick",
-            "type": "(() => void)",
+            "type": "MouseEventHandler<HTMLButtonElement>",
             "required": false,
             "description": "Click handler — presence makes the chip body (icon + text) an interactive button."
           },
@@ -4852,13 +5396,21 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "Remove file"
           },
           {
+            "name": "progressLabel",
+            "type": "((name: string) => string)",
+            "required": false,
+            "description": "Accessible name of the upload progress bar, given the file name. Defaults to \"Uploading <name>\".",
+            "defaultValue": "(fileName: string) => `Uploading ${fileName}`"
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
             "defaultValue": ""
           }
-        ]
+        ],
+        "deprecated": "Use `AttachmentTile` instead."
       }
     ]
   },
@@ -4934,6 +5486,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "true"
           },
           {
+            "name": "closeLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the close button.",
+            "defaultValue": "Close drawer"
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -4975,7 +5534,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "value",
             "type": "string",
             "required": false,
-            "description": "Currently selected value"
+            "description": "Currently selected value, controlled. Leave undefined to let the\ndropdown keep its own selection, seeded from `defaultValue`."
+          },
+          {
+            "name": "defaultValue",
+            "type": "string",
+            "required": false,
+            "description": "Selected value on first render when uncontrolled (`value` undefined)."
           },
           {
             "name": "options",
@@ -5101,10 +5666,29 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "default"
           },
           {
+            "name": "open",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the menu is open (controlled mode)"
+          },
+          {
+            "name": "defaultOpen",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the menu starts open when uncontrolled",
+            "defaultValue": "false"
+          },
+          {
+            "name": "onOpenChange",
+            "type": "((open: boolean) => void)",
+            "required": false,
+            "description": "Callback when the menu opens or closes"
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
-            "description": "Additional CSS classes",
+            "description": "Additional CSS classes on the root wrapper, which holds the trigger and the panel",
             "defaultValue": ""
           }
         ]
@@ -5135,7 +5719,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "title",
             "type": "string",
             "required": true,
-            "description": "Short headline describing the empty condition"
+            "description": "Short headline describing the empty condition.\nNote: this shadows the native `title` tooltip attribute, which EmptyState does not expose."
           },
           {
             "name": "description",
@@ -5294,6 +5878,47 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Trailing header slot, e.g. a \"New event\" Button."
           },
           {
+            "name": "previousLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the previous-month button.",
+            "defaultValue": "Previous month"
+          },
+          {
+            "name": "nextLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the next-month button.",
+            "defaultValue": "Next month"
+          },
+          {
+            "name": "monthLabel",
+            "type": "((month: Date) => string)",
+            "required": false,
+            "description": "The month heading, given the first day of the month in view: the visible\ntitle and the name of the day grid. Defaults to the English month name\nand the year.",
+            "defaultValue": "(month: Date): string =>\n  `${MONTHS[month.getMonth()]} ${month.getFullYear()}`"
+          },
+          {
+            "name": "overflowLabel",
+            "type": "((count: number, date: Date) => string)",
+            "required": false,
+            "description": "Accessible name of a day's \"+N more\" overflow button, given the number of\nhidden events and the day. Defaults to \"N more events\" followed by the\nfull date in the user's locale.",
+            "defaultValue": "(count: number, date: Date): string =>\n  `${count} more event${count === 1 ? '' : 's'}, ${formatDayLabel(date)}`"
+          },
+          {
+            "name": "moreLabel",
+            "type": "((count: number) => string)",
+            "required": false,
+            "description": "The visible text of a day's overflow row, given the number of hidden\nevents. Defaults to \"+N more\". The row's accessible name is\n`overflowLabel` when it is a button.",
+            "defaultValue": "(count: number): string => `+${count} more`"
+          },
+          {
+            "name": "weekdayLabels",
+            "type": "string[]",
+            "required": false,
+            "description": "The weekday headers above the grid: seven entries, Sunday first.\nDefaults to the English three-letter abbreviations (\"Sun\" to \"Sat\"); a\nlist of any other length falls back to the default."
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -5422,9 +6047,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "onClick",
-            "type": "(() => void)",
+            "type": "MouseEventHandler<HTMLButtonElement>",
             "required": false,
-            "description": "Click handler (e.g. open a lightbox) — adds zoom affordance + keyboard support"
+            "description": "Click handler (e.g. open a lightbox) — adds zoom affordance + keyboard support.\nIt is attached to the zoom button wrapping the image, not to the\n`<figure>`, so it replaces the native `onClick` on the root."
           },
           {
             "name": "className",
@@ -5492,6 +6117,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Helper or error message displayed below the field"
           },
           {
+            "name": "acceptHint",
+            "type": "((accept: string) => string)",
+            "required": false,
+            "description": "Hint shown under the placeholder when `accept` is set, given the `accept` value. Defaults to \"Accepts\" followed by the value.",
+            "defaultValue": "(acceptValue: string) => `Accepts ${acceptValue}`"
+          },
+          {
             "name": "onFilesSelected",
             "type": "((files: File[]) => void)",
             "required": false,
@@ -5502,6 +6134,20 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "((id: string) => void)",
             "required": false,
             "description": "Called with the id of a file whose remove button was pressed"
+          },
+          {
+            "name": "progressLabel",
+            "type": "((name: string) => string)",
+            "required": false,
+            "description": "Accessible name of a listed file's progress bar, given the file name. Defaults to \"Uploading\" followed by the name.",
+            "defaultValue": "(fileName: string) => `Uploading ${fileName}`"
+          },
+          {
+            "name": "removeLabel",
+            "type": "((name: string) => string)",
+            "required": false,
+            "description": "Accessible name of a listed file's remove button, given the file name. Defaults to \"Remove\" followed by the name.",
+            "defaultValue": "(fileName: string) => `Remove ${fileName}`"
           },
           {
             "name": "className",
@@ -5567,6 +6213,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "Clear all"
           },
           {
+            "name": "clearFilterLabel",
+            "type": "((filterLabel: string) => string)",
+            "required": false,
+            "description": "Accessible name of an active filter's own clear button, given the filter's label. Defaults to \"Clear\" followed by the label.",
+            "defaultValue": "(filterLabel: string) => `Clear ${filterLabel}`"
+          },
+          {
             "name": "size",
             "type": "\"default\" | \"compact\"",
             "required": false,
@@ -5591,7 +6244,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "slug": "funnel-chart",
     "category": "charts",
     "description": "Ordered funnel stages as centred trapezoid bands, each sized by its share of the first stage.",
-    "client": false,
+    "client": true,
     "importPath": "rift-ds/components/FunnelChart/FunnelChart",
     "barrel": "charts",
     "exports": [
@@ -5608,7 +6261,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "title",
             "type": "string",
             "required": false,
-            "description": "Chart title, in the shared chart header."
+            "description": "Chart title, in the shared chart header.\nNote: this shadows the native `title` tooltip attribute, which FunnelChart does not expose."
           },
           {
             "name": "subtitle",
@@ -5636,6 +6289,20 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Shows each stage's name beside its band. Turn off when a legend under the chart already carries the names.",
             "defaultValue": "true"
+          },
+          {
+            "name": "summaryLabel",
+            "type": "((data: FunnelStage[]) => string)",
+            "required": false,
+            "description": "The chart's accessible name, summarising every stage, given `data` when it\nholds at least one stage. Defaults to \"Funnel: \" then each stage's label and\nreading (its `displayValue`, else the value in the reader's locale),\ncomma-separated, e.g. \"Funnel: Visits 12,400, Sign-ups 3,100\".",
+            "defaultValue": "(data: FunnelStage[]) =>\n  `Funnel: ${data\n    .map((stage) => `${stage.label} ${stage.displayValue ?? stage.value.toLocaleString()}`)\n    .join(', ')}`"
+          },
+          {
+            "name": "emptyLabel",
+            "type": "string",
+            "required": false,
+            "description": "The chart's accessible name when `data` is empty. Defaults to \"Funnel, no data\".",
+            "defaultValue": "Funnel, no data"
           },
           {
             "name": "minStageShare",
@@ -5686,7 +6353,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "range",
             "type": "{ start: string; end: string; }",
             "required": false,
-            "description": "Explicit timeline window (YYYY-MM-DD both ends). Without it the range fits the data, snapped outward to whole months."
+            "description": "Explicit timeline window (YYYY-MM-DD both ends). Without it the range fits the data. Either way the window snaps outward to whole months, so an explicit range starts on the first of its start month and runs to the end of its end month."
           },
           {
             "name": "showToday",
@@ -5724,7 +6391,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "title",
             "type": "string",
             "required": false,
-            "description": "Chart title, in the shared chart header."
+            "description": "Chart title, in the shared chart header.\nNote: this shadows the native `title` tooltip attribute, which GanttChart does not expose."
           },
           {
             "name": "subtitle",
@@ -5738,6 +6405,41 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface",
             "defaultValue": "false"
+          },
+          {
+            "name": "todayLabel",
+            "type": "string",
+            "required": false,
+            "description": "The visible label on the today rule. Defaults to \"Today\".",
+            "defaultValue": "Today"
+          },
+          {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the dates are written in: the month names on the axis\n(\"Jan 2026\", then \"Feb\"), and the days in each bar's and milestone's\ntooltip and accessible text (\"Mar 9, 2026\"). Defaults to `en-US`.",
+            "defaultValue": "en-US"
+          },
+          {
+            "name": "rangeLabel",
+            "type": "((start: string, end: string) => string)",
+            "required": false,
+            "description": "The span in a bar's tooltip and accessible text, given its first and last day already formatted in `locale`. Defaults to \"<start> to <end>\".",
+            "defaultValue": "(start: string, end: string) => `${start} to ${end}`"
+          },
+          {
+            "name": "progressLabel",
+            "type": "((percent: number) => string)",
+            "required": false,
+            "description": "The completion in a bar's tooltip and accessible text, given the rounded percentage. Defaults to \"<percent>% complete\".",
+            "defaultValue": "(percent: number) => `${percent}% complete`"
+          },
+          {
+            "name": "projectedLabel",
+            "type": "string",
+            "required": false,
+            "description": "The word a `projected` bar's tooltip and accessible text carries. Defaults to \"projected\".",
+            "defaultValue": "projected"
           },
           {
             "name": "className",
@@ -5820,7 +6522,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "title",
             "type": "string",
             "required": false,
-            "description": "Chart title, in the shared chart header."
+            "description": "Chart title, in the shared chart header.\nNote: this shadows the native `title` tooltip attribute, which Gauge does not expose."
           },
           {
             "name": "subtitle",
@@ -5945,13 +6647,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "onPointHover",
             "type": "((point: GlobePoint | null) => void)",
             "required": false,
-            "description": "Fires as the pointer enters a marker, and with `null` as it leaves."
+            "description": "Fires as the pointer enters a marker (or it takes focus), and with `null` as it leaves."
           },
           {
             "name": "onPointClick",
             "type": "((point: GlobePoint) => void)",
             "required": false,
-            "description": "Fires when a marker is clicked."
+            "description": "Fires when a marker is clicked, or activated with Enter or Space while\nfocused. Setting it makes the markers real buttons on a non-interactive\nglobe too."
           },
           {
             "name": "renderCallout",
@@ -5965,6 +6667,34 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Accessible name for the globe, e.g. \"Listening points across the\nnetwork\". The point and arc counts are appended for screen readers.",
             "defaultValue": "Globe"
+          },
+          {
+            "name": "pointsLabel",
+            "type": "((count: number) => string)",
+            "required": false,
+            "description": "The point count appended to the globe's accessible name, given the count. Defaults to \"<count> point\" or \"<count> points\".",
+            "defaultValue": "(count: number) => `${count} ${count === 1 ? 'point' : 'points'}`"
+          },
+          {
+            "name": "arcsLabel",
+            "type": "((count: number) => string)",
+            "required": false,
+            "description": "The arc count appended to the globe's accessible name, given the count. Defaults to \"<count> arc\" or \"<count> arcs\".",
+            "defaultValue": "(count: number) => `${count} ${count === 1 ? 'arc' : 'arcs'}`"
+          },
+          {
+            "name": "rotateHintLabel",
+            "type": "string",
+            "required": false,
+            "description": "The pointer and keyboard instructions appended to the accessible name while `interactive`.",
+            "defaultValue": "Drag to rotate, or use the arrow keys when focused."
+          },
+          {
+            "name": "roleDescription",
+            "type": "string",
+            "required": false,
+            "description": "What assistive technology calls the globe in place of its role, applied\nwhichever role it takes: `application` while `interactive`, `group` when\nonly `onPointClick` makes the markers buttons, and `img` otherwise.\nDefaults to \"globe\".",
+            "defaultValue": "globe"
           },
           {
             "name": "className",
@@ -6001,7 +6731,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "content",
             "type": "ReactNode",
             "required": true,
-            "description": "Panel content — arbitrary elements, unlike Tooltip's plain text. In running text inside a `<p>`, keep it phrasing-level (spans): a block element would end the paragraph mid-parse."
+            "description": "Panel content — arbitrary elements, unlike Tooltip's plain text. In running text inside a `<p>`, keep it phrasing-level (spans): a block element would end the paragraph mid-parse.\nNote: this shadows the native `content` attribute, which HoverCard does not expose."
           },
           {
             "name": "position",
@@ -6093,6 +6823,18 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Whether the corner labels render",
             "defaultValue": "true"
+          },
+          {
+            "name": "handleLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the divider handle. Defaults to the two corner labels joined as \"Before and After comparison\"."
+          },
+          {
+            "name": "handleValueText",
+            "type": "((position: number) => string)",
+            "required": false,
+            "description": "Spoken value of the divider handle, given its whole-percent position. Defaults to the percentage followed by the before label in lower case."
           },
           {
             "name": "position",
@@ -6320,7 +7062,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "value",
             "type": "string",
             "required": false,
-            "description": "Currently selected value."
+            "description": "Currently selected value, controlled. Leave undefined to let the\ndropdown keep its own selection, seeded from `defaultValue`."
+          },
+          {
+            "name": "defaultValue",
+            "type": "string",
+            "required": false,
+            "description": "Selected value on first render when uncontrolled (`value` undefined)."
           },
           {
             "name": "options",
@@ -6704,7 +7452,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "title",
             "type": "string",
             "required": false,
-            "description": "Instructions title"
+            "description": "Instructions title, rendered as a heading above the steps.\nNote: this shadows the native `title` tooltip attribute, which Instructions does not expose."
           },
           {
             "name": "steps",
@@ -6730,7 +7478,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "numbered",
             "type": "boolean",
             "required": false,
-            "description": "Whether to show step numbers instead of icons",
+            "description": "What a step without an `icon` shows in its badge: its number when true\n(the default), a small dot when false. A step's own `icon` always wins.",
             "defaultValue": "true"
           },
           {
@@ -6762,7 +7510,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "title",
             "type": "string",
             "required": true,
-            "description": "The question, e.g. \"Allow file edit?\"."
+            "description": "The question, e.g. \"Allow file edit?\".\nNote: this shadows the native `title` tooltip attribute, which InterruptCard does not expose."
           },
           {
             "name": "description",
@@ -6799,6 +7547,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Override the echoed text in the answered state (default: the chosen option's label)."
+          },
+          {
+            "name": "waitingLabel",
+            "type": "string",
+            "required": false,
+            "description": "Visually hidden status announced while the card waits for a decision. Defaults to \"Waiting for your decision\".",
+            "defaultValue": "Waiting for your decision"
           },
           {
             "name": "className",
@@ -6968,6 +7723,34 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Steps to the next item — the next chevron and the Right arrow key."
           },
           {
+            "name": "viewerLabel",
+            "type": "string",
+            "required": false,
+            "description": "The panel's accessible name when neither `alt` nor `caption` is set.",
+            "defaultValue": "Media viewer"
+          },
+          {
+            "name": "closeLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the close button.",
+            "defaultValue": "Close viewer"
+          },
+          {
+            "name": "previousLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the previous button, shown with `onPrev`.",
+            "defaultValue": "Previous"
+          },
+          {
+            "name": "nextLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the next button, shown with `onNext`.",
+            "defaultValue": "Next"
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -6985,7 +7768,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "slug": "line-chart",
     "category": "charts",
     "description": "Multi-series line chart for trends over time, with per-series colours and a summary row.",
-    "client": false,
+    "client": true,
     "importPath": "rift-ds/components/Chart/LineChart",
     "barrel": "charts",
     "exports": [
@@ -7015,7 +7798,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "title",
             "type": "string",
             "required": false,
-            "description": "Chart title"
+            "description": "Chart title, in the shared chart header; it also names the figure.\nNote: this replaces the native `title` tooltip attribute, which the chart does not expose."
           },
           {
             "name": "subtitle",
@@ -7235,7 +8018,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "onSelect",
             "type": "((item: MentionItem) => void)",
             "required": false,
-            "description": "Fires with the item a person chose."
+            "description": "Fires with the item a person chose.\nNote: this replaces the native `onSelect` text-selection event, which MentionMenu does not expose."
           },
           {
             "name": "query",
@@ -7354,7 +8137,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "title",
             "type": "string",
             "required": false,
-            "description": "Card heading."
+            "description": "Card heading.\nNote: this shadows the native `title` tooltip attribute, which MessageCard does not expose."
           },
           {
             "name": "description",
@@ -7442,7 +8225,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "label",
             "type": "string",
             "required": false,
-            "description": "Visible label naming what is measured, doubling as the accessible name"
+            "description": "Visible label naming what is measured, doubling as the meter's accessible\nname. A native `aria-label` takes precedence, and with neither the meter\nis announced as \"Level\"."
           },
           {
             "name": "showValue",
@@ -7521,6 +8304,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Fires with the newly selected model's value."
           },
           {
+            "name": "placeholder",
+            "type": "string",
+            "required": false,
+            "description": "Text the trigger shows when no model is selected, and the trigger's\naccessible name when no `aria-label` is passed. Defaults to \"Choose a model\".",
+            "defaultValue": "Choose a model"
+          },
+          {
             "name": "effort",
             "type": "string",
             "required": false,
@@ -7544,6 +8334,20 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "The effort levels on offer. Defaults to low, medium and high.",
             "defaultValue": "[\n  { label: 'Low', value: 'low' },\n  { label: 'Medium', value: 'medium' },\n  { label: 'High', value: 'high' },\n]"
+          },
+          {
+            "name": "listLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the model list in the open panel.",
+            "defaultValue": "Model"
+          },
+          {
+            "name": "effortLabel",
+            "type": "string",
+            "required": false,
+            "description": "Heading of the effort row, which is also the accessible name of its radio group.",
+            "defaultValue": "Effort"
           },
           {
             "name": "placement",
@@ -7677,6 +8481,20 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Fires when any link is clicked, alongside native navigation — e.g. to close the drawer that contains the list."
           },
           {
+            "name": "expandLabel",
+            "type": "((label: string) => string)",
+            "required": false,
+            "description": "Accessible name of a collapsed section's chevron toggle, given the row's label. Defaults to \"Expand <label>\".",
+            "defaultValue": "(label) => `Expand ${label}`"
+          },
+          {
+            "name": "collapseLabel",
+            "type": "((label: string) => string)",
+            "required": false,
+            "description": "Accessible name of an expanded section's chevron toggle, given the row's label. Defaults to \"Collapse <label>\".",
+            "defaultValue": "(label) => `Collapse ${label}`"
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -7705,7 +8523,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "title",
             "type": "string",
             "required": false,
-            "description": "Heading shown in the header.",
+            "description": "Heading shown in the header.\nNote: this shadows the native `title` tooltip attribute, which NotificationCenter does not expose.",
             "defaultValue": "Notifications"
           },
           {
@@ -7713,6 +8531,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "number",
             "required": false,
             "description": "How many notifications are unread, shown under the heading. Omit to hide the line."
+          },
+          {
+            "name": "unreadCountLabel",
+            "type": "((count: number) => string)",
+            "required": false,
+            "description": "Text of the unread line under the heading, given the count. Defaults to \"<count> unread\".",
+            "defaultValue": "(count) => `${count} unread`"
+          },
+          {
+            "name": "tabsLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the filter tablist. Defaults to \"<title> filters\"."
           },
           {
             "name": "onMarkAllRead",
@@ -7734,28 +8565,55 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Filter tabs under the header, each with an optional count."
           },
           {
+            "name": "value",
+            "type": "string",
+            "required": false,
+            "description": "Value of the active filter tab, for controlled use. Leave it undefined to\nlet the component keep its own selection, seeded from `defaultValue`."
+          },
+          {
+            "name": "defaultValue",
+            "type": "string",
+            "required": false,
+            "description": "Value of the tab active on first render when the tabs are uncontrolled.\nFalls back to the first tab."
+          },
+          {
+            "name": "onValueChange",
+            "type": "((value: string) => void)",
+            "required": false,
+            "description": "Fires with the newly selected tab's value."
+          },
+          {
             "name": "activeTab",
             "type": "string",
             "required": false,
-            "description": "Active tab value for controlled use. Pair with `onTabChange`."
+            "description": "Legacy name for `value`; `value` wins when both are set.",
+            "deprecated": "Use `value` instead."
           },
           {
             "name": "defaultTab",
             "type": "string",
             "required": false,
-            "description": "Initially active tab value for uncontrolled use. Defaults to the first tab."
+            "description": "Legacy name for `defaultValue`; `defaultValue` wins when both are set.",
+            "deprecated": "Use `defaultValue` instead."
           },
           {
             "name": "onTabChange",
             "type": "((value: string) => void)",
             "required": false,
-            "description": "Fires with the newly selected tab's value."
+            "description": "Legacy change callback; fires alongside `onValueChange`.",
+            "deprecated": "Use `onValueChange` instead."
           },
           {
             "name": "emptyState",
             "type": "ReactNode",
             "required": false,
             "description": "What to render when there are no children — defaults to a built-in empty state."
+          },
+          {
+            "name": "emptyStateLabels",
+            "type": "Partial<Pick<EmptyStateProps, \"title\" | \"description\">>",
+            "required": false,
+            "description": "The built-in empty state's copy, merged over the English defaults: title\n\"Nothing new\", description \"Notifications will collect here as they\narrive.\" Ignored when `emptyState` is set."
           },
           {
             "name": "className",
@@ -7778,9 +8636,8 @@ export const componentApi: readonly ComponentApiEntry[] = [
           {
             "name": "title",
             "type": "string",
-            "required": false,
-            "description": "One-line headline, e.g. who did what.",
-            "defaultValue": "Notifications"
+            "required": true,
+            "description": "One-line headline, e.g. who did what.\nNote: this shadows the native `title` tooltip attribute, which NotificationItem does not expose."
           },
           {
             "name": "time",
@@ -7794,6 +8651,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Marks the notification as not yet read: a dot beside the time and emphasised title.",
             "defaultValue": "false"
+          },
+          {
+            "name": "unreadLabel",
+            "type": "string",
+            "required": false,
+            "description": "Visually hidden text announcing the unread dot. Defaults to \"Unread\".",
+            "defaultValue": "Unread"
           },
           {
             "name": "media",
@@ -7902,6 +8766,20 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Convenience callback receiving the numeric value directly — `null` when\nthe field is empty or unparseable. Fires on typing alongside `onChange`\n(which keeps the standard React event signature so form libraries work\nunmodified) and also on stepper clicks, where no native change event exists."
           },
           {
+            "name": "decreaseLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the decrement stepper button. Defaults to \"Decrease value\".",
+            "defaultValue": "Decrease value"
+          },
+          {
+            "name": "increaseLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the increment stepper button. Defaults to \"Increase value\".",
+            "defaultValue": "Increase value"
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -7929,8 +8807,15 @@ export const componentApi: readonly ComponentApiEntry[] = [
           {
             "name": "page",
             "type": "number",
-            "required": true,
-            "description": "Current page (1-based)"
+            "required": false,
+            "description": "Current page (1-based), for a controlled pager. Leave it undefined to let\nthe component keep its own page, seeded from `defaultPage`."
+          },
+          {
+            "name": "defaultPage",
+            "type": "number",
+            "required": false,
+            "description": "Page shown on first render when the pager is uncontrolled (1-based)",
+            "defaultValue": "1"
           },
           {
             "name": "pageCount",
@@ -7940,9 +8825,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "onPageChange",
-            "type": "(page: number) => void",
-            "required": true,
-            "description": "Callback with the requested page"
+            "type": "((page: number) => void)",
+            "required": false,
+            "description": "Called with the page the user requests"
           },
           {
             "name": "siblingCount",
@@ -7962,8 +8847,36 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "ariaLabel",
             "type": "string",
             "required": false,
-            "description": "Accessible label for the nav landmark",
-            "defaultValue": "Pagination"
+            "description": "Legacy accessible-name prop for the nav landmark.",
+            "deprecated": "Pass the native `aria-label` attribute instead."
+          },
+          {
+            "name": "previousLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the previous-page arrow",
+            "defaultValue": "Previous page"
+          },
+          {
+            "name": "nextLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the next-page arrow",
+            "defaultValue": "Next page"
+          },
+          {
+            "name": "pageLabel",
+            "type": "((page: number) => string)",
+            "required": false,
+            "description": "Accessible name of a numbered page button, given its page number",
+            "defaultValue": "(page: number) => `Page ${page}`"
+          },
+          {
+            "name": "readoutLabel",
+            "type": "((page: number, pageCount: number) => string)",
+            "required": false,
+            "description": "Text of the compact size's readout, given the current page and the page count",
+            "defaultValue": "(page: number, pageCount: number) => `Page ${page} of ${pageCount}`"
           },
           {
             "name": "className",
@@ -8021,7 +8934,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "slug": "pie-chart",
     "category": "charts",
     "description": "Proportional share of a whole as a pie or donut, with per-slice colours.",
-    "client": false,
+    "client": true,
     "importPath": "rift-ds/components/Chart/PieChart",
     "barrel": "charts",
     "exports": [
@@ -8038,7 +8951,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "title",
             "type": "string",
             "required": false,
-            "description": "Chart title"
+            "description": "Chart title, in the shared chart header; it also names the figure.\nNote: this replaces the native `title` tooltip attribute, which the chart does not expose."
           },
           {
             "name": "subtitle",
@@ -8184,6 +9097,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "false"
           },
           {
+            "name": "cellLabel",
+            "type": "((position: number, count: number) => string)",
+            "required": false,
+            "description": "Accessible name of each cell, given its 1-based position and the cell count.\nDefaults to \"Digit <position> of <count>\" for the numeric format and\n\"Character <position> of <count>\" for alphanumeric."
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -8275,7 +9194,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "content",
             "type": "ReactNode",
             "required": true,
-            "description": "Popover content"
+            "description": "Popover content. Replaces the native `content` attribute, which only\nmeans something on a `<meta>` element."
           },
           {
             "name": "size",
@@ -8305,6 +9224,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Whether the popover is open (controlled mode)"
           },
           {
+            "name": "defaultOpen",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the popover starts open when uncontrolled",
+            "defaultValue": "false"
+          },
+          {
             "name": "onOpenChange",
             "type": "((open: boolean) => void)",
             "required": false,
@@ -8314,13 +9240,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "ariaLabel",
             "type": "string",
             "required": false,
-            "description": "Accessible label for the trigger"
+            "description": "Accessible label for the trigger and the panel; the panel is named \"Popover\" when it is omitted"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
-            "description": "Additional CSS classes for the popover panel",
+            "description": "Additional CSS classes for the popover's root wrapper, which holds the trigger and the panel",
             "defaultValue": ""
           }
         ]
@@ -8366,7 +9292,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "ariaLabel",
             "type": "string",
             "required": false,
-            "description": "Accessible label describing what is loading"
+            "description": "Accessible label describing what is loading. Defaults to \"Progress\"; a passed native `aria-label` works too."
           },
           {
             "name": "className",
@@ -8385,7 +9311,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Prompt suggestions",
     "slug": "prompt-suggestions",
     "category": "ai",
-    "description": "A horizontal row of tappable prompt suggestions to start or steer a conversation.",
+    "description": "Tappable prompt suggestions to start or steer a conversation, as a scrolling or wrapping row, a stack, tiles or cards.",
     "client": true,
     "importPath": "rift-ds/components/PromptSuggestions/PromptSuggestions",
     "barrel": "main",
@@ -8452,6 +9378,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "The `id` of the suggestion already taken. Set, the row becomes the\nrecord of that choice: the taken suggestion outlined solid in the\nstrongest ink, the rest faded behind a dashed line, and none of them\ntappable any more. The same treatment QuestionCard gives a pick. For a row that stays\non screen after use, such as the follow-ups under an earlier answer."
+          },
+          {
+            "name": "chosenLabel",
+            "type": "string",
+            "required": false,
+            "description": "Visually hidden text read after the taken suggestion once `value` is set. Defaults to \"(chosen)\".",
+            "defaultValue": "(chosen)"
           },
           {
             "name": "ariaLabel",
@@ -8660,7 +9593,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "slug": "radar-chart",
     "category": "charts",
     "description": "Multi-axis comparison of series across categories on a radial grid.",
-    "client": false,
+    "client": true,
     "importPath": "rift-ds/components/Chart/RadarChart",
     "barrel": "charts",
     "exports": [
@@ -8690,7 +9623,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "title",
             "type": "string",
             "required": false,
-            "description": "Chart title"
+            "description": "Chart title, in the shared chart header; it also names the figure.\nNote: this replaces the native `title` tooltip attribute, which the chart does not expose."
           },
           {
             "name": "subtitle",
@@ -8736,7 +9669,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "slug": "radial-chart",
     "category": "charts",
     "description": "Concentric progress rings for completion and KPI readouts.",
-    "client": false,
+    "client": true,
     "importPath": "rift-ds/components/Chart/RadialChart",
     "barrel": "charts",
     "exports": [
@@ -8760,7 +9693,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "title",
             "type": "string",
             "required": false,
-            "description": "Chart title"
+            "description": "Chart title, in the shared chart header; it also names the figure.\nNote: this replaces the native `title` tooltip attribute, which the chart does not expose."
           },
           {
             "name": "subtitle",
@@ -8955,8 +9888,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "value",
             "type": "string",
             "required": false,
-            "description": "Currently selected value",
-            "defaultValue": ""
+            "description": "Currently selected value, controlled. Leave undefined to let the group\nkeep its own selection, seeded from `defaultValue`."
+          },
+          {
+            "name": "defaultValue",
+            "type": "string",
+            "required": false,
+            "description": "Selected value on first render when uncontrolled (`value` undefined)."
           },
           {
             "name": "name",
@@ -9085,6 +10023,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "Rating"
           },
           {
+            "name": "valueLabel",
+            "type": "((value: number, max: number) => string)",
+            "required": false,
+            "description": "The spoken value, given a step (or, in `readOnly` mode, the current\nrating) and `max`. Defaults to \"3 out of 5\". It follows `label` and a\ncolon, as in \"Rating: 3 out of 5\".",
+            "defaultValue": "(value: number, max: number) => `${value} out of ${max}`"
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -9126,7 +10071,28 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "label",
             "type": "string",
             "required": false,
-            "description": "Override the summary line. By default it reports the streaming state and the duration."
+            "description": "Override the summary line in every state. By default it reports the streaming state and the duration through the three labels below."
+          },
+          {
+            "name": "thinkingLabel",
+            "type": "string",
+            "required": false,
+            "description": "The summary while reasoning streams. Defaults to \"Thinking\".",
+            "defaultValue": "Thinking"
+          },
+          {
+            "name": "durationLabel",
+            "type": "((seconds: number) => string)",
+            "required": false,
+            "description": "The summary once complete with a duration, given the seconds. Defaults to \"Thought for <n>s\".",
+            "defaultValue": "(seconds: number) => `Thought for ${seconds}s`"
+          },
+          {
+            "name": "doneLabel",
+            "type": "string",
+            "required": false,
+            "description": "The summary once complete with no duration. Defaults to \"Thought process\".",
+            "defaultValue": "Thought process"
           },
           {
             "name": "summary",
@@ -9285,7 +10251,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "slug": "scatter-chart",
     "category": "charts",
     "description": "Plots point clusters across two axes to show correlation and distribution.",
-    "client": false,
+    "client": true,
     "importPath": "rift-ds/components/Chart/ScatterChart",
     "barrel": "charts",
     "exports": [
@@ -9330,7 +10296,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "title",
             "type": "string",
             "required": false,
-            "description": "Chart title"
+            "description": "Chart title, in the shared chart header; it also names the figure.\nNote: this replaces the native `title` tooltip attribute, which the chart does not expose."
           },
           {
             "name": "subtitle",
@@ -9387,7 +10353,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "title",
             "type": "string",
             "required": true,
-            "description": "Section heading text"
+            "description": "Section heading text.\nNote: this shadows the native `title` tooltip attribute, which SectionTitle does not expose."
           },
           {
             "name": "trailing",
@@ -9433,16 +10399,36 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Array of segments"
           },
           {
+            "name": "value",
+            "type": "string",
+            "required": false,
+            "description": "Value of the active segment, for a controlled control. Leave it undefined\nto let the component keep its own selection, seeded from `defaultValue`."
+          },
+          {
+            "name": "defaultValue",
+            "type": "string",
+            "required": false,
+            "description": "Value of the segment active on first render when the control is\nuncontrolled. Falls back to the first enabled segment."
+          },
+          {
+            "name": "onValueChange",
+            "type": "((value: string) => void)",
+            "required": false,
+            "description": "Called with the value of the segment the user selects"
+          },
+          {
             "name": "activeSegment",
             "type": "string",
-            "required": true,
-            "description": "Currently active segment value"
+            "required": false,
+            "description": "Legacy name for `value`.",
+            "deprecated": "Use `value` instead."
           },
           {
             "name": "onSegmentChange",
             "type": "((value: string) => void)",
             "required": false,
-            "description": "Callback when segment changes"
+            "description": "Legacy change callback; fires alongside `onValueChange`.",
+            "deprecated": "Use `onValueChange` instead."
           },
           {
             "name": "size",
@@ -9482,7 +10468,8 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "ariaLabel",
             "type": "string",
             "required": false,
-            "description": "Accessible label for the tablist"
+            "description": "Legacy accessible-name prop for the strip.",
+            "deprecated": "Pass the native `aria-label` attribute instead."
           },
           {
             "name": "className",
@@ -9501,7 +10488,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Selection card",
     "slug": "selection-card",
     "category": "data-display",
-    "description": "Large selectable option cards with radio or checkbox indicators for high-visibility choices like settings and onboarding.",
+    "description": "Large option cards for high-visibility choices like settings and onboarding, with radio, checkbox or per-card toggle indicators.",
     "client": true,
     "importPath": "rift-ds/components/SelectionCard/SelectionCard",
     "barrel": "main",
@@ -9526,7 +10513,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "value",
             "type": "string | string[]",
             "required": false,
-            "description": "Currently selected value(s) — string for radio, string[] for checkbox"
+            "description": "Currently selected value(s), controlled: a string for radio, a string[]\notherwise. Leave undefined to let the group keep its own selection,\nseeded from `defaultValue`."
+          },
+          {
+            "name": "defaultValue",
+            "type": "string | string[]",
+            "required": false,
+            "description": "Selected value(s) on first render when uncontrolled (`value` undefined)."
           },
           {
             "name": "onValueChange",
@@ -9633,7 +10626,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "title",
             "type": "string",
             "required": false,
-            "description": "Heading at the top of the panel, usually the label of the item that opened it. Also the panel's accessible name"
+            "description": "Heading at the top of the panel, usually the label of the item that opened it. Also the panel's accessible name, after a native `aria-label`; with neither, the panel is named \"Section navigation\".\nNote: this shadows the native `title` tooltip attribute, which SidebarPanel does not expose."
           },
           {
             "name": "activeKey",
@@ -9652,6 +10645,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "(() => void)",
             "required": false,
             "description": "Renders a collapse button beside the heading and calls this when it is pressed"
+          },
+          {
+            "name": "collapseLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the collapse button. Defaults to \"Collapse <title>\", or \"Collapse panel\" when there is no title"
           },
           {
             "name": "onBack",
@@ -9718,10 +10717,17 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "1"
           },
           {
+            "name": "loadingLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name announced while the placeholder shows. A passed `aria-label` takes precedence.",
+            "defaultValue": "Loading"
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
-            "description": "Additional CSS classes",
+            "description": "Additional CSS classes. On a multi-line text skeleton they apply to each line, not the group.",
             "defaultValue": ""
           }
         ]
@@ -9746,7 +10752,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "label",
             "type": "string",
             "required": false,
-            "description": "Label text rendered above the slider"
+            "description": "Label text rendered above the slider, which names it. Without one the\nslider is named by the native `aria-label`, then the deprecated\n`ariaLabel`, and defaults to \"Slider\" so it is never nameless."
           },
           {
             "name": "helperText",
@@ -9779,7 +10785,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "value",
             "type": "number",
             "required": false,
-            "description": "Current value",
+            "description": "Current value (controlled). Leave it undefined for an uncontrolled\nslider, which keeps its own state seeded from `defaultValue`."
+          },
+          {
+            "name": "defaultValue",
+            "type": "number",
+            "required": false,
+            "description": "Initial value when uncontrolled (`value` undefined). Defaults to 50.",
             "defaultValue": "50"
           },
           {
@@ -9852,7 +10864,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "title",
             "type": "string",
             "required": true,
-            "description": "The source name, e.g. \"Design tokens quarterly\". Truncates with an ellipsis when long."
+            "description": "The source name, e.g. \"Design tokens quarterly\". Truncates with an ellipsis when long.\nNote: this shadows the native `title` tooltip attribute, which SourceChip does not expose."
           },
           {
             "name": "index",
@@ -9932,7 +10944,27 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "title",
             "type": "string",
             "required": false,
-            "description": "Header text. Left unset, it is computed from the items —\n\"Reading 3 sources\" while any is still pending or active,\n\"Read 3 sources\" once every visit has settled."
+            "description": "Header text. Left unset, it is computed from the items —\n\"Reading 3 sources\" while any is still pending or active,\n\"Read 3 sources\" once every visit has settled.\nNote: this shadows the native `title` tooltip attribute, which SourceTrail does not expose."
+          },
+          {
+            "name": "readingLabel",
+            "type": "((count: number) => string)",
+            "required": false,
+            "description": "The computed header while any visit is pending or active, or while\n`streaming`, given the number of sources. Defaults to \"Reading 1 source\"\nor \"Reading N sources\". Ignored when `title` is set.",
+            "defaultValue": "(count: number) =>\n  `Reading ${count} source${count === 1 ? '' : 's'}`"
+          },
+          {
+            "name": "readLabel",
+            "type": "((count: number) => string)",
+            "required": false,
+            "description": "The computed header once every visit has settled, given the number of\nsources. Defaults to \"Read 1 source\" or \"Read N sources\". Ignored when\n`title` is set.",
+            "defaultValue": "(count: number) => `Read ${count} source${count === 1 ? '' : 's'}`"
+          },
+          {
+            "name": "statusLabels",
+            "type": "Partial<Record<SourceTrailStatus, string>>",
+            "required": false,
+            "description": "Visually hidden text announcing each row's status after its source. Merged over the English defaults (Not opened yet, Reading now, Read)."
           },
           {
             "name": "streaming",
@@ -10088,7 +11120,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "label",
             "type": "string",
             "required": false,
-            "description": "Accessible label",
+            "description": "Accessible label, announced as the spinner's name. A passed `aria-label` takes precedence.",
             "defaultValue": "Loading"
           },
           {
@@ -10284,7 +11316,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "slug": "stacked-bar-chart",
     "category": "charts",
     "description": "Bars split into stacked segments to compare totals and their composition.",
-    "client": false,
+    "client": true,
     "importPath": "rift-ds/components/Chart/StackedBarChart",
     "barrel": "charts",
     "exports": [
@@ -10314,7 +11346,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "title",
             "type": "string",
             "required": false,
-            "description": "Chart title"
+            "description": "Chart title, in the shared chart header; it also names the figure.\nNote: this replaces the native `title` tooltip attribute, which the chart does not expose."
           },
           {
             "name": "subtitle",
@@ -10529,6 +11561,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "horizontal"
           },
           {
+            "name": "completeLabel",
+            "type": "string",
+            "required": false,
+            "description": "Status read after a completed step's label. The check mark that draws the\nstate is decorative, so this visually hidden text is what tells a screen\nreader a done step from an upcoming one. Defaults to \"Completed\".",
+            "defaultValue": "Completed"
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -10582,7 +11621,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "charIntervalMs",
             "type": "number",
             "required": false,
-            "description": "The retired interval between reveal steps; when set, its equivalent\nrate becomes the reveal's floor.",
+            "description": "The retired interval between reveal steps; when set and `floorCps` is\nnot, its equivalent rate becomes the reveal's floor.",
             "deprecated": "The reveal is frame-driven now — pace it with `floorCps`\nand `drainMs` instead."
           },
           {
@@ -10766,16 +11805,36 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Array of tab definitions"
           },
           {
+            "name": "value",
+            "type": "string",
+            "required": false,
+            "description": "Value of the selected tab, for a controlled set. Leave it undefined to let\nthe component keep its own selection, seeded from `defaultValue`."
+          },
+          {
+            "name": "defaultValue",
+            "type": "string",
+            "required": false,
+            "description": "Value of the tab selected on first render when the set is uncontrolled.\nFalls back to the first enabled tab."
+          },
+          {
+            "name": "onValueChange",
+            "type": "((value: string) => void)",
+            "required": false,
+            "description": "Called with the value of the tab the user selects"
+          },
+          {
             "name": "activeTab",
             "type": "string",
-            "required": true,
-            "description": "Currently active tab value"
+            "required": false,
+            "description": "Legacy name for `value`.",
+            "deprecated": "Use `value` instead."
           },
           {
             "name": "onTabChange",
             "type": "((value: string) => void)",
             "required": false,
-            "description": "Callback when tab is selected"
+            "description": "Legacy change callback; fires alongside `onValueChange`.",
+            "deprecated": "Use `onValueChange` instead."
           },
           {
             "name": "size",
@@ -10802,8 +11861,8 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "ariaLabel",
             "type": "string",
             "required": false,
-            "description": "Accessible label for the tab list",
-            "defaultValue": "Tabs"
+            "description": "Legacy accessible-name prop for the tab list.",
+            "deprecated": "Pass the native `aria-label` attribute instead."
           }
         ]
       }
@@ -10874,6 +11933,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Helper or error message displayed below the control"
           },
           {
+            "name": "removeLabel",
+            "type": "((tag: string) => string)",
+            "required": false,
+            "description": "Accessible name of a tag's remove button, given the tag. Defaults to \"Remove <tag>\".",
+            "defaultValue": "(tag) => `Remove ${tag}`"
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -10908,8 +11974,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "value",
             "type": "string",
             "required": false,
-            "description": "Current value",
-            "defaultValue": ""
+            "description": "Current value (controlled). Leave it undefined for an uncontrolled\ntextarea, which keeps its own state seeded from `defaultValue`."
+          },
+          {
+            "name": "defaultValue",
+            "type": "string",
+            "required": false,
+            "description": "Initial value when uncontrolled (`value` undefined)."
           },
           {
             "name": "size",
@@ -11019,10 +12090,17 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Spoken text for each thread status, read after the row's title; the dot itself is decorative. Merged over the English defaults (Working, Unread, Needs input, Failed). `idle` is silent unless given a label here."
           },
           {
-            "name": "threadMenuLabel",
+            "name": "pinnedLabel",
             "type": "string",
             "required": false,
-            "description": "Accessible name for a row's menu trigger; the thread's title is appended after it.",
+            "description": "Spoken text for a `pinned` thread, read after the title and any status; the pin glyph itself is decorative. Not read on a `pending` row, whose name is its tooltip alone.",
+            "defaultValue": "Pinned"
+          },
+          {
+            "name": "threadMenuLabel",
+            "type": "string | ((title: string) => string)",
+            "required": false,
+            "description": "Accessible name for a row's menu trigger. A string is followed by a colon\nand the thread's title (\"Thread options: Q3 plan\"); a function is given\nthe title and returns the whole name, so a translation can put the title\nwhere its grammar needs it.",
             "defaultValue": "Thread options"
           },
           {
@@ -11066,7 +12144,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "newThreadLabel",
             "type": "string",
             "required": false,
-            "description": "Text for the new-thread row. The row renders when this, `onNewThread`, or `newThreadHref` is given."
+            "description": "Text for the new-thread row. Defaults to \"New thread\". The row renders when this, `onNewThread`, or `newThreadHref` is given."
           },
           {
             "name": "newThreadIcon",
@@ -11258,9 +12336,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "closeLabel",
-            "type": "string",
+            "type": "string | ((title: string) => string)",
             "required": false,
-            "description": "Accessible name for a tab's close button; the tab's label is appended after it.",
+            "description": "Accessible name for a tab's close button. A string is followed by a colon\nand the tab's label (\"Close thread: Q3 plan\"); a function is given the\nlabel and returns the whole name, so a translation can put the label where\nits grammar needs it.",
             "defaultValue": "Close thread"
           },
           {
@@ -11402,10 +12480,16 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Called with the newly selected 24-hour \"HH:MM\" value"
           },
           {
+            "name": "periodLabels",
+            "type": "{ am?: string; pm?: string; } | undefined",
+            "required": false,
+            "description": "The period suffixes a 12-hour time is written with, merged over the\nEnglish defaults `{ am: 'AM', pm: 'PM' }`. Only read when `hourFormat` is\n`'12'`."
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
-            "description": "Additional CSS classes",
+            "description": "Additional CSS classes, applied to the Field wrapper around the label,\ntrigger and helper text, not to the trigger button the ref and the other\nprops reach.",
             "defaultValue": ""
           }
         ]
@@ -11442,13 +12526,15 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "orientation",
             "type": "\"horizontal\" | \"vertical\"",
             "required": false,
-            "description": "`vertical` timeline (default) or `horizontal` stepper"
+            "description": "`vertical` timeline (default) or `horizontal` stepper",
+            "defaultValue": "vertical"
           },
           {
             "name": "numbered",
             "type": "boolean",
             "required": false,
-            "description": "Number the markers 1..n instead of dots"
+            "description": "Number the markers 1..n instead of dots",
+            "defaultValue": "false"
           },
           {
             "name": "className",
@@ -11456,6 +12542,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Additional CSS classes",
             "defaultValue": ""
+          },
+          {
+            "name": "presentLabel",
+            "type": "string",
+            "required": false,
+            "description": "Text shown in place of the end date for a role marked `present`",
+            "defaultValue": "Present"
           }
         ]
       }
@@ -11479,7 +12572,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "title",
             "type": "string",
             "required": false,
-            "description": "Toast title text"
+            "description": "Toast title text.\nNote: this shadows the native `title` tooltip attribute, which Toast does not expose."
           },
           {
             "name": "description",
@@ -11498,7 +12591,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "dismissible",
             "type": "boolean",
             "required": false,
-            "description": "Whether the toast can be manually dismissed",
+            "description": "Whether the toast can be manually dismissed. The dismiss button renders only when `onDismiss` is also given",
             "defaultValue": "true"
           },
           {
@@ -11506,6 +12599,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "ReactNode",
             "required": false,
             "description": "Custom icon override — Material Symbol name (string) or custom element (ReactNode)"
+          },
+          {
+            "name": "onDismiss",
+            "type": "(() => void)",
+            "required": false,
+            "description": "Fires when the dismiss button is pressed. The button renders only when this is given (and `dismissible` is not false); the host owns removing the toast"
+          },
+          {
+            "name": "dismissLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the dismiss button",
+            "defaultValue": "Dismiss notification"
           },
           {
             "name": "className",
@@ -11538,6 +12644,20 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Maximum number of visible toasts",
             "defaultValue": "5"
+          },
+          {
+            "name": "regionLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the toast stack's region landmark",
+            "defaultValue": "Notifications"
+          },
+          {
+            "name": "dismissLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of every toast's dismiss button",
+            "defaultValue": "Dismiss notification"
           }
         ]
       }
@@ -11567,14 +12687,20 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "value",
             "type": "string | string[]",
             "required": false,
-            "description": "Currently active value(s)",
+            "description": "Currently active value(s), controlled. Leave undefined to let the group\nkeep its own selection, seeded from `defaultValue`."
+          },
+          {
+            "name": "defaultValue",
+            "type": "string | string[]",
+            "required": false,
+            "description": "Active value(s) on first render when uncontrolled (`value` undefined).",
             "defaultValue": "[]"
           },
           {
             "name": "multiple",
             "type": "boolean",
             "required": false,
-            "description": "Allow multiple selection",
+            "description": "Allow multiple selection, where each item toggles on or off. Without it\nexactly one item is active once chosen, and pressing it again keeps it.",
             "defaultValue": "false"
           },
           {
@@ -11641,7 +12767,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Toggle switch",
     "slug": "toggle-switch",
     "category": "forms",
-    "description": "Binary on/off toggle control with sliding thumb and check indicator, used for settings like theme switching.",
+    "description": "Binary on/off toggle control with sliding thumb and check indicator, for settings that take effect immediately.",
     "client": true,
     "importPath": "rift-ds/components/ToggleSwitch/ToggleSwitch",
     "barrel": "main",
@@ -11653,7 +12779,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "checked",
             "type": "boolean",
             "required": false,
-            "description": "Whether the toggle is on (checked)",
+            "description": "Whether the toggle is on, controlled. Leave undefined to let the switch\nkeep its own state, seeded from `defaultChecked`."
+          },
+          {
+            "name": "defaultChecked",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the toggle starts on when uncontrolled (`checked` undefined). Defaults to true, so an uncontrolled switch starts on unless this is false.",
             "defaultValue": "true"
           },
           {
@@ -11887,7 +13019,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "content",
             "type": "string",
             "required": true,
-            "description": "Tooltip text content"
+            "description": "Tooltip text content. Replaces the native `content` attribute, which only\nmeans something on a `<meta>` element."
           },
           {
             "name": "position",
@@ -11939,7 +13071,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "title",
             "type": "string",
             "required": true,
-            "description": "The screen's title"
+            "description": "The screen's title.\nNote: this shadows the native `title` tooltip attribute, which TopAppBar does not expose."
           },
           {
             "name": "subtitle",
@@ -12007,6 +13139,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "More"
           },
           {
+            "name": "badgeLabel",
+            "type": "((label: string) => string)",
+            "required": false,
+            "description": "The accessible name of an action that carries a `badge`, given the\naction's `label`. Defaults to \"<label>, new\", e.g. \"Notifications, new\".",
+            "defaultValue": "(label: string) => `${label}, new`"
+          },
+          {
             "name": "scrolled",
             "type": "boolean",
             "required": false,
@@ -12020,7 +13159,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "headingLevel",
-            "type": "4 | 2 | 1 | 5 | 3 | 6",
+            "type": "1 | 2 | 4 | 5 | 3 | 6",
             "required": false,
             "description": "Level of the title's heading element",
             "defaultValue": "1"
@@ -12142,7 +13281,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "title",
             "type": "string",
             "required": false,
-            "description": "Chart title"
+            "description": "Chart title, in the shared chart header; it also names the figure.\nNote: this replaces the native `title` tooltip attribute, which the chart does not expose."
           },
           {
             "name": "subtitle",
@@ -12169,6 +13308,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface",
             "defaultValue": "false"
+          },
+          {
+            "name": "sizeLabel",
+            "type": "string",
+            "required": false,
+            "description": "The tooltip's name for a tile's value. Defaults to \"Size\".",
+            "defaultValue": "Size"
           },
           {
             "name": "className",
@@ -12205,7 +13351,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "title",
             "type": "string",
             "required": false,
-            "description": "Card title in the shared chart-chrome header"
+            "description": "Card title in the shared chart-chrome header.\nNote: this shadows the native `title` tooltip attribute, which UsageCard does not expose."
           },
           {
             "name": "subtitle",
@@ -12275,7 +13421,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "size",
             "type": "\"default\" | \"compact\"",
             "required": false,
-            "description": "Bar height scale — `default` sits on the md icon size, `compact` on sm.",
+            "description": "Bar height scale — `default` sits on `--icon-size-600`, `compact` on `--icon-size-500`.",
             "defaultValue": "default"
           },
           {
@@ -12354,7 +13500,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
         "props": [
           {
             "name": "columns",
-            "type": "2 | 1 | 3",
+            "type": "1 | 2 | 3",
             "required": false,
             "description": "The most columns the board runs to. It folds to fewer as its own width narrows.",
             "defaultValue": "2"
@@ -12550,6 +13696,48 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "World map"
           },
           {
+            "name": "pointsLabel",
+            "type": "((count: number) => string)",
+            "required": false,
+            "description": "The point count appended to the map's accessible name, given the count. Defaults to \"<count> point\" or \"<count> points\".",
+            "defaultValue": "(count) => `${count} ${count === 1 ? 'point' : 'points'}`"
+          },
+          {
+            "name": "zoomHintLabel",
+            "type": "string",
+            "required": false,
+            "description": "The keyboard and pointer instructions appended to the map's accessible name while zooming is on.",
+            "defaultValue": "Zoom with the controls or the plus and minus keys; drag or use the arrow keys to move the map."
+          },
+          {
+            "name": "zoomControlsLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the zoom toolbar. Defaults to \"Map zoom controls\".",
+            "defaultValue": "Map zoom controls"
+          },
+          {
+            "name": "zoomOutLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the zoom-out button. Defaults to \"Zoom out\".",
+            "defaultValue": "Zoom out"
+          },
+          {
+            "name": "zoomInLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the zoom-in button. Defaults to \"Zoom in\".",
+            "defaultValue": "Zoom in"
+          },
+          {
+            "name": "zoomResetLabel",
+            "type": "((percent: number) => string)",
+            "required": false,
+            "description": "Accessible name of the zoom readout that resets the view, given the zoom as a whole percentage. Defaults to \"Zoom <percent>%. Reset the view\".",
+            "defaultValue": "(percent) => `Zoom ${percent}%. Reset the view`"
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -12613,7 +13801,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "title",
             "type": "string",
             "required": false,
-            "description": "The header brand name.",
+            "description": "The header brand name, which also seeds the agent's PixelAvatar.\nNote: not the native `title` tooltip attribute; ChatWidget spreads no native attributes.",
             "defaultValue": "Assistant"
           },
           {
@@ -12742,6 +13930,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "An open-sessions tab strip as its own row under the header. `true` seats the built-in ChatTabs; a node seats your own."
           },
           {
+            "name": "tabsProps",
+            "type": "ChatTabsProps",
+            "required": false,
+            "description": "Props for the built-in tab strip when `tabs` is `true`: its name, its close buttons' names and its spoken statuses."
+          },
+          {
             "name": "aside",
             "type": "((ctx: { overlay: boolean; close: () => void; }) => ReactNode)",
             "required": false,
@@ -12764,7 +13958,61 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "contextLabel",
             "type": "string | null",
             "required": false,
-            "description": "The composer's context note, naming what the chat is looking at. Omit for none."
+            "description": "The composer's context note, naming what the chat is looking at. Omit for none. The note's wording comes from `contextNote`."
+          },
+          {
+            "name": "contextNote",
+            "type": "((title: string) => string)",
+            "required": false,
+            "description": "The composer's context note, written from `contextLabel`. Defaults to `Looking at “<title>”`.",
+            "defaultValue": "(title: string) => `Looking at “${title}”`"
+          },
+          {
+            "name": "attachHint",
+            "type": "((maxSize: string, maxFiles: number, maxBytes: number) => string)",
+            "required": false,
+            "description": "The second line of the drop overlay with attachments on, written from the limits: the largest file as text (\"50 MB\"), the most files per message, and the largest file in bytes for a host that formats sizes itself. Defaults to `Up to <maxSize> each · <maxFiles> files max`.",
+            "defaultValue": "(maxSize: string, maxFiles: number) =>\n  `Up to ${maxSize} each · ${maxFiles} files max`"
+          },
+          {
+            "name": "greetings",
+            "type": "Partial<GreetingCopy>",
+            "required": false,
+            "description": "The welcome greeting for each part of the visitor's day; a key left out keeps its English. Defaults to \"Good morning\", \"Good afternoon\" and \"Good evening\"."
+          },
+          {
+            "name": "placementLabels",
+            "type": "Partial<Record<ChatPlacement, string>>",
+            "required": false,
+            "description": "The Chat position menu's rows, one per seat; a key left out keeps its English. Defaults to \"Dock right\", \"Dock left\" and \"Floating\"."
+          },
+          {
+            "name": "agentStatus",
+            "type": "string",
+            "required": false,
+            "description": "The status line under the agent's name in the agent pane, where `agent` brings no `profile` of its own. Defaults to \"Connected\".",
+            "defaultValue": "Connected"
+          },
+          {
+            "name": "artifactPanelTitle",
+            "type": "string",
+            "required": false,
+            "description": "The artifact panel's title while nothing is on stage. Defaults to \"Artifacts\".",
+            "defaultValue": "Artifacts"
+          },
+          {
+            "name": "artifactEmptyTitle",
+            "type": "string",
+            "required": false,
+            "description": "The artifact panel's empty-state heading. Defaults to \"Nothing here yet\".",
+            "defaultValue": "Nothing here yet"
+          },
+          {
+            "name": "artifactEmptyDescription",
+            "type": "string",
+            "required": false,
+            "description": "The artifact panel's empty-state description. Defaults to \"What the chat makes for you, like a dashboard or a page, opens in this panel.\"",
+            "defaultValue": "What the chat makes for you, like a dashboard or a page, opens in this panel."
           },
           {
             "name": "widgets",
@@ -12792,6 +14040,238 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "The quiet line pinned to the widget's floor: what the chat is and where its policy lives.",
             "defaultValue": "Answers may be wrong."
+          },
+          {
+            "name": "startersLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the welcome screen's conversation starters. Defaults to \"Conversation starters\".",
+            "defaultValue": "Conversation starters"
+          },
+          {
+            "name": "newChatLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the header's new-chat button. Defaults to \"New chat\".",
+            "defaultValue": "New chat"
+          },
+          {
+            "name": "showAgentLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the agent-pane toggle while the pane is closed. Defaults to \"Show the agent panel\".",
+            "defaultValue": "Show the agent panel"
+          },
+          {
+            "name": "hideAgentLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the agent-pane toggle while the pane is open. Defaults to \"Hide the agent panel\".",
+            "defaultValue": "Hide the agent panel"
+          },
+          {
+            "name": "closeAgentLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the agent pane's own close button, and of the scrim that closes the pane's bottom sheet. Defaults to \"Close the agent panel\".",
+            "defaultValue": "Close the agent panel"
+          },
+          {
+            "name": "showArtifactLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the artifact-panel toggle while the panel is closed. Defaults to \"Show the artifact panel\".",
+            "defaultValue": "Show the artifact panel"
+          },
+          {
+            "name": "hideArtifactLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the artifact-panel toggle while the panel is open. Defaults to \"Hide the artifact panel\".",
+            "defaultValue": "Hide the artifact panel"
+          },
+          {
+            "name": "closeArtifactLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the scrim that closes the artifact panel's bottom sheet. Defaults to \"Close the artifact panel\".",
+            "defaultValue": "Close the artifact panel"
+          },
+          {
+            "name": "placementLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the Chat position menu's button, and the heading of its group. Defaults to \"Chat position\".",
+            "defaultValue": "Chat position"
+          },
+          {
+            "name": "enterFullscreenLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the expand toggle in panel view. Defaults to \"Enter full screen\".",
+            "defaultValue": "Enter full screen"
+          },
+          {
+            "name": "exitFullscreenLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the expand toggle in full-screen view. Defaults to \"Exit full screen\".",
+            "defaultValue": "Exit full screen"
+          },
+          {
+            "name": "closeLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the header's close button. Defaults to \"Close chat\".",
+            "defaultValue": "Close chat"
+          },
+          {
+            "name": "openThreadsLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the header button that opens the chat-history sheet on a narrow host. Defaults to \"Open the chat history\".",
+            "defaultValue": "Open the chat history"
+          },
+          {
+            "name": "closeThreadsLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the scrim that closes the chat-history sheet. Defaults to \"Close the chat history\".",
+            "defaultValue": "Close the chat history"
+          },
+          {
+            "name": "modelPickerLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the composer's model picker. Defaults to \"Choose a model\".",
+            "defaultValue": "Choose a model"
+          },
+          {
+            "name": "sendLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the composer's send button. Defaults to \"Send\".",
+            "defaultValue": "Send"
+          },
+          {
+            "name": "copyResponseLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of a reply's copy button. Defaults to \"Copy response\".",
+            "defaultValue": "Copy response"
+          },
+          {
+            "name": "copiedResponseLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of a reply's copy button once the copy has landed. Defaults to \"Copied\".",
+            "defaultValue": "Copied"
+          },
+          {
+            "name": "copiedAnnouncementLabel",
+            "type": "string",
+            "required": false,
+            "description": "What screen readers hear once a reply has been copied. Defaults to \"Copied to clipboard\".",
+            "defaultValue": "Copied to clipboard"
+          },
+          {
+            "name": "goodResponseLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of a reply's thumbs-up button. Defaults to \"Good response\".",
+            "defaultValue": "Good response"
+          },
+          {
+            "name": "badResponseLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of a reply's thumbs-down button. Defaults to \"Bad response\".",
+            "defaultValue": "Bad response"
+          },
+          {
+            "name": "followupsLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the follow-up question row under a finished answer. Defaults to \"Follow-up questions\".",
+            "defaultValue": "Follow-up questions"
+          },
+          {
+            "name": "pastedTextLabel",
+            "type": "string",
+            "required": false,
+            "description": "The name a long paste's tile wears in the composer and the sent message. Defaults to \"Pasted text\"."
+          },
+          {
+            "name": "reasoningLabel",
+            "type": "((durationSeconds: number) => string)",
+            "required": false,
+            "description": "The reasoning disclosure's summary once the thinking is over, given the seconds it took when known. Defaults to \"Thought for <n>s\", or \"Thought process\" with no duration."
+          },
+          {
+            "name": "composerLabels",
+            "type": "Pick<ComposerProps, \"aria-label\" | \"attachmentTileLabels\" | \"attachLabel\" | \"dropLabel\" | \"filesLabel\" | \"formatFileAnnouncement\" | \"formatMentionAnnouncement\" | \"stopLabel\">",
+            "required": false,
+            "description": "The composer's words, over Composer's English defaults: the attach button (\"Attach files\"), the drop overlay on the shell (\"Drop files to attach\"), the queued files' list (\"Attachments\") and their tiles (`attachmentTileLabels`), the stop button (\"Stop generating\"), the text field's name (\"Message\"), and the sentences announced when files or mention matches change. The send button's name is `sendLabel`."
+          },
+          {
+            "name": "attachmentDropZoneLabels",
+            "type": "Pick<AttachmentDropZoneProps, \"label\">",
+            "required": false,
+            "description": "The drop overlay's headline when a file is dragged over the chat with attachments on, over AttachmentDropZone's \"Drop files to attach\". Its second line is `attachHint`."
+          },
+          {
+            "name": "attachmentGroupLabels",
+            "type": "Pick<AttachmentGroupProps, \"label\" | \"showMoreLabel\" | \"showLessLabel\" | \"attachmentTileLabels\" | \"attachmentViewerLabels\">",
+            "required": false,
+            "description": "The words of the files on a sent message, over AttachmentGroup's English defaults: the list's name (\"Attachments\"), the overflow buttons (\"Show 3 more\", \"Show fewer\"), the tiles' status lines (`attachmentTileLabels`) and the viewer a pressed file opens in (`attachmentViewerLabels`)."
+          },
+          {
+            "name": "chatThreadLabels",
+            "type": "Pick<ChatThreadProps, \"ariaLabel\" | \"jumpLabel\">",
+            "required": false,
+            "description": "The conversation's names, over ChatThread's English defaults: the scrolling region (\"Conversation\") and the scroll-to-latest control (\"Scroll to the latest message\")."
+          },
+          {
+            "name": "modelPickerLabels",
+            "type": "Pick<ModelPickerProps, \"placeholder\" | \"listLabel\">",
+            "required": false,
+            "description": "The model picker's words, over ModelPicker's English defaults: the open list's name (\"Model\") and the trigger's text when nothing is selected (\"Choose a model\"). The trigger's own name is `modelPickerLabel`."
+          },
+          {
+            "name": "artifactPanelLabels",
+            "type": "Pick<ArtifactPanelProps, \"collapseLabel\" | \"closeLabel\" | \"expandLabel\" | \"previewLabel\" | \"codeLabel\" | \"viewLabel\" | \"codeBlockLabels\">",
+            "required": false,
+            "description": "The artifact panel's words, over ArtifactPanel's English defaults: the view switch (\"Preview\", \"Code\", \"Artifact view\"), the expand and close buttons (\"Expand the artifact\", \"Collapse the artifact\", \"Close the artifact\") and the code view's CodeBlock (`codeBlockLabels`)."
+          },
+          {
+            "name": "agentRailLabels",
+            "type": "Pick<AgentRailProps, \"tabsLabel\">",
+            "required": false,
+            "description": "The agent pane's words, over AgentRail's English defaults: the tab strip's name (\"Agent views\"). The pane's close is `closeAgentLabel`."
+          },
+          {
+            "name": "questionCardLabels",
+            "type": "Partial<QuestionCardLabels>",
+            "required": false,
+            "description": "The words of a question card a reply ends in, over QuestionCard's English defaults: the step count (\"1 of 3\"), the buttons (\"Back\", \"Next\", \"Send\", \"Skip\"), the records (\"Skipped\", \"Not answered\", \"(chosen)\"), the pick lines (\"Choose one\") and the \"Something else\" row."
+          },
+          {
+            "name": "questionSummaryLabels",
+            "type": "Pick<QuestionSummaryProps, \"missingLabel\">",
+            "required": false,
+            "description": "The words of a sent set of answers, over QuestionSummary's English default: what stands in for a question left without an answer (\"No answer\")."
+          },
+          {
+            "name": "codeBlockLabels",
+            "type": "(Pick<CodeBlockProps, \"copyLabel\" | \"copyText\" | \"copiedLabel\"> & { codeLabel?: ((language: string) => string); }) | undefined",
+            "required": false,
+            "description": "The words of a reply's fenced code, over CodeBlock's English defaults: the copy button (\"Copy code\", \"Copy\", \"Copied\"), and the code region's name, given the fence's language (\"Code: bash\", or \"Code\" with none)."
+          },
+          {
+            "name": "promptSuggestionsLabels",
+            "type": "Pick<PromptSuggestionsProps, \"chosenLabel\">",
+            "required": false,
+            "description": "The follow-up row's words, over PromptSuggestions' English default: the hidden text read after the sent suggestion (\"(chosen)\"). The row's name is `followupsLabel`."
           }
         ]
       },
@@ -12822,14 +14302,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "followups",
             "type": "string | false | FollowupsSource",
             "required": false,
-            "description": "Where follow-up questions come from after an answer commits: a source\nfunction, an endpoint for the built-in fetcher, or `false` for none.\nDefaults to the fetcher against `/api/chat/followups`.",
+            "description": "Where follow-up questions come from after an answer commits: a source\nfunction, an endpoint for the built-in fetcher, or `false` for none:\nwith `false` no chips show under an answer at all, not even the written\n`fallbackFollowups`. Defaults to the fetcher against `/api/chat/followups`.",
             "defaultValue": "/api/chat/followups"
           },
           {
             "name": "fallbackFollowups",
             "type": "readonly string[]",
             "required": false,
-            "description": "The written questions offered when the source returns none.",
+            "description": "The written questions offered when the source returns none or fails. Unused when `followups` is `false`.",
             "defaultValue": "[\n  'Can you say more about that?',\n  'What should I do next?',\n  'Where can I read more?',\n  'Can you give an example?',\n  'What are the alternatives?',\n]"
           },
           {
@@ -12875,7 +14355,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "placeholders",
             "type": "Partial<ChatPlaceholderCopy>",
             "required": false,
-            "description": "Replacement copy for the hook's placeholder replies."
+            "description": "Replacement copy for the words the hook writes itself, merged over the English defaults: the status line of a reply that has not started (\"Thinking\") and the placeholder replies for an empty, stopped or failed turn."
           }
         ]
       },
@@ -12900,13 +14380,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "summary",
             "type": "(AiButtonSummary & { chips?: { id: string; label: string; prompt: string; }[]; })",
             "required": false,
-            "description": "A TLDR panel the button summons on hover: a pre-written summary and\nprompt chips. A tapped chip opens the chat and sends the chip's\n`prompt`. Hover-capable devices only: the launcher never renders it on\ntouch, and never in server HTML."
+            "description": "A TLDR panel the button summons on hover: a pre-written summary and\nprompt chips. A tapped chip opens the chat and sends the chip's\n`prompt`. The launcher hands it to the closed button's AiButton, which\nopens the panel on pointer hover; it does no device or hydration gating\nof its own, so a host that wants the panel on hover-capable devices only,\nor kept out of server HTML, passes `summary` only there."
           },
           {
             "name": "hidden",
             "type": "boolean",
             "required": false,
-            "description": "Render nothing at all: for routes that carry no chrome.",
+            "description": "Render nothing at all: for routes that carry no chrome.\nNote: not the native `hidden` attribute, which keeps an element mounted and only hides it; the launcher unmounts its button and panel, and spreads no native attributes.",
             "defaultValue": "false"
           },
           {
@@ -12929,6 +14409,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Accessible name for the panel.",
             "defaultValue": "Chat"
+          },
+          {
+            "name": "aiButtonLabels",
+            "type": "Pick<AiButtonProps, \"summaryRegionLabel\" | \"dismissLabel\" | \"suggestionsLabel\">",
+            "required": false,
+            "description": "The words of the floating button's summary panel, over AiButton's English defaults: the panel's name, given the summary's title (\"Summary: <title>\"), its dismiss button (\"Dismiss summary\") and its chips' group (\"Suggested prompts\")."
           },
           {
             "name": "widget",
@@ -12969,7 +14455,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "logoText",
             "type": "string",
             "required": false,
-            "description": "The brand row's text. Shown on the sheet by default, where the chat header is hidden behind it."
+            "description": "The brand row's text. Shown only on the sheet, where the chat header is hidden behind it; the inline rail leaves it out."
           },
           {
             "name": "profile",
@@ -12988,7 +14474,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "defaultExpanded",
             "type": "boolean",
             "required": false,
-            "description": "Whether the rail starts collapsed.",
+            "description": "Whether the inline rail starts expanded. Defaults to `false`: it starts\ncollapsed to its icon strip. The sheet, and a rail that is not\n`collapsible`, always show expanded.",
             "defaultValue": "false"
           },
           {
@@ -12997,6 +14483,18 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Accessible heading over the history.",
             "defaultValue": "Chat history"
+          },
+          {
+            "name": "threadPanelLabels",
+            "type": "Pick<ThreadPanelProps, \"statusLabels\" | \"collapseLabel\" | \"expandLabel\" | \"pinnedLabel\" | \"threadMenuLabel\" | \"renameLabel\" | \"projectsLabel\" | \"newProjectLabel\">",
+            "required": false,
+            "description": "The words the ThreadPanel writes, merged over its English defaults: the\nspoken pin and status text (\"Pinned\", \"Working\"…), each row's menu\ntrigger (\"Thread options\"), the rename field (\"Rename thread\"), the\nprojects header and its add button (\"Projects\", \"New project\"), and the\ncollapse toggle (\"Collapse the panel\", \"Expand the panel\"). The history's\nown name is `historyLabel`."
+          },
+          {
+            "name": "actionLabels",
+            "type": "Partial<Record<\"pin\" | \"unpin\" | \"rename\" | \"delete\", string>>",
+            "required": false,
+            "description": "The rows of each thread's menu, by action; a key left out keeps its English. Defaults to \"Pin\", \"Unpin\", \"Rename\" and \"Delete\"."
           }
         ]
       },
@@ -13009,6 +14507,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Accessible name for the tab strip.",
             "defaultValue": "Open chats"
+          },
+          {
+            "name": "closeLabel",
+            "type": "string | ((title: string) => string)",
+            "required": false,
+            "description": "Accessible name of each tab's close button. A string is followed by a colon and the tab's title; a function is given the title and returns the whole name. Defaults to \"Close chat\".",
+            "defaultValue": "Close chat"
+          },
+          {
+            "name": "statusLabels",
+            "type": "Partial<Record<ThreadTabStatus, string>>",
+            "required": false,
+            "description": "Spoken text for each tab's status, merged over ThreadTabs' English defaults (Working, Unread, Needs input, Failed)."
           }
         ]
       },
@@ -13028,16 +14539,36 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "The panes, in display order: activity, approvals, automations, personalisation, or whatever the agent has."
           },
           {
+            "name": "value",
+            "type": "string",
+            "required": false,
+            "description": "The tab on stage, when the host owns the state; otherwise the pane keeps its own, seeded from `defaultValue`."
+          },
+          {
+            "name": "defaultValue",
+            "type": "string",
+            "required": false,
+            "description": "The tab on stage first when the pane keeps its own state. Defaults to the first tab."
+          },
+          {
+            "name": "onValueChange",
+            "type": "((id: string) => void)",
+            "required": false,
+            "description": "Fires with the chosen tab's id."
+          },
+          {
             "name": "activeTab",
             "type": "string",
             "required": false,
-            "description": "The tab on stage, when the host owns the state; otherwise the pane keeps its own."
+            "description": "Legacy name for `value`.",
+            "deprecated": "Use `value` instead."
           },
           {
             "name": "onTabChange",
             "type": "((id: string) => void)",
             "required": false,
-            "description": "Fires with the chosen tab's id."
+            "description": "Legacy change callback; fires alongside `onValueChange`.",
+            "deprecated": "Use `onValueChange` instead."
           },
           {
             "name": "overlay",
@@ -13050,6 +14581,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "(() => void)",
             "required": false,
             "description": "Fires from the pane's own close button, a cross in its top trailing corner. Omit for a pane with no close of its own."
+          },
+          {
+            "name": "closeLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the pane's own close button. Defaults to \"Close the agent panel\".",
+            "defaultValue": "Close the agent panel"
+          },
+          {
+            "name": "agentRailLabels",
+            "type": "Pick<AgentRailProps, \"tabsLabel\">",
+            "required": false,
+            "description": "The words the AgentRail writes, merged over its English defaults: the tab strip's name (\"Agent views\")."
           }
         ]
       },
@@ -13079,6 +14623,33 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "(() => void)",
             "required": false,
             "description": "Fires from the pane's close button; omit where another control closes the seat."
+          },
+          {
+            "name": "emptyPanelTitle",
+            "type": "string",
+            "required": false,
+            "description": "The panel's title while nothing is on stage. Defaults to \"Artifacts\".",
+            "defaultValue": "Artifacts"
+          },
+          {
+            "name": "emptyTitle",
+            "type": "string",
+            "required": false,
+            "description": "The empty state's heading. Defaults to \"Nothing here yet\".",
+            "defaultValue": "Nothing here yet"
+          },
+          {
+            "name": "emptyDescription",
+            "type": "string",
+            "required": false,
+            "description": "The empty state's description. Defaults to \"What the chat makes for you, like a dashboard or a page, opens in this panel.\"",
+            "defaultValue": "What the chat makes for you, like a dashboard or a page, opens in this panel."
+          },
+          {
+            "name": "artifactPanelLabels",
+            "type": "Pick<ArtifactPanelProps, \"collapseLabel\" | \"closeLabel\" | \"expandLabel\" | \"previewLabel\" | \"codeLabel\" | \"viewLabel\" | \"codeBlockLabels\">",
+            "required": false,
+            "description": "The words the ArtifactPanel writes, merged over its English defaults:\nthe view switch's segments and name (\"Preview\", \"Code\", \"Artifact\nview\"), the expand toggle and close button's names (\"Expand the\nartifact\", \"Collapse the artifact\", \"Close the artifact\"), and the code\nview's copy button and region (`codeBlockLabels`)."
           }
         ]
       },

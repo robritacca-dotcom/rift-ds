@@ -14,7 +14,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| title | `string` | no |  | Card heading. |
+| title | `string` | no |  | Card heading. Note: this shadows the native `title` tooltip attribute, which MessageCard does not expose. |
 | description | `string` | no |  | One or two lines under the title. |
 | media | `ReactNode` | no |  | Top media slot — an image or chart, inset from the card edges with its own rounded corners. |
 | icon | `ReactNode` | no |  | Small leading icon beside the title — a Material Symbol name, or any custom element. |

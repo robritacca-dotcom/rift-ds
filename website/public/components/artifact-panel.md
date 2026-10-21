@@ -37,4 +37,5 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | expandLabel | `string` | no | `Expand the artifact` | Accessible name for the expand toggle while the panel is at its resting size. |
 | collapseLabel | `string` | no | `Collapse the artifact` | Accessible name for the expand toggle while the panel is expanded. |
 | closeLabel | `string` | no | `Close the artifact` | Accessible name for the close button. |
+| codeBlockLabels | `Pick<CodeBlockProps, "codeLabel" \| "copyLabel" \| "copyText" \| "copiedLabel">` | no |  | The words the code view's CodeBlock writes, merged over its English defaults: the copy button's name and text ("Copy code", "Copy", "Copied") and the code region's name ("Code: <language>"). |
 | className | `string` | no | `` | Additional CSS classes |

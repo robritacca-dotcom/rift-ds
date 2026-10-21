@@ -24,4 +24,6 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | error | `boolean` | no | `false` | Error state — shows error styling and message |
 | helperText | `string` | no |  | Helper or error message displayed below the input |
 | onValueChange | `((value: number \| null) => void)` | no |  | Convenience callback receiving the numeric value directly — `null` when the field is empty or unparseable. Fires on typing alongside `onChange` (which keeps the standard React event signature so form libraries work unmodified) and also on stepper clicks, where no native change event exists. |
+| decreaseLabel | `string` | no | `Decrease value` | Accessible name of the decrement stepper button. Defaults to "Decrease value". |
+| increaseLabel | `string` | no | `Increase value` | Accessible name of the increment stepper button. Defaults to "Increase value". |
 | className | `string` | no | `` | Additional CSS classes — applied to the wrapper, not the <input> |

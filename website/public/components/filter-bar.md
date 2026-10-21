@@ -19,5 +19,6 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | defaultValues | `Record<string, string[]>` | no |  | Active options per filter id (uncontrolled initial state). |
 | onValuesChange | `((values: Record<string, string[]>) => void)` | no |  | Fires with the full active-filter map on every change. Filters with nothing active are absent from the map, so an empty object means unfiltered. |
 | clearLabel | `string` | no | `Clear all` | Label for the button that clears every filter at once. |
+| clearFilterLabel | `((filterLabel: string) => string)` | no | `(filterLabel: string) => `Clear ${filterLabel}`` | Accessible name of an active filter's own clear button, given the filter's label. Defaults to "Clear" followed by the label. |
 | size | `"default" \| "compact"` | no | `default` | Component size |
 | className | `string` | no | `` | Additional CSS classes |

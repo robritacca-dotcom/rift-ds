@@ -16,10 +16,12 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | --- | --- | --- | --- | --- |
 | profile | `AgentRailProfile` | no |  | The agent this rail belongs to, rendered as the header's portrait block. |
 | tabs | `AgentRailTab[]` | yes |  | The rail's tabs, in display order. Each carries its own pane. |
-| activeTab | `string` | yes |  | Id of the tab on stage. The rail is controlled, so the host owns the state. |
-| onTabChange | `((id: string) => void)` | no |  | Fires with the chosen tab's id. |
+| value | `string` | no |  | Id of the tab on stage. The rail is fully controlled by design, so the host owns the state: it holds no hooks and renders from a Server Component. Falls back to the first tab. |
+| onValueChange | `((id: string) => void)` | no |  | Fires with the chosen tab's id. |
+| activeTab | `string` | no |  | Legacy name for `value`. Deprecated: Use `value` instead. |
+| onTabChange | `((id: string) => void)` | no |  | Legacy change callback; fires alongside `onValueChange`. Deprecated: Use `onValueChange` instead. |
 | tabsLabel | `string` | no | `Agent views` | Accessible name for the tab strip. |
-| ariaLabel | `string` | no |  | Accessible name for the rail itself. |
+| ariaLabel | `string` | no |  | Legacy accessible-name prop for the rail. Deprecated: Pass the native `aria-label` attribute instead. |
 | onCollapse | `(() => void)` | no |  | Fires when the rail's collapse affordance is pressed. The button renders only when this is given, pinned to the rail's top trailing corner. It is a chevron rather than a cross on purpose: the host's own close control is usually a cross a few pixels away, and two of them side by side read as two ways to dismiss the same thing. |
 | collapseLabel | `string` | no | `Collapse the agent panel` | Accessible name for the collapse affordance. |
 | collapseVariant | `"chevron" \| "close"` | no | `chevron` | How the collapse affordance is drawn. `chevron` (the default) pins a chevron to the leading corner, clear of a host's own controls. `close` pins a cross to the trailing corner, for a rail that is its card's only way out or whose host wants the way out where a panel's close usually is. |

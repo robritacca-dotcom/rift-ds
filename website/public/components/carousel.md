@@ -20,5 +20,13 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | autoPlay | `boolean` | no | `false` | Auto-play slides |
 | autoPlayInterval | `number` | no | `5000` | Auto-play interval in milliseconds |
 | loop | `boolean` | no | `false` | Whether navigation should loop |
-| onSlideChange | `((index: number) => void)` | no |  | Callback when active slide changes |
+| slide | `number` | no |  | Index of the active slide (zero-based), for a controlled carousel. Leave it undefined to let the component keep its own position, seeded from `defaultSlide`. |
+| defaultSlide | `number` | no | `0` | Index of the slide shown on first render when the carousel is uncontrolled (zero-based) |
+| onSlideChange | `((index: number) => void)` | no |  | Called with the index of the slide being moved to |
+| previousLabel | `string` | no | `Previous slide` | Accessible name of the previous-slide arrow |
+| nextLabel | `string` | no | `Next slide` | Accessible name of the next-slide arrow |
+| slideLabel | `((position: number, count: number) => string)` | no | `(position: number, count: number) => `Slide ${position} of ${count}`` | Accessible name of each slide, given its 1-based position and the slide count |
+| slideRoleDescription | `string` | no | `slide` | Role description announced for each slide |
+| dotsLabel | `string` | no | `Slide indicators` | Accessible name of the dot indicators' tab list |
+| dotLabel | `((position: number) => string)` | no | `(position: number) => `Go to slide ${position}`` | Accessible name of each dot indicator, given its slide's 1-based position |
 | className | `string` | no | `` | Additional CSS classes |

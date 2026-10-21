@@ -14,7 +14,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| title | `string` | yes |  | Section heading text |
+| title | `string` | yes |  | Section heading text. Note: this shadows the native `title` tooltip attribute, which SectionTitle does not expose. |
 | trailing | `ReactNode` | no |  | Optional trailing content (count, badge, metadata) |
 | divider | `boolean` | no | `true` | Whether to draw the bottom divider line. Set false above content that draws its own lines (bordered tables, calendars), so the section separates by whitespace alone. |
 | className | `string` | no |  | Additional CSS classes |

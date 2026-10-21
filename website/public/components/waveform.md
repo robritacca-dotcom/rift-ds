@@ -17,6 +17,6 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | state | `"idle" \| "listening" \| "speaking"` | no | `idle` | What the audio channel is doing: `idle` parks the bars low and still, `listening` runs a gentle half-height wave, `speaking` runs the full one. Ignored while `levels` drives the bars. |
 | bars | `number` | no | `5` | How many bars the wave has. |
 | levels | `number[]` | no |  | Live amplitudes from a real audio analyser, one 0–1 value per bar. Providing them switches the component to controlled mode: the CSS wave stops and each bar tracks its level, easing between updates. |
-| size | `"default" \| "compact"` | no | `default` | Bar height scale — `default` sits on the md icon size, `compact` on sm. |
+| size | `"default" \| "compact"` | no | `default` | Bar height scale — `default` sits on `--icon-size-600`, `compact` on `--icon-size-500`. |
 | label | `string` | no |  | What a screen reader hears the indicator say. Defaults per state ("Listening", "Speaking", "Microphone idle"). |
 | className | `string` | no | `` | Additional CSS classes |

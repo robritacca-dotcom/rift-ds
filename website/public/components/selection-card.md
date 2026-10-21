@@ -1,6 +1,6 @@
 # Selection card
 
-Large selectable option cards with radio or checkbox indicators for high-visibility choices like settings and onboarding.
+Large option cards for high-visibility choices like settings and onboarding, with radio, checkbox or per-card toggle indicators.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
@@ -16,7 +16,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | --- | --- | --- | --- | --- |
 | mode | `"checkbox" \| "radio" \| "toggle"` | no | `radio` | Selection mode — radio (single), checkbox (multi), or toggle (each card is an on/off switch) |
 | options | `SelectionCardOption[]` | yes |  | Available options |
-| value | `string \| string[]` | no |  | Currently selected value(s) — string for radio, string[] for checkbox |
+| value | `string \| string[]` | no |  | Currently selected value(s), controlled: a string for radio, a string[] otherwise. Leave undefined to let the group keep its own selection, seeded from `defaultValue`. |
+| defaultValue | `string \| string[]` | no |  | Selected value(s) on first render when uncontrolled (`value` undefined). |
 | onValueChange | `((value: string \| string[]) => void)` | no |  | Called with the next selection — a string in radio mode, an array otherwise |
 | name | `string` | no |  | Group name (used for aria-label on the group) |
 | className | `string` | no | `` | Additional CSS classes |

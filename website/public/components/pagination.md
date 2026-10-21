@@ -14,10 +14,15 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| page | `number` | yes |  | Current page (1-based) |
+| page | `number` | no |  | Current page (1-based), for a controlled pager. Leave it undefined to let the component keep its own page, seeded from `defaultPage`. |
+| defaultPage | `number` | no | `1` | Page shown on first render when the pager is uncontrolled (1-based) |
 | pageCount | `number` | yes |  | Total number of pages |
-| onPageChange | `(page: number) => void` | yes |  | Callback with the requested page |
+| onPageChange | `((page: number) => void)` | no |  | Called with the page the user requests |
 | siblingCount | `number` | no | `1` | Pages shown on each side of the current page |
 | size | `"default" \| "compact"` | no | `default` | Component size — compact swaps the numbers for a "Page X of Y" readout |
-| ariaLabel | `string` | no | `Pagination` | Accessible label for the nav landmark |
+| ariaLabel | `string` | no |  | Legacy accessible-name prop for the nav landmark. Deprecated: Pass the native `aria-label` attribute instead. |
+| previousLabel | `string` | no | `Previous page` | Accessible name of the previous-page arrow |
+| nextLabel | `string` | no | `Next page` | Accessible name of the next-page arrow |
+| pageLabel | `((page: number) => string)` | no | `(page: number) => `Page ${page}`` | Accessible name of a numbered page button, given its page number |
+| readoutLabel | `((page: number, pageCount: number) => string)` | no | `(page: number, pageCount: number) => `Page ${page} of ${pageCount}`` | Text of the compact size's readout, given the current page and the page count |
 | className | `string` | no | `` | Additional CSS classes |

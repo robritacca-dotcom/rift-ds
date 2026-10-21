@@ -7,7 +7,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 - Category: charts
 - Import: `import { ComboChart } from 'rift-ds/charts'; // needs the optional recharts peer`
 - Deep import: `import { ComboChart } from 'rift-ds/components/Chart/ComboChart';`
-- Rendering: server-renderable (no 'use client')
+- Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/combo-chart
 
 ## ComboChart props
@@ -23,7 +23,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | barColor | `string` | no |  | Bar fill colour (CSS value or token reference) |
 | lineColor | `string` | no |  | Line stroke colour (CSS value or token reference) |
 | secondaryAxis | `boolean` | no | `true` | Plot the line on its own right-hand y-axis, for series in different units |
-| title | `string` | no |  | Chart title |
+| title | `string` | no |  | Chart title, in the shared chart header; it also names the figure. Note: this replaces the native `title` tooltip attribute, which the chart does not expose. |
 | subtitle | `string` | no |  | Description text below the title |
 | summaryItems | `ChartSummaryItem[]` | no |  | Summary stats displayed in the header |
 | height | `number` | no | `350` | Chart area height in pixels |

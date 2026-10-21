@@ -21,5 +21,6 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | action | `ReactNode` | no |  | Action slot on the trailing edge, for a compact Button or link |
 | dismissible | `boolean` | no | `false` | Whether the banner shows a dismiss button |
 | onDismiss | `(() => void)` | no |  | Callback when the dismiss button is clicked |
+| dismissLabel | `string` | no | `Dismiss banner` | Accessible name of the dismiss button. |
 | align | `"center" \| "start"` | no | `start` | Horizontal alignment of the banner content |
 | className | `string` | no | `` | Additional CSS classes |

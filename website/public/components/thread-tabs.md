@@ -19,7 +19,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | onTabSelect | `((id: string) => void)` | no |  | Fires with the clicked tab's id. |
 | onTabClose | `((id: string) => void)` | no |  | Fires with the tab's id when its close button is pressed, or Delete lands on the focused tab. The close affordance renders only when this is given. |
 | statusLabels | `Partial<Record<ThreadTabStatus, string>>` | no |  | Spoken text for each tab status, read after the tab's label; the dot itself is decorative. Merged over the English defaults (Working, Unread, Needs input, Failed). |
-| closeLabel | `string` | no | `Close thread` | Accessible name for a tab's close button; the tab's label is appended after it. |
+| closeLabel | `string \| ((title: string) => string)` | no | `Close thread` | Accessible name for a tab's close button. A string is followed by a colon and the tab's label ("Close thread: Q3 plan"); a function is given the label and returns the whole name, so a translation can put the label where its grammar needs it. |
 | onAdd | `(() => void)` | no |  | Fires when the trailing new-tab button is pressed. The button renders only when this is given. |
 | addLabel | `string` | no | `New thread` | Accessible name for the new-tab button. |
 | ariaLabel | `string` | no | `Open threads` | Accessible name for the tab strip. |

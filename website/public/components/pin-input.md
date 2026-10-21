@@ -25,4 +25,5 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | helperText | `string` | no |  | Helper or error message displayed below the cells |
 | error | `boolean` | no | `false` | Error state — recolours cell borders and the helper text |
 | disabled | `boolean` | no | `false` | Whether the whole control is disabled |
+| cellLabel | `((position: number, count: number) => string)` | no |  | Accessible name of each cell, given its 1-based position and the cell count. Defaults to "Digit <position> of <count>" for the numeric format and "Character <position> of <count>" for alphanumeric. |
 | className | `string` | no | `` | Additional CSS classes — applied to the wrapper, not the cells |

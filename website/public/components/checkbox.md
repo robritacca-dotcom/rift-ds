@@ -17,7 +17,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | label | `string` | no |  | Label text |
 | helperText | `string` | no |  | Helper or error message rendered under the label text |
 | error | `boolean` | no | `false` | Error state — recolours the helper text and marks the checkbox invalid |
-| checked | `boolean` | no | `false` | Whether the checkbox is checked |
+| checked | `boolean` | no |  | Whether the checkbox is checked, controlled. Leave undefined to let the checkbox keep its own state, seeded from `defaultChecked`. |
+| defaultChecked | `boolean` | no | `false` | Whether the checkbox starts checked when uncontrolled (`checked` undefined). |
 | indeterminate | `boolean` | no | `false` | Whether the checkbox is in an indeterminate state |
 | disabled | `boolean` | no | `false` | Whether the checkbox is disabled |
 | size | `"default" \| "compact"` | no | `default` | Component size |
@@ -36,7 +37,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | error | `boolean` | no | `false` | Error state — recolours the helper text and marks the group invalid |
 | required | `boolean` | no | `false` | Marks the group required and renders the required marker on its label |
 | items | `{ label: string; value: string; disabled?: boolean \| undefined; }[]` | yes |  | Checkbox options |
-| values | `string[]` | no | `[]` | Currently selected values |
+| values | `string[]` | no |  | Currently selected values, controlled. Leave undefined to let the group keep its own selection, seeded from `defaultValues`. |
+| defaultValues | `string[]` | no | `[]` | Selected values on first render when uncontrolled (`values` undefined). |
 | direction | `"horizontal" \| "vertical"` | no | `vertical` | Layout direction |
 | size | `"default" \| "compact"` | no | `default` | Component size |
 | onValuesChange | `((values: string[]) => void)` | no |  | Called with the next selected values |

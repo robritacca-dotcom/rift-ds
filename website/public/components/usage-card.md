@@ -15,7 +15,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | items | `UsageItem[]` | yes |  | The budgets to show, one meter row each |
-| title | `string` | no |  | Card title in the shared chart-chrome header |
+| title | `string` | no |  | Card title in the shared chart-chrome header. Note: this shadows the native `title` tooltip attribute, which UsageCard does not expose. |
 | subtitle | `string` | no |  | Supporting line under the title |
 | thresholds | `{ warning?: number; error?: number; } \| undefined` | no |  | Fractions of an item's max where its fill recolours to warning and then error |
 | bare | `boolean` | no | `false` | Chrome off (no border, padding, or fill) for use inside a panel that supplies the surface |

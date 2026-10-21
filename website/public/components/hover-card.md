@@ -15,7 +15,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | children | `ReactNode` | no |  | Trigger element |
-| content | `ReactNode` | yes |  | Panel content — arbitrary elements, unlike Tooltip's plain text. In running text inside a `<p>`, keep it phrasing-level (spans): a block element would end the paragraph mid-parse. |
+| content | `ReactNode` | yes |  | Panel content — arbitrary elements, unlike Tooltip's plain text. In running text inside a `<p>`, keep it phrasing-level (spans): a block element would end the paragraph mid-parse. Note: this shadows the native `content` attribute, which HoverCard does not expose. |
 | position | `"top" \| "bottom" \| "left" \| "right"` | no | `bottom` | Preferred position |
 | showDelay | `number` | no | `300` | Delay before showing (in ms) |
 | hideDelay | `number` | no | `150` | Delay before hiding (in ms) |

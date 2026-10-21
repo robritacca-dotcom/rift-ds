@@ -1,6 +1,6 @@
 # Card
 
-Card components for previews, navigation, and token documentation, from content cards to colour swatches and typography specimens.
+A titled preview tile for index grids, with a case-study variant carrying a cover, company logo and dek.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 

@@ -20,7 +20,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | size | `"default" \| "compact"` | no | `default` | Component size (not the native character-width `size` attribute) |
 | error | `boolean` | no | `false` | Error state — shows error styling and message |
 | helperText | `string` | no |  | Helper or error message displayed below the field |
+| acceptHint | `((accept: string) => string)` | no | `(acceptValue: string) => `Accepts ${acceptValue}`` | Hint shown under the placeholder when `accept` is set, given the `accept` value. Defaults to "Accepts" followed by the value. |
 | onFilesSelected | `((files: File[]) => void)` | no |  | Called with the newly selected files |
 | onFileRemove | `((id: string) => void)` | no |  | Called with the id of a file whose remove button was pressed |
+| progressLabel | `((name: string) => string)` | no | `(fileName: string) => `Uploading ${fileName}`` | Accessible name of a listed file's progress bar, given the file name. Defaults to "Uploading" followed by the name. |
+| removeLabel | `((name: string) => string)` | no | `(fileName: string) => `Remove ${fileName}`` | Accessible name of a listed file's remove button, given the file name. Defaults to "Remove" followed by the name. |
 | className | `string` | no | `` | Additional CSS classes — applied to the wrapper, not the <input> |
 | ariaLabel | `string` | no |  | Legacy accessible-name prop. Deprecated: Pass the native `aria-label` attribute instead. |

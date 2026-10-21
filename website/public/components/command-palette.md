@@ -20,9 +20,12 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | placeholder | `string` | no | `Type a command or search…` | Placeholder for the search field |
 | emptyMessage | `string` | no | `No matching commands` | Message shown when the query matches nothing |
 | loading | `boolean` | no | `false` | Show a loading affordance in place of results |
+| loadingMessage | `string` | no | `Loading…` | Status text shown in place of results while `loading` is set. Defaults to "Loading…". |
 | hotkey | `boolean` | no | `true` | Bind Cmd+K / Ctrl+K globally to toggle the palette. Set to false when the host app owns the shortcut. |
-| onSelect | `((command: CommandPaletteCommand) => void)` | no |  | Called with the chosen command, after its own `onSelect` |
+| onSelect | `((command: CommandPaletteCommand) => void)` | no |  | Called with the chosen command, after its own `onSelect`. Replaces the native `onSelect` (text-selection) handler on the panel. |
 | onSearchChange | `((query: string) => void)` | no |  | Called as the user types, for async/server-side search |
 | manualFiltering | `boolean` | no | `false` | Skip built-in filtering — use when commands are filtered upstream |
 | hideFooter | `boolean` | no | `false` | Hide the hint row at the bottom of the panel |
-| className | `string` | no | `` | Additional CSS classes |
+| hintLabels | `{ navigate?: string; select?: string; close?: string \| undefined; escapeKey?: string \| undefined; } \| undefined` | no |  | The words in the hint row, merged over the English defaults: the text beside each key ("to navigate", "to select", "to close") and `escapeKey`, the visible name on the Escape key cap ("esc"). |
+| closeLabel | `string` | no | `Close command palette` | Accessible name of the close button |
+| className | `string` | no | `` | Additional CSS classes on the overlay container (the ref and native attributes go on the panel) |

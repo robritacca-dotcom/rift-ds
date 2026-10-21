@@ -25,7 +25,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| columns | `2 \| 1 \| 3` | no | `2` | The most columns the board runs to. It folds to fewer as its own width narrows. |
+| columns | `1 \| 2 \| 3` | no | `2` | The most columns the board runs to. It folds to fewer as its own width narrows. |
 | children | `ReactNode` | no |  | The Widgets on the board, in reading order: they fill the first column, then the next. |
 | className | `string` | no | `` | Additional CSS classes |
 

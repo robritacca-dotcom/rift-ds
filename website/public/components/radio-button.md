@@ -34,7 +34,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | helperText | `string` | no |  | Helper or error message rendered below the group |
 | error | `boolean` | no | `false` | Error state — recolours the helper text and marks the group invalid |
 | required | `boolean` | no | `false` | Marks the group required and renders the required marker on its label |
-| value | `string` | no | `` | Currently selected value |
+| value | `string` | no |  | Currently selected value, controlled. Leave undefined to let the group keep its own selection, seeded from `defaultValue`. |
+| defaultValue | `string` | no |  | Selected value on first render when uncontrolled (`value` undefined). |
 | name | `string` | no |  | Legacy grouping name, never used. Deprecated: No-op. Grouping is React state (`value`/`onValueChange`), not native `name` semantics — the group renders `role="radiogroup"` over `<div role="radio">`s, so there is nothing for a name to group. |
 | options | `{ label: string; value: string; disabled?: boolean \| undefined; }[]` | yes |  | Radio options |
 | direction | `"horizontal" \| "vertical"` | no | `vertical` | Layout direction |

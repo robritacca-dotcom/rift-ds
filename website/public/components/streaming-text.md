@@ -18,7 +18,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | streaming | `boolean` | no | `false` | Whether the source is still producing text. Keeps the cursor visible between chunks, when the reveal has caught up but more may arrive. |
 | floorCps | `number` | no |  | Slowest the reveal ever runs, in characters per second — the pace a thin trickle of chunks types at. Defaults to MOTION_STREAM_FLOOR_CPS. |
 | drainMs | `number` | no |  | However much text is waiting, it is fully on screen within this long, in milliseconds — the rate rises with the backlog. Defaults to MOTION_STREAM_DRAIN_MS. |
-| charIntervalMs | `number` | no |  | The retired interval between reveal steps; when set, its equivalent rate becomes the reveal's floor. Deprecated: The reveal is frame-driven now — pace it with `floorCps` and `drainMs` instead. |
+| charIntervalMs | `number` | no |  | The retired interval between reveal steps; when set and `floorCps` is not, its equivalent rate becomes the reveal's floor. Deprecated: The reveal is frame-driven now — pace it with `floorCps` and `drainMs` instead. |
 | cursor | `boolean` | no | `true` | Shows the blinking cursor while streaming or revealing. |
 | onRevealComplete | `(() => void)` | no |  | Fires once when the reveal catches up with `text` after `streaming` has ended — the moment the message is fully on screen. |
 | className | `string` | no | `` | Additional CSS classes |

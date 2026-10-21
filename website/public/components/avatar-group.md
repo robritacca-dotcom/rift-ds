@@ -17,5 +17,5 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | children | `ReactNode` | yes |  | The avatars to stack, in display order — normally `Avatar` elements. |
 | max | `number` | no | `5` | Avatars shown before the rest collapse into a "+N" counter. |
 | size | `"sm" \| "md" \| "lg"` | no | `md` | Size applied to every avatar in the stack and to the overflow counter. Cloned onto the children so the group cannot render mixed sizes. |
-| overflowLabel | `string` | no |  | Accessible label for the overflow counter. Defaults to "N more" — override it to localise or add context, e.g. "4 more reviewers". |
+| overflowLabel | `string \| ((count: number) => string)` | no |  | Accessible label for the overflow counter. Defaults to "N more" (for example "4 more"), with N the number of hidden avatars. Pass a function given that count to localise or add context, e.g. `(count) => \`${count} more reviewers\``; a plain string replaces the label outright, whatever the count. |
 | className | `string` | no | `` | Additional CSS classes |

@@ -28,4 +28,5 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | error | `boolean` | no | `false` | Error state |
 | helperText | `string` | no |  | Helper or error message |
 | onValueChange | `((value: string) => void)` | no |  | Called with the newly selected 24-hour "HH:MM" value |
-| className | `string` | no | `` | Additional CSS classes |
+| periodLabels | `{ am?: string; pm?: string; } \| undefined` | no |  | The period suffixes a 12-hour time is written with, merged over the English defaults `{ am: 'AM', pm: 'PM' }`. Only read when `hourFormat` is `'12'`. |
+| className | `string` | no | `` | Additional CSS classes, applied to the Field wrapper around the label, trigger and helper text, not to the trigger button the ref and the other props reach. |

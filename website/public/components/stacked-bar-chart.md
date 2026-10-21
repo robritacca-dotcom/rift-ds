@@ -7,7 +7,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 - Category: charts
 - Import: `import { StackedBarChart } from 'rift-ds/charts'; // needs the optional recharts peer`
 - Deep import: `import { StackedBarChart } from 'rift-ds/components/Chart/StackedBarChart';`
-- Rendering: server-renderable (no 'use client')
+- Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/stacked-bar-chart
 
 ## StackedBarChart props
@@ -17,7 +17,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | data | `Record<string, unknown>[]` | yes |  | Array of data objects |
 | xKey | `string` | no | `label` | Key in data for x-axis values |
 | series | `BarSeriesConfig[]` | yes |  | One or more bar series to render (stacked) |
-| title | `string` | no |  | Chart title |
+| title | `string` | no |  | Chart title, in the shared chart header; it also names the figure. Note: this replaces the native `title` tooltip attribute, which the chart does not expose. |
 | subtitle | `string` | no |  | Description text below the title |
 | summaryItems | `ChartSummaryItem[]` | no |  | Summary stats displayed in the header |
 | height | `number` | no | `350` | Chart area height in pixels |

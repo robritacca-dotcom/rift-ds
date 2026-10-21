@@ -28,6 +28,6 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | ariaCurrent | `boolean` | no |  | Marks this link as the current page (adds aria-current="page") |
 | className | `string` | no | `` | Additional CSS classes |
 | priority | `"destructive" \| "primary" \| "secondary" \| "tertiary"` | no |  | Legacy alias for `variant`. Deprecated: Use `variant` instead. |
-| state | `"default" \| "disabled" \| "hover" \| "active"` | no |  | Documentation-only interaction state. Deprecated: Use `disabled` for the disabled state.  Documentation-only affordance for rendering a *static* interaction state in Storybook and the showcase site. Real hover/active styling comes from CSS pseudo-classes and needs no prop — for docs, prefer `className="ds-button--hover"`. |
+| state | `"active" \| "default" \| "disabled" \| "hover"` | no |  | Documentation-only interaction state. Deprecated: Use `disabled` for the disabled state.  Documentation-only affordance for rendering a *static* interaction state in Storybook and the showcase site. Real hover/active styling comes from CSS pseudo-classes and needs no prop — for docs, prefer `className="ds-button--hover"`. |
 | icon | `ReactNode` | no |  | Legacy alias for `iconLeft` — Material Symbol name (string) or custom element (ReactNode). Deprecated: Use `iconLeft` instead. |
 | text | `boolean` | no | `true` | Legacy toggle for showing the text label. Deprecated: Will be removed once `label` loses its default in the next major; an icon-only button will simply omit `label`. |

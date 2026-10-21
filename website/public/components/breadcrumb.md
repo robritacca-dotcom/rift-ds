@@ -17,4 +17,4 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | items | `BreadcrumbItem[]` | yes |  | Ordered list of breadcrumb items |
 | maxItems | `number` | no |  | Maximum visible items before collapsing (min 2: first + last) |
 | className | `string` | no | `` | Additional CSS classes |
-| ariaLabel | `string` | no |  | Accessible name for the nav landmark. Override when more than one Breadcrumb can appear on a page — identically-named landmarks are indistinguishable to assistive technology. |
+| ariaLabel | `string` | no |  | Legacy accessible-name prop for the nav landmark. Deprecated: Pass the native `aria-label` attribute instead. |

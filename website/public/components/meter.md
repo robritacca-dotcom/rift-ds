@@ -17,7 +17,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | value | `number` | no | `0` | Current level |
 | min | `number` | no | `0` | Lower bound of the range |
 | max | `number` | no | `100` | Upper bound of the range |
-| label | `string` | no |  | Visible label naming what is measured, doubling as the accessible name |
+| label | `string` | no |  | Visible label naming what is measured, doubling as the meter's accessible name. A native `aria-label` takes precedence, and with neither the meter is announced as "Level". |
 | showValue | `boolean` | no | `false` | Shows the value readout on the trailing edge of the label row |
 | valueText | `string` | no |  | Readout override — replaces the default percentage, spoken via aria-valuetext |
 | variant | `"error" \| "info" \| "positive" \| "warning" \| "neutral"` | no | `info` | Status role colouring the fill |

@@ -17,5 +17,5 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | value | `number` | no | `0` | Current progress value (0–100) |
 | size | `"default" \| "compact"` | no | `default` | Size of the bar |
 | showLabel | `boolean` | no | `false` | Show percentage label |
-| ariaLabel | `string` | no |  | Accessible label describing what is loading |
+| ariaLabel | `string` | no |  | Accessible label describing what is loading. Defaults to "Progress"; a passed native `aria-label` works too. |
 | className | `string` | no | `` | Additional CSS classes |

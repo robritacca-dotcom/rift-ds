@@ -22,4 +22,5 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | size | `"default" \| "compact"` | no | `default` | Component size (not the native character-width `size` attribute) |
 | error | `boolean` | no | `false` | Error state — shows error styling and message |
 | helperText | `string` | no |  | Helper or error message displayed below the control |
+| removeLabel | `((tag: string) => string)` | no | `(tag) => `Remove ${tag}`` | Accessible name of a tag's remove button, given the tag. Defaults to "Remove <tag>". |
 | className | `string` | no | `` | Additional CSS classes — applied to the wrapper, not the <input> |

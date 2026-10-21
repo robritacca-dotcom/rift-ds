@@ -1,6 +1,6 @@
 # rift-ds component catalog
 
-Generated from the component registry at version 1.10.0. One entry per public component; each Contract link is the component's full prop table as markdown.
+Generated from the component registry at version 1.10.0. One entry per public component; each Contract link is the component's full prop table as markdown. A component marked deprecated still works in existing code; its Deprecated line names what to use instead.
 
 ## Actions (6)
 
@@ -186,10 +186,11 @@ An auto-growing message input with send and stop states, a page-context note, a 
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/composer.md
 
-### Document chip
+### Document chip (deprecated)
 
 A legacy one-row file reference, superseded by the attachment tile and kept for existing consumers.
 
+- Deprecated: not for new code. Use `AttachmentTile` instead.
 - Import: `import { DocumentChip } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/document-chip.md
@@ -236,7 +237,7 @@ A model selector for chat surfaces, with per-model descriptions and an optional 
 
 ### Prompt suggestions
 
-A horizontal row of tappable prompt suggestions to start or steer a conversation.
+Tappable prompt suggestions to start or steer a conversation, as a scrolling or wrapping row, a stack, tiles or cards.
 
 - Import: `import { PromptSuggestions } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
@@ -339,7 +340,7 @@ Data visualisation components for plotting series and activity over time.
 Filled area chart for showing volume over time, with stacked and single-series variants.
 
 - Import: `import { AreaChart } from 'rift-ds/charts';` (needs the optional recharts peer)
-- Rendering: server-renderable (no 'use client')
+- Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/area-chart.md
 
 ### Bar chart
@@ -347,7 +348,7 @@ Filled area chart for showing volume over time, with stacked and single-series v
 Vertical bars for comparing values across categories or time, with summary stats and tooltips.
 
 - Import: `import { BarChart } from 'rift-ds/charts';` (needs the optional recharts peer)
-- Rendering: server-renderable (no 'use client')
+- Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/bar-chart.md
 
 ### Combo chart
@@ -355,7 +356,7 @@ Vertical bars for comparing values across categories or time, with summary stats
 Bar and line series in one chart, with an optional second y-axis for pairs in different units, like spend and ROAS.
 
 - Import: `import { ComboChart } from 'rift-ds/charts';` (needs the optional recharts peer)
-- Rendering: server-renderable (no 'use client')
+- Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/combo-chart.md
 
 ### Contribution graph
@@ -371,7 +372,7 @@ A year of activity, one cell per day.
 Ordered funnel stages as centred trapezoid bands, each sized by its share of the first stage.
 
 - Import: `import { FunnelChart } from 'rift-ds/charts';` (needs the optional recharts peer)
-- Rendering: server-renderable (no 'use client')
+- Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/funnel-chart.md
 
 ### Gantt chart
@@ -403,7 +404,7 @@ The labelled value tile under a chart: a series dot, the series name, and its re
 Multi-series line chart for trends over time, with per-series colours and a summary row.
 
 - Import: `import { LineChart } from 'rift-ds/charts';` (needs the optional recharts peer)
-- Rendering: server-renderable (no 'use client')
+- Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/line-chart.md
 
 ### Pie chart
@@ -411,7 +412,7 @@ Multi-series line chart for trends over time, with per-series colours and a summ
 Proportional share of a whole as a pie or donut, with per-slice colours.
 
 - Import: `import { PieChart } from 'rift-ds/charts';` (needs the optional recharts peer)
-- Rendering: server-renderable (no 'use client')
+- Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/pie-chart.md
 
 ### Radar chart
@@ -419,7 +420,7 @@ Proportional share of a whole as a pie or donut, with per-slice colours.
 Multi-axis comparison of series across categories on a radial grid.
 
 - Import: `import { RadarChart } from 'rift-ds/charts';` (needs the optional recharts peer)
-- Rendering: server-renderable (no 'use client')
+- Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/radar-chart.md
 
 ### Radial chart
@@ -427,7 +428,7 @@ Multi-axis comparison of series across categories on a radial grid.
 Concentric progress rings for completion and KPI readouts.
 
 - Import: `import { RadialChart } from 'rift-ds/charts';` (needs the optional recharts peer)
-- Rendering: server-renderable (no 'use client')
+- Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/radial-chart.md
 
 ### Scatter chart
@@ -435,7 +436,7 @@ Concentric progress rings for completion and KPI readouts.
 Plots point clusters across two axes to show correlation and distribution.
 
 - Import: `import { ScatterChart } from 'rift-ds/charts';` (needs the optional recharts peer)
-- Rendering: server-renderable (no 'use client')
+- Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/scatter-chart.md
 
 ### Sparkline
@@ -451,7 +452,7 @@ Inline trend line for stats and table cells, drawn without axes or chrome.
 Bars split into stacked segments to compare totals and their composition.
 
 - Import: `import { StackedBarChart } from 'rift-ds/charts';` (needs the optional recharts peer)
-- Rendering: server-renderable (no 'use client')
+- Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/stacked-bar-chart.md
 
 ### Treemap
@@ -516,7 +517,7 @@ A feature tile for a bento grid, with a safe content area, a shader pair, solid 
 
 ### Card
 
-Card components for previews, navigation, and token documentation, from content cards to colour swatches and typography specimens.
+A titled preview tile for index grids, with a case-study variant carrying a cover, company logo and dek.
 
 - Import: `import { Card } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
@@ -644,7 +645,7 @@ Blockquotes and pull-quotes with attribution.
 
 ### Selection card
 
-Large selectable option cards with radio or checkbox indicators for high-visibility choices like settings and onboarding.
+Large option cards for high-visibility choices like settings and onboarding, with radio, checkbox or per-card toggle indicators.
 
 - Import: `import { SelectionCard } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
@@ -960,7 +961,7 @@ Time-of-day field with a dropdown list of selectable times.
 
 ### Toggle switch
 
-Binary on/off toggle control with sliding thumb and check indicator, used for settings like theme switching.
+Binary on/off toggle control with sliding thumb and check indicator, for settings that take effect immediately.
 
 - Import: `import { ToggleSwitch } from 'rift-ds';`
 - Rendering: client component (declares 'use client')

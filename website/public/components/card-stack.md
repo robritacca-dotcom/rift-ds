@@ -22,4 +22,5 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | loop | `boolean` | no | `true` | Wrap from the last card back to the first. Off, the stack stops at both ends. |
 | advanceOnClick | `boolean` | no | `true` | Clicking the top card flips to the next. Clicks that land on a link or control inside the card are left alone, so a card can still carry its own actions. |
 | label | `string` | no |  | Accessible name for the stack, e.g. "Open roles". |
+| positionLabel | `((position: number, count: number) => string)` | no | `(position: number, total: number) => `Card ${position} of ${total}`` | Visually hidden status announcing the top card's place in the deck, given its 1-based position and the card count. Defaults to "Card 2 of 5". |
 | className | `string` | no | `` | Additional CSS classes |

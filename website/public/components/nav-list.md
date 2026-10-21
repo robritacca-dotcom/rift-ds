@@ -21,4 +21,6 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | onExpandedChange | `((expandedIds: string[]) => void)` | no |  | Fires with the full new list of expanded ids whenever a toggle is pressed, in both controlled and uncontrolled modes. |
 | multiple | `boolean` | no | `false` | Allow several sections expanded at once. Default false — expanding one collapses the rest. |
 | onNavigate | `((item: NavListItem, event: MouseEvent<HTMLElement, MouseEvent>) => void)` | no |  | Fires when any link is clicked, alongside native navigation — e.g. to close the drawer that contains the list. |
+| expandLabel | `((label: string) => string)` | no | `(label) => `Expand ${label}`` | Accessible name of a collapsed section's chevron toggle, given the row's label. Defaults to "Expand <label>". |
+| collapseLabel | `((label: string) => string)` | no | `(label) => `Collapse ${label}`` | Accessible name of an expanded section's chevron toggle, given the row's label. Defaults to "Collapse <label>". |
 | className | `string` | no | `` | Additional CSS classes |

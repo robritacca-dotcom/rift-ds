@@ -20,14 +20,15 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | threadActions | `ThreadPanelThreadAction[]` | no |  | Shared menu actions for every thread row, behind a hover-revealed trailing trigger; a thread's own `actions` overrides the set. The menu renders only when `onThreadAction` is also given, and never on a `pending` row. |
 | onThreadAction | `((threadId: string, actionId: string) => void)` | no |  | Fires with the thread's id and the chosen action's id. |
 | statusLabels | `Partial<Record<ThreadPanelThreadStatus, string>>` | no |  | Spoken text for each thread status, read after the row's title; the dot itself is decorative. Merged over the English defaults (Working, Unread, Needs input, Failed). `idle` is silent unless given a label here. |
-| threadMenuLabel | `string` | no | `Thread options` | Accessible name for a row's menu trigger; the thread's title is appended after it. |
+| pinnedLabel | `string` | no | `Pinned` | Spoken text for a `pinned` thread, read after the title and any status; the pin glyph itself is decorative. Not read on a `pending` row, whose name is its tooltip alone. |
+| threadMenuLabel | `string \| ((title: string) => string)` | no | `Thread options` | Accessible name for a row's menu trigger. A string is followed by a colon and the thread's title ("Thread options: Q3 plan"); a function is given the title and returns the whole name, so a translation can put the title where its grammar needs it. |
 | renamingThreadId | `string` | no |  | Id of the thread being renamed: its row swaps to an inline text field, prefilled with the title and selected. The host owns the state, like everything else. |
 | onThreadRename | `((threadId: string, title: string) => void)` | no |  | Fires with the thread's id and the trimmed new title when a rename commits (Enter, or focus leaving the field). An empty or unchanged value fires `onRenameCancel` instead. |
 | onRenameCancel | `(() => void)` | no |  | Fires when a rename ends without a change: Escape, an empty value, or an unchanged title. |
 | renameLabel | `string` | no | `Rename thread` | Accessible name for the inline rename field. |
 | logo | `ReactNode` | no |  | Brand mark slot at the top, e.g. a logo `<img>`. While collapsed it doubles as the expand button, AppSidebar's contract. |
 | logoText | `string` | no |  | Brand name beside the logo. The header row renders only when `logo`, `logoText`, or `onExpandedChange` is given. |
-| newThreadLabel | `string` | no |  | Text for the new-thread row. The row renders when this, `onNewThread`, or `newThreadHref` is given. |
+| newThreadLabel | `string` | no |  | Text for the new-thread row. Defaults to "New thread". The row renders when this, `onNewThread`, or `newThreadHref` is given. |
 | newThreadIcon | `ReactNode` | no | `edit_square` | Icon for the new-thread row — Material Symbol name (string) or custom element (ReactNode). Defaults to the pen-in-a-box `edit_square`, the same glyph chat headers use for New chat. |
 | newThreadShortcut | `string[]` | no |  | Keyboard hint rendered as compact Kbds at the row's trailing edge, e.g. `["Ctrl", "N"]`. Decorative — the host owns the actual binding. |
 | onNewThread | `(() => void)` | no |  | Fires when the new-thread row is clicked. |

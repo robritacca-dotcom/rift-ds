@@ -7,7 +7,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 - Category: charts
 - Import: `import { AreaChart } from 'rift-ds/charts'; // needs the optional recharts peer`
 - Deep import: `import { AreaChart } from 'rift-ds/components/Chart/AreaChart';`
-- Rendering: server-renderable (no 'use client')
+- Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/area-chart
 
 ## AreaChart props
@@ -18,7 +18,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | xKey | `string` | no | `label` | Key in data for x-axis values |
 | series | `AreaSeriesConfig[]` | yes |  | One or more area series to render |
 | stacked | `boolean` | no | `false` | Whether areas stack on top of each other |
-| title | `string` | no |  | Chart title |
+| title | `string` | no |  | Chart title, in the shared chart header; it also names the figure. Note: this replaces the native `title` tooltip attribute, which the chart does not expose. |
 | subtitle | `string` | no |  | Description text below the title |
 | summaryItems | `ChartSummaryItem[]` | no |  | Summary stats displayed in the header |
 | height | `number` | no | `350` | Chart area height in pixels |

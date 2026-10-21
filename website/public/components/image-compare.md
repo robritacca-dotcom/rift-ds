@@ -21,6 +21,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | beforeLabel | `string` | no | `Before` | Corner label over the before side |
 | afterLabel | `string` | no | `After` | Corner label over the after side |
 | showLabels | `boolean` | no | `true` | Whether the corner labels render |
+| handleLabel | `string` | no |  | Accessible name of the divider handle. Defaults to the two corner labels joined as "Before and After comparison". |
+| handleValueText | `((position: number) => string)` | no |  | Spoken value of the divider handle, given its whole-percent position. Defaults to the percentage followed by the before label in lower case. |
 | position | `number` | no |  | Divider position as a percentage from the left (controlled) |
 | defaultPosition | `number` | no | `50` | Initial divider position for uncontrolled use |
 | onPositionChange | `((position: number) => void)` | no |  | Convenience callback receiving the divider position on every change |

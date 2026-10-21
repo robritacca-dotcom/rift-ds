@@ -7,7 +7,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 - Category: charts
 - Import: `import { RadialChart } from 'rift-ds/charts'; // needs the optional recharts peer`
 - Deep import: `import { RadialChart } from 'rift-ds/components/Chart/RadialChart';`
-- Rendering: server-renderable (no 'use client')
+- Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/radial-chart
 
 ## RadialChart props
@@ -16,7 +16,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | --- | --- | --- | --- | --- |
 | data | `RadialDataItem[]` | yes |  | Array of data items — each renders as a concentric ring |
 | maxValue | `number` | no | `100` | Maximum value for the radial scale (100 = percentage) |
-| title | `string` | no |  | Chart title |
+| title | `string` | no |  | Chart title, in the shared chart header; it also names the figure. Note: this replaces the native `title` tooltip attribute, which the chart does not expose. |
 | subtitle | `string` | no |  | Description text below the title |
 | summaryItems | `ChartSummaryItem[]` | no |  | Summary stats displayed in the header |
 | height | `number` | no | `350` | Chart area height in pixels |

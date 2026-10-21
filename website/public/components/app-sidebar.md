@@ -34,3 +34,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | logo | `ReactNode` | no |  | Logo element — defaults to the built-in brand mark |
 | logoText | `string` | no | `Rift` | Text shown next to logo when expanded |
 | showMobileTrigger | `boolean` | no | `true` | Below the mobile breakpoint the rail hides and this fixed hamburger button opens it as an overlay drawer instead. Set false when the host renders its own trigger in the page chrome. |
+| openLabel | `string` | no | `Open navigation` | Accessible name of the mobile hamburger trigger that opens the drawer |
+| closeLabel | `string` | no | `Close navigation` | Accessible name of the toggle when it closes the mobile drawer |
+| expandLabel | `string` | no | `Expand sidebar` | Accessible name of the toggle (and the collapsed logo) when it expands the rail |
+| collapseLabel | `string` | no | `Collapse sidebar` | Accessible name of the toggle when it collapses the rail |
+| profileMoreLabel | `string` | no | `Profile options` | Accessible name of the profile block's more button |
+| menuLabel | `string` | no | `Menu` | Back-button text in the mobile drawer's drill-in when the open level has no parent row to name (a top-level item opened with `subNav="panel"`) |

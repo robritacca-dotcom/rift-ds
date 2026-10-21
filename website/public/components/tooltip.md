@@ -15,7 +15,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | children | `ReactNode` | no |  | Trigger element |
-| content | `string` | yes |  | Tooltip text content |
+| content | `string` | yes |  | Tooltip text content. Replaces the native `content` attribute, which only means something on a `<meta>` element. |
 | position | `"top" \| "bottom" \| "left" \| "right"` | no | `top` | Preferred position |
 | showDelay | `number` | no | `300` | Delay before showing (in ms) |
 | hideDelay | `number` | no | `150` | Delay before hiding (in ms) |

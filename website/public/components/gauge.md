@@ -22,7 +22,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | showValue | `boolean` | no | `true` | Shows the reading in the centre of the dial. |
 | formatValue | `((value: number) => string)` | no |  | Formats the centre reading — for units, precision, or locale. |
 | label | `string` | no |  | What the reading measures, shown as a caption under it and used as the accessible name, e.g. "CPU usage". |
-| title | `string` | no |  | Chart title, in the shared chart header. |
+| title | `string` | no |  | Chart title, in the shared chart header. Note: this shadows the native `title` tooltip attribute, which Gauge does not expose. |
 | subtitle | `string` | no |  | Description text below the title. |
 | bare | `boolean` | no | `false` | Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface |
 | size | `number` | no | `120` | Rendered dial diameter in pixels. The arc geometry scales with it. |

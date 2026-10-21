@@ -22,4 +22,5 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | footer | `ReactNode` | no |  | Optional footer slot — typically a row of Buttons |
 | size | `"sm" \| "md" \| "lg"` | no | `md` | Panel width |
 | dismissible | `boolean` | no | `true` | Whether ESC, backdrop click, and the close button can dismiss |
+| closeLabel | `string` | no | `Close dialog` | Accessible name of the close button. |
 | className | `string` | no | `` | Additional CSS classes — applied to the portal container, not the panel |

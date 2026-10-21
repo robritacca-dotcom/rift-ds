@@ -16,7 +16,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | --- | --- | --- | --- | --- |
 | label | `string` | no |  | Dropdown label text |
 | placeholder | `string` | no | `Select an option` | Placeholder when no value selected |
-| value | `string` | no |  | Currently selected value |
+| value | `string` | no |  | Currently selected value, controlled. Leave undefined to let the dropdown keep its own selection, seeded from `defaultValue`. |
+| defaultValue | `string` | no |  | Selected value on first render when uncontrolled (`value` undefined). |
 | options | `DropdownOption[]` | yes |  | Available options (flat list) |
 | groups | `DropdownOptionGroup[]` | no |  | Optional grouped options — when provided, renders groups with labels and separators |
 | size | `"default" \| "compact"` | no | `default` | Component size |

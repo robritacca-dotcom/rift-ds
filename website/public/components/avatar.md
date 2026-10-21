@@ -15,8 +15,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | src | `string` | no |  | Image source URL |
-| alt | `string` | no |  | Alt text for the image |
+| alt | `string` | no |  | Alt text for the image, also the avatar's accessible name. A passed `aria-label` takes precedence. |
 | name | `string` | no |  | User's name — used for initials fallback |
 | size | `"sm" \| "md" \| "lg"` | no | `md` | Avatar size |
 | status | `"online" \| "away" \| "offline" \| "busy"` | no |  | Online status indicator |
+| statusLabel | `string` | no |  | Accessible name for the status dot. Defaults to the `status` value itself (e.g. "online"). |
 | className | `string` | no | `` | Additional CSS classes |

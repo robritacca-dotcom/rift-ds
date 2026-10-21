@@ -16,7 +16,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | --- | --- | --- | --- | --- |
 | streaming | `boolean` | no | `false` | The model is still producing the trace. Opens the panel and shimmers the summary. |
 | duration | `number` | no |  | Seconds spent reasoning, shown in the summary once complete. |
-| label | `string` | no |  | Override the summary line. By default it reports the streaming state and the duration. |
+| label | `string` | no |  | Override the summary line in every state. By default it reports the streaming state and the duration through the three labels below. |
+| thinkingLabel | `string` | no | `Thinking` | The summary while reasoning streams. Defaults to "Thinking". |
+| durationLabel | `((seconds: number) => string)` | no | `(seconds: number) => `Thought for ${seconds}s`` | The summary once complete with a duration, given the seconds. Defaults to "Thought for <n>s". |
+| doneLabel | `string` | no | `Thought process` | The summary once complete with no duration. Defaults to "Thought process". |
 | summary | `ReactNode` | no |  | Replace the summary text with custom content — typically an AgentStatus, pairing the live indicator with the trace disclosure. The node owns its own appearance and announcement, so Reasoning's shimmer and live region stand down. |
 | summaryOnly | `boolean` | no | `false` | Render the summary line alone, with no chevron, no trigger, and no panel — for a model that reports what it is doing but produces no trace to read. A disclosure that opens onto nothing is a promise the component cannot keep, so it stops being one. |
 | size | `"default" \| "compact"` | no | `default` | Text scale, paired with ChatMessage's sizes: `default` matches default message text, `compact` matches compact message text. |

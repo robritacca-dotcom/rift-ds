@@ -32,4 +32,5 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | errorLabel | `string` | no | `Upload failed` | Status line while `error`, when no `error` message is given. |
 | unavailableLabel | `string` | no | `Unavailable` | Status line while `unavailable`. |
 | removeLabel | `string` | no |  | Accessible label for the remove button. Defaults to "Remove" and the file name. |
+| progressLabel | `((name: string) => string)` | no | `(fileName: string) => `Uploading ${fileName}`` | Accessible name of the upload progress spinner while `uploading`, given the file name. Defaults to "Uploading" followed by the name. |
 | className | `string` | no | `` | Additional CSS classes |

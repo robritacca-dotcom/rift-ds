@@ -15,7 +15,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | icon | `ReactNode` | no |  | Material Symbol icon name, or a custom element (e.g. an illustration) |
-| title | `string` | yes |  | Short headline describing the empty condition |
+| title | `string` | yes |  | Short headline describing the empty condition. Note: this shadows the native `title` tooltip attribute, which EmptyState does not expose. |
 | description | `string` | no |  | Supporting copy — say what to do next, not just what is missing |
 | action | `ReactNode` | no |  | Action slot — typically one primary Button, optionally a secondary |
 | size | `"default" \| "compact"` | no | `default` | Component size |

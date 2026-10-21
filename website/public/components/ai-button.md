@@ -26,4 +26,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | summaryPinned | `boolean` | no | `false` | Holds the summary panel open regardless of hover — for callers that reveal it on their own signal (scroll depth, dwell). Hover mechanics still run when it flips back off. |
 | onSummaryDismiss | `(() => void)` | no |  | Fires when the panel's dismiss button is pressed. The panel closes itself either way; hovering away and back re-summons it. |
 | onSummarySuggestion | `((id: string) => void)` | no |  | Fires with the tapped summary suggestion's `id`. |
+| summaryRegionLabel | `((title: string) => string)` | no | `(title: string) => `Summary: ${title}`` | Accessible name of the summary panel, given the summary's title. Defaults to "Summary: " followed by the title. |
+| dismissLabel | `string` | no | `Dismiss summary` | Accessible name of the summary panel's dismiss button. |
+| suggestionsLabel | `string` | no | `Suggested prompts` | Accessible name of the summary panel's group of prompt chips. |
 | className | `string` | no | `` | Additional CSS classes |

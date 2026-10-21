@@ -18,4 +18,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | items | `DropdownMenuEntry[]` | yes |  | Menu entries (items, groups, separators) |
 | align | `"start" \| "end"` | no | `start` | Horizontal alignment of the panel |
 | size | `"default" \| "compact"` | no | `default` | Component size |
-| className | `string` | no | `` | Additional CSS classes |
+| open | `boolean` | no |  | Whether the menu is open (controlled mode) |
+| defaultOpen | `boolean` | no | `false` | Whether the menu starts open when uncontrolled |
+| onOpenChange | `((open: boolean) => void)` | no |  | Callback when the menu opens or closes |
+| className | `string` | no | `` | Additional CSS classes on the root wrapper, which holds the trigger and the panel |

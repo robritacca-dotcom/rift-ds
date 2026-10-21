@@ -1,6 +1,6 @@
 # Toggle switch
 
-Binary on/off toggle control with sliding thumb and check indicator, used for settings like theme switching.
+Binary on/off toggle control with sliding thumb and check indicator, for settings that take effect immediately.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
@@ -14,7 +14,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| checked | `boolean` | no | `true` | Whether the toggle is on (checked) |
+| checked | `boolean` | no |  | Whether the toggle is on, controlled. Leave undefined to let the switch keep its own state, seeded from `defaultChecked`. |
+| defaultChecked | `boolean` | no | `true` | Whether the toggle starts on when uncontrolled (`checked` undefined). Defaults to true, so an uncontrolled switch starts on unless this is false. |
 | label | `string` | no | `Toggle` | Label text displayed next to the toggle |
 | showLabel | `boolean` | no | `true` | Whether to show the label |
 | helperText | `string` | no |  | Helper or error message rendered under the label text |

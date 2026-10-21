@@ -15,8 +15,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | items | `ToggleGroupItem[]` | yes |  | Available items |
-| value | `string \| string[]` | no | `[]` | Currently active value(s) |
-| multiple | `boolean` | no | `false` | Allow multiple selection |
+| value | `string \| string[]` | no |  | Currently active value(s), controlled. Leave undefined to let the group keep its own selection, seeded from `defaultValue`. |
+| defaultValue | `string \| string[]` | no | `[]` | Active value(s) on first render when uncontrolled (`value` undefined). |
+| multiple | `boolean` | no | `false` | Allow multiple selection, where each item toggles on or off. Without it exactly one item is active once chosen, and pressing it again keeps it. |
 | size | `"default" \| "compact"` | no | `default` | Component size |
 | tone | `"default" \| "neutral"` | no |  | Colour of active items: `default` takes the action colour, `neutral` fills them grey, for a set whose selection should not carry the action colour's weight. |
 | variant | `"neutral" \| "primary"` | no |  | Legacy name for `tone`, from before colour moved onto its own prop: `primary` is `tone="default"`. Deprecated: Use `tone` instead. |

@@ -6,22 +6,21 @@
 export interface A11yCoverage {
   /** Exported Storybook stories — each one a render test plus an axe audit. */
   stories: number;
-  /** Components whose source declares an ARIA role or attribute. */
-  withAria: number;
-  /** Components that name themselves for assistive technology. */
-  withAccessibleName: number;
+  /** Registered components with a story file of their own. */
+  storiedComponents: number;
   /** Modules in the shared overlay behaviour layer. */
   behaviourModules: number;
-  /** Components built on that layer, by display label. */
-  overlayComponents: string[];
+  /** The modal overlays (they import the focus scope), by display label. */
+  modalOverlays: string[];
+  /** Every component on the dismissal stack, modal or not, by display label. */
+  layerComponents: string[];
 }
 
 export const a11yCoverage: A11yCoverage = {
-  "stories": 1168,
-  "withAria": 143,
-  "withAccessibleName": 116,
+  "stories": 1215,
+  "storiedComponents": 155,
   "behaviourModules": 5,
-  "overlayComponents": [
+  "modalOverlays": [
     "Alert dialog",
     "App sidebar",
     "Attachment viewer",
@@ -30,5 +29,29 @@ export const a11yCoverage: A11yCoverage = {
     "Dialog",
     "Drawer",
     "Lightbox"
+  ],
+  "layerComponents": [
+    "Alert dialog",
+    "Anchor nav",
+    "App sidebar",
+    "Attachment viewer",
+    "Bento tile",
+    "Colour picker",
+    "Combobox",
+    "Command palette",
+    "Context menu",
+    "Dialog",
+    "Drawer",
+    "Dropdown",
+    "Dropdown menu",
+    "Filter bar",
+    "Hover card",
+    "Lightbox",
+    "Model picker",
+    "Popover",
+    "Rich dropdown",
+    "Source chip",
+    "Time picker",
+    "Tooltip"
   ]
 };

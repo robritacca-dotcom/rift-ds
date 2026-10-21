@@ -15,7 +15,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | label | `string` | no |  | Textarea label text |
-| value | `string` | no | `` | Current value |
+| value | `string` | no |  | Current value (controlled). Leave it undefined for an uncontrolled textarea, which keeps its own state seeded from `defaultValue`. |
+| defaultValue | `string` | no |  | Initial value when uncontrolled (`value` undefined). |
 | size | `"default" \| "compact"` | no | `default` | Component size |
 | error | `boolean` | no | `false` | Error state — shows error styling and message |
 | helperText | `string` | no |  | Helper or error message displayed below |

@@ -14,7 +14,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| title | `string` | yes |  | The screen's title |
+| title | `string` | yes |  | The screen's title. Note: this shadows the native `title` tooltip attribute, which TopAppBar does not expose. |
 | subtitle | `string` | no |  | A second line under the title, e.g. a count or a date range |
 | platform | `"default" \| "ios" \| "android"` | no | `default` | Which platform's bar to draw. `default` is the Rift bar; `ios` is the iOS 26 navigation bar, with glass circle buttons over content and a soft blurred edge; `android` is the Material 3 Expressive top app bar. |
 | size | `"small" \| "large" \| "medium"` | no | `small` | `small` puts the title in the bar. `medium` and `large` add an expanded title under it that collapses into the bar as the page scrolls; on iOS both are the large title. |
@@ -25,8 +25,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | actions | `TopAppBarAction[]` | no | `[]` | Trailing actions. The first three show as icon buttons; any more join the overflow menu, ahead of `overflowActions`, where they render as plain rows (a menu row draws no badge and routes from `onClick`, not `href`) |
 | overflowActions | `TopAppBarOverflowAction[]` | no | `[]` | Actions listed in a menu behind a trailing "More" button |
 | overflowLabel | `string` | no | `More` | Accessible label of the button that opens the overflow menu |
+| badgeLabel | `((label: string) => string)` | no | `(label: string) => `${label}, new`` | The accessible name of an action that carries a `badge`, given the action's `label`. Defaults to "<label>, new", e.g. "Notifications, new". |
 | scrolled | `boolean` | no |  | Whether content has scrolled under the bar, which collapses an expanded title and switches the bar to its scrolled surface. Leave unset to have the bar watch `scrollTarget` itself. |
 | scrollTarget | `HTMLElement \| null` | no |  | The element whose scroll the bar watches when `scrolled` is unset. Defaults to the window |
-| headingLevel | `4 \| 2 \| 1 \| 5 \| 3 \| 6` | no | `1` | Level of the title's heading element |
+| headingLevel | `1 \| 2 \| 4 \| 5 \| 3 \| 6` | no | `1` | Level of the title's heading element |
 | sticky | `boolean` | no | `true` | Keeps the bar stuck to the top of its scroll container |
 | className | `string` | no | `` | Additional CSS classes |

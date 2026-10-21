@@ -47,3 +47,4 @@ Generated from the rift-ds registry and prop JSDoc, version 1.11.0. The same dat
 | meta | `ReactNode` | no |  | Trailing fact in the caption face: a date, an amount, a state. |
 | href | `string` | no |  | Renders the row as a link to this URL. |
 | className | `string` | no | `` | Additional CSS classes |
+| linkComponent | `LinkComponent` | no |  | The component its links render with, such as Next.js's `Link`, so they navigate through the app's router; a plain `<a>` when unset. This component can render on the server, so it never reads a LinkProvider: pass the prop even under one. |

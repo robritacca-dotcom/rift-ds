@@ -31,6 +31,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.11.0. The same dat
 | topSlot | `ReactNode` | no |  | Rendered under the logo row, above the nav; fades out while collapsed |
 | footerSlot | `ReactNode` | no |  | Rendered above the profile block; fades out while collapsed |
 | className | `string` | no | `` | Additional CSS classes |
+| linkComponent | `LinkComponent` | no |  | The component its links render with, such as Next.js's `Link`, so they navigate through the app's router. Wins over a LinkProvider's; a plain `<a>` when neither is set. |
 | logo | `ReactNode` | no |  | Logo element — defaults to the built-in brand mark |
 | logoText | `string` | no | `Rift` | Text shown next to logo when expanded |
 | showMobileTrigger | `boolean` | no | `true` | Below the mobile breakpoint the rail hides and this fixed hamburger button opens it as an overlay drawer instead. Set false when the host renders its own trigger in the page chrome. |

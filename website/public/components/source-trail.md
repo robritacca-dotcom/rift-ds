@@ -23,4 +23,5 @@ Generated from the rift-ds registry and prop JSDoc, version 1.11.0. The same dat
 | open | `boolean` | no |  | Open state for controlled use. Pair with `onOpenChange`. |
 | defaultOpen | `boolean` | no | `true` | Open state for uncontrolled use. |
 | onOpenChange | `((open: boolean) => void)` | no |  | Fires whenever the panel opens or closes. |
+| linkComponent | `LinkComponent` | no |  | The component its links render with, such as Next.js's `Link`, so they navigate through the app's router; passed on to each source's SourceChip. Wins over a LinkProvider's; a plain `<a>` when neither is set. |
 | className | `string` | no | `` | Additional CSS classes |

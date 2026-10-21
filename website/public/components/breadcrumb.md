@@ -18,3 +18,4 @@ Generated from the rift-ds registry and prop JSDoc, version 1.11.0. The same dat
 | maxItems | `number` | no |  | Maximum visible items before collapsing (min 2: first + last) |
 | className | `string` | no | `` | Additional CSS classes |
 | ariaLabel | `string` | no |  | Legacy accessible-name prop for the nav landmark. Deprecated: Pass the native `aria-label` attribute instead. |
+| linkComponent | `LinkComponent` | no |  | The component its links render with, such as Next.js's `Link`, so they navigate through the app's router; a plain `<a>` when unset. This component can render on the server, so it never reads a LinkProvider: pass the prop even under one. |

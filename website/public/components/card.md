@@ -27,3 +27,4 @@ Generated from the rift-ds registry and prop JSDoc, version 1.11.0. The same dat
 | companyName | `string` | no |  | Company name shown in the eyebrow |
 | dek | `string` | no |  | Subtitle / dek line below the title |
 | placeholder | `boolean` | no | `false` | Render as a disabled placeholder (no href, dimmed, not interactive) |
+| linkComponent | `LinkComponent` | no |  | The component the link renders with, such as Next.js's `Link`, so it navigates through the app's router. Wins over a LinkProvider's; a plain `<a>` when neither is set. |

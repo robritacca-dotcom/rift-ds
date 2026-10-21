@@ -25,6 +25,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.11.0. The same dat
 | href | `string` | no |  | Optional href — renders as <a> instead of <button> |
 | target | `string` | no |  | Optional target attribute for links |
 | rel | `string` | no |  | Optional rel attribute for links |
+| linkComponent | `LinkComponent` | no |  | The component the link renders with, such as Next.js's `Link`, so it navigates through the app's router. Wins over a LinkProvider's; a plain `<a>` when neither is set. |
 | ariaCurrent | `boolean` | no |  | Marks this link as the current page (adds aria-current="page") |
 | className | `string` | no | `` | Additional CSS classes |
 | priority | `"destructive" \| "primary" \| "secondary" \| "tertiary"` | no |  | Legacy alias for `variant`. Deprecated: Use `variant` instead. |

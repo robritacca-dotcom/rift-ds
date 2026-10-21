@@ -25,4 +25,5 @@ Generated from the rift-ds registry and prop JSDoc, version 1.11.0. The same dat
 | logo | `ReactNode` | no |  | Custom logo element |
 | children | `ReactNode` | yes |  | Page content — centred in the main area |
 | theme | `"inherit" \| "dark"` | no | `dark` | Colour scheme: 'dark' pins the layout to the dark theme (the historical behaviour and the default); 'inherit' drops the pin so the layout follows the surrounding data-theme like any other component. |
+| linkComponent | `LinkComponent` | no |  | The component its links render with, such as Next.js's `Link`, so they navigate through the app's router; passed on to the AppSidebar rail. Wins over a LinkProvider's; a plain `<a>` when neither is set. |
 | className | `string` | no | `` | Additional CSS classes on outer wrapper |

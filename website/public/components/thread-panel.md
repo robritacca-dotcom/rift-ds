@@ -51,3 +51,4 @@ Generated from the rift-ds registry and prop JSDoc, version 1.11.0. The same dat
 | profile | `ThreadPanelProfile` | no |  | The signed-in person, rendered as the footer's Avatar row. |
 | footerSlot | `ReactNode` | no |  | Rendered in the footer above the profile row — a theme toggle, a storage meter. Fades out while collapsed, AppSidebar's contract. |
 | className | `string` | no | `` | Additional CSS classes |
+| linkComponent | `LinkComponent` | no |  | The component its links render with, such as Next.js's `Link`, so they navigate through the app's router; a plain `<a>` when unset. This component can render on the server, so it never reads a LinkProvider: pass the prop even under one. |

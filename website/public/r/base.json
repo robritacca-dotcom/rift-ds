@@ -7,6 +7,12 @@
   "author": "Robert Ritacca <https://robertritacca.com>",
   "files": [
     {
+      "path": "src/behaviors/LinkProvider.tsx",
+      "type": "registry:file",
+      "target": "rift/behaviors/LinkProvider.tsx",
+      "content": "'use client';\n\nimport React, { createContext, useContext } from 'react';\n\n/**\n * The props a link component receives: every anchor attribute, the ref, and\n * an `href` that is always a string. Next.js's `Link` takes these as they\n * are; a router whose link takes `to` instead needs a one-line adapter:\n * `({ href, ...props }) => <RouterLink to={href} {...props} />`.\n */\nexport type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };\n\n/** A component that renders a link in place of a plain `<a>`, such as a router's. */\nexport type LinkComponent = React.ElementType<LinkComponentProps>;\n\nconst LinkContext = createContext<LinkComponent | null>(null);\n\nexport interface LinkProviderProps {\n  /**\n   * The link component every rift-ds link under this provider renders, such\n   * as Next.js's `Link`. Named like the instance prop it stands in for.\n   */\n  linkComponent: LinkComponent;\n  /** The part of the app whose links it applies to, usually the whole app. */\n  children?: React.ReactNode;\n}\n\n/**\n * Sets the link component for every client-rendered rift-ds component below\n * it that takes an `href`, so their links navigate through the app's router\n * instead of reloading the page. A component's own `linkComponent` prop\n * wins over it. The link components that can render on the server cannot\n * read a provider and take the prop alone (design.md's Components intro\n * names them, and scripts/validate-component-contract.mjs keeps them off\n * the provider).\n */\nexport function LinkProvider({ linkComponent, children }: LinkProviderProps) {\n  return <LinkContext.Provider value={linkComponent}>{children}</LinkContext.Provider>;\n}\n\n/**\n * The link component to render: the component's own `linkComponent` prop,\n * else the nearest LinkProvider's, else a plain `<a>`.\n */\n// The hook shares the provider's private context, so the two live in one module.\n// eslint-disable-next-line react-refresh/only-export-components\nexport function useLinkComponent(override?: LinkComponent): LinkComponent {\n  const provided = useContext(LinkContext);\n  return override ?? provided ?? 'a';\n}\n"
+    },
+    {
       "path": "src/behaviors/focusable.ts",
       "type": "registry:file",
       "target": "rift/behaviors/focusable.ts",

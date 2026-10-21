@@ -29,3 +29,4 @@ Generated from the rift-ds registry and prop JSDoc, version 1.11.0. The same dat
 | target | `string` | no |  | Optional target attribute for links |
 | rel | `string` | no |  | Optional rel attribute for links |
 | className | `string` | no | `` | Additional CSS classes |
+| linkComponent | `LinkComponent` | no |  | The component the link renders with, such as Next.js's `Link`, so it navigates through the app's router; a plain `<a>` when unset. This component can render on the server, so it never reads a LinkProvider: pass the prop even under one. |

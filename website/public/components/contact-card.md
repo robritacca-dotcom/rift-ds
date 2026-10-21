@@ -25,3 +25,4 @@ Generated from the rift-ds registry and prop JSDoc, version 1.11.0. The same dat
 | copyOnClick | `boolean` | no | `false` | Renders the whole card as a button that calls `onCopy(value)` on click, with no navigation. The copying itself is the `onCopy` handler's job. |
 | copyLabel | `string` | no |  | Accessible name for the copy control: the copy button, or the whole card when `copyOnClick` is set. Defaults to "Copy <value>", and to "Copy <value> to clipboard" on a `copyOnClick` card; both defaults assume your `onCopy` writes the value to the clipboard. |
 | className | `string` | no | `` | Additional CSS classes |
+| linkComponent | `LinkComponent` | no |  | The component its links render with, such as Next.js's `Link`, so they navigate through the app's router. Wins over a LinkProvider's; a plain `<a>` when neither is set. |

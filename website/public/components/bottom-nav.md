@@ -24,3 +24,4 @@ Generated from the rift-ds registry and prop JSDoc, version 1.11.0. The same dat
 | aria-label | `string` | no | `Tabs` | Accessible name of the navigation landmark. Defaults to "Tabs", distinct from Nav's "Main", so a screen carrying both announces two different navs |
 | badgeLabel | `((badge: string \| number \| true) => string)` | no | `(badge: number \| string \| true) =>   badge === true ? ', new' : `, ${badge} new`` | Visually hidden text read after a destination's label when it carries a badge, given the item's `badge`. Defaults to ", new" for a dot (`true`) and ", 3 new" for a count; the leading comma and space are part of the text. |
 | className | `string` | no | `` | Additional CSS classes |
+| linkComponent | `LinkComponent` | no |  | The component its links render with, such as Next.js's `Link`, so they navigate through the app's router. Wins over a LinkProvider's; a plain `<a>` when neither is set. |

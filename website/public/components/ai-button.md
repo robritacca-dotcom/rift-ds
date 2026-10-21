@@ -30,3 +30,4 @@ Generated from the rift-ds registry and prop JSDoc, version 1.11.0. The same dat
 | dismissLabel | `string` | no | `Dismiss summary` | Accessible name of the summary panel's dismiss button. |
 | suggestionsLabel | `string` | no | `Suggested prompts` | Accessible name of the summary panel's group of prompt chips. |
 | className | `string` | no | `` | Additional CSS classes |
+| linkComponent | `LinkComponent` | no |  | The component the link renders with, such as Next.js's `Link`, so it navigates through the app's router. Wins over a LinkProvider's; a plain `<a>` when neither is set. |

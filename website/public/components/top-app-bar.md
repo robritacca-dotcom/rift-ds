@@ -31,3 +31,4 @@ Generated from the rift-ds registry and prop JSDoc, version 1.11.0. The same dat
 | headingLevel | `1 \| 2 \| 4 \| 5 \| 3 \| 6` | no | `1` | Level of the title's heading element |
 | sticky | `boolean` | no | `true` | Keeps the bar stuck to the top of its scroll container |
 | className | `string` | no | `` | Additional CSS classes |
+| linkComponent | `LinkComponent` | no |  | The component its links render with, such as Next.js's `Link`, so they navigate through the app's router. Wins over a LinkProvider's; a plain `<a>` when neither is set. |

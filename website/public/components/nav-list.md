@@ -23,4 +23,5 @@ Generated from the rift-ds registry and prop JSDoc, version 1.11.0. The same dat
 | onNavigate | `((item: NavListItem, event: MouseEvent<HTMLElement, MouseEvent>) => void)` | no |  | Fires when any link is clicked, alongside native navigation — e.g. to close the drawer that contains the list. |
 | expandLabel | `((label: string) => string)` | no | `(label) => `Expand ${label}`` | Accessible name of a collapsed section's chevron toggle, given the row's label. Defaults to "Expand <label>". |
 | collapseLabel | `((label: string) => string)` | no | `(label) => `Collapse ${label}`` | Accessible name of an expanded section's chevron toggle, given the row's label. Defaults to "Collapse <label>". |
+| linkComponent | `LinkComponent` | no |  | The component its links render with, such as Next.js's `Link`, so they navigate through the app's router; passed on to each row's Button. Wins over a LinkProvider's; a plain `<a>` when neither is set. |
 | className | `string` | no | `` | Additional CSS classes |

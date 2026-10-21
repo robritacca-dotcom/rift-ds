@@ -110,7 +110,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.11.0. The same dat
 | feedback | `string \| false \| FeedbackSink` | no | `/api/chat/feedback` | Where a thumbs verdict goes: a sink function, an endpoint for the built-in poster, or `false` to hide the thumbs. Defaults to the poster against `/api/chat/feedback`. Thumbs only ever show on a turn the server logged (one with an exchange id). |
 | renderers | `ChatCardRenderers` | no |  | Draws `card` events by kind. |
 | artifactRenderers | `ChatArtifactRenderers` | no |  | Draws an artifact's preview by kind, for artifacts that are live React content rather than a document or a URL. |
-| renderLink | `ChatLinkRenderer` | no | `({ href, children, onNavigate }) => (   <a href={href} onClick={onNavigate}>     {children}   </a> )` | Renders a same-site link in an answer. The default is a plain anchor; a Next.js host passes its Link. |
+| renderLink | `ChatLinkRenderer` | no | `(props) => <DefaultChatLink {...props} />` | Renders a same-site link in an answer. The default renders through the nearest LinkProvider's link component, else a plain anchor; passing this wins over both. |
 | isInternalHref | `((href: string) => boolean)` | no | `(href: string) => INTERNAL_PATH.test(href)` | Which hrefs in an answer become links. Everything else renders as text. |
 | threads | `ThreadsOptions` | no |  | Seeds the thread lifecycle behind the `threads` and `tabs` slots. |
 | placeholders | `Partial<ChatPlaceholderCopy>` | no |  | Replacement copy for the words the hook writes itself, merged over the English defaults: the status line of a reply that has not started ("Thinking") and the placeholder replies for an empty, stopped or failed turn. |

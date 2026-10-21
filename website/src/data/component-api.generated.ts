@@ -474,6 +474,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Additional CSS classes",
             "defaultValue": ""
+          },
+          {
+            "name": "linkComponent",
+            "type": "LinkComponent",
+            "required": false,
+            "description": "The component the link renders with, such as Next.js's `Link`, so it\nnavigates through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set."
           }
         ]
       }
@@ -849,6 +855,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "dark"
           },
           {
+            "name": "linkComponent",
+            "type": "LinkComponent",
+            "required": false,
+            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router; passed on to the AppSidebar rail. Wins over a\nLinkProvider's; a plain `<a>` when neither is set."
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -979,6 +991,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Additional CSS classes",
             "defaultValue": ""
+          },
+          {
+            "name": "linkComponent",
+            "type": "LinkComponent",
+            "required": false,
+            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set."
           },
           {
             "name": "logo",
@@ -2400,6 +2418,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Additional CSS classes",
             "defaultValue": ""
+          },
+          {
+            "name": "linkComponent",
+            "type": "LinkComponent",
+            "required": false,
+            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set."
           }
         ]
       }
@@ -2444,6 +2468,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Legacy accessible-name prop for the nav landmark.",
             "deprecated": "Pass the native `aria-label` attribute instead."
+          },
+          {
+            "name": "linkComponent",
+            "type": "LinkComponent",
+            "required": false,
+            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router; a plain `<a>` when unset. This\ncomponent can render on the server, so it never reads a LinkProvider:\npass the prop even under one."
           }
         ]
       }
@@ -2530,6 +2560,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Optional rel attribute for links"
+          },
+          {
+            "name": "linkComponent",
+            "type": "LinkComponent",
+            "required": false,
+            "description": "The component the link renders with, such as Next.js's `Link`, so it\nnavigates through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set."
           },
           {
             "name": "ariaCurrent",
@@ -2717,6 +2753,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Render as a disabled placeholder (no href, dimmed, not interactive)",
             "defaultValue": "false"
+          },
+          {
+            "name": "linkComponent",
+            "type": "LinkComponent",
+            "required": false,
+            "description": "The component the link renders with, such as Next.js's `Link`, so it\nnavigates through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set."
           }
         ]
       }
@@ -3582,6 +3624,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Additional CSS classes",
             "defaultValue": ""
+          },
+          {
+            "name": "linkComponent",
+            "type": "LinkComponent",
+            "required": false,
+            "description": "The component the link renders with, such as Next.js's `Link`, so it\nnavigates through the app's router; a plain `<a>` when unset. This\ncomponent can render on the server, so it never reads a LinkProvider:\npass the prop even under one."
           }
         ]
       }
@@ -4655,6 +4703,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Additional CSS classes",
             "defaultValue": ""
+          },
+          {
+            "name": "linkComponent",
+            "type": "LinkComponent",
+            "required": false,
+            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set."
           }
         ]
       }
@@ -7863,6 +7917,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Additional CSS classes",
             "defaultValue": ""
+          },
+          {
+            "name": "linkComponent",
+            "type": "LinkComponent",
+            "required": false,
+            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router; a plain `<a>` when unset. This\ncomponent can render on the server, so it never reads a LinkProvider:\npass the prop even under one."
           }
         ]
       }
@@ -8493,6 +8553,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Accessible name of an expanded section's chevron toggle, given the row's label. Defaults to \"Collapse <label>\".",
             "defaultValue": "(label) => `Collapse ${label}`"
+          },
+          {
+            "name": "linkComponent",
+            "type": "LinkComponent",
+            "required": false,
+            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router; passed on to each row's Button. Wins over a\nLinkProvider's; a plain `<a>` when neither is set."
           },
           {
             "name": "className",
@@ -10671,6 +10737,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Additional CSS classes",
             "defaultValue": ""
+          },
+          {
+            "name": "linkComponent",
+            "type": "LinkComponent",
+            "required": false,
+            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set."
           }
         ]
       }
@@ -10915,6 +10987,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Additional CSS classes",
             "defaultValue": ""
+          },
+          {
+            "name": "linkComponent",
+            "type": "LinkComponent",
+            "required": false,
+            "description": "The component the link renders with, such as Next.js's `Link`, so it\nnavigates through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set."
           }
         ]
       }
@@ -10991,6 +11069,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "((open: boolean) => void)",
             "required": false,
             "description": "Fires whenever the panel opens or closes."
+          },
+          {
+            "name": "linkComponent",
+            "type": "LinkComponent",
+            "required": false,
+            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router; passed on to each source's SourceChip. Wins over a\nLinkProvider's; a plain `<a>` when neither is set."
           },
           {
             "name": "className",
@@ -12285,6 +12369,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Additional CSS classes",
             "defaultValue": ""
+          },
+          {
+            "name": "linkComponent",
+            "type": "LinkComponent",
+            "required": false,
+            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router; a plain `<a>` when unset. This\ncomponent can render on the server, so it never reads a LinkProvider:\npass the prop even under one."
           }
         ]
       }
@@ -13177,6 +13267,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Additional CSS classes",
             "defaultValue": ""
+          },
+          {
+            "name": "linkComponent",
+            "type": "LinkComponent",
+            "required": false,
+            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set."
           }
         ]
       }
@@ -13583,6 +13679,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Additional CSS classes",
             "defaultValue": ""
+          },
+          {
+            "name": "linkComponent",
+            "type": "LinkComponent",
+            "required": false,
+            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router; a plain `<a>` when unset. This\ncomponent can render on the server, so it never reads a LinkProvider:\npass the prop even under one."
           }
         ]
       }
@@ -14335,8 +14437,8 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "renderLink",
             "type": "ChatLinkRenderer",
             "required": false,
-            "description": "Renders a same-site link in an answer. The default is a plain anchor; a Next.js host passes its Link.",
-            "defaultValue": "({ href, children, onNavigate }) => (\n  <a href={href} onClick={onNavigate}>\n    {children}\n  </a>\n)"
+            "description": "Renders a same-site link in an answer. The default renders through the\nnearest LinkProvider's link component, else a plain anchor; passing\nthis wins over both.",
+            "defaultValue": "(props) => <DefaultChatLink {...props} />"
           },
           {
             "name": "isInternalHref",

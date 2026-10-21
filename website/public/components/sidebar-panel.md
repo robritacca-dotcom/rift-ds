@@ -23,3 +23,4 @@ Generated from the rift-ds registry and prop JSDoc, version 1.11.0. The same dat
 | onBack | `(() => void)` | no |  | Renders a back row above the heading and calls this when it is pressed; the drill-in navigation on small screens |
 | backLabel | `string` | no | `Back` | Label of the back row |
 | className | `string` | no | `` | Additional CSS classes |
+| linkComponent | `LinkComponent` | no |  | The component its links render with, such as Next.js's `Link`, so they navigate through the app's router. Wins over a LinkProvider's; a plain `<a>` when neither is set. |

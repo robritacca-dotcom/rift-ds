@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useReducedMotion } from '../../behaviors/reducedMotion';
 
 /** The animation props every recharts graphical item takes. */
 export interface ChartAnimationProps {
@@ -82,8 +83,12 @@ export function useChartAnimation(
     return () => window.clearTimeout(timer);
   }, [durationMs, cycle, seriesCount]);
 
+  /* recharts' 'auto' sees only the OS setting; the host's switch on <html>
+     (data-motion, or the AAA mode) has to turn the entrance off here. */
+  const reducedMotion = useReducedMotion();
+
   return {
-    isAnimationActive: ended < seriesCount ? 'auto' : false,
+    isAnimationActive: ended < seriesCount && !reducedMotion ? 'auto' : false,
     onAnimationEnd,
     ...(durationMs == null ? {} : { animationDuration: durationMs }),
   };

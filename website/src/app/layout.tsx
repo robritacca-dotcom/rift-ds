@@ -5,6 +5,9 @@ import "rift-ds/tokens/tokens.css";
 // bundle loaded site-wide, setting data-brand="<id>" on <html> rethemes
 // every page immediately, light and dark, with zero runtime JS.
 import "rift-ds/tokens/presets/presets.css";
+// The AAA mode: inert until data-a11y="aaa" lands on <html> (the theme
+// script below sets it). After the presets, so it adjusts whichever is on.
+import "rift-ds/tokens/aaa.css";
 // Single source of the Material Symbols base styles and icon-size scale.
 // Imported explicitly rather than relying on it arriving incidentally through
 // a component import, so pages that use raw .material-symbols-rounded spans
@@ -126,6 +129,22 @@ const themeScript = `
     if (brand === '${BASE_THEME_ID}' || brand === '${LEGACY_BASE_THEME_ID}') root.removeAttribute('data-brand');
     else if (brand) root.setAttribute('data-brand', brand);
   } catch (e) {}
+  /* The AAA mode (rift-ds/tokens/aaa.css) rides the same pre-paint path, so
+     a visitor who turned it on never sees one frame without it. A saved
+     pick ("aaa" or "standard") wins; with none, the mode follows the OS's
+     more-contrast setting, live (src/lib/a11y-mode.ts owns the toggle). */
+  var contrast = window.matchMedia('(prefers-contrast: more)');
+  function syncA11y() {
+    var saved = null;
+    try { saved = localStorage.getItem('a11y'); } catch (e) {}
+    if (saved === 'aaa' || (saved !== 'standard' && contrast.matches)) root.setAttribute('data-a11y', 'aaa');
+    else root.removeAttribute('data-a11y');
+  }
+  syncA11y();
+  contrast.addEventListener('change', syncA11y);
+  window.addEventListener('storage', function (event) {
+    if (event.key === 'a11y' || event.key === null) syncA11y();
+  });
   /* An attribute, deliberately not a class: React owns <html>'s className
      (the next/font variable class), so a hydration failure's client
      re-render rewrites it — a ready *class* gets wiped and the site stays

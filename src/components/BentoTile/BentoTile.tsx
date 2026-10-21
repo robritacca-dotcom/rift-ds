@@ -10,6 +10,7 @@ import { useMounted } from '../../behaviors/useMounted';
 import { useLayer } from '../../behaviors/useLayer';
 import { useFocusScope } from '../../behaviors/useFocusScope';
 import { useScrollLock } from '../../behaviors/useScrollLock';
+import { prefersReducedMotion } from '../../behaviors/reducedMotion';
 
 /** Props owned by BentoTile itself; everything else falls through to the tile. */
 type BentoTileOwnProps = {
@@ -92,7 +93,7 @@ const MORPHING = 'ds-bento-tile-morphing';
  */
 function morph(update: () => void): Promise<void> {
   const doc = document as ViewTransitionDoc;
-  const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const still = prefersReducedMotion();
   if (!doc.startViewTransition || still) {
     update();
     return Promise.resolve();

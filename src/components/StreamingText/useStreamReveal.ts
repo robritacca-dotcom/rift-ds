@@ -23,6 +23,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { MOTION_STREAM_DRAIN_MS, MOTION_STREAM_FLOOR_CPS } from '../../tokens/motion';
+import { prefersReducedMotion } from '../../behaviors/reducedMotion';
 
 export interface StreamRevealOptions {
   /** Receives the visible slice each time the reveal moves it. */
@@ -210,7 +211,7 @@ export function useStreamReveal(
     if (engineRef.current === null) {
       engineRef.current = createStreamReveal({
         onUpdate: setRevealedText,
-        paced: () => !window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+        paced: () => !prefersReducedMotion(),
         get floorCps() {
           return floorCpsRef.current;
         },

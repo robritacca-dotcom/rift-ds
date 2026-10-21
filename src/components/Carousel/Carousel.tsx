@@ -1,21 +1,10 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useCallback, useSyncExternalStore, type ReactNode } from 'react';
+import React, { useState, useEffect, useRef, useCallback, type ReactNode } from 'react';
 import { MOTION_AUTOPLAY_INTERVAL_MS } from '../../tokens/motion';
+import { useReducedMotion } from '../../behaviors/reducedMotion';
 import './Carousel.css';
 import '../../fonts/material-symbols.css';
-
-const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
-
-// matchMedia as an external store: auto-play reacts live when the OS
-// reduced-motion setting flips, and the server snapshot keeps SSR safe.
-const subscribeReducedMotion = (callback: () => void) => {
-  const query = window.matchMedia(REDUCED_MOTION_QUERY);
-  query.addEventListener('change', callback);
-  return () => query.removeEventListener('change', callback);
-};
-const getReducedMotion = () => window.matchMedia(REDUCED_MOTION_QUERY).matches;
-const getServerReducedMotion = () => false;
 
 /** Props owned by Carousel itself — everything else falls through to the region. */
 type CarouselOwnProps = {
@@ -110,11 +99,8 @@ export const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
     const [internalIndex, setInternalIndex] = useState(defaultSlide);
     const activeIndex = isControlled ? slide : internalIndex;
     const [paused, setPaused] = useState(false);
-    const reducedMotion = useSyncExternalStore(
-      subscribeReducedMotion,
-      getReducedMotion,
-      getServerReducedMotion,
-    );
+    // Live: auto-play stops the moment the OS setting or the host's switch flips.
+    const reducedMotion = useReducedMotion();
     const containerRef = useRef<HTMLDivElement | null>(null);
     const setRef = (node: HTMLDivElement | null) => {
       containerRef.current = node;

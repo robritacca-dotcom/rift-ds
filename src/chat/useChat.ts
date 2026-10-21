@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 import { revokeAttachmentUrls } from '../components/Attachment/useAttachments';
 import type { AttachmentItem } from '../components/Attachment/fileTypes';
 import { createStreamReveal } from '../components/StreamingText/useStreamReveal';
+import { prefersReducedMotion } from '../behaviors/reducedMotion';
 import { describeAnswers, sanitizeQuestionSet, serializeReply } from './questions';
 import type {
   ChatQuestionAnswer,
@@ -262,7 +263,7 @@ export function useChat(
       const reveal = createStreamReveal({
         onUpdate: (visible) => update({ ...current, text: visible }),
         /* Someone who has asked for less motion is asking for less of this. */
-        paced: !window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+        paced: !prefersReducedMotion(),
       });
 
       const run = async () => {

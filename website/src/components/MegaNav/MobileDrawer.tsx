@@ -3,6 +3,7 @@
 import type { CSSProperties } from "react";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
 import BrandSwitcher from "../BrandSwitcher/BrandSwitcher";
+import A11yToggle from "../ThemeToggle/A11yToggle";
 import { NavList, type NavListItem } from "rift-ds/components/NavList/NavList";
 import SiteLogo from "./SiteLogo";
 import styles from "./MegaNav.module.css";
@@ -70,10 +71,11 @@ export default function MobileDrawer({
         </nav>
         <div className={styles.mobileThemeToggle}>
           {/* The drawer serves every width the header's pills leave, so it
-              carries both selectors: look, then light and dark. The menu
-              opens upward — the row sits on the drawer floor. */}
+              carries every selector: look, light and dark, then the AAA
+              mode. The menu opens upward — the row sits on the drawer floor. */}
           <BrandSwitcher placement="up" align="left" />
           <ThemeToggle />
+          <A11yToggle />
         </div>
       </div>
     </div>

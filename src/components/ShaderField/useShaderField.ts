@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type RefObject } from "react";
 import { BLOB_COUNT, fragmentSource, vertexSource } from "./field.glsl";
 import { MOTION_CONTEXT_RESTORE_WAIT_MS, MOTION_SHADER_COLOR_FADE_MS } from '../../tokens/motion';
+import { prefersReducedMotion, subscribeReducedMotion } from '../../behaviors/reducedMotion';
 
 /** The eight tuneable properties of the field. */
 export interface ShaderParams {
@@ -500,8 +501,6 @@ export function useShaderField(
        constant's note. Set at the end of each draw from the current speed. */
     let frameBudget = FRAME_MS;
 
-    const reduceQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-
     function frame(now: number) {
       raf = requestAnimationFrame(frame);
       const elapsed = now - lastDraw;
@@ -514,7 +513,7 @@ export function useShaderField(
     }
 
     function start() {
-      if (running || disposed || reduceQuery.matches || document.hidden) return;
+      if (running || disposed || prefersReducedMotion() || document.hidden) return;
       running = true;
       lastDraw = performance.now();
       raf = requestAnimationFrame(frame);
@@ -534,14 +533,14 @@ export function useShaderField(
     redrawRef.current = renderOnce;
 
     const onReduceChange = () => {
-      if (reduceQuery.matches) {
+      if (prefersReducedMotion()) {
         stop();
         renderOnce();
       } else {
         start();
       }
     };
-    reduceQuery.addEventListener("change", onReduceChange);
+    const unsubscribeReduce = subscribeReducedMotion(onReduceChange);
 
     const onVisibility = () => {
       if (document.hidden) stop();
@@ -601,7 +600,7 @@ export function useShaderField(
         uploadedBlobs = null; // new program: fresh uniform state
         colorsDirty = true;
         setActive(true);
-        if (reduceQuery.matches) renderOnce();
+        if (prefersReducedMotion()) renderOnce();
         else start();
       }
     };
@@ -645,7 +644,7 @@ export function useShaderField(
       window.clearTimeout(restoreTimer);
       redrawRef.current = () => {};
       window.removeEventListener("pointermove", onPointerMove);
-      reduceQuery.removeEventListener("change", onReduceChange);
+      unsubscribeReduce();
       document.removeEventListener("visibilitychange", onVisibility);
       themeObserver.disconnect();
       resizeObserver.disconnect();

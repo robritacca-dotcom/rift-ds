@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './AnimatedNumber.css';
 import { MOTION_COUNT_UP_MS } from '../../tokens/motion';
+import { prefersReducedMotion } from '../../behaviors/reducedMotion';
 
 /** Props owned by AnimatedNumber itself — everything else falls through to the root span. */
 type AnimatedNumberOwnProps = {
@@ -29,11 +30,6 @@ type AnimatedNumberOwnProps = {
 export interface AnimatedNumberProps
   extends AnimatedNumberOwnProps,
     Omit<React.ComponentPropsWithoutRef<'span'>, keyof AnimatedNumberOwnProps | 'children'> {}
-
-const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
-
-const prefersReducedMotion = () =>
-  typeof window !== 'undefined' && window.matchMedia(REDUCED_MOTION_QUERY).matches;
 
 /** Decelerating curve — the count lands softly instead of stopping dead. */
 const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);

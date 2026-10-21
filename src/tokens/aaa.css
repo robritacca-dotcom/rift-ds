@@ -1,0 +1,77 @@
+/* ============================================
+   AAA MODE: ENTRY POINT
+   Import after tokens.css (and presets.css, if you use the presets),
+   then set data-a11y="aaa" on <html>. Inert without the attribute.
+
+   One switch, a handful of high-impact changes, and the theme stays
+   recognisably itself:
+   - Colour (aaa-colours.css, generated): text clears 7:1 and icons,
+     input edges and the focus ring 4.5:1, in the active preset's own
+     hues, light and dark (WCAG 1.4.6, 1.4.11).
+   - Motion: every animation and transition stops, CSS and JavaScript
+     alike (2.3.3). data-motion="reduce" asks for this half alone.
+   - Focus: a thicker ring on every focus-visible outline (2.4.13).
+   - Links: links in running text are underlined, never told apart by
+     colour alone (1.4.1).
+   - No translucency: backdrop blur is off and glass surfaces are opaque,
+     so text never sits over whatever scrolls beneath it.
+   ============================================ */
+
+@import './aaa-colours.css';
+
+/* ── Motion ─────────────────────────────────────────────────────────
+   The same collapse as the prefers-reduced-motion guard in
+   tokens-motion.css, keyed to the host's switch. Components that move
+   in JavaScript read the same two attributes through
+   src/behaviors/reducedMotion.ts. */
+
+html[data-motion="reduce"],
+html[data-a11y="aaa"] {
+  --motion-duration-fast: 0.01ms;
+  --motion-duration-base: 0.01ms;
+  --motion-duration-slow: 0.01ms;
+  --motion-duration-slower: 0.01ms;
+  --motion-duration-instant: 0.01ms;
+  --motion-duration-deliberate: 0.01ms;
+  --motion-duration-orbit: 0.01ms;
+  --motion-duration-loop-spin: 0.01ms;
+  --motion-duration-loop-shimmer: 0.01ms;
+  --motion-duration-loop-matrix: 0.01ms;
+}
+
+html[data-motion="reduce"] *,
+html[data-motion="reduce"] *::before,
+html[data-motion="reduce"] *::after,
+html[data-a11y="aaa"] *,
+html[data-a11y="aaa"] *::before,
+html[data-a11y="aaa"] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* ── Focus ──────────────────────────────────────────────────────────
+   Only the width: each component keeps its own ring colour, style and
+   offset, and an element with no outline gains none. */
+
+html[data-a11y="aaa"] :focus-visible {
+  outline-width: calc(var(--border-050) + var(--border-025)) !important;
+}
+
+/* ── Links ──────────────────────────────────────────────────────────
+   Links inside running text, not navigation or buttons styled as links. */
+
+html[data-a11y="aaa"] :is(p, li, dd, td, figcaption, blockquote) a:not(nav a) {
+  text-decoration-line: underline;
+  text-decoration-thickness: var(--border-050);
+  text-underline-offset: 0.2em;
+}
+
+/* ── Translucency ───────────────────────────────────────────────────
+   aaa-colours.css makes the glass and semi surfaces opaque; this removes
+   the blur that read through them. */
+
+html[data-a11y="aaa"] * {
+  backdrop-filter: none !important;
+}

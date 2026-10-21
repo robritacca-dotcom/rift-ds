@@ -99,13 +99,13 @@ export default function AiSection() {
       <ToolCall
         name="search_tokens"
         summary="action colour"
-        status="success"
+        status="completed"
         duration="0.4s"
       >
         <CodeBlock code={TOOL_ARGS} language="json" />
       </ToolCall>
 
-      <ToolCall name="generate_theme_css" summary="current lever state" status="running" />
+      <ToolCall name="generate_theme_css" summary="current lever state" status="active" />
 
       <PromptSuggestions
         suggestions={SUGGESTIONS}

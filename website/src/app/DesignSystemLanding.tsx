@@ -769,7 +769,7 @@ export default function DesignSystemLanding() {
         </Reasoning>
         <ToolCall
           name="query_transactions"
-          status="success"
+          status="completed"
           summary="86 transactions scanned"
         />
         <ChatMessage

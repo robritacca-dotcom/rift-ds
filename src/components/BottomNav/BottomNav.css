@@ -268,7 +268,7 @@
 }
 
 .ds-bottom-nav--ios .ds-bottom-nav__badge {
-  /* systemRed, light and dark alike on a badge. */
+  /* ds-allow(platform): systemRed with a white numeral, light and dark alike on an iOS badge */
   background-color: #ff3b30;
   color: #fff;
   font-family: inherit;
@@ -404,7 +404,7 @@
 .ds-bottom-nav--android .ds-bottom-nav__badge {
   top: 2px;
   left: calc(50% + 4px);
-  /* The Material error role's baseline red. */
+  /* ds-allow(platform): the Material error role's baseline red with a white numeral */
   background-color: #b3261e;
   color: #fff;
   font-family: inherit;

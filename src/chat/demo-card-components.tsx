@@ -31,7 +31,8 @@ export interface DemoChartCard {
 export interface DemoToolCallCard {
   name: string;
   summary: string;
-  status: 'success' | 'error' | 'running';
+  /** `success`, `error` and `running` are legacy spellings of `completed`, `failed` and `active`. */
+  status: 'completed' | 'failed' | 'active' | 'success' | 'error' | 'running';
   duration?: string;
   args?: string;
   /** The error can be retried in place; the retry runs for a beat and lands as a success. */
@@ -53,11 +54,18 @@ export interface DemoStackCard {
    before it lands. */
 const RETRY_RUN_MS = 1400;
 
+/** The card's legacy spellings, mapped onto the shared agent vocabulary. */
+const LEGACY_CARD_STATUS: Partial<Record<DemoToolCallCard['status'], DemoToolCallCard['status']>> = {
+  success: 'completed',
+  error: 'failed',
+  running: 'active',
+};
+
 export function DemoToolCall({ card }: { card: DemoToolCallCard }) {
-  const [status, setStatus] = useState(card.status);
+  const [status, setStatus] = useState(LEGACY_CARD_STATUS[card.status] ?? card.status);
   useEffect(() => {
-    if (status !== 'running' || !card.retryable) return;
-    const timer = setTimeout(() => setStatus('success'), RETRY_RUN_MS);
+    if (status !== 'active' || !card.retryable) return;
+    const timer = setTimeout(() => setStatus('completed'), RETRY_RUN_MS);
     return () => clearTimeout(timer);
   }, [status, card.retryable]);
   return (
@@ -65,10 +73,10 @@ export function DemoToolCall({ card }: { card: DemoToolCallCard }) {
       name={card.name}
       summary={card.summary}
       status={status}
-      duration={status === 'running' ? undefined : card.duration}
+      duration={status === 'active' ? undefined : card.duration}
       actions={
-        card.retryable && status === 'error' ? (
-          <Button label="Retry" variant="secondary" size="compact" onClick={() => setStatus('running')} />
+        card.retryable && status === 'failed' ? (
+          <Button label="Retry" variant="secondary" size="compact" onClick={() => setStatus('active')} />
         ) : undefined
       }
     >

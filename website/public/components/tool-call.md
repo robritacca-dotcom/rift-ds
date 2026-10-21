@@ -15,7 +15,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same dat
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | name | `string` | yes |  | The tool that was invoked, shown in monospace. |
-| status | `ToolCallStatus` | no | `success` | Where the call has got to. Drives the colour, the indicator, and the default status text. |
+| status | `ToolCallStatus` | no | `completed` | Where the call has got to: `pending` (awaiting approval), `active`, `completed` or `failed`. Drives the colour, the indicator, and the default status text. `running`, `success` and `error` are legacy values that render as `active`, `completed` and `failed`. |
 | summary | `string` | no |  | One line describing this particular call, e.g. the target path or query. |
 | duration | `string` | no |  | How long the call took, e.g. "1.2s". Free text, so callers keep their own formatting. |
 | statusLabel | `string` | no |  | Override the status text shown beside the indicator. |

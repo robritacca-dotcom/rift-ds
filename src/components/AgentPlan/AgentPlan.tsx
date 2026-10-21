@@ -2,10 +2,12 @@
 
 import React, { useCallback, useId, useState } from 'react';
 import { Spinner } from '../Spinner/Spinner';
+import type { AgentStepStatus } from './stepStatus';
 import './AgentPlan.css';
 import '../../fonts/material-symbols.css';
 
-export type AgentPlanStepStatus = 'pending' | 'active' | 'completed' | 'failed';
+/** A plan step's status — the shared agent vocabulary (see `AgentStepStatus`). */
+export type AgentPlanStepStatus = AgentStepStatus;
 
 export interface AgentPlanStep {
   /** What this step does, in one line. */
@@ -167,3 +169,5 @@ export const AgentPlan = React.forwardRef<HTMLDivElement, AgentPlanProps>(
 );
 
 AgentPlan.displayName = 'AgentPlan';
+
+export type { AgentStepStatus } from './stepStatus';

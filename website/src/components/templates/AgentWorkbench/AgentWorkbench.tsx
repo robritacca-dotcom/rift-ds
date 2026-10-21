@@ -512,7 +512,7 @@ export default function AgentWorkbench() {
                 <ToolCall
                   name="search"
                   summary="scheduleRetry in src/uploads"
-                  status="success"
+                  status="completed"
                   duration="0.3s"
                 >
                   <CodeBlock
@@ -524,7 +524,7 @@ export default function AgentWorkbench() {
                 <ToolCall
                   name="read_file"
                   summary="src/uploads/retry.ts"
-                  status="success"
+                  status="completed"
                   duration="0.2s"
                 />
                 <p className={styles.turnText}>{DIAGNOSIS}</p>
@@ -561,7 +561,7 @@ export default function AgentWorkbench() {
                     <ToolCall
                       name="run_tests"
                       summary="vitest run uploads"
-                      status="success"
+                      status="completed"
                       duration="41.2s"
                     />
                   )}

@@ -70,7 +70,7 @@ function LiveRunDemo() {
           key={call.name}
           name={call.name}
           summary={call.summary}
-          status={index === revealed - 1 && revealed < script.length ? "running" : "success"}
+          status={index === revealed - 1 && revealed < script.length ? "active" : "completed"}
           duration={index === revealed - 1 && revealed < script.length ? undefined : call.duration}
           style={{ alignSelf: "stretch" }}
         />
@@ -81,7 +81,7 @@ function LiveRunDemo() {
 
 /** The approval flow, so the pending state can actually be answered. */
 function ApprovalDemo() {
-  const [status, setStatus] = useState<"pending" | "success" | "error">("pending");
+  const [status, setStatus] = useState<"pending" | "completed" | "failed">("pending");
 
   return (
     <ToolCall
@@ -96,13 +96,13 @@ function ApprovalDemo() {
               variant="secondary"
               size="compact"
               label="Deny"
-              onClick={() => setStatus("error")}
+              onClick={() => setStatus("failed")}
             />
             <Button
               variant="primary"
               size="compact"
               label="Allow"
-              onClick={() => setStatus("success")}
+              onClick={() => setStatus("completed")}
             />
           </>
         ) : (
@@ -154,7 +154,7 @@ export default function ToolCallPage() {
             </p>
             <div className={styles.stack}>
               <ToolCall name="read_file" summary="package.json" duration="0.1s" />
-              <ToolCall name="bash" summary="npm run lint" status="running" />
+              <ToolCall name="bash" summary="npm run lint" status="active" />
               <ToolCall
                 name="write_file"
                 summary="src/app/page.tsx"
@@ -163,7 +163,7 @@ export default function ToolCallPage() {
               <ToolCall
                 name="fetch"
                 summary="https://api.example.com/v2/users"
-                status="error"
+                status="failed"
                 duration="1.1s"
               >
                 ENOENT: no such file or directory

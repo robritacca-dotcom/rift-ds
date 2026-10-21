@@ -157,17 +157,17 @@
   --ds-tool-call-icon-color: var(--color-status-warning-icon);
 }
 
-.ds-tool-call--running {
+.ds-tool-call--active {
   --ds-tool-call-color: var(--color-status-info-text);
   --ds-tool-call-icon-color: var(--color-status-info-icon);
 }
 
-.ds-tool-call--success {
+.ds-tool-call--completed {
   --ds-tool-call-color: var(--color-status-positive-text);
   --ds-tool-call-icon-color: var(--color-status-positive-icon);
 }
 
-.ds-tool-call--error {
+.ds-tool-call--failed {
   --ds-tool-call-color: var(--color-status-error-text);
   --ds-tool-call-icon-color: var(--color-status-error-icon);
 }

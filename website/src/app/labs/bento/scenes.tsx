@@ -279,10 +279,10 @@ export function McpScene() {
     <div className={`${styles.scene} ${styles.stack}`}>
       <div className={styles.toolStack}>
         {TOOLS.map((t, i) => {
-          const status = i < at ? "success" : i === at ? (step % 2 ? "success" : "running") : "pending";
+          const status = i < at ? "completed" : i === at ? (step % 2 ? "completed" : "active") : "pending";
           return (
             <div key={t.name} className={styles.revealed} data-on={i <= at}>
-              <ToolCall name={t.name} status={status} duration={status === "success" ? `${120 + i * 40}ms` : undefined} />
+              <ToolCall name={t.name} status={status} duration={status === "completed" ? `${120 + i * 40}ms` : undefined} />
             </div>
           );
         })}

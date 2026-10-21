@@ -121,6 +121,7 @@
 
 /* The wash always pools in the bottom-left corner, under its texture. */
 .ds-bento-tile__shader {
+  /* ds-allow(color): mask luminance keying — the #000 paints alpha coverage, not a colour */
   mask: radial-gradient(80% 110% at 0% 100%, #000 10%, transparent 65%);
 }
 
@@ -152,6 +153,7 @@
      toward the middle, with the bottom and left edges eased in as well so
      no mark meets the border hard. Three layers, intersected. */
   --_edge: var(--gap-1000);
+  /* ds-allow(color): mask luminance keying — the #000 paints alpha coverage, not a colour */
   --_fade:
     radial-gradient(120% 100% at 0% 100%, transparent 0%, #000 28%, transparent 70%),
     linear-gradient(to top, transparent, #000 var(--_edge)),
@@ -324,14 +326,17 @@
 .ds-bento-tile--align-end .ds-bento-tile__content { margin-top: auto; }
 
 .ds-bento-tile__body[data-overflow-y] {
+  /* ds-allow(color): mask luminance keying — the #000 paints alpha coverage, not a colour */
   mask: linear-gradient(to bottom, #000 calc(100% - var(--_fade)), transparent);
 }
 
 .ds-bento-tile__body[data-overflow-x] {
+  /* ds-allow(color): mask luminance keying — the #000 paints alpha coverage, not a colour */
   mask: linear-gradient(to right, #000 calc(100% - var(--_fade)), transparent);
 }
 
 .ds-bento-tile__body[data-overflow-x][data-overflow-y] {
+  /* ds-allow(color): mask luminance keying — the #000 paints alpha coverage, not a colour */
   mask:
     linear-gradient(to bottom, #000 calc(100% - var(--_fade)), transparent),
     linear-gradient(to right, #000 calc(100% - var(--_fade)), transparent);

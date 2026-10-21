@@ -16,7 +16,7 @@ const meta = {
   argTypes: {
     status: {
       control: 'inline-radio',
-      options: ['pending', 'running', 'success', 'error'],
+      options: ['pending', 'active', 'completed', 'failed'],
     },
   },
   args: {
@@ -36,12 +36,12 @@ export const Default: Story = {
 };
 
 export const Running: Story = {
-  args: { status: 'running', duration: undefined },
+  args: { status: 'active', duration: undefined },
 };
 
 export const Failed: Story = {
   args: {
-    status: 'error',
+    status: 'failed',
     duration: '1.1s',
     children: 'ENOENT: no such file or directory',
   },
@@ -75,7 +75,7 @@ export const Sequence: Story = {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
       <ToolCall {...args} name="read_file" summary="package.json" duration="0.1s" />
       <ToolCall {...args} name="grep" summary="--color-status-" duration="0.4s" />
-      <ToolCall {...args} name="bash" summary="npm run lint" status="running" duration={undefined} />
+      <ToolCall {...args} name="bash" summary="npm run lint" status="active" duration={undefined} />
     </div>
   ),
   args: { children: undefined },

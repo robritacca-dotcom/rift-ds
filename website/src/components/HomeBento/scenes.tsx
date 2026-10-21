@@ -180,7 +180,7 @@ export function ChatScene() {
         </Reasoning>
       </div>
       <div className={styles.revealed} data-on={step >= 3}>
-        <ToolCall name="query_transactions" status={step >= 4 ? "success" : "running"} duration={step >= 4 ? "240ms" : undefined} />
+        <ToolCall name="query_transactions" status={step >= 4 ? "completed" : "active"} duration={step >= 4 ? "240ms" : undefined} />
       </div>
       <div className={styles.revealed} data-on={step >= 4}>
         <ChatMessage role="assistant" size="compact" showAvatar={false}>
@@ -360,10 +360,10 @@ export function AgentsTileScene() {
   return (
     <div className={styles.toolStack}>
       {TOOL_CALLS.map((name, i) => {
-        const status = i < at ? "success" : i === at ? (step % 2 ? "success" : "running") : "pending";
+        const status = i < at ? "completed" : i === at ? (step % 2 ? "completed" : "active") : "pending";
         return (
           <div key={name} className={styles.revealed} data-on={i <= at}>
-            <ToolCall name={name} status={status} duration={status === "success" ? `${120 + i * 40}ms` : undefined} />
+            <ToolCall name={name} status={status} duration={status === "completed" ? `${120 + i * 40}ms` : undefined} />
           </div>
         );
       })}

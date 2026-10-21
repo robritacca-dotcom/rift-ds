@@ -3,22 +3,29 @@
 import React, { useCallback, useId, useState } from 'react';
 import { SourceChip } from '../SourceChip/SourceChip';
 import { Spinner } from '../Spinner/Spinner';
+import type { AgentStepStatus } from '../AgentPlan/stepStatus';
 import './SourceTrail.css';
 import '../../fonts/material-symbols.css';
 
-export type SourceTrailStatus = 'pending' | 'active' | 'done';
+/**
+ * Where a source visit has got to: the shared agent vocabulary (`AgentStepStatus`).
+ * `done` is the legacy spelling of `completed`, kept as an alias that renders unchanged.
+ */
+export type SourceTrailStatus = AgentStepStatus | 'done';
 
 /** The glyph beside a settled row — the active row shows a spinner instead. */
-const STATUS_ICONS: Record<Exclude<SourceTrailStatus, 'active'>, string> = {
+const STATUS_ICONS: Record<Exclude<AgentStepStatus, 'active'>, string> = {
   pending: 'circle',
-  done: 'check_circle',
+  completed: 'check_circle',
+  failed: 'error',
 };
 
 /** Announced to screen readers alongside each source's title. */
-const STATUS_TEXT: Record<SourceTrailStatus, string> = {
+const STATUS_TEXT: Record<AgentStepStatus, string> = {
   pending: 'Not opened yet',
   active: 'Reading now',
-  done: 'Read',
+  completed: 'Read',
+  failed: 'Could not open',
 };
 
 /** One source the agent opened while answering. */
@@ -29,7 +36,10 @@ export interface SourceTrailItem {
   href?: string;
   /** Leading icon for the chip — a Material Symbol name (string) or custom element (ReactNode). */
   icon?: string | React.ReactNode;
-  /** Where the visit has got to. Drives the row's indicator; defaults to done. */
+  /**
+   * Where the visit has got to: `pending`, `active`, `completed` or `failed`. Drives the row's
+   * indicator; defaults to `completed`. `done` is a legacy value that renders as `completed`.
+   */
   status?: SourceTrailStatus;
   /** Supporting line, e.g. what the source contributed to the answer. */
   detail?: string;
@@ -149,7 +159,8 @@ export const SourceTrail = React.forwardRef<HTMLDivElement, SourceTrailProps>(
         >
           <ol className={`${baseClass}__list`}>
             {items.map((item, index) => {
-              const status = item.status ?? 'done';
+              const status: AgentStepStatus =
+                !item.status || item.status === 'done' ? 'completed' : item.status;
               return (
                 <li
                   key={`${item.title}-${index}`}

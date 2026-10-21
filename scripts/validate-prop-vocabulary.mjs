@@ -39,15 +39,23 @@
  *      shipped. ESLint's no-deprecated rule was tried for this and rejected:
  *      it also flags a component reading its own deprecated props and every
  *      third-party deprecation, which buries the one case that matters.
- *      Limits: an attribute whose value is an expression is checked only
- *      when it is a string literal, and props passed through an object
- *      (ButtonGroup's entries, a spread) are not seen.
+ *      Limits: an attribute whose value is an expression is checked through
+ *      the string literals inside it (both arms of a ternary), so a value
+ *      computed elsewhere is not seen, and nor are props passed through an
+ *      object (ButtonGroup's entries, a spread, a SourceTrail item).
+ *   6. Agent work speaks one status vocabulary. Every exported `*Status`
+ *      type in an `ai`-category component's folder is either the shared
+ *      `AgentStepStatus` (src/components/AgentPlan/stepStatus.ts), that type
+ *      plus the legacy spellings LEGACY_STATUS_VALUES lists for it, or a
+ *      deliberately different set recorded in SANCTIONED_STATUS_SETS with
+ *      what it describes instead. Both tables are held in both directions.
+ *      design.md's AgentPlan spec owns the vocabulary.
  *
  * Runs in the validate-registry chain, after generate-component-api.mjs: it
  * reads source through the shared docgen parse (scripts/component-docgen.mjs)
  * and nothing a build produces.
  */
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { join, relative, sep } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import ts from 'typescript';
@@ -90,6 +98,24 @@ const LEGACY_VALUES = {
   CircularButton: { variant: ['neutral'] },
   SplitButton: { variant: ['neutral'] },
   Sparkline: { tone: ['negative'] },
+  ToolCall: { status: ['error', 'running', 'success'] },
+};
+
+/** The shared status vocabulary for a unit of agent work, and where it lives. */
+const AGENT_STEP_STATUS = 'AgentStepStatus';
+const AGENT_STEP_STATUS_FILE = 'src/components/AgentPlan/stepStatus.ts';
+
+/** Legacy spellings a status type still accepts beside the shared vocabulary. */
+const LEGACY_STATUS_VALUES = {
+  ToolCallStatus: ['error', 'running', 'success'],
+  SourceTrailStatus: ['done'],
+};
+
+/** `ai`-category status types that describe something other than a unit of agent work, with what. */
+const SANCTIONED_STATUS_SETS = {
+  AttachmentStatus: 'a file moving through upload, not a step of a run',
+  ThreadTabStatus: "a whole thread's activity as a tab shows it, not a step of a run",
+  ThreadPanelThreadStatus: "a whole thread's activity as the history list shows it, not a step of a run",
 };
 
 const literalValues = (prop) =>
@@ -241,12 +267,24 @@ for (const file of tracked) {
           }
           const legacy = LEGACY_VALUES[tag]?.[propName];
           if (!legacy || !attr.initializer) continue;
-          let literal = null;
-          if (ts.isStringLiteral(attr.initializer)) literal = attr.initializer.text;
-          else if (ts.isJsxExpression(attr.initializer) && attr.initializer.expression && ts.isStringLiteral(attr.initializer.expression)) {
-            literal = attr.initializer.expression.text;
-          }
-          if (literal && legacy.includes(literal)) {
+          // The literals the attribute can evaluate to: a ternary's arms and a
+          // fallback's operands, never the literals a condition compares against.
+          const valuesOf = (n) => {
+            if (!n) return [];
+            if (ts.isStringLiteral(n) || ts.isNoSubstitutionTemplateLiteral(n)) return [n.text];
+            if (ts.isJsxExpression(n) || ts.isParenthesizedExpression(n)) return valuesOf(n.expression);
+            if (ts.isConditionalExpression(n)) return [...valuesOf(n.whenTrue), ...valuesOf(n.whenFalse)];
+            if (ts.isBinaryExpression(n)) {
+              const op = n.operatorToken.kind;
+              if (op === ts.SyntaxKind.QuestionQuestionToken || op === ts.SyntaxKind.BarBarToken) {
+                return [...valuesOf(n.left), ...valuesOf(n.right)];
+              }
+              if (op === ts.SyntaxKind.AmpersandAmpersandToken) return valuesOf(n.right);
+            }
+            return [];
+          };
+          const literals = valuesOf(attr.initializer);
+          for (const literal of literals.filter((l) => legacy.includes(l))) {
             errors.push(`${file}:${line} — <${tag} ${propName}="${literal}">: a legacy value. Use the current spelling (the prop's description names it).`);
           }
         }
@@ -257,6 +295,70 @@ for (const file of tracked) {
   visit(source);
 }
 
+/* ── 6. Agent work speaks one status vocabulary ── */
+const registry = JSON.parse(read(join(repoRoot, 'src/components/registry.json')));
+const aiFolders = [
+  ...new Set(registry.components.filter((c) => c.category === 'ai').map((c) => c.folder ?? c.name)),
+];
+const statusTypes = new Map();
+for (const folder of aiFolders) {
+  const files = readdirSync(join(repoRoot, 'src/components', folder))
+    .filter((f) => /\.tsx?$/.test(f) && !/\.stories\./.test(f))
+    .map((f) => `src/components/${folder}/${f}`);
+  for (const file of files) {
+    const text = read(join(repoRoot, file));
+    const source = ts.createSourceFile(file, text, ts.ScriptTarget.Latest, true);
+    for (const node of source.statements) {
+      if (!ts.isTypeAliasDeclaration(node) || !/Status$/.test(node.name.text)) continue;
+      if (!node.modifiers?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword)) continue;
+      statusTypes.set(node.name.text, { file, node, source });
+    }
+  }
+}
+
+if (!statusTypes.has(AGENT_STEP_STATUS) || statusTypes.get(AGENT_STEP_STATUS).file !== AGENT_STEP_STATUS_FILE) {
+  errors.push(`${AGENT_STEP_STATUS} is no longer declared in ${AGENT_STEP_STATUS_FILE}. Update AGENT_STEP_STATUS_FILE or restore it.`);
+}
+for (const [name, { file, node }] of statusTypes) {
+  if (name === AGENT_STEP_STATUS) continue;
+  const members = ts.isUnionTypeNode(node.type) ? node.type.types : [node.type];
+  const usesShared = members.some(
+    (m) => ts.isTypeReferenceNode(m) && m.typeName.getText() === AGENT_STEP_STATUS,
+  );
+  const literals = members
+    .filter((m) => ts.isLiteralTypeNode(m) && ts.isStringLiteral(m.literal))
+    .map((m) => m.literal.text)
+    .sort();
+  const aliases = members.filter((m) => ts.isTypeReferenceNode(m) && m.typeName.getText() !== AGENT_STEP_STATUS);
+  if (SANCTIONED_STATUS_SETS[name]) {
+    if (usesShared) {
+      errors.push(`${file} — ${name} uses ${AGENT_STEP_STATUS}, so SANCTIONED_STATUS_SETS no longer needs it. Remove the entry.`);
+    }
+    continue;
+  }
+  if (aliases.length === 1 && members.length === 1 && statusTypes.has(aliases[0].typeName.getText())) continue;
+  if (!usesShared) {
+    errors.push(
+      `${file} — ${name} defines its own status set. A unit of agent work uses ${AGENT_STEP_STATUS} ` +
+        `(${AGENT_STEP_STATUS_FILE}); anything else goes in SANCTIONED_STATUS_SETS with what it describes.`
+    );
+    continue;
+  }
+  const listed = [...(LEGACY_STATUS_VALUES[name] ?? [])].sort();
+  if (literals.join('|') !== listed.join('|')) {
+    errors.push(
+      `${file} — ${name} adds ${literals.join(', ') || 'nothing'} beside ${AGENT_STEP_STATUS}, but ` +
+        `LEGACY_STATUS_VALUES records ${listed.join(', ') || 'nothing'}. New values belong in the shared ` +
+        'vocabulary; retired spellings are listed there as legacy.'
+    );
+  }
+}
+for (const name of [...Object.keys(LEGACY_STATUS_VALUES), ...Object.keys(SANCTIONED_STATUS_SETS)]) {
+  if (!statusTypes.has(name)) {
+    errors.push(`A status table in scripts/validate-prop-vocabulary.mjs names ${name}, which no ai component exports. Remove the entry.`);
+  }
+}
+
 if (errors.length > 0) {
   console.error('✗ Prop vocabulary validation failed:');
   for (const error of errors) console.error(`    - ${error}`);
@@ -265,5 +367,6 @@ if (errors.length > 0) {
 
 console.log(
   `✓ Prop vocabulary — ${parsed.length} components hold emphasis and colour apart, ` +
-    `and ${callSites} internal call sites of components with deprecated spellings use the current ones.`
+    `${callSites} internal call sites of components with deprecated spellings use the current ones, ` +
+    `and ${statusTypes.size} agent status types speak ${AGENT_STEP_STATUS} or a sanctioned set.`
 );

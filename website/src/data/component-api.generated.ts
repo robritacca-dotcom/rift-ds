@@ -11745,8 +11745,8 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "status",
             "type": "ToolCallStatus",
             "required": false,
-            "description": "Where the call has got to. Drives the colour, the indicator, and the default status text.",
-            "defaultValue": "success"
+            "description": "Where the call has got to: `pending` (awaiting approval), `active`, `completed` or `failed`.\nDrives the colour, the indicator, and the default status text. `running`, `success` and\n`error` are legacy values that render as `active`, `completed` and `failed`.",
+            "defaultValue": "completed"
           },
           {
             "name": "summary",

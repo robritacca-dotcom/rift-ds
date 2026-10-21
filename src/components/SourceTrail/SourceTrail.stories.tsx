@@ -30,7 +30,7 @@ export const Streaming: Story = {
   args: {
     streaming: true,
     items: [
-      { title: 'Design tokens quarterly', icon: 'article', status: 'done' },
+      { title: 'Design tokens quarterly', icon: 'article', status: 'completed' },
       { title: 'Colour contrast working group notes', icon: 'article', status: 'active' },
       { title: 'Component API changelog', icon: 'history', status: 'pending' },
     ],
@@ -46,10 +46,10 @@ export const AllRead: Story = {
   args: {
     defaultOpen: false,
     items: [
-      { title: 'Design tokens quarterly', status: 'done' },
-      { title: 'Colour contrast working group notes', status: 'done' },
-      { title: 'Component API changelog', status: 'done' },
-      { title: 'Release notes archive', status: 'done' },
+      { title: 'Design tokens quarterly', status: 'completed' },
+      { title: 'Colour contrast working group notes', status: 'completed' },
+      { title: 'Component API changelog', status: 'completed' },
+      { title: 'Release notes archive', status: 'completed' },
     ],
   },
   render: (args) => (

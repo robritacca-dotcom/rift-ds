@@ -75,7 +75,7 @@ const INVITES_SENT: ScriptedReply = {
   card: card<DemoToolCallCard>('tool-call', {
     name: 'invite_teammates',
     summary: '3 editors to acme-design',
-    status: 'success',
+    status: 'completed',
     duration: '0.6s',
     args: '{\n  "workspace": "acme-design",\n  "role": "editor",\n  "emails": 3\n}',
   }),
@@ -277,7 +277,7 @@ export const DEMO_SCRIPT: ChatScript = scriptChat()
             card: card<DemoToolCallCard>('tool-call', {
               name: 'update_config',
               summary: 'workspace.config.ts, seats 5 to 12',
-              status: 'success',
+              status: 'completed',
               duration: '0.4s',
             }),
             followups: ['Invite my team to a workspace', 'Find a time we can all meet', 'How is the trial going?'],
@@ -296,7 +296,7 @@ export const DEMO_SCRIPT: ChatScript = scriptChat()
           card<DemoToolCallCard>('tool-call', {
             name: 'read_document',
             summary: 'Q3 launch plan.pdf',
-            status: 'success',
+            status: 'completed',
             duration: '1.8s',
           }),
           card<DemoChartCard>('chart', {
@@ -319,7 +319,7 @@ export const DEMO_SCRIPT: ChatScript = scriptChat()
     card: card<DemoToolCallCard>('tool-call', {
       name: 'sync_calendar',
       summary: 'the shared team calendar',
-      status: 'error',
+      status: 'failed',
       duration: '2.1s',
     }),
     question: {
@@ -348,7 +348,7 @@ export const DEMO_SCRIPT: ChatScript = scriptChat()
             card: card<DemoToolCallCard>('tool-call', {
               name: 'sync_calendar',
               summary: 'the shared team calendar',
-              status: 'success',
+              status: 'completed',
               duration: '1.2s',
             }),
             followups: ['Find a time we can all meet', 'Plan our launch kickoff', 'How is the trial going?'],

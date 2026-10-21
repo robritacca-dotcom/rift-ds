@@ -2,31 +2,48 @@
 
 import React, { useCallback, useId, useState } from 'react';
 import { Spinner } from '../Spinner/Spinner';
+import type { AgentStepStatus } from '../AgentPlan/stepStatus';
 import './ToolCall.css';
 import '../../fonts/material-symbols.css';
 
-export type ToolCallStatus = 'pending' | 'running' | 'success' | 'error';
+/**
+ * Where a tool call has got to: the shared agent vocabulary (`AgentStepStatus`).
+ * `running`, `success` and `error` are legacy spellings of `active`,
+ * `completed` and `failed`, kept as aliases that render unchanged.
+ */
+export type ToolCallStatus = AgentStepStatus | 'running' | 'success' | 'error';
+
+/** The legacy spellings, mapped onto the shared vocabulary. */
+const LEGACY_STATUS: Record<'running' | 'success' | 'error', AgentStepStatus> = {
+  running: 'active',
+  success: 'completed',
+  error: 'failed',
+};
 
 /** Fallback status text, used when no `statusLabel` is given. */
-const DEFAULT_STATUS_LABELS: Record<ToolCallStatus, string> = {
+const DEFAULT_STATUS_LABELS: Record<AgentStepStatus, string> = {
   pending: 'Needs approval',
-  running: 'Running',
-  success: 'Done',
-  error: 'Failed',
+  active: 'Running',
+  completed: 'Done',
+  failed: 'Failed',
 };
 
 /** The glyph that stands in for the spinner once the call has settled. */
-const STATUS_ICONS: Record<Exclude<ToolCallStatus, 'running'>, string> = {
+const STATUS_ICONS: Record<Exclude<AgentStepStatus, 'active'>, string> = {
   pending: 'pause_circle',
-  success: 'check_circle',
-  error: 'error',
+  completed: 'check_circle',
+  failed: 'error',
 };
 
 /** Props owned by ToolCall itself — everything else falls through to the root element. */
 type ToolCallOwnProps = {
   /** The tool that was invoked, shown in monospace. */
   name: string;
-  /** Where the call has got to. Drives the colour, the indicator, and the default status text. */
+  /**
+   * Where the call has got to: `pending` (awaiting approval), `active`, `completed` or `failed`.
+   * Drives the colour, the indicator, and the default status text. `running`, `success` and
+   * `error` are legacy values that render as `active`, `completed` and `failed`.
+   */
   status?: ToolCallStatus;
   /** One line describing this particular call, e.g. the target path or query. */
   summary?: string;
@@ -68,7 +85,7 @@ export const ToolCall = React.forwardRef<HTMLDivElement, ToolCallProps>(
   (
     {
       name,
-      status = 'success',
+      status: statusProp = 'completed',
       summary,
       duration,
       statusLabel,
@@ -83,6 +100,10 @@ export const ToolCall = React.forwardRef<HTMLDivElement, ToolCallProps>(
     ref,
   ) => {
     const baseClass = 'ds-tool-call';
+    const status: AgentStepStatus =
+      statusProp in LEGACY_STATUS
+        ? LEGACY_STATUS[statusProp as keyof typeof LEGACY_STATUS]
+        : (statusProp as AgentStepStatus);
     const id = useId();
     const panelId = `${id}-panel`;
     const triggerId = `${id}-trigger`;
@@ -110,7 +131,7 @@ export const ToolCall = React.forwardRef<HTMLDivElement, ToolCallProps>(
     const header = (
       <>
         <span className={`${baseClass}__indicator`} aria-hidden="true">
-          {status === 'running' ? (
+          {status === 'active' ? (
             <Spinner size="sm" tone="inherit" />
           ) : (
             <span className="material-symbols-rounded">{STATUS_ICONS[status]}</span>

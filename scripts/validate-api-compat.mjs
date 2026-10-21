@@ -79,16 +79,7 @@ const git = (...args) => execFileSync('git', args, { cwd: repoRoot, encoding: 'u
  * `subpath` + `export` for a name, `subpath` + `file` for a deep import,
  * `bin` for a binary.
  */
-const SANCTIONED_BREAKS = [
-  {
-    since: '1.11.0',
-    component: 'NotificationItem',
-    prop: 'title',
-    change: 'required',
-    reason:
-      'not a break: `title` was already required in the v1.10.0 source and its published .d.ts. The v1.10.0 generated API misreported it as optional, borrowing NotificationCenter\'s default through the docgen leak scripts/docgen-scoped-defaults.mjs closes, so only the record changed',
-  },
-];
+const SANCTIONED_BREAKS = [];
 
 /* ── Baseline ──────────────────────────────────────────────────────────── */
 

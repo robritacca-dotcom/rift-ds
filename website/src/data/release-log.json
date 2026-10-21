@@ -1,6 +1,16 @@
 {
   "releases": [
     {
+      "version": "1.11.0",
+      "date": "2026-10-21",
+      "title": "One contract, one layer stack, every word translatable",
+      "body": [
+        "Every component now forwards its ref to its element and passes your own attributes through, and state you can own works controlled or uncontrolled through one pair of names: `value`, `defaultValue` and `onValueChange`, and the same shape for `checked`, `values` and `open`. Textarea and Slider gain `defaultValue`, and NotificationCenter, AgentRail and ChatAgentPane move to `value`.",
+        "Every word a component writes, announced or on screen, now has a prop with its English default, so a product in another language can translate all of it; the chat widget passes the words through per part, and the chat guide shows a full set. Colour moves to `tone` on Button and the actions around it, backed by a destructive token family at AA, and BentoTile and BentoTileArt join the library.",
+        "A few behaviours shift on their own. Popovers, menus, pickers and tooltips now close through the same stack as the modals, so inside a Dialog the first Escape closes the menu and the second the Dialog. The native `aria-label` beats the deprecated `ariaLabel`, Combobox submits its selection rather than the search text, and every chart is a client component, so importing one into a Server Component works. Nothing was renamed or removed: the older names keep working, so upgrading needs no code changes."
+      ]
+    },
+    {
       "version": "1.10.0",
       "date": "2026-10-18",
       "title": "Questions in the AI chat",

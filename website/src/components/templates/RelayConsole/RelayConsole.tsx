@@ -510,9 +510,9 @@ export default function RelayConsole() {
                     { value: "globe", label: "Globe", icon: "public" },
                     { value: "map", label: "Map", icon: "map" },
                   ]}
-                  activeSegment={view}
-                  onSegmentChange={setView}
-                  ariaLabel="Network projection"
+                  value={view}
+                  onValueChange={setView}
+                  aria-label="Network projection"
                 />
               </div>
               <div className={styles.filters}>

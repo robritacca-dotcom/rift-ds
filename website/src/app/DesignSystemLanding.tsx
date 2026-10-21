@@ -810,9 +810,9 @@ export default function DesignSystemLanding() {
     >
       <Tabs
         tabs={STATEMENT_TABS}
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-        ariaLabel="Document types"
+        value={activeTab}
+        onValueChange={setActiveTab}
+        aria-label="Document types"
       />
       <ul className={styles.rowList}>
         {STATEMENTS.map((s) => (
@@ -835,7 +835,7 @@ export default function DesignSystemLanding() {
         pageCount={8}
         onPageChange={setPage}
         size="compact"
-        ariaLabel="Statement pages"
+        aria-label="Statement pages"
       />
     </DemoCard>
 
@@ -940,8 +940,8 @@ export default function DesignSystemLanding() {
       <div className={styles.chartToolbar}>
         <SegmentedControl
           segments={RANGE_SEGMENTS}
-          activeSegment={range}
-          onSegmentChange={setRange}
+          value={range}
+          onValueChange={setRange}
         />
       </div>
       <div className={styles.chartFlush}>
@@ -1403,7 +1403,7 @@ export default function DesignSystemLanding() {
           </div>
           <FadeDivider className={styles.heroDivider} />
           <ButtonGroup
-            ariaLabel="Get started"
+            aria-label="Get started"
             buttons={[
               { label: "Get started", variant: "primary" as const, href: "/docs/get-started", iconLeft: "terminal" },
               { label: "Browse components", variant: "secondary" as const, tone: "neutral" as const, href: "/components", iconLeft: "category" },
@@ -1450,7 +1450,7 @@ export default function DesignSystemLanding() {
           aria-label="Resources and stack"
         >
           <ButtonGroup
-            ariaLabel="External resources"
+            aria-label="External resources"
             buttons={[
               ...(SHOW_FIGMA_LINKS
                 ? [

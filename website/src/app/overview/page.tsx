@@ -166,7 +166,8 @@ export default function AboutDsPage() {
                   takes its own lane, published to npm with provenance and
                   no stored token. The map carries the detail: the drift
                   guard, the hydration smoke, the gesture stress check, the
-                  axe audit on every story.
+                  axe audit on every story, and the check that nothing the
+                  last release published has gone missing.
                 </p>
                 <ArchitectureMap
                   map={pipelineMap}

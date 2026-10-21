@@ -381,9 +381,9 @@ export default function TypographyView({ scaleTable }: { scaleTable: React.React
           <div className={`${styles.viewportToggle} animate-in animate-delay-2`}>
             <Tabs
               tabs={viewportTabs}
-              activeTab={viewport}
-              onTabChange={setViewport}
-              ariaLabel="Token values by viewport"
+              value={viewport}
+              onValueChange={setViewport}
+              aria-label="Token values by viewport"
             />
             <p className={styles.viewportNote}>
               {isMobileView

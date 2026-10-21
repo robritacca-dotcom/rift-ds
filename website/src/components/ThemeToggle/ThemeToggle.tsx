@@ -68,10 +68,10 @@ export default function ThemeToggle({ className }: { className?: string }) {
     <div className={`${styles.themeToggle} ${className || ""}`}>
       <SegmentedControl
         segments={themeSegments}
-        activeSegment={setting}
-        onSegmentChange={handleChange}
+        value={setting}
+        onValueChange={handleChange}
         size="compact"
-        ariaLabel="Theme"
+        aria-label="Theme"
       />
     </div>
   );

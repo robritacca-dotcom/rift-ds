@@ -205,7 +205,7 @@ export default function ShaderFieldPage() {
               cannot see a <code>requestAnimationFrame</code> loop. A
               GPU-driven surface has to check the query itself, and this one
               does: it draws a single static frame and never starts the loop.
-              The rule against component-level motion queries still holds for
+              The limits on component-level motion queries still hold for
               everything that consumes the duration tokens: an animation loop
               sits outside that contract by construction.
             </p>

@@ -131,8 +131,8 @@ function FullAnatomy() {
             editLabel: "Edit the agent profile",
           }}
           tabs={TABS}
-          activeTab={tab}
-          onTabChange={setTab}
+          value={tab}
+          onValueChange={setTab}
           onCollapse={() => setShown(false)}
         />
       ) : (
@@ -163,7 +163,7 @@ function StatusDemo() {
           <AgentRail
             profile={{ name: "Skylark", status: label, statusTone: tone }}
             tabs={TABS}
-            activeTab="approvals"
+            value="approvals"
           />
         </div>
       ))}
@@ -232,7 +232,7 @@ export default function AgentRailPage() {
               <AgentRail
                 profile={{ name: "Skylark", status: "Connected" }}
                 tabs={TABS}
-                activeTab="approvals"
+                value="approvals"
               />
             </div>
           </section>
@@ -263,7 +263,7 @@ export default function AgentRailPage() {
               rather than a clipped last tab.
             </p>
             <div className={`${styles.railFrame} ${styles.railFrameShort}`}>
-              <AgentRail tabs={TABS} activeTab="scheduled" />
+              <AgentRail tabs={TABS} value="scheduled" />
             </div>
           </section>
 

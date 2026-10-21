@@ -106,8 +106,8 @@ function InboxDemo() {
             count: items.filter((item) => item.tab === "system").length,
           },
         ]}
-        activeTab={tab}
-        onTabChange={setTab}
+        value={tab}
+        onValueChange={setTab}
       >
         {visible.map((item) => (
           <NotificationItem

@@ -41,13 +41,13 @@ export default function TextareaPage() {
             <SectionTitle title="Default" />
             <div className={styles.variantRow}>
               <div className={styles.variantItem}>
-                <Textarea label="Placeholder" placeholder="Enter a description..." onChange={() => {}} />
+                <Textarea label="Placeholder" placeholder="Enter a description..." />
               </div>
               <div className={styles.variantItem}>
-                <Textarea label="With value" value="Design systems engineer passionate about tokens, components, and scalable UI architecture." onChange={() => {}} />
+                <Textarea label="With value" defaultValue="Design systems engineer passionate about tokens, components, and scalable UI architecture." />
               </div>
               <div className={styles.variantItem}>
-                <Textarea label="Required" placeholder="Add your comments..." required onChange={() => {}} />
+                <Textarea label="Required" placeholder="Add your comments..." required />
               </div>
             </div>
           </section>
@@ -57,13 +57,13 @@ export default function TextareaPage() {
             <SectionTitle title="Compact" />
             <div className={styles.variantRow}>
               <div className={styles.variantItem}>
-                <Textarea label="Placeholder" placeholder="Enter a description..." size="compact" rows={3} onChange={() => {}} />
+                <Textarea label="Placeholder" placeholder="Enter a description..." size="compact" rows={3} />
               </div>
               <div className={styles.variantItem}>
-                <Textarea label="With value" value="Compact textarea with smaller text and tighter padding." size="compact" rows={3} onChange={() => {}} />
+                <Textarea label="With value" defaultValue="Compact textarea with smaller text and tighter padding." size="compact" rows={3} />
               </div>
               <div className={styles.variantItem}>
-                <Textarea label="Required" placeholder="Add your comments..." required size="compact" rows={3} onChange={() => {}} />
+                <Textarea label="Required" placeholder="Add your comments..." required size="compact" rows={3} />
               </div>
             </div>
           </section>
@@ -73,19 +73,19 @@ export default function TextareaPage() {
             <SectionTitle title="States" />
             <div className={styles.variantRow}>
               <div className={styles.variantItem}>
-                <Textarea label="Helper text" placeholder="Tell us what you think..." helperText="Your feedback helps us improve" onChange={() => {}} />
+                <Textarea label="Helper text" placeholder="Tell us what you think..." helperText="Your feedback helps us improve" />
               </div>
               <div className={styles.variantItem}>
-                <Textarea label="Character counter" placeholder="What's happening?" maxLength={280} value="Building a design system" onChange={() => {}} />
+                <Textarea label="Character counter" placeholder="What's happening?" maxLength={280} defaultValue="Building a design system" />
               </div>
               <div className={styles.variantItem}>
-                <Textarea label="Error" value="Too short" error helperText="Description must be at least 50 characters" onChange={() => {}} />
+                <Textarea label="Error" defaultValue="Too short" error helperText="Description must be at least 50 characters" />
               </div>
               <div className={styles.variantItem}>
-                <Textarea label="Disabled" value="This field is not editable" disabled onChange={() => {}} />
+                <Textarea label="Disabled" defaultValue="This field is not editable" disabled />
               </div>
               <div className={styles.variantItem}>
-                <Textarea label="No resize" placeholder="Cannot be resized..." resize="none" rows={3} onChange={() => {}} />
+                <Textarea label="No resize" placeholder="Cannot be resized..." resize="none" rows={3} />
               </div>
             </div>
           </section>

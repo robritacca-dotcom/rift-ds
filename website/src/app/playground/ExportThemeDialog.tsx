@@ -154,10 +154,10 @@ export default function ExportThemeDialog({
       <div className={styles.cssDialogBody}>
         <Tabs
           tabs={FILES.map(({ value, label }) => ({ value, label }))}
-          activeTab={file.value}
-          onTabChange={(value) => onTabChange(value as ExportTab)}
+          value={file.value}
+          onValueChange={(value) => onTabChange(value as ExportTab)}
           size="compact"
-          ariaLabel="Theme files"
+          aria-label="Theme files"
         />
         <p className={styles.sectionNote}>{file.note}</p>
         <CodeBlock

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
@@ -10,6 +10,19 @@ import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
+
+/**
+ * A static example toast whose dismiss button works: the standalone Toast
+ * renders its button only when given `onDismiss`, so the example holds its
+ * own shown state and offers it back once dismissed.
+ */
+function DemoToast(props: React.ComponentProps<typeof Toast>) {
+  const [shown, setShown] = useState(true);
+  if (!shown) {
+    return <Button label="Show again" variant="tertiary" onClick={() => setShown(true)} />;
+  }
+  return <Toast {...props} onDismiss={props.dismissible === false ? undefined : () => setShown(false)} />;
+}
 
 function ToastTriggers() {
   const { toast } = useToast();
@@ -107,19 +120,19 @@ export default function ToastPage() {
             <SectionTitle title="Variants" />
             <div className={styles.variantStack}>
               <div className={styles.toastDemo}>
-                <Toast variant="info" title="Information" description="This is an informational notification." />
+                <DemoToast variant="info" title="Information" description="This is an informational notification." />
               </div>
               <div className={styles.toastDemo}>
-                <Toast variant="positive" title="Success" description="Your changes have been saved." />
+                <DemoToast variant="positive" title="Success" description="Your changes have been saved." />
               </div>
               <div className={styles.toastDemo}>
-                <Toast variant="warning" title="Warning" description="This action may have consequences." />
+                <DemoToast variant="warning" title="Warning" description="This action may have consequences." />
               </div>
               <div className={styles.toastDemo}>
-                <Toast variant="error" title="Error" description="Something went wrong." />
+                <DemoToast variant="error" title="Error" description="Something went wrong." />
               </div>
               <div className={styles.toastDemo}>
-                <Toast variant="neutral" title="Note" description="This is a neutral notification." />
+                <DemoToast variant="neutral" title="Note" description="This is a neutral notification." />
               </div>
             </div>
           </section>
@@ -129,13 +142,13 @@ export default function ToastPage() {
             <SectionTitle title="States" />
             <div className={styles.variantStack}>
               <div className={styles.toastDemo}>
-                <Toast variant="positive" title="Title only" />
+                <DemoToast variant="positive" title="Title only" />
               </div>
               <div className={styles.toastDemo}>
-                <Toast variant="warning" description="Description only: your session will expire soon." />
+                <DemoToast variant="warning" description="Description only: your session will expire soon." />
               </div>
               <div className={styles.toastDemo}>
-                <Toast variant="info" title="Non-dismissible" description="Processing your request." dismissible={false} />
+                <DemoToast variant="info" title="Non-dismissible" description="Processing your request." dismissible={false} />
               </div>
             </div>
           </section>

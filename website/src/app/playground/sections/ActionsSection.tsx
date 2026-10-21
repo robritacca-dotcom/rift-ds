@@ -55,7 +55,7 @@ export default function ActionsSection() {
 
       <div className={styles.demoRow}>
         <ButtonGroup
-          ariaLabel="Pager"
+          aria-label="Pager"
           buttons={[
             { label: "Back", variant: "secondary", iconLeft: "arrow_back" },
             { label: "Next", variant: "primary", iconRight: "arrow_forward" },
@@ -76,8 +76,8 @@ export default function ActionsSection() {
       <div className={styles.demoRow}>
         <SegmentedControl
           segments={VIEW_SEGMENTS}
-          activeSegment={view}
-          onSegmentChange={setView}
+          value={view}
+          onValueChange={setView}
         />
         <ToggleGroup
           aria-label="Text formatting"

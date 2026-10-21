@@ -10,12 +10,14 @@ import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
-const states = [
+/* `state` draws a static hover or active look for the docs; disabled is the
+   real `disabled` prop, and the resting look takes neither. */
+const states: { label: string; value: string; state?: "hover" | "active"; disabled?: boolean }[] = [
   { label: "Default", value: "default" },
-  { label: "Hover", value: "hover" },
-  { label: "Active", value: "active" },
-  { label: "Disabled", value: "disabled" },
-] as const;
+  { label: "Hover", value: "hover", state: "hover" },
+  { label: "Active", value: "active", state: "active" },
+  { label: "Disabled", value: "disabled", disabled: true },
+];
 
 const icons = ["add", "close", "edit", "delete"];
 
@@ -58,7 +60,7 @@ export default function CircularButtonPage() {
                   <span className={styles.gridRowHeader}>{icon}</span>
                   {states.map((s) => (
                     <div key={s.value} className={styles.gridCell}>
-                      <CircularButton icon={icon} variant="primary" state={s.value} ariaLabel={icon} />
+                      <CircularButton icon={icon} variant="primary" state={s.state} disabled={s.disabled} ariaLabel={icon} />
                     </div>
                   ))}
                 </React.Fragment>
@@ -79,7 +81,7 @@ export default function CircularButtonPage() {
                   <span className={styles.gridRowHeader}>{icon}</span>
                   {states.map((s) => (
                     <div key={s.value} className={styles.gridCell}>
-                      <CircularButton icon={icon} variant="secondary" state={s.value} ariaLabel={icon} />
+                      <CircularButton icon={icon} variant="secondary" state={s.state} disabled={s.disabled} ariaLabel={icon} />
                     </div>
                   ))}
                 </React.Fragment>
@@ -100,7 +102,7 @@ export default function CircularButtonPage() {
                   <span className={styles.gridRowHeader}>{icon}</span>
                   {states.map((s) => (
                     <div key={s.value} className={styles.gridCell}>
-                      <CircularButton icon={icon} variant="tertiary" state={s.value} ariaLabel={icon} />
+                      <CircularButton icon={icon} variant="tertiary" state={s.state} disabled={s.disabled} ariaLabel={icon} />
                     </div>
                   ))}
                 </React.Fragment>
@@ -126,7 +128,7 @@ export default function CircularButtonPage() {
                   <span className={styles.gridRowHeader}>{icon}</span>
                   {states.map((s) => (
                     <div key={s.value} className={styles.gridCell}>
-                      <CircularButton icon={icon} variant="primary" tone="neutral" state={s.value} ariaLabel={icon} />
+                      <CircularButton icon={icon} variant="primary" tone="neutral" state={s.state} disabled={s.disabled} ariaLabel={icon} />
                     </div>
                   ))}
                 </React.Fragment>
@@ -151,7 +153,7 @@ export default function CircularButtonPage() {
                   <span className={styles.gridRowHeader}>{icon}</span>
                   {states.map((s) => (
                     <div key={s.value} className={styles.gridCell}>
-                      <CircularButton icon={icon} variant="secondary" tone="neutral" state={s.value} ariaLabel={icon} />
+                      <CircularButton icon={icon} variant="secondary" tone="neutral" state={s.state} disabled={s.disabled} ariaLabel={icon} />
                     </div>
                   ))}
                 </React.Fragment>
@@ -176,7 +178,7 @@ export default function CircularButtonPage() {
                   <span className={styles.gridRowHeader}>{icon}</span>
                   {states.map((s) => (
                     <div key={s.value} className={styles.gridCell}>
-                      <CircularButton icon={icon} variant="primary" tone="destructive" state={s.value} ariaLabel={icon} />
+                      <CircularButton icon={icon} variant="primary" tone="destructive" state={s.state} disabled={s.disabled} ariaLabel={icon} />
                     </div>
                   ))}
                 </React.Fragment>
@@ -201,7 +203,7 @@ export default function CircularButtonPage() {
                   <span className={styles.gridRowHeader}>{icon}</span>
                   {states.map((s) => (
                     <div key={s.value} className={styles.gridCell}>
-                      <CircularButton icon={icon} variant="secondary" tone="destructive" state={s.value} ariaLabel={icon} />
+                      <CircularButton icon={icon} variant="secondary" tone="destructive" state={s.state} disabled={s.disabled} ariaLabel={icon} />
                     </div>
                   ))}
                 </React.Fragment>

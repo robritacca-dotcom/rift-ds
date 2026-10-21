@@ -16,37 +16,37 @@ import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentI
    ============================================ */
 
 const horizontalDefault: ButtonProps[] = [
-  { label: "Home", variant: "tertiary", state: "default" },
-  { label: "About", variant: "tertiary", state: "default" },
+  { label: "Home", variant: "tertiary" },
+  { label: "About", variant: "tertiary" },
   { label: "Components", variant: "tertiary", state: "active" },
-  { label: "Foundations", variant: "tertiary", state: "default" },
+  { label: "Foundations", variant: "tertiary" },
 ];
 
 const horizontalWithIcons: ButtonProps[] = [
-  { label: "Home", variant: "tertiary", state: "default", iconLeft: "home" },
-  { label: "Settings", variant: "tertiary", state: "default", iconLeft: "settings" },
+  { label: "Home", variant: "tertiary", iconLeft: "home" },
+  { label: "Settings", variant: "tertiary", iconLeft: "settings" },
   { label: "Profile", variant: "tertiary", state: "active", iconLeft: "person" },
 ];
 
 const verticalDefault: ButtonProps[] = [
   { label: "Overview", variant: "tertiary", state: "active" },
-  { label: "Button", variant: "tertiary", state: "default" },
-  { label: "Button group", variant: "tertiary", state: "default" },
-  { label: "Card", variant: "tertiary", state: "default" },
-  { label: "Navigation", variant: "tertiary", state: "default" },
-  { label: "Toggle switch", variant: "tertiary", state: "default" },
+  { label: "Button", variant: "tertiary" },
+  { label: "Button group", variant: "tertiary" },
+  { label: "Card", variant: "tertiary" },
+  { label: "Navigation", variant: "tertiary" },
+  { label: "Toggle switch", variant: "tertiary" },
 ];
 
 const verticalWithIcons: ButtonProps[] = [
-  { label: "Dashboard", variant: "tertiary", state: "default", iconLeft: "dashboard" },
+  { label: "Dashboard", variant: "tertiary", iconLeft: "dashboard" },
   { label: "Analytics", variant: "tertiary", state: "active", iconLeft: "bar_chart" },
-  { label: "Settings", variant: "tertiary", state: "default", iconLeft: "settings" },
-  { label: "Help", variant: "tertiary", state: "default", iconLeft: "help" },
+  { label: "Settings", variant: "tertiary", iconLeft: "settings" },
+  { label: "Help", variant: "tertiary", iconLeft: "help" },
 ];
 
 const primaryGroup: ButtonProps[] = [
-  { label: "Cancel", variant: "tertiary", state: "default" },
-  { label: "Save", variant: "secondary", state: "default", iconRight: "arrow_forward" },
+  { label: "Cancel", variant: "tertiary" },
+  { label: "Save", variant: "secondary", iconRight: "arrow_forward" },
 ];
 
 /* ============================================

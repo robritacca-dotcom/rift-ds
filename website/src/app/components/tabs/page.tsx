@@ -46,8 +46,8 @@ export default function TabsPage() {
                   { label: "Tokens", value: "tokens" },
                   { label: "Usage", value: "usage" },
                 ]}
-                activeTab="overview"
-                onTabChange={() => {}}
+                value="overview"
+                onValueChange={() => {}}
               />
             </div>
           </section>
@@ -62,8 +62,8 @@ export default function TabsPage() {
                   { label: "Code", value: "code", icon: "code" },
                   { label: "Accessibility", value: "a11y", icon: "accessibility" },
                 ]}
-                activeTab="design"
-                onTabChange={() => {}}
+                value="design"
+                onValueChange={() => {}}
               />
             </div>
           </section>
@@ -78,9 +78,9 @@ export default function TabsPage() {
                   { label: "Active", value: "active" },
                   { label: "Archived", value: "archived" },
                 ]}
-                activeTab="all"
+                value="all"
                 size="compact"
-                onTabChange={() => {}}
+                onValueChange={() => {}}
               />
             </div>
           </section>
@@ -95,9 +95,9 @@ export default function TabsPage() {
                   { label: "Reviews", value: "reviews" },
                   { label: "Related", value: "related" },
                 ]}
-                activeTab="details"
+                value="details"
                 fullWidth
-                onTabChange={() => {}}
+                onValueChange={() => {}}
               />
             </div>
           </section>
@@ -112,8 +112,8 @@ export default function TabsPage() {
                   { label: "Drafts", value: "drafts" },
                   { label: "Scheduled", value: "scheduled", disabled: true },
                 ]}
-                activeTab="published"
-                onTabChange={() => {}}
+                value="published"
+                onValueChange={() => {}}
               />
             </div>
           </section>

@@ -101,6 +101,17 @@ export const POST = (request: Request) => handler(request);`;
 
 const UI_INSTALL_SNIPPET = `npm install ${PACKAGE_NAME} ${(chatWidget.peers["./chat"] ?? []).join(" ")}`;
 
+const LOCALE_SNIPPET = `<ChatLauncher
+  label="Preguntar"
+  widget={{
+    title: 'Asistente',
+    sendLabel: 'Enviar',
+    closeLabel: 'Cerrar el chat',
+    composerLabels: { attachLabel: 'Adjuntar archivos' },
+    questionCardLabels: { skip: 'Omitir', skipped: 'Omitida' },
+  }}
+/>`;
+
 const UI_MOUNT_SNIPPET = `import { ChatProvider, ChatLauncher } from '${PACKAGE_NAME}/chat';
 import '${PACKAGE_NAME}/chat/chat.css';
 
@@ -401,6 +412,16 @@ export default function ChatInstallPage() {
               chip holds {SUGGESTION_MAX_CHARS} characters, and a longer one is dropped.
             </p>
             <CodeBlock code={HOST_SNIPPET} language="css" showCopy />
+            <h3 className={s.propsHeading}>In your language</h3>
+            <p className={s.sectionNote}>
+              Every word the panel writes is a prop, with the English text as its default: the
+              names of its controls, the copy on screen, and the words of the components inside it,
+              one grouped prop per component (<code>composerLabels</code>,{" "}
+              <code>questionCardLabels</code> and the rest). Leave a key out and it keeps its
+              English. Under your own UI, <code>useThreads</code> takes <code>labels</code> for the
+              names it writes into the history.
+            </p>
+            <CodeBlock code={LOCALE_SNIPPET} language="tsx" showCopy />
 
             <h3 className={s.propsHeading}>What your endpoint sends</h3>
             <p className={s.sectionNote}>

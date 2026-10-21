@@ -26,10 +26,10 @@ export default function StageThemeFlip() {
         { value: "light", label: "Light", icon: "light_mode" },
         { value: "dark", label: "Dark", icon: "dark_mode" },
       ]}
-      activeSegment={theme}
-      onSegmentChange={apply}
+      value={theme}
+      onValueChange={apply}
       size="compact"
-      ariaLabel="Site theme"
+      aria-label="Site theme"
     />
   );
 }

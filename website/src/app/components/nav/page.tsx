@@ -19,28 +19,28 @@ import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentI
    ============================================ */
 
 const demoNavButtons: ButtonProps[] = [
-  { label: "Home", variant: "tertiary", state: "default" },
-  { label: "About", variant: "tertiary", state: "default" },
+  { label: "Home", variant: "tertiary" },
+  { label: "About", variant: "tertiary" },
   { label: "Components", variant: "tertiary", state: "active" },
-  { label: "Foundations", variant: "tertiary", state: "default" },
+  { label: "Foundations", variant: "tertiary" },
 ];
 
 const demoMobileMenuTopLinks: ButtonProps[] = [
-  { label: "Home", variant: "tertiary", state: "default" },
-  { label: "About", variant: "tertiary", state: "disabled" },
-  { label: "Work", variant: "tertiary", state: "disabled" },
+  { label: "Home", variant: "tertiary" },
+  { label: "About", variant: "tertiary", disabled: true },
+  { label: "Work", variant: "tertiary", disabled: true },
   { label: BRAND_NAME, variant: "tertiary", state: "active" },
 ];
 
 const demoMobileSubnavLinks: ButtonProps[] = [
   { label: "Contents", variant: "tertiary", state: "active" },
-  { label: "Menu item", variant: "tertiary", state: "default" },
-  { label: "Menu item", variant: "tertiary", state: "default" },
-  { label: "Menu item", variant: "tertiary", state: "default" },
-  { label: "Menu item", variant: "tertiary", state: "default" },
-  { label: "Colour", variant: "tertiary", state: "default" },
-  { label: "Menu item", variant: "tertiary", state: "default" },
-  { label: "Menu item", variant: "tertiary", state: "default" },
+  { label: "Menu item", variant: "tertiary" },
+  { label: "Menu item", variant: "tertiary" },
+  { label: "Menu item", variant: "tertiary" },
+  { label: "Menu item", variant: "tertiary" },
+  { label: "Colour", variant: "tertiary" },
+  { label: "Menu item", variant: "tertiary" },
+  { label: "Menu item", variant: "tertiary" },
 ];
 
 /* ============================================

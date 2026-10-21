@@ -95,10 +95,10 @@ export default function TemplateShowcase() {
             label: d.label,
             icon: d.icon,
           }))}
-          activeSegment={device}
-          onSegmentChange={(value) => setDevice(value as DeviceKey)}
+          value={device}
+          onValueChange={(value) => setDevice(value as DeviceKey)}
           size="compact"
-          ariaLabel="Preview device size"
+          aria-label="Preview device size"
         />
       </div>
       <div ref={trackRef} className={styles.track} onScroll={onScroll}>

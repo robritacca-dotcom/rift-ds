@@ -273,7 +273,11 @@ export default function MotionPage() {
               when the preference is set, every duration token collapses to 0.01ms and a
               universal guard flattens any remaining hardcoded transitions and animations.
               Components that use the tokens get accessibility for free: there is nothing
-              to opt into, and no component-level media queries to write.
+              to opt into, and no component-level media queries to write. The library writes
+              one only where a collapsed duration is not enough: a looping animation would
+              strobe at 0.01ms rather than stop, so its component parks it in a query of its
+              own, and an entrance it would rather skip it drops outright. Each says which,
+              in a comment the build checks.
             </p>
             <p className={styles.sectionNote}>
               That guard is CSS, so it cannot reach animation driven from JavaScript. The

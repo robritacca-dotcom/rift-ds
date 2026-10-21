@@ -473,8 +473,8 @@ function PayrollChat({
               editLabel: "Edit the agent profile",
             }}
             tabs={AGENT_TABS}
-            activeTab={agentTab}
-            onTabChange={onTabChange}
+            value={agentTab}
+            onValueChange={onTabChange}
           />
         )}
       />

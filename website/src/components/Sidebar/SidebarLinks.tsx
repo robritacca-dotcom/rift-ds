@@ -18,11 +18,8 @@ export default function SidebarLinks({ links, ariaLabel = "Components" }: Sideba
   const buttons: ButtonProps[] = links.map((link) => ({
     label: link.label,
     href: link.disabled ? undefined : link.href,
-    state: link.disabled
-      ? ("disabled" as const)
-      : link.active
-        ? ("active" as const)
-        : ("default" as const),
+    disabled: link.disabled,
+    state: !link.disabled && link.active ? ("active" as const) : undefined,
     ariaCurrent: link.active,
     variant: "tertiary" as const,
     iconLeft: link.logo ? (
@@ -37,6 +34,6 @@ export default function SidebarLinks({ links, ariaLabel = "Components" }: Sideba
   }));
 
   return (
-    <ButtonGroup orientation="vertical" buttons={buttons} ariaLabel={ariaLabel} />
+    <ButtonGroup orientation="vertical" buttons={buttons} aria-label={ariaLabel} />
   );
 }

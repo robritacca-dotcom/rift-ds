@@ -695,10 +695,10 @@ export default function MarketingDashboard() {
                 { value: "campaigns", label: "Campaigns" },
                 { value: "landing", label: "Landing pages" },
               ]}
-              activeTab={channelTab}
-              onTabChange={setChannelTab}
+              value={channelTab}
+              onValueChange={setChannelTab}
               size="compact"
-              ariaLabel="Traffic source breakdowns"
+              aria-label="Traffic source breakdowns"
             />
             {channelTab === "channels" ? (
               <div className={styles.channelList}>

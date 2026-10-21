@@ -49,7 +49,7 @@ const HISTORY: RailThread[] = [
     title: "Adding a theme preset",
     description: "Every lever, then the contrast gate",
     meta: "4h",
-    unread: true,
+    status: "unread",
   },
   {
     id: "composer",
@@ -65,7 +65,7 @@ const HISTORY: RailThread[] = [
     description: "The endpoint, its tools, a first call",
     meta: "1d",
     icon: "cloud",
-    unread: true,
+    status: "unread",
   },
   {
     id: "overlay",
@@ -245,7 +245,10 @@ export default function GlassRail({
       activeThreadId={activeThread}
       onThreadSelect={(id) => {
         setActiveThread(id);
-        edit(id, (thread) => ({ ...thread, unread: false }));
+        edit(id, (thread) => ({
+          ...thread,
+          status: thread.status === "unread" ? undefined : thread.status,
+        }));
         close();
       }}
       threadMenuLabel="Options for"

@@ -34,16 +34,16 @@ export default function NavigationSection() {
 
       <Tabs
         tabs={PREVIEW_TABS}
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-        ariaLabel="Preview tabs"
+        value={activeTab}
+        onValueChange={setActiveTab}
+        aria-label="Preview tabs"
       />
 
       <div className={styles.demoRow}>
-        <Pagination page={page} pageCount={8} onPageChange={setPage} ariaLabel="Demo pagination" />
+        <Pagination page={page} pageCount={8} onPageChange={setPage} aria-label="Demo pagination" />
       </div>
 
-      <Breadcrumb items={BREADCRUMB_ITEMS} ariaLabel="Demo breadcrumb" />
+      <Breadcrumb items={BREADCRUMB_ITEMS} aria-label="Demo breadcrumb" />
     </section>
   );
 }

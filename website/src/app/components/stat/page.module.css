@@ -72,7 +72,6 @@
   font-size: var(--font-paragraph-sm-size);
   line-height: var(--font-paragraph-sm-line-height);
   color: var(--color-text-secondary);
-  max-width: 560px;
   margin: 0 0 var(--gap-500);
 }
 

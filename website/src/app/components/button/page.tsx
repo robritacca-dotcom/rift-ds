@@ -14,11 +14,13 @@ import { FIGMA_FILE_URL } from "@/config/brand.generated";
    BUTTON STATES & VARIANTS
    ============================================ */
 
-const states = [
-  { label: "Disabled", value: "disabled" as const },
-  { label: "Default", value: "default" as const },
-  { label: "Hover", value: "hover" as const },
-  { label: "Active", value: "active" as const },
+/* `state` draws a static hover or active look for the docs; disabled is the
+   real `disabled` prop, and the resting look takes neither. */
+const states: { label: string; value: string; state?: "hover" | "active"; disabled?: boolean }[] = [
+  { label: "Disabled", value: "disabled", disabled: true },
+  { label: "Default", value: "default" },
+  { label: "Hover", value: "hover", state: "hover" },
+  { label: "Active", value: "active", state: "active" },
 ];
 
 /* Every emphasis × tone cell the Button draws. Tertiary is already grey,
@@ -87,7 +89,8 @@ function ButtonGrid({
                   label="Button"
                   variant={cell.variant}
                   tone={cell.tone}
-                  state={st.value}
+                  state={st.state}
+                  disabled={st.disabled}
                   size={size}
                   iconLeft={iv.iconLeft}
                   iconRight={iv.iconRight}

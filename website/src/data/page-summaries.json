@@ -461,7 +461,7 @@
     },
     "/foundations/accessibility": {
       "title": "Accessibility",
-      "text": "What the build enforces: every story audited against WCAG 2.1 AA, and the focus contract every overlay inherits.",
+      "text": "What the build enforces: every story audited against WCAG 2.1 AA, the focus contract the modals share, and the dismissal stack every overlay answers to.",
       "chips": [
         {
           "id": "a11y-enforced",

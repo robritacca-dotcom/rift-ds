@@ -22,25 +22,27 @@ export const consumerMap: ArchMap = {
   id: "consumer",
   title: "Using it in your product",
   label:
-    "A product installs the package and imports one stylesheet; components compose from there, a data-brand attribute applies a complete theme, and the product's coding agent reads exact contracts from this site over MCP.",
+    "A product installs the package and imports one stylesheet; components compose from there, the chat widget adds an AI chat over the product's own endpoint, a data-brand attribute applies a complete theme, and the product's coding agent reads exact contracts from this site over MCP.",
   width: 1560,
   height: 760,
   nodes: [
     { id: "z-pkg", x: 60, y: 80, w: 460, h: 560, kind: "zone", title: "The package", sub: "rift-ds · ESM · React 19 peer", },
-    { id: "pkg-components", x: 100, y: 170, w: 380, h: 76, title: "Components", sub: "one barrel + deep subpaths", icon: "widgets", chip: "info" },
-    { id: "pkg-tokens", x: 100, y: 310, w: 380, h: 76, title: "Tokens", sub: "tokens.css · primitives → semantic → components", icon: "palette", chip: "info" },
-    { id: "pkg-presets", x: 100, y: 450, w: 380, h: 90, title: "Theme presets", sub: "presets.css · one generated stylesheet per look", icon: "style", chip: "info" },
+    { id: "pkg-components", x: 100, y: 150, w: 380, h: 76, title: "Components", sub: "one barrel + deep subpaths", icon: "widgets", chip: "info" },
+    { id: "pkg-tokens", x: 100, y: 260, w: 380, h: 76, title: "Tokens", sub: "tokens.css · primitives → semantic → components", icon: "palette", chip: "info" },
+    { id: "pkg-presets", x: 100, y: 370, w: 380, h: 90, title: "Theme presets", sub: "presets.css · one generated stylesheet per look", icon: "style", chip: "info" },
+    { id: "pkg-chat", x: 100, y: 500, w: 380, h: 90, title: "Chat widget", sub: "rift-ds/chat · npx rift-ds init chat scaffolds the routes", icon: "forum", chip: "info" },
 
     { id: "z-you", x: 1040, y: 80, w: 460, h: 560, kind: "zone", title: "Your product", sub: "any React 19 stack with a bundler" },
     { id: "you-app", x: 1080, y: 170, w: 380, h: 76, title: "Your app", sub: "import, compose, override tokens", icon: "deployed_code", chip: "positive" },
     { id: "you-root", x: 1080, y: 310, w: 380, h: 76, title: "Root element", sub: 'data-theme="dark" · data-brand="<look>"', icon: "toggle_on", chip: "positive" },
     { id: "you-agent", x: 1080, y: 450, w: 380, h: 90, title: "Your coding agent", sub: "builds with exact prop and token contracts", icon: "smart_toy", chip: "positive" },
 
-    { id: "docs-site", x: 560, y: 620, w: 400, h: 90, title: "This site", sub: "/api/mcp · the agent skills · component .md pages", kind: "external", icon: "hub" },
+    { id: "docs-site", x: 560, y: 620, w: 400, h: 90, title: "This site", sub: "/api/mcp · agent skills · .md pages · shadcn registry", kind: "external", icon: "hub" },
   ],
   edges: [
     { id: "components-app", from: "pkg-components", to: "you-app", label: "npm install, then import" },
     { id: "tokens-app", from: "pkg-tokens", to: "you-app", label: "one stylesheet import", bend: -40 },
+    { id: "chat-app", from: "pkg-chat", to: "you-app", label: "an AI chat over your own endpoint", bend: 140 },
     { id: "presets-root", from: "pkg-presets", to: "you-root", label: "one attribute applies a complete look", kind: "accent" },
     { id: "site-agent", from: "docs-site", to: "you-agent", label: "npx rift-ds init installs the skills" },
     { id: "agent-site", from: "you-agent", to: "docs-site", label: "reads contracts over MCP", bend: 60 },
@@ -101,7 +103,7 @@ export const pipelineMap: ArchMap = {
 
     /* Stage 4 */
     { id: "z-gate", x: 1430, y: 840, w: 430, h: 300, kind: "zone", title: "4 · Gate", sub: "every push and pull request" },
-    { id: "ci", x: 1470, y: 930, w: 350, h: 90, title: "GitHub Actions CI", sub: "axe on every story · hydration smoke · gesture stress · drift guard", logo: "/logos/Git.svg" },
+    { id: "ci", x: 1470, y: 930, w: 350, h: 90, title: "GitHub Actions CI", sub: "axe on every story · API check against the last release · hydration smoke · gesture stress · drift guard", logo: "/logos/Git.svg" },
 
     /* Stage 5 */
     { id: "z-ship", x: 330, y: 840, w: 880, h: 320, kind: "zone", title: "5 · Ship + serve", sub: "two destinations, two paths" },
@@ -195,7 +197,7 @@ export const runtimeMap: ArchMap = {
   id: "runtime",
   title: "The architecture at runtime",
   label:
-    "The visitor's browser fetches pages from Vercel and reports page views to Google Analytics; the chat route calls Anthropic and Redis, the MCP route serves generated data with no upstream calls, and a cron smokes production every four hours.",
+    "The visitor's browser fetches pages from Vercel and reports page views to Google Analytics; the chat route calls Anthropic and Redis, the MCP route serves generated data with no upstream calls, a fetch of the shadcn registry adds one to a daily tally in Redis, and a cron smokes production every four hours.",
   width: 1700,
   height: 900,
   nodes: [
@@ -206,14 +208,14 @@ export const runtimeMap: ArchMap = {
     { id: "cron", x: 140, y: 720, w: 320, h: 76, title: "GitHub Actions cron", sub: "the uptime workflow", kind: "external", logo: "/logos/Git.svg" },
 
     { id: "z-vercel", x: 700, y: 60, w: 460, h: 780, kind: "zone", title: "Vercel", sub: "static edge + serverless routes" },
-    { id: "pages", x: 740, y: 150, w: 380, h: 76, title: "Static + ISR pages", sub: "fonts and corpus baked in at build", ...NEXTJS_LOGO },
+    { id: "pages", x: 740, y: 150, w: 380, h: 76, title: "Static + ISR pages", sub: "fonts and corpus baked in · the /r/ registry", ...NEXTJS_LOGO },
     { id: "api-chat", x: 740, y: 290, w: 380, h: 76, title: "/api/chat", sub: "followups · feedback · guardrails", icon: "forum", chip: "info" },
     { id: "api-mcp", x: 740, y: 430, w: 380, h: 90, title: "/api/mcp", sub: "generated data from memory · no model, no auth", icon: "hub", chip: "info" },
     { id: "api-github", x: 740, y: 590, w: 380, h: 76, title: "/api/github-contributions", sub: "the contribution graph", icon: "grid_view", chip: "info" },
     { id: "isr", x: 740, y: 716, w: 380, h: 64, title: "ISR", sub: "served pages can change with no deploy", kind: "state", icon: "autorenew" },
 
-    { id: "anthropic", x: 1320, y: 250, w: 320, h: 76, title: "Anthropic API", sub: "Claude, with the corpus as context", kind: "external", logo: "/logos/Claude.svg" },
-    { id: "redis", x: 1320, y: 400, w: 320, h: 76, title: "Redis", sub: "chat log (30d) · spend + rate counters · feedback", kind: "external", icon: "memory" },
+    { id: "anthropic", x: 1320, y: 310, w: 320, h: 76, title: "Anthropic API", sub: "Claude, with the corpus as context", kind: "external", logo: "/logos/Claude.svg" },
+    { id: "redis", x: 1320, y: 150, w: 320, h: 76, title: "Redis", sub: "chat log (30d) · spend + rate counters · feedback · registry tally", kind: "external", icon: "memory" },
     { id: "github-api", x: 1320, y: 590, w: 320, h: 64, title: "Contributions API", sub: "public contribution counts · third party", kind: "external", logo: "/logos/Git.svg" },
   ],
   edges: [
@@ -225,6 +227,7 @@ export const runtimeMap: ArchMap = {
     { id: "cron-isr", from: "cron", to: "isr", label: "smokes production on a cron", kind: "external" },
     { id: "chat-anthropic", from: "api-chat", to: "anthropic", label: "model calls" },
     { id: "chat-redis", from: "api-chat", to: "redis", label: "log + budget + rate", bend: 30 },
+    { id: "pages-redis", from: "pages", to: "redis", label: "counts registry fetches", kind: "external" },
     { id: "github-github", from: "api-github", to: "github-api", label: "polls" },
   ],
 };

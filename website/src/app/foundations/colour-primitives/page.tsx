@@ -305,9 +305,9 @@ export default function PrimitiveColoursPage() {
                 { value: "ramps", label: "Ramps", icon: "view_week" },
                 { value: "swatches", label: "Swatches", icon: "grid_view" },
               ]}
-              activeTab={view}
-              onTabChange={(v) => setView(v as "ramps" | "swatches")}
-              ariaLabel="Primitive colour view"
+              value={view}
+              onValueChange={(v) => setView(v as "ramps" | "swatches")}
+              aria-label="Primitive colour view"
             />
           </div>
 

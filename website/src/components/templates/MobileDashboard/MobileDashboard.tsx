@@ -507,11 +507,11 @@ export default function MobileDashboard() {
                     <>
                       <SegmentedControl
                         segments={RANGES}
-                        activeSegment={range}
-                        onSegmentChange={setRange}
+                        value={range}
+                        onValueChange={setRange}
                         size="compact"
                         fullWidth
-                        ariaLabel="Date range"
+                        aria-label="Date range"
                       />
 
                       <div className={styles.kpiGrid}>
@@ -623,11 +623,11 @@ export default function MobileDashboard() {
                     <>
                       <SegmentedControl
                         segments={DELIVERY_FILTERS}
-                        activeSegment={deliveryFilter}
-                        onSegmentChange={setDeliveryFilter}
+                        value={deliveryFilter}
+                        onValueChange={setDeliveryFilter}
                         size="compact"
                         fullWidth
-                        ariaLabel="Filter by delivery"
+                        aria-label="Filter by delivery"
                       />
                       <Panel aria-label="Campaigns">
                         <div className={styles.panelHead}>

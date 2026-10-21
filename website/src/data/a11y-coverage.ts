@@ -12,7 +12,10 @@ import { a11yCoverage } from "./a11y-coverage.generated";
 export type { A11yCoverage } from "./a11y-coverage.generated";
 
 export const STORY_COUNT = a11yCoverage.stories;
-export const ARIA_COMPONENT_COUNT = a11yCoverage.withAria;
-export const ACCESSIBLE_NAME_COUNT = a11yCoverage.withAccessibleName;
+/** Registered components with a story file of their own, each audited by axe on every change. */
+export const STORIED_COMPONENT_COUNT = a11yCoverage.storiedComponents;
 export const BEHAVIOUR_MODULE_COUNT = a11yCoverage.behaviourModules;
-export const overlayComponents = a11yCoverage.overlayComponents;
+/** The overlays that hold focus while open: they trap Tab, restore focus and make the page behind inert. */
+export const modalOverlays = a11yCoverage.modalOverlays;
+/** Every component that dismisses through the shared layer stack, modal or not. */
+export const layerComponents = a11yCoverage.layerComponents;

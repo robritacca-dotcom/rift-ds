@@ -81,13 +81,13 @@ export default function ToolbarPage() {
                 <ToolbarSeparator />
                 <SegmentedControl
                   size="compact"
-                  ariaLabel="Canvas mode"
+                  aria-label="Canvas mode"
                   segments={[
                     { label: "Select", value: "select" },
                     { label: "Pan", value: "pan" },
                   ]}
-                  activeSegment={mode}
-                  onSegmentChange={setMode}
+                  value={mode}
+                  onValueChange={setMode}
                 />
                 <ToolbarSeparator />
                 <CircularButton icon="delete" variant="tertiary" ariaLabel="Delete selection" />

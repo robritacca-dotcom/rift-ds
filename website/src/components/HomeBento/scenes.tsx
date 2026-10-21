@@ -124,9 +124,9 @@ export function ComponentsShowcase() {
       <SegmentedControl
         size="compact"
         fullWidth
-        ariaLabel="Plan"
-        activeSegment={plan}
-        onSegmentChange={setPlan}
+        aria-label="Plan"
+        value={plan}
+        onValueChange={setPlan}
         segments={[
           { value: "free", label: "Free" },
           { value: "team", label: "Team" },
@@ -265,9 +265,9 @@ export function ThemesShowcase() {
           <strong>Revenue</strong>
           <SegmentedControl
             size="compact"
-            ariaLabel="Range"
-            activeSegment={range}
-            onSegmentChange={setRange}
+            aria-label="Range"
+            value={range}
+            onValueChange={setRange}
             segments={[
               { value: "week", label: "Week" },
               { value: "month", label: "Month" },
@@ -380,9 +380,9 @@ export function AgentsShowcase() {
       <p className={styles.snippetLabel}>Connect the MCP endpoint</p>
       <Tabs
         size="compact"
-        ariaLabel="MCP client"
-        activeTab={client}
-        onTabChange={setClient}
+        aria-label="MCP client"
+        value={client}
+        onValueChange={setClient}
         tabs={MCP_CLIENTS.map((c) => ({ value: c.id, label: c.label }))}
       />
       <CodeBlock code={current.snippet} language={current.language} filename={current.filename} />
@@ -428,9 +428,9 @@ export function InstallShowcase() {
     <div className={styles.snippets}>
       <Tabs
         size="compact"
-        ariaLabel="Install path"
-        activeTab={path}
-        onTabChange={setPath}
+        aria-label="Install path"
+        value={path}
+        onValueChange={setPath}
         tabs={INSTALL_PATHS.map((p) => ({ value: p.id, label: p.label }))}
       />
       <CodeBlock code={current.code} language="bash" />
@@ -543,9 +543,9 @@ export function TemplatesShowcase() {
         </Link>
         <SegmentedControl
           size="compact"
-          ariaLabel="Preview device size"
-          activeSegment={frameDevice}
-          onSegmentChange={(v) => setDevice(v as DeviceKey)}
+          aria-label="Preview device size"
+          value={frameDevice}
+          onValueChange={(v) => setDevice(v as DeviceKey)}
           segments={Object.entries(DEVICES).map(([value, d]) => ({ value, label: d.label, icon: d.icon }))}
         />
       </div>

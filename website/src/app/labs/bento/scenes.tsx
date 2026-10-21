@@ -110,7 +110,7 @@ export function ThemeScene() {
           <strong>Revenue</strong>
           <SegmentedControl
             size="compact"
-            activeSegment="month"
+            value="month"
             segments={[
               { value: "week", label: "Week" },
               { value: "month", label: "Month" },

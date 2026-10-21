@@ -1560,7 +1560,7 @@ const previews: Record<string, () => ReactNode> = {
           { label: "A", value: "a" },
           { label: "B", value: "b" },
         ]}
-        activeSegment="a"
+        value="a"
         size="compact"
       />
     </>
@@ -1739,9 +1739,9 @@ const previews: Record<string, () => ReactNode> = {
           { label: "One", value: "one" },
           { label: "Two", value: "two" },
         ]}
-        activeTab="one"
+        value="one"
         size="compact"
-        onTabChange={() => {}}
+        onValueChange={() => {}}
       />
     </>
   ),

@@ -40,7 +40,7 @@ export default function Sidebar({ links, groups }: SidebarProps) {
               <Button
                 label={pinned.label}
                 href={pinned.disabled ? undefined : pinned.href}
-                state={pinned.active ? "active" : "default"}
+                state={pinned.active ? "active" : undefined}
                 ariaCurrent={pinned.active}
                 variant="tertiary"
               />

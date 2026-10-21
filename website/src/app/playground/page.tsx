@@ -1040,15 +1040,15 @@ export default function PlaygroundPage() {
                   { value: "desktop", label: "Desktop", icon: "desktop_windows" },
                   { value: "mobile", label: "Mobile", icon: "smartphone" },
                 ]}
-                activeSegment={stageSize}
-                onSegmentChange={(value) => {
+                value={stageSize}
+                onValueChange={(value) => {
                   /* A manual drag is a size of its own — switching the stage
                      size discards it rather than resizing around it. */
                   setStageSize(value as StageSize);
                   setChatManual({});
                 }}
                 size="compact"
-                ariaLabel="Stage size"
+                aria-label="Stage size"
               />
               <StageControlBarSeparator />
               {/* Inspect mode — hover any staged component to see which

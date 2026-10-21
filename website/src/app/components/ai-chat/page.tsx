@@ -277,7 +277,7 @@ export default function AiChatPage() {
           </div>
 
           <div className={`${styles.viewportToggle} animate-in animate-delay-2`}>
-            <Tabs tabs={viewportTabs} activeTab={viewport} onTabChange={setViewport} ariaLabel="Examples by viewport" />
+            <Tabs tabs={viewportTabs} value={viewport} onValueChange={setViewport} aria-label="Examples by viewport" />
             <p className={styles.viewportNote}>
               {phone
                 ? `Under ${strip(TAKEOVER_QUERY)} the chat is the whole screen, with the welcome stacked for a handset.`

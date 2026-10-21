@@ -46,8 +46,8 @@ export default function SegmentedControlPage() {
                   { label: "Week", value: "week" },
                   { label: "Month", value: "month" },
                 ]}
-                activeSegment="week"
-                onSegmentChange={() => {}}
+                value="week"
+                onValueChange={() => {}}
               />
             </div>
           </section>
@@ -62,16 +62,16 @@ export default function SegmentedControlPage() {
                   { label: "List", value: "list", icon: "view_list" },
                   { label: "Board", value: "board", icon: "view_column" },
                 ]}
-                activeSegment="grid"
-                onSegmentChange={() => {}}
+                value="grid"
+                onValueChange={() => {}}
               />
               <SegmentedControl
                 segments={[
                   { label: "Light", value: "light", icon: "light_mode" },
                   { label: "Dark", value: "dark", icon: "dark_mode" },
                 ]}
-                activeSegment="dark"
-                onSegmentChange={() => {}}
+                value="dark"
+                onValueChange={() => {}}
               />
             </div>
           </section>
@@ -92,8 +92,8 @@ export default function SegmentedControlPage() {
                   { label: "Week", value: "week" },
                   { label: "Month", value: "month" },
                 ]}
-                activeSegment="week"
-                onSegmentChange={() => {}}
+                value="week"
+                onValueChange={() => {}}
               />
               <SegmentedControl
                 tone="neutral"
@@ -101,8 +101,8 @@ export default function SegmentedControlPage() {
                   { label: "Grid", value: "grid", icon: "grid_view" },
                   { label: "List", value: "list", icon: "view_list" },
                 ]}
-                activeSegment="grid"
-                onSegmentChange={() => {}}
+                value="grid"
+                onValueChange={() => {}}
               />
             </div>
           </section>
@@ -117,9 +117,9 @@ export default function SegmentedControlPage() {
                   { label: "Analytics", value: "analytics" },
                   { label: "Reports", value: "reports" },
                 ]}
-                activeSegment="overview"
+                value="overview"
                 fullWidth
-                onSegmentChange={() => {}}
+                onValueChange={() => {}}
               />
             </div>
           </section>
@@ -134,8 +134,8 @@ export default function SegmentedControlPage() {
                   { label: "Pro", value: "pro" },
                   { label: "Enterprise", value: "enterprise", disabled: true },
                 ]}
-                activeSegment="pro"
-                onSegmentChange={() => {}}
+                value="pro"
+                onValueChange={() => {}}
               />
             </div>
           </section>
@@ -151,8 +151,8 @@ export default function SegmentedControlPage() {
                   { label: "Active", value: "active" },
                   { label: "Archived", value: "archived" },
                 ]}
-                activeSegment="all"
-                onSegmentChange={() => {}}
+                value="all"
+                onValueChange={() => {}}
               />
               <SegmentedControl
                 size="compact"
@@ -161,8 +161,8 @@ export default function SegmentedControlPage() {
                   { label: "Preview", value: "preview", icon: "visibility" },
                   { label: "Split", value: "split", icon: "vertical_split" },
                 ]}
-                activeSegment="code"
-                onSegmentChange={() => {}}
+                value="code"
+                onValueChange={() => {}}
               />
             </div>
           </section>

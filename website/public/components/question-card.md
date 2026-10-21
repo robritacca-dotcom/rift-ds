@@ -2,7 +2,7 @@
 
 An agent's question with answers to pick: one or several, a set asked a step at a time, kept as a record once answered.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.10.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.11.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: ai
 - Import: `import { QuestionCard } from 'rift-ds';`

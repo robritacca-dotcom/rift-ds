@@ -61,9 +61,10 @@ export default function PrivacyPage() {
             and the registry tally above, and all three are used only to run
             and improve the site. The
             machine-readable endpoint at /api/mcp stores nothing: it reads
-            published data and answers. An image you drop on the playground
-            never leaves your browser: it is read there to sample its
-            colours, and nothing about it is uploaded or kept. The same
+            published data and answers. An image or a DESIGN.md you drop on
+            the playground never leaves your browser: it is read there to
+            sample its colours or read its tokens, and nothing about it is
+            uploaded or kept. The same
             goes for files you attach in a scripted chat, on the
             playground, the chat home template or the chat widget&apos;s own
             page: they are read in your browser to draw their previews, and

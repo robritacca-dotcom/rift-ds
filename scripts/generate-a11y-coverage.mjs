@@ -111,6 +111,8 @@ export function collectA11yCoverage() {
     if (FOCUS_SCOPE_IMPORT.test(source)) modalOverlays.push(component.label);
   }
 
+  /* The .ts hooks only, deliberately: the page counts the keyboard and
+     focus modules, and the link provider (LinkProvider.tsx) is neither. */
   const behaviourModules = readdirSync(join(root, 'src', 'behaviors')).filter((f) =>
     f.endsWith('.ts')
   ).length;

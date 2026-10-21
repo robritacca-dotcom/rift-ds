@@ -162,7 +162,7 @@ export const HOME_TILES: HomeTile[] = [
     title: "Make the look your own",
     description: "Move the levers, then take the theme home as files.",
     Scene: PlaygroundTileScene,
-    lede: "The playground re-themes components, type, a chat and a full dashboard as you move its levers. Drop in an image and the colours follow the picture. When the look is right, export it as files for your project.",
+    lede: "The playground re-themes components, type, a chat and a full dashboard as you move its levers. Drop in an image or a DESIGN.md and the levers follow it. When the look is right, export it as files for your project.",
     points: [
       "Colour, type, shape, density and motion levers",
       "Every preset is a saved position of the levers",

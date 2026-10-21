@@ -250,7 +250,8 @@ export function assembleShadcnRegistry() {
 
   /* The base item: the token layer whole (tokens.css closure + the
      generated presets), the icon font's CSS, the JS motion constants and breakpoints,
-     all of src/behaviors/, and whatever else a component reached
+     every .ts module of src/behaviors/ (the link provider is .tsx and
+     rides in through the components that import it), and whatever else a component reached
      outside its own folder. */
   const baseEntries = [
     join(srcDir, 'tokens', 'tokens.css'),

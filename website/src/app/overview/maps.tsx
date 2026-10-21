@@ -203,7 +203,7 @@ export const runtimeMap: ArchMap = {
   nodes: [
     { id: "browser", x: 140, y: 200, w: 320, h: 90, title: "Visitor's browser", sub: "the WebGL background runs here", icon: "public", chip: "positive" },
     { id: "ga4", x: 140, y: 376, w: 320, h: 64, title: "Google Analytics 4", sub: "page views and engagement events", kind: "external", icon: "monitoring" },
-    { id: "runtime-fonts", x: 140, y: 490, w: 320, h: 64, title: "Google Fonts", sub: "the playground's typeface picker", kind: "external", icon: "font_download" },
+    { id: "runtime-fonts", x: 140, y: 490, w: 320, h: 64, title: "Google Fonts", sub: "the playground's fonts and DESIGN.md import", kind: "external", icon: "font_download" },
     { id: "agents", x: 140, y: 580, w: 320, h: 76, title: "Agents + MCP clients", sub: "connect with one URL, no key", icon: "smart_toy", chip: "positive" },
     { id: "cron", x: 140, y: 720, w: 320, h: 76, title: "GitHub Actions cron", sub: "the uptime workflow", kind: "external", logo: "/logos/Git.svg" },
 

@@ -176,16 +176,16 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     iconFill: false,
     fontLabel: "Inter",
     headingFontLabel: "Montserrat",
-    // Ink-wash chromatics: hue and value hold, saturation drops hard, so
-    // any colour that does appear reads as a tinted grey.
+    // Ink-wash chromatics: hue and value hold and saturation is pulled
+    // back from the base look's, so colour reads as quiet but still colour.
     advanced: bases({
-      red: "#BB7B8A",
-      orange: "#BB927B",
-      yellow: "#D0BE95",
-      green: "#469681",
-      teal: "#437180",
-      blue: "#4B5B83",
-      purple: "#9C7BBB",
+      red: "#DB5B79",
+      orange: "#DB895B",
+      yellow: "#EDCA78",
+      green: "#1EBE94",
+      teal: "#25819F",
+      blue: "#2F4F9F",
+      purple: "#9D5BDB",
     }),
     // Greyed accents: the background glow blobs and chart series go
     // monochrome with the rest of the look. Status colours follow the

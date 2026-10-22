@@ -264,6 +264,13 @@ const STORY_MODULES = [
   'website/src/app/playground/PlaygroundControls.tsx',
   'website/src/app/playground/ExportThemeDialog.tsx',
   'website/src/lib/theme/theme-export.ts',
+  // The theme-source import: the dropzone's invitation and its states, the
+  // source cards' buttons, and the DESIGN.md match report, whose every row
+  // note a visitor reads on the stage.
+  'website/src/app/playground/ThemeSourceInvite.tsx',
+  'website/src/app/playground/ImageThemeDrop.tsx',
+  'website/src/app/playground/DesignMdCard.tsx',
+  'website/src/lib/theme/design-md.ts',
   // The lever words (LEVER_VOCABULARY) print beside each slider in the
   // rail and describe the look in the exported THEME.md.
   'website/src/lib/theme/theme-overrides.ts',

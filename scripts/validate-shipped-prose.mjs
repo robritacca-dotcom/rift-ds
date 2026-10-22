@@ -256,7 +256,7 @@ const STORY_MODULES = [
   'src/chat/ChatArtifactPane.tsx',
   'src/chat/demo-artifacts.tsx',
   'website/src/app/playground/views/TypeView.tsx',
-  // The theme rail's control labels and the export dialog's notes sit in
+  // The theme rail's control labels and the export dialog's description sit in
   // component files beside the playground's page.tsx, and the export's
   // THEME.md and agent prompt are templates in a lib module: copy a
   // visitor reads, or carries into their own repo, that the page scan

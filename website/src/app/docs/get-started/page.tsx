@@ -630,7 +630,7 @@ export default function GetStartedPage() {
                   <Link href="/playground" className={styles.inlineLink}>
                     playground
                   </Link>
-                  ? Its Export theme button saves one AGENTS.md: the setup,
+                  ? Its Export theme button gives you one AGENTS.md: the setup,
                   the theme in words and its CSS. Save it at your project root
                   and your agent wires the theme in from it, and the restyling
                   skill reads its theme before it changes anything.

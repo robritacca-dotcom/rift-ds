@@ -14,7 +14,11 @@
   /* The source frame's size (.card in ImageThemeDrop.module.css), so the
      stage does not jump when a file lands and the frame takes this place. */
   aspect-ratio: 16 / 9;
-  min-height: 320px;
+  /* No min-height, unlike the frame: an explicit one switches off
+     aspect-ratio's content minimum, so on a narrow stage the art, the
+     heading and the wrapped examples spilled out of the dashed edge, top
+     and bottom alike. Below the width where 16:9 drops under the frame's
+     320px floor the zone's content is taller than that anyway. */
   padding: var(--padding-1000) var(--padding-500);
   text-align: center;
   /* The library dropzone's hairline (FileInput), so the two read as one

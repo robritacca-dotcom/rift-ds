@@ -15,9 +15,10 @@
  * matching, so a file that disguises its subject ("Stripi") falls back to
  * its file name, then to the monogram, never to a guess.
  *
- * The marks are trademarks, shown only on the source card. The themed
- * mock product keeps its own mark (the Product name lever) whatever the
- * file names.
+ * The marks are trademarks, shown in two places only: the source card, and
+ * the dropzone's example buttons (ThemeSourceInvite), which name the brand
+ * whose shipped DESIGN.md each one loads. The themed mock product keeps its
+ * own mark (the Product name lever) whatever the file names.
  */
 import type { BrandMarkData } from "@/data/brand-marks.generated";
 

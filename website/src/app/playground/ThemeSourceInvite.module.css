@@ -35,9 +35,88 @@
   background: var(--color-bg-container-secondary);
 }
 
-.icon {
-  font-size: var(--icon-size-800);
-  color: var(--color-text-secondary);
+/* ============================================
+   THE ART — three cards fanned like a hand: a
+   picture and a DESIGN.md either side of the
+   palette they become, each painted from one of
+   the colour lever's ramps (ART_CARDS in the
+   component owns why, and sets --slot inline).
+   The cards sway out of step while the
+   card waits, and fan wider when a file is near.
+   ============================================ */
+
+.art {
+  /* How far the outer cards lean and step out; the dragged-over and
+     hovered card fans them further. */
+  --fan: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(var(--icon-size-1200) * 2);
+  margin-bottom: var(--gap-200);
+}
+
+.zone:hover .art,
+.dragging .art {
+  --fan: 1.6;
+}
+
+.artCard {
+  /* Each card's resting lean and drop, set per slot below; the sway
+     swings round them. */
+  --tilt: 0deg;
+  --drop: 0px;
+  --icon-size: var(--icon-size-800);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--icon-size-1200) * 1.25);
+  aspect-ratio: 4 / 5;
+  margin-inline: calc(-1 * var(--gap-200));
+  border-radius: var(--radius-300);
+  /* Frosted glass: a translucent tint of the card's colour over a blurred
+     and saturated backdrop, so where the hand overlaps, the card behind
+     shows softened through the one in front. The rim is the glass edge
+     catching light, the slot colour lifted toward white. */
+  border: var(--border-025) solid color-mix(in srgb, var(--slot) 45%, var(--color-text-primary));
+  background: color-mix(in srgb, var(--slot) 45%, transparent);
+  backdrop-filter: blur(12px) saturate(1.6);
+  color: color-mix(in srgb, var(--slot) 35%, var(--color-text-primary));
+  transform: translateY(var(--drop)) rotate(var(--tilt));
+  transition: transform var(--motion-duration-slow) var(--motion-ease-emphasized);
+  animation: invite-sway calc(var(--invite-cycle) * 0.75) ease-in-out infinite alternate;
+}
+
+.artCard[data-slot="1"] {
+  --tilt: calc(-12deg * var(--fan));
+  --drop: calc(var(--gap-200) * var(--fan));
+  animation-delay: calc(var(--invite-cycle) * -0.25);
+}
+
+/* The palette sits forward, in the middle, upright: what the two files
+   become. */
+.artCard[data-slot="3"] {
+  position: relative;
+  /* ds-allow(stacking): local order inside the art, the middle card over its two neighbours */
+  z-index: 1;
+}
+
+.artCard[data-slot="5"] {
+  --tilt: calc(12deg * var(--fan));
+  --drop: calc(var(--gap-200) * var(--fan));
+  animation-delay: calc(var(--invite-cycle) * -0.5);
+}
+
+/* A slow swing of a few degrees either side of the card's own lean, each
+   card out of step with its neighbours, so the hand looks held rather
+   than pinned. */
+@keyframes invite-sway {
+  from {
+    transform: translateY(var(--drop)) rotate(calc(var(--tilt) - 4deg));
+  }
+  to {
+    transform: translateY(calc(var(--drop) - var(--gap-100))) rotate(calc(var(--tilt) + 4deg));
+  }
 }
 
 .title {
@@ -159,10 +238,12 @@
 }
 
 /* Reduced motion: no passes at all. The headline stays in the text
-   colour (the gradient's first third) and the ring stays hidden. */
+   colour (the gradient's first third) and the ring stays hidden; the
+   art's cards hold their resting fan without swaying. */
 @media (prefers-reduced-motion: reduce) {
   .title,
-  .zone::before {
+  .zone::before,
+  .artCard {
     animation: none;
   }
 }
@@ -186,6 +267,43 @@
   justify-content: center;
   gap: var(--gap-200);
   margin-top: var(--gap-200);
+}
+
+/* The examples: a quiet line and a row of brand buttons under the main
+   action, set apart by a step of air so they read as the second way in. */
+.examples {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-200);
+  margin-top: var(--gap-500);
+}
+
+.examplesLabel {
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-secondary);
+}
+
+.examplesLabel strong {
+  color: var(--color-text-primary);
+}
+
+.exampleRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--gap-200);
+}
+
+/* A brand's mark in the button's icon seat, drawn in the label's colour
+   rather than the brand's own: three brand colours in a row would shout
+   over the one primary action above them. */
+.exampleMark {
+  width: var(--icon-size, var(--icon-size-500));
+  height: var(--icon-size, var(--icon-size-500));
+  fill: currentColor;
 }
 
 /* The picker is opened by the button; the input itself stays out of sight

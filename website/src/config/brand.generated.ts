@@ -2,6 +2,7 @@
 // Source of truth: scripts/brand.mjs (the one home for brand facts).
 // Regenerate: node scripts/generate-brand-module.mjs (runs via predev/prebuild).
 
+export const AGENT_STARTER_FILE: string = "AGENTS.md";
 export const ASSISTANT_NAME: string = "Rift AI";
 export const AUTHOR_NAME: string = "Robert Ritacca";
 export const AUTHOR_URL: string = "https://robertritacca.com";

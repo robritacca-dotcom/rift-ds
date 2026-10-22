@@ -21,7 +21,7 @@ import { Button } from 'rift-ds';
 import { Input } from 'rift-ds/components/Input/Input';
 ```
 
-The package is ESM-only, resolved via exports subpaths: use a bundler that handles CSS and font imports from node_modules (Vite, Next.js, webpack) and set TypeScript's `moduleResolution` to `"bundler"` (or `"nodenext"`). Components are provider-free with one exception: wrap the tree in `ToastProvider` if (and only if) the toast queue is used via `useToast`.
+The package is ESM-only, resolved via exports subpaths: use a bundler that handles CSS and font imports from node_modules (Vite, Next.js, webpack) and set TypeScript's `moduleResolution` to `"bundler"` (or `"nodenext"`). Components are provider-free with one exception: wrap the tree in `ToastProvider` if (and only if) the toast queue is used via `useToast`. One more is optional: in a routed app, `LinkProvider` from `rift-ds/behaviors/LinkProvider` hands every client-rendered component your router's link, so its links navigate without a reload (in Next.js, mount it from a `'use client'` file, since the root layout is a Server Component); a component rendered on the server takes `linkComponent` on the instance instead.
 
 ## Dark mode
 

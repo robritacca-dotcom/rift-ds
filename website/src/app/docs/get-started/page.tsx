@@ -21,7 +21,13 @@ import { MCP_TOOLS } from "@/lib/mcp-tools";
 import { SITE_URL } from "@/lib/structuredData";
 import { SHOW_FIGMA_LINKS } from "@/config/social";
 import { ASSISTANT_NAME, FIGMA_FILE_URL, NPM_URL, REPOSITORY_URL, STORYBOOK_URL } from "@/config/brand.generated";
-import { AGENT_SKILLS, skillCurlSnippet } from "@/data/agent-skills";
+import {
+  AGENT_SKILLS,
+  AGENT_STARTER,
+  AGENT_STARTER_FILE,
+  AGENT_STARTER_SNIPPET,
+  skillCurlSnippet,
+} from "@/data/agent-skills";
 
 const { sidebarLinks } = getSidebarLinks(docsSidebarLinks, "/docs/get-started");
 
@@ -292,8 +298,10 @@ export default function GetStartedPage() {
               package this site is built with. There is no configuration API or theme
               provider: theming is plain CSS custom properties. Import the token
               stylesheet, use the components, and re-theme by redefining tokens. (The
-              one provider in the library is <code>ToastProvider</code>, needed only
-              if you use the toast queue via <code>useToast</code>.){" "}
+              library has two optional providers: <code>ToastProvider</code>, needed
+              only if you use the toast queue via <code>useToast</code>, and{" "}
+              <code>LinkProvider</code>, which hands components your router&apos;s
+              link.){" "}
               <Link href="/playground" className={styles.inlineLink}>
                 Try it live in the playground
               </Link>
@@ -309,9 +317,29 @@ export default function GetStartedPage() {
               <section id="agent-quickstart" className={`${styles.section} animate-in animate-delay-2`}>
                 <SectionTitle title="Build with a coding agent" />
                 <p className={styles.sectionNote}>
-                  The system is set up so the coding agent you already use
-                  can build with it, restyle what you have, and check its
-                  own work. Three pieces do that:
+                  The quickest start is one file, <code>{AGENT_STARTER_FILE}</code>:
+                  the install, the setup, the rules, and where to look
+                  things up. Copy it into your agent, or save it at your
+                  project root, where most coding agents read it on their
+                  own.
+                </p>
+                <CodeBlock
+                  code={AGENT_STARTER}
+                  language="markdown"
+                  filename={AGENT_STARTER_FILE}
+                  maxHeight={360}
+                  showCopy
+                />
+                <p className={styles.sectionNote}>
+                  Or save it from the terminal. The site regenerates it on
+                  every deploy, matched to the latest release, so fetch it
+                  again after you upgrade.
+                </p>
+                <CodeBlock code={AGENT_STARTER_SNIPPET} language="bash" showCopy />
+                <p className={styles.sectionNote}>
+                  For the full setup, the system is built so the coding
+                  agent you already use can build with it, restyle what
+                  you have, and check its own work. Three pieces do that:
                 </p>
                 <ul className={styles.promptList}>
                   <li className={styles.promptItem}>
@@ -339,7 +367,7 @@ export default function GetStartedPage() {
                   </li>
                 </ul>
                 <p className={styles.sectionNote}>
-                  Start with one command. It installs the skills and prints
+                  Install them with one command. It installs the skills and prints
                   the MCP connect line, and the{" "}
                   <a href="#agent-docs" className={styles.inlineLink}>
                     docs for your agent

@@ -129,6 +129,15 @@ export const MCP_SERVER_NAME = 'rift-ds';
 export const SKILL_NAME = 'rift-design-system';
 
 /**
+ * The agent starter's file name: one short markdown file, served at the
+ * site root, that a consumer saves into their project (or pastes into any
+ * agent) for the essentials with nothing installed. Named for the
+ * cross-tool AGENTS.md convention, so saving it under the served name is
+ * already the right place. Written by scripts/generate-agent-skill.mjs.
+ */
+export const AGENT_STARTER_FILE = 'AGENTS.md';
+
+/**
  * Every consumer agent skill the site publishes under /skill/<name>/ and
  * `npx <pkg> init` installs under .claude/skills/<name>/, in install
  * order. The folder names are brand facts, so they live here; `role`

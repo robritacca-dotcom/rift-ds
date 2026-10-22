@@ -1,0 +1,63 @@
+# Building with rift-ds
+
+You are building React UI with rift-ds 1.12.0. Follow this file before writing any code with it. It was generated from the library's registries, so every name in it exists.
+
+## Install
+
+```bash
+npm install rift-ds
+```
+
+- Required peers: `react` ^19.0.0 and `react-dom` ^19.0.0. The package has no runtime dependencies, so add nothing else for it.
+- `recharts` ^3.0.0 is optional. Install it only if you import from `rift-ds/charts`.
+- It is ESM-only. Use a bundler that handles CSS and font imports (Vite, Next.js, webpack), with TypeScript's `moduleResolution` set to `"bundler"` or `"nodenext"`.
+
+## Setup
+
+```tsx
+import 'rift-ds/tokens/tokens.css'; // once, at the app root
+import { Button } from 'rift-ds';
+```
+
+- Paint the page: `body` takes `--color-bg-page-primary`, `--color-text-primary` and `--font-family-primary`.
+- Dark mode is `data-theme="dark"` on `<html>`. A shipped theme is `data-brand` there too, with `rift-ds/tokens/presets/presets.css` imported once.
+- The base theme's typeface is not bundled. It is designed around Nunito Sans: load that (or your own) and set `--font-family-primary` to it. A shipped theme bundles its own faces, and the icon font always ships.
+- Wrap the tree in `ToastProvider` only if you call `useToast` (both from the `Toast` module). No other component needs a provider; `LinkProvider` (below) is optional and only routes links.
+
+In a routed app, hand the router's link to `LinkProvider`, or every component link reloads the page. In Next.js the root layout is a Server Component, so the provider goes in a client file of its own, mounted around `children` in the layout:
+
+```tsx
+'use client';
+import Link from 'next/link';
+import { LinkProvider } from 'rift-ds/behaviors/LinkProvider';
+
+export function AppLinks({ children }: { children: React.ReactNode }) {
+  return <LinkProvider linkComponent={Link}>{children}</LinkProvider>;
+}
+
+// app/layout.tsx
+<body><AppLinks>{children}</AppLinks></body>
+```
+
+A component rendered by a Server Component cannot read the provider, so pass `linkComponent={Link}` on that instance instead.
+
+## AI chat
+
+Do not build a chat UI by hand. `npx rift-ds init chat` scaffolds the package's chat widget into a Next.js app router project: the routes, the mount and an env example. It never overwrites a file, and it ends by printing the optional peers to install and the steps to wire it in. Follow that output. In any other framework, use the panel over your own endpoint or the headless engine instead: https://rift-ds.com/docs/chat covers both and the protocol, and every prop is on https://rift-ds.com/components/ai-chat.
+
+## Rules
+
+- Use a library component before building your own, and never restyle one from outside. If it looks wrong, change a token.
+- Never write a raw colour, spacing, radius, font value or duration. Use the semantic token for the role, not the nearest value.
+- `--color-action-primary-bg` marks the primary action, focus, and checked or selected state. Never decoration.
+- Status colours come from the `--color-status-*` family, such as `--color-status-error-text`.
+- The only shadows are `--shadow-floating` and `--shadow-modal`.
+- Size an icon by setting `--icon-size` to an `--icon-size-*` step, never `font-size`.
+- Never guess a prop. Check it in the `.d.ts` files in `node_modules/rift-ds`, which work offline, or in the component's contract, linked from the catalogue below.
+
+## Look it up
+
+- Every component, with its import and a link to its prop contract: https://rift-ds.com/skill/rift-design-system/references/components.md
+- Every token, with its value in light and dark: https://rift-ds.com/skill/rift-design-system/references/tokens.md
+- MCP endpoint, no key needed: https://rift-ds.com/api/mcp
+- If the project uses `.claude/skills/`, `npx rift-ds init` installs the full skills there.

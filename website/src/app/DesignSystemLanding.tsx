@@ -14,6 +14,9 @@ import { THEME_SELECTOR_ORDER, themeSelectorTiles } from "@/lib/theme/presets";
 import { useSiteTheme } from "@/lib/theme/use-theme-overrides";
 import { applyBrand, readBrand, SERVED_THEME_ID, subscribeBrand } from "@/lib/theme/brand";
 import { SHOW_FIGMA_LINKS } from "@/config/social";
+import { AGENT_STARTER, AGENT_STARTER_FILE, AGENT_STARTER_PAGE } from "@/data/agent-skills";
+import { useRouter } from "next/navigation";
+import { MOTION_FEEDBACK_RESET_MS } from "rift-ds/tokens/motion";
 import { AgentPlan } from "rift-ds/components/AgentPlan/AgentPlan";
 import { AnimatedNumber } from "rift-ds/components/AnimatedNumber/AnimatedNumber";
 import { AgentStatus } from "rift-ds/components/AgentStatus/AgentStatus";
@@ -365,6 +368,60 @@ function DemoCard({
         ))}
       </footer>
     </article>
+  );
+}
+
+/** The hero's agent shortcut: one click puts the whole AGENTS.md starter on
+    the clipboard, and the copy glyph crossfades to a check while the label
+    says so. With no clipboard (an insecure origin, a denied permission) it
+    goes to the get-started section, where the same text sits in a copy
+    frame. The swap rides the motion tokens, so reduced motion makes it
+    instant. */
+function AgentStarterCopy() {
+  const router = useRouter();
+  const [copied, setCopied] = useState(false);
+  const resetTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => () => {
+    if (resetTimer.current) clearTimeout(resetTimer.current);
+  }, []);
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(AGENT_STARTER);
+      setCopied(true);
+      if (resetTimer.current) clearTimeout(resetTimer.current);
+      resetTimer.current = setTimeout(() => setCopied(false), MOTION_FEEDBACK_RESET_MS);
+    } catch {
+      router.push(AGENT_STARTER_PAGE);
+    }
+  };
+
+  return (
+    <button
+      type="button"
+      className={styles.heroAgentCopy}
+      onClick={copy}
+      data-copied={copied || undefined}
+    >
+      <span className={styles.heroAgentSwap} aria-hidden="true">
+        <span className={`material-symbols-rounded ${styles.heroAgentGlyph} ${styles.heroAgentCopyGlyph}`}>
+          content_copy
+        </span>
+        <span className={`material-symbols-rounded ${styles.heroAgentGlyph} ${styles.heroAgentCheckGlyph}`}>
+          check
+        </span>
+      </span>
+      {/* Both labels share one grid cell, so the button keeps its width; they
+          differ by two characters, so the line stays centred either way. */}
+      <span className={styles.heroAgentLabels}>
+        <span className={styles.heroAgentLabelIdle}>Copy {AGENT_STARTER_FILE}</span>
+        <span className={styles.heroAgentLabelDone}>Copied {AGENT_STARTER_FILE}</span>
+      </span>
+      <span className={styles.heroAgentLive} aria-live="polite">
+        {copied ? `${AGENT_STARTER_FILE} copied to the clipboard` : ""}
+      </span>
+    </button>
   );
 }
 
@@ -1408,6 +1465,12 @@ export default function DesignSystemLanding() {
               { label: "Browse components", variant: "secondary" as const, tone: "neutral" as const, href: "/components", iconLeft: "category" },
             ]}
           />
+          {/* The agent starter, kept to one quiet line: the buttons are the
+              hero's call to action, this is the shortcut for agent users. */}
+          <p className={styles.heroAgentNote}>
+            <span>Using a coding agent?</span>
+            <AgentStarterCopy />
+          </p>
           </div>
         </section>
 

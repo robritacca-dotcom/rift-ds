@@ -38,6 +38,11 @@
  *     exempts them: em dashes are structural separators there, not voice.
  *     Skill `displayDescription` frontmatter is NOT exempt, because it
  *     renders on /skills.
+ *   - The consumer agent markdown under `website/public/` (the skills in
+ *     `skill/` and the agent starter, `AGENTS.md`). It is shipped, but
+ *     generated: `validate-agent-skill.mjs` screens every file of it for
+ *     em dashes and leaks, so scanning it here would be a second check of
+ *     the same bytes.
  *   - noindex pages — derived from the page's own `robots: { index: false }`,
  *     so a page joining or leaving the set moves itself in and out of scope
  *     with no list to maintain here. Today that is the `/labs` rebuilds

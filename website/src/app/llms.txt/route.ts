@@ -16,6 +16,8 @@ import {
 import {
   AGENT_SKILLS,
   AGENT_SKILL_MANIFEST_URL,
+  AGENT_STARTER_FILE,
+  AGENT_STARTER_URL,
   skillFileUrl,
 } from "@/data/agent-skills";
 
@@ -45,6 +47,8 @@ export function GET() {
     "> An AI-ready design system built by Claude Code from published specs (CLAUDE.md, design.md, content-design.md) and shipped to npm as an open React component library, with the docs site it builds.",
     "",
     `Designed and built by ${AUTHOR_NAME} (${AUTHOR_URL}), who writes the specs Claude Code builds from. MIT licensed.`,
+    "",
+    `[${AGENT_STARTER_FILE}](${AGENT_STARTER_URL}) is the starter for a coding agent building with the package: the install, the setup, the rules and where to look things up, in one short file to save at a project root.`,
     "",
     section(
       "Design system docs",

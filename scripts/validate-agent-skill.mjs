@@ -33,6 +33,16 @@
  *      list, and none of them spells a /skill/<name>/ path by hand, which
  *      is how the list drifted apart from the generator before.
  *
+ *   6. The agent starter (website/public/<AGENT_STARTER_FILE>) and its
+ *      module for the website (agent-starter.generated.ts) byte-match
+ *      their builders, the file passes the same content screens, and each
+ *      surface that offers it uses the accessor: the home hero copies the
+ *      full text on click (AGENT_STARTER), get-started shows the full
+ *      text in a copy frame (AGENT_STARTER), and llms.txt links the raw
+ *      file (AGENT_STARTER_URL). None spells the file's URL by hand. The
+ *      README, a fourth surface that cannot import, must carry the URL
+ *      the accessor builds.
+ *
  * Runs in the validate-registry chain: every input is source or generated
  * data, never build output.
  */
@@ -41,11 +51,15 @@ import { join } from 'node:path';
 import {
   MANIFEST_FILE,
   assembleAgentSkill,
+  assembleAgentStarter,
   assembleSkillManifest,
+  buildStarterModule,
+  starterModulePath,
+  starterPath,
   listFiles,
   skillRoot,
 } from './generate-agent-skill.mjs';
-import { AGENT_SKILLS } from './brand.mjs';
+import { AGENT_SKILLS, AGENT_STARTER_FILE, SITE_URL } from './brand.mjs';
 import { repoRoot } from './component-docgen.mjs';
 
 // Normalize CRLF so Windows checkouts validate identically to CI.
@@ -76,6 +90,13 @@ for (const path of listFiles(skillRoot)) {
         `(it prunes the orphan), or add the file to a builder deliberately.`
     );
   }
+}
+
+const starter = assembleAgentStarter();
+if (!existsSync(starterPath)) {
+  errors.push(`missing website/public/${AGENT_STARTER_FILE} — ${REGENERATE}`);
+} else if (read(starterPath) !== starter) {
+  errors.push(`website/public/${AGENT_STARTER_FILE} is stale — ${REGENERATE}`);
 }
 
 // 2. The manifest matches the table.
@@ -133,7 +154,7 @@ const screens = [
   [/\b[A-Za-z0-9._%+-]+@(?!example\.)[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g, 'email address'],
   [/\u2014/g, 'em dash (content-design.md bans it in shipped copy)'],
 ];
-for (const [path, content] of wanted) {
+for (const [path, content] of [...wanted, [`../${AGENT_STARTER_FILE}`, starter]]) {
   for (const [pattern, what] of screens) {
     for (const match of content.matchAll(pattern)) {
       errors.push(
@@ -181,6 +202,41 @@ for (const file of advertisers) {
   }
 }
 
+// 6. The starter is shown on get-started, and offered, derived.
+const starterModule = buildStarterModule(starter);
+if (!existsSync(starterModulePath) || read(starterModulePath) !== starterModule) {
+  errors.push(`website/src/data/agent-starter.generated.ts is missing or stale — ${REGENERATE}`);
+}
+// Each surface, the accessor name it must use, and what that name does there.
+const starterOffers = [
+  ['website/src/app/DesignSystemLanding.tsx', 'AGENT_STARTER', 'copies the full text from the hero'],
+  ['website/src/app/docs/get-started/page.tsx', 'AGENT_STARTER', 'shows the full text in a copy frame'],
+  ['website/src/app/llms.txt/route.ts', 'AGENT_STARTER_URL', 'links the raw file'],
+];
+for (const [file, name, what] of starterOffers) {
+  const content = read(join(repoRoot, ...file.split('/')));
+  const imported = new RegExp(
+    `import\\s*\\{[^}]*\\b${name}\\b[^}]*\\}\\s*from\\s*["']${ACCESSOR_IMPORT}["']`
+  ).test(content);
+  if (!imported || (content.match(new RegExp(`\\b${name}\\b`, 'g')) ?? []).length < 2) {
+    errors.push(`${file} no longer uses ${name} from ${ACCESSOR_IMPORT}: it ${what}.`);
+  }
+  if (content.includes(`/${AGENT_STARTER_FILE}`)) {
+    errors.push(`${file} spells /${AGENT_STARTER_FILE} by hand — use AGENT_STARTER_URL from ${ACCESSOR_IMPORT}.`);
+  }
+}
+// The README offers it too and ships in the npm tarball, but it is
+// markdown and cannot import the accessor, so it is held to the URL the
+// accessor would build: a renamed file cannot leave it pointing at a 404.
+const starterUrl = `${SITE_URL}/${AGENT_STARTER_FILE}`;
+if (!read(join(repoRoot, 'README.md')).includes(starterUrl)) {
+  errors.push(`README.md no longer offers the agent starter at ${starterUrl}: its "Set up your agent" section links and curls that URL.`);
+}
+const accessorSource = existsSync(accessorPath) ? read(accessorPath) : '';
+if (!/AGENT_STARTER_PAGE\s*=\s*"\/docs\/get-started#agent-quickstart"/.test(accessorSource)) {
+  errors.push(`AGENT_STARTER_PAGE in ${ACCESSOR} must point at get-started's #agent-quickstart section, where the copy frame is.`);
+}
+
 if (errors.length > 0) {
   console.error('\n✗ Agent skill validation failed:\n');
   for (const error of errors) console.error(`  - ${error}\n`);
@@ -189,5 +245,6 @@ if (errors.length > 0) {
 
 console.log(
   `✓ Agent skills in sync — ${tableNames.length} skills, ${wanted.size} files match the registries, ` +
-    `the manifest matches the table, and ${advertisers.length} surfaces derive their list from it.`
+    `the manifest matches the table, ${advertisers.length} surfaces derive their list from it, ` +
+    `and the agent starter matches and is offered on ${starterOffers.length + 1} surfaces.`
 );

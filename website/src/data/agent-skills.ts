@@ -1,5 +1,5 @@
 import manifest from "../../public/skill/manifest.json";
-import { SITE_URL } from "@/config/brand.generated";
+import { AGENT_STARTER_FILE, SITE_URL } from "@/config/brand.generated";
 
 /**
  * AGENT SKILLS — the website's one reader of the consumer skills' manifest.
@@ -32,6 +32,24 @@ export const AGENT_SKILL_MANIFEST_URL = `${SITE_URL}/skill/manifest.json`;
 export function skillFileUrl(skill: AgentSkill, file: string): string {
   return `${SITE_URL}/skill/${skill.name}/${file}`;
 }
+
+/**
+ * The agent starter: one short generated file (public/AGENTS.md, written by
+ * the same generator) a consumer saves at their project root or pastes into
+ * any agent. Every surface that offers it builds the link from here: the raw
+ * URL for agents and terminals, the get-started section for people.
+ */
+export { AGENT_STARTER_FILE };
+export const AGENT_STARTER_URL = `${SITE_URL}/${AGENT_STARTER_FILE}`;
+
+/** Where the site shows the starter, in a copy frame at the top of get-started. On-site links go here. */
+export const AGENT_STARTER_PAGE = "/docs/get-started#agent-quickstart";
+
+/** The starter's full text, for the copy frame. */
+export { AGENT_STARTER } from "./agent-starter.generated";
+
+/** Saves the starter into the current folder under its served name. */
+export const AGENT_STARTER_SNIPPET = `curl -o ${AGENT_STARTER_FILE} ${AGENT_STARTER_URL}`;
 
 /** The by-hand install: one curl per file, into the folder the init bin uses. */
 export function skillCurlSnippet(): string {

@@ -62,7 +62,13 @@ Swap the scripted transport for `createFetchTransport('/api/chat')` and the pane
 
 ## Set up your agent
 
-One command teaches a coding agent the system: it installs the generated agent skills into your project and prints the MCP connect line. The skills cover the library's rules, moving existing screens onto the tokens and components, and auditing styles against them.
+The quickest start is one file: save [AGENTS.md](https://rift-ds.com/AGENTS.md) at your project root, or paste it into your agent. It holds the install, the setup, the rules, and where to look things up.
+
+```bash
+curl -o AGENTS.md https://rift-ds.com/AGENTS.md
+```
+
+For the full setup, one command teaches a coding agent the system: it installs the generated agent skills into your project and prints the MCP connect line. The skills cover the library's rules, moving existing screens onto the tokens and components, and auditing styles against them.
 
 ```bash
 npx rift-ds init

@@ -215,6 +215,119 @@
   margin-top: var(--gap-400);
 }
 
+/* The agent starter line under the hero buttons: caption type in the
+   secondary text colour, so it reads as a footnote to the call to action. */
+.heroAgentNote {
+  /* A row, so the question and the copy button share one centre line
+     instead of each sitting on its own baseline. */
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-100);
+  margin: 0;
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+  color: var(--color-text-secondary);
+}
+
+/* The copy button reads as a link in the footnote: no chrome, the caption's
+   type, an underline under the label only. */
+.heroAgentCopy {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-100);
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  --icon-size: var(--icon-size-500);
+}
+
+.heroAgentCopy:hover,
+.heroAgentCopy:focus-visible {
+  color: var(--color-text-primary);
+}
+
+.heroAgentCopy:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+  border-radius: var(--radius-100);
+}
+
+/* Glyphs and labels each stack in one grid cell and crossfade, so nothing
+   moves when the copy lands: the check blurs and scales in where the copy
+   glyph dissolved, the same swap as the component pages' copy button. The
+   timings ride the motion tokens, so reduced motion makes it instant. */
+.heroAgentSwap,
+.heroAgentLabels {
+  display: inline-grid;
+}
+
+/* A button centres its text; the labels start at the glyph instead. */
+.heroAgentLabels {
+  justify-items: start;
+  text-align: start;
+}
+
+.heroAgentGlyph,
+.heroAgentLabelIdle,
+.heroAgentLabelDone {
+  grid-area: 1 / 1;
+  transition:
+    opacity var(--motion-duration-base) var(--motion-ease-entrance),
+    filter var(--motion-duration-base) var(--motion-ease-entrance),
+    transform var(--motion-duration-base) var(--motion-ease-entrance);
+}
+
+.heroAgentLabelIdle,
+.heroAgentLabelDone {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.heroAgentCheckGlyph,
+.heroAgentLabelDone {
+  opacity: 0;
+  filter: blur(2px);
+}
+
+.heroAgentCheckGlyph {
+  transform: scale(0.4);
+}
+
+.heroAgentCopy[data-copied] .heroAgentCheckGlyph,
+.heroAgentCopy[data-copied] .heroAgentLabelDone {
+  opacity: 1;
+  filter: blur(0);
+  transform: none;
+}
+
+.heroAgentCopy[data-copied] .heroAgentCopyGlyph,
+.heroAgentCopy[data-copied] .heroAgentLabelIdle {
+  opacity: 0;
+  filter: blur(2px);
+}
+
+.heroAgentCopy[data-copied] .heroAgentCopyGlyph {
+  transform: scale(0.4);
+}
+
+/* Announces the copy to screen readers; takes no space. */
+.heroAgentLive {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 .statStrip {
   display: flex;
   flex-wrap: wrap;

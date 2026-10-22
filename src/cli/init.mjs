@@ -28,7 +28,8 @@
  * Zero dependencies by design: global fetch plus node:fs, so npx never
  * installs anything beyond the package itself. SITE_ORIGIN, SKILL_NAME,
  * MCP_SERVER_NAME and PACKAGE_NAME are stamped by build-package.mjs from
- * scripts/brand.mjs (the one home for brand facts); running this file
+ * scripts/brand.mjs (the one home for brand facts), and CHAT_SLUG from
+ * the chat registry, the widget page's slug; running this file
  * straight from source fails fast rather than guessing a domain.
  * SKILL_NAME is the library skill, kept only for --out without --skill,
  * which has always meant that one.
@@ -41,6 +42,7 @@ const SITE_ORIGIN = '__SITE_URL__';
 const SKILL_NAME = '__SKILL_NAME__';
 const MCP_SERVER_NAME = '__MCP_SERVER_NAME__';
 const PACKAGE_NAME = '__PACKAGE_NAME__';
+const CHAT_SLUG = '__CHAT_SLUG__';
 const MANIFEST_URL = `${SITE_ORIGIN}/skill/manifest.json`;
 const DEFAULT_DIR = join('.claude', 'skills');
 const TEMPLATES_DIR = join(dirname(fileURLToPath(import.meta.url)), 'templates', 'chat');
@@ -229,7 +231,8 @@ function initChat({ app, dryRun }) {
   console.log(
     `  4. Your layout's viewport should set interactiveWidget: "resizes-content", so the phone takeover ends above the keyboard.`
   );
-  console.log(`\nThe widget's props, protocol and server options: ${SITE_ORIGIN}/chat`);
+  console.log(`\nHow to add it, the protocol and the server options: ${SITE_ORIGIN}/docs/chat`);
+  console.log(`Every prop: ${SITE_ORIGIN}/components/${CHAT_SLUG}`);
 }
 
 const args = process.argv.slice(2);

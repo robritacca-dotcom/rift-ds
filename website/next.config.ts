@@ -61,6 +61,10 @@ const nextConfig: NextConfig = {
       // Foundations; the deployed URL keeps resolving.
       { source: "/themes", destination: "/foundations/themes", permanent: true },
       { source: "/design-md", destination: "/blueprints/design", permanent: true },
+      // `npx rift-ds init chat` up to 1.12.0 printed /chat as the widget's
+      // docs, a page that never existed; the bins already installed keep
+      // pointing there, so the URL resolves to where it meant.
+      { source: "/chat", destination: "/docs/chat", permanent: true },
       { source: "/blueprints", destination: "/docs", permanent: true },
       // The porting guide was unpublished from /blueprints in August 2026 and
       // its source deleted from the repo soon after. The URL was public, so

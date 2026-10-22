@@ -93,7 +93,8 @@ if (unmarked.length > 0) {
 console.log(`▸ Restored "use client" on ${clientDistFiles.length} dist modules.`);
 
 // The init bin. The site origin, skill folder and MCP server name are
-// stamped in from scripts/brand.mjs — the one home for brand facts — so
+// stamped in from scripts/brand.mjs — the one home for brand facts — and
+// the chat widget's page slug from its registry, so
 // the CLI can never fetch from a domain the site no longer lives at.
 // Which skills it installs is not stamped: it reads the site's
 // /skill/manifest.json at run time (SKILL_NAME is only the default for
@@ -109,6 +110,12 @@ writeFileSync(
     .replaceAll('__SKILL_NAME__', SKILL_NAME)
     .replaceAll('__MCP_SERVER_NAME__', MCP_SERVER_NAME)
     .replaceAll('__PACKAGE_NAME__', PACKAGE_NAME)
+    // The chat widget's page slug, so `init chat` names the page that
+    // tables its props without restating the registry's slug.
+    .replaceAll(
+      '__CHAT_SLUG__',
+      JSON.parse(readFileSync(join(srcDir, 'chat', 'registry.json'), 'utf8')).widgets[0].slug
+    )
 );
 chmodSync(binTarget, 0o755);
 console.log(`▸ Wrote bin/${BIN_NAME}.mjs (brand facts stamped).`);

@@ -66,13 +66,13 @@ export function ThemeSourceInvite({
         {error ||
           (busy
             ? "Reading the file"
-            : "The levers move to match it. The file stays in your browser.")}
+            : "Build your own theme from it. The file stays in your browser.")}
       </p>
 
       <div className={styles.actions}>
         <Button
           label="Upload from computer"
-          variant="secondary"
+          variant="primary"
           iconLeft="upload"
           disabled={busy}
           onClick={() => input.current?.click()}
@@ -82,7 +82,7 @@ export function ThemeSourceInvite({
       <input
         ref={input}
         type="file"
-        accept="image/*,.md,.markdown,text/markdown"
+        accept="image/*,.md,.markdown,.txt"
         className={styles.native}
         tabIndex={-1}
         aria-hidden="true"

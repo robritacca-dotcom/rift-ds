@@ -16,3 +16,8 @@
   );
   background-size: 26px 26px;
 }
+
+/* The same ground with the pattern off: the page colour alone. */
+.plain {
+  background-image: none;
+}

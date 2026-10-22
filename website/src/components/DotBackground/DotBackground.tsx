@@ -10,6 +10,17 @@ import styles from "./DotBackground.module.css";
  * A page that renders this should render HiddenBackground beside it, so the
  * ambient shader layer stands down rather than glowing through the dots.
  */
-export default function DotBackground() {
-  return <div className={styles.ground} aria-hidden="true" />;
+export default function DotBackground({
+  dots = true,
+}: {
+  /** Draw the dot pattern. Off leaves the plain page colour, for a stage
+      whose visitor wants to judge a theme without the texture behind it. */
+  dots?: boolean;
+}) {
+  return (
+    <div
+      className={dots ? styles.ground : `${styles.ground} ${styles.plain}`}
+      aria-hidden="true"
+    />
+  );
 }

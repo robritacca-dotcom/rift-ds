@@ -5,10 +5,16 @@
    ============================================ */
 
 .zone {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: var(--gap-300);
+  /* The source frame's size (.card in ImageThemeDrop.module.css), so the
+     stage does not jump when a file lands and the frame takes this place. */
+  aspect-ratio: 16 / 9;
+  min-height: 320px;
   padding: var(--padding-1000) var(--padding-500);
   text-align: center;
   /* The library dropzone's hairline (FileInput), so the two read as one
@@ -41,6 +47,124 @@
   line-height: var(--font-heading-3-line-height);
   letter-spacing: var(--font-heading-3-letter-spacing);
   color: var(--color-text-primary);
+}
+
+/* ============================================
+   THE INVITATION — a pass of the AI gradient
+   across the headline and round the edge, every
+   six seconds while the card is waiting for a
+   file. The gradient is reserved for AI
+   affordances; this is design.md's second
+   sanctioned departure (see its AI section),
+   marking the import as the playground's feature.
+   Between passes the card is ordinary, and with
+   reduced motion there are none.
+   ============================================ */
+
+.zone {
+  /* One pass and the rest before the next. The pass is the first 37.5% of
+     the cycle (2.25s of 6s, written into both keyframe sets below, since a
+     keyframe offset cannot read a property). The cycle is a cadence chosen
+     by eye for a waiting card, not an interaction timing, so it is not on
+     the motion scale. */
+  --invite-cycle: 6s;
+}
+
+/* The headline: a band of the three gradient stops passes across the
+   text, which settles back to the text colour until the next pass. */
+.title {
+  background: linear-gradient(
+    100deg,
+    var(--color-text-primary) 0%,
+    var(--color-text-primary) 38%,
+    var(--color-ai-gradient-start) 44%,
+    var(--color-ai-gradient-mid) 50%,
+    var(--color-ai-gradient-end) 56%,
+    var(--color-text-primary) 62%,
+    var(--color-text-primary) 100%
+  );
+  background-size: 300% 100%;
+  background-position: 0% 0;
+  background-clip: text;
+  color: transparent;
+  animation: invite-shimmer var(--invite-cycle) linear var(--motion-duration-slow) infinite both;
+}
+
+/* The pass eases across; the rest of the cycle holds still. */
+@keyframes invite-shimmer {
+  0% {
+    background-position: 100% 0;
+    animation-timing-function: var(--motion-ease-standard);
+  }
+  37.5%,
+  100% {
+    background-position: 0% 0;
+  }
+}
+
+/* The edge: AiButton's summary ring, run as one sweep round the card per
+   pass and then faded, leaving the dashed dropzone border. The rotation animates a
+   registered angle; without @property support it fades in and out
+   without turning. */
+@property --invite-ring-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.zone::before {
+  content: "";
+  position: absolute;
+  inset: calc(-1 * var(--border-025));
+  border-radius: var(--radius-600);
+  padding: var(--border-050);
+  background: conic-gradient(
+    from var(--invite-ring-angle),
+    var(--color-ai-gradient-start),
+    var(--color-ai-gradient-mid),
+    var(--color-ai-gradient-end),
+    var(--color-ai-gradient-mid),
+    var(--color-ai-gradient-start)
+  );
+  /* ds-allow(color): mask luminance keying — the #fff paints alpha coverage
+     for mask-composite, not a theme colour */
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0;
+  animation: invite-ring var(--invite-cycle) linear var(--motion-duration-slow) infinite both;
+}
+
+/* One turn within the pass, faded in and out, so the jump back to 0deg
+   for the next cycle happens while the ring is invisible. */
+@keyframes invite-ring {
+  0% {
+    --invite-ring-angle: 0deg;
+    opacity: 0;
+    animation-timing-function: var(--motion-ease-standard);
+  }
+  4.5% {
+    opacity: 1;
+  }
+  26% {
+    opacity: 1;
+  }
+  37.5%,
+  100% {
+    --invite-ring-angle: 360deg;
+    opacity: 0;
+  }
+}
+
+/* Reduced motion: no passes at all. The headline stays in the text
+   colour (the gradient's first third) and the ring stays hidden. */
+@media (prefers-reduced-motion: reduce) {
+  .title,
+  .zone::before {
+    animation: none;
+  }
 }
 
 .note {

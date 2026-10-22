@@ -126,6 +126,15 @@
  *    orbit). The doc comment is the opt-in, so a new mirror is guarded the
  *    moment it says what it mirrors.
  *
+ * 10. NEUTRAL_ROLE_STEPS (website/src/lib/theme/theme-overrides.ts) — the
+ *    neutral step each role is painted with in each theme, which the
+ *    DESIGN.md importer places a file's stated greys on (a light-first
+ *    file's on `step`, a dark-first one's on `darkStep`). Each cssVar must
+ *    resolve to var(--primitive-neutral-<step>) in tokens-light.css and to
+ *    var(--primitive-neutral-<darkStep>) in tokens-dark.css (an alpha
+ *    variant of the step counts), so a repointed role cannot leave the
+ *    importer anchoring a page grey on a step the page no longer uses.
+ *
  * Runs in the validate-registry chain (and the website prebuild): it reads
  * only source files, token CSS and the generated registry — no build
  * output — so it belongs before the builds, next to
@@ -946,6 +955,69 @@ function checkMotionMirrors() {
   summaries.push(`motion.ts: ${held} constants documented as token mirrors match their --motion-duration-* values`);
 }
 
+/* ------------------------------------------------------------------ */
+/* 10. NEUTRAL_ROLE_STEPS ↔ the neutral steps tokens-light.css paints  */
+/* ------------------------------------------------------------------ */
+
+function checkNeutralRoleSteps() {
+  const block = parseTsBlock(overridesSource, 'NEUTRAL_ROLE_STEPS', overridesRel);
+  if (block === null) return;
+  const rows = [...block.matchAll(
+    /\{\s*cssVar:\s*"(--[a-z0-9-]+)",\s*step:\s*"(\d\d)",\s*darkStep:\s*"(\d\d)"\s*\}/g
+  )];
+  if (rows.length === 0) {
+    errors.push(`${overridesRel}: parsed no entries out of NEUTRAL_ROLE_STEPS — the mirror guard needs them`);
+    return;
+  }
+  /* A step's alpha variant counts as that step (dark containers are
+     neutral-09-a80): the importer anchors the step, and the variant
+     follows it. */
+  const holds = (decls, sheet, cssVar, step) => {
+    const value = decls.get(cssVar);
+    if (value === undefined) {
+      errors.push(`${overridesRel}: NEUTRAL_ROLE_STEPS names ${cssVar}, which ${sheet} does not define`);
+    } else if (!new RegExp(`^var\\(--primitive-neutral-${step}(-a\\d+)?\\)$`).test(value)) {
+      errors.push(`${overridesRel}: NEUTRAL_ROLE_STEPS puts ${cssVar} on neutral-${step} in ${sheet}, which sets it to ${value}`);
+    }
+  };
+  for (const [, cssVar, step, darkStep] of rows) {
+    holds(lightDecls, 'tokens-light.css', cssVar, step);
+    holds(darkDecls, 'tokens-dark.css', cssVar, darkStep);
+  }
+  summaries.push(`NEUTRAL_ROLE_STEPS: ${rows.length} neutral roles match the steps tokens-light.css and tokens-dark.css paint them with`);
+
+  /* NEUTRAL_SURFACE_STEPS, same file: every neutral step a mode's page and
+     container surfaces point at must be in that mode's list, so the
+     importer's surface rule cannot miss a surface the sheets add. */
+  const surfaceBlock = overridesSource.match(
+    /NEUTRAL_SURFACE_STEPS[^=]*=\s*\{\s*light:\s*\[([^\]]*)\],\s*dark:\s*\[([^\]]*)\]/
+  );
+  if (!surfaceBlock) {
+    errors.push(`${overridesRel}: could not parse NEUTRAL_SURFACE_STEPS — the mirror guard needs it`);
+    return;
+  }
+  const listed = {
+    light: new Set([...surfaceBlock[1].matchAll(/"(\d\d)"/g)].map((m) => m[1])),
+    dark: new Set([...surfaceBlock[2].matchAll(/"(\d\d)"/g)].map((m) => m[1])),
+  };
+  const SURFACE_ROLES = [
+    '--color-bg-page-primary',
+    '--color-bg-container-primary',
+    '--color-bg-container-secondary',
+    '--color-bg-container-tertiary',
+    '--color-bg-container-border',
+  ];
+  for (const [mode, decls, sheet] of [['light', lightDecls, 'tokens-light.css'], ['dark', darkDecls, 'tokens-dark.css']]) {
+    for (const role of SURFACE_ROLES) {
+      const step = /var\(--primitive-neutral-(\d\d)/.exec(decls.get(role) ?? '')?.[1];
+      if (step && !listed[mode].has(step)) {
+        errors.push(`${overridesRel}: ${sheet} paints ${role} with neutral-${step}, which NEUTRAL_SURFACE_STEPS.${mode} does not list`);
+      }
+    }
+  }
+  summaries.push('NEUTRAL_SURFACE_STEPS: every page and container surface step is listed for its mode');
+}
+
 checkChromaticRamps();
 checkActionColorPresets();
 checkActionSemanticRefs();
@@ -957,6 +1029,7 @@ checkInspectModePrefixes();
 checkSpatialPage();
 checkDesignMdTokenNames();
 checkMotionMirrors();
+checkNeutralRoleSteps();
 
 if (errors.length > 0) {
   console.error(

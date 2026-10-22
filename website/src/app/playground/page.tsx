@@ -26,6 +26,8 @@ import {
   type Overrides,
   accentOverrides,
   actionColorPlan,
+  aiGradientFadeOverrides,
+  ambientFadeOverrides,
   aiGradientTonalOverrides,
   advancedColorOverrides,
   isAccentsPristine,
@@ -52,7 +54,7 @@ import { PICKER_FONT_PARAMS, THEME_PRESETS, type ThemePreset } from "@/lib/theme
 import { BASE_THEME_ID, isBaseTheme, SERVED_THEME_ID } from "@/lib/theme/brand";
 import { useAppliedOverrides, useSiteTheme } from "@/lib/theme/use-theme-overrides";
 import {
-  buildAgentBundle,
+  buildThemedAgentsMd,
   buildAgentPrompt,
   buildThemeCss,
   buildThemeMarkdown,
@@ -66,12 +68,15 @@ import { themeFromFile, type ImageThemeSource } from "@/lib/theme/image-palette"
 import { DesignMdCard } from "./DesignMdCard";
 import { ThemeSourceInvite } from "./ThemeSourceInvite";
 import {
+  DESIGN_MD_MAX_BYTES,
   isDesignMdFile,
   themeFromDesignMd,
+  type DesignMdRejection,
   type DesignMdSource,
 } from "@/lib/theme/design-md";
 import AdvancedColorsDialog from "./AdvancedColorsDialog";
-import ExportThemeDialog, { type ExportTab } from "./ExportThemeDialog";
+import ExportThemeDialog, { downloadTextFile, EXPORT_FILES, type ExportTab } from "./ExportThemeDialog";
+import { AGENT_STARTER } from "@/data/agent-starter.generated";
 import ChatDirector from "./ChatDirector";
 import InspectMode from "@/components/InspectMode/InspectMode";
 import ChatView, {
@@ -102,6 +107,7 @@ import { InspectorSection } from "rift-ds/components/Inspector/InspectorSection"
 import { InspectorSegmentedControl } from "rift-ds/components/Inspector/InspectorSegmentedControl";
 import { InspectorSlider } from "rift-ds/components/Inspector/InspectorSlider";
 import { InspectorToggleSwitch } from "rift-ds/components/Inspector/InspectorToggleSwitch";
+import { ToggleSwitch } from "rift-ds/components/ToggleSwitch/ToggleSwitch";
 import {
   SHADER_PARAM_CONTROLS,
   shaderBackground,
@@ -181,6 +187,31 @@ const withoutAmbient = (extras?: Overrides): Overrides | undefined => {
   if (!extras) return extras;
   const kept = Object.fromEntries(
     Object.entries(extras).filter(([name]) => !name.startsWith("--color-ambient-"))
+  );
+  return Object.keys(kept).length > 0 ? kept : undefined;
+};
+
+/** Where the playground remembers whether the dot grid is showing. */
+const DOT_GRID_KEY = "playground-dot-grid";
+
+/** What the source card says when a DESIGN.md cannot be read. A text file
+    with nothing recognisable is not one of these: it reads as the base
+    theme, with every lever reported kept. */
+const DESIGN_MD_REJECTIONS: Record<DesignMdRejection, string> = {
+  type: "That kind of file is not read here. Drop a .md or .txt file, or an image.",
+  size: `That file is over ${DESIGN_MD_MAX_BYTES / 1024}KB, which is far longer than a DESIGN.md runs.`,
+  binary: "That file is not plain text, so it was not read.",
+};
+
+/** Extras with every override under the given prefixes removed: how a
+    hand-moved lever takes its tokens back from an imported DESIGN.md. */
+const withoutPrefixes = (
+  extras: Overrides | undefined,
+  prefixes: string[]
+): Overrides | undefined => {
+  if (!extras) return extras;
+  const kept = Object.fromEntries(
+    Object.entries(extras).filter(([name]) => !prefixes.some((p) => name.startsWith(p)))
   );
   return Object.keys(kept).length > 0 ? kept : undefined;
 };
@@ -320,6 +351,23 @@ export default function PlaygroundPage() {
   const stageMobile =
     view !== "chat" && view !== "dashboard" && stageSize === "mobile" && !compact;
   const stageCss = stageMobile ? stageMobileCss() : "";
+  /* The dotted ground, on by default. Remembered per browser as a viewing
+     preference: storage can be blocked, so a read or write that throws
+     just leaves the dots on. */
+  const [showDots, setShowDots] = useState(true);
+  useEffect(() => {
+    try {
+      // A once-on-mount read of a stored preference the prerender can't see.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      if (window.localStorage.getItem(DOT_GRID_KEY) === "off") setShowDots(false);
+    } catch {}
+  }, []);
+  const changeShowDots = (next: boolean) => {
+    setShowDots(next);
+    try {
+      window.localStorage.setItem(DOT_GRID_KEY, next ? "on" : "off");
+    } catch {}
+  };
   const [controlsOpen, setControlsOpen] = useState(false);
   const [advOpen, setAdvOpen] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
@@ -369,7 +417,7 @@ export default function PlaygroundPage() {
       that lever, never snap the rest of the look back to the shipped
       defaults. */
   const [presetExtras, setPresetExtras] = useState<
-    Pick<ThemePreset, "brandDark" | "aiGradient" | "ambient" | "extraOverrides" | "extraOverridesDark">
+    Pick<ThemePreset, "brandDark" | "aiGradient" | "ambient" | "ambientField" | "extraOverrides" | "extraOverridesDark">
   >({});
 
   const syncPresetParam = (value: string) => {
@@ -393,6 +441,7 @@ export default function PlaygroundPage() {
     setPresetExtras((e) => ({
       ...e,
       ambient: undefined,
+      ambientField: undefined,
       extraOverrides: withoutAmbient(e.extraOverrides),
       extraOverridesDark: withoutAmbient(e.extraOverridesDark),
     }));
@@ -402,9 +451,38 @@ export default function PlaygroundPage() {
       swatches are the exception: they carry their own dark-mode value. */
   const pickBrand = (value: string, darkValue?: string) => {
     setPreset("custom");
-    setPresetExtras((e) => ({ ...e, brandDark: darkValue }));
+    /* An imported DESIGN.md may have rebuilt the old action ramp through
+       its stated shades and pinned its states; those described the old
+       colour, so they go with it. */
+    const ramp = actionColorPlan(brand, "light")?.ramp;
+    setPresetExtras((e) => ({
+      ...e,
+      brandDark: darkValue,
+      ...(designSource && {
+        extraOverrides: withoutPrefixes(e.extraOverrides, [
+          "--color-action-",
+          ...(ramp && ramp !== "neutral" ? [`--primitive-${ramp}-`] : []),
+        ]),
+        extraOverridesDark: withoutPrefixes(e.extraOverridesDark, ["--color-action-"]),
+      }),
+    }));
     setBrand(value);
   };
+
+  /** A hand-moved tint lever takes the neutral scale back from an
+      imported DESIGN.md's rebuilt greys, which would otherwise sit over
+      the tint and hide every move. */
+  const tintLever =
+    <T,>(set: (value: T) => void) =>
+    (value: T) => {
+      if (designSource) {
+        setPresetExtras((e) => ({
+          ...e,
+          extraOverrides: withoutPrefixes(e.extraOverrides, ["--primitive-neutral-"]),
+        }));
+      }
+      asCustom(set)(value);
+    };
 
   /** Reads a local image and moves the colour levers to match it: the action
       colour, the neutral tint, and the six ambient accents. It is the same
@@ -433,11 +511,12 @@ export default function PlaygroundPage() {
        a preset's per-ramp rebases and its hue and saturation levers are
        applied last of all, so they would beat the sampled colour outright;
        and its action-colour extras layer over the derived pointers. The
-       levers the image has no opinion about, from radius to typeface, keep
-       their positions. */
+       AI gradient fades from the sampled colour, since a photo states no
+       gradient of its own. The levers the image has no opinion about, from
+       radius to typeface, keep their positions. */
     setPresetExtras((e) => ({
       brandDark: undefined,
-      aiGradient: e.aiGradient,
+      aiGradient: "fade",
       extraOverrides: withoutAmbient(withoutActionColours(e.extraOverrides)),
       extraOverridesDark: withoutAmbient(withoutActionColours(e.extraOverridesDark)),
     }));
@@ -480,10 +559,8 @@ export default function PlaygroundPage() {
     setImageError("");
     const source = await themeFromDesignMd(file);
     setImageBusy(false);
-    if (!source) {
-      setImageError(
-        "That file has no DESIGN.md tokens to read. It needs YAML front matter with colors or typography."
-      );
+    if ("rejected" in source) {
+      setImageError(DESIGN_MD_REJECTIONS[source.rejected]);
       return;
     }
 
@@ -492,12 +569,23 @@ export default function PlaygroundPage() {
     const t = source.theme;
     setPreset("custom");
     syncPresetParam("custom");
-    setPresetExtras({ brandDark: t.brandDark });
-    setAdvColors(DEFAULT_ADVANCED);
+    /* The colours the file states outright ride the extras (the rebuilt
+       grey scale, the action ramp and its pinned states) and the status
+       families ride the Advanced colours lever, so the export carries
+       them like any preset's. The tint stays off: the file's own greys,
+       or rift's, never a wash the file did not ask for. */
+    setPresetExtras({
+      brandDark: t.brandDark,
+      aiGradient: t.aiGradient,
+      ambientField: t.ambientField,
+      extraOverrides: t.extraOverrides,
+      extraOverridesDark: t.extraOverridesDark,
+    });
+    setAdvColors(t.advanced ?? DEFAULT_ADVANCED);
     setBrand(t.brand ?? DEFAULT_BRAND);
-    setTintOn(t.tintOn);
-    setTintSeed(t.tintSeed ?? DEFAULT_NEUTRAL_SEED);
-    setTintStrength(t.tintStrength ?? 6);
+    setTintOn(false);
+    setTintSeed(DEFAULT_NEUTRAL_SEED);
+    setTintStrength(6);
     setAccents(t.accents ?? SHIPPED_ACCENTS);
     setRadiusScale(t.radiusScale ?? 100);
     setPill(t.pill ?? true);
@@ -517,10 +605,14 @@ export default function PlaygroundPage() {
     pickView("components");
   };
 
-  /** The one entry point for a dropped or chosen file: a DESIGN.md is read
-      as tokens, anything else as a picture. */
-  const applySourceFile = (file: File) =>
-    isDesignMdFile(file) ? applyDesignMd(file) : applyImageTheme(file);
+  /** The one entry point for a dropped or chosen file: a DESIGN.md (.md,
+      .markdown or .txt) is read as tokens, a picture as pixels, and
+      anything else (a PDF, a document, a spreadsheet) is refused unread. */
+  const applySourceFile = (file: File) => {
+    if (isDesignMdFile(file)) return applyDesignMd(file);
+    if (file.type.startsWith("image/")) return applyImageTheme(file);
+    setImageError(DESIGN_MD_REJECTIONS.type);
+  };
 
   /* A deep link can seed the action-colour lever with ?brand=<hex> (no
      leading #). Nothing on the site emits one today — the design-system
@@ -564,6 +656,7 @@ export default function PlaygroundPage() {
     setPresetExtras({
       brandDark: p.brandDark,
       aiGradient: p.aiGradient,
+      ambientField: p.ambientField,
       ambient: p.ambient,
       extraOverrides: p.extraOverrides,
       extraOverridesDark: p.extraOverridesDark,
@@ -586,6 +679,11 @@ export default function PlaygroundPage() {
     setFontLabel(p.fontLabel);
     setHeadingFontLabel(p.headingFontLabel ?? HEADING_FONT_OPTIONS[0].label);
   };
+
+  /** Reset lands on Smoke, the served default (the raw token files stay
+      reachable as the Tide row in the picker), and drops any theme source:
+      the rail's reset and the source card's share it. */
+  const resetTheme = () => applyPreset(SERVED_THEME_ID);
 
   const font = FONT_OPTIONS.find((f) => f.label === fontLabel) ?? FONT_OPTIONS[0];
   const headingFont =
@@ -667,6 +765,19 @@ export default function PlaygroundPage() {
     }
     if (theme === "dark" && presetExtras.extraOverridesDark) {
       Object.assign(merged, presetExtras.extraOverridesDark);
+    }
+    /* The fade reads the fill as the extras leave it, as the composer does. */
+    if (presetExtras.aiGradient === "fade") {
+      Object.assign(
+        merged,
+        aiGradientFadeOverrides(merged["--color-action-primary-bg"], theme === "dark" ? "dark" : "light")
+      );
+    }
+    if (presetExtras.ambientField === "fade") {
+      Object.assign(
+        merged,
+        ambientFadeOverrides(merged["--color-action-primary-bg"], theme === "dark" ? "dark" : "light")
+      );
     }
     if (!isAdvancedPristine(advColors)) {
       Object.assign(merged, advancedColorOverrides(advColors, merged));
@@ -796,6 +907,7 @@ export default function PlaygroundPage() {
       accents,
       advanced: advColors,
       aiGradient: presetExtras.aiGradient,
+      ambientField: presetExtras.ambientField,
       ambient: presetExtras.ambient,
       extraOverrides: presetExtras.extraOverrides,
       extraOverridesDark: presetExtras.extraOverridesDark,
@@ -812,9 +924,19 @@ export default function PlaygroundPage() {
       css: buildThemeCss(theme),
       markdown: buildThemeMarkdown(theme, context),
       prompt: buildAgentPrompt(theme, context),
-      bundle: buildAgentBundle(theme, context),
+      agents: buildThemedAgentsMd(theme, context, AGENT_STARTER),
     };
   }, [preset, brand, presetExtras, tintOn, tintSeed, tintStrength, radiusScale, pill, density, typeScale, motionScale, elevation, displayWeight, headingWeight, tracking, iconWeight, iconFill, fontLabel, headingFontLabel, accents, advColors, productName]);
+
+  /** Export, from the rail or a source card: the themed AGENTS.md
+      downloads at once (the one file a coding agent needs), and the dialog
+      opens on it, with the theme's separate files a tab away. */
+  const openExport = () => {
+    const agents = EXPORT_FILES.find((file) => file.value === "agents")!;
+    downloadTextFile(exported.agents, agents.filename, agents.mime);
+    setExportTab("agents");
+    setExportOpen(true);
+  };
 
   /* The Chat view's levers — hosted by the chat director's rail on desktop,
      or slotted into the Drawer above the event list on compact screens, so
@@ -969,12 +1091,12 @@ export default function PlaygroundPage() {
               productName={productName}
               isPristine={isPristine}
               cssSnippet={exported.css}
-              agentBundle={exported.bundle}
+              agentsMd={exported.agents}
               onPreset={applyPreset}
               onBrand={pickBrand}
-              onTintOn={asCustom(setTintOn)}
-              onTintSeed={asCustom(setTintSeed)}
-              onTintStrength={asCustom(setTintStrength)}
+              onTintOn={tintLever(setTintOn)}
+              onTintSeed={tintLever(setTintSeed)}
+              onTintStrength={tintLever(setTintStrength)}
               onRadiusScale={asCustom(setRadiusScale)}
               onPill={asCustom(setPill)}
               onDensity={asCustom(setDensity)}
@@ -994,14 +1116,9 @@ export default function PlaygroundPage() {
               imageError={imageError}
               onPickImage={() => imageInputRef.current?.click()}
               onClearImage={clearImage}
-              /* Reset lands on Smoke, the served default — the raw token
-                 files stay reachable as the Tide row in the picker. */
-              onReset={() => applyPreset(SERVED_THEME_ID)}
+              onReset={resetTheme}
               onOpenAdvanced={() => setAdvOpen(true)}
-              onExport={() => {
-                setExportTab("css");
-                setExportOpen(true);
-              }}
+              onExport={openExport}
               collapsed={themeRailCollapsed}
               onCollapsedChange={setThemeRailCollapsed}
               contextual={
@@ -1030,7 +1147,7 @@ export default function PlaygroundPage() {
           field — the shader stands down here (and is staged as a banner in
           the components view instead). */}
       <HiddenBackground />
-      <DotBackground />
+      <DotBackground dots={showDots} />
 
       {/* Drag a picture or a DESIGN.md onto any part of the tool and the
           levers move to match it. The file is read in this tab and nowhere
@@ -1039,7 +1156,7 @@ export default function PlaygroundPage() {
       <input
         ref={imageInputRef}
         type="file"
-        accept="image/*,.md,.markdown,text/markdown"
+        accept="image/*,.md,.markdown,.txt"
         className={styles.visuallyHidden}
         tabIndex={-1}
         aria-hidden="true"
@@ -1098,9 +1215,10 @@ export default function PlaygroundPage() {
             layout declares (--stage-bar-start/-end) and centres on the
             workspace between the floating panels. */}
         {/* The stage's own instruments, in the bottom control bar — the
-            normalized set every immersive surface shares: the theme flip
-            (the immersive format drops the header that carried it) and the
-            desktop/mobile stage switch, then this stage's extras. */}
+            normalized set every immersive surface shares: the theme control
+            (System, Light, Dark, the header's own setting; the immersive
+            format drops the header that carried it) and the desktop/mobile
+            stage switch, then this stage's extras. */}
         <StageControlBar label="Stage controls">
           <StageThemeFlip />
           {/* Desktop rides the stage-size switch and inspect mode beside the
@@ -1136,6 +1254,17 @@ export default function PlaygroundPage() {
                 size="compact"
                 aria-label="Stage size"
               />
+              <StageControlBarSeparator />
+              {/* The dotted ground on or off, for judging a theme against
+                  its plain page colour. */}
+              <span className={styles.barSwitch}>
+                <ToggleSwitch
+                  checked={showDots}
+                  label="Dot grid"
+                  showLabel
+                  onCheckedChange={changeShowDots}
+                />
+              </span>
               <StageControlBarSeparator />
               {/* Inspect mode — hover any staged component to see which
                   tokens its computed styles resolve from, including the
@@ -1184,10 +1313,11 @@ export default function PlaygroundPage() {
           }}
         />
 
-        {/* The theme as files to take away, from any view: the CSS, a
-            THEME.md describing the look, and the prompt that hands both to
-            a coding agent. The rail's copy button grabs the CSS without
-            opening this. */}
+        {/* The theme to take away, from any view: one AGENTS.md (the agent
+            starter with this theme and its CSS set in), and the same theme as
+            separate files, the CSS, a THEME.md describing the look and a
+            setup prompt. The rail's copy button grabs the CSS or the
+            AGENTS.md without opening this. */}
         <ExportThemeDialog
           open={exportOpen}
           onOpenChange={setExportOpen}
@@ -1196,7 +1326,7 @@ export default function PlaygroundPage() {
           css={exported.css}
           markdown={exported.markdown}
           prompt={exported.prompt}
-          bundle={exported.bundle}
+          agents={exported.agents}
         />
 
         <main
@@ -1220,20 +1350,29 @@ export default function PlaygroundPage() {
           {stageCss && <style>{stageCss}</style>}
           {view === "components" && (
             <>
-              {/* A white-label site header opens the view, so the theme
-                  reads the way it does on a real page — navigation first.
-                  No animate-in on the sections: the class creates a
+              {/* No animate-in on the sections: the class creates a
                   stacking context per section, which would let later
                   sections paint over an open Dropdown/Popover in an
                   earlier one. */}
+              {/* The ambient shader, demoted from stage backdrop to staged
+                  component: the stage's opening banner, on the site's own field
+                  config, re-theming live with the levers like everything
+                  else, and tuned by its own shader levers in the rail. */}
+              <div className={styles.shaderBanner} aria-hidden="true">
+                <ShaderField
+                  params={shaderParams}
+                  blobs={shaderBackground.blobs}
+                />
+              </div>
               <div className={styles.navStage}>
-                {/* The theme's source picture heads the stage, pushing the
-                    nav and everything under it down, all of it re-themed. */}
+                {/* The theme's source sits under the banner, pushing
+                    everything below it down, all of it re-themed. */}
                 {imageSource && (
                   <ImageThemeCard
                     source={imageSource}
+                    onExport={openExport}
                     onReplace={() => imageInputRef.current?.click()}
-                    onClear={clearImage}
+                    onReset={resetTheme}
                   />
                 )}
                 {/* With no source yet, the stage opens on the invitation to
@@ -1248,29 +1387,25 @@ export default function PlaygroundPage() {
                 {designSource && (
                   <DesignMdCard
                     source={designSource}
+                    onExport={openExport}
                     onReplace={() => imageInputRef.current?.click()}
-                    onClear={clearImage}
+                    onReset={resetTheme}
                   />
                 )}
-                <MockNav brandName={productName.trim() || "Acme Corp"} />
               </div>
-              {/* The ambient shader, demoted from stage backdrop to staged
-                  component: a banner that opens on the site's own field
-                  config, re-theming live with the levers like everything
-                  else, and tuned by its own shader levers in the rail. */}
-              <div className={styles.shaderBanner} aria-hidden="true">
-                <ShaderField
-                  params={shaderParams}
-                  blobs={shaderBackground.blobs}
-                />
-              </div>
-              <ActionsSection />
+              {/* The sections with no buttons come first, so the source
+                  card's own buttons (Reset, Upload new, Export theme) are
+                  the only ones in view as the stage opens and nothing
+                  near them competes for the click. The white-label header
+                  and the action showcase follow. */}
+              <ChartsSection brand={effectiveBrand} />
               <MapsSection />
+              <DataDisplaySection />
+              <MockNav brandName={productName.trim() || "Acme Corp"} />
+              <ActionsSection />
               <AiSection />
               <FormsSection />
               <NavigationSection />
-              <DataDisplaySection />
-              <ChartsSection brand={effectiveBrand} />
               <OverlaysSection />
               <FeedbackSection />
             </>

@@ -80,7 +80,7 @@ The MCP endpoint serves the component catalogue, per-component prop APIs, the to
 claude mcp add --transport http rift-ds https://rift-ds.com/api/mcp
 ```
 
-Every component's prop contract is also plain markdown (append `.md` to its docs URL), and [llms.txt](https://rift-ds.com/llms.txt) indexes every machine surface. A theme made in the [playground](https://rift-ds.com/playground) exports as CSS, a THEME.md and a setup prompt, so the agent can read the look as well as the code. Then just ask: "Build a settings page with Rift components."
+Every component's prop contract is also plain markdown (append `.md` to its docs URL), and [llms.txt](https://rift-ds.com/llms.txt) indexes every machine surface. A theme made in the [playground](https://rift-ds.com/playground) exports as one AGENTS.md that carries the setup, your theme in words and its CSS, so the agent can read the look as well as the code. Then just ask: "Build a settings page with Rift components."
 
 ## Theming
 

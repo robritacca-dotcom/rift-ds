@@ -394,7 +394,7 @@ ${catalogSections.join('\n\n')}
     '## Before you change anything',
     '',
     `1. Check the wiring. The package is installed and ${c(`${PACKAGE_NAME}/tokens/tokens.css`)} is imported once at the root of the app. If either is missing, follow the Install section of the ${c(librarySkill)} skill first.`,
-    `2. Find the theme. If the project has a ${c('THEME.md')} (the playground at ${origin}/playground exports one beside a ${c('theme.css')}), read it: it describes the look in words, and where it disagrees with a default in this skill, it wins. If the root element carries a ${c('data-brand')} attribute, the project uses a shipped preset. With neither, the project is on the base theme.`,
+    `2. Find the theme. The playground at ${origin}/playground exports a theme as an ${c('AGENTS.md')} with a theme section (its stylesheet saved as ${c('theme.css')}), or as a ${c('THEME.md')} beside a ${c('theme.css')}. If the project has either, read the theme: it describes the look in words, and where it disagrees with a default in this skill, it wins. If the root element carries a ${c('data-brand')} attribute, the project uses a shipped preset. With neither, the project is on the base theme.`,
     '3. Agree the scope with the user: one screen, one folder or the whole app. Work one screen at a time and keep each one working before you start the next.',
     '',
     '## Order of work',

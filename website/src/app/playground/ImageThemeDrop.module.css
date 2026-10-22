@@ -114,16 +114,20 @@
   justify-content: space-between;
   gap: var(--gap-400);
   /* The top padding is the fade's runway, not spacing. */
-  padding: var(--padding-1000) var(--padding-400) var(--padding-400);
+  padding: var(--padding-1500) var(--padding-400) var(--padding-400);
   /* The far stop is the surface's own zero-alpha pair, never `transparent`:
      `transparent` is rgba(0, 0, 0, 0), so the interpolation would run the
-     fade through grey and leave a smudge across the picture. */
-  background: linear-gradient(
+     fade through grey and leave a smudge across the picture. The fade is
+     laid twice: the container surface is translucent in dark mode, and one
+     pass let the report's rows and a busy picture read through the swatches
+     and the file name. */
+  --source-bar-fade: linear-gradient(
     to top,
     var(--color-bg-container-primary) 0%,
-    var(--color-bg-container-primary) 38%,
+    var(--color-bg-container-primary) 55%,
     var(--color-bg-container-primary-transparent) 100%
   );
+  background: var(--source-bar-fade), var(--source-bar-fade);
 }
 
 .body {

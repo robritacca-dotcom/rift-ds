@@ -71,6 +71,20 @@ const ACCENT_LIGHT: readonly [number, number] = [0.42, 0.66];
 const TINT_SAT: readonly [number, number] = [0.3, 0.9];
 const TINT_LIGHT: readonly [number, number] = [0.3, 0.55];
 
+/** The least hue distance an accent keeps from the action colour. The
+    action colour is chart series 1 and the accents are series 2 to 7, so
+    an accent on the brand's hue draws a second series in the first one's
+    colour: a line over bars of the same green. */
+const SERIES_HUE_GAP = 30;
+
+/** The shipped accents' median saturation and lightness, the character a
+    turned-out role takes when the source has no colours of its own. */
+const SHIPPED_CHARACTER: readonly [number, number] = (() => {
+  const hsl = Object.values(SHIPPED_ACCENTS).map((hex) => rgbToHsl(hexToRgb(hex)));
+  const mid = (values: number[]) => [...values].sort((a, b) => a - b)[values.length >> 1];
+  return [mid(hsl.map(([, s]) => s)), mid(hsl.map(([, , l]) => l))];
+})();
+
 /** Swatches shown on the source card. */
 const DISPLAY_SWATCHES = 6;
 
@@ -279,11 +293,28 @@ const median = (values: number[]) => {
  * bolted on. The set stays six distinguishable hues either way, which is what
  * the background blobs and chart series 2 to 7 need of it.
  */
-function accentsFrom(chromatic: PaletteSwatch[]): AccentSextet {
-  if (chromatic.length === 0) return { ...SHIPPED_ACCENTS };
+function accentsFrom(chromatic: PaletteSwatch[], actionHex?: string): AccentSextet {
+  /* None of the six may sit within SERIES_HUE_GAP of the action colour,
+     which is chart series 1: a source colour that close is never claimed,
+     and a role whose own hue is that close is turned out to the gap on its
+     side, so a chart never draws two series in one colour. A grey action
+     colour has no hue to keep clear of. */
+  const actionHsl = actionHex ? rgbToHsl(hexToRgb(actionHex)) : null;
+  const avoidHue = actionHsl && actionHsl[1] >= CHROMATIC_SAT ? actionHsl[0] : null;
+  const clear = (hue: number) => avoidHue === null || hueDistance(hue, avoidHue) >= SERIES_HUE_GAP;
+  const away = (hue: number) => {
+    if (avoidHue === null || clear(hue)) return hue;
+    const side = ((hue - avoidHue + 540) % 360) - 180 >= 0 ? 1 : -1;
+    return (avoidHue + side * SERIES_HUE_GAP + 360) % 360;
+  };
 
-  const characterSat = median(chromatic.map((s) => s.hsl[1]));
-  const characterLight = median(chromatic.map((s) => s.hsl[2]));
+  if (chromatic.length === 0 && avoidHue === null) return { ...SHIPPED_ACCENTS };
+
+  /* The chroma character comes from every colour, the brand's included;
+     only the claiming is kept clear of it. */
+  const characterSat = chromatic.length > 0 ? median(chromatic.map((s) => s.hsl[1])) : SHIPPED_CHARACTER[0];
+  const characterLight = chromatic.length > 0 ? median(chromatic.map((s) => s.hsl[2])) : SHIPPED_CHARACTER[1];
+  const claimable = chromatic.filter((swatch) => clear(swatch.hsl[0]));
   const claimed = new Set<number>();
   const accents = {} as AccentSextet;
 
@@ -291,7 +322,7 @@ function accentsFrom(chromatic: PaletteSwatch[]): AccentSextet {
     const roleHue = ACCENT_HUES[name];
     let best = -1;
     let bestDistance = Infinity;
-    chromatic.forEach((swatch, index) => {
+    claimable.forEach((swatch, index) => {
       if (claimed.has(index)) return;
       const distance = hueDistance(swatch.hsl[0], roleHue);
       if (distance < bestDistance) {
@@ -302,10 +333,12 @@ function accentsFrom(chromatic: PaletteSwatch[]): AccentSextet {
 
     if (best >= 0 && bestDistance <= ACCENT_MATCH_DEGREES) {
       claimed.add(best);
-      accents[name] = toHex(band(chromatic[best].hsl, ACCENT_SAT, ACCENT_LIGHT));
+      accents[name] = toHex(band(claimable[best].hsl, ACCENT_SAT, ACCENT_LIGHT));
+    } else if (chromatic.length === 0 && clear(roleHue)) {
+      accents[name] = SHIPPED_ACCENTS[name];
     } else {
       accents[name] = toHex(
-        band([roleHue, characterSat, characterLight], ACCENT_SAT, ACCENT_LIGHT)
+        band([away(roleHue), characterSat, characterLight], ACCENT_SAT, ACCENT_LIGHT)
       );
     }
   }
@@ -321,14 +354,18 @@ function accentsFrom(chromatic: PaletteSwatch[]): AccentSextet {
  * cannot fill six roles honestly, so that case returns null and the caller
  * keeps the shipped sextet.
  */
-export function accentsFromColours(hexes: string[]): AccentSextet | null {
+export function accentsFromColours(hexes: string[], actionHex?: string): AccentSextet | null {
   const swatches: PaletteSwatch[] = hexes.map((hex) => ({
     hex,
     hsl: rgbToHsl(hexToRgb(hex)),
     weight: 1 / hexes.length,
   }));
   const chromatic = distinctChromatic(swatches);
-  return chromatic.length < 2 ? null : accentsFrom(chromatic);
+  if (chromatic.length >= 2) return accentsFrom(chromatic, actionHex);
+  /* Too few hues to fill the roles, so the shipped six stand, except one
+     the action colour would collide with, which is turned out as above. */
+  const shipped = accentsFrom([], actionHex);
+  return ACCENT_NAMES.some((name) => shipped[name] !== SHIPPED_ACCENTS[name]) ? shipped : null;
 }
 
 export interface ImageTheme {
@@ -374,7 +411,7 @@ export function themeFromPalette(palette: ImagePalette): ImageTheme | null {
     tintOn: palette.chroma >= 0.08,
     tintSeed: cast ? toHex(band(cast.hsl, TINT_SAT, TINT_LIGHT)) : brand,
     tintStrength: Math.round(clamp(palette.chroma * 22, 3, 12)),
-    accents: accentsFrom(chromatic),
+    accents: accentsFrom(chromatic, brand),
     swatches: (chromatic.length > 0 ? chromatic : palette.swatches).slice(
       0,
       DISPLAY_SWATCHES

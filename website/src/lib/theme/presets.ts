@@ -13,6 +13,8 @@ import {
   SHIPPED_ICON_WEIGHT,
   actionColorPlan,
   advancedColorOverrides,
+  aiGradientFadeOverrides,
+  ambientFadeOverrides,
   aiGradientTonalOverrides,
   densityOverrides,
   elevationOverrides,
@@ -80,9 +82,17 @@ export interface ThemePreset {
       from the accents. Absent, each blob follows its accent slot. */
   ambient?: readonly [string, string, string, string, string, string];
   /** The AI gradient's stops. "tonal" draws all three from the action
-      key's ramp (see aiGradientTonalOverrides); absent keeps the base
-      look's red and blue stops with the end stop on the key. */
-  aiGradient?: "tonal";
+      key's ramp (see aiGradientTonalOverrides); "fade" is the action
+      colour fading toward the page, lighter in light mode and deeper in
+      dark (see aiGradientFadeOverrides), the rule for an imported theme
+      whose source states no gradient; absent keeps the base look's red
+      and blue stops with the end stop on the key. */
+  aiGradient?: "tonal" | "fade";
+  /** The background shader's field. "fade" draws the six ambient roles
+      from the action colour's ramp, fading toward the page per mode (see
+      ambientFadeOverrides), the rule for an imported DESIGN.md; absent,
+      the field follows the accents, or the hexes in `ambient`. */
+  ambientField?: "fade";
   /** Hand-tuned adjacent ramp keys: every chromatic ramp re-keyed to sit
       in the theme (the action colour's own family is left to the action
       lever). Loads into the Advanced colours state. */
@@ -930,6 +940,13 @@ export function presetOverrides(
   if (preset.extraOverrides) Object.assign(merged, preset.extraOverrides);
   if (theme === "dark" && preset.extraOverridesDark) {
     Object.assign(merged, preset.extraOverridesDark);
+  }
+  /* The fade reads the fill as the extras leave it. */
+  if (preset.aiGradient === "fade") {
+    Object.assign(merged, aiGradientFadeOverrides(merged["--color-action-primary-bg"], theme));
+  }
+  if (preset.ambientField === "fade") {
+    Object.assign(merged, ambientFadeOverrides(merged["--color-action-primary-bg"], theme));
   }
   if (preset.advanced && !isAdvancedPristine(preset.advanced)) {
     Object.assign(merged, advancedColorOverrides(preset.advanced, merged));

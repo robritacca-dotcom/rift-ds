@@ -3,11 +3,11 @@
  * validate-theme-export.mjs
  *
  * Holds the playground's theme export (website/src/lib/theme/theme-export.ts:
- * the CSS, the THEME.md and the agent prompt a visitor takes away) to the
- * system it describes. A visitor pastes these files into their own project
- * and hands them to a coding agent, so a wrong declaration or a token name
- * that does not exist is a mistake shipped into someone else's codebase.
- * Four checks:
+ * the themed AGENTS.md, and the CSS, the THEME.md and the agent prompt a
+ * visitor takes away) to the system it describes. A visitor pastes these
+ * files into their own project and hands them to a coding agent, so a wrong
+ * declaration or a token name that does not exist is a mistake shipped into
+ * someone else's codebase. Five checks:
  *
  *   1. Parity. For every preset in THEME_PRESETS and both themes, the
  *      exported blocks resolve to exactly what presetOverrides states: the
@@ -26,6 +26,11 @@
  *      in the token registry or the primitives (a `--prefix-*` form needs
  *      at least one match), and neither text carries an em dash, which
  *      content-design.md bans in shipped copy.
+ *   5. The themed AGENTS.md. For every preset, the one file the Export
+ *      button downloads carries the live starter (website/public/AGENTS.md)
+ *      word for word, opening paragraph and every section, places its
+ *      theme section after the starter's Setup, and ends with exactly the
+ *      exported CSS; its theme section joins the prose check in 4.
  *
  * Belongs in the validate-registry chain (and the website prebuild): its
  * sources are TypeScript theme data and the token files, not build output.
@@ -133,11 +138,49 @@ const context = {
   mcpServerName: 'example',
 };
 
+/* ---------- 5: the themed AGENTS.md ---------- */
+
+// The starter as the site serves it; the generated module carries the
+// same bytes (validate-agent-skill.mjs holds the two together).
+const starter = read('website/public/AGENTS.md');
+const starterSections = starter.trimEnd().split('\n## ').slice(1).map((s) => `## ${s}`);
+const starterOpening = starter.split('\n## ')[0].replace(/^# .+\n+/, '').trimEnd();
+const themeSectionOf = (md) => {
+  const start = md.indexOf('\n## The ');
+  if (start < 0) return '';
+  const end = md.indexOf('\n## ', start + 1);
+  return md.slice(start, end < 0 ? undefined : end);
+};
+const agentsSections = {};
+
+for (const [id, preset] of Object.entries(THEME_PRESETS)) {
+  const md = themeExport.buildThemedAgentsMd(preset, context, starter);
+  agentsSections[id] = themeSectionOf(md);
+  if (!md.includes(starterOpening)) {
+    errors.push(`preset "${id}": the themed AGENTS.md lost the starter's opening paragraph`);
+  }
+  for (const section of starterSections) {
+    if (!md.includes(section)) {
+      errors.push(`preset "${id}": the themed AGENTS.md does not carry the starter's "${section.split('\n')[0]}" section word for word`);
+    }
+  }
+  if (!agentsSections[id]) {
+    errors.push(`preset "${id}": the themed AGENTS.md has no theme section`);
+  } else if (md.indexOf('\n## Setup') > md.indexOf('\n## The ')) {
+    errors.push(`preset "${id}": the themed AGENTS.md puts its theme section before the starter's Setup`);
+  }
+  const css = themeExport.buildThemeCss(preset);
+  if (css !== themeExport.PRISTINE_CSS && !md.includes('```css\n' + css + '\n```')) {
+    errors.push(`preset "${id}": the themed AGENTS.md does not end with the exported CSS exactly`);
+  }
+}
+
 const checked = new Set();
 for (const [id, preset] of Object.entries(THEME_PRESETS)) {
   const texts = {
     'THEME.md': themeExport.buildThemeMarkdown(preset, context),
     'the agent prompt': themeExport.buildAgentPrompt(preset, context),
+    "the themed AGENTS.md's theme section": agentsSections[id],
   };
   for (const [label, text] of Object.entries(texts)) {
     if (text.includes('—')) {
@@ -163,5 +206,5 @@ if (errors.length > 0) {
   process.exit(1);
 }
 console.log(
-  `✓ Theme export: ${Object.keys(THEME_PRESETS).length} presets round-trip through the export in both themes, ${levers.size} levers named, ${checked.size} token references resolve`
+  `✓ Theme export: ${Object.keys(THEME_PRESETS).length} presets round-trip through the export in both themes, ${levers.size} levers named, ${checked.size} token references resolve, the themed AGENTS.md carries the starter and the CSS`
 );

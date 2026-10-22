@@ -1,33 +1,26 @@
 "use client";
 
 import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
-import { useSiteTheme } from "@/lib/theme/use-theme-overrides";
+import { themeSegments, useThemeSetting } from "@/components/ThemeToggle/ThemeToggle";
 
 /**
- * The stages' light/dark flip, normalized: every immersive surface drops the
- * site header that owns the theme toggle, so each one's StageControlBar
- * carries this instead — same control, same store the header toggle writes
- * (the root attribute plus the persisted choice).
+ * The stages' theme control: every immersive surface drops the site header
+ * that owns the theme toggle, so each one's StageControlBar carries this
+ * instead. Same settings (System, Light, Dark), same store and the same
+ * setter as the header's ThemeToggle, through useThemeSetting, so System
+ * follows the OS here exactly as it does on the rest of the site. Labelled
+ * rather than icon-only like the header's, matching the bar's other
+ * controls, and because the header's tooltips open downward, off the foot
+ * of the screen where the bar sits.
  */
 export default function StageThemeFlip() {
-  const theme = useSiteTheme();
-
-  const apply = (next: string) => {
-    document.documentElement.setAttribute("data-theme", next);
-    /* An explicit pick, so the setting moves off "system" too — otherwise
-       the root script's OS-change listener would override the bar's choice. */
-    document.documentElement.setAttribute("data-theme-setting", next);
-    window.localStorage.setItem("theme", next);
-  };
+  const [setting, setSetting] = useThemeSetting();
 
   return (
     <SegmentedControl
-      segments={[
-        { value: "light", label: "Light", icon: "light_mode" },
-        { value: "dark", label: "Dark", icon: "dark_mode" },
-      ]}
-      value={theme}
-      onValueChange={apply}
+      segments={themeSegments}
+      value={setting}
+      onValueChange={setSetting}
       size="compact"
       aria-label="Site theme"
     />

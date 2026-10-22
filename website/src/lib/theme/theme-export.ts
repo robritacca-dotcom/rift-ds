@@ -7,6 +7,7 @@ import {
   HEADING_MATCH_LABEL,
   SHIPPED_ACCENTS,
   buildCssSnippet,
+  googleFontHref,
   isAdvancedPristine,
   leverWord,
   motionSpeedPercent,
@@ -18,8 +19,9 @@ import {
 
 /* ---------- the theme export ----------
    Turns the playground's lever state into what a consumer and their coding
-   agent take away: the theme as CSS, a THEME.md that describes the look in
-   words, and a setup prompt. Everything here is a pure function of the
+   agent take away: one AGENTS.md that is the library's agent starter with
+   the theme set in, and the same theme as separate files (the CSS, a
+   THEME.md that describes the look in words, and a setup prompt). Everything here is a pure function of the
    lever state, built in the visitor's browser and never uploaded.
 
    The CSS is composed by presetOverrides, the one composer the shipped
@@ -166,13 +168,13 @@ export function describeTheme(preset: ThemePreset): string {
   ].join(", ") + ".";
 }
 
-/** A design-language file for the theme: what the look is and how to keep to it. */
-export function buildThemeMarkdown(
-  preset: ThemePreset,
-  context: ThemeExportContext
-): string {
-  const name = themeName(preset, context);
-  const pkg = context.packageName;
+/**
+ * The look in words, as markdown sections from Colour to Icons: what the
+ * theme is, which tokens carry it. THEME.md prints them as its own `##`
+ * sections; the themed AGENTS.md nests them as `###` under its theme
+ * section, so the two files describe a theme in the same words.
+ */
+function themeLanguage(preset: ThemePreset, heading: "##" | "###"): string {
   const darkBrand = preset.brandDark;
   const speed = motionSpeedPercent(preset.motionScale);
 
@@ -189,9 +191,14 @@ export function buildThemeMarkdown(
     ...(preset.ambient
       ? [`- Background field: ${preset.ambient.map((hex) => `\`${hex}\``).join(", ")}, carried by \`--color-ambient-1\` to \`--color-ambient-6\`.`]
       : []),
+    ...(preset.ambientField === "fade"
+      ? ["- Background field: the action colour fading toward the page, through `--color-ambient-1` to `--color-ambient-6`."]
+      : []),
     ...(preset.aiGradient === "tonal"
       ? ["- AI gradient: three depths of the action colour, through the `--color-ai-gradient-*` tokens."]
-      : []),
+      : preset.aiGradient === "fade"
+        ? ["- AI gradient: the action colour fading toward the page, lighter in light mode and deeper in dark, through the `--color-ai-gradient-*` tokens."]
+        : []),
     "- Status uses five roles: info, positive, warning, error and neutral, through the `--color-status-*` tokens.",
   ];
 
@@ -221,37 +228,48 @@ export function buildThemeMarkdown(
       ? "This theme is flat: both elevation tokens resolve to no shadow. Separate surfaces by contrast."
       : `This theme uses the ${preset.elevation} shadow pair.`;
 
+  return `${heading} Colour
+
+${colour.join("\n")}
+
+${heading} Typography
+
+${type.join("\n")}
+
+${heading} Shape and space
+
+${shape.join("\n")}
+
+${heading} Motion
+
+${leverWord("motion", speed)}: ${speed}% of the base speed. Time transitions with the \`--motion-duration-*\` and \`--motion-ease-*\` tokens.
+
+${heading} Elevation
+
+${depth} The only shadows are \`--shadow-floating\` and \`--shadow-modal\`.
+
+${heading} Icons
+
+Material Symbols Rounded at weight ${preset.iconWeight}, ${
+    preset.iconFill ? "filled" : "outlined"
+  }. Size an icon with the \`--icon-size-*\` scale, never with \`font-size\`.`;
+}
+
+/** A design-language file for the theme: what the look is and how to keep to it. */
+export function buildThemeMarkdown(
+  preset: ThemePreset,
+  context: ThemeExportContext
+): string {
+  const name = themeName(preset, context);
+  const pkg = context.packageName;
+
   return `# ${name} theme
 
 A theme for ${pkg}, made in the playground at ${context.siteUrl}/playground. Read this before styling anything, and keep it beside \`theme.css\`.
 
 ${describeTheme(preset)}
 
-## Colour
-
-${colour.join("\n")}
-
-## Typography
-
-${type.join("\n")}
-
-## Shape and space
-
-${shape.join("\n")}
-
-## Motion
-
-${leverWord("motion", speed)}: ${speed}% of the base speed. Time transitions with the \`--motion-duration-*\` and \`--motion-ease-*\` tokens.
-
-## Elevation
-
-${depth} The only shadows are \`--shadow-floating\` and \`--shadow-modal\`.
-
-## Icons
-
-Material Symbols Rounded at weight ${preset.iconWeight}, ${
-    preset.iconFill ? "filled" : "outlined"
-  }. Size an icon with the \`--icon-size-*\` scale, never with \`font-size\`.
+${themeLanguage(preset, "##")}
 
 ## Rules
 
@@ -271,6 +289,10 @@ Material Symbols Rounded at weight ${preset.iconWeight}, ${
 
 /* ---------- the setup prompt ---------- */
 
+/** The restyle instruction, shared by the prompt and the themed AGENTS.md. */
+const restyleInstruction = (pkg: string, screens: string, against: string) =>
+  `restyle ${screens} to match ${against}. Replace hardcoded colours, radii, spacing and shadows with the semantic tokens, and replace hand-built controls with ${pkg} components where one exists. List what you changed and anything you could not map to a token.`;
+
 /** The prompt that hands the two files to a coding agent. */
 export function buildAgentPrompt(
   preset: ThemePreset,
@@ -286,19 +308,97 @@ export function buildAgentPrompt(
 4. Install the ${pkg} agent skills: npx ${context.binName} init
 5. Connect the MCP server for exact prop and token contracts: claude mcp add --transport http ${context.mcpServerName} ${context.mcpEndpoint}
 
-Then restyle the existing screens to match THEME.md. Replace hardcoded colours, radii, spacing and shadows with the semantic tokens, and replace hand-built controls with ${pkg} components where one exists. List what you changed and anything you could not map to a token.`;
+Then ${restyleInstruction(pkg, "the existing screens", "THEME.md")}`;
 }
 
-/** The prompt, THEME.md and the CSS as one paste, for a chat with no file upload. */
-export function buildAgentBundle(
+/* ---------- the themed AGENTS.md ----------
+   The one file the Export theme button hands over: the library's agent
+   starter (public/AGENTS.md, generated by scripts/generate-agent-skill.mjs)
+   word for word, with this theme set into it. The starter brings the
+   install, the setup and the rules; this adds what the theme is, how to
+   apply it and the CSS itself, so a coding agent given only this file can
+   set the project up in this look. The starter is passed in rather than
+   imported, so this module stays loadable under Node (the validator hands
+   it the generated text). */
+
+/** The faces a theme loads from Google, as stylesheet links. */
+function fontLinks(preset: ThemePreset): string[] {
+  const blocks = buildThemeBlocks(preset);
+  const params = [blocks.font, blocks.headingFont]
+    .filter((font): font is FontOption => Boolean(font?.family && font.googleParam))
+    .map((font) => font.googleParam as string);
+  return [...new Set(params)].map(
+    (param) => `<link rel="stylesheet" href="${googleFontHref(param)}">`
+  );
+}
+
+/**
+ * The theme section the AGENTS.md carries: the look in one line, how to
+ * apply it, the look in words, and the restyle instruction. Set into the
+ * starter right after its Setup section, where an agent following the
+ * file in order needs it.
+ */
+function themedSection(preset: ThemePreset, context: ThemeExportContext): string {
+  const name = themeName(preset, context);
+  const pkg = context.packageName;
+  const links = fontLinks(preset);
+  const blocks = buildThemeBlocks(preset);
+
+  const apply = blocks.pristine
+    ? "This is the base theme, so there is no theme stylesheet: the setup above is the whole of it."
+    : `1. Save the stylesheet at the end of this file as \`theme.css\` and import it right after \`${pkg}/tokens/tokens.css\`. It holds light mode in \`:root\` and dark mode in its own block, so the \`data-theme\` switch keeps working. Do not also import the shipped theme presets or set \`data-brand\`.
+2. ${
+        links.length > 0
+          ? `Load the theme's faces in the document head (the stylesheet already sets the font tokens to them):\n\n\`\`\`html\n${links.join("\n")}\n\`\`\``
+          : "The theme keeps the base typeface, so load it as the setup above says."
+      }
+3. The token values in the references below are the base theme's. Where they differ, \`theme.css\` is right.`;
+
+  return `## The ${name} theme
+
+This project uses a custom ${pkg} theme made at ${context.siteUrl}/playground. ${describeTheme(preset)} Keep to it whenever you style anything.
+
+### Apply it
+
+${apply}
+
+${themeLanguage(preset, "###")}
+
+### Existing screens
+
+If the project already has screens, ${restyleInstruction(pkg, "them", "this theme")}
+`;
+}
+
+/**
+ * The themed AGENTS.md: the starter with this theme set in. Its title
+ * names the theme, a line after the opening paragraph says how to merge it
+ * into an AGENTS.md the project already has, the theme section follows the
+ * starter's Setup, and the stylesheet closes the file so the instructions
+ * read first. Every section of the starter is carried unchanged.
+ */
+export function buildThemedAgentsMd(
   preset: ThemePreset,
-  context: ThemeExportContext
+  context: ThemeExportContext,
+  starter: string
 ): string {
-  return [
-    buildAgentPrompt(preset, context),
-    "## THEME.md",
-    "````markdown\n" + buildThemeMarkdown(preset, context).trimEnd() + "\n````",
-    "## theme.css",
-    "```css\n" + buildThemeCss(preset) + "\n```",
-  ].join("\n\n");
+  const name = themeName(preset, context);
+  const text = starter.replace(/\r\n/g, "\n").trimEnd();
+  const [opening, ...rest] = text.split("\n## ");
+  const sections = rest.map((section) => `## ${section}`.trimEnd());
+  const setup = sections.findIndex((section) => section.startsWith("## Setup"));
+  const theme = themedSection(preset, context).trimEnd();
+  sections.splice(setup >= 0 ? setup + 1 : sections.length, 0, theme);
+
+  const titled = opening
+    .replace(/^# (.+)$/m, `# $1, in the ${name} theme`)
+    .trimEnd();
+  const merge =
+    "If this project already has an AGENTS.md, add these sections to it rather than replacing it.";
+
+  const css = buildThemeBlocks(preset).pristine
+    ? ""
+    : `\n\n## theme.css\n\n\`\`\`css\n${buildThemeCss(preset)}\n\`\`\``;
+
+  return `${titled}\n\n${merge}\n\n${sections.join("\n\n")}${css}\n`;
 }

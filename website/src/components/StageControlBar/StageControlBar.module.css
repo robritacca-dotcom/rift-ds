@@ -35,25 +35,64 @@
   box-shadow: var(--shadow-floating);
 }
 
-/* The fade behind the bar: transparent at the top, the page floor at the
-   viewport edge — a taller ramp than the safe area itself, so the dim-out
-   starts before content reaches the controls. It dims only the stage
-   content: above the flow, below every floating panel (the playground's
-   rails sit at 15). */
+/* The fade behind the bar: the page floor at the viewport edge, clear well
+   above it — a ramp twice the safe area's height, so content is already
+   dimmed and softened by the time it reaches the controls. It dims only
+   the stage content: above the flow, below every floating panel (the
+   playground's rails sit at 15).
+
+   The same progressive blur the site header gets on scroll
+   (.stickyBackdrop in MegaNav.module.css owns the reasoning), mirrored to
+   rise from the bottom: a tinted layer and three blur layers, each with a
+   stronger blur and a shorter mask, so the blur itself dissolves upward
+   instead of ending in a hard line. The tint is the page surface in both
+   themes, so the foot reads as one with the viewport edge. */
 .fade {
+  --stage-fade-tint: var(--color-bg-page-primary);
   position: fixed;
   left: 0;
   right: 0;
   bottom: 0;
-  height: calc(var(--layout-stage-bottom-clearance) * 1.5);
+  height: calc(var(--layout-stage-bottom-clearance) * 2);
   /* ds-allow(stacking): local order on the immersive stage, its own ladder: floating rails 15, control bar 25, toolbar 30, full-size panels above. */
   z-index: 10;
   pointer-events: none;
+}
+
+.fade > span {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+/* ds-allow(color): mask alpha keywords (black/transparent), not palette colours */
+
+.fade > span:nth-child(1) {
   background: linear-gradient(
-    to bottom,
-    transparent,
-    var(--color-bg-page-primary) 85%
+    to top,
+    var(--stage-fade-tint) 0%,
+    var(--stage-fade-tint) 30%,
+    color-mix(in srgb, var(--stage-fade-tint) 85%, transparent) 50%,
+    color-mix(in srgb, var(--stage-fade-tint) 40%, transparent) 75%,
+    transparent 100%
   );
+  backdrop-filter: blur(2px);
+  mask-image: linear-gradient(to top, black 0%, black 55%, transparent 100%);
+}
+
+.fade > span:nth-child(2) {
+  backdrop-filter: blur(6px);
+  mask-image: linear-gradient(to top, black 0%, black 40%, transparent 80%);
+}
+
+.fade > span:nth-child(3) {
+  backdrop-filter: blur(12px);
+  mask-image: linear-gradient(to top, black 0%, black 25%, transparent 60%);
+}
+
+.fade > span:nth-child(4) {
+  backdrop-filter: blur(24px);
+  mask-image: linear-gradient(to top, black 0%, black 10%, transparent 40%);
 }
 
 .separator {

@@ -32,11 +32,48 @@
   outline-offset: calc(-1 * var(--border-050));
 }
 
+/* The title with the brand's mark (or a monogram) before it. */
+.heading {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-300);
+}
+
+/* A brand's mark, on the icon scale. Its fill is the brand's own colour
+   when that holds against the card (set inline from the mark set), the
+   text colour otherwise. */
+.mark {
+  flex-shrink: 0;
+  width: var(--icon-size-600);
+  height: var(--icon-size-600);
+  fill: var(--color-text-primary);
+}
+
+/* The fallback when the file names no brand the mark set carries: the
+   name's first letter on a neutral tile, the same size as a mark. Neutral
+   on purpose: the action colour is reserved for actions. */
+.monogram {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--icon-size-600);
+  height: var(--icon-size-600);
+  border-radius: var(--radius-200);
+  background: var(--color-bg-container-secondary);
+  color: var(--color-text-primary);
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: 1;
+}
+
 .title {
-  font-family: var(--font-title-body-family);
-  font-size: var(--font-title-body-size);
-  font-weight: var(--font-title-body-weight);
-  line-height: var(--font-title-body-line-height);
+  font-family: var(--font-heading-3-family);
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+  letter-spacing: var(--font-heading-3-letter-spacing);
   color: var(--color-text-primary);
 }
 

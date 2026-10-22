@@ -22,8 +22,15 @@ export default function StageControlBar({ label, children }: StageControlBarProp
   return (
     <>
       {/* A fade to the page floor behind the bar, so content scrolling
-          under it dims out instead of colliding with the controls. */}
-      <div className={styles.fade} aria-hidden="true" />
+          under it dims and blurs out instead of colliding with the
+          controls: the tint and three blur layers of the header's
+          progressive backdrop, mirrored to rise from the viewport foot. */}
+      <div className={styles.fade} aria-hidden="true">
+        <span />
+        <span />
+        <span />
+        <span />
+      </div>
       <div className={styles.bar} role="group" aria-label={label}>
         {children}
       </div>

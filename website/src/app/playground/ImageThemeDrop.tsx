@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Button } from "rift-ds/components/Button/Button";
-import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
 import type { ImageThemeSource } from "@/lib/theme/image-palette";
 import { isDesignMdFile } from "@/lib/theme/design-md";
 import styles from "./ImageThemeDrop.module.css";
@@ -81,9 +80,12 @@ export function ImageThemeDropZone({
          apply it twice. */
       if (event.defaultPrevented) return;
       event.preventDefault();
-      const file = Array.from(event.dataTransfer?.files ?? []).find(
-        (candidate) => candidate.type.startsWith("image/") || isDesignMdFile(candidate)
-      );
+      /* The first file the tool can read, else the first file at all, so a
+         PDF or a spreadsheet gets the refusal rather than silence. */
+      const files = Array.from(event.dataTransfer?.files ?? []);
+      const file =
+        files.find((candidate) => candidate.type.startsWith("image/") || isDesignMdFile(candidate)) ??
+        files[0];
       if (file) onFileRef.current(file);
     };
 
@@ -122,25 +124,28 @@ export function ImageThemeDropZone({
 /**
  * The frame every theme source sits in, picture or DESIGN.md: the same
  * 16:9 card, and the same bar along its foot with the file name, the key
- * colours, the upload button and the remove button, so swapping one kind
+ * colours, the reset, upload and export buttons, so swapping one kind
  * of source for the other moves nothing the visitor has learned to find.
  * The source's own content fills the frame behind the bar.
  */
 export function ThemeSourceFrame({
   name,
   swatches,
+  onExport,
   onReplace,
-  onClear,
+  onReset,
   children,
 }: {
   /** The source file's name. */
   name: string;
   /** The key colours read from the file, as hex. */
   swatches: string[];
+  /** Opens the theme export, the files the imported look leaves as. */
+  onExport: () => void;
   /** Opens the file picker to load a different source. */
   onReplace: () => void;
-  /** Drops the source. The levers it moved stay where they are. */
-  onClear: () => void;
+  /** Drops the source and puts every lever back to the starting theme. */
+  onReset: () => void;
   /** What fills the frame behind the bar. */
   children: React.ReactNode;
 }) {
@@ -169,7 +174,17 @@ export function ThemeSourceFrame({
           </div>
         </div>
 
+        {/* Least to most committed, left to right: start over, try another
+            file, take this look away. */}
         <div className={styles.actions}>
+          <Button
+            label="Reset"
+            variant="tertiary"
+            tone="neutral"
+            size="compact"
+            iconLeft="restart_alt"
+            onClick={onReset}
+          />
           <Button
             label="Upload new"
             variant="primary"
@@ -178,13 +193,15 @@ export function ThemeSourceFrame({
             iconLeft="upload"
             onClick={onReplace}
           />
-          <CircularButton
-            icon="close"
+          {/* The one primary action on the card, so it wears the imported
+              theme's action colour: what the import is for is taking the
+              look away. */}
+          <Button
+            label="Export theme"
             variant="primary"
-            tone="neutral"
             size="compact"
-            ariaLabel="Remove the theme source file"
-            onClick={onClear}
+            iconLeft="ios_share"
+            onClick={onExport}
           />
         </div>
       </div>
@@ -194,21 +211,25 @@ export function ThemeSourceFrame({
 
 export function ImageThemeCard({
   source,
+  onExport,
   onReplace,
-  onClear,
+  onReset,
 }: {
   source: ImageThemeSource;
+  /** Opens the theme export. */
+  onExport: () => void;
   /** Opens the file picker to load a different source. */
   onReplace: () => void;
-  /** Drops the image. The levers it moved stay where they are. */
-  onClear: () => void;
+  /** Drops the image and puts every lever back to the starting theme. */
+  onReset: () => void;
 }) {
   return (
     <ThemeSourceFrame
       name={source.name}
       swatches={source.theme.swatches.map((swatch) => swatch.hex)}
+      onExport={onExport}
       onReplace={onReplace}
-      onClear={onClear}
+      onReset={onReset}
     >
       {/* An object URL for a local file: next/image cannot optimize bytes
           that exist only in this tab, so the plain loader carries it. It

@@ -61,8 +61,9 @@ export interface PlaygroundControlsProps {
   productName: string;
   isPristine: boolean;
   cssSnippet: string;
-  /** The setup prompt, THEME.md and the CSS as one paste for a coding agent. */
-  agentBundle: string;
+  /** The themed AGENTS.md: the agent starter with this theme and its CSS
+      set in, the one file a coding agent needs. */
+  agentsMd: string;
   /** View-specific control groups (e.g. the chat view's transport picker),
       slotted after the shared levers so those never shift between views —
       the rail stays consistent where the views agree and contextual where
@@ -107,7 +108,8 @@ export interface PlaygroundControlsProps {
   onReset: () => void;
   /** Opens the advanced-mode dialog (every primitive ramp). */
   onOpenAdvanced: () => void;
-  /** Opens the export dialog: the CSS, THEME.md and the agent prompt. */
+  /** Exports the theme: downloads the themed AGENTS.md and opens the export
+      dialog on it, with the CSS, THEME.md and the agent prompt beside it. */
   onExport: () => void;
   /** The floating panel is folded into its toggle (panel variant only). */
   collapsed?: boolean;
@@ -138,7 +140,7 @@ export default function PlaygroundControls({
   productName,
   isPristine,
   cssSnippet,
-  agentBundle,
+  agentsMd,
   contextual,
   variant = "panel",
   onPreset,
@@ -207,7 +209,7 @@ export default function PlaygroundControls({
 
   const copy = async (what: "css" | "agents") => {
     try {
-      await navigator.clipboard.writeText(what === "css" ? cssSnippet : agentBundle);
+      await navigator.clipboard.writeText(what === "css" ? cssSnippet : agentsMd);
       setCopied(what);
       if (copiedTimer.current) clearTimeout(copiedTimer.current);
       copiedTimer.current = setTimeout(() => setCopied(null), MOTION_FEEDBACK_RESET_MS);
@@ -481,7 +483,7 @@ export default function PlaygroundControls({
               copied === "css"
                 ? "Copied"
                 : copied === "agents"
-                  ? "Copied for agents"
+                  ? "Copied AGENTS.md"
                   : "Copy CSS"
             }
             variant="primary"
@@ -491,7 +493,7 @@ export default function PlaygroundControls({
             menuLabel="More ways to copy the theme"
             items={[
               {
-                label: "Copy for agents",
+                label: "Copy AGENTS.md",
                 icon: "smart_toy",
                 onClick: () => copy("agents"),
               },

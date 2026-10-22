@@ -4,7 +4,8 @@ import { useCallback, useSyncExternalStore } from "react";
 import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
 import styles from "./ThemeToggle.module.css";
 
-const themeSegments = [
+/** The three settings, in the order every theme control shows them. */
+export const themeSegments = [
   { value: "system", label: "System", icon: "routine" },
   { value: "light", label: "Light", icon: "light_mode" },
   { value: "dark", label: "Dark", icon: "dark_mode" },
@@ -47,10 +48,16 @@ function getServerSnapshot() {
   return "system";
 }
 
-export default function ThemeToggle({ className }: { className?: string }) {
+/**
+ * The visitor's theme setting and the one way to change it: system, light
+ * or dark, resolved onto data-theme and persisted. Every theme control on
+ * the site reads and writes through this (the header's here, and the
+ * immersive stages' StageThemeFlip), so they behave identically.
+ */
+export function useThemeSetting(): [setting: string, setSetting: (value: string) => void] {
   const setting = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
-  const handleChange = useCallback((value: string) => {
+  const setSetting = useCallback((value: string) => {
     const root = document.documentElement;
     root.setAttribute("data-theme-setting", value);
     const resolved =
@@ -63,6 +70,12 @@ export default function ThemeToggle({ className }: { className?: string }) {
     localStorage.setItem("theme", value);
     // No setState needed — the MutationObserver above notifies every instance.
   }, []);
+
+  return [setting, setSetting];
+}
+
+export default function ThemeToggle({ className }: { className?: string }) {
+  const [setting, handleChange] = useThemeSetting();
 
   return (
     <div className={`${styles.themeToggle} ${className || ""}`}>

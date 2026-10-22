@@ -305,7 +305,7 @@ export default function GetStartedPage() {
               <Link href="/playground" className={styles.inlineLink}>
                 Try it live in the playground
               </Link>
-              : it generates the exact CSS you would paste into your app, with a THEME.md and a setup prompt for a coding agent.
+              : it generates the exact CSS you would paste into your app, and one AGENTS.md that hands a coding agent the setup and the theme together.
             </p>
           </div>
 
@@ -360,8 +360,7 @@ export default function GetStartedPage() {
                   <li className={styles.promptItem}>
                     <span>
                       A theme it can read: the playground exports yours as
-                      CSS, a THEME.md that describes the look in words, and
-                      a setup prompt.
+                      one AGENTS.md, with the look in words and its CSS.
                     </span>
                     <code className={styles.promptTool}>/playground</code>
                   </li>
@@ -631,10 +630,10 @@ export default function GetStartedPage() {
                   <Link href="/playground" className={styles.inlineLink}>
                     playground
                   </Link>
-                  ? Its Export theme button gives you the theme as CSS, a
-                  THEME.md and a setup prompt. Hand all three to your agent:
-                  the prompt wires the theme in, and the restyling skill
-                  reads THEME.md before it changes anything.
+                  ? Its Export theme button saves one AGENTS.md: the setup,
+                  the theme in words and its CSS. Save it at your project root
+                  and your agent wires the theme in from it, and the restyling
+                  skill reads its theme before it changes anything.
                 </p>
                 <p className={styles.sectionNote}>
                   Not sure your agent needs any of this? Paste this check
@@ -678,7 +677,7 @@ export default function GetStartedPage() {
                   (navigation, components, the type specimen, the chat
                   widget, and a full dashboard): pick a brand colour,
                   tint the neutrals, reshape the radii, swap the font, then export the
-                  theme as CSS, with a THEME.md for a coding agent.
+                  theme as one AGENTS.md for a coding agent, or as CSS alone.
                 </p>
                 <Link href="/playground" className={styles.ctaLink}>
                   <Button label="Open the playground" variant="primary" iconRight="arrow_forward" />

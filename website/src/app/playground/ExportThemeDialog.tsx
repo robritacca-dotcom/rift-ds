@@ -9,7 +9,7 @@ import { Dialog } from "rift-ds/components/Dialog/Dialog";
 import { Tabs } from "rift-ds/components/Tabs/Tabs";
 import { MOTION_FEEDBACK_RESET_MS } from "rift-ds/tokens/motion";
 
-export type ExportTab = "css" | "theme" | "prompt";
+export type ExportTab = "agents" | "css" | "theme" | "prompt";
 
 interface ExportFile {
   value: ExportTab;
@@ -20,7 +20,23 @@ interface ExportFile {
   note: React.ReactNode;
 }
 
-const FILES: ExportFile[] = [
+/** The files the export offers, the one-file AGENTS.md first: it is what
+    the Export theme button downloads, and the rest are its parts. */
+export const EXPORT_FILES: ExportFile[] = [
+  {
+    value: "agents",
+    label: "AGENTS.md",
+    filename: "AGENTS.md",
+    language: "markdown",
+    mime: "text/markdown",
+    note: (
+      <>
+        Everything a coding agent needs in one file: how to install and set up
+        rift-ds, this theme in words, and its CSS. Save it at your project
+        root, or add its sections to the AGENTS.md you already have.
+      </>
+    ),
+  },
   {
     value: "css",
     label: "Theme CSS",
@@ -68,32 +84,43 @@ const FILES: ExportFile[] = [
   },
 ];
 
+/** Saves text as a local file through an object URL: built in this tab,
+    never uploaded. */
+export function downloadTextFile(text: string, filename: string, mime: string) {
+  const url = URL.createObjectURL(new Blob([text], { type: `${mime};charset=utf-8` }));
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
 export interface ExportThemeDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   /** Which file the dialog opens on. */
   tab: ExportTab;
   onTabChange: (tab: ExportTab) => void;
+  /** The themed AGENTS.md: the agent starter with this theme set in. */
+  agents: string;
   css: string;
   markdown: string;
   prompt: string;
-  /** The prompt and both files as one paste. */
-  bundle: string;
 }
 
-/** The theme as three files to take away, built in this tab and never uploaded. */
+/** The theme as files to take away, built in this tab and never uploaded. */
 export default function ExportThemeDialog({
   open,
   onOpenChange,
   tab,
   onTabChange,
+  agents,
   css,
   markdown,
   prompt,
-  bundle,
 }: ExportThemeDialogProps) {
-  const contents: Record<ExportTab, string> = { css, theme: markdown, prompt };
-  const file = FILES.find((f) => f.value === tab) ?? FILES[0];
+  const contents: Record<ExportTab, string> = { agents, css, theme: markdown, prompt };
+  const file = EXPORT_FILES.find((f) => f.value === tab) ?? EXPORT_FILES[0];
 
   const [copied, setCopied] = useState(false);
   const copiedTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -103,27 +130,16 @@ export default function ExportThemeDialog({
     };
   }, []);
 
-  const copyBundle = async () => {
+  const copyFile = async () => {
     try {
-      await navigator.clipboard.writeText(bundle);
+      await navigator.clipboard.writeText(contents[file.value]);
       setCopied(true);
       if (copiedTimer.current) clearTimeout(copiedTimer.current);
       copiedTimer.current = setTimeout(() => setCopied(false), MOTION_FEEDBACK_RESET_MS);
     } catch {
-      // Clipboard unavailable (permissions): each file's own copy button
-      // and the download still work.
+      // Clipboard unavailable (permissions): the code block's own copy
+      // button and the download still work.
     }
-  };
-
-  const download = () => {
-    const url = URL.createObjectURL(
-      new Blob([contents[file.value]], { type: `${file.mime};charset=utf-8` })
-    );
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = file.filename;
-    link.click();
-    URL.revokeObjectURL(url);
   };
 
   return (
@@ -131,29 +147,29 @@ export default function ExportThemeDialog({
       open={open}
       onOpenChange={onOpenChange}
       title="Export your theme"
-      description="The theme as files for you and your coding agent."
+      description="One file for your coding agent, or the theme as separate files."
       size="lg"
       footer={
         <>
           <Button
-            label={copied ? "Copied" : "Copy all for agents"}
+            label={copied ? "Copied" : `Copy ${file.filename}`}
             variant="primary"
             tone="neutral"
             iconLeft={copied ? "check" : "content_copy"}
-            onClick={copyBundle}
+            onClick={copyFile}
           />
           <Button
             label={`Download ${file.filename}`}
             variant="primary"
             iconLeft="download"
-            onClick={download}
+            onClick={() => downloadTextFile(contents[file.value], file.filename, file.mime)}
           />
         </>
       }
     >
       <div className={styles.cssDialogBody}>
         <Tabs
-          tabs={FILES.map(({ value, label }) => ({ value, label }))}
+          tabs={EXPORT_FILES.map(({ value, label }) => ({ value, label }))}
           value={file.value}
           onValueChange={(value) => onTabChange(value as ExportTab)}
           size="compact"

@@ -414,6 +414,31 @@ const NEUTRALS: NeutralDef[] = [
 
 export const DEFAULT_NEUTRAL_SEED = "#0E6E8F";
 
+/** One neutral step at a hex, with its alpha variants at their shipped
+    opacities, as overrides. */
+export function neutralStepOverrides(step: string, hex: string): Overrides {
+  const def = NEUTRALS.find((n) => n.step === step);
+  if (!def) return {};
+  const overrides: Overrides = { [`--primitive-neutral-${step}`]: hex };
+  const [r, g, b] = hexToRgb(hex);
+  for (const [suffix, alpha] of Object.entries(def.alphas ?? {})) {
+    overrides[`--primitive-neutral-${step}${suffix}`] = `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  }
+  return overrides;
+}
+
+/** The neutral steps each mode paints its surfaces with: the page, the
+    containers, the borders and fills drawn on them. Light mode's are the
+    light end of the scale, dark mode's the dark end. */
+export const NEUTRAL_SURFACE_STEPS: Record<"light" | "dark", readonly string[]> = {
+  light: ["00", "01", "02"],
+  dark: ["07", "08", "09", "10", "11"],
+};
+
+/** The shipped hex of a neutral step, or null for a step the scale lacks. */
+export const shippedNeutralHex = (step: string): string | null =>
+  NEUTRALS.find((n) => n.step === step)?.hex ?? null;
+
 /** The neutral steps light mode paints its surfaces with: the container
     white and the page floor. Dark mode reads the same two steps as ink. */
 const LIGHT_SURFACE_STEPS: ReadonlySet<string> = new Set(["00", "01"]);
@@ -756,6 +781,437 @@ export function aiGradientTonalOverrides(plan: ActionColorPlan | null): Override
     "--color-ai-gradient-mid": ref(at),
     "--color-ai-gradient-end": ref(end),
   };
+}
+
+/**
+ * The fade AI gradient: the action colour fading toward the page, for a
+ * theme whose source states no gradient of its own (an imported DESIGN.md
+ * or photo). The mid stop is the key's step in this theme, so the ring's
+ * strongest point is the action colour; the start sits two steps toward
+ * the page and the end four, lighter tints in light mode and deeper
+ * shades in dark, so the ring dissolves into the surface it sits on
+ * rather than carrying hues the source never named. A key too near the
+ * page's end of its ramp to give four steps keeps what room there is.
+ */
+export function aiGradientFadeOverrides(
+  /** The action fill pointer as the theme finally has it (after any
+      extras), so the ring fades from the fill the button shows. */
+  fillPointer: string | undefined,
+  theme: "light" | "dark"
+): Overrides {
+  const m = /--primitive-([a-z]+)-(\d\d)\)$/.exec(fillPointer ?? "");
+  if (!m) return {};
+  const plan = { ramp: m[1] };
+  const last = rampStepsOf(plan.ramp).length - 1;
+  const at = Number(m[2]);
+  const toward = theme === "light" ? -1 : 1;
+  const step = (n: number) => Math.min(last, Math.max(0, at + toward * n));
+  const ref = (s: number) => `var(--primitive-${plan.ramp}-${String(s).padStart(2, "0")})`;
+  return {
+    "--color-ai-gradient-start": ref(step(2)),
+    "--color-ai-gradient-mid": ref(at),
+    "--color-ai-gradient-end": ref(step(4)),
+  };
+}
+
+/**
+ * Where each ambient blob sits on the action ramp under a fade field, in
+ * steps toward the page from the key: negative is away from the page (a
+ * brighter accent in dark mode, a deeper one in light). The shader's
+ * largest blob and its top-right one carry the key itself; the top-left
+ * pair and the bottom-left blob step toward the page so the field
+ * dissolves into it; one small blob steps away for a spark of depth.
+ * Ambient roles 1 to 6, as data/shader-background.json places them.
+ */
+const AMBIENT_FADE_STEPS: Record<string, number> = {
+  "--color-ambient-1": 1,
+  "--color-ambient-2": 2,
+  "--color-ambient-3": 0,
+  "--color-ambient-4": 4,
+  "--color-ambient-5": 0,
+  "--color-ambient-6": -1,
+};
+
+/**
+ * The fade ambient field: the background shader's blobs drawn from the
+ * action colour's own ramp, fading toward the page, for an imported
+ * DESIGN.md (whose format states no background field). The same rule as
+ * the fade AI gradient, so a brand's banner reads as that brand (a green
+ * glow on near-black, an indigo wash on a cool page) rather than the
+ * accent colours, which a file fills from its status and secondary hues.
+ * It reads the final fill pointer, after any extras, like the gradient.
+ */
+export function ambientFadeOverrides(
+  fillPointer: string | undefined,
+  theme: "light" | "dark"
+): Overrides {
+  const m = /--primitive-([a-z]+)-(\d\d)\)$/.exec(fillPointer ?? "");
+  if (!m) return {};
+  const last = rampStepsOf(m[1]).length - 1;
+  const at = Number(m[2]);
+  const toward = theme === "light" ? -1 : 1;
+  const overrides: Overrides = {};
+  for (const [cssVar, offset] of Object.entries(AMBIENT_FADE_STEPS)) {
+    const step = Math.min(last, Math.max(0, at + toward * offset));
+    overrides[cssVar] = `var(--primitive-${m[1]}-${String(step).padStart(2, "0")})`;
+  }
+  return overrides;
+}
+
+/* ---------- anchored ramps ----------
+   A ramp rebuilt through colours a source states outright, for the
+   DESIGN.md importer (lib/theme/design-md.ts). The levers above derive a
+   whole ramp from one key and rift's own tint/shade geometry, which is
+   the right guess when a photo is all there is; a file that names its
+   hover fill or its page grey has said more than that, and these
+   builders keep what it said. They write primitive values only: every
+   semantic token still reaches them through var(--primitive-…), so no
+   tier is skipped and the theme export carries them as overrides. */
+
+const lightnessOfRgb = (rgb: [number, number, number]) => rgbToHsl(rgb)[2];
+
+/**
+ * A ramp passed exactly through its anchors. Each anchored step takes its
+ * stated colour. A step between two anchors is a blend of those two,
+ * spaced along the base's own lightness curve, so the ramp keeps its shape
+ * and cannot fold between stated colours.
+ * A step beyond the outermost
+ * anchor keeps its base value moved by that anchor's offset from the
+ * base, fading to nothing at an unanchored end, so the near-white and
+ * near-black ends stay where the base had them and the ramp bends only
+ * where the file spoke.
+ */
+export function anchorRamp(
+  base: ReadonlyArray<[string, string]>,
+  anchors: ReadonlyArray<[step: string, hex: string]>
+): Array<[string, string]> {
+  const steps = base.map(([s]) => s);
+  const baseRgb = base.map(([, hex]) => hexToRgb(hex));
+  const offsets = new Map<number, [number, number, number]>();
+  for (const [step, hex] of anchors) {
+    const i = steps.indexOf(step);
+    if (i < 0) continue;
+    const a = hexToRgb(hex);
+    offsets.set(i, [a[0] - baseRgb[i][0], a[1] - baseRgb[i][1], a[2] - baseRgb[i][2]]);
+  }
+  if (!offsets.has(0)) offsets.set(0, [0, 0, 0]);
+  const last = steps.length - 1;
+  if (!offsets.has(last)) offsets.set(last, [0, 0, 0]);
+  const known = [...offsets.keys()].sort((a, b) => a - b);
+  const exact = new Map(anchors.map(([step, hex]) => [step, hex.toUpperCase()]));
+  const anchoredAt = (i: number) => exact.get(steps[i]);
+
+  return steps.map((step, i) => {
+    const pinned = exact.get(step);
+    if (pinned) return [step, pinned];
+    const lo = known.filter((k) => k <= i).pop()!;
+    const hi = known.find((k) => k >= i)!;
+    const loHex = anchoredAt(lo);
+    const hiHex = anchoredAt(hi);
+    if (loHex && hiHex) {
+      /* Spaced by where the base's lightness sits between the two anchors,
+         so the ramp keeps its own curve (the neutral scale's cliff between
+         its light and dark halves is what keeps a dark theme's surfaces
+         dark). A stretch where the base does not darken step over step
+         (a chromatic ramp can hold several steps at nearly one lightness)
+         would collapse onto one anchor that way, so it is spaced evenly by
+         step instead. */
+      const l = (k: number) => lightnessOfRgb(baseRgb[k]);
+      let strictlyDarker = true;
+      for (let k = lo; k < hi; k++) if (l(k + 1) >= l(k)) strictlyDarker = false;
+      const t = strictlyDarker ? (l(lo) - l(i)) / (l(lo) - l(hi)) : (i - lo) / (hi - lo);
+      return [step, rgbToHex(mix(hexToRgb(loHex), hexToRgb(hiHex), t))];
+    }
+    const t = hi === lo ? 0 : (i - lo) / (hi - lo);
+    const offset = mix(offsets.get(lo)!, offsets.get(hi)!, t);
+    const rgb = baseRgb[i];
+    return [step, rgbToHex([rgb[0] + offset[0], rgb[1] + offset[1], rgb[2] + offset[2]])];
+  });
+}
+
+/** Anchors whose lightness runs the same way as the ramp (00 lightest),
+    kept in the order given: an anchor that would cross one already kept
+    is dropped rather than letting the ramp fold back on itself. */
+function monotonicAnchors(
+  steps: ReadonlyArray<string>,
+  anchors: ReadonlyArray<[string, string]>
+): Array<[string, string]> {
+  const kept: Array<[string, string]> = [];
+  for (const [step, hex] of anchors) {
+    const i = steps.indexOf(step);
+    const l = lightnessOfRgb(hexToRgb(hex));
+    const fits = kept.every(([s, h]) => {
+      const j = steps.indexOf(s);
+      const m = lightnessOfRgb(hexToRgb(h));
+      return j !== i && (j < i ? m >= l : m <= l);
+    });
+    if (i >= 0 && fits) kept.push([step, hex]);
+  }
+  return kept;
+}
+
+/** How far a stated shade's hue may sit from the action key's and still be
+    a shade of it rather than a second colour. */
+const ANCHOR_HUE_DEGREES = 30;
+
+/** The action roles a source can state a fill for, and the light-theme
+    pointer each pins. */
+export type ActionState = "hover" | "active";
+const ACTION_STATE_VARS: Record<ActionState, string> = {
+  hover: "--color-action-primary-bg-hover",
+  active: "--color-action-primary-bg-active",
+};
+
+/** WCAG contrast ratio between two hexes. */
+export function contrastRatio(a: string, b: string): number {
+  const lum = (hex: string) => {
+    const [r, g, b2] = hexToRgb(hex).map((c) => {
+      const v = c / 255;
+      return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+    });
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b2;
+  };
+  const [hi, lo] = [lum(a), lum(b)].sort((x, y) => y - x);
+  return (hi + 0.05) / (lo + 0.05);
+}
+
+/** The least contrast an action fill keeps against the page, the WCAG
+    floor for a control's boundary: below it, focus rings, checked boxes
+    and the selected segment stop reading against the surface. */
+export const ACTION_FILL_MIN_CONTRAST = 3;
+
+/** The least contrast the action label keeps on the fill in every state,
+    the WCAG floor for body-size text. */
+export const ACTION_LABEL_MIN_CONTRAST = 4.5;
+
+export interface ImportedAction {
+  ramp: string;
+  /** The fill each mode's action colour is: the stated key in the mode
+      the source describes, the nearest visible step in the other. */
+  lightKey: string;
+  darkKey: string;
+  /** Every step of the rebuilt ramp, as --primitive-<ramp>-NN. */
+  primitives: Overrides;
+  /** Every action pointer for each mode, so neither mode's pins leak into
+      the other. Empty for a mode left to a stated dark colour on another
+      ramp, which actionColorPlan then handles from brandDark. */
+  light: Overrides;
+  dark: Overrides;
+  /** The stated colours that landed, as [step, hex], key included. */
+  anchors: Array<[string, string]>;
+  /** The states whose stated fills are used exactly. */
+  pinned: ActionState[];
+  /** The mode whose key was moved to stay visible on its page, if any. */
+  adjusted: "light" | "dark" | null;
+  /** The modes whose label was swapped to hold contrast on the fill. */
+  relabelled: Array<"light" | "dark">;
+}
+
+/**
+ * The action colour for a source that states it outright (an imported
+ * DESIGN.md), in both modes, under four rules that keep it as close to
+ * the source as rift's contracts allow:
+ *
+ * 1. The ramp is rebuilt through the source's stated state fills and same-
+ *    hue shades (anchorRamp), the key where actionColorPlan puts it.
+ * 2. The mode the source describes uses its key exactly, and its stated
+ *    hover and pressed fills exactly.
+ * 3. The other mode, which the source says nothing about, takes the
+ *    source's own dark colour when it states one, and otherwise the
+ *    nearest step of the same ramp that clears ACTION_FILL_MIN_CONTRAST
+ *    against that mode's page, so a bright key on a light page, or a deep
+ *    one on a dark page, stays visible.
+ * 4. In each mode the label holds ACTION_LABEL_MIN_CONTRAST on the fill,
+ *    hover and pressed alike: the derived label when it does, otherwise
+ *    the neutral scale's white or black end, whichever holds more.
+ *
+ * Null when the key is a grey: the neutral scale is the neutral builder's,
+ * and a grey key's dark partner comes from the presets (see the importer).
+ */
+export function importedActionColours(opts: {
+  key: string;
+  statedDark?: string;
+  states: Partial<Record<ActionState, string>>;
+  shades: ReadonlyArray<string>;
+  described: "light" | "dark";
+  /** The page colour of each mode, after any stated greys. */
+  pages: { light: string; dark: string };
+  /** The neutral scale as the theme will have it, for label candidates. */
+  neutral: (step: string) => string;
+}): ImportedAction | null {
+  const key = opts.key.toUpperCase();
+  const prim = findPrimitive(key);
+  const ramp = prim?.ramp ?? nearestRampFor(key);
+  if (ramp === "neutral") return null;
+  const base = prim ? rampStepsOf(ramp) : rampRebaseSteps(ramp, key);
+  const steps = base.map(([s]) => s);
+  const keyStep = prim?.step ?? RAMP_BASE_STEP;
+  const keyIdx = steps.indexOf(keyStep);
+  const [keyHue, , keyLight] = rgbToHsl(hexToRgb(key));
+
+  const taken = new Set([keyStep]);
+  const anchors: Array<[string, string]> = [[keyStep, key]];
+  const placed = new Map<string, string>();
+  const place = (hex: string) => {
+    const h = hex.toUpperCase();
+    if (placed.has(h)) return placed.get(h)!;
+    const rgb = hexToRgb(h);
+    /* Same hue as the key, not the same nearest ramp: an indigo key and
+       its deeper press can sit either side of a ramp boundary. */
+    const [hue, sat] = rgbToHsl(rgb);
+    const d = Math.abs(hue - keyHue);
+    if (h === key || sat < 0.15 || Math.min(d, 360 - d) > ANCHOR_HUE_DEGREES) return null;
+    const lighter = lightnessOfRgb(rgb) > keyLight;
+    let best: string | null = null;
+    let bestD = Infinity;
+    for (const [i, [step, stepHex]] of base.entries()) {
+      if (taken.has(step) || (lighter ? i >= keyIdx : i <= keyIdx)) continue;
+      const dd = distSq(hexToRgb(stepHex), rgb);
+      if (dd < bestD) {
+        bestD = dd;
+        best = step;
+      }
+    }
+    if (best) {
+      taken.add(best);
+      anchors.push([best, h]);
+      placed.set(h, best);
+    }
+    return best;
+  };
+
+  const stateSteps: Partial<Record<ActionState, string>> = {};
+  for (const state of ["hover", "active"] as const) {
+    const hex = opts.states[state];
+    const step = hex ? place(hex) : null;
+    if (step) stateSteps[state] = step;
+  }
+  const darkStep = opts.statedDark ? place(opts.statedDark) : null;
+  opts.shades.forEach(place);
+
+  const kept = monotonicAnchors(steps, anchors);
+  const keptSteps = new Set(kept.map(([s]) => s));
+  const rebuilt =
+    kept.length >= 2 ? anchorRamp(base, kept) : base.map(([s, h]) => [s, h] as [string, string]);
+  const hexAt = new Map(rebuilt);
+  const primitives: Overrides = {};
+  for (const [step, hex] of rebuilt) primitives[`--primitive-${ramp}-${step}`] = hex;
+
+  /* Rule 3: the other mode's key. */
+  const other = opts.described === "light" ? "dark" : "light";
+  let otherKey = key;
+  let adjusted: "light" | "dark" | null = null;
+  let otherOnRamp = true;
+  if (opts.statedDark && other === "dark") {
+    if (darkStep && keptSteps.has(darkStep)) otherKey = hexAt.get(darkStep)!;
+    else {
+      otherKey = opts.statedDark.toUpperCase();
+      otherOnRamp = false;
+    }
+  } else if (contrastRatio(key, opts.pages[other]) < ACTION_FILL_MIN_CONTRAST) {
+    const order = rebuilt
+      .map(([step, hex], i) => ({ step, hex, i }))
+      .filter(({ hex }) => contrastRatio(hex, opts.pages[other]) >= ACTION_FILL_MIN_CONTRAST)
+      .sort((a, b) => Math.abs(a.i - keyIdx) - Math.abs(b.i - keyIdx));
+    if (order[0]) {
+      otherKey = order[0].hex;
+      adjusted = other;
+    }
+  }
+  const keys = { [opts.described]: key, [other]: otherKey } as Record<"light" | "dark", string>;
+
+  /* Rules 2 and 4: each mode's pointers, its pins and its label. */
+  const pointers: Record<"light" | "dark", Overrides> = { light: {}, dark: {} };
+  const relabelled: Array<"light" | "dark"> = [];
+  const resolve = (pointer: string | undefined, fallback: string) => {
+    const m = /--primitive-([a-z]+)-(\d\d)\)$/.exec(pointer ?? "");
+    if (!m) return fallback;
+    if (m[1] === ramp) return hexAt.get(m[2]) ?? fallback;
+    return m[1] === "neutral" ? opts.neutral(m[2]) : fallback;
+  };
+  for (const mode of ["light", "dark"] as const) {
+    if (mode === other && !otherOnRamp) continue;
+    const ptr = actionPointerOverrides(ramp, keys[mode], mode, rebuilt);
+    if (mode === opts.described) {
+      for (const state of ["hover", "active"] as const) {
+        const step = stateSteps[state];
+        if (step && keptSteps.has(step)) ptr[ACTION_STATE_VARS[state]] = `var(--primitive-${ramp}-${step})`;
+      }
+    }
+    const fills = ["--color-action-primary-bg", ACTION_STATE_VARS.hover, ACTION_STATE_VARS.active].map((v) =>
+      resolve(ptr[v], keys[mode])
+    );
+    const label = resolve(ptr["--color-action-primary-text"], opts.neutral("00"));
+    const worst = (hex: string) => Math.min(...fills.map((f) => contrastRatio(hex, f)));
+    if (worst(label) < ACTION_LABEL_MIN_CONTRAST) {
+      const step = worst(opts.neutral("00")) >= worst(opts.neutral("11")) ? "00" : "11";
+      ptr["--color-action-primary-text"] = `var(--primitive-neutral-${step})`;
+      ptr["--color-action-primary-text-active"] = `var(--primitive-neutral-${step})`;
+      relabelled.push(mode);
+    }
+    pointers[mode] = ptr;
+  }
+
+  const pinned = (["hover", "active"] as const).filter((s) => {
+    const step = stateSteps[s];
+    return step !== undefined && keptSteps.has(step);
+  });
+  return {
+    ramp,
+    lightKey: keys.light,
+    darkKey: keys.dark,
+    primitives,
+    light: pointers.light,
+    dark: pointers.dark,
+    anchors: kept,
+    pinned,
+    adjusted,
+    relabelled,
+  };
+}
+
+/**
+ * The neutral roles a source can state a colour for, each with the step
+ * the light theme paints it with and the step the dark theme does. A
+ * light-first source lands on `step`; a dark-first one on `darkStep`, so
+ * dark mode shows its greys and light mode reads the same scale inverted.
+ * Mirrors tokens-light.css and tokens-dark.css by hand, held to both by
+ * scripts/validate-theme-mirrors.mjs. In priority order: when two stated
+ * greys would fold the scale, the earlier role is the one kept.
+ */
+export const NEUTRAL_ROLE_STEPS: ReadonlyArray<{ cssVar: string; step: string; darkStep: string }> = [
+  { cssVar: "--color-bg-page-primary", step: "01", darkStep: "10" },
+  { cssVar: "--color-text-primary", step: "10", darkStep: "01" },
+  { cssVar: "--color-bg-container-primary", step: "00", darkStep: "09" },
+  { cssVar: "--color-bg-container-border", step: "02", darkStep: "08" },
+  { cssVar: "--color-text-secondary", step: "07", darkStep: "03" },
+  { cssVar: "--color-text-tertiary", step: "06", darkStep: "04" },
+];
+
+/**
+ * The neutral scale rebuilt through stated greys, alpha variants included
+ * (each takes its step's new colour at its shipped opacity). Anchors are
+ * [step, hex] in priority order. Null when none survive. The same scale
+ * serves both themes, so dark mode reads the stated page grey as its ink
+ * and the stated ink as its floor, the way it reads the shipped scale.
+ */
+export function anchoredNeutralOverrides(
+  anchors: ReadonlyArray<[step: string, hex: string]>
+): { overrides: Overrides; anchors: Array<[string, string]> } | null {
+  const base = NEUTRALS.map(({ step, hex }) => [step, hex] as [string, string]);
+  const kept = monotonicAnchors(base.map(([s]) => s), anchors);
+  if (kept.length === 0) return null;
+  const rebuilt = new Map(anchorRamp(base, kept));
+  const overrides: Overrides = {};
+  for (const { step, alphas } of NEUTRALS) {
+    const hex = rebuilt.get(step)!;
+    overrides[`--primitive-neutral-${step}`] = hex;
+    for (const [suffix, alpha] of Object.entries(alphas ?? {})) {
+      const [r, g, b] = hexToRgb(hex);
+      overrides[`--primitive-neutral-${step}${suffix}`] = `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    }
+  }
+  return { overrides, anchors: kept };
 }
 
 /* ---------- radius ---------- */

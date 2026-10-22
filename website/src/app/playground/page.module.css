@@ -952,3 +952,10 @@
   line-height: var(--font-caption-line-height);
   color: var(--color-text-tertiary);
 }
+
+/* A labelled switch in the stage control bar keeps its label on one line,
+   the way the bar's end slot holds Inspect mode's. */
+.barSwitch {
+  display: inline-flex;
+  white-space: nowrap;
+}

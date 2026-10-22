@@ -6,15 +6,39 @@
  * recipes, then prose. Collections of them circulate as analyses of real
  * products. This module turns one into positions on the playground's
  * levers, the same way lib/theme/image-palette.ts turns a photograph into
- * them: the result is an approximation of the described look built entirely
- * from rift's own system. Nothing is added to the token set, no colour skips
- * a tier, and every value lands on a lever that already exists, through the
- * same functions a hand-moved lever goes through.
+ * them, with one difference that follows from having more to go on. A
+ * photo is a guess, so it only moves levers. A file states colours
+ * outright, so the colours it states are kept: the grey scale is rebuilt
+ * through the greys it names for rift's neutral roles, the action ramp
+ * through its primary shades and its stated hover and pressed fills, and
+ * each status family around the status colour it names (the anchored
+ * builders in theme-overrides.ts). A dark-first file's greys land on the
+ * steps dark mode paints each role with, so light mode reads them
+ * inverted; the visitor's own light or dark setting is never changed.
+ * The neutral tint is never switched on: the file's own greys, or
+ * rift's, never a wash it did not ask for.
+ * Where a stated colour would break one of rift's own contracts, a fixed
+ * rule bends it and the report says so: greys outside NEUTRAL_ANCHOR_BAND
+ * of their step, status colours outside STATUS_DEPTH_BAND of their
+ * family's depth, an action fill invisible on the mode the file does not
+ * describe, a label under 4.5:1, an accent on the action colour's hue
+ * (see importedActionColours and the accent builder). The rules are
+ * deterministic: the same file always gives the same theme.
+ * Nothing is added to the token set and no colour skips a tier: the
+ * stated colours become primitive values, carried on the theme's extra
+ * overrides and the Advanced colours lever, so the export reproduces them.
+ * Everything else lands on a lever that already exists, through the same
+ * functions a hand-moved lever goes through.
  *
  * It all runs in the visitor's browser. The file is read as text, parsed
  * here, and dropped; it is never uploaded and never stored. The one request
  * an import can cause is the Google Fonts stylesheet for a matched face, the
  * same request the playground's font picker makes.
+ *
+ * Any text file within the size cap is read, and none is refused for
+ * what it says: one with nothing recognisable gives the base theme with
+ * every lever reported kept. A binary passed off as text is refused, and
+ * the guards under "untrusted text" below say what else is held back.
  *
  * Three steps, kept apart so each can be judged on its own:
  *
@@ -22,6 +46,9 @@
  *                      is all the format's front matter uses. Lists,
  *                      anchors and block scalars are skipped, never
  *                      evaluated, since the file is untrusted text.
+ *   proseDoc         — the same token map read from a file with no front
+ *                      matter, from its colour lines, type table, radius
+ *                      and spacing bullets and shadows.
  *   fit*             — one function per lever, each reading the tokens it
  *                      needs and fitting the lever to them: sweep the
  *                      lever's own range through its own override function
@@ -44,9 +71,18 @@ import {
   SHIPPED_PARAGRAPH_TRACKING_EM,
   TYPE_WEIGHT_RANGE,
   hexToRgb,
-  hslToRgb,
-  neutralOverrides,
+  DEFAULT_ADVANCED,
+  NEUTRAL_ROLE_STEPS,
+  importedActionColours,
+  anchoredNeutralOverrides,
   nearestRampFor,
+  shippedNeutralHex,
+  neutralStepOverrides,
+  NEUTRAL_SURFACE_STEPS,
+  CHROMATIC_RAMPS,
+  hslToRgb,
+  type AdvancedColorState,
+  type Overrides,
   rgbToHex,
   rgbToHsl,
   type AccentSextet,
@@ -100,6 +136,7 @@ export function parseFrontMatter(text: string): YamlMap | null {
   let skipDeeperThan = Infinity;
 
   for (const raw of match[1].split("\n")) {
+    if (raw.length > MAX_LINE) continue;
     const trimmed = raw.trim();
     if (!trimmed || trimmed.startsWith("#")) continue;
     const indent = raw.length - raw.trimStart().length;
@@ -152,6 +189,195 @@ function resolve(doc: YamlMap, value: YamlValue | undefined, depth = 0): string 
     const hit = resolve(doc, lookup(doc, path), depth + 1);
     return hit ?? ref;
   });
+}
+
+/* ---------- the prose form ----------
+   Many DESIGN.md files carry no front matter: the same facts are written
+   as markdown, colours as `**Name** (`#hex`): role` bullets or a quick
+   reference of `Role: Name (`#hex`)` lines, type as a table, radius and
+   spacing as bullets. This reads what it can into the same token map the
+   front matter would give, under the keys the fitters already look for,
+   so one set of fitters serves both forms. A role is read from the words
+   beside a colour, which is a guess rather than a stated key; a colour
+   with no role it recognises still counts toward the accents. */
+
+/** A line longer than this is not a token line, and is skipped rather
+    than handed to a pattern. */
+const MAX_LINE = 2000;
+
+const HEX = /#(?:[0-9a-f]{6}|[0-9a-f]{3})\b/i;
+
+/** The roles a colour line can name, tried in order: the first that fits
+    takes the line. `label` is the name or the text before the colon, `all`
+    the whole line. Keys are the ones the fitters read. */
+const PROSE_ROLES: ReadonlyArray<[key: string, fits: (label: string, all: string) => boolean]> = [
+  ["primary-hover", (l) => /hover/.test(l) && /primary|brand|accent|cta|button/.test(l)],
+  ["primary-pressed", (l) => /press|active/.test(l) && /primary|brand|accent|cta|button/.test(l)],
+  ["error", (_, a) => /\b(error|negative|danger|destructive|critical)\b/.test(a)],
+  ["warning", (_, a) => /\b(warning|caution)\b/.test(a)],
+  ["success", (_, a) => /\b(success|positive)\b/.test(a)],
+  ["info", (_, a) => /\b(info|informational|announcement)\b/.test(a)],
+  [
+    "primary",
+    (_, a) =>
+      /\b(primary brand|brand accent|accent|brand colou?r|primary colou?r|cta|primary action|primary button|call to action)\b/.test(a) &&
+      !/\b(border|text|link|variant|hover|pressed)\b/.test(a),
+  ],
+  ["ink", (l, a) => /\b(primary text|text-base|body text|main text|text colou?r)\b/.test(a) || /^(text|ink|foreground)$/.test(l)],
+  ["text-muted", (l, a) => /\b(secondary text|muted|inactive|subdued)\b/.test(a) || /^secondary text$/.test(l)],
+  ["hairline", (_, a) => /\b(border|divider|separator|hairline|outline)s?\b/.test(a) && !/\bbutton/.test(a)],
+  ["canvas", (_, a) => /\b(page background|background|deepest|canvas|base layer)\b/.test(a)],
+  ["surface", (_, a) => /\b(card|surface|container|elevated|panel)\b/.test(a)],
+];
+
+const slugOf = (text: string) =>
+  text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 48);
+
+/** The first length in a cell like "24px (1.50rem)" or "6px–8px". */
+const firstLength = (text: string) => /-?\d*\.?\d+\s*(?:px|rem|em|%)/i.exec(text)?.[0].replace(/\s+/g, "");
+
+/** Markdown and inline code stripped, for reading the words. */
+const plain = (text: string) => text.replace(/[`*_]/g, "").replace(/\s+/g, " ").trim();
+
+/**
+ * The prose form read into a token map: `colors`, `typography`,
+ * `components` (the corners and a shadow, under keys fitShape and
+ * fitElevation read) and `spacing`. Empty groups are left out, so a file
+ * with nothing to read gives an empty map and changes nothing.
+ */
+function proseDoc(text: string): YamlMap {
+  const colors: YamlMap = {};
+  const typography: YamlMap = {};
+  const components: YamlMap = {};
+  const spacing: YamlMap = {};
+  const roleScore = new Map<string, number>();
+  const fallbacks = new Map<string, string>();
+  let h2 = "";
+  let h3 = "";
+  let table: { cols: Record<string, number> } | null = null;
+  let others = 0;
+
+  const setColour = (key: string, hex: string, score: number) => {
+    if ((roleScore.get(key) ?? 0) >= score) return;
+    roleScore.set(key, score);
+    colors[key] = hex;
+  };
+
+  for (const raw of text.split("\n")) {
+    if (raw.length > MAX_LINE) continue;
+    const line = raw.trim();
+    const heading = /^(#{1,6})\s+(.*)$/.exec(line);
+    if (heading) {
+      if (heading[1].length <= 2) {
+        h2 = heading[2].toLowerCase();
+        h3 = "";
+      } else h3 = heading[2].toLowerCase();
+      table = null;
+      continue;
+    }
+    const section = `${h2} / ${h3}`;
+
+    /* The type table: its header names the columns, every row after it is
+       a style, until the table ends. */
+    if (line.startsWith("|")) {
+      const cells = line.slice(1, line.endsWith("|") ? -1 : undefined).split("|").map((c) => plain(c));
+      if (!table && cells.some((c) => /font|family/i.test(c)) && cells.some((c) => /size/i.test(c))) {
+        const find = (re: RegExp) => cells.findIndex((c) => re.test(c));
+        table = {
+          cols: {
+            role: Math.max(0, find(/role|style|name|token|level/i)),
+            font: find(/font|family/i),
+            size: find(/size/i),
+            weight: find(/weight/i),
+            tracking: find(/letter|tracking/i),
+          },
+        };
+        continue;
+      }
+      if (table) {
+        if (cells.every((c) => /^:?-+:?$/.test(c))) continue;
+        const cell = (k: string) => (table!.cols[k] >= 0 ? cells[table!.cols[k]] ?? "" : "");
+        const size = firstLength(cell("size"));
+        const key = slugOf(cell("role"));
+        if (size && key && !(key in typography)) {
+          const style: YamlMap = { fontSize: size };
+          const family = cell("font").split(/[,(]/)[0].trim();
+          if (family) style.fontFamily = family;
+          const weight = /\d{3}/.exec(cell("weight"))?.[0];
+          if (weight) style.fontWeight = weight;
+          const tracking = firstLength(cell("tracking"));
+          if (tracking) style.letterSpacing = tracking;
+          typography[key] = style;
+        }
+        continue;
+      }
+    } else table = null;
+
+    /* A face's fallbacks, from a "Font Families" line, so the face matcher
+       has the file's own stack to work down. */
+    const stack = /`([^`]+)`[^`]*fallbacks?:?\s*`([^`]+)`/i.exec(line);
+    if (stack) fallbacks.set(stack[1].trim(), stack[2].trim());
+
+    const hex = HEX.exec(line)?.[0];
+    if (hex && /colou?r|palette|depth|elevation|surface/.test(section)) {
+      const text = plain(line.replace(/^[-*+]\s+/, "").replace(/^\|/, "").replace(/\|/g, " : "));
+      const bold = /\*\*([^*]+)\*\*/.exec(line)?.[1];
+      const colon = text.indexOf(":");
+      const label = (bold ?? (colon > 0 ? text.slice(0, colon) : "")).toLowerCase().trim();
+      const all = text.toLowerCase();
+      /* "Role: Name (#hex)" names the role outright, which outranks a role
+         read from a description further up the file. */
+      const score = !bold && colon > 0 && label.split(" ").length <= 3 ? 2 : 1;
+      const role = PROSE_ROLES.find(([, fits]) => fits(label, all))?.[0];
+      if (role) setColour(role, hex, score);
+      else if (others < 24) colors[`x-${others++}-${slugOf(label || "colour")}`] = hex;
+    }
+
+    /* Corners, from the component sections and the radius scale. */
+    const radius = /radius:?\s*`?(-?\d*\.?\d+\s*(?:px|rem|%))/i.exec(line)?.[1]?.replace(/\s+/g, "");
+    if (radius) {
+      if (/input|field|search/.test(h3) && !components.input) components.input = { rounded: radius };
+      if (/card|container/.test(h3) && !components.card) components.card = { rounded: radius };
+      if (/button/.test(h3) && !components["button-primary"]) components["button-primary"] = { rounded: radius };
+    }
+    if (/radius/.test(section) && /primary button/i.test(line)) {
+      const value = firstLength(line);
+      if (value) components["button-primary"] = { rounded: value };
+    }
+
+    if (/spacing/.test(section)) {
+      for (const m of line.matchAll(/(\d+(?:\.\d+)?)px/g)) {
+        if (Object.keys(spacing).length < 32) spacing[`s-${Object.keys(spacing).length}`] = `${m[1]}px`;
+      }
+    }
+
+    if (/shadow|depth|elevation/.test(section) && /rgba?\([^)]*\)\s*-?\d+px|\d+px\s+\d+px[^|]*rgba?\(/i.test(line)) {
+      components["x-shadow"] = { shadow: "stated" };
+    }
+  }
+
+  for (const style of Object.values(typography)) {
+    if (!isMap(style) || typeof style.fontFamily !== "string") continue;
+    const stack = fallbacks.get(style.fontFamily);
+    if (stack) style.fontFamily = `${style.fontFamily}, ${stack}`;
+  }
+
+  const doc: YamlMap = {};
+  if (Object.keys(colors).length > 0) doc.colors = colors;
+  if (Object.keys(typography).length > 0) doc.typography = typography;
+  if (Object.keys(components).length > 0) doc.components = components;
+  if (Object.keys(spacing).length > 0) doc.spacing = spacing;
+  return doc;
+}
+
+/** The first paragraph of prose under the title, for the card. */
+function proseDescription(body: string): string {
+  for (const block of body.split(/\n\s*\n/)) {
+    const text = block.trim();
+    if (!text || /^(#|[-*+|>]|```|\d+\.)/.test(text)) continue;
+    return plain(text);
+  }
+  return "";
 }
 
 /* ---------- value parsing ---------- */
@@ -456,7 +682,7 @@ function typeStyles(doc: YamlMap): TypeStyle[] {
 }
 
 const DISPLAY_NAME = /display|hero|mega|jumbo|giant/i;
-const HEADING_NAME = /heading|headline|^title|^h[1-6]$|subhead/i;
+const HEADING_NAME = /heading|headline|title|^h[1-6]$|subhead/i;
 const BODY_NAME = /^(body|paragraph|text|copy)(-(md|base|default|regular|m))?$/i;
 
 /** The file's styles split into rift's three tiers, by name first and by
@@ -490,9 +716,25 @@ export interface DesignMdTheme {
   /** Dark-mode action colour, when the file states one or the light one is
       a grey that needs its own dark partner. */
   brandDark?: string;
-  tintOn: boolean;
-  tintSeed?: string;
-  tintStrength?: number;
+  /** The primitives the file's stated colours rebuild, and the action
+      pointers it pins, in both themes (the light map applies to both,
+      the dark map over it in dark mode). These ride the theme's extra
+      overrides, so the export carries them like any preset's. */
+  extraOverrides?: Overrides;
+  extraOverridesDark?: Overrides;
+  /** The AI gradient: "fade", the action colour fading toward the page,
+      whenever the file names an action colour. The format carries no
+      gradient tokens, so the ring takes the brand rather than keeping
+      rift's own hues around a colour the file chose. */
+  aiGradient?: "fade";
+  /** The background field: "fade", the action colour's ramp fading toward
+      the page, whenever the file names an action colour. The format
+      carries no field, and the accents it fills come from its status and
+      secondary hues, which would put another brand's mood behind this one. */
+  ambientField?: "fade";
+  /** Ramps rebased around a stated colour (the status families), on the
+      Advanced colours lever. */
+  advanced?: AdvancedColorState;
   radiusScale?: number;
   pill?: boolean;
   density?: number;
@@ -533,7 +775,21 @@ const component = (doc: YamlMap, pattern: RegExp): YamlMap | undefined => {
 /** The action colour: what the primary button is filled with, which is the
     role rift's action colour plays. The colour named `primary` is the
     fallback, since some files reserve it for something narrower. */
-function fitAction(doc: YamlMap, colours: Array<[string, string]>, report: MatchRow[]) {
+/** What the action fit needs from the neutral fit: which mode the file
+    describes, and the grey scale the theme will have. */
+interface ActionContext {
+  described: "light" | "dark";
+  neutralExtras?: Overrides;
+  /** Dark mode's own neutral steps where they differ (see fitNeutrals). */
+  neutralExtrasDark?: Overrides;
+}
+
+function fitAction(
+  doc: YamlMap,
+  colours: Array<[string, string]>,
+  report: MatchRow[],
+  ctx: ActionContext
+) {
   const button = component(doc, /^button-primary$/) ?? component(doc, /^button-(primary|cta)/);
   const fromButton = button ? toHex(resolve(doc, button.backgroundColor)) : null;
   const named = (pattern: RegExp) => colours.find(([key]) => pattern.test(key))?.[1] ?? null;
@@ -560,65 +816,310 @@ function fitAction(doc: YamlMap, colours: Array<[string, string]>, report: Match
     brandDark = nearest?.hexDark;
   }
 
+  /* The states the file states for the primary button, and the other
+     shades it names on the same family, rebuild the action ramp through
+     them, so a stated hover is the hover rather than rift's guess at one. */
+  const stateOf = (pattern: RegExp, field: RegExp) => {
+    const node = component(doc, pattern);
+    const fromNode = node ? toHex(resolve(doc, node.backgroundColor)) : null;
+    const nested = button
+      ? Object.entries(button).find(([k]) => field.test(k))?.[1]
+      : undefined;
+    const fromField = isMap(nested)
+      ? toHex(resolve(doc, nested.backgroundColor))
+      : toHex(resolve(doc, nested));
+    return fromNode ?? fromField ?? named(new RegExp(`^(primary|brand|action)-${field.source}$`)) ?? undefined;
+  };
+  /* Variant names sit between the role and the state (Stripe's
+     button-primary-pill-pressed), and "press" is the format's short form. */
+  const states = {
+    hover: stateOf(/^button-(primary|cta)(-[a-z]+)?-hover$/, /hover/),
+    active: stateOf(/^button-(primary|cta)(-[a-z]+)?-(active|pressed?)$/, /(active|pressed?)/),
+  };
+  const shades = colours
+    .filter(([key]) => /^(primary|brand|action)[-_]/.test(key) && !/hover|active|press|dark|text|^on-|border|focus|bg/.test(key))
+    .map(([, hex]) => hex);
+  const statedDark = brandDark;
+  const neutralHex = (step: string) =>
+    ctx.neutralExtras?.[`--primitive-neutral-${step}`] ?? shippedNeutralHex(step) ?? "#000000";
+  const darkNeutralHex = (step: string) =>
+    ctx.neutralExtrasDark?.[`--primitive-neutral-${step}`] ?? neutralHex(step);
+  const imported = neutral
+    ? null
+    : importedActionColours({
+        key: brand,
+        statedDark,
+        states,
+        shades,
+        described: ctx.described,
+        pages: { light: neutralHex("01"), dark: darkNeutralHex("10") },
+        neutral: neutralHex,
+      });
+  const extra = imported ? imported.anchors.length - 1 : 0;
+  const lightKey = imported?.lightKey ?? brand;
+  const darkKey = imported?.darkKey ?? brandDark;
+
+  const clauses: string[] = [];
+  if (extra > 0) {
+    clauses.push(
+      `rebuilt through ${extra} more of the file's own shades${
+        imported!.pinned.length > 0 ? ` (its ${imported!.pinned.join(" and ")} fill${imported!.pinned.length > 1 ? "s" : ""} exactly)` : ""
+      }`
+    );
+  } else clauses.push("with rift's own steps between");
+  if (imported?.adjusted) {
+    clauses.push(
+      `${imported.adjusted} mode, which the file does not describe, uses ${imported.adjusted === "light" ? lightKey : darkKey} from the same ramp so the fill stays visible on its page`
+    );
+  } else if (darkKey && darkKey !== lightKey) clauses.push(`${darkKey} in dark mode`);
+  if (imported && imported.relabelled.length > 0) {
+    clauses.push(`the label switches to the neutral scale's end in ${imported.relabelled.join(" and ")} mode to hold its contrast`);
+  }
   report.push({
     lever: "Action colour",
     value: brand,
-    status: "approximated",
-    note: `${fromButton ? "The primary button's fill" : "The primary colour"}, set on rift's ${
-      neutral ? "neutral" : nearestRampFor(brand)
-    } ramp so every state keeps its contrast${brandDark ? `, with ${brandDark} in dark mode` : ""}.`,
+    status: extra > 0 ? "matched" : "approximated",
+    note: `${fromButton ? "The primary button's fill" : "The primary colour"}, on rift's ${
+      neutral ? "neutral" : imported?.ramp ?? nearestRampFor(brand)
+    } ramp, ${clauses.join("; ")}.`,
   });
-  return { brand, brandDark };
+  return {
+    brand: lightKey,
+    brandDark: darkKey && darkKey !== lightKey ? darkKey : undefined,
+    actionRamp: neutral ? "neutral" : imported?.ramp ?? nearestRampFor(brand),
+    actionExtras: imported
+      ? { light: { ...imported.primitives, ...imported.light }, dark: imported.dark }
+      : undefined,
+  };
 }
 
-/** The neutral tint: the cast of the file's light surfaces, fitted onto the
-    tint strength that gives rift's matching surface step the same cast. */
-function fitTint(colours: Array<[string, string]>, report: MatchRow[]) {
-  const surfaces = colours.filter(
-    ([key, hex]) =>
-      /canvas|surface|background|^bg|page|parchment|cloud|field|paper|base/i.test(key) &&
-      !/dark|tile|black|inverse|ink|^on-|chip|overlay|scrim/i.test(key) &&
-      lightnessOf(hex) > 0.85
-  );
-  if (surfaces.length === 0) {
-    report.push({ lever: "Neutral tint", value: "Off", status: "kept", note: "The file names no light surfaces." });
-    return { tintOn: false };
-  }
-  const [, castHex] = [...surfaces].sort(
-    ([, a], [, b]) => chromaOf(hexToRgb(b)) - chromaOf(hexToRgb(a))
-  )[0];
-  const cast = hexToRgb(castHex);
-  const castChroma = chromaOf(cast);
-  if (castChroma < 0.012) {
-    report.push({ lever: "Neutral tint", value: "Off", status: "matched", note: "The surfaces are greys with no cast worth tinting." });
-    return { tintOn: false };
-  }
+/** The neutral roles a file can name a colour for: the step each one fits
+    (NEUTRAL_ROLE_STEPS owns the steps), the key patterns that name it, in
+    preference order, and the lightness the colour must have to belong to a
+    light theme's role. A dark-first file names a near-black page, which
+    would turn the scale inside out, so its greys are left to rift.
+    Files commonly name a white canvas beside a soft one (canvas-soft,
+    parchment); rift's page sits a step below its white containers, so the
+    soft one is the page and the white one the container. */
+const NEUTRAL_ROLE_KEYS: Record<
+  string,
+  { keys: RegExp[]; light: (l: number) => boolean; dark: (l: number) => boolean }
+> = {
+  "--color-bg-page-primary": {
+    keys: [
+      /^(canvas|background|bg|surface|page)[-_](soft|parchment|subtle|muted|alt|secondary|page)$/,
+      /^(canvas|background|bg|page|background-primary|bg-primary|surface-page|page-background|parchment|paper)$/,
+    ],
+    light: (l) => l > 0.85,
+    dark: (l) => l < 0.2,
+  },
+  "--color-text-primary": {
+    keys: [/^(text|ink|foreground|fg|on-surface|on-background|body|text-primary|content|heading|headline)$/],
+    light: (l) => l < 0.3,
+    dark: (l) => l > 0.75,
+  },
+  "--color-bg-container-primary": {
+    keys: [
+      /^(surface|card|container|surface-primary|surface-card|panel|elevated|surface-elevated|white)$/,
+      /^(canvas|background|bg)$/,
+    ],
+    light: (l) => l > 0.85,
+    dark: (l) => l < 0.3,
+  },
+  "--color-bg-container-border": {
+    keys: [/^(border|divider|outline|hairline|stroke|line|border-default|border-subtle|separator)$/],
+    light: (l) => l > 0.6 && l < 0.96,
+    dark: (l) => l > 0.12 && l < 0.5,
+  },
+  "--color-text-secondary": {
+    keys: [/^(text|ink|foreground|fg|body)[-_](secondary|muted?(-\d+)?)$|^muted(-foreground)?$/],
+    light: (l) => l < 0.6,
+    dark: (l) => l > 0.45 && l < 0.9,
+  },
+  "--color-text-tertiary": {
+    keys: [/^(text|ink|foreground|fg|body)[-_](tertiary|subtle|faint|placeholder|muted?(-\d+)?)$|^subtle$/],
+    light: (l) => l > 0.25 && l < 0.75,
+    dark: (l) => l > 0.3 && l < 0.8,
+  },
+};
 
-  const [hue] = rgbToHsl(cast);
-  const seed = rgbToHex(hslToRgb([hue, 0.6, 0.45])).toUpperCase();
-  const shipped = neutralOverrides(seed, 0, "light");
-  const castLight = lightnessOf(castHex);
-  const [step] = Object.entries(shipped)
-    .filter(([name, value]) => /^--primitive-neutral-\d\d$/.test(name) && value.startsWith("#"))
-    .sort(([, a], [, b]) => Math.abs(lightnessOf(a) - castLight) - Math.abs(lightnessOf(b) - castLight))[0];
+/** Greys only: a deep navy ink still reads as ink, a teal does not. */
+const NEUTRAL_MAX_CHROMA = 0.25;
 
-  let strength = 1;
-  let bestGap = Infinity;
-  for (let k = 1; k <= 16; k += 1) {
-    const tinted = neutralOverrides(seed, k / 100, "light")[step];
-    const gap = Math.abs(chromaOf(hexToRgb(tinted)) - castChroma);
-    if (gap < bestGap) {
-      bestGap = gap;
-      strength = k;
+/**
+ * How far a stated grey's lightness may sit from rift's own value at the
+ * step it would anchor. Every neutral step does a second job in the other
+ * mode (light mode's secondary text is dark mode's secondary surface;
+ * dark mode's border fills its neutral buttons; light mode's tertiary
+ * text is its icon colour), so a grey far from the step's own depth would
+ * suit its stated role and break the other one: a mid-grey muted text
+ * turns dark surfaces grey, a hairline-light faint text turns icons
+ * invisible. Within the band the file's grey is kept exactly; outside it,
+ * a text grey may take the neighbouring text step instead, and otherwise
+ * the step keeps rift's value.
+ */
+const NEUTRAL_ANCHOR_BAND = 0.15;
+
+/** The other text step a muted or faint grey may take, per mode, when its
+    own step's depth is too far from it. */
+const TEXT_STEP_SIBLING: Record<"light" | "dark", Record<string, string>> = {
+  light: { "07": "06", "06": "07" },
+  dark: { "03": "04", "04": "03" },
+};
+
+const withinBand = (hex: string, step: string) => {
+  const shipped = shippedNeutralHex(step);
+  return shipped !== null && Math.abs(lightnessOf(hex) - lightnessOf(shipped)) <= NEUTRAL_ANCHOR_BAND;
+};
+
+/** The neutral scale, rebuilt through the greys the file names for rift's
+    neutral roles. A light-first file's greys land on the steps the light
+    theme paints each role with. A dark-first file (no light page, a dark
+    one) lands on the dark theme's steps instead: dark mode shows its
+    greys, light mode reads the same scale inverted, and the visitor's own
+    light or dark setting is never touched. The tint lever stays off either
+    way: a file that states its greys gets those greys, and one that states
+    none gets rift's, never a wash it did not ask for. */
+function fitNeutrals(colours: Array<[string, string]>, report: MatchRow[]) {
+  const read = (mode: "light" | "dark") => {
+    const anchors: Array<[string, string]> = [];
+    const named: string[] = [];
+    const claimed = new Set<string>();
+    const used = new Set<string>();
+    for (const { cssVar, step: lightStep, darkStep } of NEUTRAL_ROLE_STEPS) {
+      const rule = NEUTRAL_ROLE_KEYS[cssVar];
+      let step = mode === "light" ? lightStep : darkStep;
+      let hit: [string, string] | undefined;
+      for (const pattern of rule.keys) {
+        hit = colours.find(
+          ([key, hex]) =>
+            !claimed.has(key) &&
+            pattern.test(key.toLowerCase()) &&
+            rule[mode](lightnessOf(hex)) &&
+            chromaOf(hexToRgb(hex)) < NEUTRAL_MAX_CHROMA &&
+            /* Step 01 is the light page and the dark ink. Pure white there
+               would sit the light page flush with rift's white containers,
+               so the step keeps rift's grey instead. */
+            !(step === "01" && hex === "#FFFFFF")
+        );
+        if (hit) break;
+      }
+      if (hit && !withinBand(hit[1], step)) {
+        /* Too far from the step's depth for its other job. A text grey may
+           take the neighbouring text step; anything else is left out. */
+        const sibling = TEXT_STEP_SIBLING[mode][step];
+        if (sibling && !used.has(sibling) && withinBand(hit[1], sibling)) step = sibling;
+        else hit = undefined;
+      }
+      if (hit && !used.has(step)) {
+        claimed.add(hit[0]);
+        used.add(step);
+        anchors.push([step, hit[1]]);
+        named.push(hit[0]);
+      }
     }
+    return { anchors, named, page: anchors.some(([s]) => s === (mode === "light" ? "01" : "10")) };
+  };
+
+  const light = read("light");
+  const dark = read("dark");
+  const darkFirst = !light.page && dark.page;
+  const { anchors, named } = darkFirst ? dark : light;
+  const rebuilt = anchoredNeutralOverrides(anchors);
+  if (!rebuilt) {
+    report.push({ lever: "Neutral scale", value: "Rift's", status: "kept", note: "The file names no greys for rift's roles, so the scale and its tint stay rift's." });
+    return { neutralExtras: undefined, neutralExtrasDark: undefined, darkFirst };
   }
+  const used = rebuilt.anchors.map(([step]) => named[anchors.findIndex(([s]) => s === step)]);
+
+  /* The mode the file does not describe reads the scale inverted, so its
+     surfaces are built from the described mode's ink end: a light file's
+     deep navy text becomes the dark page. Those surface steps keep their
+     hue but only a hint of its saturation (about what the Tint neutrals
+     lever gives), so the undescribed mode's page reads as a tinted
+     neutral rather than a field of brand colour. The described mode keeps
+     every stated grey exactly; the two modes differ through the extras. */
+  const other = darkFirst ? "light" : "dark";
+  const exact: Overrides = {};
+  const muted: Overrides = {};
+  for (const step of NEUTRAL_SURFACE_STEPS[other]) {
+    const hex = rebuilt.overrides[`--primitive-neutral-${step}`];
+    if (!hex) continue;
+    const [h, s, l] = rgbToHsl(hexToRgb(hex));
+    if (s <= SURFACE_MAX_SATURATION) continue;
+    Object.assign(exact, neutralStepOverrides(step, hex));
+    Object.assign(muted, neutralStepOverrides(step, rgbToHex(hslToRgb([h, SURFACE_MAX_SATURATION, l])).toUpperCase()));
+  }
+  const mutedAny = Object.keys(muted).length > 0;
+
   report.push({
-    lever: "Neutral tint",
-    value: `${strength}%`,
-    status: "approximated",
-    note: `The cast of ${castHex}, fitted onto rift's neutral scale.`,
+    lever: "Neutral scale",
+    value: `${rebuilt.anchors.length} greys`,
+    status: "matched",
+    note: `${
+      darkFirst
+        ? `A dark-first file: its ${used.join(", ")} sit on the steps dark mode paints those roles with, and light mode reads the same scale inverted.`
+        : `Rebuilt through the file's ${used.join(", ")}, each on the step that paints its role at its depth; greys too far from any step's depth keep rift's.`
+    }${mutedAny ? ` In ${other} mode, which the file does not describe, the surfaces keep the greys' hue at a neutral's saturation.` : ""}`,
   });
-  return { tintOn: true, tintSeed: seed, tintStrength: strength };
+  /* Base extras apply in both modes and the dark extras over them in dark,
+     so a muted light mode is the base with the exact values restored for
+     dark, and a muted dark mode is the exact base with the muted values
+     for dark. */
+  return darkFirst
+    ? { neutralExtras: { ...rebuilt.overrides, ...muted }, neutralExtrasDark: mutedAny ? exact : undefined, darkFirst }
+    : { neutralExtras: rebuilt.overrides, neutralExtrasDark: mutedAny ? muted : undefined, darkFirst };
+}
+
+/** The most saturation an undescribed mode's surface step keeps. A navy
+    ink at 0.65 becomes a cool near-black; a grey already under it is
+    left alone. */
+const SURFACE_MAX_SATURATION = 0.18;
+
+/** The status families: each status colour the file names rebases its
+    ramp around it, the step the status border and the ramp's key share.
+    A family the action colour already owns keeps the action's rebuild. */
+const STATUS_FAMILIES: ReadonlyArray<{ ramp: string; label: string; key: RegExp }> = [
+  { ramp: "red", label: "Error", key: /^(error|danger|destructive|critical|negative)$/ },
+  { ramp: "green", label: "Positive", key: /^(success|positive)$/ },
+  { ramp: "orange", label: "Warning", key: /^(warning|caution|attention)$/ },
+  { ramp: "blue", label: "Info", key: /^(info|informational|notice)$/ },
+];
+
+/** How far a stated status colour's lightness may sit from its family's
+    shipped key step and still be used exactly. */
+const STATUS_DEPTH_BAND = 0.12;
+
+function fitStatus(colours: Array<[string, string]>, actionRamp: string | undefined, report: MatchRow[]) {
+  const bases: Record<string, string> = {};
+  const stated: string[] = [];
+  for (const family of STATUS_FAMILIES) {
+    const hit = colours.find(([key]) =>
+      family.key.test(key.toLowerCase().replace(/^(color|status|semantic|feedback)[-_]/, ""))
+    );
+    if (!hit || family.ramp === actionRamp) continue;
+    const [hue, sat, light] = rgbToHsl(hexToRgb(hit[1]));
+    if (sat < 0.25) continue;
+    /* The family is rebased around its key step, which status borders use
+       directly and from which the text, icon and wash steps are derived.
+       A status colour tuned for one mode (a pale red for a dark UI) at
+       that step would leave the other mode's icons and text too faint, so
+       a stated colour far from the step's shipped depth keeps its hue and
+       saturation and takes rift's depth: the colour the file chose, at the
+       contrast rift's status roles are built on. */
+    const shipped = CHROMATIC_RAMPS.find((r) => r.name === family.ramp)?.steps.find(([s]) => s === "07")?.[1];
+    const shippedLight = shipped ? lightnessOf(shipped) : light;
+    const atDepth = Math.abs(light - shippedLight) <= STATUS_DEPTH_BAND;
+    const base = atDepth ? hit[1] : rgbToHex(hslToRgb([hue, sat, shippedLight])).toUpperCase();
+    bases[family.ramp] = base;
+    stated.push(`${family.label.toLowerCase()} ${hit[1]}${atDepth ? "" : ` (at rift's depth, ${base})`}`);
+  }
+  report.push(
+    stated.length > 0
+      ? { lever: "Status colours", value: `${stated.length} of 4`, status: "matched", note: `Rebuilt around the file's ${stated.join(", ")}; the rest keep rift's roles.` }
+      : { lever: "Status colours", value: "Rift's", status: "kept", note: "The file names no status colours." }
+  );
+  return { statusBases: stated.length > 0 ? bases : undefined };
 }
 
 /** Radius and pill: the input's corner (rift's inputs and standard
@@ -825,48 +1326,78 @@ function fitElevation(doc: YamlMap, body: string, report: MatchRow[]) {
 }
 
 /**
- * Reads a DESIGN.md's text into lever positions. Null when the file has no
- * front matter with tokens in it, which is the case the caller reports.
+ * Reads a DESIGN.md's text into lever positions: the front matter when it
+ * carries tokens, the prose otherwise. Never null: a file with nothing to
+ * read reports every lever kept, and the theme is the base one.
  */
-export function readDesignMd(text: string, catalogue: FontCatalogue): DesignMdTheme | null {
-  const normalised = text.replace(/\r\n?/g, "\n");
-  const doc = parseFrontMatter(normalised);
-  if (!doc || !(isMap(doc.colors) || isMap(doc.colours) || isMap(doc.typography))) return null;
+export function readDesignMd(text: string, catalogue: FontCatalogue): DesignMdTheme {
+  const normalised = cleanText(text);
+  const front = parseFrontMatter(normalised);
+  const fromFront = Boolean(front && (isMap(front.colors) || isMap(front.colours) || isMap(front.typography)));
   const body = normalised.replace(/^﻿?---[\s\S]*?\n---[^\n]*\n?/, "");
+  const doc = fromFront && front ? front : proseDoc(body);
 
   const report: MatchRow[] = [];
   const colours = colourEntries(doc);
-  const action = fitAction(doc, colours, report);
-  const tint = fitTint(colours, report);
+  /* Greys first: the action fit needs each mode's page to keep its fill
+     visible, and the mode the file describes. The report keeps its usual
+     order, action colour first. */
+  const neutralReport: MatchRow[] = [];
+  const { neutralExtras, neutralExtrasDark, darkFirst } = fitNeutrals(colours, neutralReport);
+  const { actionExtras, actionRamp, ...action } = fitAction(doc, colours, report, {
+    described: darkFirst ? "dark" : "light",
+    neutralExtras,
+    neutralExtrasDark,
+  });
+  report.push(...neutralReport);
+  const { statusBases } = fitStatus(colours, actionRamp, report);
   const shape = fitShape(doc, report);
   const density = fitDensity(doc, report);
   const type = fitType(doc, typographyProse(body), catalogue, report);
   const elevation = fitElevation(doc, body, report);
 
-  const accents = accentsFromColours(colours.map(([, hex]) => hex)) ?? undefined;
+  const accents = accentsFromColours(colours.map(([, hex]) => hex), action.brand) ?? undefined;
   report.push(
     accents
       ? { lever: "Accents", value: "Six roles", status: "approximated", note: "The file's colours, placed on rift's six accent hues." }
       : { lever: "Accents", value: "Rift default", status: "kept", note: "The file has too few distinct hues to fill six roles." }
   );
   report.push(
-    { lever: "Motion", value: "100%", status: "kept", note: "The format carries no motion tokens." },
-    { lever: "Status colours", value: "Rift's", status: "kept", note: "Info, positive, warning and error keep rift's roles." }
+    action.brand
+      ? { lever: "AI gradient", value: "Action fade", status: "approximated", note: "The file states no gradient, so the ring fades the action colour toward the page: lighter in light mode, deeper in dark." }
+      : { lever: "AI gradient", value: "Rift default", status: "kept", note: "The file names no action colour to fade." },
+    action.brand
+      ? { lever: "Background field", value: "Action fade", status: "approximated", note: "The file states no field, so the shader banner is the action colour's ramp fading toward the page." }
+      : { lever: "Background field", value: "Rift default", status: "kept", note: "The file names no action colour, so the field follows the accents." },
+    { lever: "Motion", value: "100%", status: "kept", note: "The format carries no motion tokens." }
   );
+
+  /* The stated colours as overrides: the rebuilt grey scale first, then
+     the action ramp and its pinned states, which own their family. */
+  const extraOverrides = { ...neutralExtras, ...actionExtras?.light };
+  const extraOverridesDark = { ...neutralExtrasDark, ...actionExtras?.dark };
 
   /* Names in the format are often slugs ("Apple-design-analysis"); joined
      words read as a title once the hyphens and underscores are spaces. */
   const rawTitle = resolve(doc, doc.name)?.trim() || (/^#\s+(.+)$/m.exec(body)?.[1] ?? "").trim();
   const spaced = rawTitle.replace(/(?<=\w)[-_]+(?=\w)/g, " ").replace(/\s+/g, " ").trim();
-  const title = spaced.charAt(0).toUpperCase() + spaced.slice(1);
-  const description = (resolve(doc, doc.description) ?? "").trim();
+  const title = capText(spaced.charAt(0).toUpperCase() + spaced.slice(1), TITLE_MAX);
+  const description = capText(
+    (resolve(doc, doc.description) ?? "").trim() || (fromFront ? "" : proseDescription(body)),
+    DESCRIPTION_MAX
+  );
   const swatches = [...new Set([action.brand, ...colours.map(([, hex]) => hex)].filter(Boolean) as string[])].slice(0, 8);
 
   return {
     title,
     description,
     ...action,
-    ...tint,
+    aiGradient: action.brand ? "fade" : undefined,
+    ambientField: action.brand ? "fade" : undefined,
+    extraOverrides: Object.keys(extraOverrides).length > 0 ? extraOverrides : undefined,
+    extraOverridesDark:
+      extraOverridesDark && Object.keys(extraOverridesDark).length > 0 ? extraOverridesDark : undefined,
+    advanced: statusBases ? { ...DEFAULT_ADVANCED, bases: statusBases } : undefined,
     ...shape,
     ...density,
     ...type,
@@ -884,16 +1415,63 @@ export interface DesignMdSource {
 }
 
 /** Whether a file is a candidate DESIGN.md, by name or type. */
-export const isDesignMdFile = (file: File) =>
-  /\.(md|markdown)$/i.test(file.name) || file.type === "text/markdown";
+/** The text files the importer reads, by extension alone: markdown, and
+    plain text, since a DESIGN.md saved as .txt is still one. A type the
+    browser reports is not enough on its own: it guesses text/plain for
+    CSVs, logs and files with no extension, none of which is a DESIGN.md. */
+export const isDesignMdFile = (file: File) => /\.(md|markdown|txt)$/i.test(file.name);
+
+/* ---------- untrusted text ----------
+   The file is a stranger's text. It is never executed, never rendered as
+   markup (React escapes what the card prints) and never uploaded, and no
+   raw string from it reaches a style: colours pass through toHex, lengths
+   through toPx, faces through the built Google catalogue. These guards
+   cover what is left: a binary passed off as text, characters that
+   reorder or hide what the card shows, and text long enough to slow the
+   patterns down. */
+
+const TITLE_MAX = 120;
+const DESCRIPTION_MAX = 400;
+
+/** Binary content: a NUL byte, or more than one character in a hundred
+    outside printable text and ordinary whitespace. */
+function looksBinary(text: string): boolean {
+  if (text.includes("\u0000")) return true;
+  const sample = text.slice(0, 64 * 1024);
+  const control = sample.match(/[\u0001-\u0008\u000B\u000C\u000E-\u001F\u007F]/g)?.length ?? 0;
+  return sample.length > 0 && control / sample.length > 0.01;
+}
+
+/** Line endings normalised, and control and bidirectional-override
+    characters removed, so nothing can reorder or hide the text the card
+    prints. Tabs and newlines stay. */
+const cleanText = (text: string) =>
+  text
+    .replace(/\r\n?/g, "\n")
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F​-‏‪-‮⁦-⁩]/g, "");
+
+/** A string cut to a length at a word, with an ellipsis when cut. */
+function capText(text: string, max: number): string {
+  if (text.length <= max) return text;
+  const cut = text.slice(0, max);
+  return `${cut.slice(0, Math.max(cut.lastIndexOf(" "), max - 20)).trimEnd()}…`;
+}
+
+/** Why a file could not be read, for the caller to show. */
+export type DesignMdRejection = "type" | "size" | "binary";
 
 /**
  * Reads a local DESIGN.md and fits the levers to it. The text is read in
  * this tab and nowhere else; the font catalogue is imported on demand, so
- * the playground pays for it only when a file is actually dropped.
+ * the playground pays for it only when a file is actually dropped. Any
+ * text file within the size cap is read: one with nothing the importer
+ * recognises gives the base theme with every lever reported kept.
  */
-export async function themeFromDesignMd(file: File): Promise<DesignMdSource | null> {
-  if (!isDesignMdFile(file) || file.size > DESIGN_MD_MAX_BYTES) return null;
+export async function themeFromDesignMd(
+  file: File
+): Promise<DesignMdSource | { rejected: DesignMdRejection }> {
+  if (!isDesignMdFile(file)) return { rejected: "type" };
+  if (file.size > DESIGN_MD_MAX_BYTES) return { rejected: "size" };
   try {
     const [text, catalogue] = await Promise.all([
       file.text(),
@@ -902,9 +1480,9 @@ export async function themeFromDesignMd(file: File): Promise<DesignMdSource | nu
         substitutes: m.FONT_SUBSTITUTES,
       })),
     ]);
-    const theme = readDesignMd(text, catalogue);
-    return theme ? { name: file.name, theme } : null;
+    if (looksBinary(text)) return { rejected: "binary" };
+    return { name: file.name, theme: readDesignMd(text, catalogue) };
   } catch {
-    return null;
+    return { rejected: "binary" };
   }
 }

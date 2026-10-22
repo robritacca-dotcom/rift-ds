@@ -54,10 +54,10 @@ import { PICKER_FONT_PARAMS, THEME_PRESETS, type ThemePreset } from "@/lib/theme
 import { BASE_THEME_ID, isBaseTheme, SERVED_THEME_ID } from "@/lib/theme/brand";
 import { useAppliedOverrides, useSiteTheme } from "@/lib/theme/use-theme-overrides";
 import {
-  buildThemedAgentsMd,
   buildAgentPrompt,
-  buildThemeCss,
   buildThemeMarkdown,
+  buildThemedAgentsMd,
+  buildThemeCss,
   themeFromLevers,
 } from "@/lib/theme/theme-export";
 import { MCP_ENDPOINT } from "@/lib/mcp-clients";
@@ -75,7 +75,7 @@ import {
   type DesignMdSource,
 } from "@/lib/theme/design-md";
 import AdvancedColorsDialog from "./AdvancedColorsDialog";
-import ExportThemeDialog, { downloadTextFile, EXPORT_FILES, type ExportTab } from "./ExportThemeDialog";
+import ExportThemeDialog from "./ExportThemeDialog";
 import { AGENT_STARTER } from "@/data/agent-starter.generated";
 import ChatDirector from "./ChatDirector";
 import InspectMode from "@/components/InspectMode/InspectMode";
@@ -371,7 +371,6 @@ export default function PlaygroundPage() {
   const [controlsOpen, setControlsOpen] = useState(false);
   const [advOpen, setAdvOpen] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
-  const [exportTab, setExportTab] = useState<ExportTab>("css");
   const [advColors, setAdvColors] = useState<AdvancedColorState>(DEFAULT_ADVANCED);
   /* The ambient accent sextet — the six --color-core-accent-* roles,
      which colour chart series 2–7 and, through the --color-ambient-*
@@ -922,21 +921,15 @@ export default function PlaygroundPage() {
     };
     return {
       css: buildThemeCss(theme),
+      agents: buildThemedAgentsMd(theme, context, AGENT_STARTER),
       markdown: buildThemeMarkdown(theme, context),
       prompt: buildAgentPrompt(theme, context),
-      agents: buildThemedAgentsMd(theme, context, AGENT_STARTER),
     };
   }, [preset, brand, presetExtras, tintOn, tintSeed, tintStrength, radiusScale, pill, density, typeScale, motionScale, elevation, displayWeight, headingWeight, tracking, iconWeight, iconFill, fontLabel, headingFontLabel, accents, advColors, productName]);
 
-  /** Export, from the rail or a source card: the themed AGENTS.md
-      downloads at once (the one file a coding agent needs), and the dialog
-      opens on it, with the theme's separate files a tab away. */
-  const openExport = () => {
-    const agents = EXPORT_FILES.find((file) => file.value === "agents")!;
-    downloadTextFile(exported.agents, agents.filename, agents.mime);
-    setExportTab("agents");
-    setExportOpen(true);
-  };
+  /** Export, from the rail or a source card: opens the dialog on the
+      themed AGENTS.md, the one file a coding agent needs. */
+  const openExport = () => setExportOpen(true);
 
   /* The Chat view's levers — hosted by the chat director's rail on desktop,
      or slotted into the Drawer above the event list on compact screens, so
@@ -1092,6 +1085,8 @@ export default function PlaygroundPage() {
               isPristine={isPristine}
               cssSnippet={exported.css}
               agentsMd={exported.agents}
+              themeMd={exported.markdown}
+              agentPrompt={exported.prompt}
               onPreset={applyPreset}
               onBrand={pickBrand}
               onTintOn={tintLever(setTintOn)}
@@ -1313,19 +1308,14 @@ export default function PlaygroundPage() {
           }}
         />
 
-        {/* The theme to take away, from any view: one AGENTS.md (the agent
-            starter with this theme and its CSS set in), and the same theme as
-            separate files, the CSS, a THEME.md describing the look and a
-            setup prompt. The rail's copy button grabs the CSS or the
-            AGENTS.md without opening this. */}
+        {/* The theme to take away, from any view: one AGENTS.md, the agent
+            starter with this theme and its CSS set in. The rail's copy
+            button grabs the CSS alone, or the AGENTS.md, without opening
+            this, and its menu the theme's separate pieces too (THEME.md and
+            the setup prompt). */}
         <ExportThemeDialog
           open={exportOpen}
           onOpenChange={setExportOpen}
-          tab={exportTab}
-          onTabChange={setExportTab}
-          css={exported.css}
-          markdown={exported.markdown}
-          prompt={exported.prompt}
           agents={exported.agents}
         />
 

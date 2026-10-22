@@ -64,6 +64,10 @@ export interface PlaygroundControlsProps {
   /** The themed AGENTS.md: the agent starter with this theme and its CSS
       set in, the one file a coding agent needs. */
   agentsMd: string;
+  /** The same theme as separate pieces, for whoever wants one on its own:
+      THEME.md (the look in words) and a setup prompt for a coding agent. */
+  themeMd: string;
+  agentPrompt: string;
   /** View-specific control groups (e.g. the chat view's transport picker),
       slotted after the shared levers so those never shift between views —
       the rail stays consistent where the views agree and contextual where
@@ -108,8 +112,7 @@ export interface PlaygroundControlsProps {
   onReset: () => void;
   /** Opens the advanced-mode dialog (every primitive ramp). */
   onOpenAdvanced: () => void;
-  /** Exports the theme: downloads the themed AGENTS.md and opens the export
-      dialog on it, with the CSS, THEME.md and the agent prompt beside it. */
+  /** Opens the export dialog on the themed AGENTS.md. */
   onExport: () => void;
   /** The floating panel is folded into its toggle (panel variant only). */
   collapsed?: boolean;
@@ -141,6 +144,8 @@ export default function PlaygroundControls({
   isPristine,
   cssSnippet,
   agentsMd,
+  themeMd,
+  agentPrompt,
   contextual,
   variant = "panel",
   onPreset,
@@ -198,7 +203,8 @@ export default function PlaygroundControls({
       ? allPresetOptions
       : allPresetOptions.filter((o) => o.value !== "custom");
 
-  const [copied, setCopied] = useState<"css" | "agents" | null>(null);
+  type CopyWhat = "css" | "agents" | "theme" | "prompt";
+  const [copied, setCopied] = useState<CopyWhat | null>(null);
   const copiedTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -207,9 +213,21 @@ export default function PlaygroundControls({
     };
   }, []);
 
-  const copy = async (what: "css" | "agents") => {
+  const copyText: Record<CopyWhat, string> = {
+    css: cssSnippet,
+    agents: agentsMd,
+    theme: themeMd,
+    prompt: agentPrompt,
+  };
+  const copiedLabel: Record<CopyWhat, string> = {
+    css: "Copied",
+    agents: "Copied AGENTS.md",
+    theme: "Copied THEME.md",
+    prompt: "Copied prompt",
+  };
+  const copy = async (what: CopyWhat) => {
     try {
-      await navigator.clipboard.writeText(what === "css" ? cssSnippet : agentsMd);
+      await navigator.clipboard.writeText(copyText[what]);
       setCopied(what);
       if (copiedTimer.current) clearTimeout(copiedTimer.current);
       copiedTimer.current = setTimeout(() => setCopied(null), MOTION_FEEDBACK_RESET_MS);
@@ -479,14 +497,11 @@ export default function PlaygroundControls({
           <SplitButton
             size="compact"
             className={styles.railSplit}
-            label={
-              copied === "css"
-                ? "Copied"
-                : copied === "agents"
-                  ? "Copied AGENTS.md"
-                  : "Copy CSS"
-            }
-            variant="primary"
+            label={copied ? copiedLabel[copied] : "Copy CSS"}
+            /* Secondary: the theme's one-file export below is the primary
+               way to take it away; the CSS and the separate pieces are for
+               whoever wants just one. */
+            variant="secondary"
             iconLeft={copied ? "check" : "content_copy"}
             disabled={isPristine}
             onClick={() => copy("css")}
@@ -497,13 +512,22 @@ export default function PlaygroundControls({
                 icon: "smart_toy",
                 onClick: () => copy("agents"),
               },
+              {
+                label: "Copy THEME.md",
+                icon: "description",
+                onClick: () => copy("theme"),
+              },
+              {
+                label: "Copy agent prompt",
+                icon: "chat",
+                onClick: () => copy("prompt"),
+              },
             ]}
           />
           <Button
             size="compact"
             label="Export theme"
             variant="primary"
-            tone="neutral"
             iconLeft="ios_share"
             onClick={onExport}
           />

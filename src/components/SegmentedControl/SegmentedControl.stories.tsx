@@ -53,6 +53,18 @@ export const WithIcons: Story = {
   },
 };
 
+export const IconsOnly: Story = {
+  args: {
+    segments: [
+      { label: 'Grid', value: 'grid', icon: 'grid_view' },
+      { label: 'List', value: 'list', icon: 'view_list' },
+      { label: 'Board', value: 'board', icon: 'view_column' },
+    ],
+    defaultValue: 'grid',
+    showLabels: false,
+  },
+};
+
 export const Neutral: Story = {
   args: {
     segments: [

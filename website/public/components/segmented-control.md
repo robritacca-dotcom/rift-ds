@@ -25,5 +25,6 @@ Generated from the rift-ds registry and prop JSDoc, version 1.12.0. The same dat
 | variant | `"neutral" \| "primary"` | no |  | Legacy name for `tone`, from before colour moved onto its own prop: `primary` is `tone="default"`. Deprecated: Use `tone` instead. |
 | fullWidth | `boolean` | no | `false` | Full width — segments fill container |
 | collapse | `boolean` | no | `false` | Shed parts rather than overflow when the container is too narrow for the strip. The control measures its own natural widths and drops to labels alone, then to icons alone, in that order — the label carries the meaning, so the icon goes first. It only falls to icons when every segment has one, and hidden labels stay in the accessibility tree, so nothing loses its name. Off by default; the control overflows as before. |
+| showLabels | `boolean` | no | `true` | Show each segment's label beside its icon. Set it to `false` for an icon-only strip: the labels stay in the accessibility tree as the segments' names, and a segment without an icon keeps its label on screen. Defaults to `true`. |
 | ariaLabel | `string` | no |  | Legacy accessible-name prop for the strip. Deprecated: Pass the native `aria-label` attribute instead. |
 | className | `string` | no | `` | Additional CSS classes |

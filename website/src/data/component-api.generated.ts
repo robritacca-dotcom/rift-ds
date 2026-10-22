@@ -10531,6 +10531,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "false"
           },
           {
+            "name": "showLabels",
+            "type": "boolean",
+            "required": false,
+            "description": "Show each segment's label beside its icon. Set it to `false` for an\nicon-only strip: the labels stay in the accessibility tree as the\nsegments' names, and a segment without an icon keeps its label on\nscreen. Defaults to `true`.",
+            "defaultValue": "true"
+          },
+          {
             "name": "ariaLabel",
             "type": "string",
             "required": false,

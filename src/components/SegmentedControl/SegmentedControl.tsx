@@ -70,6 +70,13 @@ type SegmentedControlOwnProps = {
    */
   collapse?: boolean;
   /**
+   * Show each segment's label beside its icon. Set it to `false` for an
+   * icon-only strip: the labels stay in the accessibility tree as the
+   * segments' names, and a segment without an icon keeps its label on
+   * screen. Defaults to `true`.
+   */
+  showLabels?: boolean;
+  /**
    * Legacy accessible-name prop for the strip.
    *
    * @deprecated Pass the native `aria-label` attribute instead.
@@ -105,6 +112,7 @@ export const SegmentedControl = React.forwardRef<HTMLDivElement, SegmentedContro
       variant,
       fullWidth = false,
       collapse = false,
+      showLabels = true,
       ariaLabel,
       className = '',
       ...rest
@@ -180,8 +188,13 @@ export const SegmentedControl = React.forwardRef<HTMLDivElement, SegmentedContro
       // one frame of it.
       setCollapseState({ key: collapseKey, mode: 'full' });
     }
-    const collapseMode: CollapseMode =
-      collapseState.key === collapseKey ? collapseState.mode : 'full';
+    // `showLabels={false}` asks for the icon rung outright; the label is
+    // hidden per segment only where an icon stands in for it.
+    const collapseMode: CollapseMode = !showLabels
+      ? 'icons'
+      : collapseState.key === collapseKey
+        ? collapseState.mode
+        : 'full';
 
     const classes = [
       baseClass,

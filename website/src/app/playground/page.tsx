@@ -5,6 +5,7 @@ import StageToolbar from "@/components/StageToolbar/StageToolbar";
 import { HiddenBackground } from "@/components/BlurBackground/BlurBackground";
 import DotBackground from "@/components/DotBackground/DotBackground";
 import StageControlBar, {
+  StageControlBarActionSlot,
   StageControlBarEndSlot,
   StageControlBarSeparator,
 } from "@/components/StageControlBar/StageControlBar";
@@ -95,7 +96,15 @@ import {
 } from "rift-ds/chat/demo";
 import MockNav from "./views/MockNav";
 import TypeView from "./views/TypeView";
-import DashboardView from "./views/DashboardView";
+import TemplatesView from "./views/TemplatesView";
+import TemplatesRail, { DEFAULT_TEMPLATE_HREF } from "./TemplatesRail";
+import ComponentsRail, {
+  COMPONENT_SECTIONS,
+  sectionAnchor,
+  type ComponentSectionId,
+  type ComponentsRailState,
+} from "./ComponentsRail";
+import TypeRail, { DEFAULT_TYPE_SAMPLE, type TypeRailState } from "./TypeRail";
 import { stageMobileCss } from "./stage-mobile-css";
 import { createFetchTransport, useChatWidget } from "rift-ds/chat";
 import { SiteChatProvider } from "@/components/SiteChat/SiteChatProvider";
@@ -125,12 +134,12 @@ import FeedbackSection from "./sections/FeedbackSection";
 
 /* The tool's four lenses on the same theme state. One page, one set of
    levers — switching views never resets what you've styled. */
-type View = "components" | "type" | "chat" | "dashboard";
+type View = "components" | "type" | "chat" | "templates";
 const VIEWS = [
   { value: "components", label: "Components" },
-  { value: "type", label: "Type" },
-  { value: "chat", label: "Chat" },
-  { value: "dashboard", label: "Dashboard" },
+  { value: "type", label: "Typography" },
+  { value: "chat", label: "AI Chat" },
+  { value: "templates", label: "Templates" },
 ];
 
 /* Below the tool's desktop breakpoint there is no room for the edge
@@ -229,7 +238,9 @@ export default function PlaygroundPage() {
     // MegaNav's navigation effect).
     const q = new URLSearchParams(window.location.search).get("view");
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (q === "chat" || q === "type" || q === "dashboard") setView(q);
+    if (q === "chat" || q === "type" || q === "templates") setView(q);
+    /* The Templates view was the Dashboard view, and links to it remain. */
+    else if (q === "dashboard") setView("templates");
   }, []);
   /* Flipped on every view switch: the layout swaps between two copies of
      the entrance keyframes, so the panels and the stage arrive again
@@ -299,7 +310,23 @@ export default function PlaygroundPage() {
   /* The floating rails can each fold into their toggle; the layout reads
      the flags to hand the freed room to the workspace. */
   const [themeRailCollapsed, setThemeRailCollapsed] = useState(false);
-  const [chatRailCollapsed, setChatRailCollapsed] = useState(false);
+  /* The right rail's fold, shared by the two views that seat one (the chat
+     director and the templates rail), since they hold the same seat. */
+  const [rightRailCollapsed, setRightRailCollapsed] = useState(false);
+  /* The template the Templates view stages, kept across view switches. */
+  const [templateHref, setTemplateHref] = useState(DEFAULT_TEMPLATE_HREF);
+  /* The Components and Type views' own rails: viewing choices, kept
+     across view switches like the levers, never part of the theme. */
+  const [componentsView, setComponentsView] = useState<ComponentsRailState>({
+    hidden: new Set(),
+    surface: "page",
+  });
+  const [typeView, setTypeView] = useState<TypeRailState>({
+    sample: DEFAULT_TYPE_SAMPLE.value,
+    heading: DEFAULT_TYPE_SAMPLE.heading,
+    body: DEFAULT_TYPE_SAMPLE.body,
+    hiddenTiers: new Set(),
+  });
 
   /* The staged shader banner's levers (Components view). They tune the
      banner only, never the site background, and no theme preset owns them,
@@ -346,10 +373,11 @@ export default function PlaygroundPage() {
      stage-aware grids — so Mobile shows what a phone actually renders.
      On a compact screen the real queries fire and the stage stands
      down; the Chat view reads the lever as its widget preset instead. */
-  /* The Dashboard view reads the lever too, but as which template to stage
-     (the phone version draws its own handset), not as a column width. */
+  /* The Templates view reads the lever too, but as which version of the
+     template to stage (the phone version draws its own handset), not as a
+     column width. */
   const stageMobile =
-    view !== "chat" && view !== "dashboard" && stageSize === "mobile" && !compact;
+    view !== "chat" && view !== "templates" && stageSize === "mobile" && !compact;
   const stageCss = stageMobile ? stageMobileCss() : "";
   /* The dotted ground, on by default. Remembered per browser as a viewing
      preference: storage can be blocked, so a read or write that throws
@@ -1129,12 +1157,60 @@ export default function PlaygroundPage() {
                       artifacts={artifactPanel}
                     />
                   </>
+                ) : view === "templates" && compact ? (
+                  /* The templates rail's picker, the same way. */
+                  <TemplatesRail
+                    variant="drawer"
+                    value={templateHref}
+                    onValueChange={setTemplateHref}
+                  />
+                ) : view === "type" && compact ? (
+                  /* And the type rail's specimen and tiers. */
+                  <TypeRail variant="drawer" state={typeView} onChange={setTypeView} />
+                ) : view === "components" && compact ? (
+                  /* And the components rail's, after the shader's levers. */
+                  <>
+                    {shaderLevers}
+                    <ComponentsRail
+                      variant="drawer"
+                      state={componentsView}
+                      onChange={setComponentsView}
+                    />
+                  </>
                 ) : (
                   shaderLevers || undefined
                 )
               }
             />
   );
+
+  /* The showcase's sections by the components rail's ids. */
+  const componentSection = (id: ComponentSectionId) => {
+    switch (id) {
+      case "charts":
+        return <ChartsSection brand={effectiveBrand} />;
+      case "maps":
+        return <MapsSection />;
+      case "data-display":
+        return <DataDisplaySection />;
+      case "product-header":
+        return <MockNav brandName={productName.trim() || "Acme Corp"} />;
+      case "actions":
+        return <ActionsSection />;
+      case "ai":
+        return <AiSection />;
+      case "forms":
+        return <FormsSection />;
+      case "navigation":
+        /* A phone-width stage (a real phone or the Mobile preset) gets the
+           compact pagination, whose numbered row would overflow it. */
+        return <NavigationSection narrow={compact || stageMobile} />;
+      case "overlays":
+        return <OverlaysSection />;
+      case "feedback":
+        return <FeedbackSection />;
+    }
+  };
 
   return (
     <>
@@ -1198,13 +1274,13 @@ export default function PlaygroundPage() {
         className={[
           styles.dsLayout,
           view === "chat" && !compact ? styles.dsLayoutChat : "",
-          view === "dashboard" ? styles.dsLayoutDashboard : "",
+          view === "templates" ? styles.dsLayoutTemplates : "",
         ]
           .filter(Boolean)
           .join(" ")}
         data-enter={enterAlt ? "alt" : undefined}
         data-left-rail={themeRailCollapsed ? "collapsed" : undefined}
-        data-right-rail={chatRailCollapsed ? "collapsed" : undefined}
+        data-right-rail={rightRailCollapsed ? "collapsed" : undefined}
       >
         {/* Inside the layout so the bar reads the panel geometry the
             layout declares (--stage-bar-start/-end) and centres on the
@@ -1215,7 +1291,11 @@ export default function PlaygroundPage() {
             format drops the header that carried it) and the desktop/mobile
             stage switch, then this stage's extras. */}
         <StageControlBar label="Stage controls">
-          <StageThemeFlip />
+          {({ labels }) => (
+          <>
+          {/* Icons alone on a compact stage, so the bar fits a phone, and
+              wherever the labelled bar would run under the side panels. */}
+          <StageThemeFlip showLabels={labels && !compact} />
           {/* Desktop rides the stage-size switch and inspect mode beside the
               flip (a phone IS the mobile preset, and inspection is a hover
               interaction); compact screens carry the Drawer summons instead,
@@ -1223,13 +1303,15 @@ export default function PlaygroundPage() {
           {compact ? (
             <>
               <StageControlBarSeparator />
-              <Button
-                label="Theme controls"
-                variant="primary"
-                size="compact"
-                iconLeft="tune"
-                onClick={() => setControlsOpen(true)}
-              />
+              <StageControlBarActionSlot>
+                <Button
+                  label="Theme controls"
+                  variant="primary"
+                  size="compact"
+                  iconLeft="tune"
+                  onClick={() => setControlsOpen(true)}
+                />
+              </StageControlBarActionSlot>
             </>
           ) : (
             <>
@@ -1247,6 +1329,7 @@ export default function PlaygroundPage() {
                   setChatManual({});
                 }}
                 size="compact"
+                showLabels={labels}
                 aria-label="Stage size"
               />
               <StageControlBarSeparator />
@@ -1268,6 +1351,8 @@ export default function PlaygroundPage() {
                 <InspectMode desktopOnly />
               </StageControlBarEndSlot>
             </>
+          )}
+          </>
           )}
         </StageControlBar>
 
@@ -1328,11 +1413,12 @@ export default function PlaygroundPage() {
                as its widget preset, so the views agree on what the bar's
                Desktop/Mobile means. */
             stageMobile ? styles.dsContentMobile : "",
-            view === "dashboard" ? styles.dsContentDashboard : "",
+            view === "templates" ? styles.dsContentTemplates : "",
           ]
             .filter(Boolean)
             .join(" ")}
           data-stage={stageMobile ? "mobile" : undefined}
+          data-surface={view === "components" ? componentsView.surface : undefined}
           id="main-content"
         >
           {/* The phone rules the narrowed column can't trigger, derived
@@ -1388,16 +1474,14 @@ export default function PlaygroundPage() {
                   the only ones in view as the stage opens and nothing
                   near them competes for the click. The white-label header
                   and the action showcase follow. */}
-              <ChartsSection brand={effectiveBrand} />
-              <MapsSection />
-              <DataDisplaySection />
-              <MockNav brandName={productName.trim() || "Acme Corp"} />
-              <ActionsSection />
-              <AiSection />
-              <FormsSection />
-              <NavigationSection />
-              <OverlaysSection />
-              <FeedbackSection />
+              {/* In the components rail's order, less the sections it has
+                  switched off. Each sits in a wrapper the rail can scroll
+                  to. */}
+              {COMPONENT_SECTIONS.filter(({ id }) => !componentsView.hidden.has(id)).map(({ id }) => (
+                <div key={id} id={sectionAnchor(id)} className={styles.sectionAnchor}>
+                  {componentSection(id)}
+                </div>
+              ))}
             </>
           )}
 
@@ -1405,15 +1489,23 @@ export default function PlaygroundPage() {
               the heading and body family roles resolved per step. The
               stage flag re-reads the labels when the phone step-down
               lands, since no root mutation or resize announces it. */}
-          {view === "type" && <TypeView stageMobile={stageMobile} />}
+          {view === "type" && (
+            <TypeView
+              stageMobile={stageMobile}
+              headingSample={typeView.heading}
+              bodySample={typeView.body}
+              hiddenTiers={typeView.hiddenTiers}
+            />
+          )}
 
-          {/* The Dashboard view: the marketing dashboard template, live in
-              a frame that mirrors the levers, on the Chat view's stage.
-              Desktop/Mobile picks the app or its phone version in the
-              bezel; a phone always gets the phone version, bare. */}
-          {view === "dashboard" && (
-            <DashboardView
-              template={compact ? "mobile" : stageSize}
+          {/* The Templates view: the picked template, live in a frame that
+              mirrors the levers, on the Chat view's stage. Desktop/Mobile
+              picks the app or its phone version in the bezel; a phone
+              always gets the phone version, bare. */}
+          {view === "templates" && (
+            <TemplatesView
+              template={templateHref}
+              size={compact ? "mobile" : stageSize}
               device={!compact && stageSize === "mobile"}
               productName={productName.trim() || "Acme Corp"}
             />
@@ -1452,8 +1544,41 @@ export default function PlaygroundPage() {
             live={transportMode === "live"}
             artifacts={artifactPanel}
             onResetSetup={resetChatSetup}
-            collapsed={chatRailCollapsed}
-            onCollapsedChange={setChatRailCollapsed}
+            collapsed={rightRailCollapsed}
+            onCollapsedChange={setRightRailCollapsed}
+          />
+        )}
+
+        {/* The components and type rails: each view's own panel, in the
+            same right seat. Compact screens get them in the Drawer. */}
+        {view === "components" && !compact && (
+          <ComponentsRail
+            variant="panel"
+            state={componentsView}
+            onChange={setComponentsView}
+            collapsed={rightRailCollapsed}
+            onCollapsedChange={setRightRailCollapsed}
+          />
+        )}
+        {view === "type" && !compact && (
+          <TypeRail
+            variant="panel"
+            state={typeView}
+            onChange={setTypeView}
+            collapsed={rightRailCollapsed}
+            onCollapsedChange={setRightRailCollapsed}
+          />
+        )}
+
+        {/* The templates rail: the Templates view's own panel, in the chat
+            director's seat. Compact screens get the picker in the Drawer. */}
+        {view === "templates" && !compact && (
+          <TemplatesRail
+            variant="panel"
+            value={templateHref}
+            onValueChange={setTemplateHref}
+            collapsed={rightRailCollapsed}
+            onCollapsedChange={setRightRailCollapsed}
           />
         )}
       </div>

@@ -42,10 +42,11 @@
   );
 }
 
-/* The trail takes its own width; the switch follows it, and the actions
-   zone takes the rest, pinning the exit to the right. */
+/* The trail and the actions zone take equal shares of the room either
+   side of the switch, so the switch sits at the toolbar's centre whatever
+   the breadcrumb says; the actions zone pins the exit to the right. */
 .trail {
-  flex: 0 1 auto;
+  flex: 1 1 0;
   display: flex;
   align-items: center;
   gap: var(--gap-400);
@@ -53,7 +54,7 @@
 }
 
 .actions {
-  flex: 1;
+  flex: 1 1 0;
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -62,12 +63,11 @@
 
 /* The view switch: the site header's section pills (MegaNav.module.css
    .navLink owns the recipe), so moving between a stage's views reads the
-   same as moving between the site's sections. It floats left, 40px after
-   the breadcrumb (the toolbar's gap plus the difference). */
+   same as moving between the site's sections. Centred in the toolbar by
+   the equal flanks above. */
 .switch {
   /* The pills' offset parent, for the phone row's scroll-into-view. */
   position: relative;
-  margin-inline-start: calc(var(--gap-1000) - var(--gap-400));
   display: flex;
   align-items: center;
   gap: var(--primitive-gap-100);
@@ -147,13 +147,21 @@
     flex: 0 0 auto;
   }
 
+  /* A phone has no room to centre: the switch follows the logo, 40px
+     after it (the toolbar's gap plus the difference), and scrolls. */
   .switch {
+    margin-inline-start: calc(var(--gap-1000) - var(--gap-400));
     flex: 1 1 auto;
     min-width: 0;
     overflow-x: auto;
     scrollbar-width: none;
     /* Room for the focus ring, which the scroll box would otherwise clip. */
     padding: 4px;
+    /* The row runs past the X on a phone, so its trailing edge fades: a pill
+       cut clean at the edge reads as the whole row, a fading one as more to
+       scroll to. */
+    /* ds-allow(color): mask alpha keywords (black/transparent), not palette colours */
+    mask-image: linear-gradient(to right, black calc(100% - var(--gap-500)), transparent);
   }
 
   .switch::-webkit-scrollbar {
@@ -166,8 +174,9 @@
   }
 
   /* A flex scroll box drops its end padding from the scroll range, so the
-     last pill carries its own. */
+     last pill carries its own: the fade's width, so scrolled to the end
+     the last pill sits clear of the fade. */
   .switchButton:last-child {
-    margin-right: 4px;
+    margin-right: var(--gap-500);
   }
 }

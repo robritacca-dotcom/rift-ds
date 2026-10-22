@@ -19,7 +19,12 @@ const BREADCRUMB_ITEMS = [
   { label: "Design system" },
 ];
 
-export default function NavigationSection() {
+export default function NavigationSection({
+  narrow = false,
+}: {
+  /** A phone-width stage: the pagination shows its compact readout. */
+  narrow?: boolean;
+}) {
   const [activeTab, setActiveTab] = useState("overview");
   const [page, setPage] = useState(3);
 
@@ -40,7 +45,13 @@ export default function NavigationSection() {
       />
 
       <div className={styles.demoRow}>
-        <Pagination page={page} pageCount={8} onPageChange={setPage} aria-label="Demo pagination" />
+        <Pagination
+          page={page}
+          pageCount={8}
+          onPageChange={setPage}
+          size={narrow ? "compact" : "default"}
+          aria-label="Demo pagination"
+        />
       </div>
 
       <Breadcrumb items={BREADCRUMB_ITEMS} aria-label="Demo breadcrumb" />

@@ -1,23 +1,23 @@
-/* The Dashboard view borrows the Chat view's stage (ChatView.module.css:
-   the safe-zone fit, the grips, the readout, the bezel). The dashboard
+/* The Templates view borrows the Chat view's stage (ChatView.module.css:
+   the safe-zone fit, the grips, the readout, the bezel). The template
    wears the chat widget's card edge (hairline, radius, floating shadow)
    around an app on its own page floor rather than the widget's glass. */
 
 .board {
   display: flex;
-  /* Below this the dashboard's own phone layout takes over, which the
+  /* Below this a template's own phone layout takes over, which the
      Mobile stage shows properly. */
   min-width: 360px;
   min-height: 480px;
-  /* The wide wall: the browser's width less the one panel and the padding
-     ring either side (the dashboard layout seats a single panel, where the
-     chat layout seats two), and never past the stage's shared wall. At
+  /* The wide wall: the browser's width less both panels (the theme rail
+     and the templates rail, --stage-walls) and the padding ring either
+     side, and never past the stage's shared wall. At
      rest it opens at the stage's shared rest width, the chat widget's own
      (ChatView.module.css owns both widths). */
   max-width: min(
     var(--stage-max-width),
     calc(
-      100vw - var(--rail-left, 0px) -
+      100vw - var(--stage-walls, 0px) -
         var(--stage-safe-pad, var(--layout-chat-inset)) * 2
     )
   );

@@ -140,6 +140,18 @@ const INITIATIVES: Initiative[] = [
     dependsOn: ["p1"],
   },
   {
+    id: "p5",
+    title: "Search indexing v2",
+    team: "platform",
+    status: "shipped",
+    start: "2026-07-20",
+    end: "2026-09-04",
+    progress: 100,
+    owner: "Samir Haddad",
+    summary:
+      "Incremental indexing on the new event stream, so a renamed initiative is findable in seconds rather than after the nightly rebuild.",
+  },
+  {
     id: "p3",
     title: "Audit log API",
     team: "platform",
@@ -150,6 +162,19 @@ const INITIATIVES: Initiative[] = [
     owner: "Maya Okafor",
     summary:
       "Every workspace action becomes a queryable event. Slipping: the retention review pushed the schema back two weeks, and enterprise trials wait on this.",
+  },
+  {
+    id: "p6",
+    title: "API rate limiting",
+    team: "platform",
+    status: "on-track",
+    start: "2026-09-14",
+    end: "2026-10-30",
+    progress: 35,
+    owner: "Samir Haddad",
+    summary:
+      "Per-workspace quotas on the public API, enforced at the edge. The limits are live in shadow mode; the headers and the docs land with GA.",
+    dependsOn: ["p3"],
   },
   {
     id: "p4",
@@ -177,6 +202,18 @@ const INITIATIVES: Initiative[] = [
       "A guided first-run that gets a workspace to its first shipped roadmap without a sales call. Activation moved eleven points in the launch cohort.",
   },
   {
+    id: "g5",
+    title: "Lifecycle emails",
+    team: "growth",
+    status: "shipped",
+    start: "2026-07-13",
+    end: "2026-08-21",
+    progress: 100,
+    owner: "Priya Nair",
+    summary:
+      "A short sequence that follows a new workspace through its first two weeks, triggered by what the team has and has not done yet.",
+  },
+  {
     id: "g2",
     title: "Usage-based pricing",
     team: "growth",
@@ -200,6 +237,19 @@ const INITIATIVES: Initiative[] = [
     owner: "Anika Patel",
     summary:
       "Workspace invites that credit both sides. At risk while the incentive accounting waits on legal review in two markets.",
+  },
+  {
+    id: "g6",
+    title: "In-app upgrade flow",
+    team: "growth",
+    status: "on-track",
+    start: "2026-09-01",
+    end: "2026-10-09",
+    progress: 65,
+    owner: "Priya Nair",
+    summary:
+      "Plan changes without leaving the app, priced live from the usage meter. Checkout is done; proration for annual plans is the last open piece.",
+    dependsOn: ["g2"],
   },
   {
     id: "g4",
@@ -240,6 +290,18 @@ const INITIATIVES: Initiative[] = [
     dependsOn: ["m1"],
   },
   {
+    id: "m5",
+    title: "Android parity",
+    team: "mobile",
+    status: "on-track",
+    start: "2026-08-03",
+    end: "2026-10-23",
+    progress: 50,
+    owner: "Marcus Chen",
+    summary:
+      "The Android app caught up to iOS screen by screen, starting with the timeline and the initiative detail.",
+  },
+  {
     id: "m3",
     title: "Tablet layouts",
     team: "mobile",
@@ -262,6 +324,19 @@ const INITIATIVES: Initiative[] = [
     owner: "Marcus Chen",
     summary:
       "Home-screen widgets for the initiatives a person owns: window, progress, and the next milestone at a glance.",
+  },
+  {
+    id: "m6",
+    title: "App Store refresh",
+    team: "mobile",
+    status: "planned",
+    start: "2026-11-02",
+    end: "2026-11-27",
+    target: "Target: November",
+    owner: "Lena Fischer",
+    summary:
+      "New screenshots and copy for both stores, shot from the tablet layouts once they ship.",
+    dependsOn: ["m3"],
   },
 ];
 
@@ -315,7 +390,7 @@ const CHAT_SUGGESTIONS = [
 
 const CHAT_REPLIES: Record<string, string> = {
   risk: "Two initiatives are at risk. The audit log API sits at 30% with the schema pushed back two weeks by the retention review, and enterprise trials wait on it. The referral programme sits at 20% while incentive accounting clears legal review in two markets. Everything else in flight is on track.",
-  q4: "Q4 carries the close of multi-region failover and the push notification centre in October, usage-based pricing reaching GA on the 30th, then the planned work: tablet layouts through November, enterprise trials in late Q4, and zero-downtime migrations and the widget gallery landing on the year-end release, December 18.",
+  q4: "Q4 opens with the in-app upgrade flow on the 9th, then the close of multi-region failover, the push notification centre and Android parity in October, with API rate limiting and usage-based pricing both reaching GA on the 30th. The planned work follows: tablet layouts and the App Store refresh through November, enterprise trials in late Q4, and zero-downtime migrations and the widget gallery landing on the year-end release, December 18.",
   blocked:
     "Enterprise trials depend on the audit log API: security review has to happen inside the trial, which needs every workspace action queryable. The audit log is at risk after the retention review pushed its schema back two weeks, so the trials' late-Q4 target is the first date to watch.",
 };

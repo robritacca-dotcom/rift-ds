@@ -33,6 +33,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
 import { siteRoutes, isDynamicSegment } from './site-routes.mjs';
+import { navLinks } from './nav-links.mjs';
 import { readBreakpoints } from './breakpoint-source.mjs';
 import { assembleAgentStarter } from './generate-agent-skill.mjs';
 import {
@@ -556,31 +557,9 @@ export function sanctionedFacts() {
 
    navigation.ts is TypeScript importing from the package workspace, so this
    Node script reads it as text rather than importing it. The link arrays are
-   flat object literals, which is what makes that safe.
+   flat object literals, which is what makes that safe. The parser, navLinks,
+   lives in nav-links.mjs, shared with the playground's template thumbnails.
    ============================================================ */
-
-function navLinks(source, exportName) {
-  const start = source.indexOf(`export const ${exportName}`);
-  if (start === -1) throw new Error(`navigation.ts: no export named ${exportName}`);
-  const end = source.indexOf('\n];', start);
-  if (end === -1) throw new Error(`navigation.ts: ${exportName} is not a flat array literal`);
-  const body = source.slice(start, end);
-
-  const links = [];
-  for (const match of body.matchAll(/\{[^{}]*\}/g)) {
-    const entry = match[0];
-    const field = (key) => {
-      const m = entry.match(new RegExp(`${key}:\\s*"((?:[^"\\\\]|\\\\.)*)"`));
-      return m ? m[1] : null;
-    };
-    const href = field('href');
-    const label = field('label');
-    if (!href || !label || label === 'Contents') continue;
-    links.push({ href, label, description: field('description'), mobileOnly: /mobileOnly:\s*true/.test(entry) });
-  }
-  if (links.length === 0) throw new Error(`navigation.ts: ${exportName} yielded no links`);
-  return links;
-}
 
 const linkLines = (links) =>
   links

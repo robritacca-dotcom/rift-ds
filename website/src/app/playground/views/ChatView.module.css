@@ -8,7 +8,7 @@
      control bar. The same inset those pieces keep off the viewport. */
   --stage-safe-pad: var(--layout-chat-inset);
   /* The two widths every staged surface shares (the chat widget here, the
-     dashboard in DashboardView), so switching views keeps the stage's
+     template in TemplatesView), so switching views keeps the stage's
      footprint. The rest width is what a view opens at, held under the
      chat's room between its two panels on a desktop browser so both views
      launch at the same size wherever the chat has the room (from about a
@@ -53,6 +53,18 @@
 .widgetFrame {
   position: relative;
   display: flex;
+  /* Above the two bars' fades (10), so the staged surface — the chat card
+     here, the template in TemplatesView — never dims under them; still
+     below the floating rails. */
+  /* ds-allow(stacking): local order on the immersive stage, its own ladder: floating rails 15, control bar 25, toolbar 30, full-size panels above. */
+  z-index: 11;
+}
+
+/* The takeover lifts the widget to the full-size layer, which the frame's
+   own stacking context would otherwise cap at 11: the frame rises with it. */
+.widgetFrame:has(.widgetFull) {
+  /* ds-allow(stacking): local order on the immersive stage, its own ladder: floating rails 15, control bar 25, toolbar 30, full-size panels above. */
+  z-index: 40;
 }
 
 /* While the resting width fit is active the frame stretches to the stage,

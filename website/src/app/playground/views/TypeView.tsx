@@ -22,7 +22,6 @@ import styles from "./TypeView.module.css";
  * step the tiers don't know yet still renders, appended to the body tier.
  */
 
-const SPECIMEN = "Almost before we knew it, we had left the ground.";
 
 type Role = "heading" | "body";
 
@@ -36,19 +35,28 @@ type StepMeta = {
 
 /* Presentation order for the known tiers. Grouping and captions only —
    the steps themselves come from the registry. */
-const TIERS: ReadonlyArray<{ title: string; note: string; steps: string[] }> = [
+const TIERS: ReadonlyArray<{
+  title: string;
+  note: string;
+  steps: string[];
+  /** Which sample text the tier sets: the heading sample or the body one. */
+  sample: "heading" | "body";
+}> = [
   {
     title: "Display",
+    sample: "heading",
     note: "The poster tier. One weight across the tier, set by the theme and light in the base look, leaded near solid; these are the only steps that shrink on small screens.",
     steps: ["mega-1", "mega-2", "display-1", "display-2", "sub-display"],
   },
   {
     title: "Headings",
+    sample: "heading",
     note: "Document structure. Every heading step shares one weight, set by the theme; the Heading weight lever moves them together.",
     steps: ["heading-1", "heading-2", "heading-3"],
   },
   {
     title: "Body",
+    sample: "body",
     note: "Running text, labels and the caption floor. These steps read the body role, so splitting the faces leaves them on the text face.",
     steps: [
       "title-body",
@@ -73,7 +81,7 @@ const KNOWN_STEPS = new Set(TIERS.flatMap((tier) => tier.steps));
 /* The rendered tiers: known steps in presentation order (skipping any the
    registry no longer carries), unknown ones appended to the last tier so a
    new step can never be silently missing from the ramp. */
-const RENDERED_TIERS = TIERS.map((tier, index) => ({
+export const RENDERED_TIERS = TIERS.map((tier, index) => ({
   ...tier,
   steps: [
     ...tier.steps.filter((step) => REGISTRY_STEPS.includes(step)),
@@ -82,6 +90,9 @@ const RENDERED_TIERS = TIERS.map((tier, index) => ({
       : []),
   ],
 }));
+
+/** A tier's section id, so the type rail can jump to it. */
+export const tierAnchor = (title: string) => `type-tier-${title.toLowerCase()}`;
 
 const stepLabel = (step: string): string =>
   step
@@ -111,11 +122,20 @@ const roundPx = (value: string): string => {
 
 export default function TypeView({
   stageMobile = false,
+  headingSample,
+  bodySample,
+  hiddenTiers,
 }: {
   /** Whether the stage is emulating a phone — flipping it restyles the
       samples without any root mutation or resize, so it must re-trigger
       the read below. */
   stageMobile?: boolean;
+  /** The text the display and heading tiers set (the type rail's). */
+  headingSample: string;
+  /** The text the body tier sets. */
+  bodySample: string;
+  /** The tiers the type rail has switched off, by title. */
+  hiddenTiers: ReadonlySet<string>;
 }) {
   const sampleRefs = useRef(new Map<string, HTMLElement>());
   const [meta, setMeta] = useState<Record<string, StepMeta>>({});
@@ -176,7 +196,8 @@ export default function TypeView({
       observer.disconnect();
       window.removeEventListener("resize", read);
     };
-  }, [stageMobile]);
+    /* A tier switched back on mounts fresh samples, which need reading. */
+  }, [stageMobile, hiddenTiers]);
 
   return (
     <>
@@ -227,9 +248,10 @@ export default function TypeView({
         )}
       </section>
 
-      {RENDERED_TIERS.map((tier) => (
+      {RENDERED_TIERS.filter((tier) => !hiddenTiers.has(tier.title)).map((tier) => (
         <section
           key={tier.title}
+          id={tierAnchor(tier.title)}
           className={pageStyles.demoSection}
           aria-label={tier.title}
         >
@@ -265,7 +287,7 @@ export default function TypeView({
                     className={styles.rampSample}
                     style={sampleStyle(step)}
                   >
-                    {SPECIMEN}
+                    {tier.sample === "heading" ? headingSample : bodySample}
                   </p>
                 </div>
               );

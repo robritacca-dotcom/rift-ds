@@ -95,11 +95,34 @@
   mask-image: linear-gradient(to top, black 0%, black 10%, transparent 40%);
 }
 
+/* The workspace the bar may span, as an invisible measuring probe: the
+   viewport less the two side panels, less the inset the bar keeps off
+   each. StageControlBar compares the labelled bar against its width. */
+.room {
+  position: fixed;
+  left: calc(var(--stage-bar-start, 0px) + var(--layout-chat-inset));
+  right: calc(var(--stage-bar-end, 0px) + var(--layout-chat-inset));
+  bottom: 0;
+  height: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
 .separator {
   width: var(--border-025);
   height: var(--gap-500);
   margin: 0 var(--gap-050);
   background: var(--color-divider);
+}
+
+/* A filled control at the bar's end (the compact stage's Theme controls
+   summons) sits at the same inset as the active segment of a segmented
+   control beside it, whose pill rides inside the track's padding and
+   hairline. Without it the filled pill sits nearer the bar's edge than
+   the pill on the other end and reads as flush against it. */
+.actionSlot {
+  display: inline-flex;
+  padding: calc(var(--padding-100) + var(--border-025));
 }
 
 .endSlot {

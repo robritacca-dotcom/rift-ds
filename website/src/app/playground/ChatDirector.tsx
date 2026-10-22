@@ -345,7 +345,7 @@ export default function ChatDirector({
     <FloatingRail
       side="right"
       label="Chat controls"
-      title="Chat"
+      title="AI Chat"
       collapsed={collapsed}
       onCollapsedChange={onCollapsedChange}
       onReset={() => {

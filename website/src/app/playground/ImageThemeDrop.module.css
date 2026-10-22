@@ -169,19 +169,30 @@
   flex-shrink: 0;
 }
 
-/* Real phone widths. The readout stays one row rather than stacking, which
-   cost the picture most of the card; it wraps if it has to, and the file name
-   stands down, because the control panel names the image as well. */
-/* ds-allow(breakpoint): the phone step on its other edge (below 600px, not at or below it); aligning it would change this rule at exactly 600px. */
-@media (max-width: 599px) {
-  .bar {
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--gap-200);
-    padding-inline: var(--padding-300);
-  }
+/* A narrow card, read from the card's own width (ThemeSourceFrame sets
+   data-narrow), so a phone and the Mobile stage's column on a desktop
+   screen get the same bar. The readout stays one row rather than stacking,
+   which cost the picture most of the card: the buttons drop to their icons,
+   the file name stands down (the control panel names the source as well),
+   and the swatches give up the space before the buttons do. */
+.card[data-narrow] .bar {
+  align-items: center;
+  gap: var(--gap-200);
+  padding-inline: var(--padding-300);
+}
 
-  .fileName {
-    display: none;
-  }
+.card[data-narrow] .body {
+  flex: 1;
+}
+
+.card[data-narrow] .fileName {
+  display: none;
+}
+
+/* Swatches that do not fit wrap onto a row the height clips away, so the
+   last one shown is always whole rather than cut through. */
+.card[data-narrow] .swatches {
+  flex-wrap: wrap;
+  height: var(--icon-size-600);
+  overflow: hidden;
 }

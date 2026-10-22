@@ -1,12 +1,15 @@
 "use client";
 
 /**
- * The Dashboard view: the marketing dashboard template, live, under the
- * playground's levers, staged the way the Chat view stages the widget.
- * Desktop fills the safe zone between the panel and the viewport edge and
- * carries the same edge grips, so a drag reflows the dashboard through its
- * real breakpoints; Mobile puts its phone counterpart (the mobile dashboard
- * template) in the chat stage's bezel.
+ * The Templates view: one template screen, live, under the playground's
+ * levers, staged the way the Chat view stages the widget. The templates
+ * rail (TemplatesRail, beside this folder) picks which one; it opens on
+ * the marketing dashboard, the list's first. Desktop fills the safe zone
+ * between the two panels and carries the same edge grips, so a drag
+ * reflows the template through its real breakpoints; Mobile puts the
+ * template's phone version in the chat stage's bezel (a template with a
+ * phone screen of its own, as the dashboard has, stages that instead).
+ * Only the picked template ever runs: the rail shows stills.
  *
  * The templates are full-viewport app shells (a fixed sidebar, a fixed phone
  * stage), so they cannot sit inline in the workspace: each renders in a
@@ -15,7 +18,7 @@
  * <html> and load Google Fonts links into its <head>, so the frame mirrors
  * all three (the properties, the font links, and data-theme/data-brand) on
  * load and on every change. The frame keeps its own page floor, so the
- * dashboard reads exactly as it does full screen (a cleared floor would
+ * template reads exactly as it does full screen (a cleared floor would
  * also let the browser's opaque backdrop for a cross-color-scheme frame
  * show through as a grey slab).
  */
@@ -24,18 +27,18 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react
 import { MOTION_SCROLL_SETTLE_MS } from "rift-ds/tokens/motion";
 import { STAGED_PRODUCT_NAME_ATTR } from "@/components/templates/useStagedProductName";
 import chatStyles from "./ChatView.module.css";
-import styles from "./DashboardView.module.css";
+import { templatesSidebarLinks } from "@/config/navigation";
+import styles from "./TemplatesView.module.css";
 
-const TEMPLATES = {
-  desktop: {
-    href: "/templates/marketing-dashboard",
-    title: "Marketing dashboard template",
-  },
-  mobile: {
-    href: "/templates/mobile-dashboard",
-    title: "Mobile dashboard template",
-  },
-} as const;
+/* A template whose phone version is a screen of its own: the Mobile stage
+   (and a phone) shows that one. Every other template is responsive, so
+   its own route at phone width is its phone version. */
+const PHONE_SCREENS: Record<string, string> = {
+  "/templates/marketing-dashboard": "/templates/mobile-dashboard",
+};
+
+const templateTitle = (href: string) =>
+  `${templatesSidebarLinks.find((link) => link.href === href)?.label ?? "Template"} template`;
 
 /* The bezel's screen: the chat stage's mobile preset, a real phone
    viewport. Narrower than the template's framed breakpoint, so the
@@ -58,16 +61,18 @@ html, html * { scrollbar-width: thin; scrollbar-color: transparent transparent; 
 html[${SCROLLING_ATTR}], html[${SCROLLING_ATTR}] * { scrollbar-color: var(--color-divider) transparent; }
 `;
 
-/* The stage centres the dashboard, so a drag moves both opposing edges;
+/* The stage centres the template, so a drag moves both opposing edges;
    doubling the delta keeps the grabbed edge under the cursor (the Chat
    view's factor). */
 const CENTERED_DRAG_FACTOR = 2;
 
 type ResizeAxis = "x" | "y" | "both";
 
-export interface DashboardViewProps {
-  /** Which dashboard to stage: the desktop app or its phone version. */
-  template: "desktop" | "mobile";
+export interface TemplatesViewProps {
+  /** The picked template's route. */
+  template: string;
+  /** Which version to stage: the desktop app or its phone version. */
+  size: "desktop" | "mobile";
   /** Stage the phone version in the bezel. A phone-sized playground is
       already a phone, so it gets the bare app filling the stage instead. */
   device: boolean;
@@ -75,12 +80,14 @@ export interface DashboardViewProps {
   productName: string;
 }
 
-export default function DashboardView({
+export default function TemplatesView({
   template,
+  size,
   device,
   productName,
-}: DashboardViewProps) {
-  const { href, title } = TEMPLATES[template];
+}: TemplatesViewProps) {
+  const href = size === "mobile" ? (PHONE_SCREENS[template] ?? template) : template;
+  const title = templateTitle(href);
   const frameRef = useRef<HTMLIFrameElement>(null);
   const mirroredKeys = useRef<string[]>([]);
   /* Which template's document has loaded and taken the theme. A new
@@ -356,7 +363,7 @@ export default function DashboardView({
                 onPointerMove={moveResize}
                 onPointerUp={endResize}
                 onPointerCancel={endResize}
-                /* Double-click returns the dashboard to the resting fit. */
+                /* Double-click returns the template to the resting fit. */
                 onDoubleClick={() => setManual({})}
               />
             ))}

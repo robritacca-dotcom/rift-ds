@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Button } from "rift-ds/components/Button/Button";
+import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
 import type { ImageThemeSource } from "@/lib/theme/image-palette";
 import { isDesignMdFile } from "@/lib/theme/design-md";
 import styles from "./ImageThemeDrop.module.css";
@@ -24,6 +25,21 @@ import { BREAKPOINT_STAGE_COMPACT_PX } from "@/config/breakpoints";
  * The file never leaves the browser. It is read through an object URL and
  * sampled on a canvas; see lib/theme/image-palette.ts.
  */
+
+/* The narrowest source card whose bar holds the swatches and the three
+   labelled buttons on one row; below it the buttons are icons alone.
+   Measured from the bar at its fullest (eight swatches), not a token. */
+const SOURCE_BAR_LABELS_MIN_WIDTH = 640;
+
+/* The bar's buttons, least to most committed, left to right: start over,
+   try another file, take this look away. Export is the one primary action
+   on the card, so it wears the imported theme's action colour: what the
+   import is for is taking the look away. */
+const SOURCE_ACTIONS = [
+  { key: "reset", label: "Reset", icon: "restart_alt", variant: "tertiary", tone: "neutral" },
+  { key: "replace", label: "Upload new", icon: "upload", variant: "primary", tone: "neutral" },
+  { key: "export", label: "Export theme", icon: "ios_share", variant: "primary", tone: "default" },
+] as const;
 
 /** Whether a drag carries files, as opposed to text or a page element. */
 const carriesFiles = (transfer: DataTransfer | null) =>
@@ -149,8 +165,24 @@ export function ThemeSourceFrame({
   /** What fills the frame behind the bar. */
   children: React.ReactNode;
 }) {
+  /* The bar's buttons drop their labels when the card is too narrow for
+     the swatches and three labelled buttons on one row. Read from the card
+     rather than the viewport, so the Mobile stage's narrow column on a
+     desktop screen gets the same bar a phone does. */
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [narrow, setNarrow] = useState(false);
+  useEffect(() => {
+    const card = cardRef.current;
+    if (!card || typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver(([entry]) => {
+      setNarrow(entry.contentRect.width < SOURCE_BAR_LABELS_MIN_WIDTH);
+    });
+    observer.observe(card);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div className={styles.card}>
+    <div ref={cardRef} className={styles.card} data-narrow={narrow || undefined}>
       {children}
 
       {/* The readout rides the foot of the frame on a fade into it, so the
@@ -174,35 +206,34 @@ export function ThemeSourceFrame({
           </div>
         </div>
 
-        {/* Least to most committed, left to right: start over, try another
-            file, take this look away. */}
         <div className={styles.actions}>
-          <Button
-            label="Reset"
-            variant="tertiary"
-            tone="neutral"
-            size="compact"
-            iconLeft="restart_alt"
-            onClick={onReset}
-          />
-          <Button
-            label="Upload new"
-            variant="primary"
-            tone="neutral"
-            size="compact"
-            iconLeft="upload"
-            onClick={onReplace}
-          />
-          {/* The one primary action on the card, so it wears the imported
-              theme's action colour: what the import is for is taking the
-              look away. */}
-          <Button
-            label="Export theme"
-            variant="primary"
-            size="compact"
-            iconLeft="ios_share"
-            onClick={onExport}
-          />
+          {/* Narrow, each is its icon alone: CircularButton, which names
+              itself with a tooltip carrying the same words. */}
+          {SOURCE_ACTIONS.map(({ key, label, icon, variant, tone }) => {
+            const onClick = { reset: onReset, replace: onReplace, export: onExport }[key];
+            return narrow ? (
+              <CircularButton
+                key={key}
+                ariaLabel={label}
+                icon={icon}
+                variant={variant}
+                tone={tone}
+                size="compact"
+                tooltipPosition="top"
+                onClick={onClick}
+              />
+            ) : (
+              <Button
+                key={key}
+                label={label}
+                iconLeft={icon}
+                variant={variant}
+                tone={tone}
+                size="compact"
+                onClick={onClick}
+              />
+            );
+          })}
         </div>
       </div>
     </div>

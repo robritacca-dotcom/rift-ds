@@ -29,6 +29,13 @@ export interface NavLink {
    * does not preview it.
    */
   hideFromShowcase?: boolean;
+  /**
+   * Templates only: left out of the playground's Templates view. For a
+   * screen the playground already stages in a view of its own (the chat
+   * home is the Chat view's widget as a page), so the rail never offers
+   * the same thing twice.
+   */
+  hideFromPlayground?: boolean;
 }
 
 /** A row in a mega menu — provide either an `icon` (Material Symbol) or a `logo` (image path) */
@@ -432,6 +439,7 @@ export const templatesSidebarLinks: NavLink[] = [
     href: "/templates/chat-home",
     label: "Chat home",
     description: "An assistant's home screen: a prompt over a board of live tiles",
+    hideFromPlayground: true,
   },
   {
     href: "/templates/mobile-dashboard",

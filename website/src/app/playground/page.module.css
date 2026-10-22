@@ -2,9 +2,9 @@
    PLAYGROUND PAGE LAYOUT
    An immersive tool, not the standard page shell:
    floating glass panels over a dotted ground —
-   the control panel on the left, the workspace
-   centred in the space between the panel's edge
-   and the viewport's right edge.
+   the theme panel on the left, each view's own
+   panel on the right, the workspace centred in
+   the space between them.
    ============================================ */
 .dsLayout {
   /* The floating panel's width — the workspace centres in what remains. */
@@ -30,8 +30,10 @@
      widget's hard width wall. Read by ChatView.module.css. */
   --stage-walls: calc(var(--rail-left) + var(--rail-right));
   /* The bottom control bar centres on the workspace, not the viewport:
-     the theme panel reaches this far in from the left. */
+     the theme panel reaches this far in from the left, and every view's own
+     panel this far from the right. */
   --stage-bar-start: var(--rail-left);
+  --stage-bar-end: var(--rail-right);
   /* Registered lengths (the @property rules below), so the reach
      interpolates and every reader moves with the card as it folds. */
   transition:
@@ -48,9 +50,9 @@
      narrow to the panel's edge on tight viewports, and flush against the
      glass is a collision, not a fit. */
   padding-left: calc(var(--rail-left) + var(--rail-inset));
-  /* The workspace keeps the float inset off the right edge too, so the
-     content column never touches the viewport where no panel floats. */
-  padding-right: var(--rail-inset);
+  /* The same on the right, where every view seats a panel of its own, so
+     the column centres between the two and under the toolbar's switch. */
+  padding-right: calc(var(--rail-right) + var(--rail-inset));
   /* Clear the floating toolbar pill, then the immersive page still starts
      lower than a doc page would — the title gets air, not a viewport edge. */
   padding-top: calc(var(--layout-stage-clearance) + var(--primitive-gap-1000));
@@ -95,13 +97,16 @@
   padding-top: var(--layout-stage-clearance);
 }
 
-/* The Dashboard view stages a full app with no page heading: the title air
+/* The Templates view stages a full app with no page heading: the title air
    goes, as in the Chat view. */
-.dsLayoutDashboard {
+.dsLayoutTemplates {
+  /* The templates rail mirrors the theme panel on the right, so the bar
+     centres between the two, as in the Chat view. */
+  --stage-bar-end: var(--rail-right);
   /* The stage owns its safe ring (the Chat view's --stage-safe-pad), so
-     the layout hands it the zone from the panel to the viewport edge. */
+     the layout hands it the zone panel to panel. */
   padding-left: var(--rail-left);
-  padding-right: 0;
+  padding-right: var(--rail-right);
   padding-top: var(--layout-stage-clearance);
 }
 
@@ -136,9 +141,9 @@
   max-width: 420px;
 }
 
-/* The dashboard window runs the full width right of the rail — a desktop
+/* The template window runs the full width between the rails — a desktop
    app wants the room the showcase column caps. */
-.dsContentDashboard {
+.dsContentTemplates {
   max-width: none;
 }
 
@@ -518,6 +523,25 @@
   display: flex;
   flex-direction: column;
   gap: var(--primitive-gap-500);
+  /* The type rail scrolls to its tiers: they land clear of the toolbar. */
+  scroll-margin-top: var(--layout-stage-clearance);
+}
+
+/* A showcase section's wrapper, which the components rail scrolls to:
+   it lands clear of the toolbar pill. */
+.sectionAnchor {
+  scroll-margin-top: var(--layout-stage-clearance);
+}
+
+/* The components rail's Card surface: every section on a container card,
+   the surface most product screens put components on, rather than on the
+   dotted page. */
+.dsContent[data-surface="card"] .demoSection {
+  /* The library cards' own side padding (MessageCard, Panel). */
+  padding: var(--padding-500);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
+  background: var(--color-bg-container-primary);
 }
 
 .sectionNote {

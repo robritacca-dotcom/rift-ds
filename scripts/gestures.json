@@ -58,26 +58,26 @@
       "axis": "x"
     },
     {
-      "label": "playground dashboard stage: right edge",
-      "route": "/playground?preset=contrast&view=dashboard",
+      "label": "playground templates stage: right edge",
+      "route": "/playground?preset=contrast&view=templates",
       "grip": "[data-axis=\"x\"]:not([data-edge=\"left\"])",
       "axis": "x"
     },
     {
-      "label": "playground dashboard stage: left edge",
-      "route": "/playground?preset=contrast&view=dashboard",
+      "label": "playground templates stage: left edge",
+      "route": "/playground?preset=contrast&view=templates",
       "grip": "[data-axis=\"x\"][data-edge=\"left\"]",
       "axis": "x"
     },
     {
-      "label": "playground dashboard stage: bottom edge",
-      "route": "/playground?preset=contrast&view=dashboard",
+      "label": "playground templates stage: bottom edge",
+      "route": "/playground?preset=contrast&view=templates",
       "grip": "[data-axis=\"y\"]",
       "axis": "y"
     },
     {
-      "label": "playground dashboard stage: corner",
-      "route": "/playground?preset=contrast&view=dashboard",
+      "label": "playground templates stage: corner",
+      "route": "/playground?preset=contrast&view=templates",
       "grip": "[data-axis=\"both\"]",
       "axis": "both"
     },

@@ -214,8 +214,11 @@ const handler = createMcpHandler(
               `In a Next.js app router project, 'npx ${pkg.name} init chat' scaffolds the routes, the mount and an env example, never overwriting a file. ` +
               `Props: get_component with the name ChatWidget. Guide: ${SITE_URL}/docs/chat.`,
             "",
-            `Providers: none required. There is no theme provider and no configuration API. The one provider in the ` +
-              `library is ToastProvider, needed only for the toast queue via useToast.`,
+            `Providers: none required. There is no theme provider and no configuration API. ToastProvider is ` +
+              `needed only for the toast queue via useToast. LinkProvider ('${pkg.name}/behaviors/LinkProvider') is ` +
+              `optional: in a routed app it hands every client-rendered component the router's link, so links navigate ` +
+              `without a reload. In Next.js, mount it from a 'use client' file, since the root layout is a Server Component; ` +
+              `a component rendered on the server takes linkComponent on the instance instead.`,
             "",
             `Full guide: ${SITE_URL}/docs/get-started. Live docs: ${SITE_URL}/components. ` +
               `Design spec: ${SITE_URL}/design.md.`,

@@ -10,7 +10,7 @@ Generated from the library's registries at version 1.12.0. You take screens that
 ## Before you change anything
 
 1. Check the wiring. The package is installed and `rift-ds/tokens/tokens.css` is imported once at the root of the app. If either is missing, follow the Install section of the `rift-design-system` skill first.
-2. Find the theme. If the project has a `THEME.md` (the playground at https://rift-ds.com/playground exports one beside a `theme.css`), read it: it describes the look in words, and where it disagrees with a default in this skill, it wins. If the root element carries a `data-brand` attribute, the project uses a shipped preset. With neither, the project is on the base theme.
+2. Find the theme. The playground at https://rift-ds.com/playground exports a theme as an `AGENTS.md` with a theme section (its stylesheet saved as `theme.css`), or as a `THEME.md` beside a `theme.css`. If the project has either, read the theme: it describes the look in words, and where it disagrees with a default in this skill, it wins. If the root element carries a `data-brand` attribute, the project uses a shipped preset. With neither, the project is on the base theme.
 3. Agree the scope with the user: one screen, one folder or the whole app. Work one screen at a time and keep each one working before you start the next.
 
 ## Order of work

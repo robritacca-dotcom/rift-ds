@@ -90,3 +90,26 @@
   line-height: var(--font-caption-line-height);
   color: var(--color-text-secondary);
 }
+
+/* The traits the file states that no lever carries, under the report:
+   a small heading and a plain list in the report's own type, each line
+   already saying what rift does instead. */
+.subheading {
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  letter-spacing: var(--font-title-body-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.traits {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+  padding-left: var(--padding-400);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+}

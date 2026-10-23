@@ -62,9 +62,22 @@ const ACTION_SAT: readonly [number, number] = [0.32, 1];
 const ACTION_LIGHT: readonly [number, number] = [0.24, 0.46];
 
 /** The band the ambient accents sit in: vivid enough to colour a background
-    blob and a chart series, never so pale they stop being distinguishable. */
-const ACCENT_SAT: readonly [number, number] = [0.45, 0.95];
-const ACCENT_LIGHT: readonly [number, number] = [0.42, 0.66];
+    blob and a chart series, never so pale they stop being distinguishable.
+    The ceiling of saturation and both ends of lightness are the shipped
+    sextet's own envelope, read from SHIPPED_ACCENTS, so a source's pastels
+    keep as much of their character as rift's own gold does, and a retuned
+    accent moves the band with it. The saturation floor stays a constant:
+    the shipped six are all vivid, and a wash under it reads as grey on a
+    chart. */
+const SHIPPED_ACCENT_HSL = Object.values(SHIPPED_ACCENTS).map((hex) => rgbToHsl(hexToRgb(hex)));
+const ACCENT_SAT: readonly [number, number] = [
+  0.45,
+  Math.max(...SHIPPED_ACCENT_HSL.map(([, s]) => s)),
+];
+const ACCENT_LIGHT: readonly [number, number] = [
+  Math.min(...SHIPPED_ACCENT_HSL.map(([, , l]) => l)),
+  Math.max(...SHIPPED_ACCENT_HSL.map(([, , l]) => l)),
+];
 
 /** The seed that tints the neutral scale wants to stay a hint of a colour,
     not a second brand. */

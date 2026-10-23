@@ -140,6 +140,16 @@ export function DesignMdCard({
           caption="How each lever was matched to the file"
           captionHidden
         />
+        {theme.traits.length > 0 && (
+          <>
+            <h3 className={styles.subheading}>What rift does not take from it</h3>
+            <ul className={styles.traits}>
+              {theme.traits.map((trait) => (
+                <li key={trait.kind}>{trait.text}</li>
+              ))}
+            </ul>
+          </>
+        )}
       </div>
     </ThemeSourceFrame>
   );

@@ -66,6 +66,8 @@ import {
   HEADING_FONT_OPTIONS,
   LEVER_RANGES,
   SHIPPED_BODY_SIZE_PX,
+  SHIPPED_CARD_RADIUS_PX,
+  SHIPPED_DISPLAY_TRACKING_EM,
   SHIPPED_GAP_LADDER_PX,
   SHIPPED_INPUT_RADIUS_PX,
   SHIPPED_PARAGRAPH_TRACKING_EM,
@@ -74,6 +76,7 @@ import {
   DEFAULT_ADVANCED,
   NEUTRAL_ROLE_STEPS,
   importedActionColours,
+  findPrimitive,
   anchoredNeutralOverrides,
   nearestRampFor,
   shippedNeutralHex,
@@ -559,18 +562,31 @@ const typographyProse = (body: string) => {
 };
 
 /**
- * A Google face the file's own prose offers as a stand-in. Only sentences
- * that say so count ("closest", "substitute", "fallback"...), and only
- * whole, case-exact family names, so an ordinary word that happens to name
- * a font cannot match.
+ * A Google face the file's own prose offers as a stand-in for `requested`.
+ * Only sentences that say so count ("closest", "substitute", "falling
+ * back"...), and only whole, case-exact family names, so an ordinary word
+ * that happens to name a font cannot match. A file names a stand-in per
+ * role ("Cormorant Garamond for Copernicus; Inter for StyreneB"), so the
+ * sentences that mention the requested face are read first, and within
+ * them the catalogue face nearest that mention wins: the stand-in sits
+ * beside the face it stands in for. Sentences that name no face fall
+ * back to the whole section, where the first catalogue face stands.
  */
-function suggestedFace(prose: string, fonts: Readonly<Record<string, string>>): string | null {
+function suggestedFace(
+  prose: string,
+  fonts: Readonly<Record<string, string>>,
+  requested = ""
+): string | null {
   const sentences = prose
     .replace(/[*_`]/g, "")
     .split(/(?<=[.!?])\s+|\n+/)
-    .filter((s) => /substitut|closest|alternative|equivalent|fallback|similar|stand-in|instead/i.test(s));
-  for (const sentence of sentences) {
-    let best: { name: string; at: number } | null = null;
+    .filter((s) =>
+      /substitut|closest|close match|alternative|equivalent|fall(ing|s)? ?back|similar|stand-in|instead|open[- ]source/i.test(s)
+    );
+  /* A platform face in a fallback stack (Roboto, Segoe UI) is the stack's
+     own, not a stand-in the file chose, so it never counts here. */
+  const facesIn = (sentence: string) => {
+    const found: Array<{ name: string; at: number }> = [];
     for (const word of sentence.matchAll(/[A-Z][\w-]*(?: [A-Z0-9][\w-]*)*/g)) {
       /* Try the longest run of capitalised words first, so "Hanken
          Grotesk" wins over a family named "Hanken" if one existed. */
@@ -578,16 +594,56 @@ function suggestedFace(prose: string, fonts: Readonly<Record<string, string>>): 
       for (let len = parts.length; len > 0; len -= 1) {
         for (let i = 0; i + len <= parts.length; i += 1) {
           const name = parts.slice(i, i + len).join(" ");
-          if (name.length < 4 || !fonts[name]) continue;
+          if (name.length < 4 || !fonts[name] || SYSTEM_STACK_FACES.has(name.toLowerCase())) continue;
           const at = (word.index ?? 0) + parts.slice(0, i).join(" ").length;
-          if (!best || at < best.at) best = { name, at };
+          if (!found.some((f) => f.at === at)) found.push({ name, at });
         }
+      }
+    }
+    return found;
+  };
+
+  const mention = requested.split(/[\s,]/)[0]?.toLowerCase() ?? "";
+  if (mention.length >= 4) {
+    let best: { name: string; distance: number } | null = null;
+    for (const sentence of sentences) {
+      const at = sentence.toLowerCase().indexOf(mention);
+      if (at < 0) continue;
+      for (const face of facesIn(sentence)) {
+        if (face.name.toLowerCase() === mention) continue;
+        const distance = Math.abs(face.at - at);
+        if (!best || distance < best.distance) best = { name: face.name, distance };
       }
     }
     if (best) return best.name;
   }
+  for (const sentence of sentences) {
+    const first = facesIn(sentence).sort((a, b) => a.at - b.at)[0];
+    if (first) return first.name;
+  }
   return null;
 }
+
+/** The faces a generic system stack lists after a licensed one. A file
+    whose stack reads "-apple-system, Roboto, sans-serif" is naming the
+    platform's own face, not choosing one, so a stand-in its prose names
+    outranks such a stack hit. */
+const SYSTEM_STACK_FACES = new Set([
+  "roboto",
+  "segoe ui",
+  "helvetica",
+  "helvetica neue",
+  "arial",
+  "system-ui",
+  "-apple-system",
+  "blinkmacsystemfont",
+  "ui-sans-serif",
+  "oxygen",
+  "ubuntu",
+  "cantarell",
+  "fira sans",
+  "droid sans",
+]);
 
 /** Longest stand-in key the face name starts with, case-insensitively. */
 function substituteFor(name: string, substitutes: Readonly<Record<string, string>>): string | null {
@@ -604,8 +660,9 @@ function substituteFor(name: string, substitutes: Readonly<Record<string, string
 }
 
 /**
- * The nearest Google face to a font stack: the face itself, a later face in
- * the stack, the stand-in the file's prose names, rift's stand-in table, or
+ * The nearest Google face to a font stack: the face itself, a later face
+ * the file chose for its stack, the stand-in the file's prose names for
+ * this face, a platform face the stack falls to, rift's stand-in table, or
  * the category. Null only for an empty stack.
  */
 export function matchFont(
@@ -628,12 +685,17 @@ export function matchFont(
     option: optionFor(family, catalogue.fonts[family], generic, role),
   });
 
+  let systemHit: string | null = null;
   for (const [index, name] of named.entries()) {
     const hit = byLower.get(name.toLowerCase());
-    if (hit) return build(hit, index === 0 ? "exact" : "stack");
+    if (!hit) continue;
+    if (index === 0) return build(hit, "exact");
+    if (!SYSTEM_STACK_FACES.has(name.toLowerCase())) return build(hit, "stack");
+    systemHit ??= hit;
   }
-  const suggested = suggestedFace(prose, catalogue.fonts);
+  const suggested = suggestedFace(prose, catalogue.fonts, requested);
   if (suggested) return build(suggested, "suggested");
+  if (systemHit) return build(systemHit, "stack");
   for (const name of named) {
     const sub = substituteFor(name, catalogue.substitutes);
     if (sub) return build(sub, "substitute");
@@ -652,6 +714,8 @@ interface TypeStyle {
   /** Letter spacing in em, when stated. */
   trackingEm: number | null;
   family: string;
+  /** The style is set in capitals (`textTransform: uppercase`). */
+  uppercase: boolean;
 }
 
 function typeStyles(doc: YamlMap): TypeStyle[] {
@@ -676,6 +740,7 @@ function typeStyles(doc: YamlMap): TypeStyle[] {
       weight: Number.isFinite(weightValue) && weightValue > 0 ? weightValue : 400,
       trackingEm,
       family: resolve(doc, raw.fontFamily) ?? "",
+      uppercase: /^uppercase$/i.test(resolve(doc, raw.textTransform) ?? ""),
     });
   }
   return out;
@@ -741,6 +806,7 @@ export interface DesignMdTheme {
   typeScale?: number;
   displayWeight?: number;
   headingWeight?: number;
+  bodyWeight?: number;
   tracking?: number;
   elevation?: ElevationVariant;
   accents?: AccentSextet;
@@ -750,6 +816,30 @@ export interface DesignMdTheme {
   /** The colours the theme was read from, for the source card. */
   swatches: string[];
   report: MatchRow[];
+  /** What the file states that rift has no lever for, each with what rift
+      does instead (see SourceTrait). */
+  traits: SourceTrait[];
+}
+
+/** A trait the file states that no lever carries: casing, a monospace
+    face, the secondary button's shape, a second action colour, corners the
+    one scale cannot hold both of. Each names what rift does instead, in
+    rift's own words, so the export can tell a coding agent without
+    copying the file's prose. */
+export interface SourceTrait {
+  kind: "uppercase" | "mono" | "secondary" | "second-action" | "radius";
+  text: string;
+}
+
+/** The brand a file's title names, for the theme's name: the format's
+    titles run "Figma-design-analysis" and "1win Analysis". */
+export function brandNameOf(title: string): string {
+  return title
+    .replace(/^(a |the )?design system (inspired by|for|of) /i, "")
+    .replace(/^inspired by /i, "")
+    .replace(/[\s-]*(design[\s-]*)?(analysis|system)$/i, "")
+    .replace(/[\s-]+$/, "")
+    .trim();
 }
 
 /** Every colour in the `colors` group, resolved, as [key, hex]. */
@@ -764,12 +854,24 @@ function colourEntries(doc: YamlMap): Array<[string, string]> {
   return out;
 }
 
-const component = (doc: YamlMap, pattern: RegExp): YamlMap | undefined => {
+/** The first component key, in file order, that the pattern matches (a
+    regex on the key, or a test of the key and its node). */
+const componentKey = (
+  doc: YamlMap,
+  pattern: RegExp | ((key: string, node: YamlMap) => boolean)
+): string | undefined => {
   const group = doc.components;
   if (!isMap(group)) return undefined;
-  const key = Object.keys(group).find((k) => pattern.test(k));
-  const node = key ? group[key] : undefined;
-  return isMap(node) ? node : undefined;
+  return Object.keys(group).find((k) => {
+    const node = group[k];
+    if (!isMap(node)) return false;
+    return pattern instanceof RegExp ? pattern.test(k) : pattern(k, node);
+  });
+};
+
+const component = (doc: YamlMap, pattern: RegExp): YamlMap | undefined => {
+  const key = componentKey(doc, pattern);
+  return key ? ((doc.components as YamlMap)[key] as YamlMap) : undefined;
 };
 
 /** The action colour: what the primary button is filled with, which is the
@@ -790,7 +892,20 @@ function fitAction(
   report: MatchRow[],
   ctx: ActionContext
 ) {
-  const button = component(doc, /^button-primary$/) ?? component(doc, /^button-(primary|cta)/);
+  /* The primary button by its usual names, else the first filled button
+     the file has: a file that reserves `primary` for its identity draws
+     its actions with a button named for its look (button-pill-dark), and
+     that fill is the action colour. Outline, ghost, text and secondary
+     buttons draw no action fill, so they never stand in. */
+  const buttonKey =
+    componentKey(doc, /^button-primary$/) ??
+    componentKey(doc, /^button-(primary|cta)/) ??
+    componentKey(doc, (key, node) =>
+      /^button/.test(key) &&
+      !/secondary|tertiary|ghost|outline|text|link|icon|glass|tint|hover|active|press|disabled|focus/.test(key) &&
+      toHex(resolve(doc, node.backgroundColor)) !== null
+    );
+  const button = buttonKey ? (doc.components as YamlMap)[buttonKey] as YamlMap : undefined;
   const fromButton = button ? toHex(resolve(doc, button.backgroundColor)) : null;
   const named = (pattern: RegExp) => colours.find(([key]) => pattern.test(key))?.[1] ?? null;
   const brand = fromButton ?? named(/^(primary|brand|action)$/) ?? named(/^accent$/);
@@ -858,6 +973,11 @@ function fitAction(
   const extra = imported ? imported.anchors.length - 1 : 0;
   const lightKey = imported?.lightKey ?? brand;
   const darkKey = imported?.darkKey ?? brandDark;
+  /* A neutral key's dark partner is a preset's hex that names a neutral
+     step; the theme draws that step with the file's own grey when it
+     restates one, so the note names what the stylesheet resolves to. */
+  const darkStep = neutral && darkKey ? findPrimitive(darkKey)?.step : undefined;
+  const darkShown = darkStep ? darkNeutralHex(darkStep) : darkKey;
 
   const clauses: string[] = [];
   if (extra > 0) {
@@ -871,7 +991,7 @@ function fitAction(
     clauses.push(
       `${imported.adjusted} mode, which the file does not describe, uses ${imported.adjusted === "light" ? lightKey : darkKey} from the same ramp so the fill stays visible on its page`
     );
-  } else if (darkKey && darkKey !== lightKey) clauses.push(`${darkKey} in dark mode`);
+  } else if (darkKey && darkKey !== lightKey) clauses.push(`${darkShown} in dark mode`);
   if (imported && imported.relabelled.length > 0) {
     clauses.push(`the label switches to the neutral scale's end in ${imported.relabelled.join(" and ")} mode to hold its contrast`);
   }
@@ -879,7 +999,13 @@ function fitAction(
     lever: "Action colour",
     value: brand,
     status: extra > 0 ? "matched" : "approximated",
-    note: `${fromButton ? "The primary button's fill" : "The primary colour"}, on rift's ${
+    note: `${
+      fromButton
+        ? buttonKey === "button-primary"
+          ? "The primary button's fill"
+          : `The ${buttonKey} fill`
+        : "The primary colour"
+    }, on rift's ${
       neutral ? "neutral" : imported?.ramp ?? nearestRampFor(brand)
     } ramp, ${clauses.join("; ")}.`,
   });
@@ -909,18 +1035,25 @@ const NEUTRAL_ROLE_KEYS: Record<
     keys: [
       /^(canvas|background|bg|surface|page)[-_](soft|parchment|subtle|muted|alt|secondary|page)$/,
       /^(canvas|background|bg|page|background-primary|bg-primary|surface-page|page-background|parchment|paper)$/,
+      /* A file that describes both modes names each page: the lightness
+         window sorts the light one from the dark. */
+      /^(canvas|background|bg|page|surface)[-_](light|dark)$|^night$/,
     ],
     light: (l) => l > 0.85,
     dark: (l) => l < 0.2,
   },
   "--color-text-primary": {
-    keys: [/^(text|ink|foreground|fg|on-surface|on-background|body|text-primary|content|heading|headline)$/],
+    keys: [
+      /^(text|ink|foreground|fg|on-surface|on-background|body|text-primary|content|heading|headline)$/,
+      /^(on-dark|text-on-dark|ink-dark|on-light|text-on-light|ink-light)$/,
+    ],
     light: (l) => l < 0.3,
     dark: (l) => l > 0.75,
   },
   "--color-bg-container-primary": {
     keys: [
       /^(surface|card|container|surface-primary|surface-card|panel|elevated|surface-elevated|white)$/,
+      /^(surface|card|canvas|background)[-_](card-dark|dark-elevated|elevated-dark|raised|dark|light|card-light)$|^night-raised$/,
       /^(canvas|background|bg)$/,
     ],
     light: (l) => l > 0.85,
@@ -1024,6 +1157,43 @@ function fitNeutrals(colours: Array<[string, string]>, report: MatchRow[]) {
   const light = read("light");
   const dark = read("dark");
   const darkFirst = !light.page && dark.page;
+
+  /* A file that names a page for each mode (canvas-light and canvas-dark,
+     canvas and night) describes both, so each mode is rebuilt through its
+     own greys exactly: nothing is inverted and no surface is muted. Dark
+     mode's extras are the steps its own scale sets differently from light
+     mode's. The light page counts by name even when it is pure white,
+     which step 01 bars from anchoring: the file still described it. */
+  const namedPage = (mode: "light" | "dark") =>
+    colours.some(
+      ([key, hex]) =>
+        (mode === "light" ? /^(canvas|background|bg|page|surface)[-_]light$/ : /^(canvas|background|bg|page|surface)[-_]dark$|^night$/).test(key.toLowerCase()) &&
+        NEUTRAL_ROLE_KEYS["--color-bg-page-primary"][mode](lightnessOf(hex))
+    );
+  if ((light.page || namedPage("light")) && (dark.page || namedPage("dark")) && light.anchors.length > 0 && dark.anchors.length > 0) {
+    const rebuiltLight = anchoredNeutralOverrides(light.anchors);
+    const rebuiltDark = anchoredNeutralOverrides(dark.anchors);
+    if (rebuiltLight && rebuiltDark) {
+      const darkOnly: Overrides = {};
+      for (const [name, value] of Object.entries(rebuiltDark.overrides)) {
+        if (rebuiltLight.overrides[name] !== value) darkOnly[name] = value;
+      }
+      const usedIn = (mode: typeof light, rebuilt: typeof rebuiltLight) =>
+        rebuilt.anchors.map(([step]) => mode.named[mode.anchors.findIndex(([s]) => s === step)]);
+      report.push({
+        lever: "Neutral scale",
+        value: `${rebuiltLight.anchors.length + rebuiltDark.anchors.length} greys`,
+        status: "matched",
+        note: `The file names surfaces for both modes: light mode is rebuilt through its ${usedIn(light, rebuiltLight).join(", ")} and dark mode through its ${usedIn(dark, rebuiltDark).join(", ")}, each on the step that paints its role; greys too far from any step's depth keep rift's.`,
+      });
+      return {
+        neutralExtras: rebuiltLight.overrides,
+        neutralExtrasDark: Object.keys(darkOnly).length > 0 ? darkOnly : undefined,
+        darkFirst: false,
+      };
+    }
+  }
+
   const { anchors, named } = darkFirst ? dark : light;
   const rebuilt = anchoredNeutralOverrides(anchors);
   if (!rebuilt) {
@@ -1124,7 +1294,27 @@ function fitStatus(colours: Array<[string, string]>, actionRamp: string | undefi
 
 /** Radius and pill: the input's corner (rift's inputs and standard
     containers share one radius step) or, failing that, the cards'. */
-function fitShape(doc: YamlMap, report: MatchRow[]) {
+/** A control corner this round or rounder is a capsule: rift's squared
+    button lands on the 16px step, so anything past it reads as a pill,
+    and an input past it is a capsule no input step of rift's reaches. */
+const CAPSULE_MIN_PX = 16;
+
+/** Whether a button corner is a pill: the pill token, half or more of the
+    button's stated height, or past CAPSULE_MIN_PX when no height is given.
+    Files state their pills in px as often as with a pill token (32px on a
+    40px button), so the proportion decides, not the token. */
+const isPillButton = (corner: string, height: number | null) => {
+  if (isPillRadius(corner)) return true;
+  const px = toPx(corner);
+  if (px === null) return false;
+  return height !== null ? px >= height / 2 : px >= CAPSULE_MIN_PX;
+};
+
+/** How far the input and card medians may disagree before the report
+    names the contradiction: one band of the radius vocabulary. */
+const RADIUS_DISAGREEMENT = 0.5;
+
+function fitShape(doc: YamlMap, report: MatchRow[], traits: SourceTrait[]) {
   const out: { radiusScale?: number; pill?: boolean } = {};
   const group = isMap(doc.components) ? doc.components : {};
   const cornerOf = (pattern: RegExp) =>
@@ -1141,35 +1331,61 @@ function fitShape(doc: YamlMap, report: MatchRow[]) {
       .map(([, node]) => resolve(doc, (node as YamlMap).rounded ?? (node as YamlMap).borderRadius))
       .filter((v): v is string => Boolean(v) && !isPillRadius(v))
       .map(toPx)
-      .filter((px): px is number => px !== null && px > 0);
+      /* A stated 0px is a corner too: a square system fits at 0%. */
+      .filter((px): px is number => px !== null && px >= 0);
 
   const median = (values: number[]) => [...values].sort((a, b) => a - b)[values.length >> 1];
-  const inputs = cornerOf(/(^|-)(input|field|textarea|select)(-|$)/i);
+  /* The scale is read from the surfaces: input corners against rift's
+     input step and card corners against its card step, each a ratio, the
+     median of all of them the scale. A capsule input is a shape rift's
+     scale never reaches, so it is left out rather than letting it blow the
+     cards up. */
+  const inputs = cornerOf(/(^|-)(input|field|textarea|select)(-|$)/i).filter((px) => px < CAPSULE_MIN_PX);
   const cards = cornerOf(/(^|-)(card|tile|panel|container|modal|dialog)(-|$)/i);
-  const corner = inputs.length > 0 ? median(inputs) : cards.length > 0 ? median(cards) : null;
+  const ratios = [
+    ...inputs.map((px) => px / SHIPPED_INPUT_RADIUS_PX),
+    ...cards.map((px) => px / SHIPPED_CARD_RADIUS_PX),
+  ];
 
-  if (corner !== null) {
+  if (ratios.length > 0) {
     const range = LEVER_RANGES.radius;
-    out.radiusScale = clamp(snap((corner / SHIPPED_INPUT_RADIUS_PX) * 100, range.step), range.min, range.max);
+    out.radiusScale = clamp(snap(median(ratios) * 100, range.step), range.min, range.max);
+    const fed = [
+      inputs.length > 0 ? `${inputs.length} input corner${inputs.length > 1 ? "s" : ""} (${median(inputs)}px)` : "",
+      cards.length > 0 ? `${cards.length} card corner${cards.length > 1 ? "s" : ""} (${median(cards)}px)` : "",
+    ].filter(Boolean);
+    const inputRatio = inputs.length > 0 ? median(inputs) / SHIPPED_INPUT_RADIUS_PX : null;
+    const cardRatio = cards.length > 0 ? median(cards) / SHIPPED_CARD_RADIUS_PX : null;
+    const disagree =
+      inputRatio !== null && cardRatio !== null && Math.abs(inputRatio - cardRatio) > RADIUS_DISAGREEMENT;
+    if (disagree) {
+      traits.push({
+        kind: "radius",
+        text: `Its inputs (${median(inputs)}px) and cards (${median(cards)}px) round at different ratios of rift's scale. One scale holds both, so the fitted value sits between them.`,
+      });
+    }
     report.push({
       lever: "Radius",
       value: `${out.radiusScale}%`,
       status: "approximated",
-      note: `The ${inputs.length > 0 ? "input" : "card"} corner (${corner}px), on rift's radius scale.`,
+      note: `From ${fed.join(" and ")}, each against its step on rift's radius scale${
+        disagree ? "; the inputs and cards disagree, so the scale sits between them" : ""
+      }.`,
     });
   } else {
-    report.push({ lever: "Radius", value: "100%", status: "kept", note: "The file gives no input or card corner." });
+    report.push({ lever: "Radius", value: "100%", status: "kept", note: "The file gives no input or card corner on rift's scale." });
   }
 
   const button = component(doc, /^button-primary$/) ?? component(doc, /^button/);
   const buttonCorner = button ? resolve(doc, button.rounded ?? button.borderRadius) : undefined;
   if (buttonCorner) {
-    out.pill = isPillRadius(buttonCorner);
+    const height = button ? toPx(resolve(doc, button.height)) : null;
+    out.pill = isPillButton(buttonCorner, height);
     report.push({
       lever: "Pill buttons",
       value: out.pill ? "On" : "Off",
       status: "matched",
-      note: `The primary button's corner is ${buttonCorner}.`,
+      note: `The primary button's corner is ${buttonCorner}${height !== null ? ` on a ${height}px button` : ""}.`,
     });
   } else {
     report.push({ lever: "Pill buttons", value: "On", status: "kept", note: "The file gives no button corner." });
@@ -1255,17 +1471,43 @@ function fitType(doc: YamlMap, prose: string, catalogue: FontCatalogue, report: 
       status: body.size === SHIPPED_BODY_SIZE_PX ? "matched" : "approximated",
       note: `Body copy at ${body.size}px against rift's ${SHIPPED_BODY_SIZE_PX}px.`,
     });
-    if (body.trackingEm !== null) {
-      const t = LEVER_RANGES.tracking;
-      const exact = (body.trackingEm - SHIPPED_PARAGRAPH_TRACKING_EM) * 100;
-      out.tracking = clamp(snap(exact, t.step), t.min, t.max);
-      report.push({
-        lever: "Tracking",
-        value: `${out.tracking}%`,
-        status: Math.abs(out.tracking - exact) < 1e-6 ? "matched" : "approximated",
-        note: `Body tracking of ${(body.trackingEm * 100).toFixed(1)}% of an em; the lever moves every style together.`,
-      });
-    }
+    out.bodyWeight = leverWeight(body.weight);
+    report.push({
+      lever: "Body weight",
+      value: String(out.bodyWeight),
+      status: out.bodyWeight === body.weight ? "matched" : "approximated",
+      note: `From ${body.key} (${body.size}px at ${body.weight}); emphasis and labels keep their distance above it.`,
+    });
+  }
+
+  /* Tracking is read from the display tier and the body, since a brand's
+     signature is tight headlines over plain body copy and rift's display
+     tier opens by default. One lever moves every style by the same amount,
+     so it takes the offset that errs least against both samples (the mean
+     of the two), and the note says what each stated. A display tracking
+     of zero is the format's default rather than a request, so only a
+     tightened display counts; rift's open display tier is its own. */
+  const samples = [
+    display?.trackingEm !== null && display?.trackingEm !== undefined && display.trackingEm < 0
+      ? { label: "display", stated: display.trackingEm, shipped: SHIPPED_DISPLAY_TRACKING_EM }
+      : null,
+    body?.trackingEm !== null && body?.trackingEm !== undefined
+      ? { label: "body", stated: body.trackingEm, shipped: SHIPPED_PARAGRAPH_TRACKING_EM }
+      : null,
+  ].filter((s): s is NonNullable<typeof s> => s !== null);
+  if (samples.length > 0) {
+    const t = LEVER_RANGES.tracking;
+    const exact = samples.reduce((sum, s) => sum + (s.stated - s.shipped) * 100, 0) / samples.length;
+    out.tracking = clamp(snap(exact, t.step), t.min, t.max);
+    const stated = samples.map((s) => `${s.label} ${(s.stated * 100).toFixed(1)}%`).join(" and ");
+    report.push({
+      lever: "Tracking",
+      value: `${out.tracking}%`,
+      status: samples.length === 1 && Math.abs(out.tracking - exact) < 1e-6 ? "matched" : "approximated",
+      note: `${samples.length > 1 ? "Tracking of" : "Tracking of"} ${stated} of an em; the lever moves every style together${
+        samples.length > 1 ? ", so it sits where both err least" : ""
+      }.`,
+    });
   }
 
   /* The faces: the body style's, and the largest heading or display
@@ -1317,12 +1559,99 @@ function fitElevation(doc: YamlMap, body: string, report: MatchRow[]) {
     report.push({ lever: "Elevation", value: "Default", status: "approximated", note: "The file uses shadows; rift keeps its own two." });
     return { elevation: "default" as ElevationVariant };
   }
-  if (/shadow-free|no (drop )?shadows|never (add )?(drop )?shadows|without shadows|(essentially|predominantly) flat|don.t add (drop )?shadows/i.test(body)) {
+  /* A statement about the system, never a table cell: "no shadow" alone
+     is how a depth table labels its flat level, in files that keep a soft
+     tier beside it. */
+  if (/shadow-free|no (drop )?shadows\b|never (add|uses?)? ?(a |any )?(drop )?shadows?\b|without shadows|(essentially|predominantly) flat|don.t add (drop )?shadows/i.test(body)) {
     report.push({ lever: "Elevation", value: "Flat", status: "matched", note: "The file describes a shadow-free system." });
     return { elevation: "flat" as ElevationVariant };
   }
+  /* One faint tier for what floats (a menu, a sticky bar) is rift's soft
+     pair, not its default one. */
+  if (/(one|single) (shadow|elevation) tier|single shadow|(soft|subtle|faint|whisper|light|minimal|rare)[-\s]?(drop )?shadow|shadows? (is |are |stay |stays )?(rare|minimal|soft|subtle|faint|light)\b/i.test(body)) {
+    report.push({ lever: "Elevation", value: "Soft", status: "approximated", note: "The file keeps one faint shadow for what floats, which is rift's softer pair." });
+    return { elevation: "soft" as ElevationVariant };
+  }
   report.push({ lever: "Elevation", value: "Default", status: "kept", note: "The file says nothing about depth." });
   return {};
+}
+
+/** The traits the file states that no lever carries, each with what rift
+    does instead, in rift's own words. Built from the front matter alone,
+    never from the file's prose, so nothing a stranger wrote is repeated. */
+function readTraits(doc: YamlMap, brand: string | undefined, bodyFamily: string): SourceTrait[] {
+  const traits: SourceTrait[] = [];
+  const styles = typeStyles(doc);
+  const group = isMap(doc.components) ? doc.components : {};
+
+  if (styles.some((s) => s.uppercase)) {
+    traits.push({
+      kind: "uppercase",
+      text: "Its labels and eyebrows are set in capitals. Rift sets casing at the use site: the overline style carries the metrics, so add text-transform: uppercase where the brand would.",
+    });
+  }
+
+  const bodyGeneric = genericOf(splitStack(bodyFamily));
+  const mono = styles.find(
+    (s) => genericOf(splitStack(s.family)) === "monospace" && bodyGeneric !== "monospace"
+  );
+  if (mono) {
+    traits.push({
+      kind: "mono",
+      text: `It sets ${/code/i.test(mono.key) ? "code" : "labels"} in a monospace face. Rift's one monospace stack is --font-family-code, read by CodeBlock and inline code and set by no lever, so that face stays rift's.`,
+    });
+  }
+
+  const brandHue = brand ? rgbToHsl(hexToRgb(brand))[0] : null;
+  const brandNeutral = brand ? nearestRampFor(brand) === "neutral" : true;
+  const hueGap = (hex: string) => {
+    if (brandHue === null) return 360;
+    const d = Math.abs(rgbToHsl(hexToRgb(hex))[0] - brandHue);
+    return Math.min(d, 360 - d);
+  };
+  const isNeutralHex = (hex: string | null) => hex !== null && chromaOf(hexToRgb(hex)) < 0.1;
+
+  for (const [key, node] of Object.entries(group)) {
+    if (!isMap(node) || !/^button-(secondary|outline|ghost)/.test(key)) continue;
+    const fill = resolve(doc, node.backgroundColor);
+    const fillHex = toHex(fill);
+    const border = toHex(resolve(doc, node.borderColor));
+    const text = toHex(resolve(doc, node.textColor));
+    const fillIsCanvas = fill === undefined || /transparent/i.test(fill) || isNeutralHex(fillHex);
+    const edgeIsInk = isNeutralHex(border) || (border === null && isNeutralHex(text));
+    if (fillIsCanvas && edgeIsInk) {
+      traits.push({
+        kind: "secondary",
+        text: "Its secondary button is an outline in ink or a plain canvas fill, not the action colour. Rift's secondary-neutral Button variant is that shape; use it where the brand would use its secondary.",
+      });
+      break;
+    }
+  }
+
+  /* A second action colour: a chromatic `secondary` or `accent`, or a
+     second filled button on another hue (or any hue, when the action
+     colour is a neutral). */
+  const isSecondAction = (hex: string | null) =>
+    hex !== null && hex !== brand && !isNeutralHex(hex) && (brandNeutral || hueGap(hex) > 30);
+  const secondHex =
+    colourEntries(doc).find(([key, hex]) => /^(secondary|accent)$/.test(key) && isSecondAction(hex))?.[1] ??
+    Object.entries(group)
+      .filter(
+        ([key, node]) =>
+          isMap(node) &&
+          /^button/.test(key) &&
+          !/secondary|tertiary|ghost|outline|text|link|icon|hover|active|press|disabled/.test(key)
+      )
+      .map(([, node]) => toHex(resolve(doc, (node as YamlMap).backgroundColor)))
+      .find(isSecondAction) ??
+    null;
+  if (secondHex) {
+    traits.push({
+      kind: "second-action",
+      text: `It carries a second action colour (${secondHex}). Rift has one action colour; the second lands among the accents, for charts and the background field, never on a control.`,
+    });
+  }
+  return traits;
 }
 
 /**
@@ -1351,10 +1680,12 @@ export function readDesignMd(text: string, catalogue: FontCatalogue): DesignMdTh
   });
   report.push(...neutralReport);
   const { statusBases } = fitStatus(colours, actionRamp, report);
-  const shape = fitShape(doc, report);
+  const traits: SourceTrait[] = [];
+  const shape = fitShape(doc, report, traits);
   const density = fitDensity(doc, report);
   const type = fitType(doc, typographyProse(body), catalogue, report);
   const elevation = fitElevation(doc, body, report);
+  traits.push(...readTraits(doc, action.brand, type.bodyFont?.requested ?? ""));
 
   const accents = accentsFromColours(colours.map(([, hex]) => hex), action.brand) ?? undefined;
   report.push(
@@ -1405,6 +1736,7 @@ export function readDesignMd(text: string, catalogue: FontCatalogue): DesignMdTh
     accents,
     swatches,
     report,
+    traits,
   };
 }
 

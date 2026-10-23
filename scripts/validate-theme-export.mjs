@@ -136,7 +136,16 @@ for (const match of read('src/tokens/tokens-primitives.css').matchAll(/^\s*(--[\
   known.add(match[1]);
 }
 
+/* A source, so the From the source section is exercised: the importer
+   read over one fixture, the same way the playground hands it over. */
+const designMd = await import(pathToFileURL(join(repoRoot, 'website/src/lib/theme/design-md.ts')).href);
+const fonts = await import(pathToFileURL(join(repoRoot, 'website/src/data/google-fonts.generated.ts')).href);
+const fixtureTheme = designMd.readDesignMd(read('scripts/fixtures/design-md/uppercase-and-mono.md'), {
+  fonts: fonts.GOOGLE_FONTS,
+  substitutes: fonts.FONT_SUBSTITUTES,
+});
 const context = {
+  source: { name: 'DESIGN.md', report: fixtureTheme.report, traits: fixtureTheme.traits },
   productName: 'Example',
   packageName: 'example-ds',
   binName: 'example-ds',

@@ -10,6 +10,7 @@ import {
   HEADING_FONT_OPTIONS,
   SHIPPED_DISPLAY_WEIGHT,
   SHIPPED_HEADING_WEIGHT,
+  SHIPPED_BODY_WEIGHT,
   SHIPPED_ICON_WEIGHT,
   actionColorPlan,
   advancedColorOverrides,
@@ -62,6 +63,10 @@ export interface ThemePreset {
   displayWeight: number;
   /** Heading-tier weight (Headings 1 to 3, Title Body); SHIPPED_HEADING_WEIGHT is the base look. */
   headingWeight: number;
+  /** Body-tier weight: the paragraph's, with emphasis, overline and caption
+      shifted by the same amount so they keep their distance above it;
+      SHIPPED_BODY_WEIGHT is the base look. */
+  bodyWeight: number;
   /** Letter-spacing offset in percent of an em, added to every style's shipped tracking (0 = shipped). */
   tracking: number;
   /** Icon stroke weight on the icon font's `wght` axis; SHIPPED_ICON_WEIGHT is the base look. */
@@ -131,6 +136,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     elevation: "default",
     displayWeight: SHIPPED_DISPLAY_WEIGHT,
     headingWeight: SHIPPED_HEADING_WEIGHT,
+    bodyWeight: SHIPPED_BODY_WEIGHT,
     tracking: 0,
     iconWeight: SHIPPED_ICON_WEIGHT,
     iconFill: false,
@@ -181,6 +187,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     elevation: "flat",
     displayWeight: SHIPPED_DISPLAY_WEIGHT,
     headingWeight: SHIPPED_HEADING_WEIGHT,
+    bodyWeight: SHIPPED_BODY_WEIGHT,
     tracking: 0,
     iconWeight: SHIPPED_ICON_WEIGHT,
     iconFill: false,
@@ -245,6 +252,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     elevation: "default",
     displayWeight: SHIPPED_DISPLAY_WEIGHT,
     headingWeight: SHIPPED_HEADING_WEIGHT,
+    bodyWeight: SHIPPED_BODY_WEIGHT,
     tracking: 0,
     iconWeight: SHIPPED_ICON_WEIGHT,
     iconFill: false,
@@ -291,6 +299,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     elevation: "soft",
     displayWeight: SHIPPED_DISPLAY_WEIGHT,
     headingWeight: SHIPPED_HEADING_WEIGHT,
+    bodyWeight: SHIPPED_BODY_WEIGHT,
     tracking: 0,
     iconWeight: SHIPPED_ICON_WEIGHT,
     iconFill: false,
@@ -348,6 +357,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     // Both tiers a step heavier, and set tight: signage, not editorial.
     displayWeight: 500,
     headingWeight: 700,
+    bodyWeight: SHIPPED_BODY_WEIGHT,
     tracking: -1,
     // Icons carry the same heavy line as the headings.
     iconWeight: 500,
@@ -430,6 +440,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     elevation: "soft",
     displayWeight: 800,
     headingWeight: SHIPPED_HEADING_WEIGHT,
+    bodyWeight: SHIPPED_BODY_WEIGHT,
     tracking: 0,
     iconWeight: SHIPPED_ICON_WEIGHT,
     iconFill: false,
@@ -502,6 +513,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     elevation: "soft",
     displayWeight: 600,
     headingWeight: SHIPPED_HEADING_WEIGHT,
+    bodyWeight: SHIPPED_BODY_WEIGHT,
     tracking: 0,
     iconWeight: SHIPPED_ICON_WEIGHT,
     iconFill: false,
@@ -555,6 +567,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     elevation: "flat",
     displayWeight: SHIPPED_DISPLAY_WEIGHT,
     headingWeight: SHIPPED_HEADING_WEIGHT,
+    bodyWeight: SHIPPED_BODY_WEIGHT,
     tracking: 0,
     iconWeight: SHIPPED_ICON_WEIGHT,
     iconFill: false,
@@ -607,6 +620,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     // display tier comes up a step; headings stay at the shipped bold.
     displayWeight: 400,
     headingWeight: SHIPPED_HEADING_WEIGHT,
+    bodyWeight: SHIPPED_BODY_WEIGHT,
     // Rounded letters like a touch of room.
     tracking: 0.5,
     // Chunkier strokes to sit beside the soft, heavy letterforms.
@@ -668,6 +682,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     // work a heavy weight would: headings step down to a medium.
     displayWeight: 400,
     headingWeight: 500,
+    bodyWeight: SHIPPED_BODY_WEIGHT,
     // Drawn in a touch, the way a display serif is usually set.
     tracking: -0.5,
     iconWeight: 300,
@@ -917,7 +932,7 @@ export function presetOverrides(
     Object.assign(merged, motionScaleOverrides(preset.motionScale / 100));
   }
   Object.assign(merged, elevationOverrides(preset.elevation, theme));
-  Object.assign(merged, weightOverrides(preset.displayWeight, preset.headingWeight));
+  Object.assign(merged, weightOverrides(preset.displayWeight, preset.headingWeight, preset.bodyWeight));
   Object.assign(merged, trackingOverrides(preset.tracking));
   Object.assign(merged, iconOverrides(preset.iconWeight, preset.iconFill));
 

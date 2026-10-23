@@ -51,6 +51,9 @@ export interface PlaygroundControlsProps {
   displayWeight: number;
   /** Heading-tier weight (Headings 1 to 3, Title Body). */
   headingWeight: number;
+  /** Body-tier weight: the paragraph's, with emphasis and labels shifted
+      by the same amount. */
+  bodyWeight: number;
   /** Letter-spacing offset in percent of an em; 0 is the shipped tracking. */
   tracking: number;
   /** Icon stroke weight on the icon font's weight axis. */
@@ -92,6 +95,7 @@ export interface PlaygroundControlsProps {
   onElevation: (value: ElevationVariant) => void;
   onDisplayWeight: (value: number) => void;
   onHeadingWeight: (value: number) => void;
+  onBodyWeight: (value: number) => void;
   onTracking: (value: number) => void;
   onIconWeight: (value: number) => void;
   onIconFill: (value: boolean) => void;
@@ -135,6 +139,7 @@ export default function PlaygroundControls({
   elevation,
   displayWeight,
   headingWeight,
+  bodyWeight,
   tracking,
   iconWeight,
   iconFill,
@@ -161,6 +166,7 @@ export default function PlaygroundControls({
   onElevation,
   onDisplayWeight,
   onHeadingWeight,
+  onBodyWeight,
   onTracking,
   onIconWeight,
   onIconFill,
@@ -475,6 +481,13 @@ export default function PlaygroundControls({
             value={headingWeight}
             {...TYPE_WEIGHT_RANGE}
             onValueChange={onHeadingWeight}
+          />
+          <InspectorSlider
+            size="compact"
+            label="Body weight"
+            value={bodyWeight}
+            {...TYPE_WEIGHT_RANGE}
+            onValueChange={onBodyWeight}
           />
           {/* Percent of an em, added to each style's shipped tracking. */}
           <InspectorSlider

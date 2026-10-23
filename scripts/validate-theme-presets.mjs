@@ -137,6 +137,7 @@ const NUMBER_LEVERS = [
   'motionScale',
   'displayWeight',
   'headingWeight',
+  'bodyWeight',
   'tracking',
   'iconWeight',
 ];

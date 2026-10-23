@@ -310,9 +310,22 @@ export function rampRebaseSteps(
  * keeps a custom action colour honest: a warm orange brand reshapes the
  * orange ramp, never the teal one.
  */
+/** The most channel spread a colour can have and still be a neutral key:
+    a tenth of the range. A near-black ink tinted toward blue sits well
+    under it; the deepest step of any chromatic ramp sits well over. */
+export const NEUTRAL_KEY_MAX_CHROMA = 0.1;
+
 export function nearestRampFor(hex: string): string {
-  const [h, s, l] = rgbToHsl(hexToRgb(hex));
-  if (s < 0.1 || l < 0.04 || l > 0.97) return "neutral";
+  const rgb = hexToRgb(hex);
+  const [h, s, l] = rgbToHsl(rgb);
+  /* Saturation alone misreads a near-black: a navy ink at L 0.12 holds
+     HSL saturation 0.23 over a chroma of 14 in 255, and the eye reads it as
+     black. Chroma (the spread of its channels) is what tells a tinted
+     near-black from a deep hue, so a key under NEUTRAL_KEY_MAX_CHROMA rides
+     the neutral scale the way pure black does, and keeps a dark partner
+     from the presets instead of rebuilding a chromatic ramp around it. */
+  const chroma = (Math.max(...rgb) - Math.min(...rgb)) / 255;
+  if (s < 0.1 || chroma < NEUTRAL_KEY_MAX_CHROMA || l < 0.04 || l > 0.97) return "neutral";
   let best = "teal";
   let bestD = Infinity;
   for (const ramp of CHROMATIC_RAMPS) {
@@ -1237,6 +1250,9 @@ const RADIUS_STEPS: ReadonlyArray<[step: string, px: number]> = [
     sit on --radius-300, so this is what the radius lever scales from when
     a theme is fitted to a measured corner (lib/theme/design-md.ts). */
 export const SHIPPED_INPUT_RADIUS_PX = RADIUS_STEPS.find(([step]) => step === "300")![1];
+/** The card corner at the shipped scale (`--radius-600`, Card's corner), the
+    other step a stated surface corner is read against. */
+export const SHIPPED_CARD_RADIUS_PX = RADIUS_STEPS.find(([step]) => step === "600")![1];
 
 /* ---------- density, type scale, motion, elevation ----------
    The remaining preset levers, each a scale (100 = shipped) over one
@@ -1427,8 +1443,9 @@ export function radiusOverrides(scale: number, pill: boolean): Overrides {
    both directions by scripts/validate-theme-mirrors.mjs), because both
    levers need the shipped value to know when they are a no-op, and
    tracking adds to it. `tier` says which weight lever moves a style:
-   the display lever, the heading lever, or neither (body and labels
-   keep their shipped weights). */
+   the display lever and the heading lever set their tier's weight; the
+   body lever shifts its tier, so the paragraph moves to the lever and
+   emphasis, overline and caption keep their distance from it. */
 type TypeTier = "display" | "heading" | "body";
 
 const TYPE_STYLES: ReadonlyArray<
@@ -1458,11 +1475,21 @@ const tierWeight = (tier: TypeTier) =>
 export const SHIPPED_DISPLAY_WEIGHT = tierWeight("display");
 /** The shipped heading-tier weight: the heading lever's no-op position. */
 export const SHIPPED_HEADING_WEIGHT = tierWeight("heading");
+/** The paragraph style's shipped weight: the body lever's no-op position.
+    The body tier's reference is the paragraph, not its first style, since
+    emphasis and overline sit above it by design. */
+export const SHIPPED_BODY_WEIGHT = TYPE_STYLES.find(([style]) => style === "paragraph")![2];
 
 /** The paragraph style's shipped tracking, in em: the tracking lever adds
     to it, so a fitted lever position is the measured tracking minus this. */
 export const SHIPPED_PARAGRAPH_TRACKING_EM = TYPE_STYLES.find(
   ([style]) => style === "paragraph"
+)![3];
+/** The display tier's shipped tracking, in em (Display 1's): the other
+    style an importer reads a stated tracking from, since a brand's tight
+    headlines are its signature and rift's display tier opens by default. */
+export const SHIPPED_DISPLAY_TRACKING_EM = TYPE_STYLES.find(
+  ([style]) => style === "display-1"
 )![3];
 
 /** The weight levers' range. The floor and ceiling are what the picker
@@ -1470,16 +1497,26 @@ export const SHIPPED_PARAGRAPH_TRACKING_EM = TYPE_STYLES.find(
     stop renders its nearest weight. */
 export const TYPE_WEIGHT_RANGE = { min: 300, max: 800, step: 100 } as const;
 
-/** Sets a whole tier's weight. A tier left at its shipped weight emits
-    nothing, so a preset's extras can still specialise one style. */
+/** Sets the display and heading tiers' weight and shifts the body tier's:
+    the paragraph lands on `bodyWeight`, and every other body style moves
+    by the same amount, so emphasis stays a step above the paragraph and
+    the overline two, clamped to the range the faces are loaded at. A tier
+    left at its shipped weight emits nothing, so a preset's extras can
+    still specialise one style. */
 export function weightOverrides(
   displayWeight: number,
-  headingWeight: number
+  headingWeight: number,
+  bodyWeight: number = SHIPPED_BODY_WEIGHT
 ): Overrides {
   const overrides: Overrides = {};
+  const bodyShift = bodyWeight - SHIPPED_BODY_WEIGHT;
   for (const [style, tier, shipped] of TYPE_STYLES) {
     const weight =
-      tier === "display" ? displayWeight : tier === "heading" ? headingWeight : shipped;
+      tier === "display"
+        ? displayWeight
+        : tier === "heading"
+          ? headingWeight
+          : Math.min(TYPE_WEIGHT_RANGE.max, Math.max(TYPE_WEIGHT_RANGE.min, shipped + bodyShift));
     if (weight !== shipped) overrides[`--font-${style}-weight`] = String(weight);
   }
   return overrides;

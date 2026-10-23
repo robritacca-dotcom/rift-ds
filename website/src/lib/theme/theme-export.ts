@@ -1,4 +1,5 @@
 import { THEME_PRESETS, presetOverrides, type ThemePreset } from "./presets";
+import type { MatchRow, SourceTrait } from "./design-md";
 import {
   ACCENT_NAMES,
   CHROMATIC_RAMPS,
@@ -139,6 +140,17 @@ export interface ThemeExportContext {
   siteUrl: string;
   mcpEndpoint: string;
   mcpServerName: string;
+  /** The DESIGN.md the theme was read from, when it was: the file's name,
+      the importer's match report, and the traits it states that no lever
+      carries. The export writes a section from them, in rift's words; the
+      file's own prose is never copied. */
+  source?: ThemeSource;
+}
+
+export interface ThemeSource {
+  name: string;
+  report: MatchRow[];
+  traits: SourceTrait[];
 }
 
 const rampLabel = (hex: string) => {
@@ -290,7 +302,38 @@ function readingNotes(preset: ThemePreset, colours: ResolvedColours): string[] {
  * sections; the themed AGENTS.md nests them as `###` under its theme
  * section, so the two files describe a theme in the same words.
  */
-function themeLanguage(preset: ThemePreset, heading: "##" | "###"): string {
+/**
+ * The section a theme read from a DESIGN.md carries about its source: the
+ * file, how each lever was fitted (from the importer's report, matched
+ * levers in one line and the rest one each), and what rift does not take
+ * from it (the traits, each already in rift's words). Nothing here is the
+ * file's own prose: the lines are rift's, built from what was detected,
+ * so a coding agent learns the brand's rules without a stranger's text.
+ */
+function sourceSection(source: ThemeSource, heading: "##" | "###"): string {
+  const matched = source.report.filter((row) => row.status === "matched");
+  const fitted = source.report.filter((row) => row.status !== "matched");
+  const lines = [
+    `This theme was read from \`${source.name}\`, a DESIGN.md describing another system. The file stayed in the browser it was dropped on; only what it fitted is here.`,
+    "",
+    `${heading}# The fit`,
+    "",
+    ...(matched.length > 0
+      ? [`- Stated outright and kept: ${matched.map((row) => row.lever.toLowerCase()).join(", ")}.`]
+      : []),
+    ...fitted.map(
+      (row) =>
+        `- ${row.lever}: ${row.value}${row.status === "kept" ? " (rift's own)" : ""}. ${row.note}`
+    ),
+  ];
+  if (source.traits.length > 0) {
+    lines.push("", `${heading}# What rift does not take from it`, "");
+    lines.push(...source.traits.map((trait) => `- ${trait.text}`));
+  }
+  return `${heading} From the source\n\n${lines.join("\n")}`;
+}
+
+function themeLanguage(preset: ThemePreset, heading: "##" | "###", source?: ThemeSource): string {
   const colours = resolvedColours(preset);
   const speed = motionSpeedPercent(preset.motionScale);
   const [lightKey] = colours.action.light;
@@ -334,7 +377,7 @@ function themeLanguage(preset: ThemePreset, heading: "##" | "###"): string {
     preset.headingFontLabel
       ? `- Heading face: ${fontName(preset.headingFontLabel)} (\`--font-family-heading\`).`
       : "- Heading face: follows the body face.",
-    `- Display tier weight ${preset.displayWeight}, heading tier weight ${preset.headingWeight}. Levels inside a tier share a weight and step by size.`,
+    `- Display tier weight ${preset.displayWeight}, heading tier weight ${preset.headingWeight}, body weight ${preset.bodyWeight}. Levels inside a tier share a weight and step by size; emphasis and labels sit above the body weight by the same steps as the base theme's.`,
     `- Type scale: ${leverWord("typeScale", preset.typeScale)} (${preset.typeScale}% of the base scale).`,
     `- Tracking: ${leverWord("tracking", preset.tracking)} (${
       preset.tracking > 0 ? "+" : ""
@@ -382,8 +425,8 @@ ${heading} Icons
 Material Symbols Rounded at weight ${preset.iconWeight}, ${
     preset.iconFill ? "filled" : "outlined"
   }. Size an icon with the \`--icon-size-*\` scale, never with \`font-size\`.${
-    reading.length > 0 ? `\n\n${heading} Reading theme.css\n\n${reading.join("\n")}` : ""
-  }`;
+    source ? `\n\n${sourceSection(source, heading)}` : ""
+  }${reading.length > 0 ? `\n\n${heading} Reading theme.css\n\n${reading.join("\n")}` : ""}`;
 }
 
 /** A design-language file for the theme: what the look is and how to keep to it. */
@@ -400,7 +443,7 @@ A theme for ${pkg}, made in the playground at ${context.siteUrl}/playground. Rea
 
 ${describeTheme(preset)}
 
-${themeLanguage(preset, "##")}
+${themeLanguage(preset, "##", context.source)}
 
 ## Rules
 
@@ -493,7 +536,7 @@ This project uses a custom ${pkg} theme made at ${context.siteUrl}/playground. $
 
 ${apply}
 
-${themeLanguage(preset, "###")}
+${themeLanguage(preset, "###", context.source)}
 
 ### Existing screens
 

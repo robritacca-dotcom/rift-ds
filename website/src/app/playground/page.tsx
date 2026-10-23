@@ -45,6 +45,7 @@ import {
   iconOverrides,
   SHIPPED_DISPLAY_WEIGHT,
   SHIPPED_HEADING_WEIGHT,
+  SHIPPED_BODY_WEIGHT,
   SHIPPED_ICON_WEIGHT,
   addSessionFont,
   type ElevationVariant,
@@ -70,6 +71,7 @@ import { DesignMdCard } from "./DesignMdCard";
 import { ThemeSourceInvite } from "./ThemeSourceInvite";
 import {
   DESIGN_MD_MAX_BYTES,
+  brandNameOf,
   isDesignMdFile,
   themeFromDesignMd,
   type DesignMdRejection,
@@ -353,6 +355,7 @@ export default function PlaygroundPage() {
   const [elevation, setElevation] = useState<ElevationVariant>("default");
   const [displayWeight, setDisplayWeight] = useState(SHIPPED_DISPLAY_WEIGHT);
   const [headingWeight, setHeadingWeight] = useState(SHIPPED_HEADING_WEIGHT);
+  const [bodyWeight, setBodyWeight] = useState(SHIPPED_BODY_WEIGHT);
   const [tracking, setTracking] = useState(0); // percent of an em
   const [iconWeight, setIconWeight] = useState(SHIPPED_ICON_WEIGHT);
   const [iconFill, setIconFill] = useState(false);
@@ -622,6 +625,7 @@ export default function PlaygroundPage() {
     setElevation(t.elevation ?? "default");
     setDisplayWeight(t.displayWeight ?? SHIPPED_DISPLAY_WEIGHT);
     setHeadingWeight(t.headingWeight ?? SHIPPED_HEADING_WEIGHT);
+    setBodyWeight(t.bodyWeight ?? SHIPPED_BODY_WEIGHT);
     setTracking(t.tracking ?? 0);
     setIconWeight(SHIPPED_ICON_WEIGHT);
     setIconFill(false);
@@ -629,6 +633,9 @@ export default function PlaygroundPage() {
     setHeadingFontLabel(
       t.headingFont ? loadMatchedFont(t.headingFont.option) : HEADING_FONT_OPTIONS[0].label
     );
+    /* The theme takes the brand the file names, so the export reads "the
+       Figma theme" rather than "the Custom theme"; the visitor can retype it. */
+    setProductName(brandNameOf(t.title));
     pickView("components");
   };
 
@@ -700,6 +707,7 @@ export default function PlaygroundPage() {
     setElevation(p.elevation);
     setDisplayWeight(p.displayWeight);
     setHeadingWeight(p.headingWeight);
+    setBodyWeight(p.bodyWeight);
     setTracking(p.tracking);
     setIconWeight(p.iconWeight);
     setIconFill(p.iconFill);
@@ -776,7 +784,7 @@ export default function PlaygroundPage() {
       Object.assign(merged, motionScaleOverrides(motionScale / 100));
     }
     Object.assign(merged, elevationOverrides(elevation, theme === "dark" ? "dark" : "light"));
-    Object.assign(merged, weightOverrides(displayWeight, headingWeight));
+    Object.assign(merged, weightOverrides(displayWeight, headingWeight, bodyWeight));
     Object.assign(merged, trackingOverrides(tracking));
     Object.assign(merged, iconOverrides(iconWeight, iconFill));
     /* The ambient accents apply whenever any differs from the shipped
@@ -810,7 +818,7 @@ export default function PlaygroundPage() {
       Object.assign(merged, advancedColorOverrides(advColors, merged));
     }
     return merged;
-  }, [actionPlan, theme, tintOn, tintSeed, tintStrength, radiusScale, pill, density, typeScale, motionScale, elevation, displayWeight, headingWeight, tracking, iconWeight, iconFill, accents, presetExtras, advColors]);
+  }, [actionPlan, theme, tintOn, tintSeed, tintStrength, radiusScale, pill, density, typeScale, motionScale, elevation, displayWeight, headingWeight, bodyWeight, tracking, iconWeight, iconFill, accents, presetExtras, advColors]);
 
   /* ---------- apply to the whole page ----------
      The shared hook writes to :root (where the semantic layer is declared,
@@ -874,6 +882,7 @@ export default function PlaygroundPage() {
     setElevation("default");
     setDisplayWeight(SHIPPED_DISPLAY_WEIGHT);
     setHeadingWeight(SHIPPED_HEADING_WEIGHT);
+    setBodyWeight(SHIPPED_BODY_WEIGHT);
     setTracking(0);
     setIconWeight(SHIPPED_ICON_WEIGHT);
     setIconFill(false);
@@ -926,6 +935,7 @@ export default function PlaygroundPage() {
       elevation,
       displayWeight,
       headingWeight,
+      bodyWeight,
       tracking,
       iconWeight,
       iconFill,
@@ -939,6 +949,9 @@ export default function PlaygroundPage() {
       extraOverrides: presetExtras.extraOverrides,
       extraOverridesDark: presetExtras.extraOverridesDark,
     });
+    /* A theme read from a DESIGN.md carries its source into the export:
+       the file's name, how each lever was matched, and the traits rift
+       does not take from it. A preset pick clears the source. */
     const context = {
       productName,
       packageName: PACKAGE_NAME,
@@ -946,6 +959,9 @@ export default function PlaygroundPage() {
       siteUrl: SITE_URL,
       mcpEndpoint: MCP_ENDPOINT,
       mcpServerName: MCP_SERVER_NAME,
+      source: designSource
+        ? { name: designSource.name, report: designSource.theme.report, traits: designSource.theme.traits }
+        : undefined,
     };
     return {
       css: buildThemeCss(theme),
@@ -953,7 +969,7 @@ export default function PlaygroundPage() {
       markdown: buildThemeMarkdown(theme, context),
       prompt: buildAgentPrompt(theme, context),
     };
-  }, [preset, brand, presetExtras, tintOn, tintSeed, tintStrength, radiusScale, pill, density, typeScale, motionScale, elevation, displayWeight, headingWeight, tracking, iconWeight, iconFill, fontLabel, headingFontLabel, accents, advColors, productName]);
+  }, [preset, brand, presetExtras, tintOn, tintSeed, tintStrength, radiusScale, pill, density, typeScale, motionScale, elevation, displayWeight, headingWeight, bodyWeight, tracking, iconWeight, iconFill, fontLabel, headingFontLabel, accents, advColors, productName, designSource]);
 
   /** Export, from the rail or a source card: opens the dialog on the
       themed AGENTS.md, the one file a coding agent needs. */
@@ -1104,6 +1120,7 @@ export default function PlaygroundPage() {
               elevation={elevation}
               displayWeight={displayWeight}
               headingWeight={headingWeight}
+              bodyWeight={bodyWeight}
               tracking={tracking}
               iconWeight={iconWeight}
               iconFill={iconFill}
@@ -1128,6 +1145,7 @@ export default function PlaygroundPage() {
               onElevation={asCustom(setElevation)}
               onDisplayWeight={asCustom(setDisplayWeight)}
               onHeadingWeight={asCustom(setHeadingWeight)}
+              onBodyWeight={asCustom(setBodyWeight)}
               onTracking={asCustom(setTracking)}
               onIconWeight={asCustom(setIconWeight)}
               onIconFill={asCustom(setIconFill)}

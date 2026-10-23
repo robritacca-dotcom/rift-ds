@@ -324,8 +324,8 @@ export const BodyTextStyles: Story = {
           lineHeight: '1.5',
         }}
       >
-        Body text styles for content, labels, and UI text. Uses both Regular
-        (400) and SemiBold (600) weights.
+        Body text styles for content, labels, and UI text. Uses Regular
+        (400), Medium (500) and SemiBold (600) weights.
       </p>
 
       <TypographyStyle

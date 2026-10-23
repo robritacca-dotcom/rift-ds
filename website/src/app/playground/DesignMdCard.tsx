@@ -18,7 +18,8 @@ import styles from "./DesignMdCard.module.css";
  * is the point: the levers can only approximate a look described in
  * another system's terms, so every position says whether the file stated
  * it, rift fitted the nearest position it has, or the file was silent and
- * rift kept its own. See lib/theme/design-md.ts.
+ * rift kept its own. Under the report, the traits the file states that no
+ * lever carries, each with what rift does instead. See lib/theme/design-md.ts.
  */
 
 const STATUS: Record<MatchStatus, { label: string; variant: "positive" | "info" | "neutral" }> = {

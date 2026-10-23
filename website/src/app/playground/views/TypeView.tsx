@@ -57,7 +57,7 @@ const TIERS: ReadonlyArray<{
   {
     title: "Body",
     sample: "body",
-    note: "Running text, labels and the caption floor. These steps read the body role, so splitting the faces leaves them on the text face.",
+    note: "Running text, labels and the caption floor. These steps read the body role, so splitting the faces leaves them on the text face; the Body weight lever moves them together.",
     steps: [
       "title-body",
       "paragraph-em",

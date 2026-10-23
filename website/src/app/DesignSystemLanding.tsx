@@ -17,6 +17,7 @@ import { SHOW_FIGMA_LINKS } from "@/config/social";
 import { AGENT_STARTER, AGENT_STARTER_FILE, AGENT_STARTER_PAGE } from "@/data/agent-skills";
 import { useRouter } from "next/navigation";
 import { MOTION_FEEDBACK_RESET_MS } from "rift-ds/tokens/motion";
+import { SITE_EVENTS, trackEvent } from "@/lib/analytics";
 import { AgentPlan } from "rift-ds/components/AgentPlan/AgentPlan";
 import { AnimatedNumber } from "rift-ds/components/AnimatedNumber/AnimatedNumber";
 import { AgentStatus } from "rift-ds/components/AgentStatus/AgentStatus";
@@ -389,6 +390,7 @@ function AgentStarterCopy() {
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(AGENT_STARTER);
+      trackEvent(SITE_EVENTS.copyAgentStarter, { surface: "home_hero", delivery: "copy" });
       setCopied(true);
       if (resetTimer.current) clearTimeout(resetTimer.current);
       resetTimer.current = setTimeout(() => setCopied(false), MOTION_FEEDBACK_RESET_MS);

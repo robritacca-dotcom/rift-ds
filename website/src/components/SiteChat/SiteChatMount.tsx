@@ -1,12 +1,13 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useEffect, useSyncExternalStore } from "react";
 import { usePathname } from "next/navigation";
-import { ChatLauncher } from "rift-ds/chat";
+import { ChatLauncher, useChatWidget } from "rift-ds/chat";
 import { CHROMELESS_ROUTES } from "@/config/chromeless";
 import { getPageSummary } from "@/data/page-summaries";
 import { ASSISTANT_NAME } from "@/config/brand.generated";
 import { useSiteWidgetProps } from "./useSiteWidgetProps";
+import { SITE_EVENTS, trackEvent } from "@/lib/analytics";
 
 /* The TLDR panel is hover-summoned, so it exists only where hover exists: a
    touch tap has no dwell to summon it with, and the synthetic mouseenter a
@@ -38,6 +39,14 @@ export function SiteChatMount() {
   const canHover = useSyncExternalStore(subscribeHover, readHover, () => false);
   const summary = canHover ? getPageSummary(pathname) : null;
   const widget = useSiteWidgetProps();
+
+  /* One count per opening, whatever opened it: the button, a summary chip,
+     the palette's ask row or a page handing a question over. Read here,
+     under the provider, so the package itself stays free of analytics. */
+  const { open } = useChatWidget();
+  useEffect(() => {
+    if (open) trackEvent(SITE_EVENTS.openChat);
+  }, [open]);
 
   return (
     <ChatLauncher

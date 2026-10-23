@@ -16,9 +16,12 @@ export default function PrivacyPage() {
           <h2 className={styles.sectionTitle}>Analytics</h2>
           <p className={styles.body}>
             This site uses Google Analytics. It counts visits, pages read,
-            and a few interactions such as scrolling, outbound link clicks
-            and file downloads, under a random identifier, not your name. It
-            sets cookies to tell one visit from the next. To opt out, install
+            a few interactions such as scrolling, outbound link clicks and
+            file downloads, and four actions of the site&apos;s own: copying
+            an install snippet, copying the agent starter, copying a
+            component&apos;s markdown, and opening the chat. All of it sits
+            under a random identifier, not your name. It sets cookies to
+            tell one visit from the next. To opt out, install
             Google&apos;s opt-out add-on. Blocking cookies in your browser
             stops your visits being linked together, though each page view
             is still counted.

@@ -6,6 +6,7 @@ import { Button } from "rift-ds/components/Button/Button";
 import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
 import { Dialog } from "rift-ds/components/Dialog/Dialog";
 import { MOTION_FEEDBACK_RESET_MS } from "rift-ds/tokens/motion";
+import { SITE_EVENTS, trackEvent } from "@/lib/analytics";
 
 /** The one file the export hands over. */
 const FILENAME = "AGENTS.md";
@@ -35,6 +36,10 @@ export interface ExportThemeDialogProps {
  * nothing else. Built in this tab and never uploaded. The CSS alone stays
  * one click away on the rail's Copy CSS button.
  */
+/* The themed starter leaving the playground, by copy or by download. */
+const countExport = (delivery: string) =>
+  trackEvent(SITE_EVENTS.copyAgentStarter, { surface: "playground_export", delivery });
+
 export default function ExportThemeDialog({ open, onOpenChange, agents }: ExportThemeDialogProps) {
   const [copied, setCopied] = useState(false);
   const copiedTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -47,6 +52,7 @@ export default function ExportThemeDialog({ open, onOpenChange, agents }: Export
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(agents);
+      countExport("copy");
       setCopied(true);
       if (copiedTimer.current) clearTimeout(copiedTimer.current);
       copiedTimer.current = setTimeout(() => setCopied(false), MOTION_FEEDBACK_RESET_MS);
@@ -76,13 +82,23 @@ export default function ExportThemeDialog({ open, onOpenChange, agents }: Export
             label={`Download ${FILENAME}`}
             variant="primary"
             iconLeft="download"
-            onClick={() => downloadTextFile(agents, FILENAME, "text/markdown")}
+            onClick={() => {
+              downloadTextFile(agents, FILENAME, "text/markdown");
+              countExport("download");
+            }}
           />
         </>
       }
     >
       <div className={styles.cssDialogBody}>
-        <CodeBlock code={agents} language="markdown" filename={FILENAME} showCopy maxHeight="50vh" />
+        <CodeBlock
+          code={agents}
+          language="markdown"
+          filename={FILENAME}
+          showCopy
+          maxHeight="50vh"
+          onCopied={() => countExport("copy")}
+        />
       </div>
     </Dialog>
   );

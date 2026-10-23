@@ -1,4 +1,4 @@
-import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
+import InstallSnippet from "./InstallSnippet";
 import { componentPages, isWidgetSlug } from "@/data/component-pages";
 import { chatWidget } from "rift-ds/chat";
 import { SITE_URL } from "@/config/brand.generated";
@@ -36,7 +36,7 @@ export default function ComponentInstallStrip({ slug }: { slug: string }) {
 
   return (
     <div className={styles.strip}>
-      <CodeBlock code={snippet} language="tsx" showCopy />
+      <InstallSnippet code={snippet} slug={slug} />
     </div>
   );
 }

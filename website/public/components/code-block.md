@@ -18,6 +18,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same dat
 | language | `string` | no |  | Language tag shown in the header, e.g. "tsx", "css" |
 | filename | `string` | no |  | Filename shown in the header, e.g. "tokens-light.css" |
 | showCopy | `boolean` | no | `true` | Show the copy-to-clipboard button |
+| onCopied | `(() => void)` | no |  | Called after the code is put on the clipboard, through the async API or its textarea fallback, so a host can count copies. |
 | maxHeight | `string \| number` | no |  | Max height of the block; code scrolls vertically inside while the header stays pinned. Numbers are px. |
 | collapsible | `boolean` | no | `false` | Show a chevron beside the filename that collapses/expands the code area |
 | defaultCollapsed | `boolean` | no | `false` | Start collapsed (only applies when collapsible) |

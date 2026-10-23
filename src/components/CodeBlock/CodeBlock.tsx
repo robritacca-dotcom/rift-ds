@@ -15,6 +15,8 @@ type CodeBlockOwnProps = {
   filename?: string;
   /** Show the copy-to-clipboard button */
   showCopy?: boolean;
+  /** Called after the code is put on the clipboard, through the async API or its textarea fallback, so a host can count copies. */
+  onCopied?: () => void;
   /** Max height of the block; code scrolls vertically inside while the header stays pinned. Numbers are px. */
   maxHeight?: number | string;
   /** Show a chevron beside the filename that collapses/expands the code area */
@@ -56,6 +58,7 @@ export const CodeBlock = React.forwardRef<HTMLDivElement, CodeBlockProps>(
       language,
       filename,
       showCopy = true,
+      onCopied,
       maxHeight,
       collapsible = false,
       defaultCollapsed = false,
@@ -116,6 +119,7 @@ export const CodeBlock = React.forwardRef<HTMLDivElement, CodeBlockProps>(
         fallback();
       }
 
+      onCopied?.();
       setCopied(true);
       window.setTimeout(() => setCopied(false), MOTION_FEEDBACK_RESET_MS);
     };

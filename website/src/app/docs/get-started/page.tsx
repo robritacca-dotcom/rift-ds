@@ -12,6 +12,7 @@ import styles from "./page.module.css";
 import FloatingAnchorNav from "@/components/FloatingAnchorNav/FloatingAnchorNav";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
+import { SITE_EVENTS, trackEvent } from "@/lib/analytics";
 import { Button } from "rift-ds/components/Button/Button";
 import { OpenChatLink } from "./OpenChatLink";
 import { componentMetadata } from "rift-ds/components/registry";
@@ -50,6 +51,12 @@ const PAGE_SECTIONS = [
 ];
 
 const INSTALL_SNIPPET = `npm install rift-ds`;
+
+/* One count per install path copied, so a launch can be judged on installs
+   rather than page views (website/src/lib/analytics.ts owns the events). */
+const countInstall = (snippet: string) => () => trackEvent(SITE_EVENTS.copyInstall, { snippet });
+const countStarter = (delivery: string) => () =>
+  trackEvent(SITE_EVENTS.copyAgentStarter, { surface: "get_started", delivery });
 
 const USAGE_SNIPPET = `// Load the tokens once — primitives, semantic tokens, and both themes.
 import 'rift-ds/tokens/tokens.css';
@@ -329,13 +336,14 @@ export default function GetStartedPage() {
                   filename={AGENT_STARTER_FILE}
                   maxHeight={360}
                   showCopy
+                  onCopied={countStarter("copy")}
                 />
                 <p className={styles.sectionNote}>
                   Or save it from the terminal. The site regenerates it on
                   every deploy, matched to the latest release, so fetch it
                   again after you upgrade.
                 </p>
-                <CodeBlock code={AGENT_STARTER_SNIPPET} language="bash" showCopy />
+                <CodeBlock code={AGENT_STARTER_SNIPPET} language="bash" showCopy onCopied={countStarter("curl")} />
                 <p className={styles.sectionNote}>
                   For the full setup, the system is built so the coding
                   agent you already use can build with it, restyle what
@@ -375,7 +383,7 @@ export default function GetStartedPage() {
                   plain words: “Apply the theme to the settings screen”,
                   or “Audit the styles in this folder”.
                 </p>
-                <CodeBlock code={INIT_SNIPPET} language="bash" showCopy />
+                <CodeBlock code={INIT_SNIPPET} language="bash" showCopy onCopied={countInstall("init")} />
               </section>
 
               {/* Install */}
@@ -390,7 +398,7 @@ export default function GetStartedPage() {
                   <code>moduleResolution</code> set to <code>&quot;bundler&quot;</code>{" "}
                   (or <code>&quot;nodenext&quot;</code>).
                 </p>
-                <CodeBlock code={INSTALL_SNIPPET} language="bash" showCopy />
+                <CodeBlock code={INSTALL_SNIPPET} language="bash" showCopy onCopied={countInstall("npm")} />
                 <CodeBlock code={USAGE_SNIPPET} language="tsx" filename="app.tsx" showCopy />
                 <CodeBlock code={CHARTS_SNIPPET} language="tsx" showCopy />
               </section>
@@ -410,7 +418,7 @@ export default function GetStartedPage() {
                   and a <code>tsconfig.json</code> in your project; if you
                   have neither, <code>npx shadcn init</code> creates them.
                 </p>
-                <CodeBlock code={SHADCN_SNIPPET} language="bash" showCopy />
+                <CodeBlock code={SHADCN_SNIPPET} language="bash" showCopy onCopied={countInstall("shadcn")} />
               </section>
 
               {/* Clone */}
@@ -425,7 +433,7 @@ export default function GetStartedPage() {
                   from. One install brings up both the Storybook sandbox and
                   this documentation site.
                 </p>
-                <CodeBlock code={CLONE_SNIPPET} language="bash" showCopy />
+                <CodeBlock code={CLONE_SNIPPET} language="bash" showCopy onCopied={countInstall("clone")} />
               </section>
 
               {/* Dark mode */}
@@ -618,7 +626,7 @@ export default function GetStartedPage() {
                   skill-capable agents load them automatically. Add{" "}
                   <code>--skill</code> and a name to install one of them:
                 </p>
-                <CodeBlock code={INIT_SNIPPET} language="bash" showCopy />
+                <CodeBlock code={INIT_SNIPPET} language="bash" showCopy onCopied={countInstall("init")} />
                 <p className={styles.sectionNote}>
                   The files regenerate with every deploy, so re-run the
                   command to refresh them. No npm nearby? The same files

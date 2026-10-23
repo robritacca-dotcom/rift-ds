@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Button } from "rift-ds/components/Button/Button";
 import { MOTION_FEEDBACK_RESET_MS } from "rift-ds/tokens/motion";
+import { SITE_EVENTS, trackEvent } from "@/lib/analytics";
 import styles from "./CopyPageMarkdown.module.css";
 
 /**
@@ -38,6 +39,7 @@ export default function CopyPageMarkdown() {
       const response = await fetch(markdownUrl);
       if (!response.ok) throw new Error(`fetch failed: ${response.status}`);
       await navigator.clipboard.writeText(await response.text());
+      trackEvent(SITE_EVENTS.copyComponentMarkdown, { component: match[1] });
       // Freeze the current width before the label shortens to "Copied",
       // so the button doesn't shrink under the cursor.
       if (buttonRef.current) {

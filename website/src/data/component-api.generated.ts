@@ -3732,6 +3732,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "true"
           },
           {
+            "name": "onCopied",
+            "type": "(() => void)",
+            "required": false,
+            "description": "Called after the code is put on the clipboard, through the async API or its textarea fallback, so a host can count copies."
+          },
+          {
             "name": "maxHeight",
             "type": "string | number",
             "required": false,

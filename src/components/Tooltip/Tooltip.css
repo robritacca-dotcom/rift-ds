@@ -12,8 +12,15 @@
    PANEL
    ============================================ */
 
+/* Fixed, not absolute: the component places the panel from the trigger's
+   rectangle while it is visible (Tooltip.tsx owns the arithmetic), so a
+   scroll container around the trigger — a bordered table's wrapper, a rail —
+   cannot clip it. The panel keeps its place in the DOM, so it stacks inside
+   the trigger's own context at the floating layer. */
 .ds-tooltip__panel {
-  position: absolute;
+  position: fixed;
+  left: 0;
+  top: 0;
   z-index: var(--layer-floating);
   padding: var(--padding-150) var(--padding-200); /* 6px 8px */
   border-radius: var(--radius-100); /* 4px */
@@ -31,12 +38,10 @@
   line-height: var(--font-paragraph-sm-line-height);
   white-space: nowrap;
   pointer-events: none;
-  /* Hidden panels leave layout entirely: opacity/visibility alone keep the
-     box in the page's scrollable overflow, so an edge-adjacent trigger's
-     panel adds horizontal scroll while invisible. display transitions
-     discretely (allow-discrete holds it through the exit fade; the entry
-     fade starts from @starting-style below); browsers without those skip
-     the fades but show and hide correctly. */
+  /* Hidden panels leave layout entirely, so they are never measured or
+     placed. display transitions discretely (allow-discrete holds it through
+     the exit fade; the entry fade starts from @starting-style below);
+     browsers without those skip the fades but show and hide correctly. */
   display: none;
   opacity: 0;
   transition-property: opacity, transform, display;
@@ -52,50 +57,39 @@
 
 /* ============================================
    POSITIONS
+   The component sets left/top; each position only slides in from its side.
    ============================================ */
 
 .ds-tooltip__panel--top {
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%) translateY(4px);
-  margin-bottom: var(--gap-100); /* 4px */
+  transform: translateY(4px);
 }
 
 .ds-tooltip__panel--top.ds-tooltip__panel--visible {
-  transform: translateX(-50%) translateY(0);
+  transform: translateY(0);
 }
 
 .ds-tooltip__panel--bottom {
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-4px);
-  margin-top: var(--gap-100);
+  transform: translateY(-4px);
 }
 
 .ds-tooltip__panel--bottom.ds-tooltip__panel--visible {
-  transform: translateX(-50%) translateY(0);
+  transform: translateY(0);
 }
 
 .ds-tooltip__panel--left {
-  right: 100%;
-  top: 50%;
-  transform: translateY(-50%) translateX(4px);
-  margin-right: var(--gap-100);
+  transform: translateX(4px);
 }
 
 .ds-tooltip__panel--left.ds-tooltip__panel--visible {
-  transform: translateY(-50%) translateX(0);
+  transform: translateX(0);
 }
 
 .ds-tooltip__panel--right {
-  left: 100%;
-  top: 50%;
-  transform: translateY(-50%) translateX(-4px);
-  margin-left: var(--gap-100);
+  transform: translateX(-4px);
 }
 
 .ds-tooltip__panel--right.ds-tooltip__panel--visible {
-  transform: translateY(-50%) translateX(0);
+  transform: translateX(0);
 }
 
 /* Entry states for the display flip: a panel arriving from display:none has
@@ -104,22 +98,22 @@
 @starting-style {
   .ds-tooltip__panel--top.ds-tooltip__panel--visible {
     opacity: 0;
-    transform: translateX(-50%) translateY(4px);
+    transform: translateY(4px);
   }
 
   .ds-tooltip__panel--bottom.ds-tooltip__panel--visible {
     opacity: 0;
-    transform: translateX(-50%) translateY(-4px);
+    transform: translateY(-4px);
   }
 
   .ds-tooltip__panel--left.ds-tooltip__panel--visible {
     opacity: 0;
-    transform: translateY(-50%) translateX(4px);
+    transform: translateX(4px);
   }
 
   .ds-tooltip__panel--right.ds-tooltip__panel--visible {
     opacity: 0;
-    transform: translateY(-50%) translateX(-4px);
+    transform: translateX(-4px);
   }
 }
 
@@ -129,7 +123,10 @@
 
 /* The arrow is a rotated square in the panel's fill. It overlaps the panel
    by a pixel more than before so its opaque fill covers the panel border
-   behind it, and draws the hairline itself on its two outward edges only. */
+   behind it, and draws the hairline itself on its two outward edges only.
+   --ds-tooltip-arrow is where along the bubble the trigger's centre falls,
+   written by the component; it is the midpoint until a clamp moves the
+   bubble off the trigger. */
 .ds-tooltip__arrow {
   position: absolute;
   width: 8px;
@@ -141,7 +138,7 @@
 /* Arrow — top position (arrow points down) */
 .ds-tooltip__panel--top .ds-tooltip__arrow {
   bottom: -5px;
-  left: 50%;
+  left: var(--ds-tooltip-arrow, 50%);
   margin-left: -4px; /* ds-allow(spacing): half the 8px arrow, centring it on the panel edge */
   border-right: var(--border-025) solid var(--color-bg-container-border);
   border-bottom: var(--border-025) solid var(--color-bg-container-border);
@@ -150,7 +147,7 @@
 /* Arrow — bottom position (arrow points up) */
 .ds-tooltip__panel--bottom .ds-tooltip__arrow {
   top: -5px;
-  left: 50%;
+  left: var(--ds-tooltip-arrow, 50%);
   margin-left: -4px; /* ds-allow(spacing): half the 8px arrow */
   border-top: var(--border-025) solid var(--color-bg-container-border);
   border-left: var(--border-025) solid var(--color-bg-container-border);
@@ -159,7 +156,7 @@
 /* Arrow — left position (arrow points right) */
 .ds-tooltip__panel--left .ds-tooltip__arrow {
   right: -5px;
-  top: 50%;
+  top: var(--ds-tooltip-arrow, 50%);
   margin-top: -4px; /* ds-allow(spacing): half the 8px arrow */
   border-top: var(--border-025) solid var(--color-bg-container-border);
   border-right: var(--border-025) solid var(--color-bg-container-border);
@@ -168,7 +165,7 @@
 /* Arrow — right position (arrow points left) */
 .ds-tooltip__panel--right .ds-tooltip__arrow {
   left: -5px;
-  top: 50%;
+  top: var(--ds-tooltip-arrow, 50%);
   margin-top: -4px; /* ds-allow(spacing): half the 8px arrow */
   border-bottom: var(--border-025) solid var(--color-bg-container-border);
   border-left: var(--border-025) solid var(--color-bg-container-border);

@@ -50,6 +50,7 @@ import SidebarSwitchers from "../SidebarSwitchers/SidebarSwitchers";
 import TemplateAssistant from "../TemplateAssistant/TemplateAssistant";
 import styles from "./RoadmapPlanner.module.css";
 import { AppFrameScreen, AppFrameTabBar, useAppFrame } from "../AppFrame/AppFrame";
+import { ProductMark } from "../ProductMark/ProductMark";
 
 /* ---------------------------------------------------------------- data */
 
@@ -493,6 +494,7 @@ export default function RoadmapPlanner() {
           activeKey="roadmap"
           expanded={sidebarExpanded}
           onExpandedChange={setSidebarExpanded}
+          logo={<ProductMark />}
           logoText="Waypoint"
           floating
           footerSlot={<SidebarSwitchers />}

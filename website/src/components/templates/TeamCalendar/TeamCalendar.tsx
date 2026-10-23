@@ -40,6 +40,7 @@ import SidebarSwitchers from "../SidebarSwitchers/SidebarSwitchers";
 import TemplateAssistant from "../TemplateAssistant/TemplateAssistant";
 import styles from "./TeamCalendar.module.css";
 import { AppFrameScreen, AppFrameTabBar, useAppFrame } from "../AppFrame/AppFrame";
+import { ProductMark } from "../ProductMark/ProductMark";
 
 /* ---------------------------------------------------------------- data */
 
@@ -219,6 +220,7 @@ export default function TeamCalendar() {
           activeKey="calendar"
           expanded={sidebarExpanded}
           onExpandedChange={setSidebarExpanded}
+          logo={<ProductMark />}
           logoText="Cadence"
           floating
           footerSlot={<SidebarSwitchers />}

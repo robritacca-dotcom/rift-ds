@@ -61,29 +61,6 @@
   min-height: calc(40px + var(--padding-150) * 2);
 }
 
-/* The close button hugs the panel's clipped right edge, so its centred
-   bottom tooltip would lose its right cap to overflow: hidden. End-align
-   the last header tooltip to the button and walk the arrow back to the
-   button's centre (20px in, minus half the 8px arrow). */
-.ds-chat-widget .ds-chat-header__actions .ds-tooltip:last-child .ds-tooltip__panel--bottom,
-.ds-chat-widget__rail-actions .ds-tooltip:last-child .ds-tooltip__panel--bottom {
-  left: auto;
-  right: 0;
-  transform: translateY(-4px);
-}
-
-.ds-chat-widget .ds-chat-header__actions .ds-tooltip:last-child .ds-tooltip__panel--bottom.ds-tooltip__panel--visible,
-.ds-chat-widget__rail-actions .ds-tooltip:last-child .ds-tooltip__panel--bottom.ds-tooltip__panel--visible {
-  transform: translateY(0);
-}
-
-.ds-chat-widget .ds-chat-header__actions .ds-tooltip:last-child .ds-tooltip__panel--bottom .ds-tooltip__arrow,
-.ds-chat-widget__rail-actions .ds-tooltip:last-child .ds-tooltip__panel--bottom .ds-tooltip__arrow {
-  left: auto;
-  right: 16px;
-  margin-left: 0;
-}
-
 /* The placement menu's wrapper is only there to catch Escape; it must not
    become a box of its own in the header's action row. */
 .ds-chat-widget__placement-menu {

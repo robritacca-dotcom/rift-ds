@@ -73,6 +73,7 @@ import { SiteChatProvider } from "@/components/SiteChat/SiteChatProvider";
 import { lockBodyScroll, unlockBodyScroll } from "@/lib/scroll-lock";
 import SidebarSwitchers from "../SidebarSwitchers/SidebarSwitchers";
 import styles from "./PayrollConsole.module.css";
+import { ProductMark } from "../ProductMark/ProductMark";
 
 /* ---------------------------------------------------------------- data */
 
@@ -450,7 +451,7 @@ function PayrollChat({
             /* The sheet names the product and skips the collapse (its scrim
                is the dismissal); the inline rail skips the brand, since the
                chat header already says it, and offers the collapse instead. */
-            logo={<span className={styles.threadsLogoDot} />}
+            logo={<ProductMark />}
             logoText={overlay ? "Northwind AI" : undefined}
             expanded={overlay ? true : railExpanded}
             onExpandedChange={overlay ? undefined : setRailExpanded}
@@ -518,6 +519,7 @@ export default function PayrollConsole() {
           activeKey="run"
           expanded={sidebarExpanded}
           onExpandedChange={setSidebarExpanded}
+          logo={<ProductMark />}
           logoText="Northwind"
           floating
           footerSlot={<SidebarSwitchers />}

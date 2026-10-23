@@ -59,6 +59,7 @@ import {
 import { SiteChatProvider } from "@/components/SiteChat/SiteChatProvider";
 import { useStagedProductName } from "../useStagedProductName";
 import styles from "./ChatHome.module.css";
+import { ProductMark } from "../ProductMark/ProductMark";
 
 /* ------------------------------------------------------------- the page */
 
@@ -119,7 +120,7 @@ function ChatHomeShell() {
           /* The sheet names the product and skips the collapse (its scrim is
              the dismissal); the inline rail skips the name, since the chat
              header already says it, and offers the collapse. */
-          logo: <span className={styles.logoDot} />,
+          logo: <ProductMark />,
           logoText: product,
           defaultExpanded: true,
           profile: { name: "Jordan Reyes", meta: "Pro" },

@@ -231,14 +231,6 @@ const stepOf = (cssVar: string) => cssVar.slice(-2);
 const swatchTip = (s: PrimitiveSwatch) =>
   `${s.label}\n${s.cssVar}\n${s.hex} · ${s.rgb}`;
 
-/* Tooltips centre on their cell, which would push them off the page at either
-   end of a row, so the outermost columns anchor to an edge instead. */
-const tipAlignment = (column: number, columns: number) => {
-  if (column <= 2) return ` ${styles.rampTipStart}`;
-  if (column >= columns - 1) return ` ${styles.rampTipEnd}`;
-  return "";
-};
-
 /** Columns in the ramp grid, and in the alpha grid below it. */
 const RAMP_COLUMNS = 12;
 const ALPHA_COLUMNS = 6;
@@ -342,7 +334,7 @@ export default function PrimitiveColoursPage() {
                             <Tooltip
                               key={s.cssVar}
                               content={swatchTip(s)}
-                              className={`${styles.rampTip}${tipAlignment(offset + i + 1, RAMP_COLUMNS)}`}
+                              className={`${styles.rampTip}`}
                             >
                               <span
                                 className={`${styles.rampCell}${isKey ? ` ${styles.rampCellKey}` : ""}`}
@@ -374,10 +366,7 @@ export default function PrimitiveColoursPage() {
                       <div className={styles.alphaCell} key={s.cssVar}>
                         <Tooltip
                           content={swatchTip(s)}
-                          className={`${styles.rampTip}${tipAlignment(
-                            (i % ALPHA_COLUMNS) + 1,
-                            ALPHA_COLUMNS
-                          )}`}
+                          className={`${styles.rampTip}`}
                         >
                           <span
                             className={styles.alphaSwatch}
@@ -410,10 +399,7 @@ export default function PrimitiveColoursPage() {
                       <div className={styles.alphaCell} key={s.cssVar}>
                         <Tooltip
                           content={swatchTip(s)}
-                          className={`${styles.rampTip}${tipAlignment(
-                            (i % ALPHA_COLUMNS) + 1,
-                            ALPHA_COLUMNS
-                          )}`}
+                          className={`${styles.rampTip}`}
                         >
                           <span
                             className={styles.alphaSwatch}

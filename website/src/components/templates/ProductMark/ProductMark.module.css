@@ -1,0 +1,11 @@
+/* A disc in the core UI colour: it follows the theme's accent through every
+   preset without borrowing the action colour, which stays reserved for
+   controls. Sized to the sidebar's logo slot. */
+.mark {
+  display: block;
+  flex-shrink: 0;
+  width: var(--icon-size-600);
+  height: var(--icon-size-600);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-core-ui-primary);
+}

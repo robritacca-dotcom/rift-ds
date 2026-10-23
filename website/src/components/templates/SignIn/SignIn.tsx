@@ -26,12 +26,14 @@
  *   it; there is no KPI band, no drawn browser chrome, and no product tour
  *   beside the fields.
  * - **One job per control species** (rule 2): the three provider buttons are
- *   one species at one size — secondary Buttons, full width, stacked — and
+ *   one species at one size — neutral secondary Buttons, full width, stacked — and
  *   the email path below the rule is the same Button at primary. The rule
  *   itself is the library Divider's inline label, not a hand-drawn line.
- * - The provider marks are inline `currentColor` SVG (see BrandMarks.tsx):
- *   Material Symbols has no brand glyphs, and the library's icon props take a
- *   ReactNode for this case.
+ * - The provider marks are the shared PublisherMarks (the table the
+ *   marketing dashboard's channel column reads too): Google and Facebook in
+ *   their brand colours, Apple in currentColor because its mark is monochrome
+ *   by design. Material Symbols has no brand glyphs, and the library's icon
+ *   props take a ReactNode for this case.
  * - The switchers ride the form pane's floor rather than a sidebar's, since
  *   this screen has no sidebar; it is the same shared SidebarSwitchers row
  *   every other template carries, so the presets stay reachable here too.
@@ -47,7 +49,6 @@
  */
 
 import React from "react";
-import Image from "next/image";
 import { Button } from "rift-ds/components/Button/Button";
 import { Checkbox } from "rift-ds/components/Checkbox/Checkbox";
 import { Divider } from "rift-ds/components/Divider/Divider";
@@ -58,14 +59,15 @@ import {
   type ShaderParams,
 } from "rift-ds/components/ShaderField/ShaderField";
 import SidebarSwitchers from "../SidebarSwitchers/SidebarSwitchers";
-import { AppleMark, FacebookMark, GoogleMark } from "./BrandMarks";
+import { ProductMark } from "../ProductMark/ProductMark";
+import { PublisherMark } from "../PublisherMarks/PublisherMarks";
 import styles from "./SignIn.module.css";
 
 /** The identity providers, in the order the buttons stack. */
 const PROVIDERS = [
-  { id: "google", label: "Google", Mark: GoogleMark },
-  { id: "apple", label: "Apple", Mark: AppleMark },
-  { id: "facebook", label: "Facebook", Mark: FacebookMark },
+  { id: "google", label: "Google" },
+  { id: "apple", label: "Apple" },
+  { id: "facebook", label: "Facebook" },
 ] as const;
 
 /**
@@ -158,7 +160,7 @@ export default function SignIn() {
     <div className={styles.shell}>
       <div className={styles.formPane}>
         <header className={styles.brand}>
-          <Image src="/logos/mark.svg" alt="" width={28} height={28} priority />
+          <ProductMark />
           <span className={styles.wordmark}>Tessera</span>
         </header>
 
@@ -197,12 +199,13 @@ export default function SignIn() {
               </div>
 
               <div className={styles.providers}>
-                {PROVIDERS.map(({ id, label, Mark }) => (
+                {PROVIDERS.map(({ id, label }) => (
                   <Button
                     key={id}
                     variant="secondary"
+                    tone="neutral"
                     className={styles.providerButton}
-                    iconLeft={<Mark className={styles.providerMark} />}
+                    iconLeft={<PublisherMark id={id} className={styles.providerMark} />}
                     label={`Continue with ${label}`}
                     onClick={() =>
                       setSignedIn({ kind: "provider", value: `your ${label} account` })

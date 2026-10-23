@@ -136,27 +136,6 @@
   min-width: max-content;
 }
 
-/* A centred panel runs off the page at either end of a 12-column row, so
-   the outer columns anchor their panel to the cell edge instead */
-.rampTipStart :global(.ds-tooltip__panel--top) {
-  left: 0;
-  transform: translateX(0) translateY(4px);
-}
-
-.rampTipStart :global(.ds-tooltip__panel--top.ds-tooltip__panel--visible) {
-  transform: translateX(0) translateY(0);
-}
-
-.rampTipEnd :global(.ds-tooltip__panel--top) {
-  left: auto;
-  right: 0;
-  transform: translateX(0) translateY(4px);
-}
-
-.rampTipEnd :global(.ds-tooltip__panel--top.ds-tooltip__panel--visible) {
-  transform: translateX(0) translateY(0);
-}
-
 .rampCell {
   width: 100%;
   height: 44px;

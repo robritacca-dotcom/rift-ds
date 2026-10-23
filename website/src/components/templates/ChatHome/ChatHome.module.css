@@ -16,16 +16,6 @@
   overflow: hidden;
 }
 
-/* The rail's brand mark: a plain disc, the fictional product's stand-in for
-   a logo. */
-.logoDot {
-  display: inline-block;
-  width: var(--icon-size-600);
-  height: var(--icon-size-600);
-  border-radius: var(--radius-pill);
-  background-color: var(--color-core-ui-primary);
-}
-
 /* The Revenue-style tile's period note, beside its title. */
 .widgetNote {
   font-family: var(--font-caption-family);

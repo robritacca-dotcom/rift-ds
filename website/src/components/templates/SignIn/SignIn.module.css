@@ -103,16 +103,11 @@
   gap: var(--gap-200);
 }
 
-/* One species, one size, full width — so the three doors read as three
-   equal doors rather than a ranked list. The row is left-aligned rather than
-   centred, and that is the whole reason this rule exists: the three labels
-   are different lengths, so centring each button's icon-and-label group
-   leaves the three marks at three different x positions, and a stacked set
-   of one species should line its marks up in a column. */
+/* One species, one size, full width, so the three doors read as three
+   equal doors rather than a ranked list. Each button centres its mark and
+   label the way every other Button does. */
 .providerButton {
   width: 100%;
-  justify-content: flex-start;
-  padding-left: var(--padding-400);
 }
 
 /* Custom marks are not Material Symbols, so they size themselves off the

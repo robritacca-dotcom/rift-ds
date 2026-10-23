@@ -27,7 +27,6 @@
  */
 
 import React from "react";
-import Image from "next/image";
 import {
   AgentPlan,
   type AgentPlanStep,
@@ -66,6 +65,7 @@ import {
 import { UsageCard } from "rift-ds/components/UsageCard/UsageCard";
 import SidebarSwitchers from "../SidebarSwitchers/SidebarSwitchers";
 import styles from "./AgentWorkbench.module.css";
+import { ProductMark } from "../ProductMark/ProductMark";
 
 /* ---------------------------------------------------------------- data */
 
@@ -454,7 +454,7 @@ export default function AgentWorkbench() {
         {/* -------------------------------------------- session history */}
         <aside className={styles.threads} aria-label="Sessions">
           <ThreadPanel
-            logo={<Image src="/logos/mark.svg" alt="" width={24} height={24} />}
+            logo={<ProductMark />}
             logoText="Tandem"
             newThreadLabel="New session"
             newThreadShortcut={["Ctrl", "N"]}

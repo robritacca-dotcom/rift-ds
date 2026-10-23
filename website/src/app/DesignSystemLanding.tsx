@@ -13,6 +13,7 @@ import { FIGMA_FILE_URL, NPM_URL, REPOSITORY_URL, STORYBOOK_URL } from "@/config
 import { THEME_SELECTOR_ORDER, themeSelectorTiles } from "@/lib/theme/presets";
 import { useSiteTheme } from "@/lib/theme/use-theme-overrides";
 import { applyBrand, readBrand, SERVED_THEME_ID, subscribeBrand } from "@/lib/theme/brand";
+import { installScopedThemes, THEME_SCOPE_ATTRIBUTE } from "@/lib/theme/scoped-theme";
 import { SHOW_FIGMA_LINKS } from "@/config/social";
 import { AGENT_STARTER, AGENT_STARTER_FILE, AGENT_STARTER_PAGE } from "@/data/agent-skills";
 import { useRouter } from "next/navigation";
@@ -567,7 +568,20 @@ function useNarrowCollage() {
 // Matches the SSR value of data-brand on <html> in layout.tsx.
 const getServerBrand = () => SERVED_THEME_ID;
 
-function ThemeSwitcher() {
+/** A viewport point: where a theme preview or pick starts from. */
+type Origin = { x: number; y: number };
+
+function ThemeSwitcher({
+  onPreview,
+  onActivate,
+}: {
+  /** A tile under the pointer or focus (null when the row is left, or the
+      add dot is reached): the hero shows that theme through the spotlight. */
+  onPreview: (id: string | null, origin?: Origin) => void;
+  /** A tile picked: the hero floods with that theme from the tile outward,
+      then applies it for real. */
+  onActivate: (id: string, origin: Origin) => void;
+}) {
   const theme = useSiteTheme();
   /* The attribute is the truth (it survives navigation, and anything may
      set it: the header switcher, the playground). Subscribing to it, the
@@ -577,13 +591,25 @@ function ThemeSwitcher() {
 
   /* The tile names render in their themes' own faces, which need no
      loading here: every shipped face has self-hosted @font-face blocks
-     in its preset's generated stylesheet, imported site-wide. The shared
-     helper owns the attribute and persistence; the subscription above
-     picks the change up. */
-  const pick = (id: string) => applyBrand(id);
+     in its preset's generated stylesheet, imported site-wide. The pick
+     itself is the hero's: it floods the theme in from the dot, then
+     hands the id to the shared helper, which owns the attribute and
+     persistence; the subscription above picks the change up. */
+  const centre = (el: HTMLElement): Origin => {
+    const r = el.getBoundingClientRect();
+    return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+  };
 
   return (
-    <div className={styles.accentRow} role="group" aria-label="Theme">
+    <div
+      className={styles.accentRow}
+      role="group"
+      aria-label="Theme"
+      onPointerLeave={() => onPreview(null)}
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) onPreview(null);
+      }}
+    >
       {tiles.map((tile, index) => (
         <span key={tile.value} className={styles.swatchWrap}>
           <button
@@ -592,7 +618,9 @@ function ThemeSwitcher() {
             style={{ backgroundColor: tile.color, "--swatch-i": index } as React.CSSProperties}
             aria-pressed={active === tile.value}
             aria-label={`${tile.label} (${tile.description})`}
-            onClick={() => pick(tile.value)}
+            onPointerEnter={(e) => onPreview(tile.value, { x: e.clientX, y: e.clientY })}
+            onFocus={(e) => onPreview(tile.value, centre(e.currentTarget))}
+            onClick={(e) => onActivate(tile.value, centre(e.currentTarget))}
           />
           {/* The card names the look before the click: theme name in its
               own heading face, the pairing underneath in its body face.
@@ -615,6 +643,8 @@ function ThemeSwitcher() {
           className={styles.accentSwatchAdd}
           style={{ "--swatch-i": tiles.length } as React.CSSProperties}
           aria-label="Make your own theme in the playground"
+          onPointerEnter={() => onPreview(null)}
+          onFocus={() => onPreview(null)}
         >
           <span className="material-symbols-rounded" aria-hidden="true">
             add
@@ -650,18 +680,30 @@ const SUBTITLE_PHRASES = [
   "Free and MIT, by npm, the shadcn CLI or a clone.",
 ];
 
-function RotatingSubtitle() {
-  const [current, setCurrent] = useState(0);
-  const [previous, setPrevious] = useState<number | null>(null);
+/* The rotation's position lives in the hero, not here: the hero renders
+   the subtitle twice (the page's copy and the theme spotlight's ghost of
+   it), and both must show the same phrase at the same point of its sweep.
+   Only the page's copy advances the rotation; the ghost just follows. */
+type SubtitleState = { current: number; previous: number | null };
 
+function useRotatingSubtitle() {
+  const [state, setState] = useState<SubtitleState>({ current: 0, previous: null });
   const advance = (event: React.AnimationEvent<HTMLSpanElement>) => {
     // The leaving phrase's animation ends too; only the arriving one's
     // end (its hold running out) moves the rotation on.
-    if (event.currentTarget.dataset.phrase !== String(current)) return;
-    setPrevious(current);
-    setCurrent((current + 1) % SUBTITLE_PHRASES.length);
+    if (event.currentTarget.dataset.phrase !== String(state.current)) return;
+    setState({ previous: state.current, current: (state.current + 1) % SUBTITLE_PHRASES.length });
   };
+  return { state, advance };
+}
 
+function RotatingSubtitle({
+  state: { current, previous },
+  onAdvance,
+}: {
+  state: SubtitleState;
+  onAdvance?: (event: React.AnimationEvent<HTMLSpanElement>) => void;
+}) {
   return (
     <p className={`${styles.subDisplay} ${styles.subRotating}`}>
       <span className={styles.subFull}>{SUBTITLE_FULL}</span>
@@ -674,13 +716,259 @@ function RotatingSubtitle() {
             data-phrase={index}
             className={`${styles.subPhrase} ${state}`}
             aria-hidden="true"
-            onAnimationEnd={advance}
+            onAnimationEnd={onAdvance}
           >
             {phrase}
           </span>
         );
       })}
     </p>
+  );
+}
+
+/* ---------- the hero and its theme spotlight ----------
+   The hero's content renders twice. The page's copy is the real one. The
+   ghost is the same content wrapped in a theme scope (the scoped token
+   layer from /foundations/themes), laid over the page under a radial mask
+   that follows the pointer along the theme row: hovering a dot opens a
+   soft spotlight, and through it the hero shows in that theme — its page
+   colour, its faces, its action colour on the button — while the page
+   around it stays in the current one. Picking a dot grows the spotlight
+   from the dot until it has flooded the viewport, and only then does the
+   theme apply for real, so the switch reads as the light reaching every
+   corner rather than a cut; the ghost then fades off the identical page.
+
+   The ghost is inert and reaches the viewport's edges through computed
+   bleeds, so the flood covers the header and the page margins too. It
+   carries an approximation of the ambient field in CSS gradients: the
+   real field is one WebGL canvas for the whole site and cannot be drawn
+   twice in two themes. */
+
+/* The share of the mask radius that is solid; the stylesheet's gradient
+   stop restates it. */
+const SPOT_SOLID_FRACTION = 0.8;
+
+function HeroContent({
+  ghost,
+  subtitle,
+  onAdvance,
+}: {
+  ghost?: boolean;
+  subtitle: SubtitleState;
+  onAdvance?: (event: React.AnimationEvent<HTMLSpanElement>) => void;
+}) {
+  return (
+    <>
+      {/* The tagline is the h1: the nav wordmark owns the name. The ghost's
+          copy is a plain block, so the document keeps one heading. */}
+      {ghost ? (
+        <div className={styles.pageTitle}>The AI-ready React design system</div>
+      ) : (
+        <h1 className={styles.pageTitle}>The AI-ready React design system</h1>
+      )}
+      <RotatingSubtitle state={subtitle} onAdvance={onAdvance} />
+      {/* The counts sit between the two rules; the section links close
+          the hero. Every figure imports from the registry export that
+          owns it, so the band can never overstate. */}
+      <FadeDivider className={styles.heroDivider} />
+      <div className={styles.statStrip} role="group" aria-label="What the system counts today">
+        <Stat value={<AnimatedNumber value={COMPONENT_COUNT} />} label="Components" />
+        <Stat value={<AnimatedNumber value={TOKEN_COUNT} />} label="Semantic tokens" />
+        <Stat value={<AnimatedNumber value={THEME_SELECTOR_ORDER.length} />} label="Themes" />
+        <Stat value={<AnimatedNumber value={MCP_TOOLS.length} />} label="MCP tools" />
+        <Stat
+          value={<AnimatedNumber value={0} format={(v) => `$${v.toFixed(2)}`} />}
+          label="Cost"
+        />
+      </div>
+      <FadeDivider className={styles.heroDivider} />
+      <ButtonGroup
+        aria-label="Get started"
+        buttons={[
+          { label: "Get started", variant: "primary" as const, href: "/docs/get-started", iconLeft: "terminal" },
+          { label: "Browse components", variant: "secondary" as const, tone: "neutral" as const, href: "/components", iconLeft: "category" },
+        ]}
+      />
+      {/* The agent starter, kept to one quiet line: the buttons are the
+          hero's call to action, this is the shortcut for agent users. */}
+      <p className={styles.heroAgentNote}>
+        <span>Using a coding agent?</span>
+        <AgentStarterCopy />
+      </p>
+    </>
+  );
+}
+
+type SpotPhase = "idle" | "spot" | "expand" | "settle";
+
+function HeroSection() {
+  const active = useSyncExternalStore(subscribeBrand, readBrand, getServerBrand);
+  const { state: subtitle, advance } = useRotatingSubtitle();
+  const [preview, setPreview] = useState<string | null>(null);
+  const [phase, setPhase] = useState<SpotPhase>("idle");
+  const phaseRef = useRef<SpotPhase>("idle");
+  const pendingRef = useRef<string | null>(null);
+  const floodRadiusRef = useRef(0);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const ghostRef = useRef<HTMLDivElement>(null);
+  const uninstallRef = useRef<(() => void) | null>(null);
+
+  const go = (next: SpotPhase) => {
+    phaseRef.current = next;
+    setPhase(next);
+  };
+
+  /* The scoped token layer is built from the live CSSOM once, on the first
+     hover rather than at mount: the landing page pays for it only when the
+     spotlight is about to be used. */
+  const ensureScoped = () => {
+    if (!uninstallRef.current) uninstallRef.current = installScopedThemes();
+  };
+  useEffect(() => () => uninstallRef.current?.(), []);
+
+  /* Size the ghost to the union of the hero stage and the viewport, and
+     put the spotlight's centre at a viewport point. The bleeds are inset
+     on the ghost and padding on its inner wrapper, so the ghost's copy of
+     the content lands exactly over the page's. Written straight onto the
+     DOM: the pointer drives this per move, and nothing re-renders. */
+  const placeGhost = (origin: Origin) => {
+    const stage = stageRef.current;
+    const ghost = ghostRef.current;
+    if (!stage || !ghost) return null;
+    const rect = stage.getBoundingClientRect();
+    const vw = document.documentElement.clientWidth;
+    const vh = window.innerHeight;
+    const top = Math.max(0, rect.top);
+    const left = Math.max(0, rect.left);
+    const right = Math.max(0, vw - rect.right);
+    const bottom = Math.max(0, vh - rect.bottom);
+    const x = origin.x - rect.left + left;
+    const y = origin.y - rect.top + top;
+    ghost.style.setProperty("--ghost-top", `${top}px`);
+    ghost.style.setProperty("--ghost-right", `${right}px`);
+    ghost.style.setProperty("--ghost-bottom", `${bottom}px`);
+    ghost.style.setProperty("--ghost-left", `${left}px`);
+    ghost.style.setProperty("--spot-x", `${x}px`);
+    ghost.style.setProperty("--spot-y", `${y}px`);
+    return { x, y, w: rect.width + left + right, h: rect.height + top + bottom };
+  };
+
+  const onPreview = (id: string | null, origin?: Origin) => {
+    const current = phaseRef.current;
+    if (current === "expand" || current === "settle") return;
+    /* The active theme needs no window into itself. */
+    if (id === null || id === active) {
+      setPreview(null);
+      go("idle");
+      return;
+    }
+    ensureScoped();
+    if (origin) placeGhost(origin);
+    setPreview(id);
+    go("spot");
+  };
+
+  const onActivate = (id: string, origin: Origin) => {
+    const current = phaseRef.current;
+    if (current === "expand" || current === "settle") return;
+    const ghost = ghostRef.current;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    /* The flood is a transition on a registered custom property; without
+       @property support (or with motion reduced) the pick is a cut. */
+    const animatable = typeof CSS !== "undefined" && "registerProperty" in CSS;
+    if (id === active || !ghost || reduced || !animatable) {
+      applyBrand(id);
+      setPreview(null);
+      go("idle");
+      return;
+    }
+    ensureScoped();
+    const box = placeGhost(origin);
+    if (!box) {
+      applyBrand(id);
+      return;
+    }
+    /* The solid part of the mask must reach the ghost's farthest corner. */
+    const far = Math.hypot(Math.max(box.x, box.w - box.x), Math.max(box.y, box.h - box.y));
+    floodRadiusRef.current = Math.ceil(far / SPOT_SOLID_FRACTION) + 1;
+    pendingRef.current = id;
+    setPreview(id);
+    go("expand");
+  };
+
+  /* The flood radius is written once the expand state has committed, so
+     the transition it starts takes the expand rule's pace. Written from
+     the handler, it landed first and the flood ran at the hover pace. */
+  useEffect(() => {
+    if (phase !== "expand") return;
+    ghostRef.current?.style.setProperty("--spot-r", `${floodRadiusRef.current}px`);
+  }, [phase]);
+
+  /* The flood's end applies the theme; the fade's end puts the ghost away.
+     Both are transition ends on the ghost itself, never a timer, so the
+     motion tokens (and their reduced-motion override) pace all of it. */
+  useEffect(() => {
+    const ghost = ghostRef.current;
+    if (!ghost) return;
+    const onEnd = (event: TransitionEvent) => {
+      if (event.target !== ghost) return;
+      if (event.propertyName === "--spot-r" && phaseRef.current === "expand") {
+        if (pendingRef.current) applyBrand(pendingRef.current);
+        pendingRef.current = null;
+        go("settle");
+      } else if (event.propertyName === "opacity" && phaseRef.current === "settle") {
+        /* Reset without a transition: the ghost is invisible, and must
+           come back at radius zero rather than shrink into view. */
+        ghost.style.setProperty("transition", "none");
+        ghost.style.removeProperty("--spot-r");
+        setPreview(null);
+        go("idle");
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => ghost.style.removeProperty("transition"));
+        });
+      }
+    };
+    ghost.addEventListener("transitionend", onEnd);
+    return () => ghost.removeEventListener("transitionend", onEnd);
+  }, []);
+
+  return (
+    <section
+      className={styles.hero}
+      aria-label="About the design system"
+      onPointerMove={(e) => {
+        if (phaseRef.current === "spot") placeGhost({ x: e.clientX, y: e.clientY });
+      }}
+    >
+      {/* The theme row opens the hero: picking a look comes first, and
+          everything beneath it answers in that look. It enters by
+          opacity alone, outside the animated wrapper below. */}
+      <div className={styles.heroThemes}>
+        <ThemeSwitcher onPreview={onPreview} onActivate={onActivate} />
+      </div>
+      <div ref={stageRef} className={styles.heroStage}>
+        {/* The entrance animation lives on this wrapper, NOT the section:
+            .animate-in's will-change makes an ancestor a backdrop root,
+            which would stop the theme tooltips blurring the page behind
+            them. */}
+        <div className={`${styles.heroInner} animate-in`}>
+          <HeroContent subtitle={subtitle} onAdvance={advance} />
+        </div>
+        <div
+          ref={ghostRef}
+          className={styles.heroGhost}
+          data-spot={phase === "idle" ? undefined : phase}
+          inert
+          {...{ [THEME_SCOPE_ATTRIBUTE]: preview ?? active }}
+        >
+          <div className={styles.heroGhostInner}>
+            <div className={styles.heroInner}>
+              <HeroContent ghost subtitle={subtitle} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -1430,51 +1718,7 @@ export default function DesignSystemLanding() {
              swatches — nothing else. Figma, Storybook, GitHub and npm live in
              the resources strip below the collage, plus the footer and the
              Install card.) ---------- */}
-        <section className={styles.hero} aria-label="About the design system">
-          {/* The theme row opens the hero: picking a look comes first, and
-              everything beneath it answers in that look. It enters by
-              opacity alone, outside the animated wrapper below. */}
-          <div className={styles.heroThemes}>
-            <ThemeSwitcher />
-          </div>
-          {/* The entrance animation lives on this wrapper, NOT the section:
-              .animate-in's will-change makes an ancestor a backdrop root,
-              which would stop the theme tooltips blurring the page behind
-              them. */}
-          <div className={`${styles.heroInner} animate-in`}>
-          {/* The tagline is the h1: the nav wordmark owns the name. */}
-          <h1 className={styles.pageTitle}>The AI-ready React design system</h1>
-          <RotatingSubtitle />
-          {/* The counts sit between the two rules; the section links close
-              the hero. Every figure imports from the registry export that
-              owns it, so the band can never overstate. */}
-          <FadeDivider className={styles.heroDivider} />
-          <div className={styles.statStrip} role="group" aria-label="What the system counts today">
-            <Stat value={<AnimatedNumber value={COMPONENT_COUNT} />} label="Components" />
-            <Stat value={<AnimatedNumber value={TOKEN_COUNT} />} label="Semantic tokens" />
-            <Stat value={<AnimatedNumber value={THEME_SELECTOR_ORDER.length} />} label="Themes" />
-            <Stat value={<AnimatedNumber value={MCP_TOOLS.length} />} label="MCP tools" />
-            <Stat
-              value={<AnimatedNumber value={0} format={(v) => `$${v.toFixed(2)}`} />}
-              label="Cost"
-            />
-          </div>
-          <FadeDivider className={styles.heroDivider} />
-          <ButtonGroup
-            aria-label="Get started"
-            buttons={[
-              { label: "Get started", variant: "primary" as const, href: "/docs/get-started", iconLeft: "terminal" },
-              { label: "Browse components", variant: "secondary" as const, tone: "neutral" as const, href: "/components", iconLeft: "category" },
-            ]}
-          />
-          {/* The agent starter, kept to one quiet line: the buttons are the
-              hero's call to action, this is the shortcut for agent users. */}
-          <p className={styles.heroAgentNote}>
-            <span>Using a coding agent?</span>
-            <AgentStarterCopy />
-          </p>
-          </div>
-        </section>
+        <HeroSection />
 
         {/* ---------- collage: three curated columns of live demos + nav; one
              column below the breakpoint, so phones get the same drift ---------- */}

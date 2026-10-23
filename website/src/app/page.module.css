@@ -47,6 +47,127 @@
   width: 100%;
 }
 
+/* ---------- the theme spotlight ----------
+   The stage holds the page's hero content and, over it, the ghost: the
+   same content in the hovered theme's scope, shown through a radial mask
+   centred on the pointer. See the HeroSection comment in the page. */
+.heroStage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* The ghost reaches up behind the theme row (and, flooding, under the
+   whole viewport), so the row sits above it: the dots and their cards
+   stay the page's while the field behind them changes. */
+.heroThemes {
+  position: relative;
+  z-index: 2;
+}
+
+/* Registered so the radius can transition: the spotlight opens and the
+   flood grows on the motion tokens rather than in a script. */
+@property --spot-r {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+.heroGhost {
+  /* The bleeds are measured by the page from the hero stage to the
+     viewport's edges and set inline; the defaults hold the ghost to the
+     stage until the first hover. */
+  --ghost-top: 0px;
+  --ghost-right: 0px;
+  --ghost-bottom: 0px;
+  --ghost-left: 0px;
+  --spot-x: 50%;
+  --spot-y: 0px;
+  --spot-r: 0px;
+  position: absolute;
+  top: calc(-1 * var(--ghost-top));
+  right: calc(-1 * var(--ghost-right));
+  bottom: calc(-1 * var(--ghost-bottom));
+  left: calc(-1 * var(--ghost-left));
+  z-index: 1;
+  box-sizing: border-box;
+  pointer-events: none;
+  user-select: none;
+  /* The theme's page, with its ambient field approximated: the live field
+     is one WebGL canvas for the whole site and cannot be drawn twice. The
+     ellipses sit roughly where the shader's blobs do, top-left heavy, and
+     take the theme's own ambient tokens, so a theme with a different
+     palette shows it through the spotlight. */
+  background:
+    radial-gradient(ellipse 60% 55% at 15% 5%, color-mix(in srgb, var(--color-ambient-3) 42%, transparent), transparent 70%),
+    radial-gradient(ellipse 45% 50% at 85% 0%, color-mix(in srgb, var(--color-ambient-5) 30%, transparent), transparent 70%),
+    radial-gradient(ellipse 50% 45% at 55% 35%, color-mix(in srgb, var(--color-ambient-4) 24%, transparent), transparent 70%),
+    radial-gradient(ellipse 40% 40% at 30% 40%, color-mix(in srgb, var(--color-ambient-1) 20%, transparent), transparent 70%),
+    var(--color-bg-page-primary);
+  /* The spotlight: solid to most of the radius, then a short feather to
+     nothing at the radius: a wider feather blends the two titles over a
+     band wide enough to read as a double image. At radius zero the ghost
+     is entirely masked away. */
+  -webkit-mask-image: radial-gradient(
+    circle at var(--spot-x) var(--spot-y),
+    #000 calc(var(--spot-r) * 0.8),
+    transparent var(--spot-r)
+  );
+  mask-image: radial-gradient(
+    circle at var(--spot-x) var(--spot-y),
+    #000 calc(var(--spot-r) * 0.8),
+    transparent var(--spot-r)
+  );
+  transition:
+    --spot-r var(--motion-duration-slow) var(--motion-ease-standard),
+    opacity var(--motion-duration-slow) var(--motion-ease-standard);
+}
+
+/* The light field runs at reduced opacity on the live page (the
+   .blur-container rule in globals.css), so the approximation thins to
+   match. */
+html[data-theme="light"] .heroGhost {
+  background:
+    radial-gradient(ellipse 60% 55% at 15% 5%, color-mix(in srgb, var(--color-ambient-3) 28%, transparent), transparent 70%),
+    radial-gradient(ellipse 45% 50% at 85% 0%, color-mix(in srgb, var(--color-ambient-5) 20%, transparent), transparent 70%),
+    radial-gradient(ellipse 50% 45% at 55% 35%, color-mix(in srgb, var(--color-ambient-4) 16%, transparent), transparent 70%),
+    radial-gradient(ellipse 40% 40% at 30% 40%, color-mix(in srgb, var(--color-ambient-1) 13%, transparent), transparent 70%),
+    var(--color-bg-page-primary);
+}
+
+/* Hovering a dot: a spotlight wide enough to take in the headline and
+   the subtitle beneath the row. */
+.heroGhost[data-spot="spot"] {
+  --spot-r: 360px;
+}
+
+/* Picking a dot: the radius is set inline to reach the farthest corner,
+   and the flood takes the entrance pace. */
+.heroGhost[data-spot="expand"] {
+  transition-duration: var(--motion-duration-slower);
+  transition-timing-function: var(--motion-ease-emphasized);
+}
+
+/* The theme has applied beneath: the ghost is now a copy of the page and
+   fades off it, leaving the live field. */
+.heroGhost[data-spot="settle"] {
+  opacity: 0;
+}
+
+/* The ghost's inner wrapper pads by the bleeds, so the content inside
+   lands exactly over the page's copy. */
+.heroGhostInner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  padding: var(--ghost-top) var(--ghost-right) var(--ghost-bottom) var(--ghost-left);
+}
+
 /* The theme row enters by opacity alone: a finished opacity animation
    releases the backdrop root, where .animate-in's will-change transform
    would hold it forever. Delay comes from the shared stagger class. */

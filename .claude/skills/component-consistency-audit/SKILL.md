@@ -10,7 +10,7 @@ invoke: ["audit component consistency","consistency audit","are the components c
 
 The library's answer to drift between components. Every validator in the build holds one component to the system; this audit holds the components to each other: the same role gets the same treatment, and the small things every component needs are drawn once and composed everywhere else.
 
-It exists because the drift it looks for is invisible from inside any one component. On 2026-10-23 four controls on the playground looked wrong next to each other, and the sweep that followed found the same pattern across the library: three components drawing their own checkbox or radio, a switch copied by hand, a "chosen" check styled seven times in three colours, seventeen copies of one visually-hidden rule, three self-drawn close buttons, and seven surface families each split on fill, hover, radius or selected colour. Every one of those had passed every build check.
+It exists because the drift it looks for is invisible from inside any one component. On 2026-10-23 four controls on the playground looked wrong next to each other, and the sweep that followed found the same pattern across the library: three components drawing their own checkbox or radio, a switch copied by hand, a "chosen" check styled seven times in three colours, twenty-one stylesheets each carrying the visually-hidden recipe, three self-drawn close buttons, and seven surface families each split on fill, hover, radius or selected colour. Every one of those had passed every build check.
 
 ## When invoked
 
@@ -73,7 +73,7 @@ The things every component needs and must not redraw. For each, the one home is 
 
 - Visually hidden text → `ds-visually-hidden` from `src/behaviors/visually-hidden.css`.
 - A header's close button → a compact tertiary `CircularButton`.
-- The check and minus glyphs → `src/components/Checkbox/icons.tsx`.
+- The check and minus glyphs → `CheckIcon` and `MinusIcon`, exported beside Checkbox.
 - A focus ring on a control → the 2px action ring on the indicator; a host that is itself the target rings its own edge.
 - A label-and-description text column, a helper line, a disabled treatment → the same tokens and the same structure as the nearest sibling (Checkbox and RadioButton are the pair to line up).
 

@@ -7,7 +7,7 @@
  * visitor takes away) to the system it describes. A visitor pastes these
  * files into their own project and hands them to a coding agent, so a wrong
  * declaration or a token name that does not exist is a mistake shipped into
- * someone else's codebase. Five checks:
+ * someone else's codebase. Six checks:
  *
  *   1. Parity. For every preset in THEME_PRESETS and both themes, the
  *      exported blocks resolve to exactly what presetOverrides states: the
@@ -31,6 +31,13 @@
  *      word for word, opening paragraph and every section, places its
  *      theme section after the starter's Setup, and ends with exactly the
  *      exported CSS; its theme section joins the prose check in 4.
+ *   6. The colours the prose names. For every preset and two fixtures (an
+ *      import that restates greys, a black action key), the action colour
+ *      and its rest, hover and pressed fills named in THEME.md are the ones
+ *      the composer's declarations resolve to through the primitives, the
+ *      three fills differ in each mode, and greys the CSS restates are not
+ *      called untinted. The prose once read the levers instead, and named
+ *      colours an imported theme's stylesheet did not draw.
  *
  * Belongs in the validate-registry chain (and the website prebuild): its
  * sources are TypeScript theme data and the token files, not build output.
@@ -197,6 +204,73 @@ for (const [id, preset] of Object.entries(THEME_PRESETS)) {
         errors.push(`${label} names \`${key}\`, which no token file defines; fix the template in ${exportPath}`);
       }
     }
+  }
+}
+
+/* ---------- 6: the prose names the colours the CSS draws ---------- */
+
+// Resolved here from the composer and the primitives file, not through the
+// export's own resolver, so the two readings are independent.
+const shippedPrimitives = {};
+for (const match of read('src/tokens/tokens-primitives.css').matchAll(/^\s*(--primitive-[\w-]+)\s*:\s*(#[0-9a-f]{6})\s*;/gim)) {
+  shippedPrimitives[match[1]] = match[2].toUpperCase();
+}
+const resolve = (name, decls) => {
+  for (let i = 0, current = name; i < 8; i++) {
+    const value = decls[current]?.trim();
+    if (value === undefined) return shippedPrimitives[current] ?? null;
+    const ref = /^var\((--[\w-]+)\)$/.exec(value);
+    if (!ref) return /^#[0-9a-f]{6}$/i.test(value) ? value.toUpperCase() : null;
+    current = ref[1];
+  }
+  return null;
+};
+const FILLS = ['--color-action-primary-bg', '--color-action-primary-bg-hover', '--color-action-primary-bg-active'];
+
+// Two fixtures beside the presets, shaped like what the playground makes:
+// an import that restates greys (the prose must say so, not "untinted"),
+// and a black action key (its hover and pressed must not collapse onto it).
+const fixtures = {
+  ...THEME_PRESETS,
+  'fixture: stated greys': {
+    ...THEME_PRESETS[Object.keys(THEME_PRESETS)[0]],
+    tintOn: false,
+    extraOverrides: { '--primitive-neutral-02': '#CED0D4', '--primitive-neutral-01': '#F1F4F7' },
+  },
+  'fixture: black key': { ...THEME_PRESETS[Object.keys(THEME_PRESETS)[0]], brand: '#000000', brandDark: '#D6D6D6' },
+};
+
+for (const [id, preset] of Object.entries(fixtures)) {
+  const md = themeExport.buildThemeMarkdown(preset, context);
+  const fills = {};
+  for (const theme of ['light', 'dark']) {
+    const decls = presetOverrides(preset, theme);
+    fills[theme] = FILLS.map((name) => resolve(name, decls));
+  }
+  const known = [...fills.light, ...fills.dark].every(Boolean);
+  const actionLine = md.split('\n').find((line) => line.startsWith('- Action colour:')) ?? '';
+  if (fills.light[0] && !actionLine.includes(`\`${fills.light[0]}\``)) {
+    errors.push(`${id}: THEME.md's action colour line does not name ${fills.light[0]}, the fill theme.css draws in light mode`);
+  }
+  if (fills.dark[0] && fills.dark[0] !== fills.light[0] && !actionLine.includes(`\`${fills.dark[0]}\``)) {
+    errors.push(`${id}: THEME.md's action colour line does not name ${fills.dark[0]}, the fill theme.css draws in dark mode`);
+  }
+  if (known) {
+    const fillsLine = md.split('\n').find((line) => line.startsWith('- Action fills:')) ?? '';
+    for (const hex of [...fills.light, ...fills.dark]) {
+      if (!fillsLine.includes(`\`${hex}\``)) errors.push(`${id}: THEME.md's action fills line does not name ${hex}`);
+    }
+    for (const theme of ['light', 'dark']) {
+      if (new Set(fills[theme]).size < 3) {
+        errors.push(`${id} (${theme}): the action fill's rest, hover and pressed states resolve to ${fills[theme].join(', ')}, so the button would not answer hover or press`);
+      }
+    }
+  }
+  const restatesGreys = Object.entries(presetOverrides(preset, 'dark')).some(
+    ([name, value]) => name.startsWith('--primitive-neutral-') && shippedPrimitives[name] && !same(value, shippedPrimitives[name])
+  );
+  if (restatesGreys && !(preset.tintOn && preset.tintStrength > 0) && md.includes('untinted greys')) {
+    errors.push(`${id}: THEME.md calls the greys untinted, but theme.css restates neutral steps`);
   }
 }
 

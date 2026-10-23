@@ -671,11 +671,18 @@ export function actionPointerOverrides(
      A near-white key (the black & white preset's dark button) has no
      brightening headroom, so it takes a slight deepen instead. The cutoff
      sits above a light yellow (#FFD166 is 0.83): a yellow does have
-     headroom, and two shade steps under its dark label fall below AA. */
+     headroom, and two shade steps under its dark label fall below AA.
+     The near-black key is the mirror case: a fill within two steps of the
+     ramp's deep end has nowhere to deepen, so all three states would land
+     on one step (a black button that never answers hover). It brightens
+     instead, and the steps it lands on are still deep enough to hold its
+     light label. */
   const idx = (s: string) => order.indexOf(s);
   const keyLum = luminance(hexToRgb(keyHex));
   const darkLabel = keyLum > 0.5;
-  const brighten = darkLabel && keyLum < 0.9;
+  const noDeepRoom =
+    idx(picked["--color-action-primary-bg"]) >= order.length - 2;
+  const brighten = darkLabel ? keyLum < 0.9 : noDeepRoom;
   const dir = brighten ? -1 : 1;
   const walk = (s: string) =>
     order[Math.min(order.length - 1, Math.max(0, idx(s) + dir))];

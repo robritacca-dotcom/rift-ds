@@ -12,6 +12,7 @@ import {
   leverWord,
   motionSpeedPercent,
   nearestRampFor,
+  shippedNeutralHex,
   type AdvancedColorState,
   type FontOption,
   type Overrides,
@@ -168,6 +169,121 @@ export function describeTheme(preset: ThemePreset): string {
   ].join(", ") + ".";
 }
 
+/* ---------- resolved colours ----------
+   The prose states colours as the exported CSS resolves them, never as the
+   levers were set: an imported DESIGN.md can restate the primitives under
+   a lever (its greys, its action shades), and a description read off the
+   levers would then name colours the stylesheet does not draw. */
+
+/** The shipped hex of a `--primitive-<ramp>-<step>`, or null. */
+function shippedPrimitiveHex(name: string): string | null {
+  const m = /^--primitive-([a-z]+)-(\d\d)$/.exec(name);
+  if (!m) return null;
+  if (m[1] === "neutral") return shippedNeutralHex(m[2]);
+  return CHROMATIC_RAMPS.find((r) => r.name === m[1])?.steps.find(([s]) => s === m[2])?.[1] ?? null;
+}
+
+/** A custom property's colour through the theme's declarations, falling
+    back to the shipped primitives; null when the chain reaches a semantic
+    token the theme leaves at its base value. */
+function resolveColour(name: string, decls: Overrides): string | null {
+  const seen = new Set<string>();
+  let current = name;
+  while (!seen.has(current)) {
+    seen.add(current);
+    const value = decls[current]?.trim();
+    if (value === undefined) return shippedPrimitiveHex(current);
+    const ref = /^var\((--[\w-]+)\)$/.exec(value);
+    if (!ref) return /^#[0-9a-f]{6}$/i.test(value) ? value.toUpperCase() : null;
+    current = ref[1];
+  }
+  return null;
+}
+
+const ACTION_FILLS = [
+  "--color-action-primary-bg",
+  "--color-action-primary-bg-hover",
+  "--color-action-primary-bg-active",
+] as const;
+
+export interface ResolvedColours {
+  /** Rest, hover and pressed fills per mode, as the CSS draws them. */
+  action: Record<"light" | "dark", [rest: string, hover: string, pressed: string]>;
+  /** False when a fill is left at its base value, which the CSS cannot
+      name; the prose then states the key alone. */
+  statesKnown: boolean;
+  /** True when the theme restates neutral steps with greys of its own. */
+  statedNeutrals: boolean;
+  /** The primitive ramps theme.css restates, neutral first. */
+  restatedRamps: string[];
+}
+
+/** The colours the exported CSS draws, read back out of its declarations. */
+export function resolvedColours(preset: ThemePreset): ResolvedColours {
+  const blocks = buildThemeBlocks(preset);
+  const modes = { light: blocks.light, dark: { ...blocks.light, ...blocks.dark } };
+  const fallback = { light: preset.brand, dark: preset.brandDark ?? preset.brand };
+  const action = {} as ResolvedColours["action"];
+  let statesKnown = true;
+  for (const mode of ["light", "dark"] as const) {
+    const [rest, hover, pressed] = ACTION_FILLS.map((name) => resolveColour(name, modes[mode]));
+    if (!rest || !hover || !pressed) statesKnown = false;
+    const key = rest ?? fallback[mode].toUpperCase();
+    action[mode] = [key, hover ?? key, pressed ?? key];
+  }
+
+  const restated = new Set<string>();
+  for (const [name, value] of Object.entries(modes.dark)) {
+    const shipped = shippedPrimitiveHex(name);
+    if (shipped && value.trim().toUpperCase() !== shipped.toUpperCase()) {
+      restated.add(name.split("-")[3]);
+    }
+  }
+  const rampOrder = ["neutral", ...CHROMATIC_RAMPS.map((r) => r.name)];
+  return {
+    action,
+    statesKnown,
+    statedNeutrals: restated.has("neutral"),
+    restatedRamps: rampOrder.filter((ramp) => restated.has(ramp)),
+  };
+}
+
+const listOf = (items: string[]) =>
+  items.length <= 1
+    ? items.join("")
+    : `${items.slice(0, -1).join(", ")} and ${items[items.length - 1]}`;
+
+/**
+ * What a reader of theme.css might take for a mistake and is not: the
+ * shape of the file, and each place this theme departs from the base on
+ * purpose. Built from the declarations, so a note appears only when the
+ * file does the thing it explains.
+ */
+function readingNotes(preset: ThemePreset, colours: ResolvedColours): string[] {
+  const blocks = buildThemeBlocks(preset);
+  if (blocks.pristine) return [];
+  const notes = [
+    "- `:root` holds light mode and everything both modes share. The dark block lists only what changes in dark mode, and a token neither block names keeps its base value. A token set in one block and not the other is intended.",
+    "- The colours named above are the ones `theme.css` resolves to. Where a preset swatch or the token reference says otherwise, the file is right.",
+  ];
+  if (colours.restatedRamps.length > 0) {
+    const ramps = colours.restatedRamps.map((ramp) =>
+      ramp === "neutral"
+        ? "neutral"
+        : (CHROMATIC_RAMPS.find((r) => r.name === ramp)?.label ?? ramp).toLowerCase()
+    );
+    notes.push(
+      `- It restates the ${listOf(ramps)} primitive ${ramps.length === 1 ? "ramp" : "ramps"} with this theme's own steps. The semantic tokens still point at primitives through \`var()\`, so no tier is skipped: the steps hold different colours.`
+    );
+  }
+  if (ACCENT_NAMES.some((name) => `--color-core-accent-${name}` in blocks.light)) {
+    notes.push(
+      "- The `--color-core-accent-*` tokens take hex values directly. That is how the accent lever sets them: the accents are the one colour role a theme states by value."
+    );
+  }
+  return notes;
+}
+
 /**
  * The look in words, as markdown sections from Colour to Icons: what the
  * theme is, which tokens carry it. THEME.md prints them as its own `##`
@@ -175,16 +291,27 @@ export function describeTheme(preset: ThemePreset): string {
  * section, so the two files describe a theme in the same words.
  */
 function themeLanguage(preset: ThemePreset, heading: "##" | "###"): string {
-  const darkBrand = preset.brandDark;
+  const colours = resolvedColours(preset);
   const speed = motionSpeedPercent(preset.motionScale);
+  const [lightKey] = colours.action.light;
+  const [darkKey] = colours.action.dark;
+  const states = (mode: "light" | "dark") => {
+    const [rest, hover, pressed] = colours.action[mode];
+    return `\`${rest}\` at rest, \`${hover}\` on hover and \`${pressed}\` pressed`;
+  };
 
   const colour = [
-    `- Action colour: \`${preset.brand}\`, from the ${rampLabel(preset.brand)} family${
-      darkBrand ? `; \`${darkBrand}\` in dark mode` : ""
+    `- Action colour: \`${lightKey}\`, from the ${rampLabel(lightKey)} family${
+      darkKey !== lightKey ? `; \`${darkKey}\` in dark mode` : ""
     }. It is carried by \`--color-action-primary-bg\`.`,
+    ...(colours.statesKnown
+      ? [`- Action fills: ${states("light")} in light mode; ${states("dark")} in dark mode.`]
+      : []),
     preset.tintOn && preset.tintStrength > 0
       ? `- Neutrals: tinted ${preset.tintStrength}% towards \`${preset.tintSeed}\`.`
-      : "- Neutrals: untinted greys.",
+      : colours.statedNeutrals
+        ? "- Neutrals: this theme's own greys, set on the `--primitive-neutral-*` steps in `theme.css` in place of the base scale's untinted ones."
+        : "- Neutrals: untinted greys.",
     `- Ambient accents: ${ACCENT_NAMES.map(
       (accent) => `${accent} \`${preset.accents[accent]}\``
     ).join(", ")}. They colour chart series after the first, and the background field unless the theme sets its own ambient colours.`,
@@ -223,6 +350,8 @@ function themeLanguage(preset: ThemePreset, heading: "##" | "###"): string {
     `- Density: ${leverWord("density", preset.density)} (${preset.density}% of the base spacing). Space with the \`--gap-*\` and \`--padding-*\` tokens.`,
   ];
 
+  const reading = readingNotes(preset, colours);
+
   const depth =
     preset.elevation === "flat"
       ? "This theme is flat: both elevation tokens resolve to no shadow. Separate surfaces by contrast."
@@ -252,7 +381,9 @@ ${heading} Icons
 
 Material Symbols Rounded at weight ${preset.iconWeight}, ${
     preset.iconFill ? "filled" : "outlined"
-  }. Size an icon with the \`--icon-size-*\` scale, never with \`font-size\`.`;
+  }. Size an icon with the \`--icon-size-*\` scale, never with \`font-size\`.${
+    reading.length > 0 ? `\n\n${heading} Reading theme.css\n\n${reading.join("\n")}` : ""
+  }`;
 }
 
 /** A design-language file for the theme: what the look is and how to keep to it. */

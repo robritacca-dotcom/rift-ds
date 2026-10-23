@@ -1,6 +1,6 @@
 # rift-ds component catalog
 
-Generated from the component registry at version 1.12.0. One entry per public component; each Contract link is the component's full prop table as markdown. A component marked deprecated still works in existing code; its Deprecated line names what to use instead.
+Generated from the component registry at version 1.13.0. One entry per public component; each Contract link is the component's full prop table as markdown. A component marked deprecated still works in existing code; its Deprecated line names what to use instead.
 
 ## Actions (6)
 

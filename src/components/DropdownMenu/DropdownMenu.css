@@ -123,7 +123,9 @@
   justify-content: space-between;
   gap: var(--gap-400); /* 16px between label and shortcut */
   padding: var(--padding-200) var(--padding-400); /* Figma: 8px 16px */
-  border-radius: var(--radius-300); /* Figma: 12px */
+  /* A row nested in the --radius-300 panel takes the inner step, the
+     overlay-row convention every listbox and the command rows share. */
+  border-radius: var(--radius-200);
   cursor: pointer;
   position: relative;
   white-space: nowrap;
@@ -164,14 +166,6 @@
 
 .ds-dropdown-menu__item--selected .ds-dropdown-menu__item-icon {
   color: var(--color-icon-primary);
-}
-
-.ds-dropdown-menu__check {
-  --icon-size: var(--icon-size-500);
-  color: var(--color-icon-primary);
-  margin-left: auto;
-  flex-shrink: 0;
-  line-height: 1;
 }
 
 /* ============================================

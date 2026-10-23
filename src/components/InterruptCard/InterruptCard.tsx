@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from '../Button/Button';
 import './InterruptCard.css';
+import '../../behaviors/visually-hidden.css';
 import '../../fonts/material-symbols.css';
 
 /** One choice the card offers, rendered as a Button in the options footer. */
@@ -121,7 +122,7 @@ export const InterruptCard = React.forwardRef<HTMLDivElement, InterruptCardProps
             {description && <p className={`${baseClass}__description`}>{description}</p>}
           </div>
           {!answered && (
-            <span className={`${baseClass}__sr-only`} role="status">
+            <span className="ds-visually-hidden" role="status">
               {waitingLabel}
             </span>
           )}

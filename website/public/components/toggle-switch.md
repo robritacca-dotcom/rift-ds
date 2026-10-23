@@ -25,3 +25,11 @@ Generated from the rift-ds registry and prop JSDoc, version 1.12.0. The same dat
 | className | `string` | no | `` | Additional CSS classes |
 | onChange | `((checked: boolean) => void)` | no |  | Legacy change handler, kept for backwards compatibility. Deprecated: Use `onCheckedChange` instead. |
 | ariaLabel | `string` | no |  | Legacy accessible-name prop. Deprecated: Pass the native `aria-label` attribute instead. |
+
+## SwitchIndicator props
+
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| checked | `boolean` | no | `false` | Whether the switch is on. |
+| size | `"default" \| "compact"` | no | `default` | Track size: `default` is 42×24px, `compact` 34×20px. |
+| className | `string` | no | `` | Additional CSS classes |

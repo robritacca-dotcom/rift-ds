@@ -4,6 +4,7 @@ import React from 'react';
 import { Chip } from '../Chip/Chip';
 import { MOTION_EXIT_SYNC_MS } from '../../tokens/motion';
 import './PromptSuggestions.css';
+import '../../behaviors/visually-hidden.css';
 import '../../fonts/material-symbols.css';
 
 /** One tappable suggestion in the row. */
@@ -248,7 +249,7 @@ export const PromptSuggestions = React.forwardRef<HTMLDivElement, PromptSuggesti
                       )}
                     </span>
                     {value === suggestion.id && (
-                      <span className={`${baseClass}__sr-only`}> {chosenLabel}</span>
+                      <span className="ds-visually-hidden"> {chosenLabel}</span>
                     )}
                   </button>
                 ) : (
@@ -263,7 +264,7 @@ export const PromptSuggestions = React.forwardRef<HTMLDivElement, PromptSuggesti
                   />
                 )}
                 {!block && value === suggestion.id && (
-                  <span className={`${baseClass}__sr-only`}> {chosenLabel}</span>
+                  <span className="ds-visually-hidden"> {chosenLabel}</span>
                 )}
               </div>
             ))}

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useCallback, useLayoutEffect, useId } from 'react';
+import { ChosenMark } from '../Dropdown/ChosenMark';
 import { useLayer } from '../../behaviors/useLayer';
 import { MOTION_HOVER_HIDE_DELAY_MS } from '../../tokens/motion';
 import type {
@@ -229,9 +230,7 @@ const SubEntry = ({
       </span>
       {entry.shortcut && <span className={`${baseClass}__shortcut`}>{entry.shortcut}</span>}
       {entry.selected && (
-        <span className={`${baseClass}__check material-symbols-rounded`} aria-hidden="true">
-          check
-        </span>
+        <ChosenMark />
       )}
     </li>
   );
@@ -490,9 +489,7 @@ export const ContextMenu = React.forwardRef<HTMLDivElement, ContextMenuProps>(
           </span>
           {entry.shortcut && <span className={`${baseClass}__shortcut`}>{entry.shortcut}</span>}
           {entry.selected && (
-            <span className={`${baseClass}__check material-symbols-rounded`} aria-hidden="true">
-              check
-            </span>
+            <ChosenMark />
           )}
         </li>
       );

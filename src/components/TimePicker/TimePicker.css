@@ -164,15 +164,6 @@
 }
 
 /* ============================================
-   CHECK ICON
-   ============================================ */
-
-.ds-timepicker__check {
-  --icon-size: var(--icon-size-600);
-  color: var(--color-action-primary-bg);
-}
-
-/* ============================================
    ERROR STATE
    ============================================ */
 
@@ -225,6 +216,3 @@
   letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
 }
 
-.ds-timepicker--compact .ds-timepicker__check {
-  --icon-size: var(--icon-size-500);
-}

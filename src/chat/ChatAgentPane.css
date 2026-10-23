@@ -31,12 +31,16 @@
   margin: 0;
 }
 
+/* The chat's card surface: container fill behind a hairline, like every
+   card in the conversation. The radius stays a step under the rail's
+   --radius-600, concentric with the shell it nests in. */
 .ds-chat-agent-pane__card {
   display: flex;
   flex-direction: column;
   gap: var(--gap-200);
   padding: var(--padding-300);
-  background-color: var(--color-bg-container-secondary);
+  background-color: var(--color-bg-container-primary);
+  border: var(--border-025) solid var(--color-bg-container-border);
   border-radius: var(--radius-400);
 }
 

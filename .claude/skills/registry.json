@@ -24,6 +24,7 @@
     "component-doc-page",
     "accessibility-audit",
     "api-consistency",
+    "component-consistency-audit",
     "seo-audit",
     "chat-quality",
     "link-rot"

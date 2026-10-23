@@ -1,6 +1,7 @@
 import React from 'react';
 import '../Chart/Chart.css';
 import './GanttChart.css';
+import '../../behaviors/visually-hidden.css';
 
 /** Accent roles a Gantt bar or milestone can take — the core accent vocabulary shared with EventCalendar. */
 export type GanttChartColor =
@@ -310,7 +311,7 @@ export const GanttChart = React.forwardRef<HTMLDivElement, GanttChartProps>(
       return (
         <div className={barClasses} style={barStyle} title={text}>
           {fill}
-          <span className={`${baseClass}__sr`}>{text}</span>
+          <span className="ds-visually-hidden">{text}</span>
         </div>
       );
     };
@@ -327,7 +328,7 @@ export const GanttChart = React.forwardRef<HTMLDivElement, GanttChartProps>(
           style={{ left: `${left}%` }}
           title={text}
         >
-          <span className={`${baseClass}__sr`}>{text}</span>
+          <span className="ds-visually-hidden">{text}</span>
         </div>
       );
     };

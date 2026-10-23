@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useCallback, useMemo, useId } from 'react';
+import { ChosenMark } from '../Dropdown/ChosenMark';
 import { useLayer } from '../../behaviors/useLayer';
 import { Field } from '../Field/Field';
 import './Combobox.css';
@@ -396,9 +397,7 @@ export const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>(({
           )}
         </span>
         {isSelected && (
-          <span className={`${baseClass}__check material-symbols-rounded`} aria-hidden="true">
-            check
-          </span>
+          <ChosenMark />
         )}
       </li>
     );

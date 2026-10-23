@@ -537,19 +537,6 @@
   }
 }
 
-/* Visually hidden, still announced. */
-.ds-chat-widget__sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  padding: 0;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
-  border: 0;
-}
-
 /* ============================================
    THE RAILS — the optional session-history rail (leading) and agent pane
    (trailing). Wide widgets seat them inline; narrow ones summon the history

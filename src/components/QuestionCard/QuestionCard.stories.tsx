@@ -213,10 +213,13 @@ export const SomethingElseMarked: Story = {
     await userEvent.click(await canvas.findByRole('button', { name: 'Something else' }));
     const field = canvas.getByRole('textbox', { name: 'Something else' });
     const row = field.closest('.ds-question-card__other') as HTMLElement;
+    // The mark is the real checkbox indicator, so its state is the box's
+    // own checked modifier rather than a glyph name.
+    const mark = () => row.querySelector('.ds-question-card__mark') as HTMLElement;
     await userEvent.type(field, 'Billing');
-    await expect(row.querySelector('.ds-question-card__mark')?.textContent).toBe('check_box');
+    await expect(mark()).toHaveClass('ds-checkbox__box--checked');
     await userEvent.clear(field);
-    await expect(row.querySelector('.ds-question-card__mark')?.textContent).toBe('check_box_outline_blank');
+    await expect(mark()).not.toHaveClass('ds-checkbox__box--checked');
   },
 };
 

@@ -3,6 +3,7 @@
 
 import React from 'react';
 import './CodeDiff.css';
+import '../../behaviors/visually-hidden.css';
 
 /** The kind of line a parsed diff row represents. */
 export type CodeDiffLineType = 'add' | 'remove' | 'context' | 'hunk';
@@ -221,7 +222,7 @@ export const CodeDiff = React.forwardRef<HTMLDivElement, CodeDiffProps>(
               >
                 -{deletions}
               </span>
-              <span className={`${baseClass}__sr-only`}>
+              <span className="ds-visually-hidden">
                 {statsLabel(additions, deletions)}
               </span>
             </span>
@@ -273,7 +274,7 @@ export const CodeDiff = React.forwardRef<HTMLDivElement, CodeDiffProps>(
                     {line.type === 'add' ? '+' : line.type === 'remove' ? '-' : ''}
                   </span>
                   {changeLabel && (
-                    <span className={`${baseClass}__sr-only`}>{changeLabel} </span>
+                    <span className="ds-visually-hidden">{changeLabel} </span>
                   )}
                   <span className={`${baseClass}__content`}>{line.content}</span>
                 </li>

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
+import { ChosenMark } from '../Dropdown/ChosenMark';
 import { useLayer } from '../../behaviors/useLayer';
 import { Field } from '../Field/Field';
 import './RichDropdown.css';
@@ -334,12 +335,7 @@ export const RichDropdown = React.forwardRef<HTMLDivElement, RichDropdownProps>(
               >
                 <OptionCell option={option} />
                 {option.value === currentValue && (
-                  <span
-                    className={`${baseClass}__check material-symbols-rounded`}
-                    aria-hidden="true"
-                  >
-                    check
-                  </span>
+                  <ChosenMark />
                 )}
               </li>
             ))}

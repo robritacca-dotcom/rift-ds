@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import { ChosenMark } from './ChosenMark';
 import { useLayer } from '../../behaviors/useLayer';
 import { Field } from '../Field/Field';
 import './Dropdown.css';
@@ -392,12 +393,7 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
                                 {option.label}
                               </span>
                               {option.value === value && (
-                                <span
-                                  className={`${baseClass}__check material-symbols-rounded`}
-                                  aria-hidden="true"
-                                >
-                                  check
-                                </span>
+                                <ChosenMark />
                               )}
                             </li>
                           );
@@ -444,12 +440,7 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
                       {option.label}
                     </span>
                     {option.value === value && (
-                      <span
-                        className={`${baseClass}__check material-symbols-rounded`}
-                        aria-hidden="true"
-                      >
-                        check
-                      </span>
+                      <ChosenMark />
                     )}
                   </li>
                 ))}

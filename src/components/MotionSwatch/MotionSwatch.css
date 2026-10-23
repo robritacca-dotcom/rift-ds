@@ -17,7 +17,7 @@
   min-width: 140px;
 
   /* Appearance */
-  background: var(--color-bg-container-primary-semi);
+  background: var(--color-bg-container-primary);
   border: var(--border-025) solid var(--color-bg-container-border);
   border-radius: var(--radius-600); /* 24px */
   padding: var(--padding-500); /* 20px */

@@ -1,6 +1,9 @@
 'use client';
 
 import React from 'react';
+import { CheckboxIndicator } from '../Checkbox/Checkbox';
+import { RadioIndicator } from '../RadioButton/RadioButton';
+import { SwitchIndicator } from '../ToggleSwitch/ToggleSwitch';
 import './SelectionCard.css';
 
 /* ============================================
@@ -49,29 +52,6 @@ type SelectionCardOwnProps = {
 export interface SelectionCardProps
   extends SelectionCardOwnProps,
     Omit<React.ComponentPropsWithoutRef<'div'>, keyof SelectionCardOwnProps> {}
-
-/* ============================================
-   CHECK ICON — reused from Checkbox
-   ============================================ */
-
-const CheckIcon = () => (
-  <svg
-    className="ds-selection-card__check-icon"
-    width="14"
-    height="14"
-    viewBox="0 0 14 14"
-    fill="none"
-    aria-hidden="true"
-  >
-    <path
-      d="M2 7.5L5.5 11L12 3"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
 
 /* ============================================
    COMPONENT
@@ -144,6 +124,7 @@ export const SelectionCard = React.forwardRef<HTMLDivElement, SelectionCardProps
           const selected = isSelected(option.value);
           const cardClasses = [
             baseClass,
+            'ds-control-host',
             selected ? `${baseClass}--selected` : '',
             option.disabled ? `${baseClass}--disabled` : '',
           ]
@@ -168,28 +149,15 @@ export const SelectionCard = React.forwardRef<HTMLDivElement, SelectionCardProps
                 )}
               </div>
 
+              {/* The real controls' own indicators, so a card's radio, box or
+                  switch is the one the standalone control draws. */}
               <div className={`${baseClass}__indicator`}>
                 {mode === 'radio' ? (
-                  <div className={`${baseClass}__radio`}>
-                    <div className={`${baseClass}__radio-dot`} />
-                  </div>
+                  <RadioIndicator checked={selected} />
                 ) : mode === 'toggle' ? (
-                  <div
-                    className={`${baseClass}__toggle ${selected ? '' : `${baseClass}__toggle--off`}`}
-                  >
-                    <div className={`${baseClass}__toggle-thumb`}>
-                      <span
-                        className="material-symbols-rounded ds-selection-card__toggle-icon"
-                        aria-hidden="true"
-                      >
-                        check
-                      </span>
-                    </div>
-                  </div>
+                  <SwitchIndicator checked={selected} />
                 ) : (
-                  <div className={`${baseClass}__checkbox`}>
-                    <CheckIcon />
-                  </div>
+                  <CheckboxIndicator checked={selected} />
                 )}
               </div>
             </div>

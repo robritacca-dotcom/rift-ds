@@ -1,5 +1,6 @@
 import React from 'react';
 import './Waveform.css';
+import '../../behaviors/visually-hidden.css';
 
 /** Props owned by Waveform itself — everything else falls through to the root span. */
 type WaveformOwnProps = {
@@ -94,7 +95,7 @@ export const Waveform = React.forwardRef<HTMLSpanElement, WaveformProps>(
             />
           );
         })}
-        <span className={`${baseClass}__sr`}>{label ?? DEFAULT_LABELS[state]}</span>
+        <span className="ds-visually-hidden">{label ?? DEFAULT_LABELS[state]}</span>
       </span>
     );
   },

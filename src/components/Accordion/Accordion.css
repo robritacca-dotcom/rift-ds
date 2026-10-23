@@ -3,12 +3,17 @@
    Collapsible content sections
    ============================================ */
 
+/* The standard card surface (container fill, hairline border,
+   --radius-300), the one SelectionCard's and QuestionCard's option rows
+   share, so a collapsible section reads as a card on the page rather than
+   a hairline floating over it. */
 .ds-accordion {
   display: flex;
   flex-direction: column;
   width: 100%;
   border: var(--border-025) solid var(--color-bg-container-border);
-  border-radius: var(--radius-200);
+  border-radius: var(--radius-300);
+  background-color: var(--color-bg-container-primary);
   overflow: hidden;
 }
 
@@ -42,14 +47,16 @@
   transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
+/* Hover steps the header to the secondary fill, the collapsible-section
+   convention the agent cards (AgentPlan, SourceTrail, ToolCall) set. */
 .ds-accordion__trigger:hover {
-  background-color: var(--color-action-passive-bg-hover);
+  background-color: var(--color-bg-container-secondary);
 }
 
 .ds-accordion__trigger:focus-visible {
   outline: 2px solid var(--color-action-primary-bg);
   outline-offset: -2px;
-  border-radius: var(--radius-200);
+  border-radius: var(--radius-300);
 }
 
 /* ============================================

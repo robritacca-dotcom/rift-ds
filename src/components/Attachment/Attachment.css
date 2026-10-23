@@ -482,23 +482,6 @@ button.ds-attachment-tile__body:focus-visible,
 }
 
 /* ============================================
-   VISUALLY HIDDEN
-   ============================================ */
-
-.ds-attachment-tile__sr-only,
-.ds-attachment-group__sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-/* ============================================
    REDUCED MOTION
    The global guard collapses the spin to a still arc, which still reads as
    "in progress" beside the words under it.

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import '../ToggleSwitch/ToggleSwitch.css';
+import { SwitchIndicator } from '../ToggleSwitch/ToggleSwitch';
 import './Inspector.css';
 
 /** Props owned by InspectorToggleSwitch itself — everything else falls through to the <input type="checkbox">. */
@@ -99,26 +99,13 @@ export const InspectorToggleSwitch = React.forwardRef<
         <label htmlFor={inputId} className="ds-inspector-bar__label">
           {label}
         </label>
-        {/* ToggleSwitch's track and thumb, drawn by its stylesheet at the size
-            that fits the bar: the full switch in a default bar, the compact
-            one in a compact bar. */}
-        <span
-          className={[
-            'ds-toggle-switch',
-            'ds-inspector-toggle-switch__switch',
-            size === 'compact' ? 'ds-toggle-switch--compact' : '',
-            on ? '' : 'ds-toggle-switch--off',
-          ]
-            .filter(Boolean)
-            .join(' ')}
-          aria-hidden="true"
-        >
-          <span className="ds-toggle-switch__track">
-            <span className="ds-toggle-switch__thumb">
-              <span className="ds-toggle-switch__thumb-icon material-symbols-rounded">check</span>
-            </span>
-          </span>
-        </span>
+        {/* ToggleSwitch's own track and thumb, at the size that fits the bar:
+            the full switch in a default bar, the compact one in a compact bar. */}
+        <SwitchIndicator
+          className="ds-inspector-toggle-switch__switch"
+          checked={on}
+          size={size}
+        />
         <input
           {...rest}
           ref={setRefs}

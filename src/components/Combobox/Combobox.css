@@ -260,12 +260,6 @@
   color: var(--color-text-tertiary);
 }
 
-.ds-combobox__check {
-  --icon-size: var(--icon-size-600);
-  color: var(--color-action-primary-bg);
-  flex-shrink: 0;
-}
-
 /* ============================================
    GROUPS
    ============================================ */
@@ -359,8 +353,7 @@
 }
 
 .ds-combobox--compact .ds-combobox__search-icon,
-.ds-combobox--compact .ds-combobox__chevron,
-.ds-combobox--compact .ds-combobox__check {
+.ds-combobox--compact .ds-combobox__chevron {
   --icon-size: var(--icon-size-500);
 }
 

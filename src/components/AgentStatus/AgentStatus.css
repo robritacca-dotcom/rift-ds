@@ -219,7 +219,7 @@
   display: flex;
   width: 100%;
   padding: var(--padding-150) var(--padding-300);
-  background-color: var(--color-bg-container-secondary);
+  background-color: var(--color-bg-container-primary);
   border: var(--border-025) solid var(--color-bg-container-border);
   border-radius: var(--radius-300);
 }

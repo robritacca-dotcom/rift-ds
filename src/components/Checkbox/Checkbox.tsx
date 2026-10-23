@@ -2,6 +2,7 @@
 
 import React, { useId, useState } from 'react';
 import { Field } from '../Field/Field';
+import { CheckIcon, MinusIcon } from './icons';
 import './Checkbox.css';
 
 /** Props owned by Checkbox itself — everything else falls through to the wrapper. */
@@ -55,40 +56,6 @@ export interface CheckboxProps
   extends CheckboxOwnProps,
     Omit<React.ComponentPropsWithoutRef<'div'>, keyof CheckboxOwnProps> {}
 
-/** Custom SVG check icon — pixel-perfect centering without font metrics */
-const CheckIcon = () => (
-  <svg
-    className="ds-checkbox__icon"
-    width="14"
-    height="14"
-    viewBox="0 0 14 14"
-    fill="none"
-    aria-hidden="true"
-  >
-    <path
-      d="M2 7.5L5.5 11L12 3"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
-
-/** Custom SVG minus icon for indeterminate state */
-const MinusIcon = () => (
-  <svg
-    className="ds-checkbox__icon"
-    width="14"
-    height="14"
-    viewBox="0 0 14 14"
-    fill="none"
-    aria-hidden="true"
-  >
-    <path d="M2 7H12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-  </svg>
-);
-
 export const Checkbox = React.forwardRef<HTMLDivElement, CheckboxProps>(
   (
     {
@@ -121,6 +88,7 @@ export const Checkbox = React.forwardRef<HTMLDivElement, CheckboxProps>(
 
     const classes = [
       baseClass,
+      'ds-control-host',
       size === 'compact' ? `${baseClass}--compact` : '',
       checked ? `${baseClass}--checked` : '',
       indeterminate && !checked ? `${baseClass}--indeterminate` : '',
@@ -167,9 +135,7 @@ export const Checkbox = React.forwardRef<HTMLDivElement, CheckboxProps>(
         aria-invalid={error || undefined}
         tabIndex={disabled ? -1 : 0}
       >
-        <div className={`${baseClass}__box`}>
-          {indeterminate && !checked ? <MinusIcon /> : <CheckIcon />}
-        </div>
+        <CheckboxIndicator checked={checked} indeterminate={indeterminate} size={size} />
         {/* Without a helper the label stays a bare span, so existing markup
             (and layout) is untouched; with one, label and helper stack in a
             text column beside the box. */}
@@ -314,3 +280,54 @@ export const CheckboxGroup = React.forwardRef<HTMLDivElement, CheckboxGroupProps
 );
 
 CheckboxGroup.displayName = 'CheckboxGroup';
+
+/* ============================================
+   CHECKBOX INDICATOR — the box on its own
+   ============================================ */
+
+/** Props owned by CheckboxIndicator itself — everything else falls through to the <span>. */
+type CheckboxIndicatorOwnProps = {
+  /** Whether the box shows its check. */
+  checked?: boolean;
+  /** Whether the box shows the minus of an indeterminate state (ignored when `checked`). */
+  indeterminate?: boolean;
+  /** Box size: `default` is 24px, `compact` 20px. */
+  size?: 'default' | 'compact';
+  /** Additional CSS classes */
+  className?: string;
+};
+
+export interface CheckboxIndicatorProps
+  extends CheckboxIndicatorOwnProps,
+    Omit<React.ComponentPropsWithoutRef<'span'>, keyof CheckboxIndicatorOwnProps | 'children'> {}
+
+/**
+ * The checkbox's box, as a presentational piece for a host that is itself
+ * the control: SelectionCard's checkbox mode, QuestionCard's multi rows and
+ * FilterBar's multi-select options draw it, so a checkbox looks the same
+ * wherever a choice is offered. Hidden from assistive technology; the host
+ * carries `role="checkbox"` or `aria-selected` and the state. A host that
+ * adds the `ds-control-host` class to its interactive root lights the box
+ * on hover, the way Checkbox does.
+ */
+export const CheckboxIndicator = React.forwardRef<HTMLSpanElement, CheckboxIndicatorProps>(
+  ({ checked = false, indeterminate = false, size = 'default', className = '', ...rest }, ref) => {
+    const base = 'ds-checkbox__box';
+    const classes = [
+      base,
+      checked ? `${base}--checked` : '',
+      indeterminate && !checked ? `${base}--indeterminate` : '',
+      size === 'compact' ? `${base}--compact` : '',
+      className,
+    ]
+      .filter(Boolean)
+      .join(' ');
+    return (
+      <span aria-hidden="true" {...rest} ref={ref} className={classes}>
+        {indeterminate && !checked ? <MinusIcon /> : <CheckIcon />}
+      </span>
+    );
+  },
+);
+
+CheckboxIndicator.displayName = 'CheckboxIndicator';

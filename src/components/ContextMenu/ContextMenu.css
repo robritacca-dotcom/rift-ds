@@ -93,7 +93,7 @@
   justify-content: space-between;
   gap: var(--gap-400);
   padding: var(--padding-200) var(--padding-400);
-  border-radius: var(--radius-300);
+  border-radius: var(--radius-200); /* the inner step inside the --radius-300 panel, like every overlay row */
   cursor: pointer;
   position: relative;
   white-space: nowrap;
@@ -129,14 +129,6 @@
 
 .ds-context-menu__item--selected .ds-context-menu__item-icon {
   color: var(--color-icon-primary);
-}
-
-.ds-context-menu__check {
-  --icon-size: var(--icon-size-500);
-  color: var(--color-icon-primary);
-  margin-left: auto;
-  flex-shrink: 0;
-  line-height: 1;
 }
 
 /* States — disabled */

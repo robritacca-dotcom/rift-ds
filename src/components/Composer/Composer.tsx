@@ -17,6 +17,7 @@ import {
 import type { MentionItem, MentionSource } from '../Mention/Mention';
 import '../../fonts/material-symbols.css';
 import './Composer.css';
+import '../../behaviors/visually-hidden.css';
 
 /** Props owned by Composer itself — everything else falls through to the <textarea>. */
 type ComposerOwnProps = {
@@ -854,14 +855,14 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
         )}
 
         {(armed || hasFiles) && (
-          <span className={`${baseClass}__sr-only`} role="status">
+          <span className="ds-visually-hidden" role="status">
             {announcement}
           </span>
         )}
 
         {mentionsArmed && (
           /* The menu opens without moving focus, so its arrival is said here */
-          <span className={`${baseClass}__sr-only`} role="status">
+          <span className="ds-visually-hidden" role="status">
             {mentionOpen ? formatMentionAnnouncement(choosable.length) : ''}
           </span>
         )}

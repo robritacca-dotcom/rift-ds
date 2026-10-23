@@ -8,6 +8,7 @@ import { StatusDot } from '../StatusDot/StatusDot';
 import type { StatusDotProps } from '../StatusDot/StatusDot';
 import { Tooltip } from '../Tooltip/Tooltip';
 import './ThreadPanel.css';
+import '../../behaviors/visually-hidden.css';
 import '../../fonts/material-symbols.css';
 
 export interface ThreadPanelThreadAction {
@@ -776,7 +777,7 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
                                   </span>
                                 )}
                                 {statusLabel && (
-                                  <span className={`${baseClass}__status-label`}>
+                                  <span className="ds-visually-hidden">
                                     {statusLabel}
                                   </span>
                                 )}
@@ -784,7 +785,7 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
                                     meaning rides in the row's text, the
                                     status label's manner. */}
                                 {thread.pinned && !thread.pending && (
-                                  <span className={`${baseClass}__status-label`}>
+                                  <span className="ds-visually-hidden">
                                     {pinnedLabel}
                                   </span>
                                 )}

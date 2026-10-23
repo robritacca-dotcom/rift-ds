@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useId, useMemo } from 'react';
+import { ChosenMark } from '../Dropdown/ChosenMark';
 import { useLayer } from '../../behaviors/useLayer';
 import { Field } from '../Field/Field';
 import './TimePicker.css';
@@ -340,12 +341,7 @@ export const TimePicker = React.forwardRef<HTMLButtonElement, TimePickerProps>(
               >
                 {option.label}
                 {option.value === selectedValue && (
-                  <span
-                    className={`${baseClass}__check material-symbols-rounded`}
-                    aria-hidden="true"
-                  >
-                    check
-                  </span>
+                  <ChosenMark />
                 )}
               </li>
             ))}

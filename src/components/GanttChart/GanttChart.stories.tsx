@@ -129,7 +129,7 @@ export const DefaultCopy: Story = {
   play: async ({ canvasElement }) => {
     const months = [...canvasElement.querySelectorAll('.ds-gantt__month-label')].map((node) => node.textContent);
     await expect(months).toEqual(['Feb 2026', 'Mar', 'Apr', 'May', 'Jun']);
-    const reading = [...canvasElement.querySelectorAll('.ds-gantt__sr')].map((node) => node.textContent);
+    const reading = [...canvasElement.querySelectorAll('.ds-visually-hidden')].map((node) => node.textContent);
     await expect(reading).toEqual([
       'Shipped work, Feb 2, 2026 to Mar 27, 2026, 100% complete',
       'Planned work, May 4, 2026 to Jun 26, 2026, projected, Target: late Q2',
@@ -157,7 +157,7 @@ export const LocalisedCopy: Story = {
     await expect(months[1]).toBe(spanish(new Date(2026, 2, 1), { month: 'short' }));
     const day = (iso: string) =>
       spanish(new Date(`${iso}T00:00:00`), { month: 'short', day: 'numeric', year: 'numeric' });
-    const reading = [...canvasElement.querySelectorAll('.ds-gantt__sr')].map((node) => node.textContent);
+    const reading = [...canvasElement.querySelectorAll('.ds-visually-hidden')].map((node) => node.textContent);
     await expect(reading).toEqual([
       `Shipped work, del ${day('2026-02-02')} al ${day('2026-03-27')}, 100 % completado`,
       `Planned work, del ${day('2026-05-04')} al ${day('2026-06-26')}, previsto, Target: late Q2`,

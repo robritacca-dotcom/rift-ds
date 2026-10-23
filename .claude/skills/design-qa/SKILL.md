@@ -22,7 +22,7 @@ Accept any of:
 
 - **A component** → every one of its Storybook stories, plus its website showcase page if it has one (the page is where composition problems show)
 - **A page** → a URL path on the website. Page reviews inherit the `visual-review` skill's viewport matrix — both themes at desktop *and* mobile widths — since an arrangement that only holds at one width isn't holding
-- **A sweep** → several components or pages at once ("the form controls", "every page under /foundations"), each judged individually *and* against the others — cross-target inconsistency is the sweep's whole point
+- **A sweep** → several components or pages at once ("the form controls", "every page under /foundations"), each judged individually *and* against the others — cross-target inconsistency is the sweep's whole point. A sweep over a family starts from the `component-consistency-audit` skill's family table for it (the fill, border, radius, hover, selected and disabled each member takes, built from the stylesheets now), so the lineup is judged against a stated convention rather than against whichever sibling was captured first
 
 If no target is given, default to what this session built or changed. Ask only when genuinely ambiguous.
 
@@ -103,6 +103,11 @@ Inside and between a component's own parts, judged at magnification, per theme:
 - The right component is used — a page re-implementing an existing library pattern in local CSS is a Repetition finding even when it looks fine today.
 - Icons match the type: an icon's stroke weight sits with the font weight beside it; a heavy icon next to light text reads as borrowed from another system.
 - The action colour means action, status roles carry status, and visible copy follows `content-design.md`. Token *compliance* has its own skill (`token-audit`); here, judge what the token **choices** look like — a legal token in the wrong role is exactly the kind of thing this pass exists to catch.
+
+**Consistency — the same thing drawn the same way**
+
+- **One drawing per primitive.** A checkbox, radio, switch, chosen mark, close button or hidden label looks exactly like every other in the library, because it *is* the same one: the shared indicators, `ChosenMark`, `CircularButton` and `ds-visually-hidden` named in `design.md`'s Components intro. A control that reads a shade different from the standalone control beside it (a thinner ring, a glyph where the others have a box, a check in another colour) is a redrawn primitive, and the finding is a Defect whichever side looks better. `node scripts/validate-shared-primitives.mjs` catches the copies it can recognise; the eye catches the rest.
+- **The surface is the family's.** Line the target up against its family (the rows in `design.md`'s "Surfaces by family"): a fill where the siblings are transparent, a radius step the family does not use, a hover or current-item treatment that differs, a disabled state that fades differently. A member outside its family's convention with no sentence in its spec is a Defect; a family with no convention yet is a Direction call, and the `component-consistency-audit` skill is where it gets decided and written down.
 
 ## Judging
 

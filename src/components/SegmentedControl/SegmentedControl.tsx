@@ -2,6 +2,7 @@
 
 import React, { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import './SegmentedControl.css';
+import '../../behaviors/visually-hidden.css';
 import '../../fonts/material-symbols.css';
 
 export interface Segment {
@@ -444,7 +445,7 @@ export const SegmentedControl = React.forwardRef<HTMLDivElement, SegmentedContro
                   the word on screen, never in the accessibility tree. */}
               <span
                 className={`${baseClass}__label${
-                  collapseMode === 'icons' && segment.icon ? ` ${baseClass}__label--hidden` : ''
+                  collapseMode === 'icons' && segment.icon ? ` ${baseClass}__label--hidden ds-visually-hidden` : ''
                 }`}
               >
                 {segment.label}

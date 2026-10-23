@@ -17,15 +17,3 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* Visually hidden settled value — what a screen reader gets instead of the
-   rolling digits. */
-.ds-animated-number__sr {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  padding: 0;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-}

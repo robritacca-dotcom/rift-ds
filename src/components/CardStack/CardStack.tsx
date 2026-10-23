@@ -2,6 +2,7 @@
 
 import React, { useCallback, useRef, useState } from 'react';
 import './CardStack.css';
+import '../../behaviors/visually-hidden.css';
 
 /** Props owned by CardStack itself — everything else falls through to the root `<div>`. */
 type CardStackOwnProps = {
@@ -203,7 +204,7 @@ export const CardStack = React.forwardRef<HTMLDivElement, CardStackProps>(
           );
         })}
         {count > 1 && (
-          <div className={`${baseClass}__sr-only`} role="status">
+          <div className="ds-visually-hidden" role="status">
             {positionLabel(index + 1, count)}
           </div>
         )}

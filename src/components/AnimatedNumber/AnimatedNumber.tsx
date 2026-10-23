@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import './AnimatedNumber.css';
+import '../../behaviors/visually-hidden.css';
 import { MOTION_COUNT_UP_MS } from '../../tokens/motion';
 
 /** Props owned by AnimatedNumber itself — everything else falls through to the root span. */
@@ -105,7 +106,7 @@ export const AnimatedNumber = React.forwardRef<HTMLSpanElement, AnimatedNumberPr
         <span className={`${baseClass}__value`} aria-hidden="true">
           {fmt(display)}
         </span>
-        <span className={`${baseClass}__sr`}>{fmt(value)}</span>
+        <span className="ds-visually-hidden">{fmt(value)}</span>
       </span>
     );
   },

@@ -141,15 +141,6 @@
   padding: 0;
 }
 
-.ds-bottom-nav__sr {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
-
 .ds-bottom-nav__search {
   display: none;
 }

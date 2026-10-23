@@ -1,6 +1,12 @@
 /* ============================================
    RADIO BUTTON COMPONENT
-   Custom radio with animated dot indicator
+   Custom radio with animated dot indicator. The
+   circle is RadioIndicator, a presentational
+   piece every host that offers a single choice
+   draws (RadioButton itself, SelectionCard,
+   QuestionCard): its state is keyed on the
+   circle's own modifier, and a host carrying
+   ds-control-host lights it on hover.
    ============================================ */
 
 .ds-radio {
@@ -12,17 +18,18 @@
 }
 
 /* ============================================
-   CIRCLE (outer ring)
+   CIRCLE (outer ring) — RadioIndicator
    ============================================ */
 
 .ds-radio__circle {
   position: relative;
   width: 24px;
   height: 24px;
+  box-sizing: border-box;
   border: var(--border-050) solid var(--color-input-border-primary);
   border-radius: var(--radius-pill); /* 999px — perfect circle */
   background-color: var(--color-input-bg-primary);
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
@@ -57,38 +64,47 @@
 
 /* ============================================
    CHECKED STATE
+   Keyed on the circle, so an indicator drawn by
+   another host shows the same state.
    ============================================ */
 
-.ds-radio--checked .ds-radio__circle {
+.ds-radio__circle--checked {
   border-color: var(--color-action-primary-bg);
 }
 
-.ds-radio--checked .ds-radio__dot {
+.ds-radio__circle--checked .ds-radio__dot {
   transform: scale(1);
 }
 
 /* ============================================
    HOVER STATE
+   Any host carrying ds-control-host lights the
+   circle when it is hovered and not disabled.
    ============================================ */
 
-.ds-radio:not(.ds-radio--disabled):hover .ds-radio__circle {
+.ds-control-host:not(:disabled):not([aria-disabled='true']):hover .ds-radio__circle {
   border-color: var(--color-action-primary-bg);
 }
 
-.ds-radio--checked:not(.ds-radio--disabled):hover .ds-radio__circle {
+.ds-control-host:not(:disabled):not([aria-disabled='true']):hover .ds-radio__circle--checked {
   border-color: var(--color-action-primary-bg-hover);
 }
 
-.ds-radio--checked:not(.ds-radio--disabled):hover .ds-radio__dot {
+.ds-control-host:not(:disabled):not([aria-disabled='true']):hover .ds-radio__circle--checked .ds-radio__dot {
   background-color: var(--color-action-primary-bg-hover);
 }
 
 /* ============================================
    FOCUS STATE
+   The same ring as Checkbox, on the circle.
    ============================================ */
 
+.ds-radio:focus-visible {
+  outline: none;
+}
+
 .ds-radio:focus-visible .ds-radio__circle {
-  outline: var(--border-050) solid var(--color-action-primary-border-tertiary);
+  outline: 2px solid var(--color-action-primary-bg);
   outline-offset: 2px;
 }
 

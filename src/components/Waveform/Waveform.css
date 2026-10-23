@@ -73,18 +73,6 @@
   transition: transform var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
-/* Visually hidden state text — what a screen reader gets instead of bars. */
-.ds-waveform__sr {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  padding: 0;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
-
 /* The looping wave parks on its resting contour rather than strobing
    through the collapsed duration — same treatment as the other looping
    indicators. */

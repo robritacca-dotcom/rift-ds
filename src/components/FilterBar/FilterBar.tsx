@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useCallback, useId, useRef, useState } from 'react';
+import { CheckboxIndicator } from '../Checkbox/Checkbox';
+import { ChosenMark } from '../Dropdown/ChosenMark';
 import { useLayer } from '../../behaviors/useLayer';
 import './FilterBar.css';
 import '../../fonts/material-symbols.css';
@@ -314,13 +316,18 @@ export const FilterBar = React.forwardRef<HTMLDivElement, FilterBarProps>(
                         aria-selected={selected}
                         onClick={() => toggleOption(filter, option.value)}
                       >
-                        <span
-                          className={`${baseClass}__option-check material-symbols-rounded`}
-                          aria-hidden="true"
-                        >
-                          {selected ? 'check' : ''}
-                        </span>
+                        {/* Picked independently: the checkbox's own box leads
+                            each row. One at a time: the chosen mark trails
+                            the selected row, the listbox convention. */}
+                        {filter.multiple !== false && (
+                          <CheckboxIndicator
+                            className={`${baseClass}__option-check`}
+                            checked={selected}
+                            size="compact"
+                          />
+                        )}
                         {option.label}
+                        {filter.multiple === false && selected && <ChosenMark />}
                       </li>
                     );
                   })}

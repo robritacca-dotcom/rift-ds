@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useCallback, useId } from 'react';
+import { ChosenMark } from '../Dropdown/ChosenMark';
 import { useLayer } from '../../behaviors/useLayer';
 import { MOTION_HOVER_HIDE_DELAY_MS } from '../../tokens/motion';
 import './DropdownMenu.css';
@@ -291,9 +292,7 @@ const MenuPanel = ({
           <span className={`${baseClass}__shortcut`}>{entry.shortcut}</span>
         )}
         {entry.selected && (
-          <span className={`${baseClass}__check material-symbols-rounded`} aria-hidden="true">
-            check
-          </span>
+          <ChosenMark />
         )}
       </li>
     );
@@ -538,9 +537,7 @@ export const DropdownMenu = React.forwardRef<HTMLDivElement, DropdownMenuProps>(
           <span className={`${baseClass}__shortcut`}>{entry.shortcut}</span>
         )}
         {entry.selected && (
-          <span className={`${baseClass}__check material-symbols-rounded`} aria-hidden="true">
-            check
-          </span>
+          <ChosenMark />
         )}
       </li>
     );

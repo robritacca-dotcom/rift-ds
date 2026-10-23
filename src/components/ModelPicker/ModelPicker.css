@@ -121,7 +121,7 @@
 
 .ds-model-picker__option:hover,
 .ds-model-picker__option--focused {
-  background-color: var(--color-bg-container-secondary);
+  background-color: var(--color-action-passive-bg-hover);
 }
 
 .ds-model-picker__option--disabled {
@@ -173,13 +173,6 @@
   letter-spacing: var(--font-paragraph-sm-letter-spacing);
 }
 
-.ds-model-picker__check {
-  --icon-size: var(--icon-size-500);
-
-  flex: none;
-  color: var(--color-action-primary-text-tertiary);
-}
-
 /* ============================================
    EFFORT ROW
    ============================================ */
@@ -202,42 +195,8 @@
   letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
 }
 
+/* The effort levels are a compact neutral SegmentedControl (its own
+   stylesheet); the row only seats it at its end. */
 .ds-model-picker__effort-options {
-  display: inline-flex;
-  gap: var(--gap-050);
-  padding: var(--padding-050);
-  background-color: var(--color-bg-container-secondary);
-  border-radius: var(--radius-pill);
-}
-
-.ds-model-picker__effort-option {
-  padding: var(--padding-050) var(--padding-200);
-  background: none;
-  border: none;
-  border-radius: var(--radius-pill);
-  cursor: pointer;
-  color: var(--color-text-secondary);
-  font-family: var(--font-paragraph-sm-emphasis-family);
-  font-size: var(--font-paragraph-sm-emphasis-size);
-  font-weight: var(--font-paragraph-sm-emphasis-weight);
-  line-height: var(--font-paragraph-sm-emphasis-line-height);
-  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
-  transition:
-    background-color var(--motion-duration-fast) var(--motion-ease-standard),
-    color var(--motion-duration-fast) var(--motion-ease-standard);
-}
-
-.ds-model-picker__effort-option:hover {
-  color: var(--color-text-primary);
-}
-
-.ds-model-picker__effort-option:focus-visible {
-  outline: 2px solid var(--color-action-primary-bg);
-  outline-offset: -2px;
-}
-
-.ds-model-picker__effort-option--selected {
-  background-color: var(--color-bg-container-primary);
-  color: var(--color-text-primary);
-  box-shadow: var(--shadow-floating);
+  flex: none;
 }

@@ -125,7 +125,7 @@
 }
 
 .ds-notification-center__tab--active {
-  background-color: var(--color-bg-container-tertiary);
+  background-color: var(--color-action-passive-bg-active);
   color: var(--color-text-primary);
 }
 
@@ -256,18 +256,6 @@
 /* ============================================
    SCREEN READER TEXT
    ============================================ */
-
-.ds-notification-item__sr {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
 
 /* Icons take the colour of the text around them. Explicit, not just
    inherited by default: a consumer stylesheet that sets a colour on

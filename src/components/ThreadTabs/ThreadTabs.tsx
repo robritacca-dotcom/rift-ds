@@ -4,6 +4,7 @@ import React from 'react';
 import { StatusDot } from '../StatusDot/StatusDot';
 import type { StatusDotProps } from '../StatusDot/StatusDot';
 import './ThreadTabs.css';
+import '../../behaviors/visually-hidden.css';
 import '../../fonts/material-symbols.css';
 
 /** What a tab's leading dot reports — ThreadPanel's thread statuses, so a session reads the same in the rail and in the strip. */
@@ -307,7 +308,7 @@ export const ThreadTabs = React.forwardRef<HTMLDivElement, ThreadTabsProps>(
                         ))}
                       <span className={`${baseClass}__label`}>{tab.label}</span>
                       {labels[status] && (
-                        <span className={`${baseClass}__status-label`}>
+                        <span className="ds-visually-hidden">
                           {labels[status]}
                         </span>
                       )}

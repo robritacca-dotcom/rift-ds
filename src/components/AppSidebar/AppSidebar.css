@@ -211,7 +211,7 @@
 }
 
 .ds-app-sidebar__btn--active {
-  background-color: var(--color-action-passive-bg-hover);
+  background-color: var(--color-action-passive-bg-active);
 }
 
 .ds-app-sidebar__btn-left {
@@ -357,7 +357,7 @@
 }
 
 .ds-app-sidebar__sub-btn--active {
-  background-color: var(--color-action-passive-bg-hover);
+  background-color: var(--color-action-passive-bg-active);
 }
 
 .ds-app-sidebar__sub-label {

@@ -1,6 +1,11 @@
 /* ============================================
    TOGGLE SWITCH COMPONENT
-   Dark/Light mode toggle with check icon
+   Binary on/off switch with a check in the thumb.
+   The track is SwitchIndicator, a presentational
+   piece every host that offers a switch draws
+   (ToggleSwitch itself, InspectorToggleSwitch,
+   SelectionCard's toggle mode): its state is
+   keyed on the track's own modifiers.
    ============================================ */
 
 .ds-toggle-switch {
@@ -19,11 +24,12 @@
 }
 
 /* ============================================
-   TRACK
+   TRACK — SwitchIndicator
    ============================================ */
 
 .ds-toggle-switch__track {
   position: relative;
+  display: inline-block;
   width: 42px;
   height: 24px;
   border-radius: var(--radius-pill);
@@ -51,19 +57,13 @@
   transition: transform var(--motion-duration-slow) var(--motion-ease-spring);
 }
 
+/* The same SVG check Checkbox draws, so the two controls show one tick.
+   14px inside the 20px thumb: the smallest icon step is also 20px, which
+   would fill the thumb edge to edge. */
 .ds-toggle-switch__thumb-icon {
-  /* Intentionally off the --icon-size-* scale. This check sits inside the
-     20x20 thumb; the smallest scale step is also 20px, which would fill the
-     thumb edge to edge. Control-internal glyph, not a UI icon.
-
-     Set via --icon-size (not font-size): .material-symbols-rounded derives
-     font-size, width, and height from it together. Overriding font-size
-     alone leaves the box at the 24px default, so the glyph hangs off-centre
-     inside the thumb.
-
-     ds-allow(icon-size): 14px glyph inside the 20px thumb — the smallest
-     scale step would fill it edge to edge. */
-  --icon-size: 14px;
+  display: block;
+  width: 14px;
+  height: 14px;
   color: var(--color-action-primary-bg);
 }
 
@@ -84,22 +84,30 @@
 
 /* ============================================
    STATES
+   Keyed on the track, so an indicator drawn by
+   another host shows the same states.
    ============================================ */
 
 /* Off / Unchecked state — thumb moves to the left */
-.ds-toggle-switch--off .ds-toggle-switch__track {
+.ds-toggle-switch__track--off {
   background: var(--color-text-secondary);
 }
 
-.ds-toggle-switch--off .ds-toggle-switch__thumb {
+.ds-toggle-switch__track--off .ds-toggle-switch__thumb {
   transform: translateX(-18px);
 }
 
 /* ============================================
    FOCUS
+   The same ring as Checkbox and RadioButton, on
+   the track rather than around the label.
    ============================================ */
 
 .ds-toggle-switch:focus-visible {
+  outline: none;
+}
+
+.ds-toggle-switch:focus-visible .ds-toggle-switch__track {
   outline: 2px solid var(--color-action-primary-bg);
   outline-offset: 2px;
 }
@@ -117,22 +125,24 @@
    SIZE — COMPACT
    ============================================ */
 
-.ds-toggle-switch--compact .ds-toggle-switch__track {
+.ds-toggle-switch__track--compact {
   width: 34px;
   height: 20px;
 }
 
-.ds-toggle-switch--compact .ds-toggle-switch__thumb {
+.ds-toggle-switch__track--compact .ds-toggle-switch__thumb {
   width: 16px;
   height: 16px;
 }
 
-.ds-toggle-switch--compact .ds-toggle-switch__thumb-icon {
-  /* Off-scale for the same reason as the default size — the compact thumb
-     is only 16x16.
+/* 12px inside the 16px compact thumb, for the same reason as the default. */
+.ds-toggle-switch__track--compact .ds-toggle-switch__thumb-icon {
+  width: 12px;
+  height: 12px;
+}
 
-     ds-allow(icon-size): 12px glyph inside the 16px compact thumb. */
-  --icon-size: 12px;
+.ds-toggle-switch__track--compact.ds-toggle-switch__track--off .ds-toggle-switch__thumb {
+  transform: translateX(-14px);
 }
 
 .ds-toggle-switch--compact .ds-toggle-switch__label {
@@ -165,8 +175,4 @@
 
 .ds-toggle-switch--error .ds-toggle-switch__helper {
   color: var(--color-status-error-border);
-}
-
-.ds-toggle-switch--compact.ds-toggle-switch--off .ds-toggle-switch__thumb {
-  transform: translateX(-14px);
 }

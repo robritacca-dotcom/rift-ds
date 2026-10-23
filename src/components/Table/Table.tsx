@@ -3,6 +3,8 @@
 
 import React from 'react';
 import './Table.css';
+import '../../behaviors/visually-hidden.css';
+import '../../behaviors/visually-hidden.css';
 
 export interface TableColumn {
   /** Unique column identifier, used as the key into each row's cells */
@@ -90,7 +92,7 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
       <table {...rest} ref={ref} className={classes}>
         {caption && (
           <caption
-            className={captionHidden ? `${baseClass}__caption--hidden` : `${baseClass}__caption`}
+            className={captionHidden ? `${baseClass}__caption ds-visually-hidden` : `${baseClass}__caption`}
           >
             {caption}
           </caption>
@@ -110,7 +112,7 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
               >
                 {/* An empty header cell is unannounced — fall back to the
                     column key so the column is still identifiable. */}
-                {col.header || <span className={`${baseClass}__sr-only`}>{col.key}</span>}
+                {col.header || <span className="ds-visually-hidden">{col.key}</span>}
               </th>
             ))}
           </tr>

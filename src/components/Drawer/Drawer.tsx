@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useRef, useId } from 'react';
+import { CircularButton } from '../CircularButton/CircularButton';
 import ReactDOM from 'react-dom';
 import './Drawer.css';
 import '../../fonts/material-symbols.css';
@@ -134,19 +135,15 @@ export const Drawer = React.forwardRef<HTMLDivElement, DrawerProps>(
             </div>
 
             {dismissible && (
-              <button
-                type="button"
+              <CircularButton
                 className={`${baseClass}__close`}
+                icon="close"
+                variant="tertiary"
+                size="compact"
+                tooltip={false}
+                ariaLabel={closeLabel}
                 onClick={() => onOpenChange(false)}
-                aria-label={closeLabel}
-              >
-                <span
-                  className={`${baseClass}__close-icon material-symbols-rounded`}
-                  aria-hidden="true"
-                >
-                  close
-                </span>
-              </button>
+              />
             )}
           </div>
 

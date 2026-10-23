@@ -112,7 +112,7 @@
 }
 
 .ds-thread-tabs__tab--active {
-  background-color: var(--color-bg-container-tertiary);
+  background-color: var(--color-action-passive-bg-active);
 }
 
 .ds-thread-tabs__trigger {
@@ -152,20 +152,6 @@
    the same mark ThreadPanel's rows carry. */
 .ds-thread-tabs__status {
   flex: none;
-}
-
-/* The status read aloud: the dot is decorative, so its state rides in the
-   tab's text for assistive technology only. */
-.ds-thread-tabs__status-label {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
 }
 
 .ds-thread-tabs__icon {

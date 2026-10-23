@@ -3,6 +3,7 @@
 import React from 'react';
 import { useLinkComponent, type LinkComponent } from '../../behaviors/LinkProvider';
 import './BottomNav.css';
+import '../../behaviors/visually-hidden.css';
 import '../../fonts/material-symbols.css';
 
 /* ============================================
@@ -196,7 +197,7 @@ export const BottomNav = React.forwardRef<HTMLElement, BottomNavProps>(
                     {renderBadge(item.badge)}
                   </span>
                   <span className={`${baseClass}__label`}>{item.label}</span>
-                  {badgeText && <span className={`${baseClass}__sr`}>{badgeText}</span>}
+                  {badgeText && <span className="ds-visually-hidden">{badgeText}</span>}
                 </>
               );
               const handleClick = () => {

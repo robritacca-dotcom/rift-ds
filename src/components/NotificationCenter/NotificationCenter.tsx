@@ -3,6 +3,7 @@
 import React, { useId, useState } from 'react';
 import { EmptyState, type EmptyStateProps } from '../EmptyState/EmptyState';
 import './NotificationCenter.css';
+import '../../behaviors/visually-hidden.css';
 import '../../fonts/material-symbols.css';
 
 export interface NotificationCenterTab {
@@ -84,7 +85,7 @@ export const NotificationItem = React.forwardRef<HTMLElement, NotificationItemPr
             {time && <span className={`${baseClass}__time`}>{time}</span>}
             {unread && (
               <span className={`${baseClass}__dot`}>
-                <span className={`${baseClass}__sr`}>{unreadLabel}</span>
+                <span className="ds-visually-hidden">{unreadLabel}</span>
               </span>
             )}
           </div>

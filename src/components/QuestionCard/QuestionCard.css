@@ -114,9 +114,11 @@
 }
 
 /* An open row is drawn dashed: an answer on offer, not yet given. A pick
-   turns it solid, in the strongest ink, with a filled check at its end, so
-   a chosen row reads as decided at a glance and stays readable after the
-   moment has passed. */
+   turns it solid, in the strongest ink, with the control's indicator on at
+   its end, so a chosen row reads as decided at a glance and stays readable
+   after the moment has passed. The row is a control, so it sits on Input's
+   surface (--color-input-bg-primary at --radius-300), the same one
+   SelectionCard's option rows and every field share. */
 .ds-question-card__option {
   display: flex;
   align-items: center;
@@ -127,8 +129,8 @@
   margin: 0;
   padding: var(--padding-300) var(--padding-400);
   border: var(--border-025) dashed var(--color-text-tertiary);
-  border-radius: var(--radius-400);
-  background: none;
+  border-radius: var(--radius-300);
+  background-color: var(--color-input-bg-primary);
   color: var(--color-text-primary);
   font: inherit;
   text-align: left;
@@ -144,7 +146,7 @@ button.ds-question-card__option {
 
 button.ds-question-card__option:hover:not(:disabled) {
   border-style: solid;
-  background-color: var(--color-bg-container-secondary);
+  border-color: var(--color-input-border-hover);
 }
 
 button.ds-question-card__option:focus-visible {
@@ -192,14 +194,13 @@ button.ds-question-card__option--chosen:hover {
   color: var(--color-text-tertiary);
 }
 
+/* The mark is the real control's indicator (CheckboxIndicator or
+   RadioIndicator); it draws its own states, the row only seats it. The
+   "Something else" row's pencil takes the same slot. */
 .ds-question-card__mark {
   flex: none;
   --icon-size: var(--icon-size-500);
   color: var(--color-icon-secondary);
-}
-
-.ds-question-card__option--chosen .ds-question-card__mark {
-  color: var(--color-text-primary);
 }
 
 /* "Something else" reads as the way out, not one more answer. */
@@ -305,7 +306,8 @@ button.ds-question-card__option--chosen:hover {
 .ds-question-summary--card {
   padding: var(--padding-300) var(--padding-400);
   border: var(--border-025) solid var(--color-bg-container-border);
-  border-radius: var(--radius-400);
+  border-radius: var(--radius-300);
+  background-color: var(--color-bg-container-primary);
   color: var(--color-text-primary);
 }
 
@@ -345,14 +347,3 @@ button.ds-question-card__option--chosen:hover {
   color: var(--color-text-tertiary);
 }
 
-.ds-question-card__sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}

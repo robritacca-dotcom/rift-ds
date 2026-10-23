@@ -110,34 +110,10 @@
 }
 
 /* Close button — ghost icon button */
+/* The close is the library's CircularButton (tertiary, compact); the
+   header only seats it. */
 .ds-dialog__close {
   flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  border: none;
-  border-radius: var(--radius-pill); /* pill */
-  background-color: transparent;
-  cursor: pointer;
-  transition: background-color var(--motion-duration-base) var(--motion-ease-standard);
-}
-
-.ds-dialog__close:hover {
-  background-color: var(--color-action-passive-bg-hover);
-}
-
-.ds-dialog__close:focus-visible {
-  outline: 2px solid var(--color-action-primary-bg);
-  outline-offset: 2px;
-}
-
-.ds-dialog__close-icon {
-  --icon-size: var(--icon-size-500);
-  line-height: 1;
-  color: var(--color-icon-primary);
 }
 
 /* ============================================

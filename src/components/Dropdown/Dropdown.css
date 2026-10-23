@@ -201,15 +201,6 @@
   list-style: none;
 }
 
-/* ============================================
-   CHECK ICON
-   ============================================ */
-
-.ds-dropdown__check {
-  --icon-size: var(--icon-size-600);
-  color: var(--color-action-primary-bg);
-}
-
 /* The option row's icon-and-label cluster, so the selected check keeps its
    own end of the space-between row. */
 .ds-dropdown__option-content {
@@ -283,6 +274,3 @@
 /* Compact group labels keep the base --font-paragraph-sm-* type — the
    scale has no smaller step. */
 
-.ds-dropdown--compact .ds-dropdown__check {
-  --icon-size: var(--icon-size-500);
-}

@@ -1,0 +1,24 @@
+/* ============================================
+   VISUALLY HIDDEN
+   The one recipe for text that is read but not
+   seen: a status for a live region, a control's
+   spoken name, a marker beside a visual state.
+   Every component imports this sheet and uses
+   ds-visually-hidden rather than writing the
+   recipe again (scripts/validate-shared-primitives.mjs
+   fails a second copy). A hidden native input
+   that must stay focusable is not this: it
+   keeps its own rule, with the reason beside it.
+   ============================================ */
+
+.ds-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

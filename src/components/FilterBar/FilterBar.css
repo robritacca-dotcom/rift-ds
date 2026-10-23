@@ -165,14 +165,6 @@
   color: var(--color-text-primary);
 }
 
-.ds-filter-bar__option-check {
-  flex-shrink: 0;
-  width: var(--icon-size-500);
-  --icon-size: var(--icon-size-500);
-  line-height: 1;
-  color: var(--color-action-primary-bg);
-}
-
 /* Clear all */
 
 .ds-filter-bar__clear-all {

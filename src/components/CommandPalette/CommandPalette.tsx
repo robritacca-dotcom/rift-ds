@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useMemo, useCallback, useId } from 'react';
+import { CircularButton } from '../CircularButton/CircularButton';
 import ReactDOM from 'react-dom';
 import { Kbd } from '../Kbd/Kbd';
 import './CommandPalette.css';
@@ -308,16 +309,15 @@ export const CommandPalette = React.forwardRef<HTMLDivElement, CommandPalettePro
             onChange={(e) => handleQueryChange(e.target.value)}
             onKeyDown={handleKeyDown}
           />
-          <button
-            type="button"
+          <CircularButton
             className={`${baseClass}__close`}
+            icon="close"
+            variant="tertiary"
+            size="compact"
+            tooltip={false}
+            ariaLabel={closeLabel}
             onClick={() => onOpenChange(false)}
-            aria-label={closeLabel}
-          >
-            <span className="material-symbols-rounded" aria-hidden="true">
-              close
-            </span>
-          </button>
+          />
         </div>
 
         {/* A listbox may hold only options and groups, so the container takes the

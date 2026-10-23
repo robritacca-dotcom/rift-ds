@@ -3,10 +3,13 @@
    A set of two-state buttons
    ============================================ */
 
+/* A control strip on the input radius, filled like SegmentedControl's
+   track, so the group reads as one control rather than a hairline. */
 .ds-toggle-group {
   display: inline-flex;
   border: var(--border-025) solid var(--color-bg-container-border);
-  border-radius: var(--radius-200);
+  border-radius: var(--radius-300);
+  background-color: var(--color-bg-container-primary);
   overflow: hidden;
 }
 
@@ -44,7 +47,7 @@
    ============================================ */
 
 .ds-toggle-group__item:hover {
-  background-color: var(--color-bg-container-secondary);
+  background-color: var(--color-action-passive-bg-hover);
   color: var(--color-text-primary);
 }
 
@@ -98,6 +101,10 @@
 
 .ds-toggle-group--disabled {
   opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ds-toggle-group--disabled .ds-toggle-group__item {
   pointer-events: none;
 }
 

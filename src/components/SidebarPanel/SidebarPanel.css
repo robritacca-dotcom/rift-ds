@@ -177,7 +177,7 @@
 
 .ds-sidebar-panel__row:hover,
 .ds-sidebar-panel__row--active {
-  background-color: var(--color-action-passive-bg-hover);
+  background-color: var(--color-action-passive-bg-active);
 }
 
 .ds-sidebar-panel__row:focus-visible,

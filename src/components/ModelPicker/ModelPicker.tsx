@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useEffect, useId, useRef, useState } from 'react';
+import { ChosenMark } from '../Dropdown/ChosenMark';
+import { SegmentedControl } from '../SegmentedControl/SegmentedControl';
 import { useLayer } from '../../behaviors/useLayer';
 import './ModelPicker.css';
 import '../../fonts/material-symbols.css';
@@ -225,26 +227,6 @@ export const ModelPicker = React.forwardRef<HTMLDivElement, ModelPickerProps>(
       }
     };
 
-    const handleEffortKeyDown = (e: React.KeyboardEvent, index: number) => {
-      let targetIndex = -1;
-      switch (e.key) {
-        case 'ArrowRight':
-        case 'ArrowDown':
-          e.preventDefault();
-          targetIndex = (index + 1) % effortOptions.length;
-          break;
-        case 'ArrowLeft':
-        case 'ArrowUp':
-          e.preventDefault();
-          targetIndex = (index - 1 + effortOptions.length) % effortOptions.length;
-          break;
-      }
-      if (targetIndex >= 0) {
-        selectEffort(effortOptions[targetIndex].value);
-        document.getElementById(`${id}-effort-option-${targetIndex}`)?.focus();
-      }
-    };
-
     useEffect(() => {
       if (isOpen && focusedIndex >= 0 && listRef.current) {
         const focusedEl = listRef.current.children[focusedIndex] as HTMLElement;
@@ -256,9 +238,6 @@ export const ModelPicker = React.forwardRef<HTMLDivElement, ModelPickerProps>(
       isOpen && focusedIndex >= 0 && models[focusedIndex]
         ? `${id}-option-${focusedIndex}`
         : undefined;
-
-    const checkedEffortIndex = effortOptions.findIndex((o) => o.value === currentEffort);
-    const effortTabStop = checkedEffortIndex >= 0 ? checkedEffortIndex : 0;
 
     const classes = [
       baseClass,
@@ -340,12 +319,7 @@ export const ModelPicker = React.forwardRef<HTMLDivElement, ModelPickerProps>(
                     )}
                   </span>
                   {model.value === currentValue && (
-                    <span
-                      className={`${baseClass}__check material-symbols-rounded`}
-                      aria-hidden="true"
-                    >
-                      check
-                    </span>
+                    <ChosenMark />
                   )}
                 </li>
               ))}
@@ -356,34 +330,21 @@ export const ModelPicker = React.forwardRef<HTMLDivElement, ModelPickerProps>(
                 <span className={`${baseClass}__effort-label`} id={`${id}-effort-label`}>
                   {effortLabel}
                 </span>
-                <div
+                {/* The library's own mutually exclusive set, in the neutral
+                    tone so the pick does not outweigh the model list's
+                    chosen mark beside it. */}
+                <SegmentedControl
                   className={`${baseClass}__effort-options`}
-                  role="radiogroup"
+                  segments={effortOptions.map((option) => ({
+                    value: option.value,
+                    label: option.label,
+                  }))}
+                  value={currentEffort ?? ''}
+                  onValueChange={selectEffort}
+                  size="compact"
+                  tone="neutral"
                   aria-labelledby={`${id}-effort-label`}
-                >
-                  {effortOptions.map((option, index) => (
-                    <button
-                      key={option.value}
-                      type="button"
-                      id={`${id}-effort-option-${index}`}
-                      className={[
-                        `${baseClass}__effort-option`,
-                        option.value === currentEffort
-                          ? `${baseClass}__effort-option--selected`
-                          : '',
-                      ]
-                        .filter(Boolean)
-                        .join(' ')}
-                      role="radio"
-                      aria-checked={option.value === currentEffort}
-                      tabIndex={index === effortTabStop ? 0 : -1}
-                      onClick={() => selectEffort(option.value)}
-                      onKeyDown={(e) => handleEffortKeyDown(e, index)}
-                    >
-                      {option.label}
-                    </button>
-                  ))}
-                </div>
+                />
               </div>
             )}
           </div>

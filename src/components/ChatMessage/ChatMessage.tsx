@@ -1,5 +1,6 @@
 import React from 'react';
 import './ChatMessage.css';
+import '../../behaviors/visually-hidden.css';
 
 /** Props owned by ChatMessage itself — everything else falls through to the root element. */
 type ChatMessageOwnProps = {
@@ -155,7 +156,7 @@ export const ChatMessage = React.forwardRef<HTMLDivElement, ChatMessageProps>(
             <div className={`${baseClass}__content`}>
               {pending ? (
                 <span className={`${baseClass}__pending`} role="status">
-                  <span className={`${baseClass}__sr-only`}>{pendingLabel}</span>
+                  <span className="ds-visually-hidden">{pendingLabel}</span>
                   <span className={`${baseClass}__dots`} aria-hidden="true">
                     <span className={`${baseClass}__dot`} />
                     <span className={`${baseClass}__dot`} />

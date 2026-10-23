@@ -1,8 +1,18 @@
 /* ============================================
    SELECTION CARD COMPONENT
-   Large selectable option cards with radio or
-   checkbox indicators. Used for high-visibility
-   choice interfaces like settings and onboarding.
+   Large selectable option cards with radio,
+   checkbox or switch indicators, for choices that
+   need more room than a plain control. Each card
+   is a form control, so it wears Input's surface
+   (--color-input-bg-primary behind the
+   --color-input-border-primary hairline at
+   --radius-300, hover and selected borders from
+   the same family), with the real control's own
+   indicator at its end (RadioIndicator,
+   CheckboxIndicator, SwitchIndicator), so a card
+   reads as one of the fields around it and its
+   mark is exactly the one the standalone control
+   draws.
    ============================================ */
 
 /* ============================================
@@ -25,9 +35,9 @@
   justify-content: space-between;
   gap: var(--gap-500); /* 20px */
   padding: var(--padding-400); /* 16px */
-  border: var(--border-025) solid var(--color-bg-container-border);
-  border-radius: var(--radius-300); /* 12px */
-  background-color: transparent;
+  border: var(--border-025) solid var(--color-input-border-primary);
+  border-radius: var(--radius-300); /* 12px — all inputs */
+  background-color: var(--color-input-bg-primary);
   cursor: pointer;
   user-select: none;
   transition: border-color var(--motion-duration-base) var(--motion-ease-standard), background-color var(--motion-duration-base) var(--motion-ease-standard);
@@ -35,19 +45,25 @@
 
 /* ============================================
    HOVER STATE
+   Input's hover border. The indicator lights
+   itself through the ds-control-host class the
+   card carries.
    ============================================ */
 
 .ds-selection-card:not(.ds-selection-card--disabled):hover {
-  border-color: var(--color-action-primary-border);
+  border-color: var(--color-input-border-hover);
 }
 
 /* ============================================
    SELECTED STATE
+   Input's selected border marks the card, the
+   way an active field is marked; the fill stays,
+   so the row does not change weight when picked.
    ============================================ */
 
-.ds-selection-card--selected {
-  border-color: var(--color-action-primary-border);
-  background-color: var(--color-bg-container-primary-semi);
+.ds-selection-card--selected,
+.ds-selection-card--selected:not(.ds-selection-card--disabled):hover {
+  border-color: var(--color-input-border-selected);
 }
 
 /* ============================================
@@ -61,6 +77,7 @@
 
 /* ============================================
    FOCUS STATE
+   The card is the control, so the ring is its.
    ============================================ */
 
 .ds-selection-card:focus-visible {
@@ -98,158 +115,10 @@
 }
 
 /* ============================================
-   INDICATOR — radio, checkbox, or toggle
+   INDICATOR — the control's own, seated at the end
    ============================================ */
 
 .ds-selection-card__indicator {
+  display: inline-flex;
   flex-shrink: 0;
-}
-
-/* ============================================
-   RADIO INDICATOR
-   ============================================ */
-
-.ds-selection-card__radio {
-  width: 24px;
-  height: 24px;
-  border: var(--border-050) solid var(--color-input-border-primary);
-  border-radius: var(--radius-pill);
-  background-color: var(--color-input-bg-primary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: border-color var(--motion-duration-base) var(--motion-ease-standard);
-}
-
-.ds-selection-card__radio-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: var(--radius-pill);
-  background-color: var(--color-action-primary-bg);
-  transform: scale(0);
-  transition: transform var(--motion-duration-base) var(--motion-ease-standard);
-}
-
-/* Selected radio */
-.ds-selection-card--selected .ds-selection-card__radio {
-  border-color: var(--color-action-primary-bg);
-}
-
-.ds-selection-card--selected .ds-selection-card__radio-dot {
-  transform: scale(1);
-}
-
-/* Hover radio (unselected) */
-.ds-selection-card:not(.ds-selection-card--disabled):not(.ds-selection-card--selected):hover .ds-selection-card__radio {
-  border-color: var(--color-action-primary-bg);
-}
-
-/* Hover radio (selected) */
-.ds-selection-card--selected:not(.ds-selection-card--disabled):hover .ds-selection-card__radio {
-  border-color: var(--color-action-primary-bg-hover);
-}
-
-.ds-selection-card--selected:not(.ds-selection-card--disabled):hover .ds-selection-card__radio-dot {
-  background-color: var(--color-action-primary-bg-hover);
-}
-
-/* ============================================
-   CHECKBOX INDICATOR
-   ============================================ */
-
-.ds-selection-card__checkbox {
-  width: 24px;
-  height: 24px;
-  box-sizing: border-box;
-  border: var(--border-050) solid var(--color-input-border-primary);
-  border-radius: var(--radius-200); /* 8px */
-  background-color: var(--color-input-bg-primary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color var(--motion-duration-base) var(--motion-ease-standard), border-color var(--motion-duration-base) var(--motion-ease-standard);
-}
-
-.ds-selection-card__check-icon {
-  width: 14px;
-  height: 14px;
-  color: var(--color-action-primary-text-active);
-  opacity: 0;
-  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
-}
-
-/* Selected checkbox */
-.ds-selection-card--selected .ds-selection-card__checkbox {
-  background-color: var(--color-action-primary-bg);
-  border-color: var(--color-action-primary-bg);
-}
-
-.ds-selection-card--selected .ds-selection-card__check-icon {
-  opacity: 1;
-}
-
-/* Hover checkbox (unselected) */
-.ds-selection-card:not(.ds-selection-card--disabled):not(.ds-selection-card--selected):hover .ds-selection-card__checkbox {
-  border-color: var(--color-action-primary-bg);
-}
-
-/* Hover checkbox (selected) */
-.ds-selection-card--selected:not(.ds-selection-card--disabled):hover .ds-selection-card__checkbox {
-  background-color: var(--color-action-primary-bg-hover);
-  border-color: var(--color-action-primary-bg-hover);
-}
-
-/* ============================================
-   TOGGLE INDICATOR
-   Matches ToggleSwitch component styling
-   ============================================ */
-
-.ds-selection-card__toggle {
-  position: relative;
-  width: 42px;
-  height: 24px;
-  border-radius: var(--radius-pill);
-  background: var(--color-action-primary-bg);
-  transition: background-color var(--motion-duration-base) var(--motion-ease-standard);
-  flex-shrink: 0;
-}
-
-.ds-selection-card__toggle-thumb {
-  position: absolute;
-  top: 2px;
-  right: 2px;
-  width: 20px;
-  height: 20px;
-  background: var(--color-control-thumb);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  transition: transform var(--motion-duration-base) var(--motion-ease-standard);
-}
-
-.ds-selection-card__toggle-icon {
-  /* Intentionally off the --icon-size-* scale — same reason as ToggleSwitch:
-     this glyph lives inside the 20x20 toggle thumb, and the smallest scale
-     step (20px) would fill it completely. Sized via --icon-size, not
-     font-size, so the icon's box shrinks with the glyph (see ToggleSwitch).
-
-     ds-allow(icon-size): 14px glyph inside the 20px thumb — the smallest
-     scale step would fill it edge to edge. */
-  --icon-size: 14px;
-  color: var(--color-action-primary-bg);
-}
-
-/* Off state — thumb moves left, track goes grey */
-.ds-selection-card__toggle--off {
-  background: var(--color-text-secondary);
-}
-
-.ds-selection-card__toggle--off .ds-selection-card__toggle-thumb {
-  transform: translateX(-18px);
-}
-
-.ds-selection-card__toggle--off .ds-selection-card__toggle-icon {
-  color: var(--color-text-secondary);
 }

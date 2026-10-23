@@ -4,6 +4,7 @@ import { renderTypeMark } from './typeMark';
 import type { AttachmentStatus, FileKind } from './fileTypes';
 import '../../fonts/material-symbols.css';
 import './Attachment.css';
+import '../../behaviors/visually-hidden.css';
 
 /* The barrel only walks a folder's .tsx modules, so the file-type model
    reaches the package root by being re-exported here (StreamingText's
@@ -221,7 +222,7 @@ export const AttachmentTile = React.forwardRef<HTMLDivElement, AttachmentTilePro
         <span className={`${baseClass}__name`} title={name}>
           {/* One announced copy of the name; the two visible halves are the
               truncation mechanics and say nothing on their own. */}
-          <span className={`${baseClass}__sr-only`}>{name}</span>
+          <span className="ds-visually-hidden">{name}</span>
           {head !== '' && (
             <span className={`${baseClass}__name-head`} aria-hidden="true">
               {head}
@@ -249,7 +250,7 @@ export const AttachmentTile = React.forwardRef<HTMLDivElement, AttachmentTilePro
     } else if (showExcerpt) {
       content = (
         <>
-          <span className={`${baseClass}__sr-only`}>{name}</span>
+          <span className="ds-visually-hidden">{name}</span>
           <span className={`${baseClass}__excerpt`}>{excerpt}</span>
           <span className={`${baseClass}__corner`}>{cornerMark}</span>
         </>

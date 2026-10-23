@@ -1,6 +1,14 @@
 /* ============================================
    CHECKBOX COMPONENT
-   Custom checkbox with check / indeterminate icon
+   Custom checkbox with check / indeterminate icon.
+   The box is CheckboxIndicator, a presentational
+   piece every host that offers a checkbox draws
+   (Checkbox itself, SelectionCard, QuestionCard,
+   FilterBar's multi-select rows): its state is
+   keyed on the box's own modifiers, so a host
+   needs no classes of its own to show it, and a
+   host that carries the ds-control-host class
+   lights it on hover.
    ============================================ */
 
 .ds-checkbox {
@@ -12,7 +20,7 @@
 }
 
 /* ============================================
-   BOX
+   BOX — CheckboxIndicator
    ============================================ */
 
 .ds-checkbox__box {
@@ -23,7 +31,7 @@
   border: var(--border-050) solid var(--color-input-border-primary);
   border-radius: var(--radius-200); /* 8px */
   background-color: var(--color-input-bg-primary);
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
@@ -82,47 +90,48 @@
 }
 
 /* ============================================
-   CHECKED STATE
+   CHECKED and INDETERMINATE STATES
+   Keyed on the box, so an indicator drawn by
+   another host shows the same states.
    ============================================ */
 
-.ds-checkbox--checked .ds-checkbox__box {
+.ds-checkbox__box--checked,
+.ds-checkbox__box--indeterminate {
   background-color: var(--color-action-primary-bg);
   border-color: var(--color-action-primary-bg);
 }
 
-.ds-checkbox--checked .ds-checkbox__icon {
-  opacity: 1;
-}
-
-/* ============================================
-   INDETERMINATE STATE
-   ============================================ */
-
-.ds-checkbox--indeterminate .ds-checkbox__box {
-  background-color: var(--color-action-primary-bg);
-  border-color: var(--color-action-primary-bg);
-}
-
-.ds-checkbox--indeterminate .ds-checkbox__icon {
+.ds-checkbox__box--checked .ds-checkbox__icon,
+.ds-checkbox__box--indeterminate .ds-checkbox__icon {
   opacity: 1;
 }
 
 /* ============================================
    HOVER STATE
+   Any host carrying ds-control-host lights the
+   box when it is hovered and not disabled.
    ============================================ */
 
-.ds-checkbox:not(.ds-checkbox--disabled):hover .ds-checkbox__box {
+.ds-control-host:not(:disabled):not([aria-disabled='true']):hover .ds-checkbox__box {
   border-color: var(--color-action-primary-bg);
 }
 
-.ds-checkbox--checked:not(.ds-checkbox--disabled):hover .ds-checkbox__box {
+.ds-control-host:not(:disabled):not([aria-disabled='true']):hover .ds-checkbox__box--checked,
+.ds-control-host:not(:disabled):not([aria-disabled='true']):hover .ds-checkbox__box--indeterminate {
   background-color: var(--color-action-primary-bg-hover);
   border-color: var(--color-action-primary-bg-hover);
 }
 
 /* ============================================
    FOCUS STATE
+   The standalone control rings its own box; a
+   host that is itself the target (a card, a
+   row) rings its own edge instead.
    ============================================ */
+
+.ds-checkbox:focus-visible {
+  outline: none;
+}
 
 .ds-checkbox:focus-visible .ds-checkbox__box {
   outline: 2px solid var(--color-action-primary-bg);
@@ -142,12 +151,12 @@
    SIZE — COMPACT
    ============================================ */
 
-.ds-checkbox--compact .ds-checkbox__box {
+.ds-checkbox__box--compact {
   width: 20px;
   height: 20px;
 }
 
-.ds-checkbox--compact .ds-checkbox__icon {
+.ds-checkbox__box--compact .ds-checkbox__icon {
   width: 12px;
   height: 12px;
 }

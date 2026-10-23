@@ -203,7 +203,7 @@ export const PickingFiles: Story = {
     const file = new File(['%PDF'], 'contract.pdf', { type: 'application/pdf' });
     await userEvent.upload(input, file);
     await expect(args.onFilesSelected).toHaveBeenCalledWith([file]);
-    await expect(await canvas.findByText('contract.pdf', { selector: '.ds-attachment-tile__sr-only' })).toBeInTheDocument();
+    await expect(await canvas.findByText('contract.pdf', { selector: '.ds-visually-hidden' })).toBeInTheDocument();
 
     // A file alone is a message: send is live with no text, and submits an empty string
     await waitFor(() => expect(send).toBeEnabled());

@@ -2,8 +2,11 @@
 
 import React from 'react';
 import { Button } from '../Button/Button';
+import { CheckboxIndicator } from '../Checkbox/Checkbox';
 import { CircularButton } from '../CircularButton/CircularButton';
+import { RadioIndicator } from '../RadioButton/RadioButton';
 import './QuestionCard.css';
+import '../../behaviors/visually-hidden.css';
 import '../../fonts/material-symbols.css';
 
 /** One answer a question offers. */
@@ -339,7 +342,7 @@ export const QuestionCard = React.forwardRef<HTMLDivElement, QuestionCardProps>(
                 >
                   <OptionText base={baseClass} option={option} />
                   <Mark base={baseClass} chosen={chosen} multi={shown.mode === 'multi'} />
-                  {chosen && <span className={`${baseClass}__sr-only`}> {labels.chosen}</span>}
+                  {chosen && <span className="ds-visually-hidden"> {labels.chosen}</span>}
                 </li>
               );
             })}
@@ -348,7 +351,7 @@ export const QuestionCard = React.forwardRef<HTMLDivElement, QuestionCardProps>(
                 <li className={`${baseClass}__option ${baseClass}__option--static ${baseClass}__option--chosen`}>
                   <OptionText base={baseClass} option={{ value: '', label: answer.other }} />
                   <Mark base={baseClass} chosen multi={shown.mode === 'multi'} />
-                  <span className={`${baseClass}__sr-only`}> {labels.chosen}</span>
+                  <span className="ds-visually-hidden"> {labels.chosen}</span>
                 </li>
               ) : (
                 <li className={`${baseClass}__option ${baseClass}__option--static ${baseClass}__option--other`}>
@@ -407,7 +410,7 @@ export const QuestionCard = React.forwardRef<HTMLDivElement, QuestionCardProps>(
             </span>
           </div>
         ) : (
-          <span className={`${baseClass}__sr-only`} id={promptId}>
+          <span className="ds-visually-hidden" id={promptId}>
             {current.prompt}
           </span>
         )}
@@ -425,7 +428,7 @@ export const QuestionCard = React.forwardRef<HTMLDivElement, QuestionCardProps>(
               <li key={option.value} className={`${baseClass}__item`}>
                 <button
                   type="button"
-                  className={`${baseClass}__option${on ? ` ${baseClass}__option--chosen` : ''}`}
+                  className={`${baseClass}__option ds-control-host${on ? ` ${baseClass}__option--chosen` : ''}`}
                   /* Several answers make each option a toggle; one answer
                      in a set marks the pick until it is sent. A lone
                      question's options are plain buttons: the tap sends. */
@@ -623,22 +626,13 @@ function OptionText({ base, option }: { base: string; option: QuestionCardOption
 }
 
 /* The trailing mark says what kind of question it is before anything is
-   touched: a radio for one answer, a square checkbox for several. Every
-   row carries it, picked or not, the way a form control would. */
+   touched: the radio for one answer, the checkbox for several. Every row
+   carries it, picked or not, and it is the real control's indicator, so a
+   choice here looks exactly like one in a form. */
 function Mark({ base, chosen, multi }: { base: string; chosen: boolean; multi: boolean }) {
-  const icon = multi
-    ? chosen
-      ? 'check_box'
-      : 'check_box_outline_blank'
-    : chosen
-      ? 'radio_button_checked'
-      : 'radio_button_unchecked';
-  return (
-    <span
-      className={`${base}__mark material-symbols-rounded${chosen ? ' icon-filled' : ''}`}
-      aria-hidden="true"
-    >
-      {icon}
-    </span>
+  return multi ? (
+    <CheckboxIndicator className={`${base}__mark`} checked={chosen} />
+  ) : (
+    <RadioIndicator className={`${base}__mark`} checked={chosen} />
   );
 }

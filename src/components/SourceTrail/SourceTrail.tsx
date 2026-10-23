@@ -5,6 +5,7 @@ import { SourceChip } from '../SourceChip/SourceChip';
 import type { LinkComponent } from '../../behaviors/LinkProvider';
 import { Spinner } from '../Spinner/Spinner';
 import './SourceTrail.css';
+import '../../behaviors/visually-hidden.css';
 import '../../fonts/material-symbols.css';
 
 export type SourceTrailStatus = 'pending' | 'active' | 'done';
@@ -201,7 +202,7 @@ export const SourceTrail = React.forwardRef<HTMLDivElement, SourceTrailProps>(
                   {item.detail && (
                     <span className={`${baseClass}__detail`}>{item.detail}</span>
                   )}
-                  <span className={`${baseClass}__sr`}>{statusText[status]}</span>
+                  <span className="ds-visually-hidden">{statusText[status]}</span>
                 </li>
               );
             })}

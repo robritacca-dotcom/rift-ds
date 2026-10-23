@@ -3,6 +3,7 @@
 import React, { useCallback, useId, useState } from 'react';
 import { Spinner } from '../Spinner/Spinner';
 import './AgentPlan.css';
+import '../../behaviors/visually-hidden.css';
 import '../../fonts/material-symbols.css';
 
 export type AgentPlanStepStatus = 'pending' | 'active' | 'completed' | 'failed';
@@ -174,7 +175,7 @@ export const AgentPlan = React.forwardRef<HTMLDivElement, AgentPlanProps>(
                         <span className={`${baseClass}__detail`}>{step.detail}</span>
                       )}
                     </span>
-                    <span className={`${baseClass}__sr`}>{statusText[status]}</span>
+                    <span className="ds-visually-hidden">{statusText[status]}</span>
                   </li>
                 );
               })}

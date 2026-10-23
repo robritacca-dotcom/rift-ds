@@ -1,0 +1,19 @@
+/* ============================================
+   CHOSEN MARK
+   The trailing check on a selected list or menu
+   row: one size and one colour across every
+   listbox and menu. The action colour, because
+   the mark names the selected item of a
+   mutually exclusive set, the role design.md
+   reserves it for. Rows at either density take
+   the compact icon step, since the mark is a
+   tick beside a label, not a leading icon.
+   ============================================ */
+
+.ds-chosen-mark {
+  --icon-size: var(--icon-size-500);
+  flex-shrink: 0;
+  margin-left: auto;
+  color: var(--color-action-primary-bg);
+  line-height: 1;
+}

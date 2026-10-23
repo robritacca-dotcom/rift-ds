@@ -114,33 +114,10 @@
   color: var(--color-input-text-placeholder);
 }
 
+/* The close is the library's CircularButton (tertiary, compact); the
+   header only seats it. */
 .ds-command-palette__close {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  border: none;
-  border-radius: var(--radius-pill);
-  background-color: transparent;
-  color: var(--color-icon-primary);
-  cursor: pointer;
   flex-shrink: 0;
-  transition: background-color var(--motion-duration-base) var(--motion-ease-standard);
-}
-
-.ds-command-palette__close:hover {
-  background-color: var(--color-action-passive-bg-hover);
-}
-
-.ds-command-palette__close:focus-visible {
-  outline: 2px solid var(--color-action-primary-bg);
-  outline-offset: 2px;
-}
-
-.ds-command-palette__close .material-symbols-rounded {
-  --icon-size: var(--icon-size-500);
 }
 
 /* ============================================

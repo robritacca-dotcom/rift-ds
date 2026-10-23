@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useId, useState } from 'react';
+import { CheckIcon } from '../Checkbox/icons';
 import './ToggleSwitch.css';
-import '../../fonts/material-symbols.css';
 
 /** Props owned by ToggleSwitch itself — everything else falls through to the <button>. */
 type ToggleSwitchOwnProps = {
@@ -113,16 +113,7 @@ export const ToggleSwitch = React.forwardRef<HTMLButtonElement, ToggleSwitchProp
         aria-describedby={describedBy}
         aria-invalid={error || undefined}
       >
-        <div className={`${baseClass}__track`}>
-          <div className={`${baseClass}__thumb`}>
-            <span
-              className={`${baseClass}__thumb-icon material-symbols-rounded`}
-              aria-hidden="true"
-            >
-              check
-            </span>
-          </div>
-        </div>
+        <SwitchIndicator checked={checked} size={size} />
         {/* Without a helper the label stays a bare span, so existing markup
             (and layout) is untouched; with one, label and helper stack in a
             text column beside the track. */}
@@ -142,3 +133,51 @@ export const ToggleSwitch = React.forwardRef<HTMLButtonElement, ToggleSwitchProp
 );
 
 ToggleSwitch.displayName = 'ToggleSwitch';
+
+/* ============================================
+   SWITCH INDICATOR — the track on its own
+   ============================================ */
+
+/** Props owned by SwitchIndicator itself — everything else falls through to the <span>. */
+type SwitchIndicatorOwnProps = {
+  /** Whether the switch is on. */
+  checked?: boolean;
+  /** Track size: `default` is 42×24px, `compact` 34×20px. */
+  size?: 'default' | 'compact';
+  /** Additional CSS classes */
+  className?: string;
+};
+
+export interface SwitchIndicatorProps
+  extends SwitchIndicatorOwnProps,
+    Omit<React.ComponentPropsWithoutRef<'span'>, keyof SwitchIndicatorOwnProps | 'children'> {}
+
+/**
+ * The switch's track and thumb, as a presentational piece for a host that
+ * is itself the control: InspectorToggleSwitch's bar and SelectionCard's
+ * toggle mode draw it, so a switch looks and moves the same wherever it
+ * appears. Hidden from assistive technology; the host carries
+ * `role="switch"` and the state.
+ */
+export const SwitchIndicator = React.forwardRef<HTMLSpanElement, SwitchIndicatorProps>(
+  ({ checked = false, size = 'default', className = '', ...rest }, ref) => {
+    const base = 'ds-toggle-switch__track';
+    const classes = [
+      base,
+      checked ? '' : `${base}--off`,
+      size === 'compact' ? `${base}--compact` : '',
+      className,
+    ]
+      .filter(Boolean)
+      .join(' ');
+    return (
+      <span aria-hidden="true" {...rest} ref={ref} className={classes}>
+        <span className="ds-toggle-switch__thumb">
+          <CheckIcon className="ds-toggle-switch__thumb-icon" />
+        </span>
+      </span>
+    );
+  },
+);
+
+SwitchIndicator.displayName = 'SwitchIndicator';

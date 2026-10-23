@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn } from 'storybook/test';
-import { Checkbox, CheckboxGroup } from './Checkbox';
+import { Checkbox, CheckboxGroup, CheckboxIndicator } from './Checkbox';
+import { RadioIndicator } from '../RadioButton/RadioButton';
+import { SwitchIndicator } from '../ToggleSwitch/ToggleSwitch';
 
 const meta = {
   title: 'Components/Checkbox',
@@ -217,4 +219,25 @@ export const GroupError: GroupStory = {
     values: [],
     direction: 'vertical',
   },
+};
+
+/* The three indicators side by side: the presentational pieces a host that
+   is itself the control composes (SelectionCard, QuestionCard, the Inspector
+   bar), so a checkbox, radio or switch looks the same wherever a choice is
+   offered. Every state each one has, in one row. */
+export const Indicators: Story = {
+  args: { label: 'Accept terms' },
+  render: () => (
+    <div style={{ display: 'flex', gap: 'var(--gap-500)', alignItems: 'center' }}>
+      <CheckboxIndicator />
+      <CheckboxIndicator checked />
+      <CheckboxIndicator indeterminate />
+      <CheckboxIndicator size="compact" checked />
+      <RadioIndicator />
+      <RadioIndicator checked />
+      <SwitchIndicator />
+      <SwitchIndicator checked />
+      <SwitchIndicator size="compact" checked />
+    </div>
+  ),
 };

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import './Stepper.css';
+import '../../behaviors/visually-hidden.css';
 import '../../fonts/material-symbols.css';
 
 /** A single step in a Stepper flow. */
@@ -106,7 +107,7 @@ export const Stepper = React.forwardRef<HTMLOListElement, StepperProps>(
             <span className={`${baseClass}__text`}>
               <span className={`${baseClass}__label`}>{step.label}</span>
               {status === 'complete' && (
-                <span className="ds-stepper__sr-only">{completeLabel}</span>
+                <span className="ds-visually-hidden">{completeLabel}</span>
               )}
               {step.description && (
                 <span className={`${baseClass}__description`}>

@@ -80,6 +80,7 @@ export const RadioButton = React.forwardRef<HTMLDivElement, RadioButtonProps>(
 
     const classes = [
       baseClass,
+      'ds-control-host',
       checked ? `${baseClass}--checked` : '',
       disabled ? `${baseClass}--disabled` : '',
       helperText ? `${baseClass}--has-helper` : '',
@@ -122,9 +123,7 @@ export const RadioButton = React.forwardRef<HTMLDivElement, RadioButtonProps>(
         aria-describedby={describedBy}
         tabIndex={disabled ? -1 : 0}
       >
-        <div className={`${baseClass}__circle`}>
-          <div className={`${baseClass}__dot`} />
-        </div>
+        <RadioIndicator checked={checked} />
         {/* Without a helper the label stays a bare span, so existing markup
             (and layout) is untouched; with one, label and helper stack in a
             text column beside the circle. */}
@@ -269,3 +268,41 @@ export const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
 );
 
 RadioGroup.displayName = 'RadioGroup';
+
+/* ============================================
+   RADIO INDICATOR — the circle on its own
+   ============================================ */
+
+/** Props owned by RadioIndicator itself — everything else falls through to the <span>. */
+type RadioIndicatorOwnProps = {
+  /** Whether the circle shows its dot. */
+  checked?: boolean;
+  /** Additional CSS classes */
+  className?: string;
+};
+
+export interface RadioIndicatorProps
+  extends RadioIndicatorOwnProps,
+    Omit<React.ComponentPropsWithoutRef<'span'>, keyof RadioIndicatorOwnProps | 'children'> {}
+
+/**
+ * The radio's circle, as a presentational piece for a host that is itself
+ * the control: SelectionCard's radio mode and QuestionCard's single rows
+ * draw it, so a single choice looks the same wherever it is offered. Hidden
+ * from assistive technology; the host carries `role="radio"` and the state.
+ * A host that adds the `ds-control-host` class to its interactive root
+ * lights the circle on hover, the way RadioButton does.
+ */
+export const RadioIndicator = React.forwardRef<HTMLSpanElement, RadioIndicatorProps>(
+  ({ checked = false, className = '', ...rest }, ref) => {
+    const base = 'ds-radio__circle';
+    const classes = [base, checked ? `${base}--checked` : '', className].filter(Boolean).join(' ');
+    return (
+      <span aria-hidden="true" {...rest} ref={ref} className={classes}>
+        <span className="ds-radio__dot" />
+      </span>
+    );
+  },
+);
+
+RadioIndicator.displayName = 'RadioIndicator';

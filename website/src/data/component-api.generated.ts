@@ -3430,6 +3430,39 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "deprecated": "Use `onValuesChange` instead."
           }
         ]
+      },
+      {
+        "component": "CheckboxIndicator",
+        "props": [
+          {
+            "name": "checked",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the box shows its check.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "indeterminate",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the box shows the minus of an indeterminate state (ignored when `checked`).",
+            "defaultValue": "false"
+          },
+          {
+            "name": "size",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "Box size: `default` is 24px, `compact` 20px.",
+            "defaultValue": "default"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": ""
+          }
+        ]
       }
     ]
   },
@@ -10003,6 +10036,25 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "deprecated": "Use `onValueChange` instead."
           }
         ]
+      },
+      {
+        "component": "RadioIndicator",
+        "props": [
+          {
+            "name": "checked",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the circle shows its dot.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": ""
+          }
+        ]
       }
     ]
   },
@@ -12945,6 +12997,32 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Legacy accessible-name prop.",
             "deprecated": "Pass the native `aria-label` attribute instead."
+          }
+        ]
+      },
+      {
+        "component": "SwitchIndicator",
+        "props": [
+          {
+            "name": "checked",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the switch is on.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "size",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "Track size: `default` is 42×24px, `compact` 34×20px.",
+            "defaultValue": "default"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": ""
           }
         ]
       }

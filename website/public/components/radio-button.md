@@ -42,3 +42,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.12.0. The same dat
 | onValueChange | `((value: string) => void)` | no |  | Called with the newly selected value |
 | className | `string` | no | `` | Additional CSS classes |
 | onChange | `((value: string) => void)` | no |  | Legacy change handler, kept for backwards compatibility. Deprecated: Use `onValueChange` instead. |
+
+## RadioIndicator props
+
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| checked | `boolean` | no | `false` | Whether the circle shows its dot. |
+| className | `string` | no | `` | Additional CSS classes |

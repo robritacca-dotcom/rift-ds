@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { MOTION_FEEDBACK_RESET_MS } from '../tokens/motion';
 import { useChatWidget } from './context';
 import type { ChatTurn } from './types';
+import '../behaviors/visually-hidden.css';
 
 /** The row's accessible names and its copy announcement, set from ChatWidget's label props. */
 export interface ResponseActionsLabels {
@@ -131,7 +132,7 @@ export function ResponseActions({ turn }: { turn: ChatTurn }) {
       )}
 
       {/* The visual state change is silent to a screen reader; this is not. */}
-      <span className="ds-chat-widget__sr-only" aria-live="polite">
+      <span className="ds-visually-hidden" aria-live="polite">
         {copied ? labels.copiedAnnouncement : ''}
       </span>
     </>

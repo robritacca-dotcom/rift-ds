@@ -4,7 +4,6 @@ import { useState } from "react";
 import styles from "../page.module.css";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import { Input } from "rift-ds/components/Input/Input";
-import { Textarea } from "rift-ds/components/Textarea/Textarea";
 import { Dropdown } from "rift-ds/components/Dropdown/Dropdown";
 import { Combobox } from "rift-ds/components/Combobox/Combobox";
 import { DateInput } from "rift-ds/components/DateInput/DateInput";
@@ -20,10 +19,14 @@ import { PinInput } from "rift-ds/components/PinInput/PinInput";
 import { Field } from "rift-ds/components/Field/Field";
 import { Rating } from "rift-ds/components/Rating/Rating";
 import { DatePicker } from "rift-ds/components/DatePicker/DatePicker";
+import { Button } from "rift-ds/components/Button/Button";
+import { AttachmentGroup } from "rift-ds/components/Attachment/AttachmentGroup";
+import { AttachmentDropZone } from "rift-ds/components/Attachment/AttachmentDropZone";
 import {
-  FileInput,
-  type FileInputFile,
-} from "rift-ds/components/FileInput/FileInput";
+  getFileKind,
+  type AttachmentItem,
+} from "rift-ds/components/Attachment/fileTypes";
+import { DOCUMENT_FIRST_PAGE, PHOTOS, PHOTO_SQUARE } from "@/lib/attachment-demo";
 
 const ROLE_OPTIONS = [
   { label: "Designer", value: "designer" },
@@ -36,6 +39,18 @@ const CITY_OPTIONS = [
   { label: "Vancouver", value: "vancouver", description: "Pacific time" },
   { label: "Montréal", value: "montreal", description: "Eastern time" },
   { label: "Calgary", value: "calgary", description: "Mountain time" },
+];
+
+/* The files on a sent message: pictures with their previews, a document
+   with its first page, a format mark, and the two states a tile can be
+   caught in. Dropping a file anywhere over the group adds it. */
+const ATTACHMENTS: AttachmentItem[] = [
+  { id: "whiteboard", name: "whiteboard.png", kind: "image", size: 830_000, status: "ready", previewSrc: PHOTO_SQUARE },
+  { id: "roadmap", name: "Q4 roadmap.xlsx", kind: "spreadsheet", size: 88_000, status: "ready" },
+  { id: "site-visit", name: "site-visit.jpg", kind: "image", size: 1_400_000, status: "ready", previewSrc: PHOTOS[0] },
+  { id: "schedule", name: "demo_schedule.pdf", kind: "pdf", size: 1_200_000, status: "ready", previewSrc: DOCUMENT_FIRST_PAGE },
+  { id: "logo-set", name: "logo-set.zip", kind: "archive", size: 8_100_000, status: "uploading", progress: 46 },
+  { id: "brief", name: "brief.docx", kind: "document", size: 240_000, status: "error", error: "Too large" },
 ];
 
 const PLAN_OPTIONS = [
@@ -58,10 +73,36 @@ export default function FormsSection() {
   const [pin, setPin] = useState("4821");
   const [rating, setRating] = useState(4);
   const [pickedDate, setPickedDate] = useState("2026-10-14");
-  const [files, setFiles] = useState<FileInputFile[]>([
-    { id: "brand-guide", name: "brand-guide.pdf", size: 2_400_000, progress: 100 },
-    { id: "logo-set", name: "logo-set.zip", size: 8_100_000, progress: 46 },
-  ]);
+  const [attachments, setAttachments] = useState<AttachmentItem[]>(ATTACHMENTS);
+
+  /* A dropped or picked file joins the group as a ready tile; a picture
+     gets an object URL so its preview shows. Read in the browser only,
+     never uploaded. */
+  const addFiles = (added: File[]) =>
+    setAttachments((prev) => [
+      ...prev,
+      ...added.map((file, i) => {
+        const kind = getFileKind(file);
+        return {
+          id: `${file.name}-${file.size}-${prev.length + i}`,
+          name: file.name,
+          kind,
+          size: file.size,
+          mimeType: file.type,
+          status: "ready" as const,
+          previewSrc: kind === "image" ? URL.createObjectURL(file) : undefined,
+        };
+      }),
+    ]);
+
+  /* The keyboard path beside the drop: a picker the button opens. */
+  const pickFiles = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.multiple = true;
+    input.onchange = () => addFiles(Array.from(input.files ?? []));
+    input.click();
+  };
 
   return (
     <section className={styles.demoSection} aria-label="Forms and inputs">
@@ -90,13 +131,6 @@ export default function FormsSection() {
         <DateInput label="Start date" value={date} onValueChange={setDate} />
       </div>
 
-      <Textarea
-        label="Notes"
-        placeholder="A couple of lines about the project…"
-        rows={3}
-        maxLength={280}
-      />
-
       <div className={styles.demoColumns}>
         <NumberInput
           label="Seats"
@@ -121,17 +155,24 @@ export default function FormsSection() {
           <DatePicker value={pickedDate} onDateSelect={setPickedDate} />
         </Field>
         <div className={styles.demoSection}>
-          <FileInput
+          <Field
             label="Attachments"
-            files={files}
-            onFilesSelected={(added) =>
-              setFiles((prev) => [
-                ...prev,
-                ...added.map((f) => ({ id: `${f.name}-${f.size}`, name: f.name, size: f.size, progress: 100 })),
-              ])
-            }
-            onFileRemove={(id) => setFiles((prev) => prev.filter((f) => f.id !== id))}
-          />
+            helperText="Drop a file anywhere over the tiles, or press one to open it."
+            group
+            className={styles.fieldStack}
+          >
+            <AttachmentDropZone
+              onFilesSelected={addFiles}
+              hint="Any file; pictures show their preview"
+              className={styles.attachmentStage}
+            >
+              <AttachmentGroup items={attachments} align="start" max={6} label="Attached files" />
+            </AttachmentDropZone>
+            <div className={styles.demoRow}>
+              <Button label="Add files" variant="secondary" size="compact" iconLeft="attach_file" onClick={pickFiles} />
+              <Button label="Reset" variant="tertiary" size="compact" onClick={() => setAttachments(ATTACHMENTS)} />
+            </div>
+          </Field>
           <Field
             label="How did the theme turn out?"
             helperText="Stars keep their gold; focus one to see the brand ring."

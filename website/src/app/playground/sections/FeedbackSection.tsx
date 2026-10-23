@@ -10,7 +10,6 @@ import { Meter } from "rift-ds/components/Meter/Meter";
 import { StatusDot } from "rift-ds/components/StatusDot/StatusDot";
 import { Button } from "rift-ds/components/Button/Button";
 import { ProgressBar } from "rift-ds/components/ProgressBar/ProgressBar";
-import { Skeleton } from "rift-ds/components/Skeleton/Skeleton";
 import { Spinner } from "rift-ds/components/Spinner/Spinner";
 import { ToastProvider, useToast } from "rift-ds/components/Toast/Toast";
 
@@ -104,14 +103,12 @@ export default function FeedbackSection() {
       </div>
 
       <div className={styles.demoRow}>
-        <Spinner size="sm" label="Loading small" />
-        <Spinner size="md" label="Loading medium" />
+        <Spinner size="sm" label="Loading" />
         <ToastProvider position="bottom-right">
           <ToastDemo />
         </ToastProvider>
       </div>
 
-      <Skeleton variant="text" lines={3} />
     </section>
   );
 }

@@ -130,6 +130,7 @@ import AiSection from "./sections/AiSection";
 import FormsSection from "./sections/FormsSection";
 import NavigationSection from "./sections/NavigationSection";
 import DataDisplaySection from "./sections/DataDisplaySection";
+import SurfacesSection from "./sections/SurfacesSection";
 import ChartsSection from "./sections/ChartsSection";
 import OverlaysSection from "./sections/OverlaysSection";
 import FeedbackSection from "./sections/FeedbackSection";
@@ -1211,6 +1212,8 @@ export default function PlaygroundPage() {
         return <MapsSection />;
       case "data-display":
         return <DataDisplaySection />;
+      case "surfaces":
+        return <SurfacesSection />;
       case "product-header":
         return <MockNav brandName={productName.trim() || "Acme Corp"} />;
       case "actions":

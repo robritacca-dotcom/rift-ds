@@ -3463,6 +3463,30 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": ""
           }
         ]
+      },
+      {
+        "component": "CheckIcon",
+        "props": [
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes; the default is the checkbox icon's, which sizes and colours it.",
+            "defaultValue": "ds-checkbox__icon"
+          }
+        ]
+      },
+      {
+        "component": "MinusIcon",
+        "props": [
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes; the default is the checkbox icon's, which sizes and colours it.",
+            "defaultValue": "ds-checkbox__icon"
+          }
+        ]
       }
     ]
   },
@@ -5707,6 +5731,18 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Used only as a fallback for deriving the element id (`id || name || label`).\n\nNote: Dropdown renders a `<div role=\"combobox\">`, not a native `<select>`,\nso `name` does **not** make it participate in native form submission."
+          }
+        ]
+      },
+      {
+        "component": "ChosenMark",
+        "props": [
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": ""
           }
         ]
       }

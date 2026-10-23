@@ -53,3 +53,15 @@ Generated from the rift-ds registry and prop JSDoc, version 1.12.0. The same dat
 | indeterminate | `boolean` | no | `false` | Whether the box shows the minus of an indeterminate state (ignored when `checked`). |
 | size | `"default" \| "compact"` | no | `default` | Box size: `default` is 24px, `compact` 20px. |
 | className | `string` | no | `` | Additional CSS classes |
+
+## CheckIcon props
+
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| className | `string` | no | `ds-checkbox__icon` | Additional CSS classes; the default is the checkbox icon's, which sizes and colours it. |
+
+## MinusIcon props
+
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| className | `string` | no | `ds-checkbox__icon` | Additional CSS classes; the default is the checkbox icon's, which sizes and colours it. |

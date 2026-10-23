@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useId, useMemo } from 'react';
-import { ChosenMark } from '../Dropdown/ChosenMark';
+import { ChosenMark } from '../Dropdown/Dropdown';
 import { useLayer } from '../../behaviors/useLayer';
 import { Field } from '../Field/Field';
 import './TimePicker.css';

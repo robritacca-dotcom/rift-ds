@@ -2,7 +2,6 @@
 
 import React, { useId, useState } from 'react';
 import { Field } from '../Field/Field';
-import { CheckIcon, MinusIcon } from './icons';
 import './Checkbox.css';
 
 /** Props owned by Checkbox itself — everything else falls through to the wrapper. */
@@ -331,3 +330,68 @@ export const CheckboxIndicator = React.forwardRef<HTMLSpanElement, CheckboxIndic
 );
 
 CheckboxIndicator.displayName = 'CheckboxIndicator';
+
+/* ============================================
+   CONTROL GLYPHS — the one check and the one minus
+   The form controls' tick, stroked in currentColor:
+   Checkbox's box, the switch's thumb and every
+   indicator built from them draw these rather
+   than a font glyph, so every control that shows
+   a tick shows the same tick.
+   ============================================ */
+
+/** Props owned by the glyphs themselves — everything else falls through to the <svg>. */
+type ControlGlyphOwnProps = {
+  /** Additional CSS classes; the default is the checkbox icon's, which sizes and colours it. */
+  className?: string;
+};
+
+export interface ControlGlyphProps
+  extends ControlGlyphOwnProps,
+    Omit<React.ComponentPropsWithoutRef<'svg'>, keyof ControlGlyphOwnProps | 'children'> {}
+
+/** The check glyph. */
+export const CheckIcon = React.forwardRef<SVGSVGElement, ControlGlyphProps>(
+  ({ className = 'ds-checkbox__icon', ...rest }, ref) => (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 14 14"
+      fill="none"
+      aria-hidden="true"
+      {...rest}
+      ref={ref}
+      className={className}
+    >
+      <path
+        d="M2 7.5L5.5 11L12 3"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  ),
+);
+
+CheckIcon.displayName = 'CheckIcon';
+
+/** The minus glyph, for an indeterminate checkbox. */
+export const MinusIcon = React.forwardRef<SVGSVGElement, ControlGlyphProps>(
+  ({ className = 'ds-checkbox__icon', ...rest }, ref) => (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 14 14"
+      fill="none"
+      aria-hidden="true"
+      {...rest}
+      ref={ref}
+      className={className}
+    >
+      <path d="M2 7H12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  ),
+);
+
+MinusIcon.displayName = 'MinusIcon';

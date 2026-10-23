@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useId, useState } from 'react';
-import { CheckIcon } from '../Checkbox/icons';
+import { CheckIcon } from '../Checkbox/Checkbox';
 import './ToggleSwitch.css';
 
 /** Props owned by ToggleSwitch itself — everything else falls through to the <button>. */

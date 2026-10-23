@@ -2,7 +2,7 @@
 
 import React, { useCallback, useId, useRef, useState } from 'react';
 import { CheckboxIndicator } from '../Checkbox/Checkbox';
-import { ChosenMark } from '../Dropdown/ChosenMark';
+import { ChosenMark } from '../Dropdown/Dropdown';
 import { useLayer } from '../../behaviors/useLayer';
 import './FilterBar.css';
 import '../../fonts/material-symbols.css';

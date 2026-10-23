@@ -9,7 +9,7 @@
  * copies had drifted on focus, motion and colour); QuestionCard stood a
  * font glyph in for a checkbox; InspectorToggleSwitch copied the switch's
  * DOM by hand; seven list and menu components each styled their own
- * "chosen" check, in three colours; seventeen stylesheets carried the same
+ * "chosen" check, in three colours; twenty-one stylesheets carried the same
  * visually-hidden recipe; and three overlays drew their own close button
  * beside a CircularButton that already existed for it. design.md's
  * Components intro ("Shared primitives, never redrawn") now names the one
@@ -190,7 +190,7 @@ for (const file of files) {
       report(file, hit, `draws the font glyph "${hit}" where a form control belongs — render CheckboxIndicator, RadioIndicator or SwitchIndicator instead (design.md, Components intro: Shared primitives).`);
     }
     // 2. Indicator classes written outside their owner (the owner's folder:
-    //    Checkbox's icons module writes the icon class the box seats).
+    //    the owner's stylesheet and stories sit beside it).
     for (const [cls, owner] of Object.entries(INDICATOR_OWNERS)) {
       const ownerFolder = owner.slice(0, owner.lastIndexOf('/') + 1);
       if (!file.startsWith(ownerFolder) && text.includes(cls)) {
@@ -235,7 +235,7 @@ for (const file of files) {
     if (owned) continue;
     const advice =
       suffix === '__check' || suffix === '__option-check'
-        ? 'the chosen mark is ChosenMark (src/components/Dropdown/ChosenMark.tsx), one class and one colour for every list and menu row'
+        ? 'the chosen mark is ChosenMark (exported beside Dropdown), one class and one colour for every list and menu row'
         : 'a host draws CheckboxIndicator, RadioIndicator or SwitchIndicator rather than a copy of the control';
     report(file, sel, `styles "${sel}", a second drawing of a control part — ${advice}.`);
   }

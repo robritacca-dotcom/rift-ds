@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useCallback, useId } from 'react';
-import { ChosenMark } from '../Dropdown/ChosenMark';
+import { ChosenMark } from '../Dropdown/Dropdown';
 import { useLayer } from '../../behaviors/useLayer';
 import { MOTION_HOVER_HIDE_DELAY_MS } from '../../tokens/motion';
 import './DropdownMenu.css';

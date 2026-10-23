@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useId, useRef, useState } from 'react';
-import { ChosenMark } from '../Dropdown/ChosenMark';
+import { ChosenMark } from '../Dropdown/Dropdown';
 import { SegmentedControl } from '../SegmentedControl/SegmentedControl';
 import { useLayer } from '../../behaviors/useLayer';
 import './ModelPicker.css';

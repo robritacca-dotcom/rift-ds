@@ -30,3 +30,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.12.0. The same dat
 | onChange | `((value: string) => void)` | no |  | Legacy change handler, kept for backwards compatibility. Deprecated: Use `onValueChange` instead. |
 | ariaLabel | `string` | no |  | Legacy accessible-name prop. Deprecated: Pass the native `aria-label` attribute instead. |
 | name | `string` | no |  | Used only as a fallback for deriving the element id (`id \|\| name \|\| label`).  Note: Dropdown renders a `<div role="combobox">`, not a native `<select>`, so `name` does **not** make it participate in native form submission. |
+
+## ChosenMark props
+
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| className | `string` | no | `` | Additional CSS classes |

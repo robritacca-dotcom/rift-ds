@@ -249,7 +249,7 @@ This section documents how to apply the typographic scale when building new page
 
 - `h2` sits on the display tier and `h3` on the heading tier. In the base theme that is 30px / 300 (light) over 22px / 600 (bold): the weight jump makes the hierarchy unmistakable at a glance.
 - Tier weights belong to the theme, like the faces do. A theme may move them, invert them (Zest sets its display tier heavier than its headings), or set both tiers to one weight. A theme that closes the gap leans on size alone, so it should check that a heading still reads as a sub-item of the one above it.
-- Within a tier, levels step by size and share a weight: `h1` and `h2` are both display-tier, `h3` and `h4` both heading-weight. A theme sets a weight per tier, never per page. A preset may specialise a single style through its `extraOverrides` (Forest and Zest step Sub Display down a notch from their display tier); nothing else departs from the tier.
+- Within a tier, levels step by size and share a weight: `h1` and `h2` are both display-tier, `h3` and `h4` both heading-weight. A theme sets a weight per tier, never per page. A preset may specialise a single style through its `extraOverrides` (Forest and Zest step Sub Display down a notch from their display tier); nothing else departs from the tier. The body tier moves as a unit rather than to one weight: a theme sets the paragraph's weight, and emphasis, overline and caption shift by the same amount, so emphasis stays a step above the paragraph whatever the theme's body weight is.
 
 ### Section Dividers
 

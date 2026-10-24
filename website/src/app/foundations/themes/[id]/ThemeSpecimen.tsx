@@ -300,10 +300,10 @@ export function ThemeSpecimen({ id, label, designMd }: ThemeSpecimenProps) {
                 <Button label="Explore" variant="tertiary" iconRight="arrow_outward" />
               </Tile>
               <Tile name="neutral">
-                <Button label="Cancel" variant="neutral" />
+                <Button label="Cancel" variant="primary" tone="neutral" />
               </Tile>
               <Tile name="destructive">
-                <Button label="Delete" variant="destructive" iconLeft="delete" />
+                <Button label="Delete" variant="secondary" tone="destructive" iconLeft="delete" />
               </Tile>
               <Tile name="compact and circular">
                 <div className={styles.row}>
@@ -368,13 +368,13 @@ export function ThemeSpecimen({ id, label, designMd }: ThemeSpecimenProps) {
           <Section index={5} kicker="Components" title="Form elements">
             <div className={styles.tileGrid}>
               <Tile name="input">
-                <Input placeholder="Enter email address" ariaLabel="Email address" />
+                <Input placeholder="Enter email address" aria-label="Email address" />
               </Tile>
               <Tile name="input with icon">
-                <Input placeholder="Search" iconLeft="search" ariaLabel="Search" />
+                <Input placeholder="Search" iconLeft="search" aria-label="Search" />
               </Tile>
               <Tile name="textarea">
-                <Textarea placeholder="Message" ariaLabel="Message" />
+                <Textarea placeholder="Message" aria-label="Message" />
               </Tile>
               <Tile name="segmented control">
                 <SegmentedControl
@@ -391,13 +391,13 @@ export function ThemeSpecimen({ id, label, designMd }: ThemeSpecimenProps) {
                 <div className={styles.row}>
                   <Checkbox label="Checked" defaultChecked />
                   <Checkbox label="Unchecked" />
-                  <RadioButton label="Selected" checked name="specimen-radio" value="a" />
+                  <RadioButton label="Selected" checked value="a" />
                   <ToggleSwitch label="On" defaultChecked showLabel />
                 </div>
               </Tile>
               <Tile name="range" wide>
                 <div className={styles.stack}>
-                  <Slider defaultValue={64} ariaLabel="Volume" />
+                  <Slider defaultValue={64} aria-label="Volume" />
                   <ProgressBar value={42} ariaLabel="Progress" />
                 </div>
               </Tile>
@@ -448,7 +448,7 @@ export function ThemeSpecimen({ id, label, designMd }: ThemeSpecimenProps) {
                     { value: "settings", label: "Settings" },
                   ]}
                   defaultValue="overview"
-                  ariaLabel="Specimen tabs"
+                  aria-label="Specimen tabs"
                 />
               </Tile>
             </div>

@@ -66,11 +66,17 @@ function componentSummary(slug: string): PageSummary | null {
   };
 }
 
+/** A route's written entry: its own, or its dynamic route's
+    (`/foundations/themes/coral` reads `/foundations/themes/[id]`). */
+function writtenSummary(path: string): PageSummary | undefined {
+  return staticSummaries[path] ?? staticSummaries[path.replace(/\/[^/]+$/, "/[id]")];
+}
+
 /** The FAB panel's content for a route, or null for the plain button. */
 export function getPageSummary(pathname: string): PageSummary | null {
   const path = normalise(pathname);
 
-  const fixed = staticSummaries[path];
+  const fixed = writtenSummary(path);
   if (fixed) return fixed;
 
   const component = path.match(/^\/components\/([^/]+)$/);
@@ -81,5 +87,5 @@ export function getPageSummary(pathname: string): PageSummary | null {
 
 /** The written starter pool for a static route, or null where none is written. */
 export function getPageStarters(pathname: string): Starter[] | null {
-  return staticSummaries[normalise(pathname)]?.starters ?? null;
+  return writtenSummary(normalise(pathname))?.starters ?? null;
 }

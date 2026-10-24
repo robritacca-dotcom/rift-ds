@@ -998,6 +998,43 @@
           "label": "How are theme fonts loaded?"
         }
       ]
+    },
+    "/foundations/themes/[id]": {
+      "title": "Theme specimen",
+      "text": "One theme drawn whole: its colours, type, buttons, surfaces and controls, with its DESIGN.md to download.",
+      "chips": [
+        {
+          "id": "theme-specimen-design-md",
+          "label": "What is in a theme's DESIGN.md?",
+          "prompt": "What does a theme's DESIGN.md contain, and how would I use it with a coding agent or another tool?"
+        }
+      ],
+      "starters": [
+        {
+          "id": "design-md",
+          "label": "What is a DESIGN.md?"
+        },
+        {
+          "id": "use",
+          "label": "How do I use this theme?"
+        },
+        {
+          "id": "action",
+          "label": "Where does the action colour go?"
+        },
+        {
+          "id": "dark",
+          "label": "How does it look in dark mode?"
+        },
+        {
+          "id": "own",
+          "label": "Can I make my own theme?"
+        },
+        {
+          "id": "import",
+          "label": "Can the playground read it back?"
+        }
+      ]
     }
   },
   "essays": {}

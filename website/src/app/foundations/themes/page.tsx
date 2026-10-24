@@ -6,6 +6,7 @@ import Sidebar from "../../../components/Sidebar/Sidebar";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import { getSidebarLinks, foundationsSidebarLinks } from "@/config/navigation";
 import { Button } from "rift-ds/components/Button/Button";
+import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
 import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
 import {
   ShaderField,
@@ -203,13 +204,26 @@ export default function ThemesPage() {
                       disabled={isActive}
                       onClick={() => applyBrand(tile.value)}
                     />
-                    <Button
-                      label="Open in playground"
-                      variant="tertiary"
-                      size="compact"
-                      iconRight="arrow_forward"
-                      href={`/playground?preset=${tile.value}`}
-                    />
+                    <div className={styles.cardLinks}>
+                      <CircularButton
+                        icon="description"
+                        variant="secondary"
+                        tone="neutral"
+                        size="compact"
+                        ariaLabel={`${tile.label} DESIGN.md`}
+                        tooltip="DESIGN.md"
+                        href={`/foundations/themes/${tile.value}`}
+                      />
+                      <CircularButton
+                        icon="tune"
+                        variant="secondary"
+                        tone="neutral"
+                        size="compact"
+                        ariaLabel={`Open ${tile.label} in the playground`}
+                        tooltip="Playground"
+                        href={`/playground?preset=${tile.value}`}
+                      />
+                    </div>
                   </div>
                 </article>
               );

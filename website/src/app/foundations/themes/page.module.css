@@ -181,10 +181,18 @@
 
 .cardActions {
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
   gap: var(--gap-200);
   margin-top: auto;
   padding-top: var(--gap-200);
+}
+
+/* The theme's own page and the playground, as icon buttons hugging the
+   card's right edge, apart from Apply, which acts on the theme here. */
+.cardLinks {
+  display: flex;
+  gap: var(--gap-200);
+  margin-left: auto;
 }
 
 /* The create-your-own slot: dashed where the themes are solid, the same

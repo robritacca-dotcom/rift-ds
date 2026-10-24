@@ -713,6 +713,20 @@ export function getBreadcrumbs(pathname: string): BreadcrumbItem[] {
     // Sub-page within a section (e.g. /components/button)
     if (path.startsWith(section.base + "/")) {
       const subLink = section.sidebar?.find((l) => l.href === path);
+      // A page beneath a sidebar page (e.g. /foundations/themes/<id>) keeps
+      // its parent in the trail.
+      const parent = subLink
+        ? undefined
+        : section.sidebar?.find(
+            (l) => l.href !== section.base && path.startsWith(l.href + "/")
+          );
+      if (parent) {
+        return [
+          { label: section.label, href: section.base },
+          { label: parent.label, href: parent.href },
+          { label: slugToTitle(path.slice(parent.href.length + 1)) },
+        ];
+      }
       const subLabel = subLink?.label ?? slugToTitle(path.slice(section.base.length + 1));
       return [{ label: section.label, href: section.base }, { label: subLabel }];
     }

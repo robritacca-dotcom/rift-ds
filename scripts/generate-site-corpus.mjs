@@ -690,6 +690,8 @@ function coveredElsewhere() {
  * stranger could audit; the coverage validator fails on stale entries.
  */
 const EXCLUDED_ROUTES = new Map([
+  ['/foundations/themes/[id]',
+    'one specimen page per theme, drawing the components in that theme: its only prose is specimen sample text, and every fact it shows is in the theme presets the corpus already carries through /foundations/themes'],
   ['/',
     'the home page is the landing collage — its prose is demo filler for the live components, and its closing questions restate facts the pages they link to own (get-started, the chat docs, the playground); the sections it links to are all covered'],
   ['/graph',

@@ -100,20 +100,30 @@ function resolveValue(name, scopes) {
  * @media prelude to the value the token takes inside it (light scope),
  * present only for the blocks that redefine the token or something on
  * its chain.
+ *
+ * `layers`, when given, lays a theme's declarations over the token files
+ * the way the cascade does on the root element: `light` (the preset's
+ * html[data-brand] block) outranks the base files, and `dark` (its
+ * dark block) outranks that in dark mode. Each is a name -> value object,
+ * as presetOverrides returns it.
  */
-export function resolveTokenValues(names) {
+export function resolveTokenValues(names, layers = {}) {
   const files = ['tokens-light.css', 'tokens-typography.css', 'tokens-motion.css', 'tokens-primitives.css'].map(
     (file) => parseCss(read(join(tokensDir, file)))
   );
   const dark = parseCss(read(join(tokensDir, 'tokens-dark.css'))).base;
-  const lightScopes = files.map((file) => file.base);
-  const darkScopes = [dark, ...lightScopes];
+  const asMap = (decls) => new Map(Object.entries(decls ?? {}));
+  const themeLight = asMap(layers.light);
+  const themeDark = asMap(layers.dark);
+  const baseScopes = files.map((file) => file.base);
+  const lightScopes = [themeLight, ...baseScopes];
+  const darkScopes = [themeDark, themeLight, dark, ...baseScopes];
 
   const preludes = [...new Set(files.flatMap((file) => [...file.media.keys()]))];
   const mediaScopes = new Map(
     preludes.map((prelude) => [
       prelude,
-      [...files.map((file) => file.media.get(prelude)).filter(Boolean), ...lightScopes],
+      [themeLight, ...files.map((file) => file.media.get(prelude)).filter(Boolean), ...baseScopes],
     ])
   );
 

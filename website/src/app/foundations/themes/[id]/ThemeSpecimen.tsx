@@ -8,10 +8,11 @@ import { Button } from "rift-ds/components/Button/Button";
 import { Checkbox } from "rift-ds/components/Checkbox/Checkbox";
 import { Chip } from "rift-ds/components/Chip/Chip";
 import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
-import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
 import { Input } from "rift-ds/components/Input/Input";
 import { ProgressBar } from "rift-ds/components/ProgressBar/ProgressBar";
 import { RadioButton } from "rift-ds/components/RadioButton/RadioButton";
+import { ColourSwatch } from "rift-ds/components/ColourSwatch/ColourSwatch";
+import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
 import { Slider } from "rift-ds/components/Slider/Slider";
 import { Tabs } from "rift-ds/components/Tabs/Tabs";
@@ -22,7 +23,9 @@ import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import { getSidebarLinks, foundationsSidebarLinks } from "@/config/navigation";
 import { installScopedThemes, THEME_SCOPE_ATTRIBUTE } from "@/lib/theme/scoped-theme";
 import { useSiteTheme } from "@/lib/theme/use-theme-overrides";
+import { themeTagline } from "@/lib/theme/presets";
 import styles from "./specimen.module.css";
+import { ThemeBanner } from "../ThemeBanner";
 
 /* ---------- what the specimen draws ----------
    Token names only. Every value printed beside a swatch or a type row is
@@ -81,6 +84,11 @@ const toHex = (rgb: string) => {
   return m[4] !== undefined && Number(m[4]) < 1 ? `${hex} · ${Math.round(Number(m[4]) * 100)}%` : hex;
 };
 
+const toRgbTriplet = (rgb: string) => {
+  const m = /rgba?\((\d+),\s*(\d+),\s*(\d+)/.exec(rgb);
+  return m ? `${m[1]} / ${m[2]} / ${m[3]}` : rgb;
+};
+
 /** Re-reads `read` from the element after every render that could change
     it: mount, the site's light/dark flip, and a font finishing loading. */
 function useComputed<T>(read: (el: HTMLElement) => T, mode: string) {
@@ -97,21 +105,21 @@ function useComputed<T>(read: (el: HTMLElement) => T, mode: string) {
   return [ref, value] as const;
 }
 
+/* The library's ColourSwatch card, the one the colour pages use, filled
+   with what the theme's token resolves to here. The card takes no ref, so
+   the wrapper is measured and the card itself is read through it. */
 function Swatch({ label, token, mode }: { label: string; token: string; mode: string }) {
-  const [ref, value] = useComputed((el) => toHex(getComputedStyle(el).backgroundColor), mode);
+  const [ref, rgb] = useComputed(
+    (el) => getComputedStyle(el.firstElementChild ?? el).backgroundColor,
+    mode
+  );
+  const values = rgb
+    ? { hex: toHex(rgb), rgb: toRgbTriplet(rgb) }
+    : { hex: " ", rgb: " " };
   return (
-    <figure className={styles.swatch}>
-      <span
-        ref={ref as React.RefObject<HTMLSpanElement>}
-        className={styles.swatchChip}
-        style={{ backgroundColor: `var(${token})` }}
-      />
-      <figcaption className={styles.swatchMeta}>
-        <span className={styles.swatchName}>{label}</span>
-        <span className={styles.swatchValue}>{value ?? " "}</span>
-        <code className={styles.swatchToken}>{token}</code>
-      </figcaption>
-    </figure>
+    <div ref={ref as React.RefObject<HTMLDivElement>} className={styles.swatch}>
+      <ColourSwatch label={label} cssVar={token} dark={values} />
+    </div>
   );
 }
 
@@ -152,15 +160,10 @@ function Measured({ token, mode, children }: { token: string; mode: string; chil
   return <>{children(value, ref as React.Ref<HTMLSpanElement>)}</>;
 }
 
-function Section({ index, kicker, title, children }: { index: number; kicker: string; title: string; children: React.ReactNode }) {
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className={styles.section}>
-      <header className={styles.sectionHeader}>
-        <span className={styles.kicker}>
-          {String(index).padStart(2, "0")} · {kicker}
-        </span>
-        <h2 className={styles.sectionTitle}>{title}</h2>
-      </header>
+      <SectionTitle title={title} />
       {children}
     </section>
   );
@@ -181,14 +184,13 @@ function Tile({ name, note, children, wide }: { name: string; note?: string; chi
 export interface ThemeSpecimenProps {
   id: string;
   label: string;
-  designMd: string;
 }
 
-export function ThemeSpecimen({ id, label, designMd }: ThemeSpecimenProps) {
+export function ThemeSpecimen({ id, label }: ThemeSpecimenProps) {
   const mode = useSiteTheme();
-  const [view, setView] = useState("preview");
   const [billing, setBilling] = useState("yearly");
   const fileUrl = `/themes/${id}/DESIGN.md`;
+  const tagline = themeTagline(id);
 
   /* The specimen is a theme scope (see scoped-theme.ts): it wears this
      theme whatever theme the site around it is wearing. Before paint, so
@@ -200,73 +202,51 @@ export function ThemeSpecimen({ id, label, designMd }: ThemeSpecimenProps) {
       <Sidebar links={sidebarLinks} />
 
       <main className={styles.dsContent} id="main-content">
-        <PageBreadcrumb currentLabel={label} />
+        {/* The specimen is the card, header and all. */}
+        <div className={`${styles.scope} animate-in`} {...{ [THEME_SCOPE_ATTRIBUTE]: id }}>
+          <ThemeBanner className={styles.scopeBanner} />
+          {/* The page header sits inside the scope, so it wears the theme too. */}
+          <header className={styles.intro}>
+            <PageBreadcrumb currentLabel={label} />
 
-        <div className={`${styles.pageHeader} animate-in`}>
-          <h1 className={styles.pageTitle}>{label}</h1>
-          <div className={styles.headerActions}>
-            <Button
-              label="Download"
-              variant="tertiary"
-              size="compact"
-              iconLeft="download"
-              href={fileUrl}
-              {...downloadAs(`${id}-DESIGN.md`)}
-            />
-            <Button
-              label="Playground"
-              variant="tertiary"
-              size="compact"
-              iconRight="arrow_forward"
-              href={`/playground?preset=${id}`}
-            />
-          </div>
-        </div>
-
-
-        {/* The specimen is the card; the view switch sits in its corner. */}
-        <div className={`${styles.scope} animate-in animate-delay-1`} {...{ [THEME_SCOPE_ATTRIBUTE]: id }}>
-          <div className={styles.viewSwitch}>
-            <SegmentedControl
-              size="compact"
-              segments={[
-                { value: "preview", label: "Preview" },
-                { value: "file", label: "DESIGN.md" },
-              ]}
-              value={view}
-              onValueChange={setView}
-              aria-label="View"
-            />
-          </div>
-
-      {view === "file" ? (
-          <CodeBlock code={designMd} language="markdown" filename="DESIGN.md" showCopy />
-      ) : (
+            <div className={styles.pageHeader}>
+              <h1 className={styles.pageTitle}>{label}</h1>
+              <div className={styles.headerActions}>
+                <Button
+                  label="Download"
+                  variant="tertiary"
+                  size="compact"
+                  iconLeft="download"
+                  href={fileUrl}
+                  {...downloadAs(`${id}-DESIGN.md`)}
+                />
+                <Button
+                  label="Playground"
+                  variant="tertiary"
+                  size="compact"
+                  iconRight="arrow_forward"
+                  href={`/playground?preset=${id}`}
+                />
+              </div>
+            </div>
+            {tagline && <p className={styles.tagline}>{tagline}</p>}
+          </header>
         <div className={styles.body}>
-          {/* Hero */}
-          <div className={styles.hero}>
-            <span className={styles.kicker}>Theme · {id}</span>
-            <p className={styles.heroTitle}>One set of tokens, restyled end to end.</p>
-            <p className={styles.heroLede}>
-              Colour, type, shape, surfaces and controls, all drawn live in {label}.
-            </p>
-          </div>
-
           {/* 01 Colour */}
-          <Section index={1} kicker="Foundations" title="Colour">
+          <Section title="Colour">
             <div className={styles.swatchGrid}>
               {COLOURS.map(([name, token]) => (
                 <Swatch key={token} label={name} token={token} mode={mode} />
               ))}
             </div>
             <div className={styles.subhead}>Status</div>
-            <div className={`${styles.swatchGrid} ${styles.swatchGrid5}`}>
+            <div className={`${styles.swatchGrid}`}>
               {STATUS.map((s) => (
                 <Swatch key={s} label={s[0].toUpperCase() + s.slice(1)} token={`--color-status-${s}-icon`} mode={mode} />
               ))}
             </div>
             <div className={styles.subhead}>Accents and chart series</div>
-            <div className={`${styles.swatchGrid} ${styles.swatchGrid6}`}>
+            <div className={`${styles.swatchGrid}`}>
               {ACCENTS.map((a) => (
                 <Swatch key={a} label={a[0].toUpperCase() + a.slice(1)} token={`--color-core-accent-${a}`} mode={mode} />
               ))}
@@ -279,7 +259,7 @@ export function ThemeSpecimen({ id, label, designMd }: ThemeSpecimenProps) {
           </Section>
 
           {/* 02 Typography */}
-          <Section index={2} kicker="Foundations" title="Typography">
+          <Section title="Typography">
             <div className={styles.typeLadder}>
               {TYPE.map(([style, sample]) => (
                 <TypeRow key={style} style={style} sample={sample} mode={mode} />
@@ -288,7 +268,7 @@ export function ThemeSpecimen({ id, label, designMd }: ThemeSpecimenProps) {
           </Section>
 
           {/* 03 Buttons and badges */}
-          <Section index={3} kicker="Components" title="Buttons and badges">
+          <Section title="Buttons and badges">
             <div className={styles.tileGrid}>
               <Tile name="primary" note="The one action colour.">
                 <Button label="Join for free" variant="primary" />
@@ -325,7 +305,7 @@ export function ThemeSpecimen({ id, label, designMd }: ThemeSpecimenProps) {
           </Section>
 
           {/* 04 Surfaces and depth */}
-          <Section index={4} kicker="Foundations" title="Surfaces and depth">
+          <Section title="Surfaces and depth">
             <div className={styles.surfaceGrid}>
               <div className={styles.surface} style={{ background: "var(--color-bg-container-primary)", border: "var(--border-025) solid var(--color-bg-container-border)" }}>
                 <span className={styles.surfaceTitle}>Surface</span>
@@ -365,7 +345,7 @@ export function ThemeSpecimen({ id, label, designMd }: ThemeSpecimenProps) {
           </Section>
 
           {/* 05 Forms */}
-          <Section index={5} kicker="Components" title="Form elements">
+          <Section title="Form elements">
             <div className={styles.tileGrid}>
               <Tile name="input">
                 <Input placeholder="Enter email address" aria-label="Email address" />
@@ -405,7 +385,7 @@ export function ThemeSpecimen({ id, label, designMd }: ThemeSpecimenProps) {
           </Section>
 
           {/* 06 Signature */}
-          <Section index={6} kicker="Components" title="Signature pieces">
+          <Section title="Signature pieces">
             <div className={styles.tileGrid}>
               <Tile name="nav pill" wide>
                 <div className={styles.navPill}>
@@ -455,7 +435,7 @@ export function ThemeSpecimen({ id, label, designMd }: ThemeSpecimenProps) {
           </Section>
 
           {/* 07 Space */}
-          <Section index={7} kicker="Foundations" title="Space">
+          <Section title="Space">
             <div className={styles.gapLadder}>
               {GAPS.map((token) => (
                 <Measured key={token} token={token} mode={mode}>
@@ -480,7 +460,6 @@ export function ThemeSpecimen({ id, label, designMd }: ThemeSpecimenProps) {
             </div>
           </footer>
         </div>
-      )}
         </div>
       </main>
     </div>

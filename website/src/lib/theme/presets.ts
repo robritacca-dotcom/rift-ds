@@ -755,6 +755,27 @@ export const THEME_SELECTOR_ORDER: ReadonlyArray<string> = [
     registry rather than hardcoding a string. */
 export const DEFAULT_THEME_LABEL = "Tide";
 
+/** One sentence on each theme's character, the base look's included, keyed
+    by theme id. Shown under the theme's name on its specimen page
+    (/foundations/themes/<id>). scripts/validate-theme-presets.mjs holds it
+    to THEME_SELECTOR_ORDER in both directions. */
+export const THEME_TAGLINES: Readonly<Record<string, string>> = {
+  [BASE_THEME_ID]: "The base look: a calm teal on quiet surfaces, set in one friendly face.",
+  warm: "Warm and bookish, a serif heading over an easy sans, like a well-loved paperback.",
+  mono: "Black, white and nothing else, with flat surfaces and tight corners.",
+  contrast: "Precise and engineered, an electric blue with drafting-table corners and one technical face.",
+  coral: "Sunny and welcoming, a hospitality look of coral warmth and soft, round corners.",
+  gold: "Bold and electric, bright yellow on ink with grotesk headings and a quicker step.",
+  zest: "Fresh and confident, a bright lime on clean white under heavy, tight headlines.",
+  forest: "Grounded and calm, a deep woods green with organic softness throughout.",
+  terminal: "A command line as a brand: monospace type, square corners, no shadows and fast replies.",
+  pink: "Playful and rounded, hot pink with bubbly type and pills everywhere.",
+  violet: "Luxurious and unhurried, a serif display over generous spacing and wide, soft corners.",
+};
+
+/** A theme's one-sentence description, or undefined for an unknown id. */
+export const themeTagline = (id: string): string | undefined => THEME_TAGLINES[id];
+
 /* ---------- rich picker cells ----------
    The preset selector renders each option as a self-portrait (RichDropdown):
    name in the preset's heading face, the pairing's names in its body face,

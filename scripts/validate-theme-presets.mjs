@@ -53,6 +53,13 @@
  *      already guarantees this at compile time; the runtime assert
  *      guards JS-side consumers of the object (and any future
  *      JSON-shaped source that bypasses the type).
+ *   e. A description for every theme — THEME_TAGLINES carries one
+ *      sentence per id in THEME_SELECTOR_ORDER (the base look included),
+ *      held in both directions, so a new theme's specimen page
+ *      (/foundations/themes/<id>) cannot ship without the line under its
+ *      name, and a removed theme cannot leave its line behind. Each one
+ *      is shipped copy, so it is held to one sentence ending in a full
+ *      stop with no em dash (content-design.md bans them).
  *
  * Belongs in the validate-registry chain (and the website prebuild),
  * right after validate-preset-stylesheets.mjs: it reads theme source and
@@ -163,7 +170,7 @@ const REQUIRED_ACCENT_ROLES = [
 
 const errors = [];
 
-const { THEME_PRESETS, presetOverrides, DEFAULT_BRAND } = await loadThemeSource();
+const { THEME_PRESETS, presetOverrides, DEFAULT_BRAND, THEME_TAGLINES, THEME_SELECTOR_ORDER } = await loadThemeSource();
 
 /** Resolve a custom property to a literal value: the preset's override
     map first, then the theme's semantic CSS (dark falls through to
@@ -334,6 +341,23 @@ for (const [fill, fg] of ACTION_PAIRINGS) {
   }
 }
 
+// e. A description for every theme, both directions.
+for (const id of THEME_SELECTOR_ORDER) {
+  const line = THEME_TAGLINES[id];
+  if (typeof line !== 'string' || line.trim() === '') {
+    errors.push(`theme "${id}": no description in THEME_TAGLINES (website/src/lib/theme/presets.ts) — its specimen page needs one`);
+  } else if (line.includes('\u2014')) {
+    errors.push(`theme "${id}": its THEME_TAGLINES line has an em dash, which content-design.md bans`);
+  } else if (!line.endsWith('.') || /[.!?]\s+\S/.test(line.slice(0, -1))) {
+    errors.push(`theme "${id}": its THEME_TAGLINES line should be one sentence ending in a full stop`);
+  }
+}
+for (const id of Object.keys(THEME_TAGLINES)) {
+  if (!THEME_SELECTOR_ORDER.includes(id)) {
+    errors.push(`THEME_TAGLINES has a line for "${id}", which is not a theme in THEME_SELECTOR_ORDER — remove it`);
+  }
+}
+
 if (errors.length > 0) {
   console.error(
     '✗ Theme preset validation failed — a preset does not deliver a complete data-brand theme:\n' +
@@ -346,5 +370,5 @@ console.log(
   `✓ Theme presets complete — ${Object.keys(THEME_PRESETS).length} presets × 2 themes: every override names a real token, ` +
     `the action family and all ${REQUIRED_ACCENT_ROLES.length} ambient accents are covered, and all ${ACTION_PAIRINGS.length} action ` +
     `fill/foreground pairings hold contrast across ${cells} theme cells (${pairChecks} checks, ${SANCTIONED_AA_GAPS.size} pinned gaps, ` +
-    `tightest at ${minRatio.toFixed(2)}× its minimum).`
+    `tightest at ${minRatio.toFixed(2)}× its minimum), and every theme has its one-line description.`
 );

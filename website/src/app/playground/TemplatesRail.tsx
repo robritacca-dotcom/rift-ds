@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { InspectorSection } from "rift-ds/components/Inspector/InspectorSection";
 import { MessageCard } from "rift-ds/components/MessageCard/MessageCard";
 import { templatesSidebarLinks } from "@/config/navigation";
 import { useSiteTheme } from "@/lib/theme/use-theme-overrides";
@@ -57,8 +56,9 @@ export default function TemplatesRail({
   const mode = useSiteTheme();
 
   const list = (
-    <InspectorSection title="Pick a screen" defaultOpen>
-      <ul className={styles.list}>
+    /* One list and nothing beside it, so no section header: a heading
+       over the panel's only section would restate the panel's title. */
+    <ul className={styles.list}>
         {STAGE_TEMPLATES.map((template) => {
           const current = template.href === value;
           return (
@@ -92,8 +92,7 @@ export default function TemplatesRail({
             </li>
           );
         })}
-      </ul>
-    </InspectorSection>
+    </ul>
   );
 
   if (variant === "drawer") {

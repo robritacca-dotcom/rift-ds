@@ -10,7 +10,8 @@
      each card's edge needs air from the next. */
   gap: var(--gap-300);
   margin: 0;
-  padding: 0;
+  /* The space the section header used to give the list. */
+  padding: var(--padding-400) 0;
   list-style: none;
 }
 

@@ -26,6 +26,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { MOTION_SCROLL_SETTLE_MS } from "rift-ds/tokens/motion";
 import { STAGED_PRODUCT_NAME_ATTR } from "@/components/templates/useStagedProductName";
+import { APP_FRAME_ATTR } from "@/components/templates/AppFrame/AppFrame";
 import chatStyles from "./ChatView.module.css";
 import { templatesSidebarLinks } from "@/config/navigation";
 import styles from "./TemplatesView.module.css";
@@ -100,6 +101,7 @@ export default function TemplatesView({
     hrefRef.current = href;
   }, [href]);
   const productNameRef = useRef(productName);
+  const sizeRef = useRef(size);
 
   const sync = useCallback(() => {
     const doc = frameRef.current?.contentDocument;
@@ -118,6 +120,13 @@ export default function TemplatesView({
     /* The Product name lever, which the template reads from this
        attribute (useStagedProductName), so typing never reloads the frame. */
     frameRoot.setAttribute(STAGED_PRODUCT_NAME_ATTR, productNameRef.current);
+
+    /* The Mobile stage is a phone preview, so it carries the flag the
+       templates carousel's Mobile mode sets (AppFrame.tsx owns it): a
+       template dresses as an app here too, and a narrowed Desktop stage,
+       which is only a narrow window, never does. */
+    if (sizeRef.current === "mobile") frameRoot.setAttribute(APP_FRAME_ATTR, "");
+    else frameRoot.removeAttribute(APP_FRAME_ATTR);
 
     /* The levers' overrides: every custom property inline on the root,
        replacing the previous mirror so a reset lever clears in the frame. */
@@ -174,6 +183,13 @@ export default function TemplatesView({
     productNameRef.current = productName;
     sync();
   }, [productName, sync]);
+
+  /* The stage size is a prop too, and Desktop and Mobile can stage the
+     same route without a reload, so a flip re-syncs the app-frame flag. */
+  useEffect(() => {
+    sizeRef.current = size;
+    sync();
+  }, [size, sync]);
 
   /* Re-sync on every lever move (the inline style), theme flip, and brand
      change. */

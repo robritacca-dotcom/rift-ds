@@ -1,5 +1,5 @@
-/* The app dressing a template wears in the templates carousel's Mobile
-   mode (AppFrame.tsx owns when). The recipe is the mobile dashboard's: an
+/* The app dressing a template wears in a Mobile preview, the carousel's
+   or the playground's (AppFrame.tsx owns when). The recipe is the mobile dashboard's: an
    iOS large-title bar at the top of the screen and a glass tab bar
    floating above the bottom edge. */
 

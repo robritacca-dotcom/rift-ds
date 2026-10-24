@@ -1,16 +1,17 @@
 "use client";
 
 /**
- * The phone-app dressing a template wears in the templates carousel's
- * Mobile mode: an iOS large-title TopAppBar where the web top bar was, and
+ * The phone-app dressing a template wears in a Mobile preview (the
+ * templates carousel's Mobile mode, or the playground's Mobile stage): an iOS large-title TopAppBar where the web top bar was, and
  * a floating glass BottomNav built from the template's own nav, with the
  * assistant on its search circle. It is the mobile dashboard's chrome, so
  * every template previews as an app rather than a narrow website.
  *
- * Only the carousel asks for it. The carousel marks a Mobile preview's
- * frame with `data-app-frame` on the root element (same-origin, the way the
- * playground stages a product name), and a template reads it through
- * useAppFrame. At its own route the attribute never exists, so the full
+ * Only a Mobile preview asks for it. The carousel and the playground mark
+ * a Mobile preview's frame with `data-app-frame` on the root element
+ * (same-origin, the way the playground stages a product name), and a
+ * template reads it through useAppFrame. A narrowed Desktop stage never
+ * sets it, since a narrow window is not a phone. At its own route the attribute never exists, so the full
  * template page is untouched at every width.
  */
 

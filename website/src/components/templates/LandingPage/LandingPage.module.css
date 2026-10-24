@@ -1,0 +1,1023 @@
+/* The landing page template. Colours, spaces, radii and type are semantic
+   tokens; the raw values are structural layout sizes (the content column,
+   the hero's height, the mock's width, grid tracks) that pages own
+   everywhere else on the site. */
+
+.shell {
+  position: relative;
+  z-index: 1;
+  min-height: calc(var(--layout-viewport-height, 100vh));
+  /* Stretch across the body's own padding (the family's pattern); the
+     primitives mirror the body's inset in globals.css. */
+  width: calc(100% + var(--primitive-padding-1000) * 2);
+  margin: calc(-1 * var(--primitive-padding-500))
+    calc(-1 * var(--primitive-padding-1000));
+  /* No page colour of its own: the body carries the floor, and the site's
+     ambient field (declared by ExtendedBackground) shows through the top. */
+  color: var(--color-text-primary);
+  font-family: var(--font-family-body);
+  overflow-x: clip;
+}
+
+.headerInner,
+.main,
+.footerInner {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: var(--padding-1000);
+}
+
+.icon {
+  --icon-size: var(--icon-size-500);
+  font-size: var(--icon-size);
+  line-height: 1;
+}
+
+/* ------------------------------------------------------------ header */
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: var(--layer-sticky);
+  background: var(--color-bg-glass);
+  border-bottom: var(--border-025) solid var(--color-bg-container-border);
+  backdrop-filter: blur(16px);
+}
+
+.headerInner {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-1000);
+  min-height: 72px;
+}
+
+.brand {
+  display: inline-flex;
+  flex-shrink: 0;
+  white-space: nowrap;
+  align-items: center;
+  gap: var(--gap-300);
+  color: var(--color-text-primary);
+  text-decoration: none;
+  font-family: var(--font-heading-3-family);
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+}
+
+.nav {
+  display: flex;
+  gap: var(--gap-100);
+  margin-right: auto;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-200);
+}
+
+.menuButton {
+  display: none;
+}
+
+.drawerFooter {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-500);
+}
+
+.drawerActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-300);
+}
+
+/* The phone's tab bar, the app frame's recipe: fixed to the bottom of the
+   viewport, content fading out beneath it rather than meeting it in a
+   hard line. Hidden until the phone breakpoint. */
+.tabBar {
+  display: none;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: var(--layer-sticky);
+  pointer-events: none;
+}
+
+.tabBar > * {
+  pointer-events: auto;
+}
+
+.tabBar::before {
+  content: "";
+  position: absolute;
+  inset: calc(-1 * var(--gap-500)) 0 0;
+  z-index: -1;
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--color-bg-page-primary) 85%, transparent),
+    transparent
+  );
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  -webkit-mask-image: linear-gradient(to top, var(--color-text-primary) 55%, transparent);
+  mask-image: linear-gradient(to top, var(--color-text-primary) 55%, transparent);
+}
+
+.flag {
+  display: block;
+  width: 20px;
+  height: 14px;
+  border-radius: var(--radius-050);
+  box-shadow: 0 0 0 var(--border-025) var(--color-bg-container-border);
+}
+
+/* -------------------------------------------------------------- hero */
+
+.hero {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--gap-1500);
+  align-items: center;
+  min-height: 680px;
+  padding-block: var(--gap-2000);
+}
+
+.heroCopy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-500);
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-300);
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-family: var(--font-overline-family);
+  font-size: var(--font-overline-size);
+  font-weight: var(--font-overline-weight);
+  line-height: var(--font-overline-line-height);
+  letter-spacing: var(--font-overline-letter-spacing);
+  font-variant-numeric: tabular-nums;
+}
+
+.heroTitle {
+  margin: 0;
+  font-family: var(--font-display-2-family);
+  font-size: var(--font-display-2-size);
+  font-weight: var(--font-display-2-weight);
+  line-height: var(--font-display-2-line-height);
+  letter-spacing: var(--font-display-2-letter-spacing);
+  text-wrap: balance;
+}
+
+.heroLede {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-title-body-size);
+  line-height: var(--font-paragraph-line-height);
+  text-wrap: pretty;
+}
+
+.signup {
+  display: flex;
+  gap: var(--gap-300);
+  width: 100%;
+  max-width: 480px;
+  margin-top: var(--gap-300);
+}
+
+.signupInput {
+  flex: 1;
+  min-width: 0;
+}
+
+.heroStage {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* The checkout with the Today widget hanging off its lower-left corner.
+   The margins reserve the widget's overhang (180px to the left, 112px
+   below), so the pair's box is what the stage aligns. */
+.mock {
+  position: relative;
+  width: 100%;
+  max-width: 360px;
+  margin: 0 0 112px 180px;
+}
+
+.checkout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-400);
+  width: 100%;
+  max-width: 360px;
+  padding: var(--padding-500);
+  border-radius: var(--radius-600);
+  background: var(--color-bg-container-primary);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  box-shadow: var(--shadow-floating);
+}
+
+.checkoutHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.checkoutMerchant {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-200);
+  font-weight: var(--font-paragraph-emphasis-weight);
+}
+
+.merchantMark {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-200);
+  background: var(--color-bg-container-secondary);
+}
+
+.lines {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+  margin: 0;
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+}
+
+.lines div {
+  display: flex;
+  justify-content: space-between;
+}
+
+.lines dt {
+  color: var(--color-text-secondary);
+}
+
+.lines dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.lines .total dt,
+.lines .total dd {
+  color: var(--color-text-primary);
+  font-weight: var(--font-paragraph-emphasis-weight);
+}
+
+.todayWidget {
+  position: absolute;
+  right: calc(100% - 80px);
+  bottom: -112px;
+  width: 260px;
+  box-shadow: var(--shadow-floating);
+}
+
+.today {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-300);
+}
+
+.todayValue {
+  font-family: var(--font-heading-2-family);
+  font-size: var(--font-heading-2-size);
+  font-weight: var(--font-heading-2-weight);
+  line-height: var(--font-heading-2-line-height);
+  font-variant-numeric: tabular-nums;
+}
+
+.spark {
+  display: block;
+  width: 100%;
+  height: 48px;
+  margin-top: var(--gap-300);
+}
+
+/* --------------------------------------------------------- customers */
+
+.customers {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-500);
+  padding-block: var(--gap-1000);
+}
+
+.customersLabel {
+  margin: 0;
+  color: var(--color-text-tertiary);
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+}
+
+.customerList {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--gap-500) var(--gap-1500);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--color-text-secondary);
+  font-family: var(--font-heading-3-family);
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+}
+
+.customer {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-200);
+}
+
+.customerGlyph {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+/* Six wordmark treatments, all from the type tokens, so the strip reads as
+   six brands without a face the theme does not own. */
+.wordUpper {
+  text-transform: uppercase;
+  letter-spacing: var(--font-overline-letter-spacing);
+  font-size: var(--font-paragraph-emphasis-size);
+}
+
+.wordSerifish {
+  font-style: italic;
+  font-weight: var(--font-paragraph-weight);
+}
+
+.wordLight {
+  font-weight: var(--font-display-2-weight);
+  font-size: var(--font-heading-2-size);
+}
+
+.wordTight {
+  letter-spacing: var(--font-display-2-letter-spacing);
+  font-weight: var(--font-heading-1-weight);
+}
+
+.wordLower {
+  text-transform: lowercase;
+  font-weight: var(--font-heading-1-weight);
+}
+
+.wordWide {
+  text-transform: uppercase;
+  letter-spacing: var(--font-overline-letter-spacing);
+  font-weight: var(--font-paragraph-weight);
+  font-size: var(--font-paragraph-size);
+}
+
+/* ------------------------------------------------------------ detail */
+
+.detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-1000);
+}
+
+.detailHead {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: var(--gap-1000);
+  align-items: start;
+}
+
+.detailIntro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-500);
+}
+
+.detailLede {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-title-body-size);
+  line-height: var(--font-paragraph-line-height);
+}
+
+.detailCtas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-300);
+}
+
+.showcase {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: var(--gap-500);
+}
+
+.showMain {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 240px;
+  padding: var(--padding-1000);
+  border-radius: var(--radius-400);
+  background: var(--color-bg-container-secondary);
+}
+
+.showMain > * {
+  max-width: 520px;
+}
+
+.showSide {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-400);
+  padding: var(--padding-500);
+  border-radius: var(--radius-400);
+  border: var(--border-025) solid var(--color-bg-container-border);
+}
+
+.sideTitle {
+  margin: 0;
+  color: var(--color-text-tertiary);
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+}
+
+.facts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+  margin: 0;
+}
+
+.facts div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--gap-300);
+}
+
+.facts dt {
+  color: var(--color-text-secondary);
+}
+
+.facts dd {
+  margin: 0;
+  font-weight: var(--font-paragraph-emphasis-weight);
+  font-variant-numeric: tabular-nums;
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--gap-500);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.features li {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+  color: var(--color-text-secondary);
+}
+
+.features strong {
+  color: var(--color-text-primary);
+}
+
+.featureIcon {
+  --icon-size: var(--icon-size-600);
+  color: var(--color-text-primary);
+}
+
+/* ---------------------------------------------------------- sections */
+
+.section {
+  padding-block: var(--gap-3000) 0;
+}
+
+.sectionHead {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-400);
+  max-width: 640px;
+  margin-bottom: var(--gap-1500);
+}
+
+.sectionTitle {
+  margin: 0;
+  font-family: var(--font-heading-1-family);
+  font-size: var(--font-heading-1-size);
+  font-weight: var(--font-heading-1-weight);
+  line-height: var(--font-heading-1-line-height);
+  letter-spacing: var(--font-heading-1-letter-spacing);
+  text-wrap: balance;
+}
+
+.sectionLede {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-paragraph-size);
+  line-height: var(--font-paragraph-line-height);
+  text-wrap: pretty;
+}
+
+/* ------------------------------------------------------------- bento */
+
+.bento {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-rows: 380px;
+  gap: var(--gap-500);
+}
+
+.tileWide {
+  grid-column: span 2;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-200);
+}
+
+.trend {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+  width: 100%;
+}
+
+.trendHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--gap-300);
+}
+
+.trendLabel {
+  color: var(--color-text-secondary);
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+}
+
+.trendValue {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-200);
+  font-family: var(--font-heading-3-family);
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+  font-variant-numeric: tabular-nums;
+}
+
+.trendChart {
+  display: block;
+  width: 100%;
+  height: 72px;
+}
+
+/* Payouts: a balance over a plain ledger, hairlines between the lines
+   rather than bordered rows, so it reads as a statement. */
+.ledger {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-100);
+  width: 100%;
+}
+
+.ledgerTotal {
+  font-family: var(--font-heading-2-family);
+  font-size: var(--font-heading-2-size);
+  font-weight: var(--font-heading-2-weight);
+  line-height: var(--font-heading-2-line-height);
+  font-variant-numeric: tabular-nums;
+}
+
+.ledgerRows {
+  display: flex;
+  flex-direction: column;
+  margin: var(--gap-300) 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+}
+
+.ledgerRows li {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-300);
+  padding-block: var(--padding-200);
+  border-top: var(--border-025) solid var(--color-bg-container-border);
+}
+
+/* Fraud: a dial beside the day's verdicts, counted. */
+.risk {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-1000);
+  width: 100%;
+}
+
+.verdicts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--gap-500);
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.verdicts li {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+}
+
+.verdictCount {
+  font-family: var(--font-heading-2-family);
+  font-size: var(--font-heading-2-size);
+  font-weight: var(--font-heading-2-weight);
+  line-height: var(--font-heading-2-line-height);
+  font-variant-numeric: tabular-nums;
+}
+
+.verdictNote {
+  color: var(--color-text-tertiary);
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+}
+
+.tileStack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-400);
+  width: 100%;
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+}
+
+.rows li {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-300);
+  padding: var(--padding-200) var(--padding-300);
+  border-radius: var(--radius-300);
+  background: var(--color-bg-container-primary);
+  border: var(--border-025) solid var(--color-bg-container-border);
+}
+
+.rowLead {
+  font-weight: var(--font-paragraph-emphasis-weight);
+}
+
+.rowValue,
+.rowText {
+  flex: 1;
+  min-width: 0;
+  color: var(--color-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.rowVerdict {
+  font-weight: var(--font-paragraph-emphasis-weight);
+}
+
+/* ------------------------------------------------------------- stats */
+
+/* The labels are written to fit one line; balance is the backstop for the
+   widths where they do not, so a wrap never leaves one word alone. */
+.stats :global(.ds-stat__label) {
+  text-wrap: balance;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--gap-1000);
+  padding-block: var(--gap-1500);
+}
+
+.statsRule {
+  margin-top: var(--gap-3000);
+}
+
+/* -------------------------------------------------------- developers */
+
+.devSplit {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  gap: var(--gap-1500);
+  align-items: center;
+}
+
+.devCopy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-500);
+}
+
+.devCopy .eyebrow {
+  margin-bottom: calc(-1 * var(--gap-300));
+}
+
+.points {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.points li {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-300);
+}
+
+.pointIcon {
+  color: var(--color-status-positive-icon);
+}
+
+.code {
+  min-width: 0;
+}
+
+/* --------------------------------------------------------------- cta */
+
+.cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-500);
+  margin-block: var(--gap-3000);
+  padding: var(--padding-1500) var(--padding-1000);
+  border-radius: var(--radius-600);
+  background: var(--color-bg-container-primary);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  text-align: center;
+}
+
+.cta .sectionLede {
+  max-width: 560px;
+}
+
+.ctaActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--gap-300);
+  margin-top: var(--gap-300);
+}
+
+/* ------------------------------------------------------------ footer */
+
+.footer {
+  padding-block: var(--gap-1500);
+}
+
+.footerInner {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) repeat(3, minmax(0, 1fr));
+  gap: var(--gap-1000);
+}
+
+.footerBrand {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-500);
+}
+
+.legal {
+  margin: 0;
+  color: var(--color-text-tertiary);
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+}
+
+.footerCol {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+}
+
+.footerHeading {
+  font-weight: var(--font-paragraph-emphasis-weight);
+}
+
+.footerCol a {
+  color: var(--color-text-secondary);
+  text-decoration: none;
+}
+
+.footerCol a:hover {
+  color: var(--color-text-primary);
+}
+
+/* -------------------------------------------------------- responsive */
+
+@media (max-width: 1279px) {
+  .phone {
+    display: none;
+  }
+}
+
+@media (max-width: 1080px) {
+  .nav {
+    display: none;
+  }
+
+  .menuButton {
+    display: inline-flex;
+  }
+
+  .headerActions {
+    margin-left: auto;
+  }
+
+  .headerInner {
+    gap: var(--gap-300);
+  }
+
+  .hero,
+  .devSplit {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .hero {
+    min-height: 0;
+  }
+
+
+  .heroStage {
+    justify-content: center;
+  }
+
+  /* Stacked, the copy centres over the centred checkout pair, so the
+     hero reads as one column rather than a left rag above a centred card. */
+  .heroCopy {
+    align-items: center;
+    text-align: center;
+  }
+
+  .heroTitle,
+  .heroLede {
+    max-width: 720px;
+  }
+
+  /* Six marks never wrap to five and one: a grid of three, then two. */
+  .customerList {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    justify-content: space-around;
+    width: 100%;
+  }
+
+  .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .footerInner {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .footerBrand {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 959px) {
+  .shell {
+    width: calc(100% + var(--primitive-padding-500) * 2);
+    margin: calc(-1 * var(--primitive-padding-500));
+  }
+}
+
+@media (max-width: 760px) {
+  .headerInner,
+  .main,
+  .footerInner {
+    padding-inline: var(--padding-500);
+  }
+
+
+  .signup {
+    flex-direction: column;
+  }
+
+  .bento {
+    grid-template-columns: minmax(0, 1fr);
+    grid-auto-rows: auto;
+  }
+
+  .tileWide {
+    grid-column: auto;
+  }
+
+  .risk {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .todayWidget {
+    display: none;
+  }
+
+  .mock {
+    margin: 0;
+  }
+
+  .customerList {
+    grid-template-columns: repeat(2, auto);
+  }
+
+  .stats,
+  .footerInner,
+  .detailHead,
+  .showcase,
+  .features {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cta {
+    padding: var(--padding-1000) var(--padding-500);
+  }
+}
+
+@media (max-width: 600px) {
+  .shell {
+    width: calc(100% + var(--primitive-padding-400) * 2);
+    margin: calc(-1 * var(--primitive-padding-500))
+      calc(-1 * var(--primitive-padding-400));
+  }
+
+  .signIn {
+    display: none;
+  }
+
+  /* The tab bar carries search on a phone, so the header's search steps
+     aside for it; the menu stays top left, as on the mobile dashboard. */
+  .headerSearch {
+    display: none;
+  }
+
+  .tabBar {
+    display: block;
+  }
+
+  .shell {
+    padding-bottom: var(--gap-3000);
+  }
+
+  /* The language menu keeps its flag and drops the name and chevron on a
+     phone, and the row tightens, so the start button keeps its room. */
+  .language :global(.ds-button__text),
+  .language :global(.ds-button__icon--right) {
+    display: none;
+  }
+
+  .headerInner {
+    gap: var(--gap-300);
+  }
+
+  .headerActions {
+    gap: var(--gap-100);
+  }
+}

@@ -478,6 +478,11 @@ export const templatesSidebarLinks: NavLink[] = [
     label: "Sign in",
     description: "A product front door: the providers beside an ambient panel",
   },
+  {
+    href: "/templates/landing-page",
+    label: "Landing page",
+    description: "A product's front page: hero, products, figures and a call to action",
+  },
 ];
 
 /**

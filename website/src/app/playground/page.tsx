@@ -99,7 +99,7 @@ import {
 import MockNav from "./views/MockNav";
 import TypeView from "./views/TypeView";
 import TemplatesView from "./views/TemplatesView";
-import TemplatesRail, { DEFAULT_TEMPLATE_HREF } from "./TemplatesRail";
+import TemplatesRail, { DEFAULT_TEMPLATE_HREF, STAGE_TEMPLATES } from "./TemplatesRail";
 import ComponentsRail, {
   COMPONENT_SECTIONS,
   sectionAnchor,
@@ -316,8 +316,35 @@ export default function PlaygroundPage() {
   /* The right rail's fold, shared by the two views that seat one (the chat
      director and the templates rail), since they hold the same seat. */
   const [rightRailCollapsed, setRightRailCollapsed] = useState(false);
-  /* The template the Templates view stages, kept across view switches. */
+  /* The template the Templates view stages, kept across view switches and
+     mirrored into ?template=<slug> (the route's last segment) the way the
+     view is, so a staged template can be linked. A slug the stage cannot
+     run is ignored, leaving the default. A link that names a template but
+     no view opens on the Templates view, since that is the only place a
+     template shows. */
   const [templateHref, setTemplateHref] = useState(DEFAULT_TEMPLATE_HREF);
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const slug = params.get("template");
+    const linked = slug && STAGE_TEMPLATES.find((t) => t.href === `/templates/${slug}`);
+    if (!linked) return;
+    // Once-on-mount sync from the URL, the view effect's pattern above.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setTemplateHref(linked.href);
+    if (!params.get("view")) {
+      setView("templates");
+      const url = new URL(window.location.href);
+      url.searchParams.set("view", "templates");
+      window.history.replaceState(null, "", url);
+    }
+  }, []);
+  const pickTemplate = (href: string) => {
+    setTemplateHref(href);
+    const url = new URL(window.location.href);
+    if (href === DEFAULT_TEMPLATE_HREF) url.searchParams.delete("template");
+    else url.searchParams.set("template", href.split("/").pop() ?? "");
+    window.history.replaceState(null, "", url);
+  };
   /* The Components and Type views' own rails: viewing choices, kept
      across view switches like the levers, never part of the theme. */
   const [componentsView, setComponentsView] = useState<ComponentsRailState>({
@@ -1181,7 +1208,7 @@ export default function PlaygroundPage() {
                   <TemplatesRail
                     variant="drawer"
                     value={templateHref}
-                    onValueChange={setTemplateHref}
+                    onValueChange={pickTemplate}
                   />
                 ) : view === "type" && compact ? (
                   /* And the type rail's specimen and tiers. */
@@ -1597,7 +1624,7 @@ export default function PlaygroundPage() {
           <TemplatesRail
             variant="panel"
             value={templateHref}
-            onValueChange={setTemplateHref}
+            onValueChange={pickTemplate}
             collapsed={rightRailCollapsed}
             onCollapsedChange={setRightRailCollapsed}
           />

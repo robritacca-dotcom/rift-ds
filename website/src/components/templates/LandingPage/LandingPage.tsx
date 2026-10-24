@@ -72,6 +72,7 @@ import FadeDivider from "@/components/FadeDivider/FadeDivider";
 import SidebarSwitchers from "../SidebarSwitchers/SidebarSwitchers";
 import { ProductMark } from "../ProductMark/ProductMark";
 import { useStagedProductName } from "../useStagedProductName";
+import { useAppFrame } from "../AppFrame/AppFrame";
 import styles from "./LandingPage.module.css";
 
 const PRODUCT = "Pennant";
@@ -107,11 +108,14 @@ const LANGUAGES = [
     label: "English",
     flag: (
       <>
-        <rect width="30" height="20" fill="#012169" />
-        <path d="M0 0 30 20M30 0 0 20" stroke="#FFFFFF" strokeWidth="4" />
-        <path d="M0 0 30 20M30 0 0 20" stroke="#C8102E" strokeWidth="1.6" />
-        <path d="M15 0v20M0 10h30" stroke="#FFFFFF" strokeWidth="6" />
-        <path d="M15 0v20M0 10h30" stroke="#C8102E" strokeWidth="3.4" />
+        <rect width="30" height="20" fill="#FFFFFF" />
+        <rect width="7.5" height="20" fill="#D52B1E" />
+        <rect x="22.5" width="7.5" height="20" fill="#D52B1E" />
+        {/* The maple leaf, simplified to read at flag-chip size. */}
+        <path
+          d="M15 3.6l1.1 2.1 1.2-.6-.4 3 1.6-1.6.4 1 1.7-.4-.5 1.7.9.5-2.9 2.3.3 1.1-2.8-.4.1 2.8h-1.4l.1-2.8-2.8.4.3-1.1-2.9-2.3.9-.5-.5-1.7 1.7.4.4-1 1.6 1.6-.4-3 1.2.6z"
+          fill="#D52B1E"
+        />
       </>
     ),
   },
@@ -605,6 +609,11 @@ function Checkout() {
 
 export default function LandingPage() {
   const product = useStagedProductName(PRODUCT);
+  /* Phone chrome (the tab bar) belongs to a phone, not to a narrow window:
+     it shows when the frame is a phone preview (the carousel's or the
+     playground's Mobile stage set the app-frame flag) and, in the CSS, on
+     a real touch phone. A Desktop stage dragged narrow keeps the header. */
+  const phonePreview = useAppFrame();
   const [languageId, setLanguageId] = React.useState("en");
   const [paletteOpen, setPaletteOpen] = React.useState(false);
   const [menuOpen, setMenuOpen] = React.useState(false);
@@ -653,7 +662,7 @@ export default function LandingPage() {
   ];
 
   return (
-    <div className={styles.shell}>
+    <div className={styles.shell} data-phone={phonePreview ? "" : undefined}>
       <ExtendedBackground />
       <header className={styles.header}>
         <div className={styles.headerInner}>
@@ -691,7 +700,7 @@ export default function LandingPage() {
               size="compact"
               trigger={
                 <Button
-                  label={language.label}
+                  label={language.id.toUpperCase()}
                   aria-label={`Language: ${language.label}`}
                   variant="tertiary"
                   size="compact"
@@ -702,6 +711,7 @@ export default function LandingPage() {
               }
               items={LANGUAGES.map((l) => ({
                 label: l.label,
+                shortcut: l.id.toUpperCase(),
                 icon: <Flag id={l.id} />,
                 selected: l.id === language.id,
                 onClick: () => setLanguageId(l.id),

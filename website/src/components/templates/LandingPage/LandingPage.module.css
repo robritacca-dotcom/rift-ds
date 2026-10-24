@@ -79,7 +79,7 @@
   gap: var(--gap-200);
 }
 
-.menuButton {
+.headerInner .menuButton {
   display: none;
 }
 
@@ -853,8 +853,12 @@
 
 /* -------------------------------------------------------- responsive */
 
+/* Every breakpoint toggle on a library component is scoped through its
+   parent row: a single class ties the library's own display rule on
+   specificity, and which stylesheet loads last differs between the route
+   and the playground's frame, so a hide could silently lose there. */
 @media (max-width: 1279px) {
-  .phone {
+  .headerActions .phone {
     display: none;
   }
 }
@@ -864,7 +868,7 @@
     display: none;
   }
 
-  .menuButton {
+  .headerInner .menuButton {
     display: inline-flex;
   }
 
@@ -988,23 +992,10 @@
       calc(-1 * var(--primitive-padding-400));
   }
 
-  .signIn {
+  .headerActions .signIn {
     display: none;
   }
 
-  /* The tab bar carries search on a phone, so the header's search steps
-     aside for it; the menu stays top left, as on the mobile dashboard. */
-  .headerSearch {
-    display: none;
-  }
-
-  .tabBar {
-    display: block;
-  }
-
-  .shell {
-    padding-bottom: var(--gap-3000);
-  }
 
   /* The language menu keeps its flag and drops the name and chevron on a
      phone, and the row tightens, so the start button keeps its room. */
@@ -1020,4 +1011,41 @@
   .headerActions {
     gap: var(--gap-100);
   }
+}
+
+/* Phone chrome: the tab bar, and the header's search stepping aside for
+   the tab bar's own. Shown for a phone preview (data-phone, from the
+   app-frame flag) or a real touch phone, never a narrow desktop window. */
+.shell[data-phone] .tabBar {
+  display: block;
+}
+
+.shell[data-phone] .headerActions .headerSearch {
+  display: none;
+}
+
+.shell[data-phone] {
+  padding-bottom: var(--gap-3000);
+}
+
+@media (max-width: 600px) and (pointer: coarse) {
+  .tabBar {
+    display: block;
+  }
+
+  .headerActions .headerSearch {
+    display: none;
+  }
+
+  .shell {
+    padding-bottom: var(--gap-3000);
+  }
+}
+
+/* Light mode runs the ambient field thinner here than the site's 0.65: a
+   theme whose accents are greys paints the field grey, which reads as a
+   shadow behind the headline over a light floor. Scoped to this page by
+   its own shell, so the site's other pages keep the shared value. */
+:global(html[data-theme="light"]) :global(body):has(.shell) :global(.blur-container) {
+  opacity: 0.35;
 }

@@ -1502,9 +1502,6 @@ export default function DesignSystemLanding() {
         {/* ---------- the subtitle's points, one tile each ---------- */}
         <HomeBento />
 
-        {/* The payroll console compare section (components/HomeCompare) is
-            hidden for now, with the payroll template it shows. */}
-
         {/* ---------- what a stranger asks before installing ---------- */}
         <HomeFaq />
 

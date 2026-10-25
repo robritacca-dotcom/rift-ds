@@ -106,7 +106,7 @@ const SOURCES = [
      no runtime filter in front of them — written copy, held here like the
      playground's. Two names, because a screen reaches that row two ways: a
      mock TemplateAssistant takes CHAT_SUGGESTIONS, and a screen that hosts
-     the real widget hands it CHAT_STARTERS (the payroll console). Scoping to
+     the real widget hands it CHAT_STARTERS. Scoping to
      one of them left the other silently unchecked. The list derives from the
      templates directory so a new screen is covered the day it lands; the
      scope keeps the check off the screens' other label: strings (nav items,

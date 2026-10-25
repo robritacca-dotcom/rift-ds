@@ -492,13 +492,7 @@ export const templatesSidebarLinks: NavLink[] = [
  * page's title still resolves. Move an entry back into the array above to
  * restore it everywhere.
  */
-export const hiddenTemplateLinks: NavLink[] = [
-  {
-    href: "/templates/payroll-console",
-    label: "Payroll console",
-    description: "A pay run beside a docked assistant whose agent panel opens in place",
-  },
-];
+export const hiddenTemplateLinks: NavLink[] = [];
 
 /* ============================================
    HELPERS

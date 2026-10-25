@@ -23,7 +23,7 @@ import { FALLBACK_FOLLOWUPS } from "@/lib/chat-followups";
  * client-side navigation, so the transcript, a stream in flight, the draft
  * and the open state survive clicking between pages for free. A hard reload
  * starts clean by design: no storage, no persistence. The staged chats (the
- * playground, the chat home and payroll templates) mount their own with a
+ * playground and the chat home template) mount their own with a
  * scripted transport.
  */
 export function SiteChatProvider({

@@ -189,7 +189,7 @@ export const BANNERS: Banner[] = [
       "Fictional data, real components",
     ],
     primary: { label: "Browse templates", href: "/templates" },
-    secondary: { label: "Payroll console", href: "/templates/payroll-console" },
+    secondary: { label: "Chat home", href: "/templates/chat-home" },
     factsTitle: "Built from",
     facts: [
       ["Layout", "AppLayout, AppSidebar"],
@@ -200,7 +200,7 @@ export const BANNERS: Banner[] = [
     features: [
       { icon: "view_quilt", text: "Full-viewport app shells, rendered with no site chrome." },
       { icon: "smartphone", text: "Sidebar shells dress as an app in the carousel's mobile mode." },
-      { icon: "forum", text: "The payroll console docks the real chat widget as a rail." },
+      { icon: "forum", text: "The chat home runs the real chat widget as the whole page." },
     ],
   },
 ];

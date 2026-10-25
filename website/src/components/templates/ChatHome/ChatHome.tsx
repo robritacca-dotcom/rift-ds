@@ -12,7 +12,7 @@
  *
  *   - The screen's subject is the chat, so it hosts the package's ChatWidget
  *     on the scripted demo transport inside its own provider (Template
- *     screens rule 7, the payroll console's precedent) instead of the mock
+ *     screens rule 7) instead of the mock
  *     TemplateAssistant. Here the chat is the page, not a panel beside one:
  *     it has no close and no full-screen toggle, and it fills the viewport
  *     at every width, which is the chat's takeover mode held permanently.

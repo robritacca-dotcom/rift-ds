@@ -300,6 +300,45 @@ const textColours: SwatchData[] = [
   },
 ];
 
+/* --- Table --- */
+const tableColours: SwatchData[] = [
+  {
+    label: "Body", cssVar: "--color-table-body-bg",
+    dark: { primitive: "--neutral--09-a01--", hex: "rgba(14,14,14,0.01)", rgb: "Transparent" },
+    light: { primitive: "--neutral--00-a01--", hex: "rgba(255,255,255,0.01)", rgb: "Transparent" },
+  },
+  {
+    label: "Header", cssVar: "--color-table-header-bg",
+    dark: { primitive: "--neutral--09-a80--", hex: "rgba(14,14,14,0.8)", rgb: "14 / 14 / 14" },
+    light: { primitive: "--neutral--00--", hex: "#FFFFFF", rgb: "255 / 255 / 255" },
+  },
+  {
+    label: "Row hover", cssVar: "--color-table-row-hover-bg",
+    dark: { primitive: "--neutral--09-a80--", hex: "rgba(14,14,14,0.8)", rgb: "14 / 14 / 14" },
+    light: { primitive: "--neutral--00--", hex: "#FFFFFF", rgb: "255 / 255 / 255" },
+  },
+  {
+    label: "Row stripe", cssVar: "--color-table-row-stripe-bg",
+    dark: { primitive: "--neutral--09-a60--", hex: "rgba(14,14,14,0.6)", rgb: "14 / 14 / 14" },
+    light: { primitive: "--neutral--00-a90--", hex: "rgba(255,255,255,0.9)", rgb: "255 / 255 / 255" },
+  },
+  {
+    label: "Row selected", cssVar: "--color-table-row-selected-bg",
+    dark: { primitive: "--neutral--08-a80--", hex: "rgba(35,35,35,0.8)", rgb: "35 / 35 / 35" },
+    light: { primitive: "--neutral--02-a80--", hex: "rgba(214,214,214,0.8)", rgb: "214 / 214 / 214" },
+  },
+  {
+    label: "Divider", cssVar: "--color-table-divider",
+    dark: { primitive: "--neutral--08-a80--", hex: "rgba(35,35,35,0.8)", rgb: "35 / 35 / 35" },
+    light: { primitive: "--neutral--02-a80--", hex: "rgba(214,214,214,0.8)", rgb: "214 / 214 / 214" },
+  },
+  {
+    label: "Border", cssVar: "--color-table-border",
+    dark: { primitive: "--neutral--08-a80--", hex: "rgba(35,35,35,0.8)", rgb: "35 / 35 / 35" },
+    light: { primitive: "--neutral--02-a80--", hex: "rgba(214,214,214,0.8)", rgb: "214 / 214 / 214" },
+  },
+];
+
 /* --- Icon --- */
 const iconColours: SwatchData[] = [
   {
@@ -860,6 +899,16 @@ export default function SemanticColoursPage() {
             <SectionTitle title="Chat surfaces" />
             <div className={styles.colourSwatches}>
               {chatSurfaceColours.map((s) => (
+                <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
+              ))}
+            </div>
+          </section>
+
+          {/* Table */}
+          <section className={styles.colourGroup}>
+            <SectionTitle title="Table" />
+            <div className={styles.colourSwatches}>
+              {tableColours.map((s) => (
                 <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
               ))}
             </div>

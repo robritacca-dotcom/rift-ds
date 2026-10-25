@@ -5216,15 +5216,29 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "selectRowLabel",
             "type": "((row: DataTableRow) => string)",
             "required": false,
-            "description": "Accessible name of a row's checkbox, given the row. Defaults to \"Select row\" followed by the row id.",
-            "defaultValue": "(row: DataTableRow) => `Select row ${row.id}`"
+            "description": "Accessible name of a row's checkbox, given the row. Defaults to \"Select\"\nfollowed by the value of the `rowHeader` column (else the first column),\nand to \"Select row\" with the id only when that value is empty.",
+            "defaultValue": "(row: DataTableRow) => {\n        const nameKey = (columns.find((col) => col.rowHeader) ?? columns[0])?.key;\n        const name = nameKey === undefined ? undefined : row.values[nameKey];\n        return name == null || name === '' ? `Select row ${row.id}` : `Select ${name}`;\n      }"
           },
           {
             "name": "sortLabel",
             "type": "((header: string, direction: \"desc\" | \"asc\" | null) => string)",
             "required": false,
-            "description": "Accessible name of a sortable header, given the column's header text (its\n`key` when the header is not a string) and its current sort direction,\n`null` when unsorted. Defaults to \"Sort by\" with the header and the state.",
-            "defaultValue": "(header: string, direction: DataTableSort['direction'] | null) =>\n        `Sort by ${header}, ${\n          direction === null\n            ? 'not sorted'\n            : direction === 'asc'\n              ? 'sorted ascending'\n              : 'sorted descending'\n        }`"
+            "description": "Accessible name of a sortable header's button, given the column's header\ntext (its `key` when the header is not a string) and its current sort\ndirection, `null` when unsorted. Defaults to the header text alone: the\nsort state is the header's `aria-sort`, so naming it here too would read\nit twice.",
+            "defaultValue": "(header: string) => header"
+          },
+          {
+            "name": "sortAnnouncement",
+            "type": "((header: string, direction: \"desc\" | \"asc\" | null) => string)",
+            "required": false,
+            "description": "Announced when the sort changes, given the header text and the new direction, `null` when cleared. Defaults to \"Sorted by Name, ascending\" or \"Sort cleared\".",
+            "defaultValue": "(header: string, direction: DataTableSort['direction'] | null) =>\n        direction === null\n          ? 'Sort cleared'\n          : `Sorted by ${header}, ${direction === 'asc' ? 'ascending' : 'descending'}`"
+          },
+          {
+            "name": "pageAnnouncement",
+            "type": "((page: number, pageCount: number, first: number, last: number, total: number) => string)",
+            "required": false,
+            "description": "Announced when the page changes, given the page, the page count, the first and last row shown and the total. Defaults to \"Page 2 of 7, rows 21 to 40 of 140\".",
+            "defaultValue": "(page: number, pageCount: number, first: number, last: number, total: number) =>\n        `Page ${page} of ${pageCount}, rows ${first} to ${last} of ${total}`"
           },
           {
             "name": "resultsLabel",

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, within } from 'storybook/test';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { DataTable, type DataTableColumn, type DataTableRow } from './DataTable';
 import { Badge } from '../Badge/Badge';
 
@@ -167,3 +167,44 @@ export const LocalisedEmptyResult: Story = {
     await expect(canvas.getByText('Ajusta la búsqueda o los filtros y vuelve a intentarlo.')).toBeInTheDocument();
   },
 };
+
+/**
+ * What a screen reader hears: the sorted header carries `aria-sort` and its
+ * button is named by the header alone, the row header names each row and
+ * its checkbox, and a sort, a page change and select-all are announced
+ * through one polite region.
+ */
+export const Announcements: Story = {
+  args: {
+    columns: columns.map((col) => (col.key === 'name' ? { ...col, rowHeader: true } : col)),
+    pageSize: 4,
+    selectable: true,
+    caption: 'Orders',
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const live = canvasElement.querySelector('[aria-live="polite"]') as HTMLElement;
+    await expect(live).toBeEmptyDOMElement();
+
+    const sortButton = canvas.getByRole('button', { name: 'Customer' });
+    await userEvent.click(sortButton);
+    await expect(sortButton.closest('th')).toHaveAttribute('aria-sort', 'ascending');
+    await expect(live).toHaveTextContent('Sorted by Customer, ascending');
+    await expect(sortButton).toHaveFocus();
+    await userEvent.click(sortButton);
+    await userEvent.click(sortButton);
+    await expect(sortButton.closest('th')).not.toHaveAttribute('aria-sort');
+    await expect(live).toHaveTextContent('Sort cleared');
+
+    // Each row is named by its row header, and so is its checkbox.
+    await expect(canvas.getByRole('rowheader', { name: 'John Clarkson' })).toBeInTheDocument();
+    await expect(canvas.getByRole('checkbox', { name: 'Select John Clarkson' })).toBeInTheDocument();
+
+    await userEvent.click(canvas.getByRole('checkbox', { name: 'Select all rows on this page' }));
+    await expect(live).toHaveTextContent('4 selected');
+
+    await userEvent.click(canvas.getByRole('button', { name: 'Next page' }));
+    await waitFor(() => expect(live).toHaveTextContent('Page 2 of 3, rows 5 to 8 of 10'));
+  },
+};
+

@@ -34,6 +34,16 @@
   /* Divider */
   --color-divider: var(--primitive-neutral-08-a80);
 
+  /* Tables: the same roles as light; the container and divider tokens
+     carry the theme swap. */
+  --color-table-body-bg: var(--color-bg-container-primary-transparent);
+  --color-table-header-bg: var(--color-bg-container-primary);
+  --color-table-row-hover-bg: var(--color-bg-container-primary);
+  --color-table-row-stripe-bg: var(--color-bg-container-primary-semi);
+  --color-table-row-selected-bg: var(--color-action-passive-bg-hover);
+  --color-table-divider: var(--color-divider);
+  --color-table-border: var(--color-divider);
+
   /* Chat bubbles — alias the same roles as light; the underlying container
      and text tokens carry the theme swap. */
   --color-chat-bubble-sent-bg: var(--color-bg-container-secondary);

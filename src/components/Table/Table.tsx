@@ -1,9 +1,11 @@
 // No 'use client' directive: Table is purely presentational — no hooks, no event
-// handlers — so it stays renderable from a React Server Component.
+// handlers — so it stays renderable from a React Server Component. The one
+// measured part, the bordered wrapper's ScrollRegion, is a client boundary of
+// its own.
 
 import React from 'react';
 import './Table.css';
-import '../../behaviors/visually-hidden.css';
+import { ScrollRegion } from '../../behaviors/ScrollRegion';
 import '../../behaviors/visually-hidden.css';
 
 export interface TableColumn {
@@ -15,6 +17,10 @@ export interface TableColumn {
   width?: string;
   /** Text alignment for cells in this column */
   align?: 'left' | 'center' | 'right';
+  /** The column's current sort, set as `aria-sort` on its header so a screen reader announces it while reading the column. Leave unset on unsorted columns. */
+  sort?: 'ascending' | 'descending';
+  /** Whether this column names each row. Its cells render as row headers (`<th scope="row">`), so moving along a row announces which record it is. */
+  rowHeader?: boolean;
 }
 
 export interface TableRow {
@@ -22,6 +28,8 @@ export interface TableRow {
   id: string;
   /** Cell values keyed by column key — each accepts any React node */
   cells: Record<string, React.ReactNode>;
+  /** Whether the row is selected, drawn with the table's selected-row tint. */
+  selected?: boolean;
 }
 
 /** Props owned by Table itself — everything else falls through to the <table>. */
@@ -105,6 +113,7 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
                 key={col.key}
                 className={`${baseClass}__header-cell`}
                 scope="col"
+                aria-sort={col.sort}
                 style={{
                   width: col.width,
                   textAlign: col.align || 'left',
@@ -120,9 +129,12 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
 
         <tbody className={`${baseClass}__body`}>
           {rows.map((row) => (
-            <tr key={row.id} className={`${baseClass}__row`}>
-              {columns.map((col) => (
-                <td key={col.key} className={`${baseClass}__cell`}>
+            <tr
+              key={row.id}
+              className={row.selected ? `${baseClass}__row ${baseClass}__row--selected` : `${baseClass}__row`}
+            >
+              {columns.map((col) => {
+                const content = (
                   <div
                     className={`${baseClass}__cell-content`}
                     style={{
@@ -136,16 +148,27 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
                   >
                     {row.cells[col.key]}
                   </div>
-                </td>
-              ))}
+                );
+                return col.rowHeader ? (
+                  <th key={col.key} className={`${baseClass}__cell ${baseClass}__cell--row-header`} scope="row">
+                    {content}
+                  </th>
+                ) : (
+                  <td key={col.key} className={`${baseClass}__cell`}>
+                    {content}
+                  </td>
+                );
+              })}
             </tr>
           ))}
         </tbody>
       </table>
     );
 
+    // The bordered wrapper is the table's scroll container: a named,
+    // focusable region while it overflows, a plain div while it fits.
     if (bordered) {
-      return <div className={`${baseClass}__wrapper`}>{table}</div>;
+      return <ScrollRegion className={`${baseClass}__wrapper`}>{table}</ScrollRegion>;
     }
 
     return table;

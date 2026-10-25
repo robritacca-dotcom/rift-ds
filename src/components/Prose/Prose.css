@@ -225,12 +225,21 @@
    table sizes to its content instead of filling the container, because the
    inner anonymous table box a block table generates cannot be stretched.
    A clipped or shattered table is the worse failure. */
+/* Drawn as the bordered Table is, from the same --color-table-* family:
+   an outline, a header band one notch off the body, dividers between rows,
+   so a table in a reply or a doc page and a table in a product UI read as
+   one style. Separate borders, because a collapsed table cannot round its
+   corners. */
 .ds-prose table {
   display: block;
   width: max-content;
   max-width: 100%;
   overflow-x: auto;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: var(--border-025) solid var(--color-table-border);
+  border-radius: var(--radius-300);
+  background-color: var(--color-table-body-bg);
 }
 
 .ds-prose th {
@@ -239,7 +248,7 @@
   font-weight: var(--font-title-body-weight);
   line-height: var(--font-paragraph-sm-line-height);
   letter-spacing: var(--font-title-body-letter-spacing);
-  background-color: var(--color-bg-container-secondary);
+  background-color: var(--color-table-header-bg);
   text-align: start;
 }
 
@@ -253,8 +262,17 @@
 .ds-prose th,
 .ds-prose td {
   padding: var(--padding-150) var(--padding-300);
-  border-block-end: var(--border-025) solid var(--color-divider);
+  border-block-end: var(--border-025) solid var(--color-table-divider);
   overflow-wrap: normal;
+}
+
+/* The outline closes the table, so the last row draws no divider of its own. */
+.ds-prose tbody tr:last-child td {
+  border-block-end: none;
+}
+
+.ds-prose tbody tr:hover {
+  background-color: var(--color-table-row-hover-bg);
 }
 
 /* ============================================

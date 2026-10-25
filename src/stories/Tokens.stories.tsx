@@ -589,6 +589,16 @@ export const SemanticColors: Story = {
         <ColorToken name="Divider" value="--color-divider" />
       </TokenSection>
 
+      <TokenSection title="Table">
+        <ColorToken name="Body" value="--color-table-body-bg" />
+        <ColorToken name="Header" value="--color-table-header-bg" />
+        <ColorToken name="Row Hover" value="--color-table-row-hover-bg" />
+        <ColorToken name="Row Stripe" value="--color-table-row-stripe-bg" />
+        <ColorToken name="Row Selected" value="--color-table-row-selected-bg" />
+        <ColorToken name="Divider" value="--color-table-divider" />
+        <ColorToken name="Border" value="--color-table-border" />
+      </TokenSection>
+
       <TokenSection title="Core Colors">
         <ColorToken name="UI Primary" value="--color-core-ui-primary" />
         <ColorToken name="UI Secondary" value="--color-core-ui-secondary" />

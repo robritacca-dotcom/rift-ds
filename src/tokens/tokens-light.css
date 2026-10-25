@@ -42,6 +42,20 @@
   /* Divider */
   --color-divider: var(--primitive-neutral-02-a80);
 
+  /* Tables: one family every table reads (Table, DataTable, Prose's
+     markdown tables, the blueprints pages), so a docs table and a UI table
+     are drawn alike. The body takes the surface the table sits on; the
+     header steps one container notch off it; hover and stripe are tints
+     over the body. Each aliases a container role, so a theme that retunes
+     the container ramp retunes its tables with it. */
+  --color-table-body-bg: var(--color-bg-container-primary-transparent);
+  --color-table-header-bg: var(--color-bg-container-primary);
+  --color-table-row-hover-bg: var(--color-bg-container-primary);
+  --color-table-row-stripe-bg: var(--color-bg-container-primary-semi);
+  --color-table-row-selected-bg: var(--color-action-passive-bg-hover);
+  --color-table-divider: var(--color-divider);
+  --color-table-border: var(--color-divider);
+
   /* Chat bubbles — sent (the person) and received (the agent). Both alias
      the container-secondary / text-primary pair today; they exist as their
      own roles so chat surfaces can be re-themed later without touching the

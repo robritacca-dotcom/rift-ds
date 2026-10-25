@@ -1,11 +1,13 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Table, type TableColumn, type TableRow } from '../Table/Table';
 import { Pagination, type PaginationProps } from '../Pagination/Pagination';
 import { Checkbox } from '../Checkbox/Checkbox';
 import { Input } from '../Input/Input';
 import { EmptyState, type EmptyStateProps } from '../EmptyState/EmptyState';
+import { MOTION_ANNOUNCE_DEBOUNCE_MS } from '../../tokens/motion';
+import '../../behaviors/visually-hidden.css';
 import './DataTable.css';
 import '../../fonts/material-symbols.css';
 
@@ -22,6 +24,8 @@ export interface DataTableColumn {
   align?: 'left' | 'center' | 'right';
   /** Render the cell for a row; defaults to the row's raw value for this key. */
   render?: (row: DataTableRow) => React.ReactNode;
+  /** Whether this column names each row: its cells render as row headers, and its value names the row's checkbox ("Select Ada Lovelace"). One column per table. */
+  rowHeader?: boolean;
 }
 
 export interface DataTableRow {
@@ -88,14 +92,24 @@ type DataTableOwnProps = {
   emptyState?: React.ReactNode;
   /** Accessible name of the select-all checkbox in the header, shown with `selectable`. */
   selectAllLabel?: string;
-  /** Accessible name of a row's checkbox, given the row. Defaults to "Select row" followed by the row id. */
+  /**
+   * Accessible name of a row's checkbox, given the row. Defaults to "Select"
+   * followed by the value of the `rowHeader` column (else the first column),
+   * and to "Select row" with the id only when that value is empty.
+   */
   selectRowLabel?: (row: DataTableRow) => string;
   /**
-   * Accessible name of a sortable header, given the column's header text (its
-   * `key` when the header is not a string) and its current sort direction,
-   * `null` when unsorted. Defaults to "Sort by" with the header and the state.
+   * Accessible name of a sortable header's button, given the column's header
+   * text (its `key` when the header is not a string) and its current sort
+   * direction, `null` when unsorted. Defaults to the header text alone: the
+   * sort state is the header's `aria-sort`, so naming it here too would read
+   * it twice.
    */
   sortLabel?: (header: string, direction: DataTableSort['direction'] | null) => string;
+  /** Announced when the sort changes, given the header text and the new direction, `null` when cleared. Defaults to "Sorted by Name, ascending" or "Sort cleared". */
+  sortAnnouncement?: (header: string, direction: DataTableSort['direction'] | null) => string;
+  /** Announced when the page changes, given the page, the page count, the first and last row shown and the total. Defaults to "Page 2 of 7, rows 21 to 40 of 140". */
+  pageAnnouncement?: (page: number, pageCount: number, first: number, last: number, total: number) => string;
   /** Footer count of the rows that match, given the count. Defaults to "1 result" or "N results". */
   resultsLabel?: (count: number) => string;
   /** Footer count shown instead of the results while rows are selected, given the count. Defaults to "N selected". */
@@ -153,15 +167,18 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
       caption,
       emptyState,
       selectAllLabel = 'Select all rows on this page',
-      selectRowLabel = (row: DataTableRow) => `Select row ${row.id}`,
-      sortLabel = (header: string, direction: DataTableSort['direction'] | null) =>
-        `Sort by ${header}, ${
-          direction === null
-            ? 'not sorted'
-            : direction === 'asc'
-              ? 'sorted ascending'
-              : 'sorted descending'
-        }`,
+      selectRowLabel = (row: DataTableRow) => {
+        const nameKey = (columns.find((col) => col.rowHeader) ?? columns[0])?.key;
+        const name = nameKey === undefined ? undefined : row.values[nameKey];
+        return name == null || name === '' ? `Select row ${row.id}` : `Select ${name}`;
+      },
+      sortLabel = (header: string) => header,
+      sortAnnouncement = (header: string, direction: DataTableSort['direction'] | null) =>
+        direction === null
+          ? 'Sort cleared'
+          : `Sorted by ${header}, ${direction === 'asc' ? 'ascending' : 'descending'}`,
+      pageAnnouncement = (page: number, pageCount: number, first: number, last: number, total: number) =>
+        `Page ${page} of ${pageCount}, rows ${first} to ${last} of ${total}`,
       resultsLabel = (count: number) => `${count} result${count === 1 ? '' : 's'}`,
       selectedLabel = (count: number) => `${count} selected`,
       paginationLabels,
@@ -175,6 +192,22 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
 
     const [search, setSearch] = useState('');
     const [page, setPage] = useState(1);
+
+    /* One polite channel for what changes without moving focus: a sort, the
+       result count while searching (debounced, so typing speaks once), a
+       page change, select-all. It is mounted empty and stays mounted, since
+       a region that arrives already holding text is often not read. */
+    const [announcement, setAnnouncement] = useState('');
+    const announceTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+    const announce = (message: string, debounced = false) => {
+      clearTimeout(announceTimer.current);
+      if (debounced) {
+        announceTimer.current = setTimeout(() => setAnnouncement(message), MOTION_ANNOUNCE_DEBOUNCE_MS);
+      } else {
+        setAnnouncement(message);
+      }
+    };
+    useEffect(() => () => clearTimeout(announceTimer.current), []);
 
     const isSortControlled = sort !== undefined;
     const [uncontrolledSort, setUncontrolledSort] = useState<DataTableSort | null>(
@@ -200,6 +233,13 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
       else next = null;
       if (!isSortControlled) setUncontrolledSort(next);
       onSortChange?.(next);
+      const column = columns.find((col) => col.key === key);
+      announce(
+        sortAnnouncement(
+          typeof column?.header === 'string' ? column.header : key,
+          next?.direction ?? null,
+        ),
+      );
     };
 
     const filteredRows = useMemo(() => {
@@ -227,17 +267,39 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
       ? sortedRows.slice((clampedPage - 1) * pageSize, clampedPage * pageSize)
       : sortedRows;
 
+    /* The result count after a search settles. Skipped on the first render,
+       which has nothing to report. */
+    const searched = useRef(false);
+    useEffect(() => {
+      if (!searched.current) {
+        searched.current = true;
+        return;
+      }
+      announce(resultsLabel(sortedRows.length), true);
+      // Announce on a new search term only; the count is read at that moment.
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [search]);
+
+    const goToPage = (next: number) => {
+      setPage(next);
+      if (!pageSize) return;
+      const first = (next - 1) * pageSize + 1;
+      const last = Math.min(next * pageSize, sortedRows.length);
+      announce(pageAnnouncement(next, pageCount, first, last, sortedRows.length));
+    };
+
     const visibleIds = visibleRows.map((row) => row.id);
     const selectedVisible = visibleIds.filter((id) => currentSelection.includes(id));
     const allVisibleSelected = visibleIds.length > 0 && selectedVisible.length === visibleIds.length;
     const someVisibleSelected = selectedVisible.length > 0 && !allVisibleSelected;
 
     const toggleAllVisible = (checked: boolean) => {
-      if (checked) {
-        setSelection([...new Set([...currentSelection, ...visibleIds])]);
-      } else {
-        setSelection(currentSelection.filter((id) => !visibleIds.includes(id)));
-      }
+      const next = checked
+        ? [...new Set([...currentSelection, ...visibleIds])]
+        : currentSelection.filter((id) => !visibleIds.includes(id));
+      setSelection(next);
+      // A single row's checkbox speaks its own state; select-all changes many.
+      announce(selectedLabel(next.length));
     };
 
     const toggleRow = (id: string, checked: boolean) => {
@@ -277,6 +339,13 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
             key: col.key,
             width: col.width,
             align: col.align,
+            rowHeader: col.rowHeader,
+            sort:
+              currentSort?.key === col.key
+                ? currentSort.direction === 'asc'
+                  ? 'ascending'
+                  : 'descending'
+                : undefined,
             header: col.sortable ? (
               <button
                 type="button"
@@ -307,6 +376,7 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
 
     const tableRows: TableRow[] = visibleRows.map((row) => ({
       id: row.id,
+      selected: selectable && currentSelection.includes(row.id),
       cells: {
         ...(selectable
           ? {
@@ -331,6 +401,9 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
 
     return (
       <div {...rest} ref={ref} className={classes}>
+        <span className="ds-visually-hidden" aria-live="polite" aria-atomic="true">
+          {announcement}
+        </span>
         {hasChrome && (
           <div className={`${baseClass}__toolbar`}>
             {toolbar && <div className={`${baseClass}__filters`}>{toolbar}</div>}
@@ -375,7 +448,7 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
 
         {(pageSize !== undefined || selectable) && (
           <div className={`${baseClass}__footer`}>
-            <span className={`${baseClass}__count`} aria-live="polite">
+            <span className={`${baseClass}__count`}>
               {selectable && currentSelection.length > 0
                 ? selectedLabel(currentSelection.length)
                 : resultsLabel(sortedRows.length)}
@@ -385,7 +458,7 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
                 {...paginationLabels}
                 page={clampedPage}
                 pageCount={pageCount}
-                onPageChange={setPage}
+                onPageChange={goToPage}
                 size="compact"
               />
             )}

@@ -41,7 +41,7 @@
    ============================================ */
 
 .ds-table__row {
-  border-bottom: var(--border-025) solid var(--color-bg-container-border);
+  border-bottom: var(--border-025) solid var(--color-table-divider);
   transition: background-color var(--motion-duration-base) var(--motion-ease-standard);
 }
 
@@ -85,7 +85,14 @@
    ============================================ */
 
 .ds-table__body .ds-table__row:hover {
-  background-color: var(--color-bg-container-primary-semi);
+  background-color: var(--color-table-row-hover-bg);
+}
+
+/* A row header is a <th scope="row"> for its semantics only: it is drawn as
+   a data cell, without the browser's bold and centring. */
+.ds-table__cell--row-header {
+  font-weight: inherit;
+  text-align: start;
 }
 
 /* ============================================
@@ -93,11 +100,11 @@
    ============================================ */
 
 .ds-table--striped .ds-table__body .ds-table__row:nth-child(even) {
-  background-color: var(--color-bg-container-primary-semi);
+  background-color: var(--color-table-row-stripe-bg);
 }
 
 .ds-table--striped .ds-table__body .ds-table__row:nth-child(even):hover {
-  background-color: var(--color-action-passive-bg-hover);
+  background-color: var(--color-table-row-hover-bg);
 }
 
 /* ============================================
@@ -114,15 +121,15 @@
    Matches the table style used on markdown content pages.
    ============================================ */
 
-/* The bordered table is a container surface, not a window onto the page:
-   it sits on the same ramp step as the cards and panels around it, so a
-   table reads as an object standing off the page rather than a ruled
-   region of it. */
+/* The bordered table takes the surface it sits on (the page, a panel, a
+   card) and draws only its outline and a header band, the look the
+   blueprints pages give a markdown table. Its colours are the
+   --color-table-* family, which every table reads. */
 .ds-table__wrapper {
   overflow-x: auto;
-  border: var(--border-025) solid var(--color-divider);
+  border: var(--border-025) solid var(--color-table-border);
   border-radius: var(--radius-300); /* 12px */
-  background: var(--color-bg-container-primary);
+  background: var(--color-table-body-bg);
 }
 
 /* Columns never reflow on a phone: the wrapper scrolls instead
@@ -143,7 +150,7 @@
 /* Thead steps one notch off the body surface, so the header band reads as
    a header in both themes without a second border. */
 .ds-table--bordered .ds-table__head {
-  background: var(--color-bg-container-secondary);
+  background: var(--color-table-header-bg);
 }
 
 /* Remove row-level border — border-collapse: separate ignores it */
@@ -153,12 +160,12 @@
 
 /* Header cells: bottom divider */
 .ds-table--bordered .ds-table__header-cell {
-  border-bottom: var(--border-025) solid var(--color-divider);
+  border-bottom: var(--border-025) solid var(--color-table-divider);
 }
 
 /* Body cells: bottom divider */
 .ds-table--bordered .ds-table__cell {
-  border-bottom: var(--border-025) solid var(--color-divider);
+  border-bottom: var(--border-025) solid var(--color-table-divider);
 }
 
 /* Last body row: no bottom border (the wrapper border handles it) */
@@ -166,12 +173,10 @@
   border-bottom: none;
 }
 
-/* Row hover on bordered variant: the body is now the container surface
-   itself, so the hover has to be a tint over it rather than that same
-   colour. The passive hover token is translucent and works over either
-   theme's body. */
+/* Row hover on the bordered variant: the same table hover token as the
+   plain table, a tint over whatever surface the body shows. */
 .ds-table--bordered .ds-table__body .ds-table__row:hover {
-  background-color: var(--color-action-passive-bg-hover);
+  background-color: var(--color-table-row-hover-bg);
 }
 
 /* ============================================
@@ -199,3 +204,12 @@
    <th> is unannounced.
    ============================================ */
 
+/* ============================================
+   SELECTED ROW
+   Last in the file and as specific as the striped
+   hover rule, so the selected tint holds over
+   hover, stripe and the bordered hover alike.
+   ============================================ */
+.ds-table .ds-table__body .ds-table__row.ds-table__row--selected:nth-child(n) {
+  background-color: var(--color-table-row-selected-bg);
+}

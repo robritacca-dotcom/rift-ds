@@ -189,7 +189,7 @@
   font-weight: var(--font-sub-display-weight);
   line-height: var(--font-sub-display-line-height);
   letter-spacing: var(--font-sub-display-letter-spacing);
-  color: var(--color-text-primary);
+  color: var(--color-text-display);
 }
 
 /* The panel is a viewport of its own. tokens-typography.css collapses

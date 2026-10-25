@@ -15,7 +15,7 @@ Generated from the library's registries at version 1.13.0. You take screens that
 
 ## Order of work
 
-1. Wire the theme. `theme.css`, when there is one, is imported after `tokens.css`. A shipped preset needs `rift-ds/tokens/presets/presets.css` imported once and `data-brand` on the root element set to one of: `contrast`, `coral`, `forest`, `gold`, `mono`, `pink`, `terminal`, `violet`, `warm`, `zest`. Dark mode is `data-theme="dark"` on the root element.
+1. Wire the theme. `theme.css`, when there is one, is imported after `tokens.css`. A shipped preset needs `rift-ds/tokens/presets/presets.css` imported once and `data-brand` on the root element set to one of: `contrast`, `coral`, `forest`, `gold`, `marquee`, `mono`, `pink`, `terminal`, `violet`, `warm`, `zest`. Dark mode is `data-theme="dark"` on the root element.
 2. Swap components first. Where the screen hand-builds a control the library ships (a button, an input, a dialog, a table), replace it with the library component. Find it in the catalogue, then read its prop contract before you write the JSX: do not guess props. Once a component is in place, do not restyle it from outside to recover the old look. If it looks wrong, the theme is wrong, and the fix is a token.
 3. Then move what is left onto tokens. Every remaining raw colour, radius, spacing value, shadow, font value and timing becomes a semantic token, chosen by the rules below.
 4. Remove the duplicate dark styles. Each colour token already holds a light and a dark value, so a `prefers-color-scheme` branch or a second set of dark colours for a tokenised value is dead weight. Delete it.

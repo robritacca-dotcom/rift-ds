@@ -124,6 +124,8 @@
       "--color-status-warning-border",
       "--color-status-warning-icon",
       "--color-status-warning-text",
+      "--color-text-display",
+      "--color-text-heading",
       "--color-text-inverse",
       "--color-text-on-inverse",
       "--color-text-primary",

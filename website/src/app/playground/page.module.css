@@ -653,7 +653,7 @@
   font-weight: var(--font-heading-3-weight);
   line-height: var(--font-heading-3-line-height);
   letter-spacing: var(--font-heading-3-letter-spacing);
-  color: var(--color-text-primary);
+  color: var(--color-text-heading);
 }
 
 .panelSubtitle {
@@ -968,7 +968,7 @@
   font-weight: var(--font-display-2-weight);
   line-height: var(--font-display-2-line-height);
   letter-spacing: var(--font-display-2-letter-spacing);
-  color: var(--color-text-primary);
+  color: var(--color-text-display);
   font-variant-numeric: tabular-nums;
 }
 

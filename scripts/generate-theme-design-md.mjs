@@ -53,6 +53,10 @@ const COLOURS = [
   ['surface-soft', '--color-bg-container-secondary', 'light'],
   ['ink', '--color-text-primary', 'light'],
   ['ink-dark', '--color-text-primary', 'dark'],
+  ['display', '--color-text-display', 'light'],
+  ['display-dark', '--color-text-display', 'dark'],
+  ['heading', '--color-text-heading', 'light'],
+  ['heading-dark', '--color-text-heading', 'dark'],
   ['text-secondary', '--color-text-secondary', 'light'],
   ['text-tertiary', '--color-text-tertiary', 'light'],
   ['border', '--color-bg-container-border', 'light'],
@@ -237,6 +241,18 @@ export function buildThemeDesignMd({ id, label, values, siteUrl, packageName }) 
     default: 'Two shadows, one for what floats and one for dialogs. Everything else separates by contrast.',
   }[depth];
 
+  /* Which type tiers take a colour of their own rather than the ink. */
+  const toned = [
+    ['Display type', 'display', '--color-text-display'],
+    ['headings', 'heading', '--color-text-heading'],
+  ].filter(
+    ([, , token]) =>
+      hex(light(token)) !== hex(light('--color-text-primary')) || hex(dark(token)) !== hex(dark('--color-text-primary'))
+  );
+  const tierColourLine =
+    toned.length === 0
+      ? 'Every tier is set in the ink.'
+      : `${toned.map(([name, key]) => `${name} take \`${key}\``).join(' and ').replace(/^./, (c) => c.toUpperCase())}, while running text stays in the ink.`;
   const row = (cells) => `| ${cells.join(' | ')} |`;
   const colourRows = COLOURS.filter(([, , m]) => m === 'light').map(([key, token]) =>
     row([`\`${key}\``, `\`${hex(light(token))}\``, `\`${hex(dark(token))}\``, `\`${token}\``])
@@ -270,7 +286,7 @@ Accents, for charts and the background field: ${ACCENTS.map((a) => `${a} \`${hex
 
 ## Typography
 
-${pairing}. Levels inside a tier share a weight and step by size.
+${pairing}. Levels inside a tier share a weight and step by size. ${tierColourLine}
 
 ${row(['Style', 'Face', 'Size', 'Weight', 'Line height', 'Tracking'])}
 ${row(['---', '---', '---', '---', '---', '---'])}

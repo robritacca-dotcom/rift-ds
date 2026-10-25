@@ -16,6 +16,10 @@ colors:
   surface-soft: "#efedeb"
   ink: "#14100c"
   ink-dark: "#ede9e5"
+  display: "#14100c"
+  display-dark: "#ede9e5"
+  heading: "#14100c"
+  heading-dark: "#ede9e5"
   text-secondary: "#3c3734"
   text-tertiary: "#746f6c"
   border: "#d4d0cc"
@@ -172,6 +176,8 @@ One action colour, kept for primary buttons, focus rings, the checked state of a
 | `surface` | `#fcfaf8` | `rgba(28, 24, 20, 0.8)` | `--color-bg-container-primary` |
 | `surface-soft` | `#efedeb` | `#3c3734` | `--color-bg-container-secondary` |
 | `ink` | `#14100c` | `#ede9e5` | `--color-text-primary` |
+| `display` | `#14100c` | `#ede9e5` | `--color-text-display` |
+| `heading` | `#14100c` | `#ede9e5` | `--color-text-heading` |
 | `text-secondary` | `#3c3734` | `#bcb8b4` | `--color-text-secondary` |
 | `text-tertiary` | `#746f6c` | `#a4a09c` | `--color-text-tertiary` |
 | `border` | `#d4d0cc` | `#302b28` | `--color-bg-container-border` |
@@ -185,7 +191,7 @@ Accents, for charts and the background field: amber `#e0955c`, cobalt `#5e6fa8`,
 
 ## Typography
 
-Lora headings over Source Sans 3 text. Levels inside a tier share a weight and step by size.
+Lora headings over Source Sans 3 text. Levels inside a tier share a weight and step by size. Every tier is set in the ink.
 
 | Style | Face | Size | Weight | Line height | Tracking |
 | --- | --- | --- | --- | --- | --- |

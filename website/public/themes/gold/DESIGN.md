@@ -16,6 +16,10 @@ colors:
   surface-soft: "#f1f0ee"
   ink: "#0f0d09"
   ink-dark: "#f2f0eb"
+  display: "#0f0d09"
+  display-dark: "#f2f0eb"
+  heading: "#0f0d09"
+  heading-dark: "#f2f0eb"
   text-secondary: "#383632"
   text-tertiary: "#73716d"
   border: "#d8d6d2"
@@ -172,6 +176,8 @@ One action colour, kept for primary buttons, focus rings, the checked state of a
 | `surface` | `#fffefc` | `rgba(24, 22, 18, 0.8)` | `--color-bg-container-primary` |
 | `surface-soft` | `#f1f0ee` | `#383632` | `--color-bg-container-secondary` |
 | `ink` | `#0f0d09` | `#f2f0eb` | `--color-text-primary` |
+| `display` | `#0f0d09` | `#f2f0eb` | `--color-text-display` |
+| `heading` | `#0f0d09` | `#f2f0eb` | `--color-text-heading` |
 | `text-secondary` | `#383632` | `#bfbdb9` | `--color-text-secondary` |
 | `text-tertiary` | `#73716d` | `#a6a4a0` | `--color-text-tertiary` |
 | `border` | `#d8d6d2` | `#2c2a26` | `--color-bg-container-border` |
@@ -185,7 +191,7 @@ Accents, for charts and the background field: amber `#ffae4f`, cobalt `#6e7fd9`,
 
 ## Typography
 
-Space Grotesk headings over Manrope text. Levels inside a tier share a weight and step by size.
+Space Grotesk headings over Manrope text. Levels inside a tier share a weight and step by size. Every tier is set in the ink.
 
 | Style | Face | Size | Weight | Line height | Tracking |
 | --- | --- | --- | --- | --- | --- |

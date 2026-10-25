@@ -71,6 +71,7 @@ html[data-brand="forest"] {
   --color-core-ui-secondary: var(--primitive-green-10);
   --color-input-border-hover: var(--primitive-green-05);
   --color-input-border-selected: var(--primitive-green-07);
+  --color-text-display: var(--primitive-orange-07);
   --font-display-1-weight: 600;
   --font-display-2-weight: 600;
   --font-family-heading: 'Montserrat', sans-serif;
@@ -224,6 +225,7 @@ html[data-brand="forest"][data-theme="dark"] {
   --color-core-ui-secondary: var(--primitive-green-09);
   --color-input-border-hover: var(--primitive-green-08);
   --color-input-border-selected: var(--primitive-green-08);
+  --color-text-display: var(--primitive-orange-07);
   --font-display-1-weight: 600;
   --font-display-2-weight: 600;
   --font-family-heading: 'Montserrat', sans-serif;

@@ -42,7 +42,7 @@
   font-weight: var(--font-heading-3-weight);
   line-height: var(--font-heading-3-line-height);
   letter-spacing: var(--font-heading-3-letter-spacing);
-  color: var(--color-text-primary);
+  color: var(--color-text-heading);
 }
 
 .ds-chart__subtitle {
@@ -87,7 +87,7 @@
   font-weight: var(--font-heading-1-weight);
   line-height: var(--font-heading-1-line-height);
   letter-spacing: var(--font-heading-1-letter-spacing);
-  color: var(--color-text-primary);
+  color: var(--color-text-heading);
 }
 
 /* ============================================
@@ -133,7 +133,7 @@
   font-weight: var(--font-sub-display-weight);
   line-height: var(--font-sub-display-line-height);
   letter-spacing: var(--font-sub-display-letter-spacing);
-  color: var(--color-text-primary);
+  color: var(--color-text-display);
 }
 
 .ds-chart__radial-center-sub {

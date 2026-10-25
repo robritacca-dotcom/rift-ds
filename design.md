@@ -110,6 +110,8 @@ EventCalendar's day cells and event pills get their own colour roles, for the sa
 - **Tertiary** (`--color-text-tertiary`): Labels, helper text, captions.
 - **Inverse** (`--color-text-inverse`): De-emphasized secondary labels; inverts in dark mode.
 - **On inverse** (`--color-text-on-inverse`): Text sitting on `--color-bg-container-inverse` surfaces (ImageCompare's handle label, the "today" markers).
+- **Display** (`--color-text-display` → `--color-text-primary`): Text set in a display-tier style (Mega, Display 1 and 2, Sub Display). Aliases the primary text in the base look; a theme can give the tier a tone of its own, which is how a headline takes a colour the copy under it does not.
+- **Heading** (`--color-text-heading` → `--color-text-primary`): Text set in a heading-tier style (Headings 1 to 3). The same arrangement one tier down. Title Body is a label tier for colour and stays on the primary text. A tier tone must hold contrast against the page and the container fill in both modes (3:1 for display, which is only ever large, 4.5:1 for headings), and the theme presets gate it.
 
 ### Icons
 - **Primary** (`--color-icon-primary`): Default icon fill — tertiary buttons, input icons, nav icons.

@@ -83,7 +83,7 @@
   font-weight: var(--font-heading-1-weight);
   line-height: var(--font-heading-1-line-height);
   letter-spacing: var(--font-heading-1-letter-spacing);
-  color: var(--color-text-primary);
+  color: var(--color-text-heading);
 }
 
 .subhead {
@@ -180,7 +180,7 @@
   font-weight: var(--font-heading-2-weight);
   line-height: var(--font-heading-2-line-height);
   letter-spacing: var(--font-heading-2-letter-spacing);
-  color: var(--color-text-primary);
+  color: var(--color-text-heading);
 }
 
 .confirmation .subhead {

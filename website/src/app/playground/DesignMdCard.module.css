@@ -61,7 +61,7 @@
   height: var(--icon-size-600);
   border-radius: var(--radius-200);
   background: var(--color-bg-container-secondary);
-  color: var(--color-text-primary);
+  color: var(--color-text-heading);
   font-family: var(--font-caption-family);
   font-size: var(--font-caption-size);
   font-weight: var(--font-heading-3-weight);
@@ -74,7 +74,7 @@
   font-weight: var(--font-heading-3-weight);
   line-height: var(--font-heading-3-line-height);
   letter-spacing: var(--font-heading-3-letter-spacing);
-  color: var(--color-text-primary);
+  color: var(--color-text-heading);
 }
 
 .description {

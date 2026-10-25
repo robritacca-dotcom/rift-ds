@@ -16,6 +16,10 @@ colors:
   surface-soft: "#ebecec"
   ink: "#070a08"
   ink-dark: "#e5e8e6"
+  display: "#c06b32"
+  display-dark: "#c06b32"
+  heading: "#070a08"
+  heading-dark: "#e5e8e6"
   text-secondary: "#2f3231"
   text-tertiary: "#696c6a"
   border: "#cbcecd"
@@ -169,6 +173,8 @@ One action colour, kept for primary buttons, focus rings, the checked state of a
 | `surface` | `#f8faf9` | `rgba(15, 18, 17, 0.8)` | `--color-bg-container-primary` |
 | `surface-soft` | `#ebecec` | `#2f3231` | `--color-bg-container-secondary` |
 | `ink` | `#070a08` | `#e5e8e6` | `--color-text-primary` |
+| `display` | `#c06b32` | `#c06b32` | `--color-text-display` |
+| `heading` | `#070a08` | `#e5e8e6` | `--color-text-heading` |
 | `text-secondary` | `#2f3231` | `#b3b6b5` | `--color-text-secondary` |
 | `text-tertiary` | `#696c6a` | `#9a9e9c` | `--color-text-tertiary` |
 | `border` | `#cbcecd` | `#232625` | `--color-bg-container-border` |
@@ -182,7 +188,7 @@ Accents, for charts and the background field: amber `#c97f3f`, cobalt `#446e93`,
 
 ## Typography
 
-Montserrat headings over DM Sans text. Levels inside a tier share a weight and step by size.
+Montserrat headings over DM Sans text. Levels inside a tier share a weight and step by size. Display type take `display`, while running text stays in the ink.
 
 | Style | Face | Size | Weight | Line height | Tracking |
 | --- | --- | --- | --- | --- | --- |

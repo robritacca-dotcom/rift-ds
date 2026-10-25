@@ -16,6 +16,10 @@ colors:
   surface-soft: "#f1f1f1"
   ink: "#050505"
   ink-dark: "#f1f1f1"
+  display: "#050505"
+  display-dark: "#f1f1f1"
+  heading: "#050505"
+  heading-dark: "#f1f1f1"
   text-secondary: "#303030"
   text-tertiary: "#6d6d6d"
   border: "#d6d6d6"
@@ -169,6 +173,8 @@ One action colour, kept for primary buttons, focus rings, the checked state of a
 | `surface` | `#ffffff` | `rgba(14, 14, 14, 0.8)` | `--color-bg-container-primary` |
 | `surface-soft` | `#f1f1f1` | `#303030` | `--color-bg-container-secondary` |
 | `ink` | `#050505` | `#f1f1f1` | `--color-text-primary` |
+| `display` | `#050505` | `#f1f1f1` | `--color-text-display` |
+| `heading` | `#050505` | `#f1f1f1` | `--color-text-heading` |
 | `text-secondary` | `#303030` | `#bcbcbc` | `--color-text-secondary` |
 | `text-tertiary` | `#6d6d6d` | `#a2a2a2` | `--color-text-tertiary` |
 | `border` | `#d6d6d6` | `#232323` | `--color-bg-container-border` |
@@ -182,7 +188,7 @@ Accents, for charts and the background field: amber `#b8b8b8`, cobalt `#5c5c5c`,
 
 ## Typography
 
-Montserrat headings over Inter text. Levels inside a tier share a weight and step by size.
+Montserrat headings over Inter text. Levels inside a tier share a weight and step by size. Every tier is set in the ink.
 
 | Style | Face | Size | Weight | Line height | Tracking |
 | --- | --- | --- | --- | --- | --- |

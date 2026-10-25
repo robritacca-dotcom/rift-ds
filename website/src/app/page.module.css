@@ -83,7 +83,7 @@
   font-weight: var(--font-display-2-weight);
   line-height: var(--font-display-2-line-height);
   letter-spacing: var(--font-display-2-letter-spacing);
-  color: var(--color-text-primary);
+  color: var(--color-text-display);
   margin: 0;
   text-align: center;
   text-wrap: balance;
@@ -95,7 +95,7 @@
   font-weight: var(--font-sub-display-weight);
   line-height: var(--font-sub-display-line-height);
   letter-spacing: var(--font-sub-display-letter-spacing);
-  color: var(--color-text-primary);
+  color: var(--color-text-display);
   /* Tight to the tagline: the hero's own gap is the whole space. */
   margin: 0;
 }
@@ -161,7 +161,7 @@
     visibility: visible;
     background-image: linear-gradient(
       100deg,
-      var(--color-text-primary) 41%,
+      var(--color-text-display) 41%,
       var(--color-ai-gradient-start) 46%,
       var(--color-ai-gradient-mid) 50%,
       var(--color-ai-gradient-end) 54%,
@@ -176,7 +176,7 @@
     background-image: linear-gradient(
       100deg,
       transparent 54%,
-      var(--color-text-primary) 59%
+      var(--color-text-display) 59%
     );
     animation: subPhraseOut var(--motion-duration-loop-shimmer)
       var(--motion-ease-emphasized) both;
@@ -884,7 +884,7 @@
   font-size: var(--font-heading-3-size);
   font-weight: var(--font-heading-3-weight);
   line-height: var(--font-heading-3-line-height);
-  color: var(--color-text-primary);
+  color: var(--color-text-heading);
   font-variant-numeric: tabular-nums;
 }
 
@@ -1147,7 +1147,7 @@
   font-size: var(--font-heading-3-size);
   font-weight: var(--font-heading-3-weight);
   line-height: var(--font-heading-3-line-height);
-  color: var(--color-text-primary);
+  color: var(--color-text-heading);
 }
 
 .successHint {

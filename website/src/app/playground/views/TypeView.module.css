@@ -29,7 +29,7 @@
   font-family: var(--font-heading-1-family);
   font-size: var(--font-heading-1-size);
   font-weight: var(--font-heading-2-weight);
-  color: var(--color-text-primary);
+  color: var(--color-text-heading);
   background: var(--color-bg-container-secondary);
   border-radius: var(--radius-400);
 }

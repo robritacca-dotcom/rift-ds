@@ -83,6 +83,7 @@ import {
   neutralStepOverrides,
   NEUTRAL_SURFACE_STEPS,
   CHROMATIC_RAMPS,
+  TEXT_TONE_LABELS,
   hslToRgb,
   type AdvancedColorState,
   type Overrides,
@@ -91,6 +92,7 @@ import {
   type AccentSextet,
   type ElevationVariant,
   type FontOption,
+  type TextTone,
 } from "./theme-overrides";
 import { accentsFromColours } from "./image-palette";
 
@@ -813,6 +815,10 @@ export interface DesignMdTheme {
   bodyFont?: FontMatch;
   /** Absent when the headings share the body face. */
   headingFont?: FontMatch;
+  /** The display and heading tiers' colour families, when the file names a
+      coloured one; absent, the tier stays in the ink. */
+  displayTone?: TextTone;
+  headingTone?: TextTone;
   /** The colours the theme was read from, for the source card. */
   swatches: string[];
   report: MatchRow[];
@@ -850,6 +856,57 @@ function colourEntries(doc: YamlMap): Array<[string, string]> {
   for (const [key, value] of Object.entries(group)) {
     const hex = toHex(resolve(doc, value));
     if (hex) out.push([key, hex]);
+  }
+  return out;
+}
+
+/* ---------- type-tier colours ----------
+   A file that colours its headlines apart from its copy names the colour
+   under a display or heading key, in either mode. The tier takes the
+   colour's family (the nearest chromatic ramp), never the stated step:
+   rift picks the step per mode that holds the tier's contrast, as it does
+   for every theme. A grey there is the ink, which is where the tier
+   already sits. */
+const TIER_COLOUR_KEYS: Array<{ tier: "display" | "heading"; lever: string; keys: RegExp }> = [
+  {
+    tier: "display",
+    lever: "Display colour",
+    keys: /^(display|text-display|display-text|display-colou?r|hero-text|text-hero)([-_](light|dark))?$/i,
+  },
+  {
+    tier: "heading",
+    lever: "Heading colour",
+    keys: /^(heading|headings|headline|text-heading|heading-text|heading-colou?r|text-headline|headline-text)([-_](light|dark))?$/i,
+  },
+];
+
+function fitTierTones(
+  colours: ReadonlyArray<[string, string]>,
+  report: MatchRow[]
+): { displayTone?: TextTone; headingTone?: TextTone } {
+  const out: { displayTone?: TextTone; headingTone?: TextTone } = {};
+  for (const { tier, lever, keys } of TIER_COLOUR_KEYS) {
+    const stated = colours.filter(([key]) => keys.test(key));
+    const chromatic = stated
+      .map(([key, hex]) => ({ key, hex, ramp: nearestRampFor(hex) }))
+      .find(({ ramp }) => ramp !== "neutral");
+    if (chromatic) {
+      const tone = chromatic.ramp as TextTone;
+      out[tier === "display" ? "displayTone" : "headingTone"] = tone;
+      report.push({
+        lever,
+        value: TEXT_TONE_LABELS[tone],
+        status: "approximated",
+        note: `The file colours this tier ${chromatic.hex}; rift takes its family and picks the step that holds contrast in each mode.`,
+      });
+    } else {
+      report.push({
+        lever,
+        value: "Ink",
+        status: stated.length > 0 ? "matched" : "kept",
+        note: stated.length > 0 ? "The file sets this tier in a grey, the ink." : "The file gives this tier no colour of its own.",
+      });
+    }
   }
   return out;
 }
@@ -1044,7 +1101,7 @@ const NEUTRAL_ROLE_KEYS: Record<
   },
   "--color-text-primary": {
     keys: [
-      /^(text|ink|foreground|fg|on-surface|on-background|body|text-primary|content|heading|headline)$/,
+      /^(text|ink|foreground|fg|on-surface|on-background|body|text-primary|content)$/,
       /^(on-dark|text-on-dark|ink-dark|on-light|text-on-light|ink-light)$/,
     ],
     light: (l) => l < 0.3,
@@ -1685,6 +1742,7 @@ export function readDesignMd(text: string, catalogue: FontCatalogue): DesignMdTh
   const density = fitDensity(doc, report);
   const type = fitType(doc, typographyProse(body), catalogue, report);
   const elevation = fitElevation(doc, body, report);
+  const tones = fitTierTones(colours, report);
   traits.push(...readTraits(doc, action.brand, type.bodyFont?.requested ?? ""));
 
   const accents = accentsFromColours(colours.map(([, hex]) => hex), action.brand) ?? undefined;
@@ -1733,6 +1791,7 @@ export function readDesignMd(text: string, catalogue: FontCatalogue): DesignMdTh
     ...density,
     ...type,
     ...elevation,
+    ...tones,
     accents,
     swatches,
     report,

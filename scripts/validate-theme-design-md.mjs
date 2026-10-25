@@ -9,8 +9,8 @@
  *      exactly the themes in THEME_SELECTOR_ORDER (an orphan fails).
  *   2. Round trip: each file, read by the playground's importer
  *      (website/src/lib/theme/design-md.ts), lands on its own theme's
- *      levers: shape, density, depth, the tier weights, the type scale,
- *      tracking and both faces, and the action colour the file states. A
+ *      levers: shape, density, depth, the tier weights and colours, the
+ *      type scale, tracking and both faces, and the action colour the file states. A
  *      theme that exports a file its own importer misreads is a bug in one
  *      of the two, and this is where it shows.
  *
@@ -30,6 +30,12 @@ const errors = [];
 
 /** theme id -> lever -> why the file reads back differently. */
 const SANCTIONED_DRIFT = {
+  coral: {
+    'display colour':
+      "Getaway re-keys its teal ramp to a beach teal (#00A699, hue 176) that sits nearer rift's shipped green than its shipped teal; the file states the colour, not the ramp, so the importer places it by the shipped hues and lands one family over.",
+    'heading colour':
+      'The same beach teal as the display tier, read the same way.',
+  },
   zest: {
     tracking:
       'Zest tightens its display tier through its own extras, not the tracking lever; the file states the tightened display, which the importer fits as a lever.',
@@ -91,6 +97,8 @@ for (const [path, content] of files) {
     ['heading weight', want.headingWeight, got.headingWeight ?? BASE.headingWeight],
     ['body weight', want.bodyWeight, got.bodyWeight ?? BASE.bodyWeight],
     ['action colour', stated, got.brand?.toUpperCase()],
+    ['display colour', want.displayTone ?? 'ink', got.displayTone ?? 'ink'],
+    ['heading colour', want.headingTone ?? 'ink', got.headingTone ?? 'ink'],
   ];
   if (preset) {
     checks.push(['body face', faceOf(preset.fontLabel), got.bodyFont?.family]);

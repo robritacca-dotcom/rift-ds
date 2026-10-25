@@ -16,6 +16,10 @@ colors:
   surface-soft: "#efedf1"
   ink: "#0d0811"
   ink-dark: "#ede9f1"
+  display: "#71613c"
+  display-dark: "#e8c77b"
+  heading: "#0d0811"
+  heading-dark: "#ede9f1"
   text-secondary: "#36313a"
   text-tertiary: "#6f6b74"
   border: "#d3cfd7"
@@ -169,6 +173,8 @@ One action colour, kept for primary buttons, focus rings, the checked state of a
 | `surface` | `#fdfaff` | `rgba(21, 17, 25, 0.8)` | `--color-bg-container-primary` |
 | `surface-soft` | `#efedf1` | `#36313a` | `--color-bg-container-secondary` |
 | `ink` | `#0d0811` | `#ede9f1` | `--color-text-primary` |
+| `display` | `#71613c` | `#e8c77b` | `--color-text-display` |
+| `heading` | `#0d0811` | `#ede9f1` | `--color-text-heading` |
 | `text-secondary` | `#36313a` | `#bbb6bf` | `--color-text-secondary` |
 | `text-tertiary` | `#6f6b74` | `#a29da6` | `--color-text-tertiary` |
 | `border` | `#d3cfd7` | `#29252d` | `--color-bg-container-border` |
@@ -182,7 +188,7 @@ Accents, for charts and the background field: amber `#d9915e`, cobalt `#6a5be0`,
 
 ## Typography
 
-Playfair Display headings over Plus Jakarta Sans text. Levels inside a tier share a weight and step by size.
+Playfair Display headings over Plus Jakarta Sans text. Levels inside a tier share a weight and step by size. Display type take `display`, while running text stays in the ink.
 
 | Style | Face | Size | Weight | Line height | Tracking |
 | --- | --- | --- | --- | --- | --- |

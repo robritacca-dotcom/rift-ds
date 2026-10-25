@@ -134,7 +134,7 @@
   font-weight: var(--font-heading-3-weight);
   line-height: var(--font-heading-3-line-height);
   letter-spacing: var(--font-heading-3-letter-spacing);
-  color: var(--color-text-primary);
+  color: var(--color-text-heading);
 }
 
 /* The done count derives from the checkboxes' live state, so it moves as
@@ -188,7 +188,7 @@
   font-weight: var(--font-heading-1-weight);
   line-height: var(--font-heading-1-line-height);
   letter-spacing: var(--font-heading-1-letter-spacing);
-  color: var(--color-text-primary);
+  color: var(--color-text-heading);
   font-variant-numeric: tabular-nums;
 }
 

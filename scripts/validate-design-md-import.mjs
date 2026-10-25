@@ -157,6 +157,14 @@ const lightnessOf = (hex) => overrides.rgbToHsl(overrides.hexToRgb(hex))[2];
   expect('uppercase-and-mono', t.traits.some((trait) => trait.text.includes('#0075FF')), 'the second-action trait does not name the colour');
 }
 
+{
+  const t = fixture('coloured-headlines');
+  expect('coloured-headlines', t.displayTone === 'yellow', `display tone is ${t.displayTone}, expected yellow from the mustard display key`);
+  expect('coloured-headlines', t.headingTone === undefined, `heading tone is ${t.headingTone}, expected the ink from a grey heading key`);
+  expect('coloured-headlines', row(t, 'Heading colour')?.status === 'matched', 'a grey heading key is not reported as the ink');
+  expect('coloured-headlines', t.brand?.toUpperCase() === '#1A1A1A', `action colour is ${t.brand}; a coloured headline must not become the action colour`);
+}
+
 /* ---------- the theme's name, from the file's title ---------- */
 
 for (const [title, name] of [

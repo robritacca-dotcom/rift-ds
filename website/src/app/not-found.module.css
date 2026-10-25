@@ -35,7 +35,7 @@
   font-weight: var(--font-display-2-weight);
   line-height: var(--font-display-2-line-height);
   letter-spacing: var(--font-display-2-letter-spacing);
-  color: var(--color-text-primary);
+  color: var(--color-text-display);
 }
 
 .description {

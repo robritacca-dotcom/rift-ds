@@ -65,7 +65,7 @@
   font-weight: var(--font-heading-3-weight);
   line-height: var(--font-heading-3-line-height);
   letter-spacing: var(--font-heading-3-letter-spacing);
-  color: var(--color-text-primary);
+  color: var(--color-text-heading);
   width: 100%;
   text-align: center;
 }
@@ -176,7 +176,7 @@
   font-weight: var(--font-heading-3-weight);
   line-height: var(--font-heading-3-line-height);
   letter-spacing: var(--font-heading-3-letter-spacing);
-  color: var(--color-text-primary);
+  color: var(--color-text-heading);
   margin: 0;
   text-align: left;
 }

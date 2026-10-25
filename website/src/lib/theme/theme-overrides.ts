@@ -1492,6 +1492,91 @@ export const SHIPPED_DISPLAY_TRACKING_EM = TYPE_STYLES.find(
   ([style]) => style === "display-1"
 )![3];
 
+/* ---------- type-tier tones ----------
+   The display and heading tiers each have a colour role
+   (`--color-text-display`, `--color-text-heading`) that aliases the primary
+   text until a theme gives the tier a tone. A tone names a colour family,
+   never a step: the step is chosen per mode, as the one nearest the
+   family's key that still clears the tier's contrast against both the page
+   and the card fill, so a yellow display tier is the yellow key on a dark
+   page and a deep olive on a light one. Read from the overrides already
+   composed, so a rebased ramp, a tinted neutral scale and the Advanced
+   colours all count. */
+
+/** The tones a tier can take: the ink (the primary text, no override) or
+    one of the chromatic families. */
+export const TEXT_TONES = ["ink", "red", "orange", "yellow", "green", "teal", "blue", "purple"] as const;
+
+export type TextTone = (typeof TEXT_TONES)[number];
+
+/** Each tone's name in the picker. */
+export const TEXT_TONE_LABELS: Record<TextTone, string> = {
+  ink: "Ink",
+  red: "Red",
+  orange: "Orange",
+  yellow: "Yellow",
+  green: "Green",
+  teal: "Teal",
+  blue: "Blue",
+  purple: "Purple",
+};
+
+/** The contrast each tier's tone must hold against the page and the card
+    fill. Display type is only ever large, so it takes the large-text
+    minimum; headings reach sizes that need the body-text one.
+    scripts/validate-theme-presets.mjs checks the same minimums on every
+    shipped theme. */
+export const TIER_TONE_MIN_CONTRAST = { display: 3, heading: 4.5 } as const;
+
+/** The step a tone's family resolves to in one mode, or null when no step
+    holds the tier's contrast (the tier then stays on the ink). */
+export function tierToneStep(
+  ramp: Exclude<TextTone, "ink">,
+  tier: keyof typeof TIER_TONE_MIN_CONTRAST,
+  current: Overrides,
+  theme: "light" | "dark"
+): string | null {
+  const neutral = (step: string) =>
+    current[`--primitive-neutral-${step}`] ?? NEUTRALS.find((n) => n.step === step)!.hex;
+  const grounds = theme === "dark" ? [neutral("10"), neutral("09")] : [neutral("01"), neutral("00")];
+  const steps = CHROMATIC_RAMPS.find((r) => r.name === ramp)!.steps;
+  const keyIndex = steps.findIndex(([step]) => step === "07");
+  const min = TIER_TONE_MIN_CONTRAST[tier];
+  /* Nearest the key first; on a tie, the side that moves away from the
+     page (deeper on a light page, lighter on a dark one). */
+  const order = steps
+    .map(([step, hex], i) => ({ step, hex: current[`--primitive-${ramp}-${step}`] ?? hex, i }))
+    .sort((a, b) => {
+      const d = Math.abs(a.i - keyIndex) - Math.abs(b.i - keyIndex);
+      if (d !== 0) return d;
+      return theme === "dark" ? a.i - b.i : b.i - a.i;
+    });
+  const pick = order.find(({ hex }) => grounds.every((g) => contrastRatio(hex, g) >= min));
+  return pick ? pick.step : null;
+}
+
+/** The tier roles' overrides for one mode: a `var(--primitive-…)` pointer
+    per toned tier, nothing for an ink one. Applied after every other
+    lever, since it reads the ramps and greys as they finally stand. */
+export function tierToneOverrides(
+  displayTone: TextTone,
+  headingTone: TextTone,
+  current: Overrides,
+  theme: "light" | "dark"
+): Overrides {
+  const overrides: Overrides = {};
+  const tiers: Array<[keyof typeof TIER_TONE_MIN_CONTRAST, TextTone, string]> = [
+    ["display", displayTone, "--color-text-display"],
+    ["heading", headingTone, "--color-text-heading"],
+  ];
+  for (const [tier, tone, cssVar] of tiers) {
+    if (tone === "ink") continue;
+    const step = tierToneStep(tone, tier, current, theme);
+    if (step) overrides[cssVar] = `var(--primitive-${tone}-${step})`;
+  }
+  return overrides;
+}
+
 /** The weight levers' range. The floor and ceiling are what the picker
     faces are loaded at (see FONT_OPTIONS); a face that stops short of a
     stop renders its nearest weight. */
@@ -1678,6 +1763,10 @@ export const HEADING_FONT_OPTIONS: FontOption[] = [
      900 because its job is heavy fintech display type — a weight the
      body faces never load. */
   { label: "Inter Tight", family: "'Inter Tight', sans-serif", googleParam: "Inter+Tight:wght@300..900" },
+  /* Heading-only face: a heavy condensed grotesque cut for title cards and
+     posters. One weight only, so a theme that takes it sets both heading
+     tiers to 400 and lets the face carry the weight. */
+  { label: "Anton (condensed)", family: "'Anton', sans-serif", googleParam: "Anton" },
 ];
 
 /**

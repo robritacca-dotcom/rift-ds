@@ -16,6 +16,10 @@ colors:
   surface-soft: "#ededec"
   ink: "#060705"
   ink-dark: "#e8e9e7"
+  display: "#060705"
+  display-dark: "#e8e9e7"
+  heading: "#060705"
+  heading-dark: "#e8e9e7"
   text-secondary: "#2f302e"
   text-tertiary: "#6a6b69"
   border: "#cecfcd"
@@ -169,6 +173,8 @@ One action colour, kept for primary buttons, focus rings, the checked state of a
 | `surface` | `#fafbfa` | `rgba(14, 15, 13, 0.8)` | `--color-bg-container-primary` |
 | `surface-soft` | `#ededec` | `#2f302e` | `--color-bg-container-secondary` |
 | `ink` | `#060705` | `#e8e9e7` | `--color-text-primary` |
+| `display` | `#060705` | `#e8e9e7` | `--color-text-display` |
+| `heading` | `#060705` | `#e8e9e7` | `--color-text-heading` |
 | `text-secondary` | `#2f302e` | `#b5b7b4` | `--color-text-secondary` |
 | `text-tertiary` | `#6a6b69` | `#9c9e9c` | `--color-text-tertiary` |
 | `border` | `#cecfcd` | `#222422` | `--color-bg-container-border` |
@@ -182,7 +188,7 @@ Accents, for charts and the background field: amber `#ffa94d`, cobalt `#5aa9e6`,
 
 ## Typography
 
-Inter Tight headings over Inter text. Levels inside a tier share a weight and step by size.
+Inter Tight headings over Inter text. Levels inside a tier share a weight and step by size. Every tier is set in the ink.
 
 | Style | Face | Size | Weight | Line height | Tracking |
 | --- | --- | --- | --- | --- | --- |

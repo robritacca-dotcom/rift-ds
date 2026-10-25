@@ -31,7 +31,8 @@
  *      lever (they feed chart series 2-7 and the background blobs' default), so
  *      every preset must emit all six in both themes — the shipped keys
  *      are still a declaration.
- *   c. Contrast in every state — each row of ACTION_PAIRINGS below (an
+ *   c. Contrast in every state — each row of ACTION_PAIRINGS and
+ *      TIER_PAIRINGS below (an
  *      action fill, the label or icon a component draws on it, and the
  *      minimum: 4.5:1 for text, 3:1 for icons and strokes) must hold in
  *      both themes, for every preset AND for the shipped token files.
@@ -49,7 +50,7 @@
  *      with the pairing and the computed ratio recorded — never silently
  *      weakened.
  *   d. Lever completeness — every lever in NUMBER_LEVERS below, plus
- *      elevation and iconFill, must be present on every preset. The required TS schema
+ *      elevation, iconFill and the two type-tier tones, must be present on every preset. The required TS schema
  *      already guarantees this at compile time; the runtime assert
  *      guards JS-side consumers of the object (and any future
  *      JSON-shaped source that bypasses the type).
@@ -129,6 +130,19 @@ const ACTION_PAIRINGS = [
   ['--color-action-destructive-bg-active', '--color-action-destructive-text', 4.5, 'filled destructive Button labels when pressed'],
 ];
 
+/** Type-tier tones: the display and heading roles against the page and the
+    card fill, in every preset and both themes. Display is only ever large
+    type, so it is held to the large-text minimum; headings reach small
+    enough sizes to need the body-text one. */
+const TIER_PAIRINGS = [
+  ['--color-bg-page-primary', '--color-text-display', 3, 'display-tier text on the page'],
+  ['--color-bg-container-primary', '--color-text-display', 3, 'display-tier text on a card'],
+  ['--color-bg-page-primary', '--color-text-heading', 4.5, 'heading-tier text on the page'],
+  ['--color-bg-container-primary', '--color-text-heading', 4.5, 'heading-tier text on a card'],
+];
+
+const PAIRINGS = [...ACTION_PAIRINGS, ...TIER_PAIRINGS];
+
 /** Pairings that genuinely fail today, keyed "<preset>|<theme>|<fill>|<foreground>"
     (the preset id "shipped" is the unthemed token files) and pinned with
     their computed ratio, so a change in either direction (a fix, or a
@@ -170,7 +184,7 @@ const REQUIRED_ACCENT_ROLES = [
 
 const errors = [];
 
-const { THEME_PRESETS, presetOverrides, DEFAULT_BRAND, THEME_TAGLINES, THEME_SELECTOR_ORDER } = await loadThemeSource();
+const { THEME_PRESETS, presetOverrides, DEFAULT_BRAND, THEME_TAGLINES, THEME_SELECTOR_ORDER, TEXT_TONES } = await loadThemeSource();
 
 /** Resolve a custom property to a literal value: the preset's override
     map first, then the theme's semantic CSS (dark falls through to
@@ -235,7 +249,7 @@ const checkPairings = (id, theme, overrides) => {
   };
   const pageBg = resolveRgb('--color-bg-page-primary', null);
   if (!pageBg) return;
-  for (const [fillName, fgName, min, usage] of ACTION_PAIRINGS) {
+  for (const [fillName, fgName, min, usage] of PAIRINGS) {
     const fill = resolveRgb(fillName, pageBg);
     const fg = fill && resolveRgb(fgName, fill);
     if (!fill || !fg) continue;
@@ -270,6 +284,11 @@ for (const [id, preset] of Object.entries(THEME_PRESETS)) {
   }
   if (typeof preset.iconFill !== 'boolean') {
     errors.push(`preset "${id}": lever "iconFill" is missing or not a boolean`);
+  }
+  for (const lever of ['displayTone', 'headingTone']) {
+    if (!TEXT_TONES.includes(preset[lever])) {
+      errors.push(`preset "${id}": lever "${lever}" is missing or not one of ${TEXT_TONES.join(', ')}`);
+    }
   }
 
   for (const theme of ['light', 'dark']) {
@@ -333,10 +352,10 @@ for (const name of registryNames) {
     );
   }
 }
-for (const [fill, fg] of ACTION_PAIRINGS) {
+for (const [fill, fg] of PAIRINGS) {
   for (const name of [fill, fg]) {
     if (!registryNames.has(name)) {
-      errors.push(`ACTION_PAIRINGS names ${name}, which is not in src/tokens/registry.json`);
+      errors.push(`a pairing names ${name}, which is not in src/tokens/registry.json`);
     }
   }
 }
@@ -368,7 +387,7 @@ if (errors.length > 0) {
 
 console.log(
   `✓ Theme presets complete — ${Object.keys(THEME_PRESETS).length} presets × 2 themes: every override names a real token, ` +
-    `the action family and all ${REQUIRED_ACCENT_ROLES.length} ambient accents are covered, and all ${ACTION_PAIRINGS.length} action ` +
-    `fill/foreground pairings hold contrast across ${cells} theme cells (${pairChecks} checks, ${SANCTIONED_AA_GAPS.size} pinned gaps, ` +
+    `the action family and all ${REQUIRED_ACCENT_ROLES.length} ambient accents are covered, and all ${PAIRINGS.length} action ` +
+    `and type-tier pairings hold contrast across ${cells} theme cells (${pairChecks} checks, ${SANCTIONED_AA_GAPS.size} pinned gaps, ` +
     `tightest at ${minRatio.toFixed(2)}× its minimum), and every theme has its one-line description.`
 );

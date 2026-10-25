@@ -59,7 +59,7 @@
   white-space: nowrap;
   align-items: center;
   gap: var(--gap-300);
-  color: var(--color-text-primary);
+  color: var(--color-text-heading);
   text-decoration: none;
   font-family: var(--font-heading-3-family);
   font-size: var(--font-heading-3-size);

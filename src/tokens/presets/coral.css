@@ -143,6 +143,8 @@ html[data-brand="coral"] {
   --color-core-ui-secondary: var(--primitive-red-10);
   --color-input-border-hover: var(--primitive-red-05);
   --color-input-border-selected: var(--primitive-red-07);
+  --color-text-display: var(--primitive-teal-08);
+  --color-text-heading: var(--primitive-teal-09);
   --font-family-heading: 'Poppins', sans-serif;
   --font-family-primary: 'DM Sans', sans-serif;
   --primitive-blue-00: #FBFCFE;
@@ -271,6 +273,8 @@ html[data-brand="coral"][data-theme="dark"] {
   --color-core-ui-secondary: var(--primitive-red-09);
   --color-input-border-hover: var(--primitive-red-08);
   --color-input-border-selected: var(--primitive-red-08);
+  --color-text-display: var(--primitive-teal-07);
+  --color-text-heading: var(--primitive-teal-07);
   --font-family-heading: 'Poppins', sans-serif;
   --font-family-primary: 'DM Sans', sans-serif;
   --primitive-blue-00: #FBFCFE;

@@ -7,6 +7,7 @@ import {
   HEADING_FONT_OPTIONS,
   HEADING_MATCH_LABEL,
   SHIPPED_ACCENTS,
+  TEXT_TONE_LABELS,
   buildCssSnippet,
   googleFontHref,
   isAdvancedPristine,
@@ -17,6 +18,7 @@ import {
   type AdvancedColorState,
   type FontOption,
   type Overrides,
+  type TextTone,
 } from "./theme-overrides";
 
 /* ---------- the theme export ----------
@@ -45,6 +47,9 @@ export interface PlaygroundLevers
   headingFontLabel: string;
   advanced: AdvancedColorState;
 }
+
+/** A tier tone in words: "the ink", or the family's name. */
+const toneWord = (tone: TextTone) => (tone === "ink" ? "the ink" : TEXT_TONE_LABELS[tone].toLowerCase());
 
 /** The lever state as a complete theme, the shape every preset is saved in. */
 export function themeFromLevers(levers: PlaygroundLevers): ThemePreset {
@@ -378,6 +383,9 @@ function themeLanguage(preset: ThemePreset, heading: "##" | "###", source?: Them
       ? `- Heading face: ${fontName(preset.headingFontLabel)} (\`--font-family-heading\`).`
       : "- Heading face: follows the body face.",
     `- Display tier weight ${preset.displayWeight}, heading tier weight ${preset.headingWeight}, body weight ${preset.bodyWeight}. Levels inside a tier share a weight and step by size; emphasis and labels sit above the body weight by the same steps as the base theme's.`,
+    preset.displayTone === "ink" && preset.headingTone === "ink"
+      ? "- Text colour: every tier is set in the ink, `--color-text-primary`. Still colour a display style with `--color-text-display` and a heading with `--color-text-heading`, which alias it."
+      : `- Text colour: the display tier is ${toneWord(preset.displayTone)} (\`--color-text-display\`), the heading tier ${toneWord(preset.headingTone)} (\`--color-text-heading\`), and running text the ink (\`--color-text-primary\`). Colour a display style with its tier's role and a heading with its own, never with the primary text.`,
     `- Type scale: ${leverWord("typeScale", preset.typeScale)} (${preset.typeScale}% of the base scale).`,
     `- Tracking: ${leverWord("tracking", preset.tracking)} (${
       preset.tracking > 0 ? "+" : ""

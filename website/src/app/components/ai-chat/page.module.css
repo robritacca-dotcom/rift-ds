@@ -35,7 +35,7 @@
   font-weight: var(--font-display-2-weight);
   line-height: var(--font-display-2-line-height);
   letter-spacing: var(--font-display-2-letter-spacing);
-  color: var(--color-text-primary);
+  color: var(--color-text-display);
 }
 
 .introSection {
@@ -50,7 +50,7 @@
   font-weight: var(--font-sub-display-weight);
   line-height: var(--font-sub-display-line-height);
   letter-spacing: var(--font-sub-display-letter-spacing);
-  color: var(--color-text-primary);
+  color: var(--color-text-display);
   margin: 0;
 }
 
@@ -217,7 +217,7 @@
   font-weight: var(--font-heading-3-weight);
   line-height: var(--font-heading-3-line-height);
   letter-spacing: var(--font-heading-3-letter-spacing);
-  color: var(--color-text-primary);
+  color: var(--color-text-heading);
 }
 
 .defList {

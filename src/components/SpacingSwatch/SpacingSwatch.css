@@ -95,7 +95,7 @@
   font-size: var(--font-paragraph-size);
   font-weight: var(--font-heading-3-weight);
   line-height: var(--font-paragraph-line-height);
-  color: var(--color-text-primary);
+  color: var(--color-text-heading);
   text-align: center;
 }
 

@@ -16,6 +16,10 @@ colors:
   surface-soft: "#f0eaee"
   ink: "#11060c"
   ink-dark: "#efe4ea"
+  display: "#11060c"
+  display-dark: "#efe4ea"
+  heading: "#11060c"
+  heading-dark: "#efe4ea"
   text-secondary: "#3a2e35"
   text-tertiary: "#73676e"
   border: "#d6cad1"
@@ -169,6 +173,8 @@ One action colour, kept for primary buttons, focus rings, the checked state of a
 | `surface` | `#fef8fb` | `rgba(26, 14, 21, 0.8)` | `--color-bg-container-primary` |
 | `surface-soft` | `#f0eaee` | `#3a2e35` | `--color-bg-container-secondary` |
 | `ink` | `#11060c` | `#efe4ea` | `--color-text-primary` |
+| `display` | `#11060c` | `#efe4ea` | `--color-text-display` |
+| `heading` | `#11060c` | `#efe4ea` | `--color-text-heading` |
 | `text-secondary` | `#3a2e35` | `#bdb2b8` | `--color-text-secondary` |
 | `text-tertiary` | `#73676e` | `#a599a0` | `--color-text-tertiary` |
 | `border` | `#d6cad1` | `#2d2228` | `--color-bg-container-border` |
@@ -182,7 +188,7 @@ Accents, for charts and the background field: amber `#ff9a4d`, cobalt `#5c7cff`,
 
 ## Typography
 
-Fredoka headings over Nunito text. Levels inside a tier share a weight and step by size.
+Fredoka headings over Nunito text. Levels inside a tier share a weight and step by size. Every tier is set in the ink.
 
 | Style | Face | Size | Weight | Line height | Tracking |
 | --- | --- | --- | --- | --- | --- |

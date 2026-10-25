@@ -425,6 +425,8 @@ export const SemanticColors: Story = {
         <ColorToken name="Tertiary" value="--color-text-tertiary" />
         <ColorToken name="Inverse" value="--color-text-inverse" />
         <ColorToken name="On Inverse" value="--color-text-on-inverse" />
+        <ColorToken name="Display" value="--color-text-display" />
+        <ColorToken name="Heading" value="--color-text-heading" />
       </TokenSection>
 
       <TokenSection title="Icon Colors">

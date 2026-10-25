@@ -16,6 +16,10 @@ colors:
   surface-soft: "#ecf0ef"
   ink: "#050d0b"
   ink-dark: "#e8f0ee"
+  display: "#050d0b"
+  display-dark: "#e8f0ee"
+  heading: "#050d0b"
+  heading-dark: "#e8f0ee"
   text-secondary: "#2e3734"
   text-tertiary: "#69716f"
   border: "#ced6d4"
@@ -169,6 +173,8 @@ One action colour, kept for primary buttons, focus rings, the checked state of a
 | `surface` | `#fafefd` | `rgba(14, 22, 20, 0.8)` | `--color-bg-container-primary` |
 | `surface-soft` | `#ecf0ef` | `#2e3734` | `--color-bg-container-secondary` |
 | `ink` | `#050d0b` | `#e8f0ee` | `--color-text-primary` |
+| `display` | `#050d0b` | `#e8f0ee` | `--color-text-display` |
+| `heading` | `#050d0b` | `#e8f0ee` | `--color-text-heading` |
 | `text-secondary` | `#2e3734` | `#b5bdbb` | `--color-text-secondary` |
 | `text-tertiary` | `#69716f` | `#9ca4a2` | `--color-text-tertiary` |
 | `border` | `#ced6d4` | `#222a28` | `--color-bg-container-border` |
@@ -182,7 +188,7 @@ Accents, for charts and the background field: amber `#57e0b0`, cobalt `#2fa98f`,
 
 ## Typography
 
-IBM Plex Mono throughout. Levels inside a tier share a weight and step by size.
+IBM Plex Mono throughout. Levels inside a tier share a weight and step by size. Every tier is set in the ink.
 
 | Style | Face | Size | Weight | Line height | Tracking |
 | --- | --- | --- | --- | --- | --- |

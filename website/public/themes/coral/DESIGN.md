@@ -16,6 +16,10 @@ colors:
   surface-soft: "#f1f1f1"
   ink: "#050505"
   ink-dark: "#f1f1f1"
+  display: "#00867c"
+  display-dark: "#00a699"
+  heading: "#006058"
+  heading-dark: "#00a699"
   text-secondary: "#303030"
   text-tertiary: "#6d6d6d"
   border: "#d6d6d6"
@@ -169,6 +173,8 @@ One action colour, kept for primary buttons, focus rings, the checked state of a
 | `surface` | `#ffffff` | `rgba(14, 14, 14, 0.8)` | `--color-bg-container-primary` |
 | `surface-soft` | `#f1f1f1` | `#303030` | `--color-bg-container-secondary` |
 | `ink` | `#050505` | `#f1f1f1` | `--color-text-primary` |
+| `display` | `#00867c` | `#00a699` | `--color-text-display` |
+| `heading` | `#006058` | `#00a699` | `--color-text-heading` |
 | `text-secondary` | `#303030` | `#bcbcbc` | `--color-text-secondary` |
 | `text-tertiary` | `#6d6d6d` | `#a2a2a2` | `--color-text-tertiary` |
 | `border` | `#d6d6d6` | `#232323` | `--color-bg-container-border` |
@@ -182,7 +188,7 @@ Accents, for charts and the background field: amber `#ff8e3c`, cobalt `#5e7bd0`,
 
 ## Typography
 
-Poppins headings over DM Sans text. Levels inside a tier share a weight and step by size.
+Poppins headings over DM Sans text. Levels inside a tier share a weight and step by size. Display type take `display` and headings take `heading`, while running text stays in the ink.
 
 | Style | Face | Size | Weight | Line height | Tracking |
 | --- | --- | --- | --- | --- | --- |

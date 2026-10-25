@@ -13,6 +13,13 @@
   --color-text-tertiary: var(--primitive-neutral-06);
   --color-text-inverse: var(--primitive-neutral-04);
   --color-text-on-inverse: var(--primitive-neutral-01);
+  /* Text by type tier. The display tier (Mega, Display 1 and 2, Sub
+     Display) and the heading tier (Headings 1 to 3) each carry a colour
+     role of their own, aliasing the primary text until a theme gives the
+     tier a tone, so a headline can take a colour the paragraph under it
+     does not. */
+  --color-text-display: var(--color-text-primary);
+  --color-text-heading: var(--color-text-primary);
 
   /* Icon */
   --color-icon-primary: var(--primitive-neutral-06);

@@ -47,8 +47,25 @@ const projectRows: DataTableRow[] = PROJECTS.map((name, i) => ({
   },
 }));
 
-const trendFor = (id: string) =>
-  Array.from({ length: 12 }, (_, i) => 10 + ((id.charCodeAt(1) * (i + 3)) % 17));
+/* A trend per row: a seeded random walk with a little momentum, so each
+   row draws a plausible line and the same one on every render. */
+const trendFor = (id: string) => {
+  let seed = [...id].reduce((h, c) => Math.imul(h ^ c.charCodeAt(0), 2654435761), 7) >>> 0;
+  const random = () => {
+    seed = (seed + 0x6d2b79f5) >>> 0;
+    let t = seed;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+  let value = 40 + random() * 20;
+  let drift = (random() - 0.4) * 3;
+  return Array.from({ length: 16 }, () => {
+    drift = drift * 0.7 + (random() - 0.45) * 3;
+    value = Math.max(5, value + drift);
+    return Math.round(value);
+  });
+};
 
 const money = (value: unknown) =>
   typeof value === "number" ? `$${value.toLocaleString("en-US")}` : "";

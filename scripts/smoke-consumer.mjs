@@ -137,6 +137,10 @@ createRoot(document.getElementById('root')!).render(
   run('npm install --no-fund --no-audit', chat);
   // The packed bin, exactly as npx would run it, writing into the scaffold.
   run(`node node_modules/${PACKAGE_NAME}/bin/${BIN_NAME}.mjs init chat`, chat);
+  // And the app scaffold, written into the same project: its root wrapper and
+  // colour-mode script land under components/rift/, which the tsconfig
+  // includes, so tsc checks them below beside the chat's files.
+  run(`node node_modules/${PACKAGE_NAME}/bin/${BIN_NAME}.mjs init app`, chat);
   writeFileSync(
     join(chat, 'src', 'main.tsx'),
     `import { createRoot } from 'react-dom/client';
@@ -158,12 +162,15 @@ createRoot(document.getElementById('root')!).render(<ChatMount />);
   // vite bundles the client half.
   writeFileSync(
     join(chat, 'src', 'env.d.ts'),
-    `declare const process: { env: Record<string, string | undefined> };\n`
+    `declare const process: { env: Record<string, string | undefined> };\n` +
+      // The app scaffold's root wrapper imports Next's Link; this Vite consumer
+      // has no Next, so its shape is declared for the type-check alone.
+      `declare module 'next/link' {\n  const Link: import('react').ComponentType<\n    import('react').ComponentPropsWithRef<'a'> & { href: string }\n  >;\n  export default Link;\n}\n`
   );
   run('npx tsc -p tsconfig.json', chat);
   run('npx vite build', chat);
   console.log(
-    `✓ Chat consumer: \`${BIN_NAME} init chat\` scaffolds against the tarball, and the routes and the mount type-check and build.`
+    `✓ Chat consumer: \`${BIN_NAME} init chat\` and \`${BIN_NAME} init app\` scaffold against the tarball; the routes, the mount, the root wrapper and the colour-mode script type-check, and the chat builds.`
   );
 } finally {
   rmSync(work, { recursive: true, force: true });

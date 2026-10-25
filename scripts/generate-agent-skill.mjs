@@ -284,7 +284,7 @@ The token stylesheet defines custom properties and styles no element, so paint t
 
 ## Theming
 
-Components read semantic tokens (\`--color-*\`, \`--radius-*\`, \`--font-*\`, \`--motion-*\`, ...), and every semantic colour token references a \`--primitive-*\` value. Re-theme by overriding primitives: one override cascades through both themes at once. Never hardcode a colour beside the components; override the token it should come from. references/tokens.md lists every semantic token with the value it resolves to in light and dark; the live reference is at ${origin}/foundations, and the MCP endpoint's \`list_tokens\` tool serves the registry.
+Components read semantic tokens (\`--color-*\`, \`--radius-*\`, \`--font-*\`, \`--motion-*\`, ...), and every semantic colour token references a \`--primitive-*\` value. Re-theme by overriding primitives: one override cascades through both themes at once. Never hardcode a colour beside the components; override the token it should come from. references/tokens.md lists every semantic token with the value it resolves to in light and dark; the live reference is at ${origin}/foundations, and the MCP endpoint's \`list_tokens\` tool serves the registry. Never write a token name from memory: look it up there, or read the names from \`tokenRegistry\` in \`${PACKAGE_NAME}/tokens/registry\`, since a misspelt \`var()\` resolves to nothing and fails silently.
 
 ## Charts
 
@@ -671,6 +671,7 @@ Do not build a chat UI by hand. \`npx ${BIN_NAME} ${widget.command}\` scaffolds 
 
 - Use a library component before building your own, and never restyle one from outside. If it looks wrong, change a token.
 - Never write a raw colour, spacing, radius, font value or duration. Use the semantic token for the role, not the nearest value.
+- Never write a token name from memory. Check it in the token reference below, or read the names from \`tokenRegistry\` in \`${subpath('./tokens/registry')}\`: a misspelt \`var()\` resolves to nothing and fails without a sound.
 - ${token('--color-action-primary-bg')} marks the primary action, focus, and checked or selected state. Never decoration.
 - Status colours come from the \`--color-status-*\` family, such as ${token('--color-status-error-text')}.
 - The only shadows are ${listJoin(tokenRegistry.categories.shadow.map(token))}.

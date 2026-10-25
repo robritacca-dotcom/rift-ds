@@ -305,6 +305,24 @@ function destinationFor(file, appDir) {
   return join(process.cwd(), ...file.split('/'));
 }
 
+/**
+ * Whether the project's .gitignore would hide the scaffolded env example:
+ * a `.env*`-style rule with no `!.env.chat.example` exception after it.
+ * create-next-app writes `.env*`, so a fresh app's example never reaches
+ * a commit unless the scaffold says so.
+ */
+function ignoresEnvExample() {
+  const gitignore = resolve('.gitignore');
+  if (!existsSync(gitignore)) return false;
+  let ignored = false;
+  for (const raw of readFileSync(gitignore, 'utf8').split('\n')) {
+    const line = raw.trim();
+    if (line === '.env*' || line === '.env.*' || line === '.env.chat.example') ignored = true;
+    if (line === '!.env.chat.example' || line === '!.env*.example' || line === '!.env.*.example') ignored = false;
+  }
+  return ignored;
+}
+
 function initChat({ app, dryRun }) {
   if (!existsSync(TEMPLATES_DIR)) {
     fail('this copy carries no chat templates: run the published bin (npx ' + PACKAGE_NAME + ' init chat).');
@@ -327,6 +345,12 @@ function initChat({ app, dryRun }) {
     `  3. Copy .env.chat.example into .env.local. With NEXT_PUBLIC_CHAT_DEMO=true the widget plays a scripted\n` +
       `     conversation and needs no key; set ANTHROPIC_API_KEY and CHAT_ENABLED=true to go live.`
   );
+  if (ignoresEnvExample()) {
+    console.log(
+      `     Your .gitignore ignores .env* (create-next-app's default), so git will not see the example.\n` +
+        `     Commit it on purpose with: git add -f .env.chat.example`
+    );
+  }
   console.log(
     `  4. Your layout's viewport should set interactiveWidget: "resizes-content", so the phone takeover ends above the keyboard.`
   );

@@ -52,6 +52,7 @@ Do not build a chat UI by hand. `npx rift-ds init chat` scaffolds the package's 
 
 - Use a library component before building your own, and never restyle one from outside. If it looks wrong, change a token.
 - Never write a raw colour, spacing, radius, font value or duration. Use the semantic token for the role, not the nearest value.
+- Never write a token name from memory. Check it in the token reference below, or read the names from `tokenRegistry` in `rift-ds/tokens/registry`: a misspelt `var()` resolves to nothing and fails without a sound.
 - `--color-action-primary-bg` marks the primary action, focus, and checked or selected state. Never decoration.
 - Status colours come from the `--color-status-*` family, such as `--color-status-error-text`.
 - The only shadows are `--shadow-floating` and `--shadow-modal`.

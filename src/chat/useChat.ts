@@ -288,11 +288,12 @@ export function useChat(
                 current = { ...current, followups: event.items };
                 break;
               case 'content':
-                // Same: the rich element appears when the turn commits.
-                current = { ...current, content: event.node };
+                /* Drawn on the live reply as it arrives, where a tool's
+                   result belongs, and carried into the turn on commit. */
+                update({ ...current, content: event.node });
                 break;
               case 'card':
-                current = { ...current, card: event.card };
+                update({ ...current, card: event.card });
                 break;
               case 'question': {
                 /* Checked again here, whatever the transport did: the set is

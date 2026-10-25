@@ -2579,8 +2579,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "label",
             "type": "string",
             "required": false,
-            "description": "Button text content",
-            "defaultValue": "Button"
+            "description": "Button text content. When it is absent, plain-text `children` stand in\nfor it (with a development warning), and failing both the button reads\n\"Button\".",
+            "defaultValue": "'Button'"
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Plain text to use as the label when `label` is absent. Anything richer than text is ignored; prefer `label`."
           },
           {
             "name": "iconLeft",

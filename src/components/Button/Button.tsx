@@ -3,13 +3,21 @@
 import React from 'react';
 import { Spinner } from '../Spinner/Spinner';
 import { useLinkComponent, type LinkComponent } from '../../behaviors/LinkProvider';
+import { warnOnce } from '../../behaviors/devWarning';
 import './Button.css';
 import '../../fonts/material-symbols.css';
 
 /** Props owned by Button itself — everything else falls through to the DOM node. */
 type ButtonOwnProps = {
-  /** Button text content */
+  /**
+   * Button text content. When it is absent, plain-text `children` stand in
+   * for it (with a development warning), and failing both the button reads
+   * "Button".
+   * @default 'Button'
+   */
   label?: string;
+  /** Plain text to use as the label when `label` is absent. Anything richer than text is ignored; prefer `label`. */
+  children?: React.ReactNode;
   /** Icon for left side — Material Symbol name (string) or custom element (ReactNode) */
   iconLeft?: string | React.ReactNode;
   /** Icon for right side — Material Symbol name (string) or custom element (ReactNode) */
@@ -137,7 +145,8 @@ function resolveButtonCell(
 export const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
   (
     {
-      label = 'Button',
+      label: labelProp,
+      children,
       iconLeft,
       iconRight,
       variant,
@@ -161,6 +170,21 @@ export const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, Bu
   ) => {
     const baseClass = 'ds-button';
     const Link = useLinkComponent(linkComponent);
+
+    /* The text is the label prop. Plain-text children stand in for it when
+       it is absent, the habit every other button library teaches, so
+       <Button>Save</Button> reads "Save" rather than the default; anything
+       richer than text has nowhere to go and is ignored. */
+    const childText =
+      typeof children === 'string' || typeof children === 'number' ? String(children) : undefined;
+    if (labelProp === undefined && children !== undefined) {
+      warnOnce(
+        childText === undefined
+          ? 'Button ignores non-text children. Pass the text as `label` and icons as `iconLeft` or `iconRight`.'
+          : 'Button reads its text from `label`. Children work as a fallback, but `label` is the documented prop.'
+      );
+    }
+    const label = labelProp ?? childText ?? 'Button';
 
     // `priority` is the deprecated spelling of `variant`; `variant` wins when both are set.
     const resolvedVariant = resolveButtonCell(variant ?? priority ?? 'primary', tone);

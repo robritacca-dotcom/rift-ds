@@ -14,7 +14,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same dat
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| label | `string` | no | `Button` | Button text content |
+| label | `string` | no | `'Button'` | Button text content. When it is absent, plain-text `children` stand in for it (with a development warning), and failing both the button reads "Button". |
+| children | `ReactNode` | no |  | Plain text to use as the label when `label` is absent. Anything richer than text is ignored; prefer `label`. |
 | iconLeft | `ReactNode` | no |  | Icon for left side — Material Symbol name (string) or custom element (ReactNode) |
 | iconRight | `ReactNode` | no |  | Icon for right side — Material Symbol name (string) or custom element (ReactNode) |
 | variant | `"neutral" \| "destructive" \| "primary" \| "secondary" \| "tertiary"` | no |  | Emphasis: `primary` (filled), `secondary` (outlined) or `tertiary` (ghost). The colour is `tone`'s job. `neutral` and `destructive` are legacy values from before the split: `neutral` renders as `variant="primary" tone="neutral"` and `destructive` as `variant="secondary" tone="destructive"`. |

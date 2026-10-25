@@ -134,12 +134,15 @@
    MENU
    ============================================ */
 
+/* Placed by the shared anchored-position behaviour
+   (src/behaviors/useAnchoredPosition.ts), as Dropdown's list is: fixed,
+   flipped above when there is no room below, and capped to the room it has.
+   Unlike Dropdown's list it holds to the trigger's width, because its
+   options carry descriptions that should wrap rather than set the width. */
 .ds-rich-dropdown__menu {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  margin-top: var(--gap-050); /* 2px */
+  box-sizing: border-box;
+  width: var(--ds-anchor-width, auto);
+  max-width: calc(100vw - 2 * var(--gap-400));
   padding: var(--padding-100); /* inset gap on all sides */
   border: var(--border-025) solid var(--color-input-border-primary);
   border-radius: var(--radius-300); /* 12px */
@@ -150,8 +153,13 @@
   z-index: var(--layer-dropdown);
   box-shadow: var(--shadow-floating);
 
+  transform-origin: top;
   /* Animation */
   animation: ds-rich-dropdown-appear var(--motion-duration-fast) var(--motion-ease-entrance);
+}
+
+.ds-rich-dropdown__menu[data-side='top'] {
+  transform-origin: bottom;
 }
 
 @keyframes ds-rich-dropdown-appear {

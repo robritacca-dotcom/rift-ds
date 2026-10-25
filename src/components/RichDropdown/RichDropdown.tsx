@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ChosenMark } from '../Dropdown/Dropdown';
 import { useLayer } from '../../behaviors/useLayer';
+import { useAnchoredPosition } from '../../behaviors/useAnchoredPosition';
 import { Field } from '../Field/Field';
 import './RichDropdown.css';
 import '../../fonts/material-symbols.css';
@@ -143,6 +144,20 @@ export const RichDropdown = React.forwardRef<HTMLDivElement, RichDropdownProps>(
     const [focusedIndex, setFocusedIndex] = useState(-1);
     const rootRef = useRef<HTMLDivElement | null>(null);
     const listRef = useRef<HTMLUListElement>(null);
+    const triggerRef = useRef<HTMLDivElement>(null);
+
+    // Placed against the trigger by the shared anchored-position behaviour,
+    // as Dropdown's list is.
+    useAnchoredPosition({
+      open: isOpen,
+      anchorRef: triggerRef,
+      panelRef: listRef,
+      side: 'bottom',
+      align: 'start',
+      gapProperty: '--gap-050',
+      fitHeight: true,
+      matchWidth: true,
+    });
 
     const isControlled = value !== undefined;
     const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
@@ -279,6 +294,7 @@ export const RichDropdown = React.forwardRef<HTMLDivElement, RichDropdownProps>(
         id={inputId}
       >
         <div
+          ref={triggerRef}
           className={`${baseClass}__trigger`}
           role="combobox"
           aria-expanded={isOpen}

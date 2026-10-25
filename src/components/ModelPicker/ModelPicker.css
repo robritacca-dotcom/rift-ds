@@ -72,9 +72,10 @@
    PANEL
    ============================================ */
 
+/* Placed by the shared anchored-position behaviour
+   (src/behaviors/useAnchoredPosition.ts): fixed, on the `placement` side,
+   flipped when that side has no room. */
 .ds-model-picker__panel {
-  position: absolute;
-  left: 0;
   z-index: var(--layer-dropdown);
   min-width: 260px;
   display: flex;
@@ -88,12 +89,8 @@
   overflow: hidden;
 }
 
-.ds-model-picker--bottom .ds-model-picker__panel {
-  top: calc(100% + var(--gap-050));
-}
-
-.ds-model-picker--top .ds-model-picker__panel {
-  bottom: calc(100% + var(--gap-050));
+.ds-model-picker__panel[data-side='top'] {
+  transform-origin: bottom left;
 }
 
 /* ============================================

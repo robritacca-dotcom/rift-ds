@@ -383,10 +383,14 @@
   }
 }
 
+/* Placed by the shared anchored-position behaviour
+   (src/behaviors/useAnchoredPosition.ts) while open: fixed, so a scroll
+   container cannot clip it, on its placement side and lined up with the
+   button's end edge, flipped when that side has no room and shifted to stay
+   on screen. Closed, it rests out of flow at the host. */
 .ds-ai-button__summary,
 .ds-ai-button__request {
   position: absolute;
-  right: 0;
   z-index: 1;
   /* Component-local lengths, chosen by eye like the button's glow: a
      readable measure, capped so a phone viewport keeps its margins. */
@@ -439,20 +443,20 @@
   background: var(--color-bg-glass);
 }
 
-/* Placement: the panel grows out of the button, so its transform origin
-   points back at the button's side of the gap. */
-.ds-ai-button-host--top .ds-ai-button__summary {
-  bottom: calc(100% + var(--gap-200));
+/* The panel grows out of the button, so its transform origin points back
+   at the button's side of the gap, keyed on the side it landed on. */
+.ds-ai-button__summary,
+.ds-ai-button__request {
   transform-origin: calc(100% - 60px) calc(100% + 40px);
 }
 
-.ds-ai-button-host--bottom .ds-ai-button__summary {
-  top: calc(100% + var(--gap-200));
+.ds-ai-button__summary[data-side='bottom'],
+.ds-ai-button__request[data-side='bottom'] {
   transform-origin: calc(100% - 60px) -40px;
   transform: translateY(-10px) scale(0.9);
 }
 
-.ds-ai-button-host--bottom.ds-ai-button-host--open .ds-ai-button__summary {
+.ds-ai-button-host--open .ds-ai-button__summary[data-side='bottom'] {
   transform: none;
 }
 
@@ -467,7 +471,7 @@
   }
 }
 
-.ds-ai-button-host--bottom.ds-ai-button-host--open .ds-ai-button__summary {
+.ds-ai-button-host--open .ds-ai-button__summary[data-side='bottom'] {
   animation-name: ds-ai-summary-pop-down;
 }
 
@@ -559,17 +563,6 @@
   overflow: hidden;
 }
 
-.ds-ai-button__request--top {
-  bottom: calc(100% + var(--gap-200));
-  transform-origin: calc(100% - 60px) calc(100% + 40px);
-}
-
-.ds-ai-button__request--bottom {
-  top: calc(100% + var(--gap-200));
-  transform-origin: calc(100% - 60px) -40px;
-  transform: translateY(-10px) scale(0.9);
-}
-
 .ds-ai-button__request--open {
   visibility: visible;
   opacity: 1;
@@ -577,7 +570,7 @@
   animation: ds-ai-summary-pop var(--motion-duration-deliberate) var(--motion-ease-entrance) both;
 }
 
-.ds-ai-button__request--bottom.ds-ai-button__request--open {
+.ds-ai-button__request--open[data-side='bottom'] {
   transform: none;
   animation-name: ds-ai-summary-pop-down;
 }

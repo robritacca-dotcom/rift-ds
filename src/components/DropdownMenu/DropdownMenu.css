@@ -31,13 +31,17 @@
    The floating menu container
    ============================================ */
 
+/* Placed by the shared anchored-position behaviour
+   (src/behaviors/useAnchoredPosition.ts): fixed, so a scroll container
+   cannot clip it, lined up with the trigger's start or end edge (`align`),
+   flipped above when there is no room below, and capped to the room it has,
+   scrolling inside. Sub-menus are placed the same way beside their row. */
 .ds-dropdown-menu__panel {
-  position: absolute;
-  top: 100%;
-  left: 0;
+  box-sizing: border-box;
   z-index: var(--layer-floating);
   min-width: 200px;
-  margin-top: var(--gap-050); /* 2px offset from trigger */
+  max-width: calc(100vw - 2 * var(--gap-400));
+  overflow-y: auto;
 
   /* Appearance — Figma: page/primary bg, input/border/primary, radius/md */
   background: var(--color-bg-page-primary);
@@ -52,13 +56,29 @@
   list-style: none;
   margin-block: 0;
 
-  /* Animation */
+  /* Animation, grown from the side the trigger is on */
+  transform-origin: top left;
   animation: ds-dropdown-menu-appear var(--motion-duration-fast) var(--motion-ease-entrance);
 }
 
-.ds-dropdown-menu__panel--align-end {
-  left: auto;
-  right: 0;
+.ds-dropdown-menu__panel[data-align='end'] {
+  transform-origin: top right;
+}
+
+.ds-dropdown-menu__panel[data-side='top'] {
+  transform-origin: bottom left;
+}
+
+.ds-dropdown-menu__panel[data-side='top'][data-align='end'] {
+  transform-origin: bottom right;
+}
+
+.ds-dropdown-menu__submenu[data-side='right'] {
+  transform-origin: top left;
+}
+
+.ds-dropdown-menu__submenu[data-side='left'] {
+  transform-origin: top right;
 }
 
 /* Compact items: paragraph-sm-em (14/20), padding xs sm-md (6px 12px), radius-sm (8px) */
@@ -104,10 +124,8 @@
    ============================================ */
 
 .ds-dropdown-menu__submenu {
-  position: absolute;
-  left: 100%;
-  top: 0;
-  margin-left: var(--gap-050); /* 4px offset from parent */
+  /* Placed beside its row by the behaviour; nothing to set here. */
+  min-width: 200px;
 }
 
 /* ============================================

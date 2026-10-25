@@ -26,6 +26,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same dat
 | error | `boolean` | no | `false` | Error state |
 | helperText | `string` | no |  | Helper or error message |
 | onValueChange | `((value: string) => void)` | no |  | Called with the newly selected value |
+| open | `boolean` | no |  | Whether the list is open, controlled. Leave undefined to let the dropdown open and close itself. |
+| defaultOpen | `boolean` | no | `false` | Whether the list starts open when uncontrolled (`open` undefined). |
+| onOpenChange | `((open: boolean) => void)` | no |  | Fires when the list opens or closes, with the new state. |
 | className | `string` | no | `` | Additional CSS classes |
 | onChange | `((value: string) => void)` | no |  | Legacy change handler, kept for backwards compatibility. Deprecated: Use `onValueChange` instead. |
 | ariaLabel | `string` | no |  | Legacy accessible-name prop. Deprecated: Pass the native `aria-label` attribute instead. |

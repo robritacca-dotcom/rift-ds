@@ -173,12 +173,12 @@ button.ds-source-chip {
 /* ============================================
    PREVIEW
    The source behind the chip, on the floating
-   surface (see HoverCard). The host is the
-   positioning box; the panel opens above the
-   chip, flush with its leading edge. The
-   component flips it below (data-side) and
-   slides it sideways (--ds-source-chip-shift)
-   when the space runs out.
+   surface (see HoverCard). Placed by the
+   shared anchored-position behaviour
+   (src/behaviors/useAnchoredPosition.ts):
+   fixed, above the chip and flush with its
+   leading edge, flipped below (data-side) and
+   shifted sideways when the space runs out.
    ============================================ */
 
 .ds-source-chip-host {
@@ -188,11 +188,7 @@ button.ds-source-chip {
 }
 
 .ds-source-chip__preview {
-  position: absolute;
   z-index: var(--layer-floating);
-  bottom: 100%;
-  left: var(--ds-source-chip-shift, 0px);
-  margin-block: var(--gap-200);
   width: max-content;
   max-width: min(320px, calc(100vw - var(--padding-400)));
   padding: var(--padding-300) var(--padding-400);
@@ -227,8 +223,6 @@ button.ds-source-chip {
 }
 
 .ds-source-chip__preview[data-side='bottom'] {
-  top: 100%;
-  bottom: auto;
   transform: translateY(-4px);
 }
 

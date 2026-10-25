@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import { useAnchoredPosition } from '../../behaviors/useAnchoredPosition';
 import { useLayer } from '../../behaviors/useLayer';
 import { Field } from '../Field/Field';
 import './Dropdown.css';
@@ -65,6 +66,12 @@ type DropdownOwnProps = {
   helperText?: string;
   /** Called with the newly selected value */
   onValueChange?: (value: string) => void;
+  /** Whether the list is open, controlled. Leave undefined to let the dropdown open and close itself. */
+  open?: boolean;
+  /** Whether the list starts open when uncontrolled (`open` undefined). */
+  defaultOpen?: boolean;
+  /** Fires when the list opens or closes, with the new state. */
+  onOpenChange?: (open: boolean) => void;
   /** Additional CSS classes */
   className?: string;
   /**
@@ -121,6 +128,9 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
       error = false,
       helperText,
       onValueChange,
+      open: openProp,
+      defaultOpen = false,
+      onOpenChange,
       onChange,
       className = '',
       ariaLabel,
@@ -135,13 +145,35 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
     },
     ref,
   ) => {
-    const [isOpen, setIsOpen] = useState(false);
+    const [ownOpen, setOwnOpen] = useState(defaultOpen);
+    const isOpen = openProp ?? ownOpen;
+    const setIsOpen = (next: boolean) => {
+      if (next === isOpen) return;
+      if (openProp === undefined) setOwnOpen(next);
+      onOpenChange?.(next);
+    };
     const [focusedIndex, setFocusedIndex] = useState(-1);
     const [internalValue, setInternalValue] = useState(defaultValue);
     const isControlled = valueProp !== undefined;
     const value = isControlled ? valueProp : internalValue;
     const dropdownRef = useRef<HTMLDivElement | null>(null);
     const listRef = useRef<HTMLUListElement>(null);
+    const triggerRef = useRef<HTMLDivElement>(null);
+
+    // The list is placed against the trigger by the shared anchored-position
+    // behaviour: fixed, so a scroll container cannot clip it, flipped above
+    // when there is no room below, capped to the room it has, and never
+    // narrower than the trigger.
+    useAnchoredPosition({
+      open: isOpen,
+      anchorRef: triggerRef,
+      panelRef: listRef,
+      side: 'bottom',
+      align: 'start',
+      gapProperty: '--gap-050',
+      fitHeight: true,
+      matchWidth: true,
+    });
 
     /** Keep the internal ref (used for click-outside) while honouring a forwarded one. */
     const setRootRef = (node: HTMLDivElement | null) => {
@@ -172,7 +204,7 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
 
     const handleToggle = () => {
       if (!disabled) {
-        setIsOpen((prev) => !prev);
+        setIsOpen(!isOpen);
         setFocusedIndex(-1);
       }
     };
@@ -203,7 +235,7 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
           if (isOpen && focusedIndex >= 0 && !flatOptions[focusedIndex]?.disabled) {
             handleSelect(flatOptions[focusedIndex].value);
           } else {
-            setIsOpen((prev) => !prev);
+            setIsOpen(!isOpen);
           }
           break;
         case 'ArrowDown':
@@ -285,6 +317,7 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
         id={inputId}
       >
         <div
+          ref={triggerRef}
           className={`${baseClass}__trigger`}
           role="combobox"
           aria-expanded={isOpen}

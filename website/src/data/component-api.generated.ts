@@ -5794,6 +5794,25 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Called with the newly selected value"
           },
           {
+            "name": "open",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the list is open, controlled. Leave undefined to let the dropdown open and close itself."
+          },
+          {
+            "name": "defaultOpen",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the list starts open when uncontrolled (`open` undefined).",
+            "defaultValue": "false"
+          },
+          {
+            "name": "onOpenChange",
+            "type": "((open: boolean) => void)",
+            "required": false,
+            "description": "Fires when the list opens or closes, with the new state."
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,

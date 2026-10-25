@@ -4,6 +4,7 @@ import React, { useEffect, useId, useRef, useState } from 'react';
 import { ChosenMark } from '../Dropdown/Dropdown';
 import { SegmentedControl } from '../SegmentedControl/SegmentedControl';
 import { useLayer } from '../../behaviors/useLayer';
+import { useAnchoredPosition } from '../../behaviors/useAnchoredPosition';
 import './ModelPicker.css';
 import '../../fonts/material-symbols.css';
 
@@ -117,8 +118,21 @@ export const ModelPicker = React.forwardRef<HTMLDivElement, ModelPickerProps>(
     const listboxId = `${id}-listbox`;
     const rootRef = useRef<HTMLDivElement | null>(null);
     const listRef = useRef<HTMLUListElement>(null);
+    const triggerRef = useRef<HTMLButtonElement>(null);
+    const panelRef = useRef<HTMLDivElement>(null);
 
     const [isOpen, setIsOpen] = useState(false);
+
+    // The panel is placed against the trigger by the shared anchored-position
+    // behaviour, on the `placement` side, flipped when that side has no room.
+    useAnchoredPosition({
+      open: isOpen,
+      anchorRef: triggerRef,
+      panelRef,
+      side: placement,
+      align: 'start',
+      gapProperty: '--gap-050',
+    });
     const [focusedIndex, setFocusedIndex] = useState(-1);
 
     const isValueControlled = value !== undefined;
@@ -252,6 +266,7 @@ export const ModelPicker = React.forwardRef<HTMLDivElement, ModelPickerProps>(
     return (
       <div {...rest} ref={setRootRef} className={classes}>
         <button
+          ref={triggerRef}
           type="button"
           className={`${baseClass}__trigger`}
           disabled={disabled}
@@ -280,7 +295,7 @@ export const ModelPicker = React.forwardRef<HTMLDivElement, ModelPickerProps>(
         </button>
 
         {isOpen && (
-          <div className={`${baseClass}__panel`}>
+          <div ref={panelRef} className={`${baseClass}__panel`}>
             <ul
               className={`${baseClass}__list`}
               role="listbox"

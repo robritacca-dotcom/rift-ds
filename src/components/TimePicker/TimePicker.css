@@ -99,12 +99,12 @@
    MENU
    ============================================ */
 
+/* Placed by the shared anchored-position behaviour
+   (src/behaviors/useAnchoredPosition.ts), as Dropdown's list is: fixed, at
+   least the trigger's width, flipped above when there is no room below, and
+   capped to the room it has. */
 .ds-timepicker__menu {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  margin-top: var(--gap-050); /* 2px */
+  box-sizing: border-box;
   padding: var(--padding-100); /* inset gap on all sides */
   border: var(--border-025) solid var(--color-input-border-primary);
   border-radius: var(--radius-300); /* 12px */

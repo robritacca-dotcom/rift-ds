@@ -173,12 +173,14 @@
    allowed, via the shared elevation token
    ============================================ */
 
+/* Placed by the shared anchored-position behaviour
+   (src/behaviors/useAnchoredPosition.ts), as Dropdown's list is: fixed, at
+   least the field's width, flipped above when there is no room below, and
+   capped to the room it has. */
 .ds-combobox__menu {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  margin-top: var(--gap-050); /* 2px */
+  box-sizing: border-box;
+  width: max-content;
+  max-width: calc(100vw - 2 * var(--gap-400));
   padding: var(--padding-100);
   border: var(--border-025) solid var(--color-input-border-primary);
   border-radius: var(--radius-300); /* 12px */
@@ -188,7 +190,12 @@
   overflow-y: auto;
   z-index: var(--layer-dropdown);
   box-shadow: var(--shadow-floating);
+  transform-origin: top;
   animation: ds-combobox-appear var(--motion-duration-fast) var(--motion-ease-entrance);
+}
+
+.ds-combobox__menu[data-side='top'] {
+  transform-origin: bottom;
 }
 
 @keyframes ds-combobox-appear {

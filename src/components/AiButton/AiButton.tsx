@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { useLayer } from '../../behaviors/useLayer';
+import { useAnchoredPosition } from '../../behaviors/useAnchoredPosition';
 import { useLinkComponent, type LinkComponent } from '../../behaviors/LinkProvider';
 import { AgentStatusMark } from '../AgentStatus/AgentStatus';
 import type { AgentStatusState } from '../AgentStatus/AgentStatusPatterns';
@@ -204,6 +205,8 @@ export const AiButton = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, 
     /* The request panel: the controlled/uncontrolled pair, reopened by every
        move into waiting so a new request is never missed. */
     const hostRef = useRef<HTMLDivElement>(null);
+    const summaryRef = useRef<HTMLElement>(null);
+    const requestRef = useRef<HTMLElement>(null);
     const requestId = useId();
     const [ownRequestOpen, setOwnRequestOpen] = useState(defaultRequestOpen);
     const isRequestOpen = requestOpen ?? ownRequestOpen;
@@ -235,6 +238,25 @@ export const AiButton = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, 
       !requestShown &&
       !dismissed &&
       (summaryPinned || hoverOpen);
+
+    // Both panels are placed against the button by the shared
+    // anchored-position behaviour, lined up with its end edge.
+    useAnchoredPosition({
+      open: panelOpen,
+      anchorRef: hostRef,
+      panelRef: summaryRef,
+      side: summaryPlacement,
+      align: 'end',
+      gapProperty: '--gap-200',
+    });
+    useAnchoredPosition({
+      open: requestShown,
+      anchorRef: hostRef,
+      panelRef: requestRef,
+      side: requestPlacement,
+      align: 'end',
+      gapProperty: '--gap-200',
+    });
 
     /* The host's handler runs first; a click it does not prevent folds or
        opens a waiting request. */
@@ -399,6 +421,7 @@ export const AiButton = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, 
        out of the accessibility tree and the tab order. */
     const requestPanel = request ? (
       <aside
+        ref={requestRef}
         id={requestId}
         className={[
           `${baseClass}__request`,
@@ -447,7 +470,7 @@ export const AiButton = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, 
             visibility keeps the hidden panel out of the accessibility tree
             and the tab order. */}
         {summary && (
-        <aside className={panelClass} aria-label={summaryRegionLabel(summary.title)}>
+        <aside ref={summaryRef} className={panelClass} aria-label={summaryRegionLabel(summary.title)}>
             <button
               type="button"
               className={`${panelClass}-dismiss`}

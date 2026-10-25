@@ -15,7 +15,7 @@
    twelve slots it lights in (--ds-agent-step),
    and dots a pattern never lights opt out of the
    animation entirely. One grid, one cycle length,
-   fifteen patterns — so changing pattern never
+   every pattern — so changing pattern never
    changes the indicator's footprint or rhythm.
    ============================================ */
 
@@ -28,6 +28,10 @@
   --ds-agent-dot-rest: 0.82;
   --ds-agent-cycle: var(--motion-duration-loop-matrix);
   --ds-agent-slot: calc(var(--ds-agent-cycle) / 12);
+  /* The twinkle runs at a sixth of the cycle's pace, so a flicker lands
+     well under once a second across the whole matrix. */
+  --ds-agent-twinkle-cycle: calc(var(--ds-agent-cycle) * 6);
+  --ds-agent-twinkle-slot: calc(var(--ds-agent-twinkle-cycle) / 12);
   --ds-agent-matrix-size: var(--icon-size-600);
 
   display: inline-flex;
@@ -163,7 +167,13 @@
 }
 
 .ds-agent-status--waiting {
-  --ds-agent-color: var(--color-status-warning-text);
+  /* The dots are a mark, so they take the status icon colour; the label
+     takes the status text colour. Waiting breathes from a higher floor
+     than the working states dim to, the same 0.45 the waiting ring
+     breathes from: at the working floor the whole mark all but vanishes
+     at the bottom of each breath, and waiting reads as idle. */
+  --ds-agent-color: var(--color-status-warning-icon);
+  --ds-agent-dot-dim: 0.45;
   --ds-agent-label-color: var(--color-status-warning-text);
 
   /* Waiting keeps its warning colour through the shimmer — colour is the
@@ -173,20 +183,26 @@
 }
 
 .ds-agent-status--done {
-  --ds-agent-color: var(--color-status-positive-text);
+  --ds-agent-color: var(--color-status-positive-icon);
   --ds-agent-label-color: var(--color-status-positive-text);
 }
 
 .ds-agent-status--error {
-  --ds-agent-color: var(--color-status-error-text);
+  --ds-agent-color: var(--color-status-error-icon);
   --ds-agent-label-color: var(--color-status-error-text);
 }
 
-/* Terminal states fill the matrix solid — the shape itself reads as finished */
-.ds-agent-status--done .ds-agent-status__dot,
-.ds-agent-status--error .ds-agent-status__dot {
+/* Terminal states fill the matrix solid, so the shape itself reads as
+   finished, and twinkle: one or two dots at a time dip and return, so the
+   finished mark stays alive without drawing the eye. The doubled class and
+   :nth-child(n) lift the rule over every pattern's dark-dot opt-outs, so
+   the whole matrix twinkles whatever the pattern. */
+.ds-agent-status.ds-agent-status--done .ds-agent-status__dot:nth-child(n),
+.ds-agent-status.ds-agent-status--error .ds-agent-status__dot:nth-child(n) {
   opacity: 1;
   transform: none;
+  animation: ds-agent-dot-twinkle var(--ds-agent-twinkle-cycle) var(--motion-ease-standard) infinite;
+  animation-delay: calc(var(--ds-agent-twinkle-step, 0) * var(--ds-agent-twinkle-slot));
 }
 
 /* ============================================
@@ -216,12 +232,47 @@
    ============================================ */
 
 .ds-agent-status--bar {
+  /* Border-box, so the padding sits inside the full width rather than past
+     it: a host without a global reset must not get an overflowing row. */
+  box-sizing: border-box;
   display: flex;
   width: 100%;
   padding: var(--padding-150) var(--padding-300);
   background-color: var(--color-bg-container-primary);
   border: var(--border-025) solid var(--color-bg-container-border);
   border-radius: var(--radius-300);
+}
+
+/* The pill: a glass status that floats over the page while a run goes on.
+   It carries no position of its own; the host seats it. */
+.ds-agent-status--pill {
+  /* Border-box, so max-width caps the whole pill, padding and border
+     included, even in a host without a global reset. */
+  box-sizing: border-box;
+  max-width: 100%;
+  padding: var(--padding-200) var(--padding-400);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-bg-glass);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  box-shadow: var(--shadow-floating);
+  /* A component-local frost length, chosen by eye: enough to keep the text
+     legible over a busy page without the summary panel's heavier blur. */
+  --ds-agent-pill-frost: 12px;
+  backdrop-filter: blur(var(--ds-agent-pill-frost));
+}
+
+/* A long status truncates rather than widening the pill past its host. */
+.ds-agent-status--pill .ds-agent-status__label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ds-agent-status__action {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
 }
 
 /* ============================================
@@ -273,6 +324,23 @@
   100% {
     opacity: var(--ds-agent-dot-dim);
     transform: scale(var(--ds-agent-dot-rest));
+  }
+}
+
+/* Twinkle holds a dot solid and dips it briefly, a flicker rather than a
+   blink: a short, shallow dip in a long hold, so at the twelve-slot spacing
+   one or two dots are ever mid-flicker. */
+@keyframes ds-agent-dot-twinkle {
+  0%,
+  8%,
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+
+  3% {
+    opacity: 0.6;
+    transform: scale(0.9);
   }
 }
 
@@ -488,6 +556,30 @@
 .ds-agent-status--diagonal-swipe .ds-agent-status__dot:nth-child(11) { --ds-agent-step: 8; }
 .ds-agent-status--diagonal-swipe .ds-agent-status__dot:nth-child(12) { --ds-agent-step: 10; }
 
+/* Twinkle: the whole matrix solid, one or two dots at a time dipping on
+   a fixed scatter. The same flicker every finished state runs. */
+.ds-agent-status--animated.ds-agent-status--twinkle .ds-agent-status__dot:nth-child(n) {
+  opacity: 1;
+  transform: none;
+  animation-name: ds-agent-dot-twinkle;
+  animation-duration: var(--ds-agent-twinkle-cycle);
+  animation-delay: calc(var(--ds-agent-twinkle-step, 0) * var(--ds-agent-twinkle-slot));
+}
+
+/* The twinkle's scatter, shared by the pattern and the finished states */
+.ds-agent-status__dot:nth-child(1) { --ds-agent-twinkle-step: 7; }
+.ds-agent-status__dot:nth-child(2) { --ds-agent-twinkle-step: 2; }
+.ds-agent-status__dot:nth-child(3) { --ds-agent-twinkle-step: 10; }
+.ds-agent-status__dot:nth-child(4) { --ds-agent-twinkle-step: 4; }
+.ds-agent-status__dot:nth-child(5) { --ds-agent-twinkle-step: 0; }
+.ds-agent-status__dot:nth-child(6) { --ds-agent-twinkle-step: 9; }
+.ds-agent-status__dot:nth-child(7) { --ds-agent-twinkle-step: 5; }
+.ds-agent-status__dot:nth-child(8) { --ds-agent-twinkle-step: 11; }
+.ds-agent-status__dot:nth-child(9) { --ds-agent-twinkle-step: 3; }
+.ds-agent-status__dot:nth-child(10) { --ds-agent-twinkle-step: 8; }
+.ds-agent-status__dot:nth-child(11) { --ds-agent-twinkle-step: 1; }
+.ds-agent-status__dot:nth-child(12) { --ds-agent-twinkle-step: 6; }
+
 /* ============================================
    THE MARK (AgentStatusMark)
    The dots alone at icon size, for an icon
@@ -513,6 +605,8 @@
   --ds-agent-dot-rest: 0.82;
   --ds-agent-cycle: var(--motion-duration-loop-matrix);
   --ds-agent-slot: calc(var(--ds-agent-cycle) / 12);
+  --ds-agent-twinkle-cycle: calc(var(--ds-agent-cycle) * 6);
+  --ds-agent-twinkle-slot: calc(var(--ds-agent-twinkle-cycle) / 16);
   --ds-agent-mark-size: var(--icon-size, var(--icon-size-600));
 
   display: inline-grid;
@@ -539,21 +633,25 @@
 }
 
 .ds-agent-status-mark--waiting {
-  --ds-agent-color: var(--color-status-warning-text);
+  --ds-agent-color: var(--color-status-warning-icon);
+  --ds-agent-dot-dim: 0.45;
 }
 
 .ds-agent-status-mark--done {
-  --ds-agent-color: var(--color-status-positive-text);
+  --ds-agent-color: var(--color-status-positive-icon);
 }
 
 .ds-agent-status-mark--error {
-  --ds-agent-color: var(--color-status-error-text);
+  --ds-agent-color: var(--color-status-error-icon);
 }
 
-.ds-agent-status-mark--done .ds-agent-status-mark__dot,
-.ds-agent-status-mark--error .ds-agent-status-mark__dot {
+/* Finished: solid and twinkling, as AgentStatus's matrix does. */
+.ds-agent-status-mark.ds-agent-status-mark--done .ds-agent-status-mark__dot:nth-child(n),
+.ds-agent-status-mark.ds-agent-status-mark--error .ds-agent-status-mark__dot:nth-child(n) {
   opacity: 1;
   transform: none;
+  animation: ds-agent-dot-twinkle var(--ds-agent-twinkle-cycle) var(--motion-ease-standard) infinite;
+  animation-delay: calc(var(--ds-agent-twinkle-step, 0) * var(--ds-agent-twinkle-slot));
 }
 
 .ds-agent-status-mark--animated .ds-agent-status-mark__dot {
@@ -561,24 +659,444 @@
   animation-delay: calc(var(--ds-agent-step, 0) * var(--ds-agent-slot));
 }
 
-.ds-agent-status-mark__dot:nth-child(1) { --ds-agent-step: 0; }
-.ds-agent-status-mark__dot:nth-child(2) { --ds-agent-step: 1; }
-.ds-agent-status-mark__dot:nth-child(3) { --ds-agent-step: 2; }
-.ds-agent-status-mark__dot:nth-child(4) { --ds-agent-step: 3; }
-.ds-agent-status-mark__dot:nth-child(8) { --ds-agent-step: 4; }
-.ds-agent-status-mark__dot:nth-child(12) { --ds-agent-step: 5; }
-.ds-agent-status-mark__dot:nth-child(16) { --ds-agent-step: 6; }
-.ds-agent-status-mark__dot:nth-child(15) { --ds-agent-step: 7; }
-.ds-agent-status-mark__dot:nth-child(14) { --ds-agent-step: 8; }
-.ds-agent-status-mark__dot:nth-child(13) { --ds-agent-step: 9; }
-.ds-agent-status-mark__dot:nth-child(9) { --ds-agent-step: 10; }
-.ds-agent-status-mark__dot:nth-child(5) { --ds-agent-step: 11; }
+/* Each pattern of AgentStatus's 4x3 matrix, redrawn for the 4x4 square.
+   Steps stay on the same twelve-slot cycle; where a pattern has sixteen
+   dots to place, they fall on fractional slots so the cycle and its
+   rhythm are unchanged. */
 
-.ds-agent-status-mark--animated .ds-agent-status-mark__dot:nth-child(6),
-.ds-agent-status-mark--animated .ds-agent-status-mark__dot:nth-child(7),
-.ds-agent-status-mark--animated .ds-agent-status-mark__dot:nth-child(10),
-.ds-agent-status-mark--animated .ds-agent-status-mark__dot:nth-child(11) {
+/* Braille: a 2x4 cell rotating, the right half dark */
+.ds-agent-status-mark--braille .ds-agent-status-mark__dot:nth-child(1) { --ds-agent-step: 0; }
+.ds-agent-status-mark--braille .ds-agent-status-mark__dot:nth-child(2) { --ds-agent-step: 1.5; }
+.ds-agent-status-mark--braille .ds-agent-status-mark__dot:nth-child(5) { --ds-agent-step: 10.5; }
+.ds-agent-status-mark--braille .ds-agent-status-mark__dot:nth-child(6) { --ds-agent-step: 3; }
+.ds-agent-status-mark--braille .ds-agent-status-mark__dot:nth-child(9) { --ds-agent-step: 9; }
+.ds-agent-status-mark--braille .ds-agent-status-mark__dot:nth-child(10) { --ds-agent-step: 4.5; }
+.ds-agent-status-mark--braille .ds-agent-status-mark__dot:nth-child(13) { --ds-agent-step: 7.5; }
+.ds-agent-status-mark--braille .ds-agent-status-mark__dot:nth-child(14) { --ds-agent-step: 6; }
+.ds-agent-status-mark--braille .ds-agent-status-mark__dot:nth-child(3),
+.ds-agent-status-mark--braille .ds-agent-status-mark__dot:nth-child(4),
+.ds-agent-status-mark--braille .ds-agent-status-mark__dot:nth-child(7),
+.ds-agent-status-mark--braille .ds-agent-status-mark__dot:nth-child(8),
+.ds-agent-status-mark--braille .ds-agent-status-mark__dot:nth-child(11),
+.ds-agent-status-mark--braille .ds-agent-status-mark__dot:nth-child(12),
+.ds-agent-status-mark--braille .ds-agent-status-mark__dot:nth-child(15),
+.ds-agent-status-mark--braille .ds-agent-status-mark__dot:nth-child(16) {
   animation: none;
+}
+
+/* Orbit: clockwise around the edge, core dark */
+.ds-agent-status-mark--orbit .ds-agent-status-mark__dot:nth-child(1) { --ds-agent-step: 0; }
+.ds-agent-status-mark--orbit .ds-agent-status-mark__dot:nth-child(2) { --ds-agent-step: 1; }
+.ds-agent-status-mark--orbit .ds-agent-status-mark__dot:nth-child(3) { --ds-agent-step: 2; }
+.ds-agent-status-mark--orbit .ds-agent-status-mark__dot:nth-child(4) { --ds-agent-step: 3; }
+.ds-agent-status-mark--orbit .ds-agent-status-mark__dot:nth-child(5) { --ds-agent-step: 11; }
+.ds-agent-status-mark--orbit .ds-agent-status-mark__dot:nth-child(8) { --ds-agent-step: 4; }
+.ds-agent-status-mark--orbit .ds-agent-status-mark__dot:nth-child(9) { --ds-agent-step: 10; }
+.ds-agent-status-mark--orbit .ds-agent-status-mark__dot:nth-child(12) { --ds-agent-step: 5; }
+.ds-agent-status-mark--orbit .ds-agent-status-mark__dot:nth-child(13) { --ds-agent-step: 9; }
+.ds-agent-status-mark--orbit .ds-agent-status-mark__dot:nth-child(14) { --ds-agent-step: 8; }
+.ds-agent-status-mark--orbit .ds-agent-status-mark__dot:nth-child(15) { --ds-agent-step: 7; }
+.ds-agent-status-mark--orbit .ds-agent-status-mark__dot:nth-child(16) { --ds-agent-step: 6; }
+.ds-agent-status-mark--orbit .ds-agent-status-mark__dot:nth-child(6),
+.ds-agent-status-mark--orbit .ds-agent-status-mark__dot:nth-child(7),
+.ds-agent-status-mark--orbit .ds-agent-status-mark__dot:nth-child(10),
+.ds-agent-status-mark--orbit .ds-agent-status-mark__dot:nth-child(11) {
+  animation: none;
+}
+
+/* Breathe: every dot together, on its own swell */
+.ds-agent-status-mark--animated.ds-agent-status-mark--breathe .ds-agent-status-mark__dot {
+  animation-name: ds-agent-dot-breathe;
+}
+
+/* Snake: boustrophedon, one dot at a time */
+.ds-agent-status-mark--snake .ds-agent-status-mark__dot:nth-child(1) { --ds-agent-step: 0; }
+.ds-agent-status-mark--snake .ds-agent-status-mark__dot:nth-child(2) { --ds-agent-step: 0.75; }
+.ds-agent-status-mark--snake .ds-agent-status-mark__dot:nth-child(3) { --ds-agent-step: 1.5; }
+.ds-agent-status-mark--snake .ds-agent-status-mark__dot:nth-child(4) { --ds-agent-step: 2.25; }
+.ds-agent-status-mark--snake .ds-agent-status-mark__dot:nth-child(5) { --ds-agent-step: 5.25; }
+.ds-agent-status-mark--snake .ds-agent-status-mark__dot:nth-child(6) { --ds-agent-step: 4.5; }
+.ds-agent-status-mark--snake .ds-agent-status-mark__dot:nth-child(7) { --ds-agent-step: 3.75; }
+.ds-agent-status-mark--snake .ds-agent-status-mark__dot:nth-child(8) { --ds-agent-step: 3; }
+.ds-agent-status-mark--snake .ds-agent-status-mark__dot:nth-child(9) { --ds-agent-step: 6; }
+.ds-agent-status-mark--snake .ds-agent-status-mark__dot:nth-child(10) { --ds-agent-step: 6.75; }
+.ds-agent-status-mark--snake .ds-agent-status-mark__dot:nth-child(11) { --ds-agent-step: 7.5; }
+.ds-agent-status-mark--snake .ds-agent-status-mark__dot:nth-child(12) { --ds-agent-step: 8.25; }
+.ds-agent-status-mark--snake .ds-agent-status-mark__dot:nth-child(13) { --ds-agent-step: 11.25; }
+.ds-agent-status-mark--snake .ds-agent-status-mark__dot:nth-child(14) { --ds-agent-step: 10.5; }
+.ds-agent-status-mark--snake .ds-agent-status-mark__dot:nth-child(15) { --ds-agent-step: 9.75; }
+.ds-agent-status-mark--snake .ds-agent-status-mark__dot:nth-child(16) { --ds-agent-step: 9; }
+
+/* Fill sweep: columns light and hold, a band wiping left to right */
+.ds-agent-status-mark--animated.ds-agent-status-mark--fill-sweep .ds-agent-status-mark__dot {
+  animation-name: ds-agent-dot-fill;
+}
+.ds-agent-status-mark--fill-sweep .ds-agent-status-mark__dot:nth-child(1) { --ds-agent-step: 0; }
+.ds-agent-status-mark--fill-sweep .ds-agent-status-mark__dot:nth-child(2) { --ds-agent-step: 3; }
+.ds-agent-status-mark--fill-sweep .ds-agent-status-mark__dot:nth-child(3) { --ds-agent-step: 6; }
+.ds-agent-status-mark--fill-sweep .ds-agent-status-mark__dot:nth-child(4) { --ds-agent-step: 9; }
+.ds-agent-status-mark--fill-sweep .ds-agent-status-mark__dot:nth-child(5) { --ds-agent-step: 0; }
+.ds-agent-status-mark--fill-sweep .ds-agent-status-mark__dot:nth-child(6) { --ds-agent-step: 3; }
+.ds-agent-status-mark--fill-sweep .ds-agent-status-mark__dot:nth-child(7) { --ds-agent-step: 6; }
+.ds-agent-status-mark--fill-sweep .ds-agent-status-mark__dot:nth-child(8) { --ds-agent-step: 9; }
+.ds-agent-status-mark--fill-sweep .ds-agent-status-mark__dot:nth-child(9) { --ds-agent-step: 0; }
+.ds-agent-status-mark--fill-sweep .ds-agent-status-mark__dot:nth-child(10) { --ds-agent-step: 3; }
+.ds-agent-status-mark--fill-sweep .ds-agent-status-mark__dot:nth-child(11) { --ds-agent-step: 6; }
+.ds-agent-status-mark--fill-sweep .ds-agent-status-mark__dot:nth-child(12) { --ds-agent-step: 9; }
+.ds-agent-status-mark--fill-sweep .ds-agent-status-mark__dot:nth-child(13) { --ds-agent-step: 0; }
+.ds-agent-status-mark--fill-sweep .ds-agent-status-mark__dot:nth-child(14) { --ds-agent-step: 3; }
+.ds-agent-status-mark--fill-sweep .ds-agent-status-mark__dot:nth-child(15) { --ds-agent-step: 6; }
+.ds-agent-status-mark--fill-sweep .ds-agent-status-mark__dot:nth-child(16) { --ds-agent-step: 9; }
+
+/* Pulse: rings expanding from the core */
+.ds-agent-status-mark--pulse .ds-agent-status-mark__dot:nth-child(1) { --ds-agent-step: 8; }
+.ds-agent-status-mark--pulse .ds-agent-status-mark__dot:nth-child(2) { --ds-agent-step: 4; }
+.ds-agent-status-mark--pulse .ds-agent-status-mark__dot:nth-child(3) { --ds-agent-step: 4; }
+.ds-agent-status-mark--pulse .ds-agent-status-mark__dot:nth-child(4) { --ds-agent-step: 8; }
+.ds-agent-status-mark--pulse .ds-agent-status-mark__dot:nth-child(5) { --ds-agent-step: 4; }
+.ds-agent-status-mark--pulse .ds-agent-status-mark__dot:nth-child(6) { --ds-agent-step: 0; }
+.ds-agent-status-mark--pulse .ds-agent-status-mark__dot:nth-child(7) { --ds-agent-step: 0; }
+.ds-agent-status-mark--pulse .ds-agent-status-mark__dot:nth-child(8) { --ds-agent-step: 4; }
+.ds-agent-status-mark--pulse .ds-agent-status-mark__dot:nth-child(9) { --ds-agent-step: 4; }
+.ds-agent-status-mark--pulse .ds-agent-status-mark__dot:nth-child(10) { --ds-agent-step: 0; }
+.ds-agent-status-mark--pulse .ds-agent-status-mark__dot:nth-child(11) { --ds-agent-step: 0; }
+.ds-agent-status-mark--pulse .ds-agent-status-mark__dot:nth-child(12) { --ds-agent-step: 4; }
+.ds-agent-status-mark--pulse .ds-agent-status-mark__dot:nth-child(13) { --ds-agent-step: 8; }
+.ds-agent-status-mark--pulse .ds-agent-status-mark__dot:nth-child(14) { --ds-agent-step: 4; }
+.ds-agent-status-mark--pulse .ds-agent-status-mark__dot:nth-child(15) { --ds-agent-step: 4; }
+.ds-agent-status-mark--pulse .ds-agent-status-mark__dot:nth-child(16) { --ds-agent-step: 8; }
+
+/* Columns: odd columns, then even */
+.ds-agent-status-mark--columns .ds-agent-status-mark__dot:nth-child(1) { --ds-agent-step: 0; }
+.ds-agent-status-mark--columns .ds-agent-status-mark__dot:nth-child(2) { --ds-agent-step: 6; }
+.ds-agent-status-mark--columns .ds-agent-status-mark__dot:nth-child(3) { --ds-agent-step: 0; }
+.ds-agent-status-mark--columns .ds-agent-status-mark__dot:nth-child(4) { --ds-agent-step: 6; }
+.ds-agent-status-mark--columns .ds-agent-status-mark__dot:nth-child(5) { --ds-agent-step: 0; }
+.ds-agent-status-mark--columns .ds-agent-status-mark__dot:nth-child(6) { --ds-agent-step: 6; }
+.ds-agent-status-mark--columns .ds-agent-status-mark__dot:nth-child(7) { --ds-agent-step: 0; }
+.ds-agent-status-mark--columns .ds-agent-status-mark__dot:nth-child(8) { --ds-agent-step: 6; }
+.ds-agent-status-mark--columns .ds-agent-status-mark__dot:nth-child(9) { --ds-agent-step: 0; }
+.ds-agent-status-mark--columns .ds-agent-status-mark__dot:nth-child(10) { --ds-agent-step: 6; }
+.ds-agent-status-mark--columns .ds-agent-status-mark__dot:nth-child(11) { --ds-agent-step: 0; }
+.ds-agent-status-mark--columns .ds-agent-status-mark__dot:nth-child(12) { --ds-agent-step: 6; }
+.ds-agent-status-mark--columns .ds-agent-status-mark__dot:nth-child(13) { --ds-agent-step: 0; }
+.ds-agent-status-mark--columns .ds-agent-status-mark__dot:nth-child(14) { --ds-agent-step: 6; }
+.ds-agent-status-mark--columns .ds-agent-status-mark__dot:nth-child(15) { --ds-agent-step: 0; }
+.ds-agent-status-mark--columns .ds-agent-status-mark__dot:nth-child(16) { --ds-agent-step: 6; }
+
+/* Checkerboard: the two parities alternating */
+.ds-agent-status-mark--checkerboard .ds-agent-status-mark__dot:nth-child(1) { --ds-agent-step: 0; }
+.ds-agent-status-mark--checkerboard .ds-agent-status-mark__dot:nth-child(2) { --ds-agent-step: 6; }
+.ds-agent-status-mark--checkerboard .ds-agent-status-mark__dot:nth-child(3) { --ds-agent-step: 0; }
+.ds-agent-status-mark--checkerboard .ds-agent-status-mark__dot:nth-child(4) { --ds-agent-step: 6; }
+.ds-agent-status-mark--checkerboard .ds-agent-status-mark__dot:nth-child(5) { --ds-agent-step: 6; }
+.ds-agent-status-mark--checkerboard .ds-agent-status-mark__dot:nth-child(6) { --ds-agent-step: 0; }
+.ds-agent-status-mark--checkerboard .ds-agent-status-mark__dot:nth-child(7) { --ds-agent-step: 6; }
+.ds-agent-status-mark--checkerboard .ds-agent-status-mark__dot:nth-child(8) { --ds-agent-step: 0; }
+.ds-agent-status-mark--checkerboard .ds-agent-status-mark__dot:nth-child(9) { --ds-agent-step: 0; }
+.ds-agent-status-mark--checkerboard .ds-agent-status-mark__dot:nth-child(10) { --ds-agent-step: 6; }
+.ds-agent-status-mark--checkerboard .ds-agent-status-mark__dot:nth-child(11) { --ds-agent-step: 0; }
+.ds-agent-status-mark--checkerboard .ds-agent-status-mark__dot:nth-child(12) { --ds-agent-step: 6; }
+.ds-agent-status-mark--checkerboard .ds-agent-status-mark__dot:nth-child(13) { --ds-agent-step: 6; }
+.ds-agent-status-mark--checkerboard .ds-agent-status-mark__dot:nth-child(14) { --ds-agent-step: 0; }
+.ds-agent-status-mark--checkerboard .ds-agent-status-mark__dot:nth-child(15) { --ds-agent-step: 6; }
+.ds-agent-status-mark--checkerboard .ds-agent-status-mark__dot:nth-child(16) { --ds-agent-step: 0; }
+
+/* Scan: a single column travelling left to right */
+.ds-agent-status-mark--scan .ds-agent-status-mark__dot:nth-child(1) { --ds-agent-step: 0; }
+.ds-agent-status-mark--scan .ds-agent-status-mark__dot:nth-child(2) { --ds-agent-step: 3; }
+.ds-agent-status-mark--scan .ds-agent-status-mark__dot:nth-child(3) { --ds-agent-step: 6; }
+.ds-agent-status-mark--scan .ds-agent-status-mark__dot:nth-child(4) { --ds-agent-step: 9; }
+.ds-agent-status-mark--scan .ds-agent-status-mark__dot:nth-child(5) { --ds-agent-step: 0; }
+.ds-agent-status-mark--scan .ds-agent-status-mark__dot:nth-child(6) { --ds-agent-step: 3; }
+.ds-agent-status-mark--scan .ds-agent-status-mark__dot:nth-child(7) { --ds-agent-step: 6; }
+.ds-agent-status-mark--scan .ds-agent-status-mark__dot:nth-child(8) { --ds-agent-step: 9; }
+.ds-agent-status-mark--scan .ds-agent-status-mark__dot:nth-child(9) { --ds-agent-step: 0; }
+.ds-agent-status-mark--scan .ds-agent-status-mark__dot:nth-child(10) { --ds-agent-step: 3; }
+.ds-agent-status-mark--scan .ds-agent-status-mark__dot:nth-child(11) { --ds-agent-step: 6; }
+.ds-agent-status-mark--scan .ds-agent-status-mark__dot:nth-child(12) { --ds-agent-step: 9; }
+.ds-agent-status-mark--scan .ds-agent-status-mark__dot:nth-child(13) { --ds-agent-step: 0; }
+.ds-agent-status-mark--scan .ds-agent-status-mark__dot:nth-child(14) { --ds-agent-step: 3; }
+.ds-agent-status-mark--scan .ds-agent-status-mark__dot:nth-child(15) { --ds-agent-step: 6; }
+.ds-agent-status-mark--scan .ds-agent-status-mark__dot:nth-child(16) { --ds-agent-step: 9; }
+
+/* Rain: drops falling down each column, columns out of phase */
+.ds-agent-status-mark--rain .ds-agent-status-mark__dot:nth-child(1) { --ds-agent-step: 0; }
+.ds-agent-status-mark--rain .ds-agent-status-mark__dot:nth-child(2) { --ds-agent-step: 4; }
+.ds-agent-status-mark--rain .ds-agent-status-mark__dot:nth-child(3) { --ds-agent-step: 2; }
+.ds-agent-status-mark--rain .ds-agent-status-mark__dot:nth-child(4) { --ds-agent-step: 6; }
+.ds-agent-status-mark--rain .ds-agent-status-mark__dot:nth-child(5) { --ds-agent-step: 2; }
+.ds-agent-status-mark--rain .ds-agent-status-mark__dot:nth-child(6) { --ds-agent-step: 6; }
+.ds-agent-status-mark--rain .ds-agent-status-mark__dot:nth-child(7) { --ds-agent-step: 4; }
+.ds-agent-status-mark--rain .ds-agent-status-mark__dot:nth-child(8) { --ds-agent-step: 8; }
+.ds-agent-status-mark--rain .ds-agent-status-mark__dot:nth-child(9) { --ds-agent-step: 4; }
+.ds-agent-status-mark--rain .ds-agent-status-mark__dot:nth-child(10) { --ds-agent-step: 8; }
+.ds-agent-status-mark--rain .ds-agent-status-mark__dot:nth-child(11) { --ds-agent-step: 6; }
+.ds-agent-status-mark--rain .ds-agent-status-mark__dot:nth-child(12) { --ds-agent-step: 10; }
+.ds-agent-status-mark--rain .ds-agent-status-mark__dot:nth-child(13) { --ds-agent-step: 6; }
+.ds-agent-status-mark--rain .ds-agent-status-mark__dot:nth-child(14) { --ds-agent-step: 10; }
+.ds-agent-status-mark--rain .ds-agent-status-mark__dot:nth-child(15) { --ds-agent-step: 8; }
+.ds-agent-status-mark--rain .ds-agent-status-mark__dot:nth-child(16) { --ds-agent-step: 0; }
+
+/* Cascade: column by column, top to bottom */
+.ds-agent-status-mark--cascade .ds-agent-status-mark__dot:nth-child(1) { --ds-agent-step: 0; }
+.ds-agent-status-mark--cascade .ds-agent-status-mark__dot:nth-child(2) { --ds-agent-step: 3; }
+.ds-agent-status-mark--cascade .ds-agent-status-mark__dot:nth-child(3) { --ds-agent-step: 6; }
+.ds-agent-status-mark--cascade .ds-agent-status-mark__dot:nth-child(4) { --ds-agent-step: 9; }
+.ds-agent-status-mark--cascade .ds-agent-status-mark__dot:nth-child(5) { --ds-agent-step: 0.75; }
+.ds-agent-status-mark--cascade .ds-agent-status-mark__dot:nth-child(6) { --ds-agent-step: 3.75; }
+.ds-agent-status-mark--cascade .ds-agent-status-mark__dot:nth-child(7) { --ds-agent-step: 6.75; }
+.ds-agent-status-mark--cascade .ds-agent-status-mark__dot:nth-child(8) { --ds-agent-step: 9.75; }
+.ds-agent-status-mark--cascade .ds-agent-status-mark__dot:nth-child(9) { --ds-agent-step: 1.5; }
+.ds-agent-status-mark--cascade .ds-agent-status-mark__dot:nth-child(10) { --ds-agent-step: 4.5; }
+.ds-agent-status-mark--cascade .ds-agent-status-mark__dot:nth-child(11) { --ds-agent-step: 7.5; }
+.ds-agent-status-mark--cascade .ds-agent-status-mark__dot:nth-child(12) { --ds-agent-step: 10.5; }
+.ds-agent-status-mark--cascade .ds-agent-status-mark__dot:nth-child(13) { --ds-agent-step: 2.25; }
+.ds-agent-status-mark--cascade .ds-agent-status-mark__dot:nth-child(14) { --ds-agent-step: 5.25; }
+.ds-agent-status-mark--cascade .ds-agent-status-mark__dot:nth-child(15) { --ds-agent-step: 8.25; }
+.ds-agent-status-mark--cascade .ds-agent-status-mark__dot:nth-child(16) { --ds-agent-step: 11.25; }
+
+/* Sparkle: a fixed scatter, so it reads as random without being random */
+.ds-agent-status-mark--sparkle .ds-agent-status-mark__dot:nth-child(1) { --ds-agent-step: 6.75; }
+.ds-agent-status-mark--sparkle .ds-agent-status-mark__dot:nth-child(2) { --ds-agent-step: 1.5; }
+.ds-agent-status-mark--sparkle .ds-agent-status-mark__dot:nth-child(3) { --ds-agent-step: 9.75; }
+.ds-agent-status-mark--sparkle .ds-agent-status-mark__dot:nth-child(4) { --ds-agent-step: 3.75; }
+.ds-agent-status-mark--sparkle .ds-agent-status-mark__dot:nth-child(5) { --ds-agent-step: 0; }
+.ds-agent-status-mark--sparkle .ds-agent-status-mark__dot:nth-child(6) { --ds-agent-step: 8.25; }
+.ds-agent-status-mark--sparkle .ds-agent-status-mark__dot:nth-child(7) { --ds-agent-step: 5.25; }
+.ds-agent-status-mark--sparkle .ds-agent-status-mark__dot:nth-child(8) { --ds-agent-step: 11.25; }
+.ds-agent-status-mark--sparkle .ds-agent-status-mark__dot:nth-child(9) { --ds-agent-step: 3; }
+.ds-agent-status-mark--sparkle .ds-agent-status-mark__dot:nth-child(10) { --ds-agent-step: 7.5; }
+.ds-agent-status-mark--sparkle .ds-agent-status-mark__dot:nth-child(11) { --ds-agent-step: 0.75; }
+.ds-agent-status-mark--sparkle .ds-agent-status-mark__dot:nth-child(12) { --ds-agent-step: 10.5; }
+.ds-agent-status-mark--sparkle .ds-agent-status-mark__dot:nth-child(13) { --ds-agent-step: 4.5; }
+.ds-agent-status-mark--sparkle .ds-agent-status-mark__dot:nth-child(14) { --ds-agent-step: 9; }
+.ds-agent-status-mark--sparkle .ds-agent-status-mark__dot:nth-child(15) { --ds-agent-step: 2.25; }
+.ds-agent-status-mark--sparkle .ds-agent-status-mark__dot:nth-child(16) { --ds-agent-step: 6; }
+
+/* Wave rows: whole rows breaking top to bottom */
+.ds-agent-status-mark--wave-rows .ds-agent-status-mark__dot:nth-child(1) { --ds-agent-step: 0; }
+.ds-agent-status-mark--wave-rows .ds-agent-status-mark__dot:nth-child(2) { --ds-agent-step: 0; }
+.ds-agent-status-mark--wave-rows .ds-agent-status-mark__dot:nth-child(3) { --ds-agent-step: 0; }
+.ds-agent-status-mark--wave-rows .ds-agent-status-mark__dot:nth-child(4) { --ds-agent-step: 0; }
+.ds-agent-status-mark--wave-rows .ds-agent-status-mark__dot:nth-child(5) { --ds-agent-step: 3; }
+.ds-agent-status-mark--wave-rows .ds-agent-status-mark__dot:nth-child(6) { --ds-agent-step: 3; }
+.ds-agent-status-mark--wave-rows .ds-agent-status-mark__dot:nth-child(7) { --ds-agent-step: 3; }
+.ds-agent-status-mark--wave-rows .ds-agent-status-mark__dot:nth-child(8) { --ds-agent-step: 3; }
+.ds-agent-status-mark--wave-rows .ds-agent-status-mark__dot:nth-child(9) { --ds-agent-step: 6; }
+.ds-agent-status-mark--wave-rows .ds-agent-status-mark__dot:nth-child(10) { --ds-agent-step: 6; }
+.ds-agent-status-mark--wave-rows .ds-agent-status-mark__dot:nth-child(11) { --ds-agent-step: 6; }
+.ds-agent-status-mark--wave-rows .ds-agent-status-mark__dot:nth-child(12) { --ds-agent-step: 6; }
+.ds-agent-status-mark--wave-rows .ds-agent-status-mark__dot:nth-child(13) { --ds-agent-step: 9; }
+.ds-agent-status-mark--wave-rows .ds-agent-status-mark__dot:nth-child(14) { --ds-agent-step: 9; }
+.ds-agent-status-mark--wave-rows .ds-agent-status-mark__dot:nth-child(15) { --ds-agent-step: 9; }
+.ds-agent-status-mark--wave-rows .ds-agent-status-mark__dot:nth-child(16) { --ds-agent-step: 9; }
+
+/* Helix: two strands crossing, everything off-strand dark */
+.ds-agent-status-mark--helix .ds-agent-status-mark__dot:nth-child(1) { --ds-agent-step: 0; }
+.ds-agent-status-mark--helix .ds-agent-status-mark__dot:nth-child(4) { --ds-agent-step: 9; }
+.ds-agent-status-mark--helix .ds-agent-status-mark__dot:nth-child(6) { --ds-agent-step: 3; }
+.ds-agent-status-mark--helix .ds-agent-status-mark__dot:nth-child(7) { --ds-agent-step: 6; }
+.ds-agent-status-mark--helix .ds-agent-status-mark__dot:nth-child(10) { --ds-agent-step: 3; }
+.ds-agent-status-mark--helix .ds-agent-status-mark__dot:nth-child(11) { --ds-agent-step: 6; }
+.ds-agent-status-mark--helix .ds-agent-status-mark__dot:nth-child(13) { --ds-agent-step: 0; }
+.ds-agent-status-mark--helix .ds-agent-status-mark__dot:nth-child(16) { --ds-agent-step: 9; }
+.ds-agent-status-mark--helix .ds-agent-status-mark__dot:nth-child(2),
+.ds-agent-status-mark--helix .ds-agent-status-mark__dot:nth-child(3),
+.ds-agent-status-mark--helix .ds-agent-status-mark__dot:nth-child(5),
+.ds-agent-status-mark--helix .ds-agent-status-mark__dot:nth-child(8),
+.ds-agent-status-mark--helix .ds-agent-status-mark__dot:nth-child(9),
+.ds-agent-status-mark--helix .ds-agent-status-mark__dot:nth-child(12),
+.ds-agent-status-mark--helix .ds-agent-status-mark__dot:nth-child(14),
+.ds-agent-status-mark--helix .ds-agent-status-mark__dot:nth-child(15) {
+  animation: none;
+}
+
+/* Diagonal swipe: anti-diagonals, top-left to bottom-right */
+.ds-agent-status-mark--diagonal-swipe .ds-agent-status-mark__dot:nth-child(1) { --ds-agent-step: 0; }
+.ds-agent-status-mark--diagonal-swipe .ds-agent-status-mark__dot:nth-child(2) { --ds-agent-step: 1.5; }
+.ds-agent-status-mark--diagonal-swipe .ds-agent-status-mark__dot:nth-child(3) { --ds-agent-step: 3; }
+.ds-agent-status-mark--diagonal-swipe .ds-agent-status-mark__dot:nth-child(4) { --ds-agent-step: 4.5; }
+.ds-agent-status-mark--diagonal-swipe .ds-agent-status-mark__dot:nth-child(5) { --ds-agent-step: 1.5; }
+.ds-agent-status-mark--diagonal-swipe .ds-agent-status-mark__dot:nth-child(6) { --ds-agent-step: 3; }
+.ds-agent-status-mark--diagonal-swipe .ds-agent-status-mark__dot:nth-child(7) { --ds-agent-step: 4.5; }
+.ds-agent-status-mark--diagonal-swipe .ds-agent-status-mark__dot:nth-child(8) { --ds-agent-step: 6; }
+.ds-agent-status-mark--diagonal-swipe .ds-agent-status-mark__dot:nth-child(9) { --ds-agent-step: 3; }
+.ds-agent-status-mark--diagonal-swipe .ds-agent-status-mark__dot:nth-child(10) { --ds-agent-step: 4.5; }
+.ds-agent-status-mark--diagonal-swipe .ds-agent-status-mark__dot:nth-child(11) { --ds-agent-step: 6; }
+.ds-agent-status-mark--diagonal-swipe .ds-agent-status-mark__dot:nth-child(12) { --ds-agent-step: 7.5; }
+.ds-agent-status-mark--diagonal-swipe .ds-agent-status-mark__dot:nth-child(13) { --ds-agent-step: 4.5; }
+.ds-agent-status-mark--diagonal-swipe .ds-agent-status-mark__dot:nth-child(14) { --ds-agent-step: 6; }
+.ds-agent-status-mark--diagonal-swipe .ds-agent-status-mark__dot:nth-child(15) { --ds-agent-step: 7.5; }
+.ds-agent-status-mark--diagonal-swipe .ds-agent-status-mark__dot:nth-child(16) { --ds-agent-step: 9; }
+
+
+/* Twinkle: solid, one or two dots dipping on a fixed scatter */
+.ds-agent-status-mark--animated.ds-agent-status-mark--twinkle .ds-agent-status-mark__dot:nth-child(n) {
+  opacity: 1;
+  transform: none;
+  animation-name: ds-agent-dot-twinkle;
+  animation-duration: var(--ds-agent-twinkle-cycle);
+  animation-delay: calc(var(--ds-agent-twinkle-step, 0) * var(--ds-agent-twinkle-slot));
+}
+
+.ds-agent-status-mark__dot:nth-child(1) { --ds-agent-twinkle-step: 9; }
+.ds-agent-status-mark__dot:nth-child(2) { --ds-agent-twinkle-step: 2; }
+.ds-agent-status-mark__dot:nth-child(3) { --ds-agent-twinkle-step: 13; }
+.ds-agent-status-mark__dot:nth-child(4) { --ds-agent-twinkle-step: 5; }
+.ds-agent-status-mark__dot:nth-child(5) { --ds-agent-twinkle-step: 0; }
+.ds-agent-status-mark__dot:nth-child(6) { --ds-agent-twinkle-step: 11; }
+.ds-agent-status-mark__dot:nth-child(7) { --ds-agent-twinkle-step: 7; }
+.ds-agent-status-mark__dot:nth-child(8) { --ds-agent-twinkle-step: 15; }
+.ds-agent-status-mark__dot:nth-child(9) { --ds-agent-twinkle-step: 4; }
+.ds-agent-status-mark__dot:nth-child(10) { --ds-agent-twinkle-step: 10; }
+.ds-agent-status-mark__dot:nth-child(11) { --ds-agent-twinkle-step: 1; }
+.ds-agent-status-mark__dot:nth-child(12) { --ds-agent-twinkle-step: 14; }
+.ds-agent-status-mark__dot:nth-child(13) { --ds-agent-twinkle-step: 6; }
+.ds-agent-status-mark__dot:nth-child(14) { --ds-agent-twinkle-step: 12; }
+.ds-agent-status-mark__dot:nth-child(15) { --ds-agent-twinkle-step: 3; }
+.ds-agent-status-mark__dot:nth-child(16) { --ds-agent-twinkle-step: 8; }
+
+/* ============================================
+   THE AGENT RING (agentRingProps)
+   The AI gradient around whatever an agent is
+   working on: a section, a table, a row, a
+   card, a field. AiButton's ring recipe (the
+   gradient masked to a --border-050 band),
+   overlaid on the element's ::after so it never
+   moves layout. Colour only: the fill is the
+   host's.
+
+   Two hooks let any surface wear it:
+   --ds-agent-ring-offset stands the ring clear
+   of the element (a borderless section), and
+   --ds-agent-ring-radius gives a square surface
+   corners. The defaults sit flush on the
+   element's own edge and radius.
+   ============================================ */
+
+@property --ds-agent-ring-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+/* Zero specificity, so a host's own position always wins: the ring only
+   needs a containing block, which absolute and fixed already are. */
+:where(.ds-agent-ring) {
+  position: relative;
+}
+
+.ds-agent-ring:is(
+    [data-agent-state='thinking'],
+    [data-agent-state='working'],
+    [data-agent-state='waiting'],
+    [data-agent-state='done'],
+    [data-agent-state='error']
+  )::after {
+  --ds-agent-ring-start: var(--color-ai-gradient-start);
+  --ds-agent-ring-mid: var(--color-ai-gradient-mid);
+  --ds-agent-ring-end: var(--color-ai-gradient-end);
+
+  content: '';
+  position: absolute;
+  inset: calc(-1 * var(--ds-agent-ring-offset, 0px));
+  z-index: 1;
+  border-radius: var(--ds-agent-ring-radius, inherit);
+  padding: var(--border-050);
+  background: conic-gradient(
+    from var(--ds-agent-ring-angle),
+    var(--ds-agent-ring-start),
+    var(--ds-agent-ring-mid),
+    var(--ds-agent-ring-end),
+    var(--ds-agent-ring-mid),
+    var(--ds-agent-ring-start)
+  );
+  /* ds-allow(color): mask luminance keying — the #fff paints alpha coverage
+     for mask-composite, not a theme colour */
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  animation: ds-agent-ring-in var(--motion-duration-base) var(--motion-ease-entrance) both;
+}
+
+/* Thinking and working: the busy spin AiButton's ring takes, one turn per
+   spinner rotation. */
+.ds-agent-ring:is([data-agent-state='thinking'], [data-agent-state='working'])::after {
+  animation:
+    ds-agent-ring-in var(--motion-duration-base) var(--motion-ease-entrance) both,
+    ds-agent-ring-spin var(--motion-duration-loop-spin) var(--motion-ease-linear) infinite;
+}
+
+/* Waiting: the warning family's border colour, breathing on the matrix's
+   cycle the way the dots do, so a ring that waits reads like a mark that
+   waits. */
+.ds-agent-ring[data-agent-state='waiting']::after {
+  --ds-agent-ring-start: var(--color-status-warning-border);
+  --ds-agent-ring-mid: var(--color-status-warning-border);
+  --ds-agent-ring-end: var(--color-status-warning-border);
+  animation:
+    ds-agent-ring-in var(--motion-duration-base) var(--motion-ease-entrance) both,
+    ds-agent-ring-breathe var(--motion-duration-loop-matrix) var(--motion-ease-standard) infinite;
+}
+
+/* Done and error: the status family's border colour for a beat, then the
+   ring fades off and the element is left as it was. */
+.ds-agent-ring[data-agent-state='done']::after {
+  --ds-agent-ring-start: var(--color-status-positive-border);
+  --ds-agent-ring-mid: var(--color-status-positive-border);
+  --ds-agent-ring-end: var(--color-status-positive-border);
+}
+
+.ds-agent-ring[data-agent-state='error']::after {
+  --ds-agent-ring-start: var(--color-status-error-border);
+  --ds-agent-ring-mid: var(--color-status-error-border);
+  --ds-agent-ring-end: var(--color-status-error-border);
+}
+
+.ds-agent-ring:is([data-agent-state='done'], [data-agent-state='error'])::after {
+  /* ds-allow(motion): the 2s beat mirrors MOTION_FEEDBACK_RESET_MS, the hold
+     AiButton's done and error take, so the ring and the button settle
+     together */
+  animation: ds-agent-ring-settle 2000ms var(--motion-ease-standard) forwards;
+}
+
+@keyframes ds-agent-ring-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes ds-agent-ring-spin {
+  to {
+    --ds-agent-ring-angle: 360deg;
+  }
+}
+
+/* The ring's breath keeps the band legible at its low point: the dots dim
+   to a fifth, but a ring that faded that far would read as switching off. */
+@keyframes ds-agent-ring-breathe {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes ds-agent-ring-settle {
+  0%,
+  80% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
 }
 
 /* ============================================
@@ -589,13 +1107,29 @@
    let the label carry the meaning on its own.
    ============================================ */
 
-/* ds-allow(motion): parks a looping animation, which the collapsed duration would strobe rather than stop (the dot cycle and the label shimmer). */
+/* ds-allow(motion): parks a looping animation, which the collapsed duration would strobe rather than stop (the dot cycle, the label shimmer and the agent ring's turn). */
 @media (prefers-reduced-motion: reduce) {
+  .ds-agent-status.ds-agent-status--done .ds-agent-status__dot:nth-child(n),
+  .ds-agent-status.ds-agent-status--error .ds-agent-status__dot:nth-child(n),
+  .ds-agent-status-mark.ds-agent-status-mark--done .ds-agent-status-mark__dot:nth-child(n),
+  .ds-agent-status-mark.ds-agent-status-mark--error .ds-agent-status-mark__dot:nth-child(n),
+  .ds-agent-status--animated.ds-agent-status--twinkle .ds-agent-status__dot:nth-child(n),
+  .ds-agent-status-mark--animated.ds-agent-status-mark--twinkle .ds-agent-status-mark__dot:nth-child(n) {
+    animation: none;
+  }
+
   .ds-agent-status--animated .ds-agent-status__dot,
   .ds-agent-status-mark--animated .ds-agent-status-mark__dot {
     animation: none;
     opacity: 0.55;
     transform: none;
+  }
+
+  /* The ring stops turning and breathing and stays; the done and error fade
+     still runs, being a change of opacity rather than movement. */
+  .ds-agent-ring:is([data-agent-state='thinking'], [data-agent-state='working'])::after,
+  .ds-agent-ring[data-agent-state='waiting']::after {
+    animation: none;
   }
 
   .ds-agent-status__label--shimmer {

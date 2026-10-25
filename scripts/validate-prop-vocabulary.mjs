@@ -657,7 +657,7 @@ const EMPHASIS_VALUES = new Set(['default', ...EMPHASIS]);
 const STATUS_VALUES = new Set(['default', 'info', 'positive', 'warning', 'error', 'neutral']);
 const FORM = 'picks the component\'s form, which it has instead of an emphasis';
 const SANCTIONED_FORM_VARIANTS = {
-  AgentStatus: { values: ['inline', 'bar'], reason: FORM },
+  AgentStatus: { values: ['inline', 'bar', 'pill'], reason: FORM },
   AnchorNav: { values: ['list', 'floating'], reason: FORM },
   Card: { values: ['default', 'case-study'], reason: FORM },
   EmptyState: { values: ['plain', 'bordered'], reason: FORM },

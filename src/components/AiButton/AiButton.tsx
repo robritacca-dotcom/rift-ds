@@ -43,13 +43,6 @@ const DEFAULT_STATUS_LABELS: Record<AgentStatusState, string> = {
   error: 'Failed',
 };
 
-/** The statuses drawn as a glyph rather than the working mark. */
-const STATUS_GLYPHS: Partial<Record<AgentStatusState, string>> = {
-  waiting: 'front_hand',
-  done: 'check_circle',
-  error: 'error',
-};
-
 /** The statuses that spin the ring and hold the summary panel shut. */
 const BUSY_STATUSES: readonly AgentStatusState[] = ['thinking', 'working'];
 
@@ -67,9 +60,10 @@ type AiButtonOwnProps = {
    * What the agent behind the button is doing, in AgentStatus's vocabulary.
    * The label never changes; the icon carries the state. `thinking` and
    * `working` show AgentStatusMark and spin the ring faster, `waiting` shows
-   * a raised hand in the warning colour with the ring at rest, and `done` and
-   * `error` turn the button to their status colours with a check or an
-   * error glyph, then return to the resting look after a beat. The button stays clickable throughout, unlike Button's
+   * the mark breathing in the warning colour with the ring at rest, and `done` and
+   * `error` turn the button to their status colours with the mark filled
+   * solid in the status colour, then return to the resting look after a
+   * beat. The button stays clickable throughout, unlike Button's
    * `loading`, so a click can open the conversation to watch the work.
    */
   status?: AgentStatusState;
@@ -99,7 +93,7 @@ type AiButtonOwnProps = {
    * is the usual filling; a question, a form or a preview work the same way.
    * It opens each time the status becomes `waiting` and stays open without
    * hover. Escape or a click on the button folds it back into the button,
-   * where the raised hand keeps showing, and another click opens it again.
+   * where the waiting mark keeps showing, and another click opens it again.
    * While it is open the summary panel never opens.
    */
   request?: React.ReactNode;
@@ -252,7 +246,7 @@ export const AiButton = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, 
       ? { 'aria-expanded': requestShown, 'aria-controls': requestId }
       : {};
 
-    /* Done and error are moments, not resting states: their glyph shows for
+    /* Done and error are moments, not resting states: their filled mark shows for
        a beat, then the resting icon returns while the host's status stays. */
     const isTerminal = status === 'done' || status === 'error';
     const [settled, setSettled] = useState(false);
@@ -339,17 +333,7 @@ export const AiButton = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, 
         icon
       );
     const shownIcon =
-      shownStatus === 'idle' ? (
-        restingIcon
-      ) : shownStatus in STATUS_GLYPHS ? (
-        <span
-          className={`${iconClass}-glyph ${iconClass}-glyph--${shownStatus} material-symbols-rounded`}
-        >
-          {STATUS_GLYPHS[shownStatus]}
-        </span>
-      ) : (
-        <AgentStatusMark state={shownStatus} />
-      );
+      shownStatus === 'idle' ? restingIcon : <AgentStatusMark state={shownStatus} />;
 
     /* The icon slot is a fixed --icon-size box, so every state's icon takes
        exactly the room the resting one did. Keyed on the shown state, the

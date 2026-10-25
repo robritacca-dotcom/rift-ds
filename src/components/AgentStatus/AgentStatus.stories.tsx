@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { AgentStatus } from './AgentStatus';
 import { agentStatusPatterns } from './AgentStatusPatterns';
+import { agentRingProps } from './AgentRing';
 
 const meta = {
   title: 'Components/AgentStatus',
@@ -53,6 +54,43 @@ export const Patterns: Story = {
 export const Bar: Story = {
   args: { variant: 'bar', state: 'working', label: 'Running the test suite' },
   parameters: { layout: 'padded' },
+};
+
+/** The pill: a glass status for a run that floats over the page, with an action. */
+export const Pill: Story = {
+  render: () => (
+    <div style={{ display: 'grid', gap: 12, justifyItems: 'start' }}>
+      <AgentStatus variant="pill" size="compact" state="working" label="Working · step 3 of 5" action={<a href="#run">Open</a>} />
+      <AgentStatus variant="pill" size="compact" state="waiting" label="Waiting for your approval" />
+      <AgentStatus variant="pill" size="compact" state="done" label="Done, 4 changes" />
+      <AgentStatus variant="pill" size="compact" state="error" label="Stopped at step 2" />
+    </div>
+  ),
+};
+
+/** The agent ring on surfaces of different shapes, one per state. */
+export const Ring: Story = {
+  render: () => (
+    <div style={{ display: 'grid', gap: 16, gridTemplateColumns: 'repeat(2, 240px)' }}>
+      {(['working', 'waiting', 'done', 'error'] as const).map((state) => {
+        const ring = agentRingProps(state);
+        return (
+          <div
+            key={state}
+            {...ring}
+            style={{
+              padding: 16,
+              borderRadius: 'var(--radius-400)',
+              background: 'var(--color-bg-container-primary)',
+              border: 'var(--border-025) solid var(--color-bg-container-border)',
+            }}
+          >
+            {state}
+          </div>
+        );
+      })}
+    </div>
+  ),
 };
 
 /** Compact matches compact ChatMessage text, for dense transcripts. */

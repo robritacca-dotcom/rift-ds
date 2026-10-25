@@ -230,18 +230,6 @@
   --ds-agent-color: currentColor;
 }
 
-.ds-ai-button__icon-glyph--done {
-  color: var(--color-status-positive-icon);
-}
-
-.ds-ai-button__icon-glyph--error {
-  color: var(--color-status-error-icon);
-}
-
-.ds-ai-button__icon-glyph--waiting {
-  color: var(--color-status-warning-icon);
-}
-
 /* The done and error beat: the whole button takes its status family, the
    field the status background and the ring and glow its border colour at
    full strength, then returns to the AI look with the resting icon. */

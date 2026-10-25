@@ -314,10 +314,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "pattern",
-            "type": "\"braille\" | \"orbit\" | \"breathe\" | \"snake\" | \"fill-sweep\" | \"pulse\" | \"columns\" | \"checkerboard\" | \"scan\" | \"rain\" | \"cascade\" | \"sparkle\" | \"wave-rows\" | \"helix\" | \"diagonal-swipe\"",
+            "type": "\"braille\" | \"orbit\" | \"breathe\" | \"snake\" | \"fill-sweep\" | \"pulse\" | \"columns\" | \"checkerboard\" | \"scan\" | \"rain\" | \"cascade\" | \"sparkle\" | \"wave-rows\" | \"helix\" | \"diagonal-swipe\" | \"twinkle\"",
             "required": false,
-            "description": "Which dot-matrix choreography to run.",
-            "defaultValue": "orbit"
+            "description": "Which dot-matrix choreography to run. Defaults to `breathe` while `waiting`, a still pulse that reads as the person's turn (the same as AgentStatusMark), and `orbit` otherwise."
           },
           {
             "name": "shimmer",
@@ -334,10 +333,16 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "variant",
-            "type": "\"inline\" | \"bar\"",
+            "type": "\"inline\" | \"bar\" | \"pill\"",
             "required": false,
-            "description": "`inline` sits in a line of content; `bar` is a full-width row for the top of a panel.",
+            "description": "`inline` sits in a line of content; `bar` is a full-width row for the\ntop of a panel; `pill` is a glass pill for a status that floats over\nthe page while a run goes on; once it ends the dots fill solid in the\nstatus colour, as in every variant. The pill does not position itself.",
             "defaultValue": "inline"
+          },
+          {
+            "name": "action",
+            "type": "ReactNode",
+            "required": false,
+            "description": "A trailing control after the status text, such as a link that opens the run. Meant for the `pill` and `bar` variants."
           },
           {
             "name": "className",
@@ -363,6 +368,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "What the agent is doing. Drives the colour and whether the dots animate, as on AgentStatus.",
             "defaultValue": "working"
+          },
+          {
+            "name": "pattern",
+            "type": "\"braille\" | \"orbit\" | \"breathe\" | \"snake\" | \"fill-sweep\" | \"pulse\" | \"columns\" | \"checkerboard\" | \"scan\" | \"rain\" | \"cascade\" | \"sparkle\" | \"wave-rows\" | \"helix\" | \"diagonal-swipe\" | \"twinkle\"",
+            "required": false,
+            "description": "Which choreography to run: every AgentStatus pattern, redrawn for the square grid. Defaults to `breathe` while `waiting`, a still pulse that reads as the person's turn, and `orbit` otherwise."
           },
           {
             "name": "className",
@@ -420,7 +431,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "status",
             "type": "AgentStatusState",
             "required": false,
-            "description": "What the agent behind the button is doing, in AgentStatus's vocabulary.\nThe label never changes; the icon carries the state. `thinking` and\n`working` show AgentStatusMark and spin the ring faster, `waiting` shows\na raised hand in the warning colour with the ring at rest, and `done` and\n`error` turn the button to their status colours with a check or an\nerror glyph, then return to the resting look after a beat. The button stays clickable throughout, unlike Button's\n`loading`, so a click can open the conversation to watch the work."
+            "description": "What the agent behind the button is doing, in AgentStatus's vocabulary.\nThe label never changes; the icon carries the state. `thinking` and\n`working` show AgentStatusMark and spin the ring faster, `waiting` shows\nthe mark breathing in the warning colour with the ring at rest, and `done` and\n`error` turn the button to their status colours with the mark filled\nsolid in the status colour, then return to the resting look after a\nbeat. The button stays clickable throughout, unlike Button's\n`loading`, so a click can open the conversation to watch the work."
           },
           {
             "name": "statusLabel",
@@ -464,7 +475,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "request",
             "type": "ReactNode",
             "required": false,
-            "description": "What the agent needs from the person while `status` is `waiting`: any\ncontent, drawn in a glass panel at the button. An InterruptCard approval\nis the usual filling; a question, a form or a preview work the same way.\nIt opens each time the status becomes `waiting` and stays open without\nhover. Escape or a click on the button folds it back into the button,\nwhere the raised hand keeps showing, and another click opens it again.\nWhile it is open the summary panel never opens."
+            "description": "What the agent needs from the person while `status` is `waiting`: any\ncontent, drawn in a glass panel at the button. An InterruptCard approval\nis the usual filling; a question, a form or a preview work the same way.\nIt opens each time the status becomes `waiting` and stays open without\nhover. Escape or a click on the button folds it back into the button,\nwhere the waiting mark keeps showing, and another click opens it again.\nWhile it is open the summary panel never opens."
           },
           {
             "name": "requestOpen",

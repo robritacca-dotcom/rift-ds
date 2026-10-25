@@ -29,6 +29,7 @@ export const agentStatusPatterns = [
   'wave-rows',
   'helix',
   'diagonal-swipe',
+  'twinkle',
 ] as const;
 
 export type AgentStatusPattern = (typeof agentStatusPatterns)[number];

@@ -510,6 +510,15 @@ const previews: Record<string, () => ReactNode> = {
       </svg>
     </>
   ),
+  "command-palette-trigger": () => (
+    <>
+      <div style={{ width: 170, display: "flex", alignItems: "center", gap: 6, height: 32, padding: "0 10px", borderRadius: 999, border: "1px solid var(--color-bg-container-border)", background: "var(--color-bg-container-primary)", color: "var(--color-text-secondary)", fontSize: 11 }}>
+        <span className="material-symbols-rounded" style={{ fontSize: 16 }}>search</span>
+        <span>Search</span>
+        <span style={{ marginLeft: "auto", fontSize: 10 }}>⌘K</span>
+      </div>
+    </>
+  ),
   "legend-tile": () => (
     <>
       <div style={{ display: "flex", gap: "8px" }}>
@@ -601,6 +610,29 @@ const previews: Record<string, () => ReactNode> = {
         ))}
         <line x1="0" y1="63.5" x2="120" y2="63.5" stroke="var(--color-bg-container-border)" strokeWidth="1" />
       </svg>
+    </>
+  ),
+  "theme-picker": () => (
+    <>
+      {/* A still picture: the live picker would retheme the whole site. */}
+      <div style={{ width: 32, height: 32, borderRadius: 999, display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid var(--color-bg-container-border)", background: "var(--color-bg-container-primary)" }}>
+        <span style={{ width: 14, height: 14, borderRadius: 999, background: "var(--color-action-primary-bg)" }} />
+      </div>
+    </>
+  ),
+  "theme-toggle": () => (
+    <>
+      {/* A still picture: the live toggle would change the whole site. */}
+      <SegmentedControl
+        segments={[
+          { label: "System", value: "system", icon: "routine" },
+          { label: "Light", value: "light", icon: "light_mode" },
+          { label: "Dark", value: "dark", icon: "dark_mode" },
+        ]}
+        value="system"
+        size="compact"
+        showLabels={false}
+      />
     </>
   ),
   "tree-view": () => (

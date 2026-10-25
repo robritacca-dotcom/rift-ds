@@ -36,7 +36,7 @@
  *      `### ChatWidget` section in design.md; and its `category` is a
  *      registered component category, since its page joins that section.
  *   7. Every `documented` export is a component the barrel exports.
- *   8. The init bin's chat templates (src/cli/templates/chat/) import only
+ *   8. The init bin's templates (src/cli/templates/chat/ and app/) import only
  *      package subpaths the manifest declares, so `npx rift-ds init chat`
  *      can never scaffold an import that does not resolve; and every file
  *      under the templates folder is tracked by git, because the tarball is
@@ -326,11 +326,13 @@ function optionalPeersInClosure(entry) {
   }
 }
 
-/* 8. The scaffold templates import only subpaths that exist. */
-{
-  const templatesDir = join(repoRoot, 'src', 'cli', 'templates', 'chat');
+/* 8. The scaffold templates import only subpaths that exist. Both of the
+   init bin's scaffolds ride beside it the same way, `init chat`'s and
+   `init app`'s, so both are held here. */
+for (const scaffoldName of ['chat', 'app']) {
+  const templatesDir = join(repoRoot, 'src', 'cli', 'templates', scaffoldName);
   if (!existsSync(templatesDir)) {
-    errors.push('src/cli/templates/chat/ does not exist (the init bin\'s chat scaffold)');
+    errors.push(`src/cli/templates/${scaffoldName}/ does not exist (the init bin's ${scaffoldName} scaffold)`);
   } else {
     const files = [];
     const collect = (dir) => {
@@ -359,7 +361,15 @@ function optionalPeersInClosure(entry) {
     for (const file of files) {
       for (const match of read(file).matchAll(specifierRe)) {
         const subpath = match[1] === PACKAGE_NAME ? '.' : `.${match[1].slice(PACKAGE_NAME.length)}`;
-        if (!(subpath in exportsMap)) {
+        // An exact key, or a wildcard one (`./components/*`) the subpath fits.
+        const exported =
+          subpath in exportsMap ||
+          Object.keys(exportsMap).some((key) => {
+            if (!key.includes('*')) return false;
+            const [head, tail] = key.split('*');
+            return subpath.startsWith(head) && subpath.endsWith(tail) && subpath.length > head.length + tail.length;
+          });
+        if (!exported) {
           errors.push(
             `${posix(relative(repoRoot, file))} imports "${match[1]}", which is not a subpath the package exports`
           );

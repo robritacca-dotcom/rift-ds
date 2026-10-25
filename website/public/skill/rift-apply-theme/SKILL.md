@@ -35,6 +35,7 @@ Choose by role, never by the nearest value. A grey that is body text and the sam
 - Depth: the only shadows are `--shadow-floating` for floating surfaces and `--shadow-modal` for modals. Everything else separates from the page through the container colours, so remove other shadows instead of mapping them.
 - Type: each text style is a bundle of tokens, `--font-<style>-family`, `-size`, `-weight`, `-line-height` and `-letter-spacing`. The styles are `caption`, `display-1`, `display-2`, `heading-1`, `heading-2`, `heading-3`, `mega-1`, `mega-2`, `overline`, `paragraph-emphasis`, `paragraph`, `paragraph-sm-emphasis`, `paragraph-sm`, `sub-display`, `title-body`. Apply a whole bundle. Do not mix one style's size with another's weight.
 - Icons: set `--icon-size` on the icon to a step from `--icon-size-*`. Never set `font-size` on an icon.
+- Control heights: `--control-height-*`, the height every row control (field, button, picker, segmented control) takes at the default and compact sizes, border included. A control of your own that sits in a row takes the same token, so the row lines up.
 - Motion: `--motion-*` for durations and easings in CSS. A timing that lives in a JavaScript timer comes from `rift-ds/tokens/motion`.
 - Stacking: `--layer-*`. A surface that rises over the page (a menu, a dialog, a toast) takes the layer for its role instead of a picked z-index. Order inside one component (a label over a pill) can stay a small number under 10.
 

@@ -61,6 +61,10 @@ const countStarter = (delivery: string) => () =>
 const USAGE_SNIPPET = `// Load the tokens once — primitives, semantic tokens, and both themes.
 import 'rift-ds/tokens/tokens.css';
 
+// Optional: the reset and the page every component is tuned against
+// (border-box sizing, no stray margins, the body's font and colours).
+import 'rift-ds/tokens/base.css';
+
 // Then import components — from the barrel…
 import { Button, Card, Badge } from 'rift-ds';
 
@@ -92,14 +96,19 @@ const DARK_MODE_SNIPPET = `<!-- Light is the default; flip the whole system with
    installs beside the package. */
 const CHAT_SNIPPET = `npx rift-ds ${chatWidget.command}`;
 
-const PAGE_PAINT_SNIPPET = `/* The token stylesheet defines values and styles no element, so
-   paint the page from the tokens once. It then follows the theme
-   and any preset along with the components. */
-body {
-  font-family: var(--font-family-primary);
-  color: var(--color-text-primary);
-  background: var(--color-bg-page-primary);
-}`;
+const COLOR_MODE_SNIPPET = `// app/layout.tsx: apply the visitor's stored mode before first paint.
+import { colorModeScript } from 'rift-ds/components/ThemeToggle/colorMode';
+
+<html lang="en" suppressHydrationWarning>
+  <head>
+    <script dangerouslySetInnerHTML={{ __html: colorModeScript() }} />
+  </head>
+  …
+</html>
+
+// Anywhere the mode should change: System, Light and Dark.
+import { ThemeToggle } from 'rift-ds/components/ThemeToggle/ThemeToggle';
+<ThemeToggle />`;
 
 const SHADCN_SNIPPET = `npx shadcn@latest add ${SITE_URL}/r/button.json`;
 
@@ -447,13 +456,21 @@ export default function GetStartedPage() {
                 </p>
                 <CodeBlock code={DARK_MODE_SNIPPET} language="html" showCopy />
                 <p className={styles.sectionNote}>
-                  The components theme themselves, but the page behind them is
-                  yours. The token stylesheet only defines custom properties,
-                  so until you apply them the body keeps the browser default,
-                  and a dark theme lands as dark components on a white page.
-                  Set the page colours from the tokens once:
+                  The page behind the components follows too once base.css is
+                  imported: it paints the body from the tokens and sets{" "}
+                  <code>color-scheme</code>, so scrollbars and native controls
+                  turn dark with everything else. Without it the body keeps the
+                  browser default, and a dark theme lands as dark components on
+                  a white page.
                 </p>
-                <CodeBlock code={PAGE_PAINT_SNIPPET} language="css" showCopy />
+                <p className={styles.sectionNote}>
+                  To let visitors choose, render the colour-mode script in the
+                  document head, which applies the stored choice before first
+                  paint, and put a ThemeToggle where the choice belongs. In a
+                  Next.js app, <code>npx rift-ds init app</code> scaffolds the
+                  script as a component.
+                </p>
+                <CodeBlock code={COLOR_MODE_SNIPPET} language="tsx" showCopy />
               </section>
 
               {/* Fonts */}

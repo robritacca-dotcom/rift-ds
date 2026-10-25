@@ -31,6 +31,10 @@
   cursor: pointer;
   transition: border-color var(--motion-duration-base) var(--motion-ease-standard);
   outline: none;
+  /* The row height, border included (--control-height-*). */
+  box-sizing: border-box;
+  height: var(--control-height-default);
+  padding-block: 0;
 }
 
 .ds-dropdown__trigger:hover:not(:focus-visible) {
@@ -262,6 +266,8 @@
 
 .ds-dropdown--compact .ds-dropdown__trigger {
   padding: var(--padding-150) var(--padding-300); /* 6px 12px */
+  height: var(--control-height-compact);
+  padding-block: 0;
 }
 
 .ds-dropdown--compact .ds-dropdown__value {

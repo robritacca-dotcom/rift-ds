@@ -17,8 +17,8 @@ export interface A11yCoverage {
 }
 
 export const a11yCoverage: A11yCoverage = {
-  "stories": 1237,
-  "storiedComponents": 155,
+  "stories": 1250,
+  "storiedComponents": 158,
   "behaviourModules": 6,
   "modalOverlays": [
     "Alert dialog",
@@ -52,6 +52,7 @@ export const a11yCoverage: A11yCoverage = {
     "Popover",
     "Rich dropdown",
     "Source chip",
+    "Theme picker",
     "Time picker",
     "Tooltip"
   ]

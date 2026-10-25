@@ -199,6 +199,13 @@
   --primitive-border-025: 1px;
   --primitive-border-050: 2px;
 
+  /* Control height
+     The two heights every control in a row is built to, border included:
+     a search field, a button, a picker and a segmented control set side by
+     side line up exactly at either size. */
+  --primitive-control-height-800: 32px;
+  --primitive-control-height-1000: 40px;
+
   /* Icon size
      The scale starts at 20px because that is the floor of the Material
      Symbols variable font's `opsz` (optical size) axis — see the fvar

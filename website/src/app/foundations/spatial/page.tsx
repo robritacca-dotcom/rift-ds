@@ -11,6 +11,7 @@ import { getSidebarLinks, foundationsSidebarLinks } from "@/config/navigation";
 import styles from "./page.module.css";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import { Tabs } from "rift-ds/components/Tabs/Tabs";
+import { Table } from "rift-ds/components/Table/Table";
 import { FIGMA_FILE_URL } from "@/config/brand.generated";
 
 const { sidebarLinks } = getSidebarLinks(foundationsSidebarLinks, "/foundations/spatial");
@@ -157,6 +158,27 @@ export default function SemanticSpacingPage() {
               </div>
             </section>
           ))}
+
+          {/* Control height: one height per size for every row control */}
+          <section className={styles.spacingGroup}>
+            <SectionTitle title="Control height" />
+            <p className={styles.viewportNote}>
+              Every control that can share a row takes one height at each size, border included,
+              so fields, pickers, buttons and segmented controls set side by side line up exactly.
+            </p>
+            <Table
+              bordered
+              columns={[
+                { key: "token", header: "Token" },
+                { key: "value", header: "Value" },
+                { key: "use", header: "Use" },
+              ]}
+              rows={[
+                { id: "default", cells: { token: "--control-height-default", value: "40px", use: "Default controls" } },
+                { id: "compact", cells: { token: "--control-height-compact", value: "32px", use: "The same controls at the compact size" } },
+              ]}
+            />
+          </section>
         </main>
       </div>
 

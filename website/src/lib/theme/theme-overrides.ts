@@ -1286,6 +1286,13 @@ const PADDING_STEPS: ReadonlyArray<[step: string, px: number]> = [
   ["1500", 60],
 ];
 
+/* The row-control heights. Density scales them with the padding, as it did
+   before they were tokens (a control's height was its padding then), so a
+   dense theme keeps shorter controls and every row still lines up. */
+const CONTROL_HEIGHT_STEPS: ReadonlyArray<[step: string, px: number]> = [
+  ["800", 32],
+  ["1000", 40],
+];
 const FONT_SIZE_STEPS: ReadonlyArray<[step: string, px: number]> = [
   ["300", 12],
   ["350", 14],
@@ -1368,6 +1375,9 @@ export function densityOverrides(scale: number): Overrides {
   }
   for (const [step, px] of PADDING_STEPS) {
     overrides[`--primitive-padding-${step}`] = `${Math.max(1, Math.round(px * scale))}px`;
+  }
+  for (const [step, px] of CONTROL_HEIGHT_STEPS) {
+    overrides[`--primitive-control-height-${step}`] = `${Math.round(px * scale)}px`;
   }
   return overrides;
 }

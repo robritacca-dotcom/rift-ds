@@ -291,7 +291,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Agent status",
     "slug": "agent-status",
     "category": "ai",
-    "description": "A dot-matrix indicator and status line reporting what an agent is doing right now.",
+    "description": "What an agent is doing right now, as a dot matrix and status line, a floating pill, a square mark for icon slots, or a ring around any element.",
     "client": true,
     "importPath": "rift-ds/components/AgentStatus/AgentStatus",
     "barrel": "main",
@@ -392,7 +392,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "AI button",
     "slug": "ai-button",
     "category": "ai",
-    "description": "The AI entry point: icon and label ringed by a turning gradient and glow, with an optional hover-summoned AI-summary panel and prompt chips.",
+    "description": "The AI entry point: a turning gradient ring that reports the agent's status, with a hover-summoned summary and a panel for what the agent asks of you.",
     "client": true,
     "importPath": "rift-ds/components/AiButton/AiButton",
     "barrel": "main",
@@ -4523,6 +4523,66 @@ export const componentApi: readonly ComponentApiEntry[] = [
   },
   {
     "kind": "component",
+    "name": "CommandPaletteTrigger",
+    "label": "Command palette trigger",
+    "slug": "command-palette-trigger",
+    "category": "actions",
+    "description": "The entry point to a command palette: a button dressed as a search field, with the shortcut's keycaps, at the row-control height.",
+    "client": false,
+    "importPath": "rift-ds/components/CommandPaletteTrigger/CommandPaletteTrigger",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "CommandPaletteTrigger",
+        "props": [
+          {
+            "name": "label",
+            "type": "string",
+            "required": false,
+            "description": "The prompt the field shows, which is also the button's accessible name.",
+            "defaultValue": "Search or ask anything"
+          },
+          {
+            "name": "shortcut",
+            "type": "string[]",
+            "required": false,
+            "description": "The keyboard shortcut drawn as keycaps at the end, one key per entry. Pass an empty array for none.",
+            "defaultValue": "['⌘', 'K']"
+          },
+          {
+            "name": "icon",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Leading icon — Material Symbol name (string) or custom element (ReactNode).",
+            "defaultValue": "search"
+          },
+          {
+            "name": "size",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "Control size, on the row-control scale: `default` is 40px, `compact` 32px.",
+            "defaultValue": "default"
+          },
+          {
+            "name": "iconOnly",
+            "type": "boolean",
+            "required": false,
+            "description": "Fold to the icon alone, a circle the row height across, for a row with no room for the field. The label stays the accessible name.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
     "name": "Composer",
     "label": "Composer",
     "slug": "composer",
@@ -5861,7 +5921,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Dropdown menu",
     "slug": "dropdown-menu",
     "category": "overlays",
-    "description": "Contextual menu with sections, sub-menus, keyboard shortcuts, and inset-gap hover styling.",
+    "description": "Action menu opened from a trigger, with groups, sub-menus, shortcuts, radio and checkbox items, placed to stay on screen.",
     "client": true,
     "importPath": "rift-ds/components/DropdownMenu/DropdownMenu",
     "barrel": "main",
@@ -8598,6 +8658,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Which side of the trigger the panel opens on. In a composer pinned to the bottom of the screen, use `top`.",
             "defaultValue": "bottom"
+          },
+          {
+            "name": "size",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "Trigger size, on the row-control scale: `default` is 40px, `compact` 32px, so it lines up with the fields and buttons beside it.",
+            "defaultValue": "default"
           },
           {
             "name": "disabled",
@@ -12327,6 +12394,181 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Legacy accessible-name prop.",
             "deprecated": "Pass the native `aria-label` attribute instead."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
+    "name": "ThemePicker",
+    "label": "Theme picker",
+    "slug": "theme-picker",
+    "category": "actions",
+    "description": "A circular trigger wearing the active theme's swatch, opening a menu of every theme on offer with its colour, corner and faces.",
+    "client": true,
+    "importPath": "rift-ds/components/ThemePicker/ThemePicker",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "ThemePicker",
+        "props": [
+          {
+            "name": "themes",
+            "type": "ThemePickerOption[]",
+            "required": true,
+            "description": "The themes on offer, in the order the menu lists them."
+          },
+          {
+            "name": "value",
+            "type": "string",
+            "required": false,
+            "description": "The active theme, controlled. Leave undefined to let the picker keep its own, seeded from `defaultValue`."
+          },
+          {
+            "name": "defaultValue",
+            "type": "string",
+            "required": false,
+            "description": "The active theme on first render when uncontrolled. Defaults to the first theme."
+          },
+          {
+            "name": "onValueChange",
+            "type": "((value: string) => void)",
+            "required": false,
+            "description": "Fires with the chosen theme's value. The host applies it (a `data-brand` attribute on `<html>`, for the shipped presets)."
+          },
+          {
+            "name": "open",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the menu is open, controlled. Leave undefined to let the picker open and close itself."
+          },
+          {
+            "name": "defaultOpen",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the menu starts open when uncontrolled.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "onOpenChange",
+            "type": "((open: boolean) => void)",
+            "required": false,
+            "description": "Fires when the menu opens or closes."
+          },
+          {
+            "name": "size",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "Trigger size, on the row-control scale: `default` is 40px, `compact` 32px.",
+            "defaultValue": "default"
+          },
+          {
+            "name": "placement",
+            "type": "\"top\" | \"bottom\"",
+            "required": false,
+            "description": "Which side of the trigger the menu prefers; it flips when that side has no room.",
+            "defaultValue": "bottom"
+          },
+          {
+            "name": "align",
+            "type": "\"start\" | \"end\"",
+            "required": false,
+            "description": "Which trigger edge the menu lines up with.",
+            "defaultValue": "end"
+          },
+          {
+            "name": "footer",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Content after the themes, below a divider: a link to make a theme of your own, say. Give each control in it `role=\"menuitem\"`, since a menu holds only menu items; the arrow keys reach it."
+          },
+          {
+            "name": "triggerLabel",
+            "type": "((label: string) => string)",
+            "required": false,
+            "description": "Accessible name of the trigger, given the active theme's name. Defaults to \"Theme: \" followed by it.",
+            "defaultValue": "(label: string) => `Theme: ${label}`"
+          },
+          {
+            "name": "menuLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the menu.",
+            "defaultValue": "Theme"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
+    "name": "ThemeToggle",
+    "label": "Theme toggle",
+    "slug": "theme-toggle",
+    "category": "actions",
+    "description": "The colour-mode control: System, Light and Dark over a stored setting, with the script that applies it before first paint.",
+    "client": true,
+    "importPath": "rift-ds/components/ThemeToggle/ThemeToggle",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "ThemeToggle",
+        "props": [
+          {
+            "name": "size",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "Control size, on SegmentedControl's scale.",
+            "defaultValue": "compact"
+          },
+          {
+            "name": "showLabels",
+            "type": "boolean",
+            "required": false,
+            "description": "Show each segment's label beside its icon. Set `false` for an icon-only strip: each label becomes the segment's tooltip on hover and keyboard focus, and stays its accessible name.",
+            "defaultValue": "true"
+          },
+          {
+            "name": "storageKey",
+            "type": "string",
+            "required": false,
+            "description": "The localStorage key the choice is kept under. Match the key given to `colorModeScript`. Default `theme`."
+          },
+          {
+            "name": "systemLabel",
+            "type": "string",
+            "required": false,
+            "description": "Label of the setting that follows the operating system.",
+            "defaultValue": "System"
+          },
+          {
+            "name": "lightLabel",
+            "type": "string",
+            "required": false,
+            "description": "Label of the light setting.",
+            "defaultValue": "Light"
+          },
+          {
+            "name": "darkLabel",
+            "type": "string",
+            "required": false,
+            "description": "Label of the dark setting.",
+            "defaultValue": "Dark"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": ""
           }
         ]
       }

@@ -324,6 +324,15 @@ Prefix: `--icon-size-*`.
 | `--icon-size-600` | `24px` (`--primitive-icon-600`) |
 | `--icon-size-800` | `32px` (`--primitive-icon-800`) |
 
+## Controls (2)
+
+Prefix: `--control-height-*`.
+
+| Token | Value |
+| --- | --- |
+| `--control-height-compact` | `32px` (`--primitive-control-height-800`) |
+| `--control-height-default` | `40px` (`--primitive-control-height-1000`) |
+
 ## Motion (15)
 
 Prefix: `--motion-*`.

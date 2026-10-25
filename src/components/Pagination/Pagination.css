@@ -28,8 +28,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  /* The row height, as a circle (--control-height-*). */
+  box-sizing: border-box;
+  width: var(--control-height-default);
+  height: var(--control-height-default);
   padding: 0;
   border: none;
   border-radius: var(--radius-pill); /* pill */
@@ -92,8 +94,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: var(--control-height-default);
+  height: var(--control-height-default);
   font-family: var(--font-paragraph-family);
   font-size: var(--font-paragraph-size);
   color: var(--color-text-tertiary);
@@ -106,8 +108,8 @@
    ============================================ */
 
 .ds-pagination--compact .ds-pagination__arrow {
-  width: 32px;
-  height: 32px;
+  width: var(--control-height-compact);
+  height: var(--control-height-compact);
 }
 
 .ds-pagination--compact .ds-pagination__icon {

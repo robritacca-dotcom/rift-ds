@@ -1,6 +1,6 @@
 # AI button
 
-The AI entry point: icon and label ringed by a turning gradient and glow, with an optional hover-summoned AI-summary panel and prompt chips.
+The AI entry point: a turning gradient ring that reports the agent's status, with a hover-summoned summary and a panel for what the agent asks of you.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 

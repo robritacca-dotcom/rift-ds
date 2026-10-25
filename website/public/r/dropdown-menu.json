@@ -3,7 +3,7 @@
   "name": "dropdown-menu",
   "type": "registry:ui",
   "title": "Dropdown menu",
-  "description": "Contextual menu with sections, sub-menus, keyboard shortcuts, and inset-gap hover styling.",
+  "description": "Action menu opened from a trigger, with groups, sub-menus, shortcuts, radio and checkbox items, placed to stay on screen.",
   "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json",

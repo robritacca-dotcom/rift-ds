@@ -585,6 +585,8 @@ function checkLeverTables() {
     subset('--primitive-gap-', primitivesSource), (s2) => `--primitive-gap-${s2}`, 'px');
   const padCount = holdBoth('PADDING_STEPS', parseTable('PADDING_STEPS'),
     subset('--primitive-padding-', primitivesSource), (s2) => `--primitive-padding-${s2}`, 'px');
+  const controlCount = holdBoth('CONTROL_HEIGHT_STEPS', parseTable('CONTROL_HEIGHT_STEPS'),
+    subset('--primitive-control-height-', primitivesSource), (s2) => `--primitive-control-height-${s2}`, 'px');
   const sizeCount = holdBoth('FONT_SIZE_STEPS', parseTable('FONT_SIZE_STEPS'),
     subset('--font-size-', typographySource), (s2) => `--font-size-${s2}`, 'px');
   const lhCount = holdBoth('FONT_LINE_HEIGHT_STEPS', parseTable('FONT_LINE_HEIGHT_STEPS'),
@@ -698,7 +700,7 @@ function checkLeverTables() {
   }
 
   summaries.push(`Type styles match their weight and tracking tokens (${typeRows.length} styles), icon lever defaults match the icon font's fallbacks`);
-  summaries.push(`Lever tables match their ladders — gap ${gapCount}, padding ${padCount}, font-size ${sizeCount}, line-height ${lhCount}, motion ${motionTable ? motionTable.size : 0} durations, elevation default pinned to the shipped shadows`);
+  summaries.push(`Lever tables match their ladders — gap ${gapCount}, padding ${padCount}, control height ${controlCount}, font-size ${sizeCount}, line-height ${lhCount}, motion ${motionTable ? motionTable.size : 0} durations, elevation default pinned to the shipped shadows`);
 }
 
 /* ------------------------------------------------------------------ */

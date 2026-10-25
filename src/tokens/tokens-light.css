@@ -298,6 +298,11 @@
   --icon-size-800: var(--primitive-icon-800);   /* 32px — feature */
   --icon-size-1200: var(--primitive-icon-1200);   /* 48px — marketing */
 
+  /* Control height: the one height every row control takes at each size,
+     border included (fields, buttons, pickers, segmented controls). */
+  --control-height-default: var(--primitive-control-height-1000); /* 40px — default controls */
+  --control-height-compact: var(--primitive-control-height-800);  /* 32px — compact controls */
+
   --gap-050: var(--primitive-gap-050);
   --gap-100: var(--primitive-gap-100);
   --gap-200: var(--primitive-gap-200);

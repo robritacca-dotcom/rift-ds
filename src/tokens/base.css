@@ -1,0 +1,84 @@
+/* ============================================
+   BASE — the page the components assume
+   Optional: import it once, after tokens.css.
+
+   Every component in the library is measured and checked against this
+   sheet, the reset the documentation site has always run under. Without
+   it, browser defaults (content-box sizing, margins on headings and
+   paragraphs, padding on lists) land inside components and push them out
+   of true, about 40% too padded in the first outside app.
+
+   Every rule sits inside :where(), so it carries no specificity: a class
+   of your own always wins, wherever the sheets load.
+   ============================================ */
+
+/* The reset: border-box sizing, and no margin or padding a component did
+   not ask for. */
+:where(*, *::before, *::after) {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Native controls and scrollbars follow the mode the tokens are in. */
+:where(:root) {
+  color-scheme: light;
+}
+
+:where([data-theme='dark']) {
+  color-scheme: dark;
+}
+
+:where(body) {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-page-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Headings and paragraphs on the type tokens, so plain markup reads as the
+   system does before anything is styled. */
+:where(h1) {
+  font-family: var(--font-heading-1-family);
+  font-size: var(--font-heading-1-size);
+  font-weight: var(--font-heading-1-weight);
+  line-height: var(--font-heading-1-line-height);
+  letter-spacing: var(--font-heading-1-letter-spacing);
+}
+
+:where(h2) {
+  font-family: var(--font-heading-2-family);
+  font-size: var(--font-heading-2-size);
+  font-weight: var(--font-heading-2-weight);
+  line-height: var(--font-heading-2-line-height);
+  letter-spacing: var(--font-heading-2-letter-spacing);
+}
+
+:where(h3) {
+  font-family: var(--font-heading-3-family);
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+  letter-spacing: var(--font-heading-3-letter-spacing);
+}
+
+:where(h4, h5, h6) {
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  letter-spacing: var(--font-title-body-letter-spacing);
+}
+
+:where(p) {
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+}

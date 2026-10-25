@@ -117,6 +117,8 @@ html[data-brand="gold"] {
   --primitive-blue-09: #1B2C71;
   --primitive-blue-10: #0F193E;
   --primitive-blue-11: #0A112B;
+  --primitive-control-height-1000: 38px;
+  --primitive-control-height-800: 30px;
   --primitive-gap-050: 2px;
   --primitive-gap-100: 4px;
   --primitive-gap-1000: 38px;
@@ -309,6 +311,8 @@ html[data-brand="gold"][data-theme="dark"] {
   --primitive-blue-09: #1B2C71;
   --primitive-blue-10: #0F193E;
   --primitive-blue-11: #0A112B;
+  --primitive-control-height-1000: 38px;
+  --primitive-control-height-800: 30px;
   --primitive-gap-050: 2px;
   --primitive-gap-100: 4px;
   --primitive-gap-1000: 38px;

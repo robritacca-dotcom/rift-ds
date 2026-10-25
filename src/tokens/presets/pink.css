@@ -113,6 +113,8 @@ html[data-brand="pink"] {
   --primitive-blue-09: #283885;
   --primitive-blue-10: #161F4A;
   --primitive-blue-11: #0F1533;
+  --primitive-control-height-1000: 42px;
+  --primitive-control-height-800: 34px;
   --primitive-gap-050: 2px;
   --primitive-gap-100: 4px;
   --primitive-gap-1000: 42px;
@@ -314,6 +316,8 @@ html[data-brand="pink"][data-theme="dark"] {
   --primitive-blue-09: #283885;
   --primitive-blue-10: #161F4A;
   --primitive-blue-11: #0F1533;
+  --primitive-control-height-1000: 42px;
+  --primitive-control-height-800: 34px;
   --primitive-gap-050: 2px;
   --primitive-gap-100: 4px;
   --primitive-gap-1000: 42px;

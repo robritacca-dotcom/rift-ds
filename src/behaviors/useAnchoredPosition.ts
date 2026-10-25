@@ -42,11 +42,12 @@ import { useLayoutEffect, useRef } from 'react';
  * reasoning the gesture rule gives (design.md, the playground's resize
  * record).
  *
- * The box is the viewport, or the nearest ancestor that becomes the fixed
- * panel's containing block instead (a transform, filter, backdrop filter,
- * perspective, containment or container type: a Dialog panel's entrance
- * scale, the chat panel's blur). Inside one, the panel is placed and clamped
- * within that box, which is how Tooltip behaved before this was shared.
+ * The room a panel has is the viewport's. An ancestor with a transform,
+ * filter, backdrop filter, perspective or containment (a Dialog panel's
+ * entrance scale, the chat panel's blur) becomes the fixed panel's
+ * containing block, which moves the
+ * coordinates it is placed in; only when that ancestor also clips its
+ * overflow does the room narrow to its box.
  */
 
 export type AnchoredSide = 'top' | 'bottom' | 'left' | 'right';
@@ -112,15 +113,16 @@ export function fixedContainingBlock(element: HTMLElement): HTMLElement | null {
   for (let node = element.parentElement; node; node = node.parentElement) {
     const style = getComputedStyle(node);
     const read = (property: string) => style.getPropertyValue(property).trim();
-    const containerType = read('container-type');
+    // A container-type ancestor is not one: container queries no longer
+    // imply layout containment, so a fixed panel inside a container-query
+    // header is still placed from the viewport.
     if (
       read('transform') !== 'none' ||
       read('filter') !== 'none' ||
       read('backdrop-filter') !== 'none' ||
       read('perspective') !== 'none' ||
       /\b(layout|paint|strict|content)\b/.test(read('contain')) ||
-      /\b(transform|filter|perspective)\b/.test(read('will-change')) ||
-      (containerType !== '' && containerType !== 'normal')
+      /\b(transform|filter|perspective)\b/.test(read('will-change'))
     ) {
       return node;
     }
@@ -173,19 +175,34 @@ export function useAnchoredPosition({
     panel.style.margin = '0';
 
     const place = () => {
+      // Two different facts about an ancestor that becomes the fixed panel's
+      // containing block: it moves the panel's coordinate origin, always; it
+      // limits where the panel can show only when it also clips its
+      // overflow. A blurred panel that does not clip leaves the room the
+      // viewport's.
       const block = fixedContainingBlock(panel);
       const blockBox = block ? block.getBoundingClientRect() : null;
-      const bx = blockBox ? blockBox.left + block!.clientLeft : 0;
-      const by = blockBox ? blockBox.top + block!.clientTop : 0;
-      const bounds = blockBox
-        ? { left: bx, top: by, right: bx + block!.clientWidth, bottom: by + block!.clientHeight }
-        : // The layout viewport, without the scrollbar a panel must not sit under.
-          {
-            left: 0,
-            top: 0,
-            right: document.documentElement.clientWidth,
-            bottom: document.documentElement.clientHeight,
-          };
+      const origin = blockBox
+        ? { left: blockBox.left + block!.clientLeft, top: blockBox.top + block!.clientTop }
+        : { left: 0, top: 0 };
+      // The layout viewport, without the scrollbar a panel must not sit under.
+      const bounds = {
+        left: 0,
+        top: 0,
+        right: document.documentElement.clientWidth,
+        bottom: document.documentElement.clientHeight,
+      };
+      if (block && blockBox) {
+        const style = getComputedStyle(block);
+        if (style.overflowX !== 'visible') {
+          bounds.left = Math.max(bounds.left, origin.left);
+          bounds.right = Math.min(bounds.right, origin.left + block.clientWidth);
+        }
+        if (style.overflowY !== 'visible') {
+          bounds.top = Math.max(bounds.top, origin.top);
+          bounds.bottom = Math.min(bounds.bottom, origin.top + block.clientHeight);
+        }
+      }
 
       const a = anchor.getBoundingClientRect();
       const panelStyle = getComputedStyle(panel);
@@ -242,8 +259,8 @@ export function useAnchoredPosition({
       x = clamp(x, bounds.left + edge, bounds.right - edge - width);
       y = clamp(y, bounds.top + edge, bounds.bottom - edge - height);
 
-      panel.style.left = `${x - bounds.left}px`;
-      panel.style.top = `${y - bounds.top}px`;
+      panel.style.left = `${x - origin.left}px`;
+      panel.style.top = `${y - origin.top}px`;
       panel.dataset.side = chosen;
       panel.dataset.align = align;
 
@@ -259,11 +276,11 @@ export function useAnchoredPosition({
 
       onPlaceRef.current?.({
         side: chosen,
-        x: x - bounds.left,
-        y: y - bounds.top,
+        x: x - origin.left,
+        y: y - origin.top,
         width,
         height,
-        anchor: { left: a.left - bounds.left, top: a.top - bounds.top, width: a.width, height: a.height },
+        anchor: { left: a.left - origin.left, top: a.top - origin.top, width: a.width, height: a.height },
       });
     };
 

@@ -129,6 +129,13 @@ const inheritedRows = [
     },
   },
   {
+    id: "anchored",
+    cells: {
+      behaviour: "Anchored position",
+      what: "Every menu, listbox, picker, popover and tooltip is placed against its control so it shows whole: it flips to the other side when one has no room, stays inside the screen, and follows its control on scroll, so content inside a scrolling table or a narrow sidebar is never cut off where a keyboard or magnifier user cannot reach it.",
+    },
+  },
+  {
     id: "focusable",
     cells: {
       behaviour: "Shared focusable query",

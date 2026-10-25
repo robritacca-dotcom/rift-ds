@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /**
- * The package's one bin: `npx rift-ds init` and `npx rift-ds init chat`.
+ * The package's one bin: `npx rift-ds init`, `npx rift-ds init app` and
+ * `npx rift-ds init chat`.
  *
  * `init` fetches the generated agent skills from the live site into the
  * project's .claude/skills/ folder, one folder per skill, then prints the
@@ -19,6 +20,14 @@
  * by build-package.mjs) rather than being fetched, because they import the
  * installed version's own subpaths and must match it. It never overwrites:
  * a file that exists is skipped and listed, so re-running is safe.
+ *
+ * `init app` sets a Next.js app router project up for the library the same
+ * way, from dist/bin/templates/app/: a root wrapper that hands Next's Link
+ * to every link-rendering component, and a component that renders the
+ * colour-mode script before first paint, both under components/rift/. It
+ * never edits the root layout (every app already has one): it prints the
+ * lines to add instead, importing tokens.css and base.css, rendering the
+ * script and wrapping the body.
  *
  * The manifest is data from the network that decides where this command
  * writes, so every name and path in it is checked before anything touches
@@ -45,7 +54,9 @@ const PACKAGE_NAME = '__PACKAGE_NAME__';
 const CHAT_SLUG = '__CHAT_SLUG__';
 const MANIFEST_URL = `${SITE_ORIGIN}/skill/manifest.json`;
 const DEFAULT_DIR = join('.claude', 'skills');
-const TEMPLATES_DIR = join(dirname(fileURLToPath(import.meta.url)), 'templates', 'chat');
+const TEMPLATES_ROOT = join(dirname(fileURLToPath(import.meta.url)), 'templates');
+const TEMPLATES_DIR = join(TEMPLATES_ROOT, 'chat');
+const APP_TEMPLATES_DIR = join(TEMPLATES_ROOT, 'app');
 
 /* What `init chat` needs installed beside the package. The optional peers
    each chat subpath imports; the demo's recharts is only for the scripted
@@ -60,6 +71,7 @@ const CHAT_PEERS = [
 ];
 
 const USAGE = `Usage: npx ${PACKAGE_NAME} init [--skill <name>] [--dir <dir>]
+       npx ${PACKAGE_NAME} init app [--app <dir>] [--dry-run]
        npx ${PACKAGE_NAME} init chat [--app <dir>] [--dry-run]
 
 init
@@ -73,6 +85,16 @@ init
   --dir <dir>     Folder that receives one folder per skill (default: ${DEFAULT_DIR})
   --out <dir>     Deprecated: write one skill's files straight into <dir>
                   (${SKILL_NAME} unless --skill names another). Use --dir.
+
+init app
+  Sets a Next.js app router project up for the library: a root wrapper that
+  routes every link through Next's Link, and a component that applies the
+  stored colour mode before first paint, under components/rift/. Prints the
+  lines to add to your root layout; it never edits the layout itself.
+  Existing files are never overwritten.
+
+  --app <dir>     The app router folder (default: app/ or src/app/, whichever exists)
+  --dry-run       Print what would be written and write nothing
 
 init chat
   Scaffolds the chat widget into a Next.js app router project: the chat,
@@ -162,15 +184,74 @@ async function init({ only, dir, out }) {
   console.log(`  claude mcp add --transport http ${MCP_SERVER_NAME} ${SITE_ORIGIN}/api/mcp`);
 }
 
-/** Every template file, as a path relative to the templates folder (forward slashes). */
-function templateFiles(dir = TEMPLATES_DIR) {
+/** Every template file under `base`, as a path relative to it (forward slashes). */
+function templateFiles(base = TEMPLATES_DIR, dir = base) {
   const out = [];
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
     const full = join(dir, entry.name);
-    if (entry.isDirectory()) out.push(...templateFiles(full));
-    else out.push(relative(TEMPLATES_DIR, full).split('\\').join('/'));
+    if (entry.isDirectory()) out.push(...templateFiles(base, full));
+    else out.push(relative(base, full).split('\\').join('/'));
   }
   return out.sort();
+}
+
+/** The app router folder: the one passed, else app/ or src/app/, whichever exists. */
+function findAppDir(app) {
+  const appDir = app ?? ['app', join('src', 'app')].map((d) => resolve(d)).find((d) => existsSync(d));
+  if (!appDir) {
+    fail('no app/ or src/app/ folder found. Run this inside a Next.js app router project, or pass --app <dir>.');
+  }
+  return appDir;
+}
+
+/** Writes every template under `base` that does not exist yet; returns what was written and skipped. */
+function scaffold(base, appDir, dryRun) {
+  const written = [];
+  const skipped = [];
+  for (const file of templateFiles(base)) {
+    const dest = destinationFor(file, appDir);
+    if (existsSync(dest)) {
+      skipped.push(dest);
+      continue;
+    }
+    if (!dryRun) {
+      mkdirSync(dirname(dest), { recursive: true });
+      writeFileSync(dest, readFileSync(join(base, ...file.split('/'))));
+    }
+    written.push(dest);
+    console.log(`${dryRun ? '○' : '▸'} ${relative(process.cwd(), dest)}`);
+  }
+  for (const dest of skipped) {
+    console.log(`· ${relative(process.cwd(), dest)} exists, left as it is`);
+  }
+  return { written, skipped };
+}
+
+function initApp({ app, dryRun }) {
+  if (!existsSync(APP_TEMPLATES_DIR)) {
+    fail('this copy carries no app templates: run the published bin (npx ' + PACKAGE_NAME + ' init app).');
+  }
+  const appDir = findAppDir(app);
+  const { written, skipped } = scaffold(APP_TEMPLATES_DIR, appDir, dryRun);
+  console.log(
+    dryRun
+      ? `\n✓ Dry run: ${written.length} files would be written, ${skipped.length} left alone.`
+      : `\n✓ App set up: ${written.length} files written, ${skipped.length} left alone.`
+  );
+  const rift = relative(appDir, join(dirname(appDir), 'components', 'rift')).split('\\').join('/');
+  console.log(`\nNext, in your root layout (${relative(process.cwd(), join(appDir, 'layout.tsx'))}):`);
+  console.log(`  1. Import the tokens and the base sheet, once, at the top:`);
+  console.log(`       import '${PACKAGE_NAME}/tokens/tokens.css';`);
+  console.log(`       import '${PACKAGE_NAME}/tokens/base.css';`);
+  console.log(`  2. Render the colour-mode script in <head>, and let React leave the attributes it sets alone:`);
+  console.log(`       import { ColorModeScript } from '${rift}/ColorModeScript';`);
+  console.log(`       <html lang="en" suppressHydrationWarning>`);
+  console.log(`         <head><ColorModeScript /></head>`);
+  console.log(`  3. Wrap the body's content so every link routes through Next:`);
+  console.log(`       import { RiftRoot } from '${rift}/RiftRoot';`);
+  console.log(`       <body><RiftRoot>{children}</RiftRoot></body>`);
+  console.log(`\nThen drop a <ThemeToggle /> (${PACKAGE_NAME}/components/ThemeToggle/ThemeToggle) wherever the mode should change.`);
+  console.log(`Setup and theming: ${SITE_ORIGIN}/docs/get-started`);
 }
 
 /**
@@ -188,30 +269,8 @@ function initChat({ app, dryRun }) {
   if (!existsSync(TEMPLATES_DIR)) {
     fail('this copy carries no chat templates: run the published bin (npx ' + PACKAGE_NAME + ' init chat).');
   }
-  const appDir = app ?? ['app', join('src', 'app')].map((d) => resolve(d)).find((d) => existsSync(d));
-  if (!appDir) {
-    fail('no app/ or src/app/ folder found. Run this inside a Next.js app router project, or pass --app <dir>.');
-  }
-
-  const files = templateFiles();
-  const written = [];
-  const skipped = [];
-  for (const file of files) {
-    const dest = destinationFor(file, appDir);
-    if (existsSync(dest)) {
-      skipped.push(dest);
-      continue;
-    }
-    if (!dryRun) {
-      mkdirSync(dirname(dest), { recursive: true });
-      writeFileSync(dest, readFileSync(join(TEMPLATES_DIR, ...file.split('/'))));
-    }
-    written.push(dest);
-    console.log(`${dryRun ? '○' : '▸'} ${relative(process.cwd(), dest)}`);
-  }
-  for (const dest of skipped) {
-    console.log(`· ${relative(process.cwd(), dest)} exists, left as it is`);
-  }
+  const appDir = findAppDir(app);
+  const { written, skipped } = scaffold(TEMPLATES_DIR, appDir, dryRun);
 
   console.log(
     dryRun
@@ -255,9 +314,11 @@ function option(flag, what) {
   return value;
 }
 
-if (args[1] === 'chat') {
+if (args[1] === 'chat' || args[1] === 'app') {
   const appFlag = option('--app', 'a directory');
-  initChat({ app: appFlag ? resolve(appFlag) : undefined, dryRun: args.includes('--dry-run') });
+  const scaffoldArgs = { app: appFlag ? resolve(appFlag) : undefined, dryRun: args.includes('--dry-run') };
+  if (args[1] === 'chat') initChat(scaffoldArgs);
+  else initApp(scaffoldArgs);
 } else {
   if (args[1] && !args[1].startsWith('--')) fail(`unknown init target "${args[1]}"\n\n${USAGE}`);
   const only = option('--skill', 'a skill name');

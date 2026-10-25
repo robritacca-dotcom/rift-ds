@@ -895,6 +895,11 @@ export const SemanticSpacing: Story = {
         <SpacingToken name="XXL" value="--padding-1500" />
       </TokenSection>
 
+      <TokenSection title="Control Height">
+        <SpacingToken name="Default" value="--control-height-default" />
+        <SpacingToken name="Compact" value="--control-height-compact" />
+      </TokenSection>
+
       <TokenSection title="Border Width">
         <SpacingToken name="XS" value="--border-025" />
         <SpacingToken name="MD" value="--border-050" />

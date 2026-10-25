@@ -267,9 +267,12 @@ Import the token stylesheet once, then components from the barrel or by deep sub
 
 \`\`\`tsx
 import '${PACKAGE_NAME}/tokens/tokens.css';
+import '${PACKAGE_NAME}/tokens/base.css'; // the reset and page the components are tuned against
 import { Button } from '${PACKAGE_NAME}';
 import { Input } from '${PACKAGE_NAME}/components/Input/Input';
 \`\`\`
+
+In a Next.js app router project, \`npx ${PACKAGE_NAME} init app\` scaffolds the root wrapper (\`LinkProvider\` with Next's \`Link\`) and the colour-mode script, and prints the lines to add to the root layout.
 
 The package is ESM-only, resolved via exports subpaths: use a bundler that handles CSS and font imports from node_modules (Vite, Next.js, webpack) and set TypeScript's \`moduleResolution\` to \`"bundler"\` (or \`"nodenext"\`). Components are provider-free with one exception: wrap the tree in \`ToastProvider\` if (and only if) the toast queue is used via \`useToast\`. One more is optional: in a routed app, \`LinkProvider\` from \`${PACKAGE_NAME}/behaviors/LinkProvider\` hands every client-rendered component your router's link, so its links navigate without a reload (in Next.js, mount it from a \`'use client'\` file, since the root layout is a Server Component); a component rendered on the server takes \`linkComponent\` on the instance instead.
 
@@ -419,6 +422,7 @@ ${catalogSections.join('\n\n')}
     `- Depth: the only shadows are ${token('--shadow-floating')} for floating surfaces and ${token('--shadow-modal')} for modals. Everything else separates from the page through the container colours, so remove other shadows instead of mapping them.`,
     `- Type: each text style is a bundle of tokens, ${c('--font-<style>-family')}, ${c('-size')}, ${c('-weight')}, ${c('-line-height')} and ${c('-letter-spacing')}. The styles are ${typeStyles.map(c).join(', ')}. Apply a whole bundle. Do not mix one style's size with another's weight.`,
     `- Icons: set ${c('--icon-size')} on the icon to a step from ${prefixes('icons')}. Never set ${c('font-size')} on an icon.`,
+    `- Control heights: ${prefixes('controls')}, the height every row control (field, button, picker, segmented control) takes at the default and compact sizes, border included. A control of your own that sits in a row takes the same token, so the row lines up.`,
     `- Motion: ${prefixes('motion')} for durations and easings in CSS. A timing that lives in a JavaScript timer comes from ${c(`${PACKAGE_NAME}/tokens/motion`)}.`,
     `- Stacking: ${prefixes('stacking')}. A surface that rises over the page (a menu, a dialog, a toast) takes the layer for its role instead of a picked z-index. Order inside one component (a label over a pill) can stay a small number under 10.`,
     '',
@@ -626,11 +630,12 @@ npm install ${PACKAGE_NAME}
 
 \`\`\`tsx
 import '${PACKAGE_NAME}/tokens/tokens.css'; // once, at the app root
+import '${PACKAGE_NAME}/tokens/base.css'; // the reset and page the components are tuned against
 import { Button } from '${PACKAGE_NAME}';
 \`\`\`
 
-- Paint the page: \`body\` takes ${token('--color-bg-page-primary')}, ${token('--color-text-primary')} and ${token('--font-family-primary')}.
-- Dark mode is \`data-theme="dark"\` on \`<html>\`. A shipped theme is \`data-brand\` there too, with \`${subpath('./tokens/presets/*.css').replace('*', 'presets')}\` imported once.
+- \`base.css\` paints the page (\`body\` on ${token('--color-bg-page-primary')}, ${token('--color-text-primary')} and ${token('--font-family-primary')}) and resets box sizing and margins; without it, components render too padded.
+- Dark mode is \`data-theme="dark"\` on \`<html>\`. \`colorModeScript()\` from \`${PACKAGE_NAME}/components/ThemeToggle/colorMode\` applies the stored choice before first paint, and \`ThemeToggle\` changes it. In Next.js, \`npx ${PACKAGE_NAME} init app\` scaffolds both. A shipped theme is \`data-brand\` on \`<html>\`, with \`${subpath('./tokens/presets/*.css').replace('*', 'presets')}\` imported once.
 - The base theme's typeface is not bundled. It is designed around Nunito Sans: load that (or your own) and set ${token('--font-family-primary')} to it. A shipped theme bundles its own faces, and the icon font always ships.
 - Wrap the tree in \`ToastProvider\` only if you call \`useToast\` (both from the ${component('Toast')} module). No other component needs a provider; \`LinkProvider\` (below) is optional and only routes links.
 

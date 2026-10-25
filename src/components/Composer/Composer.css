@@ -291,9 +291,9 @@
 
 .ds-composer__context--above {
   margin: 0;
-  /* Outside the shell, so the shell's custom properties do not reach it:
-     the send button's raw 40px, restated */
-  height: 40px;
+  /* The send button's height, the row height (--control-height-*), read
+     from the token since the shell's custom properties do not reach here */
+  height: var(--control-height-default);
   /* The rail, plus the shell border this bar does not sit inside */
   padding: 0 var(--padding-400) 0
     calc(var(--padding-200) + var(--padding-400) + var(--border-025));

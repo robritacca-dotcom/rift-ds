@@ -31,13 +31,13 @@
       "name": "agent-status",
       "type": "registry:ui",
       "title": "Agent status",
-      "description": "A dot-matrix indicator and status line reporting what an agent is doing right now."
+      "description": "What an agent is doing right now, as a dot matrix and status line, a floating pill, a square mark for icon slots, or a ring around any element."
     },
     {
       "name": "ai-button",
       "type": "registry:ui",
       "title": "AI button",
-      "description": "The AI entry point: icon and label ringed by a turning gradient and glow, with an optional hover-summoned AI-summary panel and prompt chips."
+      "description": "The AI entry point: a turning gradient ring that reports the agent's status, with a hover-summoned summary and a panel for what the agent asks of you."
     },
     {
       "name": "alert",
@@ -280,6 +280,12 @@
       "description": "A modal Cmd+K launcher that searches a grouped command list, with keyboard navigation and shortcut hints."
     },
     {
+      "name": "command-palette-trigger",
+      "type": "registry:ui",
+      "title": "Command palette trigger",
+      "description": "The entry point to a command palette: a button dressed as a search field, with the shortcut's keycaps, at the row-control height."
+    },
+    {
       "name": "composer",
       "type": "registry:ui",
       "title": "Composer",
@@ -355,7 +361,7 @@
       "name": "dropdown-menu",
       "type": "registry:ui",
       "title": "Dropdown menu",
-      "description": "Contextual menu with sections, sub-menus, keyboard shortcuts, and inset-gap hover styling."
+      "description": "Action menu opened from a trigger, with groups, sub-menus, shortcuts, radio and checkbox items, placed to stay on screen."
     },
     {
       "name": "empty-state",
@@ -836,6 +842,18 @@
       "type": "registry:ui",
       "title": "Textarea",
       "description": "Multi-line text input with character counter, resize control, helper text, and error states."
+    },
+    {
+      "name": "theme-picker",
+      "type": "registry:ui",
+      "title": "Theme picker",
+      "description": "A circular trigger wearing the active theme's swatch, opening a menu of every theme on offer with its colour, corner and faces."
+    },
+    {
+      "name": "theme-toggle",
+      "type": "registry:ui",
+      "title": "Theme toggle",
+      "description": "The colour-mode control: System, Light and Dark over a stored setting, with the script that applies it before first paint."
     },
     {
       "name": "thread-panel",

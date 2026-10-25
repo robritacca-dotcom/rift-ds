@@ -41,11 +41,17 @@
     background-color var(--motion-duration-base) var(--motion-ease-standard),
     border-color var(--motion-duration-base) var(--motion-ease-standard),
     color var(--motion-duration-base) var(--motion-ease-standard);
+  /* A filter chip is a row control, so it takes the row height (--control-height-*). */
+  box-sizing: border-box;
+  height: var(--control-height-default);
+  padding-block: 0;
 }
 
 .ds-filter-bar--compact .ds-filter-bar__chip {
   gap: var(--gap-100);
   padding: var(--padding-050) var(--padding-200);
+  height: var(--control-height-compact);
+  padding-block: 0;
 }
 
 .ds-filter-bar__chip:hover:not(.ds-filter-bar__chip--active) {

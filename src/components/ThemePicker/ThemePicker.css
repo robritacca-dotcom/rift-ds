@@ -1,0 +1,184 @@
+/* ============================================
+   THEME PICKER
+   A circular trigger wearing the active theme's
+   swatch, and a menu of every theme on offer.
+   The trigger wears the track recipe the theme
+   toggle and the command palette trigger wear,
+   so the three read as one family in a row.
+   ============================================ */
+
+.ds-theme-picker {
+  position: relative;
+  display: inline-flex;
+}
+
+.ds-theme-picker__trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  /* The row height, as a circle (--control-height-*). */
+  box-sizing: border-box;
+  width: var(--control-height-default);
+  height: var(--control-height-default);
+  padding: 0;
+  background-color: var(--color-bg-container-primary);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  /* SegmentedControl's track curve: the pill plus the inset its segments
+     sit at, so a squared theme keeps the corners parallel across a row. */
+  border-radius: calc(var(--radius-pill) + var(--padding-100));
+  cursor: pointer;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-theme-picker--compact .ds-theme-picker__trigger {
+  width: var(--control-height-compact);
+  height: var(--control-height-compact);
+}
+
+.ds-theme-picker__trigger:hover,
+.ds-theme-picker--open .ds-theme-picker__trigger {
+  background-color: var(--color-bg-container-secondary);
+}
+
+.ds-theme-picker__trigger:focus-visible {
+  outline: var(--border-050) solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+/* The swatch is a chip on the icon scale, so it scales with the trigger,
+   with a hairline so a swatch near the menu's own fill never vanishes. */
+.ds-theme-picker__swatch,
+.ds-theme-picker__row-swatch {
+  box-sizing: border-box;
+  width: calc(var(--icon-size-500) - var(--border-050));
+  height: calc(var(--icon-size-500) - var(--border-050));
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-pill);
+}
+
+.ds-theme-picker--compact .ds-theme-picker__swatch {
+  width: calc(var(--icon-size-500) - 3 * var(--border-050));
+  height: calc(var(--icon-size-500) - 3 * var(--border-050));
+}
+
+/* ============================================
+   MENU
+   Placed by the shared anchored-position
+   behaviour (src/behaviors/useAnchoredPosition.ts):
+   fixed, so a clipping seat cannot cut it off,
+   flipped when its side has no room, capped to
+   the room it has. DropdownMenu's surface.
+   ============================================ */
+
+.ds-theme-picker__menu {
+  box-sizing: border-box;
+  z-index: var(--layer-floating);
+  display: flex;
+  flex-direction: column;
+  min-width: 260px;
+  max-width: calc(100vw - 2 * var(--gap-400));
+  overflow-y: auto;
+  padding: var(--padding-100);
+  background-color: var(--color-bg-page-primary);
+  border: var(--border-025) solid var(--color-input-border-primary);
+  border-radius: var(--radius-300);
+  box-shadow: var(--shadow-floating);
+  color: var(--color-text-primary);
+  transform-origin: top right;
+  animation: ds-theme-picker-appear var(--motion-duration-fast) var(--motion-ease-entrance);
+}
+
+.ds-theme-picker__menu[data-align='start'] {
+  transform-origin: top left;
+}
+
+.ds-theme-picker__menu[data-side='top'] {
+  transform-origin: bottom right;
+}
+
+.ds-theme-picker__menu[data-side='top'][data-align='start'] {
+  transform-origin: bottom left;
+}
+
+@keyframes ds-theme-picker-appear {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+
+.ds-theme-picker__row {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-300);
+  width: 100%;
+  padding: var(--padding-200) var(--padding-300);
+  border: none;
+  border-radius: var(--radius-200);
+  background: transparent;
+  color: inherit;
+  text-align: start;
+  cursor: pointer;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-theme-picker__row:hover,
+.ds-theme-picker__row:focus-visible {
+  background-color: var(--color-action-passive-bg-hover);
+  outline: none;
+}
+
+/* The chosen theme holds the passive wash, DropdownMenu's selected row. */
+.ds-theme-picker__row--selected {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-theme-picker__row--selected:hover,
+.ds-theme-picker__row--selected:focus-visible {
+  background-color: var(--color-action-passive-bg-active);
+}
+
+.ds-theme-picker__row-swatch {
+  flex: none;
+}
+
+.ds-theme-picker__row-text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.ds-theme-picker__row-name {
+  white-space: nowrap;
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
+}
+
+.ds-theme-picker__row-description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-tertiary);
+}
+
+.ds-theme-picker__divider {
+  display: block;
+  margin: var(--gap-100) var(--gap-200);
+  border-top: var(--border-025) solid var(--color-divider);
+}
+
+/* ds-allow(motion): drops the menu's entrance outright rather than playing it at 0.01ms. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-theme-picker__menu {
+    animation: none;
+  }
+}

@@ -27,8 +27,11 @@
   justify-content: center;
   gap: var(--gap-200);
 
-  /* Spacing — matches Button so the two sit on one control scale */
-  padding: var(--padding-200) var(--padding-500);
+  /* Spacing — matches Button so the two sit on one control scale: the row
+     height (--control-height-*), with only horizontal padding. */
+  box-sizing: border-box;
+  height: var(--control-height-default);
+  padding: 0 var(--padding-500);
 
   /* Buttons are always pill-shaped (design.md invariant) */
   border-radius: var(--radius-pill);
@@ -325,7 +328,8 @@
 
 /* Sizes */
 .ds-ai-button--compact {
-  padding: var(--padding-150) var(--padding-300);
+  height: var(--control-height-compact);
+  padding: 0 var(--padding-300);
   font-size: var(--font-paragraph-sm-emphasis-size);
   line-height: var(--font-paragraph-sm-emphasis-line-height);
   letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);

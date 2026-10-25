@@ -44,6 +44,10 @@
 
 .ds-button--default {
   /* Base padding & typography inherited from .ds-button */
+  /* The row height, border included (--control-height-*), so a bordered secondary and a borderless primary match. */
+  box-sizing: border-box;
+  height: var(--control-height-default);
+  padding-block: 0;
 }
 
 /* ============================================
@@ -55,6 +59,9 @@
   font-size: var(--font-paragraph-sm-emphasis-size);
   line-height: var(--font-paragraph-sm-emphasis-line-height);
   letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
+  box-sizing: border-box;
+  height: var(--control-height-compact);
+  padding-block: 0;
 }
 
 .ds-button--compact .ds-button__icon {

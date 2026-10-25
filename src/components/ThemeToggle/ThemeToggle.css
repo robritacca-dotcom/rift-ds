@@ -1,0 +1,82 @@
+/* ============================================
+   THEME TOGGLE
+   The colour-mode control. It is a
+   SegmentedControl, which draws every pixel;
+   this root keeps the strip at its own width
+   in a squeezed row, and dresses the icon-only
+   form.
+   ============================================ */
+
+.ds-theme-toggle {
+  flex-shrink: 0;
+}
+
+/* ============================================
+   ICON STRIP (showLabels={false})
+   The glyphs alone, with each label turned
+   into the segment's tooltip: it appears below
+   the segment on hover and keyboard focus, on
+   Tooltip's surface, so "routine" is never
+   left to be guessed as System. The component
+   places the label with the shared
+   anchored-position behaviour, so a seat that
+   clips cannot cut it off, and it flips above
+   the strip when there is no room below. The label
+   stays in the accessibility tree as the
+   segment's name. This is the documentation
+   site's header toggle, moved into the
+   package so a consumer's strip behaves the
+   same.
+   ============================================ */
+
+.ds-theme-toggle--icons .ds-segmented-control__label {
+  /* Out of flow at rest; the behaviour makes it fixed once it shows. */
+  position: absolute;
+  z-index: var(--layer-floating);
+  padding: var(--padding-150) var(--padding-200);
+  border-radius: var(--radius-100);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  background-color: var(--color-bg-page-primary);
+  color: var(--color-text-primary);
+  box-shadow: var(--shadow-floating);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(calc(-1 * var(--gap-100)));
+  transition:
+    opacity var(--motion-duration-fast) var(--motion-ease-standard),
+    transform var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+/* --motion-duration-slow matches MOTION_HOVER_SHOW_DELAY_MS, the hover-intent
+   delay Tooltip uses in JS, so the label does not flash while the pointer
+   passes through. Hiding takes no delay, like a tooltip leaving. */
+.ds-theme-toggle--icons .ds-segmented-control__segment:hover .ds-segmented-control__label,
+.ds-theme-toggle--icons .ds-segmented-control__segment:focus-visible .ds-segmented-control__label {
+  opacity: 1;
+  transform: none;
+  transition-delay: var(--motion-duration-slow);
+}
+
+/* Flipped above the strip, it slides down into place instead. */
+.ds-theme-toggle--icons .ds-segmented-control__label[data-side='top'] {
+  transform: translateY(var(--gap-100));
+}
+
+/* Without an inline label a segment's asymmetric padding reads lopsided:
+   square each one into an even pill around its glyph. */
+.ds-theme-toggle--icons .ds-segmented-control__segment {
+  padding-inline: var(--padding-200);
+}
+
+/* ds-allow(motion): drops the label tooltip's slide outright rather than playing it at 0.01ms. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-theme-toggle--icons .ds-segmented-control__label {
+    transition: none;
+  }
+}

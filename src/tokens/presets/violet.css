@@ -110,6 +110,8 @@ html[data-brand="violet"] {
   --primitive-blue-09: #303471;
   --primitive-blue-10: #1B1D3E;
   --primitive-blue-11: #12142B;
+  --primitive-control-height-1000: 42px;
+  --primitive-control-height-800: 34px;
   --primitive-gap-050: 2px;
   --primitive-gap-100: 4px;
   --primitive-gap-1000: 42px;
@@ -297,6 +299,8 @@ html[data-brand="violet"][data-theme="dark"] {
   --primitive-blue-09: #303471;
   --primitive-blue-10: #1B1D3E;
   --primitive-blue-11: #12142B;
+  --primitive-control-height-1000: 42px;
+  --primitive-control-height-800: 34px;
   --primitive-gap-050: 2px;
   --primitive-gap-100: 4px;
   --primitive-gap-1000: 42px;

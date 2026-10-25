@@ -29,6 +29,10 @@
   cursor: pointer;
   transition: border-color var(--motion-duration-base) var(--motion-ease-standard);
   outline: none;
+  /* The row height, border included (--control-height-*). */
+  box-sizing: border-box;
+  height: var(--control-height-default);
+  padding-block: 0;
 }
 
 .ds-rich-dropdown__trigger:hover:not(:focus-visible) {

@@ -11,6 +11,9 @@
   border-radius: var(--radius-300);
   background-color: var(--color-bg-container-primary);
   overflow: hidden;
+  /* The row height, border included (--control-height-*); the items fill it. */
+  box-sizing: border-box;
+  height: var(--control-height-default);
 }
 
 /* ============================================
@@ -32,6 +35,8 @@
   border: none;
   cursor: pointer;
   transition: background-color var(--motion-duration-fast) var(--motion-ease-standard), color var(--motion-duration-fast) var(--motion-ease-standard);
+  align-self: stretch;
+  padding-block: 0;
 }
 
 .ds-toggle-group__item + .ds-toggle-group__item {
@@ -87,8 +92,13 @@
    COMPACT
    ============================================ */
 
+.ds-toggle-group--compact {
+  height: var(--control-height-compact);
+}
+
 .ds-toggle-group--compact .ds-toggle-group__item {
   padding: var(--padding-100) var(--padding-150);
+  padding-block: 0;
 }
 
 .ds-toggle-group--compact .ds-toggle-group__item .material-symbols-rounded {

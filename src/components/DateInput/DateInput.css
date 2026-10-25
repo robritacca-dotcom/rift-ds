@@ -61,6 +61,10 @@
   /* Transitions */
   transition: border-color var(--motion-duration-base) var(--motion-ease-standard), background-color var(--motion-duration-base) var(--motion-ease-standard);
   outline: none;
+  /* The row height, border included (--control-height-*). */
+  box-sizing: border-box;
+  height: var(--control-height-default);
+  padding-block: 0;
 }
 
 /* Hide the default calendar icon in WebKit browsers */
@@ -88,6 +92,8 @@
   font-size: var(--font-paragraph-sm-size);
   line-height: var(--font-paragraph-sm-line-height);
   letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  height: var(--control-height-compact);
+  padding-block: 0;
 }
 
 .ds-date-input--compact .ds-date-input__icon {

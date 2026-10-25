@@ -13,6 +13,7 @@ import { ModelPicker } from '../components/ModelPicker/ModelPicker';
 import { Popover } from '../components/Popover/Popover';
 import { RichDropdown } from '../components/RichDropdown/RichDropdown';
 import { SourceChip } from '../components/SourceChip/SourceChip';
+import { ThemeToggle } from '../components/ThemeToggle/ThemeToggle';
 import { TimePicker } from '../components/TimePicker/TimePicker';
 import { Tooltip } from '../components/Tooltip/Tooltip';
 
@@ -260,4 +261,16 @@ export const AiButtonRequest: Story = {
     </ClipBox>
   ),
   play: ({ canvasElement }) => expectEscapes(canvasElement, '.ds-ai-button__request'),
+};
+
+export const ThemeToggleTooltip: Story = {
+  render: () => (
+    <ClipBox>
+      <ThemeToggle showLabels={false} storageKey="rift-ds-anchored-popups-story" />
+    </ClipBox>
+  ),
+  play: async ({ canvasElement, userEvent }) => {
+    await userEvent.hover(canvasElement.querySelector('.ds-segmented-control__segment')!);
+    await expectEscapes(canvasElement, '.ds-theme-toggle .ds-segmented-control__label');
+  },
 };

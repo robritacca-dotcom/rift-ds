@@ -30,6 +30,12 @@
   background-color: var(--color-input-bg-primary);
   cursor: text;
   transition: border-color var(--motion-duration-base) var(--motion-ease-standard);
+  /* The row height (--control-height-*) for one line, border included: the
+     border comes out of the vertical padding rather than adding to it.
+     A min-height, not a height, because selected chips may wrap it taller. */
+  box-sizing: border-box;
+  min-height: var(--control-height-default);
+  padding-block: calc(var(--padding-200) - var(--border-025));
 }
 
 .ds-combobox__control:hover {
@@ -346,6 +352,8 @@
 
 .ds-combobox--compact .ds-combobox__control {
   padding: var(--padding-150) var(--padding-300); /* 6px 12px */
+  min-height: var(--control-height-compact);
+  padding-block: calc(var(--padding-150) - var(--border-025));
 }
 
 .ds-combobox--compact .ds-combobox__input,

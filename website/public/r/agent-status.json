@@ -3,7 +3,7 @@
   "name": "agent-status",
   "type": "registry:ui",
   "title": "Agent status",
-  "description": "A dot-matrix indicator and status line reporting what an agent is doing right now.",
+  "description": "What an agent is doing right now, as a dot matrix and status line, a floating pill, a square mark for icon slots, or a ring around any element.",
   "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json"

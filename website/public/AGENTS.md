@@ -16,11 +16,12 @@ npm install rift-ds
 
 ```tsx
 import 'rift-ds/tokens/tokens.css'; // once, at the app root
+import 'rift-ds/tokens/base.css'; // the reset and page the components are tuned against
 import { Button } from 'rift-ds';
 ```
 
-- Paint the page: `body` takes `--color-bg-page-primary`, `--color-text-primary` and `--font-family-primary`.
-- Dark mode is `data-theme="dark"` on `<html>`. A shipped theme is `data-brand` there too, with `rift-ds/tokens/presets/presets.css` imported once.
+- `base.css` paints the page (`body` on `--color-bg-page-primary`, `--color-text-primary` and `--font-family-primary`) and resets box sizing and margins; without it, components render too padded.
+- Dark mode is `data-theme="dark"` on `<html>`. `colorModeScript()` from `rift-ds/components/ThemeToggle/colorMode` applies the stored choice before first paint, and `ThemeToggle` changes it. In Next.js, `npx rift-ds init app` scaffolds both. A shipped theme is `data-brand` on `<html>`, with `rift-ds/tokens/presets/presets.css` imported once.
 - The base theme's typeface is not bundled. It is designed around Nunito Sans: load that (or your own) and set `--font-family-primary` to it. A shipped theme bundles its own faces, and the icon font always ships.
 - Wrap the tree in `ToastProvider` only if you call `useToast` (both from the `Toast` module). No other component needs a provider; `LinkProvider` (below) is optional and only routes links.
 

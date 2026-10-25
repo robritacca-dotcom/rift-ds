@@ -66,6 +66,8 @@ type ModelPickerOwnProps = {
   effortLabel?: string;
   /** Which side of the trigger the panel opens on. In a composer pinned to the bottom of the screen, use `top`. */
   placement?: 'bottom' | 'top';
+  /** Trigger size, on the row-control scale: `default` is 40px, `compact` 32px, so it lines up with the fields and buttons beside it. */
+  size?: 'default' | 'compact';
   /** Whether the whole control is disabled. */
   disabled?: boolean;
   /** Additional CSS classes */
@@ -102,6 +104,7 @@ export const ModelPicker = React.forwardRef<HTMLDivElement, ModelPickerProps>(
       listLabel = 'Model',
       effortLabel = 'Effort',
       placement = 'bottom',
+      size = 'default',
       disabled = false,
       className = '',
       // The naming and description attributes belong on the combobox
@@ -256,6 +259,7 @@ export const ModelPicker = React.forwardRef<HTMLDivElement, ModelPickerProps>(
     const classes = [
       baseClass,
       `${baseClass}--${placement}`,
+      size === 'compact' ? `${baseClass}--compact` : '',
       isOpen ? `${baseClass}--open` : '',
       disabled ? `${baseClass}--disabled` : '',
       className,

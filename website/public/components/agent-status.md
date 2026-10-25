@@ -1,6 +1,6 @@
 # Agent status
 
-A dot-matrix indicator and status line reporting what an agent is doing right now.
+What an agent is doing right now, as a dot matrix and status line, a floating pill, a square mark for icon slots, or a ring around any element.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 

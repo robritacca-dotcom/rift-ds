@@ -279,6 +279,10 @@
       "--icon-size-600",
       "--icon-size-800"
     ],
+    "controls": [
+      "--control-height-compact",
+      "--control-height-default"
+    ],
     "motion": [
       "--motion-duration-base",
       "--motion-duration-deliberate",

@@ -720,6 +720,12 @@ const EXCLUDED_ROUTES = new Map([
     'the sales pipeline template rendered full viewport — its prose is a fictional CRM book of business; its name and summary reach the corpus through the site map\'s Templates list, drawn from templatesSidebarLinks'],
   ['/templates/sign-in',
     'the sign-in template rendered full viewport — its prose is a fictional product\'s front door; its name and summary reach the corpus through the site map\'s Templates list, drawn from templatesSidebarLinks'],
+  ['/docs/blocks/app-shell',
+    'the app-shell block rendered full screen from the file the init bin ships: placeholder data in a fictional product; the block\'s name, description and command reach the corpus through /docs/blocks, which maps over the blocks registry'],
+  ['/docs/blocks/dashboard',
+    'the dashboard block rendered full screen from the file the init bin ships: placeholder data in a fictional product; the block\'s name, description and command reach the corpus through /docs/blocks, which maps over the blocks registry'],
+  ['/docs/blocks/sign-in',
+    'the sign-in block rendered full screen from the file the init bin ships: placeholder data in a fictional product; the block\'s name, description and command reach the corpus through /docs/blocks, which maps over the blocks registry'],
   ['/templates/landing-page',
     'the landing page template rendered full viewport — its prose is a fictional payments product\'s marketing page; its name and summary reach the corpus through the site map\'s Templates list, drawn from templatesSidebarLinks'],
 ]);

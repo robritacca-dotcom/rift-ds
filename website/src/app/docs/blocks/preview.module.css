@@ -1,0 +1,8 @@
+/* A block preview is the whole page, as it is in the app it lands in,
+   where base.css leaves the body with no padding. The site's body carries
+   a doc-page inset and a flex column; on a preview route both stand down,
+   so the block sits edge to edge at every width. */
+:global(body):has(.stage) {
+  display: block;
+  padding: 0;
+}

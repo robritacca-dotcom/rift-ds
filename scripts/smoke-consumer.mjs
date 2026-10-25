@@ -12,8 +12,8 @@
  *      optional peer that leaks into the main barrel breaks everyone).
  *
  *   2. The chat consumer: every optional peer installed, the packed bin's
- *      `init chat` run against a scaffolded app-router layout, and the
- *      result type-checked and built. This is the proof behind "one command
+ *      `init chat`, `init app` and `init block` (every block) run against a
+ *      scaffolded app-router layout, and the result type-checked and built. This is the proof behind "one command
  *      wires the whole chat": the templates the bin writes must import
  *      subpaths the tarball resolves, the route files must type-check
  *      against the shipped server types, and the mount must bundle.
@@ -141,6 +141,15 @@ createRoot(document.getElementById('root')!).render(
   // colour-mode script land under components/rift/, which the tsconfig
   // includes, so tsc checks them below beside the chat's files.
   run(`node node_modules/${PACKAGE_NAME}/bin/${BIN_NAME}.mjs init app`, chat);
+  // And every block, read from the registry the bin ships, so a new block is
+  // checked by existing. Their pages land under app/ and the shared shell
+  // under components/blocks/, both inside the tsconfig.
+  const { blocks } = JSON.parse(
+    readFileSync(join(chat, 'node_modules', PACKAGE_NAME, 'bin', 'templates', 'blocks', 'registry.json'), 'utf8')
+  );
+  for (const block of blocks) {
+    run(`node node_modules/${PACKAGE_NAME}/bin/${BIN_NAME}.mjs init block ${block.name}`, chat);
+  }
   writeFileSync(
     join(chat, 'src', 'main.tsx'),
     `import { createRoot } from 'react-dom/client';
@@ -165,12 +174,15 @@ createRoot(document.getElementById('root')!).render(<ChatMount />);
     `declare const process: { env: Record<string, string | undefined> };\n` +
       // The app scaffold's root wrapper imports Next's Link; this Vite consumer
       // has no Next, so its shape is declared for the type-check alone.
-      `declare module 'next/link' {\n  const Link: import('react').ComponentType<\n    import('react').ComponentPropsWithRef<'a'> & { href: string }\n  >;\n  export default Link;\n}\n`
+      `declare module 'next/link' {\n  const Link: import('react').ComponentType<\n    import('react').ComponentPropsWithRef<'a'> & { href: string }\n  >;\n  export default Link;\n}\n` +
+      // The blocks style themselves with CSS modules, which Next types for
+      // an app; this consumer declares them the same way.
+      `declare module '*.module.css' {\n  const classes: Record<string, string>;\n  export default classes;\n}\n`
   );
   run('npx tsc -p tsconfig.json', chat);
   run('npx vite build', chat);
   console.log(
-    `✓ Chat consumer: \`${BIN_NAME} init chat\` and \`${BIN_NAME} init app\` scaffold against the tarball; the routes, the mount, the root wrapper and the colour-mode script type-check, and the chat builds.`
+    `✓ Chat consumer: \`${BIN_NAME} init chat\`, \`${BIN_NAME} init app\` and \`${BIN_NAME} init block\` (${blocks.length} blocks) scaffold against the tarball; the routes, the mount, the root wrapper, the colour-mode script and every block type-check, and the chat builds.`
   );
 } finally {
   rmSync(work, { recursive: true, force: true });

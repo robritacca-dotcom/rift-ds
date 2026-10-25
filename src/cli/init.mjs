@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
- * The package's one bin: `npx rift-ds init`, `npx rift-ds init app` and
- * `npx rift-ds init chat`.
+ * The package's one bin: `npx rift-ds init`, `npx rift-ds init app`,
+ * `npx rift-ds init chat` and `npx rift-ds init block`.
  *
  * `init` fetches the generated agent skills from the live site into the
  * project's .claude/skills/ folder, one folder per skill, then prints the
@@ -28,6 +28,13 @@
  * never edits the root layout (every app already has one): it prints the
  * lines to add instead, importing tokens.css and base.css, rendering the
  * script and wrapping the body.
+ *
+ * `init block <name>` copies one block, a whole starting page, from
+ * dist/bin/templates/blocks/: the files its registry.json entry lists,
+ * held at their target paths so the relative imports between them resolve
+ * as they do there. Blocks share files (the app shell), and the
+ * never-overwrite rule means a shared file is written by whichever block
+ * comes first. With no name it lists the blocks.
  *
  * The manifest is data from the network that decides where this command
  * writes, so every name and path in it is checked before anything touches
@@ -57,6 +64,7 @@ const DEFAULT_DIR = join('.claude', 'skills');
 const TEMPLATES_ROOT = join(dirname(fileURLToPath(import.meta.url)), 'templates');
 const TEMPLATES_DIR = join(TEMPLATES_ROOT, 'chat');
 const APP_TEMPLATES_DIR = join(TEMPLATES_ROOT, 'app');
+const BLOCKS_DIR = join(TEMPLATES_ROOT, 'blocks');
 
 /* What `init chat` needs installed beside the package. The optional peers
    each chat subpath imports; the demo's recharts is only for the scripted
@@ -73,6 +81,7 @@ const CHAT_PEERS = [
 const USAGE = `Usage: npx ${PACKAGE_NAME} init [--skill <name>] [--dir <dir>]
        npx ${PACKAGE_NAME} init app [--app <dir>] [--dry-run]
        npx ${PACKAGE_NAME} init chat [--app <dir>] [--dry-run]
+       npx ${PACKAGE_NAME} init block [<name>] [--app <dir>] [--dry-run]
 
 init
   Fetches the agent skills for this package from ${SITE_ORIGIN} into
@@ -101,6 +110,16 @@ init chat
   follow-ups and feedback routes under app/api/chat/, the guardrails beside
   them, the mount and its model list under components/chat/, and an
   .env.chat.example. Existing files are never overwritten.
+
+  --app <dir>     The app router folder (default: app/ or src/app/, whichever exists)
+  --dry-run       Print what would be written and write nothing
+
+init block [<name>]
+  Copies a block into a Next.js app router project: a whole starting page
+  (an app shell, a dashboard, a sign-in) built from the library, its page
+  under app/ and any shared parts under components/blocks/. The files are
+  yours from then on. With no name, lists the blocks. Run init app first.
+  Existing files are never overwritten.
 
   --app <dir>     The app router folder (default: app/ or src/app/, whichever exists)
   --dry-run       Print what would be written and write nothing
@@ -204,11 +223,14 @@ function findAppDir(app) {
   return appDir;
 }
 
-/** Writes every template under `base` that does not exist yet; returns what was written and skipped. */
-function scaffold(base, appDir, dryRun) {
+/**
+ * Writes every template under `base` (or only `files`, paths relative to
+ * it) that does not exist yet; returns what was written and skipped.
+ */
+function scaffold(base, appDir, dryRun, files = templateFiles(base)) {
   const written = [];
   const skipped = [];
-  for (const file of templateFiles(base)) {
+  for (const file of files) {
     const dest = destinationFor(file, appDir);
     if (existsSync(dest)) {
       skipped.push(dest);
@@ -294,6 +316,36 @@ function initChat({ app, dryRun }) {
   console.log(`Every prop: ${SITE_ORIGIN}/components/${CHAT_SLUG}`);
 }
 
+function initBlock({ name, app, dryRun }) {
+  const registryFile = join(BLOCKS_DIR, 'registry.json');
+  if (!existsSync(registryFile)) {
+    fail('this copy carries no blocks: run the published bin (npx ' + PACKAGE_NAME + ' init block).');
+  }
+  const { blocks } = JSON.parse(readFileSync(registryFile, 'utf8'));
+  if (!name) {
+    console.log('Blocks:\n');
+    for (const block of blocks) console.log(`  ${block.name.padEnd(12)} ${block.description}`);
+    console.log(`\nAdd one with: npx ${PACKAGE_NAME} init block <name>`);
+    console.log(`See them: ${SITE_ORIGIN}/docs/blocks`);
+    return;
+  }
+  const block = blocks.find((b) => b.name === name);
+  if (!block) {
+    fail(`no block named "${name}". The blocks: ${blocks.map((b) => b.name).join(', ')}.`);
+  }
+  const appDir = findAppDir(app);
+  const { written, skipped } = scaffold(BLOCKS_DIR, appDir, dryRun, block.files);
+  console.log(
+    dryRun
+      ? `\n✓ Dry run: ${written.length} files would be written, ${skipped.length} left alone.`
+      : `\n✓ ${block.label} block added: ${written.length} files written, ${skipped.length} left alone.`
+  );
+  console.log(`\nNext:`);
+  console.log(`  1. If you have not, run npx ${PACKAGE_NAME} init app and add the lines it prints to your root layout,`);
+  console.log(`     so the tokens, the base sheet and the colour mode are in place.`);
+  console.log(`  2. Open ${block.route} in your dev server. The files are yours: rename, restyle and grow them.`);
+}
+
 const args = process.argv.slice(2);
 if (args.includes('--help') || args.includes('-h') || args.length === 0) {
   console.log(USAGE);
@@ -314,11 +366,12 @@ function option(flag, what) {
   return value;
 }
 
-if (args[1] === 'chat' || args[1] === 'app') {
+if (args[1] === 'chat' || args[1] === 'app' || args[1] === 'block') {
   const appFlag = option('--app', 'a directory');
   const scaffoldArgs = { app: appFlag ? resolve(appFlag) : undefined, dryRun: args.includes('--dry-run') };
   if (args[1] === 'chat') initChat(scaffoldArgs);
-  else initApp(scaffoldArgs);
+  else if (args[1] === 'app') initApp(scaffoldArgs);
+  else initBlock({ ...scaffoldArgs, name: args[2] && !args[2].startsWith('--') ? args[2] : undefined });
 } else {
   if (args[1] && !args[1].startsWith('--')) fail(`unknown init target "${args[1]}"\n\n${USAGE}`);
   const only = option('--skill', 'a skill name');

@@ -1,0 +1,91 @@
+/* A card centred on the page at every width: 400px wide on a desktop, the
+   full width less the gutter on a phone, where it drops its fill and sits
+   straight on the page. */
+
+.page {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: var(--padding-1000) var(--padding-500);
+  background-color: var(--color-bg-page-primary);
+}
+
+.card {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-500);
+  padding: var(--padding-1000);
+  border-radius: var(--radius-600);
+  background-color: var(--color-bg-container-primary);
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+}
+
+.product {
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  color: var(--color-text-primary);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-heading-2-family);
+  font-size: var(--font-heading-2-size);
+  font-weight: var(--font-heading-2-weight);
+  line-height: var(--font-heading-2-line-height);
+  letter-spacing: var(--font-heading-2-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.subhead,
+.footer {
+  margin: 0;
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-400);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--gap-200);
+}
+
+.full {
+  width: 100%;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-100);
+}
+
+@media (max-width: 600px) {
+  .page {
+    place-items: start center;
+    padding: var(--padding-1000) var(--padding-400);
+  }
+
+  .card {
+    padding: 0;
+    background-color: transparent;
+  }
+}

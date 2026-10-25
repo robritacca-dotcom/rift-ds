@@ -29,4 +29,7 @@ export const CHROMELESS_ROUTES = new Set([
   "/templates/sales-pipeline",
   "/templates/sign-in",
   "/templates/landing-page",
+  "/docs/blocks/app-shell",
+  "/docs/blocks/dashboard",
+  "/docs/blocks/sign-in",
 ]);

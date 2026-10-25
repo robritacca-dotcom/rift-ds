@@ -468,7 +468,11 @@ export default function GetStartedPage() {
                   document head, which applies the stored choice before first
                   paint, and put a ThemeToggle where the choice belongs. In a
                   Next.js app, <code>npx rift-ds init app</code> scaffolds the
-                  script as a component.
+                  script as a component, and{" "}
+                  <Link href="/docs/blocks" className={styles.inlineLink}>
+                    the blocks
+                  </Link>{" "}
+                  give a first page that already wears it.
                 </p>
                 <CodeBlock code={COLOR_MODE_SNIPPET} language="tsx" showCopy />
               </section>

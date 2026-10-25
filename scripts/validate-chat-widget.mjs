@@ -36,7 +36,7 @@
  *      `### ChatWidget` section in design.md; and its `category` is a
  *      registered component category, since its page joins that section.
  *   7. Every `documented` export is a component the barrel exports.
- *   8. The init bin's templates (src/cli/templates/chat/ and app/) import only
+ *   8. The init bin's templates (src/cli/templates/chat/, app/ and blocks/) import only
  *      package subpaths the manifest declares, so `npx rift-ds init chat`
  *      can never scaffold an import that does not resolve; and every file
  *      under the templates folder is tracked by git, because the tarball is
@@ -326,10 +326,11 @@ function optionalPeersInClosure(entry) {
   }
 }
 
-/* 8. The scaffold templates import only subpaths that exist. Both of the
-   init bin's scaffolds ride beside it the same way, `init chat`'s and
-   `init app`'s, so both are held here. */
-for (const scaffoldName of ['chat', 'app']) {
+/* 8. The scaffold templates import only subpaths that exist. Every one of
+   the init bin's scaffolds rides beside it the same way, `init chat`'s,
+   `init app`'s and the blocks `init block` copies, so all are held here
+   (the blocks' own registry and closure are validate-blocks.mjs's). */
+for (const scaffoldName of ['chat', 'app', 'blocks']) {
   const templatesDir = join(repoRoot, 'src', 'cli', 'templates', scaffoldName);
   if (!existsSync(templatesDir)) {
     errors.push(`src/cli/templates/${scaffoldName}/ does not exist (the init bin's ${scaffoldName} scaffold)`);

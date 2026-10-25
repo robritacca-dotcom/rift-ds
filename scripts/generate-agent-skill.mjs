@@ -272,7 +272,7 @@ import { Button } from '${PACKAGE_NAME}';
 import { Input } from '${PACKAGE_NAME}/components/Input/Input';
 \`\`\`
 
-In a Next.js app router project, \`npx ${PACKAGE_NAME} init app\` scaffolds the root wrapper (\`LinkProvider\` with Next's \`Link\`) and the colour-mode script, and prints the lines to add to the root layout.
+In a Next.js app router project, \`npx ${PACKAGE_NAME} init app\` scaffolds the root wrapper (\`LinkProvider\` with Next's \`Link\`) and the colour-mode script, and prints the lines to add to the root layout. For a new screen, \`npx ${PACKAGE_NAME} init block <name>\` copies in a whole starting page built from the library (\`npx ${PACKAGE_NAME} init block\` lists them): start a first page from one rather than from a blank file.
 
 The package is ESM-only, resolved via exports subpaths: use a bundler that handles CSS and font imports from node_modules (Vite, Next.js, webpack) and set TypeScript's \`moduleResolution\` to \`"bundler"\` (or \`"nodenext"\`). Components are provider-free with one exception: wrap the tree in \`ToastProvider\` if (and only if) the toast queue is used via \`useToast\`. One more is optional: in a routed app, \`LinkProvider\` from \`${PACKAGE_NAME}/behaviors/LinkProvider\` hands every client-rendered component your router's link, so its links navigate without a reload (in Next.js, mount it from a \`'use client'\` file, since the root layout is a Server Component); a component rendered on the server takes \`linkComponent\` on the instance instead.
 

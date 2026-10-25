@@ -49,6 +49,7 @@ const setTheme = (value: "light" | "dark" | "system") => {
 const DOC_ICONS: Record<string, string> = {
   "/overview": "account_tree",
   "/docs/get-started": "rocket_launch",
+  "/docs/blocks": "view_quilt",
   "/blueprints/claude": "description",
   "/blueprints/design": "description",
   "/blueprints/content-design": "description",

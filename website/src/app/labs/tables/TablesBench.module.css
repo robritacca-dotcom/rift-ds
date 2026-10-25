@@ -73,7 +73,8 @@
 .stage {
   width: 100%;
   margin-inline: auto;
-  transition: max-width var(--motion-duration-slow) var(--motion-ease-emphasized);
+  transition: max-width var(--motion-duration-slow)
+    var(--motion-ease-emphasized);
 }
 
 .pair {
@@ -87,4 +88,17 @@
   display: inline-flex;
   align-items: center;
   gap: var(--gap-200);
+}
+
+/* A station's own controls: the width switch, then the density and the
+   column lines its tables take. */
+.controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--gap-400);
+}
+
+.action {
+  margin-inline-start: auto;
 }

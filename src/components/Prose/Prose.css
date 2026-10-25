@@ -281,6 +281,12 @@
   overflow-wrap: normal;
 }
 
+/* Compact tables take the library Table's compact cell step. */
+.ds-prose--compact-tables th,
+.ds-prose--compact-tables td {
+  padding: var(--padding-150) var(--padding-300);
+}
+
 /* The outline closes the table, so the last row draws no divider of its own. */
 .ds-prose tbody tr:last-child td {
   border-block-end: none;

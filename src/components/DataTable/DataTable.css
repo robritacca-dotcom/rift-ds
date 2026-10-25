@@ -416,18 +416,20 @@
   gap: var(--gap-100);
 }
 
-.ds-data-table__grid--actions-hover .ds-data-table__actions-row {
+/* On hover the inline actions fade in beside the More button, which
+   stays at rest so the column always says what it holds. */
+.ds-data-table__grid--actions-hover .ds-data-table__inline-action {
   opacity: 0;
   transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
-.ds-data-table__grid--actions-hover .ds-table__row:hover .ds-data-table__actions-row,
-.ds-data-table__grid--actions-hover .ds-table__row:focus-within .ds-data-table__actions-row {
+.ds-data-table__grid--actions-hover .ds-table__row:hover .ds-data-table__inline-action,
+.ds-data-table__grid--actions-hover .ds-table__row:focus-within .ds-data-table__inline-action {
   opacity: 1;
 }
 
 @media (hover: none) {
-  .ds-data-table__grid--actions-hover .ds-data-table__actions-row {
+  .ds-data-table__grid--actions-hover .ds-data-table__inline-action {
     opacity: 1;
   }
 }

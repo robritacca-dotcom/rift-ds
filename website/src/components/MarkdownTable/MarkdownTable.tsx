@@ -9,9 +9,21 @@ import styles from "./MarkdownTable.module.css";
  * product table are drawn alike. Pass it as react-markdown's `table`
  * component.
  */
-export function MarkdownTable(props: ComponentPropsWithoutRef<"table">) {
+export function MarkdownTable({
+  size = "default",
+  ...props
+}: ComponentPropsWithoutRef<"table"> & {
+  /** `compact` tightens the cells to the library Table's compact step, as Prose's `tableSize` does. */
+  size?: "default" | "compact";
+}) {
   return (
-    <div className={styles.wrapper}>
+    <div
+      className={
+        size === "compact"
+          ? `${styles.wrapper} ${styles.compact}`
+          : styles.wrapper
+      }
+    >
       <table {...props} />
     </div>
   );

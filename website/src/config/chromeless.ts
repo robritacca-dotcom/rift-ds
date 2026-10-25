@@ -20,6 +20,7 @@ export const CHROMELESS_ROUTES = new Set([
   "/labs/glass-chat",
   "/labs/bento",
   "/labs/tables",
+  "/labs/tables/full",
   "/templates/marketing-dashboard",
   "/templates/chat-home",
   "/templates/mobile-dashboard",

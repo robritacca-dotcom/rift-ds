@@ -702,6 +702,8 @@ const EXCLUDED_ROUTES = new Map([
     'a noindex test page hosting the site chat as frosted glass over a piece of art — a surface experiment whose only prose is the chat widget\'s own'],
   ['/labs/tables',
     'the table test bench: fictional projects staged to judge the tables, a labs page outside the IA'],
+  ['/labs/tables/full',
+    'the table bench\'s most complex table as a full page: the same fictional projects, a labs page outside the IA'],
   ['/labs/bento',
     'a noindex test page for feature banners that open into an overlay — a surface experiment whose prose restates facts the covered pages already carry'],
   ['/templates/marketing-dashboard',

@@ -5433,7 +5433,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "rowActionsVisibility",
             "type": "\"hover\" | \"always\"",
             "required": false,
-            "description": "When the actions show: on row hover and focus (the default, and always on a touch screen), or always.",
+            "description": "When the inline actions show: on row hover and focus (the default, and always on a touch screen), or always. The More button shows at rest either way, so the column never reads as empty.",
             "defaultValue": "hover"
           },
           {
@@ -9929,6 +9929,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"sm\"",
             "required": false,
             "description": "Body scale. `sm` maps paragraphs, lists and code to the small paragraph tokens for dense chat contexts.",
+            "defaultValue": "default"
+          },
+          {
+            "name": "tableSize",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "Density of the tables inside: `compact` tightens the cell padding to the library Table's compact step, for long or dense tables.",
             "defaultValue": "default"
           },
           {

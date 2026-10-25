@@ -66,5 +66,5 @@ Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same dat
 | columnDividers | `boolean` | no | `false` | Draws a vertical line between columns, as well as the lines between rows. |
 | cellText | `DataTableCellText` | no | `wrap` | How every cell's text fits unless its column says otherwise: `wrap` (the default), `nowrap`, `truncate` or `lines-2`. |
 | rowActions | `((row: R) => DataTableRowAction[])` | no |  | The actions a row offers, in an actions column that sticks to the end edge: inline ones as icon buttons, the rest in a More menu. |
-| rowActionsVisibility | `"hover" \| "always"` | no | `hover` | When the actions show: on row hover and focus (the default, and always on a touch screen), or always. |
+| rowActionsVisibility | `"hover" \| "always"` | no | `hover` | When the inline actions show: on row hover and focus (the default, and always on a touch screen), or always. The More button shows at rest either way, so the column never reads as empty. |
 | className | `string` | no | `` | Additional CSS classes |

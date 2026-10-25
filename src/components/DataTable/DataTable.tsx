@@ -398,7 +398,7 @@ type DataTableOwnProps<R extends DataTableRow = DataTableRow> = {
   cellText?: DataTableCellText;
   /** The actions a row offers, in an actions column that sticks to the end edge: inline ones as icon buttons, the rest in a More menu. */
   rowActions?: (row: R) => DataTableRowAction[];
-  /** When the actions show: on row hover and focus (the default, and always on a touch screen), or always. */
+  /** When the inline actions show: on row hover and focus (the default, and always on a touch screen), or always. The More button shows at rest either way, so the column never reads as empty. */
   rowActionsVisibility?: 'hover' | 'always';
   /** Additional CSS classes */
   className?: string;
@@ -1483,6 +1483,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
                   .map((action) => (
                     <CircularButton
                       key={action.id}
+                      className={`${baseClass}__inline-action`}
                       icon={action.icon ?? 'bolt'}
                       variant="tertiary"
                       size="compact"

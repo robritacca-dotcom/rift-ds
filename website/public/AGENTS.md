@@ -55,7 +55,7 @@ Do not build a chat UI by hand. `npx rift-ds init chat` scaffolds the package's 
 - Never write a token name from memory. Check it in the token reference below, or read the names from `tokenRegistry` in `rift-ds/tokens/registry`: a misspelt `var()` resolves to nothing and fails without a sound.
 - `--color-action-primary-bg` marks the primary action, focus, and checked or selected state. Never decoration.
 - Status colours come from the `--color-status-*` family, such as `--color-status-error-text`.
-- The only shadows are `--shadow-floating` and `--shadow-modal`.
+- The only shadows are `--shadow-floating`, `--shadow-modal` and `--shadow-table-pinned`.
 - Size an icon by setting `--icon-size` to an `--icon-size-*` step, never `font-size`.
 - Never guess a prop. Check it in the `.d.ts` files in `node_modules/rift-ds`, which work offline, or in the component's contract, linked from the catalogue below.
 

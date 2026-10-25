@@ -242,14 +242,29 @@
   background-color: var(--color-table-body-bg);
 }
 
+/* The markdown tier's metrics, the blueprints' tables' exactly
+   (website/src/components/MarkdownTable): small paragraph type, an emphasis
+   header, secondary body text, cells top-aligned. */
 .ds-prose th {
-  font-family: var(--font-title-body-family);
-  font-size: var(--font-paragraph-sm-size);
-  font-weight: var(--font-title-body-weight);
-  line-height: var(--font-paragraph-sm-line-height);
-  letter-spacing: var(--font-title-body-letter-spacing);
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
+  color: var(--color-text-primary);
   background-color: var(--color-table-header-bg);
   text-align: start;
+  white-space: nowrap;
+}
+
+.ds-prose td {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-secondary);
+  vertical-align: top;
 }
 
 /* Cells never break words, whatever the surrounding context does. An
@@ -261,7 +276,7 @@
    something to scroll. */
 .ds-prose th,
 .ds-prose td {
-  padding: var(--padding-150) var(--padding-300);
+  padding: var(--padding-300) var(--padding-400);
   border-block-end: var(--border-025) solid var(--color-table-divider);
   overflow-wrap: normal;
 }

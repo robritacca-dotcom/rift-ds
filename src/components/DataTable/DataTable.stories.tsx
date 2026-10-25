@@ -117,7 +117,7 @@ export const Compact: Story = {
   },
 };
 
-/** The built-in pager at its English defaults. */
+/** The built-in pager at its English defaults: numbered pages at the default size. */
 export const DefaultCopy: Story = {
   args: {
     pageSize: 4,
@@ -127,6 +127,19 @@ export const DefaultCopy: Story = {
     const pager = canvas.getByRole('navigation', { name: 'Pagination' });
     await expect(within(pager).getByRole('button', { name: 'Previous page' })).toBeDisabled();
     await expect(within(pager).getByRole('button', { name: 'Next page' })).toBeEnabled();
+    await expect(within(pager).getByRole('button', { name: 'Page 1' })).toHaveAttribute('aria-current', 'page');
+  },
+};
+
+/** A compact table takes the compact pager, whose readout replaces the numbers. */
+export const CompactCopy: Story = {
+  args: {
+    pageSize: 4,
+    size: 'compact',
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const pager = canvas.getByRole('navigation', { name: 'Pagination' });
     await expect(within(pager).getByText('Page 1 of 3')).toBeInTheDocument();
   },
 };
@@ -139,6 +152,7 @@ export const LocalisedCopy: Story = {
       'aria-label': 'Paginación',
       previousLabel: 'Página anterior',
       nextLabel: 'Página siguiente',
+      pageLabel: (page: number) => `Página ${page}`,
       readoutLabel: (page: number, pageCount: number) => `Página ${page} de ${pageCount}`,
     },
   },
@@ -147,7 +161,7 @@ export const LocalisedCopy: Story = {
     const pager = canvas.getByRole('navigation', { name: 'Paginación' });
     await expect(within(pager).getByRole('button', { name: 'Página anterior' })).toBeDisabled();
     await expect(within(pager).getByRole('button', { name: 'Página siguiente' })).toBeEnabled();
-    await expect(within(pager).getByText('Página 1 de 3')).toBeInTheDocument();
+    await expect(within(pager).getByRole('button', { name: 'Página 1' })).toHaveAttribute('aria-current', 'page');
   },
 };
 
@@ -250,5 +264,144 @@ export const SortAndSearchParity: Story = {
     // "north" matches the region, which no column shows.
     await userEvent.type(canvas.getByRole('textbox', { name: 'Search' }), 'north');
     await expect(names()).toEqual(['Item 1', 'Item 10']);
+  },
+};
+
+const wideColumns: DataTableColumn[] = [
+  { key: 'name', header: 'Customer', sortable: true, rowHeader: true, locked: true, pin: 'start', width: '180px' },
+  { key: 'status', header: 'Status', sortable: true, width: '140px' },
+  { key: 'updated', header: 'Last updated', sortable: true, width: '160px' },
+  { key: 'price', header: 'Price', sortable: true, align: 'right', width: '120px' },
+];
+
+/**
+ * Every column control on: drag a header's edge to resize (double-click to
+ * fit), drag a header to move it, and open a header's menu to sort, pin,
+ * move, fit, reset or hide. The Customer column is locked and pinned.
+ * In grid mode the table is one Tab stop, with arrow keys between cells.
+ */
+export const ColumnControls: Story = {
+  args: {
+    columns: wideColumns,
+    resizableColumns: true,
+    reorderableColumns: true,
+    columnMenu: true,
+    caption: 'Orders',
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByRole('grid', { name: 'Orders' })).toBeInTheDocument();
+    const headerOrder = () => canvas.getAllByRole('columnheader').map((th) => th.dataset.col);
+    await expect(headerOrder()).toEqual(['name', 'status', 'updated', 'price']);
+
+    // One Tab stop: the first body cell, then arrows move between cells.
+    const cells = () => canvasElement.querySelectorAll<HTMLElement>('[data-col][tabindex="0"]');
+    await expect(cells()).toHaveLength(1);
+    cells()[0].focus();
+    await userEvent.keyboard('{ArrowRight}');
+    await expect(document.activeElement).toHaveAttribute('data-col', 'status');
+    await userEvent.keyboard('{ArrowUp}');
+    await expect(document.activeElement?.tagName).toBe('TH');
+
+    // Alt+Down opens the header menu; Move right moves the column and keeps focus on it.
+    await userEvent.keyboard('{Alt>}{ArrowDown}{/Alt}');
+    await userEvent.click(await within(document.body).findByRole('menuitem', { name: 'Move right' }));
+    await waitFor(() => expect(headerOrder()).toEqual(['name', 'updated', 'status', 'price']));
+    await waitFor(() => expect(document.activeElement).toHaveAttribute('data-col', 'status'));
+
+    // Ctrl+Shift+Left moves it back from the keyboard.
+    await userEvent.keyboard('{Control>}{Shift>}{ArrowLeft}{/Shift}{/Control}');
+    await waitFor(() => expect(headerOrder()).toEqual(['name', 'status', 'updated', 'price']));
+
+    // Hide from the menu, and the locked column offers neither hide nor move.
+    await userEvent.click(canvas.getByRole('button', { name: 'Price column options' }));
+    await userEvent.click(await within(document.body).findByRole('menuitem', { name: 'Hide column' }));
+    await waitFor(() => expect(headerOrder()).toEqual(['name', 'status', 'updated']));
+    await userEvent.click(canvas.getByRole('button', { name: 'Customer column options' }));
+    await expect(within(document.body).queryByRole('menuitem', { name: 'Hide column' })).toBeNull();
+    await expect(within(document.body).queryByRole('menuitem', { name: 'Move right' })).toBeNull();
+    await userEvent.keyboard('{Escape}');
+
+    // The pinned column sticks, with its edge marked.
+    const pinned = canvasElement.querySelector('thead [data-col="name"]');
+    await expect(pinned).toHaveClass('ds-data-table__cell--pinned-start');
+    await expect(pinned).toHaveClass('ds-data-table__cell--pinned-edge');
+  },
+};
+
+/** Drag a row's grip up or down, or press Alt+Up and Alt+Down on it. While a sort is active the grip is off, since the sort owns the order. */
+export const RowReorder: Story = {
+  args: {
+    columns: columns.map((col) => (col.key === 'name' ? { ...col, rowHeader: true } : col)),
+    rows: rows.slice(0, 5),
+    reorderableRows: true,
+    caption: 'Queue',
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const names = () => canvas.getAllByRole('rowheader').map((cell) => cell.textContent);
+    await expect(names()).toEqual(['John Clarkson', 'Aspen Lubin', 'Michael Ekstrom', 'Kianna Vaccaro', 'Livia Saris']);
+    const gripCell = canvasElement.querySelector<HTMLElement>('tbody tr[data-row="r1"] [data-col="ds-data-table-grip"]')!;
+    gripCell.focus();
+    await userEvent.keyboard('{Alt>}{ArrowDown}{/Alt}');
+    await waitFor(() =>
+      expect(names()).toEqual(['Aspen Lubin', 'John Clarkson', 'Michael Ekstrom', 'Kianna Vaccaro', 'Livia Saris']),
+    );
+    const live = canvasElement.querySelector('[aria-live="polite"]') as HTMLElement;
+    await waitFor(() => expect(live).toHaveTextContent('John Clarkson moved to row 2 of 5'));
+    await expect(canvas.getByRole('button', { name: 'Move John Clarkson' })).toBeInTheDocument();
+  },
+};
+
+/** Row actions: edit inline, the rest in a More menu, in a column that sticks to the end edge. */
+export const RowActions: Story = {
+  args: {
+    columns: columns.map((col) => (col.key === 'name' ? { ...col, rowHeader: true } : col)),
+    rows: rows.slice(0, 4),
+    rowActions: () => [
+      { id: 'edit', label: 'Edit', icon: 'edit', inline: true, onSelect: () => {} },
+      { id: 'duplicate', label: 'Duplicate', icon: 'content_copy', onSelect: () => {} },
+      { id: 'delete', label: 'Delete', icon: 'delete', destructive: true, onSelect: () => {} },
+    ],
+    rowActionsVisibility: 'always',
+    caption: 'Orders',
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getAllByRole('button', { name: 'Edit' })).toHaveLength(4);
+    await userEvent.click(canvas.getByRole('button', { name: 'More actions for John Clarkson' }));
+    await expect(await within(document.body).findByRole('menuitem', { name: 'Delete' })).toBeInTheDocument();
+    await userEvent.keyboard('{Escape}');
+  },
+};
+
+/** The header holds while the body scrolls inside the table's own frame. */
+export const StickyHeader: Story = {
+  args: {
+    stickyHeader: true,
+    maxHeight: 220,
+    caption: 'Orders',
+  },
+};
+
+/** Every way cell text can fit: wrap (the table's default), one line, truncated with the full text on hover, and two lines. */
+export const CellText: Story = {
+  args: {
+    columns: [
+      { key: 'note', header: 'Wrap', width: '200px' },
+      { key: 'one', header: 'One line', width: '160px', cellText: 'nowrap' },
+      { key: 'trunc', header: 'Truncate', width: '160px', cellText: 'truncate' },
+      { key: 'two', header: 'Two lines', width: '200px', cellText: 'lines-2' },
+    ],
+    rows: [1, 2, 3].map((n) => {
+      const text = `Delivery window moved twice after the carrier changed the route ${n}`;
+      return { id: `t${n}`, values: { note: text, one: text, trunc: text, two: text } };
+    }),
+    resizableColumns: true,
+    caption: 'Cell text',
+  },
+  play: async ({ canvasElement }) => {
+    const truncated = canvasElement.querySelector('.ds-data-table__text--truncate');
+    await expect(truncated).toHaveAttribute('title', expect.stringContaining('Delivery window'));
   },
 };

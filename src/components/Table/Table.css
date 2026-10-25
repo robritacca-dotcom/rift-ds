@@ -149,6 +149,16 @@
   }
 }
 
+/* A bordered table's visible caption is drawn above the outline, where
+   the plain table's sits: a <caption> would render inside the wrapper's
+   border and scroll with it. The <caption> stays in the table, hidden, so
+   the table and its scroll region keep their name. */
+.ds-table__frame {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
 /* When bordered, the table fills the wrapper — no radius needed on the table itself */
 .ds-table--bordered {
   border-radius: 0;
@@ -219,4 +229,15 @@
    ============================================ */
 .ds-table .ds-table__body .ds-table__row.ds-table__row--selected:nth-child(n) {
   background-color: var(--color-table-row-selected-bg);
+}
+
+/* ============================================
+   COLUMN DIVIDERS
+   A vertical line between columns, beside the
+   lines between rows: for dense numeric tables
+   that read down as well as across.
+   ============================================ */
+.ds-table--column-dividers .ds-table__header-cell:not(:last-child),
+.ds-table--column-dividers .ds-table__cell:not(:last-child) {
+  border-inline-end: var(--border-025) solid var(--color-table-divider);
 }

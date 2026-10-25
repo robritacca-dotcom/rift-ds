@@ -278,7 +278,8 @@
     ],
     "shadow": [
       "--shadow-floating",
-      "--shadow-modal"
+      "--shadow-modal",
+      "--shadow-table-pinned"
     ],
     "icons": [
       "--icon-size-1200",

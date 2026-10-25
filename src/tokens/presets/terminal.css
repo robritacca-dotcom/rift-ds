@@ -245,6 +245,7 @@ html[data-brand="terminal"] {
   --primitive-yellow-11: #342F19;
   --shadow-floating: none;
   --shadow-modal: none;
+  --shadow-table-pinned: none;
 }
 
 html[data-brand="terminal"][data-theme="dark"] {
@@ -396,4 +397,5 @@ html[data-brand="terminal"][data-theme="dark"] {
   --primitive-yellow-11: #342F19;
   --shadow-floating: none;
   --shadow-modal: none;
+  --shadow-table-pinned: none;
 }

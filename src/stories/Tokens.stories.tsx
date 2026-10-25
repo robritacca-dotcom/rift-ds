@@ -837,7 +837,7 @@ export const Elevation: Story = {
         }}
       >
         Depth is colour-based: standard containers never carry shadows. These
-        are the only two shadows in the system, plus the modal scrim. All three
+        are the only shadows in the system, plus the modal scrim. All of them
         get stronger values in dark mode so they read against the near-black
         page floor.
       </p>
@@ -845,6 +845,7 @@ export const Elevation: Story = {
       <TokenSection title="Shadows">
         <ShadowToken name="Floating" value="--shadow-floating" />
         <ShadowToken name="Modal" value="--shadow-modal" />
+        <ShadowToken name="Pinned column" value="--shadow-table-pinned" />
       </TokenSection>
 
       <TokenSection title="Scrim">

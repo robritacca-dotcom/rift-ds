@@ -230,6 +230,7 @@ html[data-brand="violet"] {
   --primitive-yellow-11: #322B1A;
   --shadow-floating: 0 6px 24px rgba(0, 0, 0, 0.08);
   --shadow-modal: 0 12px 48px rgba(0, 0, 0, 0.14);
+  --shadow-table-pinned: 0 0 14px rgba(0, 0, 0, 0.1);
 }
 
 html[data-brand="violet"][data-theme="dark"] {
@@ -421,4 +422,5 @@ html[data-brand="violet"][data-theme="dark"] {
   --primitive-yellow-11: #322B1A;
   --shadow-floating: 0 6px 24px rgba(0, 0, 0, 0.45);
   --shadow-modal: 0 12px 48px rgba(0, 0, 0, 0.5);
+  --shadow-table-pinned: 0 0 14px rgba(0, 0, 0, 0.45);
 }

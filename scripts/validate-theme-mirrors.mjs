@@ -619,7 +619,7 @@ function checkLeverTables() {
   }
 
   // ELEVATION_VARIANTS.default ↔ the shipped shadow tokens, per theme.
-  const defaultBlock = overridesSource.match(/default:\s*\{\s*light:\s*\{\s*floating:\s*"([^"]+)",\s*modal:\s*"([^"]+)"\s*\},\s*dark:\s*\{\s*floating:\s*"([^"]+)",\s*modal:\s*"([^"]+)"\s*\}/);
+  const defaultBlock = overridesSource.match(/default:\s*\{\s*light:\s*\{\s*floating:\s*"([^"]+)",\s*modal:\s*"([^"]+)",\s*pinned:\s*"([^"]+)"\s*\},\s*dark:\s*\{\s*floating:\s*"([^"]+)",\s*modal:\s*"([^"]+)",\s*pinned:\s*"([^"]+)"\s*\}/);
   if (!defaultBlock) {
     errors.push(`${overridesRel}: could not parse ELEVATION_VARIANTS.default — the elevation guard needs it`);
   } else {
@@ -627,8 +627,10 @@ function checkLeverTables() {
     const expected = [
       ['light', '--shadow-floating', lightDecls.get('--shadow-floating'), defaultBlock[1]],
       ['light', '--shadow-modal', lightDecls.get('--shadow-modal'), defaultBlock[2]],
-      ['dark', '--shadow-floating', darkDecls.get('--shadow-floating'), defaultBlock[3]],
-      ['dark', '--shadow-modal', darkDecls.get('--shadow-modal'), defaultBlock[4]],
+      ['light', '--shadow-table-pinned', lightDecls.get('--shadow-table-pinned'), defaultBlock[3]],
+      ['dark', '--shadow-floating', darkDecls.get('--shadow-floating'), defaultBlock[4]],
+      ['dark', '--shadow-modal', darkDecls.get('--shadow-modal'), defaultBlock[5]],
+      ['dark', '--shadow-table-pinned', darkDecls.get('--shadow-table-pinned'), defaultBlock[6]],
     ];
     for (const [themeName, token, css, mirrored2] of expected) {
       if (css !== mirrored2) {

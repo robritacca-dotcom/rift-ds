@@ -212,6 +212,8 @@ const INTERNAL_MODULES = new Map([
     'baked Natural Earth land path in WorldMap\'s private drawing space; the component is the public surface, and the coordinates mean nothing without its projection'],
   ['src/components/Chart/useChartAnimation.ts',
     'the entrance hook every chart in the set spreads into its series; the charts are the public surface, and the contract it keeps (animate on mount and on new data, never on a resize) is design.md\'s chart spec'],
+  ['src/components/DataTable/dragGesture.ts',
+    'the one pointer drag every DataTable grip runs (capture, a frame per move, a commit on release); the table is the public surface, and the helper carries the gesture rule for it alone'],
 ]);
 
 const componentsDir = join(repoRoot, 'src', 'components');

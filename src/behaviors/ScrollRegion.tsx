@@ -13,9 +13,17 @@
  * wrapper is the first user, so Table itself stays server-renderable.
  */
 
-import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useId, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 
-export function ScrollRegion({ className, children }: { className?: string; children: ReactNode }) {
+export function ScrollRegion({
+  className,
+  style,
+  children,
+}: {
+  className?: string;
+  style?: CSSProperties;
+  children: ReactNode;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const captionId = useId();
   const [overflows, setOverflows] = useState(false);
@@ -41,6 +49,7 @@ export function ScrollRegion({ className, children }: { className?: string; chil
     <div
       ref={ref}
       className={className}
+      style={style}
       role={overflows ? 'region' : undefined}
       aria-labelledby={overflows ? labelledBy : undefined}
       tabIndex={overflows ? 0 : undefined}

@@ -311,7 +311,7 @@ Prefix: `--border-*`.
 | `--border-025` | `1px` (`--primitive-border-025`) |
 | `--border-050` | `2px` (`--primitive-border-050`) |
 
-## Shadow (2)
+## Shadow (3)
 
 Prefix: `--shadow-*`.
 
@@ -319,6 +319,7 @@ Prefix: `--shadow-*`.
 | --- | --- | --- |
 | `--shadow-floating` | `0 4px 16px rgba(0, 0, 0, 0.12)` | `0 4px 16px rgba(0, 0, 0, 0.55)` |
 | `--shadow-modal` | `0 8px 32px rgba(0, 0, 0, 0.2)` | `0 8px 32px rgba(0, 0, 0, 0.6)` |
+| `--shadow-table-pinned` | `0 0 10px rgba(0, 0, 0, 0.14)` | `0 0 10px rgba(0, 0, 0, 0.55)` |
 
 ## Icons (4)
 

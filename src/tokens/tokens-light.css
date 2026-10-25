@@ -97,6 +97,10 @@
   /* Elevation — the only shadows in the system (floating surfaces + modals) */
   --shadow-floating: 0 4px 16px rgba(0, 0, 0, 0.12);
   --shadow-modal: 0 8px 32px rgba(0, 0, 0, 0.2);
+  /* The edge of a pinned table column while content scrolls under it: a
+     soft, symmetric falloff drawn on a thin strip at the column's edge,
+     which clips it to the scrolling side. */
+  --shadow-table-pinned: 0 0 10px rgba(0, 0, 0, 0.14);
 
   /* Action - Primary. The action colour is theme-dependent: one teal step
      cannot clear 3:1 against both a white page and a near-black one while

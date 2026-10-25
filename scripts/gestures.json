@@ -120,6 +120,25 @@
       ],
       "grip": ".ds-colorpicker__saturation",
       "axis": "both"
+    },
+    {
+      "label": "tables bench: column resize grip",
+      "route": "/labs/tables",
+      "grip": "#bench-stress .ds-data-table__resize",
+      "axis": "x"
+    },
+    {
+      "label": "tables bench: column header move",
+      "route": "/labs/tables",
+      "grip": "#bench-stress th.ds-data-table__header--movable",
+      "at": [0.2, 0.5],
+      "axis": "x"
+    },
+    {
+      "label": "tables bench: row grip",
+      "route": "/labs/tables",
+      "grip": "#bench-stress .ds-data-table__grip",
+      "axis": "y"
     }
   ]
 }

@@ -87,6 +87,324 @@
 }
 
 /* ============================================
+   COLUMNS AND ROWS
+   The frame, fixed widths, pinned and sticky
+   cells, the grips, the guide and drop lines.
+   Widths and pinned offsets arrive as custom
+   properties on the table (--ds-dt-w-N,
+   --ds-dt-off-N, --ds-dt-total), written per
+   frame while a grip is dragged and committed
+   on release.
+   ============================================ */
+
+/* The frame holds the guide and drop lines, and is the scroll container
+   a sticky header and pinned columns stick to. */
+.ds-data-table__frame {
+  position: relative;
+}
+
+/* Fixed widths: every column holds its own width exactly, and a filler
+   column takes whatever the frame has left over, so the header band and
+   the rows always run the frame's full width. Wider than the frame, the
+   table is the sum of its columns and the filler is nothing. */
+.ds-data-table__grid--fixed {
+  table-layout: fixed;
+  width: 100%;
+  min-width: var(--ds-dt-total);
+}
+
+.ds-data-table__filler {
+  padding: 0;
+}
+
+/* Every cell of a pinned column sticks to its edge over an opaque body,
+   with any row tint (hover, stripe, selection) laid over that body, so
+   the scrolling cells never show through. */
+.ds-data-table__cell--pinned {
+  --ds-dt-tint: transparent;
+
+  position: sticky;
+  z-index: 1;
+  background-color: var(--color-table-body-bg);
+  background-image: linear-gradient(var(--ds-dt-tint), var(--ds-dt-tint));
+}
+
+.ds-table__row:hover > .ds-data-table__cell--pinned {
+  --ds-dt-tint: var(--color-table-row-hover-bg);
+}
+
+.ds-table--striped .ds-table__body .ds-table__row:nth-child(even) > .ds-data-table__cell--pinned {
+  --ds-dt-tint: var(--color-table-row-stripe-bg);
+}
+
+.ds-table__row--selected > .ds-data-table__cell--pinned {
+  --ds-dt-tint: var(--color-table-row-selected-bg);
+}
+
+.ds-table__head .ds-data-table__cell--pinned {
+  --ds-dt-tint: var(--color-table-header-bg);
+
+  z-index: 4;
+}
+
+/* One fixed layer order, so nothing changes place under the pointer:
+   body cells, pinned body cells (1), a pinned body cell that is hovered or
+   holds focus (2, so a menu it opens clears the rows below), the sticky
+   header (3), pinned header cells (4), a header being dragged (5), then the
+   resize guide and drop line (6). The header always wins: a row scrolled
+   half under it never paints over it, hovered or not. */
+.ds-table__body .ds-data-table__cell--pinned:hover,
+.ds-table__body .ds-data-table__cell--pinned:focus-within {
+  z-index: 2;
+}
+
+/* The pinned edge: a hairline always, and a soft shadow on the scrolling
+   side once content has scrolled under it. */
+.ds-data-table__cell--pinned-start.ds-data-table__cell--pinned-edge {
+  border-inline-end: var(--border-025) solid var(--color-table-divider);
+}
+
+.ds-data-table__cell--pinned-end.ds-data-table__cell--pinned-edge {
+  border-inline-start: var(--border-025) solid var(--color-table-divider);
+}
+
+.ds-data-table__cell--pinned-edge::after {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  width: var(--border-025);
+  box-shadow: var(--shadow-table-pinned);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-data-table__cell--pinned-start.ds-data-table__cell--pinned-edge::after {
+  inset-inline-end: 0;
+  clip-path: inset(0 -16px 0 0);
+}
+
+.ds-data-table__cell--pinned-end.ds-data-table__cell--pinned-edge::after {
+  inset-inline-start: 0;
+  clip-path: inset(0 0 0 -16px);
+}
+
+[data-scrolled-start] .ds-data-table__cell--pinned-start.ds-data-table__cell--pinned-edge::after,
+[data-scrolled-end] .ds-data-table__cell--pinned-end.ds-data-table__cell--pinned-edge::after {
+  opacity: 1;
+}
+
+/* A sticky header holds over a body that scrolls inside the frame. */
+.ds-data-table__grid--sticky .ds-table__head .ds-table__header-cell {
+  --ds-dt-tint: var(--color-table-header-bg);
+
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background-color: var(--color-table-body-bg);
+  background-image: linear-gradient(var(--ds-dt-tint), var(--ds-dt-tint));
+}
+
+.ds-data-table__grid--sticky .ds-table__head .ds-data-table__cell--pinned {
+  z-index: 4;
+}
+
+/* Header cells are positioned for their resize grip. A pinned or sticky
+   header cell is already positioned (sticky), so this only reaches the
+   rest; written low-specificity so it never outranks the sticky rules. */
+:where(.ds-table__head) .ds-table__header-cell:not(.ds-data-table__cell--pinned) {
+  position: relative;
+}
+
+.ds-data-table__header-inner {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-050);
+  min-width: 0;
+}
+
+.ds-data-table__header--movable {
+  cursor: grab;
+  user-select: none;
+}
+
+.ds-table__header-cell[data-dragging] {
+  z-index: 5;
+  opacity: 0.6;
+  cursor: grabbing;
+}
+
+/* The options button holds its place in every state, so the header never
+   shifts; it shows on hover, on focus, and always on a touch screen. */
+.ds-data-table__menu {
+  margin-inline-start: auto;
+  opacity: 0;
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-table__header-cell:hover .ds-data-table__menu,
+.ds-table__header-cell:focus-within .ds-data-table__menu,
+.ds-table__header-cell:focus .ds-data-table__menu {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .ds-data-table__menu {
+    opacity: 1;
+  }
+}
+
+/* The resize grip: wider than the line it shows, straddling the edge. */
+.ds-data-table__resize {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: calc(-1 * var(--padding-100));
+  z-index: 2;
+  width: var(--padding-200);
+  cursor: col-resize;
+  touch-action: none;
+}
+
+.ds-data-table__resize::after {
+  content: '';
+  position: absolute;
+  inset-block: var(--padding-200);
+  inset-inline-start: calc(50% - var(--border-025));
+  width: var(--border-050);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-icon-secondary);
+  opacity: 0;
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-data-table__resize:hover::after,
+[data-resizing] .ds-data-table__resize:active::after {
+  opacity: 1;
+}
+
+/* Touch screens get the header menu's Fit and Reset instead of a grip a
+   finger cannot find. */
+@media (pointer: coarse) {
+  .ds-data-table__resize {
+    display: none;
+  }
+}
+
+/* The guide line while resizing, and the drop line while moving. */
+.ds-data-table__guide,
+.ds-data-table__drop {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  z-index: 6;
+  pointer-events: none;
+  background-color: var(--color-icon-primary);
+}
+
+.ds-data-table__guide,
+.ds-data-table__drop[data-axis='x'] {
+  inset-block-end: 0;
+  width: var(--border-050);
+}
+
+.ds-data-table__drop[data-axis='y'] {
+  inset-inline-end: 0;
+  height: var(--border-050);
+}
+
+.ds-data-table__guide[hidden],
+.ds-data-table__drop[hidden] {
+  display: none;
+}
+
+/* The row grip and the selection column. */
+.ds-data-table__utility {
+  padding-inline: var(--padding-200);
+}
+
+.ds-data-table__grip {
+  --icon-size: var(--icon-size-500);
+
+  display: inline-flex;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--color-icon-secondary);
+  cursor: grab;
+  touch-action: none;
+}
+
+.ds-data-table__grip:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+  border-radius: var(--radius-050);
+}
+
+.ds-data-table__grip[aria-disabled='true'] {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ds-table__row[data-dragging] {
+  position: relative;
+  z-index: 2;
+  opacity: 0.8;
+}
+
+/* The actions column: its buttons side by side at the end, shown on the
+   row's hover and focus (always on a touch screen) unless the table asks
+   for them always. */
+.ds-data-table__actions-row {
+  justify-content: flex-end;
+  gap: var(--gap-100);
+}
+
+.ds-data-table__grid--actions-hover .ds-data-table__actions-row {
+  opacity: 0;
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-data-table__grid--actions-hover .ds-table__row:hover .ds-data-table__actions-row,
+.ds-data-table__grid--actions-hover .ds-table__row:focus-within .ds-data-table__actions-row {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .ds-data-table__grid--actions-hover .ds-data-table__actions-row {
+    opacity: 1;
+  }
+}
+
+/* Grid mode: the active cell takes the focus ring, inset so the frame
+   never clips it. */
+.ds-table [data-col]:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: -2px;
+}
+
+/* Cell text: wrap is the table's own; the rest fit a line or two. */
+.ds-data-table__text {
+  min-width: 0;
+}
+
+.ds-data-table__text--nowrap {
+  white-space: nowrap;
+}
+
+.ds-data-table__text--truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ds-data-table__text--lines-2 {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+/* ============================================
    FOOTER
    ============================================ */
 

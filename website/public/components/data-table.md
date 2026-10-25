@@ -27,7 +27,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same dat
 | searchable | `boolean` | no | `false` | Shows the built-in search field, matching against every column's raw value. |
 | searchPlaceholder | `string` | no | `Search` | Placeholder for the search field. |
 | toolbar | `ReactNode` | no |  | Slot beside the search field for consumer-owned filter controls. |
-| size | `"default" \| "compact"` | no | `default` | Visual size, passed through to the underlying Table. |
+| size | `"default" \| "compact"` | no | `default` | The table's density, and the controls' with it: `default` rows with the search field and pager at the default row-control height, `compact` rows with both at the compact one. Controls inside the rows (checkboxes, grips, menu and action buttons) stay compact at either density, so a row's height is its text's. |
 | striped | `boolean` | no | `false` | Alternating row backgrounds, passed through to the underlying Table. |
 | caption | `string` | no |  | Accessible caption for the underlying table (visually hidden). |
 | emptyState | `ReactNode` | no |  | What to render when no rows match — defaults to a built-in empty state. |
@@ -38,6 +38,33 @@ Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same dat
 | pageAnnouncement | `((page: number, pageCount: number, first: number, last: number, total: number) => string)` | no | `(page: number, pageCount: number, first: number, last: number, total: number) =>         `Page ${page} of ${pageCount}, rows ${first} to ${last} of ${total}`` | Announced when the page changes, given the page, the page count, the first and last row shown and the total. Defaults to "Page 2 of 7, rows 21 to 40 of 140". |
 | resultsLabel | `((count: number) => string)` | no | `(count: number) => `${count} result${count === 1 ? '' : 's'}`` | Footer count of the rows that match, given the count. Defaults to "1 result" or "N results". |
 | selectedLabel | `((count: number) => string)` | no | `(count: number) => `${count} selected`` | Footer count shown instead of the results while rows are selected, given the count. Defaults to "N selected". |
-| paginationLabels | `Pick<PaginationProps, "aria-label" \| "previousLabel" \| "nextLabel" \| "readoutLabel">` | no |  | The built-in pager's words, merged over its English defaults: the arrows' names ("Previous page", "Next page"), the readout ("Page 2 of 4") and the landmark's name ("Pagination"). The pager is always the compact size, so its numbered-page names never render and are not offered here. |
+| paginationLabels | `Pick<PaginationProps, "aria-label" \| "previousLabel" \| "nextLabel" \| "pageLabel" \| "readoutLabel">` | no |  | The built-in pager's words, merged over its English defaults: the arrows' names ("Previous page", "Next page"), the readout ("Page 2 of 4") and the landmark's name ("Pagination"). The pager follows the table's `size`: numbered pages at the default size (named by `pageLabel`), a "Page X of Y" readout when compact (`readoutLabel`). |
 | emptyStateLabels | `Partial<Pick<EmptyStateProps, "title" \| "description">>` | no |  | The built-in empty state's words, merged over its English defaults ("No matching rows", "Adjust the search or filters and try again."). Ignored when `emptyState` replaces the whole node. |
+| resizableColumns | `boolean` | no | `false` | Lets every column be resized by dragging its header's edge, double-clicking it to fit, or Alt+Left and Alt+Right on a focused header. A column's own `resizable` wins. |
+| reorderableColumns | `boolean` | no | `false` | Lets every column be moved by dragging its header, from its menu, or Ctrl+Shift+Left and Ctrl+Shift+Right on a focused header. A column's own `reorderable` wins. |
+| columnMenu | `boolean` | no | `false` | Adds a menu to every header: sort, pin, move, hide, fit and reset, as each column allows. Opened from the header's options button, Alt+Down, Shift+F10 or a right-click. |
+| reorderableRows | `boolean` | no | `false` | Adds a grip at each row's start to drag it up or down, or move it with Alt+Up and Alt+Down. Off while a sort is active, since the sort owns the order. |
+| stickyHeader | `boolean` | no | `false` | Keeps the header in view while the body scrolls. Takes effect with `maxHeight`, inside the table's own scroll frame. |
+| maxHeight | `string \| number` | no |  | The table's tallest height before its body scrolls inside its frame (any CSS length, or pixels). |
+| navigation | `"table" \| "grid"` | no |  | How the keyboard moves through the table. `table` keeps every control in the Tab order, as a reading table does; `grid` makes the table one Tab stop with arrow-key focus across its cells. Defaults to `grid` when any column or row control is on, else `table`. |
+| columnWidths | `Record<string, number>` | no |  | Column widths in pixels, by key, for controlled use. Fires `onColumnWidthsChange` once per resize, on release. |
+| defaultColumnWidths | `Record<string, number>` | no |  | Starting column widths in pixels, by key, for uncontrolled use. Columns not listed take their natural width. |
+| onColumnWidthsChange | `((widths: Record<string, number>) => void)` | no |  | Fires with every column's width after a resize, a fit or a reset. |
+| columnOrder | `string[]` | no |  | Column keys in display order, for controlled use. Keys left out keep their declared order after the listed ones. |
+| defaultColumnOrder | `string[]` | no |  | Starting column order, for uncontrolled use. |
+| onColumnOrderChange | `((order: string[]) => void)` | no |  | Fires with the full column order after a move. |
+| columnPinning | `DataTableColumnPinning` | no |  | Columns pinned to each edge, for controlled use. |
+| defaultColumnPinning | `DataTableColumnPinning` | no |  | Starting pins, for uncontrolled use; merged with each column's own `pin`. |
+| onColumnPinningChange | `((pinning: DataTableColumnPinning) => void)` | no |  | Fires with the pins after a column is pinned or unpinned. |
+| hiddenColumns | `string[]` | no |  | Hidden column keys, for controlled use. |
+| defaultHiddenColumns | `string[]` | no |  | Starting hidden keys, for uncontrolled use; merged with each column's `defaultHidden`. |
+| onHiddenColumnsChange | `((hidden: string[]) => void)` | no |  | Fires with every hidden key after a column is hidden or shown. |
+| rowOrder | `string[]` | no |  | Row ids in display order, for controlled use, applied while no sort is active. Rows left out keep their given order after the listed ones. |
+| defaultRowOrder | `string[]` | no |  | Starting row order, for uncontrolled use. |
+| onRowOrderChange | `((order: string[]) => void)` | no |  | Fires with the full row order after a row moves. |
+| columnLabels | `Partial<DataTableColumnLabels>` | no |  | The column and row controls' words, merged over their English defaults. |
+| columnDividers | `boolean` | no | `false` | Draws a vertical line between columns, as well as the lines between rows. |
+| cellText | `DataTableCellText` | no | `wrap` | How every cell's text fits unless its column says otherwise: `wrap` (the default), `nowrap`, `truncate` or `lines-2`. |
+| rowActions | `((row: R) => DataTableRowAction[])` | no |  | The actions a row offers, in an actions column that sticks to the end edge: inline ones as icon buttons, the rest in a More menu. |
+| rowActionsVisibility | `"hover" \| "always"` | no | `hover` | When the actions show: on row hover and focus (the default, and always on a touch screen), or always. |
 | className | `string` | no | `` | Additional CSS classes |

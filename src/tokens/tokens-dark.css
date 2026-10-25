@@ -78,6 +78,7 @@
   /* Elevation — stronger opacity so shadows read against the #050505 floor */
   --shadow-floating: 0 4px 16px rgba(0, 0, 0, 0.55);
   --shadow-modal: 0 8px 32px rgba(0, 0, 0, 0.6);
+  --shadow-table-pinned: 0 0 10px rgba(0, 0, 0, 0.55);
 
   /* Action - Primary. Inverted from light: the fill is the light half of
      the teal ramp under a dark label, because a dark fill cannot clear 3:1

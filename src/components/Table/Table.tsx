@@ -48,6 +48,8 @@ type TableOwnProps = {
    * markdown content pages.
    */
   bordered?: boolean;
+  /** Draws a vertical line between columns, as well as the lines between rows. */
+  columnDividers?: boolean;
   /** Accessible caption for the table */
   caption?: string;
   /** Whether to visually hide the caption (still available to screen readers) */
@@ -77,6 +79,7 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
       size = 'default',
       striped = false,
       bordered = false,
+      columnDividers = false,
       caption,
       captionHidden = false,
       className = '',
@@ -91,16 +94,23 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
       `${baseClass}--${size}`,
       striped ? `${baseClass}--striped` : '',
       bordered ? `${baseClass}--bordered` : '',
+      columnDividers ? `${baseClass}--column-dividers` : '',
       className,
     ]
       .filter(Boolean)
       .join(' ');
 
+    // A bordered table draws its visible caption outside the outline (see
+    // the frame rule in Table.css), so the <caption> itself is hidden.
+    const outsideCaption = bordered && caption && !captionHidden;
+
     const table = (
       <table {...rest} ref={ref} className={classes}>
         {caption && (
           <caption
-            className={captionHidden ? `${baseClass}__caption ds-visually-hidden` : `${baseClass}__caption`}
+            className={
+              captionHidden || outsideCaption ? `${baseClass}__caption ds-visually-hidden` : `${baseClass}__caption`
+            }
           >
             {caption}
           </caption>
@@ -168,7 +178,16 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
     // The bordered wrapper is the table's scroll container: a named,
     // focusable region while it overflows, a plain div while it fits.
     if (bordered) {
-      return <ScrollRegion className={`${baseClass}__wrapper`}>{table}</ScrollRegion>;
+      const region = <ScrollRegion className={`${baseClass}__wrapper`}>{table}</ScrollRegion>;
+      if (!outsideCaption) return region;
+      return (
+        <div className={`${baseClass}__frame`}>
+          <div className={`${baseClass}__caption`} aria-hidden="true">
+            {caption}
+          </div>
+          {region}
+        </div>
+      );
     }
 
     return table;

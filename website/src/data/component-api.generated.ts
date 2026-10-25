@@ -5183,7 +5183,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "size",
             "type": "\"default\" | \"compact\"",
             "required": false,
-            "description": "Visual size, passed through to the underlying Table.",
+            "description": "The table's density, and the controls' with it: `default` rows with the\nsearch field and pager at the default row-control height, `compact` rows\nwith both at the compact one. Controls inside the rows (checkboxes, grips,\nmenu and action buttons) stay compact at either density, so a row's\nheight is its text's.",
             "defaultValue": "default"
           },
           {
@@ -5256,15 +5256,185 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "paginationLabels",
-            "type": "Pick<PaginationProps, \"aria-label\" | \"previousLabel\" | \"nextLabel\" | \"readoutLabel\">",
+            "type": "Pick<PaginationProps, \"aria-label\" | \"previousLabel\" | \"nextLabel\" | \"pageLabel\" | \"readoutLabel\">",
             "required": false,
-            "description": "The built-in pager's words, merged over its English defaults: the arrows'\nnames (\"Previous page\", \"Next page\"), the readout (\"Page 2 of 4\") and the\nlandmark's name (\"Pagination\"). The pager is always the compact size, so\nits numbered-page names never render and are not offered here."
+            "description": "The built-in pager's words, merged over its English defaults: the arrows'\nnames (\"Previous page\", \"Next page\"), the readout (\"Page 2 of 4\") and the\nlandmark's name (\"Pagination\"). The pager follows the table's `size`:\nnumbered pages at the default size (named by `pageLabel`), a \"Page X of Y\"\nreadout when compact (`readoutLabel`)."
           },
           {
             "name": "emptyStateLabels",
             "type": "Partial<Pick<EmptyStateProps, \"title\" | \"description\">>",
             "required": false,
             "description": "The built-in empty state's words, merged over its English defaults\n(\"No matching rows\", \"Adjust the search or filters and try again.\").\nIgnored when `emptyState` replaces the whole node."
+          },
+          {
+            "name": "resizableColumns",
+            "type": "boolean",
+            "required": false,
+            "description": "Lets every column be resized by dragging its header's edge, double-clicking it to fit, or Alt+Left and Alt+Right on a focused header. A column's own `resizable` wins.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "reorderableColumns",
+            "type": "boolean",
+            "required": false,
+            "description": "Lets every column be moved by dragging its header, from its menu, or Ctrl+Shift+Left and Ctrl+Shift+Right on a focused header. A column's own `reorderable` wins.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "columnMenu",
+            "type": "boolean",
+            "required": false,
+            "description": "Adds a menu to every header: sort, pin, move, hide, fit and reset, as each column allows. Opened from the header's options button, Alt+Down, Shift+F10 or a right-click.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "reorderableRows",
+            "type": "boolean",
+            "required": false,
+            "description": "Adds a grip at each row's start to drag it up or down, or move it with Alt+Up and Alt+Down. Off while a sort is active, since the sort owns the order.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "stickyHeader",
+            "type": "boolean",
+            "required": false,
+            "description": "Keeps the header in view while the body scrolls. Takes effect with `maxHeight`, inside the table's own scroll frame.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "maxHeight",
+            "type": "string | number",
+            "required": false,
+            "description": "The table's tallest height before its body scrolls inside its frame (any CSS length, or pixels)."
+          },
+          {
+            "name": "navigation",
+            "type": "\"table\" | \"grid\"",
+            "required": false,
+            "description": "How the keyboard moves through the table. `table` keeps every control in\nthe Tab order, as a reading table does; `grid` makes the table one Tab\nstop with arrow-key focus across its cells. Defaults to `grid` when any\ncolumn or row control is on, else `table`."
+          },
+          {
+            "name": "columnWidths",
+            "type": "Record<string, number>",
+            "required": false,
+            "description": "Column widths in pixels, by key, for controlled use. Fires `onColumnWidthsChange` once per resize, on release."
+          },
+          {
+            "name": "defaultColumnWidths",
+            "type": "Record<string, number>",
+            "required": false,
+            "description": "Starting column widths in pixels, by key, for uncontrolled use. Columns not listed take their natural width."
+          },
+          {
+            "name": "onColumnWidthsChange",
+            "type": "((widths: Record<string, number>) => void)",
+            "required": false,
+            "description": "Fires with every column's width after a resize, a fit or a reset."
+          },
+          {
+            "name": "columnOrder",
+            "type": "string[]",
+            "required": false,
+            "description": "Column keys in display order, for controlled use. Keys left out keep their declared order after the listed ones."
+          },
+          {
+            "name": "defaultColumnOrder",
+            "type": "string[]",
+            "required": false,
+            "description": "Starting column order, for uncontrolled use."
+          },
+          {
+            "name": "onColumnOrderChange",
+            "type": "((order: string[]) => void)",
+            "required": false,
+            "description": "Fires with the full column order after a move."
+          },
+          {
+            "name": "columnPinning",
+            "type": "DataTableColumnPinning",
+            "required": false,
+            "description": "Columns pinned to each edge, for controlled use."
+          },
+          {
+            "name": "defaultColumnPinning",
+            "type": "DataTableColumnPinning",
+            "required": false,
+            "description": "Starting pins, for uncontrolled use; merged with each column's own `pin`."
+          },
+          {
+            "name": "onColumnPinningChange",
+            "type": "((pinning: DataTableColumnPinning) => void)",
+            "required": false,
+            "description": "Fires with the pins after a column is pinned or unpinned."
+          },
+          {
+            "name": "hiddenColumns",
+            "type": "string[]",
+            "required": false,
+            "description": "Hidden column keys, for controlled use."
+          },
+          {
+            "name": "defaultHiddenColumns",
+            "type": "string[]",
+            "required": false,
+            "description": "Starting hidden keys, for uncontrolled use; merged with each column's `defaultHidden`."
+          },
+          {
+            "name": "onHiddenColumnsChange",
+            "type": "((hidden: string[]) => void)",
+            "required": false,
+            "description": "Fires with every hidden key after a column is hidden or shown."
+          },
+          {
+            "name": "rowOrder",
+            "type": "string[]",
+            "required": false,
+            "description": "Row ids in display order, for controlled use, applied while no sort is active. Rows left out keep their given order after the listed ones."
+          },
+          {
+            "name": "defaultRowOrder",
+            "type": "string[]",
+            "required": false,
+            "description": "Starting row order, for uncontrolled use."
+          },
+          {
+            "name": "onRowOrderChange",
+            "type": "((order: string[]) => void)",
+            "required": false,
+            "description": "Fires with the full row order after a row moves."
+          },
+          {
+            "name": "columnLabels",
+            "type": "Partial<DataTableColumnLabels>",
+            "required": false,
+            "description": "The column and row controls' words, merged over their English defaults."
+          },
+          {
+            "name": "columnDividers",
+            "type": "boolean",
+            "required": false,
+            "description": "Draws a vertical line between columns, as well as the lines between rows.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "cellText",
+            "type": "DataTableCellText",
+            "required": false,
+            "description": "How every cell's text fits unless its column says otherwise: `wrap` (the default), `nowrap`, `truncate` or `lines-2`.",
+            "defaultValue": "wrap"
+          },
+          {
+            "name": "rowActions",
+            "type": "((row: R) => DataTableRowAction[])",
+            "required": false,
+            "description": "The actions a row offers, in an actions column that sticks to the end edge: inline ones as icon buttons, the rest in a More menu."
+          },
+          {
+            "name": "rowActionsVisibility",
+            "type": "\"hover\" | \"always\"",
+            "required": false,
+            "description": "When the actions show: on row hover and focus (the default, and always on a touch screen), or always.",
+            "defaultValue": "hover"
           },
           {
             "name": "className",
@@ -12138,6 +12308,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "boolean",
             "required": false,
             "description": "Adds an outer border + border-radius container, a tinted thead background,\nand `--color-divider` row lines — matching the bordered table style used on\nmarkdown content pages.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "columnDividers",
+            "type": "boolean",
+            "required": false,
+            "description": "Draws a vertical line between columns, as well as the lines between rows.",
             "defaultValue": "false"
           },
           {

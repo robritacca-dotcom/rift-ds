@@ -418,7 +418,7 @@ ${leverWord("motion", speed)}: ${speed}% of the base speed. Time transitions wit
 
 ${heading} Elevation
 
-${depth} The only shadows are \`--shadow-floating\` and \`--shadow-modal\`.
+${depth} The only shadows are \`--shadow-floating\`, \`--shadow-modal\` and \`--shadow-table-pinned\` (a pinned table column's scrolling edge).
 
 ${heading} Icons
 

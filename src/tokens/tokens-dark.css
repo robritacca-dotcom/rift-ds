@@ -34,10 +34,15 @@
   /* Divider */
   --color-divider: var(--primitive-neutral-08-a80);
 
-  /* Tables: the same roles as light; the container and divider tokens
-     carry the theme swap. */
-  --color-table-body-bg: var(--color-bg-container-primary-transparent);
-  --color-table-header-bg: var(--color-bg-container-primary);
+  /* Tables: in dark a table stands off what it sits on by going a little
+     darker than it, the opposite move to light's white, so the body is the
+     page floor (the deepest step) and the header a half step up from it,
+     the 08 grey at half strength, between the quiet container step and the
+     full grey band.
+     On a panel or a card the table reads as an inset; on the page its
+     outline carries it. */
+  --color-table-body-bg: var(--color-bg-page-primary);
+  --color-table-header-bg: var(--primitive-neutral-08-a50);
   --color-table-row-hover-bg: var(--color-bg-container-primary);
   --color-table-row-stripe-bg: var(--color-bg-container-primary-semi);
   --color-table-row-selected-bg: var(--color-action-passive-bg-hover);

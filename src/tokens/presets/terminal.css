@@ -154,6 +154,7 @@ html[data-brand="terminal"] {
   --primitive-neutral-01-a60: rgba(236, 240, 239, 0.6);
   --primitive-neutral-01-a82: rgba(236, 240, 239, 0.82);
   --primitive-neutral-02: #CED6D4;
+  --primitive-neutral-02-a50: rgba(206, 214, 212, 0.5);
   --primitive-neutral-02-a80: rgba(206, 214, 212, 0.8);
   --primitive-neutral-03: #B5BDBB;
   --primitive-neutral-03-a80: rgba(181, 189, 187, 0.8);
@@ -163,6 +164,7 @@ html[data-brand="terminal"] {
   --primitive-neutral-07: #2E3734;
   --primitive-neutral-07-a80: rgba(46, 55, 52, 0.8);
   --primitive-neutral-08: #222A28;
+  --primitive-neutral-08-a50: rgba(34, 42, 40, 0.5);
   --primitive-neutral-08-a80: rgba(34, 42, 40, 0.8);
   --primitive-neutral-09: #0E1614;
   --primitive-neutral-09-a01: rgba(14, 22, 20, 0.01);
@@ -303,6 +305,7 @@ html[data-brand="terminal"][data-theme="dark"] {
   --primitive-neutral-01-a60: rgba(232, 240, 238, 0.6);
   --primitive-neutral-01-a82: rgba(232, 240, 238, 0.82);
   --primitive-neutral-02: #CED6D4;
+  --primitive-neutral-02-a50: rgba(206, 214, 212, 0.5);
   --primitive-neutral-02-a80: rgba(206, 214, 212, 0.8);
   --primitive-neutral-03: #B5BDBB;
   --primitive-neutral-03-a80: rgba(181, 189, 187, 0.8);
@@ -312,6 +315,7 @@ html[data-brand="terminal"][data-theme="dark"] {
   --primitive-neutral-07: #2E3734;
   --primitive-neutral-07-a80: rgba(46, 55, 52, 0.8);
   --primitive-neutral-08: #222A28;
+  --primitive-neutral-08-a50: rgba(34, 42, 40, 0.5);
   --primitive-neutral-08-a80: rgba(34, 42, 40, 0.8);
   --primitive-neutral-09: #0E1614;
   --primitive-neutral-09-a01: rgba(14, 22, 20, 0.01);

@@ -409,13 +409,13 @@ interface NeutralDef {
 const NEUTRALS: NeutralDef[] = [
   { step: "00", hex: "#FFFFFF", alphas: { "-a01": 0.01, "-a60": 0.6, "-a90": 0.9 } },
   { step: "01", hex: "#F1F1F1", alphas: { "-a01": 0.01, "-a60": 0.6, "-a82": 0.82 } },
-  { step: "02", hex: "#D6D6D6", alphas: { "-a80": 0.8 } },
+  { step: "02", hex: "#D6D6D6", alphas: { "-a50": 0.5, "-a80": 0.8 } },
   { step: "03", hex: "#BCBCBC", alphas: { "-a80": 0.8 } },
   { step: "04", hex: "#A2A2A2" },
   { step: "05", hex: "#888888" },
   { step: "06", hex: "#6D6D6D" },
   { step: "07", hex: "#303030", alphas: { "-a80": 0.8 } },
-  { step: "08", hex: "#232323", alphas: { "-a80": 0.8 } },
+  { step: "08", hex: "#232323", alphas: { "-a50": 0.5, "-a80": 0.8 } },
   {
     step: "09",
     hex: "#0E0E0E",

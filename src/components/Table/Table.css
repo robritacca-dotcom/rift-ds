@@ -121,10 +121,10 @@
    Matches the table style used on markdown content pages.
    ============================================ */
 
-/* The bordered table takes the surface it sits on (the page, a panel, a
-   card) and draws only its outline and a header band, the look the
-   blueprints pages give a markdown table. Its colours are the
-   --color-table-* family, which every table reads. */
+/* The bordered table is a surface of its own: brighter than what it sits
+   on in light, a little darker in dark, with an outline and a header band
+   one step off the body. Its colours are the --color-table-* family, which
+   every table reads. */
 .ds-table__wrapper {
   overflow-x: auto;
   border: var(--border-025) solid var(--color-table-border);

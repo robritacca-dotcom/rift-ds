@@ -44,15 +44,17 @@
 
   /* Tables: one family every table reads (Table, DataTable, Prose's
      markdown tables, the blueprints pages), so a docs table and a UI table
-     are drawn alike. The body takes the surface the table sits on; the
-     header steps one container notch off it; hover and stripe are tints
-     over the body. Each aliases a container role, so a theme that retunes
-     the container ramp retunes its tables with it. */
-  --color-table-body-bg: var(--color-bg-container-primary-transparent);
-  --color-table-header-bg: var(--color-bg-container-primary);
-  --color-table-row-hover-bg: var(--color-bg-container-primary);
-  --color-table-row-stripe-bg: var(--color-bg-container-primary-semi);
-  --color-table-row-selected-bg: var(--color-action-passive-bg-hover);
+     are drawn alike. A table is a surface of its own, standing off what it
+     sits on the way a card does: the card fill for the body, with the
+     header a half step down from it, the 02 grey at half strength over
+     white, between the off-white container step and the full grey band.
+     Each aliases a container role, so a theme that retunes the container
+     ramp retunes its tables with it. */
+  --color-table-body-bg: var(--color-bg-container-primary);
+  --color-table-header-bg: var(--primitive-neutral-02-a50);
+  --color-table-row-hover-bg: var(--color-bg-container-secondary);
+  --color-table-row-stripe-bg: var(--color-bg-container-secondary);
+  --color-table-row-selected-bg: var(--color-bg-container-tertiary);
   --color-table-divider: var(--color-divider);
   --color-table-border: var(--color-divider);
 

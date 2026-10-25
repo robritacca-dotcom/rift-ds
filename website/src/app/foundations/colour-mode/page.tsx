@@ -304,28 +304,28 @@ const textColours: SwatchData[] = [
 const tableColours: SwatchData[] = [
   {
     label: "Body", cssVar: "--color-table-body-bg",
-    dark: { primitive: "--neutral--09-a01--", hex: "rgba(14,14,14,0.01)", rgb: "Transparent" },
-    light: { primitive: "--neutral--00-a01--", hex: "rgba(255,255,255,0.01)", rgb: "Transparent" },
+    dark: { primitive: "--neutral--10--", hex: "#050505", rgb: "5 / 5 / 5" },
+    light: { primitive: "--neutral--00--", hex: "#FFFFFF", rgb: "255 / 255 / 255" },
   },
   {
     label: "Header", cssVar: "--color-table-header-bg",
-    dark: { primitive: "--neutral--09-a80--", hex: "rgba(14,14,14,0.8)", rgb: "14 / 14 / 14" },
-    light: { primitive: "--neutral--00--", hex: "#FFFFFF", rgb: "255 / 255 / 255" },
+    dark: { primitive: "--neutral--08-a50--", hex: "rgba(35,35,35,0.5)", rgb: "35 / 35 / 35" },
+    light: { primitive: "--neutral--02-a50--", hex: "rgba(214,214,214,0.5)", rgb: "214 / 214 / 214" },
   },
   {
     label: "Row hover", cssVar: "--color-table-row-hover-bg",
     dark: { primitive: "--neutral--09-a80--", hex: "rgba(14,14,14,0.8)", rgb: "14 / 14 / 14" },
-    light: { primitive: "--neutral--00--", hex: "#FFFFFF", rgb: "255 / 255 / 255" },
+    light: { primitive: "--neutral--01--", hex: "#F1F1F1", rgb: "241 / 241 / 241" },
   },
   {
     label: "Row stripe", cssVar: "--color-table-row-stripe-bg",
     dark: { primitive: "--neutral--09-a60--", hex: "rgba(14,14,14,0.6)", rgb: "14 / 14 / 14" },
-    light: { primitive: "--neutral--00-a90--", hex: "rgba(255,255,255,0.9)", rgb: "255 / 255 / 255" },
+    light: { primitive: "--neutral--01--", hex: "#F1F1F1", rgb: "241 / 241 / 241" },
   },
   {
     label: "Row selected", cssVar: "--color-table-row-selected-bg",
     dark: { primitive: "--neutral--08-a80--", hex: "rgba(35,35,35,0.8)", rgb: "35 / 35 / 35" },
-    light: { primitive: "--neutral--02-a80--", hex: "rgba(214,214,214,0.8)", rgb: "214 / 214 / 214" },
+    light: { primitive: "--neutral--02--", hex: "#D6D6D6", rgb: "214 / 214 / 214" },
   },
   {
     label: "Divider", cssVar: "--color-table-divider",

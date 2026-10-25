@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { AiButton } from './AiButton';
+import { InterruptCard } from '../InterruptCard/InterruptCard';
 
 const meta = {
   title: 'Components/AiButton',
@@ -8,6 +9,10 @@ const meta = {
   parameters: { layout: 'centered' },
   argTypes: {
     size: { control: 'radio', options: ['default', 'compact'] },
+    status: {
+      control: 'select',
+      options: [undefined, 'idle', 'thinking', 'working', 'waiting', 'done', 'error'],
+    },
   },
 } satisfies Meta<typeof AiButton>;
 
@@ -28,6 +33,51 @@ export const Compact: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true },
+};
+
+export const Working: Story = {
+  args: { status: 'working', label: 'Agent', size: 'compact' },
+};
+
+export const Waiting: Story = {
+  args: { status: 'waiting', label: 'Agent', size: 'compact' },
+};
+
+/** Every status side by side at both sizes. Done and error return to the resting icon after a beat. */
+export const Statuses: Story = {
+  render: () => (
+    <div style={{ display: 'grid', gap: 16 }}>
+      {(['default', 'compact'] as const).map((size) => (
+        <div key={size} style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+          {(['idle', 'thinking', 'working', 'waiting', 'done', 'error'] as const).map((status) => (
+            <AiButton key={status} label="Agent" size={size} status={status} />
+          ))}
+        </div>
+      ))}
+    </div>
+  ),
+};
+
+/** Waiting with a request: an InterruptCard approval opens in a panel at the button. */
+export const WithRequest: Story = {
+  args: {
+    label: 'Agent',
+    status: 'waiting',
+    requestPlacement: 'bottom',
+    request: (
+      <InterruptCard
+        bare
+        title="Allow file edit?"
+        description="The agent wants to write to src/routes/checkout.ts."
+        options={[
+          { value: 'allow-once', label: 'Allow once', variant: 'primary' },
+          { value: 'deny', label: 'Deny' },
+        ]}
+      />
+    ),
+  },
+  parameters: { layout: 'padded' },
+  decorators: [(Story) => <div style={{ paddingBottom: 240 }}><Story /></div>],
 };
 
 export const AsLink: Story = {

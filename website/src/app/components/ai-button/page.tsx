@@ -1,17 +1,73 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { AiButton } from "rift-ds/components/AiButton/AiButton";
+import type { AgentStatusState } from "rift-ds/components/AgentStatus/AgentStatusPatterns";
+import { Button } from "rift-ds/components/Button/Button";
+import { InterruptCard } from "rift-ds/components/InterruptCard/InterruptCard";
+import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 
+const STATUSES: { value: AgentStatusState; label: string }[] = [
+  { value: "idle", label: "Idle" },
+  { value: "thinking", label: "Thinking" },
+  { value: "working", label: "Working" },
+  { value: "waiting", label: "Waiting" },
+  { value: "done", label: "Done" },
+  { value: "error", label: "Error" },
+];
+
+/* How long the demo task "works" before it reports done. */
+const DEMO_TASK_MS = 3200;
+/* How long the approval demo works before it stops to ask. */
+const DEMO_ASK_MS = 1600;
+
+const APPROVAL_OPTIONS = [
+  { value: "allow-once", label: "Allow once", variant: "primary" as const },
+  { value: "deny", label: "Deny" },
+];
+
 export default function AiButtonPage() {
+  const [status, setStatus] = useState<AgentStatusState>("idle");
+  const taskTimer = useRef<number | null>(null);
+  useEffect(() => () => {
+    if (taskTimer.current) window.clearTimeout(taskTimer.current);
+  }, []);
+  const pick = (next: AgentStatusState) => {
+    if (taskTimer.current) window.clearTimeout(taskTimer.current);
+    setStatus(next);
+  };
+  /* The approval demo: work, stop to ask, then finish or fail on the answer. */
+  const [askStatus, setAskStatus] = useState<AgentStatusState>("idle");
+  const askTimer = useRef<number | null>(null);
+  useEffect(() => () => {
+    if (askTimer.current) window.clearTimeout(askTimer.current);
+  }, []);
+  const runAsk = () => {
+    if (askTimer.current) window.clearTimeout(askTimer.current);
+    setAskStatus("working");
+    askTimer.current = window.setTimeout(() => setAskStatus("waiting"), DEMO_ASK_MS);
+  };
+  const answer = (choice: string) => {
+    setAskStatus("working");
+    askTimer.current = window.setTimeout(
+      () => setAskStatus(choice === "deny" ? "error" : "done"),
+      DEMO_ASK_MS,
+    );
+  };
+
+  const runTask = () => {
+    pick("working");
+    taskTimer.current = window.setTimeout(() => pick("done"), DEMO_TASK_MS);
+  };
+
   return (
     <>
       <MegaNav />
@@ -46,8 +102,9 @@ export default function AiButtonPage() {
           <section className={styles.section}>
             <SectionTitle title="Default" />
             <p className={styles.demoText}>
-              The resting state is quiet: a thin gradient ring and a low glow.
-              Hover raises the glow; the ring turns on its own uneven cadence,
+              The resting state is quiet: a hairline gradient ring at reduced
+              strength and a low glow. Hover widens the ring to full strength
+              and raises the glow; the ring turns on its own uneven cadence,
               drifting and settling rather than ticking round at one rate. On
               mount it lights rather than arriving: the glow blooms out of the
               corner and the ring fades up a beat behind it.
@@ -93,6 +150,70 @@ export default function AiButtonPage() {
             </p>
             <div className={styles.row}>
               <AiButton disabled />
+            </div>
+          </section>
+
+          {/* Status */}
+          <section className={styles.section}>
+            <SectionTitle title="Status" />
+            <p className={styles.demoText}>
+              With status, the button reports what the agent behind it is
+              doing, in AgentStatus&rsquo;s vocabulary. The label never
+              changes; the icon carries the state. Thinking and working swap
+              the icon for the agent mark, a square of dots sized exactly to
+              the icon, and spin the ring faster. Waiting shows a raised hand with the ring at rest, because the
+              next move is yours. Done and error turn the whole button to
+              their status colours with a check or an error glyph for a beat,
+              then the resting look returns. The
+              button stays clickable throughout, so a click can open the
+              conversation to watch the work.
+            </p>
+            <div className={styles.row}>
+              <SegmentedControl
+                segments={STATUSES}
+                value={status}
+                onValueChange={(v) => pick(v as AgentStatusState)}
+                size="compact"
+                aria-label="Status"
+              />
+              <Button label="Run a task" variant="secondary" size="compact" onClick={runTask} />
+            </div>
+            <div className={styles.row}>
+              <AiButton label="Agent" status={status} />
+              <AiButton label="Agent" size="compact" status={status} />
+            </div>
+          </section>
+
+          {/* Request */}
+          <section className={styles.section}>
+            <SectionTitle title="Asking for approval" />
+            <p className={styles.demoText}>
+              When the agent stops to ask, request puts what it needs in a
+              glass panel at the button, so the question appears where the
+              person is already looking. Any content works; an InterruptCard
+              approval is the usual one. The panel opens each time the status
+              becomes waiting. Escape or a click on the button folds it away,
+              the raised hand stays, and another click brings it back. Run the
+              task, then answer the card.
+            </p>
+            <div className={styles.row}>
+              <Button label="Run a task" variant="secondary" size="compact" onClick={runAsk} />
+            </div>
+            <div className={`${styles.row} ${styles.requestClearance}`}>
+              <AiButton
+                label="Agent"
+                status={askStatus}
+                requestPlacement="bottom"
+                request={
+                  <InterruptCard
+                    bare
+                    title="Allow file edit?"
+                    description="The agent wants to write to src/routes/checkout.ts."
+                    options={APPROVAL_OPTIONS}
+                    onValueChange={answer}
+                  />
+                }
+              />
             </div>
           </section>
 

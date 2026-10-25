@@ -1,7 +1,10 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useId, useRef, useState } from 'react';
+import { useLayer } from '../../behaviors/useLayer';
 import { useLinkComponent, type LinkComponent } from '../../behaviors/LinkProvider';
+import { AgentStatusMark } from '../AgentStatus/AgentStatus';
+import type { AgentStatusState } from '../AgentStatus/AgentStatusPatterns';
 import { PromptSuggestions, type PromptSuggestion } from '../PromptSuggestions/PromptSuggestions';
 import { Skeleton } from '../Skeleton/Skeleton';
 import { StreamingText } from '../StreamingText/StreamingText';
@@ -10,7 +13,9 @@ import {
   MOTION_HOVER_EXIT_GRACE_MS,
   MOTION_SUMMARY_THINK_MS,
   MOTION_SUMMARY_REVEAL_MS,
+  MOTION_FEEDBACK_RESET_MS,
 } from '../../tokens/motion';
+import '../../behaviors/visually-hidden.css';
 import './AiButton.css';
 import '../../fonts/material-symbols.css';
 
@@ -28,6 +33,26 @@ export interface AiButtonSummary {
   suggestions?: PromptSuggestion[];
 }
 
+/** What a screen reader hears for each status; `idle` says nothing. */
+const DEFAULT_STATUS_LABELS: Record<AgentStatusState, string> = {
+  idle: '',
+  thinking: 'Thinking',
+  working: 'Working',
+  waiting: 'Waiting for you',
+  done: 'Done',
+  error: 'Failed',
+};
+
+/** The statuses drawn as a glyph rather than the working mark. */
+const STATUS_GLYPHS: Partial<Record<AgentStatusState, string>> = {
+  waiting: 'front_hand',
+  done: 'check_circle',
+  error: 'error',
+};
+
+/** The statuses that spin the ring and hold the summary panel shut. */
+const BUSY_STATUSES: readonly AgentStatusState[] = ['thinking', 'working'];
+
 /** Props owned by AiButton itself — everything else falls through to the DOM node. */
 type AiButtonOwnProps = {
   /** Button text content */
@@ -38,6 +63,18 @@ type AiButtonOwnProps = {
   size?: 'default' | 'compact';
   /** Whether the button is disabled */
   disabled?: boolean;
+  /**
+   * What the agent behind the button is doing, in AgentStatus's vocabulary.
+   * The label never changes; the icon carries the state. `thinking` and
+   * `working` show AgentStatusMark and spin the ring faster, `waiting` shows
+   * a raised hand in the warning colour with the ring at rest, and `done` and
+   * `error` turn the button to their status colours with a check or an
+   * error glyph, then return to the resting look after a beat. The button stays clickable throughout, unlike Button's
+   * `loading`, so a click can open the conversation to watch the work.
+   */
+  status?: AgentStatusState;
+  /** What a screen reader hears when the status changes, given the status. Defaults to English per status; `idle` says nothing. */
+  statusLabel?: (status: AgentStatusState) => string;
   /** Optional href — renders as <a> instead of <button> */
   href?: string;
   /** Optional target attribute for links */
@@ -56,6 +93,26 @@ type AiButtonOwnProps = {
   summary?: AiButtonSummary;
   /** Which side of the button the summary panel opens on. */
   summaryPlacement?: 'top' | 'bottom';
+  /**
+   * What the agent needs from the person while `status` is `waiting`: any
+   * content, drawn in a glass panel at the button. An InterruptCard approval
+   * is the usual filling; a question, a form or a preview work the same way.
+   * It opens each time the status becomes `waiting` and stays open without
+   * hover. Escape or a click on the button folds it back into the button,
+   * where the raised hand keeps showing, and another click opens it again.
+   * While it is open the summary panel never opens.
+   */
+  request?: React.ReactNode;
+  /** Whether the request panel is open, for a host that owns it (say, to keep it shut while the chat shows the request). Leave undefined to let the button manage it. */
+  requestOpen?: boolean;
+  /** Whether the request panel starts open, when the button manages it. Each later move into `waiting` opens it again. */
+  defaultRequestOpen?: boolean;
+  /** Fires when the request panel opens or closes, including when a move into `waiting` opens it. */
+  onRequestOpenChange?: (open: boolean) => void;
+  /** Which side of the button the request panel opens on. */
+  requestPlacement?: 'top' | 'bottom';
+  /** Accessible name of the request panel. */
+  requestRegionLabel?: string;
   /**
    * Holds the summary panel open regardless of hover — for callers that
    * reveal it on their own signal (scroll depth, dwell). Hover mechanics
@@ -112,11 +169,20 @@ export const AiButton = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, 
       icon = 'auto_awesome',
       size = 'default',
       disabled,
+      status,
+      statusLabel = (s: AgentStatusState) => DEFAULT_STATUS_LABELS[s],
       href,
       target,
       rel,
       summary,
       summaryPlacement = 'top',
+      request,
+      requestOpen,
+      defaultRequestOpen = true,
+      onRequestOpenChange,
+      requestPlacement = 'top',
+      requestRegionLabel = 'Waiting for you',
+      onClick,
       summaryPinned = false,
       onSummaryDismiss,
       onSummarySuggestion,
@@ -139,8 +205,65 @@ export const AiButton = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, 
     const showTimer = useRef<number | null>(null);
     const hideTimer = useRef<number | null>(null);
 
+    const isBusy = status !== undefined && BUSY_STATUSES.includes(status);
+
+    /* The request panel: the controlled/uncontrolled pair, reopened by every
+       move into waiting so a new request is never missed. */
+    const hostRef = useRef<HTMLDivElement>(null);
+    const requestId = useId();
+    const [ownRequestOpen, setOwnRequestOpen] = useState(defaultRequestOpen);
+    const isRequestOpen = requestOpen ?? ownRequestOpen;
+    const setRequestOpen = useCallback(
+      (next: boolean) => {
+        if (requestOpen === undefined) setOwnRequestOpen(next);
+        onRequestOpenChange?.(next);
+      },
+      [requestOpen, onRequestOpenChange],
+    );
+    const lastStatus = useRef(status);
+    useEffect(() => {
+      const entered = status === 'waiting' && lastStatus.current !== 'waiting';
+      lastStatus.current = status;
+      if (entered && request) setRequestOpen(true);
+    }, [status, request, setRequestOpen]);
+    const hasRequest = Boolean(request) && status === 'waiting' && !disabled;
+    const requestShown = hasRequest && isRequestOpen;
+    useLayer({
+      open: requestShown,
+      onDismiss: () => setRequestOpen(false),
+      getElements: () => [hostRef.current],
+    });
+
     const panelOpen =
-      Boolean(summary) && !disabled && !dismissed && (summaryPinned || hoverOpen);
+      Boolean(summary) &&
+      !disabled &&
+      !isBusy &&
+      !requestShown &&
+      !dismissed &&
+      (summaryPinned || hoverOpen);
+
+    /* The host's handler runs first; a click it does not prevent folds or
+       opens a waiting request. */
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement & HTMLAnchorElement>) => {
+      onClick?.(event);
+      if (!event.defaultPrevented && hasRequest) setRequestOpen(!isRequestOpen);
+    };
+    const requestAria = hasRequest
+      ? { 'aria-expanded': requestShown, 'aria-controls': requestId }
+      : {};
+
+    /* Done and error are moments, not resting states: their glyph shows for
+       a beat, then the resting icon returns while the host's status stays. */
+    const isTerminal = status === 'done' || status === 'error';
+    const [settled, setSettled] = useState(false);
+    useEffect(() => {
+      setSettled(false);
+      if (!isTerminal) return;
+      const t = window.setTimeout(() => setSettled(true), MOTION_FEEDBACK_RESET_MS);
+      return () => window.clearTimeout(t);
+    }, [status, isTerminal]);
+    const shownStatus: AgentStatusState =
+      status === undefined || (isTerminal && settled) ? 'idle' : status;
 
     /* The fake generation runs once per mount; every later opening shows
        the text instantly, as if cached. */
@@ -201,23 +324,48 @@ export const AiButton = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, 
       baseClass,
       `${baseClass}--${size}`,
       disabled && `${baseClass}--disabled`,
+      isBusy && `${baseClass}--busy`,
+      (shownStatus === 'done' || shownStatus === 'error') && `${baseClass}--${shownStatus}`,
       className,
     ]
       .filter(Boolean)
       .join(' ');
 
+    const iconClass = `${baseClass}__icon`;
+    const restingIcon =
+      typeof icon === 'string' ? (
+        <span className={`${iconClass}-glyph material-symbols-rounded`}>{icon}</span>
+      ) : (
+        icon
+      );
+    const shownIcon =
+      shownStatus === 'idle' ? (
+        restingIcon
+      ) : shownStatus in STATUS_GLYPHS ? (
+        <span
+          className={`${iconClass}-glyph ${iconClass}-glyph--${shownStatus} material-symbols-rounded`}
+        >
+          {STATUS_GLYPHS[shownStatus]}
+        </span>
+      ) : (
+        <AgentStatusMark state={shownStatus} />
+      );
+
+    /* The icon slot is a fixed --icon-size box, so every state's icon takes
+       exactly the room the resting one did. Keyed on the shown state, the
+       new icon fades in over the old one's place. */
     const content = (
       <>
-        {icon &&
-          (typeof icon === 'string' ? (
-            <span className={`${baseClass}__icon material-symbols-rounded`} aria-hidden="true">
-              {icon}
+        {(icon || status !== undefined) && (
+          <span className={iconClass} aria-hidden="true">
+            <span
+              key={shownStatus}
+              className={`${iconClass}-swap${status !== undefined ? ` ${iconClass}-swap--animated` : ''}`}
+            >
+              {shownStatus === 'idle' && !icon ? null : shownIcon}
             </span>
-          ) : (
-            <span className={`${baseClass}__icon`} aria-hidden="true">
-              {icon}
-            </span>
-          ))}
+          </span>
+        )}
         <span className={`${baseClass}__text`}>{label}</span>
       </>
     );
@@ -231,6 +379,9 @@ export const AiButton = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, 
           href={href}
           target={target}
           rel={rel}
+          aria-busy={isBusy || undefined}
+          onClick={handleClick}
+          {...requestAria}
         >
           {content}
         </Link>
@@ -241,32 +392,77 @@ export const AiButton = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, 
           type="button"
           className={classes}
           disabled={disabled}
+          aria-busy={isBusy || undefined}
+          onClick={handleClick}
+          {...requestAria}
         >
           {content}
         </button>
       );
 
-    if (!summary) return control;
+    /* A polite region beside the control, never inside it: text inside the
+       button would join its accessible name. Mounted whenever the host
+       reports a status, so it exists before the first change it announces. */
+    const announcer =
+      status !== undefined ? (
+        <span className="ds-visually-hidden" role="status">
+          {statusLabel(status)}
+        </span>
+      ) : null;
+
+    /* Mounted whenever a request exists, shown by its --open class, so it
+       eases out the way the summary does; visibility keeps the folded panel
+       out of the accessibility tree and the tab order. */
+    const requestPanel = request ? (
+      <aside
+        id={requestId}
+        className={[
+          `${baseClass}__request`,
+          `${baseClass}__request--${requestPlacement}`,
+          requestShown && `${baseClass}__request--open`,
+        ]
+          .filter(Boolean)
+          .join(' ')}
+        aria-label={requestRegionLabel}
+      >
+        {request}
+      </aside>
+    ) : null;
+
+    if (!summary && !request)
+      return announcer ? (
+        <>
+          {control}
+          {announcer}
+        </>
+      ) : (
+        control
+      );
 
     const panelClass = `${baseClass}__summary`;
 
     return (
       <div
+        ref={hostRef}
         className={[
           `${baseClass}-host`,
           `${baseClass}-host--${summaryPlacement}`,
           panelOpen && `${baseClass}-host--open`,
+          requestShown && `${baseClass}-host--request-open`,
         ]
           .filter(Boolean)
           .join(' ')}
-        onMouseEnter={hostEnter}
-        onMouseLeave={hostLeave}
+        onMouseEnter={summary ? hostEnter : undefined}
+        onMouseLeave={summary ? hostLeave : undefined}
       >
         {control}
+        {announcer}
+        {requestPanel}
         {/* Mounted whenever a summary exists, shown by the host's --open
             class, so closing can ease out the way HoverCard does —
             visibility keeps the hidden panel out of the accessibility tree
             and the tab order. */}
+        {summary && (
         <aside className={panelClass} aria-label={summaryRegionLabel(summary.title)}>
             <button
               type="button"
@@ -333,6 +529,7 @@ export const AiButton = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, 
               </span>
             )}
           </aside>
+        )}
       </div>
     );
   },

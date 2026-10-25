@@ -59,6 +59,8 @@ type InterruptCardOwnProps = {
    * `<ToolCall status="pending">` showing what wants to run.
    */
   children?: React.ReactNode;
+  /** Strip the card chrome (fill, border, radius) when the card sits inside another panel that supplies the surface, such as AiButton's request panel. */
+  bare?: boolean;
 };
 
 export interface InterruptCardProps
@@ -91,6 +93,7 @@ export const InterruptCard = React.forwardRef<HTMLDivElement, InterruptCardProps
       waitingLabel = 'Waiting for your decision',
       className = '',
       children,
+      bare = false,
       ...rest
     },
     ref,
@@ -98,7 +101,12 @@ export const InterruptCard = React.forwardRef<HTMLDivElement, InterruptCardProps
     const baseClass = 'ds-interrupt-card';
     const answered = value !== undefined;
 
-    const classes = [baseClass, answered ? `${baseClass}--answered` : '', className]
+    const classes = [
+      baseClass,
+      answered ? `${baseClass}--answered` : '',
+      bare ? `${baseClass}--bare` : '',
+      className,
+    ]
       .filter(Boolean)
       .join(' ');
 

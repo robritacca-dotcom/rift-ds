@@ -489,6 +489,99 @@
 .ds-agent-status--diagonal-swipe .ds-agent-status__dot:nth-child(12) { --ds-agent-step: 10; }
 
 /* ============================================
+   THE MARK (AgentStatusMark)
+   The dots alone at icon size, for an icon
+   slot. A square 4x4 grid, numbered row-major:
+
+        1  2  3  4
+        5  6  7  8
+        9 10 11 12
+       13 14 15 16
+
+   The twelve edge dots orbit clockwise in the
+   matrix's own twelve-slot cycle; the four core
+   dots stay dim. The box is exactly --icon-size
+   square, inset by a twelfth on every side, the
+   2-in-24 margin a Material Symbol keeps inside
+   its em box, so the mark swaps with a glyph
+   without moving or reading larger than it.
+   ============================================ */
+
+.ds-agent-status-mark {
+  --ds-agent-color: var(--color-text-secondary);
+  --ds-agent-dot-dim: 0.2;
+  --ds-agent-dot-rest: 0.82;
+  --ds-agent-cycle: var(--motion-duration-loop-matrix);
+  --ds-agent-slot: calc(var(--ds-agent-cycle) / 12);
+  --ds-agent-mark-size: var(--icon-size, var(--icon-size-600));
+
+  display: inline-grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  flex: none;
+  box-sizing: border-box;
+  width: var(--ds-agent-mark-size);
+  height: var(--ds-agent-mark-size);
+  padding: calc(var(--ds-agent-mark-size) / 12);
+  gap: calc(var(--ds-agent-mark-size) / 16);
+  vertical-align: middle;
+}
+
+.ds-agent-status-mark__dot {
+  border-radius: var(--radius-pill);
+  background-color: var(--ds-agent-color);
+  opacity: var(--ds-agent-dot-dim);
+  transform: scale(var(--ds-agent-dot-rest));
+}
+
+.ds-agent-status-mark--idle {
+  --ds-agent-color: var(--color-text-tertiary);
+}
+
+.ds-agent-status-mark--waiting {
+  --ds-agent-color: var(--color-status-warning-text);
+}
+
+.ds-agent-status-mark--done {
+  --ds-agent-color: var(--color-status-positive-text);
+}
+
+.ds-agent-status-mark--error {
+  --ds-agent-color: var(--color-status-error-text);
+}
+
+.ds-agent-status-mark--done .ds-agent-status-mark__dot,
+.ds-agent-status-mark--error .ds-agent-status-mark__dot {
+  opacity: 1;
+  transform: none;
+}
+
+.ds-agent-status-mark--animated .ds-agent-status-mark__dot {
+  animation: ds-agent-dot var(--ds-agent-cycle) var(--motion-ease-standard) infinite;
+  animation-delay: calc(var(--ds-agent-step, 0) * var(--ds-agent-slot));
+}
+
+.ds-agent-status-mark__dot:nth-child(1) { --ds-agent-step: 0; }
+.ds-agent-status-mark__dot:nth-child(2) { --ds-agent-step: 1; }
+.ds-agent-status-mark__dot:nth-child(3) { --ds-agent-step: 2; }
+.ds-agent-status-mark__dot:nth-child(4) { --ds-agent-step: 3; }
+.ds-agent-status-mark__dot:nth-child(8) { --ds-agent-step: 4; }
+.ds-agent-status-mark__dot:nth-child(12) { --ds-agent-step: 5; }
+.ds-agent-status-mark__dot:nth-child(16) { --ds-agent-step: 6; }
+.ds-agent-status-mark__dot:nth-child(15) { --ds-agent-step: 7; }
+.ds-agent-status-mark__dot:nth-child(14) { --ds-agent-step: 8; }
+.ds-agent-status-mark__dot:nth-child(13) { --ds-agent-step: 9; }
+.ds-agent-status-mark__dot:nth-child(9) { --ds-agent-step: 10; }
+.ds-agent-status-mark__dot:nth-child(5) { --ds-agent-step: 11; }
+
+.ds-agent-status-mark--animated .ds-agent-status-mark__dot:nth-child(6),
+.ds-agent-status-mark--animated .ds-agent-status-mark__dot:nth-child(7),
+.ds-agent-status-mark--animated .ds-agent-status-mark__dot:nth-child(10),
+.ds-agent-status-mark--animated .ds-agent-status-mark__dot:nth-child(11) {
+  animation: none;
+}
+
+/* ============================================
    REDUCED MOTION
    The global guard collapses every animation to
    its final frame, which for the matrix is dark.
@@ -498,7 +591,8 @@
 
 /* ds-allow(motion): parks a looping animation, which the collapsed duration would strobe rather than stop (the dot cycle and the label shimmer). */
 @media (prefers-reduced-motion: reduce) {
-  .ds-agent-status--animated .ds-agent-status__dot {
+  .ds-agent-status--animated .ds-agent-status__dot,
+  .ds-agent-status-mark--animated .ds-agent-status-mark__dot {
     animation: none;
     opacity: 0.55;
     transform: none;

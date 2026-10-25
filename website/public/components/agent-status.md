@@ -22,3 +22,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same dat
 | variant | `"inline" \| "bar"` | no | `inline` | `inline` sits in a line of content; `bar` is a full-width row for the top of a panel. |
 | className | `string` | no | `` | Additional CSS classes |
 | children | `ReactNode` | no |  | Status text, when it needs markup the `label` string cannot express. |
+
+## AgentStatusMark props
+
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| state | `AgentStatusState` | no | `working` | What the agent is doing. Drives the colour and whether the dots animate, as on AgentStatus. |
+| className | `string` | no | `` | Additional CSS classes |

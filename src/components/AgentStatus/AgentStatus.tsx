@@ -151,3 +151,48 @@ export const AgentStatus = React.forwardRef<HTMLDivElement, AgentStatusProps>(
 );
 
 AgentStatus.displayName = 'AgentStatus';
+
+/** The mark's square grid: 4x4, row-major. CSS owns which cell lights when. */
+const MARK_DOT_COUNT = 16;
+
+/** Props owned by AgentStatusMark itself — everything else falls through to the <span>. */
+type AgentStatusMarkOwnProps = {
+  /** What the agent is doing. Drives the colour and whether the dots animate, as on AgentStatus. */
+  state?: AgentStatusState;
+  /** Additional CSS classes */
+  className?: string;
+};
+
+export interface AgentStatusMarkProps
+  extends AgentStatusMarkOwnProps,
+    Omit<React.ComponentPropsWithoutRef<'span'>, keyof AgentStatusMarkOwnProps | 'children'> {}
+
+/**
+ * AgentStatus's dots at icon size, for an icon slot: a square 4x4 grid sized
+ * by `--icon-size`, drawn inside a Material Symbol's live area, so it swaps
+ * with a glyph without moving or outgrowing it. The dots orbit the edge in
+ * AgentStatus's cycle and colours. AiButton's status is the first host.
+ * Hidden from assistive technology; the host announces the state.
+ */
+export const AgentStatusMark = React.forwardRef<HTMLSpanElement, AgentStatusMarkProps>(
+  ({ state = 'working', className = '', ...rest }, ref) => {
+    const baseClass = 'ds-agent-status-mark';
+    const classes = [
+      baseClass,
+      `${baseClass}--${state}`,
+      ACTIVE_STATES.includes(state) ? `${baseClass}--animated` : '',
+      className,
+    ]
+      .filter(Boolean)
+      .join(' ');
+    return (
+      <span aria-hidden="true" {...rest} ref={ref} className={classes}>
+        {Array.from({ length: MARK_DOT_COUNT }, (_, i) => (
+          <span key={i} className={`${baseClass}__dot`} />
+        ))}
+      </span>
+    );
+  },
+);
+
+AgentStatusMark.displayName = 'AgentStatusMark';

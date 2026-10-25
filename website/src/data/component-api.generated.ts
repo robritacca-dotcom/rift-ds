@@ -353,6 +353,25 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Status text, when it needs markup the `label` string cannot express."
           }
         ]
+      },
+      {
+        "component": "AgentStatusMark",
+        "props": [
+          {
+            "name": "state",
+            "type": "AgentStatusState",
+            "required": false,
+            "description": "What the agent is doing. Drives the colour and whether the dots animate, as on AgentStatus.",
+            "defaultValue": "working"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": ""
+          }
+        ]
       }
     ]
   },
@@ -398,6 +417,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Whether the button is disabled"
           },
           {
+            "name": "status",
+            "type": "AgentStatusState",
+            "required": false,
+            "description": "What the agent behind the button is doing, in AgentStatus's vocabulary.\nThe label never changes; the icon carries the state. `thinking` and\n`working` show AgentStatusMark and spin the ring faster, `waiting` shows\na raised hand in the warning colour with the ring at rest, and `done` and\n`error` turn the button to their status colours with a check or an\nerror glyph, then return to the resting look after a beat. The button stays clickable throughout, unlike Button's\n`loading`, so a click can open the conversation to watch the work."
+          },
+          {
+            "name": "statusLabel",
+            "type": "((status: AgentStatusState) => string)",
+            "required": false,
+            "description": "What a screen reader hears when the status changes, given the status. Defaults to English per status; `idle` says nothing.",
+            "defaultValue": "(s: AgentStatusState) => DEFAULT_STATUS_LABELS[s]"
+          },
+          {
             "name": "href",
             "type": "string",
             "required": false,
@@ -427,6 +459,45 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Which side of the button the summary panel opens on.",
             "defaultValue": "top"
+          },
+          {
+            "name": "request",
+            "type": "ReactNode",
+            "required": false,
+            "description": "What the agent needs from the person while `status` is `waiting`: any\ncontent, drawn in a glass panel at the button. An InterruptCard approval\nis the usual filling; a question, a form or a preview work the same way.\nIt opens each time the status becomes `waiting` and stays open without\nhover. Escape or a click on the button folds it back into the button,\nwhere the raised hand keeps showing, and another click opens it again.\nWhile it is open the summary panel never opens."
+          },
+          {
+            "name": "requestOpen",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the request panel is open, for a host that owns it (say, to keep it shut while the chat shows the request). Leave undefined to let the button manage it."
+          },
+          {
+            "name": "defaultRequestOpen",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the request panel starts open, when the button manages it. Each later move into `waiting` opens it again.",
+            "defaultValue": "true"
+          },
+          {
+            "name": "onRequestOpenChange",
+            "type": "((open: boolean) => void)",
+            "required": false,
+            "description": "Fires when the request panel opens or closes, including when a move into `waiting` opens it."
+          },
+          {
+            "name": "requestPlacement",
+            "type": "\"top\" | \"bottom\"",
+            "required": false,
+            "description": "Which side of the button the request panel opens on.",
+            "defaultValue": "top"
+          },
+          {
+            "name": "requestRegionLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the request panel.",
+            "defaultValue": "Waiting for you"
           },
           {
             "name": "summaryPinned",
@@ -7696,6 +7767,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "ReactNode",
             "required": false,
             "description": "Detail slot between the description and the options — typically a\n`<ToolCall status=\"pending\">` showing what wants to run."
+          },
+          {
+            "name": "bare",
+            "type": "boolean",
+            "required": false,
+            "description": "Strip the card chrome (fill, border, radius) when the card sits inside another panel that supplies the surface, such as AiButton's request panel.",
+            "defaultValue": "false"
           }
         ]
       }

@@ -22,6 +22,9 @@ import '../Table/Table.css';
 import { Pagination, type PaginationProps } from '../Pagination/Pagination';
 import { Checkbox } from '../Checkbox/Checkbox';
 import { Input } from '../Input/Input';
+import { ToggleSwitch } from '../ToggleSwitch/ToggleSwitch';
+import { CellEditor, EditorHost } from './CellEditor';
+import { EDITOR_MIN_WIDTH, LIVE_KINDS, TYPED_KINDS, type CellEditorKind, type CellValue } from './editorKinds';
 import { EmptyState, type EmptyStateProps } from '../EmptyState/EmptyState';
 import { MOTION_ANNOUNCE_DEBOUNCE_MS } from '../../tokens/motion';
 import '../../behaviors/visually-hidden.css';
@@ -43,7 +46,7 @@ export interface DataTableColumn<R extends DataTableRow = DataTableRow> {
   render?: (row: R) => React.ReactNode;
   /** Whether this column names each row: its cells render as row headers, and its value names the row's checkbox ("Select Ada Lovelace"). One column per table. */
   rowHeader?: boolean;
-  /** Narrowest width a resize can reach, in pixels. Defaults to what the header needs: its padding, two letters of label, and its sort glyph and menu button. */
+  /** Narrowest width a resize can reach, in pixels. Defaults to what the header needs (its padding, two letters of label, and its sort glyph and menu button) or, for an editable column, its editor, whichever is wider. */
   minWidth?: number;
   /** Widest width a resize can reach, in pixels. */
   maxWidth?: number;
@@ -61,6 +64,76 @@ export interface DataTableColumn<R extends DataTableRow = DataTableRow> {
   locked?: boolean;
   /** How this column's cell text fits. Defaults to the table's `cellText`. */
   cellText?: DataTableCellText;
+  /**
+   * Makes the column's cells editable, with one of the library's fields
+   * (`text`, `textarea`, `number`, `select`, `multiselect`, `combobox`,
+   * `tags`, `date`, `time`, `checkbox`, `switch`) or a function that renders
+   * your own editor. A cell reads as text until it is edited; `checkbox` and
+   * `switch` are live controls in the cell, saved as they toggle.
+   */
+  editor?: DataTableEditorKind | ((context: DataTableEditorContext<R>) => React.ReactNode);
+  /** The choices of a `select`, `multiselect` or `combobox` editor. A cell shows the chosen option's label. */
+  options?: DataTableOption[];
+  /** Checks a new value before it is saved: return the message to show, or nothing when it passes. An error keeps the editor open. */
+  validate?: (value: DataTableValue, row: R) => string | null | undefined;
+  /** Whether a row's cell in this column can be edited, given the row. Defaults to true when the column has an `editor`. */
+  editable?: boolean | ((row: R) => boolean);
+}
+
+/** The editor kinds a column's `editor` can name, each composed from the library's own field. */
+export type DataTableEditorKind = CellEditorKind;
+
+/** Any value a cell can hold. */
+export type DataTableValue = CellValue;
+
+/** One choice of a `select`, `multiselect` or `combobox` editor. */
+export interface DataTableOption {
+  /** The value stored in the row. */
+  value: string;
+  /** What the cell and the list show. */
+  label: string;
+}
+
+/** What a custom editor is handed. */
+export interface DataTableEditorContext<R extends DataTableRow = DataTableRow> {
+  /** The draft value. */
+  value: DataTableValue;
+  /** Changes the draft. */
+  setValue: (value: DataTableValue) => void;
+  /** Saves the draft, or the value given. */
+  commit: (value?: DataTableValue) => void;
+  /** Ends the edit without saving. */
+  cancel: () => void;
+  /** The row being edited. */
+  row: R;
+  /** The size to draw the editor at: always `compact`, the size every built-in editor takes, whatever the table's density. */
+  size: 'default' | 'compact';
+  /** The editor's accessible name. */
+  label: string;
+  /** The validation message, when the draft does not pass. */
+  error?: string;
+}
+
+/** One saved cell, as `onCellEdit` hears it. */
+export interface DataTableCellEdit<R extends DataTableRow = DataTableRow> {
+  /** The row, as it was before the edit. */
+  row: R;
+  /** The column's key. */
+  key: string;
+  /** The new value. */
+  value: DataTableValue;
+  /** The value before the edit. */
+  previous: DataTableValue;
+}
+
+/** One saved row, as `onRowEdit` hears it. */
+export interface DataTableRowEdit<R extends DataTableRow = DataTableRow> {
+  /** The row, as it was before the edit. */
+  row: R;
+  /** The changed values, by column key. */
+  values: Record<string, DataTableValue>;
+  /** The changed columns' values before the edit. */
+  previous: Record<string, DataTableValue>;
 }
 
 /**
@@ -75,7 +148,7 @@ export interface DataTableRow {
   /** Unique row identifier. */
   id: string;
   /** Raw values keyed by column key — used for sorting, searching, and default rendering. */
-  values: Record<string, string | number | null | undefined>;
+  values: Record<string, DataTableValue>;
 }
 
 export interface DataTableSort {
@@ -157,6 +230,18 @@ export interface DataTableColumnLabels {
   hiddenColumn: (header: string) => string;
   /** Announced after a column is resized, given its header and the new width in pixels. */
   resizedColumn: (header: string, width: number) => string;
+  /** Accessible name of a cell's editor, given the column's header and the row's name. */
+  editField: (header: string, rowName: string) => string;
+  /** Accessible name of a cell's hover edit button, in cell mode, given the column's header and the row's name. */
+  editCell: (header: string, rowName: string) => string;
+  /** Accessible name of a row's Edit button, with `editMode="row"`, given the row's name. */
+  editRow: (rowName: string) => string;
+  /** Accessible name of a row's Save button while it edits, given the row's name. */
+  saveRow: (rowName: string) => string;
+  /** Accessible name of a row's Cancel button while it edits, given the row's name. */
+  cancelRow: (rowName: string) => string;
+  /** Announced, assertively, when a save fails and the value rolls back, given the column's header and the row's name. */
+  saveFailed: (header: string, rowName: string) => string;
 }
 
 const DEFAULT_COLUMN_LABELS: DataTableColumnLabels = {
@@ -182,6 +267,12 @@ const DEFAULT_COLUMN_LABELS: DataTableColumnLabels = {
   unpinnedColumn: (header) => `${header} unpinned`,
   hiddenColumn: (header) => `${header} hidden`,
   resizedColumn: (header, width) => `${header}, ${width} pixels`,
+  editField: (header, rowName) => `${header}, ${rowName}`,
+  editCell: (header, rowName) => `Edit ${header}, ${rowName}`,
+  editRow: (rowName) => `Edit ${rowName}`,
+  saveRow: (rowName) => `Save ${rowName}`,
+  cancelRow: (rowName) => `Cancel editing ${rowName}`,
+  saveFailed: (header, rowName) => `${header} for ${rowName} was not saved. The value is back to what it was.`,
 };
 
 /** The width of the selection and row-grip columns: the control height of a compact row plus its padding. */
@@ -193,6 +284,8 @@ const LABEL_MIN_WIDTH = 40;
 /** The header controls' widths, in the base theme: the sort glyph and the compact menu button, each with its gap. */
 const SORT_GLYPH_WIDTH = 24;
 const MENU_BUTTON_WIDTH = 36;
+/** An editor's inset inside its cell (`--padding-100`). */
+const EDITOR_INSET = 4;
 /** A cell's inline padding at each density (`--padding-400`, `--padding-300`). */
 const CELL_PADDING = { default: 16, compact: 12 } as const;
 /** The widest a truncating column with no declared width starts: measured
@@ -208,14 +301,12 @@ const declaredPixels = (width: string | number | undefined): number | undefined 
 };
 
 /** Compare two raw values: numbers numerically, everything else as text. */
-const compareValues = (
-  a: string | number | null | undefined,
-  b: string | number | null | undefined,
-): number => {
+const compareValues = (a: DataTableValue, b: DataTableValue): number => {
   if (a == null && b == null) return 0;
   if (a == null) return -1;
   if (b == null) return 1;
   if (typeof a === 'number' && typeof b === 'number') return a - b;
+  if (typeof a === 'boolean' && typeof b === 'boolean') return Number(a) - Number(b);
   return String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: 'base' });
 };
 
@@ -398,6 +489,21 @@ type DataTableOwnProps<R extends DataTableRow = DataTableRow> = {
   cellText?: DataTableCellText;
   /** The actions a row offers, in an actions column that sticks to the end edge: inline ones as icon buttons, the rest in a More menu. */
   rowActions?: (row: R) => DataTableRowAction[];
+  /**
+   * How editable cells edit: `cell` (the default) edits one cell at a time,
+   * started with Enter, F2, a typed character or a double click; `row` adds an
+   * Edit button to each row that opens every editable cell of the row at
+   * once, with Save and Cancel.
+   */
+  editMode?: 'cell' | 'row';
+  /**
+   * Saves one edited cell. Rows stay the record: update them from here. Return
+   * a promise to have the cell show the new value as pending until it
+   * settles; a rejection rolls the cell back and announces the failure.
+   */
+  onCellEdit?: (edit: DataTableCellEdit<R>) => void | Promise<unknown>;
+  /** Saves one edited row with `editMode="row"`, its changed values together. Without it, each changed cell goes to `onCellEdit`. */
+  onRowEdit?: (edit: DataTableRowEdit<R>) => void | Promise<unknown>;
   /** When the inline actions show: on row hover and focus (the default, and always on a touch screen), or always. The More button shows at rest either way, so the column never reads as empty. */
   rowActionsVisibility?: 'hover' | 'always';
   /** Additional CSS classes */
@@ -485,6 +591,9 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
       cellText = 'wrap',
       rowActions,
       rowActionsVisibility = 'hover',
+      editMode = 'cell',
+      onCellEdit,
+      onRowEdit,
       className = '',
       ref,
       ...rest
@@ -729,7 +838,10 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
        shows: its inline buttons plus the More button, at the compact row
        control height, with the gap between them and the cell's padding. */
     const actionsFor = (row: R) => rowActions?.(row) ?? [];
-    const actionsCount = rowActions
+    /* Row edit mode needs the column for its Edit button, and for Save and
+       Cancel while a row edits. */
+    const showActions = Boolean(rowActions) || editMode === 'row';
+    const consumerActions = rowActions
       ? Math.max(
           1,
           ...visibleRows.map((row) => {
@@ -739,13 +851,17 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
           }),
         )
       : 0;
+    const actionsCount = editMode === 'row' ? Math.max(consumerActions + 1, 2) : consumerActions;
     /* The width itself is CSS (`--ds-dt-w-actions` in DataTable.css), from
        the live control height, gap and cell padding, so a theme's density
        moves it with everything else; JS only says how many buttons. */
     const actionsWidth = 'var(--ds-dt-w-actions)';
+    /* With no column pinned to the end, the actions column is the end edge,
+       and carries its hairline and its scrolling-edge shadow. */
+    const actionsEdge = endKeys.length === 0 ? ` ${baseClass}__cell--pinned-edge` : '';
     const anyResizable = columns.some(canResize);
     const anyColumnFeature =
-      columnMenu || anyResizable || columns.some(canMove) || anyPinned || reorderableRows;
+      columnMenu || anyResizable || columns.some(canMove) || anyPinned || reorderableRows || columns.some((col) => col.editor);
     const gridMode = (navigation ?? (anyColumnFeature ? 'grid' : 'table')) === 'grid';
 
     /* ---- Widths ---------------------------------------------------------
@@ -789,9 +905,14 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     /* A column never gets narrower than its header needs: its padding, a
        little of its label, and the controls it carries, so a resize can
        never push a header's controls into its neighbour. */
-    const minWidthOf = (col: DataTableColumn<R>) =>
-      col.minWidth ??
-      2 * CELL_PADDING[size] + LABEL_MIN_WIDTH + (col.sortable ? SORT_GLYPH_WIDTH : 0) + (columnMenu ? MENU_BUTTON_WIDTH : 0);
+    const minWidthOf = (col: DataTableColumn<R>) => {
+      if (col.minWidth !== undefined) return col.minWidth;
+      const header =
+        2 * CELL_PADDING[size] + LABEL_MIN_WIDTH + (col.sortable ? SORT_GLYPH_WIDTH : 0) + (columnMenu ? MENU_BUTTON_WIDTH : 0);
+      // An editable column also fits its editor: the field's floor and the editor's inset either side.
+      const kind = typeof col.editor === 'string' && !LIVE_KINDS.has(col.editor) ? col.editor : undefined;
+      return kind ? Math.max(header, EDITOR_MIN_WIDTH[kind as keyof typeof EDITOR_MIN_WIDTH] + 2 * EDITOR_INSET) : header;
+    };
     const clampWidth = (col: DataTableColumn<R>, width: number) =>
       Math.round(Math.min(col.maxWidth ?? Number.MAX_SAFE_INTEGER, Math.max(minWidthOf(col), width)));
     const widthOf = (key: string, widths: Record<string, number> = widthsState) => {
@@ -813,7 +934,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
         vars[`--ds-dt-off-${indexOfKey.get(key)}`] = `${offset}px`;
         offset += widthOf(key, widths);
       });
-      const plusActions = (px: number) => (rowActions ? `calc(${px}px + var(--ds-dt-w-actions))` : `${px}px`);
+      const plusActions = (px: number) => (showActions ? `calc(${px}px + var(--ds-dt-w-actions))` : `${px}px`);
       let fromEnd = 0;
       [...endKeys].reverse().forEach((key) => {
         vars[`--ds-dt-off-${indexOfKey.get(key)}`] = plusActions(fromEnd);
@@ -833,7 +954,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
        never as state. */
     useEffect(() => {
       const wrapper = tableEl?.parentElement;
-      if (!wrapper || !anyPinned) return;
+      if (!wrapper || (!anyPinned && !showActions)) return;
       const update = () => {
         const max = wrapper.scrollWidth - wrapper.clientWidth;
         const left = Math.abs(wrapper.scrollLeft);
@@ -848,7 +969,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
         wrapper.removeEventListener('scroll', update);
         observer.disconnect();
       };
-    }, [anyPinned, layoutReady, tableEl]);
+    }, [anyPinned, showActions, layoutReady, tableEl]);
 
     /* A cell to focus once the change that moved it has rendered (a column
        moved, pinned or hidden, a row moved). */
@@ -1151,7 +1272,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     /* ---- Grid navigation ------------------------------------------------
        One Tab stop: the active cell, tracked by row id and column key so it
        survives a sort, a filter, a page change or a move. */
-    const columnKeysInView = [...utilityKeys, ...visibleKeys, ...(rowActions ? ['ds-data-table-actions'] : [])];
+    const columnKeysInView = [...utilityKeys, ...visibleKeys, ...(showActions ? ['ds-data-table-actions'] : [])];
     const rowKeysInView = ['header', ...visibleRows.map((row) => row.id)];
     const [active, setActive] = useState<Cell | null>(null);
     const activeCell: Cell = (() => {
@@ -1176,6 +1297,204 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     const focusCell = (cell: Cell) => {
       setActive(cell);
       tableEl?.querySelector<HTMLElement>(cellSelector(cell))?.focus();
+    };
+
+    /* ---- Editing --------------------------------------------------------
+       The table never copies the rows: an open edit holds only its draft.
+       A save that returns a promise shows its value as pending until it
+       settles; a rejection rolls the cell back, marks it, and is announced
+       on the assertive channel. */
+    type Editing = {
+      row: string;
+      /** The cell edited, or in row mode the cell the edit began from. */
+      key?: string;
+      draft: Record<string, DataTableValue>;
+      errors: Record<string, string>;
+      /** The edit began with a typed character. */
+      replaced?: boolean;
+    };
+    const [editing, setEditing] = useState<Editing | null>(null);
+    const [pending, setPending] = useState<Record<string, Record<string, DataTableValue>>>({});
+    const [failed, setFailed] = useState<Record<string, string>>({});
+    const [alertMessage, setAlertMessage] = useState('');
+    const cellId = (rowId: string, key: string) => `${rowId}\u0000${key}`;
+    const rowById = (id: string) => rows.find((row) => row.id === id);
+    const kindOf = (col?: DataTableColumn<R>): CellEditorKind | undefined =>
+      typeof col?.editor === 'string' ? col.editor : undefined;
+    const isLive = (col?: DataTableColumn<R>) => {
+      const kind = kindOf(col);
+      return kind !== undefined && LIVE_KINDS.has(kind);
+    };
+    const canEdit = (col: DataTableColumn<R> | undefined, row: R) =>
+      Boolean(col?.editor) && (typeof col?.editable === 'function' ? col.editable(row) : (col?.editable ?? true));
+    const valueOf = (row: R, key: string): DataTableValue =>
+      pending[row.id] && key in pending[row.id] ? pending[row.id][key] : row.values[key];
+    const rowView = (row: R): R =>
+      pending[row.id] ? { ...row, values: { ...row.values, ...pending[row.id] } } : row;
+    const sameValue = (a: DataTableValue, b: DataTableValue) => JSON.stringify(a ?? null) === JSON.stringify(b ?? null);
+    const isThenable = (value: unknown): value is Promise<unknown> =>
+      typeof (value as Promise<unknown> | undefined)?.then === 'function';
+
+    const save = (row: R, values: Record<string, DataTableValue>) => {
+      const keys = Object.keys(values);
+      if (keys.length === 0) return;
+      const previous = Object.fromEntries(keys.map((key) => [key, row.values[key]]));
+      let result: unknown;
+      if (editMode === 'row' && onRowEdit) result = onRowEdit({ row, values, previous });
+      else {
+        const results = keys.map((key) => onCellEdit?.({ row, key, value: values[key], previous: previous[key] }));
+        result = results.some(isThenable) ? Promise.all(results) : undefined;
+      }
+      setFailed((current) => {
+        const next = { ...current };
+        keys.forEach((key) => delete next[cellId(row.id, key)]);
+        return next;
+      });
+      if (!isThenable(result)) return;
+      setPending((current) => ({ ...current, [row.id]: { ...current[row.id], ...values } }));
+      const settle = () =>
+        setPending((current) => {
+          const mine = { ...current[row.id] };
+          keys.forEach((key) => delete mine[key]);
+          const next = { ...current };
+          if (Object.keys(mine).length > 0) next[row.id] = mine;
+          else delete next[row.id];
+          return next;
+        });
+      result.then(settle, () => {
+        settle();
+        const name = rowName(row);
+        const message = (key: string) => labels.saveFailed(headerText(byKey.get(key) ?? { key, header: key }), name);
+        setFailed((current) => ({ ...current, ...Object.fromEntries(keys.map((key) => [cellId(row.id, key), message(key)])) }));
+        setAlertMessage(message(keys[0]));
+      });
+    };
+
+    /** The editable cells of the page in reading order, for Tab. */
+    const editableCells = () =>
+      visibleRows.flatMap((row) =>
+        visibleKeys.filter((key) => canEdit(byKey.get(key), row)).map((key) => ({ row: row.id, col: key })),
+      );
+
+    const startEdit = (rowId: string, key?: string, replace?: string) => {
+      const row = rowById(rowId);
+      if (!row) return;
+      if (editMode === 'row') {
+        const draft = Object.fromEntries(
+          visibleKeys
+            .filter((k) => canEdit(byKey.get(k), row) && !isLive(byKey.get(k)))
+            .map((k) => [k, valueOf(row, k)]),
+        );
+        if (Object.keys(draft).length > 0) setEditing({ row: rowId, key, draft, errors: {} });
+        return;
+      }
+      const col = key === undefined ? undefined : byKey.get(key);
+      if (!col || !canEdit(col, row)) return;
+      if (isLive(col)) {
+        save(row, { [col.key]: !valueOf(row, col.key) });
+        return;
+      }
+      const typed =
+        replace === undefined
+          ? undefined
+          : kindOf(col) === 'number'
+            ? Number.isNaN(Number(replace))
+              ? null
+              : Number(replace)
+            : replace;
+      setEditing({
+        row: rowId,
+        key: col.key,
+        draft: { [col.key]: replace === undefined ? valueOf(row, col.key) : typed },
+        errors: {},
+        replaced: replace !== undefined,
+      });
+    };
+
+    const setDraft = (key: string, value: DataTableValue) =>
+      setEditing((current) => {
+        if (!current) return current;
+        const errors = { ...current.errors };
+        delete errors[key];
+        return { ...current, draft: { ...current.draft, [key]: value }, errors };
+      });
+
+    const cancelEdit = () => {
+      if (!editing) return;
+      setEditing(null);
+      setPendingFocus({ row: editing.row, col: editMode === 'row' ? 'ds-data-table-actions' : editing.key! });
+    };
+
+    /** Saves the open edit, unless a value fails its check, then moves focus as the key asked. */
+    const commitEdit = (
+      move: 'stay' | 'down' | 'next' | 'previous' | 'none',
+      override?: { key: string; value: DataTableValue },
+    ) => {
+      if (!editing) return;
+      const row = rowById(editing.row);
+      if (!row) {
+        setEditing(null);
+        return;
+      }
+      const draft = override ? { ...editing.draft, [override.key]: override.value } : editing.draft;
+      const errors: Record<string, string> = {};
+      for (const [key, value] of Object.entries(draft)) {
+        const message = byKey.get(key)?.validate?.(value, row);
+        if (message) errors[key] = message;
+      }
+      if (Object.keys(errors).length > 0) {
+        setEditing({ ...editing, draft, errors });
+        return;
+      }
+      save(row, Object.fromEntries(Object.entries(draft).filter(([key, value]) => !sameValue(value, valueOf(row, key)))));
+      setEditing(null);
+      if (move === 'none') return;
+      const here = { row: editing.row, col: editMode === 'row' ? 'ds-data-table-actions' : editing.key! };
+      if (move === 'down') {
+        const at = visibleRows.findIndex((r) => r.id === editing.row);
+        const below = visibleRows[at + 1];
+        setPendingFocus(below ? { row: below.id, col: here.col } : here);
+      } else if (move === 'next' || move === 'previous') {
+        const cells = editableCells();
+        const at = cells.findIndex((cell) => cell.row === here.row && cell.col === here.col);
+        setPendingFocus(cells[at + (move === 'next' ? 1 : -1)] ?? here);
+      } else setPendingFocus(here);
+    };
+
+    const onEditorKeyDown = (event: React.KeyboardEvent<HTMLDivElement>, kind?: CellEditorKind) => {
+      if (event.defaultPrevented) return;
+      // An open list inside the editor takes its own Escape and Enter first.
+      if (event.currentTarget.querySelector('[aria-expanded="true"]')) return;
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        event.stopPropagation();
+        cancelEdit();
+        return;
+      }
+      if (event.key === 'Enter' && (kind !== 'textarea' || event.metaKey || event.ctrlKey)) {
+        event.preventDefault();
+        commitEdit(editMode === 'row' || event.shiftKey ? 'stay' : 'down');
+        return;
+      }
+      if (event.key === 'Tab' && editMode === 'cell') {
+        event.preventDefault();
+        commitEdit(event.shiftKey ? 'previous' : 'next');
+      }
+    };
+    /* A press or a focus move outside the cell's editor saves it, as a
+       spreadsheet does. Row mode waits for Save. */
+    const onEditorBlur = (event: React.FocusEvent<HTMLDivElement>) => {
+      if (editMode === 'row') return;
+      if (event.currentTarget.contains(event.relatedTarget as Node | null)) return;
+      commitEdit('none');
+    };
+
+    /** A cell's value as text: an option's label, a list joined. */
+    const displayOf = (col: DataTableColumn<R>, value: DataTableValue): React.ReactNode => {
+      const label = (v: string) => col.options?.find((option) => option.value === v)?.label ?? v;
+      if (Array.isArray(value)) return value.map(label).join(', ');
+      if (value == null) return value;
+      return col.options ? label(String(value)) : typeof value === 'boolean' ? String(value) : value;
     };
 
     const onGridKeyDown = (event: React.KeyboardEvent<HTMLTableElement>) => {
@@ -1221,6 +1540,21 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
         event.preventDefault();
         setMenuKey(cell.col);
         return;
+      }
+      const editRow = isHeader ? undefined : rowById(cell.row);
+      if (col && editRow && canEdit(col, editRow) && !isLive(col) && !editing) {
+        if (event.key === 'Enter' || event.key === 'F2') {
+          event.preventDefault();
+          startEdit(cell.row, cell.col);
+          return;
+        }
+        const kind = kindOf(col);
+        const printable = event.key.length === 1 && event.key !== ' ' && !ctrl && !event.altKey;
+        if (editMode === 'cell' && printable && kind && TYPED_KINDS.has(kind)) {
+          event.preventDefault();
+          startEdit(cell.row, cell.col, event.key);
+          return;
+        }
       }
       switch (event.key) {
         case 'ArrowRight': return go(r, c + 1);
@@ -1396,7 +1730,13 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
         <tr
           key={row.id}
           data-row={row.id}
-          className={isSelected ? 'ds-table__row ds-table__row--selected' : 'ds-table__row'}
+          className={[
+            'ds-table__row',
+            isSelected ? 'ds-table__row--selected' : '',
+            editMode === 'row' && editing?.row === row.id ? `${baseClass}__row--editing` : '',
+          ]
+            .filter(Boolean)
+            .join(' ')}
           aria-selected={gridMode && selectable ? isSelected : undefined}
         >
           {utilityKeys.map((key) => {
@@ -1441,44 +1781,188 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
           {visibleKeys.map((key) => {
             const col = byKey.get(key)!;
             const Cell = col.rowHeader ? 'th' : 'td';
+            const kind = kindOf(col);
+            const editable = canEdit(col, row);
+            const editingHere =
+              editing?.row === row.id && (editMode === 'row' ? key in editing.draft : editing.key === key);
+            const failure = failed[cellId(row.id, key)];
+            const isPending = Boolean(pending[row.id] && key in pending[row.id]);
+            const fieldLabel = labels.editField(headerText(col), name);
+            const cellClass = [
+              'ds-table__cell',
+              col.rowHeader ? 'ds-table__cell--row-header' : '',
+              editingHere ? `${baseClass}__cell--editing` : '',
+              editMode === 'cell' && editable && !isLive(col) ? `${baseClass}__cell--editable` : '',
+              isPending ? `${baseClass}__cell--pending` : '',
+              failure ? `${baseClass}__cell--failed` : '',
+            ]
+              .filter(Boolean)
+              .join(' ');
             return (
               <Cell
                 key={key}
                 data-col={key}
                 scope={col.rowHeader ? 'row' : undefined}
-                className={`ds-table__cell${col.rowHeader ? ' ds-table__cell--row-header' : ''}${pinClass(key)}`}
+                className={`${cellClass}${pinClass(key)}`}
                 style={layoutReady || regionOf(key) !== 'center' ? cellStyle(key) : undefined}
+                aria-busy={isPending || undefined}
+                title={failure}
+                onDoubleClick={editable && !isLive(col) && !editing ? () => startEdit(row.id, key) : undefined}
                 {...tabProps(row.id, key)}
               >
                 <div className="ds-table__cell-content" style={{ justifyContent: justify(col.align) }}>
                   {(() => {
                     const fit = col.cellText ?? cellText;
-                    const raw = row.values[key];
-                    const content = col.render ? col.render(row) : raw;
+                    const value = valueOf(row, key);
+                    const raw = value;
+                    if (kind === 'checkbox')
+                      return (
+                        <Checkbox
+                          size="compact"
+                          checked={Boolean(value)}
+                          disabled={!editable}
+                          onCheckedChange={(checked) => save(row, { [key]: checked })}
+                          aria-label={fieldLabel}
+                          tabIndex={innerTab}
+                          data-cell-control=""
+                        />
+                      );
+                    if (kind === 'switch')
+                      return (
+                        <ToggleSwitch
+                          size="compact"
+                          checked={Boolean(value)}
+                          disabled={!editable}
+                          onCheckedChange={(checked) => save(row, { [key]: checked })}
+                          label={fieldLabel}
+                          showLabel={false}
+                          tabIndex={innerTab}
+                          data-cell-control=""
+                        />
+                      );
+                    const content = col.render ? col.render(rowView(row)) : displayOf(col, raw);
                     if (fit === 'wrap') return content;
                     return (
                       <span
                         className={`${baseClass}__text ${baseClass}__text--${fit}`}
-                        title={fit === 'truncate' || fit === 'lines-2' ? (raw == null ? undefined : String(raw)) : undefined}
+                        title={fit === 'truncate' || fit === 'lines-2' ? (raw == null ? undefined : String(displayOf(col, raw))) : undefined}
                       >
                         {content}
                       </span>
                     );
                   })()}
                 </div>
+                {editMode === 'cell' && editable && !isLive(col) && !editingHere && (
+                  <CircularButton
+                    className={`${baseClass}__edit-hint`}
+                    icon="edit"
+                    variant="tertiary"
+                    size="compact"
+                    ariaLabel={labels.editCell(headerText(col), name)}
+                    tooltip={false}
+                    tabIndex={-1}
+                    onClick={() => startEdit(row.id, key)}
+                  />
+                )}
+                {editingHere && editing && (
+                  <EditorHost
+                    kind={kind ?? 'text'}
+                    error={editing.errors[key]}
+                    replaced={editing.replaced}
+                    autoFocus={
+                      editMode === 'cell' ||
+                      key === (editing.key && editing.key in editing.draft ? editing.key : Object.keys(editing.draft)[0])
+                    }
+                    onKeyDown={(event) => onEditorKeyDown(event, kind)}
+                    onBlur={onEditorBlur}
+                  >
+                    {typeof col.editor === 'function'
+                      ? col.editor({
+                          value: editing.draft[key],
+                          setValue: (value) => setDraft(key, value),
+                          commit: (value) =>
+                            editMode === 'row'
+                              ? value !== undefined && setDraft(key, value)
+                              : commitEdit('stay', value === undefined ? undefined : { key, value }),
+                          cancel: cancelEdit,
+                          row,
+                          size: 'compact',
+                          label: fieldLabel,
+                          error: editing.errors[key],
+                        })
+                      : kind &&
+                        kind !== 'checkbox' &&
+                        kind !== 'switch' && (
+                          <CellEditor
+                            kind={kind}
+                            value={editing.draft[key]}
+                            label={fieldLabel}
+                            options={col.options}
+                            error={Boolean(editing.errors[key])}
+                            open={editMode === 'cell'}
+                            onValueChange={(value) => setDraft(key, value)}
+                            onChoose={(value) =>
+                              editMode === 'cell' ? commitEdit('stay', { key, value }) : setDraft(key, value)
+                            }
+                          />
+                        )}
+                  </EditorHost>
+                )}
               </Cell>
             );
           })}
           {layoutReady && <td className={`ds-table__cell ${baseClass}__filler`} role="presentation" aria-hidden="true" />}
-          {rowActions && (
+          {showActions && (
             <td
               data-col="ds-data-table-actions"
-              className={`ds-table__cell ${baseClass}__actions ${baseClass}__cell--pinned ${baseClass}__cell--pinned-end`}
+              className={`ds-table__cell ${baseClass}__actions ${baseClass}__cell--pinned ${baseClass}__cell--pinned-end${actionsEdge}`}
               style={{ width: actionsWidth, insetInlineEnd: 0 }}
               {...tabProps(row.id, 'ds-data-table-actions')}
             >
               <div className={`ds-table__cell-content ${baseClass}__actions-row`}>
-                {actionsFor(row)
+                {editMode === 'row' && editing?.row === row.id ? (
+                  <>
+                    <CircularButton
+                      className={`${baseClass}__save`}
+                      icon="check"
+                      variant="tertiary"
+                      size="compact"
+                      ariaLabel={labels.saveRow(name)}
+                      tooltip={labels.saveRow(name)}
+                      tooltipPosition="left"
+                      onClick={() => commitEdit('stay')}
+                      tabIndex={innerTab}
+                    />
+                    <CircularButton
+                      className={`${baseClass}__cancel`}
+                      icon="close"
+                      variant="tertiary"
+                      size="compact"
+                      ariaLabel={labels.cancelRow(name)}
+                      tooltip={labels.cancelRow(name)}
+                      tooltipPosition="left"
+                      onClick={cancelEdit}
+                      tabIndex={innerTab}
+                    />
+                  </>
+                ) : (
+                  editMode === 'row' &&
+                  visibleKeys.some((k) => canEdit(byKey.get(k), row) && !isLive(byKey.get(k))) && (
+                    <CircularButton
+                      className={`${baseClass}__inline-action`}
+                      icon="edit"
+                      variant="tertiary"
+                      size="compact"
+                      ariaLabel={labels.editRow(name)}
+                      tooltip={labels.editRow(name)}
+                      tooltipPosition="left"
+                      disabled={editing !== null}
+                      onClick={() => startEdit(row.id)}
+                      tabIndex={innerTab}
+                    />
+                  )
+                )}
+                {!(editMode === 'row' && editing?.row === row.id) && actionsFor(row)
                   .filter((action) => action.inline)
                   .map((action) => (
                     <CircularButton
@@ -1495,7 +1979,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
                       tabIndex={innerTab}
                     />
                   ))}
-                {actionsFor(row).some((action) => !action.inline) && (
+                {!(editMode === 'row' && editing?.row === row.id) && actionsFor(row).some((action) => !action.inline) && (
                   <DropdownMenu
                     size="compact"
                     align="end"
@@ -1537,7 +2021,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
       columnDividers ? 'ds-table--column-dividers' : '',
       layoutReady ? `${baseClass}__grid--fixed` : '',
       stickyHeader ? `${baseClass}__grid--sticky` : '',
-      rowActions && rowActionsVisibility === 'hover' ? `${baseClass}__grid--actions-hover` : '',
+      showActions && rowActionsVisibility === 'hover' ? `${baseClass}__grid--actions-hover` : '',
     ]
       .filter(Boolean)
       .join(' ');
@@ -1548,6 +2032,10 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
       <div {...rest} ref={ref} className={classes}>
         <span className="ds-visually-hidden" aria-live="polite" aria-atomic="true">
           {announcement}
+        </span>
+        {/* Failed saves only: a value that rolled back must be heard now. */}
+        <span className="ds-visually-hidden" aria-live="assertive" aria-atomic="true">
+          {alertMessage}
         </span>
         {hasChrome && (
           <div className={`${baseClass}__toolbar`}>
@@ -1579,7 +2067,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
               style={
                 {
                   ...(layoutReady ? layoutVars(widthsState) : {}),
-                  ...(rowActions ? { '--ds-dt-actions': actionsCount } : {}),
+                  ...(showActions ? { '--ds-dt-actions': actionsCount } : {}),
                 } as React.CSSProperties
               }
               onKeyDown={onGridKeyDown}
@@ -1590,11 +2078,11 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
                   {utilityKeys.map(utilityHeader)}
                   {visibleKeys.map(header)}
                   {layoutReady && <th className={`ds-table__header-cell ${baseClass}__filler`} role="presentation" aria-hidden="true" />}
-                  {rowActions && (
+                  {showActions && (
                     <th
                       data-col="ds-data-table-actions"
                       scope="col"
-                      className={`ds-table__header-cell ${baseClass}__actions ${baseClass}__cell--pinned ${baseClass}__cell--pinned-end`}
+                      className={`ds-table__header-cell ${baseClass}__actions ${baseClass}__cell--pinned ${baseClass}__cell--pinned-end${actionsEdge}`}
                       style={{ width: actionsWidth, insetInlineEnd: 0 }}
                       {...tabProps('header', 'ds-data-table-actions')}
                     >

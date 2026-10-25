@@ -214,6 +214,8 @@ const INTERNAL_MODULES = new Map([
     'the entrance hook every chart in the set spreads into its series; the charts are the public surface, and the contract it keeps (animate on mount and on new data, never on a resize) is design.md\'s chart spec'],
   ['src/components/DataTable/dragGesture.ts',
     'the one pointer drag every DataTable grip runs (capture, a frame per move, a commit on release); the table is the public surface, and the helper carries the gesture rule for it alone'],
+  ['src/components/DataTable/editorKinds.ts',
+    'the editor kinds DataTable and its cell editors share, with each compact field\'s floor; the table is the public surface, and its `DataTableEditorKind` and `DataTableValue` types are the kinds\' published names'],
 ]);
 
 const componentsDir = join(repoRoot, 'src', 'components');

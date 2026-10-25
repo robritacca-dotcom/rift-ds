@@ -1,6 +1,7 @@
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
-import { DataTable, type DataTableColumn, type DataTableRow } from './DataTable';
+import { DataTable, type DataTableColumn, type DataTableProps, type DataTableRow } from './DataTable';
 import { Badge } from '../Badge/Badge';
 
 const statusVariant = {
@@ -403,5 +404,135 @@ export const CellText: Story = {
   play: async ({ canvasElement }) => {
     const truncated = canvasElement.querySelector('.ds-data-table__text--truncate');
     await expect(truncated).toHaveAttribute('title', expect.stringContaining('Delivery window'));
+  },
+};
+
+/* ---- Editing ---------------------------------------------------------- */
+
+const editColumns: DataTableColumn[] = [
+  {
+    key: 'name',
+    header: 'Customer',
+    rowHeader: true,
+    editor: 'text',
+    validate: (value) => (String(value ?? '').trim() ? undefined : 'A customer needs a name'),
+  },
+  {
+    key: 'status',
+    header: 'Status',
+    editor: 'select',
+    options: [
+      { value: 'Shipped', label: 'Shipped' },
+      { value: 'Waiting', label: 'Waiting' },
+      { value: 'Failed', label: 'Failed' },
+    ],
+  },
+  { key: 'price', header: 'Price', align: 'right', editor: 'number' },
+  { key: 'gift', header: 'Gift', align: 'center', editor: 'checkbox' },
+];
+
+/** The rows live in the host's state, as an app's would: the table only reports edits. */
+function EditableTable(props: Partial<DataTableProps> & { failSaves?: boolean }) {
+  const { failSaves, ...rest } = props;
+  const [data, setData] = useState<DataTableRow[]>(
+    rows.slice(0, 4).map((row) => ({ ...row, values: { ...row.values, gift: row.id === 'r2' } })),
+  );
+  const apply = (id: string, values: DataTableRow['values']) =>
+    setData((current) => current.map((row) => (row.id === id ? { ...row, values: { ...row.values, ...values } } : row)));
+  return (
+    <DataTable
+      columns={editColumns}
+      rows={data}
+      caption="Orders"
+      onCellEdit={({ row, key, value }) =>
+        failSaves ? Promise.reject(new Error('offline')) : apply(row.id, { [key]: value })
+      }
+      onRowEdit={({ row, values }) => apply(row.id, values)}
+      {...rest}
+    />
+  );
+}
+
+const cell = (root: HTMLElement, row: string, col: string) =>
+  root.querySelector<HTMLElement>(`tbody tr[data-row="${row}"] [data-col="${col}"]`)!;
+
+/** Cell editing: Enter or F2 opens a cell, Enter saves and moves down, Escape cancels, a typed character starts a new value, and a checkbox saves as it toggles. */
+export const CellEditing: Story = {
+  render: () => <EditableTable />,
+  play: async ({ canvasElement }) => {
+    cell(canvasElement, 'r1', 'name').focus();
+    await userEvent.keyboard('{Enter}');
+    const field = await within(canvasElement).findByRole('textbox', { name: 'Customer, John Clarkson' });
+    await expect(field).toHaveFocus();
+    await userEvent.clear(field);
+    await userEvent.type(field, 'John Clark{Enter}');
+    await waitFor(() => expect(cell(canvasElement, 'r1', 'name')).toHaveTextContent('John Clark'));
+    await expect(cell(canvasElement, 'r2', 'name')).toHaveFocus();
+
+    await userEvent.keyboard('Z');
+    const typed = await within(canvasElement).findByRole('textbox', { name: 'Customer, Aspen Lubin' });
+    await expect(typed).toHaveValue('Z');
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(cell(canvasElement, 'r2', 'name')).toHaveTextContent('Aspen Lubin'));
+    await expect(cell(canvasElement, 'r2', 'name')).toHaveFocus();
+
+    // The pencil shows on hover, and on focus, which is how a touch screen reaches it.
+    cell(canvasElement, 'r3', 'name').focus();
+    await userEvent.click(within(cell(canvasElement, 'r3', 'name')).getByRole('button', { name: 'Edit Customer, Michael Ekstrom' }));
+    await expect(await within(canvasElement).findByRole('textbox', { name: 'Customer, Michael Ekstrom' })).toHaveFocus();
+    await userEvent.keyboard('{Escape}');
+
+    const gift = within(cell(canvasElement, 'r1', 'gift')).getByRole('checkbox', { name: 'Gift, John Clark' });
+    await expect(gift).toHaveAttribute('tabindex', '-1');
+    await userEvent.click(gift);
+    await waitFor(() => expect(gift).toHaveAttribute('aria-checked', 'true'));
+  },
+};
+
+/** A value that fails its check keeps the editor open, with the message read out. */
+export const EditValidation: Story = {
+  render: () => <EditableTable />,
+  play: async ({ canvasElement }) => {
+    cell(canvasElement, 'r1', 'name').focus();
+    await userEvent.keyboard('{F2}');
+    const field = await within(canvasElement).findByRole('textbox', { name: 'Customer, John Clarkson' });
+    await userEvent.clear(field);
+    await userEvent.keyboard('{Enter}');
+    await expect(await within(canvasElement).findByRole('alert')).toHaveTextContent('A customer needs a name');
+    await expect(field).toHaveFocus();
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(cell(canvasElement, 'r1', 'name')).toHaveTextContent('John Clarkson'));
+  },
+};
+
+/** A save that fails rolls the value back, marks the cell and is announced at once. */
+export const FailedSave: Story = {
+  render: () => <EditableTable failSaves />,
+  play: async ({ canvasElement }) => {
+    cell(canvasElement, 'r1', 'price').focus();
+    await userEvent.keyboard('9');
+    await userEvent.keyboard('{Enter}');
+    const target = cell(canvasElement, 'r1', 'price');
+    await waitFor(() => expect(target).toHaveClass('ds-data-table__cell--failed'));
+    await expect(target).toHaveTextContent('3412');
+    const alert = canvasElement.querySelector('[aria-live="assertive"]') as HTMLElement;
+    await expect(alert).toHaveTextContent('Price for John Clarkson was not saved.');
+  },
+};
+
+/** Row editing: Edit opens every editable cell of a row at once, with Save and Cancel. */
+export const RowEditing: Story = {
+  render: () => <EditableTable editMode="row" />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button', { name: 'Edit Aspen Lubin' }));
+    const field = await canvas.findByRole('textbox', { name: 'Customer, Aspen Lubin' });
+    await expect(field).toHaveFocus();
+    await expect(canvasElement.querySelectorAll('tr[data-row="r2"] .ds-data-table__editor')).toHaveLength(3);
+    await userEvent.clear(field);
+    await userEvent.type(field, 'Aspen Lu');
+    await userEvent.click(canvas.getByRole('button', { name: 'Save Aspen Lubin' }));
+    await waitFor(() => expect(cell(canvasElement, 'r2', 'name')).toHaveTextContent('Aspen Lu'));
+    await expect(canvas.getByRole('button', { name: 'Edit Aspen Lu' })).toBeInTheDocument();
   },
 };

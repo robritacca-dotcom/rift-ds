@@ -138,7 +138,8 @@
   background-image: linear-gradient(var(--ds-dt-tint), var(--ds-dt-tint));
 }
 
-.ds-table__row:hover > .ds-data-table__cell--pinned {
+/* Body rows only: the header row is a row too, and never takes a hover tint. */
+.ds-table__body .ds-table__row:hover > .ds-data-table__cell--pinned {
   --ds-dt-tint: var(--color-table-row-hover-bg);
 }
 
@@ -483,4 +484,127 @@
   line-height: var(--font-paragraph-sm-line-height);
   letter-spacing: var(--font-paragraph-sm-letter-spacing);
   font-variant-numeric: tabular-nums;
+}
+
+/* ============================================
+   Editing
+   An editor covers its cell's own box, so a row never grows or reflows
+   while a cell edits. The cell stops clipping while it edits, so the
+   field's focus ring shows whole, but keeps its layer: a pinned column
+   still covers a scrolling cell's editor (the actions column's Save
+   included), and only a cell whose list is open rises over the table (the
+   open-menu rule above).
+   ============================================ */
+
+.ds-data-table .ds-table__body .ds-table__cell.ds-data-table__cell--editing {
+  overflow: visible;
+}
+
+/* A pinned cell is already positioned (sticky); the rest take a box for
+   the editor to sit in. */
+:where(.ds-table__body) .ds-data-table__cell--editing:not(.ds-data-table__cell--pinned) {
+  position: relative;
+}
+
+.ds-data-table__cell--editing > .ds-table__cell-content {
+  visibility: hidden;
+}
+
+.ds-data-table__editor {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  padding-inline: var(--padding-100);
+}
+
+.ds-data-table__editor > :first-child {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* A long text editor grows over the rows below as a floating layer,
+   never by pushing them. */
+.ds-data-table__editor--textarea {
+  inset-block-end: auto;
+  min-height: 100%;
+  align-items: flex-start;
+  padding-block: var(--padding-100);
+}
+
+/* The validation message floats under the editor, over the rows below. */
+.ds-data-table__edit-error {
+  position: absolute;
+  inset-block-start: calc(100% + var(--gap-100));
+  inset-inline-start: var(--padding-100);
+  max-width: calc(100% - 2 * var(--padding-100));
+  min-width: max-content;
+  padding: var(--padding-100) var(--padding-200);
+  border: var(--border-025) solid var(--color-status-error-border);
+  border-radius: var(--radius-200);
+  background-color: var(--color-status-error-bg);
+  color: var(--color-status-error-text);
+  box-shadow: var(--shadow-floating);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* A save in flight shows its new value, quieter, until it settles. */
+.ds-data-table__cell--pending > .ds-table__cell-content {
+  color: var(--color-text-tertiary);
+}
+
+/* A save that failed rolled the value back; the cell says so until it is
+   edited again (the message is its tooltip and was announced). */
+.ds-table__cell.ds-data-table__cell--failed {
+  box-shadow: inset 0 0 0 var(--border-025) var(--color-status-error-border);
+}
+
+/* Cell mode: an editable cell shows a pencil at its end edge, centred on
+   the row, while the pointer is over it or the cell holds focus (which is
+   how a touch screen reaches it). It sits over the cell's padding on the
+   row's hover fill, in the layout at rest and faded in, so nothing moves. */
+:where(.ds-table__body) .ds-data-table__cell--editable:not(.ds-data-table__cell--pinned) {
+  position: relative;
+}
+
+.ds-data-table__edit-hint {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-end: var(--padding-100);
+  translate: 0 -50%;
+  background-color: var(--color-table-row-hover-bg);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-data-table__cell--editable:hover .ds-data-table__edit-hint,
+.ds-data-table__cell--editable:focus .ds-data-table__edit-hint {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Row mode: the row being edited takes the selected tint, so it reads as
+   the one row that is open, pinned cells included. */
+.ds-data-table .ds-table__row.ds-data-table__row--editing {
+  background-color: var(--color-table-row-selected-bg);
+}
+
+.ds-table__row.ds-data-table__row--editing > .ds-data-table__cell--pinned {
+  --ds-dt-tint: var(--color-table-row-selected-bg);
+}
+
+/* Save and Cancel say which is which by colour as well as by shape. */
+.ds-data-table__save .ds-circular-button__icon {
+  color: var(--color-status-positive-icon);
+}
+
+.ds-data-table__cancel .ds-circular-button__icon {
+  color: var(--color-status-error-icon);
 }

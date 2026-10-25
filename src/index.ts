@@ -52,6 +52,7 @@ export * from './components/Composer/Composer';
 export * from './components/ContactCard/ContactCard';
 export * from './components/ContextMenu/ContextMenu';
 export * from './components/ContributionGraph/ContributionGraph';
+export * from './components/DataTable/CellEditor';
 export * from './components/DataTable/DataTable';
 export * from './components/DateInput/DateInput';
 export * from './components/DatePicker/DatePicker';

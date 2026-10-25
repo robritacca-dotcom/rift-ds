@@ -5430,6 +5430,25 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "The actions a row offers, in an actions column that sticks to the end edge: inline ones as icon buttons, the rest in a More menu."
           },
           {
+            "name": "editMode",
+            "type": "\"cell\" | \"row\"",
+            "required": false,
+            "description": "How editable cells edit: `cell` (the default) edits one cell at a time,\nstarted with Enter, F2, a typed character or a double click; `row` adds an\nEdit button to each row that opens every editable cell of the row at\nonce, with Save and Cancel.",
+            "defaultValue": "cell"
+          },
+          {
+            "name": "onCellEdit",
+            "type": "((edit: DataTableCellEdit<R>) => void | Promise<unknown>)",
+            "required": false,
+            "description": "Saves one edited cell. Rows stay the record: update them from here. Return\na promise to have the cell show the new value as pending until it\nsettles; a rejection rolls the cell back and announces the failure."
+          },
+          {
+            "name": "onRowEdit",
+            "type": "((edit: DataTableRowEdit<R>) => void | Promise<unknown>)",
+            "required": false,
+            "description": "Saves one edited row with `editMode=\"row\"`, its changed values together. Without it, each changed cell goes to `onCellEdit`."
+          },
+          {
             "name": "rowActionsVisibility",
             "type": "\"hover\" | \"always\"",
             "required": false,

@@ -20,6 +20,7 @@ import {
   stressColumns,
   wideColumns,
 } from "./benchData";
+import { EditingTable } from "./EditingTable";
 import styles from "./TablesBench.module.css";
 
 const MARKDOWN = `| Widget | Entry point | Notes |
@@ -360,6 +361,13 @@ export function TablesBench() {
             rowActions={stressActions}
           />
         )}
+      </Station>
+      <Station
+        id="bench-editing"
+        title="9. Editing"
+        note="Every editor kind: text, select, combobox, number, tags, multi-select, date, time, textarea, and a live checkbox and switch. Double-click a cell, or focus it and press Enter, F2 or start typing; Enter saves and moves down, Tab saves and moves on, Escape cancels. A task needs a name; a budget saves after a moment and fails above $100,000, rolling back. Row editing opens a whole row with Save and Cancel."
+      >
+        {({ size, lines }) => <EditingTable size={size} lines={lines} />}
       </Station>
     </div>
   );

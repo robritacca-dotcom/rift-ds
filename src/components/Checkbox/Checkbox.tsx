@@ -132,7 +132,8 @@ export const Checkbox = React.forwardRef<HTMLDivElement, CheckboxProps>(
         aria-label={rest['aria-label'] || ariaLabel || label}
         aria-describedby={describedBy}
         aria-invalid={error || undefined}
-        tabIndex={disabled ? -1 : 0}
+        // A host that manages focus itself (a grid's roving cell) passes its own.
+        tabIndex={disabled ? -1 : (rest.tabIndex ?? 0)}
       >
         <CheckboxIndicator checked={checked} indeterminate={indeterminate} size={size} />
         {/* Without a helper the label stays a bare span, so existing markup

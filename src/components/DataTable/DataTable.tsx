@@ -43,7 +43,7 @@ export interface DataTableColumn<R extends DataTableRow = DataTableRow> {
   render?: (row: R) => React.ReactNode;
   /** Whether this column names each row: its cells render as row headers, and its value names the row's checkbox ("Select Ada Lovelace"). One column per table. */
   rowHeader?: boolean;
-  /** Narrowest width a resize can reach, in pixels. */
+  /** Narrowest width a resize can reach, in pixels. Defaults to what the header needs: its padding, two letters of label, and its sort glyph and menu button. */
   minWidth?: number;
   /** Widest width a resize can reach, in pixels. */
   maxWidth?: number;
@@ -188,8 +188,13 @@ const DEFAULT_COLUMN_LABELS: DataTableColumnLabels = {
 const UTILITY_COLUMN_WIDTH = 40;
 /** How far one keyboard resize step moves a column edge. */
 const RESIZE_STEP = 16;
-/** The narrowest a column can be resized to when it sets no `minWidth`. */
-const DEFAULT_MIN_WIDTH = 48;
+/** The fewest pixels of label a column keeps when it sets no `minWidth`: two letters and an ellipsis. */
+const LABEL_MIN_WIDTH = 40;
+/** The header controls' widths, in the base theme: the sort glyph and the compact menu button, each with its gap. */
+const SORT_GLYPH_WIDTH = 24;
+const MENU_BUTTON_WIDTH = 36;
+/** A cell's inline padding at each density (`--padding-400`, `--padding-300`). */
+const CELL_PADDING = { default: 16, compact: 12 } as const;
 /** The widest a truncating column with no declared width starts: measured
     naturally it would be as wide as its longest text, which is what
     truncating exists to stop. */
@@ -724,7 +729,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
        shows: its inline buttons plus the More button, at the compact row
        control height, with the gap between them and the cell's padding. */
     const actionsFor = (row: R) => rowActions?.(row) ?? [];
-    const actionsWidth = rowActions
+    const actionsCount = rowActions
       ? Math.max(
           1,
           ...visibleRows.map((row) => {
@@ -732,8 +737,12 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
             const inline = list.filter((a) => a.inline).length;
             return inline + (list.some((a) => !a.inline) ? 1 : 0);
           }),
-        ) * 32 + 16 + 4 * 2
+        )
       : 0;
+    /* The width itself is CSS (`--ds-dt-w-actions` in DataTable.css), from
+       the live control height, gap and cell padding, so a theme's density
+       moves it with everything else; JS only says how many buttons. */
+    const actionsWidth = 'var(--ds-dt-w-actions)';
     const anyResizable = columns.some(canResize);
     const anyColumnFeature =
       columnMenu || anyResizable || columns.some(canMove) || anyPinned || reorderableRows;
@@ -777,11 +786,17 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     }, [needsMeasure, measured, tableEl, byKey, cellText]);
     const layoutReady = fixedLayout && !needsMeasure;
 
+    /* A column never gets narrower than its header needs: its padding, a
+       little of its label, and the controls it carries, so a resize can
+       never push a header's controls into its neighbour. */
+    const minWidthOf = (col: DataTableColumn<R>) =>
+      col.minWidth ??
+      2 * CELL_PADDING[size] + LABEL_MIN_WIDTH + (col.sortable ? SORT_GLYPH_WIDTH : 0) + (columnMenu ? MENU_BUTTON_WIDTH : 0);
     const clampWidth = (col: DataTableColumn<R>, width: number) =>
-      Math.round(Math.min(col.maxWidth ?? Number.MAX_SAFE_INTEGER, Math.max(col.minWidth ?? DEFAULT_MIN_WIDTH, width)));
+      Math.round(Math.min(col.maxWidth ?? Number.MAX_SAFE_INTEGER, Math.max(minWidthOf(col), width)));
     const widthOf = (key: string, widths: Record<string, number> = widthsState) => {
       const col = byKey.get(key)!;
-      return clampWidth(col, widths[key] ?? declaredOf(key) ?? measured[key] ?? DEFAULT_MIN_WIDTH);
+      return clampWidth(col, widths[key] ?? declaredOf(key) ?? measured[key] ?? minWidthOf(col));
     };
 
     /** Every width and pinned offset as custom properties on the table, from one width map. */
@@ -798,13 +813,13 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
         vars[`--ds-dt-off-${indexOfKey.get(key)}`] = `${offset}px`;
         offset += widthOf(key, widths);
       });
-      let fromEnd = actionsWidth;
+      const plusActions = (px: number) => (rowActions ? `calc(${px}px + var(--ds-dt-w-actions))` : `${px}px`);
+      let fromEnd = 0;
       [...endKeys].reverse().forEach((key) => {
-        vars[`--ds-dt-off-${indexOfKey.get(key)}`] = `${fromEnd}px`;
+        vars[`--ds-dt-off-${indexOfKey.get(key)}`] = plusActions(fromEnd);
         fromEnd += widthOf(key, widths);
       });
-      total += actionsWidth;
-      vars['--ds-dt-total'] = `${total}px`;
+      vars['--ds-dt-total'] = plusActions(total);
       return vars;
     };
     const writeVars = (vars: Record<string, string>) => {
@@ -1318,7 +1333,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
                 tabIndex={innerTab}
                 data-cell-control=""
               >
-                <span>{col.header}</span>
+                <span className={`${baseClass}__label`}>{col.header}</span>
                 <span
                   className={[
                     `${baseClass}__sort-icon`,
@@ -1333,7 +1348,11 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
                 </span>
               </button>
             ) : (
-              col.header || <span className="ds-visually-hidden">{col.key}</span>
+              col.header ? (
+                <span className={`${baseClass}__label`}>{col.header}</span>
+              ) : (
+                <span className="ds-visually-hidden">{col.key}</span>
+              )
             )}
             {columnMenu && (
               <span className={`${baseClass}__menu`} data-no-drag="">
@@ -1556,7 +1575,12 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
               className={tableClasses}
               role={gridMode ? 'grid' : undefined}
               aria-multiselectable={gridMode && selectable ? true : undefined}
-              style={layoutReady ? (layoutVars(widthsState) as React.CSSProperties) : undefined}
+              style={
+                {
+                  ...(layoutReady ? layoutVars(widthsState) : {}),
+                  ...(rowActions ? { '--ds-dt-actions': actionsCount } : {}),
+                } as React.CSSProperties
+              }
               onKeyDown={onGridKeyDown}
             >
               {caption && <caption className="ds-table__caption ds-visually-hidden">{caption}</caption>}

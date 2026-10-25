@@ -113,6 +113,15 @@
   min-width: var(--ds-dt-total);
 }
 
+/* Under fixed widths a cell clips what does not fit, so a narrow column
+   never draws over its neighbour. Menus and tooltips inside are fixed
+   panels and escape the clip. A pinned edge cell clips its content box
+   instead, since its scrolling-edge shadow is drawn outside the cell. */
+.ds-data-table__grid--fixed .ds-table__body .ds-table__cell:not(.ds-data-table__cell--pinned-edge),
+.ds-data-table__grid--fixed .ds-data-table__cell--pinned-edge > .ds-table__cell-content {
+  overflow: hidden;
+}
+
 .ds-data-table__filler {
   padding: 0;
 }
@@ -150,12 +159,22 @@
 /* One fixed layer order, so nothing changes place under the pointer:
    body cells, pinned body cells (1), a pinned body cell that is hovered or
    holds focus (2, so a menu it opens clears the rows below), the sticky
-   header (3), pinned header cells (4), a header being dragged (5), then the
-   resize guide and drop line (6). The header always wins: a row scrolled
-   half under it never paints over it, hovered or not. */
+   header (3), pinned header cells (4), a header being dragged (5), the
+   resize guide and drop line (6), and over everything any cell whose menu is
+   open (7), so a column's or a row's menu is never covered by a pinned cell
+   beside it. The header always wins over the rows: a row scrolled half
+   under it never paints over it, hovered or not. */
 .ds-table__body .ds-data-table__cell--pinned:hover,
 .ds-table__body .ds-data-table__cell--pinned:focus-within {
   z-index: 2;
+}
+
+/* A menu opened from a cell is drawn in that cell's layer, so the cell
+   rises above the whole table while the menu is open. */
+/* Specific enough to outrank the sticky and pinned header rules. */
+.ds-table .ds-table__head .ds-table__header-cell:has([aria-expanded='true']),
+.ds-table .ds-table__body .ds-table__cell:has([aria-expanded='true']) {
+  z-index: 7;
 }
 
 /* The pinned edge: a hairline always, and a soft shadow on the scrolling
@@ -238,7 +257,26 @@
 
 /* The options button holds its place in every state, so the header never
    shifts; it shows on hover, on focus, and always on a touch screen. */
+/* A header narrower than its label truncates the label, never the
+   controls: the sort glyph and the menu button keep their size and the
+   cell's padding, so a button's hover fill never reaches the divider. */
+.ds-data-table__header-inner .ds-data-table__sort {
+  min-width: 0;
+}
+
+.ds-data-table__label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ds-data-table__sort-icon {
+  flex-shrink: 0;
+}
+
 .ds-data-table__menu {
+  flex-shrink: 0;
   margin-inline-start: auto;
   opacity: 0;
   transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
@@ -356,6 +394,23 @@
 /* The actions column: its buttons side by side at the end, shown on the
    row's hover and focus (always on a touch screen) unless the table asks
    for them always. */
+/* The actions column holds the most buttons any row on the page shows
+   (--ds-dt-actions, from the component), at the compact control height,
+   with the gap between them and the cell's own padding either side. */
+.ds-data-table__frame > .ds-table {
+  --ds-dt-w-actions: calc(
+    var(--ds-dt-actions, 1) * var(--control-height-compact) + (var(--ds-dt-actions, 1) - 1) * var(--gap-100) +
+      2 * var(--padding-400)
+  );
+}
+
+.ds-data-table__frame > .ds-table--compact {
+  --ds-dt-w-actions: calc(
+    var(--ds-dt-actions, 1) * var(--control-height-compact) + (var(--ds-dt-actions, 1) - 1) * var(--gap-100) +
+      2 * var(--padding-300)
+  );
+}
+
 .ds-data-table__actions-row {
   justify-content: flex-end;
   gap: var(--gap-100);

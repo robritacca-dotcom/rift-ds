@@ -46,8 +46,8 @@ const shadowTokens: ShadowToken[] = [
     label: "Pinned column",
     token: "--shadow-table-pinned",
     tileClass: "elevationTilePinned",
-    light: "0 0 10px rgba(0, 0, 0, 0.14)",
-    dark: "0 0 10px rgba(0, 0, 0, 0.55)",
+    light: "0 0 12px rgba(0, 0, 0, 0.16)",
+    dark: "0 0 12px rgba(0, 0, 0, 0.6)",
     usedBy: "The scrolling edge of a pinned DataTable column, once content has scrolled under it",
   },
 ];

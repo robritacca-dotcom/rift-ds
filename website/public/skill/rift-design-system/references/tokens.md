@@ -319,7 +319,7 @@ Prefix: `--shadow-*`.
 | --- | --- | --- |
 | `--shadow-floating` | `0 4px 16px rgba(0, 0, 0, 0.12)` | `0 4px 16px rgba(0, 0, 0, 0.55)` |
 | `--shadow-modal` | `0 8px 32px rgba(0, 0, 0, 0.2)` | `0 8px 32px rgba(0, 0, 0, 0.6)` |
-| `--shadow-table-pinned` | `0 0 10px rgba(0, 0, 0, 0.14)` | `0 0 10px rgba(0, 0, 0, 0.55)` |
+| `--shadow-table-pinned` | `0 0 12px rgba(0, 0, 0, 0.16)` | `0 0 12px rgba(0, 0, 0, 0.6)` |
 
 ## Icons (4)
 

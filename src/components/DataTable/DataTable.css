@@ -168,25 +168,27 @@
   border-inline-start: var(--border-025) solid var(--color-table-divider);
 }
 
+/* The shadow is cast by the whole cell and clipped to the strip past its
+   inner edge, so it falls only on the cells scrolling beneath, at full
+   strength, and joins cell to cell into one edge down the column. */
 .ds-data-table__cell--pinned-edge::after {
   content: '';
   position: absolute;
-  inset-block: 0;
-  width: var(--border-025);
+  inset: 0;
   box-shadow: var(--shadow-table-pinned);
   opacity: 0;
   pointer-events: none;
   transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
+/* ds-allow(spacing): the clip reaches past the cell by the shadow's blur, not a layout step */
 .ds-data-table__cell--pinned-start.ds-data-table__cell--pinned-edge::after {
-  inset-inline-end: 0;
-  clip-path: inset(0 -16px 0 0);
+  clip-path: inset(0 -24px 0 100%);
 }
 
+/* ds-allow(spacing): the clip reaches past the cell by the shadow's blur, not a layout step */
 .ds-data-table__cell--pinned-end.ds-data-table__cell--pinned-edge::after {
-  inset-inline-start: 0;
-  clip-path: inset(0 0 0 -16px);
+  clip-path: inset(0 100% 0 -24px);
 }
 
 [data-scrolled-start] .ds-data-table__cell--pinned-start.ds-data-table__cell--pinned-edge::after,

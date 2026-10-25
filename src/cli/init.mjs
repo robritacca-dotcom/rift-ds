@@ -23,11 +23,12 @@
  *
  * `init app` sets a Next.js app router project up for the library the same
  * way, from dist/bin/templates/app/: a root wrapper that hands Next's Link
- * to every link-rendering component, and a component that renders the
- * colour-mode script before first paint, both under components/rift/. It
- * never edits the root layout (every app already has one): it prints the
- * lines to add instead, importing tokens.css and base.css, rendering the
- * script and wrapping the body.
+ * to every link-rendering component, a component that renders the
+ * colour-mode script before first paint, and the base theme's face through
+ * next/font, all under components/rift/. It never edits the root layout
+ * (every app already has one): it prints the whole layout to use instead,
+ * importing tokens.css, base.css and the font, rendering the script and
+ * wrapping the body, and points at init block for a first page.
  *
  * `init block <name>` copies one block, a whole starting page, from
  * dist/bin/templates/blocks/: the files its registry.json entry lists,
@@ -96,10 +97,11 @@ init
                   (${SKILL_NAME} unless --skill names another). Use --dir.
 
 init app
-  Sets a Next.js app router project up for the library: a root wrapper that
-  routes every link through Next's Link, and a component that applies the
-  stored colour mode before first paint, under components/rift/. Prints the
-  lines to add to your root layout; it never edits the layout itself.
+  Sets a Next.js app router project up for the library, under
+  components/rift/: a root wrapper that routes every link through Next's
+  Link, a component that applies the stored colour mode before first paint,
+  and the base theme's font. Prints the root layout to use; it never edits
+  the layout itself.
   Existing files are never overwritten.
 
   --app <dir>     The app router folder (default: app/ or src/app/, whichever exists)
@@ -261,18 +263,34 @@ function initApp({ app, dryRun }) {
       : `\n✓ App set up: ${written.length} files written, ${skipped.length} left alone.`
   );
   const rift = relative(appDir, join(dirname(appDir), 'components', 'rift')).split('\\').join('/');
-  console.log(`\nNext, in your root layout (${relative(process.cwd(), join(appDir, 'layout.tsx'))}):`);
-  console.log(`  1. Import the tokens and the base sheet, once, at the top:`);
-  console.log(`       import '${PACKAGE_NAME}/tokens/tokens.css';`);
-  console.log(`       import '${PACKAGE_NAME}/tokens/base.css';`);
-  console.log(`  2. Render the colour-mode script in <head>, and let React leave the attributes it sets alone:`);
-  console.log(`       import { ColorModeScript } from '${rift}/ColorModeScript';`);
-  console.log(`       <html lang="en" suppressHydrationWarning>`);
-  console.log(`         <head><ColorModeScript /></head>`);
-  console.log(`  3. Wrap the body's content so every link routes through Next:`);
-  console.log(`       import { RiftRoot } from '${rift}/RiftRoot';`);
-  console.log(`       <body><RiftRoot>{children}</RiftRoot></body>`);
-  console.log(`\nThen drop a <ThemeToggle /> (${PACKAGE_NAME}/components/ThemeToggle/ThemeToggle) wherever the mode should change.`);
+  const layoutFile = relative(process.cwd(), join(appDir, 'layout.tsx'));
+  console.log(`\nNext, make your root layout (${layoutFile}) this, keeping any metadata you have:\n`);
+  for (const line of [
+    `import '${PACKAGE_NAME}/tokens/tokens.css';`,
+    `import '${PACKAGE_NAME}/tokens/base.css';`,
+    `import '${rift}/font.css';`,
+    `import { riftFont } from '${rift}/font';`,
+    `import { ColorModeScript } from '${rift}/ColorModeScript';`,
+    `import { RiftRoot } from '${rift}/RiftRoot';`,
+    ``,
+    `export default function RootLayout({ children }: { children: React.ReactNode }) {`,
+    `  return (`,
+    `    <html lang="en" className={riftFont.variable} suppressHydrationWarning>`,
+    `      <head>`,
+    `        <ColorModeScript />`,
+    `      </head>`,
+    `      <body>`,
+    `        <RiftRoot>{children}</RiftRoot>`,
+    `      </body>`,
+    `    </html>`,
+    `  );`,
+    `}`,
+  ]) {
+    console.log(`  ${line}`);
+  }
+  console.log(`\nIf the layout imports a globals.css from create-next-app, drop that import (or empty the file):`);
+  console.log(`its body colours and font would cover the library's.`);
+  console.log(`\nThen add a first page: npx ${PACKAGE_NAME} init block dashboard (no name lists them).`);
   console.log(`Setup and theming: ${SITE_ORIGIN}/docs/get-started`);
 }
 
@@ -341,8 +359,8 @@ function initBlock({ name, app, dryRun }) {
       : `\n✓ ${block.label} block added: ${written.length} files written, ${skipped.length} left alone.`
   );
   console.log(`\nNext:`);
-  console.log(`  1. If you have not, run npx ${PACKAGE_NAME} init app and add the lines it prints to your root layout,`);
-  console.log(`     so the tokens, the base sheet and the colour mode are in place.`);
+  console.log(`  1. If you have not, run npx ${PACKAGE_NAME} init app and make your root layout the one it prints,`);
+  console.log(`     so the tokens, the base sheet, the font and the colour mode are in place.`);
   console.log(`  2. Open ${block.route} in your dev server. The files are yours: rename, restyle and grow them.`);
 }
 

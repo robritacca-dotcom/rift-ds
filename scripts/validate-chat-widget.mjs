@@ -51,6 +51,9 @@
  *      .env.chat.example, in both directions, so a template added or an env
  *      renamed cannot leave the page describing a scaffold that no longer
  *      exists.
+ *  10. The root layout get-started shows (LAYOUT_SNIPPET) is the one
+ *      `init app` prints, line for line, so a first-time user is never
+ *      handed two different layouts.
  *
  * Part of the validate-registry chain.
  */
@@ -416,6 +419,29 @@ for (const scaffoldName of ['chat', 'app', 'blocks']) {
     }
     for (const name of pageEnv) {
       if (!envNames.includes(name)) errors.push(`docs/chat/page.tsx ENV_VARS lists "${name}", which .env.chat.example does not set`);
+    }
+  }
+}
+
+/* 10. The root layout `init app` prints and the one get-started shows are
+   the same layout. The page's LAYOUT_SNIPPET is a hand mirror of the
+   lines initApp prints, read here with the package name and the default
+   components/rift path filled in, so the terminal and the page cannot
+   hand a first-time user two different files. */
+{
+  const initSource = read(join(repoRoot, 'src', 'cli', 'init.mjs'));
+  const printed = initSource.match(/for \(const line of \[\n([\s\S]*?)\n {2}\]\) \{/);
+  const pageSource = read(join(repoRoot, 'website', 'src', 'app', 'docs', 'get-started', 'page.tsx'));
+  const shown = pageSource.match(/const LAYOUT_SNIPPET = `([\s\S]*?)`;/);
+  if (!printed || !shown) {
+    errors.push('could not find the layout initApp prints (src/cli/init.mjs) or LAYOUT_SNIPPET (docs/get-started/page.tsx)');
+  } else {
+    const fromInit = [...printed[1].matchAll(/^\s+`(.*)`,$/gm)].map((m) =>
+      m[1].replaceAll('${PACKAGE_NAME}', PACKAGE_NAME).replaceAll('${rift}', '../components/rift')
+    );
+    const fromPage = shown[1].split('\n').filter((line) => !line.startsWith('// '));
+    if (fromInit.join('\n') !== fromPage.join('\n')) {
+      errors.push('get-started LAYOUT_SNIPPET does not match the root layout `init app` prints (src/cli/init.mjs initApp); change them together');
     }
   }
 }

@@ -25,19 +25,23 @@ Everything deep lives on the docs site: **[rift-ds.com](https://rift-ds.com/)**,
 
 ## Install
 
+In a Next.js app router project (a fresh `create-next-app` included), three commands give you a themed first page:
+
 ```bash
 npm install rift-ds
+npx rift-ds init app
+npx rift-ds init block dashboard
 ```
 
-Import the token stylesheet once, then use components:
+`init app` adds a root wrapper that routes every link through Next's `Link`, the script that applies the visitor's colour mode before first paint, and the base theme's font, then prints your root layout: make `app/layout.tsx` that, and drop the `globals.css` import `create-next-app` added. `init block dashboard` adds a dashboard inside an app shell (the sidebar, the top bar and the page header), laid out for a desktop and a phone; the other blocks are on the [blocks page](https://rift-ds.com/docs/blocks). Neither overwrites a file, and the files are yours to change.
+
+In any other React app, import the token stylesheet and the base sheet once, then use components:
 
 ```tsx
 import 'rift-ds/tokens/tokens.css';
-import 'rift-ds/tokens/base.css'; // optional: the reset and page every component is tuned against
+import 'rift-ds/tokens/base.css'; // the reset and page every component is tuned against
 import { Button, Card, Badge } from 'rift-ds';
 ```
-
-In a Next.js app router project, `npx rift-ds init app` adds the rest: a root wrapper that routes every link through Next's `Link`, and the script that applies the visitor's colour mode before first paint, which `ThemeToggle` then changes. It writes new files only and prints the lines to add to your layout. For a first screen, `npx rift-ds init block <name>` copies in a whole starting page (an app shell, a dashboard or a sign-in), laid out for a desktop and a phone, and the files are yours from then on. The [blocks page](https://rift-ds.com/docs/blocks) shows each one.
 
 React 19+ is a peer dependency. The package is ESM-only and resolved via `exports` subpaths: use a bundler that handles CSS and font imports from `node_modules` (Vite, Next.js, webpack) and set TypeScript's `moduleResolution` to `"bundler"` or `"nodenext"`. The Recharts-backed charts live behind `rift-ds/charts`, so the optional `recharts` peer dependency is only needed if you use them. The chat widget's subpaths bring their own optional peers (`react-markdown` and `remark-gfm` for the panel, `@anthropic-ai/sdk` for the server handlers, `@upstash/ratelimit` and `@upstash/redis` for the guardrails), needed only if you use them. Prefer owning the source? Pull single components through the shadcn CLI (`npx shadcn@latest add https://rift-ds.com/r/button.json`, with details in the [get-started guide](https://rift-ds.com/docs/get-started)), or clone this repo and build on it directly; all of it is MIT.
 

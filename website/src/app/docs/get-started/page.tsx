@@ -34,8 +34,9 @@ const { sidebarLinks } = getSidebarLinks(docsSidebarLinks, "/docs/get-started");
 
 /** On-this-page rail entries — ids match the section elements below, in document order. */
 const PAGE_SECTIONS = [
+  { id: "quick-start", label: "Start a Next.js app" },
   { id: "agent-quickstart", label: "Build with a coding agent" },
-  { id: "install", label: "Install" },
+  { id: "install", label: "Install in any React app" },
   { id: "shadcn-registry", label: "Or pull single components" },
   { id: "clone", label: "Or clone the repo" },
   { id: "dark-mode", label: "Dark mode" },
@@ -52,6 +53,35 @@ const PAGE_SECTIONS = [
 
 const INSTALL_SNIPPET = `npm install rift-ds`;
 
+/* The three-command start, and the root layout `init app` prints. The
+   layout is a hand mirror of the lines in src/cli/init.mjs's initApp,
+   held to them by scripts/validate-chat-widget.mjs, so the page and the
+   terminal never show two layouts. */
+const QUICK_START_SNIPPET = `npm install rift-ds
+npx rift-ds init app
+npx rift-ds init block dashboard`;
+
+const LAYOUT_SNIPPET = `// app/layout.tsx
+import 'rift-ds/tokens/tokens.css';
+import 'rift-ds/tokens/base.css';
+import '../components/rift/font.css';
+import { riftFont } from '../components/rift/font';
+import { ColorModeScript } from '../components/rift/ColorModeScript';
+import { RiftRoot } from '../components/rift/RiftRoot';
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en" className={riftFont.variable} suppressHydrationWarning>
+      <head>
+        <ColorModeScript />
+      </head>
+      <body>
+        <RiftRoot>{children}</RiftRoot>
+      </body>
+    </html>
+  );
+}`;
+
 /* One count per install path copied, so a launch can be judged on installs
    rather than page views (website/src/lib/analytics.ts owns the events). */
 const countInstall = (snippet: string) => () => trackEvent(SITE_EVENTS.copyInstall, { snippet });
@@ -61,8 +91,9 @@ const countStarter = (delivery: string) => () =>
 const USAGE_SNIPPET = `// Load the tokens once — primitives, semantic tokens, and both themes.
 import 'rift-ds/tokens/tokens.css';
 
-// Optional: the reset and the page every component is tuned against
+// The reset and the page every component is tuned against
 // (border-box sizing, no stray margins, the body's font and colours).
+// Leave it out only if your app already styles the page.
 import 'rift-ds/tokens/base.css';
 
 // Then import components — from the barrel…
@@ -328,14 +359,46 @@ export default function GetStartedPage() {
           {/* Content + Built-with rail */}
           <div className={styles.railLayout}>
             <div className={styles.railMain}>
-              {/* Agent quick start — before the human steps, because for many
-                  readers the agent IS the installer */}
+              {/* The quick start: three commands to a themed first page in
+                  Next.js, the path both a person and an agent should take
+                  (the agent starter below opens with the same commands). */}
+              <section id="quick-start" className={`${styles.section} animate-in animate-delay-2`}>
+                <SectionTitle title="Start a Next.js app" />
+                <p className={styles.sectionNote}>
+                  In a Next.js app router project, a fresh{" "}
+                  <code>create-next-app</code> included, three commands give you a
+                  first page with the layout, the spacing, the font and the colour
+                  mode in place:
+                </p>
+                <CodeBlock code={QUICK_START_SNIPPET} language="bash" showCopy onCopied={countInstall("quick-start")} />
+                <p className={styles.sectionNote}>
+                  <code>init app</code> adds the pieces the library needs under{" "}
+                  <code>components/rift/</code> and prints your root layout. Make{" "}
+                  <code>app/layout.tsx</code> this, keeping your metadata, and drop
+                  the <code>globals.css</code> import <code>create-next-app</code>{" "}
+                  added: its body colours and font cover the library&apos;s.
+                </p>
+                <CodeBlock code={LAYOUT_SNIPPET} language="tsx" showCopy />
+                <p className={styles.sectionNote}>
+                  <code>init block dashboard</code> adds a dashboard at{" "}
+                  <code>/dashboard</code>, inside an app shell with the sidebar,
+                  the top bar and the page header. Run your dev server and open
+                  it. The other blocks, and what each one writes, are on{" "}
+                  <Link href="/docs/blocks" className={styles.inlineLink}>
+                    Blocks
+                  </Link>
+                  . Neither command overwrites a file, and the files are yours to
+                  change.
+                </p>
+              </section>
+
+              {/* Agent quick start: the same path, handed to a coding agent */}
               <section id="agent-quickstart" className={`${styles.section} animate-in animate-delay-2`}>
                 <SectionTitle title="Build with a coding agent" />
                 <p className={styles.sectionNote}>
-                  The quickest start is one file, <code>{AGENT_STARTER_FILE}</code>:
-                  the install, the setup, the rules, and where to look
-                  things up. Copy it into your agent, or save it at your
+                  Working with an agent? Give it one file, <code>{AGENT_STARTER_FILE}</code>:
+                  it opens with the same three commands, then the setup for
+                  other apps, the rules, and where to look things up. Copy it into your agent, or save it at your
                   project root, where most coding agents read it on their
                   own.
                 </p>
@@ -397,7 +460,7 @@ export default function GetStartedPage() {
 
               {/* Install */}
               <section id="install" className={`${styles.section} animate-in animate-delay-2`}>
-                <SectionTitle title="Install" />
+                <SectionTitle title="Install in any React app" />
                 <p className={styles.sectionNote}>
                   React 19+ (react and react-dom) is the only required peer
                   dependency (recharts is an optional extra, for the recharts-backed charts). Everything else (component CSS, both

@@ -177,7 +177,10 @@ createRoot(document.getElementById('root')!).render(<ChatMount />);
       `declare module 'next/link' {\n  const Link: import('react').ComponentType<\n    import('react').ComponentPropsWithRef<'a'> & { href: string }\n  >;\n  export default Link;\n}\n` +
       // The blocks style themselves with CSS modules, which Next types for
       // an app; this consumer declares them the same way.
-      `declare module '*.module.css' {\n  const classes: Record<string, string>;\n  export default classes;\n}\n`
+      `declare module '*.module.css' {\n  const classes: Record<string, string>;\n  export default classes;\n}\n` +
+      // And the app scaffold's font loads through next/font, declared at the
+      // shape its call returns.
+      `declare module 'next/font/google' {\n  export function Nunito_Sans(options: Record<string, unknown>): { className: string; variable: string };\n}\n`
   );
   run('npx tsc -p tsconfig.json', chat);
   run('npx vite build', chat);

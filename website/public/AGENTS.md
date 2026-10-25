@@ -2,7 +2,23 @@
 
 You are building React UI with rift-ds 1.13.0. Follow this file before writing any code with it. It was generated from the library's registries, so every name in it exists.
 
-## Install
+## Start a Next.js app
+
+In a Next.js app router project (a fresh `create-next-app` is one), three commands give a themed first page:
+
+```bash
+npm install rift-ds
+npx rift-ds init app
+npx rift-ds init block dashboard
+```
+
+1. `init app` writes `components/rift/`: the wrapper that routes every link through Next's `Link`, the script that applies the stored colour mode before first paint, and the base theme's font. It prints the root layout to use. Make `app/layout.tsx` exactly that, keeping its metadata, and drop any `globals.css` import `create-next-app` left there: its body colours and font cover the library's.
+2. `init block <name>` copies in a whole starting page built from the library, laid out for desktop and phone: `app-shell`, `dashboard` and `sign-in`. With no name it lists them. The files are the project's own from then on, so change them freely.
+3. Start every new screen from a block, or inside the `AppShell` the app shell and dashboard blocks write to `components/blocks/`, never from a blank file, then fill it with library components.
+
+The init commands only add files and never overwrite one, so they are safe to run again.
+
+## Install anywhere else
 
 ```bash
 npm install rift-ds
@@ -12,7 +28,9 @@ npm install rift-ds
 - `recharts` ^3.0.0 is optional. Install it only if you import from `rift-ds/charts`.
 - It is ESM-only. Use a bundler that handles CSS and font imports (Vite, Next.js, webpack), with TypeScript's `moduleResolution` set to `"bundler"` or `"nodenext"`.
 
-## Setup
+## Setup by hand
+
+What `init app` does, for an app it does not cover:
 
 ```tsx
 import 'rift-ds/tokens/tokens.css'; // once, at the app root
@@ -21,30 +39,10 @@ import { Button } from 'rift-ds';
 ```
 
 - `base.css` paints the page (`body` on `--color-bg-page-primary`, `--color-text-primary` and `--font-family-primary`) and resets box sizing and margins; without it, components render too padded.
-- Dark mode is `data-theme="dark"` on `<html>`. `colorModeScript()` from `rift-ds/components/ThemeToggle/colorMode` applies the stored choice before first paint, and `ThemeToggle` changes it. In Next.js, `npx rift-ds init app` scaffolds both. A shipped theme is `data-brand` on `<html>`, with `rift-ds/tokens/presets/presets.css` imported once.
 - The base theme's typeface is not bundled. It is designed around Nunito Sans: load that (or your own) and set `--font-family-primary` to it. A shipped theme bundles its own faces, and the icon font always ships.
-- Wrap the tree in `ToastProvider` only if you call `useToast` (both from the `Toast` module). No other component needs a provider; `LinkProvider` (below) is optional and only routes links.
-
-In a routed app, hand the router's link to `LinkProvider`, or every component link reloads the page. In Next.js the root layout is a Server Component, so the provider goes in a client file of its own, mounted around `children` in the layout:
-
-```tsx
-'use client';
-import Link from 'next/link';
-import { LinkProvider } from 'rift-ds/behaviors/LinkProvider';
-
-export function AppLinks({ children }: { children: React.ReactNode }) {
-  return <LinkProvider linkComponent={Link}>{children}</LinkProvider>;
-}
-
-// app/layout.tsx
-<body><AppLinks>{children}</AppLinks></body>
-```
-
-A component rendered by a Server Component cannot read the provider, so pass `linkComponent={Link}` on that instance instead.
-
-## First screens
-
-Do not lay out a first page from a blank file. `npx rift-ds init block <name>` copies in a whole starting page built from the library, in a Next.js app router project: an app shell with the sidebar, top bar and page header, a dashboard, or a sign-in, laid out for desktop and phone. With no name it lists them. The files are the project's own from then on, so change them freely; it never overwrites a file.
+- Dark mode is `data-theme="dark"` on `<html>`. `colorModeScript()` from `rift-ds/components/ThemeToggle/colorMode` applies the stored choice before first paint, and `ThemeToggle` changes it. A shipped theme is `data-brand` on `<html>`, with `rift-ds/tokens/presets/presets.css` imported once.
+- In a routed app, wrap the tree in `LinkProvider` from `rift-ds/behaviors/LinkProvider` with the router's link, or every component link reloads the page. A component rendered by a Server Component cannot read it, so pass `linkComponent` on that instance instead.
+- Wrap the tree in `ToastProvider` only if you call `useToast` (both from the `Toast` module). No other component needs a provider.
 
 ## AI chat
 

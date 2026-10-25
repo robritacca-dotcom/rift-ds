@@ -272,7 +272,7 @@ import { Button } from '${PACKAGE_NAME}';
 import { Input } from '${PACKAGE_NAME}/components/Input/Input';
 \`\`\`
 
-In a Next.js app router project, \`npx ${PACKAGE_NAME} init app\` scaffolds the root wrapper (\`LinkProvider\` with Next's \`Link\`) and the colour-mode script, and prints the lines to add to the root layout. For a new screen, \`npx ${PACKAGE_NAME} init block <name>\` copies in a whole starting page built from the library (\`npx ${PACKAGE_NAME} init block\` lists them): start a first page from one rather than from a blank file.
+In a Next.js app router project, \`npx ${PACKAGE_NAME} init app\` scaffolds the root wrapper (\`LinkProvider\` with Next's \`Link\`), the colour-mode script and the base theme's font, and prints the root layout to use; then \`npx ${PACKAGE_NAME} init block dashboard\` adds a first page. Start a new screen from a block (\`npx ${PACKAGE_NAME} init block\` lists them) rather than from a blank file.
 
 The package is ESM-only, resolved via exports subpaths: use a bundler that handles CSS and font imports from node_modules (Vite, Next.js, webpack) and set TypeScript's \`moduleResolution\` to \`"bundler"\` (or \`"nodenext"\`). Components are provider-free with one exception: wrap the tree in \`ToastProvider\` if (and only if) the toast queue is used via \`useToast\`. One more is optional: in a routed app, \`LinkProvider\` from \`${PACKAGE_NAME}/behaviors/LinkProvider\` hands every client-rendered component your router's link, so its links navigate without a reload (in Next.js, mount it from a \`'use client'\` file, since the root layout is a Server Component); a component rendered on the server takes \`linkComponent\` on the instance instead.
 
@@ -609,6 +609,11 @@ export function assembleAgentStarter() {
   // The chat's peers are not listed: the init bin prints the exact set its
   // scaffold imports, and a second list here could only disagree with it.
   const widget = chatRegistry.widgets[0];
+  // The blocks the bin can copy in, read from the registry it ships.
+  const { blocks } = JSON.parse(
+    readFileSync(join(repoRoot, 'src', 'cli', 'templates', 'blocks', 'registry.json'), 'utf8')
+  );
+  const firstBlock = blocks.find((b) => b.name === 'dashboard') ?? blocks[0];
 
   // Written to the agent, never to the person: once the file is saved or
   // pasted, the agent is its only reader. How to save it is the page's job.
@@ -616,7 +621,23 @@ export function assembleAgentStarter() {
 
 You are building React UI with ${PACKAGE_NAME} ${PACKAGE_VERSION}. Follow this file before writing any code with it. It was generated from the library's registries, so every name in it exists.
 
-## Install
+## Start a Next.js app
+
+In a Next.js app router project (a fresh \`create-next-app\` is one), three commands give a themed first page:
+
+\`\`\`bash
+npm install ${PACKAGE_NAME}
+npx ${BIN_NAME} init app
+npx ${BIN_NAME} init block ${firstBlock.name}
+\`\`\`
+
+1. \`init app\` writes \`components/rift/\`: the wrapper that routes every link through Next's \`Link\`, the script that applies the stored colour mode before first paint, and the base theme's font. It prints the root layout to use. Make \`app/layout.tsx\` exactly that, keeping its metadata, and drop any \`globals.css\` import \`create-next-app\` left there: its body colours and font cover the library's.
+2. \`init block <name>\` copies in a whole starting page built from the library, laid out for desktop and phone: ${listJoin(blocks.map((b) => `\`${b.name}\``))}. With no name it lists them. The files are the project's own from then on, so change them freely.
+3. Start every new screen from a block, or inside the \`AppShell\` the app shell and dashboard blocks write to \`components/blocks/\`, never from a blank file, then fill it with library components.
+
+The init commands only add files and never overwrite one, so they are safe to run again.
+
+## Install anywhere else
 
 \`\`\`bash
 npm install ${PACKAGE_NAME}
@@ -626,7 +647,9 @@ npm install ${PACKAGE_NAME}
 - ${peer('recharts')} is optional. Install it only if you import from \`${subpath('./charts')}\`.
 - It is ESM-only. Use a bundler that handles CSS and font imports (Vite, Next.js, webpack), with TypeScript's \`moduleResolution\` set to \`"bundler"\` or \`"nodenext"\`.
 
-## Setup
+## Setup by hand
+
+What \`init app\` does, for an app it does not cover:
 
 \`\`\`tsx
 import '${PACKAGE_NAME}/tokens/tokens.css'; // once, at the app root
@@ -635,30 +658,10 @@ import { Button } from '${PACKAGE_NAME}';
 \`\`\`
 
 - \`base.css\` paints the page (\`body\` on ${token('--color-bg-page-primary')}, ${token('--color-text-primary')} and ${token('--font-family-primary')}) and resets box sizing and margins; without it, components render too padded.
-- Dark mode is \`data-theme="dark"\` on \`<html>\`. \`colorModeScript()\` from \`${PACKAGE_NAME}/components/ThemeToggle/colorMode\` applies the stored choice before first paint, and \`ThemeToggle\` changes it. In Next.js, \`npx ${PACKAGE_NAME} init app\` scaffolds both. A shipped theme is \`data-brand\` on \`<html>\`, with \`${subpath('./tokens/presets/*.css').replace('*', 'presets')}\` imported once.
 - The base theme's typeface is not bundled. It is designed around Nunito Sans: load that (or your own) and set ${token('--font-family-primary')} to it. A shipped theme bundles its own faces, and the icon font always ships.
-- Wrap the tree in \`ToastProvider\` only if you call \`useToast\` (both from the ${component('Toast')} module). No other component needs a provider; \`LinkProvider\` (below) is optional and only routes links.
-
-In a routed app, hand the router's link to \`LinkProvider\`, or every component link reloads the page. In Next.js the root layout is a Server Component, so the provider goes in a client file of its own, mounted around \`children\` in the layout:
-
-\`\`\`tsx
-'use client';
-import Link from 'next/link';
-import { LinkProvider } from '${subpath('./behaviors/LinkProvider')}';
-
-export function AppLinks({ children }: { children: React.ReactNode }) {
-  return <LinkProvider linkComponent={Link}>{children}</LinkProvider>;
-}
-
-// app/layout.tsx
-<body><AppLinks>{children}</AppLinks></body>
-\`\`\`
-
-A component rendered by a Server Component cannot read the provider, so pass \`linkComponent={Link}\` on that instance instead.
-
-## First screens
-
-Do not lay out a first page from a blank file. \`npx ${BIN_NAME} init block <name>\` copies in a whole starting page built from the library, in a Next.js app router project: an app shell with the sidebar, top bar and page header, a dashboard, or a sign-in, laid out for desktop and phone. With no name it lists them. The files are the project's own from then on, so change them freely; it never overwrites a file.
+- Dark mode is \`data-theme="dark"\` on \`<html>\`. \`colorModeScript()\` from \`${PACKAGE_NAME}/components/ThemeToggle/colorMode\` applies the stored choice before first paint, and \`ThemeToggle\` changes it. A shipped theme is \`data-brand\` on \`<html>\`, with \`${subpath('./tokens/presets/*.css').replace('*', 'presets')}\` imported once.
+- In a routed app, wrap the tree in \`LinkProvider\` from \`${subpath('./behaviors/LinkProvider')}\` with the router's link, or every component link reloads the page. A component rendered by a Server Component cannot read it, so pass \`linkComponent\` on that instance instead.
+- Wrap the tree in \`ToastProvider\` only if you call \`useToast\` (both from the ${component('Toast')} module). No other component needs a provider.
 
 ## AI chat
 

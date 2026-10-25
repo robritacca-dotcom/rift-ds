@@ -186,11 +186,20 @@ const handler = createMcpHandler(
           [
             `# Using ${pkg.name} ${pkg.version}`,
             "",
+            "In a Next.js app router project, start with three commands:",
+            "",
             "```bash",
             `npm install ${pkg.name}`,
+            `npx ${pkg.name} init app`,
+            `npx ${pkg.name} init block dashboard`,
             "```",
             "",
-            "Import the token stylesheet once, then use components from the barrel or deep subpaths:",
+            `'init app' writes components/rift/ (the link wrapper, the colour-mode script, the base theme's font) and prints the root layout to use: ` +
+              `make app/layout.tsx that, and drop any globals.css import create-next-app left. ` +
+              `'init block <name>' copies in a whole starting page built from the library, laid out for desktop and phone; with no name it lists them. ` +
+              `Start new screens from a block. Neither command overwrites a file. Guide: ${SITE_URL}/docs/blocks.`,
+            "",
+            "In any other React app, install the package, import the token stylesheet once, then use components from the barrel or deep subpaths:",
             "",
             "```tsx",
             `import '${pkg.name}/tokens/tokens.css';`,
@@ -206,12 +215,7 @@ const handler = createMcpHandler(
               `'${pkg.name}/tokens/base.css', imported after the tokens, does that and the reset the components are tuned against.`,
             "",
             `Colour mode: colorModeScript() from '${pkg.name}/components/ThemeToggle/colorMode' applies the stored choice before first paint, ` +
-              `and ThemeToggle changes it. In a Next.js app router project, 'npx ${pkg.name} init app' scaffolds the root wrapper ` +
-              `(LinkProvider with Next's Link) and the colour-mode script, and prints the lines to add to the root layout.`,
-            "",
-            `First screens: 'npx ${pkg.name} init block <name>' copies in a whole starting page built from the library ` +
-              `(an app shell, a dashboard, a sign-in), laid out for desktop and phone; with no name it lists them. ` +
-              `The files are the project's own from then on. Guide: ${SITE_URL}/docs/blocks.`,
+              `and ThemeToggle changes it.`,
             "",
             `Fonts: the primary face is not bundled; set --font-family-primary to your own (the base theme is set in Nunito Sans; the preset stylesheets bring their own faces). ` +
               `The Material Symbols icon font ships inside the package.`,

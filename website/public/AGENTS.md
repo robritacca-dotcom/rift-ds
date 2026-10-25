@@ -42,6 +42,10 @@ export function AppLinks({ children }: { children: React.ReactNode }) {
 
 A component rendered by a Server Component cannot read the provider, so pass `linkComponent={Link}` on that instance instead.
 
+## First screens
+
+Do not lay out a first page from a blank file. `npx rift-ds init block <name>` copies in a whole starting page built from the library, in a Next.js app router project: an app shell with the sidebar, top bar and page header, a dashboard, or a sign-in, laid out for desktop and phone. With no name it lists them. The files are the project's own from then on, so change them freely; it never overwrites a file.
+
 ## AI chat
 
 Do not build a chat UI by hand. `npx rift-ds init chat` scaffolds the package's chat widget into a Next.js app router project: the routes, the mount and an env example. It never overwrites a file, and it ends by printing the optional peers to install and the steps to wire it in. Follow that output. In any other framework, use the panel over your own endpoint or the headless engine instead: https://rift-ds.com/docs/chat covers both and the protocol, and every prop is on https://rift-ds.com/components/ai-chat.

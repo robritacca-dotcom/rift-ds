@@ -202,7 +202,16 @@ const handler = createMcpHandler(
             "",
             `Page colours: the token stylesheet defines custom properties and styles no element, so set ` +
               `background: var(--color-bg-page-primary), color: var(--color-text-primary) and ` +
-              `font-family: var(--font-family-primary) on body. Without it a dark theme renders dark components on a white page.`,
+              `font-family: var(--font-family-primary) on body. Without it a dark theme renders dark components on a white page. ` +
+              `'${pkg.name}/tokens/base.css', imported after the tokens, does that and the reset the components are tuned against.`,
+            "",
+            `Colour mode: colorModeScript() from '${pkg.name}/components/ThemeToggle/colorMode' applies the stored choice before first paint, ` +
+              `and ThemeToggle changes it. In a Next.js app router project, 'npx ${pkg.name} init app' scaffolds the root wrapper ` +
+              `(LinkProvider with Next's Link) and the colour-mode script, and prints the lines to add to the root layout.`,
+            "",
+            `First screens: 'npx ${pkg.name} init block <name>' copies in a whole starting page built from the library ` +
+              `(an app shell, a dashboard, a sign-in), laid out for desktop and phone; with no name it lists them. ` +
+              `The files are the project's own from then on. Guide: ${SITE_URL}/docs/blocks.`,
             "",
             `Fonts: the primary face is not bundled; set --font-family-primary to your own (the base theme is set in Nunito Sans; the preset stylesheets bring their own faces). ` +
               `The Material Symbols icon font ships inside the package.`,

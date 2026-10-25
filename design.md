@@ -407,6 +407,8 @@ A block is a whole starting page a consumer copies into their app with `npx rift
 2. **Responsive at every width.** Every block is laid out for a desktop, a laptop, a tablet and a phone, on the library's breakpoints: the app shell's sidebar floats beside the page above the mobile step and becomes AppSidebar's drawer below it, the top bar's search folds to its icon, the gutter tightens, and grids step down to one column. A block that only holds at one width is not finished.
 3. **One shell, shared.** The app shell (`components/blocks/AppShell.tsx`) is the floating sidebar, the top bar (CommandPaletteTrigger, AiButton, ThemeToggle, every control compact so the row holds one height) and the page header (Breadcrumb, an h1 at Heading 1, compact actions), around a content column capped at 1440px. Blocks that need it list it, and `init block` never overwrites, so the first writes it and the rest reuse it.
 4. **Placeholder content reads as finished.** The product is "Acme", the people are plain names, the numbers are plausible, and every comment tells the consumer what to replace, so a block looks right the moment it lands and is obvious to make their own.
+
+**Adding a block** touches five places, and the build fails on any one missed: the files at their target paths under `src/cli/templates/blocks/` with an entry in its `registry.json` (`validate-blocks.mjs`), the block's page in `BLOCK_PREVIEWS` (`website/src/data/block-previews.tsx`), a preview route folder under `website/src/app/docs/blocks/<name>/` copied from a sibling, that route in `CHROMELESS_ROUTES`, and a reason in the corpus generator's `EXCLUDED_ROUTES` (`validate-chat-coverage.mjs`). The index page, the bin's list and the consumer smoke read the registry and need nothing.
 ---
 
 ## Shapes

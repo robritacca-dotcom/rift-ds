@@ -90,6 +90,15 @@ export default function DocsPage() {
               </div>
             </TocCard>
 
+            {/* Blocks */}
+            <TocCard href="/docs/blocks" title="Blocks">
+              <div className={`${styles.circlePreview} ${styles.circleDashed}`}>
+                <span className="material-symbols-rounded" aria-hidden="true" style={{ color: "var(--color-text-secondary)" }}>
+                  view_quilt
+                </span>
+              </div>
+            </TocCard>
+
             {/* Claude MD */}
             <TocCard href="/blueprints/claude" title="Claude MD">
               <div className={`${styles.circlePreview} ${styles.circleNeutral}`}>

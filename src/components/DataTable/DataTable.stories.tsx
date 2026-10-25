@@ -208,3 +208,47 @@ export const Announcements: Story = {
   },
 };
 
+
+/**
+ * The order and the matches the table has always produced, pinned so the
+ * engine underneath can change without them moving: numbers sort
+ * numerically, empty values sort first ascending and last descending, text
+ * sorts naturally, and search reads every raw value on a row, displayed or
+ * not.
+ */
+export const SortAndSearchParity: Story = {
+  args: {
+    columns: [
+      { key: 'name', header: 'Customer', sortable: true, rowHeader: true },
+      { key: 'price', header: 'Price', sortable: true, align: 'right' },
+    ],
+    rows: [
+      { id: 'p1', values: { name: 'Item 10', price: 30, region: 'North' } },
+      { id: 'p2', values: { name: 'Item 2', price: null, region: 'South' } },
+      { id: 'p3', values: { name: 'Item 1', price: 4, region: 'North' } },
+      { id: 'p4', values: { name: 'item 3', price: 200, region: 'East' } },
+    ],
+    searchable: true,
+    caption: 'Parity',
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const names = () => canvas.getAllByRole('rowheader').map((cell) => cell.textContent);
+    await expect(names()).toEqual(['Item 10', 'Item 2', 'Item 1', 'item 3']);
+
+    const price = canvas.getByRole('button', { name: 'Price' });
+    await userEvent.click(price);
+    await expect(names()).toEqual(['Item 2', 'Item 1', 'Item 10', 'item 3']);
+    await userEvent.click(price);
+    await expect(names()).toEqual(['item 3', 'Item 10', 'Item 1', 'Item 2']);
+    await userEvent.click(price);
+    await expect(names()).toEqual(['Item 10', 'Item 2', 'Item 1', 'item 3']);
+
+    await userEvent.click(canvas.getByRole('button', { name: 'Customer' }));
+    await expect(names()).toEqual(['Item 1', 'Item 2', 'item 3', 'Item 10']);
+
+    // "north" matches the region, which no column shows.
+    await userEvent.type(canvas.getByRole('textbox', { name: 'Search' }), 'north');
+    await expect(names()).toEqual(['Item 1', 'Item 10']);
+  },
+};

@@ -5100,13 +5100,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
         "props": [
           {
             "name": "columns",
-            "type": "DataTableColumn[]",
+            "type": "DataTableColumn<R>[]",
             "required": true,
             "description": "Column definitions."
           },
           {
             "name": "rows",
-            "type": "DataTableRow[]",
+            "type": "R[]",
             "required": true,
             "description": "Row data, as raw values the table can sort and search."
           },
@@ -5214,10 +5214,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "selectRowLabel",
-            "type": "((row: DataTableRow) => string)",
+            "type": "((row: R) => string)",
             "required": false,
             "description": "Accessible name of a row's checkbox, given the row. Defaults to \"Select\"\nfollowed by the value of the `rowHeader` column (else the first column),\nand to \"Select row\" with the id only when that value is empty.",
-            "defaultValue": "(row: DataTableRow) => {\n        const nameKey = (columns.find((col) => col.rowHeader) ?? columns[0])?.key;\n        const name = nameKey === undefined ? undefined : row.values[nameKey];\n        return name == null || name === '' ? `Select row ${row.id}` : `Select ${name}`;\n      }"
+            "defaultValue": "(row: R) => {\n        const nameKey = (columns.find((col) => col.rowHeader) ?? columns[0])?.key;\n        const name = nameKey === undefined ? undefined : row.values[nameKey];\n        return name == null || name === '' ? `Select row ${row.id}` : `Select ${name}`;\n      }"
           },
           {
             "name": "sortLabel",

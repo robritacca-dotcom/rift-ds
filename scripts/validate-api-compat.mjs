@@ -79,7 +79,11 @@ const git = (...args) => execFileSync('git', args, { cwd: repoRoot, encoding: 'u
  * `subpath` + `export` for a name, `subpath` + `file` for a deep import,
  * `bin` for a binary.
  */
-const SANCTIONED_BREAKS = [];
+const SANCTIONED_BREAKS = [
+  { since: '1.14.0', component: 'DataTable', prop: 'columns', change: 'type', reason: 'DataTable became generic over its row type (R extends DataTableRow, defaulting to DataTableRow) with the TanStack engine. With the default, every one of these is exactly the type it was, so no consumer code changes; the gate compares type text, which now names R.' },
+  { since: '1.14.0', component: 'DataTable', prop: 'rows', change: 'type', reason: 'DataTable became generic over its row type (R extends DataTableRow, defaulting to DataTableRow) with the TanStack engine. With the default, every one of these is exactly the type it was, so no consumer code changes; the gate compares type text, which now names R.' },
+  { since: '1.14.0', component: 'DataTable', prop: 'selectRowLabel', change: 'type', reason: 'DataTable became generic over its row type (R extends DataTableRow, defaulting to DataTableRow) with the TanStack engine. With the default, every one of these is exactly the type it was, so no consumer code changes; the gate compares type text, which now names R.' },
+];
 
 /* ── Baseline ──────────────────────────────────────────────────────────── */
 

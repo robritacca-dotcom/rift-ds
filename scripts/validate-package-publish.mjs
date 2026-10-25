@@ -27,9 +27,16 @@
  *   themselves; the single-file ones are read off the dist manifest's
  *   exports, so a new asset subpath needs no edit here. publint still
  *   checks that the file is in the tarball.
+ *
+ * One rift rule rides here too, because it is about the shipped types: no
+ * .d.ts in dist/ may name @tanstack/. TanStack Table is the engine under
+ * DataTable, and every type it touches is wrapped in rift's own, so its
+ * major version never becomes part of rift's public API (the API gate holds
+ * every exported name, and a TanStack rename would otherwise fail it or
+ * force a rift major). Added 2026-10-25 with the engine.
  */
 import { spawnSync } from 'node:child_process';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { distExports } from './package-manifest.mjs';
@@ -60,6 +67,20 @@ const run = (label, script, args, opts = {}) => {
   }
 };
 
+/* No shipped type names TanStack: the engine stays an implementation detail. */
+const declarationFiles = (dir) =>
+  readdirSync(dir).flatMap((entry) => {
+    const full = join(dir, entry);
+    if (statSync(full).isDirectory()) return entry === 'node_modules' ? [] : declarationFiles(full);
+    return entry.endsWith('.d.ts') ? [full] : [];
+  });
+const leaks = declarationFiles(dist).filter((file) => readFileSync(file, 'utf8').includes('@tanstack/'));
+if (leaks.length > 0) {
+  console.error('✗ Shipped types name TanStack; wrap the type in a rift one instead:');
+  for (const file of leaks) console.error(`  - ${file.slice(dist.length + 1)}`);
+  process.exit(1);
+}
+
 run('publint', bin('publint'), [dist]);
 /* Single-file stylesheet subpaths: assets, excluded from module resolution. */
 const assetSubpaths = Object.entries(distExports())
@@ -78,6 +99,6 @@ run(
 );
 
 console.log(
-  `✓ Package publish surface valid — publint clean, every module subpath resolves for ESM and bundler consumers` +
+  `✓ Package publish surface valid — no shipped type names TanStack, publint clean, every module subpath resolves for ESM and bundler consumers` +
     (assetSubpaths.length > 0 ? ` (${assetSubpaths.length} stylesheet subpath(s) checked by publint alone).` : '.')
 );

@@ -1,6 +1,16 @@
 'use client';
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import {
+  columnFilteringFeature,
+  createFilteredRowModel,
+  createSortedRowModel,
+  globalFilteringFeature,
+  rowSelectionFeature,
+  rowSortingFeature,
+  tableFeatures,
+  useTable,
+} from '@tanstack/react-table';
 import { Table, type TableColumn, type TableRow } from '../Table/Table';
 import { Pagination, type PaginationProps } from '../Pagination/Pagination';
 import { Checkbox } from '../Checkbox/Checkbox';
@@ -11,7 +21,7 @@ import '../../behaviors/visually-hidden.css';
 import './DataTable.css';
 import '../../fonts/material-symbols.css';
 
-export interface DataTableColumn {
+export interface DataTableColumn<R extends DataTableRow = DataTableRow> {
   /** Unique column identifier, used as the key into each row's values. */
   key: string;
   /** Header label displayed in the column header. */
@@ -23,7 +33,7 @@ export interface DataTableColumn {
   /** Text alignment for cells in this column. */
   align?: 'left' | 'center' | 'right';
   /** Render the cell for a row; defaults to the row's raw value for this key. */
-  render?: (row: DataTableRow) => React.ReactNode;
+  render?: (row: R) => React.ReactNode;
   /** Whether this column names each row: its cells render as row headers, and its value names the row's checkbox ("Select Ada Lovelace"). One column per table. */
   rowHeader?: boolean;
 }
@@ -54,12 +64,32 @@ const compareValues = (
   return String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: 'base' });
 };
 
+/*
+ * The engine. TanStack Table runs the row model: the search, the sort and
+ * the selection state, while rift draws every pixel through Table. Nothing
+ * of TanStack's reaches the public API (every type here is rift's own), so
+ * its major version is an implementation detail. The features object is
+ * built once at module scope, as TanStack requires, and holds only what
+ * this table uses. Paging still slices the sorted rows here: today's pager
+ * clamps the page to the filtered count within the same render, which the
+ * engine's paginated model cannot do from props alone; it moves onto the
+ * engine when paging gains its controlled pair.
+ */
+const ENGINE_FEATURES = tableFeatures({
+  rowSortingFeature,
+  sortedRowModel: createSortedRowModel(),
+  columnFilteringFeature,
+  globalFilteringFeature,
+  filteredRowModel: createFilteredRowModel(),
+  rowSelectionFeature,
+});
+
 /** Props owned by DataTable itself — everything else falls through to the root element. */
-type DataTableOwnProps = {
+type DataTableOwnProps<R extends DataTableRow = DataTableRow> = {
   /** Column definitions. */
-  columns: DataTableColumn[];
+  columns: DataTableColumn<R>[];
   /** Row data, as raw values the table can sort and search. */
-  rows: DataTableRow[];
+  rows: R[];
   /** Rows per page. Setting this turns on the built-in pagination. */
   pageSize?: number;
   /** Adds a checkbox column with a select-all header. */
@@ -97,7 +127,7 @@ type DataTableOwnProps = {
    * followed by the value of the `rowHeader` column (else the first column),
    * and to "Select row" with the id only when that value is empty.
    */
-  selectRowLabel?: (row: DataTableRow) => string;
+  selectRowLabel?: (row: R) => string;
   /**
    * Accessible name of a sortable header's button, given the column's header
    * text (its `key` when the header is not a string) and its current sort
@@ -131,9 +161,9 @@ type DataTableOwnProps = {
   className?: string;
 };
 
-export interface DataTableProps
-  extends DataTableOwnProps,
-    Omit<React.ComponentPropsWithoutRef<'div'>, keyof DataTableOwnProps> {}
+export interface DataTableProps<R extends DataTableRow = DataTableRow>
+  extends DataTableOwnProps<R>,
+    Omit<React.ComponentPropsWithRef<'div'>, keyof DataTableOwnProps<R>> {}
 
 /**
  * DataTable is the wired version of Table: sorting on header click, a search
@@ -145,10 +175,12 @@ export interface DataTableProps
  * Rows carry raw values rather than rendered nodes; a column's `render`
  * turns them into cells when text isn't enough. For server-driven data,
  * control `sort` and slot your own filters into `toolbar`.
+ *
+ * Generic over the row type, so a row may carry more than its `values` and
+ * `render` reads it typed; the default is today's `DataTableRow`. The ref and
+ * any unrecognised props reach the root element.
  */
-export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
-  (
-    {
+export function DataTable<R extends DataTableRow = DataTableRow>({
       columns,
       rows,
       pageSize,
@@ -167,7 +199,7 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
       caption,
       emptyState,
       selectAllLabel = 'Select all rows on this page',
-      selectRowLabel = (row: DataTableRow) => {
+      selectRowLabel = (row: R) => {
         const nameKey = (columns.find((col) => col.rowHeader) ?? columns[0])?.key;
         const name = nameKey === undefined ? undefined : row.values[nameKey];
         return name == null || name === '' ? `Select row ${row.id}` : `Select ${name}`;
@@ -184,10 +216,9 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
       paginationLabels,
       emptyStateLabels,
       className = '',
+      ref,
       ...rest
-    },
-    ref,
-  ) => {
+    }: DataTableProps<R>) {
     const baseClass = 'ds-data-table';
 
     const [search, setSearch] = useState('');
@@ -242,24 +273,48 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
       );
     };
 
-    const filteredRows = useMemo(() => {
-      if (!search.trim()) return rows;
-      const needle = search.trim().toLowerCase();
-      return rows.filter((row) =>
-        Object.values(row.values).some(
-          (value) => value != null && String(value).toLowerCase().includes(needle),
-        ),
-      );
-    }, [rows, search]);
+    /* The engine's columns: one per rift column, reading the raw value, with
+       rift's own comparator (numbers numerically, text naturally, empty
+       values first ascending) so the order is exactly what it was. Built from
+       the column keys alone, so an inline `columns` array does not rebuild the
+       row model on every render. */
+    const columnKeys = columns.map((col) => col.key).join('\u0000');
+    const engineColumns = useMemo(
+      () =>
+        columnKeys.split('\u0000').map((key) => ({
+          id: key,
+          accessorFn: (row: R) => row.values[key],
+          sortFn: (a: { original: R }, b: { original: R }) =>
+            compareValues(a.original.values[key], b.original.values[key]),
+          sortUndefined: false as const,
+        })),
+      [columnKeys],
+    );
 
-    const sortedRows = useMemo(() => {
-      if (!currentSort) return filteredRows;
-      const { key, direction } = currentSort;
-      const factor = direction === 'asc' ? 1 : -1;
-      return [...filteredRows].sort(
-        (a, b) => compareValues(a.values[key], b.values[key]) * factor,
-      );
-    }, [filteredRows, currentSort]);
+    const needle = search.trim().toLowerCase();
+    const table = useTable({
+      features: ENGINE_FEATURES,
+      columns: engineColumns,
+      data: rows,
+      getRowId: (row: R) => row.id,
+      state: {
+        sorting: currentSort ? [{ id: currentSort.key, desc: currentSort.direction === 'desc' }] : [],
+        globalFilter: needle || undefined,
+        rowSelection: Object.fromEntries(currentSelection.map((id) => [id, true as const])),
+      },
+      /* The search matches any raw value on the row, displayed or not, case
+         insensitively, as it always has: so every column is eligible and the
+         test reads the whole row rather than the one column. */
+      getColumnCanGlobalFilter: () => true,
+      globalFilterFn: (row: { original: R }, _columnId: string, value: unknown) => {
+        const term = String(value ?? '');
+        return Object.values(row.original.values).some(
+          (cell) => cell != null && String(cell).toLowerCase().includes(term),
+        );
+      },
+    });
+
+    const sortedRows = table.getSortedRowModel().rows.map((row) => row.original);
 
     const pageCount = pageSize ? Math.max(1, Math.ceil(sortedRows.length / pageSize)) : 1;
     const clampedPage = Math.min(page, pageCount);
@@ -466,7 +521,4 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps>(
         )}
       </div>
     );
-  },
-);
-
-DataTable.displayName = 'DataTable';
+}

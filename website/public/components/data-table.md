@@ -14,8 +14,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same dat
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| columns | `DataTableColumn[]` | yes |  | Column definitions. |
-| rows | `DataTableRow[]` | yes |  | Row data, as raw values the table can sort and search. |
+| columns | `DataTableColumn<R>[]` | yes |  | Column definitions. |
+| rows | `R[]` | yes |  | Row data, as raw values the table can sort and search. |
 | pageSize | `number` | no |  | Rows per page. Setting this turns on the built-in pagination. |
 | selectable | `boolean` | no | `false` | Adds a checkbox column with a select-all header. |
 | selectedIds | `string[]` | no |  | Selected row ids for controlled use. Pair with `onSelectionChange`. |
@@ -32,7 +32,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same dat
 | caption | `string` | no |  | Accessible caption for the underlying table (visually hidden). |
 | emptyState | `ReactNode` | no |  | What to render when no rows match — defaults to a built-in empty state. |
 | selectAllLabel | `string` | no | `Select all rows on this page` | Accessible name of the select-all checkbox in the header, shown with `selectable`. |
-| selectRowLabel | `((row: DataTableRow) => string)` | no | `(row: DataTableRow) => {         const nameKey = (columns.find((col) => col.rowHeader) ?? columns[0])?.key;         const name = nameKey === undefined ? undefined : row.values[nameKey];         return name == null \|\| name === '' ? `Select row ${row.id}` : `Select ${name}`;       }` | Accessible name of a row's checkbox, given the row. Defaults to "Select" followed by the value of the `rowHeader` column (else the first column), and to "Select row" with the id only when that value is empty. |
+| selectRowLabel | `((row: R) => string)` | no | `(row: R) => {         const nameKey = (columns.find((col) => col.rowHeader) ?? columns[0])?.key;         const name = nameKey === undefined ? undefined : row.values[nameKey];         return name == null \|\| name === '' ? `Select row ${row.id}` : `Select ${name}`;       }` | Accessible name of a row's checkbox, given the row. Defaults to "Select" followed by the value of the `rowHeader` column (else the first column), and to "Select row" with the id only when that value is empty. |
 | sortLabel | `((header: string, direction: "desc" \| "asc" \| null) => string)` | no | `(header: string) => header` | Accessible name of a sortable header's button, given the column's header text (its `key` when the header is not a string) and its current sort direction, `null` when unsorted. Defaults to the header text alone: the sort state is the header's `aria-sort`, so naming it here too would read it twice. |
 | sortAnnouncement | `((header: string, direction: "desc" \| "asc" \| null) => string)` | no | `(header: string, direction: DataTableSort['direction'] \| null) =>         direction === null           ? 'Sort cleared'           : `Sorted by ${header}, ${direction === 'asc' ? 'ascending' : 'descending'}`` | Announced when the sort changes, given the header text and the new direction, `null` when cleared. Defaults to "Sorted by Name, ascending" or "Sort cleared". |
 | pageAnnouncement | `((page: number, pageCount: number, first: number, last: number, total: number) => string)` | no | `(page: number, pageCount: number, first: number, last: number, total: number) =>         `Page ${page} of ${pageCount}, rows ${first} to ${last} of ${total}`` | Announced when the page changes, given the page, the page count, the first and last row shown and the total. Defaults to "Page 2 of 7, rows 21 to 40 of 140". |

@@ -8,7 +8,6 @@
   border-collapse: separate;
   border-spacing: 0;
   border-radius: var(--radius-200); /* 8px */
-  overflow: hidden;
 
   /* Typography */
   font-family: var(--font-paragraph-family);
@@ -17,6 +16,14 @@
   line-height: var(--font-paragraph-line-height);
   letter-spacing: var(--font-paragraph-letter-spacing);
   color: var(--color-text-primary);
+}
+
+/* The plain table clips its own rounded corners. The bordered table does
+   not: its wrapper is the scroll container and clips for it, which leaves
+   the table itself free of overflow so sticky headers and pinned columns can
+   stick to the scrolling wrapper. */
+.ds-table:not(.ds-table--bordered) {
+  overflow: hidden;
 }
 
 /* ============================================

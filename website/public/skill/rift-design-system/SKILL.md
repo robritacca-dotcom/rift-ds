@@ -38,7 +38,7 @@ Components read semantic tokens (`--color-*`, `--radius-*`, `--font-*`, `--motio
 
 ## Charts
 
-Components that import recharts ship from `rift-ds/charts` and need the optional recharts peer dependency. Everything in the main barrel is dependency-free.
+Components that import recharts ship from `rift-ds/charts` and need the optional recharts peer dependency. Everything in the main barrel needs no optional peer: its one runtime dependency, TanStack Table under DataTable, installs with the package.
 
 ## Fonts
 

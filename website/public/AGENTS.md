@@ -24,7 +24,7 @@ The init commands only add files and never overwrite one, so they are safe to ru
 npm install rift-ds
 ```
 
-- Required peers: `react` ^19.0.0 and `react-dom` ^19.0.0. The package has no runtime dependencies, so add nothing else for it.
+- Required peers: `react` ^19.0.0 and `react-dom` ^19.0.0. It brings its own runtime dependency, `@tanstack/react-table` ^9.3.1 (the engine under `DataTable`), which installs with it, so add nothing else for it.
 - `recharts` ^3.0.0 is optional. Install it only if you import from `rift-ds/charts`.
 - It is ESM-only. Use a bundler that handles CSS and font imports (Vite, Next.js, webpack), with TypeScript's `moduleResolution` set to `"bundler"` or `"nodenext"`.
 

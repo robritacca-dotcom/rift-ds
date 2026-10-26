@@ -29,10 +29,11 @@
   cursor: pointer;
   transition: border-color var(--motion-duration-base) var(--motion-ease-standard);
   outline: none;
-  /* The row height, border included (--control-height-*). */
+  /* The row height is a floor, not a fixed height (--control-height-*):
+     the cell is two lines, a name over a detail, so the trigger grows
+     past the row to hold both and keeps its vertical padding. */
   box-sizing: border-box;
-  height: var(--control-height-default);
-  padding-block: 0;
+  min-height: var(--control-height-default);
 }
 
 .ds-rich-dropdown__trigger:hover:not(:focus-visible) {

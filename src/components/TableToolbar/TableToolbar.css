@@ -269,6 +269,11 @@
   align-self: flex-start;
 }
 
+/* Folded actions read as a list: each a tertiary button, at its start. */
+.ds-table-toolbar__view-actions > .ds-button {
+  align-self: flex-start;
+}
+
 .ds-table-toolbar__view-heading {
   font-family: var(--font-caption-family);
   font-size: var(--font-caption-size);
@@ -357,12 +362,34 @@
    same controls; the bar's own row stays where it was. */
 .ds-table-toolbar__bulk--floating {
   position: fixed;
-  inset-inline: var(--padding-300);
-  inset-block-start: auto;
-  inset-block-end: calc(var(--padding-300) + env(safe-area-inset-bottom, 0px));
+  /* Sized to the visible width, so a page that overflows sideways (which
+     widens the layout viewport) cannot push it past the screen's edge. */
+  inset-inline: var(--padding-300) auto;
+  width: calc(100dvw - 2 * var(--padding-300));
+  /* Anchored to the dynamic viewport's foot, as the chat panel is: a phone
+     browser's toolbar changes the layout viewport, which a bottom inset
+     would follow off screen. */
+  inset-block-start: 100dvh;
+  inset-block-end: auto;
+  translate: 0 calc(-100% - var(--padding-300) - env(safe-area-inset-bottom, 0px));
   z-index: var(--layer-sticky);
   padding: var(--padding-200);
   border-radius: var(--radius-600);
-  background-color: var(--color-bg-container-primary);
+  /* The page fill, as a popover's: the container fill is semi-transparent. */
+  background-color: var(--color-bg-page-primary);
   box-shadow: var(--shadow-floating);
+}
+
+/* In a phone's sheet the panels take the sheet's width, not the fixed
+   widths that keep a popover from growing. */
+.ds-table-toolbar__sheet .ds-table-toolbar__sorts,
+.ds-table-toolbar__sheet .ds-table-toolbar__view,
+.ds-table-toolbar__sheet .ds-table-toolbar__filter-panel,
+.ds-table-toolbar__sheet .ds-data-table__filter-editor {
+  width: auto;
+  min-width: 0;
+}
+
+.ds-table-toolbar__sheet .ds-table-toolbar__search {
+  max-width: none;
 }

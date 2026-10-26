@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react';
+import { createPortal } from 'react-dom';
 import { Badge } from '../Badge/Badge';
 import { Button } from '../Button/Button';
 import { Chip } from '../Chip/Chip';
@@ -8,6 +9,7 @@ import { Dropdown } from '../Dropdown/Dropdown';
 import { CircularButton } from '../CircularButton/CircularButton';
 import { DropdownMenu } from '../DropdownMenu/DropdownMenu';
 import { Input } from '../Input/Input';
+import { Drawer } from '../Drawer/Drawer';
 import { Popover } from '../Popover/Popover';
 import { SegmentedControl } from '../SegmentedControl/SegmentedControl';
 import { ToggleSwitch } from '../ToggleSwitch/ToggleSwitch';
@@ -117,12 +119,16 @@ export interface TableToolbarLabels {
   count: (shown: number, total: number) => string;
   /** The Filter icon's name, given how many filters are on. */
   filters: (count: number) => string;
+  /** The title of the filter panel when a phone opens it as a sheet. */
+  filterSheet: string;
   /** The folded bar's filter panel button that adds a filter. */
   addFilter: string;
   /** The chip the filters that do not fit fold into, given how many. */
   moreFilters: (count: number) => string;
   /** The More button, whose panel holds the density switch and the columns. */
   more: string;
+  /** The More panel's heading over the secondary actions it holds when the bar is folded. */
+  actionsSection: string;
   /** The Sort button, given how many sorts are set. */
   sort: (count: number) => string;
   /** The sort panel's button that adds a sort. */
@@ -167,9 +173,11 @@ const DEFAULT_LABELS: TableToolbarLabels = {
   densityCompact: 'Compact',
   count: (shown, total) => (shown === total ? `${total} result${total === 1 ? '' : 's'}` : `${shown} of ${total}`),
   filters: (count) => (count > 0 ? `Filters, ${count} on` : 'Filter'),
+  filterSheet: 'Filters',
   addFilter: 'Add filter',
   moreFilters: (count) => `+${count}`,
   more: 'More',
+  actionsSection: 'Actions',
   sort: (count) => (count > 0 ? `Sort, ${count} on` : 'Sort'),
   addSort: 'Add sort',
   clearSorts: 'Clear sorts',
@@ -247,7 +255,7 @@ type TableToolbarOwnProps = {
   sortable?: boolean;
   /** The page's main action (New project, Invite), drawn as the primary button at the bar's end. */
   primaryAction?: TableToolbarAction;
-  /** Actions beside the primary one (Export, Import), drawn as icon buttons before it, each named and tooltipped by its label. */
+  /** Actions beside the primary one (Export, Import), drawn as icon buttons before it, each named and tooltipped by its label; folded, they move into the More panel. */
   secondaryActions?: TableToolbarAction[];
   /** Any other controls at the bar's end, after the actions. */
   actions?: React.ReactNode;
@@ -271,6 +279,63 @@ const subscribePhone = (onChange: () => void) => {
   return () => query.removeEventListener('change', onChange);
 };
 const isPhone = () => window.matchMedia(PHONE_QUERY).matches;
+
+/**
+ * A control's panel: a Popover anchored to its trigger, or on a phone
+ * screen a bottom sheet (Drawer) titled with the control's name, the way
+ * the playground's controls open there, since a popover holding fields
+ * and their own lists is too cramped at a phone's width.
+ */
+function ToolbarPanel({
+  sheet,
+  title,
+  size,
+  ariaLabel,
+  position,
+  content,
+  footer,
+  onOpenChange,
+  children,
+}: {
+  sheet: boolean;
+  title: string;
+  size: 'default' | 'compact';
+  ariaLabel: string;
+  position?: 'top' | 'bottom' | 'left' | 'right';
+  content: React.ReactNode;
+  /** What the sheet pins at its foot, out of the scrolling body. */
+  footer?: React.ReactNode;
+  onOpenChange?: (open: boolean) => void;
+  children: React.ReactElement<{ onClick?: () => void; 'aria-haspopup'?: string; 'aria-expanded'?: boolean }>;
+}) {
+  const [open, setOpen] = useState(false);
+  if (!sheet)
+    return (
+      <Popover size={size} ariaLabel={ariaLabel} position={position} onOpenChange={onOpenChange} content={content}>
+        {children}
+      </Popover>
+    );
+  const change = (next: boolean) => {
+    setOpen(next);
+    onOpenChange?.(next);
+  };
+  return (
+    <>
+      {React.cloneElement(children, { onClick: () => change(true), 'aria-haspopup': 'dialog', 'aria-expanded': open })}
+      <Drawer
+        open={open}
+        onOpenChange={change}
+        title={title}
+        side="bottom"
+        size="lg"
+        footer={footer}
+        className="ds-table-toolbar__sheet"
+      >
+        {content}
+      </Drawer>
+    </>
+  );
+}
 
 /** One piece of bar state: the prop when given, else the surrounding table's, else the bar's own. */
 function useBound<T>(
@@ -633,7 +698,8 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
     const bulkMode = selectedCount > 0;
     /* On a phone the bulk bar floats at the bottom of the screen, above the
        safe area, where a thumb reaches it, and the bar's own row stays. */
-    const floating = useSyncExternalStore(subscribePhone, isPhone, () => false) && bulkMode;
+    const phoneScreen = useSyncExternalStore(subscribePhone, isPhone, () => false);
+    const floating = phoneScreen && bulkMode;
     const matching = table?.matchingIds ?? [];
     const allMatching = matching.length > 0 && matching.every((id) => table!.selectedIds.includes(id));
     const selection: TableToolbarSelection = { ids: table?.selectedIds ?? [], allMatching, except: [] };
@@ -782,6 +848,15 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
     const updateFilter = (next: Filter) => setFilters(filters.map((f) => (f.id === next.id ? next : f)));
     const removeFilter = (id: string) => setFilters(filters.filter((f) => f.id !== id));
 
+    /* Add filter and Clear filters: the panel's last row, or on a phone the sheet's pinned foot. */
+    const filterActions = (
+      <div className="ds-table-toolbar__filter-actions">
+        {addFilterMenu(<Button variant="tertiary" size={size} iconLeft="add" label={labels.addFilter} />)}
+        {filters.length > 0 && (
+          <Button variant="tertiary" size={size} label={filterLabels.clearAll} onClick={() => setFilters([])} />
+        )}
+      </div>
+    );
     const panelContent = (
       <div className="ds-table-toolbar__filter-panel">
         {filters.map((filter) => {
@@ -804,12 +879,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
             </div>
           );
         })}
-        <div className="ds-table-toolbar__filter-actions">
-          {addFilterMenu(<Button variant="tertiary" size={size} iconLeft="add" label={labels.addFilter} />)}
-          {filters.length > 0 && (
-            <Button variant="tertiary" size={size} label={filterLabels.clearAll} onClick={() => setFilters([])} />
-          )}
-        </div>
+        {!phoneScreen && filterActions}
       </div>
     );
     const dropIncomplete = (open: boolean) => {
@@ -821,14 +891,17 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
        a value. */
     const filterPanel = (
       <span className="ds-table-toolbar__badge-host">
-        <Popover
+        <ToolbarPanel
+          sheet={phoneScreen}
+          title={labels.filterSheet}
           size={size}
           ariaLabel={labels.filters(activeFilters)}
           onOpenChange={dropIncomplete}
           content={panelContent}
+          footer={filterActions}
         >
           {filterIcon}
-        </Popover>
+        </ToolbarPanel>
         {activeFilters > 0 && (
           <span className="ds-table-toolbar__badge" aria-hidden="true">
             <Badge label={String(activeFilters)} variant="info" />
@@ -944,7 +1017,9 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
     );
     const sortControl = sortable && sortableColumns.length > 0 && (
       <span className="ds-table-toolbar__badge-host">
-        <Popover
+        <ToolbarPanel
+          sheet={phoneScreen}
+          title={labels.sort(0)}
           size={size}
           ariaLabel={labels.sort(sorts.length)}
           position="bottom"
@@ -1039,7 +1114,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
             ariaLabel={labels.sort(sorts.length)}
             tooltip={labels.sort(sorts.length)}
           />
-        </Popover>
+        </ToolbarPanel>
         {/* Folded, the headers' sort marks may be out of view, so the icon carries the count. */}
         {narrow && sorts.length > 0 && (
           <span className="ds-table-toolbar__badge" aria-hidden="true">
@@ -1051,13 +1126,37 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
 
     /* The view controls (density, then the columns) share one More panel,
        so the bar keeps its room for search and the chips. */
-    const moreControl = (density || columnsList) && (
-      <Popover
+    /* Folded, the secondary actions move into the More panel, first: a
+       phone's width holds the bar's icon controls and its primary action,
+       not every action as an icon besides. */
+    const foldedActions = narrow ? secondaryActions : [];
+    const moreControl = (density || columnsList || foldedActions.length > 0) && (
+      <ToolbarPanel
+        sheet={phoneScreen}
+        title={labels.more}
         size={size}
         ariaLabel={labels.more}
         position="bottom"
         content={
           <div className="ds-table-toolbar__view">
+            {foldedActions.length > 0 && (
+              <div className="ds-table-toolbar__view-section ds-table-toolbar__view-actions">
+                <span className="ds-table-toolbar__view-heading" aria-hidden="true">
+                  {labels.actionsSection}
+                </span>
+                {foldedActions.map((action) => (
+                  <Button
+                    key={action.id}
+                    variant="tertiary"
+                    size={size}
+                    iconLeft={action.icon}
+                    label={action.label}
+                    disabled={action.disabled}
+                    onClick={action.onSelect}
+                  />
+                ))}
+              </div>
+            )}
             {density && (
               <div className="ds-table-toolbar__view-section">
                 <span className="ds-table-toolbar__view-heading" aria-hidden="true">
@@ -1084,7 +1183,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
           ariaLabel={labels.more}
           tooltip={labels.more}
         />
-      </Popover>
+      </ToolbarPanel>
     );
 
     const showFilters = filterable && filterableColumns.length > 0;
@@ -1102,7 +1201,11 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
         <span className="ds-visually-hidden" aria-live="polite" aria-atomic="true">
           {announcement}
         </span>
-        {bulkBar}
+        {/* Floating, the bar is portalled to the page body: fixed to the
+            screen, not to whatever ancestor a filter or transform makes the
+            containing block. phoneScreen is false on the server, so this
+            only ever runs in the browser. */}
+        {floating && bulkBar ? createPortal(bulkBar, document.body) : bulkBar}
         <div
           className="ds-table-toolbar__main"
           inert={(bulkMode && !floating) || undefined}
@@ -1142,7 +1245,9 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
               <span className="ds-table-toolbar__count">{labels.count(shown, total)}</span>
             )}
             {searchable && narrow && (
-              <Popover
+              <ToolbarPanel
+                sheet={phoneScreen}
+                title={labels.search}
                 size={size}
                 ariaLabel={labels.search}
                 content={<div className="ds-table-toolbar__search-panel">{searchField}</div>}
@@ -1154,39 +1259,40 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
                   ariaLabel={labels.search}
                   tooltip={labels.search}
                 />
-              </Popover>
+              </ToolbarPanel>
             )}
             {/* The icon controls sit together: Filter, Columns, then density. */}
             {showFilters && (narrow ? filterPanel : addFilterMenu(filterIcon))}
             {sortControl}
             {moreControl}
-            {(primaryAction || secondaryActions.length > 0) && (
+            {(primaryAction || (!narrow && secondaryActions.length > 0)) && (
               <span className="ds-table-toolbar__actions">
-                {secondaryActions.map((action) =>
-                  typeof action.icon === 'string' ? (
-                    <CircularButton
-                      key={action.id}
-                      icon={action.icon}
-                      variant="tertiary"
-                      size={size}
-                      ariaLabel={action.label}
-                      tooltip={action.label}
-                      disabled={action.disabled}
-                      onClick={action.onSelect}
-                    />
-                  ) : (
-                    <Button
-                      key={action.id}
-                      variant="secondary"
-                      tone="neutral"
-                      size={size}
-                      iconLeft={action.icon}
-                      label={action.label}
-                      disabled={action.disabled}
-                      onClick={action.onSelect}
-                    />
-                  ),
-                )}
+                {!narrow &&
+                  secondaryActions.map((action) =>
+                    typeof action.icon === 'string' ? (
+                      <CircularButton
+                        key={action.id}
+                        icon={action.icon}
+                        variant="tertiary"
+                        size={size}
+                        ariaLabel={action.label}
+                        tooltip={action.label}
+                        disabled={action.disabled}
+                        onClick={action.onSelect}
+                      />
+                    ) : (
+                      <Button
+                        key={action.id}
+                        variant="secondary"
+                        tone="neutral"
+                        size={size}
+                        iconLeft={action.icon}
+                        label={action.label}
+                        disabled={action.disabled}
+                        onClick={action.onSelect}
+                      />
+                    ),
+                  )}
                 {primaryAction &&
                   (narrow ? (
                     <CircularButton

@@ -42,7 +42,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same dat
 | onSortsChange | `((sorts: DataTableSort[]) => void)` | no |  | Fires with every sort after the sort panel changes one. |
 | sortable | `boolean` | no | `true` | Shows the Sort button, whose panel orders, flips and removes the sorts. Defaults to true; inside a DataTable it shows when a column sorts, and holds one sort unless the table has `multiSort`. |
 | primaryAction | `TableToolbarAction` | no |  | The page's main action (New project, Invite), drawn as the primary button at the bar's end. |
-| secondaryActions | `TableToolbarAction[]` | no | `[]` | Actions beside the primary one (Export, Import), drawn as icon buttons before it, each named and tooltipped by its label. |
+| secondaryActions | `TableToolbarAction[]` | no | `[]` | Actions beside the primary one (Export, Import), drawn as icon buttons before it, each named and tooltipped by its label; folded, they move into the More panel. |
 | actions | `ReactNode` | no |  | Any other controls at the bar's end, after the actions. |
 | labels | `Partial<TableToolbarLabels>` | no |  | The bar's words, merged over their English defaults. |
 | filterLabels | `Partial<FilterLabels>` | no |  | The filters' words, merged over their English defaults (inside a DataTable, over the table's). |

@@ -12700,7 +12700,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "secondaryActions",
             "type": "TableToolbarAction[]",
             "required": false,
-            "description": "Actions beside the primary one (Export, Import), drawn as icon buttons before it, each named and tooltipped by its label.",
+            "description": "Actions beside the primary one (Export, Import), drawn as icon buttons before it, each named and tooltipped by its label; folded, they move into the More panel.",
             "defaultValue": "[]"
           },
           {

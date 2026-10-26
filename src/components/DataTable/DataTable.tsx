@@ -2238,7 +2238,8 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
         aria-selected={gridMode && selectable ? isSelected : undefined}
       >
         {utilityKeys.map((key) => {
-          const style: React.CSSProperties = { width: UTILITY_COLUMN_WIDTH };
+          // A card sizes the checkbox to itself, beside the title.
+          const style: React.CSSProperties = stacked ? {} : { width: UTILITY_COLUMN_WIDTH };
           if (utilityPinned) style.insetInlineStart = `${utilityKeys.indexOf(key) * UTILITY_COLUMN_WIDTH}px`;
           const pinnedCls = utilityPinned ? ` ${baseClass}__cell--pinned ${baseClass}__cell--pinned-start` : '';
           return (
@@ -2451,7 +2452,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
           <td
             data-col="ds-data-table-actions"
             className={`ds-table__cell ${baseClass}__actions ${baseClass}__cell--pinned ${baseClass}__cell--pinned-end${actionsEdge}`}
-            style={{ width: actionsWidth, insetInlineEnd: 0 }}
+            style={stacked ? undefined : { width: actionsWidth, insetInlineEnd: 0 }}
             {...tabProps(row.id, 'ds-data-table-actions')}
           >
             <div className={`ds-table__cell-content ${baseClass}__actions-row`}>

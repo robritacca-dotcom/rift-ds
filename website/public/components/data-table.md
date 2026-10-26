@@ -36,6 +36,13 @@ Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same dat
 | defaultSorts | `DataTableSort[]` | no |  | Initial sorts for uncontrolled use. |
 | onSortsChange | `((sorts: DataTableSort[]) => void)` | no |  | Fires with every sort after one changes, first sort first. `onSortChange` fires too, with the first or `null`. |
 | linkComponent | `LinkComponent` | no |  | The link component a `link` column's cells render through, so the app's router handles them. Defaults to the nearest `LinkProvider`'s, else a plain anchor. |
+| grouping | `string[]` | no |  | The column keys the rows are grouped by, for controlled use; this milestone draws the first. Pair with `onGroupingChange`. |
+| defaultGrouping | `string[]` | no |  | The grouping to start with, for uncontrolled use. |
+| onGroupingChange | `((grouping: string[]) => void)` | no |  | Fires with the new grouping, from a header menu or a TableToolbar. |
+| totalsRow | `boolean` | no | `false` | Adds a totals row to the table's foot, sticky at its bottom edge: each cell a menu picking its calculation over every matching row. |
+| totals | `Record<string, Total>` | no |  | Each column's footer calculation, by key, for controlled use. A column left out shows its `aggregate`, or nothing. Pair with `onTotalsChange`. |
+| defaultTotals | `Record<string, Total>` | no |  | The footer calculations to start with, for uncontrolled use. |
+| onTotalsChange | `((totals: Record<string, Total>) => void)` | no |  | Fires with every footer calculation after one is picked. |
 | multiSort | `boolean` | no | `false` | Lets the table sort by several columns: Shift-click a header, or pick Add to sort from its menu, to add the column after the current sorts. Each sorted header shows its rank while more than one sorts. |
 | searchable | `boolean` | no | `false` | Shows the built-in search field, matching against every column's raw value. |
 | searchPlaceholder | `string` | no | `Search` | Placeholder for the search field. |

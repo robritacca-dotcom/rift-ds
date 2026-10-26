@@ -921,3 +921,176 @@
   letter-spacing: var(--font-caption-letter-spacing);
   color: var(--color-text-secondary);
 }
+
+/* ============================================
+   GROUPS AND TOTALS
+   A group is its own body, led by a group row on
+   the header's tint: the toggle, the value drawn
+   through its column's type, the count, and each
+   column's group total in its own cell. The
+   totals footer holds at the table's foot.
+   ============================================ */
+
+.ds-data-table__group-row > .ds-table__cell,
+.ds-data-table__group-row > .ds-data-table__cell--pinned {
+  --ds-dt-tint: var(--color-table-header-bg);
+
+  background-color: var(--color-table-body-bg);
+  background-image: linear-gradient(var(--ds-dt-tint), var(--ds-dt-tint));
+}
+
+/* A group row takes no hover tint: it is a heading, not a record. */
+.ds-table__body .ds-data-table__group-row:hover > .ds-table__cell,
+.ds-table__body .ds-data-table__group-row:hover > .ds-data-table__cell--pinned {
+  --ds-dt-tint: var(--color-table-header-bg);
+}
+
+/* The group's label runs past its first column over the empty cells beside
+   it, so a long value is never clipped to one column's width. */
+.ds-data-table__group-cell,
+.ds-data-table__group-cell > .ds-table__cell-content {
+  overflow: visible;
+}
+
+.ds-data-table__group-label {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-200);
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.ds-data-table__group-toggle {
+  --icon-size: var(--icon-size-500);
+
+  display: inline-flex;
+  flex-shrink: 0;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-050);
+  background: none;
+  color: var(--color-icon-secondary);
+  cursor: pointer;
+}
+
+.ds-data-table__group-toggle:hover {
+  color: var(--color-icon-primary);
+}
+
+.ds-data-table__group-toggle:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+.ds-data-table__group-chevron {
+  transition: rotate var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-data-table__group-toggle[aria-expanded='true'] .ds-data-table__group-chevron {
+  rotate: 90deg;
+}
+
+.ds-data-table__group-value {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  font-family: var(--font-paragraph-emphasis-family);
+  font-weight: var(--font-paragraph-emphasis-weight);
+}
+
+.ds-data-table__group-count,
+.ds-data-table__group-total {
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-secondary);
+}
+
+.ds-data-table__group-total {
+  color: var(--color-text-primary);
+}
+
+/* The totals footer holds at the foot of a table that scrolls, over the
+   rows, on the header's tint and divided from them like the header is. */
+.ds-data-table__totals .ds-table__cell {
+  --ds-dt-tint: var(--color-table-header-bg);
+
+  position: sticky;
+  bottom: 0;
+  z-index: 3;
+  border-block-start: var(--border-025) solid var(--color-table-divider);
+  background-color: var(--color-table-body-bg);
+  background-image: linear-gradient(var(--ds-dt-tint), var(--ds-dt-tint));
+}
+
+.ds-data-table__totals .ds-data-table__cell--pinned {
+  z-index: 4;
+}
+
+.ds-data-table__total {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--gap-100);
+  min-width: 0;
+  max-width: 100%;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-050);
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.ds-data-table__total:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+.ds-data-table__total-name {
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+  color: var(--color-text-secondary);
+}
+
+.ds-data-table__total-value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-variant-numeric: tabular-nums;
+}
+
+/* An unpicked footer cell offers Calculate only while the footer is hovered
+   or focused, so the foot stays quiet; it is in the layout at rest, so
+   nothing moves when it appears. */
+.ds-data-table__total--empty {
+  opacity: 0;
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-data-table__totals:hover .ds-data-table__total--empty,
+.ds-data-table__total--empty:focus-visible,
+.ds-data-table__total--empty[aria-expanded='true'] {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .ds-data-table__total--empty {
+    opacity: 1;
+  }
+}
+
+/* Stacked, a group row is the cards' heading: its label alone. */
+.ds-data-table__grid--stacked .ds-data-table__group-row > .ds-table__cell:not(.ds-data-table__group-cell) {
+  display: none;
+}
+
+.ds-data-table__grid--stacked .ds-data-table__group-row {
+  background-color: var(--color-table-header-bg);
+}

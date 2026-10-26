@@ -40,6 +40,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same dat
 | sorts | `DataTableSort[]` | no |  | Every sort, first sort first, for controlled use. Inside a DataTable the table's sorts are used unless this is set. |
 | defaultSorts | `DataTableSort[]` | no |  | Initial sorts for uncontrolled use. |
 | onSortsChange | `((sorts: DataTableSort[]) => void)` | no |  | Fires with every sort after the sort panel changes one. |
+| grouping | `string[]` | no |  | The column keys the rows are grouped by, for controlled use. Inside a DataTable the table's grouping is used unless this is set. |
+| defaultGrouping | `string[]` | no |  | The grouping to start with, for uncontrolled use. |
+| onGroupingChange | `((grouping: string[]) => void)` | no |  | Fires with the new grouping when the Group panel changes it. |
+| groupable | `boolean` | no | `true` | Shows the Group button, whose panel picks the column the rows group by. Defaults to true; it shows when a column is `groupable`. |
 | sortable | `boolean` | no | `true` | Shows the Sort button, whose panel orders, flips and removes the sorts. Defaults to true; inside a DataTable it shows when a column sorts, and holds one sort unless the table has `multiSort`. |
 | primaryAction | `TableToolbarAction` | no |  | The page's main action (New project, Invite), drawn as the primary button at the bar's end. |
 | secondaryActions | `TableToolbarAction[]` | no | `[]` | Actions beside the primary one (Export, Import), drawn as icon buttons before it, each named and tooltipped by its label; folded, they move into the More panel. |

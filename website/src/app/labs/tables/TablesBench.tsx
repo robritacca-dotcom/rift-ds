@@ -23,6 +23,7 @@ import {
 import { EditingTable } from "./EditingTable";
 import { TypedTable } from "./TypedTable";
 import { PhoneTable } from "./PhoneTable";
+import { GroupedTable } from "./GroupedTable";
 import { TableToolbar } from "rift-ds/components/TableToolbar/TableToolbar";
 import styles from "./TablesBench.module.css";
 
@@ -461,6 +462,14 @@ export function TablesBench() {
         note="Narrower than a phone, measured on the table itself. Scroll keeps the rows and pins the row header while the rest scrolls sideways; Stack draws each row as a card, the project as its title, every other column as a label and value. Tick a row on a real phone and the bulk bar floats at the foot of the screen."
       >
         {({ size, lines }) => <PhoneTable size={size} lines={lines} />}
+      </Station>
+
+      <Station
+        id="bench-groups"
+        title="13. Groups and totals"
+        note="The accounts grouped by stage, in the stage's own order: each group row carries its count and the totals (value and seats summed, onboarding averaged, renewals counted), its checkbox selects the group, and its chevron folds it. Group by Owner or Billable from a header menu or the bar's Group control. The footer's cells each pick a calculation; hover the footer to see Calculate on the rest."
+      >
+        {({ size, lines }) => <GroupedTable size={size} lines={lines} />}
       </Station>
     </div>
   );

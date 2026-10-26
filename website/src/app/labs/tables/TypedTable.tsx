@@ -27,7 +27,7 @@ const ACCOUNTS = [
 ];
 const TAGS = ["enterprise", "renewal", "pilot", "upsell", "at risk", "new"];
 
-const columns: DataTableColumn[] = [
+export const typedColumns: DataTableColumn[] = [
   { key: "account", header: "Account", type: "text", rowHeader: true, sortable: true, pin: "start", width: "160px" },
   {
     key: "stage",
@@ -71,7 +71,7 @@ const DAY_MS = 86_400_000;
 const isoDay = (ms: number) => new Date(ms).toISOString().slice(0, 10);
 const ORIGIN = Date.UTC(2026, 9, 1);
 
-const makeRows = (): DataTableRow[] =>
+export const makeTypedRows = (): DataTableRow[] =>
   ACCOUNTS.map((account, i) => ({
     id: `a${i + 1}`,
     values: {
@@ -92,14 +92,14 @@ const makeRows = (): DataTableRow[] =>
   }));
 
 export function TypedTable({ size, lines }: { size: "default" | "compact"; lines: boolean }) {
-  const [rows, setRows] = useState(makeRows);
+  const [rows, setRows] = useState(makeTypedRows);
   const onCellEdit = ({ row, key, value }: DataTableCellEdit) =>
     setRows((current) =>
       current.map((r) => (r.id === row.id ? { ...r, values: { ...r.values, [key]: value } } : r)),
     );
   return (
     <DataTable
-      columns={columns}
+      columns={typedColumns}
       rows={rows}
       size={size}
       columnDividers={lines}

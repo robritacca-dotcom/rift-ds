@@ -41,6 +41,7 @@ import { TableContext, type TableContextValue, type ToolbarColumn } from './tabl
 import { Popover } from '../Popover/Popover';
 import {
   TYPE_DEFAULTS,
+  formatNumber,
   typedComparator,
   typedText,
   type ColumnFormat,
@@ -48,6 +49,7 @@ import {
   type StatusRole,
 } from './columnTypes';
 import { TypedCell } from './TypedCell';
+import { NUMERIC_TOTALS, TOTALS, calculate, type Aggregate, type Result, type Total } from './aggregates';
 import { useLinkComponent, type LinkComponent } from '../../behaviors/LinkProvider';
 import { EDITOR_MIN_WIDTH, LIVE_KINDS, TYPED_KINDS, type CellEditorKind, type CellValue } from './editorKinds';
 import { EmptyState, type EmptyStateProps } from '../EmptyState/EmptyState';
@@ -121,7 +123,22 @@ export interface DataTableColumn<R extends DataTableRow = DataTableRow> {
   type?: DataTableColumnType;
   /** How a typed column formats its values: the locale, the currency, the digits after the point, the date style. */
   format?: DataTableColumnFormat;
+  /** Whether the table can be grouped by this column, from its header menu or a TableToolbar. Defaults to false. */
+  groupable?: boolean;
+  /**
+   * The calculation a group row shows in this column, and the totals
+   * footer's starting pick: `sum`, `avg`, `min`, `max`, `count`,
+   * `countDistinct` or `range`, formatted through the column's type, or a
+   * function of the column's values returning what to show.
+   */
+  aggregate?: DataTableAggregate | ((values: DataTableValue[], rows: R[]) => React.ReactNode);
 }
+
+/** The calculations a column's `aggregate` can name. */
+export type DataTableAggregate = Aggregate;
+
+/** Every calculation the totals footer offers, `none` included. */
+export type DataTableTotal = Total;
 
 /** The types a column can be; see `DataTableColumn.type`. */
 export type DataTableColumnType = ColumnType;
@@ -304,6 +321,24 @@ export interface DataTableColumnLabels {
   uncheckedValue: string;
   /** The count a `tags` cell shows for the tags it folds away, given how many. */
   moreValues: (count: number) => string;
+  /** Menu item: group the table by the column. */
+  groupBy: string;
+  /** Menu item: stop grouping, on the grouped column. */
+  ungroup: string;
+  /** A group row's toggle, given the group's value, its row count and whether it is open. */
+  groupToggle: (value: string, count: number, expanded: boolean) => string;
+  /** A group row's row count, given how many. */
+  groupCount: (count: number) => string;
+  /** The group of rows with no value in the grouped column. */
+  emptyGroup: string;
+  /** Selects every row in a group, given the group's value. */
+  selectGroup: (value: string) => string;
+  /** The totals footer's prompt on a column with no calculation picked. */
+  calculate: string;
+  /** The totals footer's menu button, given the column's header. */
+  totalsMenu: (header: string) => string;
+  /** Each calculation's name, as the footer's menu and its caption read it. */
+  totals: Record<DataTableTotal, string>;
   /** Accessible name of a row's Edit button, with `editMode="row"`, given the row's name. */
   editRow: (rowName: string) => string;
   /** Accessible name of a row's Save button while it edits, given the row's name. */
@@ -344,6 +379,28 @@ const DEFAULT_COLUMN_LABELS: DataTableColumnLabels = {
   checkedValue: 'Yes',
   uncheckedValue: 'No',
   moreValues: (count) => `+${count}`,
+  groupBy: 'Group by this column',
+  ungroup: 'Ungroup',
+  groupToggle: (value, count, expanded) =>
+    `${value}, ${count} row${count === 1 ? '' : 's'}, ${expanded ? 'expanded' : 'collapsed'}`,
+  groupCount: (count) => String(count),
+  emptyGroup: 'No value',
+  selectGroup: (value) => `Select every row in ${value}`,
+  calculate: 'Calculate',
+  totalsMenu: (header) => `Calculate ${header}`,
+  totals: {
+    none: 'None',
+    count: 'Count',
+    countDistinct: 'Unique',
+    empty: 'Empty',
+    filled: 'Filled',
+    percentEmpty: 'Percent empty',
+    sum: 'Sum',
+    avg: 'Average',
+    min: 'Min',
+    max: 'Max',
+    range: 'Range',
+  },
   editRow: (rowName) => `Edit ${rowName}`,
   saveRow: (rowName) => `Save ${rowName}`,
   cancelRow: (rowName) => `Cancel editing ${rowName}`,
@@ -483,6 +540,20 @@ type DataTableOwnProps<R extends DataTableRow = DataTableRow> = {
   onSortsChange?: (sorts: DataTableSort[]) => void;
   /** The link component a `link` column's cells render through, so the app's router handles them. Defaults to the nearest `LinkProvider`'s, else a plain anchor. */
   linkComponent?: LinkComponent;
+  /** The column keys the rows are grouped by, for controlled use; this milestone draws the first. Pair with `onGroupingChange`. */
+  grouping?: string[];
+  /** The grouping to start with, for uncontrolled use. */
+  defaultGrouping?: string[];
+  /** Fires with the new grouping, from a header menu or a TableToolbar. */
+  onGroupingChange?: (grouping: string[]) => void;
+  /** Adds a totals row to the table's foot, sticky at its bottom edge: each cell a menu picking its calculation over every matching row. */
+  totalsRow?: boolean;
+  /** Each column's footer calculation, by key, for controlled use. A column left out shows its `aggregate`, or nothing. Pair with `onTotalsChange`. */
+  totals?: Record<string, DataTableTotal>;
+  /** The footer calculations to start with, for uncontrolled use. */
+  defaultTotals?: Record<string, DataTableTotal>;
+  /** Fires with every footer calculation after one is picked. */
+  onTotalsChange?: (totals: Record<string, DataTableTotal>) => void;
   /** Lets the table sort by several columns: Shift-click a header, or pick Add to sort from its menu, to add the column after the current sorts. Each sorted header shows its rank while more than one sorts. */
   multiSort?: boolean;
   /** Shows the built-in search field, matching against every column's raw value. */
@@ -694,6 +765,13 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
   defaultSorts,
   onSortsChange,
   multiSort = false,
+  grouping: groupingProp,
+  defaultGrouping,
+  onGroupingChange,
+  totalsRow = false,
+  totals: totalsProp,
+  defaultTotals,
+  onTotalsChange,
   linkComponent,
   searchable = false,
   searchPlaceholder = 'Search',
@@ -825,6 +903,16 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
   );
   const currentSorts: DataTableSort[] = sortsProp ?? (sort !== undefined ? (sort ? [sort] : []) : uncontrolledSorts);
   const sortOf = (key: string) => currentSorts.find((entry) => entry.key === key);
+  const [groupingState, setGroupingState] = useControllable<string[]>(
+    groupingProp,
+    defaultGrouping ?? [],
+    onGroupingChange,
+  );
+  const [totalsState, setTotals] = useControllable<Record<string, DataTableTotal>>(
+    totalsProp,
+    defaultTotals ?? {},
+    onTotalsChange,
+  );
   const setSorts = (next: DataTableSort[]) => {
     if (!isSortControlled) setUncontrolledSorts(next);
     setPage(1);
@@ -1018,9 +1106,61 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
 
   const sortedRows = table.getSortedRowModel().rows.map((row) => row.original);
 
-  const pageCount = pageSize ? Math.max(1, Math.ceil(sortedRows.length / pageSize)) : 1;
+  /* Grouping: the matching rows gathered by the grouped column's value, the
+     groups in that column's own order (its sort direction when it sorts, a
+     status by its options), the rows keeping the sort within each group.
+     Paging then runs over the gathered rows, so a page shows whole runs of
+     its groups, each led by its group row. */
+  const groupKey = groupingState.find((key) => byKey.get(key)?.groupable);
+  const groupCol = groupKey ? byKey.get(groupKey) : undefined;
+  const groupOf = (row: R) => {
+    const value = groupKey ? row.values[groupKey] : null;
+    return value == null || value === '' || (Array.isArray(value) && value.length === 0)
+      ? ''
+      : Array.isArray(value)
+        ? value.join(', ')
+        : String(value);
+  };
+  const groups = useMemo(() => {
+    if (!groupKey || !groupCol) return null;
+    const byValue = new Map<string, R[]>();
+    for (const row of sortedRows) {
+      const key = groupOf(row);
+      const list = byValue.get(key);
+      if (list) list.push(row);
+      else byValue.set(key, [row]);
+    }
+    const compare = typedComparator(groupCol.type, groupCol.options, compareValues);
+    const desc = sortOf(groupKey)?.direction === 'desc';
+    const first = (key: string) => byValue.get(key)![0].values[groupKey];
+    const keys = [...byValue.keys()].sort((a, b) => {
+      // The rows with no value come last, whichever way the column sorts.
+      if (a === '' || b === '') return a === '' ? (b === '' ? 0 : 1) : -1;
+      const order = compare(first(a), first(b));
+      return desc ? -order : order;
+    });
+    return keys.map((key) => ({ key, rows: byValue.get(key)! }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- recomputed from the sorted rows and the grouping, which is all it reads
+  }, [sortedRows, groupKey, groupCol, currentSorts]);
+  const rowsInOrder = groups ? groups.flatMap((group) => group.rows) : sortedRows;
+  const groupByRow = useMemo(() => {
+    const map = new Map<string, { key: string; rows: R[] }>();
+    groups?.forEach((group) => group.rows.forEach((row) => map.set(row.id, group)));
+    return map;
+  }, [groups]);
+
+  /* A collapsed group keeps its group row and hides its rows; groups start
+     open. The reader's choice for the session, not a prop. */
+  const [collapsedGroups, setCollapsedGroups] = useState<string[]>([]);
+  const toggleGroup = (key: string) =>
+    setCollapsedGroups((current) => (current.includes(key) ? current.filter((k) => k !== key) : [...current, key]));
+
+  const pageCount = pageSize ? Math.max(1, Math.ceil(rowsInOrder.length / pageSize)) : 1;
   const clampedPage = Math.min(page, pageCount);
-  const visibleRows = pageSize ? sortedRows.slice((clampedPage - 1) * pageSize, clampedPage * pageSize) : sortedRows;
+  const pageRows = pageSize ? rowsInOrder.slice((clampedPage - 1) * pageSize, clampedPage * pageSize) : rowsInOrder;
+  const visibleRows = groups
+    ? pageRows.filter((row) => !collapsedGroups.includes(groupByRow.get(row.id)?.key ?? ''))
+    : pageRows;
 
   /* The result count after a search settles. Skipped on the first render,
        which has nothing to report. */
@@ -1105,7 +1245,8 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     startKeys.includes(key) ? 'start' : endKeys.includes(key) ? 'end' : 'center';
 
   const rowGrips = reorderableRows;
-  const sortOwnsOrder = currentSorts.length > 0;
+  // A sort or a grouping owns the order, so the row grips step aside.
+  const sortOwnsOrder = currentSorts.length > 0 || Boolean(groupKey);
   const utilityKeys = [...(rowGrips ? ['ds-data-table-grip'] : []), ...(selectable ? ['ds-data-table-select'] : [])];
   const anyPinned = startKeys.length > 0 || endKeys.length > 0;
   /* The actions column is as wide as the most actions any row on the page
@@ -1548,6 +1689,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
       movable: !col.locked && col.reorderable !== false,
       filterable: col.filterable ?? true,
       sortable: Boolean(col.sortable),
+      groupable: Boolean(col.groupable),
       kind,
       options: choices,
     };
@@ -1598,6 +1740,9 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     setSorts,
     multiSort,
     claimSelection: setSelectionClaimed,
+    grouping: groupingState,
+    setGrouping: setGroupingState,
+    setAllGroupsOpen: (open: boolean) => setCollapsedGroups(open ? [] : (groups ?? []).map((group) => group.key)),
   };
 
   const [menuKey, setMenuKey] = useState<string | null>(null);
@@ -1628,6 +1773,14 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
           icon: 'close',
           onClick: () => setSortTo(key, null),
         });
+    }
+    if (col.groupable) {
+      if (entries.length) entries.push({ type: 'separator' });
+      entries.push(
+        groupKey === key
+          ? { label: labels.ungroup, icon: 'format_list_bulleted', onClick: () => setGroupingState([]) }
+          : { label: labels.groupBy, icon: 'view_agenda', onClick: () => setGroupingState([key]) },
+      );
     }
     const region = regionOf(key);
     const block: DropdownMenuEntry[] = [];
@@ -1902,6 +2055,35 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
   const optionLabel = (col: DataTableColumn<R>) => (v: string) =>
     col.options?.find((option) => option.value === v)?.label ?? v;
 
+  /* ---- Group rows and totals ----------------------------------------- */
+  /** Whether a column's calculations read numbers: its type says so, or every value it holds is one. */
+  const numericColumn = (col: DataTableColumn<R>) =>
+    col.type === 'number' ||
+    col.type === 'currency' ||
+    col.type === 'progress' ||
+    (!col.type &&
+      rows.some((row) => typeof row.values[col.key] === 'number') &&
+      rows.every((row) => row.values[col.key] == null || typeof row.values[col.key] === 'number'));
+  /** A calculation's result in the column's own terms: an amount through its type, a count plain. */
+  const resultText = (col: DataTableColumn<R>, result: Result): string => {
+    if (!result) return '';
+    const amount = (value: number) =>
+      formatNumber(col.type === 'currency' || col.type === 'progress' ? col.type : 'number', value, col.format);
+    if (result.kind === 'amount') return amount(result.value);
+    if (result.kind === 'pair') return `${amount(result.value[0])}–${amount(result.value[1])}`;
+    if (result.kind === 'percent') return `${Math.round(result.value)}%`;
+    return String(result.value);
+  };
+  /** What a group row shows in a column: its `aggregate` over the group's rows. */
+  const groupTotal = (col: DataTableColumn<R>, groupRows: R[]): React.ReactNode => {
+    if (!col.aggregate) return null;
+    const values = groupRows.map((row) => row.values[col.key]);
+    if (typeof col.aggregate === 'function') return col.aggregate(values, groupRows);
+    return resultText(col, calculate(col.aggregate, values));
+  };
+  const totalPick = (col: DataTableColumn<R>): DataTableTotal =>
+    totalsState[col.key] ?? (typeof col.aggregate === 'string' ? col.aggregate : 'none');
+
   /** A cell's value as text: an option's label, a list joined. */
   const displayOf = (col: DataTableColumn<R>, value: DataTableValue): React.ReactNode => {
     const label = (v: string) => col.options?.find((option) => option.value === v)?.label ?? v;
@@ -2119,7 +2301,8 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
             justifyContent: justify(col.align),
             // In auto layout a declared width is only a hint the browser squeezes when the table runs wide,
             // so a pixel width also holds as the column's floor, set on content the layout cannot shrink.
-            minWidth: !layoutReady && !stacked && declaredOf(key) ? declaredOf(key)! - 2 * CELL_PADDING[size] : undefined,
+            minWidth:
+              !layoutReady && !stacked && declaredOf(key) ? declaredOf(key)! - 2 * CELL_PADDING[size] : undefined,
           }}
         >
           {col.sortable ? (
@@ -2224,6 +2407,191 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
       </th>
     );
   };
+
+  const groupLabel = (key: string) =>
+    key === '' ? labels.emptyGroup : (groupCol?.options?.find((option) => option.value === key)?.label ?? key);
+
+  /* A group's lead row: the toggle, the value drawn through its column's
+     type and the count in the first column, then each column's group total
+     in its own cell. The cells mirror a body row's, so the pinned edges and
+     the widths line up. */
+  const groupRow = (group: { key: string; rows: R[] }) => {
+    const expanded = !collapsedGroups.includes(group.key);
+    const label = groupLabel(group.key);
+    const ids = group.rows.map((row) => row.id);
+    const chosen = ids.filter((id) => currentSelection.includes(id)).length;
+    const raw = group.rows[0]?.values[groupKey!] ?? null;
+    return (
+      <tr className={`ds-table__row ${baseClass}__group-row`} data-group-row="">
+        {utilityKeys.map((key) => {
+          const style: React.CSSProperties = stacked ? {} : { width: UTILITY_COLUMN_WIDTH };
+          if (utilityPinned && !stacked)
+            style.insetInlineStart = `${utilityKeys.indexOf(key) * UTILITY_COLUMN_WIDTH}px`;
+          const pinnedCls = utilityPinned ? ` ${baseClass}__cell--pinned ${baseClass}__cell--pinned-start` : '';
+          return (
+            <td key={key} className={`ds-table__cell ${baseClass}__utility${pinnedCls}`} style={style}>
+              {key === 'ds-data-table-select' && (
+                <div className="ds-table__cell-content">
+                  <Checkbox
+                    size="compact"
+                    checked={chosen > 0 && chosen === ids.length}
+                    indeterminate={chosen > 0 && chosen < ids.length}
+                    onCheckedChange={(checked) =>
+                      setSelection(
+                        checked
+                          ? [...new Set([...currentSelection, ...ids])]
+                          : currentSelection.filter((id) => !ids.includes(id)),
+                      )
+                    }
+                    aria-label={labels.selectGroup(label)}
+                    tabIndex={innerTab}
+                  />
+                </div>
+              )}
+            </td>
+          );
+        })}
+        {visibleKeys.map((key, index) => {
+          const col = byKey.get(key)!;
+          if (index === 0)
+            return (
+              <th
+                key={key}
+                scope="rowgroup"
+                className={`ds-table__cell ${baseClass}__group-cell${pinClass(key)}`}
+                style={layoutReady || regionOf(key) !== 'center' ? cellStyle(key) : undefined}
+              >
+                <div className={`ds-table__cell-content ${baseClass}__group-label`}>
+                  <button
+                    type="button"
+                    className={`${baseClass}__group-toggle`}
+                    aria-expanded={expanded}
+                    aria-label={labels.groupToggle(label, group.rows.length, expanded)}
+                    onClick={() => toggleGroup(group.key)}
+                    tabIndex={innerTab}
+                  >
+                    <span className={`${baseClass}__group-chevron material-symbols-rounded`} aria-hidden="true">
+                      chevron_right
+                    </span>
+                  </button>
+                  <span className={`${baseClass}__group-value`} aria-hidden="true">
+                    {group.key === '' ? (
+                      labels.emptyGroup
+                    ) : groupCol?.type ? (
+                      <TypedCell
+                        type={groupCol.type}
+                        value={raw}
+                        format={groupCol.format}
+                        options={groupCol.options}
+                        words={typedWords}
+                        link={linkEl}
+                      />
+                    ) : (
+                      label
+                    )}
+                  </span>
+                  <span className={`${baseClass}__group-count`} aria-hidden="true">
+                    {labels.groupCount(group.rows.length)}
+                  </span>
+                </div>
+              </th>
+            );
+          const total = groupTotal(col, group.rows);
+          return (
+            <td
+              key={key}
+              className={`ds-table__cell${pinClass(key)}`}
+              style={layoutReady || regionOf(key) !== 'center' ? cellStyle(key) : undefined}
+            >
+              {total != null && total !== '' && (
+                <div className="ds-table__cell-content" style={{ justifyContent: justify(col.align) }}>
+                  <span className={`${baseClass}__group-total`}>{total}</span>
+                </div>
+              )}
+            </td>
+          );
+        })}
+        {layoutReady && <td className={`ds-table__cell ${baseClass}__filler`} role="presentation" aria-hidden="true" />}
+        {showActions && (
+          <td
+            className={`ds-table__cell ${baseClass}__actions ${baseClass}__cell--pinned ${baseClass}__cell--pinned-end${actionsEdge}`}
+            style={stacked ? undefined : { width: actionsWidth, insetInlineEnd: 0 }}
+          />
+        )}
+      </tr>
+    );
+  };
+
+  /* The totals footer: one cell per column, each a menu picking its
+     calculation over every matching row, its result in the column's terms
+     beside the calculation's name. */
+  const totalsFooter = () => (
+    <tfoot className={`${baseClass}__totals`}>
+      <tr className="ds-table__row">
+        {utilityKeys.map((key) => {
+          const style: React.CSSProperties = { width: UTILITY_COLUMN_WIDTH };
+          if (utilityPinned) style.insetInlineStart = `${utilityKeys.indexOf(key) * UTILITY_COLUMN_WIDTH}px`;
+          const pinnedCls = utilityPinned ? ` ${baseClass}__cell--pinned ${baseClass}__cell--pinned-start` : '';
+          return <td key={key} className={`ds-table__cell ${baseClass}__utility${pinnedCls}`} style={style} />;
+        })}
+        {visibleKeys.map((key) => {
+          const col = byKey.get(key)!;
+          const pick = totalPick(col);
+          const values = sortedRows.map((row) => row.values[key]);
+          const text =
+            pick === 'none'
+              ? ''
+              : typeof col.aggregate === 'function' && !totalsState[key]
+                ? col.aggregate(values, sortedRows)
+                : resultText(col, calculate(pick, values));
+          const offered = TOTALS.filter((total) => !NUMERIC_TOTALS.has(total) || numericColumn(col));
+          return (
+            <td
+              key={key}
+              className={`ds-table__cell${pinClass(key)}`}
+              style={layoutReady || regionOf(key) !== 'center' ? cellStyle(key) : undefined}
+            >
+              <div className="ds-table__cell-content" style={{ justifyContent: justify(col.align) }}>
+                <DropdownMenu
+                  size="compact"
+                  align={col.align === 'right' ? 'end' : 'start'}
+                  items={offered.map((total) => ({
+                    label: labels.totals[total],
+                    selected: total === pick,
+                    onClick: () => setTotals({ ...totalsState, [key]: total }),
+                  }))}
+                  trigger={
+                    <button
+                      type="button"
+                      className={`${baseClass}__total${pick === 'none' ? ` ${baseClass}__total--empty` : ''}`}
+                      aria-label={pick === 'none' ? labels.totalsMenu(headerText(col)) : undefined}
+                      tabIndex={innerTab}
+                    >
+                      {pick === 'none' ? (
+                        <span className={`${baseClass}__total-name`}>{labels.calculate}</span>
+                      ) : (
+                        <>
+                          <span className={`${baseClass}__total-name`}>{labels.totals[pick]}</span>
+                          <span className={`${baseClass}__total-value`}>{text}</span>
+                        </>
+                      )}
+                    </button>
+                  }
+                />
+              </div>
+            </td>
+          );
+        })}
+        {layoutReady && <td className={`ds-table__cell ${baseClass}__filler`} role="presentation" aria-hidden="true" />}
+        {showActions && (
+          <td
+            className={`ds-table__cell ${baseClass}__actions ${baseClass}__cell--pinned ${baseClass}__cell--pinned-end${actionsEdge}`}
+            style={{ width: actionsWidth, insetInlineEnd: 0 }}
+          />
+        )}
+      </tr>
+    </tfoot>
+  );
 
   const bodyRow = (row: R) => {
     const isSelected = selectable && currentSelection.includes(row.id);
@@ -2642,7 +3010,24 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
                   )}
                 </tr>
               </thead>
-              <tbody className="ds-table__body">{visibleRows.map(bodyRow)}</tbody>
+              {groups ? (
+                groups
+                  .map((group) => ({ group, onPage: group.rows.filter((row) => pageRows.includes(row)) }))
+                  .filter(({ onPage }) => onPage.length > 0)
+                  .map(({ group, onPage }) => (
+                    <tbody
+                      key={group.key}
+                      className={`ds-table__body ${baseClass}__group`}
+                      data-collapsed={collapsedGroups.includes(group.key) || undefined}
+                    >
+                      {groupRow(group)}
+                      {!collapsedGroups.includes(group.key) && onPage.map(bodyRow)}
+                    </tbody>
+                  ))
+              ) : (
+                <tbody className="ds-table__body">{visibleRows.map(bodyRow)}</tbody>
+              )}
+              {totalsRow && !stacked && totalsFooter()}
             </table>
             <div ref={guideRef} className={`${baseClass}__guide`} hidden aria-hidden="true" />
             <div ref={dropRef} className={`${baseClass}__drop`} hidden aria-hidden="true" />

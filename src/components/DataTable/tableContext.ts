@@ -23,6 +23,8 @@ export interface ToolbarColumn {
   filterable: boolean;
   /** Whether it can be sorted. */
   sortable: boolean;
+  /** Whether the rows can be grouped by it. */
+  groupable: boolean;
   /** Its filter kind. */
   kind: FilterKind;
   /** The values a choice filter offers: the column's options, else the values it holds. */
@@ -60,6 +62,11 @@ export interface TableContextValue {
   multiSort: boolean;
   /** A toolbar showing the selection count says so, and the table's footer shows the result count instead. */
   claimSelection: (claimed: boolean) => void;
+  /** The column keys the rows are grouped by, and their setter. */
+  grouping: string[];
+  setGrouping: (grouping: string[]) => void;
+  /** Opens or closes every group at once. */
+  setAllGroupsOpen: (open: boolean) => void;
 }
 
 export const TableContext = createContext<TableContextValue | null>(null);

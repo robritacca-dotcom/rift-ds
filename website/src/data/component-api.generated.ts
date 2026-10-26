@@ -5234,6 +5234,49 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "The link component a `link` column's cells render through, so the app's router handles them. Defaults to the nearest `LinkProvider`'s, else a plain anchor."
           },
           {
+            "name": "grouping",
+            "type": "string[]",
+            "required": false,
+            "description": "The column keys the rows are grouped by, for controlled use; this milestone draws the first. Pair with `onGroupingChange`."
+          },
+          {
+            "name": "defaultGrouping",
+            "type": "string[]",
+            "required": false,
+            "description": "The grouping to start with, for uncontrolled use."
+          },
+          {
+            "name": "onGroupingChange",
+            "type": "((grouping: string[]) => void)",
+            "required": false,
+            "description": "Fires with the new grouping, from a header menu or a TableToolbar."
+          },
+          {
+            "name": "totalsRow",
+            "type": "boolean",
+            "required": false,
+            "description": "Adds a totals row to the table's foot, sticky at its bottom edge: each cell a menu picking its calculation over every matching row.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "totals",
+            "type": "Record<string, Total>",
+            "required": false,
+            "description": "Each column's footer calculation, by key, for controlled use. A column left out shows its `aggregate`, or nothing. Pair with `onTotalsChange`."
+          },
+          {
+            "name": "defaultTotals",
+            "type": "Record<string, Total>",
+            "required": false,
+            "description": "The footer calculations to start with, for uncontrolled use."
+          },
+          {
+            "name": "onTotalsChange",
+            "type": "((totals: Record<string, Total>) => void)",
+            "required": false,
+            "description": "Fires with every footer calculation after one is picked."
+          },
+          {
             "name": "multiSort",
             "type": "boolean",
             "required": false,
@@ -12682,6 +12725,31 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "((sorts: DataTableSort[]) => void)",
             "required": false,
             "description": "Fires with every sort after the sort panel changes one."
+          },
+          {
+            "name": "grouping",
+            "type": "string[]",
+            "required": false,
+            "description": "The column keys the rows are grouped by, for controlled use. Inside a DataTable the table's grouping is used unless this is set."
+          },
+          {
+            "name": "defaultGrouping",
+            "type": "string[]",
+            "required": false,
+            "description": "The grouping to start with, for uncontrolled use."
+          },
+          {
+            "name": "onGroupingChange",
+            "type": "((grouping: string[]) => void)",
+            "required": false,
+            "description": "Fires with the new grouping when the Group panel changes it."
+          },
+          {
+            "name": "groupable",
+            "type": "boolean",
+            "required": false,
+            "description": "Shows the Group button, whose panel picks the column the rows group by. Defaults to true; it shows when a column is `groupable`.",
+            "defaultValue": "true"
           },
           {
             "name": "sortable",

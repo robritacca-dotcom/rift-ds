@@ -53,6 +53,8 @@ export interface TableToolbarColumn {
   filterable?: boolean;
   /** Whether it can be sorted. Defaults to true. */
   sortable?: boolean;
+  /** Whether the rows can be grouped by it. Defaults to false. */
+  groupable?: boolean;
 }
 
 /** One of the bar's own actions: its primary action, or a secondary one beside it. */
@@ -132,6 +134,15 @@ export interface TableToolbarLabels {
   actionsSection: string;
   /** The Sort button, given how many sorts are set. */
   sort: (count: number) => string;
+  /** The Group button, given whether the rows are grouped. */
+  group: (grouped: boolean) => string;
+  /** The Group panel's column field. */
+  groupBy: string;
+  /** The Group panel's choice for no grouping. */
+  noGrouping: string;
+  /** The Group panel's buttons that close and open every group. */
+  collapseAll: string;
+  expandAll: string;
   /** The sort panel's button that adds a sort. */
   addSort: string;
   /** The sort panel's button that clears every sort. */
@@ -181,6 +192,11 @@ const DEFAULT_LABELS: TableToolbarLabels = {
   actionsSection: 'Actions',
   sort: (count) => (count > 0 ? `Sort, ${count} on` : 'Sort'),
   addSort: 'Add sort',
+  group: (grouped) => (grouped ? 'Group, on' : 'Group'),
+  groupBy: 'Group by',
+  noGrouping: 'None',
+  collapseAll: 'Collapse all',
+  expandAll: 'Expand all',
   clearSorts: 'Clear sorts',
   sortColumn: 'Sort by',
   sortDirection: 'Direction',
@@ -252,6 +268,14 @@ type TableToolbarOwnProps = {
   defaultSorts?: Sort[];
   /** Fires with every sort after the sort panel changes one. */
   onSortsChange?: (sorts: Sort[]) => void;
+  /** The column keys the rows are grouped by, for controlled use. Inside a DataTable the table's grouping is used unless this is set. */
+  grouping?: string[];
+  /** The grouping to start with, for uncontrolled use. */
+  defaultGrouping?: string[];
+  /** Fires with the new grouping when the Group panel changes it. */
+  onGroupingChange?: (grouping: string[]) => void;
+  /** Shows the Group button, whose panel picks the column the rows group by. Defaults to true; it shows when a column is `groupable`. */
+  groupable?: boolean;
   /** Shows the Sort button, whose panel orders, flips and removes the sorts. Defaults to true; inside a DataTable it shows when a column sorts, and holds one sort unless the table has `multiSort`. */
   sortable?: boolean;
   /** The page's main action (New project, Invite), drawn as the primary button at the bar's end. */
@@ -386,6 +410,10 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
       searchable = true,
       filterable = true,
       sortable = true,
+      groupable = true,
+      grouping: groupingProp,
+      defaultGrouping,
+      onGroupingChange,
       sorts: sortsProp,
       defaultSorts,
       onSortsChange,
@@ -453,6 +481,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
         movable: col.movable ?? true,
         filterable: col.filterable ?? true,
         sortable: col.sortable ?? true,
+        groupable: col.groupable ?? false,
       })) ??
       table?.columns ??
       [];
@@ -464,6 +493,14 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
       table ? { value: table.sorts, set: table.setSorts } : undefined,
     );
     const sortableColumns = columns.filter((col) => col.sortable);
+    const [grouping, setGrouping] = useBound<string[]>(
+      groupingProp,
+      defaultGrouping ?? [],
+      onGroupingChange,
+      table ? { value: table.grouping, set: table.setGrouping } : undefined,
+    );
+    const groupableColumns = columns.filter((col) => col.groupable);
+    const groupedBy = grouping.find((key) => groupableColumns.some((col) => col.key === key));
     /* Over another table the bar sorts by as many columns as it is given;
        inside a DataTable, by one unless the table has multiSort. */
     const manySorts = table ? table.multiSort : true;
@@ -1130,6 +1167,68 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
       </span>
     );
 
+    /* The Group panel: the column the rows group by (or none), then, inside
+       a table, Collapse all and Expand all. */
+    const groupControl = groupable && groupableColumns.length > 0 && (
+      <span className="ds-table-toolbar__badge-host">
+        <ToolbarPanel
+          sheet={phoneScreen}
+          title={labels.group(false)}
+          size={size}
+          ariaLabel={labels.group(Boolean(groupedBy))}
+          position="bottom"
+          content={
+            <div className="ds-table-toolbar__view">
+              <div className="ds-table-toolbar__view-section">
+                <span className="ds-table-toolbar__view-heading" aria-hidden="true">
+                  {labels.groupBy}
+                </span>
+                <Dropdown
+                  size={size}
+                  aria-label={labels.groupBy}
+                  options={[
+                    { value: '', label: labels.noGrouping },
+                    ...groupableColumns.map((col) => ({ value: col.key, label: col.label })),
+                  ]}
+                  value={groupedBy ?? ''}
+                  onValueChange={(next) => setGrouping(next ? [String(next)] : [])}
+                />
+              </div>
+              {table && groupedBy && (
+                <div className="ds-table-toolbar__filter-actions">
+                  <Button
+                    variant="tertiary"
+                    size={size}
+                    label={labels.collapseAll}
+                    onClick={() => table.setAllGroupsOpen(false)}
+                  />
+                  <Button
+                    variant="tertiary"
+                    size={size}
+                    label={labels.expandAll}
+                    onClick={() => table.setAllGroupsOpen(true)}
+                  />
+                </div>
+              )}
+            </div>
+          }
+        >
+          <CircularButton
+            icon="view_agenda"
+            variant="tertiary"
+            size={size}
+            ariaLabel={labels.group(Boolean(groupedBy))}
+            tooltip={labels.group(Boolean(groupedBy))}
+          />
+        </ToolbarPanel>
+        {narrow && groupedBy && (
+          <span className="ds-table-toolbar__badge" aria-hidden="true">
+            <Badge label="1" variant="info" />
+          </span>
+        )}
+      </span>
+    );
+
     /* The view controls (density, then the columns) share one More panel,
        so the bar keeps its room for search and the chips. */
     /* Folded, the secondary actions move into the More panel, first: a
@@ -1270,6 +1369,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
             {/* The icon controls sit together: Filter, Columns, then density. */}
             {showFilters && (narrow ? filterPanel : addFilterMenu(filterIcon))}
             {sortControl}
+            {groupControl}
             {moreControl}
             {(primaryAction || (!narrow && secondaryActions.length > 0)) && (
               <span className="ds-table-toolbar__actions">

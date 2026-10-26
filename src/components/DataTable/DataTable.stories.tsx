@@ -691,3 +691,45 @@ export const PhoneStack: Story = {
     await expect(firstRow).toHaveClass('ds-table__row--selected');
   },
 };
+
+/** Grouped by status: each group a body led by its group row (the value, the count, the column totals), folding on its chevron; `totalsRow` adds a footer whose cells each pick a calculation. */
+export const Grouped: Story = {
+  args: {
+    columns: columns.map((col) =>
+      col.key === 'name'
+        ? { ...col, rowHeader: true }
+        : col.key === 'status'
+          ? { ...col, groupable: true }
+          : col.key === 'price'
+            ? { ...col, type: 'currency' as const, aggregate: 'sum' as const }
+            : col,
+    ),
+    rows,
+    selectable: true,
+    columnMenu: true,
+    totalsRow: true,
+    defaultGrouping: ['status'],
+    caption: 'Orders',
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const toggles = () => canvas.getAllByRole('button', { name: /rows?, (expanded|collapsed)/ });
+    // Three statuses, alphabetical: Failed, Shipped, Waiting.
+    await expect(toggles().map((b) => b.getAttribute('aria-label'))).toEqual([
+      'Failed, 3 rows, expanded',
+      'Shipped, 4 rows, expanded',
+      'Waiting, 3 rows, expanded',
+    ]);
+    // Each group sums its prices; the footer sums them all.
+    await expect(canvas.getByText('$4,354')).toBeInTheDocument();
+    await expect(canvasElement.querySelector('tfoot')).toHaveTextContent('Sum$20,262');
+    // A chevron folds its group.
+    await userEvent.click(toggles()[0]);
+    // Seven of the ten rows remain (each group's own header cell reads as a row header too, so count the rows).
+    await waitFor(() => expect(canvasElement.querySelectorAll('tbody tr[data-row]')).toHaveLength(7));
+    await expect(toggles()[0]).toHaveAttribute('aria-expanded', 'false');
+    // A group row's checkbox selects the group.
+    await userEvent.click(canvas.getByRole('checkbox', { name: 'Select every row in Shipped' }));
+    await expect(canvas.getByRole('checkbox', { name: 'Select Michael Ekstrom' })).toBeChecked();
+  },
+};

@@ -572,11 +572,10 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     iconFill: false,
     // The tones split the hero apart from the mustard buttons: display type
     // (the headline, its subtitle and the figures) in rust, headings in the
-    // mustard, running text in the ink, and a mark that runs from the rust
-    // into the mustard, so the two colours meet in the logo.
-    logoTone: "orange",
-    // A two-tone mark: rust running into the mustard.
-    logoEndTone: "yellow",
+    // mustard, running text in the ink, and the mark in the ink too, so the
+    // logo reads as a plain title-card sign over the two colours.
+    logoTone: "ink",
+    logoEndTone: "matched",
     displayTone: "orange",
     headingTone: "yellow",
     textTone: "ink",

@@ -21,6 +21,7 @@ import {
   wideColumns,
 } from "./benchData";
 import { EditingTable } from "./EditingTable";
+import { TableToolbar } from "rift-ds/components/TableToolbar/TableToolbar";
 import styles from "./TablesBench.module.css";
 
 const MARKDOWN = `| Widget | Entry point | Notes |
@@ -363,8 +364,66 @@ export function TablesBench() {
         )}
       </Station>
       <Station
+        id="bench-toolbar"
+        title="9. Toolbar and filters"
+        note="TableToolbar in the table's toolbar slot: search, Filter with a chip per condition, a More panel with the density switch and the columns, Import and Export as icons and New project, with no props. Each header menu ends in Filter…, the same filters as the chips. Status, Owner and Region filter as choices, Budget as a number, Due as a date, Project as text."
+        tunable={false}
+      >
+        {() => (
+          <DataTable
+            columns={wideColumns}
+            rows={projectRows}
+            columnMenu
+            resizableColumns
+            selectable
+            pageSize={8}
+            caption="Filtered projects"
+            defaultFilters={[
+              {
+                id: "status-1",
+                column: "status",
+                operator: "isAnyOf",
+                value: ["Active", "Paused"],
+              },
+              {
+                id: "owner-1",
+                column: "owner",
+                operator: "isAnyOf",
+                value: ["Priya Shah", "Sam Rivera", "Alex Morgan"],
+              },
+              { id: "budget-1", column: "budget", operator: "gt", value: 5000 },
+            ]}
+            toolbar={
+              <TableToolbar
+                secondaryActions={[
+                  {
+                    id: "import",
+                    label: "Import",
+                    icon: "upload",
+                    onSelect: () => {},
+                  },
+                  {
+                    id: "export",
+                    label: "Export",
+                    icon: "download",
+                    onSelect: () => {},
+                  },
+                ]}
+                primaryAction={{
+                  id: "new",
+                  label: "New project",
+                  icon: "add",
+                  onSelect: () => {},
+                }}
+              />
+            }
+          />
+        )}
+      </Station>
+
+      <Station
         id="bench-editing"
-        title="9. Editing"
+        title="10. Editing"
         note="Every editor kind: text, select, combobox, number, tags, multi-select, date, time, textarea, and a live checkbox and switch. Double-click a cell, or focus it and press Enter, F2 or start typing; Enter saves and moves down, Tab saves and moves on, Escape cancels. A task needs a name; a budget saves after a moment and fails above $100,000, rolling back. Row editing opens a whole row with Save and Cancel."
       >
         {({ size, lines }) => <EditingTable size={size} lines={lines} />}

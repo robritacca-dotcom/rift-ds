@@ -52,6 +52,19 @@
   white-space: nowrap;
 }
 
+/* Prose's inline-code chip, so a markdown table's code reads the same on a
+   docs page as in a chat reply, whatever page it sits on. It colours the
+   code, not a table part; the doubled class outranks a page's own code rule
+   (the blueprints' markdown body). */
+.wrapper.wrapper :global(code) {
+  font-family: var(--font-family-code);
+  font-size: var(--font-paragraph-sm-size);
+  background-color: var(--color-bg-container-secondary);
+  border-radius: var(--radius-050);
+  padding: 0 var(--padding-050);
+  color: var(--color-text-primary);
+}
+
 .wrapper :global(tbody tr:last-child td) {
   border-bottom: none;
 }

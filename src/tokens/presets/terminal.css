@@ -206,7 +206,7 @@ html[data-brand="terminal"] {
   --primitive-radius-300: 0px;
   --primitive-radius-400: 0px;
   --primitive-radius-600: 0px;
-  --primitive-radius-pill: 2px;
+  --primitive-radius-pill: 0px;
   --primitive-red-00: #FEF7F8;
   --primitive-red-01: #FCEEF0;
   --primitive-red-02: #F7D3D7;
@@ -358,7 +358,7 @@ html[data-brand="terminal"][data-theme="dark"] {
   --primitive-radius-300: 0px;
   --primitive-radius-400: 0px;
   --primitive-radius-600: 0px;
-  --primitive-radius-pill: 2px;
+  --primitive-radius-pill: 0px;
   --primitive-red-00: #FEF7F8;
   --primitive-red-01: #FCEEF0;
   --primitive-red-02: #F7D3D7;

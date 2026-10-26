@@ -1,0 +1,878 @@
+'use client';
+
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { Badge } from '../Badge/Badge';
+import { Button } from '../Button/Button';
+import { Chip } from '../Chip/Chip';
+import { CircularButton } from '../CircularButton/CircularButton';
+import { DropdownMenu } from '../DropdownMenu/DropdownMenu';
+import { Input } from '../Input/Input';
+import { Popover } from '../Popover/Popover';
+import { SegmentedControl } from '../SegmentedControl/SegmentedControl';
+import { ToggleSwitch } from '../ToggleSwitch/ToggleSwitch';
+import { FilterEditor } from '../DataTable/FilterEditor';
+import { startDrag } from '../DataTable/dragGesture';
+import '../../behaviors/visually-hidden.css';
+import {
+  DEFAULT_FILTER_LABELS,
+  OPERATORS,
+  isComplete,
+  newFilterId,
+  valueText,
+  type FilterKind,
+} from '../DataTable/filterModel';
+import type { DataTableFilter as Filter, DataTableFilterLabels as FilterLabels } from '../DataTable/DataTable';
+import { useTableContext, type ToolbarColumn } from '../DataTable/tableContext';
+import { BREAKPOINT_PHONE_PX } from '../../tokens/breakpoints';
+import './TableToolbar.css';
+
+/** One column as a TableToolbar over some other table is told about it. */
+export interface TableToolbarColumn {
+  /** The column's key. */
+  key: string;
+  /** Its header text. */
+  label: string;
+  /** Its filter kind: `text`, `number`, `date`, `enum` (choices) or `tags`. Defaults to `text`, or `enum` when it has options. */
+  kind?: FilterKind;
+  /** The choices an `enum` or `tags` filter offers. */
+  options?: { value: string; label: string }[];
+  /** Whether the More panel may hide it. Defaults to true. */
+  hideable?: boolean;
+  /** Whether the More panel may move it. Defaults to true. */
+  movable?: boolean;
+  /** Whether it can be filtered. Defaults to true. */
+  filterable?: boolean;
+}
+
+/** One of the bar's own actions: its primary action, or a secondary one beside it. */
+export interface TableToolbarAction {
+  /** Stable id for the action. */
+  id: string;
+  /** What the action does, as its label (and its name and tooltip when the bar folds it to an icon). */
+  label: string;
+  /** Material Symbol name (string) or custom element; the folded bar's primary icon. Defaults to `add` there. */
+  icon?: React.ReactNode;
+  /** Runs the action. */
+  onSelect: () => void;
+  /** Whether the action is unavailable. */
+  disabled?: boolean;
+}
+
+/** One action the Edit menu offers for the selected rows. */
+export interface TableToolbarBulkAction {
+  /** Stable id for the action. */
+  id: string;
+  /** What the action does, as its menu label. */
+  label: string;
+  /** Material Symbol name (string) or custom element. */
+  icon?: React.ReactNode;
+  /** Runs the action on the selected row ids. */
+  onSelect: (ids: string[]) => void;
+  /** Marks a dangerous or irreversible action, drawn in the destructive colour. */
+  destructive?: boolean;
+}
+
+/** Every word the control bar shows or announces, beyond the filters', each defaulting to English. */
+export interface TableToolbarLabels {
+  /** The bar's accessible name. */
+  toolbar: string;
+  /** The search field's placeholder and name. */
+  search: string;
+  /** The Columns caption in the More panel, and the column list's name. */
+  columns: string;
+  /** The More panel's Show all button. */
+  showAll: string;
+  /** The density switch's name. */
+  density: string;
+  /** The density switch's default segment. */
+  densityDefault: string;
+  /** The density switch's compact segment. */
+  densityCompact: string;
+  /** The result count, given the rows that match and the rows in all. */
+  count: (shown: number, total: number) => string;
+  /** The Filter icon's name, given how many filters are on. */
+  filters: (count: number) => string;
+  /** The folded bar's filter panel button that adds a filter. */
+  addFilter: string;
+  /** The chip the filters that do not fit fold into, given how many. */
+  moreFilters: (count: number) => string;
+  /** The More button, whose panel holds the density switch and the columns. */
+  more: string;
+  /** The Edit button, given how many rows are selected. */
+  bulkEdit: (count: number) => string;
+  /** The Edit menu's item that selects every matching row, given how many match. */
+  selectAll: (count: number) => string;
+  /** The Edit menu's item that clears the selection. */
+  clearSelection: string;
+  /** Name of a column's move grip in the More panel, given its header. */
+  moveColumn: (label: string) => string;
+  /** Announced after the panel moves a column, given its header, its new position and the column count. */
+  movedColumn: (label: string, position: number, count: number) => string;
+}
+
+const DEFAULT_LABELS: TableToolbarLabels = {
+  toolbar: 'Table controls',
+  search: 'Search',
+  columns: 'Columns',
+  showAll: 'Show all',
+  density: 'Density',
+  densityDefault: 'Default',
+  densityCompact: 'Compact',
+  count: (shown, total) => (shown === total ? `${total} result${total === 1 ? '' : 's'}` : `${shown} of ${total}`),
+  filters: (count) => (count > 0 ? `Filters, ${count} on` : 'Filter'),
+  addFilter: 'Add filter',
+  moreFilters: (count) => `+${count}`,
+  more: 'More',
+  bulkEdit: (count) => (count > 0 ? `Edit (${count})` : 'Edit'),
+  selectAll: (count) => `Select all ${count}`,
+  clearSelection: 'Clear selection',
+  moveColumn: (label) => `Move ${label}`,
+  movedColumn: (label, position, count) => `${label} moved to position ${position} of ${count}`,
+};
+
+/** Props owned by TableToolbar itself — everything else falls through to the root element. */
+type TableToolbarOwnProps = {
+  /** The columns the bar filters and shows, for a bar over some other table. Inside a DataTable's `toolbar` the table's own columns are used. */
+  columns?: TableToolbarColumn[];
+  /** The filters, for controlled use. Inside a DataTable the table's filters are used unless this is set. */
+  filters?: Filter[];
+  /** Starting filters, for uncontrolled use outside a DataTable. */
+  defaultFilters?: Filter[];
+  /** Fires with every filter after one is added, changed or removed. */
+  onFiltersChange?: (filters: Filter[]) => void;
+  /** The search text, for controlled use. Inside a DataTable the table's search is used unless this is set. */
+  search?: string;
+  /** Starting search text, for uncontrolled use outside a DataTable. */
+  defaultSearch?: string;
+  /** Fires with the search text as it changes. */
+  onSearchChange?: (search: string) => void;
+  /** Hidden column keys, for controlled use. Inside a DataTable the table's are used unless this is set. */
+  hiddenColumns?: string[];
+  /** Starting hidden keys, for uncontrolled use outside a DataTable. */
+  defaultHiddenColumns?: string[];
+  /** Fires with every hidden key after the More panel changes one. */
+  onHiddenColumnsChange?: (hidden: string[]) => void;
+  /** The density the bar's controls take and its switch sets, for controlled use. Inside a DataTable the table's density is used unless this is set. */
+  size?: 'default' | 'compact';
+  /** Starting density, for uncontrolled use outside a DataTable. */
+  defaultSize?: 'default' | 'compact';
+  /** Fires when the density switch changes. */
+  onSizeChange?: (size: 'default' | 'compact') => void;
+  /** The result count's numbers, outside a DataTable: rows that match and rows in all. */
+  count?: { shown: number; total: number };
+  /** Shows the search field. Defaults to true. */
+  searchable?: boolean;
+  /** Shows the Filter button and the filter chips. Defaults to true. */
+  filterable?: boolean;
+  /** Shows the columns in the More panel. Defaults to true. */
+  columnsPanel?: boolean;
+  /** Shows the density switch. Defaults to true. */
+  densitySwitch?: boolean;
+  /** Shows the result count in the bar. Defaults to true over some other table and false inside a DataTable, whose footer carries the count; set it to move the count into the bar, and the footer leaves it out. */
+  showCount?: boolean;
+  /** Every column key in display order, for controlled use. Inside a DataTable the table's order is used unless this is set. */
+  columnOrder?: string[];
+  /** Starting column order, for uncontrolled use outside a DataTable. */
+  defaultColumnOrder?: string[];
+  /** Fires with the full column order after the More panel moves one. */
+  onColumnOrderChange?: (order: string[]) => void;
+  /** The Edit menu's actions for the selected rows. Inside a DataTable with `selectable`, an Edit button leads the bar, offering these with Select all and Clear selection. */
+  bulkActions?: TableToolbarBulkAction[];
+  /** The page's main action (New project, Invite), drawn as the primary button at the bar's end. */
+  primaryAction?: TableToolbarAction;
+  /** Actions beside the primary one (Export, Import), drawn as icon buttons before it, each named and tooltipped by its label. */
+  secondaryActions?: TableToolbarAction[];
+  /** Any other controls at the bar's end, after the actions. */
+  actions?: React.ReactNode;
+  /** The bar's words, merged over their English defaults. */
+  labels?: Partial<TableToolbarLabels>;
+  /** The filters' words, merged over their English defaults (inside a DataTable, over the table's). */
+  filterLabels?: Partial<FilterLabels>;
+  /** Additional CSS classes */
+  className?: string;
+};
+
+export interface TableToolbarProps
+  extends TableToolbarOwnProps, Omit<React.ComponentPropsWithoutRef<'div'>, keyof TableToolbarOwnProps> {}
+
+/** One piece of bar state: the prop when given, else the surrounding table's, else the bar's own. */
+function useBound<T>(
+  value: T | undefined,
+  defaultValue: T,
+  onChange: ((next: T) => void) | undefined,
+  table: { value: T; set: (next: T) => void } | undefined,
+) {
+  const [own, setOwn] = useState<T>(defaultValue);
+  const current = value !== undefined ? value : table ? table.value : own;
+  const set = (next: T) => {
+    if (value === undefined) {
+      if (table) table.set(next);
+      else setOwn(next);
+    }
+    onChange?.(next);
+  };
+  return [current, set] as const;
+}
+
+/**
+ * The control bar for a table: search, filters as chips, a More panel (density and columns),
+ * the density switch, the result count and an actions slot, in one row that
+ * wraps. Inside a DataTable (`toolbar={<TableToolbar />}`) it reads and sets
+ * the table's own state with no props; over any other table its props carry
+ * the same state. Its filters and a DataTable's header filters are one list,
+ * so a filter set from either shows in both. Every control takes the
+ * table's density.
+ */
+export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
+  (
+    {
+      columns: columnsProp,
+      filters: filtersProp,
+      defaultFilters,
+      onFiltersChange,
+      search: searchProp,
+      defaultSearch,
+      onSearchChange,
+      hiddenColumns: hiddenProp,
+      defaultHiddenColumns,
+      onHiddenColumnsChange,
+      size: sizeProp,
+      defaultSize,
+      onSizeChange,
+      count,
+      searchable = true,
+      filterable = true,
+      columnsPanel = true,
+      densitySwitch = true,
+      showCount: showCountProp,
+      columnOrder: orderProp,
+      defaultColumnOrder,
+      onColumnOrderChange,
+      bulkActions = [],
+      primaryAction,
+      secondaryActions = [],
+      actions,
+      labels: labelsProp,
+      filterLabels: filterLabelsProp,
+      className = '',
+      ...rest
+    },
+    ref,
+  ) => {
+    const table = useTableContext();
+    const labels: TableToolbarLabels = { ...DEFAULT_LABELS, ...labelsProp };
+    const baseFilterLabels = table?.filterLabels ?? DEFAULT_FILTER_LABELS;
+    const filterLabels: FilterLabels = {
+      ...baseFilterLabels,
+      ...filterLabelsProp,
+      operators: {
+        ...baseFilterLabels.operators,
+        ...filterLabelsProp?.operators,
+      },
+    };
+
+    const [filters, setFilters] = useBound<Filter[]>(
+      filtersProp,
+      defaultFilters ?? [],
+      onFiltersChange,
+      table ? { value: table.filters, set: table.setFilters } : undefined,
+    );
+    const [search, setSearch] = useBound<string>(
+      searchProp,
+      defaultSearch ?? '',
+      onSearchChange,
+      table ? { value: table.search, set: table.setSearch } : undefined,
+    );
+    const [hidden, setHidden] = useBound<string[]>(
+      hiddenProp,
+      defaultHiddenColumns ?? [],
+      onHiddenColumnsChange,
+      table ? { value: table.hiddenColumns, set: table.setHiddenColumns } : undefined,
+    );
+    const [size, setSize] = useBound<'default' | 'compact'>(
+      sizeProp,
+      defaultSize ?? 'default',
+      onSizeChange,
+      table ? { value: table.size, set: table.setSize } : undefined,
+    );
+
+    const columns: ToolbarColumn[] =
+      columnsProp?.map((col) => ({
+        key: col.key,
+        label: col.label,
+        kind: col.kind ?? (col.options ? 'enum' : 'text'),
+        options: col.options ?? [],
+        hideable: col.hideable ?? true,
+        movable: col.movable ?? true,
+        filterable: col.filterable ?? true,
+      })) ??
+      table?.columns ??
+      [];
+    const columnOf = (key: string) => columns.find((col) => col.key === key);
+    const [order, setOrder] = useBound<string[]>(
+      orderProp,
+      defaultColumnOrder ?? [],
+      onColumnOrderChange,
+      table ? { value: table.columnOrder, set: table.setColumnOrder } : undefined,
+    );
+    /* The columns in display order: the order given, then any it leaves out. */
+    const ordered = [
+      ...order.map(columnOf).filter((col): col is ToolbarColumn => Boolean(col)),
+      ...columns.filter((col) => !order.includes(col.key)),
+    ];
+    const [announcement, setAnnouncement] = useState('');
+    const moveTo = (key: string, to: number) => {
+      const keys = ordered.map((col) => col.key);
+      const from = keys.indexOf(key);
+      const target = Math.max(0, Math.min(keys.length - 1, to));
+      if (from === -1 || from === target) return;
+      keys.splice(from, 1);
+      keys.splice(target, 0, key);
+      setOrder(keys);
+      setAnnouncement(labels.movedColumn(columnOf(key)?.label ?? key, target + 1, keys.length));
+    };
+    /* A grip drag moves the row on screen per frame and commits the order
+       once, on release (the gesture rule). The drop slot is how many of the
+       other rows' midpoints the dragged row's centre has passed. */
+    const startColumnDrag = (event: React.PointerEvent<HTMLElement>, key: string) => {
+      const row = event.currentTarget.closest<HTMLElement>('.ds-table-toolbar__column');
+      const list = row?.parentElement;
+      if (!row || !list) return;
+      const rows = [...list.querySelectorAll<HTMLElement>('.ds-table-toolbar__column')];
+      const from = rows.indexOf(row);
+      const boxes = rows.map((r) => r.getBoundingClientRect());
+      const slot = (dy: number) => {
+        const centre = boxes[from].top + boxes[from].height / 2 + dy;
+        return rows.reduce((at, _r, i) => {
+          if (i === from) return at;
+          const mid = boxes[i].top + boxes[i].height / 2;
+          return i < from ? (centre < mid ? at - 1 : at) : centre > mid ? at + 1 : at;
+        }, from);
+      };
+      /* The drop line marks the slot the row lands in: above the row it
+         takes the place of when moving up, below it when moving down. */
+      const line = list.querySelector<HTMLElement>(':scope > .ds-table-toolbar__drop');
+      const listTop = list.getBoundingClientRect().top;
+      const showLine = (at: number) => {
+        if (!line) return;
+        const box = boxes[at];
+        const y = at <= from ? box.top : box.bottom;
+        line.style.transform = `translateY(${y - listTop}px)`;
+        line.hidden = at === from;
+      };
+      const reset = () => {
+        row.style.transform = '';
+        row.removeAttribute('data-dragging');
+        if (line) line.hidden = true;
+      };
+      startDrag(event, {
+        onStart: () => row.setAttribute('data-dragging', ''),
+        onFrame: (_dx, dy) => {
+          row.style.transform = `translateY(${dy}px)`;
+          showLine(slot(dy));
+        },
+        onEnd: (_dx, dy) => {
+          reset();
+          moveTo(key, slot(dy));
+        },
+        onCancel: reset,
+      });
+    };
+    const showCount = showCountProp ?? !table;
+    const claimCount = table?.claimCount;
+    useEffect(() => {
+      if (!claimCount || !showCount) return;
+      claimCount(true);
+      return () => claimCount(false);
+    }, [claimCount, showCount]);
+    const shown = count?.shown ?? table?.shown;
+    const total = count?.total ?? table?.total;
+
+    /* The chip whose editor is open. A filter left without a value when its
+       editor closes is dropped, so an abandoned filter never lingers. */
+    const [openFilter, setOpenFilter] = useState<string | null>(null);
+    const closeFilter = () => {
+      const open = filters.find((filter) => filter.id === openFilter);
+      if (open && !isComplete(open)) setFilters(filters.filter((filter) => filter.id !== open.id));
+      setOpenFilter(null);
+    };
+    const addFilter = (column: ToolbarColumn) => {
+      const filter: Filter = {
+        id: newFilterId(column.key, filters),
+        column: column.key,
+        operator: OPERATORS[column.kind][0],
+      };
+      setFilters([...filters, filter]);
+      setOpenFilter(filter.id);
+    };
+
+    const chipText = (filter: Filter) => {
+      const column = columnOf(filter.column);
+      const choice = (value: string) => column?.options.find((option) => option.value === value)?.label ?? value;
+      // The kind's default condition goes unsaid ("Status · Active +1"); any other is named.
+      const isDefault = column ? OPERATORS[column.kind][0] === filter.operator : false;
+      return [
+        column?.label ?? filter.column,
+        isDefault ? '' : filterLabels.operators[filter.operator],
+        valueText(filter, filterLabels, choice),
+      ]
+        .filter(Boolean)
+        .join(' · ');
+    };
+
+    const filterableColumns = columns.filter((col) => col.filterable);
+    const visibleCount = columns.filter((col) => !hidden.includes(col.key)).length;
+    const activeFilters = filters.filter(isComplete).length;
+
+    /* Narrower than a phone, the bar folds to icons: Edit, search and
+       the filters each become one icon, the filters' chips moving into the
+       Filter icon's panel. The bar's own width decides, not the viewport's,
+       so a bar in a narrow panel folds too. */
+    const rootRef = useRef<HTMLDivElement | null>(null);
+    const [narrow, setNarrow] = useState(false);
+    useEffect(() => {
+      const node = rootRef.current;
+      if (!node) return;
+      const observer = new ResizeObserver(([entry]) => setNarrow(entry.contentRect.width < BREAKPOINT_PHONE_PX));
+      observer.observe(node);
+      return () => observer.disconnect();
+    }, []);
+    /* Wide, the bar is one line: the chips that fit after search stay
+       inline and the rest fold into a +N chip, which opens the same panel
+       the folded bar uses. Chips past the fit are kept in the layout's flow
+       out of sight (absolutely placed, inert), so every chip can be
+       measured; search is counted at its floor, since it yields first. */
+    const startRef = useRef<HTMLDivElement | null>(null);
+    const [fit, setFit] = useState(Number.MAX_SAFE_INTEGER);
+    const filterIds = filters.map((filter) => filter.id + filter.operator + JSON.stringify(filter.value)).join('|');
+    useLayoutEffect(() => {
+      const start = startRef.current;
+      if (!start || narrow) return;
+      const measure = () => {
+        const style = getComputedStyle(start);
+        const gap = parseFloat(style.columnGap) || 0;
+        const chipEls = [...start.querySelectorAll<HTMLElement>(':scope > [data-chip]')];
+        const more = start.querySelector<HTMLElement>(':scope > [data-more]');
+        let used = 0;
+        for (const el of [...start.children] as HTMLElement[]) {
+          if (el.hasAttribute('data-chip') || el.hasAttribute('data-more')) continue;
+          const width = el.classList.contains('ds-table-toolbar__search')
+            ? parseFloat(getComputedStyle(el).minWidth) || el.getBoundingClientRect().width
+            : el.getBoundingClientRect().width;
+          used += width + gap;
+        }
+        const moreWidth = (more?.getBoundingClientRect().width ?? 0) + gap;
+        let n = 0;
+        for (let i = 0; i < chipEls.length; i += 1) {
+          const width = chipEls[i].getBoundingClientRect().width + gap;
+          const reserve = i < chipEls.length - 1 ? moreWidth : 0;
+          if (used + width + reserve > start.clientWidth) break;
+          used += width;
+          n += 1;
+        }
+        setFit((previous) => (previous === n ? previous : n));
+      };
+      measure();
+      const observer = new ResizeObserver(measure);
+      observer.observe(start);
+      return () => observer.disconnect();
+      // Measures again when the filters change what their chips say.
+    }, [narrow, filterIds, size]);
+    const setRootRef = (node: HTMLDivElement | null) => {
+      rootRef.current = node;
+      if (typeof ref === 'function') ref(node);
+      else if (ref) ref.current = node;
+    };
+
+    const selectedCount = table?.selectedIds.length ?? 0;
+    const bulk = table?.selectable && (
+      <DropdownMenu
+        size={size}
+        items={[
+          ...bulkActions.map((action) => ({
+            label: action.label,
+            icon: action.icon,
+            destructive: action.destructive,
+            onClick: () => action.onSelect(table.selectedIds),
+          })),
+          ...(bulkActions.length > 0 ? [{ type: 'separator' as const }] : []),
+          {
+            label: labels.selectAll(table.matchingIds.length),
+            icon: 'select_all',
+            onClick: () => table.setSelectedIds(table.matchingIds),
+          },
+          { label: labels.clearSelection, icon: 'deselect', onClick: () => table.setSelectedIds([]) },
+        ]}
+        trigger={
+          narrow ? (
+            <CircularButton
+              icon="checklist"
+              variant="tertiary"
+              size={size}
+              ariaLabel={labels.bulkEdit(selectedCount)}
+              tooltip={labels.bulkEdit(selectedCount)}
+              disabled={selectedCount === 0}
+            />
+          ) : (
+            <Button
+              variant="secondary"
+              tone="neutral"
+              size={size}
+              iconLeft="checklist"
+              label={labels.bulkEdit(selectedCount)}
+              disabled={selectedCount === 0}
+            />
+          )
+        }
+      />
+    );
+
+    const searchField = (
+      <Input
+        className="ds-table-toolbar__search"
+        size={size}
+        iconLeft="search"
+        placeholder={labels.search}
+        aria-label={labels.search}
+        value={search}
+        onValueChange={setSearch}
+        autoFocus={narrow}
+        onKeyDown={(event) => {
+          if (event.key === 'Escape' && search) {
+            event.preventDefault();
+            setSearch('');
+          }
+        }}
+      />
+    );
+
+    const addFilterMenu = (trigger: React.ReactElement) => (
+      <DropdownMenu
+        size={size}
+        items={[
+          ...filterableColumns.map((col) => ({ label: col.label, onClick: () => addFilter(col) })),
+          ...(filters.length > 0
+            ? [
+                { type: 'separator' as const },
+                { label: filterLabels.clearAll, icon: 'filter_list_off', onClick: () => setFilters([]) },
+              ]
+            : []),
+        ]}
+        trigger={trigger}
+      />
+    );
+    const filterIcon = (
+      <CircularButton
+        icon="filter_list"
+        variant="tertiary"
+        size={size}
+        ariaLabel={labels.filters(activeFilters)}
+        tooltip={labels.filters(activeFilters)}
+      />
+    );
+    const updateFilter = (next: Filter) => setFilters(filters.map((f) => (f.id === next.id ? next : f)));
+    const removeFilter = (id: string) => setFilters(filters.filter((f) => f.id !== id));
+
+    const panelContent = (
+      <div className="ds-table-toolbar__filter-panel">
+        {filters.map((filter) => {
+          const column = columnOf(filter.column);
+          if (!column) return null;
+          return (
+            <div key={filter.id} className="ds-table-toolbar__filter-item">
+              <div className="ds-table-toolbar__filter-head">
+                <span>{column.label}</span>
+                <CircularButton
+                  icon="close"
+                  variant="tertiary"
+                  size="compact"
+                  tooltip={false}
+                  ariaLabel={filterLabels.remove(chipText(filter))}
+                  onClick={() => removeFilter(filter.id)}
+                />
+              </div>
+              <FilterEditor column={column} filter={filter} labels={filterLabels} size={size} onChange={updateFilter} />
+            </div>
+          );
+        })}
+        <div className="ds-table-toolbar__filter-actions">
+          {addFilterMenu(<Button variant="tertiary" size={size} iconLeft="add" label={labels.addFilter} />)}
+          {filters.length > 0 && (
+            <Button variant="tertiary" size={size} label={filterLabels.clearAll} onClick={() => setFilters([])} />
+          )}
+        </div>
+      </div>
+    );
+    const dropIncomplete = (open: boolean) => {
+      if (!open && filters.some((f) => !isComplete(f))) setFilters(filters.filter(isComplete));
+    };
+
+    /* The folded bar's filter panel: every filter edited in place under its
+       column's name, then Add filter. Closing it drops a filter left without
+       a value. */
+    const filterPanel = (
+      <span className="ds-table-toolbar__badge-host">
+        <Popover
+          size={size}
+          ariaLabel={labels.filters(activeFilters)}
+          onOpenChange={dropIncomplete}
+          content={panelContent}
+        >
+          {filterIcon}
+        </Popover>
+        {activeFilters > 0 && (
+          <span className="ds-table-toolbar__badge" aria-hidden="true">
+            <Badge label={String(activeFilters)} variant="info" />
+          </span>
+        )}
+      </span>
+    );
+
+    const chips = filters.map((filter, index) => {
+      const column = columnOf(filter.column);
+      if (!column) return null;
+      const text = chipText(filter);
+      return (
+        <span
+          key={filter.id}
+          data-chip=""
+          className={index < fit ? 'ds-table-toolbar__chip' : 'ds-table-toolbar__chip ds-table-toolbar__chip--overflow'}
+          aria-hidden={index < fit ? undefined : true}
+          inert={index < fit ? undefined : true}
+        >
+          <Popover
+            size={size}
+            open={openFilter === filter.id}
+            onOpenChange={(open) => (open ? setOpenFilter(filter.id) : closeFilter())}
+            content={
+              <FilterEditor column={column} filter={filter} labels={filterLabels} size={size} onChange={updateFilter} />
+            }
+          >
+            <Chip size={size === 'compact' ? 'default' : 'large'} label={text} onClick={() => {}} />
+          </Popover>
+          <CircularButton
+            icon="close"
+            variant="tertiary"
+            size={size}
+            tooltip={false}
+            ariaLabel={filterLabels.remove(text)}
+            onClick={() => removeFilter(filter.id)}
+          />
+        </span>
+      );
+    });
+
+    const columnsList = columnsPanel && columns.length > 0 && (
+          <div className="ds-table-toolbar__columns" role="group" aria-label={labels.columns}>
+            <div className="ds-table-toolbar__drop" hidden aria-hidden="true" />
+            {ordered.map((col, index) => {
+              const visible = !hidden.includes(col.key);
+              return (
+                <div key={col.key} className="ds-table-toolbar__column">
+                  <button
+                    type="button"
+                    className="ds-table-toolbar__grip material-symbols-rounded"
+                    aria-label={labels.moveColumn(col.label)}
+                    aria-disabled={!col.movable || undefined}
+                    onPointerDown={col.movable ? (event) => startColumnDrag(event, col.key) : undefined}
+                    onKeyDown={(event) => {
+                      if (!col.movable || !event.altKey) return;
+                      if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown') return;
+                      event.preventDefault();
+                      moveTo(col.key, index + (event.key === 'ArrowDown' ? 1 : -1));
+                    }}
+                  >
+                    drag_indicator
+                  </button>
+                  <ToggleSwitch
+                    size={size}
+                    label={col.label}
+                    checked={visible}
+                    disabled={!col.hideable || (visible && visibleCount <= 1)}
+                    onCheckedChange={(checked) =>
+                      setHidden(checked ? hidden.filter((key) => key !== col.key) : [...hidden, col.key])
+                    }
+                  />
+                </div>
+              );
+            })}
+            <Button
+              variant="tertiary"
+              size={size}
+              label={labels.showAll}
+              disabled={hidden.length === 0}
+              onClick={() => setHidden([])}
+            />
+          </div>
+    );
+
+    const density = densitySwitch && (
+      <SegmentedControl
+        size={size}
+        aria-label={labels.density}
+        segments={[
+          { value: 'default', label: labels.densityDefault, icon: 'density_medium' },
+          { value: 'compact', label: labels.densityCompact, icon: 'density_small' },
+        ]}
+        value={size}
+        onValueChange={(value) => setSize(value as 'default' | 'compact')}
+      />
+    );
+
+    /* The view controls (density, then the columns) share one More panel,
+       so the bar keeps its room for search and the chips. */
+    const moreControl = (density || columnsList) && (
+      <Popover
+        size={size}
+        ariaLabel={labels.more}
+        position="bottom"
+        content={
+          <div className="ds-table-toolbar__view">
+            {density && (
+              <div className="ds-table-toolbar__view-section">
+                <span className="ds-table-toolbar__view-heading" aria-hidden="true">
+                  {labels.density}
+                </span>
+                {density}
+              </div>
+            )}
+            {columnsList && (
+              <div className="ds-table-toolbar__view-section">
+                <span className="ds-table-toolbar__view-heading" aria-hidden="true">
+                  {labels.columns}
+                </span>
+                {columnsList}
+              </div>
+            )}
+          </div>
+        }
+      >
+        <CircularButton icon="more_horiz" variant="tertiary" size={size} ariaLabel={labels.more} tooltip={labels.more} />
+      </Popover>
+    );
+
+    const showFilters = filterable && filterableColumns.length > 0;
+
+    return (
+      <div
+        role="group"
+        aria-label={labels.toolbar}
+        {...rest}
+        ref={setRootRef}
+        className={`ds-table-toolbar ds-table-toolbar--${size}${narrow ? ' ds-table-toolbar--narrow' : ''} ${className}`.trim()}
+      >
+        <span className="ds-visually-hidden" aria-live="polite" aria-atomic="true">
+          {announcement}
+        </span>
+        <div className="ds-table-toolbar__main">
+          <div className="ds-table-toolbar__start" ref={startRef}>
+            {bulk}
+            {searchable && !narrow && searchField}
+            {showFilters && !narrow && chips}
+            {showFilters && !narrow && (
+              <span
+                data-more=""
+                className={
+                  filters.length > fit
+                    ? 'ds-table-toolbar__more'
+                    : 'ds-table-toolbar__more ds-table-toolbar__chip--overflow'
+                }
+                aria-hidden={filters.length > fit ? undefined : true}
+                inert={filters.length > fit ? undefined : true}
+              >
+                <Popover
+                  size={size}
+                  ariaLabel={labels.filters(activeFilters)}
+                  onOpenChange={dropIncomplete}
+                  content={panelContent}
+                >
+                  <Chip
+                    size={size === 'compact' ? 'default' : 'large'}
+                    label={labels.moreFilters(Math.max(1, filters.length - fit))}
+                    onClick={() => {}}
+                  />
+                </Popover>
+              </span>
+            )}
+          </div>
+          <div className="ds-table-toolbar__end">
+            {showCount && shown !== undefined && total !== undefined && (
+              <span className="ds-table-toolbar__count">{labels.count(shown, total)}</span>
+            )}
+            {searchable && narrow && (
+              <Popover
+                size={size}
+                ariaLabel={labels.search}
+                content={<div className="ds-table-toolbar__search-panel">{searchField}</div>}
+              >
+                <CircularButton
+                  icon="search"
+                  variant="tertiary"
+                  size={size}
+                  ariaLabel={labels.search}
+                  tooltip={labels.search}
+                />
+              </Popover>
+            )}
+            {/* The icon controls sit together: Filter, Columns, then density. */}
+            {showFilters && (narrow ? filterPanel : addFilterMenu(filterIcon))}
+            {moreControl}
+            {(primaryAction || secondaryActions.length > 0) && (
+              <span className="ds-table-toolbar__actions">
+                {secondaryActions.map((action) =>
+                  typeof action.icon === 'string' ? (
+                    <CircularButton
+                      key={action.id}
+                      icon={action.icon}
+                      variant="tertiary"
+                      size={size}
+                      ariaLabel={action.label}
+                      tooltip={action.label}
+                      disabled={action.disabled}
+                      onClick={action.onSelect}
+                    />
+                  ) : (
+                    <Button
+                      key={action.id}
+                      variant="secondary"
+                      tone="neutral"
+                      size={size}
+                      iconLeft={action.icon}
+                      label={action.label}
+                      disabled={action.disabled}
+                      onClick={action.onSelect}
+                    />
+                  ),
+                )}
+                {primaryAction &&
+                  (narrow ? (
+                    <CircularButton
+                      icon={typeof primaryAction.icon === 'string' ? primaryAction.icon : 'add'}
+                      variant="primary"
+                      size={size}
+                      ariaLabel={primaryAction.label}
+                      tooltip={primaryAction.label}
+                      disabled={primaryAction.disabled}
+                      onClick={primaryAction.onSelect}
+                    />
+                  ) : (
+                    <Button
+                      variant="primary"
+                      size={size}
+                      iconLeft={primaryAction.icon}
+                      label={primaryAction.label}
+                      disabled={primaryAction.disabled}
+                      onClick={primaryAction.onSelect}
+                    />
+                  ))}
+              </span>
+            )}
+            {actions}
+          </div>
+        </div>
+      </div>
+    );
+  },
+);
+
+TableToolbar.displayName = 'TableToolbar';

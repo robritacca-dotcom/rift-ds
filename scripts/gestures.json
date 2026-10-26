@@ -139,6 +139,17 @@
       "route": "/labs/tables",
       "grip": "#bench-stress .ds-data-table__grip",
       "axis": "y"
+    },
+    {
+      "label": "tables bench: More panel column grip",
+      "route": "/labs/tables",
+      "ready": "#bench-toolbar button[aria-label=\"More\"]",
+      "setup": [
+        { "click": "#bench-toolbar button[aria-label=\"More\"]" },
+        { "waitFor": "#bench-toolbar .ds-table-toolbar__grip" }
+      ],
+      "grip": "#bench-toolbar .ds-table-toolbar__grip:not([aria-disabled])",
+      "axis": "y"
     }
   ]
 }

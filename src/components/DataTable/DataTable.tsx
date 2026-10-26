@@ -24,6 +24,20 @@ import { Checkbox } from '../Checkbox/Checkbox';
 import { Input } from '../Input/Input';
 import { ToggleSwitch } from '../ToggleSwitch/ToggleSwitch';
 import { CellEditor, EditorHost } from './CellEditor';
+import { FilterEditor } from './FilterEditor';
+import {
+  DEFAULT_FILTER_LABELS,
+  OPERATORS,
+  kindOf as filterKindOf,
+  isComplete,
+  matches,
+  newFilterId,
+  type Filter,
+  type FilterLabels,
+  type FilterOperator,
+} from './filterModel';
+import { TableContext, type TableContextValue, type ToolbarColumn } from './tableContext';
+import { Popover } from '../Popover/Popover';
 import { EDITOR_MIN_WIDTH, LIVE_KINDS, TYPED_KINDS, type CellEditorKind, type CellValue } from './editorKinds';
 import { EmptyState, type EmptyStateProps } from '../EmptyState/EmptyState';
 import { MOTION_ANNOUNCE_DEBOUNCE_MS } from '../../tokens/motion';
@@ -78,7 +92,18 @@ export interface DataTableColumn<R extends DataTableRow = DataTableRow> {
   validate?: (value: DataTableValue, row: R) => string | null | undefined;
   /** Whether a row's cell in this column can be edited, given the row. Defaults to true when the column has an `editor`. */
   editable?: boolean | ((row: R) => boolean);
+  /** Whether the column can be filtered, from its header menu or a TableToolbar. Defaults to true. */
+  filterable?: boolean;
 }
+
+/** One filter condition on one column, as the table and TableToolbar share it. */
+export type DataTableFilter = Filter;
+
+/** The operators a filter can use, across the filter kinds. */
+export type DataTableFilterOperator = FilterOperator;
+
+/** Every word a filter shows or announces, each defaulting to English. */
+export type DataTableFilterLabels = FilterLabels;
 
 /** The editor kinds a column's `editor` can name, each composed from the library's own field. */
 export type DataTableEditorKind = CellEditorKind;
@@ -284,6 +309,8 @@ const LABEL_MIN_WIDTH = 40;
 /** The header controls' widths, in the base theme: the sort glyph and the compact menu button, each with its gap. */
 const SORT_GLYPH_WIDTH = 24;
 const MENU_BUTTON_WIDTH = 36;
+/** A filtered header's mark, the filter glyph with its gap. */
+const FILTER_MARK_WIDTH = 24;
 /** An editor's inset inside its cell (`--padding-100`). */
 const EDITOR_INSET = 4;
 /** A cell's inline padding at each density (`--padding-400`, `--padding-300`). */
@@ -504,6 +531,24 @@ type DataTableOwnProps<R extends DataTableRow = DataTableRow> = {
   onCellEdit?: (edit: DataTableCellEdit<R>) => void | Promise<unknown>;
   /** Saves one edited row with `editMode="row"`, its changed values together. Without it, each changed cell goes to `onCellEdit`. */
   onRowEdit?: (edit: DataTableRowEdit<R>) => void | Promise<unknown>;
+  /** The filters, for controlled use: conditions on columns, joined with AND. Set from the header menus (with `columnMenu`) or a TableToolbar. */
+  filters?: DataTableFilter[];
+  /** Starting filters, for uncontrolled use. */
+  defaultFilters?: DataTableFilter[];
+  /** Fires with every filter after one is added, changed or removed. */
+  onFiltersChange?: (filters: DataTableFilter[]) => void;
+  /** The search text, for controlled use; the built-in search field and a TableToolbar's both set it. */
+  search?: string;
+  /** Starting search text, for uncontrolled use. */
+  defaultSearch?: string;
+  /** Fires with the search text as it changes. */
+  onSearchChange?: (search: string) => void;
+  /** Starting density, for uncontrolled use when a TableToolbar's density switch sets it; `size` controls it. */
+  defaultSize?: 'default' | 'compact';
+  /** Fires when a TableToolbar's density switch changes the density. */
+  onSizeChange?: (size: 'default' | 'compact') => void;
+  /** The filters' words, merged over their English defaults. */
+  filterLabels?: Partial<DataTableFilterLabels>;
   /** When the inline actions show: on row hover and focus (the default, and always on a touch screen), or always. The More button shows at rest either way, so the column never reads as empty. */
   rowActionsVisibility?: 'hover' | 'always';
   /** Additional CSS classes */
@@ -543,7 +588,16 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
       searchable = false,
       searchPlaceholder = 'Search',
       toolbar,
-      size = 'default',
+      size: sizeProp,
+      defaultSize,
+      onSizeChange,
+      filters: filtersProp,
+      defaultFilters,
+      onFiltersChange,
+      search: searchProp,
+      defaultSearch,
+      onSearchChange,
+      filterLabels: filterLabelsProp,
       striped = false,
       caption,
       emptyState,
@@ -600,8 +654,24 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     }: DataTableProps<R>) {
     const baseClass = 'ds-data-table';
 
-    const [search, setSearch] = useState('');
+    const [size, setSize] = useControllable<'default' | 'compact'>(sizeProp, defaultSize ?? 'default', onSizeChange);
+    const [search, setSearchState] = useControllable<string>(searchProp, defaultSearch ?? '', onSearchChange);
+    const [filters, setFiltersState] = useControllable<DataTableFilter[]>(filtersProp, defaultFilters ?? [], onFiltersChange);
+    const filterLabels: FilterLabels = {
+      ...DEFAULT_FILTER_LABELS,
+      ...filterLabelsProp,
+      operators: { ...DEFAULT_FILTER_LABELS.operators, ...filterLabelsProp?.operators },
+    };
     const [page, setPage] = useState(1);
+    /* A new search or filter starts from the first page. */
+    const setSearch = (next: string) => {
+      setSearchState(next);
+      setPage(1);
+    };
+    const setFilters = (next: DataTableFilter[]) => {
+      setFiltersState(next);
+      setPage(1);
+    };
 
     /* One polite channel for what changes without moving focus: a sort, the
        result count while searching (debounced, so typing speaks once), a
@@ -727,6 +797,9 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
           accessorFn: (row: R) => row.values[key],
           sortFn: (a: { original: R }, b: { original: R }) =>
             compareValues(a.original.values[key], b.original.values[key]),
+          // A column's filters, every one of which a row must pass.
+          filterFn: (row: { original: R }, _id: string, value: unknown) =>
+            (value as Filter[]).every((filter) => matches(filter, row.original.values[key])),
           sortUndefined: false as const,
         })),
       [columnKeys],
@@ -744,6 +817,12 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
         columnVisibility: Object.fromEntries([...hidden].map((key) => [key, false])),
         sorting: currentSort ? [{ id: currentSort.key, desc: currentSort.direction === 'desc' }] : [],
         globalFilter: needle || undefined,
+        columnFilters: Object.entries(
+          filters.reduce<Record<string, Filter[]>>((byColumn, filter) => {
+            if (byKey.has(filter.column)) (byColumn[filter.column] ??= []).push(filter);
+            return byColumn;
+          }, {}),
+        ).map(([id, value]) => ({ id, value })),
         rowSelection: Object.fromEntries(currentSelection.map((id) => [id, true as const])),
       },
       /* The search matches any raw value on the row, displayed or not, case
@@ -778,6 +857,19 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
       // Announce on a new search term only; the count is read at that moment.
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [search]);
+
+    /* The match count after the filters change. Skipped on the first render. */
+    const filtered = useRef(false);
+    const filtersKey = JSON.stringify(filters);
+    useEffect(() => {
+      if (!filtered.current) {
+        filtered.current = true;
+        return;
+      }
+      announce(filterLabels.filteredAnnouncement(sortedRows.length), true);
+      // Announce on a change of filters only; the count is read at that moment.
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [filtersKey]);
 
     const goToPage = (next: number) => {
       setPage(next);
@@ -908,7 +1000,12 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     const minWidthOf = (col: DataTableColumn<R>) => {
       if (col.minWidth !== undefined) return col.minWidth;
       const header =
-        2 * CELL_PADDING[size] + LABEL_MIN_WIDTH + (col.sortable ? SORT_GLYPH_WIDTH : 0) + (columnMenu ? MENU_BUTTON_WIDTH : 0);
+        2 * CELL_PADDING[size] +
+        LABEL_MIN_WIDTH +
+        (col.sortable ? SORT_GLYPH_WIDTH : 0) +
+        (columnMenu ? MENU_BUTTON_WIDTH : 0) +
+        // A filterable column keeps room for its filter mark, so a filter never squeezes the label.
+        (columnMenu && (col.filterable ?? true) ? FILTER_MARK_WIDTH : 0);
       // An editable column also fits its editor: the field's floor and the editor's inset either side.
       const kind = typeof col.editor === 'string' && !LIVE_KINDS.has(col.editor) ? col.editor : undefined;
       return kind ? Math.max(header, EDITOR_MIN_WIDTH[kind as keyof typeof EDITOR_MIN_WIDTH] + 2 * EDITOR_INSET) : header;
@@ -1221,6 +1318,75 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     };
 
     /* ---- The header menu ----------------------------------------------- */
+    /* ---- Filters --------------------------------------------------------
+       The columns as a control bar sees them, and the header filters. A
+       header's Filter… opens its filter in place (adding one when the column
+       has none); a filter left without a value when its editor closes is
+       dropped, so an abandoned filter never lingers as a chip. */
+    const toolbarColumns: ToolbarColumn[] = columns.map((col) => {
+      const values = rows.map((row) => row.values[col.key]);
+      const kind = filterKindOf(values, Boolean(col.options));
+      const choices =
+        col.options ??
+        (kind === 'enum' || kind === 'tags'
+          ? [...new Set(values.flat().filter((value) => value != null && value !== '').map(String))]
+              .sort((a, b) => a.localeCompare(b))
+              .map((value) => ({ value, label: value }))
+          : []);
+      return {
+        key: col.key,
+        label: headerText(col),
+        hideable: canHide(col),
+        // The panel moves any column that is not locked or held still, whether or not its header drags.
+        movable: !col.locked && col.reorderable !== false,
+        filterable: col.filterable ?? true,
+        kind,
+        options: choices,
+      };
+    });
+    const [headerFilter, setHeaderFilter] = useState<string | null>(null);
+    /* A TableToolbar showing the count claims it, so the footer does not
+       say it twice; the footer keeps the selection count. */
+    const [countClaimed, setCountClaimed] = useState(false);
+    const openHeaderFilter = (key: string) => {
+      const existing = filters.find((filter) => filter.column === key);
+      if (existing) {
+        setHeaderFilter(existing.id);
+        return;
+      }
+      const column = toolbarColumns.find((c) => c.key === key);
+      if (!column) return;
+      const filter: DataTableFilter = { id: newFilterId(key, filters), column: key, operator: OPERATORS[column.kind][0] };
+      setFilters([...filters, filter]);
+      setHeaderFilter(filter.id);
+    };
+    const closeHeaderFilter = () => {
+      const open = filters.find((filter) => filter.id === headerFilter);
+      if (open && !isComplete(open)) setFilters(filters.filter((filter) => filter.id !== open.id));
+      setHeaderFilter(null);
+    };
+    const tableContext: TableContextValue = {
+      columns: toolbarColumns,
+      filters,
+      setFilters,
+      search,
+      setSearch,
+      hiddenColumns: [...hidden],
+      setHiddenColumns: setHidden,
+      columnOrder: knownOrder,
+      setColumnOrder: setOrder,
+      selectable,
+      selectedIds: currentSelection,
+      setSelectedIds: setSelection,
+      matchingIds: sortedRows.map((row) => row.id),
+      size,
+      setSize,
+      shown: sortedRows.length,
+      total: rows.length,
+      filterLabels,
+      claimCount: setCountClaimed,
+    };
+
     const [menuKey, setMenuKey] = useState<string | null>(null);
     const menuItems = (key: string): DropdownMenuEntry[] => {
       const col = byKey.get(key)!;
@@ -1265,6 +1431,10 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
       if (sizing.length) {
         if (entries.length) entries.push({ type: 'separator' });
         entries.push(...sizing);
+      }
+      if (col.filterable ?? true) {
+        if (entries.length) entries.push({ type: 'separator' });
+        entries.push({ label: filterLabels.filterColumn, icon: 'filter_list', onClick: () => openHeaderFilter(key) });
       }
       return entries;
     };
@@ -1688,6 +1858,35 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
                 <span className="ds-visually-hidden">{col.key}</span>
               )
             )}
+            {(() => {
+              const own = filters.filter((filter) => filter.column === key);
+              const editing = own.find((filter) => filter.id === headerFilter);
+              const shown = editing ?? own.find(isComplete);
+              const column = toolbarColumns.find((c) => c.key === key);
+              if (!shown || !column) return null;
+              return (
+                <span className={`${baseClass}__filter-mark`} data-no-drag="">
+                  <Popover
+                    size="compact"
+                    open={headerFilter === shown.id}
+                    onOpenChange={(open) => (open ? setHeaderFilter(shown.id) : closeHeaderFilter())}
+                    ariaLabel={filterLabels.filtered(text)}
+                    content={
+                      <FilterEditor
+                        column={column}
+                        filter={shown}
+                        labels={filterLabels}
+                        onChange={(next) => setFilters(filters.map((filter) => (filter.id === next.id ? next : filter)))}
+                      />
+                    }
+                  >
+                    <span className="material-symbols-rounded" aria-hidden="true">
+                      filter_alt
+                    </span>
+                  </Popover>
+                </span>
+              );
+            })()}
             {columnMenu && (
               <span className={`${baseClass}__menu`} data-no-drag="">
                 <DropdownMenu
@@ -2029,6 +2228,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
       maxHeight !== undefined ? { maxHeight: typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight } : undefined;
 
     return (
+      <TableContext.Provider value={tableContext}>
       <div {...rest} ref={ref} className={classes}>
         <span className="ds-visually-hidden" aria-live="polite" aria-atomic="true">
           {announcement}
@@ -2113,7 +2313,9 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
             <span className={`${baseClass}__count`}>
               {selectable && currentSelection.length > 0
                 ? selectedLabel(currentSelection.length)
-                : resultsLabel(sortedRows.length)}
+                : countClaimed
+                  ? null
+                  : resultsLabel(sortedRows.length)}
             </span>
             {pageSize !== undefined && pageCount > 1 && (
               <Pagination
@@ -2127,5 +2329,6 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
           </div>
         )}
       </div>
+      </TableContext.Provider>
     );
 }

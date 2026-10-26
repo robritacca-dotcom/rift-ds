@@ -200,7 +200,7 @@ html[data-brand="coral"] {
   --primitive-radius-300: 12px;
   --primitive-radius-400: 16px;
   --primitive-radius-600: 24px;
-  --primitive-radius-pill: 16px;
+  --primitive-radius-pill: 12px;
   --primitive-red-00: #FDF5F7;
   --primitive-red-01: #FBE9EE;
   --primitive-red-02: #F5C5D1;
@@ -329,7 +329,7 @@ html[data-brand="coral"][data-theme="dark"] {
   --primitive-radius-300: 12px;
   --primitive-radius-400: 16px;
   --primitive-radius-600: 24px;
-  --primitive-radius-pill: 16px;
+  --primitive-radius-pill: 12px;
   --primitive-red-00: #FDF5F7;
   --primitive-red-01: #FBE9EE;
   --primitive-red-02: #F5C5D1;

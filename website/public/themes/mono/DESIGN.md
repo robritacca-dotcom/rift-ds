@@ -119,7 +119,7 @@ rounded:
   lg: 6px
   card: 10px
   xl: 19px
-  pill: 6px
+  pill: 5px
 
 spacing:
   xxs: 2px
@@ -151,7 +151,7 @@ components:
 
 # Smoke theme
 
-Smoke: Montserrat headings over Inter text, #232323 for actions, buttons squared to 6px, 5px inputs and 10px cards. Flat: no shadows at all. Surfaces separate from the page by contrast alone.
+Smoke: Montserrat headings over Inter text, #232323 for actions, buttons squared to 5px, 5px inputs and 10px cards. Flat: no shadows at all. Surfaces separate from the page by contrast alone.
 
 Take it whole: `import 'rift-ds/tokens/presets/presets.css'` after the tokens, then set `data-brand="mono"` on `<html>`. See it at https://rift-ds.com/foundations/themes/mono.
 
@@ -201,7 +201,7 @@ Montserrat headings over Inter text. Levels inside a tier share a weight and ste
 
 ## Shape
 
-Buttons squared to 6px, 5px inputs and 10px cards. Radius belongs to the element type, never to one instance.
+Buttons squared to 5px, 5px inputs and 10px cards. Radius belongs to the element type, never to one instance.
 
 - `xs`: 1px (`--radius-050`)
 - `sm`: 2px (`--radius-100`)
@@ -210,7 +210,7 @@ Buttons squared to 6px, 5px inputs and 10px cards. Radius belongs to the element
 - `lg`: 6px (`--radius-400`)
 - `card`: 10px (`--radius-600`)
 - `xl`: 19px (`--radius-1200`)
-- `pill`: 6px (`--radius-pill`)
+- `pill`: 5px (`--radius-pill`)
 
 ## Space
 

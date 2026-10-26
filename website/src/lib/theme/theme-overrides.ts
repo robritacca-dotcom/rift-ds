@@ -1435,7 +1435,9 @@ export function elevationOverrides(
 
 /**
  * Scales the radius scale (0..2). `pill` keeps `--radius-pill` at its
- * shipped 999px; turning it off squares the pills to the scaled lg step.
+ * shipped 999px; turning it off squares the pills to the input's corner (the
+ * scaled `--radius-300`), so a button always shares its corner with the field
+ * beside it.
  */
 export function radiusOverrides(scale: number, pill: boolean): Overrides {
   const overrides: Overrides = {};
@@ -1443,7 +1445,9 @@ export function radiusOverrides(scale: number, pill: boolean): Overrides {
     overrides[`--primitive-radius-${step}`] = `${Math.round(px * scale)}px`;
   }
   if (!pill) {
-    overrides["--primitive-radius-pill"] = `${Math.max(2, Math.round(16 * scale))}px`;
+    // A squared button takes the input's corner, so a button and the field
+    // beside it always share one corner, at any scale.
+    overrides["--primitive-radius-pill"] = `${Math.round(SHIPPED_INPUT_RADIUS_PX * scale)}px`;
   }
   return overrides;
 }

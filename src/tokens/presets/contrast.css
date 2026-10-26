@@ -131,7 +131,7 @@ html[data-brand="contrast"] {
   --primitive-radius-300: 8px;
   --primitive-radius-400: 11px;
   --primitive-radius-600: 17px;
-  --primitive-radius-pill: 11px;
+  --primitive-radius-pill: 8px;
   --primitive-red-00: #FFF6F8;
   --primitive-red-01: #FFEAF0;
   --primitive-red-02: #FFC8D6;
@@ -278,7 +278,7 @@ html[data-brand="contrast"][data-theme="dark"] {
   --primitive-radius-300: 8px;
   --primitive-radius-400: 11px;
   --primitive-radius-600: 17px;
-  --primitive-radius-pill: 11px;
+  --primitive-radius-pill: 8px;
   --primitive-red-00: #FFF6F8;
   --primitive-red-01: #FFEAF0;
   --primitive-red-02: #FFC8D6;

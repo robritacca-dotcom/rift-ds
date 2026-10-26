@@ -40,7 +40,9 @@ const OWNERS = new Set([
 /** Stylesheets outside OWNERS allowed to colour a table part, with the reason. */
 const SANCTIONED = new Map([]);
 
-const TABLE_SELECTOR = /(^|[\s>+~,(])(table|thead|tbody|tfoot|tr|th|td)(?![\w-])|\.ds-table\b/;
+// TableToolbar's `ds-table-toolbar` classes share the prefix but draw the
+// control bar beside a table, never a table part, so they are left out.
+const TABLE_SELECTOR = /(^|[\s>+~,(])(table|thead|tbody|tfoot|tr|th|td)(?![\w-])|\.ds-table\b(?!-toolbar)/;
 const COLOUR_PROPERTY = /^(background(-color)?|border(-(top|right|bottom|left|block|inline|block-start|block-end|inline-start|inline-end))?(-color)?|box-shadow|outline(-color)?)$/;
 
 const blankComments = (s) => s.replace(/\/\*[\s\S]*?\*\//g, (c) => c.replace(/[^\n]/g, ' '));

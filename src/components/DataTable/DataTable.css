@@ -33,6 +33,14 @@
   flex-wrap: wrap;
 }
 
+/* A TableToolbar in the slot takes the whole row and no more, so it
+   measures the table's width, not its own content's, and folds to icons
+   when the table is narrow. */
+.ds-data-table__filters:has(> .ds-table-toolbar) {
+  flex: 1 1 100%;
+  min-width: 0;
+}
+
 /* The search field sits at the end of the toolbar even with no filters.
    It flexes from a fixed-feeling width instead of pinning one: on a roomy
    row it reads as the familiar 240px field, and when the toolbar wraps it
@@ -607,4 +615,90 @@
 
 .ds-data-table__cancel .ds-circular-button__icon {
   color: var(--color-status-error-icon);
+}
+
+/* ============================================
+   Filters
+   ============================================ */
+
+/* A toolbar in the table's toolbar slot takes the whole row. */
+.ds-data-table__filters:has(> .ds-table-toolbar) {
+  flex: 1 1 100%;
+}
+
+/* The one condition editor every filter opens: operator, then value. Its
+   width is fixed, so a multi-select's chips wrap onto new lines instead of
+   widening the panel with every value picked. */
+.ds-data-table__filter-editor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+  width: 280px;
+  max-width: 100%;
+}
+
+.ds-data-table__filter-editor > * {
+  min-width: 0;
+}
+
+.ds-data-table__filter-pair {
+  display: flex;
+  gap: var(--gap-200);
+}
+
+.ds-data-table__filter-pair > * {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+/* A filtered header's mark, after its label: the filter glyph alone,
+   a button the Popover draws round it, which reopens the filter. */
+.ds-data-table__filter-mark {
+  flex-shrink: 0;
+  display: inline-flex;
+}
+
+.ds-data-table__filter-mark button {
+  --icon-size: var(--icon-size-500);
+
+  display: inline-flex;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-100);
+  background: none;
+  color: var(--color-icon-secondary);
+  cursor: pointer;
+}
+
+.ds-data-table__filter-mark button:hover {
+  color: var(--color-icon-primary);
+}
+
+.ds-data-table__filter-mark button:focus-visible {
+  outline: var(--border-050) solid var(--color-action-primary-bg);
+  outline-offset: var(--border-025);
+}
+
+/* A list filter's value: a search field over a checkbox per choice, the
+   list scrolling inside the panel once it is long. */
+.ds-data-table__choices {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+}
+
+.ds-data-table__choice-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+  max-height: 240px;
+  overflow-y: auto;
+  padding-block: var(--padding-050);
+}
+
+.ds-data-table__choices-empty {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-tertiary);
 }

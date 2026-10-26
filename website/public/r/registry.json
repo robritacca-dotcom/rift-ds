@@ -313,7 +313,7 @@
       "name": "data-table",
       "type": "registry:ui",
       "title": "Data table",
-      "description": "The wired table: sorting, search, row selection, and pagination assembled around Table."
+      "description": "The wired table: sort, search, filters, selection, paging, column and row controls, and inline editing, on a headless engine."
     },
     {
       "name": "date-input",
@@ -824,6 +824,12 @@
       "type": "registry:ui",
       "title": "Table",
       "description": "Data table with flexible cell content, striped rows, compact sizing, and support for icons, inputs, buttons, and interactive controls."
+    },
+    {
+      "name": "table-toolbar",
+      "type": "registry:ui",
+      "title": "Table toolbar",
+      "description": "The control bar over a table: search, filters as chips, the columns panel, density and a count, reading a DataTable's state with no props."
     },
     {
       "name": "tabs",

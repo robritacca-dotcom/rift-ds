@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button } from "rift-ds/components/Button/Button";
 import { DataTable } from "rift-ds/components/DataTable/DataTable";
+import { TableToolbar } from "rift-ds/components/TableToolbar/TableToolbar";
 import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
 import { ThemeToggle } from "rift-ds/components/ThemeToggle/ThemeToggle";
 import { ToggleSwitch } from "rift-ds/components/ToggleSwitch/ToggleSwitch";
@@ -56,8 +57,7 @@ export function FullTable() {
         columnDividers={lines}
         columns={stressColumns}
         rows={rows}
-        searchable
-        searchPlaceholder="Search projects"
+        toolbar={<TableToolbar />}
         resizableColumns
         reorderableColumns
         columnMenu

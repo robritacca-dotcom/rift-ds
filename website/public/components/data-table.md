@@ -1,6 +1,6 @@
 # Data table
 
-The wired table: sorting, search, row selection, and pagination assembled around Table.
+The wired table: sort, search, filters, selection, paging, column and row controls, and inline editing, on a headless engine.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
@@ -27,7 +27,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same dat
 | searchable | `boolean` | no | `false` | Shows the built-in search field, matching against every column's raw value. |
 | searchPlaceholder | `string` | no | `Search` | Placeholder for the search field. |
 | toolbar | `ReactNode` | no |  | Slot beside the search field for consumer-owned filter controls. |
-| size | `"default" \| "compact"` | no | `default` | The table's density, and the controls' with it: `default` rows with the search field and pager at the default row-control height, `compact` rows with both at the compact one. Controls inside the rows (checkboxes, grips, menu and action buttons) stay compact at either density, so a row's height is its text's. |
+| size | `"default" \| "compact"` | no |  | The table's density, and the controls' with it: `default` rows with the search field and pager at the default row-control height, `compact` rows with both at the compact one. Controls inside the rows (checkboxes, grips, menu and action buttons) stay compact at either density, so a row's height is its text's. |
 | striped | `boolean` | no | `false` | Alternating row backgrounds, passed through to the underlying Table. |
 | caption | `string` | no |  | Accessible caption for the underlying table (visually hidden). |
 | emptyState | `ReactNode` | no |  | What to render when no rows match — defaults to a built-in empty state. |
@@ -69,5 +69,14 @@ Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same dat
 | editMode | `"cell" \| "row"` | no | `cell` | How editable cells edit: `cell` (the default) edits one cell at a time, started with Enter, F2, a typed character or a double click; `row` adds an Edit button to each row that opens every editable cell of the row at once, with Save and Cancel. |
 | onCellEdit | `((edit: DataTableCellEdit<R>) => void \| Promise<unknown>)` | no |  | Saves one edited cell. Rows stay the record: update them from here. Return a promise to have the cell show the new value as pending until it settles; a rejection rolls the cell back and announces the failure. |
 | onRowEdit | `((edit: DataTableRowEdit<R>) => void \| Promise<unknown>)` | no |  | Saves one edited row with `editMode="row"`, its changed values together. Without it, each changed cell goes to `onCellEdit`. |
+| filters | `Filter[]` | no |  | The filters, for controlled use: conditions on columns, joined with AND. Set from the header menus (with `columnMenu`) or a TableToolbar. |
+| defaultFilters | `Filter[]` | no |  | Starting filters, for uncontrolled use. |
+| onFiltersChange | `((filters: Filter[]) => void)` | no |  | Fires with every filter after one is added, changed or removed. |
+| search | `string` | no |  | The search text, for controlled use; the built-in search field and a TableToolbar's both set it. |
+| defaultSearch | `string` | no |  | Starting search text, for uncontrolled use. |
+| onSearchChange | `((search: string) => void)` | no |  | Fires with the search text as it changes. |
+| defaultSize | `"default" \| "compact"` | no |  | Starting density, for uncontrolled use when a TableToolbar's density switch sets it; `size` controls it. |
+| onSizeChange | `((size: "default" \| "compact") => void)` | no |  | Fires when a TableToolbar's density switch changes the density. |
+| filterLabels | `Partial<FilterLabels>` | no |  | The filters' words, merged over their English defaults. |
 | rowActionsVisibility | `"hover" \| "always"` | no | `hover` | When the inline actions show: on row hover and focus (the default, and always on a touch screen), or always. The More button shows at rest either way, so the column never reads as empty. |
 | className | `string` | no | `` | Additional CSS classes |

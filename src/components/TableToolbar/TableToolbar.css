@@ -1,0 +1,271 @@
+/* ============================================
+   TABLE TOOLBAR
+   The control bar over a table: search, filter chips, the More panel's columns,
+   the density switch, the count and actions, in one row that wraps.
+   ============================================ */
+
+.ds-table-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+  width: 100%;
+  min-width: 0;
+}
+
+/* One line, always: the start cluster (Edit, search, the chips that
+   fit, then +N for the rest) takes the room; the end cluster (the icon
+   controls) holds the end. */
+.ds-table-toolbar__main {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--gap-300);
+  min-width: 0;
+}
+
+.ds-table-toolbar__start,
+.ds-table-toolbar__end {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-200);
+  min-width: 0;
+}
+
+/* The start cluster never wraps: chips that do not fit fold into +N. */
+.ds-table-toolbar__start {
+  position: relative;
+  flex: 1 1 0;
+  flex-wrap: nowrap;
+}
+
+.ds-table-toolbar__start > * {
+  flex-shrink: 0;
+}
+
+.ds-table-toolbar__start > .ds-table-toolbar__search {
+  flex-shrink: 1;
+}
+
+/* A chip past the fit stays measurable but out of sight and out of flow. */
+.ds-table-toolbar__chip--overflow {
+  position: absolute;
+  inset-inline-start: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.ds-table-toolbar__end {
+  flex-shrink: 0;
+}
+
+/* The search field flexes between a floor and a ceiling: the line wraps
+   against its basis, so chips take the room it would otherwise hold, and it
+   grows into room nothing else uses. */
+.ds-table-toolbar__search {
+  flex: 1 1 200px;
+  min-width: 160px;
+  max-width: 280px;
+}
+
+/* A filter chip and its remove button, read as one. The chip is a control
+   of the bar, so it takes the bar's control height like every other one:
+   Chip's own sizes sit between the control heights, so the bar sets it. */
+.ds-table-toolbar__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-050);
+}
+
+.ds-table-toolbar__chip .ds-chip {
+  box-sizing: border-box;
+  height: var(--control-height-default);
+  padding-block: 0;
+}
+
+.ds-table-toolbar--compact .ds-table-toolbar__chip .ds-chip {
+  height: var(--control-height-compact);
+}
+
+.ds-table-toolbar__count {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-tertiary);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* The columns panel: one switch per column, Show all last. */
+.ds-table-toolbar__columns {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-200);
+  min-width: 200px;
+}
+
+/* A trigger whose panel is open (the More panel's columns, the Filter menu, a
+   chip's editor) holds its pressed fill until the panel closes, so the
+   bar says which control the open panel belongs to. */
+.ds-table-toolbar .ds-circular-button--tertiary[aria-expanded='true'],
+.ds-table-toolbar .ds-chip[aria-expanded='true'],
+.ds-table-toolbar .ds-button[aria-expanded='true'] {
+  background-color: var(--color-action-passive-bg-active);
+}
+
+/* A row of the More panel's columns: its move grip, then its switch. */
+.ds-table-toolbar__column {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-100);
+  border-radius: var(--radius-200);
+  background-color: var(--color-bg-container-primary);
+}
+
+.ds-table-toolbar__column[data-dragging] {
+  position: relative;
+  z-index: 1;
+  box-shadow: var(--shadow-floating);
+}
+
+.ds-table-toolbar__grip {
+  --icon-size: var(--icon-size-500);
+
+  display: inline-flex;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-100);
+  background: none;
+  color: var(--color-icon-secondary);
+  cursor: grab;
+  touch-action: none;
+}
+
+.ds-table-toolbar__grip:focus-visible {
+  outline: var(--border-050) solid var(--color-action-primary-bg);
+  outline-offset: var(--border-025);
+}
+
+.ds-table-toolbar__grip[aria-disabled='true'] {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* The folded bar: a filter count rides the Filter icon's corner. */
+.ds-table-toolbar__badge-host {
+  position: relative;
+  display: inline-flex;
+}
+
+.ds-table-toolbar__badge {
+  position: absolute;
+  inset-block-start: calc(-1 * var(--padding-050));
+  inset-inline-end: calc(-1 * var(--padding-050));
+  pointer-events: none;
+}
+
+/* The folded bar's filter panel: each filter under its column's name. */
+.ds-table-toolbar__filter-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--gap-400);
+  min-width: 260px;
+}
+
+/* Add filter and Clear filters share one row, centred on each other. */
+.ds-table-toolbar__filter-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-200);
+}
+
+.ds-table-toolbar__filter-actions > * {
+  display: inline-flex;
+  align-items: center;
+}
+
+.ds-table-toolbar__filter-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-100);
+}
+
+.ds-table-toolbar__filter-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-200);
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
+  color: var(--color-text-secondary);
+}
+
+/* The folded bar's search field, in its popover. */
+.ds-table-toolbar__search-panel {
+  min-width: 240px;
+}
+
+.ds-table-toolbar__search-panel .ds-table-toolbar__search {
+  max-width: none;
+}
+
+/* Where a dragged column row will land, drawn as the table's own drop
+   line is. */
+.ds-table-toolbar__drop {
+  position: absolute;
+  inset-block-start: calc(-1 * var(--border-025));
+  inset-inline: 0;
+  height: var(--border-050);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-icon-primary);
+  pointer-events: none;
+}
+
+.ds-table-toolbar__drop[hidden] {
+  display: none;
+}
+
+/* The bar's own actions, set a step apart from the icon controls. */
+.ds-table-toolbar__actions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-200);
+  margin-inline-start: var(--gap-200);
+}
+
+/* The More panel: the density switch, then the columns, each under its
+   name. */
+.ds-table-toolbar__view {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-400);
+  min-width: 220px;
+}
+
+.ds-table-toolbar__view-section {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--gap-200);
+}
+
+.ds-table-toolbar__view-section > .ds-segmented-control {
+  align-self: flex-start;
+}
+
+.ds-table-toolbar__view-heading {
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+  color: var(--color-text-tertiary);
+}

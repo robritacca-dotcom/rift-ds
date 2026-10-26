@@ -88,6 +88,9 @@ const trendFor = (id: string) => {
   });
 };
 
+const choices = (values: readonly string[]) =>
+  values.map((value) => ({ value, label: value }));
+
 const money = (value: unknown) =>
   typeof value === "number" ? `$${value.toLocaleString("en-US")}` : "";
 
@@ -127,6 +130,7 @@ export const wideColumns: DataTableColumn[] = [
     sortable: true,
     render: personCell,
     width: "180px",
+    options: choices(PEOPLE),
   },
   {
     key: "status",
@@ -134,8 +138,15 @@ export const wideColumns: DataTableColumn[] = [
     sortable: true,
     render: statusCell,
     width: "140px",
+    options: choices(Object.keys(STATUS)),
   },
-  { key: "region", header: "Region", sortable: true, width: "140px" },
+  {
+    key: "region",
+    header: "Region",
+    sortable: true,
+    width: "140px",
+    options: choices(["North", "South", "East", "West"]),
+  },
   {
     key: "budget",
     header: "Budget",

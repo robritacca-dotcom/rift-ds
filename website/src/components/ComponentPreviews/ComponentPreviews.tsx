@@ -28,6 +28,7 @@ import { Alert } from "rift-ds/components/Alert/Alert";
 import { Avatar } from "rift-ds/components/Avatar/Avatar";
 import { AvatarGroup } from "rift-ds/components/AvatarGroup/AvatarGroup";
 import { FilterBar } from "rift-ds/components/FilterBar/FilterBar";
+import { TableToolbar } from "rift-ds/components/TableToolbar/TableToolbar";
 import { Gauge } from "rift-ds/components/Gauge/Gauge";
 import { StreamingText } from "rift-ds/components/StreamingText/StreamingText";
 import { Badge } from "rift-ds/components/Badge/Badge";
@@ -1761,6 +1762,20 @@ const previews: Record<string, () => ReactNode> = {
         <div className={styles.tablePreviewRow} />
         <div className={styles.tablePreviewRow} />
         <div className={styles.tablePreviewRow} />
+      </div>
+    </>
+  ),
+  "table-toolbar": () => (
+    <>
+      <div style={{ flexShrink: 0, width: "max-content", transform: "scale(0.64)", pointerEvents: "none" }} aria-hidden="true">
+        <TableToolbar
+          size="compact"
+          columns={[{ key: "status", label: "Status", options: [{ value: "open", label: "Open" }] }]}
+          defaultFilters={[{ id: "status-1", column: "status", operator: "isAnyOf", value: ["open"] }]}
+          columnsPanel={false}
+          count={{ shown: 12, total: 48 }}
+          tabIndex={-1}
+        />
       </div>
     </>
   ),

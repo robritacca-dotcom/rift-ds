@@ -487,7 +487,7 @@ Nested rectangles sized by value for part-to-whole breakdowns.
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/treemap.md
 
-## Data display (28)
+## Data display (29)
 
 Cards, tables, lists, and badges for presenting structured content.
 
@@ -589,7 +589,7 @@ Linked contact method with icon, label, and value.
 
 ### Data table
 
-The wired table: sorting, search, row selection, and pagination assembled around Table.
+The wired table: sort, search, filters, selection, paging, column and row controls, and inline editing, on a headless engine.
 
 - Import: `import { DataTable } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
@@ -690,6 +690,14 @@ Data table with flexible cell content, striped rows, compact sizing, and support
 - Import: `import { Table } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/table.md
+
+### Table toolbar
+
+The control bar over a table: search, filters as chips, the columns panel, density and a count, reading a DataTable's state with no props.
+
+- Import: `import { TableToolbar } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/table-toolbar.md
 
 ### Timeline
 

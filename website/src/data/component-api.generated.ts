@@ -5090,7 +5090,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Data table",
     "slug": "data-table",
     "category": "data-display",
-    "description": "The wired table: sorting, search, row selection, and pagination assembled around Table.",
+    "description": "The wired table: sort, search, filters, selection, paging, column and row controls, and inline editing, on a headless engine.",
     "client": true,
     "importPath": "rift-ds/components/DataTable/DataTable",
     "barrel": "main",
@@ -5183,8 +5183,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "size",
             "type": "\"default\" | \"compact\"",
             "required": false,
-            "description": "The table's density, and the controls' with it: `default` rows with the\nsearch field and pager at the default row-control height, `compact` rows\nwith both at the compact one. Controls inside the rows (checkboxes, grips,\nmenu and action buttons) stay compact at either density, so a row's\nheight is its text's.",
-            "defaultValue": "default"
+            "description": "The table's density, and the controls' with it: `default` rows with the\nsearch field and pager at the default row-control height, `compact` rows\nwith both at the compact one. Controls inside the rows (checkboxes, grips,\nmenu and action buttons) stay compact at either density, so a row's\nheight is its text's."
           },
           {
             "name": "striped",
@@ -5447,6 +5446,60 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "((edit: DataTableRowEdit<R>) => void | Promise<unknown>)",
             "required": false,
             "description": "Saves one edited row with `editMode=\"row\"`, its changed values together. Without it, each changed cell goes to `onCellEdit`."
+          },
+          {
+            "name": "filters",
+            "type": "Filter[]",
+            "required": false,
+            "description": "The filters, for controlled use: conditions on columns, joined with AND. Set from the header menus (with `columnMenu`) or a TableToolbar."
+          },
+          {
+            "name": "defaultFilters",
+            "type": "Filter[]",
+            "required": false,
+            "description": "Starting filters, for uncontrolled use."
+          },
+          {
+            "name": "onFiltersChange",
+            "type": "((filters: Filter[]) => void)",
+            "required": false,
+            "description": "Fires with every filter after one is added, changed or removed."
+          },
+          {
+            "name": "search",
+            "type": "string",
+            "required": false,
+            "description": "The search text, for controlled use; the built-in search field and a TableToolbar's both set it."
+          },
+          {
+            "name": "defaultSearch",
+            "type": "string",
+            "required": false,
+            "description": "Starting search text, for uncontrolled use."
+          },
+          {
+            "name": "onSearchChange",
+            "type": "((search: string) => void)",
+            "required": false,
+            "description": "Fires with the search text as it changes."
+          },
+          {
+            "name": "defaultSize",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "Starting density, for uncontrolled use when a TableToolbar's density switch sets it; `size` controls it."
+          },
+          {
+            "name": "onSizeChange",
+            "type": "((size: \"default\" | \"compact\") => void)",
+            "required": false,
+            "description": "Fires when a TableToolbar's density switch changes the density."
+          },
+          {
+            "name": "filterLabels",
+            "type": "Partial<FilterLabels>",
+            "required": false,
+            "description": "The filters' words, merged over their English defaults."
           },
           {
             "name": "rowActionsVisibility",
@@ -12355,6 +12408,205 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Whether to visually hide the caption (still available to screen readers)",
             "defaultValue": "false"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
+    "name": "TableToolbar",
+    "label": "Table toolbar",
+    "slug": "table-toolbar",
+    "category": "data-display",
+    "description": "The control bar over a table: search, filters as chips, the columns panel, density and a count, reading a DataTable's state with no props.",
+    "client": true,
+    "importPath": "rift-ds/components/TableToolbar/TableToolbar",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "TableToolbar",
+        "props": [
+          {
+            "name": "columns",
+            "type": "TableToolbarColumn[]",
+            "required": false,
+            "description": "The columns the bar filters and shows, for a bar over some other table. Inside a DataTable's `toolbar` the table's own columns are used."
+          },
+          {
+            "name": "filters",
+            "type": "Filter[]",
+            "required": false,
+            "description": "The filters, for controlled use. Inside a DataTable the table's filters are used unless this is set."
+          },
+          {
+            "name": "defaultFilters",
+            "type": "Filter[]",
+            "required": false,
+            "description": "Starting filters, for uncontrolled use outside a DataTable."
+          },
+          {
+            "name": "onFiltersChange",
+            "type": "((filters: Filter[]) => void)",
+            "required": false,
+            "description": "Fires with every filter after one is added, changed or removed."
+          },
+          {
+            "name": "search",
+            "type": "string",
+            "required": false,
+            "description": "The search text, for controlled use. Inside a DataTable the table's search is used unless this is set."
+          },
+          {
+            "name": "defaultSearch",
+            "type": "string",
+            "required": false,
+            "description": "Starting search text, for uncontrolled use outside a DataTable."
+          },
+          {
+            "name": "onSearchChange",
+            "type": "((search: string) => void)",
+            "required": false,
+            "description": "Fires with the search text as it changes."
+          },
+          {
+            "name": "hiddenColumns",
+            "type": "string[]",
+            "required": false,
+            "description": "Hidden column keys, for controlled use. Inside a DataTable the table's are used unless this is set."
+          },
+          {
+            "name": "defaultHiddenColumns",
+            "type": "string[]",
+            "required": false,
+            "description": "Starting hidden keys, for uncontrolled use outside a DataTable."
+          },
+          {
+            "name": "onHiddenColumnsChange",
+            "type": "((hidden: string[]) => void)",
+            "required": false,
+            "description": "Fires with every hidden key after the More panel changes one."
+          },
+          {
+            "name": "size",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "The density the bar's controls take and its switch sets, for controlled use. Inside a DataTable the table's density is used unless this is set."
+          },
+          {
+            "name": "defaultSize",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "Starting density, for uncontrolled use outside a DataTable."
+          },
+          {
+            "name": "onSizeChange",
+            "type": "((size: \"default\" | \"compact\") => void)",
+            "required": false,
+            "description": "Fires when the density switch changes."
+          },
+          {
+            "name": "count",
+            "type": "{ shown: number; total: number; }",
+            "required": false,
+            "description": "The result count's numbers, outside a DataTable: rows that match and rows in all."
+          },
+          {
+            "name": "searchable",
+            "type": "boolean",
+            "required": false,
+            "description": "Shows the search field. Defaults to true.",
+            "defaultValue": "true"
+          },
+          {
+            "name": "filterable",
+            "type": "boolean",
+            "required": false,
+            "description": "Shows the Filter button and the filter chips. Defaults to true.",
+            "defaultValue": "true"
+          },
+          {
+            "name": "columnsPanel",
+            "type": "boolean",
+            "required": false,
+            "description": "Shows the columns in the More panel. Defaults to true.",
+            "defaultValue": "true"
+          },
+          {
+            "name": "densitySwitch",
+            "type": "boolean",
+            "required": false,
+            "description": "Shows the density switch. Defaults to true.",
+            "defaultValue": "true"
+          },
+          {
+            "name": "showCount",
+            "type": "boolean",
+            "required": false,
+            "description": "Shows the result count in the bar. Defaults to true over some other table and false inside a DataTable, whose footer carries the count; set it to move the count into the bar, and the footer leaves it out."
+          },
+          {
+            "name": "columnOrder",
+            "type": "string[]",
+            "required": false,
+            "description": "Every column key in display order, for controlled use. Inside a DataTable the table's order is used unless this is set."
+          },
+          {
+            "name": "defaultColumnOrder",
+            "type": "string[]",
+            "required": false,
+            "description": "Starting column order, for uncontrolled use outside a DataTable."
+          },
+          {
+            "name": "onColumnOrderChange",
+            "type": "((order: string[]) => void)",
+            "required": false,
+            "description": "Fires with the full column order after the More panel moves one."
+          },
+          {
+            "name": "bulkActions",
+            "type": "TableToolbarBulkAction[]",
+            "required": false,
+            "description": "The Edit menu's actions for the selected rows. Inside a DataTable with `selectable`, an Edit button leads the bar, offering these with Select all and Clear selection.",
+            "defaultValue": "[]"
+          },
+          {
+            "name": "primaryAction",
+            "type": "TableToolbarAction",
+            "required": false,
+            "description": "The page's main action (New project, Invite), drawn as the primary button at the bar's end."
+          },
+          {
+            "name": "secondaryActions",
+            "type": "TableToolbarAction[]",
+            "required": false,
+            "description": "Actions beside the primary one (Export, Import), drawn as icon buttons before it, each named and tooltipped by its label.",
+            "defaultValue": "[]"
+          },
+          {
+            "name": "actions",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Any other controls at the bar's end, after the actions."
+          },
+          {
+            "name": "labels",
+            "type": "Partial<TableToolbarLabels>",
+            "required": false,
+            "description": "The bar's words, merged over their English defaults."
+          },
+          {
+            "name": "filterLabels",
+            "type": "Partial<FilterLabels>",
+            "required": false,
+            "description": "The filters' words, merged over their English defaults (inside a DataTable, over the table's)."
           },
           {
             "name": "className",

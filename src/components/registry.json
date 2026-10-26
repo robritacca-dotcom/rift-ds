@@ -478,7 +478,7 @@
       "name": "DataTable",
       "label": "Data table",
       "slug": "data-table",
-      "description": "The wired table: sorting, search, row selection, and pagination assembled around Table.",
+      "description": "The wired table: sort, search, filters, selection, paging, column and row controls, and inline editing, on a headless engine.",
       "category": "data-display",
       "client": true
     },
@@ -1181,6 +1181,14 @@
       "description": "Data table with flexible cell content, striped rows, compact sizing, and support for icons, inputs, buttons, and interactive controls.",
       "category": "data-display",
       "client": false
+    },
+    {
+      "name": "TableToolbar",
+      "label": "Table toolbar",
+      "slug": "table-toolbar",
+      "description": "The control bar over a table: search, filters as chips, the columns panel, density and a count, reading a DataTable's state with no props.",
+      "category": "data-display",
+      "client": true
     },
     {
       "name": "Tabs",

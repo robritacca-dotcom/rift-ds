@@ -32,6 +32,7 @@ import {
   tierToneOverrides,
   type ElevationVariant,
   type Overrides,
+  type LogoTone,
   type TextTone,
 } from "./theme-overrides";
 
@@ -75,11 +76,18 @@ export interface ThemePreset {
   iconWeight: number;
   /** Filled icons instead of outlined ones. */
   iconFill: boolean;
+  /** The logo's colour, apart from the action: "action" keeps the mark on
+      the action colour, "ink" or a family name tones it (see
+      tierToneOverrides). */
+  logoTone: LogoTone;
   /** The display tier's colour (Mega, Display, Sub Display): "ink" keeps
-      the primary text, a family name tones it (see tierToneOverrides). */
+      the neutral ink, a family name tones it. */
   displayTone: TextTone;
   /** The heading tier's colour (Headings 1 to 3), on the same terms. */
   headingTone: TextTone;
+  /** Running text's colour (`--color-text-primary`): "ink" keeps the
+      neutral, a family name gives the ink that family's hue. */
+  textTone: TextTone;
   fontLabel: string;
   /** Heading face when split from the body face; absent means the heading
       role follows the body typeface (the shipped single-face system). */
@@ -147,8 +155,10 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     tracking: 0,
     iconWeight: SHIPPED_ICON_WEIGHT,
     iconFill: false,
+    logoTone: "action",
     displayTone: "ink",
     headingTone: "ink",
+    textTone: "ink",
     // The editorial pairing, and the split-face demonstration: Lora
     // carries the display personality while running text stays in a
     // humanist sans.
@@ -200,8 +210,10 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     tracking: 0,
     iconWeight: SHIPPED_ICON_WEIGHT,
     iconFill: false,
+    logoTone: "action",
     displayTone: "ink",
     headingTone: "ink",
+    textTone: "ink",
     fontLabel: "Inter",
     headingFontLabel: "Montserrat",
     // Ink-wash chromatics: hue and value hold and saturation is pulled
@@ -267,8 +279,10 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     tracking: 0,
     iconWeight: SHIPPED_ICON_WEIGHT,
     iconFill: false,
+    logoTone: "action",
     displayTone: "ink",
     headingTone: "ink",
+    textTone: "ink",
     fontLabel: "IBM Plex Sans",
     // Electric sextet: the ambient palette run hot around the pure-blue key.
     accents: {
@@ -316,10 +330,10 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     tracking: 0,
     iconWeight: SHIPPED_ICON_WEIGHT,
     iconFill: false,
-    // Coral and sea: the buttons stay coral, the headlines take the
-    // teal of the water, so the two warmths never compete.
-    displayTone: "teal",
-    headingTone: "teal",
+    logoTone: "action",
+    displayTone: "ink",
+    headingTone: "ink",
+    textTone: "ink",
     fontLabel: "DM Sans",
     headingFontLabel: "Poppins",
     // Sunset sextet: the ambient palette leans warm around the coral key.
@@ -379,8 +393,10 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     // Icons carry the same heavy line as the headings.
     iconWeight: 500,
     iconFill: false,
+    logoTone: "action",
     displayTone: "ink",
     headingTone: "ink",
+    textTone: "ink",
     // Space Grotesk keeps the headings; Manrope takes the text, a
     // plainer geometric that reads easier at small sizes.
     fontLabel: "Manrope",
@@ -463,8 +479,10 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     tracking: 0,
     iconWeight: SHIPPED_ICON_WEIGHT,
     iconFill: false,
+    logoTone: "action",
     displayTone: "ink",
     headingTone: "ink",
+    textTone: "ink",
     // The reference pairing, near enough: Inter Tight's heavy weights
     // stand in for the brand's own display grotesque over Inter text.
     fontLabel: "Inter",
@@ -542,10 +560,13 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     tracking: 0,
     iconWeight: 400,
     iconFill: false,
-    // Dual tone: every headline, display and heading alike, in the
-    // mustard family; running text stays in the ink.
+    // The tones set apart from the action: a rust logo, mustard display
+    // type, and headings and running text in the ink, so a headline, a
+    // heading and the mark can each carry their own colour.
+    logoTone: "orange",
     displayTone: "yellow",
-    headingTone: "yellow",
+    headingTone: "ink",
+    textTone: "ink",
     fontLabel: "Work Sans",
     headingFontLabel: "Anton (condensed)",
     // The AI gradient turns through the mustard ramp, so the hero's sweep
@@ -594,10 +615,10 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     tracking: 0,
     iconWeight: SHIPPED_ICON_WEIGHT,
     iconFill: false,
-    // Autumn in the woods: display type in rust over the deep green,
-    // headings kept in the ink.
-    displayTone: "orange",
+    logoTone: "action",
+    displayTone: "ink",
     headingTone: "ink",
+    textTone: "ink",
     // The trail-brand pairing: Montserrat's bold geometric caps-energy
     // headings over DM Sans text.
     fontLabel: "DM Sans",
@@ -652,8 +673,10 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     tracking: 0,
     iconWeight: SHIPPED_ICON_WEIGHT,
     iconFill: false,
+    logoTone: "action",
     displayTone: "ink",
     headingTone: "ink",
+    textTone: "ink",
     fontLabel: "IBM Plex Mono",
     // Phosphor band: the whole ambient sextet stays in the emerald band,
     // like a single-phosphor display.
@@ -709,8 +732,10 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     // Chunkier strokes to sit beside the soft, heavy letterforms.
     iconWeight: 400,
     iconFill: false,
+    logoTone: "action",
     displayTone: "ink",
     headingTone: "ink",
+    textTone: "ink",
     // Rounded all the way down: Fredoka's bubble headings over Nunito's
     // soft-terminal text.
     fontLabel: "Nunito (rounded)",
@@ -772,10 +797,10 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     tracking: -0.5,
     iconWeight: 300,
     iconFill: false,
-    // Gilt display: the serif headlines in antique gold over the violet,
-    // with the smaller headings left in the ink.
-    displayTone: "yellow",
+    logoTone: "action",
+    displayTone: "ink",
     headingTone: "ink",
+    textTone: "ink",
     // The serif-over-sans split: Playfair Display's high-contrast
     // headings over Plus Jakarta Sans text.
     fontLabel: "Plus Jakarta Sans",
@@ -853,15 +878,15 @@ export const THEME_TAGLINES: Readonly<Record<string, string>> = {
   [BASE_THEME_ID]: "The base look: a calm teal on quiet surfaces, set in one friendly face.",
   warm: "Warm and bookish, a serif heading over an easy sans, like a well-loved paperback.",
   mono: "Black, white and nothing else, with flat surfaces and tight corners.",
-  marquee: "A film title card, heavy condensed headlines and buttons in mustard over an inky blue-green page with square corners.",
+  marquee: "A film title card, heavy condensed headlines and buttons in mustard under a rust logo, over an inky blue-green page with square corners.",
   contrast: "Precise and engineered, an electric blue with drafting-table corners and one technical face.",
-  coral: "Sunny and welcoming, coral buttons under sea-teal headlines with soft, round corners.",
+  coral: "Sunny and welcoming, a hospitality look of coral warmth and soft, round corners.",
   gold: "Bold and electric, bright yellow on ink with grotesk headings and a quicker step.",
   zest: "Fresh and confident, a bright lime on clean white under heavy, tight headlines.",
-  forest: "Grounded and calm, a deep woods green with rust display type and organic softness throughout.",
+  forest: "Grounded and calm, a deep woods green with organic softness throughout.",
   terminal: "A command line as a brand: monospace type, square corners, no shadows and fast replies.",
   pink: "Playful and rounded, hot pink with bubbly type and pills everywhere.",
-  violet: "Luxurious and unhurried, a gilt serif display over violet, generous spacing and wide, soft corners.",
+  violet: "Luxurious and unhurried, a serif display over generous spacing and wide, soft corners.",
 };
 
 /** A theme's one-sentence description, or undefined for an unknown id. */
@@ -1012,7 +1037,7 @@ export const PICKER_FONT_PARAMS = Array.from(
    mirrors the playground page's own memo (action plan, tint, radius,
    density, type, motion, elevation, weight, tracking, icons, fonts,
    extras, advanced so harmonized ramps see the merged state, then the
-   tier tones, which read the ramps as they finally stand). */
+   tones (logo and type tiers), which read the ramps as they finally stand). */
 export function presetOverrides(
   preset: ThemePreset,
   theme: "light" | "dark"
@@ -1080,6 +1105,13 @@ export function presetOverrides(
   }
   /* The tier tones read the ramps and greys as everything above leaves
      them, so they come last. */
-  Object.assign(merged, tierToneOverrides(preset.displayTone, preset.headingTone, merged, theme));
+  Object.assign(
+    merged,
+    tierToneOverrides(
+      { logo: preset.logoTone, display: preset.displayTone, heading: preset.headingTone, text: preset.textTone },
+      merged,
+      theme
+    )
+  );
   return merged;
 }

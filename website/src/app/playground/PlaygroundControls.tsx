@@ -13,12 +13,14 @@ import {
   ICON_WEIGHT_RANGE,
   LEVER_RANGES,
   TEXT_TONES,
+  LOGO_TONES,
   TEXT_TONE_LABELS,
   TYPE_WEIGHT_RANGE,
   leverWord,
   motionScaleFromSpeed,
   motionSpeedPercent,
   type ElevationVariant,
+  type LogoTone,
   type TextTone,
 } from "@/lib/theme/theme-overrides";
 import { RichDropdown } from "rift-ds/components/RichDropdown/RichDropdown";
@@ -32,6 +34,7 @@ import { InspectorToggleSwitch } from "rift-ds/components/Inspector/InspectorTog
 import { fontPickerOptions, presetPickerOptions } from "@/lib/theme/presets";
 
 const TONE_OPTIONS = TEXT_TONES.map((tone) => ({ value: tone, label: TEXT_TONE_LABELS[tone] }));
+const LOGO_TONE_OPTIONS = LOGO_TONES.map((tone) => ({ value: tone, label: TEXT_TONE_LABELS[tone] }));
 
 export interface PlaygroundControlsProps {
   preset: string;
@@ -64,8 +67,10 @@ export interface PlaygroundControlsProps {
   /** Icon stroke weight on the icon font's weight axis. */
   iconWeight: number;
   iconFill: boolean;
+  logoTone: LogoTone;
   displayTone: TextTone;
   headingTone: TextTone;
+  textTone: TextTone;
   fontLabel: string;
   headingFontLabel: string;
   productName: string;
@@ -106,8 +111,10 @@ export interface PlaygroundControlsProps {
   onTracking: (value: number) => void;
   onIconWeight: (value: number) => void;
   onIconFill: (value: boolean) => void;
+  onLogoTone: (value: LogoTone) => void;
   onDisplayTone: (value: TextTone) => void;
   onHeadingTone: (value: TextTone) => void;
+  onTextTone: (value: TextTone) => void;
   onFontLabel: (value: string) => void;
   onHeadingFontLabel: (value: string) => void;
   onProductName: (value: string) => void;
@@ -152,8 +159,10 @@ export default function PlaygroundControls({
   tracking,
   iconWeight,
   iconFill,
+  logoTone,
   displayTone,
   headingTone,
+  textTone,
   fontLabel,
   headingFontLabel,
   productName,
@@ -181,8 +190,10 @@ export default function PlaygroundControls({
   onTracking,
   onIconWeight,
   onIconFill,
+  onLogoTone,
   onDisplayTone,
   onHeadingTone,
+  onTextTone,
   onFontLabel,
   onHeadingFontLabel,
   onProductName,
@@ -472,9 +483,17 @@ export default function PlaygroundControls({
           />
         </div>
 
-        {/* Each tier's colour family; the step per mode is picked to hold
-            the tier's contrast (tierToneOverrides). */}
+        {/* Each role's colour family, apart from the action colour; the
+            step per mode is picked to hold the role's contrast
+            (tierToneOverrides). */}
         <div className={`${styles.controlGroup} ${styles.dropUp}`}>
+          <InspectorDropdown
+            size="compact"
+            label="Logo colour"
+            value={logoTone}
+            options={LOGO_TONE_OPTIONS}
+            onValueChange={(value) => onLogoTone(value as LogoTone)}
+          />
           <InspectorDropdown
             size="compact"
             label="Display colour"
@@ -488,6 +507,13 @@ export default function PlaygroundControls({
             value={headingTone}
             options={TONE_OPTIONS}
             onValueChange={(value) => onHeadingTone(value as TextTone)}
+          />
+          <InspectorDropdown
+            size="compact"
+            label="Text colour"
+            value={textTone}
+            options={TONE_OPTIONS}
+            onValueChange={(value) => onTextTone(value as TextTone)}
           />
         </div>
 

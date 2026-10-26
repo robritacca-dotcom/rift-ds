@@ -1492,25 +1492,35 @@ export const SHIPPED_DISPLAY_TRACKING_EM = TYPE_STYLES.find(
   ([style]) => style === "display-1"
 )![3];
 
-/* ---------- type-tier tones ----------
-   The display and heading tiers each have a colour role
-   (`--color-text-display`, `--color-text-heading`) that aliases the primary
-   text until a theme gives the tier a tone. A tone names a colour family,
-   never a step: the step is chosen per mode, as the one nearest the
-   family's key that still clears the tier's contrast against both the page
-   and the card fill, so a yellow display tier is the yellow key on a dark
-   page and a deep olive on a light one. Read from the overrides already
-   composed, so a rebased ramp, a tinted neutral scale and the Advanced
-   colours all count. */
+/* ---------- tones: the logo and the type tiers ----------
+   Four colour roles a theme can set apart from its action colour: the
+   logo (`--color-brand-mark`, its gradient end and `--color-product-mark`),
+   the display tier (`--color-text-display`), the heading tier
+   (`--color-text-heading`) and running text (`--color-text-primary`). Each
+   aliases its usual colour until a theme gives it a tone. A tone names a
+   colour family, never a step: the step is chosen per mode, as the one
+   nearest the family's key (for running text, nearest the ink end) that
+   still clears the role's contrast against both the page and the card
+   fill. So a yellow display tier is the yellow key on a dark page and a
+   deep olive on a light one, and blue text is a navy ink. Read from the
+   overrides already composed, so a rebased ramp, a tinted neutral scale
+   and the Advanced colours all count. */
 
-/** The tones a tier can take: the ink (the primary text, no override) or
+/** The tones a type tier can take: the ink (the neutral text colour) or
     one of the chromatic families. */
 export const TEXT_TONES = ["ink", "red", "orange", "yellow", "green", "teal", "blue", "purple"] as const;
 
 export type TextTone = (typeof TEXT_TONES)[number];
 
+/** The logo's tones: the action colour it wears by default, or any text
+    tone. */
+export const LOGO_TONES = ["action", ...TEXT_TONES] as const;
+
+export type LogoTone = (typeof LOGO_TONES)[number];
+
 /** Each tone's name in the picker. */
-export const TEXT_TONE_LABELS: Record<TextTone, string> = {
+export const TEXT_TONE_LABELS: Record<LogoTone, string> = {
+  action: "Action",
   ink: "Ink",
   red: "Red",
   orange: "Orange",
@@ -1521,18 +1531,34 @@ export const TEXT_TONE_LABELS: Record<TextTone, string> = {
   purple: "Purple",
 };
 
-/** The contrast each tier's tone must hold against the page and the card
-    fill. Display type is only ever large, so it takes the large-text
-    minimum; headings reach sizes that need the body-text one.
-    scripts/validate-theme-presets.mjs checks the same minimums on every
-    shipped theme. */
-export const TIER_TONE_MIN_CONTRAST = { display: 3, heading: 4.5 } as const;
+/** The contrast each role's tone must hold against the page and the card
+    fill. The logo is a graphic and display type is only ever large, so
+    both take the 3:1 minimum; headings and running text reach sizes that
+    need the body-text one. scripts/validate-theme-presets.mjs checks the
+    same minimums on every shipped theme. */
+export const TIER_TONE_MIN_CONTRAST = { logo: 3, display: 3, heading: 4.5, text: 4.5 } as const;
+
+export type ToneRole = keyof typeof TIER_TONE_MIN_CONTRAST;
+
+/** The four tones a theme sets. */
+export interface ThemeTones {
+  logo: LogoTone;
+  display: TextTone;
+  heading: TextTone;
+  text: TextTone;
+}
+
+/** Every role on its usual colour: the logo on the action, type in the ink. */
+export const DEFAULT_TONES: ThemeTones = { logo: "action", display: "ink", heading: "ink", text: "ink" };
+
+/** The neutral ink step per mode, as the token files set the primary text. */
+const INK_STEP = { light: "10", dark: "01" } as const;
 
 /** The step a tone's family resolves to in one mode, or null when no step
-    holds the tier's contrast (the tier then stays on the ink). */
+    holds the role's contrast (the role then keeps its usual colour). */
 export function tierToneStep(
   ramp: Exclude<TextTone, "ink">,
-  tier: keyof typeof TIER_TONE_MIN_CONTRAST,
+  role: ToneRole,
   current: Overrides,
   theme: "light" | "dark"
 ): string | null {
@@ -1540,14 +1566,17 @@ export function tierToneStep(
     current[`--primitive-neutral-${step}`] ?? NEUTRALS.find((n) => n.step === step)!.hex;
   const grounds = theme === "dark" ? [neutral("10"), neutral("09")] : [neutral("01"), neutral("00")];
   const steps = CHROMATIC_RAMPS.find((r) => r.name === ramp)!.steps;
-  const keyIndex = steps.findIndex(([step]) => step === "07");
-  const min = TIER_TONE_MIN_CONTRAST[tier];
-  /* Nearest the key first; on a tie, the side that moves away from the
+  /* Running text wants an ink with a hue in it, so it starts from the far
+     end of the ramp; every other role starts from the key. */
+  const target = role === "text" ? INK_STEP[theme] : "07";
+  const targetIndex = steps.findIndex(([step]) => step === target);
+  const min = TIER_TONE_MIN_CONTRAST[role];
+  /* Nearest the target first; on a tie, the side that moves away from the
      page (deeper on a light page, lighter on a dark one). */
   const order = steps
     .map(([step, hex], i) => ({ step, hex: current[`--primitive-${ramp}-${step}`] ?? hex, i }))
     .sort((a, b) => {
-      const d = Math.abs(a.i - keyIndex) - Math.abs(b.i - keyIndex);
+      const d = Math.abs(a.i - targetIndex) - Math.abs(b.i - targetIndex);
       if (d !== 0) return d;
       return theme === "dark" ? a.i - b.i : b.i - a.i;
     });
@@ -1555,24 +1584,54 @@ export function tierToneStep(
   return pick ? pick.step : null;
 }
 
-/** The tier roles' overrides for one mode: a `var(--primitive-…)` pointer
-    per toned tier, nothing for an ink one. Applied after every other
-    lever, since it reads the ramps and greys as they finally stand. */
-export function tierToneOverrides(
-  displayTone: TextTone,
-  headingTone: TextTone,
-  current: Overrides,
-  theme: "light" | "dark"
-): Overrides {
+/** The tone roles' overrides for one mode, as `var(--primitive-…)`
+    pointers. A role on its usual colour emits nothing, with one exception:
+    once running text takes a tone, a type tier on the ink points at the
+    neutral ink itself, so "ink" always means the neutral, never the toned
+    text. Applied after every other lever, since it reads the ramps and
+    greys as they finally stand. */
+export function tierToneOverrides(tones: ThemeTones, current: Overrides, theme: "light" | "dark"): Overrides {
   const overrides: Overrides = {};
-  const tiers: Array<[keyof typeof TIER_TONE_MIN_CONTRAST, TextTone, string]> = [
-    ["display", displayTone, "--color-text-display"],
-    ["heading", headingTone, "--color-text-heading"],
-  ];
-  for (const [tier, tone, cssVar] of tiers) {
-    if (tone === "ink") continue;
-    const step = tierToneStep(tone, tier, current, theme);
-    if (step) overrides[cssVar] = `var(--primitive-${tone}-${step})`;
+  const ink = `var(--primitive-neutral-${INK_STEP[theme]})`;
+  const pointer = (tone: Exclude<TextTone, "ink">, role: ToneRole) => {
+    const step = tierToneStep(tone, role, current, theme);
+    return step ? { tone, step } : null;
+  };
+  const ref = (tone: string, step: string) => `var(--primitive-${tone}-${step})`;
+
+  if (tones.text !== "ink") {
+    const p = pointer(tones.text, "text");
+    if (p) overrides["--color-text-primary"] = ref(p.tone, p.step);
+  }
+  const textToned = "--color-text-primary" in overrides;
+  for (const [role, cssVar] of [
+    ["display", "--color-text-display"],
+    ["heading", "--color-text-heading"],
+  ] as const) {
+    const tone = tones[role];
+    if (tone === "ink") {
+      if (textToned) overrides[cssVar] = ink;
+      continue;
+    }
+    const p = pointer(tone, role);
+    if (p) overrides[cssVar] = ref(p.tone, p.step);
+  }
+
+  if (tones.logo === "ink") {
+    overrides["--color-brand-mark"] = ink;
+    overrides["--color-brand-mark-end"] = ink;
+    overrides["--color-product-mark"] = ink;
+  } else if (tones.logo !== "action") {
+    const p = pointer(tones.logo, "logo");
+    if (p) {
+      /* The gradient's end steps away from the page, as the action's
+         pressed step does, inside the ramp. */
+      const i = Number(p.step) + (theme === "dark" ? -1 : 1);
+      const end = String(Math.min(11, Math.max(0, i))).padStart(2, "0");
+      overrides["--color-brand-mark"] = ref(p.tone, p.step);
+      overrides["--color-brand-mark-end"] = ref(p.tone, end);
+      overrides["--color-product-mark"] = ref(p.tone, p.step);
+    }
   }
   return overrides;
 }

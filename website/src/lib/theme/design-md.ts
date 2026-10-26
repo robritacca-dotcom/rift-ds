@@ -92,6 +92,7 @@ import {
   type AccentSextet,
   type ElevationVariant,
   type FontOption,
+  type LogoTone,
   type TextTone,
 } from "./theme-overrides";
 import { accentsFromColours } from "./image-palette";
@@ -819,6 +820,9 @@ export interface DesignMdTheme {
       coloured one; absent, the tier stays in the ink. */
   displayTone?: TextTone;
   headingTone?: TextTone;
+  /** The logo's colour family, when the file colours its logo apart from
+      its action colour; absent, the logo wears the action colour. */
+  logoTone?: LogoTone;
   /** The colours the theme was read from, for the source card. */
   swatches: string[];
   report: MatchRow[];
@@ -880,11 +884,36 @@ const TIER_COLOUR_KEYS: Array<{ tier: "display" | "heading"; lever: string; keys
   },
 ];
 
+/** A logo colour under one of these keys, in either mode. */
+const LOGO_COLOUR_KEYS = /^(logo|logo-colou?r|logo-mark|brand-mark|wordmark)([-_](light|dark))?$/i;
+
 function fitTierTones(
   colours: ReadonlyArray<[string, string]>,
-  report: MatchRow[]
-): { displayTone?: TextTone; headingTone?: TextTone } {
-  const out: { displayTone?: TextTone; headingTone?: TextTone } = {};
+  report: MatchRow[],
+  brand: string | undefined
+): { displayTone?: TextTone; headingTone?: TextTone; logoTone?: LogoTone } {
+  const out: { displayTone?: TextTone; headingTone?: TextTone; logoTone?: LogoTone } = {};
+  /* The logo: a colour that is the action colour is the default; any
+     other takes its family (or the ink, for a grey), as the tiers do. */
+  const logo = colours.find(([key]) => LOGO_COLOUR_KEYS.test(key));
+  if (!logo || (brand && logo[1].toUpperCase() === brand.toUpperCase())) {
+    report.push({
+      lever: "Logo colour",
+      value: "Action",
+      status: logo ? "matched" : "kept",
+      note: logo ? "The file's logo wears its action colour." : "The file gives the logo no colour of its own, so it wears the action colour.",
+    });
+  } else {
+    const ramp = nearestRampFor(logo[1]);
+    const tone: LogoTone = ramp === "neutral" ? "ink" : (ramp as TextTone);
+    out.logoTone = tone;
+    report.push({
+      lever: "Logo colour",
+      value: TEXT_TONE_LABELS[tone],
+      status: "approximated",
+      note: `The file colours its logo ${logo[1]}; rift takes its family and picks the step that holds contrast in each mode.`,
+    });
+  }
   for (const { tier, lever, keys } of TIER_COLOUR_KEYS) {
     const stated = colours.filter(([key]) => keys.test(key));
     const chromatic = stated
@@ -1742,7 +1771,7 @@ export function readDesignMd(text: string, catalogue: FontCatalogue): DesignMdTh
   const density = fitDensity(doc, report);
   const type = fitType(doc, typographyProse(body), catalogue, report);
   const elevation = fitElevation(doc, body, report);
-  const tones = fitTierTones(colours, report);
+  const tones = fitTierTones(colours, report, action.brand);
   traits.push(...readTraits(doc, action.brand, type.bodyFont?.requested ?? ""));
 
   const accents = accentsFromColours(colours.map(([, hex]) => hex), action.brand) ?? undefined;

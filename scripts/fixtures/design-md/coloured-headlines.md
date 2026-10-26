@@ -1,7 +1,7 @@
 ---
 version: alpha
 name: Kestrel-design-analysis
-description: A fictional film journal whose headlines run in mustard while the copy stays near-black, and whose section heads stay grey.
+description: A fictional film journal whose headlines run in mustard and whose logo is rust, while the copy stays near-black and the section heads grey.
 
 colors:
   primary: "#1a1a1a"
@@ -10,6 +10,7 @@ colors:
   canvas: "#f4f2ec"
   display: "#b8b23a"
   heading: "#2b2b2b"
+  logo: "#d2643e"
 
 typography:
   display-lg:

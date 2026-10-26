@@ -57,6 +57,8 @@ const COLOURS = [
   ['display-dark', '--color-text-display', 'dark'],
   ['heading', '--color-text-heading', 'light'],
   ['heading-dark', '--color-text-heading', 'dark'],
+  ['logo', '--color-brand-mark', 'light'],
+  ['logo-dark', '--color-brand-mark', 'dark'],
   ['text-secondary', '--color-text-secondary', 'light'],
   ['text-tertiary', '--color-text-tertiary', 'light'],
   ['border', '--color-bg-container-border', 'light'],
@@ -241,6 +243,12 @@ export function buildThemeDesignMd({ id, label, values, siteUrl, packageName }) 
     default: 'Two shadows, one for what floats and one for dialogs. Everything else separates by contrast.',
   }[depth];
 
+  /* Whether the logo wears the action colour or a tone of its own. */
+  const logoLine =
+    hex(light('--color-brand-mark')) === hex(light('--color-action-primary-bg')) &&
+    hex(dark('--color-brand-mark')) === hex(dark('--color-action-primary-bg'))
+      ? 'The logo wears the action colour (`logo`).'
+      : 'The logo has a colour of its own (`logo`), apart from the action colour.';
   /* Which type tiers take a colour of their own rather than the ink. */
   const toned = [
     ['Display type', 'display', '--color-text-display'],
@@ -276,7 +284,7 @@ Take it whole: \`import '${packageName}/tokens/presets/presets.css'\` after the 
 
 ## Colour
 
-One action colour, kept for primary buttons, focus rings, the checked state of a control and the selected item of a set. Everything else is the neutral scale and five status roles.
+One action colour, kept for primary buttons, focus rings, the checked state of a control and the selected item of a set. Everything else is the neutral scale and five status roles. ${logoLine}
 
 ${row(['Role', 'Light', 'Dark', 'Token'])}
 ${row(['---', '---', '---', '---'])}

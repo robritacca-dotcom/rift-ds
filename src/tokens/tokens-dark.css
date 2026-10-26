@@ -19,6 +19,16 @@
      does not. */
   --color-text-display: var(--color-text-primary);
   --color-text-heading: var(--color-text-primary);
+  /* Brand mark: the two stops of the logo's gradient. They alias the
+     action fill and its pressed step, which is what the mark has always
+     worn; a theme can give the logo a tone of its own without moving the
+     action colour. */
+  --color-brand-mark: var(--color-action-primary-bg);
+  --color-brand-mark-end: var(--color-action-primary-bg-active);
+  /* A template's fictional product mark, which follows the core UI
+     colour rather than the action; the logo tone colours it with the
+     brand mark. */
+  --color-product-mark: var(--color-core-ui-primary);
 
   /* Icon */
   --color-icon-primary: var(--primitive-neutral-02);

@@ -11,7 +11,7 @@ How to read it:
 
 The live reference with swatches is at https://rift-ds.com/foundations, and the MCP endpoint's `list_tokens` tool serves the names.
 
-## Colour (131)
+## Colour (134)
 
 Prefix: `--color-*`.
 
@@ -64,6 +64,8 @@ Prefix: `--color-*`.
 | `--color-bg-glass` | `rgba(255, 255, 255, 0.9)` (`--primitive-neutral-00-a90`) | `rgba(14, 14, 14, 0.66)` (`--primitive-neutral-09-a66`) |
 | `--color-bg-page-inverse` | `#050505` (`--primitive-neutral-10`) | `#F1F1F1` (`--primitive-neutral-01`) |
 | `--color-bg-page-primary` | `#F1F1F1` (`--primitive-neutral-01`) | `#050505` (`--primitive-neutral-10`) |
+| `--color-brand-mark` | `#0E6E8F` (`--primitive-teal-08`) | `#3CA5C6` (`--primitive-teal-05`) |
+| `--color-brand-mark-end` | `#052F3E` (`--primitive-teal-10`) | `#9ED4E5` (`--primitive-teal-03`) |
 | `--color-calendar-cell-bg` | `#F1F1F1` (`--primitive-neutral-01`) | `rgba(35, 35, 35, 0.8)` (`--primitive-neutral-08-a80`) |
 | `--color-calendar-cell-bg-hover` | `rgba(214, 214, 214, 0.8)` (`--primitive-neutral-02-a80`) | `rgba(48, 48, 48, 0.8)` (`--primitive-neutral-07-a80`) |
 | `--color-calendar-event-bg` | `#FFFFFF` (`--primitive-neutral-00`) | `rgba(14, 14, 14, 0.8)` (`--primitive-neutral-09-a80`) |
@@ -118,6 +120,7 @@ Prefix: `--color-*`.
 | `--color-pixel-ink-4` | `#03765A` (`--primitive-green-09`) | `#5ADDB6` (`--primitive-green-05`) |
 | `--color-pixel-ink-5` | `#1E47B0` (`--primitive-blue-07`) | `#7F99E3` (`--primitive-blue-04`) |
 | `--color-pixel-ink-6` | `#7434B3` (`--primitive-purple-08`) | `#A86AE8` (`--primitive-purple-05`) |
+| `--color-product-mark` | `#0E6E8F` (`--primitive-teal-08`) | `#3CA5C6` (`--primitive-teal-05`) |
 | `--color-scrim` | `rgba(0, 0, 0, 0.5)` (`--primitive-true-black-semi`) | `rgba(0, 0, 0, 0.7)` (`--primitive-true-black-strong`) |
 | `--color-status-error-bg` | `#FDEFF3` (`--primitive-red-01`) | `#571727` (`--primitive-red-10`) |
 | `--color-status-error-border` | `#EF476F` (`--primitive-red-07`) | `#EF476F` (`--primitive-red-07`) |

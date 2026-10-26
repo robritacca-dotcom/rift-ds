@@ -20,6 +20,8 @@ colors:
   display-dark: "#e7eaf2"
   heading: "#05070f"
   heading-dark: "#e7eaf2"
+  logo: "#003dff"
+  logo-dark: "#003dff"
   text-secondary: "#2e3138"
   text-tertiary: "#696b73"
   border: "#cdd0d8"
@@ -164,7 +166,7 @@ Take it whole: `import 'rift-ds/tokens/presets/presets.css'` after the tokens, t
 
 ## Colour
 
-One action colour, kept for primary buttons, focus rings, the checked state of a control and the selected item of a set. Everything else is the neutral scale and five status roles.
+One action colour, kept for primary buttons, focus rings, the checked state of a control and the selected item of a set. Everything else is the neutral scale and five status roles. The logo wears the action colour (`logo`).
 
 | Role | Light | Dark | Token |
 | --- | --- | --- | --- |
@@ -178,6 +180,7 @@ One action colour, kept for primary buttons, focus rings, the checked state of a
 | `ink` | `#05070f` | `#e7eaf2` | `--color-text-primary` |
 | `display` | `#05070f` | `#e7eaf2` | `--color-text-display` |
 | `heading` | `#05070f` | `#e7eaf2` | `--color-text-heading` |
+| `logo` | `#003dff` | `#003dff` | `--color-brand-mark` |
 | `text-secondary` | `#2e3138` | `#b4b7bf` | `--color-text-secondary` |
 | `text-tertiary` | `#696b73` | `#9c9ea6` | `--color-text-tertiary` |
 | `border` | `#cdd0d8` | `#22242c` | `--color-bg-container-border` |

@@ -308,6 +308,21 @@ const textColours: SwatchData[] = [
     dark: { primitive: "--neutral--01--", hex: "#F1F1F1", rgb: "241 / 241 / 241" },
     light: { primitive: "--neutral--10--", hex: "#050505", rgb: "5 / 5 / 5" },
   },
+  {
+    label: "Brand Mark", cssVar: "--color-brand-mark",
+    dark: { primitive: "--teal--05--", hex: "#3CA5C6", rgb: "60 / 165 / 198" },
+    light: { primitive: "--teal--08--", hex: "#0E6E8F", rgb: "14 / 110 / 143" },
+  },
+  {
+    label: "Brand Mark End", cssVar: "--color-brand-mark-end",
+    dark: { primitive: "--teal--03--", hex: "#9ED4E5", rgb: "158 / 212 / 229" },
+    light: { primitive: "--teal--10--", hex: "#052F3E", rgb: "5 / 47 / 62" },
+  },
+  {
+    label: "Product Mark", cssVar: "--color-product-mark",
+    dark: { primitive: "--teal--05--", hex: "#3CA5C6", rgb: "60 / 165 / 198" },
+    light: { primitive: "--teal--08--", hex: "#0E6E8F", rgb: "14 / 110 / 143" },
+  },
 ];
 
 /* --- Icon --- */

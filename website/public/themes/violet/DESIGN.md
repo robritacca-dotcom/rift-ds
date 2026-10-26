@@ -16,10 +16,12 @@ colors:
   surface-soft: "#efedf1"
   ink: "#0d0811"
   ink-dark: "#ede9f1"
-  display: "#71613c"
-  display-dark: "#e8c77b"
+  display: "#0d0811"
+  display-dark: "#ede9f1"
   heading: "#0d0811"
   heading-dark: "#ede9f1"
+  logo: "#7434b3"
+  logo-dark: "#7434b3"
   text-secondary: "#36313a"
   text-tertiary: "#6f6b74"
   border: "#d3cfd7"
@@ -161,7 +163,7 @@ Take it whole: `import 'rift-ds/tokens/presets/presets.css'` after the tokens, t
 
 ## Colour
 
-One action colour, kept for primary buttons, focus rings, the checked state of a control and the selected item of a set. Everything else is the neutral scale and five status roles.
+One action colour, kept for primary buttons, focus rings, the checked state of a control and the selected item of a set. Everything else is the neutral scale and five status roles. The logo wears the action colour (`logo`).
 
 | Role | Light | Dark | Token |
 | --- | --- | --- | --- |
@@ -173,8 +175,9 @@ One action colour, kept for primary buttons, focus rings, the checked state of a
 | `surface` | `#fdfaff` | `rgba(21, 17, 25, 0.8)` | `--color-bg-container-primary` |
 | `surface-soft` | `#efedf1` | `#36313a` | `--color-bg-container-secondary` |
 | `ink` | `#0d0811` | `#ede9f1` | `--color-text-primary` |
-| `display` | `#71613c` | `#e8c77b` | `--color-text-display` |
+| `display` | `#0d0811` | `#ede9f1` | `--color-text-display` |
 | `heading` | `#0d0811` | `#ede9f1` | `--color-text-heading` |
+| `logo` | `#7434b3` | `#7434b3` | `--color-brand-mark` |
 | `text-secondary` | `#36313a` | `#bbb6bf` | `--color-text-secondary` |
 | `text-tertiary` | `#6f6b74` | `#a29da6` | `--color-text-tertiary` |
 | `border` | `#d3cfd7` | `#29252d` | `--color-bg-container-border` |
@@ -188,7 +191,7 @@ Accents, for charts and the background field: amber `#d9915e`, cobalt `#6a5be0`,
 
 ## Typography
 
-Playfair Display headings over Plus Jakarta Sans text. Levels inside a tier share a weight and step by size. Display type take `display`, while running text stays in the ink.
+Playfair Display headings over Plus Jakarta Sans text. Levels inside a tier share a weight and step by size. Every tier is set in the ink.
 
 | Style | Face | Size | Weight | Line height | Tracking |
 | --- | --- | --- | --- | --- | --- |

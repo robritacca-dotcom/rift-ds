@@ -6,7 +6,8 @@ import { BRAND_MARK_PATHS, BRAND_MARK_STROKE_WIDTH } from "@/config/brand-mark";
  * (header wordmark, footer, drawer, and the immersive stages' toolbar pill,
  * which took it off the static file so a re-themed stage re-themes the mark). The favicon routes draw the same
  * paths from @/config/brand-mark, so the mark cannot fork. The gradient
- * reads the live action tokens, so the mark wears whichever theme is on:
+ * reads the brand mark tokens, which alias the action fill unless a theme
+ * gives the logo a tone of its own, so the mark wears whichever theme is on:
  * gold under Volt in dark (ink in light, where Volt inverts the action
  * fill), ink under Smoke, teal in the shipped look. The favicons keep the frozen teals (browser chrome cannot read
  * CSS variables).
@@ -50,8 +51,8 @@ export default function BrandMark({
           y2="20"
           gradientUnits="userSpaceOnUse"
         >
-          <stop style={{ stopColor: "var(--color-action-primary-bg)" }} />
-          <stop offset="1" style={{ stopColor: "var(--color-action-primary-bg-active)" }} />
+          <stop style={{ stopColor: "var(--color-brand-mark)" }} />
+          <stop offset="1" style={{ stopColor: "var(--color-brand-mark-end)" }} />
         </linearGradient>
       </defs>
     </svg>

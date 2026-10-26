@@ -18,8 +18,10 @@ colors:
   ink-dark: "#dce0e1"
   display: "#625f1f"
   display-dark: "#c9c340"
-  heading: "#625f1f"
-  heading-dark: "#c9c340"
+  heading: "#080c0d"
+  heading-dark: "#dce0e1"
+  logo: "#c65e33"
+  logo-dark: "#ef8247"
   text-secondary: "#2e3333"
   text-tertiary: "#656a6a"
   border: "#c4c8c9"
@@ -161,7 +163,7 @@ Take it whole: `import 'rift-ds/tokens/presets/presets.css'` after the tokens, t
 
 ## Colour
 
-One action colour, kept for primary buttons, focus rings, the checked state of a control and the selected item of a set. Everything else is the neutral scale and five status roles.
+One action colour, kept for primary buttons, focus rings, the checked state of a control and the selected item of a set. Everything else is the neutral scale and five status roles. The logo has a colour of its own (`logo`), apart from the action colour.
 
 | Role | Light | Dark | Token |
 | --- | --- | --- | --- |
@@ -174,7 +176,8 @@ One action colour, kept for primary buttons, focus rings, the checked state of a
 | `surface-soft` | `#e6e9e9` | `#2e3333` | `--color-bg-container-secondary` |
 | `ink` | `#080c0d` | `#dce0e1` | `--color-text-primary` |
 | `display` | `#625f1f` | `#c9c340` | `--color-text-display` |
-| `heading` | `#625f1f` | `#c9c340` | `--color-text-heading` |
+| `heading` | `#080c0d` | `#dce0e1` | `--color-text-heading` |
+| `logo` | `#c65e33` | `#ef8247` | `--color-brand-mark` |
 | `text-secondary` | `#2e3333` | `#acb1b1` | `--color-text-secondary` |
 | `text-tertiary` | `#656a6a` | `#95999a` | `--color-text-tertiary` |
 | `border` | `#c4c8c9` | `#232728` | `--color-bg-container-border` |
@@ -188,7 +191,7 @@ Accents, for charts and the background field: amber `#d69a3e`, cobalt `#4f7f8c`,
 
 ## Typography
 
-Anton headings over Work Sans text. Levels inside a tier share a weight and step by size. Display type take `display` and headings take `heading`, while running text stays in the ink.
+Anton headings over Work Sans text. Levels inside a tier share a weight and step by size. Display type take `display`, while running text stays in the ink.
 
 | Style | Face | Size | Weight | Line height | Tracking |
 | --- | --- | --- | --- | --- | --- |

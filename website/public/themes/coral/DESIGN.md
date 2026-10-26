@@ -16,10 +16,12 @@ colors:
   surface-soft: "#f1f1f1"
   ink: "#050505"
   ink-dark: "#f1f1f1"
-  display: "#00867c"
-  display-dark: "#00a699"
-  heading: "#006058"
-  heading-dark: "#00a699"
+  display: "#050505"
+  display-dark: "#f1f1f1"
+  heading: "#050505"
+  heading-dark: "#f1f1f1"
+  logo: "#d9234e"
+  logo-dark: "#d9234e"
   text-secondary: "#303030"
   text-tertiary: "#6d6d6d"
   border: "#d6d6d6"
@@ -161,7 +163,7 @@ Take it whole: `import 'rift-ds/tokens/presets/presets.css'` after the tokens, t
 
 ## Colour
 
-One action colour, kept for primary buttons, focus rings, the checked state of a control and the selected item of a set. Everything else is the neutral scale and five status roles.
+One action colour, kept for primary buttons, focus rings, the checked state of a control and the selected item of a set. Everything else is the neutral scale and five status roles. The logo wears the action colour (`logo`).
 
 | Role | Light | Dark | Token |
 | --- | --- | --- | --- |
@@ -173,8 +175,9 @@ One action colour, kept for primary buttons, focus rings, the checked state of a
 | `surface` | `#ffffff` | `rgba(14, 14, 14, 0.8)` | `--color-bg-container-primary` |
 | `surface-soft` | `#f1f1f1` | `#303030` | `--color-bg-container-secondary` |
 | `ink` | `#050505` | `#f1f1f1` | `--color-text-primary` |
-| `display` | `#00867c` | `#00a699` | `--color-text-display` |
-| `heading` | `#006058` | `#00a699` | `--color-text-heading` |
+| `display` | `#050505` | `#f1f1f1` | `--color-text-display` |
+| `heading` | `#050505` | `#f1f1f1` | `--color-text-heading` |
+| `logo` | `#d9234e` | `#d9234e` | `--color-brand-mark` |
 | `text-secondary` | `#303030` | `#bcbcbc` | `--color-text-secondary` |
 | `text-tertiary` | `#6d6d6d` | `#a2a2a2` | `--color-text-tertiary` |
 | `border` | `#d6d6d6` | `#232323` | `--color-bg-container-border` |
@@ -188,7 +191,7 @@ Accents, for charts and the background field: amber `#ff8e3c`, cobalt `#5e7bd0`,
 
 ## Typography
 
-Poppins headings over DM Sans text. Levels inside a tier share a weight and step by size. Display type take `display` and headings take `heading`, while running text stays in the ink.
+Poppins headings over DM Sans text. Levels inside a tier share a weight and step by size. Every tier is set in the ink.
 
 | Style | Face | Size | Weight | Line height | Tracking |
 | --- | --- | --- | --- | --- | --- |

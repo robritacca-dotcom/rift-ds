@@ -62,6 +62,8 @@ html[data-brand="marquee"] {
   --color-ambient-4: #8C8730;
   --color-ambient-5: #173840;
   --color-ambient-6: #D2643E;
+  --color-brand-mark: var(--primitive-orange-08);
+  --color-brand-mark-end: var(--primitive-orange-09);
   --color-core-accent-amber: #D69A3E;
   --color-core-accent-cobalt: #4F7F8C;
   --color-core-accent-coral: #D2643E;
@@ -72,8 +74,8 @@ html[data-brand="marquee"] {
   --color-core-ui-secondary: var(--primitive-yellow-10);
   --color-input-border-hover: var(--primitive-yellow-08);
   --color-input-border-selected: var(--primitive-yellow-07);
+  --color-product-mark: var(--primitive-orange-08);
   --color-text-display: var(--primitive-yellow-09);
-  --color-text-heading: var(--primitive-yellow-09);
   --font-display-1-weight: 400;
   --font-display-2-weight: 400;
   --font-family-heading: 'Anton', sans-serif;
@@ -185,6 +187,8 @@ html[data-brand="marquee"][data-theme="dark"] {
   --color-ambient-4: #8C8730;
   --color-ambient-5: #173840;
   --color-ambient-6: #D2643E;
+  --color-brand-mark: var(--primitive-orange-07);
+  --color-brand-mark-end: var(--primitive-orange-06);
   --color-core-accent-amber: #D69A3E;
   --color-core-accent-cobalt: #4F7F8C;
   --color-core-accent-coral: #D2643E;
@@ -195,8 +199,8 @@ html[data-brand="marquee"][data-theme="dark"] {
   --color-core-ui-secondary: var(--primitive-yellow-09);
   --color-input-border-hover: var(--primitive-yellow-08);
   --color-input-border-selected: var(--primitive-yellow-08);
+  --color-product-mark: var(--primitive-orange-07);
   --color-text-display: var(--primitive-yellow-07);
-  --color-text-heading: var(--primitive-yellow-07);
   --font-display-1-weight: 400;
   --font-display-2-weight: 400;
   --font-family-heading: 'Anton', sans-serif;

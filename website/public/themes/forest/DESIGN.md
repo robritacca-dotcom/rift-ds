@@ -16,10 +16,12 @@ colors:
   surface-soft: "#ebecec"
   ink: "#070a08"
   ink-dark: "#e5e8e6"
-  display: "#c06b32"
-  display-dark: "#c06b32"
+  display: "#070a08"
+  display-dark: "#e5e8e6"
   heading: "#070a08"
   heading-dark: "#e5e8e6"
+  logo: "#23573f"
+  logo-dark: "#23573f"
   text-secondary: "#2f3231"
   text-tertiary: "#696c6a"
   border: "#cbcecd"
@@ -161,7 +163,7 @@ Take it whole: `import 'rift-ds/tokens/presets/presets.css'` after the tokens, t
 
 ## Colour
 
-One action colour, kept for primary buttons, focus rings, the checked state of a control and the selected item of a set. Everything else is the neutral scale and five status roles.
+One action colour, kept for primary buttons, focus rings, the checked state of a control and the selected item of a set. Everything else is the neutral scale and five status roles. The logo wears the action colour (`logo`).
 
 | Role | Light | Dark | Token |
 | --- | --- | --- | --- |
@@ -173,8 +175,9 @@ One action colour, kept for primary buttons, focus rings, the checked state of a
 | `surface` | `#f8faf9` | `rgba(15, 18, 17, 0.8)` | `--color-bg-container-primary` |
 | `surface-soft` | `#ebecec` | `#2f3231` | `--color-bg-container-secondary` |
 | `ink` | `#070a08` | `#e5e8e6` | `--color-text-primary` |
-| `display` | `#c06b32` | `#c06b32` | `--color-text-display` |
+| `display` | `#070a08` | `#e5e8e6` | `--color-text-display` |
 | `heading` | `#070a08` | `#e5e8e6` | `--color-text-heading` |
+| `logo` | `#23573f` | `#23573f` | `--color-brand-mark` |
 | `text-secondary` | `#2f3231` | `#b3b6b5` | `--color-text-secondary` |
 | `text-tertiary` | `#696c6a` | `#9a9e9c` | `--color-text-tertiary` |
 | `border` | `#cbcecd` | `#232625` | `--color-bg-container-border` |
@@ -188,7 +191,7 @@ Accents, for charts and the background field: amber `#c97f3f`, cobalt `#446e93`,
 
 ## Typography
 
-Montserrat headings over DM Sans text. Levels inside a tier share a weight and step by size. Display type take `display`, while running text stays in the ink.
+Montserrat headings over DM Sans text. Levels inside a tier share a weight and step by size. Every tier is set in the ink.
 
 | Style | Face | Size | Weight | Line height | Tracking |
 | --- | --- | --- | --- | --- | --- |

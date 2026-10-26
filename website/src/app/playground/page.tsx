@@ -50,6 +50,7 @@ import {
   SHIPPED_ICON_WEIGHT,
   addSessionFont,
   type ElevationVariant,
+  type LogoTone,
   type TextTone,
   type FontOption,
 } from "@/lib/theme/theme-overrides";
@@ -391,6 +392,8 @@ export default function PlaygroundPage() {
   const [iconFill, setIconFill] = useState(false);
   const [displayTone, setDisplayTone] = useState<TextTone>("ink");
   const [headingTone, setHeadingTone] = useState<TextTone>("ink");
+  const [logoTone, setLogoTone] = useState<LogoTone>("action");
+  const [textTone, setTextTone] = useState<TextTone>("ink");
   const [fontLabel, setFontLabel] = useState(FONT_OPTIONS[0].label);
   const [headingFontLabel, setHeadingFontLabel] = useState(
     HEADING_FONT_OPTIONS[0].label
@@ -663,6 +666,8 @@ export default function PlaygroundPage() {
     setIconFill(false);
     setDisplayTone(t.displayTone ?? "ink");
     setHeadingTone(t.headingTone ?? "ink");
+    setLogoTone(t.logoTone ?? "action");
+    setTextTone("ink");
     setFontLabel(t.bodyFont ? loadMatchedFont(t.bodyFont.option) : FONT_OPTIONS[0].label);
     setHeadingFontLabel(
       t.headingFont ? loadMatchedFont(t.headingFont.option) : HEADING_FONT_OPTIONS[0].label
@@ -747,6 +752,8 @@ export default function PlaygroundPage() {
     setIconFill(p.iconFill);
     setDisplayTone(p.displayTone);
     setHeadingTone(p.headingTone);
+    setLogoTone(p.logoTone);
+    setTextTone(p.textTone);
     setFontLabel(p.fontLabel);
     setHeadingFontLabel(p.headingFontLabel ?? HEADING_FONT_OPTIONS[0].label);
   };
@@ -854,9 +861,16 @@ export default function PlaygroundPage() {
       Object.assign(merged, advancedColorOverrides(advColors, merged));
     }
     /* Last, as in the composer: the tones read the ramps as they stand. */
-    Object.assign(merged, tierToneOverrides(displayTone, headingTone, merged, theme === "dark" ? "dark" : "light"));
+    Object.assign(
+      merged,
+      tierToneOverrides(
+        { logo: logoTone, display: displayTone, heading: headingTone, text: textTone },
+        merged,
+        theme === "dark" ? "dark" : "light"
+      )
+    );
     return merged;
-  }, [actionPlan, theme, tintOn, tintSeed, tintStrength, radiusScale, pill, density, typeScale, motionScale, elevation, displayWeight, headingWeight, bodyWeight, tracking, iconWeight, iconFill, displayTone, headingTone, accents, presetExtras, advColors]);
+  }, [actionPlan, theme, tintOn, tintSeed, tintStrength, radiusScale, pill, density, typeScale, motionScale, elevation, displayWeight, headingWeight, bodyWeight, tracking, iconWeight, iconFill, logoTone, displayTone, headingTone, textTone, accents, presetExtras, advColors]);
 
   /* ---------- apply to the whole page ----------
      The shared hook writes to :root (where the semantic layer is declared,
@@ -926,6 +940,8 @@ export default function PlaygroundPage() {
     setIconFill(false);
     setDisplayTone("ink");
     setHeadingTone("ink");
+    setLogoTone("action");
+    setTextTone("ink");
     setFontLabel(FONT_OPTIONS[0].label);
     setHeadingFontLabel(HEADING_FONT_OPTIONS[0].label);
   };
@@ -979,8 +995,10 @@ export default function PlaygroundPage() {
       tracking,
       iconWeight,
       iconFill,
+      logoTone,
       displayTone,
       headingTone,
+      textTone,
       fontLabel,
       headingFontLabel,
       accents,
@@ -1011,7 +1029,7 @@ export default function PlaygroundPage() {
       markdown: buildThemeMarkdown(theme, context),
       prompt: buildAgentPrompt(theme, context),
     };
-  }, [preset, brand, presetExtras, tintOn, tintSeed, tintStrength, radiusScale, pill, density, typeScale, motionScale, elevation, displayWeight, headingWeight, bodyWeight, tracking, iconWeight, iconFill, displayTone, headingTone, fontLabel, headingFontLabel, accents, advColors, productName, designSource]);
+  }, [preset, brand, presetExtras, tintOn, tintSeed, tintStrength, radiusScale, pill, density, typeScale, motionScale, elevation, displayWeight, headingWeight, bodyWeight, tracking, iconWeight, iconFill, logoTone, displayTone, headingTone, textTone, fontLabel, headingFontLabel, accents, advColors, productName, designSource]);
 
   /** Export, from the rail or a source card: opens the dialog on the
       themed AGENTS.md, the one file a coding agent needs. */
@@ -1166,8 +1184,10 @@ export default function PlaygroundPage() {
               tracking={tracking}
               iconWeight={iconWeight}
               iconFill={iconFill}
+              logoTone={logoTone}
               displayTone={displayTone}
               headingTone={headingTone}
+              textTone={textTone}
               fontLabel={fontLabel}
               headingFontLabel={headingFontLabel}
               productName={productName}
@@ -1193,8 +1213,10 @@ export default function PlaygroundPage() {
               onTracking={asCustom(setTracking)}
               onIconWeight={asCustom(setIconWeight)}
               onIconFill={asCustom(setIconFill)}
+              onLogoTone={asCustom(setLogoTone)}
               onDisplayTone={asCustom(setDisplayTone)}
               onHeadingTone={asCustom(setHeadingTone)}
+              onTextTone={asCustom(setTextTone)}
               onFontLabel={asCustom(setFontLabel)}
               onHeadingFontLabel={asCustom(setHeadingFontLabel)}
               onProductName={setProductName}

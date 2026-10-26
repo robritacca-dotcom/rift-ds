@@ -162,6 +162,7 @@ const lightnessOf = (hex) => overrides.rgbToHsl(overrides.hexToRgb(hex))[2];
   expect('coloured-headlines', t.displayTone === 'yellow', `display tone is ${t.displayTone}, expected yellow from the mustard display key`);
   expect('coloured-headlines', t.headingTone === undefined, `heading tone is ${t.headingTone}, expected the ink from a grey heading key`);
   expect('coloured-headlines', row(t, 'Heading colour')?.status === 'matched', 'a grey heading key is not reported as the ink');
+  expect('coloured-headlines', t.logoTone === 'orange', `logo tone is ${t.logoTone}, expected orange from the rust logo key`);
   expect('coloured-headlines', t.brand?.toUpperCase() === '#1A1A1A', `action colour is ${t.brand}; a coloured headline must not become the action colour`);
 }
 

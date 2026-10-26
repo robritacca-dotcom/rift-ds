@@ -27,7 +27,7 @@
   width: var(--icon-size-500);
   height: var(--icon-size-500);
   border-radius: var(--radius-pill);
-  background: var(--color-action-primary-bg);
+  background: var(--color-brand-mark);
   flex-shrink: 0;
 }
 

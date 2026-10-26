@@ -12,6 +12,7 @@ import { Input } from '../Input/Input';
 import { Drawer } from '../Drawer/Drawer';
 import { Popover } from '../Popover/Popover';
 import { SegmentedControl } from '../SegmentedControl/SegmentedControl';
+import { SplitButton } from '../SplitButton/SplitButton';
 import { Tabs } from '../Tabs/Tabs';
 import { ToggleSwitch } from '../ToggleSwitch/ToggleSwitch';
 import { FilterEditor } from '../DataTable/FilterEditor';
@@ -47,9 +48,9 @@ export interface TableToolbarColumn {
   kind?: FilterKind;
   /** The choices an `enum` or `tags` filter offers. */
   options?: { value: string; label: string }[];
-  /** Whether the More panel may hide it. Defaults to true. */
+  /** Whether the Columns panel may hide it. Defaults to true. */
   hideable?: boolean;
-  /** Whether the More panel may move it. Defaults to true. */
+  /** Whether the Columns panel may move it. Defaults to true. */
   movable?: boolean;
   /** Whether it can be filtered. Defaults to true. */
   filterable?: boolean;
@@ -81,6 +82,8 @@ export interface TableToolbarAction {
   onSelect: () => void;
   /** Whether the action is unavailable. */
   disabled?: boolean;
+  /** On the primary action, the further actions its split button's menu offers (Import, a template); folded, they move into the More panel. */
+  menu?: TableToolbarAction[];
 }
 
 /** One action the bulk bar offers for the selected rows. */
@@ -120,15 +123,15 @@ export interface TableToolbarLabels {
   toolbar: string;
   /** The search field's placeholder and name. */
   search: string;
-  /** The Columns caption in the More panel, and the column list's name. */
+  /** The Columns button, its panel and the column list's name. */
   columns: string;
-  /** The More panel's Show all button. */
+  /** The Columns panel's Show all button. */
   showAll: string;
-  /** The density switch's name. */
+  /** The density switch's name, in the More panel when the bar is folded. */
   density: string;
   /** The density switch's default segment. */
   densityDefault: string;
-  /** The density switch's compact segment. */
+  /** The density switch's compact segment, and the name of the bar's density toggle, pressed while compact. */
   densityCompact: string;
   /** The result count, given the rows that match and the rows in all. */
   count: (shown: number, total: number) => string;
@@ -140,7 +143,7 @@ export interface TableToolbarLabels {
   addFilter: string;
   /** The chip the filters that do not fit fold into, given how many. */
   moreFilters: (count: number) => string;
-  /** The More button, whose panel holds the density switch and the columns. */
+  /** The More button, shown when the bar is folded, whose panel holds the secondary actions and the density switch. */
   more: string;
   /** The More panel's heading over the secondary actions it holds when the bar is folded. */
   actionsSection: string;
@@ -198,7 +201,7 @@ export interface TableToolbarLabels {
   selectAll: (count: number) => string;
   /** The bulk bar's button that clears the selection. */
   clearSelection: string;
-  /** Name of a column's move grip in the More panel, given its header. */
+  /** Name of a column's move grip in the Columns panel, given its header. */
   moveColumn: (label: string) => string;
   /** Announced after the panel moves a column, given its header, its new position and the column count. */
   movedColumn: (label: string, position: number, count: number) => string;
@@ -275,7 +278,7 @@ type TableToolbarOwnProps = {
   hiddenColumns?: string[];
   /** Starting hidden keys, for uncontrolled use outside a DataTable. */
   defaultHiddenColumns?: string[];
-  /** Fires with every hidden key after the More panel changes one. */
+  /** Fires with every hidden key after the Columns panel changes one. */
   onHiddenColumnsChange?: (hidden: string[]) => void;
   /** The density the bar's controls take and its switch sets, for controlled use. Inside a DataTable the table's density is used unless this is set. */
   size?: 'default' | 'compact';
@@ -289,9 +292,9 @@ type TableToolbarOwnProps = {
   searchable?: boolean;
   /** Shows the Filter button and the filter chips. Defaults to true. */
   filterable?: boolean;
-  /** Shows the columns in the More panel. Defaults to true. */
+  /** Shows the Columns panel. Defaults to true. */
   columnsPanel?: boolean;
-  /** Shows the density switch. Defaults to true. */
+  /** Shows the density toggle (the switch in More when the bar folds). Defaults to true. */
   densitySwitch?: boolean;
   /** Shows the result count in the bar. Defaults to true over some other table and false inside a DataTable, whose footer carries the count; set it to move the count into the bar, and the footer leaves it out. */
   showCount?: boolean;
@@ -299,7 +302,7 @@ type TableToolbarOwnProps = {
   columnOrder?: string[];
   /** Starting column order, for uncontrolled use outside a DataTable. */
   defaultColumnOrder?: string[];
-  /** Fires with the full column order after the More panel moves one. */
+  /** Fires with the full column order after the Columns panel moves one. */
   onColumnOrderChange?: (order: string[]) => void;
   /** The actions for the selected rows. Inside a DataTable with `selectable`, selecting a row turns the bar, at the same height, into the bulk bar: Clear, the count, Select all N, then these, the first non-destructive one and the first destructive one labelled and the rest in a More menu. */
   bulkActions?: TableToolbarBulkAction[];
@@ -448,9 +451,8 @@ function useBound<T>(
 }
 
 /**
- * The control bar for a table: search, filters as chips, a More panel (density and columns),
- * the density switch, the result count and an actions slot, in one row that
- * wraps. Inside a DataTable (`toolbar={<TableToolbar />}`) it reads and sets
+ * The control bar for a table: search, filters as chips, a Columns panel, a
+ * density toggle, the result count and an actions slot, in one row. Inside a DataTable (`toolbar={<TableToolbar />}`) it reads and sets
  * the table's own state with no props; over any other table its props carry
  * the same state. Its filters and a DataTable's header filters are one list,
  * so a filter set from either shows in both. Every control takes the
@@ -954,7 +956,8 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
     const filterIcon = (
       <CircularButton
         icon="filter_list"
-        variant="tertiary"
+        variant="secondary"
+        tone="neutral"
         size={size}
         ariaLabel={labels.filters(activeFilters)}
         tooltip={labels.filters(activeFilters)}
@@ -1147,6 +1150,21 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
         onValueChange={(value) => setSize(value as 'default' | 'compact')}
       />
     );
+    /* On the bar the density is one icon toggle, pressed while compact, its
+       glyph the density the rows are at. Folded, it moves into More as the
+       switch, since a phone's width holds only so many icons. */
+    const densityToggle = densitySwitch && (
+      <CircularButton
+        icon={size === 'compact' ? 'density_small' : 'density_medium'}
+        variant="secondary"
+        tone="neutral"
+        size={size}
+        aria-pressed={size === 'compact'}
+        ariaLabel={labels.densityCompact}
+        tooltip={labels.densityCompact}
+        onClick={() => setSize(size === 'compact' ? 'default' : 'compact')}
+      />
+    );
 
     /* The sort panel: a row per sort, first sort first, each a move grip,
        its column, its direction and a remove button; then Add sort (the
@@ -1256,7 +1274,8 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
         >
           <CircularButton
             icon="swap_vert"
-            variant="tertiary"
+            variant="secondary"
+            tone="neutral"
             size={size}
             ariaLabel={labels.sort(sorts.length)}
             tooltip={labels.sort(sorts.length)}
@@ -1452,7 +1471,8 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
         >
           <CircularButton
             icon="view_agenda"
-            variant="tertiary"
+            variant="secondary"
+            tone="neutral"
             size={size}
             ariaLabel={labels.group(Boolean(groupedBy))}
             tooltip={labels.group(Boolean(groupedBy))}
@@ -1466,13 +1486,41 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
       </span>
     );
 
-    /* The view controls (density, then the columns) share one More panel,
-       so the bar keeps its room for search and the chips. */
-    /* Folded, the secondary actions move into the More panel, first: a
-       phone's width holds the bar's icon controls and its primary action,
-       not every action as an icon besides. */
-    const foldedActions = narrow ? secondaryActions : [];
-    const moreControl = (density || columnsList || foldedActions.length > 0) && (
+    /* The columns have a panel of their own: a row per column, each a move
+       grip and a visibility switch, then Show all. */
+    const columnsControl = columnsList && (
+      <ToolbarPanel
+        sheet={phoneScreen}
+        title={labels.columns}
+        size={size}
+        ariaLabel={labels.columns}
+        position="bottom"
+        content={
+          <div className="ds-table-toolbar__menu ds-table-toolbar__view">
+            {columnsList}
+            {menuSeparator}
+            <div className="ds-table-toolbar__menu-actions">{showAllColumns}</div>
+          </div>
+        }
+      >
+        <CircularButton
+          icon="view_column"
+          variant="secondary"
+          tone="neutral"
+          size={size}
+          ariaLabel={labels.columns}
+          tooltip={labels.columns}
+        />
+      </ToolbarPanel>
+    );
+
+    /* More appears only when the bar is folded: the secondary actions move
+       into it, then the density switch, since a phone's width holds the
+       bar's icon controls and its primary action, not every action as an
+       icon besides. */
+    const foldedActions = narrow ? [...secondaryActions, ...(primaryAction?.menu ?? [])] : [];
+    const foldedDensity = narrow ? density : false;
+    const moreControl = (foldedDensity || foldedActions.length > 0) && (
       <ToolbarPanel
         sheet={phoneScreen}
         title={labels.more}
@@ -1493,23 +1541,13 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
                 </div>
               </>
             )}
-            {foldedActions.length > 0 && (density || columnsList) && menuSeparator}
-            {density && (
+            {foldedActions.length > 0 && foldedDensity && menuSeparator}
+            {foldedDensity && (
               <>
                 <div className="ds-table-toolbar__menu-heading" aria-hidden="true">
                   {labels.density}
                 </div>
-                <div className="ds-table-toolbar__menu-row">{density}</div>
-              </>
-            )}
-            {density && columnsList && menuSeparator}
-            {columnsList && (
-              <>
-                <div className="ds-table-toolbar__menu-heading" aria-hidden="true">
-                  {labels.columns}
-                </div>
-                {columnsList}
-                <div className="ds-table-toolbar__menu-actions">{showAllColumns}</div>
+                <div className="ds-table-toolbar__menu-row">{foldedDensity}</div>
               </>
             )}
           </div>
@@ -1517,7 +1555,8 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
       >
         <CircularButton
           icon="more_horiz"
-          variant="tertiary"
+          variant="secondary"
+          tone="neutral"
           size={size}
           ariaLabel={labels.more}
           tooltip={labels.more}
@@ -1604,17 +1643,20 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
                 >
                   <CircularButton
                     icon="search"
-                    variant="tertiary"
+                    variant="secondary"
+                    tone="neutral"
                     size={size}
                     ariaLabel={labels.search}
                     tooltip={labels.search}
                   />
                 </ToolbarPanel>
               )}
-              {/* The icon controls sit together: Filter, Columns, then density. */}
+              {/* The icon controls sit together: Sort, Group, Columns, density, then More. */}
               {showFilters && narrow && filterPanel}
               {sortControl}
               {groupControl}
+              {columnsControl}
+              {!narrow && densityToggle}
               {moreControl}
               {(primaryAction || (!narrow && secondaryActions.length > 0)) && (
                 <span className="ds-table-toolbar__actions">
@@ -1624,7 +1666,8 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
                         <CircularButton
                           key={action.id}
                           icon={action.icon}
-                          variant="tertiary"
+                          variant="secondary"
+                          tone="neutral"
                           size={size}
                           ariaLabel={action.label}
                           tooltip={action.label}
@@ -1654,6 +1697,22 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
                         tooltip={primaryAction.label}
                         disabled={primaryAction.disabled}
                         onClick={primaryAction.onSelect}
+                      />
+                    ) : primaryAction.menu && primaryAction.menu.length > 0 ? (
+                      <SplitButton
+                        variant="primary"
+                        size={size}
+                        align="end"
+                        iconLeft={primaryAction.icon}
+                        label={primaryAction.label}
+                        disabled={primaryAction.disabled}
+                        onClick={primaryAction.onSelect}
+                        items={primaryAction.menu.map((action) => ({
+                          label: action.label,
+                          icon: typeof action.icon === 'string' ? action.icon : undefined,
+                          disabled: action.disabled,
+                          onClick: action.onSelect,
+                        }))}
                       />
                     ) : (
                       <Button

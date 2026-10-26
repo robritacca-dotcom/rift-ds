@@ -141,11 +141,11 @@
       "axis": "y"
     },
     {
-      "label": "tables bench: More panel column grip",
+      "label": "tables bench: Columns panel column grip",
       "route": "/labs/tables",
-      "ready": "#bench-toolbar button[aria-label=\"More\"]",
+      "ready": "#bench-toolbar button[aria-label=\"Columns\"]",
       "setup": [
-        { "click": "#bench-toolbar button[aria-label=\"More\"]" },
+        { "click": "#bench-toolbar button[aria-label=\"Columns\"]" },
         { "waitFor": "#bench-toolbar .ds-table-toolbar__column .ds-table-toolbar__grip" }
       ],
       "grip": "#bench-toolbar .ds-table-toolbar__column .ds-table-toolbar__grip:not([aria-disabled])",

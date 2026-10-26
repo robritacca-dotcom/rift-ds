@@ -23,19 +23,19 @@ Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same dat
 | onSearchChange | `((search: string) => void)` | no |  | Fires with the search text as it changes. |
 | hiddenColumns | `string[]` | no |  | Hidden column keys, for controlled use. Inside a DataTable the table's are used unless this is set. |
 | defaultHiddenColumns | `string[]` | no |  | Starting hidden keys, for uncontrolled use outside a DataTable. |
-| onHiddenColumnsChange | `((hidden: string[]) => void)` | no |  | Fires with every hidden key after the More panel changes one. |
+| onHiddenColumnsChange | `((hidden: string[]) => void)` | no |  | Fires with every hidden key after the Columns panel changes one. |
 | size | `"default" \| "compact"` | no |  | The density the bar's controls take and its switch sets, for controlled use. Inside a DataTable the table's density is used unless this is set. |
 | defaultSize | `"default" \| "compact"` | no |  | Starting density, for uncontrolled use outside a DataTable. |
 | onSizeChange | `((size: "default" \| "compact") => void)` | no |  | Fires when the density switch changes. |
 | count | `{ shown: number; total: number; }` | no |  | The result count's numbers, outside a DataTable: rows that match and rows in all. |
 | searchable | `boolean` | no | `true` | Shows the search field. Defaults to true. |
 | filterable | `boolean` | no | `true` | Shows the Filter button and the filter chips. Defaults to true. |
-| columnsPanel | `boolean` | no | `true` | Shows the columns in the More panel. Defaults to true. |
-| densitySwitch | `boolean` | no | `true` | Shows the density switch. Defaults to true. |
+| columnsPanel | `boolean` | no | `true` | Shows the Columns panel. Defaults to true. |
+| densitySwitch | `boolean` | no | `true` | Shows the density toggle (the switch in More when the bar folds). Defaults to true. |
 | showCount | `boolean` | no |  | Shows the result count in the bar. Defaults to true over some other table and false inside a DataTable, whose footer carries the count; set it to move the count into the bar, and the footer leaves it out. |
 | columnOrder | `string[]` | no |  | Every column key in display order, for controlled use. Inside a DataTable the table's order is used unless this is set. |
 | defaultColumnOrder | `string[]` | no |  | Starting column order, for uncontrolled use outside a DataTable. |
-| onColumnOrderChange | `((order: string[]) => void)` | no |  | Fires with the full column order after the More panel moves one. |
+| onColumnOrderChange | `((order: string[]) => void)` | no |  | Fires with the full column order after the Columns panel moves one. |
 | bulkActions | `TableToolbarBulkAction[]` | no | `[]` | The actions for the selected rows. Inside a DataTable with `selectable`, selecting a row turns the bar, at the same height, into the bulk bar: Clear, the count, Select all N, then these, the first non-destructive one and the first destructive one labelled and the rest in a More menu. |
 | sorts | `DataTableSort[]` | no |  | Every sort, first sort first, for controlled use. Inside a DataTable the table's sorts are used unless this is set. |
 | defaultSorts | `DataTableSort[]` | no |  | Initial sorts for uncontrolled use. |

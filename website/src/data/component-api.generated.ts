@@ -12700,7 +12700,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "onHiddenColumnsChange",
             "type": "((hidden: string[]) => void)",
             "required": false,
-            "description": "Fires with every hidden key after the More panel changes one."
+            "description": "Fires with every hidden key after the Columns panel changes one."
           },
           {
             "name": "size",
@@ -12744,14 +12744,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "columnsPanel",
             "type": "boolean",
             "required": false,
-            "description": "Shows the columns in the More panel. Defaults to true.",
+            "description": "Shows the Columns panel. Defaults to true.",
             "defaultValue": "true"
           },
           {
             "name": "densitySwitch",
             "type": "boolean",
             "required": false,
-            "description": "Shows the density switch. Defaults to true.",
+            "description": "Shows the density toggle (the switch in More when the bar folds). Defaults to true.",
             "defaultValue": "true"
           },
           {
@@ -12776,7 +12776,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "onColumnOrderChange",
             "type": "((order: string[]) => void)",
             "required": false,
-            "description": "Fires with the full column order after the More panel moves one."
+            "description": "Fires with the full column order after the Columns panel moves one."
           },
           {
             "name": "bulkActions",

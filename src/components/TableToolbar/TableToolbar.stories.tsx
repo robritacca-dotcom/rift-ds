@@ -98,18 +98,17 @@ export const InDataTable: Story = {
     await waitFor(() => expect(names()).toEqual(['Chart palette drifts']));
     await userEvent.clear(canvas.getByRole('textbox', { name: 'Search' }));
 
-    await userEvent.click(canvas.getByRole('button', { name: 'More' }));
-    await userEvent.click(await within(document.body).findByRole('tab', { name: 'Compact' }));
+    await userEvent.click(canvas.getByRole('button', { name: 'Compact' }));
     await waitFor(() => expect(canvasElement.querySelector('table')).toHaveClass('ds-table--compact'));
   },
 };
 
-/** The More panel's columns hide and show columns; the row header stays. */
+/** The Columns panel hides and shows columns; the row header stays. */
 export const ColumnsPanel: Story = {
   render: () => <DataTable columns={columns} rows={rows} caption="Issues" toolbar={<TableToolbar />} />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await userEvent.click(canvas.getByRole('button', { name: 'More' }));
+    await userEvent.click(canvas.getByRole('button', { name: 'Columns' }));
     const body = within(document.body);
     await userEvent.click(await body.findByRole('switch', { name: 'Due' }));
     await waitFor(() => expect(canvas.queryByRole('columnheader', { name: 'Due' })).not.toBeInTheDocument());
@@ -140,7 +139,7 @@ export const HeaderFilters: Story = {
   },
 };
 
-/** The More panel's columns move: Alt+Down on a column's grip moves it one place, and the table follows. */
+/** The Columns panel's columns move: Alt+Down on a column's grip moves it one place, and the table follows. */
 export const ReorderColumns: Story = {
   render: () => <DataTable columns={columns} rows={rows} caption="Issues" toolbar={<TableToolbar />} />,
   play: async ({ canvasElement }) => {
@@ -148,7 +147,7 @@ export const ReorderColumns: Story = {
     const headers = () =>
       [...canvasElement.querySelectorAll<HTMLElement>('thead th[data-col]')].map((cell) => cell.dataset.col);
     await expect(headers().slice(0, 2)).toEqual(['title', 'status']);
-    await userEvent.click(canvas.getByRole('button', { name: 'More' }));
+    await userEvent.click(canvas.getByRole('button', { name: 'Columns' }));
     const grip = await within(document.body).findByRole('button', { name: 'Move Status' });
     grip.focus();
     await userEvent.keyboard('{Alt>}{ArrowDown}{/Alt}');

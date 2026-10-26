@@ -4,6 +4,7 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Badge } from '../Badge/Badge';
 import { Button } from '../Button/Button';
 import { Chip } from '../Chip/Chip';
+import { Dropdown } from '../Dropdown/Dropdown';
 import { CircularButton } from '../CircularButton/CircularButton';
 import { DropdownMenu } from '../DropdownMenu/DropdownMenu';
 import { Input } from '../Input/Input';
@@ -21,7 +22,11 @@ import {
   valueText,
   type FilterKind,
 } from '../DataTable/filterModel';
-import type { DataTableFilter as Filter, DataTableFilterLabels as FilterLabels } from '../DataTable/DataTable';
+import type {
+  DataTableFilter as Filter,
+  DataTableFilterLabels as FilterLabels,
+  DataTableSort as Sort,
+} from '../DataTable/DataTable';
 import { useTableContext, type ToolbarColumn } from '../DataTable/tableContext';
 import { BREAKPOINT_PHONE_PX } from '../../tokens/breakpoints';
 import './TableToolbar.css';
@@ -42,6 +47,8 @@ export interface TableToolbarColumn {
   movable?: boolean;
   /** Whether it can be filtered. Defaults to true. */
   filterable?: boolean;
+  /** Whether it can be sorted. Defaults to true. */
+  sortable?: boolean;
 }
 
 /** One of the bar's own actions: its primary action, or a secondary one beside it. */
@@ -98,6 +105,24 @@ export interface TableToolbarLabels {
   moreFilters: (count: number) => string;
   /** The More button, whose panel holds the density switch and the columns. */
   more: string;
+  /** The Sort button, given how many sorts are set. */
+  sort: (count: number) => string;
+  /** The sort panel's button that adds a sort. */
+  addSort: string;
+  /** The sort panel's button that clears every sort. */
+  clearSorts: string;
+  /** A sort row's column field. */
+  sortColumn: string;
+  /** A sort row's direction switch, and its two choices. */
+  sortDirection: string;
+  ascending: string;
+  descending: string;
+  /** Removes one sort, given its column's header. */
+  removeSort: (column: string) => string;
+  /** Name of a sort row's move grip, given its column's header. */
+  moveSort: (column: string) => string;
+  /** Announced when a sort row moves, given its column, its new rank and how many sorts there are. */
+  movedSort: (column: string, rank: number, count: number) => string;
   /** The Edit button, given how many rows are selected. */
   bulkEdit: (count: number) => string;
   /** The Edit menu's item that selects every matching row, given how many match. */
@@ -123,6 +148,16 @@ const DEFAULT_LABELS: TableToolbarLabels = {
   addFilter: 'Add filter',
   moreFilters: (count) => `+${count}`,
   more: 'More',
+  sort: (count) => (count > 0 ? `Sort, ${count} on` : 'Sort'),
+  addSort: 'Add sort',
+  clearSorts: 'Clear sorts',
+  sortColumn: 'Sort by',
+  sortDirection: 'Direction',
+  ascending: 'Ascending',
+  descending: 'Descending',
+  removeSort: (column) => `Remove sort by ${column}`,
+  moveSort: (column) => `Move sort by ${column}`,
+  movedSort: (column, rank, count) => `${column}, sort ${rank} of ${count}`,
   bulkEdit: (count) => (count > 0 ? `Edit (${count})` : 'Edit'),
   selectAll: (count) => `Select all ${count}`,
   clearSelection: 'Clear selection',
@@ -178,6 +213,14 @@ type TableToolbarOwnProps = {
   onColumnOrderChange?: (order: string[]) => void;
   /** The Edit menu's actions for the selected rows. Inside a DataTable with `selectable`, an Edit button leads the bar, offering these with Select all and Clear selection. */
   bulkActions?: TableToolbarBulkAction[];
+  /** Every sort, first sort first, for controlled use. Inside a DataTable the table's sorts are used unless this is set. */
+  sorts?: Sort[];
+  /** Initial sorts for uncontrolled use. */
+  defaultSorts?: Sort[];
+  /** Fires with every sort after the sort panel changes one. */
+  onSortsChange?: (sorts: Sort[]) => void;
+  /** Shows the Sort button, whose panel orders, flips and removes the sorts. Defaults to true; inside a DataTable it shows when a column sorts, and holds one sort unless the table has `multiSort`. */
+  sortable?: boolean;
   /** The page's main action (New project, Invite), drawn as the primary button at the bar's end. */
   primaryAction?: TableToolbarAction;
   /** Actions beside the primary one (Export, Import), drawn as icon buttons before it, each named and tooltipped by its label. */
@@ -242,6 +285,10 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
       count,
       searchable = true,
       filterable = true,
+      sortable = true,
+      sorts: sortsProp,
+      defaultSorts,
+      onSortsChange,
       columnsPanel = true,
       densitySwitch = true,
       showCount: showCountProp,
@@ -305,10 +352,21 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
         hideable: col.hideable ?? true,
         movable: col.movable ?? true,
         filterable: col.filterable ?? true,
+        sortable: col.sortable ?? true,
       })) ??
       table?.columns ??
       [];
     const columnOf = (key: string) => columns.find((col) => col.key === key);
+    const [sorts, setSorts] = useBound<Sort[]>(
+      sortsProp,
+      defaultSorts ?? [],
+      onSortsChange,
+      table ? { value: table.sorts, set: table.setSorts } : undefined,
+    );
+    const sortableColumns = columns.filter((col) => col.sortable);
+    /* Over another table the bar sorts by as many columns as it is given;
+       inside a DataTable, by one unless the table has multiSort. */
+    const manySorts = table ? table.multiSort : true;
     const [order, setOrder] = useBound<string[]>(
       orderProp,
       defaultColumnOrder ?? [],
@@ -334,11 +392,11 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
     /* A grip drag moves the row on screen per frame and commits the order
        once, on release (the gesture rule). The drop slot is how many of the
        other rows' midpoints the dragged row's centre has passed. */
-    const startColumnDrag = (event: React.PointerEvent<HTMLElement>, key: string) => {
-      const row = event.currentTarget.closest<HTMLElement>('.ds-table-toolbar__column');
+    const startListDrag = (event: React.PointerEvent<HTMLElement>, rowClass: string, drop: (slot: number) => void) => {
+      const row = event.currentTarget.closest<HTMLElement>(`.${rowClass}`);
       const list = row?.parentElement;
       if (!row || !list) return;
-      const rows = [...list.querySelectorAll<HTMLElement>('.ds-table-toolbar__column')];
+      const rows = [...list.querySelectorAll<HTMLElement>(`:scope > .${rowClass}`)];
       const from = rows.indexOf(row);
       const boxes = rows.map((r) => r.getBoundingClientRect());
       const slot = (dy: number) => {
@@ -373,10 +431,22 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
         },
         onEnd: (_dx, dy) => {
           reset();
-          moveTo(key, slot(dy));
+          drop(slot(dy));
         },
         onCancel: reset,
       });
+    };
+    const startColumnDrag = (event: React.PointerEvent<HTMLElement>, key: string) =>
+      startListDrag(event, 'ds-table-toolbar__column', (slot) => moveTo(key, slot));
+    const moveSortTo = (key: string, to: number) => {
+      const from = sorts.findIndex((entry) => entry.key === key);
+      const target = Math.max(0, Math.min(sorts.length - 1, to));
+      if (from === -1 || from === target) return;
+      const next = [...sorts];
+      const [moved] = next.splice(from, 1);
+      next.splice(target, 0, moved);
+      setSorts(next);
+      setAnnouncement(labels.movedSort(columnOf(key)?.label ?? key, target + 1, next.length));
     };
     const showCount = showCountProp ?? !table;
     const claimCount = table?.claimCount;
@@ -663,47 +733,47 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
     });
 
     const columnsList = columnsPanel && columns.length > 0 && (
-          <div className="ds-table-toolbar__columns" role="group" aria-label={labels.columns}>
-            <div className="ds-table-toolbar__drop" hidden aria-hidden="true" />
-            {ordered.map((col, index) => {
-              const visible = !hidden.includes(col.key);
-              return (
-                <div key={col.key} className="ds-table-toolbar__column">
-                  <button
-                    type="button"
-                    className="ds-table-toolbar__grip material-symbols-rounded"
-                    aria-label={labels.moveColumn(col.label)}
-                    aria-disabled={!col.movable || undefined}
-                    onPointerDown={col.movable ? (event) => startColumnDrag(event, col.key) : undefined}
-                    onKeyDown={(event) => {
-                      if (!col.movable || !event.altKey) return;
-                      if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown') return;
-                      event.preventDefault();
-                      moveTo(col.key, index + (event.key === 'ArrowDown' ? 1 : -1));
-                    }}
-                  >
-                    drag_indicator
-                  </button>
-                  <ToggleSwitch
-                    size={size}
-                    label={col.label}
-                    checked={visible}
-                    disabled={!col.hideable || (visible && visibleCount <= 1)}
-                    onCheckedChange={(checked) =>
-                      setHidden(checked ? hidden.filter((key) => key !== col.key) : [...hidden, col.key])
-                    }
-                  />
-                </div>
-              );
-            })}
-            <Button
-              variant="tertiary"
-              size={size}
-              label={labels.showAll}
-              disabled={hidden.length === 0}
-              onClick={() => setHidden([])}
-            />
-          </div>
+      <div className="ds-table-toolbar__columns" role="group" aria-label={labels.columns}>
+        <div className="ds-table-toolbar__drop" hidden aria-hidden="true" />
+        {ordered.map((col, index) => {
+          const visible = !hidden.includes(col.key);
+          return (
+            <div key={col.key} className="ds-table-toolbar__column">
+              <button
+                type="button"
+                className="ds-table-toolbar__grip material-symbols-rounded"
+                aria-label={labels.moveColumn(col.label)}
+                aria-disabled={!col.movable || undefined}
+                onPointerDown={col.movable ? (event) => startColumnDrag(event, col.key) : undefined}
+                onKeyDown={(event) => {
+                  if (!col.movable || !event.altKey) return;
+                  if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown') return;
+                  event.preventDefault();
+                  moveTo(col.key, index + (event.key === 'ArrowDown' ? 1 : -1));
+                }}
+              >
+                drag_indicator
+              </button>
+              <ToggleSwitch
+                size={size}
+                label={col.label}
+                checked={visible}
+                disabled={!col.hideable || (visible && visibleCount <= 1)}
+                onCheckedChange={(checked) =>
+                  setHidden(checked ? hidden.filter((key) => key !== col.key) : [...hidden, col.key])
+                }
+              />
+            </div>
+          );
+        })}
+        <Button
+          variant="tertiary"
+          size={size}
+          label={labels.showAll}
+          disabled={hidden.length === 0}
+          onClick={() => setHidden([])}
+        />
+      </div>
     );
 
     const density = densitySwitch && (
@@ -717,6 +787,127 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
         value={size}
         onValueChange={(value) => setSize(value as 'default' | 'compact')}
       />
+    );
+
+    /* The sort panel: a row per sort, first sort first, each a move grip,
+       its column, its direction and a remove button; then Add sort (the
+       sortable columns not yet sorted) and Clear sorts. */
+    const unsorted = sortableColumns.filter((col) => !sorts.some((entry) => entry.key === col.key));
+    const addSortMenu = unsorted.length > 0 && (manySorts || sorts.length === 0) && (
+      <DropdownMenu
+        size={size}
+        items={unsorted.map((col) => ({
+          label: col.label,
+          onClick: () => setSorts([...sorts, { key: col.key, direction: 'asc' }]),
+        }))}
+        trigger={<Button variant="tertiary" size={size} iconLeft="add" label={labels.addSort} />}
+      />
+    );
+    const sortControl = sortable && sortableColumns.length > 0 && (
+      <span className="ds-table-toolbar__badge-host">
+        <Popover
+          size={size}
+          ariaLabel={labels.sort(sorts.length)}
+          position="bottom"
+          content={
+            <div className="ds-table-toolbar__sorts">
+              {sorts.length > 0 && (
+                <div className="ds-table-toolbar__sort-list">
+                  <div className="ds-table-toolbar__drop" hidden aria-hidden="true" />
+                  {sorts.map((entry, index) => {
+                    const col = columnOf(entry.key);
+                    const label = col?.label ?? entry.key;
+                    const choices = [col, ...unsorted].filter((c): c is ToolbarColumn => Boolean(c));
+                    return (
+                      <div key={entry.key} className="ds-table-toolbar__sort-row">
+                        {sorts.length > 1 && (
+                          <button
+                            type="button"
+                            className="ds-table-toolbar__grip material-symbols-rounded"
+                            aria-label={labels.moveSort(label)}
+                            onPointerDown={(event) =>
+                              startListDrag(event, 'ds-table-toolbar__sort-row', (slot) => moveSortTo(entry.key, slot))
+                            }
+                            onKeyDown={(event) => {
+                              if (!event.altKey) return;
+                              if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown') return;
+                              event.preventDefault();
+                              moveSortTo(entry.key, index + (event.key === 'ArrowDown' ? 1 : -1));
+                            }}
+                          >
+                            drag_indicator
+                          </button>
+                        )}
+                        <Dropdown
+                          className="ds-table-toolbar__sort-column"
+                          size={size}
+                          aria-label={labels.sortColumn}
+                          options={choices.map((c) => ({ value: c.key, label: c.label }))}
+                          value={entry.key}
+                          onValueChange={(next) =>
+                            setSorts(
+                              sorts.map((s) =>
+                                s.key === entry.key ? { key: String(next), direction: s.direction } : s,
+                              ),
+                            )
+                          }
+                        />
+                        <SegmentedControl
+                          size={size}
+                          aria-label={labels.sortDirection}
+                          showLabels={false}
+                          segments={[
+                            { value: 'asc', label: labels.ascending, icon: 'arrow_upward' },
+                            { value: 'desc', label: labels.descending, icon: 'arrow_downward' },
+                          ]}
+                          value={entry.direction}
+                          onValueChange={(next) =>
+                            setSorts(
+                              sorts.map((s) =>
+                                s.key === entry.key ? { key: s.key, direction: next as Sort['direction'] } : s,
+                              ),
+                            )
+                          }
+                        />
+                        <CircularButton
+                          icon="close"
+                          variant="tertiary"
+                          size={size}
+                          tooltip={false}
+                          ariaLabel={labels.removeSort(label)}
+                          onClick={() => setSorts(sorts.filter((s) => s.key !== entry.key))}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+              {(addSortMenu || sorts.length > 0) && (
+                <div className="ds-table-toolbar__filter-actions">
+                  {addSortMenu}
+                  {sorts.length > 0 && (
+                    <Button variant="tertiary" size={size} label={labels.clearSorts} onClick={() => setSorts([])} />
+                  )}
+                </div>
+              )}
+            </div>
+          }
+        >
+          <CircularButton
+            icon="swap_vert"
+            variant="tertiary"
+            size={size}
+            ariaLabel={labels.sort(sorts.length)}
+            tooltip={labels.sort(sorts.length)}
+          />
+        </Popover>
+        {/* Folded, the headers' sort marks may be out of view, so the icon carries the count. */}
+        {narrow && sorts.length > 0 && (
+          <span className="ds-table-toolbar__badge" aria-hidden="true">
+            <Badge label={String(sorts.length)} variant="info" />
+          </span>
+        )}
+      </span>
     );
 
     /* The view controls (density, then the columns) share one More panel,
@@ -747,7 +938,13 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
           </div>
         }
       >
-        <CircularButton icon="more_horiz" variant="tertiary" size={size} ariaLabel={labels.more} tooltip={labels.more} />
+        <CircularButton
+          icon="more_horiz"
+          variant="tertiary"
+          size={size}
+          ariaLabel={labels.more}
+          tooltip={labels.more}
+        />
       </Popover>
     );
 
@@ -816,6 +1013,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
             )}
             {/* The icon controls sit together: Filter, Columns, then density. */}
             {showFilters && (narrow ? filterPanel : addFilterMenu(filterIcon))}
+            {sortControl}
             {moreControl}
             {(primaryAction || secondaryActions.length > 0) && (
               <span className="ds-table-toolbar__actions">

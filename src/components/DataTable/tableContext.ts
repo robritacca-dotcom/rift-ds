@@ -21,6 +21,8 @@ export interface ToolbarColumn {
   movable: boolean;
   /** Whether it can be filtered. */
   filterable: boolean;
+  /** Whether it can be sorted. */
+  sortable: boolean;
   /** Its filter kind. */
   kind: FilterKind;
   /** The values a choice filter offers: the column's options, else the values it holds. */
@@ -51,6 +53,11 @@ export interface TableContextValue {
   filterLabels: FilterLabels;
   /** A toolbar showing the result count says so, and the table's footer leaves it out. */
   claimCount: (claimed: boolean) => void;
+  /** Every sort, first sort first. */
+  sorts: { key: string; direction: 'asc' | 'desc' }[];
+  setSorts: (sorts: { key: string; direction: 'asc' | 'desc' }[]) => void;
+  /** Whether the table sorts by more than one column. */
+  multiSort: boolean;
 }
 
 export const TableContext = createContext<TableContextValue | null>(null);

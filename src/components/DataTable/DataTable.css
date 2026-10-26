@@ -94,6 +94,20 @@
   color: var(--color-text-primary);
 }
 
+/* While several columns sort, each sorted header numbers its place in the
+   order, tucked against its arrow. */
+.ds-data-table__sort-rank {
+  flex-shrink: 0;
+  margin-inline-start: calc(-1 * var(--gap-050));
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-primary);
+}
+
 /* ============================================
    COLUMNS AND ROWS
    The frame, fixed widths, pinned and sticky

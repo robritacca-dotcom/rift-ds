@@ -146,9 +146,20 @@
       "ready": "#bench-toolbar button[aria-label=\"More\"]",
       "setup": [
         { "click": "#bench-toolbar button[aria-label=\"More\"]" },
-        { "waitFor": "#bench-toolbar .ds-table-toolbar__grip" }
+        { "waitFor": "#bench-toolbar .ds-table-toolbar__column .ds-table-toolbar__grip" }
       ],
-      "grip": "#bench-toolbar .ds-table-toolbar__grip:not([aria-disabled])",
+      "grip": "#bench-toolbar .ds-table-toolbar__column .ds-table-toolbar__grip:not([aria-disabled])",
+      "axis": "y"
+    },
+    {
+      "label": "tables bench: Sort panel row grip",
+      "route": "/labs/tables",
+      "ready": "#bench-toolbar button[aria-label^=\"Sort\"]",
+      "setup": [
+        { "click": "#bench-toolbar button[aria-label^=\"Sort\"]" },
+        { "waitFor": "#bench-toolbar .ds-table-toolbar__sort-row .ds-table-toolbar__grip" }
+      ],
+      "grip": "#bench-toolbar .ds-table-toolbar__sort-row .ds-table-toolbar__grip",
       "axis": "y"
     }
   ]

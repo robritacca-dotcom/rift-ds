@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, userEvent, waitFor, within } from 'storybook/test';
+import { expect, fireEvent, userEvent, waitFor, within } from 'storybook/test';
 import { TableToolbar } from './TableToolbar';
 import { DataTable, type DataTableColumn, type DataTableRow } from '../DataTable/DataTable';
 import { Button } from '../Button/Button';
@@ -17,8 +17,8 @@ const options = (values: string[]) => values.map((value) => ({ value, label: val
 
 const columns: DataTableColumn[] = [
   { key: 'title', header: 'Issue', rowHeader: true, sortable: true },
-  { key: 'status', header: 'Status', options: options(['Open', 'Blocked', 'Done']) },
-  { key: 'points', header: 'Points', align: 'right' },
+  { key: 'status', header: 'Status', sortable: true, options: options(['Open', 'Blocked', 'Done']) },
+  { key: 'points', header: 'Points', sortable: true, align: 'right' },
   { key: 'due', header: 'Due' },
 ];
 
@@ -176,6 +176,47 @@ export const BulkEdit: Story = {
     await expect(bulk).toBeEnabled();
     await userEvent.click(bulk);
     await expect(await within(document.body).findByRole('menuitem', { name: 'Archive' })).toBeInTheDocument();
+    await userEvent.keyboard('{Escape}');
+  },
+};
+
+/** With `multiSort`, Shift-click adds a header to the sort, and the Sort panel orders, flips and removes the sorts. */
+export const MultiSort: Story = {
+  render: () => (
+    <DataTable
+      columns={columns}
+      rows={rows}
+      multiSort
+      caption="Issues"
+      defaultSorts={[{ key: 'status', direction: 'asc' }]}
+      toolbar={<TableToolbar />}
+    />
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const names = () => canvas.getAllByRole('rowheader').map((cell) => cell.textContent);
+    // Status ascending, then the table's own order.
+    await expect(names()).toEqual([
+      'Chart palette drifts',
+      'Toast stacks past inset',
+      'Composer loses focus',
+      'Badge miscounts drafts',
+    ]);
+    fireEvent.click(canvas.getByRole('button', { name: 'Points' }), { shiftKey: true });
+    // The open issues now tie-break on points.
+    await waitFor(() => expect(names().slice(2)).toEqual(['Badge miscounts drafts', 'Composer loses focus']));
+    await expect(canvas.getByRole('button', { name: 'Points, sort 2, ascending' })).toBeInTheDocument();
+    await expect(canvas.getByRole('columnheader', { name: /Status/ })).toHaveAttribute('aria-sort', 'ascending');
+
+    await userEvent.click(canvas.getByRole('button', { name: 'Sort, 2 on' }));
+    const body = within(document.body);
+    const grip = await body.findByRole('button', { name: 'Move sort by Points' });
+    grip.focus();
+    await userEvent.keyboard('{Alt>}{ArrowUp}{/Alt}');
+    // Points first: lowest points lead.
+    await waitFor(() => expect(names()[0]).toBe('Badge miscounts drafts'));
+    await userEvent.click(body.getByRole('button', { name: 'Clear sorts' }));
+    await waitFor(() => expect(names()[0]).toBe('Composer loses focus'));
     await userEvent.keyboard('{Escape}');
   },
 };

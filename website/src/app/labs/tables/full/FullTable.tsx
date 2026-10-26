@@ -58,6 +58,7 @@ export function FullTable() {
         columns={stressColumns}
         rows={rows}
         toolbar={<TableToolbar />}
+        multiSort
         resizableColumns
         reorderableColumns
         columnMenu

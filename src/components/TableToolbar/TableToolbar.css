@@ -116,8 +116,10 @@
   background-color: var(--color-action-passive-bg-active);
 }
 
-/* A row of the More panel's columns: its move grip, then its switch. */
-.ds-table-toolbar__column {
+/* A row of the More panel's columns: its move grip, then its switch; a
+   sort row is drawn the same, with its fields in place of the switch. */
+.ds-table-toolbar__column,
+.ds-table-toolbar__sort-row {
   display: flex;
   align-items: center;
   gap: var(--gap-100);
@@ -125,7 +127,8 @@
   background-color: var(--color-bg-container-primary);
 }
 
-.ds-table-toolbar__column[data-dragging] {
+.ds-table-toolbar__column[data-dragging],
+.ds-table-toolbar__sort-row[data-dragging] {
   position: relative;
   z-index: 1;
   box-shadow: var(--shadow-floating);
@@ -268,4 +271,26 @@
   line-height: var(--font-caption-line-height);
   letter-spacing: var(--font-caption-letter-spacing);
   color: var(--color-text-tertiary);
+}
+
+/* The sort panel: the sorts, first sort first, then Add sort and Clear
+   sorts. A row's column field takes the room its grip, direction and
+   remove button leave. */
+.ds-table-toolbar__sorts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+  width: 320px;
+}
+
+.ds-table-toolbar__sort-list {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+}
+
+.ds-table-toolbar__sort-column {
+  flex: 1 1 auto;
+  min-width: 0;
 }

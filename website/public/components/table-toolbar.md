@@ -37,6 +37,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same dat
 | defaultColumnOrder | `string[]` | no |  | Starting column order, for uncontrolled use outside a DataTable. |
 | onColumnOrderChange | `((order: string[]) => void)` | no |  | Fires with the full column order after the More panel moves one. |
 | bulkActions | `TableToolbarBulkAction[]` | no | `[]` | The Edit menu's actions for the selected rows. Inside a DataTable with `selectable`, an Edit button leads the bar, offering these with Select all and Clear selection. |
+| sorts | `DataTableSort[]` | no |  | Every sort, first sort first, for controlled use. Inside a DataTable the table's sorts are used unless this is set. |
+| defaultSorts | `DataTableSort[]` | no |  | Initial sorts for uncontrolled use. |
+| onSortsChange | `((sorts: DataTableSort[]) => void)` | no |  | Fires with every sort after the sort panel changes one. |
+| sortable | `boolean` | no | `true` | Shows the Sort button, whose panel orders, flips and removes the sorts. Defaults to true; inside a DataTable it shows when a column sorts, and holds one sort unless the table has `multiSort`. |
 | primaryAction | `TableToolbarAction` | no |  | The page's main action (New project, Invite), drawn as the primary button at the bar's end. |
 | secondaryActions | `TableToolbarAction[]` | no | `[]` | Actions beside the primary one (Export, Import), drawn as icon buttons before it, each named and tooltipped by its label. |
 | actions | `ReactNode` | no |  | Any other controls at the bar's end, after the actions. |

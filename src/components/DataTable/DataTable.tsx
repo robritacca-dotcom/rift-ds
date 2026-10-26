@@ -17,6 +17,7 @@ import {
 import { DropdownMenu, type DropdownMenuEntry } from '../DropdownMenu/DropdownMenu';
 import { Dropdown } from '../Dropdown/Dropdown';
 import { CircularButton } from '../CircularButton/CircularButton';
+import { Button } from '../Button/Button';
 import { Spinner } from '../Spinner/Spinner';
 import { VirtualRows } from './VirtualRows';
 import { ScrollRegion } from '../../behaviors/ScrollRegion';
@@ -56,6 +57,8 @@ import { NUMERIC_TOTALS, TOTALS, calculate, type Aggregate, type Result, type To
 import { useLinkComponent, type LinkComponent } from '../../behaviors/LinkProvider';
 import { EDITOR_MIN_WIDTH, LIVE_KINDS, TYPED_KINDS, type CellEditorKind, type CellValue } from './editorKinds';
 import { EmptyState, type EmptyStateProps } from '../EmptyState/EmptyState';
+import { Banner } from '../Banner/Banner';
+import { Skeleton } from '../Skeleton/Skeleton';
 import { MOTION_ANNOUNCE_DEBOUNCE_MS } from '../../tokens/motion';
 import { BREAKPOINT_PHONE_PX } from '../../tokens/breakpoints';
 import '../../behaviors/visually-hidden.css';
@@ -585,6 +588,26 @@ type DataTableOwnProps<R extends DataTableRow = DataTableRow> = {
   hasMore?: boolean;
   /** The loading row's words. Defaults to "Loading more". */
   loadingMoreLabel?: string;
+  /**
+   * Hands sorting, filtering, search and paging to the host, for a table
+   * whose rows live on a server. The table stops doing them itself and
+   * reports every change through its pairs (`onSortsChange`,
+   * `onFiltersChange`, `onSearchChange`, `onPageChange`,
+   * `onPageSizeChange`); pass back `rows` already sorted, filtered and
+   * paged. Totals, grouping and Select all work over the rows given, and
+   * Select all N from a TableToolbar selects every match as a query.
+   */
+  manual?: boolean;
+  /** Every row that matches on the server, in `manual` mode: drives the pager, the result count and Select all N. Defaults to the rows given. */
+  rowCount?: number;
+  /** Whether rows are being fetched. With no rows yet the body shows skeleton rows; with rows on screen they stay, dimmed and inert, under a thin progress line, so the table never blanks. */
+  loading?: boolean;
+  /** A failed load's message. With no rows it replaces the body with an error state; over rows already on screen it shows as a Banner above them. Pair with `onRetry`. */
+  error?: string;
+  /** Called by the error state's Try again button. Without it the error shows with no button. */
+  onRetry?: () => void;
+  /** The words of a failed load: the error state's title, its retry button and the skeleton rows' name. */
+  loadLabels?: { errorTitle?: string; retry?: string; loading?: string };
   /** Renders a row's details: adds a chevron column, and an opened row shows this beneath it, across the table's width. Rendered only once opened. */
   renderDetail?: (row: R) => React.ReactNode;
   /** The ids of the rows whose details are open, for controlled use. Pair with `onExpandedIdsChange`. */
@@ -903,6 +926,12 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
   editMode = 'cell',
   onCellEdit,
   onRowEdit,
+  manual = false,
+  rowCount: rowCountProp,
+  loading = false,
+  error,
+  onRetry,
+  loadLabels,
   className = '',
   ref,
   ...rest
@@ -935,11 +964,20 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
   const setSearch = (next: string) => {
     setSearchState(next);
     setPage(1);
+    endAllMatching();
   };
   const setFilters = (next: DataTableFilter[]) => {
     setFiltersState(next);
     setPage(1);
+    endAllMatching();
   };
+
+  /* A new search or filter changes what "every match" means. Declared as
+     a function so the setters above can call it before the state below. */
+  function endAllMatching() {
+    setAllMatchingState(false);
+    setExceptIds([]);
+  }
 
   /* One polite channel for what changes without moving focus: a sort, the
        result count while searching (debounced, so typing speaks once), a
@@ -1000,11 +1038,41 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
 
   const isSelectionControlled = selectedIds !== undefined;
   const [uncontrolledSelection, setUncontrolledSelection] = useState<string[]>(defaultSelectedIds ?? []);
-  const currentSelection = isSelectionControlled ? selectedIds : uncontrolledSelection;
-
-  const setSelection = (ids: string[]) => {
+  /* In manual mode the table never holds every matching row, so Select
+     all N selects every match as a query: every row on screen shows
+     selected, a page fetched later included, and a row unticked since
+     joins the exceptions. Clearing the selection, or a new search or
+     filter, ends it. */
+  const [allMatching, setAllMatchingState] = useState(false);
+  const [exceptIds, setExceptIds] = useState<string[]>([]);
+  const currentSelection = allMatching
+    ? rows.map((row) => row.id).filter((id) => !exceptIds.includes(id))
+    : isSelectionControlled
+      ? selectedIds
+      : uncontrolledSelection;
+  const setSelectionIds = (ids: string[]) => {
     if (!isSelectionControlled) setUncontrolledSelection(ids);
     onSelectionChange?.(ids);
+  };
+  const setSelection = (ids: string[]) => {
+    if (allMatching) {
+      if (ids.length === 0) {
+        setAllMatchingState(false);
+        setExceptIds([]);
+      } else {
+        const loaded = rows.map((row) => row.id);
+        setExceptIds([
+          ...exceptIds.filter((id) => !loaded.includes(id)),
+          ...loaded.filter((id) => !ids.includes(id)),
+        ]);
+      }
+    }
+    setSelectionIds(ids);
+  };
+  const setAllMatching = (on: boolean) => {
+    setAllMatchingState(on);
+    setExceptIds([]);
+    setSelectionIds(on ? rows.map((row) => row.id) : []);
   };
 
   const labels: DataTableColumnLabels = { ...DEFAULT_COLUMN_LABELS, ...columnLabels };
@@ -1219,7 +1287,11 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     },
   });
 
-  const sortedRows = table.getSortedRowModel().rows.map((row) => row.original);
+  /* In manual mode the rows arrive sorted, filtered and paged. */
+  const engineRows = table.getSortedRowModel().rows;
+  const sortedRows = manual ? orderedRows : engineRows.map((row) => row.original);
+  /* Every row that matches: the server's count in manual mode. */
+  const matchCount = manual ? Math.max(rowCountProp ?? rows.length, rows.length) : sortedRows.length;
 
   /* Grouping: the matching rows gathered by the grouped column's value, the
      groups in that column's own order (its sort direction when it sorts, a
@@ -1270,9 +1342,10 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
   const toggleGroup = (key: string) =>
     setCollapsedGroups((current) => (current.includes(key) ? current.filter((k) => k !== key) : [...current, key]));
 
-  const pageCount = pageSize ? Math.max(1, Math.ceil(rowsInOrder.length / pageSize)) : 1;
+  const pageCount = pageSize ? Math.max(1, Math.ceil((manual ? matchCount : rowsInOrder.length) / pageSize)) : 1;
   const clampedPage = Math.min(page, pageCount);
-  const pageRows = pageSize ? rowsInOrder.slice((clampedPage - 1) * pageSize, clampedPage * pageSize) : rowsInOrder;
+  const pageRows =
+    pageSize && !manual ? rowsInOrder.slice((clampedPage - 1) * pageSize, clampedPage * pageSize) : rowsInOrder;
   const visibleRows = groups
     ? pageRows.filter((row) => !collapsedGroups.includes(groupByRow.get(row.id)?.key ?? ''))
     : pageRows;
@@ -1285,7 +1358,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
       searched.current = true;
       return;
     }
-    announce(resultsLabel(sortedRows.length), true);
+    announce(resultsLabel(matchCount), true);
     // Announce on a new search term only; the count is read at that moment.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);
@@ -1298,7 +1371,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
       filtered.current = true;
       return;
     }
-    announce(filterLabels.filteredAnnouncement(sortedRows.length), true);
+    announce(filterLabels.filteredAnnouncement(matchCount), true);
     // Announce on a change of filters only; the count is read at that moment.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filtersKey]);
@@ -1307,8 +1380,8 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     setPage(next);
     if (!pageSize) return;
     const first = (next - 1) * pageSize + 1;
-    const last = Math.min(next * pageSize, sortedRows.length);
-    announce(pageAnnouncement(next, pageCount, first, last, sortedRows.length));
+    const last = Math.min(next * pageSize, matchCount);
+    announce(pageAnnouncement(next, pageCount, first, last, matchCount));
   };
 
   const visibleIds = visibleRows.map((row) => row.id);
@@ -1920,8 +1993,12 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     matchingIds: sortedRows.map((row) => row.id),
     size,
     setSize,
-    shown: sortedRows.length,
-    total: rows.length,
+    shown: matchCount,
+    total: manual ? matchCount : rows.length,
+    matchingCount: matchCount,
+    allMatching: manual ? allMatching : undefined,
+    exceptIds,
+    setAllMatching: manual ? setAllMatching : undefined,
     filterLabels,
     claimCount: setCountClaimed,
     sorts: currentSorts,
@@ -3277,8 +3354,40 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     </tr>
   );
 
+  /* Loading and failed loads. A first load draws skeleton rows under the
+     real header; a refetch keeps the rows on screen, dimmed and inert,
+     under a thin progress line; a failure with nothing on screen takes the
+     body, and one over rows already shown is a Banner above them. */
+  const firstLoad = loading && rows.length === 0 && !error;
+  const refreshing = loading && rows.length > 0;
+  const loadWords = {
+    errorTitle: "Couldn't load the rows",
+    retry: 'Try again',
+    loading: 'Loading rows',
+    ...loadLabels,
+  };
+  const retryButton = onRetry && (
+    <Button variant="secondary" tone="neutral" size="compact" iconLeft="refresh" label={loadWords.retry} onClick={onRetry} />
+  );
+  const skeletonRows = Array.from({ length: pageSize ?? 5 }, (_, index) => (
+    <tr key={index} className={`ds-table__row ${baseClass}__skeleton-row`} aria-hidden="true">
+      {utilityKeys.map((key) => (
+        <td key={key} className="ds-table__cell" />
+      ))}
+      {visibleKeys.map((key) => (
+        <td key={key} className="ds-table__cell">
+          <div className={`${baseClass}__skeleton`}>
+            <Skeleton variant="text" />
+          </div>
+        </td>
+      ))}
+      {layoutReady && <td className={`ds-table__cell ${baseClass}__filler`} />}
+      {showActions && <td className="ds-table__cell" />}
+    </tr>
+  ));
+
   const hasChrome = searchable || Boolean(toolbar);
-  const classes = [baseClass, className].filter(Boolean).join(' ');
+  const classes = [baseClass, refreshing ? `${baseClass}--refreshing` : '', className].filter(Boolean).join(' ');
   const tableClasses = [
     'ds-table',
     `ds-table--${size}`,
@@ -3327,10 +3436,22 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
           </div>
         )}
 
-        {visibleRows.length > 0 ? (
+        {error && rows.length > 0 && (
+          <Banner variant="error" title={loadWords.errorTitle} action={retryButton || undefined} className={`${baseClass}__banner`}>
+            {error}
+          </Banner>
+        )}
+        {firstLoad && (
+          <span className="ds-visually-hidden" role="status">
+            {loadWords.loading}
+          </span>
+        )}
+        {visibleRows.length > 0 || firstLoad ? (
           <ScrollRegion className={`ds-table__wrapper ${baseClass}__frame`} style={frameStyle} onNode={setFrameEl}>
+            {refreshing && <div className={`${baseClass}__progress`} role="progressbar" aria-label={loadWords.loading} />}
             <table
               ref={setTableEl}
+              aria-busy={loading || undefined}
               className={tableClasses}
               // A card layout changes how the table displays, which strips its semantics in some browsers, so it states them.
               role={gridMode ? 'grid' : stacked ? 'table' : undefined}
@@ -3369,7 +3490,9 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
                   )}
                 </tr>
               </thead>
-              {groups ? (
+              {firstLoad ? (
+                <tbody className="ds-table__body">{skeletonRows}</tbody>
+              ) : groups ? (
                 groups
                   .map((group) => ({ group, onPage: group.rows.filter((row) => pageRows.includes(row)) }))
                   .filter(({ onPage }) => onPage.length > 0)
@@ -3412,6 +3535,16 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
             <div ref={guideRef} className={`${baseClass}__guide`} hidden aria-hidden="true" />
             <div ref={dropRef} className={`${baseClass}__drop`} hidden aria-hidden="true" />
           </ScrollRegion>
+        ) : error ? (
+          <EmptyState
+            icon="error"
+            title={loadWords.errorTitle}
+            description={error}
+            action={retryButton || undefined}
+            variant="bordered"
+            size="compact"
+            role="alert"
+          />
         ) : (
           (emptyState ?? (
             <EmptyState
@@ -3427,11 +3560,13 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
         {(pageSize !== undefined || selectable) && (
           <div className={`${baseClass}__footer`}>
             <span className={`${baseClass}__count`}>
-              {selectable && currentSelection.length > 0 && !selectionClaimed
-                ? selectedLabel(currentSelection.length)
+              {firstLoad
+                ? null
+                : selectable && currentSelection.length > 0 && !selectionClaimed
+                ? selectedLabel(allMatching ? matchCount - exceptIds.length : currentSelection.length)
                 : countClaimed
                   ? null
-                  : resultsLabel(sortedRows.length)}
+                  : resultsLabel(matchCount)}
             </span>
             {pageSize !== undefined && (pageCount > 1 || (pageSizeOptions?.length ?? 0) > 0) && (
               <div className={`${baseClass}__paging`}>

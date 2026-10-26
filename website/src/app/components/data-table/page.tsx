@@ -172,6 +172,35 @@ export default function DataTablePage() {
             />
           </section>
 
+          <section className={styles.section}>
+            <SectionTitle title="Loading" />
+            <p className={styles.demoText}>
+              While the first rows are on their way, loading draws skeleton
+              rows under the real header, each a text line tall, so the rows
+              that replace them do not jump. A later fetch keeps the rows on
+              screen, dimmed, under a thin line across the top of the table.
+            </p>
+            <DataTable columns={columns} rows={[]} loading pageSize={4} caption="Customers, loading" />
+          </section>
+
+          <section className={styles.section}>
+            <SectionTitle title="Failed load" />
+            <p className={styles.demoText}>
+              An error with nothing on screen takes the table&apos;s body, with
+              Try again calling onRetry. A failed fetch over rows already shown
+              keeps them, with the error in a banner above. In manual mode the
+              table leaves sorting, filtering and paging to your server and
+              shows the page it is given, with rowCount driving the pager.
+            </p>
+            <DataTable
+              columns={columns}
+              rows={[]}
+              error="The server took too long to answer."
+              onRetry={() => {}}
+              caption="Customers, failed load"
+            />
+          </section>
+
           <ComponentInstallStrip slug="data-table" />
         </main>
       </div>

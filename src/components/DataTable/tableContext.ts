@@ -53,6 +53,12 @@ export interface TableContextValue {
   /** Rows matching the search and filters, and rows in all. */
   shown: number;
   total: number;
+  /** Every row that matches, the server's count in manual mode. */
+  matchingCount: number;
+  /** In manual mode, whether every match is selected as a query, the rows left out of it, and its setter. */
+  allMatching?: boolean;
+  exceptIds: string[];
+  setAllMatching?: (on: boolean) => void;
   filterLabels: FilterLabels;
   /** A toolbar showing the result count says so, and the table's footer leaves it out. */
   claimCount: (claimed: boolean) => void;

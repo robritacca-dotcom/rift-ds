@@ -5267,6 +5267,44 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "Loading more"
           },
           {
+            "name": "manual",
+            "type": "boolean",
+            "required": false,
+            "description": "Hands sorting, filtering, search and paging to the host, for a table\nwhose rows live on a server. The table stops doing them itself and\nreports every change through its pairs (`onSortsChange`,\n`onFiltersChange`, `onSearchChange`, `onPageChange`,\n`onPageSizeChange`); pass back `rows` already sorted, filtered and\npaged. Totals, grouping and Select all work over the rows given, and\nSelect all N from a TableToolbar selects every match as a query.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "rowCount",
+            "type": "number",
+            "required": false,
+            "description": "Every row that matches on the server, in `manual` mode: drives the pager, the result count and Select all N. Defaults to the rows given."
+          },
+          {
+            "name": "loading",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether rows are being fetched. With no rows yet the body shows skeleton rows; with rows on screen they stay, dimmed and inert, under a thin progress line, so the table never blanks.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "error",
+            "type": "string",
+            "required": false,
+            "description": "A failed load's message. With no rows it replaces the body with an error state; over rows already on screen it shows as a Banner above them. Pair with `onRetry`."
+          },
+          {
+            "name": "onRetry",
+            "type": "(() => void)",
+            "required": false,
+            "description": "Called by the error state's Try again button. Without it the error shows with no button."
+          },
+          {
+            "name": "loadLabels",
+            "type": "{ errorTitle?: string; retry?: string; loading?: string | undefined; } | undefined",
+            "required": false,
+            "description": "The words of a failed load: the error state's title, its retry button and the skeleton rows' name."
+          },
+          {
             "name": "renderDetail",
             "type": "((row: R) => ReactNode)",
             "required": false,

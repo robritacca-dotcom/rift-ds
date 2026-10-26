@@ -818,3 +818,96 @@ export const InfiniteScroll: Story = {
     await expect(canvasElement.querySelector('.ds-data-table__loading-row')).toBeNull();
   },
 };
+
+/**
+ * With `manual`, the table leaves sorting and paging to the host: it reports
+ * the page asked for and shows the rows given, with `rowCount` driving the
+ * pager and the count.
+ */
+export const ServerMode: Story = {
+  render: () => {
+    const Demo = () => {
+      const [page, setPage] = useState(1);
+      const pageRows = manyRows.slice((page - 1) * 5, page * 5);
+      return (
+        <DataTable
+          manual
+          columns={columns}
+          rows={pageRows}
+          rowCount={manyRows.length}
+          pageSize={5}
+          page={page}
+          onPageChange={setPage}
+          caption="Customers"
+        />
+      );
+    };
+    return <Demo />;
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByText(`${manyRows.length} results`)).toBeInTheDocument();
+    await expect(canvasElement.querySelectorAll('tbody tr')).toHaveLength(5);
+    await userEvent.click(canvas.getByRole('button', { name: 'Next page' }));
+    // The host fetched page 2: the table shows the rows it was given, unsliced.
+    await waitFor(() => expect(canvas.getByText(String(manyRows[5].values.name))).toBeInTheDocument());
+  },
+};
+
+/** A first load draws skeleton rows under the real header, and the table is busy. */
+export const Loading: Story = {
+  args: { columns, rows: [], loading: true, pageSize: 5, caption: 'Customers' },
+  play: async ({ canvasElement }) => {
+    await expect(canvasElement.querySelectorAll('.ds-data-table__skeleton-row')).toHaveLength(5);
+    await expect(canvasElement.querySelector('table')).toHaveAttribute('aria-busy', 'true');
+  },
+};
+
+/** A refetch keeps the rows on screen, dimmed and inert, under a thin progress line. */
+export const Refetching: Story = {
+  args: { columns, rows: rows.slice(0, 5), loading: true, caption: 'Customers' },
+  play: async ({ canvasElement }) => {
+    await expect(canvasElement.querySelectorAll('tbody tr')).toHaveLength(5);
+    await expect(within(canvasElement).getByRole('progressbar')).toBeInTheDocument();
+  },
+};
+
+/** A failed load with nothing on screen takes the body, with Try again. */
+export const LoadFailed: Story = {
+  render: () => {
+    const Demo = () => {
+      const [tries, setTries] = useState(0);
+      return (
+        <DataTable
+          columns={columns}
+          rows={tries > 0 ? rows.slice(0, 3) : []}
+          error={tries > 0 ? undefined : 'The server took too long to answer.'}
+          onRetry={() => setTries((n) => n + 1)}
+          caption="Customers"
+        />
+      );
+    };
+    return <Demo />;
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByRole('alert')).toHaveTextContent("Couldn't load the rows");
+    await userEvent.click(canvas.getByRole('button', { name: 'Try again' }));
+    await waitFor(() => expect(canvasElement.querySelectorAll('tbody tr')).toHaveLength(3));
+  },
+};
+
+/** A refetch that fails over rows already shown keeps them, with a Banner above. */
+export const RefetchFailed: Story = {
+  args: {
+    columns,
+    rows: rows.slice(0, 5),
+    error: 'The server took too long to answer.',
+    onRetry: () => {},
+    caption: 'Customers',
+  },
+  play: async ({ canvasElement }) => {
+    await expect(canvasElement.querySelectorAll('tbody tr')).toHaveLength(5);
+    await expect(within(canvasElement).getByRole('button', { name: 'Try again' })).toBeInTheDocument();
+  },
+};

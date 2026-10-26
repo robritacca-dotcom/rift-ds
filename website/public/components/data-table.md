@@ -40,6 +40,12 @@ Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same dat
 | onLoadMore | `(() => void)` | no |  | Called when the reader scrolls near the end of the rows while `hasMore` is set, to fetch the next batch. Called once per batch: append the rows and it can fire again. |
 | hasMore | `boolean` | no | `false` | Whether more rows can be fetched: shows a loading row at the end and calls `onLoadMore` as it comes into view. |
 | loadingMoreLabel | `string` | no | `Loading more` | The loading row's words. Defaults to "Loading more". |
+| manual | `boolean` | no | `false` | Hands sorting, filtering, search and paging to the host, for a table whose rows live on a server. The table stops doing them itself and reports every change through its pairs (`onSortsChange`, `onFiltersChange`, `onSearchChange`, `onPageChange`, `onPageSizeChange`); pass back `rows` already sorted, filtered and paged. Totals, grouping and Select all work over the rows given, and Select all N from a TableToolbar selects every match as a query. |
+| rowCount | `number` | no |  | Every row that matches on the server, in `manual` mode: drives the pager, the result count and Select all N. Defaults to the rows given. |
+| loading | `boolean` | no | `false` | Whether rows are being fetched. With no rows yet the body shows skeleton rows; with rows on screen they stay, dimmed and inert, under a thin progress line, so the table never blanks. |
+| error | `string` | no |  | A failed load's message. With no rows it replaces the body with an error state; over rows already on screen it shows as a Banner above them. Pair with `onRetry`. |
+| onRetry | `(() => void)` | no |  | Called by the error state's Try again button. Without it the error shows with no button. |
+| loadLabels | `{ errorTitle?: string; retry?: string; loading?: string \| undefined; } \| undefined` | no |  | The words of a failed load: the error state's title, its retry button and the skeleton rows' name. |
 | renderDetail | `((row: R) => ReactNode)` | no |  | Renders a row's details: adds a chevron column, and an opened row shows this beneath it, across the table's width. Rendered only once opened. |
 | expandedIds | `string[]` | no |  | The ids of the rows whose details are open, for controlled use. Pair with `onExpandedIdsChange`. |
 | defaultExpandedIds | `string[]` | no |  | The rows open to begin with, for uncontrolled use. |

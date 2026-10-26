@@ -121,6 +121,17 @@
   gap: var(--gap-300);
 }
 
+.serverControls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--gap-600);
+}
+
+.serverControls > :first-child {
+  width: 240px;
+}
+
 .phoneStation > :last-child {
   align-self: stretch;
 }

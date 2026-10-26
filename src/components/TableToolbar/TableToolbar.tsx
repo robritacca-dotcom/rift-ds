@@ -811,15 +811,28 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
        selected. Every action is a full button while there is room, the
        destructive ones last; what does not fit folds into a More menu at
        the end, measured as the chips are. Folded, every action is in it. */
-    const selectedCount = table?.selectable ? table.selectedIds.length : 0;
+    /* In manual mode the table holds one page, so Select all N selects
+       every match as a query and the count is the server's. */
+    const selectedCount = !table?.selectable
+      ? 0
+      : table.allMatching
+        ? table.matchingCount - table.exceptIds.length
+        : table.selectedIds.length;
     const bulkMode = selectedCount > 0;
     /* On a phone the bulk bar floats at the bottom of the screen, above the
        safe area, where a thumb reaches it, and the bar's own row stays. */
     const phoneScreen = useSyncExternalStore(subscribePhone, isPhone, () => false);
     const floating = phoneScreen && bulkMode;
     const matching = table?.matchingIds ?? [];
-    const allMatching = matching.length > 0 && matching.every((id) => table!.selectedIds.includes(id));
-    const selection: TableToolbarSelection = { ids: table?.selectedIds ?? [], allMatching, except: [] };
+    const matchingCount = table?.matchingCount ?? matching.length;
+    const allMatching =
+      table?.allMatching ??
+      (matching.length > 0 && matching.every((id) => table!.selectedIds.includes(id)));
+    const selection: TableToolbarSelection = {
+      ids: table?.selectedIds ?? [],
+      allMatching,
+      except: table?.allMatching ? table.exceptIds : [],
+    };
     const orderedActions = [
       ...bulkActions.filter((action) => !action.destructive),
       ...bulkActions.filter((action) => action.destructive),
@@ -872,14 +885,16 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
             onClick={clearSelection}
           />
           <span className="ds-table-toolbar__bulk-count" aria-live="polite">
-            {allMatching && matching.length > 1 ? labels.allSelected(selectedCount) : labels.selected(selectedCount)}
+            {allMatching && matchingCount > 1 && selection.except.length === 0
+              ? labels.allSelected(selectedCount)
+              : labels.selected(selectedCount)}
           </span>
-          {!allMatching && matching.length > selectedCount && (
+          {!allMatching && matchingCount > selectedCount && (
             <Button
               variant="tertiary"
               size={size}
-              label={labels.selectAll(matching.length)}
-              onClick={() => table!.setSelectedIds(matching)}
+              label={labels.selectAll(matchingCount)}
+              onClick={() => (table!.setAllMatching ? table!.setAllMatching(true) : table!.setSelectedIds(matching))}
             />
           )}
         </div>

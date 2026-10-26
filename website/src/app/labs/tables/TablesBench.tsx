@@ -27,6 +27,8 @@ import { GroupedTable } from "./GroupedTable";
 import { DetailTable } from "./DetailTable";
 import { ViewsTable } from "./ViewsTable";
 import { ScaleTable } from "./ScaleTable";
+import { ServerTable } from "./ServerTable";
+import { LoadStatesTable } from "./LoadStatesTable";
 import { TableToolbar } from "rift-ds/components/TableToolbar/TableToolbar";
 import styles from "./TablesBench.module.css";
 
@@ -488,6 +490,22 @@ export function TablesBench() {
         note="Ten thousand projects in one unpaged table: only the rows in view are drawn, so scrolling, sorting, filtering and selecting stay quick, and the server's HTML still holds the first screen. Switch to 100 at a time and the table asks for the next hundred as the loading row comes into view."
       >
         {({ size, lines }) => <ScaleTable size={size} lines={lines} />}
+      </Station>
+
+      <Station
+        id="bench-server"
+        title="17. Server mode"
+        note="The rows live on a fake server: the table only reports the sort, the filters, the search and the page, and the station fetches a page that matches. Set the latency and watch a refetch keep the rows on screen under a thin line; the first load draws skeleton rows. Switch on Fail the next request and change anything: the old rows stay, with an error banner and Try again. Select all N selects every match as a query."
+      >
+        {({ size, lines }) => <ServerTable size={size} lines={lines} />}
+      </Station>
+
+      <Station
+        id="bench-states"
+        title="18. Empty and error states"
+        note="What a table shows instead of its rows: no data yet, no rows matching the search, the first load, a failed load, and a refetch that failed over rows already shown. Open the table in a Dialog or a Drawer, open a menu inside it, and Escape closes the menu first, then the overlay, and focus comes back to the button."
+      >
+        {({ size, lines }) => <LoadStatesTable size={size} lines={lines} />}
       </Station>
     </div>
   );

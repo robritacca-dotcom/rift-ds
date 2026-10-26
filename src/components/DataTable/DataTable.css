@@ -1230,3 +1230,60 @@
 .ds-data-table__menu-row {
   padding: var(--padding-150) var(--padding-300);
 }
+
+/* ============================================
+   LOADING AND FAILED LOADS
+   A refetch keeps the rows on screen, dimmed and inert, under a thin
+   line that runs across the frame's top edge; a first load draws
+   skeleton rows; a failure over rows already shown is a Banner above.
+   ============================================ */
+
+.ds-data-table--refreshing .ds-table__body {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.ds-data-table__progress {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
+  z-index: var(--layer-sticky);
+  height: var(--border-050);
+  overflow: hidden;
+}
+
+.ds-data-table__progress::after {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  width: 40%;
+  background-color: var(--color-status-info-border);
+  animation: ds-data-table-progress var(--motion-duration-loop-shimmer) var(--motion-ease-linear) infinite;
+}
+
+@keyframes ds-data-table-progress {
+  from {
+    inset-inline-start: -40%;
+  }
+  to {
+    inset-inline-start: 100%;
+  }
+}
+
+/* A skeleton line sits in a box one text line tall, so a loading row is
+   as tall as a row of text and the rows that replace it do not jump. */
+.ds-data-table__skeleton {
+  display: flex;
+  align-items: center;
+  min-height: 1lh;
+}
+
+.ds-data-table__skeleton > .ds-skeleton {
+  width: 100%;
+}
+
+.ds-data-table__banner {
+  margin-block-end: var(--gap-300);
+  /* Banner is a page-wide strip; over a table it takes the frame's corner. */
+  border-radius: var(--radius-300);
+}

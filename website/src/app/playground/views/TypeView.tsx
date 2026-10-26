@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import { tokenRegistry } from "rift-ds/tokens/registry";
 import { collectDeclaredTokens, varChain } from "@/lib/token-source";
+import { typeStyleColour } from "@/lib/theme/theme-overrides";
 import pageStyles from "../page.module.css";
 import styles from "./TypeView.module.css";
 
@@ -109,6 +110,8 @@ const sampleStyle = (step: string): React.CSSProperties => ({
   /* The overline tokens set metrics only; casing belongs to the use site
      (see tokens-typography.css), and a specimen is a use site. */
   textTransform: step === "overline" ? "uppercase" : undefined,
+  /* The tier's colour role, so a theme's tones show on the specimens. */
+  color: typeStyleColour(step),
 });
 
 /** First family of a font-family list, unquoted, for display. */

@@ -1575,6 +1575,18 @@ export interface ThemeTones {
 /** Every role on its usual colour: the logo on the action, type in the ink. */
 export const DEFAULT_TONES: ThemeTones = { logo: "action", logoEnd: "matched", display: "ink", heading: "ink", text: "ink" };
 
+/** The colour role a type style reads, by its token stem ("display-1",
+    "heading-2", "paragraph"): display-tier styles take the display role,
+    heading-tier styles the heading role, everything else running text. Any
+    surface that renders a style outside its own component's CSS (a type
+    specimen, a sample row) colours it through this, so a theme's tones show
+    there as they do on a page. */
+export function typeStyleColour(stem: string): string {
+  if (/^(mega-[12]|display-[12]|sub-display)$/.test(stem)) return "var(--color-text-display)";
+  if (/^heading-[123]$/.test(stem)) return "var(--color-text-heading)";
+  return "var(--color-text-primary)";
+}
+
 /** The neutral ink step per mode, as the token files set the primary text. */
 const INK_STEP = { light: "10", dark: "01" } as const;
 

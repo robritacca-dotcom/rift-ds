@@ -5,6 +5,7 @@ import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import { TypographySwatch } from "rift-ds/components/TypographySwatch/TypographySwatch";
+import { typeStyleColour } from "@/lib/theme/theme-overrides";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import { Tabs } from "rift-ds/components/Tabs/Tabs";
 import PageLinks from "../../../components/PageLinks/PageLinks";
@@ -414,9 +415,10 @@ export default function TypographyView({ scaleTable }: { scaleTable: React.React
                       size={m?.size ?? t.size}
                       lineHeight={m?.lineHeight ?? t.lineHeight}
                       letterSpacing={t.letterSpacing}
-                      previewStyle={
-                        m ? { ...t.previewStyle, ...m.previewStyle } : t.previewStyle
-                      }
+                      previewStyle={{
+                        ...(m ? { ...t.previewStyle, ...m.previewStyle } : t.previewStyle),
+                        color: typeStyleColour(/--font-([a-z0-9-]+)-family/.exec(String(t.previewStyle.fontFamily))?.[1] ?? ""),
+                      }}
                     />
                   );
                 })}

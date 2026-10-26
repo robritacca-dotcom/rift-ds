@@ -24,6 +24,7 @@ import { getSidebarLinks, foundationsSidebarLinks } from "@/config/navigation";
 import { installScopedThemes, THEME_SCOPE_ATTRIBUTE } from "@/lib/theme/scoped-theme";
 import { useSiteTheme } from "@/lib/theme/use-theme-overrides";
 import { themeTagline } from "@/lib/theme/presets";
+import { typeStyleColour } from "@/lib/theme/theme-overrides";
 import styles from "./specimen.module.css";
 import { ThemeBanner } from "../ThemeBanner";
 
@@ -147,6 +148,7 @@ function TypeRow({ style, sample, mode }: { style: string; sample: string; mode:
           lineHeight: v("line-height"),
           letterSpacing: v("letter-spacing"),
           textTransform: style === "overline" ? "uppercase" : undefined,
+          color: typeStyleColour(style),
         }}
       >
         {sample}

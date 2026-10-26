@@ -125,7 +125,7 @@ rounded:
   lg: 16px
   card: 24px
   xl: 48px
-  pill: 16px
+  pill: 12px
 
 spacing:
   xxs: 2px
@@ -157,7 +157,7 @@ components:
 
 # Getaway theme
 
-Getaway: Poppins headings over DM Sans text, #d9234e for actions, buttons squared to 16px, 12px inputs and 24px cards. Soft shadows, kept for what floats: menus, popovers and dialogs.
+Getaway: Poppins headings over DM Sans text, #d9234e for actions, buttons squared to 12px, 12px inputs and 24px cards. Soft shadows, kept for what floats: menus, popovers and dialogs.
 
 Take it whole: `import 'rift-ds/tokens/presets/presets.css'` after the tokens, then set `data-brand="coral"` on `<html>`. See it at https://rift-ds.com/foundations/themes/coral.
 
@@ -210,7 +210,7 @@ Poppins headings over DM Sans text. Levels inside a tier share a weight and step
 
 ## Shape
 
-Buttons squared to 16px, 12px inputs and 24px cards. Radius belongs to the element type, never to one instance.
+Buttons squared to 12px, 12px inputs and 24px cards. Radius belongs to the element type, never to one instance.
 
 - `xs`: 2px (`--radius-050`)
 - `sm`: 4px (`--radius-100`)
@@ -219,7 +219,7 @@ Buttons squared to 16px, 12px inputs and 24px cards. Radius belongs to the eleme
 - `lg`: 16px (`--radius-400`)
 - `card`: 24px (`--radius-600`)
 - `xl`: 48px (`--radius-1200`)
-- `pill`: 16px (`--radius-pill`)
+- `pill`: 12px (`--radius-pill`)
 
 ## Space
 

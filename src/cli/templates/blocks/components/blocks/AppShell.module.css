@@ -1,0 +1,160 @@
+/* The app shell's layout. Every value is a rift-ds token except the
+   sidebar's own widths (64px collapsed, 280px expanded) and its mobile
+   menu button (40px), which are the AppSidebar component's geometry. */
+
+.shell {
+  /* One inset for the floating sidebar and the gap it leaves. */
+  --shell-inset: var(--padding-500);
+  --ds-sidebar-float-inset: var(--shell-inset);
+
+  display: flex;
+  min-width: 0;
+  min-height: 100dvh;
+  background-color: var(--color-bg-page-primary);
+}
+
+/* The sidebar is fixed, so the main column reserves its width: the rail
+   plus the inset on either side of it. */
+.main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+  padding-left: calc(64px + var(--shell-inset) * 2);
+  transition: padding-left var(--motion-duration-slow) var(--motion-ease-emphasized);
+}
+
+.mainExpanded {
+  padding-left: calc(280px + var(--shell-inset) * 2);
+}
+
+.content {
+  width: 100%;
+  max-width: 1440px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-500);
+  padding: var(--shell-inset) var(--padding-1000) var(--padding-1500);
+}
+
+/* ---------------------------------------------------------- top bar */
+
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-200);
+  min-height: var(--control-height-default);
+}
+
+.search {
+  width: 320px;
+  max-width: 100%;
+}
+
+/* The folded search: shown only where the field does not fit. */
+.searchIcon {
+  display: none;
+}
+
+.topBarActions {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-200);
+}
+
+/* ------------------------------------------------------- page header */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-500);
+  min-width: 0;
+}
+
+.pageHead {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--gap-400);
+  padding-top: var(--padding-400);
+}
+
+.pageHeadText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-100);
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-heading-1-family);
+  font-size: var(--font-heading-1-size);
+  font-weight: var(--font-heading-1-weight);
+  line-height: var(--font-heading-1-line-height);
+  letter-spacing: var(--font-heading-1-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.pageActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap-200);
+}
+
+/* -------------------------------------------------------- responsive */
+
+/* Laptop: a tighter side gutter. */
+@media (max-width: 1279px) {
+  .content {
+    padding-inline: var(--padding-500);
+  }
+}
+
+/* Phone and small tablet: the sidebar leaves the layout for a drawer,
+   opened by its menu button fixed at the top left. */
+@media (max-width: 768px) {
+  .shell {
+    --shell-inset: var(--padding-400);
+  }
+
+  .main,
+  .mainExpanded {
+    padding-left: 0;
+  }
+
+  .content {
+    padding: var(--shell-inset) var(--shell-inset) var(--padding-1000);
+  }
+
+  /* Clear the menu button (40px) at the bar's left end. */
+  .topBar {
+    padding-left: calc(40px + var(--gap-200));
+    justify-content: flex-end;
+  }
+
+  .search {
+    display: none;
+  }
+
+  .searchIcon {
+    display: inline-flex;
+  }
+
+  .pageHead {
+    padding-top: 0;
+  }
+
+  /* The actions take the full row under the title, sharing it evenly. */
+  .pageActions {
+    width: 100%;
+  }
+
+  .pageActions > * {
+    flex: 1;
+  }
+}

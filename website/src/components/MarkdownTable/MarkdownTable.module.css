@@ -1,0 +1,79 @@
+/* ============================================
+   MARKDOWN TABLE
+   The blueprints' table: an outlined scroll frame
+   around the native table, coloured by the
+   --color-table-* family every table reads.
+   ============================================ */
+.wrapper {
+  overflow-x: auto;
+  border: var(--border-025) solid var(--color-table-border);
+  border-radius: var(--radius-300);
+  margin-bottom: var(--gap-400);
+  background: var(--color-table-body-bg);
+}
+
+.wrapper :global(table) {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  table-layout: auto;
+}
+
+.wrapper :global(thead) {
+  background: var(--color-table-header-bg);
+}
+
+.wrapper :global(th) {
+  text-align: left;
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  color: var(--color-text-primary);
+  padding: var(--padding-300) var(--padding-400);
+  border-bottom: var(--border-025) solid var(--color-table-divider);
+  white-space: nowrap;
+}
+
+.wrapper :global(td) {
+  padding: var(--padding-300) var(--padding-400);
+  color: var(--color-text-secondary);
+  border-bottom: var(--border-025) solid var(--color-table-divider);
+  vertical-align: top;
+  line-height: var(--font-paragraph-sm-line-height);
+}
+
+.compact :global(th),
+.compact :global(td) {
+  padding: var(--padding-150) var(--padding-300);
+}
+
+.wrapper :global(td code),
+.wrapper :global(th code) {
+  white-space: nowrap;
+}
+
+/* Prose's inline-code chip, so a markdown table's code reads the same on a
+   docs page as in a chat reply, whatever page it sits on. It colours the
+   code, not a table part; the doubled class outranks a page's own code rule
+   (the blueprints' markdown body). */
+.wrapper.wrapper :global(code) {
+  font-family: var(--font-family-code);
+  font-size: var(--font-paragraph-sm-size);
+  background-color: var(--color-bg-container-secondary);
+  border-radius: var(--radius-050);
+  padding: 0 var(--padding-050);
+  color: var(--color-text-primary);
+}
+
+.wrapper :global(tbody tr:last-child td) {
+  border-bottom: none;
+}
+
+.wrapper :global(tbody tr) {
+  transition: background-color var(--motion-duration-base)
+    var(--motion-ease-standard);
+}
+
+.wrapper :global(tbody tr:hover) {
+  background: var(--color-table-row-hover-bg);
+}

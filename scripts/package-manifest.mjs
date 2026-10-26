@@ -32,7 +32,7 @@ import {
 } from './brand.mjs';
 
 export { PACKAGE_NAME, REPOSITORY_URL };
-export const PACKAGE_VERSION = '1.13.0';
+export const PACKAGE_VERSION = '1.14.0';
 export const PACKAGE_DESCRIPTION =
   'An AI-ready React design system: accessible components on composable tokens, light/dark theming, and CSS-variable overrides.';
 
@@ -159,6 +159,10 @@ export function distManifest(rootPkg) {
     // name and filename both come from BIN_NAME in scripts/brand.mjs.
     bin: { [BIN_NAME]: `./bin/${BIN_NAME}.mjs` },
     exports: distExports(),
+    // The runtime dependencies the shipped code imports (TanStack Table and
+    // TanStack Virtual, the engine and the windowing under DataTable), mirrored from the root package.json so the
+    // install a consumer runs resolves them; the build leaves them external.
+    dependencies: rootPkg.dependencies,
     peerDependencies: rootPkg.peerDependencies,
     peerDependenciesMeta: rootPkg.peerDependenciesMeta,
   };

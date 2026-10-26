@@ -2,7 +2,7 @@
 
 Token-styled typography for rendered markdown and rich agent output.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.14.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: ai
 - Import: `import { Prose } from 'rift-ds';`
@@ -15,5 +15,6 @@ Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same dat
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | size | `"default" \| "sm"` | no | `default` | Body scale. `sm` maps paragraphs, lists and code to the small paragraph tokens for dense chat contexts. |
+| tableSize | `"default" \| "compact"` | no | `default` | Density of the tables inside: `compact` tightens the cell padding to the library Table's compact step, for long or dense tables. |
 | className | `string` | no | `` | Additional CSS classes |
 | children | `ReactNode` | no |  | The rendered markup to style — the output of whatever markdown renderer the consumer uses. |

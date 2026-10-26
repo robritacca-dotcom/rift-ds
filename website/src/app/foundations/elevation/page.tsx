@@ -12,7 +12,7 @@ const { sidebarLinks } = getSidebarLinks(foundationsSidebarLinks, "/foundations/
 
 /* ============================================
    SHADOW TOKENS
-   The only two shadows in the system. Values are
+   The only shadows in the system. Values are
    mirrored from tokens-light.css / tokens-dark.css.
    ============================================ */
 
@@ -41,6 +41,14 @@ const shadowTokens: ShadowToken[] = [
     light: "0 8px 32px rgba(0, 0, 0, 0.2)",
     dark: "0 8px 32px rgba(0, 0, 0, 0.6)",
     usedBy: "Dialog and AlertDialog panels, Drawer, paired with the --color-scrim backdrop",
+  },
+  {
+    label: "Pinned column",
+    token: "--shadow-table-pinned",
+    tileClass: "elevationTilePinned",
+    light: "0 0 12px rgba(0, 0, 0, 0.16)",
+    dark: "0 0 12px rgba(0, 0, 0, 0.6)",
+    usedBy: "The scrolling edge of a pinned DataTable column, once content has scrolled under it",
   },
 ];
 
@@ -112,8 +120,9 @@ export default function ElevationPage() {
               Standard containers never carry a shadow. Depth comes from stepping through the
               container colour ramp, which keeps surfaces flat, crisp, and legible against the
               page floor. Only surfaces that genuinely float above the page (anchored overlays,
-              modals, and the floating App sidebar) earn a shadow, and the elevation tokens
-              below are the only ones that exist for it. Never write a literal <code>box-shadow</code> value in component CSS. There are two exceptions: the iOS glass on the mobile navigation components, which restates the platform’s own shadow so the mock reads as the real system chrome, and the hover lift described at the foot of this page.
+              modals, and the floating App sidebar) earn a shadow, along with a pinned table
+              column that content scrolls under, and the elevation tokens below are the only
+              ones that exist for it. Never write a literal <code>box-shadow</code> value in component CSS. There are two exceptions: the iOS glass on the mobile navigation components, which restates the platform’s own shadow so the mock reads as the real system chrome, and the hover lift described at the foot of this page.
             </p>
           </div>
 
@@ -121,7 +130,7 @@ export default function ElevationPage() {
           <section className={`${styles.section} animate-in animate-delay-2`}>
             <SectionTitle title="Shadow tokens" />
             <p className={styles.sectionNote}>
-              Both tokens are defined per mode, with stronger opacity in dark mode so they still
+              Every token is defined per mode, with stronger opacity in dark mode so they still
               read against the near-black floor. The values below are the base theme’s. A theme
               can soften them, deepen them, or turn them off entirely, and a flat theme lets the
               hairline borders carry the depth alone.

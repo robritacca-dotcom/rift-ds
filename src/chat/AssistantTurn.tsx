@@ -129,6 +129,10 @@ export function AssistantTurn({
   const tracePoints = live ? live.tracePoints : (turn?.tracePoints ?? []);
   const durationSeconds = live ? live.durationSeconds : turn?.durationSeconds;
   const text = live ? live.text : (turn?.text ?? '');
+  /* A reply's rich content and card draw as soon as the transport sends
+     them, so a tool's result shows while the prose still streams. */
+  const content = live ? live.content : turn?.content;
+  const card = live ? live.card : turn?.card;
 
   /* Whether this turn's follow-up questions are still being generated: the
      request fires when a backend answer commits (see ChatProvider) and lands
@@ -208,8 +212,8 @@ export function AssistantTurn({
         {/* Rich content (a tool call, a card) sits where an agent's
             structured output belongs: after the reasoning, before the prose
             that reads off what it shows. */}
-        {turn?.content}
-        {turn?.card && <TurnCard card={turn.card} />}
+        {content}
+        {card && <TurnCard card={card} />}
         {text !== '' && (
           <CodeBlockLabelsContext.Provider value={labels?.codeBlock}>
           <Prose>

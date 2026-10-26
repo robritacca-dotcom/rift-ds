@@ -9,9 +9,10 @@
   align-items: center;
   justify-content: center;
 
-  /* Size — default */
-  width: 40px;
-  height: 40px;
+  /* Size — default: the row height (--control-height-*), as a circle */
+  box-sizing: border-box;
+  width: var(--control-height-default);
+  height: var(--control-height-default);
 
   /* Shape */
   border-radius: var(--radius-pill); /* 999px — perfect circle */
@@ -32,8 +33,8 @@
    ============================================ */
 
 .ds-circular-button--default {
-  width: 40px;
-  height: 40px;
+  width: var(--control-height-default);
+  height: var(--control-height-default);
 }
 
 /* ============================================
@@ -41,8 +42,8 @@
    ============================================ */
 
 .ds-circular-button--compact {
-  width: 32px;
-  height: 32px;
+  width: var(--control-height-compact);
+  height: var(--control-height-compact);
 }
 
 .ds-circular-button--compact .ds-circular-button__icon {

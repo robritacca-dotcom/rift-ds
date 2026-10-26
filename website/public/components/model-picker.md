@@ -2,7 +2,7 @@
 
 A model selector for chat surfaces, with per-model descriptions and an optional effort row.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.14.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: ai
 - Import: `import { ModelPicker } from 'rift-ds';`
@@ -26,5 +26,6 @@ Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same dat
 | listLabel | `string` | no | `Model` | Accessible name of the model list in the open panel. |
 | effortLabel | `string` | no | `Effort` | Heading of the effort row, which is also the accessible name of its radio group. |
 | placement | `"top" \| "bottom"` | no | `bottom` | Which side of the trigger the panel opens on. In a composer pinned to the bottom of the screen, use `top`. |
+| size | `"default" \| "compact"` | no | `default` | Trigger size, on the row-control scale: `default` is 40px, `compact` 32px, so it lines up with the fields and buttons beside it. |
 | disabled | `boolean` | no | `false` | Whether the whole control is disabled. |
 | className | `string` | no | `` | Additional CSS classes |

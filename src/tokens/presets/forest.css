@@ -111,6 +111,7 @@ html[data-brand="forest"] {
   --primitive-neutral-01-a60: rgba(235, 236, 236, 0.6);
   --primitive-neutral-01-a82: rgba(235, 236, 236, 0.82);
   --primitive-neutral-02: #CBCECD;
+  --primitive-neutral-02-a50: rgba(203, 206, 205, 0.5);
   --primitive-neutral-02-a80: rgba(203, 206, 205, 0.8);
   --primitive-neutral-03: #B3B6B5;
   --primitive-neutral-03-a80: rgba(179, 182, 181, 0.8);
@@ -120,6 +121,7 @@ html[data-brand="forest"] {
   --primitive-neutral-07: #2F3231;
   --primitive-neutral-07-a80: rgba(47, 50, 49, 0.8);
   --primitive-neutral-08: #232625;
+  --primitive-neutral-08-a50: rgba(35, 38, 37, 0.5);
   --primitive-neutral-08-a80: rgba(35, 38, 37, 0.8);
   --primitive-neutral-09: #0F1211;
   --primitive-neutral-09-a01: rgba(15, 18, 17, 0.01);
@@ -192,6 +194,7 @@ html[data-brand="forest"] {
   --primitive-yellow-11: #2D230C;
   --shadow-floating: 0 6px 24px rgba(0, 0, 0, 0.08);
   --shadow-modal: 0 12px 48px rgba(0, 0, 0, 0.14);
+  --shadow-table-pinned: 0 0 16px rgba(0, 0, 0, 0.12);
 }
 
 html[data-brand="forest"][data-theme="dark"] {
@@ -264,6 +267,7 @@ html[data-brand="forest"][data-theme="dark"] {
   --primitive-neutral-01-a60: rgba(229, 232, 230, 0.6);
   --primitive-neutral-01-a82: rgba(229, 232, 230, 0.82);
   --primitive-neutral-02: #CBCECD;
+  --primitive-neutral-02-a50: rgba(203, 206, 205, 0.5);
   --primitive-neutral-02-a80: rgba(203, 206, 205, 0.8);
   --primitive-neutral-03: #B3B6B5;
   --primitive-neutral-03-a80: rgba(179, 182, 181, 0.8);
@@ -273,6 +277,7 @@ html[data-brand="forest"][data-theme="dark"] {
   --primitive-neutral-07: #2F3231;
   --primitive-neutral-07-a80: rgba(47, 50, 49, 0.8);
   --primitive-neutral-08: #232625;
+  --primitive-neutral-08-a50: rgba(35, 38, 37, 0.5);
   --primitive-neutral-08-a80: rgba(35, 38, 37, 0.8);
   --primitive-neutral-09: #0F1211;
   --primitive-neutral-09-a01: rgba(15, 18, 17, 0.01);
@@ -345,4 +350,5 @@ html[data-brand="forest"][data-theme="dark"] {
   --primitive-yellow-11: #2D230C;
   --shadow-floating: 0 6px 24px rgba(0, 0, 0, 0.45);
   --shadow-modal: 0 12px 48px rgba(0, 0, 0, 0.5);
+  --shadow-table-pinned: 0 0 16px rgba(0, 0, 0, 0.5);
 }

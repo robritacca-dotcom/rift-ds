@@ -120,6 +120,10 @@
   box-shadow: var(--shadow-modal);
 }
 
+.elevationTilePinned {
+  box-shadow: var(--shadow-table-pinned);
+}
+
 .elevationLabel {
   font-family: var(--font-title-body-family);
   font-size: var(--font-title-body-size);

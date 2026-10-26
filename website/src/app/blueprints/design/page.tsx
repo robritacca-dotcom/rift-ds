@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import ReactMarkdown from "react-markdown";
+import { MarkdownTable } from "@/components/MarkdownTable/MarkdownTable";
 import remarkGfm from "remark-gfm";
 import FloatingAnchorNav from "@/components/FloatingAnchorNav/FloatingAnchorNav";
 import MegaNav from "../../../components/MegaNav/MegaNav";
@@ -49,11 +50,7 @@ export default function DesignBlueprintPage() {
               remarkPlugins={[remarkGfm]}
               components={{
                 h2: createAnchoredH2(),
-                table: ({ ...props }) => (
-                  <div className={styles.tableWrapper}>
-                    <table {...props} />
-                  </div>
-                ),
+                table: MarkdownTable,
               }}
             >
               {content}

@@ -95,6 +95,24 @@
   border-radius: var(--radius-400);
 }
 
+/* One square mark beside its name, set like an AgentStatus label */
+.markItem {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-300);
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  color: var(--color-text-secondary);
+}
+
+.markStates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-300) var(--gap-1000);
+}
+
 .patternPrefix {
   color: var(--color-text-tertiary);
 }
@@ -136,6 +154,42 @@
 
 .violet {
   --accent: var(--color-core-accent-violet);
+}
+
+/* The agent ring's demo targets */
+.ringTargets {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--gap-500);
+  align-items: start;
+}
+
+.ringSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-100);
+  padding: var(--padding-400);
+  background-color: var(--color-bg-container-primary);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-400);
+}
+
+.ringSectionTitle {
+  margin: 0;
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  color: var(--color-text-primary);
+}
+
+/* The wrapper carries the input's corners, so the ring follows them. */
+.ringField {
+  --ds-agent-ring-radius: var(--radius-300);
+}
+
+.ringTable {
+  --ds-agent-ring-radius: var(--radius-300);
+  grid-column: 1 / -1;
 }
 
 .demoText {

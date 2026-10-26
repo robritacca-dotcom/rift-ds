@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useLayer } from '../../behaviors/useLayer';
+import { useAnchoredPosition } from '../../behaviors/useAnchoredPosition';
 import { Field } from '../Field/Field';
 import './ColorPicker.css';
 
@@ -199,10 +200,23 @@ export const ColorPicker = React.forwardRef<HTMLButtonElement, ColorPickerProps>
     const rootRef = useRef<HTMLDivElement | null>(null);
     const triggerRef = useRef<HTMLButtonElement | null>(null);
     const satRef = useRef<HTMLDivElement | null>(null);
+    const panelRef = useRef<HTMLDivElement | null>(null);
     const hsvaRef = useRef(hsva);
     hsvaRef.current = hsva;
     /** Last hex we emitted — lets the controlled-value effect ignore our own echoes. */
     const lastEmitted = useRef<string | null>(null);
+
+    // The panel is placed against the trigger by the shared anchored-position
+    // behaviour: fixed, so a scroll container cannot clip it, flipped above
+    // when there is no room below.
+    useAnchoredPosition({
+      open: isOpen,
+      anchorRef: triggerRef,
+      panelRef,
+      side: 'bottom',
+      align: 'start',
+      gapProperty: '--gap-050',
+    });
 
     const setTriggerRef = (node: HTMLButtonElement | null) => {
       triggerRef.current = node;
@@ -388,6 +402,7 @@ export const ColorPicker = React.forwardRef<HTMLButtonElement, ColorPickerProps>
 
         {isOpen && (
           <div
+            ref={panelRef}
             className={`${baseClass}__panel`}
             role="dialog"
             aria-label={panelLabel ?? (label ? `${label} colour picker` : 'Colour picker')}

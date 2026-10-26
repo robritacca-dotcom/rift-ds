@@ -152,6 +152,38 @@ export default function InterruptCardPage() {
             </div>
           </section>
 
+          {/* Bare */}
+          <section className={styles.section}>
+            <SectionTitle title="Inside another panel" />
+            <p className={styles.demoText}>
+              With bare, the card drops its own fill, border and corners and
+              keeps only its padding and layout, so it reads as the panel it
+              sits in, with one border. AI button&apos;s request panel is the
+              host it exists for.
+            </p>
+            <div className={styles.stack}>
+              <div
+                style={{
+                  maxWidth: 360,
+                  borderRadius: "var(--radius-600)",
+                  border: "var(--border-025) solid var(--color-bg-container-border)",
+                  background: "var(--color-bg-glass)",
+                  boxShadow: "var(--shadow-floating)",
+                }}
+              >
+                <InterruptCard
+                  bare
+                  title="Allow file edit?"
+                  description="The agent wants to write to src/routes/checkout.ts."
+                  options={[
+                    { value: "allow-once", label: "Allow once", variant: "primary" },
+                    { value: "deny", label: "Deny" },
+                  ]}
+                />
+              </div>
+            </div>
+          </section>
+
           <ComponentInstallStrip slug="interrupt-card" />
         </main>
       </div>

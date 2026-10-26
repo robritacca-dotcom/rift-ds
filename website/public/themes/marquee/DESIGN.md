@@ -125,7 +125,7 @@ rounded:
   lg: 3px
   card: 5px
   xl: 10px
-  pill: 3px
+  pill: 2px
 
 spacing:
   xxs: 2px
@@ -157,7 +157,7 @@ components:
 
 # Marquee theme
 
-Marquee: Anton headings over Work Sans text, #c9c340 for actions, buttons squared to 3px, 2px inputs and 5px cards. Flat: no shadows at all. Surfaces separate from the page by contrast alone.
+Marquee: Anton headings over Work Sans text, #c9c340 for actions, buttons squared to 2px, 2px inputs and 5px cards. Flat: no shadows at all. Surfaces separate from the page by contrast alone.
 
 Take it whole: `import 'rift-ds/tokens/presets/presets.css'` after the tokens, then set `data-brand="marquee"` on `<html>`. See it at https://rift-ds.com/foundations/themes/marquee.
 
@@ -210,7 +210,7 @@ Anton headings over Work Sans text. Levels inside a tier share a weight and step
 
 ## Shape
 
-Buttons squared to 3px, 2px inputs and 5px cards. Radius belongs to the element type, never to one instance.
+Buttons squared to 2px, 2px inputs and 5px cards. Radius belongs to the element type, never to one instance.
 
 - `xs`: 0px (`--radius-050`)
 - `sm`: 1px (`--radius-100`)
@@ -219,7 +219,7 @@ Buttons squared to 3px, 2px inputs and 5px cards. Radius belongs to the element 
 - `lg`: 3px (`--radius-400`)
 - `card`: 5px (`--radius-600`)
 - `xl`: 10px (`--radius-1200`)
-- `pill`: 3px (`--radius-pill`)
+- `pill`: 2px (`--radius-pill`)
 
 ## Space
 

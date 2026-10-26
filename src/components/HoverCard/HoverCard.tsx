@@ -2,6 +2,7 @@
 
 import React, { useEffect, useId, useRef, useState } from 'react';
 import { useLayer } from '../../behaviors/useLayer';
+import { useAnchoredPosition } from '../../behaviors/useAnchoredPosition';
 import './HoverCard.css';
 import { MOTION_HOVER_SHOW_DELAY_MS, MOTION_HOVER_HIDE_DELAY_MS } from '../../tokens/motion';
 
@@ -58,6 +59,24 @@ export const HoverCard = React.forwardRef<HTMLSpanElement, HoverCardProps>(
     const showTimeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
     const hideTimeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
     const panelId = useId();
+    const containerRef = useRef<HTMLSpanElement | null>(null);
+    const panelRef = useRef<HTMLSpanElement>(null);
+    const setContainerRef = (node: HTMLSpanElement | null) => {
+      containerRef.current = node;
+      if (typeof ref === 'function') ref(node);
+      else if (ref) ref.current = node;
+    };
+
+    // Placed against the trigger by the shared anchored-position behaviour,
+    // centred on it, flipped when the preferred side has no room.
+    useAnchoredPosition({
+      open: visible,
+      anchorRef: containerRef,
+      panelRef,
+      side: position,
+      align: 'center',
+      gapProperty: '--gap-100',
+    });
 
     const baseClass = 'ds-hover-card';
 
@@ -117,7 +136,7 @@ export const HoverCard = React.forwardRef<HTMLSpanElement, HoverCardProps>(
     return (
       <span
         {...rest}
-        ref={ref}
+        ref={setContainerRef}
         className={containerClasses}
         onMouseEnter={(event) => {
           onMouseEnter?.(event);
@@ -137,7 +156,7 @@ export const HoverCard = React.forwardRef<HTMLSpanElement, HoverCardProps>(
 
         {/* A <span> panel, like Tooltip's bubble: the whole card must survive
             inside a <p>, where a <div> would end the paragraph mid-parse. */}
-        <span className={panelClasses} id={panelId}>
+        <span ref={panelRef} className={panelClasses} id={panelId}>
           {content}
         </span>
       </span>

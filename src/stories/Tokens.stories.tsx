@@ -594,6 +594,16 @@ export const SemanticColors: Story = {
         <ColorToken name="Divider" value="--color-divider" />
       </TokenSection>
 
+      <TokenSection title="Table">
+        <ColorToken name="Body" value="--color-table-body-bg" />
+        <ColorToken name="Header" value="--color-table-header-bg" />
+        <ColorToken name="Row Hover" value="--color-table-row-hover-bg" />
+        <ColorToken name="Row Stripe" value="--color-table-row-stripe-bg" />
+        <ColorToken name="Row Selected" value="--color-table-row-selected-bg" />
+        <ColorToken name="Divider" value="--color-table-divider" />
+        <ColorToken name="Border" value="--color-table-border" />
+      </TokenSection>
+
       <TokenSection title="Core Colors">
         <ColorToken name="UI Primary" value="--color-core-ui-primary" />
         <ColorToken name="UI Secondary" value="--color-core-ui-secondary" />
@@ -760,6 +770,26 @@ export const ChartColors: Story = {
         <ColorToken name="Ink 5" value="--color-pixel-ink-5" />
         <ColorToken name="Ink 6" value="--color-pixel-ink-6" />
       </TokenSection>
+
+      <TokenSection title="Count Badge">
+        <ColorToken name="Fill" value="--color-count-badge-bg" />
+        <ColorToken name="Figures" value="--color-count-badge-text" />
+      </TokenSection>
+
+      <TokenSection title="Avatar">
+        <ColorToken name="Avatar fill 1" value="--color-avatar-bg-1" />
+        <ColorToken name="Avatar initials 1" value="--color-avatar-text-1" />
+        <ColorToken name="Avatar fill 2" value="--color-avatar-bg-2" />
+        <ColorToken name="Avatar initials 2" value="--color-avatar-text-2" />
+        <ColorToken name="Avatar fill 3" value="--color-avatar-bg-3" />
+        <ColorToken name="Avatar initials 3" value="--color-avatar-text-3" />
+        <ColorToken name="Avatar fill 4" value="--color-avatar-bg-4" />
+        <ColorToken name="Avatar initials 4" value="--color-avatar-text-4" />
+        <ColorToken name="Avatar fill 5" value="--color-avatar-bg-5" />
+        <ColorToken name="Avatar initials 5" value="--color-avatar-text-5" />
+        <ColorToken name="Avatar fill 6" value="--color-avatar-bg-6" />
+        <ColorToken name="Avatar initials 6" value="--color-avatar-text-6" />
+      </TokenSection>
     </div>
   ),
 };
@@ -832,7 +862,7 @@ export const Elevation: Story = {
         }}
       >
         Depth is colour-based: standard containers never carry shadows. These
-        are the only two shadows in the system, plus the modal scrim. All three
+        are the only shadows in the system, plus the modal scrim. All of them
         get stronger values in dark mode so they read against the near-black
         page floor.
       </p>
@@ -840,6 +870,7 @@ export const Elevation: Story = {
       <TokenSection title="Shadows">
         <ShadowToken name="Floating" value="--shadow-floating" />
         <ShadowToken name="Modal" value="--shadow-modal" />
+        <ShadowToken name="Pinned column" value="--shadow-table-pinned" />
       </TokenSection>
 
       <TokenSection title="Scrim">
@@ -898,6 +929,11 @@ export const SemanticSpacing: Story = {
         <SpacingToken name="LG" value="--padding-500" />
         <SpacingToken name="XL" value="--padding-1000" />
         <SpacingToken name="XXL" value="--padding-1500" />
+      </TokenSection>
+
+      <TokenSection title="Control Height">
+        <SpacingToken name="Default" value="--control-height-default" />
+        <SpacingToken name="Compact" value="--control-height-compact" />
       </TokenSection>
 
       <TokenSection title="Border Width">

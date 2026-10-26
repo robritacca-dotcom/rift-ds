@@ -124,6 +124,7 @@ html[data-brand="marquee"] {
   --primitive-neutral-01-a60: rgba(230, 233, 233, 0.6);
   --primitive-neutral-01-a82: rgba(230, 233, 233, 0.82);
   --primitive-neutral-02: #C4C8C9;
+  --primitive-neutral-02-a50: rgba(196, 200, 201, 0.5);
   --primitive-neutral-02-a80: rgba(196, 200, 201, 0.8);
   --primitive-neutral-03: #ACB1B1;
   --primitive-neutral-03-a80: rgba(172, 177, 177, 0.8);
@@ -133,6 +134,7 @@ html[data-brand="marquee"] {
   --primitive-neutral-07: #2E3333;
   --primitive-neutral-07-a80: rgba(46, 51, 51, 0.8);
   --primitive-neutral-08: #232728;
+  --primitive-neutral-08-a50: rgba(35, 39, 40, 0.5);
   --primitive-neutral-08-a80: rgba(35, 39, 40, 0.8);
   --primitive-neutral-09: #101415;
   --primitive-neutral-09-a01: rgba(16, 20, 21, 0.01);
@@ -150,7 +152,7 @@ html[data-brand="marquee"] {
   --primitive-radius-300: 2px;
   --primitive-radius-400: 3px;
   --primitive-radius-600: 5px;
-  --primitive-radius-pill: 3px;
+  --primitive-radius-pill: 2px;
   --primitive-yellow-00: #FCFBF3;
   --primitive-yellow-01: #F8F7E5;
   --primitive-yellow-02: #EDEBBE;
@@ -165,6 +167,7 @@ html[data-brand="marquee"] {
   --primitive-yellow-11: #2B2A0E;
   --shadow-floating: none;
   --shadow-modal: none;
+  --shadow-table-pinned: none;
 }
 
 html[data-brand="marquee"][data-theme="dark"] {
@@ -249,6 +252,7 @@ html[data-brand="marquee"][data-theme="dark"] {
   --primitive-neutral-01-a60: rgba(220, 224, 225, 0.6);
   --primitive-neutral-01-a82: rgba(220, 224, 225, 0.82);
   --primitive-neutral-02: #C4C8C9;
+  --primitive-neutral-02-a50: rgba(196, 200, 201, 0.5);
   --primitive-neutral-02-a80: rgba(196, 200, 201, 0.8);
   --primitive-neutral-03: #ACB1B1;
   --primitive-neutral-03-a80: rgba(172, 177, 177, 0.8);
@@ -258,6 +262,7 @@ html[data-brand="marquee"][data-theme="dark"] {
   --primitive-neutral-07: #2E3333;
   --primitive-neutral-07-a80: rgba(46, 51, 51, 0.8);
   --primitive-neutral-08: #232728;
+  --primitive-neutral-08-a50: rgba(35, 39, 40, 0.5);
   --primitive-neutral-08-a80: rgba(35, 39, 40, 0.8);
   --primitive-neutral-09: #101415;
   --primitive-neutral-09-a01: rgba(16, 20, 21, 0.01);
@@ -275,7 +280,7 @@ html[data-brand="marquee"][data-theme="dark"] {
   --primitive-radius-300: 2px;
   --primitive-radius-400: 3px;
   --primitive-radius-600: 5px;
-  --primitive-radius-pill: 3px;
+  --primitive-radius-pill: 2px;
   --primitive-yellow-00: #FCFBF3;
   --primitive-yellow-01: #F8F7E5;
   --primitive-yellow-02: #EDEBBE;
@@ -290,4 +295,5 @@ html[data-brand="marquee"][data-theme="dark"] {
   --primitive-yellow-11: #2B2A0E;
   --shadow-floating: none;
   --shadow-modal: none;
+  --shadow-table-pinned: none;
 }

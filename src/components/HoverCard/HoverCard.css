@@ -17,7 +17,6 @@
 
 .ds-hover-card__panel {
   /* Rendered as a <span> so the card survives inside a <p>. */
-  position: absolute;
   z-index: var(--layer-floating);
   min-width: 240px;
   max-width: 320px;
@@ -53,73 +52,54 @@
 
 /* ============================================
    POSITIONS
+   The shared anchored-position behaviour
+   (src/behaviors/useAnchoredPosition.ts) makes the panel fixed and sets
+   where it sits, centred on the trigger and flipped when the preferred side
+   has no room. Each side only slides in from that side, keyed on the side
+   the panel landed on.
    ============================================ */
 
-.ds-hover-card__panel--top {
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%) translateY(4px);
-  margin-bottom: var(--gap-100);
+.ds-hover-card__panel[data-side='top'] {
+  transform: translateY(4px);
 }
 
-.ds-hover-card__panel--top.ds-hover-card__panel--visible {
-  transform: translateX(-50%) translateY(0);
+.ds-hover-card__panel[data-side='bottom'] {
+  transform: translateY(-4px);
 }
 
-.ds-hover-card__panel--bottom {
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-4px);
-  margin-top: var(--gap-100);
+.ds-hover-card__panel[data-side='left'] {
+  transform: translateX(4px);
 }
 
-.ds-hover-card__panel--bottom.ds-hover-card__panel--visible {
-  transform: translateX(-50%) translateY(0);
+.ds-hover-card__panel[data-side='right'] {
+  transform: translateX(-4px);
 }
 
-.ds-hover-card__panel--left {
-  right: 100%;
-  top: 50%;
-  transform: translateY(-50%) translateX(4px);
-  margin-right: var(--gap-100);
-}
-
-.ds-hover-card__panel--left.ds-hover-card__panel--visible {
-  transform: translateY(-50%) translateX(0);
-}
-
-.ds-hover-card__panel--right {
-  left: 100%;
-  top: 50%;
-  transform: translateY(-50%) translateX(-4px);
-  margin-left: var(--gap-100);
-}
-
-.ds-hover-card__panel--right.ds-hover-card__panel--visible {
-  transform: translateY(-50%) translateX(0);
+.ds-hover-card__panel--visible[data-side] {
+  transform: none;
 }
 
 /* Entry states for the display flip: a panel arriving from display:none has
    no prior computed style, so these supply the fade's starting frame. Each
-   mirrors its position's hidden transform above. */
+   mirrors its side's hidden transform above. */
 @starting-style {
-  .ds-hover-card__panel--top.ds-hover-card__panel--visible {
+  .ds-hover-card__panel--visible[data-side='top'] {
     opacity: 0;
-    transform: translateX(-50%) translateY(4px);
+    transform: translateY(4px);
   }
 
-  .ds-hover-card__panel--bottom.ds-hover-card__panel--visible {
+  .ds-hover-card__panel--visible[data-side='bottom'] {
     opacity: 0;
-    transform: translateX(-50%) translateY(-4px);
+    transform: translateY(-4px);
   }
 
-  .ds-hover-card__panel--left.ds-hover-card__panel--visible {
+  .ds-hover-card__panel--visible[data-side='left'] {
     opacity: 0;
-    transform: translateY(-50%) translateX(4px);
+    transform: translateX(4px);
   }
 
-  .ds-hover-card__panel--right.ds-hover-card__panel--visible {
+  .ds-hover-card__panel--visible[data-side='right'] {
     opacity: 0;
-    transform: translateY(-50%) translateX(-4px);
+    transform: translateX(-4px);
   }
 }

@@ -51,6 +51,21 @@
   /* Divider */
   --color-divider: var(--primitive-neutral-08-a80);
 
+  /* Tables: in dark a table stands off what it sits on by going a little
+     darker than it, the opposite move to light's white, so the body is the
+     page floor (the deepest step) and the header a half step up from it,
+     the 08 grey at half strength, between the quiet container step and the
+     full grey band.
+     On a panel or a card the table reads as an inset; on the page its
+     outline carries it. */
+  --color-table-body-bg: var(--color-bg-page-primary);
+  --color-table-header-bg: var(--primitive-neutral-08-a50);
+  --color-table-row-hover-bg: var(--color-bg-container-primary);
+  --color-table-row-stripe-bg: var(--color-bg-container-primary-semi);
+  --color-table-row-selected-bg: var(--color-action-passive-bg-hover);
+  --color-table-divider: var(--color-divider);
+  --color-table-border: var(--color-divider);
+
   /* Chat bubbles — alias the same roles as light; the underlying container
      and text tokens carry the theme swap. */
   --color-chat-bubble-sent-bg: var(--color-bg-container-secondary);
@@ -80,6 +95,7 @@
   /* Elevation — stronger opacity so shadows read against the #050505 floor */
   --shadow-floating: 0 4px 16px rgba(0, 0, 0, 0.55);
   --shadow-modal: 0 8px 32px rgba(0, 0, 0, 0.6);
+  --shadow-table-pinned: 0 0 12px rgba(0, 0, 0, 0.6);
 
   /* Action - Primary. Inverted from light: the fill is the light half of
      the teal ramp under a dark label, because a dark fill cannot clear 3:1
@@ -195,6 +211,26 @@
   --color-pixel-ink-4: var(--primitive-green-05);
   --color-pixel-ink-5: var(--primitive-blue-04);
   --color-pixel-ink-6: var(--primitive-purple-05);
+
+  /* Count badge - Bright on the dark page, its figures in the page's ink. */
+  --color-count-badge-bg: var(--primitive-red-06);
+  --color-count-badge-text: var(--primitive-neutral-10);
+
+  /* Avatar - The initials avatar's six fills, deep on each ramp with a
+     pale step for the initials (4.7:1 at the least), so the fill stands
+     off the dark page. */
+  --color-avatar-bg-1: var(--primitive-red-09);
+  --color-avatar-bg-2: var(--primitive-orange-09);
+  --color-avatar-bg-3: var(--primitive-yellow-09);
+  --color-avatar-bg-4: var(--primitive-green-09);
+  --color-avatar-bg-5: var(--primitive-blue-09);
+  --color-avatar-bg-6: var(--primitive-purple-09);
+  --color-avatar-text-1: var(--primitive-red-01);
+  --color-avatar-text-2: var(--primitive-orange-01);
+  --color-avatar-text-3: var(--primitive-yellow-01);
+  --color-avatar-text-4: var(--primitive-green-01);
+  --color-avatar-text-5: var(--primitive-blue-01);
+  --color-avatar-text-6: var(--primitive-purple-01);
 
   /* Input */
   --color-input-text-primary: var(--primitive-neutral-01);

@@ -108,7 +108,8 @@ export default function ModelPickerPage() {
             <p className={styles.demoText}>
               The Composer&apos;s actions slot was reserved for exactly this.
               With the composer pinned to the bottom of a chat, set placement
-              to top so the panel opens upward.
+              to top, the side the panel prefers; it flips on its own when
+              that side has no room.
             </p>
             <div className={styles.demoColumn}>
               <Composer
@@ -124,6 +125,18 @@ export default function ModelPickerPage() {
                   />
                 }
               />
+            </div>
+          </section>
+
+          <section className={styles.section}>
+            <SectionTitle title="Sizes" />
+            <p className={styles.demoText}>
+              The trigger is the row height at either size, 40px or 32px, so
+              it lines up with the fields and buttons beside it.
+            </p>
+            <div className={styles.demoRow}>
+              <ModelPicker models={models} defaultValue="sonnet-5" />
+              <ModelPicker models={models} defaultValue="sonnet-5" size="compact" />
             </div>
           </section>
 

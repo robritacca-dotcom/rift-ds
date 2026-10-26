@@ -79,7 +79,8 @@ const git = (...args) => execFileSync('git', args, { cwd: repoRoot, encoding: 'u
  * `subpath` + `export` for a name, `subpath` + `file` for a deep import,
  * `bin` for a binary.
  */
-const SANCTIONED_BREAKS = [];
+const SANCTIONED_BREAKS = [
+];
 
 /* ── Baseline ──────────────────────────────────────────────────────────── */
 

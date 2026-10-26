@@ -205,8 +205,8 @@ function compile(gl: WebGL2RenderingContext, type: number, source: string) {
 
 /**
  * Owns the whole WebGL2 lifetime for the field: context, program, uniforms,
- * the 30fps rAF loop, reduced-motion handling, theme observation, resize,
- * context loss, and teardown.
+ * the 30fps rAF loop (paused off screen and in a hidden tab), reduced-motion
+ * handling, theme observation, resize, context loss, and teardown.
  */
 /* Chrome returns null from getExtension('WEBGL_lose_context') once a context
  * is lost, so a mount that inherits a context our previous cleanup released
@@ -496,6 +496,12 @@ export function useShaderField(
     let lastDraw = 0;
     let running = false;
     let disposed = false;
+    /* False while the canvas is scrolled well out of view. A page can carry
+       several fields (the background plus a grid of shader tiles), and a
+       phone GPU should never draw every one of them at frame rate when only
+       one is in view. Assumed visible until the observer's first
+       report, so the opening frames never wait on it. */
+    let onScreen = true;
     /* Raised to FRAME_MS_ACTIVE while a cursor wake is alive — see the
        constant's note. Set at the end of each draw from the current speed. */
     let frameBudget = FRAME_MS;
@@ -514,7 +520,14 @@ export function useShaderField(
     }
 
     function start() {
-      if (running || disposed || reduceQuery.matches || document.hidden) return;
+      if (
+        running ||
+        disposed ||
+        !onScreen ||
+        reduceQuery.matches ||
+        document.hidden
+      )
+        return;
       running = true;
       lastDraw = performance.now();
       raf = requestAnimationFrame(frame);
@@ -574,6 +587,23 @@ export function useShaderField(
       }
     });
     resizeObserver.observe(canvas);
+
+    /* Pauses the loop off screen and resumes it a little before the field
+       scrolls back in, so it is already moving when it appears. The paused
+       field keeps its last frame, and a theme or param change still paints
+       one fresh frame through renderOnce. */
+    const visibilityObserver =
+      typeof IntersectionObserver === "undefined"
+        ? null
+        : new IntersectionObserver(
+            (entries) => {
+              onScreen = entries[entries.length - 1].isIntersecting;
+              if (onScreen) start();
+              else stop();
+            },
+            { rootMargin: "200px 0px" }
+          );
+    visibilityObserver?.observe(canvas);
 
     let restoreTimer = 0;
     const onContextLost = (e: Event) => {
@@ -649,6 +679,7 @@ export function useShaderField(
       document.removeEventListener("visibilitychange", onVisibility);
       themeObserver.disconnect();
       resizeObserver.disconnect();
+      visibilityObserver?.disconnect();
       canvas.removeEventListener("webglcontextlost", onContextLost);
       canvas.removeEventListener("webglcontextrestored", onContextRestored);
       if (program) gl.deleteProgram(program);

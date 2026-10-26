@@ -15,9 +15,18 @@
  * and the comment in preview.ts is its authoritative record — do not
  * re-enable it here without asking him, and a contrast failure appearing
  * from this script means someone turned it back on.
+ *
+ * It also renders the table bench under forced colors (Windows high
+ * contrast), the one mode axe cannot judge: the browser flattens every
+ * fill to the page, so a state carried by a fill alone vanishes with no
+ * error. src/tokens/tokens-forced-colors.css re-points the state-bearing
+ * roles at system colours, the one fill the mode keeps; FORCED_CHECKS
+ * proves each of them still stands apart from the page, and that a
+ * floating panel keeps its edge and a focused control its ring.
  */
-/* global window, document -- page.evaluate() callbacks execute in the browser */
+/* global window, document, getComputedStyle -- page.evaluate() callbacks execute in the browser */
 import { createRequire } from 'node:module';
+import { pathToFileURL } from 'node:url';
 import { chromium } from 'playwright';
 import { SMOKE_ROUTES, startServer } from './served-site.mjs';
 
@@ -64,6 +73,81 @@ async function checkRoute(browser, origin, route, theme) {
   return violations;
 }
 
+/** The page forced colors are judged on: the bench carries every table control. */
+const FORCED_ROUTE = '/labs/tables';
+
+/**
+ * Each check reads one element under forced colors and says what is wrong
+ * with it, or nothing. `fill` must differ from the page's, the only way a
+ * state carried by a fill survives the mode.
+ */
+const FORCED_CHECKS = [
+  { name: 'the primary action', selector: '#bench-toolbar .ds-split-button .ds-button--primary', fill: true },
+  // The selected segment's fill rides a pill that slides beneath the segments.
+  { name: 'the selected density segment', selector: '#bench-toolbar .ds-table-toolbar .ds-segmented-control__pill', fill: true },
+  { name: 'a ticked row checkbox', selector: '#bench-paged tbody .ds-checkbox__box--checked', fill: true },
+  // The count rides an icon only once the bar folds, so it is read at the station's phone width.
+  { name: 'the filter count', selector: '#bench-toolbar .ds-table-toolbar__badge', fill: true, phone: true },
+];
+
+export async function checkForcedColors(browser, origin) {
+  const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, forcedColors: 'active' });
+  const page = await context.newPage();
+  const problems = [];
+  try {
+    await page.goto(origin + FORCED_ROUTE, { waitUntil: 'load', timeout: 30_000 });
+    await page.waitForTimeout(800);
+    // Tick a row, so a checked checkbox exists to judge.
+    await page.locator('#bench-paged tbody [role="checkbox"]').first().click();
+    await page.waitForTimeout(200);
+    for (const check of FORCED_CHECKS) {
+      if (check.phone) {
+        await page.locator('#bench-toolbar [role="tab"]', { hasText: 'Phone' }).first().click();
+        await page.waitForTimeout(600);
+      }
+      const result = await page.evaluate((selector) => {
+        const el = document.querySelector(selector);
+        if (!el) return { missing: true };
+        const page = getComputedStyle(document.body).backgroundColor;
+        return { fill: getComputedStyle(el).backgroundColor, page };
+      }, check.selector);
+      if (result.missing) problems.push(`${check.name}: nothing matches ${check.selector}`);
+      else if (check.fill && (result.fill === result.page || /rgba\(.*, 0\)$/.test(result.fill)))
+        problems.push(`${check.name} draws no fill of its own (${result.fill} on ${result.page}), so its state is lost`);
+    }
+    await page.locator('#bench-toolbar [role="tab"]', { hasText: 'Desktop' }).first().click();
+    await page.waitForTimeout(600);
+    // A floating panel keeps its edge: forced colors drop its shadow.
+    await page.locator('#bench-toolbar button[aria-label="Columns"]').click();
+    await page.waitForTimeout(300);
+    const edge = await page.evaluate(() => {
+      // Popovers are fixed, so offsetParent is no test of being shown.
+      const panel = [...document.querySelectorAll('.ds-popover__panel')].find(
+        (el) => el.getBoundingClientRect().width > 0 && getComputedStyle(el).visibility !== 'hidden',
+      );
+      return panel ? getComputedStyle(panel).borderTopWidth : null;
+    });
+    if (edge === null) problems.push('the Columns panel did not open');
+    else if (parseFloat(edge) === 0) problems.push('an open panel has no border, so it has no edge once its shadow is dropped');
+    await page.keyboard.press('Escape');
+    // A focused control keeps its ring.
+    await page.locator('#bench-toolbar button[aria-label="Columns"]').focus();
+    await page.keyboard.press('Shift+Tab');
+    await page.keyboard.press('Tab');
+    const ring = await page.evaluate(() => {
+      const el = document.activeElement;
+      const style = el ? getComputedStyle(el) : null;
+      return style ? `${style.outlineStyle} ${style.outlineWidth}` : null;
+    });
+    if (!ring || ring.startsWith('none') || ring.endsWith(' 0px')) problems.push(`a focused control shows no ring (${ring})`);
+  } catch (err) {
+    problems.push(`forced colors run failed: ${err.message}`);
+  } finally {
+    await context.close();
+  }
+  return problems;
+}
+
 async function main() {
   const server = await startServer();
   const browser = await chromium.launch();
@@ -81,6 +165,13 @@ async function main() {
         }
       }
     }
+    const forced = await checkForcedColors(browser, server.origin);
+    if (forced.length > 0) {
+      problems.push(`${FORCED_ROUTE} [forced colors]\n${forced.map((v) => `    - ${v}`).join('\n')}`);
+      console.error(`✗ ${FORCED_ROUTE} [forced colors]`);
+    } else {
+      console.log(`✓ ${FORCED_ROUTE} [forced colors]: ${FORCED_CHECKS.length} states, a panel edge and a focus ring hold`);
+    }
   } finally {
     await browser.close();
     server.stop();
@@ -97,7 +188,10 @@ async function main() {
   );
 }
 
-main().catch((err) => {
-  console.error(`validate-website-a11y: ${err.message}`);
-  process.exit(1);
-});
+// Run when invoked directly; imported, it hands out the forced colors pass alone.
+if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+  main().catch((err) => {
+    console.error(`validate-website-a11y: ${err.message}`);
+    process.exit(1);
+  });
+}

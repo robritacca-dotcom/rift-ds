@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useId } from 'react';
+import { useAnchoredPosition } from '../../behaviors/useAnchoredPosition';
 import { useLayer } from '../../behaviors/useLayer';
 import { Field } from '../Field/Field';
 import './Dropdown.css';
@@ -65,6 +66,12 @@ type DropdownOwnProps = {
   helperText?: string;
   /** Called with the newly selected value */
   onValueChange?: (value: string) => void;
+  /** Whether the list is open, controlled. Leave undefined to let the dropdown open and close itself. */
+  open?: boolean;
+  /** Whether the list starts open when uncontrolled (`open` undefined). */
+  defaultOpen?: boolean;
+  /** Fires when the list opens or closes, with the new state. */
+  onOpenChange?: (open: boolean) => void;
   /** Additional CSS classes */
   className?: string;
   /**
@@ -121,6 +128,9 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
       error = false,
       helperText,
       onValueChange,
+      open: openProp,
+      defaultOpen = false,
+      onOpenChange,
       onChange,
       className = '',
       ariaLabel,
@@ -135,13 +145,42 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
     },
     ref,
   ) => {
-    const [isOpen, setIsOpen] = useState(false);
-    const [focusedIndex, setFocusedIndex] = useState(-1);
+    const [ownOpen, setOwnOpen] = useState(defaultOpen);
+    const isOpen = openProp ?? ownOpen;
+    const setIsOpen = (next: boolean) => {
+      if (next === isOpen) return;
+      if (openProp === undefined) setOwnOpen(next);
+      onOpenChange?.(next);
+    };
+    // A list opened with `defaultOpen` starts on the chosen option, as one
+    // opened from the trigger does.
+    const [focusedIndex, setFocusedIndex] = useState(() => {
+      if (!defaultOpen) return -1;
+      const flat = groups && groups.length > 0 ? groups.flatMap((g) => g.options) : options;
+      return flat.findIndex((opt) => opt.value === (valueProp ?? defaultValue));
+    });
+    const autoId = useId();
     const [internalValue, setInternalValue] = useState(defaultValue);
     const isControlled = valueProp !== undefined;
     const value = isControlled ? valueProp : internalValue;
     const dropdownRef = useRef<HTMLDivElement | null>(null);
     const listRef = useRef<HTMLUListElement>(null);
+    const triggerRef = useRef<HTMLDivElement>(null);
+
+    // The list is placed against the trigger by the shared anchored-position
+    // behaviour: fixed, so a scroll container cannot clip it, flipped above
+    // when there is no room below, capped to the room it has, and never
+    // narrower than the trigger.
+    useAnchoredPosition({
+      open: isOpen,
+      anchorRef: triggerRef,
+      panelRef: listRef,
+      side: 'bottom',
+      align: 'start',
+      gapProperty: '--gap-050',
+      fitHeight: true,
+      matchWidth: true,
+    });
 
     /** Keep the internal ref (used for click-outside) while honouring a forwarded one. */
     const setRootRef = (node: HTMLDivElement | null) => {
@@ -168,12 +207,15 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
     const flatOptions: DropdownOption[] = isGrouped ? groups.flatMap((g) => g.options) : options;
 
     const selectedOption = flatOptions.find((opt) => opt.value === value);
-    const inputId = id || name || label?.toLowerCase().replace(/\s+/g, '-');
+    const inputId = id || name || label?.toLowerCase().replace(/\s+/g, '-') || autoId;
+    /* Opening the list puts the keyboard on the chosen option (the select
+       pattern), so ArrowDown moves on from the current value. */
+    const selectedIndex = flatOptions.findIndex((opt) => opt.value === value);
 
     const handleToggle = () => {
       if (!disabled) {
-        setIsOpen((prev) => !prev);
-        setFocusedIndex(-1);
+        setIsOpen(!isOpen);
+        setFocusedIndex(isOpen ? -1 : selectedIndex);
       }
     };
 
@@ -203,12 +245,14 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
           if (isOpen && focusedIndex >= 0 && !flatOptions[focusedIndex]?.disabled) {
             handleSelect(flatOptions[focusedIndex].value);
           } else {
-            setIsOpen((prev) => !prev);
+            if (!isOpen) setFocusedIndex(selectedIndex);
+            setIsOpen(!isOpen);
           }
           break;
         case 'ArrowDown':
           e.preventDefault();
           if (!isOpen) {
+            setFocusedIndex(selectedIndex);
             setIsOpen(true);
           } else {
             setFocusedIndex((prev) => {
@@ -285,6 +329,7 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
         id={inputId}
       >
         <div
+          ref={triggerRef}
           className={`${baseClass}__trigger`}
           role="combobox"
           aria-expanded={isOpen}

@@ -2,7 +2,9 @@
 
 import React, { useState, useRef, useEffect, useCallback, useId } from 'react';
 import { ChosenMark } from '../Dropdown/Dropdown';
+import { CheckboxIndicator } from '../Checkbox/Checkbox';
 import { useLayer } from '../../behaviors/useLayer';
+import { useAnchoredPosition } from '../../behaviors/useAnchoredPosition';
 import { MOTION_HOVER_HIDE_DELAY_MS } from '../../tokens/motion';
 import './DropdownMenu.css';
 import '../../fonts/material-symbols.css';
@@ -25,6 +27,10 @@ export interface DropdownMenuItem {
   destructive?: boolean;
   /** Marks the item as the current choice of a set: it holds the passive wash and a trailing check, and is announced as a checked radio item. Leave undefined on plain action items; pass `false` on the unchosen members of a set so they are announced as radio items too. Ignored on an item that opens a sub-menu. */
   selected?: boolean;
+  /** Marks the item as one of a set picked independently: it leads with the checkbox's box, ticked when true, and is announced as a checkbox item. Leave undefined on plain action items. The host toggles it in `onClick`. Ignored on an item that opens a sub-menu. */
+  checked?: boolean;
+  /** Whether choosing the item closes the menu. Defaults to false for a checkbox item, so several can be toggled in one visit, and true for every other item. */
+  closeOnSelect?: boolean;
   /** Click handler */
   onClick?: () => void;
   /** Nested sub-menu items */
@@ -89,6 +95,23 @@ function collectItems(entries: DropdownMenuEntry[]): DropdownMenuItem[] {
   return result;
 }
 
+/** The role and checked state an item is announced with. */
+function itemSemantics(item: DropdownMenuItem) {
+  if (item.checked !== undefined) {
+    return { role: 'menuitemcheckbox', 'aria-checked': item.checked } as const;
+  }
+  if (item.selected !== undefined) {
+    return { role: 'menuitemradio', 'aria-checked': item.selected } as const;
+  }
+  return { role: 'menuitem' } as const;
+}
+
+/** Whether choosing an item closes the menu. */
+const closesOnSelect = (item: DropdownMenuItem) => item.closeOnSelect ?? item.checked === undefined;
+
+/** The roles a keyboard-focusable menu row can carry. */
+const ITEM_SELECTOR = '[role="menuitem"], [role="menuitemradio"], [role="menuitemcheckbox"]';
+
 /* ============================================
    SUB-MENU ITEM
    ============================================ */
@@ -105,6 +128,20 @@ interface SubMenuItemProps {
 const SubMenuItem = ({ item, baseClass, itemId, focused, size, onActivate }: SubMenuItemProps) => {
   const [subOpen, setSubOpen] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const rowRef = useRef<HTMLLIElement>(null);
+  const subPanelRef = useRef<HTMLUListElement>(null);
+
+  // The sub-menu is placed beside its row by the shared anchored-position
+  // behaviour, flipping to the left when there is no room on the right.
+  useAnchoredPosition({
+    open: subOpen,
+    anchorRef: rowRef,
+    panelRef: subPanelRef,
+    side: 'right',
+    align: 'start',
+    gapProperty: '--gap-050',
+    fitHeight: true,
+  });
 
   const handleMouseEnter = () => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
@@ -141,6 +178,7 @@ const SubMenuItem = ({ item, baseClass, itemId, focused, size, onActivate }: Sub
 
   return (
     <li
+      ref={rowRef}
       id={itemId}
       className={classes}
       role="menuitem"
@@ -177,6 +215,7 @@ const SubMenuItem = ({ item, baseClass, itemId, focused, size, onActivate }: Sub
           itemIdBase={`${itemId}-sub`}
           size={size}
           isSubmenu
+          panelRef={subPanelRef}
           onItemActivate={onActivate}
         />
       )}
@@ -194,6 +233,7 @@ interface MenuPanelProps {
   itemIdBase: string;
   size: 'default' | 'compact';
   isSubmenu?: boolean;
+  panelRef?: React.Ref<HTMLUListElement>;
   onItemActivate: () => void;
 }
 
@@ -203,6 +243,7 @@ const MenuPanel = ({
   itemIdBase,
   size,
   isSubmenu = false,
+  panelRef,
   onItemActivate,
 }: MenuPanelProps) => {
   const panelClasses = [
@@ -252,30 +293,36 @@ const MenuPanel = ({
       entry.disabled ? `${baseClass}__item--disabled` : '',
       entry.destructive ? `${baseClass}__item--destructive` : '',
       entry.selected ? `${baseClass}__item--selected` : '',
+      entry.checked !== undefined ? `${baseClass}__item--checkbox ds-control-host` : '',
     ]
       .filter(Boolean)
       .join(' ');
-
-    // `selected` given at all means the item belongs to a choice set.
-    const isChoice = entry.selected !== undefined;
 
     return (
       <li
         key={`item-${index}`}
         id={entryId}
         className={itemClasses}
-        role={isChoice ? 'menuitemradio' : 'menuitem'}
-        aria-checked={isChoice ? entry.selected : undefined}
+        {...itemSemantics(entry)}
         aria-disabled={entry.disabled || undefined}
         onClick={(e) => {
           e.stopPropagation();
           if (!entry.disabled) {
             entry.onClick?.();
-            onItemActivate();
+            if (closesOnSelect(entry)) onItemActivate();
           }
         }}
       >
         <span className={`${baseClass}__item-label`}>
+          {/* Picked independently: the checkbox's own box leads the row,
+              the convention every multi-select list shares. */}
+          {entry.checked !== undefined && (
+            <CheckboxIndicator
+              className={`${baseClass}__item-check`}
+              checked={entry.checked}
+              size="compact"
+            />
+          )}
           {entry.icon &&
             (typeof entry.icon === 'string' ? (
               <span className={`${baseClass}__item-icon material-symbols-rounded`} aria-hidden="true">
@@ -299,7 +346,7 @@ const MenuPanel = ({
   };
 
   return (
-    <ul className={panelClasses} role="menu">
+    <ul ref={panelRef} className={panelClasses} role="menu">
       {entries.map((entry, index) => renderEntry(entry, index, itemIdBase))}
     </ul>
   );
@@ -339,7 +386,21 @@ export const DropdownMenu = React.forwardRef<HTMLDivElement, DropdownMenuProps>(
     else if (ref) ref.current = node;
   };
   const panelRef = useRef<HTMLUListElement | null>(null);
+  const triggerRef = useRef<HTMLDivElement>(null);
   const generatedId = useId();
+
+  // The panel is placed against the trigger by the shared anchored-position
+  // behaviour: fixed, so a scroll container cannot clip it, flipped above
+  // when there is no room below, and capped to the room it has.
+  useAnchoredPosition({
+    open: isOpen,
+    anchorRef: triggerRef,
+    panelRef,
+    side: 'bottom',
+    align,
+    gapProperty: '--gap-050',
+    fitHeight: true,
+  });
 
   const baseClass = 'ds-dropdown-menu';
   const classes = [baseClass, className].filter(Boolean).join(' ');
@@ -382,7 +443,7 @@ export const DropdownMenu = React.forwardRef<HTMLDivElement, DropdownMenuProps>(
           const item = flatItems[focusedIndex];
           if (item && !item.disabled && !item.children) {
             item.onClick?.();
-            handleClose();
+            if (closesOnSelect(item)) handleClose();
           }
         }
         break;
@@ -446,7 +507,7 @@ export const DropdownMenu = React.forwardRef<HTMLDivElement, DropdownMenuProps>(
   /* Scroll focused item into view */
   useEffect(() => {
     if (isOpen && focusedIndex >= 0 && panelRef.current) {
-      const allItems = panelRef.current.querySelectorAll(`[role="menuitem"], [role="menuitemradio"]`);
+      const allItems = panelRef.current.querySelectorAll(ITEM_SELECTOR);
       const el = allItems[focusedIndex] as HTMLElement | undefined;
       el?.scrollIntoView({ block: 'nearest' });
     }
@@ -497,30 +558,36 @@ export const DropdownMenu = React.forwardRef<HTMLDivElement, DropdownMenuProps>(
       entry.disabled ? `${baseClass}__item--disabled` : '',
       entry.destructive ? `${baseClass}__item--destructive` : '',
       entry.selected ? `${baseClass}__item--selected` : '',
+      entry.checked !== undefined ? `${baseClass}__item--checkbox ds-control-host` : '',
     ]
       .filter(Boolean)
       .join(' ');
-
-    // `selected` given at all means the item belongs to a choice set.
-    const isChoice = entry.selected !== undefined;
 
     return (
       <li
         key={`item-${index}`}
         id={`${generatedId}-item-${myIndex}`}
         className={itemClasses}
-        role={isChoice ? 'menuitemradio' : 'menuitem'}
-        aria-checked={isChoice ? entry.selected : undefined}
+        {...itemSemantics(entry)}
         aria-disabled={entry.disabled || undefined}
         onClick={(e) => {
           e.stopPropagation();
           if (!entry.disabled) {
             entry.onClick?.();
-            handleClose();
+            if (closesOnSelect(entry)) handleClose();
           }
         }}
       >
         <span className={`${baseClass}__item-label`}>
+          {/* Picked independently: the checkbox's own box leads the row,
+              the convention every multi-select list shares. */}
+          {entry.checked !== undefined && (
+            <CheckboxIndicator
+              className={`${baseClass}__item-check`}
+              checked={entry.checked}
+              size="compact"
+            />
+          )}
           {entry.icon &&
             (typeof entry.icon === 'string' ? (
               <span className={`${baseClass}__item-icon material-symbols-rounded`} aria-hidden="true">
@@ -571,7 +638,7 @@ export const DropdownMenu = React.forwardRef<HTMLDivElement, DropdownMenuProps>(
         semantics on the real control instead, and only synthesise a button
         when the trigger is not an element we can clone onto.
       */}
-      <div className={`${baseClass}__trigger`}>
+      <div ref={triggerRef} className={`${baseClass}__trigger`}>
         {React.isValidElement(trigger) ? (
           React.cloneElement(trigger as React.ReactElement<Record<string, unknown>>, {
             'aria-haspopup': 'menu',

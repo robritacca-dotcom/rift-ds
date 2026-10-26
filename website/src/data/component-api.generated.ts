@@ -291,7 +291,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Agent status",
     "slug": "agent-status",
     "category": "ai",
-    "description": "A dot-matrix indicator and status line reporting what an agent is doing right now.",
+    "description": "What an agent is doing right now, as a dot matrix and status line, a floating pill, a square mark for icon slots, or a ring around any element.",
     "client": true,
     "importPath": "rift-ds/components/AgentStatus/AgentStatus",
     "barrel": "main",
@@ -314,10 +314,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "pattern",
-            "type": "\"braille\" | \"orbit\" | \"breathe\" | \"snake\" | \"fill-sweep\" | \"pulse\" | \"columns\" | \"checkerboard\" | \"scan\" | \"rain\" | \"cascade\" | \"sparkle\" | \"wave-rows\" | \"helix\" | \"diagonal-swipe\"",
+            "type": "\"braille\" | \"orbit\" | \"breathe\" | \"snake\" | \"fill-sweep\" | \"pulse\" | \"columns\" | \"checkerboard\" | \"scan\" | \"rain\" | \"cascade\" | \"sparkle\" | \"wave-rows\" | \"helix\" | \"diagonal-swipe\" | \"twinkle\"",
             "required": false,
-            "description": "Which dot-matrix choreography to run.",
-            "defaultValue": "orbit"
+            "description": "Which dot-matrix choreography to run. Defaults to `breathe` while `waiting`, a still pulse that reads as the person's turn (the same as AgentStatusMark), and `orbit` otherwise."
           },
           {
             "name": "shimmer",
@@ -334,10 +333,16 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "variant",
-            "type": "\"inline\" | \"bar\"",
+            "type": "\"inline\" | \"bar\" | \"pill\"",
             "required": false,
-            "description": "`inline` sits in a line of content; `bar` is a full-width row for the top of a panel.",
+            "description": "`inline` sits in a line of content; `bar` is a full-width row for the\ntop of a panel; `pill` is a glass pill for a status that floats over\nthe page while a run goes on; once it ends the dots fill solid in the\nstatus colour, as in every variant. The pill does not position itself.",
             "defaultValue": "inline"
+          },
+          {
+            "name": "action",
+            "type": "ReactNode",
+            "required": false,
+            "description": "A trailing control after the status text, such as a link that opens the run. Meant for the `pill` and `bar` variants."
           },
           {
             "name": "className",
@@ -353,6 +358,31 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Status text, when it needs markup the `label` string cannot express."
           }
         ]
+      },
+      {
+        "component": "AgentStatusMark",
+        "props": [
+          {
+            "name": "state",
+            "type": "AgentStatusState",
+            "required": false,
+            "description": "What the agent is doing. Drives the colour and whether the dots animate, as on AgentStatus. Defaults to `working`, unlike AgentStatus's `thinking`: the mark stands in for an icon on a control (AiButton's, a pill's), where the commonest moment it is drawn is a run under way, while the labelled AgentStatus most often opens a reply.",
+            "defaultValue": "working"
+          },
+          {
+            "name": "pattern",
+            "type": "\"braille\" | \"orbit\" | \"breathe\" | \"snake\" | \"fill-sweep\" | \"pulse\" | \"columns\" | \"checkerboard\" | \"scan\" | \"rain\" | \"cascade\" | \"sparkle\" | \"wave-rows\" | \"helix\" | \"diagonal-swipe\" | \"twinkle\"",
+            "required": false,
+            "description": "Which choreography to run: every AgentStatus pattern, redrawn for the square grid. Defaults to `breathe` while `waiting`, a still pulse that reads as the person's turn, and `orbit` otherwise."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": ""
+          }
+        ]
       }
     ]
   },
@@ -362,7 +392,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "AI button",
     "slug": "ai-button",
     "category": "ai",
-    "description": "The AI entry point: icon and label ringed by a turning gradient and glow, with an optional hover-summoned AI-summary panel and prompt chips.",
+    "description": "The AI entry point: a turning gradient ring that reports the agent's status, with a hover-summoned summary and a panel for what the agent asks of you.",
     "client": true,
     "importPath": "rift-ds/components/AiButton/AiButton",
     "barrel": "main",
@@ -398,6 +428,18 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Whether the button is disabled"
           },
           {
+            "name": "state",
+            "type": "AgentStatusState",
+            "required": false,
+            "description": "What the agent behind the button is doing, in AgentStatus's vocabulary.\nThe label never changes; the icon carries the state. `thinking` and\n`working` show AgentStatusMark and spin the ring faster, `waiting` shows\nthe mark breathing in the warning colour with the ring at rest, and `done` and\n`error` turn the button to their status colours with the mark filled\nsolid in the status colour, then return to the resting look after a\nbeat. The button stays clickable throughout, unlike Button's\n`loading`, so a click can open the conversation to watch the work."
+          },
+          {
+            "name": "statusLabels",
+            "type": "Partial<Record<AgentStatusState, string>>",
+            "required": false,
+            "description": "What a screen reader hears when the state changes, per state, merged over the English defaults; `idle` says nothing."
+          },
+          {
             "name": "href",
             "type": "string",
             "required": false,
@@ -427,6 +469,45 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Which side of the button the summary panel opens on.",
             "defaultValue": "top"
+          },
+          {
+            "name": "request",
+            "type": "ReactNode",
+            "required": false,
+            "description": "What the agent needs from the person while `state` is `waiting`: any\ncontent, drawn in a glass panel at the button. An InterruptCard approval\nis the usual filling; a question, a form or a preview work the same way.\nIt opens each time the state becomes `waiting` and stays open without\nhover. Escape or a click on the button folds it back into the button,\nwhere the waiting mark keeps showing, and another click opens it again.\nWhile it is open the summary panel never opens."
+          },
+          {
+            "name": "requestOpen",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the request panel is open, for a host that owns it (say, to keep it shut while the chat shows the request). Leave undefined to let the button manage it."
+          },
+          {
+            "name": "defaultRequestOpen",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the request panel starts open, when the button manages it. Each later move into `waiting` opens it again.",
+            "defaultValue": "true"
+          },
+          {
+            "name": "onRequestOpenChange",
+            "type": "((open: boolean) => void)",
+            "required": false,
+            "description": "Fires when the request panel opens or closes, including when a move into `waiting` opens it."
+          },
+          {
+            "name": "requestPlacement",
+            "type": "\"top\" | \"bottom\"",
+            "required": false,
+            "description": "Which side of the button the request panel opens on.",
+            "defaultValue": "top"
+          },
+          {
+            "name": "requestRegionLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the request panel.",
+            "defaultValue": "Waiting for you"
           },
           {
             "name": "summaryPinned",
@@ -1916,6 +1997,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "md"
           },
           {
+            "name": "fill",
+            "type": "\"neutral\" | AvatarFill",
+            "required": false,
+            "description": "Which of the six fills the initials sit on. Picked from the name when\nunset, so a person keeps one colour everywhere; `neutral` keeps the\nplain grey. An AvatarGroup\nsets it on its avatars so neighbours in the stack differ."
+          },
+          {
             "name": "status",
             "type": "\"online\" | \"away\" | \"offline\" | \"busy\"",
             "required": false,
@@ -2228,7 +2315,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "headingLevel",
-            "type": "2 | 4 | 5 | 3 | 6",
+            "type": "2 | 4 | 3 | 5 | 6",
             "required": false,
             "description": "The heading level the title renders at, to fit the page's outline. Never `1`: a tile is never the page's top heading.",
             "defaultValue": "3"
@@ -2242,7 +2329,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "highlight",
-            "type": "1 | 2 | 4 | 5 | 3 | 6",
+            "type": "1 | 2 | 4 | 3 | 5 | 6",
             "required": false,
             "description": "Which of the six shader pairs the tile wears: pair N is ambient colour N\nwith texture N. Unset, tiles rotate through the set by their position\namong their siblings, so a grid of shader tiles comes out told apart."
           },
@@ -2497,8 +2584,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "label",
             "type": "string",
             "required": false,
-            "description": "Button text content",
-            "defaultValue": "Button"
+            "description": "Button text content. When it is absent, plain-text `children` stand in\nfor it (with a development warning), and failing both the button reads\n\"Button\".",
+            "defaultValue": "'Button'"
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Plain text to use as the label when `label` is absent. Anything richer than text is ignored; prefer `label`."
           },
           {
             "name": "iconLeft",
@@ -4441,6 +4534,66 @@ export const componentApi: readonly ComponentApiEntry[] = [
   },
   {
     "kind": "component",
+    "name": "CommandPaletteTrigger",
+    "label": "Command palette trigger",
+    "slug": "command-palette-trigger",
+    "category": "actions",
+    "description": "The entry point to a command palette: a button dressed as a search field, with the shortcut's keycaps, at the row-control height.",
+    "client": false,
+    "importPath": "rift-ds/components/CommandPaletteTrigger/CommandPaletteTrigger",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "CommandPaletteTrigger",
+        "props": [
+          {
+            "name": "label",
+            "type": "string",
+            "required": false,
+            "description": "The prompt the field shows, which is also the button's accessible name.",
+            "defaultValue": "Search or ask anything"
+          },
+          {
+            "name": "shortcut",
+            "type": "string[]",
+            "required": false,
+            "description": "The keyboard shortcut drawn as keycaps at the end, one key per entry. Pass an empty array for none. The default draws the Mac's ⌘ K and announces both it and Ctrl+K, as CommandPalette answers to either; off a Mac, pass `['Ctrl', 'K']` to draw the keys the reader presses.",
+            "defaultValue": "['⌘', 'K']"
+          },
+          {
+            "name": "icon",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Leading icon — Material Symbol name (string) or custom element (ReactNode).",
+            "defaultValue": "search"
+          },
+          {
+            "name": "size",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "Control size, on the row-control scale: `default` is 40px, `compact` 32px.",
+            "defaultValue": "default"
+          },
+          {
+            "name": "iconOnly",
+            "type": "boolean",
+            "required": false,
+            "description": "Fold to the icon alone, a circle the row height across, for a row with no room for the field. The label stays the accessible name.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
     "name": "Composer",
     "label": "Composer",
     "slug": "composer",
@@ -4942,7 +5095,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Data table",
     "slug": "data-table",
     "category": "data-display",
-    "description": "The wired table: sorting, search, row selection, and pagination assembled around Table.",
+    "description": "The wired table: typed columns, sorting, filters, editing, grouping with totals, row details, saved views, thousands of rows, and rows from a server.",
     "client": true,
     "importPath": "rift-ds/components/DataTable/DataTable",
     "barrel": "main",
@@ -4952,13 +5105,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
         "props": [
           {
             "name": "columns",
-            "type": "DataTableColumn[]",
+            "type": "DataTableColumn<R>[]",
             "required": true,
             "description": "Column definitions."
           },
           {
             "name": "rows",
-            "type": "DataTableRow[]",
+            "type": "R[]",
             "required": true,
             "description": "Row data, as raw values the table can sort and search."
           },
@@ -4966,7 +5119,57 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "pageSize",
             "type": "number",
             "required": false,
-            "description": "Rows per page. Setting this turns on the built-in pagination."
+            "description": "Rows per page, for controlled use (or as a fixed setting). Setting this or `defaultPageSize` turns on the built-in pagination."
+          },
+          {
+            "name": "defaultPageSize",
+            "type": "number",
+            "required": false,
+            "description": "Rows per page to start with, for uncontrolled use; `pageSizeOptions` then lets the reader change it."
+          },
+          {
+            "name": "onPageSizeChange",
+            "type": "((pageSize: number) => void)",
+            "required": false,
+            "description": "Fires with the new page size when the reader picks one from `pageSizeOptions`."
+          },
+          {
+            "name": "pageSizeOptions",
+            "type": "number[]",
+            "required": false,
+            "description": "The page sizes the footer offers in a Rows per page picker. Leave unset for no picker."
+          },
+          {
+            "name": "page",
+            "type": "number",
+            "required": false,
+            "description": "The current page, counting from 1, for controlled use. Pair with `onPageChange`. A page past the last shows the last."
+          },
+          {
+            "name": "defaultPage",
+            "type": "number",
+            "required": false,
+            "description": "The page to start on, counting from 1, for uncontrolled use."
+          },
+          {
+            "name": "onPageChange",
+            "type": "((page: number) => void)",
+            "required": false,
+            "description": "Fires with the new page, counting from 1: from the pager, and back to 1 when a search, filter, sort or page size change starts over."
+          },
+          {
+            "name": "pageSizeLabel",
+            "type": "string",
+            "required": false,
+            "description": "The page size picker's label. Defaults to \"Rows per page\".",
+            "defaultValue": "Rows per page"
+          },
+          {
+            "name": "phoneLayout",
+            "type": "\"scroll\" | \"stack\"",
+            "required": false,
+            "description": "How the table reads when it is narrower than a phone (its own width,\nunder `BREAKPOINT_PHONE_PX`, so a table in a narrow panel counts):\n`scroll` keeps the rows and scrolls sideways with the row header\npinned; `stack` draws each row as a card, its row header as the title\nand every other column as a label and value pair. Defaults to `scroll`.",
+            "defaultValue": "scroll"
           },
           {
             "name": "selectable",
@@ -5012,6 +5215,175 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Fires with the new sort state — `null` when a third click clears the sort."
           },
           {
+            "name": "sorts",
+            "type": "DataTableSort[]",
+            "required": false,
+            "description": "Every sort, first sort first, for controlled use: the several-column form of `sort`, and wins over it when both are given. Pair with `onSortsChange`."
+          },
+          {
+            "name": "defaultSorts",
+            "type": "DataTableSort[]",
+            "required": false,
+            "description": "Initial sorts for uncontrolled use."
+          },
+          {
+            "name": "onSortsChange",
+            "type": "((sorts: DataTableSort[]) => void)",
+            "required": false,
+            "description": "Fires with every sort after one changes, first sort first. `onSortChange` fires too, with the first or `null`."
+          },
+          {
+            "name": "linkComponent",
+            "type": "LinkComponent",
+            "required": false,
+            "description": "The link component a `link` column's cells render through, so the app's router handles them. Defaults to the nearest `LinkProvider`'s, else a plain anchor."
+          },
+          {
+            "name": "virtualize",
+            "type": "boolean | \"auto\"",
+            "required": false,
+            "description": "Draws only the rows in view, so a table of thousands scrolls as\nsmoothly as one of ten. `auto` (the default) does it for an unpaged,\nungrouped table of more than 200 rows; `true` always; `false` never.\nA virtualised table scrolls inside its frame (`maxHeight`, 640px when\nunset), keeps its header in view, and still sends its first screen of\nrows in the server's HTML.",
+            "defaultValue": "auto"
+          },
+          {
+            "name": "onLoadMore",
+            "type": "(() => void)",
+            "required": false,
+            "description": "Called when the reader scrolls near the end of the rows while `hasMore` is set, to fetch the next batch. Called once per batch: append the rows and it can fire again."
+          },
+          {
+            "name": "hasMore",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether more rows can be fetched: shows a loading row at the end and calls `onLoadMore` as it comes into view.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "manual",
+            "type": "boolean",
+            "required": false,
+            "description": "Hands sorting, filtering, search and paging to the host, for a table\nwhose rows live on a server. The table stops doing them itself and\nreports every change through its pairs (`onSortsChange`,\n`onFiltersChange`, `onSearchChange`, `onPageChange`,\n`onPageSizeChange`); pass back `rows` already sorted, filtered and\npaged. Totals, grouping and Select all work over the rows given, and\nSelect all N from a TableToolbar selects every match as a query.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "rowCount",
+            "type": "number",
+            "required": false,
+            "description": "Every row that matches on the server, in `manual` mode: drives the pager, the result count and Select all N. Defaults to the rows given."
+          },
+          {
+            "name": "loading",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether rows are being fetched. With no rows yet the body shows skeleton rows; with rows on screen they stay, dimmed and inert, under a thin progress line, so the table never blanks.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "error",
+            "type": "string",
+            "required": false,
+            "description": "A failed load's message. With no rows it replaces the body with an error state; over rows already on screen it shows as a Banner above them. Pair with `onRetry`."
+          },
+          {
+            "name": "onRetry",
+            "type": "(() => void)",
+            "required": false,
+            "description": "Called by the error state's Try again button. Without it the error shows with no button."
+          },
+          {
+            "name": "loadLabels",
+            "type": "Partial<DataTableLoadLabels>",
+            "required": false,
+            "description": "The words of loading and failed loads, merged over their English defaults: the skeleton rows' name, the loading row, a failed load's title and its retry button."
+          },
+          {
+            "name": "renderDetail",
+            "type": "((row: R) => ReactNode)",
+            "required": false,
+            "description": "Renders a row's details: adds a chevron column, and an opened row shows this beneath it, across the table's width. Rendered only once opened."
+          },
+          {
+            "name": "expandedIds",
+            "type": "string[]",
+            "required": false,
+            "description": "The ids of the rows whose details are open, for controlled use. Pair with `onExpandedIdsChange`."
+          },
+          {
+            "name": "defaultExpandedIds",
+            "type": "string[]",
+            "required": false,
+            "description": "The rows open to begin with, for uncontrolled use."
+          },
+          {
+            "name": "onExpandedIdsChange",
+            "type": "((ids: string[]) => void)",
+            "required": false,
+            "description": "Fires with the open rows' ids after one opens or closes."
+          },
+          {
+            "name": "expandMode",
+            "type": "\"multiple\" | \"single\"",
+            "required": false,
+            "description": "Whether several rows' details can be open at once (`multiple`, the default) or opening one closes the rest (`single`).",
+            "defaultValue": "multiple"
+          },
+          {
+            "name": "onViewChange",
+            "type": "((view: TableView) => void)",
+            "required": false,
+            "description": "Fires with the table's setup as a view whenever any part of it changes, so a host can keep the reader's last view."
+          },
+          {
+            "name": "grouping",
+            "type": "string[]",
+            "required": false,
+            "description": "The column keys the rows are grouped by, for controlled use; this milestone draws the first. Pair with `onGroupingChange`."
+          },
+          {
+            "name": "defaultGrouping",
+            "type": "string[]",
+            "required": false,
+            "description": "The grouping to start with, for uncontrolled use."
+          },
+          {
+            "name": "onGroupingChange",
+            "type": "((grouping: string[]) => void)",
+            "required": false,
+            "description": "Fires with the new grouping, from a header menu or a TableToolbar."
+          },
+          {
+            "name": "totalsRow",
+            "type": "boolean",
+            "required": false,
+            "description": "Adds a totals row to the table's foot, sticky at its bottom edge: each cell a menu picking its calculation over every matching row.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "totals",
+            "type": "Record<string, Total>",
+            "required": false,
+            "description": "Each column's footer calculation, by key, for controlled use. A column left out shows its `aggregate`, or nothing. Pair with `onTotalsChange`."
+          },
+          {
+            "name": "defaultTotals",
+            "type": "Record<string, Total>",
+            "required": false,
+            "description": "The footer calculations to start with, for uncontrolled use."
+          },
+          {
+            "name": "onTotalsChange",
+            "type": "((totals: Record<string, Total>) => void)",
+            "required": false,
+            "description": "Fires with every footer calculation after one is picked."
+          },
+          {
+            "name": "multiSort",
+            "type": "boolean",
+            "required": false,
+            "description": "Lets the table sort by several columns: Shift-click a header, or pick Add to sort from its menu, to add the column after the current sorts. Each sorted header shows its rank while more than one sorts.",
+            "defaultValue": "false"
+          },
+          {
             "name": "searchable",
             "type": "boolean",
             "required": false,
@@ -5035,8 +5407,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "size",
             "type": "\"default\" | \"compact\"",
             "required": false,
-            "description": "Visual size, passed through to the underlying Table.",
-            "defaultValue": "default"
+            "description": "The table's density, and the controls' with it: `default` rows with the\nsearch field and pager at the default row-control height, `compact` rows\nwith both at the compact one. Controls inside the rows (checkboxes, grips,\nmenu and action buttons) stay compact at either density, so a row's\nheight is its text's. Defaults to `default`. Unlike a static size, it is\nstate the reader can change from a TableToolbar's density switch: passing\nit controls that state, paired with `defaultSize` and `onSizeChange`."
           },
           {
             "name": "striped",
@@ -5066,17 +5437,38 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "selectRowLabel",
-            "type": "((row: DataTableRow) => string)",
+            "type": "((row: R) => string)",
             "required": false,
-            "description": "Accessible name of a row's checkbox, given the row. Defaults to \"Select row\" followed by the row id.",
-            "defaultValue": "(row: DataTableRow) => `Select row ${row.id}`"
+            "description": "Accessible name of a row's checkbox, given the row. Defaults to \"Select\"\nfollowed by the value of the `rowHeader` column (else the first column),\nand to \"Select row\" with the id only when that value is empty.",
+            "defaultValue": "(row: R) => {\n    const nameKey = (columnsProp.find((col) => col.rowHeader) ?? columnsProp[0])?.key;\n    const name = nameKey === undefined ? undefined : row.values[nameKey];\n    return name == null || name === '' ? `Select row ${row.id}` : `Select ${name}`;\n  }"
           },
           {
             "name": "sortLabel",
             "type": "((header: string, direction: \"desc\" | \"asc\" | null) => string)",
             "required": false,
-            "description": "Accessible name of a sortable header, given the column's header text (its\n`key` when the header is not a string) and its current sort direction,\n`null` when unsorted. Defaults to \"Sort by\" with the header and the state.",
-            "defaultValue": "(header: string, direction: DataTableSort['direction'] | null) =>\n        `Sort by ${header}, ${\n          direction === null\n            ? 'not sorted'\n            : direction === 'asc'\n              ? 'sorted ascending'\n              : 'sorted descending'\n        }`"
+            "description": "Accessible name of a sortable header's button, given the column's header\ntext (its `key` when the header is not a string) and its current sort\ndirection, `null` when unsorted. Defaults to the header text alone: the\nsort state is the header's `aria-sort`, so naming it here too would read\nit twice.",
+            "defaultValue": "(header: string) => header"
+          },
+          {
+            "name": "sortAnnouncement",
+            "type": "((header: string, direction: \"desc\" | \"asc\" | null) => string)",
+            "required": false,
+            "description": "Announced when the sort changes, given the header text and the new direction, `null` when cleared. Defaults to \"Sorted by Name, ascending\" or \"Sort cleared\".",
+            "defaultValue": "(header: string, direction: DataTableSort['direction'] | null) =>\n    direction === null ? 'Sort cleared' : `Sorted by ${header}, ${direction === 'asc' ? 'ascending' : 'descending'}`"
+          },
+          {
+            "name": "sortRankLabel",
+            "type": "((name: string, rank: number, direction: \"desc\" | \"asc\") => string)",
+            "required": false,
+            "description": "With several sorts, names a header's sort button after the first: given the `sortLabel` name, its rank and its direction. Defaults to \"Owner, sort 2, ascending\". The first sort's header carries `aria-sort` instead.",
+            "defaultValue": "(name: string, rank: number, direction: DataTableSort['direction']) =>\n    `${name}, sort ${rank}, ${direction === 'asc' ? 'ascending' : 'descending'}`"
+          },
+          {
+            "name": "pageAnnouncement",
+            "type": "((page: number, pageCount: number, first: number, last: number, total: number) => string)",
+            "required": false,
+            "description": "Announced when the page changes, given the page, the page count, the first and last row shown and the total. Defaults to \"Page 2 of 7, rows 21 to 40 of 140\".",
+            "defaultValue": "(page: number, pageCount: number, first: number, last: number, total: number) =>\n    `Page ${page} of ${pageCount}, rows ${first} to ${last} of ${total}`"
           },
           {
             "name": "resultsLabel",
@@ -5094,15 +5486,258 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "paginationLabels",
-            "type": "Pick<PaginationProps, \"aria-label\" | \"previousLabel\" | \"nextLabel\" | \"readoutLabel\">",
+            "type": "Pick<PaginationProps, \"aria-label\" | \"previousLabel\" | \"nextLabel\" | \"pageLabel\" | \"readoutLabel\">",
             "required": false,
-            "description": "The built-in pager's words, merged over its English defaults: the arrows'\nnames (\"Previous page\", \"Next page\"), the readout (\"Page 2 of 4\") and the\nlandmark's name (\"Pagination\"). The pager is always the compact size, so\nits numbered-page names never render and are not offered here."
+            "description": "The built-in pager's words, merged over its English defaults: the arrows'\nnames (\"Previous page\", \"Next page\"), the readout (\"Page 2 of 4\") and the\nlandmark's name (\"Pagination\"). The pager follows the table's `size`:\nnumbered pages at the default size (named by `pageLabel`), a \"Page X of Y\"\nreadout when compact (`readoutLabel`)."
           },
           {
             "name": "emptyStateLabels",
             "type": "Partial<Pick<EmptyStateProps, \"title\" | \"description\">>",
             "required": false,
             "description": "The built-in empty state's words, merged over its English defaults\n(\"No matching rows\", \"Adjust the search or filters and try again.\").\nIgnored when `emptyState` replaces the whole node."
+          },
+          {
+            "name": "resizableColumns",
+            "type": "boolean",
+            "required": false,
+            "description": "Lets every column be resized by dragging its header's edge, double-clicking it to fit, or Alt+Left and Alt+Right on a focused header. A column's own `resizable` wins.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "reorderableColumns",
+            "type": "boolean",
+            "required": false,
+            "description": "Lets every column be moved by dragging its header, from its menu, or Ctrl+Shift+Left and Ctrl+Shift+Right on a focused header. A column's own `reorderable` wins.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "columnMenu",
+            "type": "boolean",
+            "required": false,
+            "description": "Adds a menu to every header: sort, pin, move, hide, fit and reset, as each column allows. Opened from the header's options button, Alt+Down, Shift+F10 or a right-click.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "reorderableRows",
+            "type": "boolean",
+            "required": false,
+            "description": "Adds a grip at each row's start to drag it up or down, or move it with Alt+Up and Alt+Down. Off while a sort is active, since the sort owns the order.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "stickyHeader",
+            "type": "boolean",
+            "required": false,
+            "description": "Keeps the header in view while the body scrolls. Takes effect with `maxHeight`, inside the table's own scroll frame.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "maxHeight",
+            "type": "string | number",
+            "required": false,
+            "description": "The table's tallest height before its body scrolls inside its frame (any CSS length, or pixels)."
+          },
+          {
+            "name": "navigation",
+            "type": "\"table\" | \"grid\"",
+            "required": false,
+            "description": "How the keyboard moves through the table. `table` keeps every control in\nthe Tab order, as a reading table does; `grid` makes the table one Tab\nstop with arrow-key focus across its cells. Defaults to `grid` when any\ncolumn or row control is on, else `table`."
+          },
+          {
+            "name": "columnWidths",
+            "type": "Record<string, number>",
+            "required": false,
+            "description": "Column widths in pixels, by key, for controlled use. Fires `onColumnWidthsChange` once per resize, on release."
+          },
+          {
+            "name": "defaultColumnWidths",
+            "type": "Record<string, number>",
+            "required": false,
+            "description": "Starting column widths in pixels, by key, for uncontrolled use. Columns not listed take their natural width."
+          },
+          {
+            "name": "onColumnWidthsChange",
+            "type": "((widths: Record<string, number>) => void)",
+            "required": false,
+            "description": "Fires with every column's width after a resize, a fit or a reset."
+          },
+          {
+            "name": "columnOrder",
+            "type": "string[]",
+            "required": false,
+            "description": "Column keys in display order, for controlled use. Keys left out keep their declared order after the listed ones."
+          },
+          {
+            "name": "defaultColumnOrder",
+            "type": "string[]",
+            "required": false,
+            "description": "Starting column order, for uncontrolled use."
+          },
+          {
+            "name": "onColumnOrderChange",
+            "type": "((order: string[]) => void)",
+            "required": false,
+            "description": "Fires with the full column order after a move."
+          },
+          {
+            "name": "columnPinning",
+            "type": "DataTableColumnPinning",
+            "required": false,
+            "description": "Columns pinned to each edge, for controlled use."
+          },
+          {
+            "name": "defaultColumnPinning",
+            "type": "DataTableColumnPinning",
+            "required": false,
+            "description": "Starting pins, for uncontrolled use; merged with each column's own `pin`."
+          },
+          {
+            "name": "onColumnPinningChange",
+            "type": "((pinning: DataTableColumnPinning) => void)",
+            "required": false,
+            "description": "Fires with the pins after a column is pinned or unpinned."
+          },
+          {
+            "name": "hiddenColumns",
+            "type": "string[]",
+            "required": false,
+            "description": "Hidden column keys, for controlled use."
+          },
+          {
+            "name": "defaultHiddenColumns",
+            "type": "string[]",
+            "required": false,
+            "description": "Starting hidden keys, for uncontrolled use; merged with each column's `defaultHidden`."
+          },
+          {
+            "name": "onHiddenColumnsChange",
+            "type": "((hidden: string[]) => void)",
+            "required": false,
+            "description": "Fires with every hidden key after a column is hidden or shown."
+          },
+          {
+            "name": "rowOrder",
+            "type": "string[]",
+            "required": false,
+            "description": "Row ids in display order, for controlled use, applied while no sort is active. Rows left out keep their given order after the listed ones."
+          },
+          {
+            "name": "defaultRowOrder",
+            "type": "string[]",
+            "required": false,
+            "description": "Starting row order, for uncontrolled use."
+          },
+          {
+            "name": "onRowOrderChange",
+            "type": "((order: string[]) => void)",
+            "required": false,
+            "description": "Fires with the full row order after a row moves."
+          },
+          {
+            "name": "columnLabels",
+            "type": "Partial<DataTableColumnLabels>",
+            "required": false,
+            "description": "The column and row controls' words, merged over their English defaults."
+          },
+          {
+            "name": "columnDividers",
+            "type": "boolean",
+            "required": false,
+            "description": "Draws a vertical line between columns, as well as the lines between rows.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "cellText",
+            "type": "DataTableCellText",
+            "required": false,
+            "description": "How every cell's text fits unless its column says otherwise: `wrap` (the default), `nowrap`, `truncate` or `lines-2`.",
+            "defaultValue": "wrap"
+          },
+          {
+            "name": "rowActions",
+            "type": "((row: R) => DataTableRowAction[])",
+            "required": false,
+            "description": "The actions a row offers, in an actions column that sticks to the end edge: inline ones as icon buttons, the rest in a More menu."
+          },
+          {
+            "name": "editMode",
+            "type": "\"cell\" | \"row\"",
+            "required": false,
+            "description": "How editable cells edit: `cell` (the default) edits one cell at a time,\nstarted with Enter, F2, a typed character or a double click; `row` adds an\nEdit button to each row that opens every editable cell of the row at\nonce, with Save and Cancel.",
+            "defaultValue": "cell"
+          },
+          {
+            "name": "onCellEdit",
+            "type": "((edit: DataTableCellEdit<R>) => void | Promise<unknown>)",
+            "required": false,
+            "description": "Saves one edited cell. Rows stay the record: update them from here. Return\na promise to have the cell show the new value as pending until it\nsettles; a rejection rolls the cell back and announces the failure."
+          },
+          {
+            "name": "onRowEdit",
+            "type": "((edit: DataTableRowEdit<R>) => void | Promise<unknown>)",
+            "required": false,
+            "description": "Saves one edited row with `editMode=\"row\"`, its changed values together. Without it, each changed cell goes to `onCellEdit`."
+          },
+          {
+            "name": "filters",
+            "type": "Filter[]",
+            "required": false,
+            "description": "The filters, for controlled use: conditions on columns, joined with AND. Set from the header menus (with `columnMenu`) or a TableToolbar."
+          },
+          {
+            "name": "defaultFilters",
+            "type": "Filter[]",
+            "required": false,
+            "description": "Starting filters, for uncontrolled use."
+          },
+          {
+            "name": "onFiltersChange",
+            "type": "((filters: Filter[]) => void)",
+            "required": false,
+            "description": "Fires with every filter after one is added, changed or removed."
+          },
+          {
+            "name": "search",
+            "type": "string",
+            "required": false,
+            "description": "The search text, for controlled use; the built-in search field and a TableToolbar's both set it."
+          },
+          {
+            "name": "defaultSearch",
+            "type": "string",
+            "required": false,
+            "description": "Starting search text, for uncontrolled use."
+          },
+          {
+            "name": "onSearchChange",
+            "type": "((search: string) => void)",
+            "required": false,
+            "description": "Fires with the search text as it changes."
+          },
+          {
+            "name": "defaultSize",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "Starting density, for uncontrolled use when a TableToolbar's density switch sets it; `size` controls it."
+          },
+          {
+            "name": "onSizeChange",
+            "type": "((size: \"default\" | \"compact\") => void)",
+            "required": false,
+            "description": "Fires when a TableToolbar's density switch changes the density."
+          },
+          {
+            "name": "filterLabels",
+            "type": "Partial<FilterLabels>",
+            "required": false,
+            "description": "The filters' words, merged over their English defaults."
+          },
+          {
+            "name": "rowActionsVisibility",
+            "type": "\"hover\" | \"always\"",
+            "required": false,
+            "description": "When the inline actions show: on row hover and focus (the default, and always on a touch screen), or always. The More button shows at rest either way, so the column never reads as empty.",
+            "defaultValue": "hover"
           },
           {
             "name": "className",
@@ -5712,6 +6347,25 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Called with the newly selected value"
           },
           {
+            "name": "open",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the list is open, controlled. Leave undefined to let the dropdown open and close itself."
+          },
+          {
+            "name": "defaultOpen",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the list starts open when uncontrolled (`open` undefined).",
+            "defaultValue": "false"
+          },
+          {
+            "name": "onOpenChange",
+            "type": "((open: boolean) => void)",
+            "required": false,
+            "description": "Fires when the list opens or closes, with the new state."
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -5760,7 +6414,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Dropdown menu",
     "slug": "dropdown-menu",
     "category": "overlays",
-    "description": "Contextual menu with sections, sub-menus, keyboard shortcuts, and inset-gap hover styling.",
+    "description": "Action menu opened from a trigger, with groups, sub-menus, shortcuts, radio and checkbox items, placed to stay on screen.",
     "client": true,
     "importPath": "rift-ds/components/DropdownMenu/DropdownMenu",
     "barrel": "main",
@@ -7696,6 +8350,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "ReactNode",
             "required": false,
             "description": "Detail slot between the description and the options — typically a\n`<ToolCall status=\"pending\">` showing what wants to run."
+          },
+          {
+            "name": "bare",
+            "type": "boolean",
+            "required": false,
+            "description": "Strip the card chrome (fill, border, radius) when the card sits inside another panel that supplies the surface, such as AiButton's request panel.",
+            "defaultValue": "false"
           }
         ]
       }
@@ -8490,6 +9151,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Which side of the trigger the panel opens on. In a composer pinned to the bottom of the screen, use `top`.",
             "defaultValue": "bottom"
+          },
+          {
+            "name": "size",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "Trigger size, on the row-control scale: `default` is 40px, `compact` 32px, so it lines up with the fields and buttons beside it.",
+            "defaultValue": "default"
           },
           {
             "name": "disabled",
@@ -9345,6 +10013,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "default"
           },
           {
+            "name": "surface",
+            "type": "\"menu\" | \"panel\"",
+            "required": false,
+            "description": "The panel's surface. `panel` (the default) is the content panel: a\n16px inset and the container border. `menu` is DropdownMenu's own\nsurface (its 4px inset, input border and corner), for a popover that\nsits among menus and should read as one of them, such as a table\ntoolbar's sort or column panel.",
+            "defaultValue": "panel"
+          },
+          {
             "name": "position",
             "type": "\"top\" | \"bottom\" | \"left\" | \"right\"",
             "required": false,
@@ -9564,6 +10239,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"sm\"",
             "required": false,
             "description": "Body scale. `sm` maps paragraphs, lists and code to the small paragraph tokens for dense chat contexts.",
+            "defaultValue": "default"
+          },
+          {
+            "name": "tableSize",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "Density of the tables inside: `compact` tightens the cell padding to the library Table's compact step, for long or dense tables.",
             "defaultValue": "default"
           },
           {
@@ -11946,6 +12628,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "false"
           },
           {
+            "name": "columnDividers",
+            "type": "boolean",
+            "required": false,
+            "description": "Draws a vertical line between columns, as well as the lines between rows.",
+            "defaultValue": "false"
+          },
+          {
             "name": "caption",
             "type": "string",
             "required": false,
@@ -11957,6 +12646,291 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Whether to visually hide the caption (still available to screen readers)",
             "defaultValue": "false"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
+    "name": "TableToolbar",
+    "label": "Table toolbar",
+    "slug": "table-toolbar",
+    "category": "data-display",
+    "description": "The control bar over a table: search, filter chips, sort, group, columns, density, saved views and a bulk bar, wired to a DataTable in its toolbar slot.",
+    "client": true,
+    "importPath": "rift-ds/components/TableToolbar/TableToolbar",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "TableToolbar",
+        "props": [
+          {
+            "name": "columns",
+            "type": "TableToolbarColumn[]",
+            "required": false,
+            "description": "The columns the bar filters and shows, for a bar over some other table. Inside a DataTable's `toolbar` the table's own columns are used."
+          },
+          {
+            "name": "filters",
+            "type": "Filter[]",
+            "required": false,
+            "description": "The filters, for controlled use. Inside a DataTable the table's filters are used unless this is set."
+          },
+          {
+            "name": "defaultFilters",
+            "type": "Filter[]",
+            "required": false,
+            "description": "Starting filters, for uncontrolled use outside a DataTable."
+          },
+          {
+            "name": "onFiltersChange",
+            "type": "((filters: Filter[]) => void)",
+            "required": false,
+            "description": "Fires with every filter after one is added, changed or removed."
+          },
+          {
+            "name": "search",
+            "type": "string",
+            "required": false,
+            "description": "The search text, for controlled use. Inside a DataTable the table's search is used unless this is set."
+          },
+          {
+            "name": "defaultSearch",
+            "type": "string",
+            "required": false,
+            "description": "Starting search text, for uncontrolled use outside a DataTable."
+          },
+          {
+            "name": "onSearchChange",
+            "type": "((search: string) => void)",
+            "required": false,
+            "description": "Fires with the search text as it changes."
+          },
+          {
+            "name": "hiddenColumns",
+            "type": "string[]",
+            "required": false,
+            "description": "Hidden column keys, for controlled use. Inside a DataTable the table's are used unless this is set."
+          },
+          {
+            "name": "defaultHiddenColumns",
+            "type": "string[]",
+            "required": false,
+            "description": "Starting hidden keys, for uncontrolled use outside a DataTable."
+          },
+          {
+            "name": "onHiddenColumnsChange",
+            "type": "((hidden: string[]) => void)",
+            "required": false,
+            "description": "Fires with every hidden key after the Columns panel changes one."
+          },
+          {
+            "name": "size",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "The density the bar's controls take and its switch sets, for controlled use. Inside a DataTable the table's density is used unless this is set."
+          },
+          {
+            "name": "defaultSize",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "Starting density, for uncontrolled use outside a DataTable."
+          },
+          {
+            "name": "onSizeChange",
+            "type": "((size: \"default\" | \"compact\") => void)",
+            "required": false,
+            "description": "Fires when the density switch changes."
+          },
+          {
+            "name": "count",
+            "type": "{ shown: number; total: number; }",
+            "required": false,
+            "description": "The result count's numbers, outside a DataTable: rows that match and rows in all."
+          },
+          {
+            "name": "searchable",
+            "type": "boolean",
+            "required": false,
+            "description": "Shows the search field. Defaults to true.",
+            "defaultValue": "true"
+          },
+          {
+            "name": "filterable",
+            "type": "boolean",
+            "required": false,
+            "description": "Shows the Filter button and the filter chips. Defaults to true.",
+            "defaultValue": "true"
+          },
+          {
+            "name": "columnsPanel",
+            "type": "boolean",
+            "required": false,
+            "description": "Shows the Columns panel. Defaults to true.",
+            "defaultValue": "true"
+          },
+          {
+            "name": "densitySwitch",
+            "type": "boolean",
+            "required": false,
+            "description": "Shows the density switch (in More when the bar folds). Defaults to true.",
+            "defaultValue": "true"
+          },
+          {
+            "name": "showCount",
+            "type": "boolean",
+            "required": false,
+            "description": "Shows the result count in the bar. Defaults to true over some other table and false inside a DataTable, whose footer carries the count; set it to move the count into the bar, and the footer leaves it out."
+          },
+          {
+            "name": "columnOrder",
+            "type": "string[]",
+            "required": false,
+            "description": "Every column key in display order, for controlled use. Inside a DataTable the table's order is used unless this is set."
+          },
+          {
+            "name": "defaultColumnOrder",
+            "type": "string[]",
+            "required": false,
+            "description": "Starting column order, for uncontrolled use outside a DataTable."
+          },
+          {
+            "name": "onColumnOrderChange",
+            "type": "((order: string[]) => void)",
+            "required": false,
+            "description": "Fires with the full column order after the Columns panel moves one."
+          },
+          {
+            "name": "bulkActions",
+            "type": "TableToolbarBulkAction[]",
+            "required": false,
+            "description": "The actions for the selected rows. Inside a DataTable with `selectable`, selecting a row turns the bar, at the same height, into the bulk bar: Clear, the count, Select all N, then these, the first non-destructive one and the first destructive one labelled and the rest in a More menu.",
+            "defaultValue": "[]"
+          },
+          {
+            "name": "sorts",
+            "type": "DataTableSort[]",
+            "required": false,
+            "description": "Every sort, first sort first, for controlled use. Inside a DataTable the table's sorts are used unless this is set."
+          },
+          {
+            "name": "defaultSorts",
+            "type": "DataTableSort[]",
+            "required": false,
+            "description": "Initial sorts for uncontrolled use."
+          },
+          {
+            "name": "onSortsChange",
+            "type": "((sorts: DataTableSort[]) => void)",
+            "required": false,
+            "description": "Fires with every sort after the sort panel changes one."
+          },
+          {
+            "name": "views",
+            "type": "TableToolbarView[]",
+            "required": false,
+            "description": "Saved views, shown as tabs over the bar inside a DataTable: picking one\napplies its setup to the table, its tab shows a dot while the table no\nlonger matches it, and its menu saves, saves as new, resets, renames\nand deletes. For controlled use; store them however you like (each\n`view` is plain data). Pair with `onViewsChange`."
+          },
+          {
+            "name": "defaultViews",
+            "type": "TableToolbarView[]",
+            "required": false,
+            "description": "The saved views to start with, for uncontrolled use."
+          },
+          {
+            "name": "onViewsChange",
+            "type": "((views: TableToolbarView[]) => void)",
+            "required": false,
+            "description": "Fires with every view after one is saved, added, renamed or deleted."
+          },
+          {
+            "name": "activeView",
+            "type": "string",
+            "required": false,
+            "description": "The active view's id, for controlled use. Pair with `onActiveViewChange`."
+          },
+          {
+            "name": "defaultActiveView",
+            "type": "string",
+            "required": false,
+            "description": "The view active to begin with, for uncontrolled use. Defaults to the first."
+          },
+          {
+            "name": "onActiveViewChange",
+            "type": "((id: string) => void)",
+            "required": false,
+            "description": "Fires with the id of the view picked or added."
+          },
+          {
+            "name": "grouping",
+            "type": "string[]",
+            "required": false,
+            "description": "The column keys the rows are grouped by, for controlled use. Inside a DataTable the table's grouping is used unless this is set."
+          },
+          {
+            "name": "defaultGrouping",
+            "type": "string[]",
+            "required": false,
+            "description": "The grouping to start with, for uncontrolled use."
+          },
+          {
+            "name": "onGroupingChange",
+            "type": "((grouping: string[]) => void)",
+            "required": false,
+            "description": "Fires with the new grouping when the Group panel changes it."
+          },
+          {
+            "name": "groupable",
+            "type": "boolean",
+            "required": false,
+            "description": "Shows the Group button, whose panel picks the column the rows group by. Defaults to true; it shows when a column is `groupable`.",
+            "defaultValue": "true"
+          },
+          {
+            "name": "sortable",
+            "type": "boolean",
+            "required": false,
+            "description": "Shows the Sort button, whose panel orders, flips and removes the sorts. Defaults to true; inside a DataTable it shows when a column sorts, and holds one sort unless the table has `multiSort`.",
+            "defaultValue": "true"
+          },
+          {
+            "name": "primaryAction",
+            "type": "TableToolbarAction",
+            "required": false,
+            "description": "The page's main action (New project, Invite), drawn as the primary button at the bar's end."
+          },
+          {
+            "name": "secondaryActions",
+            "type": "TableToolbarAction[]",
+            "required": false,
+            "description": "Actions beside the primary one (Export, Import), drawn as icon buttons before it, each named and tooltipped by its label; folded, they move into the More panel.",
+            "defaultValue": "[]"
+          },
+          {
+            "name": "actions",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Any other controls at the bar's end, after the actions."
+          },
+          {
+            "name": "labels",
+            "type": "Partial<TableToolbarLabels>",
+            "required": false,
+            "description": "The bar's words, merged over their English defaults."
+          },
+          {
+            "name": "filterLabels",
+            "type": "Partial<FilterLabels>",
+            "required": false,
+            "description": "The filters' words, merged over their English defaults (inside a DataTable, over the table's)."
           },
           {
             "name": "className",
@@ -12219,6 +13193,206 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Legacy accessible-name prop.",
             "deprecated": "Pass the native `aria-label` attribute instead."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
+    "name": "ThemePicker",
+    "label": "Theme picker",
+    "slug": "theme-picker",
+    "category": "actions",
+    "description": "A circular trigger wearing the active theme's swatch, opening a menu of every theme on offer with its colour, corner and faces.",
+    "client": true,
+    "importPath": "rift-ds/components/ThemePicker/ThemePicker",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "ThemePicker",
+        "props": [
+          {
+            "name": "themes",
+            "type": "ThemePickerOption[]",
+            "required": true,
+            "description": "The themes on offer, in the order the menu lists them."
+          },
+          {
+            "name": "value",
+            "type": "string",
+            "required": false,
+            "description": "The active theme, controlled. Leave undefined to let the picker keep its own, seeded from `defaultValue`."
+          },
+          {
+            "name": "defaultValue",
+            "type": "string",
+            "required": false,
+            "description": "The active theme on first render when uncontrolled. Defaults to the first theme."
+          },
+          {
+            "name": "onValueChange",
+            "type": "((value: string) => void)",
+            "required": false,
+            "description": "Fires with the chosen theme's value. The host applies it (a `data-brand` attribute on `<html>`, for the shipped presets)."
+          },
+          {
+            "name": "open",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the menu is open, controlled. Leave undefined to let the picker open and close itself."
+          },
+          {
+            "name": "defaultOpen",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the menu starts open when uncontrolled.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "onOpenChange",
+            "type": "((open: boolean) => void)",
+            "required": false,
+            "description": "Fires when the menu opens or closes."
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the picker is disabled: the trigger takes no press and the menu cannot open.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "size",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "Trigger size, on the row-control scale: `default` is 40px, `compact` 32px.",
+            "defaultValue": "default"
+          },
+          {
+            "name": "placement",
+            "type": "\"top\" | \"bottom\"",
+            "required": false,
+            "description": "Which side of the trigger the menu prefers; it flips when that side has no room.",
+            "defaultValue": "bottom"
+          },
+          {
+            "name": "align",
+            "type": "\"start\" | \"end\"",
+            "required": false,
+            "description": "Which trigger edge the menu lines up with.",
+            "defaultValue": "end"
+          },
+          {
+            "name": "footer",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Content after the themes, below a divider: a link to make a theme of your own, say. Give each control in it `role=\"menuitem\"`, since a menu holds only menu items; the arrow keys reach it."
+          },
+          {
+            "name": "triggerLabel",
+            "type": "((label: string) => string)",
+            "required": false,
+            "description": "Accessible name of the trigger, given the active theme's name. Defaults to \"Theme: \" followed by it.",
+            "defaultValue": "(label: string) => `Theme: ${label}`"
+          },
+          {
+            "name": "menuLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the menu.",
+            "defaultValue": "Theme"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
+    "name": "ThemeToggle",
+    "label": "Theme toggle",
+    "slug": "theme-toggle",
+    "category": "actions",
+    "description": "The colour-mode control: System, Light and Dark over a stored setting, with the script that applies it before first paint.",
+    "client": true,
+    "importPath": "rift-ds/components/ThemeToggle/ThemeToggle",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "ThemeToggle",
+        "props": [
+          {
+            "name": "value",
+            "type": "\"dark\" | \"system\" | \"light\"",
+            "required": false,
+            "description": "The setting shown, for a host that owns colour mode (its own settings\nstore, or a library such as next-themes). A pick then only calls\n`onValueChange`, and the host applies it. Leave undefined to let the\ntoggle keep the setting in its own store, `useColorMode`."
+          },
+          {
+            "name": "defaultValue",
+            "type": "\"dark\" | \"system\" | \"light\"",
+            "required": false,
+            "description": "The setting applied when the store holds no choice yet, for uncontrolled use. Without it, a first visit follows the operating system."
+          },
+          {
+            "name": "onValueChange",
+            "type": "((value: \"dark\" | \"system\" | \"light\") => void)",
+            "required": false,
+            "description": "Fires with the setting after every pick, controlled or not."
+          },
+          {
+            "name": "size",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "Control size, on SegmentedControl's scale.",
+            "defaultValue": "compact"
+          },
+          {
+            "name": "showLabels",
+            "type": "boolean",
+            "required": false,
+            "description": "Show each segment's label beside its icon. Set `false` for an icon-only strip: each label becomes the segment's tooltip on hover and keyboard focus, and stays its accessible name.",
+            "defaultValue": "true"
+          },
+          {
+            "name": "storageKey",
+            "type": "string",
+            "required": false,
+            "description": "The localStorage key the choice is kept under. Match the key given to `colorModeScript`. Default `theme`."
+          },
+          {
+            "name": "systemLabel",
+            "type": "string",
+            "required": false,
+            "description": "Label of the setting that follows the operating system.",
+            "defaultValue": "System"
+          },
+          {
+            "name": "lightLabel",
+            "type": "string",
+            "required": false,
+            "description": "Label of the light setting.",
+            "defaultValue": "Light"
+          },
+          {
+            "name": "darkLabel",
+            "type": "string",
+            "required": false,
+            "description": "Label of the dark setting.",
+            "defaultValue": "Dark"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": ""
           }
         ]
       }
@@ -13376,7 +14550,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "headingLevel",
-            "type": "1 | 2 | 4 | 5 | 3 | 6",
+            "type": "1 | 2 | 4 | 3 | 5 | 6",
             "required": false,
             "description": "Level of the title's heading element",
             "defaultValue": "1"

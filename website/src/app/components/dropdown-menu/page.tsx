@@ -44,6 +44,21 @@ function SelectedStateDemo() {
   );
 }
 
+function CheckboxItemsDemo() {
+  const [shown, setShown] = React.useState<Record<string, boolean>>({ name: true, owner: true, due: false });
+  const toggle = (key: string) => setShown((current) => ({ ...current, [key]: !current[key] }));
+  return (
+    <DropdownMenu
+      trigger={<Button label="Columns" variant="secondary" />}
+      items={[
+        { label: "Name", checked: shown.name, onClick: () => toggle("name") },
+        { label: "Owner", checked: shown.owner, onClick: () => toggle("owner") },
+        { label: "Due date", checked: shown.due, onClick: () => toggle("due") },
+      ]}
+    />
+  );
+}
+
 const simpleItems: DropdownMenuEntry[] = [
   { label: "New file", icon: "note_add", onClick: () => {} },
   { label: "Open", icon: "folder_open", onClick: () => {} },
@@ -217,6 +232,19 @@ export default function DropdownMenuPage() {
             <div className={styles.variantRow}>
               <div className={styles.variantItem}>
                 <SelectedStateDemo />
+              </div>
+            </div>
+          </section>
+
+          {/* Checkbox items */}
+          <section className={styles.section}>
+            <SectionTitle title="Checkbox items" />
+            <p className={styles.introBody}>
+              When each option is picked on its own, give it a checked value. The row leads with the checkbox&apos;s own box, assistive technology hears it as a checkbox item, and choosing it leaves the menu open so several can be toggled in one visit. closeOnSelect overrides that either way.
+            </p>
+            <div className={styles.variantRow}>
+              <div className={styles.variantItem}>
+                <CheckboxItemsDemo />
               </div>
             </div>
           </section>

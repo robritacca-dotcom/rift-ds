@@ -22,7 +22,6 @@ import {
   AppSidebar,
   type AppSidebarSection,
 } from "rift-ds/components/AppSidebar/AppSidebar";
-import { Badge } from "rift-ds/components/Badge/Badge";
 import { Breadcrumb } from "rift-ds/components/Breadcrumb/Breadcrumb";
 import { Button } from "rift-ds/components/Button/Button";
 import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
@@ -31,6 +30,7 @@ import {
   type DataTableColumn,
   type DataTableRow,
 } from "rift-ds/components/DataTable/DataTable";
+import { TableToolbar } from "rift-ds/components/TableToolbar/TableToolbar";
 import {
   Dropdown,
   type DropdownOption,
@@ -235,23 +235,24 @@ const CAMPAIGNS: Campaign[] = [
   { id: "c16", name: "Annual report teaser", market: "Global", channel: "x", delivery: "paused", objective: "Traffic", updated: "2026-02-11", spend: 5720 },
 ];
 
-const DELIVERY_OPTIONS: DropdownOption[] = [
-  { label: "Active", value: "active" },
-  { label: "Paused", value: "paused" },
-  { label: "Draft", value: "draft" },
-  { label: "Completed", value: "completed" },
+/* Delivery as a status: each state in its role, in the order a campaign
+   moves through them. */
+const DELIVERY_OPTIONS = [
+  { label: "Draft", value: "draft", status: "neutral" as const },
+  { label: "Active", value: "active", status: "positive" as const },
+  { label: "Paused", value: "paused", status: "warning" as const },
+  { label: "Completed", value: "completed", status: "info" as const },
 ];
 
-const MONTH_NAMES: Record<string, string> = {
-  "01": "Jan", "02": "Feb", "03": "Mar", "04": "Apr", "05": "May",
-  "06": "Jun", "07": "Jul", "08": "Aug", "09": "Sep", "10": "Oct",
-  "11": "Nov", "12": "Dec",
-};
-
-function formatDate(iso: string): string {
-  const [year, month, day] = iso.split("-");
-  return `${MONTH_NAMES[month]} ${Number(day)}, ${year}`;
-}
+/* The channels a campaign runs on, for the Channel filter. */
+const CHANNEL_OPTIONS = [
+  { value: "google", label: "Google Ads" },
+  { value: "meta", label: "Meta" },
+  { value: "linkedin", label: "LinkedIn" },
+  { value: "x", label: "X" },
+  { value: "email", label: "Email" },
+  { value: "web", label: "Web" },
+];
 
 /* ------------------------------------------------------------- helpers */
 
@@ -330,75 +331,38 @@ export default function MarketingDashboard() {
     {
       key: "delivery",
       header: "Delivery",
-      width: "160px",
-      render: (row: DataTableRow) => (
-        <Dropdown
-          size="compact"
-          options={DELIVERY_OPTIONS}
-          value={delivery[row.id]}
-          onValueChange={(value) =>
-            setDelivery((current) => ({ ...current, [row.id]: value }))
-          }
-          aria-label={`Delivery state for ${row.values.name}`}
-          className={styles.deliverySelect}
-        />
-      ),
+      // A status that edits in place: the cell reads as its Badge, and a double click or Enter picks another.
+      type: "status",
+      editable: true,
+      sortable: true,
+      width: "150px",
+      options: DELIVERY_OPTIONS,
     },
     {
       key: "objective",
       header: "Objective",
+      type: "status",
       sortable: true,
-      render: (row: DataTableRow) => (
-        <Badge
-          variant={OBJECTIVE_VARIANT[String(row.values.objective)] ?? "neutral"}
-          label={String(row.values.objective)}
-        />
-      ),
+      options: Object.entries(OBJECTIVE_VARIANT).map(([value, status]) => ({ value, label: value, status })),
+    },
+    {
+      key: "channel",
+      header: "Channel",
+      // Hidden by default: the campaign cell already shows the channel's mark, so this column is there to filter by.
+      defaultHidden: true,
+      options: CHANNEL_OPTIONS,
     },
     {
       key: "updated",
       header: "Last updated",
+      type: "date",
       sortable: true,
-      render: (row: DataTableRow) => (
-        <span className={styles.dateCell}>
-          {formatDate(String(row.values.updated))}
-        </span>
-      ),
     },
     {
       key: "spend",
       header: "Spend",
+      type: "currency",
       sortable: true,
-      align: "right",
-      render: (row: DataTableRow) =>
-        `$${Number(row.values.spend).toLocaleString("en-US")}`,
-    },
-    {
-      key: "actions",
-      header: "",
-      align: "right",
-      render: (row: DataTableRow) => (
-        <span className={styles.rowActions}>
-          <CircularButton
-            icon="delete"
-            variant="tertiary"
-            size="compact"
-            ariaLabel={`Delete ${row.values.name}`}
-          />
-          <CircularButton
-            icon="edit"
-            variant="tertiary"
-            size="compact"
-            ariaLabel={`Edit ${row.values.name}`}
-          />
-          <CircularButton
-            icon="more_vert"
-            variant="tertiary"
-            size="compact"
-            ariaLabel={`More actions for ${row.values.name}`}
-          />
-        </span>
-      ),
     },
   ];
 
@@ -408,7 +372,7 @@ export default function MarketingDashboard() {
       name: c.name,
       market: c.market,
       channel: c.channel,
-      delivery: c.delivery,
+      delivery: delivery[c.id],
       objective: c.objective,
       updated: c.updated,
       spend: c.spend,
@@ -751,34 +715,29 @@ export default function MarketingDashboard() {
             columns={columns}
             rows={rows}
             caption="Campaigns"
-            searchable
-            searchPlaceholder="Search campaigns"
             selectable
-            pageSize={16}
+            multiSort
+            columnMenu
+            phoneLayout="stack"
+            defaultPageSize={16}
+            pageSizeOptions={[8, 16, 32]}
             defaultSort={{ key: "updated", direction: "desc" }}
+            onCellEdit={({ row, key, value }) => {
+              if (key === "delivery") setDelivery((current) => ({ ...current, [row.id]: String(value) }));
+            }}
+            rowActions={(row) => [
+              { id: "edit", label: `Edit ${row.values.name}`, icon: "edit", inline: true, onSelect: () => {} },
+              { id: "duplicate", label: "Duplicate", icon: "content_copy", onSelect: () => {} },
+              { id: "delete", label: `Delete ${row.values.name}`, icon: "delete", destructive: true, onSelect: () => {} },
+            ]}
             toolbar={
-              <div className={styles.tableFilters}>
-                <RangeSelect
-                  options={[
-                    { label: "All channels", value: "all" },
-                    { label: "Google Ads", value: "google" },
-                    { label: "Meta", value: "meta" },
-                    { label: "LinkedIn", value: "linkedin" },
-                  ]}
-                  initial="all"
-                  label="Filter by channel"
-                />
-                <RangeSelect
-                  options={[
-                    { label: "All objectives", value: "all" },
-                    { label: "Awareness", value: "awareness" },
-                    { label: "Conversions", value: "conversions" },
-                    { label: "Leads", value: "leads" },
-                  ]}
-                  initial="all"
-                  label="Filter by objective"
-                />
-              </div>
+              <TableToolbar
+                bulkActions={[
+                  { id: "pause", label: "Pause", icon: "pause", onSelect: () => {} },
+                  { id: "duplicate", label: "Duplicate", icon: "content_copy", onSelect: () => {} },
+                  { id: "delete", label: "Delete", icon: "delete", destructive: true, onSelect: () => {} },
+                ]}
+              />
             }
           />
         </section>

@@ -116,12 +116,13 @@ export type ChatEvent =
       hold the turn open) and the provider fetches them after the turn
       commits instead. */
   | { type: 'followups'; items: string[] }
-  /** Rich content to render with the committed turn, as a React node. Only
-      an in-browser transport can yield one (a script, or `injectTurn`); the
-      network form is `card`. */
+  /** Rich content, as a React node, drawn on the live reply as it arrives
+      and kept with the committed turn. Only an in-browser transport can
+      yield one (a script, or `injectTurn`); the network form is `card`. */
   | { type: 'content'; node: ReactNode }
-  /** Rich content to render with the committed turn, as serialisable data
-      the provider's `renderers` draw. The form a server can send. */
+  /** Rich content as serialisable data the provider's `renderers` draw,
+      on the live reply as it arrives and with the committed turn. The form
+      a server can send. */
   | { type: 'card'; card: ChatCard }
   /** Questions the agent asks with answers to pick, drawn under the committed
       turn in place of follow-ups: a turn that asks is never asked about. */
@@ -267,9 +268,9 @@ export interface LiveResponse {
   exchangeId?: string;
   /** Carried from the transport's `followups` event into the committed turn. */
   followups?: string[];
-  /** Carried from the transport's `content` event into the committed turn. */
+  /** The transport's `content` event, drawn on the live reply and carried into the committed turn. */
   content?: ReactNode;
-  /** Carried from the transport's `card` event into the committed turn. */
+  /** The transport's `card` event, drawn on the live reply and carried into the committed turn. */
   card?: ChatCard;
   /** Carried from the transport's `question` event into the committed turn. */
   question?: ChatQuestionSet;

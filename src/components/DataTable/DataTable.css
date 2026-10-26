@@ -33,6 +33,14 @@
   flex-wrap: wrap;
 }
 
+/* A TableToolbar in the slot takes the whole row and no more, so it
+   measures the table's width, not its own content's, and folds to icons
+   when the table is narrow. */
+.ds-data-table__filters:has(> .ds-table-toolbar) {
+  flex: 1 1 100%;
+  min-width: 0;
+}
+
 /* The search field sits at the end of the toolbar even with no filters.
    It flexes from a fixed-feeling width instead of pinning one: on a roomy
    row it reads as the familiar 240px field, and when the toolbar wraps it
@@ -86,6 +94,411 @@
   color: var(--color-text-primary);
 }
 
+/* While several columns sort, each sorted header numbers its place in the
+   order, tucked against its arrow. */
+.ds-data-table__sort-rank {
+  flex-shrink: 0;
+  margin-inline-start: calc(-1 * var(--gap-050));
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   COLUMNS AND ROWS
+   The frame, fixed widths, pinned and sticky
+   cells, the grips, the guide and drop lines.
+   Widths and pinned offsets arrive as custom
+   properties on the table (--ds-dt-w-N,
+   --ds-dt-off-N, --ds-dt-total), written per
+   frame while a grip is dragged and committed
+   on release.
+   ============================================ */
+
+/* The frame holds the guide and drop lines, and is the scroll container
+   a sticky header and pinned columns stick to. */
+.ds-data-table__frame {
+  position: relative;
+}
+
+/* Fixed widths: every column holds its own width exactly, and a filler
+   column takes whatever the frame has left over, so the header band and
+   the rows always run the frame's full width. Wider than the frame, the
+   table is the sum of its columns and the filler is nothing. */
+.ds-data-table__grid--fixed {
+  table-layout: fixed;
+  width: 100%;
+  min-width: var(--ds-dt-total);
+}
+
+/* Under fixed widths a cell clips what does not fit, so a narrow column
+   never draws over its neighbour. Menus and tooltips inside are fixed
+   panels and escape the clip. A pinned edge cell clips its content box
+   instead, since its scrolling-edge shadow is drawn outside the cell. */
+.ds-data-table__grid--fixed .ds-table__body .ds-table__cell:not(.ds-data-table__cell--pinned-edge),
+.ds-data-table__grid--fixed .ds-data-table__cell--pinned-edge > .ds-table__cell-content {
+  overflow: hidden;
+}
+
+.ds-data-table__filler {
+  padding: 0;
+}
+
+/* Every cell of a pinned column sticks to its edge over an opaque body,
+   with any row tint (hover, stripe, selection) laid over that body, so
+   the scrolling cells never show through. */
+.ds-data-table__cell--pinned {
+  --ds-dt-tint: transparent;
+
+  position: sticky;
+  z-index: 1;
+  background-color: var(--color-table-body-bg);
+  background-image: linear-gradient(var(--ds-dt-tint), var(--ds-dt-tint));
+}
+
+/* Body rows only: the header row is a row too, and never takes a hover tint. */
+.ds-table__body .ds-table__row:hover > .ds-data-table__cell--pinned {
+  --ds-dt-tint: var(--color-table-row-hover-bg);
+}
+
+.ds-table--striped .ds-table__body .ds-table__row:nth-child(even) > .ds-data-table__cell--pinned {
+  --ds-dt-tint: var(--color-table-row-stripe-bg);
+}
+
+.ds-table__row--selected > .ds-data-table__cell--pinned {
+  --ds-dt-tint: var(--color-table-row-selected-bg);
+}
+
+.ds-table__head .ds-data-table__cell--pinned {
+  --ds-dt-tint: var(--color-table-header-bg);
+
+  z-index: 4;
+}
+
+/* One fixed layer order, so nothing changes place under the pointer:
+   body cells, pinned body cells (1), a pinned body cell that is hovered or
+   holds focus (2, so a menu it opens clears the rows below), the sticky
+   header (3), pinned header cells (4), a header being dragged (5), the
+   resize guide and drop line (6), and over everything any cell whose menu is
+   open (7), so a column's or a row's menu is never covered by a pinned cell
+   beside it. The header always wins over the rows: a row scrolled half
+   under it never paints over it, hovered or not. */
+.ds-table__body .ds-data-table__cell--pinned:hover,
+.ds-table__body .ds-data-table__cell--pinned:focus-within {
+  z-index: 2;
+}
+
+/* A menu opened from a cell is drawn in that cell's layer, so the cell
+   rises above the whole table while the menu is open. */
+/* Specific enough to outrank the sticky and pinned header rules. */
+.ds-table .ds-table__head .ds-table__header-cell:has([aria-expanded='true']),
+.ds-table .ds-table__body .ds-table__cell:has([aria-expanded='true']) {
+  z-index: 7;
+}
+
+/* The pinned edge: a hairline always, and a soft shadow on the scrolling
+   side once content has scrolled under it. */
+.ds-data-table__cell--pinned-start.ds-data-table__cell--pinned-edge {
+  border-inline-end: var(--border-025) solid var(--color-table-divider);
+}
+
+.ds-data-table__cell--pinned-end.ds-data-table__cell--pinned-edge {
+  border-inline-start: var(--border-025) solid var(--color-table-divider);
+}
+
+/* The shadow is cast by the whole cell and clipped to the strip past its
+   inner edge, so it falls only on the cells scrolling beneath, at full
+   strength, and joins cell to cell into one edge down the column. */
+.ds-data-table__cell--pinned-edge::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  box-shadow: var(--shadow-table-pinned);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+/* ds-allow(spacing): the clip reaches past the cell by the shadow's blur, not a layout step */
+.ds-data-table__cell--pinned-start.ds-data-table__cell--pinned-edge::after {
+  clip-path: inset(0 -24px 0 100%);
+}
+
+/* ds-allow(spacing): the clip reaches past the cell by the shadow's blur, not a layout step */
+.ds-data-table__cell--pinned-end.ds-data-table__cell--pinned-edge::after {
+  clip-path: inset(0 100% 0 -24px);
+}
+
+[data-scrolled-start] .ds-data-table__cell--pinned-start.ds-data-table__cell--pinned-edge::after,
+[data-scrolled-end] .ds-data-table__cell--pinned-end.ds-data-table__cell--pinned-edge::after {
+  opacity: 1;
+}
+
+/* A sticky header holds over a body that scrolls inside the frame. */
+.ds-data-table__grid--sticky .ds-table__head .ds-table__header-cell {
+  --ds-dt-tint: var(--color-table-header-bg);
+
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background-color: var(--color-table-body-bg);
+  background-image: linear-gradient(var(--ds-dt-tint), var(--ds-dt-tint));
+}
+
+.ds-data-table__grid--sticky .ds-table__head .ds-data-table__cell--pinned {
+  z-index: 4;
+}
+
+/* Header cells are positioned for their resize grip. A pinned or sticky
+   header cell is already positioned (sticky), so this only reaches the
+   rest; written low-specificity so it never outranks the sticky rules. */
+:where(.ds-table__head) .ds-table__header-cell:not(.ds-data-table__cell--pinned) {
+  position: relative;
+}
+
+.ds-data-table__header-inner {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-050);
+  min-width: 0;
+}
+
+.ds-data-table__header--movable {
+  cursor: grab;
+  user-select: none;
+}
+
+.ds-table__header-cell[data-dragging] {
+  z-index: 5;
+  opacity: 0.6;
+  cursor: grabbing;
+}
+
+/* The options button holds its place in every state, so the header never
+   shifts; it shows on hover, on focus, and always on a touch screen. */
+/* A header narrower than its label truncates the label, never the
+   controls: the sort glyph and the menu button keep their size and the
+   cell's padding, so a button's hover fill never reaches the divider. */
+.ds-data-table__header-inner .ds-data-table__sort {
+  min-width: 0;
+}
+
+.ds-data-table__label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ds-data-table__sort-icon {
+  flex-shrink: 0;
+}
+
+.ds-data-table__menu {
+  flex-shrink: 0;
+  margin-inline-start: auto;
+  opacity: 0;
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+/* A centred column centres its label with its options button beside it. */
+.ds-data-table__header-inner[data-align='center'] > .ds-data-table__menu {
+  margin-inline-start: 0;
+}
+
+/* An end-aligned column's label sits over its figures, at the end, so its
+   options button takes the start instead. */
+.ds-data-table__header-inner[data-align='end'] > .ds-data-table__menu {
+  order: -1;
+  margin-inline-start: 0;
+  margin-inline-end: auto;
+}
+
+.ds-table__header-cell:hover .ds-data-table__menu,
+.ds-table__header-cell:focus-within .ds-data-table__menu,
+.ds-table__header-cell:focus .ds-data-table__menu {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .ds-data-table__menu {
+    opacity: 1;
+  }
+}
+
+/* The resize grip: wider than the line it shows, straddling the edge. */
+.ds-data-table__resize {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: calc(-1 * var(--padding-100));
+  z-index: 2;
+  width: var(--padding-200);
+  cursor: col-resize;
+  touch-action: none;
+}
+
+.ds-data-table__resize::after {
+  content: '';
+  position: absolute;
+  inset-block: var(--padding-200);
+  inset-inline-start: calc(50% - var(--border-025));
+  width: var(--border-050);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-icon-secondary);
+  opacity: 0;
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-data-table__resize:hover::after,
+[data-resizing] .ds-data-table__resize:active::after {
+  opacity: 1;
+}
+
+/* Touch screens get the header menu's Fit and Reset instead of a grip a
+   finger cannot find. */
+@media (pointer: coarse) {
+  .ds-data-table__resize {
+    display: none;
+  }
+}
+
+/* The guide line while resizing, and the drop line while moving. */
+.ds-data-table__guide,
+.ds-data-table__drop {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  z-index: 6;
+  pointer-events: none;
+  background-color: var(--color-icon-primary);
+}
+
+.ds-data-table__guide,
+.ds-data-table__drop[data-axis='x'] {
+  inset-block-end: 0;
+  width: var(--border-050);
+}
+
+.ds-data-table__drop[data-axis='y'] {
+  inset-inline-end: 0;
+  height: var(--border-050);
+}
+
+.ds-data-table__guide[hidden],
+.ds-data-table__drop[hidden] {
+  display: none;
+}
+
+/* The row grip and the selection column. */
+.ds-data-table__utility {
+  padding-inline: var(--padding-200);
+}
+
+.ds-data-table__grip {
+  --icon-size: var(--icon-size-500);
+
+  display: inline-flex;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--color-text-secondary);
+  cursor: grab;
+  touch-action: none;
+}
+
+.ds-data-table__grip:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+  border-radius: var(--radius-050);
+}
+
+.ds-data-table__grip[aria-disabled='true'] {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ds-table__row[data-dragging] {
+  position: relative;
+  z-index: 2;
+  opacity: 0.8;
+}
+
+/* The actions column: its buttons side by side at the end, shown on the
+   row's hover and focus (always on a touch screen) unless the table asks
+   for them always. */
+/* The actions column holds the most buttons any row on the page shows
+   (--ds-dt-actions, from the component), at the compact control height,
+   with the gap between them and the cell's own padding either side. */
+.ds-data-table__frame > .ds-table {
+  --ds-dt-w-actions: calc(
+    var(--ds-dt-actions, 1) * var(--control-height-compact) + (var(--ds-dt-actions, 1) - 1) * var(--gap-100) +
+      2 * var(--padding-400)
+  );
+}
+
+.ds-data-table__frame > .ds-table--compact {
+  --ds-dt-w-actions: calc(
+    var(--ds-dt-actions, 1) * var(--control-height-compact) + (var(--ds-dt-actions, 1) - 1) * var(--gap-100) +
+      2 * var(--padding-300)
+  );
+}
+
+.ds-data-table__actions-row {
+  justify-content: flex-end;
+  gap: var(--gap-100);
+}
+
+/* On hover the inline actions fade in beside the More button, which
+   stays at rest so the column always says what it holds. */
+.ds-data-table__grid--actions-hover .ds-data-table__inline-action {
+  opacity: 0;
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-data-table__grid--actions-hover .ds-table__row:hover .ds-data-table__inline-action,
+.ds-data-table__grid--actions-hover .ds-table__row:focus-within .ds-data-table__inline-action {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .ds-data-table__grid--actions-hover .ds-data-table__inline-action {
+    opacity: 1;
+  }
+}
+
+/* Grid mode: the active cell takes the focus ring, inset so the frame
+   never clips it. */
+.ds-table [data-col]:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: -2px;
+}
+
+/* Cell text: wrap is the table's own; the rest fit a line or two. */
+.ds-data-table__text {
+  min-width: 0;
+}
+
+.ds-data-table__text--nowrap {
+  white-space: nowrap;
+}
+
+.ds-data-table__text--truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ds-data-table__text--lines-2 {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
 /* ============================================
    FOOTER
    ============================================ */
@@ -98,6 +511,30 @@
   flex-wrap: wrap;
 }
 
+/* The pager and, before it, the page size picker. */
+.ds-data-table__paging {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--gap-300);
+}
+
+.ds-data-table__page-size {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-200);
+}
+
+.ds-data-table__page-size-label {
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
 .ds-data-table__count {
   color: var(--color-text-tertiary);
   font-family: var(--font-paragraph-sm-family);
@@ -106,4 +543,747 @@
   line-height: var(--font-paragraph-sm-line-height);
   letter-spacing: var(--font-paragraph-sm-letter-spacing);
   font-variant-numeric: tabular-nums;
+}
+
+/* ============================================
+   Editing
+   An editor covers its cell's own box, so a row never grows or reflows
+   while a cell edits. The cell stops clipping while it edits, so the
+   field's focus ring shows whole, but keeps its layer: a pinned column
+   still covers a scrolling cell's editor (the actions column's Save
+   included), and only a cell whose list is open rises over the table (the
+   open-menu rule above).
+   ============================================ */
+
+.ds-data-table .ds-table__body .ds-table__cell.ds-data-table__cell--editing {
+  overflow: visible;
+}
+
+/* A pinned cell is already positioned (sticky); the rest take a box for
+   the editor to sit in. */
+:where(.ds-table__body) .ds-data-table__cell--editing:not(.ds-data-table__cell--pinned) {
+  position: relative;
+}
+
+.ds-data-table__cell--editing > .ds-table__cell-content {
+  visibility: hidden;
+}
+
+.ds-data-table__editor {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  padding-inline: var(--padding-100);
+}
+
+.ds-data-table__editor > :first-child {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* A long text editor grows over the rows below as a floating layer,
+   never by pushing them. */
+.ds-data-table__editor--textarea {
+  inset-block-end: auto;
+  min-height: 100%;
+  align-items: flex-start;
+  padding-block: var(--padding-100);
+}
+
+/* The validation message floats under the editor, over the rows below. */
+.ds-data-table__edit-error {
+  position: absolute;
+  inset-block-start: calc(100% + var(--gap-100));
+  inset-inline-start: var(--padding-100);
+  max-width: calc(100% - 2 * var(--padding-100));
+  min-width: max-content;
+  padding: var(--padding-100) var(--padding-200);
+  border: var(--border-025) solid var(--color-status-error-border);
+  border-radius: var(--radius-200);
+  background-color: var(--color-status-error-bg);
+  color: var(--color-status-error-text);
+  box-shadow: var(--shadow-floating);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* A save in flight shows its new value, quieter, until it settles. */
+.ds-data-table__cell--pending > .ds-table__cell-content {
+  color: var(--color-text-tertiary);
+}
+
+/* A save that failed rolled the value back; the cell says so until it is
+   edited again (the message is its tooltip and was announced). */
+.ds-table__cell.ds-data-table__cell--failed {
+  box-shadow: inset 0 0 0 var(--border-025) var(--color-status-error-border);
+}
+
+/* Cell mode: an editable cell shows a pencil at its end edge, centred on
+   the row, while the pointer is over it or the cell holds focus (which is
+   how a touch screen reaches it). It sits over the cell's padding on the
+   row's hover fill, in the layout at rest and faded in, so nothing moves. */
+:where(.ds-table__body) .ds-data-table__cell--editable:not(.ds-data-table__cell--pinned) {
+  position: relative;
+}
+
+/* The pencil sits on the side the value leaves free: the end of a cell
+   that reads from the start, the start of one that reads from the end
+   (figures), so it covers the least of the value. Its fill is solid, the
+   body under the hovered row's tint, so text never shows through it. */
+.ds-data-table .ds-data-table__edit-hint {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-end: var(--padding-100);
+  translate: 0 -50%;
+  background-color: var(--color-table-body-bg);
+  background-image: linear-gradient(var(--color-table-row-hover-bg), var(--color-table-row-hover-bg));
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-data-table .ds-data-table__edit-hint--start {
+  inset-inline-start: var(--padding-100);
+  inset-inline-end: auto;
+}
+
+.ds-data-table__cell--editable:hover .ds-data-table__edit-hint,
+.ds-data-table__cell--editable:focus .ds-data-table__edit-hint {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Row mode: the row being edited takes the selected tint, so it reads as
+   the one row that is open, pinned cells included. */
+.ds-data-table .ds-table__row.ds-data-table__row--editing {
+  background-color: var(--color-table-row-selected-bg);
+}
+
+.ds-table__row.ds-data-table__row--editing > .ds-data-table__cell--pinned {
+  --ds-dt-tint: var(--color-table-row-selected-bg);
+}
+
+/* Save and Cancel say which is which by colour as well as by shape. */
+.ds-data-table__save .ds-circular-button__icon {
+  color: var(--color-status-positive-icon);
+}
+
+.ds-data-table__cancel .ds-circular-button__icon {
+  color: var(--color-status-error-icon);
+}
+
+/* ============================================
+   Filters
+   ============================================ */
+
+/* A toolbar in the table's toolbar slot takes the whole row. */
+.ds-data-table__filters:has(> .ds-table-toolbar) {
+  flex: 1 1 100%;
+}
+
+/* The one condition editor every filter opens: operator, then value. Its
+   width is fixed, so a multi-select's chips wrap onto new lines instead of
+   widening the panel with every value picked. */
+.ds-data-table__filter-editor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+  width: 280px;
+  max-width: 100%;
+}
+
+.ds-data-table__filter-editor > * {
+  min-width: 0;
+}
+
+.ds-data-table__filter-pair {
+  display: flex;
+  gap: var(--gap-200);
+}
+
+.ds-data-table__filter-pair > * {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+/* A filtered header's mark, after its label: the filter glyph alone,
+   a button the Popover draws round it, which reopens the filter. */
+.ds-data-table__filter-mark {
+  flex-shrink: 0;
+  display: inline-flex;
+}
+
+.ds-data-table__filter-mark button {
+  --icon-size: var(--icon-size-500);
+
+  display: inline-flex;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-100);
+  background: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+
+.ds-data-table__filter-mark button:hover {
+  color: var(--color-icon-primary);
+}
+
+.ds-data-table__filter-mark button:focus-visible {
+  outline: var(--border-050) solid var(--color-action-primary-bg);
+  outline-offset: var(--border-025);
+}
+
+/* A list filter's value: a search field over a checkbox per choice, the
+   list scrolling inside the panel once it is long. */
+.ds-data-table__choices {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+}
+
+.ds-data-table__choice-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+  max-height: 240px;
+  overflow-y: auto;
+  padding-block: var(--padding-050);
+}
+
+.ds-data-table__choices-empty {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-tertiary);
+}
+
+/* ============================================
+   TYPED CELLS
+   What a column's `type` draws: figures that
+   line up, a bar with its percent, a person,
+   tags, a check, a link.
+   ============================================ */
+
+.ds-data-table__typed-number {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.ds-data-table__typed-progress {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-200);
+  width: 100%;
+  min-width: 0;
+}
+
+.ds-data-table__typed-progress .ds-progress-bar {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.ds-data-table__typed-person {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-200);
+  min-width: 0;
+  max-width: 100%;
+}
+
+.ds-data-table__typed-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ds-data-table__typed-tags {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-100);
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.ds-data-table__typed-more {
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+  color: var(--color-text-secondary);
+}
+
+.ds-data-table__typed-check {
+  display: inline-flex;
+}
+
+.ds-data-table__typed-check-icon {
+  display: block;
+  color: var(--color-icon-primary);
+}
+
+.ds-data-table__typed-link {
+  /* Body text with its underline: the underline marks it as a link, and the
+     text colour holds AA on every table surface in both modes, which the
+     action colour's link shade does not on a dark card. */
+  color: inherit;
+  text-decoration: underline;
+}
+
+/* ============================================
+   STACKED
+   `phoneLayout="stack"` narrower than a phone:
+   each row a card, its row header the title
+   (with the checkbox before it and the actions
+   after), every other column a label and value
+   pair below. Column widths, pinning, grips and
+   the header row step aside; the header is still
+   read, from a visually hidden thead.
+   ============================================ */
+
+.ds-data-table__grid--stacked,
+.ds-data-table__grid--stacked > tbody {
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+
+.ds-data-table__grid--stacked .ds-table__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: var(--gap-200);
+  row-gap: var(--gap-100);
+  padding: var(--padding-300);
+  border-block-end: var(--border-025) solid var(--color-table-divider);
+  background-color: var(--color-table-body-bg);
+}
+
+.ds-data-table__grid--stacked .ds-table__row:last-child {
+  border-block-end: none;
+}
+
+.ds-data-table__grid--stacked .ds-table__row--selected {
+  background-color: var(--color-table-row-selected-bg);
+}
+
+.ds-data-table__grid--stacked .ds-table__cell {
+  position: static;
+  display: block;
+  width: auto;
+  min-width: 0;
+  padding: 0;
+  border: none;
+  box-shadow: none;
+  background: none;
+  text-align: start;
+}
+
+.ds-data-table__grid--stacked .ds-table__cell--row-header {
+  flex: 1 1 0;
+  font-family: var(--font-paragraph-emphasis-family);
+  font-size: var(--font-paragraph-emphasis-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-emphasis-letter-spacing);
+}
+
+.ds-data-table__grid--stacked .ds-data-table__utility,
+.ds-data-table__grid--stacked .ds-data-table__actions {
+  flex: none;
+  width: auto;
+}
+
+.ds-data-table__grid--stacked .ds-data-table__actions {
+  order: 1;
+}
+
+/* A row has no drag on a card, and no filler column. */
+.ds-data-table__grid--stacked [data-col='ds-data-table-grip'],
+.ds-data-table__grid--stacked .ds-data-table__filler {
+  display: none;
+}
+
+/* Every other column: its label, then its value, on a line of its own. */
+.ds-data-table__grid--stacked .ds-table__cell:not(.ds-table__cell--row-header, .ds-data-table__utility, .ds-data-table__actions) {
+  order: 2;
+  display: grid;
+  flex-basis: 100%;
+  /* A quarter for the label, enough for a header word, so the value sits close to it. */
+  grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+  align-items: center;
+  gap: var(--gap-200);
+}
+
+.ds-data-table__stack-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+  color: var(--color-text-secondary);
+}
+
+/* The table's own controls whose glyph is all a reader sees of them (the
+   row grip, the filter mark, the group and details chevrons) take the
+   secondary text colour, which holds the 3:1 a control needs on every
+   table surface; the secondary icon colour does not in light mode. */
+
+/* ============================================
+   GROUPS AND TOTALS
+   A group is its own body, led by a group row on
+   the header's tint: the toggle, the value drawn
+   through its column's type, the count, and each
+   column's group total in its own cell. The
+   totals footer holds at the table's foot.
+   ============================================ */
+
+.ds-data-table__group-row > .ds-table__cell,
+.ds-data-table__group-row > .ds-data-table__cell--pinned {
+  --ds-dt-tint: var(--color-table-header-bg);
+
+  background-color: var(--color-table-body-bg);
+  background-image: linear-gradient(var(--ds-dt-tint), var(--ds-dt-tint));
+}
+
+/* A group row takes no hover tint: it is a heading, not a record. */
+.ds-table__body .ds-data-table__group-row:hover > .ds-table__cell,
+.ds-table__body .ds-data-table__group-row:hover > .ds-data-table__cell--pinned {
+  --ds-dt-tint: var(--color-table-header-bg);
+}
+
+/* The group's label runs past its first column over the empty cells beside
+   it, so a long value is never clipped to one column's width. */
+.ds-data-table__group-cell,
+.ds-data-table__group-cell > .ds-table__cell-content {
+  overflow: visible;
+}
+
+.ds-data-table__group-label {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-200);
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.ds-data-table__group-toggle {
+  --icon-size: var(--icon-size-500);
+
+  display: inline-flex;
+  flex-shrink: 0;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-050);
+  background: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+
+.ds-data-table__group-toggle:hover {
+  color: var(--color-icon-primary);
+}
+
+.ds-data-table__group-toggle:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+.ds-data-table__group-chevron {
+  transition: rotate var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-data-table__group-toggle[aria-expanded='true'] .ds-data-table__group-chevron {
+  rotate: 90deg;
+}
+
+.ds-data-table__group-value {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  font-family: var(--font-paragraph-emphasis-family);
+  font-weight: var(--font-paragraph-emphasis-weight);
+}
+
+.ds-data-table__group-count,
+.ds-data-table__group-total {
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-secondary);
+}
+
+.ds-data-table__group-total {
+  color: var(--color-text-primary);
+}
+
+/* The totals footer holds at the foot of a table that scrolls, over the
+   rows, on the header's tint and divided from them like the header is. */
+.ds-data-table__totals .ds-table__cell {
+  --ds-dt-tint: var(--color-table-header-bg);
+
+  position: sticky;
+  bottom: 0;
+  z-index: 3;
+  border-block-start: var(--border-025) solid var(--color-table-divider);
+  background-color: var(--color-table-body-bg);
+  background-image: linear-gradient(var(--ds-dt-tint), var(--ds-dt-tint));
+}
+
+.ds-data-table__totals .ds-data-table__cell--pinned {
+  z-index: 4;
+}
+
+.ds-data-table__total {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--gap-100);
+  min-width: 0;
+  max-width: 100%;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-050);
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.ds-data-table__total:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+.ds-data-table__total-name {
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+  color: var(--color-text-secondary);
+}
+
+.ds-data-table__total-value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-variant-numeric: tabular-nums;
+}
+
+/* An unpicked footer cell offers Calculate only while the footer is hovered
+   or focused, so the foot stays quiet; it is in the layout at rest, so
+   nothing moves when it appears. */
+.ds-data-table__total--empty {
+  opacity: 0;
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-data-table__totals:hover .ds-data-table__total--empty,
+.ds-data-table__total--empty:focus-visible,
+.ds-data-table__total--empty[aria-expanded='true'] {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .ds-data-table__total--empty {
+    opacity: 1;
+  }
+}
+
+/* Stacked, a group row is the cards' heading: its label alone. */
+.ds-data-table__grid--stacked .ds-data-table__group-row > .ds-table__cell:not(.ds-data-table__group-cell) {
+  display: none;
+}
+
+.ds-data-table__grid--stacked .ds-data-table__group-row {
+  background-color: var(--color-table-header-bg);
+}
+
+/* ============================================
+   DETAILS
+   A row's chevron opens its details beneath it:
+   one cell across the table, its panel as wide as
+   the visible table and held to the start edge,
+   opening with a height ease.
+   ============================================ */
+
+.ds-data-table__expand {
+  --icon-size: var(--icon-size-500);
+
+  display: inline-flex;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-050);
+  background: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+
+.ds-data-table__expand:hover {
+  color: var(--color-icon-primary);
+}
+
+.ds-data-table__expand:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+.ds-data-table__expand-chevron {
+  transition: rotate var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-data-table__expand[aria-expanded='true'] .ds-data-table__expand-chevron {
+  rotate: 90deg;
+}
+
+/* The details row takes no hover tint: it belongs to the row above it. */
+.ds-table__body .ds-data-table__detail-row:hover > .ds-table__cell,
+.ds-data-table__detail-row > .ds-table__cell {
+  padding: 0;
+  background-color: var(--color-table-body-bg);
+}
+
+.ds-data-table__detail {
+  position: sticky;
+  inset-inline-start: 0;
+  display: grid;
+  grid-template-rows: 1fr;
+  max-width: 100%;
+  animation: ds-data-table-detail-open var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-data-table__detail-body {
+  min-height: 0;
+  overflow: hidden;
+  padding: var(--padding-400);
+}
+
+@keyframes ds-data-table-detail-open {
+  from {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+}
+
+/* Stacked, the details close the card they belong to. */
+.ds-data-table__grid--stacked .ds-data-table__detail-row {
+  padding-block-start: 0;
+}
+
+.ds-data-table__grid--stacked [data-col='ds-data-table-expand'] {
+  order: 1;
+}
+
+.ds-data-table__grid--stacked .ds-data-table__detail-cell {
+  display: block;
+  flex-basis: 100%;
+}
+
+/* ============================================
+   SCALE
+   A virtualised body's spacer rows hold the
+   height of the rows not drawn and draw nothing;
+   the loading row closes the rows while the next
+   batch is on its way.
+   ============================================ */
+
+.ds-data-table__spacer > td {
+  padding: 0;
+  border: none;
+}
+
+.ds-table__body .ds-data-table__loading-row:hover > .ds-table__cell,
+.ds-data-table__loading-row > .ds-table__cell {
+  background-color: var(--color-table-body-bg);
+}
+
+.ds-data-table__loading {
+  position: sticky;
+  inset-inline-start: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-200);
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+  color: var(--color-text-secondary);
+}
+
+/* A header filter's editor sits in a compact menu row on DropdownMenu's
+   surface, the measure of a compact menu item, as the header's own menu. */
+.ds-data-table__menu-row {
+  padding: var(--padding-150) var(--padding-300);
+}
+
+/* ============================================
+   LOADING AND FAILED LOADS
+   A refetch keeps the rows on screen, dimmed and inert, under a thin
+   line that runs across the frame's top edge; a first load draws
+   skeleton rows; a failure over rows already shown is a Banner above.
+   ============================================ */
+
+.ds-data-table--refreshing .ds-table__body {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.ds-data-table__progress {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
+  z-index: var(--layer-sticky);
+  height: var(--border-050);
+  overflow: hidden;
+}
+
+.ds-data-table__progress::after {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  width: 40%;
+  background-color: var(--color-status-info-border);
+  animation: ds-data-table-progress var(--motion-duration-loop-shimmer) var(--motion-ease-linear) infinite;
+}
+
+@keyframes ds-data-table-progress {
+  from {
+    inset-inline-start: -40%;
+  }
+  to {
+    inset-inline-start: 100%;
+  }
+}
+
+/* A skeleton line sits in a box one text line tall, so a loading row is
+   as tall as a row of text and the rows that replace it do not jump. */
+.ds-data-table__skeleton {
+  display: flex;
+  align-items: center;
+  min-height: 1lh;
+}
+
+.ds-data-table__skeleton > .ds-skeleton {
+  width: 100%;
+}
+
+.ds-data-table__banner {
+  margin-block-end: var(--gap-300);
+  /* Banner is a page-wide strip; over a table it takes the frame's corner. */
+  border-radius: var(--radius-300);
 }

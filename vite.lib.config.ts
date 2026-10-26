@@ -25,7 +25,9 @@ export default defineConfig({
       entryRoot: 'src',
       outDir: 'dist',
       include: ['src'],
-      exclude: ['src/**/*.stories.tsx', 'src/**/*.stories.ts', 'src/stories'],
+      // The scaffold templates are source a consumer copies, shipped beside the
+      // bin by build-package.mjs, never types of the package.
+      exclude: ['src/**/*.stories.tsx', 'src/**/*.stories.ts', 'src/stories', 'src/cli'],
     }),
   ],
   build: {
@@ -64,10 +66,10 @@ export default defineConfig({
       formats: ['es'],
     },
     rollupOptions: {
-      // Every peer stays external: bundled, an optional peer would ship
-      // inside the tarball (and bill every consumer for it). The list is
-      // OPTIONAL_PEER_PACKAGES in scripts/generate-library-barrel.mjs plus
-      // the two required peers.
+      // Every peer and dependency stays external: bundled, an optional peer
+      // would ship inside the tarball (and bill every consumer for it). The
+      // list is OPTIONAL_PEER_PACKAGES in scripts/optional-peers.mjs
+      // plus the two required peers, plus the runtime dependencies.
       external: (id) =>
         id.endsWith('.css') ||
         /^react($|\/)/.test(id) ||
@@ -76,7 +78,10 @@ export default defineConfig({
         /^react-markdown($|\/)/.test(id) ||
         /^remark-gfm($|\/)/.test(id) ||
         /^@anthropic-ai\/sdk($|\/)/.test(id) ||
-        /^@upstash\/(ratelimit|redis)($|\/)/.test(id),
+        /^@upstash\/(ratelimit|redis)($|\/)/.test(id) ||
+        // A runtime dependency: the consumer's install provides it, so the
+        // tarball never carries a second copy.
+        /^@tanstack\//.test(id),
       output: {
         preserveModules: true,
         preserveModulesRoot: 'src',

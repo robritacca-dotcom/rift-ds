@@ -125,7 +125,7 @@ rounded:
   lg: 5px
   card: 7px
   xl: 14px
-  pill: 5px
+  pill: 4px
 
 spacing:
   xxs: 2px
@@ -160,7 +160,7 @@ components:
 
 # Volt theme
 
-Volt: Space Grotesk headings over Manrope text, #2c2a26 for actions, buttons squared to 5px, 4px inputs and 7px cards. Two shadows, one for what floats and one for dialogs. Everything else separates by contrast.
+Volt: Space Grotesk headings over Manrope text, #2c2a26 for actions, buttons squared to 4px, 4px inputs and 7px cards. Two shadows, one for what floats and one for dialogs. Everything else separates by contrast.
 
 Take it whole: `import 'rift-ds/tokens/presets/presets.css'` after the tokens, then set `data-brand="gold"` on `<html>`. See it at https://rift-ds.com/foundations/themes/gold.
 
@@ -213,7 +213,7 @@ Space Grotesk headings over Manrope text. Levels inside a tier share a weight an
 
 ## Shape
 
-Buttons squared to 5px, 4px inputs and 7px cards. Radius belongs to the element type, never to one instance.
+Buttons squared to 4px, 4px inputs and 7px cards. Radius belongs to the element type, never to one instance.
 
 - `xs`: 1px (`--radius-050`)
 - `sm`: 1px (`--radius-100`)
@@ -222,7 +222,7 @@ Buttons squared to 5px, 4px inputs and 7px cards. Radius belongs to the element 
 - `lg`: 5px (`--radius-400`)
 - `card`: 7px (`--radius-600`)
 - `xl`: 14px (`--radius-1200`)
-- `pill`: 5px (`--radius-pill`)
+- `pill`: 4px (`--radius-pill`)
 
 ## Space
 

@@ -36,6 +36,7 @@ export const CATEGORY_PREFIXES = [
   ['border', ['--border-']],
   ['shadow', ['--shadow-']],
   ['icons', ['--icon-size-']],
+  ['controls', ['--control-height-']],
   ['motion', ['--motion-']],
   ['stacking', ['--layer-']],
 ];

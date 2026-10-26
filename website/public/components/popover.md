@@ -2,7 +2,7 @@
 
 Contextual overlay panel with click and hover triggers, positioned relative to its anchor.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.14.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: overlays
 - Import: `import { Popover } from 'rift-ds';`
@@ -17,6 +17,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same dat
 | children | `ReactNode` | yes |  | Trigger element |
 | content | `ReactNode` | yes |  | Popover content. Replaces the native `content` attribute, which only means something on a `<meta>` element. |
 | size | `"default" \| "compact"` | no | `default` | Component size |
+| surface | `"menu" \| "panel"` | no | `panel` | The panel's surface. `panel` (the default) is the content panel: a 16px inset and the container border. `menu` is DropdownMenu's own surface (its 4px inset, input border and corner), for a popover that sits among menus and should read as one of them, such as a table toolbar's sort or column panel. |
 | position | `"top" \| "bottom" \| "left" \| "right"` | no | `bottom` | Preferred position |
 | trigger | `"hover" \| "click"` | no | `click` | Trigger mode |
 | open | `boolean` | no |  | Whether the popover is open (controlled mode) |

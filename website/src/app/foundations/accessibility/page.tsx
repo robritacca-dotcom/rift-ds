@@ -47,6 +47,14 @@ const gateRows = [
     },
   },
   {
+    id: "forced",
+    cells: {
+      gate: "Forced colors",
+      runs: "High contrast modes swap every colour for the user's own and flatten every fill, so the token layer re-points the roles that carry a state (a checked box, the selected segment, the primary button, a count) at system colours, the one fill the mode keeps. The table bench is rendered in that mode, and the check fails on a state with no fill of its own, an open panel with no edge or a focus ring that vanished.",
+      when: "After the website build, in CI and local verify",
+    },
+  },
+  {
     id: "presets",
     cells: {
       gate: "Theme contrast",
@@ -126,6 +134,13 @@ const inheritedRows = [
     cells: {
       behaviour: "Counted scroll lock",
       what: "The page unlocks when the last holder releases it, so two overlays never unlock the body under each other. Published as ./behaviors/useScrollLock so host chrome joins the same lock rather than fights it.",
+    },
+  },
+  {
+    id: "anchored",
+    cells: {
+      behaviour: "Anchored position",
+      what: "Every menu, listbox, picker, popover and tooltip is placed against its control so it shows whole: it flips to the other side when one has no room, stays inside the screen, and follows its control on scroll, so content inside a scrolling table or a narrow sidebar is never cut off where a keyboard or magnifier user cannot reach it.",
     },
   },
   {

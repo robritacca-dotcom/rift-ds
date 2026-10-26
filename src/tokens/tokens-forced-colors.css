@@ -1,0 +1,31 @@
+/* ============================================
+   FORCED COLORS
+   Windows high contrast and every other forced-colors mode. The browser
+   swaps each colour for the user's own and flattens every fill to the
+   page, so a state carried by a fill alone (a checked box, the selected
+   segment, the primary button, a count on an icon) would vanish. A system
+   colour is the one fill it keeps, so the roles that carry a state are
+   re-pointed at the system's own: the action family at Highlight, the
+   count at Mark. Shadows are dropped by the browser and borders kept, so
+   floating surfaces keep the hairline they already draw.
+
+   It defines no token of its own, only new values for existing ones, so
+   the token registry does not read it. The selector carries an id's
+   weight so it wins over every theme and preset sheet, whatever their
+   attribute selectors.
+   ============================================ */
+
+@media (forced-colors: active) {
+  :root:not(#ds-forced-colors) {
+    --color-action-primary-bg: Highlight;
+    --color-action-primary-bg-hover: Highlight;
+    --color-action-primary-bg-active: Highlight;
+    --color-action-primary-text: HighlightText;
+    --color-action-primary-text-active: HighlightText;
+    --color-action-primary-border: Highlight;
+    --color-action-primary-border-secondary: Highlight;
+    --color-action-primary-border-tertiary: Highlight;
+    --color-count-badge-bg: Mark;
+    --color-count-badge-text: MarkText;
+  }
+}

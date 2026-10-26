@@ -1,45 +1,48 @@
 # Building with rift-ds
 
-You are building React UI with rift-ds 1.13.0. Follow this file before writing any code with it. It was generated from the library's registries, so every name in it exists.
+You are building React UI with rift-ds 1.14.0. Follow this file before writing any code with it. It was generated from the library's registries, so every name in it exists.
 
-## Install
+## Start a Next.js app
+
+In a Next.js app router project (a fresh `create-next-app` is one), three commands give a themed first page:
+
+```bash
+npm install rift-ds
+npx rift-ds init app
+npx rift-ds init block dashboard
+```
+
+1. `init app` writes `components/rift/`: the wrapper that routes every link through Next's `Link`, the script that applies the stored colour mode before first paint, and the base theme's font. It prints the root layout to use. Make `app/layout.tsx` exactly that, keeping its metadata, and drop any `globals.css` import `create-next-app` left there: its body colours and font cover the library's.
+2. `init block <name>` copies in a whole starting page built from the library, laid out for desktop and phone: `app-shell`, `dashboard` and `sign-in`. With no name it lists them. The files are the project's own from then on, so change them freely.
+3. Start every new screen from a block, or inside the `AppShell` the app shell and dashboard blocks write to `components/blocks/`, never from a blank file, then fill it with library components.
+
+The init commands only add files and never overwrite one, so they are safe to run again.
+
+## Install anywhere else
 
 ```bash
 npm install rift-ds
 ```
 
-- Required peers: `react` ^19.0.0 and `react-dom` ^19.0.0. The package has no runtime dependencies, so add nothing else for it.
+- Required peers: `react` ^19.0.0 and `react-dom` ^19.0.0. It brings its own runtime dependencies, `@tanstack/react-table` ^9.3.1 and `@tanstack/react-virtual` ^3.14.15 (the engine and the windowing under `DataTable`), which install with it, so add nothing else for them.
 - `recharts` ^3.0.0 is optional. Install it only if you import from `rift-ds/charts`.
 - It is ESM-only. Use a bundler that handles CSS and font imports (Vite, Next.js, webpack), with TypeScript's `moduleResolution` set to `"bundler"` or `"nodenext"`.
 
-## Setup
+## Setup by hand
+
+What `init app` does, for an app it does not cover:
 
 ```tsx
 import 'rift-ds/tokens/tokens.css'; // once, at the app root
+import 'rift-ds/tokens/base.css'; // the reset and page the components are tuned against
 import { Button } from 'rift-ds';
 ```
 
-- Paint the page: `body` takes `--color-bg-page-primary`, `--color-text-primary` and `--font-family-primary`.
-- Dark mode is `data-theme="dark"` on `<html>`. A shipped theme is `data-brand` there too, with `rift-ds/tokens/presets/presets.css` imported once.
+- `base.css` paints the page (`body` on `--color-bg-page-primary`, `--color-text-primary` and `--font-family-primary`) and resets box sizing and margins; without it, components render too padded.
 - The base theme's typeface is not bundled. It is designed around Nunito Sans: load that (or your own) and set `--font-family-primary` to it. A shipped theme bundles its own faces, and the icon font always ships.
-- Wrap the tree in `ToastProvider` only if you call `useToast` (both from the `Toast` module). No other component needs a provider; `LinkProvider` (below) is optional and only routes links.
-
-In a routed app, hand the router's link to `LinkProvider`, or every component link reloads the page. In Next.js the root layout is a Server Component, so the provider goes in a client file of its own, mounted around `children` in the layout:
-
-```tsx
-'use client';
-import Link from 'next/link';
-import { LinkProvider } from 'rift-ds/behaviors/LinkProvider';
-
-export function AppLinks({ children }: { children: React.ReactNode }) {
-  return <LinkProvider linkComponent={Link}>{children}</LinkProvider>;
-}
-
-// app/layout.tsx
-<body><AppLinks>{children}</AppLinks></body>
-```
-
-A component rendered by a Server Component cannot read the provider, so pass `linkComponent={Link}` on that instance instead.
+- Dark mode is `data-theme="dark"` on `<html>`. `colorModeScript()` from `rift-ds/components/ThemeToggle/colorMode` applies the stored choice before first paint, and `ThemeToggle` changes it. A shipped theme is `data-brand` on `<html>`, with `rift-ds/tokens/presets/presets.css` imported once.
+- In a routed app, wrap the tree in `LinkProvider` from `rift-ds/behaviors/LinkProvider` with the router's link, or every component link reloads the page. A component rendered by a Server Component cannot read it, so pass `linkComponent` on that instance instead.
+- Wrap the tree in `ToastProvider` only if you call `useToast` (both from the `Toast` module). No other component needs a provider.
 
 ## AI chat
 
@@ -49,9 +52,10 @@ Do not build a chat UI by hand. `npx rift-ds init chat` scaffolds the package's 
 
 - Use a library component before building your own, and never restyle one from outside. If it looks wrong, change a token.
 - Never write a raw colour, spacing, radius, font value or duration. Use the semantic token for the role, not the nearest value.
+- Never write a token name from memory. Check it in the token reference below, or read the names from `tokenRegistry` in `rift-ds/tokens/registry`: a misspelt `var()` resolves to nothing and fails without a sound.
 - `--color-action-primary-bg` marks the primary action, focus, and checked or selected state. Never decoration.
 - Status colours come from the `--color-status-*` family, such as `--color-status-error-text`.
-- The only shadows are `--shadow-floating` and `--shadow-modal`.
+- The only shadows are `--shadow-floating`, `--shadow-modal` and `--shadow-table-pinned`.
 - Size an icon by setting `--icon-size` to an `--icon-size-*` step, never `font-size`.
 - Never guess a prop. Check it in the `.d.ts` files in `node_modules/rift-ds`, which work offline, or in the component's contract, linked from the catalogue below.
 

@@ -125,7 +125,7 @@ rounded:
   lg: 11px
   card: 17px
   xl: 34px
-  pill: 11px
+  pill: 8px
 
 spacing:
   xxs: 2px
@@ -160,7 +160,7 @@ components:
 
 # Blueprint theme
 
-Blueprint: IBM Plex Sans throughout, #003dff for actions, buttons squared to 11px, 8px inputs and 17px cards. Two shadows, one for what floats and one for dialogs. Everything else separates by contrast.
+Blueprint: IBM Plex Sans throughout, #003dff for actions, buttons squared to 8px, 8px inputs and 17px cards. Two shadows, one for what floats and one for dialogs. Everything else separates by contrast.
 
 Take it whole: `import 'rift-ds/tokens/presets/presets.css'` after the tokens, then set `data-brand="contrast"` on `<html>`. See it at https://rift-ds.com/foundations/themes/contrast.
 
@@ -213,7 +213,7 @@ IBM Plex Sans throughout. Levels inside a tier share a weight and step by size. 
 
 ## Shape
 
-Buttons squared to 11px, 8px inputs and 17px cards. Radius belongs to the element type, never to one instance.
+Buttons squared to 8px, 8px inputs and 17px cards. Radius belongs to the element type, never to one instance.
 
 - `xs`: 1px (`--radius-050`)
 - `sm`: 3px (`--radius-100`)
@@ -222,7 +222,7 @@ Buttons squared to 11px, 8px inputs and 17px cards. Radius belongs to the elemen
 - `lg`: 11px (`--radius-400`)
 - `card`: 17px (`--radius-600`)
 - `xl`: 34px (`--radius-1200`)
-- `pill`: 11px (`--radius-pill`)
+- `pill`: 8px (`--radius-pill`)
 
 ## Space
 

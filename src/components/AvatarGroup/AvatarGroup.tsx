@@ -1,5 +1,7 @@
 import React from 'react';
 import './AvatarGroup.css';
+import { avatarFill } from '../Avatar/avatarFill';
+import { spreadInks } from '../PixelAvatar/pixelInks';
 
 /** Props owned by AvatarGroup itself — everything else falls through to the root div. */
 type AvatarGroupOwnProps = {
@@ -56,13 +58,29 @@ export const AvatarGroup = React.forwardRef<HTMLDivElement, AvatarGroupProps>(
     const allChildren = flatten(children);
     const visible = allChildren.slice(0, Math.max(max, 0));
     const overflow = allChildren.length - visible.length;
+    /* Spread the fills over the stack so overlapping neighbours never
+       match: each avatar keeps its own pick where it can (the PixelAvatar
+       spreader's rule). An avatar given a `fill` keeps it. Spreading only
+       the named avatars, so an image does not use up a colour. */
+    const names = visible.map((child) =>
+      React.isValidElement(child) ? ((child.props as { name?: string }).name ?? '').trim() : '',
+    );
+    const named = names.filter(Boolean);
+    const spread = spreadInks(named.map(avatarFill));
+    let next = 0;
+    const fills = names.map((name) => (name ? spread[next++] : undefined));
 
     return (
       <div {...rest} ref={ref} className={classes} role="group">
         {visible.map((child, index) => (
           <span key={index} className={`${baseClass}__item`}>
             {React.isValidElement(child)
-              ? React.cloneElement(child as React.ReactElement<{ size?: string }>, { size })
+              ? React.cloneElement(child as React.ReactElement<{ size?: string; fill?: unknown }>, {
+                  size,
+                  ...((child.props as { fill?: unknown }).fill === undefined && names[index]
+                    ? { fill: fills[index] }
+                    : {}),
+                })
               : child}
           </span>
         ))}

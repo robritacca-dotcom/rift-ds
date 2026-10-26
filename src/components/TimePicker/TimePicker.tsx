@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect, useId, useMemo } from 'react';
 import { ChosenMark } from '../Dropdown/Dropdown';
 import { useLayer } from '../../behaviors/useLayer';
+import { useAnchoredPosition } from '../../behaviors/useAnchoredPosition';
 import { Field } from '../Field/Field';
 import './TimePicker.css';
 import '../../fonts/material-symbols.css';
@@ -127,6 +128,19 @@ export const TimePicker = React.forwardRef<HTMLButtonElement, TimePickerProps>(
     const rootRef = useRef<HTMLDivElement | null>(null);
     const triggerRef = useRef<HTMLButtonElement | null>(null);
     const listRef = useRef<HTMLUListElement>(null);
+
+    // The list is placed against the trigger by the shared anchored-position
+    // behaviour, as Dropdown's list is.
+    useAnchoredPosition({
+      open: isOpen,
+      anchorRef: triggerRef,
+      panelRef: listRef,
+      side: 'bottom',
+      align: 'start',
+      gapProperty: '--gap-050',
+      fitHeight: true,
+      matchWidth: true,
+    });
 
     const isControlled = value !== undefined;
     const selectedValue = isControlled ? value : internalValue;

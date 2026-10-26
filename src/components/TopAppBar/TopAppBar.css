@@ -144,7 +144,7 @@
   width: 6px;
   height: 6px;
   border-radius: var(--radius-pill);
-  background-color: var(--color-status-error-icon);
+  background-color: var(--color-count-badge-bg);
 }
 
 /* The overflow menu's own wrapper takes no room of its own. */
@@ -184,8 +184,10 @@
 }
 
 .ds-top-app-bar--default .ds-top-app-bar__button {
-  width: 40px;
-  height: 40px;
+  /* The row height, as a circle (--control-height-*). */
+  box-sizing: border-box;
+  width: var(--control-height-default);
+  height: var(--control-height-default);
   border-radius: var(--radius-pill);
 }
 

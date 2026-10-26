@@ -4,6 +4,7 @@ import React, { useEffect, useId, useRef, useState } from 'react';
 import { ChosenMark } from '../Dropdown/Dropdown';
 import { SegmentedControl } from '../SegmentedControl/SegmentedControl';
 import { useLayer } from '../../behaviors/useLayer';
+import { useAnchoredPosition } from '../../behaviors/useAnchoredPosition';
 import './ModelPicker.css';
 import '../../fonts/material-symbols.css';
 
@@ -65,6 +66,8 @@ type ModelPickerOwnProps = {
   effortLabel?: string;
   /** Which side of the trigger the panel opens on. In a composer pinned to the bottom of the screen, use `top`. */
   placement?: 'bottom' | 'top';
+  /** Trigger size, on the row-control scale: `default` is 40px, `compact` 32px, so it lines up with the fields and buttons beside it. */
+  size?: 'default' | 'compact';
   /** Whether the whole control is disabled. */
   disabled?: boolean;
   /** Additional CSS classes */
@@ -101,6 +104,7 @@ export const ModelPicker = React.forwardRef<HTMLDivElement, ModelPickerProps>(
       listLabel = 'Model',
       effortLabel = 'Effort',
       placement = 'bottom',
+      size = 'default',
       disabled = false,
       className = '',
       // The naming and description attributes belong on the combobox
@@ -117,8 +121,21 @@ export const ModelPicker = React.forwardRef<HTMLDivElement, ModelPickerProps>(
     const listboxId = `${id}-listbox`;
     const rootRef = useRef<HTMLDivElement | null>(null);
     const listRef = useRef<HTMLUListElement>(null);
+    const triggerRef = useRef<HTMLButtonElement>(null);
+    const panelRef = useRef<HTMLDivElement>(null);
 
     const [isOpen, setIsOpen] = useState(false);
+
+    // The panel is placed against the trigger by the shared anchored-position
+    // behaviour, on the `placement` side, flipped when that side has no room.
+    useAnchoredPosition({
+      open: isOpen,
+      anchorRef: triggerRef,
+      panelRef,
+      side: placement,
+      align: 'start',
+      gapProperty: '--gap-050',
+    });
     const [focusedIndex, setFocusedIndex] = useState(-1);
 
     const isValueControlled = value !== undefined;
@@ -242,6 +259,7 @@ export const ModelPicker = React.forwardRef<HTMLDivElement, ModelPickerProps>(
     const classes = [
       baseClass,
       `${baseClass}--${placement}`,
+      size === 'compact' ? `${baseClass}--compact` : '',
       isOpen ? `${baseClass}--open` : '',
       disabled ? `${baseClass}--disabled` : '',
       className,
@@ -252,6 +270,7 @@ export const ModelPicker = React.forwardRef<HTMLDivElement, ModelPickerProps>(
     return (
       <div {...rest} ref={setRootRef} className={classes}>
         <button
+          ref={triggerRef}
           type="button"
           className={`${baseClass}__trigger`}
           disabled={disabled}
@@ -280,7 +299,7 @@ export const ModelPicker = React.forwardRef<HTMLDivElement, ModelPickerProps>(
         </button>
 
         {isOpen && (
-          <div className={`${baseClass}__panel`}>
+          <div ref={panelRef} className={`${baseClass}__panel`}>
             <ul
               className={`${baseClass}__list`}
               role="listbox"

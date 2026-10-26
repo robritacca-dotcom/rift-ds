@@ -15,6 +15,7 @@ import "./globals.css";
 import { buildDesignSystemJsonLd, buildWebsiteJsonLd, SITE_URL } from "@/lib/structuredData";
 import { BRAND_NAME, GA_ID, TITLE_SUFFIX } from "@/config/brand.generated";
 import { BASE_THEME_ID, LEGACY_BASE_THEME_ID, SERVED_THEME_ID } from "@/lib/theme/brand";
+import { colorModeScript } from "rift-ds/components/ThemeToggle/colorMode";
 import { SiteChatProvider } from "@/components/SiteChat/SiteChatProvider";
 import { SiteLinkProvider } from "@/components/SiteLinkProvider/SiteLinkProvider";
 import { SiteChatMount } from "@/components/SiteChat/SiteChatMount";
@@ -103,19 +104,14 @@ export const viewport: Viewport = {
   ],
 };
 
+// Light and dark come from the package's own colorModeScript, the same
+// pre-paint script a consumer renders, so the site and a stranger's app can
+// never apply the mode differently. The site adds its own two facts after
+// it: the stored theme preset, and the ready mark.
 const themeScript = `
+${colorModeScript()}
 (function() {
   var root = document.documentElement;
-  var saved = localStorage.getItem('theme');
-  var setting = saved === 'light' || saved === 'dark' ? saved : 'system';
-  var media = window.matchMedia('(prefers-color-scheme: dark)');
-  root.setAttribute('data-theme-setting', setting);
-  root.setAttribute('data-theme', setting === 'system' ? (media.matches ? 'dark' : 'light') : setting);
-  media.addEventListener('change', function (event) {
-    if (root.getAttribute('data-theme-setting') === 'system') {
-      root.setAttribute('data-theme', event.matches ? 'dark' : 'light');
-    }
-  });
   /* The visitor's theme pick (the hero's dot row) rides the same pre-paint
      path as light/dark: the stored brand replaces the server's served theme
      before first render, so a returning visitor never flashes the wrong

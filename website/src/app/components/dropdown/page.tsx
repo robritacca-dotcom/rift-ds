@@ -135,6 +135,32 @@ export default function DropdownPage() {
             </div>
           </section>
 
+          {/* Width and open state */}
+          <section className={styles.section}>
+            <SectionTitle title="Width and open state" />
+            <p className={styles.demoText}>
+              The list sizes to its longest option and an option never wraps,
+              but it is never narrower than the trigger. It opens below, flips
+              above when there is no room, and caps its height to the room it
+              has. Whether it is open follows the usual pair: open,
+              defaultOpen and onOpenChange, for a host that needs to own it.
+            </p>
+            <div className={styles.variantRow}>
+              <div className={styles.variantItem}>
+                <Dropdown
+                  label="Long options"
+                  placeholder="Choose a plan"
+                  options={[
+                    { label: "Free", value: "free" },
+                    { label: "Team, billed monthly per seat", value: "team" },
+                    { label: "Enterprise, with single sign-on and audit logs", value: "enterprise" },
+                  ]}
+                  onValueChange={() => {}}
+                />
+              </div>
+            </div>
+          </section>
+
           {/* States */}
           <section className={styles.section}>
             <SectionTitle title="States" />

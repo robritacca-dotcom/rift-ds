@@ -1,0 +1,121 @@
+/* ============================================
+   BLOCKS (docs)
+   The standard doc page shell, plus the block preview.
+   ============================================ */
+.dsLayout {
+  display: flex;
+  gap: var(--layout-column-gap);
+  width: 100%;
+  max-width: 1440px;
+  padding-top: var(--primitive-gap-1000);
+}
+
+.dsContent {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-2000);
+}
+
+.pageHeader {
+  margin-top: calc(var(--primitive-gap-1000) - var(--gap-2000));
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--primitive-gap-500);
+  width: 100%;
+}
+
+.pageTitle {
+  font-family: var(--font-display-2-family);
+  font-size: var(--font-display-2-size);
+  font-weight: var(--font-display-2-weight);
+  line-height: var(--font-display-2-line-height);
+  letter-spacing: var(--font-display-2-letter-spacing);
+  color: var(--color-text-display);
+}
+
+.introSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-500);
+}
+
+.subDisplay {
+  font-family: var(--font-sub-display-family);
+  font-size: var(--font-sub-display-size);
+  font-weight: var(--font-sub-display-weight);
+  line-height: var(--font-sub-display-line-height);
+  letter-spacing: var(--font-sub-display-letter-spacing);
+  color: var(--color-text-display);
+  margin: 0;
+}
+
+.introBody {
+  margin: 0;
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-secondary);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-500);
+  scroll-margin-top: var(--layout-anchor-clearance);
+}
+
+.section > :global(.ds-section-title:not(.ds-section-title--no-divider)) {
+  margin-bottom: calc(var(--gap-1000) - var(--primitive-gap-500));
+}
+
+.sectionNote {
+  margin: 0;
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-secondary);
+}
+
+.sectionNote code {
+  color: var(--color-text-primary);
+}
+
+.inlineLink {
+  color: var(--color-text-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ============================================
+   PREVIEW
+   The width switch over a stage the frame centres in. The frame holds the
+   scaled page; its size is set inline from the device width.
+   ============================================ */
+.preview {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-400);
+}
+
+.stage {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.frame {
+  overflow: hidden;
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
+  background-color: var(--color-bg-page-primary);
+}
+
+.frameDoc {
+  display: block;
+  border: 0;
+  transform-origin: top left;
+}

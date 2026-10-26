@@ -27,6 +27,14 @@
  * checked at a desktop and a phone viewport: the FAB summary panel and the
  * chat takeover render differently per pointer capability, and a mismatch
  * gated on either would only show on one of the two.
+ *
+ * It also fails a page that lays out wider than its viewport. On a phone,
+ * Chrome widens the layout viewport to fit the overflow and every fixed
+ * element stretches with it: on 2026-10-25 a Pixel 7 user reported the home
+ * page scrolling sideways with the header's menu button off screen, because
+ * the hero's theme-swatch tooltips sat in layout at opacity 0 and reached
+ * 54px past a 412px screen. Nothing errored and every other check here
+ * passed, so the width is checked directly.
  */
 /* global document, window -- page.evaluate() callbacks execute in the browser */
 import { chromium } from 'playwright';
@@ -59,6 +67,8 @@ const SETTLE_MS = 1500;
 /** The page must show real prose, not a shell — the threshold only has to
  *  reject emptiness, so it stays far below any real page's content. */
 const MIN_MAIN_TEXT = 80;
+/** How many overflowing elements a width failure names. */
+const OVERFLOW_REPORT_LIMIT = 3;
 
 async function checkPage(browser, origin, route, profile) {
   const context = await browser.newContext({
@@ -91,11 +101,53 @@ async function checkPage(browser, origin, route, profile) {
       };
     });
 
+    // The configured width, not documentElement.clientWidth: on a phone the
+    // layout viewport widens to fit the overflow, so it would agree with it.
+    const width = await page.evaluate(({ viewport, limit }) => {
+      const scrollWidth = document.documentElement.scrollWidth;
+      if (scrollWidth <= viewport) return { viewport, scrollWidth, culprits: [] };
+      // Name the elements that reach past either edge with no ancestor
+      // clipping them, outermost first, so the failure points at the cause.
+      // A fixed element stretches with the widened layout viewport, and its
+      // contents with it: a symptom of the overflow, never its cause. A
+      // clipping ancestor contains whatever sits inside it.
+      const excused = (el) => {
+        if (window.getComputedStyle(el).position === 'fixed') return true;
+        for (let a = el.parentElement; a && a !== document.body; a = a.parentElement) {
+          const style = window.getComputedStyle(a);
+          if (style.position === 'fixed' || style.overflowX !== 'visible') return true;
+        }
+        return false;
+      };
+      const culprits = [];
+      for (const el of document.body.querySelectorAll('*')) {
+        const r = el.getBoundingClientRect();
+        if (r.width === 0 || (r.right <= viewport + 1 && r.left >= -1)) continue;
+        if (culprits.some((c) => c.el.contains(el)) || excused(el)) continue;
+        culprits.push({ el, left: Math.round(r.left), right: Math.round(r.right) });
+        if (culprits.length >= limit) break;
+      }
+      return {
+        viewport,
+        scrollWidth,
+        culprits: culprits.map(({ el, left, right }) => {
+          const cls = typeof el.className === 'string' ? el.className.trim().split(/\s+/)[0] : '';
+          return `<${el.tagName.toLowerCase()}${cls ? ` class="${cls}"` : ''}> spans ${left} to ${right}px`;
+        }),
+      };
+    }, { viewport: profile.viewport.width, limit: OVERFLOW_REPORT_LIMIT });
+
     if (!state.themeReady) failures.push('data-theme-ready never landed on <html>');
     if (state.rootVisibility !== 'visible') failures.push(`<html> visibility is ${state.rootVisibility}`);
     if (state.mainVisibility !== 'visible') failures.push(`<main> visibility is ${state.mainVisibility}`);
     if (state.mainTextLength < MIN_MAIN_TEXT) {
       failures.push(`<main> has ${state.mainTextLength} chars of text (needs ${MIN_MAIN_TEXT})`);
+    }
+    if (width.scrollWidth > width.viewport) {
+      const named = width.culprits.length > 0 ? `: ${width.culprits.join('; ')}` : '';
+      failures.push(
+        `page lays out ${width.scrollWidth}px wide in a ${width.viewport}px viewport${named}`,
+      );
     }
 
     const hydrationErrors = errors.filter((e) => HYDRATION_PATTERNS.some((p) => p.test(e)));

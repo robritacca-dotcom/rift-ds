@@ -129,7 +129,7 @@ html[data-brand="mono"] {
   --primitive-radius-300: 5px;
   --primitive-radius-400: 6px;
   --primitive-radius-600: 10px;
-  --primitive-radius-pill: 6px;
+  --primitive-radius-pill: 5px;
   --primitive-red-00: #FDF8F9;
   --primitive-red-01: #FBEFF2;
   --primitive-red-02: #F6D4DC;
@@ -168,6 +168,7 @@ html[data-brand="mono"] {
   --primitive-yellow-11: #332B1A;
   --shadow-floating: none;
   --shadow-modal: none;
+  --shadow-table-pinned: none;
 }
 
 html[data-brand="mono"][data-theme="dark"] {
@@ -258,7 +259,7 @@ html[data-brand="mono"][data-theme="dark"] {
   --primitive-radius-300: 5px;
   --primitive-radius-400: 6px;
   --primitive-radius-600: 10px;
-  --primitive-radius-pill: 6px;
+  --primitive-radius-pill: 5px;
   --primitive-red-00: #FDF8F9;
   --primitive-red-01: #FBEFF2;
   --primitive-red-02: #F6D4DC;
@@ -297,4 +298,5 @@ html[data-brand="mono"][data-theme="dark"] {
   --primitive-yellow-11: #332B1A;
   --shadow-floating: none;
   --shadow-modal: none;
+  --shadow-table-pinned: none;
 }

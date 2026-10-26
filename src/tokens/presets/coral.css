@@ -200,7 +200,7 @@ html[data-brand="coral"] {
   --primitive-radius-300: 12px;
   --primitive-radius-400: 16px;
   --primitive-radius-600: 24px;
-  --primitive-radius-pill: 16px;
+  --primitive-radius-pill: 12px;
   --primitive-red-00: #FDF5F7;
   --primitive-red-01: #FBE9EE;
   --primitive-red-02: #F5C5D1;
@@ -239,6 +239,7 @@ html[data-brand="coral"] {
   --primitive-yellow-11: #35280E;
   --shadow-floating: 0 6px 24px rgba(0, 0, 0, 0.08);
   --shadow-modal: 0 12px 48px rgba(0, 0, 0, 0.14);
+  --shadow-table-pinned: 0 0 16px rgba(0, 0, 0, 0.12);
 }
 
 html[data-brand="coral"][data-theme="dark"] {
@@ -328,7 +329,7 @@ html[data-brand="coral"][data-theme="dark"] {
   --primitive-radius-300: 12px;
   --primitive-radius-400: 16px;
   --primitive-radius-600: 24px;
-  --primitive-radius-pill: 16px;
+  --primitive-radius-pill: 12px;
   --primitive-red-00: #FDF5F7;
   --primitive-red-01: #FBE9EE;
   --primitive-red-02: #F5C5D1;
@@ -367,4 +368,5 @@ html[data-brand="coral"][data-theme="dark"] {
   --primitive-yellow-11: #35280E;
   --shadow-floating: 0 6px 24px rgba(0, 0, 0, 0.45);
   --shadow-modal: 0 12px 48px rgba(0, 0, 0, 0.5);
+  --shadow-table-pinned: 0 0 16px rgba(0, 0, 0, 0.5);
 }

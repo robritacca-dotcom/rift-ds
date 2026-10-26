@@ -409,13 +409,13 @@ interface NeutralDef {
 const NEUTRALS: NeutralDef[] = [
   { step: "00", hex: "#FFFFFF", alphas: { "-a01": 0.01, "-a60": 0.6, "-a90": 0.9 } },
   { step: "01", hex: "#F1F1F1", alphas: { "-a01": 0.01, "-a60": 0.6, "-a82": 0.82 } },
-  { step: "02", hex: "#D6D6D6", alphas: { "-a80": 0.8 } },
+  { step: "02", hex: "#D6D6D6", alphas: { "-a50": 0.5, "-a80": 0.8 } },
   { step: "03", hex: "#BCBCBC", alphas: { "-a80": 0.8 } },
   { step: "04", hex: "#A2A2A2" },
   { step: "05", hex: "#888888" },
   { step: "06", hex: "#6D6D6D" },
   { step: "07", hex: "#303030", alphas: { "-a80": 0.8 } },
-  { step: "08", hex: "#232323", alphas: { "-a80": 0.8 } },
+  { step: "08", hex: "#232323", alphas: { "-a50": 0.5, "-a80": 0.8 } },
   {
     step: "09",
     hex: "#0E0E0E",
@@ -1286,6 +1286,13 @@ const PADDING_STEPS: ReadonlyArray<[step: string, px: number]> = [
   ["1500", 60],
 ];
 
+/* The row-control heights. Density scales them with the padding, as it did
+   before they were tokens (a control's height was its padding then), so a
+   dense theme keeps shorter controls and every row still lines up. */
+const CONTROL_HEIGHT_STEPS: ReadonlyArray<[step: string, px: number]> = [
+  ["800", 32],
+  ["1000", 40],
+];
 const FONT_SIZE_STEPS: ReadonlyArray<[step: string, px: number]> = [
   ["300", 12],
   ["350", 14],
@@ -1344,19 +1351,19 @@ export type ElevationVariant = "default" | "flat" | "soft";
    the same geometry for a gentler float. */
 const ELEVATION_VARIANTS: Record<
   ElevationVariant,
-  Record<"light" | "dark", { floating: string; modal: string }>
+  Record<"light" | "dark", { floating: string; modal: string; pinned: string }>
 > = {
   default: {
-    light: { floating: "0 4px 16px rgba(0, 0, 0, 0.12)", modal: "0 8px 32px rgba(0, 0, 0, 0.2)" },
-    dark: { floating: "0 4px 16px rgba(0, 0, 0, 0.55)", modal: "0 8px 32px rgba(0, 0, 0, 0.6)" },
+    light: { floating: "0 4px 16px rgba(0, 0, 0, 0.12)", modal: "0 8px 32px rgba(0, 0, 0, 0.2)", pinned: "0 0 12px rgba(0, 0, 0, 0.16)" },
+    dark: { floating: "0 4px 16px rgba(0, 0, 0, 0.55)", modal: "0 8px 32px rgba(0, 0, 0, 0.6)", pinned: "0 0 12px rgba(0, 0, 0, 0.6)" },
   },
   flat: {
-    light: { floating: "none", modal: "none" },
-    dark: { floating: "none", modal: "none" },
+    light: { floating: "none", modal: "none", pinned: "none" },
+    dark: { floating: "none", modal: "none", pinned: "none" },
   },
   soft: {
-    light: { floating: "0 6px 24px rgba(0, 0, 0, 0.08)", modal: "0 12px 48px rgba(0, 0, 0, 0.14)" },
-    dark: { floating: "0 6px 24px rgba(0, 0, 0, 0.45)", modal: "0 12px 48px rgba(0, 0, 0, 0.5)" },
+    light: { floating: "0 6px 24px rgba(0, 0, 0, 0.08)", modal: "0 12px 48px rgba(0, 0, 0, 0.14)", pinned: "0 0 16px rgba(0, 0, 0, 0.12)" },
+    dark: { floating: "0 6px 24px rgba(0, 0, 0, 0.45)", modal: "0 12px 48px rgba(0, 0, 0, 0.5)", pinned: "0 0 16px rgba(0, 0, 0, 0.5)" },
   },
 };
 
@@ -1368,6 +1375,9 @@ export function densityOverrides(scale: number): Overrides {
   }
   for (const [step, px] of PADDING_STEPS) {
     overrides[`--primitive-padding-${step}`] = `${Math.max(1, Math.round(px * scale))}px`;
+  }
+  for (const [step, px] of CONTROL_HEIGHT_STEPS) {
+    overrides[`--primitive-control-height-${step}`] = `${Math.round(px * scale)}px`;
   }
   return overrides;
 }
@@ -1419,12 +1429,15 @@ export function elevationOverrides(
   return {
     "--shadow-floating": pair.floating,
     "--shadow-modal": pair.modal,
+    "--shadow-table-pinned": pair.pinned,
   };
 }
 
 /**
  * Scales the radius scale (0..2). `pill` keeps `--radius-pill` at its
- * shipped 999px; turning it off squares the pills to the scaled lg step.
+ * shipped 999px; turning it off squares the pills to the input's corner (the
+ * scaled `--radius-300`), so a button always shares its corner with the field
+ * beside it.
  */
 export function radiusOverrides(scale: number, pill: boolean): Overrides {
   const overrides: Overrides = {};
@@ -1432,7 +1445,9 @@ export function radiusOverrides(scale: number, pill: boolean): Overrides {
     overrides[`--primitive-radius-${step}`] = `${Math.round(px * scale)}px`;
   }
   if (!pill) {
-    overrides["--primitive-radius-pill"] = `${Math.max(2, Math.round(16 * scale))}px`;
+    // A squared button takes the input's corner, so a button and the field
+    // beside it always share one corner, at any scale.
+    overrides["--primitive-radius-pill"] = `${Math.round(SHIPPED_INPUT_RADIUS_PX * scale)}px`;
   }
   return overrides;
 }

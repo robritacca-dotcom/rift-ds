@@ -308,6 +308,14 @@ export default function ChatInstallPage() {
             <CodeBlock code={INSTALL_SNIPPET} language="bash" showCopy />
             <p className={s.sectionNote}>What it writes:</p>
             <CodeBlock code={SCAFFOLD_FILES.join("\n")} language="text" />
+            <p className={s.sectionNote}>
+              It then lists the peers to install. One of them, <code>recharts</code>, is only for the
+              scripted demo: the mount imports <code>{PACKAGE_NAME}/chat/demo</code> so the chat plays
+              a conversation with chart cards before you have a key. Delete that import when you go
+              live and <code>recharts</code> can go with it. If your <code>.gitignore</code> ignores{" "}
+              <code>.env*</code>, as a fresh <code>create-next-app</code> does, the env example is
+              ignored too; the command says so, and <code>git add -f</code> commits it.
+            </p>
 
             <h3 className={s.propsHeading}>Mount it once</h3>
             <p className={s.sectionNote}>

@@ -425,7 +425,11 @@
      field. */
   bottom: calc(100% + 12px);
   left: 50%;
-  display: flex;
+  /* Out of layout until it opens. Faded to opacity 0 it still counted as
+     scrollable overflow: the end cards reach past the viewport on a phone,
+     so the page laid out wider than the screen and the fixed header
+     stretched with it, pushing the menu button off the right edge. */
+  display: none;
   flex-direction: column;
   align-items: center;
   gap: var(--gap-050);
@@ -482,15 +486,39 @@
 }
 
 /* Hover only — plus keyboard focus via :focus-visible, so a click's
-   lingering focus never pins a card open after the pointer leaves. */
-.swatchWrap:hover .swatchTip,
+   lingering focus never pins a card open after the pointer leaves. Hover
+   opens a card only where a pointer can hover: a tap leaves :hover stuck
+   on a touch screen, which would pin the card open over the hero. */
 .swatchWrap:has(.accentSwatch:focus-visible) .swatchTip,
 .swatchWrap:has(.accentSwatchAdd:focus-visible) .swatchTip {
+  display: flex;
   opacity: 1;
   transform: translate(-50%, 0);
   transition:
     opacity var(--motion-duration-base) var(--motion-ease-standard) 80ms,
     transform var(--motion-duration-base) var(--motion-ease-standard) 80ms;
+}
+
+@media (hover: hover) {
+  .swatchWrap:hover .swatchTip {
+    display: flex;
+    opacity: 1;
+    transform: translate(-50%, 0);
+    transition:
+      opacity var(--motion-duration-base) var(--motion-ease-standard) 80ms,
+      transform var(--motion-duration-base) var(--motion-ease-standard) 80ms;
+  }
+}
+
+/* The card enters from display: none, so its fade and rise start from
+   these values; a browser without @starting-style shows it unfaded. */
+@starting-style {
+  .swatchWrap:hover .swatchTip,
+  .swatchWrap:has(.accentSwatch:focus-visible) .swatchTip,
+  .swatchWrap:has(.accentSwatchAdd:focus-visible) .swatchTip {
+    opacity: 0;
+    transform: translate(-50%, 6px);
+  }
 }
 
 .swatchTipName {

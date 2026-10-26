@@ -1,0 +1,39 @@
+{
+  "$comment": "The blocks: whole starting pages the init bin copies into a consumer's app, composed from the library alone. Each lists every file it writes, at its target path (app/** lands in the app router folder, components/** beside it). A file may belong to more than one block; init never overwrites, so the shared shell is written once. scripts/validate-blocks.mjs holds this file to the tree and the site's previews.",
+  "blocks": [
+    {
+      "name": "app-shell",
+      "label": "App shell",
+      "description": "The floating sidebar, a top bar with search, the AI entry and the colour mode, a page header, and an empty page with the spacing set.",
+      "route": "/starter",
+      "files": [
+        "components/blocks/AppShell.tsx",
+        "components/blocks/AppShell.module.css",
+        "app/starter/page.tsx",
+        "app/starter/page.module.css"
+      ]
+    },
+    {
+      "name": "dashboard",
+      "label": "Dashboard",
+      "description": "The app shell with a row of stats, two panels and a project table, stacking down to one column on a phone.",
+      "route": "/dashboard",
+      "files": [
+        "components/blocks/AppShell.tsx",
+        "components/blocks/AppShell.module.css",
+        "app/dashboard/page.tsx",
+        "app/dashboard/page.module.css"
+      ]
+    },
+    {
+      "name": "sign-in",
+      "label": "Sign in",
+      "description": "A centred sign-in card with email and password, remember me and a single sign-on route.",
+      "route": "/sign-in",
+      "files": [
+        "app/sign-in/page.tsx",
+        "app/sign-in/page.module.css"
+      ]
+    }
+  ]
+}

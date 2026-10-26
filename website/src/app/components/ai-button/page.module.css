@@ -121,3 +121,11 @@
 .summaryClearance {
   padding-top: 340px;
 }
+
+/* Room under the button for the request panel to open into. */
+.requestClearance {
+  padding-bottom: 220px;
+  /* The panel aligns to the button's end edge, as it would under a top
+     bar's trailing agent button. */
+  justify-content: flex-end;
+}

@@ -182,6 +182,44 @@ export const Questions: Story = {
   },
 };
 
+/* A transport that sends rich content, then holds the reply open until the
+   play function lets it go, so the story can check the content is already
+   drawn while the reply is still streaming. */
+let releaseLiveReply: (() => void) | undefined;
+const heldTransport: ChatTransport = async function* () {
+  yield { type: 'status', label: 'Looking up your tasks' };
+  yield { type: 'content', node: <div data-testid="live-tool-result">Three open tasks</div> };
+  await new Promise<void>((resolve) => {
+    releaseLiveReply = resolve;
+  });
+  yield { type: 'delta', text: 'You have three open tasks this week.' };
+  yield { type: 'done' };
+};
+
+/** Rich content draws on the live reply as it arrives, before the prose, not only when the turn ends. */
+export const LiveContent: Story = {
+  render: (args) => (
+    <ChatProvider transport={heldTransport} followups={false} feedback={false}>
+      <OpenOnMount>
+        <Stage>
+          <ChatWidget {...args} starters={[{ id: 'tasks', label: 'What is open this week?' }]} />
+        </Stage>
+      </OpenOnMount>
+    </ChatProvider>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(await canvas.findByRole('button', { name: 'What is open this week?' }, { timeout: 4000 }));
+    // The tool's result is on screen while the reply is still held open.
+    await expect(await canvas.findByTestId('live-tool-result', {}, { timeout: 4000 })).toBeInTheDocument();
+    await expect(canvas.queryByText(/three open tasks this week/)).toBeNull();
+    releaseLiveReply?.();
+    await waitFor(() => expect(canvas.getByText(/three open tasks this week/)).toBeInTheDocument(), { timeout: 8000 });
+    // And it stays with the committed turn, drawn once.
+    await expect(canvas.getAllByTestId('live-tool-result')).toHaveLength(1);
+  },
+};
+
 /** A reply carrying a card: the plan renders inside the turn through the provider's renderers. */
 export const RichContent: Story = {
   render: (args) => (

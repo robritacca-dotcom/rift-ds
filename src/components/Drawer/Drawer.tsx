@@ -109,12 +109,16 @@ export const Drawer = React.forwardRef<HTMLDivElement, DrawerProps>(
       .join(' ');
 
     const drawer = (
-      <div className={classes}>
+      <div className={classes} data-state={open ? 'open' : 'closed'}>
         <div className={`${baseClass}__scrim`} onClick={handleScrimClick} />
 
+        {/* data-state is the open state as an attribute, for a consumer's
+            styles and tests; the drawer stays mounted so it can slide shut,
+            so its presence in the DOM never means it is open. */}
         <div
           {...rest}
           className={`${baseClass}__panel`}
+          data-state={open ? 'open' : 'closed'}
           ref={setPanelRef}
           role="dialog"
           aria-modal="true"

@@ -212,6 +212,20 @@ const INTERNAL_MODULES = new Map([
     'baked Natural Earth land path in WorldMap\'s private drawing space; the component is the public surface, and the coordinates mean nothing without its projection'],
   ['src/components/Chart/useChartAnimation.ts',
     'the entrance hook every chart in the set spreads into its series; the charts are the public surface, and the contract it keeps (animate on mount and on new data, never on a resize) is design.md\'s chart spec'],
+  ['src/components/DataTable/dragGesture.ts',
+    'the one pointer drag every DataTable grip runs (capture, a frame per move, a commit on release); the table is the public surface, and the helper carries the gesture rule for it alone'],
+  ['src/components/DataTable/filterModel.ts',
+    'the filter model DataTable and TableToolbar share: kinds, operators, matching and the English words; the public names are DataTableFilter, DataTableFilterOperator and DataTableFilterLabels'],
+  ['src/components/DataTable/tableContext.ts',
+    'the state a DataTable hands the TableToolbar inside it; TableToolbar\'s own props are the public way to carry the same state'],
+  ['src/components/DataTable/views.ts',
+    'the saved view and its repair against changed columns; the table is the public surface, and its `DataTableView` type and `reconcileDataTableView` function are the published names'],
+  ['src/components/DataTable/aggregates.ts',
+    'the calculations a group row and the totals footer show; the table is the public surface, and its `DataTableAggregate` and `DataTableTotal` types are the published names'],
+  ['src/components/DataTable/columnTypes.ts',
+    'what each column type sets (alignment, sort, filter kind, editor) and how its values format; the table is the public surface, and its `DataTableColumnType` and `DataTableColumnFormat` types are the published names'],
+  ['src/components/DataTable/editorKinds.ts',
+    'the editor kinds DataTable and its cell editors share, with each compact field\'s floor; the table is the public surface, and its `DataTableEditorKind` and `DataTableValue` types are the kinds\' published names'],
 ]);
 
 const componentsDir = join(repoRoot, 'src', 'components');

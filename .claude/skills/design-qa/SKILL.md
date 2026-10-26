@@ -87,6 +87,9 @@ Inside and between a component's own parts, judged at magnification, per theme:
 - **Joins render once.** Where two segments share an edge — a split control, an attached input-and-button, a segmented anything — the shared border must not double, the group's outer radius must flow through as if it were one shape, and any divider spans exactly the height it should. The two halves must look designed together in *every* state: capture the compound in each state and ask whether the treatment of the inactive half was chosen or inherited.
 - **Hairlines are crisp.** 1px lines land on the pixel grid; a soft, blurry border means a half-pixel offset somewhere.
 
+- **A row lines up.** Controls that share a row (a field, a button, a picker, a segmented set) measure the same height at each size, `--control-height-default` and `-compact`; measure them side by side rather than trusting the token, since a border or a line height outside it shows here first.
+- **A popup shows whole.** Open every menu, listbox, popover and tooltip inside a scrolling or clipping container and near each screen edge: it must escape the container, flip when its side has no room, stay a margin inside the screen, and follow its control on scroll (`src/stories/AnchoredPopups.stories.tsx` holds the clipping case; design.md's "Popups are placed by one behaviour" owns the rest).
+
 **States as a family**
 
 - **Every state designed, not derived.** A loading state is composed — spinner colour, size, and seat all look chosen — not "opacity plus a spinner". Disabled reads as one coherent treatment, not per-part fading.

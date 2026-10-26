@@ -125,7 +125,7 @@ rounded:
   lg: 0px
   card: 0px
   xl: 0px
-  pill: 2px
+  pill: 0px
 
 spacing:
   xxs: 2px
@@ -157,7 +157,7 @@ components:
 
 # Terminal theme
 
-Terminal: IBM Plex Mono throughout, #06d6a0 for actions, buttons squared to 2px, 0px inputs and 0px cards. Flat: no shadows at all. Surfaces separate from the page by contrast alone.
+Terminal: IBM Plex Mono throughout, #06d6a0 for actions, buttons squared to 0px, 0px inputs and 0px cards. Flat: no shadows at all. Surfaces separate from the page by contrast alone.
 
 Take it whole: `import 'rift-ds/tokens/presets/presets.css'` after the tokens, then set `data-brand="terminal"` on `<html>`. See it at https://rift-ds.com/foundations/themes/terminal.
 
@@ -210,7 +210,7 @@ IBM Plex Mono throughout. Levels inside a tier share a weight and step by size. 
 
 ## Shape
 
-Buttons squared to 2px, 0px inputs and 0px cards. Radius belongs to the element type, never to one instance.
+Buttons squared to 0px, 0px inputs and 0px cards. Radius belongs to the element type, never to one instance.
 
 - `xs`: 0px (`--radius-050`)
 - `sm`: 0px (`--radius-100`)
@@ -219,7 +219,7 @@ Buttons squared to 2px, 0px inputs and 0px cards. Radius belongs to the element 
 - `lg`: 0px (`--radius-400`)
 - `card`: 0px (`--radius-600`)
 - `xl`: 0px (`--radius-1200`)
-- `pill`: 2px (`--radius-pill`)
+- `pill`: 0px (`--radius-pill`)
 
 ## Space
 

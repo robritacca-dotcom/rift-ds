@@ -59,6 +59,22 @@
   /* Divider */
   --color-divider: var(--primitive-neutral-02-a80);
 
+  /* Tables: one family every table reads (Table, DataTable, Prose's
+     markdown tables, the blueprints pages), so a docs table and a UI table
+     are drawn alike. A table is a surface of its own, standing off what it
+     sits on the way a card does: the card fill for the body, with the
+     header a half step down from it, the 02 grey at half strength over
+     white, between the off-white container step and the full grey band.
+     Each aliases a container role, so a theme that retunes the container
+     ramp retunes its tables with it. */
+  --color-table-body-bg: var(--color-bg-container-primary);
+  --color-table-header-bg: var(--primitive-neutral-02-a50);
+  --color-table-row-hover-bg: var(--color-bg-container-secondary);
+  --color-table-row-stripe-bg: var(--color-bg-container-secondary);
+  --color-table-row-selected-bg: var(--color-bg-container-tertiary);
+  --color-table-divider: var(--color-divider);
+  --color-table-border: var(--color-divider);
+
   /* Chat bubbles — sent (the person) and received (the agent). Both alias
      the container-secondary / text-primary pair today; they exist as their
      own roles so chat surfaces can be re-themed later without touching the
@@ -98,6 +114,10 @@
   /* Elevation — the only shadows in the system (floating surfaces + modals) */
   --shadow-floating: 0 4px 16px rgba(0, 0, 0, 0.12);
   --shadow-modal: 0 8px 32px rgba(0, 0, 0, 0.2);
+  /* The edge of a pinned table column while content scrolls under it: a
+     soft, symmetric falloff drawn on a thin strip at the column's edge,
+     which clips it to the scrolling side. */
+  --shadow-table-pinned: 0 0 12px rgba(0, 0, 0, 0.16);
 
   /* Action - Primary. The action colour is theme-dependent: one teal step
      cannot clear 3:1 against both a white page and a near-black one while
@@ -272,6 +292,30 @@
   --color-pixel-ink-5: var(--primitive-blue-07);
   --color-pixel-ink-6: var(--primitive-purple-08);
 
+  /* Count badge - The solid pill a count rides on an icon's corner (a
+     toolbar's filter count, a tab's unread count, a bar's dot): the error
+     ramp at a step its figures read on, so it is seen at a glance. */
+  --color-count-badge-bg: var(--primitive-red-08);
+  --color-count-badge-text: var(--primitive-neutral-01);
+
+  /* Avatar - The six fills an initials avatar takes, picked by the name, each
+     with its initials colour, on the pixel inks' ramps and in their order
+     (the brand's ramp is left out for the same reason). A pale step with a
+     deep one on it, so the initials read as text (8.7:1 at the least) and
+     neighbours in a stack read apart. They identify; they never signal. */
+  --color-avatar-bg-1: var(--primitive-red-02);
+  --color-avatar-bg-2: var(--primitive-orange-02);
+  --color-avatar-bg-3: var(--primitive-yellow-02);
+  --color-avatar-bg-4: var(--primitive-green-02);
+  --color-avatar-bg-5: var(--primitive-blue-02);
+  --color-avatar-bg-6: var(--primitive-purple-02);
+  --color-avatar-text-1: var(--primitive-red-10);
+  --color-avatar-text-2: var(--primitive-orange-10);
+  --color-avatar-text-3: var(--primitive-yellow-10);
+  --color-avatar-text-4: var(--primitive-green-10);
+  --color-avatar-text-5: var(--primitive-blue-10);
+  --color-avatar-text-6: var(--primitive-purple-10);
+
   /* Input */
   --color-input-text-primary: var(--primitive-neutral-10);
   --color-input-text-placeholder: var(--primitive-neutral-06);
@@ -314,6 +358,11 @@
   --icon-size-600: var(--primitive-icon-600);   /* 24px — default */
   --icon-size-800: var(--primitive-icon-800);   /* 32px — feature */
   --icon-size-1200: var(--primitive-icon-1200);   /* 48px — marketing */
+
+  /* Control height: the one height every row control takes at each size,
+     border included (fields, buttons, pickers, segmented controls). */
+  --control-height-default: var(--primitive-control-height-1000); /* 40px — default controls */
+  --control-height-compact: var(--primitive-control-height-800);  /* 32px — compact controls */
 
   --gap-050: var(--primitive-gap-050);
   --gap-100: var(--primitive-gap-100);

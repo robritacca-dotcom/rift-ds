@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useId, useRef, useState } from 'react';
+import { useAnchoredPosition } from '../../behaviors/useAnchoredPosition';
 import { useLinkComponent, type LinkComponent } from '../../behaviors/LinkProvider';
 import { useLayer } from '../../behaviors/useLayer';
 import './SourceChip.css';
@@ -56,32 +57,8 @@ export interface SourceChipProps
   extends SourceChipOwnProps,
     Omit<React.ComponentPropsWithoutRef<'a'>, keyof SourceChipOwnProps> {}
 
-/** Breathing room kept between the preview and the edge of whatever clips it. */
-const PREVIEW_EDGE_MARGIN = 8;
-
 /** Closes whichever chip's preview is showing, so only one is ever open. */
 let closeOpenPreview: (() => void) | null = null;
-
-/**
- * The box the preview must stay inside: the viewport, narrowed by every
- * ancestor that clips its overflow (a chat's scrolling message list).
- */
-function clipBounds(el: HTMLElement) {
-  const bounds = { top: 0, left: 0, right: window.innerWidth, bottom: window.innerHeight };
-  for (let node = el.parentElement; node; node = node.parentElement) {
-    const { overflowX, overflowY } = getComputedStyle(node);
-    const rect = node.getBoundingClientRect();
-    if (overflowX !== 'visible') {
-      bounds.left = Math.max(bounds.left, rect.left);
-      bounds.right = Math.min(bounds.right, rect.right);
-    }
-    if (overflowY !== 'visible') {
-      bounds.top = Math.max(bounds.top, rect.top);
-      bounds.bottom = Math.min(bounds.bottom, rect.bottom);
-    }
-  }
-  return bounds;
-}
 
 /**
  * SourceChip is the numbered citation pill linking a claim to its source.
@@ -167,30 +144,18 @@ export const SourceChip = React.forwardRef<
     };
   }, [visible]);
 
-  // Place the panel before it paints: above the chip and flush with its
-  // leading edge, flipped below when the space above is short, and shifted
-  // sideways until it sits inside the clip bounds.
-  useLayoutEffect(() => {
-    const host = hostRef.current;
-    const panel = panelRef.current;
-    if (!visible || !host || !panel) return;
-
-    const bounds = clipBounds(host);
-    const anchor = host.getBoundingClientRect();
-    const width = panel.offsetWidth;
-    const height = panel.offsetHeight;
-
-    const roomAbove = anchor.top - bounds.top - PREVIEW_EDGE_MARGIN;
-    const roomBelow = bounds.bottom - anchor.bottom - PREVIEW_EDGE_MARGIN;
-    const side = roomAbove >= height || roomAbove >= roomBelow ? 'top' : 'bottom';
-
-    const minLeft = bounds.left + PREVIEW_EDGE_MARGIN;
-    const maxLeft = bounds.right - PREVIEW_EDGE_MARGIN - width;
-    const left = Math.max(minLeft, Math.min(anchor.left, maxLeft));
-
-    panel.dataset.side = side;
-    panel.style.setProperty('--ds-source-chip-shift', `${Math.round(left - anchor.left)}px`);
-  }, [visible]);
+  // The shared anchored-position behaviour places the panel before it
+  // paints: above the chip and flush with its leading edge, flipped below
+  // when the space above is short, and shifted sideways to stay on screen.
+  // Fixed, so a chat's scrolling message list cannot clip it.
+  useAnchoredPosition({
+    open: visible,
+    anchorRef: hostRef,
+    panelRef,
+    side: 'top',
+    align: 'start',
+    gapProperty: '--gap-200',
+  });
 
   const element = href ? 'a' : hasPreview ? 'button' : 'span';
 

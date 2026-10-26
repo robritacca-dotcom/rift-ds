@@ -310,6 +310,13 @@
    mode, so it takes no fill of its own: the selected rows' tint and the
    count say what changed. The row beneath stays laid out (and inert), so
    its chips keep their measured fit for when it returns. */
+/* The bar's own row, the one the bulk bar lies over (the views row above
+   it stays in view). */
+.ds-table-toolbar__row {
+  position: relative;
+  min-width: 0;
+}
+
 .ds-table-toolbar__main[data-covered] {
   visibility: hidden;
 }
@@ -392,4 +399,39 @@
 
 .ds-table-toolbar__sheet .ds-table-toolbar__search {
   max-width: none;
+}
+
+/* Saved views: tabs over the bar, the active view's menu and New view
+   after them. */
+.ds-table-toolbar__views {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-100);
+  min-width: 0;
+}
+
+.ds-table-toolbar__view-tabs {
+  min-width: 0;
+}
+
+.ds-table-toolbar__view-picker {
+  flex: 0 1 240px;
+  min-width: 0;
+}
+
+/* The active view's mark while the table has moved on from it: a dot
+   before its name, in the icon colour. */
+.ds-table-toolbar__view-dot {
+  display: inline-block;
+  width: var(--padding-150);
+  height: var(--padding-150);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-icon-primary);
+}
+
+.ds-table-toolbar__rename {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-200);
+  min-width: 0;
 }

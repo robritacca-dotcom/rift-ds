@@ -8,6 +8,7 @@
 
 import { createContext, useContext } from 'react';
 import type { Filter, FilterKind, FilterLabels } from './filterModel';
+import type { TableView } from './views';
 
 /** One column as the control bar sees it. */
 export interface ToolbarColumn {
@@ -67,6 +68,10 @@ export interface TableContextValue {
   setGrouping: (grouping: string[]) => void;
   /** Opens or closes every group at once. */
   setAllGroupsOpen: (open: boolean) => void;
+  /** The table's setup as a view, the setter that applies one, and whether a view matches the setup now. */
+  view: TableView;
+  applyView: (view: TableView) => void;
+  viewMatches: (view: TableView) => boolean;
 }
 
 export const TableContext = createContext<TableContextValue | null>(null);

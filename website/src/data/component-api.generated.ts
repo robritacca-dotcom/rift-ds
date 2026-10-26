@@ -5265,6 +5265,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "multiple"
           },
           {
+            "name": "onViewChange",
+            "type": "((view: TableView) => void)",
+            "required": false,
+            "description": "Fires with the table's setup as a view whenever any part of it changes, so a host can keep the reader's last view."
+          },
+          {
             "name": "grouping",
             "type": "string[]",
             "required": false,
@@ -12756,6 +12762,42 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "((sorts: DataTableSort[]) => void)",
             "required": false,
             "description": "Fires with every sort after the sort panel changes one."
+          },
+          {
+            "name": "views",
+            "type": "TableToolbarView[]",
+            "required": false,
+            "description": "Saved views, shown as tabs over the bar inside a DataTable: picking one\napplies its setup to the table, its tab shows a dot while the table no\nlonger matches it, and its menu saves, saves as new, resets, renames\nand deletes. For controlled use; store them however you like (each\n`view` is plain data). Pair with `onViewsChange`."
+          },
+          {
+            "name": "defaultViews",
+            "type": "TableToolbarView[]",
+            "required": false,
+            "description": "The saved views to start with, for uncontrolled use."
+          },
+          {
+            "name": "onViewsChange",
+            "type": "((views: TableToolbarView[]) => void)",
+            "required": false,
+            "description": "Fires with every view after one is saved, added, renamed or deleted."
+          },
+          {
+            "name": "activeView",
+            "type": "string",
+            "required": false,
+            "description": "The active view's id, for controlled use. Pair with `onActiveViewChange`."
+          },
+          {
+            "name": "defaultActiveView",
+            "type": "string",
+            "required": false,
+            "description": "The view active to begin with, for uncontrolled use. Defaults to the first."
+          },
+          {
+            "name": "onActiveViewChange",
+            "type": "((id: string) => void)",
+            "required": false,
+            "description": "Fires with the id of the view picked or added."
           },
           {
             "name": "grouping",

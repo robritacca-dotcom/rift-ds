@@ -12,6 +12,7 @@ import { Input } from '../Input/Input';
 import { Drawer } from '../Drawer/Drawer';
 import { Popover } from '../Popover/Popover';
 import { SegmentedControl } from '../SegmentedControl/SegmentedControl';
+import { Tabs } from '../Tabs/Tabs';
 import { ToggleSwitch } from '../ToggleSwitch/ToggleSwitch';
 import { FilterEditor } from '../DataTable/FilterEditor';
 import { startDrag } from '../DataTable/dragGesture';
@@ -30,6 +31,7 @@ import type {
   DataTableFilter as Filter,
   DataTableFilterLabels as FilterLabels,
   DataTableSort as Sort,
+  DataTableView,
 } from '../DataTable/DataTable';
 import { useTableContext, type ToolbarColumn } from '../DataTable/tableContext';
 import { BREAKPOINT_PHONE_PX, mediaBelow } from '../../tokens/breakpoints';
@@ -55,6 +57,16 @@ export interface TableToolbarColumn {
   sortable?: boolean;
   /** Whether the rows can be grouped by it. Defaults to false. */
   groupable?: boolean;
+}
+
+/** One saved view of the table: its name and its setup. */
+export interface TableToolbarView {
+  /** Stable id for the view. */
+  id: string;
+  /** The view's name, its tab's label. */
+  name: string;
+  /** The table's setup the view holds. */
+  view: DataTableView;
 }
 
 /** One of the bar's own actions: its primary action, or a secondary one beside it. */
@@ -134,6 +146,23 @@ export interface TableToolbarLabels {
   actionsSection: string;
   /** The Sort button, given how many sorts are set. */
   sort: (count: number) => string;
+  /** The view tabs' name. */
+  views: string;
+  /** The active view's menu button, given its name and whether the table has moved on from it (the tab's dot, said aloud). */
+  viewMenu: (name: string, unsaved: boolean) => string;
+  /** The view menu's items. */
+  saveView: string;
+  saveAsNewView: string;
+  resetView: string;
+  renameView: string;
+  deleteView: string;
+  /** The button that saves the table's setup as a new view, and a new view's name, given its number. */
+  newView: string;
+  newViewName: (count: number) => string;
+  /** The rename field's name, and its buttons. */
+  viewName: string;
+  saveName: string;
+  cancelRename: string;
   /** The Group button, given whether the rows are grouped. */
   group: (grouped: boolean) => string;
   /** The Group panel's column field. */
@@ -192,6 +221,18 @@ const DEFAULT_LABELS: TableToolbarLabels = {
   actionsSection: 'Actions',
   sort: (count) => (count > 0 ? `Sort, ${count} on` : 'Sort'),
   addSort: 'Add sort',
+  views: 'Views',
+  viewMenu: (name, unsaved) => `${name} options${unsaved ? ', unsaved changes' : ''}`,
+  saveView: 'Save view',
+  saveAsNewView: 'Save as new view',
+  resetView: 'Reset to saved',
+  renameView: 'Rename',
+  deleteView: 'Delete view',
+  newView: 'New view',
+  newViewName: (count) => `View ${count}`,
+  viewName: 'View name',
+  saveName: 'Save',
+  cancelRename: 'Cancel',
   group: (grouped) => (grouped ? 'Group, on' : 'Group'),
   groupBy: 'Group by',
   noGrouping: 'None',
@@ -268,6 +309,24 @@ type TableToolbarOwnProps = {
   defaultSorts?: Sort[];
   /** Fires with every sort after the sort panel changes one. */
   onSortsChange?: (sorts: Sort[]) => void;
+  /**
+   * Saved views, shown as tabs over the bar inside a DataTable: picking one
+   * applies its setup to the table, its tab shows a dot while the table no
+   * longer matches it, and its menu saves, saves as new, resets, renames
+   * and deletes. For controlled use; store them however you like (each
+   * `view` is plain data). Pair with `onViewsChange`.
+   */
+  views?: TableToolbarView[];
+  /** The saved views to start with, for uncontrolled use. */
+  defaultViews?: TableToolbarView[];
+  /** Fires with every view after one is saved, added, renamed or deleted. */
+  onViewsChange?: (views: TableToolbarView[]) => void;
+  /** The active view's id, for controlled use. Pair with `onActiveViewChange`. */
+  activeView?: string;
+  /** The view active to begin with, for uncontrolled use. Defaults to the first. */
+  defaultActiveView?: string;
+  /** Fires with the id of the view picked or added. */
+  onActiveViewChange?: (id: string) => void;
   /** The column keys the rows are grouped by, for controlled use. Inside a DataTable the table's grouping is used unless this is set. */
   grouping?: string[];
   /** The grouping to start with, for uncontrolled use. */
@@ -411,6 +470,12 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
       filterable = true,
       sortable = true,
       groupable = true,
+      views: viewsProp,
+      defaultViews,
+      onViewsChange,
+      activeView: activeViewProp,
+      defaultActiveView,
+      onActiveViewChange,
       grouping: groupingProp,
       defaultGrouping,
       onGroupingChange,
@@ -1167,6 +1232,150 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
       </span>
     );
 
+    /* Saved views: tabs over the bar, inside a table. Picking one applies its
+       setup; the active one shows a dot while the table has moved on from
+       it, and its menu saves, saves as new, resets, renames and deletes. */
+    const [views, setViews] = useBound<TableToolbarView[]>(viewsProp, defaultViews ?? [], onViewsChange, undefined);
+    const [activeViewId, setActiveViewId] = useBound<string>(
+      activeViewProp,
+      defaultActiveView ?? views[0]?.id ?? '',
+      onActiveViewChange,
+      undefined,
+    );
+    const active = views.find((v) => v.id === activeViewId) ?? views[0];
+    const dirty = Boolean(table && active && !table.viewMatches(active.view));
+    const [renaming, setRenaming] = useState<string | null>(null);
+    const commitRename = () => {
+      const name = renaming?.trim();
+      if (name && active) setViews(views.map((v) => (v.id === active.id ? { ...v, name } : v)));
+      setRenaming(null);
+    };
+    const pickView = (id: string) => {
+      const picked = views.find((v) => v.id === id);
+      if (!picked) return;
+      setActiveViewId(id);
+      table?.applyView(picked.view);
+    };
+    const snapshot = (): DataTableView => JSON.parse(JSON.stringify(table!.view)) as DataTableView;
+    const addView = () => {
+      let n = views.length + 1;
+      while (views.some((v) => v.name === labels.newViewName(n))) n += 1;
+      let id = `view-${n}`;
+      while (views.some((v) => v.id === id)) id = `${id}-x`;
+      setViews([...views, { id, name: labels.newViewName(n), view: snapshot() }]);
+      setActiveViewId(id);
+    };
+    const saveActive = () =>
+      active && setViews(views.map((v) => (v.id === active.id ? { ...v, view: snapshot() } : v)));
+    const deleteActive = () => {
+      if (!active || views.length < 2) return;
+      const rest = views.filter((v) => v.id !== active.id);
+      setViews(rest);
+      setActiveViewId(rest[0].id);
+      table?.applyView(rest[0].view);
+    };
+    const viewMenu = active && (
+      <DropdownMenu
+        size={size}
+        align="end"
+        items={[
+          { label: labels.saveView, icon: 'save', disabled: !dirty, onClick: saveActive },
+          { label: labels.saveAsNewView, icon: 'add', onClick: addView },
+          {
+            label: labels.resetView,
+            icon: 'restart_alt',
+            disabled: !dirty,
+            onClick: () => table?.applyView(active.view),
+          },
+          { type: 'separator' as const },
+          { label: labels.renameView, icon: 'edit', onClick: () => setRenaming(active.name) },
+          {
+            label: labels.deleteView,
+            icon: 'delete',
+            destructive: true,
+            disabled: views.length < 2,
+            onClick: deleteActive,
+          },
+        ]}
+        trigger={
+          <CircularButton
+            icon="more_horiz"
+            variant="tertiary"
+            size="compact"
+            ariaLabel={labels.viewMenu(active.name, dirty)}
+            tooltip={labels.viewMenu(active.name, dirty)}
+          />
+        }
+      />
+    );
+    /* A view tab's label carries the dot while the table has moved on. */
+    const viewRow = table && views.length > 0 && (
+      <div className="ds-table-toolbar__views">
+        {renaming !== null && active ? (
+          <div className="ds-table-toolbar__rename">
+            <Input
+              size="compact"
+              aria-label={labels.viewName}
+              value={renaming}
+              onValueChange={setRenaming}
+              autoFocus
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') {
+                  event.preventDefault();
+                  commitRename();
+                }
+                if (event.key === 'Escape') {
+                  event.preventDefault();
+                  setRenaming(null);
+                }
+              }}
+            />
+            <Button variant="secondary" tone="neutral" size="compact" label={labels.saveName} onClick={commitRename} />
+            <Button variant="tertiary" size="compact" label={labels.cancelRename} onClick={() => setRenaming(null)} />
+          </div>
+        ) : narrow ? (
+          <Dropdown
+            className="ds-table-toolbar__view-picker"
+            size="compact"
+            aria-label={labels.views}
+            options={views.map((v) => ({
+              value: v.id,
+              label: v.id === active?.id && dirty ? `${v.name} •` : v.name,
+            }))}
+            value={active?.id ?? ''}
+            onValueChange={(id) => pickView(String(id))}
+          />
+        ) : (
+          <Tabs
+            className="ds-table-toolbar__view-tabs"
+            size="compact"
+            aria-label={labels.views}
+            tabs={views.map((v) => ({
+              value: v.id,
+              label: v.name,
+              icon:
+                v.id === active?.id && dirty ? (
+                  <span className="ds-table-toolbar__view-dot" />
+                ) : undefined,
+            }))}
+            value={active?.id}
+            onValueChange={pickView}
+          />
+        )}
+        {renaming === null && viewMenu}
+        {renaming === null && (
+          <CircularButton
+            icon="add"
+            variant="tertiary"
+            size="compact"
+            ariaLabel={labels.newView}
+            tooltip={labels.newView}
+            onClick={addView}
+          />
+        )}
+      </div>
+    );
+
     /* The Group panel: the column the rows group by (or none), then, inside
        a table, Collapse all and Expand all. */
     const groupControl = groupable && groupableColumns.length > 0 && (
@@ -1310,119 +1519,122 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
             screen, not to whatever ancestor a filter or transform makes the
             containing block. phoneScreen is false on the server, so this
             only ever runs in the browser. */}
-        {floating && bulkBar ? createPortal(bulkBar, document.body) : bulkBar}
-        <div
-          className="ds-table-toolbar__main"
-          inert={(bulkMode && !floating) || undefined}
-          data-covered={(bulkMode && !floating) || undefined}
-        >
-          <div className="ds-table-toolbar__start" ref={startRef}>
-            {searchable && !narrow && searchField}
-            {showFilters && !narrow && chips}
-            {showFilters && !narrow && (
-              <span
-                data-more=""
-                className={
-                  filters.length > fit
-                    ? 'ds-table-toolbar__more'
-                    : 'ds-table-toolbar__more ds-table-toolbar__chip--overflow'
-                }
-                aria-hidden={filters.length > fit ? undefined : true}
-                inert={filters.length > fit ? undefined : true}
-              >
-                <Popover
-                  size={size}
-                  ariaLabel={labels.filters(activeFilters)}
-                  onOpenChange={dropIncomplete}
-                  content={panelContent}
+        {viewRow}
+        <div className="ds-table-toolbar__row">
+          {floating && bulkBar ? createPortal(bulkBar, document.body) : bulkBar}
+          <div
+            className="ds-table-toolbar__main"
+            inert={(bulkMode && !floating) || undefined}
+            data-covered={(bulkMode && !floating) || undefined}
+          >
+            <div className="ds-table-toolbar__start" ref={startRef}>
+              {searchable && !narrow && searchField}
+              {showFilters && !narrow && chips}
+              {showFilters && !narrow && (
+                <span
+                  data-more=""
+                  className={
+                    filters.length > fit
+                      ? 'ds-table-toolbar__more'
+                      : 'ds-table-toolbar__more ds-table-toolbar__chip--overflow'
+                  }
+                  aria-hidden={filters.length > fit ? undefined : true}
+                  inert={filters.length > fit ? undefined : true}
                 >
-                  <Chip
-                    size={size === 'compact' ? 'default' : 'large'}
-                    label={labels.moreFilters(Math.max(1, filters.length - fit))}
-                    onClick={() => {}}
-                  />
-                </Popover>
-              </span>
-            )}
-          </div>
-          <div className="ds-table-toolbar__end">
-            {showCount && shown !== undefined && total !== undefined && (
-              <span className="ds-table-toolbar__count">{labels.count(shown, total)}</span>
-            )}
-            {searchable && narrow && (
-              <ToolbarPanel
-                sheet={phoneScreen}
-                title={labels.search}
-                size={size}
-                ariaLabel={labels.search}
-                content={<div className="ds-table-toolbar__search-panel">{searchField}</div>}
-              >
-                <CircularButton
-                  icon="search"
-                  variant="tertiary"
+                  <Popover
+                    size={size}
+                    ariaLabel={labels.filters(activeFilters)}
+                    onOpenChange={dropIncomplete}
+                    content={panelContent}
+                  >
+                    <Chip
+                      size={size === 'compact' ? 'default' : 'large'}
+                      label={labels.moreFilters(Math.max(1, filters.length - fit))}
+                      onClick={() => {}}
+                    />
+                  </Popover>
+                </span>
+              )}
+            </div>
+            <div className="ds-table-toolbar__end">
+              {showCount && shown !== undefined && total !== undefined && (
+                <span className="ds-table-toolbar__count">{labels.count(shown, total)}</span>
+              )}
+              {searchable && narrow && (
+                <ToolbarPanel
+                  sheet={phoneScreen}
+                  title={labels.search}
                   size={size}
                   ariaLabel={labels.search}
-                  tooltip={labels.search}
-                />
-              </ToolbarPanel>
-            )}
-            {/* The icon controls sit together: Filter, Columns, then density. */}
-            {showFilters && (narrow ? filterPanel : addFilterMenu(filterIcon))}
-            {sortControl}
-            {groupControl}
-            {moreControl}
-            {(primaryAction || (!narrow && secondaryActions.length > 0)) && (
-              <span className="ds-table-toolbar__actions">
-                {!narrow &&
-                  secondaryActions.map((action) =>
-                    typeof action.icon === 'string' ? (
+                  content={<div className="ds-table-toolbar__search-panel">{searchField}</div>}
+                >
+                  <CircularButton
+                    icon="search"
+                    variant="tertiary"
+                    size={size}
+                    ariaLabel={labels.search}
+                    tooltip={labels.search}
+                  />
+                </ToolbarPanel>
+              )}
+              {/* The icon controls sit together: Filter, Columns, then density. */}
+              {showFilters && (narrow ? filterPanel : addFilterMenu(filterIcon))}
+              {sortControl}
+              {groupControl}
+              {moreControl}
+              {(primaryAction || (!narrow && secondaryActions.length > 0)) && (
+                <span className="ds-table-toolbar__actions">
+                  {!narrow &&
+                    secondaryActions.map((action) =>
+                      typeof action.icon === 'string' ? (
+                        <CircularButton
+                          key={action.id}
+                          icon={action.icon}
+                          variant="tertiary"
+                          size={size}
+                          ariaLabel={action.label}
+                          tooltip={action.label}
+                          disabled={action.disabled}
+                          onClick={action.onSelect}
+                        />
+                      ) : (
+                        <Button
+                          key={action.id}
+                          variant="secondary"
+                          tone="neutral"
+                          size={size}
+                          iconLeft={action.icon}
+                          label={action.label}
+                          disabled={action.disabled}
+                          onClick={action.onSelect}
+                        />
+                      ),
+                    )}
+                  {primaryAction &&
+                    (narrow ? (
                       <CircularButton
-                        key={action.id}
-                        icon={action.icon}
-                        variant="tertiary"
+                        icon={typeof primaryAction.icon === 'string' ? primaryAction.icon : 'add'}
+                        variant="primary"
                         size={size}
-                        ariaLabel={action.label}
-                        tooltip={action.label}
-                        disabled={action.disabled}
-                        onClick={action.onSelect}
+                        ariaLabel={primaryAction.label}
+                        tooltip={primaryAction.label}
+                        disabled={primaryAction.disabled}
+                        onClick={primaryAction.onSelect}
                       />
                     ) : (
                       <Button
-                        key={action.id}
-                        variant="secondary"
-                        tone="neutral"
+                        variant="primary"
                         size={size}
-                        iconLeft={action.icon}
-                        label={action.label}
-                        disabled={action.disabled}
-                        onClick={action.onSelect}
+                        iconLeft={primaryAction.icon}
+                        label={primaryAction.label}
+                        disabled={primaryAction.disabled}
+                        onClick={primaryAction.onSelect}
                       />
-                    ),
-                  )}
-                {primaryAction &&
-                  (narrow ? (
-                    <CircularButton
-                      icon={typeof primaryAction.icon === 'string' ? primaryAction.icon : 'add'}
-                      variant="primary"
-                      size={size}
-                      ariaLabel={primaryAction.label}
-                      tooltip={primaryAction.label}
-                      disabled={primaryAction.disabled}
-                      onClick={primaryAction.onSelect}
-                    />
-                  ) : (
-                    <Button
-                      variant="primary"
-                      size={size}
-                      iconLeft={primaryAction.icon}
-                      label={primaryAction.label}
-                      disabled={primaryAction.disabled}
-                      onClick={primaryAction.onSelect}
-                    />
-                  ))}
-              </span>
-            )}
-            {actions}
+                    ))}
+                </span>
+              )}
+              {actions}
+            </div>
           </div>
         </div>
       </div>

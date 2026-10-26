@@ -40,6 +40,12 @@ Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same dat
 | sorts | `DataTableSort[]` | no |  | Every sort, first sort first, for controlled use. Inside a DataTable the table's sorts are used unless this is set. |
 | defaultSorts | `DataTableSort[]` | no |  | Initial sorts for uncontrolled use. |
 | onSortsChange | `((sorts: DataTableSort[]) => void)` | no |  | Fires with every sort after the sort panel changes one. |
+| views | `TableToolbarView[]` | no |  | Saved views, shown as tabs over the bar inside a DataTable: picking one applies its setup to the table, its tab shows a dot while the table no longer matches it, and its menu saves, saves as new, resets, renames and deletes. For controlled use; store them however you like (each `view` is plain data). Pair with `onViewsChange`. |
+| defaultViews | `TableToolbarView[]` | no |  | The saved views to start with, for uncontrolled use. |
+| onViewsChange | `((views: TableToolbarView[]) => void)` | no |  | Fires with every view after one is saved, added, renamed or deleted. |
+| activeView | `string` | no |  | The active view's id, for controlled use. Pair with `onActiveViewChange`. |
+| defaultActiveView | `string` | no |  | The view active to begin with, for uncontrolled use. Defaults to the first. |
+| onActiveViewChange | `((id: string) => void)` | no |  | Fires with the id of the view picked or added. |
 | grouping | `string[]` | no |  | The column keys the rows are grouped by, for controlled use. Inside a DataTable the table's grouping is used unless this is set. |
 | defaultGrouping | `string[]` | no |  | The grouping to start with, for uncontrolled use. |
 | onGroupingChange | `((grouping: string[]) => void)` | no |  | Fires with the new grouping when the Group panel changes it. |

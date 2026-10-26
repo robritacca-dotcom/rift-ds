@@ -49,6 +49,7 @@ import {
   type StatusRole,
 } from './columnTypes';
 import { TypedCell } from './TypedCell';
+import { reconcileView, type TableView } from './views';
 import { NUMERIC_TOTALS, TOTALS, calculate, type Aggregate, type Result, type Total } from './aggregates';
 import { useLinkComponent, type LinkComponent } from '../../behaviors/LinkProvider';
 import { EDITOR_MIN_WIDTH, LIVE_KINDS, TYPED_KINDS, type CellEditorKind, type CellValue } from './editorKinds';
@@ -136,6 +137,9 @@ export interface DataTableColumn<R extends DataTableRow = DataTableRow> {
 
 /** The calculations a column's `aggregate` can name. */
 export type DataTableAggregate = Aggregate;
+
+/** One saved setup of a table: its sorts, filters, search, columns, pinning, widths, grouping, density and page size. Selection, the page and open details are the session, never part of a view. */
+export type DataTableView = TableView;
 
 /** Every calculation the totals footer offers, `none` included. */
 export type DataTableTotal = Total;
@@ -558,6 +562,8 @@ type DataTableOwnProps<R extends DataTableRow = DataTableRow> = {
   onExpandedIdsChange?: (ids: string[]) => void;
   /** Whether several rows' details can be open at once (`multiple`, the default) or opening one closes the rest (`single`). */
   expandMode?: 'multiple' | 'single';
+  /** Fires with the table's setup as a view whenever any part of it changes, so a host can keep the reader's last view. */
+  onViewChange?: (view: DataTableView) => void;
   /** The column keys the rows are grouped by, for controlled use; this milestone draws the first. Pair with `onGroupingChange`. */
   grouping?: string[];
   /** The grouping to start with, for uncontrolled use. */
@@ -783,6 +789,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
   defaultSorts,
   onSortsChange,
   multiSort = false,
+  onViewChange,
   renderDetail,
   expandedIds: expandedProp,
   defaultExpandedIds,
@@ -1767,6 +1774,75 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     if (open && !isComplete(open)) setFilters(filters.filter((filter) => filter.id !== open.id));
     setHeaderFilter(null);
   };
+  /* ---- The view -------------------------------------------------------- */
+  const currentView: DataTableView = {
+    version: 1,
+    sorts: currentSorts,
+    filters,
+    search,
+    hiddenColumns: [...hidden],
+    columnOrder: knownOrder,
+    columnPinning: { start: pinnedStart, end: pinnedEnd },
+    columnWidths: widthsState,
+    grouping: groupingState,
+    size,
+    ...(pageSize !== undefined ? { pageSize } : {}),
+  };
+  /* The setup the table opened with: a view that leaves a part out gets
+     this part back, so switching views never carries one view's filters
+     into the next. */
+  const [baseView] = useState(currentView);
+  const viewColumns = columns.map((col) => ({
+    key: col.key,
+    filterKind: col.type ? TYPE_DEFAULTS[col.type].filter : undefined,
+    minWidth: col.minWidth,
+    maxWidth: col.maxWidth,
+    groupable: col.groupable,
+    sortable: col.sortable,
+  }));
+  /** A view in full, every part present, so two views compare part by part. */
+  const fullView = (view: DataTableView): DataTableView => ({ ...baseView, ...reconcileView(view, viewColumns) });
+  const viewKey = (view: DataTableView) =>
+    JSON.stringify([
+      view.sorts ?? [],
+      view.filters ?? [],
+      view.search ?? '',
+      [...(view.hiddenColumns ?? [])].sort(),
+      view.columnOrder ?? [],
+      view.columnPinning ?? {},
+      Object.entries(view.columnWidths ?? {}).sort(([a], [b]) => a.localeCompare(b)),
+      view.grouping ?? [],
+      view.size ?? 'default',
+      view.pageSize ?? null,
+    ]);
+  const currentKey = viewKey(currentView);
+  const applyView = (view: DataTableView) => {
+    const next = fullView(view);
+    setSorts(next.sorts ?? []);
+    setFilters(next.filters ?? []);
+    setSearch(next.search ?? '');
+    setHidden(next.hiddenColumns ?? []);
+    setOrder(next.columnOrder ?? []);
+    setPins(next.columnPinning ?? {});
+    setWidths(next.columnWidths ?? {});
+    setGroupingState(next.grouping ?? []);
+    setSize(next.size ?? 'default');
+    if (next.pageSize !== undefined) setPageSize(next.pageSize);
+    setPage(1);
+  };
+  /* A host listening for the view hears it once per change of setup. */
+  const viewCallback = useRef(onViewChange);
+  useEffect(() => {
+    viewCallback.current = onViewChange;
+  });
+  const reportedKey = useRef(currentKey);
+  useEffect(() => {
+    if (reportedKey.current === currentKey) return;
+    reportedKey.current = currentKey;
+    viewCallback.current?.(JSON.parse(JSON.stringify(currentView)) as DataTableView);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- the key stands for the view
+  }, [currentKey]);
+
   const tableContext: TableContextValue = {
     columns: toolbarColumns,
     filters,
@@ -1794,6 +1870,9 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     grouping: groupingState,
     setGrouping: setGroupingState,
     setAllGroupsOpen: (open: boolean) => setCollapsedGroups(open ? [] : (groups ?? []).map((group) => group.key)),
+    view: currentView,
+    applyView,
+    viewMatches: (view: DataTableView) => viewKey(fullView(view)) === currentKey,
   };
 
   const [menuKey, setMenuKey] = useState<string | null>(null);
@@ -3193,5 +3272,31 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
         )}
       </div>
     </TableContext.Provider>
+  );
+}
+
+/**
+ * A stored view made safe for a table's columns as they are now: columns
+ * that no longer exist drop out of every part of it, a filter whose
+ * condition no longer fits its column's type is dropped, new columns join
+ * the end of the column order, and widths clamp to each column's limits.
+ * DataTable runs it on every view it applies; run it yourself on a view
+ * read from storage before showing it anywhere else.
+ */
+// eslint-disable-next-line react-refresh/only-export-components -- a view helper the table's API carries
+export function reconcileDataTableView<R extends DataTableRow = DataTableRow>(
+  view: DataTableView,
+  columns: DataTableColumn<R>[],
+): DataTableView {
+  return reconcileView(
+    view,
+    columns.map((col) => ({
+      key: col.key,
+      filterKind: col.type ? TYPE_DEFAULTS[col.type].filter : undefined,
+      minWidth: col.minWidth,
+      maxWidth: col.maxWidth,
+      groupable: col.groupable,
+      sortable: col.sortable,
+    })),
   );
 }

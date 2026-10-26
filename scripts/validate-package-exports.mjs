@@ -218,6 +218,8 @@ const INTERNAL_MODULES = new Map([
     'the filter model DataTable and TableToolbar share: kinds, operators, matching and the English words; the public names are DataTableFilter, DataTableFilterOperator and DataTableFilterLabels'],
   ['src/components/DataTable/tableContext.ts',
     'the state a DataTable hands the TableToolbar inside it; TableToolbar\'s own props are the public way to carry the same state'],
+  ['src/components/DataTable/views.ts',
+    'the saved view and its repair against changed columns; the table is the public surface, and its `DataTableView` type and `reconcileDataTableView` function are the published names'],
   ['src/components/DataTable/aggregates.ts',
     'the calculations a group row and the totals footer show; the table is the public surface, and its `DataTableAggregate` and `DataTableTotal` types are the published names'],
   ['src/components/DataTable/columnTypes.ts',

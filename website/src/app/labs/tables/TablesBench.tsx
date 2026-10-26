@@ -25,6 +25,7 @@ import { TypedTable } from "./TypedTable";
 import { PhoneTable } from "./PhoneTable";
 import { GroupedTable } from "./GroupedTable";
 import { DetailTable } from "./DetailTable";
+import { ViewsTable } from "./ViewsTable";
 import { TableToolbar } from "rift-ds/components/TableToolbar/TableToolbar";
 import styles from "./TablesBench.module.css";
 
@@ -479,6 +480,14 @@ export function TablesBench() {
         note="A chevron opens a row's details beneath it, across the table: the figures the list leaves out, the note and an action, rendered only once opened. On a focused row header in a grid, the right arrow opens and the left closes. Switch to One at a time and opening a row closes the rest."
       >
         {({ size, lines }) => <DetailTable size={size} lines={lines} />}
+      </Station>
+
+      <Station
+        id="bench-views"
+        title="15. Saved views"
+        note="Three saved views as tabs over the bar: All accounts, Open pipeline (a filter and a sort) and By owner (grouped, three columns hidden). Pick one and the table takes its setup. Change anything and the active tab shows a dot; its menu saves, saves as new, resets, renames and deletes, and the plus saves the table as a new view."
+      >
+        {({ size, lines }) => <ViewsTable size={size} lines={lines} />}
       </Station>
     </div>
   );

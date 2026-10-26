@@ -41,6 +41,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same dat
 | defaultExpandedIds | `string[]` | no |  | The rows open to begin with, for uncontrolled use. |
 | onExpandedIdsChange | `((ids: string[]) => void)` | no |  | Fires with the open rows' ids after one opens or closes. |
 | expandMode | `"multiple" \| "single"` | no | `multiple` | Whether several rows' details can be open at once (`multiple`, the default) or opening one closes the rest (`single`). |
+| onViewChange | `((view: TableView) => void)` | no |  | Fires with the table's setup as a view whenever any part of it changes, so a host can keep the reader's last view. |
 | grouping | `string[]` | no |  | The column keys the rows are grouped by, for controlled use; this milestone draws the first. Pair with `onGroupingChange`. |
 | defaultGrouping | `string[]` | no |  | The grouping to start with, for uncontrolled use. |
 | onGroupingChange | `((grouping: string[]) => void)` | no |  | Fires with the new grouping, from a header menu or a TableToolbar. |

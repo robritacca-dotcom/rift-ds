@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fireEvent, userEvent, waitFor, within } from 'storybook/test';
 import { TableToolbar } from './TableToolbar';
-import { DataTable, type DataTableColumn, type DataTableRow } from '../DataTable/DataTable';
+import { DataTable, reconcileDataTableView, type DataTableColumn, type DataTableRow } from '../DataTable/DataTable';
 import { Button } from '../Button/Button';
 
 const meta = {
@@ -274,5 +274,57 @@ export const MultiSort: Story = {
     await userEvent.click(body.getByRole('button', { name: 'Clear sorts' }));
     await waitFor(() => expect(names()[0]).toBe('Composer loses focus'));
     await userEvent.keyboard('{Escape}');
+  },
+};
+
+/** Saved views as tabs over the bar: picking one applies its setup, the active tab shows a dot once the table moves on, and its menu saves, saves as new, resets, renames and deletes. */
+export const SavedViews: Story = {
+  render: () => (
+    <DataTable
+      columns={columns}
+      rows={rows}
+      caption="Issues"
+      toolbar={
+        <TableToolbar
+          defaultViews={[
+            { id: 'all', name: 'All issues', view: { version: 1 } },
+            {
+              id: 'open',
+              name: 'Open by points',
+              view: {
+                version: 1,
+                filters: [{ id: 'status-1', column: 'status', operator: 'isAnyOf', value: ['Open'] }],
+                sorts: [{ key: 'points', direction: 'desc' }],
+              },
+            },
+          ]}
+        />
+      }
+    />
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const names = () => canvas.getAllByRole('rowheader').map((cell) => cell.textContent);
+    await expect(names()).toHaveLength(4);
+    await userEvent.click(canvas.getByRole('tab', { name: 'Open by points' }));
+    await waitFor(() => expect(names()).toEqual(['Composer loses focus', 'Badge miscounts drafts']));
+    await expect(canvas.getByRole('button', { name: 'Open by points options' })).toBeInTheDocument();
+    // Moving on from the view marks it: a click takes the points sort off.
+    await userEvent.click(canvas.getByRole('button', { name: 'Points' }));
+    await expect(canvasElement.querySelector('.ds-table-toolbar__view-dot')).not.toBeNull();
+    // Reset brings the saved setup back.
+    await userEvent.click(await canvas.findByRole('button', { name: 'Open by points options, unsaved changes' }));
+    await userEvent.click(await within(document.body).findByRole('menuitem', { name: 'Reset to saved' }));
+    await waitFor(() => expect(canvasElement.querySelector('.ds-table-toolbar__view-dot')).toBeNull());
+    // Save as new adds a tab and makes it active.
+    await userEvent.click(canvas.getByRole('button', { name: 'New view' }));
+    await expect(await canvas.findByRole('tab', { name: 'View 3' })).toHaveAttribute('aria-selected', 'true');
+    // A stored view is repaired against the columns as they are now.
+    const repaired = reconcileDataTableView(
+      { version: 1, sorts: [{ key: 'gone', direction: 'asc' }], columnOrder: ['due', 'gone'] },
+      columns,
+    );
+    await expect(repaired.sorts).toEqual([]);
+    await expect(repaired.columnOrder).toEqual(['due', 'title', 'status', 'points']);
   },
 };

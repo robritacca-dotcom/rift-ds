@@ -8,6 +8,8 @@ import { ContributionGraph } from '../components/ContributionGraph/ContributionG
 import { DatePicker } from '../components/DatePicker/DatePicker';
 import { EventCalendar } from '../components/EventCalendar/EventCalendar';
 import { LegendTile } from '../components/LegendTile/LegendTile';
+import { Pagination } from '../components/Pagination/Pagination';
+import { ProgressBar } from '../components/ProgressBar/ProgressBar';
 import { TimePicker } from '../components/TimePicker/TimePicker';
 
 /*
@@ -169,5 +171,26 @@ export const ContributionWeekStart: Story = {
     // Thursday sits three rows below Monday and four below Sunday.
     await expect(firstColumnCells('monday')).toBe(3);
     await expect(firstColumnCells('sunday')).toBe(4);
+  },
+};
+
+/** Every number a component prints takes the locale's digits: pages, days and percentages in Arabic. */
+export const DigitsFollowTheLocale: Story = {
+  render: () => (
+    <LocaleProvider locale="ar-EG">
+      <div data-testid="arabic">
+        <Pagination defaultPage={2} pageCount={3} />
+        <DatePicker value="2026-01-15" />
+      </div>
+      <ProgressBar value={64} showLabel locale="ar-EG" />
+    </LocaleProvider>
+  ),
+  play: async ({ canvas }) => {
+    const arabic = within(canvas.getByTestId('arabic'));
+    await expect(arabic.getByRole('button', { name: 'Page 2' })).toHaveTextContent('٢');
+    await expect(arabic.getByRole('button', { name: /، selected|, selected/ })).toHaveTextContent('١٥');
+    // Arabic percentages carry a bidi mark beside the sign, so match the digits and the sign.
+    const label = canvas.getByText((_text, el) => el?.className === 'ds-progress-bar__label');
+    await expect(label.textContent).toMatch(/٦٤.?٪/);
   },
 };

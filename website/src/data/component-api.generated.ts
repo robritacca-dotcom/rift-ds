@@ -9204,6 +9204,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "default"
           },
           {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the default percentage readout is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider.",
+            "defaultValue": "en-US"
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -9578,6 +9585,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "The built-in empty state's copy, merged over the English defaults: title\n\"Nothing new\", description \"Notifications will collect here as they\narrive.\" Ignored when `emptyState` is set."
           },
           {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the tab counts are written in, such as `ar-EG`. Defaults to the nearest LocaleProvider's, else `en-US`."
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -9839,6 +9852,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Text of the compact size's readout, given the current page and the page count",
             "defaultValue": "(page: number, pageCount: number) => `Page ${page} of ${pageCount}`"
+          },
+          {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the page numbers is written in, such as `ar-EG`. Defaults to the nearest LocaleProvider's, else `en-US`."
           },
           {
             "name": "className",
@@ -10268,6 +10287,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible label describing what is loading. Defaults to \"Progress\"; a passed native `aria-label` works too."
+          },
+          {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the percentage label is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider.",
+            "defaultValue": "en-US"
           },
           {
             "name": "className",
@@ -11942,6 +11968,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "A short trailing fact for the preview's top line, e.g. \"Updated 3 days ago\". Only rendered with `excerpt`."
           },
           {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the index numeral is written in, such as `ar-EG`. Defaults to the nearest LocaleProvider's, else `en-US`."
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -12616,6 +12648,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Status read after a completed step's label. The check mark that draws the\nstate is decorative, so this visually hidden text is what tells a screen\nreader a done step from an upcoming one. Defaults to \"Completed\".",
             "defaultValue": "Completed"
+          },
+          {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the step numbers is written in, such as `ar-EG`. Defaults to the nearest LocaleProvider's, else `en-US`."
           },
           {
             "name": "className",
@@ -14102,6 +14140,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "false"
           },
           {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the marker numbers are written in, such as `ar-EG`. Defaults to `en-US`. Timeline can render from a Server Component, so it takes the prop alone and reads no LocaleProvider.",
+            "defaultValue": "en-US"
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -15088,6 +15133,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "ReactNode",
             "required": false,
             "description": "The tile's body: WidgetRows, WidgetGroups, a chart, a figure, anything."
+          },
+          {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the count is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider.",
+            "defaultValue": "en-US"
           },
           {
             "name": "className",

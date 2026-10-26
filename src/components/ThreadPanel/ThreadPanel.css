@@ -599,6 +599,13 @@
   );
 }
 
+/* The trailing edge is the left in a right-to-left page. */
+.ds-thread-panel__title:dir(rtl) {
+  /* ds-allow(color): mask alpha keywords (black/transparent), not palette colours */
+  -webkit-mask-image: linear-gradient(to left, black calc(100% - var(--gap-1000)), transparent);
+  mask-image: linear-gradient(to left, black calc(100% - var(--gap-1000)), transparent);
+}
+
 /* The naming state: a shimmer bar holds the title's place while the host
    generates a name (Skeleton's sweep restated on the row's own geometry);
    the row's accessible name stays on its tooltip. */
@@ -669,6 +676,13 @@
     black calc(100% - var(--gap-1000)),
     transparent
   );
+}
+
+/* The trailing edge is the left in a right-to-left page. */
+.ds-thread-panel__description:dir(rtl) {
+  /* ds-allow(color): mask alpha keywords (black/transparent), not palette colours */
+  -webkit-mask-image: linear-gradient(to left, black calc(100% - var(--gap-1000)), transparent);
+  mask-image: linear-gradient(to left, black calc(100% - var(--gap-1000)), transparent);
 }
 
 .ds-thread-panel--dotted .ds-thread-panel__description {

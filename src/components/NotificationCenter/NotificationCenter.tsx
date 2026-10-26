@@ -6,6 +6,8 @@ import './NotificationCenter.css';
 import '../../behaviors/visually-hidden.css';
 import '../../fonts/material-symbols.css';
 import { logicalArrowKey } from '../../behaviors/direction';
+import { formatNumber } from '../../behaviors/locale';
+import { useLocale } from '../../behaviors/LocaleProvider';
 
 export interface NotificationCenterTab {
   /** Display label */
@@ -157,6 +159,8 @@ type NotificationCenterOwnProps = {
    * arrive." Ignored when `emptyState` is set.
    */
   emptyStateLabels?: Partial<Pick<EmptyStateProps, 'title' | 'description'>>;
+  /** The BCP 47 locale the tab counts are written in, such as `ar-EG`. Defaults to the nearest LocaleProvider's, else `en-US`. */
+  locale?: string;
   /** Additional CSS classes */
   className?: string;
   /** The notifications, newest first — typically NotificationItems. */
@@ -194,12 +198,14 @@ export const NotificationCenter = React.forwardRef<HTMLElement, NotificationCent
       onTabChange,
       emptyState,
       emptyStateLabels,
+      locale: localeProp,
       className = '',
       children,
       ...rest
     },
     ref,
   ) => {
+    const locale = useLocale(localeProp);
     const baseClass = 'ds-notification-center';
 
     // `activeTab` and `defaultTab` are the deprecated spellings of `value`
@@ -300,7 +306,7 @@ export const NotificationCenter = React.forwardRef<HTMLElement, NotificationCent
                 >
                   {tab.label}
                   {tab.count !== undefined && (
-                    <span className={`${baseClass}__tab-count`}>{tab.count}</span>
+                    <span className={`${baseClass}__tab-count`}>{formatNumber(tab.count, locale)}</span>
                   )}
                 </button>
               );

@@ -24,6 +24,8 @@
  *   - `text-align`, `float` and `clear` with `left` or `right` (`start` and
  *     `end` read the direction);
  *   - an `inset` shorthand whose left and right differ;
+ *   - a background or mask gradient running `to left` or `to right` in a
+ *     file with no `:dir(rtl)` rule to turn it;
  *   - a horizontal `transform`/`translate` that is not multiplied by
  *     `--ds-inline-sign` (src/behaviors/direction.css), other than zero and
  *     -50% centring: motion along the inline axis has no logical property,
@@ -69,6 +71,7 @@ const LOGICAL = {
 };
 
 /** The logical name for a physical property, or null when the declaration reads the direction already. */
+let fileHasRtlRule = false;
 function physical(property, value, block) {
   const side = /^(scroll-)?(margin|padding)-(left|right)$/.exec(property);
   if (side) return `${side[1] ?? ''}${side[2]}-inline-${side[3] === 'left' ? 'start' : 'end'}`;
@@ -97,6 +100,11 @@ function physical(property, value, block) {
     if (/^\s*(0|0px|-50%|calc\(-50%[^)]*\))\s*$/.test(x)) return null;
     return 'a translation multiplied by var(--ds-inline-sign, 1) (src/behaviors/direction.css)';
   }
+  if (/^(background|background-image|mask|mask-image|-webkit-mask-image)$/.test(property) && /gradient\(\s*to (left|right)\b/.test(value)) {
+    // A gradient has no logical direction: one that runs along the inline
+    // axis needs a :dir(rtl) rule that turns it, in the same file.
+    return fileHasRtlRule ? null : 'a gradient turned by a :dir(rtl) rule in the same file';
+  }
   if (property === 'inset') {
     // Split on top-level spaces only: `calc(-1 * x)` is one value.
     const parts = [];
@@ -123,6 +131,7 @@ let sanctioned = 0;
 const files = [...cssFiles(join(repoRoot, 'src', 'components')), ...cssFiles(join(repoRoot, 'src', 'chat'))];
 for (const file of files) {
   const text = read(file);
+  fileHasRtlRule = /:dir\(rtl\)/.test(text);
   const fileWide = new Set([...text.matchAll(/ds-allow-file\(([a-z-]+)\)/g)].map((m) => m[1]));
   // A stack of open blocks, each with the categories its directives
   // sanction and the text of its declarations (read for the centring test).

@@ -18,4 +18,5 @@ Generated from the rift-ds registry and prop JSDoc, version 1.14.0. The same dat
 | size | `"default" \| "compact"` | no | `default` | Size of the bar |
 | showLabel | `boolean` | no | `false` | Show percentage label |
 | ariaLabel | `string` | no |  | Accessible label describing what is loading. Defaults to "Progress"; a passed native `aria-label` works too. |
+| locale | `string` | no | `en-US` | The BCP 47 locale the percentage label is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider. |
 | className | `string` | no | `` | Additional CSS classes |

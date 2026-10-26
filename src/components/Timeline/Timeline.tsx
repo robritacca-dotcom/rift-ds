@@ -2,6 +2,7 @@ import React from 'react';
 import './Timeline.css';
 import '../../fonts/material-symbols.css';
 import { mirrorClass } from '../../behaviors/direction';
+import { DEFAULT_LOCALE, formatNumber } from '../../behaviors/locale';
 
 export interface TimelineItem {
   /** Step or event title */
@@ -52,6 +53,8 @@ export interface TimelineDefaultProps {
   orientation?: 'vertical' | 'horizontal';
   /** Number the markers 1..n instead of dots */
   numbered?: boolean;
+  /** The BCP 47 locale the marker numbers are written in, such as `ar-EG`. Defaults to `en-US`. Timeline can render from a Server Component, so it takes the prop alone and reads no LocaleProvider. */
+  locale?: string;
   /** Additional CSS classes */
   className?: string;
 }
@@ -156,11 +159,12 @@ export const Timeline = React.forwardRef<HTMLOListElement, TimelineProps>((
   {
     orientation = 'vertical',
     numbered = false,
+    locale = DEFAULT_LOCALE,
     presentLabel = 'Present',
     className = '',
     ...props
   }: TimelineProps &
-    Pick<TimelineDefaultProps, 'orientation' | 'numbered'> &
+    Pick<TimelineDefaultProps, 'orientation' | 'numbered' | 'locale'> &
     Pick<TimelineCompanyProps, 'presentLabel'>,
   ref,
 ) => {
@@ -195,7 +199,7 @@ export const Timeline = React.forwardRef<HTMLOListElement, TimelineProps>((
       );
     }
     if (numbered) {
-      return <span aria-hidden="true">{index + 1}</span>;
+      return <span aria-hidden="true">{formatNumber(index + 1, locale)}</span>;
     }
     return null;
   };

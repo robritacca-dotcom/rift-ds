@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import './Pagination.css';
 import '../../fonts/material-symbols.css';
+import { useLocale } from '../../behaviors/LocaleProvider';
+import { formatNumber } from '../../behaviors/locale';
 
 /** Props owned by Pagination itself — everything else falls through to the nav landmark. */
 type PaginationOwnProps = {
@@ -35,6 +37,8 @@ type PaginationOwnProps = {
   pageLabel?: (page: number) => string;
   /** Text of the compact size's readout, given the current page and the page count */
   readoutLabel?: (page: number, pageCount: number) => string;
+  /** The BCP 47 locale the page numbers is written in, such as `ar-EG`. Defaults to the nearest LocaleProvider's, else `en-US`. */
+  locale?: string;
   /** Additional CSS classes */
   className?: string;
 };
@@ -102,11 +106,13 @@ export const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
       nextLabel = 'Next page',
       pageLabel = defaultPageLabel,
       readoutLabel = defaultReadoutLabel,
+      locale: localeProp,
       className = '',
       ...rest
     },
     ref,
   ) => {
+    const locale = useLocale(localeProp);
     const baseClass = 'ds-pagination';
     const compact = size === 'compact';
 
@@ -171,7 +177,7 @@ export const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
                     aria-current={item === clampedPage ? 'page' : undefined}
                     aria-label={pageLabel(item)}
                   >
-                    {item}
+                    {formatNumber(item, locale)}
                   </button>
                 </li>
               ) : (

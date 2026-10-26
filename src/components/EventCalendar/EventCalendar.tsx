@@ -193,6 +193,7 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
     const today = useMemo(() => new Date(), []);
     const locale = useLocale(localeProp);
     const weekStart = weekStartsOn ?? weekStartOf(locale);
+    const dayNumber = useMemo(() => new Intl.NumberFormat(locale), [locale]);
     const formatDayLabel = useMemo(() => dayLabelIn(locale), [locale]);
     const monthLabel = useMemo(() => monthLabelProp ?? monthLabelIn(locale), [monthLabelProp, locale]);
     const overflowLabel = useMemo(
@@ -337,7 +338,7 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
                     aria-current={isToday ? 'date' : undefined}
                     aria-pressed={selectedDate !== undefined ? isSelected : undefined}
                   >
-                    {date.getDate()}
+                    {dayNumber.format(date.getDate())}
                   </button>
                 ) : (
                   <span
@@ -345,7 +346,7 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
                     aria-label={dayLabel}
                     aria-current={isToday ? 'date' : undefined}
                   >
-                    {date.getDate()}
+                    {dayNumber.format(date.getDate())}
                   </span>
                 )}
 

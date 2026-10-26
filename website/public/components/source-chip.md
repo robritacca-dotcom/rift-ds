@@ -22,5 +22,6 @@ Generated from the rift-ds registry and prop JSDoc, version 1.14.0. The same dat
 | source | `string` | no |  | Where the source lives, shown as the preview's top line, e.g. "docs.acme.com". Only rendered with `excerpt`. |
 | logo | `ReactNode` | no |  | The source's logo or favicon — an image URL (string) or a custom element (ReactNode), cropped to a circle. It fills the chip's leading slot when there is no `index`, and always leads the preview's top line. Decorative: the title and `source` text carry the name. |
 | meta | `string` | no |  | A short trailing fact for the preview's top line, e.g. "Updated 3 days ago". Only rendered with `excerpt`. |
+| locale | `string` | no |  | The BCP 47 locale the index numeral is written in, such as `ar-EG`. Defaults to the nearest LocaleProvider's, else `en-US`. |
 | className | `string` | no | `` | Additional CSS classes |
 | linkComponent | `LinkComponent` | no |  | The component the link renders with, such as Next.js's `Link`, so it navigates through the app's router. Wins over a LinkProvider's; a plain `<a>` when neither is set. |

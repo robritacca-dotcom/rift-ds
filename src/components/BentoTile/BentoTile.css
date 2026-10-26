@@ -155,7 +155,7 @@
   --_fade:
     radial-gradient(120% 100% at 0% 100%, transparent 0%, #000 28%, transparent 70%),
     linear-gradient(to top, transparent, #000 var(--_edge)),
-    linear-gradient(to right, transparent, #000 var(--_edge));
+    linear-gradient(to right, transparent, #000 var(--_edge)); /* ds-allow(physical): the art fades from the tile's drawn bottom-left corner, a picture rather than text */
 
   position: absolute;
   inset: 0;
@@ -335,6 +335,18 @@
   mask:
     linear-gradient(to bottom, #000 calc(100% - var(--_fade)), transparent),
     linear-gradient(to right, #000 calc(100% - var(--_fade)), transparent);
+  mask-composite: intersect;
+}
+
+/* Overflow runs off the inline end, which is the left in a right-to-left page. */
+.ds-bento-tile__body[data-overflow-x]:dir(rtl) {
+  mask: linear-gradient(to left, #000 calc(100% - var(--_fade)), transparent);
+}
+
+.ds-bento-tile__body[data-overflow-x][data-overflow-y]:dir(rtl) {
+  mask:
+    linear-gradient(to bottom, #000 calc(100% - var(--_fade)), transparent),
+    linear-gradient(to left, #000 calc(100% - var(--_fade)), transparent);
   mask-composite: intersect;
 }
 

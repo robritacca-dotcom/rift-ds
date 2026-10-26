@@ -1,5 +1,6 @@
 import React from 'react';
 import './ProgressBar.css';
+import { DEFAULT_LOCALE, formatPercent } from '../../behaviors/locale';
 
 /** Props owned by ProgressBar itself — everything else falls through to the root div. */
 type ProgressBarOwnProps = {
@@ -11,6 +12,8 @@ type ProgressBarOwnProps = {
   showLabel?: boolean;
   /** Accessible label describing what is loading. Defaults to "Progress"; a passed native `aria-label` works too. */
   ariaLabel?: string;
+  /** The BCP 47 locale the percentage label is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider. */
+  locale?: string;
   /** Additional CSS classes */
   className?: string;
 };
@@ -25,7 +28,7 @@ export interface ProgressBarProps
  * attributes onto it.
  */
 export const ProgressBar = React.forwardRef<HTMLDivElement, ProgressBarProps>(
-  ({ value = 0, size = 'default', showLabel = false, ariaLabel, className = '', ...rest }, ref) => {
+  ({ value = 0, size = 'default', showLabel = false, ariaLabel, locale = DEFAULT_LOCALE, className = '', ...rest }, ref) => {
     const clamped = Math.max(0, Math.min(100, value));
     const baseClass = 'ds-progress-bar';
     const classes = [
@@ -54,7 +57,7 @@ export const ProgressBar = React.forwardRef<HTMLDivElement, ProgressBarProps>(
         <div className={`${baseClass}__track`}>
           <div className={`${baseClass}__fill`} style={{ width: `${clamped}%` }} />
         </div>
-        {showLabel && <span className={`${baseClass}__label`}>{clamped}%</span>}
+        {showLabel && <span className={`${baseClass}__label`}>{formatPercent(clamped, locale)}</span>}
       </div>
     );
   },

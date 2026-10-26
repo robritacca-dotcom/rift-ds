@@ -1,6 +1,7 @@
 import React from 'react';
 import type { LinkComponent } from '../../behaviors/LinkProvider';
 import './Widget.css';
+import { DEFAULT_LOCALE, formatNumber } from '../../behaviors/locale';
 
 /* ============================================
    Widget — the tile
@@ -18,6 +19,8 @@ type WidgetOwnProps = {
   titleAs?: 'h2' | 'h3' | 'h4';
   /** The tile's body: WidgetRows, WidgetGroups, a chart, a figure, anything. */
   children?: React.ReactNode;
+  /** The BCP 47 locale the count is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider. */
+  locale?: string;
   /** Additional CSS classes */
   className?: string;
 };
@@ -36,7 +39,7 @@ export interface WidgetProps
  * Purely presentational: safe to render from a Server Component.
  */
 export const Widget = React.forwardRef<HTMLElement, WidgetProps>(
-  ({ title, count, action, titleAs: Title = 'h3', children, className = '', ...rest }, ref) => {
+  ({ title, count, action, titleAs: Title = 'h3', children, locale = DEFAULT_LOCALE, className = '', ...rest }, ref) => {
     const baseClass = 'ds-widget';
 
     return (
@@ -49,7 +52,7 @@ export const Widget = React.forwardRef<HTMLElement, WidgetProps>(
         <header className={`${baseClass}__header`}>
           <Title className={`${baseClass}__title`}>
             {title}
-            {count !== undefined && <span className={`${baseClass}__count`}>{count}</span>}
+            {count !== undefined && <span className={`${baseClass}__count`}>{formatNumber(count, locale)}</span>}
           </Title>
           {action && <span className={`${baseClass}__action`}>{action}</span>}
         </header>

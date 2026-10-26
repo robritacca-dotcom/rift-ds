@@ -127,3 +127,15 @@ export function formatAxisNumber(value: number, locale: string): string {
   }
   return format.format(value);
 }
+
+const percentFormats = new Map<string, Intl.NumberFormat>();
+
+/** A whole percentage, given as 0 to 100, as `locale` writes it: `64%` in en-US, `٦٤٪` in ar-EG, `64 %` in de-DE. */
+export function formatPercent(percent: number, locale: string): string {
+  let format = percentFormats.get(locale);
+  if (!format) {
+    format = new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits: 0 });
+    percentFormats.set(locale, format);
+  }
+  return format.format(percent / 100);
+}

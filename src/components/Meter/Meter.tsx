@@ -1,5 +1,6 @@
 import React from 'react';
 import './Meter.css';
+import { DEFAULT_LOCALE, formatPercent } from '../../behaviors/locale';
 
 /** Props owned by Meter itself — everything else falls through to the root node. */
 type MeterOwnProps = {
@@ -23,6 +24,8 @@ type MeterOwnProps = {
   variant?: 'info' | 'positive' | 'warning' | 'error' | 'neutral';
   /** Component size (bar height) */
   size?: 'default' | 'compact';
+  /** The BCP 47 locale the default percentage readout is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider. */
+  locale?: string;
   /** Additional CSS classes */
   className?: string;
 };
@@ -52,6 +55,7 @@ export const Meter = React.forwardRef<HTMLDivElement, MeterProps>(
       valueText,
       variant = 'info',
       size = 'default',
+      locale = DEFAULT_LOCALE,
       className = '',
       'aria-label': ariaLabel,
       ...rest
@@ -63,7 +67,7 @@ export const Meter = React.forwardRef<HTMLDivElement, MeterProps>(
     const range = max - min;
     const fraction = range > 0 ? Math.max(0, Math.min(1, (value - min) / range)) : 0;
     const percent = Math.round(fraction * 100);
-    const readout = valueText ?? `${percent}%`;
+    const readout = valueText ?? formatPercent(percent, locale);
 
     const classes = [baseClass, `${baseClass}--${variant}`, `${baseClass}--${size}`, className]
       .filter(Boolean)

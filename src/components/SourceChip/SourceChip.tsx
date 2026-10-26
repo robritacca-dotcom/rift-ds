@@ -8,6 +8,8 @@ import './SourceChip.css';
 import '../../fonts/material-symbols.css';
 import { MOTION_HOVER_SHOW_DELAY_MS, MOTION_HOVER_HIDE_DELAY_MS } from '../../tokens/motion';
 import { mirrorClass } from '../../behaviors/direction';
+import { formatNumber } from '../../behaviors/locale';
+import { useLocale } from '../../behaviors/LocaleProvider';
 
 /** Props owned by SourceChip itself — everything else falls through to the root element. */
 type SourceChipOwnProps = {
@@ -44,6 +46,8 @@ type SourceChipOwnProps = {
   logo?: string | React.ReactNode;
   /** A short trailing fact for the preview's top line, e.g. "Updated 3 days ago". Only rendered with `excerpt`. */
   meta?: string;
+  /** The BCP 47 locale the index numeral is written in, such as `ar-EG`. Defaults to the nearest LocaleProvider's, else `en-US`. */
+  locale?: string;
   /** Additional CSS classes */
   className?: string;
   /**
@@ -79,7 +83,8 @@ let closeOpenPreview: (() => void) | null = null;
 export const SourceChip = React.forwardRef<
   HTMLAnchorElement | HTMLButtonElement | HTMLSpanElement,
   SourceChipProps
->(({ title, index, icon = 'language', href, excerpt, source, logo, meta, className = '', linkComponent, ...rest }, ref) => {
+>(({ title, index, icon = 'language', href, excerpt, source, logo, meta, locale: localeProp, className = '', linkComponent, ...rest }, ref) => {
+  const locale = useLocale(localeProp);
   const baseClass = 'ds-source-chip';
   const Link = useLinkComponent(linkComponent);
   const hasPreview = Boolean(excerpt);
@@ -177,7 +182,7 @@ export const SourceChip = React.forwardRef<
   const leading =
     index !== undefined ? (
       <span className={`${baseClass}__index`}>
-        <span className={`${baseClass}__numeral`}>{index}</span>
+        <span className={`${baseClass}__numeral`}>{formatNumber(index, locale)}</span>
       </span>
     ) : logoMark ? (
       <span className={`${baseClass}__logo`} aria-hidden="true">

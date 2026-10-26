@@ -183,6 +183,13 @@
   );
 }
 
+/* The trailing edge is the left in a right-to-left page. */
+.ds-thread-tabs__label:dir(rtl) {
+  /* ds-allow(color): mask alpha keywords (black/transparent), not palette colours */
+  -webkit-mask-image: linear-gradient(to left, black calc(100% - var(--gap-400)), transparent);
+  mask-image: linear-gradient(to left, black calc(100% - var(--gap-400)), transparent);
+}
+
 /* ============================================
    CLOSE — hover-revealed, geometry-stable
    The button always holds its seat (states never move the label); it fades

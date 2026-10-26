@@ -110,7 +110,7 @@
   touch-action: none;
   background:
     linear-gradient(to top, hsl(0 0% 0%), transparent),
-    linear-gradient(to right, hsl(0 0% 100%), transparent),
+    linear-gradient(to right, hsl(0 0% 100%), transparent), /* ds-allow(physical): saturation runs left to right across the colour field in every direction */
     hsl(var(--ds-cp-hue) 100% 50%);
 }
 
@@ -160,6 +160,7 @@
 }
 
 .ds-colorpicker__hue {
+  /* ds-allow(physical): the hue track runs red to violet left to right, like every colour tool */
   background: linear-gradient(
     to right,
     hsl(0 100% 50%),
@@ -175,7 +176,7 @@
 .ds-colorpicker__alpha {
   background-color: var(--color-bg-page-primary);
   background-image:
-    linear-gradient(to right, transparent, var(--ds-cp-solid)),
+    linear-gradient(to right, transparent, var(--ds-cp-solid)), /* ds-allow(physical): the alpha track runs left to right like the field above it */
     repeating-conic-gradient(var(--color-bg-container-tertiary) 0% 25%, transparent 0% 50%);
   background-size: 100% 100%, 8px 8px;
 }

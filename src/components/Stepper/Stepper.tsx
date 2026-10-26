@@ -4,6 +4,8 @@ import React from 'react';
 import './Stepper.css';
 import '../../behaviors/visually-hidden.css';
 import '../../fonts/material-symbols.css';
+import { useLocale } from '../../behaviors/LocaleProvider';
+import { formatNumber } from '../../behaviors/locale';
 
 /** A single step in a Stepper flow. */
 export type StepperStep = {
@@ -37,6 +39,8 @@ type StepperOwnProps = {
    * reader a done step from an upcoming one. Defaults to "Completed".
    */
   completeLabel?: string;
+  /** The BCP 47 locale the step numbers is written in, such as `ar-EG`. Defaults to the nearest LocaleProvider's, else `en-US`. */
+  locale?: string;
   /** Additional CSS classes */
   className?: string;
 };
@@ -64,11 +68,13 @@ export const Stepper = React.forwardRef<HTMLOListElement, StepperProps>(
       onStepClick,
       orientation = 'horizontal',
       completeLabel = 'Completed',
+      locale: localeProp,
       className = '',
       ...rest
     },
     ref,
   ) => {
+    const locale = useLocale(localeProp);
     const baseClass = 'ds-stepper';
 
     const classes = [
@@ -98,7 +104,7 @@ export const Stepper = React.forwardRef<HTMLOListElement, StepperProps>(
               {status === 'complete' ? (
                 <span className="material-symbols-rounded">check</span>
               ) : (
-                index + 1
+                formatNumber(index + 1, locale)
               )}
             </span>
           );

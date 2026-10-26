@@ -18,5 +18,6 @@ Generated from the rift-ds registry and prop JSDoc, version 1.14.0. The same dat
 | items | `TimelineItem[] \| TimelineCompany[]` | yes |  | Ordered list of steps/events Ordered list of company/tool entries |
 | orientation | `"horizontal" \| "vertical"` | no | `vertical` | `vertical` timeline (default) or `horizontal` stepper |
 | numbered | `boolean` | no | `false` | Number the markers 1..n instead of dots |
+| locale | `string` | no | `en-US` | The BCP 47 locale the marker numbers are written in, such as `ar-EG`. Defaults to `en-US`. Timeline can render from a Server Component, so it takes the prop alone and reads no LocaleProvider. |
 | className | `string` | no | `` | Additional CSS classes |
 | presentLabel | `string` | no | `Present` | Text shown in place of the end date for a role marked `present` |

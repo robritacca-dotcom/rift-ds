@@ -163,12 +163,14 @@ export const DrawerSides: Story = {
     try {
       await userEvent.click(canvas.getByRole('button', { name: 'start' }));
       const panel = await body.findByRole('dialog');
-      await waitFor(() => expect(panel.getBoundingClientRect().right).toBeGreaterThan(window.innerWidth - 2));
+      // The panel slides in over the slow motion step; under a loaded test
+      // run that can outlast waitFor's default second.
+      await waitFor(() => expect(panel.getBoundingClientRect().right).toBeGreaterThan(window.innerWidth - 2), { timeout: 4000 });
       await userEvent.keyboard('{Escape}');
-      await waitFor(() => expect(body.queryByRole('dialog')).toBeNull());
+      await waitFor(() => expect(body.queryByRole('dialog')).toBeNull(), { timeout: 4000 });
       await userEvent.click(canvas.getByRole('button', { name: 'left' }));
       const left = await body.findByRole('dialog');
-      await waitFor(() => expect(left.getBoundingClientRect().left).toBeLessThan(2));
+      await waitFor(() => expect(left.getBoundingClientRect().left).toBeLessThan(2), { timeout: 4000 });
       await userEvent.keyboard('{Escape}');
     } finally {
       document.documentElement.dir = before;

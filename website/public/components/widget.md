@@ -19,6 +19,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.14.0. The same dat
 | action | `ReactNode` | no |  | Trailing header slot, opposite the title — a compact button, a link, a period label. |
 | titleAs | `"h2" \| "h3" \| "h4"` | no | `h3` | Heading element for the title, so the tile takes its place in the page's outline. |
 | children | `ReactNode` | no |  | The tile's body: WidgetRows, WidgetGroups, a chart, a figure, anything. |
+| locale | `string` | no | `en-US` | The BCP 47 locale the count is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider. |
 | className | `string` | no | `` | Additional CSS classes |
 
 ## WidgetGrid props

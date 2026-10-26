@@ -154,9 +154,9 @@ export const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
           aria-describedby={describedBy}
           aria-invalid={error || undefined}
           style={{
-            background: `linear-gradient(to right, var(--color-action-primary-bg) ${percentage}%, var(--color-bg-container-tertiary) ${percentage}%)`,
+            '--ds-slider-fill': `${percentage}%`,
             ...style,
-          }}
+          } as React.CSSProperties}
         />
       </Field>
     );

@@ -39,7 +39,22 @@
   border-radius: var(--radius-pill);
   outline: none;
   cursor: pointer;
-  background: var(--color-bg-container-tertiary);
+  /* The fill runs from the inline start to the thumb: a native range input
+     puts its minimum on the right in a right-to-left page, so the gradient
+     turns with it. A gradient has no logical direction of its own. */
+  background: linear-gradient(
+    to right,
+    var(--color-action-primary-bg) var(--ds-slider-fill, 0%),
+    var(--color-bg-container-tertiary) var(--ds-slider-fill, 0%)
+  );
+}
+
+.ds-slider__input:dir(rtl) {
+  background: linear-gradient(
+    to left,
+    var(--color-action-primary-bg) var(--ds-slider-fill, 0%),
+    var(--color-bg-container-tertiary) var(--ds-slider-fill, 0%)
+  );
 }
 
 .ds-slider--compact .ds-slider__input {

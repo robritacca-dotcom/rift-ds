@@ -29,6 +29,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.14.0. The same dat
 | onTabChange | `((value: string) => void)` | no |  | Legacy change callback; fires alongside `onValueChange`. Deprecated: Use `onValueChange` instead. |
 | emptyState | `ReactNode` | no |  | What to render when there are no children — defaults to a built-in empty state. |
 | emptyStateLabels | `Partial<Pick<EmptyStateProps, "title" \| "description">>` | no |  | The built-in empty state's copy, merged over the English defaults: title "Nothing new", description "Notifications will collect here as they arrive." Ignored when `emptyState` is set. |
+| locale | `string` | no |  | The BCP 47 locale the tab counts are written in, such as `ar-EG`. Defaults to the nearest LocaleProvider's, else `en-US`. |
 | className | `string` | no | `` | Additional CSS classes |
 | children | `ReactNode` | no |  | The notifications, newest first — typically NotificationItems. |
 

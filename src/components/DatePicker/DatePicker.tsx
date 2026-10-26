@@ -184,6 +184,7 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(
     const maxDate = parseDate(max);
     const locale = useLocale(localeProp);
     const weekStart = weekStartsOn ?? weekStartOf(locale);
+    const dayNumber = useMemo(() => new Intl.NumberFormat(locale), [locale]);
     const monthLabel = useMemo(() => monthLabelProp ?? monthLabelIn(locale), [monthLabelProp, locale]);
     const dayLabel = useMemo(() => dayLabelProp ?? dayLabelIn(locale), [dayLabelProp, locale]);
     const weekdays = rotateWeek(
@@ -459,7 +460,7 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(
                       // exactly what aria-current="date" is for.
                       aria-current={isToday ? 'date' : undefined}
                     >
-                      {cell.day}
+                      {dayNumber.format(cell.day)}
                     </button>
                   </div>
                 );

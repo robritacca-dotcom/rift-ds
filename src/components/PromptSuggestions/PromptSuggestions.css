@@ -455,6 +455,13 @@
   mask-image: linear-gradient(to right, black calc(100% - var(--gap-1000)), transparent);
 }
 
+/* The trailing end is the left in a right-to-left page. */
+.ds-prompt-suggestions__skeleton-bar:dir(rtl) {
+  /* ds-allow(color): mask alpha keywords (black/transparent), not palette colours */
+  -webkit-mask-image: linear-gradient(to left, black calc(100% - var(--gap-1000)), transparent);
+  mask-image: linear-gradient(to left, black calc(100% - var(--gap-1000)), transparent);
+}
+
 .ds-prompt-suggestions__skeleton-bar::after {
   content: '';
   position: absolute;

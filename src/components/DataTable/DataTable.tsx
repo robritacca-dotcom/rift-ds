@@ -66,6 +66,7 @@ import './DataTable.css';
 import '../../fonts/material-symbols.css';
 import { useLocale } from '../../behaviors/LocaleProvider';
 import { isRtl, logicalArrowKey } from '../../behaviors/direction';
+import { formatPercent } from '../../behaviors/locale';
 
 export interface DataTableColumn<R extends DataTableRow = DataTableRow> {
   /** Unique column identifier, used as the key into each row's values. */
@@ -2380,7 +2381,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
       formatNumber(col.type === 'currency' || col.type === 'progress' ? col.type : 'number', value, col.format);
     if (result.kind === 'amount') return amount(result.value);
     if (result.kind === 'pair') return `${amount(result.value[0])}–${amount(result.value[1])}`;
-    if (result.kind === 'percent') return `${Math.round(result.value)}%`;
+    if (result.kind === 'percent') return formatPercent(result.value, col.format?.locale ?? locale);
     return String(result.value);
   };
   /** What a group row shows in a column: its `aggregate` over the group's rows. */

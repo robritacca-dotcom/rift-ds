@@ -66,12 +66,14 @@ export default function ThemePickerPage() {
           <section className={styles.section}>
             <SectionTitle title="Sizes" />
             <p className={styles.demoText}>
-              Two sizes on the row-control scale. These pick between three
-              made-up themes and change nothing else.
+              Two sizes on the row-control scale, then disabled, where the
+              trigger takes no press. These pick between three made-up themes
+              and change nothing else.
             </p>
             <div className={styles.row}>
               <ThemePicker themes={DEMO_THEMES} value={demo} onValueChange={setDemo} align="start" />
               <ThemePicker themes={DEMO_THEMES} value={demo} onValueChange={setDemo} size="compact" align="start" />
+              <ThemePicker themes={DEMO_THEMES} value={demo} disabled align="start" />
             </div>
           </section>
 

@@ -21,6 +21,10 @@ import { colorModeScript } from 'rift-ds/components/ThemeToggle/colorMode';
   …
 </html>`;
 
+const CONTROLLED_SNIPPET = `const { theme, setTheme } = useTheme(); // next-themes, say
+
+<ThemeToggle value={theme as ColorModeSetting} onValueChange={setTheme} />`;
+
 const HOOK_SNIPPET = `// Any client component: read or change the setting yourself.
 import { useColorMode } from 'rift-ds/components/ThemeToggle/useColorMode';
 
@@ -104,6 +108,13 @@ export default function ThemeTogglePage() {
               a shortcut and the toggle never disagree, across tabs too.
             </p>
             <CodeBlock code={HOOK_SNIPPET} language="tsx" />
+            <p className={styles.demoText}>
+              An app that owns colour mode itself, in its own settings store or
+              a library such as next-themes, passes value and hears each pick
+              through onValueChange, applying it itself. Left to its own store,
+              defaultValue is the setting a first visit takes.
+            </p>
+            <CodeBlock code={CONTROLLED_SNIPPET} language="tsx" />
           </section>
 
           <ComponentInstallStrip slug="theme-toggle" />

@@ -32,13 +32,14 @@ const accentRamps = [
   ["violet", "Violet"],
 ] as const;
 
-const RING_STATES: { value: AgentStatusState; label: string }[] = [
-  { value: "idle", label: "Idle" },
-  { value: "thinking", label: "Thinking" },
-  { value: "working", label: "Working" },
-  { value: "waiting", label: "Waiting" },
-  { value: "done", label: "Done" },
-  { value: "error", label: "Error" },
+/* Each state has an icon, so the switch folds to icons where its words do not fit. */
+const RING_STATES: { value: AgentStatusState; label: string; icon: string }[] = [
+  { value: "idle", label: "Idle", icon: "radio_button_unchecked" },
+  { value: "thinking", label: "Thinking", icon: "psychology" },
+  { value: "working", label: "Working", icon: "autorenew" },
+  { value: "waiting", label: "Waiting", icon: "front_hand" },
+  { value: "done", label: "Done", icon: "check_circle" },
+  { value: "error", label: "Error", icon: "error" },
 ];
 
 /* The mark's states, in AgentStatus's order. */
@@ -79,6 +80,7 @@ function RingDemo() {
         }}
         size="compact"
         aria-label="Ring state"
+        collapse
       />
       <div key={run} className={styles.ringTargets}>
         <div {...ring} className={`${ring.className} ${styles.ringSection}`}>

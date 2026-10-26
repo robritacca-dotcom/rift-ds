@@ -391,10 +391,14 @@
    (src/behaviors/useAnchoredPosition.ts) while open: fixed, so a scroll
    container cannot clip it, on its placement side and lined up with the
    button's end edge, flipped when that side has no room and shifted to stay
-   on screen. Closed, it rests out of flow at the host. */
+   on screen. Closed, it rests fixed at the viewport's corner, hidden: an
+   absolute panel at the host still counts as scrollable overflow, so a
+   button near the page's end edge laid the page out wider than the screen. */
 .ds-ai-button__summary,
 .ds-ai-button__request {
-  position: absolute;
+  position: fixed;
+  top: 0;
+  left: 0;
   z-index: 1;
   /* Component-local lengths, chosen by eye like the button's glow: a
      readable measure, capped so a phone viewport keeps its margins. */

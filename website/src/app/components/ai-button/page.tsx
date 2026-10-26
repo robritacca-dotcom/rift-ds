@@ -15,13 +15,14 @@ import styles from "./page.module.css";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
 
-const STATUSES: { value: AgentStatusState; label: string }[] = [
-  { value: "idle", label: "Idle" },
-  { value: "thinking", label: "Thinking" },
-  { value: "working", label: "Working" },
-  { value: "waiting", label: "Waiting" },
-  { value: "done", label: "Done" },
-  { value: "error", label: "Error" },
+/* Each state has an icon, so the switch folds to icons where its words do not fit. */
+const STATUSES: { value: AgentStatusState; label: string; icon: string }[] = [
+  { value: "idle", label: "Idle", icon: "radio_button_unchecked" },
+  { value: "thinking", label: "Thinking", icon: "psychology" },
+  { value: "working", label: "Working", icon: "autorenew" },
+  { value: "waiting", label: "Waiting", icon: "front_hand" },
+  { value: "done", label: "Done", icon: "check_circle" },
+  { value: "error", label: "Error", icon: "error" },
 ];
 
 /* How long the demo task "works" before it reports done. */
@@ -177,6 +178,7 @@ export default function AiButtonPage() {
                 onValueChange={(v) => pick(v as AgentStatusState)}
                 size="compact"
                 aria-label="Status"
+                collapse
               />
               <Button label="Run a task" variant="secondary" size="compact" onClick={runTask} />
             </div>

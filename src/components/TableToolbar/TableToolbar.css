@@ -81,13 +81,16 @@
   gap: var(--gap-050);
 }
 
-.ds-table-toolbar__chip .ds-chip {
+/* Every chip in the bar, the +N chip included, holds the bar's row height. */
+.ds-table-toolbar__chip .ds-chip,
+.ds-table-toolbar__more .ds-chip {
   box-sizing: border-box;
   height: var(--control-height-default);
   padding-block: 0;
 }
 
-.ds-table-toolbar--compact .ds-table-toolbar__chip .ds-chip {
+.ds-table-toolbar--compact .ds-table-toolbar__chip .ds-chip,
+.ds-table-toolbar--compact .ds-table-toolbar__more .ds-chip {
   height: var(--control-height-compact);
 }
 

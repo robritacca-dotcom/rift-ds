@@ -3,6 +3,7 @@ import type { LinkComponent } from '../../behaviors/LinkProvider';
 import { Avatar } from '../Avatar/Avatar';
 import { DropdownMenu } from '../DropdownMenu/DropdownMenu';
 import { Kbd } from '../Kbd/Kbd';
+import type { Shortcut, ShortcutKeyLabels } from '../../behaviors/shortcut-keys';
 import { PixelAvatar, distinctPixelInks } from '../PixelAvatar/PixelAvatar';
 import { StatusDot } from '../StatusDot/StatusDot';
 import type { StatusDotProps } from '../StatusDot/StatusDot';
@@ -142,8 +143,12 @@ type ThreadPanelOwnProps = {
   newThreadLabel?: string;
   /** Icon for the new-thread row — Material Symbol name (string) or custom element (ReactNode). Defaults to the pen-in-a-box `edit_square`, the same glyph chat headers use for New chat. */
   newThreadIcon?: string | React.ReactNode;
-  /** Keyboard hint rendered as compact Kbds at the row's trailing edge, e.g. `["Ctrl", "N"]`. Decorative — the host owns the actual binding. */
+  /** Keyboard hint rendered as compact Kbds at the row's trailing edge, as literal keycaps, e.g. `["Ctrl", "N"]`. Decorative — the host owns the actual binding. */
   newThreadShortcut?: string[];
+  /** Keyboard hint at the row's trailing edge in the shortcut grammar (`mod+shift+o`), drawn in the reader's platform legends. Decorative — bind the action with `useShortcut`. Wins over `newThreadShortcut`. */
+  newThreadKeys?: Shortcut;
+  /** Replaces any legend `newThreadKeys` is drawn with, such as `{ ctrl: 'Strg' }` for a German keyboard. */
+  keyLabels?: ShortcutKeyLabels;
   /** Fires when the new-thread row is clicked. */
   onNewThread?: () => void;
   /** Optional href — the new-thread row renders as an `<a>`. */
@@ -384,6 +389,8 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
       newThreadLabel,
       newThreadIcon = 'edit_square',
       newThreadShortcut,
+      newThreadKeys,
+      keyLabels,
       onNewThread,
       newThreadHref,
       controls,
@@ -546,7 +553,11 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
             <span className={`${baseClass}__new-label`}>
               {newThreadLabel ?? 'New thread'}
             </span>
-            {newThreadShortcut && newThreadShortcut.length > 0 && (
+            {newThreadKeys ? (
+              <span className={`${baseClass}__new-kbd`} aria-hidden="true">
+                <Kbd keys={newThreadKeys} keyLabels={keyLabels} size="compact" aria-keyshortcuts={undefined} />
+              </span>
+            ) : newThreadShortcut && newThreadShortcut.length > 0 && (
               <span className={`${baseClass}__new-kbd`} aria-hidden="true">
                 {newThreadShortcut.map((key) => (
                   <Kbd key={key} size="compact">

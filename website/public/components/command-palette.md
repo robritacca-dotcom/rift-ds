@@ -22,6 +22,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.14.0. The same dat
 | loading | `boolean` | no | `false` | Show a loading affordance in place of results |
 | loadingMessage | `string` | no | `Loading…` | Status text shown in place of results while `loading` is set. Defaults to "Loading…". |
 | hotkey | `boolean` | no | `true` | Bind Cmd+K / Ctrl+K globally to toggle the palette. Set to false when the host app owns the shortcut. |
+| hotkeyKeys | `string \| string[]` | no | `['meta+k', 'ctrl+k']` | The shortcuts that toggle the palette when `hotkey` is on, in the shortcut grammar. Defaults to `['meta+k', 'ctrl+k']`, so both answer on every platform. They go through the shared shortcut listener, so they fire from a text field and over an open dialog. |
+| keyLabels | `Partial<Record<string, string>>` | no |  | Replaces any legend a command's `keys` is drawn with, such as `{ ctrl: 'Strg' }` for a German keyboard. |
 | onSelect | `((command: CommandPaletteCommand) => void)` | no |  | Called with the chosen command, after its own `onSelect`. Replaces the native `onSelect` (text-selection) handler on the panel. |
 | onSearchChange | `((query: string) => void)` | no |  | Called as the user types, for async/server-side search |
 | manualFiltering | `boolean` | no | `false` | Skip built-in filtering — use when commands are filtered upstream |

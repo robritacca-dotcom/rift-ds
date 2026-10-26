@@ -26,3 +26,19 @@
   min-width: 20px;
   padding: var(--padding-050) var(--padding-100);
 }
+
+/* A whole shortcut: the outer <kbd> only lays its keycaps out, one group per
+   step of a sequence, so it sheds the keycap's own chrome. */
+.ds-kbd--combo {
+  min-width: 0;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  gap: var(--gap-200);
+}
+
+.ds-kbd__step {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-050);
+}

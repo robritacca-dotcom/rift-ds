@@ -233,7 +233,8 @@ const handler = createMcpHandler(
               `without a reload. In Next.js, mount it from a 'use client' file, since the root layout is a Server Component; ` +
               `a component rendered on the server takes linkComponent on the instance instead. LocaleProvider ` +
               `('${pkg.name}/behaviors/LocaleProvider') is optional too: it sets the locale every client-rendered component writes ` +
-              `numbers, dates and calendars in (en-US without it, never the browser's), and a server-rendered one takes locale on the instance.`,
+              `numbers, dates and calendars in (en-US without it, never the browser's), and a server-rendered one takes locale on the instance. ` +
+              `Key bindings: useShortcut from '${pkg.name}/behaviors/shortcuts' ('mod+k' is Cmd+K on a Mac, Ctrl+K elsewhere), the listener the components use; Kbd's keys prop draws the same string.`,
             "",
             `Full guide: ${SITE_URL}/docs/get-started. Live docs: ${SITE_URL}/components. ` +
               `Design spec: ${SITE_URL}/design.md.`,

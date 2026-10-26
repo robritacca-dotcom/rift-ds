@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useId, useRef, useState } from 'react';
+import React, { useId, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { Button } from '../Button/Button';
 import { CircularButton } from '../CircularButton/CircularButton';
@@ -14,6 +14,7 @@ import { useScrollLock } from '../../behaviors/useScrollLock';
 import '../../fonts/material-symbols.css';
 import './Attachment.css';
 import { useLocale } from '../../behaviors/LocaleProvider';
+import { useShortcut } from '../../behaviors/shortcuts';
 
 /** Props owned by AttachmentViewer itself — everything else falls through to the panel. */
 type AttachmentViewerOwnProps = {
@@ -149,20 +150,10 @@ export const AttachmentViewer = React.forwardRef<HTMLDivElement, AttachmentViewe
       onActiveChange?.(next.id);
     };
 
-    // Arrow keys step through the files: this component's own listener,
-    // gated on open state. The handler rides a ref so the subscription does
-    // not churn on every render.
-    const stepRef = useRef(step);
-    stepRef.current = step;
-    useEffect(() => {
-      if (!open || total < 2) return;
-      const onKey = (event: KeyboardEvent) => {
-        if (event.key === 'ArrowLeft') stepRef.current(-1);
-        if (event.key === 'ArrowRight') stepRef.current(1);
-      };
-      document.addEventListener('keydown', onKey);
-      return () => document.removeEventListener('keydown', onKey);
-    }, [open, total]);
+    // Arrow keys step through the files, through the shared shortcut
+    // listener scoped to the panel, while the viewer is the surface in front.
+    useShortcut('arrowleft', () => step(-1), { scope: panelRef, enabled: open && total > 1 });
+    useShortcut('arrowright', () => step(1), { scope: panelRef, enabled: open && total > 1 });
 
     if (!mounted) return null;
 

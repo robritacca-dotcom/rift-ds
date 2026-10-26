@@ -81,6 +81,12 @@ const SUBPATHS = [
   // server and the browser can disagree on). Consumers mount it, so it is
   // published; design.md's Components intro owns the contract.
   { key: './behaviors/LocaleProvider', srcJs: './src/behaviors/LocaleProvider.tsx', dist: './behaviors/LocaleProvider' },
+  // Keyboard shortcuts: useShortcut and useRegisteredShortcuts over the one
+  // document key listener, so an app's own bindings follow the same rules as
+  // the library's (scoped to the surface in front, quiet in text fields,
+  // never stealing Escape from an open overlay). Consumers bind keys with
+  // it, so it is published; design.md's Components intro owns the contract.
+  { key: './behaviors/shortcuts', srcJs: './src/behaviors/shortcuts.ts', dist: './behaviors/shortcuts' },
   // The chat widget: the composed chat as one installable thing, in four
   // subpaths so the main barrel never pulls a peer a consumer did not ask
   // for. `./chat` needs react-markdown and remark-gfm, `./chat/server` the

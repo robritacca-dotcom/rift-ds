@@ -21,4 +21,5 @@ Generated from the rift-ds registry and prop JSDoc, version 1.14.0. The same dat
 | open | `boolean` | no |  | Whether the menu is open (controlled mode) |
 | defaultOpen | `boolean` | no | `false` | Whether the menu starts open when uncontrolled |
 | onOpenChange | `((open: boolean) => void)` | no |  | Callback when the menu opens or closes |
+| keyLabels | `Partial<Record<string, string>>` | no |  | Replaces any legend an item's `keys` is written with, such as `{ ctrl: 'Strg' }` for a German keyboard. |
 | className | `string` | no | `` | Additional CSS classes on the root wrapper, which holds the trigger and the panel |

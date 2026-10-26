@@ -75,6 +75,17 @@ let pressOwner: Layer | null = null;
 const contains = (layer: Layer, target: Node) =>
   (layer.optionsRef.current.getElements?.() ?? []).some((el) => el?.contains(target));
 
+/**
+ * Whether `node` sits inside an open layer that names its elements: a
+ * popover, menu or listbox holding focus, or a modal panel. Keyboard
+ * shortcuts read it, so a page shortcut never fires while focus is in an
+ * overlay that has its own keys.
+ */
+export const openLayerContains = (node: Node): boolean => layers.some((layer) => contains(layer, node));
+
+/** Whether any layer is open. Escape belongs to the stack while one is, so keyboard shortcuts leave it alone. */
+export const hasOpenLayer = (): boolean => layers.length > 0;
+
 const handleKeyDown = (event: KeyboardEvent) => {
   if (event.key !== 'Escape' || event.defaultPrevented) return;
   const top = layers[layers.length - 1];

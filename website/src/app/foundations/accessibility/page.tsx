@@ -130,6 +130,13 @@ const inheritedRows = [
     },
   },
   {
+    id: "shortcuts",
+    cells: {
+      behaviour: "Keyboard shortcuts",
+      what: "Every key binding, the library's and your app's, goes through one listener. A shortcut stays quiet while someone types in a field, never takes Escape from an open overlay, and a page shortcut waits while a dialog or menu holds focus. Published as ./behaviors/shortcuts, with a list of the live bindings for a help dialog.",
+    },
+  },
+  {
     id: "scroll",
     cells: {
       behaviour: "Counted scroll lock",
@@ -190,7 +197,7 @@ const keyboardRows = [
     id: "arrows",
     cells: {
       key: "Arrow keys",
-      does: "Move through the list in CommandPalette, and between files in Lightbox and AttachmentViewer.",
+      does: "Move through the list in CommandPalette, and between files in Lightbox and AttachmentViewer, while focus is inside the open panel.",
     },
   },
   {

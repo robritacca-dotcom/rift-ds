@@ -10,6 +10,7 @@ import {
 import { usePathname } from "next/navigation";
 import { lockBodyScroll, unlockBodyScroll } from "@/lib/scroll-lock";
 import { type NavListItem } from "rift-ds/components/NavList/NavList";
+import { useShortcut } from "rift-ds/behaviors/shortcuts";
 import { getNavSections } from "@/config/navigation";
 import HeaderBar from "./HeaderBar";
 import MobileDrawer from "./MobileDrawer";
@@ -99,22 +100,22 @@ export default function MegaNav() {
   }, [openId]);
 
   // Close on Escape, returning focus to the open section's visible trigger.
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        if (openId) {
-          const trigger = inFlowHeaderRef.current?.querySelector<HTMLElement>(
-            `a[data-mega-trigger="${openId}"]:not([tabindex="-1"])`
-          );
-          setOpenId(null);
-          trigger?.focus();
-        }
-        if (mobileOpen) setMobileOpen(false);
+  // Through the library's shortcut listener, so an open overlay keeps its
+  // own Escape and the header closes only when it is the thing in front.
+  useShortcut(
+    "escape",
+    () => {
+      if (openId) {
+        const trigger = inFlowHeaderRef.current?.querySelector<HTMLElement>(
+          `a[data-mega-trigger="${openId}"]:not([tabindex="-1"])`
+        );
+        setOpenId(null);
+        trigger?.focus();
       }
-    };
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, [openId, mobileOpen]);
+      if (mobileOpen) setMobileOpen(false);
+    },
+    { enabled: Boolean(openId) || mobileOpen, global: true, allowInInput: true }
+  );
 
   // Close mega when pathname changes (user navigated via a link).
   // The setState here is intentional — we react to external navigation,

@@ -45,6 +45,7 @@
     "./behaviors/useScrollLock": "./src/behaviors/useScrollLock.ts",
     "./behaviors/LinkProvider": "./src/behaviors/LinkProvider.tsx",
     "./behaviors/LocaleProvider": "./src/behaviors/LocaleProvider.tsx",
+    "./behaviors/shortcuts": "./src/behaviors/shortcuts.ts",
     "./chat": "./src/chat/index.ts",
     "./chat/server": "./src/chat/server.ts",
     "./chat/upstash": "./src/chat/upstash.ts",

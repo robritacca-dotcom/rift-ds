@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { useShortcut } from "rift-ds/behaviors/shortcuts";
 import { tokenRegistry } from "rift-ds/tokens/registry";
 import { MOTION_SCROLL_SETTLE_MS } from "rift-ds/tokens/motion";
 import { ToggleSwitch } from "rift-ds/components/ToggleSwitch/ToggleSwitch";
@@ -396,17 +397,10 @@ export default function InspectMode({ desktopOnly = false }: InspectModeProps) {
       setPinned((current) => !current);
     };
 
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key !== "Escape") return;
-      if (pinnedRef.current) setPinned(false);
-      else deactivate();
-    };
-
     const onReflow = () => setTick((t) => t + 1);
 
     window.addEventListener("mousemove", onMove, true);
     document.addEventListener("click", onClick, true);
-    window.addEventListener("keydown", onKey);
     /* Capture-phase: scroll events do not bubble, and capture sees a scroll
        on any inner container as well as the window. */
     window.addEventListener("scroll", onReflow, { passive: true, capture: true });
@@ -419,11 +413,21 @@ export default function InspectMode({ desktopOnly = false }: InspectModeProps) {
       document.body.style.cursor = previousCursor;
       window.removeEventListener("mousemove", onMove, true);
       document.removeEventListener("click", onClick, true);
-      window.removeEventListener("keydown", onKey);
       window.removeEventListener("scroll", onReflow, { capture: true });
       window.removeEventListener("resize", onReflow);
     };
   }, [active, deactivate]);
+
+  // Escape unpins the popover, then leaves inspect mode, through the
+  // library's shortcut listener, which leaves Escape to any open overlay.
+  useShortcut(
+    "escape",
+    () => {
+      if (pinnedRef.current) setPinned(false);
+      else deactivate();
+    },
+    { enabled: active, global: true, allowInInput: true }
+  );
 
   const hoverRect = inspection?.el.isConnected
     ? inspection.el.getBoundingClientRect()

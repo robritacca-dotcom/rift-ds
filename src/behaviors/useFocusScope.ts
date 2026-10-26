@@ -83,6 +83,14 @@ const applyInert = () => {
   }
 };
 
+/**
+ * The panel of the topmost modal scope that isolates the page, or null when
+ * none is open. Keyboard shortcuts read it: while a modal is open, only the
+ * shortcuts that live inside it (or are global) may fire.
+ */
+export const activeModalPanel = (): HTMLElement | null =>
+  inertScopes[inertScopes.length - 1]?.panel ?? null;
+
 const isVisible = (el: HTMLElement) => el.getClientRects().length > 0;
 
 /** Where focus goes back to on close: the opener, or the nearest visible stand-in for it. */

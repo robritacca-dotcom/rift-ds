@@ -12,6 +12,13 @@
  * register on the stack; this script is what keeps the next one from
  * quietly adding a listener of its own.
  *
+ * Keys have the same shape of owner: src/behaviors/shortcuts.ts holds the one
+ * document listener every keyboard shortcut goes through (useShortcut), so a
+ * binding is quiet in text fields, scoped to the surface in front, and never
+ * steals Escape from an open overlay. Since 2026-10-26 CommandPalette's Cmd+K
+ * and the two galleries' arrows ride it, and the site's own Escape handlers
+ * (the header, inspect mode, the architecture map, the graph) do too.
+ *
  * Checks every non-story .ts/.tsx file under src/components and src/chat:
  *
  *   1. No `document.` or `window.` listener for a key or press event
@@ -21,6 +28,10 @@
  *      `dismissOnOutsidePress` + `getElements`) instead.
  *   2. Every SANCTIONED entry still matches a listener in its file, so the
  *      table never outlives the code it excuses.
+ *
+ * And every non-story .ts/.tsx file under website/src, for key events only
+ * (keydown, keyup): the site's own presses and clicks are its business, but
+ * a key binding goes through `useShortcut` from `rift-ds/behaviors/shortcuts`.
  *
  * Out of scope by design: scroll, resize, wheel, pointermove and
  * visibilitychange listeners (scroll spies, drag tracking, the shader's
@@ -45,17 +56,7 @@ const EVENTS = ['keydown', 'keyup', 'pointerdown', 'pointerup', 'mousedown', 'mo
 const LISTENER = new RegExp(`\\b(document|window)\\.addEventListener\\(\\s*['"\`](${EVENTS.join('|')})['"\`]`, 'g');
 
 /** File (repo-relative) → event → why a document listener is the right tool there. */
-const SANCTIONED = {
-  'src/components/CommandPalette/CommandPalette.tsx': {
-    keydown: 'the global Cmd+K / Ctrl+K hotkey must hear the keyboard while the palette is closed, when no layer exists',
-  },
-  'src/components/Lightbox/Lightbox.tsx': {
-    keydown: 'the gallery arrows step images from anywhere while the lightbox is open; Escape still goes through its layer',
-  },
-  'src/components/Attachment/AttachmentViewer.tsx': {
-    keydown: 'the arrows step between files from anywhere while the viewer is open; Escape still goes through its layer',
-  },
-};
+const SANCTIONED = {};
 
 const stripComments = (src) => src.replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, ' ')).replace(/\/\/.*$/gm, (m) => ' '.repeat(m.length));
 
@@ -92,6 +93,28 @@ for (const file of [...walk(join(repoRoot, 'src', 'components')), ...walk(join(r
   }
 }
 
+const KEY_EVENTS = new Set(['keydown', 'keyup']);
+for (const file of walk(join(repoRoot, 'website', 'src'))) {
+  scanned += 1;
+  const path = display(file);
+  const src = stripComments(read(file));
+  for (const m of src.matchAll(LISTENER)) {
+    const event = m[2];
+    if (!KEY_EVENTS.has(event)) continue;
+    const line = src.slice(0, m.index).split('\n').length;
+    if (SANCTIONED[path]?.[event]) {
+      matched.add(`${path}#${event}`);
+      continue;
+    }
+    errors.push(
+      `${path}:${line} adds a ${m[1]} "${event}" listener. A key binding goes through useShortcut from ` +
+        `rift-ds/behaviors/shortcuts, which keeps it out of text fields and open overlays, or, if a ` +
+        `document listener is genuinely the right tool, sanction it in SANCTIONED in ` +
+        `scripts/validate-overlay-listeners.mjs with the reason.`
+    );
+  }
+}
+
 for (const [path, events] of Object.entries(SANCTIONED)) {
   for (const event of Object.keys(events)) {
     if (!matched.has(`${path}#${event}`)) {
@@ -107,5 +130,5 @@ if (errors.length > 0) {
 }
 
 console.log(
-  `✓ Overlay listeners owned by the layer stack — ${scanned} files scanned, ${matched.size} sanctioned document listeners`
+  `✓ Overlay and key listeners owned by the layer stack and the shortcut listener — ${scanned} files scanned, ${matched.size} sanctioned document listeners`
 );

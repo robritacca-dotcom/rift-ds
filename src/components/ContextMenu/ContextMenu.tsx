@@ -10,6 +10,8 @@ import type {
 } from '../DropdownMenu/DropdownMenu';
 import './ContextMenu.css';
 import '../../fonts/material-symbols.css';
+import { MenuKeyLabelsContext, MenuShortcutHint } from '../DropdownMenu/ShortcutHint';
+import { shortcutAriaAnyPlatform, type ShortcutKeyLabels } from '../../behaviors/shortcut-keys';
 
 /* ============================================
    TYPES
@@ -23,6 +25,8 @@ type ContextMenuOwnProps = {
   size?: 'default' | 'compact';
   /** Accessible name for the menu */
   ariaLabel?: string;
+  /** Replaces any legend an item's `keys` is written with, such as `{ ctrl: 'Strg' }` for a German keyboard. */
+  keyLabels?: ShortcutKeyLabels;
   /** Additional CSS classes */
   className?: string;
   /** The right-clickable area the menu is attached to */
@@ -212,6 +216,7 @@ const SubEntry = ({
       role={isChoice ? 'menuitemradio' : 'menuitem'}
       aria-checked={isChoice ? entry.selected : undefined}
       aria-disabled={entry.disabled || undefined}
+      aria-keyshortcuts={entry.keys ? shortcutAriaAnyPlatform(entry.keys) : undefined}
       onClick={(e) => {
         e.stopPropagation();
         if (!entry.disabled) {
@@ -228,7 +233,7 @@ const SubEntry = ({
         )}
         {entry.label}
       </span>
-      {entry.shortcut && <span className={`${baseClass}__shortcut`}>{entry.shortcut}</span>}
+      <MenuShortcutHint item={entry} className={`${baseClass}__shortcut`} />
       {entry.selected && (
         <ChosenMark />
       )}
@@ -253,6 +258,7 @@ export const ContextMenu = React.forwardRef<HTMLDivElement, ContextMenuProps>(
       items,
       size = 'default',
       ariaLabel,
+      keyLabels,
       className = '',
       children,
       onContextMenu,
@@ -468,6 +474,7 @@ export const ContextMenu = React.forwardRef<HTMLDivElement, ContextMenuProps>(
           role={isChoice ? 'menuitemradio' : 'menuitem'}
           aria-checked={isChoice ? entry.selected : undefined}
           aria-disabled={entry.disabled || undefined}
+          aria-keyshortcuts={entry.keys ? shortcutAriaAnyPlatform(entry.keys) : undefined}
           onClick={(e) => {
             e.stopPropagation();
             if (!entry.disabled) {
@@ -487,7 +494,7 @@ export const ContextMenu = React.forwardRef<HTMLDivElement, ContextMenuProps>(
             )}
             {entry.label}
           </span>
-          {entry.shortcut && <span className={`${baseClass}__shortcut`}>{entry.shortcut}</span>}
+          <MenuShortcutHint item={entry} className={`${baseClass}__shortcut`} />
           {entry.selected && (
             <ChosenMark />
           )}
@@ -505,29 +512,31 @@ export const ContextMenu = React.forwardRef<HTMLDivElement, ContextMenuProps>(
     const itemCounter = { count: 0 };
 
     return (
-      <div {...rest} ref={setRootRef} className={classes} onContextMenu={handleContextMenu}>
-        {children}
-        {isOpen && (
-          <ul
-            className={panelClasses}
-            role="menu"
-            aria-label={ariaLabel}
-            aria-activedescendant={
-              focusedIndex >= 0 ? `${generatedId}-item-${focusedIndex}` : undefined
-            }
-            tabIndex={-1}
-            ref={(el) => {
-              panelRef.current = el;
-            }}
-            // The pointer position is runtime data, not a design decision —
-            // the one sanctioned inline style in this component.
-            style={{ left: position.x, top: position.y }}
-            onKeyDown={handleKeyDown}
-          >
-            {items.map((entry, index) => renderEntry(entry, index, itemCounter))}
-          </ul>
-        )}
-      </div>
+      <MenuKeyLabelsContext.Provider value={keyLabels}>
+        <div {...rest} ref={setRootRef} className={classes} onContextMenu={handleContextMenu}>
+          {children}
+          {isOpen && (
+            <ul
+              className={panelClasses}
+              role="menu"
+              aria-label={ariaLabel}
+              aria-activedescendant={
+                focusedIndex >= 0 ? `${generatedId}-item-${focusedIndex}` : undefined
+              }
+              tabIndex={-1}
+              ref={(el) => {
+                panelRef.current = el;
+              }}
+              // The pointer position is runtime data, not a design decision —
+              // the one sanctioned inline style in this component.
+              style={{ left: position.x, top: position.y }}
+              onKeyDown={handleKeyDown}
+            >
+              {items.map((entry, index) => renderEntry(entry, index, itemCounter))}
+            </ul>
+          )}
+        </div>
+      </MenuKeyLabelsContext.Provider>
     );
   },
 );

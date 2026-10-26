@@ -640,7 +640,7 @@ Step-by-step guidance with numbered badges, connecting lines, and horizontal lay
 A keyboard key rendered as a keycap, for shortcut hints in menus and prose.
 
 - Import: `import { Kbd } from 'rift-ds';`
-- Rendering: server-renderable (no 'use client')
+- Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/kbd.md
 
 ### Link list

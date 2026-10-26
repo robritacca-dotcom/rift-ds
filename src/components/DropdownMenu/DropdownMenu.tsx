@@ -8,6 +8,8 @@ import { useAnchoredPosition } from '../../behaviors/useAnchoredPosition';
 import { MOTION_HOVER_HIDE_DELAY_MS } from '../../tokens/motion';
 import './DropdownMenu.css';
 import '../../fonts/material-symbols.css';
+import { MenuKeyLabelsContext, MenuShortcutHint } from './ShortcutHint';
+import { shortcutAriaAnyPlatform, type Shortcut, type ShortcutKeyLabels } from '../../behaviors/shortcut-keys';
 
 /* ============================================
    TYPES
@@ -17,8 +19,10 @@ export interface DropdownMenuItem {
   type?: 'item';
   /** Display label */
   label: string;
-  /** Keyboard shortcut hint (e.g. "⇧ ⌘ P") */
+  /** Keyboard shortcut hint as literal text (e.g. "⇧ ⌘ P"). `keys` writes it for the reader's platform instead. */
   shortcut?: string;
+  /** Keyboard shortcut hint in the shortcut grammar (`mod+shift+p`), written for the reader's platform (⇧⌘P on a Mac, Ctrl+Shift+P elsewhere) and announced through `aria-keyshortcuts`. Display only: bind the action itself with `useShortcut`. Wins over `shortcut`. */
+  keys?: Shortcut;
   /** Item icon — Material Symbol name (string) or custom element (ReactNode) */
   icon?: string | React.ReactNode;
   /** Disabled state */
@@ -69,6 +73,8 @@ type DropdownMenuOwnProps = {
   defaultOpen?: boolean;
   /** Callback when the menu opens or closes */
   onOpenChange?: (open: boolean) => void;
+  /** Replaces any legend an item's `keys` is written with, such as `{ ctrl: 'Strg' }` for a German keyboard. */
+  keyLabels?: ShortcutKeyLabels;
   /** Additional CSS classes on the root wrapper, which holds the trigger and the panel */
   className?: string;
 };
@@ -305,6 +311,7 @@ const MenuPanel = ({
         className={itemClasses}
         {...itemSemantics(entry)}
         aria-disabled={entry.disabled || undefined}
+        aria-keyshortcuts={entry.keys ? shortcutAriaAnyPlatform(entry.keys) : undefined}
         onClick={(e) => {
           e.stopPropagation();
           if (!entry.disabled) {
@@ -335,9 +342,7 @@ const MenuPanel = ({
             ))}
           {entry.label}
         </span>
-        {entry.shortcut && (
-          <span className={`${baseClass}__shortcut`}>{entry.shortcut}</span>
-        )}
+        <MenuShortcutHint item={entry} className={`${baseClass}__shortcut`} />
         {entry.selected && (
           <ChosenMark />
         )}
@@ -364,6 +369,7 @@ export const DropdownMenu = React.forwardRef<HTMLDivElement, DropdownMenuProps>(
   open: controlledOpen,
   defaultOpen = false,
   onOpenChange,
+  keyLabels,
   className = '',
   ...rest
 }, ref) => {
@@ -570,6 +576,7 @@ export const DropdownMenu = React.forwardRef<HTMLDivElement, DropdownMenuProps>(
         className={itemClasses}
         {...itemSemantics(entry)}
         aria-disabled={entry.disabled || undefined}
+        aria-keyshortcuts={entry.keys ? shortcutAriaAnyPlatform(entry.keys) : undefined}
         onClick={(e) => {
           e.stopPropagation();
           if (!entry.disabled) {
@@ -600,9 +607,7 @@ export const DropdownMenu = React.forwardRef<HTMLDivElement, DropdownMenuProps>(
             ))}
           {entry.label}
         </span>
-        {entry.shortcut && (
-          <span className={`${baseClass}__shortcut`}>{entry.shortcut}</span>
-        )}
+        <MenuShortcutHint item={entry} className={`${baseClass}__shortcut`} />
         {entry.selected && (
           <ChosenMark />
         )}
@@ -630,57 +635,59 @@ export const DropdownMenu = React.forwardRef<HTMLDivElement, DropdownMenuProps>(
     : undefined;
 
   return (
-    <div {...rest} className={classes} ref={setRootRef}>
-      {/*
-        The trigger is consumer-supplied and is virtually always already a
-        control (a Button). Wrapping it in role="button" tabIndex=0 put an
-        interactive element inside an interactive container. Put the menu
-        semantics on the real control instead, and only synthesise a button
-        when the trigger is not an element we can clone onto.
-      */}
-      <div ref={triggerRef} className={`${baseClass}__trigger`}>
-        {React.isValidElement(trigger) ? (
-          React.cloneElement(trigger as React.ReactElement<Record<string, unknown>>, {
-            'aria-haspopup': 'menu',
-            'aria-expanded': isOpen,
-            'aria-controls': isOpen ? menuId : undefined,
-            'aria-activedescendant': activeDescendantId,
-            onClick: (e: React.MouseEvent) => {
-              triggerProps?.onClick?.(e);
-              handleToggle();
-            },
-            onKeyDown: (e: React.KeyboardEvent) => {
-              triggerProps?.onKeyDown?.(e);
-              handleKeyDown(e);
-            },
-          })
-        ) : (
-          <button
-            type="button"
-            aria-haspopup="menu"
-            aria-expanded={isOpen}
-            aria-controls={isOpen ? menuId : undefined}
-            aria-activedescendant={activeDescendantId}
-            onClick={handleToggle}
-            onKeyDown={handleKeyDown}
+    <MenuKeyLabelsContext.Provider value={keyLabels}>
+      <div {...rest} className={classes} ref={setRootRef}>
+        {/*
+          The trigger is consumer-supplied and is virtually always already a
+          control (a Button). Wrapping it in role="button" tabIndex=0 put an
+          interactive element inside an interactive container. Put the menu
+          semantics on the real control instead, and only synthesise a button
+          when the trigger is not an element we can clone onto.
+        */}
+        <div ref={triggerRef} className={`${baseClass}__trigger`}>
+          {React.isValidElement(trigger) ? (
+            React.cloneElement(trigger as React.ReactElement<Record<string, unknown>>, {
+              'aria-haspopup': 'menu',
+              'aria-expanded': isOpen,
+              'aria-controls': isOpen ? menuId : undefined,
+              'aria-activedescendant': activeDescendantId,
+              onClick: (e: React.MouseEvent) => {
+                triggerProps?.onClick?.(e);
+                handleToggle();
+              },
+              onKeyDown: (e: React.KeyboardEvent) => {
+                triggerProps?.onKeyDown?.(e);
+                handleKeyDown(e);
+              },
+            })
+          ) : (
+            <button
+              type="button"
+              aria-haspopup="menu"
+              aria-expanded={isOpen}
+              aria-controls={isOpen ? menuId : undefined}
+              aria-activedescendant={activeDescendantId}
+              onClick={handleToggle}
+              onKeyDown={handleKeyDown}
+            >
+              {trigger}
+            </button>
+          )}
+        </div>
+        {isOpen && (
+          <ul
+            id={menuId}
+            className={panelClasses}
+            role="menu"
+            ref={(el) => {
+              panelRef.current = el;
+            }}
           >
-            {trigger}
-          </button>
+            {items.map((entry, index) => renderPanelEntry(entry, index, itemCounter))}
+          </ul>
         )}
       </div>
-      {isOpen && (
-        <ul
-          id={menuId}
-          className={panelClasses}
-          role="menu"
-          ref={(el) => {
-            panelRef.current = el;
-          }}
-        >
-          {items.map((entry, index) => renderPanelEntry(entry, index, itemCounter))}
-        </ul>
-      )}
-    </div>
+    </MenuKeyLabelsContext.Provider>
   );
 });
 

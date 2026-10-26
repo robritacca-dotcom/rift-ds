@@ -11,6 +11,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { useShortcut } from "rift-ds/behaviors/shortcuts";
 import StageToolbar from "@/components/StageToolbar/StageToolbar";
 import { lockBodyScroll, unlockBodyScroll } from "@/lib/scroll-lock";
 import { MapViewport } from "./MapViewport";
@@ -36,18 +37,16 @@ export function ArchitectureMap({ map, caption }: ArchitectureMapProps) {
     overlayRef.current
       ?.querySelector<HTMLButtonElement>('button[aria-label="Close this view"]')
       ?.focus();
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
-    };
-    document.addEventListener("keydown", onKey);
     return () => {
-      document.removeEventListener("keydown", onKey);
       unlockBodyScroll(owner);
       figure
         ?.querySelector<HTMLButtonElement>('button[aria-label="Expand the map"]')
         ?.focus();
     };
   }, [open, map.id]);
+
+  // Escape closes the expanded view, through the library's shortcut listener.
+  useShortcut("escape", () => setOpen(false), { enabled: open, global: true, allowInInput: true });
 
   return (
     <figure className={styles.figure} ref={expandRef}>

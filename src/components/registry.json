@@ -744,7 +744,7 @@
       "slug": "kbd",
       "description": "A keyboard key rendered as a keycap, for shortcut hints in menus and prose.",
       "category": "data-display",
-      "client": false
+      "client": true
     },
     {
       "name": "LegendTile",

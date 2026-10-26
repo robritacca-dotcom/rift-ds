@@ -65,6 +65,7 @@ export * from './components/DocumentChip/DocumentChip';
 export * from './components/Drawer/Drawer';
 export * from './components/Dropdown/Dropdown';
 export * from './components/DropdownMenu/DropdownMenu';
+export * from './components/DropdownMenu/ShortcutHint';
 export * from './components/EmptyState/EmptyState';
 export * from './components/EntityCard/EntityCard';
 export * from './components/EventCalendar/EventCalendar';

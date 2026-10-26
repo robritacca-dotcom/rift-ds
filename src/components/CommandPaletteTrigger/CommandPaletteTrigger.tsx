@@ -2,6 +2,7 @@
 // own (the host passes onClick), so it renders from a Server Component too.
 import React from 'react';
 import { Kbd } from '../Kbd/Kbd';
+import { shortcutAriaAnyPlatform, type Shortcut, type ShortcutKeyLabels } from '../../behaviors/shortcut-keys';
 import './CommandPaletteTrigger.css';
 import '../../fonts/material-symbols.css';
 
@@ -9,8 +10,17 @@ import '../../fonts/material-symbols.css';
 type CommandPaletteTriggerOwnProps = {
   /** The prompt the field shows, which is also the button's accessible name. */
   label?: string;
-  /** The keyboard shortcut drawn as keycaps at the end, one key per entry. Pass an empty array for none. The default draws the Mac's ⌘ K and announces both it and Ctrl+K, as CommandPalette answers to either; off a Mac, pass `['Ctrl', 'K']` to draw the keys the reader presses. */
+  /** The keyboard shortcut drawn as literal keycaps at the end, one key per entry, in place of `keys`. Pass an empty array for none. */
   shortcut?: string[];
+  /**
+   * The keyboard shortcut drawn at the end, in the shortcut grammar, in the
+   * reader's platform legends. Defaults to `mod+k`: ⌘ K on a Mac and Ctrl K
+   * elsewhere, announced as both, since CommandPalette answers to either.
+   * `shortcut` wins when it is given.
+   */
+  keys?: Shortcut;
+  /** Replaces any legend `keys` is drawn with, such as `{ ctrl: 'Strg' }` for a German keyboard. */
+  keyLabels?: ShortcutKeyLabels;
   /** Leading icon — Material Symbol name (string) or custom element (ReactNode). */
   icon?: string | React.ReactNode;
   /** Control size, on the row-control scale: `default` is 40px, `compact` 32px. */
@@ -40,7 +50,9 @@ export const CommandPaletteTrigger = React.forwardRef<HTMLButtonElement, Command
   (
     {
       label = 'Search or ask anything',
-      shortcut = ['⌘', 'K'],
+      shortcut,
+      keys = 'mod+k',
+      keyLabels,
       icon = 'search',
       size = 'default',
       iconOnly = false,
@@ -58,9 +70,16 @@ export const CommandPaletteTrigger = React.forwardRef<HTMLButtonElement, Command
     ]
       .filter(Boolean)
       .join(' ');
-    const keyNames = shortcut.map((key) => (key === '⌘' ? 'Meta' : key === 'Ctrl' ? 'Control' : key)).join('+');
-    /* The palette answers to ⌘ K and Ctrl+K both, so a ⌘ shortcut announces its Ctrl twin too. */
-    const announced = keyNames.startsWith('Meta+') ? `${keyNames} ${keyNames.replace('Meta+', 'Control+')}` : keyNames;
+    let announced: string;
+    if (shortcut) {
+      const keyNames = shortcut.map((key) => (key === '⌘' ? 'Meta' : key === 'Ctrl' ? 'Control' : key)).join('+');
+      /* The palette answers to ⌘ K and Ctrl+K both, so a ⌘ shortcut announces its Ctrl twin too. */
+      announced = keyNames.startsWith('Meta+') ? `${keyNames} ${keyNames.replace('Meta+', 'Control+')}` : keyNames;
+    } else {
+      /* Rendered on the server too, so it announces the shortcut on both
+         platforms rather than guessing which one the reader is on. */
+      announced = shortcutAriaAnyPlatform(keys) ?? '';
+    }
     return (
       <button
         aria-label={label}
@@ -85,14 +104,22 @@ export const CommandPaletteTrigger = React.forwardRef<HTMLButtonElement, Command
             <span className={`${baseClass}__label`} aria-hidden="true">
               {label}
             </span>
-            {shortcut.length > 0 && (
-              <span className={`${baseClass}__keys`} aria-hidden="true">
-                {shortcut.map((key) => (
-                  <Kbd key={key} size="compact">
-                    {key}
-                  </Kbd>
-                ))}
-              </span>
+            {shortcut ? (
+              shortcut.length > 0 && (
+                <span className={`${baseClass}__keys`} aria-hidden="true">
+                  {shortcut.map((key) => (
+                    <Kbd key={key} size="compact">
+                      {key}
+                    </Kbd>
+                  ))}
+                </span>
+              )
+            ) : (
+              keys && (
+                <span className={`${baseClass}__keys`} aria-hidden="true">
+                  <Kbd keys={keys} keyLabels={keyLabels} size="compact" aria-keyshortcuts={undefined} />
+                </span>
+              )
             )}
           </>
         )}

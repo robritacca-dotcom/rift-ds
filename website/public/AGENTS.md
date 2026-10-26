@@ -43,6 +43,7 @@ import { Button } from 'rift-ds';
 - Dark mode is `data-theme="dark"` on `<html>`. `colorModeScript()` from `rift-ds/components/ThemeToggle/colorMode` applies the stored choice before first paint, and `ThemeToggle` changes it. A shipped theme is `data-brand` on `<html>`, with `rift-ds/tokens/presets/presets.css` imported once.
 - In a routed app, wrap the tree in `LinkProvider` from `rift-ds/behaviors/LinkProvider` with the router's link, or every component link reloads the page. A component rendered by a Server Component cannot read it, so pass `linkComponent` on that instance instead.
 - For an app not in US English, wrap the tree in `LocaleProvider` from `rift-ds/behaviors/LocaleProvider` with its locale, or every number, date and calendar reads as `en-US`. A component rendered by a Server Component cannot read it, so pass `locale` on that instance instead. Translate the words through each component's label props.
+- Bind keyboard shortcuts with `useShortcut` from `rift-ds/behaviors/shortcuts` (`mod+k` is Cmd+K on a Mac and Ctrl+K elsewhere), never a document keydown listener: it is the listener the components use, so a binding stays quiet in text fields and never takes Escape from an open overlay. Draw a shortcut with Kbd's `keys` prop, not hand-typed ⌘ glyphs.
 - Wrap the tree in `ToastProvider` only if you call `useToast` (both from the `Toast` module). No other component needs a provider.
 
 ## AI chat

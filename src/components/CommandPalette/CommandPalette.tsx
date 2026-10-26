@@ -10,6 +10,7 @@ import { useMounted } from '../../behaviors/useMounted';
 import { useLayer } from '../../behaviors/useLayer';
 import { useFocusScope } from '../../behaviors/useFocusScope';
 import { useScrollLock } from '../../behaviors/useScrollLock';
+import { useShortcut, type Shortcut, type ShortcutKeyLabels } from '../../behaviors/shortcuts';
 
 export interface CommandPaletteCommand {
   /** Stable identifier */
@@ -20,8 +21,10 @@ export interface CommandPaletteCommand {
   description?: string;
   /** Optional icon — Material Symbol name (string) or custom element (ReactNode) */
   icon?: string | React.ReactNode;
-  /** Keyboard shortcut shown on the right, e.g. ['⌘', 'P'] */
+  /** Keyboard shortcut shown on the right as literal keycaps, e.g. ['⌘', 'P']. `keys` draws it for the visitor's platform instead. */
   shortcut?: string[];
+  /** Keyboard shortcut shown on the right in the shortcut grammar (`mod+p`), drawn in the platform's legends: ⌘ P on a Mac, Ctrl P elsewhere. Display only: bind the action itself with `useShortcut`. Wins over `shortcut`. */
+  keys?: Shortcut;
   /** Custom node at the row's right edge, after any `shortcut` — a badge or affordance the keycap slot can't express. It renders inside the option row, so keep it non-interactive: a focusable element here would nest controls. */
   trailing?: React.ReactNode;
   /** Extra terms that should match this command when filtering */
@@ -62,6 +65,15 @@ type CommandPaletteOwnProps = {
    */
   hotkey?: boolean;
   /**
+   * The shortcuts that toggle the palette when `hotkey` is on, in the
+   * shortcut grammar. Defaults to `['meta+k', 'ctrl+k']`, so both answer on
+   * every platform. They go through the shared shortcut listener, so they
+   * fire from a text field and over an open dialog.
+   */
+  hotkeyKeys?: Shortcut | Shortcut[];
+  /** Replaces any legend a command's `keys` is drawn with, such as `{ ctrl: 'Strg' }` for a German keyboard. */
+  keyLabels?: ShortcutKeyLabels;
+  /**
    * Called with the chosen command, after its own `onSelect`. Replaces the
    * native `onSelect` (text-selection) handler on the panel.
    */
@@ -88,6 +100,9 @@ export interface CommandPaletteProps
   extends CommandPaletteOwnProps,
     Omit<React.ComponentPropsWithoutRef<'div'>, keyof CommandPaletteOwnProps | 'children' | 'role'> {}
 
+/** The palette's default toggle: ⌘K and Ctrl+K both, on every platform. */
+const DEFAULT_HOTKEY_KEYS: Shortcut[] = ['meta+k', 'ctrl+k'];
+
 /**
  * CommandPalette component — a modal Cmd+K launcher that searches a grouped
  * command list. Filtering matches labels, descriptions, and keywords; the
@@ -102,6 +117,8 @@ export const CommandPalette = React.forwardRef<HTMLDivElement, CommandPalettePro
   loading = false,
   loadingMessage = 'Loading…',
   hotkey = true,
+  hotkeyKeys = DEFAULT_HOTKEY_KEYS,
+  keyLabels,
   onSelect,
   onSearchChange,
   manualFiltering = false,
@@ -179,20 +196,12 @@ export const CommandPalette = React.forwardRef<HTMLDivElement, CommandPalettePro
   // a group filtered out) can never leave the highlight past the end.
   const activeIndex = Math.min(rawActiveIndex, Math.max(0, flatCommands.length - 1));
 
-  // Global Cmd+K / Ctrl+K toggle
-  useEffect(() => {
-    if (!hotkey) return;
-
-    const handleHotkey = (e: KeyboardEvent) => {
-      if (e.key.toLowerCase() === 'k' && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault();
-        onOpenChange(!open);
-      }
-    };
-
-    document.addEventListener('keydown', handleHotkey);
-    return () => document.removeEventListener('keydown', handleHotkey);
-  }, [hotkey, open, onOpenChange]);
+  // Global Cmd+K / Ctrl+K toggle, through the shared shortcut listener.
+  useShortcut(hotkeyKeys, () => onOpenChange(!open), {
+    enabled: hotkey,
+    global: true,
+    allowInInput: true,
+  });
 
   // Shared overlay behaviors (src/behaviors/) — see Dialog for the contract.
   // Initial focus goes straight to the search field. The scroll lock uses the
@@ -394,7 +403,11 @@ export const CommandPalette = React.forwardRef<HTMLDivElement, CommandPalettePro
                         )}
                       </span>
 
-                      {command.shortcut && command.shortcut.length > 0 && (
+                      {command.keys ? (
+                        <span className={`${baseClass}__shortcut`}>
+                          <Kbd keys={command.keys} keyLabels={keyLabels} size="compact" />
+                        </span>
+                      ) : command.shortcut && command.shortcut.length > 0 && (
                         <span className={`${baseClass}__shortcut`}>
                           {command.shortcut.map((key, i) => (
                             <Kbd key={i} size="compact">

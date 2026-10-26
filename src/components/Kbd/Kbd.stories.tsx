@@ -52,6 +52,21 @@ export const Chord: Story = {
 };
 
 /** Keycaps sit inline with body text. */
+/** A whole shortcut from `keys`, drawn in the reader's platform legends: ⇧ ⌘ P on a Mac, Ctrl Shift P elsewhere. */
+export const Shortcut: Story = {
+  args: { keys: 'mod+shift+p' },
+};
+
+/** A sequence draws each step as its own group. */
+export const Sequence: Story = {
+  args: { keys: 'g i' },
+};
+
+/** `keyLabels` replaces a legend, here for a German keyboard. */
+export const LocalisedLegends: Story = {
+  args: { keys: 'ctrl+alt+delete', keyLabels: { ctrl: 'Strg', delete: 'Entf' } },
+};
+
 export const InProse: Story = {
   render: () => (
     <p style={{ margin: 0 }}>

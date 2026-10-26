@@ -17,5 +17,6 @@ Generated from the rift-ds registry and prop JSDoc, version 1.14.0. The same dat
 | items | `DropdownMenuEntry[]` | yes |  | Menu entries — the same model as DropdownMenu (items, groups, separators) |
 | size | `"default" \| "compact"` | no | `default` | Component size |
 | ariaLabel | `string` | no |  | Accessible name for the menu |
+| keyLabels | `Partial<Record<string, string>>` | no |  | Replaces any legend an item's `keys` is written with, such as `{ ctrl: 'Strg' }` for a German keyboard. |
 | className | `string` | no | `` | Additional CSS classes |
 | children | `ReactNode` | yes |  | The right-clickable area the menu is attached to |

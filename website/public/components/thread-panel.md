@@ -30,7 +30,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.14.0. The same dat
 | logoText | `string` | no |  | Brand name beside the logo. The header row renders only when `logo`, `logoText`, or `onExpandedChange` is given. |
 | newThreadLabel | `string` | no |  | Text for the new-thread row. Defaults to "New thread". The row renders when this, `onNewThread`, or `newThreadHref` is given. |
 | newThreadIcon | `ReactNode` | no | `edit_square` | Icon for the new-thread row — Material Symbol name (string) or custom element (ReactNode). Defaults to the pen-in-a-box `edit_square`, the same glyph chat headers use for New chat. |
-| newThreadShortcut | `string[]` | no |  | Keyboard hint rendered as compact Kbds at the row's trailing edge, e.g. `["Ctrl", "N"]`. Decorative — the host owns the actual binding. |
+| newThreadShortcut | `string[]` | no |  | Keyboard hint rendered as compact Kbds at the row's trailing edge, as literal keycaps, e.g. `["Ctrl", "N"]`. Decorative — the host owns the actual binding. |
+| newThreadKeys | `string` | no |  | Keyboard hint at the row's trailing edge in the shortcut grammar (`mod+shift+o`), drawn in the reader's platform legends. Decorative — bind the action with `useShortcut`. Wins over `newThreadShortcut`. |
+| keyLabels | `Partial<Record<string, string>>` | no |  | Replaces any legend `newThreadKeys` is drawn with, such as `{ ctrl: 'Strg' }` for a German keyboard. |
 | onNewThread | `(() => void)` | no |  | Fires when the new-thread row is clicked. |
 | newThreadHref | `string` | no |  | Optional href — the new-thread row renders as an `<a>`. |
 | controls | `ThreadPanelControl[]` | no |  | Standing rows between the new-thread action and the history, e.g. Automations or Settings. |

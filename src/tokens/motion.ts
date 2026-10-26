@@ -84,3 +84,6 @@ export const MOTION_CONTEXT_RESTORE_WAIT_MS = 700;
 
 /** How long a table waits after the last keystroke or range step before it announces the new result or selection count, so typing a search or sweeping Shift+Down speaks once. A schedule timing. */
 export const MOTION_ANNOUNCE_DEBOUNCE_MS = 500;
+
+/** How long a keyboard shortcut sequence waits for its next key ("g" then "i"): a key pressed later than this after the one before starts a new sequence. A schedule timing, so the reduced-motion guard leaves it alone. */
+export const MOTION_SHORTCUT_SEQUENCE_MS = 1000;

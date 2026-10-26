@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import ReactDOM from 'react-dom';
 import './Lightbox.css';
 import '../../fonts/material-symbols.css';
@@ -8,6 +8,7 @@ import { useMounted } from '../../behaviors/useMounted';
 import { useLayer } from '../../behaviors/useLayer';
 import { useFocusScope } from '../../behaviors/useFocusScope';
 import { useScrollLock } from '../../behaviors/useScrollLock';
+import { useShortcut } from '../../behaviors/shortcuts';
 
 /** Props owned by Lightbox itself — everything else falls through to the panel. */
 type LightboxOwnProps = {
@@ -104,20 +105,12 @@ export const Lightbox = React.forwardRef<HTMLDivElement, LightboxProps>(
     useFocusScope(panelRef, { active: open });
     useScrollLock(open);
 
-    // Gallery stepping is this component's own listener, gated on open state
-    // like the non-modal overlays' — the layer stack owns dismissal keys
-    // only. Handlers ride refs so the subscription doesn't churn per render.
-    const stepRef = useRef({ onPrev, onNext });
-    stepRef.current = { onPrev, onNext };
-    useEffect(() => {
-      if (!open || (!onPrev && !onNext)) return;
-      const onKey = (e: KeyboardEvent) => {
-        if (e.key === 'ArrowLeft') stepRef.current.onPrev?.();
-        if (e.key === 'ArrowRight') stepRef.current.onNext?.();
-      };
-      document.addEventListener('keydown', onKey);
-      return () => document.removeEventListener('keydown', onKey);
-    }, [open, onPrev, onNext]);
+    // Gallery stepping goes through the shared shortcut listener, scoped to
+    // the panel, so the arrows step images while the lightbox is the surface
+    // in front and never reach the page behind it. The layer stack still
+    // owns Escape.
+    useShortcut('arrowleft', () => onPrev?.(), { scope: panelRef, enabled: open && Boolean(onPrev) });
+    useShortcut('arrowright', () => onNext?.(), { scope: panelRef, enabled: open && Boolean(onNext) });
 
     // A press that began while a menu or popover was open above this layer was
     // that layer's press: it closed the menu, and must not also close this.

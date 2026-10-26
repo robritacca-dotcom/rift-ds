@@ -133,6 +133,15 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return <LocaleProvider locale="de-DE">{children}</LocaleProvider>;
 }`;
 
+const SHORTCUT_SNIPPET = `'use client';
+import { useShortcut } from 'rift-ds/behaviors/shortcuts';
+import { Kbd } from 'rift-ds/components/Kbd/Kbd';
+
+export function SaveButton({ onSave }: { onSave: () => void }) {
+  useShortcut('mod+s', onSave, { description: 'Save', allowInInput: true });
+  return <button onClick={onSave}>Save <Kbd keys="mod+s" size="compact" /></button>;
+}`;
+
 const CHAT_SNIPPET = `npx rift-ds ${chatWidget.command}`;
 
 const COLOR_MODE_SNIPPET = `// app/layout.tsx: apply the visitor's stored mode before first paint.
@@ -595,6 +604,27 @@ export default function GetStartedPage() {
                   text through those props. Where a word depends on a count, the
                   prop is a function of the count, which is where your plural
                   rules go.
+                </p>
+              </section>
+
+              {/* Keyboard shortcuts */}
+              <section id="shortcuts" className={`${styles.section} animate-in animate-delay-4`}>
+                <SectionTitle title="Bind keyboard shortcuts" />
+                <p className={styles.sectionNote}>
+                  Bind your app&apos;s keys with <code>useShortcut</code>, the same
+                  listener the components use. A shortcut is a short string:{" "}
+                  <code>mod+s</code> is ⌘S on a Mac and Ctrl+S elsewhere, and{" "}
+                  <code>g i</code> is G then I. It stays quiet while someone types in
+                  a field, waits while a dialog or menu has focus, and never takes
+                  Escape from an open overlay. Draw the same string with Kbd&apos;s{" "}
+                  <code>keys</code> and it shows the keys for the reader&apos;s
+                  platform.
+                </p>
+                <CodeBlock code={SHORTCUT_SNIPPET} language="tsx" showCopy />
+                <p className={styles.sectionNote}>
+                  Give a binding a <code>description</code> and{" "}
+                  <code>useRegisteredShortcuts</code> lists it, so a help dialog shows
+                  exactly the keys the current page answers to.
                 </p>
               </section>
 

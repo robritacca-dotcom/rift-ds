@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "rift-ds/components/Button/Button";
+import { useShortcut } from "rift-ds/behaviors/shortcuts";
 import { Chip } from "rift-ds/components/Chip/Chip";
 import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
 import { Input } from "rift-ds/components/Input/Input";
@@ -202,18 +203,18 @@ export default function SystemGraph() {
     return () => observer.disconnect();
   }, []);
 
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setPinned(false);
-        setSelectedId(null);
-        setResultsOpen(false);
-        setQuery("");
-      }
-    };
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, []);
+  // Escape clears the selection and the search, through the library's
+  // shortcut listener (from the search box too).
+  useShortcut(
+    "escape",
+    () => {
+      setPinned(false);
+      setSelectedId(null);
+      setResultsOpen(false);
+      setQuery("");
+    },
+    { global: true, allowInInput: true }
+  );
 
   // Edge drawing.
   useEffect(() => {

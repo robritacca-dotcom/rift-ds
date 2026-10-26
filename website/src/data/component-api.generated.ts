@@ -4519,6 +4519,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "true"
           },
           {
+            "name": "hotkeyKeys",
+            "type": "string | string[]",
+            "required": false,
+            "description": "The shortcuts that toggle the palette when `hotkey` is on, in the\nshortcut grammar. Defaults to `['meta+k', 'ctrl+k']`, so both answer on\nevery platform. They go through the shared shortcut listener, so they\nfire from a text field and over an open dialog.",
+            "defaultValue": "['meta+k', 'ctrl+k']"
+          },
+          {
+            "name": "keyLabels",
+            "type": "Partial<Record<string, string>>",
+            "required": false,
+            "description": "Replaces any legend a command's `keys` is drawn with, such as `{ ctrl: 'Strg' }` for a German keyboard."
+          },
+          {
             "name": "onSelect",
             "type": "((command: CommandPaletteCommand) => void)",
             "required": false,
@@ -4593,8 +4606,20 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "shortcut",
             "type": "string[]",
             "required": false,
-            "description": "The keyboard shortcut drawn as keycaps at the end, one key per entry. Pass an empty array for none. The default draws the Mac's ⌘ K and announces both it and Ctrl+K, as CommandPalette answers to either; off a Mac, pass `['Ctrl', 'K']` to draw the keys the reader presses.",
-            "defaultValue": "['⌘', 'K']"
+            "description": "The keyboard shortcut drawn as literal keycaps at the end, one key per entry, in place of `keys`. Pass an empty array for none."
+          },
+          {
+            "name": "keys",
+            "type": "string",
+            "required": false,
+            "description": "The keyboard shortcut drawn at the end, in the shortcut grammar, in the\nreader's platform legends. Defaults to `mod+k`: ⌘ K on a Mac and Ctrl K\nelsewhere, announced as both, since CommandPalette answers to either.\n`shortcut` wins when it is given.",
+            "defaultValue": "mod+k"
+          },
+          {
+            "name": "keyLabels",
+            "type": "Partial<Record<string, string>>",
+            "required": false,
+            "description": "Replaces any legend `keys` is drawn with, such as `{ ctrl: 'Strg' }` for a German keyboard."
           },
           {
             "name": "icon",
@@ -5004,6 +5029,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible name for the menu"
+          },
+          {
+            "name": "keyLabels",
+            "type": "Partial<Record<string, string>>",
+            "required": false,
+            "description": "Replaces any legend an item's `keys` is written with, such as `{ ctrl: 'Strg' }` for a German keyboard."
           },
           {
             "name": "className",
@@ -6530,6 +6561,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "((open: boolean) => void)",
             "required": false,
             "description": "Callback when the menu opens or closes"
+          },
+          {
+            "name": "keyLabels",
+            "type": "Partial<Record<string, string>>",
+            "required": false,
+            "description": "Replaces any legend an item's `keys` is written with, such as `{ ctrl: 'Strg' }` for a German keyboard."
           },
           {
             "name": "className",
@@ -8460,7 +8497,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "slug": "kbd",
     "category": "data-display",
     "description": "A keyboard key rendered as a keycap, for shortcut hints in menus and prose.",
-    "client": false,
+    "client": true,
     "importPath": "rift-ds/components/Kbd/Kbd",
     "barrel": "main",
     "exports": [
@@ -8485,7 +8522,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "children",
             "type": "ReactNode",
             "required": false,
-            "description": "The key legend — e.g. ⌘, K, Esc, Shift"
+            "description": "The key legend — e.g. ⌘, K, Esc, Shift. Ignored when `keys` is set."
+          },
+          {
+            "name": "keys",
+            "type": "string",
+            "required": false,
+            "description": "A whole shortcut in the shortcut grammar (`mod+k`, `shift+?`, `g i`),\ndrawn as one keycap per key in the platform's legends: ⌘ K on a Mac,\nCtrl K elsewhere. The server draws the non-Apple legends and the browser\nsettles on its own after hydration."
+          },
+          {
+            "name": "keyLabels",
+            "type": "Partial<Record<string, string>>",
+            "required": false,
+            "description": "Replaces any legend `keys` is drawn with, such as `{ ctrl: 'Strg' }` for a German keyboard. Merged over the platform's defaults."
           }
         ]
       }
@@ -13650,7 +13699,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "newThreadShortcut",
             "type": "string[]",
             "required": false,
-            "description": "Keyboard hint rendered as compact Kbds at the row's trailing edge, e.g. `[\"Ctrl\", \"N\"]`. Decorative — the host owns the actual binding."
+            "description": "Keyboard hint rendered as compact Kbds at the row's trailing edge, as literal keycaps, e.g. `[\"Ctrl\", \"N\"]`. Decorative — the host owns the actual binding."
+          },
+          {
+            "name": "newThreadKeys",
+            "type": "string",
+            "required": false,
+            "description": "Keyboard hint at the row's trailing edge in the shortcut grammar (`mod+shift+o`), drawn in the reader's platform legends. Decorative — bind the action with `useShortcut`. Wins over `newThreadShortcut`."
+          },
+          {
+            "name": "keyLabels",
+            "type": "Partial<Record<string, string>>",
+            "required": false,
+            "description": "Replaces any legend `newThreadKeys` is drawn with, such as `{ ctrl: 'Strg' }` for a German keyboard."
           },
           {
             "name": "onNewThread",

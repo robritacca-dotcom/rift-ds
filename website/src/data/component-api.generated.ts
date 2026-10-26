@@ -5178,6 +5178,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Fires with every sort after one changes, first sort first. `onSortChange` fires too, with the first or `null`."
           },
           {
+            "name": "linkComponent",
+            "type": "LinkComponent",
+            "required": false,
+            "description": "The link component a `link` column's cells render through, so the app's router handles them. Defaults to the nearest `LinkProvider`'s, else a plain anchor."
+          },
+          {
             "name": "multiSort",
             "type": "boolean",
             "required": false,
@@ -5241,7 +5247,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "((row: R) => string)",
             "required": false,
             "description": "Accessible name of a row's checkbox, given the row. Defaults to \"Select\"\nfollowed by the value of the `rowHeader` column (else the first column),\nand to \"Select row\" with the id only when that value is empty.",
-            "defaultValue": "(row: R) => {\n    const nameKey = (columns.find((col) => col.rowHeader) ?? columns[0])?.key;\n    const name = nameKey === undefined ? undefined : row.values[nameKey];\n    return name == null || name === '' ? `Select row ${row.id}` : `Select ${name}`;\n  }"
+            "defaultValue": "(row: R) => {\n    const nameKey = (columnsProp.find((col) => col.rowHeader) ?? columnsProp[0])?.key;\n    const name = nameKey === undefined ? undefined : row.values[nameKey];\n    return name == null || name === '' ? `Select row ${row.id}` : `Select ${name}`;\n  }"
           },
           {
             "name": "sortLabel",

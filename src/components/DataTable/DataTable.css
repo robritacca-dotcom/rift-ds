@@ -305,6 +305,19 @@
   transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
+/* A centred column centres its label with its options button beside it. */
+.ds-data-table__header-inner[data-align='center'] > .ds-data-table__menu {
+  margin-inline-start: 0;
+}
+
+/* An end-aligned column's label sits over its figures, at the end, so its
+   options button takes the start instead. */
+.ds-data-table__header-inner[data-align='end'] > .ds-data-table__menu {
+  order: -1;
+  margin-inline-start: 0;
+  margin-inline-end: auto;
+}
+
 .ds-table__header-cell:hover .ds-data-table__menu,
 .ds-table__header-cell:focus-within .ds-data-table__menu,
 .ds-table__header-cell:focus .ds-data-table__menu {
@@ -715,4 +728,74 @@
   font-size: var(--font-paragraph-sm-size);
   line-height: var(--font-paragraph-sm-line-height);
   color: var(--color-text-tertiary);
+}
+
+/* ============================================
+   TYPED CELLS
+   What a column's `type` draws: figures that
+   line up, a bar with its percent, a person,
+   tags, a check, a link.
+   ============================================ */
+
+.ds-data-table__typed-number {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.ds-data-table__typed-progress {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-200);
+  width: 100%;
+  min-width: 0;
+}
+
+.ds-data-table__typed-progress .ds-progress-bar {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.ds-data-table__typed-person {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-200);
+  min-width: 0;
+  max-width: 100%;
+}
+
+.ds-data-table__typed-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ds-data-table__typed-tags {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-100);
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.ds-data-table__typed-more {
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+  color: var(--color-text-secondary);
+}
+
+.ds-data-table__typed-check {
+  display: inline-flex;
+}
+
+.ds-data-table__typed-check-icon {
+  display: block;
+  color: var(--color-icon-primary);
+}
+
+.ds-data-table__typed-link {
+  color: var(--color-action-primary-text-tertiary);
+  text-decoration: underline;
 }

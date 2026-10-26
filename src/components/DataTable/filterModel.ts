@@ -12,8 +12,8 @@
  * matches everything.
  */
 
-/** The kinds of filter, each with its own operators. Until typed columns land, a column's kind is read from its values. */
-export type FilterKind = 'text' | 'number' | 'date' | 'enum' | 'tags';
+/** The kinds of filter, each with its own operators. A typed column's kind follows its type; an untyped one's is read from its values. */
+export type FilterKind = 'text' | 'number' | 'date' | 'enum' | 'tags' | 'boolean';
 
 /** Every operator, across the kinds. */
 export type FilterOperator =
@@ -38,7 +38,9 @@ export type FilterOperator =
   | 'hasAllOf'
   | 'hasNoneOf'
   | 'isEmpty'
-  | 'isNotEmpty';
+  | 'isNotEmpty'
+  | 'isChecked'
+  | 'isNotChecked';
 
 /** A filter's value: text or a date for one-value operators, a number, a pair for `between`, a list for the set operators. */
 export type FilterValue = string | number | [number | string | null, number | string | null] | string[] | null | undefined;
@@ -63,10 +65,11 @@ export const OPERATORS: Record<FilterKind, FilterOperator[]> = {
   // A list filter is its checkboxes, so it has the one condition they mean.
   enum: ['isAnyOf'],
   tags: ['hasAnyOf'],
+  boolean: ['isChecked', 'isNotChecked'],
 };
 
 /** Operators that take no value. */
-export const VALUELESS: ReadonlySet<FilterOperator> = new Set(['isEmpty', 'isNotEmpty']);
+export const VALUELESS: ReadonlySet<FilterOperator> = new Set(['isEmpty', 'isNotEmpty', 'isChecked', 'isNotChecked']);
 
 /** Every word a filter shows or announces, each defaulting to English. */
 export interface FilterLabels {
@@ -130,6 +133,8 @@ export const DEFAULT_FILTER_LABELS: FilterLabels = {
     hasNoneOf: 'has none of',
     isEmpty: 'is empty',
     isNotEmpty: 'is not empty',
+    isChecked: 'is checked',
+    isNotChecked: 'is not checked',
   },
   addFilter: 'Filter',
   editor: (header) => `Filter ${header}`,
@@ -187,6 +192,10 @@ export const matches = (filter: Filter, value: Raw): boolean => {
       return isEmptyValue(value);
     case 'isNotEmpty':
       return !isEmptyValue(value);
+    case 'isChecked':
+      return value === true;
+    case 'isNotChecked':
+      return value !== true;
     case 'contains':
       return text(value).includes(text(target as string));
     case 'notContains':

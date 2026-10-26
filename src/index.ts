@@ -55,6 +55,7 @@ export * from './components/ContributionGraph/ContributionGraph';
 export * from './components/DataTable/CellEditor';
 export * from './components/DataTable/DataTable';
 export * from './components/DataTable/FilterEditor';
+export * from './components/DataTable/TypedCell';
 export * from './components/DateInput/DateInput';
 export * from './components/DatePicker/DatePicker';
 export * from './components/Dialog/Dialog';

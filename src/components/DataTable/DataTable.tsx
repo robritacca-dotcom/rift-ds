@@ -38,6 +38,16 @@ import {
 } from './filterModel';
 import { TableContext, type TableContextValue, type ToolbarColumn } from './tableContext';
 import { Popover } from '../Popover/Popover';
+import {
+  TYPE_DEFAULTS,
+  typedComparator,
+  typedText,
+  type ColumnFormat,
+  type ColumnType,
+  type StatusRole,
+} from './columnTypes';
+import { TypedCell } from './TypedCell';
+import { useLinkComponent, type LinkComponent } from '../../behaviors/LinkProvider';
 import { EDITOR_MIN_WIDTH, LIVE_KINDS, TYPED_KINDS, type CellEditorKind, type CellValue } from './editorKinds';
 import { EmptyState, type EmptyStateProps } from '../EmptyState/EmptyState';
 import { MOTION_ANNOUNCE_DEBOUNCE_MS } from '../../tokens/motion';
@@ -94,7 +104,28 @@ export interface DataTableColumn<R extends DataTableRow = DataTableRow> {
   editable?: boolean | ((row: R) => boolean);
   /** Whether the column can be filtered, from its header menu or a TableToolbar. Defaults to true. */
   filterable?: boolean;
+  /**
+   * What the column holds, which sets everything the column does not set
+   * itself: how a cell is drawn (`render` still wins), its alignment, its
+   * sort, its filter's conditions, and the editor it opens when `editable`
+   * is set. `text`, `number`, `currency`, `date` (a `YYYY-MM-DD` value),
+   * `status` (a Badge in the option's `status` role, sorted in the options'
+   * order), `person` (an Avatar and the name, or a stack for a list),
+   * `tags` (a list, the first two shown), `progress` (0 to 100),
+   * `checkbox` (a check, or a live checkbox when editable) and `link` (a
+   * URL, shown without its scheme). An untyped column reads as text and
+   * filters by what its values look like.
+   */
+  type?: DataTableColumnType;
+  /** How a typed column formats its values: the locale, the currency, the digits after the point, the date style. */
+  format?: DataTableColumnFormat;
 }
+
+/** The types a column can be; see `DataTableColumn.type`. */
+export type DataTableColumnType = ColumnType;
+
+/** How a typed column formats its values. */
+export type DataTableColumnFormat = ColumnFormat;
 
 /** One filter condition on one column, as the table and TableToolbar share it. */
 export type DataTableFilter = Filter;
@@ -117,6 +148,8 @@ export interface DataTableOption {
   value: string;
   /** What the cell and the list show. */
   label: string;
+  /** For a `status` column, the status role its Badge takes. Defaults to `neutral`. */
+  status?: StatusRole;
 }
 
 /** What a custom editor is handed. */
@@ -263,6 +296,12 @@ export interface DataTableColumnLabels {
   editField: (header: string, rowName: string) => string;
   /** Accessible name of a cell's hover edit button, in cell mode, given the column's header and the row's name. */
   editCell: (header: string, rowName: string) => string;
+  /** How a `checkbox` column's checked cell is read. */
+  checkedValue: string;
+  /** How a `checkbox` column's unchecked cell is read. */
+  uncheckedValue: string;
+  /** The count a `tags` cell shows for the tags it folds away, given how many. */
+  moreValues: (count: number) => string;
   /** Accessible name of a row's Edit button, with `editMode="row"`, given the row's name. */
   editRow: (rowName: string) => string;
   /** Accessible name of a row's Save button while it edits, given the row's name. */
@@ -300,6 +339,9 @@ const DEFAULT_COLUMN_LABELS: DataTableColumnLabels = {
   resizedColumn: (header, width) => `${header}, ${width} pixels`,
   editField: (header, rowName) => `${header}, ${rowName}`,
   editCell: (header, rowName) => `Edit ${header}, ${rowName}`,
+  checkedValue: 'Yes',
+  uncheckedValue: 'No',
+  moreValues: (count) => `+${count}`,
   editRow: (rowName) => `Edit ${rowName}`,
   saveRow: (rowName) => `Save ${rowName}`,
   cancelRow: (rowName) => `Cancel editing ${rowName}`,
@@ -415,6 +457,8 @@ type DataTableOwnProps<R extends DataTableRow = DataTableRow> = {
   defaultSorts?: DataTableSort[];
   /** Fires with every sort after one changes, first sort first. `onSortChange` fires too, with the first or `null`. */
   onSortsChange?: (sorts: DataTableSort[]) => void;
+  /** The link component a `link` column's cells render through, so the app's router handles them. Defaults to the nearest `LinkProvider`'s, else a plain anchor. */
+  linkComponent?: LinkComponent;
   /** Lets the table sort by several columns: Shift-click a header, or pick Add to sort from its menu, to add the column after the current sorts. Each sorted header shows its rank while more than one sorts. */
   multiSort?: boolean;
   /** Shows the built-in search field, matching against every column's raw value. */
@@ -591,8 +635,20 @@ export interface DataTableProps<R extends DataTableRow = DataTableRow>
  * `render` reads it typed; the default is today's `DataTableRow`. The ref and
  * any unrecognised props reach the root element.
  */
+/** A column with what its type sets filled in: its alignment, and the editor it opens when editable. */
+function withType<R extends DataTableRow>(col: DataTableColumn<R>): DataTableColumn<R> {
+  if (!col.type) return col;
+  const defaults = TYPE_DEFAULTS[col.type];
+  const editable = col.editable !== undefined && col.editable !== false;
+  return {
+    ...col,
+    align: col.align ?? defaults.align,
+    editor: col.editor ?? (editable ? defaults.editor : undefined),
+  };
+}
+
 export function DataTable<R extends DataTableRow = DataTableRow>({
-  columns,
+  columns: columnsProp,
   rows,
   pageSize,
   selectable = false,
@@ -606,6 +662,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
   defaultSorts,
   onSortsChange,
   multiSort = false,
+  linkComponent,
   searchable = false,
   searchPlaceholder = 'Search',
   toolbar,
@@ -624,7 +681,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
   emptyState,
   selectAllLabel = 'Select all rows on this page',
   selectRowLabel = (row: R) => {
-    const nameKey = (columns.find((col) => col.rowHeader) ?? columns[0])?.key;
+    const nameKey = (columnsProp.find((col) => col.rowHeader) ?? columnsProp[0])?.key;
     const name = nameKey === undefined ? undefined : row.values[nameKey];
     return name == null || name === '' ? `Select row ${row.id}` : `Select ${name}`;
   },
@@ -743,6 +800,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
   };
 
   const labels: DataTableColumnLabels = { ...DEFAULT_COLUMN_LABELS, ...columnLabels };
+  const columns = useMemo(() => columnsProp.map(withType), [columnsProp]);
   const byKey = useMemo(() => new Map(columns.map((col) => [col.key, col])), [columns]);
   const indexOfKey = new Map(columns.map((col, index) => [col.key, index]));
   const canResize = (col: DataTableColumn<R>) => !col.locked && (col.resizable ?? resizableColumns);
@@ -816,19 +874,37 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
        values first ascending) so the order is exactly what it was. Built from
        the column keys alone, so an inline `columns` array does not rebuild the
        row model on every render. */
-  const columnKeys = columns.map((col) => col.key).join('\u0000');
+  /* Each column's key, type and (for a status column, whose sort is its
+     options' order) option values, as one string: the engine's columns
+     rebuild when that changes and not on every inline `columns` array. */
+  const columnKeys = columns
+    .map((col) =>
+      [
+        col.key,
+        col.type ?? '',
+        col.type === 'status' ? (col.options ?? []).map((o) => o.value).join('\u0002') : '',
+      ].join('\u0001'),
+    )
+    .join('\u0000');
   const engineColumns = useMemo(
     () =>
-      columnKeys.split('\u0000').map((key) => ({
-        id: key,
-        accessorFn: (row: R) => row.values[key],
-        sortFn: (a: { original: R }, b: { original: R }) =>
-          compareValues(a.original.values[key], b.original.values[key]),
-        // A column's filters, every one of which a row must pass.
-        filterFn: (row: { original: R }, _id: string, value: unknown) =>
-          (value as Filter[]).every((filter) => matches(filter, row.original.values[key])),
-        sortUndefined: false as const,
-      })),
+      columnKeys.split('\u0000').map((spec) => {
+        const [key, type, optionValues] = spec.split('\u0001');
+        const compare = typedComparator(
+          (type || undefined) as ColumnType | undefined,
+          optionValues ? optionValues.split('\u0002').map((value) => ({ value })) : undefined,
+          compareValues,
+        );
+        return {
+          id: key,
+          accessorFn: (row: R) => row.values[key],
+          sortFn: (a: { original: R }, b: { original: R }) => compare(a.original.values[key], b.original.values[key]),
+          // A column's filters, every one of which a row must pass.
+          filterFn: (row: { original: R }, _id: string, value: unknown) =>
+            (value as Filter[]).every((filter) => matches(filter, row.original.values[key])),
+          sortUndefined: false as const,
+        };
+      }),
     [columnKeys],
   );
 
@@ -1369,7 +1445,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
        dropped, so an abandoned filter never lingers as a chip. */
   const toolbarColumns: ToolbarColumn[] = columns.map((col) => {
     const values = rows.map((row) => row.values[col.key]);
-    const kind = filterKindOf(values, Boolean(col.options));
+    const kind = col.type ? TYPE_DEFAULTS[col.type].filter : filterKindOf(values, Boolean(col.options));
     const choices =
       col.options ??
       (kind === 'enum' || kind === 'tags'
@@ -1739,6 +1815,11 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     commitEdit('none');
   };
 
+  const linkEl = useLinkComponent(linkComponent);
+  const typedWords = { checked: labels.checkedValue, unchecked: labels.uncheckedValue, more: labels.moreValues };
+  const optionLabel = (col: DataTableColumn<R>) => (v: string) =>
+    col.options?.find((option) => option.value === v)?.label ?? v;
+
   /** A cell's value as text: an option's label, a list joined. */
   const displayOf = (col: DataTableColumn<R>, value: DataTableValue): React.ReactNode => {
     const label = (v: string) => col.options?.find((option) => option.value === v)?.label ?? v;
@@ -1947,7 +2028,11 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
         }
         {...tabProps('header', key)}
       >
-        <div className={`${baseClass}__header-inner`} style={{ justifyContent: justify(col.align) }}>
+        <div
+          className={`${baseClass}__header-inner`}
+          data-align={col.align === 'right' ? 'end' : col.align === 'center' ? 'center' : undefined}
+          style={{ justifyContent: justify(col.align) }}
+        >
           {col.sortable ? (
             <button
               type="button"
@@ -2174,7 +2259,20 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
                         data-cell-control=""
                       />
                     );
-                  const content = col.render ? col.render(rowView(row)) : displayOf(col, raw);
+                  const content = col.render ? (
+                    col.render(rowView(row))
+                  ) : col.type ? (
+                    <TypedCell
+                      type={col.type}
+                      value={raw}
+                      format={col.format}
+                      options={col.options}
+                      words={typedWords}
+                      link={linkEl}
+                    />
+                  ) : (
+                    displayOf(col, raw)
+                  );
                   if (fit === 'wrap') return content;
                   return (
                     <span
@@ -2183,7 +2281,9 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
                         fit === 'truncate' || fit === 'lines-2'
                           ? raw == null
                             ? undefined
-                            : String(displayOf(col, raw))
+                            : col.type
+                              ? typedText(col.type, raw, col.format, optionLabel(col), typedWords) || undefined
+                              : String(displayOf(col, raw))
                           : undefined
                       }
                     >

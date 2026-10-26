@@ -21,6 +21,7 @@ import {
   wideColumns,
 } from "./benchData";
 import { EditingTable } from "./EditingTable";
+import { TypedTable } from "./TypedTable";
 import { TableToolbar } from "rift-ds/components/TableToolbar/TableToolbar";
 import styles from "./TablesBench.module.css";
 
@@ -432,6 +433,14 @@ export function TablesBench() {
         note="Every editor kind: text, select, combobox, number, tags, multi-select, date, time, textarea, and a live checkbox and switch. Double-click a cell, or focus it and press Enter, F2 or start typing; Enter saves and moves down, Tab saves and moves on, Escape cancels. A task needs a name; a budget saves after a moment and fails above $100,000, rolling back. Row editing opens a whole row with Save and Cancel."
       >
         {({ size, lines }) => <EditingTable size={size} lines={lines} />}
+      </Station>
+
+      <Station
+        id="bench-types"
+        title="11. Column types"
+        note="Every column type, with no render function anywhere: text, status (sorted in its options' order), person and a person list, currency, number, progress, an absolute and a relative date, tags, checkbox and link. Each type sets its cell, alignment, sort and filter conditions, and Stage, Owner, Value, Renews and Billable are editable with the editor their type brings. One row has no last contact, and draws nothing there."
+      >
+        {({ size, lines }) => <TypedTable size={size} lines={lines} />}
       </Station>
     </div>
   );

@@ -218,6 +218,8 @@ const INTERNAL_MODULES = new Map([
     'the filter model DataTable and TableToolbar share: kinds, operators, matching and the English words; the public names are DataTableFilter, DataTableFilterOperator and DataTableFilterLabels'],
   ['src/components/DataTable/tableContext.ts',
     'the state a DataTable hands the TableToolbar inside it; TableToolbar\'s own props are the public way to carry the same state'],
+  ['src/components/DataTable/columnTypes.ts',
+    'what each column type sets (alignment, sort, filter kind, editor) and how its values format; the table is the public surface, and its `DataTableColumnType` and `DataTableColumnFormat` types are the published names'],
   ['src/components/DataTable/editorKinds.ts',
     'the editor kinds DataTable and its cell editors share, with each compact field\'s floor; the table is the public surface, and its `DataTableEditorKind` and `DataTableValue` types are the kinds\' published names'],
 ]);

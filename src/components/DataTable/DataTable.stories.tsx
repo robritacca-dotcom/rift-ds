@@ -223,7 +223,6 @@ export const Announcements: Story = {
   },
 };
 
-
 /**
  * The order and the matches the table has always produced, pinned so the
  * engine underneath can change without them moving: numbers sort
@@ -342,7 +341,9 @@ export const RowReorder: Story = {
     const canvas = within(canvasElement);
     const names = () => canvas.getAllByRole('rowheader').map((cell) => cell.textContent);
     await expect(names()).toEqual(['John Clarkson', 'Aspen Lubin', 'Michael Ekstrom', 'Kianna Vaccaro', 'Livia Saris']);
-    const gripCell = canvasElement.querySelector<HTMLElement>('tbody tr[data-row="r1"] [data-col="ds-data-table-grip"]')!;
+    const gripCell = canvasElement.querySelector<HTMLElement>(
+      'tbody tr[data-row="r1"] [data-col="ds-data-table-grip"]',
+    )!;
     gripCell.focus();
     await userEvent.keyboard('{Alt>}{ArrowDown}{/Alt}');
     await waitFor(() =>
@@ -438,7 +439,9 @@ function EditableTable(props: Partial<DataTableProps> & { failSaves?: boolean })
     rows.slice(0, 4).map((row) => ({ ...row, values: { ...row.values, gift: row.id === 'r2' } })),
   );
   const apply = (id: string, values: DataTableRow['values']) =>
-    setData((current) => current.map((row) => (row.id === id ? { ...row, values: { ...row.values, ...values } } : row)));
+    setData((current) =>
+      current.map((row) => (row.id === id ? { ...row, values: { ...row.values, ...values } } : row)),
+    );
   return (
     <DataTable
       columns={editColumns}
@@ -478,8 +481,12 @@ export const CellEditing: Story = {
 
     // The pencil shows on hover, and on focus, which is how a touch screen reaches it.
     cell(canvasElement, 'r3', 'name').focus();
-    await userEvent.click(within(cell(canvasElement, 'r3', 'name')).getByRole('button', { name: 'Edit Customer, Michael Ekstrom' }));
-    await expect(await within(canvasElement).findByRole('textbox', { name: 'Customer, Michael Ekstrom' })).toHaveFocus();
+    await userEvent.click(
+      within(cell(canvasElement, 'r3', 'name')).getByRole('button', { name: 'Edit Customer, Michael Ekstrom' }),
+    );
+    await expect(
+      await within(canvasElement).findByRole('textbox', { name: 'Customer, Michael Ekstrom' }),
+    ).toHaveFocus();
     await userEvent.keyboard('{Escape}');
 
     const gift = within(cell(canvasElement, 'r1', 'gift')).getByRole('checkbox', { name: 'Gift, John Clark' });
@@ -534,5 +541,101 @@ export const RowEditing: Story = {
     await userEvent.click(canvas.getByRole('button', { name: 'Save Aspen Lubin' }));
     await waitFor(() => expect(cell(canvasElement, 'r2', 'name')).toHaveTextContent('Aspen Lu'));
     await expect(canvas.getByRole('button', { name: 'Edit Aspen Lu' })).toBeInTheDocument();
+  },
+};
+
+const typedColumns: DataTableColumn[] = [
+  { key: 'account', header: 'Account', type: 'text', rowHeader: true, sortable: true },
+  {
+    key: 'stage',
+    header: 'Stage',
+    type: 'status',
+    sortable: true,
+    options: [
+      { value: 'lead', label: 'Lead', status: 'neutral' },
+      { value: 'trial', label: 'Trial', status: 'info' },
+      { value: 'won', label: 'Won', status: 'positive' },
+    ],
+  },
+  { key: 'owner', header: 'Owner', type: 'person' },
+  { key: 'value', header: 'Value', type: 'currency', sortable: true },
+  { key: 'onboarded', header: 'Onboarded', type: 'progress' },
+  { key: 'renews', header: 'Renews', type: 'date' },
+  { key: 'tags', header: 'Tags', type: 'tags' },
+  { key: 'billable', header: 'Billable', type: 'checkbox', sortable: true },
+  { key: 'site', header: 'Site', type: 'link' },
+];
+
+const typedRows: DataTableRow[] = [
+  {
+    id: 't1',
+    values: {
+      account: 'Northwind',
+      stage: 'won',
+      owner: 'Priya Shah',
+      value: 48000,
+      onboarded: 80,
+      renews: '2026-11-04',
+      tags: ['enterprise', 'renewal', 'upsell'],
+      billable: true,
+      site: 'https://www.northwind.example/',
+    },
+  },
+  {
+    id: 't2',
+    values: {
+      account: 'Fabrikam',
+      stage: 'lead',
+      owner: 'Sam Rivera',
+      value: 1200,
+      onboarded: 0,
+      renews: null,
+      tags: [],
+      billable: false,
+      site: 'https://fabrikam.example',
+    },
+  },
+  {
+    id: 't3',
+    values: {
+      account: 'Contoso',
+      stage: 'trial',
+      owner: 'Jordan Lee',
+      value: 9500,
+      onboarded: 35,
+      renews: '2027-02-01',
+      tags: ['pilot'],
+      billable: true,
+      site: 'https://contoso.example/team',
+    },
+  },
+];
+
+/** Typed columns: each `type` draws, aligns and sorts its cells with no `render`, and an empty value draws nothing. */
+export const ColumnTypes: Story = {
+  args: { columns: typedColumns, rows: typedRows, caption: 'Accounts' },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const names = () => canvas.getAllByRole('rowheader').map((cell) => cell.textContent);
+    await expect(canvas.getByText('$48,000')).toBeInTheDocument();
+    await expect(canvas.getByText('80%')).toBeInTheDocument();
+    await expect(canvas.getByText('Nov 4, 2026')).toBeInTheDocument();
+    await expect(canvas.getByRole('link', { name: 'northwind.example' })).toHaveAttribute(
+      'href',
+      'https://www.northwind.example/',
+    );
+    // Three tags fold to two and a count.
+    await expect(canvas.getByText('+1')).toBeInTheDocument();
+    // A status sorts in its options' order, not alphabetically.
+    await userEvent.click(canvas.getByRole('button', { name: 'Stage' }));
+    await waitFor(() => expect(names()).toEqual(['Fabrikam', 'Contoso', 'Northwind']));
+    // A checkbox sorts the checked first.
+    await userEvent.click(canvas.getByRole('button', { name: 'Billable' }));
+    await waitFor(() => expect(names()[2]).toBe('Fabrikam'));
+    // Figures sit at the end; the checkbox in the middle.
+    const cell = (col: string) =>
+      canvasElement.querySelector<HTMLElement>(`tbody [data-col="${col}"] .ds-table__cell-content`)!;
+    await expect(cell('value').style.justifyContent).toBe('flex-end');
+    await expect(cell('billable').style.justifyContent).toBe('center');
   },
 };

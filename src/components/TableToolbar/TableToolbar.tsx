@@ -17,6 +17,7 @@ import '../../behaviors/visually-hidden.css';
 import {
   DEFAULT_FILTER_LABELS,
   OPERATORS,
+  VALUELESS,
   isComplete,
   newFilterId,
   valueText,
@@ -480,7 +481,9 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
       const column = columnOf(filter.column);
       const choice = (value: string) => column?.options.find((option) => option.value === value)?.label ?? value;
       // The kind's default condition goes unsaid ("Status · Active +1"); any other is named.
-      const isDefault = column ? OPERATORS[column.kind][0] === filter.operator : false;
+      // A condition with no value is the whole meaning, so it is always named ("Done · is checked").
+      const isDefault =
+        column && !VALUELESS.has(filter.operator) ? OPERATORS[column.kind][0] === filter.operator : false;
       return [
         column?.label ?? filter.column,
         isDefault ? '' : filterLabels.operators[filter.operator],

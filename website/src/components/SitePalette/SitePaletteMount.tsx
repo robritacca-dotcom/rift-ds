@@ -6,6 +6,7 @@ import { CommandPalette } from "rift-ds/components/CommandPalette/CommandPalette
 import type { CommandPaletteGroup } from "rift-ds/components/CommandPalette/CommandPalette";
 import { componentMetadata } from "rift-ds/components/registry";
 import {
+  DOC_ITEM_ICONS,
   docsSidebarLinks,
   getSectionItems,
   foundationsSidebarLinks,
@@ -42,20 +43,6 @@ const setTheme = (value: "light" | "dark" | "system") => {
       : value;
   root.setAttribute("data-theme", resolved);
   localStorage.setItem("theme", value);
-};
-
-/* Icons for the docs cluster rows, keyed by href so the rows themselves
-   stay derived from docsSidebarLinks. */
-const DOC_ICONS: Record<string, string> = {
-  "/overview": "account_tree",
-  "/docs/get-started": "rocket_launch",
-  "/docs/blocks": "view_quilt",
-  "/blueprints/claude": "description",
-  "/blueprints/design": "description",
-  "/blueprints/content-design": "description",
-  "/skills": "construction",
-  "/loops": "all_inclusive",
-  "/releases": "new_releases",
 };
 
 /**
@@ -132,7 +119,7 @@ export function SitePaletteMount() {
           id: `ds-${link.href}`,
           label: link.label,
           description: link.description,
-          icon: DOC_ICONS[link.href] ?? "description",
+          icon: DOC_ITEM_ICONS[link.href] ?? "description",
           onSelect: go(link.href),
         })),
       ],

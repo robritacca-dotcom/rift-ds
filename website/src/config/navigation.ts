@@ -144,6 +144,7 @@ const componentCategoryItems: MegaItem[] = componentCategoryMetadata.map(
 /* The Foundations and Templates panels derive from the sidebar arrays below
    (declared before them in file order, so these builders run lazily). */
 const FOUNDATION_ICONS: Record<string, string> = {
+  "/foundations/accessibility": "accessibility_new",
   "/foundations/elevation": "layers",
   "/foundations/icons": "apps",
   "/foundations/layout": "responsive_layout",
@@ -156,7 +157,7 @@ const FOUNDATION_ICONS: Record<string, string> = {
   "/foundations/typography": "text_fields",
 };
 
-const DOC_ITEM_ICONS: Record<string, string> = {
+export const DOC_ITEM_ICONS: Record<string, string> = {
   "/overview": "account_tree",
   "/docs/get-started": "rocket_launch",
   "/docs/chat": "forum",
@@ -168,6 +169,14 @@ const DOC_ITEM_ICONS: Record<string, string> = {
   "/loops": "all_inclusive",
   "/releases": "new_releases",
 };
+
+/* The Docs panel's grouping. Get started is the showcase, the blueprints
+   and the system-at-work pages have named groups, and Learn takes the rest,
+   so no docs page can be left out of the panel. */
+const DOCS_SHOWCASE_HREF = "/docs/get-started";
+const isBlueprintDoc = (l: NavLink) => l.href.startsWith("/blueprints");
+const isSystemAtWorkDoc = (l: NavLink) =>
+  ["/skills", "/loops", "/releases"].includes(l.href);
 
 const linksToMegaItems = (
   links: NavLink[],
@@ -275,33 +284,31 @@ function buildNavSections(): NavSection[] {
           {
             id: "learn",
             label: "Learn",
-            // Get started leaves the grid: it is the panel's showcase.
+            // Every docs link the other groups and the showcase do not
+            // claim, so a new docs page joins the panel by existing.
             items: linksToMegaItems(
-              docsSidebarLinks.filter((l) => ["/overview", "/docs/chat"].includes(l.href)),
+              docsSidebarLinks.filter(
+                (l) =>
+                  l.href !== DOCS_SHOWCASE_HREF &&
+                  !isBlueprintDoc(l) &&
+                  !isSystemAtWorkDoc(l)
+              ),
               DOC_ITEM_ICONS
             ),
           },
           {
             id: "blueprints",
             label: "Blueprints",
-            items: linksToMegaItems(
-              docsSidebarLinks.filter((l) => l.href.startsWith("/blueprints")),
-              DOC_ITEM_ICONS
-            ),
+            items: linksToMegaItems(docsSidebarLinks.filter(isBlueprintDoc), DOC_ITEM_ICONS),
           },
           {
             id: "meta",
             label: "The system at work",
-            items: linksToMegaItems(
-              docsSidebarLinks.filter((l) =>
-                ["/skills", "/loops", "/releases"].includes(l.href)
-              ),
-              DOC_ITEM_ICONS
-            ),
+            items: linksToMegaItems(docsSidebarLinks.filter(isSystemAtWorkDoc), DOC_ITEM_ICONS),
           },
         ],
         showcase: {
-          href: "/docs/get-started",
+          href: DOCS_SHOWCASE_HREF,
           overline: "Start here",
           label: "Get started",
           description:

@@ -2,7 +2,7 @@
 
 The entry point to a command palette: a button dressed as a search field, with the shortcut's keycaps, at the row-control height.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.14.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: actions
 - Import: `import { CommandPaletteTrigger } from 'rift-ds';`

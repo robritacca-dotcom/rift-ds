@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fireEvent, userEvent, waitFor, within } from 'storybook/test';
 import { TableToolbar } from './TableToolbar';
@@ -88,7 +89,6 @@ export const InDataTable: Story = {
     await expect(names()).toEqual(['Composer loses focus', 'Badge miscounts drafts']);
     // Inside a table the count is the footer's.
     await expect(canvasElement.querySelector('.ds-data-table__count')).toHaveTextContent('2 results');
-    await expect(canvas.getByRole('button', { name: 'Edit' })).toBeDisabled();
     await expect(canvas.getByRole('button', { name: 'Status · Open' })).toBeInTheDocument();
 
     await userEvent.click(canvas.getByRole('button', { name: 'Remove filter Status · Open' }));
@@ -157,26 +157,80 @@ export const ReorderColumns: Story = {
   },
 };
 
-/** With row checkboxes, Edit leads the bar: disabled until a row is selected, then counting them. */
-export const BulkEdit: Story = {
-  render: () => (
-    <DataTable
-      columns={columns}
-      rows={rows}
-      selectable
-      caption="Issues"
-      toolbar={<TableToolbar bulkActions={[{ id: 'archive', label: 'Archive', icon: 'archive', onSelect: () => {} }]} />}
-    />
-  ),
+/**
+ * With row checkboxes, selecting a row turns the bar into the bulk bar at
+ * the same height: Clear, the count, Select all N, the actions (the first
+ * ordinary and the first destructive one labelled, the rest in More).
+ */
+export const BulkBar: Story = {
+  render: () => {
+    const Demo = () => {
+      const [ran, setRan] = useState('');
+      return (
+        <>
+          <DataTable
+            columns={columns}
+            rows={rows}
+            selectable
+            pageSize={2}
+            caption="Issues"
+            toolbar={
+              <TableToolbar
+                bulkActions={[
+                  {
+                    id: 'archive',
+                    label: 'Archive',
+                    icon: 'archive',
+                    onSelect: (selection) =>
+                      setRan(`archive ${selection.ids.length}${selection.allMatching ? ' all' : ''}`),
+                  },
+                  { id: 'assign', label: 'Assign', icon: 'person_add', onSelect: () => setRan('assign') },
+                  {
+                    id: 'delete',
+                    label: 'Delete',
+                    icon: 'delete',
+                    destructive: true,
+                    onSelect: (selection) => setRan(`delete ${selection.ids.length}`),
+                  },
+                ]}
+              />
+            }
+          />
+          <output data-testid="ran">{ran}</output>
+        </>
+      );
+    };
+    return <Demo />;
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await expect(canvas.getByRole('button', { name: 'Edit' })).toBeDisabled();
+    const bar = () => canvasElement.querySelector<HTMLElement>('.ds-table-toolbar')!;
+    const height = bar().getBoundingClientRect().height;
     await userEvent.click(canvas.getByRole('checkbox', { name: 'Select Composer loses focus' }));
-    const bulk = await canvas.findByRole('button', { name: 'Edit (1)' });
-    await expect(bulk).toBeEnabled();
-    await userEvent.click(bulk);
-    await expect(await within(document.body).findByRole('menuitem', { name: 'Archive' })).toBeInTheDocument();
-    await userEvent.keyboard('{Escape}');
+    const bulk = await canvas.findByRole('group', { name: '1 selected' });
+    // The same height, so nothing below moves.
+    await expect(bar().getBoundingClientRect().height).toBe(height);
+    // The footer leaves the selection count to the bar.
+    await expect(canvasElement.querySelector('.ds-data-table__count')).toHaveTextContent('4 results');
+    const inBar = within(bulk);
+    await expect(inBar.getByRole('button', { name: 'Archive' })).toBeInTheDocument();
+    await expect(inBar.getByRole('button', { name: 'Delete' })).toBeInTheDocument();
+    await expect(inBar.queryByRole('button', { name: 'Assign' })).not.toBeInTheDocument();
+
+    // Select all N reaches past the page.
+    await userEvent.click(inBar.getByRole('button', { name: 'Select all 4' }));
+    await expect(await inBar.findByText('All 4 selected')).toBeInTheDocument();
+    await userEvent.click(inBar.getByRole('button', { name: 'Archive' }));
+    await expect(canvas.getByTestId('ran')).toHaveTextContent('archive 4 all');
+
+    await userEvent.click(inBar.getByRole('button', { name: 'More actions' }));
+    await userEvent.click(await within(document.body).findByRole('menuitem', { name: 'Assign' }));
+    await expect(canvas.getByTestId('ran')).toHaveTextContent('assign');
+
+    // Clear returns the bar, and focus to its search.
+    await userEvent.click(inBar.getByRole('button', { name: 'Clear selection' }));
+    await waitFor(() => expect(canvas.queryByRole('group', { name: /selected/ })).not.toBeInTheDocument());
+    await waitFor(() => expect(canvas.getByRole('textbox', { name: 'Search' })).toHaveFocus());
   },
 };
 

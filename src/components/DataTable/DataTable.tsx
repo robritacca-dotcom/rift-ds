@@ -1476,6 +1476,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
   /* A TableToolbar showing the count claims it, so the footer does not
        say it twice; the footer keeps the selection count. */
   const [countClaimed, setCountClaimed] = useState(false);
+  const [selectionClaimed, setSelectionClaimed] = useState(false);
   const openHeaderFilter = (key: string) => {
     const existing = filters.find((filter) => filter.column === key);
     if (existing) {
@@ -1516,6 +1517,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     sorts: currentSorts,
     setSorts,
     multiSort,
+    claimSelection: setSelectionClaimed,
   };
 
   const [menuKey, setMenuKey] = useState<string | null>(null);
@@ -2559,7 +2561,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
         {(pageSize !== undefined || selectable) && (
           <div className={`${baseClass}__footer`}>
             <span className={`${baseClass}__count`}>
-              {selectable && currentSelection.length > 0
+              {selectable && currentSelection.length > 0 && !selectionClaimed
                 ? selectedLabel(currentSelection.length)
                 : countClaimed
                   ? null

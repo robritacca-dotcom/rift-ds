@@ -36,7 +36,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same dat
 | columnOrder | `string[]` | no |  | Every column key in display order, for controlled use. Inside a DataTable the table's order is used unless this is set. |
 | defaultColumnOrder | `string[]` | no |  | Starting column order, for uncontrolled use outside a DataTable. |
 | onColumnOrderChange | `((order: string[]) => void)` | no |  | Fires with the full column order after the More panel moves one. |
-| bulkActions | `TableToolbarBulkAction[]` | no | `[]` | The Edit menu's actions for the selected rows. Inside a DataTable with `selectable`, an Edit button leads the bar, offering these with Select all and Clear selection. |
+| bulkActions | `TableToolbarBulkAction[]` | no | `[]` | The actions for the selected rows. Inside a DataTable with `selectable`, selecting a row turns the bar, at the same height, into the bulk bar: Clear, the count, Select all N, then these, the first non-destructive one and the first destructive one labelled and the rest in a More menu. |
 | sorts | `DataTableSort[]` | no |  | Every sort, first sort first, for controlled use. Inside a DataTable the table's sorts are used unless this is set. |
 | defaultSorts | `DataTableSort[]` | no |  | Initial sorts for uncontrolled use. |
 | onSortsChange | `((sorts: DataTableSort[]) => void)` | no |  | Fires with every sort after the sort panel changes one. |

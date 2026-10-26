@@ -58,6 +58,8 @@ export interface TableContextValue {
   setSorts: (sorts: { key: string; direction: 'asc' | 'desc' }[]) => void;
   /** Whether the table sorts by more than one column. */
   multiSort: boolean;
+  /** A toolbar showing the selection count says so, and the table's footer shows the result count instead. */
+  claimSelection: (claimed: boolean) => void;
 }
 
 export const TableContext = createContext<TableContextValue | null>(null);

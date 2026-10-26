@@ -12612,7 +12612,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "bulkActions",
             "type": "TableToolbarBulkAction[]",
             "required": false,
-            "description": "The Edit menu's actions for the selected rows. Inside a DataTable with `selectable`, an Edit button leads the bar, offering these with Select all and Clear selection.",
+            "description": "The actions for the selected rows. Inside a DataTable with `selectable`, selecting a row turns the bar, at the same height, into the bulk bar: Clear, the count, Select all N, then these, the first non-destructive one and the first destructive one labelled and the rest in a More menu.",
             "defaultValue": "[]"
           },
           {

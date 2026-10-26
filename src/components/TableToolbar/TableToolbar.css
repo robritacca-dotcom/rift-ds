@@ -5,6 +5,7 @@
    ============================================ */
 
 .ds-table-toolbar {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: var(--gap-200);
@@ -12,7 +13,11 @@
   min-width: 0;
 }
 
-/* One line, always: the start cluster (Edit, search, the chips that
+.ds-table-toolbar:focus {
+  outline: none;
+}
+
+/* One line, always: the start cluster (search, the chips that
    fit, then +N for the rest) takes the room; the end cluster (the icon
    controls) holds the end. */
 .ds-table-toolbar__main {
@@ -293,4 +298,52 @@
 .ds-table-toolbar__sort-column {
   flex: 1 1 auto;
   min-width: 0;
+}
+
+/* The bulk bar: while rows are selected it lies over the bar's own row at
+   the same height, so nothing below moves, on the container fill so the
+   change of mode reads at a glance. The row beneath stays laid out (and
+   inert), so its chips keep their measured fit for when it returns. */
+.ds-table-toolbar__main[data-covered] {
+  visibility: hidden;
+}
+
+.ds-table-toolbar__bulk {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-300);
+  padding-inline: var(--padding-100);
+  border-radius: var(--radius-300);
+  background-color: var(--color-bg-container-secondary);
+}
+
+.ds-table-toolbar__bulk-start,
+.ds-table-toolbar__bulk-end {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-200);
+  min-width: 0;
+}
+
+.ds-table-toolbar__bulk-count {
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  color: var(--color-text-primary);
+}
+
+/* The destructive action stands apart from the rest. */
+.ds-table-toolbar__bulk-divider {
+  align-self: stretch;
+  width: var(--border-025);
+  margin-block: var(--padding-100);
+  background-color: var(--color-divider);
 }

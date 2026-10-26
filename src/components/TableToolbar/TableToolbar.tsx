@@ -66,7 +66,7 @@ export interface TableToolbarAction {
   disabled?: boolean;
 }
 
-/** One action the Edit menu offers for the selected rows. */
+/** One action the bulk bar offers for the selected rows. */
 export interface TableToolbarBulkAction {
   /** Stable id for the action. */
   id: string;
@@ -74,10 +74,27 @@ export interface TableToolbarBulkAction {
   label: string;
   /** Material Symbol name (string) or custom element. */
   icon?: React.ReactNode;
-  /** Runs the action on the selected row ids. */
-  onSelect: (ids: string[]) => void;
-  /** Marks a dangerous or irreversible action, drawn in the destructive colour. */
+  /** Runs the action on the selection. */
+  onSelect: (selection: TableToolbarSelection) => void;
+  /** Marks a dangerous or irreversible action: drawn in the destructive colour and set apart at the bar's end. */
   destructive?: boolean;
+  /** Whether the action is unavailable. */
+  disabled?: boolean;
+}
+
+/**
+ * What a bulk action runs on. `ids` lists every selected row. `allMatching`
+ * says the selection is every row that matches the search and filters,
+ * which a server can act on as a query rather than a list, leaving out
+ * `except`. A table that holds every row resolves `ids` in full either way.
+ */
+export interface TableToolbarSelection {
+  /** The selected row ids. */
+  ids: string[];
+  /** Whether every matching row is selected. */
+  allMatching: boolean;
+  /** Matching rows left out of an `allMatching` selection. */
+  except: string[];
 }
 
 /** Every word the control bar shows or announces, beyond the filters', each defaulting to English. */
@@ -124,11 +141,15 @@ export interface TableToolbarLabels {
   moveSort: (column: string) => string;
   /** Announced when a sort row moves, given its column, its new rank and how many sorts there are. */
   movedSort: (column: string, rank: number, count: number) => string;
-  /** The Edit button, given how many rows are selected. */
-  bulkEdit: (count: number) => string;
-  /** The Edit menu's item that selects every matching row, given how many match. */
+  /** The bulk bar's count and its name, given how many rows are selected. */
+  selected: (count: number) => string;
+  /** The bulk bar's count once every matching row is selected, given how many. */
+  allSelected: (count: number) => string;
+  /** The bulk bar's menu of the actions that do not fit. */
+  moreBulkActions: string;
+  /** The bulk bar's button that selects every matching row, given how many match. */
   selectAll: (count: number) => string;
-  /** The Edit menu's item that clears the selection. */
+  /** The bulk bar's button that clears the selection. */
   clearSelection: string;
   /** Name of a column's move grip in the More panel, given its header. */
   moveColumn: (label: string) => string;
@@ -159,7 +180,9 @@ const DEFAULT_LABELS: TableToolbarLabels = {
   removeSort: (column) => `Remove sort by ${column}`,
   moveSort: (column) => `Move sort by ${column}`,
   movedSort: (column, rank, count) => `${column}, sort ${rank} of ${count}`,
-  bulkEdit: (count) => (count > 0 ? `Edit (${count})` : 'Edit'),
+  selected: (count) => `${count} selected`,
+  allSelected: (count) => `All ${count} selected`,
+  moreBulkActions: 'More actions',
   selectAll: (count) => `Select all ${count}`,
   clearSelection: 'Clear selection',
   moveColumn: (label) => `Move ${label}`,
@@ -212,7 +235,7 @@ type TableToolbarOwnProps = {
   defaultColumnOrder?: string[];
   /** Fires with the full column order after the More panel moves one. */
   onColumnOrderChange?: (order: string[]) => void;
-  /** The Edit menu's actions for the selected rows. Inside a DataTable with `selectable`, an Edit button leads the bar, offering these with Select all and Clear selection. */
+  /** The actions for the selected rows. Inside a DataTable with `selectable`, selecting a row turns the bar, at the same height, into the bulk bar: Clear, the count, Select all N, then these, the first non-destructive one and the first destructive one labelled and the rest in a More menu. */
   bulkActions?: TableToolbarBulkAction[];
   /** Every sort, first sort first, for controlled use. Inside a DataTable the table's sorts are used unless this is set. */
   sorts?: Sort[];
@@ -497,7 +520,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
     const visibleCount = columns.filter((col) => !hidden.includes(col.key)).length;
     const activeFilters = filters.filter(isComplete).length;
 
-    /* Narrower than a phone, the bar folds to icons: Edit, search and
+    /* Narrower than a phone, the bar folds to icons: search and
        the filters each become one icon, the filters' chips moving into the
        Filter icon's panel. The bar's own width decides, not the viewport's,
        so a bar in a narrow panel folds too. */
@@ -557,48 +580,105 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
       else if (ref) ref.current = node;
     };
 
-    const selectedCount = table?.selectedIds.length ?? 0;
-    const bulk = table?.selectable && (
-      <DropdownMenu
+    /* The bulk bar: the bar's own row, at the same height, while rows are
+       selected. Two actions carry a label at most, the first ordinary
+       one and the first destructive one, set apart at the end; the rest
+       fold into a More menu. Folded, every action is in the menu. */
+    const selectedCount = table?.selectable ? table.selectedIds.length : 0;
+    const bulkMode = selectedCount > 0;
+    const matching = table?.matchingIds ?? [];
+    const allMatching = matching.length > 0 && matching.every((id) => table!.selectedIds.includes(id));
+    const selection: TableToolbarSelection = { ids: table?.selectedIds ?? [], allMatching, except: [] };
+    const ordinary = bulkActions.filter((action) => !action.destructive);
+    const dangerous = bulkActions.filter((action) => action.destructive);
+    const labelled = narrow ? [] : [ordinary[0], dangerous[0]].filter((action): action is TableToolbarBulkAction => Boolean(action));
+    const folded = bulkActions.filter((action) => !labelled.includes(action));
+    const bulkButton = (action: TableToolbarBulkAction) => (
+      <Button
+        key={action.id}
+        variant="secondary"
+        tone={action.destructive ? 'destructive' : 'neutral'}
         size={size}
-        items={[
-          ...bulkActions.map((action) => ({
-            label: action.label,
-            icon: action.icon,
-            destructive: action.destructive,
-            onClick: () => action.onSelect(table.selectedIds),
-          })),
-          ...(bulkActions.length > 0 ? [{ type: 'separator' as const }] : []),
-          {
-            label: labels.selectAll(table.matchingIds.length),
-            icon: 'select_all',
-            onClick: () => table.setSelectedIds(table.matchingIds),
-          },
-          { label: labels.clearSelection, icon: 'deselect', onClick: () => table.setSelectedIds([]) },
-        ]}
-        trigger={
-          narrow ? (
-            <CircularButton
-              icon="checklist"
-              variant="tertiary"
-              size={size}
-              ariaLabel={labels.bulkEdit(selectedCount)}
-              tooltip={labels.bulkEdit(selectedCount)}
-              disabled={selectedCount === 0}
-            />
-          ) : (
-            <Button
-              variant="secondary"
-              tone="neutral"
-              size={size}
-              iconLeft="checklist"
-              label={labels.bulkEdit(selectedCount)}
-              disabled={selectedCount === 0}
-            />
-          )
-        }
+        iconLeft={action.icon}
+        label={action.label}
+        disabled={action.disabled}
+        onClick={() => action.onSelect(selection)}
       />
     );
+    /* Clearing unmounts the button that had focus, so focus moves to the
+       bar's search, or the bar itself. */
+    const clearSelection = () => {
+      table?.setSelectedIds([]);
+      requestAnimationFrame(() => {
+        const root = rootRef.current;
+        const field = root?.querySelector<HTMLElement>('.ds-table-toolbar__search input');
+        (field ?? root)?.focus();
+      });
+    };
+    const bulkBar = bulkMode && (
+      <div className="ds-table-toolbar__bulk" role="group" aria-label={labels.selected(selectedCount)}>
+        <div className="ds-table-toolbar__bulk-start">
+          <CircularButton
+            icon="close"
+            variant="tertiary"
+            size={size}
+            ariaLabel={labels.clearSelection}
+            tooltip={labels.clearSelection}
+            onClick={clearSelection}
+          />
+          <span className="ds-table-toolbar__bulk-count" aria-live="polite">
+            {allMatching && matching.length > 1 ? labels.allSelected(selectedCount) : labels.selected(selectedCount)}
+          </span>
+          {!allMatching && matching.length > selectedCount && (
+            <Button
+              variant="tertiary"
+              size={size}
+              label={labels.selectAll(matching.length)}
+              onClick={() => table!.setSelectedIds(matching)}
+            />
+          )}
+        </div>
+        <div className="ds-table-toolbar__bulk-end">
+          {labelled.filter((action) => !action.destructive).map(bulkButton)}
+          {folded.length > 0 && (
+            <DropdownMenu
+              size={size}
+              align="end"
+              items={folded.map((action) => ({
+                label: action.label,
+                icon: action.icon,
+                destructive: action.destructive,
+                disabled: action.disabled,
+                onClick: () => action.onSelect(selection),
+              }))}
+              trigger={
+                <CircularButton
+                  icon="more_horiz"
+                  variant="tertiary"
+                  size={size}
+                  ariaLabel={labels.moreBulkActions}
+                  tooltip={labels.moreBulkActions}
+                />
+              }
+            />
+          )}
+          {labelled.some((action) => action.destructive) && (
+            <>
+              <span className="ds-table-toolbar__bulk-divider" aria-hidden="true" />
+              {labelled.filter((action) => action.destructive).map(bulkButton)}
+            </>
+          )}
+        </div>
+      </div>
+    );
+
+    /* Inside a DataTable, the bar's own count of the selection stands in for the footer's. */
+    const claimSelection = table?.claimSelection;
+    useEffect(() => {
+      if (!claimSelection || !table?.selectable) return;
+      claimSelection(true);
+      return () => claimSelection(false);
+    }, [claimSelection, table?.selectable]);
 
     const searchField = (
       <Input
@@ -957,6 +1037,8 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
       <div
         role="group"
         aria-label={labels.toolbar}
+        // Focus lands here when clearing the selection takes the focused button away and there is no search.
+        tabIndex={-1}
         {...rest}
         ref={setRootRef}
         className={`ds-table-toolbar ds-table-toolbar--${size}${narrow ? ' ds-table-toolbar--narrow' : ''} ${className}`.trim()}
@@ -964,9 +1046,9 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
         <span className="ds-visually-hidden" aria-live="polite" aria-atomic="true">
           {announcement}
         </span>
-        <div className="ds-table-toolbar__main">
+        {bulkBar}
+        <div className="ds-table-toolbar__main" inert={bulkMode || undefined} data-covered={bulkMode || undefined}>
           <div className="ds-table-toolbar__start" ref={startRef}>
-            {bulk}
             {searchable && !narrow && searchField}
             {showFilters && !narrow && chips}
             {showFilters && !narrow && (

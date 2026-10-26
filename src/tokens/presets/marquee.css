@@ -75,8 +75,7 @@ html[data-brand="marquee"] {
   --color-input-border-hover: var(--primitive-yellow-08);
   --color-input-border-selected: var(--primitive-yellow-07);
   --color-product-mark: var(--primitive-neutral-10);
-  --color-text-display: var(--primitive-orange-08);
-  --color-text-heading: var(--primitive-yellow-09);
+  --color-text-display: var(--primitive-yellow-09);
   --font-display-1-weight: 400;
   --font-display-2-weight: 400;
   --font-family-heading: 'Anton', sans-serif;
@@ -204,8 +203,7 @@ html[data-brand="marquee"][data-theme="dark"] {
   --color-input-border-hover: var(--primitive-yellow-08);
   --color-input-border-selected: var(--primitive-yellow-08);
   --color-product-mark: var(--primitive-neutral-01);
-  --color-text-display: var(--primitive-orange-07);
-  --color-text-heading: var(--primitive-yellow-07);
+  --color-text-display: var(--primitive-yellow-07);
   --font-display-1-weight: 400;
   --font-display-2-weight: 400;
   --font-family-heading: 'Anton', sans-serif;

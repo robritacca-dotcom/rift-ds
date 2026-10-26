@@ -16,10 +16,10 @@ colors:
   surface-soft: "#e6e9e9"
   ink: "#080c0d"
   ink-dark: "#dce0e1"
-  display: "#c65e33"
-  display-dark: "#ef8247"
-  heading: "#625f1f"
-  heading-dark: "#c9c340"
+  display: "#625f1f"
+  display-dark: "#c9c340"
+  heading: "#080c0d"
+  heading-dark: "#dce0e1"
   logo: "#080c0d"
   logo-dark: "#dce0e1"
   logo-end: "#080c0d"
@@ -177,8 +177,8 @@ One action colour, kept for primary buttons, focus rings, the checked state of a
 | `surface` | `#f4f6f6` | `rgba(16, 20, 21, 0.8)` | `--color-bg-container-primary` |
 | `surface-soft` | `#e6e9e9` | `#2e3333` | `--color-bg-container-secondary` |
 | `ink` | `#080c0d` | `#dce0e1` | `--color-text-primary` |
-| `display` | `#c65e33` | `#ef8247` | `--color-text-display` |
-| `heading` | `#625f1f` | `#c9c340` | `--color-text-heading` |
+| `display` | `#625f1f` | `#c9c340` | `--color-text-display` |
+| `heading` | `#080c0d` | `#dce0e1` | `--color-text-heading` |
 | `logo` | `#080c0d` | `#dce0e1` | `--color-brand-mark` |
 | `logo-end` | `#080c0d` | `#dce0e1` | `--color-brand-mark-end` |
 | `text-secondary` | `#2e3333` | `#acb1b1` | `--color-text-secondary` |
@@ -194,7 +194,7 @@ Accents, for charts and the background field: amber `#d69a3e`, cobalt `#4f7f8c`,
 
 ## Typography
 
-Anton headings over Work Sans text. Levels inside a tier share a weight and step by size. Display type `display` and headings `heading` take their own colours, while running text stays in the ink.
+Anton headings over Work Sans text. Levels inside a tier share a weight and step by size. Display type `display` takes its own colour, while running text stays in the ink.
 
 | Style | Face | Size | Weight | Line height | Tracking |
 | --- | --- | --- | --- | --- | --- |

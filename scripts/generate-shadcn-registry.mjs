@@ -55,6 +55,16 @@ import { AUTHOR_NAME, AUTHOR_URL, BRAND_SHORT, SITE_URL } from './brand.mjs';
 import { chatRegistry } from './component-docgen.mjs';
 import { OPTIONAL_PEER_PACKAGES } from './optional-peers.mjs';
 
+/* The package's runtime dependencies (TanStack under DataTable): an item
+   whose source imports one declares it, as an optional peer is declared,
+   or `shadcn add` installs source that cannot resolve its imports. */
+const RUNTIME_PACKAGES = Object.keys(
+  JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')).dependencies ?? {},
+);
+/* What the consumer brings: React itself. Any other bare import must be a
+   peer or a runtime dependency an item can declare. */
+const CONSUMER_PACKAGES = ['react', 'react-dom'];
+
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const srcDir = join(repoRoot, 'src');
 export const outputDir = join(repoRoot, 'website', 'public', 'r');
@@ -150,10 +160,15 @@ function walkClosure(entryFiles, ownDir) {
     const specs = isCss ? cssImportsIn(content) : specifiersIn(content);
     for (const spec of specs) {
       if (!spec.startsWith('.')) {
-        // The optional peers become npm dependencies of the item that
-        // reaches them; react and react-dom are the consumer's already.
-        const peer = OPTIONAL_PEER_PACKAGES.find((name) => spec === name || spec.startsWith(`${name}/`));
-        if (peer) npm.add(peer);
+        // The optional peers and the runtime dependencies become npm
+        // dependencies of the item that reaches them; react and react-dom
+        // are the consumer's already. Anything else would install broken.
+        const owns = (name) => spec === name || spec.startsWith(`${name}/`);
+        const declared = [...OPTIONAL_PEER_PACKAGES, ...RUNTIME_PACKAGES].find(owns);
+        if (declared) npm.add(declared);
+        // The specifier scan is textual, so it only judges what reads as a package name.
+        else if (/^(@[a-z0-9-]+\/)?[a-z0-9][\w.-]*(\/[\w./-]*)?$/.test(spec) && !CONSUMER_PACKAGES.some(owns))
+          throw new Error(`${rel}: imports "${spec}", which is neither a dependency nor a peer an item can declare`);
         continue;
       }
       const resolved = resolveSpecifier(file, spec);

@@ -5,6 +5,10 @@
   "title": "Data table",
   "description": "The wired table: sort, search, filters, selection, paging, column and row controls, and inline editing, on a headless engine.",
   "author": "Robert Ritacca <https://robertritacca.com>",
+  "dependencies": [
+    "@tanstack/react-table",
+    "@tanstack/react-virtual"
+  ],
   "registryDependencies": [
     "https://rift-ds.com/r/base.json",
     "https://rift-ds.com/r/avatar.json",

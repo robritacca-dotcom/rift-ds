@@ -48,4 +48,5 @@ Generated from the rift-ds registry and prop JSDoc, version 1.14.0. The same dat
 | trailingActions | `ReactNode` | no |  | Trailing actions on the right of the action bar, just before the send button (dictation, voice mode). |
 | sendLabel | `string` | no | `Send message` | Accessible label for the send button. |
 | stopLabel | `string` | no | `Stop generating` | Accessible label for the stop button. |
+| locale | `string` | no |  | The BCP 47 locale file sizes are written in, such as `de-DE` (`1,5 MB`). Defaults to the nearest LocaleProvider's, else `en-US`. |
 | className | `string` | no | `` | Additional CSS classes — applied to the shell, not the <textarea>. |

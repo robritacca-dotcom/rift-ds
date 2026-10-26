@@ -31,4 +31,5 @@ Generated from the rift-ds registry and prop JSDoc, version 1.14.0. The same dat
 | showLessLabel | `string` | no | `Show fewer` | Text of the collapse button under an expanded group. |
 | attachmentTileLabels | `Pick<AttachmentTileProps, "uploadingLabel" \| "errorLabel" \| "unavailableLabel" \| "progressLabel">` | no |  | The status lines and progress name every tile writes, merged over the tile's English defaults ("Uploading…", "Upload failed", "Unavailable"). |
 | attachmentViewerLabels | `Pick<AttachmentViewerProps, "closeLabel" \| "downloadLabel" \| "previousLabel" \| "nextLabel" \| "retryLabel" \| "noPreviewLabel" \| "failedLabel" \| "failedDescription" \| "formatPosition">` | no |  | The words the built-in viewer writes, merged over its English defaults: its buttons ("Download", "Close", "Previous file", "Next file", "Try again"), its fallback headlines and the position text ("2 of 5"). |
+| locale | `string` | no |  | The BCP 47 locale file sizes are written in, such as `de-DE` (`1,5 MB`). Defaults to the nearest LocaleProvider's, else `en-US`. |
 | className | `string` | no | `` | Additional CSS classes |

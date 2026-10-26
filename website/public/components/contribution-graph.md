@@ -24,7 +24,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.14.0. The same dat
 | gridLabel | `string` | no |  | Accessible name for the grid of day cells, which renders as one image. Falls back to `caption`, then to "Contribution activity". |
 | lessLabel | `string` | no | `Less` | The legend's low-end word. Defaults to "Less". |
 | moreLabel | `string` | no | `More` | The legend's high-end word. Defaults to "More". |
-| locale | `string` | no | `en-US` | The BCP 47 locale the dates are written in: the default month labels above the grid ("Jan" to "Dec" in `en-US`) and the date in each cell's default tooltip ("Jul 8, 2026"). Defaults to `en-US`. |
+| locale | `string` | no | `en-US` | The BCP 47 locale the dates are written in: the default month labels above the grid ("Jan" to "Dec" in `en-US`) and the date in each cell's default tooltip ("Jul 8, 2026"), and the weekday each column starts on. Defaults to `en-US`. |
+| weekStartsOn | `Weekday` | no |  | The weekday each column starts on, 0 (Sunday) to 6 (Saturday). Defaults to the first day of the week in `locale`: Sunday in `en-US`, Monday in `de-DE`. |
 | monthLabels | `string[]` | no |  | The month labels above the grid: twelve entries, January first. Defaults to the short month names in `locale` ("Jan" to "Dec" in `en-US`); a list of any other length falls back to the default. |
 | cellLabel | `((count: number, date: Date) => string)` | no |  | A day cell's tooltip, given its count and date. Defaults to "No contributions", "1 contribution" or "N contributions", then "on" and the date in `locale`'s short form (e.g. "Jul 8, 2026"). |
 | className | `string` | no | `` | Additional CSS classes |

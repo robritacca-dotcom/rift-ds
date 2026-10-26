@@ -5,6 +5,8 @@ import { ChosenMark } from '../Dropdown/Dropdown';
 import { useLayer } from '../../behaviors/useLayer';
 import { useAnchoredPosition } from '../../behaviors/useAnchoredPosition';
 import { Field } from '../Field/Field';
+import { useLocale } from '../../behaviors/LocaleProvider';
+import { uses12HourClock } from '../../behaviors/locale';
 import './TimePicker.css';
 import '../../fonts/material-symbols.css';
 
@@ -32,8 +34,19 @@ type TimePickerOwnProps = {
   maxTime?: string;
   /** Minutes between generated options */
   stepMinutes?: number;
-  /** Display format for the trigger and options — the value stays a 24-hour "HH:MM" string either way */
+  /**
+   * Display format for the trigger and options — the value stays a 24-hour
+   * "HH:MM" string either way. Defaults to the clock `locale` uses: `'12'` in
+   * `en-US`, `'24'` in `en-GB` and `de-DE`.
+   */
   hourFormat?: '12' | '24';
+  /**
+   * The BCP 47 locale the times are written in, such as `de-DE`: the clock
+   * `hourFormat` defaults to, and the period words and their place when no
+   * `periodLabels` are given. Defaults to the nearest LocaleProvider's, else
+   * `en-US`.
+   */
+  locale?: string;
   /** Component size */
   size?: 'default' | 'compact';
   /** Whether the picker is disabled */
@@ -47,9 +60,11 @@ type TimePickerOwnProps = {
   /** Called with the newly selected 24-hour "HH:MM" value */
   onValueChange?: (value: string) => void;
   /**
-   * The period suffixes a 12-hour time is written with, merged over the
-   * English defaults `{ am: 'AM', pm: 'PM' }`. Only read when `hourFormat` is
-   * `'12'`.
+   * The period suffixes a 12-hour time is written with, as "2:30 PM".
+   * Without them a 12-hour time is written the way `locale` writes it,
+   * period words included ("2:30 PM" in `en-US`). A partial set is merged
+   * over the English `{ am: 'AM', pm: 'PM' }`. Only read when `hourFormat`
+   * is `'12'`.
    */
   periodLabels?: { am?: string; pm?: string };
   /**
@@ -77,7 +92,21 @@ function toTimeValue(minutes: number): string {
   return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
 }
 
-/** Format a 24-hour "HH:MM" value for display ("2:30 PM" or "14:30"). */
+/** A 24-hour "HH:MM" value as `locale` writes it on the given clock ("2:30 PM" or "14:30" in en-US). */
+function formatTimeIn(time: string, hourFormat: '12' | '24', locale: string): string {
+  const [h, m] = time.split(':').map(Number);
+  return new Intl.DateTimeFormat(locale, {
+    hour: hourFormat === '12' ? 'numeric' : '2-digit',
+    minute: '2-digit',
+    hourCycle: hourFormat === '12' ? 'h12' : 'h23',
+    timeZone: 'UTC',
+  }).format(Date.UTC(2000, 0, 1, h, m))
+    // Newer ICU puts a narrow no-break space before the period; one space
+    // keeps the server and an older browser writing the same text.
+    .replace(/\u202f/g, ' ');
+}
+
+/** Format a 24-hour "HH:MM" value for display with the consumer's own period words ("2:30 PM" or "14:30"). */
 function formatTime(
   time: string,
   hourFormat: '12' | '24',
@@ -108,7 +137,8 @@ export const TimePicker = React.forwardRef<HTMLButtonElement, TimePickerProps>(
       minTime = '00:00',
       maxTime = '23:30',
       stepMinutes = 30,
-      hourFormat = '12',
+      hourFormat: hourFormatProp,
+      locale: localeProp,
       size = 'default',
       disabled = false,
       required = false,
@@ -167,6 +197,11 @@ export const TimePicker = React.forwardRef<HTMLButtonElement, TimePickerProps>(
       .filter(Boolean)
       .join(' ');
 
+    const locale = useLocale(localeProp);
+    const hourFormat = hourFormatProp ?? (uses12HourClock(locale) ? '12' : '24');
+    // The consumer's own period words, when given, are written in after the
+    // time; otherwise the locale writes the whole time, period and all.
+    const hasPeriodLabels = periodLabels !== undefined;
     const amLabel = periodLabels?.am ?? 'AM';
     const pmLabel = periodLabels?.pm ?? 'PM';
 
@@ -178,10 +213,13 @@ export const TimePicker = React.forwardRef<HTMLButtonElement, TimePickerProps>(
       const opts: TimeOption[] = [];
       for (let mins = start; mins <= end; mins += step) {
         const v = toTimeValue(mins);
-        opts.push({ value: v, label: formatTime(v, hourFormat, period) });
+        opts.push({
+          value: v,
+          label: hasPeriodLabels ? formatTime(v, hourFormat, period) : formatTimeIn(v, hourFormat, locale),
+        });
       }
       return opts;
-    }, [minTime, maxTime, stepMinutes, hourFormat, amLabel, pmLabel]);
+    }, [minTime, maxTime, stepMinutes, hourFormat, amLabel, pmLabel, hasPeriodLabels, locale]);
 
     const selectedIndex = timeOptions.findIndex((opt) => opt.value === selectedValue);
     const selectedOption = selectedIndex >= 0 ? timeOptions[selectedIndex] : undefined;

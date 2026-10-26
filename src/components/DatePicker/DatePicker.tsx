@@ -3,6 +3,15 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import './DatePicker.css';
 import '../../fonts/material-symbols.css';
+import { useLocale } from '../../behaviors/LocaleProvider';
+import {
+  isEnglish,
+  rotateWeek,
+  weekStartOf,
+  weekdayNamesIn,
+  weekdayOffset,
+  type Weekday,
+} from '../../behaviors/locale';
 
 /** Props owned by DatePicker itself — everything else falls through to the wrapper. */
 type DatePickerOwnProps = {
@@ -25,24 +34,39 @@ type DatePickerOwnProps = {
   /**
    * The month heading, given the first day of the month in view: the visible
    * title, the name of the day grid, and the text announced on navigation.
-   * Defaults to the English month name and the year.
+   * Defaults to the month name and the year in `locale` ("January 2026" in
+   * `en-US`).
    */
   monthLabel?: (month: Date) => string;
-  /** Accessible name of a day button, given its date and whether it is selected. Defaults to the full date in the user's locale, with ", selected" appended when selected. */
+  /** Accessible name of a day button, given its date and whether it is selected. Defaults to the full date in `locale`, with ", selected" appended when selected. */
   dayLabel?: (date: Date, selected: boolean) => string;
   /**
-   * The visible weekday column headers: seven entries, Sunday first.
-   * Defaults to the English two-letter abbreviations ("Su" to "Sa"); a list
-   * of any other length falls back to the default.
+   * The visible weekday column headers: seven entries, Sunday first, laid
+   * out from `weekStartsOn`. Defaults to the two-letter abbreviations ("Su"
+   * to "Sa") in English and the short weekday names in `locale` otherwise; a
+   * list of any other length falls back to the default.
    */
   weekdayLabels?: string[];
   /**
    * The weekday column headers' accessible names, read in full where the
    * visible header is abbreviated: seven entries, Sunday first. Defaults to
-   * the English weekday names ("Sunday" to "Saturday"); a list of any other
-   * length falls back to the default.
+   * the weekday names in `locale` ("Sunday" to "Saturday" in `en-US`); a
+   * list of any other length falls back to the default.
    */
   weekdayNames?: string[];
+  /**
+   * The BCP 47 locale the calendar is written and laid out in, such as
+   * `de-DE`: the month heading, the weekday names, the spoken dates and the
+   * first day of the week. Defaults to the nearest LocaleProvider's, else
+   * `en-US`.
+   */
+  locale?: string;
+  /**
+   * The first column of the grid, 0 (Sunday) to 6 (Saturday). Defaults to
+   * the first day of the week in `locale`: Sunday in `en-US`, Monday in
+   * `de-DE`.
+   */
+  weekStartsOn?: Weekday;
   /** Additional CSS classes */
   className?: string;
 };
@@ -51,26 +75,11 @@ export interface DatePickerProps
   extends DatePickerOwnProps,
     Omit<React.ComponentPropsWithoutRef<'div'>, keyof DatePickerOwnProps> {}
 
-const DAYS = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
-const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+/** The two-letter English headers, which Intl has no width for. */
+const EN_DAYS = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
 /** A consumer's weekday list when it has the seven entries the grid needs, else the default. */
 const weekdaysOr = (labels: string[] | undefined, fallback: string[]): string[] =>
   labels && labels.length === 7 ? labels : fallback;
-const MONTHS = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-];
-
 function parseDate(str?: string): Date | null {
   if (!str) return null;
   const [y, m, d] = str.split('-').map(Number);
@@ -101,16 +110,21 @@ const visuallyHidden: React.CSSProperties = {
   border: 0,
 };
 
-const defaultMonthLabel = (month: Date): string =>
-  `${MONTHS[month.getMonth()]} ${month.getFullYear()}`;
+const monthLabelIn = (locale: string) => {
+  const format = new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric' });
+  return (month: Date): string => format.format(month);
+};
 
-const defaultDayLabel = (date: Date, selected: boolean): string =>
-  `${date.toLocaleDateString(undefined, {
+const dayLabelIn = (locale: string) => {
+  const format = new Intl.DateTimeFormat(locale, {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
     day: 'numeric',
-  })}${selected ? ', selected' : ''}`;
+  });
+  return (date: Date, selected: boolean): string =>
+    `${format.format(date)}${selected ? ', selected' : ''}`;
+};
 
 function isSameDay(a: Date, b: Date): boolean {
   return (
@@ -153,10 +167,12 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(
       onDateSelect,
       previousLabel = 'Previous month',
       nextLabel = 'Next month',
-      monthLabel = defaultMonthLabel,
-      dayLabel = defaultDayLabel,
+      monthLabel: monthLabelProp,
+      dayLabel: dayLabelProp,
       weekdayLabels,
       weekdayNames,
+      locale: localeProp,
+      weekStartsOn,
       className = '',
       ...rest
     },
@@ -165,8 +181,18 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(
     const selectedDate = parseDate(value);
     const minDate = parseDate(min);
     const maxDate = parseDate(max);
-    const weekdays = weekdaysOr(weekdayLabels, DAYS);
-    const weekdayFullNames = weekdaysOr(weekdayNames, DAY_NAMES);
+    const locale = useLocale(localeProp);
+    const weekStart = weekStartsOn ?? weekStartOf(locale);
+    const monthLabel = useMemo(() => monthLabelProp ?? monthLabelIn(locale), [monthLabelProp, locale]);
+    const dayLabel = useMemo(() => dayLabelProp ?? dayLabelIn(locale), [dayLabelProp, locale]);
+    const weekdays = rotateWeek(
+      weekdaysOr(weekdayLabels, isEnglish(locale) ? EN_DAYS : weekdayNamesIn(locale, 'short')),
+      weekStart,
+    );
+    const weekdayFullNames = rotateWeek(
+      weekdaysOr(weekdayNames, weekdayNamesIn(locale, 'long')),
+      weekStart,
+    );
 
     const today = useMemo(() => new Date(), []);
     const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
@@ -205,7 +231,9 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(
       .join(' ');
 
     // Build grid of days
-    const firstDay = new Date(viewYear, viewMonth, 1).getDay();
+    // Leading days from the previous month: as many as the month's first day
+    // sits after the week's first column.
+    const firstDay = weekdayOffset(new Date(viewYear, viewMonth, 1).getDay(), weekStart);
     const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
     const daysInPrevMonth = new Date(viewYear, viewMonth, 0).getDate();
 
@@ -297,10 +325,10 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(
           next = addDays(date, 7);
           break;
         case 'Home':
-          next = addDays(date, -date.getDay());
+          next = addDays(date, -weekdayOffset(date.getDay(), weekStart));
           break;
         case 'End':
-          next = addDays(date, 6 - date.getDay());
+          next = addDays(date, 6 - weekdayOffset(date.getDay(), weekStart));
           break;
         case 'PageUp':
           next = addMonths(date, event.shiftKey ? -12 : -1);

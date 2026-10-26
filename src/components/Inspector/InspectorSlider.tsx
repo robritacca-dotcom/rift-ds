@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import './Inspector.css';
+import { useLocale } from '../../behaviors/LocaleProvider';
 
 /** Props owned by InspectorSlider itself — everything else falls through to the <input type="range">. */
 type InspectorSliderOwnProps = {
@@ -26,6 +27,8 @@ type InspectorSliderOwnProps = {
    * Fires alongside `onChange`, which keeps the standard React event signature.
    */
   onValueChange?: (value: number) => void;
+  /** The BCP 47 locale the reading is written in when no `format` is given, such as `de-DE` (`0,5`). Defaults to the nearest LocaleProvider's, else `en-US`. */
+  locale?: string;
   /** Additional CSS classes, applied to the bar rather than the <input>. */
   className?: string;
 };
@@ -65,18 +68,26 @@ export const InspectorSlider = React.forwardRef<HTMLInputElement, InspectorSlide
       disabled = false,
       onChange,
       onValueChange,
+      locale: localeProp,
       className = '',
       id,
       ...rest
     },
     ref,
   ) => {
+    const locale = useLocale(localeProp);
     const generatedId = React.useId();
     const inputId = id ?? generatedId;
     const [uncontrolled, setUncontrolled] = useState(defaultValue ?? min);
     const current = value ?? uncontrolled;
     const pct = max === min ? 0 : ((current - min) / (max - min)) * 100;
-    const reading = format ? format(current) : current.toFixed(decimalsOf(step));
+    const decimals = decimalsOf(step);
+    const reading = format
+      ? format(current)
+      : new Intl.NumberFormat(locale, {
+          minimumFractionDigits: decimals,
+          maximumFractionDigits: decimals,
+        }).format(current);
 
     const classes = [
       'ds-inspector-bar',

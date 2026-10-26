@@ -231,7 +231,9 @@ const handler = createMcpHandler(
               `needed only for the toast queue via useToast. LinkProvider ('${pkg.name}/behaviors/LinkProvider') is ` +
               `optional: in a routed app it hands every client-rendered component the router's link, so links navigate ` +
               `without a reload. In Next.js, mount it from a 'use client' file, since the root layout is a Server Component; ` +
-              `a component rendered on the server takes linkComponent on the instance instead.`,
+              `a component rendered on the server takes linkComponent on the instance instead. LocaleProvider ` +
+              `('${pkg.name}/behaviors/LocaleProvider') is optional too: it sets the locale every client-rendered component writes ` +
+              `numbers, dates and calendars in (en-US without it, never the browser's), and a server-rendered one takes locale on the instance.`,
             "",
             `Full guide: ${SITE_URL}/docs/get-started. Live docs: ${SITE_URL}/components. ` +
               `Design spec: ${SITE_URL}/design.md.`,

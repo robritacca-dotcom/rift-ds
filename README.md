@@ -91,7 +91,7 @@ Every component's prop contract is also plain markdown (append `.md` to its docs
 
 ## Theming
 
-Theming is CSS custom properties; there is no configuration API and no provider (one exception: wrap your tree in `ToastProvider` if, and only if, you use the toast queue via `useToast`). Complete looks ship as generated stylesheets: import the aggregate once and one attribute rethemes everything, light and dark, typefaces included (each preset self-hosts its faces).
+Theming is CSS custom properties; there is no configuration API and no theme provider (one required exception: wrap your tree in `ToastProvider` if, and only if, you use the toast queue via `useToast`). Two providers are optional: `LinkProvider` hands every component your router's link, and `LocaleProvider` sets the locale numbers, dates and calendars are written in (`en-US` without it, never the browser's). Complete looks ship as generated stylesheets: import the aggregate once and one attribute rethemes everything, light and dark, typefaces included (each preset self-hosts its faces).
 
 ```tsx
 import 'rift-ds/tokens/presets/presets.css';

@@ -14,6 +14,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.14.0. The same dat
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
+| locale | `string` | no |  | The BCP 47 locale the values, tooltips and value axis are written in, such as `de-DE`. Defaults to the nearest LocaleProvider's, else `en-US`. |
 | data | `Record<string, unknown>[]` | yes |  | Array of data objects — each should have a category key and one or more value keys |
 | categoryKey | `string` | no | `subject` | Key in data for the category labels on each axis |
 | series | `RadarSeriesConfig[]` | yes |  | One or more radar series to render |

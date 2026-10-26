@@ -47,6 +47,7 @@ export default defineConfig({
         'components/StreamingText/useStreamReveal': 'src/components/StreamingText/useStreamReveal.ts',
         'behaviors/useScrollLock': 'src/behaviors/useScrollLock.ts',
         'behaviors/LinkProvider': 'src/behaviors/LinkProvider.tsx',
+        'behaviors/LocaleProvider': 'src/behaviors/LocaleProvider.tsx',
         // The chat widget's four subpaths (scripts/package-manifest.mjs owns
         // the list; each carries its own optional peers, externalised below).
         'chat/index': 'src/chat/index.ts',

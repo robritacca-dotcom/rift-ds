@@ -13,6 +13,7 @@ import { useFocusScope } from '../../behaviors/useFocusScope';
 import { useScrollLock } from '../../behaviors/useScrollLock';
 import '../../fonts/material-symbols.css';
 import './Attachment.css';
+import { useLocale } from '../../behaviors/LocaleProvider';
 
 /** Props owned by AttachmentViewer itself — everything else falls through to the panel. */
 type AttachmentViewerOwnProps = {
@@ -57,6 +58,8 @@ type AttachmentViewerOwnProps = {
   failedDescription?: string;
   /** Builds the position text, e.g. "2 of 5", from a one-based index and the total. */
   formatPosition?: (position: number, total: number) => string;
+  /** The BCP 47 locale file sizes are written in, such as `de-DE` (`1,5 MB`). Defaults to the nearest LocaleProvider's, else `en-US`. */
+  locale?: string;
   /** Additional CSS classes — applied to the portal container, not the panel. */
   className?: string;
 };
@@ -101,11 +104,13 @@ export const AttachmentViewer = React.forwardRef<HTMLDivElement, AttachmentViewe
       failedLabel = 'Couldn’t load this file',
       failedDescription = 'The link may have expired.',
       formatPosition = (position, total) => `${position} of ${total}`,
+      locale: localeProp,
       className = '',
       ...rest
     },
     ref,
   ) => {
+    const locale = useLocale(localeProp);
     const baseClass = 'ds-attachment-viewer';
     const titleId = useId();
     const panelRef = useRef<HTMLDivElement | null>(null);
@@ -165,7 +170,7 @@ export const AttachmentViewer = React.forwardRef<HTMLDivElement, AttachmentViewe
       .filter(Boolean)
       .join(' ');
 
-    const sizeText = item?.size === undefined ? '' : formatBytes(item.size);
+    const sizeText = item?.size === undefined ? '' : formatBytes(item.size, locale);
     const positionText = total > 1 ? formatPosition(index + 1, total) : '';
     const subtitle = [sizeText, positionText].filter(Boolean).join(' · ');
 

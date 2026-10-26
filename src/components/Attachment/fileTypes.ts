@@ -11,6 +11,8 @@
  */
 
 /** What kind of file an attachment is. */
+import { DEFAULT_LOCALE } from '../../behaviors/locale';
+
 export type FileKind =
   | 'pdf'
   | 'document'
@@ -233,14 +235,22 @@ export function splitFileName(name: string, tailChars = 4): { head: string; tail
   return { head: name.slice(0, cut), tail: name.slice(cut) };
 }
 
-/** Render a byte count as a short human-readable string. */
-export function formatBytes(bytes: number): string {
-  if (!Number.isFinite(bytes) || bytes <= 0) return '0 B';
+/**
+ * Render a byte count as a short human-readable string, its number written
+ * in `locale` (`1.5 MB` in en-US, `1,5 MB` in de-DE). Defaults to `en-US`.
+ */
+export function formatBytes(bytes: number, locale: string = DEFAULT_LOCALE): string {
   const units = ['B', 'KB', 'MB', 'GB', 'TB'];
+  const number = (value: number, digits: number) =>
+    new Intl.NumberFormat(locale, {
+      minimumFractionDigits: digits,
+      maximumFractionDigits: digits,
+    }).format(value);
+  if (!Number.isFinite(bytes) || bytes <= 0) return `${number(0, 0)} B`;
   const exponent = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), units.length - 1);
   const value = bytes / Math.pow(1024, exponent);
   // Whole numbers for bytes, one decimal above that
-  return `${exponent === 0 ? value : value.toFixed(1)} ${units[exponent]}`;
+  return `${number(value, exponent === 0 ? 0 : 1)} ${units[exponent]}`;
 }
 
 /**

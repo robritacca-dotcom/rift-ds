@@ -13,6 +13,8 @@ import type { ChartSummaryItem } from './BarChart';
 import { getChartSeriesColors, readTokenPx } from './palette';
 import { useChartAnimation } from './useChartAnimation';
 import './Chart.css';
+import { useLocale } from '../../behaviors/LocaleProvider';
+import { formatNumber } from '../../behaviors/locale';
 
 interface PieChartTooltipPayloadEntry {
   value?: number;
@@ -22,6 +24,8 @@ interface PieChartTooltipPayloadEntry {
 }
 
 interface PieChartTooltipProps {
+  /** The locale the values are written in. */
+  locale: string;
   active?: boolean;
   payload?: PieChartTooltipPayloadEntry[];
 }
@@ -37,6 +41,8 @@ export interface PieSlice {
 
 /** Props owned by PieChart itself; everything else falls through to the root div. */
 type PieChartOwnProps = {
+  /** The BCP 47 locale the values, tooltips and value axis are written in, such as `de-DE`. Defaults to the nearest LocaleProvider's, else `en-US`. */
+  locale?: string;
   /** Array of slices */
   data: PieSlice[];
   /**
@@ -73,7 +79,7 @@ function getCSSVar(name: string, fallback: string): string {
   return `var(${name}, ${fallback})`;
 }
 
-function PieChartTooltip({ active, payload }: PieChartTooltipProps) {
+function PieChartTooltip({ locale, active, payload }: PieChartTooltipProps) {
   if (!active || !payload?.length) return null;
   const entry = payload[0];
 
@@ -86,7 +92,7 @@ function PieChartTooltip({ active, payload }: PieChartTooltipProps) {
         />
         <span className="ds-chart__tooltip-name">{entry.name}</span>
         <span className="ds-chart__tooltip-value">
-          {entry.value?.toLocaleString()}
+          {(entry.value === undefined ? undefined : formatNumber(entry.value, locale))}
         </span>
       </div>
     </div>
@@ -108,8 +114,10 @@ export const PieChart = React.forwardRef<HTMLDivElement, PieChartProps>(({
   showLegend = true,
   bare = false,
   className = '',
+  locale: localeProp,
   ...rest
 }, ref) => {
+  const locale = useLocale(localeProp);
   const titleId = useId();
   const subtitleId = useId();
   const animation = useChartAnimation(data);
@@ -126,8 +134,8 @@ export const PieChart = React.forwardRef<HTMLDivElement, PieChartProps>(({
 
   const renderTooltip = useCallback(
     /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-    (props: any) => <PieChartTooltip {...props} />,
-    [],
+    (props: any) => <PieChartTooltip {...props} locale={locale} />,
+    [locale],
   );
 
   return (
@@ -151,7 +159,7 @@ export const PieChart = React.forwardRef<HTMLDivElement, PieChartProps>(({
                 <div key={i} className={`${baseClass}__summary-item`}>
                   <span className={`${baseClass}__summary-label`}>{item.label}</span>
                   <span className={`${baseClass}__summary-value`}>
-                    {typeof item.value === 'number' ? item.value.toLocaleString() : item.value}
+                    {typeof item.value === 'number' ? formatNumber(item.value, locale) : item.value}
                   </span>
                 </div>
               ))}

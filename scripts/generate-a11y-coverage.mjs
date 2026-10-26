@@ -112,9 +112,12 @@ export function collectA11yCoverage() {
   }
 
   /* The .ts hooks only, deliberately: the page counts the keyboard and
-     focus modules, and the link provider (LinkProvider.tsx) is neither. */
-  const behaviourModules = readdirSync(join(root, 'src', 'behaviors')).filter((f) =>
-    f.endsWith('.ts')
+     focus modules, and the providers (LinkProvider.tsx, LocaleProvider.tsx)
+     are neither. The locale data module is the one .ts file that is not
+     either, so it is left out by name. */
+  const NOT_KEYBOARD_OR_FOCUS = new Set(['locale.ts']);
+  const behaviourModules = readdirSync(join(root, 'src', 'behaviors')).filter(
+    (f) => f.endsWith('.ts') && !NOT_KEYBOARD_OR_FOCUS.has(f)
   ).length;
 
   return {

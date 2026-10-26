@@ -1,4 +1,5 @@
 import React from 'react';
+import { DEFAULT_LOCALE, weekStartOf, weekdayOffset, type Weekday } from '../../behaviors/locale';
 import '../Chart/Chart.css';
 import './ContributionGraph.css';
 
@@ -41,9 +42,14 @@ type ContributionGraphOwnProps = {
   /**
    * The BCP 47 locale the dates are written in: the default month labels
    * above the grid ("Jan" to "Dec" in `en-US`) and the date in each cell's
-   * default tooltip ("Jul 8, 2026"). Defaults to `en-US`.
+   * default tooltip ("Jul 8, 2026"), and the weekday each column starts on. Defaults to `en-US`.
    */
   locale?: string;
+  /**
+   * The weekday each column starts on, 0 (Sunday) to 6 (Saturday). Defaults to
+   * the first day of the week in `locale`: Sunday in `en-US`, Monday in `de-DE`.
+   */
+  weekStartsOn?: Weekday;
   /**
    * The month labels above the grid: twelve entries, January first.
    * Defaults to the short month names in `locale` ("Jan" to "Dec" in
@@ -87,15 +93,15 @@ const cellLabelFor = (locale: string) => (count: number, date: Date) => {
   return `${count} contributions on ${formatted}`;
 };
 
-/** Group days into calendar weeks (Sunday-first columns, like GitHub) */
-const buildWeeks = (days: ContributionDay[]) => {
+/** Group days into calendar weeks, each column starting on `weekStart` (Sunday in en-US, like GitHub) */
+const buildWeeks = (days: ContributionDay[], weekStart: Weekday) => {
   const weeks: (ContributionDay | null)[][] = [];
   let week: (ContributionDay | null)[] = [];
 
   days.forEach((day, index) => {
     if (index === 0) {
       // Pad the first week so the first day lands on its weekday row
-      week = Array<ContributionDay | null>(parseDay(day.date).getDay()).fill(null);
+      week = Array<ContributionDay | null>(weekdayOffset(parseDay(day.date).getDay(), weekStart)).fill(null);
     }
     week.push(day);
     if (week.length === 7) {
@@ -152,13 +158,14 @@ export const ContributionGraph = React.forwardRef<HTMLDivElement, ContributionGr
   gridLabel,
   lessLabel = 'Less',
   moreLabel = 'More',
-  locale = 'en-US',
+  locale = DEFAULT_LOCALE,
+  weekStartsOn,
   monthLabels: monthLabelsProp,
   cellLabel: cellLabelProp,
   className = '',
   ...rest
 }, ref) => {
-  const weeks = buildWeeks(days);
+  const weeks = buildWeeks(days, weekStartsOn ?? weekStartOf(locale));
   const monthLabels = buildMonthLabels(weeks, monthsOr(monthLabelsProp, locale));
   const cellLabel = cellLabelProp ?? cellLabelFor(locale);
 

@@ -14,6 +14,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.14.0. The same dat
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
+| locale | `string` | no |  | The BCP 47 locale the values, tooltips and value axis are written in, such as `de-DE`. Defaults to the nearest LocaleProvider's, else `en-US`. |
 | data | `Record<string, unknown>[]` | yes |  | Array of data objects |
 | xKey | `string` | no | `label` | Key in data for x-axis values |
 | series | `AreaSeriesConfig[]` | yes |  | One or more area series to render |

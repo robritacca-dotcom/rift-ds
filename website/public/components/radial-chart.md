@@ -14,6 +14,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.14.0. The same dat
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
+| locale | `string` | no |  | The BCP 47 locale the values, tooltips and value axis are written in, such as `de-DE`. Defaults to the nearest LocaleProvider's, else `en-US`. |
 | data | `RadialDataItem[]` | yes |  | Array of data items — each renders as a concentric ring |
 | maxValue | `number` | no | `100` | Maximum value for the radial scale (100 = percentage) |
 | title | `string` | no |  | Chart title, in the shared chart header; it also names the figure. Note: this replaces the native `title` tooltip attribute, which the chart does not expose. |

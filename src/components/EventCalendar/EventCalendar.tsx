@@ -3,6 +3,14 @@
 import React, { useMemo, useState } from 'react';
 import './EventCalendar.css';
 import '../../fonts/material-symbols.css';
+import { useLocale } from '../../behaviors/LocaleProvider';
+import {
+  rotateWeek,
+  weekStartOf,
+  weekdayNamesIn,
+  weekdayOffset,
+  type Weekday,
+} from '../../behaviors/locale';
 
 export type EventCalendarColor =
   | 'neutral'
@@ -26,25 +34,9 @@ export interface EventCalendarEvent {
   color?: EventCalendarColor;
 }
 
-const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-/** A consumer's weekday list when it has the seven entries the grid needs, else the default. */
-const weekdaysOr = (labels: string[] | undefined): string[] =>
-  labels && labels.length === 7 ? labels : DAYS;
-const MONTHS = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-];
-
+/** A consumer's weekday list when it has the seven entries the grid needs, else the locale's. */
+const weekdaysOr = (labels: string[] | undefined, locale: string): string[] =>
+  labels && labels.length === 7 ? labels : weekdayNamesIn(locale, 'short');
 /** Parse "YYYY-MM" into [year, monthIndex]. */
 function parseMonth(str: string): [number, number] {
   const [y, m] = str.split('-').map(Number);
@@ -62,23 +54,27 @@ function formatDate(date: Date): string {
   return `${y}-${m}-${d}`;
 }
 
-/** A day's full date in the user's locale, the spoken half of every day-level name. */
-function formatDayLabel(date: Date): string {
-  return date.toLocaleDateString(undefined, {
+/** A day's full date in `locale`, the spoken half of every day-level name. */
+const dayLabelIn = (locale: string) => {
+  const format = new Intl.DateTimeFormat(locale, {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
     day: 'numeric',
   });
-}
+  return (date: Date): string => format.format(date);
+};
 
-const defaultMonthLabel = (month: Date): string =>
-  `${MONTHS[month.getMonth()]} ${month.getFullYear()}`;
+const monthLabelIn = (locale: string) => {
+  const format = new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric' });
+  return (month: Date): string => format.format(month);
+};
 
 const defaultMoreLabel = (count: number): string => `+${count} more`;
 
-const defaultOverflowLabel = (count: number, date: Date): string =>
-  `${count} more event${count === 1 ? '' : 's'}, ${formatDayLabel(date)}`;
+const overflowLabelIn = (formatDayLabel: (date: Date) => string) =>
+  (count: number, date: Date): string =>
+    `${count} more event${count === 1 ? '' : 's'}, ${formatDayLabel(date)}`;
 
 /** Props owned by EventCalendar itself — everything else falls through to the root element. */
 type EventCalendarOwnProps = {
@@ -115,14 +111,14 @@ type EventCalendarOwnProps = {
   nextLabel?: string;
   /**
    * The month heading, given the first day of the month in view: the visible
-   * title and the name of the day grid. Defaults to the English month name
-   * and the year.
+   * title and the name of the day grid. Defaults to the month name and the
+   * year in `locale` ("January 2026" in `en-US`).
    */
   monthLabel?: (month: Date) => string;
   /**
    * Accessible name of a day's "+N more" overflow button, given the number of
    * hidden events and the day. Defaults to "N more events" followed by the
-   * full date in the user's locale.
+   * full date in `locale`.
    */
   overflowLabel?: (count: number, date: Date) => string;
   /**
@@ -132,11 +128,25 @@ type EventCalendarOwnProps = {
    */
   moreLabel?: (count: number) => string;
   /**
-   * The weekday headers above the grid: seven entries, Sunday first.
-   * Defaults to the English three-letter abbreviations ("Sun" to "Sat"); a
-   * list of any other length falls back to the default.
+   * The weekday headers above the grid: seven entries, Sunday first, laid
+   * out from `weekStartsOn`. Defaults to the short weekday names in `locale`
+   * ("Sun" to "Sat" in `en-US`); a list of any other length falls back to
+   * the default.
    */
   weekdayLabels?: string[];
+  /**
+   * The BCP 47 locale the calendar is written and laid out in, such as
+   * `de-DE`: the month heading, the weekday names, the spoken dates and the
+   * first day of the week. Defaults to the nearest LocaleProvider's, else
+   * `en-US`.
+   */
+  locale?: string;
+  /**
+   * The first column of the grid, 0 (Sunday) to 6 (Saturday). Defaults to
+   * the first day of the week in `locale`: Sunday in `en-US`, Monday in
+   * `de-DE`.
+   */
+  weekStartsOn?: Weekday;
   /** Additional CSS classes */
   className?: string;
 };
@@ -168,10 +178,12 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
       actions,
       previousLabel = 'Previous month',
       nextLabel = 'Next month',
-      monthLabel = defaultMonthLabel,
-      overflowLabel = defaultOverflowLabel,
+      monthLabel: monthLabelProp,
+      overflowLabel: overflowLabelProp,
       moreLabel = defaultMoreLabel,
       weekdayLabels,
+      locale: localeProp,
+      weekStartsOn,
       className = '',
       ...rest
     },
@@ -179,6 +191,14 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
   ) => {
     const baseClass = 'ds-event-calendar';
     const today = useMemo(() => new Date(), []);
+    const locale = useLocale(localeProp);
+    const weekStart = weekStartsOn ?? weekStartOf(locale);
+    const formatDayLabel = useMemo(() => dayLabelIn(locale), [locale]);
+    const monthLabel = useMemo(() => monthLabelProp ?? monthLabelIn(locale), [monthLabelProp, locale]);
+    const overflowLabel = useMemo(
+      () => overflowLabelProp ?? overflowLabelIn(formatDayLabel),
+      [overflowLabelProp, formatDayLabel],
+    );
 
     const isControlled = month !== undefined;
     const [uncontrolledMonth, setUncontrolledMonth] = useState(
@@ -207,14 +227,14 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
           if (!a.time && !b.time) return 0;
           if (!a.time) return -1;
           if (!b.time) return 1;
-          return a.time.localeCompare(b.time);
+          return a.time.localeCompare(b.time, locale);
         });
       }
       return map;
-    }, [events]);
+    }, [events, locale]);
 
     // Build the grid — whole weeks only, trimmed to the month's span
-    const firstDay = new Date(viewYear, viewMonth, 1).getDay();
+    const firstDay = weekdayOffset(new Date(viewYear, viewMonth, 1).getDay(), weekStart);
     const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
     const weekCount = Math.ceil((firstDay + daysInMonth) / 7);
 
@@ -253,7 +273,7 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
         </div>
 
         <div className={`${baseClass}__weekdays`} aria-hidden="true">
-          {weekdaysOr(weekdayLabels).map((day, index) => (
+          {rotateWeek(weekdaysOr(weekdayLabels, locale), weekStart).map((day, index) => (
             <div key={index} className={`${baseClass}__weekday`}>
               {day}
             </div>

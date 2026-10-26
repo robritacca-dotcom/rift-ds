@@ -12,6 +12,8 @@ import { getChartSeriesColors } from '../Chart/palette';
 import { useChartAnimation } from '../Chart/useChartAnimation';
 import '../Chart/Chart.css';
 import './FunnelChart.css';
+import { useLocale } from '../../behaviors/LocaleProvider';
+import { formatNumber } from '../../behaviors/locale';
 
 /** One stage of the funnel, ordered widest first. */
 export interface FunnelStage {
@@ -28,6 +30,8 @@ export interface FunnelStage {
 
 /** Props owned by FunnelChart itself — everything else falls through to the root div. */
 type FunnelChartOwnProps = {
+  /** The BCP 47 locale the values, tooltips and value axis are written in, such as `de-DE`. Defaults to the nearest LocaleProvider's, else `en-US`. */
+  locale?: string;
   /** Ordered stages, first stage widest. Each later stage's width is its share of the first. */
   data: FunnelStage[];
   /**
@@ -66,9 +70,9 @@ export interface FunnelChartProps
   extends FunnelChartOwnProps,
     Omit<React.ComponentPropsWithoutRef<'div'>, keyof FunnelChartOwnProps | 'children'> {}
 
-const defaultSummaryLabel = (data: FunnelStage[]) =>
+const defaultSummaryLabel = (data: FunnelStage[], locale: string) =>
   `Funnel: ${data
-    .map((stage) => `${stage.label} ${stage.displayValue ?? stage.value.toLocaleString()}`)
+    .map((stage) => `${stage.label} ${stage.displayValue ?? formatNumber(stage.value, locale)}`)
     .join(', ')}`;
 
 interface FunnelTooltipPayloadEntry {
@@ -78,6 +82,8 @@ interface FunnelTooltipPayloadEntry {
 }
 
 interface FunnelTooltipProps {
+  /** The locale the values are written in. */
+  locale: string;
   active?: boolean;
   payload?: FunnelTooltipPayloadEntry[];
 }
@@ -89,7 +95,7 @@ function getCSSVar(name: string, fallback: string): string {
   return `var(${name}, ${fallback})`;
 }
 
-function FunnelTooltip({ active, payload }: FunnelTooltipProps) {
+function FunnelTooltip({ locale, active, payload }: FunnelTooltipProps) {
   if (!active || !payload?.length) return null;
   const entry = payload[0];
   const stage = entry.payload;
@@ -106,7 +112,7 @@ function FunnelTooltip({ active, payload }: FunnelTooltipProps) {
           {stage?.share !== undefined ? `${stage.share}%` : ''}
         </span>
         <span className="ds-chart__tooltip-value">
-          {stage?.displayValue ?? entry.value?.toLocaleString()}
+          {stage?.displayValue ?? (entry.value === undefined ? undefined : formatNumber(entry.value, locale))}
         </span>
       </div>
     </div>
@@ -133,14 +139,16 @@ export const FunnelChart = React.forwardRef<HTMLDivElement, FunnelChartProps>(
       bare = false,
       height = 190,
       showLabels = true,
-      summaryLabel = defaultSummaryLabel,
+      summaryLabel,
       emptyLabel = 'Funnel, no data',
       minStageShare,
       className = '',
+      locale: localeProp,
       ...rest
     },
     ref,
   ) => {
+    const locale = useLocale(localeProp);
     const baseClass = 'ds-funnel-chart';
     const animation = useChartAnimation(data);
     const chartClass = 'ds-chart';
@@ -161,13 +169,13 @@ export const FunnelChart = React.forwardRef<HTMLDivElement, FunnelChartProps>(
       fill: seriesColors[i % seriesColors.length],
     }));
 
-    const ariaLabel = data.length > 0 ? summaryLabel(data) : emptyLabel;
+    const ariaLabel = data.length > 0 ? (summaryLabel ? summaryLabel(data) : defaultSummaryLabel(data, locale)) : emptyLabel;
 
     const renderTooltip = useCallback(
       /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-      (props: any) => <FunnelTooltip {...props} />,
-      [],
-    );
+      (props: any) => <FunnelTooltip {...props} locale={locale} />,
+      [locale],
+  );
 
     return (
       <div {...rest} ref={ref} className={classes}>

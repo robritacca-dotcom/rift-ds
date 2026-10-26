@@ -1,4 +1,5 @@
 import React from 'react';
+import { DEFAULT_LOCALE, formatNumber } from '../../behaviors/locale';
 import './LegendTile.css';
 
 /** Props owned by LegendTile itself — everything else falls through to the root div. */
@@ -6,7 +7,7 @@ type LegendTileOwnProps = {
   /** The series name shown above the value. Truncates with an ellipsis rather than wrapping. */
   label: string;
   /**
-   * The reading for this series. Numbers are formatted with `toLocaleString()`;
+   * The reading for this series. A number is written in `locale`;
    * pass a string when the value carries its own formatting or a unit.
    */
   value: string | number;
@@ -16,6 +17,11 @@ type LegendTileOwnProps = {
    * renders.
    */
   swatch?: string;
+  /**
+   * The BCP 47 locale a number `value` is written in, such as `de-DE`. Defaults to `en-US`.
+   * LegendTile can render from a Server Component, so it takes the prop alone and reads no LocaleProvider.
+   */
+  locale?: string;
   /** Additional CSS classes */
   className?: string;
 };
@@ -33,7 +39,7 @@ export interface LegendTileProps
  */
 // No 'use client': purely presentational — no hooks, handlers, or browser APIs.
 export const LegendTile = React.forwardRef<HTMLDivElement, LegendTileProps>(
-  ({ label, value, swatch, className = '', style, ...rest }, ref) => {
+  ({ label, value, swatch, locale = DEFAULT_LOCALE, className = '', style, ...rest }, ref) => {
     const baseClass = 'ds-legend-tile';
 
     const classes = [baseClass, className].filter(Boolean).join(' ');
@@ -51,7 +57,7 @@ export const LegendTile = React.forwardRef<HTMLDivElement, LegendTileProps>(
           {label}
         </span>
         <span className={`${baseClass}__value`}>
-          {typeof value === 'number' ? value.toLocaleString() : value}
+          {typeof value === 'number' ? formatNumber(value, locale) : value}
         </span>
       </div>
     );

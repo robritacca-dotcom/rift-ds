@@ -21,12 +21,13 @@ Generated from the rift-ds registry and prop JSDoc, version 1.14.0. The same dat
 | minTime | `string` | no | `00:00` | Earliest generated option, as a 24-hour "HH:MM" string |
 | maxTime | `string` | no | `23:30` | Latest generated option, as a 24-hour "HH:MM" string |
 | stepMinutes | `number` | no | `30` | Minutes between generated options |
-| hourFormat | `"12" \| "24"` | no | `12` | Display format for the trigger and options — the value stays a 24-hour "HH:MM" string either way |
+| hourFormat | `"12" \| "24"` | no |  | Display format for the trigger and options — the value stays a 24-hour "HH:MM" string either way. Defaults to the clock `locale` uses: `'12'` in `en-US`, `'24'` in `en-GB` and `de-DE`. |
+| locale | `string` | no |  | The BCP 47 locale the times are written in, such as `de-DE`: the clock `hourFormat` defaults to, and the period words and their place when no `periodLabels` are given. Defaults to the nearest LocaleProvider's, else `en-US`. |
 | size | `"default" \| "compact"` | no | `default` | Component size |
 | disabled | `boolean` | no | `false` | Whether the picker is disabled |
 | required | `boolean` | no | `false` | Whether the field is required |
 | error | `boolean` | no | `false` | Error state |
 | helperText | `string` | no |  | Helper or error message |
 | onValueChange | `((value: string) => void)` | no |  | Called with the newly selected 24-hour "HH:MM" value |
-| periodLabels | `{ am?: string; pm?: string; } \| undefined` | no |  | The period suffixes a 12-hour time is written with, merged over the English defaults `{ am: 'AM', pm: 'PM' }`. Only read when `hourFormat` is `'12'`. |
+| periodLabels | `{ am?: string; pm?: string; } \| undefined` | no |  | The period suffixes a 12-hour time is written with, as "2:30 PM". Without them a 12-hour time is written the way `locale` writes it, period words included ("2:30 PM" in `en-US`). A partial set is merged over the English `{ am: 'AM', pm: 'PM' }`. Only read when `hourFormat` is `'12'`. |
 | className | `string` | no | `` | Additional CSS classes, applied to the Field wrapper around the label, trigger and helper text, not to the trigger button the ref and the other props reach. |

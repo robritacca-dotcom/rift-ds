@@ -14,6 +14,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.14.0. The same dat
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
+| locale | `string` | no |  | The BCP 47 locale the values, tooltips and value axis are written in, such as `de-DE`. Defaults to the nearest LocaleProvider's, else `en-US`. |
 | data | `TreemapDataItem[]` | yes |  | Hierarchical data — each item needs `name` and `size` (or `children`) |
 | dataKey | `string` | no | `size` | Key used for sizing rectangles |
 | title | `string` | no |  | Chart title, in the shared chart header; it also names the figure. Note: this replaces the native `title` tooltip attribute, which the chart does not expose. |

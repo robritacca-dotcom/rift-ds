@@ -829,6 +829,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Formats the displayed number — currency, units, compact notation. Called\non every animation frame, so keep it pure and cheap."
           },
           {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the number is written in when no `format` is given,\nsuch as `de-DE` (`1.234,5`). Defaults to the nearest LocaleProvider's,\nelse `en-US`."
+          },
+          {
             "name": "duration",
             "type": "number",
             "required": false,
@@ -1159,6 +1165,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
       {
         "component": "AreaChart",
         "props": [
+          {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the values, tooltips and value axis are written in, such as `de-DE`. Defaults to the nearest LocaleProvider's, else `en-US`."
+          },
           {
             "name": "data",
             "type": "Record<string, unknown>[]",
@@ -1652,6 +1664,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "The words the built-in viewer writes, merged over its English defaults: its buttons (\"Download\", \"Close\", \"Previous file\", \"Next file\", \"Try again\"), its fallback headlines and the position text (\"2 of 5\")."
           },
           {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale file sizes are written in, such as `de-DE` (`1,5 MB`). Defaults to the nearest LocaleProvider's, else `en-US`."
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -1947,6 +1965,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "(position, total) => `${position} of ${total}`"
           },
           {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale file sizes are written in, such as `de-DE` (`1,5 MB`). Defaults to the nearest LocaleProvider's, else `en-US`."
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -2211,6 +2235,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
       {
         "component": "BarChart",
         "props": [
+          {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the values, tooltips and value axis are written in, such as `de-DE`. Defaults to the nearest LocaleProvider's, else `en-US`."
+          },
           {
             "name": "data",
             "type": "Record<string, unknown>[]",
@@ -4133,6 +4163,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
         "component": "ComboChart",
         "props": [
           {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the values, tooltips and value axis are written in, such as `de-DE`. Defaults to the nearest LocaleProvider's, else `en-US`."
+          },
+          {
             "name": "data",
             "type": "Record<string, unknown>[]",
             "required": true,
@@ -4826,6 +4862,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "Stop generating"
           },
           {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale file sizes are written in, such as `de-DE` (`1,5 MB`). Defaults to the nearest LocaleProvider's, else `en-US`."
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -5063,8 +5105,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "locale",
             "type": "string",
             "required": false,
-            "description": "The BCP 47 locale the dates are written in: the default month labels\nabove the grid (\"Jan\" to \"Dec\" in `en-US`) and the date in each cell's\ndefault tooltip (\"Jul 8, 2026\"). Defaults to `en-US`.",
+            "description": "The BCP 47 locale the dates are written in: the default month labels\nabove the grid (\"Jan\" to \"Dec\" in `en-US`) and the date in each cell's\ndefault tooltip (\"Jul 8, 2026\"), and the weekday each column starts on. Defaults to `en-US`.",
             "defaultValue": "en-US"
+          },
+          {
+            "name": "weekStartsOn",
+            "type": "Weekday",
+            "required": false,
+            "description": "The weekday each column starts on, 0 (Sunday) to 6 (Saturday). Defaults to\nthe first day of the week in `locale`: Sunday in `en-US`, Monday in `de-DE`."
           },
           {
             "name": "monthLabels",
@@ -5740,6 +5788,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "hover"
           },
           {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the table formats and sorts in, such as `de-DE`: every\ntyped column without a `format.locale` of its own, and the order text\nsorts in. Defaults to the nearest LocaleProvider's, else `en-US`."
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -5902,27 +5956,37 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "monthLabel",
             "type": "((month: Date) => string)",
             "required": false,
-            "description": "The month heading, given the first day of the month in view: the visible\ntitle, the name of the day grid, and the text announced on navigation.\nDefaults to the English month name and the year.",
-            "defaultValue": "(month: Date): string =>\n  `${MONTHS[month.getMonth()]} ${month.getFullYear()}`"
+            "description": "The month heading, given the first day of the month in view: the visible\ntitle, the name of the day grid, and the text announced on navigation.\nDefaults to the month name and the year in `locale` (\"January 2026\" in\n`en-US`)."
           },
           {
             "name": "dayLabel",
             "type": "((date: Date, selected: boolean) => string)",
             "required": false,
-            "description": "Accessible name of a day button, given its date and whether it is selected. Defaults to the full date in the user's locale, with \", selected\" appended when selected.",
-            "defaultValue": "(date: Date, selected: boolean): string =>\n  `${date.toLocaleDateString(undefined, {\n    weekday: 'long',\n    year: 'numeric',\n    month: 'long',\n    day: 'numeric',\n  })}${selected ? ', selected' : ''}`"
+            "description": "Accessible name of a day button, given its date and whether it is selected. Defaults to the full date in `locale`, with \", selected\" appended when selected."
           },
           {
             "name": "weekdayLabels",
             "type": "string[]",
             "required": false,
-            "description": "The visible weekday column headers: seven entries, Sunday first.\nDefaults to the English two-letter abbreviations (\"Su\" to \"Sa\"); a list\nof any other length falls back to the default."
+            "description": "The visible weekday column headers: seven entries, Sunday first, laid\nout from `weekStartsOn`. Defaults to the two-letter abbreviations (\"Su\"\nto \"Sa\") in English and the short weekday names in `locale` otherwise; a\nlist of any other length falls back to the default."
           },
           {
             "name": "weekdayNames",
             "type": "string[]",
             "required": false,
-            "description": "The weekday column headers' accessible names, read in full where the\nvisible header is abbreviated: seven entries, Sunday first. Defaults to\nthe English weekday names (\"Sunday\" to \"Saturday\"); a list of any other\nlength falls back to the default."
+            "description": "The weekday column headers' accessible names, read in full where the\nvisible header is abbreviated: seven entries, Sunday first. Defaults to\nthe weekday names in `locale` (\"Sunday\" to \"Saturday\" in `en-US`); a\nlist of any other length falls back to the default."
+          },
+          {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the calendar is written and laid out in, such as\n`de-DE`: the month heading, the weekday names, the spoken dates and the\nfirst day of the week. Defaults to the nearest LocaleProvider's, else\n`en-US`."
+          },
+          {
+            "name": "weekStartsOn",
+            "type": "Weekday",
+            "required": false,
+            "description": "The first column of the grid, 0 (Sunday) to 6 (Saturday). Defaults to\nthe first day of the week in `locale`: Sunday in `en-US`, Monday in\n`de-DE`."
           },
           {
             "name": "className",
@@ -6678,15 +6742,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "monthLabel",
             "type": "((month: Date) => string)",
             "required": false,
-            "description": "The month heading, given the first day of the month in view: the visible\ntitle and the name of the day grid. Defaults to the English month name\nand the year.",
-            "defaultValue": "(month: Date): string =>\n  `${MONTHS[month.getMonth()]} ${month.getFullYear()}`"
+            "description": "The month heading, given the first day of the month in view: the visible\ntitle and the name of the day grid. Defaults to the month name and the\nyear in `locale` (\"January 2026\" in `en-US`)."
           },
           {
             "name": "overflowLabel",
             "type": "((count: number, date: Date) => string)",
             "required": false,
-            "description": "Accessible name of a day's \"+N more\" overflow button, given the number of\nhidden events and the day. Defaults to \"N more events\" followed by the\nfull date in the user's locale.",
-            "defaultValue": "(count: number, date: Date): string =>\n  `${count} more event${count === 1 ? '' : 's'}, ${formatDayLabel(date)}`"
+            "description": "Accessible name of a day's \"+N more\" overflow button, given the number of\nhidden events and the day. Defaults to \"N more events\" followed by the\nfull date in `locale`."
           },
           {
             "name": "moreLabel",
@@ -6699,7 +6761,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "weekdayLabels",
             "type": "string[]",
             "required": false,
-            "description": "The weekday headers above the grid: seven entries, Sunday first.\nDefaults to the English three-letter abbreviations (\"Sun\" to \"Sat\"); a\nlist of any other length falls back to the default."
+            "description": "The weekday headers above the grid: seven entries, Sunday first, laid\nout from `weekStartsOn`. Defaults to the short weekday names in `locale`\n(\"Sun\" to \"Sat\" in `en-US`); a list of any other length falls back to\nthe default."
+          },
+          {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the calendar is written and laid out in, such as\n`de-DE`: the month heading, the weekday names, the spoken dates and the\nfirst day of the week. Defaults to the nearest LocaleProvider's, else\n`en-US`."
+          },
+          {
+            "name": "weekStartsOn",
+            "type": "Weekday",
+            "required": false,
+            "description": "The first column of the grid, 0 (Sunday) to 6 (Saturday). Defaults to\nthe first day of the week in `locale`: Sunday in `en-US`, Monday in\n`de-DE`."
           },
           {
             "name": "className",
@@ -6933,6 +7007,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "(fileName: string) => `Remove ${fileName}`"
           },
           {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale file sizes are written in, such as `de-DE` (`1,5 MB`). Defaults to the nearest LocaleProvider's, else `en-US`."
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -7035,6 +7115,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
         "component": "FunnelChart",
         "props": [
           {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the values, tooltips and value axis are written in, such as `de-DE`. Defaults to the nearest LocaleProvider's, else `en-US`."
+          },
+          {
             "name": "data",
             "type": "FunnelStage[]",
             "required": true,
@@ -7077,8 +7163,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "summaryLabel",
             "type": "((data: FunnelStage[]) => string)",
             "required": false,
-            "description": "The chart's accessible name, summarising every stage, given `data` when it\nholds at least one stage. Defaults to \"Funnel: \" then each stage's label and\nreading (its `displayValue`, else the value in the reader's locale),\ncomma-separated, e.g. \"Funnel: Visits 12,400, Sign-ups 3,100\".",
-            "defaultValue": "(data: FunnelStage[]) =>\n  `Funnel: ${data\n    .map((stage) => `${stage.label} ${stage.displayValue ?? stage.value.toLocaleString()}`)\n    .join(', ')}`"
+            "description": "The chart's accessible name, summarising every stage, given `data` when it\nholds at least one stage. Defaults to \"Funnel: \" then each stage's label and\nreading (its `displayValue`, else the value in the reader's locale),\ncomma-separated, e.g. \"Funnel: Visits 12,400, Sign-ups 3,100\"."
           },
           {
             "name": "emptyLabel",
@@ -8163,6 +8248,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Convenience callback receiving the numeric value directly.\nFires alongside `onChange`, which keeps the standard React event signature."
           },
           {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the reading is written in when no `format` is given, such as `de-DE` (`0,5`). Defaults to the nearest LocaleProvider's, else `en-US`."
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -8424,13 +8515,20 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "value",
             "type": "string | number",
             "required": true,
-            "description": "The reading for this series. Numbers are formatted with `toLocaleString()`;\npass a string when the value carries its own formatting or a unit."
+            "description": "The reading for this series. A number is written in `locale`;\npass a string when the value carries its own formatting or a unit."
           },
           {
             "name": "swatch",
             "type": "string",
             "required": false,
             "description": "Any CSS colour for the series dot — consumers typically pass a chart\npalette token, e.g. `var(--color-chart-series-1)`. When omitted, no dot\nrenders."
+          },
+          {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale a number `value` is written in, such as `de-DE`. Defaults to `en-US`.\nLegendTile can render from a Server Component, so it takes the prop alone and reads no LocaleProvider.",
+            "defaultValue": "en-US"
           },
           {
             "name": "className",
@@ -8565,6 +8663,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
       {
         "component": "LineChart",
         "props": [
+          {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the values, tooltips and value axis are written in, such as `de-DE`. Defaults to the nearest LocaleProvider's, else `en-US`."
+          },
           {
             "name": "data",
             "type": "Record<string, unknown>[]",
@@ -9751,6 +9855,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
         "component": "PieChart",
         "props": [
           {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the values, tooltips and value axis are written in, such as `de-DE`. Defaults to the nearest LocaleProvider's, else `en-US`."
+          },
+          {
             "name": "data",
             "type": "PieSlice[]",
             "required": true,
@@ -10424,6 +10534,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
         "component": "RadarChart",
         "props": [
           {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the values, tooltips and value axis are written in, such as `de-DE`. Defaults to the nearest LocaleProvider's, else `en-US`."
+          },
+          {
             "name": "data",
             "type": "Record<string, unknown>[]",
             "required": true,
@@ -10499,6 +10615,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
       {
         "component": "RadialChart",
         "props": [
+          {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the values, tooltips and value axis are written in, such as `de-DE`. Defaults to the nearest LocaleProvider's, else `en-US`."
+          },
           {
             "name": "data",
             "type": "RadialDataItem[]",
@@ -11100,6 +11222,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
       {
         "component": "ScatterChart",
         "props": [
+          {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the values, tooltips and value axis are written in, such as `de-DE`. Defaults to the nearest LocaleProvider's, else `en-US`."
+          },
           {
             "name": "datasets",
             "type": "ScatterDatasetConfig[]",
@@ -12190,6 +12318,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
       {
         "component": "StackedBarChart",
         "props": [
+          {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the values, tooltips and value axis are written in, such as `de-DE`. Defaults to the nearest LocaleProvider's, else `en-US`."
+          },
           {
             "name": "data",
             "type": "Record<string, unknown>[]",
@@ -13801,8 +13935,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "hourFormat",
             "type": "\"12\" | \"24\"",
             "required": false,
-            "description": "Display format for the trigger and options — the value stays a 24-hour \"HH:MM\" string either way",
-            "defaultValue": "12"
+            "description": "Display format for the trigger and options — the value stays a 24-hour\n\"HH:MM\" string either way. Defaults to the clock `locale` uses: `'12'` in\n`en-US`, `'24'` in `en-GB` and `de-DE`."
+          },
+          {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the times are written in, such as `de-DE`: the clock\n`hourFormat` defaults to, and the period words and their place when no\n`periodLabels` are given. Defaults to the nearest LocaleProvider's, else\n`en-US`."
           },
           {
             "name": "size",
@@ -13848,7 +13987,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "periodLabels",
             "type": "{ am?: string; pm?: string; } | undefined",
             "required": false,
-            "description": "The period suffixes a 12-hour time is written with, merged over the\nEnglish defaults `{ am: 'AM', pm: 'PM' }`. Only read when `hourFormat` is\n`'12'`."
+            "description": "The period suffixes a 12-hour time is written with, as \"2:30 PM\".\nWithout them a 12-hour time is written the way `locale` writes it,\nperiod words included (\"2:30 PM\" in `en-US`). A partial set is merged\nover the English `{ am: 'AM', pm: 'PM' }`. Only read when `hourFormat`\nis `'12'`."
           },
           {
             "name": "className",
@@ -14661,6 +14800,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
       {
         "component": "Treemap",
         "props": [
+          {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the values, tooltips and value axis are written in, such as `de-DE`. Defaults to the nearest LocaleProvider's, else `en-US`."
+          },
           {
             "name": "data",
             "type": "TreemapDataItem[]",

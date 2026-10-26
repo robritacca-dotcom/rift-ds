@@ -13,6 +13,8 @@ import type { ChartSummaryItem } from './BarChart';
 import { getChartSeriesColors, readTokenPx } from './palette';
 import { useChartAnimation } from './useChartAnimation';
 import './Chart.css';
+import { useLocale } from '../../behaviors/LocaleProvider';
+import { formatNumber } from '../../behaviors/locale';
 
 interface RadialTooltipPayloadEntry {
   value?: number;
@@ -21,6 +23,8 @@ interface RadialTooltipPayloadEntry {
 }
 
 interface RadialTooltipProps {
+  /** The locale the values are written in. */
+  locale: string;
   active?: boolean;
   payload?: RadialTooltipPayloadEntry[];
 }
@@ -36,6 +40,8 @@ export interface RadialDataItem {
 
 /** Props owned by RadialChart itself; everything else falls through to the root div. */
 type RadialChartOwnProps = {
+  /** The BCP 47 locale the values, tooltips and value axis are written in, such as `de-DE`. Defaults to the nearest LocaleProvider's, else `en-US`. */
+  locale?: string;
   /** Array of data items — each renders as a concentric ring */
   data: RadialDataItem[];
   /** Maximum value for the radial scale (100 = percentage) */
@@ -78,7 +84,7 @@ function getCSSVar(name: string, fallback: string): string {
   return `var(${name}, ${fallback})`;
 }
 
-function RadialTooltip({ active, payload }: RadialTooltipProps) {
+function RadialTooltip({ locale, active, payload }: RadialTooltipProps) {
   if (!active || !payload?.length) return null;
   const entry = payload[0];
 
@@ -91,7 +97,7 @@ function RadialTooltip({ active, payload }: RadialTooltipProps) {
         />
         <span className="ds-chart__tooltip-name">{entry.payload?.name}</span>
         <span className="ds-chart__tooltip-value">
-          {entry.value?.toLocaleString()}
+          {(entry.value === undefined ? undefined : formatNumber(entry.value, locale))}
         </span>
       </div>
     </div>
@@ -117,8 +123,10 @@ export const RadialChart = React.forwardRef<HTMLDivElement, RadialChartProps>(({
   centerSublabel,
   bare = false,
   className = '',
+  locale: localeProp,
   ...rest
 }, ref) => {
+  const locale = useLocale(localeProp);
   const titleId = useId();
   const subtitleId = useId();
   const animation = useChartAnimation(data);
@@ -142,8 +150,8 @@ export const RadialChart = React.forwardRef<HTMLDivElement, RadialChartProps>(({
 
   const renderTooltip = useCallback(
     /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-    (props: any) => <RadialTooltip {...props} />,
-    [],
+    (props: any) => <RadialTooltip {...props} locale={locale} />,
+    [locale],
   );
 
   return (
@@ -167,7 +175,7 @@ export const RadialChart = React.forwardRef<HTMLDivElement, RadialChartProps>(({
                 <div key={i} className={`${baseClass}__summary-item`}>
                   <span className={`${baseClass}__summary-label`}>{item.label}</span>
                   <span className={`${baseClass}__summary-value`}>
-                    {typeof item.value === 'number' ? item.value.toLocaleString() : item.value}
+                    {typeof item.value === 'number' ? formatNumber(item.value, locale) : item.value}
                   </span>
                 </div>
               ))}

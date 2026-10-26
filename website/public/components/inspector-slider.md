@@ -23,4 +23,5 @@ Generated from the rift-ds registry and prop JSDoc, version 1.14.0. The same dat
 | format | `((value: number) => string)` | no |  | Formats the reading on the right, and the value a screen reader announces. Defaults to the step's precision. |
 | size | `"default" \| "compact"` | no | `default` | Component size, matching Button: `default` is 40px tall, `compact` 32px (not the native character-width `size` attribute). |
 | onValueChange | `((value: number) => void)` | no |  | Convenience callback receiving the numeric value directly. Fires alongside `onChange`, which keeps the standard React event signature. |
+| locale | `string` | no |  | The BCP 47 locale the reading is written in when no `format` is given, such as `de-DE` (`0,5`). Defaults to the nearest LocaleProvider's, else `en-US`. |
 | className | `string` | no | `` | Additional CSS classes, applied to the bar rather than the <input>. |

@@ -115,4 +115,5 @@ Generated from the rift-ds registry and prop JSDoc, version 1.14.0. The same dat
 | onSizeChange | `((size: "default" \| "compact") => void)` | no |  | Fires when a TableToolbar's density switch changes the density. |
 | filterLabels | `Partial<FilterLabels>` | no |  | The filters' words, merged over their English defaults. |
 | rowActionsVisibility | `"hover" \| "always"` | no | `hover` | When the inline actions show: on row hover and focus (the default, and always on a touch screen), or always. The More button shows at rest either way, so the column never reads as empty. |
+| locale | `string` | no |  | The BCP 47 locale the table formats and sorts in, such as `de-DE`: every typed column without a `format.locale` of its own, and the order text sorts in. Defaults to the nearest LocaleProvider's, else `en-US`. |
 | className | `string` | no | `` | Additional CSS classes |

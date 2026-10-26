@@ -10,6 +10,8 @@ import type { ChartSummaryItem } from './BarChart';
 import { getChartSeriesColors } from './palette';
 import { useChartAnimation } from './useChartAnimation';
 import './Chart.css';
+import { useLocale } from '../../behaviors/LocaleProvider';
+import { formatNumber } from '../../behaviors/locale';
 
 interface TreemapTooltipPayloadEntry {
   value?: number;
@@ -19,6 +21,8 @@ interface TreemapTooltipPayloadEntry {
 }
 
 interface TreemapTooltipProps {
+  /** The locale the values are written in. */
+  locale: string;
   active?: boolean;
   payload?: TreemapTooltipPayloadEntry[];
   sizeLabel: string;
@@ -38,6 +42,8 @@ export interface TreemapDataItem {
 
 /** Props owned by Treemap itself; everything else falls through to the root div. */
 type TreemapOwnProps = {
+  /** The BCP 47 locale the values, tooltips and value axis are written in, such as `de-DE`. Defaults to the nearest LocaleProvider's, else `en-US`. */
+  locale?: string;
   /** Hierarchical data — each item needs `name` and `size` (or `children`) */
   data: TreemapDataItem[];
   /** Key used for sizing rectangles */
@@ -224,7 +230,7 @@ function TreemapContent(props: any) {
   );
 }
 
-function TreemapTooltip({ active, payload, sizeLabel }: TreemapTooltipProps) {
+function TreemapTooltip({ locale, active, payload, sizeLabel }: TreemapTooltipProps) {
   if (!active || !payload?.length) return null;
   const entry = payload[0];
 
@@ -234,7 +240,7 @@ function TreemapTooltip({ active, payload, sizeLabel }: TreemapTooltipProps) {
       <div className="ds-chart__tooltip-row">
         <span className="ds-chart__tooltip-name">{sizeLabel}</span>
         <span className="ds-chart__tooltip-value">
-          {entry.value?.toLocaleString()}
+          {(entry.value === undefined ? undefined : formatNumber(entry.value, locale))}
         </span>
       </div>
     </div>
@@ -255,8 +261,10 @@ export const Treemap = React.forwardRef<HTMLDivElement, TreemapProps>(({
   bare = false,
   sizeLabel = 'Size',
   className = '',
+  locale: localeProp,
   ...rest
 }, ref) => {
+  const locale = useLocale(localeProp);
   const titleId = useId();
   const subtitleId = useId();
   const animation = useChartAnimation(data);
@@ -268,8 +276,8 @@ export const Treemap = React.forwardRef<HTMLDivElement, TreemapProps>(({
 
   const renderTooltip = useCallback(
     /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-    (props: any) => <TreemapTooltip {...props} sizeLabel={sizeLabel} />,
-    [sizeLabel],
+    (props: any) => <TreemapTooltip {...props} locale={locale} sizeLabel={sizeLabel} />,
+    [sizeLabel, locale],
   );
 
   return (
@@ -293,7 +301,7 @@ export const Treemap = React.forwardRef<HTMLDivElement, TreemapProps>(({
                 <div key={i} className={`${baseClass}__summary-item`}>
                   <span className={`${baseClass}__summary-label`}>{item.label}</span>
                   <span className={`${baseClass}__summary-value`}>
-                    {typeof item.value === 'number' ? item.value.toLocaleString() : item.value}
+                    {typeof item.value === 'number' ? formatNumber(item.value, locale) : item.value}
                   </span>
                 </div>
               ))}

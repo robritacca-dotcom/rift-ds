@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import './AnimatedNumber.css';
 import '../../behaviors/visually-hidden.css';
 import { MOTION_COUNT_UP_MS } from '../../tokens/motion';
+import { useLocale } from '../../behaviors/LocaleProvider';
 
 /** Props owned by AnimatedNumber itself — everything else falls through to the root span. */
 type AnimatedNumberOwnProps = {
@@ -16,6 +17,12 @@ type AnimatedNumberOwnProps = {
    * on every animation frame, so keep it pure and cheap.
    */
   format?: (value: number) => string;
+  /**
+   * The BCP 47 locale the number is written in when no `format` is given,
+   * such as `de-DE` (`1.234,5`). Defaults to the nearest LocaleProvider's,
+   * else `en-US`.
+   */
+  locale?: string;
   /**
    * Tween length in ms. Defaults to the shared `MOTION_COUNT_UP_MS` constant;
    * an animation pace, so the tween is skipped entirely under reduced motion.
@@ -57,12 +64,22 @@ export const AnimatedNumber = React.forwardRef<HTMLSpanElement, AnimatedNumberPr
       format,
       duration = MOTION_COUNT_UP_MS,
       animateOnMount = true,
+      locale: localeProp,
       className = '',
       ...rest
     },
     ref,
   ) => {
     const baseClass = 'ds-animated-number';
+    const locale = useLocale(localeProp);
+    const numberFormat = useMemo(
+      () =>
+        new Intl.NumberFormat(locale, {
+          minimumFractionDigits: decimals,
+          maximumFractionDigits: decimals,
+        }),
+      [locale, decimals],
+    );
 
     // The value currently painted. Starts at 0 when the mount animates, so
     // SSR markup and the first client frame agree.
@@ -91,13 +108,7 @@ export const AnimatedNumber = React.forwardRef<HTMLSpanElement, AnimatedNumberPr
       return () => cancelAnimationFrame(frameRef.current);
     }, [value, duration]);
 
-    const fmt =
-      format ??
-      ((n: number) =>
-        n.toLocaleString(undefined, {
-          minimumFractionDigits: decimals,
-          maximumFractionDigits: decimals,
-        }));
+    const fmt = format ?? ((n: number) => numberFormat.format(n));
 
     const classes = [baseClass, className].filter(Boolean).join(' ');
 

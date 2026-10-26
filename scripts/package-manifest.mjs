@@ -65,7 +65,7 @@ const SUBPATHS = [
   // text needs its own renderer (markdown, a highlighter). A .ts module,
   // so the *.tsx wildcard below can't serve it either.
   { key: './components/StreamingText/useStreamReveal', srcJs: './src/components/StreamingText/useStreamReveal.ts', dist: './components/StreamingText/useStreamReveal' },
-  // The one published behavior: the shared page scroll lock. Host chrome
+  // A published behavior: the shared page scroll lock. Host chrome
   // with its own overlays must join the modal components' counter, or two
   // locks fight over document.body — the rest of src/behaviors stays
   // internal (design.md's Components intro owns the contract).
@@ -75,6 +75,12 @@ const SUBPATHS = [
   // `Link`), so links navigate without a reload. Consumers mount it, so it
   // is published; design.md's Components intro owns the contract.
   { key: './behaviors/LinkProvider', srcJs: './src/behaviors/LinkProvider.tsx', dist: './behaviors/LinkProvider' },
+  // The locale setting: LocaleProvider hands every client-rendered component
+  // that formats a number or a date, or lays out a calendar, the app's
+  // locale, so nothing falls back to the runtime's default (which the
+  // server and the browser can disagree on). Consumers mount it, so it is
+  // published; design.md's Components intro owns the contract.
+  { key: './behaviors/LocaleProvider', srcJs: './src/behaviors/LocaleProvider.tsx', dist: './behaviors/LocaleProvider' },
   // The chat widget: the composed chat as one installable thing, in four
   // subpaths so the main barrel never pulls a peer a consumer did not ask
   // for. `./chat` needs react-markdown and remark-gfm, `./chat/server` the

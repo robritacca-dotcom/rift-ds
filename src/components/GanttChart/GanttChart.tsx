@@ -1,4 +1,5 @@
 import React from 'react';
+import { DEFAULT_LOCALE } from '../../behaviors/locale';
 import '../Chart/Chart.css';
 import './GanttChart.css';
 import '../../behaviors/visually-hidden.css';
@@ -160,7 +161,7 @@ export const GanttChart = React.forwardRef<HTMLDivElement, GanttChartProps>(
       subtitle,
       bare = false,
       todayLabel = 'Today',
-      locale = 'en-US',
+      locale = DEFAULT_LOCALE,
       rangeLabel = defaultRangeLabel,
       progressLabel = defaultProgressLabel,
       projectedLabel = 'projected',

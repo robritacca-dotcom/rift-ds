@@ -14,6 +14,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.14.0. The same dat
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
+| locale | `string` | no |  | The BCP 47 locale the values, tooltips and value axis are written in, such as `de-DE`. Defaults to the nearest LocaleProvider's, else `en-US`. |
 | datasets | `ScatterDatasetConfig[]` | yes |  | One or more scatter datasets to plot |
 | xKey | `string` | no | `x` | Key in data for x-axis values |
 | yKey | `string` | no | `y` | Key in data for y-axis values |

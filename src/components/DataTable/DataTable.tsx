@@ -64,6 +64,7 @@ import { BREAKPOINT_PHONE_PX } from '../../tokens/breakpoints';
 import '../../behaviors/visually-hidden.css';
 import './DataTable.css';
 import '../../fonts/material-symbols.css';
+import { useLocale } from '../../behaviors/LocaleProvider';
 
 export interface DataTableColumn<R extends DataTableRow = DataTableRow> {
   /** Unique column identifier, used as the key into each row's values. */
@@ -477,19 +478,24 @@ const declaredPixels = (width: string | number | undefined): number | undefined 
   return match ? Number(match[1]) : undefined;
 };
 
-/* One collator for every text comparison: `localeCompare` with options
-   builds a new one per call, which a sort of thousands of rows feels. */
-const TEXT_COLLATOR = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
+/* One collator per locale for every text comparison: `localeCompare` with
+   options builds a new one per call, which a sort of thousands of rows feels.
+   The table's locale decides the order (ä sorts with a in German, after z in
+   Swedish), so the server and the browser sort alike. */
+const textCollator = (locale: string) =>
+  new Intl.Collator(locale, { numeric: true, sensitivity: 'base' });
 
-/** Compare two raw values: numbers numerically, everything else as text. */
-const compareValues = (a: DataTableValue, b: DataTableValue): number => {
-  if (a == null && b == null) return 0;
-  if (a == null) return -1;
-  if (b == null) return 1;
-  if (typeof a === 'number' && typeof b === 'number') return a - b;
-  if (typeof a === 'boolean' && typeof b === 'boolean') return Number(a) - Number(b);
-  return TEXT_COLLATOR.compare(String(a), String(b));
-};
+/** Compare two raw values: numbers numerically, everything else as text in the collator's order. */
+const valueComparator =
+  (collator: Intl.Collator) =>
+  (a: DataTableValue, b: DataTableValue): number => {
+    if (a == null && b == null) return 0;
+    if (a == null) return -1;
+    if (b == null) return 1;
+    if (typeof a === 'number' && typeof b === 'number') return a - b;
+    if (typeof a === 'boolean' && typeof b === 'boolean') return Number(a) - Number(b);
+    return collator.compare(String(a), String(b));
+  };
 
 /*
  * The engine. TanStack Table runs the row model: the search, the sort and
@@ -800,6 +806,12 @@ type DataTableOwnProps<R extends DataTableRow = DataTableRow> = {
   filterLabels?: Partial<DataTableFilterLabels>;
   /** When the inline actions show: on row hover and focus (the default, and always on a touch screen), or always. The More button shows at rest either way, so the column never reads as empty. */
   rowActionsVisibility?: 'hover' | 'always';
+  /**
+   * The BCP 47 locale the table formats and sorts in, such as `de-DE`: every
+   * typed column without a `format.locale` of its own, and the order text
+   * sorts in. Defaults to the nearest LocaleProvider's, else `en-US`.
+   */
+  locale?: string;
   /** Additional CSS classes */
   className?: string;
 };
@@ -822,8 +834,8 @@ export interface DataTableProps<R extends DataTableRow = DataTableRow>
  * `render` reads it typed; the default is today's `DataTableRow`. The ref and
  * any unrecognised props reach the root element.
  */
-/** A column with what its type sets filled in: its alignment, and the editor it opens when editable. */
-function withType<R extends DataTableRow>(col: DataTableColumn<R>): DataTableColumn<R> {
+/** A column with what its type sets filled in: its alignment, the editor it opens when editable, and the table's locale. */
+function withType<R extends DataTableRow>(col: DataTableColumn<R>, locale: string): DataTableColumn<R> {
   if (!col.type) return col;
   const defaults = TYPE_DEFAULTS[col.type];
   const editable = col.editable !== undefined && col.editable !== false;
@@ -831,6 +843,7 @@ function withType<R extends DataTableRow>(col: DataTableColumn<R>): DataTableCol
     ...col,
     align: col.align ?? defaults.align,
     editor: col.editor ?? (editable ? defaults.editor : undefined),
+    format: { ...col.format, locale: col.format?.locale ?? locale },
   };
 }
 
@@ -943,11 +956,15 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
   error,
   onRetry,
   loadLabels,
+  locale: localeProp,
   className = '',
   ref,
   ...rest
 }: DataTableProps<R>) {
   const baseClass = 'ds-data-table';
+  const locale = useLocale(localeProp);
+  const collator = useMemo(() => textCollator(locale), [locale]);
+  const compareValues = useMemo(() => valueComparator(collator), [collator]);
 
   const [size, setSize] = useControllable<'default' | 'compact'>(sizeProp, defaultSize ?? 'default', onSizeChange);
   const [search, setSearchState] = useControllable<string>(searchProp, defaultSearch ?? '', onSearchChange);
@@ -1087,7 +1104,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
   };
 
   const labels: DataTableColumnLabels = { ...DEFAULT_COLUMN_LABELS, ...columnLabels };
-  const columns = useMemo(() => columnsProp.map(withType), [columnsProp]);
+  const columns = useMemo(() => columnsProp.map((col) => withType(col, locale)), [columnsProp, locale]);
   const byKey = useMemo(() => new Map(columns.map((col) => [col.key, col])), [columns]);
   const indexOfKey = new Map(columns.map((col, index) => [col.key, index]));
   const canResize = (col: DataTableColumn<R>) => !col.locked && (col.resizable ?? resizableColumns);
@@ -1237,7 +1254,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
           sortUndefined: false as const,
         };
       }),
-    [columnKeys],
+    [columnKeys, compareValues],
   );
 
   const needle = search.trim().toLowerCase();
@@ -1339,7 +1356,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     });
     return keys.map((key) => ({ key, rows: byValue.get(key)! }));
     // eslint-disable-next-line react-hooks/exhaustive-deps -- recomputed from the sorted rows and the grouping, which is all it reads
-  }, [sortedRows, groupKey, groupCol, currentSorts]);
+  }, [sortedRows, groupKey, groupCol, currentSorts, compareValues]);
   const rowsInOrder = groups ? groups.flatMap((group) => group.rows) : sortedRows;
   const groupByRow = useMemo(() => {
     const map = new Map<string, { key: string; rows: R[] }>();
@@ -1881,7 +1898,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
                 .map(String),
             ),
           ]
-            .sort((a, b) => a.localeCompare(b))
+            .sort((a, b) => collator.compare(a, b))
             .map((value) => ({ value, label: value }))
         : []);
     return {
@@ -1955,7 +1972,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
       [...(view.hiddenColumns ?? [])].sort(),
       view.columnOrder ?? [],
       view.columnPinning ?? {},
-      Object.entries(view.columnWidths ?? {}).sort(([a], [b]) => a.localeCompare(b)),
+      Object.entries(view.columnWidths ?? {}).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0)),
       view.grouping ?? [],
       view.size ?? 'default',
       view.pageSize ?? null,

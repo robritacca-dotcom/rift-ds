@@ -17,6 +17,8 @@ import { getChartSeriesColors, readTokenPx } from './palette';
 import { useChartAnimation } from './useChartAnimation';
 import { MOTION_CHART_ENTRANCE_MS } from '../../tokens/motion';
 import './Chart.css';
+import { useLocale } from '../../behaviors/LocaleProvider';
+import { formatAxisNumber, formatNumber } from '../../behaviors/locale';
 
 interface ScatterTooltipPayloadEntry {
   value?: number;
@@ -27,6 +29,8 @@ interface ScatterTooltipPayloadEntry {
 }
 
 interface ScatterTooltipProps {
+  /** The locale the values are written in. */
+  locale: string;
   active?: boolean;
   payload?: ScatterTooltipPayloadEntry[];
   xLabel: string;
@@ -44,6 +48,8 @@ export interface ScatterDatasetConfig {
 
 /** Props owned by ScatterChart itself; everything else falls through to the root div. */
 type ScatterChartOwnProps = {
+  /** The BCP 47 locale the values, tooltips and value axis are written in, such as `de-DE`. Defaults to the nearest LocaleProvider's, else `en-US`. */
+  locale?: string;
   /** One or more scatter datasets to plot */
   datasets: ScatterDatasetConfig[];
   /** Key in data for x-axis values */
@@ -82,7 +88,7 @@ function getCSSVar(name: string, fallback: string): string {
   return `var(${name}, ${fallback})`;
 }
 
-function ScatterTooltip({ active, payload, xLabel, yLabel }: ScatterTooltipProps) {
+function ScatterTooltip({ locale, active, payload, xLabel, yLabel }: ScatterTooltipProps) {
   if (!active || !payload?.length) return null;
 
   const xEntry = payload.find((p) => p.dataKey === payload[0]?.dataKey);
@@ -93,14 +99,14 @@ function ScatterTooltip({ active, payload, xLabel, yLabel }: ScatterTooltipProps
       <div className="ds-chart__tooltip-row">
         <span className="ds-chart__tooltip-name">{xLabel}</span>
         <span className="ds-chart__tooltip-value">
-          {xEntry?.value?.toLocaleString()}
+          {(xEntry?.value === undefined ? undefined : formatNumber(xEntry?.value, locale))}
         </span>
       </div>
       {yEntry && (
         <div className="ds-chart__tooltip-row">
           <span className="ds-chart__tooltip-name">{yLabel}</span>
           <span className="ds-chart__tooltip-value">
-            {yEntry.value?.toLocaleString()}
+            {(yEntry.value === undefined ? undefined : formatNumber(yEntry.value, locale))}
           </span>
         </div>
       )}
@@ -124,8 +130,14 @@ export const ScatterChart = React.forwardRef<HTMLDivElement, ScatterChartProps>(
   height = 350,
   bare = false,
   className = '',
+  locale: localeProp,
   ...rest
 }, ref) => {
+  const locale = useLocale(localeProp);
+  const formatTick = useCallback(
+    (value: unknown) => (typeof value === 'number' ? formatAxisNumber(value, locale) : String(value)),
+    [locale],
+  );
   const titleId = useId();
   const subtitleId = useId();
   /* Scatter is the one recharts item with no end callback, so the wrapper
@@ -148,8 +160,8 @@ export const ScatterChart = React.forwardRef<HTMLDivElement, ScatterChartProps>(
 
   const renderTooltip = useCallback(
     /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-    (props: any) => <ScatterTooltip {...props} xLabel={xLabel} yLabel={yLabel} />,
-    [xLabel, yLabel],
+    (props: any) => <ScatterTooltip {...props} locale={locale} xLabel={xLabel} yLabel={yLabel} />,
+    [xLabel, yLabel, locale],
   );
 
   return (
@@ -173,7 +185,7 @@ export const ScatterChart = React.forwardRef<HTMLDivElement, ScatterChartProps>(
                 <div key={i} className={`${baseClass}__summary-item`}>
                   <span className={`${baseClass}__summary-label`}>{item.label}</span>
                   <span className={`${baseClass}__summary-value`}>
-                    {typeof item.value === 'number' ? item.value.toLocaleString() : item.value}
+                    {typeof item.value === 'number' ? formatNumber(item.value, locale) : item.value}
                   </span>
                 </div>
               ))}
@@ -187,6 +199,7 @@ export const ScatterChart = React.forwardRef<HTMLDivElement, ScatterChartProps>(
           <RechartsScatterChart margin={{ top: 8, right: 4, bottom: 0, left: -12 }}>
             <CartesianGrid stroke={gridColor} />
             <XAxis
+              tickFormatter={formatTick}
               type="number"
               dataKey={xKey}
               name={xLabel}
@@ -195,6 +208,7 @@ export const ScatterChart = React.forwardRef<HTMLDivElement, ScatterChartProps>(
               axisLine={{ stroke: gridColor }}
             />
             <YAxis
+              tickFormatter={formatTick}
               type="number"
               dataKey={yKey}
               name={yLabel}

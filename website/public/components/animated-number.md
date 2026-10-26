@@ -17,6 +17,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.14.0. The same dat
 | value | `number` | yes |  | The number to display. Changing it tweens the display from the previous value. |
 | decimals | `number` | no | `0` | Decimal places shown throughout the tween and at rest. Ignored when `format` is set. |
 | format | `((value: number) => string)` | no |  | Formats the displayed number — currency, units, compact notation. Called on every animation frame, so keep it pure and cheap. |
+| locale | `string` | no |  | The BCP 47 locale the number is written in when no `format` is given, such as `de-DE` (`1.234,5`). Defaults to the nearest LocaleProvider's, else `en-US`. |
 | duration | `number` | no | `800` | Tween length in ms. Defaults to the shared `MOTION_COUNT_UP_MS` constant; an animation pace, so the tween is skipped entirely under reduced motion. |
 | animateOnMount | `boolean` | no | `true` | Counts up from zero on first render. Turn off to arrive settled and animate only on later changes. |
 | className | `string` | no | `` | Additional CSS classes |

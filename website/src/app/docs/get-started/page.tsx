@@ -125,6 +125,14 @@ const DARK_MODE_SNIPPET = `<!-- Light is the default; flip the whole system with
 
 /* The widget's scaffold: the registry owns the subcommand and the peers it
    installs beside the package. */
+const LOCALE_SNIPPET = `// app/providers.tsx: a client component, mounted from the root layout.
+'use client';
+import { LocaleProvider } from 'rift-ds/behaviors/LocaleProvider';
+
+export function Providers({ children }: { children: React.ReactNode }) {
+  return <LocaleProvider locale="de-DE">{children}</LocaleProvider>;
+}`;
+
 const CHAT_SNIPPET = `npx rift-ds ${chatWidget.command}`;
 
 const COLOR_MODE_SNIPPET = `// app/layout.tsx: apply the visitor's stored mode before first paint.
@@ -351,10 +359,11 @@ export default function GetStartedPage() {
               package this site is built with. There is no configuration API or theme
               provider: theming is plain CSS custom properties. Import the token
               stylesheet, use the components, and re-theme by redefining tokens. (The
-              library has two optional providers: <code>ToastProvider</code>, needed
-              only if you use the toast queue via <code>useToast</code>, and{" "}
+              library has three optional providers: <code>ToastProvider</code>, needed
+              only if you use the toast queue via <code>useToast</code>,{" "}
               <code>LinkProvider</code>, which hands components your router&apos;s
-              link.){" "}
+              link, and <code>LocaleProvider</code>, which sets the locale numbers
+              and dates are written in.){" "}
               <Link href="/playground" className={styles.inlineLink}>
                 Try it live in the playground
               </Link>
@@ -563,6 +572,30 @@ export default function GetStartedPage() {
                   the playground.
                 </p>
                 <CodeBlock code={FONT_SNIPPET} language="css" showCopy />
+              </section>
+
+              {/* Locale */}
+              <section id="locale" className={`${styles.section} animate-in animate-delay-4`}>
+                <SectionTitle title="Write numbers and dates in your locale" />
+                <p className={styles.sectionNote}>
+                  Every number, date and time a component prints is written in
+                  US English until you say otherwise, never in the browser&apos;s
+                  locale, so the server and the browser always print the same
+                  text. Wrap your app in <code>LocaleProvider</code> and the
+                  charts, tables, calendars, pickers and counters take your
+                  locale&apos;s decimal marks, month and weekday names, first day of
+                  the week and clock. A component&apos;s own <code>locale</code> prop
+                  wins over the provider, and the few that render on the server
+                  (LegendTile, GanttChart, ContributionGraph) take the prop alone.
+                </p>
+                <CodeBlock code={LOCALE_SNIPPET} language="tsx" showCopy />
+                <p className={styles.sectionNote}>
+                  The locale formats; it never translates. Every word a component
+                  writes is a prop with an English default, so you pass your own
+                  text through those props. Where a word depends on a count, the
+                  prop is a function of the count, which is where your plural
+                  rules go.
+                </p>
               </section>
 
               {/* Primitives */}

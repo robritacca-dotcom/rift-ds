@@ -33,4 +33,5 @@ Generated from the rift-ds registry and prop JSDoc, version 1.14.0. The same dat
 | failedLabel | `string` | no | `Couldn’t load this file` | Headline when a file failed to load or is no longer available. |
 | failedDescription | `string` | no | `The link may have expired.` | Sentence under `failedLabel`, when the file carries no error message of its own. |
 | formatPosition | `((position: number, total: number) => string)` | no | `(position, total) => `${position} of ${total}`` | Builds the position text, e.g. "2 of 5", from a one-based index and the total. |
+| locale | `string` | no |  | The BCP 47 locale file sizes are written in, such as `de-DE` (`1,5 MB`). Defaults to the nearest LocaleProvider's, else `en-US`. |
 | className | `string` | no | `` | Additional CSS classes — applied to the portal container, not the panel. |

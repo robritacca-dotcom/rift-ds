@@ -7,6 +7,7 @@ import type { AttachmentItem } from './fileTypes';
 import { renderTypeMark } from './typeMark';
 import { AttachmentViewer, type AttachmentViewerProps } from './AttachmentViewer';
 import './Attachment.css';
+import { useLocale } from '../../behaviors/LocaleProvider';
 
 /** Props owned by AttachmentGroup itself — everything else falls through to the root element. */
 type AttachmentGroupOwnProps = {
@@ -62,6 +63,8 @@ type AttachmentGroupOwnProps = {
     | 'failedDescription'
     | 'formatPosition'
   >;
+  /** The BCP 47 locale file sizes are written in, such as `de-DE` (`1,5 MB`). Defaults to the nearest LocaleProvider's, else `en-US`. */
+  locale?: string;
   /** Additional CSS classes */
   className?: string;
 };
@@ -104,11 +107,13 @@ export const AttachmentGroup = React.forwardRef<HTMLDivElement, AttachmentGroupP
       showLessLabel = 'Show fewer',
       attachmentTileLabels,
       attachmentViewerLabels,
+      locale: localeProp,
       className = '',
       ...rest
     },
     ref,
   ) => {
+    const locale = useLocale(localeProp);
     const baseClass = 'ds-attachment-group';
     const gridId = useId();
 
@@ -228,7 +233,7 @@ export const AttachmentGroup = React.forwardRef<HTMLDivElement, AttachmentGroupP
                   previewAlt={item.previewAlt}
                   excerpt={item.excerpt}
                   previewMark
-                  meta={item.size === undefined ? undefined : formatBytes(item.size)}
+                  meta={item.size === undefined ? undefined : formatBytes(item.size, locale)}
                   size={size}
                   onClick={clickHandler(item)}
                 />

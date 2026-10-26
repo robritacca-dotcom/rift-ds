@@ -15,6 +15,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.14.0. The same dat
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | label | `string` | yes |  | The series name shown above the value. Truncates with an ellipsis rather than wrapping. |
-| value | `string \| number` | yes |  | The reading for this series. Numbers are formatted with `toLocaleString()`; pass a string when the value carries its own formatting or a unit. |
+| value | `string \| number` | yes |  | The reading for this series. A number is written in `locale`; pass a string when the value carries its own formatting or a unit. |
 | swatch | `string` | no |  | Any CSS colour for the series dot — consumers typically pass a chart palette token, e.g. `var(--color-chart-series-1)`. When omitted, no dot renders. |
+| locale | `string` | no | `en-US` | The BCP 47 locale a number `value` is written in, such as `de-DE`. Defaults to `en-US`. LegendTile can render from a Server Component, so it takes the prop alone and reads no LocaleProvider. |
 | className | `string` | no | `` | Additional CSS classes |

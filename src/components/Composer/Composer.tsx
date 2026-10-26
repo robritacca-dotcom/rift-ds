@@ -18,6 +18,7 @@ import type { MentionItem, MentionSource } from '../Mention/Mention';
 import '../../fonts/material-symbols.css';
 import './Composer.css';
 import '../../behaviors/visually-hidden.css';
+import { useLocale } from '../../behaviors/LocaleProvider';
 
 /** Props owned by Composer itself — everything else falls through to the <textarea>. */
 type ComposerOwnProps = {
@@ -175,6 +176,8 @@ type ComposerOwnProps = {
   sendLabel?: string;
   /** Accessible label for the stop button. */
   stopLabel?: string;
+  /** The BCP 47 locale file sizes are written in, such as `de-DE` (`1,5 MB`). Defaults to the nearest LocaleProvider's, else `en-US`. */
+  locale?: string;
   /** Additional CSS classes — applied to the shell, not the <textarea>. */
   className?: string;
 };
@@ -268,6 +271,7 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
       trailingActions,
       sendLabel = 'Send message',
       stopLabel = 'Stop generating',
+      locale: localeProp,
       className = '',
       onChange,
       onKeyDown,
@@ -280,6 +284,7 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
     },
     ref,
   ) => {
+    const locale = useLocale(localeProp);
     const baseClass = 'ds-composer';
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
     const contentRef = useRef<HTMLDivElement | null>(null);
@@ -733,7 +738,7 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
                   previewSrc={file.previewSrc}
                   previewAlt={file.previewAlt}
                   excerpt={file.excerpt}
-                  meta={file.size === undefined ? undefined : formatBytes(file.size)}
+                  meta={file.size === undefined ? undefined : formatBytes(file.size, locale)}
                   onClick={onFileClick ? () => onFileClick(file) : undefined}
                   onRemove={
                     onFileRemove && !disabled ? () => handleFileRemove(file.id, index) : undefined

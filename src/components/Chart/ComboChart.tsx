@@ -15,6 +15,8 @@ import type { ChartSummaryItem } from './BarChart';
 import { getChartSeriesColors, readTokenPx } from './palette';
 import { useChartAnimation } from './useChartAnimation';
 import './Chart.css';
+import { useLocale } from '../../behaviors/LocaleProvider';
+import { formatAxisNumber, formatNumber } from '../../behaviors/locale';
 
 interface ComboTooltipPayloadEntry {
   value?: number;
@@ -25,6 +27,8 @@ interface ComboTooltipPayloadEntry {
 }
 
 interface ComboTooltipProps {
+  /** The locale the values are written in. */
+  locale: string;
   active?: boolean;
   payload?: ComboTooltipPayloadEntry[];
   label?: string | number;
@@ -32,6 +36,8 @@ interface ComboTooltipProps {
 
 /** Props owned by ComboChart itself; everything else falls through to the root div. */
 type ComboChartOwnProps = {
+  /** The BCP 47 locale the values, tooltips and value axis are written in, such as `de-DE`. Defaults to the nearest LocaleProvider's, else `en-US`. */
+  locale?: string;
   /** Array of data objects */
   data: Record<string, unknown>[];
   /** Key in data for x-axis values */
@@ -85,7 +91,7 @@ function getCSSVar(name: string, fallback: string): string {
 /**
  * Custom tooltip rendered inside the chart on hover showing both series.
  */
-function ComboTooltip({ active, payload, label }: ComboTooltipProps) {
+function ComboTooltip({ locale, active, payload, label }: ComboTooltipProps) {
   if (!active || !payload?.length) return null;
 
   return (
@@ -99,7 +105,7 @@ function ComboTooltip({ active, payload, label }: ComboTooltipProps) {
           />
           <span className="ds-chart__tooltip-name">{entry.name}</span>
           <span className="ds-chart__tooltip-value">
-            {entry.value?.toLocaleString()}
+            {(entry.value === undefined ? undefined : formatNumber(entry.value, locale))}
           </span>
         </div>
       ))}
@@ -129,8 +135,14 @@ export const ComboChart = React.forwardRef<HTMLDivElement, ComboChartProps>(({
   height = 350,
   bare = false,
   className = '',
+  locale: localeProp,
   ...rest
 }, ref) => {
+  const locale = useLocale(localeProp);
+  const formatTick = useCallback(
+    (value: unknown) => (typeof value === 'number' ? formatAxisNumber(value, locale) : String(value)),
+    [locale],
+  );
   const titleId = useId();
   const subtitleId = useId();
   const animation = useChartAnimation(data, 2);
@@ -156,8 +168,8 @@ export const ComboChart = React.forwardRef<HTMLDivElement, ComboChartProps>(({
 
   const renderTooltip = useCallback(
     /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-    (props: any) => <ComboTooltip {...props} />,
-    [],
+    (props: any) => <ComboTooltip {...props} locale={locale} />,
+    [locale],
   );
 
   return (
@@ -182,7 +194,7 @@ export const ComboChart = React.forwardRef<HTMLDivElement, ComboChartProps>(({
                 <div key={i} className={`${baseClass}__summary-item`}>
                   <span className={`${baseClass}__summary-label`}>{item.label}</span>
                   <span className={`${baseClass}__summary-value`}>
-                    {typeof item.value === 'number' ? item.value.toLocaleString() : item.value}
+                    {typeof item.value === 'number' ? formatNumber(item.value, locale) : item.value}
                   </span>
                 </div>
               ))}
@@ -206,6 +218,7 @@ export const ComboChart = React.forwardRef<HTMLDivElement, ComboChartProps>(({
               axisLine={{ stroke: gridColor }}
             />
             <YAxis
+              tickFormatter={formatTick}
               yAxisId="bar"
               tick={{ fill: textSecondary, fontSize: textSize }}
               tickLine={false}
@@ -213,6 +226,7 @@ export const ComboChart = React.forwardRef<HTMLDivElement, ComboChartProps>(({
             />
             {secondaryAxis && (
               <YAxis
+                tickFormatter={formatTick}
                 yAxisId="line"
                 orientation="right"
                 tick={{ fill: textSecondary, fontSize: textSize }}

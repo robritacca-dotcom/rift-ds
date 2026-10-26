@@ -5,6 +5,7 @@ import { Field } from '../Field/Field';
 import './FileInput.css';
 import { formatBytes } from '../Attachment/fileTypes';
 import '../../fonts/material-symbols.css';
+import { useLocale } from '../../behaviors/LocaleProvider';
 
 export interface FileInputFile {
   /** Stable identifier */
@@ -43,6 +44,8 @@ type FileInputOwnProps = {
   progressLabel?: (name: string) => string;
   /** Accessible name of a listed file's remove button, given the file name. Defaults to "Remove" followed by the name. */
   removeLabel?: (name: string) => string;
+  /** The BCP 47 locale file sizes are written in, such as `de-DE` (`1,5 MB`). Defaults to the nearest LocaleProvider's, else `en-US`. */
+  locale?: string;
   /** Additional CSS classes — applied to the wrapper, not the <input> */
   className?: string;
   /**
@@ -86,6 +89,7 @@ export const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
       progressLabel = (fileName: string) => `Uploading ${fileName}`,
       removeLabel = (fileName: string) => `Remove ${fileName}`,
       onChange,
+      locale: localeProp,
       className = '',
       ariaLabel,
       name,
@@ -94,6 +98,7 @@ export const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
     },
     ref,
   ) => {
+    const locale = useLocale(localeProp);
     const [isDragging, setIsDragging] = useState(false);
     const inputRef = useRef<HTMLInputElement | null>(null);
     const generatedId = useId();
@@ -241,7 +246,7 @@ export const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
                     <span className={`${baseClass}__file-error`}>{file.error}</span>
                   ) : (
                     file.size !== undefined && (
-                      <span className={`${baseClass}__file-size`}>{formatBytes(file.size)}</span>
+                      <span className={`${baseClass}__file-size`}>{formatBytes(file.size, locale)}</span>
                     )
                   )}
 

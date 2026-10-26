@@ -13,6 +13,8 @@ import {
 import { useChartAnimation } from './useChartAnimation';
 import './Chart.css';
 import { readTokenPx } from './palette';
+import { useLocale } from '../../behaviors/LocaleProvider';
+import { formatAxisNumber, formatNumber } from '../../behaviors/locale';
 
 interface ChartTooltipPayloadEntry {
   value?: number;
@@ -20,6 +22,8 @@ interface ChartTooltipPayloadEntry {
 }
 
 interface ChartTooltipProps {
+  /** The locale the values are written in. */
+  locale: string;
   active?: boolean;
   payload?: ChartTooltipPayloadEntry[];
   label?: string | number;
@@ -36,6 +40,8 @@ export interface ChartSummaryItem {
 
 /** Props owned by BarChart itself; everything else falls through to the root div. */
 type BarChartOwnProps = {
+  /** The BCP 47 locale the values, tooltips and value axis are written in, such as `de-DE`. Defaults to the nearest LocaleProvider's, else `en-US`. */
+  locale?: string;
   /** Array of data objects */
   data: Record<string, unknown>[];
   /** Key in data for x-axis values */
@@ -82,6 +88,7 @@ function getCSSVar(name: string, fallback: string): string {
  * Custom tooltip rendered inside the chart on hover.
  */
 function ChartTooltip({
+  locale,
   active,
   payload,
   label,
@@ -98,7 +105,7 @@ function ChartTooltip({
           <span className="ds-chart__tooltip-dot" style={{ backgroundColor: barColor }} />
           <span className="ds-chart__tooltip-name">{dataLabel}</span>
           <span className="ds-chart__tooltip-value">
-            {entry.value?.toLocaleString()}
+            {(entry.value === undefined ? undefined : formatNumber(entry.value, locale))}
           </span>
         </div>
       ))}
@@ -123,8 +130,14 @@ export const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>(({
   height = 350,
   bare = false,
   className = '',
+  locale: localeProp,
   ...rest
 }, ref) => {
+  const locale = useLocale(localeProp);
+  const formatTick = useCallback(
+    (value: unknown) => (typeof value === 'number' ? formatAxisNumber(value, locale) : String(value)),
+    [locale],
+  );
   const titleId = useId();
   const subtitleId = useId();
   const animation = useChartAnimation(data);
@@ -146,9 +159,9 @@ export const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>(({
   const renderTooltip = useCallback(
     /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     (props: any) => (
-      <ChartTooltip {...props} barColor={resolvedBarColor} dataLabel={dataLabel} />
+      <ChartTooltip {...props} locale={locale} barColor={resolvedBarColor} dataLabel={dataLabel} />
     ),
-    [resolvedBarColor, dataLabel],
+    [resolvedBarColor, dataLabel, locale],
   );
 
   return (
@@ -173,7 +186,7 @@ export const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>(({
                 <div key={i} className={`${baseClass}__summary-item`}>
                   <span className={`${baseClass}__summary-label`}>{item.label}</span>
                   <span className={`${baseClass}__summary-value`}>
-                    {typeof item.value === 'number' ? item.value.toLocaleString() : item.value}
+                    {typeof item.value === 'number' ? formatNumber(item.value, locale) : item.value}
                   </span>
                 </div>
               ))}
@@ -198,6 +211,7 @@ export const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>(({
               axisLine={{ stroke: gridColor }}
             />
             <YAxis
+              tickFormatter={formatTick}
               tick={{ fill: textSecondary, fontSize: textSize }}
               tickLine={false}
               axisLine={false}

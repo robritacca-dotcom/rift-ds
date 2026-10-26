@@ -15,6 +15,8 @@ import type { ChartSummaryItem } from './BarChart';
 import { getChartSeriesColors, readTokenPx } from './palette';
 import { useChartAnimation } from './useChartAnimation';
 import './Chart.css';
+import { useLocale } from '../../behaviors/LocaleProvider';
+import { formatAxisNumber, formatNumber } from '../../behaviors/locale';
 
 interface RadarTooltipPayloadEntry {
   value?: number;
@@ -25,6 +27,8 @@ interface RadarTooltipPayloadEntry {
 }
 
 interface RadarTooltipProps {
+  /** The locale the values are written in. */
+  locale: string;
   active?: boolean;
   payload?: RadarTooltipPayloadEntry[];
   label?: string | number;
@@ -43,6 +47,8 @@ export interface RadarSeriesConfig {
 
 /** Props owned by RadarChart itself; everything else falls through to the root div. */
 type RadarChartOwnProps = {
+  /** The BCP 47 locale the values, tooltips and value axis are written in, such as `de-DE`. Defaults to the nearest LocaleProvider's, else `en-US`. */
+  locale?: string;
   /** Array of data objects — each should have a category key and one or more value keys */
   data: Record<string, unknown>[];
   /** Key in data for the category labels on each axis */
@@ -77,7 +83,7 @@ function getCSSVar(name: string, fallback: string): string {
   return `var(${name}, ${fallback})`;
 }
 
-function RadarTooltip({ active, payload, label }: RadarTooltipProps) {
+function RadarTooltip({ locale, active, payload, label }: RadarTooltipProps) {
   if (!active || !payload?.length) return null;
 
   return (
@@ -88,7 +94,7 @@ function RadarTooltip({ active, payload, label }: RadarTooltipProps) {
           <span className="ds-chart__tooltip-dot" style={{ backgroundColor: entry.color }} />
           <span className="ds-chart__tooltip-name">{entry.name}</span>
           <span className="ds-chart__tooltip-value">
-            {entry.value?.toLocaleString()}
+            {(entry.value === undefined ? undefined : formatNumber(entry.value, locale))}
           </span>
         </div>
       ))}
@@ -110,8 +116,14 @@ export const RadarChart = React.forwardRef<HTMLDivElement, RadarChartProps>(({
   height = 350,
   bare = false,
   className = '',
+  locale: localeProp,
   ...rest
 }, ref) => {
+  const locale = useLocale(localeProp);
+  const formatTick = useCallback(
+    (value: unknown) => (typeof value === 'number' ? formatAxisNumber(value, locale) : String(value)),
+    [locale],
+  );
   const titleId = useId();
   const subtitleId = useId();
   const animation = useChartAnimation(data, series.length);
@@ -134,8 +146,8 @@ export const RadarChart = React.forwardRef<HTMLDivElement, RadarChartProps>(({
 
   const renderTooltip = useCallback(
     /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-    (props: any) => <RadarTooltip {...props} />,
-    [],
+    (props: any) => <RadarTooltip {...props} locale={locale} />,
+    [locale],
   );
 
   return (
@@ -159,7 +171,7 @@ export const RadarChart = React.forwardRef<HTMLDivElement, RadarChartProps>(({
                 <div key={i} className={`${baseClass}__summary-item`}>
                   <span className={`${baseClass}__summary-label`}>{item.label}</span>
                   <span className={`${baseClass}__summary-value`}>
-                    {typeof item.value === 'number' ? item.value.toLocaleString() : item.value}
+                    {typeof item.value === 'number' ? formatNumber(item.value, locale) : item.value}
                   </span>
                 </div>
               ))}
@@ -177,6 +189,7 @@ export const RadarChart = React.forwardRef<HTMLDivElement, RadarChartProps>(({
               tick={{ fill: textSecondary, fontSize: textSize }}
             />
             <PolarRadiusAxis
+              tickFormatter={formatTick}
               tick={{ fill: textSecondary, fontSize: textSize }}
               axisLine={false}
               tickCount={5}

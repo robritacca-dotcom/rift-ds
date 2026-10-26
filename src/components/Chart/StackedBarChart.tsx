@@ -14,6 +14,8 @@ import type { ChartSummaryItem } from './BarChart';
 import { getChartSeriesColors, readTokenPx } from './palette';
 import { useChartAnimation } from './useChartAnimation';
 import './Chart.css';
+import { useLocale } from '../../behaviors/LocaleProvider';
+import { formatAxisNumber, formatNumber } from '../../behaviors/locale';
 
 interface StackedTooltipPayloadEntry {
   value?: number;
@@ -24,6 +26,8 @@ interface StackedTooltipPayloadEntry {
 }
 
 interface StackedTooltipProps {
+  /** The locale the values are written in. */
+  locale: string;
   active?: boolean;
   payload?: StackedTooltipPayloadEntry[];
   label?: string | number;
@@ -40,6 +44,8 @@ export interface BarSeriesConfig {
 
 /** Props owned by StackedBarChart itself; everything else falls through to the root div. */
 type StackedBarChartOwnProps = {
+  /** The BCP 47 locale the values, tooltips and value axis are written in, such as `de-DE`. Defaults to the nearest LocaleProvider's, else `en-US`. */
+  locale?: string;
   /** Array of data objects */
   data: Record<string, unknown>[];
   /** Key in data for x-axis values */
@@ -76,7 +82,7 @@ function getCSSVar(name: string, fallback: string): string {
   return `var(${name}, ${fallback})`;
 }
 
-function StackedTooltip({ active, payload, label }: StackedTooltipProps) {
+function StackedTooltip({ locale, active, payload, label }: StackedTooltipProps) {
   if (!active || !payload?.length) return null;
 
   return (
@@ -87,7 +93,7 @@ function StackedTooltip({ active, payload, label }: StackedTooltipProps) {
           <span className="ds-chart__tooltip-dot" style={{ backgroundColor: entry.color }} />
           <span className="ds-chart__tooltip-name">{entry.name}</span>
           <span className="ds-chart__tooltip-value">
-            {entry.value?.toLocaleString()}
+            {(entry.value === undefined ? undefined : formatNumber(entry.value, locale))}
           </span>
         </div>
       ))}
@@ -110,8 +116,14 @@ export const StackedBarChart = React.forwardRef<HTMLDivElement, StackedBarChartP
   yAxisFormatter,
   bare = false,
   className = '',
+  locale: localeProp,
   ...rest
 }, ref) => {
+  const locale = useLocale(localeProp);
+  const formatTick = useCallback(
+    (value: unknown) => (typeof value === 'number' ? formatAxisNumber(value, locale) : String(value)),
+    [locale],
+  );
   const titleId = useId();
   const subtitleId = useId();
   const animation = useChartAnimation(data, series.length);
@@ -135,8 +147,8 @@ export const StackedBarChart = React.forwardRef<HTMLDivElement, StackedBarChartP
 
   const renderTooltip = useCallback(
     /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-    (props: any) => <StackedTooltip {...props} />,
-    [],
+    (props: any) => <StackedTooltip {...props} locale={locale} />,
+    [locale],
   );
 
   return (
@@ -160,7 +172,7 @@ export const StackedBarChart = React.forwardRef<HTMLDivElement, StackedBarChartP
                 <div key={i} className={`${baseClass}__summary-item`}>
                   <span className={`${baseClass}__summary-label`}>{item.label}</span>
                   <span className={`${baseClass}__summary-value`}>
-                    {typeof item.value === 'number' ? item.value.toLocaleString() : item.value}
+                    {typeof item.value === 'number' ? formatNumber(item.value, locale) : item.value}
                   </span>
                 </div>
               ))}
@@ -183,7 +195,7 @@ export const StackedBarChart = React.forwardRef<HTMLDivElement, StackedBarChartP
               tick={{ fill: textSecondary, fontSize: textSize }}
               tickLine={false}
               axisLine={false}
-              tickFormatter={yAxisFormatter}
+              tickFormatter={yAxisFormatter ?? formatTick}
             />
             <Tooltip
               content={renderTooltip}

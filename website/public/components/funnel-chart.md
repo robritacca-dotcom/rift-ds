@@ -14,13 +14,14 @@ Generated from the rift-ds registry and prop JSDoc, version 1.14.0. The same dat
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
+| locale | `string` | no |  | The BCP 47 locale the values, tooltips and value axis are written in, such as `de-DE`. Defaults to the nearest LocaleProvider's, else `en-US`. |
 | data | `FunnelStage[]` | yes |  | Ordered stages, first stage widest. Each later stage's width is its share of the first. |
 | title | `string` | no |  | Chart title, in the shared chart header. Note: this shadows the native `title` tooltip attribute, which FunnelChart does not expose. |
 | subtitle | `string` | no |  | Description text below the title. |
 | bare | `boolean` | no | `false` | Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface |
 | height | `number` | no | `190` | Chart area height in pixels. |
 | showLabels | `boolean` | no | `true` | Shows each stage's name beside its band. Turn off when a legend under the chart already carries the names. |
-| summaryLabel | `((data: FunnelStage[]) => string)` | no | `(data: FunnelStage[]) =>   `Funnel: ${data     .map((stage) => `${stage.label} ${stage.displayValue ?? stage.value.toLocaleString()}`)     .join(', ')}`` | The chart's accessible name, summarising every stage, given `data` when it holds at least one stage. Defaults to "Funnel: " then each stage's label and reading (its `displayValue`, else the value in the reader's locale), comma-separated, e.g. "Funnel: Visits 12,400, Sign-ups 3,100". |
+| summaryLabel | `((data: FunnelStage[]) => string)` | no |  | The chart's accessible name, summarising every stage, given `data` when it holds at least one stage. Defaults to "Funnel: " then each stage's label and reading (its `displayValue`, else the value in the reader's locale), comma-separated, e.g. "Funnel: Visits 12,400, Sign-ups 3,100". |
 | emptyLabel | `string` | no | `Funnel, no data` | The chart's accessible name when `data` is empty. Defaults to "Funnel, no data". |
 | minStageShare | `number` | no |  | Floor percentage from the stepped-bar rendering this chart used to have. Deprecated: The funnel now draws true trapezoids sized by value, so a height floor no longer applies; the prop is ignored. |
 | className | `string` | no | `` | Additional CSS classes |

@@ -1,7 +1,9 @@
 import '../src/tokens/tokens.css';
 import '../src/tokens/presets/presets.css';
 import '../src/fonts/material-symbols.css';
+import { createElement } from 'react';
 import type { Decorator, Preview } from '@storybook/react-vite';
+import { LocaleProvider } from '../src/behaviors/LocaleProvider';
 import { withThemeByDataAttribute } from '@storybook/addon-themes';
 import {
   DEFAULT_THEME_LABEL,
@@ -26,6 +28,15 @@ const withBrand: Decorator = (Story, context) => {
   }
   return Story();
 };
+
+/**
+ * The locale toolbar wraps every story in a LocaleProvider, so any component
+ * that formats a number or a date can be read in another locale's marks,
+ * names, week and clock without touching the story. en-US is the library's
+ * own default, so it is the opening value.
+ */
+const withLocale: Decorator = (Story, context) =>
+  createElement(LocaleProvider, { locale: String(context.globals.locale ?? 'en-US') }, Story());
 
 const preview: Preview = {
   parameters: {
@@ -79,6 +90,7 @@ const preview: Preview = {
   },
 
   decorators: [
+    withLocale,
     withBrand,
     withThemeByDataAttribute({
       themes: {
@@ -103,11 +115,27 @@ const preview: Preview = {
         })),
       },
     },
+    locale: {
+      description: 'The locale numbers, dates and calendars are written in',
+      toolbar: {
+        title: 'Locale',
+        icon: 'globe',
+        dynamicTitle: true,
+        items: [
+          { value: 'en-US', title: 'English (US)' },
+          { value: 'en-GB', title: 'English (UK)' },
+          { value: 'de-DE', title: 'German' },
+          { value: 'ja-JP', title: 'Japanese' },
+          { value: 'ar-EG', title: 'Arabic (Egypt)' },
+        ],
+      },
+    },
   },
 
   // The served theme is Storybook's opening look too.
   initialGlobals: {
     brand: SERVED_THEME_ID,
+    locale: 'en-US',
   },
 };
 

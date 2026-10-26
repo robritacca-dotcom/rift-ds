@@ -25,5 +25,6 @@ Generated from the rift-ds registry and prop JSDoc, version 1.14.0. The same dat
 | onFileRemove | `((id: string) => void)` | no |  | Called with the id of a file whose remove button was pressed |
 | progressLabel | `((name: string) => string)` | no | `(fileName: string) => `Uploading ${fileName}`` | Accessible name of a listed file's progress bar, given the file name. Defaults to "Uploading" followed by the name. |
 | removeLabel | `((name: string) => string)` | no | `(fileName: string) => `Remove ${fileName}`` | Accessible name of a listed file's remove button, given the file name. Defaults to "Remove" followed by the name. |
+| locale | `string` | no |  | The BCP 47 locale file sizes are written in, such as `de-DE` (`1,5 MB`). Defaults to the nearest LocaleProvider's, else `en-US`. |
 | className | `string` | no | `` | Additional CSS classes — applied to the wrapper, not the <input> |
 | ariaLabel | `string` | no |  | Legacy accessible-name prop. Deprecated: Pass the native `aria-label` attribute instead. |

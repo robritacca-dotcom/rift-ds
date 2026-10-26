@@ -28,7 +28,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same dat
 | badgeLabel | `((label: string) => string)` | no | `(label: string) => `${label}, new`` | The accessible name of an action that carries a `badge`, given the action's `label`. Defaults to "<label>, new", e.g. "Notifications, new". |
 | scrolled | `boolean` | no |  | Whether content has scrolled under the bar, which collapses an expanded title and switches the bar to its scrolled surface. Leave unset to have the bar watch `scrollTarget` itself. |
 | scrollTarget | `HTMLElement \| null` | no |  | The element whose scroll the bar watches when `scrolled` is unset. Defaults to the window |
-| headingLevel | `1 \| 2 \| 4 \| 5 \| 3 \| 6` | no | `1` | Level of the title's heading element |
+| headingLevel | `1 \| 2 \| 4 \| 3 \| 5 \| 6` | no | `1` | Level of the title's heading element |
 | sticky | `boolean` | no | `true` | Keeps the bar stuck to the top of its scroll container |
 | className | `string` | no | `` | Additional CSS classes |
 | linkComponent | `LinkComponent` | no |  | The component its links render with, such as Next.js's `Link`, so they navigate through the app's router. Wins over a LinkProvider's; a plain `<a>` when neither is set. |

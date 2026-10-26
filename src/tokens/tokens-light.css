@@ -275,6 +275,24 @@
   --color-pixel-ink-5: var(--primitive-blue-07);
   --color-pixel-ink-6: var(--primitive-purple-08);
 
+  /* Avatar - The six fills an initials avatar takes, picked by the name, each
+     with its initials colour, on the pixel inks' ramps and in their order
+     (the brand's ramp is left out for the same reason). A pale step with a
+     deep one on it, so the initials read as text (8.7:1 at the least) and
+     neighbours in a stack read apart. They identify; they never signal. */
+  --color-avatar-bg-1: var(--primitive-red-02);
+  --color-avatar-bg-2: var(--primitive-orange-02);
+  --color-avatar-bg-3: var(--primitive-yellow-02);
+  --color-avatar-bg-4: var(--primitive-green-02);
+  --color-avatar-bg-5: var(--primitive-blue-02);
+  --color-avatar-bg-6: var(--primitive-purple-02);
+  --color-avatar-text-1: var(--primitive-red-10);
+  --color-avatar-text-2: var(--primitive-orange-10);
+  --color-avatar-text-3: var(--primitive-yellow-10);
+  --color-avatar-text-4: var(--primitive-green-10);
+  --color-avatar-text-5: var(--primitive-blue-10);
+  --color-avatar-text-6: var(--primitive-purple-10);
+
   /* Input */
   --color-input-text-primary: var(--primitive-neutral-10);
   --color-input-text-placeholder: var(--primitive-neutral-06);

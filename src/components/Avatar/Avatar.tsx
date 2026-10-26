@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import './Avatar.css';
 import '../../fonts/material-symbols.css';
+import { avatarFill, type AvatarFill } from './avatarFill';
 
 /** Props owned by Avatar itself — everything else falls through to the root span. */
 type AvatarOwnProps = {
@@ -14,6 +15,13 @@ type AvatarOwnProps = {
   name?: string;
   /** Avatar size */
   size?: 'sm' | 'md' | 'lg';
+  /**
+   * Which of the six fills the initials sit on. Picked from the name when
+   * unset, so a person keeps one colour everywhere; `neutral` keeps the
+   * plain grey. An AvatarGroup
+   * sets it on its avatars so neighbours in the stack differ.
+   */
+  fill?: AvatarFill | 'neutral';
   /** Online status indicator */
   status?: 'online' | 'away' | 'offline' | 'busy';
   /** Accessible name for the status dot. Defaults to the `status` value itself (e.g. "online"). */
@@ -39,6 +47,7 @@ export const Avatar = React.forwardRef<HTMLSpanElement, AvatarProps>(
       alt,
       name,
       size = 'md',
+      fill,
       status,
       statusLabel,
       className = '',
@@ -51,7 +60,12 @@ export const Avatar = React.forwardRef<HTMLSpanElement, AvatarProps>(
     const baseClass = 'ds-avatar';
     const sizeClass = `${baseClass}--${size}`;
 
-    const classes = [baseClass, sizeClass, className].filter(Boolean).join(' ');
+    /* Only initials take a fill: an image covers it, and the generic glyph
+       stands for no one in particular, so it stays grey. */
+    const fillIndex = name?.trim() && fill !== 'neutral' ? (fill ?? avatarFill(name.trim())) : null;
+    const fillClass = fillIndex ? `${baseClass}--fill-${fillIndex}` : '';
+
+    const classes = [baseClass, sizeClass, fillClass, className].filter(Boolean).join(' ');
 
     const getInitials = (fullName: string): string => {
       const parts = fullName.trim().split(/\s+/);
@@ -106,3 +120,5 @@ export const Avatar = React.forwardRef<HTMLSpanElement, AvatarProps>(
 );
 
 Avatar.displayName = 'Avatar';
+
+export type { AvatarFill } from './avatarFill';

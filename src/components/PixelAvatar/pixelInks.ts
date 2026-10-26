@@ -43,10 +43,19 @@ export function pixelAvatarInk(name: string): PixelInk {
  * the list around it does, which is the price of the guarantee.
  */
 export function distinctPixelInks(names: readonly string[]): PixelInk[] {
+  return spreadInks(names.map(pixelAvatarInk));
+}
+
+/**
+ * The spreading behind `distinctPixelInks`, from each item's own pick rather
+ * than a name, so a set picked by another hash (Avatar's fills) spreads by
+ * the same rule. Internal: AvatarGroup calls it.
+ */
+export function spreadInks(picks: readonly PixelInk[]): PixelInk[] {
   const used = new Array<number>(INKS).fill(0);
   const inks: PixelInk[] = [];
-  names.forEach((name) => {
-    const own = pixelAvatarInk(name) - 1;
+  picks.forEach((pick) => {
+    const own = pick - 1;
     const fewest = Math.min(...used);
     const previous = inks.length > 0 ? inks[inks.length - 1] - 1 : -1;
     /* Three tiers, best first: clear of the row before by two hue steps,

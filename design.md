@@ -187,6 +187,11 @@ The family carries one solid fill alongside the stops: `--color-ai-button-bg`, t
 
 A PixelAvatar is drawn in one of these, picked by its name. They are a set of their own rather than the chart series because the job is different: a series colour fills a large mark on a chart and is tuned as a mid-tone that works on both grounds, while a sprite is a few small solid shapes on the page and needs a text-like contrast, so each ink splits by mode. Yellow and green sit a step deeper than their neighbours in light mode, because those ramps stay bright for longer. PromptSuggestions' card covers borrow the same inks for their tint, cycled by position. The brand's own ramp is left out on purpose: a theme re-points it, so an ink there would become a second copy of whichever ink the theme's colour resembles, and two neighbours in a list would match. Nothing else uses them: they identify, they never signal a state.
 
+### Avatar (mode-split — the "whose initials" role)
+- Fill 1 to Fill 6: `--color-avatar-bg-1` → `-6`, with Initials 1 to 6: `--color-avatar-text-1` → `-6` — the pixel inks' six ramps in their order, a pale step under a deep one in light mode and the reverse in dark
+
+An initials Avatar takes one pair, picked by its name. The fill is large and the initials are text, so each pair is a fill and an ink together, held to a text contrast in both modes, and a stack of people reads apart rather than as one grey run. The brand's ramp is left out for the pixel inks' reason. They identify, they never signal a state.
+
 ## Typography
 
 ### Font Family
@@ -1048,7 +1053,7 @@ Field deliberately owns **no layout** — the flex column and gap stay on the co
 
 ### Avatar
 
-**`ds-avatar`** — User identity circle (`--radius-pill`) in three sizes — `sm` 32px, `md` 40px, `lg` 56px. Renders the image when `src` is provided, falls back to initials derived from `name` on `--color-bg-container-secondary`, then to a person icon. An optional `status` dot (`online`/`away`/`offline`/`busy`) sits on the rim, filled with the matching status border token and ringed in `--color-bg-page-primary`. `role="img"` with a label from `alt`/`name`. Its `size` is a ladder of mark sizes rather than the `default`/`compact` density pair, a departure recorded with its reason in `SANCTIONED_SIZES` in `scripts/validate-prop-vocabulary.mjs`, which is the list of every component that keeps a scale of its own.
+**`ds-avatar`** — User identity circle (`--radius-pill`) in three sizes — `sm` 32px, `md` 40px, `lg` 56px. Renders the image when `src` is provided, falls back to initials derived from `name`, then to a person icon. Initials sit on one of six fills (`ds-avatar--fill-N`, the `--color-avatar-bg-*` tokens, each with its `--color-avatar-text-*` initials colour), picked from a hash of the name, so one person is one colour everywhere; `fill` sets one by number, or `neutral` keeps `--color-bg-container-secondary`. The person icon stays grey, since it stands for no one in particular. An optional `status` dot (`online`/`away`/`offline`/`busy`) sits on the rim, filled with the matching status border token and ringed in `--color-bg-page-primary`. `role="img"` with a label from `alt`/`name`. Its `size` is a ladder of mark sizes rather than the `default`/`compact` density pair, a departure recorded with its reason in `SANCTIONED_SIZES` in `scripts/validate-prop-vocabulary.mjs`, which is the list of every component that keeps a scale of its own.
 
 ### PixelAvatar
 
@@ -1056,7 +1061,7 @@ Field deliberately owns **no layout** — the flex column and gap stay on the co
 
 ### AvatarGroup
 
-**`ds-avatar-group`** — An overlapping stack of Avatars with a "+N" counter for the overflow — the "who's here" affordance. Purely presentational (no `'use client'`): it wraps each child in a ring-bearing item (`--radius-pill`, a `--border-050` `--color-bg-page-primary` box-shadow ring so overlaps stay legible on any surface) and overlaps them by `--gap-200`. The group's `size` (`sm`/`md`/`lg`, Avatar's own 32/40/56px ladder) is cloned onto the children so a stack can never render mixed sizes, and sizes the counter circle to match — `--color-bg-container-secondary` fill, `--color-text-secondary` text at the same initials type ramp as Avatar. `max` (default 5) caps the visible avatars; the counter is `role="img"` with an accessible "N more" label, overridable via `overflowLabel`. The root is `role="group"` — pass `aria-label` to name the collection. `overflowLabel` also takes a function of the hidden count.
+**`ds-avatar-group`** — An overlapping stack of Avatars with a "+N" counter for the overflow — the "who's here" affordance. Purely presentational (no `'use client'`): it wraps each child in a ring-bearing item (`--radius-pill`, a `--border-050` `--color-bg-page-primary` box-shadow ring so overlaps stay legible on any surface) and overlaps them by `--gap-200`. It spreads the fills over the stack with `distinctPixelInks`, so overlapping neighbours never share a colour; an avatar given its own `fill` keeps it. The group's `size` (`sm`/`md`/`lg`, Avatar's own 32/40/56px ladder) is cloned onto the children so a stack can never render mixed sizes, and sizes the counter circle to match — `--color-bg-container-secondary` fill, `--color-text-secondary` text at the same initials type ramp as Avatar. `max` (default 5) caps the visible avatars; the counter is `role="img"` with an accessible "N more" label, overridable via `overflowLabel`. The root is `role="group"` — pass `aria-label` to name the collection. `overflowLabel` also takes a function of the hidden count.
 
 ### ContactCard
 

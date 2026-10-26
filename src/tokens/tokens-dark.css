@@ -195,6 +195,22 @@
   --color-pixel-ink-5: var(--primitive-blue-04);
   --color-pixel-ink-6: var(--primitive-purple-05);
 
+  /* Avatar - The initials avatar's six fills, deep on each ramp with a
+     pale step for the initials (4.7:1 at the least), so the fill stands
+     off the dark page. */
+  --color-avatar-bg-1: var(--primitive-red-09);
+  --color-avatar-bg-2: var(--primitive-orange-09);
+  --color-avatar-bg-3: var(--primitive-yellow-09);
+  --color-avatar-bg-4: var(--primitive-green-09);
+  --color-avatar-bg-5: var(--primitive-blue-09);
+  --color-avatar-bg-6: var(--primitive-purple-09);
+  --color-avatar-text-1: var(--primitive-red-01);
+  --color-avatar-text-2: var(--primitive-orange-01);
+  --color-avatar-text-3: var(--primitive-yellow-01);
+  --color-avatar-text-4: var(--primitive-green-01);
+  --color-avatar-text-5: var(--primitive-blue-01);
+  --color-avatar-text-6: var(--primitive-purple-01);
+
   /* Input */
   --color-input-text-primary: var(--primitive-neutral-01);
   --color-input-text-placeholder: var(--primitive-neutral-04);

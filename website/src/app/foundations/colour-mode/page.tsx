@@ -790,6 +790,70 @@ const pixelInkColours: SwatchData[] = [
   },
 ];
 
+/* --- Avatar --- */
+const avatarColours: SwatchData[] = [
+  {
+    label: "Fill 1", cssVar: "--color-avatar-bg-1",
+    dark: { primitive: "--red--09--", hex: "#8E2641", rgb: "142 / 38 / 65" },
+    light: { primitive: "--red--02--", hex: "#FAD3DD", rgb: "250 / 211 / 221" },
+  },
+  {
+    label: "Fill 2", cssVar: "--color-avatar-bg-2",
+    dark: { primitive: "--orange--09--", hex: "#8F4324", rgb: "143 / 67 / 36" },
+    light: { primitive: "--orange--02--", hex: "#FBD9C5", rgb: "251 / 217 / 197" },
+  },
+  {
+    label: "Fill 3", cssVar: "--color-avatar-bg-3",
+    dark: { primitive: "--yellow--09--", hex: "#8A6B2A", rgb: "138 / 107 / 42" },
+    light: { primitive: "--yellow--02--", hex: "#FFF0C9", rgb: "255 / 240 / 201" },
+  },
+  {
+    label: "Fill 4", cssVar: "--color-avatar-bg-4",
+    dark: { primitive: "--green--09--", hex: "#03765A", rgb: "3 / 118 / 90" },
+    light: { primitive: "--green--02--", hex: "#CEF6E8", rgb: "206 / 246 / 232" },
+  },
+  {
+    label: "Fill 5", cssVar: "--color-avatar-bg-5",
+    dark: { primitive: "--blue--09--", hex: "#0F265E", rgb: "15 / 38 / 94" },
+    light: { primitive: "--blue--02--", hex: "#D3DDF8", rgb: "211 / 221 / 248" },
+  },
+  {
+    label: "Fill 6", cssVar: "--color-avatar-bg-6",
+    dark: { primitive: "--purple--09--", hex: "#52247D", rgb: "82 / 36 / 125" },
+    light: { primitive: "--purple--02--", hex: "#E6D2FB", rgb: "230 / 210 / 251" },
+  },
+  {
+    label: "Initials 1", cssVar: "--color-avatar-text-1",
+    dark: { primitive: "--red--01--", hex: "#FDEFF3", rgb: "253 / 239 / 243" },
+    light: { primitive: "--red--10--", hex: "#571727", rgb: "87 / 23 / 39" },
+  },
+  {
+    label: "Initials 2", cssVar: "--color-avatar-text-2",
+    dark: { primitive: "--orange--01--", hex: "#FFF3EC", rgb: "255 / 243 / 236" },
+    light: { primitive: "--orange--10--", hex: "#552716", rgb: "85 / 39 / 22" },
+  },
+  {
+    label: "Initials 3", cssVar: "--color-avatar-text-3",
+    dark: { primitive: "--yellow--01--", hex: "#FFF9EA", rgb: "255 / 249 / 234" },
+    light: { primitive: "--yellow--10--", hex: "#544016", rgb: "84 / 64 / 22" },
+  },
+  {
+    label: "Initials 4", cssVar: "--color-avatar-text-4",
+    dark: { primitive: "--green--01--", hex: "#ECFCF7", rgb: "236 / 252 / 247" },
+    light: { primitive: "--green--10--", hex: "#024336", rgb: "2 / 67 / 54" },
+  },
+  {
+    label: "Initials 5", cssVar: "--color-avatar-text-5",
+    dark: { primitive: "--blue--01--", hex: "#EEF3FD", rgb: "238 / 243 / 253" },
+    light: { primitive: "--blue--10--", hex: "#081633", rgb: "8 / 22 / 51" },
+  },
+  {
+    label: "Initials 6", cssVar: "--color-avatar-text-6",
+    dark: { primitive: "--purple--01--", hex: "#F7F0FE", rgb: "247 / 240 / 254" },
+    light: { primitive: "--purple--10--", hex: "#31164A", rgb: "49 / 22 / 74" },
+  },
+];
+
 /* ============================================
    THEME HOOK
    ============================================ */
@@ -1075,6 +1139,15 @@ export default function SemanticColoursPage() {
             <SectionTitle title="Pixel ink" />
             <div className={styles.colourSwatches}>
               {pixelInkColours.map((s) => (
+                <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
+              ))}
+            </div>
+          </section>
+          {/* Avatar */}
+          <section className={styles.colourGroup}>
+            <SectionTitle title="Avatar" />
+            <div className={styles.colourSwatches}>
+              {avatarColours.map((s) => (
                 <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
               ))}
             </div>

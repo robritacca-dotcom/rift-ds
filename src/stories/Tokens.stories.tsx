@@ -765,6 +765,21 @@ export const ChartColors: Story = {
         <ColorToken name="Ink 5" value="--color-pixel-ink-5" />
         <ColorToken name="Ink 6" value="--color-pixel-ink-6" />
       </TokenSection>
+
+      <TokenSection title="Avatar">
+        <ColorToken name="Avatar fill 1" value="--color-avatar-bg-1" />
+        <ColorToken name="Avatar initials 1" value="--color-avatar-text-1" />
+        <ColorToken name="Avatar fill 2" value="--color-avatar-bg-2" />
+        <ColorToken name="Avatar initials 2" value="--color-avatar-text-2" />
+        <ColorToken name="Avatar fill 3" value="--color-avatar-bg-3" />
+        <ColorToken name="Avatar initials 3" value="--color-avatar-text-3" />
+        <ColorToken name="Avatar fill 4" value="--color-avatar-bg-4" />
+        <ColorToken name="Avatar initials 4" value="--color-avatar-text-4" />
+        <ColorToken name="Avatar fill 5" value="--color-avatar-bg-5" />
+        <ColorToken name="Avatar initials 5" value="--color-avatar-text-5" />
+        <ColorToken name="Avatar fill 6" value="--color-avatar-bg-6" />
+        <ColorToken name="Avatar initials 6" value="--color-avatar-text-6" />
+      </TokenSection>
     </div>
   ),
 };

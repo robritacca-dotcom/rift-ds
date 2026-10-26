@@ -1998,6 +1998,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "md"
           },
           {
+            "name": "fill",
+            "type": "\"neutral\" | AvatarFill",
+            "required": false,
+            "description": "Which of the six fills the initials sit on. Picked from the name when\nunset, so a person keeps one colour everywhere; `neutral` keeps the\nplain grey. An AvatarGroup\nsets it on its avatars so neighbours in the stack differ."
+          },
+          {
             "name": "status",
             "type": "\"online\" | \"away\" | \"offline\" | \"busy\"",
             "required": false,
@@ -2310,7 +2316,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "headingLevel",
-            "type": "2 | 4 | 5 | 3 | 6",
+            "type": "2 | 4 | 3 | 5 | 6",
             "required": false,
             "description": "The heading level the title renders at, to fit the page's outline. Never `1`: a tile is never the page's top heading.",
             "defaultValue": "3"
@@ -2324,7 +2330,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "highlight",
-            "type": "1 | 2 | 4 | 5 | 3 | 6",
+            "type": "1 | 2 | 4 | 3 | 5 | 6",
             "required": false,
             "description": "Which of the six shader pairs the tile wears: pair N is ambient colour N\nwith texture N. Unset, tiles rotate through the set by their position\namong their siblings, so a grid of shader tiles comes out told apart."
           },
@@ -14489,7 +14495,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "headingLevel",
-            "type": "1 | 2 | 4 | 5 | 3 | 6",
+            "type": "1 | 2 | 4 | 3 | 5 | 6",
             "required": false,
             "description": "Level of the title's heading element",
             "defaultValue": "1"

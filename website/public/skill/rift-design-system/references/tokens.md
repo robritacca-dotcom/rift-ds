@@ -11,7 +11,7 @@ How to read it:
 
 The live reference with swatches is at https://rift-ds.com/foundations, and the MCP endpoint's `list_tokens` tool serves the names.
 
-## Colour (136)
+## Colour (148)
 
 Prefix: `--color-*`.
 
@@ -54,6 +54,18 @@ Prefix: `--color-*`.
 | `--color-ambient-4` | `#1E47B0` (`--primitive-blue-07`) | `#1E47B0` (`--primitive-blue-07`) |
 | `--color-ambient-5` | `#EF476F` (`--primitive-red-07`) | `#EF476F` (`--primitive-red-07`) |
 | `--color-ambient-6` | `#EF8247` (`--primitive-orange-07`) | `#EF8247` (`--primitive-orange-07`) |
+| `--color-avatar-bg-1` | `#FAD3DD` (`--primitive-red-02`) | `#8E2641` (`--primitive-red-09`) |
+| `--color-avatar-bg-2` | `#FBD9C5` (`--primitive-orange-02`) | `#8F4324` (`--primitive-orange-09`) |
+| `--color-avatar-bg-3` | `#FFF0C9` (`--primitive-yellow-02`) | `#8A6B2A` (`--primitive-yellow-09`) |
+| `--color-avatar-bg-4` | `#CEF6E8` (`--primitive-green-02`) | `#03765A` (`--primitive-green-09`) |
+| `--color-avatar-bg-5` | `#D3DDF8` (`--primitive-blue-02`) | `#0F265E` (`--primitive-blue-09`) |
+| `--color-avatar-bg-6` | `#E6D2FB` (`--primitive-purple-02`) | `#52247D` (`--primitive-purple-09`) |
+| `--color-avatar-text-1` | `#571727` (`--primitive-red-10`) | `#FDEFF3` (`--primitive-red-01`) |
+| `--color-avatar-text-2` | `#552716` (`--primitive-orange-10`) | `#FFF3EC` (`--primitive-orange-01`) |
+| `--color-avatar-text-3` | `#544016` (`--primitive-yellow-10`) | `#FFF9EA` (`--primitive-yellow-01`) |
+| `--color-avatar-text-4` | `#024336` (`--primitive-green-10`) | `#ECFCF7` (`--primitive-green-01`) |
+| `--color-avatar-text-5` | `#081633` (`--primitive-blue-10`) | `#EEF3FD` (`--primitive-blue-01`) |
+| `--color-avatar-text-6` | `#31164A` (`--primitive-purple-10`) | `#F7F0FE` (`--primitive-purple-01`) |
 | `--color-bg-container-border` | `#D6D6D6` (`--primitive-neutral-02`) | `#232323` (`--primitive-neutral-08`) |
 | `--color-bg-container-inverse` | `#0E0E0E` (`--primitive-neutral-09`) | `#F1F1F1` (`--primitive-neutral-01`) |
 | `--color-bg-container-primary` | `#FFFFFF` (`--primitive-neutral-00`) | `rgba(14, 14, 14, 0.8)` (`--primitive-neutral-09-a80`) |

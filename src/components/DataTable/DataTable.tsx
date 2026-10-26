@@ -15,6 +15,7 @@ import {
   useTable,
 } from '@tanstack/react-table';
 import { DropdownMenu, type DropdownMenuEntry } from '../DropdownMenu/DropdownMenu';
+import { Dropdown } from '../Dropdown/Dropdown';
 import { CircularButton } from '../CircularButton/CircularButton';
 import { ScrollRegion } from '../../behaviors/ScrollRegion';
 import { startDrag } from './dragGesture';
@@ -51,6 +52,7 @@ import { useLinkComponent, type LinkComponent } from '../../behaviors/LinkProvid
 import { EDITOR_MIN_WIDTH, LIVE_KINDS, TYPED_KINDS, type CellEditorKind, type CellValue } from './editorKinds';
 import { EmptyState, type EmptyStateProps } from '../EmptyState/EmptyState';
 import { MOTION_ANNOUNCE_DEBOUNCE_MS } from '../../tokens/motion';
+import { BREAKPOINT_PHONE_PX } from '../../tokens/breakpoints';
 import '../../behaviors/visually-hidden.css';
 import './DataTable.css';
 import '../../fonts/material-symbols.css';
@@ -393,10 +395,10 @@ const compareValues = (a: DataTableValue, b: DataTableValue): number => {
  * of TanStack's reaches the public API (every type here is rift's own), so
  * its major version is an implementation detail. The features object is
  * built once at module scope, as TanStack requires, and holds only what
- * this table uses. Paging still slices the sorted rows here: today's pager
- * clamps the page to the filtered count within the same render, which the
- * engine's paginated model cannot do from props alone; it moves onto the
- * engine when paging gains its controlled pair.
+ * this table uses. Paging slices the sorted rows here rather than through
+ * the engine's paginated model: the page is clamped to the filtered count
+ * within the same render (a filter that leaves fewer pages shows the last
+ * one at once), which the engine's model cannot do from its state alone.
  */
 const ENGINE_FEATURES = tableFeatures({
   rowSortingFeature,
@@ -435,8 +437,30 @@ type DataTableOwnProps<R extends DataTableRow = DataTableRow> = {
   columns: DataTableColumn<R>[];
   /** Row data, as raw values the table can sort and search. */
   rows: R[];
-  /** Rows per page. Setting this turns on the built-in pagination. */
+  /** Rows per page, for controlled use (or as a fixed setting). Setting this or `defaultPageSize` turns on the built-in pagination. */
   pageSize?: number;
+  /** Rows per page to start with, for uncontrolled use; `pageSizeOptions` then lets the reader change it. */
+  defaultPageSize?: number;
+  /** Fires with the new page size when the reader picks one from `pageSizeOptions`. */
+  onPageSizeChange?: (pageSize: number) => void;
+  /** The page sizes the footer offers in a Rows per page picker. Leave unset for no picker. */
+  pageSizeOptions?: number[];
+  /** The current page, counting from 1, for controlled use. Pair with `onPageChange`. A page past the last shows the last. */
+  page?: number;
+  /** The page to start on, counting from 1, for uncontrolled use. */
+  defaultPage?: number;
+  /** Fires with the new page, counting from 1: from the pager, and back to 1 when a search, filter, sort or page size change starts over. */
+  onPageChange?: (page: number) => void;
+  /** The page size picker's label. Defaults to "Rows per page". */
+  pageSizeLabel?: string;
+  /**
+   * How the table reads when it is narrower than a phone (its own width,
+   * under `BREAKPOINT_PHONE_PX`, so a table in a narrow panel counts):
+   * `scroll` keeps the rows and scrolls sideways with the row header
+   * pinned; `stack` draws each row as a card, its row header as the title
+   * and every other column as a label and value pair. Defaults to `scroll`.
+   */
+  phoneLayout?: 'scroll' | 'stack';
   /** Adds a checkbox column with a select-all header. */
   selectable?: boolean;
   /** Selected row ids for controlled use. Pair with `onSelectionChange`. */
@@ -650,7 +674,15 @@ function withType<R extends DataTableRow>(col: DataTableColumn<R>): DataTableCol
 export function DataTable<R extends DataTableRow = DataTableRow>({
   columns: columnsProp,
   rows,
-  pageSize,
+  pageSize: pageSizeProp,
+  defaultPageSize,
+  onPageSizeChange,
+  pageSizeOptions,
+  page: pageProp,
+  defaultPage,
+  onPageChange,
+  pageSizeLabel = 'Rows per page',
+  phoneLayout = 'scroll',
   selectable = false,
   selectedIds,
   defaultSelectedIds,
@@ -744,7 +776,16 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     ...filterLabelsProp,
     operators: { ...DEFAULT_FILTER_LABELS.operators, ...filterLabelsProp?.operators },
   };
-  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useControllable<number | undefined>(
+    pageSizeProp,
+    defaultPageSize,
+    onPageSizeChange as ((next: number | undefined) => void) | undefined,
+  );
+  const [page, setPageState] = useControllable<number>(pageProp, defaultPage ?? 1, onPageChange);
+  /* Starting over reports only a real change, so typing in the search does not fire onPageChange per key. */
+  const setPage = (next: number) => {
+    if (next !== page) setPageState(next);
+  };
   /* A new search or filter starts from the first page. */
   const setSearch = (next: string) => {
     setSearchState(next);
@@ -786,6 +827,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
   const sortOf = (key: string) => currentSorts.find((entry) => entry.key === key);
   const setSorts = (next: DataTableSort[]) => {
     if (!isSortControlled) setUncontrolledSorts(next);
+    setPage(1);
     onSortsChange?.(next);
     onSortChange?.(next[0] ?? null);
   };
@@ -833,8 +875,40 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     ...orderState.filter((key) => byKey.has(key)),
     ...columns.map((col) => col.key).filter((key) => !orderState.includes(key)),
   ].filter((key, index, all) => all.indexOf(key) === index);
+  /* Narrower than a phone, measured on the table itself. */
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  /* The table's width while it is narrower than a phone, to the nearest
+     eight pixels (so a resize renders every few pixels, not every one),
+     else 0. The pinned row header is capped against it. */
+  const [narrowWidth, setNarrowWidth] = useState(0);
+  const narrow = narrowWidth > 0;
+  useLayoutEffect(() => {
+    const el = rootRef.current;
+    if (!el) return;
+    const observer = new ResizeObserver(([entry]) => {
+      const width = entry.contentRect.width;
+      setNarrowWidth(width > 0 && width < BREAKPOINT_PHONE_PX ? Math.round(width / 8) * 8 : 0);
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+  const stacked = narrow && phoneLayout === 'stack';
+  const setRootRef = (node: HTMLDivElement | null) => {
+    rootRef.current = node;
+    if (typeof ref === 'function') ref(node);
+    else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
+  };
   const pinnedStart = [...new Set((pinState.start ?? []).filter((key) => byKey.has(key)))];
   const pinnedEnd = [...new Set((pinState.end ?? []).filter((key) => byKey.has(key) && !pinnedStart.includes(key)))];
+  /* Scrolling sideways on a phone, the row header stays in view: it is
+     pinned to the start for as long as the table is that narrow, without
+     touching the pinning the reader set. Stacked, nothing pins. */
+  const rowHeaderKey = columns.find((col) => col.rowHeader)?.key;
+  const enginePinnedStart = stacked
+    ? []
+    : narrow && rowHeaderKey && !pinnedStart.includes(rowHeaderKey) && !pinnedEnd.includes(rowHeaderKey)
+      ? [rowHeaderKey, ...pinnedStart]
+      : pinnedStart;
   const hidden = new Set(hiddenState.filter((key) => byKey.has(key)));
 
   /* Rows in the order the grips set, while no sort owns the order. */
@@ -916,7 +990,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     getRowId: (row: R) => row.id,
     state: {
       columnOrder: knownOrder,
-      columnPinning: { start: pinnedStart, end: pinnedEnd },
+      columnPinning: { start: enginePinnedStart, end: pinnedEnd },
       columnVisibility: Object.fromEntries([...hidden].map((key) => [key, false])),
       sorting: currentSorts
         .filter((entry) => byKey.has(entry.key))
@@ -1125,9 +1199,15 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
   };
   const clampWidth = (col: DataTableColumn<R>, width: number) =>
     Math.round(Math.min(col.maxWidth ?? Number.MAX_SAFE_INTEGER, Math.max(minWidthOf(col), width)));
+  /* On a phone the pinned row header takes at most this share of the table,
+     so the columns scrolling past it keep room to be read. */
+  const PHONE_PINNED_SHARE = 0.4;
   const widthOf = (key: string, widths: Record<string, number> = widthsState) => {
     const col = byKey.get(key)!;
-    return clampWidth(col, widths[key] ?? declaredOf(key) ?? measured[key] ?? minWidthOf(col));
+    const width = clampWidth(col, widths[key] ?? declaredOf(key) ?? measured[key] ?? minWidthOf(col));
+    if (narrow && !stacked && key === rowHeaderKey && regionOf(key) === 'start')
+      return Math.min(width, Math.max(minWidthOf(col), Math.round(narrowWidth * PHONE_PINNED_SHARE)));
+    return width;
   };
 
   /** Every width and pinned offset as custom properties on the table, from one width map. */
@@ -1939,6 +2019,8 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
   const cellStyle = (key: string, align?: string): React.CSSProperties => {
     const index = indexOfKey.get(key);
     const style: React.CSSProperties = {};
+    // A card takes no column widths or pinned offsets.
+    if (stacked) return style;
     if (layoutReady) style.width = `var(--ds-dt-w-${index})`;
     else {
       const col = byKey.get(key);
@@ -2145,6 +2227,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
       <tr
         key={row.id}
         data-row={row.id}
+        role={stacked ? 'row' : undefined}
         className={[
           'ds-table__row',
           isSelected ? 'ds-table__row--selected' : '',
@@ -2162,6 +2245,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
             <td
               key={key}
               data-col={key}
+              role={stacked && !gridMode ? 'cell' : undefined}
               className={`ds-table__cell ${baseClass}__utility${pinnedCls}`}
               style={style}
               {...tabProps(row.id, key)}
@@ -2224,6 +2308,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
               key={key}
               data-col={key}
               scope={col.rowHeader ? 'row' : undefined}
+              role={stacked && !gridMode ? (col.rowHeader ? 'rowheader' : 'cell') : undefined}
               className={`${cellClass}${pinClass(key)}`}
               style={layoutReady || regionOf(key) !== 'center' ? cellStyle(key) : undefined}
               aria-busy={isPending || undefined}
@@ -2231,7 +2316,15 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
               onDoubleClick={editable && !isLive(col) && !editing ? () => startEdit(row.id, key) : undefined}
               {...tabProps(row.id, key)}
             >
-              <div className="ds-table__cell-content" style={{ justifyContent: justify(col.align) }}>
+              {stacked && !col.rowHeader && (
+                <span className={`${baseClass}__stack-label`} aria-hidden="true">
+                  {col.header}
+                </span>
+              )}
+              <div
+                className="ds-table__cell-content"
+                style={{ justifyContent: stacked ? undefined : justify(col.align) }}
+              >
                 {(() => {
                   const fit = col.cellText ?? cellText;
                   const value = valueOf(row, key);
@@ -2464,6 +2557,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     columnDividers ? 'ds-table--column-dividers' : '',
     layoutReady ? `${baseClass}__grid--fixed` : '',
     stickyHeader ? `${baseClass}__grid--sticky` : '',
+    stacked ? `${baseClass}__grid--stacked` : '',
     showActions && rowActionsVisibility === 'hover' ? `${baseClass}__grid--actions-hover` : '',
   ]
     .filter(Boolean)
@@ -2473,7 +2567,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
 
   return (
     <TableContext.Provider value={tableContext}>
-      <div {...rest} ref={ref} className={classes}>
+      <div {...rest} ref={setRootRef} className={classes}>
         <span className="ds-visually-hidden" aria-live="polite" aria-atomic="true">
           {announcement}
         </span>
@@ -2506,7 +2600,8 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
             <table
               ref={setTableEl}
               className={tableClasses}
-              role={gridMode ? 'grid' : undefined}
+              // A card layout changes how the table displays, which strips its semantics in some browsers, so it states them.
+              role={gridMode ? 'grid' : stacked ? 'table' : undefined}
               aria-multiselectable={gridMode && selectable ? true : undefined}
               style={
                 {
@@ -2517,7 +2612,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
               onKeyDown={onGridKeyDown}
             >
               {caption && <caption className="ds-table__caption ds-visually-hidden">{caption}</caption>}
-              <thead className="ds-table__head">
+              <thead className={stacked ? 'ds-table__head ds-visually-hidden' : 'ds-table__head'}>
                 <tr className="ds-table__row ds-table__row--header">
                   {utilityKeys.map(utilityHeader)}
                   {visibleKeys.map(header)}
@@ -2567,14 +2662,37 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
                   ? null
                   : resultsLabel(sortedRows.length)}
             </span>
-            {pageSize !== undefined && pageCount > 1 && (
-              <Pagination
-                {...paginationLabels}
-                page={clampedPage}
-                pageCount={pageCount}
-                onPageChange={goToPage}
-                size={size}
-              />
+            {pageSize !== undefined && (pageCount > 1 || (pageSizeOptions?.length ?? 0) > 0) && (
+              <div className={`${baseClass}__paging`}>
+                {pageSizeOptions && pageSizeOptions.length > 0 && (
+                  <span className={`${baseClass}__page-size`}>
+                    <span className={`${baseClass}__page-size-label`} aria-hidden="true">
+                      {pageSizeLabel}
+                    </span>
+                    <Dropdown
+                      size="compact"
+                      aria-label={pageSizeLabel}
+                      options={[...new Set([...pageSizeOptions, pageSize])]
+                        .sort((a, b) => a - b)
+                        .map((option) => ({ value: String(option), label: String(option) }))}
+                      value={String(pageSize)}
+                      onValueChange={(next) => {
+                        setPageSize(Number(next));
+                        setPage(1);
+                      }}
+                    />
+                  </span>
+                )}
+                {pageCount > 1 && (
+                  <Pagination
+                    {...paginationLabels}
+                    page={clampedPage}
+                    pageCount={pageCount}
+                    onPageChange={goToPage}
+                    size={size}
+                  />
+                )}
+              </div>
             )}
           </div>
         )}

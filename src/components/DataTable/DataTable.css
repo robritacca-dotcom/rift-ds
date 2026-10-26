@@ -511,6 +511,30 @@
   flex-wrap: wrap;
 }
 
+/* The pager and, before it, the page size picker. */
+.ds-data-table__paging {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--gap-300);
+}
+
+.ds-data-table__page-size {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-200);
+}
+
+.ds-data-table__page-size-label {
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
 .ds-data-table__count {
   color: var(--color-text-tertiary);
   font-family: var(--font-paragraph-sm-family);
@@ -798,4 +822,101 @@
 .ds-data-table__typed-link {
   color: var(--color-action-primary-text-tertiary);
   text-decoration: underline;
+}
+
+/* ============================================
+   STACKED
+   `phoneLayout="stack"` narrower than a phone:
+   each row a card, its row header the title
+   (with the checkbox before it and the actions
+   after), every other column a label and value
+   pair below. Column widths, pinning, grips and
+   the header row step aside; the header is still
+   read, from a visually hidden thead.
+   ============================================ */
+
+.ds-data-table__grid--stacked,
+.ds-data-table__grid--stacked > tbody {
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+
+.ds-data-table__grid--stacked .ds-table__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: var(--gap-200);
+  row-gap: var(--gap-100);
+  padding: var(--padding-300);
+  border-block-end: var(--border-025) solid var(--color-table-divider);
+  background-color: var(--color-table-body-bg);
+}
+
+.ds-data-table__grid--stacked .ds-table__row:last-child {
+  border-block-end: none;
+}
+
+.ds-data-table__grid--stacked .ds-table__row--selected {
+  background-color: var(--color-table-row-selected-bg);
+}
+
+.ds-data-table__grid--stacked .ds-table__cell {
+  position: static;
+  display: block;
+  width: auto;
+  min-width: 0;
+  padding: 0;
+  border: none;
+  box-shadow: none;
+  background: none;
+  text-align: start;
+}
+
+.ds-data-table__grid--stacked .ds-table__cell--row-header {
+  flex: 1 1 0;
+  font-family: var(--font-paragraph-emphasis-family);
+  font-size: var(--font-paragraph-emphasis-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-emphasis-letter-spacing);
+}
+
+.ds-data-table__grid--stacked .ds-data-table__utility,
+.ds-data-table__grid--stacked .ds-data-table__actions {
+  flex: none;
+  width: auto;
+}
+
+.ds-data-table__grid--stacked .ds-data-table__actions {
+  order: 1;
+}
+
+/* A row has no drag on a card, and no filler column. */
+.ds-data-table__grid--stacked [data-col='ds-data-table-grip'],
+.ds-data-table__grid--stacked .ds-data-table__filler {
+  display: none;
+}
+
+/* Every other column: its label, then its value, on a line of its own. */
+.ds-data-table__grid--stacked .ds-table__cell:not(.ds-table__cell--row-header, .ds-data-table__utility, .ds-data-table__actions) {
+  order: 2;
+  display: grid;
+  flex-basis: 100%;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  align-items: center;
+  gap: var(--gap-200);
+}
+
+.ds-data-table__stack-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+  color: var(--color-text-secondary);
 }

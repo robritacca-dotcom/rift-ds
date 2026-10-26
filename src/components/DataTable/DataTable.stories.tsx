@@ -639,3 +639,55 @@ export const ColumnTypes: Story = {
     await expect(cell('billable').style.justifyContent).toBe('center');
   },
 };
+
+/** The page and page size are a controlled or uncontrolled pair each; `pageSizeOptions` adds a Rows per page picker, and a new size starts over at page 1. */
+export const PageSize: Story = {
+  args: {
+    columns: columns.map((col) => (col.key === 'name' ? { ...col, rowHeader: true } : col)),
+    rows,
+    defaultPageSize: 3,
+    pageSizeOptions: [3, 5, 10],
+    caption: 'Orders',
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getAllByRole('rowheader')).toHaveLength(3);
+    await userEvent.click(canvas.getByRole('button', { name: /page 2/i }));
+    await waitFor(() => expect(canvas.getAllByRole('rowheader')[0]).toHaveTextContent('Kianna Vaccaro'));
+    await userEvent.click(canvas.getByRole('combobox', { name: 'Rows per page' }));
+    await userEvent.click(await within(document.body).findByRole('option', { name: '5' }));
+    await waitFor(() => expect(canvas.getAllByRole('rowheader')).toHaveLength(5));
+    // A new size starts over at the first page.
+    await expect(canvas.getAllByRole('rowheader')[0]).toHaveTextContent('John Clarkson');
+  },
+};
+
+/** Narrower than a phone, `phoneLayout="stack"` draws each row as a card: the row header as its title, every other column as a label and value. */
+export const PhoneStack: Story = {
+  args: {
+    columns: columns.map((col) => (col.key === 'name' ? { ...col, rowHeader: true } : col)),
+    rows: rows.slice(0, 3),
+    phoneLayout: 'stack',
+    selectable: true,
+    caption: 'Orders',
+  },
+  decorators: [
+    (Story) => (
+      <div style={{ width: 360 }}>
+        <Story />
+      </div>
+    ),
+  ],
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await waitFor(() => expect(canvasElement.querySelector('.ds-data-table__grid--stacked')).not.toBeNull());
+    // Still a table to a screen reader, with its row headers.
+    await expect(canvas.getByRole('table')).toBeInTheDocument();
+    await expect(canvas.getAllByRole('rowheader')).toHaveLength(3);
+    // Each value carries its column's label.
+    const firstRow = canvasElement.querySelector('tbody tr')!;
+    await expect(firstRow.querySelector('.ds-data-table__stack-label')).toHaveTextContent('Status');
+    await userEvent.click(canvas.getByRole('checkbox', { name: 'Select John Clarkson' }));
+    await expect(firstRow).toHaveClass('ds-table__row--selected');
+  },
+};

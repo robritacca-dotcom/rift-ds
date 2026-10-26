@@ -113,3 +113,14 @@
 .editing > :last-child {
   align-self: stretch;
 }
+
+.phoneStation {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-300);
+}
+
+.phoneStation > :last-child {
+  align-self: stretch;
+}

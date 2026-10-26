@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { Badge } from '../Badge/Badge';
 import { Button } from '../Button/Button';
 import { Chip } from '../Chip/Chip';
@@ -29,7 +29,7 @@ import type {
   DataTableSort as Sort,
 } from '../DataTable/DataTable';
 import { useTableContext, type ToolbarColumn } from '../DataTable/tableContext';
-import { BREAKPOINT_PHONE_PX } from '../../tokens/breakpoints';
+import { BREAKPOINT_PHONE_PX, mediaBelow } from '../../tokens/breakpoints';
 import './TableToolbar.css';
 
 /** One column as a TableToolbar over some other table is told about it. */
@@ -261,6 +261,16 @@ type TableToolbarOwnProps = {
 
 export interface TableToolbarProps
   extends TableToolbarOwnProps, Omit<React.ComponentPropsWithoutRef<'div'>, keyof TableToolbarOwnProps> {}
+
+/* Whether the viewport is a phone's: the floating bulk bar answers to the
+   screen, not the bar's width, since it is fixed to the screen. */
+const PHONE_QUERY = mediaBelow(BREAKPOINT_PHONE_PX);
+const subscribePhone = (onChange: () => void) => {
+  const query = window.matchMedia(PHONE_QUERY);
+  query.addEventListener('change', onChange);
+  return () => query.removeEventListener('change', onChange);
+};
+const isPhone = () => window.matchMedia(PHONE_QUERY).matches;
 
 /** One piece of bar state: the prop when given, else the surrounding table's, else the bar's own. */
 function useBound<T>(
@@ -621,6 +631,9 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
        the end, measured as the chips are. Folded, every action is in it. */
     const selectedCount = table?.selectable ? table.selectedIds.length : 0;
     const bulkMode = selectedCount > 0;
+    /* On a phone the bulk bar floats at the bottom of the screen, above the
+       safe area, where a thumb reaches it, and the bar's own row stays. */
+    const floating = useSyncExternalStore(subscribePhone, isPhone, () => false) && bulkMode;
     const matching = table?.matchingIds ?? [];
     const allMatching = matching.length > 0 && matching.every((id) => table!.selectedIds.includes(id));
     const selection: TableToolbarSelection = { ids: table?.selectedIds ?? [], allMatching, except: [] };
@@ -660,7 +673,12 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
       });
     };
     const bulkBar = bulkMode && (
-      <div className="ds-table-toolbar__bulk" role="group" aria-label={labels.selected(selectedCount)} ref={bulkRef}>
+      <div
+        className={floating ? 'ds-table-toolbar__bulk ds-table-toolbar__bulk--floating' : 'ds-table-toolbar__bulk'}
+        role="group"
+        aria-label={labels.selected(selectedCount)}
+        ref={bulkRef}
+      >
         <div className="ds-table-toolbar__bulk-start">
           <CircularButton
             icon="close"
@@ -1085,7 +1103,11 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
           {announcement}
         </span>
         {bulkBar}
-        <div className="ds-table-toolbar__main" inert={bulkMode || undefined} data-covered={bulkMode || undefined}>
+        <div
+          className="ds-table-toolbar__main"
+          inert={(bulkMode && !floating) || undefined}
+          data-covered={(bulkMode && !floating) || undefined}
+        >
           <div className="ds-table-toolbar__start" ref={startRef}>
             {searchable && !narrow && searchField}
             {showFilters && !narrow && chips}

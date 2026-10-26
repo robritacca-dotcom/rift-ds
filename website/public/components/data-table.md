@@ -16,7 +16,15 @@ Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same dat
 | --- | --- | --- | --- | --- |
 | columns | `DataTableColumn<R>[]` | yes |  | Column definitions. |
 | rows | `R[]` | yes |  | Row data, as raw values the table can sort and search. |
-| pageSize | `number` | no |  | Rows per page. Setting this turns on the built-in pagination. |
+| pageSize | `number` | no |  | Rows per page, for controlled use (or as a fixed setting). Setting this or `defaultPageSize` turns on the built-in pagination. |
+| defaultPageSize | `number` | no |  | Rows per page to start with, for uncontrolled use; `pageSizeOptions` then lets the reader change it. |
+| onPageSizeChange | `((pageSize: number) => void)` | no |  | Fires with the new page size when the reader picks one from `pageSizeOptions`. |
+| pageSizeOptions | `number[]` | no |  | The page sizes the footer offers in a Rows per page picker. Leave unset for no picker. |
+| page | `number` | no |  | The current page, counting from 1, for controlled use. Pair with `onPageChange`. A page past the last shows the last. |
+| defaultPage | `number` | no |  | The page to start on, counting from 1, for uncontrolled use. |
+| onPageChange | `((page: number) => void)` | no |  | Fires with the new page, counting from 1: from the pager, and back to 1 when a search, filter, sort or page size change starts over. |
+| pageSizeLabel | `string` | no | `Rows per page` | The page size picker's label. Defaults to "Rows per page". |
+| phoneLayout | `"scroll" \| "stack"` | no | `scroll` | How the table reads when it is narrower than a phone (its own width, under `BREAKPOINT_PHONE_PX`, so a table in a narrow panel counts): `scroll` keeps the rows and scrolls sideways with the row header pinned; `stack` draws each row as a card, its row header as the title and every other column as a label and value pair. Defaults to `scroll`. |
 | selectable | `boolean` | no | `false` | Adds a checkbox column with a select-all header. |
 | selectedIds | `string[]` | no |  | Selected row ids for controlled use. Pair with `onSelectionChange`. |
 | defaultSelectedIds | `string[]` | no |  | Initially selected row ids for uncontrolled use. |

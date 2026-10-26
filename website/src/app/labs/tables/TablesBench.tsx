@@ -22,6 +22,7 @@ import {
 } from "./benchData";
 import { EditingTable } from "./EditingTable";
 import { TypedTable } from "./TypedTable";
+import { PhoneTable } from "./PhoneTable";
 import { TableToolbar } from "rift-ds/components/TableToolbar/TableToolbar";
 import styles from "./TablesBench.module.css";
 
@@ -50,6 +51,7 @@ function Station({
   tunable = true,
   defaultSize = "default",
   defaultLines = false,
+  defaultWidth = "desktop",
   action,
   children,
 }: {
@@ -60,11 +62,13 @@ function Station({
   tunable?: boolean | "density";
   defaultSize?: Tuning["size"];
   defaultLines?: boolean;
+  /** The width the station opens at. */
+  defaultWidth?: Width;
   /** A control at the end of the station's control row. */
   action?: ReactNode;
   children: ReactNode | ((tuning: Tuning) => ReactNode);
 }) {
-  const [width, setWidth] = useState<Width>("desktop");
+  const [width, setWidth] = useState<Width>(defaultWidth);
   const [size, setSize] = useState<Tuning["size"]>(defaultSize);
   const [lines, setLines] = useState(defaultLines);
   return (
@@ -274,7 +278,7 @@ export function TablesBench() {
       <Station
         id="bench-paged"
         title="5. Paged and selectable"
-        note="Pages of five, row selection with a select-all header, the count in the footer."
+        note="Pages of five, with a Rows per page picker (5, 10 or 20), row selection with a select-all header, the count in the footer."
       >
         {({ size, lines }) => (
           <DataTable
@@ -282,7 +286,8 @@ export function TablesBench() {
             columnDividers={lines}
             columns={listColumns}
             rows={projectRows}
-            pageSize={5}
+            defaultPageSize={5}
+            pageSizeOptions={[5, 10, 20]}
             selectable
             caption="Paged projects"
           />
@@ -447,6 +452,15 @@ export function TablesBench() {
         note="Every column type, with no render function anywhere: text, status (sorted in its options' order), person and a person list, currency, number, progress, an absolute and a relative date, tags, checkbox and link. Each type sets its cell, alignment, sort and filter conditions, and Stage, Owner, Value, Renews and Billable are editable with the editor their type brings. One row has no last contact, and draws nothing there."
       >
         {({ size, lines }) => <TypedTable size={size} lines={lines} />}
+      </Station>
+
+      <Station
+        id="bench-phone"
+        title="12. Phone layouts"
+        defaultWidth="phone"
+        note="Narrower than a phone, measured on the table itself. Scroll keeps the rows and pins the row header while the rest scrolls sideways; Stack draws each row as a card, the project as its title, every other column as a label and value. Tick a row on a real phone and the bulk bar floats at the foot of the screen."
+      >
+        {({ size, lines }) => <PhoneTable size={size} lines={lines} />}
       </Station>
     </div>
   );

@@ -5114,7 +5114,57 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "pageSize",
             "type": "number",
             "required": false,
-            "description": "Rows per page. Setting this turns on the built-in pagination."
+            "description": "Rows per page, for controlled use (or as a fixed setting). Setting this or `defaultPageSize` turns on the built-in pagination."
+          },
+          {
+            "name": "defaultPageSize",
+            "type": "number",
+            "required": false,
+            "description": "Rows per page to start with, for uncontrolled use; `pageSizeOptions` then lets the reader change it."
+          },
+          {
+            "name": "onPageSizeChange",
+            "type": "((pageSize: number) => void)",
+            "required": false,
+            "description": "Fires with the new page size when the reader picks one from `pageSizeOptions`."
+          },
+          {
+            "name": "pageSizeOptions",
+            "type": "number[]",
+            "required": false,
+            "description": "The page sizes the footer offers in a Rows per page picker. Leave unset for no picker."
+          },
+          {
+            "name": "page",
+            "type": "number",
+            "required": false,
+            "description": "The current page, counting from 1, for controlled use. Pair with `onPageChange`. A page past the last shows the last."
+          },
+          {
+            "name": "defaultPage",
+            "type": "number",
+            "required": false,
+            "description": "The page to start on, counting from 1, for uncontrolled use."
+          },
+          {
+            "name": "onPageChange",
+            "type": "((page: number) => void)",
+            "required": false,
+            "description": "Fires with the new page, counting from 1: from the pager, and back to 1 when a search, filter, sort or page size change starts over."
+          },
+          {
+            "name": "pageSizeLabel",
+            "type": "string",
+            "required": false,
+            "description": "The page size picker's label. Defaults to \"Rows per page\".",
+            "defaultValue": "Rows per page"
+          },
+          {
+            "name": "phoneLayout",
+            "type": "\"scroll\" | \"stack\"",
+            "required": false,
+            "description": "How the table reads when it is narrower than a phone (its own width,\nunder `BREAKPOINT_PHONE_PX`, so a table in a narrow panel counts):\n`scroll` keeps the rows and scrolls sideways with the row header\npinned; `stack` draws each row as a card, its row header as the title\nand every other column as a label and value pair. Defaults to `scroll`.",
+            "defaultValue": "scroll"
           },
           {
             "name": "selectable",

@@ -92,6 +92,7 @@ import {
   type AccentSextet,
   type ElevationVariant,
   type FontOption,
+  type LogoEndTone,
   type LogoTone,
   type TextTone,
 } from "./theme-overrides";
@@ -823,6 +824,9 @@ export interface DesignMdTheme {
   /** The logo's colour family, when the file colours its logo apart from
       its action colour; absent, the logo wears the action colour. */
   logoTone?: LogoTone;
+  /** The logo gradient's second colour family, when the file gives its
+      mark a second colour. */
+  logoEndTone?: LogoEndTone;
   /** The colours the theme was read from, for the source card. */
   swatches: string[];
   report: MatchRow[];
@@ -887,33 +891,90 @@ const TIER_COLOUR_KEYS: Array<{ tier: "display" | "heading"; lever: string; keys
 /** A logo colour under one of these keys, in either mode. */
 const LOGO_COLOUR_KEYS = /^(logo|logo-colou?r|logo-mark|brand-mark|wordmark)([-_](light|dark))?$/i;
 
+/** A logo gradient's second colour. */
+const LOGO_END_KEYS = /^(logo|brand-mark|logo-mark)[-_](end|secondary|2|accent|gradient-end)([-_](light|dark))?$/i;
+
+/** The identity colour a file names when its buttons draw in something
+    else: `primary` or `brand` (Meta keeps `primary` for its cobalt and
+    draws its actions in black). */
+const IDENTITY_COLOUR_KEYS = /^(primary|brand|brand-primary|brand-colou?r)$/i;
+
 function fitTierTones(
   colours: ReadonlyArray<[string, string]>,
   report: MatchRow[],
   brand: string | undefined
-): { displayTone?: TextTone; headingTone?: TextTone; logoTone?: LogoTone } {
-  const out: { displayTone?: TextTone; headingTone?: TextTone; logoTone?: LogoTone } = {};
-  /* The logo: a colour that is the action colour is the default; any
-     other takes its family (or the ink, for a grey), as the tiers do. */
-  const logo = colours.find(([key]) => LOGO_COLOUR_KEYS.test(key));
-  if (!logo || (brand && logo[1].toUpperCase() === brand.toUpperCase())) {
+): {
+  displayTone?: TextTone;
+  headingTone?: TextTone;
+  logoTone?: LogoTone;
+  logoEndTone?: LogoEndTone;
+  logoBase?: [ramp: string, hex: string];
+} {
+  const out: {
+    displayTone?: TextTone;
+    headingTone?: TextTone;
+    logoTone?: LogoTone;
+    logoEndTone?: LogoEndTone;
+    logoBase?: [string, string];
+  } = {};
+  /* The logo: a stated logo colour, else the identity colour when the
+     file's actions are drawn in another one. A colour that is the action
+     colour is the default (the logo wears the action); a grey is the ink;
+     any other takes its family, re-keyed to the stated colour so the mark
+     is that colour exactly wherever it holds contrast. */
+  /* The action colour, or the same family as it: an importer can deepen
+     a stated key for one mode (Spotify's green), and that is still the
+     action, not a second colour. */
+  const same = (hex: string) =>
+    Boolean(brand) &&
+    (hex.toUpperCase() === brand!.toUpperCase() ||
+      (nearestRampFor(brand!) !== "neutral" && nearestRampFor(hex) === nearestRampFor(brand!)));
+  const stated = colours.find(([key]) => LOGO_COLOUR_KEYS.test(key));
+  const identity = colours.find(([key, hex]) => IDENTITY_COLOUR_KEYS.test(key) && !same(hex));
+  const logo = stated && !same(stated[1]) ? stated : stated ? undefined : identity;
+  if (!logo) {
     report.push({
       lever: "Logo colour",
       value: "Action",
-      status: logo ? "matched" : "kept",
-      note: logo ? "The file's logo wears its action colour." : "The file gives the logo no colour of its own, so it wears the action colour.",
+      status: stated ? "matched" : "kept",
+      note: stated ? "The file's logo wears its action colour." : "The file gives the logo no colour of its own, so it wears the action colour.",
     });
   } else {
     const ramp = nearestRampFor(logo[1]);
     const tone: LogoTone = ramp === "neutral" ? "ink" : (ramp as TextTone);
     out.logoTone = tone;
+    if (ramp !== "neutral") out.logoBase = [ramp, logo[1]];
+    const from = logo === stated ? "colours its logo" : "keeps its identity colour for the brand and draws its actions in another, so the logo takes the identity colour";
     report.push({
       lever: "Logo colour",
       value: TEXT_TONE_LABELS[tone],
-      status: "approximated",
-      note: `The file colours its logo ${logo[1]}; rift takes its family and picks the step that holds contrast in each mode.`,
+      status: ramp === "neutral" ? "matched" : "approximated",
+      note: `The file ${from}, ${logo[1]}, apart from the action colour.`,
     });
   }
+  /* A second logo colour makes the mark two-tone, unless it is the first
+     colour's own family (a shade of it, which is what Matched draws). */
+  const end = colours.find(([key]) => LOGO_END_KEYS.test(key));
+  const firstFamily = logo ? nearestRampFor(logo[1]) : brand ? nearestRampFor(brand) : undefined;
+  const endFamily = end ? nearestRampFor(end[1]) : undefined;
+  if (end && endFamily !== firstFamily) {
+    const tone: LogoEndTone = endFamily === "neutral" ? "ink" : (endFamily as TextTone);
+    out.logoEndTone = tone;
+    report.push({
+      lever: "Logo end colour",
+      value: TEXT_TONE_LABELS[tone],
+      status: "approximated",
+      note: `The file runs its logo into a second colour, ${end[1]}, so the mark is two-tone.`,
+    });
+  } else {
+    report.push({
+      lever: "Logo end colour",
+      value: "Matched",
+      status: end ? "matched" : "kept",
+      note: end ? "The file's logo gradient stays in one colour." : "The file gives the logo one colour, so its gradient stays in it.",
+    });
+  }
+
   for (const { tier, lever, keys } of TIER_COLOUR_KEYS) {
     const stated = colours.filter(([key]) => keys.test(key));
     const chromatic = stated
@@ -1771,7 +1832,11 @@ export function readDesignMd(text: string, catalogue: FontCatalogue): DesignMdTh
   const density = fitDensity(doc, report);
   const type = fitType(doc, typographyProse(body), catalogue, report);
   const elevation = fitElevation(doc, body, report);
-  const tones = fitTierTones(colours, report, action.brand);
+  const { logoBase, ...tones } = fitTierTones(colours, report, action.brand);
+  /* The logo's family re-keyed to the stated colour, unless a status
+     colour or the action already owns that family. */
+  const bases = { ...statusBases };
+  if (logoBase && logoBase[0] !== actionRamp && !bases[logoBase[0]]) bases[logoBase[0]] = logoBase[1];
   traits.push(...readTraits(doc, action.brand, type.bodyFont?.requested ?? ""));
 
   const accents = accentsFromColours(colours.map(([, hex]) => hex), action.brand) ?? undefined;
@@ -1815,7 +1880,7 @@ export function readDesignMd(text: string, catalogue: FontCatalogue): DesignMdTh
     extraOverrides: Object.keys(extraOverrides).length > 0 ? extraOverrides : undefined,
     extraOverridesDark:
       extraOverridesDark && Object.keys(extraOverridesDark).length > 0 ? extraOverridesDark : undefined,
-    advanced: statusBases ? { ...DEFAULT_ADVANCED, bases: statusBases } : undefined,
+    advanced: Object.keys(bases).length > 0 ? { ...DEFAULT_ADVANCED, bases } : undefined,
     ...shape,
     ...density,
     ...type,

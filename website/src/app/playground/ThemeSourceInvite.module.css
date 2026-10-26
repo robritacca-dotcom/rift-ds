@@ -86,15 +86,20 @@
   background: color-mix(in srgb, var(--slot) 45%, transparent);
   backdrop-filter: blur(12px) saturate(1.6);
   color: color-mix(in srgb, var(--slot) 35%, var(--color-text-primary));
+  /* The lean and drop sit on transform, which transitions, so the hand
+     eases open when a file is near; the sway rides the separate rotate
+     and translate properties, so the loop never fights the transition
+     (on transform, the animation took the fan instantly). */
   transform: translateY(var(--drop)) rotate(var(--tilt));
-  transition: transform var(--motion-duration-slow) var(--motion-ease-emphasized);
-  animation: invite-sway calc(var(--invite-cycle) * 0.75) ease-in-out infinite alternate;
+  transition: transform var(--motion-duration-slower) var(--motion-ease-entrance);
+  /* ds-allow(motion): the sway is an alternating loop, so its easing must be symmetric, which none of the motion easings is */
+  animation: invite-sway calc(var(--invite-cycle) * 1.5) ease-in-out infinite alternate;
 }
 
 .artCard[data-slot="1"] {
   --tilt: calc(-12deg * var(--fan));
   --drop: calc(var(--gap-200) * var(--fan));
-  animation-delay: calc(var(--invite-cycle) * -0.25);
+  animation-delay: calc(var(--invite-cycle) * -0.5);
 }
 
 /* The palette sits forward, in the middle, upright: what the two files
@@ -108,7 +113,7 @@
 .artCard[data-slot="5"] {
   --tilt: calc(12deg * var(--fan));
   --drop: calc(var(--gap-200) * var(--fan));
-  animation-delay: calc(var(--invite-cycle) * -0.5);
+  animation-delay: calc(var(--invite-cycle) * -1);
 }
 
 /* A slow swing of a few degrees either side of the card's own lean, each
@@ -116,10 +121,12 @@
    than pinned. */
 @keyframes invite-sway {
   from {
-    transform: translateY(var(--drop)) rotate(calc(var(--tilt) - 4deg));
+    rotate: -3deg;
+    translate: 0 0;
   }
   to {
-    transform: translateY(calc(var(--drop) - var(--gap-100))) rotate(calc(var(--tilt) + 4deg));
+    rotate: 3deg;
+    translate: 0 calc(-1 * var(--gap-100));
   }
 }
 

@@ -10,7 +10,7 @@
  *   2. Round trip: each file, read by the playground's importer
  *      (website/src/lib/theme/design-md.ts), lands on its own theme's
  *      levers: shape, density, depth, the tier weights, the display,
- *      heading and logo colours, the type scale, tracking and both faces, and the action colour the file states. A
+ *      heading and both logo colours, the type scale, tracking and both faces, and the action colour the file states. A
  *      theme that exports a file its own importer misreads is a bug in one
  *      of the two, and this is where it shows.
  *
@@ -94,6 +94,7 @@ for (const [path, content] of files) {
     ['display colour', want.displayTone ?? 'ink', got.displayTone ?? 'ink'],
     ['heading colour', want.headingTone ?? 'ink', got.headingTone ?? 'ink'],
     ['logo colour', want.logoTone ?? 'action', got.logoTone ?? 'action'],
+    ['logo end colour', want.logoEndTone ?? 'matched', got.logoEndTone ?? 'matched'],
   ];
   if (preset) {
     checks.push(['body face', faceOf(preset.fontLabel), got.bodyFont?.family]);

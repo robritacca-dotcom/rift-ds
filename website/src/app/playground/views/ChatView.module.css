@@ -443,12 +443,13 @@
 }
 
 /* The staged product's stand-in logo mark on the threads sheet: a disc in
-   the theme's primary colour, deliberately brandless, sized on the icon
+   the theme's logo colour (the action colour unless the theme gives its
+   logo a tone of its own), deliberately brandless, sized on the icon
    scale, so every theme's mark reads as that theme's product. */
 .threadsLogoDot {
   display: inline-block;
   width: var(--icon-size-600);
   height: var(--icon-size-600);
   border-radius: var(--radius-pill);
-  background-color: var(--color-action-primary-bg);
+  background-color: var(--color-brand-mark);
 }

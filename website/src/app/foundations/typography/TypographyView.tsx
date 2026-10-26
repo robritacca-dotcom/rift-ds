@@ -372,7 +372,10 @@ export default function TypographyView({ scaleTable }: { scaleTable: React.React
               a heading font with a body font, previewing pairings in the
               playground. The printed specs are the base theme&apos;s values: a
               preset sets its own tier weights and tracking, and Forest sets
-              its display tier to semibold.
+              its display tier to semibold. Colour works the same way: display
+              text reads <code>--color-text-display</code> and headings read{" "}
+              <code>--color-text-heading</code>, both aliasing the primary text,
+              so a theme can give a tier its own colour.
             </p>
           </div>
 

@@ -11,6 +11,7 @@ colors:
   display: "#b8b23a"
   heading: "#2b2b2b"
   logo: "#d2643e"
+  logo-end: "#c9c340"
 
 typography:
   display-lg:

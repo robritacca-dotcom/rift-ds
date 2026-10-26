@@ -59,6 +59,8 @@ const COLOURS = [
   ['heading-dark', '--color-text-heading', 'dark'],
   ['logo', '--color-brand-mark', 'light'],
   ['logo-dark', '--color-brand-mark', 'dark'],
+  ['logo-end', '--color-brand-mark-end', 'light'],
+  ['logo-end-dark', '--color-brand-mark-end', 'dark'],
   ['text-secondary', '--color-text-secondary', 'light'],
   ['text-tertiary', '--color-text-tertiary', 'light'],
   ['border', '--color-bg-container-border', 'light'],

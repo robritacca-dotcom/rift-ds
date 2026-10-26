@@ -1533,8 +1533,16 @@ export const LOGO_TONES = ["action", ...TEXT_TONES] as const;
 
 export type LogoTone = (typeof LOGO_TONES)[number];
 
+/** The logo gradient's second stop: "matched" matches the first (its next
+    step, as the action's pressed step follows its fill), or any text
+    tone for a two-colour mark. */
+export const LOGO_END_TONES = ["matched", ...TEXT_TONES] as const;
+
+export type LogoEndTone = (typeof LOGO_END_TONES)[number];
+
 /** Each tone's name in the picker. */
-export const TEXT_TONE_LABELS: Record<LogoTone, string> = {
+export const TEXT_TONE_LABELS: Record<LogoTone | LogoEndTone, string> = {
+  matched: "Matched",
   action: "Action",
   ink: "Ink",
   red: "Red",
@@ -1558,13 +1566,14 @@ export type ToneRole = keyof typeof TIER_TONE_MIN_CONTRAST;
 /** The four tones a theme sets. */
 export interface ThemeTones {
   logo: LogoTone;
+  logoEnd: LogoEndTone;
   display: TextTone;
   heading: TextTone;
   text: TextTone;
 }
 
 /** Every role on its usual colour: the logo on the action, type in the ink. */
-export const DEFAULT_TONES: ThemeTones = { logo: "action", display: "ink", heading: "ink", text: "ink" };
+export const DEFAULT_TONES: ThemeTones = { logo: "action", logoEnd: "matched", display: "ink", heading: "ink", text: "ink" };
 
 /** The neutral ink step per mode, as the token files set the primary text. */
 const INK_STEP = { light: "10", dark: "01" } as const;
@@ -1647,6 +1656,15 @@ export function tierToneOverrides(tones: ThemeTones, current: Overrides, theme: 
       overrides["--color-brand-mark-end"] = ref(p.tone, end);
       overrides["--color-product-mark"] = ref(p.tone, p.step);
     }
+  }
+  /* A second colour for a two-tone mark: the end stop alone takes it, so
+     the gradient runs from the logo colour into this one. The product
+     mark is a flat disc and keeps the first colour. */
+  if (tones.logoEnd === "ink") {
+    overrides["--color-brand-mark-end"] = ink;
+  } else if (tones.logoEnd !== "matched") {
+    const p = pointer(tones.logoEnd, "logo");
+    if (p) overrides["--color-brand-mark-end"] = ref(p.tone, p.step);
   }
   return overrides;
 }

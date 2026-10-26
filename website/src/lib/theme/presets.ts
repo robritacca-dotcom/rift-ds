@@ -32,6 +32,7 @@ import {
   tierToneOverrides,
   type ElevationVariant,
   type Overrides,
+  type LogoEndTone,
   type LogoTone,
   type TextTone,
 } from "./theme-overrides";
@@ -80,6 +81,9 @@ export interface ThemePreset {
       the action colour, "ink" or a family name tones it (see
       tierToneOverrides). */
   logoTone: LogoTone;
+  /** The logo gradient's second stop: "matched" follows the logo colour, a
+      tone makes the mark two-colour. */
+  logoEndTone: LogoEndTone;
   /** The display tier's colour (Mega, Display, Sub Display): "ink" keeps
       the neutral ink, a family name tones it. */
   displayTone: TextTone;
@@ -156,6 +160,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     iconWeight: SHIPPED_ICON_WEIGHT,
     iconFill: false,
     logoTone: "action",
+    logoEndTone: "matched",
     displayTone: "ink",
     headingTone: "ink",
     textTone: "ink",
@@ -211,6 +216,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     iconWeight: SHIPPED_ICON_WEIGHT,
     iconFill: false,
     logoTone: "action",
+    logoEndTone: "matched",
     displayTone: "ink",
     headingTone: "ink",
     textTone: "ink",
@@ -280,6 +286,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     iconWeight: SHIPPED_ICON_WEIGHT,
     iconFill: false,
     logoTone: "action",
+    logoEndTone: "matched",
     displayTone: "ink",
     headingTone: "ink",
     textTone: "ink",
@@ -331,6 +338,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     iconWeight: SHIPPED_ICON_WEIGHT,
     iconFill: false,
     logoTone: "action",
+    logoEndTone: "matched",
     displayTone: "ink",
     headingTone: "ink",
     textTone: "ink",
@@ -394,6 +402,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     iconWeight: 500,
     iconFill: false,
     logoTone: "action",
+    logoEndTone: "matched",
     displayTone: "ink",
     headingTone: "ink",
     textTone: "ink",
@@ -480,6 +489,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     iconWeight: SHIPPED_ICON_WEIGHT,
     iconFill: false,
     logoTone: "action",
+    logoEndTone: "matched",
     displayTone: "ink",
     headingTone: "ink",
     textTone: "ink",
@@ -564,6 +574,8 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     // type, and headings and running text in the ink, so a headline, a
     // heading and the mark can each carry their own colour.
     logoTone: "orange",
+    // A two-tone mark: rust running into the mustard.
+    logoEndTone: "yellow",
     displayTone: "yellow",
     headingTone: "ink",
     textTone: "ink",
@@ -583,7 +595,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     },
     // The field is mostly the deep blue-green of the tint, with the
     // mustard and one rust glint moving through it.
-    ambient: ["#C9C340", "#1F4A52", "#4F7F8C", "#8C8730", "#173840", "#D2643E"],
+    ambient: ["#C9C340", "#1E4A52", "#4F7F8C", "#8C8730", "#173840", "#D2643E"],
     // The yellow ramp re-keyed from a sunny yellow to a muted mustard, so
     // both modes' headline steps are drawn from it.
     advanced: bases({
@@ -616,6 +628,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     iconWeight: SHIPPED_ICON_WEIGHT,
     iconFill: false,
     logoTone: "action",
+    logoEndTone: "matched",
     displayTone: "ink",
     headingTone: "ink",
     textTone: "ink",
@@ -674,6 +687,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     iconWeight: SHIPPED_ICON_WEIGHT,
     iconFill: false,
     logoTone: "action",
+    logoEndTone: "matched",
     displayTone: "ink",
     headingTone: "ink",
     textTone: "ink",
@@ -733,6 +747,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     iconWeight: 400,
     iconFill: false,
     logoTone: "action",
+    logoEndTone: "matched",
     displayTone: "ink",
     headingTone: "ink",
     textTone: "ink",
@@ -798,6 +813,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     iconWeight: 300,
     iconFill: false,
     logoTone: "action",
+    logoEndTone: "matched",
     displayTone: "ink",
     headingTone: "ink",
     textTone: "ink",
@@ -878,7 +894,7 @@ export const THEME_TAGLINES: Readonly<Record<string, string>> = {
   [BASE_THEME_ID]: "The base look: a calm teal on quiet surfaces, set in one friendly face.",
   warm: "Warm and bookish, a serif heading over an easy sans, like a well-loved paperback.",
   mono: "Black, white and nothing else, with flat surfaces and tight corners.",
-  marquee: "A film title card, heavy condensed headlines and buttons in mustard under a rust logo, over an inky blue-green page with square corners.",
+  marquee: "A film title card, heavy condensed headlines and buttons in mustard under a rust-to-mustard logo, over an inky blue-green page with square corners.",
   contrast: "Precise and engineered, an electric blue with drafting-table corners and one technical face.",
   coral: "Sunny and welcoming, a hospitality look of coral warmth and soft, round corners.",
   gold: "Bold and electric, bright yellow on ink with grotesk headings and a quicker step.",
@@ -1108,7 +1124,7 @@ export function presetOverrides(
   Object.assign(
     merged,
     tierToneOverrides(
-      { logo: preset.logoTone, display: preset.displayTone, heading: preset.headingTone, text: preset.textTone },
+      { logo: preset.logoTone, logoEnd: preset.logoEndTone, display: preset.displayTone, heading: preset.headingTone, text: preset.textTone },
       merged,
       theme
     )

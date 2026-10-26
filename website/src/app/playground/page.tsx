@@ -32,6 +32,10 @@ import {
   aiGradientTonalOverrides,
   advancedColorOverrides,
   tierToneOverrides,
+  nearestRampFor,
+  shippedNeutralHex,
+  CHROMATIC_RAMPS,
+  type ToneRole,
   isAccentsPristine,
   googleFontHref,
   isAdvancedPristine,
@@ -50,6 +54,7 @@ import {
   SHIPPED_ICON_WEIGHT,
   addSessionFont,
   type ElevationVariant,
+  type LogoEndTone,
   type LogoTone,
   type TextTone,
   type FontOption,
@@ -74,7 +79,6 @@ import { DesignMdCard } from "./DesignMdCard";
 import { ThemeSourceInvite } from "./ThemeSourceInvite";
 import {
   DESIGN_MD_MAX_BYTES,
-  brandNameOf,
   isDesignMdFile,
   themeFromDesignMd,
   type DesignMdRejection,
@@ -393,6 +397,7 @@ export default function PlaygroundPage() {
   const [displayTone, setDisplayTone] = useState<TextTone>("ink");
   const [headingTone, setHeadingTone] = useState<TextTone>("ink");
   const [logoTone, setLogoTone] = useState<LogoTone>("action");
+  const [logoEndTone, setLogoEndTone] = useState<LogoEndTone>("matched");
   const [textTone, setTextTone] = useState<TextTone>("ink");
   const [fontLabel, setFontLabel] = useState(FONT_OPTIONS[0].label);
   const [headingFontLabel, setHeadingFontLabel] = useState(
@@ -667,14 +672,15 @@ export default function PlaygroundPage() {
     setDisplayTone(t.displayTone ?? "ink");
     setHeadingTone(t.headingTone ?? "ink");
     setLogoTone(t.logoTone ?? "action");
+    setLogoEndTone(t.logoEndTone ?? "matched");
     setTextTone("ink");
     setFontLabel(t.bodyFont ? loadMatchedFont(t.bodyFont.option) : FONT_OPTIONS[0].label);
     setHeadingFontLabel(
       t.headingFont ? loadMatchedFont(t.headingFont.option) : HEADING_FONT_OPTIONS[0].label
     );
-    /* The theme takes the brand the file names, so the export reads "the
-       Figma theme" rather than "the Custom theme"; the visitor can retype it. */
-    setProductName(brandNameOf(t.title));
+    /* The Product name stays as the visitor left it: a file is the look to
+       be inspired by, not the product being built, so its brand never
+       becomes the app's name. Typing it in is the visitor's call. */
     pickView("components");
   };
 
@@ -753,6 +759,7 @@ export default function PlaygroundPage() {
     setDisplayTone(p.displayTone);
     setHeadingTone(p.headingTone);
     setLogoTone(p.logoTone);
+    setLogoEndTone(p.logoEndTone);
     setTextTone(p.textTone);
     setFontLabel(p.fontLabel);
     setHeadingFontLabel(p.headingFontLabel ?? HEADING_FONT_OPTIONS[0].label);
@@ -802,6 +809,41 @@ export default function PlaygroundPage() {
     () => actionColorPlan(effectiveBrand, theme === "dark" ? "dark" : "light"),
     [effectiveBrand, theme]
   );
+
+  /* A custom colour for one tone role re-keys the family nearest it (the
+     same ramp keys the All colour ramps dialog edits), so the role wears
+     that colour wherever it holds contrast; a grey takes the ink. The
+     action's own family stays the action lever's, so a pick near it only
+     takes the family. */
+  const actionRamp = actionPlan?.ramp ?? "teal";
+  const pickToneHex = (role: ToneRole | "logoEnd", hex: string) => {
+    const ramp = nearestRampFor(hex);
+    const tone: TextTone = ramp === "neutral" ? "ink" : (ramp as TextTone);
+    if (ramp !== "neutral" && ramp !== actionRamp) {
+      setAdvColors((a) => ({ ...a, bases: { ...a.bases, [ramp]: hex.toUpperCase() } }));
+    }
+    if (role === "logo") setLogoTone(tone);
+    else if (role === "logoEnd") setLogoEndTone(tone);
+    else if (role === "display") setDisplayTone(tone);
+    else if (role === "heading") setHeadingTone(tone);
+    else setTextTone(tone);
+  };
+  /* What each role's custom field shows: a family's key as it stands, the
+     ink of the mode in view, or the action colour for the logo's defaults. */
+  const toneCustomOf = (tone: LogoTone | LogoEndTone) => {
+    if (tone === "action" || tone === "matched") return { hex: effectiveBrand, active: false };
+    if (tone === "ink") return { hex: shippedNeutralHex(theme === "dark" ? "01" : "10") ?? "#000000", active: false };
+    const base = advColors.bases[tone];
+    const key = CHROMATIC_RAMPS.find((ramp) => ramp.name === tone)!.steps.find(([step]) => step === "07")![1];
+    return { hex: base ?? key, active: Boolean(base) && tone !== actionRamp };
+  };
+  const toneCustom = {
+    logo: toneCustomOf(logoTone),
+    logoEnd: toneCustomOf(logoEndTone),
+    display: toneCustomOf(displayTone),
+    heading: toneCustomOf(headingTone),
+    text: toneCustomOf(textTone),
+  };
 
   const overrides = useMemo<Overrides>(() => {
     const merged: Overrides = {};
@@ -864,13 +906,13 @@ export default function PlaygroundPage() {
     Object.assign(
       merged,
       tierToneOverrides(
-        { logo: logoTone, display: displayTone, heading: headingTone, text: textTone },
+        { logo: logoTone, logoEnd: logoEndTone, display: displayTone, heading: headingTone, text: textTone },
         merged,
         theme === "dark" ? "dark" : "light"
       )
     );
     return merged;
-  }, [actionPlan, theme, tintOn, tintSeed, tintStrength, radiusScale, pill, density, typeScale, motionScale, elevation, displayWeight, headingWeight, bodyWeight, tracking, iconWeight, iconFill, logoTone, displayTone, headingTone, textTone, accents, presetExtras, advColors]);
+  }, [actionPlan, theme, tintOn, tintSeed, tintStrength, radiusScale, pill, density, typeScale, motionScale, elevation, displayWeight, headingWeight, bodyWeight, tracking, iconWeight, iconFill, logoTone, logoEndTone, displayTone, headingTone, textTone, accents, presetExtras, advColors]);
 
   /* ---------- apply to the whole page ----------
      The shared hook writes to :root (where the semantic layer is declared,
@@ -941,6 +983,7 @@ export default function PlaygroundPage() {
     setDisplayTone("ink");
     setHeadingTone("ink");
     setLogoTone("action");
+    setLogoEndTone("matched");
     setTextTone("ink");
     setFontLabel(FONT_OPTIONS[0].label);
     setHeadingFontLabel(HEADING_FONT_OPTIONS[0].label);
@@ -996,6 +1039,7 @@ export default function PlaygroundPage() {
       iconWeight,
       iconFill,
       logoTone,
+      logoEndTone,
       displayTone,
       headingTone,
       textTone,
@@ -1029,7 +1073,7 @@ export default function PlaygroundPage() {
       markdown: buildThemeMarkdown(theme, context),
       prompt: buildAgentPrompt(theme, context),
     };
-  }, [preset, brand, presetExtras, tintOn, tintSeed, tintStrength, radiusScale, pill, density, typeScale, motionScale, elevation, displayWeight, headingWeight, bodyWeight, tracking, iconWeight, iconFill, logoTone, displayTone, headingTone, textTone, fontLabel, headingFontLabel, accents, advColors, productName, designSource]);
+  }, [preset, brand, presetExtras, tintOn, tintSeed, tintStrength, radiusScale, pill, density, typeScale, motionScale, elevation, displayWeight, headingWeight, bodyWeight, tracking, iconWeight, iconFill, logoTone, logoEndTone, displayTone, headingTone, textTone, fontLabel, headingFontLabel, accents, advColors, productName, designSource]);
 
   /** Export, from the rail or a source card: opens the dialog on the
       themed AGENTS.md, the one file a coding agent needs. */
@@ -1185,6 +1229,7 @@ export default function PlaygroundPage() {
               iconWeight={iconWeight}
               iconFill={iconFill}
               logoTone={logoTone}
+              logoEndTone={logoEndTone}
               displayTone={displayTone}
               headingTone={headingTone}
               textTone={textTone}
@@ -1214,9 +1259,12 @@ export default function PlaygroundPage() {
               onIconWeight={asCustom(setIconWeight)}
               onIconFill={asCustom(setIconFill)}
               onLogoTone={asCustom(setLogoTone)}
+              onLogoEndTone={asCustom(setLogoEndTone)}
               onDisplayTone={asCustom(setDisplayTone)}
               onHeadingTone={asCustom(setHeadingTone)}
               onTextTone={asCustom(setTextTone)}
+              toneCustom={toneCustom}
+              onToneCustom={(role, hex) => asCustom(() => pickToneHex(role, hex))(undefined)}
               onFontLabel={asCustom(setFontLabel)}
               onHeadingFontLabel={asCustom(setHeadingFontLabel)}
               onProductName={setProductName}
@@ -1527,6 +1575,11 @@ export default function PlaygroundPage() {
                   params={shaderParams}
                   blobs={shaderBackground.blobs}
                 />
+                {/* The product's name over the field in the display style,
+                    so the display face, weight and colour levers show at
+                    the size they are made for. Decorative here: the mock
+                    nav below names the product to assistive tech. */}
+                <span className={styles.shaderBannerName}>{productName.trim() || "Acme Corp"}</span>
               </div>
               <div className={styles.navStage}>
                 {/* The theme's source sits under the banner, pushing

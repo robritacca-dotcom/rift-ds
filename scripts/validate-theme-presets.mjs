@@ -149,6 +149,7 @@ const TIER_PAIRINGS = [
     skip it. */
 const LOGO_PAIRINGS = [
   ['--color-bg-page-primary', '--color-brand-mark', 3, 'the logo mark on the page'],
+  ['--color-bg-page-primary', '--color-brand-mark-end', 3, "the logo gradient's second stop on the page"],
   ['--color-bg-page-primary', '--color-product-mark', 3, "a template's product mark on the page"],
 ];
 
@@ -195,7 +196,7 @@ const REQUIRED_ACCENT_ROLES = [
 
 const errors = [];
 
-const { THEME_PRESETS, presetOverrides, DEFAULT_BRAND, THEME_TAGLINES, THEME_SELECTOR_ORDER, TEXT_TONES, LOGO_TONES } = await loadThemeSource();
+const { THEME_PRESETS, presetOverrides, DEFAULT_BRAND, THEME_TAGLINES, THEME_SELECTOR_ORDER, TEXT_TONES, LOGO_TONES, LOGO_END_TONES } = await loadThemeSource();
 
 /** Resolve a custom property to a literal value: the preset's override
     map first, then the theme's semantic CSS (dark falls through to
@@ -304,6 +305,9 @@ for (const [id, preset] of Object.entries(THEME_PRESETS)) {
   if (!LOGO_TONES.includes(preset.logoTone)) {
     errors.push(`preset "${id}": lever "logoTone" is missing or not one of ${LOGO_TONES.join(', ')}`);
   }
+  if (!LOGO_END_TONES.includes(preset.logoEndTone)) {
+    errors.push(`preset "${id}": lever "logoEndTone" is missing or not one of ${LOGO_END_TONES.join(', ')}`);
+  }
 
   for (const theme of ['light', 'dark']) {
     cells += 1;
@@ -345,7 +349,7 @@ for (const [id, preset] of Object.entries(THEME_PRESETS)) {
       }
     }
 
-    checkPairings(id, theme, overrides, preset.logoTone !== 'action');
+    checkPairings(id, theme, overrides, preset.logoTone !== 'action' || preset.logoEndTone !== 'matched');
   }
 }
 

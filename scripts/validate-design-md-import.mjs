@@ -162,6 +162,7 @@ const lightnessOf = (hex) => overrides.rgbToHsl(overrides.hexToRgb(hex))[2];
   expect('coloured-headlines', t.displayTone === 'yellow', `display tone is ${t.displayTone}, expected yellow from the mustard display key`);
   expect('coloured-headlines', t.headingTone === undefined, `heading tone is ${t.headingTone}, expected the ink from a grey heading key`);
   expect('coloured-headlines', row(t, 'Heading colour')?.status === 'matched', 'a grey heading key is not reported as the ink');
+  expect('coloured-headlines', t.logoEndTone === 'yellow', `logo end tone is ${t.logoEndTone}, expected yellow from the mustard logo-end key`);
   expect('coloured-headlines', t.logoTone === 'orange', `logo tone is ${t.logoTone}, expected orange from the rust logo key`);
   expect('coloured-headlines', t.brand?.toUpperCase() === '#1A1A1A', `action colour is ${t.brand}; a coloured headline must not become the action colour`);
 }
@@ -193,6 +194,10 @@ for (const [title, name] of [
 /* The light-mode action key each shipped sample reads to (spotify is a
    dark-first file, so its light key is the step adjusted for a light page). */
 const samples = { apple: '#0066CC', meta: '#000000', spotify: '#117835' };
+/* The logo each sample reads to: Meta keeps `primary` for its cobalt and
+   draws its actions in black, so its logo is the cobalt; Apple and Spotify
+   colour their actions in their brand, so their logos wear the action. */
+const sampleLogos = { apple: 'action', meta: 'blue', spotify: 'action' };
 const all = [
   ...readdirSync(join(repoRoot, fixturesDir)).filter((f) => f.endsWith('.md')).map((f) => [`fixture ${f}`, `${fixturesDir}/${f}`]),
   ...Object.keys(samples).map((id) => [`sample ${id}`, `website/public/samples/${id}/DESIGN.md`]),
@@ -209,6 +214,12 @@ for (const [label, path] of all) {
   if (sample && t.brand !== samples[sample]) {
     errors.push(`${label}: action colour is ${t.brand}, expected ${samples[sample]}; a shipped example changed what it reads`);
   }
+  if (sample && (t.logoTone ?? 'action') !== sampleLogos[sample]) {
+    errors.push(`${label}: logo colour is ${t.logoTone ?? 'action'}, expected ${sampleLogos[sample]}`);
+  }
+  if (sample === 'meta' && t.advanced?.bases?.blue !== '#0064E0') {
+    errors.push(`${label}: the blue family is not re-keyed to Meta's stated #0064E0, so the logo would not be that colour`);
+  }
 }
 
 if (errors.length > 0) {
@@ -216,4 +227,4 @@ if (errors.length > 0) {
   for (const error of errors) console.error(`  - ${error}`);
   process.exit(1);
 }
-console.log(`✓ DESIGN.md import: ${all.length - Object.keys(samples).length} fixtures read by their rule, ${Object.keys(samples).length} shipped samples keep their action colour, every report line free of em dashes`);
+console.log(`✓ DESIGN.md import: ${all.length - Object.keys(samples).length} fixtures read by their rule, ${Object.keys(samples).length} shipped samples keep their action and logo colours, every report line free of em dashes`);

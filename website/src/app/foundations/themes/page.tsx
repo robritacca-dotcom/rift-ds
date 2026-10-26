@@ -71,8 +71,9 @@ export default function ThemesPage() {
               whole system restyled through its tokens alone, to show the
               range one set of primitives covers. A look means both colour
               modes, a typeface or a heading and body pairing, with self-hosted fonts,
-              type weight and tracking, icon weight, radius, density, motion, elevation, the ambient background, and
-              the chart palette. Apply one and this page rethemes around you,
+              type weight and tracking, the colour of the logo and of each type
+              tier, icon weight, radius, density, motion, elevation, the ambient
+              background, and the chart palette. Apply one and this page rethemes around you,
               which is the honest preview. Your own brand takes the same
               path: the playground builds it live and copies out paste-ready
               CSS.

@@ -13,6 +13,7 @@ import {
   ICON_WEIGHT_RANGE,
   LEVER_RANGES,
   TEXT_TONES,
+  LOGO_END_TONES,
   LOGO_TONES,
   TEXT_TONE_LABELS,
   TYPE_WEIGHT_RANGE,
@@ -20,8 +21,10 @@ import {
   motionScaleFromSpeed,
   motionSpeedPercent,
   type ElevationVariant,
+  type LogoEndTone,
   type LogoTone,
   type TextTone,
+  type ToneRole,
 } from "@/lib/theme/theme-overrides";
 import { RichDropdown } from "rift-ds/components/RichDropdown/RichDropdown";
 import { InspectorColorPicker } from "rift-ds/components/Inspector/InspectorColorPicker";
@@ -33,8 +36,74 @@ import { InspectorSlider } from "rift-ds/components/Inspector/InspectorSlider";
 import { InspectorToggleSwitch } from "rift-ds/components/Inspector/InspectorToggleSwitch";
 import { fontPickerOptions, presetPickerOptions } from "@/lib/theme/presets";
 
-const TONE_OPTIONS = TEXT_TONES.map((tone) => ({ value: tone, label: TEXT_TONE_LABELS[tone] }));
-const LOGO_TONE_OPTIONS = LOGO_TONES.map((tone) => ({ value: tone, label: TEXT_TONE_LABELS[tone] }));
+/** What each tone choice's swatch shows: the role's default as it stands
+    (the action fill, or the logo's own first colour), the ink of the mode
+    in view, and each family at its key, live with any re-keyed ramp. */
+const toneSwatchColour = (tone: LogoTone | LogoEndTone): string =>
+  tone === "action"
+    ? "var(--color-action-primary-bg)"
+    : tone === "matched"
+      ? "var(--color-brand-mark)"
+      : tone === "ink"
+        ? "var(--color-bg-page-inverse)"
+        : `var(--primitive-${tone}-07)`;
+
+const toneOptions = <T extends LogoTone | LogoEndTone>(tones: readonly T[]) =>
+  tones.map((tone) => ({ value: tone, label: TEXT_TONE_LABELS[tone], colour: toneSwatchColour(tone) }));
+
+const TONE_OPTIONS = toneOptions(TEXT_TONES);
+const LOGO_TONE_OPTIONS = toneOptions(LOGO_TONES);
+const LOGO_END_TONE_OPTIONS = toneOptions(LOGO_END_TONES);
+
+/**
+ * One colour role's picker, laid out like the action colour's: a swatch per
+ * choice, then a custom colour, which re-keys the family nearest it (see
+ * pickToneHex on the page). The step each mode shows is still picked to
+ * hold the role's contrast (tierToneOverrides).
+ */
+function TonePicker<T extends string>({
+  heading,
+  ariaLabel,
+  value,
+  options,
+  customHex,
+  customActive,
+  onValueChange,
+  onCustom,
+}: {
+  heading: string;
+  ariaLabel: string;
+  value: T;
+  options: ReadonlyArray<{ value: T; label: string; colour: string }>;
+  customHex: string;
+  customActive: boolean;
+  onValueChange: (value: T) => void;
+  onCustom: (hex: string) => void;
+}) {
+  return (
+    <div className={styles.controlGroup}>
+      <span className={styles.controlHeading}>{heading}</span>
+      <div className={styles.swatchGrid} role="group" aria-label={ariaLabel}>
+        {options.map((o) => (
+          <Swatch
+            key={o.value}
+            value={o.colour}
+            label={o.label}
+            selected={value === o.value}
+            onClick={() => onValueChange(o.value)}
+          />
+        ))}
+      </div>
+      <InspectorColorPicker
+        size="compact"
+        label="Custom colour"
+        value={customHex}
+        onValueChange={onCustom}
+        className={customActive ? styles.customPickerActive : ""}
+      />
+    </div>
+  );
+}
 
 export interface PlaygroundControlsProps {
   preset: string;
@@ -68,6 +137,7 @@ export interface PlaygroundControlsProps {
   iconWeight: number;
   iconFill: boolean;
   logoTone: LogoTone;
+  logoEndTone: LogoEndTone;
   displayTone: TextTone;
   headingTone: TextTone;
   textTone: TextTone;
@@ -112,9 +182,15 @@ export interface PlaygroundControlsProps {
   onIconWeight: (value: number) => void;
   onIconFill: (value: boolean) => void;
   onLogoTone: (value: LogoTone) => void;
+  onLogoEndTone: (value: LogoEndTone) => void;
   onDisplayTone: (value: TextTone) => void;
   onHeadingTone: (value: TextTone) => void;
   onTextTone: (value: TextTone) => void;
+  /** Each tone role's custom colour as the picker shows it, and whether a
+      custom colour is what the role currently wears. */
+  toneCustom: Record<ToneRole | "logoEnd", { hex: string; active: boolean }>;
+  /** A custom colour for one role: re-keys the nearest family and takes it. */
+  onToneCustom: (role: ToneRole | "logoEnd", hex: string) => void;
   onFontLabel: (value: string) => void;
   onHeadingFontLabel: (value: string) => void;
   onProductName: (value: string) => void;
@@ -160,6 +236,7 @@ export default function PlaygroundControls({
   iconWeight,
   iconFill,
   logoTone,
+  logoEndTone,
   displayTone,
   headingTone,
   textTone,
@@ -191,9 +268,12 @@ export default function PlaygroundControls({
   onIconWeight,
   onIconFill,
   onLogoTone,
+  onLogoEndTone,
   onDisplayTone,
   onHeadingTone,
   onTextTone,
+  toneCustom,
+  onToneCustom,
   onFontLabel,
   onHeadingFontLabel,
   onProductName,
@@ -295,6 +375,7 @@ export default function PlaygroundControls({
             all views — the contextual sections render at the bottom, so
             nothing above them ever shifts. */}
         <div className={styles.controlGroup}>
+          <span className={styles.controlHeading}>Action colour</span>
           <div
             className={styles.swatchGrid}
             role="group"
@@ -465,58 +546,120 @@ export default function PlaygroundControls({
         </div>
       </InspectorSection>
 
-      <InspectorSection title="Typography" defaultOpen>
+      {/* The logo apart from the action colour: its mark is a gradient, so
+          it takes a first colour and, for a two-tone mark, an end one. */}
+      <InspectorSection title="Logo" defaultOpen>
+        <TonePicker
+          heading="Logo colour"
+          ariaLabel="Logo colour"
+          value={logoTone}
+          options={LOGO_TONE_OPTIONS}
+          customHex={toneCustom.logo.hex}
+          customActive={toneCustom.logo.active}
+          onValueChange={onLogoTone}
+          onCustom={(hex) => onToneCustom("logo", hex)}
+        />
+        <TonePicker
+          heading="Logo gradient end"
+          ariaLabel="Logo end colour"
+          value={logoEndTone}
+          options={LOGO_END_TONE_OPTIONS}
+          customHex={toneCustom.logoEnd.hex}
+          customActive={toneCustom.logoEnd.active}
+          onValueChange={onLogoEndTone}
+          onCustom={(hex) => onToneCustom("logoEnd", hex)}
+        />
+      </InspectorSection>
+
+      {/* Type in its three tiers, each with its colour and weight, then the
+          levers every tier shares. The heading face also sets the display
+          tier, which has no face of its own. */}
+      <InspectorSection title="Display" defaultOpen>
+        <TonePicker
+          heading="Display colour"
+          ariaLabel="Display colour"
+          value={displayTone}
+          options={TONE_OPTIONS}
+          customHex={toneCustom.display.hex}
+          customActive={toneCustom.display.active}
+          onValueChange={onDisplayTone}
+          onCustom={(hex) => onToneCustom("display", hex)}
+        />
+        <div className={styles.controlGroup}>
+          <InspectorSlider
+            size="compact"
+            label="Weight"
+            value={displayWeight}
+            {...TYPE_WEIGHT_RANGE}
+            onValueChange={onDisplayWeight}
+          />
+        </div>
+      </InspectorSection>
+
+      <InspectorSection title="Headings" defaultOpen>
         <div className={`${styles.controlGroup} ${styles.dropUp}`}>
           <InspectorDropdown
             size="compact"
-            label="Headings"
+            label="Typeface"
             value={headingFontLabel}
             options={fontPickerOptions("heading", fontLabel)}
             onValueChange={onHeadingFontLabel}
           />
+          <p className={styles.controlNote}>Display type uses this face too.</p>
+        </div>
+        <TonePicker
+          heading="Heading colour"
+          ariaLabel="Heading colour"
+          value={headingTone}
+          options={TONE_OPTIONS}
+          customHex={toneCustom.heading.hex}
+          customActive={toneCustom.heading.active}
+          onValueChange={onHeadingTone}
+          onCustom={(hex) => onToneCustom("heading", hex)}
+        />
+        <div className={styles.controlGroup}>
+          <InspectorSlider
+            size="compact"
+            label="Weight"
+            value={headingWeight}
+            {...TYPE_WEIGHT_RANGE}
+            onValueChange={onHeadingWeight}
+          />
+        </div>
+      </InspectorSection>
+
+      <InspectorSection title="Body" defaultOpen>
+        <div className={`${styles.controlGroup} ${styles.dropUp}`}>
           <InspectorDropdown
             size="compact"
-            label="Body"
+            label="Typeface"
             value={fontLabel}
             options={fontPickerOptions("body", fontLabel)}
             onValueChange={onFontLabel}
           />
         </div>
-
-        {/* Each role's colour family, apart from the action colour; the
-            step per mode is picked to hold the role's contrast
-            (tierToneOverrides). */}
-        <div className={`${styles.controlGroup} ${styles.dropUp}`}>
-          <InspectorDropdown
+        <TonePicker
+          heading="Text colour"
+          ariaLabel="Text colour"
+          value={textTone}
+          options={TONE_OPTIONS}
+          customHex={toneCustom.text.hex}
+          customActive={toneCustom.text.active}
+          onValueChange={onTextTone}
+          onCustom={(hex) => onToneCustom("text", hex)}
+        />
+        <div className={styles.controlGroup}>
+          <InspectorSlider
             size="compact"
-            label="Logo colour"
-            value={logoTone}
-            options={LOGO_TONE_OPTIONS}
-            onValueChange={(value) => onLogoTone(value as LogoTone)}
-          />
-          <InspectorDropdown
-            size="compact"
-            label="Display colour"
-            value={displayTone}
-            options={TONE_OPTIONS}
-            onValueChange={(value) => onDisplayTone(value as TextTone)}
-          />
-          <InspectorDropdown
-            size="compact"
-            label="Heading colour"
-            value={headingTone}
-            options={TONE_OPTIONS}
-            onValueChange={(value) => onHeadingTone(value as TextTone)}
-          />
-          <InspectorDropdown
-            size="compact"
-            label="Text colour"
-            value={textTone}
-            options={TONE_OPTIONS}
-            onValueChange={(value) => onTextTone(value as TextTone)}
+            label="Weight"
+            value={bodyWeight}
+            {...TYPE_WEIGHT_RANGE}
+            onValueChange={onBodyWeight}
           />
         </div>
+      </InspectorSection>
 
+      <InspectorSection title="General" defaultOpen>
         <div className={styles.controlGroup}>
           <InspectorSlider
             size="compact"
@@ -525,27 +668,6 @@ export default function PlaygroundControls({
             {...LEVER_RANGES.typeScale}
             onValueChange={onTypeScale}
             format={(v) => `${leverWord("typeScale", v)} ${v}%`}
-          />
-          <InspectorSlider
-            size="compact"
-            label="Display weight"
-            value={displayWeight}
-            {...TYPE_WEIGHT_RANGE}
-            onValueChange={onDisplayWeight}
-          />
-          <InspectorSlider
-            size="compact"
-            label="Heading weight"
-            value={headingWeight}
-            {...TYPE_WEIGHT_RANGE}
-            onValueChange={onHeadingWeight}
-          />
-          <InspectorSlider
-            size="compact"
-            label="Body weight"
-            value={bodyWeight}
-            {...TYPE_WEIGHT_RANGE}
-            onValueChange={onBodyWeight}
           />
           {/* Percent of an em, added to each style's shipped tracking. */}
           <InspectorSlider

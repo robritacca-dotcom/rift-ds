@@ -22,6 +22,8 @@ colors:
   heading-dark: "#e7eaf2"
   logo: "#003dff"
   logo-dark: "#003dff"
+  logo-end: "#002085"
+  logo-end-dark: "#002085"
   text-secondary: "#2e3138"
   text-tertiary: "#696b73"
   border: "#cdd0d8"
@@ -181,6 +183,7 @@ One action colour, kept for primary buttons, focus rings, the checked state of a
 | `display` | `#05070f` | `#e7eaf2` | `--color-text-display` |
 | `heading` | `#05070f` | `#e7eaf2` | `--color-text-heading` |
 | `logo` | `#003dff` | `#003dff` | `--color-brand-mark` |
+| `logo-end` | `#002085` | `#002085` | `--color-brand-mark-end` |
 | `text-secondary` | `#2e3138` | `#b4b7bf` | `--color-text-secondary` |
 | `text-tertiary` | `#696b73` | `#9c9ea6` | `--color-text-tertiary` |
 | `border` | `#cdd0d8` | `#22242c` | `--color-bg-container-border` |

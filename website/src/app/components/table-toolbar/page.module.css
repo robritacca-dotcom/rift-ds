@@ -156,3 +156,8 @@
   color: var(--color-text-tertiary);
   font-size: var(--font-paragraph-sm-size);
 }
+
+/* A phone-width stage, so the bar folds as it does on a phone. */
+.narrowFrame {
+  max-width: 375px;
+}

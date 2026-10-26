@@ -19,7 +19,7 @@ const options = (values: string[]) => values.map((value) => ({ value, label: val
 const columns: DataTableColumn[] = [
   { key: 'title', header: 'Issue', rowHeader: true, sortable: true },
   { key: 'status', header: 'Status', sortable: true, options: options(['Open', 'Blocked', 'Done']) },
-  { key: 'points', header: 'Points', sortable: true, align: 'right' },
+  { key: 'points', header: 'Points', sortable: true, align: 'end' },
   { key: 'due', header: 'Due' },
 ];
 

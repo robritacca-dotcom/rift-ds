@@ -5,6 +5,7 @@ import { Kbd } from '../Kbd/Kbd';
 import { shortcutAriaAnyPlatform, type Shortcut, type ShortcutKeyLabels } from '../../behaviors/shortcut-keys';
 import './CommandPaletteTrigger.css';
 import '../../fonts/material-symbols.css';
+import { mirrorClass } from '../../behaviors/direction';
 
 /** Props owned by CommandPaletteTrigger itself — everything else falls through to the <button>. */
 type CommandPaletteTriggerOwnProps = {
@@ -91,7 +92,7 @@ export const CommandPaletteTrigger = React.forwardRef<HTMLButtonElement, Command
         className={classes}
       >
         {typeof icon === 'string' ? (
-          <span className={`${baseClass}__icon material-symbols-rounded`} aria-hidden="true">
+          <span className={`${baseClass}__icon material-symbols-rounded ${mirrorClass(icon)}`} aria-hidden="true">
             {icon}
           </span>
         ) : (

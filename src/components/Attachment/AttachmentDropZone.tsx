@@ -3,6 +3,7 @@
 import React, { useRef, useState } from 'react';
 import '../../fonts/material-symbols.css';
 import './Attachment.css';
+import { mirrorClass } from '../../behaviors/direction';
 
 /** Props owned by AttachmentDropZone itself — everything else falls through to the root element. */
 type AttachmentDropZoneOwnProps = {
@@ -124,7 +125,7 @@ export const AttachmentDropZone = React.forwardRef<HTMLDivElement, AttachmentDro
             {icon !== null && icon !== undefined && (
               <span className={`${baseClass}__icon`}>
                 {typeof icon === 'string' ? (
-                  <span className="material-symbols-rounded">{icon}</span>
+                  <span className={`material-symbols-rounded ${mirrorClass(icon)}`}>{icon}</span>
                 ) : (
                   icon
                 )}

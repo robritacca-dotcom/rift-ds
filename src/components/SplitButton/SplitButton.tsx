@@ -3,6 +3,7 @@ import { Button } from '../Button/Button';
 import { CircularButton } from '../CircularButton/CircularButton';
 import { DropdownMenu, type DropdownMenuEntry } from '../DropdownMenu/DropdownMenu';
 import './SplitButton.css';
+import '../../behaviors/direction.css';
 
 export type { DropdownMenuEntry as SplitButtonMenuEntry } from '../DropdownMenu/DropdownMenu';
 

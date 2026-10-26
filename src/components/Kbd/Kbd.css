@@ -30,6 +30,11 @@
 /* A whole shortcut: the outer <kbd> only lays its keycaps out, one group per
    step of a sequence, so it sheds the keycap's own chrome. */
 .ds-kbd--combo {
+  /* A shortcut reads ⇧ ⌘ P in every direction, as it is printed on the
+     keys and in the platform's own menus, so the combination keeps its
+     left-to-right order inside a right-to-left page. */
+  direction: ltr;
+  unicode-bidi: isolate;
   min-width: 0;
   padding: 0;
   border: none;

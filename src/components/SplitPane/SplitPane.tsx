@@ -2,6 +2,7 @@
 
 import React, { useRef, useState } from 'react';
 import './SplitPane.css';
+import { isRtl, logicalArrowKey } from '../../behaviors/direction';
 
 /** Props owned by SplitPane itself — everything else falls through to the root div. */
 type SplitPaneOwnProps = {
@@ -86,9 +87,13 @@ export const SplitPane = React.forwardRef<HTMLDivElement, SplitPaneProps>(
     const splitFromPointer = (e: React.PointerEvent) => {
       const rect = internalRef.current?.getBoundingClientRect();
       if (!rect) return;
+      // In a right-to-left page the first pane is on the right, so its share
+      // is measured from the right edge.
       const fraction =
         direction === 'horizontal'
-          ? (e.clientX - rect.left) / rect.width
+          ? isRtl(internalRef.current)
+            ? (rect.right - e.clientX) / rect.width
+            : (e.clientX - rect.left) / rect.width
           : (e.clientY - rect.top) / rect.height;
       applySplit(fraction * 100);
     };
@@ -117,7 +122,9 @@ export const SplitPane = React.forwardRef<HTMLDivElement, SplitPaneProps>(
       const step = e.shiftKey ? KEY_STEP_LARGE : KEY_STEP;
       const shrinkKey = direction === 'horizontal' ? 'ArrowLeft' : 'ArrowUp';
       const growKey = direction === 'horizontal' ? 'ArrowRight' : 'ArrowDown';
-      switch (e.key) {
+      // In a right-to-left page the first pane is on the right, so ArrowLeft
+      // moves the separator left and grows it: the logical key keeps that.
+      switch (logicalArrowKey(e.key, e.currentTarget)) {
         case shrinkKey:
           e.preventDefault();
           applySplit(currentSplit - step);

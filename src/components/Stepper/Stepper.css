@@ -153,8 +153,8 @@ button.ds-stepper__content:hover .ds-stepper__label {
 .ds-stepper__connector {
   position: absolute;
   top: 16px; /* vertical centre of the 32px indicator */
-  left: calc(50% + 24px);
-  right: calc(-50% + 24px);
+  inset-inline-start: calc(50% + 24px);
+  inset-inline-end: calc(-50% + 24px);
   height: var(--border-050);
   transform: translateY(-50%);
   background-color: var(--color-divider);
@@ -188,7 +188,7 @@ button.ds-stepper__content:hover .ds-stepper__label {
   flex-direction: row;
   align-items: flex-start;
   gap: var(--gap-300); /* 12px */
-  text-align: left;
+  text-align: start;
 }
 
 /* Centre the first label line on the 32px indicator */
@@ -199,8 +199,8 @@ button.ds-stepper__content:hover .ds-stepper__label {
 .ds-stepper--vertical .ds-stepper__connector {
   top: calc(32px + var(--gap-100));
   bottom: var(--gap-100);
-  left: 16px; /* horizontal centre of the 32px indicator */
-  right: auto;
+  inset-inline-start: 16px; /* horizontal centre of the 32px indicator */
+  inset-inline-end: auto;
   width: var(--border-050);
   height: auto;
   transform: translateX(-50%);

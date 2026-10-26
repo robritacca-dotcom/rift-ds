@@ -398,7 +398,7 @@
 .ds-ai-button__request {
   position: fixed;
   top: 0;
-  left: 0;
+  left: 0; /* ds-allow(physical): closed, the panel rests at the viewport corner the anchored behaviour then places it from, in screen pixels */
   z-index: 1;
   /* Component-local lengths, chosen by eye like the button's glow: a
      readable measure, capped so a phone viewport keeps its margins. */
@@ -620,7 +620,7 @@
 .ds-ai-button__summary-dismiss {
   position: absolute;
   top: var(--gap-200);
-  right: var(--gap-200);
+  inset-inline-end: var(--gap-200);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -649,7 +649,7 @@
   align-items: baseline;
   gap: var(--gap-200);
   /* Keeps the row clear of the dismiss button in the corner. */
-  padding-right: var(--gap-1000);
+  padding-inline-end: var(--gap-1000);
 }
 
 .ds-ai-button__summary-overline {
@@ -672,7 +672,7 @@
 
 .ds-ai-button__summary-title {
   /* Long titles wrap short of the dismiss corner. */
-  padding-right: var(--gap-500);
+  padding-inline-end: var(--gap-500);
   font-family: var(--font-family-primary);
   font-size: var(--font-title-body-size);
   font-weight: var(--font-title-body-weight);

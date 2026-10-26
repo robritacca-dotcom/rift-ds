@@ -139,7 +139,7 @@ export const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
           disabled={disabled}
           aria-label={direction === 'previous' ? previousLabel : nextLabel}
         >
-          <span className={`${baseClass}__icon material-symbols-rounded`} aria-hidden="true">
+          <span className={`${baseClass}__icon material-symbols-rounded ds-mirror-rtl`} aria-hidden="true">
             {direction === 'previous' ? 'chevron_left' : 'chevron_right'}
           </span>
         </button>

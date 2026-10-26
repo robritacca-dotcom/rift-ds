@@ -35,13 +35,13 @@
   padding: var(--padding-200);
   /* The chevron glyph carries its own side bearing, so the row drops its
      left padding and the glyph's ink lands on the rows' text edge. */
-  padding-left: 0;
+  padding-inline-start: 0;
   border: none;
   border-radius: var(--radius-pill);
   background: transparent;
   color: var(--color-text-secondary);
   cursor: pointer;
-  text-align: left;
+  text-align: start;
   flex-shrink: 0;
   transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
 }
@@ -91,7 +91,7 @@
   height: 32px;
   /* Pulls the 32px hit area back so the 24px glyph sits on the same
      right edge as the rows' badges and chevrons. */
-  margin-right: calc(var(--padding-100) * -1);
+  margin-inline-end: calc(var(--padding-100) * -1);
   /* Centred on the heading's first line however many lines it wraps to. */
   margin-top: calc((var(--font-overline-line-height) - 32px) / 2);
   margin-bottom: calc((var(--font-overline-line-height) - 32px) / 2);
@@ -170,7 +170,7 @@
   background: transparent;
   color: var(--color-text-primary);
   cursor: pointer;
-  text-align: left;
+  text-align: start;
   text-decoration: none;
   transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
 }
@@ -233,7 +233,7 @@
   flex-shrink: 0;
   /* Pulls the glyph's side bearing out, so its ink ends on the same right
      edge as a badge in the row above. */
-  margin-right: calc(var(--padding-100) * -1);
+  margin-inline-end: calc(var(--padding-100) * -1);
   color: var(--color-icon-secondary);
   transition: transform var(--motion-duration-slow) var(--motion-ease-emphasized);
 }
@@ -271,14 +271,14 @@
   position: absolute;
   top: var(--gap-100);
   bottom: 0;
-  left: calc(var(--padding-300) + var(--padding-200));
+  inset-inline-start: calc(var(--padding-300) + var(--padding-200));
   width: var(--border-025);
   background-color: var(--color-bg-container-border);
 }
 
 .ds-sidebar-panel__row--nested {
   width: calc(100% - var(--padding-300) * 2 - var(--padding-400));
-  margin-left: calc(var(--padding-300) + var(--padding-400));
+  margin-inline-start: calc(var(--padding-300) + var(--padding-400));
 }
 
 /* Icons take the colour of the text around them, whatever a consumer

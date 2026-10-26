@@ -38,6 +38,18 @@ const withBrand: Decorator = (Story, context) => {
 const withLocale: Decorator = (Story, context) =>
   createElement(LocaleProvider, { locale: String(context.globals.locale ?? 'en-US') }, Story());
 
+/**
+ * The direction toolbar sets `dir` on <html>, so every component can be read
+ * right to left without touching the story: logical properties, the
+ * direction sign, mirrored glyphs and the arrow keys all follow it. The
+ * second story-test project (vite.config.ts) renders every story with it
+ * set to rtl.
+ */
+const withDirection: Decorator = (Story, context) => {
+  document.documentElement.dir = String(context.globals.direction ?? 'ltr');
+  return Story();
+};
+
 const preview: Preview = {
   parameters: {
     // Chromatic snapshots every story in both themes. `theme` is the global
@@ -90,6 +102,7 @@ const preview: Preview = {
   },
 
   decorators: [
+    withDirection,
     withLocale,
     withBrand,
     withThemeByDataAttribute({
@@ -115,6 +128,18 @@ const preview: Preview = {
         })),
       },
     },
+    direction: {
+      description: 'The reading direction the components lay out in',
+      toolbar: {
+        title: 'Direction',
+        icon: 'transfer',
+        dynamicTitle: true,
+        items: [
+          { value: 'ltr', title: 'Left to right' },
+          { value: 'rtl', title: 'Right to left' },
+        ],
+      },
+    },
     locale: {
       description: 'The locale numbers, dates and calendars are written in',
       toolbar: {
@@ -136,6 +161,7 @@ const preview: Preview = {
   initialGlobals: {
     brand: SERVED_THEME_ID,
     locale: 'en-US',
+    direction: 'ltr',
   },
 };
 

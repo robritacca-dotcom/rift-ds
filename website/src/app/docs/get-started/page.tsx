@@ -585,7 +585,7 @@ export default function GetStartedPage() {
 
               {/* Locale */}
               <section id="locale" className={`${styles.section} animate-in animate-delay-4`}>
-                <SectionTitle title="Write numbers and dates in your locale" />
+                <SectionTitle title="Localise numbers, dates and direction" />
                 <p className={styles.sectionNote}>
                   Every number, date and time a component prints is written in
                   US English until you say otherwise, never in the browser&apos;s
@@ -604,6 +604,17 @@ export default function GetStartedPage() {
                   text through those props. Where a word depends on a count, the
                   prop is a function of the count, which is where your plural
                   rules go.
+                </p>
+                <p className={styles.sectionNote}>
+                  For Arabic, Hebrew or another right-to-left language, set{" "}
+                  <code>dir=&quot;rtl&quot;</code> on <code>&lt;html&gt;</code>.
+                  Every component lays itself out from it: sides and insets
+                  mirror, arrow keys and drags follow the reading order, menus
+                  and tooltips open on the right side, and directional icons
+                  point the other way. Maps, chart axes and anything you place
+                  by a screen edge, such as a <code>left</code> drawer, keep their
+                  side; use <code>start</code> and <code>end</code> where you want
+                  the reading direction instead.
                 </p>
               </section>
 

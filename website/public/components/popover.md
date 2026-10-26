@@ -18,7 +18,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.14.0. The same dat
 | content | `ReactNode` | yes |  | Popover content. Replaces the native `content` attribute, which only means something on a `<meta>` element. |
 | size | `"default" \| "compact"` | no | `default` | Component size |
 | surface | `"menu" \| "panel"` | no | `panel` | The panel's surface. `panel` (the default) is the content panel: a 16px inset and the container border. `menu` is DropdownMenu's own surface (its 4px inset, input border and corner), for a popover that sits among menus and should read as one of them, such as a table toolbar's sort or column panel. |
-| position | `"top" \| "bottom" \| "left" \| "right"` | no | `bottom` | Preferred position |
+| position | `"top" \| "bottom" \| "start" \| "end" \| "left" \| "right"` | no | `bottom` | Preferred position. `left` and `right` are screen sides; `start` and `end` follow the reading direction, so `end` opens to the right in English and to the left in Arabic. |
 | trigger | `"hover" \| "click"` | no | `click` | Trigger mode |
 | open | `boolean` | no |  | Whether the popover is open (controlled mode) |
 | defaultOpen | `boolean` | no | `false` | Whether the popover starts open when uncontrolled |

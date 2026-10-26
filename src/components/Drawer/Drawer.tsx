@@ -4,6 +4,7 @@ import React, { useRef, useId } from 'react';
 import { CircularButton } from '../CircularButton/CircularButton';
 import ReactDOM from 'react-dom';
 import './Drawer.css';
+import '../../behaviors/direction.css';
 import '../../fonts/material-symbols.css';
 import { useMounted } from '../../behaviors/useMounted';
 import { useLayer } from '../../behaviors/useLayer';
@@ -27,8 +28,12 @@ type DrawerOwnProps = {
   children?: React.ReactNode;
   /** Optional footer slot — typically a row of Buttons */
   footer?: React.ReactNode;
-  /** Edge the panel slides in from */
-  side?: 'left' | 'right' | 'top' | 'bottom';
+  /**
+   * Edge the panel slides in from. `left` and `right` are the screen's
+   * edges in any reading direction; `start` and `end` follow it, so a
+   * `start` drawer opens on the left in English and on the right in Arabic.
+   */
+  side?: 'left' | 'right' | 'start' | 'end' | 'top' | 'bottom';
   /** Panel size along the axis it slides on */
   size?: 'sm' | 'md' | 'lg';
   /** Whether ESC, scrim click, and the close button can dismiss */

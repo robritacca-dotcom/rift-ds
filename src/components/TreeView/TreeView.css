@@ -40,7 +40,7 @@
   align-items: center;
   gap: var(--gap-100);
   padding: var(--padding-100) var(--padding-200);
-  padding-left: calc(var(--padding-200) + var(--ds-treeview-depth, 0) * var(--gap-400));
+  padding-inline-start: calc(var(--padding-200) + var(--ds-treeview-depth, 0) * var(--gap-400));
   border-radius: var(--radius-200);
   cursor: pointer;
   transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);

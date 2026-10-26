@@ -18,15 +18,28 @@
   pointer-events: auto;
 }
 
-/* Anchor the panel to the requested edge */
-.ds-drawer--left {
+/* Anchor the panel to the requested edge. `left` and `right` name screen
+   edges, so in a right-to-left page (where flex-start is the right) they
+   swap their flex ends to stay put; `start` and `end` follow the reading
+   direction. */
+.ds-drawer--left,
+.ds-drawer--start {
   justify-content: flex-start;
   align-items: stretch;
 }
 
-.ds-drawer--right {
+.ds-drawer--right,
+.ds-drawer--end {
   justify-content: flex-end;
   align-items: stretch;
+}
+
+.ds-drawer--left:dir(rtl) {
+  justify-content: flex-end;
+}
+
+.ds-drawer--right:dir(rtl) {
+  justify-content: flex-start;
 }
 
 .ds-drawer--top {
@@ -73,17 +86,32 @@
   overflow: hidden;
 }
 
-/* Edge-specific border + resting (off-screen) transform */
+/* Edge-specific border + resting (off-screen) transform. The left and
+   right drawers' sides are the screen's; the start and end drawers' are the
+   reading direction's, so their slide follows the direction sign
+   (src/behaviors/direction.css). */
 .ds-drawer--left .ds-drawer__panel {
   height: 100%;
-  border-right: var(--border-025) solid var(--color-bg-container-border);
-  transform: translateX(-100%);
+  border-right: var(--border-025) solid var(--color-bg-container-border); /* ds-allow(physical): a left drawer sits on the screen's left edge */
+  transform: translateX(-100%); /* ds-allow(physical): it slides in from the screen's left edge */
 }
 
 .ds-drawer--right .ds-drawer__panel {
   height: 100%;
-  border-left: var(--border-025) solid var(--color-bg-container-border);
-  transform: translateX(100%);
+  border-left: var(--border-025) solid var(--color-bg-container-border); /* ds-allow(physical): a right drawer sits on the screen's right edge */
+  transform: translateX(100%); /* ds-allow(physical): it slides in from the screen's right edge */
+}
+
+.ds-drawer--start .ds-drawer__panel {
+  height: 100%;
+  border-inline-end: var(--border-025) solid var(--color-bg-container-border);
+  transform: translateX(calc(-100% * var(--ds-inline-sign, 1)));
+}
+
+.ds-drawer--end .ds-drawer__panel {
+  height: 100%;
+  border-inline-start: var(--border-025) solid var(--color-bg-container-border);
+  transform: translateX(calc(100% * var(--ds-inline-sign, 1)));
 }
 
 .ds-drawer--top .ds-drawer__panel {
@@ -107,19 +135,25 @@
    ============================================ */
 
 .ds-drawer--left.ds-drawer--sm .ds-drawer__panel,
-.ds-drawer--right.ds-drawer--sm .ds-drawer__panel {
+.ds-drawer--right.ds-drawer--sm .ds-drawer__panel,
+.ds-drawer--start.ds-drawer--sm .ds-drawer__panel,
+.ds-drawer--end.ds-drawer--sm .ds-drawer__panel {
   width: 320px;
   max-width: 100vw;
 }
 
 .ds-drawer--left.ds-drawer--md .ds-drawer__panel,
-.ds-drawer--right.ds-drawer--md .ds-drawer__panel {
+.ds-drawer--right.ds-drawer--md .ds-drawer__panel,
+.ds-drawer--start.ds-drawer--md .ds-drawer__panel,
+.ds-drawer--end.ds-drawer--md .ds-drawer__panel {
   width: 420px;
   max-width: 100vw;
 }
 
 .ds-drawer--left.ds-drawer--lg .ds-drawer__panel,
-.ds-drawer--right.ds-drawer--lg .ds-drawer__panel {
+.ds-drawer--right.ds-drawer--lg .ds-drawer__panel,
+.ds-drawer--start.ds-drawer--lg .ds-drawer__panel,
+.ds-drawer--end.ds-drawer--lg .ds-drawer__panel {
   width: 560px;
   max-width: 100vw;
 }

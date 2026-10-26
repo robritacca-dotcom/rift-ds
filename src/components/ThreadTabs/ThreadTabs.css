@@ -126,7 +126,7 @@
   border-radius: var(--radius-pill);
   background: transparent;
   cursor: pointer;
-  text-align: left;
+  text-align: start;
   color: var(--color-text-secondary);
   transition: color var(--motion-duration-fast) var(--motion-ease-standard);
 }

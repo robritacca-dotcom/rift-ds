@@ -234,7 +234,8 @@ const handler = createMcpHandler(
               `a component rendered on the server takes linkComponent on the instance instead. LocaleProvider ` +
               `('${pkg.name}/behaviors/LocaleProvider') is optional too: it sets the locale every client-rendered component writes ` +
               `numbers, dates and calendars in (en-US without it, never the browser's), and a server-rendered one takes locale on the instance. ` +
-              `Key bindings: useShortcut from '${pkg.name}/behaviors/shortcuts' ('mod+k' is Cmd+K on a Mac, Ctrl+K elsewhere), the listener the components use; Kbd's keys prop draws the same string.`,
+              `Key bindings: useShortcut from '${pkg.name}/behaviors/shortcuts' ('mod+k' is Cmd+K on a Mac, Ctrl+K elsewhere), the listener the components use; Kbd's keys prop draws the same string. ` +
+              `Right to left: set dir="rtl" on <html> and every component mirrors (logical sides, arrow keys, drags, popup sides, directional icons); use start/end, not left/right, on Drawer side and popup positions.`,
             "",
             `Full guide: ${SITE_URL}/docs/get-started. Live docs: ${SITE_URL}/components. ` +
               `Design spec: ${SITE_URL}/design.md.`,

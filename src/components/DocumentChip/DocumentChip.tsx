@@ -2,6 +2,7 @@ import React from 'react';
 import { ProgressBar } from '../ProgressBar/ProgressBar';
 import './DocumentChip.css';
 import '../../fonts/material-symbols.css';
+import { mirrorClass } from '../../behaviors/direction';
 
 export type DocumentChipFileType =
   | 'pdf'
@@ -109,7 +110,7 @@ export const DocumentChip = React.forwardRef<HTMLDivElement, DocumentChipProps>(
       <>
         <span className={`${baseClass}__icon`} aria-hidden="true">
           {typeof typeIcon === 'string' ? (
-            <span className="material-symbols-rounded">{typeIcon}</span>
+            <span className={`material-symbols-rounded ${mirrorClass(typeIcon)}`}>{typeIcon}</span>
           ) : (
             typeIcon
           )}

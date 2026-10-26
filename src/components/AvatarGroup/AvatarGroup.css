@@ -23,7 +23,7 @@
 }
 
 .ds-avatar-group__item + .ds-avatar-group__item {
-  margin-left: calc(var(--gap-200) * -1);
+  margin-inline-start: calc(var(--gap-200) * -1);
 }
 
 /* Overflow counter */

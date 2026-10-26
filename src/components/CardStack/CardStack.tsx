@@ -3,6 +3,7 @@
 import React, { useCallback, useRef, useState } from 'react';
 import './CardStack.css';
 import '../../behaviors/visually-hidden.css';
+import { logicalArrowKey } from '../../behaviors/direction';
 
 /** Props owned by CardStack itself — everything else falls through to the root `<div>`. */
 type CardStackOwnProps = {
@@ -140,10 +141,11 @@ export const CardStack = React.forwardRef<HTMLDivElement, CardStackProps>(
     const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
       onKeyDown?.(e);
       if (e.defaultPrevented || e.target !== e.currentTarget) return;
-      if (NEXT_KEYS.has(e.key)) {
+      const key = logicalArrowKey(e.key, e.currentTarget);
+      if (NEXT_KEYS.has(key)) {
         e.preventDefault();
         next();
-      } else if (PREV_KEYS.has(e.key)) {
+      } else if (PREV_KEYS.has(key)) {
         e.preventDefault();
         prev();
       }

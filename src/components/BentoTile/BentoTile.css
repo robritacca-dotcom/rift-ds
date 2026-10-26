@@ -356,7 +356,7 @@
 .ds-bento-tile__toggle {
   position: absolute;
   top: calc(var(--_inset) + (var(--font-heading-2-line-height) - 32px) / 2);
-  right: var(--_inset);
+  inset-inline-end: var(--_inset);
   z-index: 4;
 }
 
@@ -436,7 +436,7 @@
 .ds-bento-tile-overlay__close {
   position: absolute;
   top: calc(var(--_panel-top) + (var(--font-sub-display-line-height) - 32px) / 2);
-  right: var(--_panel-inset);
+  inset-inline-end: var(--_panel-inset);
 }
 
 .ds-bento-tile-overlay__title {

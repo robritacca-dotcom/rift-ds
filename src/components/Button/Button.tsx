@@ -5,7 +5,9 @@ import { Spinner } from '../Spinner/Spinner';
 import { useLinkComponent, type LinkComponent } from '../../behaviors/LinkProvider';
 import { warnOnce } from '../../behaviors/devWarning';
 import './Button.css';
+import '../../behaviors/direction.css';
 import '../../fonts/material-symbols.css';
+import { mirrorClass } from '../../behaviors/direction';
 
 /** Props owned by Button itself — everything else falls through to the DOM node. */
 type ButtonOwnProps = {
@@ -223,7 +225,7 @@ export const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, Bu
       const positionClass = position === 'right' ? ` ${baseClass}__icon--right` : '';
       if (typeof iconProp === 'string') {
         return (
-          <span className={`${baseClass}__icon${positionClass} ${iconClass}`} aria-hidden="true">
+          <span className={`${baseClass}__icon${positionClass} ${iconClass} ${mirrorClass(iconProp)}`} aria-hidden="true">
             {iconProp}
           </span>
         );

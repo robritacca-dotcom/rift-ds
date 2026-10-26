@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useId, useRef, useState } from 'react';
 import './Reasoning.css';
+import '../../behaviors/direction.css';
 import '../../fonts/material-symbols.css';
 
 /** Props owned by Reasoning itself — everything else falls through to the root element. */

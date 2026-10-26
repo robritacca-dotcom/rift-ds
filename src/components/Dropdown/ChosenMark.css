@@ -13,7 +13,7 @@
 .ds-chosen-mark {
   --icon-size: var(--icon-size-500);
   flex-shrink: 0;
-  margin-left: auto;
+  margin-inline-start: auto;
   color: var(--color-action-primary-bg);
   line-height: 1;
 }

@@ -36,6 +36,7 @@ import type {
 import { useTableContext, type ToolbarColumn } from '../DataTable/tableContext';
 import { BREAKPOINT_PHONE_PX, mediaBelow } from '../../tokens/breakpoints';
 import './TableToolbar.css';
+import { mirrorClass } from '../../behaviors/direction';
 
 /** One column as a TableToolbar over some other table is told about it. */
 export interface TableToolbarColumn {
@@ -390,7 +391,7 @@ function ToolbarPanel({
   title: string;
   size: 'default' | 'compact';
   ariaLabel: string;
-  position?: 'top' | 'bottom' | 'left' | 'right';
+  position?: 'top' | 'bottom' | 'left' | 'right' | 'start' | 'end';
   content: React.ReactNode;
   /** What the sheet pins at its foot, out of the scrolling body. */
   footer?: React.ReactNode;
@@ -993,7 +994,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
     const menuItem = (label: string, icon?: React.ReactNode, onClick?: () => void, disabled?: boolean) => (
       <button type="button" className="ds-table-toolbar__menu-item" onClick={onClick} disabled={disabled}>
         {typeof icon === 'string' ? (
-          <span className="ds-table-toolbar__menu-icon material-symbols-rounded" aria-hidden="true">
+          <span className={`ds-table-toolbar__menu-icon material-symbols-rounded ${mirrorClass(icon)}`} aria-hidden="true">
             {icon}
           </span>
         ) : (

@@ -43,7 +43,7 @@
   background: none;
   border: none;
   cursor: pointer;
-  text-align: left;
+  text-align: start;
   transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
 }
 

@@ -10,7 +10,7 @@
 .ds-app-sidebar {
   position: fixed;
   top: 0;
-  left: 0;
+  inset-inline-start: 0;
   z-index: var(--layer-nav-rail);
   display: flex;
   flex-direction: column;
@@ -40,7 +40,7 @@
    ============================================ */
 .ds-app-sidebar--floating {
   top: var(--ds-sidebar-float-inset, 20px);
-  left: var(--ds-sidebar-float-inset, 20px);
+  inset-inline-start: var(--ds-sidebar-float-inset, 20px);
   height: calc(100dvh - var(--ds-sidebar-float-inset, 20px) * 2);
   background-color: var(--color-bg-glass);
   border: var(--border-025) solid var(--color-bg-container-border);
@@ -196,7 +196,7 @@
   color: var(--color-text-primary);
   cursor: pointer;
   overflow: hidden;
-  text-align: left;
+  text-align: start;
   /* The row renders as an <a> when the item carries an href. */
   text-decoration: none;
   transition: background-color var(--motion-duration-fast) var(--motion-ease-standard), padding var(--motion-duration-slow) var(--motion-ease-emphasized), margin var(--motion-duration-slow) var(--motion-ease-emphasized);
@@ -318,7 +318,7 @@
   width: 44px;
   height: 100%;
   flex-shrink: 0;
-  padding-left: var(--padding-400);
+  padding-inline-start: var(--padding-400);
 }
 
 .ds-app-sidebar__sub-line::after {
@@ -336,7 +336,7 @@
   height: 40px;
   /* The same edge inset the parent pills get; sub-items only render while
      the rail is expanded, so this needs no state selector. */
-  margin-right: var(--padding-300);
+  margin-inline-end: var(--padding-300);
   padding: var(--padding-200);
   border-radius: var(--radius-pill);
   background: transparent;
@@ -344,7 +344,7 @@
   color: var(--color-text-primary);
   cursor: pointer;
   flex: 1;
-  text-align: left;
+  text-align: start;
   overflow: hidden;
   white-space: nowrap;
   /* The row renders as an <a> when the sub-item carries an href. */
@@ -546,14 +546,14 @@
 .ds-app-sidebar__panel {
   position: fixed;
   top: 0;
-  left: 64px;
+  inset-inline-start: 64px;
   /* One step under the rail, so the slide starts from beneath it. */
   z-index: calc(var(--layer-nav-rail) - 1);
   height: 100vh;
-  border-left: var(--border-025) solid var(--color-bg-container-border);
-  border-right: var(--border-025) solid var(--color-bg-container-border);
+  border-inline-start: var(--border-025) solid var(--color-bg-container-border);
+  border-inline-end: var(--border-025) solid var(--color-bg-container-border);
   opacity: 0;
-  transform: translateX(calc(var(--padding-300) * -1));
+  transform: translateX(calc(var(--padding-300) * -1 * var(--ds-inline-sign, 1)));
   visibility: hidden;
   pointer-events: none;
   /* Visibility waits out the fade on the way out, then flips; on the way
@@ -578,17 +578,17 @@
 }
 
 .ds-app-sidebar__panel--panel-mode {
-  left: 80px;
+  inset-inline-start: 80px;
 }
 
 .ds-app-sidebar__panel--beside-expanded {
-  left: 280px;
+  inset-inline-start: 280px;
 }
 
 /* Floating: a second glass card beside the first, one gap along. */
 .ds-app-sidebar__panel--floating {
   top: var(--ds-sidebar-float-inset, 20px);
-  left: calc(var(--ds-sidebar-float-inset, 20px) + 64px + var(--gap-300));
+  inset-inline-start: calc(var(--ds-sidebar-float-inset, 20px) + 64px + var(--gap-300));
   height: calc(100dvh - var(--ds-sidebar-float-inset, 20px) * 2);
   background-color: var(--color-bg-glass);
   border: var(--border-025) solid var(--color-bg-container-border);
@@ -598,11 +598,11 @@
 }
 
 .ds-app-sidebar__panel--floating.ds-app-sidebar__panel--panel-mode {
-  left: calc(var(--ds-sidebar-float-inset, 20px) + 80px + var(--gap-300));
+  inset-inline-start: calc(var(--ds-sidebar-float-inset, 20px) + 80px + var(--gap-300));
 }
 
 .ds-app-sidebar__panel--floating.ds-app-sidebar__panel--beside-expanded {
-  left: calc(var(--ds-sidebar-float-inset, 20px) + 280px + var(--gap-300));
+  inset-inline-start: calc(var(--ds-sidebar-float-inset, 20px) + 280px + var(--gap-300));
 }
 
 /* ============================================
@@ -715,7 +715,7 @@
 @keyframes ds-app-sidebar-drill-in {
   from {
     opacity: 0;
-    transform: translateX(var(--padding-1000));
+    transform: translateX(calc(var(--padding-1000) * var(--ds-inline-sign, 1)));
   }
   to {
     opacity: 1;
@@ -761,7 +761,7 @@
        content gutter is 16px get a trigger whose centre lines up with
        a 40px header row's. */
     top: var(--padding-400);
-    left: var(--padding-400);
+    inset-inline-start: var(--padding-400);
     z-index: var(--layer-nav);
     display: flex;
     align-items: center;
@@ -792,7 +792,7 @@
     visibility: visible;
     position: fixed;
     top: 0;
-    left: 0;
+    inset-inline-start: 0;
     bottom: 0;
     z-index: var(--layer-nav-rail);
     width: 280px;
@@ -800,7 +800,7 @@
     padding: var(--padding-500) 0;
     overflow-y: auto;
     background: var(--color-bg-page-primary);
-    border-right: var(--border-025) solid var(--color-bg-container-border);
+    border-inline-end: var(--border-025) solid var(--color-bg-container-border);
     box-shadow: var(--shadow-modal);
     animation: ds-app-sidebar-slide-in var(--motion-duration-base) var(--motion-ease-standard);
   }
@@ -808,7 +808,7 @@
 
 @keyframes ds-app-sidebar-slide-in {
   from {
-    transform: translateX(-100%);
+    transform: translateX(calc(-100% * var(--ds-inline-sign, 1)));
   }
   to {
     transform: translateX(0);

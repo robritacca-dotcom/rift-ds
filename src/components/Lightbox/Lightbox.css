@@ -175,7 +175,7 @@
 
 .ds-lightbox__close {
   top: var(--gap-500);
-  right: var(--gap-500);
+  inset-inline-end: var(--gap-500);
 }
 
 .ds-lightbox__nav {
@@ -184,11 +184,11 @@
 }
 
 .ds-lightbox__nav--prev {
-  left: var(--gap-500);
+  inset-inline-start: var(--gap-500);
 }
 
 .ds-lightbox__nav--next {
-  right: var(--gap-500);
+  inset-inline-end: var(--gap-500);
 }
 
 /* ============================================

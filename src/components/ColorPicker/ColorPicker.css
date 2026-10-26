@@ -72,7 +72,7 @@
   line-height: var(--font-paragraph-sm-line-height);
   color: var(--color-text-primary);
   font-variant-numeric: tabular-nums;
-  padding-right: var(--padding-100);
+  padding-inline-end: var(--padding-100);
 }
 
 /* Sizes */
@@ -121,7 +121,7 @@
 
 .ds-colorpicker__handle {
   position: absolute;
-  left: var(--ds-cp-x);
+  left: var(--ds-cp-x); /* ds-allow(physical): the handle sits on the colour field by its saturation, a screen axis rather than a reading one */
   top: var(--ds-cp-y);
   transform: translate(-50%, -50%);
   width: 14px;

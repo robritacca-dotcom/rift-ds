@@ -19,6 +19,7 @@ import '../../fonts/material-symbols.css';
 import './Composer.css';
 import '../../behaviors/visually-hidden.css';
 import { useLocale } from '../../behaviors/LocaleProvider';
+import { mirrorClass } from '../../behaviors/direction';
 
 /** Props owned by Composer itself — everything else falls through to the <textarea>. */
 type ComposerOwnProps = {
@@ -696,7 +697,7 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
         {contextIcon && (
           <span className={`${baseClass}__context-icon`} aria-hidden="true">
             {typeof contextIcon === 'string' ? (
-              <span className="material-symbols-rounded">{contextIcon}</span>
+              <span className={`material-symbols-rounded ${mirrorClass(contextIcon)}`}>{contextIcon}</span>
             ) : (
               contextIcon
             )}

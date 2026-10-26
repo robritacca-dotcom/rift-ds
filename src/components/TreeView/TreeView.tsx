@@ -3,6 +3,7 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import './TreeView.css';
 import '../../fonts/material-symbols.css';
+import { logicalArrowKey, mirrorClass } from '../../behaviors/direction';
 
 export interface TreeViewNode {
   /** Unique identifier for the node */
@@ -186,7 +187,7 @@ export const TreeView = React.forwardRef<HTMLUListElement, TreeViewProps>(
       const index = visibleNodes.findIndex((n) => n.id === node.id);
       let handled = true;
 
-      switch (event.key) {
+      switch (logicalArrowKey(event.key, event.currentTarget)) {
         case 'ArrowDown':
           focusNode(visibleNodes[index + 1]?.id);
           break;
@@ -276,7 +277,7 @@ export const TreeView = React.forwardRef<HTMLUListElement, TreeViewProps>(
           >
             {branch ? (
               <span
-                className={`${baseClass}__chevron material-symbols-rounded`}
+                className={`${baseClass}__chevron material-symbols-rounded ds-mirror-rtl`}
                 aria-hidden="true"
               >
                 chevron_right
@@ -288,7 +289,7 @@ export const TreeView = React.forwardRef<HTMLUListElement, TreeViewProps>(
               />
             )}
             <span
-              className={`${baseClass}__icon${typeof icon === 'string' ? ' material-symbols-rounded' : ''}`}
+              className={`${baseClass}__icon${typeof icon === 'string' ? ` material-symbols-rounded ${mirrorClass(icon)}` : ''}`}
               aria-hidden="true"
             >
               {icon}

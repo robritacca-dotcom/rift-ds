@@ -123,8 +123,8 @@ const PORTFOLIO_DATA = [
 
 const HOLDINGS_COLUMNS = [
   { key: "ticker", header: "Ticker" },
-  { key: "shares", header: "Shares", align: "right" as const },
-  { key: "value", header: "Value", align: "right" as const },
+  { key: "shares", header: "Shares", align: "end" as const },
+  { key: "value", header: "Value", align: "end" as const },
 ];
 
 const HOLDINGS_ROWS = [

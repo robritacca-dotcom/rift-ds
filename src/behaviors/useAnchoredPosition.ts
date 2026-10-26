@@ -1,6 +1,7 @@
 'use client';
 
 import { useLayoutEffect, useRef } from 'react';
+import { isRtl } from './direction';
 
 /**
  * Anchored positioning: the one way every popup in the library places itself
@@ -51,6 +52,8 @@ import { useLayoutEffect, useRef } from 'react';
  */
 
 export type AnchoredSide = 'top' | 'bottom' | 'left' | 'right';
+/** A side a caller can ask for: a screen side, or `start` / `end` of the reading direction. */
+export type AnchoredSideRequest = AnchoredSide | 'start' | 'end';
 export type AnchoredAlign = 'start' | 'center' | 'end';
 
 export type AnchoredPlacement = {
@@ -73,9 +76,20 @@ export type AnchoredPositionOptions = {
   anchorRef: React.RefObject<HTMLElement | null>;
   /** The panel being placed. */
   panelRef: React.RefObject<HTMLElement | null>;
-  /** The preferred side. Default `bottom`. */
-  side?: AnchoredSide;
-  /** Where along that side the panel lines up with the anchor. Default `start`. */
+  /**
+   * The preferred side. Default `bottom`. `start` and `end` resolve against
+   * the anchor's reading direction at placement time (`start` is the left
+   * in English, the right in Arabic); the placement reports the screen side
+   * it took.
+   */
+  side?: AnchoredSideRequest;
+  /**
+   * Where along that side the panel lines up with the anchor. Default
+   * `start`. On the top and bottom sides `start` and `end` follow the
+   * anchor's reading direction, so a menu lines up with its trigger's
+   * leading edge in either. The panel's `data-align` reports the screen
+   * alignment it took (`start` is the left edge), like `data-side`.
+   */
   align?: AnchoredAlign;
   /**
    * The custom property that holds the gap between anchor and panel, read
@@ -145,8 +159,8 @@ export function useAnchoredPosition({
   open,
   anchorRef,
   panelRef,
-  side = 'bottom',
-  align = 'start',
+  side: sideRequest = 'bottom',
+  align: alignRequest = 'start',
   gapProperty = '--gap-200',
   edgeProperty = '--gap-200',
   flip = true,
@@ -203,6 +217,14 @@ export function useAnchoredPosition({
           bounds.bottom = Math.min(bounds.bottom, origin.top + block.clientHeight);
         }
       }
+
+      // Logical sides and alignment resolve against the anchor's direction
+      // now, so a dir change up the tree applies on the next placement.
+      const rtl = isRtl(anchor);
+      const side: AnchoredSide =
+        sideRequest === 'start' ? (rtl ? 'right' : 'left') : sideRequest === 'end' ? (rtl ? 'left' : 'right') : sideRequest;
+      const flipsAlign = rtl && (side === 'top' || side === 'bottom') && alignRequest !== 'center';
+      const align: AnchoredAlign = flipsAlign ? (alignRequest === 'start' ? 'end' : 'start') : alignRequest;
 
       const a = anchor.getBoundingClientRect();
       const panelStyle = getComputedStyle(panel);
@@ -310,5 +332,5 @@ export function useAnchoredPosition({
         panel.style.removeProperty('visibility');
       }
     };
-  }, [open, target, anchorRef, panelRef, side, align, gapProperty, edgeProperty, flip, fitHeight, matchWidth]);
+  }, [open, target, anchorRef, panelRef, sideRequest, alignRequest, gapProperty, edgeProperty, flip, fitHeight, matchWidth]);
 }

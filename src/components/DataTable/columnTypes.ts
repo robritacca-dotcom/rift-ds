@@ -33,23 +33,23 @@ export interface ColumnFormat {
 export type StatusRole = 'info' | 'positive' | 'warning' | 'error' | 'neutral';
 
 interface TypeDefaults {
-  align: 'left' | 'center' | 'right';
+  align: 'start' | 'center' | 'end';
   filter: FilterKind;
   editor: CellEditorKind;
 }
 
 /** What each type sets, before the column's own fields. */
 export const TYPE_DEFAULTS: Record<ColumnType, TypeDefaults> = {
-  text: { align: 'left', filter: 'text', editor: 'text' },
-  number: { align: 'right', filter: 'number', editor: 'number' },
-  currency: { align: 'right', filter: 'number', editor: 'number' },
-  date: { align: 'left', filter: 'date', editor: 'date' },
-  status: { align: 'left', filter: 'enum', editor: 'select' },
-  person: { align: 'left', filter: 'enum', editor: 'combobox' },
-  tags: { align: 'left', filter: 'tags', editor: 'tags' },
-  progress: { align: 'right', filter: 'number', editor: 'number' },
+  text: { align: 'start', filter: 'text', editor: 'text' },
+  number: { align: 'end', filter: 'number', editor: 'number' },
+  currency: { align: 'end', filter: 'number', editor: 'number' },
+  date: { align: 'start', filter: 'date', editor: 'date' },
+  status: { align: 'start', filter: 'enum', editor: 'select' },
+  person: { align: 'start', filter: 'enum', editor: 'combobox' },
+  tags: { align: 'start', filter: 'tags', editor: 'tags' },
+  progress: { align: 'end', filter: 'number', editor: 'number' },
   checkbox: { align: 'center', filter: 'boolean', editor: 'checkbox' },
-  link: { align: 'left', filter: 'text', editor: 'text' },
+  link: { align: 'start', filter: 'text', editor: 'text' },
 };
 
 const DEFAULT_LOCALE = 'en-US';

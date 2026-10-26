@@ -55,7 +55,7 @@
   font: inherit;
   letter-spacing: inherit;
   color: inherit;
-  text-align: left;
+  text-align: start;
   cursor: pointer;
   transition: background-color var(--motion-duration-base) var(--motion-ease-standard);
 }

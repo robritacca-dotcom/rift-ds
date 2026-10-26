@@ -48,7 +48,7 @@
   letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
   color: var(--color-text-secondary);
   min-width: 36px;
-  text-align: right;
+  text-align: end;
 }
 
 /* ============================================

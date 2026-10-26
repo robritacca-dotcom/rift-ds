@@ -5,6 +5,7 @@ import '../../fonts/material-symbols.css';
 import './Mention.css';
 import { mentionListboxId, mentionOptionId, splitMentions } from './mentions';
 import type { MentionItem, MentionSource } from './mentions';
+import { mirrorClass } from '../../behaviors/direction';
 
 /* The data shapes and helpers live in a React-free module with a subpath
    of its own (`rift-ds/components/Mention/mentions`), so a Server Component
@@ -254,7 +255,7 @@ export const MentionMenu = React.forwardRef<HTMLDivElement, MentionMenuProps>(
                   {item.icon !== undefined && (
                     <span className={`${baseClass}__icon`} aria-hidden="true">
                       {typeof item.icon === 'string' ? (
-                        <span className="material-symbols-rounded">{item.icon}</span>
+                        <span className={`material-symbols-rounded ${mirrorClass(item.icon)}`}>{item.icon}</span>
                       ) : (
                         item.icon
                       )}

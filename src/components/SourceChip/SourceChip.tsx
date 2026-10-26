@@ -7,6 +7,7 @@ import { useLayer } from '../../behaviors/useLayer';
 import './SourceChip.css';
 import '../../fonts/material-symbols.css';
 import { MOTION_HOVER_SHOW_DELAY_MS, MOTION_HOVER_HIDE_DELAY_MS } from '../../tokens/motion';
+import { mirrorClass } from '../../behaviors/direction';
 
 /** Props owned by SourceChip itself — everything else falls through to the root element. */
 type SourceChipOwnProps = {
@@ -185,7 +186,7 @@ export const SourceChip = React.forwardRef<
     ) : icon ? (
       <span className={`${baseClass}__icon`} aria-hidden="true">
         {typeof icon === 'string' ? (
-          <span className="material-symbols-rounded">{icon}</span>
+          <span className={`material-symbols-rounded ${mirrorClass(icon)}`}>{icon}</span>
         ) : (
           icon
         )}

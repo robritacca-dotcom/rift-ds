@@ -562,7 +562,7 @@
   flex: none;
   display: flex;
   min-height: 0;
-  border-right: var(--border-025) solid var(--color-bg-container-border);
+  border-inline-end: var(--border-025) solid var(--color-bg-container-border);
 }
 
 /* The sheet layer: hidden entirely (visibility) while closed, so nothing in
@@ -604,13 +604,13 @@
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 0;
+  inset-inline-start: 0;
   display: flex;
   background-color: var(--color-bg-glass);
   backdrop-filter: blur(24px);
-  border-right: var(--border-025) solid var(--color-bg-container-border);
+  border-inline-end: var(--border-025) solid var(--color-bg-container-border);
   box-shadow: var(--shadow-floating);
-  transform: translateX(-100%);
+  transform: translateX(calc(-100% * var(--ds-inline-sign, 1)));
   transition: transform var(--motion-duration-slow) var(--motion-ease-emphasized);
 }
 
@@ -655,7 +655,7 @@
   /* Before the first measurement there is no number to glide to, so the
      rail simply takes its content's width. */
   width: var(--ds-chat-aside-width, max-content);
-  margin-right: var(--padding-500);
+  margin-inline-end: var(--padding-500);
   opacity: 1;
   visibility: visible;
   transition:
@@ -728,7 +728,7 @@
 
 .ds-chat-widget__artifact-rail--open {
   flex-grow: 1.2;
-  margin-right: var(--padding-500);
+  margin-inline-end: var(--padding-500);
   opacity: 1;
   visibility: visible;
   transition:
@@ -798,7 +798,7 @@
   position: absolute;
   top: 0;
   bottom: 0;
-  left: -10px;
+  inset-inline-start: -10px;
   width: 20px;
 }
 
@@ -806,7 +806,7 @@
   content: "";
   position: absolute;
   top: calc(50% - 24px);
-  left: -2px;
+  inset-inline-start: -2px;
   width: 4px;
   height: 48px;
   border-radius: var(--radius-pill);
@@ -833,7 +833,7 @@
 
 .ds-chat-widget__rails[data-artifact-expanded] > .ds-chat-widget__artifact-rail--open {
   flex: 1 1 0;
-  margin-left: var(--padding-500);
+  margin-inline-start: var(--padding-500);
 }
 
 /* The sheet runs nearly the widget's height: a preview has no natural
@@ -859,7 +859,7 @@
 .ds-chat-widget__rail-actions {
   position: absolute;
   top: calc(var(--padding-200) + var(--padding-150));
-  right: var(--padding-500);
+  inset-inline-end: var(--padding-500);
   z-index: 6;
   display: flex;
   align-items: center;
@@ -925,7 +925,7 @@
   top: var(--ds-chat-inset);
   /* Placed from the left on both docks, so one property carries every move
      the card makes and they all glide. */
-  left: calc(100% - var(--ds-chat-width) - var(--ds-chat-inset));
+  left: calc(100% - var(--ds-chat-width) - var(--ds-chat-inset)); /* ds-allow(physical): the panel is placed on a dock the visitor picks by screen edge (src/chat/placement.ts), not by reading direction */
   height: calc(100dvh - var(--ds-chat-inset) * 2);
   width: var(--ds-chat-width);
   max-width: calc(100vw - var(--ds-chat-inset) * 2);
@@ -992,7 +992,7 @@ html[data-chat-resizing] .ds-chat-launcher__panel {
 
 /* The left dock: the same card on the other edge. */
 .ds-chat-launcher__panel--left {
-  left: var(--ds-chat-inset);
+  left: var(--ds-chat-inset); /* ds-allow(physical): the left dock is the screen's left edge */
 }
 
 /* Fullscreen view: a true viewport takeover. The stronger blur keeps the
@@ -1000,7 +1000,7 @@ html[data-chat-resizing] .ds-chat-launcher__panel {
    border fades rather than vanishing, so the geometry never snaps mid-glide. */
 .ds-chat-launcher__panel--full {
   top: 0;
-  left: 0;
+  left: 0; /* ds-allow(physical): fullscreen covers the viewport from its corner */
   height: 100dvh;
   width: 100vw;
   max-width: 100vw;
@@ -1032,7 +1032,7 @@ html[data-chat-resizing] .ds-chat-launcher__panel {
   position: fixed;
   top: var(--ds-chat-inset);
   height: calc(100dvh - var(--ds-chat-inset) * 2);
-  right: calc(var(--ds-chat-inset) + var(--ds-chat-width) - 10px);
+  right: calc(var(--ds-chat-inset) + var(--ds-chat-width) - 10px); /* ds-allow(physical): the dock grip tracks the docked card's screen edge */
   width: 20px;
   display: flex;
   align-items: center;
@@ -1044,7 +1044,7 @@ html[data-chat-resizing] .ds-chat-launcher__panel {
 
 .ds-chat-launcher__dock-handle--left {
   right: auto;
-  left: calc(var(--ds-chat-inset) + var(--ds-chat-width) - 10px);
+  left: calc(var(--ds-chat-inset) + var(--ds-chat-width) - 10px); /* ds-allow(physical): the dock grip tracks the docked card's screen edge */
 }
 
 .ds-chat-launcher__dock-handle::after {
@@ -1089,7 +1089,7 @@ html[data-chat-resizing] .ds-chat-launcher__panel {
     calc(100dvh - var(--ds-chat-inset) * 2)
   );
   top: var(--ds-chat-float-y, calc(100dvh - var(--ds-chat-float-h) - var(--ds-chat-inset)));
-  left: var(--ds-chat-float-x, calc(100% - var(--ds-chat-width) - var(--ds-chat-inset)));
+  left: var(--ds-chat-float-x, calc(100% - var(--ds-chat-width) - var(--ds-chat-inset))); /* ds-allow(physical): the floating card sits where the visitor dragged it, in screen pixels */
   width: var(--ds-chat-float-w, var(--ds-chat-width));
   height: var(--ds-chat-float-h);
   max-height: 100dvh;
@@ -1125,8 +1125,8 @@ html[data-chat-resizing] .ds-chat-launcher__panel {
 
 .ds-chat-launcher__float-grip[data-dir="n"] { top: 0; }
 .ds-chat-launcher__float-grip[data-dir="s"] { bottom: 0; }
-.ds-chat-launcher__float-grip[data-dir="e"] { right: 0; }
-.ds-chat-launcher__float-grip[data-dir="w"] { left: 0; }
+.ds-chat-launcher__float-grip[data-dir="e"] { right: 0; } /* ds-allow(physical): a compass grip resizes the floating card toward that screen edge */
+.ds-chat-launcher__float-grip[data-dir="w"] { left: 0; } /* ds-allow(physical): a compass grip resizes the floating card toward that screen edge */
 
 .ds-chat-launcher__float-grip[data-dir="ne"],
 .ds-chat-launcher__float-grip[data-dir="nw"],
@@ -1136,10 +1136,10 @@ html[data-chat-resizing] .ds-chat-launcher__panel {
   height: 16px;
 }
 
-.ds-chat-launcher__float-grip[data-dir="ne"] { top: 0; right: 0; cursor: nesw-resize; }
-.ds-chat-launcher__float-grip[data-dir="sw"] { bottom: 0; left: 0; cursor: nesw-resize; }
-.ds-chat-launcher__float-grip[data-dir="nw"] { top: 0; left: 0; cursor: nwse-resize; }
-.ds-chat-launcher__float-grip[data-dir="se"] { bottom: 0; right: 0; cursor: nwse-resize; }
+.ds-chat-launcher__float-grip[data-dir="ne"] { top: 0; right: 0; cursor: nesw-resize; } /* ds-allow(physical): a compass grip resizes the floating card toward that screen corner */
+.ds-chat-launcher__float-grip[data-dir="sw"] { bottom: 0; left: 0; cursor: nesw-resize; } /* ds-allow(physical): a compass grip resizes the floating card toward that screen corner */
+.ds-chat-launcher__float-grip[data-dir="nw"] { top: 0; left: 0; cursor: nwse-resize; } /* ds-allow(physical): a compass grip resizes the floating card toward that screen corner */
+.ds-chat-launcher__float-grip[data-dir="se"] { bottom: 0; right: 0; cursor: nwse-resize; } /* ds-allow(physical): a compass grip resizes the floating card toward that screen corner */
 
 .ds-chat-launcher__float-grip[data-dir="n"]::after,
 .ds-chat-launcher__float-grip[data-dir="s"]::after,
@@ -1209,7 +1209,7 @@ html[data-chat-resizing] .ds-chat-launcher__panel--floating .ds-chat-header {
 
 .ds-chat-launcher__fab {
   position: fixed;
-  right: var(--ds-chat-inset);
+  right: var(--ds-chat-inset); /* ds-allow(physical): the launcher sits in the corner the default dock opens from, a screen corner like the docks */
   bottom: var(--ds-chat-inset);
   z-index: var(--layer-chat-launcher);
 }

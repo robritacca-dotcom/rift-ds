@@ -4,6 +4,7 @@ import React, { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import './SegmentedControl.css';
 import '../../behaviors/visually-hidden.css';
 import '../../fonts/material-symbols.css';
+import { logicalArrowKey, mirrorClass } from '../../behaviors/direction';
 
 export interface Segment {
   /** Unique value for this segment */
@@ -371,11 +372,12 @@ export const SegmentedControl = React.forwardRef<HTMLDivElement, SegmentedContro
       const currentEnabledIdx = enabledSegments.findIndex((s) => s.value === segments[idx].value);
 
       let nextIdx = -1;
+      const key = logicalArrowKey(e.key, e.currentTarget);
 
-      if (e.key === 'ArrowRight') {
+      if (key === 'ArrowRight') {
         e.preventDefault();
         nextIdx = (currentEnabledIdx + 1) % enabledSegments.length;
-      } else if (e.key === 'ArrowLeft') {
+      } else if (key === 'ArrowLeft') {
         e.preventDefault();
         nextIdx = (currentEnabledIdx - 1 + enabledSegments.length) % enabledSegments.length;
       } else if (e.key === 'Home') {
@@ -435,7 +437,7 @@ export const SegmentedControl = React.forwardRef<HTMLDivElement, SegmentedContro
             >
               {segment.icon && collapseMode !== 'labels' && (
                 <span
-                  className={`${baseClass}__icon${typeof segment.icon === 'string' ? ' material-symbols-rounded' : ''}`}
+                  className={`${baseClass}__icon${typeof segment.icon === 'string' ? ` material-symbols-rounded ${mirrorClass(segment.icon)}` : ''}`}
                   aria-hidden="true"
                 >
                   {segment.icon}

@@ -73,6 +73,13 @@ async function checkRoute(browser, origin, route, theme) {
   return violations;
 }
 
+/**
+ * The right-to-left bench: the library laid out in Arabic with dir="rtl" on
+ * <html>, so a component that breaks right to left fails here as well as in
+ * the right-to-left story pass.
+ */
+const RTL_ROUTE = '/labs/rtl';
+
 /** The page forced colors are judged on: the bench carries every table control. */
 const FORCED_ROUTE = '/labs/tables';
 
@@ -153,7 +160,7 @@ async function main() {
   const browser = await chromium.launch();
   const problems = [];
   try {
-    for (const route of SMOKE_ROUTES) {
+    for (const route of [...SMOKE_ROUTES, RTL_ROUTE]) {
       for (const theme of THEMES) {
         const violations = await checkRoute(browser, server.origin, route, theme);
         const label = `${route} [${theme}]`;

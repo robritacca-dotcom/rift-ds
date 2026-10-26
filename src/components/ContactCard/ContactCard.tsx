@@ -4,6 +4,7 @@ import React from 'react';
 import { useLinkComponent, type LinkComponent } from '../../behaviors/LinkProvider';
 import './ContactCard.css';
 import '../../fonts/material-symbols.css';
+import { mirrorClass } from '../../behaviors/direction';
 
 /** Props owned by ContactCard itself — everything else falls through to the root node. */
 type ContactCardOwnProps = {
@@ -110,7 +111,7 @@ export const ContactCard = React.forwardRef<HTMLAnchorElement | HTMLButtonElemen
               className="ds-contact-card__logo"
             />
           ) : typeof icon === 'string' || icon == null ? (
-            <span className="material-symbols-rounded ds-contact-card__icon">
+            <span className={`material-symbols-rounded ds-contact-card__icon ${mirrorClass(icon)}`}>
               {icon ?? 'link'}
             </span>
           ) : (
@@ -140,7 +141,7 @@ export const ContactCard = React.forwardRef<HTMLAnchorElement | HTMLButtonElemen
               </span>
             </button>
           )}
-          <span className="material-symbols-rounded ds-contact-card__chevron" aria-hidden="true">
+          <span className={`material-symbols-rounded ds-contact-card__chevron ${mirrorClass(trailingIcon)}`} aria-hidden="true">
             {trailingIcon}
           </span>
         </div>

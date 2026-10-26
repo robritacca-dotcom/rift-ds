@@ -55,7 +55,7 @@ const MARK_STATES: { value: AgentStatusState; label: string }[] = [
 const RING_COLUMNS = [
   { key: "invoice", header: "Invoice" },
   { key: "client", header: "Client" },
-  { key: "amount", header: "Amount", align: "right" as const },
+  { key: "amount", header: "Amount", align: "end" as const },
 ];
 
 const RING_ROWS = [

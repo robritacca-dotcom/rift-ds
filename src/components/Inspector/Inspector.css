@@ -142,7 +142,8 @@
 
 .ds-inspector-slider__fill {
   position: absolute;
-  inset: 0 auto 0 0;
+  inset-block: 0;
+  inset-inline: 0 auto;
   width: var(--ds-inspector-pct, 0%);
   background: var(--color-action-neutral-bg-hover);
   transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
@@ -160,7 +161,7 @@
   position: absolute;
   top: 30%;
   bottom: 30%;
-  left: clamp(
+  inset-inline-start: clamp(
     var(--padding-200),
     calc(var(--ds-inspector-pct, 0%) - var(--padding-200)),
     calc(100% - var(--padding-200))
@@ -239,7 +240,7 @@
   outline: none;
   background: transparent;
   font: inherit;
-  text-align: right;
+  text-align: end;
   color: var(--color-text-primary);
 }
 
@@ -274,7 +275,7 @@
 /* The bar's own inset shrinks on the right, so the selected segment sits
    as an inset chip in the bar's end rather than touching its edge. */
 .ds-inspector-segmented-control {
-  padding-right: var(--padding-100);
+  padding-inline-end: var(--padding-100);
 }
 
 /* Focus rings the segment, not the whole bar. */
@@ -309,7 +310,7 @@
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 0;
+  left: 0; /* ds-allow(physical): the pill slides by the chip's measured offsetLeft, which is a screen offset in either direction */
   width: var(--ds-inspector-pill-w, 0px);
   transform: translateX(var(--ds-inspector-pill-x, 0px));
   border-radius: var(--radius-pill);
@@ -387,7 +388,7 @@
 .ds-inspector-dropdown__label {
   position: absolute;
   top: 50%;
-  left: var(--ds-inspector-inset);
+  inset-inline-start: var(--ds-inspector-inset);
   z-index: 1;
   transform: translateY(-50%);
   white-space: nowrap;
@@ -430,7 +431,7 @@
 }
 
 .ds-inspector-dropdown .ds-dropdown__value {
-  text-align: right;
+  text-align: end;
   font-family: var(--ds-dropdown-font, var(--ds-inspector-font-family));
   font-size: var(--ds-inspector-font-size);
   font-weight: var(--ds-inspector-value-weight);
@@ -459,7 +460,7 @@
 .ds-inspector-color-picker__label {
   position: absolute;
   top: calc(var(--ds-inspector-height) / 2);
-  left: var(--ds-inspector-inset);
+  inset-inline-start: var(--ds-inspector-inset);
   z-index: 1;
   transform: translateY(-50%);
   white-space: nowrap;
@@ -515,7 +516,7 @@
    where the switch's track and the dropdown's chevron sit. */
 .ds-inspector-color-picker .ds-colorpicker__trigger-text {
   order: -1;
-  padding-right: 0;
+  padding-inline-end: 0;
   font-family: var(--ds-inspector-font-family);
   font-size: var(--ds-inspector-font-size);
   font-weight: var(--ds-inspector-value-weight);
@@ -532,7 +533,7 @@
 
 /* The panel opens under the bar and spans it. */
 .ds-inspector-color-picker .ds-colorpicker__panel {
-  right: 0;
+  inset-inline-end: 0;
   width: auto;
 }
 
@@ -571,7 +572,7 @@
   border: none;
   border-radius: var(--radius-200);
   cursor: pointer;
-  text-align: left;
+  text-align: start;
   font-family: var(--font-paragraph-emphasis-family);
   font-size: var(--font-paragraph-emphasis-size);
   font-weight: var(--font-paragraph-emphasis-weight);

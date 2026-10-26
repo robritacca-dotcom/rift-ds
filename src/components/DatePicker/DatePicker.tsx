@@ -12,6 +12,7 @@ import {
   weekdayOffset,
   type Weekday,
 } from '../../behaviors/locale';
+import { logicalArrowKey } from '../../behaviors/direction';
 
 /** Props owned by DatePicker itself — everything else falls through to the wrapper. */
 type DatePickerOwnProps = {
@@ -311,7 +312,7 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(
 
     const handleDayKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>, date: Date) => {
       let next: Date;
-      switch (event.key) {
+      switch (logicalArrowKey(event.key, event.currentTarget)) {
         case 'ArrowLeft':
           next = addDays(date, -1);
           break;
@@ -368,7 +369,7 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(
         <div className={`${baseClass}__header`}>
           <button
             type="button"
-            className={`${baseClass}__nav-btn material-symbols-rounded`}
+            className={`${baseClass}__nav-btn material-symbols-rounded ds-mirror-rtl`}
             onClick={goToPrevMonth}
             disabled={disabled}
             aria-label={previousLabel}
@@ -378,7 +379,7 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(
           <span className={`${baseClass}__month-year`}>{monthTitle}</span>
           <button
             type="button"
-            className={`${baseClass}__nav-btn material-symbols-rounded`}
+            className={`${baseClass}__nav-btn material-symbols-rounded ds-mirror-rtl`}
             onClick={goToNextMonth}
             disabled={disabled}
             aria-label={nextLabel}

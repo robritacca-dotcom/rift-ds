@@ -110,7 +110,7 @@ const columns: DataTableColumn[] = [
     sortable: true,
     options: options(["Jane Doe", "Alex Smith", "Sam Reyes"]),
   },
-  { key: "estimate", header: "Points", sortable: true, align: "right" },
+  { key: "estimate", header: "Points", sortable: true, align: "end" },
   { key: "due", header: "Due", sortable: true },
   { key: "labels", header: "Labels", hideable: true },
 ];

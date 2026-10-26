@@ -1,6 +1,7 @@
 import React from 'react';
 import './ArtifactCard.css';
 import '../../fonts/material-symbols.css';
+import { mirrorClass } from '../../behaviors/direction';
 
 /** Props owned by ArtifactCard itself — everything else falls through to the root `<button>`. */
 type ArtifactCardOwnProps = {
@@ -41,7 +42,7 @@ export const ArtifactCard = React.forwardRef<HTMLButtonElement, ArtifactCardProp
       aria-pressed={open}
     >
       {typeof icon === 'string' ? (
-        <span className={`${baseClass}__mark material-symbols-rounded`} aria-hidden="true">
+        <span className={`${baseClass}__mark material-symbols-rounded ${mirrorClass(icon)}`} aria-hidden="true">
           {icon}
         </span>
       ) : (

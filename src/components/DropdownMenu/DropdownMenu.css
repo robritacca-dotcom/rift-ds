@@ -227,13 +227,16 @@
    ============================================ */
 
 .ds-dropdown-menu__shortcut {
+  /* A shortcut keeps its left-to-right order in a right-to-left menu. */
+  direction: ltr;
+  unicode-bidi: isolate;
   font-family: var(--font-paragraph-sm-family);
   font-size: var(--font-paragraph-sm-size);
   font-weight: var(--font-paragraph-sm-weight);
   line-height: var(--font-paragraph-sm-line-height);
   letter-spacing: var(--font-paragraph-sm-letter-spacing);
   color: var(--color-text-tertiary);
-  margin-left: auto;
+  margin-inline-start: auto;
   flex-shrink: 0;
 }
 
@@ -245,7 +248,7 @@
 .ds-dropdown-menu__submenu-icon {
   --icon-size: var(--icon-size-600);
   color: var(--color-text-tertiary);
-  margin-left: auto;
+  margin-inline-start: auto;
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -284,8 +287,8 @@
   line-height: var(--font-paragraph-emphasis-line-height);
   letter-spacing: var(--font-paragraph-emphasis-letter-spacing);
   color: var(--color-text-tertiary);
-  padding-left: var(--padding-400);
-  padding-right: var(--padding-400);
+  padding-inline-start: var(--padding-400);
+  padding-inline-end: var(--padding-400);
   user-select: none;
 }
 
@@ -300,7 +303,7 @@
    ============================================ */
 
 .ds-dropdown-menu__item--has-submenu {
-  padding-right: var(--padding-300); /* Slightly less right padding for chevron */
+  padding-inline-end: var(--padding-300); /* Slightly less right padding for chevron */
 }
 
 /* ============================================

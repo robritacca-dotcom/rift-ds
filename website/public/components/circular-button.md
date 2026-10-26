@@ -24,7 +24,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.14.0. The same dat
 | loading | `boolean` | no |  | Shows a spinner in place of the icon and blocks interaction while an async action runs. Keeps the variant's full-colour appearance (unlike the disabled state) and sets `aria-busy` on the rendered element. |
 | ariaLabel | `string` | yes |  | Accessible label — required, because the button has no visible text |
 | tooltip | `string \| false` | no |  | The hover/focus tooltip. An icon-only control names itself: by default the button wears a Tooltip carrying `ariaLabel`. Pass a string to show different wording, or `false` to opt out — for a host that labels the control another way, or one that owns the button's box directly (SplitButton's trigger stretches to its sibling segment, which the tooltip wrapper would block). |
-| tooltipPosition | `"top" \| "bottom" \| "left" \| "right"` | no | `top` | Which side the tooltip opens on. |
+| tooltipPosition | `"top" \| "bottom" \| "start" \| "end" \| "left" \| "right"` | no | `top` | Which side the tooltip opens on. `start` and `end` follow the reading direction. |
 | href | `string` | no |  | Optional href — renders as <a> instead of <button> |
 | target | `string` | no |  | Optional target attribute for links |
 | rel | `string` | no |  | Optional rel attribute for links |

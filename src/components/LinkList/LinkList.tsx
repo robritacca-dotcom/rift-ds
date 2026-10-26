@@ -2,6 +2,7 @@ import React from 'react';
 import type { LinkComponent } from '../../behaviors/LinkProvider';
 import './LinkList.css';
 import '../../fonts/material-symbols.css';
+import { mirrorClass } from '../../behaviors/direction';
 
 export interface LinkListItem {
   /** Link destination */
@@ -77,7 +78,7 @@ export const LinkList = React.forwardRef<HTMLDivElement, LinkListProps>(
                     height={28}
                   />
                 ) : typeof item.icon === 'string' || item.icon == null ? (
-                  <span className="material-symbols-rounded ds-link-list__symbol">
+                  <span className={`material-symbols-rounded ds-link-list__symbol ${mirrorClass(item.icon)}`}>
                     {item.icon ?? 'link'}
                   </span>
                 ) : (
@@ -88,7 +89,7 @@ export const LinkList = React.forwardRef<HTMLDivElement, LinkListProps>(
               <div className="ds-link-list__content">
                 <div className="ds-link-list__title">
                   <span>{item.label}</span>
-                  <span className="material-symbols-rounded ds-link-list__open-icon" aria-hidden="true">
+                  <span className="material-symbols-rounded ds-link-list__open-icon ds-mirror-rtl" aria-hidden="true">
                     {newTab ? 'open_in_new' : 'arrow_forward'}
                   </span>
                 </div>

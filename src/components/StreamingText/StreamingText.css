@@ -19,7 +19,7 @@
   display: inline-block;
   width: 0.55em;
   height: 1em;
-  margin-left: 0.1em;
+  margin-inline-start: 0.1em;
   vertical-align: text-bottom;
   border-radius: var(--radius-050);
   background-color: currentColor;

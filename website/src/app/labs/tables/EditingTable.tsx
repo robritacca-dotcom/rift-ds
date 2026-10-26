@@ -111,7 +111,7 @@ const columns: DataTableColumn[] = [
     key: "budget",
     header: "Budget",
     width: "140px",
-    align: "right",
+    align: "end",
     editor: "number",
     render: (row) =>
       typeof row.values.budget === "number"

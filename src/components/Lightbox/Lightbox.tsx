@@ -157,7 +157,7 @@ export const Lightbox = React.forwardRef<HTMLDivElement, LightboxProps>(
               onClick={onPrev}
               aria-label={previousLabel}
             >
-              <span className={`${baseClass}__control-icon material-symbols-rounded`} aria-hidden="true">
+              <span className={`${baseClass}__control-icon material-symbols-rounded ds-mirror-rtl`} aria-hidden="true">
                 chevron_left
               </span>
             </button>
@@ -175,7 +175,7 @@ export const Lightbox = React.forwardRef<HTMLDivElement, LightboxProps>(
               onClick={onNext}
               aria-label={nextLabel}
             >
-              <span className={`${baseClass}__control-icon material-symbols-rounded`} aria-hidden="true">
+              <span className={`${baseClass}__control-icon material-symbols-rounded ds-mirror-rtl`} aria-hidden="true">
                 chevron_right
               </span>
             </button>

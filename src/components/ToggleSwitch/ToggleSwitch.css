@@ -45,7 +45,7 @@
 .ds-toggle-switch__thumb {
   position: absolute;
   top: 2px;
-  right: 2px;
+  inset-inline-end: 2px;
   width: 20px;
   height: 20px;
   background: var(--color-control-thumb);
@@ -79,7 +79,7 @@
   /* The root is a <button>, whose UA style centres text — without this,
      a label short enough to undershoot any width the layout gives it
      floats away from the track instead of hugging the gap. */
-  text-align: left;
+  text-align: start;
 }
 
 /* ============================================
@@ -94,7 +94,7 @@
 }
 
 .ds-toggle-switch__track--off .ds-toggle-switch__thumb {
-  transform: translateX(-18px);
+  transform: translateX(calc(-18px * var(--ds-inline-sign, 1)));
 }
 
 /* ============================================
@@ -142,7 +142,7 @@
 }
 
 .ds-toggle-switch__track--compact.ds-toggle-switch__track--off .ds-toggle-switch__thumb {
-  transform: translateX(-14px);
+  transform: translateX(calc(-14px * var(--ds-inline-sign, 1)));
 }
 
 .ds-toggle-switch--compact .ds-toggle-switch__label {
@@ -170,7 +170,7 @@
   line-height: var(--font-paragraph-sm-line-height);
   letter-spacing: var(--font-paragraph-sm-letter-spacing);
   color: var(--color-text-tertiary);
-  text-align: left;
+  text-align: start;
 }
 
 .ds-toggle-switch--error .ds-toggle-switch__helper {

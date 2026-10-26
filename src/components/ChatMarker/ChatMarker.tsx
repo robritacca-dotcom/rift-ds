@@ -1,6 +1,7 @@
 import React from 'react';
 import './ChatMarker.css';
 import '../../fonts/material-symbols.css';
+import { mirrorClass } from '../../behaviors/direction';
 
 /** Props owned by ChatMarker itself — everything else falls through to the root element. */
 type ChatMarkerOwnProps = {
@@ -38,7 +39,7 @@ export const ChatMarker = React.forwardRef<HTMLDivElement, ChatMarkerProps>(
           {icon && (
             <span className={`${baseClass}__icon`} aria-hidden="true">
               {typeof icon === 'string' ? (
-                <span className="material-symbols-rounded">{icon}</span>
+                <span className={`material-symbols-rounded ${mirrorClass(icon)}`}>{icon}</span>
               ) : (
                 icon
               )}

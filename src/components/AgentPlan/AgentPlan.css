@@ -34,7 +34,7 @@
   padding: var(--padding-200) var(--padding-500);
   background: none;
   border: none;
-  text-align: left;
+  text-align: start;
   cursor: pointer;
   transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
 }
@@ -141,7 +141,7 @@
   position: absolute;
   top: calc(var(--padding-100) + var(--icon-size-500));
   bottom: calc(-1 * var(--padding-100));
-  left: calc(var(--icon-size-500) / 2);
+  inset-inline-start: calc(var(--icon-size-500) / 2);
   width: var(--border-025);
   background-color: var(--color-divider);
 }

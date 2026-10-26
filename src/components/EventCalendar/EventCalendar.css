@@ -229,7 +229,7 @@ button.ds-event-calendar__day:focus-visible {
      resting pills stay quiet, only the pill under the pointer gets ringed. */
   border: var(--border-025) solid transparent;
   border-radius: var(--radius-100);
-  text-align: left;
+  text-align: start;
 }
 
 button.ds-event-calendar__event {

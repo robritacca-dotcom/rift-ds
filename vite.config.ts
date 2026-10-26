@@ -38,6 +38,30 @@ export default defineConfig({
         },
         setupFiles: ['.storybook/vitest.setup.ts']
       }
+    }, {
+      // Every story again, right to left: dir="rtl" on <html>, render and
+      // axe only. A story with a play function asserts an English page's
+      // keys and sides, so it runs in the pass above; the right-to-left
+      // behaviour itself is asserted in src/stories/Direction.stories.tsx,
+      // which sets its own direction and so runs in the pass above too.
+      extends: true,
+      plugins: [
+      storybookTest({
+        configDir: path.join(dirname, '.storybook'),
+        tags: { exclude: ['play-fn'] }
+      })],
+      test: {
+        name: 'storybook-rtl',
+        browser: {
+          enabled: true,
+          headless: true,
+          provider: playwright({}),
+          instances: [{
+            browser: 'chromium'
+          }]
+        },
+        setupFiles: ['.storybook/vitest.setup.rtl.ts']
+      }
     }]
   }
 });

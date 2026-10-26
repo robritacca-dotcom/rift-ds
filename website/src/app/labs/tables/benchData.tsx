@@ -110,7 +110,7 @@ export const listColumns: DataTableColumn[] = [
   { key: "name", header: "Project", sortable: true, rowHeader: true },
   { key: "owner", header: "Owner", sortable: true, render: personCell },
   { key: "status", header: "Status", sortable: true, render: statusCell },
-  { key: "due", header: "Due", sortable: true, align: "right" },
+  { key: "due", header: "Due", sortable: true, align: "end" },
 ];
 
 export const wideColumns: DataTableColumn[] = [
@@ -151,7 +151,7 @@ export const wideColumns: DataTableColumn[] = [
     key: "budget",
     header: "Budget",
     sortable: true,
-    align: "right",
+    align: "end",
     width: "130px",
     render: (r) => money(r.values.budget),
   },
@@ -159,7 +159,7 @@ export const wideColumns: DataTableColumn[] = [
     key: "spent",
     header: "Spent",
     sortable: true,
-    align: "right",
+    align: "end",
     width: "130px",
     render: (r) => money(r.values.spent),
   },
@@ -167,7 +167,7 @@ export const wideColumns: DataTableColumn[] = [
     key: "tasks",
     header: "Tasks",
     sortable: true,
-    align: "right",
+    align: "end",
     width: "100px",
   },
   { key: "due", header: "Due", sortable: true, width: "130px" },

@@ -181,7 +181,7 @@ export function TablesBench() {
               columns={[
                 { key: "a", header: "Project" },
                 { key: "b", header: "Owner" },
-                { key: "c", header: "Due", align: "right" },
+                { key: "c", header: "Due", align: "end" },
               ]}
               rows={projectRows.slice(0, 4).map((r) => ({
                 id: r.id,
@@ -200,7 +200,7 @@ export function TablesBench() {
               columns={[
                 { key: "a", header: "Project" },
                 { key: "b", header: "Owner" },
-                { key: "c", header: "Due", align: "right" },
+                { key: "c", header: "Due", align: "end" },
               ]}
               rows={projectRows.slice(0, 4).map((r) => ({
                 id: r.id,

@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import './Tabs.css';
 import '../../fonts/material-symbols.css';
+import { logicalArrowKey, mirrorClass } from '../../behaviors/direction';
 
 export interface Tab {
   /** Unique tab identifier */
@@ -113,7 +114,7 @@ export const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(
 
       let targetTab: Tab | undefined;
 
-      switch (e.key) {
+      switch (logicalArrowKey(e.key, e.currentTarget)) {
         case 'ArrowRight':
           e.preventDefault();
           targetTab = enabledTabs[(currentEnabledIndex + 1) % enabledTabs.length];
@@ -176,7 +177,7 @@ export const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(
             >
               {tab.icon &&
                 (typeof tab.icon === 'string' ? (
-                  <span className={`${baseClass}__icon material-symbols-rounded`} aria-hidden="true">
+                  <span className={`${baseClass}__icon material-symbols-rounded ${mirrorClass(tab.icon)}`} aria-hidden="true">
                     {tab.icon}
                   </span>
                 ) : (

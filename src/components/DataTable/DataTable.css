@@ -46,7 +46,7 @@
    row it reads as the familiar 240px field, and when the toolbar wraps it
    grows across its own line rather than orphaning right over dead space. */
 .ds-data-table__search {
-  margin-left: auto;
+  margin-inline-start: auto;
   flex: 1 1 200px;
   max-width: 320px;
 }

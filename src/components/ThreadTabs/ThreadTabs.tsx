@@ -6,6 +6,7 @@ import type { StatusDotProps } from '../StatusDot/StatusDot';
 import './ThreadTabs.css';
 import '../../behaviors/visually-hidden.css';
 import '../../fonts/material-symbols.css';
+import { logicalArrowKey, mirrorClass } from '../../behaviors/direction';
 
 /** What a tab's leading dot reports — ThreadPanel's thread statuses, so a session reads the same in the rail and in the strip. */
 export type ThreadTabStatus = 'idle' | 'working' | 'unread' | 'waiting' | 'error';
@@ -177,7 +178,8 @@ export const ThreadTabs = React.forwardRef<HTMLDivElement, ThreadTabsProps>(
         ) ?? [],
       );
 
-    const moveFocus = (from: HTMLElement, key: string) => {
+    const moveFocus = (from: HTMLElement, pressed: string) => {
+      const key = logicalArrowKey(pressed, from);
       const triggers = liveTriggers();
       const index = triggers.indexOf(from);
       if (index < 0 || triggers.length === 0) return;
@@ -293,7 +295,7 @@ export const ThreadTabs = React.forwardRef<HTMLDivElement, ThreadTabsProps>(
                       {tab.icon &&
                         (typeof tab.icon === 'string' ? (
                           <span
-                            className={`${baseClass}__icon ${iconClass}`}
+                            className={`${baseClass}__icon ${iconClass} ${mirrorClass(tab.icon)}`}
                             aria-hidden="true"
                           >
                             {tab.icon}

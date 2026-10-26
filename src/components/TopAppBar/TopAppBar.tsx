@@ -4,7 +4,9 @@ import React, { useEffect, useState } from 'react';
 import { useLinkComponent, type LinkComponent } from '../../behaviors/LinkProvider';
 import { DropdownMenu } from '../DropdownMenu/DropdownMenu';
 import './TopAppBar.css';
+import '../../behaviors/direction.css';
 import '../../fonts/material-symbols.css';
+import { mirrorClass } from '../../behaviors/direction';
 
 /* ============================================
    TYPES
@@ -189,7 +191,7 @@ export const TopAppBar = React.forwardRef<HTMLElement, TopAppBarProps>(
 
     const renderIcon = (icon: string | React.ReactNode) =>
       typeof icon === 'string' ? (
-        <span className={`${baseClass}__icon material-symbols-rounded`} aria-hidden="true">
+        <span className={`${baseClass}__icon material-symbols-rounded ${mirrorClass(icon)}`} aria-hidden="true">
           {icon}
         </span>
       ) : (

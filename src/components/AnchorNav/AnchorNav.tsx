@@ -3,6 +3,8 @@
 import React, { useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useLayer } from '../../behaviors/useLayer';
 import './AnchorNav.css';
+import '../../behaviors/direction.css';
+import { mirrorClass } from '../../behaviors/direction';
 
 export interface AnchorNavItem {
   /** The id of the element the item jumps to (rendered as `href="#id"`) */
@@ -151,7 +153,7 @@ export const AnchorNav = React.forwardRef<HTMLElement, AnchorNavProps>(
       <p className="ds-anchor-nav__header">
         {icon &&
           (typeof icon === 'string' ? (
-            <span className="material-symbols-rounded ds-anchor-nav__icon" aria-hidden="true">
+            <span className={`material-symbols-rounded ds-anchor-nav__icon ${mirrorClass(icon)}`} aria-hidden="true">
               {icon}
             </span>
           ) : (

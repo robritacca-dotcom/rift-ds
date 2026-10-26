@@ -16,7 +16,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.14.0. The same dat
 | --- | --- | --- | --- | --- |
 | children | `ReactNode` | no |  | Trigger element |
 | content | `string` | yes |  | Tooltip text content. Replaces the native `content` attribute, which only means something on a `<meta>` element. |
-| position | `"top" \| "bottom" \| "left" \| "right"` | no | `top` | Preferred position |
+| position | `"top" \| "bottom" \| "start" \| "end" \| "left" \| "right"` | no | `top` | Preferred position. `left` and `right` are screen sides; `start` and `end` follow the reading direction, so `end` opens to the right in English and to the left in Arabic. |
 | showDelay | `number` | no | `300` | Delay before showing (in ms) |
 | hideDelay | `number` | no | `150` | Delay before hiding (in ms) |
 | className | `string` | no | `` | Additional CSS classes |

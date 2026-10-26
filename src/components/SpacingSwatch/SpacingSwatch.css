@@ -63,8 +63,8 @@
 
 .ds-spacing-swatch__gap-bar {
   height: 50px;
-  border-left: 1px solid var(--color-core-accent-coral);
-  border-right: 1px solid var(--color-core-accent-coral);
+  border-inline-start: 1px solid var(--color-core-accent-coral);
+  border-inline-end: 1px solid var(--color-core-accent-coral);
 }
 
 /* ============================================

@@ -3,6 +3,7 @@
 import React from 'react';
 import { Field } from '../Field/Field';
 import './PinInput.css';
+import { logicalArrowKey } from '../../behaviors/direction';
 
 /** Build a fixed-length cell array from a value string, one character per cell. */
 const toChars = (value: string, length: number): string[] =>
@@ -173,10 +174,10 @@ export const PinInput = React.forwardRef<HTMLInputElement, PinInputProps>(
           commit(next);
           focusCell(index - 1);
         }
-      } else if (e.key === 'ArrowLeft') {
+      } else if (logicalArrowKey(e.key, e.currentTarget) === 'ArrowLeft') {
         e.preventDefault();
         focusCell(index - 1);
-      } else if (e.key === 'ArrowRight') {
+      } else if (logicalArrowKey(e.key, e.currentTarget) === 'ArrowRight') {
         e.preventDefault();
         focusCell(index + 1);
       }

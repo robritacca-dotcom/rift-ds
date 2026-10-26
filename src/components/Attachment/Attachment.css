@@ -391,7 +391,7 @@ button.ds-attachment-group__single:hover .ds-attachment-group__single-image {
   line-height: var(--font-caption-line-height);
   letter-spacing: var(--font-caption-letter-spacing);
   color: var(--color-text-secondary);
-  text-align: left;
+  text-align: start;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
   /* The text fades out toward the foot instead of being cut mid-line */
@@ -404,7 +404,7 @@ button.ds-attachment-group__single:hover .ds-attachment-group__single-image {
    plate of the tile surface so it reads over any picture. */
 .ds-attachment-tile__corner {
   position: absolute;
-  left: var(--padding-150);
+  inset-inline-start: var(--padding-150);
   bottom: var(--padding-150);
   display: inline-flex;
 }
@@ -418,7 +418,7 @@ button.ds-attachment-group__single:hover .ds-attachment-group__single-image {
   /* A third of the button hangs outside the tile, as the corner control of
      a removable thumbnail does on every platform */
   top: calc(var(--ds-attachment-tile-remove-size) / -3);
-  right: calc(var(--ds-attachment-tile-remove-size) / -3);
+  inset-inline-end: calc(var(--ds-attachment-tile-remove-size) / -3);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -644,7 +644,7 @@ button.ds-attachment-group__single:hover {
 /* The extension, on a plate of the surface so it reads over any picture */
 .ds-attachment-group__single-mark {
   position: absolute;
-  left: var(--padding-200);
+  inset-inline-start: var(--padding-200);
   bottom: var(--padding-200);
   display: inline-flex;
   line-height: normal;

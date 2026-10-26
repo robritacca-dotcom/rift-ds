@@ -27,25 +27,25 @@
 
 .ds-toast-container--top-right {
   top: var(--ds-toast-inset-top, 0);
-  right: var(--ds-toast-inset-right, 0);
+  inset-inline-end: var(--ds-toast-inset-right, 0);
   align-items: flex-end;
 }
 
 .ds-toast-container--top-left {
   top: var(--ds-toast-inset-top, 0);
-  left: var(--ds-toast-inset-left, 0);
+  inset-inline-start: var(--ds-toast-inset-left, 0);
   align-items: flex-start;
 }
 
 .ds-toast-container--bottom-right {
   bottom: var(--ds-toast-inset-bottom, 0);
-  right: var(--ds-toast-inset-right, 0);
+  inset-inline-end: var(--ds-toast-inset-right, 0);
   align-items: flex-end;
 }
 
 .ds-toast-container--bottom-left {
   bottom: var(--ds-toast-inset-bottom, 0);
-  left: var(--ds-toast-inset-left, 0);
+  inset-inline-start: var(--ds-toast-inset-left, 0);
   align-items: flex-start;
 }
 
@@ -166,7 +166,7 @@
 .ds-toast__progress {
   position: absolute;
   bottom: 0;
-  left: 0;
+  inset-inline-start: 0;
   height: 3px;
   width: 100%;
   transform-origin: left;

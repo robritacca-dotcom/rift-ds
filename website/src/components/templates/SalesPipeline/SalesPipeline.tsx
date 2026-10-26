@@ -573,7 +573,7 @@ export default function SalesPipeline() {
       key: "win",
       header: "Win probability",
       type: "number",
-      align: "left",
+      align: "start",
       sortable: true,
       width: "170px",
       render: (row: DataTableRow) => {

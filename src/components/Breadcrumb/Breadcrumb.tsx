@@ -78,7 +78,7 @@ export const Breadcrumb = React.forwardRef<HTMLElement, BreadcrumbProps>(
             if (item === 'ellipsis') {
               return (
                 <li key="ellipsis" className={`${baseClass}__item`} aria-hidden="true">
-                  <span className={`${baseClass}__separator material-symbols-rounded`}>chevron_right</span>
+                  <span className={`${baseClass}__separator material-symbols-rounded ds-mirror-rtl`}>chevron_right</span>
                   <span className={`${baseClass}__ellipsis`}>&hellip;</span>
                 </li>
               );
@@ -87,7 +87,7 @@ export const Breadcrumb = React.forwardRef<HTMLElement, BreadcrumbProps>(
             return (
               <li key={index} className={`${baseClass}__item`}>
                 {index > 0 && (
-                  <span className={`${baseClass}__separator material-symbols-rounded`} aria-hidden="true">
+                  <span className={`${baseClass}__separator material-symbols-rounded ds-mirror-rtl`} aria-hidden="true">
                     chevron_right
                   </span>
                 )}

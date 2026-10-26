@@ -227,7 +227,7 @@ export const SidebarPanel = React.forwardRef<HTMLElement, SidebarPanelProps>(
       >
         {onBack && (
           <button type="button" className={`${baseClass}__back`} onClick={onBack}>
-            <span className={`${baseClass}__back-icon material-symbols-rounded`} aria-hidden="true">
+            <span className={`${baseClass}__back-icon material-symbols-rounded ds-mirror-rtl`} aria-hidden="true">
               chevron_left
             </span>
             <span className={`${baseClass}__label`}>{backLabel}</span>
@@ -244,7 +244,7 @@ export const SidebarPanel = React.forwardRef<HTMLElement, SidebarPanelProps>(
                 onClick={onCollapse}
                 aria-label={collapseLabel ?? (title ? `Collapse ${title}` : 'Collapse panel')}
               >
-                <span className="material-symbols-rounded" aria-hidden="true">
+                <span className="material-symbols-rounded ds-mirror-rtl" aria-hidden="true">
                   left_panel_close
                 </span>
               </button>

@@ -14,8 +14,8 @@ type HoverCardOwnProps = {
    * Note: this shadows the native `content` attribute, which HoverCard does not expose.
    */
   content: React.ReactNode;
-  /** Preferred position */
-  position?: 'top' | 'bottom' | 'left' | 'right';
+  /** Preferred position. `left` and `right` are screen sides; `start` and `end` follow the reading direction, so `end` opens to the right in English and to the left in Arabic. */
+  position?: 'top' | 'bottom' | 'left' | 'right' | 'start' | 'end';
   /** Delay before showing (in ms) */
   showDelay?: number;
   /** Delay before hiding (in ms) */

@@ -161,9 +161,9 @@
 }
 
 .ds-contribution-graph__legend-label:first-child {
-  margin-right: var(--gap-050);
+  margin-inline-end: var(--gap-050);
 }
 
 .ds-contribution-graph__legend-label:last-child {
-  margin-left: var(--gap-050);
+  margin-inline-start: var(--gap-050);
 }

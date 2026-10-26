@@ -161,6 +161,12 @@
       ],
       "grip": "#bench-toolbar .ds-table-toolbar__sort-row .ds-table-toolbar__grip",
       "axis": "y"
+    },
+    {
+      "label": "right-to-left bench: split pane separator",
+      "route": "/labs/rtl",
+      "grip": "#rtl-split .ds-split-pane__separator",
+      "axis": "x"
     }
   ]
 }

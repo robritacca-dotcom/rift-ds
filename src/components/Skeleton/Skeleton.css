@@ -73,9 +73,9 @@
 
 @keyframes ds-skeleton-shimmer {
   0% {
-    transform: translateX(-100%);
+    transform: translateX(calc(-100% * var(--ds-inline-sign, 1)));
   }
   100% {
-    transform: translateX(100%);
+    transform: translateX(calc(100% * var(--ds-inline-sign, 1)));
   }
 }

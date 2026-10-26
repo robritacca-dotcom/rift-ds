@@ -4,8 +4,10 @@ import React from 'react';
 import { Chip } from '../Chip/Chip';
 import { MOTION_EXIT_SYNC_MS } from '../../tokens/motion';
 import './PromptSuggestions.css';
+import '../../behaviors/direction.css';
 import '../../behaviors/visually-hidden.css';
 import '../../fonts/material-symbols.css';
+import { mirrorClass } from '../../behaviors/direction';
 
 /** One tappable suggestion in the row. */
 export interface PromptSuggestion {
@@ -157,7 +159,7 @@ export const PromptSuggestions = React.forwardRef<HTMLDivElement, PromptSuggesti
     const block = arrangement === 'tiles' ? 'tile' : arrangement === 'cards' ? 'card' : null;
     const renderIcon = (icon: PromptSuggestion['icon']) =>
       typeof icon === 'string' ? (
-        <span className={`${baseClass}__icon material-symbols-rounded`} aria-hidden="true">
+        <span className={`${baseClass}__icon material-symbols-rounded ${mirrorClass(icon)}`} aria-hidden="true">
           {icon}
         </span>
       ) : (

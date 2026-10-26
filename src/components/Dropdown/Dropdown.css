@@ -78,7 +78,7 @@
   --icon-size: var(--icon-size-500);
   color: var(--color-icon-primary);
   vertical-align: text-bottom;
-  margin-right: var(--gap-100);
+  margin-inline-end: var(--gap-100);
 }
 
 /* ============================================

@@ -26,7 +26,7 @@
   gap: var(--gap-200);
   align-self: flex-start;
   padding: var(--padding-100) var(--padding-150);
-  margin-left: calc(var(--padding-150) * -1);
+  margin-inline-start: calc(var(--padding-150) * -1);
   background: none;
   border: none;
   border-radius: var(--radius-200);
@@ -99,7 +99,7 @@
 
 .ds-reasoning__summary-leaving {
   position: absolute;
-  left: 0;
+  inset-inline-start: 0;
   top: 50%;
   transform: translateY(-50%);
   white-space: nowrap;
@@ -109,7 +109,7 @@
 @keyframes ds-reasoning-summary-in {
   from {
     opacity: 0;
-    transform: translateX(var(--ds-reasoning-align));
+    transform: translateX(calc(var(--ds-reasoning-align) * var(--ds-inline-sign, 1)));
   }
 }
 
@@ -185,13 +185,13 @@
      the status label's first letter starts (matrix + its gap). A plain
      text summary shares the same geometry, so swapping a live status for
      the thought-for line never shifts the trace. */
-  margin-left: calc(var(--icon-size-600) / 2 - var(--border-050) / 2);
-  padding-left: calc(var(--icon-size-600) / 2 + var(--gap-300) - var(--border-050) / 2);
+  margin-inline-start: calc(var(--icon-size-600) / 2 - var(--border-050) / 2);
+  padding-inline-start: calc(var(--icon-size-600) / 2 + var(--gap-300) - var(--border-050) / 2);
   /* The rail dissolves at its foot — the Timeline's end-of-line treatment.
      A border can't carry a gradient, so the border only reserves the
      geometry (transparent, same width) and the stripe is painted under it:
      a border-box background sized to the border's own column. */
-  border-left: var(--border-050) solid transparent;
+  border-inline-start: var(--border-050) solid transparent;
   background:
     linear-gradient(
         to bottom,
@@ -274,8 +274,8 @@
 }
 
 .ds-reasoning--compact .ds-reasoning__content {
-  margin-left: calc(var(--icon-size-500) / 2 - var(--border-050) / 2);
-  padding-left: calc(var(--icon-size-500) / 2 + var(--gap-200) - var(--border-050) / 2);
+  margin-inline-start: calc(var(--icon-size-500) / 2 - var(--border-050) / 2);
+  padding-inline-start: calc(var(--icon-size-500) / 2 + var(--gap-200) - var(--border-050) / 2);
 }
 
 /* ============================================

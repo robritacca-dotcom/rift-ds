@@ -40,7 +40,7 @@
 }
 
 .ds-toggle-group__item + .ds-toggle-group__item {
-  border-left: var(--border-025) solid var(--color-bg-container-border);
+  border-inline-start: var(--border-025) solid var(--color-bg-container-border);
 }
 
 .ds-toggle-group__item .material-symbols-rounded {

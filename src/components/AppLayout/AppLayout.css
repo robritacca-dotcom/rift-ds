@@ -17,7 +17,7 @@
   display: flex;
   justify-content: center;
   /* The rail's width plus, while it shows, the side panel's. */
-  margin-left: calc(var(--ds-app-layout-rail, 64px) + var(--ds-app-layout-panel, 0px));
+  margin-inline-start: calc(var(--ds-app-layout-rail, 64px) + var(--ds-app-layout-panel, 0px));
   padding: var(--padding-1000) var(--padding-500);
   transition: margin-left var(--motion-duration-slow) var(--motion-ease-emphasized);
   min-width: 0;
@@ -52,11 +52,11 @@
    ============================================ */
 @media (max-width: 768px) {
   .ds-app-layout__main {
-    margin-left: 0;
+    margin-inline-start: 0;
     padding: var(--padding-500) var(--padding-400);
   }
 
   .ds-app-layout--expanded .ds-app-layout__main {
-    margin-left: 0;
+    margin-inline-start: 0;
   }
 }

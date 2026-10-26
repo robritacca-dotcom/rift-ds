@@ -7,6 +7,7 @@ import { Field } from '../Field/Field';
 import './Dropdown.css';
 import './ChosenMark.css';
 import '../../fonts/material-symbols.css';
+import { mirrorClass } from '../../behaviors/direction';
 
 export interface DropdownOption {
   /** Display label */
@@ -359,7 +360,7 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
             {selectedOption?.icon &&
               (typeof selectedOption.icon === 'string' ? (
                 <span
-                  className={`${baseClass}__value-icon material-symbols-rounded`}
+                  className={`${baseClass}__value-icon material-symbols-rounded ${mirrorClass(selectedOption.icon)}`}
                   aria-hidden="true"
                 >
                   {selectedOption.icon}
@@ -422,7 +423,7 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
                                 {option.icon &&
                                   (typeof option.icon === 'string' ? (
                                     <span
-                                      className={`${baseClass}__option-icon material-symbols-rounded`}
+                                      className={`${baseClass}__option-icon material-symbols-rounded ${mirrorClass(option.icon)}`}
                                       aria-hidden="true"
                                     >
                                       {option.icon}
@@ -472,7 +473,7 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
                       {option.icon &&
                         (typeof option.icon === 'string' ? (
                           <span
-                            className={`${baseClass}__option-icon material-symbols-rounded`}
+                            className={`${baseClass}__option-icon material-symbols-rounded ${mirrorClass(option.icon)}`}
                             aria-hidden="true"
                           >
                             {option.icon}

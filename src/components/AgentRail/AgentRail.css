@@ -53,7 +53,7 @@
      `--ds-agent-rail-collapse-top` is the seat, which a host overrides to
      line the chevron up with its own header row. */
   top: var(--ds-agent-rail-collapse-top, var(--padding-300));
-  left: var(--padding-300);
+  inset-inline-start: var(--padding-300);
   z-index: 1;
   display: inline-flex;
   align-items: center;
@@ -77,8 +77,8 @@
    way out usually sits. The host that asks for it has decided its controls
    and this one do not collide. */
 .ds-agent-rail__collapse--close {
-  left: auto;
-  right: var(--padding-300);
+  inset-inline-start: auto;
+  inset-inline-end: var(--padding-300);
 }
 
 .ds-agent-rail__collapse .material-symbols-rounded {
@@ -146,7 +146,7 @@
      annotate. The offset puts the circle's centre roughly on the portrait's
      45-degree point, so it straddles the edge the way a badge should and the
      glyph underneath stays whole. */
-  right: -6px;
+  inset-inline-end: -6px;
   bottom: -6px;
   display: inline-flex;
   align-items: center;

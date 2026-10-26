@@ -173,12 +173,12 @@
 /* Tail — the speaker-side bottom corner squares off to point at them */
 .ds-chat-message--tail.ds-chat-message--bubble.ds-chat-message--user
   .ds-chat-message__content {
-  border-bottom-right-radius: var(--radius-100);
+  border-end-end-radius: var(--radius-100);
 }
 
 .ds-chat-message--tail.ds-chat-message--bubble.ds-chat-message--assistant
   .ds-chat-message__content {
-  border-bottom-left-radius: var(--radius-100);
+  border-end-start-radius: var(--radius-100);
 }
 
 /* ============================================

@@ -1,0 +1,19 @@
+/* ============================================
+   READING DIRECTION SIGN
+   `--ds-inline-sign` is 1 in a left-to-right context and -1 in a
+   right-to-left one, read from the element's own direction (`:dir()`),
+   so a `dir` attribute anywhere up the tree sets it. A component that
+   moves along the inline axis (a slide-in, a thumb, a shimmer's sweep, an
+   optical nudge) multiplies its offset by it, always with the fallback
+   `var(--ds-inline-sign, 1)`, and imports this file. Logical properties
+   cover placement; this covers motion, which CSS has no logical form for.
+   design.md's "Layout follows the reading direction" owns the contract.
+   ============================================ */
+
+:dir(ltr) {
+  --ds-inline-sign: 1;
+}
+
+:dir(rtl) {
+  --ds-inline-sign: -1;
+}

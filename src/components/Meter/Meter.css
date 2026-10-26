@@ -36,7 +36,7 @@
   line-height: var(--font-paragraph-sm-line-height);
   color: var(--color-text-secondary);
   font-variant-numeric: tabular-nums;
-  margin-left: auto;
+  margin-inline-start: auto;
 }
 
 /* ============================================

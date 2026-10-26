@@ -127,7 +127,7 @@
   backdrop-filter: blur(24px);
   color: inherit;
   font: inherit;
-  text-align: left;
+  text-align: start;
   cursor: pointer;
 }
 
@@ -474,10 +474,10 @@
 
 @keyframes ds-prompt-suggestions-shimmer {
   0% {
-    transform: translateX(-100%);
+    transform: translateX(calc(-100% * var(--ds-inline-sign, 1)));
   }
   100% {
-    transform: translateX(100%);
+    transform: translateX(calc(100% * var(--ds-inline-sign, 1)));
   }
 }
 

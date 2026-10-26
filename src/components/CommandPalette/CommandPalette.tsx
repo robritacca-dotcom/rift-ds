@@ -11,6 +11,7 @@ import { useLayer } from '../../behaviors/useLayer';
 import { useFocusScope } from '../../behaviors/useFocusScope';
 import { useScrollLock } from '../../behaviors/useScrollLock';
 import { useShortcut, type Shortcut, type ShortcutKeyLabels } from '../../behaviors/shortcuts';
+import { mirrorClass } from '../../behaviors/direction';
 
 export interface CommandPaletteCommand {
   /** Stable identifier */
@@ -387,7 +388,7 @@ export const CommandPalette = React.forwardRef<HTMLDivElement, CommandPalettePro
                     >
                       {command.icon && (
                         <span
-                          className={`${baseClass}__command-icon${typeof command.icon === 'string' ? ' material-symbols-rounded' : ''}`}
+                          className={`${baseClass}__command-icon${typeof command.icon === 'string' ? ` material-symbols-rounded ${mirrorClass(command.icon)}` : ''}`}
                           aria-hidden="true"
                         >
                           {command.icon}

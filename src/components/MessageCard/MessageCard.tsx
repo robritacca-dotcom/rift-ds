@@ -1,6 +1,7 @@
 import React from 'react';
 import './MessageCard.css';
 import '../../fonts/material-symbols.css';
+import { mirrorClass } from '../../behaviors/direction';
 
 /** Props owned by MessageCard itself — everything else falls through to the root element. */
 type MessageCardOwnProps = {
@@ -60,7 +61,7 @@ export const MessageCard = React.forwardRef<HTMLDivElement, MessageCardProps>(
                     {icon && (
                       <span className={`${baseClass}__icon`} aria-hidden="true">
                         {typeof icon === 'string' ? (
-                          <span className="material-symbols-rounded">{icon}</span>
+                          <span className={`material-symbols-rounded ${mirrorClass(icon)}`}>{icon}</span>
                         ) : (
                           icon
                         )}

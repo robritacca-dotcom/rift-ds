@@ -7,6 +7,7 @@ const emptySubscribe = () => () => {};
 import ReactDOM from 'react-dom';
 import './Toast.css';
 import '../../fonts/material-symbols.css';
+import { mirrorClass } from '../../behaviors/direction';
 
 /* ============================================
    TYPES
@@ -162,7 +163,7 @@ const ToastItem = ({
       onBlur={() => setPauseTimer(false)}
     >
       <span
-        className={`${baseClass}__icon${typeof iconName === 'string' ? ' material-symbols-rounded' : ''}`}
+        className={`${baseClass}__icon${typeof iconName === 'string' ? ` material-symbols-rounded ${mirrorClass(iconName)}` : ''}`}
         aria-hidden="true"
       >
         {iconName}
@@ -360,7 +361,7 @@ export const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
     return (
       <div {...rest} ref={ref} className={classes} role="status">
         <span
-          className={`${baseClass}__icon${typeof iconName === 'string' ? ' material-symbols-rounded' : ''}`}
+          className={`${baseClass}__icon${typeof iconName === 'string' ? ` material-symbols-rounded ${mirrorClass(iconName)}` : ''}`}
           aria-hidden="true"
         >
           {iconName}

@@ -5,6 +5,7 @@ import { EmptyState, type EmptyStateProps } from '../EmptyState/EmptyState';
 import './NotificationCenter.css';
 import '../../behaviors/visually-hidden.css';
 import '../../fonts/material-symbols.css';
+import { logicalArrowKey } from '../../behaviors/direction';
 
 export interface NotificationCenterTab {
   /** Display label */
@@ -227,7 +228,7 @@ export const NotificationCenter = React.forwardRef<HTMLElement, NotificationCent
     const handleTabKeyDown = (e: React.KeyboardEvent, index: number) => {
       if (!tabs) return;
       let target: NotificationCenterTab | undefined;
-      switch (e.key) {
+      switch (logicalArrowKey(e.key, e.currentTarget)) {
         case 'ArrowRight':
           e.preventDefault();
           target = tabs[(index + 1) % tabs.length];

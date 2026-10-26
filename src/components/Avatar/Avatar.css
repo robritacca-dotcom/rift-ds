@@ -150,7 +150,7 @@
 .ds-avatar__status {
   position: absolute;
   bottom: 0;
-  right: 0;
+  inset-inline-end: 0;
   border-radius: var(--radius-pill);
   border: 2px solid var(--color-bg-page-primary);
 }

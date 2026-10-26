@@ -44,6 +44,7 @@ import { Button } from 'rift-ds';
 - In a routed app, wrap the tree in `LinkProvider` from `rift-ds/behaviors/LinkProvider` with the router's link, or every component link reloads the page. A component rendered by a Server Component cannot read it, so pass `linkComponent` on that instance instead.
 - For an app not in US English, wrap the tree in `LocaleProvider` from `rift-ds/behaviors/LocaleProvider` with its locale, or every number, date and calendar reads as `en-US`. A component rendered by a Server Component cannot read it, so pass `locale` on that instance instead. Translate the words through each component's label props.
 - Bind keyboard shortcuts with `useShortcut` from `rift-ds/behaviors/shortcuts` (`mod+k` is Cmd+K on a Mac and Ctrl+K elsewhere), never a document keydown listener: it is the listener the components use, so a binding stays quiet in text fields and never takes Escape from an open overlay. Draw a shortcut with Kbd's `keys` prop, not hand-typed ⌘ glyphs.
+- For a right-to-left language set `dir="rtl"` on `<html>` and the components mirror themselves. In your own CSS use logical properties (`margin-inline-start`, not `margin-left`), and pass `start`/`end`, not `left`/`right`, to Drawer's `side`, popup positions and column `align`, unless the side belongs to the screen.
 - Wrap the tree in `ToastProvider` only if you call `useToast` (both from the `Toast` module). No other component needs a provider.
 
 ## AI chat

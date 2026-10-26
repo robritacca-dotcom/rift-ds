@@ -140,7 +140,7 @@
 .ds-top-app-bar__badge {
   position: absolute;
   top: 25%;
-  right: 25%;
+  inset-inline-end: 25%;
   width: 6px;
   height: 6px;
   border-radius: var(--radius-pill);
@@ -329,7 +329,7 @@
 .ds-top-app-bar--ios .ds-top-app-bar__button--nav .ds-top-app-bar__icon {
   /* The chevron's glyph sits right of centre in its box; a nudge
      centres it optically in the circle. */
-  transform: translateX(-1px);
+  transform: translateX(calc(-1px * var(--ds-inline-sign, 1)));
 }
 
 .ds-top-app-bar--ios .ds-top-app-bar__title-text {

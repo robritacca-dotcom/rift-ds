@@ -4,6 +4,7 @@ import React from 'react';
 import { Field } from '../Field/Field';
 import './Input.css';
 import '../../fonts/material-symbols.css';
+import { mirrorClass } from '../../behaviors/direction';
 
 /** Props owned by Input itself — everything else falls through to the <input>. */
 type InputOwnProps = {
@@ -117,7 +118,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         <div className={`${baseClass}__field-wrapper`}>
           {iconLeft && (
             <span
-              className={`${baseClass}__icon ${baseClass}__icon--left${typeof iconLeft === 'string' ? ' material-symbols-rounded' : ''}`}
+              className={`${baseClass}__icon ${baseClass}__icon--left${typeof iconLeft === 'string' ? ` material-symbols-rounded ${mirrorClass(iconLeft)}` : ''}`}
               aria-hidden="true"
             >
               {iconLeft}
@@ -141,7 +142,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           />
           {iconRight && (
             <span
-              className={`${baseClass}__icon ${baseClass}__icon--right${typeof iconRight === 'string' ? ' material-symbols-rounded' : ''}`}
+              className={`${baseClass}__icon ${baseClass}__icon--right${typeof iconRight === 'string' ? ` material-symbols-rounded ${mirrorClass(iconRight)}` : ''}`}
               aria-hidden="true"
             >
               {iconRight}

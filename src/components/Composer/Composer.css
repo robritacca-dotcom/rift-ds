@@ -305,7 +305,7 @@
    carries (ink starts 4/24 into the box); the fallback is a consumer hook
    for a glyph with a different bearing. */
 .ds-composer__context--above .ds-composer__context-icon {
-  margin-left: calc(-1 * var(--ds-composer-context-icon-bearing, var(--icon-size-500) * 4 / 24));
+  margin-inline-start: calc(-1 * var(--ds-composer-context-icon-bearing, var(--icon-size-500) * 4 / 24));
 }
 
 .ds-composer--context-above {
@@ -527,7 +527,7 @@
 .ds-composer__backdrop {
   position: absolute;
   top: var(--padding-400);
-  left: var(--ds-composer-text-inset);
+  inset-inline-start: var(--ds-composer-text-inset);
   /* The textarea's measured box: its height, and its client width, which
      is what its text wraps at once a scrollbar takes its share */
   width: var(
@@ -558,7 +558,7 @@
    the fallbacks seat it against the shell's edge. */
 .ds-composer__mention-menu {
   position: absolute;
-  left: 0;
+  inset-inline-start: 0;
   z-index: var(--layer-dropdown);
   /* A list, not a text field */
   cursor: default;
@@ -597,7 +597,7 @@
   display: flex;
   align-items: center;
   gap: var(--gap-100);
-  margin-left: auto;
+  margin-inline-start: auto;
 }
 
 /* ============================================

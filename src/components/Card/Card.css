@@ -178,7 +178,7 @@
   letter-spacing: var(--font-heading-3-letter-spacing);
   color: var(--color-text-heading);
   margin: 0;
-  text-align: left;
+  text-align: start;
 }
 
 .ds-card--case-study__dek {

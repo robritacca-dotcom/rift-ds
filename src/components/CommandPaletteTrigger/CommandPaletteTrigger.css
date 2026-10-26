@@ -62,7 +62,7 @@
   display: inline-flex;
   align-items: center;
   gap: var(--gap-050);
-  margin-left: auto;
+  margin-inline-start: auto;
 }
 
 .ds-command-palette-trigger--compact {

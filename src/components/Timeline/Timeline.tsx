@@ -1,6 +1,7 @@
 import React from 'react';
 import './Timeline.css';
 import '../../fonts/material-symbols.css';
+import { mirrorClass } from '../../behaviors/direction';
 
 export interface TimelineItem {
   /** Step or event title */
@@ -182,7 +183,7 @@ export const Timeline = React.forwardRef<HTMLOListElement, TimelineProps>((
     if (item.icon) {
       if (typeof item.icon === 'string') {
         return (
-          <span className={`material-symbols-rounded ${BASE_CLASS}__marker-icon`} aria-hidden="true">
+          <span className={`material-symbols-rounded ${BASE_CLASS}__marker-icon ${mirrorClass(item.icon)}`} aria-hidden="true">
             {item.icon}
           </span>
         );

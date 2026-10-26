@@ -19,6 +19,7 @@ import {
 import '../../behaviors/visually-hidden.css';
 import './AiButton.css';
 import '../../fonts/material-symbols.css';
+import { mirrorClass } from '../../behaviors/direction';
 
 /** The content of AiButton's summary panel. */
 export interface AiButtonSummary {
@@ -350,7 +351,7 @@ export const AiButton = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, 
     const iconClass = `${baseClass}__icon`;
     const restingIcon =
       typeof icon === 'string' ? (
-        <span className={`${iconClass}-glyph material-symbols-rounded`}>{icon}</span>
+        <span className={`${iconClass}-glyph material-symbols-rounded ${mirrorClass(icon)}`}>{icon}</span>
       ) : (
         icon
       );

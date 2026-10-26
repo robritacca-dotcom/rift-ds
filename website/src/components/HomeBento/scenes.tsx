@@ -487,8 +487,8 @@ export function TemplatesTileScene({ full = false }: { full?: boolean }) {
           columns={[
             { key: "team", header: "Team" },
             { key: "area", header: "Area" },
-            { key: "seats", header: "Seats", align: "right" },
-            { key: "status", header: "Status", align: "right" },
+            { key: "seats", header: "Seats", align: "end" },
+            { key: "status", header: "Status", align: "end" },
           ]}
           rows={TEAMS.map(([team, area, seats, status], i) => ({
             id: team,

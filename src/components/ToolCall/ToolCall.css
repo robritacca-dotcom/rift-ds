@@ -47,7 +47,7 @@
   /* Buttons default to the UA's buttontext, not the inherited colour, so
      anything in the header that inherits would read black in both themes. */
   color: var(--color-text-primary);
-  text-align: left;
+  text-align: start;
   cursor: pointer;
   transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
 }
@@ -108,7 +108,7 @@
 
 .ds-tool-call__status {
   flex: none;
-  margin-left: auto;
+  margin-inline-start: auto;
   color: var(--ds-tool-call-color);
   font-family: var(--font-paragraph-sm-emphasis-family);
   font-size: var(--font-paragraph-sm-emphasis-size);
@@ -121,7 +121,7 @@
 /* A summary already claims the free space; without one the status still
    needs pushing to the right, which the auto margin above handles */
 .ds-tool-call__summary ~ .ds-tool-call__status {
-  margin-left: 0;
+  margin-inline-start: 0;
 }
 
 .ds-tool-call__duration {

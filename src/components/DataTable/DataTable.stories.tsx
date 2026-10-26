@@ -24,7 +24,7 @@ const columns: DataTableColumn[] = [
     ),
   },
   { key: 'updated', header: 'Last updated', sortable: true },
-  { key: 'price', header: 'Price', sortable: true, align: 'right' },
+  { key: 'price', header: 'Price', sortable: true, align: 'end' },
 ];
 
 const rows: DataTableRow[] = [
@@ -234,7 +234,7 @@ export const SortAndSearchParity: Story = {
   args: {
     columns: [
       { key: 'name', header: 'Customer', sortable: true, rowHeader: true },
-      { key: 'price', header: 'Price', sortable: true, align: 'right' },
+      { key: 'price', header: 'Price', sortable: true, align: 'end' },
     ],
     rows: [
       { id: 'p1', values: { name: 'Item 10', price: 30, region: 'North' } },
@@ -271,7 +271,7 @@ const wideColumns: DataTableColumn[] = [
   { key: 'name', header: 'Customer', sortable: true, rowHeader: true, locked: true, pin: 'start', width: '180px' },
   { key: 'status', header: 'Status', sortable: true, width: '140px' },
   { key: 'updated', header: 'Last updated', sortable: true, width: '160px' },
-  { key: 'price', header: 'Price', sortable: true, align: 'right', width: '120px' },
+  { key: 'price', header: 'Price', sortable: true, align: 'end', width: '120px' },
 ];
 
 /**
@@ -428,7 +428,7 @@ const editColumns: DataTableColumn[] = [
       { value: 'Failed', label: 'Failed' },
     ],
   },
-  { key: 'price', header: 'Price', align: 'right', editor: 'number' },
+  { key: 'price', header: 'Price', align: 'end', editor: 'number' },
   { key: 'gift', header: 'Gift', align: 'center', editor: 'checkbox' },
 ];
 

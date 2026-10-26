@@ -62,6 +62,8 @@ import { ResponseActionsLabelsContext } from './ResponseActions';
 import { FollowupSuggestionsLabelContext } from './FollowupSuggestions';
 import type { ChatModelOption, Starter } from './types';
 import './ChatWidget.css';
+import '../behaviors/direction.css';
+import { inlineSign } from '../behaviors/direction';
 
 /* Limits on what a visitor may queue where attachments are on. They bound
    what the browser holds in memory; nothing is uploaded, so they are not a
@@ -665,7 +667,7 @@ export function ChatWidget({
   const [artifactWidth, setArtifactWidth] = useState<number | null>(null);
   const [artifactResizing, setArtifactResizing] = useState(false);
   const artifactRailRef = useRef<HTMLDivElement | null>(null);
-  const artifactDragRef = useRef<{ startX: number; width: number; max: number; next: number } | null>(null);
+  const artifactDragRef = useRef<{ startX: number; width: number; max: number; next: number; sign: 1 | -1 } | null>(null);
   const beginArtifactResize = (e: React.PointerEvent<HTMLDivElement>) => {
     if ((e.pointerType === 'mouse' && e.button !== 0) || artifactDragRef.current) return;
     const rail = artifactRailRef.current;
@@ -673,14 +675,16 @@ export function ChatWidget({
     if (!rail || !column) return;
     const width = rail.getBoundingClientRect().width;
     const spare = column.getBoundingClientRect().width - ARTIFACT_MIN_COLUMN_WIDTH;
-    artifactDragRef.current = { startX: e.clientX, width, max: width + Math.max(0, spare), next: width };
+    artifactDragRef.current = { startX: e.clientX, width, max: width + Math.max(0, spare), next: width, sign: inlineSign(rail) };
     e.currentTarget.setPointerCapture(e.pointerId);
     setArtifactResizing(true);
   };
   const moveArtifactResize = (e: React.PointerEvent<HTMLDivElement>) => {
     const drag = artifactDragRef.current;
     if (!drag) return;
-    const grown = drag.width - (e.clientX - drag.startX);
+    // The pane sits at the inline end, so dragging toward the start widens
+    // it: leftward in English, rightward in Arabic.
+    const grown = drag.width - (e.clientX - drag.startX) * drag.sign;
     drag.next = Math.round(Math.min(drag.max, Math.max(ARTIFACT_MIN_COLUMN_WIDTH, grown)));
     railsHostRef.current?.style.setProperty('--ds-chat-artifact-width', `${drag.next}px`);
   };

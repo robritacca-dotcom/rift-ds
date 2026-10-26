@@ -3,7 +3,9 @@
 import React, { useState, useEffect, useRef, useCallback, useSyncExternalStore, type ReactNode } from 'react';
 import { MOTION_AUTOPLAY_INTERVAL_MS } from '../../tokens/motion';
 import './Carousel.css';
+import '../../behaviors/direction.css';
 import '../../fonts/material-symbols.css';
+import { logicalArrowKey } from '../../behaviors/direction';
 
 const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
 
@@ -153,10 +155,11 @@ export const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
     const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
       onKeyDown?.(e);
       if (e.defaultPrevented) return;
-      if (e.key === 'ArrowLeft') {
+      const key = logicalArrowKey(e.key, e.currentTarget);
+      if (key === 'ArrowLeft') {
         e.preventDefault();
         goPrev();
-      } else if (e.key === 'ArrowRight') {
+      } else if (key === 'ArrowRight') {
         e.preventDefault();
         goNext();
       }
@@ -167,9 +170,10 @@ export const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
     // arrow handler from moving the slide a second time.
     const handleDotKeyDown = (e: React.KeyboardEvent, index: number) => {
       let target: number | undefined;
-      if (e.key === 'ArrowRight') {
+      const key = logicalArrowKey(e.key, e.currentTarget);
+      if (key === 'ArrowRight') {
         target = loop ? (index + 1) % slideCount : Math.min(index + 1, slideCount - 1);
-      } else if (e.key === 'ArrowLeft') {
+      } else if (key === 'ArrowLeft') {
         target = loop ? (index - 1 + slideCount) % slideCount : Math.max(index - 1, 0);
       }
       if (target === undefined) return;
@@ -218,7 +222,7 @@ export const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
         <div className={`${baseClass}__viewport`}>
           <div
             className={`${baseClass}__track`}
-            style={{ transform: `translateX(-${activeIndex * 100}%)` }}
+            style={{ '--ds-carousel-index': activeIndex } as React.CSSProperties}
           >
             {slides.map((slideContent, index) => (
               <div
@@ -243,7 +247,7 @@ export const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
               aria-label={previousLabel}
               type="button"
             >
-              <span className="material-symbols-rounded" aria-hidden="true">
+              <span className="material-symbols-rounded ds-mirror-rtl" aria-hidden="true">
                 chevron_left
               </span>
             </button>
@@ -255,7 +259,7 @@ export const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
               aria-label={nextLabel}
               type="button"
             >
-              <span className="material-symbols-rounded" aria-hidden="true">
+              <span className="material-symbols-rounded ds-mirror-rtl" aria-hidden="true">
                 chevron_right
               </span>
             </button>

@@ -1,6 +1,7 @@
 import React from 'react';
 import './EmptyState.css';
 import '../../fonts/material-symbols.css';
+import { mirrorClass } from '../../behaviors/direction';
 
 /** Props owned by EmptyState itself — everything else falls through to the root div. */
 type EmptyStateOwnProps = {
@@ -67,7 +68,7 @@ export const EmptyState = React.forwardRef<HTMLDivElement, EmptyStateProps>(
         {icon && (
           <div className={`${baseClass}__icon`} aria-hidden="true">
             {typeof icon === 'string' ? (
-              <span className="material-symbols-rounded">{icon}</span>
+              <span className={`material-symbols-rounded ${mirrorClass(icon)}`}>{icon}</span>
             ) : (
               icon
             )}

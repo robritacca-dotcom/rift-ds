@@ -139,7 +139,7 @@ export const AgentRail = React.forwardRef<HTMLDivElement, AgentRailProps>(
             aria-label={collapseLabel}
             onClick={onCollapse}
           >
-            <span className="material-symbols-rounded" aria-hidden="true">
+            <span className="material-symbols-rounded ds-mirror-rtl" aria-hidden="true">
               {collapseVariant === 'close' ? 'close' : 'chevron_right'}
             </span>
           </button>

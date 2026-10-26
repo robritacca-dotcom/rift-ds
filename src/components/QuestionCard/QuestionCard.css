@@ -133,7 +133,7 @@
   background-color: var(--color-input-bg-primary);
   color: var(--color-text-primary);
   font: inherit;
-  text-align: left;
+  text-align: start;
   transition:
     border-color var(--motion-duration-fast) var(--motion-ease-standard),
     background-color var(--motion-duration-fast) var(--motion-ease-standard),

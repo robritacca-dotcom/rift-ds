@@ -35,7 +35,7 @@
 .ds-segmented-control__pill {
   position: absolute;
   top: 0;
-  left: 0;
+  left: 0; /* ds-allow(physical): the pill slides by the segment's measured offsetLeft, which is a screen offset in either direction */
   width: 0;
   height: 0;
   border-radius: var(--radius-pill);

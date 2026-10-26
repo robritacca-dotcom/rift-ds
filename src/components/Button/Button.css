@@ -376,7 +376,7 @@
 }
 
 .ds-button:not(.ds-button--disabled):not(.ds-button--loading):hover .ds-button__icon--right {
-  transform: translateX(2px);
+  transform: translateX(calc(2px * var(--ds-inline-sign, 1)));
 }
 
 .ds-button--primary .ds-button__icon {

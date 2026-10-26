@@ -42,7 +42,10 @@
   display: inline-block;
   white-space: nowrap;
   word-wrap: normal;
-  direction: ltr;
+  /* Isolate the ligature's name as its own run rather than forcing the box
+     left to right: a forced `direction: ltr` made every icon's logical
+     inset and margin resolve left to right inside a right-to-left page. */
+  unicode-bidi: isolate;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -92,4 +95,13 @@
 
 .icon-filled {
   --material-symbols-fill: 1;
+}
+
+/* A glyph that points along the reading direction (a "next" chevron, a
+   send arrow) mirrors in a right-to-left context. `scale` composes with any
+   transform the icon already has, so a hover nudge still applies.
+   DIRECTIONAL_ICONS in src/behaviors/direction.ts is the list a component
+   applies it to (`mirrorClass`). */
+.ds-mirror-rtl:dir(rtl) {
+  scale: -1 1;
 }

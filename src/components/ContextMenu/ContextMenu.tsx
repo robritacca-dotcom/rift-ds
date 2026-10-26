@@ -12,6 +12,7 @@ import './ContextMenu.css';
 import '../../fonts/material-symbols.css';
 import { MenuKeyLabelsContext, MenuShortcutHint } from '../DropdownMenu/ShortcutHint';
 import { shortcutAriaAnyPlatform, type ShortcutKeyLabels } from '../../behaviors/shortcut-keys';
+import { mirrorClass } from '../../behaviors/direction';
 
 /* ============================================
    TYPES
@@ -122,13 +123,13 @@ const SubMenuItem = ({ item, baseClass, itemId, focused, size, onActivate }: Sub
     >
       <span className={`${baseClass}__item-label`}>
         {item.icon && (
-          <span className={`${baseClass}__item-icon material-symbols-rounded`} aria-hidden="true">
+          <span className={`${baseClass}__item-icon material-symbols-rounded ${mirrorClass(item.icon)}`} aria-hidden="true">
             {item.icon}
           </span>
         )}
         {item.label}
       </span>
-      <span className={`${baseClass}__submenu-icon material-symbols-rounded`} aria-hidden="true">
+      <span className={`${baseClass}__submenu-icon material-symbols-rounded ds-mirror-rtl`} aria-hidden="true">
         chevron_right
       </span>
       {subOpen && item.children && (
@@ -227,7 +228,7 @@ const SubEntry = ({
     >
       <span className={`${baseClass}__item-label`}>
         {entry.icon && (
-          <span className={`${baseClass}__item-icon material-symbols-rounded`} aria-hidden="true">
+          <span className={`${baseClass}__item-icon material-symbols-rounded ${mirrorClass(entry.icon)}`} aria-hidden="true">
             {entry.icon}
           </span>
         )}
@@ -486,7 +487,7 @@ export const ContextMenu = React.forwardRef<HTMLDivElement, ContextMenuProps>(
           <span className={`${baseClass}__item-label`}>
             {entry.icon && (
               <span
-                className={`${baseClass}__item-icon material-symbols-rounded`}
+                className={`${baseClass}__item-icon material-symbols-rounded ${mirrorClass(entry.icon)}`}
                 aria-hidden="true"
               >
                 {entry.icon}

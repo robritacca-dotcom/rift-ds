@@ -1,5 +1,6 @@
 import React from 'react';
 import './EntityCard.css';
+import { mirrorClass } from '../../behaviors/direction';
 
 /** Props owned by EntityCard itself — everything else falls through to the root div. */
 type EntityCardOwnProps = {
@@ -41,7 +42,7 @@ export const EntityCard = React.forwardRef<HTMLDivElement, EntityCardProps>(
             />
           ) : icon ? (
             typeof icon === 'string' ? (
-              <span className={`${baseClass}__icon material-symbols-rounded`} aria-hidden="true">
+              <span className={`${baseClass}__icon material-symbols-rounded ${mirrorClass(icon)}`} aria-hidden="true">
                 {icon}
               </span>
             ) : (

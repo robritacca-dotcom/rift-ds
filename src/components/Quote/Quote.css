@@ -20,8 +20,8 @@
    ============================================ */
 
 .ds-quote--default .ds-quote__text {
-  padding-left: var(--padding-500);
-  border-left: var(--border-050) solid var(--color-bg-container-tertiary);
+  padding-inline-start: var(--padding-500);
+  border-inline-start: var(--border-050) solid var(--color-bg-container-tertiary);
   font-family: var(--font-paragraph-family);
   font-size: var(--font-paragraph-size);
   font-weight: var(--font-paragraph-weight);
@@ -31,7 +31,7 @@
 }
 
 .ds-quote--default .ds-quote__caption {
-  padding-left: var(--padding-500);
+  padding-inline-start: var(--padding-500);
 }
 
 /* ============================================

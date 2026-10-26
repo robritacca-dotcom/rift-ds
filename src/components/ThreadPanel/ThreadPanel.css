@@ -236,7 +236,7 @@
   background: transparent;
   cursor: pointer;
   overflow: hidden;
-  text-align: left;
+  text-align: start;
   text-decoration: none;
   transition: background-color var(--motion-duration-fast)
     var(--motion-ease-standard);
@@ -638,10 +638,10 @@
 
 @keyframes ds-thread-panel-shimmer {
   0% {
-    transform: translateX(-100%);
+    transform: translateX(calc(-100% * var(--ds-inline-sign, 1)));
   }
   100% {
-    transform: translateX(100%);
+    transform: translateX(calc(100% * var(--ds-inline-sign, 1)));
   }
 }
 
@@ -673,7 +673,7 @@
 
 .ds-thread-panel--dotted .ds-thread-panel__description {
   /* The dot's width plus the row's column gap. */
-  margin-left: calc(var(--gap-200) + var(--gap-200));
+  margin-inline-start: calc(var(--gap-200) + var(--gap-200));
 }
 
 /* The trailing cluster: session glyph, pin marker, and the meta caption,
@@ -717,7 +717,7 @@
 .ds-thread-panel__row .ds-thread-panel__menu {
   position: absolute;
   top: var(--padding-150);
-  right: var(--padding-150);
+  inset-inline-end: var(--padding-150);
   opacity: 0;
   pointer-events: none;
   transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);

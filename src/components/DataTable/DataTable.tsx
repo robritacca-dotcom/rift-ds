@@ -65,6 +65,7 @@ import '../../behaviors/visually-hidden.css';
 import './DataTable.css';
 import '../../fonts/material-symbols.css';
 import { useLocale } from '../../behaviors/LocaleProvider';
+import { isRtl, logicalArrowKey } from '../../behaviors/direction';
 
 export interface DataTableColumn<R extends DataTableRow = DataTableRow> {
   /** Unique column identifier, used as the key into each row's values. */
@@ -75,8 +76,8 @@ export interface DataTableColumn<R extends DataTableRow = DataTableRow> {
   sortable?: boolean;
   /** Optional column width (CSS value like '200px', '30%', 'auto'). */
   width?: string;
-  /** Text alignment for cells in this column. */
-  align?: 'left' | 'center' | 'right';
+  /** Text alignment for cells in this column. `start` and `end` follow the reading direction (a typed column defaults to its type's: `end` for numbers, money and progress, `start` for text); `left` and `right` are screen sides. */
+  align?: 'start' | 'center' | 'end' | 'left' | 'right';
   /** Render the cell for a row; defaults to the row's raw value for this key. */
   render?: (row: R) => React.ReactNode;
   /** Whether this column names each row: its cells render as row headers, and its value names the row's checkbox ("Select Ada Lovelace"). One column per table. */
@@ -1772,13 +1773,15 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
   /**
    * Where a drag along one axis drops, from the pointer and the items'
    * boxes as they stood when the drag began: the dragged item follows the
-   * pointer, so its live box would always contain it.
+   * pointer, so its live box would always contain it. In a right-to-left
+   * table the columns run leftward, so an item is before the pointer when
+   * its middle is to the pointer's right.
    */
-  const dropIndex = (boxes: DOMRect[], from: number, pointer: number, axis: 'x' | 'y') =>
+  const dropIndex = (boxes: DOMRect[], from: number, pointer: number, axis: 'x' | 'y', rtl = false) =>
     boxes.filter((box, i) => {
       if (i === from) return false;
       const mid = axis === 'x' ? box.left + box.width / 2 : box.top + box.height / 2;
-      return mid < pointer;
+      return rtl && axis === 'x' ? mid > pointer : mid < pointer;
     }).length;
 
   const startColumnDrag = (event: React.PointerEvent<HTMLTableCellElement>, key: string) => {
@@ -1786,6 +1789,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     const target = event.target as HTMLElement;
     if (!col || !canMove(col) || target.closest('[data-no-drag]')) return;
     const th = event.currentTarget;
+    const rtl = isRtl(tableEl);
     const region = regionOf(key);
     const regionKeys = region === 'start' ? startKeys : region === 'end' ? endKeys : centerKeys;
     const headers = () =>
@@ -1805,12 +1809,12 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
         th.style.transform = `translateX(${dx}px)`;
         const wrapper = tableEl?.parentElement;
         const shift = (wrapper?.scrollLeft ?? 0) - scroll0;
-        to = dropIndex(boxes, regionKeys.indexOf(key), move.clientX + shift, 'x');
+        to = dropIndex(boxes, regionKeys.indexOf(key), move.clientX + shift, 'x', rtl);
         const anchor = boxes[to];
         if (anchor && dropRef.current && wrapper) {
           const box = anchor;
           const from = regionKeys.indexOf(key);
-          const x = (to > from ? box.right : box.left) - wrapper.getBoundingClientRect().left + scroll0;
+          const x = ((to > from) !== rtl ? box.right : box.left) - wrapper.getBoundingClientRect().left + scroll0;
           dropRef.current.hidden = false;
           dropRef.current.dataset.axis = 'x';
           dropRef.current.style.transform = `translateX(${x}px)`;
@@ -2426,7 +2430,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
       if (!canMove(col)) return;
       const region = regionOf(cell.col);
       const regionKeys = region === 'start' ? startKeys : region === 'end' ? endKeys : centerKeys;
-      moveColumn(cell.col, regionKeys.indexOf(cell.col) + (event.key === 'ArrowRight' ? 1 : -1));
+      moveColumn(cell.col, regionKeys.indexOf(cell.col) + (logicalArrowKey(event.key, event.currentTarget) === 'ArrowRight' ? 1 : -1));
       return;
     }
     if (!isHeader && rowGrips && event.altKey && (event.key === 'ArrowUp' || event.key === 'ArrowDown')) {
@@ -2475,7 +2479,9 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
         return;
       }
     }
-    switch (event.key) {
+    // Columns run in the reading direction, so the column to the right is
+    // the previous one in a right-to-left table.
+    switch (logicalArrowKey(event.key, event.currentTarget)) {
       case 'ArrowRight':
         return go(r, c + 1);
       case 'ArrowLeft':
@@ -2538,7 +2544,12 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
         }
       : {};
   const innerTab = gridMode ? -1 : undefined;
-  const justify = (align?: string) => (align === 'center' ? 'center' : align === 'right' ? 'flex-end' : 'flex-start');
+  /* flex-start and flex-end follow the reading direction; left and right
+     stay on their screen side. */
+  const justify = (align?: string) =>
+    (align === 'center' ? 'center' : align === 'end' ? 'flex-end' : align === 'right' ? 'right' : align === 'left' ? 'left' : 'flex-start');
+  /** Whether a column sits at the inline end, for what follows its text (the sort glyph, the edit hint). */
+  const alignsEnd = (align?: string) => align === 'end' || align === 'right';
 
   const utilityHeader = (key: string) => {
     const style: React.CSSProperties = { width: UTILITY_COLUMN_WIDTH };
@@ -2601,7 +2612,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
         scope="col"
         aria-sort={sortValue}
         className={`ds-table__header-cell${pinClass(key)}${movable ? ` ${baseClass}__header--movable` : ''}`}
-        style={cellStyle(key, col.align || 'left')}
+        style={cellStyle(key, col.align || 'start')}
         onPointerDown={movable ? (event) => startColumnDrag(event, key) : undefined}
         onContextMenu={
           columnMenu
@@ -2615,7 +2626,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
       >
         <div
           className={`${baseClass}__header-inner`}
-          data-align={col.align === 'right' ? 'end' : col.align === 'center' ? 'center' : undefined}
+          data-align={alignsEnd(col.align) ? 'end' : col.align === 'center' ? 'center' : undefined}
           style={{
             justifyContent: justify(col.align),
             // In auto layout a declared width is only a hint the browser squeezes when the table runs wide,
@@ -2860,7 +2871,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
                     onClick={() => toggleGroup(group.key)}
                     tabIndex={0}
                   >
-                    <span className={`${baseClass}__group-chevron material-symbols-rounded`} aria-hidden="true">
+                    <span className={`${baseClass}__group-chevron material-symbols-rounded ds-mirror-rtl`} aria-hidden="true">
                       chevron_right
                     </span>
                   </button>
@@ -2944,7 +2955,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
               <div className="ds-table__cell-content" style={{ justifyContent: justify(col.align) }}>
                 <DropdownMenu
                   size="compact"
-                  align={col.align === 'right' ? 'end' : 'start'}
+                  align={alignsEnd(col.align) ? 'end' : 'start'}
                   items={offered.map((total) => ({
                     label: labels.totals[total],
                     selected: total === pick,
@@ -3058,7 +3069,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
                     tabIndex={innerTab}
                     data-cell-control=""
                   >
-                    <span className={`${baseClass}__expand-chevron material-symbols-rounded`} aria-hidden="true">
+                    <span className={`${baseClass}__expand-chevron material-symbols-rounded ds-mirror-rtl`} aria-hidden="true">
                       chevron_right
                     </span>
                   </button>
@@ -3182,7 +3193,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
               </div>
               {editMode === 'cell' && editable && !isLive(col) && !editingHere && (
                 <CircularButton
-                  className={`${baseClass}__edit-hint${col.align === 'right' ? ` ${baseClass}__edit-hint--start` : ''}`}
+                  className={`${baseClass}__edit-hint${alignsEnd(col.align) ? ` ${baseClass}__edit-hint--start` : ''}`}
                   icon="edit"
                   variant="tertiary"
                   size="compact"
@@ -3257,7 +3268,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
                     size="compact"
                     ariaLabel={labels.saveRow(name)}
                     tooltip={labels.saveRow(name)}
-                    tooltipPosition="left"
+                    tooltipPosition="start"
                     onClick={() => commitEdit('stay')}
                     tabIndex={innerTab}
                   />
@@ -3268,7 +3279,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
                     size="compact"
                     ariaLabel={labels.cancelRow(name)}
                     tooltip={labels.cancelRow(name)}
-                    tooltipPosition="left"
+                    tooltipPosition="start"
                     onClick={cancelEdit}
                     tabIndex={innerTab}
                   />
@@ -3283,7 +3294,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
                     size="compact"
                     ariaLabel={labels.editRow(name)}
                     tooltip={labels.editRow(name)}
-                    tooltipPosition="left"
+                    tooltipPosition="start"
                     disabled={editing !== null}
                     onClick={() => startEdit(row.id)}
                     tabIndex={innerTab}
@@ -3302,7 +3313,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
                       size="compact"
                       ariaLabel={action.label}
                       tooltip={action.label}
-                      tooltipPosition="left"
+                      tooltipPosition="start"
                       disabled={action.disabled}
                       onClick={action.onSelect}
                       tabIndex={innerTab}

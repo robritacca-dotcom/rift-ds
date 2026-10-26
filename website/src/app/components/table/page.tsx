@@ -148,7 +148,7 @@ export default function TablePage() {
                   { key: "name", header: "Name", width: "25%" },
                   { key: "role", header: "Role", width: "20%" },
                   { key: "email", header: "Email" },
-                  { key: "actions", header: "Actions", align: "right" },
+                  { key: "actions", header: "Actions", align: "end" },
                 ]}
                 rows={[
                   {

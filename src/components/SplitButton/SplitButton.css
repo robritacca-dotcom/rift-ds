@@ -50,11 +50,11 @@
    A geometrically centred chevron reads as pushed toward the cap; nudge
    it toward the flat edge to match. */
 .ds-split-button .ds-split-button__trigger .ds-circular-button__icon {
-  transform: translateX(-2px);
+  transform: translateX(calc(-2px * var(--ds-inline-sign, 1)));
 }
 
 .ds-split-button .ds-split-button__trigger.ds-circular-button--compact .ds-circular-button__icon {
-  transform: translateX(-1px);
+  transform: translateX(calc(-1px * var(--ds-inline-sign, 1)));
 }
 
 /* ============================================

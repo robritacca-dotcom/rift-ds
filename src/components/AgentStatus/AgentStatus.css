@@ -97,7 +97,7 @@
 
 .ds-agent-status__label-text--out {
   position: absolute;
-  left: 0;
+  inset-inline-start: 0;
   top: 0;
   white-space: nowrap;
   animation: ds-agent-label-out var(--motion-duration-slow) var(--motion-ease-standard) both;

@@ -1,5 +1,6 @@
 import React from 'react';
 import './Skeleton.css';
+import '../../behaviors/direction.css';
 
 /** Props owned by Skeleton itself — everything else falls through to the root div. */
 type SkeletonOwnProps = {

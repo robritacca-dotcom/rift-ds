@@ -23,8 +23,8 @@ type TooltipOwnProps = {
    * means something on a `<meta>` element.
    */
   content: string;
-  /** Preferred position */
-  position?: 'top' | 'bottom' | 'left' | 'right';
+  /** Preferred position. `left` and `right` are screen sides; `start` and `end` follow the reading direction, so `end` opens to the right in English and to the left in Arabic. */
+  position?: 'top' | 'bottom' | 'left' | 'right' | 'start' | 'end';
   /** Delay before showing (in ms) */
   showDelay?: number;
   /** Delay before hiding (in ms) */

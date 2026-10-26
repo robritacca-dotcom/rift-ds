@@ -254,7 +254,7 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
           <div className={`${baseClass}__nav`}>
             <button
               type="button"
-              className={`${baseClass}__nav-btn material-symbols-rounded`}
+              className={`${baseClass}__nav-btn material-symbols-rounded ds-mirror-rtl`}
               onClick={() => navigate(-1)}
               aria-label={previousLabel}
             >
@@ -262,7 +262,7 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
             </button>
             <button
               type="button"
-              className={`${baseClass}__nav-btn material-symbols-rounded`}
+              className={`${baseClass}__nav-btn material-symbols-rounded ds-mirror-rtl`}
               onClick={() => navigate(1)}
               aria-label={nextLabel}
             >

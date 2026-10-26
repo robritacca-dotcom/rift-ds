@@ -3,6 +3,7 @@ import { Button } from '../Button/Button';
 import './InterruptCard.css';
 import '../../behaviors/visually-hidden.css';
 import '../../fonts/material-symbols.css';
+import { mirrorClass } from '../../behaviors/direction';
 
 /** One choice the card offers, rendered as a Button in the options footer. */
 export interface InterruptCardOption {
@@ -119,7 +120,7 @@ export const InterruptCard = React.forwardRef<HTMLDivElement, InterruptCardProps
           {icon && (
             <span className={`${baseClass}__icon`} aria-hidden="true">
               {typeof icon === 'string' ? (
-                <span className="material-symbols-rounded">{icon}</span>
+                <span className={`material-symbols-rounded ${mirrorClass(icon)}`}>{icon}</span>
               ) : (
                 icon
               )}

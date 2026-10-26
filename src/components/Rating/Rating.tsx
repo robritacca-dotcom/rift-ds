@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import './Rating.css';
 import '../../fonts/material-symbols.css';
+import { logicalArrowKey, mirrorClass } from '../../behaviors/direction';
 
 /** Props owned by Rating itself — everything else falls through to the root node. */
 type RatingOwnProps = {
@@ -98,7 +99,7 @@ export const Rating = React.forwardRef<HTMLDivElement, RatingProps>(
 
     const handleKeyDown = (event: React.KeyboardEvent) => {
       let next: number | null = null;
-      switch (event.key) {
+      switch (logicalArrowKey(event.key, event.currentTarget)) {
         case 'ArrowRight':
         case 'ArrowUp':
           next = Math.min(max, currentValue + 1);
@@ -141,7 +142,7 @@ export const Rating = React.forwardRef<HTMLDivElement, RatingProps>(
               className={`${baseClass}__step ${step <= displayValue ? `${baseClass}__step--filled` : ''}`}
               aria-hidden="true"
             >
-              <span className={`${baseClass}__icon${typeof icon === 'string' ? ' material-symbols-rounded' : ''}`}>{icon}</span>
+              <span className={`${baseClass}__icon${typeof icon === 'string' ? ` material-symbols-rounded ${mirrorClass(icon)}` : ''}`}>{icon}</span>
             </span>
           ))}
         </div>
@@ -176,7 +177,7 @@ export const Rating = React.forwardRef<HTMLDivElement, RatingProps>(
               onClick={() => setValue(step)}
               onMouseEnter={() => setHoverValue(step)}
             >
-              <span className={`${baseClass}__icon${typeof icon === 'string' ? ' material-symbols-rounded' : ''}`} aria-hidden="true">
+              <span className={`${baseClass}__icon${typeof icon === 'string' ? ` material-symbols-rounded ${mirrorClass(icon)}` : ''}`} aria-hidden="true">
                 {icon}
               </span>
             </button>

@@ -3,6 +3,7 @@
 import React, { useRef } from 'react';
 import './Toolbar.css';
 import { getFocusable } from '../../behaviors/focusable';
+import { logicalArrowKey } from '../../behaviors/direction';
 
 /** Props owned by Toolbar itself — everything else falls through to the root div. */
 type ToolbarOwnProps = {
@@ -66,7 +67,8 @@ export const Toolbar = React.forwardRef<HTMLDivElement, ToolbarProps>(
 
       const nextKey = orientation === 'vertical' ? 'ArrowDown' : 'ArrowRight';
       const prevKey = orientation === 'vertical' ? 'ArrowUp' : 'ArrowLeft';
-      if (e.key !== nextKey && e.key !== prevKey && e.key !== 'Home' && e.key !== 'End') return;
+      const key = orientation === 'vertical' ? e.key : logicalArrowKey(e.key, e.currentTarget);
+      if (key !== nextKey && key !== prevKey && key !== 'Home' && key !== 'End') return;
 
       const items = getFocusable(rootRef.current);
       const current = items.indexOf(document.activeElement as HTMLElement);
@@ -77,11 +79,11 @@ export const Toolbar = React.forwardRef<HTMLDivElement, ToolbarProps>(
 
       e.preventDefault();
       const target =
-        e.key === 'Home'
+        key === 'Home'
           ? 0
-          : e.key === 'End'
+          : key === 'End'
             ? items.length - 1
-            : e.key === nextKey
+            : key === nextKey
               ? (current + 1) % items.length
               : (current - 1 + items.length) % items.length;
       items[target].focus();

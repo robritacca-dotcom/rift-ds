@@ -3775,9 +3775,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "tooltipPosition",
-            "type": "\"top\" | \"bottom\" | \"left\" | \"right\"",
+            "type": "\"top\" | \"bottom\" | \"start\" | \"end\" | \"left\" | \"right\"",
             "required": false,
-            "description": "Which side the tooltip opens on.",
+            "description": "Which side the tooltip opens on. `start` and `end` follow the reading direction.",
             "defaultValue": "top"
           },
           {
@@ -6313,9 +6313,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "side",
-            "type": "\"top\" | \"bottom\" | \"left\" | \"right\"",
+            "type": "\"top\" | \"bottom\" | \"start\" | \"end\" | \"left\" | \"right\"",
             "required": false,
-            "description": "Edge the panel slides in from",
+            "description": "Edge the panel slides in from. `left` and `right` are the screen's\nedges in any reading direction; `start` and `end` follow it, so a\n`start` drawer opens on the left in English and on the right in Arabic.",
             "defaultValue": "right"
           },
           {
@@ -7640,9 +7640,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "position",
-            "type": "\"top\" | \"bottom\" | \"left\" | \"right\"",
+            "type": "\"top\" | \"bottom\" | \"start\" | \"end\" | \"left\" | \"right\"",
             "required": false,
-            "description": "Preferred position",
+            "description": "Preferred position. `left` and `right` are screen sides; `start` and `end` follow the reading direction, so `end` opens to the right in English and to the left in Arabic.",
             "defaultValue": "bottom"
           },
           {
@@ -10180,9 +10180,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "position",
-            "type": "\"top\" | \"bottom\" | \"left\" | \"right\"",
+            "type": "\"top\" | \"bottom\" | \"start\" | \"end\" | \"left\" | \"right\"",
             "required": false,
-            "description": "Preferred position",
+            "description": "Preferred position. `left` and `right` are screen sides; `start` and `end` follow the reading direction, so `end` opens to the right in English and to the left in Arabic.",
             "defaultValue": "bottom"
           },
           {
@@ -14614,9 +14614,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "position",
-            "type": "\"top\" | \"bottom\" | \"left\" | \"right\"",
+            "type": "\"top\" | \"bottom\" | \"start\" | \"end\" | \"left\" | \"right\"",
             "required": false,
-            "description": "Preferred position",
+            "description": "Preferred position. `left` and `right` are screen sides; `start` and `end` follow the reading direction, so `end` opens to the right in English and to the left in Arabic.",
             "defaultValue": "top"
           },
           {

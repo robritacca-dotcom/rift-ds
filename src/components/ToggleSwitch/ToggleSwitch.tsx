@@ -3,6 +3,7 @@
 import React, { useId, useState } from 'react';
 import { CheckIcon } from '../Checkbox/Checkbox';
 import './ToggleSwitch.css';
+import '../../behaviors/direction.css';
 
 /** Props owned by ToggleSwitch itself — everything else falls through to the <button>. */
 type ToggleSwitchOwnProps = {

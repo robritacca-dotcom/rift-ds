@@ -1,6 +1,7 @@
 import React from 'react';
 import './Instructions.css';
 import '../../fonts/material-symbols.css';
+import { mirrorClass } from '../../behaviors/direction';
 
 export interface InstructionStep {
   /** Step label/title */
@@ -75,7 +76,7 @@ export const Instructions = React.forwardRef<HTMLDivElement, InstructionsProps>(
                 <div className={`${baseClass}__badge`}>
                   {step.icon ? (
                     typeof step.icon === 'string' ? (
-                      <span className="material-symbols-rounded" aria-hidden="true">
+                      <span className={`material-symbols-rounded ${mirrorClass(step.icon)}`} aria-hidden="true">
                         {step.icon}
                       </span>
                     ) : (

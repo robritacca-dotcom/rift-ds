@@ -2,6 +2,7 @@ import React from 'react';
 import { Tooltip } from '../Tooltip/Tooltip';
 import './MessageActions.css';
 import '../../fonts/material-symbols.css';
+import { mirrorClass } from '../../behaviors/direction';
 
 /** One action in the row: a stable id, a glyph, and an accessible name. */
 export interface MessageAction {
@@ -69,7 +70,7 @@ export const MessageActions = React.forwardRef<HTMLDivElement, MessageActionsPro
               onClick={() => onActionClick?.(item.id)}
             >
               <span
-                className={typeof item.icon === 'string' ? 'material-symbols-rounded' : undefined}
+                className={typeof item.icon === 'string' ? `material-symbols-rounded ${mirrorClass(item.icon)}` : undefined}
                 aria-hidden="true"
               >
                 {item.icon}

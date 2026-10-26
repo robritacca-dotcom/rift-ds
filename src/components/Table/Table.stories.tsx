@@ -169,7 +169,7 @@ export const WithButtons: Story = {
     columns: [
       { key: 'name', header: 'Name', width: '30%' },
       { key: 'email', header: 'Email', width: '35%' },
-      { key: 'actions', header: 'Actions', align: 'right' as const },
+      { key: 'actions', header: 'Actions', align: 'end' as const },
     ],
     rows: [
       {
@@ -221,7 +221,7 @@ export const WithCircularButtons: Story = {
     columns: [
       { key: 'name', header: 'Name', width: '30%' },
       { key: 'role', header: 'Role', width: '35%' },
-      { key: 'actions', header: 'Actions', align: 'right' as const },
+      { key: 'actions', header: 'Actions', align: 'end' as const },
     ],
     rows: [
       {
@@ -311,7 +311,7 @@ export const MixedContent: Story = {
       { key: 'name', header: 'Name', width: '25%' },
       { key: 'role', header: 'Role', width: '20%' },
       { key: 'email', header: 'Email' },
-      { key: 'actions', header: 'Actions', align: 'right' as const },
+      { key: 'actions', header: 'Actions', align: 'end' as const },
     ],
     rows: [
       {

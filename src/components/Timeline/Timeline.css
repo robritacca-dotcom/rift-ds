@@ -130,7 +130,7 @@
   position: absolute;
   top: 0;
   bottom: calc(-1 * var(--gap-500));
-  left: 5px; /* centre of the 12px dot */
+  inset-inline-start: 5px; /* centre of the 12px dot */
   width: var(--border-050);
   background-color: var(--color-divider);
 }
@@ -138,7 +138,7 @@
 .ds-timeline--vertical.ds-timeline--numbered .ds-timeline__item::before,
 .ds-timeline--vertical .ds-timeline__item:has(.ds-timeline__marker--badge)::before,
 .ds-timeline--vertical .ds-timeline__item:has(.ds-timeline__marker--icon)::before {
-  left: 13px; /* centre of the 28px badge/icon box */
+  inset-inline-start: 13px; /* centre of the 28px badge/icon box */
 }
 
 /* Bare icons have no opaque fill to cover the line —
@@ -166,7 +166,7 @@
   flex-direction: column;
   gap: var(--gap-200);
   min-width: 0;
-  padding-right: var(--padding-400);
+  padding-inline-end: var(--padding-400);
 }
 
 /* Connector line — from this marker across to the next */
@@ -189,7 +189,7 @@
 /* Bare icons have no opaque fill to cover the line —
    start it just after the icon box instead */
 .ds-timeline--horizontal .ds-timeline__item:has(.ds-timeline__marker--icon)::before {
-  left: 32px;
+  inset-inline-start: 32px;
 }
 
 .ds-timeline--horizontal .ds-timeline__item:last-child::before {
@@ -315,7 +315,7 @@
 
 .ds-timeline__role-bullets {
   margin: 0;
-  padding-left: var(--padding-500);
+  padding-inline-start: var(--padding-500);
   list-style: disc;
   display: flex;
   flex-direction: column;
@@ -346,7 +346,7 @@
    below every logo: it starts 8px below this logo and runs down to 8px above
    the next one (extending into the inter-entry gap). */
 .ds-timeline--company .ds-timeline__item::before {
-  left: 16px; /* centre of the 32px logo */
+  inset-inline-start: 16px; /* centre of the 32px logo */
   top: 40px; /* 32px logo + 8px break */
   bottom: calc(8px - var(--gap-500)); /* stop 8px above the next logo */
 }

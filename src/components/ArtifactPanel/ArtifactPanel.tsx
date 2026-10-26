@@ -6,6 +6,7 @@ import { CodeBlock, type CodeBlockProps } from '../CodeBlock/CodeBlock';
 import { SegmentedControl } from '../SegmentedControl/SegmentedControl';
 import './ArtifactPanel.css';
 import '../../fonts/material-symbols.css';
+import { mirrorClass } from '../../behaviors/direction';
 
 /** Which face of the artifact is on stage. */
 export type ArtifactPanelView = 'preview' | 'code';
@@ -145,7 +146,7 @@ export const ArtifactPanel = React.forwardRef<HTMLElement, ArtifactPanelProps>(
           <div className={`${baseClass}__heading`}>
             {icon !== undefined &&
               (typeof icon === 'string' ? (
-                <span className={`${baseClass}__icon material-symbols-rounded`} aria-hidden="true">
+                <span className={`${baseClass}__icon material-symbols-rounded ${mirrorClass(icon)}`} aria-hidden="true">
                   {icon}
                 </span>
               ) : (

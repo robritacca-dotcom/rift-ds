@@ -37,7 +37,7 @@
   width: 100%;
   max-width: 100%;
   justify-content: flex-start;
-  text-align: left;
+  text-align: start;
 }
 
 .ds-nav-list .ds-button__text {
@@ -140,12 +140,12 @@
   min-height: 0;
   margin: 0;
   padding: 0;
-  padding-left: var(--padding-1000);
+  padding-inline-start: var(--padding-1000);
   list-style: none;
 }
 
 .ds-nav-list__sublist .ds-nav-list__sublist {
-  padding-left: var(--gap-500);
+  padding-inline-start: var(--gap-500);
 }
 
 /* Permanent (non-collapsible) groups render their sublist directly under the

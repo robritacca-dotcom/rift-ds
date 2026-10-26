@@ -55,7 +55,7 @@
 .ds-motion-swatch__replay-icon {
   position: absolute;
   top: 0;
-  right: 0;
+  inset-inline-end: 0;
   --icon-size: var(--icon-size-500);
   color: var(--color-text-tertiary);
   opacity: 0;
@@ -96,7 +96,7 @@
     transform: translateX(0);
   }
   to {
-    transform: translateX(104px); /* track width minus dot */
+    transform: translateX(104px); /* ds-allow(physical): the motion demo runs its dot along a fixed track; track width minus dot */
   }
 }
 

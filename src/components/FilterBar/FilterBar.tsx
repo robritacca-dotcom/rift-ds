@@ -7,6 +7,7 @@ import { useLayer } from '../../behaviors/useLayer';
 import { useAnchoredPosition } from '../../behaviors/useAnchoredPosition';
 import './FilterBar.css';
 import '../../fonts/material-symbols.css';
+import { mirrorClass } from '../../behaviors/direction';
 
 /** One choice inside a filter's popover. */
 export interface FilterBarOption {
@@ -288,7 +289,7 @@ export const FilterBar = React.forwardRef<HTMLDivElement, FilterBarProps>(
                   {filter.icon &&
                     (typeof filter.icon === 'string' ? (
                       <span
-                        className={`${baseClass}__icon material-symbols-rounded`}
+                        className={`${baseClass}__icon material-symbols-rounded ${mirrorClass(filter.icon)}`}
                         aria-hidden="true"
                       >
                         {filter.icon}

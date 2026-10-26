@@ -3,8 +3,10 @@
 import React from 'react';
 import { useLinkComponent, type LinkComponent } from '../../behaviors/LinkProvider';
 import './BottomNav.css';
+import '../../behaviors/direction.css';
 import '../../behaviors/visually-hidden.css';
 import '../../fonts/material-symbols.css';
+import { mirrorClass } from '../../behaviors/direction';
 
 /* ============================================
    TYPES
@@ -156,7 +158,7 @@ export const BottomNav = React.forwardRef<HTMLElement, BottomNavProps>(
 
     const renderIcon = (icon: BottomNavItem['icon']) =>
       typeof icon === 'string' ? (
-        <span className={`${baseClass}__icon material-symbols-rounded`} aria-hidden="true">
+        <span className={`${baseClass}__icon material-symbols-rounded ${mirrorClass(icon)}`} aria-hidden="true">
           {icon}
         </span>
       ) : (

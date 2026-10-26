@@ -109,7 +109,7 @@
   align-items: flex-end;
   /* The slot spans the content box, which excludes the gutter; this
      re-centres the control on the full component width. */
-  padding-left: var(--ds-chat-thread-gutter, 0px);
+  padding-inline-start: var(--ds-chat-thread-gutter, 0px);
   z-index: 1;
 }
 

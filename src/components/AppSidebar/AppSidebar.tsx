@@ -12,7 +12,9 @@ import type { PixelInk } from '../PixelAvatar/PixelAvatar';
 import { SidebarPanel } from '../SidebarPanel/SidebarPanel';
 import type { SidebarPanelItem } from '../SidebarPanel/SidebarPanel';
 import './AppSidebar.css';
+import '../../behaviors/direction.css';
 import '../../fonts/material-symbols.css';
+import { mirrorClass } from '../../behaviors/direction';
 
 /* ============================================
    TYPES
@@ -520,7 +522,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
                   : expandLabel
             }
           >
-            <span className="material-symbols-rounded">
+            <span className="material-symbols-rounded ds-mirror-rtl">
               {mobileOpen ? 'close' : isExpanded ? 'left_panel_close' : 'left_panel_open'}
             </span>
           </button>
@@ -584,7 +586,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
                       </span>
                     ) : (
                       <span
-                        className={`${baseClass}__btn-icon${typeof item.icon === 'string' ? ' material-symbols-rounded' : ''}`}
+                        className={`${baseClass}__btn-icon${typeof item.icon === 'string' ? ` material-symbols-rounded ${mirrorClass(item.icon)}` : ''}`}
                       >
                         {item.icon}
                       </span>
@@ -599,7 +601,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
                   {hasChildren && (
                     <span
                       className={[
-                        `${baseClass}__btn-chevron material-symbols-rounded`,
+                        `${baseClass}__btn-chevron material-symbols-rounded ds-mirror-rtl`,
                         isOpen && !isPanelMode ? `${baseClass}__btn-chevron--open` : '',
                       ]
                         .filter(Boolean)
@@ -690,7 +692,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
                             )}
                             {subHasChildren && (
                               <span
-                                className={`${baseClass}__sub-chevron material-symbols-rounded`}
+                                className={`${baseClass}__sub-chevron material-symbols-rounded ds-mirror-rtl`}
                                 aria-hidden="true"
                               >
                                 chevron_right

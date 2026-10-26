@@ -31,7 +31,7 @@
   border: var(--border-025) solid var(--color-input-border-primary);
   border-radius: var(--radius-300); /* 12px — input shape, not the button pill */
   background-color: var(--color-input-bg-primary);
-  text-align: left;
+  text-align: start;
   cursor: pointer;
   transition: border-color var(--motion-duration-base) var(--motion-ease-standard);
   outline: none;

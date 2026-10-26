@@ -24,8 +24,8 @@ type PopoverOwnProps = {
    * toolbar's sort or column panel.
    */
   surface?: 'panel' | 'menu';
-  /** Preferred position */
-  position?: 'top' | 'bottom' | 'left' | 'right';
+  /** Preferred position. `left` and `right` are screen sides; `start` and `end` follow the reading direction, so `end` opens to the right in English and to the left in Arabic. */
+  position?: 'top' | 'bottom' | 'left' | 'right' | 'start' | 'end';
   /** Trigger mode */
   trigger?: 'click' | 'hover';
   /** Whether the popover is open (controlled mode) */

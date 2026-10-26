@@ -70,7 +70,7 @@
   align-items: flex-end;
   gap: var(--gap-050);
   padding: var(--padding-150) var(--padding-400);
-  border-left: var(--border-025) solid var(--color-bg-container-border);
+  border-inline-start: var(--border-025) solid var(--color-bg-container-border);
 }
 
 .ds-chart__summary-label {
@@ -194,7 +194,7 @@
   font-weight: var(--font-paragraph-sm-emphasis-weight);
   line-height: var(--font-paragraph-sm-emphasis-line-height);
   color: var(--color-text-primary);
-  margin-left: auto;
+  margin-inline-start: auto;
 }
 
 /* ============================================
@@ -218,7 +218,7 @@
   .ds-chart__summary-item {
     align-items: flex-start;
     flex: 1;
-    border-left: none;
+    border-inline-start: none;
     border-top: var(--border-025) solid var(--color-bg-container-border);
     padding: var(--padding-150) 0;
   }

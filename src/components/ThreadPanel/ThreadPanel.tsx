@@ -9,8 +9,10 @@ import { StatusDot } from '../StatusDot/StatusDot';
 import type { StatusDotProps } from '../StatusDot/StatusDot';
 import { Tooltip } from '../Tooltip/Tooltip';
 import './ThreadPanel.css';
+import '../../behaviors/direction.css';
 import '../../behaviors/visually-hidden.css';
 import '../../fonts/material-symbols.css';
+import { mirrorClass } from '../../behaviors/direction';
 
 export interface ThreadPanelThreadAction {
   /** Stable identifier reported through `onThreadAction`. */
@@ -454,7 +456,7 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
     const toggle = onExpandedChange && (
       <Tooltip
         content={toggleLabel}
-        position="left"
+        position="start"
         className={`${baseClass}__toggle-tip`}
       >
         <button
@@ -470,7 +472,7 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
           aria-expanded={expanded}
           onClick={() => onExpandedChange(!expanded)}
         >
-          <span className={iconClass} aria-hidden="true">
+          <span className={`${iconClass} ds-mirror-rtl`} aria-hidden="true">
             {expanded ? 'left_panel_close' : 'left_panel_open'}
           </span>
         </button>
@@ -545,7 +547,7 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
             onClick={onNewThread}
           >
             <span
-              className={`${baseClass}__new-icon${typeof newThreadIcon === 'string' ? ` ${iconClass}` : ''}`}
+              className={`${baseClass}__new-icon${typeof newThreadIcon === 'string' ? ` ${iconClass} ${mirrorClass(newThreadIcon)}` : ''}`}
               aria-hidden="true"
             >
               {newThreadIcon}
@@ -584,7 +586,7 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
                 }
               >
                 <span
-                  className={`${baseClass}__control-icon${typeof control.icon === 'string' ? ` ${iconClass}` : ''}`}
+                  className={`${baseClass}__control-icon${typeof control.icon === 'string' ? ` ${iconClass} ${mirrorClass(control.icon)}` : ''}`}
                   aria-hidden="true"
                 >
                   {control.icon}
@@ -652,7 +654,7 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
                         </span>
                       ) : (
                         <span
-                          className={`${baseClass}__project-icon${typeof project.icon === 'string' ? ` ${iconClass}` : ''}`}
+                          className={`${baseClass}__project-icon${typeof project.icon === 'string' ? ` ${iconClass} ${mirrorClass(project.icon)}` : ''}`}
                           aria-hidden="true"
                         >
                           {project.icon}
@@ -807,7 +809,7 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
                                     <span className={`${baseClass}__trail`}>
                                       {thread.icon && (
                                         <span
-                                          className={`${baseClass}__thread-icon${typeof thread.icon === 'string' ? ` ${iconClass}` : ''}`}
+                                          className={`${baseClass}__thread-icon${typeof thread.icon === 'string' ? ` ${iconClass} ${mirrorClass(thread.icon)}` : ''}`}
                                           aria-hidden="true"
                                         >
                                           {thread.icon}

@@ -48,6 +48,11 @@ export const CATEGORIES = new Set([
   // content-driven or deliberately on a step's other edge.
   // scripts/validate-breakpoints.mjs is what requires it.
   'breakpoint',
+  // A side that belongs to the screen rather than the reading direction: a
+  // map's geography, a chart axis, a pointer position, a placement prop that
+  // names a screen edge (Drawer's left and right, Toast's corners, the chat's
+  // docks). scripts/validate-logical-properties.mjs is what requires it.
+  'physical',
   // A z-index of 10 or more that is not a --layer-* token: local order
   // inside one component that happens to need a larger number.
   // scripts/validate-stacking.mjs is what requires it.

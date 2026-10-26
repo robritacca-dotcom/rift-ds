@@ -34,7 +34,7 @@
   /* Buttons default to the UA's buttontext, not the inherited colour, so
      anything in the header that inherits would read black in both themes. */
   color: var(--color-text-primary);
-  text-align: left;
+  text-align: start;
   cursor: pointer;
   transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
 }

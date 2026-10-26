@@ -19,6 +19,9 @@
 
 .ds-carousel__track {
   display: flex;
+  /* The slides run in the reading direction, so the track moves toward the
+     inline start: leftward in English, rightward in Arabic. */
+  transform: translateX(calc(-100% * var(--ds-carousel-index, 0) * var(--ds-inline-sign, 1)));
   transition: transform var(--motion-duration-deliberate) var(--motion-ease-standard);
 }
 
@@ -60,11 +63,11 @@
 }
 
 .ds-carousel__arrow--prev {
-  left: var(--gap-200); /* 8px */
+  inset-inline-start: var(--gap-200); /* 8px */
 }
 
 .ds-carousel__arrow--next {
-  right: var(--gap-200);
+  inset-inline-end: var(--gap-200);
 }
 
 .ds-carousel__arrow:disabled {

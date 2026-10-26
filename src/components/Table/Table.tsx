@@ -15,8 +15,8 @@ export interface TableColumn {
   header: React.ReactNode;
   /** Optional column width (CSS value like '200px', '30%', 'auto') */
   width?: string;
-  /** Text alignment for cells in this column */
-  align?: 'left' | 'center' | 'right';
+  /** Text alignment for cells in this column. `start` (the default) and `end` follow the reading direction, so a number column set to `end` sits right in English and left in Arabic; `left` and `right` are screen sides. */
+  align?: 'start' | 'center' | 'end' | 'left' | 'right';
   /** The column's current sort, the direction DataTable's sorts use, set as `aria-sort` on its header so a screen reader announces it while reading the column. Leave unset on unsorted columns. */
   sort?: 'asc' | 'desc';
   /** Whether this column names each row. Its cells render as row headers (`<th scope="row">`), so moving along a row announces which record it is. */
@@ -126,7 +126,7 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
                 aria-sort={col.sort === 'asc' ? 'ascending' : col.sort === 'desc' ? 'descending' : undefined}
                 style={{
                   width: col.width,
-                  textAlign: col.align || 'left',
+                  textAlign: col.align || 'start',
                 }}
               >
                 {/* An empty header cell is unannounced — fall back to the
@@ -148,12 +148,16 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
                   <div
                     className={`${baseClass}__cell-content`}
                     style={{
+                      // flex-start and flex-end follow the reading direction;
+                      // left and right stay on their screen side.
                       justifyContent:
                         col.align === 'center'
                           ? 'center'
-                          : col.align === 'right'
+                          : col.align === 'end'
                             ? 'flex-end'
-                            : 'flex-start',
+                            : col.align === 'left' || col.align === 'right'
+                              ? col.align
+                              : 'flex-start',
                     }}
                   >
                     {row.cells[col.key]}

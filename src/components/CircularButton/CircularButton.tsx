@@ -8,6 +8,7 @@ import { Spinner } from '../Spinner/Spinner';
 import { Tooltip } from '../Tooltip/Tooltip';
 import './CircularButton.css';
 import '../../fonts/material-symbols.css';
+import { mirrorClass } from '../../behaviors/direction';
 
 /** Props owned by CircularButton itself — everything else falls through to the DOM node. */
 type CircularButtonOwnProps = {
@@ -65,8 +66,8 @@ type CircularButtonOwnProps = {
    * tooltip wrapper would block).
    */
   tooltip?: string | false;
-  /** Which side the tooltip opens on. */
-  tooltipPosition?: 'top' | 'bottom' | 'left' | 'right';
+  /** Which side the tooltip opens on. `start` and `end` follow the reading direction. */
+  tooltipPosition?: 'top' | 'bottom' | 'left' | 'right' | 'start' | 'end';
   /** Optional href — renders as <a> instead of <button> */
   href?: string;
   /** Optional target attribute for links */
@@ -171,7 +172,7 @@ export const CircularButton = React.forwardRef<
         <Spinner size={size === 'compact' ? 'sm' : 'md'} tone="inherit" />
       </span>
     ) : (
-      <span className={`${baseClass}__icon${typeof icon === 'string' ? ' material-symbols-rounded' : ''}`} aria-hidden="true">
+      <span className={`${baseClass}__icon${typeof icon === 'string' ? ` material-symbols-rounded ${mirrorClass(icon)}` : ''}`} aria-hidden="true">
         {icon}
       </span>
     );

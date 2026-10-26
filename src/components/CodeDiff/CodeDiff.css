@@ -112,7 +112,7 @@
   flex-shrink: 0;
   min-width: 4ch;
   padding: 0 var(--padding-100);
-  text-align: right;
+  text-align: end;
   color: var(--color-text-tertiary);
   user-select: none;
 }
@@ -126,7 +126,7 @@
 
 .ds-codediff__content {
   white-space: pre;
-  padding-right: var(--padding-400);
+  padding-inline-end: var(--padding-400);
 }
 
 /* ============================================

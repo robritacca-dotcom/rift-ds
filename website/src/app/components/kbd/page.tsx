@@ -35,8 +35,9 @@ export default function KbdPage() {
             <p className={styles.introBody}>
               Renders a semantic kbd element styled as a keycap, for shortcut
               hints in menus and documentation prose. Compose several for a
-              chord. The command palette&apos;s shortcut hints render through
-              this component.
+              chord, or pass a whole shortcut as <code>keys</code> and it draws
+              the keys for the reader&apos;s platform. The command palette&apos;s
+              shortcut hints render through this component.
             </p>
           </div>
 
@@ -96,6 +97,24 @@ export default function KbdPage() {
             <p className={styles.demoText}>
               Compact keycaps match the command palette&apos;s shortcut hints;
               the default size suits body-text prose.
+            </p>
+          </section>
+
+          {/* A whole shortcut */}
+          <section className={styles.section}>
+            <SectionTitle title="A whole shortcut" />
+            <div className={styles.demoRow}>
+              <Kbd keys="mod+k" />
+              <Kbd keys="mod+shift+p" />
+              <Kbd keys="g i" size="compact" />
+            </div>
+            <p className={styles.demoText}>
+              <code>keys</code> takes the same string <code>useShortcut</code>{" "}
+              binds: <code>mod</code> draws ⌘ on a Mac and Ctrl elsewhere, and a
+              space separates the steps of a sequence. The keys keep their
+              left-to-right order in a right-to-left page, and{" "}
+              <code>keyLabels</code> renames any of them for a keyboard printed
+              in another language.
             </p>
           </section>
 

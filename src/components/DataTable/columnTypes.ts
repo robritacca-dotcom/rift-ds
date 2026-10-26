@@ -6,8 +6,9 @@
  * plain types). TypedCell draws the cell. Internal: the public names are
  * DataTableColumnType and DataTableColumnFormat, re-exported from DataTable.
  *
- * Formatting defaults to `en-US`, not the browser's locale, so the server's
- * HTML and the browser's first render agree; a column sets its own.
+ * Formatting defaults to the table's locale (its `locale` prop, else the
+ * nearest LocaleProvider's, else `en-US`), never the browser's, so the
+ * server's HTML and the browser's first render agree; a column sets its own.
  */
 
 import type { CellEditorKind, CellValue } from './editorKinds';
@@ -19,7 +20,7 @@ export type ColumnType =
 
 /** How a typed column formats its values. */
 export interface ColumnFormat {
-  /** BCP 47 locale for numbers, money and dates. Defaults to `en-US`, so the server and the browser agree. */
+  /** BCP 47 locale for numbers, money and dates. Defaults to the table's `locale` (else the nearest LocaleProvider's, else `en-US`), never the browser's, so the server and the browser agree. */
   locale?: string;
   /** ISO 4217 code for a `currency` column. Defaults to `USD`. */
   currency?: string;

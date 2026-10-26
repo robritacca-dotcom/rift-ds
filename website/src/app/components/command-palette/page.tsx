@@ -18,8 +18,8 @@ const groups: CommandPaletteGroup[] = [
   {
     label: "Navigation",
     commands: [
-      { id: "home", label: "Go to Home", icon: "home", shortcut: ["G", "H"] },
-      { id: "components", label: "Go to Components", icon: "widgets", shortcut: ["G", "C"] },
+      { id: "home", label: "Go to Home", icon: "home", keys: "g h" },
+      { id: "components", label: "Go to Components", icon: "widgets", keys: "g c" },
       {
         id: "foundations",
         label: "Go to Foundations",
@@ -41,10 +41,10 @@ const groups: CommandPaletteGroup[] = [
         id: "new",
         label: "New component",
         icon: "add",
-        shortcut: ["⌘", "N"],
+        keys: "mod+n",
         trailing: <Badge label="Beta" variant="info" />,
       },
-      { id: "search", label: "Search documentation", icon: "search", shortcut: ["⌘", "F"] },
+      { id: "search", label: "Search documentation", icon: "search", keys: "mod+f" },
       {
         id: "theme",
         label: "Toggle dark mode",
@@ -60,7 +60,7 @@ const groups: CommandPaletteGroup[] = [
     label: "Help",
     commands: [
       { id: "docs", label: "Read the docs", icon: "menu_book" },
-      { id: "shortcuts", label: "Keyboard shortcuts", icon: "keyboard", shortcut: ["?"] },
+      { id: "shortcuts", label: "Keyboard shortcuts", icon: "keyboard", keys: "?" },
     ],
   },
 ];
@@ -127,8 +127,9 @@ export default function CommandPalettePage() {
           <section className={styles.section}>
             <SectionTitle title="Anatomy" />
             <p className={styles.introBody}>
-              Commands carry an optional icon, a label, a description line, a{" "}
-              <code>shortcut</code> array rendered as key chips on the right,
+              Commands carry an optional icon, a label, a description line, a
+              shortcut as <code>keys</code> (drawn for the reader&apos;s
+              platform) rendered as key chips on the right,
               and an optional <code>trailing</code> node after the keycaps, a
               non-interactive badge or mark at the row&apos;s right edge (the
               Beta badge on “New component” in these examples; the site&apos;s

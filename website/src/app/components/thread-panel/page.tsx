@@ -51,7 +51,7 @@ function FullAnatomy() {
         activeThreadId={active}
         onThreadSelect={setActive}
         newThreadLabel="New thread"
-        newThreadShortcut={["Ctrl", "N"]}
+        newThreadKeys="mod+n"
         controls={CONTROLS}
         moreLabel="Show 12 more"
         profile={{ name: "Robin Vale", meta: "Team" }}
@@ -79,7 +79,7 @@ function CollapseDemo() {
         expanded={expanded}
         onExpandedChange={setExpanded}
         newThreadLabel="New thread"
-        newThreadShortcut={["Ctrl", "N"]}
+        newThreadKeys="mod+n"
         controls={CONTROLS}
         profile={{ name: "Robin Vale", meta: "Team" }}
       />

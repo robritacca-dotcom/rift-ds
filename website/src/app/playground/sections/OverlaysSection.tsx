@@ -39,7 +39,7 @@ const COMMAND_GROUPS: CommandPaletteGroup[] = [
     commands: [
       { id: "light", label: "Switch to light mode", icon: "light_mode" },
       { id: "dark", label: "Switch to dark mode", icon: "dark_mode" },
-      { id: "copy", label: "Copy theme CSS", icon: "content_copy", shortcut: ["⌘", "C"] },
+      { id: "copy", label: "Copy theme CSS", icon: "content_copy", keys: "mod+c" },
     ],
   },
   {

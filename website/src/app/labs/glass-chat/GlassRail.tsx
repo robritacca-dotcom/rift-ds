@@ -213,7 +213,7 @@ export default function GlassRail({
       /* New chat: the one row wired to the real conversation. */
       newThreadLabel="New chat"
       newThreadIcon="edit_square"
-      newThreadShortcut={["Ctrl", "N"]}
+      newThreadKeys="mod+n"
       onNewThread={() => {
         reset();
         setActiveThread(LIVE_ID);

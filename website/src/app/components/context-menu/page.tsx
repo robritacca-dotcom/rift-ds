@@ -17,11 +17,11 @@ import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentI
    ============================================ */
 
 const fileItems: DropdownMenuEntry[] = [
-  { label: "Open", icon: "open_in_new", shortcut: "⌘ O", onClick: () => {} },
-  { label: "Rename", icon: "edit", shortcut: "⏎", onClick: () => {} },
-  { label: "Duplicate", icon: "content_copy", shortcut: "⌘ D", onClick: () => {} },
+  { label: "Open", icon: "open_in_new", keys: "mod+o", onClick: () => {} },
+  { label: "Rename", icon: "edit", keys: "enter", onClick: () => {} },
+  { label: "Duplicate", icon: "content_copy", keys: "mod+d", onClick: () => {} },
   { type: "separator" },
-  { label: "Delete", icon: "delete", shortcut: "⌘ ⌫", destructive: true, onClick: () => {} },
+  { label: "Delete", icon: "delete", keys: "mod+backspace", destructive: true, onClick: () => {} },
 ];
 
 const richItems: DropdownMenuEntry[] = [

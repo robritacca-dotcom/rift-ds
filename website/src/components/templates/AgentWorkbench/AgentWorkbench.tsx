@@ -457,7 +457,7 @@ export default function AgentWorkbench() {
             logo={<ProductMark />}
             logoText="Tandem"
             newThreadLabel="New session"
-            newThreadShortcut={["Ctrl", "N"]}
+            newThreadKeys="mod+n"
             controls={THREAD_CONTROLS}
             groups={THREAD_GROUPS}
             activeThreadId="flaky"

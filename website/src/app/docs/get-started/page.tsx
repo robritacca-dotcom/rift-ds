@@ -595,7 +595,7 @@ export default function GetStartedPage() {
                   locale&apos;s decimal marks, month and weekday names, first day of
                   the week and clock. A component&apos;s own <code>locale</code> prop
                   wins over the provider, and the few that render on the server
-                  (LegendTile, GanttChart, ContributionGraph, Meter, ProgressBar, Timeline and Widget) take the prop alone.
+                  (such as LegendTile, Gauge, Stat and ProgressBar) take the prop alone.
                 </p>
                 <CodeBlock code={LOCALE_SNIPPET} language="tsx" showCopy />
                 <p className={styles.sectionNote}>

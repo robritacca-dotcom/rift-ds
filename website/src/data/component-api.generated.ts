@@ -7457,6 +7457,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "12"
           },
           {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the value is written in when no `formatValue` is given, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider.",
+            "defaultValue": "en-US"
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -12527,6 +12534,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "default"
           },
           {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale a number `value` is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider.",
+            "defaultValue": "en-US"
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -15019,6 +15033,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Chrome off (no border, padding, or fill) for use inside a panel that supplies the surface",
             "defaultValue": "false"
+          },
+          {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale each meter's readout is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider.",
+            "defaultValue": "en-US"
           },
           {
             "name": "className",

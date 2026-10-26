@@ -72,9 +72,9 @@ const groupedItems: DropdownMenuEntry[] = [
     type: "group",
     label: "My Account",
     items: [
-      { label: "Profile", icon: "person", shortcut: "⇧ ⌘ P", onClick: () => {} },
-      { label: "Billing", icon: "credit_card", shortcut: "⌘ B", onClick: () => {} },
-      { label: "Settings", icon: "settings", shortcut: "⌘ S", onClick: () => {} },
+      { label: "Profile", icon: "person", keys: "mod+shift+p", onClick: () => {} },
+      { label: "Billing", icon: "credit_card", keys: "mod+b", onClick: () => {} },
+      { label: "Settings", icon: "settings", keys: "mod+s", onClick: () => {} },
     ],
   },
   { type: "separator" },
@@ -83,7 +83,7 @@ const groupedItems: DropdownMenuEntry[] = [
     label: "Team",
     items: [
       { label: "Invite users", icon: "person_add", onClick: () => {} },
-      { label: "New Team", icon: "group_add", shortcut: "⌘ T", onClick: () => {} },
+      { label: "New Team", icon: "group_add", keys: "mod+t", onClick: () => {} },
     ],
   },
   { type: "separator" },
@@ -91,12 +91,12 @@ const groupedItems: DropdownMenuEntry[] = [
   { label: "Support", icon: "help", onClick: () => {} },
   { label: "API", icon: "terminal", disabled: true },
   { type: "separator" },
-  { label: "Log out", icon: "logout", shortcut: "⇧ ⌘ Q", destructive: true, onClick: () => {} },
+  { label: "Log out", icon: "logout", keys: "mod+shift+q", destructive: true, onClick: () => {} },
 ];
 
 const subMenuItems: DropdownMenuEntry[] = [
-  { label: "Back", icon: "arrow_back", shortcut: "⌘ [", onClick: () => {} },
-  { label: "Forward", icon: "arrow_forward", shortcut: "⌘ ]", disabled: true },
+  { label: "Back", icon: "arrow_back", keys: "mod+[", onClick: () => {} },
+  { label: "Forward", icon: "arrow_forward", keys: "mod+]", disabled: true },
   { type: "separator" },
   {
     label: "Invite users",
@@ -121,14 +121,14 @@ const subMenuItems: DropdownMenuEntry[] = [
 ];
 
 const shortcutItems: DropdownMenuEntry[] = [
-  { label: "Undo", shortcut: "⌘ Z", onClick: () => {} },
-  { label: "Redo", shortcut: "⇧ ⌘ Z", onClick: () => {} },
+  { label: "Undo", keys: "mod+z", onClick: () => {} },
+  { label: "Redo", keys: "mod+shift+z", onClick: () => {} },
   { type: "separator" },
-  { label: "Cut", shortcut: "⌘ X", onClick: () => {} },
-  { label: "Copy", shortcut: "⌘ C", onClick: () => {} },
-  { label: "Paste", shortcut: "⌘ V", onClick: () => {} },
+  { label: "Cut", keys: "mod+x", onClick: () => {} },
+  { label: "Copy", keys: "mod+c", onClick: () => {} },
+  { label: "Paste", keys: "mod+v", onClick: () => {} },
   { type: "separator" },
-  { label: "Select all", shortcut: "⌘ A", onClick: () => {} },
+  { label: "Select all", keys: "mod+a", onClick: () => {} },
 ];
 
 export default function DropdownMenuPage() {

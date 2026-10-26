@@ -6,6 +6,7 @@ import {
   type NavLink,
 } from "@/config/navigation";
 import { SITE_URL } from "@/lib/structuredData";
+import { blocks } from "@/data/blocks";
 import {
   AUTHOR_NAME,
   AUTHOR_URL,
@@ -81,7 +82,7 @@ export function GET() {
     "Live tools for exploring and re-theming the design system.",
     "",
     `- [AI chat](${SITE_URL}/docs/chat): how to add the whole AI chat as one installable widget: the full install (one command scaffolds the routes and guardrails), the panel alone over your own endpoint (with the streaming protocol it reads) or the headless engine under your own UI; its page under /components holds every prop, and .md on that URL is the contract as markdown`,
-    `- [Blocks](${SITE_URL}/docs/blocks): whole starting pages for a new app (an app shell, a dashboard, a sign-in), laid out for desktop and phone and added with \`npx rift-ds init block <name>\`; the files are yours from then on`,
+    `- [Blocks](${SITE_URL}/docs/blocks): whole starting pages for a new app (${blocks.map((block) => block.label.toLowerCase()).join(", ")}), laid out for desktop and phone and added with \`npx rift-ds init block <name>\`; the files are yours from then on`,
     `- [Playground](${SITE_URL}/playground): re-theme the design system live (components, type, chat and a full dashboard) and export it as one AGENTS.md for a coding agent (the setup, the theme in words and its CSS), or as CSS, a THEME.md and a setup prompt`,
     `- [Theme presets](${SITE_URL}/docs/get-started): complete looks ship in the package as generated stylesheets, applied by one data-brand attribute on the root element`,
     `- [System graph](${SITE_URL}/graph): every token, component and page as one dependency graph, traceable in both directions`,

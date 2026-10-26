@@ -589,7 +589,7 @@ Linked contact method with icon, label, and value.
 
 ### Data table
 
-The wired table: sort, search, filters, selection, paging, column and row controls, and inline editing, on a headless engine.
+The wired table: typed columns, sorting, filters, editing, grouping with totals, row details, saved views, thousands of rows, and rows from a server.
 
 - Import: `import { DataTable } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
@@ -693,7 +693,7 @@ Data table with flexible cell content, striped rows, compact sizing, and support
 
 ### Table toolbar
 
-The control bar over a table: search, filters as chips, the columns panel, density and a count, reading a DataTable's state with no props.
+The control bar over a table: search, filter chips, sort, group, columns, density, saved views and a bulk bar, wired to a DataTable in its toolbar slot.
 
 - Import: `import { TableToolbar } from 'rift-ds';`
 - Rendering: client component (declares 'use client')

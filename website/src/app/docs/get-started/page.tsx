@@ -250,6 +250,12 @@ const STACK_TOOLS: {
     logo: "/logos/React.svg",
   },
   {
+    name: "TanStack",
+    desc: "Table and Virtual, the engine and windowing under DataTable",
+    icon: "table_chart",
+    href: "https://tanstack.com/table",
+  },
+  {
     name: "Vite",
     desc: "Dev server and story test runner",
     logo: "/logos/vite.svg",

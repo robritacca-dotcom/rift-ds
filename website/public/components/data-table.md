@@ -1,6 +1,6 @@
 # Data table
 
-The wired table: sort, search, filters, selection, paging, column and row controls, and inline editing, on a headless engine.
+The wired table: typed columns, sorting, filters, editing, grouping with totals, row details, saved views, thousands of rows, and rows from a server.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 

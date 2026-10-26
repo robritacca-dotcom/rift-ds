@@ -3,7 +3,7 @@
   "name": "data-table",
   "type": "registry:ui",
   "title": "Data table",
-  "description": "The wired table: sort, search, filters, selection, paging, column and row controls, and inline editing, on a headless engine.",
+  "description": "The wired table: typed columns, sorting, filters, editing, grouping with totals, row details, saved views, thousands of rows, and rows from a server.",
   "author": "Robert Ritacca <https://robertritacca.com>",
   "dependencies": [
     "@tanstack/react-table",

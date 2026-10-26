@@ -478,7 +478,7 @@
       "name": "DataTable",
       "label": "Data table",
       "slug": "data-table",
-      "description": "The wired table: sort, search, filters, selection, paging, column and row controls, and inline editing, on a headless engine.",
+      "description": "The wired table: typed columns, sorting, filters, editing, grouping with totals, row details, saved views, thousands of rows, and rows from a server.",
       "category": "data-display",
       "client": true
     },
@@ -1186,7 +1186,7 @@
       "name": "TableToolbar",
       "label": "Table toolbar",
       "slug": "table-toolbar",
-      "description": "The control bar over a table: search, filters as chips, the columns panel, density and a count, reading a DataTable's state with no props.",
+      "description": "The control bar over a table: search, filter chips, sort, group, columns, density, saved views and a bulk bar, wired to a DataTable in its toolbar slot.",
       "category": "data-display",
       "client": true
     },

@@ -1,6 +1,6 @@
 # Table toolbar
 
-The control bar over a table: search, filters as chips, the columns panel, density and a count, reading a DataTable's state with no props.
+The control bar over a table: search, filter chips, sort, group, columns, density, saved views and a bulk bar, wired to a DataTable in its toolbar slot.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 

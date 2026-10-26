@@ -40,6 +40,9 @@ execSync('npx vite build --config vite.lib.config.ts', { cwd: repoRoot, stdio: '
 const collect = (dir, predicate, out = []) => {
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
     const path = join(dir, entry.name);
+    // The scaffold templates' stylesheets ship with the templates beside the
+    // bin (below), not as package assets under dist/cli.
+    if (entry.isDirectory() && path === join(srcDir, 'cli')) continue;
     if (entry.isDirectory()) collect(path, predicate, out);
     else if (predicate(entry.name)) out.push(path);
   }
@@ -120,7 +123,7 @@ writeFileSync(
 chmodSync(binTarget, 0o755);
 console.log(`▸ Wrote bin/${BIN_NAME}.mjs (brand facts stamped).`);
 
-// The `init chat` templates ride beside the bin. They import the installed
+// The scaffold templates (`init chat`, `init app` and `init block`) ride beside the bin. They import the installed
 // version's own subpaths, so unlike the skills they are shipped rather than
 // fetched: the copy a consumer scaffolds must match the package they have.
 const templatesSrc = join(srcDir, 'cli', 'templates');

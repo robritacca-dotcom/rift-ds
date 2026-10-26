@@ -43,7 +43,7 @@ import 'rift-ds/tokens/base.css'; // the reset and page every component is tuned
 import { Button, Card, Badge } from 'rift-ds';
 ```
 
-React 19+ is a peer dependency. Its two runtime dependencies, TanStack Table and TanStack Virtual (the headless engine under `DataTable` and the windowing behind its long tables), install with the package. The package is ESM-only and resolved via `exports` subpaths: use a bundler that handles CSS and font imports from `node_modules` (Vite, Next.js, webpack) and set TypeScript's `moduleResolution` to `"bundler"` or `"nodenext"`. The Recharts-backed charts live behind `rift-ds/charts`, so the optional `recharts` peer dependency is only needed if you use them. The chat widget's subpaths bring their own optional peers (`react-markdown` and `remark-gfm` for the panel, `@anthropic-ai/sdk` for the server handlers, `@upstash/ratelimit` and `@upstash/redis` for the guardrails), needed only if you use them. Prefer owning the source? Pull single components through the shadcn CLI (`npx shadcn@latest add https://rift-ds.com/r/button.json`, with details in the [get-started guide](https://rift-ds.com/docs/get-started)), or clone this repo and build on it directly; all of it is MIT.
+React 19+ is a peer dependency. The package's own runtime dependencies, TanStack Table and TanStack Virtual (the headless engine under `DataTable` and the windowing behind its long tables), install with it. The package is ESM-only and resolved via `exports` subpaths: use a bundler that handles CSS and font imports from `node_modules` (Vite, Next.js, webpack) and set TypeScript's `moduleResolution` to `"bundler"` or `"nodenext"`. The Recharts-backed charts live behind `rift-ds/charts`, so the optional `recharts` peer dependency is only needed if you use them. The chat widget's subpaths bring their own optional peers (`react-markdown` and `remark-gfm` for the panel, `@anthropic-ai/sdk` for the server handlers, `@upstash/ratelimit` and `@upstash/redis` for the guardrails), needed only if you use them. Prefer owning the source? Pull single components through the shadcn CLI (`npx shadcn@latest add https://rift-ds.com/r/button.json`, with details in the [get-started guide](https://rift-ds.com/docs/get-started)), or clone this repo and build on it directly; all of it is MIT.
 
 ## The chat widget
 
@@ -125,6 +125,7 @@ Accordion · Agent plan · Agent rail · Agent status · AI button · Alert · A
 - **Next.js 16**: the documentation site
 - **Storybook 10**: component explorer
 - **Vitest + Playwright + axe**: every Storybook story runs as a render test in headless Chromium, with an accessibility audit on each
+- **TanStack Table + TanStack Virtual**: the headless engine and the windowing under `DataTable`, the package's runtime dependencies
 - **CSS custom properties**: all theming via semantic tokens, no CSS-in-JS
 
 The [overview](https://rift-ds.com/overview) shows the generate-and-validate pipeline behind the docs.

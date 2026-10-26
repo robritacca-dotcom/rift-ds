@@ -3,7 +3,7 @@
   "name": "table-toolbar",
   "type": "registry:ui",
   "title": "Table toolbar",
-  "description": "The control bar over a table: search, filters as chips, the columns panel, density and a count, reading a DataTable's state with no props.",
+  "description": "The control bar over a table: search, filter chips, sort, group, columns, density, saved views and a bulk bar, wired to a DataTable in its toolbar slot.",
   "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json",

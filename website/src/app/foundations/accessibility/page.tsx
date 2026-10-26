@@ -47,6 +47,14 @@ const gateRows = [
     },
   },
   {
+    id: "forced",
+    cells: {
+      gate: "Forced colors",
+      runs: "High contrast modes swap every colour for the user's own and flatten every fill, so the token layer re-points the roles that carry a state (a checked box, the selected segment, the primary button, a count) at system colours, the one fill the mode keeps. The table bench is rendered in that mode, and the check fails on a state with no fill of its own, an open panel with no edge or a focus ring that vanished.",
+      when: "After the website build, in CI and local verify",
+    },
+  },
+  {
     id: "presets",
     cells: {
       gate: "Theme contrast",

@@ -405,7 +405,7 @@
   padding: 0;
   border: none;
   background: none;
-  color: var(--color-icon-secondary);
+  color: var(--color-text-secondary);
   cursor: grab;
   touch-action: none;
 }
@@ -717,7 +717,7 @@
   border: none;
   border-radius: var(--radius-100);
   background: none;
-  color: var(--color-icon-secondary);
+  color: var(--color-text-secondary);
   cursor: pointer;
 }
 
@@ -820,7 +820,10 @@
 }
 
 .ds-data-table__typed-link {
-  color: var(--color-action-primary-text-tertiary);
+  /* Body text with its underline: the underline marks it as a link, and the
+     text colour holds AA on every table surface in both modes, which the
+     action colour's link shade does not on a dark card. */
+  color: inherit;
   text-decoration: underline;
 }
 
@@ -922,6 +925,11 @@
   color: var(--color-text-secondary);
 }
 
+/* The table's own controls whose glyph is all a reader sees of them (the
+   row grip, the filter mark, the group and details chevrons) take the
+   secondary text colour, which holds the 3:1 a control needs on every
+   table surface; the secondary icon colour does not in light mode. */
+
 /* ============================================
    GROUPS AND TOTALS
    A group is its own body, led by a group row on
@@ -969,7 +977,7 @@
   border: none;
   border-radius: var(--radius-050);
   background: none;
-  color: var(--color-icon-secondary);
+  color: var(--color-text-secondary);
   cursor: pointer;
 }
 
@@ -1111,7 +1119,7 @@
   border: none;
   border-radius: var(--radius-050);
   background: none;
-  color: var(--color-icon-secondary);
+  color: var(--color-text-secondary);
   cursor: pointer;
 }
 

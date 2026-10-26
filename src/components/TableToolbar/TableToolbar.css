@@ -147,7 +147,7 @@
   border: none;
   border-radius: var(--radius-100);
   background: none;
-  color: var(--color-icon-secondary);
+  color: var(--color-text-secondary);
   cursor: grab;
   touch-action: none;
 }

@@ -347,6 +347,8 @@ export interface DataTableColumnLabels {
   calculate: string;
   /** The totals footer's menu button, given the column's header. */
   totalsMenu: (header: string) => string;
+  /** A picked footer cell's name, given the column's header, the calculation and its result, so it says which column it totals. */
+  totalsValue: (header: string, calculation: string, value: string) => string;
   /** Each calculation's name, as the footer's menu and its caption read it. */
   totals: Record<DataTableTotal, string>;
   /** Accessible name of a row's Edit button, with `editMode="row"`, given the row's name. */
@@ -400,6 +402,7 @@ const DEFAULT_COLUMN_LABELS: DataTableColumnLabels = {
   selectGroup: (value) => `Select every row in ${value}`,
   calculate: 'Calculate',
   totalsMenu: (header) => `Calculate ${header}`,
+  totalsValue: (header, calculation, value) => `${header}, ${calculation} ${value}`,
   totals: {
     none: 'None',
     count: 'Count',
@@ -2687,6 +2690,10 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
      type and the count in the first column, then each column's group total
      in its own cell. The cells mirror a body row's, so the pinned edges and
      the widths line up. */
+  /* The group rows' and the footer's controls sit outside the grid's cell
+     navigation (the arrows move through the records), so they keep their
+     own Tab stops in every mode: a grid's roving focus would otherwise
+     leave them unreachable from the keyboard. */
   const groupRow = (group: { key: string; rows: R[] }) => {
     const expanded = !collapsedGroups.includes(group.key);
     const label = groupLabel(group.key);
@@ -2716,7 +2723,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
                       )
                     }
                     aria-label={labels.selectGroup(label)}
-                    tabIndex={innerTab}
+                    tabIndex={0}
                   />
                 </div>
               )}
@@ -2740,7 +2747,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
                     aria-expanded={expanded}
                     aria-label={labels.groupToggle(label, group.rows.length, expanded)}
                     onClick={() => toggleGroup(group.key)}
-                    tabIndex={innerTab}
+                    tabIndex={0}
                   >
                     <span className={`${baseClass}__group-chevron material-symbols-rounded`} aria-hidden="true">
                       chevron_right
@@ -2836,8 +2843,12 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
                     <button
                       type="button"
                       className={`${baseClass}__total${pick === 'none' ? ` ${baseClass}__total--empty` : ''}`}
-                      aria-label={pick === 'none' ? labels.totalsMenu(headerText(col)) : undefined}
-                      tabIndex={innerTab}
+                      aria-label={
+                        pick === 'none'
+                          ? labels.totalsMenu(headerText(col))
+                          : labels.totalsValue(headerText(col), labels.totals[pick], String(text ?? ''))
+                      }
+                      tabIndex={0}
                     >
                       {pick === 'none' ? (
                         <span className={`${baseClass}__total-name`}>{labels.calculate}</span>
@@ -2911,6 +2922,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
                     type="button"
                     className={`${baseClass}__grip material-symbols-rounded`}
                     aria-label={labels.rowGrip(name)}
+                    aria-keyshortcuts="Alt+ArrowUp Alt+ArrowDown"
                     aria-disabled={sortOwnsOrder || undefined}
                     tabIndex={innerTab}
                     onPointerDown={(event) => startRowDrag(event, row.id)}

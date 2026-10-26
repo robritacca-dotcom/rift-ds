@@ -1062,6 +1062,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
               <button
                 type="button"
                 className="ds-table-toolbar__grip material-symbols-rounded"
+                aria-keyshortcuts="Alt+ArrowUp Alt+ArrowDown"
                 aria-label={labels.moveColumn(col.label)}
                 aria-disabled={!col.movable || undefined}
                 onPointerDown={col.movable ? (event) => startColumnDrag(event, col.key) : undefined}
@@ -1146,6 +1147,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
                           <button
                             type="button"
                             className="ds-table-toolbar__grip material-symbols-rounded"
+                            aria-keyshortcuts="Alt+ArrowUp Alt+ArrowDown"
                             aria-label={labels.moveSort(label)}
                             onPointerDown={(event) =>
                               startListDrag(event, 'ds-table-toolbar__sort-row', (slot) => moveSortTo(entry.key, slot))
@@ -1353,10 +1355,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
             tabs={views.map((v) => ({
               value: v.id,
               label: v.name,
-              icon:
-                v.id === active?.id && dirty ? (
-                  <span className="ds-table-toolbar__view-dot" />
-                ) : undefined,
+              icon: v.id === active?.id && dirty ? <span className="ds-table-toolbar__view-dot" /> : undefined,
             }))}
             value={active?.id}
             onValueChange={pickView}

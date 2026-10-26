@@ -723,6 +723,10 @@ export const Grouped: Story = {
     // Each group sums its prices; the footer sums them all.
     await expect(canvas.getByText('$4,354')).toBeInTheDocument();
     await expect(canvasElement.querySelector('tfoot')).toHaveTextContent('Sum$20,262');
+    // In grid mode the group rows and the footer sit outside the arrows' reach, so each control is its own Tab stop.
+    await expect(canvas.getByRole('grid')).toBeInTheDocument();
+    await expect(toggles()[0]).toHaveAttribute('tabindex', '0');
+    await expect(canvas.getByRole('button', { name: 'Price, Sum $20,262' })).toHaveAttribute('tabindex', '0');
     // A chevron folds its group.
     await userEvent.click(toggles()[0]);
     // Seven of the ten rows remain (each group's own header cell reads as a row header too, so count the rows).

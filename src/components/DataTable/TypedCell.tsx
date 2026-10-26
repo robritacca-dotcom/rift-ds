@@ -120,9 +120,13 @@ export function TypedCell({ type, value, format, options, words, link: Link }: T
             <Badge key={tag} label={label(tag)} variant="neutral" />
           ))}
           {hidden > 0 && (
-            <span className={`${base}-more`} title={tags.slice(TAG_LIMIT).map(label).join(', ')}>
-              {words.more(hidden)}
-            </span>
+            <>
+              <span className={`${base}-more`} title={tags.slice(TAG_LIMIT).map(label).join(', ')} aria-hidden="true">
+                {words.more(hidden)}
+              </span>
+              {/* The folded tags, read in full: the count alone tells a screen reader nothing. */}
+              <span className="ds-visually-hidden">{tags.slice(TAG_LIMIT).map(label).join(', ')}</span>
+            </>
           )}
         </span>
       );

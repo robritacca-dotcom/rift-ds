@@ -36,6 +36,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same dat
 | defaultSorts | `DataTableSort[]` | no |  | Initial sorts for uncontrolled use. |
 | onSortsChange | `((sorts: DataTableSort[]) => void)` | no |  | Fires with every sort after one changes, first sort first. `onSortChange` fires too, with the first or `null`. |
 | linkComponent | `LinkComponent` | no |  | The link component a `link` column's cells render through, so the app's router handles them. Defaults to the nearest `LinkProvider`'s, else a plain anchor. |
+| virtualize | `boolean \| "auto"` | no | `auto` | Draws only the rows in view, so a table of thousands scrolls as smoothly as one of ten. `auto` (the default) does it for an unpaged, ungrouped table of more than 200 rows; `true` always; `false` never. A virtualised table scrolls inside its frame (`maxHeight`, 640px when unset), keeps its header in view, and still sends its first screen of rows in the server's HTML. |
+| onLoadMore | `(() => void)` | no |  | Called when the reader scrolls near the end of the rows while `hasMore` is set, to fetch the next batch. Called once per batch: append the rows and it can fire again. |
+| hasMore | `boolean` | no | `false` | Whether more rows can be fetched: shows a loading row at the end and calls `onLoadMore` as it comes into view. |
+| loadingMoreLabel | `string` | no | `Loading more` | The loading row's words. Defaults to "Loading more". |
 | renderDetail | `((row: R) => ReactNode)` | no |  | Renders a row's details: adds a chevron column, and an opened row shows this beneath it, across the table's width. Rendered only once opened. |
 | expandedIds | `string[]` | no |  | The ids of the rows whose details are open, for controlled use. Pair with `onExpandedIdsChange`. |
 | defaultExpandedIds | `string[]` | no |  | The rows open to begin with, for uncontrolled use. |

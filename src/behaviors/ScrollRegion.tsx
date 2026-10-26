@@ -13,18 +13,29 @@
  * wrapper is the first user, so Table itself stays server-renderable.
  */
 
-import { useEffect, useId, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import { useCallback, useEffect, useId, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 
 export function ScrollRegion({
   className,
   style,
   children,
+  onNode,
 }: {
   className?: string;
   style?: CSSProperties;
   children: ReactNode;
+  /** Hands the scrolling element to its owner (a virtualised table scrolls its rows inside it). */
+  onNode?: (node: HTMLDivElement | null) => void;
 }) {
   const ref = useRef<HTMLDivElement>(null);
+  // Stable, so the owner hears of the node once, not on every render.
+  const setNode = useCallback(
+    (node: HTMLDivElement | null) => {
+      ref.current = node;
+      onNode?.(node);
+    },
+    [onNode],
+  );
   const captionId = useId();
   const [overflows, setOverflows] = useState(false);
   const [labelledBy, setLabelledBy] = useState<string | undefined>();
@@ -47,7 +58,7 @@ export function ScrollRegion({
 
   return (
     <div
-      ref={ref}
+      ref={setNode}
       className={className}
       style={style}
       role={overflows ? 'region' : undefined}

@@ -759,3 +759,58 @@ export const RowDetails: Story = {
     await waitFor(() => expect(canvas.queryByText('Order for John Clarkson')).not.toBeInTheDocument());
   },
 };
+
+const manyRows: DataTableRow[] = Array.from({ length: 1000 }, (_, i) => ({
+  id: `m${i + 1}`,
+  values: { name: `Customer ${String(i + 1).padStart(4, '0')}`, status: 'Shipped', updated: '2026-09-01', price: i },
+}));
+
+/** A thousand rows: past 200 an unpaged table draws only the rows in view, inside its frame, and says how many rows there are. */
+export const Virtualized: Story = {
+  args: {
+    columns: columns.map((col) => (col.key === 'name' ? { ...col, rowHeader: true } : col)),
+    rows: manyRows,
+    maxHeight: 320,
+    caption: 'Customers',
+  },
+  play: async ({ canvasElement }) => {
+    const table = canvasElement.querySelector('table')!;
+    await expect(table).toHaveAttribute('aria-rowcount', '1001');
+    const drawn = () => canvasElement.querySelectorAll('tbody tr[data-row]');
+    await waitFor(() => expect(drawn().length).toBeGreaterThan(0));
+    await expect(drawn().length).toBeLessThan(60);
+    const frame = canvasElement.querySelector<HTMLElement>('.ds-data-table__frame')!;
+    frame.scrollTop = frame.scrollHeight;
+    await waitFor(() => expect(drawn()[drawn().length - 1]).toHaveAttribute('aria-rowindex', '1001'));
+  },
+};
+
+/** With `hasMore`, a loading row ends the rows and asks for the next batch as it comes into view. */
+export const InfiniteScroll: Story = {
+  render: () => {
+    const Demo = () => {
+      const [count, setCount] = useState(20);
+      return (
+        <DataTable
+          columns={columns.map((col) => (col.key === 'name' ? { ...col, rowHeader: true } : col))}
+          rows={manyRows.slice(0, count)}
+          maxHeight={240}
+          hasMore={count < 60}
+          onLoadMore={() => setCount((n) => n + 20)}
+          caption="Customers"
+        />
+      );
+    };
+    return <Demo />;
+  },
+  play: async ({ canvasElement }) => {
+    const frame = canvasElement.querySelector<HTMLElement>('.ds-data-table__frame')!;
+    await expect(canvasElement.querySelectorAll('tbody tr[data-row]')).toHaveLength(20);
+    frame.scrollTop = frame.scrollHeight;
+    await waitFor(() => expect(canvasElement.querySelectorAll('tbody tr[data-row]')).toHaveLength(40));
+    frame.scrollTop = frame.scrollHeight;
+    await waitFor(() => expect(canvasElement.querySelectorAll('tbody tr[data-row]')).toHaveLength(60));
+    // No more to load: the loading row is gone.
+    await expect(canvasElement.querySelector('.ds-data-table__loading-row')).toBeNull();
+  },
+};

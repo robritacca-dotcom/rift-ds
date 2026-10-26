@@ -26,6 +26,7 @@ import { PhoneTable } from "./PhoneTable";
 import { GroupedTable } from "./GroupedTable";
 import { DetailTable } from "./DetailTable";
 import { ViewsTable } from "./ViewsTable";
+import { ScaleTable } from "./ScaleTable";
 import { TableToolbar } from "rift-ds/components/TableToolbar/TableToolbar";
 import styles from "./TablesBench.module.css";
 
@@ -488,6 +489,14 @@ export function TablesBench() {
         note="Three saved views as tabs over the bar: All accounts, Open pipeline (a filter and a sort) and By owner (grouped, three columns hidden). Pick one and the table takes its setup. Change anything and the active tab shows a dot; its menu saves, saves as new, resets, renames and deletes, and the plus saves the table as a new view."
       >
         {({ size, lines }) => <ViewsTable size={size} lines={lines} />}
+      </Station>
+
+      <Station
+        id="bench-scale"
+        title="16. Ten thousand rows"
+        note="Ten thousand projects in one unpaged table: only the rows in view are drawn, so scrolling, sorting, filtering and selecting stay quick, and the server's HTML still holds the first screen. Switch to 100 at a time and the table asks for the next hundred as the loading row comes into view."
+      >
+        {({ size, lines }) => <ScaleTable size={size} lines={lines} />}
       </Station>
     </div>
   );

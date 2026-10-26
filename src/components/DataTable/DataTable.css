@@ -1174,3 +1174,35 @@
   display: block;
   flex-basis: 100%;
 }
+
+/* ============================================
+   SCALE
+   A virtualised body's spacer rows hold the
+   height of the rows not drawn and draw nothing;
+   the loading row closes the rows while the next
+   batch is on its way.
+   ============================================ */
+
+.ds-data-table__spacer > td {
+  padding: 0;
+  border: none;
+}
+
+.ds-table__body .ds-data-table__loading-row:hover > .ds-table__cell,
+.ds-data-table__loading-row > .ds-table__cell {
+  background-color: var(--color-table-body-bg);
+}
+
+.ds-data-table__loading {
+  position: sticky;
+  inset-inline-start: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-200);
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+  color: var(--color-text-secondary);
+}

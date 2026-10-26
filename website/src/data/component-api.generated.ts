@@ -5234,6 +5234,33 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "The link component a `link` column's cells render through, so the app's router handles them. Defaults to the nearest `LinkProvider`'s, else a plain anchor."
           },
           {
+            "name": "virtualize",
+            "type": "boolean | \"auto\"",
+            "required": false,
+            "description": "Draws only the rows in view, so a table of thousands scrolls as\nsmoothly as one of ten. `auto` (the default) does it for an unpaged,\nungrouped table of more than 200 rows; `true` always; `false` never.\nA virtualised table scrolls inside its frame (`maxHeight`, 640px when\nunset), keeps its header in view, and still sends its first screen of\nrows in the server's HTML.",
+            "defaultValue": "auto"
+          },
+          {
+            "name": "onLoadMore",
+            "type": "(() => void)",
+            "required": false,
+            "description": "Called when the reader scrolls near the end of the rows while `hasMore` is set, to fetch the next batch. Called once per batch: append the rows and it can fire again."
+          },
+          {
+            "name": "hasMore",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether more rows can be fetched: shows a loading row at the end and calls `onLoadMore` as it comes into view.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "loadingMoreLabel",
+            "type": "string",
+            "required": false,
+            "description": "The loading row's words. Defaults to \"Loading more\".",
+            "defaultValue": "Loading more"
+          },
+          {
             "name": "renderDetail",
             "type": "((row: R) => ReactNode)",
             "required": false,

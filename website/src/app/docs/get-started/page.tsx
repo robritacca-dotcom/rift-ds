@@ -463,8 +463,9 @@ export default function GetStartedPage() {
                 <SectionTitle title="Install in any React app" />
                 <p className={styles.sectionNote}>
                   React 19+ (react and react-dom) is the only required peer
-                  dependency (recharts is an optional extra, for the recharts-backed charts). The one runtime dependency,
-                  TanStack Table, the headless engine under DataTable, installs with the package. Everything else
+                  dependency (recharts is an optional extra, for the recharts-backed charts). The two runtime dependencies,
+                  TanStack Table and TanStack Virtual, the headless engine and the windowing under DataTable, install
+                  with the package. Everything else
                   (component CSS, both themes, the Material Symbols icon font) is bundled. The package is
                   ESM-only: use a bundler that handles CSS and font imports (Vite,
                   Next.js, webpack), with TypeScript&apos;s{" "}

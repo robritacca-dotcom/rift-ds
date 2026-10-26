@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import {
   columnFilteringFeature,
   columnOrderingFeature,
@@ -17,6 +17,8 @@ import {
 import { DropdownMenu, type DropdownMenuEntry } from '../DropdownMenu/DropdownMenu';
 import { Dropdown } from '../Dropdown/Dropdown';
 import { CircularButton } from '../CircularButton/CircularButton';
+import { Spinner } from '../Spinner/Spinner';
+import { VirtualRows } from './VirtualRows';
 import { ScrollRegion } from '../../behaviors/ScrollRegion';
 import { startDrag } from './dragGesture';
 import '../Table/Table.css';
@@ -425,6 +427,15 @@ const RESIZE_STEP = 16;
 const LABEL_MIN_WIDTH = 40;
 /** The header controls' widths, in the base theme: the sort glyph and the compact menu button, each with its gap. */
 const SORT_GLYPH_WIDTH = 24;
+/** Past this many rows, an unpaged table draws only the rows in view. */
+const VIRTUAL_THRESHOLD = 200;
+/** A virtualised table's frame height when `maxHeight` does not set one, and the height its first screen is drawn for on the server. */
+const VIRTUAL_HEIGHT = 640;
+/** A row's height before it is measured: a single line of body text at each density, with the cell padding. */
+const ESTIMATED_ROW_HEIGHT = { default: 52, compact: 40 } as const;
+/** Rows drawn past each edge of the view, so a quick scroll never shows a gap. */
+const VIRTUAL_OVERSCAN = 8;
+
 /** The bordered frame's line, either side of a details panel that spans the visible table. */
 const UTILITY_BORDER = 1;
 /** The rank a header shows beside its sort glyph while several columns sort. */
@@ -448,6 +459,10 @@ const declaredPixels = (width: string | number | undefined): number | undefined 
   return match ? Number(match[1]) : undefined;
 };
 
+/* One collator for every text comparison: `localeCompare` with options
+   builds a new one per call, which a sort of thousands of rows feels. */
+const TEXT_COLLATOR = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
+
 /** Compare two raw values: numbers numerically, everything else as text. */
 const compareValues = (a: DataTableValue, b: DataTableValue): number => {
   if (a == null && b == null) return 0;
@@ -455,7 +470,7 @@ const compareValues = (a: DataTableValue, b: DataTableValue): number => {
   if (b == null) return 1;
   if (typeof a === 'number' && typeof b === 'number') return a - b;
   if (typeof a === 'boolean' && typeof b === 'boolean') return Number(a) - Number(b);
-  return String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: 'base' });
+  return TEXT_COLLATOR.compare(String(a), String(b));
 };
 
 /*
@@ -552,6 +567,21 @@ type DataTableOwnProps<R extends DataTableRow = DataTableRow> = {
   onSortsChange?: (sorts: DataTableSort[]) => void;
   /** The link component a `link` column's cells render through, so the app's router handles them. Defaults to the nearest `LinkProvider`'s, else a plain anchor. */
   linkComponent?: LinkComponent;
+  /**
+   * Draws only the rows in view, so a table of thousands scrolls as
+   * smoothly as one of ten. `auto` (the default) does it for an unpaged,
+   * ungrouped table of more than 200 rows; `true` always; `false` never.
+   * A virtualised table scrolls inside its frame (`maxHeight`, 640px when
+   * unset), keeps its header in view, and still sends its first screen of
+   * rows in the server's HTML.
+   */
+  virtualize?: boolean | 'auto';
+  /** Called when the reader scrolls near the end of the rows while `hasMore` is set, to fetch the next batch. Called once per batch: append the rows and it can fire again. */
+  onLoadMore?: () => void;
+  /** Whether more rows can be fetched: shows a loading row at the end and calls `onLoadMore` as it comes into view. */
+  hasMore?: boolean;
+  /** The loading row's words. Defaults to "Loading more". */
+  loadingMoreLabel?: string;
   /** Renders a row's details: adds a chevron column, and an opened row shows this beneath it, across the table's width. Rendered only once opened. */
   renderDetail?: (row: R) => React.ReactNode;
   /** The ids of the rows whose details are open, for controlled use. Pair with `onExpandedIdsChange`. */
@@ -790,6 +820,10 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
   onSortsChange,
   multiSort = false,
   onViewChange,
+  virtualize = 'auto',
+  onLoadMore,
+  hasMore = false,
+  loadingMoreLabel = 'Loading more',
   renderDetail,
   expandedIds: expandedProp,
   defaultExpandedIds,
@@ -1125,6 +1159,37 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
   );
 
   const needle = search.trim().toLowerCase();
+  /* The engine memoises its row models on its state's identity, so each
+     piece is rebuilt only when what it says changes: rebuilt every render,
+     a table of thousands would re-sort and re-filter on every hover. Each
+     memo reads only its own key, which says everything the piece holds. */
+  const sortingKey = JSON.stringify(
+    currentSorts
+      .filter((entry) => byKey.has(entry.key))
+      .map((entry) => ({ id: entry.key, desc: entry.direction === 'desc' })),
+  );
+  const engineSorting = useMemo(() => JSON.parse(sortingKey) as { id: string; desc: boolean }[], [sortingKey]);
+  const engineFiltersKey = JSON.stringify(
+    Object.entries(
+      filters.reduce<Record<string, Filter[]>>((byColumn, filter) => {
+        if (byKey.has(filter.column)) (byColumn[filter.column] ??= []).push(filter);
+        return byColumn;
+      }, {}),
+    ).map(([id, value]) => ({ id, value })),
+  );
+  const engineFilters = useMemo(
+    () => JSON.parse(engineFiltersKey) as { id: string; value: Filter[] }[],
+    [engineFiltersKey],
+  );
+  const selectionKey = currentSelection.join('\u0000');
+  const engineSelection = useMemo(
+    () =>
+      Object.fromEntries((selectionKey ? selectionKey.split('\u0000') : []).map((id) => [id, true as const])) as Record<
+        string,
+        true
+      >,
+    [selectionKey],
+  );
   const table = useTable({
     features: ENGINE_FEATURES,
     columns: engineColumns,
@@ -1134,17 +1199,10 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
       columnOrder: knownOrder,
       columnPinning: { start: enginePinnedStart, end: pinnedEnd },
       columnVisibility: Object.fromEntries([...hidden].map((key) => [key, false])),
-      sorting: currentSorts
-        .filter((entry) => byKey.has(entry.key))
-        .map((entry) => ({ id: entry.key, desc: entry.direction === 'desc' })),
+      sorting: engineSorting,
       globalFilter: needle || undefined,
-      columnFilters: Object.entries(
-        filters.reduce<Record<string, Filter[]>>((byColumn, filter) => {
-          if (byKey.has(filter.column)) (byColumn[filter.column] ??= []).push(filter);
-          return byColumn;
-        }, {}),
-      ).map(([id, value]) => ({ id, value })),
-      rowSelection: Object.fromEntries(currentSelection.map((id) => [id, true as const])),
+      columnFilters: engineFilters,
+      rowSelection: engineSelection,
     },
     /* The search matches any raw value on the row, displayed or not, case
          insensitively, as it always has: so every column is eligible and the
@@ -1987,7 +2045,16 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
   }, [pendingFocus?.id]);
   const focusCell = (cell: Cell) => {
     setActive(cell);
-    tableEl?.querySelector<HTMLElement>(cellSelector(cell))?.focus();
+    const node = tableEl?.querySelector<HTMLElement>(cellSelector(cell));
+    if (node) {
+      node.focus();
+      return;
+    }
+    // Virtualised, the row may not be drawn yet: bring it in, then focus it once it is.
+    scrollRowIntoView(cell.row);
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() => tableEl?.querySelector<HTMLElement>(cellSelector(cell))?.focus()),
+    );
   };
 
   /* ---- Editing --------------------------------------------------------
@@ -2552,6 +2619,67 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     );
   };
 
+  /* ---- Virtualisation ----------------------------------------------------
+     Past VIRTUAL_THRESHOLD rows (or when asked), only the rows in view and
+     a few either side are in the DOM, between two spacer rows that hold
+     the scroll height. A row and its open details are separate items, each
+     measured as it draws. The rows' order, filtering and selection are the
+     engine's as ever; only the drawing is windowed. */
+  const virtual =
+    !stacked &&
+    !groups &&
+    (virtualize === true ||
+      (virtualize === 'auto' && pageSize === undefined && visibleRows.length > VIRTUAL_THRESHOLD));
+  const [frameEl, setFrameEl] = useState<HTMLDivElement | null>(null);
+  const virtualItems = virtual
+    ? visibleRows.flatMap((row) =>
+        renderDetail && expandedState.includes(row.id)
+          ? [
+              { row, part: 'record' as const },
+              { row, part: 'detail' as const },
+            ]
+          : [{ row, part: 'record' as const }],
+      )
+    : [];
+  const frameHeight = typeof maxHeight === 'number' ? maxHeight : VIRTUAL_HEIGHT;
+  /* VirtualRows hands back how to scroll an item into view; a cell the
+     keyboard moves to may not be drawn yet. */
+  const scrollTo = useRef<((index: number) => void) | null>(null);
+  const setScroller = useCallback((fn: (index: number) => void) => {
+    scrollTo.current = fn;
+  }, []);
+  const scrollRowIntoView = (rowId: string) => {
+    if (!virtual) return;
+    const index = virtualItems.findIndex((item) => item.row.id === rowId && item.part === 'record');
+    if (index >= 0) scrollTo.current?.(index);
+  };
+
+  /* Infinite scroll: a loading row after the rows asks for the next batch
+     as it comes into view, once per batch. */
+  const loadingRef = useRef<HTMLTableRowElement | null>(null);
+  const requestedAt = useRef(-1);
+  const loadMore = useRef(onLoadMore);
+  useEffect(() => {
+    loadMore.current = onLoadMore;
+  });
+  const rowCount = visibleRows.length;
+  const scrollsInFrame = virtual || maxHeight !== undefined;
+  useEffect(() => {
+    const node = loadingRef.current;
+    if (!node || !hasMore) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting || requestedAt.current === rowCount) return;
+        requestedAt.current = rowCount;
+        loadMore.current?.();
+      },
+      // The rows scroll inside the frame whenever it has a height (always, virtualised), else with the page.
+      { root: scrollsInFrame ? frameEl : null, rootMargin: '200px' },
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [hasMore, rowCount, scrollsInFrame, frameEl]);
+
   const groupLabel = (key: string) =>
     key === '' ? labels.emptyGroup : (groupCol?.options?.find((option) => option.value === key)?.label ?? key);
 
@@ -2740,7 +2868,8 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
   /* Every column a row draws, for a cell that spans them all. */
   const columnCount = utilityKeys.length + visibleKeys.length + (layoutReady ? 1 : 0) + (showActions ? 1 : 0);
 
-  const bodyRow = (row: R) => {
+  type Slot = { index: number; measure: (node: Element | null) => void };
+  const bodyRow = (row: R, slot?: Slot, part: 'both' | 'record' | 'detail' = 'both') => {
     const isSelected = selectable && currentSelection.includes(row.id);
     const name = rowName(row);
     const expandedHere = Boolean(renderDetail) && expandedState.includes(row.id);
@@ -2749,6 +2878,9 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
       <tr
         key={row.id}
         data-row={row.id}
+        ref={slot && part === 'record' ? slot.measure : undefined}
+        data-index={slot && part === 'record' ? slot.index : undefined}
+        aria-rowindex={slot && part === 'record' ? slot.index + 2 : undefined}
         role={stacked ? 'row' : undefined}
         className={[
           'ds-table__row',
@@ -3083,26 +3215,49 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
         )}
       </tr>
     );
-    if (!expandedHere) return record;
+    if (part === 'record' || !expandedHere) return record;
     /* The details: one cell across every column, its panel as wide as the
        visible table and held to its start edge, so it stays in view while
        the columns scroll sideways. Rendered only while open. */
+    const details = (
+      <tr
+        key={`${row.id}:detail`}
+        className={`ds-table__row ${baseClass}__detail-row`}
+        data-detail-for={row.id}
+        ref={slot ? slot.measure : undefined}
+        data-index={slot?.index}
+        aria-rowindex={slot ? slot.index + 2 : undefined}
+      >
+        <td id={detailId} colSpan={columnCount} className={`ds-table__cell ${baseClass}__detail-cell`}>
+          <div
+            className={`${baseClass}__detail`}
+            style={tableWidth && !stacked ? { width: tableWidth - 2 * UTILITY_BORDER } : undefined}
+          >
+            <div className={`${baseClass}__detail-body`}>{renderDetail!(row)}</div>
+          </div>
+        </td>
+      </tr>
+    );
+    if (part === 'detail') return details;
     return (
       <React.Fragment key={row.id}>
         {record}
-        <tr className={`ds-table__row ${baseClass}__detail-row`} data-detail-for={row.id}>
-          <td id={detailId} colSpan={columnCount} className={`ds-table__cell ${baseClass}__detail-cell`}>
-            <div
-              className={`${baseClass}__detail`}
-              style={tableWidth && !stacked ? { width: tableWidth - 2 * UTILITY_BORDER } : undefined}
-            >
-              <div className={`${baseClass}__detail-body`}>{renderDetail!(row)}</div>
-            </div>
-          </td>
-        </tr>
+        {details}
       </React.Fragment>
     );
   };
+
+  /* The loading row: the next batch on its way, across the table. */
+  const loadingRow = (
+    <tr ref={loadingRef} className={`ds-table__row ${baseClass}__loading-row`}>
+      <td colSpan={columnCount} className={`ds-table__cell ${baseClass}__loading-cell`}>
+        <div className={`${baseClass}__loading`} role="status">
+          <Spinner size="sm" tone="neutral" />
+          <span>{loadingMoreLabel}</span>
+        </div>
+      </td>
+    </tr>
+  );
 
   const hasChrome = searchable || Boolean(toolbar);
   const classes = [baseClass, className].filter(Boolean).join(' ');
@@ -3113,14 +3268,16 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     'ds-table--bordered',
     columnDividers ? 'ds-table--column-dividers' : '',
     layoutReady ? `${baseClass}__grid--fixed` : '',
-    stickyHeader ? `${baseClass}__grid--sticky` : '',
+    stickyHeader || virtual ? `${baseClass}__grid--sticky` : '',
     stacked ? `${baseClass}__grid--stacked` : '',
     showActions && rowActionsVisibility === 'hover' ? `${baseClass}__grid--actions-hover` : '',
   ]
     .filter(Boolean)
     .join(' ');
+  // A virtualised table scrolls its rows inside its frame, so it always has a height to scroll in.
+  const frameMax = maxHeight ?? (virtual ? VIRTUAL_HEIGHT : undefined);
   const frameStyle: React.CSSProperties | undefined =
-    maxHeight !== undefined ? { maxHeight: typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight } : undefined;
+    frameMax !== undefined ? { maxHeight: typeof frameMax === 'number' ? `${frameMax}px` : frameMax } : undefined;
 
   return (
     <TableContext.Provider value={tableContext}>
@@ -3153,12 +3310,13 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
         )}
 
         {visibleRows.length > 0 ? (
-          <ScrollRegion className={`ds-table__wrapper ${baseClass}__frame`} style={frameStyle}>
+          <ScrollRegion className={`ds-table__wrapper ${baseClass}__frame`} style={frameStyle} onNode={setFrameEl}>
             <table
               ref={setTableEl}
               className={tableClasses}
               // A card layout changes how the table displays, which strips its semantics in some browsers, so it states them.
               role={gridMode ? 'grid' : stacked ? 'table' : undefined}
+              aria-rowcount={virtual ? virtualItems.length + 1 : undefined}
               aria-multiselectable={gridMode && selectable ? true : undefined}
               style={
                 {
@@ -3204,11 +3362,32 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
                       data-collapsed={collapsedGroups.includes(group.key) || undefined}
                     >
                       {groupRow(group)}
-                      {!collapsedGroups.includes(group.key) && onPage.map(bodyRow)}
+                      {!collapsedGroups.includes(group.key) && onPage.map((row) => bodyRow(row))}
                     </tbody>
                   ))
+              ) : virtual ? (
+                <tbody className="ds-table__body">
+                  <VirtualRows
+                    count={virtualItems.length}
+                    itemKey={(index) => `${virtualItems[index]?.row.id}:${virtualItems[index]?.part}`}
+                    estimate={ESTIMATED_ROW_HEIGHT[size]}
+                    overscan={VIRTUAL_OVERSCAN}
+                    frame={frameEl}
+                    frameHeight={frameHeight}
+                    columnCount={columnCount}
+                    onScroller={setScroller}
+                    renderItem={(index, measure) => {
+                      const entry = virtualItems[index];
+                      return bodyRow(entry.row, { index, measure }, entry.part);
+                    }}
+                  />
+                  {hasMore && loadingRow}
+                </tbody>
               ) : (
-                <tbody className="ds-table__body">{visibleRows.map(bodyRow)}</tbody>
+                <tbody className="ds-table__body">
+                  {visibleRows.map((row) => bodyRow(row))}
+                  {hasMore && loadingRow}
+                </tbody>
               )}
               {totalsRow && !stacked && totalsFooter()}
             </table>

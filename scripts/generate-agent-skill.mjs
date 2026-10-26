@@ -288,7 +288,7 @@ Components read semantic tokens (\`--color-*\`, \`--radius-*\`, \`--font-*\`, \`
 
 ## Charts
 
-Components that import recharts ship from \`${PACKAGE_NAME}/charts\` and need the optional recharts peer dependency. Everything in the main barrel needs no optional peer: its one runtime dependency, TanStack Table under DataTable, installs with the package.
+Components that import recharts ship from \`${PACKAGE_NAME}/charts\` and need the optional recharts peer dependency. Everything in the main barrel needs no optional peer: its two runtime dependencies, TanStack Table and TanStack Virtual under DataTable, install with the package.
 
 ## Fonts
 
@@ -599,7 +599,7 @@ export function assembleAgentStarter() {
   const rootPkg = JSON.parse(readFileSync(join(repoRoot, 'package.json'), 'utf8'));
   const shipped = distManifest(rootPkg);
   const runtimeDeps = Object.keys(shipped.dependencies ?? {});
-  const EXPLAINED_DEPS = new Set(['@tanstack/react-table']);
+  const EXPLAINED_DEPS = new Set(['@tanstack/react-table', '@tanstack/react-virtual']);
   const unexplained = runtimeDeps.filter((name) => !EXPLAINED_DEPS.has(name));
   if (unexplained.length > 0) {
     throw new Error(`generate-agent-skill.mjs: the shipped manifest depends on ${unexplained.join(', ')}, which the starter's Install section does not explain. Add it there and to EXPLAINED_DEPS.`);
@@ -649,7 +649,7 @@ The init commands only add files and never overwrite one, so they are safe to ru
 npm install ${PACKAGE_NAME}
 \`\`\`
 
-- Required peers: ${listJoin(required.map(peer))}. It brings its own runtime dependency, ${depList} (the engine under \`DataTable\`), which installs with it, so add nothing else for it.
+- Required peers: ${listJoin(required.map(peer))}. It brings its own runtime dependencies, ${depList} (the engine and the windowing under \`DataTable\`), which install with it, so add nothing else for them.
 - ${peer('recharts')} is optional. Install it only if you import from \`${subpath('./charts')}\`.
 - It is ESM-only. Use a bundler that handles CSS and font imports (Vite, Next.js, webpack), with TypeScript's \`moduleResolution\` set to \`"bundler"\` or \`"nodenext"\`.
 

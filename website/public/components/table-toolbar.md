@@ -31,7 +31,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same dat
 | searchable | `boolean` | no | `true` | Shows the search field. Defaults to true. |
 | filterable | `boolean` | no | `true` | Shows the Filter button and the filter chips. Defaults to true. |
 | columnsPanel | `boolean` | no | `true` | Shows the Columns panel. Defaults to true. |
-| densitySwitch | `boolean` | no | `true` | Shows the density toggle (the switch in More when the bar folds). Defaults to true. |
+| densitySwitch | `boolean` | no | `true` | Shows the density switch (in More when the bar folds). Defaults to true. |
 | showCount | `boolean` | no |  | Shows the result count in the bar. Defaults to true over some other table and false inside a DataTable, whose footer carries the count; set it to move the count into the bar, and the footer leaves it out. |
 | columnOrder | `string[]` | no |  | Every column key in display order, for controlled use. Inside a DataTable the table's order is used unless this is set. |
 | defaultColumnOrder | `string[]` | no |  | Starting column order, for uncontrolled use outside a DataTable. |

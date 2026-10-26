@@ -127,11 +127,11 @@ export interface TableToolbarLabels {
   columns: string;
   /** The Columns panel's Show all button. */
   showAll: string;
-  /** The density switch's name, in the More panel when the bar is folded. */
+  /** The density switch's name. */
   density: string;
   /** The density switch's default segment. */
   densityDefault: string;
-  /** The density switch's compact segment, and the name of the bar's density toggle, pressed while compact. */
+  /** The density switch's compact segment. */
   densityCompact: string;
   /** The result count, given the rows that match and the rows in all. */
   count: (shown: number, total: number) => string;
@@ -294,7 +294,7 @@ type TableToolbarOwnProps = {
   filterable?: boolean;
   /** Shows the Columns panel. Defaults to true. */
   columnsPanel?: boolean;
-  /** Shows the density toggle (the switch in More when the bar folds). Defaults to true. */
+  /** Shows the density switch (in More when the bar folds). Defaults to true. */
   densitySwitch?: boolean;
   /** Shows the result count in the bar. Defaults to true over some other table and false inside a DataTable, whose footer carries the count; set it to move the count into the bar, and the footer leaves it out. */
   showCount?: boolean;
@@ -451,8 +451,8 @@ function useBound<T>(
 }
 
 /**
- * The control bar for a table: search, filters as chips, a Columns panel, a
- * density toggle, the result count and an actions slot, in one row. Inside a DataTable (`toolbar={<TableToolbar />}`) it reads and sets
+ * The control bar for a table: search, filters as chips, a Columns panel, the
+ * density switch, the result count and an actions slot, in one row. Inside a DataTable (`toolbar={<TableToolbar />}`) it reads and sets
  * the table's own state with no props; over any other table its props carry
  * the same state. Its filters and a DataTable's header filters are one list,
  * so a filter set from either shows in both. Every control takes the
@@ -956,7 +956,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
     const filterIcon = (
       <CircularButton
         icon="filter_list"
-        variant="secondary"
+        variant="primary"
         tone="neutral"
         size={size}
         ariaLabel={labels.filters(activeFilters)}
@@ -1150,19 +1150,20 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
         onValueChange={(value) => setSize(value as 'default' | 'compact')}
       />
     );
-    /* On the bar the density is one icon toggle, pressed while compact, its
-       glyph the density the rows are at. Folded, it moves into More as the
-       switch, since a phone's width holds only so many icons. */
-    const densityToggle = densitySwitch && (
-      <CircularButton
-        icon={size === 'compact' ? 'density_small' : 'density_medium'}
-        variant="secondary"
-        tone="neutral"
+    /* On the bar the density is the same switch, its segments icons alone
+       (each still named by its label). Folded, it moves into More with its
+       words shown, since a phone's width holds only so many controls. */
+    const densityIcons = densitySwitch && (
+      <SegmentedControl
         size={size}
-        aria-pressed={size === 'compact'}
-        ariaLabel={labels.densityCompact}
-        tooltip={labels.densityCompact}
-        onClick={() => setSize(size === 'compact' ? 'default' : 'compact')}
+        showLabels={false}
+        aria-label={labels.density}
+        segments={[
+          { value: 'default', label: labels.densityDefault, icon: 'density_medium' },
+          { value: 'compact', label: labels.densityCompact, icon: 'density_small' },
+        ]}
+        value={size}
+        onValueChange={(value) => setSize(value as 'default' | 'compact')}
       />
     );
 
@@ -1274,7 +1275,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
         >
           <CircularButton
             icon="swap_vert"
-            variant="secondary"
+            variant="primary"
             tone="neutral"
             size={size}
             ariaLabel={labels.sort(sorts.length)}
@@ -1471,7 +1472,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
         >
           <CircularButton
             icon="view_agenda"
-            variant="secondary"
+            variant="primary"
             tone="neutral"
             size={size}
             ariaLabel={labels.group(Boolean(groupedBy))}
@@ -1505,7 +1506,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
       >
         <CircularButton
           icon="view_column"
-          variant="secondary"
+          variant="primary"
           tone="neutral"
           size={size}
           ariaLabel={labels.columns}
@@ -1555,7 +1556,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
       >
         <CircularButton
           icon="more_horiz"
-          variant="secondary"
+          variant="primary"
           tone="neutral"
           size={size}
           ariaLabel={labels.more}
@@ -1643,7 +1644,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
                 >
                   <CircularButton
                     icon="search"
-                    variant="secondary"
+                    variant="primary"
                     tone="neutral"
                     size={size}
                     ariaLabel={labels.search}
@@ -1656,7 +1657,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
               {sortControl}
               {groupControl}
               {columnsControl}
-              {!narrow && densityToggle}
+              {!narrow && densityIcons}
               {moreControl}
               {(primaryAction || (!narrow && secondaryActions.length > 0)) && (
                 <span className="ds-table-toolbar__actions">
@@ -1666,7 +1667,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
                         <CircularButton
                           key={action.id}
                           icon={action.icon}
-                          variant="secondary"
+                          variant="primary"
                           tone="neutral"
                           size={size}
                           ariaLabel={action.label}

@@ -12751,7 +12751,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "densitySwitch",
             "type": "boolean",
             "required": false,
-            "description": "Shows the density toggle (the switch in More when the bar folds). Defaults to true.",
+            "description": "Shows the density switch (in More when the bar folds). Defaults to true.",
             "defaultValue": "true"
           },
           {

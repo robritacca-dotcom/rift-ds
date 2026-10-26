@@ -98,7 +98,7 @@ export const InDataTable: Story = {
     await waitFor(() => expect(names()).toEqual(['Chart palette drifts']));
     await userEvent.clear(canvas.getByRole('textbox', { name: 'Search' }));
 
-    await userEvent.click(canvas.getByRole('button', { name: 'Compact' }));
+    await userEvent.click(canvas.getByRole('tab', { name: 'Compact' }));
     await waitFor(() => expect(canvasElement.querySelector('table')).toHaveClass('ds-table--compact'));
   },
 };

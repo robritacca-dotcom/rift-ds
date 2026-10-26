@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import {
   columnFilteringFeature,
   columnOrderingFeature,
@@ -295,6 +295,10 @@ export interface DataTableColumnLabels {
   rowGrip: (rowName: string) => string;
   /** Accessible name of the move-grip column header. */
   rowGripColumn: string;
+  /** The hidden header of the details column. */
+  detailsColumn: string;
+  /** A row's details toggle, given the row's name and whether its details are showing. */
+  toggleDetails: (rowName: string, expanded: boolean) => string;
   /** Accessible name of the actions column header. */
   actionsColumn: string;
   /** Accessible name of a row's More menu button, given the row's name. */
@@ -366,6 +370,8 @@ const DEFAULT_COLUMN_LABELS: DataTableColumnLabels = {
   resetWidth: 'Reset width',
   rowGrip: (rowName) => `Move ${rowName}`,
   rowGripColumn: 'Reorder',
+  detailsColumn: 'Details',
+  toggleDetails: (rowName, expanded) => `${expanded ? 'Hide' : 'Show'} details for ${rowName}`,
   actionsColumn: 'Actions',
   moreActions: (rowName) => `More actions for ${rowName}`,
   movedColumn: (header, position, count) => `${header} moved to column ${position} of ${count}`,
@@ -415,6 +421,8 @@ const RESIZE_STEP = 16;
 const LABEL_MIN_WIDTH = 40;
 /** The header controls' widths, in the base theme: the sort glyph and the compact menu button, each with its gap. */
 const SORT_GLYPH_WIDTH = 24;
+/** The bordered frame's line, either side of a details panel that spans the visible table. */
+const UTILITY_BORDER = 1;
 /** The rank a header shows beside its sort glyph while several columns sort. */
 const SORT_RANK_WIDTH = 12;
 const MENU_BUTTON_WIDTH = 36;
@@ -540,6 +548,16 @@ type DataTableOwnProps<R extends DataTableRow = DataTableRow> = {
   onSortsChange?: (sorts: DataTableSort[]) => void;
   /** The link component a `link` column's cells render through, so the app's router handles them. Defaults to the nearest `LinkProvider`'s, else a plain anchor. */
   linkComponent?: LinkComponent;
+  /** Renders a row's details: adds a chevron column, and an opened row shows this beneath it, across the table's width. Rendered only once opened. */
+  renderDetail?: (row: R) => React.ReactNode;
+  /** The ids of the rows whose details are open, for controlled use. Pair with `onExpandedIdsChange`. */
+  expandedIds?: string[];
+  /** The rows open to begin with, for uncontrolled use. */
+  defaultExpandedIds?: string[];
+  /** Fires with the open rows' ids after one opens or closes. */
+  onExpandedIdsChange?: (ids: string[]) => void;
+  /** Whether several rows' details can be open at once (`multiple`, the default) or opening one closes the rest (`single`). */
+  expandMode?: 'multiple' | 'single';
   /** The column keys the rows are grouped by, for controlled use; this milestone draws the first. Pair with `onGroupingChange`. */
   grouping?: string[];
   /** The grouping to start with, for uncontrolled use. */
@@ -765,6 +783,11 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
   defaultSorts,
   onSortsChange,
   multiSort = false,
+  renderDetail,
+  expandedIds: expandedProp,
+  defaultExpandedIds,
+  onExpandedIdsChange,
+  expandMode = 'multiple',
   grouping: groupingProp,
   defaultGrouping,
   onGroupingChange,
@@ -908,6 +931,17 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     defaultGrouping ?? [],
     onGroupingChange,
   );
+  const [expandedState, setExpanded] = useControllable<string[]>(
+    expandedProp,
+    defaultExpandedIds ?? [],
+    onExpandedIdsChange,
+  );
+  const toggleDetail = (id: string) => {
+    const open = expandedState.includes(id);
+    setExpanded(
+      open ? expandedState.filter((other) => other !== id) : expandMode === 'single' ? [id] : [...expandedState, id],
+    );
+  };
   const [totalsState, setTotals] = useControllable<Record<string, DataTableTotal>>(
     totalsProp,
     defaultTotals ?? {},
@@ -968,7 +1002,20 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
   /* The table's width while it is narrower than a phone, to the nearest
      eight pixels (so a resize renders every few pixels, not every one),
      else 0. The pinned row header is capped against it. */
+  const tableId = useId();
   const [narrowWidth, setNarrowWidth] = useState(0);
+  /* The table's width, to the nearest eight pixels, kept only when rows
+     open details: a details panel is as wide as the visible table, not the
+     whole scrolling grid. */
+  const [tableWidth, setTableWidth] = useState(0);
+  const hasDetails = Boolean(renderDetail);
+  useLayoutEffect(() => {
+    const el = rootRef.current;
+    if (!el || !hasDetails) return;
+    const observer = new ResizeObserver(([entry]) => setTableWidth(Math.round(entry.contentRect.width / 8) * 8));
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [hasDetails]);
   const narrow = narrowWidth > 0;
   useLayoutEffect(() => {
     const el = rootRef.current;
@@ -1247,7 +1294,11 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
   const rowGrips = reorderableRows;
   // A sort or a grouping owns the order, so the row grips step aside.
   const sortOwnsOrder = currentSorts.length > 0 || Boolean(groupKey);
-  const utilityKeys = [...(rowGrips ? ['ds-data-table-grip'] : []), ...(selectable ? ['ds-data-table-select'] : [])];
+  const utilityKeys = [
+    ...(rowGrips ? ['ds-data-table-grip'] : []),
+    ...(selectable ? ['ds-data-table-select'] : []),
+    ...(renderDetail ? ['ds-data-table-expand'] : []),
+  ];
   const anyPinned = startKeys.length > 0 || endKeys.length > 0;
   /* The actions column is as wide as the most actions any row on the page
        shows: its inline buttons plus the More button, at the compact row
@@ -2143,6 +2194,18 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
       setMenuKey(cell.col);
       return;
     }
+    /* On a row header, the arrows open and close the row's details, as a
+       tree row does: right opens a closed row, left closes an open one, and
+       otherwise they move as usual. */
+    if (!isHeader && col?.rowHeader && renderDetail && !event.altKey && !ctrl) {
+      const open = expandedState.includes(cell.row);
+      const forward = (event.key === 'ArrowRight') !== (getComputedStyle(cellEl).direction === 'rtl');
+      if ((event.key === 'ArrowRight' || event.key === 'ArrowLeft') && forward !== open) {
+        event.preventDefault();
+        toggleDetail(cell.row);
+        return;
+      }
+    }
     const editRow = isHeader ? undefined : rowById(cell.row);
     if (col && editRow && canEdit(col, editRow) && !isLive(col) && !editing) {
       if (event.key === 'Enter' || event.key === 'F2') {
@@ -2227,7 +2290,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     const style: React.CSSProperties = { width: UTILITY_COLUMN_WIDTH };
     if (utilityPinned) style.insetInlineStart = `${utilityKeys.indexOf(key) * UTILITY_COLUMN_WIDTH}px`;
     const pinnedCls = utilityPinned ? ` ${baseClass}__cell--pinned ${baseClass}__cell--pinned-start` : '';
-    if (key === 'ds-data-table-grip') {
+    if (key === 'ds-data-table-grip' || key === 'ds-data-table-expand') {
       return (
         <th
           key={key}
@@ -2237,7 +2300,9 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
           style={style}
           {...tabProps('header', key)}
         >
-          <span className="ds-visually-hidden">{labels.rowGripColumn}</span>
+          <span className="ds-visually-hidden">
+            {key === 'ds-data-table-grip' ? labels.rowGripColumn : labels.detailsColumn}
+          </span>
         </th>
       );
     }
@@ -2593,10 +2658,15 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     </tfoot>
   );
 
+  /* Every column a row draws, for a cell that spans them all. */
+  const columnCount = utilityKeys.length + visibleKeys.length + (layoutReady ? 1 : 0) + (showActions ? 1 : 0);
+
   const bodyRow = (row: R) => {
     const isSelected = selectable && currentSelection.includes(row.id);
     const name = rowName(row);
-    return (
+    const expandedHere = Boolean(renderDetail) && expandedState.includes(row.id);
+    const detailId = `${tableId}-detail-${row.id}`;
+    const record = (
       <tr
         key={row.id}
         data-row={row.id}
@@ -2642,6 +2712,21 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
                     }}
                   >
                     drag_indicator
+                  </button>
+                ) : key === 'ds-data-table-expand' ? (
+                  <button
+                    type="button"
+                    className={`${baseClass}__expand`}
+                    aria-expanded={expandedHere}
+                    aria-controls={expandedHere ? detailId : undefined}
+                    aria-label={labels.toggleDetails(name, expandedHere)}
+                    onClick={() => toggleDetail(row.id)}
+                    tabIndex={innerTab}
+                    data-cell-control=""
+                  >
+                    <span className={`${baseClass}__expand-chevron material-symbols-rounded`} aria-hidden="true">
+                      chevron_right
+                    </span>
                   </button>
                 ) : (
                   <Checkbox
@@ -2918,6 +3003,25 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
           </td>
         )}
       </tr>
+    );
+    if (!expandedHere) return record;
+    /* The details: one cell across every column, its panel as wide as the
+       visible table and held to its start edge, so it stays in view while
+       the columns scroll sideways. Rendered only while open. */
+    return (
+      <React.Fragment key={row.id}>
+        {record}
+        <tr className={`ds-table__row ${baseClass}__detail-row`} data-detail-for={row.id}>
+          <td id={detailId} colSpan={columnCount} className={`ds-table__cell ${baseClass}__detail-cell`}>
+            <div
+              className={`${baseClass}__detail`}
+              style={tableWidth && !stacked ? { width: tableWidth - 2 * UTILITY_BORDER } : undefined}
+            >
+              <div className={`${baseClass}__detail-body`}>{renderDetail!(row)}</div>
+            </div>
+          </td>
+        </tr>
+      </React.Fragment>
     );
   };
 

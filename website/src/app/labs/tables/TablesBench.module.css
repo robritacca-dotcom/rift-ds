@@ -124,3 +124,34 @@
 .phoneStation > :last-child {
   align-self: stretch;
 }
+
+/* A project's details: its facts in a row, its note, an action. */
+.detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+}
+
+.detailFacts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-500);
+  margin: 0;
+}
+
+.detailFacts dt {
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-secondary);
+}
+
+.detailFacts dd {
+  margin: 0;
+}
+
+.detailNote {
+  margin: 0;
+  color: var(--color-text-secondary);
+}

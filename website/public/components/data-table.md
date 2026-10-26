@@ -36,6 +36,11 @@ Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same dat
 | defaultSorts | `DataTableSort[]` | no |  | Initial sorts for uncontrolled use. |
 | onSortsChange | `((sorts: DataTableSort[]) => void)` | no |  | Fires with every sort after one changes, first sort first. `onSortChange` fires too, with the first or `null`. |
 | linkComponent | `LinkComponent` | no |  | The link component a `link` column's cells render through, so the app's router handles them. Defaults to the nearest `LinkProvider`'s, else a plain anchor. |
+| renderDetail | `((row: R) => ReactNode)` | no |  | Renders a row's details: adds a chevron column, and an opened row shows this beneath it, across the table's width. Rendered only once opened. |
+| expandedIds | `string[]` | no |  | The ids of the rows whose details are open, for controlled use. Pair with `onExpandedIdsChange`. |
+| defaultExpandedIds | `string[]` | no |  | The rows open to begin with, for uncontrolled use. |
+| onExpandedIdsChange | `((ids: string[]) => void)` | no |  | Fires with the open rows' ids after one opens or closes. |
+| expandMode | `"multiple" \| "single"` | no | `multiple` | Whether several rows' details can be open at once (`multiple`, the default) or opening one closes the rest (`single`). |
 | grouping | `string[]` | no |  | The column keys the rows are grouped by, for controlled use; this milestone draws the first. Pair with `onGroupingChange`. |
 | defaultGrouping | `string[]` | no |  | The grouping to start with, for uncontrolled use. |
 | onGroupingChange | `((grouping: string[]) => void)` | no |  | Fires with the new grouping, from a header menu or a TableToolbar. |

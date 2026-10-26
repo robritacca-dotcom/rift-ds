@@ -1094,3 +1094,83 @@
 .ds-data-table__grid--stacked .ds-data-table__group-row {
   background-color: var(--color-table-header-bg);
 }
+
+/* ============================================
+   DETAILS
+   A row's chevron opens its details beneath it:
+   one cell across the table, its panel as wide as
+   the visible table and held to the start edge,
+   opening with a height ease.
+   ============================================ */
+
+.ds-data-table__expand {
+  --icon-size: var(--icon-size-500);
+
+  display: inline-flex;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-050);
+  background: none;
+  color: var(--color-icon-secondary);
+  cursor: pointer;
+}
+
+.ds-data-table__expand:hover {
+  color: var(--color-icon-primary);
+}
+
+.ds-data-table__expand:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+.ds-data-table__expand-chevron {
+  transition: rotate var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-data-table__expand[aria-expanded='true'] .ds-data-table__expand-chevron {
+  rotate: 90deg;
+}
+
+/* The details row takes no hover tint: it belongs to the row above it. */
+.ds-table__body .ds-data-table__detail-row:hover > .ds-table__cell,
+.ds-data-table__detail-row > .ds-table__cell {
+  padding: 0;
+  background-color: var(--color-table-body-bg);
+}
+
+.ds-data-table__detail {
+  position: sticky;
+  inset-inline-start: 0;
+  display: grid;
+  grid-template-rows: 1fr;
+  max-width: 100%;
+  animation: ds-data-table-detail-open var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-data-table__detail-body {
+  min-height: 0;
+  overflow: hidden;
+  padding: var(--padding-400);
+}
+
+@keyframes ds-data-table-detail-open {
+  from {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+}
+
+/* Stacked, the details close the card they belong to. */
+.ds-data-table__grid--stacked .ds-data-table__detail-row {
+  padding-block-start: 0;
+}
+
+.ds-data-table__grid--stacked [data-col='ds-data-table-expand'] {
+  order: 1;
+}
+
+.ds-data-table__grid--stacked .ds-data-table__detail-cell {
+  display: block;
+  flex-basis: 100%;
+}

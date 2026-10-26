@@ -24,6 +24,7 @@ import { EditingTable } from "./EditingTable";
 import { TypedTable } from "./TypedTable";
 import { PhoneTable } from "./PhoneTable";
 import { GroupedTable } from "./GroupedTable";
+import { DetailTable } from "./DetailTable";
 import { TableToolbar } from "rift-ds/components/TableToolbar/TableToolbar";
 import styles from "./TablesBench.module.css";
 
@@ -470,6 +471,14 @@ export function TablesBench() {
         note="The accounts grouped by stage, in the stage's own order: each group row carries its count and the totals (value and seats summed, onboarding averaged, renewals counted), its checkbox selects the group, and its chevron folds it. Group by Owner or Billable from a header menu or the bar's Group control. The footer's cells each pick a calculation; hover the footer to see Calculate on the rest."
       >
         {({ size, lines }) => <GroupedTable size={size} lines={lines} />}
+      </Station>
+
+      <Station
+        id="bench-details"
+        title="14. Row details"
+        note="A chevron opens a row's details beneath it, across the table: the figures the list leaves out, the note and an action, rendered only once opened. On a focused row header in a grid, the right arrow opens and the left closes. Switch to One at a time and opening a row closes the rest."
+      >
+        {({ size, lines }) => <DetailTable size={size} lines={lines} />}
       </Station>
     </div>
   );

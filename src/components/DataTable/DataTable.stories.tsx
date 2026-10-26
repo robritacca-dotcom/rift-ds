@@ -733,3 +733,29 @@ export const Grouped: Story = {
     await expect(canvas.getByRole('checkbox', { name: 'Select Michael Ekstrom' })).toBeChecked();
   },
 };
+
+/** `renderDetail` adds a chevron per row; an opened row shows its details beneath it, across the table, rendered only once opened. */
+export const RowDetails: Story = {
+  args: {
+    columns: columns.map((col) => (col.key === 'name' ? { ...col, rowHeader: true } : col)),
+    rows: rows.slice(0, 4),
+    renderDetail: (row: DataTableRow) => <p style={{ margin: 0 }}>Order for {String(row.values.name)}</p>,
+    caption: 'Orders',
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.queryByText('Order for John Clarkson')).not.toBeInTheDocument();
+    const toggle = canvas.getByRole('button', { name: 'Show details for John Clarkson' });
+    await userEvent.click(toggle);
+    await expect(await canvas.findByText('Order for John Clarkson')).toBeInTheDocument();
+    await expect(canvas.getByRole('button', { name: 'Hide details for John Clarkson' })).toHaveAttribute(
+      'aria-expanded',
+      'true',
+    );
+    // The details row spans every column.
+    const cell = canvasElement.querySelector<HTMLTableCellElement>('.ds-data-table__detail-cell')!;
+    await expect(cell.colSpan).toBe(canvasElement.querySelectorAll('thead th').length);
+    await userEvent.click(canvas.getByRole('button', { name: 'Hide details for John Clarkson' }));
+    await waitFor(() => expect(canvas.queryByText('Order for John Clarkson')).not.toBeInTheDocument());
+  },
+};

@@ -5234,6 +5234,37 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "The link component a `link` column's cells render through, so the app's router handles them. Defaults to the nearest `LinkProvider`'s, else a plain anchor."
           },
           {
+            "name": "renderDetail",
+            "type": "((row: R) => ReactNode)",
+            "required": false,
+            "description": "Renders a row's details: adds a chevron column, and an opened row shows this beneath it, across the table's width. Rendered only once opened."
+          },
+          {
+            "name": "expandedIds",
+            "type": "string[]",
+            "required": false,
+            "description": "The ids of the rows whose details are open, for controlled use. Pair with `onExpandedIdsChange`."
+          },
+          {
+            "name": "defaultExpandedIds",
+            "type": "string[]",
+            "required": false,
+            "description": "The rows open to begin with, for uncontrolled use."
+          },
+          {
+            "name": "onExpandedIdsChange",
+            "type": "((ids: string[]) => void)",
+            "required": false,
+            "description": "Fires with the open rows' ids after one opens or closes."
+          },
+          {
+            "name": "expandMode",
+            "type": "\"multiple\" | \"single\"",
+            "required": false,
+            "description": "Whether several rows' details can be open at once (`multiple`, the default) or opening one closes the rest (`single`).",
+            "defaultValue": "multiple"
+          },
+          {
             "name": "grouping",
             "type": "string[]",
             "required": false,

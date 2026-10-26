@@ -790,6 +790,20 @@ const pixelInkColours: SwatchData[] = [
   },
 ];
 
+/* --- Count badge --- */
+const countBadgeColours: SwatchData[] = [
+  {
+    label: "Fill", cssVar: "--color-count-badge-bg",
+    dark: { primitive: "--red--06--", hex: "#F16385", rgb: "241 / 99 / 133" },
+    light: { primitive: "--red--08--", hex: "#C93A5C", rgb: "201 / 58 / 92" },
+  },
+  {
+    label: "Figures", cssVar: "--color-count-badge-text",
+    dark: { primitive: "--neutral--10--", hex: "#050505", rgb: "5 / 5 / 5" },
+    light: { primitive: "--neutral--01--", hex: "#F1F1F1", rgb: "241 / 241 / 241" },
+  },
+];
+
 /* --- Avatar --- */
 const avatarColours: SwatchData[] = [
   {
@@ -1143,6 +1157,16 @@ export default function SemanticColoursPage() {
               ))}
             </div>
           </section>
+          {/* Count badge */}
+          <section className={styles.colourGroup}>
+            <SectionTitle title="Count badge" />
+            <div className={styles.colourSwatches}>
+              {countBadgeColours.map((s) => (
+                <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
+              ))}
+            </div>
+          </section>
+
           {/* Avatar */}
           <section className={styles.colourGroup}>
             <SectionTitle title="Avatar" />

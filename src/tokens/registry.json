@@ -92,6 +92,8 @@
       "--color-core-accent-violet",
       "--color-core-ui-primary",
       "--color-core-ui-secondary",
+      "--color-count-badge-bg",
+      "--color-count-badge-text",
       "--color-divider",
       "--color-file-document",
       "--color-file-pdf",

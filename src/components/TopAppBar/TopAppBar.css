@@ -144,7 +144,7 @@
   width: 6px;
   height: 6px;
   border-radius: var(--radius-pill);
-  background-color: var(--color-status-error-icon);
+  background-color: var(--color-count-badge-bg);
 }
 
 /* The overflow menu's own wrapper takes no room of its own. */

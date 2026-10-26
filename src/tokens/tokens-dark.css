@@ -195,6 +195,10 @@
   --color-pixel-ink-5: var(--primitive-blue-04);
   --color-pixel-ink-6: var(--primitive-purple-05);
 
+  /* Count badge - Bright on the dark page, its figures in the page's ink. */
+  --color-count-badge-bg: var(--primitive-red-06);
+  --color-count-badge-text: var(--primitive-neutral-10);
+
   /* Avatar - The initials avatar's six fills, deep on each ramp with a
      pale step for the initials (4.7:1 at the least), so the fill stands
      off the dark page. */

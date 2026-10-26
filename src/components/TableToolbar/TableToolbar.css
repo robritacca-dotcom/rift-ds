@@ -286,10 +286,26 @@
   display: inline-flex;
 }
 
+/* A count on an icon's top-end corner, drawn as BottomNav's count badge:
+   a solid pill on the count badge pair, so it reads at a glance on the
+   filled icon buttons in both modes. */
 .ds-table-toolbar__badge {
   position: absolute;
-  inset-block-start: calc(-1 * var(--padding-050));
-  inset-inline-end: calc(-1 * var(--padding-050));
+  inset-block-start: calc(-1 * var(--padding-100));
+  inset-inline-end: calc(-1 * var(--padding-100));
+  box-sizing: border-box;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 var(--padding-100);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-count-badge-bg);
+  color: var(--color-count-badge-text);
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-caption-line-height);
+  text-align: center;
+  white-space: nowrap;
   pointer-events: none;
 }
 

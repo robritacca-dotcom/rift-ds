@@ -766,6 +766,11 @@ export const ChartColors: Story = {
         <ColorToken name="Ink 6" value="--color-pixel-ink-6" />
       </TokenSection>
 
+      <TokenSection title="Count Badge">
+        <ColorToken name="Fill" value="--color-count-badge-bg" />
+        <ColorToken name="Figures" value="--color-count-badge-text" />
+      </TokenSection>
+
       <TokenSection title="Avatar">
         <ColorToken name="Avatar fill 1" value="--color-avatar-bg-1" />
         <ColorToken name="Avatar initials 1" value="--color-avatar-text-1" />

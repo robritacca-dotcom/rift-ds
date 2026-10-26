@@ -2,7 +2,6 @@
 
 import React, { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
-import { Badge } from '../Badge/Badge';
 import { Button } from '../Button/Button';
 import { Chip } from '../Chip/Chip';
 import { Dropdown } from '../Dropdown/Dropdown';
@@ -1063,7 +1062,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
         </ToolbarPanel>
         {activeFilters > 0 && (
           <span className="ds-table-toolbar__badge" aria-hidden="true">
-            <Badge label={String(activeFilters)} variant="info" />
+            {activeFilters}
           </span>
         )}
       </span>
@@ -1300,7 +1299,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
         {/* Folded, the headers' sort marks may be out of view, so the icon carries the count. */}
         {narrow && sorts.length > 0 && (
           <span className="ds-table-toolbar__badge" aria-hidden="true">
-            <Badge label={String(sorts.length)} variant="info" />
+            {sorts.length}
           </span>
         )}
       </span>
@@ -1496,7 +1495,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
         </ToolbarPanel>
         {narrow && groupedBy && (
           <span className="ds-table-toolbar__badge" aria-hidden="true">
-            <Badge label="1" variant="info" />
+            1
           </span>
         )}
       </span>

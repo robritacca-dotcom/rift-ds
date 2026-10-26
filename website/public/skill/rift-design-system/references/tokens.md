@@ -11,7 +11,7 @@ How to read it:
 
 The live reference with swatches is at https://rift-ds.com/foundations, and the MCP endpoint's `list_tokens` tool serves the names.
 
-## Colour (148)
+## Colour (150)
 
 Prefix: `--color-*`.
 
@@ -107,6 +107,8 @@ Prefix: `--color-*`.
 | `--color-core-accent-violet` | `#9E47EF` (`--primitive-purple-07`) | `#9E47EF` (`--primitive-purple-07`) |
 | `--color-core-ui-primary` | `#0E6E8F` (`--primitive-teal-08`) | `#3CA5C6` (`--primitive-teal-05`) |
 | `--color-core-ui-secondary` | `#052F3E` (`--primitive-teal-10`) | `#0A4E66` (`--primitive-teal-09`) |
+| `--color-count-badge-bg` | `#C93A5C` (`--primitive-red-08`) | `#F16385` (`--primitive-red-06`) |
+| `--color-count-badge-text` | `#F1F1F1` (`--primitive-neutral-01`) | `#050505` (`--primitive-neutral-10`) |
 | `--color-divider` | `rgba(214, 214, 214, 0.8)` (`--primitive-neutral-02-a80`) | `rgba(35, 35, 35, 0.8)` (`--primitive-neutral-08-a80`) |
 | `--color-file-document` | `#2684FC` (`--primitive-file-document`) | `#2684FC` (`--primitive-file-document`) |
 | `--color-file-pdf` | `#FF2116` (`--primitive-file-pdf`) | `#FF2116` (`--primitive-file-pdf`) |

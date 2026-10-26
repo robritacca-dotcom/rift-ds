@@ -122,8 +122,8 @@
   height: 16px;
   padding: 0 var(--padding-100);
   border-radius: var(--radius-pill);
-  background-color: var(--color-status-error-icon);
-  color: var(--color-bg-page-primary);
+  background-color: var(--color-count-badge-bg);
+  color: var(--color-count-badge-text);
   font-family: var(--font-caption-family);
   font-size: var(--font-caption-size);
   font-weight: var(--font-paragraph-sm-emphasis-weight);

@@ -1,6 +1,7 @@
 import React from 'react';
 import './Stat.css';
 import '../../fonts/material-symbols.css';
+import { DEFAULT_LOCALE, formatNumber } from '../../behaviors/locale';
 
 /** Props owned by Stat itself — everything else falls through to the root div. */
 type StatOwnProps = {
@@ -16,6 +17,8 @@ type StatOwnProps = {
   deltaPlacement?: 'stacked' | 'inline';
   /** Stat size */
   size?: 'default' | 'large';
+  /** The BCP 47 locale a number `value` is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider. */
+  locale?: string;
   /** Additional CSS classes */
   className?: string;
 };
@@ -44,6 +47,7 @@ export const Stat = React.forwardRef<HTMLDivElement, StatProps>(
       trend = 'neutral',
       deltaPlacement = 'stacked',
       size = 'default',
+      locale = DEFAULT_LOCALE,
       className = '',
       ...rest
     },
@@ -62,7 +66,7 @@ export const Stat = React.forwardRef<HTMLDivElement, StatProps>(
 
     return (
       <div {...rest} ref={ref} className={classes}>
-        <span className={`${baseClass}__value`}>{value}</span>
+        <span className={`${baseClass}__value`}>{typeof value === 'number' ? formatNumber(value, locale) : value}</span>
         <span className={`${baseClass}__label`}>{label}</span>
         {delta && (
           <span className={`${baseClass}__delta ${baseClass}__delta--${trend}`}>

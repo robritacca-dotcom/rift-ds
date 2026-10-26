@@ -1,6 +1,7 @@
 import React from 'react';
 import '../Chart/Chart.css';
 import './Gauge.css';
+import { DEFAULT_LOCALE, formatNumber } from '../../behaviors/locale';
 
 /** One colour switch point: at or above `value`, the dial takes `tone`. */
 export interface GaugeThreshold {
@@ -52,6 +53,8 @@ type GaugeOwnProps = {
   size?: number;
   /** Arc thickness in pixels. */
   strokeWidth?: number;
+  /** The BCP 47 locale the value is written in when no `formatValue` is given, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider. */
+  locale?: string;
   /** Additional CSS classes */
   className?: string;
 };
@@ -90,6 +93,7 @@ export const Gauge = React.forwardRef<HTMLDivElement, GaugeProps>(
       bare = false,
       size = 120,
       strokeWidth = 12,
+      locale = DEFAULT_LOCALE,
       className = '',
       ...rest
     },
@@ -122,7 +126,7 @@ export const Gauge = React.forwardRef<HTMLDivElement, GaugeProps>(
     const center = size / 2;
     const valueUnits = Math.round(SWEEP_UNITS * fraction * 100) / 100;
 
-    const displayValue = formatValue ? formatValue(value) : String(Math.round(value));
+    const displayValue = formatValue ? formatValue(value) : formatNumber(Math.round(value), locale);
 
     // The meter semantics live on the dial, not the card; a consumer-passed
     // aria-label follows them there.

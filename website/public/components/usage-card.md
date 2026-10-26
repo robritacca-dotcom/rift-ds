@@ -19,4 +19,5 @@ Generated from the rift-ds registry and prop JSDoc, version 1.14.0. The same dat
 | subtitle | `string` | no |  | Supporting line under the title |
 | thresholds | `{ warning?: number; error?: number; } \| undefined` | no |  | Fractions of an item's max where its fill recolours to warning and then error |
 | bare | `boolean` | no | `false` | Chrome off (no border, padding, or fill) for use inside a panel that supplies the surface |
+| locale | `string` | no | `en-US` | The BCP 47 locale each meter's readout is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider. |
 | className | `string` | no | `` | Additional CSS classes |

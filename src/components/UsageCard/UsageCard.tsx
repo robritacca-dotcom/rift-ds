@@ -2,6 +2,7 @@ import React from 'react';
 import { Meter } from '../Meter/Meter';
 import '../Chart/Chart.css';
 import './UsageCard.css';
+import { DEFAULT_LOCALE } from '../../behaviors/locale';
 
 /** One budgeted quantity in the card — a meter row with an optional reset caption. */
 export interface UsageItem {
@@ -34,6 +35,8 @@ type UsageCardOwnProps = {
   thresholds?: { warning?: number; error?: number };
   /** Chrome off (no border, padding, or fill) for use inside a panel that supplies the surface */
   bare?: boolean;
+  /** The BCP 47 locale each meter's readout is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider. */
+  locale?: string;
   /** Additional CSS classes */
   className?: string;
 };
@@ -62,6 +65,7 @@ export const UsageCard = React.forwardRef<HTMLDivElement, UsageCardProps>(
       subtitle,
       thresholds,
       bare = false,
+      locale = DEFAULT_LOCALE,
       className = '',
       ...rest
     },
@@ -101,6 +105,7 @@ export const UsageCard = React.forwardRef<HTMLDivElement, UsageCardProps>(
                 value={item.value}
                 max={item.max ?? 100}
                 valueText={item.valueText}
+                locale={locale}
                 showValue
                 variant={variantFor(item)}
                 size="compact"

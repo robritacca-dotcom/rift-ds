@@ -27,4 +27,5 @@ Generated from the rift-ds registry and prop JSDoc, version 1.14.0. The same dat
 | bare | `boolean` | no | `false` | Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface |
 | size | `number` | no | `120` | Rendered dial diameter in pixels. The arc geometry scales with it. |
 | strokeWidth | `number` | no | `12` | Arc thickness in pixels. |
+| locale | `string` | no | `en-US` | The BCP 47 locale the value is written in when no `formatValue` is given, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider. |
 | className | `string` | no | `` | Additional CSS classes |

@@ -20,4 +20,5 @@ Generated from the rift-ds registry and prop JSDoc, version 1.14.0. The same dat
 | trend | `"neutral" \| "up" \| "down"` | no | `neutral` | Direction of the delta — colours it and adds an arrow |
 | deltaPlacement | `"inline" \| "stacked"` | no | `stacked` | Where the delta sits: stacked below the label, or inline to the right of the value, bottom-aligned |
 | size | `"default" \| "large"` | no | `default` | Stat size |
+| locale | `string` | no | `en-US` | The BCP 47 locale a number `value` is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider. |
 | className | `string` | no | `` | Additional CSS classes |

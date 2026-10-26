@@ -104,3 +104,17 @@
   padding: var(--padding-200); /* 8px */
   min-width: 160px;
 }
+
+/* ============================================
+   SURFACE — MENU
+   DropdownMenu's own panel, for a popover that sits among menus: its
+   inset, border and corner. Its rows, headings and separators are the
+   content's to draw, on the menu's measures.
+   ============================================ */
+
+.ds-popover__panel--menu,
+.ds-popover--compact.ds-popover__panel--menu {
+  padding: var(--padding-100);
+  border-color: var(--color-input-border-primary);
+  border-radius: var(--radius-300);
+}

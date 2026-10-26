@@ -2571,13 +2571,19 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
                   open={headerFilter === shown.id}
                   onOpenChange={(open) => (open ? setHeaderFilter(shown.id) : closeHeaderFilter())}
                   ariaLabel={filterLabels.filtered(text)}
+                  // A menu among the header's menus: DropdownMenu's surface, the editor in a menu row.
+                  surface="menu"
                   content={
-                    <FilterEditor
-                      column={column}
-                      filter={shown}
-                      labels={filterLabels}
-                      onChange={(next) => setFilters(filters.map((filter) => (filter.id === next.id ? next : filter)))}
-                    />
+                    <div className={`${baseClass}__menu-row`}>
+                      <FilterEditor
+                        column={column}
+                        filter={shown}
+                        labels={filterLabels}
+                        onChange={(next) =>
+                          setFilters(filters.map((filter) => (filter.id === next.id ? next : filter)))
+                        }
+                      />
+                    </div>
                   }
                 >
                   <span className="material-symbols-rounded" aria-hidden="true">
@@ -3071,7 +3077,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
               </div>
               {editMode === 'cell' && editable && !isLive(col) && !editingHere && (
                 <CircularButton
-                  className={`${baseClass}__edit-hint`}
+                  className={`${baseClass}__edit-hint${col.align === 'right' ? ` ${baseClass}__edit-hint--start` : ''}`}
                   icon="edit"
                   variant="tertiary"
                   size="compact"

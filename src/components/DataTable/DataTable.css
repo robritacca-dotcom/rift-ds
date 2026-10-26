@@ -632,15 +632,25 @@
   position: relative;
 }
 
-.ds-data-table__edit-hint {
+/* The pencil sits on the side the value leaves free: the end of a cell
+   that reads from the start, the start of one that reads from the end
+   (figures), so it covers the least of the value. Its fill is solid, the
+   body under the hovered row's tint, so text never shows through it. */
+.ds-data-table .ds-data-table__edit-hint {
   position: absolute;
   inset-block-start: 50%;
   inset-inline-end: var(--padding-100);
   translate: 0 -50%;
-  background-color: var(--color-table-row-hover-bg);
+  background-color: var(--color-table-body-bg);
+  background-image: linear-gradient(var(--color-table-row-hover-bg), var(--color-table-row-hover-bg));
   opacity: 0;
   pointer-events: none;
   transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-data-table .ds-data-table__edit-hint--start {
+  inset-inline-start: var(--padding-100);
+  inset-inline-end: auto;
 }
 
 .ds-data-table__cell--editable:hover .ds-data-table__edit-hint,
@@ -1213,4 +1223,10 @@
   line-height: var(--font-caption-line-height);
   letter-spacing: var(--font-caption-letter-spacing);
   color: var(--color-text-secondary);
+}
+
+/* A header filter's editor sits in a compact menu row on DropdownMenu's
+   surface, the measure of a compact menu item, as the header's own menu. */
+.ds-data-table__menu-row {
+  padding: var(--padding-150) var(--padding-300);
 }

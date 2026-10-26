@@ -9977,6 +9977,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "default"
           },
           {
+            "name": "surface",
+            "type": "\"menu\" | \"panel\"",
+            "required": false,
+            "description": "The panel's surface. `panel` (the default) is the content panel: a\n16px inset and the container border. `menu` is DropdownMenu's own\nsurface (its 4px inset, input border and corner), for a popover that\nsits among menus and should read as one of them, such as a table\ntoolbar's sort or column panel.",
+            "defaultValue": "panel"
+          },
+          {
             "name": "position",
             "type": "\"top\" | \"bottom\" | \"left\" | \"right\"",
             "required": false,

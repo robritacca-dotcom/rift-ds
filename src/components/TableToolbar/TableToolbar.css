@@ -102,16 +102,6 @@
   white-space: nowrap;
 }
 
-/* The columns panel: one switch per column, Show all last. */
-.ds-table-toolbar__columns {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--gap-200);
-  min-width: 200px;
-}
-
 /* A trigger whose panel is open (the More panel's columns, the Filter menu, a
    chip's editor) holds its pressed fill until the panel closes, so the
    bar says which control the open panel belongs to. */
@@ -121,21 +111,149 @@
   background-color: var(--color-action-passive-bg-active);
 }
 
-/* A row of the More panel's columns: its move grip, then its switch; a
-   sort row is drawn the same, with its fields in place of the switch. */
-.ds-table-toolbar__column,
-.ds-table-toolbar__sort-row {
+/* ============================================
+   PANELS
+   The bar's panels are menus in all but name, drawn
+   on DropdownMenu's own surface (Popover's `menu`
+   surface) and to its measures: a heading per
+   section in the menu's group-label type, a row per
+   control at the menu item's inset, a separator
+   between sections, and their actions as full-width
+   menu items with the menu's passive hover. A
+   compact bar takes the compact menu's measures.
+   ============================================ */
+
+.ds-table-toolbar__menu {
+  display: flex;
+  flex-direction: column;
+  min-width: 240px;
+}
+
+.ds-table-toolbar__menu-heading {
   display: flex;
   align-items: center;
-  gap: var(--gap-100);
+  justify-content: space-between;
+  gap: var(--gap-200);
+  min-height: var(--control-height-default);
+  padding-inline: var(--padding-400);
+  font-family: var(--font-paragraph-emphasis-family);
+  font-size: var(--font-paragraph-emphasis-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-emphasis-letter-spacing);
+  color: var(--color-text-tertiary);
+  user-select: none;
+}
+
+.ds-table-toolbar__menu-row {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-200);
+  padding: var(--padding-200) var(--padding-400);
   border-radius: var(--radius-200);
-  background-color: var(--color-bg-container-primary);
+}
+
+.ds-table-toolbar__menu-separator {
+  height: var(--border-025);
+  margin: var(--padding-100) var(--padding-400);
+  background-color: var(--color-input-border-primary);
+}
+
+.ds-table-toolbar__menu-actions {
+  display: flex;
+  flex-direction: column;
+}
+
+.ds-table-toolbar__menu-actions > *,
+.ds-table-toolbar__menu-actions .ds-dropdown-menu,
+.ds-table-toolbar__menu-actions .ds-dropdown-menu__trigger {
+  display: flex;
+  width: 100%;
+}
+
+.ds-table-toolbar__menu-item {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-300);
+  width: 100%;
+  padding: var(--padding-200) var(--padding-400);
+  border: none;
+  border-radius: var(--radius-200);
+  background: none;
+  color: var(--color-text-primary);
+  text-align: start;
+  white-space: nowrap;
+  cursor: pointer;
+  font-family: var(--font-paragraph-emphasis-family);
+  font-size: var(--font-paragraph-emphasis-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-emphasis-letter-spacing);
+}
+
+.ds-table-toolbar__menu-item:hover:not(:disabled),
+.ds-table-toolbar__menu-item[aria-expanded='true'] {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-table-toolbar__menu-item:focus-visible {
+  outline: var(--border-050) solid var(--color-action-primary-bg);
+  outline-offset: calc(-1 * var(--border-050));
+}
+
+.ds-table-toolbar__menu-item:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ds-table-toolbar__menu-icon {
+  --icon-size: var(--icon-size-600);
+
+  color: var(--color-icon-primary);
+}
+
+/* The compact bar's panels: the compact menu's measures. */
+.ds-table-toolbar--compact .ds-table-toolbar__menu-heading {
+  min-height: var(--control-height-compact);
+  padding-inline: var(--padding-300);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
+}
+
+.ds-table-toolbar--compact .ds-table-toolbar__menu-row,
+.ds-table-toolbar--compact .ds-table-toolbar__menu-item {
+  padding: var(--padding-150) var(--padding-300);
+}
+
+.ds-table-toolbar--compact .ds-table-toolbar__menu-separator {
+  margin-inline: var(--padding-300);
+}
+
+.ds-table-toolbar--compact .ds-table-toolbar__menu-item {
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
+}
+
+.ds-table-toolbar--compact .ds-table-toolbar__menu-icon {
+  --icon-size: var(--icon-size-500);
+}
+
+/* A column or sort row: its move grip, then its control. A row being
+   dragged lifts off the panel on its surface. */
+.ds-table-toolbar__columns,
+.ds-table-toolbar__sort-list {
+  position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .ds-table-toolbar__column[data-dragging],
 .ds-table-toolbar__sort-row[data-dragging] {
   position: relative;
   z-index: 1;
+  background-color: var(--color-bg-page-primary);
   box-shadow: var(--shadow-floating);
 }
 
@@ -177,51 +295,12 @@
 
 /* The folded bar's filter panel: each filter under its column's name. */
 .ds-table-toolbar__filter-panel {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: var(--gap-400);
-  min-width: 260px;
-}
-
-/* Add filter and Clear filters share one row, centred on each other. */
-.ds-table-toolbar__filter-actions {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--gap-200);
-}
-
-.ds-table-toolbar__filter-actions > * {
-  display: inline-flex;
-  align-items: center;
-}
-
-.ds-table-toolbar__filter-item {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-100);
-}
-
-.ds-table-toolbar__filter-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--gap-200);
-  font-family: var(--font-paragraph-sm-emphasis-family);
-  font-size: var(--font-paragraph-sm-emphasis-size);
-  font-weight: var(--font-paragraph-sm-emphasis-weight);
-  line-height: var(--font-paragraph-sm-emphasis-line-height);
-  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
-  color: var(--color-text-secondary);
+  min-width: 280px;
 }
 
 /* The folded bar's search field, in its popover. */
-.ds-table-toolbar__search-panel {
-  min-width: 240px;
-}
-
 .ds-table-toolbar__search-panel .ds-table-toolbar__search {
+  flex: 1 1 auto;
   max-width: none;
 }
 
@@ -249,58 +328,14 @@
   margin-inline-start: var(--gap-200);
 }
 
-/* The More panel: the density switch, then the columns, each under its
-   name. */
-.ds-table-toolbar__view {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-400);
-  min-width: 220px;
-}
-
-.ds-table-toolbar__view-section {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: var(--gap-200);
-}
-
-.ds-table-toolbar__view-section > .ds-segmented-control {
-  align-self: flex-start;
-}
-
-/* Folded actions read as a list: each a tertiary button, at its start. */
-.ds-table-toolbar__view-actions > .ds-button {
-  align-self: flex-start;
-}
-
-.ds-table-toolbar__view-heading {
-  font-family: var(--font-caption-family);
-  font-size: var(--font-caption-size);
-  font-weight: var(--font-caption-weight);
-  line-height: var(--font-caption-line-height);
-  letter-spacing: var(--font-caption-letter-spacing);
-  color: var(--color-text-tertiary);
-}
-
-/* The sort panel: the sorts, first sort first, then Add sort and Clear
-   sorts. A row's column field takes the room its grip, direction and
-   remove button leave. */
+/* The sort panel: a row's column field takes the room its grip,
+   direction and remove button leave. */
 .ds-table-toolbar__sorts {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-300);
-  width: 320px;
+  width: 360px;
 }
 
-.ds-table-toolbar__sort-list {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-200);
-}
-
-.ds-table-toolbar__sort-column {
+.ds-table-toolbar__sort-column,
+.ds-table-toolbar__menu-field {
   flex: 1 1 auto;
   min-width: 0;
 }
@@ -389,9 +424,7 @@
 
 /* In a phone's sheet the panels take the sheet's width, not the fixed
    widths that keep a popover from growing. */
-.ds-table-toolbar__sheet .ds-table-toolbar__sorts,
-.ds-table-toolbar__sheet .ds-table-toolbar__view,
-.ds-table-toolbar__sheet .ds-table-toolbar__filter-panel,
+.ds-table-toolbar__sheet .ds-table-toolbar__menu,
 .ds-table-toolbar__sheet .ds-data-table__filter-editor {
   width: auto;
   min-width: 0;
@@ -434,4 +467,9 @@
   align-items: center;
   gap: var(--gap-200);
   min-width: 0;
+}
+
+.ds-table-toolbar__filter-button {
+  display: inline-flex;
+  flex-shrink: 0;
 }

@@ -395,7 +395,14 @@ function ToolbarPanel({
   const [open, setOpen] = useState(false);
   if (!sheet)
     return (
-      <Popover size={size} ariaLabel={ariaLabel} position={position} onOpenChange={onOpenChange} content={content}>
+      <Popover
+        size={size}
+        surface="menu"
+        ariaLabel={ariaLabel}
+        position={position}
+        onOpenChange={onOpenChange}
+        content={content}
+      >
         {children}
       </Popover>
     );
@@ -956,23 +963,40 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
     const updateFilter = (next: Filter) => setFilters(filters.map((f) => (f.id === next.id ? next : f)));
     const removeFilter = (id: string) => setFilters(filters.filter((f) => f.id !== id));
 
-    /* Add filter and Clear filters: the panel's last row, or on a phone the sheet's pinned foot. */
-    const filterActions = (
-      <div className="ds-table-toolbar__filter-actions">
-        {addFilterMenu(<Button variant="tertiary" size={size} iconLeft="add" label={labels.addFilter} />)}
-        {filters.length > 0 && (
-          <Button variant="tertiary" size={size} label={filterLabels.clearAll} onClick={() => setFilters([])} />
+    /* The bar's panels are menus in all but name, so they are drawn on
+       DropdownMenu's own surface and measures: a heading per section, a
+       row per control, a separator between sections, and their actions as
+       full-width menu items (an icon and a label, the passive hover), never
+       as buttons floating in a panel. */
+    const menuItem = (label: string, icon?: React.ReactNode, onClick?: () => void, disabled?: boolean) => (
+      <button type="button" className="ds-table-toolbar__menu-item" onClick={onClick} disabled={disabled}>
+        {typeof icon === 'string' ? (
+          <span className="ds-table-toolbar__menu-icon material-symbols-rounded" aria-hidden="true">
+            {icon}
+          </span>
+        ) : (
+          icon
         )}
+        <span>{label}</span>
+      </button>
+    );
+    const menuSeparator = <div className="ds-table-toolbar__menu-separator" role="separator" />;
+
+    /* Add filter and Clear filters: the panel's last items, or on a phone the sheet's pinned foot. */
+    const filterActions = (
+      <div className="ds-table-toolbar__menu-actions">
+        {addFilterMenu(menuItem(labels.addFilter, 'add'))}
+        {filters.length > 0 && menuItem(filterLabels.clearAll, 'filter_list_off', () => setFilters([]))}
       </div>
     );
     const panelContent = (
-      <div className="ds-table-toolbar__filter-panel">
+      <div className="ds-table-toolbar__menu ds-table-toolbar__filter-panel">
         {filters.map((filter) => {
           const column = columnOf(filter.column);
           if (!column) return null;
           return (
             <div key={filter.id} className="ds-table-toolbar__filter-item">
-              <div className="ds-table-toolbar__filter-head">
+              <div className="ds-table-toolbar__menu-heading">
                 <span>{column.label}</span>
                 <CircularButton
                   icon="close"
@@ -983,10 +1007,19 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
                   onClick={() => removeFilter(filter.id)}
                 />
               </div>
-              <FilterEditor column={column} filter={filter} labels={filterLabels} size={size} onChange={updateFilter} />
+              <div className="ds-table-toolbar__menu-row">
+                <FilterEditor
+                  column={column}
+                  filter={filter}
+                  labels={filterLabels}
+                  size={size}
+                  onChange={updateFilter}
+                />
+              </div>
             </div>
           );
         })}
+        {!phoneScreen && filters.length > 0 && menuSeparator}
         {!phoneScreen && filterActions}
       </div>
     );
@@ -1034,8 +1067,19 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
             size={size}
             open={openFilter === filter.id}
             onOpenChange={(open) => (open ? setOpenFilter(filter.id) : closeFilter())}
+            surface="menu"
             content={
-              <FilterEditor column={column} filter={filter} labels={filterLabels} size={size} onChange={updateFilter} />
+              <div className="ds-table-toolbar__menu">
+                <div className="ds-table-toolbar__menu-row">
+                  <FilterEditor
+                    column={column}
+                    filter={filter}
+                    labels={filterLabels}
+                    size={size}
+                    onChange={updateFilter}
+                  />
+                </div>
+              </div>
             }
           >
             <Chip size={size === 'compact' ? 'default' : 'large'} label={text} onClick={() => {}} />
@@ -1058,7 +1102,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
         {ordered.map((col, index) => {
           const visible = !hidden.includes(col.key);
           return (
-            <div key={col.key} className="ds-table-toolbar__column">
+            <div key={col.key} className="ds-table-toolbar__column ds-table-toolbar__menu-row">
               <button
                 type="button"
                 className="ds-table-toolbar__grip material-symbols-rounded"
@@ -1087,15 +1131,9 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
             </div>
           );
         })}
-        <Button
-          variant="tertiary"
-          size={size}
-          label={labels.showAll}
-          disabled={hidden.length === 0}
-          onClick={() => setHidden([])}
-        />
       </div>
     );
+    const showAllColumns = menuItem(labels.showAll, 'visibility', () => setHidden([]), hidden.length === 0);
 
     const density = densitySwitch && (
       <SegmentedControl
@@ -1121,7 +1159,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
           label: col.label,
           onClick: () => setSorts([...sorts, { key: col.key, direction: 'asc' }]),
         }))}
-        trigger={<Button variant="tertiary" size={size} iconLeft="add" label={labels.addSort} />}
+        trigger={menuItem(labels.addSort, 'add')}
       />
     );
     const sortControl = sortable && sortableColumns.length > 0 && (
@@ -1133,7 +1171,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
           ariaLabel={labels.sort(sorts.length)}
           position="bottom"
           content={
-            <div className="ds-table-toolbar__sorts">
+            <div className="ds-table-toolbar__menu ds-table-toolbar__sorts">
               {sorts.length > 0 && (
                 <div className="ds-table-toolbar__sort-list">
                   <div className="ds-table-toolbar__drop" hidden aria-hidden="true" />
@@ -1142,7 +1180,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
                     const label = col?.label ?? entry.key;
                     const choices = [col, ...unsorted].filter((c): c is ToolbarColumn => Boolean(c));
                     return (
-                      <div key={entry.key} className="ds-table-toolbar__sort-row">
+                      <div key={entry.key} className="ds-table-toolbar__sort-row ds-table-toolbar__menu-row">
                         {sorts.length > 1 && (
                           <button
                             type="button"
@@ -1206,12 +1244,11 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
                   })}
                 </div>
               )}
+              {sorts.length > 0 && (addSortMenu || sorts.length > 0) && menuSeparator}
               {(addSortMenu || sorts.length > 0) && (
-                <div className="ds-table-toolbar__filter-actions">
+                <div className="ds-table-toolbar__menu-actions">
                   {addSortMenu}
-                  {sorts.length > 0 && (
-                    <Button variant="tertiary" size={size} label={labels.clearSorts} onClick={() => setSorts([])} />
-                  )}
+                  {sorts.length > 0 && menuItem(labels.clearSorts, 'close', () => setSorts([]))}
                 </div>
               )}
             </div>
@@ -1386,12 +1423,13 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
           ariaLabel={labels.group(Boolean(groupedBy))}
           position="bottom"
           content={
-            <div className="ds-table-toolbar__view">
-              <div className="ds-table-toolbar__view-section">
-                <span className="ds-table-toolbar__view-heading" aria-hidden="true">
-                  {labels.groupBy}
-                </span>
+            <div className="ds-table-toolbar__menu">
+              <div className="ds-table-toolbar__menu-heading" aria-hidden="true">
+                {labels.groupBy}
+              </div>
+              <div className="ds-table-toolbar__menu-row">
                 <Dropdown
+                  className="ds-table-toolbar__menu-field"
                   size={size}
                   aria-label={labels.groupBy}
                   options={[
@@ -1402,20 +1440,11 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
                   onValueChange={(next) => setGrouping(next ? [String(next)] : [])}
                 />
               </div>
+              {table && groupedBy && menuSeparator}
               {table && groupedBy && (
-                <div className="ds-table-toolbar__filter-actions">
-                  <Button
-                    variant="tertiary"
-                    size={size}
-                    label={labels.collapseAll}
-                    onClick={() => table.setAllGroupsOpen(false)}
-                  />
-                  <Button
-                    variant="tertiary"
-                    size={size}
-                    label={labels.expandAll}
-                    onClick={() => table.setAllGroupsOpen(true)}
-                  />
+                <div className="ds-table-toolbar__menu-actions">
+                  {menuItem(labels.collapseAll, 'unfold_less', () => table.setAllGroupsOpen(false))}
+                  {menuItem(labels.expandAll, 'unfold_more', () => table.setAllGroupsOpen(true))}
                 </div>
               )}
             </div>
@@ -1451,40 +1480,37 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
         ariaLabel={labels.more}
         position="bottom"
         content={
-          <div className="ds-table-toolbar__view">
+          <div className="ds-table-toolbar__menu ds-table-toolbar__view">
             {foldedActions.length > 0 && (
-              <div className="ds-table-toolbar__view-section ds-table-toolbar__view-actions">
-                <span className="ds-table-toolbar__view-heading" aria-hidden="true">
+              <>
+                <div className="ds-table-toolbar__menu-heading" aria-hidden="true">
                   {labels.actionsSection}
-                </span>
-                {foldedActions.map((action) => (
-                  <Button
-                    key={action.id}
-                    variant="tertiary"
-                    size={size}
-                    iconLeft={action.icon}
-                    label={action.label}
-                    disabled={action.disabled}
-                    onClick={action.onSelect}
-                  />
-                ))}
-              </div>
+                </div>
+                <div className="ds-table-toolbar__menu-actions">
+                  {foldedActions.map((action) => (
+                    <span key={action.id}>{menuItem(action.label, action.icon, action.onSelect, action.disabled)}</span>
+                  ))}
+                </div>
+              </>
             )}
+            {foldedActions.length > 0 && (density || columnsList) && menuSeparator}
             {density && (
-              <div className="ds-table-toolbar__view-section">
-                <span className="ds-table-toolbar__view-heading" aria-hidden="true">
+              <>
+                <div className="ds-table-toolbar__menu-heading" aria-hidden="true">
                   {labels.density}
-                </span>
-                {density}
-              </div>
+                </div>
+                <div className="ds-table-toolbar__menu-row">{density}</div>
+              </>
             )}
+            {density && columnsList && menuSeparator}
             {columnsList && (
-              <div className="ds-table-toolbar__view-section">
-                <span className="ds-table-toolbar__view-heading" aria-hidden="true">
+              <>
+                <div className="ds-table-toolbar__menu-heading" aria-hidden="true">
                   {labels.columns}
-                </span>
+                </div>
                 {columnsList}
-              </div>
+                <div className="ds-table-toolbar__menu-actions">{showAllColumns}</div>
+              </>
             )}
           </div>
         }
@@ -1528,6 +1554,10 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
           >
             <div className="ds-table-toolbar__start" ref={startRef}>
               {searchable && !narrow && searchField}
+              {/* Filter sits with what it makes: after search, before the chips it adds. */}
+              {showFilters && !narrow && (
+                <span className="ds-table-toolbar__filter-button">{addFilterMenu(filterIcon)}</span>
+              )}
               {showFilters && !narrow && chips}
               {showFilters && !narrow && (
                 <span
@@ -1541,6 +1571,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
                   inert={filters.length > fit ? undefined : true}
                 >
                   <Popover
+                    surface="menu"
                     size={size}
                     ariaLabel={labels.filters(activeFilters)}
                     onOpenChange={dropIncomplete}
@@ -1565,7 +1596,11 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
                   title={labels.search}
                   size={size}
                   ariaLabel={labels.search}
-                  content={<div className="ds-table-toolbar__search-panel">{searchField}</div>}
+                  content={
+                    <div className="ds-table-toolbar__menu ds-table-toolbar__search-panel">
+                      <div className="ds-table-toolbar__menu-row">{searchField}</div>
+                    </div>
+                  }
                 >
                   <CircularButton
                     icon="search"
@@ -1577,7 +1612,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
                 </ToolbarPanel>
               )}
               {/* The icon controls sit together: Filter, Columns, then density. */}
-              {showFilters && (narrow ? filterPanel : addFilterMenu(filterIcon))}
+              {showFilters && narrow && filterPanel}
               {sortControl}
               {groupControl}
               {moreControl}

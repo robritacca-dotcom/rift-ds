@@ -16,6 +16,14 @@ type PopoverOwnProps = {
   content: React.ReactNode;
   /** Component size */
   size?: 'default' | 'compact';
+  /**
+   * The panel's surface. `panel` (the default) is the content panel: a
+   * 16px inset and the container border. `menu` is DropdownMenu's own
+   * surface (its 4px inset, input border and corner), for a popover that
+   * sits among menus and should read as one of them, such as a table
+   * toolbar's sort or column panel.
+   */
+  surface?: 'panel' | 'menu';
   /** Preferred position */
   position?: 'top' | 'bottom' | 'left' | 'right';
   /** Trigger mode */
@@ -60,6 +68,7 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
       children,
       content,
       size = 'default',
+      surface = 'panel',
       position = 'bottom',
       trigger = 'click',
       open: controlledOpen,
@@ -148,7 +157,8 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
     const openClass = isOpen ? `${baseClass}__panel--open` : '';
 
     const containerClasses = [baseClass, className].filter(Boolean).join(' ');
-    const panelClasses = [`${baseClass}__panel`, sizeClass, positionClass, openClass]
+    const surfaceClass = surface === 'menu' ? `${baseClass}__panel--menu` : '';
+    const panelClasses = [`${baseClass}__panel`, sizeClass, surfaceClass, positionClass, openClass]
       .filter(Boolean)
       .join(' ');
 

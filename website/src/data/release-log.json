@@ -1,6 +1,17 @@
 {
   "releases": [
     {
+      "version": "1.14.0",
+      "date": "2026-10-26",
+      "title": "The tables release",
+      "body": [
+        "DataTable is rebuilt on a headless engine, TanStack Table. A column's `type` (text, status, person, currency, number, progress, date, tags, checkbox, link) draws, aligns, sorts and filters it with no render function. The table sorts by several columns, resizes, moves, pins and hides them, filters from each header, edits cells or whole rows in place, groups rows with totals, opens row details and saves its setup as views. Past 200 unpaged rows it draws only the rows in view, and `manual` hands sorting, filtering and paging to your server, with loading and failed-load states built in.",
+        "`TableToolbar` is the control bar over a table: search, filters as chips, sort, group, columns, density, saved views, a bulk bar for selected rows and the page's primary action. In a DataTable's `toolbar` slot it needs no props, and on a phone it folds to icons with its panels opening as sheets.",
+        "For starting an app, `rift-ds/tokens/base.css` is the reset and page the components are tuned against, `ThemeToggle` with `colorModeScript` sets the colour mode before first paint, `npx rift-ds init app` wires a Next.js app, and `npx rift-ds init block <name>` copies in a whole starting page. `ThemePicker` and `CommandPaletteTrigger` join the library, AiButton shows what an agent is doing through `state`, and every menu, list and popover is placed so a clipping container cannot cut it off.",
+        "Nothing published was renamed or removed. Initials avatars now take a colour fill picked from the name (pass `fill=\"neutral\"` for the grey), a table narrower than a phone shows \"Page X of Y\", and `@tanstack/react-table` and `@tanstack/react-virtual` install with the package."
+      ]
+    },
+    {
       "version": "1.13.0",
       "date": "2026-10-23",
       "title": "One drawing per control",

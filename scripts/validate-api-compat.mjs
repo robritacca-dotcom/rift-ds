@@ -80,10 +80,6 @@ const git = (...args) => execFileSync('git', args, { cwd: repoRoot, encoding: 'u
  * `bin` for a binary.
  */
 const SANCTIONED_BREAKS = [
-  { since: '1.14.0', component: 'DataTable', prop: 'columns', change: 'type', reason: 'DataTable became generic over its row type (R extends DataTableRow, defaulting to DataTableRow) with the TanStack engine. With the default, every one of these is exactly the type it was, so no consumer code changes; the gate compares type text, which now names R.' },
-  { since: '1.14.0', component: 'DataTable', prop: 'rows', change: 'type', reason: 'DataTable became generic over its row type (R extends DataTableRow, defaulting to DataTableRow) with the TanStack engine. With the default, every one of these is exactly the type it was, so no consumer code changes; the gate compares type text, which now names R.' },
-  { since: '1.14.0', component: 'DataTable', prop: 'selectRowLabel', change: 'type', reason: 'DataTable became generic over its row type (R extends DataTableRow, defaulting to DataTableRow) with the TanStack engine. With the default, every one of these is exactly the type it was, so no consumer code changes; the gate compares type text, which now names R.' },
-  { since: '1.14.0', component: 'DataTable', prop: 'paginationLabels', change: 'type', reason: 'A widening: the pick gains `pageLabel`, because the pager now follows the table\'s density and the default size shows numbered pages, whose names a consumer must be able to localise. Every object that type-checked before still does.' },
 ];
 
 /* ── Baseline ──────────────────────────────────────────────────────────── */

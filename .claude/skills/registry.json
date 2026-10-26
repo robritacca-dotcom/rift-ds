@@ -33,6 +33,7 @@
   "unlisted": [
     "first-deploy",
     "security-audit",
-    "dependency-advisory"
+    "dependency-advisory",
+    "dogfood"
   ]
 }

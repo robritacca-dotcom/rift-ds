@@ -6,7 +6,7 @@ import { DataTable } from "rift-ds/components/DataTable/DataTable";
 import { Dialog } from "rift-ds/components/Dialog/Dialog";
 import { Drawer } from "rift-ds/components/Drawer/Drawer";
 import { EmptyState } from "rift-ds/components/EmptyState/EmptyState";
-import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
+import { Dropdown } from "rift-ds/components/Dropdown/Dropdown";
 import { TableToolbar } from "rift-ds/components/TableToolbar/TableToolbar";
 import { listColumns, projectRows } from "./benchData";
 import styles from "./TablesBench.module.css";
@@ -62,10 +62,11 @@ export function LoadStatesTable({ size, lines }: { size: "default" | "compact"; 
   return (
     <div className={styles.phoneStation}>
       <div className={styles.controls}>
-        <SegmentedControl
+        {/* Five states outrun a phone as segments, so they are a list. */}
+        <Dropdown
           size="compact"
           aria-label="Table state"
-          segments={STATES}
+          options={STATES}
           value={state}
           onValueChange={(value) => setState(value as State)}
         />

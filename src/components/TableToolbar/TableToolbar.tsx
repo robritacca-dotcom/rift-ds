@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react';
+import React, { useEffect, useId, useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 import { Button } from '../Button/Button';
 import { Chip } from '../Chip/Chip';
@@ -200,6 +200,8 @@ export interface TableToolbarLabels {
   selectAll: (count: number) => string;
   /** The bulk bar's button that clears the selection. */
   clearSelection: string;
+  /** On a phone, the stop in the bar's own row that hands the keyboard to the bulk bar floating at the foot of the screen, given how many rows are selected. */
+  goToBulkBar: (count: number) => string;
   /** Name of a column's move grip in the Columns panel, given its header. */
   moveColumn: (label: string) => string;
   /** Announced after the panel moves a column, given its header, its new position and the column count. */
@@ -253,6 +255,7 @@ const DEFAULT_LABELS: TableToolbarLabels = {
   moreBulkActions: 'More actions',
   selectAll: (count) => `Select all ${count}`,
   clearSelection: 'Clear selection',
+  goToBulkBar: (count) => `${count} selected, go to actions`,
   moveColumn: (label) => `Move ${label}`,
   movedColumn: (label, position, count) => `${label} moved to position ${position} of ${count}`,
 };
@@ -768,6 +771,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
     /* How many bulk actions fit beside the bulk bar's count: each measured
        at full width, the More button's room kept while any is left out. */
     const bulkRef = useRef<HTMLDivElement | null>(null);
+    const bulkId = useId();
     const [actionFit, setActionFit] = useState(Number.MAX_SAFE_INTEGER);
     const bulkOn = Boolean(table?.selectable && table.selectedIds.length > 0);
     const actionIds = bulkActions.map((action) => action.id + action.label).join('|');
@@ -869,6 +873,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
     };
     const bulkBar = bulkMode && (
       <div
+        id={bulkId}
         className={floating ? 'ds-table-toolbar__bulk ds-table-toolbar__bulk--floating' : 'ds-table-toolbar__bulk'}
         role="group"
         aria-label={labels.selected(selectedCount)}
@@ -1413,7 +1418,9 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
             aria-label={labels.views}
             options={views.map((v) => ({
               value: v.id,
-              label: v.id === active?.id && dirty ? `${v.name} •` : v.name,
+              label: v.name,
+              // The tabs' dot, not a character in the name: the view menu's name says it aloud.
+              icon: v.id === active?.id && dirty ? <span className="ds-table-toolbar__view-dot" /> : undefined,
             }))}
             value={active?.id ?? ''}
             onValueChange={(id) => pickView(String(id))}
@@ -1601,6 +1608,21 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
         {viewRow}
         <div className="ds-table-toolbar__row">
           {floating && bulkBar ? createPortal(bulkBar, document.body) : bulkBar}
+          {/* Portalled, the floating bar sits last in the page. aria-owns
+              reads it here, where it belongs, and this stop hands the
+              keyboard to it from the bar's own place in the Tab order. */}
+          {floating && bulkBar && (
+            <>
+              <span aria-owns={bulkId} />
+              <button
+                type="button"
+                className="ds-visually-hidden"
+                onFocus={() => bulkRef.current?.querySelector<HTMLElement>('button:not([disabled])')?.focus()}
+              >
+                {labels.goToBulkBar(selectedCount)}
+              </button>
+            </>
+          )}
           <div
             className="ds-table-toolbar__main"
             inert={(bulkMode && !floating) || undefined}

@@ -3595,7 +3595,8 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
                     page={clampedPage}
                     pageCount={pageCount}
                     onPageChange={goToPage}
-                    size={size}
+                    // A phone's width cannot hold the numbered pages, so a narrow table reads "Page X of Y".
+                    size={narrow ? 'compact' : size}
                   />
                 )}
               </div>

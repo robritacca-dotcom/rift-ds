@@ -26,7 +26,8 @@
  *
  * Package subpath imports and git tracking are checked with the other
  * scaffold templates in validate-chat-widget.mjs, which covers this folder
- * beside chat/ and app/. Runs in the validate-registry chain: it reads
+ * beside chat/ and app/, and the consumer smoke (smoke-consumer.mjs)
+ * installs every block into a scratch app and type-checks it. Runs in the validate-registry chain: it reads
  * source files only, no build output.
  */
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';

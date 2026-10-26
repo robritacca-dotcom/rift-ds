@@ -18,9 +18,13 @@
  *     a single file (after tokens.css) and every data-brand value works.
  *
  * The declarations are EXACTLY the output of presetOverrides(preset,
- * theme) — the one composer the playground's live preview also calls —
- * never a re-derivation, so the preview and the shipped theme cannot
- * disagree. This script imports the TypeScript source directly under
+ * theme), the one composer the playground's theme export also calls,
+ * never a re-derivation. (The playground's live preview composes the same
+ * lever functions in a memo of its own that mirrors this composer's merge
+ * order; it does not call it.) The stylesheets ship in the npm package
+ * under the ./tokens/presets/* subpath, and the site's root layout loads
+ * presets.css, so the site rethemes through the same files a consumer
+ * imports. This script imports the TypeScript source directly under
  * Node's type stripping (the theme modules are erasable TS); the resolve
  * hook below only supplies the `.ts` extension Node's ESM resolver does
  * not guess. Output is deterministic: preset ids and declaration names

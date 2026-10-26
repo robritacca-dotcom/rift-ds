@@ -10,6 +10,13 @@
  * root files into website/public/ on every build, so the published
  * blueprints always match the real ones.
  *
+ * Never hand-edit the copies; edit the root files. FILES is the
+ * authoritative list: validate-website-surfaces.mjs imports it to require
+ * a /blueprints/<name> page for every synced file (so a spec is never a
+ * raw download with no page to read it on) and to hold the llms.txt
+ * route's spec-download list to it in both directions (so an unpublished
+ * spec cannot stay advertised as a link that 404s).
+ *
  * Runs as part of the validate-registry chain (root package.json) and
  * the website prebuild.
  */

@@ -39,6 +39,9 @@
  *   uppercase-and-mono          casing, a monospace face, an ink-outlined
  *                               secondary and a second action colour are
  *                               reported as traits rift does not take
+ *   coloured-headlines          display, heading and logo keys reach their
+ *                               tone levers, and a coloured headline never
+ *                               becomes the action colour
  *
  * Every report note and trait line is also held to content-design.md's em
  * dash ban, since the export ships them, and the three shipped samples

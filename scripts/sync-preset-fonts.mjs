@@ -29,6 +29,17 @@
  * Every family here is licensed under the SIL Open Font License 1.1,
  * which permits exactly this redistribution; the manifest records the
  * license per face.
+ *
+ * What this does not cover. The base theme's face, Nunito Sans, is bundled
+ * nowhere: the website self-hosts it through next/font/google at build
+ * time, Storybook loads it with a Google Fonts link in
+ * .storybook/preview-head.html, and package consumers bring their own by
+ * overriding --font-family-primary. The icon font is the other face that
+ * ships, self-hosted in src/fonts/. Two surfaces still load from Google at
+ * runtime, deliberately: the playground's typeface picker and its DESIGN.md
+ * import (the picker's roster is wider than the shipped presets, and an
+ * import can match any Google face), and the /api/mcp browser landing page,
+ * a self-contained HTML string with its own font link.
  */
 import { mkdirSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';

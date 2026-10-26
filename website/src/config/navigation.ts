@@ -436,6 +436,8 @@ export const docsSidebarLinks: NavLink[] = [
 /**
  * Sidebar for the Templates section — complete screens built from the
  * library's components and tokens alone. Curated order: strongest first.
+ * The authoritative list of templates: the showcase carousel, the sidebar,
+ * the sitemap and llms.txt all derive from it.
  */
 export const templatesSidebarLinks: NavLink[] = [
   { href: "/templates", label: "Contents" },

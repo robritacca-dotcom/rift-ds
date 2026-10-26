@@ -22,8 +22,10 @@
  *  - PARAM_RANGES matches the slider ranges in SHADER_PARAM_CONTROLS (the dev
  *    tuner's and the playground's), in both directions, so a slider can never
  *    dial in a value this validator would then reject
- *  - the "<N> parameters" claims match that count in every doc the CLAIM_CHECKS
- *    loop enumerates (the list beside the loop is authoritative — it includes
+ *  - the "<N> parameters" claims, and the "<N> blob definitions" / "<N> blurred
+ *    CSS discs" claims (held to BLOB_COUNT), match their counts in every doc the
+ *    CLAIM_CHECKS loop enumerates. README.md ships in the npm tarball, so a stale
+ *    count there reaches consumers. (The list beside the loop is authoritative; it includes
  *    the ShaderField docs page, which the 2026-09 audit caught still saying
  *    seven). A parameter count is a countable fact, so it gets the same
  *    treatment as every other one in this repo: build-enforced rather than

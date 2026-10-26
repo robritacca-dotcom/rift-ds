@@ -32,6 +32,11 @@ import {
 } from './brand.mjs';
 
 export { PACKAGE_NAME, REPOSITORY_URL };
+// Authoritative for what ships. The version has two mirrors that must move
+// with it: the root package.json's `version` (by hand; that manifest stays
+// private forever and never publishes) and package-lock.json (refresh with
+// `npm install --package-lock-only`). validate-package-exports.mjs fails the
+// build when the three disagree; the release skill owns the bump procedure.
 export const PACKAGE_VERSION = '1.14.0';
 export const PACKAGE_DESCRIPTION =
   'An AI-ready React design system: accessible components on composable tokens, light/dark theming, and CSS-variable overrides.';

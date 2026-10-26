@@ -33,6 +33,9 @@ export interface LinkProviderProps {
  * read a provider and take the prop alone (design.md's Components intro
  * names them, and scripts/validate-component-contract.mjs keeps them off
  * the provider).
+ *
+ * Published as the `./behaviors/LinkProvider` subpath because consumers
+ * mount it; with the scroll lock it is one of only two behaviors that are.
  */
 export function LinkProvider({ linkComponent, children }: LinkProviderProps) {
   return <LinkContext.Provider value={linkComponent}>{children}</LinkContext.Provider>;

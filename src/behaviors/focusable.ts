@@ -2,7 +2,8 @@
  * Shared focusability queries for the overlay behavior layer.
  *
  * One home for the selector the modal components previously each carried a
- * copy of. Plain DOM utilities — no React, safe to import anywhere.
+ * copy of. Plain DOM utilities — no React, safe to import anywhere. It
+ * serves non-overlay keyboard work too: Toolbar's arrow-key model reads it.
  */
 
 /** Everything a focus trap must cycle through. */

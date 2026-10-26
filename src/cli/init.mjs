@@ -42,6 +42,9 @@
  * the disk: a skill name is one kebab-case folder, a file is a plain
  * relative path, and nothing may climb out of the target folder.
  *
+ * A bin and never an exports subpath: nothing imports it, and build-package.mjs
+ * ships it as dist/bin/<BIN_NAME>.mjs.
+ *
  * Zero dependencies by design: global fetch plus node:fs, so npx never
  * installs anything beyond the package itself. SITE_ORIGIN, SKILL_NAME,
  * MCP_SERVER_NAME and PACKAGE_NAME are stamped by build-package.mjs from

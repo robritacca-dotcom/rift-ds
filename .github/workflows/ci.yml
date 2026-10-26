@@ -1,5 +1,10 @@
 name: CI
 
+# `npm run verify` is the local mirror of this workflow: a check added here
+# goes into verify in the same change. Three deliberate exceptions stay
+# CI-only: the dependency audit and the drift guard below, and Chromatic
+# (chromatic.yml, dispatch-only for its snapshot budget).
+
 on:
   push:
     branches: [main]
@@ -45,6 +50,8 @@ jobs:
       - run: node scripts/validate-package-publish.mjs
       # validate-registry (run by prebuild) regenerates README/skills/barrel
       # content; a dirty tree here means committed generated content is stale.
+      # CI-only: a local tree is dirty with the change in progress, so verify
+      # cannot run this guard.
       - name: Check generated content is committed
         run: git diff --exit-code
 

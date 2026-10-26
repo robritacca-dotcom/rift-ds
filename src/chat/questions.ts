@@ -16,6 +16,11 @@ import type { ChatQuestion, ChatQuestionAnswer, ChatQuestionSet, ChatReply, Chat
    arrives, the same double check the chips get. Anything malformed is
    dropped, never repaired: the reply text still asks the question in
    words, so a dropped set leaves a conversation that reads correctly.
+
+   This module is the questions' one home: the sanitiser, the plain-text
+   serialiser of answers (`serializeReply`), the `ask_user` input schema
+   and the composer-lock rule (`isBlockingQuestion`). TurnQuestion.tsx
+   draws them.
    ============================================ */
 
 /** Questions in one set. A longer interview belongs in a form, not a chat turn. */

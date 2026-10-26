@@ -18,6 +18,29 @@
  *      prompt injection yields off-brand prose, never a leak. Keep it that
  *      way: do not add a source that isn't already public.
  *
+ *   3. Owner-authored only. The model treats corpus text as context, so
+ *      third-party words (a client quote, a testimonial, a pulled-in review)
+ *      would be an injection surface into the chat. Today every word on the
+ *      site is the owner's, which is what makes automatic page-prose
+ *      extraction safe; the day a page carries third-party text, it needs
+ *      an explicit decision (probably an EXCLUDED_ROUTES entry) before the
+ *      next build ships it to the model.
+ *
+ * Both halves are security boundaries, not style choices. The public half
+ * is enforced as an allowlist where it can be: an email address may reach
+ * the corpus only through a page's corpus-facts() directive, and
+ * validate-site-corpus.mjs fails on any other route in. That validator
+ * also screens for local paths, analytics ids and keys, but it cannot
+ * judge whether a new source was meant to be public, or whether the owner
+ * wrote it; that judgement is the author's.
+ *
+ * The sources: every page's prose (read through the TypeScript AST from the
+ * route's whole folder, JSX text plus the attributes in PROSE_ATTRIBUTES),
+ * the corpus-facts() data blocks, the data registries, and the root specs
+ * (CLAUDE.md and design.md condensed, content-design.md in full). The page
+ * list is the filesystem (site-routes.mjs), so a new page is covered with no
+ * registration; deliberate absences live in EXCLUDED_ROUTES with a reason.
+ *
  * Section order is stable → volatile so an edit to a late section leaves the
  * earlier text byte-identical. There is one cache breakpoint today (the whole
  * corpus), but the ordering keeps a second breakpoint available later.

@@ -33,7 +33,9 @@
  * DataTable, and every type it touches is wrapped in rift's own, so its
  * major version never becomes part of rift's public API (the API gate holds
  * every exported name, and a TanStack rename would otherwise fail it or
- * force a rift major). Added 2026-10-25 with the engine.
+ * force a rift major). Added 2026-10-25 with the engine. TanStack Virtual,
+ * the windowing under DataTable and the package's other runtime dependency,
+ * is held out of the public types by the same rule.
  */
 import { spawnSync } from 'node:child_process';
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';

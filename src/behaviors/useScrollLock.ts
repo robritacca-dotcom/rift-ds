@@ -35,6 +35,10 @@ import { useEffect, useRef } from 'react';
  * swapping the modals onto it would change their scrollbar rendering.
  * Instances are independent — overlapping cancel-events locks stack
  * harmlessly.
+ *
+ * Published as the `./behaviors/useScrollLock` subpath so host chrome can
+ * join the counter; with LinkProvider it is one of only two behaviors that
+ * are. The rest of src/behaviors stays internal.
  */
 
 type ScrollLockOptions = {

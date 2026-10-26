@@ -14,6 +14,11 @@
  * /api/mcp through @/lib/site-tools), the package's ask_user tool switched
  * on, the Upstash guardrails, and the
  * notice copy that points people at the docs.
+ *
+ * The two lookup tools cover what the corpus deliberately leaves out, the
+ * component prop API and the token registry. They return plain strings, no
+ * cards, so a visitor sees them only as trace points; the tool loop is
+ * bounded by maxModelCalls, whose last pass withholds the tools.
  */
 import { createChatHandler, type ChatTool } from "rift-ds/chat/server";
 

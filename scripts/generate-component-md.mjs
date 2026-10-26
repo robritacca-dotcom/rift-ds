@@ -10,7 +10,10 @@
  * feeds Storybook's props tables, the shipped .d.ts and the /api/mcp
  * get_component tool. No hand-written facts live here, so the files cannot
  * drift from the source: validate-component-md.mjs regenerates in memory
- * and byte-compares on every build.
+ * and byte-compares on every build. Two consumers point at these files:
+ * the "Copy for agents" button on component pages
+ * (website/src/components/PageLinks/CopyPageMarkdown.tsx) and the MCP
+ * get_component response's markdownUrl.
  *
  * Deterministic and public-only, like every generated surface: no network,
  * no timestamps (the version stamp is PACKAGE_VERSION, which only moves on

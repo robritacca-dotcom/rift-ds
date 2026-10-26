@@ -16,6 +16,18 @@
  *
  * Every producer of a suggestion checks against it. A suggestion that will
  * not fit is dropped, never truncated: half a question is not a question.
+ *
+ * The FAB summary panel's chips render through the same row, so they share
+ * the budget too. It lives in the package rather than the site so every
+ * consumer's chat holds the same line. The enforcement points: the
+ * follow-ups model is told the number in its prompt (server.ts), the
+ * follow-ups route drops a long one rather than clipping it, and the
+ * options of a question the agent asks are held to it as well (the
+ * `ask_user` input schema tells the model the number, and
+ * `sanitizeQuestionSet` in questions.ts drops a question whose option
+ * outruns it). Written copy is a build check: validate-chat-starters.mjs
+ * holds the starters, follow-ups and the demo script's question options,
+ * and validate-page-summaries.mjs the summary panel's chips.
  */
 export const SUGGESTION_MAX_CHARS = 40;
 

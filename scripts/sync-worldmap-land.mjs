@@ -12,7 +12,8 @@
  * 0..360 linearly in longitude, y runs 0..360 through the Mercator formula
  * with latitude clamped to ±85.05°, so a degree of longitude and a degree
  * of projected latitude share one unit and a bounds box can become an SVG
- * viewBox directly. Antarctica is dropped (Mercator inflates it into a
+ * viewBox directly. This script owns those projection constants;
+ * WorldMap.tsx restates them. Antarctica is dropped (Mercator inflates it into a
  * shelf that dominates any world framing, and no marker will ever sit on
  * it), as are islands too small to survive a hairline stroke.
  */

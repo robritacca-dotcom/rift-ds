@@ -16,6 +16,9 @@
  * a chain followed through the inline layer reports the *re-pointed* ramp,
  * not the shipped one.
  *
+ * Its readers are inspect mode's primitive column and the playground Type
+ * view's family-role chips.
+ *
  * Client-only (it reads `document`); callers re-collect after a theme flip
  * or lever change rather than holding one collection forever.
  */

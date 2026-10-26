@@ -8,12 +8,21 @@
  * Rewrites README.md in place between marker comments:
  *   <!-- component-count -->…<!-- /component-count -->   (inline)
  *   <!-- component-list:start --> … <!-- component-list:end -->
- *   <!-- banner:start --> … <!-- banner:end -->
- *   <!-- author:start --> … <!-- author:end -->
+ *   <!-- npm-badge:start --> … <!-- npm-badge:end -->   (from PACKAGE_NAME)
+ *   <!-- banner:start --> … <!-- banner:end -->   (absolute raw URL from REPOSITORY_URL)
+ *   <!-- author:start --> … <!-- author:end -->   (AUTHOR_NAME/AUTHOR_URL)
+ *
+ * Commit README.md whenever a build regenerates it; CI's drift guard
+ * fails on an uncommitted regeneration.
  *
  * Also fails if the README's Tech section names a different major
  * version of React / Next.js / Storybook / Vite than package.json —
  * versions aren't generated (they sit in prose), but they can't drift.
+ * And it fails if either install surface, README.md or
+ * src/stories/Configure.mdx (the Storybook landing, which deploys
+ * separately and keeps its counts and URLs as live imports), stops
+ * mentioning PACKAGE_NAME. Both ship to strangers (the README inside the
+ * npm tarball), so treat their install and usage prose as production copy.
  *
  * Runs as part of `npm run validate-registry` (every build, both
  * projects). Never hand-edit the marked README sections.

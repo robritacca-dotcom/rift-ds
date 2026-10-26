@@ -65,8 +65,9 @@
  *    reference --primitive-radius-pill literally, or the exemption fails.
  *
  * 4b. The lever tables (same file): GAP_STEPS, PADDING_STEPS,
- *    FONT_SIZE_STEPS and FONT_LINE_HEIGHT_STEPS held to their token
- *    ladders in both directions; MOTION_DURATION_STEPS held to every
+ *    CONTROL_HEIGHT_STEPS (the control-height primitives the density lever
+ *    scales), FONT_SIZE_STEPS and FONT_LINE_HEIGHT_STEPS held to their
+ *    token ladders in both directions; MOTION_DURATION_STEPS held to every
  *    --motion-duration-* except instant and loop-* (both directions, so a
  *    new paced duration such as orbit cannot ship unscaled); and
  *    ELEVATION_VARIANTS.default pinned to the shipped shadows per theme.

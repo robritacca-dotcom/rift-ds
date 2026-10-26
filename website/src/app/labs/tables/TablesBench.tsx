@@ -367,7 +367,7 @@ export function TablesBench() {
       <Station
         id="bench-toolbar"
         title="9. Toolbar and filters"
-        note="TableToolbar in the table's toolbar slot: search, Filter with a chip per condition, Sort (two sorts set: Shift-click a header to add one, or order them in the panel), a More panel with the density switch and the columns, Import and Export as icons and New project. Tick a row and the bar becomes the bulk bar at the same height: Clear, the count, Select all N past the page, Archive and Delete labelled, the rest under More. Each header menu ends in Filter…, the same filters as the chips. Status, Owner and Region filter as choices, Budget as a number, Due as a date, Project as text."
+        note="TableToolbar in the table's toolbar slot: search, Filter with a chip per condition, Sort (two sorts set: Shift-click a header to add one, or order them in the panel), a More panel with the density switch and the columns, Import and Export as icons and New project. Tick a row and the bar becomes the bulk bar at the same height: Clear, the count, Select all N past the page, then every action in full, Delete last, with a More menu only for what does not fit. Each header menu ends in Filter…, the same filters as the chips. Status, Owner and Region filter as choices, Budget as a number, Due as a date, Project as text."
         tunable={false}
       >
         {() => (

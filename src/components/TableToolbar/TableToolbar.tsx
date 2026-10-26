@@ -574,6 +574,41 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
       return () => observer.disconnect();
       // Measures again when the filters change what their chips say.
     }, [narrow, filterIds, size]);
+    /* How many bulk actions fit beside the bulk bar's count: each measured
+       at full width, the More button's room kept while any is left out. */
+    const bulkRef = useRef<HTMLDivElement | null>(null);
+    const [actionFit, setActionFit] = useState(Number.MAX_SAFE_INTEGER);
+    const bulkOn = Boolean(table?.selectable && table.selectedIds.length > 0);
+    const actionIds = bulkActions.map((action) => action.id + action.label).join('|');
+    useLayoutEffect(() => {
+      const bar = bulkRef.current;
+      if (!bar || narrow || !bulkOn) return;
+      const measure = () => {
+        const gap = parseFloat(getComputedStyle(bar).columnGap) || 0;
+        const start = bar.querySelector<HTMLElement>('.ds-table-toolbar__bulk-start');
+        const end = bar.querySelector<HTMLElement>('.ds-table-toolbar__bulk-end');
+        if (!start || !end) return;
+        const endGap = parseFloat(getComputedStyle(end).columnGap) || 0;
+        const room = bar.clientWidth - start.getBoundingClientRect().width - gap;
+        const buttons = [...end.querySelectorAll<HTMLElement>(':scope > [data-action]')];
+        // The More button is a square at the control height.
+        const moreWidth = bar.getBoundingClientRect().height + endGap;
+        let used = 0;
+        let n = 0;
+        for (let i = 0; i < buttons.length; i += 1) {
+          const width = buttons[i].getBoundingClientRect().width + (i > 0 ? endGap : 0);
+          const reserve = i < buttons.length - 1 ? moreWidth : 0;
+          if (used + width + reserve > room) break;
+          used += width;
+          n += 1;
+        }
+        setActionFit((previous) => (previous === n ? previous : n));
+      };
+      measure();
+      const observer = new ResizeObserver(measure);
+      observer.observe(bar);
+      return () => observer.disconnect();
+    }, [narrow, bulkOn, actionIds, size]);
     const setRootRef = (node: HTMLDivElement | null) => {
       rootRef.current = node;
       if (typeof ref === 'function') ref(node);
@@ -581,30 +616,39 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
     };
 
     /* The bulk bar: the bar's own row, at the same height, while rows are
-       selected. Two actions carry a label at most, the first ordinary
-       one and the first destructive one, set apart at the end; the rest
-       fold into a More menu. Folded, every action is in the menu. */
+       selected. Every action is a full button while there is room, the
+       destructive ones last; what does not fit folds into a More menu at
+       the end, measured as the chips are. Folded, every action is in it. */
     const selectedCount = table?.selectable ? table.selectedIds.length : 0;
     const bulkMode = selectedCount > 0;
     const matching = table?.matchingIds ?? [];
     const allMatching = matching.length > 0 && matching.every((id) => table!.selectedIds.includes(id));
     const selection: TableToolbarSelection = { ids: table?.selectedIds ?? [], allMatching, except: [] };
-    const ordinary = bulkActions.filter((action) => !action.destructive);
-    const dangerous = bulkActions.filter((action) => action.destructive);
-    const labelled = narrow ? [] : [ordinary[0], dangerous[0]].filter((action): action is TableToolbarBulkAction => Boolean(action));
-    const folded = bulkActions.filter((action) => !labelled.includes(action));
-    const bulkButton = (action: TableToolbarBulkAction) => (
-      <Button
-        key={action.id}
-        variant="secondary"
-        tone={action.destructive ? 'destructive' : 'neutral'}
-        size={size}
-        iconLeft={action.icon}
-        label={action.label}
-        disabled={action.disabled}
-        onClick={() => action.onSelect(selection)}
-      />
-    );
+    const orderedActions = [
+      ...bulkActions.filter((action) => !action.destructive),
+      ...bulkActions.filter((action) => action.destructive),
+    ];
+    const shownActions = narrow ? 0 : Math.min(actionFit, orderedActions.length);
+    const folded = orderedActions.slice(shownActions);
+    const bulkButton = (action: TableToolbarBulkAction, index: number) => {
+      const out = index >= shownActions;
+      return (
+        <Button
+          key={action.id}
+          data-action=""
+          className={out ? 'ds-table-toolbar__chip--overflow' : undefined}
+          aria-hidden={out || undefined}
+          inert={out || undefined}
+          variant="secondary"
+          tone={action.destructive ? 'destructive' : 'neutral'}
+          size={size}
+          iconLeft={action.icon}
+          label={action.label}
+          disabled={action.disabled}
+          onClick={() => action.onSelect(selection)}
+        />
+      );
+    };
     /* Clearing unmounts the button that had focus, so focus moves to the
        bar's search, or the bar itself. */
     const clearSelection = () => {
@@ -616,7 +660,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
       });
     };
     const bulkBar = bulkMode && (
-      <div className="ds-table-toolbar__bulk" role="group" aria-label={labels.selected(selectedCount)}>
+      <div className="ds-table-toolbar__bulk" role="group" aria-label={labels.selected(selectedCount)} ref={bulkRef}>
         <div className="ds-table-toolbar__bulk-start">
           <CircularButton
             icon="close"
@@ -639,7 +683,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
           )}
         </div>
         <div className="ds-table-toolbar__bulk-end">
-          {labelled.filter((action) => !action.destructive).map(bulkButton)}
+          {!narrow && orderedActions.map(bulkButton)}
           {folded.length > 0 && (
             <DropdownMenu
               size={size}
@@ -661,12 +705,6 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
                 />
               }
             />
-          )}
-          {labelled.some((action) => action.destructive) && (
-            <>
-              <span className="ds-table-toolbar__bulk-divider" aria-hidden="true" />
-              {labelled.filter((action) => action.destructive).map(bulkButton)}
-            </>
           )}
         </div>
       </div>

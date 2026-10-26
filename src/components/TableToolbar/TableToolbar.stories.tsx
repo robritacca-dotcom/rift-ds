@@ -159,8 +159,9 @@ export const ReorderColumns: Story = {
 
 /**
  * With row checkboxes, selecting a row turns the bar into the bulk bar at
- * the same height: Clear, the count, Select all N, the actions (the first
- * ordinary and the first destructive one labelled, the rest in More).
+ * the same height: Clear, the count, Select all N, then every action in
+ * full while there is room, the destructive ones last, and a More menu for
+ * what does not fit.
  */
 export const BulkBar: Story = {
   render: () => {
@@ -215,7 +216,9 @@ export const BulkBar: Story = {
     const inBar = within(bulk);
     await expect(inBar.getByRole('button', { name: 'Archive' })).toBeInTheDocument();
     await expect(inBar.getByRole('button', { name: 'Delete' })).toBeInTheDocument();
-    await expect(inBar.queryByRole('button', { name: 'Assign' })).not.toBeInTheDocument();
+    // With room for every action, nothing folds.
+    await expect(inBar.getByRole('button', { name: 'Assign' })).toBeInTheDocument();
+    await expect(inBar.queryByRole('button', { name: 'More actions' })).not.toBeInTheDocument();
 
     // Select all N reaches past the page.
     await userEvent.click(inBar.getByRole('button', { name: 'Select all 4' }));
@@ -223,8 +226,7 @@ export const BulkBar: Story = {
     await userEvent.click(inBar.getByRole('button', { name: 'Archive' }));
     await expect(canvas.getByTestId('ran')).toHaveTextContent('archive 4 all');
 
-    await userEvent.click(inBar.getByRole('button', { name: 'More actions' }));
-    await userEvent.click(await within(document.body).findByRole('menuitem', { name: 'Assign' }));
+    await userEvent.click(inBar.getByRole('button', { name: 'Assign' }));
     await expect(canvas.getByTestId('ran')).toHaveTextContent('assign');
 
     // Clear returns the bar, and focus to its search.

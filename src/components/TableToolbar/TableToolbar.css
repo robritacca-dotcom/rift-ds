@@ -301,9 +301,10 @@
 }
 
 /* The bulk bar: while rows are selected it lies over the bar's own row at
-   the same height, so nothing below moves, on the container fill so the
-   change of mode reads at a glance. The row beneath stays laid out (and
-   inert), so its chips keep their measured fit for when it returns. */
+   the same height, so nothing below moves. It is the same bar in another
+   mode, so it takes no fill of its own: the selected rows' tint and the
+   count say what changed. The row beneath stays laid out (and inert), so
+   its chips keep their measured fit for when it returns. */
 .ds-table-toolbar__main[data-covered] {
   visibility: hidden;
 }
@@ -316,9 +317,6 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--gap-300);
-  padding-inline: var(--padding-100);
-  border-radius: var(--radius-300);
-  background-color: var(--color-bg-container-secondary);
 }
 
 .ds-table-toolbar__bulk-start,
@@ -329,21 +327,27 @@
   min-width: 0;
 }
 
+/* Actions that do not fit stay laid out out of sight, so they can be measured. */
+.ds-table-toolbar__bulk-end {
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* The count reads at the size of the button labels beside it, at either density. */
 .ds-table-toolbar__bulk-count {
-  font-family: var(--font-paragraph-sm-emphasis-family);
-  font-size: var(--font-paragraph-sm-emphasis-size);
-  font-weight: var(--font-paragraph-sm-emphasis-weight);
-  line-height: var(--font-paragraph-sm-emphasis-line-height);
-  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
+  font-family: var(--font-paragraph-emphasis-family);
+  font-size: var(--font-paragraph-emphasis-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-emphasis-letter-spacing);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
   color: var(--color-text-primary);
 }
 
-/* The destructive action stands apart from the rest. */
-.ds-table-toolbar__bulk-divider {
-  align-self: stretch;
-  width: var(--border-025);
-  margin-block: var(--padding-100);
-  background-color: var(--color-divider);
+
+.ds-table-toolbar--compact .ds-table-toolbar__bulk-count {
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
 }

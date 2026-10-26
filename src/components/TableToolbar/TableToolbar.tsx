@@ -15,6 +15,7 @@ import { SegmentedControl } from '../SegmentedControl/SegmentedControl';
 import { ToggleSwitch } from '../ToggleSwitch/ToggleSwitch';
 import { FilterEditor } from '../DataTable/FilterEditor';
 import { startDrag } from '../DataTable/dragGesture';
+import { absoluteDate, parseDate } from '../DataTable/columnTypes';
 import '../../behaviors/visually-hidden.css';
 import {
   DEFAULT_FILTER_LABELS,
@@ -577,7 +578,12 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
 
     const chipText = (filter: Filter) => {
       const column = columnOf(filter.column);
-      const choice = (value: string) => column?.options.find((option) => option.value === value)?.label ?? value;
+      const choice = (value: string) => {
+        // A date reads as people read it ("Jun 17, 2026"), not as it is stored.
+        const date = column?.kind === 'date' ? parseDate(value) : null;
+        if (date) return absoluteDate(date, undefined);
+        return column?.options.find((option) => option.value === value)?.label ?? value;
+      };
       // The kind's default condition goes unsaid ("Status · Active +1"); any other is named.
       // A condition with no value is the whole meaning, so it is always named ("Done · is checked").
       const isDefault =

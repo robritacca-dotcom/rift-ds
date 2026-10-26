@@ -2115,7 +2115,12 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
         <div
           className={`${baseClass}__header-inner`}
           data-align={col.align === 'right' ? 'end' : col.align === 'center' ? 'center' : undefined}
-          style={{ justifyContent: justify(col.align) }}
+          style={{
+            justifyContent: justify(col.align),
+            // In auto layout a declared width is only a hint the browser squeezes when the table runs wide,
+            // so a pixel width also holds as the column's floor, set on content the layout cannot shrink.
+            minWidth: !layoutReady && !stacked && declaredOf(key) ? declaredOf(key)! - 2 * CELL_PADDING[size] : undefined,
+          }}
         >
           {col.sortable ? (
             <button

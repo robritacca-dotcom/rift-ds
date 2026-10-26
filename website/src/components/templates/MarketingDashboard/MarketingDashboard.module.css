@@ -308,19 +308,8 @@
   line-height: var(--font-caption-line-height);
 }
 
-.deliverySelect {
-  min-width: 140px;
-}
 
-.dateCell {
-  white-space: nowrap;
-}
 
-.rowActions {
-  display: inline-flex;
-  justify-content: flex-end;
-  gap: var(--gap-100);
-}
 
 /* ---------------------------------------------------------- responsive */
 

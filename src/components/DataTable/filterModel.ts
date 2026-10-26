@@ -244,7 +244,7 @@ export const matches = (filter: Filter, value: Raw): boolean => {
   }
 };
 
-/** The value's part of a chip: "Paused", "Paused +2", "10 and 20", or the placeholder. */
+/** The value's part of a chip: "Paused", "Paused +2", "10 and 20", or the placeholder, each value read through `label` (an option's label, a date as people read it). */
 export const valueText = (
   filter: Filter,
   labels: FilterLabels,
@@ -253,12 +253,13 @@ export const valueText = (
   if (VALUELESS.has(filter.operator)) return '';
   if (!isComplete(filter)) return labels.noValue;
   const value = filter.value;
-  if (filter.operator === 'between' && Array.isArray(value)) return `${value[0]} ${labels.and} ${value[1]}`;
+  if (filter.operator === 'between' && Array.isArray(value))
+    return `${label(String(value[0]))} ${labels.and} ${label(String(value[1]))}`;
   if (Array.isArray(value)) {
     const list = value as string[];
     return list.length > 1 ? `${label(list[0])} ${labels.more(list.length - 1)}` : label(list[0]);
   }
-  return String(value);
+  return label(String(value));
 };
 
 /** A new filter's id. */

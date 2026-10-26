@@ -81,3 +81,6 @@ export const MOTION_THREAD_NAMING_DELAY_MS = 1600;
 
 /** How long ShaderField waits for the browser to restore a lost WebGL context on its own before forcing a restore. A schedule timing. */
 export const MOTION_CONTEXT_RESTORE_WAIT_MS = 700;
+
+/** How long a table waits after the last keystroke or range step before it announces the new result or selection count, so typing a search or sweeping Shift+Down speaks once. A schedule timing. */
+export const MOTION_ANNOUNCE_DEBOUNCE_MS = 500;

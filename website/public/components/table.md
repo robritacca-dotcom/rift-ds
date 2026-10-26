@@ -19,6 +19,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same dat
 | size | `"default" \| "compact"` | no | `default` | Visual size |
 | striped | `boolean` | no | `false` | Alternating row background colours |
 | bordered | `boolean` | no | `false` | Adds an outer border + border-radius container, a tinted thead background, and `--color-divider` row lines — matching the bordered table style used on markdown content pages. |
+| columnDividers | `boolean` | no | `false` | Draws a vertical line between columns, as well as the lines between rows. |
 | caption | `string` | no |  | Accessible caption for the table |
 | captionHidden | `boolean` | no | `false` | Whether to visually hide the caption (still available to screen readers) |
 | className | `string` | no | `` | Additional CSS classes |

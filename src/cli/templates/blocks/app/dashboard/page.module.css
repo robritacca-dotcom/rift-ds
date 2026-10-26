@@ -1,0 +1,90 @@
+/* The dashboard's grid. Four stats across on a desktop, two from the
+   laptop width down to a phone; the two panels sit side by side until the
+   tablet width, then stack. */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--gap-500);
+}
+
+.panels {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gap-500);
+}
+
+/* The projects table: its title, then the table on the page itself. */
+.tableSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+  min-width: 0;
+}
+
+.panelTitle {
+  margin: 0;
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  letter-spacing: var(--font-title-body-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-400);
+}
+
+.progressRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+}
+
+.progressMeta,
+.activityRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--gap-400);
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-primary);
+}
+
+.muted {
+  flex-shrink: 0;
+  color: var(--color-text-secondary);
+}
+
+.strong {
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+}
+
+@media (max-width: 1279px) {
+  .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 959px) {
+  .panels {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .stats {
+    gap: var(--gap-400);
+  }
+
+  .panels {
+    gap: var(--gap-400);
+  }
+}

@@ -23,6 +23,7 @@ export type TokenCategory =
   | 'border'
   | 'shadow'
   | 'icons'
+  | 'controls'
   | 'motion'
   | 'stacking';
 

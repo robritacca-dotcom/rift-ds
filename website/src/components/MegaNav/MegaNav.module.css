@@ -240,8 +240,8 @@
   padding: var(--primitive-padding-200);
   cursor: pointer;
   color: var(--color-text-primary);
-  width: 40px;
-  height: 40px;
+  width: var(--control-height-default);
+  height: var(--control-height-default);
 }
 
 .mobileMenuBtn:hover {
@@ -266,58 +266,12 @@
    never hidden.
    ============================================ */
 .searchBtn {
-  display: flex;
-  align-items: center;
-  gap: var(--primitive-gap-200);
-  /* Same track recipe as the theme toggle beside it (SegmentedControl's
-     container-primary fill and border), so the two pills read as one
-     family — the passive fill is near-invisible on the dark header. The
-     corner comes from there too: the toggle's track is pill plus the 4px
-     inset its segments sit at, and a row of 40px controls that curve
-     differently reads as sloppy once a theme squares the pill token. */
-  background: var(--color-bg-container-primary);
-  border: var(--border-025) solid var(--color-bg-container-border);
-  border-radius: calc(var(--radius-pill) + var(--padding-100));
-  padding: 0 var(--primitive-padding-300);
-  cursor: pointer;
-  color: var(--color-text-secondary);
-  /* Wide enough for the full "Search or ask anything" placeholder plus the
-     icon and the ⌘K keycaps in EVERY theme's face — the monospace themes
-     run widest, and the label must never wrap to two lines. */
+  /* The field is the package's CommandPaletteTrigger, which draws every
+     pixel; the header sets only its width. Wide enough for the full
+     "Search or ask anything" prompt plus the icon and the ⌘K keycaps in
+     EVERY theme's face — the monospace themes run widest, and the label
+     must never wrap to two lines. */
   width: 320px;
-  height: 40px;
-  --icon-size: var(--icon-size-500);
-  white-space: nowrap;
-  /* Input's own hover transition, so the border responds at the same pace. */
-  transition:
-    background var(--motion-duration-base) var(--motion-ease-standard),
-    border-color var(--motion-duration-base) var(--motion-ease-standard);
-}
-
-/* Hovers like a real Input: the border darkens, the fill stays put. */
-.searchBtn:hover {
-  border-color: var(--color-input-border-hover);
-}
-
-/* The site's global symbol default is --color-text-primary; this icon is an
-   input adornment and must match the placeholder label beside it (and the
-   theme toggle's idle glyphs) at the button's --color-text-secondary. */
-.searchBtn :global(.material-symbols-rounded) {
-  color: inherit;
-}
-
-.searchLabel {
-  font-family: var(--font-title-body-family);
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1;
-}
-
-.searchKeys {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--primitive-gap-050);
-  margin-left: auto;
 }
 
 /* ============================================
@@ -722,15 +676,15 @@
 .mobileMenuClose {
   position: absolute;
   top: max(
-    calc((var(--mn-bar-height) - 40px) / 2),
-    var(--mn-close-top, calc(var(--primitive-padding-500) + (var(--mn-bar-height) - 40px) / 2))
+    calc((var(--mn-bar-height) - var(--control-height-default)) / 2),
+    var(--mn-close-top, calc(var(--primitive-padding-500) + (var(--mn-bar-height) - var(--control-height-default)) / 2))
   );
   right: var(--primitive-padding-500);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: var(--control-height-default);
+  height: var(--control-height-default);
   background: none;
   border: none;
   /* It stands in the menu button's place, so its hover fill wears the
@@ -841,24 +795,24 @@
   /* Not enough room for the input dressing beside five nav pills (the
      full pill needs ~1415px of bar, measured) — the field folds
      back to the icon circle. */
-  .searchBtn {
+  /* The trigger's icon-only form, by container rather than by prop: the
+     class is doubled because the production build orders the library
+     stylesheet after page modules, where a tie would go to the library. */
+  .searchBtn.searchBtn {
     justify-content: center;
-    width: 40px;
-    padding: var(--primitive-padding-200);
-    /* The circle keeps the track costume (fill, hairline border, curve)
-       from the base rule, so it sits in the same mini container as the
-       theme switcher and mode toggle beside it. */
+    width: var(--control-height-default);
+    padding: 0;
   }
 
-  /* The circle hovers like the theme switcher's trigger rather than like an
+  /* The circle hovers like the theme picker's trigger rather than like an
      input: the fill steps up a container, the border stays put. */
-  .searchBtn:hover {
+  .searchBtn.searchBtn:hover {
     border-color: var(--color-bg-container-border);
     background: var(--color-bg-container-secondary);
   }
 
-  .searchLabel,
-  .searchKeys {
+  .searchBtn :global(.ds-command-palette-trigger__label),
+  .searchBtn :global(.ds-command-palette-trigger__keys) {
     display: none;
   }
 }

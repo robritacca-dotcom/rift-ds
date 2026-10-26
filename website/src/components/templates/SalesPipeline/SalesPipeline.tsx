@@ -7,11 +7,14 @@
  * page is a breadcrumbed head and then the wired DataTable, which takes
  * the whole screen and sits directly on the page because it brings its own
  * bordered chrome (design.md's Composition rule 2 — a panel around it
- * would double-box it). The table's toolbar carries three matching compact
- * selects (window, owner, motion) beside its built-in search, the
- * campaigns table's convention; each row composes the smaller parts — a
- * motion Badge, the owner's Avatar, a win-probability Meter carrying its
- * own judgement through the status roles, an activity Sparkline. Every
+ * would double-box it). Its control bar is the library's TableToolbar:
+ * search, a filter per column (it opens on the last 90 days of activity,
+ * as a date filter the reader can change), multi-sort, the More panel and
+ * a bulk bar for the selected companies. The motion and the owner are
+ * typed columns (a status in its role, a person), and the rest compose
+ * the smaller parts: a win-probability Meter carrying its own judgement
+ * through the status roles, an activity Sparkline. On a phone the rows
+ * stack as cards. Every
  * colour, radius, space, and type style is a semantic token; every control
  * is a library component.
  *
@@ -28,8 +31,6 @@ import {
   AppSidebar,
   type AppSidebarSection,
 } from "rift-ds/components/AppSidebar/AppSidebar";
-import { Avatar } from "rift-ds/components/Avatar/Avatar";
-import { Badge } from "rift-ds/components/Badge/Badge";
 import { Breadcrumb } from "rift-ds/components/Breadcrumb/Breadcrumb";
 import { Button } from "rift-ds/components/Button/Button";
 import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
@@ -38,11 +39,8 @@ import {
   type DataTableColumn,
   type DataTableRow,
 } from "rift-ds/components/DataTable/DataTable";
+import { TableToolbar } from "rift-ds/components/TableToolbar/TableToolbar";
 import { Divider } from "rift-ds/components/Divider/Divider";
-import {
-  Dropdown,
-  type DropdownOption,
-} from "rift-ds/components/Dropdown/Dropdown";
 import { Input } from "rift-ds/components/Input/Input";
 import { Kbd } from "rift-ds/components/Kbd/Kbd";
 import { Meter } from "rift-ds/components/Meter/Meter";
@@ -465,31 +463,9 @@ const OWNERS = ["Priya Raman", "Cole Bennett", "Sofia Marchetti", "Amara Diallo"
 /* The activity windows are pinned dates, not clock arithmetic: lastTouch is
    an ISO string, so "inside the window" is one string comparison the server
    and the client always agree on. */
-const WINDOWS = [
-  { value: "30", label: "Last 30 days", since: "2026-08-16" },
-  { value: "90", label: "Last 90 days", since: "2026-06-17" },
-  { value: "all", label: "All time", since: "" },
-];
-
-/* The toolbar's three selects share one option shape, the marketing
-   dashboard's RangeSelect convention. */
-const WINDOW_OPTIONS: DropdownOption[] = WINDOWS.map(({ value, label }) => ({
-  value,
-  label,
-}));
-
-const OWNER_OPTIONS: DropdownOption[] = [
-  { value: "all", label: "All owners" },
-  ...OWNERS.map((o) => ({ value: o, label: o })),
-];
-
-const MOTION_OPTIONS: DropdownOption[] = [
-  { value: "all", label: "All motions" },
-  ...(Object.keys(MOTION_META) as Motion[]).map((m) => ({
-    value: m,
-    label: MOTION_META[m].label,
-  })),
-];
+/* The activity window the table opens on: touched in the last 90 days, as
+   a date filter the reader can change or remove like any other. */
+const ACTIVITY_SINCE = "2026-06-17";
 
 const CHAT_SUGGESTIONS = [
   { id: "risk", label: "Where's the churn risk?" },
@@ -537,24 +513,12 @@ export default function SalesPipeline() {
   const [chatOpen, setChatOpen] = React.useState(false);
   /* The templates carousel's Mobile mode: previewed as a phone app. */
   const appFrame = useAppFrame();
-  const [activityWindow, setActivityWindow] = React.useState("90");
-  const [ownerFilter, setOwnerFilter] = React.useState("all");
-  const [motionFilter, setMotionFilter] = React.useState("all");
-
-  const activeWindow = WINDOWS.find((w) => w.value === activityWindow) ?? WINDOWS[1];
-
-  const visible = COMPANIES.filter(
-    (c) =>
-      c.lastTouch >= activeWindow.since &&
-      (ownerFilter === "all" || c.owner === ownerFilter) &&
-      (motionFilter === "all" || c.motion === motionFilter),
-  );
-
   const columns: DataTableColumn[] = [
     {
       key: "company",
       header: "Company",
       sortable: true,
+      rowHeader: true,
       width: "240px",
       render: (row: DataTableRow) => {
         const c = COMPANY_BY_ID.get(row.id)!;
@@ -569,36 +533,30 @@ export default function SalesPipeline() {
     {
       key: "motion",
       header: "Motion",
+      type: "status",
       sortable: true,
-      render: (row: DataTableRow) => {
-        const c = COMPANY_BY_ID.get(row.id)!;
-        return (
-          <Badge
-            variant={MOTION_META[c.motion].variant}
-            label={MOTION_META[c.motion].label}
-          />
-        );
-      },
+      width: "150px",
+      // The motions in the order a book of business reads them, each in its status role.
+      options: (Object.keys(MOTION_META) as Motion[]).map((m) => ({
+        value: m,
+        label: MOTION_META[m].label,
+        status: MOTION_META[m].variant,
+      })),
     },
     {
       key: "owner",
       header: "Owner",
+      type: "person",
       sortable: true,
-      render: (row: DataTableRow) => {
-        const c = COMPANY_BY_ID.get(row.id)!;
-        return (
-          <span className={styles.ownerCell}>
-            <Avatar name={c.owner} size="sm" />
-            <span className={styles.ownerName}>{c.owner}</span>
-          </span>
-        );
-      },
+      width: "180px",
+      options: OWNERS.map((o) => ({ value: o, label: o })),
     },
     {
       key: "pipeline",
       header: "Pipeline",
+      // The type brings the alignment, the sort and a number filter; the cell keeps its deal count.
+      type: "currency",
       sortable: true,
-      align: "right",
       render: (row: DataTableRow) => {
         const c = COMPANY_BY_ID.get(row.id)!;
         return (
@@ -614,6 +572,8 @@ export default function SalesPipeline() {
     {
       key: "win",
       header: "Win probability",
+      type: "number",
+      align: "left",
       sortable: true,
       width: "170px",
       render: (row: DataTableRow) => {
@@ -635,6 +595,7 @@ export default function SalesPipeline() {
     {
       key: "trend",
       header: "Trend",
+      filterable: false,
       render: (row: DataTableRow) => {
         const c = COMPANY_BY_ID.get(row.id)!;
         return (
@@ -653,6 +614,7 @@ export default function SalesPipeline() {
     {
       key: "touch",
       header: "Last touch",
+      type: "date",
       sortable: true,
       render: (row: DataTableRow) => {
         const c = COMPANY_BY_ID.get(row.id)!;
@@ -666,12 +628,12 @@ export default function SalesPipeline() {
     },
   ];
 
-  const rows: DataTableRow[] = visible.map((c) => ({
+  const rows: DataTableRow[] = COMPANIES.map((c) => ({
     id: c.id,
     values: {
       /* Segment rides in the company value so search matches it too. */
       company: `${c.name} ${c.segment}`,
-      motion: MOTION_META[c.motion].label,
+      motion: c.motion,
       owner: c.owner,
       pipeline: c.pipeline,
       win: c.win,
@@ -786,37 +748,23 @@ export default function SalesPipeline() {
               columns={columns}
               rows={rows}
               selectable
+              multiSort
+              columnMenu
+              phoneLayout="stack"
               defaultSort={{ key: "pipeline", direction: "desc" }}
-              searchable
-              searchPlaceholder="Search companies"
+              defaultFilters={[
+                { id: "touch-1", column: "touch", operator: "after", value: ACTIVITY_SINCE },
+              ]}
               caption="Companies in the pipeline"
               toolbar={
-                <div className={styles.tableFilters}>
-                  <Dropdown
-                    size="compact"
-                    options={WINDOW_OPTIONS}
-                    value={activityWindow}
-                    onValueChange={setActivityWindow}
-                    aria-label="Activity window"
-                    className={styles.filterSelect}
-                  />
-                  <Dropdown
-                    size="compact"
-                    options={OWNER_OPTIONS}
-                    value={ownerFilter}
-                    onValueChange={setOwnerFilter}
-                    aria-label="Filter by owner"
-                    className={styles.filterSelect}
-                  />
-                  <Dropdown
-                    size="compact"
-                    options={MOTION_OPTIONS}
-                    value={motionFilter}
-                    onValueChange={setMotionFilter}
-                    aria-label="Filter by motion"
-                    className={styles.filterSelect}
-                  />
-                </div>
+                <TableToolbar
+                  bulkActions={[
+                    { id: "assign", label: "Assign owner", icon: "person_add", onSelect: () => {} },
+                    { id: "sequence", label: "Add to sequence", icon: "forward_to_inbox", onSelect: () => {} },
+                    { id: "export", label: "Export", icon: "download", onSelect: () => {} },
+                    { id: "archive", label: "Archive", icon: "archive", destructive: true, onSelect: () => {} },
+                  ]}
+                />
               }
             />
           </section>

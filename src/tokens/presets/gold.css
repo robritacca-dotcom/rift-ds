@@ -117,6 +117,8 @@ html[data-brand="gold"] {
   --primitive-blue-09: #1B2C71;
   --primitive-blue-10: #0F193E;
   --primitive-blue-11: #0A112B;
+  --primitive-control-height-1000: 38px;
+  --primitive-control-height-800: 30px;
   --primitive-gap-050: 2px;
   --primitive-gap-100: 4px;
   --primitive-gap-1000: 38px;
@@ -148,6 +150,7 @@ html[data-brand="gold"] {
   --primitive-neutral-01-a60: rgba(241, 240, 238, 0.6);
   --primitive-neutral-01-a82: rgba(241, 240, 238, 0.82);
   --primitive-neutral-02: #D8D6D2;
+  --primitive-neutral-02-a50: rgba(216, 214, 210, 0.5);
   --primitive-neutral-02-a80: rgba(216, 214, 210, 0.8);
   --primitive-neutral-03: #BFBDB9;
   --primitive-neutral-03-a80: rgba(191, 189, 185, 0.8);
@@ -157,6 +160,7 @@ html[data-brand="gold"] {
   --primitive-neutral-07: #383632;
   --primitive-neutral-07-a80: rgba(56, 54, 50, 0.8);
   --primitive-neutral-08: #2C2A26;
+  --primitive-neutral-08-a50: rgba(44, 42, 38, 0.5);
   --primitive-neutral-08-a80: rgba(44, 42, 38, 0.8);
   --primitive-neutral-09: #181612;
   --primitive-neutral-09-a01: rgba(24, 22, 18, 0.01);
@@ -207,7 +211,7 @@ html[data-brand="gold"] {
   --primitive-radius-300: 4px;
   --primitive-radius-400: 5px;
   --primitive-radius-600: 7px;
-  --primitive-radius-pill: 5px;
+  --primitive-radius-pill: 4px;
   --primitive-red-00: #FEF7F8;
   --primitive-red-01: #FEEEEF;
   --primitive-red-02: #FBD1D5;
@@ -309,6 +313,8 @@ html[data-brand="gold"][data-theme="dark"] {
   --primitive-blue-09: #1B2C71;
   --primitive-blue-10: #0F193E;
   --primitive-blue-11: #0A112B;
+  --primitive-control-height-1000: 38px;
+  --primitive-control-height-800: 30px;
   --primitive-gap-050: 2px;
   --primitive-gap-100: 4px;
   --primitive-gap-1000: 38px;
@@ -340,6 +346,7 @@ html[data-brand="gold"][data-theme="dark"] {
   --primitive-neutral-01-a60: rgba(242, 240, 235, 0.6);
   --primitive-neutral-01-a82: rgba(242, 240, 235, 0.82);
   --primitive-neutral-02: #D8D6D2;
+  --primitive-neutral-02-a50: rgba(216, 214, 210, 0.5);
   --primitive-neutral-02-a80: rgba(216, 214, 210, 0.8);
   --primitive-neutral-03: #BFBDB9;
   --primitive-neutral-03-a80: rgba(191, 189, 185, 0.8);
@@ -349,6 +356,7 @@ html[data-brand="gold"][data-theme="dark"] {
   --primitive-neutral-07: #383632;
   --primitive-neutral-07-a80: rgba(56, 54, 50, 0.8);
   --primitive-neutral-08: #2C2A26;
+  --primitive-neutral-08-a50: rgba(44, 42, 38, 0.5);
   --primitive-neutral-08-a80: rgba(44, 42, 38, 0.8);
   --primitive-neutral-09: #181612;
   --primitive-neutral-09-a01: rgba(24, 22, 18, 0.01);
@@ -399,7 +407,7 @@ html[data-brand="gold"][data-theme="dark"] {
   --primitive-radius-300: 4px;
   --primitive-radius-400: 5px;
   --primitive-radius-600: 7px;
-  --primitive-radius-pill: 5px;
+  --primitive-radius-pill: 4px;
   --primitive-red-00: #FEF7F8;
   --primitive-red-01: #FEEEEF;
   --primitive-red-02: #FBD1D5;

@@ -22,7 +22,6 @@
    ============================================ */
 
 .ds-popover__panel {
-  position: absolute;
   z-index: var(--layer-dropdown);
   min-width: 200px;
   padding: var(--padding-400); /* 16px */
@@ -31,6 +30,10 @@
   /* Page background, not container: the container fill is semi-transparent
      in dark mode, and a floating panel must not show text through itself */
   background-color: var(--color-bg-page-primary);
+  /* A panel that sets its own fill sets its own ink, as every floating
+     panel in the family does: inherited from a host with no body colour, a
+     dark-mode panel read black on black. */
+  color: var(--color-text-primary);
   box-shadow: var(--shadow-floating);
 
   /* Hidden by default. display:none keeps the closed panel out of the tab
@@ -67,43 +70,28 @@
 }
 
 /* ============================================
-   POSITION — BOTTOM (default)
+   POSITION
+   The shared anchored-position behaviour
+   (src/behaviors/useAnchoredPosition.ts) makes the panel fixed and sets
+   where it sits: on the preferred side, flipped when that side has no room,
+   shifted to stay on screen. The panel grows from the trigger's side of it,
+   keyed on the side it landed on.
    ============================================ */
 
-.ds-popover__panel--bottom {
-  top: 100%;
-  left: 0;
-  margin-top: var(--gap-050); /* 2px */
+.ds-popover__panel[data-side='bottom'] {
+  transform-origin: top left;
 }
 
-/* ============================================
-   POSITION — TOP
-   ============================================ */
-
-.ds-popover__panel--top {
-  bottom: 100%;
-  left: 0;
-  margin-bottom: var(--gap-050); /* 2px */
+.ds-popover__panel[data-side='top'] {
+  transform-origin: bottom left;
 }
 
-/* ============================================
-   POSITION — LEFT
-   ============================================ */
-
-.ds-popover__panel--left {
-  right: 100%;
-  top: 0;
-  margin-right: var(--gap-050); /* 2px */
+.ds-popover__panel[data-side='left'] {
+  transform-origin: top right;
 }
 
-/* ============================================
-   POSITION — RIGHT
-   ============================================ */
-
-.ds-popover__panel--right {
-  left: 100%;
-  top: 0;
-  margin-left: var(--gap-050); /* 2px */
+.ds-popover__panel[data-side='right'] {
+  transform-origin: top left;
 }
 
 /* ============================================
@@ -115,4 +103,18 @@
 .ds-popover--compact {
   padding: var(--padding-200); /* 8px */
   min-width: 160px;
+}
+
+/* ============================================
+   SURFACE — MENU
+   DropdownMenu's own panel, for a popover that sits among menus: its
+   inset, border and corner. Its rows, headings and separators are the
+   content's to draw, on the menu's measures.
+   ============================================ */
+
+.ds-popover__panel--menu,
+.ds-popover--compact.ds-popover__panel--menu {
+  padding: var(--padding-100);
+  border-color: var(--color-input-border-primary);
+  border-radius: var(--radius-300);
 }

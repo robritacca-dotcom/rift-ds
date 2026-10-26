@@ -24,6 +24,14 @@
   overflow: hidden;
 }
 
+/* Bare: the host panel is the surface, so the card keeps only its own
+   padding and layout. */
+.ds-interrupt-card--bare {
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
 /* ============================================
    HEADER
    ============================================ */

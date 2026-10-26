@@ -585,6 +585,8 @@ function checkLeverTables() {
     subset('--primitive-gap-', primitivesSource), (s2) => `--primitive-gap-${s2}`, 'px');
   const padCount = holdBoth('PADDING_STEPS', parseTable('PADDING_STEPS'),
     subset('--primitive-padding-', primitivesSource), (s2) => `--primitive-padding-${s2}`, 'px');
+  const controlCount = holdBoth('CONTROL_HEIGHT_STEPS', parseTable('CONTROL_HEIGHT_STEPS'),
+    subset('--primitive-control-height-', primitivesSource), (s2) => `--primitive-control-height-${s2}`, 'px');
   const sizeCount = holdBoth('FONT_SIZE_STEPS', parseTable('FONT_SIZE_STEPS'),
     subset('--font-size-', typographySource), (s2) => `--font-size-${s2}`, 'px');
   const lhCount = holdBoth('FONT_LINE_HEIGHT_STEPS', parseTable('FONT_LINE_HEIGHT_STEPS'),
@@ -617,7 +619,7 @@ function checkLeverTables() {
   }
 
   // ELEVATION_VARIANTS.default ↔ the shipped shadow tokens, per theme.
-  const defaultBlock = overridesSource.match(/default:\s*\{\s*light:\s*\{\s*floating:\s*"([^"]+)",\s*modal:\s*"([^"]+)"\s*\},\s*dark:\s*\{\s*floating:\s*"([^"]+)",\s*modal:\s*"([^"]+)"\s*\}/);
+  const defaultBlock = overridesSource.match(/default:\s*\{\s*light:\s*\{\s*floating:\s*"([^"]+)",\s*modal:\s*"([^"]+)",\s*pinned:\s*"([^"]+)"\s*\},\s*dark:\s*\{\s*floating:\s*"([^"]+)",\s*modal:\s*"([^"]+)",\s*pinned:\s*"([^"]+)"\s*\}/);
   if (!defaultBlock) {
     errors.push(`${overridesRel}: could not parse ELEVATION_VARIANTS.default — the elevation guard needs it`);
   } else {
@@ -625,8 +627,10 @@ function checkLeverTables() {
     const expected = [
       ['light', '--shadow-floating', lightDecls.get('--shadow-floating'), defaultBlock[1]],
       ['light', '--shadow-modal', lightDecls.get('--shadow-modal'), defaultBlock[2]],
-      ['dark', '--shadow-floating', darkDecls.get('--shadow-floating'), defaultBlock[3]],
-      ['dark', '--shadow-modal', darkDecls.get('--shadow-modal'), defaultBlock[4]],
+      ['light', '--shadow-table-pinned', lightDecls.get('--shadow-table-pinned'), defaultBlock[3]],
+      ['dark', '--shadow-floating', darkDecls.get('--shadow-floating'), defaultBlock[4]],
+      ['dark', '--shadow-modal', darkDecls.get('--shadow-modal'), defaultBlock[5]],
+      ['dark', '--shadow-table-pinned', darkDecls.get('--shadow-table-pinned'), defaultBlock[6]],
     ];
     for (const [themeName, token, css, mirrored2] of expected) {
       if (css !== mirrored2) {
@@ -698,7 +702,7 @@ function checkLeverTables() {
   }
 
   summaries.push(`Type styles match their weight and tracking tokens (${typeRows.length} styles), icon lever defaults match the icon font's fallbacks`);
-  summaries.push(`Lever tables match their ladders — gap ${gapCount}, padding ${padCount}, font-size ${sizeCount}, line-height ${lhCount}, motion ${motionTable ? motionTable.size : 0} durations, elevation default pinned to the shipped shadows`);
+  summaries.push(`Lever tables match their ladders — gap ${gapCount}, padding ${padCount}, control height ${controlCount}, font-size ${sizeCount}, line-height ${lhCount}, motion ${motionTable ? motionTable.size : 0} durations, elevation default pinned to the shipped shadows`);
 }
 
 /* ------------------------------------------------------------------ */

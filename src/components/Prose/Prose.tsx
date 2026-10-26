@@ -5,6 +5,8 @@ import './Prose.css';
 type ProseOwnProps = {
   /** Body scale. `sm` maps paragraphs, lists and code to the small paragraph tokens for dense chat contexts. */
   size?: 'default' | 'sm';
+  /** Density of the tables inside: `compact` tightens the cell padding to the library Table's compact step, for long or dense tables. */
+  tableSize?: 'default' | 'compact';
   /** Additional CSS classes */
   className?: string;
   /** The rendered markup to style — the output of whatever markdown renderer the consumer uses. */
@@ -23,10 +25,15 @@ export interface ProseProps
  * code, quotes, tables — with the token scale.
  */
 export const Prose = React.forwardRef<HTMLDivElement, ProseProps>(
-  ({ size = 'default', className = '', children, ...rest }, ref) => {
+  ({ size = 'default', tableSize = 'default', className = '', children, ...rest }, ref) => {
     const baseClass = 'ds-prose';
 
-    const classes = [baseClass, size === 'sm' ? `${baseClass}--sm` : '', className]
+    const classes = [
+      baseClass,
+      size === 'sm' ? `${baseClass}--sm` : '',
+      tableSize === 'compact' ? `${baseClass}--compact-tables` : '',
+      className,
+    ]
       .filter(Boolean)
       .join(' ');
 

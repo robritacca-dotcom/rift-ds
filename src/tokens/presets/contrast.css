@@ -79,6 +79,7 @@ html[data-brand="contrast"] {
   --primitive-neutral-01-a60: rgba(236, 237, 241, 0.6);
   --primitive-neutral-01-a82: rgba(236, 237, 241, 0.82);
   --primitive-neutral-02: #CDD0D8;
+  --primitive-neutral-02-a50: rgba(205, 208, 216, 0.5);
   --primitive-neutral-02-a80: rgba(205, 208, 216, 0.8);
   --primitive-neutral-03: #B4B7BF;
   --primitive-neutral-03-a80: rgba(180, 183, 191, 0.8);
@@ -88,6 +89,7 @@ html[data-brand="contrast"] {
   --primitive-neutral-07: #2E3138;
   --primitive-neutral-07-a80: rgba(46, 49, 56, 0.8);
   --primitive-neutral-08: #22242C;
+  --primitive-neutral-08-a50: rgba(34, 36, 44, 0.5);
   --primitive-neutral-08-a80: rgba(34, 36, 44, 0.8);
   --primitive-neutral-09: #0D1018;
   --primitive-neutral-09-a01: rgba(13, 16, 24, 0.01);
@@ -129,7 +131,7 @@ html[data-brand="contrast"] {
   --primitive-radius-300: 8px;
   --primitive-radius-400: 11px;
   --primitive-radius-600: 17px;
-  --primitive-radius-pill: 11px;
+  --primitive-radius-pill: 8px;
   --primitive-red-00: #FFF6F8;
   --primitive-red-01: #FFEAF0;
   --primitive-red-02: #FFC8D6;
@@ -224,6 +226,7 @@ html[data-brand="contrast"][data-theme="dark"] {
   --primitive-neutral-01-a60: rgba(231, 234, 242, 0.6);
   --primitive-neutral-01-a82: rgba(231, 234, 242, 0.82);
   --primitive-neutral-02: #CDD0D8;
+  --primitive-neutral-02-a50: rgba(205, 208, 216, 0.5);
   --primitive-neutral-02-a80: rgba(205, 208, 216, 0.8);
   --primitive-neutral-03: #B4B7BF;
   --primitive-neutral-03-a80: rgba(180, 183, 191, 0.8);
@@ -233,6 +236,7 @@ html[data-brand="contrast"][data-theme="dark"] {
   --primitive-neutral-07: #2E3138;
   --primitive-neutral-07-a80: rgba(46, 49, 56, 0.8);
   --primitive-neutral-08: #22242C;
+  --primitive-neutral-08-a50: rgba(34, 36, 44, 0.5);
   --primitive-neutral-08-a80: rgba(34, 36, 44, 0.8);
   --primitive-neutral-09: #0D1018;
   --primitive-neutral-09-a01: rgba(13, 16, 24, 0.01);
@@ -274,7 +278,7 @@ html[data-brand="contrast"][data-theme="dark"] {
   --primitive-radius-300: 8px;
   --primitive-radius-400: 11px;
   --primitive-radius-600: 17px;
-  --primitive-radius-pill: 11px;
+  --primitive-radius-pill: 8px;
   --primitive-red-00: #FFF6F8;
   --primitive-red-01: #FFEAF0;
   --primitive-red-02: #FFC8D6;

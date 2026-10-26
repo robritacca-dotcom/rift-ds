@@ -11,7 +11,7 @@ How to read it:
 
 The live reference with swatches is at https://rift-ds.com/foundations, and the MCP endpoint's `list_tokens` tool serves the names.
 
-## Colour (129)
+## Colour (150)
 
 Prefix: `--color-*`.
 
@@ -54,6 +54,18 @@ Prefix: `--color-*`.
 | `--color-ambient-4` | `#1E47B0` (`--primitive-blue-07`) | `#1E47B0` (`--primitive-blue-07`) |
 | `--color-ambient-5` | `#EF476F` (`--primitive-red-07`) | `#EF476F` (`--primitive-red-07`) |
 | `--color-ambient-6` | `#EF8247` (`--primitive-orange-07`) | `#EF8247` (`--primitive-orange-07`) |
+| `--color-avatar-bg-1` | `#FAD3DD` (`--primitive-red-02`) | `#8E2641` (`--primitive-red-09`) |
+| `--color-avatar-bg-2` | `#FBD9C5` (`--primitive-orange-02`) | `#8F4324` (`--primitive-orange-09`) |
+| `--color-avatar-bg-3` | `#FFF0C9` (`--primitive-yellow-02`) | `#8A6B2A` (`--primitive-yellow-09`) |
+| `--color-avatar-bg-4` | `#CEF6E8` (`--primitive-green-02`) | `#03765A` (`--primitive-green-09`) |
+| `--color-avatar-bg-5` | `#D3DDF8` (`--primitive-blue-02`) | `#0F265E` (`--primitive-blue-09`) |
+| `--color-avatar-bg-6` | `#E6D2FB` (`--primitive-purple-02`) | `#52247D` (`--primitive-purple-09`) |
+| `--color-avatar-text-1` | `#571727` (`--primitive-red-10`) | `#FDEFF3` (`--primitive-red-01`) |
+| `--color-avatar-text-2` | `#552716` (`--primitive-orange-10`) | `#FFF3EC` (`--primitive-orange-01`) |
+| `--color-avatar-text-3` | `#544016` (`--primitive-yellow-10`) | `#FFF9EA` (`--primitive-yellow-01`) |
+| `--color-avatar-text-4` | `#024336` (`--primitive-green-10`) | `#ECFCF7` (`--primitive-green-01`) |
+| `--color-avatar-text-5` | `#081633` (`--primitive-blue-10`) | `#EEF3FD` (`--primitive-blue-01`) |
+| `--color-avatar-text-6` | `#31164A` (`--primitive-purple-10`) | `#F7F0FE` (`--primitive-purple-01`) |
 | `--color-bg-container-border` | `#D6D6D6` (`--primitive-neutral-02`) | `#232323` (`--primitive-neutral-08`) |
 | `--color-bg-container-inverse` | `#0E0E0E` (`--primitive-neutral-09`) | `#F1F1F1` (`--primitive-neutral-01`) |
 | `--color-bg-container-primary` | `#FFFFFF` (`--primitive-neutral-00`) | `rgba(14, 14, 14, 0.8)` (`--primitive-neutral-09-a80`) |
@@ -95,6 +107,8 @@ Prefix: `--color-*`.
 | `--color-core-accent-violet` | `#9E47EF` (`--primitive-purple-07`) | `#9E47EF` (`--primitive-purple-07`) |
 | `--color-core-ui-primary` | `#0E6E8F` (`--primitive-teal-08`) | `#3CA5C6` (`--primitive-teal-05`) |
 | `--color-core-ui-secondary` | `#052F3E` (`--primitive-teal-10`) | `#0A4E66` (`--primitive-teal-09`) |
+| `--color-count-badge-bg` | `#C93A5C` (`--primitive-red-08`) | `#F16385` (`--primitive-red-06`) |
+| `--color-count-badge-text` | `#F1F1F1` (`--primitive-neutral-01`) | `#050505` (`--primitive-neutral-10`) |
 | `--color-divider` | `rgba(214, 214, 214, 0.8)` (`--primitive-neutral-02-a80`) | `rgba(35, 35, 35, 0.8)` (`--primitive-neutral-08-a80`) |
 | `--color-file-document` | `#2684FC` (`--primitive-file-document`) | `#2684FC` (`--primitive-file-document`) |
 | `--color-file-pdf` | `#FF2116` (`--primitive-file-pdf`) | `#FF2116` (`--primitive-file-pdf`) |
@@ -139,6 +153,13 @@ Prefix: `--color-*`.
 | `--color-status-warning-border` | `#EF8247` (`--primitive-orange-07`) | `#EF8247` (`--primitive-orange-07`) |
 | `--color-status-warning-icon` | `#C65E33` (`--primitive-orange-08`) | `#EF8247` (`--primitive-orange-07`) |
 | `--color-status-warning-text` | `#552716` (`--primitive-orange-10`) | `#FFF3EC` (`--primitive-orange-01`) |
+| `--color-table-body-bg` | `#FFFFFF` (`--primitive-neutral-00`) | `#050505` (`--primitive-neutral-10`) |
+| `--color-table-border` | `rgba(214, 214, 214, 0.8)` (`--primitive-neutral-02-a80`) | `rgba(35, 35, 35, 0.8)` (`--primitive-neutral-08-a80`) |
+| `--color-table-divider` | `rgba(214, 214, 214, 0.8)` (`--primitive-neutral-02-a80`) | `rgba(35, 35, 35, 0.8)` (`--primitive-neutral-08-a80`) |
+| `--color-table-header-bg` | `rgba(214, 214, 214, 0.5)` (`--primitive-neutral-02-a50`) | `rgba(35, 35, 35, 0.5)` (`--primitive-neutral-08-a50`) |
+| `--color-table-row-hover-bg` | `#F1F1F1` (`--primitive-neutral-01`) | `rgba(14, 14, 14, 0.8)` (`--primitive-neutral-09-a80`) |
+| `--color-table-row-selected-bg` | `#D6D6D6` (`--primitive-neutral-02`) | `rgba(35, 35, 35, 0.8)` (`--primitive-neutral-08-a80`) |
+| `--color-table-row-stripe-bg` | `#F1F1F1` (`--primitive-neutral-01`) | `rgba(14, 14, 14, 0.6)` (`--primitive-neutral-09-a60`) |
 | `--color-text-inverse` | `#A2A2A2` (`--primitive-neutral-04`) | `#303030` (`--primitive-neutral-07`) |
 | `--color-text-on-inverse` | `#F1F1F1` (`--primitive-neutral-01`) | `#0E0E0E` (`--primitive-neutral-09`) |
 | `--color-text-primary` | `#050505` (`--primitive-neutral-10`) | `#F1F1F1` (`--primitive-neutral-01`) |
@@ -304,7 +325,7 @@ Prefix: `--border-*`.
 | `--border-025` | `1px` (`--primitive-border-025`) |
 | `--border-050` | `2px` (`--primitive-border-050`) |
 
-## Shadow (2)
+## Shadow (3)
 
 Prefix: `--shadow-*`.
 
@@ -312,6 +333,7 @@ Prefix: `--shadow-*`.
 | --- | --- | --- |
 | `--shadow-floating` | `0 4px 16px rgba(0, 0, 0, 0.12)` | `0 4px 16px rgba(0, 0, 0, 0.55)` |
 | `--shadow-modal` | `0 8px 32px rgba(0, 0, 0, 0.2)` | `0 8px 32px rgba(0, 0, 0, 0.6)` |
+| `--shadow-table-pinned` | `0 0 12px rgba(0, 0, 0, 0.16)` | `0 0 12px rgba(0, 0, 0, 0.6)` |
 
 ## Icons (4)
 
@@ -323,6 +345,15 @@ Prefix: `--icon-size-*`.
 | `--icon-size-500` | `20px` (`--primitive-icon-500`) |
 | `--icon-size-600` | `24px` (`--primitive-icon-600`) |
 | `--icon-size-800` | `32px` (`--primitive-icon-800`) |
+
+## Controls (2)
+
+Prefix: `--control-height-*`.
+
+| Token | Value |
+| --- | --- |
+| `--control-height-compact` | `32px` (`--primitive-control-height-800`) |
+| `--control-height-default` | `40px` (`--primitive-control-height-1000`) |
 
 ## Motion (15)
 

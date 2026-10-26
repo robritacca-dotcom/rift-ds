@@ -418,7 +418,7 @@ ${leverWord("motion", speed)}: ${speed}% of the base speed. Time transitions wit
 
 ${heading} Elevation
 
-${depth} The only shadows are \`--shadow-floating\` and \`--shadow-modal\`.
+${depth} The only shadows are \`--shadow-floating\`, \`--shadow-modal\` and \`--shadow-table-pinned\` (a pinned table column's scrolling edge).
 
 ${heading} Icons
 
@@ -455,8 +455,8 @@ ${themeLanguage(preset, "##", context.source)}
 
 ## Setup
 
-1. Import \`${pkg}/tokens/tokens.css\` once at the root of the app.
-2. Import \`theme.css\` after it.
+1. Import \`${pkg}/tokens/tokens.css\` and \`${pkg}/tokens/base.css\` (the reset and page every component is tuned against) once at the root of the app.
+2. Import \`theme.css\` after them.
 3. Component contracts: append \`.md\` to any component page at ${context.siteUrl}/components, or connect the MCP server at ${context.mcpEndpoint}.
 `;
 }
@@ -477,7 +477,7 @@ export function buildAgentPrompt(
   return `Set up the ${name} theme in this project. It comes with theme.css and THEME.md.
 
 1. Install the design system if it is missing: npm install ${pkg}
-2. Import ${pkg}/tokens/tokens.css once at the root of the app, then import theme.css after it.
+2. Import ${pkg}/tokens/tokens.css and ${pkg}/tokens/base.css once at the root of the app, then import theme.css after them.
 3. Save THEME.md at the project root and read it before you style anything.
 4. Install the ${pkg} agent skills: npx ${context.binName} init
 5. Connect the MCP server for exact prop and token contracts: claude mcp add --transport http ${context.mcpServerName} ${context.mcpEndpoint}

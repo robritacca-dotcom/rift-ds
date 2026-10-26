@@ -21,6 +21,7 @@
   --primitive-neutral-01-a60: rgba(241, 241, 241, 0.6);
   --primitive-neutral-01-a82: rgba(241, 241, 241, 0.82);
   --primitive-neutral-02: #D6D6D6;
+  --primitive-neutral-02-a50: rgba(214, 214, 214, 0.5);
   --primitive-neutral-02-a80: rgba(214, 214, 214, 0.8);
   --primitive-neutral-03: #BCBCBC;
   --primitive-neutral-03-a80: rgba(188, 188, 188, 0.8);
@@ -30,6 +31,7 @@
   --primitive-neutral-07: #303030;
   --primitive-neutral-07-a80: rgba(48, 48, 48, 0.8);
   --primitive-neutral-08: #232323;
+  --primitive-neutral-08-a50: rgba(35, 35, 35, 0.5);
   --primitive-neutral-08-a80: rgba(35, 35, 35, 0.8);
   --primitive-neutral-09: #0E0E0E;
   --primitive-neutral-09-a01: rgba(14, 14, 14, 0.01);
@@ -198,6 +200,13 @@
   /* Border width */
   --primitive-border-025: 1px;
   --primitive-border-050: 2px;
+
+  /* Control height
+     The two heights every control in a row is built to, border included:
+     a search field, a button, a picker and a segmented control set side by
+     side line up exactly at either size. */
+  --primitive-control-height-800: 32px;
+  --primitive-control-height-1000: 40px;
 
   /* Icon size
      The scale starts at 20px because that is the floor of the Material

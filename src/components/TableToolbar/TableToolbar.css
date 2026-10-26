@@ -1,0 +1,494 @@
+/* ============================================
+   TABLE TOOLBAR
+   The control bar over a table: search, filter chips, the More panel's columns,
+   the density switch, the count and actions, in one row that wraps.
+   ============================================ */
+
+.ds-table-toolbar {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+  width: 100%;
+  min-width: 0;
+}
+
+.ds-table-toolbar:focus {
+  outline: none;
+}
+
+/* One line, always: the start cluster (search, the chips that
+   fit, then +N for the rest) takes the room; the end cluster (the icon
+   controls) holds the end. */
+.ds-table-toolbar__main {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--gap-300);
+  min-width: 0;
+}
+
+.ds-table-toolbar__start,
+.ds-table-toolbar__end {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-200);
+  min-width: 0;
+}
+
+/* The start cluster never wraps: chips that do not fit fold into +N. */
+.ds-table-toolbar__start {
+  position: relative;
+  flex: 1 1 0;
+  flex-wrap: nowrap;
+}
+
+.ds-table-toolbar__start > * {
+  flex-shrink: 0;
+}
+
+.ds-table-toolbar__start > .ds-table-toolbar__search {
+  flex-shrink: 1;
+}
+
+/* A chip past the fit stays measurable but out of sight and out of flow. */
+.ds-table-toolbar__chip--overflow {
+  position: absolute;
+  inset-inline-start: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.ds-table-toolbar__end {
+  flex-shrink: 0;
+}
+
+/* The search field flexes between a floor and a ceiling: the line wraps
+   against its basis, so chips take the room it would otherwise hold, and it
+   grows into room nothing else uses. */
+.ds-table-toolbar__search {
+  flex: 1 1 200px;
+  min-width: 160px;
+  max-width: 280px;
+}
+
+/* A filter chip and its remove button, read as one. The chip is a control
+   of the bar, so it takes the bar's control height like every other one:
+   Chip's own sizes sit between the control heights, so the bar sets it. */
+.ds-table-toolbar__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-050);
+}
+
+/* Every chip in the bar, the +N chip included, holds the bar's row height. */
+.ds-table-toolbar__chip .ds-chip,
+.ds-table-toolbar__more .ds-chip {
+  box-sizing: border-box;
+  height: var(--control-height-default);
+  padding-block: 0;
+}
+
+.ds-table-toolbar--compact .ds-table-toolbar__chip .ds-chip,
+.ds-table-toolbar--compact .ds-table-toolbar__more .ds-chip {
+  height: var(--control-height-compact);
+}
+
+.ds-table-toolbar__count {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-tertiary);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* A trigger whose panel is open (the More panel's columns, the Filter menu, a
+   chip's editor) holds its pressed fill until the panel closes, so the
+   bar says which control the open panel belongs to. */
+.ds-table-toolbar .ds-circular-button--tertiary[aria-expanded='true'],
+.ds-table-toolbar .ds-chip[aria-expanded='true'],
+.ds-table-toolbar .ds-button[aria-expanded='true'] {
+  background-color: var(--color-action-passive-bg-active);
+}
+
+/* ============================================
+   PANELS
+   The bar's panels are menus in all but name, drawn
+   on DropdownMenu's own surface (Popover's `menu`
+   surface) and to its measures: a heading per
+   section in the menu's group-label type, a row per
+   control at the menu item's inset, a separator
+   between sections, and their actions as full-width
+   menu items with the menu's passive hover. A
+   compact bar takes the compact menu's measures.
+   ============================================ */
+
+.ds-table-toolbar__menu {
+  display: flex;
+  flex-direction: column;
+  min-width: 240px;
+}
+
+.ds-table-toolbar__menu-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-200);
+  min-height: var(--control-height-default);
+  padding-inline: var(--padding-400);
+  font-family: var(--font-paragraph-emphasis-family);
+  font-size: var(--font-paragraph-emphasis-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-emphasis-letter-spacing);
+  color: var(--color-text-tertiary);
+  user-select: none;
+}
+
+.ds-table-toolbar__menu-row {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-200);
+  padding: var(--padding-200) var(--padding-400);
+  border-radius: var(--radius-200);
+}
+
+.ds-table-toolbar__menu-separator {
+  height: var(--border-025);
+  margin: var(--padding-100) var(--padding-400);
+  background-color: var(--color-input-border-primary);
+}
+
+.ds-table-toolbar__menu-actions {
+  display: flex;
+  flex-direction: column;
+}
+
+.ds-table-toolbar__menu-actions > *,
+.ds-table-toolbar__menu-actions .ds-dropdown-menu,
+.ds-table-toolbar__menu-actions .ds-dropdown-menu__trigger {
+  display: flex;
+  width: 100%;
+}
+
+.ds-table-toolbar__menu-item {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-300);
+  width: 100%;
+  padding: var(--padding-200) var(--padding-400);
+  border: none;
+  border-radius: var(--radius-200);
+  background: none;
+  color: var(--color-text-primary);
+  text-align: start;
+  white-space: nowrap;
+  cursor: pointer;
+  font-family: var(--font-paragraph-emphasis-family);
+  font-size: var(--font-paragraph-emphasis-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-emphasis-letter-spacing);
+}
+
+.ds-table-toolbar__menu-item:hover:not(:disabled),
+.ds-table-toolbar__menu-item[aria-expanded='true'] {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-table-toolbar__menu-item:focus-visible {
+  outline: var(--border-050) solid var(--color-action-primary-bg);
+  outline-offset: calc(-1 * var(--border-050));
+}
+
+.ds-table-toolbar__menu-item:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ds-table-toolbar__menu-icon {
+  --icon-size: var(--icon-size-600);
+
+  color: var(--color-icon-primary);
+}
+
+/* The compact bar's panels: the compact menu's measures. */
+.ds-table-toolbar--compact .ds-table-toolbar__menu-heading {
+  min-height: var(--control-height-compact);
+  padding-inline: var(--padding-300);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
+}
+
+.ds-table-toolbar--compact .ds-table-toolbar__menu-row,
+.ds-table-toolbar--compact .ds-table-toolbar__menu-item {
+  padding: var(--padding-150) var(--padding-300);
+}
+
+.ds-table-toolbar--compact .ds-table-toolbar__menu-separator {
+  margin-inline: var(--padding-300);
+}
+
+.ds-table-toolbar--compact .ds-table-toolbar__menu-item {
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
+}
+
+.ds-table-toolbar--compact .ds-table-toolbar__menu-icon {
+  --icon-size: var(--icon-size-500);
+}
+
+/* A column or sort row: its move grip, then its control. A row being
+   dragged lifts off the panel on its surface. */
+.ds-table-toolbar__columns,
+.ds-table-toolbar__sort-list {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.ds-table-toolbar__column[data-dragging],
+.ds-table-toolbar__sort-row[data-dragging] {
+  position: relative;
+  z-index: 1;
+  background-color: var(--color-bg-page-primary);
+  box-shadow: var(--shadow-floating);
+}
+
+.ds-table-toolbar__grip {
+  --icon-size: var(--icon-size-500);
+
+  display: inline-flex;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-100);
+  background: none;
+  color: var(--color-text-secondary);
+  cursor: grab;
+  touch-action: none;
+}
+
+.ds-table-toolbar__grip:focus-visible {
+  outline: var(--border-050) solid var(--color-action-primary-bg);
+  outline-offset: var(--border-025);
+}
+
+.ds-table-toolbar__grip[aria-disabled='true'] {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* The folded bar: a filter count rides the Filter icon's corner. */
+.ds-table-toolbar__badge-host {
+  position: relative;
+  display: inline-flex;
+}
+
+/* A count on an icon's top-end corner, drawn as BottomNav's count badge:
+   a solid pill on the count badge pair, so it reads at a glance on the
+   filled icon buttons in both modes. */
+.ds-table-toolbar__badge {
+  position: absolute;
+  inset-block-start: calc(-1 * var(--padding-100));
+  inset-inline-end: calc(-1 * var(--padding-100));
+  box-sizing: border-box;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 var(--padding-100);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-count-badge-bg);
+  color: var(--color-count-badge-text);
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-caption-line-height);
+  text-align: center;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* The folded bar's filter panel: each filter under its column's name. */
+.ds-table-toolbar__filter-panel {
+  min-width: 280px;
+}
+
+/* The folded bar's search field, in its popover. */
+.ds-table-toolbar__search-panel .ds-table-toolbar__search {
+  flex: 1 1 auto;
+  max-width: none;
+}
+
+/* Where a dragged column row will land, drawn as the table's own drop
+   line is. */
+.ds-table-toolbar__drop {
+  position: absolute;
+  inset-block-start: calc(-1 * var(--border-025));
+  inset-inline: 0;
+  height: var(--border-050);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-icon-primary);
+  pointer-events: none;
+}
+
+.ds-table-toolbar__drop[hidden] {
+  display: none;
+}
+
+/* The bar's own actions, set a step apart from the icon controls. */
+.ds-table-toolbar__actions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-200);
+  margin-inline-start: var(--gap-200);
+}
+
+/* The sort panel: a row's column field takes the room its grip,
+   direction and remove button leave. */
+.ds-table-toolbar__sorts {
+  width: 360px;
+}
+
+.ds-table-toolbar__sort-column,
+.ds-table-toolbar__menu-field {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* The bulk bar: while rows are selected it lies over the bar's own row at
+   the same height, so nothing below moves. It is the same bar in another
+   mode, so it takes no fill of its own: the selected rows' tint and the
+   count say what changed. The row beneath stays laid out (and inert), so
+   its chips keep their measured fit for when it returns. */
+/* The bar's own row, the one the bulk bar lies over (the views row above
+   it stays in view). */
+.ds-table-toolbar__row {
+  position: relative;
+  min-width: 0;
+}
+
+.ds-table-toolbar__main[data-covered] {
+  visibility: hidden;
+}
+
+.ds-table-toolbar__bulk {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-300);
+}
+
+.ds-table-toolbar__bulk-start,
+.ds-table-toolbar__bulk-end {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-200);
+  min-width: 0;
+}
+
+/* Actions that do not fit stay laid out out of sight, so they can be measured. */
+.ds-table-toolbar__bulk-end {
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* The count reads at the size of the button labels beside it, at either density. */
+.ds-table-toolbar__bulk-count {
+  font-family: var(--font-paragraph-emphasis-family);
+  font-size: var(--font-paragraph-emphasis-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-emphasis-letter-spacing);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  color: var(--color-text-primary);
+}
+
+
+.ds-table-toolbar--compact .ds-table-toolbar__bulk-count {
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
+}
+
+/* On a phone the bulk bar floats at the foot of the screen, inset from its
+   edges and above the safe area, on the floating surface. It holds the
+   same controls; the bar's own row stays where it was. */
+.ds-table-toolbar__bulk--floating {
+  position: fixed;
+  /* Sized to the visible width, so a page that overflows sideways (which
+     widens the layout viewport) cannot push it past the screen's edge. */
+  inset-inline: var(--padding-300) auto;
+  width: calc(100dvw - 2 * var(--padding-300));
+  /* Anchored to the dynamic viewport's foot, as the chat panel is: a phone
+     browser's toolbar changes the layout viewport, which a bottom inset
+     would follow off screen. */
+  inset-block-start: 100dvh;
+  inset-block-end: auto;
+  translate: 0 calc(-100% - var(--padding-300) - env(safe-area-inset-bottom, 0px));
+  z-index: var(--layer-sticky);
+  padding: var(--padding-200);
+  border-radius: var(--radius-600);
+  /* The page fill, as a popover's: the container fill is semi-transparent. */
+  background-color: var(--color-bg-page-primary);
+  box-shadow: var(--shadow-floating);
+}
+
+/* In a phone's sheet the panels take the sheet's width, not the fixed
+   widths that keep a popover from growing. */
+.ds-table-toolbar__sheet .ds-table-toolbar__menu,
+.ds-table-toolbar__sheet .ds-data-table__filter-editor {
+  width: auto;
+  min-width: 0;
+}
+
+.ds-table-toolbar__sheet .ds-table-toolbar__search {
+  max-width: none;
+}
+
+/* Saved views: tabs over the bar, the active view's menu and New view
+   after them. */
+.ds-table-toolbar__views {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-100);
+  min-width: 0;
+}
+
+.ds-table-toolbar__view-tabs {
+  min-width: 0;
+}
+
+.ds-table-toolbar__view-picker {
+  flex: 0 1 240px;
+  min-width: 0;
+}
+
+/* The active view's mark while the table has moved on from it: a dot
+   before its name, in the icon colour. */
+.ds-table-toolbar__view-dot {
+  display: inline-block;
+  width: var(--padding-150);
+  height: var(--padding-150);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-icon-primary);
+}
+
+.ds-table-toolbar__rename {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-200);
+  min-width: 0;
+}
+
+.ds-table-toolbar__filter-button {
+  display: inline-flex;
+  flex-shrink: 0;
+}

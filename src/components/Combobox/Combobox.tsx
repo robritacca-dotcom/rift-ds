@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo, useId } from 'react';
 import { ChosenMark } from '../Dropdown/Dropdown';
 import { useLayer } from '../../behaviors/useLayer';
+import { useAnchoredPosition } from '../../behaviors/useAnchoredPosition';
 import { Field } from '../Field/Field';
 import './Combobox.css';
 import '../../fonts/material-symbols.css';
@@ -163,6 +164,20 @@ export const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>(({
   const rootRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
+  const controlRef = useRef<HTMLDivElement>(null);
+
+  // Placed against the field by the shared anchored-position behaviour, as
+  // Dropdown's list is.
+  useAnchoredPosition({
+    open: isOpen,
+    anchorRef: controlRef,
+    panelRef: listRef,
+    side: 'bottom',
+    align: 'start',
+    gapProperty: '--gap-050',
+    fitHeight: true,
+    matchWidth: true,
+  });
   const generatedId = useId();
 
   /** Keep the internal ref (used for click-outside) while honouring a forwarded one. */
@@ -418,7 +433,11 @@ export const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>(({
       size={size}
       id={inputId}
     >
-      <div className={`${baseClass}__control`} onClick={() => inputRef.current?.focus()}>
+      <div
+        ref={controlRef}
+        className={`${baseClass}__control`}
+        onClick={() => inputRef.current?.focus()}
+      >
         <span className={`${baseClass}__search-icon material-symbols-rounded`} aria-hidden="true">
           search
         </span>

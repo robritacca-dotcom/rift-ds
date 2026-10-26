@@ -1,0 +1,88 @@
+/* ============================================
+   COMMAND PALETTE TRIGGER
+   A button dressed as a search field: icon,
+   prompt, the shortcut's keycaps. It wears the
+   track recipe SegmentedControl's strip wears
+   (container fill, hairline border, the
+   track's curve), so the two read as one
+   family in a row, and it hovers like a field.
+   ============================================ */
+
+.ds-command-palette-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-200);
+  /* The row height, border included (--control-height-*). */
+  box-sizing: border-box;
+  height: var(--control-height-default);
+  padding: 0 var(--padding-300);
+  background-color: var(--color-bg-container-primary);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  /* SegmentedControl's track curve: the pill plus the inset its segments
+     sit at, so a squared theme keeps the two corners parallel. */
+  border-radius: calc(var(--radius-pill) + var(--padding-100));
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  cursor: pointer;
+  --icon-size: var(--icon-size-500);
+  transition:
+    background-color var(--motion-duration-base) var(--motion-ease-standard),
+    border-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+/* Hovers like a field: the border darkens, the fill stays put. */
+.ds-command-palette-trigger:hover {
+  border-color: var(--color-input-border-hover);
+}
+
+.ds-command-palette-trigger:focus-visible {
+  outline: var(--border-050) solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+.ds-command-palette-trigger__icon {
+  display: inline-flex;
+  flex: none;
+  color: inherit;
+}
+
+.ds-command-palette-trigger__label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+}
+
+/* The keycaps sit at the far end however wide the host makes the field. */
+.ds-command-palette-trigger__keys {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-050);
+  margin-left: auto;
+}
+
+.ds-command-palette-trigger--compact {
+  height: var(--control-height-compact);
+  padding: 0 var(--padding-200);
+}
+
+/* Folded to the icon: a circle the row height across, hovering like the
+   theme picker's trigger rather than like a field. */
+.ds-command-palette-trigger--icon-only {
+  justify-content: center;
+  width: var(--control-height-default);
+  padding: 0;
+}
+
+.ds-command-palette-trigger--compact.ds-command-palette-trigger--icon-only {
+  width: var(--control-height-compact);
+}
+
+.ds-command-palette-trigger--icon-only:hover {
+  border-color: var(--color-bg-container-border);
+  background-color: var(--color-bg-container-secondary);
+}

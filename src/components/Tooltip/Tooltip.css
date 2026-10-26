@@ -12,15 +12,13 @@
    PANEL
    ============================================ */
 
-/* Fixed, not absolute: the component places the panel from the trigger's
-   rectangle while it is visible (Tooltip.tsx owns the arithmetic), so a
-   scroll container around the trigger — a bordered table's wrapper, a rail —
-   cannot clip it. The panel keeps its place in the DOM, so it stacks inside
-   the trigger's own context at the floating layer. */
+/* Placed by the shared anchored-position behaviour
+   (src/behaviors/useAnchoredPosition.ts), which makes the panel fixed and
+   sets where it sits, so a scroll container around the trigger (a bordered
+   table's wrapper, a rail) cannot clip it. The panel keeps its place in the
+   DOM, so it stacks inside the trigger's own context at the floating layer.
+   The side it lands on, after any flip, is its data-side. */
 .ds-tooltip__panel {
-  position: fixed;
-  left: 0;
-  top: 0;
   z-index: var(--layer-floating);
   padding: var(--padding-150) var(--padding-200); /* 6px 8px */
   border-radius: var(--radius-100); /* 4px */
@@ -57,38 +55,39 @@
 
 /* ============================================
    POSITIONS
-   The component sets left/top; each position only slides in from its side.
+   The behaviour sets where the panel sits; each side only slides in from
+   that side, keyed on data-side so a flipped panel slides the right way.
    ============================================ */
 
-.ds-tooltip__panel--top {
+.ds-tooltip__panel[data-side='top'] {
   transform: translateY(4px);
 }
 
-.ds-tooltip__panel--top.ds-tooltip__panel--visible {
+.ds-tooltip__panel[data-side='top'].ds-tooltip__panel--visible {
   transform: translateY(0);
 }
 
-.ds-tooltip__panel--bottom {
+.ds-tooltip__panel[data-side='bottom'] {
   transform: translateY(-4px);
 }
 
-.ds-tooltip__panel--bottom.ds-tooltip__panel--visible {
+.ds-tooltip__panel[data-side='bottom'].ds-tooltip__panel--visible {
   transform: translateY(0);
 }
 
-.ds-tooltip__panel--left {
+.ds-tooltip__panel[data-side='left'] {
   transform: translateX(4px);
 }
 
-.ds-tooltip__panel--left.ds-tooltip__panel--visible {
+.ds-tooltip__panel[data-side='left'].ds-tooltip__panel--visible {
   transform: translateX(0);
 }
 
-.ds-tooltip__panel--right {
+.ds-tooltip__panel[data-side='right'] {
   transform: translateX(-4px);
 }
 
-.ds-tooltip__panel--right.ds-tooltip__panel--visible {
+.ds-tooltip__panel[data-side='right'].ds-tooltip__panel--visible {
   transform: translateX(0);
 }
 
@@ -96,22 +95,22 @@
    no prior computed style, so these supply the fade's starting frame. Each
    mirrors its position's hidden transform above. */
 @starting-style {
-  .ds-tooltip__panel--top.ds-tooltip__panel--visible {
+  .ds-tooltip__panel[data-side='top'].ds-tooltip__panel--visible {
     opacity: 0;
     transform: translateY(4px);
   }
 
-  .ds-tooltip__panel--bottom.ds-tooltip__panel--visible {
+  .ds-tooltip__panel[data-side='bottom'].ds-tooltip__panel--visible {
     opacity: 0;
     transform: translateY(-4px);
   }
 
-  .ds-tooltip__panel--left.ds-tooltip__panel--visible {
+  .ds-tooltip__panel[data-side='left'].ds-tooltip__panel--visible {
     opacity: 0;
     transform: translateX(4px);
   }
 
-  .ds-tooltip__panel--right.ds-tooltip__panel--visible {
+  .ds-tooltip__panel[data-side='right'].ds-tooltip__panel--visible {
     opacity: 0;
     transform: translateX(-4px);
   }
@@ -136,7 +135,7 @@
 }
 
 /* Arrow — top position (arrow points down) */
-.ds-tooltip__panel--top .ds-tooltip__arrow {
+.ds-tooltip__panel[data-side='top'] .ds-tooltip__arrow {
   bottom: -5px;
   left: var(--ds-tooltip-arrow, 50%);
   margin-left: -4px; /* ds-allow(spacing): half the 8px arrow, centring it on the panel edge */
@@ -145,7 +144,7 @@
 }
 
 /* Arrow — bottom position (arrow points up) */
-.ds-tooltip__panel--bottom .ds-tooltip__arrow {
+.ds-tooltip__panel[data-side='bottom'] .ds-tooltip__arrow {
   top: -5px;
   left: var(--ds-tooltip-arrow, 50%);
   margin-left: -4px; /* ds-allow(spacing): half the 8px arrow */
@@ -154,7 +153,7 @@
 }
 
 /* Arrow — left position (arrow points right) */
-.ds-tooltip__panel--left .ds-tooltip__arrow {
+.ds-tooltip__panel[data-side='left'] .ds-tooltip__arrow {
   right: -5px;
   top: var(--ds-tooltip-arrow, 50%);
   margin-top: -4px; /* ds-allow(spacing): half the 8px arrow */
@@ -163,7 +162,7 @@
 }
 
 /* Arrow — right position (arrow points left) */
-.ds-tooltip__panel--right .ds-tooltip__arrow {
+.ds-tooltip__panel[data-side='right'] .ds-tooltip__arrow {
   left: -5px;
   top: var(--ds-tooltip-arrow, 50%);
   margin-top: -4px; /* ds-allow(spacing): half the 8px arrow */

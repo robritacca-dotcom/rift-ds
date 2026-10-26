@@ -1,0 +1,7 @@
+/* The empty page fills the rest of the screen, so the shell reads as a
+   whole page rather than a header over nothing. */
+.empty {
+  flex: 1;
+  min-height: 420px;
+  justify-content: center;
+}

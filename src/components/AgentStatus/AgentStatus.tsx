@@ -26,7 +26,7 @@ type AgentStatusOwnProps = {
   state?: AgentStatusState;
   /** Status text. Falls back to a default for the state. Ignored when `children` are given. */
   label?: string;
-  /** Which dot-matrix choreography to run. */
+  /** Which dot-matrix choreography to run. Defaults to `breathe` while `waiting`, a still pulse that reads as the person's turn (the same as AgentStatusMark), and `orbit` otherwise. */
   pattern?: AgentStatusPattern;
   /**
    * Sweep a highlight across the label while the agent is active. Defaults to
@@ -39,8 +39,15 @@ type AgentStatusOwnProps = {
    * `sm` and `md` are legacy aliases for `compact` and `default`.
    */
   size?: 'default' | 'compact' | 'sm' | 'md';
-  /** `inline` sits in a line of content; `bar` is a full-width row for the top of a panel. */
-  variant?: 'inline' | 'bar';
+  /**
+   * `inline` sits in a line of content; `bar` is a full-width row for the
+   * top of a panel; `pill` is a glass pill for a status that floats over
+   * the page while a run goes on; once it ends the dots fill solid in the
+   * status colour, as in every variant. The pill does not position itself.
+   */
+  variant?: 'inline' | 'bar' | 'pill';
+  /** A trailing control after the status text, such as a link that opens the run. Meant for the `pill` and `bar` variants. */
+  action?: React.ReactNode;
   /** Additional CSS classes */
   className?: string;
   /** Status text, when it needs markup the `label` string cannot express. */
@@ -65,10 +72,11 @@ export const AgentStatus = React.forwardRef<HTMLDivElement, AgentStatusProps>(
     {
       state = 'thinking',
       label,
-      pattern = 'orbit',
+      pattern,
       shimmer,
       size = 'default',
       variant = 'inline',
+      action,
       className = '',
       children,
       ...rest
@@ -100,7 +108,7 @@ export const AgentStatus = React.forwardRef<HTMLDivElement, AgentStatusProps>(
     const classes = [
       baseClass,
       `${baseClass}--${state}`,
-      `${baseClass}--${pattern}`,
+      `${baseClass}--${pattern ?? (state === 'waiting' ? 'breathe' : 'orbit')}`,
       `${baseClass}--${resolvedSize}`,
       `${baseClass}--${variant}`,
       isActive ? `${baseClass}--animated` : '',
@@ -145,9 +153,60 @@ export const AgentStatus = React.forwardRef<HTMLDivElement, AgentStatusProps>(
             </>
           )}
         </span>
+        {action != null && <span className={`${baseClass}__action`}>{action}</span>}
       </div>
     );
   },
 );
 
 AgentStatus.displayName = 'AgentStatus';
+
+/** The mark's square grid: 4x4, row-major. CSS owns which cell lights when. */
+const MARK_DOT_COUNT = 16;
+
+/** Props owned by AgentStatusMark itself — everything else falls through to the <span>. */
+type AgentStatusMarkOwnProps = {
+  /** What the agent is doing. Drives the colour and whether the dots animate, as on AgentStatus. Defaults to `working`, unlike AgentStatus's `thinking`: the mark stands in for an icon on a control (AiButton's, a pill's), where the commonest moment it is drawn is a run under way, while the labelled AgentStatus most often opens a reply. */
+  state?: AgentStatusState;
+  /** Which choreography to run: every AgentStatus pattern, redrawn for the square grid. Defaults to `breathe` while `waiting`, a still pulse that reads as the person's turn, and `orbit` otherwise. */
+  pattern?: AgentStatusPattern;
+  /** Additional CSS classes */
+  className?: string;
+};
+
+export interface AgentStatusMarkProps
+  extends AgentStatusMarkOwnProps,
+    Omit<React.ComponentPropsWithoutRef<'span'>, keyof AgentStatusMarkOwnProps | 'children'> {}
+
+/**
+ * AgentStatus's dots at icon size, for an icon slot: a square 4x4 grid sized
+ * by `--icon-size`, drawn inside a Material Symbol's live area, so it swaps
+ * with a glyph without moving or outgrowing it. Every AgentStatus pattern
+ * runs on it, redrawn for the square, in AgentStatus's cycle and colours;
+ * orbit is the default, and breathe while waiting. AiButton's status is
+ * the first host.
+ * Hidden from assistive technology; the host announces the state.
+ */
+export const AgentStatusMark = React.forwardRef<HTMLSpanElement, AgentStatusMarkProps>(
+  ({ state = 'working', pattern, className = '', ...rest }, ref) => {
+    const baseClass = 'ds-agent-status-mark';
+    const classes = [
+      baseClass,
+      `${baseClass}--${state}`,
+      `${baseClass}--${pattern ?? (state === 'waiting' ? 'breathe' : 'orbit')}`,
+      ACTIVE_STATES.includes(state) ? `${baseClass}--animated` : '',
+      className,
+    ]
+      .filter(Boolean)
+      .join(' ');
+    return (
+      <span aria-hidden="true" {...rest} ref={ref} className={classes}>
+        {Array.from({ length: MARK_DOT_COUNT }, (_, i) => (
+          <span key={i} className={`${baseClass}__dot`} />
+        ))}
+      </span>
+    );
+  },
+);
+
+AgentStatusMark.displayName = 'AgentStatusMark';

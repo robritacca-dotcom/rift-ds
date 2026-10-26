@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { fn } from 'storybook/test';
+import { expect, fn, within } from 'storybook/test';
 import { Button } from './Button';
 
 const meta = {
@@ -656,5 +656,19 @@ export const DestructiveIconOnly: Story = {
     text: false,
     iconLeft: 'delete',
     iconRight: undefined,
+  },
+};
+
+/** Plain-text children stand in for a missing `label`, so the habit other
+    libraries teach still reads right. `label` stays the documented prop. */
+export const TextChildren: Story = {
+  args: {
+    label: undefined,
+    children: 'Save changes',
+    variant: 'primary',
+  },
+  play: async ({ canvasElement }) => {
+    const button = within(canvasElement).getByRole('button');
+    await expect(button).toHaveTextContent('Save changes');
   },
 };

@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useLayer } from '../../behaviors/useLayer';
+import { useAnchoredPosition } from '../../behaviors/useAnchoredPosition';
 import { MOTION_HOVER_HIDE_DELAY_MS } from '../../tokens/motion';
 import './Popover.css';
 
@@ -15,6 +16,14 @@ type PopoverOwnProps = {
   content: React.ReactNode;
   /** Component size */
   size?: 'default' | 'compact';
+  /**
+   * The panel's surface. `panel` (the default) is the content panel: a
+   * 16px inset and the container border. `menu` is DropdownMenu's own
+   * surface (its 4px inset, input border and corner), for a popover that
+   * sits among menus and should read as one of them, such as a table
+   * toolbar's sort or column panel.
+   */
+  surface?: 'panel' | 'menu';
   /** Preferred position */
   position?: 'top' | 'bottom' | 'left' | 'right';
   /** Trigger mode */
@@ -59,6 +68,7 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
       children,
       content,
       size = 'default',
+      surface = 'panel',
       position = 'bottom',
       trigger = 'click',
       open: controlledOpen,
@@ -74,6 +84,8 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
   ) => {
     const [internalOpen, setInternalOpen] = useState(defaultOpen);
     const containerRef = useRef<HTMLDivElement>(null);
+    const triggerRef = useRef<HTMLDivElement>(null);
+    const panelRef = useRef<HTMLDivElement>(null);
     const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
     const setContainerRef = (node: HTMLDivElement | null) => {
@@ -127,13 +139,26 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
       }
     };
 
+    // The panel is placed against the trigger by the shared anchored-position
+    // behaviour: fixed, so a scroll container cannot clip it, on the preferred
+    // side, flipped when that side has no room, and shifted to stay on screen.
+    useAnchoredPosition({
+      open: isOpen,
+      anchorRef: triggerRef,
+      panelRef,
+      side: position,
+      align: 'start',
+      gapProperty: '--gap-050',
+    });
+
     const baseClass = 'ds-popover';
     const sizeClass = `${baseClass}--${size}`;
     const positionClass = `${baseClass}__panel--${position}`;
     const openClass = isOpen ? `${baseClass}__panel--open` : '';
 
     const containerClasses = [baseClass, className].filter(Boolean).join(' ');
-    const panelClasses = [`${baseClass}__panel`, sizeClass, positionClass, openClass]
+    const surfaceClass = surface === 'menu' ? `${baseClass}__panel--menu` : '';
+    const panelClasses = [`${baseClass}__panel`, sizeClass, surfaceClass, positionClass, openClass]
       .filter(Boolean)
       .join(' ');
 
@@ -152,7 +177,7 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
           real control, and only synthesise a button when there is nothing to
           clone onto.
         */}
-        <div className={`${baseClass}__trigger`} onClick={handleClick}>
+        <div ref={triggerRef} className={`${baseClass}__trigger`} onClick={handleClick}>
           {React.isValidElement(children) && canCarryPopoverSemantics(children) ? (
             React.cloneElement(children as React.ReactElement<Record<string, unknown>>, {
               'aria-expanded': isOpen,
@@ -174,6 +199,7 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
         </div>
 
         <div
+          ref={panelRef}
           className={panelClasses}
           role="dialog"
           // role="dialog" requires an accessible name.

@@ -36,8 +36,15 @@ type FocusScopeOptions = {
   active: boolean;
   /** Wrap Tab / Shift+Tab within the scope. Default true. */
   trap?: boolean;
-  /** Restore focus to the previously focused element on deactivate. Default true. */
-  restoreFocus?: boolean;
+  /**
+   * Restore focus on deactivate. Default true: the previously focused
+   * element, or its nearest visible stand-in. A function names the target
+   * instead, read at the moment of closing, for a host that knows better
+   * than the opener: a table whose row deleted itself from this dialog
+   * sends focus to the next row rather than the table's first control. A
+   * function that returns null falls back to the default.
+   */
+  restoreFocus?: boolean | (() => HTMLElement | null);
   /**
    * Where initial focus lands. Defaults to the first visible real control,
    * then the first focusable of any kind, then the container itself.
@@ -151,7 +158,11 @@ export function useFocusScope(
         inertScopes.splice(index, 1);
         applyInert();
       }
-      if (optionsRef.current.restoreFocus !== false && previousFocus) {
+      const restore = optionsRef.current.restoreFocus;
+      const chosen = typeof restore === 'function' ? restore() : null;
+      if (chosen) {
+        chosen.focus();
+      } else if (restore !== false && previousFocus) {
         restoreTarget(previousFocus)?.focus();
       }
     };

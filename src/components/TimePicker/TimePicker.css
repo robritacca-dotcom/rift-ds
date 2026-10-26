@@ -35,6 +35,10 @@
   cursor: pointer;
   transition: border-color var(--motion-duration-base) var(--motion-ease-standard);
   outline: none;
+  /* The row height, border included (--control-height-*). */
+  box-sizing: border-box;
+  height: var(--control-height-default);
+  padding-block: 0;
 }
 
 .ds-timepicker__trigger:hover:not(:focus-visible):not(:disabled) {
@@ -99,12 +103,12 @@
    MENU
    ============================================ */
 
+/* Placed by the shared anchored-position behaviour
+   (src/behaviors/useAnchoredPosition.ts), as Dropdown's list is: fixed, at
+   least the trigger's width, flipped above when there is no room below, and
+   capped to the room it has. */
 .ds-timepicker__menu {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  margin-top: var(--gap-050); /* 2px */
+  box-sizing: border-box;
   padding: var(--padding-100); /* inset gap on all sides */
   border: var(--border-025) solid var(--color-input-border-primary);
   border-radius: var(--radius-300); /* 12px */
@@ -197,6 +201,8 @@
 
 .ds-timepicker--compact .ds-timepicker__trigger {
   padding: var(--padding-150) var(--padding-300); /* 6px 12px */
+  height: var(--control-height-compact);
+  padding-block: 0;
 }
 
 .ds-timepicker--compact .ds-timepicker__value {

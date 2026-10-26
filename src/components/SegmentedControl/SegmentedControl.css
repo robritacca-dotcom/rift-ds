@@ -106,6 +106,12 @@
   white-space: nowrap;
   position: relative;
   z-index: 1; /* labels and icons read above the sliding pill */
+  /* Sized so the track, its 4px padding and its hairline included, comes
+       out at the row height (--control-height-*): the segments shrink inside
+       the track rather than the track growing past every control beside it. */
+  box-sizing: border-box;
+  height: calc(var(--control-height-default) - 2 * var(--padding-100) - 2 * var(--border-025));
+  padding-block: 0;
 }
 
 /* Typography — paragraph em (medium weight) for clickable controls */
@@ -209,6 +215,8 @@
 
 .ds-segmented-control--compact .ds-segmented-control__segment {
   padding: var(--padding-150) var(--padding-300); /* 6px 12px */
+  height: calc(var(--control-height-compact) - 2 * var(--padding-100) - 2 * var(--border-025));
+  padding-block: 0;
 }
 
 .ds-segmented-control--compact .ds-segmented-control__label {

@@ -27,8 +27,11 @@
   justify-content: center;
   gap: var(--gap-200);
 
-  /* Spacing — matches Button so the two sit on one control scale */
-  padding: var(--padding-200) var(--padding-500);
+  /* Spacing — matches Button so the two sit on one control scale: the row
+     height (--control-height-*), with only horizontal padding. */
+  box-sizing: border-box;
+  height: var(--control-height-default);
+  padding: 0 var(--padding-500);
 
   /* Buttons are always pill-shaped (design.md invariant) */
   border-radius: var(--radius-pill);
@@ -52,7 +55,15 @@
   background: var(--color-ai-button-bg);
   color: var(--color-text-primary);
 
-  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+  /* The ring's three stops, local so a status moment can recolour the ring
+     and glow together. */
+  --ds-ai-button-ring-start: var(--color-ai-gradient-start);
+  --ds-ai-button-ring-mid: var(--color-ai-gradient-mid);
+  --ds-ai-button-ring-end: var(--color-ai-gradient-end);
+
+  transition:
+    opacity var(--motion-duration-base) var(--motion-ease-standard),
+    background-color var(--motion-duration-base) var(--motion-ease-standard);
 
   /* Reset */
   cursor: pointer;
@@ -69,14 +80,20 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  padding: var(--border-050);
+  /* At rest the ring is a hairline at reduced strength; hover, focus and a
+     busy status take it to the full band at full strength (below). */
+  padding: var(--border-025);
+  opacity: 0.6;
+  transition:
+    padding var(--motion-duration-base) var(--motion-ease-standard),
+    opacity var(--motion-duration-base) var(--motion-ease-standard);
   background: conic-gradient(
     from var(--ds-ai-button-angle),
-    var(--color-ai-gradient-start),
-    var(--color-ai-gradient-mid),
-    var(--color-ai-gradient-end),
-    var(--color-ai-gradient-mid),
-    var(--color-ai-gradient-start)
+    var(--ds-ai-button-ring-start),
+    var(--ds-ai-button-ring-mid),
+    var(--ds-ai-button-ring-end),
+    var(--ds-ai-button-ring-mid),
+    var(--ds-ai-button-ring-start)
   );
   /* Standard properties only — the build pipeline prefixes per its browser
      targets, and hand-written -webkit- duplicates confuse its merging. */
@@ -109,11 +126,11 @@
   border-radius: inherit;
   background: conic-gradient(
     from var(--ds-ai-button-angle),
-    var(--color-ai-gradient-start),
-    var(--color-ai-gradient-mid),
-    var(--color-ai-gradient-end),
-    var(--color-ai-gradient-mid),
-    var(--color-ai-gradient-start)
+    var(--ds-ai-button-ring-start),
+    var(--ds-ai-button-ring-mid),
+    var(--ds-ai-button-ring-end),
+    var(--ds-ai-button-ring-mid),
+    var(--ds-ai-button-ring-start)
   );
   /* The glow's spread; a length with no token family, chosen by eye. */
   --ds-ai-button-glow: 14px;
@@ -180,15 +197,112 @@
   }
 }
 
-/* Icon rides the icon-size scale */
+/* Icon rides the icon-size scale. The slot is a fixed --icon-size square,
+   so a status icon swapped into it can never move the label or the edge. */
 .ds-ai-button__icon {
   --icon-size: var(--icon-size-600);
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: var(--icon-size);
+  height: var(--icon-size);
   line-height: 1;
 }
 
-/* States */
-.ds-ai-button:hover::after {
+.ds-ai-button__icon-swap {
+  display: inline-grid;
+  place-items: center;
+}
+
+/* Each status icon fades and settles into the slot as it arrives. */
+.ds-ai-button__icon-swap--animated {
+  animation: ds-ai-button-icon-in var(--motion-duration-base) var(--motion-ease-entrance) both;
+}
+
+@keyframes ds-ai-button-icon-in {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+
+/* The working mark takes the label's ink in the icon seat, as the resting
+   glyph does, rather than AgentStatus's secondary grey. */
+.ds-ai-button__icon .ds-agent-status-mark--thinking,
+.ds-ai-button__icon .ds-agent-status-mark--working {
+  --ds-agent-color: currentColor;
+}
+
+/* The done and error beat: the whole button takes its status family, the
+   field the status background and the ring and glow its border colour at
+   full strength, then returns to the AI look with the resting icon. */
+.ds-ai-button--done {
+  --ds-ai-button-ring-start: var(--color-status-positive-border);
+  --ds-ai-button-ring-mid: var(--color-status-positive-border);
+  --ds-ai-button-ring-end: var(--color-status-positive-border);
+  background-color: var(--color-status-positive-bg);
+}
+
+.ds-ai-button--error {
+  --ds-ai-button-ring-start: var(--color-status-error-border);
+  --ds-ai-button-ring-mid: var(--color-status-error-border);
+  --ds-ai-button-ring-end: var(--color-status-error-border);
+  background-color: var(--color-status-error-bg);
+}
+
+/* Busy: the ring trades its drifting cadence for a steady, faster spin,
+   one turn per spinner rotation. The entry stays second in the list, so
+   switching never replays it. */
+.ds-ai-button--busy::before,
+.ds-ai-button--busy::after {
+  animation:
+    ds-ai-button-spin var(--motion-duration-loop-spin) var(--motion-ease-linear) infinite,
+    ds-ai-button-enter-ring var(--motion-duration-slower) var(--motion-ease-entrance) var(--motion-duration-fast) backwards;
+}
+
+.ds-ai-button--busy::after {
+  animation-name: ds-ai-button-spin, ds-ai-button-enter-glow;
+  animation-delay: 0s, 0s;
+}
+
+@keyframes ds-ai-button-spin {
+  from {
+    --ds-ai-button-angle: 0deg;
+  }
+  to {
+    --ds-ai-button-angle: 360deg;
+  }
+}
+
+/* States: hover and a busy status wake the ring to the full band at full
+   strength, and raise the glow. Keyboard focus leaves the ring at rest: the
+   focus outline is its signal, as on Button, and a widened ring inside it
+   would read as two concentric strokes. */
+.ds-ai-button:hover::before,
+.ds-ai-button--busy::before,
+.ds-ai-button--done::before,
+.ds-ai-button--error::before {
+  padding: var(--border-050);
+  opacity: 1;
+}
+
+.ds-ai-button:hover::after,
+.ds-ai-button--busy::after,
+.ds-ai-button--done::after,
+.ds-ai-button--error::after {
   opacity: 0.55;
+}
+
+/* A disabled button stays at rest under the pointer. */
+.ds-ai-button:disabled:hover::before,
+.ds-ai-button--disabled:hover::before {
+  padding: var(--border-025);
+  opacity: 0.6;
+}
+
+.ds-ai-button:disabled:hover::after,
+.ds-ai-button--disabled:hover::after {
+  opacity: 0.3;
 }
 
 .ds-ai-button:focus-visible {
@@ -214,7 +328,8 @@
 
 /* Sizes */
 .ds-ai-button--compact {
-  padding: var(--padding-150) var(--padding-300);
+  height: var(--control-height-compact);
+  padding: 0 var(--padding-300);
   font-size: var(--font-paragraph-sm-emphasis-size);
   line-height: var(--font-paragraph-sm-emphasis-line-height);
   letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
@@ -225,10 +340,13 @@
 }
 
 /* Reduced motion: the ring and glow stay, the turning stops. */
-/* ds-allow(motion): parks a looping animation, which the collapsed duration would strobe rather than stop (the ring's turn). */
+/* ds-allow(motion): parks a looping animation, which the collapsed duration would strobe rather than stop (the ring's turn and the busy spin), and drops the status icon's entrance. */
 @media (prefers-reduced-motion: reduce) {
   .ds-ai-button::before,
-  .ds-ai-button::after {
+  .ds-ai-button::after,
+  .ds-ai-button--busy::before,
+  .ds-ai-button--busy::after,
+  .ds-ai-button__icon-swap--animated {
     animation: none;
   }
 }
@@ -248,9 +366,13 @@
   display: inline-flex;
 }
 
-/* The button acknowledges the panel's arrival with one gentle pulse. */
-.ds-ai-button-host--open .ds-ai-button {
-  animation: ds-ai-button-acknowledge var(--motion-duration-deliberate) var(--motion-ease-spring) both;
+/* The button acknowledges the panel's arrival with one gentle pulse. No
+   fill mode: a transform held after the pulse would make the button a
+   stacking context, and the glow (z-index -1) would then paint over the
+   field instead of behind it. */
+.ds-ai-button-host--open .ds-ai-button,
+.ds-ai-button-host--request-open .ds-ai-button {
+  animation: ds-ai-button-acknowledge var(--motion-duration-deliberate) var(--motion-ease-spring);
 }
 
 @keyframes ds-ai-button-acknowledge {
@@ -265,9 +387,18 @@
   }
 }
 
-.ds-ai-button__summary {
-  position: absolute;
-  right: 0;
+/* Placed by the shared anchored-position behaviour
+   (src/behaviors/useAnchoredPosition.ts) while open: fixed, so a scroll
+   container cannot clip it, on its placement side and lined up with the
+   button's end edge, flipped when that side has no room and shifted to stay
+   on screen. Closed, it rests fixed at the viewport's corner, hidden: an
+   absolute panel at the host still counts as scrollable overflow, so a
+   button near the page's end edge laid the page out wider than the screen. */
+.ds-ai-button__summary,
+.ds-ai-button__request {
+  position: fixed;
+  top: 0;
+  left: 0;
   z-index: 1;
   /* Component-local lengths, chosen by eye like the button's glow: a
      readable measure, capped so a phone viewport keeps its margins. */
@@ -315,24 +446,25 @@
 
 /* Dark glass is already translucent; thinning it further puts body text
    straight onto whatever bright imagery sits beneath. */
-[data-theme='dark'] .ds-ai-button__summary {
+[data-theme='dark'] .ds-ai-button__summary,
+[data-theme='dark'] .ds-ai-button__request {
   background: var(--color-bg-glass);
 }
 
-/* Placement: the panel grows out of the button, so its transform origin
-   points back at the button's side of the gap. */
-.ds-ai-button-host--top .ds-ai-button__summary {
-  bottom: calc(100% + var(--gap-200));
+/* The panel grows out of the button, so its transform origin points back
+   at the button's side of the gap, keyed on the side it landed on. */
+.ds-ai-button__summary,
+.ds-ai-button__request {
   transform-origin: calc(100% - 60px) calc(100% + 40px);
 }
 
-.ds-ai-button-host--bottom .ds-ai-button__summary {
-  top: calc(100% + var(--gap-200));
+.ds-ai-button__summary[data-side='bottom'],
+.ds-ai-button__request[data-side='bottom'] {
   transform-origin: calc(100% - 60px) -40px;
   transform: translateY(-10px) scale(0.9);
 }
 
-.ds-ai-button-host--bottom.ds-ai-button-host--open .ds-ai-button__summary {
+.ds-ai-button-host--open .ds-ai-button__summary[data-side='bottom'] {
   transform: none;
 }
 
@@ -347,7 +479,7 @@
   }
 }
 
-.ds-ai-button-host--bottom.ds-ai-button-host--open .ds-ai-button__summary {
+.ds-ai-button-host--open .ds-ai-button__summary[data-side='bottom'] {
   animation-name: ds-ai-summary-pop-down;
 }
 
@@ -373,7 +505,8 @@
   inherits: false;
 }
 
-.ds-ai-button__summary::before {
+.ds-ai-button__summary::before,
+.ds-ai-button__request::before {
   content: '';
   position: absolute;
   inset: calc(-1 * var(--border-025));
@@ -419,6 +552,42 @@
     --ds-ai-summary-ring-angle: 360deg;
     opacity: 0;
   }
+}
+
+/* ============================================
+   THE REQUEST PANEL
+   The same glass surface, holding whatever the
+   agent needs from the person while waiting.
+   It opens on its own rather than on hover, so
+   it carries its own open and placement
+   classes. The panel is the one surface and
+   adds no padding: the content brings its own
+   spacing, so a card set bare inside it reads
+   as the panel itself, with one border.
+   ============================================ */
+
+.ds-ai-button__request {
+  padding: 0;
+  overflow: hidden;
+}
+
+.ds-ai-button__request--open {
+  visibility: visible;
+  opacity: 1;
+  transform: none;
+  animation: ds-ai-summary-pop var(--motion-duration-deliberate) var(--motion-ease-entrance) both;
+}
+
+.ds-ai-button__request--open[data-side='bottom'] {
+  transform: none;
+  animation-name: ds-ai-summary-pop-down;
+}
+
+.ds-ai-button__request--open::before {
+  /* ds-allow(motion): the summary's one-shot signature sweep, timed to the
+     panel's entrance */
+  animation: ds-ai-summary-ring 1500ms var(--motion-ease-standard) both;
+  animation-delay: 100ms;
 }
 
 /* The content settles a beat behind the surface — each row fades up in
@@ -543,9 +712,12 @@
   margin-top: var(--gap-100);
 }
 
-/* ds-allow(motion): drops the summary panel's staggered entrance outright rather than playing each row at 0.01ms. */
+/* ds-allow(motion): drops the summary and request panels' entrances outright rather than playing each at 0.01ms. */
 @media (prefers-reduced-motion: reduce) {
   .ds-ai-button-host--open .ds-ai-button,
+  .ds-ai-button-host--request-open .ds-ai-button,
+  .ds-ai-button__request--open,
+  .ds-ai-button__request--open::before,
   .ds-ai-button-host--open .ds-ai-button__summary,
   .ds-ai-button-host--open .ds-ai-button__summary::before,
   .ds-ai-button-host--open .ds-ai-button__summary-meta,
@@ -555,7 +727,8 @@
     animation: none;
   }
 
-  .ds-ai-button__summary {
+  .ds-ai-button__summary,
+  .ds-ai-button__request {
     transition: none;
   }
 }

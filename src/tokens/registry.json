@@ -39,6 +39,18 @@
       "--color-ambient-4",
       "--color-ambient-5",
       "--color-ambient-6",
+      "--color-avatar-bg-1",
+      "--color-avatar-bg-2",
+      "--color-avatar-bg-3",
+      "--color-avatar-bg-4",
+      "--color-avatar-bg-5",
+      "--color-avatar-bg-6",
+      "--color-avatar-text-1",
+      "--color-avatar-text-2",
+      "--color-avatar-text-3",
+      "--color-avatar-text-4",
+      "--color-avatar-text-5",
+      "--color-avatar-text-6",
       "--color-bg-container-border",
       "--color-bg-container-inverse",
       "--color-bg-container-primary",
@@ -80,6 +92,8 @@
       "--color-core-accent-violet",
       "--color-core-ui-primary",
       "--color-core-ui-secondary",
+      "--color-count-badge-bg",
+      "--color-count-badge-text",
       "--color-divider",
       "--color-file-document",
       "--color-file-pdf",
@@ -124,6 +138,13 @@
       "--color-status-warning-border",
       "--color-status-warning-icon",
       "--color-status-warning-text",
+      "--color-table-body-bg",
+      "--color-table-border",
+      "--color-table-divider",
+      "--color-table-header-bg",
+      "--color-table-row-hover-bg",
+      "--color-table-row-selected-bg",
+      "--color-table-row-stripe-bg",
       "--color-text-inverse",
       "--color-text-on-inverse",
       "--color-text-primary",
@@ -271,13 +292,18 @@
     ],
     "shadow": [
       "--shadow-floating",
-      "--shadow-modal"
+      "--shadow-modal",
+      "--shadow-table-pinned"
     ],
     "icons": [
       "--icon-size-1200",
       "--icon-size-500",
       "--icon-size-600",
       "--icon-size-800"
+    ],
+    "controls": [
+      "--control-height-compact",
+      "--control-height-default"
     ],
     "motion": [
       "--motion-duration-base",

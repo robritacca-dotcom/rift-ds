@@ -64,6 +64,7 @@ Flag:
 - A hover, selected or current treatment that differs from the family's (a current navigation row on the hover token, so hover and current read the same, is the classic case).
 - A disabled state that is not `opacity: 0.4` with `cursor: not-allowed`, or is missing where the component takes `disabled`.
 - A raw value where the family uses a token (`1px` for `--border-025`).
+- A row control (a field, a button, a picker, a segmented set, a filter chip) whose height is not `--control-height-default` / `--control-height-compact` at its two sizes, or is padding-derived rather than set: it drifts the moment its border, line height or the density lever moves, and the row stops lining up. design.md's Control Height Scale is the roster.
 
 A deliberate departure needs a sentence in the component's `design.md` spec saying so; one without is a finding whichever way it resolves.
 

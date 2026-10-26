@@ -69,6 +69,60 @@
 }
 
 /* ============================================
+   FILLS
+   Six fills picked by name, each with its own initials colour, so a stack
+   of people reads apart. The `--color-avatar-*` tokens own the colours.
+   ============================================ */
+
+.ds-avatar--fill-1 {
+  background-color: var(--color-avatar-bg-1);
+}
+
+.ds-avatar--fill-1 .ds-avatar__initials {
+  color: var(--color-avatar-text-1);
+}
+
+.ds-avatar--fill-2 {
+  background-color: var(--color-avatar-bg-2);
+}
+
+.ds-avatar--fill-2 .ds-avatar__initials {
+  color: var(--color-avatar-text-2);
+}
+
+.ds-avatar--fill-3 {
+  background-color: var(--color-avatar-bg-3);
+}
+
+.ds-avatar--fill-3 .ds-avatar__initials {
+  color: var(--color-avatar-text-3);
+}
+
+.ds-avatar--fill-4 {
+  background-color: var(--color-avatar-bg-4);
+}
+
+.ds-avatar--fill-4 .ds-avatar__initials {
+  color: var(--color-avatar-text-4);
+}
+
+.ds-avatar--fill-5 {
+  background-color: var(--color-avatar-bg-5);
+}
+
+.ds-avatar--fill-5 .ds-avatar__initials {
+  color: var(--color-avatar-text-5);
+}
+
+.ds-avatar--fill-6 {
+  background-color: var(--color-avatar-bg-6);
+}
+
+.ds-avatar--fill-6 .ds-avatar__initials {
+  color: var(--color-avatar-text-6);
+}
+
+/* ============================================
    ICON FALLBACK
    ============================================ */
 

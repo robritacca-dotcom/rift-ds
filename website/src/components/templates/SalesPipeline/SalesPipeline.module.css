@@ -137,20 +137,6 @@
   min-width: 0;
 }
 
-/* The toolbar's controls cluster: three matching compact selects in the
-   DataTable's own filter slot, the marketing dashboard's convention. */
-.tableFilters {
-  display: flex;
-  align-items: center;
-  gap: var(--gap-200);
-  flex-wrap: wrap;
-}
-
-.filterSelect {
-  width: 160px;
-  flex-shrink: 0;
-}
-
 /* ---------------------------------------------------------------- cells */
 
 .companyCell {
@@ -172,16 +158,7 @@
   white-space: nowrap;
 }
 
-.ownerCell {
-  display: flex;
-  align-items: center;
-  gap: var(--gap-200);
-  white-space: nowrap;
-}
 
-.ownerName {
-  color: var(--color-text-primary);
-}
 
 .pipelineCell {
   display: inline-flex;

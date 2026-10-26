@@ -2,7 +2,7 @@
 
 Generated from the component registry at version 1.13.0. One entry per public component; each Contract link is the component's full prop table as markdown. A component marked deprecated still works in existing code; its Deprecated line names what to use instead.
 
-## Actions (6)
+## Actions (9)
 
 Buttons, button groups, and toggles for triggering actions and switching modes.
 
@@ -30,6 +30,14 @@ Round icon button in primary, secondary and tertiary emphasis and a default, neu
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/circular-button.md
 
+### Command palette trigger
+
+The entry point to a command palette: a button dressed as a search field, with the shortcut's keycaps, at the row-control height.
+
+- Import: `import { CommandPaletteTrigger } from 'rift-ds';`
+- Rendering: server-renderable (no 'use client')
+- Contract: https://rift-ds.com/components/command-palette-trigger.md
+
 ### Segmented control
 
 Pill-style toggle between related views with keyboard navigation and icon support.
@@ -45,6 +53,22 @@ Primary action with an attached menu of alternatives, composing Button and Dropd
 - Import: `import { SplitButton } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/split-button.md
+
+### Theme picker
+
+A circular trigger wearing the active theme's swatch, opening a menu of every theme on offer with its colour, corner and faces.
+
+- Import: `import { ThemePicker } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/theme-picker.md
+
+### Theme toggle
+
+The colour-mode control: System, Light and Dark over a stored setting, with the script that applies it before first paint.
+
+- Import: `import { ThemeToggle } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/theme-toggle.md
 
 ### Toggle group
 
@@ -76,7 +100,7 @@ The companion rail of an agent product: the agent's portrait over tabbed panes f
 
 ### Agent status
 
-A dot-matrix indicator and status line reporting what an agent is doing right now.
+What an agent is doing right now, as a dot matrix and status line, a floating pill, a square mark for icon slots, or a ring around any element.
 
 - Import: `import { AgentStatus } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
@@ -84,7 +108,7 @@ A dot-matrix indicator and status line reporting what an agent is doing right no
 
 ### AI button
 
-The AI entry point: icon and label ringed by a turning gradient and glow, with an optional hover-summoned AI-summary panel and prompt chips.
+The AI entry point: a turning gradient ring that reports the agent's status, with a hover-summoned summary and a panel for what the agent asks of you.
 
 - Import: `import { AiButton } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
@@ -463,7 +487,7 @@ Nested rectangles sized by value for part-to-whole breakdowns.
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/treemap.md
 
-## Data display (28)
+## Data display (29)
 
 Cards, tables, lists, and badges for presenting structured content.
 
@@ -565,7 +589,7 @@ Linked contact method with icon, label, and value.
 
 ### Data table
 
-The wired table: sorting, search, row selection, and pagination assembled around Table.
+The wired table: typed columns, sorting, filters, editing, grouping with totals, row details, saved views, thousands of rows, and rows from a server.
 
 - Import: `import { DataTable } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
@@ -666,6 +690,14 @@ Data table with flexible cell content, striped rows, compact sizing, and support
 - Import: `import { Table } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/table.md
+
+### Table toolbar
+
+The control bar over a table: search, filter chips, sort, group, columns, density, saved views and a bulk bar, wired to a DataTable in its toolbar slot.
+
+- Import: `import { TableToolbar } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/table-toolbar.md
 
 ### Timeline
 
@@ -1253,7 +1285,7 @@ An edge-anchored modal panel that slides in from any side, for filter panels, de
 
 ### Dropdown menu
 
-Contextual menu with sections, sub-menus, keyboard shortcuts, and inset-gap hover styling.
+Action menu opened from a trigger, with groups, sub-menus, shortcuts, radio and checkbox items, placed to stay on screen.
 
 - Import: `import { DropdownMenu } from 'rift-ds';`
 - Rendering: client component (declares 'use client')

@@ -36,7 +36,7 @@
  *      `### ChatWidget` section in design.md; and its `category` is a
  *      registered component category, since its page joins that section.
  *   7. Every `documented` export is a component the barrel exports.
- *   8. The init bin's chat templates (src/cli/templates/chat/) import only
+ *   8. The init bin's templates (src/cli/templates/chat/, app/ and blocks/) import only
  *      package subpaths the manifest declares, so `npx rift-ds init chat`
  *      can never scaffold an import that does not resolve; and every file
  *      under the templates folder is tracked by git, because the tarball is
@@ -51,6 +51,9 @@
  *      .env.chat.example, in both directions, so a template added or an env
  *      renamed cannot leave the page describing a scaffold that no longer
  *      exists.
+ *  10. The root layout get-started shows (LAYOUT_SNIPPET) is the one
+ *      `init app` prints, line for line, so a first-time user is never
+ *      handed two different layouts.
  *
  * Part of the validate-registry chain.
  */
@@ -326,11 +329,14 @@ function optionalPeersInClosure(entry) {
   }
 }
 
-/* 8. The scaffold templates import only subpaths that exist. */
-{
-  const templatesDir = join(repoRoot, 'src', 'cli', 'templates', 'chat');
+/* 8. The scaffold templates import only subpaths that exist. Every one of
+   the init bin's scaffolds rides beside it the same way, `init chat`'s,
+   `init app`'s and the blocks `init block` copies, so all are held here
+   (the blocks' own registry and closure are validate-blocks.mjs's). */
+for (const scaffoldName of ['chat', 'app', 'blocks']) {
+  const templatesDir = join(repoRoot, 'src', 'cli', 'templates', scaffoldName);
   if (!existsSync(templatesDir)) {
-    errors.push('src/cli/templates/chat/ does not exist (the init bin\'s chat scaffold)');
+    errors.push(`src/cli/templates/${scaffoldName}/ does not exist (the init bin's ${scaffoldName} scaffold)`);
   } else {
     const files = [];
     const collect = (dir) => {
@@ -359,7 +365,15 @@ function optionalPeersInClosure(entry) {
     for (const file of files) {
       for (const match of read(file).matchAll(specifierRe)) {
         const subpath = match[1] === PACKAGE_NAME ? '.' : `.${match[1].slice(PACKAGE_NAME.length)}`;
-        if (!(subpath in exportsMap)) {
+        // An exact key, or a wildcard one (`./components/*`) the subpath fits.
+        const exported =
+          subpath in exportsMap ||
+          Object.keys(exportsMap).some((key) => {
+            if (!key.includes('*')) return false;
+            const [head, tail] = key.split('*');
+            return subpath.startsWith(head) && subpath.endsWith(tail) && subpath.length > head.length + tail.length;
+          });
+        if (!exported) {
           errors.push(
             `${posix(relative(repoRoot, file))} imports "${match[1]}", which is not a subpath the package exports`
           );
@@ -405,6 +419,29 @@ function optionalPeersInClosure(entry) {
     }
     for (const name of pageEnv) {
       if (!envNames.includes(name)) errors.push(`docs/chat/page.tsx ENV_VARS lists "${name}", which .env.chat.example does not set`);
+    }
+  }
+}
+
+/* 10. The root layout `init app` prints and the one get-started shows are
+   the same layout. The page's LAYOUT_SNIPPET is a hand mirror of the
+   lines initApp prints, read here with the package name and the default
+   components/rift path filled in, so the terminal and the page cannot
+   hand a first-time user two different files. */
+{
+  const initSource = read(join(repoRoot, 'src', 'cli', 'init.mjs'));
+  const printed = initSource.match(/for \(const line of \[\n([\s\S]*?)\n {2}\]\) \{/);
+  const pageSource = read(join(repoRoot, 'website', 'src', 'app', 'docs', 'get-started', 'page.tsx'));
+  const shown = pageSource.match(/const LAYOUT_SNIPPET = `([\s\S]*?)`;/);
+  if (!printed || !shown) {
+    errors.push('could not find the layout initApp prints (src/cli/init.mjs) or LAYOUT_SNIPPET (docs/get-started/page.tsx)');
+  } else {
+    const fromInit = [...printed[1].matchAll(/^\s+`(.*)`,$/gm)].map((m) =>
+      m[1].replaceAll('${PACKAGE_NAME}', PACKAGE_NAME).replaceAll('${rift}', '../components/rift')
+    );
+    const fromPage = shown[1].split('\n').filter((line) => !line.startsWith('// '));
+    if (fromInit.join('\n') !== fromPage.join('\n')) {
+      errors.push('get-started LAYOUT_SNIPPET does not match the root layout `init app` prints (src/cli/init.mjs initApp); change them together');
     }
   }
 }

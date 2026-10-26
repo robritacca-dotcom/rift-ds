@@ -1,6 +1,6 @@
 # Dropdown menu
 
-Contextual menu with sections, sub-menus, keyboard shortcuts, and inset-gap hover styling.
+Action menu opened from a trigger, with groups, sub-menus, shortcuts, radio and checkbox items, placed to stay on screen.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 

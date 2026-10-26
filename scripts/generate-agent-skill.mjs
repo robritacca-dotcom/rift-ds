@@ -267,9 +267,12 @@ Import the token stylesheet once, then components from the barrel or by deep sub
 
 \`\`\`tsx
 import '${PACKAGE_NAME}/tokens/tokens.css';
+import '${PACKAGE_NAME}/tokens/base.css'; // the reset and page the components are tuned against
 import { Button } from '${PACKAGE_NAME}';
 import { Input } from '${PACKAGE_NAME}/components/Input/Input';
 \`\`\`
+
+In a Next.js app router project, \`npx ${PACKAGE_NAME} init app\` scaffolds the root wrapper (\`LinkProvider\` with Next's \`Link\`), the colour-mode script and the base theme's font, and prints the root layout to use; then \`npx ${PACKAGE_NAME} init block dashboard\` adds a first page. Start a new screen from a block (\`npx ${PACKAGE_NAME} init block\` lists them) rather than from a blank file.
 
 The package is ESM-only, resolved via exports subpaths: use a bundler that handles CSS and font imports from node_modules (Vite, Next.js, webpack) and set TypeScript's \`moduleResolution\` to \`"bundler"\` (or \`"nodenext"\`). Components are provider-free with one exception: wrap the tree in \`ToastProvider\` if (and only if) the toast queue is used via \`useToast\`. One more is optional: in a routed app, \`LinkProvider\` from \`${PACKAGE_NAME}/behaviors/LinkProvider\` hands every client-rendered component your router's link, so its links navigate without a reload (in Next.js, mount it from a \`'use client'\` file, since the root layout is a Server Component); a component rendered on the server takes \`linkComponent\` on the instance instead.
 
@@ -281,11 +284,11 @@ The token stylesheet defines custom properties and styles no element, so paint t
 
 ## Theming
 
-Components read semantic tokens (\`--color-*\`, \`--radius-*\`, \`--font-*\`, \`--motion-*\`, ...), and every semantic colour token references a \`--primitive-*\` value. Re-theme by overriding primitives: one override cascades through both themes at once. Never hardcode a colour beside the components; override the token it should come from. references/tokens.md lists every semantic token with the value it resolves to in light and dark; the live reference is at ${origin}/foundations, and the MCP endpoint's \`list_tokens\` tool serves the registry.
+Components read semantic tokens (\`--color-*\`, \`--radius-*\`, \`--font-*\`, \`--motion-*\`, ...), and every semantic colour token references a \`--primitive-*\` value. Re-theme by overriding primitives: one override cascades through both themes at once. Never hardcode a colour beside the components; override the token it should come from. references/tokens.md lists every semantic token with the value it resolves to in light and dark; the live reference is at ${origin}/foundations, and the MCP endpoint's \`list_tokens\` tool serves the registry. Never write a token name from memory: look it up there, or read the names from \`tokenRegistry\` in \`${PACKAGE_NAME}/tokens/registry\`, since a misspelt \`var()\` resolves to nothing and fails silently.
 
 ## Charts
 
-Components that import recharts ship from \`${PACKAGE_NAME}/charts\` and need the optional recharts peer dependency. Everything in the main barrel is dependency-free.
+Components that import recharts ship from \`${PACKAGE_NAME}/charts\` and need the optional recharts peer dependency. Everything in the main barrel needs no optional peer: its two runtime dependencies, TanStack Table and TanStack Virtual under DataTable, install with the package.
 
 ## Fonts
 
@@ -419,6 +422,7 @@ ${catalogSections.join('\n\n')}
     `- Depth: the only shadows are ${token('--shadow-floating')} for floating surfaces and ${token('--shadow-modal')} for modals. Everything else separates from the page through the container colours, so remove other shadows instead of mapping them.`,
     `- Type: each text style is a bundle of tokens, ${c('--font-<style>-family')}, ${c('-size')}, ${c('-weight')}, ${c('-line-height')} and ${c('-letter-spacing')}. The styles are ${typeStyles.map(c).join(', ')}. Apply a whole bundle. Do not mix one style's size with another's weight.`,
     `- Icons: set ${c('--icon-size')} on the icon to a step from ${prefixes('icons')}. Never set ${c('font-size')} on an icon.`,
+    `- Control heights: ${prefixes('controls')}, the height every row control (field, button, picker, segmented control) takes at the default and compact sizes, border included. A control of your own that sits in a row takes the same token, so the row lines up.`,
     `- Motion: ${prefixes('motion')} for durations and easings in CSS. A timing that lives in a JavaScript timer comes from ${c(`${PACKAGE_NAME}/tokens/motion`)}.`,
     `- Stacking: ${prefixes('stacking')}. A surface that rises over the page (a menu, a dialog, a toast) takes the layer for its role instead of a picked z-index. Order inside one component (a label over a pill) can stay a small number under 10.`,
     '',
@@ -588,13 +592,19 @@ export function assembleAgentStarter() {
   };
 
   // Dependencies, read from the manifest that ships: the required peers are
-  // the ones not marked optional, and the shipped manifest carries no
-  // runtime dependencies.
+  // the ones not marked optional, and the runtime dependencies are named so
+  // an agent knows they arrive with the install rather than adding them. The
+  // one known today is TanStack Table; a new one fails generation until the
+  // sentence that explains it is written.
   const rootPkg = JSON.parse(readFileSync(join(repoRoot, 'package.json'), 'utf8'));
   const shipped = distManifest(rootPkg);
-  if (shipped.dependencies && Object.keys(shipped.dependencies).length > 0) {
-    throw new Error('generate-agent-skill.mjs: the starter says the package has no runtime dependencies, and the shipped manifest now has some. Update the Dependencies section.');
+  const runtimeDeps = Object.keys(shipped.dependencies ?? {});
+  const EXPLAINED_DEPS = new Set(['@tanstack/react-table', '@tanstack/react-virtual']);
+  const unexplained = runtimeDeps.filter((name) => !EXPLAINED_DEPS.has(name));
+  if (unexplained.length > 0) {
+    throw new Error(`generate-agent-skill.mjs: the shipped manifest depends on ${unexplained.join(', ')}, which the starter's Install section does not explain. Add it there and to EXPLAINED_DEPS.`);
   }
+  const depList = listJoin(runtimeDeps.map((name) => `\`${name}\` ${shipped.dependencies[name]}`));
   const peers = shipped.peerDependencies;
   const optional = shipped.peerDependenciesMeta ?? {};
   const peer = (name) => {
@@ -605,6 +615,11 @@ export function assembleAgentStarter() {
   // The chat's peers are not listed: the init bin prints the exact set its
   // scaffold imports, and a second list here could only disagree with it.
   const widget = chatRegistry.widgets[0];
+  // The blocks the bin can copy in, read from the registry it ships.
+  const { blocks } = JSON.parse(
+    readFileSync(join(repoRoot, 'src', 'cli', 'templates', 'blocks', 'registry.json'), 'utf8')
+  );
+  const firstBlock = blocks.find((b) => b.name === 'dashboard') ?? blocks[0];
 
   // Written to the agent, never to the person: once the file is saved or
   // pasted, the agent is its only reader. How to save it is the page's job.
@@ -612,44 +627,47 @@ export function assembleAgentStarter() {
 
 You are building React UI with ${PACKAGE_NAME} ${PACKAGE_VERSION}. Follow this file before writing any code with it. It was generated from the library's registries, so every name in it exists.
 
-## Install
+## Start a Next.js app
+
+In a Next.js app router project (a fresh \`create-next-app\` is one), three commands give a themed first page:
+
+\`\`\`bash
+npm install ${PACKAGE_NAME}
+npx ${BIN_NAME} init app
+npx ${BIN_NAME} init block ${firstBlock.name}
+\`\`\`
+
+1. \`init app\` writes \`components/rift/\`: the wrapper that routes every link through Next's \`Link\`, the script that applies the stored colour mode before first paint, and the base theme's font. It prints the root layout to use. Make \`app/layout.tsx\` exactly that, keeping its metadata, and drop any \`globals.css\` import \`create-next-app\` left there: its body colours and font cover the library's.
+2. \`init block <name>\` copies in a whole starting page built from the library, laid out for desktop and phone: ${listJoin(blocks.map((b) => `\`${b.name}\``))}. With no name it lists them. The files are the project's own from then on, so change them freely.
+3. Start every new screen from a block, or inside the \`AppShell\` the app shell and dashboard blocks write to \`components/blocks/\`, never from a blank file, then fill it with library components.
+
+The init commands only add files and never overwrite one, so they are safe to run again.
+
+## Install anywhere else
 
 \`\`\`bash
 npm install ${PACKAGE_NAME}
 \`\`\`
 
-- Required peers: ${listJoin(required.map(peer))}. The package has no runtime dependencies, so add nothing else for it.
+- Required peers: ${listJoin(required.map(peer))}. It brings its own runtime dependencies, ${depList} (the engine and the windowing under \`DataTable\`), which install with it, so add nothing else for them.
 - ${peer('recharts')} is optional. Install it only if you import from \`${subpath('./charts')}\`.
 - It is ESM-only. Use a bundler that handles CSS and font imports (Vite, Next.js, webpack), with TypeScript's \`moduleResolution\` set to \`"bundler"\` or \`"nodenext"\`.
 
-## Setup
+## Setup by hand
+
+What \`init app\` does, for an app it does not cover:
 
 \`\`\`tsx
 import '${PACKAGE_NAME}/tokens/tokens.css'; // once, at the app root
+import '${PACKAGE_NAME}/tokens/base.css'; // the reset and page the components are tuned against
 import { Button } from '${PACKAGE_NAME}';
 \`\`\`
 
-- Paint the page: \`body\` takes ${token('--color-bg-page-primary')}, ${token('--color-text-primary')} and ${token('--font-family-primary')}.
-- Dark mode is \`data-theme="dark"\` on \`<html>\`. A shipped theme is \`data-brand\` there too, with \`${subpath('./tokens/presets/*.css').replace('*', 'presets')}\` imported once.
+- \`base.css\` paints the page (\`body\` on ${token('--color-bg-page-primary')}, ${token('--color-text-primary')} and ${token('--font-family-primary')}) and resets box sizing and margins; without it, components render too padded.
 - The base theme's typeface is not bundled. It is designed around Nunito Sans: load that (or your own) and set ${token('--font-family-primary')} to it. A shipped theme bundles its own faces, and the icon font always ships.
-- Wrap the tree in \`ToastProvider\` only if you call \`useToast\` (both from the ${component('Toast')} module). No other component needs a provider; \`LinkProvider\` (below) is optional and only routes links.
-
-In a routed app, hand the router's link to \`LinkProvider\`, or every component link reloads the page. In Next.js the root layout is a Server Component, so the provider goes in a client file of its own, mounted around \`children\` in the layout:
-
-\`\`\`tsx
-'use client';
-import Link from 'next/link';
-import { LinkProvider } from '${subpath('./behaviors/LinkProvider')}';
-
-export function AppLinks({ children }: { children: React.ReactNode }) {
-  return <LinkProvider linkComponent={Link}>{children}</LinkProvider>;
-}
-
-// app/layout.tsx
-<body><AppLinks>{children}</AppLinks></body>
-\`\`\`
-
-A component rendered by a Server Component cannot read the provider, so pass \`linkComponent={Link}\` on that instance instead.
+- Dark mode is \`data-theme="dark"\` on \`<html>\`. \`colorModeScript()\` from \`${PACKAGE_NAME}/components/ThemeToggle/colorMode\` applies the stored choice before first paint, and \`ThemeToggle\` changes it. A shipped theme is \`data-brand\` on \`<html>\`, with \`${subpath('./tokens/presets/*.css').replace('*', 'presets')}\` imported once.
+- In a routed app, wrap the tree in \`LinkProvider\` from \`${subpath('./behaviors/LinkProvider')}\` with the router's link, or every component link reloads the page. A component rendered by a Server Component cannot read it, so pass \`linkComponent\` on that instance instead.
+- Wrap the tree in \`ToastProvider\` only if you call \`useToast\` (both from the ${component('Toast')} module). No other component needs a provider.
 
 ## AI chat
 
@@ -659,6 +677,7 @@ Do not build a chat UI by hand. \`npx ${BIN_NAME} ${widget.command}\` scaffolds 
 
 - Use a library component before building your own, and never restyle one from outside. If it looks wrong, change a token.
 - Never write a raw colour, spacing, radius, font value or duration. Use the semantic token for the role, not the nearest value.
+- Never write a token name from memory. Check it in the token reference below, or read the names from \`tokenRegistry\` in \`${subpath('./tokens/registry')}\`: a misspelt \`var()\` resolves to nothing and fails without a sound.
 - ${token('--color-action-primary-bg')} marks the primary action, focus, and checked or selected state. Never decoration.
 - Status colours come from the \`--color-status-*\` family, such as ${token('--color-status-error-text')}.
 - The only shadows are ${listJoin(tokenRegistry.categories.shadow.map(token))}.

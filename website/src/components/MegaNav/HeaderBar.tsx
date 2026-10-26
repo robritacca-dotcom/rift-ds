@@ -5,36 +5,20 @@ import type { MouseEvent as ReactMouseEvent } from "react";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
 import BrandSwitcher from "../BrandSwitcher/BrandSwitcher";
 import { openSitePalette } from "../SitePalette/palette-bus";
-import { Kbd } from "rift-ds/components/Kbd/Kbd";
+import { CommandPaletteTrigger } from "rift-ds/components/CommandPaletteTrigger/CommandPaletteTrigger";
 import { getNavSections } from "@/config/navigation";
 import MegaPanel from "./MegaPanel";
 import SiteLogo from "./SiteLogo";
 import styles from "./MegaNav.module.css";
 
-/** The input-dressed button that opens the global command palette. */
+/** The input-dressed button that opens the global command palette: the
+ * package's CommandPaletteTrigger, at the header's 320px (the stylesheet
+ * folds it to the icon circle when the bar runs out of room). */
 function SearchButton({ tabIndex }: { tabIndex?: number }) {
   return (
     // Opens the global palette mounted from the root layout — the two trees
     // never meet, so the click travels via palette-bus.
-    <button
-      type="button"
-      className={styles.searchBtn}
-      onClick={openSitePalette}
-      aria-label="Search or ask anything"
-      aria-keyshortcuts="Meta+K"
-      tabIndex={tabIndex}
-    >
-      <span className="material-symbols-rounded" aria-hidden="true">
-        search
-      </span>
-      <span className={styles.searchLabel} aria-hidden="true">
-        Search or ask anything
-      </span>
-      <span className={styles.searchKeys} aria-hidden="true">
-        <Kbd size="compact">⌘</Kbd>
-        <Kbd size="compact">K</Kbd>
-      </span>
-    </button>
+    <CommandPaletteTrigger className={styles.searchBtn} onClick={openSitePalette} tabIndex={tabIndex} />
   );
 }
 

@@ -65,6 +65,9 @@ It also runs **scoped** inside other flows: `new-component` runs it on a new com
    - **One word for danger: `destructive`.** Flag `danger`, `negative` and other strays naming the same thing, unless the value is a labelled legacy alias in `LEGACY_VALUES`
    - **Data entries take a boolean, components take a tone.** An item inside a data array (a menu item, a command row) marks danger with `destructive?: boolean`; a component marks it with `tone`. Flag the two crossed
 
+   **Popup side vocabulary:**
+   - The components that open an anchored panel name its preferred side with `position` (Tooltip, Popover, HoverCard), `placement` (ModelPicker, ThemePicker, AiButton's `summaryPlacement` and `requestPlacement`) or `align` for the edge (DropdownMenu, SplitButton, ThemePicker). Those are settled and never renamed (the API only grows); flag a new component that introduces a fourth spelling, or uses one of these words for something else
+
    **Missing standard props on interactive components:**
    - All components rendering clickable/interactive elements should have `className?: string`
    - All components with visual disabled states should have `disabled?: boolean`

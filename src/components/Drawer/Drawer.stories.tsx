@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { Drawer } from './Drawer';
 import { Button } from '../Button/Button';
 import { Input } from '../Input/Input';
@@ -72,6 +73,15 @@ export const Default: Story = {
       </p>
     </DrawerDemo>
   ),
+  /* The panel's data-state follows the open state, so a consumer can style
+     and test it without reading the modifier class. */
+  play: async ({ canvasElement }) => {
+    await userEvent.click(within(canvasElement).getByRole('button', { name: 'Open drawer' }));
+    const panel = await within(document.body).findByRole('dialog');
+    await expect(panel).toHaveAttribute('data-state', 'open');
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(panel).toHaveAttribute('data-state', 'closed'));
+  },
 };
 
 export const Left: Story = {

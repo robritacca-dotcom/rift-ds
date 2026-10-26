@@ -4,6 +4,7 @@ import React, { useCallback, useId, useRef, useState } from 'react';
 import { CheckboxIndicator } from '../Checkbox/Checkbox';
 import { ChosenMark } from '../Dropdown/Dropdown';
 import { useLayer } from '../../behaviors/useLayer';
+import { useAnchoredPosition } from '../../behaviors/useAnchoredPosition';
 import './FilterBar.css';
 import '../../fonts/material-symbols.css';
 
@@ -93,6 +94,25 @@ export const FilterBar = React.forwardRef<HTMLDivElement, FilterBarProps>(
     const [openId, setOpenId] = useState<string | null>(null);
     const [focusedIndex, setFocusedIndex] = useState(-1);
     const filterRefs = useRef(new Map<string, HTMLDivElement>());
+    // The open filter's chip and listbox: one popover is open at a time, so
+    // one placement follows whichever chip opened it.
+    const openChipRef = useRef<HTMLSpanElement | null>(null);
+    const openPanelRef = useRef<HTMLUListElement | null>(null);
+
+    // Placed against the chip by the shared anchored-position behaviour, as
+    // Dropdown's list is: fixed, at least the chip's width, flipped above
+    // when there is no room below, capped to the room it has.
+    useAnchoredPosition({
+      open: openId !== null,
+      target: openId,
+      anchorRef: openChipRef,
+      panelRef: openPanelRef,
+      side: 'bottom',
+      align: 'start',
+      gapProperty: '--gap-050',
+      fitHeight: true,
+      matchWidth: true,
+    });
 
     const activeValues = values ?? uncontrolledValues;
 
@@ -245,7 +265,16 @@ export const FilterBar = React.forwardRef<HTMLDivElement, FilterBarProps>(
                 else filterRefs.current.delete(filter.id);
               }}
             >
-              <span className={chipClasses}>
+              <span
+                className={chipClasses}
+                ref={
+                  isOpen
+                    ? (node) => {
+                        openChipRef.current = node;
+                      }
+                    : undefined
+                }
+              >
                 <button
                   type="button"
                   className={`${baseClass}__trigger`}
@@ -292,6 +321,7 @@ export const FilterBar = React.forwardRef<HTMLDivElement, FilterBarProps>(
               </span>
               {isOpen && (
                 <ul
+                  ref={openPanelRef}
                   id={listboxId}
                   className={`${baseClass}__panel`}
                   role="listbox"

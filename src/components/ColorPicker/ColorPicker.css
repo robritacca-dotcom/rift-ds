@@ -84,11 +84,10 @@
 
 /* Panel */
 
+/* Placed by the shared anchored-position behaviour
+   (src/behaviors/useAnchoredPosition.ts): fixed, flipped above when there
+   is no room below, shifted to stay on screen. */
 .ds-colorpicker__panel {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  margin-top: var(--gap-050);
   width: 240px;
   padding: var(--padding-300);
   display: flex;

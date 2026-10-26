@@ -24,3 +24,4 @@ Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same dat
 | waitingLabel | `string` | no | `Waiting for your decision` | Visually hidden status announced while the card waits for a decision. Defaults to "Waiting for your decision". |
 | className | `string` | no | `` | Additional CSS classes |
 | children | `ReactNode` | no |  | Detail slot between the description and the options — typically a `<ToolCall status="pending">` showing what wants to run. |
+| bare | `boolean` | no | `false` | Strip the card chrome (fill, border, radius) when the card sits inside another panel that supplies the surface, such as AiButton's request panel. |

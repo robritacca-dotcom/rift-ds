@@ -22,9 +22,10 @@
   display: inline-flex;
   align-items: center;
   gap: var(--gap-050);
-  /* CircularButton's 40px, so the pill and the composer's round icon
-     buttons read as one row of equals — same height, same resting shape. */
-  height: 40px;
+  /* The row height (--control-height-*), CircularButton's too, so the pill
+     and the composer's round icon buttons read as one row of equals. */
+  box-sizing: border-box;
+  height: var(--control-height-default);
   padding: 0 var(--padding-400);
   background-color: var(--color-action-passive-bg);
   border: none;
@@ -37,6 +38,11 @@
   line-height: var(--font-paragraph-sm-emphasis-line-height);
   letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
   transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-model-picker--compact .ds-model-picker__trigger {
+  height: var(--control-height-compact);
+  padding: 0 var(--padding-300);
 }
 
 .ds-model-picker__trigger:hover {
@@ -72,9 +78,10 @@
    PANEL
    ============================================ */
 
+/* Placed by the shared anchored-position behaviour
+   (src/behaviors/useAnchoredPosition.ts): fixed, on the `placement` side,
+   flipped when that side has no room. */
 .ds-model-picker__panel {
-  position: absolute;
-  left: 0;
   z-index: var(--layer-dropdown);
   min-width: 260px;
   display: flex;
@@ -88,12 +95,8 @@
   overflow: hidden;
 }
 
-.ds-model-picker--bottom .ds-model-picker__panel {
-  top: calc(100% + var(--gap-050));
-}
-
-.ds-model-picker--top .ds-model-picker__panel {
-  bottom: calc(100% + var(--gap-050));
+.ds-model-picker__panel[data-side='top'] {
+  transform-origin: bottom left;
 }
 
 /* ============================================

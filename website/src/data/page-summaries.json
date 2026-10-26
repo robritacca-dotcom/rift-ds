@@ -224,6 +224,56 @@
         }
       ]
     },
+    "/docs/blocks": {
+      "title": "Blocks",
+      "text": "Whole starting pages for a new app, the layout and spacing set, each added with one command.",
+      "chips": [
+        {
+          "id": "add",
+          "label": "How do I add a block?",
+          "prompt": "How do I add a block to my app with npx rift-ds init block?"
+        },
+        {
+          "id": "which",
+          "label": "Which blocks are there?",
+          "prompt": "Which blocks are there, and what does each one include?"
+        }
+      ],
+      "starters": [
+        {
+          "id": "what",
+          "label": "What is a block?"
+        },
+        {
+          "id": "add",
+          "label": "How do I add a block?"
+        },
+        {
+          "id": "shell",
+          "label": "What is in the app shell?"
+        },
+        {
+          "id": "dashboard",
+          "label": "What does the dashboard block hold?"
+        },
+        {
+          "id": "mobile",
+          "label": "How do blocks work on a phone?"
+        },
+        {
+          "id": "own",
+          "label": "Can I change a block after adding it?"
+        },
+        {
+          "id": "setup",
+          "label": "What should I run before a block?"
+        },
+        {
+          "id": "overwrite",
+          "label": "Will a block overwrite my files?"
+        }
+      ]
+    },
     "/skills": {
       "title": "Agent skills",
       "text": "The repeatable jobs the coding agent runs on this repo: audits, shipping flows, and content loops.",

@@ -1,7 +1,8 @@
 "use client";
 
-import { useCallback, useSyncExternalStore } from "react";
-import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
+import { ThemeToggle as LibraryThemeToggle } from "rift-ds/components/ThemeToggle/ThemeToggle";
+import type { ColorModeSetting } from "rift-ds/components/ThemeToggle/colorMode";
+import { useColorMode } from "rift-ds/components/ThemeToggle/useColorMode";
 import styles from "./ThemeToggle.module.css";
 
 /** The three settings, in the order every theme control shows them. */
@@ -12,80 +13,28 @@ export const themeSegments = [
 ];
 
 /**
- * Two attributes on <html> carry the theme, both set by the inline script in
- * layout.tsx before first paint and mutated on toggle:
- *
- * - `data-theme-setting` is the visitor's choice — system, light or dark.
- *   System is the default; this control renders it.
- * - `data-theme` is what that resolves to — light or dark — and is what every
- *   stylesheet and theme-reading component consumes. While the setting is
- *   system, the inline script's matchMedia listener keeps it following the OS.
- *
- * Every ThemeToggle instance (in-flow header, sticky header, mobile menu)
- * subscribes to the attribute, so they all stay in sync no matter which one
- * is clicked, and they never drift on client-side navigation.
+ * The visitor's theme setting and the one way to change it: the package's
+ * own useColorMode, which writes data-theme-setting and data-theme on <html>
+ * (set first by the inline script in layout.tsx, built from the package's
+ * colorModeScript) and persists the choice. Every theme control on the site
+ * reads and writes through it (the header's here, and the immersive stages'
+ * StageThemeFlip), so they behave identically and match what a consumer of
+ * the package gets.
  */
-function subscribe(callback: () => void) {
-  const observer = new MutationObserver(callback);
-  observer.observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: ["data-theme-setting"],
-  });
-  // Reflect theme changes made in other tabs.
-  window.addEventListener("storage", callback);
-  return () => {
-    observer.disconnect();
-    window.removeEventListener("storage", callback);
-  };
-}
-
-function getSnapshot() {
-  return document.documentElement.getAttribute("data-theme-setting") || "system";
-}
-
-// Matches the SSR value of data-theme-setting on <html> in layout.tsx.
-function getServerSnapshot() {
-  return "system";
+export function useThemeSetting(): [setting: string, setSetting: (value: string) => void] {
+  const [setting, setSetting] = useColorMode();
+  return [setting, (value) => setSetting(value as ColorModeSetting)];
 }
 
 /**
- * The visitor's theme setting and the one way to change it: system, light
- * or dark, resolved onto data-theme and persisted. Every theme control on
- * the site reads and writes through this (the header's here, and the
- * immersive stages' StageThemeFlip), so they behave identically.
+ * The site's header toggle: the package's ThemeToggle as an icon strip
+ * (its labels become tooltips) at the default size, the 40px row height the
+ * header's other controls share.
  */
-export function useThemeSetting(): [setting: string, setSetting: (value: string) => void] {
-  const setting = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
-
-  const setSetting = useCallback((value: string) => {
-    const root = document.documentElement;
-    root.setAttribute("data-theme-setting", value);
-    const resolved =
-      value === "system"
-        ? window.matchMedia("(prefers-color-scheme: dark)").matches
-          ? "dark"
-          : "light"
-        : value;
-    root.setAttribute("data-theme", resolved);
-    localStorage.setItem("theme", value);
-    // No setState needed — the MutationObserver above notifies every instance.
-  }, []);
-
-  return [setting, setSetting];
-}
-
 export default function ThemeToggle({ className }: { className?: string }) {
-  const [setting, handleChange] = useThemeSetting();
-
   return (
     <div className={`${styles.themeToggle} ${className || ""}`}>
-      <SegmentedControl
-        segments={themeSegments}
-        value={setting}
-        onValueChange={handleChange}
-        size="compact"
-        aria-label="Theme"
-      />
+      <LibraryThemeToggle size="default" showLabels={false} aria-label="Theme" />
     </div>
   );
 }

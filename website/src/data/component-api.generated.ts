@@ -366,7 +366,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "state",
             "type": "AgentStatusState",
             "required": false,
-            "description": "What the agent is doing. Drives the colour and whether the dots animate, as on AgentStatus.",
+            "description": "What the agent is doing. Drives the colour and whether the dots animate, as on AgentStatus. Defaults to `working`, unlike AgentStatus's `thinking`: the mark stands in for an icon on a control (AiButton's, a pill's), where the commonest moment it is drawn is a run under way, while the labelled AgentStatus most often opens a reply.",
             "defaultValue": "working"
           },
           {
@@ -428,17 +428,16 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Whether the button is disabled"
           },
           {
-            "name": "status",
+            "name": "state",
             "type": "AgentStatusState",
             "required": false,
             "description": "What the agent behind the button is doing, in AgentStatus's vocabulary.\nThe label never changes; the icon carries the state. `thinking` and\n`working` show AgentStatusMark and spin the ring faster, `waiting` shows\nthe mark breathing in the warning colour with the ring at rest, and `done` and\n`error` turn the button to their status colours with the mark filled\nsolid in the status colour, then return to the resting look after a\nbeat. The button stays clickable throughout, unlike Button's\n`loading`, so a click can open the conversation to watch the work."
           },
           {
-            "name": "statusLabel",
-            "type": "((status: AgentStatusState) => string)",
+            "name": "statusLabels",
+            "type": "Partial<Record<AgentStatusState, string>>",
             "required": false,
-            "description": "What a screen reader hears when the status changes, given the status. Defaults to English per status; `idle` says nothing.",
-            "defaultValue": "(s: AgentStatusState) => DEFAULT_STATUS_LABELS[s]"
+            "description": "What a screen reader hears when the state changes, per state, merged over the English defaults; `idle` says nothing."
           },
           {
             "name": "href",
@@ -475,7 +474,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "request",
             "type": "ReactNode",
             "required": false,
-            "description": "What the agent needs from the person while `status` is `waiting`: any\ncontent, drawn in a glass panel at the button. An InterruptCard approval\nis the usual filling; a question, a form or a preview work the same way.\nIt opens each time the status becomes `waiting` and stays open without\nhover. Escape or a click on the button folds it back into the button,\nwhere the waiting mark keeps showing, and another click opens it again.\nWhile it is open the summary panel never opens."
+            "description": "What the agent needs from the person while `state` is `waiting`: any\ncontent, drawn in a glass panel at the button. An InterruptCard approval\nis the usual filling; a question, a form or a preview work the same way.\nIt opens each time the state becomes `waiting` and stays open without\nhover. Escape or a click on the button folds it back into the button,\nwhere the waiting mark keeps showing, and another click opens it again.\nWhile it is open the summary panel never opens."
           },
           {
             "name": "requestOpen",
@@ -4558,7 +4557,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "shortcut",
             "type": "string[]",
             "required": false,
-            "description": "The keyboard shortcut drawn as keycaps at the end, one key per entry. Pass an empty array for none.",
+            "description": "The keyboard shortcut drawn as keycaps at the end, one key per entry. Pass an empty array for none. The default draws the Mac's ⌘ K and announces both it and Ctrl+K, as CommandPalette answers to either; off a Mac, pass `['Ctrl', 'K']` to draw the keys the reader presses.",
             "defaultValue": "['⌘', 'K']"
           },
           {
@@ -5260,13 +5259,6 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "false"
           },
           {
-            "name": "loadingMoreLabel",
-            "type": "string",
-            "required": false,
-            "description": "The loading row's words. Defaults to \"Loading more\".",
-            "defaultValue": "Loading more"
-          },
-          {
             "name": "manual",
             "type": "boolean",
             "required": false,
@@ -5300,9 +5292,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "loadLabels",
-            "type": "{ errorTitle?: string; retry?: string; loading?: string | undefined; } | undefined",
+            "type": "Partial<DataTableLoadLabels>",
             "required": false,
-            "description": "The words of a failed load: the error state's title, its retry button and the skeleton rows' name."
+            "description": "The words of loading and failed loads, merged over their English defaults: the skeleton rows' name, the loading row, a failed load's title and its retry button."
           },
           {
             "name": "renderDetail",
@@ -5415,7 +5407,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "size",
             "type": "\"default\" | \"compact\"",
             "required": false,
-            "description": "The table's density, and the controls' with it: `default` rows with the\nsearch field and pager at the default row-control height, `compact` rows\nwith both at the compact one. Controls inside the rows (checkboxes, grips,\nmenu and action buttons) stay compact at either density, so a row's\nheight is its text's."
+            "description": "The table's density, and the controls' with it: `default` rows with the\nsearch field and pager at the default row-control height, `compact` rows\nwith both at the compact one. Controls inside the rows (checkboxes, grips,\nmenu and action buttons) stay compact at either density, so a row's\nheight is its text's. Defaults to `default`. Unlike a static size, it is\nstate the reader can change from a TableToolbar's density switch: passing\nit controls that state, paired with `defaultSize` and `onSizeChange`."
           },
           {
             "name": "striped",
@@ -13264,6 +13256,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Fires when the menu opens or closes."
           },
           {
+            "name": "disabled",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the picker is disabled: the trigger takes no press and the menu cannot open.",
+            "defaultValue": "false"
+          },
+          {
             "name": "size",
             "type": "\"default\" | \"compact\"",
             "required": false,
@@ -13329,6 +13328,24 @@ export const componentApi: readonly ComponentApiEntry[] = [
       {
         "component": "ThemeToggle",
         "props": [
+          {
+            "name": "value",
+            "type": "\"dark\" | \"system\" | \"light\"",
+            "required": false,
+            "description": "The setting shown, for a host that owns colour mode (its own settings\nstore, or a library such as next-themes). A pick then only calls\n`onValueChange`, and the host applies it. Leave undefined to let the\ntoggle keep the setting in its own store, `useColorMode`."
+          },
+          {
+            "name": "defaultValue",
+            "type": "\"dark\" | \"system\" | \"light\"",
+            "required": false,
+            "description": "The setting applied when the store holds no choice yet, for uncontrolled use. Without it, a first visit follows the operating system."
+          },
+          {
+            "name": "onValueChange",
+            "type": "((value: \"dark\" | \"system\" | \"light\") => void)",
+            "required": false,
+            "description": "Fires with the setting after every pick, controlled or not."
+          },
           {
             "name": "size",
             "type": "\"default\" | \"compact\"",

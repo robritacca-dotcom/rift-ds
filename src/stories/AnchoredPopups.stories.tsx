@@ -254,7 +254,7 @@ export const AiButtonRequest: Story = {
       <AiButton
         label="Agent"
         size="compact"
-        status="waiting"
+        state="waiting"
         requestPlacement="bottom"
         request={<InterruptCard bare title="Allow file edit?" options={[{ value: 'ok', label: 'Allow' }]} />}
       />

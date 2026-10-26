@@ -9,7 +9,7 @@ import '../../fonts/material-symbols.css';
 type CommandPaletteTriggerOwnProps = {
   /** The prompt the field shows, which is also the button's accessible name. */
   label?: string;
-  /** The keyboard shortcut drawn as keycaps at the end, one key per entry. Pass an empty array for none. */
+  /** The keyboard shortcut drawn as keycaps at the end, one key per entry. Pass an empty array for none. The default draws the Mac's ⌘ K and announces both it and Ctrl+K, as CommandPalette answers to either; off a Mac, pass `['Ctrl', 'K']` to draw the keys the reader presses. */
   shortcut?: string[];
   /** Leading icon — Material Symbol name (string) or custom element (ReactNode). */
   icon?: string | React.ReactNode;
@@ -58,11 +58,13 @@ export const CommandPaletteTrigger = React.forwardRef<HTMLButtonElement, Command
     ]
       .filter(Boolean)
       .join(' ');
-    const keyNames = shortcut.map((key) => (key === '⌘' ? 'Meta' : key)).join('+');
+    const keyNames = shortcut.map((key) => (key === '⌘' ? 'Meta' : key === 'Ctrl' ? 'Control' : key)).join('+');
+    /* The palette answers to ⌘ K and Ctrl+K both, so a ⌘ shortcut announces its Ctrl twin too. */
+    const announced = keyNames.startsWith('Meta+') ? `${keyNames} ${keyNames.replace('Meta+', 'Control+')}` : keyNames;
     return (
       <button
         aria-label={label}
-        aria-keyshortcuts={keyNames || undefined}
+        aria-keyshortcuts={announced || undefined}
         title={iconOnly ? label : undefined}
         {...rest}
         ref={ref}

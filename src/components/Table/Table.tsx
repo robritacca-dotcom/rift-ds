@@ -17,8 +17,8 @@ export interface TableColumn {
   width?: string;
   /** Text alignment for cells in this column */
   align?: 'left' | 'center' | 'right';
-  /** The column's current sort, set as `aria-sort` on its header so a screen reader announces it while reading the column. Leave unset on unsorted columns. */
-  sort?: 'ascending' | 'descending';
+  /** The column's current sort, the direction DataTable's sorts use, set as `aria-sort` on its header so a screen reader announces it while reading the column. Leave unset on unsorted columns. */
+  sort?: 'asc' | 'desc';
   /** Whether this column names each row. Its cells render as row headers (`<th scope="row">`), so moving along a row announces which record it is. */
   rowHeader?: boolean;
 }
@@ -123,7 +123,7 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
                 key={col.key}
                 className={`${baseClass}__header-cell`}
                 scope="col"
-                aria-sort={col.sort}
+                aria-sort={col.sort === 'asc' ? 'ascending' : col.sort === 'desc' ? 'descending' : undefined}
                 style={{
                   width: col.width,
                   textAlign: col.align || 'left',

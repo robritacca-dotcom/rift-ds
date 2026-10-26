@@ -158,7 +158,7 @@ export default function AiButtonPage() {
           <section className={styles.section}>
             <SectionTitle title="Status" />
             <p className={styles.demoText}>
-              With status, the button reports what the agent behind it is
+              With state, the button reports what the agent behind it is
               doing, in AgentStatus&rsquo;s vocabulary. The label never
               changes; the icon carries the state. Thinking and working swap
               the icon for the agent mark, a square of dots sized exactly to
@@ -183,8 +183,8 @@ export default function AiButtonPage() {
               <Button label="Run a task" variant="secondary" size="compact" onClick={runTask} />
             </div>
             <div className={styles.row}>
-              <AiButton label="Agent" status={status} />
-              <AiButton label="Agent" size="compact" status={status} />
+              <AiButton label="Agent" state={status} />
+              <AiButton label="Agent" size="compact" state={status} />
             </div>
           </section>
 
@@ -195,7 +195,7 @@ export default function AiButtonPage() {
               When the agent stops to ask, request puts what it needs in a
               glass panel at the button, so the question appears where the
               person is already looking. Any content works; an InterruptCard
-              approval is the usual one. The panel opens each time the status
+              approval is the usual one. The panel opens each time the state
               becomes waiting. Escape or a click on the button folds it away,
               the waiting mark stays, and another click brings it back. Run the
               task, then answer the card.
@@ -206,7 +206,7 @@ export default function AiButtonPage() {
             <div className={`${styles.row} ${styles.requestClearance}`}>
               <AiButton
                 label="Agent"
-                status={askStatus}
+                state={askStatus}
                 requestPlacement="bottom"
                 request={
                   <InterruptCard

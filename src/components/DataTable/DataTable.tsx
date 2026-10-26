@@ -271,6 +271,18 @@ export interface DataTableColumnPinning {
 }
 
 /** Every word the column and row controls show or announce, each defaulting to English. */
+/** Every word the table shows while rows load or fail to, each defaulting to English. */
+export interface DataTableLoadLabels {
+  /** The skeleton rows' name, and the refetch line's. */
+  loading: string;
+  /** The loading row that ends the rows while `hasMore` fetches the next batch. */
+  loadingMore: string;
+  /** The title of a failed load, in the error state and the Banner. */
+  errorTitle: string;
+  /** The button that calls `onRetry`. */
+  retry: string;
+}
+
 export interface DataTableColumnLabels {
   /** Accessible name of a column's menu button, given the header text. */
   menu: (header: string) => string;
@@ -586,8 +598,6 @@ type DataTableOwnProps<R extends DataTableRow = DataTableRow> = {
   onLoadMore?: () => void;
   /** Whether more rows can be fetched: shows a loading row at the end and calls `onLoadMore` as it comes into view. */
   hasMore?: boolean;
-  /** The loading row's words. Defaults to "Loading more". */
-  loadingMoreLabel?: string;
   /**
    * Hands sorting, filtering, search and paging to the host, for a table
    * whose rows live on a server. The table stops doing them itself and
@@ -606,8 +616,8 @@ type DataTableOwnProps<R extends DataTableRow = DataTableRow> = {
   error?: string;
   /** Called by the error state's Try again button. Without it the error shows with no button. */
   onRetry?: () => void;
-  /** The words of a failed load: the error state's title, its retry button and the skeleton rows' name. */
-  loadLabels?: { errorTitle?: string; retry?: string; loading?: string };
+  /** The words of loading and failed loads, merged over their English defaults: the skeleton rows' name, the loading row, a failed load's title and its retry button. */
+  loadLabels?: Partial<DataTableLoadLabels>;
   /** Renders a row's details: adds a chevron column, and an opened row shows this beneath it, across the table's width. Rendered only once opened. */
   renderDetail?: (row: R) => React.ReactNode;
   /** The ids of the rows whose details are open, for controlled use. Pair with `onExpandedIdsChange`. */
@@ -647,7 +657,9 @@ type DataTableOwnProps<R extends DataTableRow = DataTableRow> = {
    * search field and pager at the default row-control height, `compact` rows
    * with both at the compact one. Controls inside the rows (checkboxes, grips,
    * menu and action buttons) stay compact at either density, so a row's
-   * height is its text's.
+   * height is its text's. Defaults to `default`. Unlike a static size, it is
+   * state the reader can change from a TableToolbar's density switch: passing
+   * it controls that state, paired with `defaultSize` and `onSizeChange`.
    */
   size?: 'default' | 'compact';
   /** Alternating row backgrounds, passed through to the underlying Table. */
@@ -849,7 +861,6 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
   virtualize = 'auto',
   onLoadMore,
   hasMore = false,
-  loadingMoreLabel = 'Loading more',
   renderDetail,
   expandedIds: expandedProp,
   defaultExpandedIds,
@@ -3343,12 +3354,20 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
   };
 
   /* The loading row: the next batch on its way, across the table. */
+  const loadWords = {
+    errorTitle: "Couldn't load the rows",
+    retry: 'Try again',
+    loading: 'Loading rows',
+    loadingMore: 'Loading more',
+    ...loadLabels,
+  };
+
   const loadingRow = (
     <tr ref={loadingRef} className={`ds-table__row ${baseClass}__loading-row`}>
       <td colSpan={columnCount} className={`ds-table__cell ${baseClass}__loading-cell`}>
         <div className={`${baseClass}__loading`} role="status">
           <Spinner size="sm" tone="neutral" />
-          <span>{loadingMoreLabel}</span>
+          <span>{loadWords.loadingMore}</span>
         </div>
       </td>
     </tr>
@@ -3360,12 +3379,6 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
      body, and one over rows already shown is a Banner above them. */
   const firstLoad = loading && rows.length === 0 && !error;
   const refreshing = loading && rows.length > 0;
-  const loadWords = {
-    errorTitle: "Couldn't load the rows",
-    retry: 'Try again',
-    loading: 'Loading rows',
-    ...loadLabels,
-  };
   const retryButton = onRetry && (
     <Button variant="secondary" tone="neutral" size="compact" iconLeft="refresh" label={loadWords.retry} onClick={onRetry} />
   );

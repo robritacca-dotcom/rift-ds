@@ -1,14 +1,25 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { SegmentedControl } from '../SegmentedControl/SegmentedControl';
 import { useAnchoredPosition } from '../../behaviors/useAnchoredPosition';
-import type { ColorModeSetting } from './colorMode';
+import { DEFAULT_COLOR_MODE_STORAGE_KEY, type ColorModeSetting } from './colorMode';
 import { useColorMode } from './useColorMode';
 import './ThemeToggle.css';
 
 /** Props owned by ThemeToggle itself — everything else falls through to the strip. */
 type ThemeToggleOwnProps = {
+  /**
+   * The setting shown, for a host that owns colour mode (its own settings
+   * store, or a library such as next-themes). A pick then only calls
+   * `onValueChange`, and the host applies it. Leave undefined to let the
+   * toggle keep the setting in its own store, `useColorMode`.
+   */
+  value?: ColorModeSetting;
+  /** The setting applied when the store holds no choice yet, for uncontrolled use. Without it, a first visit follows the operating system. */
+  defaultValue?: ColorModeSetting;
+  /** Fires with the setting after every pick, controlled or not. */
+  onValueChange?: (value: ColorModeSetting) => void;
   /** Control size, on SegmentedControl's scale. */
   size?: 'default' | 'compact';
   /** Show each segment's label beside its icon. Set `false` for an icon-only strip: each label becomes the segment's tooltip on hover and keyboard focus, and stays its accessible name. */
@@ -40,6 +51,9 @@ export interface ThemeToggleProps
 export const ThemeToggle = React.forwardRef<HTMLDivElement, ThemeToggleProps>(
   (
     {
+      value,
+      defaultValue,
+      onValueChange,
       size = 'compact',
       showLabels = true,
       storageKey,
@@ -52,7 +66,20 @@ export const ThemeToggle = React.forwardRef<HTMLDivElement, ThemeToggleProps>(
     },
     ref,
   ) => {
-    const [setting, setSetting] = useColorMode({ storageKey });
+    const [storedSetting, setSetting] = useColorMode({ storageKey });
+    const setting = value ?? storedSetting;
+    /* A first visit takes the default; a stored choice always wins. */
+    useEffect(() => {
+      if (value !== undefined || defaultValue === undefined) return;
+      let stored: string | null = null;
+      try {
+        stored = localStorage.getItem(storageKey ?? DEFAULT_COLOR_MODE_STORAGE_KEY);
+      } catch {
+        // Storage unavailable: nothing is stored, so the default applies.
+      }
+      if (stored === null) setSetting(defaultValue);
+      // eslint-disable-next-line react-hooks/exhaustive-deps -- once, on mount
+    }, []);
 
     // The icon strip's tooltips: the label of the segment under the pointer
     // or keyboard focus is placed against its segment by the shared
@@ -108,7 +135,11 @@ export const ThemeToggle = React.forwardRef<HTMLDivElement, ThemeToggleProps>(
           .join(' ')}
         segments={segments}
         value={setting}
-        onValueChange={(value) => setSetting(value as ColorModeSetting)}
+        onValueChange={(picked) => {
+          const next = picked as ColorModeSetting;
+          if (value === undefined) setSetting(next);
+          onValueChange?.(next);
+        }}
         size={size}
         // The icon strip keeps its labels rendered: the stylesheet turns each
         // into the segment's tooltip, so the glyphs are never left unnamed.

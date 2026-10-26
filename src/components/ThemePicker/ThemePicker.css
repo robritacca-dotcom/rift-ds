@@ -36,7 +36,12 @@
   height: var(--control-height-compact);
 }
 
-.ds-theme-picker__trigger:hover,
+.ds-theme-picker__trigger:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ds-theme-picker__trigger:not(:disabled):hover,
 .ds-theme-picker--open .ds-theme-picker__trigger {
   background-color: var(--color-bg-container-secondary);
 }

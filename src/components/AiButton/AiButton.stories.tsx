@@ -9,7 +9,7 @@ const meta = {
   parameters: { layout: 'centered' },
   argTypes: {
     size: { control: 'radio', options: ['default', 'compact'] },
-    status: {
+    state: {
       control: 'select',
       options: [undefined, 'idle', 'thinking', 'working', 'waiting', 'done', 'error'],
     },
@@ -36,11 +36,11 @@ export const Disabled: Story = {
 };
 
 export const Working: Story = {
-  args: { status: 'working', label: 'Agent', size: 'compact' },
+  args: { state: 'working', label: 'Agent', size: 'compact' },
 };
 
 export const Waiting: Story = {
-  args: { status: 'waiting', label: 'Agent', size: 'compact' },
+  args: { state: 'waiting', label: 'Agent', size: 'compact' },
 };
 
 /** Every status side by side at both sizes. Done and error return to the resting icon after a beat. */
@@ -50,7 +50,7 @@ export const Statuses: Story = {
       {(['default', 'compact'] as const).map((size) => (
         <div key={size} style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
           {(['idle', 'thinking', 'working', 'waiting', 'done', 'error'] as const).map((status) => (
-            <AiButton key={status} label="Agent" size={size} status={status} />
+            <AiButton key={status} label="Agent" size={size} state={status} />
           ))}
         </div>
       ))}
@@ -62,7 +62,7 @@ export const Statuses: Story = {
 export const WithRequest: Story = {
   args: {
     label: 'Agent',
-    status: 'waiting',
+    state: 'waiting',
     requestPlacement: 'bottom',
     request: (
       <InterruptCard

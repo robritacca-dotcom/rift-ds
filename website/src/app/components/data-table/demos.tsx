@@ -192,17 +192,17 @@ export function DetailsDemo() {
 }
 
 const VIEWS: TableToolbarView[] = [
-  { id: "all", name: "All accounts", view: { version: 1 } },
+  { id: "all", label: "All accounts", view: { version: 1 } },
   {
     id: "open",
-    name: "Open pipeline",
+    label: "Open pipeline",
     view: {
       version: 1,
       filters: [{ id: "stage-1", column: "stage", operator: "isAnyOf", value: ["lead", "trial", "proposal"] }],
       sorts: [{ key: "value", direction: "desc" }],
     },
   },
-  { id: "owner", name: "By owner", view: { version: 1, grouping: ["owner"], hiddenColumns: ["tags", "site"] } },
+  { id: "owner", label: "By owner", view: { version: 1, grouping: ["owner"], hiddenColumns: ["tags", "site"] } },
 ];
 
 /** Saved views as tabs over the bar. */

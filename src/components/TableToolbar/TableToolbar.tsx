@@ -43,14 +43,14 @@ export interface TableToolbarColumn {
   key: string;
   /** Its header text. */
   label: string;
-  /** Its filter kind: `text`, `number`, `date`, `enum` (choices) or `tags`. Defaults to `text`, or `enum` when it has options. */
-  kind?: FilterKind;
+  /** How it filters: `text`, `number`, `date`, `enum` (choices) or `tags`. Defaults to `text`, or `enum` when it has options. */
+  filterType?: FilterKind;
   /** The choices an `enum` or `tags` filter offers. */
   options?: { value: string; label: string }[];
   /** Whether the Columns panel may hide it. Defaults to true. */
   hideable?: boolean;
-  /** Whether the Columns panel may move it. Defaults to true. */
-  movable?: boolean;
+  /** Whether the Columns panel may move it, DataTable's word for the same. Defaults to true. */
+  reorderable?: boolean;
   /** Whether it can be filtered. Defaults to true. */
   filterable?: boolean;
   /** Whether it can be sorted. Defaults to true. */
@@ -59,12 +59,12 @@ export interface TableToolbarColumn {
   groupable?: boolean;
 }
 
-/** One saved view of the table: its name and its setup. */
+/** One saved view of the table: its label and its setup. */
 export interface TableToolbarView {
   /** Stable id for the view. */
   id: string;
-  /** The view's name, its tab's label. */
-  name: string;
+  /** The view's name, shown as its tab's label. */
+  label: string;
   /** The table's setup the view holds. */
   view: DataTableView;
 }
@@ -551,10 +551,10 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
       columnsProp?.map((col) => ({
         key: col.key,
         label: col.label,
-        kind: col.kind ?? (col.options ? 'enum' : 'text'),
+        kind: col.filterType ?? (col.options ? 'enum' : 'text'),
         options: col.options ?? [],
         hideable: col.hideable ?? true,
-        movable: col.movable ?? true,
+        movable: col.reorderable ?? true,
         filterable: col.filterable ?? true,
         sortable: col.sortable ?? true,
         groupable: col.groupable ?? false,
@@ -1325,7 +1325,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
     const [renaming, setRenaming] = useState<string | null>(null);
     const commitRename = () => {
       const name = renaming?.trim();
-      if (name && active) setViews(views.map((v) => (v.id === active.id ? { ...v, name } : v)));
+      if (name && active) setViews(views.map((v) => (v.id === active.id ? { ...v, label: name } : v)));
       setRenaming(null);
     };
     const pickView = (id: string) => {
@@ -1337,10 +1337,10 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
     const snapshot = (): DataTableView => JSON.parse(JSON.stringify(table!.view)) as DataTableView;
     const addView = () => {
       let n = views.length + 1;
-      while (views.some((v) => v.name === labels.newViewName(n))) n += 1;
+      while (views.some((v) => v.label === labels.newViewName(n))) n += 1;
       let id = `view-${n}`;
       while (views.some((v) => v.id === id)) id = `${id}-x`;
-      setViews([...views, { id, name: labels.newViewName(n), view: snapshot() }]);
+      setViews([...views, { id, label: labels.newViewName(n), view: snapshot() }]);
       setActiveViewId(id);
     };
     const saveActive = () =>
@@ -1366,7 +1366,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
             onClick: () => table?.applyView(active.view),
           },
           { type: 'separator' as const },
-          { label: labels.renameView, icon: 'edit', onClick: () => setRenaming(active.name) },
+          { label: labels.renameView, icon: 'edit', onClick: () => setRenaming(active.label) },
           {
             label: labels.deleteView,
             icon: 'delete',
@@ -1380,8 +1380,8 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
             icon="more_horiz"
             variant="tertiary"
             size="compact"
-            ariaLabel={labels.viewMenu(active.name, dirty)}
-            tooltip={labels.viewMenu(active.name, dirty)}
+            ariaLabel={labels.viewMenu(active.label, dirty)}
+            tooltip={labels.viewMenu(active.label, dirty)}
           />
         }
       />
@@ -1418,7 +1418,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
             aria-label={labels.views}
             options={views.map((v) => ({
               value: v.id,
-              label: v.name,
+              label: v.label,
               // The tabs' dot, not a character in the name: the view menu's name says it aloud.
               icon: v.id === active?.id && dirty ? <span className="ds-table-toolbar__view-dot" /> : undefined,
             }))}
@@ -1432,7 +1432,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
             aria-label={labels.views}
             tabs={views.map((v) => ({
               value: v.id,
-              label: v.name,
+              label: v.label,
               icon: v.id === active?.id && dirty ? <span className="ds-table-toolbar__view-dot" /> : undefined,
             }))}
             value={active?.id}

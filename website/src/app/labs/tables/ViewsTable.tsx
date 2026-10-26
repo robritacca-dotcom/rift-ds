@@ -16,10 +16,10 @@ const columns: DataTableColumn[] = typedColumns.map((col) => ({
 }));
 
 const VIEWS: TableToolbarView[] = [
-  { id: "all", name: "All accounts", view: { version: 1 } },
+  { id: "all", label: "All accounts", view: { version: 1 } },
   {
     id: "open",
-    name: "Open pipeline",
+    label: "Open pipeline",
     view: {
       version: 1,
       filters: [{ id: "stage-1", column: "stage", operator: "isAnyOf", value: ["lead", "trial", "proposal"] }],
@@ -28,7 +28,7 @@ const VIEWS: TableToolbarView[] = [
   },
   {
     id: "owner",
-    name: "By owner",
+    label: "By owner",
     view: { version: 1, grouping: ["owner"], hiddenColumns: ["team", "site", "contacted"] },
   },
 ];

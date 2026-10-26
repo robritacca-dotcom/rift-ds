@@ -67,9 +67,9 @@ type AiButtonOwnProps = {
    * beat. The button stays clickable throughout, unlike Button's
    * `loading`, so a click can open the conversation to watch the work.
    */
-  status?: AgentStatusState;
-  /** What a screen reader hears when the status changes, given the status. Defaults to English per status; `idle` says nothing. */
-  statusLabel?: (status: AgentStatusState) => string;
+  state?: AgentStatusState;
+  /** What a screen reader hears when the state changes, per state, merged over the English defaults; `idle` says nothing. */
+  statusLabels?: Partial<Record<AgentStatusState, string>>;
   /** Optional href — renders as <a> instead of <button> */
   href?: string;
   /** Optional target attribute for links */
@@ -89,10 +89,10 @@ type AiButtonOwnProps = {
   /** Which side of the button the summary panel opens on. */
   summaryPlacement?: 'top' | 'bottom';
   /**
-   * What the agent needs from the person while `status` is `waiting`: any
+   * What the agent needs from the person while `state` is `waiting`: any
    * content, drawn in a glass panel at the button. An InterruptCard approval
    * is the usual filling; a question, a form or a preview work the same way.
-   * It opens each time the status becomes `waiting` and stays open without
+   * It opens each time the state becomes `waiting` and stays open without
    * hover. Escape or a click on the button folds it back into the button,
    * where the waiting mark keeps showing, and another click opens it again.
    * While it is open the summary panel never opens.
@@ -164,8 +164,8 @@ export const AiButton = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, 
       icon = 'auto_awesome',
       size = 'default',
       disabled,
-      status,
-      statusLabel = (s: AgentStatusState) => DEFAULT_STATUS_LABELS[s],
+      state: status,
+      statusLabels,
       href,
       target,
       rel,
@@ -412,7 +412,7 @@ export const AiButton = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, 
     const announcer =
       status !== undefined ? (
         <span className="ds-visually-hidden" role="status">
-          {statusLabel(status)}
+          {{ ...DEFAULT_STATUS_LABELS, ...statusLabels }[status]}
         </span>
       ) : null;
 

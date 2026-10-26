@@ -39,13 +39,12 @@ Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same dat
 | virtualize | `boolean \| "auto"` | no | `auto` | Draws only the rows in view, so a table of thousands scrolls as smoothly as one of ten. `auto` (the default) does it for an unpaged, ungrouped table of more than 200 rows; `true` always; `false` never. A virtualised table scrolls inside its frame (`maxHeight`, 640px when unset), keeps its header in view, and still sends its first screen of rows in the server's HTML. |
 | onLoadMore | `(() => void)` | no |  | Called when the reader scrolls near the end of the rows while `hasMore` is set, to fetch the next batch. Called once per batch: append the rows and it can fire again. |
 | hasMore | `boolean` | no | `false` | Whether more rows can be fetched: shows a loading row at the end and calls `onLoadMore` as it comes into view. |
-| loadingMoreLabel | `string` | no | `Loading more` | The loading row's words. Defaults to "Loading more". |
 | manual | `boolean` | no | `false` | Hands sorting, filtering, search and paging to the host, for a table whose rows live on a server. The table stops doing them itself and reports every change through its pairs (`onSortsChange`, `onFiltersChange`, `onSearchChange`, `onPageChange`, `onPageSizeChange`); pass back `rows` already sorted, filtered and paged. Totals, grouping and Select all work over the rows given, and Select all N from a TableToolbar selects every match as a query. |
 | rowCount | `number` | no |  | Every row that matches on the server, in `manual` mode: drives the pager, the result count and Select all N. Defaults to the rows given. |
 | loading | `boolean` | no | `false` | Whether rows are being fetched. With no rows yet the body shows skeleton rows; with rows on screen they stay, dimmed and inert, under a thin progress line, so the table never blanks. |
 | error | `string` | no |  | A failed load's message. With no rows it replaces the body with an error state; over rows already on screen it shows as a Banner above them. Pair with `onRetry`. |
 | onRetry | `(() => void)` | no |  | Called by the error state's Try again button. Without it the error shows with no button. |
-| loadLabels | `{ errorTitle?: string; retry?: string; loading?: string \| undefined; } \| undefined` | no |  | The words of a failed load: the error state's title, its retry button and the skeleton rows' name. |
+| loadLabels | `Partial<DataTableLoadLabels>` | no |  | The words of loading and failed loads, merged over their English defaults: the skeleton rows' name, the loading row, a failed load's title and its retry button. |
 | renderDetail | `((row: R) => ReactNode)` | no |  | Renders a row's details: adds a chevron column, and an opened row shows this beneath it, across the table's width. Rendered only once opened. |
 | expandedIds | `string[]` | no |  | The ids of the rows whose details are open, for controlled use. Pair with `onExpandedIdsChange`. |
 | defaultExpandedIds | `string[]` | no |  | The rows open to begin with, for uncontrolled use. |
@@ -63,7 +62,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same dat
 | searchable | `boolean` | no | `false` | Shows the built-in search field, matching against every column's raw value. |
 | searchPlaceholder | `string` | no | `Search` | Placeholder for the search field. |
 | toolbar | `ReactNode` | no |  | Slot beside the search field for consumer-owned filter controls. |
-| size | `"default" \| "compact"` | no |  | The table's density, and the controls' with it: `default` rows with the search field and pager at the default row-control height, `compact` rows with both at the compact one. Controls inside the rows (checkboxes, grips, menu and action buttons) stay compact at either density, so a row's height is its text's. |
+| size | `"default" \| "compact"` | no |  | The table's density, and the controls' with it: `default` rows with the search field and pager at the default row-control height, `compact` rows with both at the compact one. Controls inside the rows (checkboxes, grips, menu and action buttons) stay compact at either density, so a row's height is its text's. Defaults to `default`. Unlike a static size, it is state the reader can change from a TableToolbar's density switch: passing it controls that state, paired with `defaultSize` and `onSizeChange`. |
 | striped | `boolean` | no | `false` | Alternating row backgrounds, passed through to the underlying Table. |
 | caption | `string` | no |  | Accessible caption for the underlying table (visually hidden). |
 | emptyState | `ReactNode` | no |  | What to render when no rows match — defaults to a built-in empty state. |

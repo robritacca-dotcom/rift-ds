@@ -40,3 +40,8 @@ export const WithFooter: Story = {
     ),
   },
 };
+
+/** Disabled, the trigger takes no press and the menu stays shut. */
+export const Disabled: Story = {
+  args: { disabled: true },
+};

@@ -166,7 +166,7 @@ const MARK_DOT_COUNT = 16;
 
 /** Props owned by AgentStatusMark itself — everything else falls through to the <span>. */
 type AgentStatusMarkOwnProps = {
-  /** What the agent is doing. Drives the colour and whether the dots animate, as on AgentStatus. */
+  /** What the agent is doing. Drives the colour and whether the dots animate, as on AgentStatus. Defaults to `working`, unlike AgentStatus's `thinking`: the mark stands in for an icon on a control (AiButton's, a pill's), where the commonest moment it is drawn is a run under way, while the labelled AgentStatus most often opens a reply. */
   state?: AgentStatusState;
   /** Which choreography to run: every AgentStatus pattern, redrawn for the square grid. Defaults to `breathe` while `waiting`, a still pulse that reads as the person's turn, and `orbit` otherwise. */
   pattern?: AgentStatusPattern;

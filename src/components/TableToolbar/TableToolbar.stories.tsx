@@ -286,10 +286,10 @@ export const SavedViews: Story = {
       toolbar={
         <TableToolbar
           defaultViews={[
-            { id: 'all', name: 'All issues', view: { version: 1 } },
+            { id: 'all', label: 'All issues', view: { version: 1 } },
             {
               id: 'open',
-              name: 'Open by points',
+              label: 'Open by points',
               view: {
                 version: 1,
                 filters: [{ id: 'status-1', column: 'status', operator: 'isAnyOf', value: ['Open'] }],

@@ -21,6 +21,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.13.0. The same dat
 | open | `boolean` | no |  | Whether the menu is open, controlled. Leave undefined to let the picker open and close itself. |
 | defaultOpen | `boolean` | no | `false` | Whether the menu starts open when uncontrolled. |
 | onOpenChange | `((open: boolean) => void)` | no |  | Fires when the menu opens or closes. |
+| disabled | `boolean` | no | `false` | Whether the picker is disabled: the trigger takes no press and the menu cannot open. |
 | size | `"default" \| "compact"` | no | `default` | Trigger size, on the row-control scale: `default` is 40px, `compact` 32px. |
 | placement | `"top" \| "bottom"` | no | `bottom` | Which side of the trigger the menu prefers; it flips when that side has no room. |
 | align | `"start" \| "end"` | no | `end` | Which trigger edge the menu lines up with. |

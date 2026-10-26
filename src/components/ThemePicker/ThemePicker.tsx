@@ -40,6 +40,8 @@ type ThemePickerOwnProps = {
   defaultOpen?: boolean;
   /** Fires when the menu opens or closes. */
   onOpenChange?: (open: boolean) => void;
+  /** Whether the picker is disabled: the trigger takes no press and the menu cannot open. */
+  disabled?: boolean;
   /** Trigger size, on the row-control scale: `default` is 40px, `compact` 32px. */
   size?: 'default' | 'compact';
   /** Which side of the trigger the menu prefers; it flips when that side has no room. */
@@ -82,6 +84,7 @@ export const ThemePicker = React.forwardRef<HTMLDivElement, ThemePickerProps>(
       open: openProp,
       defaultOpen = false,
       onOpenChange,
+      disabled = false,
       size = 'default',
       placement = 'bottom',
       align = 'end',
@@ -192,11 +195,12 @@ export const ThemePicker = React.forwardRef<HTMLDivElement, ThemePickerProps>(
           aria-haspopup="menu"
           aria-expanded={isOpen}
           aria-controls={isOpen ? menuId : undefined}
+          disabled={disabled}
           onClick={() => setOpen(!isOpen)}
         >
           {swatch(active, 'swatch')}
         </button>
-        {isOpen && (
+        {isOpen && !disabled && (
           <div
             ref={menuRef}
             id={menuId}

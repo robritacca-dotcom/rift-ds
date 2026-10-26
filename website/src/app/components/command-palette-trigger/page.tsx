@@ -68,7 +68,9 @@ export default function CommandPaletteTriggerPage() {
               The trigger only opens: its onClick sets CommandPalette&rsquo;s
               open state, and the palette owns the shortcut. The label and the
               shortcut are props, so the prompt can say what a product&rsquo;s
-              palette does, and aria-keyshortcuts follows the keys drawn.
+              palette does, and aria-keyshortcuts follows the keys drawn: the
+              default ⌘ K also announces Ctrl+K, which the palette answers to
+              too, and off a Mac a host draws Ctrl K instead.
             </p>
           </section>
 

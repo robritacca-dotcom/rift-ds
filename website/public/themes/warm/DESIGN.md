@@ -168,7 +168,7 @@ Take it whole: `import 'rift-ds/tokens/presets/presets.css'` after the tokens, t
 
 ## Colour
 
-One action colour, kept for primary buttons, focus rings, the checked state of a control and the selected item of a set. Everything else is the neutral scale and five status roles. The logo wears the action colour (`logo`).
+One action colour, kept for primary buttons, focus rings, the checked state of a control and the selected item of a set. Everything else is the neutral scale and five status roles. The logo wears the action colour (`logo`). Its mark is a gradient within that one colour (`logo-end`).
 
 | Role | Light | Dark | Token |
 | --- | --- | --- | --- |

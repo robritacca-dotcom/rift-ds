@@ -245,13 +245,44 @@ export function buildThemeDesignMd({ id, label, values, siteUrl, packageName }) 
     default: 'Two shadows, one for what floats and one for dialogs. Everything else separates by contrast.',
   }[depth];
 
-  /* Whether the logo wears the action colour or a tone of its own. */
-  const logoLine =
+  /* The tones, read from what the theme resolves to rather than its levers,
+     so the prose cannot claim a colour the tables do not show. A colour
+     counts as toned when its channels spread past the neutral threshold,
+     and two colours as different families when their hues sit over 30
+     degrees apart. */
+  const rgbOf = (value) => {
+    const h = hex(value).replace('#', '');
+    return [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16));
+  };
+  const chroma = (value) => {
+    const c = rgbOf(value);
+    return (Math.max(...c) - Math.min(...c)) / 255;
+  };
+  const hue = (value) => {
+    const [r, g, b] = rgbOf(value).map((v) => v / 255);
+    const max = Math.max(r, g, b);
+    const d = max - Math.min(r, g, b);
+    if (d === 0) return 0;
+    const h = max === r ? ((g - b) / d) % 6 : max === g ? (b - r) / d + 2 : (r - g) / d + 4;
+    return (h * 60 + 360) % 360;
+  };
+  const isToned = (value) => chroma(value) >= 0.1;
+  const sameFamily = (a, b) =>
+    isToned(a) === isToned(b) && (!isToned(a) || Math.min(Math.abs(hue(a) - hue(b)), 360 - Math.abs(hue(a) - hue(b))) <= 30);
+
+  const markOnAction =
     hex(light('--color-brand-mark')) === hex(light('--color-action-primary-bg')) &&
-    hex(dark('--color-brand-mark')) === hex(dark('--color-action-primary-bg'))
+    hex(dark('--color-brand-mark')) === hex(dark('--color-action-primary-bg'));
+  const twoToneMark = !sameFamily(light('--color-brand-mark'), light('--color-brand-mark-end'));
+  const logoLine = [
+    markOnAction
       ? 'The logo wears the action colour (`logo`).'
-      : 'The logo has a colour of its own (`logo`), apart from the action colour.';
-  /* Which type tiers take a colour of their own rather than the ink. */
+      : 'The logo has a colour of its own (`logo`), apart from the action colour.',
+    twoToneMark
+      ? 'Its mark is a two-tone gradient, running into a second colour (`logo-end`).'
+      : 'Its mark is a gradient within that one colour (`logo-end`).',
+  ].join(' ');
+  /* Which type tiers take a colour of their own rather than the text's. */
   const toned = [
     ['Display type', 'display', '--color-text-display'],
     ['headings', 'heading', '--color-text-heading'],
@@ -259,10 +290,14 @@ export function buildThemeDesignMd({ id, label, values, siteUrl, packageName }) 
     ([, , token]) =>
       hex(light(token)) !== hex(light('--color-text-primary')) || hex(dark(token)) !== hex(dark('--color-text-primary'))
   );
+  const textToned = isToned(light('--color-text-primary')) || isToned(dark('--color-text-primary'));
+  const textPart = textToned ? 'running text takes a hue of its own (`ink`)' : 'running text stays in the ink';
   const tierColourLine =
     toned.length === 0
-      ? 'Every tier is set in the ink.'
-      : `${toned.map(([name, key]) => `${name} take \`${key}\``).join(' and ').replace(/^./, (c) => c.toUpperCase())}, while running text stays in the ink.`;
+      ? textToned
+        ? 'Every tier is set in the text colour, which takes a hue of its own (`ink`).'
+        : 'Every tier is set in the ink.'
+      : `${toned.map(([name, key]) => `${name} \`${key}\``).join(' and ').replace(/^./, (c) => c.toUpperCase())} ${toned.length === 1 && toned[0][1] === 'display' ? 'takes its own colour' : 'take their own colours'}, while ${textPart}.`;
   const row = (cells) => `| ${cells.join(' | ')} |`;
   const colourRows = COLOURS.filter(([, , m]) => m === 'light').map(([key, token]) =>
     row([`\`${key}\``, `\`${hex(light(token))}\``, `\`${hex(dark(token))}\``, `\`${token}\``])
@@ -325,30 +360,31 @@ ${MOTION.map(([key, token]) => `- \`${key}\`: ${light(token)}`).join('\n')}
 }
 
 /** Every file of the surface, as relative path -> content. */
+/** One preset's DESIGN.md, resolved through the composer: the shipped
+    themes go through here, and so does the validator's synthetic theme that
+    sets every tone, which no shipped theme does. `base` is the token files'
+    own resolution, for the shadow comparison. */
+export function designMdForPreset({ preset, id, label, presetOverrides, base = resolveTokenValues(allTokens()) }) {
+  const values = preset
+    ? resolveTokenValues(allTokens(), {
+        light: presetOverrides(preset, 'light'),
+        dark: presetOverrides(preset, 'dark'),
+      })
+    : base;
+  values.baseFloating = base.get('--shadow-floating').light.value;
+  return buildThemeDesignMd({ id, label, values, siteUrl: SITE_URL, packageName: PACKAGE_NAME });
+}
+
 export async function assembleThemeDesignMd() {
   const source = await loadThemeSource();
   const { THEME_PRESETS, THEME_SELECTOR_ORDER, DEFAULT_THEME_LABEL, presetOverrides } = source;
-  const names = allTokens();
-  const base = resolveTokenValues(names);
+  const base = resolveTokenValues(allTokens());
   const files = new Map();
   for (const id of THEME_SELECTOR_ORDER) {
     const preset = THEME_PRESETS[id];
-    const values = preset
-      ? resolveTokenValues(names, {
-          light: presetOverrides(preset, 'light'),
-          dark: presetOverrides(preset, 'dark'),
-        })
-      : base;
-    values.baseFloating = base.get('--shadow-floating').light.value;
     files.set(
       `${id}/${FILE_NAME}`,
-      buildThemeDesignMd({
-        id,
-        label: preset?.label ?? DEFAULT_THEME_LABEL,
-        values,
-        siteUrl: SITE_URL,
-        packageName: PACKAGE_NAME,
-      })
+      designMdForPreset({ preset, id, label: preset?.label ?? DEFAULT_THEME_LABEL, presetOverrides, base })
     );
   }
   return files;

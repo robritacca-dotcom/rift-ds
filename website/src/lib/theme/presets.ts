@@ -543,10 +543,10 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
   },
   marquee: {
     label: "Marquee",
-    // A title card in one colour: mustard is the key, so the buttons, the
-    // headlines and the AI gradient all come from the one ramp, and the
-    // copy stays in the ink. A light key, so the action lever derives dark
-    // labels over the mustard fill on its own.
+    // A title card in two colours: mustard is the key, so the buttons and
+    // the AI gradient come from its ramp, and the tones below set the rust
+    // against it. A light key, so the action lever derives dark labels over
+    // the mustard fill on its own.
     brand: "#C9C340",
     // The greys lean toward a deep blue-green, so the dark page is the
     // inky teal-black of a graded film still rather than a flat black.
@@ -570,14 +570,15 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     tracking: 0,
     iconWeight: 400,
     iconFill: false,
-    // The tones set apart from the action: a rust logo, mustard display
-    // type, and headings and running text in the ink, so a headline, a
-    // heading and the mark can each carry their own colour.
+    // The tones split the hero apart from the mustard buttons: display type
+    // (the headline, its subtitle and the figures) in rust, headings in the
+    // mustard, running text in the ink, and a mark that runs from the rust
+    // into the mustard, so the two colours meet in the logo.
     logoTone: "orange",
     // A two-tone mark: rust running into the mustard.
     logoEndTone: "yellow",
-    displayTone: "yellow",
-    headingTone: "ink",
+    displayTone: "orange",
+    headingTone: "yellow",
     textTone: "ink",
     fontLabel: "Work Sans",
     headingFontLabel: "Anton (condensed)",
@@ -894,7 +895,7 @@ export const THEME_TAGLINES: Readonly<Record<string, string>> = {
   [BASE_THEME_ID]: "The base look: a calm teal on quiet surfaces, set in one friendly face.",
   warm: "Warm and bookish, a serif heading over an easy sans, like a well-loved paperback.",
   mono: "Black, white and nothing else, with flat surfaces and tight corners.",
-  marquee: "A film title card, heavy condensed headlines and buttons in mustard under a rust-to-mustard logo, over an inky blue-green page with square corners.",
+  marquee: "A film title card, condensed headlines in rust over mustard buttons and headings, on an inky blue-green page with square corners.",
   contrast: "Precise and engineered, an electric blue with drafting-table corners and one technical face.",
   coral: "Sunny and welcoming, a hospitality look of coral warmth and soft, round corners.",
   gold: "Bold and electric, bright yellow on ink with grotesk headings and a quicker step.",

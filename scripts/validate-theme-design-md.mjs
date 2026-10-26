@@ -14,6 +14,9 @@
  *      theme that exports a file its own importer misreads is a bug in one
  *      of the two, and this is where it shows.
  *
+ *   3. Every tone: a synthetic theme that sets all five tones, which no
+ *      shipped theme does, carries each of them through the file.
+ *
  * A difference the format cannot carry is sanctioned in SANCTIONED_DRIFT
  * with the reason; a stale entry fails too.
  *
@@ -114,6 +117,39 @@ for (const [path, content] of files) {
     errors.push(`${path}: ${lever} reads back as ${actual}, expected ${expected}`);
   }
 }
+/* ---------- 3. every tone ----------
+   No shipped theme sets all five tones, so a synthetic one does: the
+   format must carry each of them back. The logo, its end and the two type
+   tiers read back as their families; running text reads back as its exact
+   colour on the neutral ink step, the importer's deliberate reading. */
+{
+  const { designMdForPreset } = await import('./generate-theme-design-md.mjs');
+  const want = { logo: 'purple', logoEnd: 'orange', display: 'blue', heading: 'red', text: 'teal' };
+  const preset = {
+    ...source.THEME_PRESETS.mono,
+    advanced: undefined,
+    logoTone: want.logo,
+    logoEndTone: want.logoEnd,
+    displayTone: want.display,
+    headingTone: want.heading,
+    textTone: want.text,
+  };
+  const file = designMdForPreset({ preset, id: 'synthetic', label: 'Synthetic', presetOverrides: source.presetOverrides });
+  const got = designMd.readDesignMd(file, catalogue);
+  for (const [lever, expected, actual] of [
+    ['logo colour', want.logo, got.logoTone],
+    ['logo end colour', want.logoEnd, got.logoEndTone],
+    ['display colour', want.display, got.displayTone],
+    ['heading colour', want.heading, got.headingTone],
+  ]) {
+    if (expected !== actual) errors.push(`synthetic all-tone theme: ${lever} reads back as ${actual}, expected ${expected}`);
+  }
+  const ink = /^\s+ink: "(#[0-9a-f]{6})"/m.exec(file)?.[1]?.toUpperCase();
+  if (!ink || got.extraOverrides?.['--primitive-neutral-10']?.toUpperCase() !== ink) {
+    errors.push(`synthetic all-tone theme: the toned text colour ${ink} does not land exactly on the ink step`);
+  }
+}
+
 for (const [id, levers] of Object.entries(SANCTIONED_DRIFT)) {
   for (const lever of Object.keys(levers)) {
     if (!used.has(`${id}.${lever}`)) errors.push(`SANCTIONED_DRIFT.${id}.${lever} is stale: the file now reads back exactly`);
@@ -124,4 +160,4 @@ if (errors.length > 0) {
   console.error(`✗ Theme DESIGN.md files: ${errors.length} problem(s)\n  ${errors.join('\n  ')}`);
   process.exit(1);
 }
-console.log(`✓ Theme DESIGN.md files: ${files.size} in sync, each reading back onto its own theme.`);
+console.log(`✓ Theme DESIGN.md files: ${files.size} in sync, each reading back onto its own theme, and a synthetic theme carries all five tones through.`);

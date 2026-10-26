@@ -975,6 +975,23 @@ function fitTierTones(
     });
   }
 
+  /* Running text: a hued ink is kept exactly, as the neutral scale's ink
+     step (fitNeutrals anchors it), which is truer to the file than a
+     ramp's nearest step would be, so the Text colour lever stays on Ink
+     and the row says why. */
+  const ink = colours.find(([key]) => /^(ink|text|text-primary|foreground|fg|body)$/i.test(key));
+  const inkHued = ink ? nearestRampFor(ink[1]) !== "neutral" : false;
+  report.push({
+    lever: "Text colour",
+    value: "Ink",
+    status: ink ? "matched" : "kept",
+    note: !ink
+      ? "The file gives running text no colour, so it stays in rift's ink."
+      : inkHued
+        ? `The file's text colour, ${ink[1]}, has a hue of its own; rift keeps it exactly as the ink.`
+        : "The file sets running text in a grey, the ink.",
+  });
+
   for (const { tier, lever, keys } of TIER_COLOUR_KEYS) {
     const stated = colours.filter(([key]) => keys.test(key));
     const chromatic = stated

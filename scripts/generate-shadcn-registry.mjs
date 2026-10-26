@@ -35,6 +35,13 @@
  *      CSS copies point at `${SITE_URL}/r/assets/<file>`. The package's
  *      own stylesheets are untouched.
  *
+ * Advertised in llms.txt and on get-started. End-to-end installs need the
+ * deployed site, because every dependency URL bakes in SITE_URL; a local
+ * proof installs from a copy with those URLs rewritten, never from the
+ * committed files. Fetches of the items are counted by website/src/proxy.ts
+ * through website/src/lib/registry-downloads.ts, whose doc block owns
+ * what is stored.
+ *
  * The whole surface is generated, committed, and byte-compared by
  * validate-shadcn-registry.mjs (both directions, plus a leak screen —
  * file contents ship verbatim to strangers, so corpus rules apply).

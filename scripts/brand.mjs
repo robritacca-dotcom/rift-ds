@@ -33,6 +33,21 @@ export const ASSISTANT_NAME = 'Rift AI';
  * deliberately a different host from SITE_URL: robertritacca.com was this
  * project's home until the 2026-09-26 move, and it is now the portfolio
  * the credit points at, which is why it is not a RETIRED_HOST.
+ *
+ * Derived surfaces: the site footer's bottom row, the Person author on
+ * both JSON-LD nodes (website/src/lib/structuredData.ts), the sentence
+ * closing the /overview intro, the corpus's Author section (the footer
+ * sits outside app/, so page-prose extraction never sees it), the
+ * package's `author` field, the README's author region, the Storybook
+ * landing page, llms.txt, the MCP endpoint's browser landing page, the
+ * consumer library skill's provenance line, and every shadcn registry
+ * item's `author` in the schema's `name <url>` form (the registry index
+ * has no author field). Two hand mirrors, the root package.json's
+ * `author` and LICENSE's copyright holder, are held by
+ * validate-package-exports.mjs. Deliberately uncredited: the init bin's
+ * terminal output (content-design.md's CLI register never promotes),
+ * the per-component markdown pages (prop contracts only), and every
+ * consumer skill file other than the library skill's SKILL.md.
  */
 export const AUTHOR_NAME = 'Robert Ritacca';
 export const AUTHOR_URL = 'https://robertritacca.com';
@@ -60,7 +75,10 @@ export const RETIRED_PACKAGE_NAMES = ['@robr0/design-system'];
 /**
  * The deployed site's origin. Baked into the sitemap, canonicals, OG
  * urls, llms.txt, the corpus, and the init bin at build time — point it
- * at the real deployment before any `build:lib`.
+ * at the real deployment before any `build:lib`. Served by the Vercel
+ * project still named `dragonspine` (root directory `website`), which
+ * deploys every push to main; .github/workflows/uptime.yml reads this value
+ * at run time to smoke production.
  */
 export const SITE_URL = 'https://rift-ds.com';
 
@@ -114,6 +132,8 @@ export const TITLE_SUFFIX = BRAND_NAME;
  * GA4 measurement id for the rift-ds.com property (created 2026-10-08).
  * Public by design: it is visible in every page's source. Emptying it
  * short-circuits the analytics snippet entirely, which is the off switch.
+ * /privacy discloses the analytics, so the two change together; the site's
+ * own events live in website/src/lib/analytics.ts.
  */
 export const GA_ID = 'G-Y279CKE2RL';
 

@@ -218,6 +218,26 @@ The second release rebuilt the foundations under the modal overlays, so dialogs,
 
 ---
 
+## Decisions and incidents behind CLAUDE.md
+
+CLAUDE.md states the rules an agent works by; these are the dated events that produced them, moved here on 2026-10-26 when CLAUDE.md was cut to rules and pointers. Each rule's mechanism lives in the doc block of the script that enforces it. Oldest first.
+
+- **2026-07-27: a Chromatic baseline that belonged to someone else.** The visual-regression baseline accepted that day, across both themes, was the predecessor's Chromatic project. This repo still needs a project and token of its own, which the `first-deploy` skill owns.
+- **2026-09-06: the blank-site outage.** A hydration mismatch left every page invisible while the build was green and the server answered 200. It produced the browser-based hydration smoke in `verify` and CI, and its second life as the post-deploy check in the `ship` skill. Because ISR means the served site can change with no deploy, the same check runs against production every four hours (`.github/workflows/uptime.yml`).
+- **A dev-only advisory held `main` red.** A dependency advisory with no upstream fix, in tooling that never ships, failed the audit step and skipped the lint and build steps behind it. The audit has judged only the shipped tree (`--omit=dev`) since; the workflow comment records the decision.
+- **A dialog styled with a token family that never existed.** Nothing caught it, which is why every `var()` a component references must now resolve (`scripts/validate-token-usage.mjs`).
+- **The chat answered blind while its checks passed.** The corpus matched its generator and covered every route, yet prose the extractor could not see was missing. `scripts/validate-corpus-coverage.mjs` now compares the corpus with what the built pages actually render.
+- **2026-09-26: the rename and the first publish.** The package moved from the predecessor's scoped name to `rift-ds`, the rift-ds.com domain was bought, and 1.0.0 was the first version published from this repo. That publish could not use OIDC: a trusted publisher can only be attached to a package that already exists, and npm answers `404 ... OIDC token exchange error - package not found` otherwise, which is why the release workflow has an off-by-default `bootstrap_token` input. Trusted Publishing was registered the same day, and 1.0.1 was the first version published over OIDC with no token anywhere, the only proof that path works, since a dry run never authenticates.
+- **2026-09-26: what the rename found.** The domain move had no guard against a URL written from memory, which `RETIRED_HOSTS` now gives it. The README banner still showed the old codename, the retired package name, 132 components and 8 themes, and npm had resolved 1.0.0's relative banner path to nothing, so the banner region now uses an absolute raw URL and the banner is re-shot by hand. The LICENSE holder had drifted to a short form of the author's name, now held by `validate-package-exports.mjs`. A second copy of the go-live checklist in CLAUDE.md drifted the moment the npm side was finished, so only the `first-deploy` skill states what is outstanding.
+- **2026-10-08: analytics on.** `GA_ID` in `scripts/brand.mjs` for the rift-ds.com property, disclosed on /privacy.
+- **2026-10-20: a drag blanked the live site.** Dragging the playground stage card's resize grip re-rendered the chat widget on every pointer move while the welcome chart replayed its entrance animation; React 19.2's nested-update count reached 50 and error #185 unmounted the root. It shipped twice because no check drove a gesture. Since then every drag writes the DOM per frame and commits once on release, `scripts/validate-gestures.mjs` drives every grip in `scripts/gestures.json` under a throttled pointer flood, and route error boundaries (`RouteErrorFallback`) cap the damage of the next one.
+- **2026-10-21: full contract conformance.** Every component passed the props contract (ref and rest on one node, native props), now held by `validate-component-contract.mjs` and the props-contract story.
+- **2026-10-22: the DESIGN.md importer's patterns.** Every pattern the playground's importer reads was taken from fifteen real brand DESIGN.md files read that day, kept outside the repo; the fixtures in `scripts/fixtures/design-md/` are fictional stand-ins, one per pattern.
+- **2026-10-23: site events after the first launch post.** A four-times traffic day gave no way to tell a reader from an installer, so `SITE_EVENTS` in `website/src/lib/analytics.ts` now names the four actions that mean a visitor is taking the system.
+- **2026-10-23: the component consistency audit.** It found the same control drawn four ways and seven surface families each split on fill, hover or radius, every one green in CI. The shared-primitives rule, `validate-shared-primitives.mjs` and the `component-consistency-audit` skill came from it.
+
+---
+
 ## Provenance
 
 Extracted 2026-09-26 from `robritacca-dotcom/design-system` at `dc211dab`, immediately

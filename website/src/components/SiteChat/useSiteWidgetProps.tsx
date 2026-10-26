@@ -20,6 +20,11 @@ import styles from "./SiteChatMount.module.css";
  * One hook, so every host of the live site chat (the launcher's panel, the
  * glass chat lab) describes the same assistant. Must run inside the
  * SiteChatProvider, for the seed.
+ *
+ * The live chat stays text-only on purpose: it never turns on
+ * `fileAttachments` or passes `mentions`, which only the playground's and
+ * the chat home's simulated chats do, and the fetch transport sends role
+ * and text alone, so nothing about a file can reach /api/chat.
  */
 export function useSiteWidgetProps(): Pick<
   ChatWidgetProps,

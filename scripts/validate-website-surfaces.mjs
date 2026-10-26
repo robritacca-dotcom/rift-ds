@@ -11,6 +11,11 @@
  * spec section. The site-scoped ones hold the blueprint pages, the
  * llms.txt spec downloads, SECTION_OG_IMAGE_SEGMENTS, and the colour
  * token swatch page to their sources, each in both directions.
+ * The chat widget from src/chat/registry.json counts as a component
+ * page here: its page sits under /components and is held to the same
+ * rules. Categories have no pages (they are index sections and sidebar
+ * accordions), so a page folder named for a category fails like any
+ * other unregistered folder.
  *
  * The sidebar nav entry and its alphabetical order used to be checked here.
  * componentsSidebarLinks is now DERIVED from the registry, so both are

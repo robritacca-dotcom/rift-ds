@@ -20,6 +20,16 @@
  *      consumer. See REACHABILITY below.
  *   5. Every explicit (non-wildcard) JS subpath is a lib entry in
  *      vite.lib.config.ts. See DIST ENTRIES below.
+ *   6. The website workspace depends on PACKAGE_NAME, and no retired
+ *      identity survives anywhere in source: every RETIRED_PACKAGE_NAMES
+ *      and RETIRED_HOSTS entry in brand.mjs is a build error naming the
+ *      file, so a rename or a domain move cannot leave a straggler import,
+ *      install snippet or hand-written URL (brand.mjs's PACKAGE_NAME doc
+ *      block owns the rename-day recipe).
+ *
+ * Exports are checked as subpaths only: the bin entry's presence and its
+ * shebang are publint's job in the package-publish lint
+ * (validate-package-publish.mjs).
  *
  * Part of the validate-registry chain, so the public import surface the
  * website dogfoods can never drift from what the package declares.

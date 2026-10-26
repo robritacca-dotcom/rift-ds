@@ -49,6 +49,12 @@
  * reaches it; `node scripts/validate-gestures.mjs <label substring>` runs a
  * subset while working on one. Each gesture gets a fresh browser context, so a seat chosen
  * for one never leaks into the next. One line is printed per gesture.
+ *
+ * Two grips stay outside the list for now, Globe's rotation and WorldMap's
+ * pan: both draw to a canvas or an SVG attribute, and this script's evidence
+ * that a drag took is a style write, so widening that evidence is their way
+ * in. It needs the built site and a browser, which is why it runs after the
+ * website build rather than in the validate-registry chain.
  */
 /* global window, document -- page.evaluate() callbacks execute in the browser; the probe itself is a string the browser runs */
 import { readFileSync } from 'node:fs';

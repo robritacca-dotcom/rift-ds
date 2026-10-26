@@ -24,7 +24,7 @@ const ShaderTuner =
 
 /**
  * Marker a page renders to make the background fill the viewport instead of
- * the 450px header band, suppressing the fade-to-page-colour mask.
+ * the standard header band, suppressing the fade-to-page-colour mask.
  *
  * It is a marker rather than a prop because the background is mounted once in
  * the root layout and no longer re-renders per route. CSS reads the marker
@@ -82,6 +82,14 @@ export function HiddenBackground() {
  * reduced-motion handling, context-loss recovery and the watchdog that bounds
  * "pending" all live in ShaderField, which reports which of the three states
  * it has reached.
+ *
+ * Four modes, picked per page by the markers above: the standard band (the
+ * default, 540px tall with its last 450px the fade to the page colour), the
+ * home page's extended band (ExtendedBackground), full-bleed
+ * (FullBleedBackground) and hidden (HiddenBackground). Every height, the
+ * fade and the light-mode opacity live in the `.blur-container` rules in
+ * website/src/app/globals.css, which own the values and their reasons;
+ * the numbers here are a description, not a second home.
  *
  * Every tuneable value comes from website/src/data/shader-background.json.
  * Append `?tune=1` to any page in `npm run dev --workspace website` to adjust them live.

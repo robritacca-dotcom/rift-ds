@@ -49,8 +49,16 @@
  *      genuinely cannot clear its minimum is pinned in SANCTIONED_AA_GAPS
  *      with the pairing and the computed ratio recorded — never silently
  *      weakened.
+ *      TIER_PAIRINGS holds the display, heading and running-text roles
+ *      to the page and the card fill (3:1 for display, 4.5:1 for the
+ *      others), which is the gate on what tierToneOverrides picks per
+ *      mode; once a preset tones its logo (logoTone off the action
+ *      colour, or a logoEndTone), LOGO_PAIRINGS holds the brand mark,
+ *      its gradient end and the product mark to 3:1 on the page.
  *   d. Lever completeness — every lever in NUMBER_LEVERS below, plus
- *      elevation, iconFill and the two type-tier tones, must be present on every preset. The required TS schema
+ *      elevation, iconFill and the five tones (displayTone, headingTone,
+ *      textTone, logoTone and logoEndTone, the last two checked against
+ *      their allowed values), must be present on every preset. The required TS schema
  *      already guarantees this at compile time; the runtime assert
  *      guards JS-side consumers of the object (and any future
  *      JSON-shaped source that bypasses the type).

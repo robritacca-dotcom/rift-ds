@@ -26,7 +26,16 @@
  * `<Name>`, must come back as a parsed component called `<Name>` with at
  * least one prop. The declaration is read from the syntax
  * tree directly, never through the docgen parse, because the parse is the
- * thing under test.
+ * thing under test. The fix is to move the re-export below the component
+ * (ShaderField.tsx and AttachmentGroup.tsx are the worked examples);
+ * `export *` also avoids it, but widens the public API to whatever the
+ * module exports later.
+ *
+ * One authoring rule this script cannot see: a prop description never goes
+ * in a story's `argTypes`. Storybook lets an argTypes entry override the
+ * docgen description, so a description there shadows the JSDoc in the
+ * props table and drifts from the .d.ts. Stories set `control` and
+ * `options`; the source owns the words.
  *
  * The docgen settings live in scripts/component-docgen.mjs, shared with
  * generate-component-api.mjs and mirroring .storybook/main.ts, so this

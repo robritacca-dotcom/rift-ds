@@ -20,7 +20,7 @@
  *      package.json (declared, and marked optional), and every optional peer
  *      the chat subpaths import is listed for the subpath that imports it.
  *   4. The main barrel's import closure never reaches src/chat or any
- *      optional peer (OPTIONAL_PEER_PACKAGES in generate-library-barrel.mjs):
+ *      optional peer (OPTIONAL_PEER_PACKAGES in optional-peers.mjs):
  *      a consumer who installed none of them must still build.
  *   5. The two numbers the stylesheet mirrors from the TypeScript side agree:
  *      TAKEOVER_QUERY's width against the panel's phone media query in
@@ -37,7 +37,8 @@
  *      registered component category, since its page joins that section.
  *   7. Every `documented` export is a component the barrel exports.
  *   8. The init bin's templates (src/cli/templates/chat/, app/ and blocks/) import only
- *      package subpaths the manifest declares, so `npx rift-ds init chat`
+ *      package subpaths the manifest declares (an exact key, or a wildcard
+ *      export such as `./components/*` the subpath fits), so `npx rift-ds init chat`
  *      can never scaffold an import that does not resolve; and every file
  *      under the templates folder is tracked by git, because the tarball is
  *      built from the working tree while CI and the release build from a

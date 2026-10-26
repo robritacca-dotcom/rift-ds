@@ -7,6 +7,28 @@
  * registry entry must have a folder. Runs before every build — library,
  * Storybook, and website — so the public component count can never
  * silently drift from reality.
+ *
+ * Entry shape: each component carries `name`, `label`, `slug`,
+ * `description`, `category` and `client`, plus `folder` when the
+ * implementation lives in a shared folder (the registry's `folder` values
+ * are the authoritative list; Chart/ and the Inspector/ family sharing
+ * Inspector.css are the examples) and `recharts: true` when the module
+ * imports recharts. That flag is independent of `folder` (FunnelChart is
+ * recharts-backed in its own folder) and is held to the real imports by
+ * scripts/generate-library-barrel.mjs, not here. Each category carries
+ * `id`, `label` and `description`; the description reaches the chat corpus
+ * and the MCP tools.
+ *
+ * Beyond folder parity, this script checks: well-formed metadata
+ * (kebab-case unique slugs that never collide with a category id, unique
+ * labels, descriptions of at most 160 chars ending in a full stop, a
+ * registered category, no empty category, categories sorted), a stories
+ * file per public component, the component list sorted by name, `client`
+ * matching whether the file declares 'use client', and, for a file
+ * without the directive, that it does not need it (the closure walk
+ * documented above `reactKeys` below, with CLIENT_ONLY_PACKAGES for
+ * packages such as recharts that ship no client boundary). It also fails
+ * on Finder duplicate files ("Name 2.tsx") anywhere in the repo.
  */
 import { execFileSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
@@ -170,8 +192,9 @@ const seenLabels = new Map();
 
 /*
  * Category checks. Categories are objects because their label and description
- * are displayed — the /components index sections, the sidebar accordions, and
- * the chat corpus all read them. Ids are the index's `#<id>` anchor namespace
+ * are both served: the /components index sections and the sidebar accordions
+ * display the label (with a count), and the chat corpus and the MCP tools
+ * carry the description. Ids are the index's `#<id>` anchor namespace
  * and have historically been routes, so they stay disjoint from component
  * slugs rather than ever ambiguously naming both a section and a component.
  */

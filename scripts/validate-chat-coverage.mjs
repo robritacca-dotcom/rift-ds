@@ -16,8 +16,7 @@
  *      exclusion map with a written reason. This is the scaling guarantee: a
  *      new page cannot ship invisible to the site chat.
  *
- * Runs in the validate-registry chain once green (registered at the end of
- * Milestone 1 — see the plan; running it earlier documents the holes).
+ * Runs in the validate-registry chain.
  */
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';

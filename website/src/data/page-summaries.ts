@@ -11,7 +11,8 @@ import registry from "./page-summaries.json";
  *
  * `page-summaries.json` holds the hand-written entries (the static
  * routes). Component pages derive theirs from the component registry's
- * descriptions instead of restating facts. A chromeless route has no FAB
+ * descriptions instead of restating facts (the chat widget's page from its
+ * own registry, through `componentPages`). A chromeless route has no FAB
  * and so no entry. `scripts/validate-page-summaries.mjs` holds all of this
  * to the route list in both directions, so a new page cannot ship without
  * a summary or a written exclusion.

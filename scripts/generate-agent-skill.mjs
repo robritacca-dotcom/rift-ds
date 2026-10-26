@@ -18,7 +18,14 @@
  * row, fails generation.
  *
  * These are for people using the package, not for this repo (whose own
- * skills live in .claude/skills/ and publish through /skills). Every fact
+ * skills live in .claude/skills/ and publish through /skills), which is
+ * why they are served under /skill/, singular. The style-audit skill is a
+ * consumer rewrite of the repo's token-audit skill, maintained separately
+ * on purpose: the repo skill leans on validators and the ds-allow grammar
+ * a consumer does not have. The library skill carries the two references
+ * the other skills read, the component catalogue and references/tokens.md
+ * (every semantic token with the value it resolves to per theme and
+ * breakpoint). Every fact
  * derives from an existing source of truth: the component registry and
  * prop JSDoc via assembleComponentApi(), the token registry, the token
  * CSS (resolved values, through token-values.mjs), the generated preset
@@ -36,7 +43,13 @@
  * project root or pastes into any agent, for the agent that has nothing
  * installed, plus website/src/data/agent-starter.generated.ts, the same
  * text as a module for the get-started page's copy frame. Same lookups,
- * same version stamp, held by the same validator.
+ * same version stamp, held by the same validator. The starter is written
+ * to the agent, never to the person (the page around it tells them how to
+ * save it), and carries the install and its peers (read from the shipped
+ * manifest), the chat command (from the chat registry), the setup and the
+ * rules generic React habits break. Keep it short but complete for setup:
+ * it points at the references, the MCP endpoint and `init` rather than
+ * restating them, so it never becomes a second copy of the skill.
  *
  * Deterministic (version-stamped with PACKAGE_VERSION, no timestamps) and
  * byte-compared by validate-agent-skill.mjs. A file the builders stop

@@ -14,6 +14,8 @@
  * website's /api/mcp route hands it to any MCP client that asks, so an
  * agent building with rift-ds reads the exact prop contract
  * instead of guessing.
+ * The site chat's get_component tool (website/src/lib/site-tools.ts) serves
+ * the same data, so a visitor asking the chat reads that contract too.
  *
  * Two properties this file must keep, or the build breaks:
  *

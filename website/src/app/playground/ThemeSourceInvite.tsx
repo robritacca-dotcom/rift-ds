@@ -27,7 +27,9 @@ const rampHex = (name: string) =>
 /** The samples under "Try it", each a DESIGN.md served from /samples/<id>/,
     an analysis of a real product's published look. Each loads under the
     file name DESIGN-<id>.md, which the source card's brand-mark match also
-    reads, and wears that brand's mark on its button. */
+    reads, and wears that brand's mark on its button. The files are
+    third-party analyses, which is why they sit in public/ rather than
+    app/: none of their text reaches the chat corpus. */
 const EXAMPLES = [
   { id: "apple", label: "Apple" },
   { id: "spotify", label: "Spotify" },

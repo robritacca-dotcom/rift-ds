@@ -1046,11 +1046,13 @@ export const PICKER_FONT_PARAMS = Array.from(
 );
 
 /* ---------- the composer ----------
-   One pure function turns a preset into the exact override map the
-   playground's live preview applies — and the exact declarations the
-   generated [data-brand] stylesheets ship. Both consumers call THIS, so
-   the preview and the shipped theme cannot disagree; the merge order
-   mirrors the playground page's own memo (action plan, tint, radius,
+   One pure function turns a preset into the exact declarations the
+   generated [data-brand] stylesheets ship (scripts/generate-preset-
+   stylesheets.mjs) and the playground's theme export writes
+   (theme-export.ts, held to it by scripts/validate-theme-export.mjs).
+   The playground's live preview does not call it: it composes the same
+   lever functions in a memo of its own, so the merge order here mirrors
+   the playground page's memo (action plan, tint, radius,
    density, type, motion, elevation, weight, tracking, icons, fonts,
    extras, advanced so harmonized ramps see the merged state, then the
    tones (logo and type tiers), which read the ramps as they finally stand). */

@@ -32,6 +32,11 @@ import {
 } from './brand.mjs';
 
 export { PACKAGE_NAME, REPOSITORY_URL };
+// Authoritative for what ships. The version has two mirrors that must move
+// with it: the root package.json's `version` (by hand; that manifest stays
+// private forever and never publishes) and package-lock.json (refresh with
+// `npm install --package-lock-only`). validate-package-exports.mjs fails the
+// build when the three disagree; the release skill owns the bump procedure.
 export const PACKAGE_VERSION = '1.14.0';
 export const PACKAGE_DESCRIPTION =
   'An AI-ready React design system: accessible components on composable tokens, light/dark theming, and CSS-variable overrides.';
@@ -65,7 +70,7 @@ const SUBPATHS = [
   // text needs its own renderer (markdown, a highlighter). A .ts module,
   // so the *.tsx wildcard below can't serve it either.
   { key: './components/StreamingText/useStreamReveal', srcJs: './src/components/StreamingText/useStreamReveal.ts', dist: './components/StreamingText/useStreamReveal' },
-  // The one published behavior: the shared page scroll lock. Host chrome
+  // One of two published behaviors: the shared page scroll lock. Host chrome
   // with its own overlays must join the modal components' counter, or two
   // locks fight over document.body — the rest of src/behaviors stays
   // internal (design.md's Components intro owns the contract).

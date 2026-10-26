@@ -1,5 +1,25 @@
 "use client";
 
+/**
+ * The playground: the immersive re-theming tool. Four views (Components,
+ * Type, Chat, Templates) over one set of levers, chromeless, its rails
+ * built from the library's Inspector family. The theme rail sits on the
+ * left and every view seats a panel of its own on the right, so each stage
+ * centres under the toolbar's view switch: the Components view's section
+ * switches and surface, the Type view's specimen text and tier switches
+ * (viewing choices that never reach the theme or its export), the chat
+ * director (views/ChatView.tsx, ChatDirector.tsx) and the templates rail
+ * (views/TemplatesView.tsx, TemplatesRail.tsx).
+ *
+ * A theme leaves through the Export theme button (lib/theme/theme-export.ts
+ * owns what it writes); one comes in by dropping a picture
+ * (lib/theme/image-palette.ts) or a DESIGN.md or other text file
+ * (lib/theme/design-md.ts), read in this tab and never uploaded. Any drag
+ * on the stages writes to the DOM per frame and commits React state once
+ * on release; the resize block in views/ChatView.tsx owns the reason. The
+ * old /robr0-gpt chat bench redirects here (next.config.ts).
+ */
+
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import StageToolbar from "@/components/StageToolbar/StageToolbar";
 import { HiddenBackground } from "@/components/BlurBackground/BlurBackground";

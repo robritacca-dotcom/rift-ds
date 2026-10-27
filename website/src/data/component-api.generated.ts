@@ -6300,6 +6300,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Optional subtitle under the title"
           },
           {
+            "name": "heading",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Content shown in place of the title text, such as a site's logo. The\n`title` still names the dialog, read by assistive tech from a visually\nhidden heading."
+          },
+          {
             "name": "children",
             "type": "ReactNode",
             "required": false,
@@ -8915,6 +8921,67 @@ export const componentApi: readonly ComponentApiEntry[] = [
   },
   {
     "kind": "component",
+    "name": "MegaMenu",
+    "label": "Mega menu",
+    "slug": "mega-menu",
+    "category": "navigation",
+    "description": "A wide navigation panel of icon rows with descriptions, beside an optional featured card.",
+    "client": false,
+    "importPath": "rift-ds/components/MegaMenu/MegaMenu",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "MegaMenu",
+        "props": [
+          {
+            "name": "open",
+            "type": "boolean",
+            "required": true,
+            "description": "Whether the panel shows. Controlled by design: the host owns the\ntriggers that open it, so it owns this state too. A closed panel fades\nout and is `inert`, so its links leave the tab order."
+          },
+          {
+            "name": "items",
+            "type": "MegaMenuItem[]",
+            "required": true,
+            "description": "The link rows, laid out four to a column and wrapping into further columns."
+          },
+          {
+            "name": "showcase",
+            "type": "MegaMenuShowcase",
+            "required": false,
+            "description": "A featured card in its own column beside the link grid."
+          },
+          {
+            "name": "currentHref",
+            "type": "string",
+            "required": false,
+            "description": "The path of the page being viewed. A row whose `href` is this path, or a\nparent of it, is marked as the current page."
+          },
+          {
+            "name": "onNavigate",
+            "type": "(() => void)",
+            "required": false,
+            "description": "Called when any link in the panel is followed, so a host can close it."
+          },
+          {
+            "name": "linkComponent",
+            "type": "LinkComponent",
+            "required": false,
+            "description": "The component every link renders through, so a router's link (Next.js\n`Link`) navigates without a reload. The panel is server-renderable, so it\ncannot read a `LinkProvider`; a client host resolves one and passes it\nhere. Defaults to `<a>`."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes on the panel.",
+            "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
     "name": "Mention",
     "label": "Mention",
     "slug": "mention",
@@ -10307,6 +10374,45 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
+            "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
+    "name": "ProgressiveBlur",
+    "label": "Progressive blur",
+    "slug": "progressive-blur",
+    "category": "effects",
+    "description": "A backdrop blur that dissolves along one edge, with an optional page tint that fades in.",
+    "client": false,
+    "importPath": "rift-ds/components/ProgressiveBlur/ProgressiveBlur",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "ProgressiveBlur",
+        "props": [
+          {
+            "name": "side",
+            "type": "\"top\" | \"bottom\"",
+            "required": false,
+            "description": "The side the blur is anchored to, as Drawer names its edge: fully\nfrosted there, dissolving to clear toward the opposite side. `top` sits\nbehind a header, `bottom` behind a toolbar or a footer bar.",
+            "defaultValue": "top"
+          },
+          {
+            "name": "tinted",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the page-surface tint shows over the blur. It fades on change,\nso a header can bring it in once the page has scrolled; the blur\nitself never fades.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes on the root.",
             "defaultValue": ""
           }
         ]
@@ -11736,6 +11842,141 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "LinkComponent",
             "required": false,
             "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
+    "name": "SiteHeader",
+    "label": "Site header",
+    "slug": "site-header",
+    "category": "navigation",
+    "description": "A site's sticky top bar of section pills and mega menus, folding to a drawer when the pills no longer fit.",
+    "client": true,
+    "importPath": "rift-ds/components/SiteHeader/SiteHeader",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "SiteHeader",
+        "props": [
+          {
+            "name": "brand",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The brand at the bar's start, usually a logo linking home. Rendered as\ngiven, so it carries its own link."
+          },
+          {
+            "name": "sections",
+            "type": "SiteHeaderSection[]",
+            "required": true,
+            "description": "The site's top-level sections, in order."
+          },
+          {
+            "name": "currentHref",
+            "type": "string",
+            "required": false,
+            "description": "The path of the page being viewed, used to mark the current section, row and drawer item."
+          },
+          {
+            "name": "actions",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Controls at the bar's end that stay at every width, such as a search button."
+          },
+          {
+            "name": "wideActions",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Controls at the bar's end that show only while the pills fit, such as a\ntheme toggle. Once the bar folds to its menu button they leave it; put\ntheir drawer twin in `drawerFooter`."
+          },
+          {
+            "name": "drawerFooter",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Content for the drawer's footer, such as the controls `wideActions` holds in the bar."
+          },
+          {
+            "name": "drawerOpen",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the folded bar's drawer is open, for a host that owns that state. Pair with `onDrawerOpenChange`."
+          },
+          {
+            "name": "defaultDrawerOpen",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the drawer starts open, when the header owns its state.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "onDrawerOpenChange",
+            "type": "((open: boolean) => void)",
+            "required": false,
+            "description": "Called when the drawer opens or closes, controlled or not."
+          },
+          {
+            "name": "initialFold",
+            "type": "\"tablet\" | \"mid\" | \"never\"",
+            "required": false,
+            "description": "Where the bar folds before it has measured itself: on the first frame,\nwhich a server-rendered page shows before its script runs. Below this\nbreakpoint (`tablet` or the wider `mid`) the bar starts folded by CSS\nalone, so a phone never sees the pills overflow; the measurement takes\nover once the script runs. Pick the step nearest where the pills stop\nfitting, or `never` for a bar that fits at every width.",
+            "defaultValue": "tablet"
+          },
+          {
+            "name": "sticky",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the header sticks to the top of the viewport over a progressive\nblur. Off, it scrolls away with the page and draws no blur.",
+            "defaultValue": "true"
+          },
+          {
+            "name": "tintAfter",
+            "type": "number",
+            "required": false,
+            "description": "How far, in pixels, the page scrolls before the page-surface tint fades\nin over the sticky header's blur.",
+            "defaultValue": "48"
+          },
+          {
+            "name": "linkComponent",
+            "type": "LinkComponent",
+            "required": false,
+            "description": "The component every link renders through, so a router's link (Next.js\n`Link`) navigates without a reload. Falls back to the nearest\n`LinkProvider`, then `<a>`."
+          },
+          {
+            "name": "navLabel",
+            "type": "string",
+            "required": false,
+            "description": "The accessible name of the section links' `<nav>` landmark.",
+            "defaultValue": "Primary"
+          },
+          {
+            "name": "drawerOpenLabel",
+            "type": "string",
+            "required": false,
+            "description": "The accessible name of the menu button that opens the drawer.",
+            "defaultValue": "Open menu"
+          },
+          {
+            "name": "drawerTitle",
+            "type": "string",
+            "required": false,
+            "description": "The drawer's title, naming the dialog. Shown at its top when there is no\n`brand`; with one, the brand takes its place and the title is read only\nby assistive tech.",
+            "defaultValue": "Menu"
+          },
+          {
+            "name": "drawerCloseLabel",
+            "type": "string",
+            "required": false,
+            "description": "The accessible name of the drawer's close button.",
+            "defaultValue": "Close menu"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes on the `<header>`.",
+            "defaultValue": ""
           }
         ]
       }

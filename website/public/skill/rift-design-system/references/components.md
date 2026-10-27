@@ -723,7 +723,7 @@ A titled tile for a dashboard or home screen, with rows, labelled groups, and a 
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/widget.md
 
-## Effects (2)
+## Effects (3)
 
 Ambient and decorative surfaces that sit behind or around the interface.
 
@@ -734,6 +734,14 @@ The texture half of a bento tile's shader pair: six fine patterns in one vocabul
 - Import: `import { BentoTileArt } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/bento-tile-art.md
+
+### Progressive blur
+
+A backdrop blur that dissolves along one edge, with an optional page tint that fades in.
+
+- Import: `import { ProgressiveBlur } from 'rift-ds';`
+- Rendering: server-renderable (no 'use client')
+- Contract: https://rift-ds.com/components/progressive-blur.md
 
 ### Shader field
 
@@ -1163,7 +1171,7 @@ A flat world map from Natural Earth land shapes: token-coloured continents, fram
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/world-map.md
 
-## Navigation (9)
+## Navigation (11)
 
 Top bars, breadcrumbs, tabs, steppers, and pagination for moving through a product.
 
@@ -1191,6 +1199,14 @@ Hierarchical navigation trail showing the user's location within the site.
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/breadcrumb.md
 
+### Mega menu
+
+A wide navigation panel of icon rows with descriptions, beside an optional featured card.
+
+- Import: `import { MegaMenu } from 'rift-ds';`
+- Rendering: server-renderable (no 'use client')
+- Contract: https://rift-ds.com/components/mega-menu.md
+
 ### Nav
 
 Desktop top navigation bar with a brand slot, horizontal button group, and optional trailing content.
@@ -1214,6 +1230,14 @@ Numbered page navigation for long datasets, with ellipses, disabled end arrows, 
 - Import: `import { Pagination } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/pagination.md
+
+### Site header
+
+A site's sticky top bar of section pills and mega menus, folding to a drawer when the pills no longer fit.
+
+- Import: `import { SiteHeader } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/site-header.md
 
 ### Stepper
 

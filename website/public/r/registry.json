@@ -544,6 +544,12 @@
       "description": "The corner block of a map: its name, what it shows, and the key to its markers."
     },
     {
+      "name": "mega-menu",
+      "type": "registry:ui",
+      "title": "Mega menu",
+      "description": "A wide navigation panel of icon rows with descriptions, beside an optional featured card."
+    },
+    {
       "name": "mention",
       "type": "registry:ui",
       "title": "Mention",
@@ -640,6 +646,12 @@
       "description": "Horizontal bar indicating completion progress, with an optional percentage label."
     },
     {
+      "name": "progressive-blur",
+      "type": "registry:ui",
+      "title": "Progressive blur",
+      "description": "A backdrop blur that dissolves along one edge, with an optional page tint that fades in."
+    },
+    {
       "name": "prompt-suggestions",
       "type": "registry:ui",
       "title": "Prompt suggestions",
@@ -734,6 +746,12 @@
       "type": "registry:ui",
       "title": "Sidebar panel",
       "description": "Secondary navigation column listing one section's pages, with group headings and one level of accordion nesting."
+    },
+    {
+      "name": "site-header",
+      "type": "registry:ui",
+      "title": "Site header",
+      "description": "A site's sticky top bar of section pills and mega menus, folding to a drawer when the pills no longer fit."
     },
     {
       "name": "skeleton",

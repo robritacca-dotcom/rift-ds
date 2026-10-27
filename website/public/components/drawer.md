@@ -18,6 +18,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.15.0. The same dat
 | onOpenChange | `(open: boolean) => void` | yes |  | Callback when the drawer requests to close |
 | title | `string` | yes |  | Drawer title. Note: this shadows the native `title` tooltip attribute, which Drawer does not expose. |
 | description | `string` | no |  | Optional subtitle under the title |
+| heading | `ReactNode` | no |  | Content shown in place of the title text, such as a site's logo. The `title` still names the dialog, read by assistive tech from a visually hidden heading. |
 | children | `ReactNode` | no |  | Drawer body content |
 | footer | `ReactNode` | no |  | Optional footer slot — typically a row of Buttons |
 | side | `"top" \| "bottom" \| "start" \| "end" \| "left" \| "right"` | no | `right` | Edge the panel slides in from. `left` and `right` are the screen's edges in any reading direction; `start` and `end` follow it, so a `start` drawer opens on the left in English and on the right in Arabic. |

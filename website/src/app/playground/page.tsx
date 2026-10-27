@@ -272,11 +272,21 @@ export default function PlaygroundPage() {
     const q = params.get("view");
     /* ?autoplay=1 is the home page's embed: the Chat view plays its
        scripted reel on a loop (ChatAutoplay). */
+    const embedded = params.get("autoplay") === "1";
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setAutoplay(params.get("autoplay") === "1");
+    setAutoplay(embedded);
+    /* The embed is a picture: nothing in it may take focus. A focus inside
+       a frame scrolls the host page to the frame (preventScroll and the
+       frame's inert do not stop it), so the reel's composer focus would
+       drag the home page down on load. */
+    const nativeFocus = HTMLElement.prototype.focus;
+    if (embedded) HTMLElement.prototype.focus = function () {};
     if (q === "chat" || q === "type" || q === "templates") setView(q);
     /* The Templates view was the Dashboard view, and links to it remain. */
     else if (q === "dashboard") setView("templates");
+    return () => {
+      HTMLElement.prototype.focus = nativeFocus;
+    };
   }, []);
   /* Flipped on every view switch: the layout swaps between two copies of
      the entrance keyframes, so the panels and the stage arrive again

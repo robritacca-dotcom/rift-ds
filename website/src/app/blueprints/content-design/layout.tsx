@@ -4,7 +4,7 @@ import { BRAND_NAME } from "@/config/brand.generated";
 
 const title = "Content MD";
 const description =
-  `The writing rules behind ${BRAND_NAME} in a single markdown reference: voice, register by surface, banned words and patterns, and the self-review tests copy passes before it ships.`;
+  `The writing rules behind ${BRAND_NAME} in one markdown reference: voice, register by surface, banned words, and the tests copy passes before it ships.`;
 
 export const metadata: Metadata = {
   alternates: { canonical: "/blueprints/content-design" },

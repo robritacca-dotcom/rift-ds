@@ -82,7 +82,7 @@ export default function DocsPage() {
             </TocCard>
 
             {/* AI chat */}
-            <TocCard href="/docs/chat" title="AI chat">
+            <TocCard href="/docs/chat" title="Add AI chat">
               <div className={`${styles.circlePreview} ${styles.circleDashed}`}>
                 <span className="material-symbols-rounded" aria-hidden="true" style={{ color: "var(--color-text-secondary)" }}>
                   forum

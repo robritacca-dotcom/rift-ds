@@ -36,9 +36,11 @@ export const ASSISTANT_NAME = 'Rift AI';
  *
  * Derived surfaces: the site footer's bottom row, the Person author on
  * both JSON-LD nodes (website/src/lib/structuredData.ts), the root
- * layout's author and creator meta (website/src/app/layout.tsx), the sentence
- * closing the /overview intro, the corpus's Author section (the footer
- * sits outside app/, so page-prose extraction never sees it), the
+ * layout's author and creator meta (website/src/app/layout.tsx), the
+ * share cards' credit (website/src/lib/ogImage.tsx), the /privacy page's
+ * Questions section, the sentence closing the /overview intro, the
+ * corpus's Author section (the footer sits outside app/, so page-prose
+ * extraction never sees it), the
  * package's `author` field, the README's author region, the Storybook
  * landing page, llms.txt, the MCP endpoint's browser landing page, the
  * consumer library skill's provenance line, and every shadcn registry

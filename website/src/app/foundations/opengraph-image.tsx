@@ -6,5 +6,5 @@ export const contentType = ogImageContentType;
 export const alt = `${BRAND_NAME} · Foundations`;
 
 export default function Image() {
-  return buildOgImage("Foundations", BRAND_NAME);
+  return buildOgImage("Foundations", "Tokens and foundations");
 }

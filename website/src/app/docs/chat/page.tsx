@@ -268,7 +268,7 @@ export default function ChatInstallPage() {
           <PageBreadcrumb />
 
           <div className={`${s.pageHeader} animate-in`}>
-            <h1 className={s.pageTitle}>AI chat</h1>
+            <h1 className={s.pageTitle}>Add AI chat</h1>
           </div>
 
           <div className={`${s.introSection} animate-in animate-delay-1`}>

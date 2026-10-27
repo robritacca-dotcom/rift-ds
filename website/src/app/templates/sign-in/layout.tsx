@@ -2,7 +2,7 @@ import { pageMetadata } from "@/config/navigation";
 
 export const metadata = pageMetadata(
   "/templates/sign-in",
-  "A product sign-in screen built from the design system alone: the identity providers and the email form on the left, an ambient panel holding the right half of the split."
+  "A product sign-in screen from the design system alone: identity providers and an email form on the left, an ambient panel filling the right half."
 );
 
 export default function SignInTemplateLayout({

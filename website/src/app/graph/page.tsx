@@ -12,6 +12,9 @@ import styles from "./page.module.css";
 export default function GraphPage() {
   return (
     <main className={styles.page}>
+      {/* The stage has no visible title; this names the page for screen
+          readers and search. */}
+      <h1 className={styles.visuallyHidden}>System graph</h1>
       <HiddenBackground />
       <DotBackground />
       <StageToolbar />

@@ -1,9 +1,8 @@
-import { sectionMetadata } from "@/config/navigation";
+import { SECTION_LANDINGS, sectionMetadata } from "@/config/navigation";
 
-export const metadata = sectionMetadata(
-  "Foundations",
-  "Colours, typography, spacing, icons, and logos: the tokens behind every component on this site."
-);
+const { label, description } = SECTION_LANDINGS["/foundations"];
+
+export const metadata = sectionMetadata(label, description);
 
 export default function FoundationsLayout({
   children,

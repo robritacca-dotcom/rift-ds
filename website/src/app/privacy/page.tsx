@@ -1,5 +1,6 @@
 import MegaNav from "../../components/MegaNav/MegaNav";
 import styles from "./page.module.css";
+import { AUTHOR_NAME, AUTHOR_URL } from "@/config/brand.generated";
 
 export default function PrivacyPage() {
   return (
@@ -79,6 +80,9 @@ export default function PrivacyPage() {
         <div className={`${styles.section} animate-in animate-delay-3`}>
           <h2 className={styles.sectionTitle}>Questions</h2>
           <p className={styles.body}>
+            {/* Who runs the site; AUTHOR_NAME/AUTHOR_URL own the values. */}
+            This site is designed, built and run by{" "}
+            <a href={AUTHOR_URL} target="_blank" rel="noopener noreferrer">{AUTHOR_NAME}</a>.
             Open an issue on the project&apos;s GitHub repository.
           </p>
         </div>

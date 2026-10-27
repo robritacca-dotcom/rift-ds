@@ -1,16 +1,17 @@
-"use client";
-
 import Image from "next/image";
 import MegaNav from "../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import TocCard from "../../components/TocCard/TocCard";
 import PageLinks from "../../components/PageLinks/PageLinks";
-import { getSidebarLinks, foundationsSidebarLinks } from "@/config/navigation";
+import { foundationsSidebarLinks, getSidebarLinks, sectionLandingMetadata } from "@/config/navigation";
 import styles from "./page.module.css";
 import { BRAND_SHORT, FIGMA_FILE_URL } from "@/config/brand.generated";
 
 const { sidebarLinks } = getSidebarLinks(foundationsSidebarLinks, "/foundations");
+
+// Page-level, so it never cascades to the sub-pages (see sectionLandingMetadata).
+export const metadata = sectionLandingMetadata("/foundations");
 
 export default function FoundationsPage() {
   return (

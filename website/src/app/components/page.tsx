@@ -1,3 +1,4 @@
+import { sectionLandingMetadata } from "@/config/navigation";
 import MegaNav from "../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import ComponentsSidebar from "../../components/Sidebar/ComponentsSidebar";
@@ -8,6 +9,9 @@ import { componentCategoryMetadata } from "rift-ds/components/registry";
 import { componentPages } from "@/data/component-pages";
 import styles from "./page.module.css";
 import { FIGMA_FILE_URL } from "@/config/brand.generated";
+
+// Page-level, so it never cascades to the sub-pages (see sectionLandingMetadata).
+export const metadata = sectionLandingMetadata("/components");
 
 export default function ComponentsPage() {
   return (

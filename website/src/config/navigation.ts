@@ -423,7 +423,7 @@ export const docsSidebarLinks: NavLink[] = [
   { href: "/docs", label: "Contents" },
   { href: "/overview", label: "Overview", description: "How the system is built, tested, and shipped" },
   { href: "/docs/get-started", label: "Get started", description: "Install the package and theme it" },
-  { href: "/docs/chat", label: "AI chat", description: "Add the chat: one command, the panel alone, or the engine" },
+  { href: "/docs/chat", label: "Add AI chat", description: "One command, the panel alone, or the engine" },
   { href: "/docs/blocks", label: "Blocks", description: "Whole starting pages, added with one command" },
   { href: "/blueprints/claude", label: "Claude MD", description: "The agent instructions behind this repo" },
   { href: "/blueprints/design", label: "Design MD", description: "The design spec behind the system" },
@@ -602,9 +602,9 @@ export function pageOpenGraph(
  *
  * Deliberately sets NO canonical: this layout wraps the section's sub-pages, and
  * `alternates` inherits, so a canonical here would make every sub-page that
- * doesn't override it self-canonicalise to the section landing. The landing (and
- * any sub-page without its own canonical) self-canonicalises to its own URL by
- * default; leaf pages set explicit canonicals via `pageMetadata` or directly.
+ * doesn't override it self-canonicalise to the section landing. The landing
+ * sets its own from its page.tsx via `sectionLandingMetadata`; leaf pages set
+ * theirs via `pageMetadata` or directly.
  */
 export function sectionMetadata(label: string, description?: string): Metadata {
   // `default` is the bare label — the root layout's template adds the suffix to
@@ -615,6 +615,43 @@ export function sectionMetadata(label: string, description?: string): Metadata {
   const openGraph = pageOpenGraph(label, description);
   return description ? { title, description, openGraph } : { title, openGraph };
 }
+
+/**
+ * The page-level half of a section landing's metadata: its canonical and an
+ * Open Graph block that carries its URL. Exported from the landing's own
+ * page.tsx, never its layout: page metadata does not cascade, so the
+ * section's sub-pages keep their own canonicals. Title and description still
+ * come from `sectionMetadata` on the layout.
+ */
+export function sectionLandingMetadata(href: SectionLandingHref): Metadata {
+  const { label, description } = SECTION_LANDINGS[href];
+  return {
+    alternates: { canonical: href },
+    openGraph: pageOpenGraph(label, description, href),
+  };
+}
+
+/** Each section landing's title and search description: the one home both
+    its layout (`sectionMetadata`) and its page (`sectionLandingMetadata`)
+    read, so the two halves can never disagree. */
+export const SECTION_LANDINGS = {
+  "/components": {
+    label: "Components",
+    description: `${COMPONENT_COUNT} React components that make up ${BRAND_NAME}, the design system behind this site.`,
+  },
+  "/foundations": {
+    label: "Foundations",
+    description:
+      "Colours, typography, spacing, icons, and logos: the tokens behind every component on this site.",
+  },
+  "/templates": {
+    label: "Templates",
+    description:
+      "Complete screens built from the design system's components and tokens alone.",
+  },
+} as const;
+
+export type SectionLandingHref = keyof typeof SECTION_LANDINGS;
 
 /**
  * Builds a page's Next.js `Metadata` with its `title` derived from the nav
@@ -653,7 +690,16 @@ export function componentPageMetadata(slug: string): Metadata {
         `Add it to src/components/registry.json (or src/chat/registry.json for a widget).`
     );
   }
-  return pageMetadata(`/components/${slug}`, meta.description);
+  return pageMetadata(`/components/${slug}`, searchDescription(meta.description));
+}
+
+/* Search results show roughly 70 to 160 characters. A registry description
+   stays terse because the panels, chat and MCP read it too; one too short
+   to stand alone in a result gets a derived second sentence here instead. */
+const SEARCH_DESCRIPTION_MIN = 70;
+function searchDescription(description: string): string {
+  if (description.length >= SEARCH_DESCRIPTION_MIN) return description;
+  return `${description} A ${BRAND_NAME} React component, with live examples and its props.`;
 }
 
 /* ============================================

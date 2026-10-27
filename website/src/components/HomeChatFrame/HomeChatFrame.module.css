@@ -179,3 +179,18 @@
   outline: 2px solid var(--color-action-primary-bg);
   outline-offset: 2px;
 }
+
+/* The board report the reel opens in the artifact panel (BoardReport.tsx):
+   one column of the library's own parts, on the panel's surface. */
+.report {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-500);
+  padding: var(--padding-500);
+}
+
+.reportStats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--gap-400);
+}

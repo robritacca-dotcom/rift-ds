@@ -15,10 +15,12 @@ import {
   FINANCE_MENTIONS,
   FINANCE_PERSON,
   FINANCE_PRODUCT,
+  FINANCE_REPORT,
   FINANCE_SCRIPT,
   FINANCE_THREADS,
   REEL_COPY,
 } from "./reel-script";
+import BoardReport from "./BoardReport";
 import FinanceBoard from "./FinanceBoard";
 import styles from "./HomeChatFrame.module.css";
 
@@ -28,8 +30,10 @@ import styles from "./HomeChatFrame.module.css";
    (reel-script.ts) on a loop, from a welcome board of the quarter
    (FinanceBoard.tsx). A collaborator's cursor drives it the way a person
    would: it clicks into the composer and types the first question, drags
-   an expense report in, answers the clarifying questions, tags the CFO,
-   takes a follow-up chip, and starts a new chat to begin again.
+   an expense report in, answers the clarifying questions, takes a
+   follow-up chip that writes the board report into the artifact panel,
+   sends the report to the CFO with a mention, and starts a new chat to
+   begin again.
 
    The stage is a picture to the visitor: inert, hidden from assistive tech,
    and covered by one link into the playground's Chat view. The link sits
@@ -47,6 +51,12 @@ import styles from "./HomeChatFrame.module.css";
    ============================================ */
 
 const TARGET_HREF = "/playground?view=chat";
+
+/* The demo's artifact kinds, and the reel's board report. */
+const ARTIFACT_RENDERERS = {
+  ...DEMO_ARTIFACT_RENDERERS,
+  [FINANCE_REPORT.kind]: () => <BoardReport />,
+};
 
 /* The review footprint for the stage, not a layout token. */
 const FOOTPRINT = { w: 1440, h: 960 };
@@ -75,6 +85,7 @@ const TYPE_CHAR_MS = 55;
 const TYPE_SPACE_MS = 120;
 const DROP_HOVER_MS = 700;
 const GIVE_UP_MS = 25000;
+const FRAME_GAP_MS = 100;
 
 /* Where the expense report waits to be picked up, in footprint pixels:
    over the empty right of the conversation, clear of the composer. */
@@ -174,7 +185,7 @@ export default function HomeChatFrame() {
           <SiteChatProvider
             transport={transport}
             renderers={DEMO_RENDERERS}
-            artifactRenderers={DEMO_ARTIFACT_RENDERERS}
+            artifactRenderers={ARTIFACT_RENDERERS}
             threads={FINANCE_THREADS}
           >
             <Reel
@@ -325,15 +336,23 @@ function Reel({
         timers.add(id);
       }).then(live);
 
-    /** Resolves with the check's first truthy value, tried each frame. */
+    /** Resolves with the check's first truthy value, tried each frame. The
+        give-up clock counts watched time only: a frame gap longer than
+        FRAME_GAP_MS is a hidden tab, and counts as one frame, so a visitor
+        who comes back is not met by a reel that gave up while they were
+        away. */
     const waitFor = <T,>(check: () => T | null | undefined | false) =>
       new Promise<T>((resolve, reject) => {
-        const start = performance.now();
+        let waited = 0;
+        let last = performance.now();
         const tick = () => {
           if (!alive) return reject(CANCELLED);
           const found = check();
           if (found) return resolve(found);
-          if (performance.now() - start > GIVE_UP_MS) return reject(new Error("reel: gave up waiting"));
+          const now = performance.now();
+          waited += Math.min(now - last, FRAME_GAP_MS);
+          last = now;
+          if (waited > GIVE_UP_MS) return reject(new Error("reel: gave up waiting"));
           requestAnimationFrame(tick);
         };
         tick();
@@ -358,6 +377,19 @@ function Reel({
       const r = el.getBoundingClientRect();
       const x = text ? r.left + Math.min(r.width * 0.25, 160 * k) : r.left + r.width / 2;
       return { x: (x - s.left) / k, y: (r.top + r.height / 2 - s.top) / k };
+    };
+
+    /** Where `prefix` ends in a text field's first line, in footprint
+        pixels: the field's text start plus the prefix's width in its font. */
+    const measure = document.createElement("canvas").getContext("2d");
+    const textStart = (field: HTMLElement, prefix: string) => {
+      const s = stage().getBoundingClientRect();
+      const k = s.width / FOOTPRINT.w;
+      const style = getComputedStyle(field);
+      const left = (field.getBoundingClientRect().left - s.left) / k + parseFloat(style.paddingInlineStart);
+      if (!measure) return left;
+      measure.font = `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+      return left + measure.measureText(prefix).width;
     };
 
     /* What the cursor rests on wears its hover look, through the staged
@@ -535,13 +567,16 @@ function Reel({
       stagedFocus(true);
       setMode("text");
       const item = mention && FINANCE_MENTIONS[0].items.find((i) => i.id === mention.id);
-      if (mention && item && text.startsWith(`@${item.label}`)) {
+      const at = item ? text.indexOf(`@${item.label}`) : -1;
+      if (mention && item && at >= 0) {
+        await typeText(text.slice(0, at));
         await typeText(`@${mention.query}`);
-        /* The menu opens above the field's first line, where the
-           composer's own would. */
+        /* The menu opens above the field's first line, at the trigger,
+           where the composer's own would. */
         const r = pointOn(input, true);
         const items = filterMentionItems(FINANCE_MENTIONS[0].items, mention.query);
-        setStaging((s) => ({ ...s, mention: { x: r.x - 60, y: r.y - 24, items, query: mention.query } }));
+        const x = textStart(input, text.slice(0, at));
+        setStaging((s) => ({ ...s, mention: { x, y: r.y - 24, items, query: mention.query } }));
         const row = await waitFor(() => stage().querySelector(".ds-mention-menu [role=option]"));
         await sleep(SHORT_BEAT_MS / 3);
         setMode("pointer");
@@ -549,10 +584,10 @@ function Reel({
         hover(row);
         await ring();
         setStaging((s) => ({ ...s, mention: null }));
-        chatRef.current.setDraft(`@${item.label} `);
+        chatRef.current.setDraft(`${text.slice(0, at)}@${item.label} `);
         await moveTo(pointOn(input, true));
         setMode("text");
-        await typeText(text.slice(item.label.length + 2));
+        await typeText(text.slice(at + item.label.length + 2));
       } else {
         await typeText(text);
       }
@@ -653,6 +688,9 @@ function Reel({
     };
 
     const play = async () => {
+      /* A reel that starts on a chat already under way (a hot reload in
+         development) clears it first, so the script plays from the top. */
+      if (chatRef.current.turns.length > 0) await newChat(false).catch(() => {});
       while (alive) {
         try {
           /* A beat on the welcome board before anything moves. */
@@ -677,14 +715,15 @@ function Reel({
           });
           await answer(REEL_COPY.runwayPicks);
           await sleep(READ_BEAT_MS);
-          /* 4. The numbers handed to the CFO, with a mention. */
+          /* 4. The board update, from a follow-up chip: a report that
+             opens itself in the artifact panel. */
+          await exchange(() => chip(REEL_COPY.board));
+          await sleep(READ_BEAT_MS);
+          /* 5. The report sent to the CFO, with a mention. */
           await exchange(async () => {
             await compose(REEL_COPY.handoff, REEL_COPY.mention);
             await send();
           });
-          await sleep(SHORT_BEAT_MS);
-          /* 5. The board update, from a follow-up chip. */
-          await exchange(() => chip(REEL_COPY.board));
           await sleep(READ_BEAT_MS);
           /* Back to the welcome the way a person would get there. */
           await newChat(true);

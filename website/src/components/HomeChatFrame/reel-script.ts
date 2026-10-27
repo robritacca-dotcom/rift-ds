@@ -4,15 +4,15 @@
  * sends is scripted here, in the order it sends them, so the conversation
  * reads end to end from the welcome board (FinanceBoard.tsx): the
  * quarter's revenue, the expense report dropped in,
- * a runway question that needs two answers first, the numbers handed to
- * the CFO, and the board update drafted from all of it.
+ * a runway question that needs two answers first, the board update
+ * written up from all of it as a report, and the report sent to the CFO.
  *
  * Everything is invented: the company, the people, the figures. It lives
  * outside the app folder, so the site chat's corpus never reads it.
  */
 
-import { scriptChat, type ChatCard, type ThreadsOptions } from "rift-ds/chat";
-import type { DemoChartCard, DemoSourcesCard, DemoStackCard, DemoToolCallCard } from "rift-ds/chat/demo";
+import { artifactCard, scriptChat, type ChatArtifact, type ChatCard, type ThreadsOptions } from "rift-ds/chat";
+import type { DemoChartCard, DemoStackCard, DemoToolCallCard } from "rift-ds/chat/demo";
 import type { MentionSource } from "rift-ds/components/Mention/mentions";
 
 const card = <T,>(kind: string, data: T): ChatCard => ({ kind, data });
@@ -27,7 +27,7 @@ export const REEL_COPY = {
   runway: "What would a 20% cut to cloud spend do to runway?",
   runwayPicks: ["From October", "Keep all three"],
   mention: { query: "Pri", id: "priya" },
-  handoff: "@Priya Shah can you check these before the board pack?",
+  handoff: "Send this to @Priya Shah to check before the board pack",
   board: "Draft the board update",
 } as const;
 
@@ -125,7 +125,7 @@ export const MONTHLY_REVENUE = [
 ];
 
 /* $1,031K in all; payroll is 59% of it. */
-const Q3_SPEND = [
+export const Q3_SPEND = [
   { category: "Payroll", spend: 612 },
   { category: "Cloud", spend: 186 },
   { category: "Marketing", spend: 121 },
@@ -133,11 +133,21 @@ const Q3_SPEND = [
   { category: "Travel", spend: 38 },
 ];
 
-const RUNWAY = [
+export const RUNWAY = [
   { scenario: "Today", months: 14 },
   { scenario: "Cut cloud 20%", months: 17 },
   { scenario: "Cut and pause hires", months: 21 },
 ];
+
+/** The board report the reel's last answer opens in the artifact panel,
+    drawn by BoardReport.tsx through the frame's artifact renderers. */
+export const FINANCE_REPORT: ChatArtifact = {
+  id: "q3-board-update",
+  title: "Q3 board update",
+  kind: "finance-board-report",
+  meta: "Report",
+  icon: "description",
+};
 
 /* -------------------------------------------------------------- script */
 
@@ -231,56 +241,32 @@ export const FINANCE_SCRIPT = scriptChat()
         yKey: "months",
         label: "Months",
       }),
-      followups: ["Share this with Priya", REEL_COPY.board, "Why did cloud costs jump?"],
+      followups: [REEL_COPY.board, "Why did cloud costs jump?", "Model a 30% cut"],
     },
   })
-  .user(REEL_COPY.handoff)
-  .assistant(
-    "Shared the runway model with Priya and flagged the cloud assumption for her review. She has all three scenarios, and the expense report is attached.",
-    {
-      steps: [{ status: "Sharing the model", point: "Priya owns the board numbers." }],
-      card: card<DemoToolCallCard>("tool-call", {
-        name: "share_model",
-        summary: "runway-q4.xlsx with Priya Shah",
-        status: "success",
-        duration: "0.4s",
-      }),
-      followups: [REEL_COPY.board, "Remind me if she has questions", "How long is our runway?"],
-    }
-  )
   .user(REEL_COPY.board)
   .assistant(
-    "A first draft for the board:\n\n- **Revenue:** $1.24M in Q3, up 18% on Q2, led by expansion.\n- **Spend:** cloud grew 41%, the one cost outpacing revenue.\n- **Runway:** 14 months today, 17 with a 20% cloud cut from October.\n- **Ask:** approve the cut so it lands this quarter.",
+    "The Q3 board update is ready. It covers revenue, spend and runway from this thread, and ends on the one decision the board needs to make.",
     {
       steps: [
         { status: "Collecting the numbers", point: "Revenue, spend and runway from this thread." },
-        { status: "Drafting the update", point: "Four lines, ending on the decision." },
+        { status: "Writing the report", point: "One page, ending on the decision." },
       ],
-      card: card<DemoSourcesCard>("sources", {
-        items: [
-          {
-            title: REEL_COPY.file,
-            source: "Uploaded today",
-            letter: "E",
-            excerpt: "Cloud hosting, Q3: $186K against $132K in Q2. Payroll, Q3: $612K.",
-          },
-          {
-            title: "Revenue ledger",
-            source: "Stripe, synced hourly",
-            letter: "R",
-            excerpt: "Q3 booked revenue $1,240K. Expansion 64%, new customers 36%.",
-          },
-          {
-            title: "Runway model",
-            source: "runway-q4.xlsx",
-            letter: "M",
-            excerpt: "Scenario B: cloud down 20% from October, hiring as planned. 17 months.",
-          },
-        ],
-      }),
-      followups: ["Make it shorter", "Add the hiring plan", "Send it to Priya"],
+      card: artifactCard(FINANCE_REPORT),
+      followups: ["Send this to Priya", "Make it shorter", "Add the hiring plan"],
     }
   )
+  .user(REEL_COPY.handoff)
+  .assistant("Sent to Priya, with the runway model and the expense report attached.", {
+    card: card<DemoToolCallCard>("tool-call", {
+      name: "send_report",
+      summary: "Q3 board update to Priya",
+      status: "success",
+      duration: "0.4s",
+    }),
+    /* The last reply offers nothing more: the reel starts a new chat. */
+    followups: [],
+  })
   .fallback("I can look at revenue, spend and runway for any quarter. Which would help?", {
     followups: [REEL_COPY.revenue, "Where is our cash going?", "How long is our runway?"],
   });

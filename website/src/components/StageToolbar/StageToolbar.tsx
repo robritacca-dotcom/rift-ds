@@ -126,8 +126,8 @@ export default function StageToolbar({
         )}
       </div>
 
-      {/* The switch wears the site header's section pills (MegaNav's
-          navLink): a neutral hover fill, and the action pair on the
+      {/* The switch wears the site header's section pills (SiteHeader's
+          pills): the passive hover wash, and the action pair on the
           current view, design.md's action selection convention. */}
       {tabs && activeTab && (
         <div ref={switchRef} className={styles.switch} role="group" aria-label={switchLabel}>

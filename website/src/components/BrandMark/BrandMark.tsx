@@ -19,8 +19,8 @@ export default function BrandMark({
   size?: number;
   className?: string;
 }) {
-  /* The mark renders several times per document (both header bars, the
-     drawer, the footer), so the gradient id must be per-instance. */
+  /* The mark renders several times per document (the header bar, the
+     drawer's brand row, the footer), so the gradient id must be per-instance. */
   const gradientId = useId();
   return (
     <svg

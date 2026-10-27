@@ -177,8 +177,8 @@ a.toolItem:hover {
   display: flex;
   flex-direction: column;
   gap: var(--primitive-gap-500);
-  /* Anchor targets clear the sticky MegaNav overlay and its frosted
-     backdrop — the shared clearance in globals.css owns the geometry */
+  /* Anchor targets clear the sticky site header and its progressive
+     blur — the shared clearance in globals.css owns the geometry */
   scroll-margin-top: var(--layout-anchor-clearance);
 }
 

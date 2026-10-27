@@ -61,8 +61,8 @@
   gap: var(--gap-400);
 }
 
-/* The view switch: the site header's section pills (MegaNav.module.css
-   .navLink owns the recipe), so moving between a stage's views reads the
+/* The view switch: the site header's section pills (.ds-site-header__pill
+   in the library's SiteHeader.css owns the recipe), so moving between a stage's views reads the
    same as moving between the site's sections. Centred in the toolbar by
    the equal flanks above. */
 .switch {

@@ -41,8 +41,8 @@
    the stage content: above the flow, below every floating panel (the
    playground's rails sit at 15).
 
-   The same progressive blur the site header gets on scroll
-   (.stickyBackdrop in MegaNav.module.css owns the reasoning), mirrored to
+   The same progressive blur the site header sits on
+   (ProgressiveBlur; its design.md spec owns the reasoning), mirrored to
    rise from the bottom: a tinted layer and three blur layers, each with a
    stronger blur and a shorter mask, so the blur itself dissolves upward
    instead of ending in a hard line. The tint is the page surface in both

@@ -226,8 +226,8 @@
 /* ============================================
    ANCHOR RAIL (on-this-page column)
    ============================================ */
-/* Anchor targets clear the sticky MegaNav overlay and its frosted
-   backdrop — the shared clearance in globals.css owns the geometry */
+/* Anchor targets clear the sticky site header and its progressive
+   blur — the shared clearance in globals.css owns the geometry */
 .markdownBody :global(h2) {
   scroll-margin-top: var(--layout-anchor-clearance);
 }

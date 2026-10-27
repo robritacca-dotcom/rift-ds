@@ -1216,7 +1216,8 @@
    (64px to 40px) is enough at this size. */
 
 /* Hero buttons for desktop-only pages (the canvas board) leave the mobile
-   IA. Breakpoint matches the nav's drawer switch in MegaNav.module.css. */
+   IA. Breakpoint is the tablet step (BREAKPOINT_TABLET_PX), where
+   MegaNav's initialFold="tablet" pre-folds the header. */
 @media (max-width: 959px) {
   .desktopOnly {
     display: none;

@@ -265,7 +265,8 @@
 }
 
 /* Links to desktop-only pages (the canvas board) leave the mobile IA.
-   Breakpoint matches the nav's drawer switch in MegaNav.module.css. */
+   Breakpoint is the tablet step (BREAKPOINT_TABLET_PX), where
+   MegaNav's initialFold="tablet" pre-folds the header. */
 @media (max-width: 959px) {
   .columnList > li.desktopOnly {
     display: none;

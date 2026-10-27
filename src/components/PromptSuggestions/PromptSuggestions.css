@@ -508,7 +508,7 @@
 .ds-prompt-suggestions--kept .ds-prompt-suggestions__tile,
 .ds-prompt-suggestions--kept .ds-prompt-suggestions__card {
   border-style: dashed;
-  border-color: var(--color-text-tertiary);
+  border-color: var(--color-bg-container-border);
   /* A record carries no fill, like QuestionCard's rows once answered: the
      outline alone says which way the conversation went. */
   background-color: transparent;

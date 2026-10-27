@@ -113,7 +113,8 @@
   }
 }
 
-/* An open row is drawn dashed: an answer on offer, not yet given. A pick
+/* An open row is drawn dashed, in the suggestion chip's hairline colour:
+   an answer on offer, not yet given. A pick
    turns it solid, in the strongest ink, with the control's indicator on at
    its end, so a chosen row reads as decided at a glance and stays readable
    after the moment has passed. The row is a control, so it sits on Input's
@@ -128,7 +129,7 @@
   min-width: 0;
   margin: 0;
   padding: var(--padding-300) var(--padding-400);
-  border: var(--border-025) dashed var(--color-text-tertiary);
+  border: var(--border-025) dashed var(--color-bg-container-border);
   border-radius: var(--radius-300);
   background-color: var(--color-input-bg-primary);
   color: var(--color-text-primary);

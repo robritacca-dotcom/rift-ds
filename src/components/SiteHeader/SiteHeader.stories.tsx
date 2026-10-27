@@ -65,7 +65,7 @@ function Brand() {
 
 const ModeSwitch = () => (
   <SegmentedControl
-    ariaLabel="Colour mode"
+    aria-label="Colour mode"
     size="compact"
     defaultValue="dark"
     showLabels={false}

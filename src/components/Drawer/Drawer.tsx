@@ -5,6 +5,7 @@ import { CircularButton } from '../CircularButton/CircularButton';
 import ReactDOM from 'react-dom';
 import './Drawer.css';
 import '../../behaviors/direction.css';
+import '../../behaviors/visually-hidden.css';
 import '../../fonts/material-symbols.css';
 import { useMounted } from '../../behaviors/useMounted';
 import { useLayer } from '../../behaviors/useLayer';
@@ -24,6 +25,12 @@ type DrawerOwnProps = {
   title: string;
   /** Optional subtitle under the title */
   description?: string;
+  /**
+   * Content shown in place of the title text, such as a site's logo. The
+   * `title` still names the dialog, read by assistive tech from a visually
+   * hidden heading.
+   */
+  heading?: React.ReactNode;
   /** Drawer body content */
   children?: React.ReactNode;
   /** Optional footer slot — typically a row of Buttons */
@@ -65,6 +72,7 @@ export const Drawer = React.forwardRef<HTMLDivElement, DrawerProps>(
       onOpenChange,
       title,
       description,
+      heading,
       children,
       footer,
       side = 'right',
@@ -133,9 +141,13 @@ export const Drawer = React.forwardRef<HTMLDivElement, DrawerProps>(
         >
           <div className={`${baseClass}__header`}>
             <div className={`${baseClass}__heading`}>
-              <h2 className={`${baseClass}__title`} id={titleId}>
+              <h2
+                className={heading ? 'ds-visually-hidden' : `${baseClass}__title`}
+                id={titleId}
+              >
                 {title}
               </h2>
+              {heading}
               {description && (
                 <p className={`${baseClass}__description`} id={descId}>
                   {description}

@@ -131,6 +131,32 @@ export const WithFooter: Story = {
   ),
 };
 
+/**
+ * A logo in place of the title text: `heading` draws it, and `title` still
+ * names the dialog from a visually hidden heading.
+ */
+export const WithHeading: Story = {
+  render: (args) => (
+    <DrawerDemo
+      {...args}
+      side="start"
+      size="sm"
+      title="Menu"
+      triggerLabel="Open menu"
+      heading={
+        <span style={{ display: 'flex', alignItems: 'center', gap: 'var(--gap-200)', fontWeight: 600 }}>
+          <span className="material-symbols-rounded" aria-hidden="true">
+            deployed_code
+          </span>
+          Acme
+        </span>
+      }
+    >
+      <p style={{ margin: 0 }}>The dialog is still named Menu for assistive tech.</p>
+    </DrawerDemo>
+  ),
+};
+
 export const Small: Story = {
   render: (args) => (
     <DrawerDemo {...args} size="sm" title="Small drawer" triggerLabel="Open small">

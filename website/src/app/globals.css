@@ -52,11 +52,13 @@ html[data-theme-ready] {
   --layout-stage-bottom-clearance: calc(var(--layout-chat-inset) * 2 + 48px);
 
   /* How far an anchor target rests below the viewport top. The sticky
-     MegaNav bar is 78px (--mn-bar-height), but its frosted backdrop
-     dissolves for another 64px below it (--sticky-backdrop-reach), so a
-     heading parked just under the bar sits inside the blur. 128px lands
-     it where the frost has faded to nothing. Shared by every page with
-     anchor links, so the offset can never differ between them. */
+     header bar is 78px (--ds-site-header-height, set in MegaNav's
+     stylesheet), and its progressive blur dissolves for another
+     --ds-site-header-blur-reach below it, so a heading parked just under
+     the bar sits inside the frost. 128px lands it in the blur's last
+     stretch, where the weakest layer alone is left and the text reads
+     clear. Shared by every page with anchor links, so the offset can
+     never differ between them. */
   --layout-anchor-clearance: 128px;
 
   /* What "one viewport tall" means to a page. Sections that fill the first
@@ -153,9 +155,9 @@ body {
    while the panel is docked (open, wide viewport, panel view). The body is
    itself the page container (a centred flex column), so right padding
    slides every page's content over instead of letting the fixed panel
-   cover it — zero per-page layout changes. The fixed sticky header is not
-   inset by body padding; MegaNav.module.css offsets it under the same
-   attribute. Reduced motion zeroes the glide via the motion tokens. */
+   cover it — zero per-page layout changes. The sticky header sits in the
+   body too, so the same padding narrows it, and its measured fold follows.
+   Reduced motion zeroes the glide via the motion tokens. */
 html[data-chat="docked"] body {
   padding-right: calc(
     var(--primitive-padding-1000) + var(--layout-chat-width) + var(--layout-chat-inset)
@@ -227,6 +229,23 @@ html[data-chat-resizing] body {
    laid over the menu, so it stands down until the menu closes. */
 html[data-nav-drawer="open"] .ds-chat-launcher__fab {
   display: none;
+}
+
+/* The header's drawer joins the header on the site's chrome layer: the
+   header sits there (MegaNav.module.css), so a drawer at the library's
+   modal layer would open underneath the bar it replaces. */
+.ds-site-header__drawer.ds-drawer {
+  z-index: var(--layer-site-chrome);
+}
+
+/* The header drawer's rows already carry the Button's own text inset, so
+   the list steps in by whatever is left of the logo's lead-in (the mark
+   plus its gap), and every label starts on the wordmark's first letter. The
+   same step on the end keeps the rows centred in the panel. The drawer is
+   portaled out of the header, so this lives here rather than in MegaNav's
+   module. */
+.ds-site-header__drawer .ds-nav-list {
+  padding-inline: calc(var(--icon-size-600) + var(--primitive-gap-200) - var(--padding-500));
 }
 
 a {

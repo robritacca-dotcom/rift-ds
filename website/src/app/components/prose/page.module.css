@@ -96,7 +96,7 @@
 }
 
 /* The demo copy's in-page link lands here. Anchor targets clear the
-   sticky MegaNav bar (--mn-bar-height, 78px) plus a breathing gap */
+   sticky header bar (--ds-site-header-height, 78px) plus a breathing gap */
 .anchorTarget {
   scroll-margin-top: 94px;
 }

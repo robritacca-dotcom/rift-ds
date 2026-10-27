@@ -234,6 +234,15 @@ export const PROSE_ATTRIBUTES = new Set([
  * visitor sees its text on the page.
  */
 
+/**
+ * The brand constants page prose interpolates as visible text, resolved to
+ * what the page renders. Only public, owner-authored values belong here.
+ */
+const INLINE_CONSTANTS = new Map([
+  ['AUTHOR_NAME', AUTHOR_NAME],
+  ['PACKAGE_NAME', PACKAGE_NAME],
+]);
+
 /** True when a string literal is structural rather than prose. */
 function isStructuralString(node) {
   const parent = node.parent;
@@ -275,6 +284,14 @@ export function extractProse(source, fileName) {
       if (ts.isJsxText(child)) {
         consumed.add(child);
         parts.push(decode(child.text));
+      } else if (ts.isJsxExpression(child) && child.expression) {
+        // `{" "}` and `{AUTHOR_NAME}` render as text, so they read as text:
+        // dropping them left "built by ." in the corpus.
+        const { expression } = child;
+        if (ts.isStringLiteral(expression)) parts.push(expression.text);
+        else if (ts.isIdentifier(expression) && INLINE_CONSTANTS.has(expression.text)) {
+          parts.push(INLINE_CONSTANTS.get(expression.text));
+        } else inlineText(child, parts);
       } else if (isBlockElement(child)) {
         // Emitted on its own line when the walk reaches it.
       } else {

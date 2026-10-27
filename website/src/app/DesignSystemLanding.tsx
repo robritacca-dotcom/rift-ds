@@ -1431,8 +1431,8 @@ export default function DesignSystemLanding() {
       <main className={styles.page} id="main-content">
         {/* ---------- page header (deliberately light: this is the index of
              the design-system section, so it carries the tagline, the
-             registry-counted metrics band, the section links, and the accent
-             swatches — nothing else. Figma, Storybook, GitHub and npm live in
+             section links, and the accent swatches; the registry-counted
+             metrics band opens the collage below — nothing else. Figma, Storybook, GitHub and npm live in
              the resources strip below the collage, plus the footer and the
              Install card.) ---------- */}
         <section className={styles.hero} aria-label="About the design system">

@@ -32,7 +32,7 @@ The crawl/index surface lives in `website/src/app/`: the root `layout.tsx` (site
 Build the site (`npm run build` in `website/`), then serve it via the `website-prod` entry in `.claude/launch.json` — it wraps `npm run start` and takes any assigned port, so it never collides with a running dev server; read the port from what it reports. Then fetch the served HTML — plain HTTP requests are enough; no browser needed. Sample every section of the site (at least one page per top-level route group, plus the home page and one component page), and fetch the sitemap, robots, and manifest routes directly. For each sampled page check the `<head>`:
 
 - Title present, unique across pages, and following the site's title template.
-- Meta description present, sensible length (~70–160 characters), and specific to the page.
+- Meta description present, sensible length (~70–160 characters), and specific to the page. Judge component pages in the rendered head, never in the registry: `searchDescription()` in `website/src/config/navigation.ts` owns the floor and pads a short registry description at the metadata layer, so a terse registry line is deliberate.
 - Canonical URL correct — one canonical host, no duplicate-content splits.
 - Open Graph and Twitter card tags complete enough for a clean unfurl (title, description, image, type, url).
 - No accidental `noindex`/`nofollow`; viewport and charset present.

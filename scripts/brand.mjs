@@ -38,16 +38,15 @@ export const ASSISTANT_NAME = 'Rift AI';
  * both JSON-LD nodes (website/src/lib/structuredData.ts), the root
  * layout's author and creator meta (website/src/app/layout.tsx), the
  * share cards' credit (website/src/lib/ogImage.tsx), the /privacy page's
- * Questions section, the sentence closing the /overview intro, the
- * corpus's Author section (the footer sits outside app/, so page-prose
- * extraction never sees it), the
- * package's `author` field, the README's author region, the Storybook
- * landing page, llms.txt, the MCP endpoint's browser landing page, the
- * consumer library skill's provenance line, and every shadcn registry
- * item's `author` in the schema's `name <url>` form (the registry index
- * has no author field), and the home page's closing "Built by" badge
- * (website/src/app/DesignSystemLanding.tsx). Two hand mirrors, the root package.json's
- * `author` and LICENSE's copyright holder, are held by
+ * Questions section, the sentence closing the /overview intro, the home
+ * page's closing "Built by" credit (website/src/app/DesignSystemLanding.tsx),
+ * the corpus's Author section (the footer sits outside app/, so page-prose
+ * extraction never sees it), the package's `author` field, the README's
+ * author region, the Storybook landing page, llms.txt, the MCP endpoint's
+ * browser landing page, the consumer library skill's provenance line, and
+ * every shadcn registry item's `author` in the schema's `name <url>` form
+ * (the registry index has no author field). Two hand mirrors, the root
+ * package.json's `author` and LICENSE's copyright holder, are held by
  * validate-package-exports.mjs. Deliberately uncredited: the init bin's
  * terminal output (content-design.md's CLI register never promotes),
  * the per-component markdown pages (prop contracts only), and every

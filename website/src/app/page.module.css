@@ -27,8 +27,7 @@
   text-align: center;
   gap: var(--gap-400);
   /* The content container's own cap, not the raw viewport: the fade
-     rules and stat band read as part of the page column, not banner
-     furniture. 1440px clears the mega title in every theme's face,
+     rule reads as part of the page column, not banner furniture. 1440px clears the mega title in every theme's face,
      including the wide monospace ones that broke the old 1080px cap. */
   max-width: 1440px;
   /* Section-rhythm token rather than a fixed margin: it steps down at
@@ -204,13 +203,13 @@
 
 
 /* ============================================
-   STAT STRIP — the metrics band under the
-   tagline: the library's own Stat, centred,
+   STAT STRIP: the counts band opening the
+   collage, the library's own Stat, centred,
    one figure per registry count export
    ============================================ */
 
-/* The dividers breathe: air below the subtitle, and between the second
-   rule and the stats, on top of the hero's own gap. */
+/* The hero's one rule breathes: air below the subtitle, on top of the
+   hero's own gap. */
 .heroDivider {
   margin-top: var(--gap-400);
 }
@@ -376,8 +375,8 @@
   margin-block-end: var(--gap-1000);
 }
 
-/* Stat left-aligns for dashboard rows; a centred hero band centres each
-   value over its label. */
+/* Stat left-aligns for dashboard rows; the centred counts band centres
+   each value over its label. */
 .statStrip :global(.ds-stat) {
   align-items: center;
 }

@@ -13,7 +13,7 @@ import "rift-ds/fonts/material-symbols.css";
 import { Nunito_Sans } from "next/font/google";
 import "./globals.css";
 import { buildDesignSystemJsonLd, buildWebsiteJsonLd, SITE_URL } from "@/lib/structuredData";
-import { BRAND_NAME, GA_ID, TITLE_SUFFIX } from "@/config/brand.generated";
+import { AUTHOR_NAME, AUTHOR_URL, BRAND_NAME, GA_ID, TITLE_SUFFIX } from "@/config/brand.generated";
 import { BASE_THEME_ID, LEGACY_BASE_THEME_ID, SERVED_THEME_ID } from "@/lib/theme/brand";
 import { colorModeScript } from "rift-ds/components/ThemeToggle/colorMode";
 import { SiteChatProvider } from "@/components/SiteChat/SiteChatProvider";
@@ -57,8 +57,10 @@ export const metadata: Metadata = {
     "open source design system",
     "MCP",
   ],
-  authors: [{ name: BRAND_NAME }],
-  creator: BRAND_NAME,
+  // The person, not the product: the head's author/creator agree with the
+  // JSON-LD Person node and the footer credit, from the same brand constants.
+  authors: [{ name: AUTHOR_NAME, url: AUTHOR_URL }],
+  creator: AUTHOR_NAME,
   openGraph: {
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,

@@ -21,3 +21,10 @@
 .plain {
   background-image: none;
 }
+
+/* The same ground inside a frame: it fills its positioned ancestor and
+   sits under the frame's own content rather than behind the page. */
+.contained {
+  position: absolute;
+  z-index: 0;
+}

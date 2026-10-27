@@ -1,17 +1,15 @@
-/* The framed playground: a container card holding the scaled page, with
-   the call to open it pinned to the bottom edge. */
+/* The framed chat: a container card holding the scaled stage, with one
+   link laid over the whole of it. */
 .frame {
   position: relative;
-  display: block;
   width: 100%;
   max-width: 1440px;
   margin-inline: auto;
   overflow: hidden;
   border-radius: var(--radius-600);
   border: 1px solid var(--color-bg-container-border);
-  background: var(--color-bg-container-primary);
+  background: var(--color-bg-page-primary);
   box-shadow: var(--shadow-floating);
-  text-decoration: none;
   transition: border-color var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
@@ -19,56 +17,165 @@
   border-color: var(--color-input-border-hover);
 }
 
-.frame:focus-visible {
-  outline: 2px solid var(--color-action-primary-bg);
-  outline-offset: 2px;
-}
-
 /* Laid out at its native footprint, scaled from the top-left corner to
-   the frame's width. */
-.embed {
+   the frame's width. The dot ground fills it; the chat card sits inset. */
+.stage {
   position: absolute;
   inset-block-start: 0;
   inset-inline-start: 0; /* ds-allow(physical): the scale origin is the screen's top-left in either direction */
-  border: 0;
   transform-origin: top left;
   pointer-events: none;
+  display: flex;
+  padding: var(--gap-1000);
 }
 
-.cta {
-  position: absolute;
-  inset-block-end: var(--gap-400);
-  inset-inline-start: 50%;
-  translate: calc(-50% * var(--ds-inline-sign)) 0;
-  display: inline-flex;
-  align-items: center;
-  gap: var(--gap-100);
-  padding-block: var(--padding-100);
-  padding-inline: var(--padding-300) var(--padding-200);
-  border-radius: var(--radius-pill);
-  background: var(--color-action-primary-bg);
-  color: var(--color-action-primary-text);
-  font-family: var(--font-paragraph-sm-emphasis-family);
-  font-size: var(--font-paragraph-sm-emphasis-size);
-  font-weight: var(--font-paragraph-sm-emphasis-weight);
-  line-height: var(--font-paragraph-sm-emphasis-line-height);
+/* The chat on the ground: the AI chat page's stage card, filling the
+   footprint inside the ground's margin. */
+.card {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: var(--radius-600);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  background: var(--color-bg-glass);
   box-shadow: var(--shadow-floating);
+  backdrop-filter: blur(24px);
+}
+
+/* The staged pointer, dressed as a collaborator's cursor so it never reads
+   as the visitor's own: a filled, rounded arrow and a name tag in one
+   colour pair. The pair is the action colour and its text colour, re-pointed
+   for Smoke below. The reel moves it by transform; its glyphs are offset so
+   the arrow's tip, or the I-beam's middle, sits on the point. */
+.cursor {
+  --cursor-fill: var(--color-action-primary-bg);
+  --cursor-ink: var(--color-action-primary-text);
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0; /* ds-allow(physical): the reel's coordinates are the screen's, from the top-left */
+  z-index: 3;
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* Smoke's action colour is the neutral at its lightest, close enough to a
+   system pointer to pass for one, and Smoke turns the accents and chart
+   colours neutral too. Its cursor borrows the info status blue, the one
+   hue Smoke keeps that says nothing good or bad, with a text colour that
+   stays light on it in either mode. */
+:global(:root[data-brand="mono"]) .cursor {
+  --cursor-fill: var(--color-status-info-border);
+  --cursor-ink: var(--color-text-on-inverse);
+}
+
+:global(:root[data-brand="mono"][data-theme="dark"]) .cursor {
+  --cursor-ink: var(--color-status-info-text);
+}
+
+.arrow,
+.beam {
+  position: absolute;
+  fill: var(--cursor-fill);
+  stroke: var(--color-bg-page-primary);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+  overflow: visible;
+}
+
+.arrow { translate: -3px -3px; }
+.beam { translate: -8px -14px; display: none; }
+
+.cursor[data-mode="text"] .arrow { display: none; }
+.cursor[data-mode="text"] .beam { display: block; }
+
+/* The name tag, trailing the tip down and to the right, the way a shared
+   canvas labels a collaborator. */
+.tag {
+  position: absolute;
+  inset-block-start: var(--gap-500);
+  inset-inline-start: var(--gap-500); /* ds-allow(physical): trails the pointer's tip on screen, whatever the reading direction */
+  padding: var(--padding-100) var(--padding-300);
+  border-radius: var(--radius-pill);
+  background: var(--cursor-fill);
+  color: var(--cursor-ink);
+  font-family: var(--font-paragraph-emphasis-family);
+  font-size: var(--font-paragraph-emphasis-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-emphasis-line-height);
+  white-space: nowrap;
+  box-shadow: var(--shadow-floating);
+}
+
+/* A click: a ring pulses out from the tip. */
+.ring {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  translate: -20px -20px;
+  border-radius: var(--radius-pill);
+  border: 2px solid var(--cursor-fill);
   opacity: 0;
-  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
-.frame:hover .cta,
-.frame:focus-visible .cta {
-  opacity: 1;
+.cursor[data-pressed] .ring {
+  animation: cursorRing var(--motion-duration-slow) var(--motion-ease-standard);
 }
 
-/* Touch has no hover: the call stays up. */
-@media (hover: none) {
-  .cta {
-    opacity: 1;
-  }
+@keyframes cursorRing {
+  from { opacity: 0.9; scale: 0.3; }
+  to { opacity: 0; scale: 1.3; }
 }
 
-.ctaIcon {
-  --icon-size: var(--icon-size-500);
+/* The staged mention menu: the library's MentionMenu, set over the
+   composer's first line and opening upward, where the composer's own
+   would open. */
+.mentionMenu {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0; /* ds-allow(physical): placed by the reel in screen coordinates */
+  z-index: 2;
+  translate: 0 -100%;
+}
+
+/* The expense report on its way into the composer: a real AttachmentTile,
+   lifted while the cursor carries it. */
+.file {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0; /* ds-allow(physical): placed by the reel in screen coordinates */
+  z-index: 2;
+  animation: fileIn var(--motion-duration-slow) var(--motion-ease-entrance);
+}
+
+.file :global(.ds-attachment-tile) {
+  box-shadow: var(--shadow-floating);
+}
+
+.file[data-carried] {
+  rotate: -4deg;
+  scale: 1.04;
+  transition:
+    rotate var(--motion-duration-fast) var(--motion-ease-standard),
+    scale var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+@keyframes fileIn {
+  from { opacity: 0; scale: 0.92; }
+  to { opacity: 1; scale: 1; }
+}
+
+/* The link: the frame's whole face, above the stage. */
+.hit {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+}
+
+.hit:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
 }

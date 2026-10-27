@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type ReactNode } from "react";
+import { type ReactNode } from "react";
 import layout from "./page.module.css";
 import styles from "./ChatDirector.module.css";
 import { FloatingRail } from "./FloatingRail";
@@ -8,7 +8,6 @@ import { Button } from "rift-ds/components/Button/Button";
 import { ChatMarker } from "rift-ds/components/ChatMarker/ChatMarker";
 import { InspectorSection } from "rift-ds/components/Inspector/InspectorSection";
 import { useChatWidget } from "rift-ds/chat";
-import { MOTION_AUTOPLAY_INTERVAL_MS, MOTION_EXIT_SYNC_MS } from "rift-ds/tokens/motion";
 
 /* ============================================
    The chat director: the Chat view's own rail.
@@ -359,53 +358,4 @@ export default function ChatDirector({
       {content}
     </FloatingRail>
   );
-}
-
-/* The autoplay reel: the prompts the home page's embedded stage plays on a
-   loop, each a scripted exchange that ends without waiting on the visitor
-   (no question cards, which would sit unanswered). After the last one the
-   conversation starts over. */
-const AUTOPLAY_REEL = [
-  "Which plan fits a team of five?",
-  "How is the trial going?",
-  "Go ahead and invite the other three",
-  "Set it all up for me",
-  "Where is that written down?",
-];
-
-/** Plays `AUTOPLAY_REEL` through the demo transport, one exchange at a
-    time: each prompt waits for the previous answer to finish streaming and
-    then a beat to read it. Mounted only by `?autoplay=1`, the home page's
-    embed; renders nothing. */
-export function ChatAutoplay() {
-  const chat = useChatWidget();
-  const { streaming } = chat;
-  /* The latest actions, read when the timer fires: the effect keys on
-     streaming alone, so a re-render cannot restart the beat. */
-  const chatRef = useRef(chat);
-  useEffect(() => {
-    chatRef.current = chat;
-  });
-  const step = useRef(0);
-  const started = useRef(false);
-
-  useEffect(() => {
-    if (streaming) return;
-    /* The first exchange starts almost at once, so the frame is never
-       empty for long; every later one leaves the answer up to be read. */
-    const delay = started.current ? MOTION_AUTOPLAY_INTERVAL_MS : MOTION_EXIT_SYNC_MS;
-    const timer = window.setTimeout(() => {
-      started.current = true;
-      const { send, reset, setDraft } = chatRef.current;
-      if (step.current === AUTOPLAY_REEL.length) {
-        step.current = 0;
-        reset();
-        setDraft("");
-      }
-      send(AUTOPLAY_REEL[step.current++]);
-    }, delay);
-    return () => window.clearTimeout(timer);
-  }, [streaming]);
-
-  return null;
 }

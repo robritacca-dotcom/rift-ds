@@ -107,8 +107,7 @@ import {
 import AdvancedColorsDialog from "./AdvancedColorsDialog";
 import ExportThemeDialog from "./ExportThemeDialog";
 import { AGENT_STARTER } from "@/data/agent-starter.generated";
-import ChatDirector, { ChatAutoplay } from "./ChatDirector";
-import { EMBED_THEME_MESSAGE } from "@/components/HomeChatFrame/embed-theme";
+import ChatDirector from "./ChatDirector";
 import InspectMode from "@/components/InspectMode/InspectMode";
 import ChatView, {
   defaultChatPlaceholder,
@@ -172,6 +171,11 @@ const VIEWS = [
   { value: "chat", label: "AI Chat" },
   { value: "templates", label: "Templates" },
 ];
+
+/* Where the toolbar's Get started goes: the chat's own guide from the Chat
+   view, the install guide from every other. */
+const GET_STARTED_HREF: Record<string, string> = { chat: "/docs/chat" };
+const GET_STARTED_FALLBACK = "/docs/get-started";
 
 /* Below the tool's desktop breakpoint there is no room for the edge
    panel: the controls move into a bottom Drawer summoned by a fixed pill,
@@ -263,30 +267,15 @@ export default function PlaygroundPage() {
      useSearchParams, which would force a Suspense boundary on a fully
      client-rendered page. */
   const [view, setView] = useState<View>("components");
-  const [autoplay, setAutoplay] = useState(false);
   useEffect(() => {
     // The setState here is intentional — a once-on-mount sync from the
     // URL, which the server prerender can't see (same pattern as
     // MegaNav's navigation effect).
-    const params = new URLSearchParams(window.location.search);
-    const q = params.get("view");
-    /* ?autoplay=1 is the home page's embed: the Chat view plays its
-       scripted reel on a loop (ChatAutoplay). */
-    const embedded = params.get("autoplay") === "1";
+    const q = new URLSearchParams(window.location.search).get("view");
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setAutoplay(embedded);
-    /* The embed is a picture: nothing in it may take focus. A focus inside
-       a frame scrolls the host page to the frame (preventScroll and the
-       frame's inert do not stop it), so the reel's composer focus would
-       drag the home page down on load. */
-    const nativeFocus = HTMLElement.prototype.focus;
-    if (embedded) HTMLElement.prototype.focus = function () {};
     if (q === "chat" || q === "type" || q === "templates") setView(q);
     /* The Templates view was the Dashboard view, and links to it remain. */
     else if (q === "dashboard") setView("templates");
-    return () => {
-      HTMLElement.prototype.focus = nativeFocus;
-    };
   }, []);
   /* Flipped on every view switch: the layout swaps between two copies of
      the entrance keyframes, so the panels and the stage arrive again
@@ -1049,32 +1038,6 @@ export default function PlaygroundPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  /* The home page's embed (?autoplay=1) follows the page around it: the
-     frame posts the visitor's theme pick and colour mode on every change
-     (HomeChatFrame), and the levers take the pick the way the picker
-     would. Same origin only; a ref keeps the listener on the latest
-     applyPreset without re-subscribing every render. */
-  const applyPresetRef = useRef(applyPreset);
-  useEffect(() => {
-    applyPresetRef.current = applyPreset;
-  });
-  useEffect(() => {
-    if (!autoplay) return;
-    const onMessage = (event: MessageEvent) => {
-      if (event.origin !== window.location.origin) return;
-      const data = event.data as { type?: string; brand?: string; mode?: string; setting?: string };
-      if (data?.type !== EMBED_THEME_MESSAGE) return;
-      const root = document.documentElement;
-      if (data.mode) root.setAttribute("data-theme", data.mode);
-      if (data.setting) root.setAttribute("data-theme-setting", data.setting);
-      if (data.brand && (isBaseTheme(data.brand) || THEME_PRESETS[data.brand])) {
-        applyPresetRef.current(data.brand);
-      }
-    };
-    window.addEventListener("message", onMessage);
-    return () => window.removeEventListener("message", onMessage);
-  }, [autoplay]);
-
   /* What leaves the playground: the levers as one complete theme, and the
      three files built from it. The CSS comes from the composer the shipped
      preset stylesheets are written from, once per theme, so :root always
@@ -1441,13 +1404,23 @@ export default function PlaygroundPage() {
       />
 
       {/* Not the site's full navigation — a full-screen view's floating
-          toolbar pill: brand mark, breadcrumb trail, the view pills, and
-          the X out. (Footer and the site chat still skip this route.) */}
+          toolbar pill: brand mark, breadcrumb trail, the view pills, a way
+          into the docs, and the X out. (Footer and the site chat still
+          skip this route.) */}
       <StageToolbar
         tabs={VIEWS}
         activeTab={view}
         onTabChange={pickView}
         switchLabel="Switch the playground view"
+        actions={
+          <Button
+            className={styles.getStarted}
+            label="Get started"
+            variant="primary"
+            size="compact"
+            href={GET_STARTED_HREF[view] ?? GET_STARTED_FALLBACK}
+          />
+        }
       />
 
       {/* One provider around the whole layout: the theme drawer, the chat
@@ -1788,7 +1761,6 @@ export default function PlaygroundPage() {
           />
         )}
       </div>
-      {view === "chat" && autoplay && <ChatAutoplay />}
       </SiteChatProvider>
 
     </>

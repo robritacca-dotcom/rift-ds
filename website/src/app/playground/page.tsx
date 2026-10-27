@@ -1407,6 +1407,9 @@ export default function PlaygroundPage() {
           the components view instead). */}
       <HiddenBackground />
       <DotBackground dots={showDots} />
+      {/* The stage has no visible title; this names the page for screen
+          readers and search, one h1 like every other page. */}
+      <h1 className={styles.visuallyHidden}>Playground</h1>
 
       {/* Drag a picture or a DESIGN.md onto any part of the tool and the
           levers move to match it. The file is read in this tab and nowhere

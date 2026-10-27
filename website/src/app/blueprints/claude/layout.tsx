@@ -4,7 +4,7 @@ import { BRAND_NAME } from "@/config/brand.generated";
 
 const title = "Claude MD";
 const description =
-  `The codebase context file Claude Code reads on every session. Project structure, token architecture, and the conventions a builder needs to extend ${BRAND_NAME} without exploring.`;
+  `The context file Claude Code reads every session: project structure, token architecture, and the conventions for extending ${BRAND_NAME} without exploring.`;
 
 export const metadata: Metadata = {
   alternates: { canonical: "/blueprints/claude" },

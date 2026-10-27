@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import { BRAND_NAME } from "@/config/brand.generated";
+import { AUTHOR_NAME, BRAND_NAME } from "@/config/brand.generated";
 import shaderBackground from "@/data/shader-background.json";
 
 export const ogImageSize = { width: 1200, height: 630 };
@@ -61,8 +61,9 @@ const THEME = {
 
 /**
  * Renders a 1200x630 OG image: the ambient blob field (one static frame of
- * the site's shader background), the logo mark, a title, and a byline of
- * "<brand> — <kicker>". Used for every dynamic social card on the site.
+ * the site's shader background), the logo mark with the author credit
+ * across from it, a title, and a byline of "<brand> · <kicker>". Used for
+ * every dynamic social card on the site.
  *
  * The light theme is the default the routes ship: unfurlers fetch one static
  * image per page (Open Graph has no notion of the viewer's colour scheme), and
@@ -74,7 +75,7 @@ const THEME = {
  */
 export function buildOgImage(
   title: string,
-  kicker = "Portfolio",
+  kicker = "Design system",
   theme: OgTheme = "light"
 ) {
   const colors = THEME[theme];
@@ -92,16 +93,23 @@ export function buildOgImage(
           backgroundImage: blobFieldLayers(theme),
         }}
       >
-        <svg width="88" height="88" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path fillRule="evenodd" clipRule="evenodd" d={LOGO_MARK_PATH} fill="url(#paint0_linear)" />
-          <defs>
-            <linearGradient id="paint0_linear" x1="3.83825" y1="15.8618" x2="13.4908" y2="5.78849" gradientUnits="userSpaceOnUse">
-              <stop stopColor="#2980B9" />
-              <stop offset="0.5484" stopColor="#2980B9" />
-              <stop offset="1" stopColor="#34495E" />
-            </linearGradient>
-          </defs>
-        </svg>
+        {/* The credit sits across from the mark, so it never competes with
+            a long byline for the bottom row's width. */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <svg width="88" height="88" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fillRule="evenodd" clipRule="evenodd" d={LOGO_MARK_PATH} fill="url(#paint0_linear)" />
+            <defs>
+              <linearGradient id="paint0_linear" x1="3.83825" y1="15.8618" x2="13.4908" y2="5.78849" gradientUnits="userSpaceOnUse">
+                <stop stopColor="#2980B9" />
+                <stop offset="0.5484" stopColor="#2980B9" />
+                <stop offset="1" stopColor="#34495E" />
+              </linearGradient>
+            </defs>
+          </svg>
+          <div style={{ display: "flex", fontSize: 32, fontWeight: 600, color: colors.ink }}>
+            {`by ${AUTHOR_NAME}`}
+          </div>
+        </div>
 
         <div
           style={{

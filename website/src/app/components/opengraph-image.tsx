@@ -6,5 +6,5 @@ export const contentType = ogImageContentType;
 export const alt = `${BRAND_NAME} · Components`;
 
 export default function Image() {
-  return buildOgImage("Components", BRAND_NAME);
+  return buildOgImage("Components", "React components");
 }

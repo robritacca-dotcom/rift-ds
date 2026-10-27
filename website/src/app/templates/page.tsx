@@ -1,5 +1,4 @@
-"use client";
-
+import { sectionLandingMetadata } from "@/config/navigation";
 import MegaNav from "../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import TemplateShowcase from "./TemplateShowcase";
@@ -12,6 +11,9 @@ import styles from "./page.module.css";
  * templates. The sidebar would only offer links that eject the reader into
  * a chromeless page; the preview is the navigation.
  */
+// Page-level, so it never cascades to the sub-pages (see sectionLandingMetadata).
+export const metadata = sectionLandingMetadata("/templates");
+
 export default function TemplatesPage() {
   return (
     <>

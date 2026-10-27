@@ -47,7 +47,7 @@ const demoProfile = {
 function DemoContent({ heading, body }: { heading: string; body: string }) {
   return (
     <div>
-      <h1 className={styles.demoHeading}>{heading}</h1>
+      <h2 className={styles.demoHeading}>{heading}</h2>
       <p className={styles.demoBody}>{body}</p>
     </div>
   );

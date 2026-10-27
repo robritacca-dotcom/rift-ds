@@ -1,9 +1,8 @@
-import { sectionMetadata } from "@/config/navigation";
+import { SECTION_LANDINGS, sectionMetadata } from "@/config/navigation";
 
-export const metadata = sectionMetadata(
-  "Templates",
-  "Complete screens built from the design system's components and tokens alone."
-);
+const { label, description } = SECTION_LANDINGS["/templates"];
+
+export const metadata = sectionMetadata(label, description);
 
 export default function TemplatesLayout({
   children,

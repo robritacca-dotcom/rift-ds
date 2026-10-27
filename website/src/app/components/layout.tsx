@@ -1,11 +1,8 @@
-import { COMPONENT_COUNT } from "rift-ds/components/registry";
-import { sectionMetadata } from "@/config/navigation";
-import { BRAND_NAME } from "@/config/brand.generated";
+import { SECTION_LANDINGS, sectionMetadata } from "@/config/navigation";
 
-export const metadata = sectionMetadata(
-  "Components",
-  `${COMPONENT_COUNT} React components that make up ${BRAND_NAME}, the design system behind this site.`
-);
+const { label, description } = SECTION_LANDINGS["/components"];
+
+export const metadata = sectionMetadata(label, description);
 
 export default function ComponentsLayout({
   children,

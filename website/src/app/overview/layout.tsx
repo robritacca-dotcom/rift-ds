@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { pageOpenGraph } from "@/config/navigation";
 import { BRAND_NAME } from "@/config/brand.generated";
-import { buildDesignSystemJsonLd } from "@/lib/structuredData";
 
 const title = `Overview of ${BRAND_NAME}`;
 const description =
@@ -19,15 +18,7 @@ export default function OverviewLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(buildDesignSystemJsonLd()),
-        }}
-      />
-      {children}
-    </>
-  );
+  // No JSON-LD here: the root layout already emits the SoftwareApplication
+  // node on every page, and a second copy on this one duplicated it.
+  return <>{children}</>;
 }

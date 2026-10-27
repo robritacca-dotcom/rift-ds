@@ -8,7 +8,15 @@
  */
 
 import ChatHome from "@/components/templates/ChatHome/ChatHome";
+import styles from "./page.module.css";
 
 export default function ChatHomeTemplatePage() {
-  return <ChatHome />;
+  return (
+    <>
+      {/* The template has no visible page title; this names the page for
+          screen readers and search. */}
+      <h1 className={styles.visuallyHidden}>Chat home</h1>
+      <ChatHome />
+    </>
+  );
 }

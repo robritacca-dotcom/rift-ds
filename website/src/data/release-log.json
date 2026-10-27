@@ -1,6 +1,17 @@
 {
   "releases": [
     {
+      "version": "1.15.0",
+      "date": "2026-10-26",
+      "title": "Your locale, your keys, your reading direction",
+      "body": [
+        "Every number and date a component prints is now written in a locale you choose. Wrap your app in `LocaleProvider` (`rift-ds/behaviors/LocaleProvider`) and the charts, tables, calendars, pickers, counters and percentages take your locale's digits, decimal and percent marks, month and weekday names, first day of the week and clock; a component's own `locale` prop wins. It formats and never translates: words stay props.",
+        "`useShortcut` (`rift-ds/behaviors/shortcuts`) binds keys with a short string, `mod+k` for Cmd+K on a Mac and Ctrl+K elsewhere, through the one listener the components use, so a shortcut stays quiet in a text field and never takes Escape from an open overlay. `useRegisteredShortcuts` lists the live bindings for a help dialog, and Kbd, the command palette and the menus take `keys` to draw a shortcut for the reader's platform.",
+        "Set `dir=\"rtl\"` on `<html>` and every component lays itself out right to left: sides and insets, slides and toggles, arrow keys and drags, mirrored icons, and menus that line up with their trigger's leading edge. Drawer, the popups and table columns take `start` and `end` beside `left` and `right`.",
+        "Themes can colour the logo, display type, headings and running text apart from the action colour, and Marquee joins as the twelfth theme. Nothing published was renamed or removed. Numbers and dates now default to `en-US` rather than the browser's locale, chart value axes group long numbers, and the command palette trigger draws Ctrl K off a Mac."
+      ]
+    },
+    {
       "version": "1.14.0",
       "date": "2026-10-26",
       "title": "The tables release",

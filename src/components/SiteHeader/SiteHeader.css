@@ -1,0 +1,296 @@
+/* ============================================
+   SITE HEADER
+   The site's top bar: brand, section pills with
+   mega menus, actions, and a drawer once folded
+   ============================================ */
+
+/* Base */
+.ds-site-header {
+  /* The bar's height. An override hook: the blur's reach and a page's own
+     anchor offsets read it. */
+  --ds-site-header-height: calc(var(--control-height-default) + var(--padding-1000));
+  /* How far the blur dissolves below the bar. */
+  --ds-site-header-blur-reach: var(--gap-1500);
+  position: relative;
+  /* Lifts the open panel over the page's flow when the header is not sticky. */
+  z-index: 1;
+  width: 100%;
+}
+
+/* Sticky: rides up with whatever sits above it, then holds at the top. */
+.ds-site-header--sticky {
+  position: sticky;
+  top: 0;
+  z-index: var(--layer-sticky);
+}
+
+/* The blur stack, viewport-fixed (a sticky box is not a containing block
+   for it) so it spans the full width whatever the host's gutters. It sits
+   inside the header's stacking context, behind the bar's controls. Never a
+   filter on the header itself: that would make the header a backdrop root
+   and the mega menu's own glass would sample only the header's subtree. */
+.ds-site-header__blur.ds-progressive-blur {
+  position: fixed;
+  inset: 0 0 auto;
+  height: calc(var(--ds-site-header-height) + var(--ds-site-header-blur-reach));
+  z-index: -1;
+}
+
+/* The bar: brand, pills, then the end cluster pushed to the far side. */
+.ds-site-header__bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--gap-400);
+  height: var(--ds-site-header-height);
+  box-sizing: border-box;
+  /* The folded bar keeps its pills out of flow at full width so they stay
+     measurable; clipping the inline axis keeps them from widening the page
+     into a sideways scroll. The margin leaves room for a focus ring at the
+     bar's edge, and the block axis stays open for the menu panel. */
+  overflow-x: clip;
+  overflow-clip-margin: var(--gap-200);
+}
+
+.ds-site-header__brand {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* The pills sit beside the brand rather than centred on the page:
+   --gap-1000 from the brand (the bar's own gap plus this margin), and the
+   first pill's inline padding sets the rest of the visual gap. */
+.ds-site-header__nav {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-100);
+  margin-inline-start: calc(var(--gap-1000) - var(--gap-400));
+  flex-shrink: 0;
+}
+
+.ds-site-header__end {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-400);
+  margin-inline-start: auto;
+  flex-shrink: 0;
+}
+
+.ds-site-header__actions,
+.ds-site-header__wide-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-400);
+  flex-shrink: 0;
+}
+
+.ds-site-header__section {
+  position: relative;
+}
+
+/* Pills: a pill-radius link at the compact control height, so a caret's
+   icon box never makes one pill taller than its neighbours. */
+.ds-site-header__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-050);
+  height: var(--control-height-compact);
+  box-sizing: border-box;
+  padding-inline: var(--padding-400);
+  border-radius: var(--radius-pill);
+  background-color: transparent;
+  color: var(--color-text-primary);
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
+  line-height: 1;
+  white-space: nowrap;
+  text-decoration: none;
+  transition:
+    background-color var(--motion-duration-fast) var(--motion-ease-standard),
+    color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+/* Hover is the tertiary family's wash, as on a tertiary Button, a NavList
+   row and the MegaMenu's rows: a container fill can match the page floor
+   in a light theme and vanish. */
+.ds-site-header__pill:hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-site-header__pill:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+/* An open menu holds the hover fill and nothing more: opening a menu is
+   not a selection. Declared before --current so the current section keeps
+   its colour while its menu is open. */
+.ds-site-header__pill--open {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+/* The current section is the selected item of an exclusive set, so it
+   takes the action selection pair, SegmentedControl's active segment; a
+   neutral fill would read as the hover state over the glassy blur. */
+.ds-site-header__pill--current {
+  background-color: var(--color-action-primary-bg);
+  color: var(--color-action-primary-text);
+}
+
+.ds-site-header__pill--current:hover {
+  background-color: var(--color-action-primary-bg-hover);
+}
+
+.ds-site-header__caret {
+  --icon-size: var(--icon-size-500);
+  line-height: 1;
+  color: var(--color-text-secondary);
+  transition: rotate var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-site-header__pill--current .ds-site-header__caret {
+  color: inherit;
+}
+
+.ds-site-header__pill--open .ds-site-header__caret {
+  rotate: 180deg;
+}
+
+/* The menu button only exists once the bar folds. */
+.ds-site-header__menu-button {
+  display: none;
+}
+
+/* While the drawer is open its close button stands in this exact spot, on
+   the top layer; the button underneath would only show through the scrim. */
+.ds-site-header__menu-button--hidden {
+  visibility: hidden;
+}
+
+/* The mega menu hangs under the bar across its full width. It is not
+   anchored to a control (useAnchoredPosition's job): it belongs to the bar
+   and spans it, so it rides the bar's own box. */
+.ds-site-header__panel {
+  position: absolute;
+  inset-block-start: calc(100% + var(--gap-200));
+  inset-inline: 0;
+}
+
+/* Folded: the pills and the wide actions leave the row but stay measurable
+   (hidden, out of flow, inert), and the menu button takes their place. */
+.ds-site-header--folded .ds-site-header__nav,
+.ds-site-header--folded .ds-site-header__wide-actions {
+  position: absolute;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.ds-site-header--folded .ds-site-header__menu-button {
+  display: inline-flex;
+}
+
+.ds-site-header--folded .ds-site-header__panel {
+  display: none;
+}
+
+/* Before the bar has measured itself (the first frame, which a
+   server-rendered page shows before its script runs), it folds by CSS below
+   the `initialFold` step, so a phone never sees the pills spill past the
+   actions. The first measurement replaces this in the same commit as
+   hydration. */
+@media (max-width: 959px) {
+  .ds-site-header--prefold-tablet .ds-site-header__nav,
+  .ds-site-header--prefold-tablet .ds-site-header__wide-actions {
+    position: absolute;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .ds-site-header--prefold-tablet .ds-site-header__menu-button {
+    display: inline-flex;
+  }
+}
+
+@media (max-width: 1279px) {
+  .ds-site-header--prefold-mid .ds-site-header__nav,
+  .ds-site-header--prefold-mid .ds-site-header__wide-actions {
+    position: absolute;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .ds-site-header--prefold-mid .ds-site-header__menu-button {
+    display: inline-flex;
+  }
+}
+
+/* The drawer: its brand row lands on the bar's own brand. SiteHeader
+   measures the bar as the drawer opens (its top, which is 0 once stuck and
+   the host's gutter at rest, and its inline start) and the panel takes
+   those as its padding, with the header row the bar's height, so the
+   panel slides in under a brand that does not move. */
+.ds-site-header__drawer .ds-drawer__panel {
+  width: min(320px, 80vw);
+  padding-block-start: var(--ds-site-header-drawer-top, var(--padding-500));
+  padding-inline-start: var(--ds-site-header-drawer-start, var(--padding-500));
+  /* The floating glass the command palette wears, so the page reaches
+     through the menu frosted rather than behind an opaque sheet. The
+     panel lets its close button out (below); its body still scrolls. */
+  background-color: var(--color-bg-glass);
+  backdrop-filter: blur(24px);
+  overflow: visible;
+}
+
+/* The drawer's close button swaps with the menu button: it sits on the
+   scrim exactly where the menu button was (measured as the drawer opens),
+   and fades in once the panel has slid home, so the X never travels with
+   it. It stays the drawer's own button, inside its focus trap. */
+.ds-site-header__drawer .ds-drawer__close {
+  position: absolute;
+  inset-block-start: var(--ds-site-header-close-top, var(--padding-500));
+  inset-inline-start: var(--ds-site-header-close-start, auto);
+  width: var(--control-height-default);
+  height: var(--control-height-default);
+  /* ds-allow(color): on-scrim furniture, as Lightbox's: the scrim is dark in both themes, so the glyph is white in both. */
+  color: #ffffff;
+  opacity: 0;
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+/* The glyph at the menu button's own size, so the swap reads as one icon
+   turning into another. */
+.ds-site-header__drawer .ds-drawer__close .material-symbols-rounded {
+  --icon-size: var(--icon-size-600);
+}
+
+.ds-site-header__drawer .ds-drawer__panel[data-state="open"] .ds-drawer__close {
+  opacity: 1;
+  transition-delay: var(--motion-duration-slow);
+}
+
+.ds-site-header__drawer .ds-drawer__close:hover {
+  /* ds-allow(color): the hover wash on the always-dark scrim, as Lightbox's controls. */
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* The footer row starts under the brand, not at the panel's far edge. */
+.ds-site-header__drawer .ds-drawer__footer {
+  justify-content: flex-start;
+}
+
+.ds-site-header__drawer .ds-drawer__header {
+  align-items: center;
+  height: var(--ds-site-header-height, auto);
+}
+
+.ds-site-header__drawer-brand {
+  display: flex;
+  align-items: center;
+}
+
+.ds-site-header__drawer .ds-nav-list {
+  width: 100%;
+}

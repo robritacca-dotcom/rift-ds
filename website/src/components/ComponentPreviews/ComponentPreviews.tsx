@@ -72,6 +72,10 @@ import { MapCallout } from "rift-ds/components/MapCallout/MapCallout";
 import { MapLegend } from "rift-ds/components/MapLegend/MapLegend";
 import { WorldMap } from "rift-ds/components/WorldMap/WorldMap";
 import { ProgressBar } from "rift-ds/components/ProgressBar/ProgressBar";
+import { ProgressiveBlur } from "rift-ds/components/ProgressiveBlur/ProgressiveBlur";
+import { MegaMenu } from "rift-ds/components/MegaMenu/MegaMenu";
+import { SiteHeader } from "rift-ds/components/SiteHeader/SiteHeader";
+import type { LinkComponent } from "rift-ds/behaviors/LinkProvider";
 import { PromptSuggestions } from "rift-ds/components/PromptSuggestions/PromptSuggestions";
 import { QuestionCard } from "rift-ds/components/QuestionCard/QuestionCard";
 import { Prose } from "rift-ds/components/Prose/Prose";
@@ -116,6 +120,11 @@ const contributionPreviewDays: ContributionDay[] = Array.from({ length: 10 * 7 }
   them. Leave the inline pixel values alone; they are not a token
   violation. Real icons elsewhere on the site use the scale.
 */
+/* Each preview sits inside its card's own link, so a component that renders
+   links draws them as spans here: a picture of the rows, never a link
+   nested in a link. */
+const PreviewRow: LinkComponent = ({ className, children }) => <span className={className}>{children}</span>;
+
 const previews: Record<string, () => ReactNode> = {
   "accordion": () => (
     <>
@@ -1346,6 +1355,27 @@ const previews: Record<string, () => ReactNode> = {
       </div>
     </>
   ),
+  "mega-menu": () => (
+    <>
+      {/* The real panel at 45%: a picture of it, so inert and hidden from
+          assistive tech rather than a second set of live links. */}
+      <div style={{ width: "220px", height: "92px", overflow: "hidden", position: "relative" }}>
+        <div inert aria-hidden="true" style={{ position: "absolute", top: 0, left: 0, width: "488px", transform: "scale(0.45)", transformOrigin: "top left" }}>
+          <MegaMenu
+            open
+            currentHref="#a"
+            linkComponent={PreviewRow}
+            items={[
+              { href: "#a", label: "Guides", description: "Walkthroughs from install to release.", icon: "menu_book" },
+              { href: "#b", label: "Recipes", description: "Short answers to common questions.", icon: "restaurant" },
+              { href: "#c", label: "Examples", description: "Small complete apps to copy.", icon: "deployed_code" },
+              { href: "#d", label: "Community", description: "Forums and office hours.", icon: "forum" },
+            ]}
+          />
+        </div>
+      </div>
+    </>
+  ),
   "mention": () => (
     <>
       <span aria-hidden="true" style={{ fontSize: "14px", lineHeight: "20px", color: "var(--color-text-primary)", whiteSpace: "nowrap" }}>
@@ -1505,6 +1535,20 @@ const previews: Record<string, () => ReactNode> = {
       </div>
     </>
   ),
+  "progressive-blur": () => (
+    <>
+      {/* Two rows of content dissolving into the frosted top edge. */}
+      <div aria-hidden="true" style={{ position: "relative", width: "170px", height: "100px", overflow: "hidden", borderRadius: "12px", border: "1px solid var(--color-bg-container-border)", background: "var(--color-bg-page-primary)", padding: "12px", boxSizing: "border-box", display: "grid", gap: "8px", alignContent: "start" }}>
+        {["--color-status-info-text", "--color-status-positive-text", "--color-status-warning-text", "--color-status-error-text"].map((token) => (
+          <div key={token} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <span style={{ width: "28px", height: "12px", borderRadius: "999px", background: `var(${token})` }} />
+            <span style={{ height: "8px", flex: 1, borderRadius: "999px", background: "var(--color-text-tertiary)" }} />
+          </div>
+        ))}
+        <ProgressiveBlur tinted />
+      </div>
+    </>
+  ),
   "prompt-suggestions": () => (
     <>
       <PromptSuggestions
@@ -1634,6 +1678,26 @@ const previews: Record<string, () => ReactNode> = {
         <div style={{ marginLeft: "10px", paddingLeft: "8px", borderLeft: "1px solid var(--color-bg-container-border)", display: "flex", flexDirection: "column", gap: "3px" }}>
           <span style={{ fontSize: "10px", color: "var(--color-text-primary)", padding: "2px 0" }}>Budgets</span>
           <span style={{ fontSize: "10px", color: "var(--color-text-primary)", padding: "2px 0" }}>Forecasts</span>
+        </div>
+      </div>
+    </>
+  ),
+  "site-header": () => (
+    <>
+      {/* The real bar at 55%, over a strip of page: a picture of it, so
+          inert, hidden from assistive tech and drawn with span links. */}
+      <div style={{ width: "220px", height: "48px", overflow: "hidden", position: "relative", borderRadius: "10px", border: "1px solid var(--color-bg-container-border)", background: "var(--color-bg-page-primary)" }}>
+        <div inert aria-hidden="true" style={{ position: "absolute", top: 0, left: "12px", width: "380px", transform: "scale(0.55)", transformOrigin: "top left" }}>
+          <SiteHeader
+            sticky={false}
+            linkComponent={PreviewRow}
+            brand={<span style={{ fontWeight: 600, color: "var(--color-text-primary)" }}>Acme</span>}
+            sections={[
+              { id: "docs", label: "Docs", href: "#a", current: true, mega: { items: [] } },
+              { id: "examples", label: "Examples", href: "#b", mega: { items: [] } },
+              { id: "blog", label: "Blog", href: "#c" },
+            ]}
+          />
         </div>
       </div>
     </>

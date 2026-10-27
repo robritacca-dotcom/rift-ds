@@ -797,6 +797,14 @@
       "client": false
     },
     {
+      "name": "MegaMenu",
+      "label": "Mega menu",
+      "slug": "mega-menu",
+      "description": "A wide navigation panel of icon rows with descriptions, beside an optional featured card.",
+      "category": "navigation",
+      "client": false
+    },
+    {
       "name": "Mention",
       "label": "Mention",
       "slug": "mention",
@@ -924,6 +932,14 @@
       "slug": "progress-bar",
       "description": "Horizontal bar indicating completion progress, with an optional percentage label.",
       "category": "feedback",
+      "client": false
+    },
+    {
+      "name": "ProgressiveBlur",
+      "label": "Progressive blur",
+      "slug": "progressive-blur",
+      "description": "A backdrop blur that dissolves along one edge, with an optional page tint that fades in.",
+      "category": "effects",
       "client": false
     },
     {
@@ -1058,6 +1074,14 @@
       "slug": "sidebar-panel",
       "description": "Secondary navigation column listing one section's pages, with group headings and one level of accordion nesting.",
       "category": "layout",
+      "client": true
+    },
+    {
+      "name": "SiteHeader",
+      "label": "Site header",
+      "slug": "site-header",
+      "description": "A site's sticky top bar of section pills and mega menus, folding to a drawer when the pills no longer fit.",
+      "category": "navigation",
       "client": true
     },
     {

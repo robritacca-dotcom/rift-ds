@@ -58,6 +58,7 @@ export const SANCTIONED = {
   Pagination: 'selected item (the current page)',
   RadioButton: 'checked state of a form control',
   SegmentedControl: 'selected item (the active segment)',
+  SiteHeader: 'selected item (the current section\'s pill)',
   Slider: 'on state of a form control (the filled track and thumb)',
   Stepper: 'selected item (the active step)',
   Tabs: 'selected item (the active tab)',

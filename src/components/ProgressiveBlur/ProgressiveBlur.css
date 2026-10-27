@@ -1,0 +1,102 @@
+/* ============================================
+   PROGRESSIVE BLUR
+   A backdrop blur that dissolves along one edge
+   ============================================ */
+
+/* Why a stack, and why masks: a single backdrop-filter is uniform across its
+   whole box, so a tint that fades to transparent still ends in a hard line
+   where the blur stops. A mask-image multiplies both the layer's paint and
+   its filtered backdrop by its alpha, so the blur itself dissolves. Four
+   layers with rising blur strength and a shrinking mask band give a
+   progressive blur: frosted at the anchored edge, clear at the far one.
+
+   The blur sits on child layers, never on the root: a backdrop-filter on an
+   ancestor would make it a backdrop root, and any glass inside the host
+   (a menu panel, say) would then sample only that subtree instead of the
+   page. So the host keeps its own children above this element, and the
+   blur reads the page behind both.
+
+   No hand-written -webkit- twins for backdrop-filter: the build's CSS
+   pipeline adds the prefix, and a manual one beside it has made the
+   pipeline drop the property entirely. */
+
+/* Base */
+.ds-progressive-blur {
+  /* The tint's colour. An override hook: a host over a different surface
+     points it at that surface. */
+  --ds-progressive-blur-tint: var(--color-bg-page-primary);
+  position: absolute;
+  inset: 0;
+  /* A child's backdrop-filter is not reliably clipped by a rounded
+     overflow: hidden parent, so the frost would show square at the host's
+     corners. The root and every layer take the host's corner instead. */
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.ds-progressive-blur--top {
+  --ds-progressive-blur-toward: to bottom;
+}
+
+.ds-progressive-blur--bottom {
+  --ds-progressive-blur-toward: to top;
+}
+
+.ds-progressive-blur__layer {
+  position: absolute;
+  inset: 0;
+  display: block;
+  border-radius: inherit;
+}
+
+/* Layers: blur strength rises as the masked band shrinks, so the edge is
+   fully frosted and the far side is sharp. The radii are the effect's own
+   tuning, not a scale: a blur radius is not spacing. */
+
+/* ds-allow(color): mask alpha keywords (black/transparent), not palette colours */
+
+.ds-progressive-blur__layer:nth-child(1) {
+  backdrop-filter: blur(2px);
+  mask-image: linear-gradient(var(--ds-progressive-blur-toward), black 0%, black 55%, transparent 100%);
+}
+
+.ds-progressive-blur__layer:nth-child(2) {
+  backdrop-filter: blur(6px);
+  mask-image: linear-gradient(var(--ds-progressive-blur-toward), black 0%, black 40%, transparent 80%);
+}
+
+.ds-progressive-blur__layer:nth-child(3) {
+  backdrop-filter: blur(12px);
+  mask-image: linear-gradient(var(--ds-progressive-blur-toward), black 0%, black 25%, transparent 60%);
+}
+
+.ds-progressive-blur__layer:nth-child(4) {
+  backdrop-filter: blur(24px);
+  mask-image: linear-gradient(var(--ds-progressive-blur-toward), black 0%, black 10%, transparent 40%);
+}
+
+/* Tint: the page surface at the edge stepping to transparent, on its own
+   layer above the blur. Only this layer ever fades: transitioning opacity
+   on a backdrop-filter makes the browser re-rasterise the blur, which then
+   snaps in at the end of the fade, while a plain gradient fades smoothly. */
+.ds-progressive-blur::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    var(--ds-progressive-blur-toward),
+    var(--ds-progressive-blur-tint) 0%,
+    color-mix(in srgb, var(--ds-progressive-blur-tint) 90%, transparent) 30%,
+    color-mix(in srgb, var(--ds-progressive-blur-tint) 40%, transparent) 65%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(var(--ds-progressive-blur-toward), black 0%, black 55%, transparent 100%);
+  opacity: 0;
+  transition: opacity var(--motion-duration-slow) var(--motion-ease-standard);
+}
+
+/* States */
+.ds-progressive-blur--tinted::after {
+  opacity: 1;
+}

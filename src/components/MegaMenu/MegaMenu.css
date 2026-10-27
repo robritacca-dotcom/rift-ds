@@ -1,0 +1,271 @@
+/* ============================================
+   MEGA MENU
+   A wide navigation panel: icon rows plus an
+   optional featured card
+   ============================================ */
+
+/* Base: the floating glass shell, CommandPalette's surface. The panel is a
+   shallow strip that lands on whatever the page opens with, display type
+   most of it, so its blur runs harder than the shell's 24px: at that
+   strength a heading that size still reads through the row labels. */
+.ds-mega-menu {
+  box-sizing: border-box;
+  padding: var(--padding-1000);
+  background-color: var(--color-bg-glass);
+  backdrop-filter: blur(32px);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-400);
+  box-shadow: var(--shadow-floating);
+  /* The showcase card's height floor is sized against this box. */
+  container: ds-mega-menu / inline-size;
+
+  /* Closed: faded out, then hidden once the fade has run, so a reopen
+     mid-fade picks up where it was. */
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--motion-duration-base) var(--motion-ease-standard),
+    visibility 0s linear var(--motion-duration-base);
+}
+
+/* States */
+.ds-mega-menu--open {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+/* Layout: the link grid alone, or the grid in two thirds beside the
+   showcase in one. */
+.ds-mega-menu__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--gap-1000);
+}
+
+.ds-mega-menu__layout--showcase {
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+}
+
+/* The link grid: four rows to a column, wrapping into further columns, so
+   a long menu grows sideways and never into a scroll. */
+.ds-mega-menu__grid {
+  display: grid;
+  grid-template-rows: repeat(4, auto);
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: var(--gap-200) var(--gap-1000);
+  align-content: start;
+}
+
+/* Rows: the overlay row family. No fill at rest, the passive wash on hover
+   and focus at --radius-200, and the navigation current item one step past
+   it, so current and hovered never read the same. */
+.ds-mega-menu__item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-300);
+  min-width: 0;
+  padding: var(--padding-300) var(--padding-400);
+  border-radius: var(--radius-200);
+  color: inherit;
+  text-decoration: none;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-mega-menu__item:hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-mega-menu__item:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-mega-menu__item--current {
+  background-color: var(--color-action-passive-bg-active);
+}
+
+/* The icon tile: a step of container fill around the glyph, holding that
+   step over the row's hover wash. Its corner is the row's own radius, since
+   the tile sits at the row's start with no padding between them on that
+   axis that would ask for a smaller one. */
+.ds-mega-menu__icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--icon-size-600) + var(--padding-200) * 2);
+  height: calc(var(--icon-size-600) + var(--padding-200) * 2);
+  border-radius: var(--radius-200);
+  background-color: var(--color-bg-container-secondary);
+  color: var(--color-text-primary);
+}
+
+/* The tile keeps a step of contrast when the row behind it fills in. The
+   hover wash already differs from the tile's resting fill; the current
+   row's wash is that same fill, so there the tile takes the other step. */
+.ds-mega-menu__item--current .ds-mega-menu__icon {
+  background-color: var(--color-bg-container-tertiary);
+}
+
+.ds-mega-menu__icon .material-symbols-rounded {
+  --icon-size: var(--icon-size-600);
+  line-height: 1;
+}
+
+.ds-mega-menu__logo {
+  display: block;
+  width: var(--icon-size-600);
+  height: var(--icon-size-600);
+  object-fit: contain;
+}
+
+.ds-mega-menu__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-100);
+  min-width: 0;
+}
+
+.ds-mega-menu__label {
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  letter-spacing: var(--font-title-body-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+/* Rows stay even: a description is at most two lines. The full sentence
+   lives on the page the row links to. */
+.ds-mega-menu__description {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-tertiary);
+}
+
+/* Showcase: the column carries the divider, the card fills it. */
+.ds-mega-menu__showcase-column {
+  display: flex;
+  padding-inline-start: var(--padding-1000);
+  border-inline-start: var(--border-025) solid var(--color-bg-container-border);
+}
+
+/* One link that is the whole card. The cover fills it and absorbs whatever
+   height the link grid runs to, so the columns always bottom-align; the
+   floor keeps a short grid's card at about 4:3 so the drawing has room
+   above the copy. */
+.ds-mega-menu__showcase {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-width: 0;
+  min-height: 25cqw;
+  overflow: hidden;
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-300);
+  color: inherit;
+  text-decoration: none;
+  transition: border-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-mega-menu__showcase:hover {
+  border-color: var(--color-bg-container-tertiary);
+}
+
+.ds-mega-menu__showcase:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 4px;
+}
+
+/* The cover's gentle zoom on hover is the card acknowledging the pointer,
+   clipped by the frame. */
+.ds-mega-menu__cover {
+  position: absolute;
+  inset: 0;
+  transition: scale var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-mega-menu__cover > * {
+  width: 100%;
+  height: 100%;
+}
+
+.ds-mega-menu__showcase:hover .ds-mega-menu__cover {
+  scale: 1.02;
+}
+
+/* The copy, kept legible on the drawing by a rise of page surface from the
+   card's foot. The tall top padding is the fade zone; the text never
+   reaches it. */
+.ds-mega-menu__showcase-text {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-100);
+  padding: var(--padding-1500) var(--padding-500) var(--padding-500);
+  /* ds-allow(color): the transparent end of the fade, not a palette colour */
+  background: linear-gradient(to top, var(--color-bg-page-primary) 55%, transparent);
+}
+
+.ds-mega-menu__overline {
+  font-family: var(--font-overline-family);
+  font-size: var(--font-overline-size);
+  font-weight: var(--font-overline-weight);
+  line-height: var(--font-overline-line-height);
+  letter-spacing: var(--font-overline-letter-spacing);
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+}
+
+.ds-mega-menu__showcase-title {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-100);
+}
+
+.ds-mega-menu__arrow {
+  --icon-size: var(--icon-size-500);
+  line-height: 1;
+  color: var(--color-action-passive-text);
+  transition: translate var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-mega-menu__showcase:hover .ds-mega-menu__arrow {
+  translate: calc(var(--gap-050) * var(--ds-inline-sign, 1)) 0;
+}
+
+/* Narrow: a panel without the room for two column groups stacks the
+   showcase under the grid and lets the grid run one column deep.
+   ds-allow(breakpoint): content-driven: two row columns and the showcase need about 720px of panel. */
+@container ds-mega-menu (max-width: 720px) {
+  .ds-mega-menu__layout--showcase {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ds-mega-menu__grid {
+    grid-template-rows: none;
+    grid-auto-flow: row;
+  }
+
+  .ds-mega-menu__showcase-column {
+    padding-inline-start: 0;
+    border-inline-start: none;
+  }
+
+  /* Full width now, so the floor that kept a third-width card at 4:3
+     becomes a wide band with the same room above the copy. */
+  .ds-mega-menu__showcase {
+    min-height: 50cqw;
+  }
+}

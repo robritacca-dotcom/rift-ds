@@ -1,6 +1,6 @@
 /* ============================================
-   HOME BENTO — one tile per point the hero's
-   rotating subtitle makes. It holds the
+   HOME BENTO — three tiles: the look, the
+   agent and the install. It holds the
    collage's 1440px line, so its edges land
    under the logo and the theme toggle.
    ============================================ */
@@ -34,55 +34,18 @@
   font-weight: var(--font-sub-display-weight);
 }
 
-/* Four columns: the chat takes a two-by-two block, room for a whole
-   agent turn; templates and the playground share a row; the install
-   lines run the full width underneath as a strip. */
+/* Three tiles, one row of equal columns. */
 .grid {
   display: grid;
   width: 100%;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  grid-template-rows: 360px 360px 400px 260px;
-  grid-template-areas:
-    "components components chat chat"
-    "themes agents chat chat"
-    "templates templates playground playground"
-    "install install install install";
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-rows: 360px;
   gap: var(--gap-400);
 }
-
-.components { grid-area: components; }
-.chat { grid-area: chat; }
-.themes { grid-area: themes; }
-.agents { grid-area: agents; }
-.install { grid-area: install; }
-.templates { grid-area: templates; }
-.playground { grid-area: playground; }
 
 /* ---------- tile content ----------
    Scenes are pictures of the product: BentoTile makes them inert while
    the tile is expandable. In the overlay they are live. */
-
-.sampler {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--gap-1000);
-}
-
-.samplerStat {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-300);
-}
-
-.samplerControls {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--gap-300);
-  max-width: 320px;
-}
 
 /* A step of a looping scene, eased in when it arrives. */
 .revealed {
@@ -98,7 +61,6 @@
   transform: none;
 }
 
-.chatStack,
 .toolStack {
   display: flex;
   flex-direction: column;
@@ -110,10 +72,12 @@
 
 .toolStack .revealed > * { box-shadow: var(--shadow-floating); }
 
-/* A conversation needs air: turns sit apart, and the composer stands
-   clear of the thread above it. */
-.chatStack { gap: var(--gap-400); }
-.chatStack > :last-child { margin-top: var(--gap-300); }
+/* The install tile's lines wrap rather than scroll: a third of the row is
+   narrower than the URLs, and the tile is a picture, so nothing scrolls. */
+.installLines :global(.ds-code-block__code) {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
 
 .themeStack {
   display: flex;
@@ -137,27 +101,11 @@
 
 /* ---------- overlay showcases ---------- */
 
-.workbench {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-500);
-  width: 100%;
-  max-width: 380px;
-  box-shadow: var(--shadow-floating);
-}
-
-.workbenchHead,
-.workbenchFoot,
 .panelBar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--gap-300);
-}
-
-.workbenchFoot {
-  padding-top: var(--gap-400);
-  border-top: var(--border-025) solid var(--color-divider);
 }
 
 .themeDash {
@@ -268,104 +216,6 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--gap-200);
-}
-
-/* Templates tile: a members widget beside a console. */
-.console {
-  display: grid;
-  grid-template-columns: minmax(200px, 0.7fr) minmax(0, 1.6fr);
-  align-items: start;
-  gap: var(--gap-400);
-  width: 100%;
-}
-
-.consoleSide,
-.consoleMain { box-shadow: var(--shadow-floating); }
-
-.consoleMain {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-400);
-}
-
-@container ds-bento-tile (max-width: 560px) {
-  .console { grid-template-columns: minmax(0, 1fr); }
-  .consoleSide { display: none; }
-}
-
-/* Templates showcase: the live frame under its bar. */
-.templateStage {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--gap-400);
-  width: 100%;
-}
-
-.templateBar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--gap-300);
-  width: 100%;
-}
-
-.templateName {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--gap-100);
-  font-family: var(--font-title-body-family);
-  font-size: var(--font-title-body-size);
-  font-weight: var(--font-title-body-weight);
-  color: var(--color-text-primary);
-  text-decoration: none;
-}
-
-.templateName :global(.material-symbols-rounded) {
-  --icon-size: var(--icon-size-500);
-  font-size: var(--icon-size);
-}
-
-.templateName:hover { text-decoration: underline; }
-
-/* Playground: an inspector rail beside the panel it restyles. */
-.lever {
-  display: grid;
-  grid-template-columns: minmax(270px, 1fr) minmax(0, 1fr);
-  align-items: center;
-  gap: var(--gap-500);
-  width: 100%;
-}
-
-.leverRail {
-  padding: var(--padding-300);
-  border-radius: var(--radius-300);
-  background: var(--color-bg-container-primary);
-  border: var(--border-025) solid var(--color-bg-container-border);
-  box-shadow: var(--shadow-floating);
-}
-
-.leverCard {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-400);
-  box-shadow: var(--shadow-floating);
-}
-
-/* The levers ease between positions. */
-.leverPreview :global(.ds-button),
-.leverPreview :global(.ds-input),
-.leverPreview :global(.ds-panel) {
-  transition:
-    background-color var(--motion-duration-slower) var(--motion-ease-standard),
-    border-radius var(--motion-duration-slower) var(--motion-ease-standard),
-    box-shadow var(--motion-duration-slower) var(--motion-ease-standard);
-}
-
-@container ds-bento-tile (max-width: 560px) {
-  .lever { grid-template-columns: minmax(0, 1fr); }
-  .leverRail { display: none; }
 }
 
 /* ---------- overlay layout ---------- */
@@ -549,54 +399,24 @@
 @media (max-width: 959px) {
   .detailHead,
   .showcase,
-  .themeDash,
-  .lever { grid-template-columns: minmax(0, 1fr); }
+  .themeDash { grid-template-columns: minmax(0, 1fr); }
   .showMain, .showSide { min-height: 0; }
   .detailHead > div { padding-right: 0; }
   .checks { padding: 0; }
 
-  .grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: none;
-    grid-auto-rows: 340px;
-    grid-template-areas:
-      "components components"
-      "chat chat"
-      "chat chat"
-      "themes agents"
-      "templates templates"
-      "playground playground"
-      "install install";
-  }
-}
-
-@media (max-width: 600px) {
-  /* A phone preview in a landscape box shrinks to a sliver; turn it portrait. */
-  .phoneShell { aspect-ratio: 3 / 4; }
-
-  .features { grid-template-columns: minmax(0, 1fr); gap: var(--gap-500); }
-  .features > *, .features > :nth-child(3) { padding-inline: 0; }
-  .showMain { padding: var(--padding-400); }
-
+  /* A third of the width is too narrow for the install lines: stack. */
   .grid {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: none;
     grid-auto-rows: auto;
-    grid-template-areas:
-      "components"
-      "chat"
-      "themes"
-      "agents"
-      "templates"
-      "playground"
-      "install";
   }
 
   .grid > * {
     min-height: 320px;
   }
+}
 
-  .chat {
-    min-height: 640px;
-  }
+@media (max-width: 600px) {
+  .features { grid-template-columns: minmax(0, 1fr); gap: var(--gap-500); }
+  .features > *, .features > :nth-child(3) { padding-inline: 0; }
+  .showMain { padding: var(--padding-400); }
 }

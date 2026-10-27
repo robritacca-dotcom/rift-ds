@@ -1,12 +1,11 @@
 "use client";
 
 /**
- * The home page's bento under the collage: one BentoTile per point the
- * hero's rotating subtitle makes, in the same order, so the line that
- * sweeps past at the top is answered in full further down. Each tile opens
- * into an overlay with the detail: a lede and the pages that own the fact,
- * a working showcase beside a fact sheet, and three features. The content
- * lives in tiles.tsx, the scenes and showcases in scenes.tsx.
+ * The home page's bento under the collage: three BentoTiles in one row,
+ * the look, the agent and the install. Each tile opens into an overlay
+ * with the detail: a lede and the pages that own the fact, a working
+ * showcase beside a fact sheet, and three features. The content lives in
+ * tiles.tsx, the scenes and showcases in scenes.tsx.
  */
 
 import React from "react";
@@ -22,9 +21,8 @@ export default function HomeBento() {
       <h2 id="home-bento-title" className={styles.statement}>
         Skip the blank page.{" "}
         <span>
-          Drop in a working chat, start from a finished screen, change the
-          whole look with one line, and let your coding agent build with the
-          real API instead of guessing.
+          Change the whole look with one line, and let your coding agent
+          build with the real API instead of guessing.
         </span>
       </h2>
 
@@ -32,7 +30,6 @@ export default function HomeBento() {
         {HOME_TILES.map((tile) => (
           <BentoTile
             key={tile.id}
-            className={styles[tile.id]}
             title={tile.title}
             description={tile.description}
             align={tile.align}

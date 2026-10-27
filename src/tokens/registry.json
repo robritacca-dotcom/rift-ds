@@ -109,6 +109,7 @@
       "--color-input-border-hover",
       "--color-input-border-primary",
       "--color-input-border-selected",
+      "--color-input-indicator-border",
       "--color-input-text-disabled",
       "--color-input-text-inverse",
       "--color-input-text-placeholder",

@@ -11,7 +11,7 @@ How to read it:
 
 The live reference with swatches is at https://rift-ds.com/foundations, and the MCP endpoint's `list_tokens` tool serves the names.
 
-## Colour (155)
+## Colour (156)
 
 Prefix: `--color-*`.
 
@@ -124,6 +124,7 @@ Prefix: `--color-*`.
 | `--color-input-border-hover` | `#2C9AB9` (`--primitive-teal-06`) | `#118AB2` (`--primitive-teal-07`) |
 | `--color-input-border-primary` | `#D6D6D6` (`--primitive-neutral-02`) | `#232323` (`--primitive-neutral-08`) |
 | `--color-input-border-selected` | `#0E6E8F` (`--primitive-teal-08`) | `#2C9AB9` (`--primitive-teal-06`) |
+| `--color-input-indicator-border` | `#888888` (`--primitive-neutral-05`) | `#6D6D6D` (`--primitive-neutral-06`) |
 | `--color-input-text-disabled` | `#A2A2A2` (`--primitive-neutral-04`) | `#303030` (`--primitive-neutral-07`) |
 | `--color-input-text-inverse` | `#A2A2A2` (`--primitive-neutral-04`) | `#303030` (`--primitive-neutral-07`) |
 | `--color-input-text-placeholder` | `#6D6D6D` (`--primitive-neutral-06`) | `#A2A2A2` (`--primitive-neutral-04`) |

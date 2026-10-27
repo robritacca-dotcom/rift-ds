@@ -323,6 +323,7 @@
   --color-input-text-inverse: var(--primitive-neutral-04);
   --color-input-border-primary: var(--primitive-neutral-02);
   --color-input-border-hover: var(--primitive-teal-06);
+  --color-input-indicator-border: var(--primitive-neutral-05);
   --color-input-border-selected: var(--primitive-teal-08);
   --color-input-border-disabled: var(--primitive-neutral-03);
   --color-input-bg-primary: var(--primitive-neutral-00);

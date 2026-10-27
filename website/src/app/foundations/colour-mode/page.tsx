@@ -566,6 +566,11 @@ const inputColours: SwatchData[] = [
     light: { primitive: "--neutral--02--", hex: "#D6D6D6", rgb: "214 / 214 / 214" },
   },
   {
+    label: "Indicator Border", cssVar: "--color-input-indicator-border",
+    dark: { primitive: "--neutral--06--", hex: "#6D6D6D", rgb: "109 / 109 / 109" },
+    light: { primitive: "--neutral--05--", hex: "#888888", rgb: "136 / 136 / 136" },
+  },
+  {
     label: "Border Hover", cssVar: "--color-input-border-hover",
     dark: { primitive: "--teal--07--", hex: "#118AB2", rgb: "17 / 138 / 178" },
     light: { primitive: "--teal--06--", hex: "#2C9AB9", rgb: "44 / 154 / 185" },

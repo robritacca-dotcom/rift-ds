@@ -28,8 +28,10 @@
   width: 24px;
   height: 24px;
   box-sizing: border-box;
-  border: var(--border-050) solid var(--color-input-border-primary);
-  border-radius: var(--radius-200); /* 8px */
+  border: var(--border-050) solid var(--color-input-indicator-border);
+  /* Always a rounded square, whatever the theme's radius: never sharp at a
+     zero radius, never rounding towards a radio's circle at a large one. */
+  border-radius: clamp(4px, var(--radius-200), 8px); /* ds-allow(spacing): the checkbox's shape is fixed, so its corner is bounded */
   background-color: var(--color-input-bg-primary);
   display: inline-flex;
   align-items: center;

@@ -26,8 +26,10 @@
   width: 24px;
   height: 24px;
   box-sizing: border-box;
-  border: var(--border-050) solid var(--color-input-border-primary);
-  border-radius: var(--radius-pill); /* 999px — perfect circle */
+  border: var(--border-050) solid var(--color-input-indicator-border);
+  /* Always a circle, whatever the theme's radius: a radio's shape is its
+     meaning, so it never follows --radius-pill into a square. */
+  border-radius: 50%;
   background-color: var(--color-input-bg-primary);
   display: inline-flex;
   align-items: center;
@@ -43,7 +45,7 @@
 .ds-radio__dot {
   width: 12px;
   height: 12px;
-  border-radius: var(--radius-pill);
+  border-radius: 50%;
   background-color: var(--color-action-primary-bg);
   transform: scale(0);
   transition: transform var(--motion-duration-base) var(--motion-ease-standard);

@@ -1475,8 +1475,9 @@ export default function DesignSystemLanding() {
           </div>
         </section>
 
-        {/* ---------- the playground's Chat view, framed and playing its
-             scripted reel; the whole frame opens it ---------- */}
+        {/* ---------- the chat widget, framed and playing a scripted
+             finance review; the whole frame opens the playground's Chat
+             view ---------- */}
         <section
           className={`${styles.chatFrame} animate-in animate-delay-1`}
           aria-label="The AI chat playground"
@@ -1489,10 +1490,9 @@ export default function DesignSystemLanding() {
              band can never overstate; the columns below show the things
              counted ---------- */}
         <header className={styles.collageHeader}>
-          <h2 className={styles.collageTitle}>A whole system, running live</h2>
+          <h2 className={styles.collageTitle}>Components you don’t have to build</h2>
           <p className={styles.collageSub}>
-            Components, tokens and themes in one free package. Every card below is the real
-            thing, drawn in the theme you picked.
+            Typed, keyboard-ready and checked with axe. Every card below is live in your theme.
           </p>
         </header>
         <FadeDivider className={styles.statsDivider} />
@@ -1504,6 +1504,17 @@ export default function DesignSystemLanding() {
           <Stat
             value={<AnimatedNumber value={0} format={(v) => `$${v.toFixed(2)}`} />}
             label="Cost"
+          />
+        </div>
+        <FadeDivider className={styles.statsDividerEnd} />
+        <div className={styles.statsCta}>
+          <Button
+            label="Components"
+            variant="secondary"
+            tone="neutral"
+            href="/components"
+            iconLeft="category"
+            iconRight="arrow_forward"
           />
         </div>
 
@@ -1530,7 +1541,7 @@ export default function DesignSystemLanding() {
           )}
         </section>
 
-        {/* ---------- the subtitle's points, one tile each ---------- */}
+        {/* ---------- three tiles: the look, the agent, the install ---------- */}
         <HomeBento />
 
         {/* ---------- what a stranger asks before installing ---------- */}

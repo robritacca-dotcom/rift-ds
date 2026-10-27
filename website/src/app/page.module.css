@@ -370,9 +370,9 @@
   flex-wrap: wrap;
   justify-content: center;
   gap: var(--gap-400) var(--gap-1500);
-  margin-top: var(--gap-400);
-  /* Room before the escalator columns, whose fade opens the next band. */
-  margin-block-end: var(--gap-1000);
+  /* The band's step less a little: the figures' line height already adds
+     air above the numerals, so every gap in the band reads the same. */
+  margin-top: calc(var(--gap-1000) - var(--gap-200));
 }
 
 /* Stat left-aligns for dashboard rows; the centred counts band centres
@@ -659,7 +659,7 @@
    one copy's height, so the loop never shows a seam. The outer columns run
    down, the middle runs up, all slower than a reading pace — ambient motion,
    not a carousel. The mask fades the cards out at the window's edges. */
-/* The framed chat playground between the hero and the collage: the page
+/* The framed chat between the hero and the collage: the page
    column's width, with the widest section step below it, so the stats
    header opens a new section rather than captioning the frame. */
 .chatFrame {
@@ -683,7 +683,27 @@
 /* The rule opening the counts band: a full section step below the header
    copy, so the subtitle and the counts read as separate beats. */
 .statsDivider {
+  /* Held to the same 1440px column as the chat frame and the collage, so
+     the rule's faded ends land under their outer edges. */
+  max-width: 1440px;
   margin-block-start: var(--gap-1000);
+  margin-inline: auto;
+}
+
+/* The rule closing the counts band, in the same column as the one opening
+   it, the band's one step under the labels. */
+.statsDividerEnd {
+  max-width: 1440px;
+  margin-block-start: var(--gap-1000);
+  margin-inline: auto;
+}
+
+/* The band's one call to action, the same step under its rule, with room
+   before the escalator columns, whose fade opens the next band. */
+.statsCta {
+  display: flex;
+  justify-content: center;
+  margin-block: var(--gap-1000);
 }
 
 .collageTitle {

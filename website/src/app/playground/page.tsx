@@ -107,7 +107,8 @@ import {
 import AdvancedColorsDialog from "./AdvancedColorsDialog";
 import ExportThemeDialog from "./ExportThemeDialog";
 import { AGENT_STARTER } from "@/data/agent-starter.generated";
-import ChatDirector from "./ChatDirector";
+import ChatDirector, { ChatAutoplay } from "./ChatDirector";
+import { EMBED_THEME_MESSAGE } from "@/components/HomeChatFrame/embed-theme";
 import InspectMode from "@/components/InspectMode/InspectMode";
 import ChatView, {
   defaultChatPlaceholder,
@@ -262,12 +263,17 @@ export default function PlaygroundPage() {
      useSearchParams, which would force a Suspense boundary on a fully
      client-rendered page. */
   const [view, setView] = useState<View>("components");
+  const [autoplay, setAutoplay] = useState(false);
   useEffect(() => {
     // The setState here is intentional — a once-on-mount sync from the
     // URL, which the server prerender can't see (same pattern as
     // MegaNav's navigation effect).
-    const q = new URLSearchParams(window.location.search).get("view");
+    const params = new URLSearchParams(window.location.search);
+    const q = params.get("view");
+    /* ?autoplay=1 is the home page's embed: the Chat view plays its
+       scripted reel on a loop (ChatAutoplay). */
     // eslint-disable-next-line react-hooks/set-state-in-effect
+    setAutoplay(params.get("autoplay") === "1");
     if (q === "chat" || q === "type" || q === "templates") setView(q);
     /* The Templates view was the Dashboard view, and links to it remain. */
     else if (q === "dashboard") setView("templates");
@@ -1033,6 +1039,32 @@ export default function PlaygroundPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  /* The home page's embed (?autoplay=1) follows the page around it: the
+     frame posts the visitor's theme pick and colour mode on every change
+     (HomeChatFrame), and the levers take the pick the way the picker
+     would. Same origin only; a ref keeps the listener on the latest
+     applyPreset without re-subscribing every render. */
+  const applyPresetRef = useRef(applyPreset);
+  useEffect(() => {
+    applyPresetRef.current = applyPreset;
+  });
+  useEffect(() => {
+    if (!autoplay) return;
+    const onMessage = (event: MessageEvent) => {
+      if (event.origin !== window.location.origin) return;
+      const data = event.data as { type?: string; brand?: string; mode?: string; setting?: string };
+      if (data?.type !== EMBED_THEME_MESSAGE) return;
+      const root = document.documentElement;
+      if (data.mode) root.setAttribute("data-theme", data.mode);
+      if (data.setting) root.setAttribute("data-theme-setting", data.setting);
+      if (data.brand && (isBaseTheme(data.brand) || THEME_PRESETS[data.brand])) {
+        applyPresetRef.current(data.brand);
+      }
+    };
+    window.addEventListener("message", onMessage);
+    return () => window.removeEventListener("message", onMessage);
+  }, [autoplay]);
+
   /* What leaves the playground: the levers as one complete theme, and the
      three files built from it. The CSS comes from the composer the shipped
      preset stylesheets are written from, once per theme, so :root always
@@ -1743,6 +1775,7 @@ export default function PlaygroundPage() {
           />
         )}
       </div>
+      {view === "chat" && autoplay && <ChatAutoplay />}
       </SiteChatProvider>
 
     </>

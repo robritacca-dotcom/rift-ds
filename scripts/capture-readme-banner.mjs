@@ -82,10 +82,17 @@ const raw = join(tmp, 'raw.png');
 await page.screenshot({ path: raw, clip: { x: 0, y: 0, width: WIDTH, height: HEIGHT } });
 await browser.close();
 
-// sips ships with macOS; the downscale and JPEG encode in one pass.
-execFileSync('sips', ['-Z', String(WIDTH), '-s', 'format', 'jpeg', '-s', 'formatOptions', '80', raw, '--out', OUT], {
-  stdio: 'ignore',
-});
+// The downscale and JPEG encode in one pass: sips where it ships (macOS),
+// sharp everywhere else. sharp arrives with Next.js, so any installed
+// checkout has it; sips alone made this script macOS-only.
+if (process.platform === 'darwin') {
+  execFileSync('sips', ['-Z', String(WIDTH), '-s', 'format', 'jpeg', '-s', 'formatOptions', '80', raw, '--out', OUT], {
+    stdio: 'ignore',
+  });
+} else {
+  const { default: sharp } = await import('sharp');
+  await sharp(raw).resize({ width: WIDTH }).jpeg({ quality: 80 }).toFile(OUT);
+}
 rmSync(tmp, { recursive: true, force: true });
 
 const { size } = await import('node:fs').then((fs) => fs.statSync(OUT));

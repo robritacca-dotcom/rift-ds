@@ -53,7 +53,7 @@ export const WithSwatch: Story = {
   ),
 };
 
-// Numbers are formatted with toLocaleString().
+// A number is written in the resolved locale: en-US unless `locale` or a LocaleProvider says otherwise.
 export const NumericValue: Story = {
   args: {
     label: 'Total events',

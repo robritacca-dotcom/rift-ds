@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, waitFor } from 'storybook/test';
 import { AnimatedNumber } from './AnimatedNumber';
 import { Button } from '../Button/Button';
+import { DEFAULT_LOCALE } from '../../behaviors/locale';
 
 const meta = {
   title: 'Components/AnimatedNumber',
@@ -29,7 +30,7 @@ export const Default: Story = {
   // The count-up settles on the exact target — grouped, no decimals.
   play: async ({ canvasElement }) => {
     await waitFor(
-      () => expect(canvasElement.textContent).toContain((12847).toLocaleString()),
+      () => expect(canvasElement.textContent).toContain((12847).toLocaleString(DEFAULT_LOCALE)),
       { timeout: 3000 },
     );
   },
@@ -46,7 +47,7 @@ export const CustomFormat: Story = {
   args: {
     value: 1284700,
     format: (n: number) =>
-      n.toLocaleString(undefined, {
+      n.toLocaleString(DEFAULT_LOCALE, {
         style: 'currency',
         currency: 'USD',
         maximumFractionDigits: 0,
@@ -82,12 +83,12 @@ export const ValueChanges: Story = {
   // A change tweens from the previous value and lands exactly on the target.
   play: async ({ canvas, canvasElement, userEvent }) => {
     await waitFor(
-      () => expect(canvasElement.textContent).toContain((1200).toLocaleString()),
+      () => expect(canvasElement.textContent).toContain((1200).toLocaleString(DEFAULT_LOCALE)),
       { timeout: 3000 },
     );
     await userEvent.click(await canvas.findByRole('button', { name: 'Add 250' }));
     await waitFor(
-      () => expect(canvasElement.textContent).toContain((1450).toLocaleString()),
+      () => expect(canvasElement.textContent).toContain((1450).toLocaleString(DEFAULT_LOCALE)),
       { timeout: 3000 },
     );
   },

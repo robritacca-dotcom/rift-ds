@@ -2,10 +2,13 @@ import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, waitFor } from 'storybook/test';
 import { DatePicker } from './DatePicker';
+import { DEFAULT_LOCALE } from '../../behaviors/locale';
 
-/** The default day name, as the component builds it, so the test reads like a screen reader would. */
+/** The default day name, as the component builds it, so the test reads like a screen reader would.
+    Written in the component's default locale, never the browser's, or the test fails on any
+    machine whose browser is not American English. */
 const dayName = (y: number, m: number, d: number) =>
-  new Date(y, m - 1, d).toLocaleDateString(undefined, {
+  new Date(y, m - 1, d).toLocaleDateString(DEFAULT_LOCALE, {
     weekday: 'long',
     year: 'numeric',
     month: 'long',

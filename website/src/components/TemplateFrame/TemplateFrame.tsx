@@ -8,8 +8,8 @@
  * it full screen. The frame mounts only once the shell nears the viewport
  * (see LIVE_MARGIN), because every preview is a whole app document. It
  * follows the site's theme and preset live, and in the phone it wears the
- * app dressing AppFrame owns. The templates carousel and the home bento's
- * templates tile both draw their previews with it.
+ * app dressing AppFrame owns. The templates carousel draws its previews
+ * with it.
  */
 
 import Link from "next/link";

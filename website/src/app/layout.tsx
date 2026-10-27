@@ -188,8 +188,8 @@ export default async function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(buildWebsiteJsonLd()) }}
         />
         {/* Analytics runs only while GA_ID has a value; emptying it in the
-            brand module is the off switch. A framed page (the home page's
-            chat embed) skips the config, so a visit counts once. */}
+            brand module is the off switch. A framed page (a template preview,
+            which iframes a site page) skips the config, so a visit counts once. */}
         {GA_ID && (
           <>
             <Script

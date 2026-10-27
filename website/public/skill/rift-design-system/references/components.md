@@ -1207,10 +1207,11 @@ A wide navigation panel of icon rows with descriptions, beside an optional featu
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/mega-menu.md
 
-### Nav
+### Nav (deprecated)
 
-Desktop top navigation bar with a brand slot, horizontal button group, and optional trailing content.
+A legacy plain top bar of brand and page links, superseded by the site header and kept for existing consumers.
 
+- Deprecated: not for new code. Use `SiteHeader` instead.
 - Import: `import { Nav } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/nav.md

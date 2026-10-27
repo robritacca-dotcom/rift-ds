@@ -848,7 +848,7 @@
       "name": "Nav",
       "label": "Nav",
       "slug": "nav",
-      "description": "Desktop top navigation bar with a brand slot, horizontal button group, and optional trailing content.",
+      "description": "A legacy plain top bar of brand and page links, superseded by the site header and kept for existing consumers.",
       "category": "navigation",
       "client": false
     },

@@ -21,12 +21,17 @@ export interface NavProps
     Omit<React.ComponentPropsWithoutRef<'nav'>, keyof NavOwnProps> {}
 
 /**
- * Nav component from Figma design system
- * Renders a horizontal navigation bar using ButtonGroup.
+ * Nav is the earlier plain top bar: a brand slot and a horizontal
+ * ButtonGroup of page links, with no menus and no mobile behaviour of its
+ * own. It keeps working for existing consumers, and new work uses
+ * SiteHeader, which adds section mega menus, the sticky progressive blur and
+ * the fold to a drawer.
  *
  * The landmark is labelled "Main" by default so assistive tech can tell it
  * apart from any other navigation on the page; pass `aria-label` to name it
  * differently. The forwarded ref and any unrecognised props target the `<nav>`.
+ *
+ * @deprecated Use `SiteHeader` instead.
  */
 export const Nav = React.forwardRef<HTMLElement, NavProps>(
   ({ brandText, brandIcon, buttons, trailing, className = '', ...rest }, ref) => {

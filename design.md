@@ -905,7 +905,7 @@ Two behaviours are the component's rather than the caller's, and both are why it
 
 ### Nav
 
-**`ds-nav`** — Top navigation bar: a 78px-tall, max-width 1440px flex row with a brand slot (icon + `--font-paragraph-emphasis-*` text, `--gap-500`) on the left and a horizontal ButtonGroup plus optional `trailing` content (e.g. the theme ToggleSwitch) on the right at `--gap-1000`. Purely compositional — active states come from the Button configs passed in. The landmark is labelled "Main" by default so it stays distinguishable from any other `<nav>` on the page; a passed `aria-label` overrides it, and other native attributes spread onto the `<nav>`. For a whole site's header (section mega menus, a sticky progressive blur, a fold to a drawer), use SiteHeader; Nav is the plain bar.
+**`ds-nav`** — Deprecated: the earlier plain top bar, superseded by SiteHeader and kept working for existing consumers. A top navigation bar: a 78px-tall, max-width 1440px flex row with a brand slot (icon + `--font-paragraph-emphasis-*` text, `--gap-500`) on the left and a horizontal ButtonGroup plus optional `trailing` content (e.g. the theme ToggleSwitch) on the right at `--gap-1000`. Purely compositional — active states come from the Button configs passed in. The landmark is labelled "Main" by default so it stays distinguishable from any other `<nav>` on the page; a passed `aria-label` overrides it, and other native attributes spread onto the `<nav>`. New work uses SiteHeader, which adds section mega menus, the sticky progressive blur and the fold to a drawer.
 
 ### NavList
 

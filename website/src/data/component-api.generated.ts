@@ -9417,10 +9417,11 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Nav",
     "slug": "nav",
     "category": "navigation",
-    "description": "Desktop top navigation bar with a brand slot, horizontal button group, and optional trailing content.",
+    "description": "A legacy plain top bar of brand and page links, superseded by the site header and kept for existing consumers.",
     "client": false,
     "importPath": "rift-ds/components/Nav/Nav",
     "barrel": "main",
+    "deprecated": "Use `SiteHeader` instead.",
     "exports": [
       {
         "component": "Nav",
@@ -9456,7 +9457,8 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Additional CSS classes",
             "defaultValue": ""
           }
-        ]
+        ],
+        "deprecated": "Use `SiteHeader` instead."
       }
     ]
   },

@@ -2,6 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
@@ -74,7 +75,12 @@ export default function NavigationPage() {
               A compositional top bar: brand, page links, and a trailing slot
             </p>
             <p className={styles.introBody}>
-              Nav lays out a brand, a ButtonGroup of page links, and trailing content such as a theme toggle. It has no mobile behaviour of its own. The collapsed bar and drawer below are this site&apos;s phone pattern, mocked up from ButtonGroup and ToggleSwitch, to show how the pieces compose at a narrow width.
+              Nav is deprecated: it keeps working for existing consumers, and new work uses{" "}
+              <Link href="/components/site-header">Site header</Link>, which adds section mega menus, a sticky
+              progressive blur and a fold to a drawer. Nav lays out a brand, a ButtonGroup of page links, and
+              trailing content such as a theme toggle, with no mobile behaviour of its own; the collapsed bar and
+              drawer below are mocked up from ButtonGroup and ToggleSwitch to show how the pieces compose at a
+              narrow width.
             </p>
           </div>
 

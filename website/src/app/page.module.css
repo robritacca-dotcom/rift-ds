@@ -217,6 +217,38 @@
 
 /* The agent starter line under the hero buttons: caption type in the
    secondary text colour, so it reads as a footnote to the call to action. */
+/* Experiment: the maker's mark closing the page. A hairline pill, so
+   it reads as a credit rather than another resource link. */
+.heroCredit {
+  display: inline-flex;
+  margin-block-start: var(--gap-400);
+  align-items: center;
+  gap: var(--gap-100);
+  padding-block: var(--padding-050);
+  padding-inline: var(--padding-050) var(--padding-200);
+  border: 1px solid var(--color-bg-container-border);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition:
+    color var(--motion-duration-fast) var(--motion-ease-standard),
+    border-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.heroCredit:hover {
+  color: var(--color-text-primary);
+  border-color: var(--color-input-border-hover);
+}
+
+.heroCreditIcon {
+  --icon-size: var(--icon-size-500);
+}
+
 .heroAgentNote {
   /* A row, so the question and the copy button share one centre line
      instead of each sitting on its own baseline. */
@@ -224,6 +256,8 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
+  /* Wider than the glyph-to-label gap inside each link, so the icons read
+     as belonging to their labels rather than floating between items. */
   gap: var(--gap-100);
   margin: 0;
   font-family: var(--font-caption-family);
@@ -239,10 +273,11 @@
 .heroAgentCopy {
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-100);
+  gap: var(--gap-050);
   padding: 0;
   border: 0;
   background: none;
+  text-decoration: none;
   font: inherit;
   color: inherit;
   cursor: pointer;
@@ -286,7 +321,8 @@
 }
 
 .heroAgentLabelIdle,
-.heroAgentLabelDone {
+.heroAgentLabelDone,
+.heroAgentLinkLabel {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -330,10 +366,14 @@
 
 .statStrip {
   display: flex;
+  max-width: 1440px;
+  margin-inline: auto;
   flex-wrap: wrap;
   justify-content: center;
   gap: var(--gap-400) var(--gap-1500);
   margin-top: var(--gap-400);
+  /* Room before the escalator columns, whose fade opens the next band. */
+  margin-block-end: var(--gap-1000);
 }
 
 /* Stat left-aligns for dashboard rows; a centred hero band centres each
@@ -620,6 +660,51 @@
    one copy's height, so the loop never shows a seam. The outer columns run
    down, the middle runs up, all slower than a reading pace — ambient motion,
    not a carousel. The mask fades the cards out at the window's edges. */
+/* The framed chat playground between the hero and the collage: the page
+   column's width, with the widest section step below it, so the stats
+   header opens a new section rather than captioning the frame. */
+.chatFrame {
+  max-width: 1440px;
+  margin: 0 auto var(--gap-3000);
+}
+
+/* The collage's header: a heading-1 line carrying the live count, and one
+   line of secondary copy, centred over the columns. */
+.collageHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-200);
+  margin-inline: auto;
+  text-align: center;
+}
+
+
+
+/* The rule opening the counts band: a full section step below the header
+   copy, so the subtitle and the counts read as separate beats. */
+.statsDivider {
+  margin-block-start: var(--gap-1000);
+}
+
+.collageTitle {
+  margin: 0;
+  font-family: var(--font-heading-1-family);
+  font-size: var(--font-heading-1-size);
+  font-weight: var(--font-heading-1-weight);
+  line-height: var(--font-heading-1-line-height);
+  letter-spacing: var(--font-heading-1-letter-spacing);
+  color: var(--color-text-heading);
+  font-variant-numeric: tabular-nums;
+}
+
+.collageSub {
+  margin: 0;
+  font-size: var(--font-paragraph-size);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-secondary);
+}
+
 .collage {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

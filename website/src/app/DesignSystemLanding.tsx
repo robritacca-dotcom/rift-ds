@@ -9,7 +9,8 @@ import FadeDivider from "../components/FadeDivider/FadeDivider";
 import styles from "./page.module.css";
 import HomeBento from "@/components/HomeBento/HomeBento";
 import HomeFaq from "@/components/HomeFaq/HomeFaq";
-import { FIGMA_FILE_URL, NPM_URL, REPOSITORY_URL, STORYBOOK_URL } from "@/config/brand.generated";
+import HomeChatFrame from "@/components/HomeChatFrame/HomeChatFrame";
+import { AUTHOR_NAME, AUTHOR_URL, FIGMA_FILE_URL, NPM_URL, REPOSITORY_URL, STORYBOOK_URL } from "@/config/brand.generated";
 import { THEME_SELECTOR_ORDER, themeSelectorTiles } from "@/lib/theme/presets";
 import { useSiteTheme } from "@/lib/theme/use-theme-overrides";
 import { applyBrand, readBrand, SERVED_THEME_ID, subscribeBrand } from "@/lib/theme/brand";
@@ -414,11 +415,13 @@ function AgentStarterCopy() {
           check
         </span>
       </span>
-      {/* Both labels share one grid cell, so the button keeps its width; they
-          differ by two characters, so the line stays centred either way. */}
+      {/* Both labels share one grid cell, so the button keeps its width. The
+          done label is the shorter, so the idle label alone sets that width
+          and no slack sits before the next item; the live region says which
+          file was copied. */}
       <span className={styles.heroAgentLabels}>
         <span className={styles.heroAgentLabelIdle}>Copy {AGENT_STARTER_FILE}</span>
-        <span className={styles.heroAgentLabelDone}>Copied {AGENT_STARTER_FILE}</span>
+        <span className={styles.heroAgentLabelDone}>Copied</span>
       </span>
       <span className={styles.heroAgentLive} aria-live="polite">
         {copied ? `${AGENT_STARTER_FILE} copied to the clipboard` : ""}
@@ -639,13 +642,15 @@ function ThemeSwitcher() {
 const SUBTITLE_FULL =
   "Open source and fully themeable, built for AI products and coding agents.";
 
-/* One headline per reason the README leads with, in the same order and
+/* One headline per reason the README leads with, in the same order (plus
+   the playground's theme-from-a-file drop beside the themes line), and
    held to a similar length so every sweep covers about the same ground.
    The component figure is the registry's count, never a typed number. */
 const SUBTITLE_PHRASES = [
   `${COMPONENT_COUNT} typed components, from buttons to charts.`,
   "AI chat patterns and templates, ready to use.",
   "Complete themes, applied with one attribute.",
+  "Drop in a DESIGN.md or any image to theme it.",
   "Agent skills and an MCP endpoint, no key needed.",
   "Free and MIT, by npm, the shadcn CLI or a clone.",
 ];
@@ -1443,38 +1448,64 @@ export default function DesignSystemLanding() {
               them. */}
           <div className={`${styles.heroInner} animate-in`}>
           {/* The tagline is the h1: the nav wordmark owns the name. */}
-          <h1 className={styles.pageTitle}>The AI-ready React design system</h1>
+          <h1 className={styles.pageTitle}>The AI-native React interface kit</h1>
           <RotatingSubtitle />
-          {/* The counts sit between the two rules; the section links close
-              the hero. Every figure imports from the registry export that
-              owns it, so the band can never overstate. */}
-          <FadeDivider className={styles.heroDivider} />
-          <div className={styles.statStrip} role="group" aria-label="What the system counts today">
-            <Stat value={<AnimatedNumber value={COMPONENT_COUNT} />} label="Components" />
-            <Stat value={<AnimatedNumber value={TOKEN_COUNT} />} label="Semantic tokens" />
-            <Stat value={<AnimatedNumber value={THEME_SELECTOR_ORDER.length} />} label="Themes" />
-            <Stat value={<AnimatedNumber value={MCP_TOOLS.length} />} label="MCP tools" />
-            <Stat
-              value={<AnimatedNumber value={0} format={(v) => `$${v.toFixed(2)}`} />}
-              label="Cost"
-            />
-          </div>
           <FadeDivider className={styles.heroDivider} />
           <ButtonGroup
-            aria-label="Get started"
+            aria-label="Explore the system"
             buttons={[
-              { label: "Get started", variant: "primary" as const, href: "/docs/get-started", iconLeft: "terminal" },
-              { label: "Browse components", variant: "secondary" as const, tone: "neutral" as const, href: "/components", iconLeft: "category" },
+              { label: "Playground", variant: "primary" as const, href: "/playground", iconLeft: "palette", iconRight: "arrow_forward" },
+              { label: "Components", variant: "secondary" as const, tone: "neutral" as const, href: "/components", iconLeft: "category", iconRight: "arrow_forward" },
             ]}
           />
           {/* The agent starter, kept to one quiet line: the buttons are the
-              hero's call to action, this is the shortcut for agent users. */}
+              hero's call to action, this is the shortcut for agent users,
+              with the install guide beside it. */}
           <p className={styles.heroAgentNote}>
             <span>Using a coding agent?</span>
             <AgentStarterCopy />
+            <span>or</span>
+            <Link href="/docs/get-started" className={styles.heroAgentCopy}>
+              <span className={`material-symbols-rounded ${styles.heroAgentGlyph}`} aria-hidden="true">
+                terminal
+              </span>
+              <span className={styles.heroAgentLinkLabel}>Get started</span>
+            </Link>
           </p>
           </div>
         </section>
+
+        {/* ---------- the playground's Chat view, framed and playing its
+             scripted reel; the whole frame opens it ---------- */}
+        <section
+          className={`${styles.chatFrame} animate-in animate-delay-1`}
+          aria-label="The AI chat playground"
+        >
+          <HomeChatFrame />
+        </section>
+
+        {/* ---------- the collage's own header, then the counts: every
+             figure imports from the registry export that owns it, so the
+             band can never overstate; the columns below show the things
+             counted ---------- */}
+        <header className={styles.collageHeader}>
+          <h2 className={styles.collageTitle}>A whole system, running live</h2>
+          <p className={styles.collageSub}>
+            Components, tokens and themes in one free package. Every card below is the real
+            thing, drawn in the theme you picked.
+          </p>
+        </header>
+        <FadeDivider className={styles.statsDivider} />
+        <div className={styles.statStrip} role="group" aria-label="What the system counts today">
+          <Stat value={<AnimatedNumber value={COMPONENT_COUNT} />} label="Components" />
+          <Stat value={<AnimatedNumber value={TOKEN_COUNT} />} label="Semantic tokens" />
+          <Stat value={<AnimatedNumber value={THEME_SELECTOR_ORDER.length} />} label="Themes" />
+          <Stat value={<AnimatedNumber value={MCP_TOOLS.length} />} label="MCP tools" />
+          <Stat
+            value={<AnimatedNumber value={0} format={(v) => `$${v.toFixed(2)}`} />}
+            label="Cost"
+          />
+        </div>
 
         {/* ---------- collage: three curated columns of live demos + nav; one
              column below the breakpoint, so phones get the same drift ---------- */}
@@ -1604,6 +1635,20 @@ export default function DesignSystemLanding() {
               </li>
             ))}
           </ul>
+          {/* Experiment: a quiet maker's mark closing the page, pointing
+              at the portfolio. AUTHOR_NAME/AUTHOR_URL own the values. */}
+          <a
+            href={AUTHOR_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.heroCredit}
+          >
+            <Avatar name={AUTHOR_NAME} size="sm" fill="neutral" />
+            <span>Built by {AUTHOR_NAME}</span>
+            <span className={`material-symbols-rounded ${styles.heroCreditIcon}`} aria-hidden="true">
+              arrow_outward
+            </span>
+          </a>
         </section>
       </main>
 

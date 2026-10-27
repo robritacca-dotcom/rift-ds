@@ -42,7 +42,8 @@ export const ASSISTANT_NAME = 'Rift AI';
  * landing page, llms.txt, the MCP endpoint's browser landing page, the
  * consumer library skill's provenance line, and every shadcn registry
  * item's `author` in the schema's `name <url>` form (the registry index
- * has no author field). Two hand mirrors, the root package.json's
+ * has no author field), and the home page's closing "Built by" badge
+ * (website/src/app/DesignSystemLanding.tsx). Two hand mirrors, the root package.json's
  * `author` and LICENSE's copyright holder, are held by
  * validate-package-exports.mjs. Deliberately uncredited: the init bin's
  * terminal output (content-design.md's CLI register never promotes),

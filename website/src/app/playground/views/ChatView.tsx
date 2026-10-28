@@ -18,6 +18,7 @@ import {
   demoAgentTabs,
   type DemoWelcomeVariant,
 } from "rift-ds/chat/demo";
+import PhoneKeyboard, { findKey } from "@/components/PhoneKeyboard/PhoneKeyboard";
 import styles from "./ChatView.module.css";
 
 /** The composer's placeholder when the Placeholder lever is empty. The
@@ -403,6 +404,20 @@ export default function ChatView({
 
   const preset = STAGE_SIZES[size];
   const isDevice = preset.device;
+
+  /* The bezel's soft keyboard: up while a text field in the screen has
+     focus, as a phone's is, and lighting each key as its letter is typed
+     on the visitor's own keyboard. */
+  const [keyboardOpen, setKeyboardOpen] = useState(false);
+  const typingField = (target: EventTarget | null) =>
+    target instanceof HTMLTextAreaElement ||
+    (target instanceof HTMLInputElement && !["checkbox", "radio", "button", "submit"].includes(target.type));
+  const litKey = useRef<Element | null>(null);
+  const lightKey = (screen: HTMLElement, key: string | null) => {
+    litKey.current?.removeAttribute("data-pressed");
+    litKey.current = key && key.length === 1 ? findKey(screen, key) : null;
+    litKey.current?.setAttribute("data-pressed", "");
+  };
   /* The header's Chat position menu, and the seats it offers, belong to the
      desktop card, the same gate as the takeover, for the same reason: a
      phone is already edge to edge. */
@@ -637,6 +652,12 @@ export default function ChatView({
               <div
                 className={styles.deviceScreen}
                 style={{ width: preset.w, height: preset.h }}
+                onFocus={(e) => setKeyboardOpen(typingField(e.target))}
+                onBlur={(e) => {
+                  if (!e.currentTarget.contains(e.relatedTarget) || !typingField(e.relatedTarget)) setKeyboardOpen(false);
+                }}
+                onKeyDown={(e) => typingField(e.target) && lightKey(e.currentTarget, e.key)}
+                onKeyUp={(e) => lightKey(e.currentTarget, null)}
               >
                 <div className={styles.statusBar} aria-hidden="true">
                   <span className={styles.statusTime}>9:41</span>
@@ -650,6 +671,7 @@ export default function ChatView({
                   </span>
                 </div>
                 {widgetEl}
+                <PhoneKeyboard open={keyboardOpen} />
                 <div className={styles.homeBar} aria-hidden="true">
                   <span className={styles.homeIndicator} />
                 </div>

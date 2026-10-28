@@ -1,0 +1,66 @@
+/* The staged soft keyboard for the phone previews (PhoneKeyboard.tsx). */
+
+/* Closed to no height, it rises while a field has focus and takes that
+   height from the app above it, so the composer rides up the way it does
+   over a real soft keyboard. */
+.keyboard {
+  display: grid;
+  grid-template-rows: 0fr;
+  flex-shrink: 0;
+  background: var(--color-bg-container-secondary);
+  transition: grid-template-rows var(--motion-duration-slow) var(--motion-ease-standard);
+}
+
+.keyboard[data-open] {
+  grid-template-rows: 1fr;
+}
+
+/* The collapsing track holds no padding of its own, or a closed keyboard
+   would still show a strip that tall. */
+.keyboardInner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.keys {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+  padding: var(--padding-200) var(--padding-100) var(--padding-100);
+}
+
+.keyRow {
+  display: flex;
+  justify-content: center;
+  gap: var(--gap-100);
+}
+
+/* A key: the size of an iPhone's, lit while its letter is typed. */
+.key {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 32px;
+  height: 42px;
+  border-radius: var(--radius-200);
+  background: var(--color-bg-container-primary);
+  color: var(--color-text-primary);
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  line-height: 1;
+  --icon-size: var(--icon-size-500);
+}
+
+.key[data-pressed] {
+  background: var(--color-bg-container-border);
+}
+
+.keyWide {
+  flex-basis: 44px;
+  font-size: var(--font-paragraph-sm-size);
+}
+
+.keySpace {
+  flex: 1;
+  font-size: var(--font-paragraph-sm-size);
+}

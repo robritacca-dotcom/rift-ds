@@ -94,7 +94,17 @@ html[data-theme-ready] {
      (scripts/validate-stacking.mjs). */
   --layer-site-chrome: 1000;   /* the sticky header, its mobile menu, and the skip link onto it */
   --layer-site-inspect: 1040;  /* inspect mode's section boxes; its hover box and popover step up from here */
+  --layer-site-modal: 1150;    /* the library's modal surfaces, lifted over the site chrome and the chat */
   --layer-site-overlay: 1200;  /* what must cover the chat panel: the command palette, an expanded diagram, toasts */
+
+  /* The library's modal surfaces (an expanded bento sheet, Dialog, Drawer,
+     AlertDialog, Lightbox, the attachment viewer) sit on --layer-modal,
+     which the library ranks under its own chrome, not under a site header
+     at --layer-site-chrome. Left there, the header covered a sheet's close
+     button and a visitor had no way out. Lifted here, a modal covers the
+     header and the chat; its command palette keeps its one step above. */
+  --layer-modal: var(--layer-site-modal);
+  --layer-command: calc(var(--layer-site-modal) + 10);
 
   /* The chat FAB holds the bottom-right corner on every page, which is
      also the toast queue's default corner. Bottom-placed toasts start

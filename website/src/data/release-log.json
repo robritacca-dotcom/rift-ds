@@ -1,6 +1,16 @@
 {
   "releases": [
     {
+      "version": "1.16.0",
+      "date": "2026-10-28",
+      "title": "A site header, its mega menus and a progressive blur",
+      "body": [
+        "`SiteHeader` is the sticky top bar the docs site runs on: section pills that open mega menus, a blur that dissolves into the page as it scrolls, and a fold to a drawer when the pills no longer fit. Its parts ship on their own too: `MegaMenu`, a wide panel of icon rows beside an optional featured card, and `ProgressiveBlur`, a backdrop blur that fades out along one edge.",
+        "Drawer takes a `heading` that puts content such as your logo where the title text shows, while `title` stays as the dialog's hidden accessible name. `Nav` is deprecated in favour of `SiteHeader` and keeps working.",
+        "In a QuestionCard set, picking an option now only marks it and Next moves on, so a slip can be changed before the step passes. A radio is always a circle and a checkbox a rounded square whatever the theme's radii, and their unchecked ring takes a new `--color-input-indicator-border` that clears 3:1 in both themes. Nothing published was renamed or removed."
+      ]
+    },
+    {
       "version": "1.15.0",
       "date": "2026-10-26",
       "title": "Your locale, your keys, your reading direction",

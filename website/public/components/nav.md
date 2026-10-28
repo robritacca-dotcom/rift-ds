@@ -4,7 +4,7 @@
 
 A legacy plain top bar of brand and page links, superseded by the site header and kept for existing consumers.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.15.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.16.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: navigation
 - Import: `import { Nav } from 'rift-ds';`

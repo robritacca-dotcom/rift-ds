@@ -74,12 +74,13 @@ const HEADER_ROOM = 88;
 
 /* Where the header points: the chat's component page, its install guide,
    and the playground's Chat view the whole frame opens. */
-/* Frame widths, in CSS pixels, below which the header sheds words so the
-   toggle stays centred between its neighbours: the toggle's labels first,
-   then the buttons'. Measured against the three buttons with their labels
-   and the title, not layout tokens. Every name stays for assistive tech. */
+/* Frame widths, in CSS pixels: below the first the toggle sheds its labels
+   so it stays centred between its neighbours, and below the second the
+   header stands down altogether, the chat plays on the desktop alone and
+   takes back the strip. Measured against the three buttons with their
+   labels and the title, not layout tokens. */
 const HEADER_TOGGLE_LABELS_MIN = 1100;
-const HEADER_BUTTON_LABELS_MIN = 900;
+const HEADER_MIN = 900;
 
 const HEADER_LINKS = [
   { href: "/components/ai-chat", label: "Component", icon: "category" },
@@ -217,7 +218,7 @@ export default function HomeChatFrame() {
 
   const scale = width > 0 ? width / FOOTPRINT.w : 0;
   const toggleLabels = width >= HEADER_TOGGLE_LABELS_MIN;
-  const buttonLabels = width === 0 || width >= HEADER_BUTTON_LABELS_MIN;
+  const showHeader = width === 0 || width >= HEADER_MIN;
   const [transport, setTransport] = useState(() => createSimTransport(FINANCE_SCRIPT.build()));
 
   /* A switch starts the script over, on a fresh transport. The transport
@@ -227,6 +228,10 @@ export default function HomeChatFrame() {
     setTransport(() => createSimTransport(FINANCE_SCRIPT.build()));
     setDevice(next as Device);
   };
+
+  /* With the header gone there is no toggle back, so a frame narrowed
+     while on the phone returns to the desktop, set as it renders. */
+  if (!showHeader && phone) changeDevice("desktop");
 
   /* Every control the playground stage shows: the header's agent,
      artifact, full-screen and close buttons, the session tabs, and the
@@ -275,7 +280,7 @@ export default function HomeChatFrame() {
           style={{
             width: FOOTPRINT.w,
             height: FOOTPRINT.h,
-            paddingBlockStart: HEADER_ROOM,
+            paddingBlockStart: showHeader ? HEADER_ROOM : undefined,
             transform: `scale(${scale})`,
           }}
           aria-hidden="true"
@@ -324,32 +329,31 @@ export default function HomeChatFrame() {
       <Link href={TARGET_HREF} className={styles.hit} aria-label="Open the AI chat playground" />
       {/* The header sits above the link, so a press on the toggle or its
           links does its own thing rather than opening the playground. */}
-      <div className={styles.header}>
-        <h2 className={styles.headerTitle}>AI chat</h2>
-        <SegmentedControl
-          segments={DEVICE_SEGMENTS}
-          value={device}
-          onValueChange={changeDevice}
-          size="compact"
-          showLabels={toggleLabels}
-          aria-label="Preview the chat on"
-        />
-        <div className={styles.headerLinks}>
-          {HEADER_LINKS.map((link) => (
-            <Button
-              key={link.href}
-              href={link.href}
-              label={link.label}
-              /* Icon-only when narrow, the label kept as the name. `text`
-                 is the one way to it until `label` loses its default. */
-              text={buttonLabels}
-              variant="tertiary"
-              size="compact"
-              iconLeft={link.icon}
-            />
-          ))}
+      {showHeader && (
+        <div className={styles.header}>
+          <h2 className={styles.headerTitle}>AI chat</h2>
+          <SegmentedControl
+            segments={DEVICE_SEGMENTS}
+            value={device}
+            onValueChange={changeDevice}
+            size="compact"
+            showLabels={toggleLabels}
+            aria-label="Preview the chat on"
+          />
+          <div className={styles.headerLinks}>
+            {HEADER_LINKS.map((link) => (
+              <Button
+                key={link.href}
+                href={link.href}
+                label={link.label}
+                variant="tertiary"
+                size="compact"
+                iconLeft={link.icon}
+              />
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

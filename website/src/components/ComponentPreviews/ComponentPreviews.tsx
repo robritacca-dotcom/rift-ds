@@ -43,6 +43,7 @@ import { LegendTile } from "rift-ds/components/LegendTile/LegendTile";
 import { Panel } from "rift-ds/components/Panel/Panel";
 import { Chip } from "rift-ds/components/Chip/Chip";
 import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { CommandPaletteTrigger } from "rift-ds/components/CommandPaletteTrigger/CommandPaletteTrigger";
 import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
 import { Quote } from "rift-ds/components/Quote/Quote";
 import { Reasoning } from "rift-ds/components/Reasoning/Reasoning";
@@ -522,11 +523,7 @@ const previews: Record<string, () => ReactNode> = {
   ),
   "command-palette-trigger": () => (
     <>
-      <div style={{ width: 170, display: "flex", alignItems: "center", gap: 6, height: 32, padding: "0 10px", borderRadius: 999, border: "1px solid var(--color-bg-container-border)", background: "var(--color-bg-container-primary)", color: "var(--color-text-secondary)", fontSize: 11 }}>
-        <span className="material-symbols-rounded" style={{ fontSize: 16 }}>search</span>
-        <span>Search</span>
-        <span style={{ marginLeft: "auto", fontSize: 10 }}>⌘K</span>
-      </div>
+      <CommandPaletteTrigger label="Search" size="compact" />
     </>
   ),
   "legend-tile": () => (

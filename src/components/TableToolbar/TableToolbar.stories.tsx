@@ -235,6 +235,116 @@ export const BulkBar: Story = {
   },
 };
 
+/** Where the full buttons do not fit, every action stands as an icon button named by its tooltip, and only what still does not fit folds into More. The count and Select all N keep their width, so nothing draws under anything else. */
+export const BulkBarNarrow: Story = {
+  render: () => (
+    <div style={{ inlineSize: 620 }}>
+      <DataTable
+        columns={columns}
+        rows={rows}
+        selectable
+        caption="Issues"
+        toolbar={
+          <TableToolbar
+            bulkActions={[
+              { id: 'done', label: 'Mark done', icon: 'check_circle', onSelect: () => {} },
+              { id: 'start', label: 'Start', icon: 'play_circle', onSelect: () => {} },
+              { id: 'mine', label: 'Assign to me', icon: 'person', onSelect: () => {} },
+              { id: 'cancel', label: 'Cancel', icon: 'cancel', destructive: true, onSelect: () => {} },
+            ]}
+          />
+        }
+      />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('checkbox', { name: 'Select Composer loses focus' }));
+    const bulk = await canvas.findByRole('group', { name: '1 selected' });
+    const inBar = within(bulk);
+    const selectAll = inBar.getByRole('button', { name: 'Select all 4' });
+    // Every action as an icon, nothing folded.
+    const icons = await waitFor(() => {
+      const found = ['Mark done', 'Start', 'Assign to me', 'Cancel'].map((name) => inBar.getByRole('button', { name }));
+      for (const icon of found) expect(icon.className).toContain('ds-circular-button');
+      return found;
+    });
+    await expect(inBar.queryByRole('button', { name: 'More actions' })).not.toBeInTheDocument();
+    const end = selectAll.getBoundingClientRect().right;
+    for (const icon of icons) await expect(icon.getBoundingClientRect().left).toBeGreaterThanOrEqual(end);
+  },
+};
+
+/** The active view is the table's starting setup: the table opens on it, here a view that leaves out done issues with "is none of", and a view that sets no filters shows every row again. */
+export const StartingView: Story = {
+  render: () => (
+    <DataTable
+      columns={columns}
+      rows={rows}
+      caption="Issues"
+      toolbar={
+        <TableToolbar
+          defaultViews={[
+            {
+              id: 'open',
+              label: 'Not done',
+              view: {
+                version: 1,
+                filters: [{ id: 'status-1', column: 'status', operator: 'isNoneOf', value: ['Done'] }],
+              },
+            },
+            { id: 'all', label: 'All issues', view: { version: 1 } },
+          ]}
+        />
+      }
+    />
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const names = () => canvas.getAllByRole('rowheader').map((cell) => cell.textContent);
+    // Open on the first view, with no unsaved mark: the table matches it.
+    await expect(names()).toHaveLength(3);
+    await expect(names()).not.toContain('Toast stacks past inset');
+    await expect(canvasElement.querySelector('.ds-table-toolbar__view-dot')).toBeNull();
+    // The chip names the condition, since it is not the default one.
+    await expect(canvas.getByRole('button', { name: 'Status · is none of · Done' })).toBeInTheDocument();
+    // Its editor offers the list's conditions.
+    await userEvent.click(canvas.getByRole('button', { name: 'Status · is none of · Done' }));
+    await expect(await within(document.body).findByRole('combobox', { name: 'Condition' })).toBeInTheDocument();
+    await userEvent.keyboard('{Escape}');
+    // A view with no filters falls back to the table's own: every row.
+    await userEvent.click(canvas.getByRole('tab', { name: 'All issues' }));
+    await waitFor(() => expect(names()).toHaveLength(4));
+  },
+};
+
+/** A bar the table cannot see into, wrapped in a component of the host's, still opens the table on its active view, applied once it mounts. */
+export const StartingViewWrapped: Story = {
+  render: () => {
+    const IssuesBar = () => (
+      <TableToolbar
+        defaultActiveView="open"
+        defaultViews={[
+          { id: 'all', label: 'All issues', view: { version: 1 } },
+          {
+            id: 'open',
+            label: 'Open',
+            view: { version: 1, filters: [{ id: 'status-1', column: 'status', operator: 'isAnyOf', value: ['Open'] }] },
+          },
+        ]}
+      />
+    );
+    return <DataTable columns={columns} rows={rows} caption="Issues" toolbar={<IssuesBar />} />;
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const names = () => canvas.getAllByRole('rowheader').map((cell) => cell.textContent);
+    await waitFor(() => expect(names()).toEqual(['Composer loses focus', 'Badge miscounts drafts']));
+    await expect(canvas.getByRole('tab', { name: 'Open' })).toHaveAttribute('aria-selected', 'true');
+    await expect(canvasElement.querySelector('.ds-table-toolbar__view-dot')).toBeNull();
+  },
+};
+
 /** With `multiSort`, Shift-click adds a header to the sort, and the Sort panel orders, flips and removes the sorts. */
 export const MultiSort: Story = {
   render: () => (

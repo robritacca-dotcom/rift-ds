@@ -773,12 +773,18 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
        at full width, the More button's room kept while any is left out. */
     const bulkRef = useRef<HTMLDivElement | null>(null);
     const bulkId = useId();
-    const [actionFit, setActionFit] = useState(Number.MAX_SAFE_INTEGER);
+    /* How the actions fit: as full buttons while every one has room, then as
+       icon buttons named by their tooltips, then as many icons as fit with
+       the rest folded into More. */
+    const [actionFit, setActionFit] = useState<{ icons: boolean; shown: number }>({
+      icons: false,
+      shown: Number.MAX_SAFE_INTEGER,
+    });
     const bulkOn = Boolean(table?.selectable && table.selectedIds.length > 0);
     const actionIds = bulkActions.map((action) => action.id + action.label).join('|');
     useLayoutEffect(() => {
       const bar = bulkRef.current;
-      if (!bar || narrow || !bulkOn) return;
+      if (!bar || !bulkOn) return;
       const measure = () => {
         const gap = parseFloat(getComputedStyle(bar).columnGap) || 0;
         const start = bar.querySelector<HTMLElement>('.ds-table-toolbar__bulk-start');
@@ -787,18 +793,27 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
         const endGap = parseFloat(getComputedStyle(end).columnGap) || 0;
         const room = bar.clientWidth - start.getBoundingClientRect().width - gap;
         const buttons = [...end.querySelectorAll<HTMLElement>(':scope > [data-action]')];
-        // The More button is a square at the control height.
-        const moreWidth = bar.getBoundingClientRect().height + endGap;
-        let used = 0;
-        let n = 0;
-        for (let i = 0; i < buttons.length; i += 1) {
-          const width = buttons[i].getBoundingClientRect().width + (i > 0 ? endGap : 0);
-          const reserve = i < buttons.length - 1 ? moreWidth : 0;
-          if (used + width + reserve > room) break;
-          used += width;
-          n += 1;
+        // An icon button and the More button are squares at the control height.
+        const square = bar.getBoundingClientRect().height;
+        const full = buttons.reduce((sum, button, i) => sum + button.getBoundingClientRect().width + (i > 0 ? endGap : 0), 0);
+        let next = { icons: false, shown: buttons.length };
+        if (narrow || full > room) {
+          // Only an action with an icon can stand as one; the rest fold.
+          const iconable = buttons.filter((button) => button.hasAttribute('data-iconable')).length;
+          let used = 0;
+          let n = 0;
+          for (let i = 0; i < iconable; i += 1) {
+            const width = square + (i > 0 ? endGap : 0);
+            const reserve = i < buttons.length - 1 ? square + endGap : 0;
+            if (used + width + reserve > room) break;
+            used += width;
+            n += 1;
+          }
+          next = { icons: true, shown: n };
         }
-        setActionFit((previous) => (previous === n ? previous : n));
+        setActionFit((previous) =>
+          previous.icons === next.icons && previous.shown === next.shown ? previous : next,
+        );
       };
       measure();
       const observer = new ResizeObserver(measure);
@@ -812,9 +827,10 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
     };
 
     /* The bulk bar: the bar's own row, at the same height, while rows are
-       selected. Every action is a full button while there is room, the
-       destructive ones last; what does not fit folds into a More menu at
-       the end, measured as the chips are. Folded, every action is in it. */
+       selected. Every action is a full button while all of them fit, the
+       destructive ones last; then each is an icon button named by its
+       tooltip, and what still does not fit folds into a More menu at the
+       end, measured as the chips are. */
     /* In manual mode the table holds one page, so Select all N selects
        every match as a query and the count is the server's. */
     const selectedCount = !table?.selectable
@@ -841,14 +857,21 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
       ...bulkActions.filter((action) => !action.destructive),
       ...bulkActions.filter((action) => action.destructive),
     ];
-    const shownActions = narrow ? 0 : Math.min(actionFit, orderedActions.length);
-    const folded = orderedActions.slice(shownActions);
+    // Actions with icons lead when they stand as icons, so the ones that fold are the ones that must.
+    const iconFirst = [
+      ...orderedActions.filter((action) => action.icon != null),
+      ...orderedActions.filter((action) => action.icon == null),
+    ];
+    const shownActions = Math.min(actionFit.shown, orderedActions.length);
+    const folded = (actionFit.icons ? iconFirst : orderedActions).slice(shownActions);
     const bulkButton = (action: TableToolbarBulkAction, index: number) => {
-      const out = index >= shownActions;
+      // Full buttons stay laid out out of sight while icons stand in, so the fit can be measured.
+      const out = actionFit.icons || index >= shownActions;
       return (
         <Button
           key={action.id}
           data-action=""
+          data-iconable={action.icon != null || undefined}
           className={out ? 'ds-table-toolbar__chip--overflow' : undefined}
           aria-hidden={out || undefined}
           inert={out || undefined}
@@ -904,7 +927,21 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
           )}
         </div>
         <div className="ds-table-toolbar__bulk-end">
-          {!narrow && orderedActions.map(bulkButton)}
+          {orderedActions.map(bulkButton)}
+          {actionFit.icons &&
+            iconFirst.slice(0, shownActions).map((action) => (
+              <CircularButton
+                key={action.id}
+                icon={action.icon}
+                variant="secondary"
+                tone={action.destructive ? 'destructive' : 'neutral'}
+                size={size}
+                ariaLabel={action.label}
+                tooltip={action.label}
+                disabled={action.disabled}
+                onClick={() => action.onSelect(selection)}
+              />
+            ))}
           {folded.length > 0 && (
             <DropdownMenu
               size={size}
@@ -1323,6 +1360,16 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
     );
     const active = views.find((v) => v.id === activeViewId) ?? views[0];
     const dirty = Boolean(table && active && !table.viewMatches(active.view));
+    /* The active view is the table's starting setup. A DataTable opens on it
+       already when this bar sits directly in its toolbar slot; anywhere else
+       (the bar wrapped in another component) it is applied once on mount. */
+    const appliedStart = useRef(false);
+    useEffect(() => {
+      if (appliedStart.current || !table) return;
+      appliedStart.current = true;
+      if (active && !table.viewMatches(active.view)) table.applyView(active.view);
+      // eslint-disable-next-line react-hooks/exhaustive-deps -- once, on the first render with a table
+    }, [table]);
     const [renaming, setRenaming] = useState<string | null>(null);
     const commitRename = () => {
       const name = renaming?.trim();

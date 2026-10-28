@@ -12,6 +12,11 @@ import {
   Treemap,
 } from "rift-ds/charts";
 import { Gauge } from "rift-ds/components/Gauge/Gauge";
+import {
+  GanttChart,
+  type GanttChartItem,
+  type GanttChartMilestone,
+} from "rift-ds/components/GanttChart/GanttChart";
 import { Panel } from "rift-ds/components/Panel/Panel";
 import { Sparkline } from "rift-ds/components/Sparkline/Sparkline";
 import {
@@ -106,6 +111,23 @@ function shade(hex: string, w: number): string {
    token lookup: charts resolve CSS variables during render, before the
    effect that writes the overrides runs, so they would otherwise lag the
    brand lever by one change. */
+/* A theme rollout on a timeline: bars in the accent roles, progress fills,
+   a dashed projected phase and milestones. The today rule is pinned so the
+   built page and the hydrating client agree on where it sits. */
+const ROLLOUT_ITEMS: GanttChartItem[] = [
+  { id: "audit", label: "Token audit", start: "2026-08-03", end: "2026-08-28", color: "cobalt", progress: 100, group: "Foundations" },
+  { id: "palette", label: "New palette", start: "2026-08-24", end: "2026-09-25", color: "violet", progress: 100, group: "Foundations" },
+  { id: "type", label: "Type scale", start: "2026-09-14", end: "2026-10-23", color: "mint", progress: 70, group: "Foundations" },
+  { id: "components", label: "Component pass", start: "2026-10-05", end: "2026-11-20", color: "coral", progress: 40, group: "Rollout" },
+  { id: "docs", label: "Docs refresh", start: "2026-11-02", end: "2026-12-11", color: "amber", progress: 10, group: "Rollout" },
+  { id: "app", label: "App migration", start: "2026-11-23", end: "2027-01-29", color: "gold", projected: true, group: "Rollout", detail: "Target: end of January" },
+];
+
+const ROLLOUT_MILESTONES: GanttChartMilestone[] = [
+  { id: "freeze", label: "Token freeze", date: "2026-09-28", color: "violet", group: "Foundations" },
+  { id: "launch", label: "Public launch", date: "2027-01-11", color: "coral", group: "Rollout" },
+];
+
 export default function ChartsSection({ brand }: { brand: string }) {
   const shades = [brand, shade(brand, 0.35), shade(brand, 0.63)];
 
@@ -246,6 +268,14 @@ export default function ChartsSection({ brand }: { brand: string }) {
         title="Theme edits"
         subtitle="A year of activity; the sweep-in follows the Motion lever"
         caption={`${CONTRIBUTION_TOTAL} edits in the last year`}
+      />
+
+      <GanttChart
+        items={ROLLOUT_ITEMS}
+        milestones={ROLLOUT_MILESTONES}
+        today="2026-10-14"
+        title="Theme rollout"
+        subtitle="Bars in the accent roles; the dashed one is projected"
       />
 
     </section>

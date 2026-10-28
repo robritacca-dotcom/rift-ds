@@ -18,6 +18,7 @@ export const COMPONENT_SECTIONS = [
   { id: "charts", label: "Charts" },
   { id: "maps", label: "Maps" },
   { id: "data-display", label: "Data display" },
+  { id: "tables", label: "Tables" },
   { id: "surfaces", label: "Surfaces" },
   { id: "product-header", label: "Product header" },
   { id: "actions", label: "Actions" },

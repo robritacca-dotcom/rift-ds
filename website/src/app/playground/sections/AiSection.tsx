@@ -18,6 +18,11 @@ import {
 import { Reasoning } from "rift-ds/components/Reasoning/Reasoning";
 import { SourceChip } from "rift-ds/components/SourceChip/SourceChip";
 import { ToolCall } from "rift-ds/components/ToolCall/ToolCall";
+import { AgentPlan, type AgentPlanStep } from "rift-ds/components/AgentPlan/AgentPlan";
+import { CodeDiff } from "rift-ds/components/CodeDiff/CodeDiff";
+import { InterruptCard } from "rift-ds/components/InterruptCard/InterruptCard";
+import { SourceTrail, type SourceTrailItem } from "rift-ds/components/SourceTrail/SourceTrail";
+import { UsageCard } from "rift-ds/components/UsageCard/UsageCard";
 
 const AGENT_STATES = ["thinking", "working", "waiting", "done", "error"] as const;
 
@@ -62,7 +67,37 @@ const ARTIFACT_ROWS = [
   ["Typeface", "Headings over body"],
 ];
 
+/* An agent re-theming a codebase: its plan, what it read, the edit it
+   wants to make, and the budgets it is spending. One story, so the four
+   surfaces read as one turn of the same agent. */
+const PLAN_STEPS: AgentPlanStep[] = [
+  { label: "Read the current tokens", status: "completed", detail: "tokens-light.css" },
+  { label: "Map the brand colour to the action ramp", status: "completed" },
+  { label: "Update the button radius", status: "active", detail: "Button.css" },
+  { label: "Check contrast in both themes", status: "pending" },
+];
+
+const SOURCE_ITEMS: SourceTrailItem[] = [
+  { title: "Design tokens", icon: "palette", status: "done", detail: "The three tiers and their names" },
+  { title: "Border radius scale", icon: "rounded_corner", status: "done" },
+  { title: "Button spec", icon: "smart_button", status: "active" },
+];
+
+const RADIUS_DIFF = `@@ -12,5 +12,5 @@
+ .ds-button {
+   display: inline-flex;
+-  border-radius: 8px;
++  border-radius: var(--radius-pill);
+   font-family: var(--font-family-body);
+ }`;
+
+const USAGE_ITEMS = [
+  { label: "Context window", value: 62, valueText: "124k of 200k" },
+  { label: "Weekly limit", value: 78, resetLabel: "Resets Monday" },
+];
+
 export default function AiSection() {
+  const [decision, setDecision] = useState<string | undefined>(undefined);
   const [suggestion, setSuggestion] = useState<string | null>(null);
   const [artifactOpen, setArtifactOpen] = useState(true);
   const [answers, setAnswers] = useState<QuestionCardAnswer[] | undefined>(undefined);
@@ -164,6 +199,41 @@ export default function AiSection() {
           </ArtifactPanel>
         </div>
       )}
+
+      <AgentPlan steps={PLAN_STEPS} />
+
+      <SourceTrail items={SOURCE_ITEMS} />
+
+      <CodeDiff diff={RADIUS_DIFF} filename="Button.css" />
+
+      {/* The checkpoint before the edit runs: pick an option and the card
+          keeps the answer as its record. Pressing again starts over. */}
+      <div className={styles.questionFrame}>
+        <InterruptCard
+          title="Allow file edit?"
+          description="The agent wants to change one line in Button.css."
+          icon="edit_document"
+          value={decision}
+          onValueChange={setDecision}
+          options={[
+            { value: "deny", label: "Deny", tone: "destructive" },
+            { value: "once", label: "Allow once" },
+            { value: "always", label: "Always allow", variant: "primary" },
+          ]}
+        >
+          <ToolCall name="edit_file" summary="Button.css" status="pending" />
+        </InterruptCard>
+        {decision && (
+          <Button variant="tertiary" size="compact" label="Ask again" onClick={() => setDecision(undefined)} />
+        )}
+      </div>
+
+      <UsageCard
+        items={USAGE_ITEMS}
+        title="Usage"
+        subtitle="Fills turn warning at 75% and error at 90%"
+        thresholds={{ warning: 0.75, error: 0.9 }}
+      />
 
       <div className={styles.demoRow}>
         <SourceChip title="Design tokens" index={1} />

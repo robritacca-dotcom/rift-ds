@@ -1,3 +1,46 @@
+/* The frame's header, on the ground above the chat in the strip the stage
+   keeps clear for it, above the frame's link: the name at the start, the
+   chat's component page and install guide at the end, and the device
+   toggle between them in the middle. It fills the strip
+   at the stage's scale and centres in it, so the ground above and below it
+   match, and its sides line up with the chat card's, the ground's margin
+   at the same scale. */
+.header {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
+  block-size: calc(var(--header-room) * var(--stage-scale, 1));
+  z-index: 3;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  /* Only the narrowest frame ever closes the columns up to this. */
+  gap: var(--gap-300);
+  padding-inline: calc(var(--gap-1000) * var(--stage-scale, 1));
+  pointer-events: none;
+}
+
+.header > * {
+  pointer-events: auto;
+}
+
+.headerLinks {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: var(--gap-200);
+}
+
+.headerTitle {
+  margin: 0;
+  font-family: var(--font-heading-3-family);
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+  letter-spacing: var(--font-heading-3-letter-spacing);
+  color: var(--color-text-heading);
+}
+
 /* The framed chat: a container card holding the scaled stage, with one
    link laid over the whole of it. */
 .frame {
@@ -43,6 +86,103 @@
   background: var(--color-bg-glass);
   box-shadow: var(--shadow-floating);
   backdrop-filter: blur(24px);
+}
+
+/* The mobile preview's handset, standing centred on the ground: the
+   playground bezel's recipe (ChatView.module.css owns it), a 56px screen
+   corner inside a concentric 68px bezel. */
+.phone {
+  position: relative;
+  z-index: 1;
+  margin: auto;
+  padding: 12px;
+  border-radius: 68px;
+  background: var(--color-bg-page-primary);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  box-shadow: var(--shadow-floating);
+}
+
+/* One glass surface behind the OS strips and the app. */
+.phoneScreen {
+  display: flex;
+  flex-direction: column;
+  border-radius: 56px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--color-bg-container-primary) 82%, transparent);
+  backdrop-filter: blur(24px);
+}
+
+/* The app between the strips: the widget fills it, without card chrome. */
+.phoneApp {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.phoneApp > :global(.ds-chat-widget) {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+}
+
+/* The status bar, sized to a 390pt iPhone's: clock and icons inboard of
+   the screen corner, either side of the cutout. */
+.statusBar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 54px;
+  padding: var(--padding-150) 36px 0 44px; /* ds-allow(physical): set dressing drawn as the hardware is, whatever the reading direction */
+  flex-shrink: 0;
+  color: var(--color-text-primary);
+}
+
+.statusTime {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ds-allow(color): the Dynamic Island is a camera cutout, true-black
+   hardware in both themes, not a themeable surface */
+.island {
+  position: absolute;
+  left: 50%; /* ds-allow(physical): centred on the hardware */
+  top: 12px;
+  transform: translateX(-50%);
+  width: 118px;
+  height: 34px;
+  border-radius: var(--radius-pill);
+  background: #000000;
+}
+
+.statusIcons {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-050);
+  --icon-size: var(--icon-size-500);
+}
+
+.homeBar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 24px;
+  padding-bottom: var(--padding-150);
+  flex-shrink: 0;
+}
+
+.homeIndicator {
+  width: 134px;
+  height: 5px;
+  border-radius: var(--radius-pill);
+  background: var(--color-text-primary);
 }
 
 /* The staged pointer, dressed as a collaborator's cursor so it never reads
@@ -107,6 +247,46 @@
   line-height: var(--font-paragraph-emphasis-line-height);
   white-space: nowrap;
   box-shadow: var(--shadow-floating);
+}
+
+/* The fingertip, on the phone: a soft disc the size of a touch, centred on
+   the point, in the cursor's colour. The arrow, the I-beam and the name
+   tag stand down; a tap presses it in and rings out from it. */
+.finger {
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  translate: -22px -22px;
+  /* Round in every theme: a fingertip is not a pill-shaped control, so
+     it never takes a theme's pill radius. */
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--cursor-fill) 40%, transparent);
+  border: 2px solid color-mix(in srgb, var(--cursor-fill) 80%, transparent);
+  box-shadow: var(--shadow-floating);
+  display: none;
+}
+
+.cursor[data-touch] .finger { display: block; }
+
+.cursor[data-touch] .arrow,
+.cursor[data-touch] .beam,
+.cursor[data-touch] .tag { display: none; }
+
+/* Thumbs on the keys: the fingertip steps back while the keys light. */
+.cursor[data-touch][data-mode="text"] .finger {
+  opacity: 0;
+}
+
+.finger {
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.cursor[data-touch][data-pressed] .finger {
+  animation: fingerPress var(--motion-duration-slow) var(--motion-ease-standard);
+}
+
+@keyframes fingerPress {
+  40% { scale: 0.82; }
 }
 
 /* A click: a ring pulses out from the tip. */

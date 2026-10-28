@@ -28,7 +28,7 @@ export default function BoardReport() {
       <div className={styles.reportStats}>
         <Stat value="$1.24M" label="Q3 revenue" delta="18% on Q2" trend="up" />
         <Stat value="$1.03M" label="Q3 spend" delta="9% on Q2" trend="up" />
-        <Stat value="14 months" label="Runway today" delta="17 with the cut" trend="neutral" />
+        <Stat value="14m" label="Runway today" delta="17 with the cut" trend="neutral" />
       </div>
 
       <Prose>

@@ -1,16 +1,19 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { AttachmentTile } from "rift-ds/components/Attachment/AttachmentTile";
+import { Button } from "rift-ds/components/Button/Button";
 import { MentionMenu } from "rift-ds/components/Mention/Mention";
 import { filterMentionItems, type MentionItem } from "rift-ds/components/Mention/mentions";
 import { ModelPicker } from "rift-ds/components/ModelPicker/ModelPicker";
+import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
 import { ChatWidget, createSimTransport, useChatWidget } from "rift-ds/chat";
 import { DEMO_ARTIFACT_RENDERERS, DEMO_MODELS, DEMO_RENDERERS, demoAgentTabs } from "rift-ds/chat/demo";
 import { MOTION_AUTOPLAY_INTERVAL_MS } from "rift-ds/tokens/motion";
 import { SiteChatProvider } from "@/components/SiteChat/SiteChatProvider";
 import DotBackground from "@/components/DotBackground/DotBackground";
+import PhoneKeyboard, { findKey } from "@/components/PhoneKeyboard/PhoneKeyboard";
 import {
   FINANCE_MENTIONS,
   FINANCE_PERSON,
@@ -47,7 +50,13 @@ import styles from "./HomeChatFrame.module.css";
 
    The stage lays out at a fixed desktop footprint and is scaled to the
    frame's width, so a phone sees the desktop chat in miniature rather than
-   its compact layout.
+   its compact layout. A toggle in the header above the chat swaps the card
+   for a phone
+   in a bezel, where the widget takes its phone layout and the same script
+   plays with a fingertip: the report is attached from the + button rather
+   than dragged, the history and the board report open as sheets, and the
+   reel opens and closes them the way a thumb would, with a soft keyboard
+   up while it types.
    ============================================ */
 
 const TARGET_HREF = "/playground?view=chat";
@@ -58,14 +67,54 @@ const ARTIFACT_RENDERERS = {
   [FINANCE_REPORT.kind]: () => <BoardReport />,
 };
 
-/* The review footprint for the stage, not a layout token. */
-const FOOTPRINT = { w: 1440, h: 960 };
+/* The review footprint for the stage, not a layout token, and the strip of
+   ground it keeps clear above the chat for the header, in footprint pixels. */
+const FOOTPRINT = { w: 1440, h: 1040 };
+const HEADER_ROOM = 88;
+
+/* Where the header points: the chat's component page, its install guide,
+   and the playground's Chat view the whole frame opens. */
+/* Frame widths, in CSS pixels, below which the header sheds words so the
+   toggle stays centred between its neighbours: the toggle's labels first,
+   then the buttons'. Measured against the three buttons with their labels
+   and the title, not layout tokens. Every name stays for assistive tech. */
+const HEADER_TOGGLE_LABELS_MIN = 1100;
+const HEADER_BUTTON_LABELS_MIN = 900;
+
+const HEADER_LINKS = [
+  { href: "/components/ai-chat", label: "Component", icon: "category" },
+  { href: "/docs/chat", label: "Docs", icon: "menu_book" },
+  { href: TARGET_HREF, label: "Playground", icon: "palette" },
+];
+
+/* The phone the mobile preview stands on its ground: the playground's
+   mobile preset, a 390 by 844 screen. */
+const PHONE = { w: 390, h: 844 };
+
+type Device = "desktop" | "mobile";
+
+const DEVICE_SEGMENTS = [
+  { value: "desktop", label: "Desktop", icon: "desktop_windows" },
+  { value: "mobile", label: "Mobile", icon: "smartphone" },
+];
 
 /* The collaborator whose cursor drives the reel: the profile on the rail. */
 const CURSOR_NAME = FINANCE_PERSON.split(" ")[0];
 
-/* The send button's name: set on the widget and found by it, in one place. */
+/* The controls the reel finds by name: set on the widget and found by it,
+   in one place. */
 const SEND_LABEL = "Send";
+const NEW_CHAT_LABEL = "New chat";
+const OPEN_THREADS_LABEL = "Open the chat history";
+
+/* The open bottom sheet the phone raises for an artifact, and its own close
+   button, the artifact panel's default name. */
+const OPEN_SHEET = ".ds-chat-widget__aside-overlay--open";
+const CLOSE_REPORT_LABEL = "Close the artifact";
+
+/* The composer's attach button, by its default name: the phone's way in
+   for a file, where the card has a drag. */
+const ATTACH_LABEL = "Attach files";
 
 /* The reel's beats: a full one to read each finished answer, half of one
    on the welcome and before an answer is picked. */
@@ -155,6 +204,8 @@ export default function HomeChatFrame() {
   const fileRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(0);
   const [staging, setStaging] = useState<Staging>({ file: null, mention: null });
+  const [device, setDevice] = useState<Device>("desktop");
+  const phone = device === "mobile";
 
   useEffect(() => {
     const el = frameRef.current;
@@ -165,24 +216,74 @@ export default function HomeChatFrame() {
   }, []);
 
   const scale = width > 0 ? width / FOOTPRINT.w : 0;
-  const transport = useMemo(() => createSimTransport(FINANCE_SCRIPT.build()), []);
+  const toggleLabels = width >= HEADER_TOGGLE_LABELS_MIN;
+  const buttonLabels = width === 0 || width >= HEADER_BUTTON_LABELS_MIN;
+  const [transport, setTransport] = useState(() => createSimTransport(FINANCE_SCRIPT.build()));
+
+  /* A switch starts the script over, on a fresh transport. The transport
+     is a function, so it goes in through an updater. */
+  const changeDevice = (next: string) => {
+    setStaging({ file: null, mention: null });
+    setTransport(() => createSimTransport(FINANCE_SCRIPT.build()));
+    setDevice(next as Device);
+  };
+
+  /* Every control the playground stage shows: the header's agent,
+     artifact, full-screen and close buttons, the session tabs, and the
+     composer's attachments, mentions and model picker. On the phone the
+     tabs and full screen stand down, as they do in the playground's bezel,
+     and the history waits behind the header's menu. */
+  const widget = (
+    <ChatWidget
+      title={FINANCE_PRODUCT}
+      tagline="What should we look at today?"
+      showStarters={false}
+      widgets={<FinanceBoard />}
+      widgetsLayout={phone ? "scroll" : "fit"}
+      widgetsWidth="wide"
+      compact={phone}
+      phone={phone}
+      fullscreenEnabled={!phone}
+      threads
+      threadsProps={{ defaultExpanded: !phone, profile: { name: FINANCE_PERSON, meta: "Founder" } }}
+      tabs={!phone}
+      fileAttachments
+      mentions={FINANCE_MENTIONS}
+      composerActions={<ModelPicker models={DEMO_MODELS} placement="top" />}
+      sendLabel={SEND_LABEL}
+      newChatLabel={NEW_CHAT_LABEL}
+      openThreadsLabel={OPEN_THREADS_LABEL}
+      agent={{
+        defaultOpen: false,
+        tabs: demoAgentTabs(FINANCE_PRODUCT),
+        profile: { name: FINANCE_PRODUCT, status: "Connected" },
+      }}
+      artifacts
+    />
+  );
 
   return (
     <div
       ref={frameRef}
       className={styles.frame}
-      style={{ aspectRatio: `${FOOTPRINT.w} / ${FOOTPRINT.h}` }}
+      style={{ aspectRatio: `${FOOTPRINT.w} / ${FOOTPRINT.h}`, "--stage-scale": scale, "--header-room": `${HEADER_ROOM}px` } as React.CSSProperties}
     >
       {scale > 0 && (
         <div
           ref={stageRef}
           className={styles.stage}
-          style={{ width: FOOTPRINT.w, height: FOOTPRINT.h, transform: `scale(${scale})` }}
+          style={{
+            width: FOOTPRINT.w,
+            height: FOOTPRINT.h,
+            paddingBlockStart: HEADER_ROOM,
+            transform: `scale(${scale})`,
+          }}
           aria-hidden="true"
           inert
         >
           <DotBackground contained />
           <SiteChatProvider
+            key={`chat-${device}`}
             transport={transport}
             renderers={DEMO_RENDERERS}
             artifactRenderers={ARTIFACT_RENDERERS}
@@ -194,33 +295,9 @@ export default function HomeChatFrame() {
               cursorRef={cursorRef}
               fileRef={fileRef}
               setStaging={setStaging}
+              phone={phone}
             />
-            <div className={styles.card}>
-              {/* Every control the playground stage shows: the header's
-                  agent, artifact, full-screen and close buttons, the session
-                  tabs, and the composer's attachments, mentions and model
-                  picker. */}
-              <ChatWidget
-                title={FINANCE_PRODUCT}
-                tagline="What should we look at today?"
-                showStarters={false}
-                widgets={<FinanceBoard />}
-                widgetsWidth="wide"
-                threads
-                threadsProps={{ defaultExpanded: true, profile: { name: FINANCE_PERSON, meta: "Founder" } }}
-                tabs
-                fileAttachments
-                mentions={FINANCE_MENTIONS}
-                composerActions={<ModelPicker models={DEMO_MODELS} placement="top" />}
-                sendLabel={SEND_LABEL}
-                agent={{
-                  defaultOpen: false,
-                  tabs: demoAgentTabs(FINANCE_PRODUCT),
-                  profile: { name: FINANCE_PRODUCT, status: "Connected" },
-                }}
-                artifacts
-              />
-            </div>
+            {phone ? <Phone>{widget}</Phone> : <div className={styles.card}>{widget}</div>}
           </SiteChatProvider>
           {staging.mention && (
             <MentionMenu
@@ -241,22 +318,80 @@ export default function HomeChatFrame() {
               <AttachmentTile name={REEL_COPY.file} kind="pdf" meta="248 KB" />
             </div>
           )}
-          <Cursor ref={cursorRef} />
+          <Cursor key={`cursor-${device}`} ref={cursorRef} touch={phone} />
         </div>
       )}
       <Link href={TARGET_HREF} className={styles.hit} aria-label="Open the AI chat playground" />
+      {/* The header sits above the link, so a press on the toggle or its
+          links does its own thing rather than opening the playground. */}
+      <div className={styles.header}>
+        <h2 className={styles.headerTitle}>AI chat</h2>
+        <SegmentedControl
+          segments={DEVICE_SEGMENTS}
+          value={device}
+          onValueChange={changeDevice}
+          size="compact"
+          showLabels={toggleLabels}
+          aria-label="Preview the chat on"
+        />
+        <div className={styles.headerLinks}>
+          {HEADER_LINKS.map((link) => (
+            <Button
+              key={link.href}
+              href={link.href}
+              label={link.label}
+              /* Icon-only when narrow, the label kept as the name. `text`
+                 is the one way to it until `label` loses its default. */
+              text={buttonLabels}
+              variant="tertiary"
+              size="compact"
+              iconLeft={link.icon}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/** The handset the mobile preview plays in: the playground bezel's recipe,
+    a status bar and a home indicator either side of the app, on one glass
+    screen. The OS strips and the keyboard are set dressing: the reel raises
+    the keyboard while it types, and it takes its height from the app the
+    way a soft keyboard does, so the composer rides up above it. */
+function Phone({ children }: { children: React.ReactNode }) {
+  return (
+    <div className={styles.phone}>
+      <div className={styles.phoneScreen} style={{ width: PHONE.w, height: PHONE.h }}>
+        <div className={styles.statusBar}>
+          <span className={styles.statusTime}>9:41</span>
+          <span className={styles.island} />
+          <span className={styles.statusIcons}>
+            <span className="material-symbols-rounded">signal_cellular_alt</span>
+            <span className="material-symbols-rounded">wifi</span>
+            <span className="material-symbols-rounded">battery_full</span>
+          </span>
+        </div>
+        <div className={styles.phoneApp}>{children}</div>
+        <PhoneKeyboard />
+        <div className={styles.homeBar}>
+          <span className={styles.homeIndicator} />
+        </div>
+      </div>
     </div>
   );
 }
 
 /** The staged pointer, dressed as a collaborator's cursor so it never reads
     as the visitor's own: a rounded arrow, or an I-beam while it types, with
-    a name tag trailing it and a ring that pulses on a click. Positioned by
-    the reel, never by React state. */
-function Cursor({ ref }: { ref: React.Ref<HTMLDivElement> }) {
+    a name tag trailing it and a ring that pulses on a click. On the phone
+    it is a fingertip instead, a soft disc with the same ring on a tap.
+    Positioned by the reel, never by React state. */
+function Cursor({ ref, touch }: { ref: React.Ref<HTMLDivElement>; touch: boolean }) {
   return (
-    <div ref={ref} className={styles.cursor} data-mode="pointer">
+    <div ref={ref} className={styles.cursor} data-mode="pointer" data-touch={touch || undefined}>
       <span className={styles.ring} />
+      <span className={styles.finger} />
       <svg className={styles.arrow} viewBox="0 0 28 28" width="30" height="30">
         <path d="M4.2 3.1 24.5 10.6c1.2.45 1.15 2.15-.07 2.52l-8.6 2.62-2.66 8.6c-.37 1.22-2.07 1.27-2.52.07L3.1 4.2c-.33-.88.22-1.43 1.1-1.1Z" />
       </svg>
@@ -277,12 +412,15 @@ function Reel({
   cursorRef,
   fileRef,
   setStaging,
+  phone,
 }: {
   frameRef: React.RefObject<HTMLDivElement | null>;
   stageRef: React.RefObject<HTMLDivElement | null>;
   cursorRef: React.RefObject<HTMLDivElement | null>;
   fileRef: React.RefObject<HTMLDivElement | null>;
   setStaging: React.Dispatch<React.SetStateAction<Staging>>;
+  /** The widget is in the phone, so the reel taps rather than points. */
+  phone: boolean;
 }) {
   const chat = useChatWidget();
   /* The latest state and actions, read as the reel runs. */
@@ -318,8 +456,11 @@ function Reel({
     let alive = true;
     const timers = new Set<number>();
     const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    /* Where the cursor is, in footprint pixels; it enters from the lower right. */
-    const at = { x: FOOTPRINT.w * 0.82, y: FOOTPRINT.h * 0.9 };
+    /* Where the cursor is, in footprint pixels; it enters from the lower
+       right, or beside the phone's lower edge. */
+    const at = phone
+      ? { x: (FOOTPRINT.w + PHONE.w) / 2 + 40, y: FOOTPRINT.h * 0.85 }
+      : { x: FOOTPRINT.w * 0.82, y: FOOTPRINT.h * 0.9 };
     let swing = 1;
     /* The staged file, while the cursor carries it: its offset from the tip. */
     let carrying: { dx: number; dy: number } | null = null;
@@ -401,6 +542,8 @@ function Reel({
     };
     const hover = (el: Element) => {
       unhover();
+      /* A fingertip hovers over nothing. */
+      if (phone) return;
       for (let node: Element | null = el; node && node !== stageRef.current; node = node.parentElement) {
         node.setAttribute(STAGED_HOVER, "");
         hovered.push(node);
@@ -535,6 +678,14 @@ function Reel({
         return turns.length >= before + 2 && !streaming && turns[turns.length - 1].role === "assistant";
       });
 
+    /** On the phone, lights the key a character comes from. */
+    let lit: Element | null = null;
+    const lightKey = (char: string) => {
+      lit?.removeAttribute("data-pressed");
+      lit = phone ? findKey(stage(), char) : null;
+      lit?.setAttribute("data-pressed", "");
+    };
+
     const typeText = async (text: string) => {
       const base = chatRef.current.draft;
       if (still) {
@@ -542,9 +693,11 @@ function Reel({
         return;
       }
       for (let i = 1; i <= text.length; i++) {
+        lightKey(text[i - 1]);
         chatRef.current.setDraft(base + text.slice(0, i));
         await sleep(text[i - 1] === " " ? TYPE_SPACE_MS : TYPE_CHAR_MS);
       }
+      lightKey("");
     };
 
     const field = () => waitFor(() => stage().querySelector<HTMLElement>(".ds-composer__textarea"));
@@ -555,6 +708,10 @@ function Reel({
       const composer = stage().querySelector(".ds-composer");
       if (on) composer?.setAttribute(STAGED_FOCUS, "");
       else composer?.removeAttribute(STAGED_FOCUS);
+      /* A focused field on a phone raises the keyboard. */
+      const keyboard = stage().querySelector("[data-keyboard]");
+      if (on) keyboard?.setAttribute("data-open", "");
+      else keyboard?.removeAttribute("data-open");
     };
 
     /** Clicks into the composer and types `text`; a mention in it opens the
@@ -602,9 +759,32 @@ function Reel({
       stagedFocus(false);
     };
 
+    const reportFile = () => {
+      const data = new DataTransfer();
+      data.items.add(new File([new Uint8Array(248 * 1024)], REEL_COPY.file, { type: "application/pdf" }));
+      return data;
+    };
+
+    /** On the phone, where nothing is dragged: the fingertip taps the
+        attach button and the report comes back from the picker, a real
+        file set on the composer's own file input. The button is tapped in
+        look only, since a press would open the visitor's own picker. */
+    const attachFile = async () => {
+      const zone = await waitFor(() => stage().querySelector(".ds-composer"));
+      const attach = await waitFor(() => zone.querySelector(`[aria-label="${ATTACH_LABEL}"]`));
+      await moveTo(pointOn(attach));
+      await ring();
+      await sleep(SHORT_BEAT_MS / 2);
+      const input = await waitFor(() => zone.querySelector<HTMLInputElement>('input[type="file"]'));
+      input.files = reportFile().files;
+      input.dispatchEvent(new Event("change", { bubbles: true }));
+      await waitFor(() => zone.querySelector(".ds-attachment-tile"));
+    };
+
     /** Picks up the expense report and drops it on the composer: the drop
         zone's own overlay shows on the hover, and the drop is a real file. */
     const dropFile = async () => {
+      if (phone) return attachFile();
       setStaging((s) => ({ ...s, file: { ...FILE_START, carried: false } }));
       const tile = await waitFor(() => fileRef.current);
       await sleep(SHORT_BEAT_MS / 3);
@@ -614,8 +794,7 @@ function Reel({
       carrying = { dx: FILE_START.x - grab.x, dy: FILE_START.y - grab.y };
       setStaging((s) => ({ ...s, file: s.file && { ...s.file, carried: true } }));
       const zone = await waitFor(() => stage().querySelector(".ds-composer"));
-      const data = new DataTransfer();
-      data.items.add(new File([new Uint8Array(248 * 1024)], REEL_COPY.file, { type: "application/pdf" }));
+      const data = reportFile();
       const drag = (type: string) => zone.dispatchEvent(new DragEvent(type, { bubbles: true, cancelable: true, dataTransfer: data }));
       await moveTo(pointOn(zone));
       drag("dragenter");
@@ -660,6 +839,21 @@ function Reel({
 
     const chip = (label: string) => clickEl(() => button(".ds-prompt-suggestions", label));
 
+    const named = (label: string) => stage().querySelector(`[aria-label="${label}"]`);
+
+    /** On the card the board report opens itself beside the conversation
+        and stays. The phone leaves it as a tile in the thread: the
+        fingertip taps it, the report rises as a sheet over the composer,
+        and after a read the fingertip closes it again to type on. */
+    const readReport = async () => {
+      if (!phone) return;
+      await clickEl(() => [...stage().querySelectorAll(".ds-artifact-card")].at(-1));
+      const sheet = await waitFor(() => stage().querySelector(OPEN_SHEET));
+      await sleep(READ_BEAT_MS);
+      await clickEl(() => sheet.querySelector(`[aria-label="${CLOSE_REPORT_LABEL}"]`));
+      await waitFor(() => !stage().querySelector(OPEN_SHEET));
+    };
+
     /** A new chat from the rail's button, with the finished conversation
         dropped from the history so the rail and tabs hold the fixtures
         alone however long the loop runs. */
@@ -672,7 +866,11 @@ function Reel({
       const played = chatRef.current.threads.activeThreadId;
       const hadTurns = chatRef.current.turns.length > 0;
       chatRef.current.setDraft("");
-      if (click) await clickEl(() => button("", "New chat"));
+      if (click) {
+        /* The phone keeps the history behind the header's menu. */
+        if (phone) await clickEl(() => named(OPEN_THREADS_LABEL));
+        await clickEl(() => button("", NEW_CHAT_LABEL));
+      }
       else chatRef.current.threads.startNew();
       if (!hadTurns) return;
       /* Removed once the new chat is the active one, so the rail never
@@ -718,7 +916,8 @@ function Reel({
           /* 4. The board update, from a follow-up chip: a report that
              opens itself in the artifact panel. */
           await exchange(() => chip(REEL_COPY.board));
-          await sleep(READ_BEAT_MS);
+          await sleep(phone ? SHORT_BEAT_MS : READ_BEAT_MS);
+          await readReport();
           /* 5. The report sent to the CFO, with a mention. */
           await exchange(async () => {
             await compose(REEL_COPY.handoff, REEL_COPY.mention);
@@ -740,7 +939,7 @@ function Reel({
       alive = false;
       timers.forEach((id) => window.clearTimeout(id));
     };
-  }, [inView, stageRef, cursorRef, fileRef, setStaging]);
+  }, [inView, stageRef, cursorRef, fileRef, setStaging, phone]);
 
   return null;
 }

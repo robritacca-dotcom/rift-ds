@@ -1,0 +1,76 @@
+/* ============================================
+   FEATURED COMPONENTS
+   A row of case-study Cards above the category
+   sections. Each cover is an accent field with
+   the real component set into it, drawn smaller
+   and running off the foot like a product shot.
+   ============================================ */
+
+.featured {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-500);
+  scroll-margin-top: var(--layout-anchor-clearance);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--primitive-gap-500);
+}
+
+/* ---- Cover ---- */
+
+.cover {
+  position: relative;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.violet {
+  background: var(--color-core-accent-violet);
+}
+
+.cobalt {
+  background: var(--color-core-accent-cobalt);
+}
+
+.mint {
+  background: var(--color-core-accent-mint);
+}
+
+/* The component lays out at its own size and is scaled down whole, so it
+   reads as the real thing rather than a squeezed one. It is inset from the
+   top and sides and runs off the foot of the cover. */
+.shot {
+  position: absolute;
+  inset: var(--padding-500) var(--padding-500) auto;
+  zoom: 0.7;
+}
+
+/* A floating surface for the parts that have no card of their own. */
+.surface {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+  padding: var(--padding-300);
+  background: var(--color-bg-page-primary);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-400);
+  box-shadow: var(--shadow-floating);
+}
+
+.chatTurns {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 1151px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

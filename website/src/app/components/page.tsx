@@ -4,6 +4,7 @@ import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import ComponentsSidebar from "../../components/Sidebar/ComponentsSidebar";
 import PageLinks from "../../components/PageLinks/PageLinks";
 import ComponentCardGrid from "../../components/ComponentCardGrid/ComponentCardGrid";
+import FeaturedComponents from "../../components/FeaturedComponents/FeaturedComponents";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import { componentCategoryMetadata } from "rift-ds/components/registry";
 import { componentPages } from "@/data/component-pages";
@@ -41,6 +42,7 @@ export default function ComponentsPage() {
 
           {/* One section per category, cards alphabetical within */}
           <div className={`${styles.categorySections} animate-in animate-delay-2`}>
+            <FeaturedComponents />
             {componentCategoryMetadata.map((cat) => (
               <section key={cat.id} id={cat.id} className={styles.categorySection}>
                 <SectionTitle

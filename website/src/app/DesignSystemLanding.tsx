@@ -1448,7 +1448,7 @@ export default function DesignSystemLanding() {
               them. */}
           <div className={`${styles.heroInner} animate-in`}>
           {/* The tagline is the h1: the nav wordmark owns the name. */}
-          <h1 className={styles.pageTitle}>The AI-native React interface kit</h1>
+          <h1 className={styles.pageTitle}>The open source AI design system</h1>
           <RotatingSubtitle />
           <FadeDivider className={styles.heroDivider} />
           <ButtonGroup

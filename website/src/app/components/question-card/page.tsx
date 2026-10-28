@@ -136,9 +136,9 @@ export default function QuestionCardPage() {
             <SectionTitle title="A set of questions" />
             <p className={styles.demoText}>
               A short set of questions, asked one at a time with a count beside
-              the heading and a way back. A one-answer question moves on as
-              soon as it is answered; the last one waits for Send, so a slip
-              can still be taken back. The digits pick by position. Sent, the
+              the heading and a way back. A tap marks the answer and Next moves
+              on, so a slip can be changed before it is passed; the last
+              question sends with Send. The digits pick by position. Sent, the
               set folds to each question over its answer.
             </p>
             <Demo questions={[FRAMEWORK, SURFACES, THEME]} skippable />

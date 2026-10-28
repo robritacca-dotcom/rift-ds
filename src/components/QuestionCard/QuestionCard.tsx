@@ -230,18 +230,12 @@ export const QuestionCard = React.forwardRef<HTMLDivElement, QuestionCardProps>(
         });
         return;
       }
-      /* One answer: the tap is the answer. In a set it also moves on, except
-         at the last question, which waits for Send so a slip there can still
-         be taken back before everything goes. */
+      /* One answer: a lone question's tap is the answer. In a set the tap
+         only marks the pick, and Next moves on: jumping ahead on the tap
+         read as too quick, and a slip can be changed before it is passed. */
       const next: Draft = { values: [option.value], other: '', otherOpen: false };
-      if (!isSet) {
-        writeDraft(current, next);
-        submit({ ...drafts, [current.id]: next });
-      } else if (step < questions.length - 1) {
-        advance(next);
-      } else {
-        writeDraft(current, next);
-      }
+      writeDraft(current, next);
+      if (!isSet) submit({ ...drafts, [current.id]: next });
     };
 
     const openOther = () => {

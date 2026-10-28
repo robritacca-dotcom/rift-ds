@@ -150,8 +150,10 @@ export const QuestionSet: Story = {
   render: (args) => <Controlled {...args} />,
   play: async ({ canvas, userEvent, args }) => {
     await expect(await canvas.findByText('1 of 3')).toBeVisible();
-    // A one-answer question in a set moves on as soon as it is answered.
+    // A one-answer question in a set marks the pick and waits for Next.
     await userEvent.click(canvas.getByRole('button', { name: 'Next.js' }));
+    await expect(canvas.getByText('1 of 3')).toBeVisible();
+    await userEvent.click(canvas.getByRole('button', { name: 'Next' }));
     await expect(canvas.getByText('2 of 3')).toBeVisible();
     await userEvent.click(canvas.getByRole('button', { name: /The chat widget/ }));
     await userEvent.click(canvas.getByRole('button', { name: 'Next' }));
